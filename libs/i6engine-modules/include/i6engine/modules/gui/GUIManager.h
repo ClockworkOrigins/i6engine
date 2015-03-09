@@ -458,7 +458,6 @@ namespace modules {
 		GUIFunctions _objGUIFunctions;
 		GUIKeyFunctions _objGUIKeyFunctions;
 		CEGUI::Window * _objRoot;
-		bool game_init;
 
 		/**
 		 * \brief Map of all widgets.

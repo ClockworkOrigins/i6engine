@@ -6,6 +6,7 @@ Enhancements:
 	- added a TextManager for easy multilanguage support
 	- moved IDManager to API
 	- added an EditboxWidget
+	- added a TextButtonWidget
 
 v 0.8.0
 

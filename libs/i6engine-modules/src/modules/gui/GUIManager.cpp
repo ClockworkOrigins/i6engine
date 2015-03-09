@@ -31,6 +31,7 @@
 #include "i6engine/modules/gui/guiwidgets/GUIImage.h"
 #include "i6engine/modules/gui/guiwidgets/GUIPrint.h"
 #include "i6engine/modules/gui/guiwidgets/GUIStatusList.h"
+#include "i6engine/modules/gui/guiwidgets/GUITextButton.h"
 
 #include "boost/functional/factory.hpp"
 #include "boost/interprocess/sync/scoped_lock.hpp"
@@ -44,7 +45,7 @@
 namespace i6engine {
 namespace modules {
 
-	GUIManager::GUIManager(GUIController * ctrl) : _objRenderer(), _objGUIFunctions(), _objGUIKeyFunctions(), _objRoot(), game_init(false), _widgets(), _enabledFunctions(), _listIDs(0), _toTick(), _keyStates(), _factory(), _tickerLock(), _ctrl(ctrl), _lastOnWindow(""), _mouseOverWidgets() {
+	GUIManager::GUIManager(GUIController * ctrl) : _objRenderer(), _objGUIFunctions(), _objGUIKeyFunctions(), _objRoot(), _widgets(), _enabledFunctions(), _listIDs(0), _toTick(), _keyStates(), _factory(), _tickerLock(), _ctrl(ctrl), _lastOnWindow(""), _mouseOverWidgets() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerAddTickerCallback(boost::bind(&GUIManager::addTicker, this, _1));
@@ -55,6 +56,7 @@ namespace modules {
 		registerGUIWidgetTemplate("GUIImage", boost::factory<GUIImage *>());
 		registerGUIWidgetTemplate("GUIPrint", boost::factory<GUIPrint *>());
 		registerGUIWidgetTemplate("GUIStatusList", boost::factory<GUIStatusList *>());
+		registerGUIWidgetTemplate("GUITextButton", boost::factory<GUITextButton *>());
 	}
 
 	GUIManager::~GUIManager() {

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-#include <iostream>
 #include <thread>
+
+#include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/modules/graphics/ResourceManager.h"
 #include "i6engine/modules/physics/MeshStrider.h"
@@ -33,7 +34,7 @@ int main(int argc, char ** argv) {
 	argv++;
 
 	if (argc != 2) {
-		std::cerr << "Wrong parameters: in.mesh out.bullet" << std::endl;
+		ISIXE_THROW_API("meshToBulletConverter", "Wrong parameters: in.mesh out.bullet");
 	} else {
 		std::string mesh = argv[0];
 		std::string bullet = argv[1];
@@ -44,7 +45,7 @@ int main(int argc, char ** argv) {
 		clockUtils::iniParser::IniParser iniParser;
 		iniParser.load("i6engine.ini");
 		if (clockUtils::ClockError::SUCCESS != iniParser.getValue<std::string>("GRAPHIC", "ogreConfigsPath", ogrePath)) {
-			std::cerr << "An exception has occurred: value ogreConfigsPath in section GRAPHIC not found!" << std::endl;
+			ISIXE_THROW_API("meshToBulletConverter", "An exception has occurred: value ogreConfigsPath in section GRAPHIC not found!");
 			return 1;
 		}
 		Ogre::LogManager * lm = new Ogre::LogManager();

@@ -29,7 +29,7 @@ namespace api {
 		tinyxml2::XMLError e = doc.LoadFile(file.c_str());
 
 		if (e) {
-			std::cerr << "Couldn't open xml file!" << std::endl;
+			ISIXE_THROW_API("TextManager", "Couldn't open xml file!");
 			return;
 		}
 

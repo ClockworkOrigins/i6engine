@@ -164,6 +164,18 @@ namespace gui {
 		void addEditbox(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & defaultText, const std::function<void(std::string)> & enterCallback);
 
 		/**
+		 * \brief Adds a new TextButton to the screen.
+		 * \param name (Unique) Name of the new object.
+		 * \param type Style of the new object.
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 * \param w Width of the TextButton
+		 * \param h Height of the TextButton
+		 * \param text text of the TextButton
+		 */
+		void addTextButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & text);
+
+		/**
 		 * \brief Set a text to an specified object.
 		 * \param name Name of the object.
 		 * \param text Text to be set.

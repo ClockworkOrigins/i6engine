@@ -114,6 +114,13 @@ namespace api {
 		setEnterTextCallback(name, enterCallback);
 	}
 
+	void GUIFacade::addTextButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & text) {
+		createWidget(name, "GUITextButton", type);
+		setPosition(name, x, y);
+		setSize(name, w, h);
+		setText(name, text);
+	}
+
 	void GUIFacade::setLifetime(const std::string & name, const int64_t time) {
 		GameMessage::Ptr tim = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetLifetime, core::Method::Update, new gui::GUI_Lifetime(name, time), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(tim);
