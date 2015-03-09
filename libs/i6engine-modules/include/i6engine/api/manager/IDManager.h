@@ -19,15 +19,15 @@
  * @{
  */
 
-#ifndef __I6ENGINE_MODULES_IDMANAGER_H__
-#define __I6ENGINE_MODULES_IDMANAGER_H__
+#ifndef __I6ENGINE_API_IDMANAGER_H__
+#define __I6ENGINE_API_IDMANAGER_H__
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
 #include "boost/thread/mutex.hpp"
 
 namespace i6engine {
-namespace modules {
+namespace api {
 
 	class ISIXE_MODULES_API IDManager {
 	public:
@@ -82,10 +82,10 @@ namespace modules {
 		IDManager & operator=(const IDManager &) = delete;
 	};
 
-} /* namespace modules */
+} /* namespace api */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_MODULES_IDMANAGER_H__ */
+#endif /* __I6ENGINE_API_IDMANAGER_H__ */
 
 /**
  * @}

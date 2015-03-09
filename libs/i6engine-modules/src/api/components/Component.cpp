@@ -26,9 +26,8 @@
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/manager/IDManager.h"
 #include "i6engine/api/objects/GameObject.h"
-
-#include "i6engine/modules/manager/IDManager.h"
 
 namespace i6engine {
 namespace api {

@@ -16,12 +16,12 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-#include "i6engine/modules/manager/IDManager.h"
+#include "i6engine/api/manager/IDManager.h"
 
 #include "gtest/gtest.h"
 
 TEST(IDManager, getID) {
-	i6engine::modules::IDManager idm;
+	i6engine::api::IDManager idm;
 
 	for (int i = 0; i < 100; ++i) {
 		EXPECT_EQ(idm.getID(), i);
@@ -37,7 +37,7 @@ TEST(IDManager, getID) {
 }
 
 TEST(IDManager, setBounds) {
-	i6engine::modules::IDManager idm;
+	i6engine::api::IDManager idm;
 
 	idm.setBounds(50, 100);
 

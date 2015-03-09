@@ -4,6 +4,7 @@ Enhancements:
 	- GameObject::getGOC can specify return value now via template
 	- GUIWidgets now can be dragged and dropped with calling a callback at drop
 	- added a TextManager for easy multilanguage support
+	- moved IDManager to API
 
 v 0.8.0
 

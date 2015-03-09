@@ -51,7 +51,7 @@
 
 #include "i6engine/modules/graphics/GraphicsController.h"
 #include "i6engine/modules/input/InputController.h"
-#include "i6engine/modules/manager/IDManager.h"
+#include "i6engine/api/manager/IDManager.h"
 
 #ifdef ISIXE_NETWORK
 	#include "i6engine/modules/network/NetworkController.h"
@@ -76,7 +76,7 @@ void forceCleanup(int param) {
 namespace i6engine {
 namespace api {
 
-	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new modules::IDManager()), _textManager(new TextManager()), _appl(), _debugdrawer(0), _ds(false), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
+	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _textManager(new TextManager()), _appl(), _debugdrawer(0), _ds(false), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
 		// WORKAROUND: Install signal handlers to overcome OIS's limitation to handle X11 key repeat rate properly when crashing.
 		signal(SIGINT, forceCleanup);
 		// TODO: kA
@@ -179,10 +179,6 @@ namespace api {
 	void EngineController::registerSubSystem(const std::string & name, core::ModuleController * module, const std::set<core::Subsystem> & waitingFor) {
 		_queuedModulesWaiting.insert(std::make_pair(name, std::make_pair(module, waitingFor)));
 		module->setController(_subsystemController, _coreController, _messagingController);
-	}
-
-	modules::IDManager * EngineController::getIDManager() const {
-		return _idManager;
 	}
 
 	void EngineController::start(const bool ds) {

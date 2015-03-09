@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#include "i6engine/modules/manager/IDManager.h"
+#include "i6engine/api/manager/IDManager.h"
 
 #include "i6engine/utils/Exceptions.h"
 
 namespace i6engine {
-namespace modules {
+namespace api {
 
 	IDManager::IDManager() : _idNext(0), _idMax(INT64_MAX), _idMutex() {
 	}
@@ -56,5 +56,5 @@ namespace modules {
 		return _idNext - amount;
 	}
 
-} /* namespace modules */
+} /* namespace api */
 } /* namespace i6engine */

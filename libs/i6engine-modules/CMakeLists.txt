@@ -74,7 +74,8 @@ set(i6modulesSrc
 	${srcdir}/api/facades/ScriptingFacade.cpp
 
 	${srcdir}/api/gui/GUIWidget.cpp
-
+	
+	${srcdir}/api/manager/IDManager.cpp
 	${srcdir}/api/manager/TextManager.cpp
 
 	${srcdir}/api/objects/GameObject.cpp
@@ -101,8 +102,6 @@ set(i6modulesSrc
 	${srcdir}/modules/input/InputManager.cpp
 	${srcdir}/modules/input/KeyboardListener.cpp
 	${srcdir}/modules/input/MouseListener.cpp
-
-	${srcdir}/modules/manager/IDManager.cpp
 
 	${srcdir}/modules/object/ComponentFactory.cpp
 	${srcdir}/modules/object/GOFactory.cpp
@@ -231,7 +230,6 @@ source_group(modules\\audio /modules/audio/*)
 source_group(modules\\graphics /modules/graphics/*)
 source_group(modules\\gui /modules/gui/*)
 source_group(modules\\input /modules/input/*)
-source_group(modules\\manager /modules/manager/*)
 source_group(modules\\network /modules/network/*)
 source_group(modules\\object /modules/object/*)
 source_group(modules\\physics /modules/physics/*)

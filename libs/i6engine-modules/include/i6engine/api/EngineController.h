@@ -42,17 +42,13 @@ namespace core {
 	class SubSystemController;
 	enum class Subsystem;
 } /* namespace core */
-
-namespace modules {
-	class IDManager;
-} /* namespace modules */
-
 namespace api {
 
 	class Application;
 	class AudioFacade;
 	class GraphicsFacade;
 	class GUIFacade;
+	class IDManager;
 	class InputFacade;
 	class MessagingFacade;
 	class NetworkFacade;
@@ -136,7 +132,9 @@ namespace api {
 			return _scriptingFacade;
 		}
 
-		modules::IDManager * getIDManager() const;
+		IDManager * getIDManager() const {
+			return _idManager;
+		}
 
 		TextManager * getTextManager() const {
 			return _textManager;
@@ -246,7 +244,7 @@ namespace api {
 		std::map<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> _queuedModulesWaiting;
 		core::SubSystemController * _subsystemController;
 		core::EngineCoreController * _coreController;
-		modules::IDManager * _idManager;
+		IDManager * _idManager;
 		TextManager * _textManager;
 		Application * _appl;
 		uint8_t _debugdrawer;
