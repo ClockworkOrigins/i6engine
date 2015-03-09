@@ -72,6 +72,7 @@ namespace gui {
 		GuiResolution,
 		GuiAddImageset,
 		GuiSetAlignment,
+		GuiSetDropTarget,
 		GuiMessageTypesCount
 	};
 
@@ -408,6 +409,18 @@ namespace gui {
 			return new GUI_Alignment(*this);
 		}
 	} GUI_Alignment;
+
+	/**
+	 * \brief enables or disables a GUIWidget as drop target
+	 */
+	typedef struct GUI_SetDropTarget : GUIUpdateMessageStruct {
+		bool dropable;
+		GUI_SetDropTarget(const std::string & name, bool d) : GUIUpdateMessageStruct(name), dropable(d) {
+		}
+		GUI_SetDropTarget * copy() {
+			return new GUI_SetDropTarget(*this);
+		}
+	} GUI_SetDropTarget;
 
 } /* namespace gui */
 } /* namespace api */

@@ -197,6 +197,10 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetAlignment, core::Method::Update, new gui::GUI_Alignment(windowname, alignment), core::Subsystem::Unknown));
 	}
 
+	void GUIFacade::enableDropTarget(const std::string & windowname, bool target) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetDropTarget, core::Method::Update, new gui::GUI_SetDropTarget(windowname, target), core::Subsystem::Unknown));
+	}
+
 	void GUIFacade::addTicker(GUIWidget * widget) {
 		_addTickerCallback(widget);
 	}

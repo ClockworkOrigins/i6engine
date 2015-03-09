@@ -31,6 +31,12 @@ namespace api {
 		_window->destroy();
 	}
 
+	void GUIWidget::update(uint16_t type, gui::GUIUpdateMessageStruct * message) {
+		if (type == gui::GUIMessageTypes::GuiSetDropTarget) {
+			_dropable = dynamic_cast<gui::GUI_SetDropTarget *>(message)->dropable;
+		}
+	}
+
 	void GUIWidget::loadWindowLayout(const std::string & name, const std::string & filename) {
 		try {
 			CEGUI::Window * objTemp = CEGUI::WindowManager::getSingleton().loadLayoutFromFile(filename);

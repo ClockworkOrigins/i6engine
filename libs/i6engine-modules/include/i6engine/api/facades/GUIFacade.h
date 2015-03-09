@@ -212,6 +212,13 @@ namespace gui {
 		void setAlignment(const std::string & name, gui::Alignment alignment) const;
 
 		/**
+		 * \brief Enables or disables Widget as drop target
+		 * \param name Name of the object.
+		 * \param target true means Widget accepts drops
+		 */
+		void enableDropTarget(const std::string & name, bool target) const;
+
+		/**
 		 * \brief Creates a StatusList-GuiWidget
 		 * \param	CEGUI Type i.e. "Tri6/Blanko"
 		 * \param	position x-coordinate

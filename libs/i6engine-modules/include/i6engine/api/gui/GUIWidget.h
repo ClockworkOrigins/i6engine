@@ -63,7 +63,7 @@ namespace gui {
 		/**
 		 * \brief Method to process incoming messages.
 		 */
-		virtual void update(uint16_t type, gui::GUIUpdateMessageStruct * message) = 0;
+		virtual void update(uint16_t type, gui::GUIUpdateMessageStruct * message);
 
 		/**
 		 * \brief This method is called every Tick, if ticking is enabled for this widget
