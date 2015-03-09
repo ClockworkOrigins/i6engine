@@ -116,6 +116,9 @@ namespace gui {
 			_mouseOverCallback = func;
 		}
 
+		void setPosition(double x, double y);
+		void setSize(double w, double h);
+
 		std::string _name;
 		CEGUI::Window * _window;
 
@@ -128,9 +131,6 @@ namespace gui {
 		bool _isDragged;
 		Vec2f _dragOffset;
 		boost::function<void(void)> _clickCallback;
-
-		void setPosition(double x, double y);
-		void setSize(double w, double h);
 
 		bool drag(const CEGUI::EventArgs & e);
 		bool drop(const CEGUI::EventArgs & e);

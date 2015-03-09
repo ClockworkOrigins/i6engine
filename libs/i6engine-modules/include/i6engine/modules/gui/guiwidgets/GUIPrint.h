@@ -75,20 +75,6 @@ namespace modules {
 		uint64_t _startTime;
 
 		/**
-		 * \brief Sets the Position of the text.
-		 * \param x x Value.
-		 * \param y y Value.
-		 */
-		void setPosition(double x, double y);
-
-		/**
-		 * \brief Sets the Size of the window.
-		 * \param w width.
-		 * \param h height.
-		 */
-		void setSize(double w, double h);
-
-		/**
 		 * \brief Sets the text which should be displayed.
 		 * \param text Text to be set.
 		 */

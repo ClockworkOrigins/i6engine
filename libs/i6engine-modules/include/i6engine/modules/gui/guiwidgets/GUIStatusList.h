@@ -82,11 +82,6 @@ namespace modules {
 		void addMessage(const std::string & message);
 
 		/**
-		 * \brief Sets the position of the GUIStatusList
-		 */
-		void setPosition(const double x, const double y);
-
-		/**
 		 * \brief Sets the Lifetime
 		 */
 		void setLifetime(const int64_t lifetime);

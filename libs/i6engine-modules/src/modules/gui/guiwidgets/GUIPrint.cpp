@@ -49,9 +49,6 @@ namespace modules {
 			_realPosX = guiP->x;
 			_realPosY = guiP->y;
 			setText(_text);
-		} else if (type == api::gui::GuiSetSize) {
-			api::gui::GUI_Size * guiP = static_cast<api::gui::GUI_Size *>(data);
-			setSize(guiP->width, guiP->height);
 		} else if (type == api::gui::GuiSetColour) {
 			api::gui::GUI_Colour * guiC = static_cast<api::gui::GUI_Colour *>(data);
 			setColour(CEGUI::Colour(float(guiC->red), float(guiC->green), float(guiC->blue), float(guiC->alpha)));
@@ -62,23 +59,12 @@ namespace modules {
 		} else if (type == api::gui::GuiSetLifetime) {
 			api::gui::GUI_Lifetime * guiP = static_cast<api::gui::GUI_Lifetime *>(data);
 			setTimeToDie(guiP->lifetime);
-		} else if (type == api::gui::GuiSetVisible) {
-			bool vis = static_cast<api::gui::GUI_Visibility *>(data)->visible;
-			_window->setVisible(vis);
 		} else if (type == api::gui::GuiSetAlignment) {
 			_alignment = static_cast<api::gui::GUI_Alignment *>(data)->alignment;
 			setText(_text);
 		} else {
-			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
+			GUIWidget::update(type, data);
 		}
-	}
-
-	void GUIPrint::setPosition(double x, double y) {
-		_lb->setPosition(CEGUI::UVector2(CEGUI::UDim(float(x), 0.0f), CEGUI::UDim(float(y), 0.0f)));
-	}
-
-	void GUIPrint::setSize(double w, double h) {
-		_lb->setSize(CEGUI::USize(CEGUI::UDim(float(w), 0.0f), CEGUI::UDim(float(h), 0.0f)));
 	}
 
 	void GUIPrint::setText(const std::string & text) {

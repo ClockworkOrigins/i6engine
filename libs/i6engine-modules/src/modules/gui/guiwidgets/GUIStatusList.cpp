@@ -41,6 +41,22 @@ namespace modules {
 		enableTicking(false);
 	}
 
+	void GUIStatusList::update(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
+		if (type == api::gui::GuiAddText) {
+			std::string text = dynamic_cast<api::gui::GUI_Text *>(data)->text;
+			addMessage(text);
+		} else if (type == api::gui::GuiSetLifetime) {
+			const api::gui::GUI_Lifetime * guiP = (static_cast<api::gui::GUI_Lifetime *>(data));
+			setLifetime(guiP->lifetime);
+		} else if (type == api::gui::GuiClearWidget) {
+			clearEntries();
+		} else if (type == api::gui::GuiSetAmount) {
+			_amount = static_cast<api::gui::GUI_Amount *>(data)->amount;
+		} else {
+			GUIWidget::update(type, data);
+		}
+	}
+
 	void GUIStatusList::addMessage(const std::string & message) {
 		ISIXE_LOG_INFO("GUIStatusList " + _name, message);
 		CEGUI::ListboxTextItem * lbi = new CEGUI::ListboxTextItem(message);
@@ -53,10 +69,6 @@ namespace modules {
 		}
 	}
 
-	void GUIStatusList::setPosition(double x, double y) {
-		lb->setPosition(CEGUI::UVector2(CEGUI::UDim(float(x), 0.0f), CEGUI::UDim(float(y), 0.0f)));
-	}
-
 	void GUIStatusList::setLifetime(const int64_t lifetime) {
 		if (_lifetime == -1 && lifetime != -1) {
 			enableTicking(true);
@@ -67,31 +79,6 @@ namespace modules {
 	void GUIStatusList::clearEntries() {
 		while (lb->getItemCount() > 0) {
 			lb->removeItem(lb->getListboxItemFromIndex(0));
-		}
-	}
-
-	void GUIStatusList::update(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
-		if (type == api::gui::GuiAddText) {
-			std::string text = dynamic_cast<api::gui::GUI_Text *>(data)->text;
-			addMessage(text);
-		} else if (type == api::gui::GuiSetPosition) {
-			const api::gui::GUI_Position * guiP = (static_cast<api::gui::GUI_Position *>(data));
-			setPosition(guiP->x, guiP->y);
-		} else if (type == api::gui::GuiSetLifetime) {
-			const api::gui::GUI_Lifetime * guiP = (static_cast<api::gui::GUI_Lifetime *>(data));
-			setLifetime(guiP->lifetime);
-		} else if (type == api::gui::GuiSetVisible) {
-			bool vis = static_cast<api::gui::GUI_Visibility *>(data)->visible;
-			_window->setVisible(vis);
-		} else if (type == api::gui::GuiSetSize) {
-			const api::gui::GUI_Size * guiP = static_cast<api::gui::GUI_Size *>(data);
-			_window->setSize(CEGUI::USize(CEGUI::UDim(float(guiP->width), 0.0f), CEGUI::UDim(float(guiP->height), 0.0f)));
-		} else if (type == api::gui::GuiClearWidget) {
-			clearEntries();
-		} else if (type == api::gui::GuiSetAmount) {
-			_amount = static_cast<api::gui::GUI_Amount *>(data)->amount;
-		} else {
-			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
 		}
 	}
 

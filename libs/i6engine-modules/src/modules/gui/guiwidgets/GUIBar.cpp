@@ -32,33 +32,16 @@ namespace modules {
 	}
 
 	void GUIBar::update(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
-		if (type == api::gui::GuiSetPosition) {
-			const api::gui::GUI_Position * g = static_cast<api::gui::GUI_Position *>(data);
-			setPosition(g->x, g->y);
-		} else if (type == api::gui::GuiSetProgress) {
-			const api::gui::GUI_Progress * g = static_cast<api::gui::GUI_Progress *>(data);
+		if (type == api::gui::GuiSetProgress) {
+			api::gui::GUI_Progress * g = static_cast<api::gui::GUI_Progress *>(data);
 			setProgress(g->progress);
-		} else if (type == api::gui::GuiSetSize) {
-			const api::gui::GUI_Size * g = static_cast<api::gui::GUI_Size *>(data);
-			setSize(g->width, g->height);
-		} else if (type == api::gui::GuiSetVisible) {
-			bool vis = static_cast<api::gui::GUI_Visibility *>(data)->visible;
-			_window->setVisible(vis);
 		} else {
-			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
+			GUIWidget::update(type, data);
 		}
-	}
-
-	void GUIBar::setPosition(double x, double y) {
-		_window->setPosition(CEGUI::UVector2(CEGUI::UDim(float(x), 0.0f), CEGUI::UDim(float(y), 0.0f)));
 	}
 
 	void GUIBar::setProgress(double f) {
 		static_cast<CEGUI::ProgressBar *>(_window)->setProgress(float(f));
-	}
-
-	void GUIBar::setSize(double w, double h) {
-		_window->setSize(CEGUI::USize(CEGUI::UDim(float(w), 0.0f), CEGUI::UDim(float(h), 0.0f)));
 	}
 
 } /* namespace modules */

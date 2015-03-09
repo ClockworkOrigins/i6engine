@@ -50,23 +50,11 @@ namespace modules {
 
 	private:
 		/**
-		 * \brief Sets the Position of the image.
-		 * \param x x Value.
-		 * \param y y Value.
-		 */
-		void setPosition(double x, double y);
-
-		/**
 		 * \brief Sets the image of the image
 		 * \param ImageSet-Name
 		 * \param Image-Name
 		 */
 		void setImage(const std::string & imageSetName, const std::string & imageName);
-
-		/**
-		 * \brief Sets the size of the image
-		 */
-		void setSize(double w, double h);
 
 		/**
 		 * \brief forbidden

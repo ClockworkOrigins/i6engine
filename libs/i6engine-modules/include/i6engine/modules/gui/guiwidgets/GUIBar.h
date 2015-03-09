@@ -49,22 +49,10 @@ namespace modules {
 
 	private:
 		/**
-		 * \brief Sets the Position of the bar.
-		 * \param x x Value.
-		 * \param y y Value.
-		 */
-		void setPosition(double x, double y);
-
-		/**
 		 * \brief Sets the progress of the bar
 		 * \param f Progress (between 0 and 1)
 		 */
 		void setProgress(double f);
-
-		/**
-		 * \brief Sets the size of the bar
-		 */
-		void setSize(double w, double h);
 
 		/**
 		 * \brief forbidden

@@ -34,33 +34,16 @@ namespace modules {
 	}
 
 	void GUIImage::update(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
-		if (type == api::gui::GuiSetPosition) {
-			api::gui::GUI_Position * g = static_cast<api::gui::GUI_Position *>(data);
-			setPosition(g->x, g->y);
-		} else if (type == api::gui::GuiSetImage) {
+		if (type == api::gui::GuiSetImage) {
 			api::gui::GUI_Image * g = static_cast<api::gui::GUI_Image *>(data);
 			setImage(g->imageSetName, g->imageName);
-		} else if (type == api::gui::GuiSetSize) {
-			api::gui::GUI_Size * g = static_cast<api::gui::GUI_Size *>(data);
-			setSize(g->width, g->height);
-		} else if (type == api::gui::GuiSetVisible) {
-			bool vis = static_cast<api::gui::GUI_Visibility *>(data)->visible;
-			_window->setVisible(vis);
 		} else {
-			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
+			GUIWidget::update(type, data);
 		}
 	}
 
 	void GUIImage::setImage(const std::string & imageSetName, const std::string & imageName) {
 		_window->setProperty("Image", imageSetName + "/" + imageName);
-	}
-
-	void GUIImage::setPosition(double x, double y) {
-		_window->setPosition(CEGUI::UVector2(CEGUI::UDim(float(x), 0.0f), CEGUI::UDim(float(y), 0.0f)));
-	}
-
-	void GUIImage::setSize(double w, double h) {
-		_window->setSize(CEGUI::USize(CEGUI::UDim(float(w), 0.0f), CEGUI::UDim(float(h), 0.0f)));
 	}
 
 } /* namespace modules */

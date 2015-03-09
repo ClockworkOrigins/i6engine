@@ -60,6 +60,8 @@ namespace api {
 			_dropCallback = dynamic_cast<gui::GUI_SetDropCallback *>(message)->callback;
 		} else if (type == gui::GUIMessageTypes::GuiSubscribeEvent) {
 			subscribeClickEvent(dynamic_cast<gui::GUI_SubscribeEvent_Update *>(message)->func);
+		} else {
+			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
 		}
 	}
 
