@@ -368,6 +368,8 @@ namespace editor {
 						break;
 					}
 				}
+			} else if (ibu->pressed && api::MouseButtonID(ibu->code) == api::MouseButtonID::MB_Right) {
+				selectObject(-1);
 			}
 		}
 	}
@@ -375,7 +377,7 @@ namespace editor {
 	void Editor::updateObjectList() {
 		api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::RemoveEntries, core::Method::Update, new messages::GUI_RemoveEntries("ObjectList"), i6engine::core::Subsystem::Unknown));
 
-		for (auto go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
+		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
 			if (go->getType() != "EditorCam") {
 				api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddEntry, core::Method::Update, new messages::GUI_AddEntry("ObjectList", go->getType(), boost::bind(&Editor::selectObject, this, go->getID())), i6engine::core::Subsystem::Unknown));
 			}
@@ -387,6 +389,10 @@ namespace editor {
 			api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("ObjectInfo");
 		}
 		_selectedObjectID = id;
+
+		if (_selectedObjectID == -1) {
+			return;
+		}
 
 		api::EngineController::GetSingleton().getGUIFacade()->setSize("ObjectList", 0.15, 0.5);
 

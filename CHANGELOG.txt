@@ -8,6 +8,7 @@ Enhancements:
 	- added an EditboxWidget
 	- added a TextButtonWidget
 	- objects in the level editor now can be selected clicking on their mesh with the mouse
+	- right mouse button now can be used to deselect an object in level editor
 
 v 0.8.0
 
