@@ -93,11 +93,11 @@ namespace api {
 	}
 
 	bool GUIWidget::drag(const CEGUI::EventArgs & e) {
-		if (_clickCallback != nullptr) {
+		if (!_clickCallback.empty()) {
 			_clickCallback();
 		}
 		if (!_dragable) {
-			return true;
+			return false;
 		}
 		_isDragged = true;
 		_dragOffset.setX(dynamic_cast<const CEGUI::MouseEventArgs *>(&e)->position.d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _window->getPosition().d_x.d_scale);

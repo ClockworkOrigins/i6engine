@@ -106,6 +106,14 @@ namespace api {
 		setSize(name, w, h);
 	}
 
+	void GUIFacade::addEditbox(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & defaultText, const std::function<void(std::string)> & enterCallback) {
+		createWidget(name, "GUIEditbox", type);
+		setPosition(name, x, y);
+		setSize(name, w, h);
+		setText(name, defaultText);
+		setEnterTextCallback(name, enterCallback);
+	}
+
 	void GUIFacade::setLifetime(const std::string & name, const int64_t time) {
 		GameMessage::Ptr tim = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetLifetime, core::Method::Update, new gui::GUI_Lifetime(name, time), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(tim);
@@ -132,6 +140,10 @@ namespace api {
 		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetImage, core::Method::Update, new gui::GUI_Image(name, imageSetName, imageName), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pos);
+	}
+
+	void GUIFacade::setEnterTextCallback(const std::string & name, const std::function<void(std::string)> & enterCallback) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetEnterCallback, core::Method::Update, new gui::GUI_SetEnterTextCallback(name, enterCallback), core::Subsystem::Unknown));
 	}
 
 	void GUIFacade::addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) {

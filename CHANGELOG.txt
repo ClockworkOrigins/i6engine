@@ -5,6 +5,7 @@ Enhancements:
 	- GUIWidgets now can be dragged and dropped with calling a callback at drop
 	- added a TextManager for easy multilanguage support
 	- moved IDManager to API
+	- added an EditboxWidget
 
 v 0.8.0
 

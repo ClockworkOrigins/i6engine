@@ -26,10 +26,11 @@
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/gui/GUIWidget.h"
 
+#include "i6engine/modules/gui/guiwidgets/GUIBar.h"
+#include "i6engine/modules/gui/guiwidgets/GUIEditbox.h"
+#include "i6engine/modules/gui/guiwidgets/GUIImage.h"
 #include "i6engine/modules/gui/guiwidgets/GUIPrint.h"
 #include "i6engine/modules/gui/guiwidgets/GUIStatusList.h"
-#include "i6engine/modules/gui/guiwidgets/GUIBar.h"
-#include "i6engine/modules/gui/guiwidgets/GUIImage.h"
 
 #include "boost/functional/factory.hpp"
 #include "boost/interprocess/sync/scoped_lock.hpp"
@@ -49,10 +50,11 @@ namespace modules {
 		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerAddTickerCallback(boost::bind(&GUIManager::addTicker, this, _1));
 		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerRemoveTickerCallback(boost::bind(&GUIManager::removeTicker, this, _1));
 
+		registerGUIWidgetTemplate("GUIBar", boost::factory<GUIBar *>());
+		registerGUIWidgetTemplate("GUIEditbox", boost::factory<GUIEditbox *>());
+		registerGUIWidgetTemplate("GUIImage", boost::factory<GUIImage *>());
 		registerGUIWidgetTemplate("GUIPrint", boost::factory<GUIPrint *>());
 		registerGUIWidgetTemplate("GUIStatusList", boost::factory<GUIStatusList *>());
-		registerGUIWidgetTemplate("GUIBar", boost::factory<GUIBar *>());
-		registerGUIWidgetTemplate("GUIImage", boost::factory<GUIImage *>());
 	}
 
 	GUIManager::~GUIManager() {
@@ -192,9 +194,9 @@ namespace modules {
 
 	void GUIManager::KeyHold(const api::KeyCode intKeyCode) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyDown(CEGUI::Key::Scan(intKeyCode));
-		CEGUI::System::getSingleton().getDefaultGUIContext().injectChar(CEGUI::uint(intKeyCode));
+			
+		//CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyDown(CEGUI::Key::Scan(intKeyCode));
+		//CEGUI::System::getSingleton().getDefaultGUIContext().injectChar(CEGUI::uint(intKeyCode));
 
 		std::stringstream ss;
 		ss << uint32_t(intKeyCode);
