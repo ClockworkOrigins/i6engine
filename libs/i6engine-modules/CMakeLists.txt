@@ -75,6 +75,8 @@ set(i6modulesSrc
 
 	${srcdir}/api/gui/GUIWidget.cpp
 
+	${srcdir}/api/manager/TextManager.cpp
+
 	${srcdir}/api/objects/GameObject.cpp
 
 	${srcdir}/modules/graphics/Debug.cpp
@@ -222,6 +224,7 @@ source_group(api\\components /api/components/*)
 source_group(api\\configs /api/configs/*)
 source_group(api\\facades /api/facades/*)
 source_group(api\\gui /api/gui/*)
+source_group(api\\manager /api/manager/*)
 source_group(api\\objects /api/objects/*)
 source_group(api /api/*)
 source_group(modules\\audio /modules/audio/*)

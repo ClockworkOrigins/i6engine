@@ -43,6 +43,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/facades/PhysicsFacade.h"
 #include "i6engine/api/facades/ScriptingFacade.h"
+#include "i6engine/api/manager/TextManager.h"
 
 #ifdef ISIXE_WITH_AUDIO
 	#include "i6engine/modules/audio/AudioController.h"
@@ -75,7 +76,7 @@ void forceCleanup(int param) {
 namespace i6engine {
 namespace api {
 
-	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new modules::IDManager()), _appl(), _debugdrawer(0), _ds(false), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
+	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new modules::IDManager()), _textManager(new TextManager()), _appl(), _debugdrawer(0), _ds(false), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
 		// WORKAROUND: Install signal handlers to overcome OIS's limitation to handle X11 key repeat rate properly when crashing.
 		signal(SIGINT, forceCleanup);
 		// TODO: kA
@@ -88,14 +89,22 @@ namespace api {
 		_messagingFacade->registerMessagingController(_messagingController);
 
 		if (clockUtils::ClockError::SUCCESS != _iParser.load("i6engine.ini")) {
-			ISIXE_LOG_ERROR("EngineController", "An exception has occurred: i6engine.ini couldn't be parsed!");
+			ISIXE_THROW_FAILURE("EngineController", "An exception has occurred: i6engine.ini couldn't be parsed!");
 		}
+
+		std::string textDir;
+		if (clockUtils::ClockError::SUCCESS != _iParser.getValue("GENERAL", "i6engineTextDir", textDir)) {
+			ISIXE_THROW_FAILURE("EngineController", "An exception has occurred: i6engine.ini couldn't be parsed!");
+		}
+
+		_textManager->initialize(textDir);
 	}
 
 	EngineController::~EngineController() {
 		delete _subsystemController;
 		delete _coreController;
 		delete _idManager;
+		delete _textManager;
 
 		for (const std::pair<std::string, std::pair<core::ModuleController *, uint32_t>> & modulesPair : _queuedModules) {
 			delete modulesPair.second.first;

@@ -3,6 +3,7 @@
 Enhancements:
 	- GameObject::getGOC can specify return value now via template
 	- GUIWidgets now can be dragged and dropped with calling a callback at drop
+	- added a TextManager for easy multilanguage support
 
 v 0.8.0
 

@@ -59,6 +59,7 @@ namespace api {
 	class ObjectFacade;
 	class PhysicsFacade;
 	class ScriptingFacade;
+	class TextManager;
 
 	enum class GameType {
 		SINGLEPLAYER,
@@ -136,6 +137,10 @@ namespace api {
 		}
 
 		modules::IDManager * getIDManager() const;
+
+		TextManager * getTextManager() const {
+			return _textManager;
+		}
 
 		/**
 		 * \brief register an Application to the Engine
@@ -242,6 +247,7 @@ namespace api {
 		core::SubSystemController * _subsystemController;
 		core::EngineCoreController * _coreController;
 		modules::IDManager * _idManager;
+		TextManager * _textManager;
 		Application * _appl;
 		uint8_t _debugdrawer;
 		bool _ds;
