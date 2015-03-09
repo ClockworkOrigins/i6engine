@@ -308,7 +308,7 @@ namespace api {
 
 	template<typename T>
 	i6engine::utils::sharedPtr<T, i6engine::api::Component> GameObject::getGOC() const {
-		for (auto com : _objComponents) {
+		for (const std::pair<int64_t, ComPtr> & com : _objComponents) {
 			auto c = i6engine::utils::dynamic_pointer_cast<T>(com.second);
 			if (c != nullptr) {
 				return c;
@@ -321,7 +321,7 @@ namespace api {
 
 	template<typename T>
 	i6engine::utils::sharedPtr<T, i6engine::api::Component> GameObject::getGOC(const std::string & identifier) const {
-		for (auto com : _objComponents) {
+		for (const std::pair<int64_t, ComPtr> & com : _objComponents) {
 			auto co = i6engine::utils::dynamic_pointer_cast<T>(com.second);
 			if (co != nullptr) {
 				for (ComPtr & c : co->_subComps) {
