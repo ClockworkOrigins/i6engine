@@ -73,6 +73,8 @@ namespace gui {
 		GuiAddImageset,
 		GuiSetAlignment,
 		GuiSetDropTarget,
+		GuiSetDragable,
+		GuiSetDropCallback,
 		GuiMessageTypesCount
 	};
 
@@ -421,6 +423,30 @@ namespace gui {
 			return new GUI_SetDropTarget(*this);
 		}
 	} GUI_SetDropTarget;
+
+	/**
+	 * \brief enables or disables dragging of Widget
+	 */
+	typedef struct GUI_SetDragable : GUIUpdateMessageStruct {
+		bool dragable;
+		GUI_SetDragable(const std::string & name, bool d) : GUIUpdateMessageStruct(name), dragable(d) {
+		}
+		GUI_SetDragable * copy() {
+			return new GUI_SetDragable(*this);
+		}
+	} GUI_SetDragable;
+
+	/**
+	* \brief callback being called when Widget is dropped
+	*/
+	typedef struct GUI_SetDropCallback : GUIUpdateMessageStruct {
+		std::function<void(const std::string &, const std::string &)> callback;
+		GUI_SetDropCallback(const std::string & name, const std::function<void(const std::string &, const std::string &)> & c) : GUIUpdateMessageStruct(name), callback(c) {
+		}
+		GUI_SetDropCallback * copy() {
+			return new GUI_SetDropCallback(*this);
+		}
+	} GUI_SetDropCallback;
 
 } /* namespace gui */
 } /* namespace api */

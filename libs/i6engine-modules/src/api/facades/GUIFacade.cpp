@@ -201,6 +201,14 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetDropTarget, core::Method::Update, new gui::GUI_SetDropTarget(windowname, target), core::Subsystem::Unknown));
 	}
 
+	void GUIFacade::setDragable(const std::string & windowname, bool enabled) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetDragable, core::Method::Update, new gui::GUI_SetDragable(windowname, enabled), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::setDropCallback(const std::string & windowname, const std::function<void(const std::string &, const std::string &)> & callback) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetDropCallback, core::Method::Update, new gui::GUI_SetDropCallback(windowname, callback), core::Subsystem::Unknown));
+	}
+
 	void GUIFacade::addTicker(GUIWidget * widget) {
 		_addTickerCallback(widget);
 	}

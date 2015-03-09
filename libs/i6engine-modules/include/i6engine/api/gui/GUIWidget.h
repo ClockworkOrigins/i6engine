@@ -26,9 +26,12 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
+#include "i6engine/math/i6eVector2.h"
+
 #include "boost/function.hpp"
 
 namespace CEGUI {
+	class EventArgs;
 	class Window;
 } /* namespace CEGUI */
 
@@ -57,7 +60,7 @@ namespace gui {
 	 */
 	class ISIXE_MODULES_API GUIWidget {
 	public:
-		explicit GUIWidget(const std::string & name) : _name(name), _window(), _dropable(false), _mouseOverCallback() {}
+		explicit GUIWidget(const std::string & name);
 		virtual ~GUIWidget();
 
 		/**
@@ -107,16 +110,28 @@ namespace gui {
 		/**
 		 * \brief sets mouse over callback
 		 */
-		void setMouseOverCallback(const std::function<std::vector<GUIWidget *>()> & func) {
+		void setMouseOverCallback(const std::function<std::vector<GUIWidget *>(void)> & func) {
 			_mouseOverCallback = func;
 		}
 
 		std::string _name;
 		CEGUI::Window * _window;
-		bool _dropable;
 
 	private:
 		std::function<std::vector<GUIWidget *>()> _mouseOverCallback;
+		bool _dropable;
+		bool _dragable;
+		std::function<void(const std::string &, const std::string &)> _dropCallback;
+		Vec2f _originalPos;
+		bool _isDragged;
+		Vec2f _dragOffset;
+
+		void setPosition(double x, double y);
+		void setSize(double w, double h);
+
+		bool drag(const CEGUI::EventArgs & e);
+		bool drop(const CEGUI::EventArgs & e);
+		bool mouseMove(const CEGUI::EventArgs & e);
 
 		/**
 		 * \brief forbidden

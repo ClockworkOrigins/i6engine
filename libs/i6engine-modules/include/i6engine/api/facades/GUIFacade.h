@@ -219,6 +219,20 @@ namespace gui {
 		void enableDropTarget(const std::string & name, bool target) const;
 
 		/**
+		 * \brief Enables or disables Widget being dragable
+		 * \param name Name of the object.
+		 * \param enabled defines whether the Widget is dragable or not
+		 */
+		void setDragable(const std::string & name, bool enabled) const;
+
+		/**
+		 * \brief Sets callback being called when the dragable widget is dropped
+		 * \param name Name of the object.
+		 * \param callback the method to be called on drop
+		 */
+		void setDropCallback(const std::string & name, const std::function<void(const std::string &, const std::string &)> & callback) const;
+
+		/**
 		 * \brief Creates a StatusList-GuiWidget
 		 * \param	CEGUI Type i.e. "Tri6/Blanko"
 		 * \param	position x-coordinate

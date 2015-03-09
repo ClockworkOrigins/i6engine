@@ -2,6 +2,7 @@
 
 Enhancements:
 	- GameObject::getGOC can specify return value now via template
+	- GUIWidgets now can be dragged and dropped with calling a callback at drop
 
 v 0.8.0
 
