@@ -1,0 +1,14 @@
+/**
+ * \addtogroup graphic
+ * @{
+ * \page page_graphic Graphic
+ *
+ * The \ref i6engine::modules::GraphicsController "GraphicsController" (which can only be instantiated once) is the
+ * interface managing the graphic subsystem. It therefore provides methods to create and update \ref i6engine::modules::GraphicsNode "Graphic Nodes"
+ * according to received messages from the \ref i6engine::core::MessagingController "MessagingController" and start Renderer every tick.
+ *
+ */
+ 
+/**
+ * @}
+ */

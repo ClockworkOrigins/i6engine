@@ -1,0 +1,305 @@
+/**
+ * Copyright 2012 FAU (Friedrich Alexander University of Erlangen-Nuremberg)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * \addtogroup API
+ * @{
+ */
+
+#ifndef __I6ENGINE_API_ENGINECONTROLLER_H__
+#define __I6ENGINE_API_ENGINECONTROLLER_H__
+
+#include <map>
+#include <set>
+
+#include "i6engine/utils/ExceptionQueue.h"
+#include "i6engine/utils/i6eSystemParameters.h"
+#include "i6engine/utils/Logger.h"
+#include "i6engine/utils/Singleton.h"
+
+#include "clockUtils/iniParser/iniParser.h"
+
+#include "boost/function.hpp"
+
+namespace i6engine {
+namespace core {
+	class EngineCoreController;
+	class MessagingController;
+	class ModuleController;
+	class SubSystemController;
+	enum class Subsystem;
+} /* namespace core */
+
+namespace modules {
+	class IDManager;
+} /* namespace modules */
+
+namespace api {
+
+	class Application;
+	class AudioFacade;
+	class GraphicsFacade;
+	class GUIFacade;
+	class InputFacade;
+	class MessagingFacade;
+	class NetworkFacade;
+	class ObjectFacade;
+	class PhysicsFacade;
+	class ScriptingFacade;
+
+	enum class GameType {
+		SINGLEPLAYER,
+		CLIENT,
+		SERVER
+	};
+
+	/**
+	 * \brief This class is used as the Controller for the whole engine
+	 * Create an instance of this class and use the functions to start / stop / ...
+	 * the Engine
+	 */
+#ifdef ISIXE_LOGGING
+	class ISIXE_MODULES_API EngineController : public utils::Singleton<EngineController, utils::Logger, utils::exceptions::ExceptionQueue> {
+		friend class utils::Singleton<EngineController, utils::Logger, utils::exceptions::ExceptionQueue>;
+#else
+	class ISIXE_MODULES_API EngineController : public utils::Singleton<EngineController, utils::exceptions::ExceptionQueue> {
+		friend class utils::Singleton<EngineController, utils::exceptions::ExceptionQueue>;
+#endif
+
+	public:
+		/**
+		 * \brief Destructor
+		 */
+		~EngineController();
+
+		/**
+		 * \brief This method registeres a modul
+		 * \param[in] name name of the module
+		 * \param[in] module the module to be registered
+		 * \param[in] frameTime time between two ticks of this subsystem
+		 * This function can be used to create a non default subsystem configurator
+		 * or you can even register your own subsystems. But if you do this, make sure, they
+		 * match the required behaviour.
+		 * For most purposes, the default configuration is sufficiant and can be registered with
+		 * \ref registerDefault()
+		 */
+		void registerSubSystem(const std::string & name, core::ModuleController * module, uint32_t frameTime);
+		void registerSubSystem(const std::string & name, core::ModuleController * module, const std::set<core::Subsystem> & waitingFor);
+
+		inline AudioFacade * getAudioFacade() const {
+			return _audioFacade;
+		}
+
+		inline GraphicsFacade * getGraphicsFacade() const {
+			return _graphicsFacade;
+		}
+
+		inline GUIFacade * getGUIFacade() const {
+			return _guiFacade;
+		}
+
+		inline InputFacade * getInputFacade() const {
+			return _inputFacade;
+		}
+
+		inline MessagingFacade * getMessagingFacade() const {
+			return _messagingFacade;
+		}
+
+		inline NetworkFacade * getNetworkFacade() const {
+			return _networkFacade;
+		}
+
+		inline ObjectFacade * getObjectFacade() const {
+			return _objectFacade;
+		}
+
+		inline PhysicsFacade * getPhysicsFacade() const {
+			return _physicsFacade;
+		}
+
+		inline ScriptingFacade * getScriptingFacade() const {
+			return _scriptingFacade;
+		}
+
+		modules::IDManager * getIDManager() const;
+
+		/**
+		 * \brief register an Application to the Engine
+		 * \param[in] app reference to the application
+		 */
+		void registerApplication(Application & app);
+
+		/**
+		 * \brief A start method to Initialize and run the engine
+		 * \param[in] start as Dedicated Server (ds)
+		 */
+		void start(const bool ds);
+
+		inline void setType(GameType type) {
+			_type = type;
+		}
+
+		/**
+		 * \brief sets level of the debug drawer
+		 */
+		inline void setDebugdrawer(const uint8_t dd) {
+			_debugdrawer = dd;
+		}
+
+		/**
+		 * \brief gets level of the debug drawer
+		 */
+		inline uint8_t getDebugdrawer() const {
+			return _debugdrawer;
+		}
+
+		/**
+		 * \brief returns the registered Application
+		 */
+		inline Application * getAppl() const { return _appl; }
+
+		void registerDefault(const bool ds);
+
+		void stop();
+
+		inline core::EngineCoreController * getController() const {
+			return _coreController;
+		}
+
+		/**
+		 * \brief registers a timer
+		 * \param[in] name name of the timer to identify
+		 * \param[in] time time in microseconds until func is called
+		 * \param[in] func function to be called after given time
+		 */
+		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, uint16_t priority);
+
+		/**
+		 * \brief deletes all timer with given priority
+		 */
+		void removeTimer(uint16_t priority);
+
+		/**
+		 * \brief deletes all timer with given name
+		 */
+		bool removeTimerID(uint64_t id);
+
+		uint64_t getTimeLeft(uint64_t id) const;
+
+		/**
+		 * \brief returns current application time in microseconds
+		 */
+		uint64_t getCurrentTime() const;
+
+		/**
+		 * \brief sets the current time (only at clients, time will be synchronized by server)
+		 */
+		void setCurrentTime(uint64_t time);
+
+		/**
+		 * \brief returns the uuid of this node
+		 */
+		inline uint32_t getUUID() const {
+			return _uuid;
+		}
+
+		/**
+		 * \brief returns a new uuid
+		 */
+		uint32_t getNewUUID() const;
+
+		/**
+		 * \brief returns the iniParser that parsed the i6engine config file
+		 */
+		inline clockUtils::iniParser::IniParser & getIniParser() {
+			return _iParser;
+		}
+
+		/**
+		 * \brief returns the type of this node
+		 */
+		GameType getType() const {
+			return _type;
+		}
+
+	private:
+		std::map<std::string, std::pair<core::ModuleController *, uint32_t>> _queuedModules;
+		std::map<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> _queuedModulesWaiting;
+		core::SubSystemController * _subsystemController;
+		core::EngineCoreController * _coreController;
+		modules::IDManager * _idManager;
+		Application * _appl;
+		uint8_t _debugdrawer;
+		bool _ds;
+
+		AudioFacade * _audioFacade;
+		GraphicsFacade * _graphicsFacade;
+		GUIFacade * _guiFacade;
+		InputFacade * _inputFacade;
+		MessagingFacade * _messagingFacade;
+		NetworkFacade * _networkFacade;
+		ObjectFacade * _objectFacade;
+		PhysicsFacade * _physicsFacade;
+		ScriptingFacade * _scriptingFacade;
+
+		core::MessagingController * _messagingController;
+
+		uint32_t _uuid;
+
+		/**
+		 * \brief ini parser to load config file
+		 */
+		clockUtils::iniParser::IniParser _iParser;
+
+		GameType _type;
+
+		/**
+		 * \brief Contructor
+		 */
+		EngineController();
+
+		/**
+		 * \brief starts the engine
+		 * This function blocks. It will return only after the engine is completely shutdown
+		 * You can now only interact with the engine from your application class.
+		 */
+		void runEngine();
+
+		/**
+		 * \brief shut down the engine
+		 */
+		void ShutDown();
+
+		/**
+		 * \brief forbidden
+		 */
+		EngineController(const EngineController &) = delete;
+
+		/**
+		 * \brief forbidden
+		 */
+		EngineController & operator=(const EngineController &) = delete;
+	};
+
+} /* namespace api */
+} /* namespace i6engine */
+
+#endif /* __I6ENGINE_API_ENGINECONTROLLER_H__ */
+
+/**
+ * @}
+ */

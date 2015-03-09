@@ -1,0 +1,28 @@
+/**
+ * \page page_utils Utilities
+ * Various tools are stored under utils, that did't really fit in anywhere else.
+ *
+ * \section sec_utils_overview Overview
+ * 
+ * \ref i6engine::utils::exceptions::i6exception Base type for custom exceptions
+ * 
+ * \ref i6engine::utils::exceptions::ExceptionQueue Queues and dequeues exceptions
+ * 
+ * \ref i6engine::utils::math::i6eQuaternion Implements 3-d rotations
+ * 
+ * \ref i6engine::utils::math::i6eVector4 Implements 4-dimensional vectors, similar to i6engine::utils::math::i6eQuaternion
+ * 
+ * \ref i6engine::utils::math::i6eVector Implements 3-dimensional vectors
+ * 
+ * \ref Logger Logs to console or file, uses different LogLevels
+ * 
+ * \ref i6engine::utils::math::Maths Miscellaneous mathmatical operations. Right now only calulates Euclidian Distance
+ * 
+ * \ref NonCopyable Used for objects, that should not be copyable.
+ * 
+ * \ref i6engine::utils::Singleton< T > Used for objects, that should only have one instance max.
+ * 
+ * \ref Splash Displays JPEGs as splash screen.
+ * 
+ * \ref TickCounter Counter, used for calculating FPS
+ */

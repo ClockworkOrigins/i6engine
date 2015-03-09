@@ -1,0 +1,92 @@
+/**
+ * \addtogroup physics
+ * The physics module monitors all \ref i6engine::modules::GameObject "GameObjects" that have a physical
+ * influence on the game world and detects collisions between them. It uses the 
+ * <a href="http://bulletphysics.org/wordpress/">BulletPhysics</a> library.
+ * @{
+ */
+ 
+/**
+ * \page page_physics Physics System
+ *
+ * The \ref i6engine::modules::PhysicsController "PhysicsController" (which can only be instantiated once) is the
+ * interface through which one can influence the contents of the simulated Bullet world. It therefore provides methods to
+ * add and remove rigidBodies and setting up (/shutting down) the whole Bullet world.
+ *
+ * The Bullet world itself can be changed (set
+ * \ref i6engine::modules::PhysicsFacade "gravity" and 
+ * \ref i6engine::modules::PhysicsFacade::setPhysicsWorldScale(const int intPhysicsWorldScale) "world scale") via the
+ * \ref i6engine::modules::PhysicsFacade "PhysicsFacade".
+ *
+ * \section The Collision Detection
+ *
+ * The \ref i6engine::modules::PhysicsController "PhysicsController" uses (yet) a discrete world (btDiscreteDynamicsWorld),
+ * the default collision configuration (btDefaultCollisionConfiguration) and a broadphase detection using
+ * a fast dynamic bounding volume hierarchy based on an AABB tree (btDbvtBroadphase).
+ *
+ *
+ */
+ 
+ /**
+ * \page objects_bullet The Objects of Bullet's World
+ *
+ * The abstract class \ref i6engine::api::PhysicalStateComponent "PhysicalStateComponent" stores rotation and position of a physical body and provides methods
+ * for changing those parameters. Each change will set the dirty flag and initiate broadcasting the new
+ * position and rotation at the next \ref i6engine::api::PhysicalStateComponent::Tick() "tick".
+ *
+ * \image html PhysicalStateComponent1.png
+ *
+ * The btTransform of a body however is managed by the child class \ref i6engine::api::BulletPhysicalStateComponent
+ * "BulletPhysicalStateComponent". It is also
+ * a child of btMotionState and therefore provides a setWorldTransform method to be able to adopt changes
+ * by Bullet. BulletPhysicalStateComponent contains a pointer to the specific rigidBody and is responsible
+ * for adding and removing the object to Bullet's world via the \ref i6engine::modules::PhysicsController "PhysicsController".
+ * 
+ * \section position_update Updating An Object's Position
+ *
+ * When a message with a MotionState update is received, the (yet to be implemented) BodyHandler's duty will be
+ * to manipulate the specific btRigidBody accordingly. Currently the idea is to compute momentum and torque to move
+ * the object to the new position, as you cannot set a new position directly with Bullet.
+ *
+ * \section creating_rigidbody Creating a rigid Body
+ *
+ * The following steps must be taken to create a simple physical object and add it to the simulated world:
+ * @code
+ * i6eFrontend::BulletPhysicalStateComponent *physComp = new i6eFrontend::BulletPhysicalStateComponent();
+ * physComp->SetRotation(i6eQuaternion(1,1,1,1));
+ * physComp->SetPosition(i6eVector(1,1,1));
+ * physComp->Init(new btRigidBody(10000, physComp, new btCylinderShape(btVector3(1,1,1))));
+ * @endcode
+ *
+ * The last code line will get the \ref i6engine::modules::PhysicsController "PhysicsController" singleton
+ * and call its \ref i6engine::modules::PhysicsController::AddRigidBody(btRigidBody* rigidBody) "AddRigidBody" method.
+ *
+ * The now created component just needs to be added to a \ref i6engine::modules::GameObject "GameObject" via its
+ * \ref i6engine::modules::GameObject::setGOC(api::Component *objNewGOC)
+ * "setGOC" method and you are done.
+ */
+ 
+ /*  PhysicalStateComponent
+ *
+ *  Speichert Position und Rotation des GameObjects
+ *  Setzt Dirty-Flag bei Änderung.
+ *  Virtuelle Tick-Methode, die bei vorhandenem Dirty-Flag Message schickt. -> Override in abgeleiteter Klasse.
+ *  Wird benutzt, um Positionsupdates übers Netzwerk
+ *  TODO: Scale möglich mit Bullet?
+ *  TODO: Besseren Ort für Owner-Flag suchen. Gehört entweder direkt ins GameObject oder in separate Input-Komponente.
+ *
+ *  BulletPhysicalStateComponent
+ *
+ *  Kind-Klasse von PhysicalStateComponent und btMotionState
+ *  Besitzt Referenz auf zu simulierenden RigidBody
+ *  Zuständig für An- und Abmelden des Bodys beim PhysicsController
+ *  Synchronisiert PhysicalStateComponent-Attribute mit btMotionState
+ *  TODO: setWorldTransform? Bullet-Doku ist etwas vage, wie Readbacks aus dem MotionState zu machen sind.
+ *  TODO: Schöneres Wegkapseln der Bullet-API?
+ *
+ *
+ */
+ 
+/**
+ * @}
+ */

@@ -1,0 +1,151 @@
+/**
+ * \addtogroup requirements
+ * Requirements for i6engine
+ * @{
+ */
+ 
+ /**
+ * \page page_requirements System requirements
+ *
+ * \section sec_06 0.6
+ * Operating System\n
+ * SUSE 12.2\n
+ * Sabayon\n
+ * ArchLinux\n
+ * \n
+ * working Hardware (wasn't tested on other hardware) \n
+ * Hardware / Drivers\n
+ * Graphics card: GeForce 7300 LE\n
+ * Graphics driver: 304.64\n
+ * \n
+ * Tools\n
+ * Automake	1.10 (exactly 1.10) \n
+ * CMake	2.8 (or above) \n
+ * \n
+ * Libraries\n
+ * libpthread.so\n
+ * libX11.so.6.3.0\n
+ * libjpeg.so.62\n
+ * libstdc++.so.6\n
+ * libm.so.6\n
+ * libgcc_s.so.1\n
+ * libc.so.6\n
+ * librt.so.1\n
+ * ld-linux-x86-64.so.2\n
+ * libxcb.so.1\n
+ * libdl.so.2\n
+ * libfreetype.so.6\n
+ * libSM.so.6\n
+ * libICE.so.6\n
+ * libXext.so.6\n
+ * libXt.so.6\n
+ * libXaw.so.7\n
+ * libfreeimage.so.3\n
+ * libpcre.so.0\n
+ * libexpat.so.1\n
+ * libXau.so.6\n
+ * libssl.so.1.0.0\n
+ * libcrypto.so.1.0.0\n
+ * libz.so.1\n
+ * libuuid.so.1\n
+ * libXmu.so.6\n
+ * libXpm.so.4\n
+ *
+ * Compiler\n
+ * gcc 4.7\n
+ * clang 3.1, 3.2\n
+ *
+ * \section sec_05 0.5
+ * Operating System\n
+ * SUSE 12.1\n
+ * SUSE 12.2\n
+ * \n
+ * working Hardware (wasn't tested on other hardware) \n
+ * Hardware / Drivers\n
+ * Graphics card: GeForce 7300 LE\n
+ * Graphics driver: 290.10, 295.40\n
+ * \n
+ * Tools\n
+ * Automake	1.10 (exactly 1.10) \n
+ * CMake	2.8 (or above) \n
+ * \n
+ * Libraries\n
+ * libpthread.so\n
+ * libX11.so.6.3.0\n
+ * libjpeg.so.62\n
+ * libstdc++.so.6\n
+ * libm.so.6\n
+ * libgcc_s.so.1\n
+ * libc.so.6\n
+ * librt.so.1\n
+ * ld-linux-x86-64.so.2\n
+ * libxcb.so.1\n
+ * libdl.so.2\n
+ * libfreetype.so.6\n
+ * libSM.so.6\n
+ * libICE.so.6\n
+ * libXext.so.6\n
+ * libXt.so.6\n
+ * libXaw.so.7\n
+ * libfreeimage.so.3\n
+ * libpcre.so.0\n
+ * libexpat.so.1\n
+ * libXau.so.6\n
+ * libssl.so.1.0.0\n
+ * libcrypto.so.1.0.0\n
+ * libz.so.1\n
+ * libuuid.so.1\n
+ * libXmu.so.6\n
+ * libXpm.so.4\n
+ *
+ * Compiler\n
+ * gcc 4.6\n
+ * gcc 4.7\n
+ *
+ * \section sec_04 0.4
+ * Operating System\n
+ * SUSE 12.1\n
+ * \n
+ * working Hardware (wasn't tested on other hardware) \n
+ * Hardware / Drivers\n
+ * Graphics card: GeForce 7300 LE\n
+ * Graphics driver: 295.40\n
+ * \n
+ * Tools\n
+ * Automake	1.10 (exactly 1.10) \n
+ * CMake	2.8 (or above) \n
+ * \n
+ * Libraries\n
+ * libpthread.so\n
+ * libX11.so.6.3.0\n
+ * libjpeg.so.62\n
+ * libstdc++.so.6\n
+ * libm.so.6\n
+ * libgcc_s.so.1\n
+ * libc.so.6\n
+ * librt.so.1\n
+ * ld-linux-x86-64.so.2\n
+ * libxcb.so.1\n
+ * libdl.so.2\n
+ * libfreetype.so.6\n
+ * libSM.so.6\n
+ * libICE.so.6\n
+ * libXext.so.6\n
+ * libXt.so.6\n
+ * libXaw.so.7\n
+ * libfreeimage.so.3\n
+ * libpcre.so.0\n
+ * libexpat.so.1\n
+ * libXau.so.6\n
+ * libssl.so.1.0.0\n
+ * libcrypto.so.1.0.0\n
+ * libz.so.1\n
+ * libuuid.so.1\n
+ * libXmu.so.6\n
+ * libXpm.so.4\n
+ *
+ */
+ 
+/**
+ * @}
+ */

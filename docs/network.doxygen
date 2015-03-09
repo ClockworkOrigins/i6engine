@@ -1,0 +1,22 @@
+/**
+ * \addtogroup network
+ * The network
+ * @{
+ */
+ 
+/**
+ * \page page_network Network
+ *
+ * \section sec_network_overview Overview
+ *
+ * This is the customized Network index page.
+ *
+ * \section sec_Network_details Details
+ *
+ * insert details here or
+ * feel free to modify this file in any way
+ */
+ 
+/**
+ * @}
+ */

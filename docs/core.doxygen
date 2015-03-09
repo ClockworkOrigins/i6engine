@@ -1,0 +1,21 @@
+/**
+ * \addtogroup core
+ * The core is the part of the engine that controlles the whole enginge.
+ * @{
+ */
+
+/**
+ * \page page_core Core Overview
+ *
+ * \image html Core_Overview.png
+ * 
+ * The core is the part of the engine that controlles the whole enginge.\n
+ * It consists of a \ref page_engineCoreController as the super controller,
+ * a \ref sec_core_subsystemController for all the various SubSystems,
+ * the \ref page_messagingSystem the \ref page_subsystems use for communication
+ * and a \ref page_clock for ensuring a specific frame rate and synchronizing the \ref page_subsystems
+ */
+
+/**
+ * @}
+ */

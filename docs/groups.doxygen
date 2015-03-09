@@ -1,0 +1,8 @@
+/**
+ * \defgroup core Core
+ * \defgroup Graphic Graphic
+ * \defgroup physics Physics
+ * \defgroup GUI GUI
+ * \defgroup Input Input
+ * \defgroup Network Network
+ */

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<Map name="Testarena">	
+	<Section flags="SP|MPS">
+		<GameObject name="map" send="False">
+			<Attribute name="map" value="terrain4.png"></Attribute>
+			<Attribute name="texture" value="terrain9.jpg"></Attribute>
+			<Attribute name="size" value="50000.0"></Attribute>
+		</GameObject>
+	</Section>
+</Map>

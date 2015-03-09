@@ -1,0 +1,34 @@
+call build-common.bat
+
+Set ARCHIVE=bullet-2.80-rev2531.tar.gz
+Set BUILD_DIR=%BUILD_ROOT%/bullet-2.80-rev2531
+Set PREFIX=%cd%/bullet/
+
+echo "Compile Bullet"
+
+echo "Extracting Bullet"
+if not exist %BUILD_ROOT% exit
+cd %BUILD_ROOT%
+
+if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
+
+winrar.exe x %EX_DIR%/%ARCHIVE%
+
+if not exist %BUILD_DIR% exit
+
+echo "Patching Bullet"
+xcopy /S /Y "%PATCH_DIR%/Windows/bullet/Extras" "%BUILD_DIR%/Extras"
+
+echo "Configuring Bullet"
+cd %BUILD_DIR%
+cmake . -DCMAKE_INSTALL_PREFIX=%PREFIX% -DBUILD_DEMOS=OFF -DINSTALL_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DUSE_DOUBLE_PRECISION=ON -DUSE_GRAPHICAL_BENCHMARK=OFF -DUSE_MSVC_RUNTIME_LIBRARY_DLL=ON -DBUILD_CPU_DEMOS=OFF -DBUILD_INTEL_OPENCL_DEMOS=OFF -DBUILD_EXTRAS=ON -DBUILD_MINICL_OPENCL_DEMOS=OFF -DINSTALL_EXTRA_LIBS=ON -DUSE_DX11=OFF -DUSE_GLUT=ON
+
+echo "Building Bullet"
+MSBuild.exe BULLET_PHYSICS.sln /p:Configuration=Release > NUL
+
+echo "Installing Bullet"
+MSBuild.exe INSTALL.vcxproj /p:Configuration=Release > NUL
+
+echo "Cleaning up"
+cd %DEP_DIR%
+RD /S /Q "%BUILD_DIR%"

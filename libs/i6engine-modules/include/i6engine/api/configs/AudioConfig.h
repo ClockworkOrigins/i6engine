@@ -1,0 +1,121 @@
+/**
+ * Copyright 2012 FAU (Friedrich Alexander University of Erlangen-Nuremberg)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * \addtogroup Audio
+ * @{
+ */
+
+#ifndef __I6ENGINE_API_AUDIOCONFIG_H__
+#define __I6ENGINE_API_AUDIOCONFIG_H__
+
+#include "i6engine/math/i6eQuaternion.h"
+#include "i6engine/math/i6eVector.h"
+
+#include "i6engine/api/GameMessageStruct.h"
+
+namespace i6engine {
+namespace api {
+	enum class KeyState : uint16_t;
+
+namespace audio {
+	enum AudioMessageTypes {
+		AudioReset = 0,
+		AudioNode,
+		AudioListener,
+		AudioPosition,
+		AudioUnlock,
+		AudioPlaySound,
+		AudioMessageTypesCount
+	};
+
+	/**
+	 * \brief creates a new audio node
+	 */
+	typedef struct Audio_Node_Create : GameMessageStruct {
+		std::string file;
+		bool looping;
+		double maxDist;
+		Vec3 position;
+		Vec3 direction;
+		Audio_Node_Create(int64_t c, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d) : GameMessageStruct(c, -1), file(f), looping(l), maxDist(m), position(p), direction(d) {
+		}
+		Audio_Node_Create * copy() {
+			return new Audio_Node_Create(*this);
+		}
+	} Audio_Node_Create;
+
+	/**
+	 * \brief deletes an audio node
+	 */
+	typedef struct Audio_Node_Delete : GameMessageStruct {
+		Audio_Node_Delete(int64_t c) : GameMessageStruct(c, -1) {
+		}
+		Audio_Node_Delete * copy() {
+			return new Audio_Node_Delete(*this);
+		}
+	} Audio_Node_Delete;
+
+	/**
+	 * \brief updates sound listener
+	 */
+	typedef struct Audio_Listener_Update : GameMessageStruct {
+		Vec3 position;
+		Quaternion rotation;
+		Vec3 velocity;
+		Audio_Listener_Update(const Vec3 & p, const Quaternion & r, const Vec3 & v) : GameMessageStruct(), position(p), rotation(r), velocity(v) {
+		}
+		Audio_Listener_Update * copy() {
+			return new Audio_Listener_Update(*this);
+		}
+	} Audio_Listener_Update;
+
+	/**
+	* \brief updates nodes position
+	*/
+	typedef struct Audio_Position_Update : GameMessageStruct {
+		Vec3 position;
+		Audio_Position_Update(int64_t c, const Vec3 & p) : GameMessageStruct(c, -1), position(p) {
+		}
+		Audio_Position_Update * copy() {
+			return new Audio_Position_Update(*this);
+		}
+	} Audio_Position_Update;
+
+	/**
+	 * \brief plays given sound once
+	 */
+	typedef struct Audio_PlaySound_Create : GameMessageStruct {
+		std::string file;
+		double maxDist;
+		Vec3 position;
+		Vec3 direction;
+		Audio_PlaySound_Create(const std::string & f, double m, const Vec3 & p, const Vec3 & d) : GameMessageStruct(), file(f), maxDist(m), position(p), direction(d) {
+		}
+		Audio_PlaySound_Create * copy() {
+			return new Audio_PlaySound_Create(*this);
+		}
+	} Audio_PlaySound_Create;
+
+} /* namespace audio */
+} /* namespace api */
+} /* namespace i6engine */
+
+#endif /* __I6ENGINE_API_AUDIOCONFIG_H__ */
+
+/**
+ * @}
+ */

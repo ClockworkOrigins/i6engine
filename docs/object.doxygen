@@ -1,0 +1,31 @@
+/**
+ * \addtogroup object
+ * The object module creates, manages and destroys all \ref i6engine::modules::GameObject "GameObjects", which represent aggregates of components ("GOComponent").
+ *
+ * This design follows the one described in "Chris Stoy: Game Object Component System. Game Programming Gems 6, 2006, page 393."
+ * @{
+ */
+
+/**
+ * \page page_object Object System
+ *
+ * \section objectController ObjectController
+ *
+ * The singleton \ref i6engine::modules::ObjectController "ObjectController" holds the list of all GameObjects. Upon each tick all GOComponents are ordered to process their messages.
+ *
+ * \section componentFactory ComponentFactory
+ *
+ * The singleton \ref i6engine::modules::ObjectController "ComponentFactory" creates GOComponents that have been registered with it and GameObjects whose records are found in the database.
+ *
+ * \section objectFacade ObjectFacade
+ *
+ * The singleton \ref i6engine::modules::ObjectFacade "ObjectFacade" inserts, deletes and retrieves the GameObjects resp. their pointers via the ObjectController's list.
+ *
+ * \section gameObject GameObject
+ *
+ * A GameObject consists of a timestamp and its list of GOComponents. Both can be manipulated; there can only be one GOComponent of each type.
+ */
+
+/**
+ * @}
+ */

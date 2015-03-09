@@ -1,0 +1,25 @@
+﻿v 0.8.0
+
+Enhancements:
+	- added Vec2 implementation to help using GUI caluclations or things like that
+	- mouse wheel movement can be handled now
+	- added audio subsystem
+	- mover can be created now without starting them directly
+	- ray tests start position now can be set as offset from objects center
+	- mover now can be resetted
+	- added possibility to let a mover only drive its way once
+	- added possibility to change direction of a mover
+	- object and physics subsystem now can be paused and unpaused
+	- using shift in input fields now leads to upper case
+	- imagesets now can be added dynamically during lifetime
+	- added basics of level editor
+	- moved math functionality into own submodule
+	- message structs now are in the correct sub namespace
+	- added a numeric integration method for arrays of data using trapezoidal rule
+	- reduced message overhead a bit
+	- added horizontal alignment for GUIPrints
+	- added possibility to let a subsystem wait for another one
+
+Fixes:
+	- meshes can be changed now
+	- fixed datatypes being not equal over different compilers, especially 32 and 64 bit, causing game to freeze on 32 bit after about 30 minutes

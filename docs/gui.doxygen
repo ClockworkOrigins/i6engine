@@ -1,0 +1,49 @@
+/**
+ * \page page_gui Graphical User Interface
+ * \section basic Basic GUI understanding
+ * It is pretty simple to add GUI elements to the screen using C++ Code. But you have to define them earlier. Therefor, there are several files being used by the GUI:
+ * + Scheme
+ *		+ list of Imagesets
+ *		+ list of Fonts
+ *		+ list of LookNFeel
+ *		+ defines how a custom name is mapped to the CEGUI item, the renderer to be used and the lookNFeel
+ * + LookNFeel
+ *		+ Sets custom properties for the Widgets
+ * + Imageset
+ *		+ Maps Image names to regions in an image file
+ * + Layout
+ *		+ Defines the main settings for a layout (a container for the widgets)
+ *
+ * \section infra Setting up the GUI infrastructure
+ * \note During this Introduction, <i>gf</i> will always be a pointer to the GUIFacade
+ *
+ * Start the GUI with a given Scheme
+ * ~~~~~~~~~~{.cpp}
+ * gf->startGUI("Tri6.scheme", "", "", "Tri6", "MouseArrow");
+ * ~~~~~~~~~~
+ * The parameters are:
+ * + The Name of the Scheme file to use
+ * + The default FontSet (can be empty)
+ * + The default Font from this set (can be empty)
+ * + The imageset that should be used for the mouse cursor
+ * + The image that should be used for the cursor
+ * This has to done for other GUI functions to succeed.
+ *
+ * \section actual Adding GUI elements
+ * Now comes the interesting part: Adding GUI elements. All functions look like this:
+ * ~~~~~~~~~~{.cpp}
+ * add[WidgetType]([Name], [WidgetType], [Parameterlist]*);
+ * ~~~~~~~~~~
+ * Let's for example add a progressbar:
+ * ~~~~~~~~~~{.cpp}
+ * gf->addProgressBar("HPBar", "Game/VUMeter", 0.50, 0.09, 0.04, 0.01);
+ * ~~~~~~~~~~
+ * The 4 parameters are the position and the size of the bar. Later, the value can be adjusted using:
+ * ~~~~~~~~~~{.cpp}
+ * gf->setProgress("HPBar", 0.75);
+ * ~~~~~~~~~~
+ * GUI Elements currently supported are:
+ * + ProgressBar
+ * + Print
+ * + Image
+ */

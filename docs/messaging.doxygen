@@ -1,0 +1,33 @@
+/**
+ * \addtogroup messaging
+ * The Messaging System is used for the main communication between the different Subsystems
+ * @{
+ */
+
+/**
+ * \page page_messaging Messaging Overview
+ *
+ * This list *should* contain all types of messages that exist in the i6engine
+ *
+ * <h2>FooBar - type="Collision" <i>signals a Collision</i></h2>
+ * <h3>delivered by: ?</h3>
+ * <h3>catched by: ObjectMailbox</h3>
+ * <table border=1><tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Description</b></td></tr>
+ * <tr><td>self</td><td>int</td><td></td></tr>
+ * <tr><td>other</td><td>int</td><td></td></tr>
+ * </table>
+ * <br>
+ * <h2>FooBar - type="Component" <i>adds a new Component to a specific GameObject</i></h2>
+ * <h3>delivered by: ?</h3>
+ * <h3>catched by: ObjectMailbox</h3>
+ * <table border=1><tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Description</b></td></tr>
+ * <tr><td>gameObjectID</td><td>int</td><td></td></tr>
+ * <tr><td>num</td><td>int</td><td>must match the amount of TYPE_ and VALUE_ fields</td></tr>
+ * <tr><td>TYPE_<i>id</i></td><td>string</td><td>name of the id-th variable, id starts with 0</td></tr>
+ * <tr><td>VALUE_<i>id</i></td><td>string</td><td>value of the id-th variable, id starts with 0</td></tr>
+ * </table>
+ */
+
+/**
+ * @}
+ */

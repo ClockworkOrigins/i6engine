@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<GUILayout version="4">
+	<Window type="Editor/StaticImage" name="MenuBar">
+		<Property name="Position" value="{{0,0},{0,0}}" />
+		<Property name="MaxSize" value="{{1,0},{1,0}}" />
+		<Property name="Size" value="{{1,0},{1,0}}" />
+		<Property name="Image" value="Editor/TbM_Filling" />
+
+		<Window type="Editor/Combobox" name="File">
+			<Property name="Position" value="{{0.0,0},{0,0}}" />
+			<Property name="MaxSize" value="{{1,0},{1,0}}" />
+			<Property name="Size" value="{{0.4,0},{0.6,0}}" />
+		</Window>
+	</Window>
+</GUILayout>

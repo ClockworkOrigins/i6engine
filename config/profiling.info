@@ -1,0 +1,12 @@
+; To enable output => true
+packetDump false
+fps false
+fpsCrit false
+fpsRed 0.9
+waitingMsg false
+countMsg true
+timeStamp false
+numberObjects false
+numberMessages false
+profileCPU false
+profileMemory false

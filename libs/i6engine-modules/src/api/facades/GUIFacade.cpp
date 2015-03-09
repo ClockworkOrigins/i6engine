@@ -1,0 +1,233 @@
+/**
+ * Copyright 2012 FAU (Friedrich Alexander University of Erlangen-Nuremberg)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "i6engine/api/facades/GUIFacade.h"
+
+#include "i6engine/utils/Exceptions.h"
+
+#include "i6engine/core/configs/SubsystemConfig.h"
+
+#include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/configs/GUIConfig.h"
+#include "i6engine/api/facades/MessagingFacade.h"
+
+namespace i6engine {
+namespace api {
+
+	GUIFacade::GUIFacade() : _onWindow(), _captured() {
+	}
+
+	void GUIFacade::startGUI(const std::string & strScheme, const std::string & strFont, const std::string & strDefaultFont, const std::string & strDefaultMouseImageSet, const std::string & strDefaultMouseImageName) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAdd, core::Method::Create, new gui::GUI_Add_Create(strScheme, strFont, strDefaultFont, strDefaultMouseImageSet, strDefaultMouseImageName), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::addToRootWindow(const std::string & child_window) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddToRoot, core::Method::Update, new gui::GUI_AddToRoot_Update(child_window), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::setMouseVisibility(const bool visibility) {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiMouseVisible, core::Method::Update, new gui::GUI_MouseVisible_Update(visibility), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::clearAllWindows() {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiCleanUp, core::Method::Delete, new gui::GUI_CleanUp_Delete(), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::subscribeEvent(const std::string & windowname, const std::string & eventType, const boost::function<void(void)> & ptrEventMethod) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSubscribe, core::Method::Create, new gui::GUI_Subscribe_Create(windowname, eventType), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+
+		GameMessage::Ptr msg2 = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSubscribeEvent, core::Method::Create, new gui::GUI_SubscribeEvent_Create(windowname, ptrEventMethod), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg2);
+	}
+
+	void GUIFacade::changeEvent(const std::string & windowname, const bool b) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiEvent, core::Method::Update, new gui::GUI_Event_Update(windowname, b), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::registerWidgetTemplate(const std::string & name, const boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc) {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiWidgetTemplate, core::Method::Create, new gui::GUI_WidgetTemplate_Create(name, createFunc), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::createWidget(const std::string & name, const std::string & type, const std::string & style) {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddWidget, core::Method::Create, new gui::GUI_Widget_Create(name, type, style), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::deleteWidget(const std::string & name) {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiDeleteWidget, core::Method::Delete, new gui::GUIUpdateMessageStruct(name), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::addPrint(const std::string & name, const std::string & type, const double x, const double y, const std::string & message, gui::Alignment alignment, const int64_t lifetime /*=-1*/) {
+		createWidget(name, "GUIPrint", type);
+		setPosition(name, x, y);
+		setSize(name, 0.15, 0.04); // Default size for Prints
+		setText(name, message);
+		setAlignment(name, alignment);
+
+		if (lifetime != -1) {
+			setLifetime(name, lifetime);
+		}
+	}
+
+	void GUIFacade::addStatusList(const std::string & name, const std::string & type, const double x, const double y, const int64_t lifetime) {
+		createWidget(name, "GUIStatusList", type);
+		setPosition(name, x, y);
+		setLifetime(name, lifetime);
+	}
+
+	void GUIFacade::addProgressBar(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h) {
+		createWidget(name, "GUIBar", type);
+		setPosition(name, x, y);
+		setSize(name, w, h);
+	}
+
+	void GUIFacade::setLifetime(const std::string & name, const int64_t time) {
+		GameMessage::Ptr tim = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetLifetime, core::Method::Update, new gui::GUI_Lifetime(name, time), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(tim);
+	}
+
+	void GUIFacade::setText(const std::string & name, const std::string & text) {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetText, core::Method::Update, new gui::GUI_Text(name, text), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::setPosition(const std::string & name, const double x, const double y) {
+		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetPosition, core::Method::Update, new gui::GUI_Position(name, x, y), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pos);
+	}
+
+	void GUIFacade::setAmount(const std::string & name, const uint32_t amount) {
+		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetAmount, core::Method::Update, new gui::GUI_Amount(name, amount), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pos);
+	}
+
+	void GUIFacade::setImage(const std::string & name, const std::string & imageSetName, const std::string & imageName) {
+		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetImage, core::Method::Update, new gui::GUI_Image(name, imageSetName, imageName), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pos);
+	}
+
+	void GUIFacade::addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) {
+		createWidget(name, "GUIImage", type);
+		setPosition(name, x, y);
+		setSize(name, w, h);
+		setImage(name, imageSetName, imageName);
+	}
+
+	void GUIFacade::setSize(const std::string & name, const double w, const double h) {
+		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSize, core::Method::Update, new gui::GUI_Size(name, w, h), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pos);
+	}
+
+	void GUIFacade::setColour(const std::string & name, double alpha, double red, double green, double blue) {
+		GameMessage::Ptr col = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetColour, core::Method::Update, new gui::GUI_Colour(name, alpha, red, green, blue), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(col);
+	}
+
+	void GUIFacade::setFont(const std::string & name, const std::string & font) {
+		GameMessage::Ptr fon = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetFont, core::Method::Update, new gui::GUI_Text(name, font), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(fon);
+	}
+
+	void GUIFacade::addTextToWidget(const std::string & name, const std::string & text) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddText, core::Method::Update, new gui::GUI_Text(name, text), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::setProgress(const std::string & name, const double progress) {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetProgress, core::Method::Update, new gui::GUI_Progress(name, progress), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::addRowToList(const std::string & name) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddRow, core::Method::Update, new gui::GUIUpdateMessageStruct(name), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::addRowEntry(const std::string & name, const uint32_t row, const uint32_t column, const std::string & entry) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetRowEntry, core::Method::Update, new gui::GUI_Add_Row_Entry(name, row, column, entry), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::clearWidget(const std::string & name) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiClearWidget, core::Method::Update, new gui::GUIUpdateMessageStruct(name), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::setVisibility(const std::string & windowname, const bool visibility) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetVisible, core::Method::Update, new gui::GUI_Visibility(windowname, visibility), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::setAlignment(const std::string & windowname, gui::Alignment alignment) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetAlignment, core::Method::Update, new gui::GUI_Alignment(windowname, alignment), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::addTicker(GUIWidget * widget) {
+		_addTickerCallback(widget);
+	}
+
+	void GUIFacade::removeTicker(GUIWidget * widget) {
+		_removeTickerCallback(widget);
+	}
+
+	void GUIFacade::registerAddTickerCallback(const boost::function<void(GUIWidget *)> & func) {
+		_addTickerCallback = func;
+	}
+
+	void GUIFacade::registerRemoveTickerCallback(const boost::function<void(GUIWidget *)> & func) {
+		_removeTickerCallback = func;
+	}
+
+	void GUIFacade::resetSubSystem() {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiReset, core::Method::Delete, new GameMessageStruct(), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::setMouseCursorImage(const std::string & image) {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiMouseCursorImage, core::Method::Update, new gui::GUI_MouseCursorImage_Update(image), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::addImageset(const std::string & imageset) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddImageset, core::Method::Create, new gui::GUI_AddImageset_Create(imageset), core::Subsystem::Unknown));
+	}
+
+} /* namespace api */
+} /* namespace i6engine */

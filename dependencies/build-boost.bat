@@ -1,0 +1,40 @@
+call build-common.bat
+
+Set ARCHIVE=boost_1_55_0.tar.bz2
+Set BUILD_DIR=%BUILD_ROOT%/boost_1_55_0
+
+Set PREFIX=%cd%/boost/
+Set DEBUG_FLAG="variant=debug"
+Set RELEASE_FLAG="variant=release"
+
+Set BUILD_TYPE=%RELEASE_FLAG%
+
+echo "Compile Boost"
+
+echo "Extracting Boost"
+if not exist %BUILD_ROOT% exit
+cd %BUILD_ROOT%
+
+if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
+winrar.exe x %EX_DIR%/%ARCHIVE%
+
+if not exist %BUILD_DIR% exit
+
+echo "Patching Boost"
+cd %BUILD_DIR%
+xcopy /S /Y "%PATCH_DIR%/Windows/boost" "%BUILD_DIR%/boost"
+
+echo "Bootstrapping Boost"
+
+if not exist bootstrap.bat exit
+
+call bootstrap.bat
+
+if not exist b2.exe exit
+
+b2 toolset=msvc --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=tagged --build-type=complete install --prefix=%PREFIX% stage > NUL
+
+echo "Cleaning up"
+cd %DEP_DIR%
+RD /S /Q "%BUILD_DIR%"
+xcopy /S /Y "%PATCH_DIR%/Windows/boost_post" "%PREFIX%/include/boost/config"

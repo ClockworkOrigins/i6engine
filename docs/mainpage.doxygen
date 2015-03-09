@@ -1,0 +1,23 @@
+/**
+ * \mainpage i6engine Documentation
+ *
+ * \section sec_main_overview Overview
+ *
+ * i6engine is a message based multithreaded 3D Game Engine
+ *
+ * \section sec_main_links Links
+ *
+ * - \ref page_core
+ * - \ref page_graphic
+ * - \ref page_gui
+ * - \ref page_input
+ * - \ref page_messaging
+ * - \ref page_network
+ * - \ref page_object
+ * - \ref page_physics
+ * 	- &nbsp;&nbsp;&nbsp;&nbsp;\ref objects_bullet
+ * - \ref page_utils
+ * - \ref page_requirements
+ *
+ * \todo von dem nicht wirklich funktionierenden li-tags zurueck zu normalen doxygen Listen, wenn die funktionieren
+ */
