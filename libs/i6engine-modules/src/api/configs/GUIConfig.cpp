@@ -29,10 +29,7 @@ namespace gui {
 	GUI_MouseVisible_Update::GUI_MouseVisible_Update(const bool b) : GUIUpdateMessageStruct("GUIManager"), visible(b) {
 	}
 
-	GUI_Subscribe_Create::GUI_Subscribe_Create(const std::string & n, const std::string & e) : GUIUpdateMessageStruct("GUIManager"), name(n), event(e) {
-	}
-
-	GUI_SubscribeEvent_Create::GUI_SubscribeEvent_Create(const std::string & n, const boost::function<void(void)> & f) : GUIUpdateMessageStruct("GUIManager"), name(n), func(f) {
+	GUI_SubscribeEvent_Update::GUI_SubscribeEvent_Update(const std::string & n, const std::string & e, const boost::function<void(void)> & f) : GUIUpdateMessageStruct("GUIManager"), name(n), event(e), func(f) {
 	}
 
 	GUI_Child_Update::GUI_Child_Update(const std::string & n, const std::string & c) : GUIUpdateMessageStruct("GUIManager"), name(n), child(c) {

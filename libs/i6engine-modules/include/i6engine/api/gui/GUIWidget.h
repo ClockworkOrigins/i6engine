@@ -63,6 +63,8 @@ namespace gui {
 		explicit GUIWidget(const std::string & name);
 		virtual ~GUIWidget();
 
+		void init();
+
 		/**
 		 * \brief Method to process incoming messages.
 		 */
@@ -87,11 +89,11 @@ namespace gui {
 		/**
 		 * \brief Subscribes to a window event.
 		 * This function can be used to handle event-subscription-messages.
-		 * \param windowName The name of the window used in CEGUI
-		 * \param eventType The type of the Event
 		 * \param callback The function to be executed.
 		 */
-		void subscribeEvent(const std::string & windowName, const std::string & eventType, const boost::function<void(void)> & callback);
+		void subscribeClickEvent(const boost::function<void(void)> & callback) {
+			_clickCallback = callback;
+		}
 
 		/**
 		 * \brief returns whether the widget accepts drops or not
@@ -125,6 +127,7 @@ namespace gui {
 		Vec2f _originalPos;
 		bool _isDragged;
 		Vec2f _dragOffset;
+		boost::function<void(void)> _clickCallback;
 
 		void setPosition(double x, double y);
 		void setSize(double w, double h);

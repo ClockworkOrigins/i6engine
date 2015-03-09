@@ -43,7 +43,6 @@ namespace gui {
 		GuiTimepulse,
 		GuiMouseLeave,
 		GuiChild,
-		GuiSubscribe,
 		GuiSubscribeEvent,
 		GuiEvent,
 		GuiWidgetTemplate,
@@ -314,29 +313,19 @@ namespace gui {
 	} GUI_CleanUp_Delete;
 
 	/**
-	 * \brief subscribes key for some button
-	 */
-	typedef struct GUI_Subscribe_Create : GUIUpdateMessageStruct {
-		std::string name;
-		std::string event;
-		GUI_Subscribe_Create() {
-		}
-		GUI_Subscribe_Create(const std::string & n, const std::string & e);
-		GUI_Subscribe_Create * copy() {
-			return new GUI_Subscribe_Create(*this);
-		}
-	} GUI_Subscribe_Create;
-
-	/**
 	 * \brief subscribes method to be called using button
 	 */
-	typedef struct ISIXE_MODULES_API GUI_SubscribeEvent_Create : GUIUpdateMessageStruct {
+	typedef struct GUI_SubscribeEvent_Update : GUIUpdateMessageStruct {
 		std::string name;
+		std::string event;
 		boost::function<void(void)> func;
-		GUI_SubscribeEvent_Create() {}
-		GUI_SubscribeEvent_Create(const std::string & n, const boost::function<void(void)> & f);
-		GUI_SubscribeEvent_Create * copy() { return new GUI_SubscribeEvent_Create(*this); }
-	} GUI_SubscribeEvent_Create;
+		GUI_SubscribeEvent_Update() {
+		}
+		GUI_SubscribeEvent_Update(const std::string & n, const std::string & e, const boost::function<void(void)> & f);
+		GUI_SubscribeEvent_Update * copy() {
+			return new GUI_SubscribeEvent_Update(*this);
+		}
+	} GUI_SubscribeEvent_Update;
 
 	/**
 	 * \brief changes state of the event

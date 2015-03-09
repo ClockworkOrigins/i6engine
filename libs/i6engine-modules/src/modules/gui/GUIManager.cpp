@@ -225,6 +225,7 @@ namespace modules {
 		}
 		api::gui::GUI_Widget_Create * crt = static_cast<api::gui::GUI_Widget_Create *>(data);
 		api::GUIWidget * widget = _factory.createGUIWidget(crt->_name, crt->widgetType, crt->style);
+		widget->init();
 		widget->setMouseOverCallback(std::bind(&GUIManager::getMouseoverWidgets, this));
 		_widgets[crt->_name] = widget;
 		addToRootWindow(widget->_window);
@@ -493,13 +494,13 @@ namespace modules {
 		return it->second;
 	}
 
-	void GUIManager::handleCreateMessage(uint16_t type, const api::gui::GUIUpdateMessageStruct * data) {
+	void GUIManager::handleCreateMessage(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		if (type == api::gui::GuiWindow) {
-			initializeGUI(reinterpret_cast<Ogre::Root *>(static_cast<const api::gui::GUI_Window_Create *>(data)->window));
+			initializeGUI(reinterpret_cast<Ogre::Root *>(static_cast<api::gui::GUI_Window_Create *>(data)->window));
 		} else if (type == api::gui::GuiAdd) {
-			const api::gui::GUI_Add_Create * msg = static_cast<const api::gui::GUI_Add_Create *>(data);
+			const api::gui::GUI_Add_Create * msg = static_cast<api::gui::GUI_Add_Create *>(data);
 			std::string strScheme = msg->scheme;
 			std::string strFont = msg->font;
 			std::string strDefaultFont = msg->defFont;
@@ -507,50 +508,51 @@ namespace modules {
 			std::string strDefaultMouseImageName = msg->defMouseImageName;
 
 			createGUI(strScheme, strFont, strDefaultFont, strDefaultMouseImageSet, strDefaultMouseImageName);
-		} else if (type == api::gui::GuiSubscribe) {
-			std::string eventType = static_cast<const api::gui::GUI_Subscribe_Create *>(data)->event;
-			std::string name = static_cast<const api::gui::GUI_Subscribe_Create *>(data)->name;
-
-			subscribeEvent(name, eventType);
-		} else if (type == api::gui::GuiSubscribeEvent) {
-			setFunction(static_cast<const api::gui::GUI_SubscribeEvent_Create *>(data)->name, static_cast<const api::gui::GUI_SubscribeEvent_Create *>(data)->func);
 		} else if (type == api::gui::GuiWidgetTemplate) {
-			registerGUIWidgetTemplate(static_cast<const api::gui::GUI_WidgetTemplate_Create *>(data)->name, static_cast<const api::gui::GUI_WidgetTemplate_Create *>(data)->func);
+			registerGUIWidgetTemplate(static_cast<api::gui::GUI_WidgetTemplate_Create *>(data)->name, static_cast<api::gui::GUI_WidgetTemplate_Create *>(data)->func);
 		} else if (type == api::gui::GuiAddImageset) {
-			CEGUI::ImageManager::getSingleton().loadImageset(dynamic_cast<const api::gui::GUI_AddImageset_Create *>(data)->imageset);
+			CEGUI::ImageManager::getSingleton().loadImageset(dynamic_cast<api::gui::GUI_AddImageset_Create *>(data)->imageset);
 		} else {
 			ISIXE_THROW_API("GUIManager", "Can't handle create message " << type);
 		}
 	}
 
-	void GUIManager::handleUpdateMessage(uint16_t type, const api::gui::GUIUpdateMessageStruct * data) {
+	void GUIManager::handleUpdateMessage(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		if (type == api::gui::GuiChild) {
-			std::string parent_window = static_cast<const api::gui::GUI_Child_Update *>(data)->name;
-			std::string child_window = static_cast<const api::gui::GUI_Child_Update *>(data)->child;
+			std::string parent_window = static_cast<api::gui::GUI_Child_Update *>(data)->name;
+			std::string child_window = static_cast<api::gui::GUI_Child_Update *>(data)->child;
 
 			addChildWindow(parent_window, child_window);
 		} else if (type == api::gui::GuiAddToRoot) {
-			std::string child_window = static_cast<const api::gui::GUI_AddToRoot_Update *>(data)->child;
+			std::string child_window = static_cast<api::gui::GUI_AddToRoot_Update *>(data)->child;
 			addToRootWindow(getWidgetByName(child_window)->_window);
 		} else if (type == api::gui::GuiMouseVisible) {
-			bool visibility = static_cast<const api::gui::GUI_MouseVisible_Update *>(data)->visible;
+			bool visibility = static_cast<api::gui::GUI_MouseVisible_Update *>(data)->visible;
 
 			setMouseVisibility(visibility);
 		} else if (type == api::gui::GuiEvent) {
-			changeEvent(static_cast<const api::gui::GUI_Event_Update *>(data)->name, static_cast<const api::gui::GUI_Event_Update *>(data)->enabled);
+			changeEvent(static_cast<api::gui::GUI_Event_Update *>(data)->name, static_cast<api::gui::GUI_Event_Update *>(data)->enabled);
 		} else if (type == api::gui::GuiMouseCursorImage) {
-			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage(static_cast<const api::gui::GUI_MouseCursorImage_Update *>(data)->image);
+			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage(static_cast<api::gui::GUI_MouseCursorImage_Update *>(data)->image);
 		} else if (type == api::gui::GuiResolution) {
-			const api::gui::GUI_Resolution_Update * ru = dynamic_cast<const api::gui::GUI_Resolution_Update *>(data);
+			const api::gui::GUI_Resolution_Update * ru = dynamic_cast<api::gui::GUI_Resolution_Update *>(data);
 			_objRenderer->setDisplaySize(CEGUI::Sizef(float(ru->resolution.width), float(ru->resolution.height)));
+		} else if (type == api::gui::GuiSubscribeEvent) {
+			std::map<std::string, api::GUIWidget *>::iterator it = _widgets.find(static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->name);
+			if (it != _widgets.end()) {
+				it->second->update(type, data);
+				return;
+			}
+			subscribeEvent(static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->name, static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->event);
+			setFunction(static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->name, static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->func);
 		} else {
 			ISIXE_THROW_API("GUIManager", "Can't handle update message " << type);
 		}
 	}
 
-	void GUIManager::handleDeleteMessage(uint16_t type, const api::gui::GUIUpdateMessageStruct * data) {
+	void GUIManager::handleDeleteMessage(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		if (type == api::gui::GuiCleanUp) {

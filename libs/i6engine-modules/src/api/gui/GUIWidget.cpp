@@ -27,14 +27,17 @@
 namespace i6engine {
 namespace api {
 
-	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _mouseOverCallback(), _dropable(false), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset() {
-		_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
-		_window->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&GUIWidget::drop, this));
-		_window->subscribeEvent(CEGUI::Window::EventMouseMove, CEGUI::Event::Subscriber(&GUIWidget::mouseMove, this));
+	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _mouseOverCallback(), _dropable(false), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback() {
 	}
 
 	GUIWidget::~GUIWidget() {
 		_window->destroy();
+	}
+
+	void GUIWidget::init() {
+		_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
+		_window->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&GUIWidget::drop, this));
+		_window->subscribeEvent(CEGUI::Window::EventMouseMove, CEGUI::Event::Subscriber(&GUIWidget::mouseMove, this));
 	}
 
 	void GUIWidget::update(uint16_t type, gui::GUIUpdateMessageStruct * message) {
@@ -55,6 +58,8 @@ namespace api {
 			_dragable = dynamic_cast<gui::GUI_SetDragable *>(message)->dragable;
 		} else if (type == gui::GUIMessageTypes::GuiSetDropCallback) {
 			_dropCallback = dynamic_cast<gui::GUI_SetDropCallback *>(message)->callback;
+		} else if (type == gui::GUIMessageTypes::GuiSubscribeEvent) {
+			subscribeClickEvent(dynamic_cast<gui::GUI_SubscribeEvent_Update *>(message)->func);
 		}
 	}
 
@@ -77,10 +82,6 @@ namespace api {
 		}
 	}
 
-	void GUIWidget::subscribeEvent(const std::string & windowName, const std::string & eventType, const boost::function<void(void)> & callback) {
-		EngineController::GetSingletonPtr()->getGUIFacade()->subscribeEvent(windowName, eventType, callback);
-	}
-
 	void GUIWidget::setPosition(double x, double y) {
 		_window->setPosition(CEGUI::UVector2(CEGUI::UDim(float(x), 0.0f), CEGUI::UDim(float(y), 0.0f)));
 	}
@@ -90,6 +91,9 @@ namespace api {
 	}
 
 	bool GUIWidget::drag(const CEGUI::EventArgs & e) {
+		if (_clickCallback != nullptr) {
+			_clickCallback();
+		}
 		if (!_dragable) {
 			return true;
 		}

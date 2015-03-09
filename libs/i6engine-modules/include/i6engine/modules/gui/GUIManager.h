@@ -377,17 +377,17 @@ namespace modules {
 		/**
 		 * \brief Handles all create messages, which are for the GUIManager
 		 */
-		void handleCreateMessage(uint16_t type, const api::gui::GUIUpdateMessageStruct * data);
+		void handleCreateMessage(uint16_t type, api::gui::GUIUpdateMessageStruct * data);
 
 		/**
 		 * \brief Handles all update messages, which are for the GUIManager
 		 */
-		void handleUpdateMessage(uint16_t type, const api::gui::GUIUpdateMessageStruct * data);
+		void handleUpdateMessage(uint16_t type, api::gui::GUIUpdateMessageStruct * data);
 
 		/**
 		 * \brief Handles all delete messages, which are for the GUIManager
 		 */
-		void handleDeleteMessage(uint16_t type, const api::gui::GUIUpdateMessageStruct * data);
+		void handleDeleteMessage(uint16_t type, api::gui::GUIUpdateMessageStruct * data);
 
 		/**
 		 * \brief Returns a pointer to the renderer of the gui subsystem

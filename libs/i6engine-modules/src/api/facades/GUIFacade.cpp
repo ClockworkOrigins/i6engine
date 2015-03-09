@@ -55,13 +55,9 @@ namespace api {
 	}
 
 	void GUIFacade::subscribeEvent(const std::string & windowname, const std::string & eventType, const boost::function<void(void)> & ptrEventMethod) const {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSubscribe, core::Method::Create, new gui::GUI_Subscribe_Create(windowname, eventType), core::Subsystem::Unknown);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSubscribeEvent, core::Method::Update, new gui::GUI_SubscribeEvent_Update(windowname, eventType, ptrEventMethod), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-
-		GameMessage::Ptr msg2 = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSubscribeEvent, core::Method::Create, new gui::GUI_SubscribeEvent_Create(windowname, ptrEventMethod), core::Subsystem::Unknown);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg2);
 	}
 
 	void GUIFacade::changeEvent(const std::string & windowname, const bool b) const {
