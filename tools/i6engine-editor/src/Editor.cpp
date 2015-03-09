@@ -354,6 +354,21 @@ namespace editor {
 				_lastX = imu->intNewX;
 				_lastY = imu->intNewY;
 			}
+		} else if (msg->getSubtype() == api::mouse::MouButton) {
+			api::input::Input_Button_Update * ibu = dynamic_cast<api::input::Input_Button_Update *>(msg->getContent());
+
+			if (ibu->pressed && api::MouseButtonID(ibu->code) == api::MouseButtonID::MB_Left) {
+				auto targetList = i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
+
+				for (auto & p : targetList) {
+					auto go = i6engine::api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
+
+					if (go != nullptr && go->getType() != "EditorCam") {
+						selectObject(p.first);
+						break;
+					}
+				}
+			}
 		}
 	}
 

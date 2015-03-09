@@ -7,6 +7,7 @@ Enhancements:
 	- moved IDManager to API
 	- added an EditboxWidget
 	- added a TextButtonWidget
+	- objects in the level editor now can be selected clicking on their mesh with the mouse
 
 v 0.8.0
 
