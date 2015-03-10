@@ -31,5 +31,20 @@
 				<Attribute name="pos">5.0 0.0 0.0</Attribute>
 			</Component>
 		</GameObject>
+		
+		<GameObject name="NPC" send="False">
+			<Component template="PhysicalState">
+				<Attribute name="pos">0.0 2.0 10.0</Attribute>
+			</Component>
+			<Component template="NPC">
+				<Attribute name="name">NPCName01</Attribute>
+			</Component>
+		</GameObject>
+		
+		<GameObject name="Player" send="False">
+			<Component template="PhysicalState">
+				<Attribute name="pos">0.0 2.0 0.0</Attribute>
+			</Component>
+		</GameObject>
 	</Section>
 </Map>

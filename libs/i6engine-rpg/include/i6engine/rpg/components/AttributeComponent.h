@@ -19,23 +19,24 @@
  * @{
  */
 
-#ifndef __I6ENGINE_RPG_COMPONENTS_USABLEITEMCOMPONENT_H__
-#define __I6ENGINE_RPG_COMPONENTS_USABLEITEMCOMPONENT_H__
+#ifndef __I6ENGINE_RPG_COMPONENTS_ATTRIBUTECOMPONENT_H__
+#define __I6ENGINE_RPG_COMPONENTS_ATTRIBUTECOMPONENT_H__
 
-#include "i6engine/rpg/components/ItemComponent.h"
+#include "i6engine/api/components/Component.h"
 
 namespace i6engine {
 namespace rpg {
 namespace components {
 
-	enum class Attribute;
+	enum class Attribute {
+		HP,
+		HP_MAX,
+		COUNT
+	};
 
-	/**
-	 * \brief a usable item is an item that changes attributes of the user and is removed from inventory afterwards
-	 */
-	class UsableItemComponent : public ItemComponent {
+	class AttributeComponent : public api::Component {
 	public:
-		UsableItemComponent(int64_t id, const api::attributeMap & params);
+		AttributeComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
@@ -43,21 +44,29 @@ namespace components {
 
 		api::attributeMap synchronize() override;
 
-		std::string getTemplateName() const {
-			return "UsableItem";
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+			return std::make_pair(api::AddStrategy::REJECT, -1);
 		}
 
-		bool use(const api::GOPtr & self);
+		std::vector<api::componentOptions> getComponentOptions() override {
+			return {};
+		}
+
+		std::string getTemplateName() const {
+			return "Attribute";
+		}
+
+		void changeAttribute(Attribute attribute, int32_t diff);
 
 	private:
-		std::map<Attribute, int32_t> _attributeChange;
+		std::vector<int32_t> _attributes;
 	};
 
 } /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_RPG_COMPONENTS_USABLEITEMCOMPONENT_H__ */
+#endif /* __I6ENGINE_RPG_COMPONENTS_ATTRIBUTECOMPONENT_H__ */
 
 /**
  * @}

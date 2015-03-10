@@ -16,6 +16,9 @@
 
 #include "i6engine/rpg/components/UsableItemComponent.h"
 
+#include "i6engine/api/objects/GameObject.h"
+
+#include "i6engine/rpg/components/AttributeComponent.h"
 #include "i6engine/rpg/components/Config.h"
 
 namespace i6engine {
@@ -23,7 +26,7 @@ namespace rpg {
 namespace components {
 
 	UsableItemComponent::UsableItemComponent(int64_t id, const api::attributeMap & params) : ItemComponent(id, params) {
-		_objComponentID = ComponentTypes::UsableItemComponent;
+		_objComponentID = config::ComponentTypes::UsableItemComponent;
 	}
 
 	api::ComPtr UsableItemComponent::createC(int64_t id, const api::attributeMap & params) {
@@ -44,7 +47,10 @@ namespace components {
 	}
 
 	bool UsableItemComponent::use(const api::GOPtr & self) {
-		// TODO: (Daniel) add attribute change as soon as NPC template is available
+		auto ac = self->getGOC<AttributeComponent>(config::ComponentTypes::AttributeComponent);
+		for (auto & p : _attributeChange) {
+			ac->changeAttribute(p.first, p.second);
+		}
 		return true;
 	}
 

@@ -19,29 +19,46 @@
  * @{
  */
 
-#ifndef __I6ENGINE_RPG_COMPONENTS_CONFIG_H__
-#define __I6ENGINE_RPG_COMPONENTS_CONFIG_H__
+#ifndef __I6ENGINE_RPG_COMPONENTS_NPCCOMPONENT_H__
+#define __I6ENGINE_RPG_COMPONENTS_NPCCOMPONENT_H__
 
-#include "i6engine/api/configs/ComponentConfig.h"
+#include "i6engine/api/components/Component.h"
 
 namespace i6engine {
 namespace rpg {
 namespace components {
-namespace config {
 
-	enum ComponentTypes {
-		ItemComponent = api::components::ComponentTypes::ComponentTypesCount,
-		UsableItemComponent,
-		AttributeComponent,
-		NPCComponent
+	class NPCComponent : public api::Component {
+	public:
+		NPCComponent(int64_t id, const api::attributeMap & params);
+
+		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
+
+		void Init() override;
+
+		api::attributeMap synchronize() override;
+
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+			return std::make_pair(api::AddStrategy::REJECT, -1);
+		}
+
+		std::vector<api::componentOptions> getComponentOptions() override {
+			return {};
+		}
+
+		std::string getTemplateName() const {
+			return "NPC";
+		}
+
+	private:
+		std::string _name;
 	};
 
-} /* namespace config */
 } /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_RPG_COMPONENTS_CONFIG_H__ */
+#endif /* __I6ENGINE_RPG_COMPONENTS_NPCCOMPONENT_H__ */
 
 /**
  * @}

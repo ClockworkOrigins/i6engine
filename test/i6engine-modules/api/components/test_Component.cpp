@@ -59,7 +59,7 @@ namespace i6Test {
 
 TEST(Component, Registration) {
 	EXPECT_FALSE(i6engine::api::Component::componentCallbacks.empty());
-	EXPECT_GT(i6engine::api::Component::componentCallbacks.size(), 1);
+	EXPECT_GE(i6engine::api::Component::componentCallbacks.size(), 16);
 	bool found = false;
 	for (auto cc : i6engine::api::Component::componentCallbacks) {
 		if (cc._name == "RegistrationTest") {

@@ -27,7 +27,9 @@ include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 set(srcdir ./src)
 
 set(i6rpgSrc
+	${srcdir}/components/AttributeComponent.cpp
 	${srcdir}/components/ItemComponent.cpp
+	${srcdir}/components/NPCComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp
 )
 

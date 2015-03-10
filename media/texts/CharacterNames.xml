@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<!-- Character names -->
+<Key key="PlayerName">
+	<Language name="Deutsch">Ich</Language>
+	<Language name="English">I</Language>
+</Key>
+<Key key="NPCName01">
+	<Language name="Deutsch">NPC 1</Language>
+	<Language name="English">NPC 1</Language>
+</Key>

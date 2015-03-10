@@ -12,6 +12,7 @@ Enhancements:
 	- sounds can now be marked as cacheable to speed up creation
 	- added basic RPG sample
 	- added Item base class with a simple implementation of usable items
+	- added first base components for NPCs representing their attributes and their name
 
 v 0.8.0
 
