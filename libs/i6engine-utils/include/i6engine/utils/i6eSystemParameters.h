@@ -117,6 +117,23 @@
 		#define ISIXE_MODULES_API
 	#endif
 #endif
+#ifndef ISIXE_RPG_API
+	#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+		#ifdef ISIXE_BUILD_SHARED
+			#ifdef i6engine_rpg_EXPORTS
+				#define ISIXE_RPG_API __declspec(dllexport)
+			#else
+				#define ISIXE_RPG_API __declspec(dllimport)
+			#endif
+		#else
+			#define ISIXE_RPG_API
+		#endif
+	#elif ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+		#define ISIXE_RPG_API
+	#else
+		#define ISIXE_RPG_API
+	#endif
+#endif
 #ifndef ISIXE_EDITOR_API
 	#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 		#ifdef ISIXE_BUILD_SHARED

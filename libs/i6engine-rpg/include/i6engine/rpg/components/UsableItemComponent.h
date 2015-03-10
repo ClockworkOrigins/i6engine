@@ -33,7 +33,7 @@ namespace components {
 	/**
 	 * \brief a usable item is an item that changes attributes of the user and is removed from inventory afterwards
 	 */
-	class UsableItemComponent : public ItemComponent {
+	class ISIXE_RPG_API UsableItemComponent : public ItemComponent {
 	public:
 		UsableItemComponent(int64_t id, const api::attributeMap & params);
 

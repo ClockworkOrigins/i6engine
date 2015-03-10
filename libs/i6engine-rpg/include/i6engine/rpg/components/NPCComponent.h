@@ -28,7 +28,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	class NPCComponent : public api::Component {
+	class ISIXE_RPG_API NPCComponent : public api::Component {
 	public:
 		NPCComponent(int64_t id, const api::attributeMap & params);
 

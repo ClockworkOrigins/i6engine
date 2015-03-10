@@ -34,7 +34,7 @@ namespace components {
 		COUNT
 	};
 
-	class AttributeComponent : public api::Component {
+	class ISIXE_RPG_API AttributeComponent : public api::Component {
 	public:
 		AttributeComponent(int64_t id, const api::attributeMap & params);
 

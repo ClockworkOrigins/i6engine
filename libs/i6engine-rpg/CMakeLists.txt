@@ -28,6 +28,7 @@ set(srcdir ./src)
 
 set(i6rpgSrc
 	${srcdir}/components/AttributeComponent.cpp
+	${srcdir}/components/InventoryComponent.cpp
 	${srcdir}/components/ItemComponent.cpp
 	${srcdir}/components/NPCComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp

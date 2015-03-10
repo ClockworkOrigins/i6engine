@@ -19,8 +19,8 @@
  * @{
  */
 
-#ifndef __I6ENGINE_RPG_COMPONENTS_ITEMCOMPONENT_H__
-#define __I6ENGINE_RPG_COMPONENTS_ITEMCOMPONENT_H__
+#ifndef __I6ENGINE_RPG_COMPONENTS_INVENTORYCOMPONENT_H__
+#define __I6ENGINE_RPG_COMPONENTS_INVENTORYCOMPONENT_H__
 
 #include "i6engine/api/components/Component.h"
 
@@ -28,9 +28,11 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	class ISIXE_RPG_API ItemComponent : public api::Component {
+	class ISIXE_RPG_API InventoryComponent : public api::Component {
 	public:
-		ItemComponent(int64_t id, const api::attributeMap & params);
+		InventoryComponent(int64_t id, const api::attributeMap & params);
+
+		void Init() override;
 
 		api::attributeMap synchronize() override;
 
@@ -42,21 +44,34 @@ namespace components {
 			return {};
 		}
 
-		/**
-		 * \brief self is using this item, return value decides whether item is removed from inventory or not
-		 */
-		virtual bool use(const api::GOPtr & self) = 0;
+		std::string getTemplateName() const {
+			return "Inventory";
+		}
 
-	private:
-		std::string _name;
-		uint32_t _value;
+		/**
+		 * \brief checks whether the item can be added to the inventory and if so it is added
+		 */
+		virtual bool addItem(const api::GOPtr & item) = 0;
+
+		/**
+		 * \brief shows the inventory, implementation depends on subclass
+		 */
+		virtual void show() = 0;
+
+		/**
+		 * \brief hides the inventory, implementation depends on subclass
+		 */
+		virtual void hide() = 0;
+
+	protected:
+		std::map<uint32_t, std::map<std::string, std::vector<api::GOPtr>>> _items;
 	};
 
 } /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_RPG_COMPONENTS_ITEMCOMPONENT_H__ */
+#endif /* __I6ENGINE_RPG_COMPONENTS_INVENTORYCOMPONENT_H__ */
 
 /**
  * @}

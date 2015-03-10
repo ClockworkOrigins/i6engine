@@ -1,5 +1,5 @@
-/*
- * Copyright 2011-2012 Prof. Dr. Richard Lenz, Thomas Fischer
+/**
+ * Copyright 2012 FAU (Friedrich Alexander University of Erlangen-Nuremberg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,36 +14,29 @@
  * limitations under the License.
  */
 
-/**
- * \addtogroup rpg
- * @{
- */
+#include "i6engine/rpg/components/InventoryComponent.h"
 
-#ifndef __I6ENGINE_RPG_COMPONENTS_CONFIG_H__
-#define __I6ENGINE_RPG_COMPONENTS_CONFIG_H__
+#include "i6engine/utils/Exceptions.h"
 
-#include "i6engine/api/configs/ComponentConfig.h"
+#include "i6engine/rpg/components/Config.h"
 
 namespace i6engine {
 namespace rpg {
 namespace components {
-namespace config {
 
-	enum ComponentTypes {
-		ItemComponent = api::components::ComponentTypes::ComponentTypesCount,
-		UsableItemComponent,
-		AttributeComponent,
-		NPCComponent,
-		InventoryComponent
-	};
+	InventoryComponent::InventoryComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _items() {
+		_objFamilyID = config::ComponentTypes::InventoryComponent;
+		_objComponentID = config::ComponentTypes::InventoryComponent;
+	}
 
-} /* namespace config */
+	void InventoryComponent::Init() {
+	}
+
+	api::attributeMap InventoryComponent::synchronize() {
+		api::attributeMap params;
+		return params;
+	}
+
 } /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */
-
-#endif /* __I6ENGINE_RPG_COMPONENTS_CONFIG_H__ */
-
-/**
- * @}
- */
