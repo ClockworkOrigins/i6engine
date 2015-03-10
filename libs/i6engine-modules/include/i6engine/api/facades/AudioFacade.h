@@ -38,7 +38,7 @@ namespace api {
 		/**
 		 * \brief creates a new audio node
 		 */
-		void createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d);
+		void createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool cacheable);
 
 		/**
 		 * \brief deletes an audio node
@@ -58,7 +58,7 @@ namespace api {
 		/**
 		 * \brief plays given sound once
 		 */
-		void playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d);
+		void playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable);
 
 		/**
 		 * \brief resets the subsystem to it's defaults

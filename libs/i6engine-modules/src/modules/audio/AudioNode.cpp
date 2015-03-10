@@ -25,27 +25,39 @@
 namespace i6engine {
 namespace modules {
 
-	AudioNode::AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction) : _source(), _buffer() {
+	AudioNode::AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable) : _source(), _buffer(), _wavFile() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		boost::shared_ptr<WavFile> wh = loadWavFile(file);
 
-		ALsizei frequency = ALsizei(wh->SampleRate);
+		AudioNode(wh, looping, maxDist, position, direction);
+
+		if (cacheable) {
+			_wavFile = wh;
+		}
+	}
+
+
+
+	AudioNode::AudioNode(const boost::shared_ptr<WavFile> & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction) : _source(), _buffer(), _wavFile() {
+		ASSERT_THREAD_SAFETY_CONSTRUCTOR
+
+			ALsizei frequency = ALsizei(file->SampleRate);
 		ALenum format = 0;
 
 		alGenBuffers(1, &_buffer);
 		alGenSources(1, &_source);
 
-		if (wh->BitsPerSample == 8) {
-			if (wh->NumberOfChanels == 1) {
+		if (file->BitsPerSample == 8) {
+			if (file->NumberOfChanels == 1) {
 				format = AL_FORMAT_MONO8;
-			} else if (wh->NumberOfChanels == 2) {
+			} else if (file->NumberOfChanels == 2) {
 				format = AL_FORMAT_STEREO8;
 			}
-		} else if (wh->BitsPerSample == 16) {
-			if (wh->NumberOfChanels == 1) {
+		} else if (file->BitsPerSample == 16) {
+			if (file->NumberOfChanels == 1) {
 				format = AL_FORMAT_MONO16;
-			} else if (wh->NumberOfChanels == 2) {
+			} else if (file->NumberOfChanels == 2) {
 				format = AL_FORMAT_STEREO16;
 			}
 		}
@@ -54,7 +66,7 @@ namespace modules {
 			ISIXE_THROW_FAILURE("AudioNode", "Wrong audio format! Only MONO and STEREO in 8 and 16 bit are supported!");
 		}
 
-		alBufferData(_buffer, format, wh->data, ALsizei(wh->SubChunk2Size), frequency);
+		alBufferData(_buffer, format, file->data, ALsizei(file->SubChunk2Size), frequency);
 
 		// Sound setting variables
 		ALfloat SourcePos[] = { float(position.getX()), float(position.getY()), float(position.getZ()) };	// Position of the source sound

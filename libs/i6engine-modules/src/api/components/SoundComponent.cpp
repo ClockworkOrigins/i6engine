@@ -35,7 +35,7 @@
 namespace i6engine {
 namespace api {
 
-	SoundComponent::SoundComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _offset(Vec3(params, "offset")), _direction(Vec3(params, "direction")), _file(params.find("file")->second), _looping(boost::lexical_cast<bool>(params.find("looping")->second)), _maxDist(boost::lexical_cast<double>(params.find("maxDist")->second)), _psc() {
+	SoundComponent::SoundComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _offset(Vec3(params, "offset")), _direction(Vec3(params, "direction")), _file(params.find("file")->second), _looping(boost::lexical_cast<bool>(params.find("looping")->second)), _maxDist(boost::lexical_cast<double>(params.find("maxDist")->second)), _psc(), _cacheable(boost::lexical_cast<bool>(params.find("cache")->second)) {
 		Component::_objFamilyID = components::SoundComponent;
 		Component::_objComponentID = components::SoundComponent;
 	}
@@ -49,6 +49,7 @@ namespace api {
 		ISIXE_THROW_API_COND("SoundComponent", "file not set!", params.find("file") != params.end());
 		ISIXE_THROW_API_COND("SoundComponent", "looping not set!", params.find("looping") != params.end());
 		ISIXE_THROW_API_COND("SoundComponent", "maxDist not set!", params.find("maxDist") != params.end());
+		ISIXE_THROW_API_COND("SoundComponent", "cache not set!", params.find("cache") != params.end());
 		return utils::make_shared<SoundComponent, Component>(id, params);
 	}
 
@@ -58,7 +59,7 @@ namespace api {
 		_psc = utils::dynamic_pointer_cast<PhysicalStateComponent>(_objOwnerGO.get()->getGOC(components::PhysicalStateComponent));
 		_position = _psc.get()->getPosition();
 		Vec3 position = _psc.get()->getPosition() + math::rotateVector(_offset, _psc.get()->getRotation());
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(getID(), _file, _looping, _maxDist, position, _direction), i6engine::core::Subsystem::Object));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(getID(), _file, _looping, _maxDist, position, _direction, _cacheable), i6engine::core::Subsystem::Object));
 	}
 
 	void SoundComponent::Finalize() {
@@ -82,6 +83,7 @@ namespace api {
 		params["file"] = _file;
 		params["looping"] = boost::lexical_cast<std::string>(_looping);
 		params["maxDist"] = boost::lexical_cast<std::string>(_maxDist);
+		params["cache"] = boost::lexical_cast<std::string>(_cacheable);
 		return params;
 	}
 
@@ -137,6 +139,17 @@ namespace api {
 		}, [this](std::string s) {
 			try {
 				_direction = Vec3(s);
+			} catch (boost::bad_lexical_cast &) {
+				return false;
+			}
+			// TODO: (Daniel) update change
+			return true;
+		}));
+		result.push_back(std::make_tuple(AccessState::READWRITE, "Cache", [this]() {
+			return boost::lexical_cast<std::string>(_cacheable);
+		}, [this](std::string s) {
+			try {
+				_cacheable = boost::lexical_cast<bool>(s);
 			} catch (boost::bad_lexical_cast &) {
 				return false;
 			}

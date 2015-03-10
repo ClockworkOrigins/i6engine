@@ -51,7 +51,8 @@ namespace audio {
 		double maxDist;
 		Vec3 position;
 		Vec3 direction;
-		Audio_Node_Create(int64_t c, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d) : GameMessageStruct(c, -1), file(f), looping(l), maxDist(m), position(p), direction(d) {
+		bool cacheable;
+		Audio_Node_Create(int64_t c, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool ca) : GameMessageStruct(c, -1), file(f), looping(l), maxDist(m), position(p), direction(d), cacheable(ca) {
 		}
 		Audio_Node_Create * copy() {
 			return new Audio_Node_Create(*this);
@@ -103,7 +104,8 @@ namespace audio {
 		double maxDist;
 		Vec3 position;
 		Vec3 direction;
-		Audio_PlaySound_Create(const std::string & f, double m, const Vec3 & p, const Vec3 & d) : GameMessageStruct(), file(f), maxDist(m), position(p), direction(d) {
+		bool cacheable;
+		Audio_PlaySound_Create(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c) : GameMessageStruct(), file(f), maxDist(m), position(p), direction(d), cacheable(c) {
 		}
 		Audio_PlaySound_Create * copy() {
 			return new Audio_PlaySound_Create(*this);

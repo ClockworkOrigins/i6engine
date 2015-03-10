@@ -40,7 +40,7 @@ namespace api {
 		/**
 		 * \brief Constructor with attribute map
 		 */
-		explicit SoundComponent(const int64_t id, const attributeMap & params);
+		SoundComponent(const int64_t id, const attributeMap & params);
 
 		/**
 		 * \brief Destructor
@@ -107,6 +107,11 @@ namespace api {
 		 * \brief weakPtr on PhysicalStateComponent for faster access
 		 */
 		utils::weakPtr<PhysicalStateComponent, Component> _psc;
+
+		/**
+		 * \brief will this sound file be cached
+		 */
+		bool _cacheable;
 	};
 
 } /* namespace api */

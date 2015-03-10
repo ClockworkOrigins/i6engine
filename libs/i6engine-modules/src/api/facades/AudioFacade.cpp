@@ -30,8 +30,8 @@ namespace api {
 	AudioFacade::~AudioFacade() {
 	}
 
-	void AudioFacade::createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d) {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(comId, f, l, m, p, d), core::Subsystem::Unknown));
+	void AudioFacade::createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool cacheable) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(comId, f, l, m, p, d, cacheable), core::Subsystem::Unknown));
 	}
 
 	void AudioFacade::deleteNode(int64_t comId) {
@@ -46,8 +46,8 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPosition, core::Method::Update, new audio::Audio_Position_Update(comId, position), core::Subsystem::Unknown));
 	}
 
-	void AudioFacade::playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d) {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySound, core::Method::Create, new audio::Audio_PlaySound_Create(f, m, p, d), core::Subsystem::Unknown));
+	void AudioFacade::playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySound, core::Method::Create, new audio::Audio_PlaySound_Create(f, m, p, d, cacheable), core::Subsystem::Unknown));
 	}
 
 	void AudioFacade::resetSubSystem() {

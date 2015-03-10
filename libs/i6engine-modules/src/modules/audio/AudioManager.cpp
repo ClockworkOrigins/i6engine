@@ -32,7 +32,7 @@
 namespace i6engine {
 namespace modules {
 
-	AudioManager::AudioManager() : _nodes(), _sounds() {
+	AudioManager::AudioManager() : _device(), _context(), _nodes(), _sounds(), _cachedSounds() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		_device = alcOpenDevice(nullptr);
@@ -68,7 +68,7 @@ namespace modules {
 		if (type == api::audio::AudioPlaySound) {
 			api::audio::Audio_PlaySound_Create * apsc = dynamic_cast<api::audio::Audio_PlaySound_Create *>(msg->getContent());
 
-			playSound(apsc->file, apsc->maxDist, apsc->position, apsc->direction);
+			playSound(apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable);
 		}
 	}
 
@@ -94,7 +94,16 @@ namespace modules {
 		if (type == api::audio::AudioNode) {
 			api::audio::Audio_Node_Create * anc = dynamic_cast<api::audio::Audio_Node_Create *>(msg->getContent());
 
-			_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(anc->file, anc->looping, anc->maxDist, anc->position, anc->direction);
+			auto it = _cachedSounds.find(anc->file);
+			boost::shared_ptr<WavFile> wh;
+			if (it != _cachedSounds.end()) {
+				_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(it->second, anc->looping, anc->maxDist, anc->position, anc->direction);
+			} else {
+				_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(anc->file, anc->looping, anc->maxDist, anc->position, anc->direction, anc->cacheable);
+				if (anc->cacheable) {
+					_cachedSounds.insert(std::make_pair(anc->file, _nodes[msg->getContent()->getID()]->_wavFile));
+				}
+			}
 		}
 	}
 
@@ -128,9 +137,18 @@ namespace modules {
 		alListenerfv(AL_VELOCITY, ListenerVel);		// Set velocity of the listener
 	}
 
-	void AudioManager::playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir) {
+	void AudioManager::playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		boost::shared_ptr<WavFile> wh = loadWavFile(file);
+		auto it = _cachedSounds.find(file);
+		boost::shared_ptr<WavFile> wh;
+		if (it != _cachedSounds.end()) {
+			wh = it->second;
+		} else {
+			wh = loadWavFile(file);
+			if (cacheable) {
+				_cachedSounds.insert(std::make_pair(file, wh));
+			}
+		}
 
 		ALsizei frequency = ALsizei(wh->SampleRate);
 		ALenum format = 0;

@@ -40,6 +40,7 @@ namespace modules {
 	class AudioController;
 	class AudioMailbox;
 	class AudioNode;
+	struct WavFile;
 
 	class AudioManager {
 		friend class AudioMailbox;
@@ -68,6 +69,8 @@ namespace modules {
 
 		std::vector<std::pair<ALuint, ALuint>> _sounds;
 
+		std::map<std::string, boost::shared_ptr<WavFile>> _cachedSounds;
+
 		/**
 		 * \brief called by AudioMailbox with a message
 		 */
@@ -86,7 +89,7 @@ namespace modules {
 		/**
 		 * \brief plays given sound
 		 */
-		void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir);
+		void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable);
 
 		/**
 		 * \brief forbidden

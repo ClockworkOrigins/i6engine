@@ -27,16 +27,23 @@
 namespace i6engine {
 namespace modules {
 
-	class AudioNode {
-	public:
-		AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction);
-		~AudioNode();
+	class AudioManager;
+	struct WavFile;
 
-		void News(const api::GameMessage::Ptr & msg);
+	class AudioNode {
+		friend class AudioManager;
+
+	public:
+		AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable);
+		AudioNode(const boost::shared_ptr<WavFile> & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction);
+		~AudioNode();
 
 	private:
 		ALuint _source;
 		ALuint _buffer;
+		boost::shared_ptr<WavFile> _wavFile;
+
+		void News(const api::GameMessage::Ptr & msg);
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

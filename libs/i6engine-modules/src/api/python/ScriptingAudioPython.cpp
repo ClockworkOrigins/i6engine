@@ -19,8 +19,8 @@
 
 #include "boost/python.hpp"
 
-void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir) {
-	i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir);
+void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
+	i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir, cacheable);
 }
 
 BOOST_PYTHON_MODULE(ScriptingAudioPython) {
