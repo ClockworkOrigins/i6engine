@@ -9,6 +9,8 @@ Enhancements:
 	- added a TextButtonWidget
 	- objects in the level editor now can be selected clicking on their mesh with the mouse
 	- right mouse button now can be used to deselect an object in level editor
+	- sounds can now be marked as cacheable to speed up creation
+	- added basic RPG sample
 
 v 0.8.0
 

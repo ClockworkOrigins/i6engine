@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<GUILayout version="4">
+
+<Window name="root" type="DefaultWindow">
+    <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+    <Property name="RiseOnClickEnabled" value="False" />
+    <Property name="WantsMultiClickEvents" value="False" />
+    <Property name="MousePassThroughEnabled" value="True" />
+</Window>
+</GUILayout>

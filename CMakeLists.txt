@@ -33,6 +33,7 @@ option(ISIXE_SCRIPTING "build scripting with demo game" ON)
 option(ISIXE_TESTING "build i6engine with tests" OFF)
 OPTION(ISIXE_WITH_AUDIO "build i6engine with OpenAL Soft audio subsystem" ON)
 OPTION(ISIXE_WITH_EDITOR "build i6engine with the level editor" ON)
+OPTION(ISIXE_WITH_SAMPLES "build some samples for i6engine" ON)
 OPTION(ISIXE_WITH_TOOLS "build some tools for i6engine" ON)
 set(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies" CACHE STRING "path to dependencies for i6engine")
 
@@ -298,6 +299,7 @@ set(I6ENGINE_UTILS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/i6engine-utils/include)
 set(I6ENGINE_MATH_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/i6engine-math/include)
 set(I6ENGINE_CORE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/i6engine-core/include)
 set(I6ENGINE_MODULES_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/i6engine-modules/include)
+set(I6ENGINE_RPG_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/i6engine-rpg/include)
 
 #####################################################################################
 # libs
@@ -312,6 +314,14 @@ add_subdirectory(libs)
 IF(ISIXE_TESTING)
 	add_subdirectory(test)
 ENDIF(ISIXE_TESTING)
+
+#####################################################################################
+# samples
+#####################################################################################
+
+IF(ISIXE_WITH_SAMPLES)
+	add_subdirectory(samples)
+ENDIF(ISIXE_WITH_SAMPLES)
 
 #####################################################################################
 # tools

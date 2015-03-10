@@ -14,4 +14,4 @@
 # limitations under the License.
 ##
 
-#add_subdirectory(meshToBulletConverter)
+add_subdirectory(rpg)
