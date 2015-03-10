@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<!-- Item names -->
+<Key key="UsableItem_Key">
+	<Language name="Deutsch">Verbrauchsgegenstand</Language>
+	<Language name="English">Usable Item</Language>
+</Key>

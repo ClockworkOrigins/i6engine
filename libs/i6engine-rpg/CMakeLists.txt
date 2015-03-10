@@ -19,20 +19,19 @@
 ################################
 
 include_directories("include")
+include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
+include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
+include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
+include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 
 set(srcdir ./src)
 
 set(i6rpgSrc
-	${srcdir}/Exceptions.cpp
-	${srcdir}/ExceptionQueue.cpp
-	${srcdir}/i6eRandom.cpp
-	${srcdir}/Profiling.cpp
-	${srcdir}/RealTimeClock.cpp
-	${srcdir}/Semaphore.cpp
-	${srcdir}/Splash.cpp
+	${srcdir}/components/ItemComponent.cpp
+	${srcdir}/components/UsableItemComponent.cpp
 )
 
-SOURCE_GROUP(rpg src/*)
+SOURCE_GROUP(rpg\\components src/components/*)
 
 IF(ISIXE_BUILD_SHARED)
 	add_library(i6engine-rpg SHARED ${i6rpgSrc})
@@ -40,7 +39,7 @@ ELSE(ISIXE_BUILD_SHARED)
 	add_library(i6engine-rpg STATIC ${i6rpgSrc})
 ENDIF(ISIXE_BUILD_SHARED)
 
-#target_link_libraries(i6engine-rpg )
+target_link_libraries(i6engine-rpg i6engine-modules ${BOOST_LIBRARIES})
 
 IF(WIN32 AND ISIXE_BUILD_SHARED)
 	add_custom_command(TARGET i6engine-rpg POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-rpg.dll ${CMAKE_BINARY_DIR}/bin)

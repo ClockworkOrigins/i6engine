@@ -1,5 +1,35 @@
 <?xml version="1.0" ?>
 <Map>
 	<Section flags="Singleplayer">
+		<GameObject name="Terrain" send="true">
+			<Component template="TerrainAppearance">
+				<Attribute name="heightmap">RPGTerrain.png</Attribute>
+				<Attribute name="texture">GrassFloor.tga</Attribute>
+				<Attribute name="size">100.0</Attribute>
+			</Component>
+			<Component template="PhysicalState">
+			</Component>
+		</GameObject>
+		
+		<GameObject name="UsableItem" send="False">
+			<Component template="StaticState">
+				<Attribute name="pos">-10.0 0.0 0.0</Attribute>
+			</Component>
+		</GameObject>
+		<GameObject name="UsableItem" send="False">
+			<Component template="StaticState">
+				<Attribute name="pos">10.0 0.0 0.0</Attribute>
+			</Component>
+		</GameObject>
+		<GameObject name="UsableItem" send="False">
+			<Component template="StaticState">
+				<Attribute name="pos">-5.0 0.0 0.0</Attribute>
+			</Component>
+		</GameObject>
+		<GameObject name="UsableItem" send="False">
+			<Component template="StaticState">
+				<Attribute name="pos">5.0 0.0 0.0</Attribute>
+			</Component>
+		</GameObject>
 	</Section>
 </Map>

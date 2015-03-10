@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GOTemplate type="Terrain">
+	<Component template="TerrainAppearance">
+	</Component>
+	<Component template="PhysicalState">
+		<Attribute name="activationState">4</Attribute>
+		<Attribute name="planeConstant">1</Attribute>
+		<Attribute name="restitution">0.0</Attribute>
+		<Attribute name="friction">1.0</Attribute>
+		<Attribute name="shapeType">0</Attribute>
+		<Attribute name="collisionGroup">1 0 0</Attribute>
+		<Attribute name="shatterInterest">0</Attribute>
+		<Attribute name="planeVector">0.0 0.1 0.0</Attribute>
+		<Attribute name="angularFactor">0.0 0.0 0.0</Attribute>
+		<Attribute name="linearFactor">0.0 0.0 0.0</Attribute>
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1 1 1</Attribute>
+		<Attribute name="compound">0</Attribute>
+	</Component>
+</GOTemplate>

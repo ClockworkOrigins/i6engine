@@ -11,6 +11,7 @@ Enhancements:
 	- right mouse button now can be used to deselect an object in level editor
 	- sounds can now be marked as cacheable to speed up creation
 	- added basic RPG sample
+	- added Item base class with a simple implementation of usable items
 
 v 0.8.0
 

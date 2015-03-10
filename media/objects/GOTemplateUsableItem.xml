@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GOTemplate type="UsableItem">
+	<Component template="StaticState" owner="true">
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
+	<Component template="MeshAppearance" owner="true">
+		<Attribute name="mesh">UsableItem.MESH</Attribute>
+		<Attribute name="visibility">1</Attribute>
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
+	<Component template="UsableItem" owner="true">
+		<Attribute name="name">UsableItem_Key</Attribute>
+		<Attribute name="attribute_0">50</Attribute>
+		<Attribute name="value">100</Attribute>
+	</Component>
+</GOTemplate>
