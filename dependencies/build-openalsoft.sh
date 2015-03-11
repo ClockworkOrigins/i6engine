@@ -26,6 +26,8 @@ fi
 
 rm -rf "${PREFIX}"
 
+./download-dependency.sh ${ARCHIVE}
+
 
 cd "${BUILD_ROOT}"
 tar xfvj "${EX_DIR}/${ARCHIVE}" > /dev/null
@@ -52,5 +54,6 @@ make install > /dev/null
 
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" > /dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"

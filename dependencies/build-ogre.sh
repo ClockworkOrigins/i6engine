@@ -50,6 +50,13 @@ if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
 	exit 0
 fi
 
+./download-dependency.sh ${ARCHIVE}
+./download-dependency.sh ogre-freetype.patch
+
+mkdir -p ${PATCH_DIR}
+
+mv ${EX_DIR}/ogre-freetype.patch ${PATCH_DIR}/
+
 status "Cleaning Ogre"
 rm -rf "${DEST_DIR}"
 
@@ -121,5 +128,6 @@ make ${PARALLEL_FLAG} install >/dev/null
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" >/dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"

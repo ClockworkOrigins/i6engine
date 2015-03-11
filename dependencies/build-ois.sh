@@ -56,6 +56,14 @@ if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
 	exit 0
 fi
 
+./download-dependency.sh ${ARCHIVE}
+./download-dependency.sh ois-gcc-4.7.patch
+./download-dependency.sh ois-aclocal-1.13.patch
+
+mkdir -p ${PATCH_DIR}
+
+mv ${EX_DIR}/*.patch ${PATCH_DIR}/
+
 status "Cleaning OIS"
 rm -rf "${PREFIX}"
 
@@ -88,6 +96,7 @@ make ${PARALLEL_FLAG} install >/dev/null
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" >/dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"
 

@@ -56,6 +56,8 @@ if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
 	exit 0
 fi
 
+./download-dependency.sh ${ARCHIVE}
+
 status "Cleaning CEGUI"
 rm -rf "${DEST_DIR}" >/dev/null
 
@@ -111,5 +113,6 @@ cp -r ${PREFIX}include/cegui-0/* ${PREFIX}include/
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" >/dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"

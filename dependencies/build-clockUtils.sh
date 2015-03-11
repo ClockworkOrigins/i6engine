@@ -2,8 +2,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 
 . ./build-common.sh
 
-ARCHIVE="clockUtils-0.3-rev105.zip"
-BUILD_DIR="${BUILD_ROOT}/clockUtils-0.3-rev105"
+ARCHIVE="clockUtils-0.3-rev128.zip"
+BUILD_DIR="${BUILD_ROOT}/clockUtils-0.3-rev128"
 
 PREFIX="${PWD}/clockUtils"
 DEBUG_FLAG="DEBUG"
@@ -25,6 +25,8 @@ if [ -d ${PREFIX} ]; then
 fi
 
 rm -rf "${PREFIX}"
+
+./download-dependency.sh ${ARCHIVE}
 
 
 cd "${BUILD_ROOT}"
@@ -53,5 +55,6 @@ make install
 
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" >/dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"

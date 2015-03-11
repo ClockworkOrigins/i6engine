@@ -56,6 +56,8 @@ if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
 	exit 0
 fi
 
+./download-dependency.sh ${ARCHIVE}
+
 status "Cleaning Bullet"
 rm -rf "${DEST_DIR}" >/dev/null
 
@@ -87,5 +89,6 @@ make ${PARALLEL_FLAG} install >/dev/null
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" >/dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"

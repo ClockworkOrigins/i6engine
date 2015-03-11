@@ -55,6 +55,8 @@ if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
+./download-dependency.sh ${ARCHIVE}
+
 status "Cleaning M2etis"
 rm -rf "${PREFIX}"
 
@@ -74,10 +76,10 @@ if [ -e "CMakeCache.txt" ]; then
 	make clean
 fi
 
-cp "${PATCH_DIR}/m2etis/GeneratedChannelConfigurationExample.h" "include/m2etis/config/examples/"
-cp "${PATCH_DIR}/m2etis/GeneratedChannelNameExample.h" "include/m2etis/config/examples/"
-cp "${PATCH_DIR}/m2etis/GeneratedEventTypesExample.h" "include/m2etis/config/examples/"
-cp "${PATCH_DIR}/m2etis/GeneratedMessageConfigurationExample.h" "include/m2etis/config/examples/"
+cp "${DEP_DIR}/../config/m2etis/GeneratedChannelConfigurationExample.h" "include/m2etis/config/examples/"
+cp "${DEP_DIR}/../config/m2etis/GeneratedChannelNameExample.h" "include/m2etis/config/examples/"
+cp "${DEP_DIR}/../config/m2etis/GeneratedEventTypesExample.h" "include/m2etis/config/examples/"
+cp "${DEP_DIR}/../config/m2etis/GeneratedMessageConfigurationExample.h" "include/m2etis/config/examples/"
 mkdir -p "extern/i6engine/api"
 mkdir -p "extern/i6engine/core/messaging"
 mkdir -p "extern/i6engine/utils"
@@ -114,5 +116,6 @@ make install
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" >/dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"

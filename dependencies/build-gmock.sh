@@ -56,6 +56,8 @@ if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
 	exit 0
 fi
 
+./download-dependency.sh ${ARCHIVE}
+
 status "Extracting GoogleMock with GoogleTest"
 cd "${BUILD_ROOT}"
 unzip "${EX_DIR}/${ARCHIVE}" >/dev/null
@@ -83,5 +85,6 @@ cp -R gtest/include ${PREFIX} >/dev/null
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -rf "${BUILD_DIR}" >/dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"

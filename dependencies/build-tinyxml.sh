@@ -52,6 +52,8 @@ if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
 	exit 0
 fi
 
+./download-dependency.sh ${ARCHIVE}
+
 status "Cleaning TinyXML"
 rm -rf "${DEST_DIR}"
 rm -rf "${PREFIX}"
@@ -83,5 +85,6 @@ cp ./*.so "${PREFIX}/lib"
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" >/dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"

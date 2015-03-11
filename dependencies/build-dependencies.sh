@@ -42,5 +42,6 @@ fi
 ./build-gmock.sh
 ./build-tinyxml.sh
 ./build-clockUtils.sh
+./build-openalsoft.sh
 #./build-m2etis.sh	# depends on boost; not usable until m2etis is published as well
 

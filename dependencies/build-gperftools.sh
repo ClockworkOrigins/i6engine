@@ -56,6 +56,13 @@ if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
 	exit 0
 fi
 
+./download-dependency.sh ${ARCHIVE}
+./download-dependency.sh gperftools-gcc-4.7-siginfo.patch
+
+mkdir -p ${PATCH_DIR}
+
+mv ${EX_DIR}/gperftools-gcc-4.7-siginfo.patch ${PATCH_DIR}/
+
 status "Extracting GPerfTools"
 cd "${BUILD_ROOT}"
 tar xfz "${EX_DIR}/${ARCHIVE}" >/dev/null
@@ -78,6 +85,7 @@ make ${PARALLEL_FLAG} install >/dev/null
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -rf "${BUILD_DIR}" >/dev/null
+rm -rf "${EX_DIR}/.."
 
 touch "${PREFIX}"
 
