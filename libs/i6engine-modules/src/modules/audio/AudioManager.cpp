@@ -89,7 +89,7 @@ namespace modules {
 
 	void AudioManager::NewsNodeCreate(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-			uint16_t type = msg->getSubtype();
+		uint16_t type = msg->getSubtype();
 
 		if (type == api::audio::AudioNode) {
 			api::audio::Audio_Node_Create * anc = dynamic_cast<api::audio::Audio_Node_Create *>(msg->getContent());
