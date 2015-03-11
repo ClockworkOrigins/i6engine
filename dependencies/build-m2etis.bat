@@ -41,12 +41,12 @@ mkdir "%BUILD_DIR%\extern\i6engine\utils"
 mkdir "%BUILD_DIR%\extern\i6engine\core\messaging"
 mkdir "%BUILD_DIR%\extern\i6engine\api"
 
-xcopy "%DEP_DIR%\..\i6engine-utils\include\i6engine\utils\i6eSystemParameters.h" "%BUILD_DIR%\extern\i6engine\utils"
-xcopy "%DEP_DIR%\..\i6engine-core\include\i6engine\core\messaging\IPKey.h" "%BUILD_DIR%\extern\i6engine\core\messaging"
-xcopy "%DEP_DIR%\..\i6engine-core\include\i6engine\core\messaging\Message.h" "%BUILD_DIR%\extern\i6engine\core\messaging"
-xcopy "%DEP_DIR%\..\i6engine-core\include\i6engine\core\messaging\MessageStruct.h" "%BUILD_DIR%\extern\i6engine\core\messaging"
-xcopy "%DEP_DIR%\..\i6engine-modules\include\i6engine\api\GameMessage.h" "%BUILD_DIR%\extern\i6engine\api"
-xcopy "%DEP_DIR%\..\i6engine-modules\include\i6engine\api\GameMessageStruct.h" "%BUILD_DIR%\extern\i6engine\api"
+xcopy "%DEP_DIR%\..\libs\i6engine-utils\include\i6engine\utils\i6eSystemParameters.h" "%BUILD_DIR%\extern\i6engine\utils"
+xcopy "%DEP_DIR%\..\libs\i6engine-core\include\i6engine\core\messaging\IPKey.h" "%BUILD_DIR%\extern\i6engine\core\messaging"
+xcopy "%DEP_DIR%\..\libs\i6engine-core\include\i6engine\core\messaging\Message.h" "%BUILD_DIR%\extern\i6engine\core\messaging"
+xcopy "%DEP_DIR%\..\libs\i6engine-core\include\i6engine\core\messaging\MessageStruct.h" "%BUILD_DIR%\extern\i6engine\core\messaging"
+xcopy "%DEP_DIR%\..\libs\i6engine-modules\include\i6engine\api\GameMessage.h" "%BUILD_DIR%\extern\i6engine\api"
+xcopy "%DEP_DIR%\..\libs\i6engine-modules\include\i6engine\api\GameMessageStruct.h" "%BUILD_DIR%\extern\i6engine\api"
 xcopy "%COPY_DIR%\i6engine\i6engineBuildSettings.h" "%BUILD_DIR%\extern\i6engine"
 
 cd %BUILD_DIR%
