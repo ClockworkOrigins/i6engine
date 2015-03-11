@@ -9,6 +9,9 @@ Set PREFIX_DEPS=%cd%/misc/
 
 echo "Compile Ogre"
 
+call download-dependency.bat %ARCHIVE%
+call download-dependency.bat %DEP_ARCHIVE%
+
 echo "Extracting OgreDeps"
 if not exist %BUILD_ROOT% exit
 cd %BUILD_ROOT%
@@ -72,3 +75,4 @@ rd /S /Q "%PREFIX%/bin/Release"
 rd /S /Q "%PREFIX%/lib/Release"
 rd /S /Q "%PREFIX%/include/OIS"
 rd /S /Q "%PREFIX%/CMake"
+RD /S /Q "%EX_DIR%\.."

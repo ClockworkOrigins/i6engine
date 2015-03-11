@@ -6,6 +6,18 @@ Set PREFIX=%cd%/bullet/
 
 echo "Compile Bullet"
 
+call download-dependency.bat %ARCHIVE%
+
+call download-dependency.bat bullet_2_80_patch.zip
+
+mkdir %PATCH_DIR%\Windows
+
+move %EX_DIR%\bullet_2_80_patch.zip %PATCH_DIR%\Windows
+
+cd %PATCH_DIR%\Windows
+
+winrar.exe x bullet_2_80_patch.zip
+
 echo "Extracting Bullet"
 if not exist %BUILD_ROOT% exit
 cd %BUILD_ROOT%
@@ -32,3 +44,5 @@ MSBuild.exe INSTALL.vcxproj /p:Configuration=Release > NUL
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
+
+RD /S /Q "%EX_DIR%\.."

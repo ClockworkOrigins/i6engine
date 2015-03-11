@@ -6,6 +6,8 @@ Set PREFIX=%cd%/tinyxml2/
 
 echo "Compile TinyXML"
 
+call download-dependency.bat %ARCHIVE%
+
 echo "Extracting TinyXML"
 if not exist %BUILD_ROOT% exit
 cd %BUILD_ROOT%
@@ -15,7 +17,7 @@ if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
 winrar.exe x %EX_DIR%/%ARCHIVE%
 
 if not exist %BUILD_DIR% exit
-cd %BUILD_DIR%
+cd %BUILD_DIR%\jni
 
 echo "Building TinyXML"
 cl /EHsc /MP /GS /TP /analyze- /W3 /Zc:wchar_t /Z7 /Gm- /Ox /fp:precise /FD /D "WIN32" /D "_WINDOWS" /D "TINYXML2_EXPORT" /D "_WINDLL" /D "_MBCS" /errorReport:prompt /WX- /Zc:forScope /GR /Gd /Oy- /MD /nologo /D_USRDLL tinyxml2.cpp /link /DLL /OUT:tinyxml2.dll
@@ -40,3 +42,4 @@ move tinyxml2.lib %PREFIX%/lib/tinyxml2.lib
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
+RD /S /Q "%EX_DIR%\.."

@@ -6,6 +6,17 @@ Set PREFIX=%cd%/ois/
 
 echo "Compile OIS"
 
+call download-dependency.bat %ARCHIVE%
+call download-dependency.bat ois_1_3_patch.zip
+
+mkdir %PATCH_DIR%\Windows
+
+move %EX_DIR%\ois_1_3_patch.zip %PATCH_DIR%\Windows
+
+cd %PATCH_DIR%\Windows
+
+winrar.exe x ois_1_3_patch.zip
+
 echo "Extracting OIS"
 if not exist %BUILD_ROOT% exit
 cd %BUILD_ROOT%
@@ -37,3 +48,4 @@ move ../dll/OIS.lib %PREFIX%/lib/OIS.lib
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
+RD /S /Q "%EX_DIR%\.."

@@ -4,8 +4,8 @@ Set COPY_DIR=%2
 call "%ROOT_DIR%\build-common.bat"
 
 Set DEP_DIR=%ROOT_DIR%
-Set EX_DIR=%DEP_DIR%/../externals/libs/
-Set PATCH_DIR=%DEP_DIR%/../externals/patches/
+Set EX_DIR=%DEP_DIR%\..\externals\libs
+Set PATCH_DIR=%DEP_DIR%\..\externals\patches
 Set BUILD_ROOT=%EX_DIR%
 
 Set ARCHIVE=m2etis-0.3-rev20.zip
@@ -15,6 +15,8 @@ Set PREFIX=%ROOT_DIR%/m2etis
 call %CONFIG_BAT%
 
 echo "Compile m2etis"
+
+call download-dependency.bat %ARCHIVE%
 
 if exist %PREFIX% exit
 
@@ -33,7 +35,7 @@ if not exist %BUILD_DIR% exit
 
 echo "Configuring m2etis"
 
-xcopy /S /Y "%PATCH_DIR%/m2etis" "%BUILD_DIR%\include\m2etis\config\examples"
+xcopy /S /Y "%DEP_DIR%\config\m2etis" "%BUILD_DIR%\include\m2etis\config\examples"
 
 mkdir "%BUILD_DIR%\extern\i6engine\utils"
 mkdir "%BUILD_DIR%\extern\i6engine\core\messaging"
@@ -59,3 +61,4 @@ MSBuild.exe INSTALL.vcxproj /p:Configuration=Release
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%/.."
+RD /S /Q "%EX_DIR%\.."

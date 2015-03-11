@@ -6,6 +6,8 @@ Set PREFIX=%cd%/OpenAL Soft/
 
 echo "Compile OpenAL Soft"
 
+call download-dependency.bat %ARCHIVE%
+
 echo "Extracting OpenAL Soft"
 if not exist %BUILD_ROOT% exit
 cd %BUILD_ROOT%
@@ -31,3 +33,4 @@ MSBuild.exe INSTALL.vcxproj /p:Configuration=Release > NUL
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
+RD /S /Q "%EX_DIR%\.."

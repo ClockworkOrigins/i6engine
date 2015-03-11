@@ -6,6 +6,8 @@ Set PREFIX=%cd%/gmock
 
 echo "Compile GoogleMock with GoogleTest"
 
+call download-dependency.bat %ARCHIVE%
+
 echo "Extracting GoogleMock with GoogleTest"
 if not exist %BUILD_ROOT% exit
 cd %BUILD_ROOT%
@@ -36,3 +38,4 @@ xcopy /S /Y "%BUILD_DIR%/Release" "%PREFIX%/lib" > NUL
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
+RD /S /Q "%EX_DIR%\.."

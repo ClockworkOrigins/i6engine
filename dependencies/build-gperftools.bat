@@ -6,6 +6,20 @@ Set PREFIX=%cd%/gperftools
 
 echo "Compile GPerfTools"
 
+call download-dependency.bat %ARCHIVE%
+call download-dependency.bat gperftools_2_0_patch.zip
+call download-dependency.bat gperftools_2_0_patch_sln.zip
+
+mkdir %PATCH_DIR%\Windows
+
+move %EX_DIR%\gperftools_2_0_patch.zip %PATCH_DIR%\Windows
+move %EX_DIR%\gperftools_2_0_patch_sln.zip %PATCH_DIR%\Windows
+
+cd %PATCH_DIR%\Windows
+
+winrar.exe x gperftools_2_0_patch.zip
+winrar.exe x gperftools_2_0_patch_sln.zip
+
 echo "Extracting GPerfTools"
 if not exist %BUILD_ROOT% exit
 cd %BUILD_ROOT%
@@ -39,3 +53,4 @@ xcopy /S /Y "%BUILD_DIR%/Release" "%PREFIX%/lib" > NUL
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
+RD /S /Q "%EX_DIR%\.."

@@ -9,6 +9,18 @@ Set PREFIX_DEPS=%cd%/ceguideps
 
 echo "Compile CEGUI"
 
+call download-dependency.bat %ARCHIVE%
+call download-dependency.bat %DEP_ARCHIVE%
+call download-dependency.bat cegui_0_8_4_patch.zip
+
+mkdir %PATCH_DIR%\Windows
+
+move %EX_DIR%\cegui_0_8_4_patch.zip %PATCH_DIR%\Windows
+
+cd %PATCH_DIR%\Windows
+
+winrar.exe x cegui_0_8_4_patch.zip
+
 echo "Extracting CEGUIDeps"
 if not exist %BUILD_ROOT% exit
 cd %BUILD_ROOT%
@@ -74,3 +86,5 @@ RD /S /Q "%BUILD_DIR%"
 xcopy /S /Y "%PREFIX%/include/cegui-0" "%PREFIX%/include" > NUL
 rd /S /Q "%PREFIX%/share"
 rd /S /Q "%PREFIX%/include/cegui-0"
+
+RD /S /Q "%EX_DIR%\.."
