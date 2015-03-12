@@ -14,4 +14,6 @@
 # limitations under the License.
 ##
 
-add_subdirectory(rpg)
+IF(ISIXE_WITH_RPG)
+	add_subdirectory(rpg)
+ENDIF(ISIXE_WITH_RPG)

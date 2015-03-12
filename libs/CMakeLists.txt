@@ -42,4 +42,6 @@ add_subdirectory(i6engine-modules)
 # i6engine-rpg
 #####################################################################################
 
-add_subdirectory(i6engine-rpg)
+IF(ISIXE_WITH_RPG)
+	add_subdirectory(i6engine-rpg)
+ENDIF(ISIXE_WITH_RPG)
