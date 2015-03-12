@@ -55,6 +55,6 @@ make install
 
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" >/dev/null
-rm -rf "${EX_DIR}/.."
+rm -rf "${DEP_DIR}/../externals"
 
 touch "${PREFIX}"

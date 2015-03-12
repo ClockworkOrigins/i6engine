@@ -67,7 +67,7 @@ rm -rf "tinyxml2"
 
 unzip "${EX_DIR}/${ARCHIVE}" >/dev/null
 
-cd "${BUILD_DIR}"
+cd "${BUILD_DIR}/jni"
 
 status "Building TinyXML"
 gcc -c -fPIC tinyxml2.cpp -o tinyxml2.o
@@ -85,6 +85,6 @@ cp ./*.so "${PREFIX}/lib"
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -r "${BUILD_DIR}" >/dev/null
-rm -rf "${EX_DIR}/.."
+rm -rf "${DEP_DIR}/../externals"
 
 touch "${PREFIX}"
