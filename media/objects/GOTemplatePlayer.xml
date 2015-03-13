@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GOTemplate type="Player">
 	<Component template="PhysicalState">
-		<Attribute name="mass">4.0</Attribute>
+		<Attribute name="mass">0.0</Attribute>
 		<Attribute name="activationState">4</Attribute>
 		<Attribute name="friction">1.0</Attribute>
 		<Attribute name="shapeType">1</Attribute>

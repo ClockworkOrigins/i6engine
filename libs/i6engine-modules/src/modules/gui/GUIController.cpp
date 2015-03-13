@@ -42,6 +42,8 @@ namespace modules {
 
 		_manager = new GUIManager(this);
 		_mailbox = new GUIMailbox(_manager);
+
+		processMessages();
 	}
 
 	void GUIController::Mailbox(const api::GameMessage::Ptr & msg) const {

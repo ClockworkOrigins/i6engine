@@ -131,11 +131,11 @@ namespace modules {
 
 		// create subnode
 		Ogre::Entity * meshEntity = sm->createEntity(s.str(), meshName);
+		meshEntity->setVisible(isVisible);
+		meshEntity->setCastShadows(true);
 		_sceneNodes[coid]->attachObject(meshEntity);
 
-		meshEntity->setVisible(isVisible);
-
-		meshEntity->setCastShadows(true);
+		meshEntity->getMesh()->buildEdgeList();
 
 		unsigned short src, dest;
 		if (!meshEntity->getMesh()->suggestTangentVectorBuildParams(Ogre::VertexElementSemantic::VES_TANGENT, src, dest)) {
@@ -267,11 +267,11 @@ namespace modules {
 		std::stringstream name;
 		name << "SN_" << _gameObjectID << "_" << coid;
 
-		Ogre::SceneNode * newNode = _sceneNode->createChildSceneNode(name.str(), position.toOgre()); // TODO: (Michael) we dont need an additional scene node
+		Ogre::SceneNode * newNode = _sceneNode->createChildSceneNode(name.str(), position.toOgre()); // TODO: (Michael) we don't need an additional scene node
 		Ogre::Light * light = sm->createLight(name.str());
 		newNode->attachObject(light);
 
-		light->setType(static_cast<Ogre::Light::LightTypes>(type));
+		light->setType(Ogre::Light::LightTypes(type));
 		light->setDiffuseColour(diffuse.getX(), diffuse.getY(), diffuse.getZ());
 		light->setSpecularColour(specular.getX(), specular.getY(), specular.getZ());
 		light->setAttenuation(attenuation.getW(), attenuation.getX(), attenuation.getY(), attenuation.getZ());
@@ -279,7 +279,6 @@ namespace modules {
 		light->setSpotlightInnerAngle(Ogre::Radian(spotLightRangeInner));
 		light->setSpotlightOuterAngle(Ogre::Radian(spotLightRangeOuter));
 		_lights[coid] = newNode;
-		light->setCastShadows(true);
 	}
 
 	void GraphicsNode::updateLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) {
@@ -297,7 +296,6 @@ namespace modules {
 		light->setDirection(direction.toOgre());
 		light->setSpotlightInnerAngle(Ogre::Radian(spotLightRangeInner));
 		light->setSpotlightOuterAngle(Ogre::Radian(spotLightRangeOuter));
-		light->setCastShadows(true);
 	}
 
 	void GraphicsNode::createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos) {

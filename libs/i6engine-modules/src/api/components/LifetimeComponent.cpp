@@ -28,11 +28,12 @@
 namespace i6engine {
 namespace api {
 
-	LifetimeComponent::LifetimeComponent(const int64_t id, const attributeMap & params) : Component(id, params), _ticksToDie(0) {
+	LifetimeComponent::LifetimeComponent(const int64_t id, const attributeMap & params) : Component(id, params), _startTime(EngineController::GetSingleton().getCurrentTime()), _lifetime(0) {
 		Component::_objFamilyID = components::LifetimeComponent;;
 		Component::_objComponentID = components::LifetimeComponent;
 
-		_ticksToDie = uint64_t(boost::lexical_cast<double>(params.find("lifetime")->second) / (EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime() / 1000));
+		_lifetime = boost::lexical_cast<uint64_t>(params.find("lifetime")->second);
+
 	}
 
 	ComPtr LifetimeComponent::createC(const int64_t id, const attributeMap & params) {
@@ -45,15 +46,13 @@ namespace api {
 	}
 
 	void LifetimeComponent::Init() {
-		if (_ticksToDie > 0) {
-			addTicker();
-		}
+		addTicker();
 	}
 
 	void LifetimeComponent::Tick() {
-		_ticksToDie--;
+		uint64_t cT = EngineController::GetSingleton().getCurrentTime();
 
-		if (_ticksToDie == 0) {
+		if (_startTime + _lifetime <= cT) {
 			dead();
 		}
 	}
@@ -63,12 +62,12 @@ namespace api {
 	}
 
 	void LifetimeComponent::instantKill() {
-		_ticksToDie = 1;
+		_lifetime = 0;
 	}
 
 	attributeMap LifetimeComponent::synchronize() {
 		attributeMap params;
-		params["lifetime"] = boost::lexical_cast<std::string>((EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime() / 1000) * _ticksToDie);
+		params["lifetime"] = boost::lexical_cast<std::string>(_lifetime - _startTime);
 		return params;
 	}
 
@@ -76,9 +75,9 @@ namespace api {
 		std::vector<componentOptions> result;
 
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Lifetime", [this]() {
-			return boost::lexical_cast<std::string>((EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime() / 1000) * _ticksToDie);
+			return boost::lexical_cast<std::string>(_lifetime);
 		}, [this](std::string s) {
-			_ticksToDie = uint64_t(boost::lexical_cast<double>(s) / (EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime() / 1000));
+			_lifetime = boost::lexical_cast<uint64_t>(s);
 			return true;
 		}));
 

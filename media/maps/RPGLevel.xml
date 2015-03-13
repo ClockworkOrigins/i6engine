@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <Map>
 	<Section flags="Singleplayer">
-		<GameObject name="Terrain" send="true">
+		<!-- GameObject name="Terrain" send="true">
 			<Component template="TerrainAppearance">
 				<Attribute name="heightmap">RPGTerrain.png</Attribute>
 				<Attribute name="texture">GrassFloor.tga</Attribute>
@@ -9,6 +9,10 @@
 			</Component>
 			<Component template="PhysicalState">
 			</Component>
+		</GameObject -->
+		<GameObject name="Floor" send="False">
+		</GameObject>
+		<GameObject name="Sun" send="False">
 		</GameObject>
 		
 		<GameObject name="UsableItem" send="False">

@@ -81,9 +81,6 @@ namespace modules {
 		Ogre::WindowEventUtilities::addWindowEventListener(_rWindow, this);
 
 		_sceneManager = _objRoot->createSceneManager(Ogre::ST_GENERIC);
-		//_sceneManager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_ADDITIVE);
-		//_sceneManager->setShadowTextureSettings(512, 2);
-		//_sceneManager->setShadowColour(Ogre::ColourValue(0.5, 0.5, 0.5));
 
 		_debug = new Debug(_sceneManager, 0.5f);
 
@@ -93,6 +90,8 @@ namespace modules {
 		Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(Ogre::MIP_UNLIMITED);
 
 		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+
+		_sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
 		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
 

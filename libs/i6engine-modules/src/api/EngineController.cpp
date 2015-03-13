@@ -223,7 +223,7 @@ namespace api {
 			registerSubSystem("Network", new modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 #endif
 			registerSubSystem("Graphics", new modules::GraphicsController(), { i6engine::core::Subsystem::Object });
-			registerSubSystem("Object", new modules::ObjectController(), LNG_OBJECT_FRAME_TIME);
+			registerSubSystem("Object", new modules::ObjectController(), { i6engine::core::Subsystem::Physic });
 			registerSubSystem("Input", new modules::InputController(), LNG_INPUT_FRAME_TIME);
 			registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
 #ifdef ISIXE_SCRIPTING

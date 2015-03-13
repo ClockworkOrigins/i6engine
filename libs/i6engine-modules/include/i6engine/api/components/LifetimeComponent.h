@@ -78,10 +78,12 @@ namespace api {
 		LifetimeComponent(const LifetimeComponent &) = delete;
 		const LifetimeComponent & operator=(const LifetimeComponent &) = delete;
 
+		uint64_t _startTime;
+
 		/**
 		 * ticks left until the object will be removed
 		 */
-		uint64_t _ticksToDie;
+		uint64_t _lifetime;
 	};
 
 } /* namespace api */

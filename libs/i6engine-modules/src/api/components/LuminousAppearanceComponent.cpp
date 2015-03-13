@@ -30,7 +30,7 @@
 namespace i6engine {
 namespace api {
 
-	LuminousAppearanceComponent::LuminousAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _lightType(LightType(boost::lexical_cast<uint8_t>(params.find("lightType")->second))), _diffuseColor(Vec3(params, "diffuseColor")), _specularColor(Vec3(params, "specularColor")), _attenuation(Vec4(params, "attenuation")), _direction(), _position(), _spotlightRangeInner(0.0), _spotlightRangeOuter(0.0) {
+	LuminousAppearanceComponent::LuminousAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _lightType(LightType(boost::lexical_cast<uint32_t>(params.find("lightType")->second))), _diffuseColor(Vec3(params, "diffuseColor")), _specularColor(Vec3(params, "specularColor")), _attenuation(Vec4(params, "attenuation")), _direction(), _position(), _spotlightRangeInner(0.0), _spotlightRangeOuter(0.0) {
 		Component::_objFamilyID = components::LuminousAppearanceComponent;
 		Component::_objComponentID = components::LuminousAppearanceComponent;
 
