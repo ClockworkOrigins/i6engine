@@ -122,6 +122,12 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
+	void GraphicsFacade::setShadowTechnique(graphics::ShadowTechnique st) {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraShadowTechnique, core::Method::Update, new graphics::Graphics_ShadowTechnique_Update(st), core::Subsystem::Unknown);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
 	void GraphicsFacade::registerNotifyCallback(const boost::function<void(int64_t)> & f) {
 		_notify = f;
 		_notifyInit = true;

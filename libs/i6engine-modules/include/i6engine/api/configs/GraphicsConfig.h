@@ -58,7 +58,13 @@ namespace graphics {
 		GraStopAnimation,
 		GraBillboardSet,
 		GraBillboard,
-		GraBillboardRemove
+		GraBillboardRemove,
+		GraShadowTechnique
+	};
+
+	enum class ShadowTechnique {
+		None,
+		Stencil_Additive
 	};
 
 	struct ISIXE_MODULES_API Resolution {
@@ -567,6 +573,17 @@ namespace graphics {
 			return new Graphics_Fullscreen_Update(*this);
 		}
 	} Graphics_Fullscreen_Update;
+
+	/**
+	 * \brief updates shadow technique
+	 */
+	typedef struct Graphics_ShadowTechnique_Update : GameMessageStruct {
+		ShadowTechnique shadowTechnique;
+		Graphics_ShadowTechnique_Update(ShadowTechnique st);
+		Graphics_ShadowTechnique_Update * copy() {
+			return new Graphics_ShadowTechnique_Update(*this);
+		}
+	} Graphics_ShadowTechnique_Update;
 
 } /* namespace graphics */
 } /* namespace api */

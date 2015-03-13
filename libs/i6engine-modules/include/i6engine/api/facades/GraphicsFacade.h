@@ -76,6 +76,11 @@ namespace api {
 		void setFullscreen(bool fullscreen);
 
 		/**
+		 * \brief sets the shadow technique
+		 */
+		void setShadowTechnique(graphics::ShadowTechnique st);
+
+		/**
 		 * \brief register callback for notifying IDs, call only from GraphicsController
 		 */
 		void registerNotifyCallback(const boost::function<void(int64_t)> & f);

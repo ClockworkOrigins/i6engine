@@ -180,6 +180,9 @@ namespace graphics {
 	Graphics_Fullscreen_Update::Graphics_Fullscreen_Update(bool fs) : GameMessageStruct(), fullscreen(fs) {
 	}
 
+	Graphics_ShadowTechnique_Update::Graphics_ShadowTechnique_Update(ShadowTechnique st) : GameMessageStruct(), shadowTechnique(st) {
+	}
+
 } /* namespace graphics */
 } /* namespace api */
 } /* namespace i6engine */

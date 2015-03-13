@@ -93,8 +93,6 @@ namespace modules {
 
 		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
-		_sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-
 		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
@@ -351,6 +349,22 @@ namespace modules {
 
 			removeTerrain(msg->getContent()->getID());
 			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, _heightmap, _texture, _size));
+		} else if (msg->getSubtype() == api::graphics::GraShadowTechnique) {
+			api::graphics::ShadowTechnique st = dynamic_cast<api::graphics::Graphics_ShadowTechnique_Update *>(msg->getContent())->shadowTechnique;
+
+			switch (st) {
+			case api::graphics::ShadowTechnique::None: {
+				_sceneManager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_NONE);
+				break;
+			}
+			case api::graphics::ShadowTechnique::Stencil_Additive: {
+				_sceneManager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_ADDITIVE);
+				break;
+			}
+			default: {
+				break;
+			}
+			}
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
