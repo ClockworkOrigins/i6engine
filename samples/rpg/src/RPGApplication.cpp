@@ -18,6 +18,7 @@
 
 #include <thread>
 
+#include "i6engine/math/i6eMath.h"
 #include "i6engine/math/i6eVector.h"
 
 #include "i6engine/api/EngineController.h"

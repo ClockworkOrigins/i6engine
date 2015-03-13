@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GOTemplate type="Floor">
+	<Component template="MeshAppearance" owner="true">
+		<Attribute name="mesh">ForestGround.mesh</Attribute>
+		<Attribute name="visibility">1</Attribute>
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">100.0 1.0 100.0</Attribute>
+	</Component>
+</GOTemplate>

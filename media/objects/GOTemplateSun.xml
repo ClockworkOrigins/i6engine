@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GOTemplate type="Sun">
+	<Component template="StaticState">
+		<Attribute name="pos">100.0 100.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
+	<Component template="LuminousAppearance">
+		<Attribute name="lightType">1</Attribute>
+		<Attribute name="diffuseColor">1.0 1.0 1.0</Attribute>
+		<Attribute name="specularColor">1.0 1.0 1.0</Attribute>
+		<Attribute name="attenuation">100000 1.0 0.0 0.0</Attribute>
+		<Attribute name="direction">0.0 -0.5 -1.0</Attribute>
+	</Component>
+	<Component template="ParticleEmitter">
+		<Attribute name="particleEmitter">Environment/Sun</Attribute>
+	</Component>
+</GOTemplate>

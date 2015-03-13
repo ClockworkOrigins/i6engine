@@ -34,6 +34,7 @@ namespace api {
 
 		_lifetime = boost::lexical_cast<uint64_t>(params.find("lifetime")->second);
 
+		std::cout << "Lifetime: " << _lifetime << std::endl;
 	}
 
 	ComPtr LifetimeComponent::createC(const int64_t id, const attributeMap & params) {

@@ -21,7 +21,7 @@
 		<Attribute name="mesh">Placeholder.mesh</Attribute>
 		<Attribute name="visibility">1</Attribute>
 		<Attribute name="pos">0.0 0.0 0.0</Attribute>
-		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1 0 0 0</Attribute>
 		<Attribute name="scale">0.01 0.01 0.01</Attribute>
 	</Component>
 	<Component template="MovingCamera" owner="true">
