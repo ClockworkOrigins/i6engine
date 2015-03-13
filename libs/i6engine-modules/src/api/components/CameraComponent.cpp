@@ -142,7 +142,7 @@ namespace api {
 	}
 
 	void CameraComponent::sendCameraUpdateMessage() {
-		if (getOwnerGO().get()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+		if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 			return;
 		}
 
@@ -152,7 +152,7 @@ namespace api {
 	}
 
 	void CameraComponent::sendViewportUpdateMessage() {
-		if (getOwnerGO().get()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+		if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 			return;
 		}
 
@@ -162,7 +162,7 @@ namespace api {
 	}
 
 	void CameraComponent::sendFrustumUpdateMessage() {
-		if (getOwnerGO().get()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+		if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 			return;
 		}
 

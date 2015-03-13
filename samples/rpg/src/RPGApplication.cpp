@@ -16,6 +16,8 @@
 
 #include "RPGApplication.h"
 
+#include <thread>
+
 #include "i6engine/math/i6eVector.h"
 
 #include "i6engine/api/EngineController.h"
@@ -24,6 +26,10 @@
 #include "i6engine/api/facades/InputFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/facades/PhysicsFacade.h"
+#include "i6engine/api/objects/GameObject.h"
+
+#include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/NPCComponent.h"
 
 #include "boost/bind.hpp"
 
@@ -55,6 +61,12 @@ namespace sample {
 
 		// loads the RPG demo level
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/RPGLevel.xml", "Singleplayer");
+
+		// wait until level is loaded => remove as soon as loadLevel blocks until level is loaded
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		// a hack to load rpg library
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").front()->getGOC<i6engine::rpg::components::NPCComponent>(i6engine::rpg::components::config::ComponentTypes::NPCComponent)->getName();
 	}
 
 	void RPGApplication::Tick() {

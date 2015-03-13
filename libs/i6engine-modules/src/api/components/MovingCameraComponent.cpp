@@ -142,7 +142,7 @@ namespace api {
 	}
 
 	void MovingCameraComponent::sendCameraUpdateMessage() {
-		if (getOwnerGO().get()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+		if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 			return;
 		}
 
@@ -152,7 +152,7 @@ namespace api {
 	}
 
 	void MovingCameraComponent::sendViewportUpdateMessage() {
-		if (getOwnerGO().get()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+		if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 			return;
 		}
 
@@ -162,7 +162,7 @@ namespace api {
 	}
 
 	void MovingCameraComponent::sendFrustumUpdateMessage() {
-		if (getOwnerGO().get()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+		if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 			return;
 		}
 
@@ -177,7 +177,7 @@ namespace api {
 			return;
 		}
 
-		utils::sharedPtr<PhysicalStateComponent, Component> psc = utils::dynamic_pointer_cast<PhysicalStateComponent>(go->getGOC(components::PhysicalStateComponent));
+		utils::sharedPtr<PhysicalStateComponent, Component> psc = go->getGOC<PhysicalStateComponent>(components::PhysicalStateComponent);
 
 		// newPos := Bikeposition and LookAt Point
 		Vec3 targetPos = psc->getPosition();

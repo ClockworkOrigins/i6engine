@@ -306,7 +306,7 @@ namespace modules {
 			return;
 		}
 
-		utils::sharedPtr<api::PhysicalStateComponent, api::Component> pC = utils::dynamic_pointer_cast<api::PhysicalStateComponent>(go->getGOC(api::components::PhysicalStateComponent));
+		utils::sharedPtr<api::PhysicalStateComponent, api::Component> pC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
 
 		if (_rigidBody && !_rigidBody->isKinematicObject()) {
 			_rigidBody->proceedToTransform(_transform);

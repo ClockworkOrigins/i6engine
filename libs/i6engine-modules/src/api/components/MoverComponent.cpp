@@ -44,7 +44,7 @@ namespace api {
 	}
 
 	void MoverComponent::Init() {
-		_psc = utils::dynamic_pointer_cast<PhysicalStateComponent>(getOwnerGO().get()->getGOC(components::PhysicalStateComponent));
+		_psc = getOwnerGO()->getGOC<PhysicalStateComponent>(components::PhysicalStateComponent);
 		if (_psc == nullptr) {
 			ISIXE_THROW_FAILURE("MoverComponent", "Object has no PhysicalStateComponent");
 			return;
@@ -78,7 +78,7 @@ namespace api {
 		getNewPosition(timeElapsed, newPos, newRot);
 
 		for (int64_t i : _linked) {
-			utils::sharedPtr<PhysicalStateComponent, Component> psc = utils::dynamic_pointer_cast<PhysicalStateComponent>(EngineController::GetSingleton().getObjectFacade()->getObject(i)->getGOC(components::PhysicalStateComponent));
+			utils::sharedPtr<PhysicalStateComponent, Component> psc = EngineController::GetSingleton().getObjectFacade()->getObject(i)->getGOC<PhysicalStateComponent>(components::PhysicalStateComponent);
 			if (psc == nullptr) {
 				return;
 			}

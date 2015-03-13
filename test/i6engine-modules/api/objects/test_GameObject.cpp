@@ -465,9 +465,9 @@ namespace config {
 		i6engine::api::attributeMap attMap;
 		attMap["identifier"] = "A";
 		i6engine::api::ComPtr cAdd1 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(1, attMap);
-		i6engine::api::ComPtr cAdd2 = i6engine::utils::make_shared<Replace1Component, i6engine::api::Component>(1, attMap);
-		i6engine::api::ComPtr cAdd3 = i6engine::utils::make_shared<ReplaceDisComponent, i6engine::api::Component>(1, attMap);
-		i6engine::api::ComPtr cAdd4 = i6engine::utils::make_shared<RejectComponent, i6engine::api::Component>(1, attMap);
+		i6engine::api::ComPtr cAdd2 = i6engine::utils::make_shared<Replace1Component, i6engine::api::Component>(2, attMap);
+		i6engine::api::ComPtr cAdd3 = i6engine::utils::make_shared<ReplaceDisComponent, i6engine::api::Component>(3, attMap);
+		i6engine::api::ComPtr cAdd4 = i6engine::utils::make_shared<RejectComponent, i6engine::api::Component>(4, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -476,28 +476,28 @@ namespace config {
 		owner->setGOC(cAdd3);
 		owner->setGOC(cAdd4);
 
-		EXPECT_NE(nullptr, owner->getGOC(config::ComponentTypes::AddComponent).get());
-		EXPECT_EQ(nullptr, owner->getGOC(config::ComponentTypes::Replace0Component).get());
-		EXPECT_NE(nullptr, i6engine::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)).get());
+		EXPECT_NE(nullptr, owner->getGOC(config::ComponentTypes::AddComponent));
+		EXPECT_EQ(nullptr, owner->getGOC(config::ComponentTypes::Replace0Component));
+		EXPECT_NE(nullptr, i6engine::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)));
 		EXPECT_EQ(nullptr, i6engine::utils::dynamic_pointer_cast<Replace0Component>(owner->getGOC(config::ComponentTypes::AddComponent)));
-		EXPECT_NE(nullptr, owner->getGOC<AddComponent>(config::ComponentTypes::AddComponent).get());
+		EXPECT_NE(nullptr, owner->getGOC<AddComponent>(config::ComponentTypes::AddComponent));
 		EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>(config::ComponentTypes::AddComponent));
-		EXPECT_NE(nullptr, owner->getGOC<AddComponent>().get());
+		EXPECT_NE(nullptr, owner->getGOC<AddComponent>());
 		EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>());
 
 		const uint32_t COUNTER = 1000000;
 
 		uint64_t startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 		for (uint32_t i = 0; i < COUNTER; i++) {
-			EXPECT_NE(nullptr, owner->getGOC(config::ComponentTypes::AddComponent).get());
-			EXPECT_EQ(nullptr, owner->getGOC(config::ComponentTypes::Replace0Component).get());
+			EXPECT_NE(nullptr, owner->getGOC(config::ComponentTypes::AddComponent));
+			EXPECT_EQ(nullptr, owner->getGOC(config::ComponentTypes::Replace0Component));
 		}
 		uint64_t endTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 		std::cout << "Test 1: " << endTime - startTime << std::endl;
 
 		startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 		for (uint32_t i = 0; i < COUNTER; i++) {
-			EXPECT_NE(nullptr, i6engine::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)).get());
+			EXPECT_NE(nullptr, i6engine::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)));
 			EXPECT_EQ(nullptr, i6engine::utils::dynamic_pointer_cast<Replace0Component>(owner->getGOC(config::ComponentTypes::AddComponent)));
 		}
 		endTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
@@ -505,7 +505,7 @@ namespace config {
 
 		startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 		for (uint32_t i = 0; i < COUNTER; i++) {
-			EXPECT_NE(nullptr, owner->getGOC<AddComponent>(config::ComponentTypes::AddComponent).get());
+			EXPECT_NE(nullptr, owner->getGOC<AddComponent>(config::ComponentTypes::AddComponent));
 			EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>(config::ComponentTypes::AddComponent));
 		}
 		endTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
@@ -513,7 +513,7 @@ namespace config {
 
 		startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 		for (uint32_t i = 0; i < COUNTER; i++) {
-			EXPECT_NE(nullptr, owner->getGOC<AddComponent>().get());
+			EXPECT_NE(nullptr, owner->getGOC<AddComponent>());
 			EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>());
 		}
 		endTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());

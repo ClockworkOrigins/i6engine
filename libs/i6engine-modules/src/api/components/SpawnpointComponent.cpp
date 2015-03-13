@@ -91,7 +91,7 @@ namespace api {
 	void SpawnpointComponent::setState(bool b) {
 		_state = b;
 
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComSpawnpoint, core::Method::Update, new components::Component_Spawnpoint_Update(getOwnerGO().get()->getID(), getID()), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComSpawnpoint, core::Method::Update, new components::Component_Spawnpoint_Update(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->registerTimer(2000000, [msg]() {
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);

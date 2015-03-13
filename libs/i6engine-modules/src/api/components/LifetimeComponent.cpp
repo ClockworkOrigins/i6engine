@@ -59,7 +59,7 @@ namespace api {
 	}
 
 	void LifetimeComponent::dead() {
-		getOwnerGO().get()->setDie();
+		getOwnerGO()->setDie();
 	}
 
 	void LifetimeComponent::instantKill() {

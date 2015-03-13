@@ -210,6 +210,10 @@ namespace utils {
 			return !(*this == other);
 		}
 
+		friend bool operator!=(const T * other, const sharedPtr & self) {
+			return self != other;
+		}
+
 		bool operator!=(const T * other) const {
 			return !(*this == other);
 		}

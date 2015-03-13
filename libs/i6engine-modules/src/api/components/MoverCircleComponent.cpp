@@ -77,7 +77,7 @@ namespace api {
 		_lastPos = _circleCenter + orth1 * _circleRadius; // the position is now updated
 
 		// resync
-		if (getOwnerGO().get()->getGOC(components::NetworkSenderComponent) != nullptr) {
+		if (getOwnerGO()->getGOC(components::NetworkSenderComponent) != nullptr) {
 			attributeMap am = synchronize();
 			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComMoverResync, core::Method::Update, new components::Component_MoverResync_Update(_objOwnerID, _id, am), i6engine::core::Subsystem::Object);
 			EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);

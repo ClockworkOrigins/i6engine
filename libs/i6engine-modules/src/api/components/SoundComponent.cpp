@@ -56,10 +56,11 @@ namespace api {
 	void SoundComponent::Init() {
 		addTicker();
 
-		_psc = utils::dynamic_pointer_cast<PhysicalStateComponent>(_objOwnerGO.get()->getGOC(components::PhysicalStateComponent));
-		_position = _psc.get()->getPosition();
-		Vec3 position = _psc.get()->getPosition() + math::rotateVector(_offset, _psc.get()->getRotation());
+		auto psc = getOwnerGO()->getGOC<PhysicalStateComponent>(components::PhysicalStateComponent);
+		_position = psc->getPosition();
+		Vec3 position = psc->getPosition() + math::rotateVector(_offset, psc->getRotation());
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(getID(), _file, _looping, _maxDist, position, _direction, _cacheable), i6engine::core::Subsystem::Object));
+		_psc = psc;
 	}
 
 	void SoundComponent::Finalize() {
@@ -69,9 +70,10 @@ namespace api {
 	}
 
 	void SoundComponent::Tick() {
-		if (_psc.get()->getPosition() != _position) {
-			_position = _psc.get()->getPosition();
-			Vec3 position = _position + math::rotateVector(_offset, _psc.get()->getRotation());
+		auto psc = _psc.get();
+		if (psc->getPosition() != _position) {
+			_position = psc->getPosition();
+			Vec3 position = _position + math::rotateVector(_offset, psc->getRotation());
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioPosition, core::Method::Update, new audio::Audio_Position_Update(getID(), position), i6engine::core::Subsystem::Object));
 		}
 	}

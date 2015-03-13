@@ -182,7 +182,7 @@ namespace api {
 
 	void PhysicalStateComponent::News(const GameMessage::Ptr & msg) {
 		if (msg->getMessageType() == messages::PositionMessageType) {
-			if (getOwnerGO().get()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+			if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 				setPosition(static_cast<objects::Position_Update *>(msg->getContent())->pos, UINT32_MAX);
 				setRotation(static_cast<objects::Position_Update *>(msg->getContent())->rot, UINT32_MAX);
 				_scale = static_cast<objects::Position_Update *>(msg->getContent())->scale;
@@ -193,7 +193,7 @@ namespace api {
 			if (msg->getSubtype() == physics::PhyVelForce) {
 				_linearVelocity = static_cast<physics::Physics_Comp_Update *>(msg->getContent())->linVel;
 			} else if (msg->getSubtype() == components::ComShatter) {
-				ComPtr sc = getOwnerGO().get()->getGOC(components::ShatterComponent);
+				ComPtr sc = getOwnerGO()->getGOC(components::ShatterComponent);
 				if (sc != nullptr) {
 					sc->News(msg);
 				}

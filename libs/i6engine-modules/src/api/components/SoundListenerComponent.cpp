@@ -48,7 +48,7 @@ namespace api {
 	void SoundListenerComponent::Init() {
 		addTicker();
 
-		_psc = utils::dynamic_pointer_cast<PhysicalStateComponent>(_objOwnerGO.get()->getGOC(components::PhysicalStateComponent));
+		_psc = getOwnerGO()->getGOC<PhysicalStateComponent>(components::PhysicalStateComponent);
 	}
 
 	void SoundListenerComponent::Finalize() {
@@ -56,14 +56,15 @@ namespace api {
 	}
 
 	void SoundListenerComponent::Tick() {
-		if (_psc.get()->getPosition() != _position) {
-			_position = _psc.get()->getPosition();
-			_rotation = _psc.get()->getRotation();
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioListener, core::Method::Update, new audio::Audio_Listener_Update(_position, _rotation, _psc.get()->getLinearVelocity()), i6engine::core::Subsystem::Object));
-		} else if (_psc.get()->getRotation() != _rotation) {
-			_position = _psc.get()->getPosition();
-			_rotation = _psc.get()->getRotation();
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioListener, core::Method::Update, new audio::Audio_Listener_Update(_position, _rotation, _psc.get()->getLinearVelocity()), i6engine::core::Subsystem::Object));
+		auto psc = _psc.get();
+		if (psc->getPosition() != _position) {
+			_position = psc->getPosition();
+			_rotation = psc->getRotation();
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioListener, core::Method::Update, new audio::Audio_Listener_Update(_position, _rotation, psc->getLinearVelocity()), i6engine::core::Subsystem::Object));
+		} else if (psc->getRotation() != _rotation) {
+			_position = psc->getPosition();
+			_rotation = psc->getRotation();
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioListener, core::Method::Update, new audio::Audio_Listener_Update(_position, _rotation, psc->getLinearVelocity()), i6engine::core::Subsystem::Object));
 		}
 	}
 

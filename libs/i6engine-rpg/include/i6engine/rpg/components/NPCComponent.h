@@ -50,6 +50,10 @@ namespace components {
 			return "NPC";
 		}
 
+		std::string getName() const {
+			return _name;
+		}
+
 	private:
 		std::string _name;
 	};
