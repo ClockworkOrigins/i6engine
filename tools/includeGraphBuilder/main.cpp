@@ -1,17 +1,15 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <queue>
 #include <map>
-#include <cstdio>
-#include <cstring>
+#include <queue>
+#include <regex>
 #include <set>
+#include <vector>
 
 int main(int argc, char ** argv) {
 	std::vector<std::string> search;
 	search.push_back("");
 	std::queue<std::string> analyse;
-	analyse.push(std::string(argv[1]));
+	analyse.push(std::regex_replace(argv[1], std::regex("\\\\"), "/"));
 	for (int i = 2; i < argc; i++) {
 		search.push_back(std::string(argv[i]));
 	}
