@@ -137,13 +137,11 @@ namespace core {
 			}
 			_existingObjects[i] = IDStatus::CREATED;
 
-			ReceivedMessagePtr msg;
-
 			// CAUTION: some messages in _waitingMsgs[i] could be deleted when msg is a Delete message
 			// but only messages behind the current one
 			// using an iterator will break, using an positioncounter works
 			for (size_t msgNr = 0; msgNr < _waitingMsgs[i].size(); ++msgNr) {
-				msg = _waitingMsgs[i][msgNr];
+				ReceivedMessagePtr msg = _waitingMsgs[i][msgNr];
 				int64_t id = msg->message->getContent()->_id;
 				int64_t waitForId = msg->message->getContent()->_waitForId;
 				// delete Msg from other buffer
@@ -201,9 +199,8 @@ namespace core {
 	}
 
 	void MessageSubscriber::notifyNewID(const int64_t id) {
-		_objMessageListMutex.lock();
+		boost::mutex::scoped_lock sl(_objMessageListMutex);
 		_newCreatedIDs.push_back(id);
-		_objMessageListMutex.unlock();
 	}
 
 	void MessageSubscriber::deliverMessageInternal(const ReceivedMessagePtr & msg) {
@@ -252,7 +249,7 @@ namespace core {
 		swapMessageBuffer();
 
 		for (ReceivedMessagePtr & rm : *_objInActiveMessageVector) {
-			Message::Ptr m = rm->message;
+			Message::Ptr & m = rm->message;
 
 			if (m->getSubtype() == 0) {
 				reset();

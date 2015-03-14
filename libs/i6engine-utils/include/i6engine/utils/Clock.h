@@ -71,8 +71,8 @@ namespace utils {
 				return;
 			}
 			// Get current time.
-			std::lock_guard<std::mutex> sl(_lock);
 			_systemTime = Updater::getCurrentTime(_systemTime);
+			//std::lock_guard<std::mutex> sl(_lock);
 			notifyTimer();
 		}
 
@@ -102,7 +102,7 @@ namespace utils {
 		 * \brief updates the time a timer is waiting for
 		 */
 		void updateWaitTime(uint64_t timerID, uint64_t time) {
-			std::lock_guard<std::mutex> lock(_lock);
+			//std::lock_guard<std::mutex> lock(_lock);
 			if (time <= _systemTime) {
 				_timer[timerID].second->notify_all();
 				return;

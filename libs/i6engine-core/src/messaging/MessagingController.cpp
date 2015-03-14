@@ -115,17 +115,6 @@ namespace core {
 	}
 
 	void MessagingController::deliverMessage(const Message::Ptr & msg) {
-		uint16_t msgType = msg->getMessageType();
-
-		{
-			boost::mutex::scoped_lock objScopeLock(_objDictionaryMutex);
-			// Look up the message type in the dictionary (method suggested by Item 24 of Effective STL by Scott Meyers).
-			auto it = _objMessageTypeDictionary.find(msgType);
-			if (it == _objMessageTypeDictionary.end()) {
-				// nobody registered for this type
-				return;
-			}
-		}
 #ifdef ISIXE_PROFILING
 		msg->insertTimestamp("MessagingController deliverMessage");
 #endif /* ISIXE_PROFILING */

@@ -226,6 +226,12 @@ void startClockAndScheduler() {
 	sched.runOnce(5000, boost::bind(func2, 0), 0);
 	sched.runRepeated(2500, boost::bind(func2, 1), 0);
 	sched.runOnce(1500, boost::bind(func2, 1), 0);
+	sched.runRepeated(2500, boost::bind(func2, 1), 0);
+	sched.runRepeated(3000, boost::bind(func2, 1), 0);
+	sched.runRepeated(2500, boost::bind(func2, 1), 0);
+	sched.runRepeated(4500, boost::bind(func2, 1), 0);
+	sched.runRepeated(2500, boost::bind(func2, 1), 0);
+	sched.runRepeated(3500, boost::bind(func2, 1), 0);
 
 	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 }
