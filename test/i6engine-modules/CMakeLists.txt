@@ -28,10 +28,11 @@ SET(testSrc
 	
 	api/components/test_Component.cpp
 	api/components/test_MoverComponent.cpp
+	
+	api/manager/test_IDManager.cpp
+	api/manager/test_TextManager.cpp
 
 	api/objects/test_GameObject.cpp
-
-	modules/manager/test_IDManager.cpp
 )
 add_executable(ModulesTester ${testSrc})
 

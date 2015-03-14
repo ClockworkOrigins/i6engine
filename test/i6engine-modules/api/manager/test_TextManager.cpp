@@ -14,21 +14,11 @@
  * limitations under the License.
  */
 
-#include "RPGApplication.h"
-
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/manager/TextManager.h"
 
-int main(int argc, char ** argv) {
-	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false);
+#include "gtest/gtest.h"
 
-	sample::RPGApplication app;
-
-	app.setName("RPG Sample");
-
-	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
-
-	i6engine::api::EngineController::GetSingletonPtr()->start();
-
-	return 0;
+TEST(TextManager, getText) {
+	EXPECT_EQ("Ich", i6engine::api::EngineController::GetSingleton().getTextManager()->getText("PlayerName"));
 }
-

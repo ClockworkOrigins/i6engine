@@ -14,7 +14,7 @@ material "ForestGround_ForestGround"
 				texture "GrassFloor.tga"
 				tex_coord_set 0
 				colour_op modulate
-				scale 1 1
+				scale 0.01 0.01
 				scroll 0 0
 				rotate 0
 			}

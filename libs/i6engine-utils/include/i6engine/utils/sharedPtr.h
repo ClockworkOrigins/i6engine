@@ -249,7 +249,7 @@ namespace utils {
 		 */
 		void removeRef() {
 			if (_sharedCounter != nullptr) {
-				if (_sharedCounter->refCounter.fetch_sub(1) == 1) {
+				if (_sharedCounter->refCounter-- == 1) {
 					{
 						boost::recursive_mutex::scoped_lock l(sharedPtr<U, U>::clearListLock);
 						sharedPtr<U, U>::clearList.push_back(reinterpret_cast<U *>(_ptr));

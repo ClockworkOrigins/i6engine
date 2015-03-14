@@ -92,7 +92,7 @@ namespace editor {
 #endif
 		api::EngineController::GetSingletonPtr()->registerApplication(*this);
 
-		api::EngineController::GetSingletonPtr()->start(false);
+		api::EngineController::GetSingletonPtr()->start();
 	}
 
 	void Editor::Initialize() {

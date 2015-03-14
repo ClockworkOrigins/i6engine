@@ -5,7 +5,7 @@
 		<Attribute name="activationState">4</Attribute>
 		<Attribute name="friction">1.0</Attribute>
 		<Attribute name="shapeType">1</Attribute>
-		<Attribute name="box">0.2 0.5 0.2</Attribute>
+		<Attribute name="box">0.2 0.25 0.2</Attribute>
 		<Attribute name="collisionGroup">4 1 0</Attribute>
 		<Attribute name="shatterInterest">1</Attribute>
 		<Attribute name="angularFactor">1.0 1.0 1.0</Attribute>

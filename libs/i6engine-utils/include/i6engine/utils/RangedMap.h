@@ -25,7 +25,6 @@ namespace utils {
 
 	/**
 	 * class RangedMap
-	 *
 	 */
 	template<typename Key, typename Value>
 	class RangedMap {
@@ -94,6 +93,7 @@ namespace utils {
 			Value operator*() {
 				return _cur->_val;
 			}
+
 		private:
 			Element * _cur;
 		};

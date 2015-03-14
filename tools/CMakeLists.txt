@@ -23,4 +23,5 @@ IF(ISIXE_WITH_EDITOR)
 	set(I6ENGINE_EDITOR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/tools/i6engine-editor/include)
 ENDIF(ISIXE_WITH_EDITOR)
 
+add_subdirectory(includeGraphBuilder)
 add_subdirectory(meshToBulletConverter)

@@ -18,10 +18,6 @@
 
 #include <sstream>
 
-#include "i6engine/utils/Exceptions.h"
-
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace core {
 
@@ -59,7 +55,7 @@ namespace core {
 	}
 
 	bool IPKey::operator==(const IPKey & other) const {
-		return getIP() == other.getIP() && _port == other._port;
+		return _ip[0] == other._ip[0] && _ip[1] == other._ip[1] && _ip[2] == other._ip[2] && _ip[3] == other._ip[3] && _port == other._port;
 	}
 
 	bool IPKey::operator!=(const IPKey & other) const {
@@ -71,7 +67,7 @@ namespace core {
 	}
 
 	std::string IPKey::toString() const {
-		return (isValid()) ? (getIP() + std::string(":") + boost::lexical_cast<std::string>(_port)) : "Invalid IP";
+		return (isValid()) ? (getIP() + std::string(":") + std::to_string(_port)) : "Invalid IP";
 	}
 
 	std::ostream & operator<<(std::ostream & stream, const IPKey & key) {

@@ -43,6 +43,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/facades/PhysicsFacade.h"
 #include "i6engine/api/facades/ScriptingFacade.h"
+#include "i6engine/api/manager/IDManager.h"
 #include "i6engine/api/manager/TextManager.h"
 
 #ifdef ISIXE_WITH_AUDIO
@@ -51,7 +52,6 @@
 
 #include "i6engine/modules/graphics/GraphicsController.h"
 #include "i6engine/modules/input/InputController.h"
-#include "i6engine/api/manager/IDManager.h"
 
 #ifdef ISIXE_NETWORK
 	#include "i6engine/modules/network/NetworkController.h"
@@ -76,7 +76,7 @@ void forceCleanup(int param) {
 namespace i6engine {
 namespace api {
 
-	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _textManager(new TextManager()), _appl(), _debugdrawer(0), _ds(false), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
+	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _textManager(new TextManager()), _appl(), _debugdrawer(0), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
 		// WORKAROUND: Install signal handlers to overcome OIS's limitation to handle X11 key repeat rate properly when crashing.
 		signal(SIGINT, forceCleanup);
 		// TODO: kA
@@ -181,14 +181,13 @@ namespace api {
 		module->setController(_subsystemController, _coreController, _messagingController);
 	}
 
-	void EngineController::start(const bool ds) {
+	void EngineController::start() {
 		// Call the user-defined function Initialize (Application.h)
-		if (ds == true) {
+		if (_type == GameType::SERVER) {
 			ISIXE_LOG_INFO("EngineController", "Starting, Server is enabled");
 		} else {
 			ISIXE_LOG_INFO("EngineController", "Starting, Server is disabled");
 		}
-		_ds = ds;
 		_appl->Initialize();
 		_coreController->SetOnAfterInitializedCallback(boost::bind(&Application::AfterInitialize, _appl));
 		runEngine();
@@ -216,9 +215,7 @@ namespace api {
 	}
 
 	void EngineController::registerDefault(const bool ds) {
-		_ds = ds;
-
-		if (!_ds) {
+		if (!ds) {
 #ifdef ISIXE_NETWORK
 			registerSubSystem("Network", new modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 #endif

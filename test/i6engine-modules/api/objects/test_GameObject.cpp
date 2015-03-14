@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-#include <algorithm>
-
-#include "i6engine/core/messaging/IPKey.h"
-
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/components/Component.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
-#include "i6engine/api/components/MoverCircleComponent.h"
-#include "i6engine/api/components/PhysicalStateComponent.h"
 
 #include "gtest/gtest.h"
 

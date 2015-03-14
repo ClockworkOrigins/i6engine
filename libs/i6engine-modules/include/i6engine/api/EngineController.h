@@ -148,9 +148,8 @@ namespace api {
 
 		/**
 		 * \brief A start method to Initialize and run the engine
-		 * \param[in] start as Dedicated Server (ds)
 		 */
-		void start(const bool ds);
+		void start();
 
 		inline void setType(GameType type) {
 			_type = type;
@@ -248,7 +247,6 @@ namespace api {
 		TextManager * _textManager;
 		Application * _appl;
 		uint8_t _debugdrawer;
-		bool _ds;
 
 		AudioFacade * _audioFacade;
 		GraphicsFacade * _graphicsFacade;

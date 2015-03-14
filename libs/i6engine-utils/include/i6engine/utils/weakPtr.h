@@ -45,7 +45,7 @@ namespace utils {
 		 * \brief copy constructor copying another weak pointer
 		 */
 		weakPtr(const weakPtr & other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			_sharedCounter->weakCounter.fetch_add(1);
+			_sharedCounter->weakCounter++;
 		}
 
 		/**
@@ -60,7 +60,7 @@ namespace utils {
 		 * \brief constructor takes sharedPtr with same base class
 		 */
 		weakPtr(const sharedPtr<T, Base> & other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			_sharedCounter->weakCounter.fetch_add(1);
+			_sharedCounter->weakCounter++;
 		}
 
 		/**
@@ -68,7 +68,7 @@ namespace utils {
 		 */
 		template<typename U>
 		weakPtr(const sharedPtr<U, T> & other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			_sharedCounter->weakCounter.fetch_add(1);
+			_sharedCounter->weakCounter++;
 		}
 
 		/**
@@ -97,7 +97,7 @@ namespace utils {
 
 			_sharedCounter = other._sharedCounter;
 			_ptr = other._ptr;
-			_sharedCounter->weakCounter.fetch_add(1);
+			_sharedCounter->weakCounter++;
 
 			return *this;
 		}
@@ -164,7 +164,7 @@ namespace utils {
 		 * \brief handles deletion of a reference
 		 */
 		void removeRef() {
-			if (_sharedCounter != nullptr && _sharedCounter->weakCounter.fetch_sub(1) == 1) {
+			if (_sharedCounter != nullptr && _sharedCounter->weakCounter-- == 1) {
 				if (_sharedCounter->refCounter == 0) {
 					delete _sharedCounter;
 				}

@@ -15,6 +15,7 @@ Enhancements:
 	- added first base components for NPCs representing their attributes and their name
 	- added basic inventory interface
 	- improved build dependency to download archives from server
+	- added support for shadows
 
 v 0.8.0
 

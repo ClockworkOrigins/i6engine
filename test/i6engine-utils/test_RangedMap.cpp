@@ -327,7 +327,7 @@ TEST(RangedMap, comparisonMapToRangedMap2) {
 }
 
 TEST(RangedMap, comparisonMapToRangedMapSet) {
-	const size_t ENTRIES = 1000000;
+	const size_t ENTRIES = 100000;
 
 	std::set<int> orderSet;
 	std::vector<int> orderList;
@@ -371,7 +371,7 @@ TEST(RangedMap, comparisonMapToRangedMapSet) {
 }
 
 TEST(RangedMap, comparisonMapToRangedMapGet) {
-	const size_t ENTRIES = 1000000;
+	const size_t ENTRIES = 100000;
 
 	std::set<int> orderSet;
 	std::vector<std::pair<int, int>> orderList;

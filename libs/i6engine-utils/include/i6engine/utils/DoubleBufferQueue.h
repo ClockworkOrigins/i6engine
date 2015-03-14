@@ -65,6 +65,7 @@ namespace utils {
 		void pop() {
 			pop(Bool2Type<consumer>());
 		}
+
 		void pop(Bool2Type<true>) {
 			static_assert(consumer, "Consumer must be true here");
 			boost::recursive_mutex::scoped_lock scopeLock(_readLock);
@@ -78,6 +79,7 @@ namespace utils {
 
 			_queueRead->pop();
 		}
+
 		void pop(Bool2Type<false>) {
 			static_assert(!consumer, "Consumer must be false here");
 			if (_queueRead->empty()) {
@@ -97,6 +99,7 @@ namespace utils {
 		T front() {
 			return front(Bool2Type<consumer>());
 		}
+
 		T front(Bool2Type<true>) {
 			static_assert(consumer, "Consumer must be true here");
 			boost::recursive_mutex::scoped_lock scopeLock(_readLock);
@@ -109,6 +112,7 @@ namespace utils {
 			}
 			return _queueRead->front();
 		}
+
 		T front(Bool2Type<false>) {
 			static_assert(!consumer, "Consumer must be false here");
 			if (_queueRead->empty()) {
@@ -127,6 +131,7 @@ namespace utils {
 		T poll() {
 			return poll(Bool2Type<consumer>());
 		}
+
 		T poll(Bool2Type<true> b) {
 			static_assert(consumer, "Consumer must be true here");
 			boost::recursive_mutex::scoped_lock scopeLock(_readLock);
@@ -142,6 +147,7 @@ namespace utils {
 			_queueRead->pop();
 			return ret;
 		}
+
 		T poll(Bool2Type<false> b) {
 			static_assert(!consumer, "Consumer must be false here");
 			if (_queueRead->empty()) {

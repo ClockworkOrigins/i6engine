@@ -35,8 +35,8 @@
 namespace boost {
 namespace serialization {
 	class access;
-}
-}
+} /* namespace serialization */
+} /* namespace boost */
 
 namespace i6engine {
 namespace core {

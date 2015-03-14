@@ -36,23 +36,21 @@ namespace utils {
 	inline std::vector<std::string> split(const std::string & str, const std::string & delim) {
 		std::vector<std::string> ret;
 
-		if (!str.empty()) {
-			size_t n = 0;
-			size_t n2 = str.find(delim);
+		size_t n = 0;
+		size_t n2 = str.find(delim);
 
-			while (n2 != std::string::npos) {
-				std::string s = str.substr(n, n2 - n);
-				n = n2 + 1;
-				n2 = str.find(delim, n);
+		while (n2 != std::string::npos) {
+			std::string s = str.substr(n, n2 - n);
+			n = n2 + 1;
+			n2 = str.find(delim, n);
 
-				if (!s.empty()) {
-					ret.push_back(s);
-				}
+			if (!s.empty()) {
+				ret.push_back(s);
 			}
+		}
 
-			if (str.size() - n > 0) {
-				ret.push_back(str.substr(n, str.size() - n));
-			}
+		if (str.size() - n > 0) {
+			ret.push_back(str.substr(n, str.size() - n));
 		}
 
 		return ret;
