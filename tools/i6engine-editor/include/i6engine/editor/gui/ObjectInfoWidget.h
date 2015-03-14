@@ -48,8 +48,6 @@ namespace gui {
 		size_t _count;
 		CEGUI::Window * _lastWindow;
 
-		void setPosition(double w, double h);
-		void setSize(double w, double h);
 		void addComponent(const std::string & component, const std::string & identifier);
 		void addComponentOption(bool writeable, const std::string & optionName, const boost::function<std::string(void)> & getter, const boost::function<bool(std::string)> & setter);
 

@@ -39,8 +39,6 @@ namespace gui {
 	private:
 		std::vector<boost::function<void(void)>> _callbacks;
 
-		void setPosition(double w, double h);
-		void setSize(double w, double h);
 		void addEntry(const std::string & entry);
 
 		bool changedSelection(const CEGUI::EventArgs & e);

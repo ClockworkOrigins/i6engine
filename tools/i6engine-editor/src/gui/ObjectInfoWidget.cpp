@@ -49,16 +49,7 @@ namespace gui {
 	}
 
 	void ObjectInfoWidget::update(uint16_t type, i6engine::api::gui::GUIUpdateMessageStruct * data) {
-		if (type == api::gui::GuiSetVisible) {
-			bool vis = static_cast<i6engine::api::gui::GUI_Visibility *>(data)->visible;
-			_window->setVisible(vis);
-		} else if (type == api::gui::GuiSetPosition) {
-			api::gui::GUI_Position * g = static_cast<api::gui::GUI_Position *>(data);
-			setPosition(g->x, g->y);
-		} else if (type == api::gui::GuiSetSize) {
-			api::gui::GUI_Size * g = static_cast<api::gui::GUI_Size *>(data);
-			setSize(g->width, g->height);
-		} else if (type == api::gui::GuiSetText) {
+		if (type == api::gui::GuiSetText) {
 			api::gui::GUI_Text * g = static_cast<api::gui::GUI_Text *>(data);
 			dynamic_cast<CEGUI::Listbox *>(_window)->addItem(new CEGUI::ListboxTextItem(g->text));
 			_lastWindow = _window;
@@ -69,16 +60,8 @@ namespace gui {
 			messages::GUI_AddComponentOption * g = static_cast<messages::GUI_AddComponentOption *>(data);
 			addComponentOption(g->writeable, g->optionName, g->getter, g->setter);
 		} else {
-			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
+			GUIWidget::update(type, data);
 		}
-	}
-
-	void ObjectInfoWidget::setPosition(double x, double y) {
-		_window->setPosition(CEGUI::UVector2(CEGUI::UDim(float(x), 0.0f), CEGUI::UDim(float(y), 0.0f)));
-	}
-
-	void ObjectInfoWidget::setSize(double w, double h) {
-		_window->setSize(CEGUI::USize(CEGUI::UDim(float(w), 0.0f), CEGUI::UDim(float(h), 0.0f)));
 	}
 
 	void ObjectInfoWidget::addComponent(const std::string & component, const std::string & identifier) {
