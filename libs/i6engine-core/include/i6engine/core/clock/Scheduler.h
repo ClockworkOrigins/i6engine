@@ -115,11 +115,11 @@ namespace core {
 				ISIXE_THROW_API("Scheduler", "time need to be > 0");
 			}
 
-			boost::mutex::scoped_lock sl(_lock);
 			Job j(f, _clock.getTime() + time, priority, _id++);
+			boost::mutex::scoped_lock sl(_lock);
 			_queue.push(j);
 			if (_queue.top().time == j.time) {
-				_clock.adjustTime(_tID, j.time);
+				_clock.updateWaitTime(_tID, j.time);
 			}
 
 			return j.id;
@@ -138,11 +138,11 @@ namespace core {
 				ISIXE_THROW_API("Scheduler", "interval has to be greater than 0, otherwise there would be an instant call");
 			}
 
-			boost::mutex::scoped_lock sl(_lock);
 			Job j(f, _clock.getTime() + interval, priority, _id++, interval);
+			boost::mutex::scoped_lock sl(_lock);
 			_queue.push(j);
 			if (_queue.top().time == j.time) {
-				_clock.adjustTime(_tID, j.time);
+				_clock.updateWaitTime(_tID, j.time);
 			}
 			return j.id;
 		}
@@ -250,7 +250,7 @@ namespace core {
 		/**
 		 * \brief says wether this thread is running or not
 		 */
-		bool _running;
+		std::atomic<bool> _running;
 
 		/**
 		 * \brief the internal clock being used for time management
@@ -277,7 +277,7 @@ namespace core {
 		 */
 		boost::thread _worker;
 
-		uint64_t _id;
+		std::atomic<uint64_t> _id;
 
 		/**
 		 * \brief forbidden

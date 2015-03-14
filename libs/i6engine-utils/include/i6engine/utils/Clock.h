@@ -22,6 +22,7 @@
 #ifndef __I6ENGINE_UTILS_CLOCK_H__
 #define __I6ENGINE_UTILS_CLOCK_H__
 
+#include <atomic>
 #include <cassert>
 #include <climits>
 #include <condition_variable>
@@ -47,7 +48,7 @@ namespace utils {
 		~Clock() {
 			_running = false;
 			Updater::Stop();
-			for (std::map<uint64_t, std::pair<uint64_t, std::condition_variable *> >::iterator it = _timer.begin(); it != _timer.end(); ++it) {
+			for (std::map<uint64_t, std::pair<uint64_t, std::condition_variable *>>::iterator it = _timer.begin(); it != _timer.end(); ++it) {
 				it->second.second->notify_all();
 				delete it->second.second;
 			}
@@ -81,8 +82,8 @@ namespace utils {
 		uint64_t registerTimer() {
 			std::pair<uint64_t, std::condition_variable *> p(std::make_pair(UINT64_MAX, new std::condition_variable()));
 
-			std::lock_guard<std::mutex> lock(_lock);
 			uint64_t id = _usedIDs++;
+			std::lock_guard<std::mutex> lock(_lock);
 			_timer.insert(std::make_pair(id, p));
 
 			return id;
@@ -116,27 +117,14 @@ namespace utils {
 			if (!_running) {
 				return false;
 			}
-			std::unique_lock<std::mutex> lock(_lock);
 			if (time <= _systemTime) {
 				return true;
 			}
+			std::unique_lock<std::mutex> lock(_lock);
 			auto it = _timer.find(timerID);
 			it->second.first = time;
 			it->second.second->wait(lock);
 			return _running;
-		}
-
-		/**
-		 * \brief actualizes the time the given timer is waiting for
-		 */
-		void adjustTime(uint64_t timerID, uint64_t time) {
-			std::lock_guard<std::mutex> lock(_lock);
-			assert(_timer.find(timerID) != _timer.end());
-			if (time <= _systemTime) {
-				_timer[timerID].second->notify_all();
-			} else {
-				_timer[timerID].first = time;
-			}
 		}
 
 		/**
@@ -157,7 +145,7 @@ namespace utils {
 		 * \brief activates every timer waiting for current systemTime
 		 */
 		void notifyTimer() {
-			for (std::map<uint64_t, std::pair<uint64_t, std::condition_variable *> >::iterator it = _timer.begin(); it != _timer.end(); ++it) {
+			for (std::map<uint64_t, std::pair<uint64_t, std::condition_variable *>>::iterator it = _timer.begin(); it != _timer.end(); ++it) {
 				if (_systemTime >= it->second.first) {
 					it->second.first = UINT64_MAX;
 					it->second.second->notify_all();
@@ -166,15 +154,15 @@ namespace utils {
 		}
 
 		//        id            wakeuptime      variable
-		std::map<uint64_t, std::pair<uint64_t, std::condition_variable *> > _timer;
+		std::map<uint64_t, std::pair<uint64_t, std::condition_variable *>> _timer;
 
-		std::mutex _lock;
-		uint64_t _usedIDs;
+		mutable std::mutex _lock;
+		std::atomic<uint64_t> _usedIDs;
 
 		// last system time
-		volatile uint64_t _systemTime;
+		std::atomic<uint64_t> _systemTime;
 
-		volatile bool _running;
+		std::atomic<bool> _running;
 	};
 
 } /* namespace utils */

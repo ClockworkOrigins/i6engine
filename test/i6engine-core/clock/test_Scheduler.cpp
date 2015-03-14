@@ -16,6 +16,8 @@
 
 #include <cmath>
 
+#include "i6engine/utils/RealTimeClock.h"
+
 #include "i6engine/core/clock/Scheduler.h"
 
 #include "gtest/gtest.h"
@@ -213,4 +215,23 @@ TEST(Scheduler, addTimerLater) {
 
     std::vector<int> ref2({ 1, 0 });
 	EXPECT_EQ(ref2, jobs);
+}
+
+void startClockAndScheduler() {
+	i6engine::utils::Clock<i6engine::utils::RealTimeClock> cl;
+	i6engine::core::Scheduler<i6engine::utils::RealTimeClock> sched(cl);
+
+	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+
+	sched.runOnce(5000, boost::bind(func2, 0), 0);
+	sched.runRepeated(2500, boost::bind(func2, 1), 0);
+	sched.runOnce(1500, boost::bind(func2, 1), 0);
+
+	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+}
+
+TEST(Scheduler, startupAndShutdown) {
+	for (uint32_t i = 0; i < 1000; i++) {
+		startClockAndScheduler();
+	}
 }
