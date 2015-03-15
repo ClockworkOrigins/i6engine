@@ -95,10 +95,10 @@ void doThreadingStuff() {
 
 TEST(Boost, Thread) {
 	std::vector<boost::thread *> threads;
-	for (size_t i = 0; i < 10000; i++) {
+	for (size_t i = 0; i < 1000; i++) {
 		threads.push_back(new boost::thread(doThreadingStuff));
 	}
-	for (size_t i = 0; i < 10000; i++) {
+	for (size_t i = 0; i < 1000; i++) {
 		threads[i]->join();
 		delete threads[i];
 	}
@@ -106,10 +106,10 @@ TEST(Boost, Thread) {
 
 TEST(STL, Thread) {
 	std::vector<std::thread *> threads;
-	for (size_t i = 0; i < 10000; i++) {
+	for (size_t i = 0; i < 1000; i++) {
 		threads.push_back(new std::thread(doThreadingStuff));
 	}
-	for (size_t i = 0; i < 10000; i++) {
+	for (size_t i = 0; i < 1000; i++) {
 		threads[i]->join();
 		delete threads[i];
 	}
