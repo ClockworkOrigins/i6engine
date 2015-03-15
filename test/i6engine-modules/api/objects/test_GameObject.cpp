@@ -124,6 +124,7 @@ namespace config {
 		RejectComponent(const int64_t id, const api::attributeMap & params) : TestComponent(id, params) {
 			_objFamilyID = config::ComponentTypes::RejectComponent;
 		}
+		
 		// always rejects
 		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & c) const {
 			return std::make_pair(AddStrategy::REJECT, 0);
