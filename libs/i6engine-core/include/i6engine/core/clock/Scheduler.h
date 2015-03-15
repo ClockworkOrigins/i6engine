@@ -119,7 +119,7 @@ namespace core {
 			Job j(f, _clock.getTime() + time, priority, _id++);
 			_queue.push(j);
 			if (_queue.top().time == j.time) {
-				_clock.adjustTime(_tID, j.time);
+				_clock.updateWaitTime(_tID, j.time);
 			}
 
 			return j.id;
@@ -142,7 +142,7 @@ namespace core {
 			Job j(f, _clock.getTime() + interval, priority, _id++, interval);
 			_queue.push(j);
 			if (_queue.top().time == j.time) {
-				_clock.adjustTime(_tID, j.time);
+				_clock.updateWaitTime(_tID, j.time);
 			}
 			return j.id;
 		}

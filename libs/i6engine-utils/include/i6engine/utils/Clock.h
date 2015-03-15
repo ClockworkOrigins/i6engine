@@ -25,7 +25,7 @@
 #include <cassert>
 #include <climits>
 #include <condition_variable>
-#include <map>
+#include <vector>
 
 #include "boost/bind.hpp"
 
@@ -38,20 +38,34 @@ namespace utils {
 		/**
 		 * \brief default constructor
 		 */
-		Clock() : Updater(boost::bind(&Clock::Update, this)), _timer(), _lock(), _usedIDs(0), _systemTime(0), _running(true) {
+		Clock() : Updater(boost::bind(&Clock::Update, this)), _timer(), _lock(), _systemTime(0), _running(true) {
 		}
 
 		/**
 		 * \brief stops the updating of the clock, removes all timers
+		 * \note make sure, this function is never called while an Update is still in progress
+		 * It will call Updater::Stop befor the critical section begins.
 		 */
 		~Clock() {
 			_running = false;
 			Updater::Stop();
-			for (std::map<uint64_t, std::pair<uint64_t, std::condition_variable *> >::iterator it = _timer.begin(); it != _timer.end(); ++it) {
-				it->second.second->notify_all();
-				delete it->second.second;
+			for (size_t i = 0; i < _timer.size(); i++) {
+				_timer[i].second->notify_all();
+				delete _timer[i].second;
 			}
 			_timer.clear();
+		}
+
+		/**
+		 * \brief updates current time and notifies timers, called from outside
+		 * This function tells the clock to update it's current time.
+		 * it will query the Updater template to get the current time value
+		 * \note this function is not reentrant
+		 */
+		void Update() {
+			// Get current time.
+			_systemTime = Updater::getCurrentTime(_systemTime);
+			notifyTimer();
 		}
 
 		/**
@@ -63,49 +77,41 @@ namespace utils {
 		}
 
 		/**
-		 * \brief updates current time and notifies timers, called from outside
-		 */
-		void Update() {
-			if (!_running) {
-				return;
-			}
-			// Get current time.
-			std::lock_guard<std::mutex> sl(_lock);
-			_systemTime = Updater::getCurrentTime(_systemTime);
-			notifyTimer();
-		}
-
-		/**
 		 * \brief registers a new timer waiting for this clock
 		 */
 		uint64_t registerTimer() {
 			std::pair<uint64_t, std::condition_variable *> p(std::make_pair(UINT64_MAX, new std::condition_variable()));
 
 			std::lock_guard<std::mutex> lock(_lock);
-			uint64_t id = _usedIDs++;
-			_timer.insert(std::make_pair(id, p));
+			_timer.push_back(p);
 
-			return id;
+			return _timer.size() - 1;
 		}
 
 		/**
 		 * \brief removes the given timer
+		 * \note calling this while another function concerning this timer is pending
+		 * (updateWaitTime etc.) can lead to undefined behaviour
 		 */
 		void unregisterTimer(uint64_t timerID) {
 			std::lock_guard<std::mutex> lock(_lock);
-			delete _timer[timerID].second;
-			_timer.erase(timerID);
+			_timer[timerID].first = UINT64_MAX;
 		}
 
 		/**
 		 * \brief updates the time a timer is waiting for
 		 */
 		void updateWaitTime(uint64_t timerID, uint64_t time) {
-			std::lock_guard<std::mutex> lock(_lock);
 			if (time <= _systemTime) {
-				_timer[timerID].second->notify_all();
+				std::condition_variable * cond;
+				{
+					std::lock_guard<std::mutex> lock(_lock);
+					cond = _timer[timerID].second;
+				}
+				cond->notify_all();
 				return;
 			}
+			std::lock_guard<std::mutex> lock(_lock);
 			_timer[timerID].first = time;
 		}
 
@@ -113,30 +119,13 @@ namespace utils {
 		 * \brief lets a time wait for the given time
 		 */
 		bool waitForTime(uint64_t timerID, uint64_t time) {
-			if (!_running) {
-				return false;
-			}
-			std::unique_lock<std::mutex> lock(_lock);
 			if (time <= _systemTime) {
 				return true;
 			}
-			auto it = _timer.find(timerID);
-			it->second.first = time;
-			it->second.second->wait(lock);
+			std::unique_lock<std::mutex> lock(_lock);
+			_timer[timerID].first = time;
+			_timer[timerID].second->wait(lock);
 			return _running;
-		}
-
-		/**
-		 * \brief actualizes the time the given timer is waiting for
-		 */
-		void adjustTime(uint64_t timerID, uint64_t time) {
-			std::lock_guard<std::mutex> lock(_lock);
-			assert(_timer.find(timerID) != _timer.end());
-			if (time <= _systemTime) {
-				_timer[timerID].second->notify_all();
-			} else {
-				_timer[timerID].first = time;
-			}
 		}
 
 		/**
@@ -157,19 +146,22 @@ namespace utils {
 		 * \brief activates every timer waiting for current systemTime
 		 */
 		void notifyTimer() {
-			for (std::map<uint64_t, std::pair<uint64_t, std::condition_variable *> >::iterator it = _timer.begin(); it != _timer.end(); ++it) {
-				if (_systemTime >= it->second.first) {
-					it->second.first = UINT64_MAX;
-					it->second.second->notify_all();
+			std::unique_lock<std::mutex> lock(_lock);
+			for (size_t i = 0; i < _timer.size(); i++) {
+				if (_systemTime >= _timer[i].first) {
+					_timer[i].first = UINT64_MAX;
+					_timer[i].second->notify_all();
 				}
 			}
 		}
 
-		//        id            wakeuptime      variable
-		std::map<uint64_t, std::pair<uint64_t, std::condition_variable *> > _timer;
+		//        			wakeuptime      variable
+		std::vector<std::pair<uint64_t, std::condition_variable *> > _timer;
 
+		/**
+		 * \brief lock to prevent conflicts regarding the timer vector
+		 */
 		std::mutex _lock;
-		uint64_t _usedIDs;
 
 		// last system time
 		volatile uint64_t _systemTime;

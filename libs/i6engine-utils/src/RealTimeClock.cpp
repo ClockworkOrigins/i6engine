@@ -42,8 +42,8 @@ namespace utils {
 
 	void RealTimeClock::clockUpdater() {
 		while (_running) {
-			boost::this_thread::sleep(boost::posix_time::microseconds(500));
 			_update();
+			boost::this_thread::sleep(boost::posix_time::microseconds(500));
 		}
 	}
 
