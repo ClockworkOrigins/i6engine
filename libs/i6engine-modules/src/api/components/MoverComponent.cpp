@@ -33,7 +33,7 @@
 namespace i6engine {
 namespace api {
 
-	MoverComponent::MoverComponent(const int64_t id, const attributeMap & params) : ShatterComponent(id, params), _duration(0), _positioning(), _psc(nullptr), _startTime(), _lastPos(), _realStartPos(), _lastRot(), _moving(false), _initial(true), _started(false), _linkable(false), _linked() {
+	MoverComponent::MoverComponent(const int64_t id, const attributeMap & params) : ShatterComponent(id, params), _duration(0), _positioning(), _psc(), _startTime(), _lastPos(), _realStartPos(), _lastRot(), _moving(false), _initial(true), _started(false), _linkable(false), _linked() {
 		_objFamilyID = components::MoverComponent;
 
 		loadParams(params);
@@ -86,15 +86,17 @@ namespace api {
 			psc->applyRotation(_lastRot.inverse() * newRot);
 		}
 
+		auto psc = _psc.get();
+
 		// Update position
 		if (_positioning == Positioning::POSITIONING_ABSOLUTE) {
-			_psc->setPosition(newPos, 2);
-			_psc->setRotation(newRot, 2);
+			psc->setPosition(newPos, 2);
+			psc->setRotation(newRot, 2);
 			_lastPos = newPos;
 			_lastRot = newRot;
 		} else {
-			_psc->setPosition(_psc->getPosition() + (newPos - _lastPos), 2);
-			_psc->setRotation(_psc->getRotation() * (_lastRot.inverse() * newRot), 2);
+			psc->setPosition(psc->getPosition() + (newPos - _lastPos), 2);
+			psc->setRotation(psc->getRotation() * (_lastRot.inverse() * newRot), 2);
 			_lastPos = newPos;
 			_lastRot = newRot;
 		}

@@ -88,16 +88,16 @@ namespace api {
 				}
 			}
 		}
-
+		auto psc = _psc.get();
 		if (_way == Way::LINEAR) {
-			_psc->setPosition(_realStartPos, 2);
+			psc->setPosition(_realStartPos, 2);
 			if (_direction) {
 				_lastPos = _keyFrames[0].first;
 			} else {
 				_lastPos = _keyFrames.back().first;
 			}
 		} else if (_way == Way::BEZIER) {
-			_psc->setPosition(_realStartPos, 2);
+			psc->setPosition(_realStartPos, 2);
 			if (_direction) {
 				_lastPos = _keyFrames[0].first;
 			} else {
@@ -312,12 +312,12 @@ namespace api {
 			ISIXE_THROW_FAILURE("MoverComponent", "You need at least two keyFrames");
 			return;
 		}
-
+		auto psc = _psc.get();
 		if (_way == Way::LINEAR) {
-			_psc->setPosition(_realStartPos, 1);
+			psc->setPosition(_realStartPos, 1);
 			_lastPos = _keyFrames[0].first;
 		} else if (_way == Way::BEZIER) {
-			_psc->setPosition(_realStartPos, 1);
+			psc->setPosition(_realStartPos, 1);
 			_lastPos = _keyFrames[0].first;
 		} else {
 			ISIXE_THROW_FAILURE("MoverComponent", "Unknown way");
