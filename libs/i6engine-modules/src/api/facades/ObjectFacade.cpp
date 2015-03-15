@@ -45,7 +45,7 @@ namespace api {
 	}
 
 	GOPtr ObjectFacade::getObject(const int64_t goid) const {
-		boost::recursive_mutex::scoped_lock sl(_lock);
+		boost::mutex::scoped_lock sl(_lock);
 		// Iterate through _GOList
 		for (std::list<GOPtr>::const_iterator it = _GOList.begin(); it != _GOList.end(); ++it) {
 			// Wanted GameObject found
@@ -66,7 +66,7 @@ namespace api {
 	std::list<GOPtr> ObjectFacade::getAllObjectsOfType(const std::vector<std::string> & types) const {
 		std::list<GOPtr> all;
 
-		boost::recursive_mutex::scoped_lock sl(_lock);
+		boost::mutex::scoped_lock sl(_lock);
 		// Iterate through _GOList
 		for (std::list<GOPtr>::const_iterator it = _GOList.begin(); it != _GOList.end(); ++it) {
 			// Wanted GameObject found
@@ -82,7 +82,7 @@ namespace api {
 	}
 
 	std::list<GOPtr> ObjectFacade::getGOList() const {
-		boost::recursive_mutex::scoped_lock sl(_lock);
+		boost::mutex::scoped_lock sl(_lock);
 		return _GOList;
 	}
 
@@ -129,7 +129,7 @@ namespace api {
 	}
 
 	void ObjectFacade::updateGOList(const std::list<GOPtr> & GOList) {
-		boost::recursive_mutex::scoped_lock sl(_lock);
+		boost::mutex::scoped_lock sl(_lock);
 		_GOList = GOList;
 	}
 

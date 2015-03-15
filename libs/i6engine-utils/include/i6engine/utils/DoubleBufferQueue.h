@@ -21,7 +21,7 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-#include "boost/thread/recursive_mutex.hpp"
+#include "boost/thread/mutex.hpp"
 
 namespace i6engine {
 namespace utils {
@@ -54,9 +54,8 @@ namespace utils {
 		 * \brief pushes the given value into the queue
 		 */
 		void push(const T & value) {
-			_writeLock.lock();
+			boost::mutex::scoped_lock scopeLock(_writeLock);
 			_queueWrite->push(value);
-			_writeLock.unlock();
 		}
 
 		/**
@@ -68,7 +67,7 @@ namespace utils {
 
 		void pop(Bool2Type<true>) {
 			static_assert(consumer, "Consumer must be true here");
-			boost::recursive_mutex::scoped_lock scopeLock(_readLock);
+			boost::mutex::scoped_lock scopeLock(_readLock);
 			if (_queueRead->empty()) {
 				swap();
 
@@ -102,7 +101,7 @@ namespace utils {
 
 		T front(Bool2Type<true>) {
 			static_assert(consumer, "Consumer must be true here");
-			boost::recursive_mutex::scoped_lock scopeLock(_readLock);
+			boost::mutex::scoped_lock scopeLock(_readLock);
 			if (_queueRead->empty()) {
 				swap();
 
@@ -134,7 +133,7 @@ namespace utils {
 
 		T poll(Bool2Type<true> b) {
 			static_assert(consumer, "Consumer must be true here");
-			boost::recursive_mutex::scoped_lock scopeLock(_readLock);
+			boost::mutex::scoped_lock scopeLock(_readLock);
 			if (_queueRead->empty()) {
 				swap();
 
@@ -206,8 +205,8 @@ namespace utils {
 		std::queue<T> * _queueRead;
 		std::queue<T> * _queueWrite;
 
-		boost::recursive_mutex _readLock;
-		boost::recursive_mutex _writeLock;
+		boost::mutex _readLock;
+		boost::mutex _writeLock;
 
 		/**
 		 * \brief forbidden
@@ -218,8 +217,7 @@ namespace utils {
 		 * \brief switches read and write buffer
 		 */
 		void swap() {
-			boost::recursive_mutex::scoped_lock scopeLock(_readLock);
-			boost::recursive_mutex::scoped_lock scopeLock2(_writeLock);
+			boost::mutex::scoped_lock scopeLock2(_writeLock);
 			if (_queueRead == &_queueA) {
 				_queueWrite = &_queueA;
 				_queueRead = &_queueB;

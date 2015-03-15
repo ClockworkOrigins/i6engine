@@ -182,11 +182,11 @@ namespace core {
 	}
 
 	void ModuleController::processMessages() {
-		updateBuffer();
+		while (updateBuffer());
 		swapMessageBuffer();
 
 		for (ReceivedMessagePtr & rm : *_objInActiveMessageVector) {
-			Message::Ptr m = boost::static_pointer_cast<Message>(rm->message);
+			Message::Ptr & m = rm->message;
 
 			if (m->getSubtype() == 0) {
 				reset();

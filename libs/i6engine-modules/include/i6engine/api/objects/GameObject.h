@@ -274,67 +274,67 @@ namespace api {
 	};
 
 	template<typename T>
-	i6engine::utils::sharedPtr<T, i6engine::api::Component> GameObject::getGOC(uint32_t famID) const {
+	utils::sharedPtr<T, Component> GameObject::getGOC(uint32_t famID) const {
 		component_table_t::const_iterator it = _objComponents.find(famID);
 		// GOComponent not found
 		if (it == _objComponents.end()) {
-			return i6engine::utils::sharedPtr<T, i6engine::api::Component>();
+			return utils::sharedPtr<T, Component>();
 		}
 
 		// Return a pointer to the found GOComponent
-		return i6engine::utils::dynamic_pointer_cast<T>(it->second);
+		return utils::dynamic_pointer_cast<T>(it->second);
 	}
 
 	template<typename T>
-	i6engine::utils::sharedPtr<T, i6engine::api::Component> GameObject::getGOC(uint32_t famID, const std::string & identifier) const {
+	utils::sharedPtr<T, Component> GameObject::getGOC(uint32_t famID, const std::string & identifier) const {
 		component_table_t::const_iterator it = _objComponents.find(famID);
 		// GOComponent not found
 		if (it == _objComponents.end()) {
-			return i6engine::utils::sharedPtr<T, i6engine::api::Component>();
+			return utils::sharedPtr<T, Component>();
 		}
 
 		if (it->second->getIdentifier() != identifier) {
 			for (ComPtr & c : it->second->_subComps) {
 				if (c->getIdentifier() == identifier) {
-					return i6engine::utils::dynamic_pointer_cast<T>(c);
+					return utils::dynamic_pointer_cast<T>(c);
 				}
 			}
 
-			return i6engine::utils::sharedPtr<T, i6engine::api::Component>();
+			return utils::sharedPtr<T, Component>();
 		}
 
 		// Return a pointer to the found GOComponent
-		return i6engine::utils::dynamic_pointer_cast<T>(it->second);
+		return utils::dynamic_pointer_cast<T>(it->second);
 	}
 
 	template<typename T>
-	i6engine::utils::sharedPtr<T, i6engine::api::Component> GameObject::getGOC() const {
+	utils::sharedPtr<T, Component> GameObject::getGOC() const {
 		for (const std::pair<int64_t, ComPtr> & com : _objComponents) {
-			auto c = i6engine::utils::dynamic_pointer_cast<T>(com.second);
+			auto c = utils::dynamic_pointer_cast<T>(com.second);
 			if (c != nullptr) {
 				return c;
 			}
 		}
 
 		// Return a pointer to the found GOComponent
-		return i6engine::utils::sharedPtr<T, i6engine::api::Component>();
+		return utils::sharedPtr<T, Component>();
 	}
 
 	template<typename T>
-	i6engine::utils::sharedPtr<T, i6engine::api::Component> GameObject::getGOC(const std::string & identifier) const {
+	utils::sharedPtr<T, Component> GameObject::getGOC(const std::string & identifier) const {
 		for (const std::pair<int64_t, ComPtr> & com : _objComponents) {
-			auto co = i6engine::utils::dynamic_pointer_cast<T>(com.second);
+			auto co = utils::dynamic_pointer_cast<T>(com.second);
 			if (co != nullptr) {
 				for (ComPtr & c : co->_subComps) {
 					if (c->getIdentifier() == identifier) {
-						return i6engine::utils::dynamic_pointer_cast<T>(c);
+						return utils::dynamic_pointer_cast<T>(c);
 					}
 				}
 			}
 		}
 
 		// Return a pointer to the found GOComponent
-		return i6engine::utils::sharedPtr<T, i6engine::api::Component>();
+		return utils::sharedPtr<T, Component>();
 	}
 
 } /* namespace api */
