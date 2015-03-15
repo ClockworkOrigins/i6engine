@@ -16,6 +16,11 @@
 
 #include <cmath>
 
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	#define __STDC_LIMIT_MACROS
+	#include <stdint.h>
+#endif
+
 #include "i6engine/utils/RealTimeClock.h"
 
 #include "i6engine/core/clock/Scheduler.h"

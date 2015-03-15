@@ -19,6 +19,11 @@
 #include <chrono>
 #include <thread>
 
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	#define __STDC_LIMIT_MACROS
+	#include <stdint.h>
+#endif
+
 #include "i6engine/i6engineBuildSettings.h"
 
 #include "i6engine/utils/Clock.h"

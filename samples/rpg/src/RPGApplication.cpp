@@ -16,6 +16,10 @@
 
 #include "RPGApplication.h"
 
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	#define _GLIBCXX_USE_NANOSLEEP
+#endif
+
 #include <thread>
 
 #include "i6engine/math/i6eMath.h"
