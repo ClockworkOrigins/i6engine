@@ -1,24 +1,21 @@
 call build-common.bat
 
-Set ARCHIVE=gperftools-2.0.tar.gz
-Set BUILD_DIR=%BUILD_ROOT%/gperftools-2.0
+Set ARCHIVE=gperftools-2.4.tar.gz
+Set BUILD_DIR=%BUILD_ROOT%/gperftools-2.4
 Set PREFIX=%cd%/gperftools
 
 echo "Compile GPerfTools"
 
 call download-dependency.bat %ARCHIVE%
-call download-dependency.bat gperftools_2_0_patch.zip
-call download-dependency.bat gperftools_2_0_patch_sln.zip
+call download-dependency.bat gperftools_2_4_patch_sln.zip
 
 mkdir %PATCH_DIR%\Windows
 
-move %EX_DIR%\gperftools_2_0_patch.zip %PATCH_DIR%\Windows
-move %EX_DIR%\gperftools_2_0_patch_sln.zip %PATCH_DIR%\Windows
+move %EX_DIR%\gperftools_2_4_patch_sln.zip %PATCH_DIR%\Windows
 
 cd %PATCH_DIR%\Windows
 
-winrar.exe x gperftools_2_0_patch.zip
-winrar.exe x gperftools_2_0_patch_sln.zip
+winrar.exe x gperftools_2_4_patch_sln.zip
 
 echo "Extracting GPerfTools"
 if not exist %BUILD_ROOT% exit
@@ -29,9 +26,6 @@ if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
 winrar.exe x %EX_DIR%/%ARCHIVE%
 
 if not exist %BUILD_DIR% exit
-
-echo "Patching GPerfTools"
-xcopy /S /Y "%PATCH_DIR%/Windows/gperftools/src" "%BUILD_DIR%/src"
 
 echo "Building GPerfTools"
 cd %BUILD_DIR%

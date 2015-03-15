@@ -21,8 +21,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 . ./build-common.sh
 
 # google perftools
-ARCHIVE="gperftools-2.0.tar.gz"
-BUILD_DIR="${BUILD_ROOT}/gperftools-2.0"
+ARCHIVE="gperftools-2.4.tar.gz"
+BUILD_DIR="${BUILD_ROOT}/gperftools-2.4"
 
 if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
@@ -57,11 +57,11 @@ if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
 fi
 
 ./download-dependency.sh ${ARCHIVE}
-./download-dependency.sh gperftools-gcc-4.7-siginfo.patch
+#./download-dependency.sh gperftools-gcc-4.7-siginfo.patch
 
 mkdir -p ${PATCH_DIR}
 
-mv ${EX_DIR}/gperftools-gcc-4.7-siginfo.patch ${PATCH_DIR}/
+#mv ${EX_DIR}/gperftools-gcc-4.7-siginfo.patch ${PATCH_DIR}/
 
 status "Extracting GPerfTools"
 cd "${BUILD_ROOT}"
@@ -71,7 +71,7 @@ cd "${BUILD_DIR}"
 # set readable
 chmod -R u+w .
 
-patch -p0 -i "${PATCH_DIR}/gperftools-gcc-4.7-siginfo.patch"
+#patch -p0 -i "${PATCH_DIR}/gperftools-gcc-4.7-siginfo.patch"
 
 status "Configuring GPerfTools"
 ./configure --libdir="${PREFIX}/lib" --prefix="${PREFIX}" --enable-frame-pointers ${BUILD_TYPE} >/dev/null
