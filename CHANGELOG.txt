@@ -17,6 +17,9 @@ Enhancements:
 	- improved build dependency to download archives from server
 	- added support for shadows
 
+Fixes:
+	- fixed deadlock during shutdown
+
 v 0.8.0
 
 Enhancements:
