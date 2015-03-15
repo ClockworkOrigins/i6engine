@@ -45,9 +45,6 @@ namespace gui {
 		std::vector<std::pair<CEGUI::TreeItem *, bool>> _treeItems;
 		boost::function<void(std::string)> _callback;
 
-		void setPosition(double x, double y);
-		void setSize(double w, double h);
-
 		void updateView();
 
 		bool changedSelection(const CEGUI::EventArgs & e);

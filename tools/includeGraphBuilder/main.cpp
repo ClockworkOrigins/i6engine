@@ -5,11 +5,21 @@
 #include <set>
 #include <vector>
 
+#include "i6engine/utils/i6eSystemParameters.h"
+
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	#include <cstring>
+#endif
+
 int main(int argc, char ** argv) {
 	std::vector<std::string> search;
 	search.push_back("");
 	std::queue<std::string> analyse;
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	analyse.push(argv[1]);
+#elif ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 	analyse.push(std::regex_replace(argv[1], std::regex("\\\\"), "/"));
+#endif
 	for (int i = 2; i < argc; i++) {
 		search.push_back(std::string(argv[i]));
 	}

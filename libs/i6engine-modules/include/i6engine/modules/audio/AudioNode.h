@@ -35,7 +35,7 @@ namespace modules {
 
 	public:
 		AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable);
-		AudioNode(const boost::shared_ptr<WavFile> & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction);
+		AudioNode(boost::shared_ptr<WavFile> file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable);
 		~AudioNode();
 
 	private:

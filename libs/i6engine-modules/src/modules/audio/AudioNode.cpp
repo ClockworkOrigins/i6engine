@@ -25,20 +25,18 @@
 namespace i6engine {
 namespace modules {
 
-	AudioNode::AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable) : AudioNode(loadWavFile(file), looping, maxDist, position, direction) {
+	AudioNode::AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable) : AudioNode(loadWavFile(file), looping, maxDist, position, direction, cacheable) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-
-		boost::shared_ptr<WavFile> wh = loadWavFile(file);
-
-		if (cacheable) {
-			_wavFile = wh;
-		}
 	}
 
 
 
-	AudioNode::AudioNode(const boost::shared_ptr<WavFile> & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction) : _source(), _buffer(), _wavFile() {
+	AudioNode::AudioNode(boost::shared_ptr<WavFile> file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable) : _source(), _buffer(), _wavFile() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
+
+		if (cacheable) {
+			_wavFile = file;
+		}
 
 		ALsizei frequency = ALsizei(file->SampleRate);
 		ALenum format = 0;

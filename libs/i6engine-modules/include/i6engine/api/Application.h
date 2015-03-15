@@ -46,7 +46,7 @@ namespace api {
 	 */
 	class ISIXE_MODULES_API Application : public core::ModuleController {
 	public:
-		Application() : core::ModuleController(core::Subsystem::Unknown), _windowName("Default") {}
+		Application() : core::ModuleController(core::Subsystem::Application), _windowName("Default") {}
 
 		virtual ~Application() {}
 

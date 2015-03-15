@@ -114,6 +114,7 @@ namespace api {
 		}
 
 		_queuedModules.clear();
+		_queuedModulesWaiting.clear();
 
 		delete _audioFacade;
 		delete _graphicsFacade;

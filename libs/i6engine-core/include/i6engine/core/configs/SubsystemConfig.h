@@ -27,6 +27,7 @@ namespace core {
 
 	enum class Subsystem {
 		Unknown,
+		Application,
 		Audio,
 		Graphic,
 		GUI,

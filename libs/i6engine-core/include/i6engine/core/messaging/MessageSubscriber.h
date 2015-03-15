@@ -169,12 +169,12 @@ namespace core {
 		/**
 		 * \brief lock for notifies
 		 */
-		boost::mutex _objMessageListMutex;
+		mutable boost::mutex _objMessageListMutex;
 
 		/**
 		 * \brief lock for buffering methods
 		 */
-		boost::recursive_mutex _bufferLock;
+		mutable boost::recursive_mutex _bufferLock;
 
 		/**
 		 * \brief forbidden

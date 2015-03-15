@@ -41,8 +41,6 @@ namespace gui {
 		std::map<std::string, CEGUI::Combobox *> _menus;
 		std::map<std::pair<std::string, std::string>, boost::function<void(void)>> _callbacks;
 
-		void setSize(double w, double h);
-
 		bool clickedFileMenu(const CEGUI::EventArgs & e);
 	};
 

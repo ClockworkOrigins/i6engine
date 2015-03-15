@@ -43,33 +43,16 @@ namespace gui {
 	}
 
 	void ListboxWidget::update(uint16_t type, i6engine::api::gui::GUIUpdateMessageStruct * data) {
-		if (type == api::gui::GuiSetVisible) {
-			bool vis = static_cast<i6engine::api::gui::GUI_Visibility *>(data)->visible;
-			_window->setVisible(vis);
-		} else if (type == messages::GUIMessageTypes::RemoveEntries) {
+		if (type == messages::GUIMessageTypes::RemoveEntries) {
 			_callbacks.clear();
 			dynamic_cast<CEGUI::Listbox *>(_window)->resetList();
 		} else if (type == messages::GUIMessageTypes::AddEntry) {
 			messages::GUI_AddEntry * g = static_cast<messages::GUI_AddEntry *>(data);
 			addEntry(g->objName);
 			_callbacks.push_back(g->callback);
-		} else if (type == api::gui::GuiSetPosition) {
-			api::gui::GUI_Position * g = static_cast<api::gui::GUI_Position *>(data);
-			setPosition(g->x, g->y);
-		} else if (type == api::gui::GuiSetSize) {
-			api::gui::GUI_Size * g = static_cast<api::gui::GUI_Size *>(data);
-			setSize(g->width, g->height);
 		} else {
-			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
+			GUIWidget::update(type, data);
 		}
-	}
-
-	void ListboxWidget::setPosition(double x, double y) {
-		_window->setPosition(CEGUI::UVector2(CEGUI::UDim(float(x), 0.0f), CEGUI::UDim(float(y), 0.0f)));
-	}
-
-	void ListboxWidget::setSize(double w, double h) {
-		_window->setSize(CEGUI::USize(CEGUI::UDim(float(w), 0.0f), CEGUI::UDim(float(h), 0.0f)));
 	}
 
 	void ListboxWidget::addEntry(const std::string & entry) {

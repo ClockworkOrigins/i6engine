@@ -46,21 +46,14 @@ namespace gui {
 	}
 
 	void MenuBarWidget::update(uint16_t type, i6engine::api::gui::GUIUpdateMessageStruct * data) {
-		if (type == i6engine::api::gui::GuiSetVisible) {
-			bool vis = static_cast<i6engine::api::gui::GUI_Visibility *>(data)->visible;
-			_window->setVisible(vis);
-		} else if (type == messages::GUIMessageTypes::AddMenuBarEntry) {
+		if (type == messages::GUIMessageTypes::AddMenuBarEntry) {
 			messages::GUI_MenuBarEntry * mbe = dynamic_cast<messages::GUI_MenuBarEntry *>(data);
 
 			_menus[mbe->menu]->addItem(new CEGUI::ListboxTextItem(mbe->submenu));
 			_callbacks.insert(std::make_pair(std::make_pair(mbe->menu, mbe->submenu), mbe->callback));
 		} else {
-			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
+			GUIWidget::update(type, data);
 		}
-	}
-
-	void MenuBarWidget::setSize(double w, double h) {
-		_window->setSize(CEGUI::USize(CEGUI::UDim(float(w), 0.0f), CEGUI::UDim(float(h), 0.0f)));
 	}
 
 	bool MenuBarWidget::clickedFileMenu(const CEGUI::EventArgs & e) {

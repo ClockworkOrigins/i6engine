@@ -17,6 +17,8 @@
 #ifndef __I6ENGINE_UTILS_REALTIMECLOCK_H__
 #define __I6ENGINE_UTILS_REALTIMECLOCK_H__
 
+#include <atomic>
+
 #include "i6engine/utils/i6eSystemParameters.h"
 
 #include "boost/date_time/posix_time/posix_time.hpp"
@@ -64,7 +66,7 @@ namespace utils {
 
 		boost::function<void(void)> _update;
 
-		bool _running;
+		std::atomic<bool> _running;
 
 		boost::thread _thread;
 

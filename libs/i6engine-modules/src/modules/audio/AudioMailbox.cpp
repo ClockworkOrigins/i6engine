@@ -31,6 +31,9 @@ namespace modules {
 
 	void AudioMailbox::News(const api::GameMessage::Ptr & msg) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
+
+		std::cout << msg->getMessageInfo() << std::endl;
+
 		if (msg->getMessageType() == api::messages::AudioMessageType) {
 			if (msg->getMethod() == core::Method::Create) {
 				_manager->NewsCreate(msg);

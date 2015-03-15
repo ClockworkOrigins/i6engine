@@ -90,14 +90,12 @@ namespace modules {
 	void AudioManager::NewsNodeCreate(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t type = msg->getSubtype();
-
 		if (type == api::audio::AudioNode) {
 			api::audio::Audio_Node_Create * anc = dynamic_cast<api::audio::Audio_Node_Create *>(msg->getContent());
 
 			auto it = _cachedSounds.find(anc->file);
-			boost::shared_ptr<WavFile> wh;
 			if (it != _cachedSounds.end()) {
-				_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(it->second, anc->looping, anc->maxDist, anc->position, anc->direction);
+				_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(it->second, anc->looping, anc->maxDist, anc->position, anc->direction, false);
 			} else {
 				_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(anc->file, anc->looping, anc->maxDist, anc->position, anc->direction, anc->cacheable);
 				if (anc->cacheable) {

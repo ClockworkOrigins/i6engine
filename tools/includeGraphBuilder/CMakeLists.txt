@@ -18,6 +18,8 @@
 # includeGraphBuilder cmake
 ################################
 
+include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
+
 set(includeGraphBuilderSrc
 	main.cpp
 )
