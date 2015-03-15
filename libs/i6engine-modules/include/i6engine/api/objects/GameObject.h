@@ -30,6 +30,7 @@
 
 #include "i6engine/core/messaging/IPKey.h"
 
+#include "i6engine/api/components/Component.h"
 #include "i6engine/api/GameMessage.h"
 
 #include "boost/function.hpp"
