@@ -27,7 +27,7 @@
 #include <new>
 
 #include "boost/interprocess/sync/scoped_lock.hpp"
-#include "boost/thread/recursive_mutex.hpp"
+#include "boost/thread/mutex.hpp"
 
 namespace i6engine {
 namespace utils {
@@ -222,7 +222,7 @@ namespace utils {
 		 * \brief deletes all pointers in clearList
 		 */
 		static void clear() {
-			boost::recursive_mutex::scoped_lock l(sharedPtr<U, U>::clearListLock);
+			boost::mutex::scoped_lock l(sharedPtr<U, U>::clearListLock);
 			for (U * ptr : sharedPtr<U, U>::clearList) {
 				delete ptr;
 			}
@@ -251,7 +251,7 @@ namespace utils {
 			if (_sharedCounter != nullptr) {
 				if (_sharedCounter->refCounter-- == 1) {
 					{
-						boost::recursive_mutex::scoped_lock l(sharedPtr<U, U>::clearListLock);
+						boost::mutex::scoped_lock l(sharedPtr<U, U>::clearListLock);
 						sharedPtr<U, U>::clearList.push_back(reinterpret_cast<U *>(_ptr));
 					}
 
@@ -266,11 +266,11 @@ namespace utils {
 		sharedCounter * _sharedCounter;
 		T * _ptr;
 
-		static boost::recursive_mutex clearListLock;
+		static boost::mutex clearListLock;
 		static std::list<U *> clearList;
 	};
 
-	template<typename T, typename U> boost::recursive_mutex sharedPtr<T, U>::clearListLock;
+	template<typename T, typename U> boost::mutex sharedPtr<T, U>::clearListLock;
 	template<typename T, typename U> std::list<U *> sharedPtr<T, U>::clearList;
 
 	/**

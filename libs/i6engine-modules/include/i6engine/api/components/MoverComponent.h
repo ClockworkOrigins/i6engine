@@ -126,7 +126,7 @@ namespace api {
 		/**
 		 * \brief PSC of the GameObject
 		 */
-		utils::sharedPtr<PhysicalStateComponent, Component> _psc;
+		utils::weakPtr<PhysicalStateComponent, Component> _psc;
 
 		/**
 		 * \brief time the moving started

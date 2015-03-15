@@ -261,14 +261,10 @@ namespace math {
 	const i6eVector2<T> i6eVector2<T>::ZERO = i6eVector2<T>(T(), T());
 
 	template<>
-	bool i6eVector2<int32_t>::operator==(const i6eVector2<int32_t> & b) const {
-		return std::fabs(double(_x - b.getX())) < EPSILON && std::fabs(double(_y - b.getY())) < EPSILON;
-	}
+	bool i6eVector2<int32_t>::operator==(const i6eVector2<int32_t> & b) const;
 
 	template<>
-	bool i6eVector2<uint32_t>::operator==(const i6eVector2<uint32_t> & b) const {
-		return std::fabs(double(_x - b.getX())) < EPSILON && std::fabs(double(_y - b.getY())) < EPSILON;
-	}
+	bool i6eVector2<uint32_t>::operator==(const i6eVector2<uint32_t> & b) const;
 
 } /* namespace math */
 } /* namespace i6engine */

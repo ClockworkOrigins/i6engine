@@ -29,7 +29,7 @@
 
 #include "i6engine/api/configs/ObjectConfig.h"
 
-#include "boost/thread/recursive_mutex.hpp"
+#include "boost/thread/mutex.hpp"
 
 namespace i6engine {
 namespace api {
@@ -213,7 +213,7 @@ namespace api {
 		/**
 		 * \brief for locking the _GOList
 		 */
-		mutable boost::recursive_mutex _lock;
+		mutable boost::mutex _lock;
 
 		/**
 		 * \brief contains the current frameTime of this subsystem

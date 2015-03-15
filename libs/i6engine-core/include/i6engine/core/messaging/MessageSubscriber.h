@@ -29,7 +29,6 @@
 
 #include "boost/function.hpp"
 #include "boost/thread/mutex.hpp"
-#include "boost/thread/recursive_mutex.hpp"
 
 namespace i6engine {
 namespace core {
@@ -131,7 +130,7 @@ namespace core {
 		/**
 		 * \brief This method delivers all waiting Messages that can now be delivered.
 		 */
-		void updateBuffer();
+		bool updateBuffer();
 
 
 		boost::mutex _objMessageVectorMutex;
@@ -174,7 +173,7 @@ namespace core {
 		/**
 		 * \brief lock for buffering methods
 		 */
-		mutable boost::recursive_mutex _bufferLock;
+		mutable boost::mutex _bufferLock;
 
 		/**
 		 * \brief forbidden

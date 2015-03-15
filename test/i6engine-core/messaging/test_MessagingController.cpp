@@ -44,7 +44,7 @@ public:
 	}
 
 	void processMessages() {
-		MessageSubscriber::updateBuffer();
+		while (MessageSubscriber::updateBuffer());
 		MessageSubscriber::swapMessageBuffer();
 
 		for (ReceivedMessagePtr & rm : *MessageSubscriber::_objInActiveMessageVector) {
@@ -73,7 +73,7 @@ public:
 	}
 
 	void processMessages() {
-		MessageSubscriber::updateBuffer();
+		while (MessageSubscriber::updateBuffer());
 		MessageSubscriber::swapMessageBuffer();
 
 		for (ReceivedMessagePtr & rm : *MessageSubscriber::_objInActiveMessageVector) {

@@ -140,6 +140,7 @@ namespace api {
 					_objComponents[famID]->Finalize();
 					_objComponents[famID] = objNewGOC; // set new dispatcher
 					objNewGOC->_subComps = objOldGOC->_subComps;
+					objOldGOC->_subComps.clear();
 				} else { // replace another component
 					objOldGOC->_subComps[size_t(add.second)]->Finalize();
 					objOldGOC->_subComps[size_t(add.second)] = objNewGOC;
@@ -174,6 +175,7 @@ namespace api {
 				subComp->Finalize();
 			}
 			component.second->Finalize();
+			component.second->_subComps.clear();
 		}
 		// Clear the map to avoid memory leaks
 		_objComponents.clear();
@@ -214,11 +216,12 @@ namespace api {
 			if (it->second->getIdentifier() == identifier) { // delete dispatcher
 				it->second->Finalize();
 				ComPtr old = _objComponents[famID];
-				if (old->_subComps.size() == 0) { // deletes the last Component with this famID
+				if (old->_subComps.empty()) { // deletes the last Component with this famID
 					_objComponents.erase(it);
 				} else {
 					_objComponents[famID] = old->_subComps[0];
 					_objComponents[famID]->_subComps = std::vector<ComPtr>(old->_subComps.begin() + 1, old->_subComps.end());
+					old->_subComps.clear();
 				}
 			} else {
 				std::vector<ComPtr>::iterator it2 = std::find_if(it->second->_subComps.begin(), it->second->_subComps.end(),

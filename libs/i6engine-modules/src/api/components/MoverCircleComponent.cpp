@@ -68,11 +68,11 @@ namespace api {
 		} else {
 			orth1 = Vec3(_circleAxis.getY(), - _circleAxis.getX(), _circleAxis.getZ()).normalize();
 		}
-
+		auto psc = _psc.get();
 		if (_positioning == Positioning::POSITIONING_RELATIVE) {
-			_psc->setPosition(_realStartPos + orth1 * _circleRadius, 2);
+			psc->setPosition(_realStartPos + orth1 * _circleRadius, 2);
 		} else {
-			_psc->setPosition(_circleCenter + orth1 * _circleRadius, 2);
+			psc->setPosition(_circleCenter + orth1 * _circleRadius, 2);
 		}
 		_lastPos = _circleCenter + orth1 * _circleRadius; // the position is now updated
 

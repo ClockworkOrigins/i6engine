@@ -56,7 +56,7 @@ namespace core {
 		// if buffer() is called frequently from many different threads, it may be better to release it after obtaining the status and
 		// reaquire it later on
 		// however for a single thread buffering, aquiring twice is very slow
-		boost::recursive_mutex::scoped_lock sl(_bufferLock);
+		boost::mutex::scoped_lock sl(_bufferLock);
 
 		if (id != -1 && _existingObjects.find(id) != _existingObjects.end()) {
 			statusID = _existingObjects.at(id);
@@ -119,7 +119,7 @@ namespace core {
 		}
 	}
 
-	void MessageSubscriber::updateBuffer() {
+	bool MessageSubscriber::updateBuffer() {
 		// Step 6
 		// determind all Messages that can now be delivered
 		_objMessageListMutex.lock();
@@ -129,7 +129,7 @@ namespace core {
 
 		bool notify = false;
 
-		boost::recursive_mutex::scoped_lock sl(_bufferLock);
+		boost::mutex::scoped_lock sl(_bufferLock);
 
 		for (int64_t i : ids) {
 			if (_existingObjects.find(i) != _existingObjects.end()) {
@@ -193,9 +193,7 @@ namespace core {
 			_waitingMsgs[i].clear();
 		}
 
-		if (notify) {
-			updateBuffer();
-		}
+		return notify;
 	}
 
 	void MessageSubscriber::notifyNewID(const int64_t id) {
@@ -233,19 +231,20 @@ namespace core {
 
 	void MessageSubscriber::reset() {
 		boost::mutex::scoped_lock sl1(_objMessageVectorMutex);
-		boost::mutex::scoped_lock sl2(_objMessageListMutex);
-		boost::recursive_mutex::scoped_lock sl3(_bufferLock);
 
 		_objMessageVectorA.clear();
 		_objMessageVectorB.clear();
 
+		boost::mutex::scoped_lock sl2(_objMessageListMutex);
 		_newCreatedIDs.clear();
+
+		boost::mutex::scoped_lock sl3(_bufferLock);
 		_existingObjects.clear();
 		_waitingMsgs.clear();
 	}
 
 	void MessageSubscriber::processMessages() {
-		updateBuffer();
+		while (updateBuffer());
 		swapMessageBuffer();
 
 		for (ReceivedMessagePtr & rm : *_objInActiveMessageVector) {

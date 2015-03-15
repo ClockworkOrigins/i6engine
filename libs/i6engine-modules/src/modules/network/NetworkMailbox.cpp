@@ -58,13 +58,16 @@ namespace modules {
 		if (msg->getMessageType() == api::messages::NetworkMessageType) {
 			if (msg->getSubtype() == api::network::NetPingRequest) {
 				// Got a ping request, send the answer
-				api::network::Network_Ping_Update * p = new api::network::Network_Ping_Update(msg->getContent()->_sender, static_cast<api::network::Network_Ping_Update *>(msg->getContent())->time);
+				api::network::Network_Ping_Update * p = new api::network::Network_Ping_Update(msg->getContent()->_sender, dynamic_cast<api::network::Network_Ping_Update *>(msg->getContent())->time);
 				api::GameMessage::Ptr m = boost::make_shared<api::GameMessage>(api::messages::NetworkMessageType, api::network::NetPingAnswer, core::Method::Update, p, i6engine::core::Subsystem::Network);
 				_manager->publish(PINGANSWER_CHANNEL, m);
 			} else if (msg->getSubtype() == api::network::NetPingAnswer) {
+				if (dynamic_cast<api::network::Network_Ping_Update *>(msg->getContent())->receiver != api::EngineController::GetSingleton().getNetworkFacade()->getIP()) {
+					return;
+				}
 				// Got a ping answer, send the ping-time
 				uint64_t cT = api::EngineController::GetSingleton().getCurrentTime();
-				uint64_t ping = (cT - static_cast<api::network::Network_Ping_Update *>(msg->getContent())->time) / 2;
+				uint64_t ping = (cT - dynamic_cast<api::network::Network_Ping_Update *>(msg->getContent())->time) / 2;
 				api::network::Network_Pingtime_Update * p = new api::network::Network_Pingtime_Update(msg->getContent()->_sender, ping / 1000);
 				api::GameMessage::Ptr m = boost::make_shared<api::GameMessage>(api::messages::GameMessageType, api::network::NetPingTime, core::Method::Update, p, i6engine::core::Subsystem::Network);
 				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(m);
