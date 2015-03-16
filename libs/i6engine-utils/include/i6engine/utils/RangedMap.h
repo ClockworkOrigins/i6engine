@@ -17,8 +17,9 @@
 #ifndef __I6ENGINE_UTILS_RANGEDMAP_H__
 #define __I6ENGINE_UTILS_RANGEDMAP_H__
 
-#include "i6engine/utils/Exceptions.h"
 #include <fstream>
+
+#include "i6engine/utils/Exceptions.h"
 
 namespace i6engine {
 namespace utils {

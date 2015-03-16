@@ -194,7 +194,7 @@ namespace math {
 		/**
 		 * \brief inserts this vector into an attributeMap using the given prefix
 		 */
-		void insertInMap(const std::string & prefix, std::map<std::string, std::string> & map) {
+		void insertInMap(const std::string & prefix, std::map<std::string, std::string> & map) const {
 			std::stringstream ss;
 			ss << _x << " " << _y;
 			map[prefix] = ss.str();

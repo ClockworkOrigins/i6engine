@@ -76,7 +76,14 @@ namespace core {
 		/**
 		 * \brief Standard constructor
 		 */
-		MessageSubscriber() : _objMessageVectorMutex(), _objMessageVectorA(), _objMessageVectorB(), _objActiveMessageVector(&_objMessageVectorA), _objInActiveMessageVector(&_objMessageVectorB), _ptrMessageMethod(), _newCreatedIDs(), _existingObjects(), _waitingMsgs(), _objMessageListMutex() {}
+		MessageSubscriber() : _objMessageVectorMutex(), _objMessageVectorA(), _objMessageVectorB(), _objActiveMessageVector(&_objMessageVectorA), _objInActiveMessageVector(&_objMessageVectorB), _ptrMessageMethod(), _newCreatedIDs(), _existingObjects(), _waitingMsgs(), _objMessageListMutex() {
+		}
+
+		/**
+		 * \brief Destructor.
+		 */
+		virtual ~MessageSubscriber() {
+		}
 
 		/**
 		 * \brief This method is called from the MessagingController. It stores incoming messages in a local buffer.
@@ -90,11 +97,6 @@ namespace core {
 		 * It is called prior to a tick in the main loop of every subsystem. This class must not be called explicitely. Subject to future refactoring to private scope.
 		 */
 		virtual void processMessages();
-
-		/**
-		 * \brief Destructor.
-		 */
-		virtual ~MessageSubscriber() {}
 
 		/**
 		 * \brief This method notifies the MessagingController that Messages waiting for this id can now be delivered.

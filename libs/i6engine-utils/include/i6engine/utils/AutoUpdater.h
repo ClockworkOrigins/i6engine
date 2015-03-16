@@ -49,11 +49,10 @@ namespace utils {
 
 		/**
 		 * \brief Registers a callback for autoUpdate.
-		 * \param name Name of the object to be updated.
 		 * \param func Function to be called when the variable change.
 		 */
-		void registerUpdate(const std::string & name, const std::function<void(std::string, T)> & func) {
-			_functions.push_back(std::bind(func, name, std::placeholders::_1));
+		void registerUpdate(const std::function<void(T)> & func) {
+			_functions.push_back(std::bind(func, std::placeholders::_1));
 		}
 
 		/**
@@ -86,7 +85,7 @@ namespace utils {
 		/**
 		 * \brief returns value as the datatype it really is
 		 */
-		operator T() {
+		operator T() const {
 			return _value;
 		}
 
@@ -99,7 +98,7 @@ namespace utils {
 		/**
 		 * \brief Vector containing all Methods.
 		 */
-		std::vector<std::function<void(const T)>> _functions;
+		std::vector<std::function<void(T)>> _functions;
 	};
 
 } /* namespace utils */

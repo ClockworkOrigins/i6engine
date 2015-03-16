@@ -46,7 +46,6 @@ namespace i6engine {
 namespace core {
 
 	typedef struct ISIXE_CORE_API MessageStruct {
-		friend class boost::serialization::access;
 		int64_t _id;
 		IPKey _sender;
 		int64_t _waitForId;
@@ -96,7 +95,7 @@ namespace core {
 		 * \param send Sender.
 		 * \param waitID waitForId.
 		 */
-		explicit MessageStruct(const int64_t id, const IPKey & send = IPKey(), const int64_t waitID = -1) : _id(id), _sender(send), _waitForId(waitID), _timestamps(), _lock() {
+		MessageStruct(const int64_t id, const IPKey & send = IPKey(), const int64_t waitID = -1) : _id(id), _sender(send), _waitForId(waitID), _timestamps(), _lock() {
 			assert(_timestamps.size() == 0);
 			insertTimestamp("Create");
 			assert(_timestamps.size() == 1);

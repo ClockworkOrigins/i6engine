@@ -31,8 +31,8 @@
 namespace boost {
 namespace serialization {
 	class access;
-}
-}
+} /* serialization */
+} /* boost */
 
 namespace i6engine {
 namespace math {
@@ -53,7 +53,7 @@ namespace math {
 		/**
 		 * \brief constructor taking dimension of the matrix setting all values to zero
 		 */
-		i6eMatrix(unsigned int m, unsigned int n) : _width(n), _height(m), _data(m, std::vector<T>(n, T())) {
+		i6eMatrix(uint32_t m, uint32_t n) : _width(n), _height(m), _data(m, std::vector<T>(n, T())) {
 		}
 
 		/**
@@ -114,8 +114,8 @@ namespace math {
 		i6eMatrix & operator/=(const T & value) {
 			i6eMatrix result(*this);
 
-			for (unsigned int i = 0; i < _height; ++i) {
-				for (unsigned int j = 0; j < _width; ++j) {
+			for (uint32_t i = 0; i < _height; ++i) {
+				for (uint32_t j = 0; j < _width; ++j) {
 					_data[i][j] /= value;
 				}
 			}
@@ -144,9 +144,9 @@ namespace math {
 
 			i6eMatrix result(_height, other.getWidth());
 
-			for (unsigned int i = 0; i < _height; ++i) {
-				for (unsigned int j = 0; j < other.getWidth(); ++j) {
-					for (unsigned int k = 0; k < _width; ++k) {
+			for (uint32_t i = 0; i < _height; ++i) {
+				for (uint32_t j = 0; j < other.getWidth(); ++j) {
+					for (uint32_t k = 0; k < _width; ++k) {
 						result(i, j, result(i, j) + _data[i][k] * other(k, j));
 					}
 				}
@@ -176,8 +176,8 @@ namespace math {
 				ISIXE_THROW_API("i6eMatrix", "wrong dimension for matrix-matrix-addition");
 			}
 
-			for (unsigned int i = 0; i < _height; ++i) {
-				for (unsigned int j = 0; j < _width; ++j) {
+			for (uint32_t i = 0; i < _height; ++i) {
+				for (uint32_t j = 0; j < _width; ++j) {
 					_data[i][j] += other(i, j);
 				}
 			}
@@ -204,8 +204,8 @@ namespace math {
 				ISIXE_THROW_API("i6eMatrix", "wrong dimension for matrix-matrix-subtraction");
 			}
 
-			for (unsigned int i = 0; i < _height; ++i) {
-				for (unsigned int j = 0; j < _width; ++j) {
+			for (uint32_t i = 0; i < _height; ++i) {
+				for (uint32_t j = 0; j < _width; ++j) {
 					_data[i][j] -= other(i, j);
 				}
 			}
@@ -219,8 +219,8 @@ namespace math {
 		i6eMatrix operator-() {
 			i6eMatrix result(*this);
 
-			for (unsigned int i = 0; i < _height; ++i) {
-				for (unsigned int j = 0; j < _width; ++j) {
+			for (uint32_t i = 0; i < _height; ++i) {
+				for (uint32_t j = 0; j < _width; ++j) {
 					result(i, j, -_data[i][j]);
 				}
 			}
@@ -231,14 +231,14 @@ namespace math {
 		/**
 		 * \brief sets the given value to the given position
 		 */
-		void operator()(unsigned int m, unsigned int n, const T & value) {
+		void operator()(uint32_t m, uint32_t n, const T & value) {
 			setEntry(m, n, value);
 		}
 
 		/**
 		 * \brief returs the value at the given position
 		 */
-		T operator()(unsigned int m, unsigned int n) const {
+		T operator()(uint32_t m, uint32_t n) const {
 			return getEntry(m, n);
 		}
 
@@ -250,8 +250,8 @@ namespace math {
 				return false;
 			}
 
-			for (unsigned int i = 0; i < _height; ++i) {
-				for (unsigned int j = 0; j < _width; ++j) {
+			for (uint32_t i = 0; i < _height; ++i) {
+				for (uint32_t j = 0; j < _width; ++j) {
 					if (std::fabs(_data[i][j] - other._data[i][j]) > 0.0000001f) {
 						return false;
 					}
@@ -264,14 +264,14 @@ namespace math {
 		/**
 		 * \brief return true, if both matrixes aren't equal
 		 */
-		bool operator!=(const i6eMatrix & other) {
+		bool operator!=(const i6eMatrix & other) const {
 			return !(*this == other);
 		}
 
 		/**
 		 * \brief sets the given value to the given position
 		 */
-		void setEntry(unsigned int m, unsigned int n, T value) {
+		void setEntry(uint32_t m, uint32_t n, T value) {
 			if (m >= _height || n >= _width) {
 				ISIXE_THROW_API("i6eMatrix", "field (" << m << ", " << n << ") not part of the matrix");
 			}
@@ -283,8 +283,8 @@ namespace math {
 		 * \brief sets all values of the matrix to zero
 		 */
 		void setZero() {
-			for (unsigned int i = 0; i < _height; ++i) {
-				for (unsigned int j = 0; j < _width; ++j) {
+			for (uint32_t i = 0; i < _height; ++i) {
+				for (uint32_t j = 0; j < _width; ++j) {
 					_data[i][j] = T();
 				}
 			}
@@ -294,8 +294,8 @@ namespace math {
 		 * \brief sets matrix to be an identity matrix
 		 */
 		void setIdentity() {
-			for (unsigned int i = 0; i < _height; ++i) {
-				for (unsigned int j = 0; j < _width; ++j) {
+			for (uint32_t i = 0; i < _height; ++i) {
+				for (uint32_t j = 0; j < _width; ++j) {
 					if (i == j) {
 						_data[i][j] = 1;
 					} else {
@@ -308,17 +308,21 @@ namespace math {
 		/**
 		 * \brief returns width of the matrix
 		 */
-		inline unsigned int getWidth() const { return _width; }
+		inline uint32_t getWidth() const {
+			return _width;
+		}
 
 		/**
 		 * \brief returns height of the matrix
 		 */
-		inline unsigned int getHeight() const { return _height; }
+		inline uint32_t getHeight() const {
+			return _height;
+		}
 
 		/**
 		 * \brief returns entry at given position
 		 */
-		inline T getEntry(unsigned int m, unsigned int n) const {
+		inline T getEntry(uint32_t m, uint32_t n) const {
 			if (m >= _height || n >= _width) {
 				ISIXE_THROW_API("i6eMatrix", "field (" << m << ", " << n << ") not part of the matrix");
 			}
@@ -329,8 +333,8 @@ namespace math {
 		/**
 		 * \brief returns determinant of the matrix
 		 */
-		float calculateDeterminant() const {
-			float det = 1.0f;
+		double calculateDeterminant() const {
+			double det = 1.0;
 
 			if (_height != _width) {
 				ISIXE_THROW_API("i6eMatrix", "only nxn matrices have a determinant");
@@ -345,7 +349,7 @@ namespace math {
 
 			decomposeLU(l, u);
 
-			for (unsigned int i = 0; i < getHeight(); ++i) {
+			for (uint32_t i = 0; i < getHeight(); ++i) {
 				det *= u(i, i);
 			}
 
@@ -355,10 +359,10 @@ namespace math {
 		/**
 		 * \brief calculates a given amount of multiplications for the given matrix
 		 */
-		static i6eMatrix pow(const i6eMatrix & other, unsigned int amount) {
+		static i6eMatrix pow(const i6eMatrix & other, uint32_t amount) {
 			i6eMatrix result(other);
 
-			for (unsigned int i = 1; i < amount; ++i) {
+			for (uint32_t i = 1; i < amount; ++i) {
 				result *= other;
 			}
 
@@ -371,8 +375,8 @@ namespace math {
 		static i6eMatrix transpose(const i6eMatrix & other) {
 			i6eMatrix result(other.getWidth(), other.getHeight());
 
-			for (unsigned int i = 0; i < other.getHeight(); ++i) {
-				for (unsigned int j = 0; j < other.getWidth(); ++j) {
+			for (uint32_t i = 0; i < other.getHeight(); ++i) {
+				for (uint32_t j = 0; j < other.getWidth(); ++j) {
 					result(j, i, other(i, j));
 				}
 			}
@@ -405,18 +409,18 @@ namespace math {
 
 			i6eMatrix result(other.getHeight(), other.getWidth());
 
-			for (unsigned int i = 0; i < other.getHeight(); ++i) {
-				for (unsigned int j = 0; j < other.getWidth(); ++j) {
+			for (uint32_t i = 0; i < other.getHeight(); ++i) {
+				for (uint32_t j = 0; j < other.getWidth(); ++j) {
 					i6eMatrix m(other.getHeight() - 1, other.getWidth() - 1);
 
-					unsigned int rowC = 0;
-					unsigned int columnC = 0;
+					uint32_t rowC = 0;
+					uint32_t columnC = 0;
 
-					for (unsigned int x = 0; x < other.getHeight(); ++x) {
+					for (uint32_t x = 0; x < other.getHeight(); ++x) {
 						if (x == i) {
 							continue;
 						}
-						for (unsigned int y = 0; y < other.getWidth(); ++y) {
+						for (uint32_t y = 0; y < other.getWidth(); ++y) {
 							if (y == j) {
 								continue;
 							}
@@ -429,7 +433,7 @@ namespace math {
 						columnC = 0;
 					}
 
-					T k = static_cast<T>(std::pow(-1.0f, i + j) * m.calculateDeterminant());
+					T k = T(std::pow(-1.0f, i + j) * m.calculateDeterminant());
 					result(i, j, k);
 				}
 			}
@@ -459,8 +463,8 @@ namespace math {
 	private:
 		friend class boost::serialization::access;
 
-		unsigned int _width;
-		unsigned int _height;
+		uint32_t _width;
+		uint32_t _height;
 		std::vector<std::vector<T>> _data;
 
 		/**
@@ -472,15 +476,15 @@ namespace math {
 			l.setZero();
 			u = *this;
 
-			for (unsigned int i = 0; i < l.getWidth(); ++i) {
+			for (uint32_t i = 0; i < l.getWidth(); ++i) {
 				l(i, i, 1.0f);
 			}
 
-			for (unsigned int i = 0; i < getHeight(); ++i) {
-				for (unsigned int j = i + 1; j < getHeight(); ++j) {
+			for (uint32_t i = 0; i < getHeight(); ++i) {
+				for (uint32_t j = i + 1; j < getHeight(); ++j) {
 					l(j, i, u(j, i) / u(i, i));
 
-					for (unsigned int k = i; k < getWidth(); ++k) {
+					for (uint32_t k = i; k < getWidth(); ++k) {
 						u(j, k, u(j, k) - l(j, i) * u(i, k));
 					}
 				}
@@ -496,10 +500,10 @@ namespace math {
 
 			y = i6eMatrix(l.getHeight(), 1);
 
-			for (unsigned int i = 0; i < l.getWidth(); ++i) {
+			for (uint32_t i = 0; i < l.getWidth(); ++i) {
 				T tmp = b(i, 0);
 
-				for (unsigned int j = 0; j < i; ++j) {
+				for (uint32_t j = 0; j < i; ++j) {
 					tmp -= y(j, 0) * l(i, j);
 				}
 
@@ -516,10 +520,10 @@ namespace math {
 
 			x = i6eMatrix(u.getHeight(), 1);
 
-			for (unsigned int i = u.getHeight(); i > 0; --i) {
+			for (uint32_t i = u.getHeight(); i > 0; --i) {
 				T tmp = y(i - 1, 0);
 
-				for (unsigned int j = u.getHeight() - 1; j > i - 1; --j) {
+				for (uint32_t j = u.getHeight() - 1; j > i - 1; --j) {
 					tmp -= x(j, 0) * u(i - 1, j);
 				}
 

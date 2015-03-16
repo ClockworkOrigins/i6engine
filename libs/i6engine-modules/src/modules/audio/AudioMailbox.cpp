@@ -16,7 +16,7 @@
 
 #include "i6engine/modules/audio/AudioMailbox.h"
 
-#include <boost/shared_ptr.hpp>
+#include "boost/shared_ptr.hpp"
 
 #include "i6engine/api/FrontendMessageTypes.h"
 

@@ -67,7 +67,6 @@
  * ISIXE_UNREGISTERMESSAGETYPE("type")
  * \endcode
  *
- *
  * \image html Core_Messaging.png
  */
 
@@ -125,10 +124,6 @@ namespace core {
 	 * as second parameter.
 	 * \li \c ISIXE_UNREGISTERMESSAGETYPE(strMessageTypeName) This macro wraps the unregisterMessageType method. It just sets objMessageSubscriber to
 	 * 'this'.
-	 * \li \c RETURNIFVARIABLEISNULL(objVariable) This macro checks if a variable is NULL and returns if so. Should be used before converting a
-	 * variable from a Message.
-	 * \li \c CONVERTVARIABLE(objRealVariable, Type, objVariantVariable) This macro tries to convert objVariantVariable of type MessageVariable to
-	 * Type and stores it in objRealVariable.
 	 *
 	 * Have a look at \link i6engine here \endlink for an overview of typedef's in namespace %i6engine.
 	 * See \ref macrodoc for a list of all globally defined macros.

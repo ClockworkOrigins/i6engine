@@ -146,7 +146,7 @@ namespace api {
 		/**
 		 * \brief Sends a message to delete this GameObject on the next Tick of the ObjectController.
 		 */
-		void setDie();
+		void setDie() const;
 
 		/**
 		 * \brief Returns the type of the GameObject
@@ -174,12 +174,12 @@ namespace api {
 		/**
 		 * \brief
 		 */
-		void sendCreateMessage();
+		void sendCreateMessage() const;
 
 		/**
 		 * \brief adds synchronize messages for GameObject and all Components of this GO
 		 */
-		void synchronize(std::vector<GameMessage::Ptr> & messages);
+		void synchronize(std::vector<GameMessage::Ptr> & messages) const;
 
 		/**
 		 * \brief sends a message to delete the GameObject

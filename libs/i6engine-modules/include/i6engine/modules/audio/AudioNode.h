@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-#pragma once
+#ifndef __I6ENGINE_MODULES_AUDIONODE_H__
+#define __I6ENGINE_MODULES_AUDIONODE_H__
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
@@ -50,3 +51,5 @@ namespace modules {
 
 } /* namespace modules */
 } /* namespace i6engine */
+
+#endif /* __I6ENGINE_MODULES_AUDIONODE_H__ */

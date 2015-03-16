@@ -62,10 +62,16 @@ namespace utils {
 		 * \brief removes first entry of the queue
 		 */
 		void pop() {
-			pop(Bool2Type<consumer>());
+			pop<consumer>();
 		}
 
-		void pop(Bool2Type<true>) {
+		template<bool b>
+		void pop() {
+			static_assert(false, "Mustn't be called");
+		}
+
+		template<>
+		void pop<true>() {
 			static_assert(consumer, "Consumer must be true here");
 			boost::mutex::scoped_lock scopeLock(_readLock);
 			if (_queueRead->empty()) {
@@ -79,7 +85,8 @@ namespace utils {
 			_queueRead->pop();
 		}
 
-		void pop(Bool2Type<false>) {
+		template<>
+		void pop<false>() {
 			static_assert(!consumer, "Consumer must be false here");
 			if (_queueRead->empty()) {
 				swap();
@@ -96,10 +103,16 @@ namespace utils {
 		 * \brief returns first entry of the queue
 		 */
 		T front() {
-			return front(Bool2Type<consumer>());
+			return front<consumer>();
 		}
 
-		T front(Bool2Type<true>) {
+		template<bool b>
+		T front() {
+			static_assert(false, "Mustn't be called!");
+		}
+
+		template<>
+		T front<true>() {
 			static_assert(consumer, "Consumer must be true here");
 			boost::mutex::scoped_lock scopeLock(_readLock);
 			if (_queueRead->empty()) {
@@ -112,7 +125,8 @@ namespace utils {
 			return _queueRead->front();
 		}
 
-		T front(Bool2Type<false>) {
+		template<>
+		T front<false>() {
 			static_assert(!consumer, "Consumer must be false here");
 			if (_queueRead->empty()) {
 				swap();
@@ -128,10 +142,16 @@ namespace utils {
 		 * \brief removes first entry of the queue and returns its value
 		 */
 		T poll() {
-			return poll(Bool2Type<consumer>());
+			return poll<consumer>();
 		}
 
-		T poll(Bool2Type<true> b) {
+		template<bool b>
+		T poll() {
+			static_assert(false, "Mustn't be called!");
+		}
+
+		template<>
+		T poll<true>() {
 			static_assert(consumer, "Consumer must be true here");
 			boost::mutex::scoped_lock scopeLock(_readLock);
 			if (_queueRead->empty()) {
@@ -147,7 +167,8 @@ namespace utils {
 			return ret;
 		}
 
-		T poll(Bool2Type<false> b) {
+		template<>
+		T poll<false>() {
 			static_assert(!consumer, "Consumer must be false here");
 			if (_queueRead->empty()) {
 				swap();
@@ -205,8 +226,8 @@ namespace utils {
 		std::queue<T> * _queueRead;
 		std::queue<T> * _queueWrite;
 
-		boost::mutex _readLock;
-		boost::mutex _writeLock;
+		mutable boost::mutex _readLock;
+		mutable boost::mutex _writeLock;
 
 		/**
 		 * \brief forbidden

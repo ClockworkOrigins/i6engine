@@ -31,7 +31,7 @@ namespace math {
 
 	const double i6eQuaternion::EPSILON = 1e-15;
 
-	bool i6eQuaternion::equals(const i6eQuaternion & q, double eps /* = i6eQuaternion::EPSILON*/) {
+	bool i6eQuaternion::equals(const i6eQuaternion & q, double eps /* = i6eQuaternion::EPSILON*/) const {
 		i6eQuaternion diff = this->inverse() * q;
 		diff = diff.normalize();
 		double angle;
@@ -54,7 +54,7 @@ namespace math {
 		return *this;
 	}
 
-	void i6eQuaternion::toAxisAngle(i6eVector & axis, double & angle) {
+	void i6eQuaternion::toAxisAngle(i6eVector & axis, double & angle) const {
 		normalize();
 		angle = 2 * std::acos(_w);
 		double s = std::sqrt(length());
@@ -122,7 +122,7 @@ namespace math {
 		return std::sqrt(_w * _w + _x * _x + _y * _y + _z * _z);
 	}
 
-	bool i6eQuaternion::operator==(const i6eQuaternion & b) {
+	bool i6eQuaternion::operator==(const i6eQuaternion & b) const {
 		return std::abs(_w - b.getW()) < EPSILON && std::abs(_x - b.getX()) < EPSILON && std::abs(_y - b.getY()) < EPSILON && std::abs(_z - b.getZ()) < EPSILON;
 	}
 

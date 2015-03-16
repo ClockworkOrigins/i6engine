@@ -31,7 +31,7 @@
 
 namespace boost {
 	class thread;
-}
+} /* boost */
 
 namespace i6engine {
 namespace core {

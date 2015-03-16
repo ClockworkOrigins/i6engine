@@ -90,7 +90,7 @@ namespace math {
 		/*
 		 * \brief Constructs a Vec4 from a string
 		 */
-		i6eVector4(const std::string & str);
+		explicit i6eVector4(const std::string & str);
 
 		/**
 		 * \brief Empty
@@ -149,7 +149,7 @@ namespace math {
 		/**
 		 * \brief inserts this vector into an attributeMap using the given prefix
 		 */
-		void insertInMap(const std::string & prefix, std::map<std::string, std::string> & map);
+		void insertInMap(const std::string & prefix, std::map<std::string, std::string> & map) const;
 
 		std::string toString() const;
 

@@ -90,7 +90,7 @@ namespace core {
 					_lastTime = cT;
 				}
 #endif /* ISIXE_PROFILING */
-			} catch(utils::exceptions::i6exception & e) {
+			} catch (utils::exceptions::i6exception & e) {
 				e.writeLog();
 				throw e;
 			}
