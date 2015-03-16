@@ -229,7 +229,6 @@ namespace modules {
 		}
 		api::gui::GUI_Widget_Create * crt = static_cast<api::gui::GUI_Widget_Create *>(data);
 		api::GUIWidget * widget = _factory.createGUIWidget(crt->_name, crt->widgetType, crt->style);
-		widget->init();
 		widget->setMouseOverCallback(std::bind(&GUIManager::getMouseoverWidgets, this));
 		_widgets[crt->_name] = widget;
 		addToRootWindow(widget->_window);

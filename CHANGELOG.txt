@@ -16,6 +16,7 @@ Enhancements:
 	- added basic inventory interface
 	- improved build dependency to download archives from server
 	- added support for shadows
+	- added base material and shader for normal and specular mapping
 
 Fixes:
 	- fixed deadlock during shutdown
