@@ -137,9 +137,13 @@ namespace modules {
 
 		meshEntity->getMesh()->buildEdgeList();
 
-		unsigned short src, dest;
-		if (!meshEntity->getMesh()->suggestTangentVectorBuildParams(Ogre::VertexElementSemantic::VES_TANGENT, src, dest)) {
-			meshEntity->getMesh()->buildTangentVectors(Ogre::VertexElementSemantic::VES_TANGENT, src, dest);
+		try {
+			unsigned short src, dest;
+			if (!meshEntity->getMesh()->suggestTangentVectorBuildParams(Ogre::VertexElementSemantic::VES_TANGENT, src, dest)) {
+				meshEntity->getMesh()->buildTangentVectors(Ogre::VertexElementSemantic::VES_TANGENT, src, dest);
+			}
+		} catch (const Ogre::Exception & e) {
+			ISIXE_LOG_ERROR("GraphicsNode", e.what());
 		}
 
 		if (api::EngineController::GetSingletonPtr()->getDebugdrawer() == 3 || api::EngineController::GetSingletonPtr()->getDebugdrawer() == 4) {

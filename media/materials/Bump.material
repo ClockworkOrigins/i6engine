@@ -1,0 +1,72 @@
+material Bump_Base_Material
+{
+    set $diffuseCol "1 1 1 1"
+    set $specularCol "1 1 1"
+    set $shininess "32"
+ 
+    technique
+    {
+        pass
+        {
+            illumination_stage ambient
+ 
+            ambient 1 1 1 1
+            diffuse $diffuseCol
+            specular 0 0 0 0
+            emissive 0 0 0 0
+ 
+            vertex_program_ref ambient_vs
+            {
+            }
+ 
+            fragment_program_ref ambient_ps
+            {
+            }
+ 
+            texture_unit diffuseMap
+            {
+                texture white.bmp
+            }
+ 
+            texture_unit aoMap
+            {
+                texture white.bmp
+            }
+        }
+ 
+        pass
+        {
+            illumination_stage per_light
+ 
+            scene_blend add
+//            iteration once_per_light   not needed while   illumination_stage per_light   is used
+ 
+            vertex_program_ref diffuse_vs
+            {
+            }
+ 
+            fragment_program_ref diffuse_ps
+            {
+            }
+ 
+            diffuse $diffuseCol
+            specular $specularCol $shininess
+            ambient 0 0 0 0
+ 
+            texture_unit diffuseMap
+            {
+                texture white.bmp
+            }
+ 
+            texture_unit specMap
+            {
+                texture white.bmp
+            }
+ 
+            texture_unit normalMap
+            {
+                texture flat_n.png
+            }
+        }
+    }
+}

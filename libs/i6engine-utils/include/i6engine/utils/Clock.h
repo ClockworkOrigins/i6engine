@@ -22,6 +22,7 @@
 #ifndef __I6ENGINE_UTILS_CLOCK_H__
 #define __I6ENGINE_UTILS_CLOCK_H__
 
+#include <atomic>
 #include <cassert>
 #include <climits>
 #include <condition_variable>
@@ -156,17 +157,17 @@ namespace utils {
 		}
 
 		//        			wakeuptime      variable
-		std::vector<std::pair<uint64_t, std::condition_variable *> > _timer;
+		std::vector<std::pair<uint64_t, std::condition_variable *>> _timer;
 
 		/**
 		 * \brief lock to prevent conflicts regarding the timer vector
 		 */
-		std::mutex _lock;
+		mutable std::mutex _lock;
 
 		// last system time
-		volatile uint64_t _systemTime;
+		std::atomic<uint64_t> _systemTime;
 
-		volatile bool _running;
+		std::atomic<bool> _running;
 	};
 
 } /* namespace utils */
