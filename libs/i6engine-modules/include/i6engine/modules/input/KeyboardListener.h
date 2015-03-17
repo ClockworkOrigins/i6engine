@@ -32,7 +32,7 @@
 
 namespace OIS {
 	class KeyEvent;
-}
+} /* namespace OIS */
 
 namespace i6engine {
 namespace modules {
@@ -46,7 +46,7 @@ namespace modules {
 	class KeyboardListener : public OIS::KeyListener {
 		friend class InputManager;
 
-		typedef std::map<std::pair<api::KeyCode, std::string>, boost::function<void(void)>> InputKeyFunctions;
+		typedef std::map<std::pair<api::KeyCode, api::KeyState>, boost::function<void(void)>> InputKeyFunctions;
 
 	private:
 		/**
@@ -82,7 +82,7 @@ namespace modules {
 		 * \return   nothing
 		 *
 		 */
-		void setKeyFunction(const api::KeyCode name, const std::string & type, const boost::function<void(void)> & ptrEventMethod);
+		void setKeyFunction(const api::KeyCode name, const api::KeyState type, const boost::function<void(void)> & ptrEventMethod);
 
 		/**
 		 * \brief removes the function specified for the given pair of KeyCode and type
@@ -92,7 +92,7 @@ namespace modules {
 		 * \return   nothing
 		 *
 		 */
-		void removeKeyFunction(const api::KeyCode name, const std::string & type);
+		void removeKeyFunction(const api::KeyCode name, const api::KeyState type);
 
 		/**
 		 * \brief Triggers the previously subscribed event for a key "Pressed" or "Released" event.
@@ -104,7 +104,7 @@ namespace modules {
 		 * \return   bool true if enabled, false otherwise
 		 *
 		 */
-		void triggerKeyFunction(const uint32_t keyCode, const std::string & type);
+		void triggerKeyFunction(const uint32_t keyCode, const api::KeyState type);
 
 		/**
 		 * \brief checks whether keys are hold

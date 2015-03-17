@@ -67,13 +67,13 @@ namespace api {
 		return iter->second;
 	}
 
-	void InputFacade::subscribeKeyEvent(const KeyCode name, const std::string & type, const boost::function<void(void)> & f) const {
+	void InputFacade::subscribeKeyEvent(const KeyCode name, const KeyState type, const boost::function<void(void)> & f) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::InputMessageType, input::InputSubscribeKeyEvent, core::Method::Create, new input::Input_SubscribeKeyEvent_Create(name, type, f), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void InputFacade::unsubscribeKeyEvent(const KeyCode name, const std::string & type) const {
+	void InputFacade::unsubscribeKeyEvent(const KeyCode name, const KeyState type) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::InputMessageType, input::InputSubscribeKeyEvent, core::Method::Delete, new input::Input_SubscribeKeyEvent_Delete(name, type), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);

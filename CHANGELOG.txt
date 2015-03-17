@@ -1,4 +1,4 @@
-﻿v 0.9.0
+﻿v 0.8.1
 
 Enhancements:
 	- GameObject::getGOC can specify return value now via template
@@ -20,6 +20,8 @@ Enhancements:
 
 Fixes:
 	- fixed deadlock during shutdown
+	- improved performance for waiting subsystems
+	- exchanged strings for key states by enum values
 
 v 0.8.0
 

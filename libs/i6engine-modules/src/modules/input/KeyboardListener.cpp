@@ -38,11 +38,11 @@ namespace modules {
 			_keyStates[objKeyEvent.key] = api::KeyState::KEY_PRESSED;
 			_keyTexts[objKeyEvent.key] = objKeyEvent.text;
 
-			triggerKeyFunction(objKeyEvent.key, "Pressed");
+			triggerKeyFunction(objKeyEvent.key, api::KeyState::KEY_PRESSED);
 		} else if (_keyStates[objKeyEvent.key] == api::KeyState::KEY_PRESSED) {
 			_keyStates[objKeyEvent.key] = api::KeyState::KEY_HOLD;
 
-			triggerKeyFunction(objKeyEvent.key, "Hold");
+			triggerKeyFunction(objKeyEvent.key, api::KeyState::KEY_HOLD);
 		}
 
 		uint32_t text = objKeyEvent.text;
@@ -66,7 +66,7 @@ namespace modules {
 		if (_keyStates[objKeyEvent.key] == api::KeyState::KEY_HOLD || _keyStates[objKeyEvent.key] == api::KeyState::KEY_PRESSED) {
 			_keyStates[objKeyEvent.key] = api::KeyState::KEY_RELEASED;
 
-			triggerKeyFunction(objKeyEvent.key, "Released");
+			triggerKeyFunction(objKeyEvent.key, api::KeyState::KEY_RELEASED);
 		}
 
 		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[objKeyEvent.key], objKeyEvent.key, objKeyEvent.text), i6engine::core::Subsystem::Input);
@@ -76,19 +76,19 @@ namespace modules {
 		return true;
 	}
 
-	void KeyboardListener::setKeyFunction(const api::KeyCode name, const std::string & type, const boost::function<void(void)> & f) {
+	void KeyboardListener::setKeyFunction(const api::KeyCode name, const api::KeyState type, const boost::function<void(void)> & f) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		_objInputKeyFunctions[std::make_pair(name, type)] = f;
 	}
 
-	void KeyboardListener::removeKeyFunction(const api::KeyCode name, const std::string & type) {
+	void KeyboardListener::removeKeyFunction(const api::KeyCode name, const api::KeyState type) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		_objInputKeyFunctions.erase(std::make_pair(name, type));
 	}
 
-	void KeyboardListener::triggerKeyFunction(const uint32_t keyCode, const std::string & type) {
+	void KeyboardListener::triggerKeyFunction(const uint32_t keyCode, const api::KeyState type) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		InputKeyFunctions::const_iterator iter = _objInputKeyFunctions.find(std::make_pair(api::KeyCode(keyCode), type));
@@ -105,7 +105,7 @@ namespace modules {
 			if (_keyStates[i] == api::KeyState::KEY_PRESSED) {
 				_keyStates[i] = api::KeyState::KEY_HOLD;
 			} else if (_keyStates[i] == api::KeyState::KEY_HOLD) {
-				triggerKeyFunction(i, "Hold");
+				triggerKeyFunction(i, api::KeyState::KEY_HOLD);
 
 				uint32_t text = uint32_t(_keyTexts[i]);
 

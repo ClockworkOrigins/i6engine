@@ -103,10 +103,10 @@ namespace input {
 	 */
 	typedef struct Input_SubscribeKeyEvent_Create : GameMessageStruct {
 		KeyCode code;
-		std::string type;
+		KeyState type;
 		boost::function<void(void)> func;
 		Input_SubscribeKeyEvent_Create() {}
-		Input_SubscribeKeyEvent_Create(const KeyCode & c, const std::string & t, const boost::function<void(void)> & f);
+		Input_SubscribeKeyEvent_Create(const KeyCode & c, const KeyState t, const boost::function<void(void)> & f);
 		Input_SubscribeKeyEvent_Create * copy() { return new Input_SubscribeKeyEvent_Create(*this); }
 	} Input_SubscribeKeyEvent_Create;
 
@@ -115,10 +115,10 @@ namespace input {
 	 */
 	typedef struct Input_SubscribeKeyEvent_Delete : GameMessageStruct {
 		KeyCode code;
-		std::string type;
+		KeyState type;
 		Input_SubscribeKeyEvent_Delete() {
 		}
-		Input_SubscribeKeyEvent_Delete(const KeyCode & c, const std::string & t);
+		Input_SubscribeKeyEvent_Delete(const KeyCode & c, const KeyState t);
 		Input_SubscribeKeyEvent_Delete * copy() {
 			return new Input_SubscribeKeyEvent_Delete(*this);
 		}
