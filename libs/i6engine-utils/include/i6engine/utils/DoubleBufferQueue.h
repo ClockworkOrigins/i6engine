@@ -35,14 +35,6 @@ namespace utils {
 	 */
 	template<typename T, bool producer = true, bool consumer = true>
 	class DoubleBufferQueue {
-	private:
-		template<bool v>
-		struct Bool2Type {
-			enum {
-				value = v
-			};
-		};
-
 	public:
 		/**
 		 * \brief default constructor

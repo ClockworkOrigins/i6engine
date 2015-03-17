@@ -143,12 +143,13 @@ namespace core {
 
 		std::map<uint16_t, boost::function<void(const Message::Ptr &)>> _ptrMessageMethod;
 
-	private:
 		/**
 		 * \brief This method really delivers the Message without buffering it anymore.
 		 * \param msg Message to be delivered.
 		 */
-		void deliverMessageInternal(const ReceivedMessagePtr & msg);
+		virtual void deliverMessageInternal(const ReceivedMessagePtr & msg);
+
+	private:
 
 		/**
 		 * \brief vector containing all new notified IDs since the last tick happened

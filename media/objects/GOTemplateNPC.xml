@@ -22,7 +22,7 @@
 		<Attribute name="visibility">1</Attribute>
 		<Attribute name="pos">0.0 0.0 0.0</Attribute>
 		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
-		<Attribute name="scale">0.01 0.01 0.01</Attribute>
+		<Attribute name="scale">0.02 0.02 0.02</Attribute>
 	</Component>
 	<Component template="Attribute" owner="true">
 		<Attribute name="attribute_0">100</Attribute>

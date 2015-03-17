@@ -34,7 +34,7 @@
 namespace i6engine {
 namespace core {
 
-	ModuleController::ModuleController(Subsystem sub) : MessageSubscriber(), _subsystem(sub), _frameTime(0), _messagingController(), _ctrl(nullptr), _ptrTimer(nullptr), _isRunning(false), _subsystemController(), _type(SubsystemType::Ticking), _waitingSubsystems(), _notifiedSubsystems(), _waitingMessages(), _messages()
+	ModuleController::ModuleController(Subsystem sub) : MessageSubscriber(), _subsystem(sub), _frameTime(0), _messagingController(), _ctrl(nullptr), _ptrTimer(nullptr), _isRunning(false), _subsystemController(), _type(SubsystemType::Ticking), _waitingSubsystems(), _notifiedSubsystems(), _waitingMessages(), _messages(), _lock(), _conditionVariable()
 #ifdef ISIXE_PROFILING
 		, _lastTime(0), _fps(0), _expectedFps(0)
 #endif /* ISIXE_PROFILING */
@@ -110,6 +110,8 @@ namespace core {
 
 			try {
 				// delegate system
+				std::unique_lock<std::mutex> ul(_lock);
+				_conditionVariable.wait(ul);
 				processMessages();
 				bool triggered = true;
 
@@ -209,6 +211,13 @@ namespace core {
 			}
 		}
 		_objInActiveMessageVector->clear();
+	}
+
+	void ModuleController::deliverMessageInternal(const ReceivedMessagePtr & msg) {
+		MessageSubscriber::deliverMessageInternal(msg);
+		if (msg->message->getMessageType() == messages::SubsystemMessageType) {
+			_conditionVariable.notify_one();
+		}
 	}
 
 } /* namespace core */

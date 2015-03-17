@@ -102,7 +102,7 @@ namespace core {
 		/**
 		 * \brief This method will set the flag which will indicate that the subsystems have to be shut down.
 		 */
-		inline void ShutDown() { _bolGlobalShutDown = true; }
+		void ShutDown();
 
 		/**
 		 * \brief Waits for all controlled subsystem-threads to terminate.
