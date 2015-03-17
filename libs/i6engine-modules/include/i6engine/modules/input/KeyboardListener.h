@@ -104,7 +104,7 @@ namespace modules {
 		 * \return   bool true if enabled, false otherwise
 		 *
 		 */
-		void triggerKeyFunction(const uint32_t keyCode, const api::KeyState type);
+		void triggerKeyFunction(const api::KeyCode keyCode, const api::KeyState type);
 
 		/**
 		 * \brief checks whether keys are hold

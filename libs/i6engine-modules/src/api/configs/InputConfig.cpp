@@ -20,7 +20,7 @@ namespace i6engine {
 namespace api {
 namespace input {
 
-	Input_Keyboard_Update::Input_Keyboard_Update(const api::KeyState b, const uint32_t c, uint32_t t) : GameMessageStruct(), pressed(b), code(c), text(t) {
+	Input_Keyboard_Update::Input_Keyboard_Update(const KeyState b, const KeyCode c, uint32_t t) : GameMessageStruct(), pressed(b), code(c), text(t) {
 	}
 
 	Input_Mouse_Update::Input_Mouse_Update(const int32_t a, const int32_t b) : GameMessageStruct(), intNewX(a), intNewY(b) {
@@ -29,7 +29,7 @@ namespace input {
 	Input_MouseWheel_Update::Input_MouseWheel_Update(int d) : GameMessageStruct(), diff(d) {
 	}
 
-	Input_Button_Update::Input_Button_Update(const bool b, const uint32_t c) : GameMessageStruct(), pressed(b), code(c) {
+	Input_Button_Update::Input_Button_Update(const bool b, const MouseButtonID c) : GameMessageStruct(), pressed(b), code(c) {
 	}
 
 	Input_Window_Create::Input_Window_Create(void * w) : GameMessageStruct(), window(w) {

@@ -46,11 +46,11 @@ namespace input {
 	 * \brief notifies state of a key
 	 */
 	typedef struct Input_Keyboard_Update : GameMessageStruct {
-		api::KeyState pressed;
-		uint32_t code;
+		KeyState pressed;
+		KeyCode code;
 		uint32_t text;
 		Input_Keyboard_Update() {}
-		Input_Keyboard_Update(const api::KeyState b, const uint32_t c, uint32_t t);
+		Input_Keyboard_Update(const KeyState b, const KeyCode c, uint32_t t);
 		Input_Keyboard_Update * copy() { return new Input_Keyboard_Update(*this); }
 	} Input_Keyboard_Update;
 
@@ -83,9 +83,9 @@ namespace input {
 	 */
 	typedef struct Input_Button_Update : GameMessageStruct {
 		bool pressed;
-		uint32_t code;
+		MouseButtonID code;
 		Input_Button_Update() {}
-		Input_Button_Update(const bool b, const uint32_t c);
+		Input_Button_Update(const bool b, const MouseButtonID c);
 		Input_Button_Update * copy() { return new Input_Button_Update(*this); }
 	} Input_Button_Update;
 

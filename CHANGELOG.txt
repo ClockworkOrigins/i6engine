@@ -21,7 +21,8 @@ Enhancements:
 Fixes:
 	- fixed deadlock during shutdown
 	- improved performance for waiting subsystems
-	- exchanged strings for key states by enum values
+	- exchanged strings for key states with enum values
+	- exchanged ints in Input message through their KeyCode
 
 v 0.8.0
 
