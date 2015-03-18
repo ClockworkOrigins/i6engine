@@ -247,11 +247,6 @@ namespace modules {
 			uint64_t cT = api::EngineController::GetSingleton().getCurrentTime();
 			btScalar timestep = double(cT - _lngTime) / 1000000.0;
 			_lngTime = cT;
-			// the maximum amount of time a step should take??? in seconds, frametime is microseconds
-			btScalar fixedTimeStep = (1000.0 / _ctrl->getFrameTime()) / 3.0;
-			//btScalar fixedTimeStep = timestep / 3.0;
-			// maximum amount of steps to simulate
-			int maxSubSteps = 10;
 
 			// referring to bullet wiki, this formula must be always true: http://bulletphysics.org/mediawiki-1.5.8/index.php/Stepping_The_World
 			//assert(timestep < maxSubSteps * fixedTimeStep);
@@ -518,7 +513,7 @@ namespace modules {
 		}
 
 		if (_meshes.find(meshName) == _meshes.end()) {
-			_meshes[meshName] = _meshManager->load(meshName, "i6engine");
+			_meshes[meshName] = _meshManager->loadMesh(meshName, "i6engine");
 		}
 
 		Ogre::Mesh * mp = _meshes.find(meshName)->second.get();

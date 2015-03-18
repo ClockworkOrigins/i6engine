@@ -28,7 +28,7 @@ namespace components {
 		ISIXE_THROW_API_COND("ItemComponent", "name not set!", params.find("name") != params.end());
 		ISIXE_THROW_API_COND("ItemComponent", "value not set!", params.find("value") != params.end());
 		_name = params.find("name")->second;
-		_value = std::stoi(params.find("value")->second.c_str());
+		_value = static_cast<uint32_t>(std::stoi(params.find("value")->second.c_str()));
 
 		_objFamilyID = config::ComponentTypes::ItemComponent;
 	}

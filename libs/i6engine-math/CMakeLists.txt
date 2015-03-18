@@ -39,6 +39,8 @@ ELSE(ISIXE_BUILD_SHARED)
 ENDIF(ISIXE_BUILD_SHARED)
 
 target_link_libraries(i6engine-math i6engine-utils ${BOOST_LIBRARIES} ${BULLET_LIBRARIES} ${OGRE_LIBRARIES})
+# to find the dependency libs during runtime
+set_target_properties(i6engine-math PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 IF(WIN32 AND ISIXE_BUILD_SHARED)
 	add_custom_command(TARGET i6engine-math POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-math.dll ${CMAKE_BINARY_DIR}/bin)

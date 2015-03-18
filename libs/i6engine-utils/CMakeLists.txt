@@ -48,6 +48,8 @@ ELSE(ISIXE_BUILD_SHARED)
 ENDIF(ISIXE_BUILD_SHARED)
 
 target_link_libraries(i6engine-utils ${BOOST_LIBRARIES} ${BULLET_LIBRARIES})
+# to find the dependency libs during runtime
+set_target_properties(i6engine-utils PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 IF(NOT WIN32)
 	target_link_libraries(i6engine-utils X11 jpeg ${PYTHON_LIBRARIES})

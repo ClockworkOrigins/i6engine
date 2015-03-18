@@ -62,6 +62,8 @@ ELSE(ISIXE_BUILD_SHARED)
 ENDIF(ISIXE_BUILD_SHARED)
 
 set_target_properties(i6engine-core PROPERTIES LINKER_LANGUAGE CXX)
+# to find the dependency libs during runtime
+set_target_properties(i6engine-core PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 target_link_libraries(i6engine-core i6engine-utils)
 

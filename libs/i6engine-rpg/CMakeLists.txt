@@ -43,6 +43,8 @@ ELSE(ISIXE_BUILD_SHARED)
 ENDIF(ISIXE_BUILD_SHARED)
 
 target_link_libraries(i6engine-rpg i6engine-modules ${BOOST_LIBRARIES})
+# to find the dependency libs during runtime
+set_target_properties(i6engine-rpg PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 IF(WIN32 AND ISIXE_BUILD_SHARED)
 	add_custom_command(TARGET i6engine-rpg POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-rpg.dll ${CMAKE_BINARY_DIR}/bin)

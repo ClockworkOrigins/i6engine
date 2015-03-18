@@ -37,9 +37,9 @@ namespace modules {
 
 		void _initialise(void);
 
-		Ogre::ResourceManager::ResourceCreateOrRetrieveResult createOrRetrieve(const Ogre::String & name, const Ogre::String & group, bool isManual = false, Ogre::ManualResourceLoader * loader = nullptr, const Ogre::NameValuePairList * params = nullptr, Ogre::HardwareBuffer::Usage vertexBufferUsage = Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, Ogre::HardwareBuffer::Usage indexBufferUsage = Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, bool vertexBufferShadowed = true, bool indexBufferShadowed = true);
+		Ogre::ResourceManager::ResourceCreateOrRetrieveResult createOrRetrieveMesh(const Ogre::String & name, const Ogre::String & group, bool isManual = false, Ogre::ManualResourceLoader * loader = nullptr, const Ogre::NameValuePairList * params = nullptr, Ogre::HardwareBuffer::Usage vertexBufferUsage = Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, Ogre::HardwareBuffer::Usage indexBufferUsage = Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, bool vertexBufferShadowed = true, bool indexBufferShadowed = true);
 
-		Ogre::MeshPtr load(const Ogre::String & filename, const Ogre::String & groupName, Ogre::HardwareBuffer::Usage vertexBufferUsage = Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, Ogre::HardwareBuffer::Usage indexBufferUsage = Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, bool vertexBufferShadowed = true, bool indexBufferShadowed = true);
+		Ogre::MeshPtr loadMesh(const Ogre::String & filename, const Ogre::String & groupName, Ogre::HardwareBuffer::Usage vertexBufferUsage = Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, Ogre::HardwareBuffer::Usage indexBufferUsage = Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY, bool vertexBufferShadowed = true, bool indexBufferShadowed = true);
 
 		void loadResource(Ogre::Resource * res);
 

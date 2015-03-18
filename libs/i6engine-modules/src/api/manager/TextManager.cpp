@@ -58,7 +58,7 @@ namespace api {
 						} else if (int(text[i + 1] == -97)) {
 							addText += 'ß';
 						} else {
-							std::cout << key << " " << int(text[i + 1]) << std::endl;
+							ISIXE_LOG_DEBUG("TextManager", key << " " << int(text[i + 1]));
 						}
 						i++;
 					} else {

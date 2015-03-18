@@ -16,6 +16,8 @@
 
 #include "OgreStableHeaders.h"
 
+#include "i6engine/utils/Logger.h"
+
 #include "i6engine/modules/physics/MeshManager.h"
 
 #include "OgreMesh.h"
@@ -42,7 +44,7 @@ namespace modules {
 	void MeshManager::_initialise(void) {
 	}
 	//-----------------------------------------------------------------------
-	Ogre::ResourceManager::ResourceCreateOrRetrieveResult MeshManager::createOrRetrieve(const Ogre::String & name, const Ogre::String & group, bool isManual, Ogre::ManualResourceLoader * loader, const Ogre::NameValuePairList * params, Ogre::HardwareBuffer::Usage vertexBufferUsage, Ogre::HardwareBuffer::Usage indexBufferUsage, bool vertexBufferShadowed, bool indexBufferShadowed) {
+	Ogre::ResourceManager::ResourceCreateOrRetrieveResult MeshManager::createOrRetrieveMesh(const Ogre::String & name, const Ogre::String & group, bool isManual, Ogre::ManualResourceLoader * loader, const Ogre::NameValuePairList * params, Ogre::HardwareBuffer::Usage vertexBufferUsage, Ogre::HardwareBuffer::Usage indexBufferUsage, bool vertexBufferShadowed, bool indexBufferShadowed) {
 		Ogre::ResourceManager::ResourceCreateOrRetrieveResult res = Ogre::ResourceManager::createOrRetrieve(name, group, isManual, loader, params);
 		Ogre::MeshPtr pMesh = res.first;
 		// Was it created?
@@ -55,8 +57,8 @@ namespace modules {
 	}
 
 	//-----------------------------------------------------------------------
-	Ogre::MeshPtr MeshManager::load(const Ogre::String & filename, const Ogre::String& groupName, Ogre::HardwareBuffer::Usage vertexBufferUsage, Ogre::HardwareBuffer::Usage indexBufferUsage, bool vertexBufferShadowed, bool indexBufferShadowed) {
-		Ogre::MeshPtr pMesh = createOrRetrieve(filename, groupName, false, 0, 0, vertexBufferUsage, indexBufferUsage, true, true).first;
+	Ogre::MeshPtr MeshManager::loadMesh(const Ogre::String & filename, const Ogre::String& groupName, Ogre::HardwareBuffer::Usage vertexBufferUsage, Ogre::HardwareBuffer::Usage indexBufferUsage, bool vertexBufferShadowed, bool indexBufferShadowed) {
+		Ogre::MeshPtr pMesh = createOrRetrieveMesh(filename, groupName, false, 0, 0, vertexBufferUsage, indexBufferUsage, true, true).first;
 		pMesh->load();
 		return pMesh;
 	}
@@ -67,6 +69,9 @@ namespace modules {
 
 		// attempt to create a prefab mesh
 		bool createdPrefab = Ogre::PrefabFactory::createPrefab(msh);
+		if (!createdPrefab) {
+			ISIXE_LOG_ERROR("MeshManager", "Could not create Prefab");
+		}
 	}
 
 	//-----------------------------------------------------------------------
