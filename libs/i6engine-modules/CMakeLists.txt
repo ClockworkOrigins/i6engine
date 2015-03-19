@@ -26,32 +26,55 @@ include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 set(srcdir ./src)
 set(configdir ${CMAKE_SOURCE_DIR}/config)
 
-# Core source files
-set(i6modulesSrc
-	${i6modulesSrc}
-
-	${srcdir}/api/EngineController.cpp
-	${srcdir}/api/GameMessage.cpp
-	
+# List of all component classes
+# All these classes will be registered as Components
+set(i6components
 	${srcdir}/api/components/BillboardComponent.cpp
 	${srcdir}/api/components/CameraComponent.cpp
-	${srcdir}/api/components/Component.cpp
 	${srcdir}/api/components/LifetimeComponent.cpp
 	${srcdir}/api/components/LuminousAppearanceComponent.cpp
 	${srcdir}/api/components/MeshAppearanceComponent.cpp
-	${srcdir}/api/components/MoverComponent.cpp
 	${srcdir}/api/components/MoverInterpolateComponent.cpp
 	${srcdir}/api/components/MoverCircleComponent.cpp
 	${srcdir}/api/components/MovingCameraComponent.cpp
 	${srcdir}/api/components/ParticleEmitterComponent.cpp
 	${srcdir}/api/components/PhysicalStateComponent.cpp
-	${srcdir}/api/components/ShatterComponent.cpp
 	${srcdir}/api/components/SoundComponent.cpp
 	${srcdir}/api/components/SoundListenerComponent.cpp
 	${srcdir}/api/components/SpawnpointComponent.cpp
 	${srcdir}/api/components/StaticStateComponent.cpp
 	${srcdir}/api/components/TerrainAppearanceComponent.cpp
-	
+)
+
+# Generates a file that registers the components
+FILE(WRITE ${CMAKE_BINARY_DIR}/include/i6engine/i6eComponentRegister.h "")
+SET(componentList "#ifndef __COMPONENTREGISTER_H__\n#define __COMPONENTREGISTER_H__\n#include <vector>\nnamespace i6engine {\nnamespace api {\nstd::vector<std::pair<std::string, createGOCCallback>> componentList = {\n")
+SET(firstIt TRUE)
+FOREACH(comp ${i6components})
+	STRING(REGEX MATCH ".*/([a-zA-Z0-9_]+)Component.cpp" compName ${comp})
+	FILE(APPEND ${CMAKE_BINARY_DIR}/include/i6engine/i6eComponentRegister.h "#include \"i6engine/api/components/${CMAKE_MATCH_1}Component.h\"\n")
+	IF(${firstIt})
+		SET(componentList "${componentList}\t{\"${CMAKE_MATCH_1}\", boost::bind(&${CMAKE_MATCH_1}Component::createC, _1, _2)}")
+		SET(firstIt FALSE)
+	ELSE()
+		SET(componentList "${componentList},\n\t{\"${CMAKE_MATCH_1}\", boost::bind(&${CMAKE_MATCH_1}Component::createC, _1, _2)}")
+	ENDIF()
+ENDFOREACH()
+FILE(APPEND ${CMAKE_BINARY_DIR}/include/i6engine/i6eComponentRegister.h "${componentList}\n};\n}\n}\n#endif\n")
+
+# Modules source files
+set(i6modulesSrc
+	${i6modulesSrc}
+
+	${srcdir}/api/EngineController.cpp
+	${srcdir}/api/GameMessage.cpp
+
+	${i6components}
+	# These Classes are superclasses and don't need to be registered
+	${srcdir}/api/components/Component.cpp
+	${srcdir}/api/components/MoverComponent.cpp
+	${srcdir}/api/components/ShatterComponent.cpp
+
 	${srcdir}/api/configs/AudioConfig.cpp
 	${srcdir}/api/configs/ComponentConfig.cpp
 	${srcdir}/api/configs/GraphicsConfig.cpp
@@ -61,7 +84,7 @@ set(i6modulesSrc
 	${srcdir}/api/configs/ObjectConfig.cpp
 	${srcdir}/api/configs/PhysicsConfig.cpp
 	${srcdir}/api/configs/ScriptingConfig.cpp
-	
+
 	${srcdir}/api/facades/AudioFacade.cpp
 	${srcdir}/api/facades/GraphicsFacade.cpp
 	${srcdir}/api/facades/GUIFacade.cpp
@@ -74,7 +97,7 @@ set(i6modulesSrc
 	${srcdir}/api/facades/ScriptingFacade.cpp
 
 	${srcdir}/api/gui/GUIWidget.cpp
-	
+
 	${srcdir}/api/manager/IDManager.cpp
 	${srcdir}/api/manager/TextManager.cpp
 

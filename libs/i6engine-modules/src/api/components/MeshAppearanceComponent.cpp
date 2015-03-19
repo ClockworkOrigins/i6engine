@@ -207,5 +207,3 @@ namespace api {
 
 } /* namespace api */
 } /* namespace i6engine */
-
-REGISTERCOMPONENT(i6engine::api::MeshAppearanceComponent, MeshAppearanceComponent)

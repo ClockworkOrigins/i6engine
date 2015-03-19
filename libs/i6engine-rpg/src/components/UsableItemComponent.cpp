@@ -57,5 +57,3 @@ namespace components {
 } /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */
-
-REGISTERCOMPONENT(i6engine::rpg::components::UsableItemComponent, UsableItemComponent)

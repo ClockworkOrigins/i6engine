@@ -80,17 +80,6 @@ namespace api {
 	typedef std::tuple<AccessState, std::string, boost::function<std::string(void)>, boost::function<bool(std::string)>> componentOptions;
 
 	/**
-	 * \brief helperclass to automatically register component templates
-	 */
-	class ISIXE_MODULES_API ComponentHelper {
-	public:
-		ComponentHelper(const std::string & name, const createGOCCallback & func);
-
-		std::string _name;
-		createGOCCallback _func;
-	};
-
-	/**
 	 * \class Component
 	 * \brief Component Base Class. All Components must derive from Component.
 	 */
@@ -98,8 +87,6 @@ namespace api {
 		friend class GameObject;
 
 	public:
-		static std::vector<ComponentHelper> componentCallbacks;
-
 		/**
 		 * \brief Constructor for Component.
 		 */
@@ -274,9 +261,6 @@ namespace api {
 
 } /* namespace api */
 } /* namespace i6engine */
-
-#define REGISTERCOMPONENT(a,b)\
-	static i6engine::api::ComponentHelper b##Helper(#a, boost::bind(&a::createC, _1, _2));
 
 #endif /* __I6ENGINE_API_COMPONENT_H__ */
 

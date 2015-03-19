@@ -32,14 +32,6 @@
 namespace i6engine {
 namespace api {
 
-	std::vector<ComponentHelper> Component::componentCallbacks = std::vector<ComponentHelper>();
-
-	ComponentHelper::ComponentHelper(const std::string & name, const createGOCCallback & func) : _name(), _func(func) {
-		_name = utils::split(name, ":").back();
-		_name = _name.substr(0, _name.length() - 9);
-		Component::componentCallbacks.push_back(*this);
-	}
-
 	Component::Component() : _objOwnerID(), _objOwnerGO(), _objComponentID(), _objFamilyID(), _id(-1), _sync(true), _self() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		_id = EngineController::GetSingletonPtr()->getIDManager()->getID();

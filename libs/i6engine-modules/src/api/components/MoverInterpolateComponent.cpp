@@ -292,13 +292,13 @@ namespace api {
 		// general attributes
 		params["mode"] = boost::lexical_cast<std::string>(uint16_t(_mode));
 		params["way"] = boost::lexical_cast<std::string>(uint16_t(_way));
-		
+
 		params["keyframes"] = boost::lexical_cast<std::string>(_keyFrames.size());
 		for (size_t i = 0; i < _keyFrames.size(); ++i) {
 			_keyFrames[i].first.insertInMap(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos", params);
 			_keyFrames[i].second.insertInMap(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot", params);
 		}
-		
+
 		return params;
 	}
 
@@ -348,5 +348,3 @@ namespace api {
 
 } /* namespace api */
 } /* namespace i6engine */
-
-REGISTERCOMPONENT(i6engine::api::MoverInterpolateComponent, MoverInterpolateComponent)
