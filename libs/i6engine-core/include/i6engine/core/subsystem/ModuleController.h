@@ -22,7 +22,9 @@
 #ifndef __I6ENGINE_CORE_MODULECONTROLLER_H__
 #define __I6ENGINE_CORE_MODULECONTROLLER_H__
 
+#include <condition_variable>
 #include <cstdint>
+#include <mutex>
 #include <string>
 
 #include "i6engine/utils/i6eSystemParameters.h"
@@ -31,7 +33,7 @@
 
 namespace boost {
 	class thread;
-}
+} /* boost */
 
 namespace i6engine {
 namespace core {
@@ -200,6 +202,9 @@ namespace core {
 		 */
 		std::vector<Message::Ptr> _messages;
 
+		mutable std::mutex _lock;
+		std::condition_variable _conditionVariable;
+
 #ifdef ISIXE_PROFILING
 		/**
 		 * \brief last frame time
@@ -229,6 +234,12 @@ namespace core {
 		 */
 		inline bool getRunning() const {
 			return _isRunning;
+		}
+
+		void deliverMessageInternal(const ReceivedMessagePtr & msg);
+
+		void stop() {
+			_conditionVariable.notify_one();
 		}
 
 		/**

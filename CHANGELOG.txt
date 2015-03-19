@@ -1,4 +1,4 @@
-﻿v 0.9.0
+﻿v 0.8.1
 
 Enhancements:
 	- GameObject::getGOC can specify return value now via template
@@ -16,6 +16,13 @@ Enhancements:
 	- added basic inventory interface
 	- improved build dependency to download archives from server
 	- added support for shadows
+	- added base material and shader for normal and specular mapping
+
+Fixes:
+	- fixed deadlock during shutdown
+	- improved performance for waiting subsystems
+	- exchanged strings for key states with enum values
+	- exchanged ints in Input message through their KeyCode
 
 v 0.8.0
 

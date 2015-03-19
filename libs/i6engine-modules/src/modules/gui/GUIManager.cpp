@@ -229,7 +229,6 @@ namespace modules {
 		}
 		api::gui::GUI_Widget_Create * crt = static_cast<api::gui::GUI_Widget_Create *>(data);
 		api::GUIWidget * widget = _factory.createGUIWidget(crt->_name, crt->widgetType, crt->style);
-		widget->init();
 		widget->setMouseOverCallback(std::bind(&GUIManager::getMouseoverWidgets, this));
 		_widgets[crt->_name] = widget;
 		addToRootWindow(widget->_window);
@@ -270,19 +269,17 @@ namespace modules {
 
 			MousePos(intNewX, intNewY);
 		} else if (type == api::mouse::MouButton) {
-			uint32_t newButton = static_cast<api::input::Input_Button_Update *>(data)->code;
+			api::MouseButtonID newButton = static_cast<api::input::Input_Button_Update *>(data)->code;
 			bool pressed = static_cast<api::input::Input_Button_Update *>(data)->pressed;
 
 			if (pressed) {
-				MouseDown(api::MouseButtonID(newButton));
+				MouseDown(newButton);
 			} else {
-				MouseUp(api::MouseButtonID(newButton));
+				MouseUp(newButton);
 			}
 		} else if (type == api::keyboard::KeyKeyboard) {
-			uint32_t code = static_cast<api::input::Input_Keyboard_Update *>(data)->code;
+			api::KeyCode keyCode = static_cast<api::input::Input_Keyboard_Update *>(data)->code;
 			api::KeyState pressed = static_cast<api::input::Input_Keyboard_Update *>(data)->pressed;
-
-			api::KeyCode keyCode = api::KeyCode(code);
 
 			if (pressed == api::KeyState::KEY_PRESSED) {
 				KeyDown(keyCode, static_cast<api::input::Input_Keyboard_Update *>(data)->text);

@@ -69,7 +69,7 @@ namespace api {
 		/**
 		 * \brief mutex for locking the id
 		 */
-		boost::mutex _idMutex;
+		mutable boost::mutex _idMutex;
 
 		/**
 		 * \brief forbidden

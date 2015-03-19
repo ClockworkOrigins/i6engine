@@ -117,7 +117,7 @@ namespace api {
 		_attenuation.insertInMap("attenuation", params);
 		_specularColor.insertInMap("specularColor", params);
 		_direction.insertInMap("direction", params);
-		params.insert(std::make_pair("lightType", boost::lexical_cast<std::string>(uint8_t(_lightType))));
+		params.insert(std::make_pair("lightType", boost::lexical_cast<std::string>(uint32_t(_lightType))));
 		params.insert(std::make_pair("spotLightRangeInner", boost::lexical_cast<std::string>(_spotlightRangeInner)));
 		params.insert(std::make_pair("spotLightRangeOuter", boost::lexical_cast<std::string>(_spotlightRangeOuter)));
 

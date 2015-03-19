@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
+#include <cstdint>
+
 #include "i6engine/utils/AutoUpdater.h"
 
 #include "gtest/gtest.h"
 
-int d = 0;
+int32_t d = 0;
 
-void testIt(std::string s, int i) {
+void testIt(int32_t i) {
 	d = i;
 }
 
 TEST(AutoUpdater, operatorTest) {
-	i6engine::utils::AutoUpdater<int> ud(5);
+	i6engine::utils::AutoUpdater<int32_t> ud(5);
 
 	int test = ud;
 
@@ -38,11 +40,9 @@ TEST(AutoUpdater, operatorTest) {
 }
 
 TEST(AutoUpdater, Updater) {
-	i6engine::utils::AutoUpdater<int> ud(5);
+	i6engine::utils::AutoUpdater<int32_t> ud(5);
 
-	std::function<void(std::string, int)> f = std::bind(&testIt, std::placeholders::_1, std::placeholders::_2);
-
-	ud.registerUpdate(std::string("TEST"), std::bind(&testIt, std::placeholders::_1, std::placeholders::_2));
+	ud.registerUpdate(std::bind(&testIt, std::placeholders::_1));
 
 	ud = 50;
 

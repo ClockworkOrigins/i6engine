@@ -96,17 +96,17 @@ namespace api {
 		/**
 		 * \brief Subscribes for a keyboard event. (m)
 		 * \param name The OIS::KeyCode for the specified Key, equivalent to an int
-		 * \param type Type of the keyboard event. At the moment there are only two types: "Pressed" and "Released".
+		 * \param type Type of the keyboard event.
 		 * \param ptrEventMethod Everytime the Event occurs on this window, the Method leading to this pointer will be called
 		 */
-		void subscribeKeyEvent(const KeyCode name, const std::string & type, const boost::function<void(void)> & f) const;
+		void subscribeKeyEvent(const KeyCode name, const KeyState type, const boost::function<void(void)> & f) const;
 
 		/**
 		 * \brief Unsubscribes for a keyboard event. (m)
 		 * \param name The OIS::KeyCode for the specified Key, equivalent to an int
-		 * \param type Type of the keyboard event. At the moment there are only two types: "Pressed" and "Released".
+		 * \param type Type of the keyboard event.
 		 */
-		void unsubscribeKeyEvent(const KeyCode name, const std::string & type) const;
+		void unsubscribeKeyEvent(const KeyCode name, const KeyState type) const;
 
 		/**
 		 * \brief resets the subsystem to it's defaults

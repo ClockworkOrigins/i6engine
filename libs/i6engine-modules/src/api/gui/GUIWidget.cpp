@@ -34,12 +34,6 @@ namespace api {
 		_window->destroy();
 	}
 
-	void GUIWidget::init() {
-		_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
-		_window->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&GUIWidget::drop, this));
-		_window->subscribeEvent(CEGUI::Window::EventMouseMove, CEGUI::Event::Subscriber(&GUIWidget::mouseMove, this));
-	}
-
 	void GUIWidget::update(uint16_t type, gui::GUIUpdateMessageStruct * message) {
 		if (type == i6engine::api::gui::GuiSetPosition) {
 			gui::GUI_Position * g = static_cast<gui::GUI_Position *>(message);
@@ -56,10 +50,14 @@ namespace api {
 			_dropable = dynamic_cast<gui::GUI_SetDropTarget *>(message)->dropable;
 		} else if (type == gui::GUIMessageTypes::GuiSetDragable) {
 			_dragable = dynamic_cast<gui::GUI_SetDragable *>(message)->dragable;
+			_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
+			_window->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&GUIWidget::drop, this));
+			_window->subscribeEvent(CEGUI::Window::EventMouseMove, CEGUI::Event::Subscriber(&GUIWidget::mouseMove, this));
 		} else if (type == gui::GUIMessageTypes::GuiSetDropCallback) {
 			_dropCallback = dynamic_cast<gui::GUI_SetDropCallback *>(message)->callback;
 		} else if (type == gui::GUIMessageTypes::GuiSubscribeEvent) {
 			subscribeClickEvent(dynamic_cast<gui::GUI_SubscribeEvent_Update *>(message)->func);
+			_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
 		} else {
 			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
 		}

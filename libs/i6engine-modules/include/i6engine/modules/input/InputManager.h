@@ -32,7 +32,7 @@
 namespace OGRE {
 	class RenderWindow;
 	class Root;
-}
+} /* namespace OGRE */
 
 namespace OIS {
 	class InputManager;

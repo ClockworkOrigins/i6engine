@@ -205,24 +205,24 @@ namespace math {
 		 * \param[in] q Quaternion to compare with
 		 * \return true if they are similar according to epsi(angle < eps)
 		 */
-		bool equals(const i6eQuaternion & q, double eps = i6eQuaternion::EPSILON);
+		bool equals(const i6eQuaternion & q, double eps = i6eQuaternion::EPSILON) const;
 
 		/**
 		 * \brief converts the quaternion to an angle / axis representation
 		 * \param[out] angle rotation by this angle
 		 * \param[out] axis around this axis
 		 */
-		void toAxisAngle(i6eVector & axis, double & angle);
+		void toAxisAngle(i6eVector & axis, double & angle) const;
 
 		/**
 		 * \brief Operator '==' for Quaternions
 		 */
-		bool operator==(const i6eQuaternion & b);
+		bool operator==(const i6eQuaternion & b) const;
 
 		/**
 		 * \brief Operator '!=' for Quaternions
 		 */
-		bool operator!=(const i6eQuaternion & b) {
+		bool operator!=(const i6eQuaternion & b) const {
 	  		return !(*this == b);
 	  	}
 

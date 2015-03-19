@@ -37,6 +37,14 @@ namespace core {
 		_coreController->SetInitialized();
 	}
 
+	void SubSystemController::ShutDown() {
+		_bolGlobalShutDown = true;
+
+		for (QueuedModule & objQueuedSubSystem : _objQueuedSubSystems) {
+			objQueuedSubSystem.module->stop();
+		}
+	}
+
 	void SubSystemController::startSubSystemTicking(ModuleController * objSubSystem, const uint32_t lngFrameTime) {
 		_objThreadGrp.add_thread(new boost::thread(boost::bind(&ModuleController::startThreadTicking, objSubSystem, lngFrameTime)));
 

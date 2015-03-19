@@ -226,7 +226,7 @@ void startClockAndScheduler() {
 	i6engine::utils::Clock<i6engine::utils::RealTimeClock> cl;
 	i6engine::core::Scheduler<i6engine::utils::RealTimeClock> sched(cl);
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 
 	sched.runOnce(5000, boost::bind(func2, 0), 0);
 	sched.runRepeated(2500, boost::bind(func2, 1), 0);
@@ -238,11 +238,11 @@ void startClockAndScheduler() {
 	sched.runRepeated(2500, boost::bind(func2, 1), 0);
 	sched.runRepeated(3500, boost::bind(func2, 1), 0);
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 }
 
 TEST(Scheduler, startupAndShutdown) {
-	for (uint32_t i = 0; i < 1000; i++) {
+	for (uint32_t i = 0; i < 100; i++) {
 		startClockAndScheduler();
 	}
 }

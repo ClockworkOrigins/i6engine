@@ -43,7 +43,7 @@ namespace math {
 		stream >> _w >> _x >> _y >> _z;
 	}
 
-	void i6eVector4::insertInMap(const std::string & prefix, std::map<std::string, std::string> & map) {
+	void i6eVector4::insertInMap(const std::string & prefix, std::map<std::string, std::string> & map) const {
 		std::stringstream ss;
 		ss << _w << " " << _x << " " << _y << " " << _z;
 		map[prefix] = ss.str();

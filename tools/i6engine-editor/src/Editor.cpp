@@ -322,7 +322,7 @@ namespace editor {
 			api::input::Input_Keyboard_Update * iku = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent());
 
 			if (!api::EngineController::GetSingleton().getGUIFacade()->getInputCaptured()) {
-				std::string key = api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(api::KeyCode(iku->code));
+				std::string key = api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(iku->code);
 
 				if (_eventMap.find(key) != _eventMap.end()) {
 					_eventMap[key].second = iku->pressed != api::KeyState::KEY_RELEASED;
@@ -330,8 +330,6 @@ namespace editor {
 					if (iku->pressed == api::KeyState::KEY_PRESSED) {
 						_freeFlyMode = !_freeFlyMode;
 					}
-				} else {
-					std::cout << iku->code << std::endl;
 				}
 			}
 		} else if (msg->getSubtype() == api::mouse::MouMouse) {

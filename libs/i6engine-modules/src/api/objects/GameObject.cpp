@@ -185,7 +185,7 @@ namespace api {
 		_type = type;
 	}
 
-	void GameObject::sendCreateMessage() {
+	void GameObject::sendCreateMessage() const {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		std::vector<GameMessage::Ptr> v;
 		synchronize(v);
@@ -238,7 +238,7 @@ namespace api {
 		}
 	}
 
-	void GameObject::setDie() {
+	void GameObject::setDie() const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectMessageType, objects::ObjCreate, core::Method::Delete, new objects::Object_Create_Delete(getID(), getOwner()), i6engine::core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
@@ -302,12 +302,12 @@ namespace api {
 		}
 	}
 
-	void GameObject::synchronize(std::vector<GameMessage::Ptr> & messages) {
+	void GameObject::synchronize(std::vector<GameMessage::Ptr> & messages) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		objects::GOTemplate tpl;
 		tpl._type = getType();
-		for (std::pair<int64_t, ComPtr> & p : _objComponents) {
+		for (const std::pair<int64_t, ComPtr> & p : _objComponents) {
 			if (p.second->getFamilyID() != components::NetworkSenderComponent && p.second->getSync()) {
 				tpl._components.push_back(objects::GOTemplateComponent(p.second->getTemplateName(), p.second->getID(), p.second->synchronize(), false, p.second->getIdentifier(), false));
 			}
@@ -324,7 +324,6 @@ namespace api {
 
 	void GameObject::initializeComponents() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		for (component_table_pair_t & p : _objComponents) {
 			p.second->Init();
 

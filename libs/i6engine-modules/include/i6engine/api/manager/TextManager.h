@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __I6ENGINE_API_TEXTMANAGER_H__
+#define __I6ENGINE_API_TEXTMANAGER_H__
 
 #include <map>
 #include <string>
@@ -35,3 +36,5 @@ namespace api {
 
 } /* namespace api */
 } /* namespace i6engine */
+
+#endif /* __I6ENGINE_API_TEXTMANAGER_H__ */

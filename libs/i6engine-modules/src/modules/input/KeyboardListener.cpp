@@ -38,11 +38,11 @@ namespace modules {
 			_keyStates[objKeyEvent.key] = api::KeyState::KEY_PRESSED;
 			_keyTexts[objKeyEvent.key] = objKeyEvent.text;
 
-			triggerKeyFunction(objKeyEvent.key, "Pressed");
+			triggerKeyFunction(api::KeyCode(objKeyEvent.key), api::KeyState::KEY_PRESSED);
 		} else if (_keyStates[objKeyEvent.key] == api::KeyState::KEY_PRESSED) {
 			_keyStates[objKeyEvent.key] = api::KeyState::KEY_HOLD;
 
-			triggerKeyFunction(objKeyEvent.key, "Hold");
+			triggerKeyFunction(api::KeyCode(objKeyEvent.key), api::KeyState::KEY_HOLD);
 		}
 
 		uint32_t text = objKeyEvent.text;
@@ -53,7 +53,7 @@ namespace modules {
 			}
 		}
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[objKeyEvent.key], objKeyEvent.key, text), i6engine::core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[objKeyEvent.key], api::KeyCode(objKeyEvent.key), text), i6engine::core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -66,32 +66,29 @@ namespace modules {
 		if (_keyStates[objKeyEvent.key] == api::KeyState::KEY_HOLD || _keyStates[objKeyEvent.key] == api::KeyState::KEY_PRESSED) {
 			_keyStates[objKeyEvent.key] = api::KeyState::KEY_RELEASED;
 
-			triggerKeyFunction(objKeyEvent.key, "Released");
+			triggerKeyFunction(api::KeyCode(objKeyEvent.key), api::KeyState::KEY_RELEASED);
 		}
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[objKeyEvent.key], objKeyEvent.key, objKeyEvent.text), i6engine::core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[objKeyEvent.key], api::KeyCode(objKeyEvent.key), objKeyEvent.text), i6engine::core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
 		return true;
 	}
 
-	void KeyboardListener::setKeyFunction(const api::KeyCode name, const std::string & type, const boost::function<void(void)> & f) {
+	void KeyboardListener::setKeyFunction(const api::KeyCode name, const api::KeyState type, const boost::function<void(void)> & f) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		_objInputKeyFunctions[std::make_pair(name, type)] = f;
 	}
 
-	void KeyboardListener::removeKeyFunction(const api::KeyCode name, const std::string & type) {
+	void KeyboardListener::removeKeyFunction(const api::KeyCode name, const api::KeyState type) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		_objInputKeyFunctions.erase(std::make_pair(name, type));
 	}
 
-	void KeyboardListener::triggerKeyFunction(const uint32_t keyCode, const std::string & type) {
+	void KeyboardListener::triggerKeyFunction(const api::KeyCode keyCode, const api::KeyState type) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		InputKeyFunctions::const_iterator iter = _objInputKeyFunctions.find(std::make_pair(api::KeyCode(keyCode), type));
+		InputKeyFunctions::const_iterator iter = _objInputKeyFunctions.find(std::make_pair(keyCode, type));
 		if (iter == _objInputKeyFunctions.end()) {
 			// keyCode is register for another event
 			return;
@@ -101,11 +98,12 @@ namespace modules {
 	}
 
 	void KeyboardListener::Tick() {
+		ASSERT_THREAD_SAFETY_FUNCTION
 		for (size_t i = 0; i < _keyStates.size(); i++) {
 			if (_keyStates[i] == api::KeyState::KEY_PRESSED) {
 				_keyStates[i] = api::KeyState::KEY_HOLD;
 			} else if (_keyStates[i] == api::KeyState::KEY_HOLD) {
-				triggerKeyFunction(i, "Hold");
+				triggerKeyFunction(api::KeyCode(i), api::KeyState::KEY_HOLD);
 
 				uint32_t text = uint32_t(_keyTexts[i]);
 
@@ -115,7 +113,7 @@ namespace modules {
 					}
 				}
 
-				api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[i], i, text), i6engine::core::Subsystem::Input);
+				api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[i], api::KeyCode(i), text), i6engine::core::Subsystem::Input);
 
 				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 			}

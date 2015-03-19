@@ -63,8 +63,6 @@ namespace gui {
 		explicit GUIWidget(const std::string & name);
 		virtual ~GUIWidget();
 
-		void init();
-
 		/**
 		 * \brief Method to process incoming messages.
 		 */

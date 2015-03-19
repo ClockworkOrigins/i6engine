@@ -22,9 +22,9 @@
 #ifndef __I6ENGINE_UTILS_SEMAPHORE_H__
 #define __I6ENGINE_UTILS_SEMAPHORE_H__
 
-#include "i6engine/utils/i6eSystemParameters.h"
-
 #include <condition_variable>
+
+#include "i6engine/utils/i6eSystemParameters.h"
 
 // TODO: (Daniel) Docu
 
@@ -40,7 +40,7 @@ namespace utils {
 		void wait();
 
 	private:
-		std::mutex _mutex;
+		mutable std::mutex _mutex;
 		std::condition_variable _condition;
 		uint32_t _count;
 	};

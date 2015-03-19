@@ -46,11 +46,11 @@ namespace input {
 	 * \brief notifies state of a key
 	 */
 	typedef struct Input_Keyboard_Update : GameMessageStruct {
-		api::KeyState pressed;
-		uint32_t code;
+		KeyState pressed;
+		KeyCode code;
 		uint32_t text;
 		Input_Keyboard_Update() {}
-		Input_Keyboard_Update(const api::KeyState b, const uint32_t c, uint32_t t);
+		Input_Keyboard_Update(const KeyState b, const KeyCode c, uint32_t t);
 		Input_Keyboard_Update * copy() { return new Input_Keyboard_Update(*this); }
 	} Input_Keyboard_Update;
 
@@ -83,9 +83,9 @@ namespace input {
 	 */
 	typedef struct Input_Button_Update : GameMessageStruct {
 		bool pressed;
-		uint32_t code;
+		MouseButtonID code;
 		Input_Button_Update() {}
-		Input_Button_Update(const bool b, const uint32_t c);
+		Input_Button_Update(const bool b, const MouseButtonID c);
 		Input_Button_Update * copy() { return new Input_Button_Update(*this); }
 	} Input_Button_Update;
 
@@ -103,10 +103,10 @@ namespace input {
 	 */
 	typedef struct Input_SubscribeKeyEvent_Create : GameMessageStruct {
 		KeyCode code;
-		std::string type;
+		KeyState type;
 		boost::function<void(void)> func;
 		Input_SubscribeKeyEvent_Create() {}
-		Input_SubscribeKeyEvent_Create(const KeyCode & c, const std::string & t, const boost::function<void(void)> & f);
+		Input_SubscribeKeyEvent_Create(const KeyCode & c, const KeyState t, const boost::function<void(void)> & f);
 		Input_SubscribeKeyEvent_Create * copy() { return new Input_SubscribeKeyEvent_Create(*this); }
 	} Input_SubscribeKeyEvent_Create;
 
@@ -115,10 +115,10 @@ namespace input {
 	 */
 	typedef struct Input_SubscribeKeyEvent_Delete : GameMessageStruct {
 		KeyCode code;
-		std::string type;
+		KeyState type;
 		Input_SubscribeKeyEvent_Delete() {
 		}
-		Input_SubscribeKeyEvent_Delete(const KeyCode & c, const std::string & t);
+		Input_SubscribeKeyEvent_Delete(const KeyCode & c, const KeyState t);
 		Input_SubscribeKeyEvent_Delete * copy() {
 			return new Input_SubscribeKeyEvent_Delete(*this);
 		}
