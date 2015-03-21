@@ -41,6 +41,9 @@ namespace utils {
 	}
 
 	void RealTimeClock::clockUpdater() {
+		// need a bit of sleep until the clock is created completely
+		// FIXME: (Michael) this is REALLY stupid
+		boost::this_thread::sleep(boost::posix_time::microseconds(500));
 		while (_running) {
 			_update();
 			boost::this_thread::sleep(boost::posix_time::microseconds(500));
