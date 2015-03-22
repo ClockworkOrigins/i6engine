@@ -14,49 +14,12 @@
  * limitations under the License.
  */
 
-#include "i6engine/api/components/Component.h"
+#include "i6engine/i6eComponentRegister.h"
 
 #include "boost/bind.hpp"
 
 #include "gtest/gtest.h"
 
-namespace i6Test {
-
-	class RegistrationTestComponent : public i6engine::api::Component {
-	public:
-		RegistrationTestComponent(int64_t id, const i6engine::api::attributeMap & params) : i6engine::api::Component(id, params) {
-		}
-
-		~RegistrationTestComponent() {
-		}
-
-		static i6engine::api::ComPtr createC(const int64_t id, const i6engine::api::attributeMap & params) {
-			return i6engine::utils::make_shared<RegistrationTestComponent, i6engine::api::Component>(id, params);
-		}
-
-		void Init() override {
-		}
-
-		i6engine::api::attributeMap synchronize() override {
-			return i6engine::api::attributeMap();
-		}
-
-		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
-			return std::make_pair(i6engine::api::AddStrategy::ADD, 0);
-		}
-
-		std::string getTemplateName() const override {
-			return "RegistrationTest";
-		}
-
-		std::vector<i6engine::api::componentOptions> getComponentOptions() override {
-			std::vector<i6engine::api::componentOptions> result;
-			return result;
-		}
-	};
-
-} /* namespace i6Test */
-
 TEST(Component, Registration) {
-	EXPECT_TRUE(true);
+	EXPECT_EQ(15, i6engine::api::componentList.size());
 }

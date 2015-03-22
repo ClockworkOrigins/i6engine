@@ -237,7 +237,7 @@ ENDIF(ISIXE_PROFILING)
 #----------------------------------------------------
 	SET(LIBNAME "CLOCKUTILS")
 	SET(LIBHEADER "clockUtils/errors.h")
-	SET(CLOCKUTILS_ROOT ${CMAKE_SOURCE_DIR}/dependencies/clockUtils)
+	SET(CLOCKUTILS_ROOT ${ISIXE_DEP_DIR}/clockUtils)
 	find_package(EasyFind REQUIRED COMPONENTS clock_iniParser)
 	include_directories(SYSTEM ${CLOCKUTILS_INCLUDE_DIR})
 
