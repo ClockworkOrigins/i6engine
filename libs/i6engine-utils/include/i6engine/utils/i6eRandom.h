@@ -36,6 +36,13 @@ namespace utils {
 
 	public:
 		/**
+		 * \brief destructor
+		 */
+		~Random() {
+			delete _linear;
+		}
+
+		/**
 		 * \brief returns a random number in range of unsigned int
 		 */
 		uint32_t rand() const {
@@ -63,10 +70,11 @@ namespace utils {
 		}
 
 		/**
-		 * \brief destructor
+		 * \brief sets a random seed value
 		 */
-		~Random() {
-			delete _linear;
+		void setSeed(uint32_t seed) {
+			std::lock_guard<std::mutex> l(_lock);
+			_linear->seed(seed);
 		}
 
 	private:

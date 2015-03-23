@@ -43,3 +43,33 @@ TEST(i6eRandom, rand) {
 	ASSERT_THROW(i6engine::utils::Random::GetSingletonPtr()->rand(0, 0), i6engine::utils::exceptions::ApiException);
 	ASSERT_THROW(i6engine::utils::Random::GetSingletonPtr()->rand(5, 2), i6engine::utils::exceptions::ApiException);
 }
+
+TEST(i6eRandom, setSeed) {
+	const uint32_t RUNS = 1000;
+
+	std::vector<uint32_t> noSeedFirst;
+	std::vector<uint32_t> noSeedSecond;
+
+	for (uint32_t i = 0; i < RUNS; ++i) {
+		noSeedFirst.push_back(i6engine::utils::Random::GetSingletonPtr()->rand(1000));
+	}
+	for (uint32_t i = 0; i < RUNS; ++i) {
+		noSeedSecond.push_back(i6engine::utils::Random::GetSingletonPtr()->rand(1000));
+	}
+
+	EXPECT_FALSE(std::equal(noSeedFirst.begin(), noSeedFirst.end(), noSeedSecond.begin()));
+
+	std::vector<uint32_t> seedFirst;
+	std::vector<uint32_t> seedSecond;
+
+	i6engine::utils::Random::GetSingleton().setSeed(42);
+	for (uint32_t i = 0; i < RUNS; ++i) {
+		seedFirst.push_back(i6engine::utils::Random::GetSingletonPtr()->rand(1000));
+	}
+	i6engine::utils::Random::GetSingleton().setSeed(42);
+	for (uint32_t i = 0; i < RUNS; ++i) {
+		seedSecond.push_back(i6engine::utils::Random::GetSingletonPtr()->rand(1000));
+	}
+
+	EXPECT_TRUE(std::equal(seedFirst.begin(), seedFirst.end(), seedSecond.begin()));
+}
