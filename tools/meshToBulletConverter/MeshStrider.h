@@ -15,14 +15,14 @@
  */
 
 /**
- * \addtogroup Physics
+ * \addtogroup Tools
  * @{
  */
 
-#ifndef __I6ENGINE_MODULES_MESHSTRIDER_H__
-#define __I6ENGINE_MODULES_MESHSTRIDER_H__
+#ifndef __I6ENGINE_TOOLS_MESHSTRIDER_H__
+#define __I6ENGINE_TOOLS_MESHSTRIDER_H__
 
-#include "i6engine/utils/i6eSystemParameters.h"
+#include "i6engine/i6engineBuildSettings.h"
 
 #include "BulletCollision/CollisionShapes/btStridingMeshInterface.h"
 
@@ -31,13 +31,13 @@ namespace Ogre {
 } /* namespace Ogre */
 
 namespace i6engine {
-namespace modules {
+namespace tools {
 
 	/**
 	 * Translates a Mesh into a Physics Object.
 	 * \todo Use less magic.
 	 */
-	class ISIXE_MODULES_API MeshStrider : public btStridingMeshInterface {
+	class MeshStrider : public btStridingMeshInterface {
 	public:
 		/**
 		 * \brief constructor
@@ -105,10 +105,10 @@ namespace modules {
 		const MeshStrider & operator=(const MeshStrider &);
 	};
 
-} /* namespace modules */
+} /* namespace tools */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_MODULES_MESHSTRIDER_H__ */
+#endif /* __I6ENGINE_TOOLS_MESHSTRIDER_H__ */
 
 /**
  * @}

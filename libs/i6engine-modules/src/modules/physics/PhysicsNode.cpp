@@ -77,10 +77,6 @@ namespace modules {
 			newShape = _manager->createBox(shapeParams);
 			break;
 		}
-		case api::PhysicalStateComponent::ShapeType::MESH: {
-			newShape = _manager->createMeshStrider(shapeParams);
-			break;
-		}
 		case api::PhysicalStateComponent::ShapeType::SPHERE: {
 			newShape = _manager->createSphere(shapeParams);
 			break;

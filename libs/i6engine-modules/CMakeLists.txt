@@ -137,8 +137,6 @@ set(i6modulesSrc
 	${srcdir}/modules/object/ObjectManager.cpp
 
 	${srcdir}/modules/physics/DebugDrawer.cpp
-	${srcdir}/modules/physics/MeshStrider.cpp
-	${srcdir}/modules/physics/MeshManager.cpp
 	${srcdir}/modules/physics/PhysicsController.cpp
 	${srcdir}/modules/physics/PhysicsMailbox.cpp
 	${srcdir}/modules/physics/PhysicsManager.cpp

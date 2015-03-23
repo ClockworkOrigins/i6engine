@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-#include "i6engine/modules/physics/MeshStrider.h"
+#include "MeshStrider.h"
 
 #include "i6engine/utils/Exceptions.h"
 
 #include "OGRE/Ogre.h"
 
 namespace i6engine {
-namespace modules {
+namespace tools {
 
 	int MeshStrider::getNumSubParts() const {
 		int ret = _mesh->getNumSubMeshes();
@@ -112,5 +112,5 @@ namespace modules {
 	void MeshStrider::preallocateIndices(int numindices) {
 	}
 
-} /* namespace modules */
+} /* namespace tools */
 } /* namespace i6engine */

@@ -33,10 +33,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "i6engine/modules/graphics/ResourceManager.h"
 #include "i6engine/modules/physics/DebugDrawer.h"
-#include "i6engine/modules/physics/MeshManager.h"
-#include "i6engine/modules/physics/MeshStrider.h"
 #include "i6engine/modules/physics/PhysicsController.h"
 #include "i6engine/modules/physics/PhysicsNode.h"
 
@@ -164,7 +161,7 @@ namespace modules {
 
 	uint64_t PhysicsManager::_tickCount = 0;
 
-	PhysicsManager::PhysicsManager(PhysicsController * pc) : _ctrl(pc), _collisionShapes(), _meshes(), _dynamicsWorld(), _broadphase(), _dispatcher(), _collisionConfiguration(), _solver(), _nodes(), _lngTime(api::EngineController::GetSingleton().getCurrentTime()), _root(nullptr), _resourceManager(nullptr), _tickList(), _meshManager(new MeshManager()), _paused(false) {
+	PhysicsManager::PhysicsManager(PhysicsController * pc) : _ctrl(pc), _collisionShapes(), _dynamicsWorld(), _broadphase(), _dispatcher(), _collisionConfiguration(), _solver(), _nodes(), _lngTime(api::EngineController::GetSingleton().getCurrentTime()), _tickList(), _paused(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			// Build the broadphase
@@ -194,21 +191,6 @@ namespace modules {
 
 			// add collisioncallback
 			gContactAddedCallback = reinterpret_cast<ContactAddedCallback>(&myContactAddedCallback);
-
-			if (api::EngineController::GetSingletonPtr()->getType() == api::GameType::SERVER) {
-				std::string ogrePath;
-				// GRAPHIC is correct, because we want the same variable as for ogre
-				if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue<std::string>("GRAPHIC", "ogreConfigsPath", ogrePath)) {
-					ISIXE_LOG_ERROR("Physics", "An exception has occurred: value ogreConfigsPath in section GRAPHIC not found!");
-					api::EngineController::GetSingletonPtr()->stop();
-					return;
-				}
-				Ogre::LogManager * lm = new Ogre::LogManager();
-				lm->createLog("ogre.log", true, false, false);
-				_root = new Ogre::Root("", ogrePath + "/ogre.cfg", "");
-				new Ogre::DefaultHardwareBufferManager();
-				_resourceManager = new ResourceManager(ogrePath);
-			}
 		} catch(std::exception & e) {
 			ISIXE_LOG_ERROR("Physics", "An exception has occurred: " << e.what());
 		}
@@ -228,16 +210,12 @@ namespace modules {
 			_dynamicsWorld->removeCollisionObject(obj);
 		}
 
-		delete _resourceManager;
-		delete _root;
 		delete _dynamicsWorld->getDebugDrawer();
 		delete _dynamicsWorld;
 		delete _solver;
 		delete _dispatcher;
 		delete _collisionConfiguration;
 		delete _broadphase;
-
-		removeAll();
 	}
 
 	void PhysicsManager::Tick() {
@@ -330,7 +308,6 @@ namespace modules {
 		uint16_t type = msg->getSubtype();
 
 		if (type == api::physics::PhyClean) {
-			removeAll();
 		} else if (type == api::physics::PhyNode) {
 			api::physics::Physics_Node_Delete * pnc = static_cast<api::physics::Physics_Node_Delete *>(msg->getContent());
 
@@ -494,49 +471,6 @@ namespace modules {
 		return groundShape;
 	}
 
-	btCollisionShape * PhysicsManager::createMeshStrider(const attributeMap & params) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-
-		assert(params.find("mesh") != params.end());
-
-		std::string meshName = params.find("mesh")->second;
-
-		Vec3 localInertia;
-		double mass = 0.0;
-
-		if (params.find("localInertia") != params.end()) {
-			localInertia = Vec3(params, "localInertia");
-		}
-
-		if (params.find("mass") != params.end()) {
-			mass = boost::lexical_cast<double>(params.find("mass")->second);
-		}
-
-		if (_meshes.find(meshName) == _meshes.end()) {
-			_meshes[meshName] = _meshManager->loadMesh(meshName, "i6engine");
-		}
-
-		Ogre::Mesh * mp = _meshes.find(meshName)->second.get();
-
-		btCollisionShape * fallShape = new btBvhTriangleMeshShape(new MeshStrider(mp), true);
-
-		btDefaultSerializer *	serializer = new btDefaultSerializer();
-		serializer->startSerialization();
-		fallShape->serializeSingleShape(serializer);
-		serializer->finishSerialization();
-
-		FILE * file = fopen((meshName + ".bullet").c_str(), "wb");
-		fwrite(serializer->getBufferPointer(), size_t(serializer->getCurrentBufferSize()), 1, file);
-		fclose(file);
-
-		btVector3 inertia = localInertia.toBullet();
-		fallShape->calculateLocalInertia(mass, inertia);
-
-		_collisionShapes.push_back(fallShape);
-
-		return fallShape;
-	}
-
 	btCollisionShape * PhysicsManager::createEmptyShape() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		btCollisionShape * fallShape = new btEmptyShape();
@@ -555,16 +489,6 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_collisionShapes.remove(shape);
 		delete shape;
-	}
-
-	void PhysicsManager::removeAll() {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		removeMeshes();
-	}
-
-	void PhysicsManager::removeMeshes() {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_meshes.clear();
 	}
 
 	PhysicsNode::Ptr PhysicsManager::getPhysicsNode(const int64_t id, const int64_t compId) {

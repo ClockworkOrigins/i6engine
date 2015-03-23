@@ -30,8 +30,6 @@
 
 #include "LinearMath/btAlignedObjectArray.h"
 
-#include "OGRE/OgreMesh.h"
-
 class btBroadphaseInterface;
 class btCollisionDispatcher;
 class btCollisionShape;
@@ -43,14 +41,9 @@ class btMotionState;
 class btRigidBody;
 class btSequentialImpulseConstraintSolver;
 
-namespace Ogre {
-	class Entity;
-}
 namespace i6engine {
 namespace modules {
 
-	class MeshManager;
-	class ResourceManager;
 	class PhysicsController;
 
 	class PhysicsManager {
@@ -119,13 +112,6 @@ namespace modules {
 		btCollisionShape * createPlane(const attributeMap & params);
 
 		/**
-		 * \brief Creates a new RigidBody with a planes collisionShape.
-		 * \param[in] motionState
-		 * \param[in] params attributeMap containing all values set for MeshStrider
-		 */
-		btCollisionShape * createMeshStrider(const attributeMap & params);
-
-		/**
 		 * \brief creates an empty default shape
 		 */
 		btCollisionShape * createEmptyShape();
@@ -136,16 +122,6 @@ namespace modules {
 		 */
 		void remove(btRigidBody * body);
 		void removeShape(btCollisionShape * shape);
-
-		/**
-		 * \brief Deletes all collisionShape and clears the _collisionShapes array
-		 */
-		void removeAll();
-
-		/**
-		 * \brief removes all meshes
-		 */
-		void removeMeshes();
 
 		/**
 		 * \brief
@@ -214,10 +190,6 @@ namespace modules {
 		 */
 		btAlignedObjectArray<btCollisionShape *> _collisionShapes;
 
-		/**
-		 * \brief map of all Meshes
-		 */
-		std::map<std::string, Ogre::MeshPtr> _meshes;
 		btDiscreteDynamicsWorld * _dynamicsWorld;
 		btBroadphaseInterface * _broadphase;
 		btCollisionDispatcher * _dispatcher;
@@ -229,13 +201,7 @@ namespace modules {
 		// http://www.bulletphysics.org/mediawiki-1.5.8/index.php/Collision_Things
 		uint64_t _lngTime;
 
-		Ogre::Root * _root;
-
-		ResourceManager * _resourceManager;
-
 		std::vector<PhysicsNode *> _tickList;
-
-		MeshManager * _meshManager;
 
 		/**
 		 * \brief is the subsystem paused or not?

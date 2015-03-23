@@ -16,10 +16,11 @@
 
 #include <thread>
 
+#include "MeshStrider.h"
+
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/modules/graphics/ResourceManager.h"
-#include "i6engine/modules/physics/MeshStrider.h"
 
 #include "btBulletDynamicsCommon.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
@@ -60,7 +61,7 @@ int main(int argc, char ** argv) {
 		Ogre::Mesh * mp = meshPtr.get();
 
 		std::cout << "Creating collision shape" << std::endl;
-		btCollisionShape * fallShape = new btBvhTriangleMeshShape(new i6engine::modules::MeshStrider(mp), true);
+		btCollisionShape * fallShape = new btBvhTriangleMeshShape(new i6engine::tools::MeshStrider(mp), true);
 
 		btDefaultSerializer * serializer = new btDefaultSerializer();
 		serializer->startSerialization();

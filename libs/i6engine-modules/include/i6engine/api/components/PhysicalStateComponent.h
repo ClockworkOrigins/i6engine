@@ -142,7 +142,6 @@ namespace api {
 		enum class ShapeType : uint16_t {
 			PLANE,	// !< an infinite large plane
 			BOX,	// !< a cuboid
-			MESH,	// !< a complex mesh
 			SPHERE,	// !< a sphere
 			FILE	// !< load from file
 		};
