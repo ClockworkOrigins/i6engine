@@ -1,4 +1,9 @@
-﻿v 0.8.1
+﻿v 0.8.2
+
+Fixes:
+	- cmake now doesn't need to be run twice to build m2etis correctly
+
+v 0.8.1
 
 Enhancements:
 	- GameObject::getGOC can specify return value now via template

@@ -248,6 +248,13 @@ IF(NOT WIN32)
 	find_package(JPEG REQUIRED)
 ENDIF(NOT WIN32)
 
+###############################################################################
+# Configure Build Settings (has to be before building m2etis because m2etis needs i6engineBuildSettings)
+###############################################################################
+
+configure_file(${CMAKE_SOURCE_DIR}/config/i6engineBuildSettings.h.in ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/i6engine)
+
 #----------------------------------------------------
 # m2etis
 #----------------------------------------------------
@@ -286,13 +293,6 @@ set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}" CACHE PATH "The subdirectory t
 IF(ISIXE_TESTING)
 	enable_testing()
 ENDIF(ISIXE_TESTING)
-
-###############################################################################
-# Configure Build Settings
-###############################################################################
-
-configure_file(${CMAKE_SOURCE_DIR}/config/i6engineBuildSettings.h.in ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/i6engine)
 
 include_directories(${CMAKE_BINARY_DIR}/include/)
 
