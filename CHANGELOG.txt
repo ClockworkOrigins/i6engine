@@ -4,6 +4,7 @@ Enhancements:
 	- dependencies aren't downloaded always, but only if they aren't already stored locally
 	- removed mesh collision shapes from physic being created using a mesh directly (use meshToBulletConverter instead und use FILE shape)
 	- load level blocks now until the level is completely loaded by object subsystem
+	- added basic tutorial template
 
 Fixes:
 	- cmake now doesn't need to be run twice to build m2etis correctly
