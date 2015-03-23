@@ -23,6 +23,7 @@ Fixes:
 	- improved performance for waiting subsystems
 	- exchanged strings for key states with enum values
 	- exchanged ints in Input message through their KeyCode
+	- linking against static library offers now all Components
 
 v 0.8.0
 
