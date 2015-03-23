@@ -24,7 +24,9 @@ FILE=${1}
 
 mkdir -p ${EX_DIR}
 
-wget http://www.clockwork-origins.de/dependencies/${FILE}
+if [! -f "${EX_DIR}/${FILE}" ]; then
+	wget http://www.clockwork-origins.de/dependencies/${FILE}
 
-mv ${FILE} ${EX_DIR}
+	mv ${FILE} ${EX_DIR}
+fi
 

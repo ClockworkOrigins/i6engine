@@ -1,5 +1,8 @@
 ﻿v 0.8.2
 
+Enhancements:
+	- dependencies aren't downloaded always, but only if they aren't already stored locally
+
 Fixes:
 	- cmake now doesn't need to be run twice to build m2etis correctly
 
