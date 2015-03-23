@@ -22,8 +22,10 @@
 #ifndef __I6ENGINE_API_OBJECTFACADE_H__
 #define __I6ENGINE_API_OBJECTFACADE_H__
 
+#include <condition_variable>
 #include <list>
 #include <map>
+#include <mutex>
 
 #include "i6engine/utils/weakPtr.h"
 
@@ -224,6 +226,9 @@ namespace api {
 
 		boost::function<void(const WeakComPtr &)> _addTicker;
 		boost::function<void(int64_t)> _removeTicker;
+
+		mutable std::mutex _loadLevelLock;
+		mutable std::condition_variable _loadLevelCondVar;
 	};
 
 } /* namespace api */

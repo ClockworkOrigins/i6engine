@@ -31,7 +31,7 @@
 namespace i6engine {
 namespace api {
 
-	ObjectFacade::ObjectFacade() : _GOList(), _lock(), _notify(), _addTicker(), _removeTicker() {
+	ObjectFacade::ObjectFacade() : _GOList(), _lock(), _notify(), _addTicker(), _removeTicker(), _loadLevelLock(), _loadLevelCondVar() {
 	}
 
 	ObjectFacade::~ObjectFacade() {
@@ -99,9 +99,11 @@ namespace api {
 	}
 
 	void ObjectFacade::loadLevel(const std::string & file, const std::string & flags) const {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjLevel, core::Method::Create, new objects::Object_Level_Create(file, flags), core::Subsystem::Unknown);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjLevel, core::Method::Create, new objects::Object_Level_Create(file, flags, [this]() {
+			_loadLevelCondVar.notify_all();
+		}), core::Subsystem::Unknown));
+		std::unique_lock<std::mutex> ul(_loadLevelLock);
+		_loadLevelCondVar.wait(ul);
 	}
 
 	void ObjectFacade::addTicker(const WeakComPtr & c) {

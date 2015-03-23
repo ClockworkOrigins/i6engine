@@ -150,6 +150,11 @@ namespace modules {
 				std::string flags = static_cast<api::objects::Object_Level_Create *>(msg->getContent())->flags;
 
 				loadLevel(file, flags);
+
+				auto func = static_cast<api::objects::Object_Level_Create *>(msg->getContent())->func;
+				if (func != nullptr) {
+					func();
+				}
 			} else if (type == api::objects::ObjRegisterCTemplate) {
 				std::string name = static_cast<api::objects::Object_RegisterCTemplate_Create *>(msg->getContent())->name;
 				api::createGOCCallback func = static_cast<api::objects::Object_RegisterCTemplate_Create *>(msg->getContent())->func;

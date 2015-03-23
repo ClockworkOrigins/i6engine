@@ -79,9 +79,6 @@ namespace sample {
 		// loads the RPG demo level
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/RPGLevel.xml", "Singleplayer");
 
-		// wait until level is loaded => remove as soon as loadLevel blocks until level is loaded
-		std::this_thread::sleep_for(std::chrono::seconds(2));
-
 		// a hack to load rpg library
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").front()->getGOC<i6engine::rpg::components::NPCComponent>(i6engine::rpg::components::config::ComponentTypes::NPCComponent)->getName();
 	}
