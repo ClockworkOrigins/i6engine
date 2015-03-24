@@ -15,6 +15,7 @@ Enhancements:
 	- added a sample showing multilanguage usage
 	- added possibility to use distance fog (linear, exponential and a second exponential one)
 	- added sample application for level editor
+	- added sample showing drag & drop
 
 Fixes:
 	- cmake now doesn't need to be run twice to build m2etis correctly
