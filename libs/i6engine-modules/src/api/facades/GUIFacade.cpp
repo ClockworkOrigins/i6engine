@@ -121,6 +121,15 @@ namespace api {
 		setText(name, text);
 	}
 
+	void GUIFacade::addImageButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & normalImage, const std::string & hoverImage, const std::string & pushedImage) {
+		createWidget(name, "GUIImageButton", type);
+		setPosition(name, x, y);
+		setSize(name, w, h);
+		setProperty(name, "NormalImage", normalImage);
+		setProperty(name, "HoverImage", hoverImage);
+		setProperty(name, "PushedImage", pushedImage);
+	}
+
 	void GUIFacade::setLifetime(const std::string & name, const int64_t time) {
 		GameMessage::Ptr tim = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetLifetime, core::Method::Update, new gui::GUI_Lifetime(name, time), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(tim);
@@ -151,6 +160,10 @@ namespace api {
 
 	void GUIFacade::setEnterTextCallback(const std::string & name, const std::function<void(std::string)> & enterCallback) {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetEnterCallback, core::Method::Update, new gui::GUI_SetEnterTextCallback(name, enterCallback), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::setProperty(const std::string & name, const std::string & prop, const std::string & value) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetProperty, core::Method::Update, new gui::GUI_SetProperty(name, prop, value), core::Subsystem::Unknown));
 	}
 
 	void GUIFacade::addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) {

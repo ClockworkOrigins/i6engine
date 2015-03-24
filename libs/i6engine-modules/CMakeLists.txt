@@ -121,6 +121,7 @@ set(i6modulesSrc
 	${srcdir}/modules/gui/guiwidgets/GUIBar.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIEditbox.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIImage.cpp
+	${srcdir}/modules/gui/guiwidgets/GUIImageButton.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIPrint.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIStatusList.cpp
 	${srcdir}/modules/gui/guiwidgets/GUITextButton.cpp

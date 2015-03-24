@@ -75,6 +75,7 @@ namespace gui {
 		GuiSetDragable,
 		GuiSetDropCallback,
 		GuiSetEnterCallback,
+		GuiSetProperty,
 		GuiMessageTypesCount
 	};
 
@@ -449,6 +450,19 @@ namespace gui {
 			return new GUI_SetEnterTextCallback(*this);
 		}
 	} GUI_SetEnterTextCallback;
+
+	/**
+	 * \brief callback being called when text is changed in Editbox
+	 */
+	typedef struct GUI_SetProperty : GUIUpdateMessageStruct {
+		std::string prop;
+		std::string value;
+		GUI_SetProperty(const std::string & name, const std::string & p, const std::string & v) : GUIUpdateMessageStruct(name), prop(p), value(v) {
+		}
+		GUI_SetProperty * copy() {
+			return new GUI_SetProperty(*this);
+		}
+	} GUI_SetProperty;
 
 } /* namespace gui */
 } /* namespace api */

@@ -176,6 +176,20 @@ namespace gui {
 		void addTextButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & text);
 
 		/**
+		 * \brief Adds a new ImageButton to the screen.
+		 * \param name (Unique) Name of the new object.
+		 * \param type Style of the new object.
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 * \param w Width of the TextButton
+		 * \param h Height of the TextButton
+		 * \param normalImage normal image of the button
+		 * \param hoverImage image of the button when hovered
+		 * \param pushedImage image of the button when pushed
+		 */
+		void addImageButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & normalImage, const std::string & hoverImage, const std::string & pushedImage);
+
+		/**
 		 * \brief Set a text to an specified object.
 		 * \param name Name of the object.
 		 * \param text Text to be set.
@@ -300,6 +314,14 @@ namespace gui {
 		 * \param enterCallback callback to be called when text changes
 		 */
 		void setEnterTextCallback(const std::string & name, const std::function<void(std::string)> & enterCallback);
+
+		/**
+		 * \brief Sets a widgets property
+		 * \param name Name of the Widget
+		 * \param prop property to be set
+		 * \param value new value of the property
+		 */
+		void setProperty(const std::string & name, const std::string & prop, const std::string & value);
 
 		/**
 		 * \brief Adds a text to a widget.
