@@ -16,13 +16,6 @@
 
 #include "RPGApplication.h"
 
-#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX && !_GLIBCXX_USE_NANOSLEEP
-	#define _GLIBCXX_USE_NANOSLEEP
-#endif
-
-#include <thread>
-
-#include "i6engine/math/i6eMath.h"
 #include "i6engine/math/i6eVector.h"
 
 #include "i6engine/api/EngineController.h"
@@ -66,6 +59,9 @@ namespace sample {
 
 		// setting shadow technique... currently only additive stencil possible
 		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique::Stencil_Additive);
+
+		// setting distance fog
+		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setExponentialFog(Vec3(0.9, 0.9, 0.9), 0.005);
 
 		// register ESC to close the application
 		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));

@@ -128,6 +128,18 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
+	void GraphicsFacade::setLinearFog(const Vec3 & colour, double start, double end) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraSetLinearFog, core::Method::Update, new graphics::Graphics_SetLinearFog_Update(colour, start, end), core::Subsystem::Unknown));
+	}
+
+	void GraphicsFacade::setExponentialFog(const Vec3 & colour, double density) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraSetExponentialFog, core::Method::Update, new graphics::Graphics_SetExponentialFog_Update(colour, density), core::Subsystem::Unknown));
+	}
+
+	void GraphicsFacade::setExponentialFog2(const Vec3 & colour, double density) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraSetExponentialFog2, core::Method::Update, new graphics::Graphics_SetExponentialFog_Update(colour, density), core::Subsystem::Unknown));
+	}
+
 	void GraphicsFacade::registerNotifyCallback(const boost::function<void(int64_t)> & f) {
 		_notify = f;
 		_notifyInit = true;

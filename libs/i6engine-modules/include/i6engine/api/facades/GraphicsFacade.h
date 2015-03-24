@@ -132,6 +132,28 @@ namespace api {
 			return _selectables;
 		}
 
+		/**
+		 * \brief sets linear fog
+		 * \params colour colour of the fog
+		 * \params start the distance the fog starts
+		 * \params end the distance the fog is complete thick
+		 */
+		void setLinearFog(const Vec3 & colour, double start, double end);
+
+		/**
+		 * \brief sets exponential fog
+		 * \params colour colour of the fog
+		 * \params density the density of the fog
+		 */
+		void setExponentialFog(const Vec3 & colour, double density);
+
+		/**
+		 * \brief sets exponential fog (2, faster increase of density)
+		 * \params colour colour of the fog
+		 * \params density the density of the fog
+		 */
+		void setExponentialFog2(const Vec3 & colour, double density);
+
 	private:
 		boost::function<void(int64_t)> _notify;
 

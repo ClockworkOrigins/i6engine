@@ -59,7 +59,10 @@ namespace graphics {
 		GraBillboardSet,
 		GraBillboard,
 		GraBillboardRemove,
-		GraShadowTechnique
+		GraShadowTechnique,
+		GraSetLinearFog,
+		GraSetExponentialFog,
+		GraSetExponentialFog2
 	};
 
 	enum class ShadowTechnique {
@@ -585,6 +588,33 @@ namespace graphics {
 			return new Graphics_ShadowTechnique_Update(*this);
 		}
 	} Graphics_ShadowTechnique_Update;
+
+	/**
+	 * \brief sets linear fog
+	 */
+	typedef struct Graphics_SetLinearFog_Update : GameMessageStruct {
+		Vec3 colour;
+		double start;
+		double end;
+		Graphics_SetLinearFog_Update(const Vec3 & c, double s, double e) : GameMessageStruct(), colour(c), start(s), end(e) {
+		}
+		Graphics_SetLinearFog_Update * copy() {
+			return new Graphics_SetLinearFog_Update(*this);
+		}
+	} Graphics_SetLinearFog_Update;
+
+	/**
+	 * \brief sets exponential fog
+	 */
+	typedef struct Graphics_SetExponentialFog_Update : GameMessageStruct {
+		Vec3 colour;
+		double density;
+		Graphics_SetExponentialFog_Update(const Vec3 & c, double d) : GameMessageStruct(), colour(c), density(d) {
+		}
+		Graphics_SetExponentialFog_Update * copy() {
+			return new Graphics_SetExponentialFog_Update(*this);
+		}
+	} Graphics_SetExponentialFog_Update;
 
 } /* namespace graphics */
 } /* namespace api */

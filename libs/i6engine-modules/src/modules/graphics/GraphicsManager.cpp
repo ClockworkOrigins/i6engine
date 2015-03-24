@@ -369,6 +369,15 @@ namespace modules {
 				break;
 			}
 			}
+		} else if (msg->getSubtype() == api::graphics::GraSetLinearFog) {
+			api::graphics::Graphics_SetLinearFog_Update * gslfu = dynamic_cast<api::graphics::Graphics_SetLinearFog_Update *>(msg->getContent());
+			_sceneManager->setFog(Ogre::FogMode::FOG_LINEAR, Ogre::ColourValue(gslfu->colour.getX(), gslfu->colour.getY(), gslfu->colour.getZ()), 0.0, gslfu->start, gslfu->end);
+		} else if (msg->getSubtype() == api::graphics::GraSetExponentialFog) {
+			api::graphics::Graphics_SetExponentialFog_Update * gsefu = dynamic_cast<api::graphics::Graphics_SetExponentialFog_Update *>(msg->getContent());
+			_sceneManager->setFog(Ogre::FogMode::FOG_EXP, Ogre::ColourValue(gsefu->colour.getX(), gsefu->colour.getY(), gsefu->colour.getZ()), gsefu->density);
+		} else if (msg->getSubtype() == api::graphics::GraSetExponentialFog2) {
+			api::graphics::Graphics_SetExponentialFog_Update * gsefu = dynamic_cast<api::graphics::Graphics_SetExponentialFog_Update *>(msg->getContent());
+			_sceneManager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(gsefu->colour.getX(), gsefu->colour.getY(), gsefu->colour.getZ()), gsefu->density);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
