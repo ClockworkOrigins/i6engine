@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-#ifndef __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
-#define __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
+#ifndef __I6ENGINE_SAMPLES_MULTILANGUAGEAPPLICATION_H__
+#define __I6ENGINE_SAMPLES_MULTILANGUAGEAPPLICATION_H__
 
 #include "i6engine/api/Application.h"
 
 namespace sample {
 
-	class RPGApplication : public i6engine::api::Application {
+	class MultilanguageApplication : public i6engine::api::Application {
 	public:
-		RPGApplication();
+		MultilanguageApplication();
 
-		~RPGApplication();
+		~MultilanguageApplication();
 
 		void Initialize();
 
@@ -42,4 +42,4 @@ namespace sample {
 
 } /* namespace sample */
 
-#endif /* __I6ENGINE_SAMPLES_RPGAPPLICATION_H__ */
+#endif /* __I6ENGINE_SAMPLES_MULTILANGUAGEAPPLICATION_H__ */

@@ -14,32 +14,21 @@
  * limitations under the License.
  */
 
-#ifndef __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
-#define __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
+#include "MultilanguageApplication.h"
 
-#include "i6engine/api/Application.h"
+#include "i6engine/api/EngineController.h"
 
-namespace sample {
+int main(int argc, char ** argv) {
+	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false);
 
-	class RPGApplication : public i6engine::api::Application {
-	public:
-		RPGApplication();
+	sample::MultilanguageApplication app;
 
-		~RPGApplication();
+	app.setName("Multilanguage Sample");
 
-		void Initialize();
+	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
 
-		void AfterInitialize();
+	i6engine::api::EngineController::GetSingletonPtr()->start();
 
-		void Tick();
+	return 0;
+}
 
-		bool ShutdownRequest();
-
-		void Finalize();
-		
-		void ShutDown();
-	};
-
-} /* namespace sample */
-
-#endif /* __I6ENGINE_SAMPLES_RPGAPPLICATION_H__ */

@@ -14,6 +14,7 @@
 # limitations under the License.
 ##
 
+add_subdirectory(multilanguage)
 IF(ISIXE_WITH_RPG)
 	add_subdirectory(rpg)
 ENDIF(ISIXE_WITH_RPG)
