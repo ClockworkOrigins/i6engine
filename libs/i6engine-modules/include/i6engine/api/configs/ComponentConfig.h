@@ -57,6 +57,7 @@ namespace components {
 		SoundComponent,
 		SoundListenerComponent,
 		BillboardComponent,
+		FollowComponent,
 		ComponentTypesCount
 	};
 
