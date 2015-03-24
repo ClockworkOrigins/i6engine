@@ -14,11 +14,32 @@
  * limitations under the License.
  */
 
-#include "i6engine/api/EngineController.h"
-#include "i6engine/api/manager/TextManager.h"
+#ifndef __I6ENGINE_SAMPLES_DRAGDROPAPPLICATION_H__
+#define __I6ENGINE_SAMPLES_DRAGDROPAPPLICATION_H__
 
-#include "gtest/gtest.h"
+#include "i6engine/api/Application.h"
 
-TEST(TextManager, getText) {
-	EXPECT_EQ("I", i6engine::api::EngineController::GetSingleton().getTextManager()->getText("PlayerName"));
-}
+namespace sample {
+
+	class DragDropApplication : public i6engine::api::Application {
+	public:
+		DragDropApplication();
+
+		~DragDropApplication();
+
+		void Initialize();
+
+		void AfterInitialize();
+
+		void Tick();
+
+		bool ShutdownRequest();
+
+		void Finalize();
+		
+		void ShutDown();
+	};
+
+} /* namespace sample */
+
+#endif /* __I6ENGINE_SAMPLES_DRAGDROPAPPLICATION_H__ */

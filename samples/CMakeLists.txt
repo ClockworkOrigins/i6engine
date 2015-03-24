@@ -14,6 +14,7 @@
 # limitations under the License.
 ##
 
+add_subdirectory(dragdrop)
 IF(ISIXE_WITH_EDITOR AND ISIXE_WITH_TOOLS)
 	add_subdirectory(leveleditor)
 ENDIF(ISIXE_WITH_EDITOR AND ISIXE_WITH_TOOLS)

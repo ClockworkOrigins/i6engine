@@ -53,6 +53,7 @@ namespace api {
 			_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
 			_window->subscribeEvent(CEGUI::Window::EventMouseButtonUp, CEGUI::Event::Subscriber(&GUIWidget::drop, this));
 			_window->subscribeEvent(CEGUI::Window::EventMouseMove, CEGUI::Event::Subscriber(&GUIWidget::mouseMove, this));
+			_window->subscribeEvent(CEGUI::Window::EventMouseLeavesArea, CEGUI::Event::Subscriber(&GUIWidget::mouseLeave, this));
 		} else if (type == gui::GUIMessageTypes::GuiSetDropCallback) {
 			_dropCallback = dynamic_cast<gui::GUI_SetDropCallback *>(message)->callback;
 		} else if (type == gui::GUIMessageTypes::GuiSubscribeEvent) {
@@ -101,7 +102,6 @@ namespace api {
 		_dragOffset.setX(dynamic_cast<const CEGUI::MouseEventArgs *>(&e)->position.d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _window->getPosition().d_x.d_scale);
 		_dragOffset.setY(dynamic_cast<const CEGUI::MouseEventArgs *>(&e)->position.d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _window->getPosition().d_y.d_scale);
 		_window->setAlwaysOnTop(true);
-		_window->setMousePassThroughEnabled(true);
 		return true;
 	}
 
@@ -127,13 +127,19 @@ namespace api {
 			setPosition(_originalPos.getX(), _originalPos.getY());
 		}
 		_window->setAlwaysOnTop(false);
-		_window->setMousePassThroughEnabled(false);
 		return true;
 	}
 
 	bool GUIWidget::mouseMove(const CEGUI::EventArgs & e) {
 		if (_isDragged) {
 			setPosition(dynamic_cast<const CEGUI::MouseEventArgs *>(&e)->position.d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _dragOffset.getX(), dynamic_cast<const CEGUI::MouseEventArgs *>(&e)->position.d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _dragOffset.getY());
+		}
+		return true;
+	}
+
+	bool GUIWidget::mouseLeave(const CEGUI::EventArgs & e) {
+		if (_isDragged) {
+			setPosition(CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _dragOffset.getX(), CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _dragOffset.getY());
 		}
 		return true;
 	}

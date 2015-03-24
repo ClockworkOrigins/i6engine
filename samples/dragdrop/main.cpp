@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
+#include "DragDropApplication.h"
+
 #include "i6engine/api/EngineController.h"
-#include "i6engine/api/manager/TextManager.h"
 
-#include "gtest/gtest.h"
+int main(int argc, char ** argv) {
+	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false);
 
-TEST(TextManager, getText) {
-	EXPECT_EQ("I", i6engine::api::EngineController::GetSingleton().getTextManager()->getText("PlayerName"));
+	sample::DragDropApplication app;
+
+	app.setName("Drag & Drop Sample");
+
+	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
+
+	i6engine::api::EngineController::GetSingletonPtr()->start();
+
+	return 0;
 }
+

@@ -133,6 +133,7 @@ namespace gui {
 		bool drag(const CEGUI::EventArgs & e);
 		bool drop(const CEGUI::EventArgs & e);
 		bool mouseMove(const CEGUI::EventArgs & e);
+		bool mouseLeave(const CEGUI::EventArgs & e);
 
 		/**
 		 * \brief forbidden
