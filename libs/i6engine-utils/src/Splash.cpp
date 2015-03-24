@@ -21,6 +21,12 @@
 namespace i6engine {
 namespace utils {
 
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+	LRESULT CALLBACK fnWndProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam) {
+		return (DefWindowProc(hwnd, msg, wParam, lParam));
+	}
+#endif
+
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
 	static Display * dis = XOpenDisplay(nullptr);
 #endif
@@ -221,6 +227,8 @@ namespace utils {
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
 		XCloseDisplay(dis);
 		XDestroyImage(_img);
+#elif ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+		DestroyWindow(hWnd);
 #endif
 	}
 
@@ -284,6 +292,42 @@ namespace utils {
 		}
 
 		XFreeGC(dis, copyGC);
+#elif ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+		TCHAR * szClassName = const_cast<char *>(name.c_str());
+		WNDCLASSEX wc;
+		BITMAP qB;
+
+		wc.lpszClassName = szClassName;                     //Important Field!  Character string identifying window class
+		wc.lpfnWndProc = fnWndProc;                       //Important Field!  Function Pointer.  Address of Window Procedure
+		wc.cbSize = sizeof(WNDCLASSEX);             //Those top two fields I just listed are very important.  The
+		wc.style = 0;                               //others are of course necessary too, but fully understanding all
+		wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);  //the implications of the .szClassName and .lpfnWndProc fields will
+		wc.hInstance = nullptr;                       //go a long way to helping you understand Win32 coding. The
+		wc.hIconSm = 0;                               //.hBrushBackground field will be the color of the Window's
+		wc.hCursor = LoadCursor(NULL, IDC_ARROW);      //background.  The .cbWndExtra field is very useful as it allows
+		//wc.hbrBackground = (HBRUSH) COLOR_BTNSHADOW;         //you to associate object (Window) data to the instantiated Window's
+		wc.hbrBackground = CreatePatternBrush((HBITMAP)::LoadImage(nullptr, (LPCSTR) file.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION));
+		wc.cbWndExtra = 0;                               //internal structure, i.e., accomodate member data.
+		wc.cbClsExtra = 0;
+		wc.lpszMenuName = NULL;
+		RegisterClassEx(&wc);
+		HBITMAP hBitmap = (HBITMAP)::LoadImage(nullptr, (LPCSTR) file.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		if (!hBitmap) {
+			return;
+		}
+		GetObject(reinterpret_cast<HGDIOBJ>(hBitmap), sizeof(BITMAP), reinterpret_cast<LPVOID>(&qB));
+
+		hWnd = CreateWindowEx(0, szClassName, szClassName, WS_POPUP, 0, 0, qB.bmWidth, qB.bmHeight, HWND_DESKTOP, 0, nullptr, 0);
+
+		RECT rc;
+		GetWindowRect(hWnd, &rc);
+
+		int xPos = (GetSystemMetrics(SM_CXSCREEN) - rc.right) / 2;
+		int yPos = (GetSystemMetrics(SM_CYSCREEN) - rc.bottom) / 2;
+
+		SetWindowPos(hWnd, 0, xPos, yPos, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
+
+		ShowWindow(hWnd, SW_SHOW);
 #endif
 	}
 

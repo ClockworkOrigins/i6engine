@@ -26,16 +26,18 @@
 #include <stdint.h>
 #include <string>
 
-#ifndef WIN32
+#include "i6engine/utils/i6eSystemParameters.h"
+
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
 	#include "jerror.h"
 	#include "jpeglib.h"
 
 	#include <X11/Xatom.h>
 	#include <X11/Xlib.h>
 	#include <X11/Xutil.h>
+#elif ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+	#include <Windows.h>
 #endif /* WIN32 */
-
-#include "i6engine/utils/i6eSystemParameters.h"
 
 #ifndef u_char
 	#define u_char unsigned char
@@ -54,7 +56,7 @@ namespace utils {
 
 	/**
 	 * \class Splash
-	 * \brief Opens and displays JPEG images as splash screens.
+	 * \brief Opens and displays JPEG (Linux) or BMP (Windows) images as splash screens.
 	 *
 	 * Opens given file, saves its decoded contents in a buffer and then displays it.
 	 */
@@ -63,8 +65,9 @@ namespace utils {
 		/**
 		 * \brief Displays the splash screen
 		 *
-		 * Displays the file ../i6engine-utils/Splash.jpg in the center of the screen.
-		 * This file has to be in JPEG format and its color depth has to be 15 or greater.
+		 * Displays the given file in the center of the screen.
+		 * This file has to be in JPEG format and its color depth has to be 15 or greater for Linux.
+		 * This file has to be in BMP format saved by Paint for Windows.
 		 */
 		void showSplash(const std::string & file, const std::string & name);
 
@@ -80,13 +83,15 @@ namespace utils {
 
 	private:
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+		XImage * _img;
+
 		int get_byte_order();
 		void jpeg_error_exit(j_common_ptr cinfo);
 		u_char * decode_jpeg(const char * filename, int * widthPtr, int * heightPtr);
 		XImage * create_image_from_buffer(Display * dis, int screen, u_char * buf, int width, int height);
 		Window create_window(Display * dis, int screen, int x, int y, int width, int height, const std::string & name);
-
-		XImage * _img;
+#elif ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+		HWND hWnd;
 #endif
 	};
 
