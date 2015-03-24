@@ -46,11 +46,13 @@ namespace sample {
 		// enter buttons for language switching
 		gf->addImage("Background", "RPG/StaticImage", "RPG", "MainMenu", 0.0, 0.0, 1.0, 1.0);
 
+		// 20 slots accepting drops
 		for (size_t i = 0; i < 20; i++) {
 			gf->addImage("Slot" + std::to_string(i), "RPG/StaticImage", "RPG", "TbM_Filling", 0.1 + 0.1666666 * (i % 5), 0.125 + 0.2 * (i / 5), 0.1333333, 0.175);
 			gf->enableDropTarget("Slot" + std::to_string(i), true);
 		}
 
+		// 5 images being dragable
 		for (size_t i = 0; i < 5; i++) {
 			gf->addImage("Image" + std::to_string(i), "RPG/StaticImage", "RPG", "NewCloseButtonNormal", 0.1 + 0.1666666 * (i % 5), 0.125 + 0.2 * (i / 5), 0.1333333, 0.175);
 			gf->setDragable("Image" + std::to_string(i), true);

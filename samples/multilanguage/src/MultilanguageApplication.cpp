@@ -48,6 +48,7 @@ namespace sample {
 		gf->addTextButton("GermanButton", "RPG/Button", 0.05, 0.05, 0.1, 0.05, i6engine::api::EngineController::GetSingleton().getTextManager()->getText("German_Key"));
 		gf->addTextButton("EnglishButton", "RPG/Button", 0.05, 0.11, 0.1, 0.05, i6engine::api::EngineController::GetSingleton().getTextManager()->getText("English_Key"));
 
+		// onClick events setting new language
 		gf->subscribeEvent("GermanButton", "Clicked", boost::bind(&i6engine::api::LanguageManager::setLanguage, i6engine::api::EngineController::GetSingleton().getLanguageManager(), "Deutsch"));
 		gf->subscribeEvent("EnglishButton", "Clicked", boost::bind(&i6engine::api::LanguageManager::setLanguage, i6engine::api::EngineController::GetSingleton().getLanguageManager(), "English"));
 
