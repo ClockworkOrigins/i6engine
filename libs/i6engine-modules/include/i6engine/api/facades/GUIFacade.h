@@ -190,6 +190,19 @@ namespace gui {
 		void addImageButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & normalImage, const std::string & hoverImage, const std::string & pushedImage);
 
 		/**
+		 * \brief Adds a new ToggleButton to the screen.
+		 * \param name (Unique) Name of the new object.
+		 * \param type Style of the new object.
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 * \param w Width of the Editbox
+		 * \param h Height of the Editbox
+		 * \param selected default selection of the ToggleButton
+		 * \param selectedCallback callback to be called when selection changed
+		 */
+		void addToggleButton(const std::string & name, const std::string & type, double x, double y, double w, double h, bool selected, const std::function<void(bool)> & selectedCallback);
+
+		/**
 		 * \brief Set a text to an specified object.
 		 * \param name Name of the object.
 		 * \param text Text to be set.
@@ -322,6 +335,20 @@ namespace gui {
 		 * \param value new value of the property
 		 */
 		void setProperty(const std::string & name, const std::string & prop, const std::string & value);
+
+		/**
+		 * \brief Sets a selection state of widget
+		 * \param name Name of the Widget
+		 * \param selected true if widget is selected
+		 */
+		void setSelected(const std::string & name, bool selected);
+
+		/**
+		 * \brief Sets a selected callback to a ToggleButton
+		 * \param name Name of the Widget
+		 * \param selectedCallback callback to be called when selection changes
+		 */
+		void setSelectedCallback(const std::string & name, const std::function<void(bool)> & selectedCallback);
 
 		/**
 		 * \brief Adds a text to a widget.

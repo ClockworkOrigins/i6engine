@@ -130,6 +130,14 @@ namespace api {
 		setProperty(name, "PushedImage", pushedImage);
 	}
 
+	void GUIFacade::addToggleButton(const std::string & name, const std::string & type, double x, double y, double w, double h, bool selected, const std::function<void(bool)> & selectedCallback) {
+		createWidget(name, "GUIToggleButton", type);
+		setPosition(name, x, y);
+		setSize(name, w, h);
+		setSelected(name, selected);
+		setSelectedCallback(name, selectedCallback);
+	}
+
 	void GUIFacade::setLifetime(const std::string & name, const int64_t time) {
 		GameMessage::Ptr tim = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetLifetime, core::Method::Update, new gui::GUI_Lifetime(name, time), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(tim);
@@ -164,6 +172,14 @@ namespace api {
 
 	void GUIFacade::setProperty(const std::string & name, const std::string & prop, const std::string & value) {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetProperty, core::Method::Update, new gui::GUI_SetProperty(name, prop, value), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::setSelected(const std::string & name, bool selected) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSelected, core::Method::Update, new gui::GUI_SetSelected(name, selected), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::setSelectedCallback(const std::string & name, const std::function<void(bool)> & selectedCallback) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSelectedCallback, core::Method::Update, new gui::GUI_SetSelectedCallback(name, selectedCallback), core::Subsystem::Unknown));
 	}
 
 	void GUIFacade::addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) {

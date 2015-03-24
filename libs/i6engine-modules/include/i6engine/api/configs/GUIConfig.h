@@ -76,6 +76,8 @@ namespace gui {
 		GuiSetDropCallback,
 		GuiSetEnterCallback,
 		GuiSetProperty,
+		GuiSetSelected,
+		GuiSetSelectedCallback,
 		GuiMessageTypesCount
 	};
 
@@ -463,6 +465,30 @@ namespace gui {
 			return new GUI_SetProperty(*this);
 		}
 	} GUI_SetProperty;
+
+	/**
+	 * \brief sets the widget to selected or not
+	 */
+	typedef struct GUI_SetSelected : GUIUpdateMessageStruct {
+		bool selected;
+		GUI_SetSelected(const std::string & name, bool s) : GUIUpdateMessageStruct(name), selected(s) {
+		}
+		GUI_SetSelected * copy() {
+			return new GUI_SetSelected(*this);
+		}
+	} GUI_SetSelected;
+
+	/**
+	* \brief callback being called when selection in ToggleButton changes
+	*/
+	typedef struct GUI_SetSelectedCallback : GUIUpdateMessageStruct {
+		std::function<void(bool)> callback;
+		GUI_SetSelectedCallback(const std::string & name, const std::function<void(bool)> & c) : GUIUpdateMessageStruct(name), callback(c) {
+		}
+		GUI_SetSelectedCallback * copy() {
+			return new GUI_SetSelectedCallback(*this);
+		}
+	} GUI_SetSelectedCallback;
 
 } /* namespace gui */
 } /* namespace api */
