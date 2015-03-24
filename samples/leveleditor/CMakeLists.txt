@@ -15,7 +15,7 @@
 ##
 
 ################################
-# SampleMultilanguage cmake
+# SampleLeveleditor cmake
 ################################
 
 include_directories(include)
@@ -23,22 +23,23 @@ include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
+include_directories(${I6ENGINE_EDITOR_INCLUDE_DIR})
 
-set(SampleMultilanguageSrc
+set(SampleLeveleditorSrc
 	main.cpp
 
-	src/MultilanguageApplication.cpp
+	src/LeveleditorApplication.cpp
 )
 
-add_executable(SampleMultilanguage ${SampleMultilanguageSrc})
-set_target_properties(SampleMultilanguage PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(SampleLeveleditor ${SampleLeveleditorSrc})
+set_target_properties(SampleLeveleditor PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(SampleMultilanguage i6engine-modules)
+target_link_libraries(SampleLeveleditor i6engine-editor)
 
 IF(WIN32)
-	add_custom_command(TARGET SampleMultilanguage POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleMultilanguage.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET SampleLeveleditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleLeveleditor.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(TARGETS SampleMultilanguage
+install(TARGETS SampleLeveleditor
 		DESTINATION ${CMAKE_INSTALL_PREFIX}/samples
 	)

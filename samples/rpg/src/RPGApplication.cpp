@@ -28,7 +28,6 @@
 
 #include "i6engine/rpg/components/Config.h"
 #include "i6engine/rpg/components/AttributeComponent.h"
-#include "i6engine/rpg/components/InventoryComponent.h"
 #include "i6engine/rpg/components/NPCComponent.h"
 #include "i6engine/rpg/components/UsableItemComponent.h"
 
@@ -68,9 +67,9 @@ namespace sample {
 
 		// register rpg components we want to use => will be easier in the futur
 		// do this befor loading the level
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("NPC", boost::bind(&i6engine::rpg::components::NPCComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6engine::rpg::components::AttributeComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("NPC", boost::bind(&i6engine::rpg::components::NPCComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));
 
 		// loads the RPG demo level
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/RPGLevel.xml", "Singleplayer");
