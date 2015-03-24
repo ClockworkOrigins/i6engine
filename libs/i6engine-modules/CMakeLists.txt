@@ -102,6 +102,7 @@ set(i6modulesSrc
 	${srcdir}/api/gui/GUIWidget.cpp
 
 	${srcdir}/api/manager/IDManager.cpp
+	${srcdir}/api/manager/LanguageManager.cpp
 	${srcdir}/api/manager/TextManager.cpp
 
 	${srcdir}/api/objects/GameObject.cpp
