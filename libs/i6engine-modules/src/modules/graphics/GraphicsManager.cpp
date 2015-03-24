@@ -361,6 +361,10 @@ namespace modules {
 				_sceneManager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_ADDITIVE);
 				break;
 			}
+			case api::graphics::ShadowTechnique::Stencil_Modulative: {
+				_sceneManager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
+				break;
+			}
 			default: {
 				break;
 			}

@@ -64,7 +64,8 @@ namespace graphics {
 
 	enum class ShadowTechnique {
 		None,
-		Stencil_Additive
+		Stencil_Additive,
+		Stencil_Modulative
 	};
 
 	struct ISIXE_MODULES_API Resolution {
