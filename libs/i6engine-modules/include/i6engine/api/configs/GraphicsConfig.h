@@ -62,7 +62,8 @@ namespace graphics {
 		GraShadowTechnique,
 		GraSetLinearFog,
 		GraSetExponentialFog,
-		GraSetExponentialFog2
+		GraSetExponentialFog2,
+		GraMovableText
 	};
 
 	enum class ShadowTechnique {
@@ -615,6 +616,48 @@ namespace graphics {
 			return new Graphics_SetExponentialFog_Update(*this);
 		}
 	} Graphics_SetExponentialFog_Update;
+
+	/**
+	 * \brief creates a MovableText on a GraphicsNode
+	 */
+	typedef struct Graphics_MovableText_Create : GameMessageStruct {
+		int64_t targetID;
+		std::string font;
+		std::string text;
+		uint16_t size;
+		Vec3 colour;
+		Graphics_MovableText_Create(int64_t goid, int64_t coid, int64_t tid, const std::string & f, const std::string & t, uint16_t s, const Vec3 & c) : GameMessageStruct(coid, goid), targetID(tid), font(f), text(t), size(s), colour(c) {
+		}
+		Graphics_MovableText_Create * copy() {
+			return new Graphics_MovableText_Create(*this);
+		}
+	} Graphics_MovableText_Create;
+
+	/**
+	 * \brief updates a MovableText on a GraphicsNode
+	 */
+	typedef struct Graphics_MovableText_Update : GameMessageStruct {
+		std::string font;
+		std::string text;
+		uint16_t size;
+		Vec3 colour;
+		Graphics_MovableText_Update(int64_t goid, int64_t coid, const std::string & f, const std::string & t, uint16_t s, const Vec3 & c) : GameMessageStruct(coid, goid), font(f), text(t), size(s), colour(c) {
+		}
+		Graphics_MovableText_Update * copy() {
+			return new Graphics_MovableText_Update(*this);
+		}
+	} Graphics_MovableText_Update;
+
+	/**
+	 * \brief deletes a MovableText on a GraphicsNode
+	 */
+	typedef struct Graphics_MovableText_Delete : GameMessageStruct {
+		Graphics_MovableText_Delete(int64_t goid, int64_t coid) : GameMessageStruct(coid, goid) {
+		}
+		Graphics_MovableText_Delete * copy() {
+			return new Graphics_MovableText_Delete(*this);
+		}
+	} Graphics_MovableText_Delete;
 
 } /* namespace graphics */
 } /* namespace api */

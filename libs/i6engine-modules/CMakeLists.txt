@@ -35,6 +35,7 @@ set(i6components
 	${srcdir}/api/components/LifetimeComponent.cpp
 	${srcdir}/api/components/LuminousAppearanceComponent.cpp
 	${srcdir}/api/components/MeshAppearanceComponent.cpp
+	${srcdir}/api/components/MovableTextComponent.cpp
 	${srcdir}/api/components/MoverInterpolateComponent.cpp
 	${srcdir}/api/components/MoverCircleComponent.cpp
 	${srcdir}/api/components/MovingCameraComponent.cpp
@@ -114,6 +115,7 @@ set(i6modulesSrc
 	${srcdir}/modules/graphics/GraphicsNode.cpp
 	${srcdir}/modules/graphics/ResourceManager.cpp
 	${srcdir}/modules/graphics/Terrain.cpp
+	${srcdir}/modules/graphics/graphicswidgets/MovableText.cpp
 
 	${srcdir}/modules/gui/GUIController.cpp
 	${srcdir}/modules/gui/GUIFactory.cpp

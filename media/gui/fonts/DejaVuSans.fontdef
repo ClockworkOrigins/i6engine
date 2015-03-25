@@ -1,0 +1,9 @@
+DejaVuSans
+{
+	type 		truetype
+	source 		DejaVuSans.ttf
+	size 		10
+	resolution 	96
+}
+
+

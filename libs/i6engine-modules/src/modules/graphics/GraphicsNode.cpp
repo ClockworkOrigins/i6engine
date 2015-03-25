@@ -24,6 +24,7 @@
 #include "i6engine/api/configs/GraphicsConfig.h"
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
+#include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
 #include "OGRE/OgreBillboard.h"
 #include "OGRE/OgreBillboardSet.h"
@@ -39,7 +40,7 @@
 namespace i6engine {
 namespace modules {
 
-	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _parentNode(nullptr), _cameras(), _lights(), _particles(), _sceneNodes(), _animationState(), _animationSpeed(1.0), _lastTime(), _billboardSets() {
+	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _parentNode(nullptr), _cameras(), _lights(), _particles(), _sceneNodes(), _animationState(), _animationSpeed(1.0), _lastTime(), _billboardSets(), _movableTexts() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		Ogre::SceneManager * sm = _manager->getSceneManager();
@@ -168,7 +169,6 @@ namespace modules {
 		// create subnode
 		entity = sm->createEntity(s.str(), meshName);
 		sn->attachObject(entity);
-
 		entity->setVisible(isVisible);
 
 		unsigned short src, dest;
@@ -412,9 +412,14 @@ namespace modules {
 	}
 
 	void GraphicsNode::Tick() {
-		uint64_t cT = i6engine::api::EngineController::GetSingleton().getCurrentTime();
-		_animationState->addTime(_animationSpeed * (cT - _lastTime) / 1000000.0);
-		_lastTime = cT;
+		if (_animationState) {
+			uint64_t cT = i6engine::api::EngineController::GetSingleton().getCurrentTime();
+			_animationState->addTime(_animationSpeed * (cT - _lastTime) / 1000000.0);
+			_lastTime = cT;
+		}
+		for (auto & p : _movableTexts) {
+			p.second->update();
+		}
 	}
 
 	void GraphicsNode::stopAnimation() {
@@ -470,6 +475,29 @@ namespace modules {
 
 		_sceneNode->detachObject(bs);
 		_manager->getSceneManager()->destroyBillboardSet(bs);
+	}
+
+	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
+		MovableText * movableText = new MovableText(_sceneNodes[targetID]->getAttachedObject(0), _manager->getSceneManager(), font);
+		movableText->setText(text);
+		movableText->setSize(size);
+		movableText->setColour(colour);
+		movableText->enable(true);
+		_movableTexts.insert(std::make_pair(coid, movableText));
+		_manager->addTicker(this);
+	}
+
+	void GraphicsNode::updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
+		MovableText * movableText = _movableTexts[coid];
+		movableText->setText(text);
+		movableText->setSize(size);
+		movableText->setColour(colour);
+	}
+
+	void GraphicsNode::deleteMovableText(int64_t coid) {
+		_manager->removeTicker(this);
+		delete _movableTexts[coid];
+		_movableTexts.erase(coid);
 	}
 
 } /* namespace modules */

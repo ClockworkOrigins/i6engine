@@ -19,6 +19,7 @@ Enhancements:
 	- added SubtitleWidget for rpg module
 	- added TooltipWidget and possibility to add tooltips to every widget
 	- added sample showing some widgets in action together with tooltips
+	- added MovableTextComponent allowing to show text above a GameObject aligned to camera
 
 Fixes:
 	- cmake now doesn't need to be run twice to build m2etis correctly
