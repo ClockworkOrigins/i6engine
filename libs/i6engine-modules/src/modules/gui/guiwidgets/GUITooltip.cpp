@@ -38,7 +38,7 @@ namespace modules {
 		auto vec = i6engine::utils::split(text, "~");
 
 		for (std::string s : vec) {
-			lb->addItem(new CEGUI::ListboxTextItem(s, 0, 0, false, false));
+			lb->addItem(new CEGUI::ListboxTextItem(s));
 		}
 		lb->setVisible(false);
 		lb->setVisible(true);

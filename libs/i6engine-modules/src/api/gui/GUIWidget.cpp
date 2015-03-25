@@ -63,6 +63,9 @@ namespace api {
 			_tooltip = dynamic_cast<gui::GUI_SetTooltip *>(message)->tooltip;
 			_window->subscribeEvent(CEGUI::Window::EventMouseEntersArea, CEGUI::Event::Subscriber(&GUIWidget::mouseEnter, this));
 			_window->subscribeEvent(CEGUI::Window::EventMouseLeavesArea, CEGUI::Event::Subscriber(&GUIWidget::mouseLeave, this));
+			if (_tooltipActive) {
+				i6engine::api::EngineController::GetSingleton().getGUIFacade()->setText(_name + "_Tooltip", _tooltip);
+			}
 		} else {
 			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
 		}
@@ -142,7 +145,7 @@ namespace api {
 	}
 
 	bool GUIWidget::mouseEnter(const CEGUI::EventArgs & e) {
-		if (_tooltip.empty()) {
+		if (_tooltip.empty() || _tooltipActive) {
 			return true;
 		}
 		_tooltipActive = true;
@@ -156,7 +159,7 @@ namespace api {
 		if (_isDragged) {
 			setPosition(CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _dragOffset.getX(), CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _dragOffset.getY());
 		}
-		if (_tooltip.empty()) {
+		if (_tooltip.empty() || !_tooltipActive) {
 			return true;
 		}
 		_tooltipActive = false;
