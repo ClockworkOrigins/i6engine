@@ -127,6 +127,7 @@ set(i6modulesSrc
 	${srcdir}/modules/gui/guiwidgets/GUIStatusList.cpp
 	${srcdir}/modules/gui/guiwidgets/GUITextButton.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIToggleButton.cpp
+	${srcdir}/modules/gui/guiwidgets/GUITooltip.cpp
 
 	${srcdir}/modules/input/InputController.cpp
 	${srcdir}/modules/input/InputMailbox.cpp

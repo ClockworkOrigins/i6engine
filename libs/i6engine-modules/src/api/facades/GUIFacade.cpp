@@ -42,13 +42,13 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::setMouseVisibility(const bool visibility) {
+	void GUIFacade::setMouseVisibility(const bool visibility) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiMouseVisible, core::Method::Update, new gui::GUI_MouseVisible_Update(visibility), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::clearAllWindows() {
+	void GUIFacade::clearAllWindows() const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiCleanUp, core::Method::Delete, new gui::GUI_CleanUp_Delete(), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
@@ -66,23 +66,23 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::registerWidgetTemplate(const std::string & name, const boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc) {
+	void GUIFacade::registerWidgetTemplate(const std::string & name, const boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiWidgetTemplate, core::Method::Create, new gui::GUI_WidgetTemplate_Create(name, createFunc), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::createWidget(const std::string & name, const std::string & type, const std::string & style) {
+	void GUIFacade::createWidget(const std::string & name, const std::string & type, const std::string & style) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddWidget, core::Method::Create, new gui::GUI_Widget_Create(name, type, style), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::deleteWidget(const std::string & name) {
+	void GUIFacade::deleteWidget(const std::string & name) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiDeleteWidget, core::Method::Delete, new gui::GUIUpdateMessageStruct(name), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::addPrint(const std::string & name, const std::string & type, const double x, const double y, const std::string & message, gui::Alignment alignment, const int64_t lifetime /*=-1*/) {
+	void GUIFacade::addPrint(const std::string & name, const std::string & type, const double x, const double y, const std::string & message, gui::Alignment alignment, const int64_t lifetime /*=-1*/) const {
 		createWidget(name, "GUIPrint", type);
 		setPosition(name, x, y);
 		setSize(name, 0.15, 0.04); // Default size for Prints
@@ -94,19 +94,19 @@ namespace api {
 		}
 	}
 
-	void GUIFacade::addStatusList(const std::string & name, const std::string & type, const double x, const double y, const int64_t lifetime) {
+	void GUIFacade::addStatusList(const std::string & name, const std::string & type, const double x, const double y, const int64_t lifetime) const {
 		createWidget(name, "GUIStatusList", type);
 		setPosition(name, x, y);
 		setLifetime(name, lifetime);
 	}
 
-	void GUIFacade::addProgressBar(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h) {
+	void GUIFacade::addProgressBar(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h) const {
 		createWidget(name, "GUIBar", type);
 		setPosition(name, x, y);
 		setSize(name, w, h);
 	}
 
-	void GUIFacade::addEditbox(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & defaultText, const std::function<void(std::string)> & enterCallback) {
+	void GUIFacade::addEditbox(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & defaultText, const std::function<void(std::string)> & enterCallback) const {
 		createWidget(name, "GUIEditbox", type);
 		setPosition(name, x, y);
 		setSize(name, w, h);
@@ -114,14 +114,14 @@ namespace api {
 		setEnterTextCallback(name, enterCallback);
 	}
 
-	void GUIFacade::addTextButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & text) {
+	void GUIFacade::addTextButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & text) const {
 		createWidget(name, "GUITextButton", type);
 		setPosition(name, x, y);
 		setSize(name, w, h);
 		setText(name, text);
 	}
 
-	void GUIFacade::addImageButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & normalImage, const std::string & hoverImage, const std::string & pushedImage) {
+	void GUIFacade::addImageButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & normalImage, const std::string & hoverImage, const std::string & pushedImage) const {
 		createWidget(name, "GUIImageButton", type);
 		setPosition(name, x, y);
 		setSize(name, w, h);
@@ -130,7 +130,7 @@ namespace api {
 		setProperty(name, "PushedImage", pushedImage);
 	}
 
-	void GUIFacade::addToggleButton(const std::string & name, const std::string & type, double x, double y, double w, double h, bool selected, const std::function<void(bool)> & selectedCallback) {
+	void GUIFacade::addToggleButton(const std::string & name, const std::string & type, double x, double y, double w, double h, bool selected, const std::function<void(bool)> & selectedCallback) const {
 		createWidget(name, "GUIToggleButton", type);
 		setPosition(name, x, y);
 		setSize(name, w, h);
@@ -138,70 +138,70 @@ namespace api {
 		setSelectedCallback(name, selectedCallback);
 	}
 
-	void GUIFacade::setLifetime(const std::string & name, const int64_t time) {
+	void GUIFacade::setLifetime(const std::string & name, const int64_t time) const {
 		GameMessage::Ptr tim = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetLifetime, core::Method::Update, new gui::GUI_Lifetime(name, time), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(tim);
 	}
 
-	void GUIFacade::setText(const std::string & name, const std::string & text) {
+	void GUIFacade::setText(const std::string & name, const std::string & text) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetText, core::Method::Update, new gui::GUI_Text(name, text), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::setPosition(const std::string & name, const double x, const double y) {
+	void GUIFacade::setPosition(const std::string & name, const double x, const double y) const {
 		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetPosition, core::Method::Update, new gui::GUI_Position(name, x, y), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pos);
 	}
 
-	void GUIFacade::setAmount(const std::string & name, const uint32_t amount) {
+	void GUIFacade::setAmount(const std::string & name, const uint32_t amount) const {
 		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetAmount, core::Method::Update, new gui::GUI_Amount(name, amount), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pos);
 	}
 
-	void GUIFacade::setImage(const std::string & name, const std::string & imageSetName, const std::string & imageName) {
+	void GUIFacade::setImage(const std::string & name, const std::string & imageSetName, const std::string & imageName) const {
 		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetImage, core::Method::Update, new gui::GUI_Image(name, imageSetName, imageName), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pos);
 	}
 
-	void GUIFacade::setEnterTextCallback(const std::string & name, const std::function<void(std::string)> & enterCallback) {
+	void GUIFacade::setEnterTextCallback(const std::string & name, const std::function<void(std::string)> & enterCallback) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetEnterCallback, core::Method::Update, new gui::GUI_SetEnterTextCallback(name, enterCallback), core::Subsystem::Unknown));
 	}
 
-	void GUIFacade::setProperty(const std::string & name, const std::string & prop, const std::string & value) {
+	void GUIFacade::setProperty(const std::string & name, const std::string & prop, const std::string & value) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetProperty, core::Method::Update, new gui::GUI_SetProperty(name, prop, value), core::Subsystem::Unknown));
 	}
 
-	void GUIFacade::setSelected(const std::string & name, bool selected) {
+	void GUIFacade::setSelected(const std::string & name, bool selected) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSelected, core::Method::Update, new gui::GUI_SetSelected(name, selected), core::Subsystem::Unknown));
 	}
 
-	void GUIFacade::setSelectedCallback(const std::string & name, const std::function<void(bool)> & selectedCallback) {
+	void GUIFacade::setSelectedCallback(const std::string & name, const std::function<void(bool)> & selectedCallback) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSelectedCallback, core::Method::Update, new gui::GUI_SetSelectedCallback(name, selectedCallback), core::Subsystem::Unknown));
 	}
 
-	void GUIFacade::addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) {
+	void GUIFacade::addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) const {
 		createWidget(name, "GUIImage", type);
 		setPosition(name, x, y);
 		setSize(name, w, h);
 		setImage(name, imageSetName, imageName);
 	}
 
-	void GUIFacade::setSize(const std::string & name, const double w, const double h) {
+	void GUIFacade::setSize(const std::string & name, const double w, const double h) const {
 		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSize, core::Method::Update, new gui::GUI_Size(name, w, h), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pos);
 	}
 
-	void GUIFacade::setColour(const std::string & name, double alpha, double red, double green, double blue) {
+	void GUIFacade::setColour(const std::string & name, double alpha, double red, double green, double blue) const {
 		GameMessage::Ptr col = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetColour, core::Method::Update, new gui::GUI_Colour(name, alpha, red, green, blue), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(col);
 	}
 
-	void GUIFacade::setFont(const std::string & name, const std::string & font) {
+	void GUIFacade::setFont(const std::string & name, const std::string & font) const {
 		GameMessage::Ptr fon = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetFont, core::Method::Update, new gui::GUI_Text(name, font), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(fon);
 	}
@@ -212,7 +212,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::setProgress(const std::string & name, const double progress) {
+	void GUIFacade::setProgress(const std::string & name, const double progress) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetProgress, core::Method::Update, new gui::GUI_Progress(name, progress), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -253,6 +253,10 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetDropCallback, core::Method::Update, new gui::GUI_SetDropCallback(windowname, callback), core::Subsystem::Unknown));
 	}
 
+	void GUIFacade::setTooltip(const std::string & windowname, const std::string & tooltip) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetTooltip, core::Method::Update, new gui::GUI_SetTooltip(windowname, tooltip), core::Subsystem::Unknown));
+	}
+
 	void GUIFacade::addTicker(GUIWidget * widget) {
 		_addTickerCallback(widget);
 	}
@@ -275,13 +279,13 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::setMouseCursorImage(const std::string & image) {
+	void GUIFacade::setMouseCursorImage(const std::string & image) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiMouseCursorImage, core::Method::Update, new gui::GUI_MouseCursorImage_Update(image), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GUIFacade::addImageset(const std::string & imageset) {
+	void GUIFacade::addImageset(const std::string & imageset) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddImageset, core::Method::Create, new gui::GUI_AddImageset_Create(imageset), core::Subsystem::Unknown));
 	}
 

@@ -78,6 +78,7 @@ namespace gui {
 		GuiSetProperty,
 		GuiSetSelected,
 		GuiSetSelectedCallback,
+		GuiSetTooltip,
 		GuiMessageTypesCount
 	};
 
@@ -489,6 +490,18 @@ namespace gui {
 			return new GUI_SetSelectedCallback(*this);
 		}
 	} GUI_SetSelectedCallback;
+
+	/**
+	 * \brief sets tooltip to a widget
+	 */
+	typedef struct GUI_SetTooltip : GUIUpdateMessageStruct {
+		std::string tooltip;
+		GUI_SetTooltip(const std::string & name, const std::string & t) : GUIUpdateMessageStruct(name), tooltip(t) {
+		}
+		GUI_SetTooltip * copy() {
+			return new GUI_SetTooltip(*this);
+		}
+	} GUI_SetTooltip;
 
 } /* namespace gui */
 } /* namespace api */

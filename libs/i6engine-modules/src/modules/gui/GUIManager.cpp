@@ -34,6 +34,7 @@
 #include "i6engine/modules/gui/guiwidgets/GUIStatusList.h"
 #include "i6engine/modules/gui/guiwidgets/GUITextButton.h"
 #include "i6engine/modules/gui/guiwidgets/GUIToggleButton.h"
+#include "i6engine/modules/gui/guiwidgets/GUITooltip.h"
 
 #include "boost/functional/factory.hpp"
 #include "boost/interprocess/sync/scoped_lock.hpp"
@@ -61,6 +62,7 @@ namespace modules {
 		registerGUIWidgetTemplate("GUIStatusList", boost::factory<GUIStatusList *>());
 		registerGUIWidgetTemplate("GUITextButton", boost::factory<GUITextButton *>());
 		registerGUIWidgetTemplate("GUIToggleButton", boost::factory<GUIToggleButton *>());
+		registerGUIWidgetTemplate("GUITooltip", boost::factory<GUITooltip *>());
 	}
 
 	GUIManager::~GUIManager() {

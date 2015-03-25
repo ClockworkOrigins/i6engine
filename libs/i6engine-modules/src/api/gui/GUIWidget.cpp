@@ -27,7 +27,7 @@
 namespace i6engine {
 namespace api {
 
-	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _mouseOverCallback(), _dropable(false), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback() {
+	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _mouseOverCallback(), _dropable(false), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false) {
 	}
 
 	GUIWidget::~GUIWidget() {
@@ -59,6 +59,10 @@ namespace api {
 		} else if (type == gui::GUIMessageTypes::GuiSubscribeEvent) {
 			subscribeClickEvent(dynamic_cast<gui::GUI_SubscribeEvent_Update *>(message)->func);
 			_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
+		} else if (type == gui::GUIMessageTypes::GuiSetTooltip) {
+			_tooltip = dynamic_cast<gui::GUI_SetTooltip *>(message)->tooltip;
+			_window->subscribeEvent(CEGUI::Window::EventMouseEntersArea, CEGUI::Event::Subscriber(&GUIWidget::mouseEnter, this));
+			_window->subscribeEvent(CEGUI::Window::EventMouseLeavesArea, CEGUI::Event::Subscriber(&GUIWidget::mouseLeave, this));
 		} else {
 			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
 		}
@@ -137,10 +141,26 @@ namespace api {
 		return true;
 	}
 
+	bool GUIWidget::mouseEnter(const CEGUI::EventArgs & e) {
+		if (_tooltip.empty()) {
+			return true;
+		}
+		_tooltipActive = true;
+		i6engine::api::EngineController::GetSingleton().getGUIFacade()->createWidget(_name + "_Tooltip", "GUITooltip", "");
+		i6engine::api::EngineController::GetSingleton().getGUIFacade()->setSize(_name + "_Tooltip", 0.3, 0.05);
+		i6engine::api::EngineController::GetSingleton().getGUIFacade()->setText(_name + "_Tooltip", _tooltip);
+		return true;
+	}
+
 	bool GUIWidget::mouseLeave(const CEGUI::EventArgs & e) {
 		if (_isDragged) {
 			setPosition(CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _dragOffset.getX(), CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _dragOffset.getY());
 		}
+		if (_tooltip.empty()) {
+			return true;
+		}
+		_tooltipActive = false;
+		i6engine::api::EngineController::GetSingleton().getGUIFacade()->deleteWidget(_name + "_Tooltip");
 		return true;
 	}
 
