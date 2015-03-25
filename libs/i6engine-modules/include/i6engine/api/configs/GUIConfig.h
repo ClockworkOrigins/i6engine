@@ -479,8 +479,8 @@ namespace gui {
 	} GUI_SetSelected;
 
 	/**
-	* \brief callback being called when selection in ToggleButton changes
-	*/
+	 * \brief callback being called when selection in ToggleButton changes
+	 */
 	typedef struct GUI_SetSelectedCallback : GUIUpdateMessageStruct {
 		std::function<void(bool)> callback;
 		GUI_SetSelectedCallback(const std::string & name, const std::function<void(bool)> & c) : GUIUpdateMessageStruct(name), callback(c) {

@@ -32,9 +32,12 @@ set(i6rpgSrc
 	${srcdir}/components/ItemComponent.cpp
 	${srcdir}/components/NPCComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp
+	
+	${srcdir}/gui/SubtitleWidget.cpp
 )
 
 SOURCE_GROUP(rpg\\components src/components/*)
+SOURCE_GROUP(rpg\\gui src/gui/*)
 
 IF(ISIXE_BUILD_SHARED)
 	add_library(i6engine-rpg SHARED ${i6rpgSrc})
