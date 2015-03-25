@@ -34,7 +34,8 @@ namespace config {
 		UsableItemComponent,
 		AttributeComponent,
 		NPCComponent,
-		InventoryComponent
+		InventoryComponent,
+		ThirdPersonControlComponent
 	};
 
 } /* namespace config */

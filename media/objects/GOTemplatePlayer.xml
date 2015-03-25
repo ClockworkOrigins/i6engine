@@ -21,11 +21,11 @@
 		<Attribute name="mesh">Placeholder.mesh</Attribute>
 		<Attribute name="visibility">1</Attribute>
 		<Attribute name="pos">0.0 0.0 0.0</Attribute>
-		<Attribute name="rot">1 0 0 0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
 		<Attribute name="scale">0.025 0.025 0.025</Attribute>
 	</Component>
 	<Component template="MovingCamera" owner="true">
-		<Attribute name="pos">0.0 1.0 10.0</Attribute>
+		<Attribute name="pos">0.0 2.0 10.0</Attribute>
 		<Attribute name="lookAt">0.0 5.8 -10.0</Attribute>
 		<Attribute name="nearclip">1</Attribute>
 		<Attribute name="aspect">0.5235987755982988</Attribute>
@@ -45,5 +45,7 @@
 	</Component>
 	<Component template="NPC" owner="true">
 		<Attribute name="name">PlayerName</Attribute>
+	</Component>
+	<Component template="ThirdPersonControl" owner="true">
 	</Component>
 </GOTemplate>

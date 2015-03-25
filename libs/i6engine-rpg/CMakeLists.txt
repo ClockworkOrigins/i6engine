@@ -31,6 +31,7 @@ set(i6rpgSrc
 	${srcdir}/components/InventoryComponent.cpp
 	${srcdir}/components/ItemComponent.cpp
 	${srcdir}/components/NPCComponent.cpp
+	${srcdir}/components/ThirdPersonControlComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp
 	
 	${srcdir}/gui/SubtitleWidget.cpp
