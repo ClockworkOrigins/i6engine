@@ -19,10 +19,8 @@
  * @{
  */
 
-#ifndef __I6ENGINE_RPG_COMPONENTS_ATTRIBUTECOMPONENT_H__
-#define __I6ENGINE_RPG_COMPONENTS_ATTRIBUTECOMPONENT_H__
-
-#include "i6engine/utils/AutoUpdater.h"
+#ifndef __I6ENGINE_RPG_COMPONENTS_HEALTHBARCOMPONENT_H__
+#define __I6ENGINE_RPG_COMPONENTS_HEALTHBARCOMPONENT_H__
 
 #include "i6engine/api/components/Component.h"
 
@@ -30,19 +28,15 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	enum class Attribute {
-		HP,
-		HP_MAX,
-		COUNT
-	};
-
-	class ISIXE_RPG_API AttributeComponent : public api::Component {
+	class ISIXE_RPG_API HealthbarComponent : public api::Component {
 	public:
-		AttributeComponent(int64_t id, const api::attributeMap & params);
+		HealthbarComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
 		void Init() override;
+
+		void Finalize() override;
 
 		api::attributeMap synchronize() override;
 
@@ -55,26 +49,19 @@ namespace components {
 		}
 
 		std::string getTemplateName() const {
-			return "Attribute";
+			return "Healthbar";
 		}
-
-		int32_t getAttributeValue(Attribute attribute) const {
-			return _attributes[size_t(attribute)];
-		}
-
-		void changeAttribute(Attribute attribute, int32_t diff);
-
-		void registerListener(Attribute attribute, const std::function<void(int32_t)> & func);
 
 	private:
-		std::vector<utils::AutoUpdater<int32_t>> _attributes;
+		int32_t _currentHP;
+		int32_t _maxHP;
 	};
 
 } /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_RPG_COMPONENTS_ATTRIBUTECOMPONENT_H__ */
+#endif /* __I6ENGINE_RPG_COMPONENTS_HEALTHBARCOMPONENT_H__ */
 
 /**
  * @}
