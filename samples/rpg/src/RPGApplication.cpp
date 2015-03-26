@@ -28,7 +28,7 @@
 
 #include "i6engine/rpg/components/Config.h"
 #include "i6engine/rpg/components/AttributeComponent.h"
-#include "i6engine/rpg/components/NPCComponent.h"
+#include "i6engine/rpg/components/NameComponent.h"
 #include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 #include "i6engine/rpg/components/UsableItemComponent.h"
 
@@ -69,7 +69,7 @@ namespace sample {
 		// register rpg components we want to use => will be easier in the futur
 		// do this befor loading the level
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6engine::rpg::components::AttributeComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("NPC", boost::bind(&i6engine::rpg::components::NPCComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&i6engine::rpg::components::NameComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&i6engine::rpg::components::ThirdPersonControlComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));
 
@@ -77,7 +77,7 @@ namespace sample {
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/RPGLevel.xml", "Singleplayer");
 
 		// a hack to load rpg library
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").front()->getGOC<i6engine::rpg::components::NPCComponent>(i6engine::rpg::components::config::ComponentTypes::NPCComponent)->getName();
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").front()->getGOC<i6engine::rpg::components::NameComponent>(i6engine::rpg::components::config::ComponentTypes::NameComponent)->getName();
 	}
 
 	void RPGApplication::Tick() {

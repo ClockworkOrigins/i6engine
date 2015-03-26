@@ -13,8 +13,10 @@
 		<Attribute name="scale">1.0 1.0 1.0</Attribute>
 	</Component>
 	<Component template="UsableItem" owner="true">
-		<Attribute name="name">UsableItem_Key</Attribute>
 		<Attribute name="attribute_0">50</Attribute>
 		<Attribute name="value">100</Attribute>
+	</Component>
+	<Component template="Name" owner="true">
+		<Attribute name="name">UsableItem_Key</Attribute>
 	</Component>
 </GOTemplate>

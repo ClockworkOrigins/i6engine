@@ -48,7 +48,6 @@ namespace components {
 		virtual bool use(const api::GOPtr & self) = 0;
 
 	private:
-		std::string _name;
 		uint32_t _value;
 	};
 

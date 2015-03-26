@@ -28,6 +28,6 @@
 		<Attribute name="attribute_0">100</Attribute>
 		<Attribute name="attribute_1">100</Attribute>
 	</Component>
-	<Component template="NPC" owner="true">
+	<Component template="Name" owner="true">
 	</Component>
 </GOTemplate>

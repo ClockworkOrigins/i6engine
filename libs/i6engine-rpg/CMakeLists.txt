@@ -30,7 +30,7 @@ set(i6rpgSrc
 	${srcdir}/components/AttributeComponent.cpp
 	${srcdir}/components/InventoryComponent.cpp
 	${srcdir}/components/ItemComponent.cpp
-	${srcdir}/components/NPCComponent.cpp
+	${srcdir}/components/NameComponent.cpp
 	${srcdir}/components/ThirdPersonControlComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp
 	

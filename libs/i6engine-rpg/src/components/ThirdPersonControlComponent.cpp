@@ -4,20 +4,27 @@
 
 #include "i6engine/math/i6eMath.h"
 
+#include "i6engine/core/configs/SubsystemConfig.h"
+
 #include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/GraphicsFacade.h"
 #include "i6engine/api/facades/InputFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
+#include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/manager/IDManager.h"
+#include "i6engine/api/manager/TextManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/NameComponent.h"
 
 namespace i6engine {
 namespace rpg {
 namespace components {
 
-	ThirdPersonControlComponent::ThirdPersonControlComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), api::MessageSubscriberFacade(), _psc() {
+	ThirdPersonControlComponent::ThirdPersonControlComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), api::MessageSubscriberFacade(), _psc(), _highlightTargetID(-1) {
 		_objFamilyID = config::ThirdPersonControlComponent;
 		_objComponentID = config::ThirdPersonControlComponent;
 	}
@@ -37,6 +44,53 @@ namespace components {
 
 	void ThirdPersonControlComponent::Tick() {
 		processMessages();
+
+		api::GOPtr targetGO;
+		int64_t highlightTargetID = -1;
+		double distance = DBL_MAX;
+		for (auto & go : i6engine::api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
+			if (go->getType() != "Player" && go->getGOC(config::NameComponent) != nullptr) {
+				Vec3 point = (go->getGOC(api::components::PhysicalStateComponent) != nullptr) ? go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent)->getPosition() : go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition();
+				Vec3 offset = _psc.get()->getPosition();
+				Vec3 direction = math::rotateVector(Vec3(0.0, 0.0, 8.0), _psc.get()->getRotation());
+				double currentDistance = (point - offset).length();
+				double currentDistanceFromLine = math::disPointLine(offset, direction, point);
+				if (currentDistance <= 8.0 && currentDistanceFromLine <= 2.0 && (point - (offset + direction)).length() > (point - (offset - direction)).length()) {
+					if (currentDistance + currentDistanceFromLine < distance) {
+						distance = currentDistance + currentDistanceFromLine;
+						highlightTargetID = go->getID();
+						targetGO = go;
+					}
+				}
+			}
+		}
+		if (highlightTargetID != _highlightTargetID) {
+			if (_highlightTargetID == -1) {
+				// add MovableText to new target
+				api::attributeMap params;
+				params.insert(std::make_pair("font", "DejaVuSans"));
+				params.insert(std::make_pair("size", "16"));
+				params.insert(std::make_pair("colour", "1.0 1.0 1.0"));
+				params.insert(std::make_pair("text", api::EngineController::GetSingleton().getTextManager()->getText(targetGO->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName())));
+				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComCreate, core::Method::Create, new api::components::Component_Create_Create(highlightTargetID, api::EngineController::GetSingletonPtr()->getIDManager()->getID(), core::IPKey(), "MovableText", params), core::Subsystem::Unknown));
+			} else {
+				// remove MovableText from old target
+				auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_highlightTargetID);
+				if (go != nullptr) {
+					go->getGOC(api::components::MovableTextComponent)->setDie();
+				}
+				if (highlightTargetID != -1) {
+					// add MovableText to new target
+					api::attributeMap params;
+					params.insert(std::make_pair("font", "DejaVuSans"));
+					params.insert(std::make_pair("size", "16"));
+					params.insert(std::make_pair("colour", "1.0 1.0 1.0"));
+					params.insert(std::make_pair("text", api::EngineController::GetSingleton().getTextManager()->getText(targetGO->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName())));
+					api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComCreate, core::Method::Create, new api::components::Component_Create_Create(highlightTargetID, api::EngineController::GetSingletonPtr()->getIDManager()->getID(), core::IPKey(), "MovableText", params), core::Subsystem::Unknown));
+				}
+			}
+			_highlightTargetID = highlightTargetID;
+		}
 	}
 
 	void ThirdPersonControlComponent::Finalize() {

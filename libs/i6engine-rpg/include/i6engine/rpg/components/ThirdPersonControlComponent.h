@@ -38,6 +38,7 @@ namespace components {
 
 	private:
 		utils::weakPtr<api::PhysicalStateComponent, api::Component> _psc;
+		int64_t _highlightTargetID;
 	};
 
 } /* namespace components */

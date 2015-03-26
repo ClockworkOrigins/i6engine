@@ -21,6 +21,7 @@ Enhancements:
 	- added sample showing some widgets in action together with tooltips
 	- added MovableTextComponent allowing to show text above a GameObject aligned to camera
 	- added basic third person control for rpg module
+	- objects in focus in rpg display now their names
 
 Fixes:
 	- cmake now doesn't need to be run twice to build m2etis correctly

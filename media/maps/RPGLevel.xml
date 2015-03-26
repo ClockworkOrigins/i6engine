@@ -40,7 +40,7 @@
 			<Component template="PhysicalState">
 				<Attribute name="pos">0.0 2.0 10.0</Attribute>
 			</Component>
-			<Component template="NPC">
+			<Component template="Name">
 				<Attribute name="name">NPCName01</Attribute>
 			</Component>
 		</GameObject>

@@ -25,9 +25,7 @@ namespace rpg {
 namespace components {
 
 	ItemComponent::ItemComponent(int64_t id, const api::attributeMap & params) : Component(id, params) {
-		ISIXE_THROW_API_COND("ItemComponent", "name not set!", params.find("name") != params.end());
 		ISIXE_THROW_API_COND("ItemComponent", "value not set!", params.find("value") != params.end());
-		_name = params.find("name")->second;
 		_value = static_cast<uint32_t>(std::stoi(params.find("value")->second.c_str()));
 
 		_objFamilyID = config::ComponentTypes::ItemComponent;
@@ -36,7 +34,6 @@ namespace components {
 	api::attributeMap ItemComponent::synchronize() {
 		api::attributeMap params;
 
-		params.insert(std::make_pair("name", _name));
 		params.insert(std::make_pair("value", std::to_string(_value)));
 
 		return params;
