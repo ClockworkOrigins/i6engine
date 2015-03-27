@@ -74,7 +74,7 @@ namespace api {
 		/**
 		 * \brief synchronizes the Components state
 		 */
-		virtual attributeMap synchronize() override;
+		virtual attributeMap synchronize() const override;
 
 	private:
 		/**

@@ -31,7 +31,7 @@ namespace components {
 	void InventoryComponent::Init() {
 	}
 
-	api::attributeMap InventoryComponent::synchronize() {
+	api::attributeMap InventoryComponent::synchronize() const {
 		api::attributeMap params;
 		return params;
 	}

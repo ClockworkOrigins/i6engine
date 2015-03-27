@@ -22,7 +22,7 @@ namespace api {
 
 		void Tick() override;
 
-		attributeMap synchronize() override;
+		attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
 			return "Follow";

@@ -56,7 +56,7 @@ namespace components {
 		api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("HPBar_" + std::to_string(_id));
 	}
 
-	api::attributeMap HealthbarComponent::synchronize() {
+	api::attributeMap HealthbarComponent::synchronize() const {
 		return api::attributeMap();
 	}
 

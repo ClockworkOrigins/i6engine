@@ -111,7 +111,7 @@ namespace api {
 		sendUpdateMessage();
 	}
 
-	attributeMap LuminousAppearanceComponent::synchronize() {
+	attributeMap LuminousAppearanceComponent::synchronize() const {
 		attributeMap params;
 		_diffuseColor.insertInMap("diffuseColor", params);
 		_attenuation.insertInMap("attenuation", params);

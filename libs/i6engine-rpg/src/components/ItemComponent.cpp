@@ -35,7 +35,7 @@ namespace components {
 		_objFamilyID = config::ComponentTypes::ItemComponent;
 	}
 
-	api::attributeMap ItemComponent::synchronize() {
+	api::attributeMap ItemComponent::synchronize() const {
 		api::attributeMap params;
 
 		params.insert(std::make_pair("value", std::to_string(_value)));

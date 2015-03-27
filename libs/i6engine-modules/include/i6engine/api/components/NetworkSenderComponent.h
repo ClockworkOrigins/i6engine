@@ -37,7 +37,7 @@ namespace api {
 
 		void Init() override;
 
-		attributeMap synchronize() override;
+		attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
 			return "NetworkSender";

@@ -41,7 +41,7 @@ namespace components {
 
 		void Init() override;
 
-		api::attributeMap synchronize() override;
+		api::attributeMap synchronize() const override;
 
 		std::string getTemplateName() const {
 			return "UsableItem";

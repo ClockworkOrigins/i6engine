@@ -22,7 +22,7 @@
 namespace i6engine {
 namespace api {
 
-	NetworkSenderComponent::NetworkSenderComponent() {
+	NetworkSenderComponent::NetworkSenderComponent() : Component() {
 		_objFamilyID = components::NetworkSenderComponent;
 		_objComponentID = components::NetworkSenderComponent;
 	}
@@ -35,7 +35,7 @@ namespace api {
 		go->sendCreateMessage();
 	}
 
-	attributeMap NetworkSenderComponent::synchronize() {
+	attributeMap NetworkSenderComponent::synchronize() const {
 		return attributeMap();
 	}
 

@@ -56,7 +56,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	attributeMap TerrainAppearanceComponent::synchronize() {
+	attributeMap TerrainAppearanceComponent::synchronize() const {
 		attributeMap params;
 
 		params["heightmap"] = _heightmap;

@@ -140,7 +140,7 @@ namespace api {
 		}
 	}
 
-	attributeMap MoverComponent::synchronize() {
+	attributeMap MoverComponent::synchronize() const {
 		attributeMap params;
 
 		// other Component only needs to resume

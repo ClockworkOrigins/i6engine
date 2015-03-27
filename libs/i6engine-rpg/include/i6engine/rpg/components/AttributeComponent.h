@@ -44,7 +44,7 @@ namespace components {
 
 		void Init() override;
 
-		api::attributeMap synchronize() override;
+		api::attributeMap synchronize() const override;
 
 		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
 			return std::make_pair(api::AddStrategy::REJECT, -1);

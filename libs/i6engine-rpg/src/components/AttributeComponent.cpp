@@ -41,7 +41,7 @@ namespace components {
 	void AttributeComponent::Init() {
 	}
 
-	api::attributeMap AttributeComponent::synchronize() {
+	api::attributeMap AttributeComponent::synchronize() const {
 		api::attributeMap params;
 
 		for (size_t i = 0; i < _attributes.size(); i++) {

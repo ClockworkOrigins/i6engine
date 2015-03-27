@@ -56,7 +56,7 @@ namespace components {
 		removeTicker();
 	}
 
-	api::attributeMap ListInventoryComponent::synchronize() {
+	api::attributeMap ListInventoryComponent::synchronize() const {
 		api::attributeMap params;
 		return params;
 	}

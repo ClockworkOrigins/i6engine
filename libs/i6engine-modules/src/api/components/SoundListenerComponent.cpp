@@ -68,7 +68,7 @@ namespace api {
 		}
 	}
 
-	attributeMap SoundListenerComponent::synchronize() {
+	attributeMap SoundListenerComponent::synchronize() const {
 		return attributeMap();
 	}
 

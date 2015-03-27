@@ -43,7 +43,7 @@ namespace components {
 	void UsableItemComponent::Init() {
 	}
 
-	api::attributeMap UsableItemComponent::synchronize() {
+	api::attributeMap UsableItemComponent::synchronize() const {
 		api::attributeMap params = ItemComponent::synchronize();
 
 		for (auto & p : _attributeChange) {

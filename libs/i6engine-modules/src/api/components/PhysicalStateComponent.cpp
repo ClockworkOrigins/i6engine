@@ -275,7 +275,7 @@ namespace api {
 		_shatterInterest = si;
 	}
 
-	attributeMap PhysicalStateComponent::synchronize() {
+	attributeMap PhysicalStateComponent::synchronize() const {
 		attributeMap params = _shapeParams;
 		_position.insertInMap("pos", params);
 		_rotation.insertInMap("rot", params);

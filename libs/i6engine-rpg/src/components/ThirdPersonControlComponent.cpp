@@ -146,7 +146,7 @@ namespace components {
 		}
 	}
 
-	i6engine::api::attributeMap ThirdPersonControlComponent::synchronize() {
+	i6engine::api::attributeMap ThirdPersonControlComponent::synchronize() const {
 		return i6engine::api::attributeMap();
 	}
 

@@ -26,7 +26,7 @@ namespace components {
 
 		void News(const api::GameMessage::Ptr & msg);
 
-		api::attributeMap synchronize() override;
+		api::attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
 			return "ThirdPersonControl";

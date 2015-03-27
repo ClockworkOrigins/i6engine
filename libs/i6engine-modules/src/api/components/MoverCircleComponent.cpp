@@ -129,7 +129,7 @@ namespace api {
 		}
 	}
 
-	attributeMap MoverCircleComponent::synchronize() {
+	attributeMap MoverCircleComponent::synchronize() const {
 		attributeMap params = MoverComponent::synchronize();
 
 		_circleCenter.insertInMap("pos", params);

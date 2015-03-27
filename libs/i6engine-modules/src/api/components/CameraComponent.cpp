@@ -171,7 +171,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	attributeMap CameraComponent::synchronize() {
+	attributeMap CameraComponent::synchronize() const {
 		return attributeMap();
 	}
 

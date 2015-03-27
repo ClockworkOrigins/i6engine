@@ -37,7 +37,7 @@ namespace components {
 	void NameComponent::Init() {
 	}
 
-	api::attributeMap NameComponent::synchronize() {
+	api::attributeMap NameComponent::synchronize() const {
 		api::attributeMap params;
 
 		params.insert(std::make_pair("name", _name));

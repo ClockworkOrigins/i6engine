@@ -64,7 +64,7 @@ namespace api {
 		_lifetime = 0;
 	}
 
-	attributeMap LifetimeComponent::synchronize() {
+	attributeMap LifetimeComponent::synchronize() const {
 		attributeMap params;
 		params["lifetime"] = boost::lexical_cast<std::string>(_lifetime - (EngineController::GetSingleton().getCurrentTime() - _startTime));
 		return params;

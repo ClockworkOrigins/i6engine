@@ -63,7 +63,7 @@ namespace api {
 		/**
 		 * \brief synchronizes the Components state
 		 */
-		attributeMap synchronize() override;
+		attributeMap synchronize() const override;
 
 		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 

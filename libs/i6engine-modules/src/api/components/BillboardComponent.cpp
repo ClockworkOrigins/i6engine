@@ -79,7 +79,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	attributeMap BillboardComponent::synchronize() {
+	attributeMap BillboardComponent::synchronize() const {
 		attributeMap params;
 		return params;
 	}

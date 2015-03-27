@@ -63,7 +63,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Delete, new graphics::Graphics_MovableText_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object));
 	}
 
-	attributeMap MovableTextComponent::synchronize() {
+	attributeMap MovableTextComponent::synchronize() const {
 		attributeMap params;
 		params.insert(std::make_pair("font", _font));
 		params.insert(std::make_pair("text", _text));

@@ -56,7 +56,7 @@ namespace api {
 	void ParticleEmitterComponent::sendUpdateMessage() {
 	}
 
-	attributeMap ParticleEmitterComponent::synchronize() {
+	attributeMap ParticleEmitterComponent::synchronize() const {
 		attributeMap params;
 		params["particleEmitter"] = _emitterName;
 
