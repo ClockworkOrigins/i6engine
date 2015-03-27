@@ -132,7 +132,9 @@ namespace components {
 							auto targetGO = api::EngineController::GetSingleton().getObjectFacade()->getObject(_highlightTargetID);
 							if (targetGO != nullptr) {
 								if (targetGO->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent) != nullptr) {
-									ic->addItem(targetGO);
+									if (ic->addItem(targetGO)) {
+										targetGO->setDie();
+									}
 								}
 							}
 						}

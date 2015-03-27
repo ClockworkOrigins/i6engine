@@ -330,6 +330,11 @@ namespace modules {
 
 		std::map<int64_t, MovableText *> _movableTexts;
 
+		/**
+		 * \brief list of all MovableTexts depending on a mesh. Key is mesh
+		 */
+		std::map<int64_t, std::vector<int64_t>> _observer;
+
 		ASSERT_THREAD_SAFETY_HEADER
 	};
 

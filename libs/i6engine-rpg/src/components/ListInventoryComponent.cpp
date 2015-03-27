@@ -26,11 +26,14 @@
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/facades/InputFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
+#include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/manager/IDManager.h"
+#include "i6engine/api/manager/TextManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
-#include "i6engine/rpg/components/ItemComponent.h"
 #include "i6engine/rpg/components/NameComponent.h"
+#include "i6engine/rpg/components/UsableItemComponent.h"
 
 namespace i6engine {
 namespace rpg {
@@ -64,12 +67,28 @@ namespace components {
 		if (it != _items.end()) {
 			auto it2 = it->second.find(nc->getName());
 			if (it2 != it->second.end()) {
-				it2->second.push_back(item);
+				std::get<ItemEntry::Amount>(it2->second)++;
 			} else {
-				it->second.insert(std::make_pair(nc->getName(), std::vector<api::GOPtr>({ item })));
+				std::vector<api::GameMessage::Ptr> msgs;
+				item->synchronize(msgs);
+				for (size_t i = 0; i < dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.size(); i++) {
+					if (dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components[i]._template == "MovableText") {
+						dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.erase(dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.begin() + int(i));
+						break;
+					}
+				}
+				it->second.insert(std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage())));
 			}
 		} else {
-			_items.insert(std::make_pair(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), std::map<std::string, std::vector<api::GOPtr>>({ std::make_pair(nc->getName(), std::vector<api::GOPtr>({ item })) })));
+			std::vector<api::GameMessage::Ptr> msgs;
+			item->synchronize(msgs);
+			for (size_t i = 0; i < dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.size(); i++) {
+				if (dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components[i]._template == "MovableText") {
+					dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.erase(dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.begin() + int(i));
+					break;
+				}
+			}
+			_items.insert(std::make_pair(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>({ std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage())) })));
 		}
 		return true;
 	}
@@ -93,9 +112,13 @@ namespace components {
 		if (_maxSlot == 0) {
 			_maxSlot = _slotCount / _columns;
 		}
+
+		// info screen in the middle of the bottom
+		gf->addImage("Inventory_InfoScreen", "RPG/StaticImage", "RPG", "TbM_Filling", 0.25, 0.8, 0.5, 0.15);
 		showItems();
-		if (_currentIndex >= _widgets.size() / 2) {
-			_currentIndex = _widgets.size() / 2 - 1;
+
+		if (_currentIndex >= _itemTypeCount) {
+			_currentIndex = _itemTypeCount - 1;
 		}
 		for (uint32_t i = 0; i < _slotCount; i++) {
 			std::string namePrefix = "Inventory_" + std::to_string(_id) + "_" + std::to_string(i) + "_";
@@ -121,6 +144,7 @@ namespace components {
 			gf->deleteWidget(namePrefix + "Back");
 			gf->deleteWidget(namePrefix + "Slot");
 		}
+		gf->deleteWidget("Inventory_InfoScreen");
 		for (auto & s : _widgets) {
 			gf->deleteWidget(s);
 		}
@@ -136,19 +160,49 @@ namespace components {
 		double height = (width * res.width) / res.height;
 
 		uint32_t counter = 0;
+		uint32_t placed = 0;
 		for (auto & p : _items) {
 			for (auto & p2 : p.second) {
-				if (counter < _slotCount) {
+				if (counter >= (_maxSlot - (_slotCount / _columns)) * _columns && counter < (_maxSlot - (_slotCount / _columns)) * _columns + _slotCount) {
 					std::string namePrefix = "Inventory_" + std::to_string(_id) + "_" + std::to_string(counter) + "_";
-					gf->addImage(namePrefix + "Image", "RPG/StaticImage", p2.second[0]->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), p2.second[0]->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), 0.6 + width * (counter % _columns), 0.1 + height * (counter / _columns), width, height);
-					gf->addPrint(namePrefix + "Amount", "RPG/Blanko", 0.6 + width * (counter % _columns) + width / 2, 0.1 + height * (counter / _columns) + 0.7 * height, std::to_string(p2.second.size()), api::gui::Alignment::Center, -1);
+					gf->addImage(namePrefix + "Image", "RPG/StaticImage", std::get<ItemEntry::Imageset>(p2.second), std::get<ItemEntry::Image>(p2.second), 0.6 + width * (placed % _columns), 0.1 + height * (placed / _columns), width, height);
+					gf->addPrint(namePrefix + "Amount", "RPG/Blanko", 0.6 + width * (placed % _columns) + width / 2, 0.1 + height * (placed / _columns) + 0.7 * height, std::to_string(std::get<ItemEntry::Amount>(p2.second)), api::gui::Alignment::Center, -1);
 					gf->setSize(namePrefix + "Amount", width, 0.05);
 					gf->setColour(namePrefix + "Amount", 1.0, 1.0, 1.0, 1.0);
-					if (p2.second.size() == 1) {
+					if (std::get<ItemEntry::Amount>(p2.second) == 1) {
 						gf->setVisibility(namePrefix + "Amount", false);
 					}
 					_widgets.push_back(namePrefix + "Image");
 					_widgets.push_back(namePrefix + "Amount");
+					placed++;
+					if (counter == _currentIndex) {
+						gf->addPrint("Inventory_InfoScreen_Name", "RPG/Blanko", 0.5, 0.82, api::EngineController::GetSingleton().getTextManager()->getText(p2.first), api::gui::Alignment::Center, -1);
+						gf->setSize("Inventory_InfoScreen_Name", 0.5, 0.05);
+						_widgets.push_back("Inventory_InfoScreen_Name");
+						api::GameMessage::Ptr msg = std::get<ItemEntry::Message>(p2.second);
+						api::objects::Object_Create_Create * occ = dynamic_cast<api::objects::Object_Create_Create *>(msg->getContent());
+						api::EngineController::GetSingleton().getObjectFacade()->createGO(occ->tpl, occ->tmpl, api::EngineController::GetSingleton().getUUID(), occ->send, [this, gf](api::GOPtr go) {
+							auto ic = go->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent);
+							gf->addPrint("Inventory_InfoScreen_ValueText", "RPG/Blanko", 0.26, 0.92, api::EngineController::GetSingleton().getTextManager()->getText("Value_Key"), api::gui::Alignment::Left, -1);
+							gf->setSize("Inventory_InfoScreen_ValueText", 0.24, 0.05);
+							gf->addPrint("Inventory_InfoScreen_Value", "RPG/Blanko", 0.5, 0.92, std::to_string(ic->getValue()), api::gui::Alignment::Right, -1);
+							gf->setSize("Inventory_InfoScreen_Value", 0.24, 0.05);
+							_widgets.push_back("Inventory_InfoScreen_ValueText");
+							_widgets.push_back("Inventory_InfoScreen_Value");
+							if (ic->getComponentID() == config::ComponentTypes::UsableItemComponent) {
+								auto attributeChanges = utils::dynamic_pointer_cast<UsableItemComponent>(ic)->getAttributeChanges();
+								uint32_t counter = 0;
+								for (auto & p : attributeChanges) {
+									gf->addPrint("Inventory_InfoScreen_AttributeText_" + std::to_string(counter), "RPG/Blanko", 0.26, 0.85 + 0.03 * counter, api::EngineController::GetSingleton().getTextManager()->getText("Attribute_" + std::to_string(uint32_t(p.first)) + "_Key"), api::gui::Alignment::Left, -1);
+									gf->addPrint("Inventory_InfoScreen_AttributeValue_" + std::to_string(counter), "RPG/Blanko", 0.5, 0.85 + 0.03 * counter, std::to_string(p.second), api::gui::Alignment::Right, -1);
+									_widgets.push_back("Inventory_InfoScreen_AttributeText_" + std::to_string(counter));
+									_widgets.push_back("Inventory_InfoScreen_AttributeValue_" + std::to_string(counter));
+									counter++;
+								}
+							}
+							go->setDie();
+						});
+					}
 				}
 				counter++;
 			}
@@ -201,6 +255,32 @@ namespace components {
 							}
 							hide();
 							show();
+						}
+					} else if (kc == api::KeyCode::KC_E && ks == api::KeyState::KEY_PRESSED) {
+						// use item
+						uint32_t counter = 0;
+						for (auto & p : _items) {
+							for (auto & p2 : p.second) {
+								if (counter == _currentIndex) {
+									api::GameMessage::Ptr msg = std::get<ItemEntry::Message>(p2.second);
+									api::objects::Object_Create_Create * occ = dynamic_cast<api::objects::Object_Create_Create *>(msg->getContent());
+									api::EngineController::GetSingleton().getObjectFacade()->createGO(occ->tpl, occ->tmpl, api::EngineController::GetSingleton().getUUID(), occ->send, [this](api::GOPtr go) {
+										auto ic = go->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent);
+										if (ic->use(getOwnerGO())) {
+											std::string name = go->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName();
+											std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name])--;
+											if (std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name]) == 0) {
+												_items[ic->getComponentID()].erase(name);
+											}
+											hide();
+											show();
+										}
+										go->setDie();
+									});
+									return;
+								}
+								counter++;
+							}
 						}
 					}
 				}

@@ -49,6 +49,10 @@ namespace components {
 
 		bool use(const api::GOPtr & self);
 
+		std::map<Attribute, int32_t> getAttributeChanges() const {
+			return _attributeChange;
+		}
+
 	private:
 		std::map<Attribute, int32_t> _attributeChange;
 	};

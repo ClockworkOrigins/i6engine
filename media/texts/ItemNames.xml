@@ -4,3 +4,19 @@
 	<Language name="Deutsch">Verbrauchsgegenstand</Language>
 	<Language name="English">Usable Item</Language>
 </Key>
+
+<!-- Items in inventory -->
+<Key key="Value_Key">
+	<Language name="Deutsch">Wert</Language>
+	<Language name="English">Value</Language>
+</Key>
+
+<!-- Attributes in inventory -->
+<Key key="Attribute_0_Key">
+	<Language name="Deutsch">Lebensenergie</Language>
+	<Language name="English">Lifepoints</Language>
+</Key>
+<Key key="Attribute_1_Key">
+	<Language name="Deutsch">Max. Lebensenergie</Language>
+	<Language name="English">Max. lifepoints</Language>
+</Key>

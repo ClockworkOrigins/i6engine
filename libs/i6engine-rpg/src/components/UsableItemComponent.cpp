@@ -27,6 +27,13 @@ namespace components {
 
 	UsableItemComponent::UsableItemComponent(int64_t id, const api::attributeMap & params) : ItemComponent(id, params) {
 		_objComponentID = config::ComponentTypes::UsableItemComponent;
+
+		for (uint32_t i = 0; i < uint32_t(Attribute::COUNT); i++) {
+			auto it = params.find("attribute_" + std::to_string(i));
+			if (it != params.end()) {
+				_attributeChange.insert(std::make_pair(Attribute(i), std::stoi(it->second)));
+			}
+		}
 	}
 
 	api::ComPtr UsableItemComponent::createC(int64_t id, const api::attributeMap & params) {

@@ -675,6 +675,9 @@ namespace modules {
 			node->deleteBillboardSetComponent(coid);
 		} else if (msg->getSubtype() == api::graphics::GraMovableText) {
 			GraphicsNode * node = getGraphicsNode(goid);
+			if (node == nullptr) {
+				return;
+			}
 			node->deleteMovableText(coid);
 		}
 	}

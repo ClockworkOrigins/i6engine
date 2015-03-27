@@ -70,7 +70,13 @@ namespace components {
 		}
 
 	protected:
-		std::map<uint32_t, std::map<std::string, std::vector<api::GOPtr>>> _items;
+		enum ItemEntry {
+			Message,
+			Amount,
+			Imageset,
+			Image
+		};
+		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>> _items;
 		bool _shown;
 	};
 

@@ -26,6 +26,7 @@ Enhancements:
 	- added possibility to move selected object in level editor
 	- added possibility to rotate selected object in level editor
 	- added a first inventory implementation
+	- items are collectable now
 
 Fixes:
 	- cmake now doesn't need to be run twice to build m2etis correctly
