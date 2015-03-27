@@ -19,23 +19,25 @@
  * @{
  */
 
-#ifndef __I6ENGINE_RPG_COMPONENTS_INVENTORYCOMPONENT_H__
-#define __I6ENGINE_RPG_COMPONENTS_INVENTORYCOMPONENT_H__
+#ifndef __I6ENGINE_RPG_COMPONENTS_LISTINVENTORYCOMPONENT_H__
+#define __I6ENGINE_RPG_COMPONENTS_LISTINVENTORYCOMPONENT_H__
 
-#include "i6engine/api/components/Component.h"
+#include "i6engine/api/facades/MessageSubscriberFacade.h"
+
+#include "i6engine/rpg/components/InventoryComponent.h"
 
 namespace i6engine {
 namespace rpg {
 namespace components {
 
-	class ISIXE_RPG_API InventoryComponent : public api::Component {
+	class ISIXE_RPG_API ListInventoryComponent : public InventoryComponent, public api::MessageSubscriberFacade {
 	public:
-		InventoryComponent(int64_t id, const api::attributeMap & params);
+		ListInventoryComponent(int64_t id, const api::attributeMap & params);
 
-		virtual ~InventoryComponent() {
-		}
+		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
 		void Init() override;
+		void Finalize() override;
 
 		api::attributeMap synchronize() override;
 
@@ -47,38 +49,44 @@ namespace components {
 			return {};
 		}
 
+		std::string getTemplateName() const {
+			return "ListInventory";
+		}
+
 		/**
 		 * \brief checks whether the item can be added to the inventory and if so it is added
 		 */
-		virtual bool addItem(const api::GOPtr & item) = 0;
+		bool addItem(const api::GOPtr & item);
 
 		/**
 		 * \brief shows the inventory, implementation depends on subclass
 		 */
-		virtual void show() = 0;
+		void show();
 
 		/**
 		 * \brief hides the inventory, implementation depends on subclass
 		 */
-		virtual void hide() = 0;
+		void hide();
 
-		/**
-		 * \brief returns whether the inventory is shown or not
-		 */
-		bool isActive() const {
-			return _shown;
-		}
+	private:
+		uint32_t _columns;
+		uint32_t _slotCount;
+		uint32_t _currentIndex;
+		std::vector<std::string> _widgets;
+		uint32_t _itemTypeCount;
+		uint32_t _maxSlot;
 
-	protected:
-		std::map<uint32_t, std::map<std::string, std::vector<api::GOPtr>>> _items;
-		bool _shown;
+		void showItems();
+
+		void News(const api::GameMessage::Ptr & msg);
+		void Tick() override;
 	};
 
 } /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_RPG_COMPONENTS_INVENTORYCOMPONENT_H__ */
+#endif /* __I6ENGINE_RPG_COMPONENTS_LISTINVENTORYCOMPONENT_H__ */
 
 /**
  * @}

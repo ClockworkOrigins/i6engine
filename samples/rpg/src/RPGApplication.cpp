@@ -29,6 +29,7 @@
 #include "i6engine/rpg/components/Config.h"
 #include "i6engine/rpg/components/AttributeComponent.h"
 #include "i6engine/rpg/components/HealthbarComponent.h"
+#include "i6engine/rpg/components/ListInventoryComponent.h"
 #include "i6engine/rpg/components/NameComponent.h"
 #include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 #include "i6engine/rpg/components/UsableItemComponent.h"
@@ -71,6 +72,7 @@ namespace sample {
 		// do this befor loading the level
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6engine::rpg::components::AttributeComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&i6engine::rpg::components::HealthbarComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&i6engine::rpg::components::ListInventoryComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&i6engine::rpg::components::NameComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&i6engine::rpg::components::ThirdPersonControlComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));

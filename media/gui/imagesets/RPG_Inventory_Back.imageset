@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<Imageset name="RPG_Inventory_Back" imagefile="RPG_Inventory_Back.tga" nativeHorzRes="16" nativeVertRes="16" autoScaled="true" version="2">
+	<Image name="Back" xPos="0" yPos="0" width="16" height="16" />
+</Imageset>

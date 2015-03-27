@@ -47,8 +47,18 @@ namespace components {
 		 */
 		virtual bool use(const api::GOPtr & self) = 0;
 
+		std::string getImageset() const {
+			return _imageset;
+		}
+
+		std::string getImage() const {
+			return _image;
+		}
+
 	private:
 		uint32_t _value;
+		std::string _imageset;
+		std::string _image;
 	};
 
 } /* namespace components */

@@ -2,6 +2,12 @@
 <GUIScheme name="RPG" version="5">
 	<Imageset filename="RPG.imageset" />
 	<Imageset filename="Editbox.imageset" />
+	<Imageset filename="RPG_Inventory_Back.imageset" />
+	<Imageset filename="RPG_Inventory_Slot.imageset" />
+	<Imageset filename="RPG_Inventory_Highlighted.imageset" />
+	
+	<Imageset filename="UsableItem.imageset" />
+	
 	<Font filename="DejaVuSans-8.font" />
 	<Font filename="DejaVuSans-10.font" />
 	<Font filename="DejaVuSansBig.font" />

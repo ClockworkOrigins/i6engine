@@ -50,4 +50,6 @@
 	</Component>
 	<Component template="Healthbar" owner="true">
 	</Component>
+	<Component template="ListInventory" owner="true">
+	</Component>
 </GOTemplate>

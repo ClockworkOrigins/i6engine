@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<Imageset name="UsableItem" imagefile="UsableItem.tga" nativeHorzRes="128" nativeVertRes="128" autoScaled="true" version="2">
+	<Image name="UsableItem" xPos="0" yPos="0" width="128" height="128" />
+</Imageset>

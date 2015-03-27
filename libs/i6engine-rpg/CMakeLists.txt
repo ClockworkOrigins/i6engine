@@ -31,6 +31,7 @@ set(i6rpgSrc
 	${srcdir}/components/HealthbarComponent.cpp
 	${srcdir}/components/InventoryComponent.cpp
 	${srcdir}/components/ItemComponent.cpp
+	${srcdir}/components/ListInventoryComponent.cpp
 	${srcdir}/components/NameComponent.cpp
 	${srcdir}/components/ThirdPersonControlComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp

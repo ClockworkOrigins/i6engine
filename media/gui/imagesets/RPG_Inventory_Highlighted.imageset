@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<Imageset name="RPG_Inventory_Highlighted" imagefile="RPG_Inventory_Highlighted.tga" nativeHorzRes="256" nativeVertRes="256" autoScaled="true" version="2">
+	<Image name="Highlighted" xPos="0" yPos="0" width="256" height="256" />
+</Imageset>

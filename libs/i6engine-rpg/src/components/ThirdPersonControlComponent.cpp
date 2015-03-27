@@ -18,6 +18,8 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/InventoryComponent.h"
+#include "i6engine/rpg/components/ItemComponent.h"
 #include "i6engine/rpg/components/NameComponent.h"
 
 namespace i6engine {
@@ -106,17 +108,34 @@ namespace components {
 			if (subType == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
 				api::input::Input_Keyboard_Update * iku = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent());
 				if (iku->pressed == api::KeyState::KEY_PRESSED || iku->pressed == api::KeyState::KEY_HOLD) {
+					auto ic = getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent);
 					auto psc = _psc.get();
-					if (iku->code == i6engine::api::KeyCode::KC_W) {
+					if (iku->code == i6engine::api::KeyCode::KC_W && !ic->isActive()) {
 						psc->applyCentralForce(Vec3(0.0, 0.0, -30.0), true);
-					} else if (iku->code == i6engine::api::KeyCode::KC_S) {
+					} else if (iku->code == i6engine::api::KeyCode::KC_S && !ic->isActive()) {
 						psc->applyCentralForce(Vec3(0.0, 0.0, 25.0), true);
-					} else if (iku->code == i6engine::api::KeyCode::KC_A) {
+					} else if (iku->code == i6engine::api::KeyCode::KC_A && !ic->isActive()) {
 						Quaternion rot(Vec3(0.0, 1.0, 0.0), 1.5 * PI / 180);
 						psc->applyRotation(rot);
-					} else if (iku->code == i6engine::api::KeyCode::KC_D) {
+					} else if (iku->code == i6engine::api::KeyCode::KC_D && !ic->isActive()) {
 						Quaternion rot(Vec3(0.0, 1.0, 0.0), -1.5 * PI / 180);
 						psc->applyRotation(rot);
+					} else if (iku->code == i6engine::api::KeyCode::KC_TAB && iku->pressed == api::KeyState::KEY_PRESSED) {
+						if (ic->isActive()) {
+							ic->hide();
+						} else {
+							ic->show();
+						}
+					} else if (iku->code == i6engine::api::KeyCode::KC_E && iku->pressed == api::KeyState::KEY_PRESSED && !ic->isActive()) {
+						if (_highlightTargetID != -1) {
+							auto ic = getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent);
+							auto targetGO = api::EngineController::GetSingleton().getObjectFacade()->getObject(_highlightTargetID);
+							if (targetGO != nullptr) {
+								if (targetGO->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent) != nullptr) {
+									ic->addItem(targetGO);
+								}
+							}
+						}
 					}
 				}
 			} else if (subType == api::mouse::MouseMessageTypes::MouMouse) {
