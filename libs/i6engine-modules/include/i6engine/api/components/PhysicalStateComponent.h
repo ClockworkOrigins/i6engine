@@ -317,7 +317,7 @@ namespace api {
 		/**
 		 * \brief synchronizes the Components state
 		 */
-		attributeMap synchronize() override;
+		attributeMap synchronize() const override;
 
 		/**
 		 * \brief performs raytest with given parameters, only one periodic ray for each direction possible // FIXME: (Daniel) not really nice

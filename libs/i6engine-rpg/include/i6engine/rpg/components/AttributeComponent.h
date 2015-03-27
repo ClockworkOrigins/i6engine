@@ -22,6 +22,8 @@
 #ifndef __I6ENGINE_RPG_COMPONENTS_ATTRIBUTECOMPONENT_H__
 #define __I6ENGINE_RPG_COMPONENTS_ATTRIBUTECOMPONENT_H__
 
+#include "i6engine/utils/AutoUpdater.h"
+
 #include "i6engine/api/components/Component.h"
 
 namespace i6engine {
@@ -42,7 +44,7 @@ namespace components {
 
 		void Init() override;
 
-		api::attributeMap synchronize() override;
+		api::attributeMap synchronize() const override;
 
 		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
 			return std::make_pair(api::AddStrategy::REJECT, -1);
@@ -56,10 +58,16 @@ namespace components {
 			return "Attribute";
 		}
 
+		int32_t getAttributeValue(Attribute attribute) const {
+			return _attributes[size_t(attribute)];
+		}
+
 		void changeAttribute(Attribute attribute, int32_t diff);
 
+		void registerListener(Attribute attribute, const std::function<void(int32_t)> & func);
+
 	private:
-		std::vector<int32_t> _attributes;
+		std::vector<utils::AutoUpdater<int32_t>> _attributes;
 	};
 
 } /* namespace components */

@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<Map>
+	<Section flags="Singleplayer">
+		<GameObject name="Floor" send="False">
+		</GameObject>
+		<GameObject name="Sun" send="False">
+		</GameObject>
+	</Section>
+</Map>

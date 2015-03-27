@@ -41,7 +41,7 @@ namespace components {
 	void AttributeComponent::Init() {
 	}
 
-	api::attributeMap AttributeComponent::synchronize() {
+	api::attributeMap AttributeComponent::synchronize() const {
 		api::attributeMap params;
 
 		for (size_t i = 0; i < _attributes.size(); i++) {
@@ -52,7 +52,11 @@ namespace components {
 	}
 
 	void AttributeComponent::changeAttribute(Attribute attribute, int32_t diff) {
-		_attributes[size_t(attribute)] += diff;
+		_attributes[size_t(attribute)] = _attributes[size_t(attribute)] + diff;
+	}
+
+	void AttributeComponent::registerListener(Attribute attribute, const std::function<void(int32_t)> & func) {
+		_attributes[size_t(attribute)].registerUpdate(func);
 	}
 
 } /* namespace components */

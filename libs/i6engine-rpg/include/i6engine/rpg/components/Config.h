@@ -33,8 +33,11 @@ namespace config {
 		ItemComponent = api::components::ComponentTypes::ComponentTypesCount,
 		UsableItemComponent,
 		AttributeComponent,
-		NPCComponent,
-		InventoryComponent
+		NameComponent,
+		InventoryComponent,
+		ThirdPersonControlComponent,
+		HealthbarComponent,
+		ListInventoryComponent
 	};
 
 } /* namespace config */

@@ -64,7 +64,7 @@ namespace api {
 		}
 	}
 
-	attributeMap ShatterComponent::synchronize() {
+	attributeMap ShatterComponent::synchronize() const {
 		return attributeMap();
 	}
 

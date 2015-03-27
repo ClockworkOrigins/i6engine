@@ -119,7 +119,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	attributeMap MeshAppearanceComponent::synchronize() {
+	attributeMap MeshAppearanceComponent::synchronize() const {
 		attributeMap params;
 
 		_position.insertInMap("pos", params);

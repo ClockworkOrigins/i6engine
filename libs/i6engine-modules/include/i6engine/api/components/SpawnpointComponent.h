@@ -78,7 +78,7 @@ namespace api {
 		/**
 		 * \brief synchronizes the Components state
 		 */
-		attributeMap synchronize() override;
+		attributeMap synchronize() const override;
 
 		/**
 		 * \brief returns true, if this spawnpoint currently can be used

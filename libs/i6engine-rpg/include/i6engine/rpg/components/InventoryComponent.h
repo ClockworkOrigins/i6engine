@@ -32,9 +32,12 @@ namespace components {
 	public:
 		InventoryComponent(int64_t id, const api::attributeMap & params);
 
+		virtual ~InventoryComponent() {
+		}
+
 		void Init() override;
 
-		api::attributeMap synchronize() override;
+		api::attributeMap synchronize() const override;
 
 		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
 			return std::make_pair(api::AddStrategy::REJECT, -1);
@@ -42,10 +45,6 @@ namespace components {
 
 		std::vector<api::componentOptions> getComponentOptions() override {
 			return {};
-		}
-
-		std::string getTemplateName() const {
-			return "Inventory";
 		}
 
 		/**
@@ -63,8 +62,22 @@ namespace components {
 		 */
 		virtual void hide() = 0;
 
+		/**
+		 * \brief returns whether the inventory is shown or not
+		 */
+		bool isActive() const {
+			return _shown;
+		}
+
 	protected:
-		std::map<uint32_t, std::map<std::string, std::vector<api::GOPtr>>> _items;
+		enum ItemEntry {
+			Message,
+			Amount,
+			Imageset,
+			Image
+		};
+		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>> _items;
+		bool _shown;
 	};
 
 } /* namespace components */

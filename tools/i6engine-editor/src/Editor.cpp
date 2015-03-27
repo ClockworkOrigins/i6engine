@@ -62,7 +62,7 @@
 namespace i6engine {
 namespace editor {
 
-	Editor::Editor(const std::string & name) : Application(), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(), _lastX(), _lastY() {
+	Editor::Editor(const std::string & name) : Application(), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY() {
 		setName(name);
 
 		_eventMap["forward"] = std::make_pair(boost::bind(&Editor::Forward, this), false);
@@ -77,6 +77,14 @@ namespace editor {
 		_eventMap["rotateDown"] = std::make_pair(boost::bind(&Editor::RotateDown, this), false);
 		_eventMap["leanLeft"] = std::make_pair(boost::bind(&Editor::LeanLeft, this), false);
 		_eventMap["leanRight"] = std::make_pair(boost::bind(&Editor::LeanRight, this), false);
+		_eventMap["scaleUp"] = std::make_pair(boost::bind(&Editor::ScaleUp, this), false);
+		_eventMap["scaleDown"] = std::make_pair(boost::bind(&Editor::ScaleDown, this), false);
+		_eventMap["scaleXUp"] = std::make_pair(boost::bind(&Editor::ScaleXUp, this), false);
+		_eventMap["scaleXDown"] = std::make_pair(boost::bind(&Editor::ScaleXDown, this), false);
+		_eventMap["scaleYUp"] = std::make_pair(boost::bind(&Editor::ScaleYUp, this), false);
+		_eventMap["scaleYDown"] = std::make_pair(boost::bind(&Editor::ScaleYDown, this), false);
+		_eventMap["scaleZUp"] = std::make_pair(boost::bind(&Editor::ScaleZUp, this), false);
+		_eventMap["scaleZDown"] = std::make_pair(boost::bind(&Editor::ScaleZDown, this), false);
 	}
 
 	Editor::~Editor() {
@@ -134,8 +142,17 @@ namespace editor {
 		inputFacade->setKeyMapping(api::KeyCode::KC_END, "rotateDown");
 		inputFacade->setKeyMapping(api::KeyCode::KC_PGUP, "leanLeft");
 		inputFacade->setKeyMapping(api::KeyCode::KC_PGDOWN, "leanRight");
+		inputFacade->setKeyMapping(api::KeyCode::KC_ADD, "scaleUp");
+		inputFacade->setKeyMapping(api::KeyCode::KC_SUBTRACT, "scaleDown");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD1, "scaleXDown");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD2, "scaleXUp");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD4, "scaleYDown");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD5, "scaleYUp");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD7, "scaleZDown");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD8, "scaleZUp");
 
 		inputFacade->setKeyMapping(api::KeyCode::KC_F3, "freeFly");
+		inputFacade->setKeyMapping(api::KeyCode::KC_M, "moveObject");
 	}
 
 	bool Editor::ShutdownRequest() {
@@ -146,7 +163,7 @@ namespace editor {
 	}
 
 	void Editor::Tick() {
-		for (auto p : _eventMap) {
+		for (auto & p : _eventMap) {
 			if (p.second.second) {
 				p.second.first();
 			}
@@ -254,7 +271,7 @@ namespace editor {
 
 		std::map<std::string, std::vector<api::GOPtr>> sectionMap;
 
-		for (auto go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
+		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
 			if (go->getType() == "EditorCam") {
 				continue;
 			}
@@ -275,7 +292,7 @@ namespace editor {
 			sectionMap[flagString].push_back(go);
 		}
 
-		for (auto p : sectionMap) {
+		for (auto & p : sectionMap) {
 			tinyxml2::XMLElement * section = doc.NewElement("Section");
 
 			section->SetAttribute("flags", p.first.c_str());
@@ -320,7 +337,6 @@ namespace editor {
 	void Editor::InputMailbox(const api::GameMessage::Ptr & msg) {
 		if (msg->getSubtype() == api::keyboard::KeyKeyboard) {
 			api::input::Input_Keyboard_Update * iku = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent());
-
 			if (!api::EngineController::GetSingleton().getGUIFacade()->getInputCaptured()) {
 				std::string key = api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(iku->code);
 
@@ -330,11 +346,20 @@ namespace editor {
 					if (iku->pressed == api::KeyState::KEY_PRESSED) {
 						_freeFlyMode = !_freeFlyMode;
 					}
+				} else if (key == "moveObject") {
+					if (iku->pressed == api::KeyState::KEY_PRESSED) {
+						if (_moveObject) {
+							_moveObject = false;
+						} else {
+							if (_selectedObjectID != -1) {
+								_moveObject = true;
+							}
+						}
+					}
 				}
 			}
 		} else if (msg->getSubtype() == api::mouse::MouMouse) {
 			api::input::Input_Mouse_Update * imu = dynamic_cast<api::input::Input_Mouse_Update *>(msg->getContent());
-
 			if (_freeFlyMode) {
 				if (_lastX < imu->intNewX) {
 					RotateLeft();
@@ -354,12 +379,11 @@ namespace editor {
 			}
 		} else if (msg->getSubtype() == api::mouse::MouButton) {
 			api::input::Input_Button_Update * ibu = dynamic_cast<api::input::Input_Button_Update *>(msg->getContent());
-
-			if (ibu->pressed && api::MouseButtonID(ibu->code) == api::MouseButtonID::MB_Left) {
-				auto targetList = i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
+			if (ibu->pressed && api::MouseButtonID(ibu->code) == api::MouseButtonID::MB_Left && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
+				auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
 
 				for (auto & p : targetList) {
-					auto go = i6engine::api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
+					auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
 
 					if (go != nullptr && go->getType() != "EditorCam") {
 						selectObject(p.first);
@@ -424,80 +448,362 @@ namespace editor {
 				api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponentOption, core::Method::Update, new messages::GUI_AddComponentOption("ObjectInfo", std::get<api::ComponentOptionsParameter::ACCESSSTATE>(option) == api::AccessState::READWRITE, std::get<api::ComponentOptionsParameter::NAME>(option), std::get<api::ComponentOptionsParameter::READFUNC>(option), std::get<api::ComponentOptionsParameter::WRITEFUNC>(option)), i6engine::core::Subsystem::Unknown));
 			}
 		}
-
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-
-		utils::sharedPtr<api::PhysicalStateComponent, api::Component> psc = utils::dynamic_pointer_cast<api::PhysicalStateComponent>(go->getGOC(api::components::PhysicalStateComponent));
-		if (psc != nullptr) {
-			ssc->setPosition(psc->getPosition() - Vec3(0.0, 0.0, -2.0));
-			return;
-		}
-
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc2 = utils::dynamic_pointer_cast<api::StaticStateComponent>(go->getGOC(api::components::StaticStateComponent));
-		if (ssc2 != nullptr) {
-			ssc->setPosition(ssc2->getPosition() - Vec3(0.0, 0.0, -2.0));
-			return;
-		}
 	}
 
 	void Editor::Forward() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 1.0), ssc->getRotation()));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 1.0), ssc->getRotation()));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 1.0), ssc->getRotation()), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 1.0), ssc->getRotation()));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::Backward() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -1.0), ssc->getRotation()));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -1.0), ssc->getRotation()));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -1.0), ssc->getRotation()), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -1.0), ssc->getRotation()));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::Left() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(1.0, 0.0, 0.0), ssc->getRotation()));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(1.0, 0.0, 0.0), ssc->getRotation()));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(1.0, 0.0, 0.0), ssc->getRotation()), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(1.0, 0.0, 0.0), ssc->getRotation()));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::Right() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(-1.0, 0.0, 0.0), ssc->getRotation()));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(-1.0, 0.0, 0.0), ssc->getRotation()));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(-1.0, 0.0, 0.0), ssc->getRotation()), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(-1.0, 0.0, 0.0), ssc->getRotation()));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::Down() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, -1.0, 0.0), ssc->getRotation()));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, -1.0, 0.0), ssc->getRotation()));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, -1.0, 0.0), ssc->getRotation()), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, -1.0, 0.0), ssc->getRotation()));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::Up() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 1.0, 0.0), ssc->getRotation()));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 1.0, 0.0), ssc->getRotation()));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, 1.0, 0.0), ssc->getRotation()), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, 1.0, 0.0), ssc->getRotation()));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::RotateLeft() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), -(PI / 48)));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), -(PI / 48)));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setRotation(objPSC->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), -(PI / 48)), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setRotation(objSSC->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), -(PI / 48)));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::RotateRight() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (PI / 48)));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (PI / 48)));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setRotation(objPSC->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (PI / 48)), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setRotation(objSSC->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (PI / 48)));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::RotateUp() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), -(PI / 48)));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), -(PI / 48)));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setRotation(objPSC->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), -(PI / 48)), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setRotation(objSSC->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), -(PI / 48)));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::RotateDown() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), (PI / 48)));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), (PI / 48)));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setRotation(objPSC->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), (PI / 48)), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setRotation(objSSC->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), (PI / 48)));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::LeanLeft() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), -(PI / 48)));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), -(PI / 48)));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setRotation(objPSC->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), -(PI / 48)), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setRotation(objSSC->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), -(PI / 48)));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 	void Editor::LeanRight() {
-		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = utils::dynamic_pointer_cast<api::StaticStateComponent>(_camera->getGOC(api::components::StaticStateComponent));
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		if (!_moveObject) {
+			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
+		} else {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setRotation(objPSC->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setRotation(objSSC->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleUp() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() + Vec3(0.01, 0.01, 0.01), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() + Vec3(0.01, 0.01, 0.01));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleDown() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() - Vec3(0.01, 0.01, 0.01), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() - Vec3(0.01, 0.01, 0.01));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleXUp() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() + Vec3(0.01, 0.0, 0.0), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() + Vec3(0.01, 0.0, 0.0));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleXDown() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() - Vec3(0.01, 0.0, 0.0), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() - Vec3(0.01, 0.0, 0.0));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleYUp() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() + Vec3(0.0, 0.01, 0.0), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() + Vec3(0.0, 0.01, 0.0));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleYDown() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() - Vec3(0.0, 0.01, 0.0), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() - Vec3(0.0, 0.01, 0.0));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleZUp() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() + Vec3(0.0, 0.0, 0.01), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() + Vec3(0.0, 0.0, 0.01));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleZDown() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() - Vec3(0.0, 0.0, 0.01), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() - Vec3(0.0, 0.0, 0.01));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
 	}
 
 } /* namespace editor */

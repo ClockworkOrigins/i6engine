@@ -9,9 +9,31 @@ Enhancements:
 	- added support for modulative stencil shadows
 	- SplashScreen now works also on Windows (use Paint to save as bmp, otherwise it might cause problems)
 	- added a FollowComponent, following a target GameObject with given speed
+	- added ImageButtonWidget
+	- added ToggleButtonWidget
+	- added LanguageManager
+	- added a sample showing multilanguage usage
+	- added possibility to use distance fog (linear, exponential and a second exponential one)
+	- added sample application for level editor
+	- added sample showing drag & drop
+	- added SubtitleWidget for rpg module
+	- added TooltipWidget and possibility to add tooltips to every widget
+	- added sample showing some widgets in action together with tooltips
+	- added MovableTextComponent allowing to show text above a GameObject aligned to camera
+	- added basic third person control for rpg module
+	- objects in focus in rpg display now their names
+	- added hp bar to player character in rpg
+	- added possibility to move selected object in level editor (press 'm' to activate object move mode)
+	- added possibility to rotate selected object in level editor
+	- added possibility to scale selected object in level editor
+	- added a first inventory implementation
+	- items are collectable now
+	- Component::synchronize is now const
 
 Fixes:
 	- cmake now doesn't need to be run twice to build m2etis correctly
+	- fixed problem selecting property of a Component or GameObject in level editor while GUIWidget was above a GameObject
+	- unregistering from a message type with processing message buffer afterwards can result in assert if a message for this messagetype still was buffered
 
 v 0.8.1
 

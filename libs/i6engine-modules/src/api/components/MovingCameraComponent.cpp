@@ -193,7 +193,7 @@ namespace api {
 		_oldPos = movePos;
 	}
 
-	attributeMap MovingCameraComponent::synchronize() {
+	attributeMap MovingCameraComponent::synchronize() const {
 		return attributeMap();
 	}
 

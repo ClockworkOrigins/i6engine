@@ -74,12 +74,12 @@ namespace api {
 		return false;
 	}
 
-	attributeMap SpawnpointComponent::synchronize() {
+	attributeMap SpawnpointComponent::synchronize() const {
 		attributeMap params;
 
 		std::string types;
 
-		for (std::string & s : _spawntypes) {
+		for (const std::string & s : _spawntypes) {
 			types += s + ";";
 		}
 

@@ -24,15 +24,14 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	InventoryComponent::InventoryComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _items() {
+	InventoryComponent::InventoryComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _items(), _shown(false) {
 		_objFamilyID = config::ComponentTypes::InventoryComponent;
-		_objComponentID = config::ComponentTypes::InventoryComponent;
 	}
 
 	void InventoryComponent::Init() {
 	}
 
-	api::attributeMap InventoryComponent::synchronize() {
+	api::attributeMap InventoryComponent::synchronize() const {
 		api::attributeMap params;
 		return params;
 	}

@@ -369,6 +369,15 @@ namespace modules {
 				break;
 			}
 			}
+		} else if (msg->getSubtype() == api::graphics::GraSetLinearFog) {
+			api::graphics::Graphics_SetLinearFog_Update * gslfu = dynamic_cast<api::graphics::Graphics_SetLinearFog_Update *>(msg->getContent());
+			_sceneManager->setFog(Ogre::FogMode::FOG_LINEAR, Ogre::ColourValue(gslfu->colour.getX(), gslfu->colour.getY(), gslfu->colour.getZ()), 0.0, gslfu->start, gslfu->end);
+		} else if (msg->getSubtype() == api::graphics::GraSetExponentialFog) {
+			api::graphics::Graphics_SetExponentialFog_Update * gsefu = dynamic_cast<api::graphics::Graphics_SetExponentialFog_Update *>(msg->getContent());
+			_sceneManager->setFog(Ogre::FogMode::FOG_EXP, Ogre::ColourValue(gsefu->colour.getX(), gsefu->colour.getY(), gsefu->colour.getZ()), gsefu->density);
+		} else if (msg->getSubtype() == api::graphics::GraSetExponentialFog2) {
+			api::graphics::Graphics_SetExponentialFog_Update * gsefu = dynamic_cast<api::graphics::Graphics_SetExponentialFog_Update *>(msg->getContent());
+			_sceneManager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(gsefu->colour.getX(), gsefu->colour.getY(), gsefu->colour.getZ()), gsefu->density);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -473,6 +482,11 @@ namespace modules {
 
 			GraphicsNode * node = getOrCreateGraphicsNode(goid, Vec3());
 			node->createBilldboardSetComponent(coid, gbc->material, gbc->width, gbc->height, gbc->origin);
+		} else if (msg->getSubtype() == api::graphics::GraMovableText) {
+			api::graphics::Graphics_MovableText_Create * gmtc = static_cast<api::graphics::Graphics_MovableText_Create *>(msg->getContent());
+
+			GraphicsNode * node = getGraphicsNode(goid);
+			node->createMovableText(coid, gmtc->targetID, gmtc->font, gmtc->text, gmtc->size, gmtc->colour);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -609,6 +623,11 @@ namespace modules {
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			node->deleteBillboard(coid, gbu->identifier);
+		} else if (msg->getSubtype() == api::graphics::GraMovableText) {
+			api::graphics::Graphics_MovableText_Update * gmtu = static_cast<api::graphics::Graphics_MovableText_Update *>(msg->getContent());
+
+			GraphicsNode * node = getGraphicsNode(goid);
+			node->updateMovableText(coid, gmtu->font, gmtu->text, gmtu->size, gmtu->colour);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -654,6 +673,12 @@ namespace modules {
 			}
 
 			node->deleteBillboardSetComponent(coid);
+		} else if (msg->getSubtype() == api::graphics::GraMovableText) {
+			GraphicsNode * node = getGraphicsNode(goid);
+			if (node == nullptr) {
+				return;
+			}
+			node->deleteMovableText(coid);
 		}
 	}
 

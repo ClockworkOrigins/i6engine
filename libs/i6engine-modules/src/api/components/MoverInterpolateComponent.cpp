@@ -286,7 +286,7 @@ namespace api {
 		}
 	}
 
-	attributeMap MoverInterpolateComponent::synchronize() {
+	attributeMap MoverInterpolateComponent::synchronize() const {
 		attributeMap params = MoverComponent::synchronize();
 
 		// general attributes

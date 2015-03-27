@@ -57,7 +57,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	attributeMap StaticStateComponent::synchronize() {
+	attributeMap StaticStateComponent::synchronize() const {
 		attributeMap params;
 		_position.insertInMap("pos", params);
 		_rotation.insertInMap("rot", params);

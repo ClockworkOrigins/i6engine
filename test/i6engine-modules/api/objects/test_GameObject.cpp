@@ -44,7 +44,7 @@ namespace config {
 		virtual ~TestComponent() {
 		}
 		void Init() {}
-		api::attributeMap synchronize() { return api::attributeMap(); }
+		api::attributeMap synchronize() const { return api::attributeMap(); }
 
 		std::string getTemplateName() const {
 			return "";

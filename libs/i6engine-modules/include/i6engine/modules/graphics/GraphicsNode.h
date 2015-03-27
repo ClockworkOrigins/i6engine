@@ -47,6 +47,7 @@ namespace graphics {
 namespace modules {
 
 	class GraphicsManager;
+	class MovableText;
 
 	/**
 	 * \ingroup Graphic
@@ -261,6 +262,10 @@ namespace modules {
 
 		void deleteBillboardSetComponent(int64_t coid);
 
+		void createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour);
+		void updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour);
+		void deleteMovableText(int64_t coid);
+
 		/**
 		 * \brief forbidden
 		 */
@@ -322,6 +327,13 @@ namespace modules {
 		uint64_t _lastTime;
 
 		std::map<int64_t, std::pair<Ogre::BillboardSet *, std::map<std::string, Ogre::Billboard *>>> _billboardSets;
+
+		std::map<int64_t, MovableText *> _movableTexts;
+
+		/**
+		 * \brief list of all MovableTexts depending on a mesh. Key is mesh
+		 */
+		std::map<int64_t, std::vector<int64_t>> _observer;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

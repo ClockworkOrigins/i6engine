@@ -16,13 +16,6 @@
 
 #include "RPGApplication.h"
 
-#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX && !_GLIBCXX_USE_NANOSLEEP
-	#define _GLIBCXX_USE_NANOSLEEP
-#endif
-
-#include <thread>
-
-#include "i6engine/math/i6eMath.h"
 #include "i6engine/math/i6eVector.h"
 
 #include "i6engine/api/EngineController.h"
@@ -35,8 +28,10 @@
 
 #include "i6engine/rpg/components/Config.h"
 #include "i6engine/rpg/components/AttributeComponent.h"
-#include "i6engine/rpg/components/InventoryComponent.h"
-#include "i6engine/rpg/components/NPCComponent.h"
+#include "i6engine/rpg/components/HealthbarComponent.h"
+#include "i6engine/rpg/components/ListInventoryComponent.h"
+#include "i6engine/rpg/components/NameComponent.h"
+#include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 #include "i6engine/rpg/components/UsableItemComponent.h"
 
 #include "boost/bind.hpp"
@@ -67,20 +62,26 @@ namespace sample {
 		// setting shadow technique... currently only additive stencil possible
 		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique::Stencil_Additive);
 
+		// setting distance fog
+		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setExponentialFog(Vec3(0.9, 0.9, 0.9), 0.005);
+
 		// register ESC to close the application
 		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
 
 		// register rpg components we want to use => will be easier in the futur
 		// do this befor loading the level
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("NPC", boost::bind(&i6engine::rpg::components::NPCComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6engine::rpg::components::AttributeComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&i6engine::rpg::components::HealthbarComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&i6engine::rpg::components::ListInventoryComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&i6engine::rpg::components::NameComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&i6engine::rpg::components::ThirdPersonControlComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));
 
 		// loads the RPG demo level
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/RPGLevel.xml", "Singleplayer");
 
 		// a hack to load rpg library
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").front()->getGOC<i6engine::rpg::components::NPCComponent>(i6engine::rpg::components::config::ComponentTypes::NPCComponent)->getName();
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").front()->getGOC<i6engine::rpg::components::NameComponent>(i6engine::rpg::components::config::ComponentTypes::NameComponent)->getName();
 	}
 
 	void RPGApplication::Tick() {

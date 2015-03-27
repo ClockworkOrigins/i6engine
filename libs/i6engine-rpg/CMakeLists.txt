@@ -28,13 +28,19 @@ set(srcdir ./src)
 
 set(i6rpgSrc
 	${srcdir}/components/AttributeComponent.cpp
+	${srcdir}/components/HealthbarComponent.cpp
 	${srcdir}/components/InventoryComponent.cpp
 	${srcdir}/components/ItemComponent.cpp
-	${srcdir}/components/NPCComponent.cpp
+	${srcdir}/components/ListInventoryComponent.cpp
+	${srcdir}/components/NameComponent.cpp
+	${srcdir}/components/ThirdPersonControlComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp
+	
+	${srcdir}/gui/SubtitleWidget.cpp
 )
 
 SOURCE_GROUP(rpg\\components src/components/*)
+SOURCE_GROUP(rpg\\gui src/gui/*)
 
 IF(ISIXE_BUILD_SHARED)
 	add_library(i6engine-rpg SHARED ${i6rpgSrc})

@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!-- languages -->
+<Key key="English_Key">
+	<Language name="Deutsch">Englisch</Language>
+	<Language name="English">English</Language>
+</Key>
+<Key key="German_Key">
+	<Language name="Deutsch">Deutsch</Language>
+	<Language name="English">German</Language>
+</Key>
+<Key key="ChangeLanguageDescription_Key">
+	<Language name="Deutsch">Um die Sprache zu ändern einfach auf den entsprechenden Button links drücken!</Language>
+	<Language name="English">To change the language just press the appropriate button on the left side!</Language>
+</Key>

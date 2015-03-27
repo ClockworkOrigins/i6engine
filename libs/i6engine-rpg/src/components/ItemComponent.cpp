@@ -24,20 +24,23 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	ItemComponent::ItemComponent(int64_t id, const api::attributeMap & params) : Component(id, params) {
-		ISIXE_THROW_API_COND("ItemComponent", "name not set!", params.find("name") != params.end());
+	ItemComponent::ItemComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _value(), _imageset(), _image() {
 		ISIXE_THROW_API_COND("ItemComponent", "value not set!", params.find("value") != params.end());
-		_name = params.find("name")->second;
+		ISIXE_THROW_API_COND("ItemComponent", "imageset not set!", params.find("imageset") != params.end());
+		ISIXE_THROW_API_COND("ItemComponent", "image not set!", params.find("image") != params.end());
 		_value = static_cast<uint32_t>(std::stoi(params.find("value")->second.c_str()));
+		_imageset = params.find("imageset")->second;
+		_image = params.find("image")->second;
 
 		_objFamilyID = config::ComponentTypes::ItemComponent;
 	}
 
-	api::attributeMap ItemComponent::synchronize() {
+	api::attributeMap ItemComponent::synchronize() const {
 		api::attributeMap params;
 
-		params.insert(std::make_pair("name", _name));
 		params.insert(std::make_pair("value", std::to_string(_value)));
+		params.insert(std::make_pair("imageset", _imageset));
+		params.insert(std::make_pair("image", _image));
 
 		return params;
 	}

@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-#pragma once
+#ifndef __I6ENGINE_EDITOR_EDITOR_H__
+#define __I6ENGINE_EDITOR_EDITOR_H__
 
 #include "i6engine/api/Application.h"
 #include "i6engine/api/configs/ObjectConfig.h"
@@ -127,6 +128,11 @@ namespace editor {
 		bool _freeFlyMode;
 
 		/**
+		 * \brief stores whether movement mode is for camera or object
+		 */
+		bool _moveObject;
+
+		/**
 		 * \brief last mouse positions
 		 */
 		int32_t _lastX;
@@ -166,7 +172,17 @@ namespace editor {
 		void RotateDown();
 		void LeanLeft();
 		void LeanRight();
+		void ScaleUp();
+		void ScaleDown();
+		void ScaleXUp();
+		void ScaleXDown();
+		void ScaleYUp();
+		void ScaleYDown();
+		void ScaleZUp();
+		void ScaleZDown();
 	};
 
 } /* namespace editor */
 } /* namespace i6engine */
+
+#endif /* __I6ENGINE_EDITOR_EDITOR_H__ */

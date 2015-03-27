@@ -129,10 +129,14 @@ namespace gui {
 		bool _isDragged;
 		Vec2f _dragOffset;
 		boost::function<void(void)> _clickCallback;
+		std::string _tooltip;
+		bool _tooltipActive;
 
 		bool drag(const CEGUI::EventArgs & e);
 		bool drop(const CEGUI::EventArgs & e);
 		bool mouseMove(const CEGUI::EventArgs & e);
+		bool mouseEnter(const CEGUI::EventArgs & e);
+		bool mouseLeave(const CEGUI::EventArgs & e);
 
 		/**
 		 * \brief forbidden

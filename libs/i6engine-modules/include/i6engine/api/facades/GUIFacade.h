@@ -74,12 +74,12 @@ namespace gui {
 		 * \brief Sets the MouseVisibility (m)
 		 * \param visibility True to display the mouse, False to hide it.
 		 */
-		void setMouseVisibility(const bool visibility);
+		void setMouseVisibility(const bool visibility) const;
 
 		/**
 		 * \brief Delete all windows. Should be used when shutting down. (m)
 		 */
-		void clearAllWindows();
+		void clearAllWindows() const;
 
 		/**
 		 * \brief Subscribes for an event (Mouse-Click). (m)
@@ -108,7 +108,7 @@ namespace gui {
 		 * \param wVisibilty visibility of the window
 		 * \param mVisibilty visibility of the cursor
 		 */
-		void setWindowAndMouseVisibility(const std::string & windowname, const bool wVisibility, const bool mVisibility);
+		void setWindowAndMouseVisibility(const std::string & windowname, const bool wVisibility, const bool mVisibility) const;
 
 		/**
 		 * \brief Adding a Row to a List (m)
@@ -137,7 +137,7 @@ namespace gui {
 		 * \param message Message to be printed.
 		 * \param lifetime Lifetime of the object or -1 for infinite lifetime (default = -1), time in microseconds.
 		 */
-		void addPrint(const std::string & name, const std::string & type, const double x, const double y, const std::string & message, gui::Alignment alignment, const int64_t lifetime = -1);
+		void addPrint(const std::string & name, const std::string & type, const double x, const double y, const std::string & message, gui::Alignment alignment, const int64_t lifetime = -1) const;
 
 		/**
 		 * \brief Adds a new ProgressBar to the screen.
@@ -148,7 +148,7 @@ namespace gui {
 		 * \param w Width of the Bar
 		 * \param h Height of the Bar
 		 */
-		void addProgressBar(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h);
+		void addProgressBar(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h) const;
 
 		/**
 		 * \brief Adds a new Editbox to the screen.
@@ -161,7 +161,7 @@ namespace gui {
 		 * \param text default text of the Editbox
 		 * \param enterCallback callback to be called when text changed
 		 */
-		void addEditbox(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & defaultText, const std::function<void(std::string)> & enterCallback);
+		void addEditbox(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & defaultText, const std::function<void(std::string)> & enterCallback) const;
 
 		/**
 		 * \brief Adds a new TextButton to the screen.
@@ -173,14 +173,41 @@ namespace gui {
 		 * \param h Height of the TextButton
 		 * \param text text of the TextButton
 		 */
-		void addTextButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & text);
+		void addTextButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & text) const;
+
+		/**
+		 * \brief Adds a new ImageButton to the screen.
+		 * \param name (Unique) Name of the new object.
+		 * \param type Style of the new object.
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 * \param w Width of the TextButton
+		 * \param h Height of the TextButton
+		 * \param normalImage normal image of the button
+		 * \param hoverImage image of the button when hovered
+		 * \param pushedImage image of the button when pushed
+		 */
+		void addImageButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & normalImage, const std::string & hoverImage, const std::string & pushedImage) const;
+
+		/**
+		 * \brief Adds a new ToggleButton to the screen.
+		 * \param name (Unique) Name of the new object.
+		 * \param type Style of the new object.
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 * \param w Width of the Editbox
+		 * \param h Height of the Editbox
+		 * \param selected default selection of the ToggleButton
+		 * \param selectedCallback callback to be called when selection changed
+		 */
+		void addToggleButton(const std::string & name, const std::string & type, double x, double y, double w, double h, bool selected, const std::function<void(bool)> & selectedCallback) const;
 
 		/**
 		 * \brief Set a text to an specified object.
 		 * \param name Name of the object.
 		 * \param text Text to be set.
 		 */
-		void setText(const std::string & name, const std::string & text);
+		void setText(const std::string & name, const std::string & text) const;
 
 		/**
 		 * \brief Sets the Position of an specified object.
@@ -188,7 +215,7 @@ namespace gui {
 		 * \param x X-Value of the position.
 		 * \param y Y-Value of the position.
 		 */
-		void setPosition(const std::string & name, const double x, const double y);
+		void setPosition(const std::string & name, const double x, const double y) const;
 
 		/**
 		 * \brief Sets the Size of an specified object.
@@ -196,14 +223,14 @@ namespace gui {
 		 * \param w Width
 		 * \param h Height
 		 */
-		void setSize(const std::string & name, const double w, const double h);
+		void setSize(const std::string & name, const double w, const double h) const;
 
 		/**
 		 * \brief Sets the amount of items of an specified object.
 		 * \param name Name of the object.
 		 * \param amount Amount of items
 		 */
-		void setAmount(const std::string & name, const uint32_t amount);
+		void setAmount(const std::string & name, const uint32_t amount) const;
 
 		/**
 		 * \brief Sets the Colour of specified.
@@ -213,21 +240,21 @@ namespace gui {
 		 * \param green Green value.
 		 * \param blue Blue value.
 		 */
-		void setColour(const std::string & name, double alpha, double red, double green, double blue);
+		void setColour(const std::string & name, double alpha, double red, double green, double blue) const;
 
 		/**
 		 * \brief Sets the Font of an specified object.
 		 * \param name Name of the object.
 		 * \param font Font to be set.
 		 */
-		void setFont(const std::string & name, const std::string & font);
+		void setFont(const std::string & name, const std::string & font) const;
 
 		/**
 		 * \brief Sets the remaining lifetime of a specified object.
 		 * \param name Name of the object.
 		 * \param time Remaining lifetime of the Object, in microseconds
 		 */
-		void setLifetime(const std::string & name, const int64_t time);
+		void setLifetime(const std::string & name, const int64_t time) const;
 
 		/**
 		 * \brief Set an aligment to an specified object.
@@ -265,14 +292,14 @@ namespace gui {
 		 * \param	time before entire List hides, in microseconds
 		 * \return   nothing
 		 */
-		void addStatusList(const std::string & name, const std::string & type, const double x, const double y, const int64_t lifetime);
+		void addStatusList(const std::string & name, const std::string & type, const double x, const double y, const int64_t lifetime) const;
 
 		/**
 		 * \brief Sets the Progress of a bar.
 		 * \param name Name of the Widget
 		 * \param progress Percentage to set (between 0 and 1)
 		 */
-		void setProgress(const std::string & name, const double progress);
+		void setProgress(const std::string & name, const double progress) const;
 
 		/**
 		 * \brief Adds a new Image to the screen.
@@ -284,7 +311,7 @@ namespace gui {
 		 * \param w Width of the image
 		 * \param h Height of the image
 		 */
-		void addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h);
+		void addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) const;
 
 		/**
 		 * \brief Sets the Image
@@ -292,14 +319,43 @@ namespace gui {
 		 * \param imageSetName imageSet
 		 * \param imageName image
 		 */
-		void setImage(const std::string & name, const std::string & imageSetName, const std::string & imageSet);
+		void setImage(const std::string & name, const std::string & imageSetName, const std::string & imageSet) const;
 
 		/**
 		 * \brief Sets a enter callback to an Editbox
 		 * \param name Name of the Widget
 		 * \param enterCallback callback to be called when text changes
 		 */
-		void setEnterTextCallback(const std::string & name, const std::function<void(std::string)> & enterCallback);
+		void setEnterTextCallback(const std::string & name, const std::function<void(std::string)> & enterCallback) const;
+
+		/**
+		 * \brief Sets a widgets property
+		 * \param name Name of the Widget
+		 * \param prop property to be set
+		 * \param value new value of the property
+		 */
+		void setProperty(const std::string & name, const std::string & prop, const std::string & value) const;
+
+		/**
+		 * \brief Sets a selection state of widget
+		 * \param name Name of the Widget
+		 * \param selected true if widget is selected
+		 */
+		void setSelected(const std::string & name, bool selected) const;
+
+		/**
+		 * \brief Sets a selected callback to a ToggleButton
+		 * \param name Name of the Widget
+		 * \param selectedCallback callback to be called when selection changes
+		 */
+		void setSelectedCallback(const std::string & name, const std::function<void(bool)> & selectedCallback) const;
+
+		/**
+		 * \brief sets tooltip for a widget
+		 * \param name Name of the Widget
+		 * \param tooltip the tooltip text... for multilines use ~ as delimiter
+		 */
+		void setTooltip(const std::string & name, const std::string & tooltip) const;
 
 		/**
 		 * \brief Adds a text to a widget.
@@ -313,7 +369,7 @@ namespace gui {
 		 * \param createFunc A function to create a widget. It gets a string for the name and a string for the style.
 		 *  Tip: You can use boost::factory to give it a GUIWidget constructor
 		 */
-		void registerWidgetTemplate(const std::string & name, const boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc);
+		void registerWidgetTemplate(const std::string & name, const boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc) const;
 
 		/**
 		 * \brief Creates a new Widget.
@@ -321,13 +377,13 @@ namespace gui {
 		 * \param type Type of the Widget (either registered by registerWidgetTemplate, or one of the default Types)
 		 * \param style Style for the Widget
 		 */
-		void createWidget(const std::string & name, const std::string & type, const std::string & style);
+		void createWidget(const std::string & name, const std::string & type, const std::string & style) const;
 
 		/**
 		 * \brief Deletes a specified object.
 		 * \param name Name of the object to be deleted.
 		 */
-		void deleteWidget(const std::string & name);
+		void deleteWidget(const std::string & name) const;
 
 		/**
 		 * \brief adds a GUIWidget to be ticked
@@ -357,12 +413,12 @@ namespace gui {
 		/**
 		 * \brief sets image for mouse cursor
 		 */
-		void setMouseCursorImage(const std::string & image);
+		void setMouseCursorImage(const std::string & image) const;
 
 		/**
 		 * \brief adds given imageset so it can be used with own graphics
 		 */
-		void addImageset(const std::string & imageset);
+		void addImageset(const std::string & imageset) const;
 
 		/**
 		 * \brief called only by GUI subsystem setting state whether input is captured or not

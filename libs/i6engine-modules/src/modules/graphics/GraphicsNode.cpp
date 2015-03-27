@@ -24,6 +24,7 @@
 #include "i6engine/api/configs/GraphicsConfig.h"
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
+#include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
 #include "OGRE/OgreBillboard.h"
 #include "OGRE/OgreBillboardSet.h"
@@ -39,7 +40,7 @@
 namespace i6engine {
 namespace modules {
 
-	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _parentNode(nullptr), _cameras(), _lights(), _particles(), _sceneNodes(), _animationState(), _animationSpeed(1.0), _lastTime(), _billboardSets() {
+	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _parentNode(nullptr), _cameras(), _lights(), _particles(), _sceneNodes(), _animationState(), _animationSpeed(1.0), _lastTime(), _billboardSets(), _movableTexts(), _observer() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		Ogre::SceneManager * sm = _manager->getSceneManager();
@@ -78,6 +79,9 @@ namespace modules {
 		}
 		for (const std::pair<int64_t, Ogre::SceneNode *> & part : _particles) {
 			deleteParticleComponent(part.first);
+		}
+		for (const std::pair<int64_t, MovableText *> & text : _movableTexts) {
+			deleteMovableText(text.first);
 		}
 
 		root->removeChild(_sceneNode);
@@ -168,7 +172,6 @@ namespace modules {
 		// create subnode
 		entity = sm->createEntity(s.str(), meshName);
 		sn->attachObject(entity);
-
 		entity->setVisible(isVisible);
 
 		unsigned short src, dest;
@@ -358,6 +361,15 @@ namespace modules {
 		if (_sceneNodes.find(coid) == _sceneNodes.end()) { // TODO: (Daniel) fix this, how can this happen? Had a coid with a negative large number
 			return;
 		}
+
+		auto it = _observer.find(coid);
+		if (it != _observer.end()) {
+			for (auto & i : it->second) {
+				deleteMovableText(i);
+			}
+			_observer.erase(it);
+		}
+
 		Ogre::SceneNode * sn = _sceneNodes[coid];
 		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(sn->getAttachedObject(0));
 
@@ -412,9 +424,14 @@ namespace modules {
 	}
 
 	void GraphicsNode::Tick() {
-		uint64_t cT = i6engine::api::EngineController::GetSingleton().getCurrentTime();
-		_animationState->addTime(_animationSpeed * (cT - _lastTime) / 1000000.0);
-		_lastTime = cT;
+		if (_animationState) {
+			uint64_t cT = i6engine::api::EngineController::GetSingleton().getCurrentTime();
+			_animationState->addTime(_animationSpeed * (cT - _lastTime) / 1000000.0);
+			_lastTime = cT;
+		}
+		for (auto & p : _movableTexts) {
+			p.second->update();
+		}
 	}
 
 	void GraphicsNode::stopAnimation() {
@@ -470,6 +487,30 @@ namespace modules {
 
 		_sceneNode->detachObject(bs);
 		_manager->getSceneManager()->destroyBillboardSet(bs);
+	}
+
+	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
+		MovableText * movableText = new MovableText(_sceneNodes[targetID]->getAttachedObject(0), _manager->getSceneManager(), font);
+		movableText->setText(text);
+		movableText->setSize(size);
+		movableText->setColour(colour);
+		movableText->enable(true);
+		_movableTexts.insert(std::make_pair(coid, movableText));
+		_manager->addTicker(this);
+		_observer[targetID].push_back(coid);
+	}
+
+	void GraphicsNode::updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
+		MovableText * movableText = _movableTexts[coid];
+		movableText->setText(text);
+		movableText->setSize(size);
+		movableText->setColour(colour);
+	}
+
+	void GraphicsNode::deleteMovableText(int64_t coid) {
+		_manager->removeTicker(this);
+		delete _movableTexts[coid];
+		_movableTexts.erase(coid);
 	}
 
 } /* namespace modules */

@@ -90,7 +90,7 @@ namespace api {
 		_lastTime = cT;
 	}
 
-	attributeMap FollowComponent::synchronize() {
+	attributeMap FollowComponent::synchronize() const {
 		return attributeMap();
 	}
 

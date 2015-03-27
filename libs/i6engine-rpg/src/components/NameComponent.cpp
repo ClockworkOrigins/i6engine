@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "i6engine/rpg/components/NPCComponent.h"
+#include "i6engine/rpg/components/NameComponent.h"
 
 #include "i6engine/utils/Exceptions.h"
 
@@ -24,20 +24,20 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	NPCComponent::NPCComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _name(params.find("name")->second) {
-		_objFamilyID = config::ComponentTypes::NPCComponent;
-		_objComponentID = config::ComponentTypes::NPCComponent;
+	NameComponent::NameComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _name(params.find("name")->second) {
+		_objFamilyID = config::ComponentTypes::NameComponent;
+		_objComponentID = config::ComponentTypes::NameComponent;
 	}
 
-	api::ComPtr NPCComponent::createC(int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("NPCComponent", "name not set!", params.find("name") != params.end());
-		return utils::make_shared<NPCComponent, api::Component>(id, params);
+	api::ComPtr NameComponent::createC(int64_t id, const api::attributeMap & params) {
+		ISIXE_THROW_API_COND("NameComponent", "name not set!", params.find("name") != params.end());
+		return utils::make_shared<NameComponent, api::Component>(id, params);
 	}
 
-	void NPCComponent::Init() {
+	void NameComponent::Init() {
 	}
 
-	api::attributeMap NPCComponent::synchronize() {
+	api::attributeMap NameComponent::synchronize() const {
 		api::attributeMap params;
 
 		params.insert(std::make_pair("name", _name));

@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-#pragma once
+#ifndef __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
+#define __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
 
 #include "i6engine/api/Application.h"
 
@@ -40,3 +41,5 @@ namespace sample {
 	};
 
 } /* namespace sample */
+
+#endif /* __I6ENGINE_SAMPLES_RPGAPPLICATION_H__ */

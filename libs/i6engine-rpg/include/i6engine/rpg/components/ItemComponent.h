@@ -32,7 +32,7 @@ namespace components {
 	public:
 		ItemComponent(int64_t id, const api::attributeMap & params);
 
-		api::attributeMap synchronize() override;
+		api::attributeMap synchronize() const override;
 
 		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
 			return std::make_pair(api::AddStrategy::REJECT, -1);
@@ -47,9 +47,22 @@ namespace components {
 		 */
 		virtual bool use(const api::GOPtr & self) = 0;
 
+		uint32_t getValue() const {
+			return _value;
+		}
+
+		std::string getImageset() const {
+			return _imageset;
+		}
+
+		std::string getImage() const {
+			return _image;
+		}
+
 	private:
-		std::string _name;
 		uint32_t _value;
+		std::string _imageset;
+		std::string _image;
 	};
 
 } /* namespace components */

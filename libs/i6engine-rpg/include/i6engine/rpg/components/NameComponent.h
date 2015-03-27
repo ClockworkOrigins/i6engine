@@ -19,8 +19,8 @@
  * @{
  */
 
-#ifndef __I6ENGINE_RPG_COMPONENTS_NPCCOMPONENT_H__
-#define __I6ENGINE_RPG_COMPONENTS_NPCCOMPONENT_H__
+#ifndef __I6ENGINE_RPG_COMPONENTS_NAMECOMPONENT_H__
+#define __I6ENGINE_RPG_COMPONENTS_NAMECOMPONENT_H__
 
 #include "i6engine/api/components/Component.h"
 
@@ -28,15 +28,15 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	class ISIXE_RPG_API NPCComponent : public api::Component {
+	class ISIXE_RPG_API NameComponent : public api::Component {
 	public:
-		NPCComponent(int64_t id, const api::attributeMap & params);
+		NameComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
 		void Init() override;
 
-		api::attributeMap synchronize() override;
+		api::attributeMap synchronize() const override;
 
 		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
 			return std::make_pair(api::AddStrategy::REJECT, -1);
@@ -47,7 +47,7 @@ namespace components {
 		}
 
 		std::string getTemplateName() const {
-			return "NPC";
+			return "Name";
 		}
 
 		std::string getName() const {
@@ -62,7 +62,7 @@ namespace components {
 } /* namespace rpg */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_RPG_COMPONENTS_NPCCOMPONENT_H__ */
+#endif /* __I6ENGINE_RPG_COMPONENTS_NAMECOMPONENT_H__ */
 
 /**
  * @}

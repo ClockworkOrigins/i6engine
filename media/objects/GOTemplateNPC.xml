@@ -22,12 +22,12 @@
 		<Attribute name="visibility">1</Attribute>
 		<Attribute name="pos">0.0 0.0 0.0</Attribute>
 		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
-		<Attribute name="scale">0.02 0.02 0.02</Attribute>
+		<Attribute name="scale">0.025 0.025 0.025</Attribute>
 	</Component>
 	<Component template="Attribute" owner="true">
 		<Attribute name="attribute_0">100</Attribute>
 		<Attribute name="attribute_1">100</Attribute>
 	</Component>
-	<Component template="NPC" owner="true">
+	<Component template="Name" owner="true">
 	</Component>
 </GOTemplate>

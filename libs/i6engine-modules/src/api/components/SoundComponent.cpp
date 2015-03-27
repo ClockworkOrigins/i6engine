@@ -78,7 +78,7 @@ namespace api {
 		}
 	}
 
-	attributeMap SoundComponent::synchronize() {
+	attributeMap SoundComponent::synchronize() const {
 		attributeMap params;
 		_offset.insertInMap("offset", params);
 		_direction.insertInMap("direction", params);

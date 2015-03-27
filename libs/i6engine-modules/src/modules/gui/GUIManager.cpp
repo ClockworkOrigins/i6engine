@@ -29,9 +29,12 @@
 #include "i6engine/modules/gui/guiwidgets/GUIBar.h"
 #include "i6engine/modules/gui/guiwidgets/GUIEditbox.h"
 #include "i6engine/modules/gui/guiwidgets/GUIImage.h"
+#include "i6engine/modules/gui/guiwidgets/GUIImageButton.h"
 #include "i6engine/modules/gui/guiwidgets/GUIPrint.h"
 #include "i6engine/modules/gui/guiwidgets/GUIStatusList.h"
 #include "i6engine/modules/gui/guiwidgets/GUITextButton.h"
+#include "i6engine/modules/gui/guiwidgets/GUIToggleButton.h"
+#include "i6engine/modules/gui/guiwidgets/GUITooltip.h"
 
 #include "boost/functional/factory.hpp"
 #include "boost/interprocess/sync/scoped_lock.hpp"
@@ -54,9 +57,12 @@ namespace modules {
 		registerGUIWidgetTemplate("GUIBar", boost::factory<GUIBar *>());
 		registerGUIWidgetTemplate("GUIEditbox", boost::factory<GUIEditbox *>());
 		registerGUIWidgetTemplate("GUIImage", boost::factory<GUIImage *>());
+		registerGUIWidgetTemplate("GUIImageButton", boost::factory<GUIImageButton *>());
 		registerGUIWidgetTemplate("GUIPrint", boost::factory<GUIPrint *>());
 		registerGUIWidgetTemplate("GUIStatusList", boost::factory<GUIStatusList *>());
 		registerGUIWidgetTemplate("GUITextButton", boost::factory<GUITextButton *>());
+		registerGUIWidgetTemplate("GUIToggleButton", boost::factory<GUIToggleButton *>());
+		registerGUIWidgetTemplate("GUITooltip", boost::factory<GUITooltip *>());
 	}
 
 	GUIManager::~GUIManager() {

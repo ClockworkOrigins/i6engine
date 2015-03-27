@@ -35,6 +35,7 @@ set(i6components
 	${srcdir}/api/components/LifetimeComponent.cpp
 	${srcdir}/api/components/LuminousAppearanceComponent.cpp
 	${srcdir}/api/components/MeshAppearanceComponent.cpp
+	${srcdir}/api/components/MovableTextComponent.cpp
 	${srcdir}/api/components/MoverInterpolateComponent.cpp
 	${srcdir}/api/components/MoverCircleComponent.cpp
 	${srcdir}/api/components/MovingCameraComponent.cpp
@@ -102,6 +103,7 @@ set(i6modulesSrc
 	${srcdir}/api/gui/GUIWidget.cpp
 
 	${srcdir}/api/manager/IDManager.cpp
+	${srcdir}/api/manager/LanguageManager.cpp
 	${srcdir}/api/manager/TextManager.cpp
 
 	${srcdir}/api/objects/GameObject.cpp
@@ -113,6 +115,7 @@ set(i6modulesSrc
 	${srcdir}/modules/graphics/GraphicsNode.cpp
 	${srcdir}/modules/graphics/ResourceManager.cpp
 	${srcdir}/modules/graphics/Terrain.cpp
+	${srcdir}/modules/graphics/graphicswidgets/MovableText.cpp
 
 	${srcdir}/modules/gui/GUIController.cpp
 	${srcdir}/modules/gui/GUIFactory.cpp
@@ -121,9 +124,12 @@ set(i6modulesSrc
 	${srcdir}/modules/gui/guiwidgets/GUIBar.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIEditbox.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIImage.cpp
+	${srcdir}/modules/gui/guiwidgets/GUIImageButton.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIPrint.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIStatusList.cpp
 	${srcdir}/modules/gui/guiwidgets/GUITextButton.cpp
+	${srcdir}/modules/gui/guiwidgets/GUIToggleButton.cpp
+	${srcdir}/modules/gui/guiwidgets/GUITooltip.cpp
 
 	${srcdir}/modules/input/InputController.cpp
 	${srcdir}/modules/input/InputMailbox.cpp

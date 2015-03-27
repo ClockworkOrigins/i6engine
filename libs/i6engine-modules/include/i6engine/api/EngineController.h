@@ -50,6 +50,7 @@ namespace api {
 	class GUIFacade;
 	class IDManager;
 	class InputFacade;
+	class LanguageManager;
 	class MessagingFacade;
 	class NetworkFacade;
 	class ObjectFacade;
@@ -134,6 +135,10 @@ namespace api {
 
 		IDManager * getIDManager() const {
 			return _idManager;
+		}
+
+		LanguageManager * getLanguageManager() const {
+			return _languageManager;
 		}
 
 		TextManager * getTextManager() const {
@@ -244,6 +249,7 @@ namespace api {
 		core::SubSystemController * _subsystemController;
 		core::EngineCoreController * _coreController;
 		IDManager * _idManager;
+		LanguageManager * _languageManager;
 		TextManager * _textManager;
 		Application * _appl;
 		uint8_t _debugdrawer;

@@ -59,7 +59,11 @@ namespace graphics {
 		GraBillboardSet,
 		GraBillboard,
 		GraBillboardRemove,
-		GraShadowTechnique
+		GraShadowTechnique,
+		GraSetLinearFog,
+		GraSetExponentialFog,
+		GraSetExponentialFog2,
+		GraMovableText
 	};
 
 	enum class ShadowTechnique {
@@ -585,6 +589,75 @@ namespace graphics {
 			return new Graphics_ShadowTechnique_Update(*this);
 		}
 	} Graphics_ShadowTechnique_Update;
+
+	/**
+	 * \brief sets linear fog
+	 */
+	typedef struct Graphics_SetLinearFog_Update : GameMessageStruct {
+		Vec3 colour;
+		double start;
+		double end;
+		Graphics_SetLinearFog_Update(const Vec3 & c, double s, double e) : GameMessageStruct(), colour(c), start(s), end(e) {
+		}
+		Graphics_SetLinearFog_Update * copy() {
+			return new Graphics_SetLinearFog_Update(*this);
+		}
+	} Graphics_SetLinearFog_Update;
+
+	/**
+	 * \brief sets exponential fog
+	 */
+	typedef struct Graphics_SetExponentialFog_Update : GameMessageStruct {
+		Vec3 colour;
+		double density;
+		Graphics_SetExponentialFog_Update(const Vec3 & c, double d) : GameMessageStruct(), colour(c), density(d) {
+		}
+		Graphics_SetExponentialFog_Update * copy() {
+			return new Graphics_SetExponentialFog_Update(*this);
+		}
+	} Graphics_SetExponentialFog_Update;
+
+	/**
+	 * \brief creates a MovableText on a GraphicsNode
+	 */
+	typedef struct Graphics_MovableText_Create : GameMessageStruct {
+		int64_t targetID;
+		std::string font;
+		std::string text;
+		uint16_t size;
+		Vec3 colour;
+		Graphics_MovableText_Create(int64_t goid, int64_t coid, int64_t tid, const std::string & f, const std::string & t, uint16_t s, const Vec3 & c) : GameMessageStruct(coid, goid), targetID(tid), font(f), text(t), size(s), colour(c) {
+		}
+		Graphics_MovableText_Create * copy() {
+			return new Graphics_MovableText_Create(*this);
+		}
+	} Graphics_MovableText_Create;
+
+	/**
+	 * \brief updates a MovableText on a GraphicsNode
+	 */
+	typedef struct Graphics_MovableText_Update : GameMessageStruct {
+		std::string font;
+		std::string text;
+		uint16_t size;
+		Vec3 colour;
+		Graphics_MovableText_Update(int64_t goid, int64_t coid, const std::string & f, const std::string & t, uint16_t s, const Vec3 & c) : GameMessageStruct(coid, goid), font(f), text(t), size(s), colour(c) {
+		}
+		Graphics_MovableText_Update * copy() {
+			return new Graphics_MovableText_Update(*this);
+		}
+	} Graphics_MovableText_Update;
+
+	/**
+	 * \brief deletes a MovableText on a GraphicsNode
+	 */
+	typedef struct Graphics_MovableText_Delete : GameMessageStruct {
+		Graphics_MovableText_Delete(int64_t goid, int64_t coid) : GameMessageStruct(coid, goid) {
+		}
+		Graphics_MovableText_Delete * copy() {
+			return new Graphics_MovableText_Delete(*this);
+		}
+	} Graphics_MovableText_Delete;
 
 } /* namespace graphics */
 } /* namespace api */

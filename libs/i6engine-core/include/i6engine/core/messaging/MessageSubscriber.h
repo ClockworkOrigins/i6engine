@@ -121,6 +121,17 @@ namespace core {
 
 		inline void removeMethod(uint16_t msgType) {
 			_ptrMessageMethod.erase(msgType);
+			boost::mutex::scoped_lock objScopeLock(_objMessageVectorMutex);
+			MessageVector result;
+			for (auto & rm : *_objActiveMessageVector) {
+				if (rm->message->getMessageType() != msgType) {
+					result.push_back(rm);
+				}
+			}
+			_objActiveMessageVector->clear();
+			for (auto & rm : result) {
+				_objActiveMessageVector->push_back(rm);
+			}
 		}
 
 	protected:

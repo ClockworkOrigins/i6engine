@@ -173,7 +173,7 @@ namespace api {
 		/**
 		 * \brief synchronizes the Components state
 		 */
-		virtual attributeMap synchronize() = 0;
+		virtual attributeMap synchronize() const = 0;
 
 		/**
 		 * \brief sets whether this object has to be synchronized or not

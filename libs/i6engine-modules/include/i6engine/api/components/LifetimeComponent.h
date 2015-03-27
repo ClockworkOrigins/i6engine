@@ -66,7 +66,7 @@ namespace api {
 		/**
 		 * \brief synchronizes the Components state
 		 */
-		attributeMap synchronize() override;
+		attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
 			return "Lifetime";
