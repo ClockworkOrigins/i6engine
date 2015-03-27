@@ -8,8 +8,8 @@ Set EX_DIR=%DEP_DIR%\..\externals\libs
 Set PATCH_DIR=%DEP_DIR%\..\externals\patches
 Set BUILD_ROOT=%EX_DIR%
 
-Set ARCHIVE=m2etis-0.3-rev20.zip
-Set BUILD_DIR=%BUILD_ROOT%/m2etis-0.3-rev20/library
+Set ARCHIVE=m2etis-0.3-rev24.zip
+Set BUILD_DIR=%BUILD_ROOT%/m2etis-0.3-rev24/library
 Set PREFIX=%ROOT_DIR%/m2etis
 
 call %CONFIG_BAT%
