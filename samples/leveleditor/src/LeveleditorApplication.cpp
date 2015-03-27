@@ -16,15 +16,9 @@
 
 #include "LeveleditorApplication.h"
 
-#include "i6engine/math/i6eVector.h"
-
 #include "i6engine/api/EngineController.h"
-#include "i6engine/api/facades/GraphicsFacade.h"
-#include "i6engine/api/facades/GUIFacade.h"
+#include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/InputFacade.h"
-#include "i6engine/api/facades/ObjectFacade.h"
-#include "i6engine/api/facades/PhysicsFacade.h"
-#include "i6engine/api/objects/GameObject.h"
 
 #include "boost/bind.hpp"
 
@@ -38,6 +32,9 @@ namespace sample {
 
 	void LeveleditorApplication::AfterInitialize() {
 		Editor::AfterInitialize();
+
+		// register ESC to close the application
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
 	}
 
 } /* namespace sample */

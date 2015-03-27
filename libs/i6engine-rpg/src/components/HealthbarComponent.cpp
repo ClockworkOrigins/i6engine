@@ -16,8 +16,6 @@
 
 #include "i6engine/rpg/components/HealthbarComponent.h"
 
-#include "i6engine/utils/Exceptions.h"
-
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/objects/GameObject.h"
