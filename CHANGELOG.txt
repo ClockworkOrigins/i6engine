@@ -23,8 +23,9 @@ Enhancements:
 	- added basic third person control for rpg module
 	- objects in focus in rpg display now their names
 	- added hp bar to player character in rpg
-	- added possibility to move selected object in level editor
+	- added possibility to move selected object in level editor (press 'm' to activate object move mode)
 	- added possibility to rotate selected object in level editor
+	- added possibility to scale selected object in level editor
 	- added a first inventory implementation
 	- items are collectable now
 

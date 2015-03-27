@@ -77,6 +77,14 @@ namespace editor {
 		_eventMap["rotateDown"] = std::make_pair(boost::bind(&Editor::RotateDown, this), false);
 		_eventMap["leanLeft"] = std::make_pair(boost::bind(&Editor::LeanLeft, this), false);
 		_eventMap["leanRight"] = std::make_pair(boost::bind(&Editor::LeanRight, this), false);
+		_eventMap["scaleUp"] = std::make_pair(boost::bind(&Editor::ScaleUp, this), false);
+		_eventMap["scaleDown"] = std::make_pair(boost::bind(&Editor::ScaleDown, this), false);
+		_eventMap["scaleXUp"] = std::make_pair(boost::bind(&Editor::ScaleXUp, this), false);
+		_eventMap["scaleXDown"] = std::make_pair(boost::bind(&Editor::ScaleXDown, this), false);
+		_eventMap["scaleYUp"] = std::make_pair(boost::bind(&Editor::ScaleYUp, this), false);
+		_eventMap["scaleYDown"] = std::make_pair(boost::bind(&Editor::ScaleYDown, this), false);
+		_eventMap["scaleZUp"] = std::make_pair(boost::bind(&Editor::ScaleZUp, this), false);
+		_eventMap["scaleZDown"] = std::make_pair(boost::bind(&Editor::ScaleZDown, this), false);
 	}
 
 	Editor::~Editor() {
@@ -134,6 +142,14 @@ namespace editor {
 		inputFacade->setKeyMapping(api::KeyCode::KC_END, "rotateDown");
 		inputFacade->setKeyMapping(api::KeyCode::KC_PGUP, "leanLeft");
 		inputFacade->setKeyMapping(api::KeyCode::KC_PGDOWN, "leanRight");
+		inputFacade->setKeyMapping(api::KeyCode::KC_ADD, "scaleUp");
+		inputFacade->setKeyMapping(api::KeyCode::KC_SUBTRACT, "scaleDown");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD1, "scaleXDown");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD2, "scaleXUp");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD4, "scaleYDown");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD5, "scaleYUp");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD7, "scaleZDown");
+		inputFacade->setKeyMapping(api::KeyCode::KC_NUMPAD8, "scaleZUp");
 
 		inputFacade->setKeyMapping(api::KeyCode::KC_F3, "freeFly");
 		inputFacade->setKeyMapping(api::KeyCode::KC_M, "moveObject");
@@ -656,6 +672,134 @@ namespace editor {
 				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 				if (objSSC != nullptr) {
 					objSSC->setRotation(objSSC->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleUp() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() + Vec3(0.01, 0.01, 0.01), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() + Vec3(0.01, 0.01, 0.01));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleDown() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() - Vec3(0.01, 0.01, 0.01), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() - Vec3(0.01, 0.01, 0.01));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleXUp() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() + Vec3(0.01, 0.0, 0.0), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() + Vec3(0.01, 0.0, 0.0));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleXDown() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() - Vec3(0.01, 0.0, 0.0), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() - Vec3(0.01, 0.0, 0.0));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleYUp() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() + Vec3(0.0, 0.01, 0.0), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() + Vec3(0.0, 0.01, 0.0));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleYDown() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() - Vec3(0.0, 0.01, 0.0), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() - Vec3(0.0, 0.01, 0.0));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleZUp() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() + Vec3(0.0, 0.0, 0.01), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() + Vec3(0.0, 0.0, 0.01));
+				}
+			}
+			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::ScaleZDown() {
+		if (_moveObject) {
+			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
+			if (objPSC != nullptr) {
+				objPSC->setScale(objPSC->getScale() - Vec3(0.0, 0.0, 0.01), 2);
+			} else {
+				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+				if (objSSC != nullptr) {
+					objSSC->setScale(objSSC->getScale() - Vec3(0.0, 0.0, 0.01));
 				}
 			}
 			selectObject(_selectedObjectID);

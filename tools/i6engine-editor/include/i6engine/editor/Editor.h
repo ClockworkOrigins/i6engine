@@ -172,6 +172,14 @@ namespace editor {
 		void RotateDown();
 		void LeanLeft();
 		void LeanRight();
+		void ScaleUp();
+		void ScaleDown();
+		void ScaleXUp();
+		void ScaleXDown();
+		void ScaleYUp();
+		void ScaleYDown();
+		void ScaleZUp();
+		void ScaleZDown();
 	};
 
 } /* namespace editor */
