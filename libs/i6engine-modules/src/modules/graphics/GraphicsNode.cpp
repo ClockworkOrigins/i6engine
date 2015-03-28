@@ -243,6 +243,27 @@ namespace modules {
 		}
 
 		vp->setBackgroundColour(Ogre::ColourValue(float(red), float(green), float(blue), float(alpha)));
+
+		Ogre::CompositorManager::ResourceMapIterator resourceIterator = Ogre::CompositorManager::getSingleton().getResourceIterator();
+
+		// add all compositor resources to the view container
+		while (resourceIterator.hasMoreElements()) {
+			Ogre::ResourcePtr resource = resourceIterator.getNext();
+			const Ogre::String & compositorName = resource->getName();
+
+			int addPosition = -1;
+			if (compositorName == "HDR") {
+				// HDR must be first in the chain
+				addPosition = 0;
+			}
+			try {
+				Ogre::CompositorManager::getSingleton().addCompositor(vp, compositorName, addPosition);
+				Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, compositorName, false);
+			} catch (...) {
+				/// Warn user
+				Ogre::LogManager::getSingleton().logMessage("Could not load compositor " + compositorName);
+			}
+		}
 	}
 
 	void GraphicsNode::setMaterial(const int64_t coid, const std::string & materialName) {
@@ -323,10 +344,26 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		Ogre::SceneManager * sm = _manager->getSceneManager();
-
-		_manager->getRoot()->getAutoCreatedWindow()->removeViewport(int(coid));
 		Ogre::SceneNode * sn = _cameras[coid];
 		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(sn->getAttachedObject(0));
+		Ogre::Viewport * vp = camera->getViewport();
+
+		Ogre::CompositorManager::ResourceMapIterator resourceIterator = Ogre::CompositorManager::getSingleton().getResourceIterator();
+
+		// add all compositor resources to the view container
+		while (resourceIterator.hasMoreElements()) {
+			Ogre::ResourcePtr resource = resourceIterator.getNext();
+			const Ogre::String & compositorName = resource->getName();
+			try {
+				Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, compositorName, false);
+				Ogre::CompositorManager::getSingleton().removeCompositor(vp, compositorName);
+			} catch (...) {
+				/// Warn user
+				Ogre::LogManager::getSingleton().logMessage("Could not load compositor " + compositorName);
+			}
+		}
+
+		_manager->getRoot()->getAutoCreatedWindow()->removeViewport(int(coid));		
 
 		sn->detachObject(camera);
 		sm->destroyCamera(camera);
@@ -511,6 +548,13 @@ namespace modules {
 		_manager->removeTicker(this);
 		delete _movableTexts[coid];
 		_movableTexts.erase(coid);
+	}
+
+	void GraphicsNode::enableCompositor(int64_t coid, const std::string & compositor, bool enabled) {
+		Ogre::SceneNode * sn = _cameras[coid];
+		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(sn->getAttachedObject(0));
+		Ogre::Viewport * vp = camera->getViewport();
+		Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, compositor, enabled);
 	}
 
 } /* namespace modules */

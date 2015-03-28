@@ -230,5 +230,9 @@ namespace api {
 		return result;
 	}
 
+	void CameraComponent::enableCompositor(const std::string & compositor, bool enabled) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCompositor, core::Method::Update, new graphics::Graphics_Compositor_Update(_objOwnerID, getID(), compositor, enabled), i6engine::core::Subsystem::Object));
+	}
+
 } /* namespace api */
 } /* namespace i6engine */

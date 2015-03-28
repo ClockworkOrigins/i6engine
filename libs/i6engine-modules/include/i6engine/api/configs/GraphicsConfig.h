@@ -63,7 +63,8 @@ namespace graphics {
 		GraSetLinearFog,
 		GraSetExponentialFog,
 		GraSetExponentialFog2,
-		GraMovableText
+		GraMovableText,
+		GraCompositor
 	};
 
 	enum class ShadowTechnique {
@@ -658,6 +659,19 @@ namespace graphics {
 			return new Graphics_MovableText_Delete(*this);
 		}
 	} Graphics_MovableText_Delete;
+
+	/**
+	 * \brief enables/disables a compositor for a viewport
+	 */
+	typedef struct Graphics_Compositor_Update : GameMessageStruct {
+		std::string compositor;
+		bool enabled;
+		Graphics_Compositor_Update(int64_t goid, int64_t coid, const std::string & c, bool e) : GameMessageStruct(coid, goid), compositor(c), enabled(e) {
+		}
+		Graphics_Compositor_Update * copy() {
+			return new Graphics_Compositor_Update(*this);
+		}
+	} Graphics_Compositor_Update;
 
 } /* namespace graphics */
 } /* namespace api */

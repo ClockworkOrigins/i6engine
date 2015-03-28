@@ -133,6 +133,8 @@ namespace api {
 
 		std::vector<componentOptions> getComponentOptions() override;
 
+		void enableCompositor(const std::string & compositor, bool enabled);
+
 	private:
 		/**
 		 * \brief Position of the camera

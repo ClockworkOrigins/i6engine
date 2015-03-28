@@ -37,12 +37,14 @@
 #include "i6engine/modules/graphics/GraphicsController.h"
 #include "i6engine/modules/graphics/GraphicsNode.h"
 #include "i6engine/modules/graphics/Terrain.h"
+#include "i6engine/modules/graphics/compositors/HDRLogic.h"
 #include "i6engine/modules/gui/GUIController.h"
 
 #include "boost/lexical_cast.hpp"
 
 #include "CEGUI/CEGUI.h"
 
+#include "OGRE/OgreCompositorManager.h"
 #include "OGRE/OgreEntity.h"
 #include "OGRE/OgreMeshManager.h"
 #include "OGRE/OgreRenderWindow.h"
@@ -92,6 +94,9 @@ namespace modules {
 		Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(Ogre::MIP_UNLIMITED);
 
 		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+
+		Ogre::CompositorManager & compMgr = Ogre::CompositorManager::getSingleton();
+		compMgr.registerCompositorLogic("HDR", new HDRLogic());
 
 		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
 
@@ -628,6 +633,11 @@ namespace modules {
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			node->updateMovableText(coid, gmtu->font, gmtu->text, gmtu->size, gmtu->colour);
+		} else if (msg->getSubtype() == api::graphics::GraCompositor) {
+			api::graphics::Graphics_Compositor_Update * gcu = dynamic_cast<api::graphics::Graphics_Compositor_Update *>(msg->getContent());
+
+			GraphicsNode * node = getGraphicsNode(goid);
+			node->enableCompositor(coid, gcu->compositor, gcu->enabled);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

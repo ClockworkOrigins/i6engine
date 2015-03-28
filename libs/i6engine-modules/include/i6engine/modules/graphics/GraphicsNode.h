@@ -266,6 +266,8 @@ namespace modules {
 		void updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour);
 		void deleteMovableText(int64_t coid);
 
+		void enableCompositor(int64_t coid, const std::string & compositor, bool enabled);
+
 		/**
 		 * \brief forbidden
 		 */

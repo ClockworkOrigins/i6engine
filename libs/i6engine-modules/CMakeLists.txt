@@ -115,6 +115,8 @@ set(i6modulesSrc
 	${srcdir}/modules/graphics/GraphicsNode.cpp
 	${srcdir}/modules/graphics/ResourceManager.cpp
 	${srcdir}/modules/graphics/Terrain.cpp
+	${srcdir}/modules/graphics/compositors/HDRListener.cpp
+	${srcdir}/modules/graphics/compositors/HDRLogic.cpp
 	${srcdir}/modules/graphics/graphicswidgets/MovableText.cpp
 
 	${srcdir}/modules/gui/GUIController.cpp
@@ -260,6 +262,8 @@ source_group(api\\objects /api/objects/*)
 source_group(api /api/*)
 source_group(modules\\audio /modules/audio/*)
 source_group(modules\\graphics /modules/graphics/*)
+source_group(modules\\graphics\\compositors /modules/graphics/compositors/*)
+source_group(modules\\graphics\\widgets /modules/graphics/graphicswidgets/*)
 source_group(modules\\gui /modules/gui/*)
 source_group(modules\\input /modules/input/*)
 source_group(modules\\network /modules/network/*)
