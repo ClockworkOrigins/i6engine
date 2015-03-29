@@ -30,6 +30,7 @@
 #include "i6engine/modules/gui/guiwidgets/GUIEditbox.h"
 #include "i6engine/modules/gui/guiwidgets/GUIImage.h"
 #include "i6engine/modules/gui/guiwidgets/GUIImageButton.h"
+#include "i6engine/modules/gui/guiwidgets/GUIMultiColumnList.h"
 #include "i6engine/modules/gui/guiwidgets/GUIPrint.h"
 #include "i6engine/modules/gui/guiwidgets/GUIStatusList.h"
 #include "i6engine/modules/gui/guiwidgets/GUITextButton.h"
@@ -58,6 +59,7 @@ namespace modules {
 		registerGUIWidgetTemplate("GUIEditbox", boost::factory<GUIEditbox *>());
 		registerGUIWidgetTemplate("GUIImage", boost::factory<GUIImage *>());
 		registerGUIWidgetTemplate("GUIImageButton", boost::factory<GUIImageButton *>());
+		registerGUIWidgetTemplate("GUIMultiColumnList", boost::factory<GUIMultiColumnList *>());
 		registerGUIWidgetTemplate("GUIPrint", boost::factory<GUIPrint *>());
 		registerGUIWidgetTemplate("GUIStatusList", boost::factory<GUIStatusList *>());
 		registerGUIWidgetTemplate("GUITextButton", boost::factory<GUITextButton *>());

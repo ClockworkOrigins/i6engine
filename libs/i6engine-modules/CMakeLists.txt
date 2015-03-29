@@ -127,6 +127,7 @@ set(i6modulesSrc
 	${srcdir}/modules/gui/guiwidgets/GUIEditbox.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIImage.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIImageButton.cpp
+	${srcdir}/modules/gui/guiwidgets/GUIMultiColumnList.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIPrint.cpp
 	${srcdir}/modules/gui/guiwidgets/GUIStatusList.cpp
 	${srcdir}/modules/gui/guiwidgets/GUITextButton.cpp
@@ -265,6 +266,7 @@ source_group(modules\\graphics /modules/graphics/*)
 source_group(modules\\graphics\\compositors /modules/graphics/compositors/*)
 source_group(modules\\graphics\\widgets /modules/graphics/graphicswidgets/*)
 source_group(modules\\gui /modules/gui/*)
+source_group(modules\\gui\\widgets /modules/gui/guiwidgets/*)
 source_group(modules\\input /modules/input/*)
 source_group(modules\\network /modules/network/*)
 source_group(modules\\object /modules/object/*)

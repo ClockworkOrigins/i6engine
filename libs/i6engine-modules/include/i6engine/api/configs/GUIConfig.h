@@ -79,6 +79,7 @@ namespace gui {
 		GuiSetSelected,
 		GuiSetSelectedCallback,
 		GuiSetTooltip,
+		GuiAddColumn,
 		GuiMessageTypesCount
 	};
 
@@ -97,8 +98,6 @@ namespace gui {
 
 		GUIUpdateMessageStruct() {}
 		GUIUpdateMessageStruct(const std::string & name) : GameMessageStruct(), _name(name) {}
-		/*GUIUpdateMessageStruct(const std::string & name, int64_t i, const core::IPKey & r, const core::IPKey & s, int64_t waitID) : GameMessageStruct(i, r, s, waitID), _name(name) {
-		}*/
 
 		~GUIUpdateMessageStruct() {}
 
@@ -502,6 +501,20 @@ namespace gui {
 			return new GUI_SetTooltip(*this);
 		}
 	} GUI_SetTooltip;
+
+	/**
+	 * \brief adds a column to a GUIMultiColumnHeader
+	 */
+	typedef struct GUI_AddColumn : GUIUpdateMessageStruct {
+		std::string columnHeader;
+		uint32_t column;
+		double width;
+		GUI_AddColumn(const std::string & name, const std::string & ch, uint32_t c, double w) : GUIUpdateMessageStruct(name), columnHeader(ch), column(c), width(w) {
+		}
+		GUI_AddColumn * copy() {
+			return new GUI_AddColumn(*this);
+		}
+	} GUI_AddColumn;
 
 } /* namespace gui */
 } /* namespace api */

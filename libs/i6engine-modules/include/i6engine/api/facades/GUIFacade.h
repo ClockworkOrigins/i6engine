@@ -210,6 +210,16 @@ namespace gui {
 		void addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) const;
 
 		/**
+		* \brief Adds a MultiColumnList to the screen.
+		* \param name (Unique) Name of the new object.
+		* \param x X-Value of the position.
+		* \param y Y-Value of the position.
+		* \param w Width of the image
+		* \param h Height of the image
+		*/
+		void addMultiColumnList(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h) const;
+
+		/**
 		 * \brief Set a text to an specified object.
 		 * \param name Name of the object.
 		 * \param text Text to be set.
@@ -306,7 +316,7 @@ namespace gui {
 		void setProgress(const std::string & name, const double progress) const;
 
 		/**
-		 * \brief Adding a Row to a List (m)
+		 * \brief Adding a Row to a List
 		 * \param name the name of the window
 		 */
 		void addRowToList(const std::string & name) const;
@@ -315,6 +325,15 @@ namespace gui {
 		 * \brief quite self-explanatory. See addRowToList. (m)
 		 */
 		void addRowEntry(const std::string & name, const uint32_t row, const uint32_t column, const std::string & entry) const;
+
+		/**
+		 * \brief Adding a column to a List
+		 * \param name the name of the window
+		 * \param columnHeader header text of the column
+		 * \param column index of the column
+		 * \param width width of this column
+		 */
+		void addColumn(const std::string & name, const std::string & columnHeader, uint32_t column, double width) const;
 
 		/**
 		 * \brief Clears all data in a Widget.

@@ -155,6 +155,12 @@ namespace api {
 		setImage(name, imageSetName, imageName);
 	}
 
+	void GUIFacade::addMultiColumnList(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h) const {
+		createWidget(name, "GUIMultiColumnList", type);
+		setPosition(name, x, y);
+		setSize(name, w, h);
+	}
+
 	void GUIFacade::setLifetime(const std::string & name, const int64_t time) const {
 		GameMessage::Ptr tim = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetLifetime, core::Method::Update, new gui::GUI_Lifetime(name, time), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(tim);
@@ -234,6 +240,11 @@ namespace api {
 
 	void GUIFacade::addRowEntry(const std::string & name, const uint32_t row, const uint32_t column, const std::string & entry) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetRowEntry, core::Method::Update, new gui::GUI_Add_Row_Entry(name, row, column, entry), core::Subsystem::Unknown);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void GUIFacade::addColumn(const std::string & name, const std::string & columnHeader, uint32_t column, double width) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddColumn, core::Method::Update, new gui::GUI_AddColumn(name, columnHeader, column, width), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
