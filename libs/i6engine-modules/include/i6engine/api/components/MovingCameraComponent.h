@@ -43,6 +43,8 @@ namespace api {
 
 		void Init() override;
 
+		void Finalize() override;
+
 		/**
 		 * \brief Sets position of the component
 		 *

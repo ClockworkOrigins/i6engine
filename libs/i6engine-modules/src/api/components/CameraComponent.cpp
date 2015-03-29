@@ -172,7 +172,21 @@ namespace api {
 	}
 
 	attributeMap CameraComponent::synchronize() const {
-		return attributeMap();
+		attributeMap params;
+		_position.insertInMap("pos", params);
+		_lookAt.insertInMap("lookAt", params);
+		params.insert(std::make_pair("nearclip", std::to_string(_nearClip)));
+		params.insert(std::make_pair("aspect", std::to_string(_aspect)));
+		params.insert(std::make_pair("viewport", std::to_string(_viewport)));
+		params.insert(std::make_pair("vp_left", std::to_string(_left)));
+		params.insert(std::make_pair("vp_top", std::to_string(_top)));
+		params.insert(std::make_pair("vp_width", std::to_string(_width)));
+		params.insert(std::make_pair("vp_height", std::to_string(_height)));
+		params.insert(std::make_pair("vp_red", std::to_string(_red)));
+		params.insert(std::make_pair("vp_green", std::to_string(_green)));
+		params.insert(std::make_pair("vp_blue", std::to_string(_blue)));
+		params.insert(std::make_pair("vp_alpha", std::to_string(_alpha)));
+		return params;
 	}
 
 	std::pair<AddStrategy, int64_t> CameraComponent::howToAdd(const ComPtr & comp) const {

@@ -41,6 +41,9 @@ namespace api {
 	}
 
 	ComPtr TerrainAppearanceComponent::createC(const int64_t id, const i6engine::api::attributeMap & params) {
+		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "heightmap not set!", params.find("heightmap") != params.end());
+		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "texture not set!", params.find("texture") != params.end());
+		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "size not set!", params.find("size") != params.end());
 		return utils::make_shared<TerrainAppearanceComponent, Component>(id, params);
 	}
 

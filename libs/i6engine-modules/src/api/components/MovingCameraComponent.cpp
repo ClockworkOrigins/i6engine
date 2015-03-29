@@ -58,13 +58,13 @@ namespace api {
 	}
 
 	MovingCameraComponent::~MovingCameraComponent() {
-		removeTicker();
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Delete, new graphics::Graphics_Camera_Delete(_objOwnerID), i6engine::core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	ComPtr MovingCameraComponent::createC(const int64_t id, const attributeMap & params) {
+		ISIXE_THROW_API_COND("MovingCameraComponent", "position not set!", params.find("pos") != params.end());
+		ISIXE_THROW_API_COND("MovingCameraComponent", "lookAt not set!", params.find("lookAt") != params.end());
+		ISIXE_THROW_API_COND("MovingCameraComponent", "nearclip not set!", params.find("nearclip") != params.end());
+		ISIXE_THROW_API_COND("MovingCameraComponent", "aspect not set!", params.find("aspect") != params.end());
 		return utils::make_shared<MovingCameraComponent, Component>(id, params);
 	}
 
@@ -78,6 +78,13 @@ namespace api {
 		}
 
 		addTicker();
+	}
+
+	void MovingCameraComponent::Finalize() {
+		removeTicker();
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Delete, new graphics::Graphics_Camera_Delete(_objOwnerID), i6engine::core::Subsystem::Object);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void MovingCameraComponent::setPosition(const Vec3 & pos) {
@@ -194,7 +201,21 @@ namespace api {
 	}
 
 	attributeMap MovingCameraComponent::synchronize() const {
-		return attributeMap();
+		attributeMap params;
+		_position.insertInMap("pos", params);
+		_lookAt.insertInMap("lookAt", params);
+		params.insert(std::make_pair("nearclip", std::to_string(_nearClip)));
+		params.insert(std::make_pair("aspect", std::to_string(_aspect)));
+		params.insert(std::make_pair("viewport", std::to_string(_viewport)));
+		params.insert(std::make_pair("vp_left", std::to_string(_left)));
+		params.insert(std::make_pair("vp_top", std::to_string(_top)));
+		params.insert(std::make_pair("vp_width", std::to_string(_width)));
+		params.insert(std::make_pair("vp_height", std::to_string(_height)));
+		params.insert(std::make_pair("vp_red", std::to_string(_red)));
+		params.insert(std::make_pair("vp_green", std::to_string(_green)));
+		params.insert(std::make_pair("vp_blue", std::to_string(_blue)));
+		params.insert(std::make_pair("vp_alpha", std::to_string(_alpha)));
+		return params;
 	}
 
 	std::pair<AddStrategy, int64_t> MovingCameraComponent::howToAdd(const ComPtr & comp) const {

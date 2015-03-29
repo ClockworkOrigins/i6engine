@@ -96,6 +96,8 @@ namespace api {
 
 		void Init() override;
 
+		void Finalize() override;
+
 		/**
 		 * \brief resets progress to initial status
 		 */

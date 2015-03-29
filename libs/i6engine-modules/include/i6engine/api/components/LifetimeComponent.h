@@ -43,6 +43,8 @@ namespace api {
 
 		void Init() override;
 
+		void Finalize() override;
+
 		/**
 		 * \brief creates the Component with given attributeMap
 		 */

@@ -268,6 +268,9 @@ namespace api {
 		}
 		_way = static_cast<Way>(boost::lexical_cast<uint16_t>(params.at("way")));
 
+		if (params.find("direction") == params.end()) {
+			ISIXE_THROW_API("MoverComponent", "required parameter 'direction' not set");
+		}
 		if (params.find("direction") != params.end()) {
 			_direction = boost::lexical_cast<bool>(params.find("direction")->second);
 		}
@@ -292,6 +295,7 @@ namespace api {
 		// general attributes
 		params["mode"] = boost::lexical_cast<std::string>(uint16_t(_mode));
 		params["way"] = boost::lexical_cast<std::string>(uint16_t(_way));
+		params["direction"] = std::to_string(_direction);
 
 		params["keyframes"] = boost::lexical_cast<std::string>(_keyFrames.size());
 		for (size_t i = 0; i < _keyFrames.size(); ++i) {

@@ -81,6 +81,10 @@ namespace api {
 
 	attributeMap BillboardComponent::synchronize() const {
 		attributeMap params;
+		params.insert(std::make_pair("material", _material));
+		params.insert(std::make_pair("width", std::to_string(_width)));
+		params.insert(std::make_pair("height", std::to_string(_height)));
+		params.insert(std::make_pair("origin", std::to_string(uint32_t(_billboardOrigin))));
 		return params;
 	}
 

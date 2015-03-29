@@ -40,7 +40,6 @@ namespace api {
 	}
 
 	MoverComponent::~MoverComponent() {
-		removeTicker();
 	}
 
 	void MoverComponent::Init() {
@@ -60,6 +59,10 @@ namespace api {
 			start(_realStartPos);
 			_startTime = a;
 		}
+	}
+
+	void MoverComponent::Finalize() {
+		removeTicker();
 	}
 
 	void MoverComponent::stop() {

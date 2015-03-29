@@ -41,11 +41,14 @@ namespace api {
 	}
 
 	LifetimeComponent::~LifetimeComponent() {
-		removeTicker();
 	}
 
 	void LifetimeComponent::Init() {
 		addTicker();
+	}
+
+	void LifetimeComponent::Finalize() {
+		removeTicker();
 	}
 
 	void LifetimeComponent::Tick() {

@@ -197,6 +197,8 @@ namespace api {
 		 */
 		void Init() override;
 
+		void Finalize() override;
+
 		/**
 		 * \brief Returns the position of the object.
 		 * \return Position of the object

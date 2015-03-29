@@ -91,7 +91,11 @@ namespace api {
 	}
 
 	attributeMap FollowComponent::synchronize() const {
-		return attributeMap();
+		attributeMap params;
+		int64_t targetID = (_targetPSC != nullptr) ? _targetPSC.get()->getOwnerGO()->getID() : -1;
+		params.insert(std::make_pair("targetID", std::to_string(targetID)));
+		params.insert(std::make_pair("speed", std::to_string(_speed)));
+		return params;
 	}
 
 } /* namespace api */

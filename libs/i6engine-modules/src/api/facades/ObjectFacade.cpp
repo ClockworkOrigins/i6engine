@@ -146,7 +146,9 @@ namespace api {
 	}
 
 	void ObjectFacade::notifyNewID(int64_t id) {
-		_notify(id);
+		if (!_notify.empty()) {
+			_notify(id);
+		}
 	}
 
 	void ObjectFacade::registerAddTickerCallback(const boost::function<void(const WeakComPtr &)> & func) {

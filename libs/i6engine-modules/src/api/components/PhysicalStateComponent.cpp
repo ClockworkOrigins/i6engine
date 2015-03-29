@@ -56,11 +56,6 @@ namespace api {
 	}
 
 	PhysicalStateComponent::~PhysicalStateComponent() {
-		removeTicker();
-
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Delete, new physics::Physics_Node_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	ComPtr PhysicalStateComponent::createC(const int64_t id, const i6engine::api::attributeMap & params) {
@@ -90,6 +85,14 @@ namespace api {
 		_initialized = true;
 
 		addTicker();
+	}
+
+	void PhysicalStateComponent::Finalize() {
+		removeTicker();
+
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Delete, new physics::Physics_Node_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	Vec3 PhysicalStateComponent::getPosition() const {

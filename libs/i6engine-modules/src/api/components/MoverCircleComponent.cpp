@@ -118,6 +118,9 @@ namespace api {
 	}
 
 	void MoverCircleComponent::loadParams(const attributeMap & params) {
+		ISIXE_THROW_API_COND("MoverCircleComponent", "required parameter 'pos' not set", params.find("pos") != params.end());
+		ISIXE_THROW_API_COND("MoverCircleComponent", "required parameter 'axis' not set", params.find("axis") != params.end());
+		ISIXE_THROW_API_COND("MoverCircleComponent", "required parameter 'radius' not set", params.find("radius") != params.end());
 		setCircleParameters(Vec3(params, "pos"), Vec3(params, "axis"), boost::lexical_cast<double>(params.at("radius")));
 		_lastPos = _circleCenter;
 		if (params.find("realCenterPos") != params.end()) {

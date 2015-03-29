@@ -39,9 +39,9 @@ namespace api {
 	}
 
 	ComPtr StaticStateComponent::createC(const int64_t id, const attributeMap & params) {
-		assert(params.find("pos") != params.end());
-		assert(params.find("rot") != params.end());
-		assert(params.find("scale") != params.end());
+		ISIXE_THROW_API_COND("StaticStateComponent", "position not set!", params.find("pos") != params.end());
+		ISIXE_THROW_API_COND("StaticStateComponent", "rotation not set!", params.find("rot") != params.end());
+		ISIXE_THROW_API_COND("StaticStateComponent", "scale not set!", params.find("scale") != params.end());
 		return utils::make_shared<StaticStateComponent, Component>(id, params);
 	}
 

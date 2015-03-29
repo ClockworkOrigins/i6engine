@@ -27,6 +27,8 @@ SET(testSrc
 	api/test_GameMessage.cpp
 	
 	api/components/test_Component.cpp
+	api/components/test_ComponentCreateException.cpp
+	api/components/test_ComponentSynchronize.cpp
 	api/components/test_MoverComponent.cpp
 	
 	api/manager/test_IDManager.cpp

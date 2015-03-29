@@ -36,8 +36,8 @@ set(i6components
 	${srcdir}/api/components/LuminousAppearanceComponent.cpp
 	${srcdir}/api/components/MeshAppearanceComponent.cpp
 	${srcdir}/api/components/MovableTextComponent.cpp
-	${srcdir}/api/components/MoverInterpolateComponent.cpp
 	${srcdir}/api/components/MoverCircleComponent.cpp
+	${srcdir}/api/components/MoverInterpolateComponent.cpp
 	${srcdir}/api/components/MovingCameraComponent.cpp
 	${srcdir}/api/components/ParticleEmitterComponent.cpp
 	${srcdir}/api/components/PhysicalStateComponent.cpp
