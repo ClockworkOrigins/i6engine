@@ -370,3 +370,40 @@ TEST(MessagingController, MultithreadedStressTest) {
 
 	delete mc;
 }
+
+TEST(MessagingController, handlingBufferedMessageForUnregisteredType) {
+	Mock_MessagingController * mc = new Mock_MessagingController();
+	MessageSubscriber ms;
+
+	mc->registerMessageType(1, &ms);
+	ms.addMethod(1, [](const Message::Ptr) {});
+
+	// create and delete obj 1
+	Message::Ptr msg1(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg2(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg3(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg4(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg5(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg6(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+
+	mc->deliverMessage(msg1);
+	mc->deliverMessage(msg2);
+	mc->deliverMessage(msg3);
+
+	// wait for messages to be delivered and processed
+	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+	ms.processMessages();
+
+	// this message will be in buffer when unregistering
+	mc->deliverMessage(msg4);
+
+	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+
+	mc->unregisterMessageType(1, &ms);
+	ms.removeMethod(1);
+	mc->deliverMessage(msg5);
+
+	ms.processMessages();
+
+	delete mc;
+}
