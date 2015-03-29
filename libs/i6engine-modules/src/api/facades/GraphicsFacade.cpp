@@ -128,16 +128,20 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void GraphicsFacade::setLinearFog(const Vec3 & colour, double start, double end) {
+	void GraphicsFacade::setLinearFog(const Vec3 & colour, double start, double end) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraSetLinearFog, core::Method::Update, new graphics::Graphics_SetLinearFog_Update(colour, start, end), core::Subsystem::Unknown));
 	}
 
-	void GraphicsFacade::setExponentialFog(const Vec3 & colour, double density) {
+	void GraphicsFacade::setExponentialFog(const Vec3 & colour, double density) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraSetExponentialFog, core::Method::Update, new graphics::Graphics_SetExponentialFog_Update(colour, density), core::Subsystem::Unknown));
 	}
 
-	void GraphicsFacade::setExponentialFog2(const Vec3 & colour, double density) {
+	void GraphicsFacade::setExponentialFog2(const Vec3 & colour, double density) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraSetExponentialFog2, core::Method::Update, new graphics::Graphics_SetExponentialFog_Update(colour, density), core::Subsystem::Unknown));
+	}
+
+	void GraphicsFacade::takeScreenshot(const std::string & prefix, const std::string & suffix) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraScreenshot, core::Method::Create, new graphics::Graphics_Screenshot_Create(prefix, suffix), core::Subsystem::Unknown));
 	}
 
 	void GraphicsFacade::registerNotifyCallback(const boost::function<void(int64_t)> & f) {

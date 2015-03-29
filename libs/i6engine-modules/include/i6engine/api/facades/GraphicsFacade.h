@@ -138,21 +138,28 @@ namespace api {
 		 * \params start the distance the fog starts
 		 * \params end the distance the fog is complete thick
 		 */
-		void setLinearFog(const Vec3 & colour, double start, double end);
+		void setLinearFog(const Vec3 & colour, double start, double end) const;
 
 		/**
 		 * \brief sets exponential fog
 		 * \params colour colour of the fog
 		 * \params density the density of the fog
 		 */
-		void setExponentialFog(const Vec3 & colour, double density);
+		void setExponentialFog(const Vec3 & colour, double density) const;
 
 		/**
 		 * \brief sets exponential fog (2, faster increase of density)
 		 * \params colour colour of the fog
 		 * \params density the density of the fog
 		 */
-		void setExponentialFog2(const Vec3 & colour, double density);
+		void setExponentialFog2(const Vec3 & colour, double density) const;
+
+		/**
+		 * \brief make a screenshot of current scene using prefix, timestamp and suffix
+		 * \params prefix prefix of the file
+		 * \params suffix suffix of the file, something like .bmp
+		 */
+		void takeScreenshot(const std::string & prefix, const std::string & suffix) const;
 
 	private:
 		boost::function<void(int64_t)> _notify;

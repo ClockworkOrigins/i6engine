@@ -64,7 +64,8 @@ namespace graphics {
 		GraSetExponentialFog,
 		GraSetExponentialFog2,
 		GraMovableText,
-		GraCompositor
+		GraCompositor,
+		GraScreenshot
 	};
 
 	enum class ShadowTechnique {
@@ -672,6 +673,19 @@ namespace graphics {
 			return new Graphics_Compositor_Update(*this);
 		}
 	} Graphics_Compositor_Update;
+
+	/**
+	 * \brief takes a screenshot
+	 */
+	typedef struct Graphics_Screenshot_Create : GameMessageStruct {
+		std::string prefix;
+		std::string suffix;
+		Graphics_Screenshot_Create(const std::string & p, const std::string & s) : GameMessageStruct(), prefix(p), suffix(s) {
+		}
+		Graphics_Screenshot_Create * copy() {
+			return new Graphics_Screenshot_Create(*this);
+		}
+	} Graphics_Screenshot_Create;
 
 } /* namespace graphics */
 } /* namespace api */

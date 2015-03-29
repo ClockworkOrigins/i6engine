@@ -296,6 +296,9 @@ namespace modules {
 			api::graphics::Graphics_SkyPlane_Create * c = static_cast<api::graphics::Graphics_SkyPlane_Create *>(msg->getContent());
 
 			_sceneManager->setSkyPlane(true, Ogre::Plane(Ogre::Vector3(0.0, c->direction, 0.0), c->distance), c->material, c->size, c->tiles, c->renderFirst, c->curvature, c->xSegments, c->ySegments);
+		} else if (msg->getSubtype() == api::graphics::GraScreenshot) {
+			api::graphics::Graphics_Screenshot_Create * gsc = dynamic_cast<api::graphics::Graphics_Screenshot_Create *>(msg->getContent());
+			_rWindow->writeContentsToTimestampedFile(gsc->prefix, gsc->suffix);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

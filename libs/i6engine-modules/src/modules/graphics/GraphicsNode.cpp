@@ -20,6 +20,8 @@
 
 #include "i6engine/utils/Exceptions.h"
 
+#include "i6engine/math/i6eMath.h"
+
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/GraphicsConfig.h"
 
@@ -322,8 +324,8 @@ namespace modules {
 		light->setSpecularColour(specular.getX(), specular.getY(), specular.getZ());
 		light->setAttenuation(attenuation.getW(), attenuation.getX(), attenuation.getY(), attenuation.getZ());
 		light->setDirection(direction.toOgre());
-		light->setSpotlightInnerAngle(Ogre::Radian(spotLightRangeInner));
-		light->setSpotlightOuterAngle(Ogre::Radian(spotLightRangeOuter));
+		light->setSpotlightInnerAngle(Ogre::Radian(spotLightRangeInner * PI / 180));
+		light->setSpotlightOuterAngle(Ogre::Radian(spotLightRangeOuter * PI / 180));
 	}
 
 	void GraphicsNode::createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos) {
