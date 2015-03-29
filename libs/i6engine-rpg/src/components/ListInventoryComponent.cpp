@@ -176,7 +176,6 @@ namespace components {
 					_widgets.push_back(namePrefix + "Amount");
 					placed++;
 					if (counter == _currentIndex) {
-						std::cout << "Hier" << std::endl;
 						gf->addPrint("Inventory_InfoScreen_Name", "RPG/Blanko", 0.5, 0.82, api::EngineController::GetSingleton().getTextManager()->getText(p2.first), api::gui::Alignment::Center, -1);
 						gf->setSize("Inventory_InfoScreen_Name", 0.5, 0.05);
 						_widgets.push_back("Inventory_InfoScreen_Name");
