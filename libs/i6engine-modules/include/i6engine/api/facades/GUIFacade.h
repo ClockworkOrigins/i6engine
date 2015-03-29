@@ -96,13 +96,6 @@ namespace gui {
 		void changeEvent(const std::string & windowname, bool b) const;
 
 		/**
-		 * \brief Sets visibility of a window (m)
-		 * \param windowname name of the window
-		 * \param visibilty
-		 */
-		void setVisibility(const std::string & windowname, const bool visibility) const;
-
-		/**
 		 * \brief Wrapper to set both visibility of a window and the cursor
 		 * \param windowname name of the window
 		 * \param wVisibilty visibility of the window
@@ -111,22 +104,14 @@ namespace gui {
 		void setWindowAndMouseVisibility(const std::string & windowname, const bool wVisibility, const bool mVisibility) const;
 
 		/**
-		 * \brief Adding a Row to a List (m)
-		 * \param name the name of the window
+		 * \brief sets image for mouse cursor
 		 */
-		void addRowToList(const std::string & name) const;
+		void setMouseCursorImage(const std::string & image) const;
 
 		/**
-		 * \brief quite self-explanatory. See addRowToList. (m)
+		 * \brief adds given imageset so it can be used with own graphics
 		 */
-		void addRowEntry(const std::string & name, const uint32_t row, const uint32_t column, const std::string & entry) const;
-
-		/**
-		 * \brief Clears all data in a Widget.
-		 *
-		 * Removes for example all entries in a StatusList.
-		 */
-		void clearWidget(const std::string & name) const;
+		void addImageset(const std::string & imageset) const;
 
 		/**
 		 * \brief Adds a new Text to the screen.
@@ -203,6 +188,28 @@ namespace gui {
 		void addToggleButton(const std::string & name, const std::string & type, double x, double y, double w, double h, bool selected, const std::function<void(bool)> & selectedCallback) const;
 
 		/**
+		 * \brief Creates a StatusList-GuiWidget
+		 * \param	CEGUI Type i.e. "Tri6/Blanko"
+		 * \param	position x-coordinate
+		 * \param	position y-coordinate
+		 * \param	time before entire List hides, in microseconds
+		 * \return   nothing
+		 */
+		void addStatusList(const std::string & name, const std::string & type, const double x, const double y, const int64_t lifetime) const;
+
+		/**
+		 * \brief Adds a new Image to the screen.
+		 * \param name (Unique) Name of the new object.
+		 * \param imageSetName imageSet
+		 * \param imageName image
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 * \param w Width of the image
+		 * \param h Height of the image
+		 */
+		void addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) const;
+
+		/**
 		 * \brief Set a text to an specified object.
 		 * \param name Name of the object.
 		 * \param text Text to be set.
@@ -224,6 +231,13 @@ namespace gui {
 		 * \param h Height
 		 */
 		void setSize(const std::string & name, const double w, const double h) const;
+
+		/**
+		 * \brief Sets visibility of a window (m)
+		 * \param windowname name of the window
+		 * \param visibilty
+		 */
+		void setVisibility(const std::string & windowname, const bool visibility) const;
 
 		/**
 		 * \brief Sets the amount of items of an specified object.
@@ -285,16 +299,6 @@ namespace gui {
 		void setDropCallback(const std::string & name, const std::function<void(const std::string &, const std::string &)> & callback) const;
 
 		/**
-		 * \brief Creates a StatusList-GuiWidget
-		 * \param	CEGUI Type i.e. "Tri6/Blanko"
-		 * \param	position x-coordinate
-		 * \param	position y-coordinate
-		 * \param	time before entire List hides, in microseconds
-		 * \return   nothing
-		 */
-		void addStatusList(const std::string & name, const std::string & type, const double x, const double y, const int64_t lifetime) const;
-
-		/**
 		 * \brief Sets the Progress of a bar.
 		 * \param name Name of the Widget
 		 * \param progress Percentage to set (between 0 and 1)
@@ -302,16 +306,22 @@ namespace gui {
 		void setProgress(const std::string & name, const double progress) const;
 
 		/**
-		 * \brief Adds a new Image to the screen.
-		 * \param name (Unique) Name of the new object.
-		 * \param imageSetName imageSet
-		 * \param imageName image
-		 * \param x X-Value of the position.
-		 * \param y Y-Value of the position.
-		 * \param w Width of the image
-		 * \param h Height of the image
+		 * \brief Adding a Row to a List (m)
+		 * \param name the name of the window
 		 */
-		void addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) const;
+		void addRowToList(const std::string & name) const;
+
+		/**
+		 * \brief quite self-explanatory. See addRowToList. (m)
+		 */
+		void addRowEntry(const std::string & name, const uint32_t row, const uint32_t column, const std::string & entry) const;
+
+		/**
+		 * \brief Clears all data in a Widget.
+		 *
+		 * Removes for example all entries in a StatusList.
+		 */
+		void clearWidget(const std::string & name) const;
 
 		/**
 		 * \brief Sets the Image
@@ -409,16 +419,6 @@ namespace gui {
 		 * \brief resets the subsystem to it's defaults
 		 */
 		void resetSubSystem();
-
-		/**
-		 * \brief sets image for mouse cursor
-		 */
-		void setMouseCursorImage(const std::string & image) const;
-
-		/**
-		 * \brief adds given imageset so it can be used with own graphics
-		 */
-		void addImageset(const std::string & imageset) const;
 
 		/**
 		 * \brief called only by GUI subsystem setting state whether input is captured or not
