@@ -143,6 +143,15 @@ namespace api {
 		void createGO(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint32_t uuid, const bool sender, const boost::function<void(GOPtr)> & func) const;
 
 		/**
+		 * \brief creates a new Component for given GameObject
+		 * \param goid GameObject id
+		 * \param coid id for the Component
+		 * \param component registered string for create method
+		 * \param params attributeMap for this Component
+		 */
+		void createComponent(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params) const;
+
+		/**
 		 * \brief updates the GOList with current state in ObjectSubsystem
 		 */
 		void updateGOList(const std::list<GOPtr> & GOList);

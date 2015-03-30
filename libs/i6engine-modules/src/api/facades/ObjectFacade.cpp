@@ -22,6 +22,7 @@
 
 #include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/Component.h"
+#include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/objects/GameObject.h"
@@ -128,6 +129,10 @@ namespace api {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectMessageType, objects::ObjCreateAndCall, core::Method::Create, new objects::Object_CreateAndCall_Create(-1, gTemplate, EngineController::GetSingletonPtr()->getNetworkFacade()->getIP(), uuid, tmpl, sender, func), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void ObjectFacade::createComponent(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComCreate, core::Method::Create, new components::Component_Create_Create(goid, coid, core::IPKey(), component, params), core::Subsystem::Unknown));
 	}
 
 	void ObjectFacade::updateGOList(const std::list<GOPtr> & GOList) {
