@@ -134,32 +134,48 @@ namespace api {
 
 		/**
 		 * \brief sets linear fog
-		 * \params colour colour of the fog
-		 * \params start the distance the fog starts
-		 * \params end the distance the fog is complete thick
+		 * \param colour colour of the fog
+		 * \param start the distance the fog starts
+		 * \param end the distance the fog is complete thick
 		 */
 		void setLinearFog(const Vec3 & colour, double start, double end) const;
 
 		/**
 		 * \brief sets exponential fog
-		 * \params colour colour of the fog
-		 * \params density the density of the fog
+		 * \param colour colour of the fog
+		 * \param density the density of the fog
 		 */
 		void setExponentialFog(const Vec3 & colour, double density) const;
 
 		/**
 		 * \brief sets exponential fog (2, faster increase of density)
-		 * \params colour colour of the fog
-		 * \params density the density of the fog
+		 * \param colour colour of the fog
+		 * \param density the density of the fog
 		 */
 		void setExponentialFog2(const Vec3 & colour, double density) const;
 
 		/**
 		 * \brief make a screenshot of current scene using prefix, timestamp and suffix
-		 * \params prefix prefix of the file
-		 * \params suffix suffix of the file, something like .bmp
+		 * \param prefix prefix of the file
+		 * \param suffix suffix of the file, something like .bmp
 		 */
 		void takeScreenshot(const std::string & prefix, const std::string & suffix) const;
+
+		/**
+		 * \brief shows graphic frames
+		 * \param x x position of the frames window
+		 * \param y y position of the frames window
+		 * \param imageStyle style of the image
+		 * \param printStyle style of the print
+		 * \param imageset imageset of the frame window
+		 * \param image image of the frame window
+		 */
+		void showFPS(double x, double y, const std::string & imageStyle, const std::string & printStyle, const std::string & imageset, const std::string & image) const;
+
+		/**
+		 * \brief hides graphic frames
+		 */
+		void hideFPS() const;
 
 	private:
 		boost::function<void(int64_t)> _notify;

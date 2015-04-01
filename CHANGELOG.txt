@@ -35,6 +35,7 @@ Enhancements:
 	- added MultiColumnListWidget
 	- added API method on ObjectFacade to add Components
 	- added ComboBoxWidget
+	- added possibility to show a fps box with avg, best and worst frames
 
 Fixes:
 	- cmake now doesn't need to be run twice to build m2etis correctly

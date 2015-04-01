@@ -238,6 +238,8 @@ namespace modules {
 
 		bool _initialized;
 
+		bool _showFPS;
+
 		/**
 		 * \brief forbidden
 		 */

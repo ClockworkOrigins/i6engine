@@ -30,6 +30,7 @@
 #include "i6engine/api/configs/GUIConfig.h"
 #include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/GraphicsFacade.h"
+#include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
 #include "i6engine/modules/graphics/Debug.h"
@@ -53,7 +54,7 @@
 namespace i6engine {
 namespace modules {
 
-	GraphicsManager::GraphicsManager(GraphicsController * ctrl) : _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false) {
+	GraphicsManager::GraphicsManager(GraphicsController * ctrl) : _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		try {
@@ -202,6 +203,21 @@ namespace modules {
 			gn->Tick();
 		}
 
+		if (_showFPS) {
+			Ogre::RenderTarget::FrameStats stats = _rWindow->getStatistics();
+			api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+			std::ostringstream oss;
+			oss.str("");
+			oss << std::fixed << std::setprecision(1) << stats.avgFPS;
+			gf->setText("FPS_Avg_Value", oss.str());
+			oss.str("");
+			oss << std::fixed << std::setprecision(1) << stats.bestFPS;
+			gf->setText("FPS_Best_Value", oss.str());
+			oss.str("");
+			oss << std::fixed << std::setprecision(1) << stats.worstFPS;
+			gf->setText("FPS_Worst_Value", oss.str());
+		}
+
 		try {
 			Debug::getSingleton().build();
 			_objRoot->renderOneFrame();
@@ -299,6 +315,8 @@ namespace modules {
 		} else if (msg->getSubtype() == api::graphics::GraScreenshot) {
 			api::graphics::Graphics_Screenshot_Create * gsc = dynamic_cast<api::graphics::Graphics_Screenshot_Create *>(msg->getContent());
 			_rWindow->writeContentsToTimestampedFile(gsc->prefix, gsc->suffix);
+		} else if (msg->getSubtype() == api::graphics::GraFPS) {
+			_showFPS = true;
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -406,6 +424,8 @@ namespace modules {
 			_sceneManager->setSkyDome(false, "");
 		} else if (msg->getSubtype() == api::graphics::GraSkyPlane) {
 			_sceneManager->setSkyPlane(false, Ogre::Plane(), "");
+		} else if (msg->getSubtype() == api::graphics::GraFPS) {
+			_showFPS = false;
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

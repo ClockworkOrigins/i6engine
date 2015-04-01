@@ -38,6 +38,9 @@ namespace sample {
 		void Finalize();
 		
 		void ShutDown();
+
+	private:
+		bool _showFPS;
 	};
 
 } /* namespace sample */

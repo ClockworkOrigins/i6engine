@@ -38,7 +38,7 @@
 
 namespace sample {
 
-	RPGApplication::RPGApplication() : i6engine::api::Application() {
+	RPGApplication::RPGApplication() : i6engine::api::Application(), _showFPS(false) {
 	}
 
 	RPGApplication::~RPGApplication() {
@@ -68,8 +68,8 @@ namespace sample {
 		// register ESC to close the application
 		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
 
-		// register P to take screenshot
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_P, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::GraphicsFacade::takeScreenshot, i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "RPGScreen_", ".jpg"));
+		// register F12 to take screenshot
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F12, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::GraphicsFacade::takeScreenshot, i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "RPGScreen_", ".jpg"));
 
 		// register rpg components we want to use => will be easier in the futur
 		// do this befor loading the level
@@ -85,6 +85,16 @@ namespace sample {
 
 		// a hack to load rpg library
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").front()->getGOC<i6engine::rpg::components::NameComponent>(i6engine::rpg::components::config::ComponentTypes::NameComponent)->getName();
+
+		// shows fps (activate/deactive using F1)
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F1, i6engine::api::KeyState::KEY_PRESSED, [this]() {
+			if (!_showFPS) {
+				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->showFPS(0.0, 0.0, "RPG/StaticImage", "RPG/Blanko", "RPG", "TbM_Filling");
+			} else {
+				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->hideFPS();
+			}
+			_showFPS = !_showFPS;
+		});
 	}
 
 	void RPGApplication::Tick() {

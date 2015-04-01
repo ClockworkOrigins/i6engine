@@ -21,6 +21,8 @@
 #include "i6engine/core/configs/SubsystemConfig.h"
 
 #include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/configs/GUIConfig.h"
+#include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
 namespace i6engine {
@@ -142,6 +144,28 @@ namespace api {
 
 	void GraphicsFacade::takeScreenshot(const std::string & prefix, const std::string & suffix) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraScreenshot, core::Method::Create, new graphics::Graphics_Screenshot_Create(prefix, suffix), core::Subsystem::Unknown));
+	}
+
+	void GraphicsFacade::showFPS(double x, double y, const std::string & imageStyle, const std::string & printStyle, const std::string & imageset, const std::string & image) const {
+		EngineController::GetSingletonPtr()->getGUIFacade()->addImage("FPSBox", imageStyle, imageset, image, x, y, 0.15, 0.11);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg", printStyle, x + 0.01, y + 0.01, "Avg. FPS: ", gui::Alignment::Left, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best", printStyle, x + 0.01, y + 0.04, "Best FPS: ", gui::Alignment::Left, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst", printStyle, x + 0.01, y + 0.07, "Worst FPS: ", gui::Alignment::Left, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg_Value", printStyle, x + 0.14, y + 0.01, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best_Value", printStyle, x + 0.14, y + 0.04, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst_Value", printStyle, x + 0.14, y + 0.07, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraFPS, core::Method::Create, new graphics::Graphics_FPS_Create(), core::Subsystem::Unknown));
+	}
+
+	void GraphicsFacade::hideFPS() const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraFPS, core::Method::Delete, new graphics::Graphics_FPS_Delete(), core::Subsystem::Unknown));
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPSBox");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Avg");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Best");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Worst");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Avg_Value");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Best_Value");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Worst_Value");
 	}
 
 	void GraphicsFacade::registerNotifyCallback(const boost::function<void(int64_t)> & f) {

@@ -65,7 +65,8 @@ namespace graphics {
 		GraSetExponentialFog2,
 		GraMovableText,
 		GraCompositor,
-		GraScreenshot
+		GraScreenshot,
+		GraFPS
 	};
 
 	enum class ShadowTechnique {
@@ -686,6 +687,28 @@ namespace graphics {
 			return new Graphics_Screenshot_Create(*this);
 		}
 	} Graphics_Screenshot_Create;
+
+	/**
+	 * \brief shows FPS
+	 */
+	typedef struct Graphics_FPS_Create : GameMessageStruct {
+		Graphics_FPS_Create() : GameMessageStruct() {
+		}
+		Graphics_FPS_Create * copy() {
+			return new Graphics_FPS_Create(*this);
+		}
+	} Graphics_FPS_Create;
+
+	/**
+	 * \brief hides FPS
+	 */
+	typedef struct Graphics_FPS_Delete : GameMessageStruct {
+		Graphics_FPS_Delete() : GameMessageStruct() {
+		}
+		Graphics_FPS_Delete * copy() {
+			return new Graphics_FPS_Delete(*this);
+		}
+	} Graphics_FPS_Delete;
 
 } /* namespace graphics */
 } /* namespace api */
