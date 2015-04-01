@@ -151,8 +151,9 @@ namespace core {
 						deliverMessageInternal(msg);
 					} else {
 						if (msg->waitingFor.find(waitForId) == msg->waitingFor.end()/*findWaiting(msg, waitForId) == -1*/) {
-							if (_existingObjects.find(waitForId) != _existingObjects.end()) {
-								if (_existingObjects[waitForId] != IDStatus::DELETED) {
+							auto it = _existingObjects.find(waitForId);
+							if (it != _existingObjects.end()) {
+								if (it->second != IDStatus::DELETED) {
 									deliverMessageInternal(msg);
 								}
 							} else {
@@ -169,8 +170,9 @@ namespace core {
 						deliverMessageInternal(msg);
 					} else {
 						if (msg->waitingFor.find(id) == msg->waitingFor.end()/*findWaiting(msg, id) == -1*/) {
-							if (_existingObjects.find(id) != _existingObjects.end()) {
-								if (_existingObjects[id] != IDStatus::DELETED) {
+							auto it = _existingObjects.find(id);
+							if (it != _existingObjects.end()) {
+								if (it->second != IDStatus::DELETED) {
 									deliverMessageInternal(msg);
 								}
 							} else {

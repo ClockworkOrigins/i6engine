@@ -161,6 +161,13 @@ namespace api {
 		setSize(name, w, h);
 	}
 
+	void GUIFacade::addComboBox(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::function<void(std::string)> & selectedCallback) const {
+		createWidget(name, "GUIComboBox", type);
+		setPosition(name, x, y);
+		setSize(name, w, h);
+		setSelectedStringCallback(name, selectedCallback);
+	}
+
 	void GUIFacade::setLifetime(const std::string & name, const int64_t time) const {
 		GameMessage::Ptr tim = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetLifetime, core::Method::Update, new gui::GUI_Lifetime(name, time), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(tim);
@@ -276,6 +283,10 @@ namespace api {
 
 	void GUIFacade::setTooltip(const std::string & windowname, const std::string & tooltip) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetTooltip, core::Method::Update, new gui::GUI_SetTooltip(windowname, tooltip), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::setSelectedStringCallback(const std::string & name, const std::function<void(std::string)> & selectedCallback) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSelectedStringCallback, core::Method::Update, new gui::GUI_SetSelectedStringCallback(name, selectedCallback), core::Subsystem::Unknown));
 	}
 
 	void GUIFacade::addTicker(GUIWidget * widget) {

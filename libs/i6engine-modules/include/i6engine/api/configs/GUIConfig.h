@@ -80,6 +80,7 @@ namespace gui {
 		GuiSetSelectedCallback,
 		GuiSetTooltip,
 		GuiAddColumn,
+		GuiSetSelectedStringCallback,
 		GuiMessageTypesCount
 	};
 
@@ -515,6 +516,18 @@ namespace gui {
 			return new GUI_AddColumn(*this);
 		}
 	} GUI_AddColumn;
+
+	/**
+	 * \brief callback being called when selection in ComboBox changes
+	 */
+	typedef struct GUI_SetSelectedStringCallback : GUIUpdateMessageStruct {
+		std::function<void(std::string)> callback;
+		GUI_SetSelectedStringCallback(const std::string & name, const std::function<void(std::string)> & c) : GUIUpdateMessageStruct(name), callback(c) {
+		}
+		GUI_SetSelectedStringCallback * copy() {
+			return new GUI_SetSelectedStringCallback(*this);
+		}
+	} GUI_SetSelectedStringCallback;
 
 } /* namespace gui */
 } /* namespace api */

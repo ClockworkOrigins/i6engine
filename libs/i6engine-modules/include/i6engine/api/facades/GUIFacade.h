@@ -210,14 +210,24 @@ namespace gui {
 		void addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) const;
 
 		/**
-		* \brief Adds a MultiColumnList to the screen.
-		* \param name (Unique) Name of the new object.
-		* \param x X-Value of the position.
-		* \param y Y-Value of the position.
-		* \param w Width of the image
-		* \param h Height of the image
-		*/
+		 * \brief Adds a MultiColumnList to the screen.
+		 * \param name (Unique) Name of the new object.
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 * \param w Width of the image
+		 * \param h Height of the image
+		 */
 		void addMultiColumnList(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h) const;
+
+		/**
+		 * \brief Adds a ComboBox to the screen.
+		 * \param name (Unique) Name of the new object.
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 * \param w Width of the image
+		 * \param h Height of the image
+		 */
+		void addComboBox(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h, const std::function<void(std::string)> & selectedCallback) const;
 
 		/**
 		 * \brief Set a text to an specified object.
@@ -391,6 +401,13 @@ namespace gui {
 		 * The specific behavior depends on the widget.
 		 */
 		void addTextToWidget(const std::string & name, const std::string & text) const;
+
+		/**
+		 * \brief Sets a selected callback to a ComboBox
+		 * \param name Name of the Widget
+		 * \param selectedCallback callback to be called when selection changes
+		 */
+		void setSelectedStringCallback(const std::string & name, const std::function<void(std::string)> & selectedCallback) const;
 
 		/**
 		 * \brief Registers a new Widget-template.

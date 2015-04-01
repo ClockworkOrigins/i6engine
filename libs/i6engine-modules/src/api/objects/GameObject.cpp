@@ -48,7 +48,6 @@ namespace api {
 		if (graF != nullptr) {
 			graF->removeNode(_objGoid);
 		}
-
 		clearGOCs();
 	}
 
@@ -104,10 +103,10 @@ namespace api {
 	std::vector<ComPtr> GameObject::getGOCList() const {
 		std::vector<ComPtr> result;
 
-		for (auto c : _objComponents) {
+		for (auto & c : _objComponents) {
 			result.push_back(c.second);
 
-			for (auto sc : c.second->_subComps) {
+			for (auto & sc : c.second->_subComps) {
 				result.push_back(sc);
 			}
 		}
