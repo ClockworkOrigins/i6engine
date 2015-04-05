@@ -236,7 +236,7 @@ namespace api {
 			registerSubSystem("Scripting", new modules::ScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
 #ifdef ISIXE_WITH_AUDIO
-			registerSubSystem("Audio", new modules::AudioController(), LNG_SCRIPTING_FRAME_TIME);
+			registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
 #endif
 		} else {
 #ifdef ISIXE_NETWORK
