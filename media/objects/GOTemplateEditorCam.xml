@@ -20,4 +20,6 @@
 		<Attribute name="vp_blue">0.0</Attribute>
 		<Attribute name="vp_alpha">1.0</Attribute>
 	</Component>
+	<Component template="ToggleWaynet" owner="true">
+	</Component>
 </GOTemplate>

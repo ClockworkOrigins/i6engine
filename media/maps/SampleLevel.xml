@@ -5,5 +5,41 @@
 		</GameObject>
 		<GameObject name="Sun" send="False">
 		</GameObject>
+		<GameObject name="Waypoint" send="False">
+			<Component template="Waypoint">
+				<Attribute name="name">WP_01</Attribute>
+				<Attribute name="connections">WP_02;WP_03</Attribute>
+			</Component>
+			<Component template="StaticState">
+				<Attribute name="pos">0.0 0.1 0.0</Attribute>
+			</Component>
+		</GameObject>
+		<GameObject name="Waypoint" send="False">
+			<Component template="Waypoint">
+				<Attribute name="name">WP_02</Attribute>
+				<Attribute name="connections">WP_01</Attribute>
+			</Component>
+			<Component template="StaticState">
+				<Attribute name="pos">-10.0 0.1 5.0</Attribute>
+			</Component>
+		</GameObject>
+		<GameObject name="Waypoint" send="False">
+			<Component template="Waypoint">
+				<Attribute name="name">WP_03</Attribute>
+				<Attribute name="connections">WP_01;WP_04</Attribute>
+			</Component>
+			<Component template="StaticState">
+				<Attribute name="pos">10.0 0.1 5.0</Attribute>
+			</Component>
+		</GameObject>
+		<GameObject name="Waypoint" send="False">
+			<Component template="Waypoint">
+				<Attribute name="name">WP_04</Attribute>
+				<Attribute name="connections">WP_03</Attribute>
+			</Component>
+			<Component template="StaticState">
+				<Attribute name="pos">-10.0 0.1 -10.0</Attribute>
+			</Component>
+		</GameObject>
 	</Section>
 </Map>

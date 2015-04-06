@@ -50,6 +50,7 @@
 #include "i6engine/modules/physics/PhysicsController.h"
 
 #include "i6engine/editor/EditorMessageTypes.h"
+#include "i6engine/editor/components/ToggleWaynetComponent.h"
 #include "i6engine/editor/gui/FileDialogWidget.h"
 #include "i6engine/editor/gui/ListboxWidget.h"
 #include "i6engine/editor/gui/MenuBarWidget.h"
@@ -91,12 +92,12 @@ namespace editor {
 	}
 
 	void Editor::start() {
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new modules::GraphicsController(), LNG_GRAPHICS_FRAME_TIME);
+		api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new modules::GraphicsController(), { core::Subsystem::Object });
 		api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new modules::ObjectController(), LNG_OBJECT_FRAME_TIME);
 		api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new modules::InputController(), LNG_INPUT_FRAME_TIME);
 		api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
 #ifdef ISIXE_WITH_AUDIO
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Audio", new modules::AudioController(), LNG_SCRIPTING_FRAME_TIME);
+		api::EngineController::GetSingletonPtr()->registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
 #endif
 		api::EngineController::GetSingletonPtr()->registerApplication(*this);
 
@@ -108,6 +109,11 @@ namespace editor {
 	}
 
 	void Editor::AfterInitialize() {
+		api::ObjectFacade * of = api::EngineController::GetSingletonPtr()->getObjectFacade();
+
+		// register Components
+		of->registerCTemplate("ToggleWaynet", boost::bind(&editor::components::ToggleWaynetComponent::createC, _1, _2));
+
 		api::GUIFacade * gf = api::EngineController::GetSingletonPtr()->getGUIFacade();
 
 		// register GUIWidgets
@@ -153,6 +159,7 @@ namespace editor {
 
 		inputFacade->setKeyMapping(api::KeyCode::KC_F3, "freeFly");
 		inputFacade->setKeyMapping(api::KeyCode::KC_M, "moveObject");
+		inputFacade->setKeyMapping(api::KeyCode::KC_F4, "toggleWaynet");
 	}
 
 	bool Editor::ShutdownRequest() {
