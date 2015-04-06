@@ -44,6 +44,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/facades/PhysicsFacade.h"
 #include "i6engine/api/manager/IDManager.h"
+#include "i6engine/api/manager/WaynetManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/modules/audio/AudioController.h"
@@ -480,6 +481,9 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			if (go->getType() == "Waypoint") {
+				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+			}
 		}
 	}
 
@@ -500,6 +504,9 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			if (go->getType() == "Waypoint") {
+				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+			}
 		}
 	}
 
@@ -520,6 +527,9 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			if (go->getType() == "Waypoint") {
+				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+			}
 		}
 	}
 
@@ -540,6 +550,9 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			if (go->getType() == "Waypoint") {
+				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+			}
 		}
 	}
 
@@ -560,6 +573,9 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			if (go->getType() == "Waypoint") {
+				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+			}
 		}
 	}
 
@@ -580,6 +596,9 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			if (go->getType() == "Waypoint") {
+				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+			}
 		}
 	}
 
