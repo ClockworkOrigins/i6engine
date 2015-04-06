@@ -59,6 +59,7 @@ namespace components {
 		BillboardComponent,
 		FollowComponent,
 		MovableTextComponent,
+		WaypointComponent,
 		ComponentTypesCount
 	};
 

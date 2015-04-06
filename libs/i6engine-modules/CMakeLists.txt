@@ -46,6 +46,7 @@ set(i6components
 	${srcdir}/api/components/SpawnpointComponent.cpp
 	${srcdir}/api/components/StaticStateComponent.cpp
 	${srcdir}/api/components/TerrainAppearanceComponent.cpp
+	${srcdir}/api/components/WaypointComponent.cpp
 )
 
 # Generates a file that registers the components

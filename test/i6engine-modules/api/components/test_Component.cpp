@@ -21,5 +21,5 @@
 #include "gtest/gtest.h"
 
 TEST(Component, Registration) {
-	EXPECT_EQ(17, i6engine::api::componentList.size());
+	EXPECT_EQ(18, i6engine::api::componentList.size());
 }

@@ -33,6 +33,7 @@
 #include "i6engine/api/components/SpawnpointComponent.h"
 #include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/components/TerrainAppearanceComponent.h"
+#include "i6engine/api/components/WaypointComponent.h"
 
 #include "gtest/gtest.h"
 
@@ -208,6 +209,15 @@ TEST(Component, CreateException) {
 			auto newMap = paramsTerrainAppearance;
 			newMap.erase(it->first);
 			ASSERT_THROW(i6engine::api::TerrainAppearanceComponent::createC(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
+	{
+		attributeMap paramsWaypoint = { { "name", "WP_01" }, { "numConnections", "0" } };
+		i6engine::api::WaypointComponent::createC(0, paramsWaypoint);
+		for (auto it = paramsWaypoint.begin(); it != paramsWaypoint.end(); it++) {
+			auto newMap = paramsWaypoint;
+			newMap.erase(it->first);
+			ASSERT_THROW(i6engine::api::WaypointComponent::createC(0, newMap), i6engine::utils::exceptions::ApiException);
 		}
 	}
 	i6engine::api::ComPtr::clear();
