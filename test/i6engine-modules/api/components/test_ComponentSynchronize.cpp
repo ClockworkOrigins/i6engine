@@ -153,7 +153,7 @@ TEST(Component, Synchronize) {
 		i6engine::api::TerrainAppearanceComponent::createC(0, newMap);
 	}
 	{
-		attributeMap paramsWaypoint = { { "name", "WP_01" }, { "numConnections", "1" }, { "connection_0", "WP_02" } };
+		attributeMap paramsWaypoint = { { "name", "WP_01" }, { "connections", "WP_02" } };
 		auto wc = i6engine::api::WaypointComponent::createC(0, paramsWaypoint);
 		auto newMap = wc->synchronize();
 		i6engine::api::WaypointComponent::createC(0, newMap);

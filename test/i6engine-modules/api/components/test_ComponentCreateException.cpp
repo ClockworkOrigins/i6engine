@@ -212,7 +212,7 @@ TEST(Component, CreateException) {
 		}
 	}
 	{
-		attributeMap paramsWaypoint = { { "name", "WP_01" }, { "numConnections", "0" } };
+		attributeMap paramsWaypoint = { { "name", "WP_01" }, { "connections", "" } };
 		i6engine::api::WaypointComponent::createC(0, paramsWaypoint);
 		for (auto it = paramsWaypoint.begin(); it != paramsWaypoint.end(); it++) {
 			auto newMap = paramsWaypoint;
