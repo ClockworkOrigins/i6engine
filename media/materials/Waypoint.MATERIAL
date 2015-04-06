@@ -1,0 +1,13 @@
+material "Waypoint_defaultPhong"
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 0 0 1
+			diffuse 0.75 0.75 0 1
+			specular 0 0 0 0
+			emissive 0 0 0
+		}
+	}
+}

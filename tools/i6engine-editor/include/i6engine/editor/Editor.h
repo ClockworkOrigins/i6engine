@@ -138,6 +138,8 @@ namespace editor {
 		int32_t _lastX;
 		int32_t _lastY;
 
+		std::set<utils::weakPtr<api::GameObject, api::GameObject>> _lastNearWaypoints;
+
 		/**
 		 * \brief stores camera object used for navigation through level
 		 */
@@ -180,6 +182,8 @@ namespace editor {
 		void ScaleYDown();
 		void ScaleZUp();
 		void ScaleZDown();
+
+		void updateWaypointNames();
 	};
 
 } /* namespace editor */

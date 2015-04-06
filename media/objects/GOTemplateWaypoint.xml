@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GOTemplate type="Waypoint">
+	<Component template="StaticState">
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
+	<Component template="Waypoint">
+		<Attribute name="name">1</Attribute>
+	</Component>
+</GOTemplate>

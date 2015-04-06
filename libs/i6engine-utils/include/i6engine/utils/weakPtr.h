@@ -141,6 +141,10 @@ namespace utils {
 			return !(*this == other);
 		}
 
+		bool operator<(const weakPtr & other) const {
+			return _ptr < other._ptr;
+		}
+
 		/**
 		 * \brief returns the shared pointer being observed by this weakPtr
 		 */

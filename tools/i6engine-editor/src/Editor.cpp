@@ -31,7 +31,9 @@
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/components/MovableTextComponent.h"
 #include "i6engine/api/components/StaticStateComponent.h"
+#include "i6engine/api/components/WaypointComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/AudioFacade.h"
@@ -41,6 +43,7 @@
 #include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/facades/PhysicsFacade.h"
+#include "i6engine/api/manager/IDManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/modules/audio/AudioController.h"
@@ -63,7 +66,7 @@
 namespace i6engine {
 namespace editor {
 
-	Editor::Editor(const std::string & name) : Application(), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY() {
+	Editor::Editor(const std::string & name) : Application(), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints() {
 		setName(name);
 
 		_eventMap["forward"] = std::make_pair(boost::bind(&Editor::Forward, this), false);
@@ -304,7 +307,7 @@ namespace editor {
 
 			section->SetAttribute("flags", p.first.c_str());
 
-			for (auto go : p.second) {
+			for (auto & go : p.second) {
 				tinyxml2::XMLElement * gameObject = doc.NewElement("GameObject");
 				gameObject->SetAttribute("name", go->getType().c_str());
 
@@ -314,7 +317,10 @@ namespace editor {
 					gameObject->SetAttribute("send", "false");
 				}
 
-				for (auto c : go->getGOCList()) {
+				for (auto & c : go->getGOCList()) {
+					if (go->getType() == "Waypoint" && (c->getTemplateName() == "MovableText" || c->getTemplateName() == "MeshAppearance")) {
+						continue;
+					}
 					tinyxml2::XMLElement * component = doc.NewElement("Component");
 					component->SetAttribute("template", c->getTemplateName().c_str());
 
@@ -461,6 +467,7 @@ namespace editor {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 1.0), ssc->getRotation()));
+			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
@@ -480,6 +487,7 @@ namespace editor {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -1.0), ssc->getRotation()));
+			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
@@ -499,6 +507,7 @@ namespace editor {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(1.0, 0.0, 0.0), ssc->getRotation()));
+			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
@@ -518,6 +527,7 @@ namespace editor {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(-1.0, 0.0, 0.0), ssc->getRotation()));
+			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
@@ -537,6 +547,7 @@ namespace editor {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, -1.0, 0.0), ssc->getRotation()));
+			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
@@ -556,6 +567,7 @@ namespace editor {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 1.0, 0.0), ssc->getRotation()));
+			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
@@ -810,6 +822,44 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+		}
+	}
+
+	void Editor::updateWaypointNames() {
+		std::set<api::WeakGOPtr> removables;
+		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+		for (auto g : _lastNearWaypoints) {
+			if ((ssc->getPosition() - g.get()->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition()).length() > 50.0) {
+				g.get()->getGOC(api::components::MeshAppearanceComponent)->setDie();
+				g.get()->getGOC(api::components::MovableTextComponent)->setDie();
+				removables.insert(g);
+			}
+		}
+		for (auto g : removables) {
+			_lastNearWaypoints.erase(g);
+		}
+		for (auto go : api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
+			auto wpSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+			if ((ssc->getPosition() - wpSSC->getPosition()).length() <= 50.0 && _lastNearWaypoints.find(go) == _lastNearWaypoints.end()) {
+				{
+					api::attributeMap params;
+					params.insert(std::make_pair("mesh", "Waypoint.MESH"));
+					params.insert(std::make_pair("pos", "0.0 0.0 0.0"));
+					params.insert(std::make_pair("rot", "1.0 0.0 0.0 0.0"));
+					params.insert(std::make_pair("scale", "1.0 1.0 1.0"));
+					params.insert(std::make_pair("visibility", "1"));
+					api::EngineController::GetSingleton().getObjectFacade()->createComponent(go->getID(), api::EngineController::GetSingleton().getIDManager()->getID(), "MeshAppearance", params);
+				}
+				{
+					api::attributeMap params;
+					params.insert(std::make_pair("font", "DejaVuSans"));
+					params.insert(std::make_pair("size", "16"));
+					params.insert(std::make_pair("colour", "1.0 1.0 1.0"));
+					params.insert(std::make_pair("text", go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName()));
+					api::EngineController::GetSingleton().getObjectFacade()->createComponent(go->getID(), api::EngineController::GetSingleton().getIDManager()->getID(), "MovableText", params);
+				}
+				_lastNearWaypoints.insert(go);
+			}
 		}
 	}
 
