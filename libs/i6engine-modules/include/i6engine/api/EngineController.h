@@ -57,6 +57,7 @@ namespace api {
 	class PhysicsFacade;
 	class ScriptingFacade;
 	class TextManager;
+	class WaynetManager;
 
 	enum class GameType {
 		SINGLEPLAYER,
@@ -143,6 +144,10 @@ namespace api {
 
 		TextManager * getTextManager() const {
 			return _textManager;
+		}
+
+		WaynetManager * getWaynetManager() const {
+			return _waynetManager;
 		}
 
 		/**
@@ -251,6 +256,7 @@ namespace api {
 		IDManager * _idManager;
 		LanguageManager * _languageManager;
 		TextManager * _textManager;
+		WaynetManager * _waynetManager;
 		Application * _appl;
 		uint8_t _debugdrawer;
 

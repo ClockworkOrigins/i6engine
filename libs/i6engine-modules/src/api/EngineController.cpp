@@ -46,6 +46,7 @@
 #include "i6engine/api/manager/IDManager.h"
 #include "i6engine/api/manager/LanguageManager.h"
 #include "i6engine/api/manager/TextManager.h"
+#include "i6engine/api/manager/WaynetManager.h"
 
 #ifdef ISIXE_WITH_AUDIO
 	#include "i6engine/modules/audio/AudioController.h"
@@ -77,7 +78,7 @@ void forceCleanup(int param) {
 namespace i6engine {
 namespace api {
 
-	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _languageManager(new LanguageManager()), _textManager(new TextManager()), _appl(), _debugdrawer(0), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
+	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _languageManager(new LanguageManager()), _textManager(new TextManager()), _waynetManager(new WaynetManager()), _appl(), _debugdrawer(0), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
 		// WORKAROUND: Install signal handlers to overcome OIS's limitation to handle X11 key repeat rate properly when crashing.
 		signal(SIGINT, forceCleanup);
 		// TODO: kA
@@ -113,6 +114,7 @@ namespace api {
 		delete _idManager;
 		delete _languageManager;
 		delete _textManager;
+		delete _waynetManager;
 
 		for (const std::pair<std::string, std::pair<core::ModuleController *, uint32_t>> & modulesPair : _queuedModules) {
 			delete modulesPair.second.first;

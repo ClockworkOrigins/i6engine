@@ -31,6 +31,7 @@
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/facades/PhysicsFacade.h"
+#include "i6engine/api/manager/WaynetManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/modules/object/ComponentFactory.h"
@@ -294,6 +295,8 @@ namespace modules {
 				go->setSend(send);
 			}
 		}
+
+		api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 	}
 
 } /* namespace modules */
