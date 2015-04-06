@@ -20,15 +20,18 @@ namespace i6engine {
 namespace utils {
 namespace exceptions {
 
-	ExceptionQueue::ExceptionQueue() : _queue(), _mutex() {
+	ExceptionQueue::ExceptionQueue() : _queue(), _mutex(), _callbacks() {
 	}
 
 	void ExceptionQueue::enqueue(const loginfo & data) {
 		std::lock_guard<std::mutex> lock(_mutex);
 		_queue.push(data);
+		for (auto & cb : _callbacks) {
+			cb();
+		}
 	}
 
-	bool ExceptionQueue::isEmpty() {
+	bool ExceptionQueue::isEmpty() const {
 		std::lock_guard<std::mutex> lock(_mutex);
 		return _queue.empty();
 	}
@@ -38,6 +41,11 @@ namespace exceptions {
 		loginfo e = _queue.front();
 		_queue.pop();
 		return e;
+	}
+
+	void ExceptionQueue::addCallback(const std::function<void(void)> & callback) {
+		std::lock_guard<std::mutex> lock(_mutex);
+		_callbacks.push_back(callback);
 	}
 
 } /* namespace exceptions */

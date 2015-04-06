@@ -28,7 +28,7 @@
 namespace i6engine {
 namespace core {
 
-	EngineCoreController::EngineCoreController(SubSystemController * ssc) : _subsystemController(ssc), _bolIsInitialized(false), _bolLoop(true), _bolShutdownComplete(false), _vptrOnAfterInitialize(), _rClock(), _scheduler(_rClock) {
+	EngineCoreController::EngineCoreController(SubSystemController * ssc) : _subsystemController(ssc), _bolIsInitialized(false), _bolLoop(true), _bolShutdownComplete(false), _vptrOnAfterInitialize(), _lock(), _condVar(), _rClock(), _scheduler(_rClock) {
 	}
 
 	void EngineCoreController::Initialize() const {
@@ -37,6 +37,10 @@ namespace core {
 		while (!_bolIsInitialized) {
 			boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 		}
+
+		utils::exceptions::ExceptionQueue::GetSingleton().addCallback([this]() {
+			_condVar.notify_all();
+		});
 	}
 
 	void EngineCoreController::Run() {
@@ -59,21 +63,20 @@ namespace core {
 	void EngineCoreController::MainLoop() {
 		while (_bolLoop) {
 			try {
-				// throttle main thread
-				boost::this_thread::sleep(boost::posix_time::milliseconds(5));
-
 				if (!utils::exceptions::ExceptionQueue::GetSingleton().isEmpty()) {
 					utils::exceptions::loginfo info = utils::exceptions::ExceptionQueue::GetSingleton().dequeue();
 					throw utils::exceptions::SystemFailureException(info.module, info.message, info.file, info.line);
 				}
-			} catch(utils::exceptions::SystemFailureException & e) {
+			} catch (utils::exceptions::SystemFailureException & e) {
 				// repair if possible
 				e.writeLog();
 				exit(1);
-			} catch(utils::exceptions::i6exception & e) {
+			} catch (utils::exceptions::i6exception & e) {
 				e.writeLog();
 				exit(1);
 			}
+			std::unique_lock<std::mutex> ul(_lock);
+			_condVar.wait(ul);
 		}
 
 		_subsystemController->ShutDown();
@@ -91,11 +94,11 @@ namespace core {
 					utils::exceptions::loginfo info = utils::exceptions::ExceptionQueue::GetSingleton().dequeue();
 					throw utils::exceptions::SystemFailureException(info.module, info.message, info.file, info.line);
 				}
-			} catch(utils::exceptions::SystemFailureException & e) {
+			} catch (utils::exceptions::SystemFailureException & e) {
 				// repair if possible
 				e.writeLog();
 				exit(1);
-			} catch(utils::exceptions::i6exception & e) {
+			} catch (utils::exceptions::i6exception & e) {
 				e.writeLog();
 				exit(1);
 			}

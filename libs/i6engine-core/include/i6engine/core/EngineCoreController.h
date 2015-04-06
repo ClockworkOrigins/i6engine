@@ -22,6 +22,8 @@
 #ifndef __I6ENGINE_CORE_ENGINECORECONTROLLER_H__
 #define __I6ENGINE_CORE_ENGINECORECONTROLLER_H__
 
+#include <condition_variable>
+#include <mutex>
 #include <vector>
 
 #include "i6engine/utils/RealTimeClock.h"
@@ -41,7 +43,6 @@
  * The whole initialising processlooks like this:
  * Game -> EngineHandle -> EngineModuleController -> EngineCoreController -> SubSystemController -> SubSystems
  */
-
 namespace i6engine {
 namespace core {
 
@@ -74,7 +75,10 @@ namespace core {
 		/**
 		 * \brief This method will stop the main loop and will start the shut down sequence.
 		 */
-		void ShutDown() { _bolLoop = false; }
+		void ShutDown() {
+			_bolLoop = false;
+			_condVar.notify_all();
+		}
 
 		/**
 		 * \brief This method will tell the EngineController that the subsystems have been initialized.
@@ -149,6 +153,8 @@ namespace core {
 		bool _bolLoop;
 		bool _bolShutdownComplete;
 		std::vector<boost::function<void(void)>> _vptrOnAfterInitialize;
+		mutable std::mutex _lock;
+		mutable std::condition_variable _condVar;
 
 		utils::Clock<utils::RealTimeClock> _rClock;
 		Scheduler<utils::RealTimeClock> _scheduler;

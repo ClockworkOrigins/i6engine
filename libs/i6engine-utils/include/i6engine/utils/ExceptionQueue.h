@@ -22,8 +22,10 @@
 #ifndef __I6ENGINE_UTILS_EXCEPTIONS_EXCEPTIONQUEUE_H__
 #define __I6ENGINE_UTILS_EXCEPTIONS_EXCEPTIONQUEUE_H__
 
+#include <functional>
 #include <mutex>
 #include <queue>
+#include <vector>
 
 #include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/Singleton.h"
@@ -59,16 +61,22 @@ namespace exceptions {
 		 *
 		 * \return True if the queue is empty
 		 */
-		bool isEmpty();
+		bool isEmpty() const;
 
 		/**
 		 * \brief Removes the first element in the queue.
 		 */
 		loginfo dequeue();
 
+		/**
+		 * \brief add callback to queue being called when a new entry is pushed
+		 */
+		void addCallback(const std::function<void(void)> & callback);
+
 	private:
 		std::queue<loginfo> _queue;
-		std::mutex _mutex;
+		mutable std::mutex _mutex;
+		std::vector<std::function<void(void)>> _callbacks;
 	};
 
 } /* namespace exceptions */

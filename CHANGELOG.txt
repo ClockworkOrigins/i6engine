@@ -1,4 +1,9 @@
-﻿v 0.8.2
+﻿v 0.8.3
+
+Enhancements:
+	- paused main thread (EngineCoreController) while nothing is to do
+
+v 0.8.2
 
 Enhancements:
 	- dependencies aren't downloaded always, but only if they aren't already stored locally
