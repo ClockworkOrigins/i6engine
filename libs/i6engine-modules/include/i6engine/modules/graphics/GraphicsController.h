@@ -26,8 +26,6 @@
 
 #include "i6engine/core/subsystem/ModuleController.h"
 
-#include "i6engine/api/GameMessage.h"
-
 namespace i6engine {
 namespace modules {
 
@@ -60,16 +58,6 @@ namespace modules {
 		 * \brief starts GraphicsManager
 		 */
 		void OnThreadStart() override;
-
-		/**
-		 * \brief Handles incoming messages noticeable for the graphics subsystem.
-		 * Adds Message to Message-Pipe by calling GraphicsMailbox::News(msg)
-		 * \details Called by the global MessagingController .\n Delegates the received message to the GraMailbox.
-		 * \attention Do not call this method explicitly. Only communicate with the graphics subsystem via the MessagingController .
-		 * \param   const api::GameMessage::Ptr msg, objMessage Message Object
-		 * \return   nothing
-		 */
-		void Mailbox(const api::GameMessage::Ptr & msg) const;
 
 		/**
 		 * \brief Called when shutting down the graphics subsystem.

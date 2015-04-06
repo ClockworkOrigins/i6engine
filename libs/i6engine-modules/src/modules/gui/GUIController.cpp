@@ -30,8 +30,6 @@ namespace i6engine {
 namespace modules {
 
 	GUIController::GUIController() : core::ModuleController(core::Subsystem::GUI), _manager(nullptr), _mailbox(nullptr) {
-		ISIXE_REGISTERMESSAGETYPE(api::messages::GUIMessageType, GUIController::Mailbox);
-		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, GUIController::Mailbox);
 	}
 
 	GUIController::~GUIController() {
@@ -43,12 +41,8 @@ namespace modules {
 		_manager = new GUIManager(this);
 		_mailbox = new GUIMailbox(_manager);
 
-		processMessages();
-	}
-
-	void GUIController::Mailbox(const api::GameMessage::Ptr & msg) const {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_mailbox->News(msg);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::GUIMessageType, GUIMailbox::News, _mailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, GUIMailbox::News, _mailbox);
 	}
 
 	void GUIController::Tick() {

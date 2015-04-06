@@ -40,11 +40,12 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
-		ISIXE_REGISTERMESSAGETYPE(api::messages::GraphicsMessageType, GraphicsController::Mailbox);
-		ISIXE_REGISTERMESSAGETYPE(api::messages::GraphicsNodeMessageType, GraphicsController::Mailbox);
 
 		_manager = new GraphicsManager(this);
 		_mailbox = new GraphicsMailbox(_manager);
+
+		ISIXE_REGISTERMESSAGETYPE(api::messages::GraphicsMessageType, GraphicsMailbox::News, _mailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::GraphicsNodeMessageType, GraphicsMailbox::News, _mailbox);
 	}
 
 	void GraphicsController::ShutDown() {
@@ -64,11 +65,6 @@ namespace modules {
 	void GraphicsController::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_manager->Tick();
-	}
-
-	void GraphicsController::Mailbox(const api::GameMessage::Ptr & msg) const {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_mailbox->News(msg);
 	}
 
 } /* namespace modules */

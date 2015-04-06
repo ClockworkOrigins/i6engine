@@ -26,11 +26,10 @@
 
 #include "i6engine/core/subsystem/ModuleController.h"
 
-#include "i6engine/api/GameMessage.h"
-
 namespace i6engine {
 namespace modules {
 
+	class GraphicsManager;
 	class GUIMailbox;
 	class GUIManager;
 
@@ -40,6 +39,8 @@ namespace modules {
 	 * \attention Do NOT call any of its method directly. Communicate with the gui subsystem via the MessagingController only! Otherwise you will see unexpected behavior (e.g segmentation faults)!
 	 */
 	class GUIController: public core::ModuleController {
+		friend class GraphicsManager;
+
 	public:
 		/**
 		 * \brief constructor
@@ -63,18 +64,6 @@ namespace modules {
 		 *
 		 */
 		void OnThreadStart() override;
-
-		/**
-		 * \brief Gets all messages of the graphics channels, extracts them and call the expected method.
-		 *
-		 *     Adds Message to Message-Pipe by calling GraphicsMailbox::GetSingleton().News(msg) ???
-		 *
-		 *			Remove this method as it is not called anywhere. Use GUIMailBox::News(Message*) instead!
-		 * \param   const api::GameMessage::Ptr msg
-		 * \return   nothing
-		 *
-		 */
-		void Mailbox(const api::GameMessage::Ptr & msg) const;
 
 		 /**
 		 * \brief This method will be called when shutting down the subsystem.

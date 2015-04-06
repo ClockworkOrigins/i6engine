@@ -39,11 +39,11 @@ namespace modules {
 	void AudioController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
-		ISIXE_REGISTERMESSAGETYPE(api::messages::AudioMessageType, AudioController::Mailbox);
-		ISIXE_REGISTERMESSAGETYPE(api::messages::AudioNodeMessageType, AudioController::Mailbox);
-
 		_manager = new AudioManager();
 		_mailbox = new AudioMailbox(_manager);
+
+		ISIXE_REGISTERMESSAGETYPE(api::messages::AudioMessageType, AudioMailbox::News, _mailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::AudioNodeMessageType, AudioMailbox::News, _mailbox);
 	}
 
 	void AudioController::ShutDown() {
@@ -59,11 +59,6 @@ namespace modules {
 	void AudioController::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_manager->Tick();
-	}
-
-	void AudioController::Mailbox(const api::GameMessage::Ptr & msg) const {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_mailbox->News(msg);
 	}
 
 } /* namespace modules */

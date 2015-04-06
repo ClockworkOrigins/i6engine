@@ -40,6 +40,7 @@
 #include "i6engine/modules/graphics/Terrain.h"
 #include "i6engine/modules/graphics/compositors/HDRLogic.h"
 #include "i6engine/modules/gui/GUIController.h"
+#include "i6engine/modules/gui/GUIMailbox.h"
 
 #include "boost/lexical_cast.hpp"
 
@@ -99,14 +100,6 @@ namespace modules {
 		Ogre::CompositorManager & compMgr = Ogre::CompositorManager::getSingleton();
 		compMgr.registerCompositorLogic("HDR", new HDRLogic());
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
-
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-
-		api::GameMessage::Ptr msg2 = boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiWindow, core::Method::Create, new api::gui::GUI_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
-
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg2);
-
 		Ogre::ConfigOptionMap & CurrentRendererOptions = _objRoot->getRenderSystem()->getConfigOptions();
 		Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
 		Ogre::StringVector res;
@@ -132,6 +125,14 @@ namespace modules {
 		// Start the gui subsytem. Initialization is completely delegated to the GUIController.
 		// Attention: The gui subsystem MUST be started after the renderer because it needs a valid window handle!
 		_guiController->OnThreadStart();
+
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
+
+		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+
+		api::GameMessage::Ptr msg2 = boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiWindow, core::Method::Create, new api::gui::GUI_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
+
+		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg2);
 	}
 
 	GraphicsManager::~GraphicsManager() {
@@ -168,7 +169,7 @@ namespace modules {
 			return;
 		}
 
-		if (_sceneManager != nullptr && _rWindow->getNumViewports() > 0 && _rWindow->getViewport(0) != nullptr) {
+		if (_sceneManager && _rWindow->getNumViewports() > 0 && _rWindow->getViewport(0) && CEGUI::System::getSingletonPtr()) {
 			// Setup the ray scene query
 			CEGUI::Vector2f mousePos = CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition();
 			Ogre::Ray mouseRay = _rWindow->getViewport(0)->getCamera()->getCameraToViewportRay(mousePos.d_x / double(_rWindow->getWidth()), mousePos.d_y / double(_rWindow->getHeight()));
@@ -331,7 +332,7 @@ namespace modules {
 			api::graphics::Graphics_Resolution_Update * ru = dynamic_cast<api::graphics::Graphics_Resolution_Update *>(msg->getContent());
 			_rWindow->setFullscreen(_rWindow->isFullScreen(), ru->resolution.width, ru->resolution.height);
 
-			_guiController->Mailbox(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiResolution, core::Method::Update, new api::gui::GUI_Resolution_Update(ru->resolution), i6engine::core::Subsystem::Graphic));
+			_guiController->_mailbox->News(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiResolution, core::Method::Update, new api::gui::GUI_Resolution_Update(ru->resolution), i6engine::core::Subsystem::Graphic));
 			api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputResolution, core::Method::Update, new api::input::Input_Resolution_Update(ru->resolution), i6engine::core::Subsystem::Graphic));
 
 			Ogre::ConfigOptionMap & CurrentRendererOptions = _objRoot->getRenderSystem()->getConfigOptions();

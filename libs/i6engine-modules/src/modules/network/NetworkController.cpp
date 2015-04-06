@@ -38,10 +38,11 @@ namespace modules {
 	void NetworkController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		ISIXE_LOG_INFO("NetworkController", "OnThreadStart: Starting");
-		ISIXE_REGISTERMESSAGETYPE(api::messages::NetworkMessageType, NetworkController::Mailbox);
 		_mailbox = new NetworkMailbox();
 		_manager = new NetworkManager(_mailbox);
 		_mailbox->setManager(_manager);
+
+		ISIXE_REGISTERMESSAGETYPE(api::messages::NetworkMessageType, NetworkMailbox::News, _mailbox);
 		ISIXE_LOG_INFO("NetworkController", "OnThreadStart: Finished");
 	}
 
@@ -58,11 +59,6 @@ namespace modules {
 	void NetworkController::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_manager->Tick();
-	}
-
-	void NetworkController::Mailbox(const api::GameMessage::Ptr & msg) const {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_mailbox->News(msg);
 	}
 
 } /* namespace modules */

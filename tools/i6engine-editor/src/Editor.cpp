@@ -104,7 +104,7 @@ namespace editor {
 	}
 
 	void Editor::Initialize() {
-		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, Editor::InputMailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, Editor::InputMailbox, this);
 	}
 
 	void Editor::AfterInitialize() {

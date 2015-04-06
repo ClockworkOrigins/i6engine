@@ -29,6 +29,7 @@
 namespace i6engine {
 namespace modules {
 
+	class GraphicsManager;
 	class GUIController;
 	class GUIManager;
 
@@ -39,6 +40,7 @@ namespace modules {
 	 * 	The supported methods are declared in the enum method of GUIConfig: \ref i6engine::modules::GUIConfig::method
 	 */
 	class GUIMailbox {
+		friend class GraphicsManager;
 		friend class GUIController;
 
 	private:

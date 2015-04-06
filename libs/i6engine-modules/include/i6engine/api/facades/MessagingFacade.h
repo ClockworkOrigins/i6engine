@@ -27,7 +27,7 @@
 
 #include "boost/bind.hpp"
 
-#define ISIXE_REGISTERMESSAGETYPE(msgType, ptrMessageMethod) i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->registerMessageType(msgType, this, boost::bind(&ptrMessageMethod, this, _1))
+#define ISIXE_REGISTERMESSAGETYPE(msgType, method, owner) i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->registerMessageType(msgType, this, boost::bind(&method, owner, _1))
 #define ISIXE_UNREGISTERMESSAGETYPE(msgType) i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->unregisterMessageType(msgType, this)
 
 namespace i6engine {

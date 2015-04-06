@@ -40,7 +40,7 @@ namespace components {
 
 	void ThirdPersonControlComponent::Init() {
 		addTicker();
-		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, ThirdPersonControlComponent::News);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, ThirdPersonControlComponent::News, this);
 		_psc = getOwnerGO()->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent);
 	}
 

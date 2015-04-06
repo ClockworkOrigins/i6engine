@@ -30,7 +30,7 @@ namespace i6engine {
 namespace modules {
 
 	InputController::InputController() : core::ModuleController(core::Subsystem::Input), _mailbox(nullptr), _manager(nullptr) {
-		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, InputController::Mailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, InputController::Mailbox, this);
 	}
 
 	void InputController::OnThreadStart() {

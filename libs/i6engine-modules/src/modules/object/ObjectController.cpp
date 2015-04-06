@@ -39,30 +39,16 @@ namespace modules {
 	void ObjectController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
-		ISIXE_REGISTERMESSAGETYPE(api::messages::ComponentMessageType, ObjectController::MailboxComponent);
-		ISIXE_REGISTERMESSAGETYPE(api::messages::ObjectMessageType, ObjectController::MailboxObject);
-		ISIXE_REGISTERMESSAGETYPE(api::messages::ObjectManagerMessageType, ObjectController::MailboxObjectManager);
-		ISIXE_REGISTERMESSAGETYPE(api::messages::PositionMessageType, ObjectController::MailboxObject);
 
 		_manager = new ObjectManager(this);
 		_mailbox = new ObjectMailbox(_manager);
 
+		ISIXE_REGISTERMESSAGETYPE(api::messages::ComponentMessageType, ObjectMailbox::NewsComponent, _mailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::ObjectMessageType, ObjectMailbox::NewsObject, _mailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::ObjectManagerMessageType, ObjectMailbox::NewsObjectManager, _mailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::PositionMessageType, ObjectMailbox::NewsObject, _mailbox);
+
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->setFrametime(getFrameTime());
-	}
-
-	void ObjectController::MailboxComponent(const api::GameMessage::Ptr & msg) const {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_mailbox->NewsComponent(msg);
-	}
-
-	void ObjectController::MailboxObject(const api::GameMessage::Ptr & msg) const {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_mailbox->NewsObject(msg);
-	}
-
-	void ObjectController::MailboxObjectManager(const api::GameMessage::Ptr & msg) const {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_mailbox->NewsObjectManager(msg);
 	}
 
 	void ObjectController::ShutDown() {

@@ -94,7 +94,7 @@ namespace components {
 	}
 
 	void ListInventoryComponent::show() {
-		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, ListInventoryComponent::News);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, ListInventoryComponent::News, this);
 		_shown = true;
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 

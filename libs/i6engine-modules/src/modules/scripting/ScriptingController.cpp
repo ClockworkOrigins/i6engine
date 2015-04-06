@@ -50,8 +50,6 @@ namespace PythonAPIWorkaround {
 		Py_Initialize();
 		ISIXE_LOG_INFO("ScriptingController", Py_GetVersion());
 
-		ISIXE_REGISTERMESSAGETYPE(api::messages::ScriptingMessageType, ScriptingController::Mailbox);
-
 		boost::filesystem::path workingDir = boost::filesystem::complete("./").normalize();
 		PyObject * sysPath = PySys_GetObject(PythonAPIWorkaround::path);
 		PyList_Insert(sysPath, 0, PyString_FromString(workingDir.string().c_str()));
@@ -74,6 +72,8 @@ namespace PythonAPIWorkaround {
 
 		_manager = new ScriptingManager(this);
 		_mailbox = new ScriptingMailbox(_manager);
+
+		ISIXE_REGISTERMESSAGETYPE(api::messages::ScriptingMessageType, ScriptingMailbox::News, _mailbox);
 	}
 
 	void ScriptingController::ShutDown() {
@@ -93,11 +93,6 @@ namespace PythonAPIWorkaround {
 			ISIXE_LOG_DEBUG("ScriptingController", "CTRL-C");
 			api::EngineController::GetSingletonPtr()->stop();
 		}
-	}
-
-	void ScriptingController::Mailbox(const api::GameMessage::Ptr & msg) const {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_mailbox->News(msg);
 	}
 
 } /* namespace modules */

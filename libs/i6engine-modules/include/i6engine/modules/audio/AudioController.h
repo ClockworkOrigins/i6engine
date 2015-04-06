@@ -26,8 +26,6 @@
 
 #include "i6engine/core/subsystem/ModuleController.h"
 
-#include "i6engine/api/GameMessage.h"
-
 namespace i6engine {
 namespace modules {
 
@@ -66,11 +64,6 @@ namespace modules {
 		 * \brief This method will be called in every tick of the subsystem.
 		 */
 		void Tick() override;
-
-		/**
-		 * \brief Forwards scripting messages to the scripting mailbox.
-		 */
-		void Mailbox(const api::GameMessage::Ptr & msg) const;
 
 	private:
 		AudioMailbox * _mailbox;

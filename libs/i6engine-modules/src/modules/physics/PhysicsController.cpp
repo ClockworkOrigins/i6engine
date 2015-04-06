@@ -38,11 +38,12 @@ namespace modules {
 	void PhysicsController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		api::EngineController::GetSingletonPtr()->getPhysicsFacade()->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
-		ISIXE_REGISTERMESSAGETYPE(api::messages::PhysicsMessageType, PhysicsController::Mailbox);
-		ISIXE_REGISTERMESSAGETYPE(api::messages::PhysicsNodeMessageType, PhysicsController::Mailbox);
 
 		_manager = new PhysicsManager(this);
 		_mailbox = new PhysicsMailbox(_manager);
+
+		ISIXE_REGISTERMESSAGETYPE(api::messages::PhysicsMessageType, PhysicsMailbox::News, _mailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::PhysicsNodeMessageType, PhysicsMailbox::News, _mailbox);
 	}
 
 	void PhysicsController::ShutDown() {
@@ -61,11 +62,6 @@ namespace modules {
 	void PhysicsController::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_manager->Tick();
-	}
-
-	void PhysicsController::Mailbox(const api::GameMessage::Ptr & msg) const {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_mailbox->News(msg);
 	}
 
 } /* namespace modules */

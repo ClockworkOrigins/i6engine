@@ -26,8 +26,6 @@
 
 #include "i6engine/core/subsystem/ModuleController.h"
 
-#include "i6engine/api/GameMessage.h"
-
 namespace i6engine {
 namespace api {
 	class ObjectFacade;
@@ -55,21 +53,6 @@ namespace modules {
 		 * \brief destructor
 		 */
 		~ObjectController();
-
-		/**
-		 * \brief forwards Component Messages to the Mailbox
-		 */
-		void MailboxComponent(const api::GameMessage::Ptr & msg) const;
-
-		/**
-		 * \brief forwards Object Messages to the Mailbox
-		 */
-		void MailboxObject(const api::GameMessage::Ptr & msg) const;
-
-		/**
-		 * \brief forwards Messages for the ObjectManager to the Mailbox
-		 */
-		void MailboxObjectManager(const api::GameMessage::Ptr & msg) const;
 
 	protected:
 		/**
