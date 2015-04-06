@@ -1,9 +1,14 @@
 #include "i6engine/api/manager/WaynetManager.h"
 
+#include "i6engine/core/configs/SubsystemConfig.h"
+
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/components/WaypointComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
+#include "i6engine/api/configs/GraphicsConfig.h"
+#include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
@@ -58,6 +63,7 @@ namespace api {
 				// connection from go to target
 				Edge a;
 				a.targetWP = target;
+				a.startPosition = ownSSC->getPosition();
 				a.targetPosition = targetSSC->getPosition();
 				a.targetRotation = targetSSC->getRotation();
 				a.length = (targetSSC->getPosition() - ownSSC->getPosition()).length();
@@ -65,6 +71,7 @@ namespace api {
 				// connection from target to go
 				Edge b;
 				b.targetWP = wc->getName();
+				a.startPosition = targetSSC->getPosition();
 				a.targetPosition = ownSSC->getPosition();
 				a.targetRotation = ownSSC->getRotation();
 				a.length = (targetSSC->getPosition() - ownSSC->getPosition()).length();
@@ -74,6 +81,19 @@ namespace api {
 
 				edges.insert(std::make_pair(go->getID(), targetGO->getID()));
 				edges.insert(std::make_pair(targetGO->getID(), go->getID()));
+			}
+		}
+	}
+
+	void WaynetManager::showWaynet() const {
+		std::set<std::pair<std::string, std::string>> edges;
+		for (auto & p : _waypoints) {
+			for (auto & e : p.second) {
+				if (edges.find(std::make_pair(p.first, e.targetWP)) == edges.end()) {
+					EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraLine, i6engine::core::Method::Create, new graphics::Graphics_Line_Create(e.startPosition, e.targetPosition), core::Subsystem::Object));
+					edges.insert(std::make_pair(p.first, e.targetWP));
+					edges.insert(std::make_pair(e.targetWP, p.first));
+				}
 			}
 		}
 	}

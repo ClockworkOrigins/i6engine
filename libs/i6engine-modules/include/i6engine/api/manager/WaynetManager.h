@@ -21,6 +21,7 @@ namespace api {
 		struct Edge {
 			double length;
 			std::string targetWP;
+			Vec3 startPosition;
 			Vec3 targetPosition;
 			Quaternion targetRotation;
 		};
@@ -35,6 +36,11 @@ namespace api {
 		 * \brief returns the shortest path between startPos and targetWP
 		 */
 		std::vector<Vec3> getShortestPath(const Vec3 & startPos, const std::string & targetWP);
+
+		/**
+		 * \brief shows waynet (has to be called in each tick because lines are resetted after one graphics tick)
+		 */
+		void showWaynet() const;
 
 	private:
 		WaynetManager();
