@@ -347,8 +347,8 @@ namespace modules {
 	btCollisionShape * PhysicsManager::createSphere(const attributeMap & params) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Vec3 localInertia;
-		double radius = 1.0f;
-		double mass = 0.0f;
+		double radius = 1.0;
+		double mass = 0.0;
 
 		assert(params.find("radius") != params.end());
 
@@ -422,7 +422,7 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Vec3 box;
 		Vec3 localInertia;
-		double mass = 0.0f;
+		double mass = 0.0;
 
 		assert(params.find("box") != params.end());
 

@@ -4,6 +4,7 @@ Enhancements:
 	- paused main thread (EngineCoreController) while nothing is to do
 	- added possibility to reduce overhead using a mailbox in controller when message dispatching isn't done there
 	- added Waypoints, Waynet and possibility to show an manipulate it in level editor (F4 to show/hide waynet and middle mouse button to add remove connection)
+	- added a sample showing a destroyable jenga tower
 
 v 0.8.2
 

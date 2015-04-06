@@ -1,0 +1,27 @@
+material "JengaStick_01 - Default"
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.992157 0.956863 0 1
+			diffuse 0.992157 0.956863 0 1
+			specular 0 0 0 0
+			emissive 0 0 0
+		}
+	}
+}
+
+material "JengaStick_Middle"
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 1 0 1
+			diffuse 0 1 0 1
+			specular 0 0 0 0
+			emissive 0 0 0
+		}
+	}
+}

@@ -15,6 +15,7 @@
 ##
 
 add_subdirectory(dragdrop)
+add_subdirectory(jenga)
 
 IF(ISIXE_WITH_EDITOR AND ISIXE_WITH_TOOLS)
 	add_subdirectory(leveleditor)
