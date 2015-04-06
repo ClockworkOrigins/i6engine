@@ -90,5 +90,27 @@ namespace api {
 		return result;
 	}
 
+	bool WaypointComponent::isConnected(const std::string & name) const {
+		for (auto s : _connections) {
+			if (s == name) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void WaypointComponent::addConnection(const std::string & name) {
+		_connections.push_back(name);
+	}
+
+	void WaypointComponent::removeConnection(const std::string & name) {
+		for (size_t i = 0; i < _connections.size(); i++) {
+			if (_connections[i] == name) {
+				_connections.erase(_connections.begin() + i);
+				break;
+			}
+		}
+	}
+
 } /* namespace api */
 } /* namespace i6engine */

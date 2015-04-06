@@ -62,6 +62,12 @@ namespace api {
 			return _connections;
 		}
 
+		bool isConnected(const std::string & name) const;
+
+		void addConnection(const std::string & name);
+
+		void removeConnection(const std::string & name);
+
 	private:
 		std::string _name;
 		std::vector<std::string> _connections;

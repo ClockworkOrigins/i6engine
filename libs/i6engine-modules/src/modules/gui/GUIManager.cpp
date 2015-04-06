@@ -604,7 +604,7 @@ namespace modules {
 			}
 			tickWidgets();
 
-			api::EngineController::GetSingleton().getGUIFacade()->setInputCaptured(CEGUI::System::getSingleton().getDefaultGUIContext().getWindowContainingMouse() != nullptr && CEGUI::System::getSingleton().getDefaultGUIContext().getWindowContainingMouse()->isActive());
+			api::EngineController::GetSingleton().getGUIFacade()->setInputCaptured(CEGUI::System::getSingleton().getDefaultGUIContext().getWindowContainingMouse() != nullptr && CEGUI::System::getSingleton().getDefaultGUIContext().getWindowContainingMouse()->isActive() && _lastOnWindow != "root");
 
 			double x = CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_x;
 			double y = CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_y;

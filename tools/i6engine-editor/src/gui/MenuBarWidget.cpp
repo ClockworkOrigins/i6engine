@@ -34,7 +34,7 @@ namespace gui {
 		loadWindowLayout(name, "MenuBar.layout");
 		_window->setRiseOnClickEnabled(false);
 
-		_menus["File"] = dynamic_cast<CEGUI::Combobox *>(_window->getChild("File"));
+		_menus["File"] = dynamic_cast<CEGUI::Combobox *>(_window);
 
 		_menus["File"]->setText("File");
 		_menus["File"]->setReadOnly(true);
