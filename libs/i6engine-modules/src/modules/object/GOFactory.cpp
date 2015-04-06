@@ -67,6 +67,10 @@ namespace modules {
 		api::objects::GOTemplate tmp;
 		tmp._type = root->Attribute("type");
 
+		if (_templateList.find(tmp._type) != _templateList.end()) {
+			ISIXE_THROW_FAILURE("GOFactory", "Template type " << tmp._type << " already registered! Second found in file " << file);
+		}
+
 		for (tinyxml2::XMLElement * component = root->FirstChildElement("Component"); component != nullptr; component = component->NextSiblingElement("Component")) {
 			api::attributeMap params;
 

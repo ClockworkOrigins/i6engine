@@ -40,6 +40,9 @@ namespace modules {
 	void ComponentFactory::registerCTemplate(const std::string & GOCType, const api::createGOCCallback & fn) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		// Register GOCType and its callback function at the factory
+		if (_callbacks.find(GOCType) != _callbacks.end()) {
+			ISIXE_THROW_FAILURE("ComponentFactory", "Component type '" << GOCType << "' is already registered!");
+		}
 		_callbacks[GOCType] = fn;
 	}
 
