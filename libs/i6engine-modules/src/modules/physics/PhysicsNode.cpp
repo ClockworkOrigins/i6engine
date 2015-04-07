@@ -104,6 +104,11 @@ namespace modules {
 			int activationState = ACTIVE_TAG;
 			double linearDamping = 0.0;
 			double angularDamping = 0.0;
+			Vec3 localInertia;
+
+			if (shapeParams.find("localInertia") != shapeParams.end()) {
+				localInertia = Vec3(shapeParams, "localInertia");
+			}
 
 			if (shapeParams.find("angularFactor") != shapeParams.end()) {
 				angularFactor = Vec3(shapeParams, "angularFactor");
@@ -140,18 +145,18 @@ namespace modules {
 			_transform = btTransform(rotation.toBullet(), position.toBullet());
 
 			if (_parentShape != nullptr) {
-				btVector3 localInertia(0, 0, 0);
-				if (mass > 0.0) {
-					newShape->calculateLocalInertia(mass, localInertia);
+				btVector3 inertia(localInertia.toBullet());
+				if (mass > 0.0 && !localInertia.isValid()) {
+					newShape->calculateLocalInertia(mass, inertia);
 				}
-				btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(mass, this, _parentShape, localInertia);
+				btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(mass, this, _parentShape, inertia);
 				_rigidBody = new btRigidBody(groundRigidBodyCI);
 			} else {
-				btVector3 localInertia(0, 0, 0);
-				if (mass > 0.0) {
-					newShape->calculateLocalInertia(mass, localInertia);
+				btVector3 inertia(localInertia.toBullet());
+				if (mass > 0.0 && !localInertia.isValid()) {
+					newShape->calculateLocalInertia(mass, inertia);
 				}
-				btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(mass, this, newShape, localInertia);
+				btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(mass, this, newShape, inertia);
 				_rigidBody = new btRigidBody(groundRigidBodyCI);
 			}
 			_rigidBody->setFriction(friction);

@@ -5,10 +5,10 @@
 		<Attribute name="activationState">4</Attribute>
 		<Attribute name="friction">1.0</Attribute>
 		<Attribute name="shapeType">1</Attribute>
-		<Attribute name="box">0.2 0.25 0.2</Attribute>
+		<Attribute name="box">0.25 0.25 0.25</Attribute>
 		<Attribute name="collisionGroup">4 1 0</Attribute>
 		<Attribute name="shatterInterest">1</Attribute>
-		<Attribute name="angularFactor">1.0 1.0 1.0</Attribute>
+		<Attribute name="angularFactor">0.0 1.0 0.0</Attribute>
 		<Attribute name="linearFactor">1.0 1.0 1.0</Attribute>
 		<Attribute name="linearDamping">0.3</Attribute>
 		<Attribute name="angularDamping">1.0</Attribute>
@@ -16,11 +16,12 @@
 		<Attribute name="scale">1.0 1.0 1.0</Attribute>
 		<Attribute name="syncPrio">2</Attribute>
 		<Attribute name="compound">0</Attribute>
+		<Attribute name="localInertia">0.0 0.0 0.0</Attribute>
 	</Component>
 	<Component template="MeshAppearance" owner="true">
 		<Attribute name="mesh">Placeholder.mesh</Attribute>
 		<Attribute name="visibility">1</Attribute>
-		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="pos">0.0 0.5 0.0</Attribute>
 		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
 		<Attribute name="scale">0.025 0.025 0.025</Attribute>
 	</Component>
