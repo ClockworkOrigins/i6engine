@@ -105,36 +105,7 @@ namespace sample {
 			i6engine::api::objects::GOTemplate tmpl;
 			of->createObject("Sun", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
 		}
-		// generate level
-		for (uint32_t i = 0; i < 20; i++) { // rows
-			for (int32_t j = 0; j < 3; j++) {
-				i6engine::api::objects::GOTemplate tmpl;
-
-				Vec3 pos(0.0, 0.5 + 1.0 * i, (j - 1) * 2.5);
-				Quaternion rot;
-
-				if (i % 2 == 1) {
-					pos.setZ(0.0);
-					pos.setX((j - 1) * 2.5);
-					rot = Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0);
-				}
-
-				i6engine::api::attributeMap paramsPSC;
-				pos.insertInMap("pos", paramsPSC);
-				rot.insertInMap("rot", paramsPSC);
-
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
-
-				if (j == 1) {
-					i6engine::api::attributeMap paramsMesh;
-					paramsMesh["material"] = "JengaStick_Middle";
-
-					tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("MeshAppearance", paramsMesh, "", false, false));
-				}
-
-				of->createObject("JengaStick", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
-			}
-		}
+		resetScene();
 
 		i6engine::api::InputFacade * inputFacade = i6engine::api::EngineController::GetSingleton().getInputFacade();
 
@@ -144,12 +115,15 @@ namespace sample {
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_D, "right");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_LCONTROL, "down");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_SPACE, "up");
+		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_Q, "rotateRight");
+		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_E, "rotateLeft");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_DELETE, "rotateLeft");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_INSERT, "rotateRight");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_HOME, "rotateUp");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_END, "rotateDown");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGUP, "leanLeft");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGDOWN, "leanRight");
+		inputFacade->subscribeKeyEvent(i6engine::api::KeyCode::KC_RETURN, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&JengaApplication::resetScene, this));
 	}
 
 	void JengaApplication::Tick() {
@@ -256,6 +230,42 @@ namespace sample {
 	void JengaApplication::LeanRight() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
+	}
+
+	void JengaApplication::resetScene() {
+		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
+		of->deleteAllObjectsOfType("JengaStick");
+		of->deleteAllObjectsOfType("Ball");
+		// generate level
+		for (uint32_t i = 0; i < 20; i++) { // rows
+			for (int32_t j = 0; j < 3; j++) {
+				i6engine::api::objects::GOTemplate tmpl;
+
+				Vec3 pos(0.0, 0.5 + 1.0 * i, (j - 1) * 2.5);
+				Quaternion rot;
+
+				if (i % 2 == 1) {
+					pos.setZ(0.0);
+					pos.setX((j - 1) * 2.5);
+					rot = Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0);
+				}
+
+				i6engine::api::attributeMap paramsPSC;
+				pos.insertInMap("pos", paramsPSC);
+				rot.insertInMap("rot", paramsPSC);
+
+				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+
+				if (j == 1) {
+					i6engine::api::attributeMap paramsMesh;
+					paramsMesh["material"] = "JengaStick_Middle";
+
+					tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("MeshAppearance", paramsMesh, "", false, false));
+				}
+
+				of->createObject("JengaStick", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			}
+		}
 	}
 
 } /* namespace sample */

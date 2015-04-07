@@ -105,43 +105,7 @@ namespace sample {
 			i6engine::api::objects::GOTemplate tmpl;
 			of->createObject("Sun", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
 		}
-		// generate level
-		for (uint32_t i = 0; i < 21; i++) { // rows
-			const int32_t LENGTH = 15;
-			for (int32_t j = 0; j < LENGTH; j++) {
-				const int32_t WIDTH = 8;
-				for (int32_t k = 0; k < WIDTH; k++) {
-					if (i % 2 == 0) {
-						i6engine::api::objects::GOTemplate tmpl;
-
-						Vec3 pos((k - (WIDTH / 2.0 - 0.5)) * 7.5, 1.25 + 2.5 * i, (j - (LENGTH / 2.0 - 0.5)) * 4.0);
-						Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
-
-						i6engine::api::attributeMap paramsPSC;
-						pos.insertInMap("pos", paramsPSC);
-						rot.insertInMap("rot", paramsPSC);
-
-						tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
-
-						of->createObject("JengaStick", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
-					} else {
-						i6engine::api::objects::GOTemplate tmpl;
-
-						Vec3 pos((j - (LENGTH / 2.0 - 0.5)) * 4.0, 1.25 + 2.5 * i, (k - (WIDTH / 2.0 - 0.5)) * 7.5);
-						Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
-						rot = rot * Quaternion(Vec3(0.0, 0.0, 1.0), PI / 2.0);
-
-						i6engine::api::attributeMap paramsPSC;
-						pos.insertInMap("pos", paramsPSC);
-						rot.insertInMap("rot", paramsPSC);
-
-						tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
-
-						of->createObject("JengaStick", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
-					}
-				}
-			}
-		}
+		resetScene();
 
 		i6engine::api::InputFacade * inputFacade = i6engine::api::EngineController::GetSingleton().getInputFacade();
 
@@ -151,12 +115,15 @@ namespace sample {
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_D, "right");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_LCONTROL, "down");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_SPACE, "up");
+		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_Q, "rotateRight");
+		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_E, "rotateLeft");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_DELETE, "rotateLeft");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_INSERT, "rotateRight");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_HOME, "rotateUp");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_END, "rotateDown");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGUP, "leanLeft");
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGDOWN, "leanRight");
+		inputFacade->subscribeKeyEvent(i6engine::api::KeyCode::KC_RETURN, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&PhysicsPowerApplication::resetScene, this));
 	}
 
 	void PhysicsPowerApplication::Tick() {
@@ -263,6 +230,49 @@ namespace sample {
 	void PhysicsPowerApplication::LeanRight() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
+	}
+
+	void PhysicsPowerApplication::resetScene() {
+		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
+		of->deleteAllObjectsOfType("JengaStick");
+		of->deleteAllObjectsOfType("Ball");
+		// generate level
+		for (uint32_t i = 0; i < 21; i++) { // rows
+			const int32_t LENGTH = 15;
+			for (int32_t j = 0; j < LENGTH; j++) {
+				const int32_t WIDTH = 8;
+				for (int32_t k = 0; k < WIDTH; k++) {
+					if (i % 2 == 0) {
+						i6engine::api::objects::GOTemplate tmpl;
+
+						Vec3 pos((k - (WIDTH / 2.0 - 0.5)) * 7.5, 1.25 + 2.5 * i, (j - (LENGTH / 2.0 - 0.5)) * 4.0);
+						Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
+
+						i6engine::api::attributeMap paramsPSC;
+						pos.insertInMap("pos", paramsPSC);
+						rot.insertInMap("rot", paramsPSC);
+
+						tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+
+						of->createObject("JengaStick", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+					} else {
+						i6engine::api::objects::GOTemplate tmpl;
+
+						Vec3 pos((j - (LENGTH / 2.0 - 0.5)) * 4.0, 1.25 + 2.5 * i, (k - (WIDTH / 2.0 - 0.5)) * 7.5);
+						Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
+						rot = rot * Quaternion(Vec3(0.0, 0.0, 1.0), PI / 2.0);
+
+						i6engine::api::attributeMap paramsPSC;
+						pos.insertInMap("pos", paramsPSC);
+						rot.insertInMap("rot", paramsPSC);
+
+						tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+
+						of->createObject("JengaStick", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+					}
+				}
+			}
+		}
 	}
 
 } /* namespace sample */

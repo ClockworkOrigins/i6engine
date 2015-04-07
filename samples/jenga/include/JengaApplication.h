@@ -67,6 +67,8 @@ namespace sample {
 		void RotateDown();
 		void LeanLeft();
 		void LeanRight();
+
+		void resetScene();
 	};
 
 } /* namespace sample */
