@@ -10,6 +10,7 @@ Enhancements:
 
 Fixes:
 	- fixed GUIPrints not updating right alignment when only size is changed after creation
+	- fixed value print of fps view
 
 v 0.8.2
 

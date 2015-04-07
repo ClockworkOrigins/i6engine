@@ -151,9 +151,12 @@ namespace api {
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg", printStyle, x + 0.01, y + 0.01, "Avg. FPS: ", gui::Alignment::Left, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best", printStyle, x + 0.01, y + 0.04, "Best FPS: ", gui::Alignment::Left, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst", printStyle, x + 0.01, y + 0.07, "Worst FPS: ", gui::Alignment::Left, -1);
-		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg_Value", printStyle, x + 0.14, y + 0.01, "", gui::Alignment::Right, -1);
-		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best_Value", printStyle, x + 0.14, y + 0.04, "", gui::Alignment::Right, -1);
-		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst_Value", printStyle, x + 0.14, y + 0.07, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg_Value", printStyle, x + 0.01, y + 0.01, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best_Value", printStyle, x + 0.01, y + 0.04, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst_Value", printStyle, x + 0.01, y + 0.07, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Avg_Value", 0.14, 0.02);
+		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Best_Value", 0.14, 0.02);
+		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Worst_Value", 0.14, 0.02);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraFPS, core::Method::Create, new graphics::Graphics_FPS_Create(), core::Subsystem::Unknown));
 	}
 
