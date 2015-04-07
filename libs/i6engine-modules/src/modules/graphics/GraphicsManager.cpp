@@ -662,6 +662,14 @@ namespace modules {
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			node->enableCompositor(coid, gcu->compositor, gcu->enabled);
+		} else if (msg->getSubtype() == api::graphics::GraParticleFadeOut) {
+			GraphicsNode * node = getGraphicsNode(goid);
+
+			if (node == nullptr) {
+				return;
+			}
+
+			node->particleFadeOut(coid);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

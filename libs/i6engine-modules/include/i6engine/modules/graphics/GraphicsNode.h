@@ -195,6 +195,11 @@ namespace modules {
 		void createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos);
 
 		/**
+		 * \brief lets a particle fade out
+		 */
+		void particleFadeOut(int64_t coid);
+
+		/**
 		 * \brief Deletes the MeshComponent of the Node
 		 *
 		 *     Deletes an Ogre Entity by calling sm->destroyEntity

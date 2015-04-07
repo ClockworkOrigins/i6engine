@@ -66,7 +66,8 @@ namespace graphics {
 		GraMovableText,
 		GraCompositor,
 		GraScreenshot,
-		GraFPS
+		GraFPS,
+		GraParticleFadeOut
 	};
 
 	enum class ShadowTechnique {
@@ -375,6 +376,17 @@ namespace graphics {
 		Graphics_Particle_Update(const int64_t, const int64_t);
 		Graphics_Particle_Update * copy() { return new Graphics_Particle_Update(*this); }
 	} Graphics_Particle_Update;
+
+	/**
+	 * \brief lets a particle fade out
+	 */
+	typedef struct Graphics_ParticleFadeOut_Update : GameMessageStruct {
+		Graphics_ParticleFadeOut_Update(const int64_t goid, const int64_t coid) : GameMessageStruct(coid, goid) {
+		}
+		Graphics_ParticleFadeOut_Update * copy() {
+			return new Graphics_ParticleFadeOut_Update(*this);
+		}
+	} Graphics_ParticleFadeOut_Update;
 
 	/**
 	 * \brief deletes a particle effect

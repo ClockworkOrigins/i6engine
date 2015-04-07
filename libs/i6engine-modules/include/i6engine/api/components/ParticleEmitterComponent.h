@@ -49,7 +49,7 @@ namespace api {
 		 * Hasn't to do anything right now
 		 *
 		 */
-		virtual ~ParticleEmitterComponent();
+		~ParticleEmitterComponent();
 
 		/**
 	 	 * \brief creates the Component with given attributeMap
@@ -57,6 +57,8 @@ namespace api {
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
 		void Init() override;
+
+		void Finalize() override;
 
 		/**
 		 * \brief synchronizes the Components state
@@ -74,6 +76,8 @@ namespace api {
 	private:
 		std::string _emitterName;
 		Vec3 _pos;
+		bool _fadeOut;
+		uint32_t _fadeOutCooldown;
 
 		/**
 		 * \brief Sends message to MessagingController

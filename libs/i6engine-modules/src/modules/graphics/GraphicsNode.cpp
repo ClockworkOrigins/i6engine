@@ -342,6 +342,21 @@ namespace modules {
 		_particles[coid] = newNode;
 	}
 
+	void GraphicsNode::particleFadeOut(int64_t coid) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		Ogre::SceneManager * sm = _manager->getSceneManager();
+		if (_particles.find(coid) == _particles.end()) {
+			ISIXE_LOG_ERROR("GraphicsNode", "Particle System is null");
+		} else {
+			Ogre::SceneNode * sn = _particles[coid];
+			Ogre::ParticleSystem * part = dynamic_cast<Ogre::ParticleSystem *>(sn->getAttachedObject(0));
+			if (part == nullptr) {
+				ISIXE_LOG_ERROR("GraphicNode", "Particle system broken");
+			}
+			part->removeAllEmitters();
+		}
+	}
+
 	void GraphicsNode::deleteCameraComponent(const int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 

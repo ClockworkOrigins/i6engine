@@ -111,7 +111,7 @@ TEST(Component, Synchronize) {
 		i6engine::api::MovingCameraComponent::createC(0, newMap);
 	}
 	{
-		attributeMap paramsParticleEmitter = { { "pos", "0.0 0.0 0.0" }, { "particleEmitter", "blafoo.particle" } };
+		attributeMap paramsParticleEmitter = { { "pos", "0.0 0.0 0.0" }, { "particleEmitter", "blafoo.particle" }, { "fadeOut", "1" }, { "fadeOutCooldown", "1000000" } };
 		auto pc = i6engine::api::ParticleEmitterComponent::createC(0, paramsParticleEmitter);
 		auto newMap = pc->synchronize();
 		i6engine::api::ParticleEmitterComponent::createC(0, newMap);

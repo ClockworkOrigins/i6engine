@@ -479,6 +479,9 @@ namespace editor {
 		}), i6engine::core::Subsystem::Unknown));
 
 		for (auto c : go->getGOCList()) {
+			if (go->getType() == "Waypoint" && (c->getTemplateName() == "MeshAppearance" || c->getTemplateName() == "MovableText")) {
+				continue;
+			}
 			api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponent, core::Method::Update, new messages::GUI_AddComponent("ObjectInfo", c->getTemplateName(), c->getIdentifier()), i6engine::core::Subsystem::Unknown));
 
 			for (auto option : c->getComponentOptions()) {

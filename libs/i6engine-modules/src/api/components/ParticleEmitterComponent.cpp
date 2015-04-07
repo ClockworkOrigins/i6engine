@@ -28,18 +28,22 @@
 namespace i6engine {
 namespace api {
 
-	ParticleEmitterComponent::ParticleEmitterComponent(const int64_t id, const attributeMap & params) : Component(id, params), _emitterName(params.find("particleEmitter")->second), _pos() {
+	ParticleEmitterComponent::ParticleEmitterComponent(const int64_t id, const attributeMap & params) : Component(id, params), _emitterName(params.find("particleEmitter")->second), _pos(), _fadeOut(false), _fadeOutCooldown(0) {
 		Component::_objFamilyID = components::ParticleEmitterComponent;
 		Component::_objComponentID = components::ParticleEmitterComponent;
 
 		if (params.find("pos") != params.end()) {
 			_pos = Vec3(params, "pos");
 		}
+		if (params.find("fadeOut") != params.end()) {
+			_fadeOut = params.find("fadeOut")->second == "1";
+
+			ISIXE_THROW_API_COND("ParticleEmitterComponent", "fadeOut set without fadeOutCooldown", params.find("fadeOutCooldown") != params.end());
+			_fadeOutCooldown = std::stoul(params.find("fadeOutCooldown")->second);
+		}
 	}
 
 	ParticleEmitterComponent::~ParticleEmitterComponent() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	ComPtr ParticleEmitterComponent::createC(const int64_t id, const attributeMap & params) {
@@ -53,12 +57,28 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
+	void ParticleEmitterComponent::Finalize() {
+		if (_fadeOut) {
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticleFadeOut, core::Method::Update, new graphics::Graphics_ParticleFadeOut_Update(_objOwnerID, getID()), i6engine::core::Subsystem::Object));
+			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+			EngineController::GetSingleton().registerTimer(_fadeOutCooldown, [msg]() {
+				EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+				return false;
+			}, false, 1);
+		} else {
+			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+		}
+	}
+
 	void ParticleEmitterComponent::sendUpdateMessage() {
 	}
 
 	attributeMap ParticleEmitterComponent::synchronize() const {
 		attributeMap params;
 		params["particleEmitter"] = _emitterName;
+		params["fadeOut"] = std::to_string(_fadeOut);
+		params["fadeOutCooldown"] = std::to_string(_fadeOutCooldown);
 
 		if (_pos != Vec3::ZERO) {
 			_pos.insertInMap("pos", params);
@@ -86,6 +106,18 @@ namespace api {
 		}, [this](std::string s) {
 			_pos = Vec3(s);
 			// TODO: (Daniel) send Update
+			return true;
+		}));
+		result.push_back(std::make_tuple(AccessState::READWRITE, "FadeOut", [this]() {
+			return std::to_string(_fadeOut);
+		}, [this](std::string s) {
+			_fadeOut = s == "1";
+			return true;
+		}));
+		result.push_back(std::make_tuple(AccessState::READWRITE, "FadeOut Cooldown", [this]() {
+			return std::to_string(_fadeOutCooldown);
+		}, [this](std::string s) {
+			_fadeOutCooldown = std::stoul(s);
 			return true;
 		}));
 
