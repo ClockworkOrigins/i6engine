@@ -50,17 +50,13 @@ namespace modules {
 		const Ogre::AxisAlignedBox & bbox = _object->getWorldBoundingBox(true);
 		Ogre::Matrix4 mat = _sceneManager->getCurrentViewport()->getCamera()->getViewMatrix();
 
-		bool behind = false;
-
 		// We want to put the text point in the center of the top of the AABB Box.
 		Ogre::Vector3 topcenter = bbox.getCenter();
 		// Y is up.
 		topcenter.y += bbox.getHalfSize().y;
 		topcenter = mat * topcenter;
 		// We are now in screen pixel coords and depth is +Z away from the viewer.
-		behind = (topcenter.z > 0.0);
-
-		if (behind) {
+		if (topcenter.z > 0.0) {
 			// Don't show text for objects behind the camera.
 			_container->setPosition(-1000, -1000);
 		} else {
@@ -70,7 +66,7 @@ namespace modules {
 			// The 0.45's here offset alittle up and right for better "text above head" positioning.
 			// The 2.2 and 1.7 compensate for some strangeness in Ogre projection?
 			// Tested in wide screen and normal aspect ratio.
-			_container->setPosition(0.40 - topcenter.x / (2.2 * topcenter.z), topcenter.y / (1.7 * topcenter.z) + 0.45);
+			_container->setPosition(0.45 - topcenter.x / topcenter.z, topcenter.y / (topcenter.z) + 0.45);
 			// Sizse is relative to screen size being 1.0 by 1.0 (not pixels size)
 			_container->setDimensions(0.1, 0.1);
 		}

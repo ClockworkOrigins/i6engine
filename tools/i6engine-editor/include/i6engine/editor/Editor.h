@@ -33,7 +33,7 @@ namespace editor {
 		/**
 		 * \brief destructor
 		 */
-		~Editor();
+		virtual ~Editor();
 
 		/**
 		 * \brief starts the Editor, registering subsystems and starting engine
@@ -143,7 +143,7 @@ namespace editor {
 		/**
 		 * \brief stores camera object used for navigation through level
 		 */
-		void setCamera(const api::GOPtr & go) {
+		inline void setCamera(const api::GOPtr & go) {
 			_camera = go;
 		}
 
