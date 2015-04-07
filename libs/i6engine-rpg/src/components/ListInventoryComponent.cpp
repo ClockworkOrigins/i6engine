@@ -90,6 +90,9 @@ namespace components {
 			}
 			_items.insert(std::make_pair(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>({ std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage())) })));
 		}
+		for (auto & cb : _callbacks) {
+			cb(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), nc->getName(), std::get<ItemEntry::Amount>(_items[item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID()][nc->getName()]));
+		}
 		return true;
 	}
 
@@ -274,6 +277,9 @@ namespace components {
 											}
 											hide();
 											show();
+											for (auto & cb : _callbacks) {
+												cb(ic->getComponentID(), name, std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name]));
+											}
 										}
 										go->setDie();
 									});
@@ -286,6 +292,39 @@ namespace components {
 				}
 			}
 		}
+	}
+
+	void ListInventoryComponent::useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback) {
+		api::GameMessage::Ptr msg = std::get<ItemEntry::Message>(_items[item][name]);
+		api::objects::Object_Create_Create * occ = dynamic_cast<api::objects::Object_Create_Create *>(msg->getContent());
+		api::EngineController::GetSingleton().getObjectFacade()->createGO(occ->tpl, occ->tmpl, api::EngineController::GetSingleton().getUUID(), occ->send, [this, callback](api::GOPtr go) {
+			auto ic = go->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent);
+			if (ic->use(getOwnerGO())) {
+				std::string name = go->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName();
+				std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name])--;
+				if (std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name]) == 0) {
+					_items[ic->getComponentID()].erase(name);
+				}
+				for (auto & cb : _callbacks) {
+					cb(ic->getComponentID(), name, std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name]));
+				}
+				callback();
+			}
+			go->setDie();
+		});
+	}
+
+	std::tuple<uint32_t, std::string, std::string, std::string> ListInventoryComponent::getSelectedItem() const {
+		uint32_t counter = 0;
+		for (auto & p : _items) {
+			for (auto & p2 : p.second) {
+				if (counter == _currentIndex) {
+					return std::make_tuple(p.first, p2.first, std::get<ItemEntry::Imageset>(p2.second), std::get<ItemEntry::Image>(p2.second));
+				}
+				counter++;
+			}
+		}
+		return std::make_tuple(UINT32_MAX, "", "", "");
 	}
 
 	void ListInventoryComponent::Tick() {

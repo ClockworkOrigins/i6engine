@@ -53,4 +53,6 @@
 	</Component>
 	<Component template="ListInventory" owner="true">
 	</Component>
+	<Component template="Quickslot" owner="true">
+	</Component>
 </GOTemplate>

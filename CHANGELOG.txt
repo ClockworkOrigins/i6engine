@@ -3,9 +3,13 @@
 Enhancements:
 	- paused main thread (EngineCoreController) while nothing is to do
 	- added possibility to reduce overhead using a mailbox in controller when message dispatching isn't done there
-	- added Waypoints, Waynet and possibility to show an manipulate it in level editor (F4 to show/hide waynet and middle mouse button to add remove connection)
+	- added Waypoints, Waynet and possibility to show and manipulate it in level editor (F4 to show/hide waynet and middle mouse button to add remove connection)
 	- added a sample showing a destroyable jenga tower
 	- added a sample showing physics power
+	- added a Quickslot system interactable with all inventories
+
+Fixes:
+	- fixed GUIPrints not updating right alignment when only size is changed after creation
 
 v 0.8.2
 

@@ -49,6 +49,10 @@ namespace modules {
 			_realPosX = guiP->x;
 			_realPosY = guiP->y;
 			setText(_text);
+		} else if (type == i6engine::api::gui::GuiSetSize) {
+			api::gui::GUI_Size * g = static_cast<api::gui::GUI_Size *>(data);
+			setSize(g->width, g->height);
+			setText(_text);
 		} else if (type == api::gui::GuiSetColour) {
 			api::gui::GUI_Colour * guiC = static_cast<api::gui::GUI_Colour *>(data);
 			setColour(CEGUI::Colour(float(guiC->red), float(guiC->green), float(guiC->blue), float(guiC->alpha)));

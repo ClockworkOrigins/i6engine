@@ -37,7 +37,8 @@ namespace config {
 		InventoryComponent,
 		ThirdPersonControlComponent,
 		HealthbarComponent,
-		ListInventoryComponent
+		ListInventoryComponent,
+		QuickslotComponent
 	};
 
 } /* namespace config */

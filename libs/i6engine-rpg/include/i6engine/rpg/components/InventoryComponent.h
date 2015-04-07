@@ -69,6 +69,29 @@ namespace components {
 			return _shown;
 		}
 
+		/**
+		 * \brief tries to use given item
+		 */
+		virtual void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback) = 0;
+
+		/**
+		 * \brief returns the number of items for the given type
+		 */
+		uint32_t getItemCount(uint32_t item, const std::string & name) const;
+
+		/**
+		 * \brief returns the selected item
+		 * if none is selected, first parameter in tuple is UINT32_MAX
+		 */
+		virtual std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const = 0;
+
+		/**
+		 * \brief registers a callback to be called on every change on the item count
+		 */
+		void registerUpdateCallback(const std::function<void(uint32_t, const std::string &, uint32_t)> & callback) {
+			_callbacks.push_back(callback);
+		}
+
 	protected:
 		enum ItemEntry {
 			Message,
@@ -78,6 +101,7 @@ namespace components {
 		};
 		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>> _items;
 		bool _shown;
+		std::vector<std::function<void(uint32_t, const std::string &, uint32_t)>> _callbacks;
 	};
 
 } /* namespace components */

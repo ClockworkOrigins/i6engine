@@ -33,6 +33,7 @@ set(i6rpgSrc
 	${srcdir}/components/ItemComponent.cpp
 	${srcdir}/components/ListInventoryComponent.cpp
 	${srcdir}/components/NameComponent.cpp
+	${srcdir}/components/QuickslotComponent.cpp
 	${srcdir}/components/ThirdPersonControlComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp
 	

@@ -68,6 +68,17 @@ namespace components {
 		 */
 		void hide();
 
+		/**
+		 * \brief tries to use given item
+		 */
+		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback);
+
+		/**
+		 * \brief returns the selected item
+		 * if none is selected, first parameter in pair is UINT32_MAX
+		 */
+		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const;
+
 	private:
 		uint32_t _columns;
 		uint32_t _slotCount;
