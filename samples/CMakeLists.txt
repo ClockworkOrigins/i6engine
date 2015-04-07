@@ -22,6 +22,7 @@ IF(ISIXE_WITH_EDITOR AND ISIXE_WITH_TOOLS)
 ENDIF(ISIXE_WITH_EDITOR AND ISIXE_WITH_TOOLS)
 
 add_subdirectory(multilanguage)
+add_subdirectory(physicspower)
 
 IF(ISIXE_WITH_RPG)
 	add_subdirectory(rpg)

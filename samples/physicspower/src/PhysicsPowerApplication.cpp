@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "JengaApplication.h"
+#include "PhysicsPowerApplication.h"
 
 #include "i6engine/math/i6eMath.h"
 #include "i6engine/math/i6eVector.h"
@@ -37,29 +37,29 @@
 
 namespace sample {
 
-	JengaApplication::JengaApplication() : i6engine::api::Application(), _showFPS(false), _camera(), _eventMap() {
-		_eventMap["forward"] = std::make_pair(boost::bind(&JengaApplication::Forward, this), false);
-		_eventMap["backward"] = std::make_pair(boost::bind(&JengaApplication::Backward, this), false);
-		_eventMap["left"] = std::make_pair(boost::bind(&JengaApplication::Left, this), false);
-		_eventMap["right"] = std::make_pair(boost::bind(&JengaApplication::Right, this), false);
-		_eventMap["down"] = std::make_pair(boost::bind(&JengaApplication::Down, this), false);
-		_eventMap["up"] = std::make_pair(boost::bind(&JengaApplication::Up, this), false);
-		_eventMap["rotateLeft"] = std::make_pair(boost::bind(&JengaApplication::RotateLeft, this), false);
-		_eventMap["rotateRight"] = std::make_pair(boost::bind(&JengaApplication::RotateRight, this), false);
-		_eventMap["rotateUp"] = std::make_pair(boost::bind(&JengaApplication::RotateUp, this), false);
-		_eventMap["rotateDown"] = std::make_pair(boost::bind(&JengaApplication::RotateDown, this), false);
-		_eventMap["leanLeft"] = std::make_pair(boost::bind(&JengaApplication::LeanLeft, this), false);
-		_eventMap["leanRight"] = std::make_pair(boost::bind(&JengaApplication::LeanRight, this), false);
+	PhysicsPowerApplication::PhysicsPowerApplication() : i6engine::api::Application(), _showFPS(false), _camera(), _eventMap() {
+		_eventMap["forward"] = std::make_pair(boost::bind(&PhysicsPowerApplication::Forward, this), false);
+		_eventMap["backward"] = std::make_pair(boost::bind(&PhysicsPowerApplication::Backward, this), false);
+		_eventMap["left"] = std::make_pair(boost::bind(&PhysicsPowerApplication::Left, this), false);
+		_eventMap["right"] = std::make_pair(boost::bind(&PhysicsPowerApplication::Right, this), false);
+		_eventMap["down"] = std::make_pair(boost::bind(&PhysicsPowerApplication::Down, this), false);
+		_eventMap["up"] = std::make_pair(boost::bind(&PhysicsPowerApplication::Up, this), false);
+		_eventMap["rotateLeft"] = std::make_pair(boost::bind(&PhysicsPowerApplication::RotateLeft, this), false);
+		_eventMap["rotateRight"] = std::make_pair(boost::bind(&PhysicsPowerApplication::RotateRight, this), false);
+		_eventMap["rotateUp"] = std::make_pair(boost::bind(&PhysicsPowerApplication::RotateUp, this), false);
+		_eventMap["rotateDown"] = std::make_pair(boost::bind(&PhysicsPowerApplication::RotateDown, this), false);
+		_eventMap["leanLeft"] = std::make_pair(boost::bind(&PhysicsPowerApplication::LeanLeft, this), false);
+		_eventMap["leanRight"] = std::make_pair(boost::bind(&PhysicsPowerApplication::LeanRight, this), false);
 	}
 
-	JengaApplication::~JengaApplication() {
+	PhysicsPowerApplication::~PhysicsPowerApplication() {
 	}
 
-	void JengaApplication::Initialize() {
-		ISIXE_REGISTERMESSAGETYPE(i6engine::api::messages::InputMessageType, JengaApplication::InputMailbox, this);
+	void PhysicsPowerApplication::Initialize() {
+		ISIXE_REGISTERMESSAGETYPE(i6engine::api::messages::InputMessageType, PhysicsPowerApplication::InputMailbox, this);
 	}
 
-	void JengaApplication::AfterInitialize() {
+	void PhysicsPowerApplication::AfterInitialize() {
 		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
 
 		// register GUI scheme
@@ -106,33 +106,40 @@ namespace sample {
 			of->createObject("Sun", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		// generate level
-		for (uint32_t i = 0; i < 20; i++) { // rows
-			for (int32_t j = 0; j < 3; j++) {
-				i6engine::api::objects::GOTemplate tmpl;
+		for (uint32_t i = 0; i < 21; i++) { // rows
+			const int32_t LENGTH = 15;
+			for (int32_t j = 0; j < LENGTH; j++) {
+				const int32_t WIDTH = 8;
+				for (int32_t k = 0; k < WIDTH; k++) {
+					if (i % 2 == 0) {
+						i6engine::api::objects::GOTemplate tmpl;
 
-				Vec3 pos(0.0, 0.5 + 1.0 * i, (j - 1) * 2.5);
-				Quaternion rot;
+						Vec3 pos((k - (WIDTH / 2.0 - 0.5)) * 7.5, 1.25 + 2.5 * i, (j - (LENGTH / 2.0 - 0.5)) * 4.0);
+						Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
 
-				if (i % 2 == 1) {
-					pos.setZ(0.0);
-					pos.setX((j - 1) * 2.5);
-					rot = Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0);
+						i6engine::api::attributeMap paramsPSC;
+						pos.insertInMap("pos", paramsPSC);
+						rot.insertInMap("rot", paramsPSC);
+
+						tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+
+						of->createObject("JengaStick", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+					} else {
+						i6engine::api::objects::GOTemplate tmpl;
+
+						Vec3 pos((j - (LENGTH / 2.0 - 0.5)) * 4.0, 1.25 + 2.5 * i, (k - (WIDTH / 2.0 - 0.5)) * 7.5);
+						Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
+						rot = rot * Quaternion(Vec3(0.0, 0.0, 1.0), PI / 2.0);
+
+						i6engine::api::attributeMap paramsPSC;
+						pos.insertInMap("pos", paramsPSC);
+						rot.insertInMap("rot", paramsPSC);
+
+						tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+
+						of->createObject("JengaStick", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+					}
 				}
-
-				i6engine::api::attributeMap paramsPSC;
-				pos.insertInMap("pos", paramsPSC);
-				rot.insertInMap("rot", paramsPSC);
-
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
-
-				if (j == 1) {
-					i6engine::api::attributeMap paramsMesh;
-					paramsMesh["material"] = "JengaStick_Middle";
-
-					tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("MeshAppearance", paramsMesh, "", false, false));
-				}
-
-				of->createObject("JengaStick", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
 			}
 		}
 
@@ -152,7 +159,7 @@ namespace sample {
 		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGDOWN, "leanRight");
 	}
 
-	void JengaApplication::Tick() {
+	void PhysicsPowerApplication::Tick() {
 		for (auto & p : _eventMap) {
 			if (p.second.second) {
 				p.second.first();
@@ -160,17 +167,17 @@ namespace sample {
 		}
 	}
 
-	bool JengaApplication::ShutdownRequest() {
+	bool PhysicsPowerApplication::ShutdownRequest() {
 		return true;
 	}
 
-	void JengaApplication::Finalize() {
+	void PhysicsPowerApplication::Finalize() {
 	}
 
-	void JengaApplication::ShutDown() {
+	void PhysicsPowerApplication::ShutDown() {
 	}
 
-	void JengaApplication::InputMailbox(const i6engine::api::GameMessage::Ptr & msg) {
+	void PhysicsPowerApplication::InputMailbox(const i6engine::api::GameMessage::Ptr & msg) {
 		if (msg->getSubtype() == i6engine::api::keyboard::KeyKeyboard) {
 			i6engine::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6engine::api::input::Input_Keyboard_Update *>(msg->getContent());
 			if (!i6engine::api::EngineController::GetSingleton().getGUIFacade()->getInputCaptured()) {
@@ -198,62 +205,62 @@ namespace sample {
 		}
 	}
 
-	void JengaApplication::Forward() {
+	void PhysicsPowerApplication::Forward() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, 1.0), ssc->getRotation()));
 	}
 
-	void JengaApplication::Backward() {
+	void PhysicsPowerApplication::Backward() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, -1.0), ssc->getRotation()));
 	}
 
-	void JengaApplication::Left() {
+	void PhysicsPowerApplication::Left() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(1.0, 0.0, 0.0), ssc->getRotation()));
 	}
 
-	void JengaApplication::Right() {
+	void PhysicsPowerApplication::Right() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(-1.0, 0.0, 0.0), ssc->getRotation()));
 	}
 
-	void JengaApplication::Down() {
+	void PhysicsPowerApplication::Down() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, -1.0, 0.0), ssc->getRotation()));
 	}
 
-	void JengaApplication::Up() {
+	void PhysicsPowerApplication::Up() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 1.0, 0.0), ssc->getRotation()));
 	}
 
-	void JengaApplication::RotateLeft() {
+	void PhysicsPowerApplication::RotateLeft() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), -(PI / 48)));
 	}
 
-	void JengaApplication::RotateRight() {
+	void PhysicsPowerApplication::RotateRight() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (PI / 48)));
 	}
 
-	void JengaApplication::RotateUp() {
+	void PhysicsPowerApplication::RotateUp() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), -(PI / 48)));
 	}
 
-	void JengaApplication::RotateDown() {
+	void PhysicsPowerApplication::RotateDown() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), (PI / 48)));
 	}
 
-	void JengaApplication::LeanLeft() {
+	void PhysicsPowerApplication::LeanLeft() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), -(PI / 48)));
 	}
 
-	void JengaApplication::LeanRight() {
+	void PhysicsPowerApplication::LeanRight() {
 		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
 	}
