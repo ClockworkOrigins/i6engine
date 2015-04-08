@@ -173,7 +173,7 @@ namespace modules {
 			_dispatcher = new btCollisionDispatcher(_collisionConfiguration);
 
 			// The actual physics solver
-			_solver = new btSequentialImpulseConstraintSolver;
+			_solver = new btSequentialImpulseConstraintSolver();
 
 			// The world.
 			_dynamicsWorld = new btDiscreteDynamicsWorld(_dispatcher, _broadphase, _solver, _collisionConfiguration);

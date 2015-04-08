@@ -8,7 +8,6 @@
 		<Attribute name="scale">100.0 1.0 100.0</Attribute>
 	</Component>
 	<Component template="PhysicalState">
-		<Attribute name="activationState">4</Attribute>
 		<Attribute name="planeConstant">0.01</Attribute>
 		<Attribute name="restitution">0.0</Attribute>
 		<Attribute name="friction">1.0</Attribute>
