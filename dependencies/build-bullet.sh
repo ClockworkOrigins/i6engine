@@ -21,7 +21,7 @@ cd "$(readlink -f "$(dirname "${0}")")"
 . ./build-common.sh
 
 # bullet
-ARCHIVE="bullet-2.82-r2704.tar.gz"
+ARCHIVE="bullet-2.82-r2704.tgz"
 BUILD_DIR="${BUILD_ROOT}/bullet-2.82-r2704"
 
 if [ -d ${BUILD_DIR} ]; then
