@@ -107,13 +107,13 @@ namespace utils {
 				std::condition_variable * cond;
 				{
 					std::lock_guard<std::mutex> lock(_lock);
-					cond = _timer[timerID].second;
+					cond = _timer[size_t(timerID)].second;
 				}
 				cond->notify_all();
 				return;
 			}
 			std::lock_guard<std::mutex> lock(_lock);
-			_timer[timerID].first = time;
+			_timer[size_t(timerID)].first = time;
 		}
 
 		/**
@@ -124,8 +124,8 @@ namespace utils {
 				return true;
 			}
 			std::unique_lock<std::mutex> lock(_lock);
-			_timer[timerID].first = time;
-			_timer[timerID].second->wait(lock);
+			_timer[size_t(timerID)].first = time;
+			_timer[size_t(timerID)].second->wait(lock);
 			return _running;
 		}
 
