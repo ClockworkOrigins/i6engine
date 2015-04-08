@@ -1,5 +1,7 @@
 #include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
+#include "OGRE/Overlay/OgreOverlayManager.h"
+
 namespace i6engine {
 namespace modules {
 
@@ -17,6 +19,7 @@ namespace modules {
 		overlay->add2D(_container);
 
 		_pText = Ogre::OverlayManager::getSingleton().createOverlayElement("TextArea", "ct_" + p->getName());
+
 		_pText->setDimensions(1.0, 1.0);
 		_pText->setMetricsMode(Ogre::GMM_PIXELS);
 		_pText->setPosition(0.0, 0.0);

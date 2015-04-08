@@ -21,8 +21,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 . ./build-common.sh
 
 # Ogre
-ARCHIVE="ogre_src_v1-8-1.tar.bz2"
-BUILD_DIR="${BUILD_ROOT}/ogre_src_v1-8-1"
+ARCHIVE="sinbad-ogre-dd30349ea667.tar.bz2"
+BUILD_DIR="${BUILD_ROOT}/sinbad-ogre-dd30349ea667"
 
 if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
@@ -51,11 +51,11 @@ if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
 fi
 
 ./download-dependency.sh ${ARCHIVE}
-./download-dependency.sh ogre-freetype.patch
+#./download-dependency.sh ogre-freetype.patch
 
-mkdir -p ${PATCH_DIR}
+#mkdir -p ${PATCH_DIR}
 
-mv ${EX_DIR}/ogre-freetype.patch ${PATCH_DIR}/
+#mv ${EX_DIR}/ogre-freetype.patch ${PATCH_DIR}/
 
 status "Cleaning Ogre"
 rm -rf "${DEST_DIR}"
@@ -65,7 +65,7 @@ cd "${BUILD_ROOT}"
 tar xfj "${EX_DIR}/${ARCHIVE}"
 
 # applying freetype patch
-patch -p0 -i "${PATCH_DIR}ogre-freetype.patch"
+#patch -p0 -i "${PATCH_DIR}ogre-freetype.patch"
 
 # ../cmake_files/FindBoost.cmake tries to find the libs here
 export BOOST_ROOT="${DEP_DIR}/boost"
@@ -94,7 +94,6 @@ cmake -G 'Unix Makefiles'\
 	-DOGRE_BUILD_TOOLS:BOOL=ON\
 	-DOGRE_CONFIG_ALLOCATOR:STRING=1\
 	-DOGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR:BOOL=ON\
-	-DOGRE_CONFIG_DOUBLE:BOOL=OFF\
 	-DOGRE_CONFIG_ENABLE_DDS:BOOL=ON\
 	-DOGRE_CONFIG_ENABLE_FREEIMAGE:BOOL=ON\
 	-DOGRE_CONFIG_ENABLE_PVRTC:BOOL=OFF\

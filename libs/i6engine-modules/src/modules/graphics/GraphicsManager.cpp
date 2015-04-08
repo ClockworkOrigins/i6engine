@@ -51,6 +51,7 @@
 #include "OGRE/OgreMeshManager.h"
 #include "OGRE/OgreRenderWindow.h"
 #include "OGRE/OgreRoot.h"
+#include "OGRE/Overlay/OgreOverlaySystem.h"
 
 namespace i6engine {
 namespace modules {
@@ -87,6 +88,8 @@ namespace modules {
 		Ogre::WindowEventUtilities::addWindowEventListener(_rWindow, this);
 
 		_sceneManager = _objRoot->createSceneManager(Ogre::ST_GENERIC);
+
+		_sceneManager->addRenderQueueListener(new Ogre::OverlaySystem());
 
 		_debug = new Debug(_sceneManager, 0.5f);
 

@@ -4,6 +4,8 @@
 #include "i6engine/math/i6eVector.h"
 
 #include "OGRE/Ogre.h"
+#include "OGRE/Overlay/OgreOverlay.h"
+#include "OGRE/Overlay/OgreOverlayContainer.h"
 
 namespace i6engine {
 namespace modules {
