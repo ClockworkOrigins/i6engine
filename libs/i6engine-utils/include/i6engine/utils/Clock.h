@@ -167,7 +167,7 @@ namespace utils {
 		// last system time
 		std::atomic<uint64_t> _systemTime;
 
-		volatile std::atomic<bool> _running;
+		std::atomic<bool> _running;
 	};
 
 } /* namespace utils */

@@ -106,7 +106,7 @@ namespace api {
 	void WaypointComponent::removeConnection(const std::string & name) {
 		for (size_t i = 0; i < _connections.size(); i++) {
 			if (_connections[i] == name) {
-				_connections.erase(_connections.begin() + i);
+				_connections.erase(_connections.begin() + int(i));
 				break;
 			}
 		}

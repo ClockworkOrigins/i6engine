@@ -1,5 +1,9 @@
 #include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	#include <float.h>
+#endif
+
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/math/i6eMath.h"
@@ -128,7 +132,6 @@ namespace components {
 						}
 					} else if (iku->code == i6engine::api::KeyCode::KC_E && iku->pressed == api::KeyState::KEY_PRESSED && !ic->isActive()) {
 						if (_highlightTargetID != -1) {
-							auto ic = getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent);
 							auto targetGO = api::EngineController::GetSingleton().getObjectFacade()->getObject(_highlightTargetID);
 							if (targetGO != nullptr) {
 								if (targetGO->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent) != nullptr) {
@@ -141,7 +144,7 @@ namespace components {
 					}
 				}
 			} else if (subType == api::mouse::MouseMessageTypes::MouMouse) {
-				double xPos = dynamic_cast<api::input::Input_Mouse_Update *>(msg->getContent())->intNewX / double(api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution().width);
+				//double xPos = dynamic_cast<api::input::Input_Mouse_Update *>(msg->getContent())->intNewX / double(api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution().width);
 			}
 		}
 	}

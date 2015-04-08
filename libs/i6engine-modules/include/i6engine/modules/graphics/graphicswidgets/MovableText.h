@@ -16,9 +16,9 @@ namespace modules {
 
 		~MovableText();
 
-		void enable(bool enable) {
-			_enabled = enable;
-			if (enable) {
+		void enable(bool b) {
+			_enabled = b;
+			if (b) {
 				_container->show();
 			} else {
 				_container->hide();

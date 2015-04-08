@@ -33,7 +33,7 @@ set(SampleJengaSrc
 add_executable(SampleJenga ${SampleJengaSrc})
 set_target_properties(SampleJenga PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(SampleJenga i6engine-rpg)
+target_link_libraries(SampleJenga i6engine-modules)
 
 IF(WIN32)
 	add_custom_command(TARGET SampleJenga POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleJenga.exe ${CMAKE_BINARY_DIR}/bin)

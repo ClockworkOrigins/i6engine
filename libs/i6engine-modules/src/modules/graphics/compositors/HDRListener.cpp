@@ -39,7 +39,7 @@ namespace modules {
 		while (defIter.hasMoreElements()) {
 			Ogre::CompositionTechnique::TextureDefinition * def = defIter.getNext();
 			if (def->name == "rt_bloom0") {
-				mBloomSize = (int) def->width; // should be square
+				mBloomSize = int(def->width); // should be square
 				// Calculate gaussian texture offsets & weights
 				float deviation = 3.0f;
 				float texelSize = 1.0f / float(mBloomSize);
@@ -107,6 +107,8 @@ namespace modules {
 
 			break;
 		}
+		default:
+			break;
 		}
 	}
 

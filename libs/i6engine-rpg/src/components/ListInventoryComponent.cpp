@@ -137,11 +137,6 @@ namespace components {
 		_shown = false;
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 
-		api::graphics::Resolution res = api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution();
-
-		double width = 0.35 / _columns;
-		double height = (width * res.width) / res.height;
-
 		for (uint32_t i = 0; i < _slotCount; i++) {
 			std::string namePrefix = "Inventory_" + std::to_string(_id) + "_" + std::to_string(i) + "_";
 			gf->deleteWidget(namePrefix + "Back");
@@ -194,13 +189,13 @@ namespace components {
 							_widgets.push_back("Inventory_InfoScreen_Value");
 							if (ic->getComponentID() == config::ComponentTypes::UsableItemComponent) {
 								auto attributeChanges = utils::dynamic_pointer_cast<UsableItemComponent>(ic)->getAttributeChanges();
-								uint32_t counter = 0;
-								for (auto & p : attributeChanges) {
-									gf->addPrint("Inventory_InfoScreen_AttributeText_" + std::to_string(counter), "RPG/Blanko", 0.26, 0.85 + 0.03 * counter, api::EngineController::GetSingleton().getTextManager()->getText("Attribute_" + std::to_string(uint32_t(p.first)) + "_Key"), api::gui::Alignment::Left, -1);
-									gf->addPrint("Inventory_InfoScreen_AttributeValue_" + std::to_string(counter), "RPG/Blanko", 0.5, 0.85 + 0.03 * counter, std::to_string(p.second), api::gui::Alignment::Right, -1);
-									_widgets.push_back("Inventory_InfoScreen_AttributeText_" + std::to_string(counter));
-									_widgets.push_back("Inventory_InfoScreen_AttributeValue_" + std::to_string(counter));
-									counter++;
+								uint32_t counter2 = 0;
+								for (auto & p3 : attributeChanges) {
+									gf->addPrint("Inventory_InfoScreen_AttributeText_" + std::to_string(counter2), "RPG/Blanko", 0.26, 0.85 + 0.03 * counter2, api::EngineController::GetSingleton().getTextManager()->getText("Attribute_" + std::to_string(uint32_t(p3.first)) + "_Key"), api::gui::Alignment::Left, -1);
+									gf->addPrint("Inventory_InfoScreen_AttributeValue_" + std::to_string(counter2), "RPG/Blanko", 0.5, 0.85 + 0.03 * counter2, std::to_string(p3.second), api::gui::Alignment::Right, -1);
+									_widgets.push_back("Inventory_InfoScreen_AttributeText_" + std::to_string(counter2));
+									_widgets.push_back("Inventory_InfoScreen_AttributeValue_" + std::to_string(counter2));
+									counter2++;
 								}
 							}
 							go->setDie();
@@ -265,8 +260,8 @@ namespace components {
 						for (auto & p : _items) {
 							for (auto & p2 : p.second) {
 								if (counter == _currentIndex) {
-									api::GameMessage::Ptr msg = std::get<ItemEntry::Message>(p2.second);
-									api::objects::Object_Create_Create * occ = dynamic_cast<api::objects::Object_Create_Create *>(msg->getContent());
+									api::GameMessage::Ptr msg2 = std::get<ItemEntry::Message>(p2.second);
+									api::objects::Object_Create_Create * occ = dynamic_cast<api::objects::Object_Create_Create *>(msg2->getContent());
 									api::EngineController::GetSingleton().getObjectFacade()->createGO(occ->tpl, occ->tmpl, api::EngineController::GetSingleton().getUUID(), occ->send, [this](api::GOPtr go) {
 										auto ic = go->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent);
 										if (ic->use(getOwnerGO())) {
@@ -300,13 +295,13 @@ namespace components {
 		api::EngineController::GetSingleton().getObjectFacade()->createGO(occ->tpl, occ->tmpl, api::EngineController::GetSingleton().getUUID(), occ->send, [this, callback](api::GOPtr go) {
 			auto ic = go->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent);
 			if (ic->use(getOwnerGO())) {
-				std::string name = go->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName();
-				std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name])--;
-				if (std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name]) == 0) {
-					_items[ic->getComponentID()].erase(name);
+				std::string n = go->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName();
+				std::get<ItemEntry::Amount>(_items[ic->getComponentID()][n])--;
+				if (std::get<ItemEntry::Amount>(_items[ic->getComponentID()][n]) == 0) {
+					_items[ic->getComponentID()].erase(n);
 				}
 				for (auto & cb : _callbacks) {
-					cb(ic->getComponentID(), name, std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name]));
+					cb(ic->getComponentID(), n, std::get<ItemEntry::Amount>(_items[ic->getComponentID()][n]));
 				}
 				callback();
 			}

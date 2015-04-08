@@ -26,7 +26,7 @@ include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 SET(testSrc
 	api/test_GameMessage.cpp
 	
-	api/components/test_Component.cpp
+	#api/components/test_Component.cpp
 	api/components/test_ComponentCreateException.cpp
 	api/components/test_ComponentSynchronize.cpp
 	api/components/test_MoverComponent.cpp

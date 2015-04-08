@@ -33,7 +33,7 @@ set(SamplePhysicsPowerSrc
 add_executable(SamplePhysicsPower ${SamplePhysicsPowerSrc})
 set_target_properties(SamplePhysicsPower PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(SamplePhysicsPower i6engine-rpg)
+target_link_libraries(SamplePhysicsPower i6engine-modules)
 
 IF(WIN32)
 	add_custom_command(TARGET SamplePhysicsPower POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SamplePhysicsPower.exe ${CMAKE_BINARY_DIR}/bin)
