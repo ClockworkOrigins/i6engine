@@ -1,22 +1,22 @@
 call build-common.bat
 
-Set ARCHIVE=bullet-2.80-rev2531.tar.gz
-Set BUILD_DIR=%BUILD_ROOT%/bullet-2.80-rev2531
+Set ARCHIVE=bullet-2.82-r2704.tgz
+Set BUILD_DIR=%BUILD_ROOT%/bullet-2.82-r2704
 Set PREFIX=%cd%/bullet/
 
 echo "Compile Bullet"
 
 call download-dependency.bat %ARCHIVE%
 
-call download-dependency.bat bullet_2_80_patch.zip
+call download-dependency.bat bullet_2_82_patch.zip
 
 mkdir %PATCH_DIR%\Windows
 
-move %EX_DIR%\bullet_2_80_patch.zip %PATCH_DIR%\Windows
+move %EX_DIR%\bullet_2_82_patch.zip %PATCH_DIR%\Windows
 
 cd %PATCH_DIR%\Windows
 
-winrar.exe x bullet_2_80_patch.zip
+winrar.exe x bullet_2_82_patch.zip
 
 echo "Extracting Bullet"
 if not exist %BUILD_ROOT% exit

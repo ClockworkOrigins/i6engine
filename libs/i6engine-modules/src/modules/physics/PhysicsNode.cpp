@@ -176,6 +176,7 @@ namespace modules {
 
 			_rigidBody->getBroadphaseProxy()->m_collisionFilterMask = btBroadphaseProxy::DefaultFilter;
 
+			_rigidBody->setCollisionFlags(0);
 			// Object sould not physically react to collisions
 			if (cg.responseType & api::ResponseType::GHOST) {
 				_rigidBody->setCollisionFlags(_rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);

@@ -55,8 +55,7 @@ namespace core {
 	std::string Message::Serialize() const {
 		std::stringstream ss;
 		boost::archive::text_oarchive arch(ss, boost::archive::no_header | boost::archive::no_codecvt | boost::archive::no_xml_tag_checking | boost::archive::archive_flags::no_tracking);
-		Message * m = const_cast<Message *>(this);
-		arch << m;
+		arch << this;
 		return ss.str();
 	}
 

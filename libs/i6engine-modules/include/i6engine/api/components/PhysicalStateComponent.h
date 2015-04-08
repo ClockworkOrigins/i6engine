@@ -38,10 +38,10 @@ namespace api {
 		 * \info You can combine these flags
 		 */
 		enum ResponseType {
-			NONE = 0,	// !< Shouln't be used
+			NONE = 0,		// !< Simple objects being pushable
 			STATIC = 1<<0,	// !< Static object (don't move, can't be pushed away, ...)
 			GHOST = 1<<1,	// !< Objects that don't interact physically with other objects (it's more like an area)
-			TRIGGER = 1<<2	// !< collision with this object will trigger the internal callbacks
+			TRIGGER = 1<<2	// !< collision with this object will trigger the internal callbacks (use this if you need shatter info)
 		};
 	}
 

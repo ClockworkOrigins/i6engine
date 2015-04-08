@@ -5,7 +5,7 @@
 		<Attribute name="friction">1.0</Attribute>
 		<Attribute name="shapeType">2</Attribute>
 		<Attribute name="radius">1.0</Attribute>
-		<Attribute name="collisionGroup">4 0 0</Attribute>
+		<Attribute name="collisionGroup">0 0 0</Attribute>
 		<Attribute name="shatterInterest">0</Attribute>
 		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
 		<Attribute name="scale">1.0 1.0 1.0</Attribute>
