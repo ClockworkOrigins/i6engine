@@ -66,14 +66,14 @@ tar xfj "${EX_DIR}/${ARCHIVE}" >/dev/null
 status "Bootstrapping Boost"
 cd "${BUILD_DIR}"
 
-./bootstrap.sh --prefix="${PREFIX}" --with-libraries=filesystem,thread,date_time,python,system,serialization,log --with-python=python2.7
+./bootstrap.sh --prefix="${PREFIX}" --with-libraries=atomic,filesystem,thread,date_time,python,system,serialization,log --with-python=python2.7
 
 status "Building & Installing Boost"
 ./bjam -d2 \
 	${PARALLEL_FLAG} \
 	${BUILD_TYPE} \
 	link=shared \
-	--layout=tagged \
+	--layout=system \
 	threading=multi \
 	install >/dev/null
 

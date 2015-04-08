@@ -46,11 +46,11 @@ call bootstrap.bat
 
 if not exist b2.exe exit
 
-b2 toolset=msvc --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=tagged --build-type=complete install --prefix=%PREFIX% stage > NUL
+b2 toolset=msvc --with-atomic --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system variant=release install --prefix=%PREFIX% stage > NUL
 
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
-xcopy /S /Y "%PATCH_DIR%/Windows/boost_post" "%PREFIX%/include/boost/config"
+xcopy /S /Y "%PATCH_DIR%\Windows\boost_post" "%PREFIX%\include\boost\config"
 
 RD /S /Q "%EX_DIR%\.."
