@@ -69,6 +69,8 @@ tar xfj "${EX_DIR}/${ARCHIVE}"
 
 # ../cmake_files/FindBoost.cmake tries to find the libs here
 export BOOST_ROOT="${DEP_DIR}/boost"
+export BOOST_INCLUDEDIR="${DEP_DIR}/boost/include"
+export BOOST_LIBRARYDIR="${DEP_DIR}/boost/lib"
 
 export OIS_HOME="${DEP_DIR}/ois"
 
@@ -77,6 +79,7 @@ cd "${BUILD_DIR}"
 
 status "Configurig release version of Ogre"
 cmake -G 'Unix Makefiles'\
+	-DBoost_NO_SYSTEM_PATHS=ON\
 	-DOGRE_BUILD_COMPONENT_PAGING:BOOL=ON\
 	-DOGRE_BUILD_COMPONENT_PROPERTY:BOOL=ON\
 	-DOGRE_BUILD_COMPONENT_RTSHADERSYSTEM:BOOL=ON\
@@ -100,7 +103,6 @@ cmake -G 'Unix Makefiles'\
 	-DOGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE:BOOL=OFF\
 	-DOGRE_CONFIG_ENABLE_ZIP:BOOL=ON\
 	-DOGRE_CONFIG_MEMTRACK_RELEASE:BOOL=OFF\
-	-DOGRE_CONFIG_NEW_COMPILERS:BOOL=ON\
 	-DOGRE_CONFIG_STRING_USE_CUSTOM_ALLOCATOR:BOOL=OFF\
 	-DOGRE_CONFIG_THREADS:STRING=2\
 	-DOGRE_CONFIG_THREAD_PROVIDER:STRING=boost\
@@ -115,18 +117,24 @@ cmake -G 'Unix Makefiles'\
 	-DCMAKE_INSTALL_PREFIX:PATH="${PREFIX}"\
 	-DOGRE_USE_BOOST:BOOL=ON\
 	-DOGRE_CONFIG_DOUBLE=TRUE\
-	${RELEASE_FLAG} . >/dev/null
+	-DBoost_DIR="${DEP_DIR}/boost"\
+	-DBoost_INCLUDE_DIR="${DEP_DIR}/boost/include"\
+	-DCMAKE_SKIP_BUILD_RPATH=FALSE\
+	-DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE\
+	-DCMAKE_INSTALL_RPATH="${DEP_DIR}/boost/lib"\
+	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE\
+	${RELEASE_FLAG} . &> /dev/null
 
 status "Building release version of Ogre"
 # I'll leave the build output enabled here, because it's cmake output and because it takes fairly long
-make ${PARALLEL_FLAG} >/dev/null
+make ${PARALLEL_FLAG} &>/dev/null
 
 status "Installing release version of Ogre"
-make ${PARALLEL_FLAG} install >/dev/null
+make ${PARALLEL_FLAG} install &>/dev/null
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-rm -r "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -r "${BUILD_DIR}" &>/dev/null
+#rm -rf "${DEP_DIR}/../externals"
 
 touch "${PREFIX}"
