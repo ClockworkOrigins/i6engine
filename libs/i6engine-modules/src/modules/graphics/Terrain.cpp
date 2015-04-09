@@ -26,7 +26,7 @@
 namespace i6engine {
 namespace modules {
 
-	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const std::string & texture, const double size) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _texture(texture), _size(size) {
+	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string>> & layers) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _layers(layers) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		_mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
@@ -44,6 +44,17 @@ namespace modules {
 		}
 
 		_mTerrainGroup->loadAllTerrains(true);
+
+		if (_mTerrainsImported) {
+			Ogre::TerrainGroup::TerrainIterator ti = _mTerrainGroup->getTerrainIterator();
+
+			while (ti.hasMoreElements()) {
+				Ogre::Terrain * t = ti.getNext()->instance;
+				initBlendMaps(t);
+			}
+		}
+
+		_mTerrainGroup->freeTemporaryResources();
 	}
 
 	Terrain::~Terrain() {
@@ -67,13 +78,17 @@ namespace modules {
 		 Ogre::Terrain::ImportData & defaultimp = _mTerrainGroup->getDefaultImportSettings();
 		 defaultimp.terrainSize = 65;
 		 defaultimp.worldSize = _size;
-		 defaultimp.inputScale = 1.0; // kein unterschied bei 6000 erkennbar die terrain.png is 8 bpp
+		 defaultimp.inputScale = _inputScale;
 		 defaultimp.minBatchSize = 33;
 		 defaultimp.maxBatchSize = 65;
 
-		 defaultimp.layerList.resize(1);
-		 defaultimp.layerList[0].worldSize = 20; // scale factor of one tile
-		 defaultimp.layerList[0].textureNames.push_back(_texture);
+		 defaultimp.layerList.resize(_layers.size());
+
+		 for (size_t i = 0; i < _layers.size(); i++) {
+			 defaultimp.layerList[i].worldSize = std::get<0>(_layers[i]); // scale factor of one tile
+			 defaultimp.layerList[i].textureNames.push_back(std::get<1>(_layers[i]));
+			 defaultimp.layerList[i].textureNames.push_back(std::get<2>(_layers[i]));
+		 }
 	}
 
 	void Terrain::defineTerrain(const int64_t x, const int64_t y) {
@@ -104,6 +119,41 @@ namespace modules {
 		if (flipY) {
 			img.flipAroundX();
 		}
+	}
+
+	void Terrain::initBlendMaps(Ogre::Terrain * terrain) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		Ogre::Real minHeight0 = 70;
+		Ogre::Real fadeDist0 = 40;
+		Ogre::Real minHeight1 = 70;
+		Ogre::Real fadeDist1 = 15;
+
+		Ogre::TerrainLayerBlendMap * blendMap0 = terrain->getLayerBlendMap(1);
+		Ogre::TerrainLayerBlendMap * blendMap1 = terrain->getLayerBlendMap(2);
+
+		float * pBlend0 = blendMap0->getBlendPointer();
+		float * pBlend1 = blendMap1->getBlendPointer();
+
+		for (Ogre::uint16 y = 0; y < terrain->getLayerBlendMapSize(); ++y) {
+			for (Ogre::uint16 x = 0; x < terrain->getLayerBlendMapSize(); ++x) {
+				Ogre::Real tx, ty;
+
+				blendMap0->convertImageToTerrainSpace(x, y, &tx, &ty);
+				Ogre::Real height = terrain->getHeightAtTerrainPosition(tx, ty);
+				Ogre::Real val = (height - minHeight0) / fadeDist0;
+				val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
+				*pBlend0++ = val;
+
+				val = (height - minHeight1) / fadeDist1;
+				val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
+				*pBlend1++ = val;
+			}
+		}
+
+		blendMap0->dirty();
+		blendMap1->dirty();
+		blendMap0->update();
+		blendMap1->update();
 	}
 
 } /* namespace modules */

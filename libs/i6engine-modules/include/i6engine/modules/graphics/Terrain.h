@@ -24,11 +24,13 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
 namespace Ogre {
 	class Image;
+	class Terrain;
 	class TerrainGroup;
 	class TerrainGlobalOptions;
 } /* namespace Ogre */
@@ -57,7 +59,7 @@ namespace modules {
 		 * \return   nothing
 		 *
 		 */
-		Terrain(GraphicsManager * manager, const std::string & heightmap, const std::string & texture, const double size);
+		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string>> & layers);
 
 		/**
 		 * \brief Terrain::~Terrain()
@@ -102,6 +104,8 @@ namespace modules {
 		 *
 		 */
 		void getTerrainImage(const bool flipX, const bool flipY, Ogre::Image & img);
+
+		void initBlendMaps(Ogre::Terrain * terrain);
 
 		/**
 		 * \brief Returns a pointer to the TerrainGroup of the graphics library
@@ -158,14 +162,13 @@ namespace modules {
 		std::string _heightmap;
 
 		/**
-		 * Textur of the terrain
-		 */
-		std::string _texture;
-
-		/**
 		 * Size of the terrain
 		 */
 		double _size;
+
+		double _inputScale;
+
+		std::vector<std::tuple<double, std::string, std::string>> _layers;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

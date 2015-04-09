@@ -49,11 +49,6 @@ namespace api {
 		inline std::string getHeightmap() const { return _heightmap; }
 
 		/**
-		 * \brief Gets the GameObject's texture.
-		 */
-		inline std::string getTexture() const { return _texture; }
-
-		/**
 		 * \brief Gets the GameObject's size.
 		 */
 		inline double getSize() const { return _size; }
@@ -71,8 +66,9 @@ namespace api {
 
 	private:
 		std::string _heightmap;
-		std::string _texture;
 		double _size;
+		double _inputScale;
+		std::vector<std::tuple<double, std::string, std::string>> _layers;
 
 		void sendUpdateMessage();
 	};

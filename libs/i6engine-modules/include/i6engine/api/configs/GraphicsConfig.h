@@ -298,10 +298,10 @@ namespace graphics {
 	 */
 	typedef struct Graphics_Terrain_Create : GameMessageStruct {
 		std::string heightmap;
-		std::string texture;
 		double size;
-		Graphics_Terrain_Create();
-		Graphics_Terrain_Create(const int64_t, const int64_t, const std::string & h, const std::string & t, const double s);
+		double inputScale;
+		std::vector<std::tuple<double, std::string, std::string>> layers;
+		Graphics_Terrain_Create(const int64_t, const int64_t, const std::string & h, const double s, double i, const std::vector<std::tuple<double, std::string, std::string>> & l);
 		Graphics_Terrain_Create * copy() { return new Graphics_Terrain_Create(*this); }
 	} Graphics_Terrain_Create;
 
@@ -310,10 +310,10 @@ namespace graphics {
 	 */
 	typedef struct Graphics_Terrain_Update : GameMessageStruct {
 		std::string heightmap;
-		std::string texture;
 		double size;
-		Graphics_Terrain_Update();
-		Graphics_Terrain_Update(const int64_t i, const std::string & h, const std::string & t, const double s);
+		double inputScale;
+		std::vector<std::tuple<double, std::string, std::string>> layers;
+		Graphics_Terrain_Update(const int64_t goID, const std::string & h, const double s, double i, const std::vector<std::tuple<double, std::string, std::string>> & l);
 		Graphics_Terrain_Update * copy() { return new Graphics_Terrain_Update(*this); }
 	} Graphics_Terrain_Update;
 

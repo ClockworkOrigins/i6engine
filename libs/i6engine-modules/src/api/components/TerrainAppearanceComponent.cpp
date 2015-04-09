@@ -29,9 +29,18 @@
 namespace i6engine {
 namespace api {
 
-	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const i6engine::api::attributeMap & params) : Component(id, params), _heightmap(params.at("heightmap")), _texture(params.at("texture")), _size(boost::lexical_cast<double>(params.at("size"))) {
+	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const i6engine::api::attributeMap & params) : Component(id, params), _heightmap(params.at("heightmap")), _size(boost::lexical_cast<double>(params.at("size"))), _inputScale(boost::lexical_cast<double>(params.at("inputScale"))), _layers() {
 		Component::_objFamilyID = components::TerrainAppearanceComponent;
 		Component::_objComponentID = components::TerrainAppearanceComponent;
+
+		uint32_t size = std::stoul(params.at("layers"));
+
+		for (uint32_t i = 0; i < size; i++) {
+			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_size not set!", params.find("layer_" + std::to_string(i) + "_size") != params.end());
+			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_diffusespecular not set!", params.find("layer_" + std::to_string(i) + "_diffusespecular") != params.end());
+			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_normal not set!", params.find("layer_" + std::to_string(i) + "_normal") != params.end());
+			_layers.push_back(std::make_tuple(boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_size")), params.at("layer_" + std::to_string(i) + "_diffusespecular"), params.at("layer_" + std::to_string(i) + "_normal")));
+		}
 	}
 
 	TerrainAppearanceComponent::~TerrainAppearanceComponent() {
@@ -42,19 +51,20 @@ namespace api {
 
 	ComPtr TerrainAppearanceComponent::createC(const int64_t id, const i6engine::api::attributeMap & params) {
 		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "heightmap not set!", params.find("heightmap") != params.end());
-		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "texture not set!", params.find("texture") != params.end());
 		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "size not set!", params.find("size") != params.end());
+		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "inputScale not set!", params.find("inputScale") != params.end());
+		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layers not set!", params.find("layers") != params.end());
 		return utils::make_shared<TerrainAppearanceComponent, Component>(id, params);
 	}
 
 	void TerrainAppearanceComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _texture, _size), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _layers), i6engine::core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void TerrainAppearanceComponent::sendUpdateMessage() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Update, new graphics::Graphics_Terrain_Update(getID(), _heightmap, _texture, _size), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Update, new graphics::Graphics_Terrain_Update(getID(), _heightmap, _size, _inputScale, _layers), i6engine::core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -63,8 +73,15 @@ namespace api {
 		attributeMap params;
 
 		params["heightmap"] = _heightmap;
-		params["texture"] = _texture;
 		params["size"] = boost::lexical_cast<std::string>(_size);
+		params["inputScale"] = std::to_string(_inputScale);
+		params["layers"] = std::to_string(_layers.size());
+
+		for (size_t i = 0; i < _layers.size(); i++) {
+			params["layer_" + std::to_string(i) + "_size"] = std::to_string(std::get<0>(_layers[i]));
+			params["layer_" + std::to_string(i) + "_diffusespecular"] = std::get<1>(_layers[i]);
+			params["layer_" + std::to_string(i) + "_normal"] = std::get<2>(_layers[i]);
+		}
 
 		return params;
 	}
@@ -79,17 +96,17 @@ namespace api {
 			sendUpdateMessage();
 			return true;
 		}));
-		result.push_back(std::make_tuple(AccessState::READWRITE, "Texture", [this]() {
-			return _texture;
-		}, [this](std::string s) {
-			_texture = s;
-			sendUpdateMessage();
-			return true;
-		}));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Size", [this]() {
 			return boost::lexical_cast<std::string>(_size);
 		}, [this](std::string s) {
 			_size = boost::lexical_cast<double>(s);
+			sendUpdateMessage();
+			return true;
+		}));
+		result.push_back(std::make_tuple(AccessState::READWRITE, "Input Scale", [this]() {
+			return std::to_string(_inputScale);
+		}, [this](std::string s) {
+			_inputScale = boost::lexical_cast<double>(s);
 			sendUpdateMessage();
 			return true;
 		}));

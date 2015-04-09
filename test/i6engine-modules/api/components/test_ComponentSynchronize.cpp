@@ -147,7 +147,7 @@ TEST(Component, Synchronize) {
 		i6engine::api::StaticStateComponent::createC(0, newMap);
 	}
 	{
-		attributeMap paramsTerrainAppearance = { { "heightmap", "blafoo" }, { "texture", "blafoo" }, { "size", "0.0" } };
+		attributeMap paramsTerrainAppearance = { { "heightmap", "blafoo" }, { "size", "0.0" }, { "inputScale", "0.0" }, { "layers", "1" }, { "layer_0_size", "1.0" }, { "layer_0_diffusespecular", "texture.png" }, { "layer_0_normal", "texture_normal.png" } };
 		auto tc = i6engine::api::TerrainAppearanceComponent::createC(0, paramsTerrainAppearance);
 		auto newMap = tc->synchronize();
 		i6engine::api::TerrainAppearanceComponent::createC(0, newMap);

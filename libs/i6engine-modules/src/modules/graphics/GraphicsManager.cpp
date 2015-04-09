@@ -136,6 +136,8 @@ namespace modules {
 		api::GameMessage::Ptr msg2 = boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiWindow, core::Method::Create, new api::gui::GUI_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg2);
+
+		_rWindow->resetStatistics();
 	}
 
 	GraphicsManager::~GraphicsManager() {
@@ -299,11 +301,12 @@ namespace modules {
 
 			Debug::getSingleton().drawLine(from.toOgre(), to.toOgre(), Ogre::ColourValue::Red);
 		} else if (msg->getSubtype() == api::graphics::GraTerrain) {
-			std::string _heightmap = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->heightmap;
-			std::string _texture = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->texture;
-			double _size = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->size;
+			std::string heightmap = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->heightmap;
+			double size = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->size;
+			double inputScale = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->inputScale;
+			std::vector<std::tuple<double, std::string, std::string>> layers = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->layers;
 
-			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, _heightmap, _texture, _size));
+			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, layers));
 		} else if (msg->getSubtype() == api::graphics::GraSkyBox) {
 			api::graphics::Graphics_SkyBox_Create * c = static_cast<api::graphics::Graphics_SkyBox_Create *>(msg->getContent());
 
@@ -373,12 +376,13 @@ namespace modules {
 			}
 			_objRoot->saveConfig();
 		} else if (msg->getSubtype() == api::graphics::GraTerrain) {
-			std::string _heightmap = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->heightmap;
-			std::string _texture = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->texture;
-			double _size = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->size;
+			std::string heightmap = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->heightmap;
+			double size = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->size;
+			double inputScale = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->inputScale;
+			std::vector<std::tuple<double, std::string, std::string>> layers = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->layers;
 
 			removeTerrain(msg->getContent()->getID());
-			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, _heightmap, _texture, _size));
+			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, layers));
 		} else if (msg->getSubtype() == api::graphics::GraShadowTechnique) {
 			api::graphics::ShadowTechnique st = dynamic_cast<api::graphics::Graphics_ShadowTechnique_Update *>(msg->getContent())->shadowTechnique;
 
