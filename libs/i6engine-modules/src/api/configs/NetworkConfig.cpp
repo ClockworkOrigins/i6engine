@@ -36,6 +36,9 @@ namespace network {
 	Network_TimeSynchro_Update::Network_TimeSynchro_Update(const core::IPKey & r, uint64_t p, uint64_t t) : GameMessageStruct(), ping(p), time(t), receiver(r) {
 	}
 
+	Network_ChatMessage::Network_ChatMessage(const std::string & t) : GameMessageStruct(), text(t) {
+	}
+
 } /* namespace network */
 } /* namespace api */
 } /* namespace i6engine */
@@ -45,3 +48,4 @@ BOOST_CLASS_EXPORT(i6engine::api::network::Network_Ping_Update)
 BOOST_CLASS_EXPORT(i6engine::api::network::Network_Pingtime_Update)
 BOOST_CLASS_EXPORT(i6engine::api::network::Network_PingEnable_Update)
 BOOST_CLASS_EXPORT(i6engine::api::network::Network_TimeSynchro_Update)
+BOOST_CLASS_EXPORT(i6engine::api::network::Network_ChatMessage)

@@ -226,8 +226,20 @@ namespace gui {
 		 * \param y Y-Value of the position.
 		 * \param w Width of the image
 		 * \param h Height of the image
+		 * \param selectedCallback called when selection in ComboBox changes
 		 */
 		void addComboBox(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h, const std::function<void(std::string)> & selectedCallback) const;
+
+		/**
+		 * \brief Adds a Chat to the screen.
+		 * \param name (Unique) Name of the new object.
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 * \param w Width of the image
+		 * \param h Height of the image
+		 * \param acceptedCallback called when entered text is accepted
+		 */
+		void addChat(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h, const std::function<std::string(std::string)> & acceptedCallback) const;
 
 		/**
 		 * \brief Set a text to an specified object.
@@ -388,6 +400,13 @@ namespace gui {
 		 * \param selectedCallback callback to be called when selection changes
 		 */
 		void setSelectedCallback(const std::string & name, const std::function<void(bool)> & selectedCallback) const;
+
+		/**
+		 * \brief Sets a accepted callback to a chat
+		 * \param name Name of the Widget
+		 * \param acceptedCallback callback to be called when entered text is accepted
+		 */
+		void setAcceptedTextCallback(const std::string & name, const std::function<std::string(std::string)> & acceptedCallback) const;
 
 		/**
 		 * \brief sets tooltip for a widget

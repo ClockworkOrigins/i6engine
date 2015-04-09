@@ -45,6 +45,7 @@ namespace messages {
 		PositionMessageType,
 		AudioMessageType,
 		AudioNodeMessageType,
+		ChatMessageType,
 		MessageTypeCount
 	};
 

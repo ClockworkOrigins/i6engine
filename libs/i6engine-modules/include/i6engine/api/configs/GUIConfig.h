@@ -81,6 +81,7 @@ namespace gui {
 		GuiSetTooltip,
 		GuiAddColumn,
 		GuiSetSelectedStringCallback,
+		GuiSetTextAcceptCallback,
 		GuiMessageTypesCount
 	};
 
@@ -528,6 +529,18 @@ namespace gui {
 			return new GUI_SetSelectedStringCallback(*this);
 		}
 	} GUI_SetSelectedStringCallback;
+
+	/**
+	 * \brief callback being called when entered text in editbox is submitted
+	 */
+	typedef struct GUI_SetAcceptTextCallback : GUIUpdateMessageStruct {
+		std::function<std::string(std::string)> callback;
+		GUI_SetAcceptTextCallback(const std::string & name, const std::function<std::string(std::string)> & c) : GUIUpdateMessageStruct(name), callback(c) {
+		}
+		GUI_SetAcceptTextCallback * copy() {
+			return new GUI_SetAcceptTextCallback(*this);
+		}
+	} GUI_SetAcceptTextCallback;
 
 } /* namespace gui */
 } /* namespace api */

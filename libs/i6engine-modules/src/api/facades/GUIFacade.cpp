@@ -168,6 +168,13 @@ namespace api {
 		setSelectedStringCallback(name, selectedCallback);
 	}
 
+	void GUIFacade::addChat(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::function<std::string(std::string)> & acceptedCallback) const {
+		createWidget(name, "GUIChat", type);
+		setPosition(name, x, y);
+		setSize(name, w, h);
+		setAcceptedTextCallback(name, acceptedCallback);
+	}
+
 	void GUIFacade::setLifetime(const std::string & name, const int64_t time) const {
 		GameMessage::Ptr tim = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetLifetime, core::Method::Update, new gui::GUI_Lifetime(name, time), core::Subsystem::Unknown);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(tim);
@@ -287,6 +294,10 @@ namespace api {
 
 	void GUIFacade::setSelectedStringCallback(const std::string & name, const std::function<void(std::string)> & selectedCallback) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSelectedStringCallback, core::Method::Update, new gui::GUI_SetSelectedStringCallback(name, selectedCallback), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::setAcceptedTextCallback(const std::string & name, const std::function<std::string(std::string)> & acceptedCallback) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetTextAcceptCallback, core::Method::Update, new gui::GUI_SetAcceptTextCallback(name, acceptedCallback), core::Subsystem::Unknown));
 	}
 
 	void GUIFacade::addTicker(GUIWidget * widget) {

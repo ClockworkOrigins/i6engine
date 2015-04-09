@@ -39,8 +39,9 @@ namespace network {
 		NetPingTime,
 		NetPingEnable,
 		NetRefused,
-		NetworkMessageTypesCount,
-		NetTimeSynchro
+		NetTimeSynchro,
+		ChatMessage,
+		NetworkMessageTypesCount
 	};
 
 	/**
@@ -130,6 +131,24 @@ namespace network {
 		}
 		Network_PingEnable_Update * copy() { return new Network_PingEnable_Update(*this); }
 	} Network_PingEnable_Update;
+
+	/**
+	 * \brief sends a text message to other subscribers
+	 */
+	typedef struct ISIXE_MODULES_API Network_ChatMessage : GameMessageStruct {
+		std::string text;
+		Network_ChatMessage() : GameMessageStruct(), text() {
+		}
+		Network_ChatMessage(const std::string & t);
+		template<class Archive>
+		void serialize(Archive & ar, const unsigned int version) {
+			ar & boost::serialization::base_object<GameMessageStruct>(*this);
+			ar & text;
+		}
+		Network_ChatMessage * copy() {
+			return new Network_ChatMessage(*this);
+		}
+	} Network_ChatMessage;
 
 } /* namespace network */
 } /* namespace api */

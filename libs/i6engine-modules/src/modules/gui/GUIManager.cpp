@@ -27,6 +27,7 @@
 #include "i6engine/api/gui/GUIWidget.h"
 
 #include "i6engine/modules/gui/guiwidgets/GUIBar.h"
+#include "i6engine/modules/gui/guiwidgets/GUIChat.h"
 #include "i6engine/modules/gui/guiwidgets/GUIComboBox.h"
 #include "i6engine/modules/gui/guiwidgets/GUIEditbox.h"
 #include "i6engine/modules/gui/guiwidgets/GUIImage.h"
@@ -57,6 +58,7 @@ namespace modules {
 		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerRemoveTickerCallback(boost::bind(&GUIManager::removeTicker, this, _1));
 
 		registerGUIWidgetTemplate("GUIBar", boost::factory<GUIBar *>());
+		registerGUIWidgetTemplate("GUIChat", boost::factory<GUIChat *>());
 		registerGUIWidgetTemplate("GUIComboBox", boost::factory<GUIComboBox *>());
 		registerGUIWidgetTemplate("GUIEditbox", boost::factory<GUIEditbox *>());
 		registerGUIWidgetTemplate("GUIImage", boost::factory<GUIImage *>());

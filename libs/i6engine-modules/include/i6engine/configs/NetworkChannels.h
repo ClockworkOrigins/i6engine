@@ -31,6 +31,9 @@
 
 	// used only by clients to answer the servers ping request
 	#define PINGANSWER_CHANNEL m2etis::pubsub::I6ENGINE_Direct_Null_Null_Null_Null_Null_DirectBroadcast_Null_GameMessage_TCP
+
+	// used for all chat messages
+	#define CHAT_CHANNEL m2etis::pubsub::I6ENGINE_Direct_Null_Null_Null_Null_Null_DirectBroadcast_Null_GameMessage_TCP
 #else /* ISIXE_NETWORK */
 	// used for all messages containing information about GameObjects and their components
 	#define OBJECT_CHANNEL 0
@@ -43,6 +46,9 @@
 
 	// used only by clients to answer the servers ping request
 	#define PINGANSWER_CHANNEL 0
+
+	// used for all chat messages
+	#define CHAT_CHANNEL 0
 #endif /* ISIXE_NETWORK */
 
 #endif /* __I6ENGINE_CONFIGS_NETWORKCHANNELS_H__ */
