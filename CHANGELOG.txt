@@ -10,6 +10,7 @@ Enhancements:
 	- particles have a flag now to enable fading out instead of instant removal
 	- added a chat widget
 	- added a sample showing a simple chat application
+	- added inputScale, layers and blend map generation to TerrainComponent
 
 Fixes:
 	- fixed GUIPrints not updating right alignment when only size is changed after creation
