@@ -25,7 +25,7 @@
 namespace i6engine {
 namespace modules {
 
-	GUIEditbox::GUIEditbox(const std::string & name, const std::string & style) : api::GUIWidget(name), _enterCallback() {
+	GUIEditbox::GUIEditbox(const std::string & name, const std::string & style) : api::GUIWidget(name), _enterCallback(), _submitCallback() {
 		CEGUI::WindowManager & wmgr = CEGUI::WindowManager::getSingleton();
 
 		_window = wmgr.createWindow(style, name);
@@ -38,6 +38,10 @@ namespace modules {
 		if (type == api::gui::GuiSetEnterCallback) {
 			api::gui::GUI_SetEnterTextCallback * g = static_cast<api::gui::GUI_SetEnterTextCallback *>(data);
 			_enterCallback = g->callback;
+		} else if (type == api::gui::GuiSetTextAcceptCallback) {
+			api::gui::GUI_SetAcceptTextCallback * g = static_cast<api::gui::GUI_SetAcceptTextCallback *>(data);
+			_submitCallback = g->callback;
+			_window->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIEditbox::textAccepted, this));
 		} else if (type == api::gui::GuiSetText) {
 			api::gui::GUI_Text * g = static_cast<api::gui::GUI_Text *>(data);
 			_window->setText(g->text);
@@ -51,6 +55,14 @@ namespace modules {
 			return true;
 		}
 		_enterCallback(std::string(_window->getText().c_str()));
+		return true;
+	}
+
+	bool GUIEditbox::textAccepted(const CEGUI::EventArgs & evt) {
+		if (_submitCallback == nullptr) {
+			return true;
+		}
+		std::string entry = _submitCallback(std::string(_window->getText().c_str()));
 		return true;
 	}
 

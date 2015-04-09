@@ -14,6 +14,10 @@
 # limitations under the License.
 ##
 
+IF(ISIXE_NETWORK)
+	add_subdirectory(chat)
+ENDIF(ISIXE_NETWORK)
+
 add_subdirectory(dragdrop)
 add_subdirectory(jenga)
 

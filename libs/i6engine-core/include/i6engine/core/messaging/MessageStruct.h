@@ -24,6 +24,9 @@
 
 #include "i6engine/core/messaging/IPKey.h"
 
+#include "boost/archive/text_iarchive.hpp"
+#include "boost/archive/text_oarchive.hpp"
+
 #ifdef ISIXE_PROFILING
 	#include "boost/date_time/posix_time/posix_time.hpp"
 	#include "boost/date_time/posix_time/time_serialize.hpp"

@@ -35,7 +35,7 @@ namespace modules {
 		loadWindowLayout(name, "Chat.layout");
 		_window->setProperty("RiseOnClickEnabled", "False");
 
-		_window->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIChat::textAccepted, this));
+		_window->getChild("Editbox")->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIChat::textAccepted, this));
 
 		ISIXE_REGISTERMESSAGETYPE(api::messages::ChatMessageType, GUIChat::News, this);
 	}
@@ -60,9 +60,10 @@ namespace modules {
 		if (_submitCallback == nullptr) {
 			return true;
 		}
-		std::string entry = _submitCallback(std::string(_window->getText().c_str()));
+		std::string entry = _submitCallback(std::string(_window->getChild("Text")->getText().c_str()));
 		dynamic_cast<CEGUI::Listbox *>(_window->getChild("Text"))->addItem(new CEGUI::ListboxTextItem(entry));
 		api::EngineController::GetSingleton().getNetworkFacade()->publish(CHAT_CHANNEL, boost::make_shared<api::GameMessage>(api::messages::ChatMessageType, api::network::ChatMessage, core::Method::Create, new api::network::Network_ChatMessage(entry), core::Subsystem::Unknown));
+		_window->getChild("Editbox")->setText("");
 		return true;
 	}
 

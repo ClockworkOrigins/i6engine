@@ -22,10 +22,10 @@
 #ifndef __I6ENGINE_API_NETWORKCONFIG_H__
 #define __I6ENGINE_API_NETWORKCONFIG_H__
 
-#include <boost/shared_ptr.hpp>
-
 #include "i6engine/api/GameMessage.h"
 #include "i6engine/api/GameMessageStruct.h"
+
+#include "boost/shared_ptr.hpp"
 
 namespace i6engine {
 namespace api {
@@ -153,6 +153,13 @@ namespace network {
 } /* namespace network */
 } /* namespace api */
 } /* namespace i6engine */
+
+BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Administration_GameState_Create)
+BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_Ping_Update)
+BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_Pingtime_Update)
+BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_PingEnable_Update)
+BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_TimeSynchro_Update)
+BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_ChatMessage)
 
 #endif /* __I6ENGINE_API_NETWORKCONFIG_H__ */
 

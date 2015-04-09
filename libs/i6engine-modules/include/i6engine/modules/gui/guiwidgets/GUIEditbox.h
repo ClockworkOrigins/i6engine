@@ -50,8 +50,10 @@ namespace modules {
 
 	private:
 		std::function<void(std::string)> _enterCallback;
+		std::function<std::string(std::string)> _submitCallback;
 
 		bool textChanged(const CEGUI::EventArgs & evt);
+		bool textAccepted(const CEGUI::EventArgs & evt);
 
 		/**
 		 * \brief forbidden

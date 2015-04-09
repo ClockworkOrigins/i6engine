@@ -43,9 +43,9 @@ namespace network {
 } /* namespace api */
 } /* namespace i6engine */
 
-BOOST_CLASS_EXPORT(i6engine::api::network::Administration_GameState_Create)
-BOOST_CLASS_EXPORT(i6engine::api::network::Network_Ping_Update)
-BOOST_CLASS_EXPORT(i6engine::api::network::Network_Pingtime_Update)
-BOOST_CLASS_EXPORT(i6engine::api::network::Network_PingEnable_Update)
-BOOST_CLASS_EXPORT(i6engine::api::network::Network_TimeSynchro_Update)
-BOOST_CLASS_EXPORT(i6engine::api::network::Network_ChatMessage)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::network::Administration_GameState_Create)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::network::Network_Ping_Update)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::network::Network_Pingtime_Update)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::network::Network_PingEnable_Update)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::network::Network_TimeSynchro_Update)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::network::Network_ChatMessage)
