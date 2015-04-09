@@ -8,6 +8,8 @@ Enhancements:
 	- added a sample showing physics power
 	- added a Quickslot system interactable with all inventories
 	- particles have a flag now to enable fading out instead of instant removal
+	- added a chat widget
+	- added a sample showing a simple chat application
 
 Fixes:
 	- fixed GUIPrints not updating right alignment when only size is changed after creation
