@@ -32,4 +32,5 @@ IF(ISIXE_WITH_RPG)
 	add_subdirectory(rpg)
 ENDIF(ISIXE_WITH_RPG)
 
+add_subdirectory(terrain)
 add_subdirectory(tooltip)

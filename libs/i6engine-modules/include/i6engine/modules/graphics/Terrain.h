@@ -59,7 +59,7 @@ namespace modules {
 		 * \return   nothing
 		 *
 		 */
-		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string>> & layers);
+		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers);
 
 		/**
 		 * \brief Terrain::~Terrain()
@@ -168,7 +168,7 @@ namespace modules {
 
 		double _inputScale;
 
-		std::vector<std::tuple<double, std::string, std::string>> _layers;
+		std::vector<std::tuple<double, std::string, std::string, double, double>> _layers;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

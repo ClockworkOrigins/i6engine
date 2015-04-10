@@ -68,7 +68,7 @@ namespace api {
 		std::string _heightmap;
 		double _size;
 		double _inputScale;
-		std::vector<std::tuple<double, std::string, std::string>> _layers;
+		std::vector<std::tuple<double, std::string, std::string, double, double>> _layers;
 
 		void sendUpdateMessage();
 	};

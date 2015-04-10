@@ -300,8 +300,8 @@ namespace graphics {
 		std::string heightmap;
 		double size;
 		double inputScale;
-		std::vector<std::tuple<double, std::string, std::string>> layers;
-		Graphics_Terrain_Create(const int64_t, const int64_t, const std::string & h, const double s, double i, const std::vector<std::tuple<double, std::string, std::string>> & l);
+		std::vector<std::tuple<double, std::string, std::string, double, double>> layers;
+		Graphics_Terrain_Create(const int64_t, const int64_t, const std::string & h, const double s, double i, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l);
 		Graphics_Terrain_Create * copy() { return new Graphics_Terrain_Create(*this); }
 	} Graphics_Terrain_Create;
 
@@ -312,8 +312,8 @@ namespace graphics {
 		std::string heightmap;
 		double size;
 		double inputScale;
-		std::vector<std::tuple<double, std::string, std::string>> layers;
-		Graphics_Terrain_Update(const int64_t goID, const std::string & h, const double s, double i, const std::vector<std::tuple<double, std::string, std::string>> & l);
+		std::vector<std::tuple<double, std::string, std::string, double, double>> layers;
+		Graphics_Terrain_Update(const int64_t goID, const std::string & h, const double s, double i, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l);
 		Graphics_Terrain_Update * copy() { return new Graphics_Terrain_Update(*this); }
 	} Graphics_Terrain_Update;
 

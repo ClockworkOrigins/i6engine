@@ -304,7 +304,7 @@ namespace modules {
 			std::string heightmap = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->heightmap;
 			double size = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->size;
 			double inputScale = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->inputScale;
-			std::vector<std::tuple<double, std::string, std::string>> layers = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->layers;
+			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->layers;
 
 			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, layers));
 		} else if (msg->getSubtype() == api::graphics::GraSkyBox) {
@@ -379,7 +379,7 @@ namespace modules {
 			std::string heightmap = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->heightmap;
 			double size = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->size;
 			double inputScale = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->inputScale;
-			std::vector<std::tuple<double, std::string, std::string>> layers = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->layers;
+			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->layers;
 
 			removeTerrain(msg->getContent()->getID());
 			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, layers));

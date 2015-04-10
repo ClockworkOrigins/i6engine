@@ -39,7 +39,14 @@ namespace api {
 			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_size not set!", params.find("layer_" + std::to_string(i) + "_size") != params.end());
 			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_diffusespecular not set!", params.find("layer_" + std::to_string(i) + "_diffusespecular") != params.end());
 			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_normal not set!", params.find("layer_" + std::to_string(i) + "_normal") != params.end());
-			_layers.push_back(std::make_tuple(boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_size")), params.at("layer_" + std::to_string(i) + "_diffusespecular"), params.at("layer_" + std::to_string(i) + "_normal")));
+
+			if (i == 0) { // special case, first layer is always there
+				_layers.push_back(std::make_tuple(boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_size")), params.at("layer_" + std::to_string(i) + "_diffusespecular"), params.at("layer_" + std::to_string(i) + "_normal"), 0.0, 0.0));
+			} else {
+				ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_minHeight not set!", params.find("layer_" + std::to_string(i) + "_minHeight") != params.end());
+				ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_fadeDist not set!", params.find("layer_" + std::to_string(i) + "_fadeDist") != params.end());
+				_layers.push_back(std::make_tuple(boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_size")), params.at("layer_" + std::to_string(i) + "_diffusespecular"), params.at("layer_" + std::to_string(i) + "_normal"), boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_minHeight")), boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_fadeDist"))));
+			}
 		}
 	}
 

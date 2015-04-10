@@ -26,12 +26,12 @@
 namespace i6engine {
 namespace modules {
 
-	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string>> & layers) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _layers(layers) {
+	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _layers(layers) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		_mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-		_mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(_manager->getSceneManager(), Ogre::Terrain::ALIGN_X_Z, 65, _size);
+		_mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(_manager->getSceneManager(), Ogre::Terrain::ALIGN_X_Z, 513, _size);
 		_mTerrainGroup->setFilenameConvention(Ogre::String("i6engineTerrain"), Ogre::String("dat"));
 		_mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
@@ -72,11 +72,12 @@ namespace modules {
 		 _mTerrainGlobals->setMaxPixelError(8);
 		 // testing composite map
 		 _mTerrainGlobals->setCompositeMapDistance(3000);
+		 //Ogre::Light * light = _manager->getSceneManager()->getLight("SN_3_5");
 		 // _mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
 		 _mTerrainGlobals->setCompositeMapAmbient(_manager->getSceneManager()->getAmbientLight());
 		 // _mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
 		 Ogre::Terrain::ImportData & defaultimp = _mTerrainGroup->getDefaultImportSettings();
-		 defaultimp.terrainSize = 65;
+		 defaultimp.terrainSize = 513;
 		 defaultimp.worldSize = _size;
 		 defaultimp.inputScale = _inputScale;
 		 defaultimp.minBatchSize = 33;
@@ -123,37 +124,29 @@ namespace modules {
 
 	void Terrain::initBlendMaps(Ogre::Terrain * terrain) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		Ogre::Real minHeight0 = 70;
-		Ogre::Real fadeDist0 = 40;
-		Ogre::Real minHeight1 = 70;
-		Ogre::Real fadeDist1 = 15;
+		for (size_t i = 1; i < _layers.size(); i++) {
+			Ogre::Real minHeight = std::get<3>(_layers[i]);
+			Ogre::Real fadeDist = std::get<4>(_layers[i]);
 
-		Ogre::TerrainLayerBlendMap * blendMap0 = terrain->getLayerBlendMap(1);
-		Ogre::TerrainLayerBlendMap * blendMap1 = terrain->getLayerBlendMap(2);
+			Ogre::TerrainLayerBlendMap * blendMap0 = terrain->getLayerBlendMap(i);
 
-		float * pBlend0 = blendMap0->getBlendPointer();
-		float * pBlend1 = blendMap1->getBlendPointer();
+			float * pBlend0 = blendMap0->getBlendPointer();
 
-		for (Ogre::uint16 y = 0; y < terrain->getLayerBlendMapSize(); ++y) {
-			for (Ogre::uint16 x = 0; x < terrain->getLayerBlendMapSize(); ++x) {
-				Ogre::Real tx, ty;
+			for (Ogre::uint16 y = 0; y < 1024 /*terrain->getLayerBlendMapSize()*/; ++y) { // FIXME: (Daniel) there is a bug in OGRE 1.9 to getLayerBlendMapSize always return zero... fix with Ogre update
+				for (Ogre::uint16 x = 0; x < 1024 /*terrain->getLayerBlendMapSize()*/; ++x) {
+					Ogre::Real tx, ty;
 
-				blendMap0->convertImageToTerrainSpace(x, y, &tx, &ty);
-				Ogre::Real height = terrain->getHeightAtTerrainPosition(tx, ty);
-				Ogre::Real val = (height - minHeight0) / fadeDist0;
-				val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
-				*pBlend0++ = val;
-
-				val = (height - minHeight1) / fadeDist1;
-				val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
-				*pBlend1++ = val;
+					blendMap0->convertImageToTerrainSpace(x, y, &tx, &ty);
+					Ogre::Real height = terrain->getHeightAtTerrainPosition(tx, ty);
+					Ogre::Real val = (height - minHeight) / fadeDist;
+					val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
+					*pBlend0++ = val;
+				}
 			}
-		}
 
-		blendMap0->dirty();
-		blendMap1->dirty();
-		blendMap0->update();
-		blendMap1->update();
+			blendMap0->dirty();
+			blendMap0->update();
+		}
 	}
 
 } /* namespace modules */
