@@ -68,8 +68,8 @@ bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colO
 		return false;
 	}
 
-	i6engine::modules::PhysicsNode * a = reinterpret_cast<i6engine::modules::PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj0)->getCollisionObject()->getUserPointer());
-	i6engine::modules::PhysicsNode * b = reinterpret_cast<i6engine::modules::PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj1)->getCollisionObject()->getUserPointer());
+	i6engine::modules::PhysicsNode * a = reinterpret_cast<i6engine::modules::PhysicsNode *>(dynamic_cast<const btCollisionObjectWrapper *>(colObj0)->getCollisionObject()->getUserPointer());
+	i6engine::modules::PhysicsNode * b = reinterpret_cast<i6engine::modules::PhysicsNode *>(dynamic_cast<const btCollisionObjectWrapper *>(colObj1)->getCollisionObject()->getUserPointer());
 
 	if (a->getCrashMask() & b->getCrashType()) {
 		// A collides with B
