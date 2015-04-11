@@ -14,7 +14,4 @@
 # limitations under the License.
 ##
 
-configure_file(header.tex ${CMAKE_CURRENT_BINARY_DIR}/header.tex COPYONLY)
-
-add_subdirectory(basics)
-add_subdirectory(advanced)
+add_subdirectory(addComponent)

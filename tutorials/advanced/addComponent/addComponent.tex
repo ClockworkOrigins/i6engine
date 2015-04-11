@@ -1,0 +1,40 @@
+\documentclass{article}
+\input{../../header.tex}
+
+\title{i6engine Tutorial \\ Adding Component to GameObject during runtime}
+
+\begin{document}
+
+\section{Requirements}
+
+
+\begin{enumerate}
+\item Tutorial 2 - Creating GameObjects
+\end{enumerate}
+
+\section{Introduction}
+
+This tutorial will show you how to add a Component to an existing GameObject. This can be necessary in different situations: you might add a fire particle to an object starting to burn or a helmet mesh to your character, when he's equipping the item.
+
+\section{Configuring the Component}
+
+Adding Components to GameObjects is really simple. From previous tutorials you know every Component needs a map of key-value-pairs defining its settings. Let's assume we want to add a helmet.mesh to our character. The MeshAppearanceComponent requires five parameters: position, rotation, scale, mesh and visibility. The first three parameters are relative to the main node in the graphic being represented by the player model. Listing \ref{code:map} shows the complete map creation.
+
+\begin{lstlisting}[language=C++, style=basic, caption={configuring attributeMap}, label=code:map]
+i6engine::api::attributeMap params;
+params["pos"] = "0.0 0.9, 0.0";
+params["rot"] = "1.0 0.0 0.0, 0.0";
+params["scale"] = "1.0 1.0 1.0";
+params["mesh"] = "Helmet.mesh";
+params["visibility"] = "1";
+\end{lstlisting}
+
+We set position on y-position to 0.9 assuming the character has a height of 1.8 meters and the helmet as well as the player model are centered in origin. So this offset places the helmet to the head of the player. That was the difficult part. Now we have to add a Component with these properties. This will be done as shown in listing \ref{code:createComp}.
+
+\begin{lstlisting}[language=C++, style=basic, caption={create Component}, label=code:createComp]
+i6engine::api::EngineController::GetSingleton().getObjectFacade()->createComponent(goid, i6engine::api::EngineController::GetSingleton().getIDManager()->getID(), "MeshAppearance", params);
+\end{lstlisting}
+
+The first parameter is the GameObjects id. You need your GameObject and can get the id using getID(). The second parameter is the id of the newly created Component. Here we call the IDManager to give us the next id. We can enter -1 to invoke the object subsystem to take care of that itself. The third parameter is the registered template for the Component we want to add and the last parameter is our attributeMap.
+
+\end{document}

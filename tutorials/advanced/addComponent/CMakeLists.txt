@@ -14,7 +14,6 @@
 # limitations under the License.
 ##
 
-configure_file(header.tex ${CMAKE_CURRENT_BINARY_DIR}/header.tex COPYONLY)
+configure_file(addComponent.tex ${CMAKE_CURRENT_BINARY_DIR}/addComponent.tex COPYONLY)
 
-add_subdirectory(basics)
-add_subdirectory(advanced)
+add_custom_target(AdvancedTutorialAddComponent COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/addComponent.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
