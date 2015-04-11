@@ -1,0 +1,55 @@
+\documentclass{article}
+\input{../../header.tex}
+
+\title{i6engine Tutorial 2 \\ Adding GameObjects}
+
+\begin{document}
+
+\section{Requirements}
+
+Tutorial 1 - First Steps
+
+\section{Introduction}
+
+Now that we have a simple game running, we can start adding some GameObjects.
+
+\section{What is a GameObject?}
+
+It is necessary to add some theory here as the whole GameObject system is kind of complex. But if you know how to use it, it is really simple and flexible.\newline
+Every entity in the world is a GameObject. Obviously each object like cars, trees, etc. but also the terrain, special points of interest in the world or some areas with special effects if you enter them. All these GameObjects (or at least most of them) have one thing in common: The position in the world. But many other properties differ. Cars can move, areas are not visible, trees can't be pushed away, your main character is followed by a camera, ... . A common approach is creating a GameObject class and deriving many subclasses for different types of objects. This is a fast way and sufficient for small games. But in larger games with many different objects where some of them can change their behaviour within the game (e.g. a player picked up an item giving him invulnerability), the amount of subclasses will explode as well as some code that is needed more than once.\newline
+To face this problem, we use another design pattern: We have a class \textit{GameObject} that is nothing but a container for \textit{components}. A component implements a specific property objects can have. Examples are: Position in the world, being displayed on the screen. If you now need a GameObject, just create one object of type GameObject. This newly created object is empty: It can't do anything. Next, you have to add some components to the GameObject. These than control the behaviour of the GameObject or define some properties. After creating a GameObject, you can add and delete components as you like. As soon as you add one, the GameObject will behave accordingly to the component. Likewise, the GameObject will loose a certain ability in the moment you remove the corresponding component. You probably won't understand this concept now, but using it will make things clear.
+
+\section{Creating GameObjects}
+
+Every GameObject in the world is created out of a template you have to specify in xml. In this xml file you specify what type the GameObject has and what components it has with which default settings. Every parameter can be changed later for specific GameObjects and also it is possible to add and delete Components. For simplicity, we start with a template for creating a GameObject that has a position in the world, has a mesh (it is visible) and a camera attached to it so we can see it.
+\lstinputlisting[language=xml, style=basic, caption={GOTemplateTutorial.xml}, label=code:complete]{listings/GOTemplateTutorial.xml}
+
+\section{Using the Template}
+
+Now that we have our template, we need to use it in the game (MyApp.cpp). We can create GameObjects as shown in Listing \ref{code:createGO}. The GOTemplate parameter is used for specifying the Components on the GameObject. But we will use the default configuration from the xml, so this parameter doesn't matter for now. The third parameter is the owner id. This feature is only necessary for multiplayer games, in single player the id should always be the one of the EngineController. The \textit{true} indicates whether the object shall be synchroniszed on other clients. As we don't have any network at the moment, this value doesn't matter also. Of course you have to include \begin{quote}i6engine/api/facades/ObjectFacade.h\end{quote} to get the code compiling.
+\begin{lstlisting}[language=C++, style=basic, caption={creating objects}, label=code:createGO]
+i6engine::api::EngineController::GetSingleton().getObjectFacade()->createObject("Tutorial", i6engine::api::objects::GOTemplate(), i6engine::api::EngineController::GetSingleton().getUuid(), true);
+\end{lstlisting}
+Ok, we have a first object in our world. But we won't see it. Why? Because we don't have any light. Luckily, to get a simple light is a one-liner shown in Listing \ref{code:light}. Don't forget to include \begin{quote}i6engine/api/facades/GraphicsFacade.h\end{quote}
+\begin{lstlisting}[language=C++, style=basic, caption={adding lights}, label=code:light]
+i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
+\end{lstlisting}
+Now, you should see your object in the world. Listing \ref{code:complete} shows the AfterInitialize().
+\begin{lstlisting}[language=C++, style=basic, caption={AfterInitialize()}, label=code:complete]
+AfterInitialize() {
+	i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
+	i6engine::api::EngineController::GetSingleton().getObjectFacade()->createObject("Tutorial", i6engine::api::objects::GOTemplate(), i6engine::api::EngineController::GetSingleton().getUuid(), true);
+}
+\end{lstlisting}
+
+Last thing to do is adding a resource path to our resources.cfg. You can add as many FileSystem lines as you want. But they all have to be below the line with \textit{[i6engine]}. The path specified will be used to find the files you try to load for the graphic (.mesh, .material, .texture, ...).
+\begin{lstlisting}[style=basic, caption={resource.cfg}, label=code:resourcecfg]
+[i6engine]
+FileSystem=.
+\end{lstlisting}
+
+\section{What's next?}
+
+Next, we will add a terrain to our world.
+
+\end{document}

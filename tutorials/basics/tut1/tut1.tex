@@ -1,0 +1,47 @@
+\documentclass{article}
+\input{../../header.tex}
+
+\title{i6engine Tutorial 1 \\ First Steps}
+
+\begin{document}
+
+\section{Requirements}
+
+
+\begin{enumerate}
+\item Basic knowledge in C++.
+\item i6engine.ini and *.cfg files offered by engine have to be in bin directory of your project
+\end{enumerate}
+
+\section{Introduction}
+
+This tutorial series is intended to help developers to create their own games using the i6engine. The i6engine is an open-source game engine first developed at the chair 6 (datamanagement) at the FAU (Friedrich-Alexander University Erlangen-Nuremberg) and later continued as a hobby project.\newline
+Following this tutorials, you will learn the basics to create your own game. We will start with nothing but an empty text file and end up with a programm containing many features you will probably need in your game. The programm will be very minimalistic to make it easy for you to find errors and to increase the tutorial speed. Of course, you are free to implement additional objects etc. during the tutorial.\newline
+The tutorials of this basic series cover the following topics:\newline
+\begin{enumerate}
+\item \textbf{Tutorial 1 - First Steps} Create the main.cpp and get the engine running (but no output)
+\item \textbf{Tutorial 2 - Adding GameObjects} Add a simple GameObject being visible to the screen
+\end{enumerate}
+
+\section{Application}
+
+\subsection{How do I interact with the engine?}
+
+\lstinputlisting[language=C++, style=basic, caption={MyApp.cpp}, label=code:myapp]{listings/MyApp.cpp}
+Now let's take a look at the five functions implemented: Initialize(), AfterInitialize(), Tick(), ShutdownRequest() and Finalize(). These are the functions called by the engine on five diffent times, giving you the chance to execute your own code. Now follows a short description, when the functions are called. If you need detailed descriptions, please consult the API documentation.
+\begin{enumerate}
+	\item \textbf{Initialize()} Called after the very basic initialisations. Nearly nothing is created yet. E.g. You may register for messages here, initialize basic data structures or show a splash screen. Don't try to interact with other subsystems yet!
+	\item \textbf{AfterInitialize()} Now, the engine is completely started. All subsystems have processed OnThreadStart(). This is the perfect place, to create your initial world, e.g. a menu.
+	\item \textbf{Tick()} This is the only function that is called more than once. It is called in every frame. Meaning you can do some repeating stuff. Keep in mind, you don't have infinite time. Exceeding your frametime can lead to undefined behaviour.
+	\item \textbf{ShutdownRequest()} This function is called, just before the engine will shut down. This corrensponds to AfterInitialize().
+	\item \textbf{Finalize()} This function is the last one being called. It is invoked just after nearly everything is cleaned up and shutdown. This corrensponds to Initialize()
+\end{enumerate}
+These five functions should be enough for nearly every thing, you may want to do, but it is not very easy for some tasks. Therefor we have some more functions that are called on specific events. We'll discuss them later. Furthermore, you can register for keyboard and mouse events as well as messages. How to do this is discussed later as well. We just want the smallest programm first. And we're nearly done. What remains is a main function starting the engine. Here is an example for a small one \ref{code:main}.
+\lstinputlisting[language=C++, style=basic, caption={main.cpp}, label=code:main]{listings/main.cpp}
+Code Listing \ref{code:main}: First, we create an object of our application class MyApp. First we tell the engine which subsystem should be started. You can specify your own subsystems using registerModule(), but this is a really advanced feature. registerDefault() will be enough for most games. You have to pass a parameter indicating, whether you want to create a client or a server. Here we use \textit{false} because we just want a client. This will register the default systems for Graphics, Object, Physics, Input, GUI, Audio and Scripting. Using \textit{true} indicating a server, Graphics, GUI and Input wouldn't be registered as they are normally not needed on servers. \textit{registerApplication()} now registers our game in the engine. Now we can call start method on EngineController to run the engine and start our game.
+
+\section{What's next?}
+
+In the next step we will add a GameObject to the scene so we can see something.
+
+\end{document}

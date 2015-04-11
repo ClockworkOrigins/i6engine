@@ -36,6 +36,8 @@ OPTION(ISIXE_WITH_EDITOR "build i6engine with the level editor" ON)
 OPTION(ISIXE_WITH_SAMPLES "build some samples for i6engine" ON)
 OPTION(ISIXE_WITH_TOOLS "build some tools for i6engine" ON)
 OPTION(ISIXE_WITH_RPG "build rpg module for i6engine" ON)
+OPTION(ISIXE_WITH_DOCU "build documentation for i6engine" ON)
+OPTION(ISIXE_WITH_TUTORIALS "build tutorials for i6engine" ON)
 set(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies" CACHE STRING "path to dependencies for i6engine")
 
 IF(ISIXE_TESTING AND NOT WIN32)
@@ -337,7 +339,21 @@ ENDIF(ISIXE_WITH_TOOLS)
 # Docs
 ###############################################################################
 
-add_subdirectory(docs)
+IF(ISIXE_WITH_DOCU)
+	find_package(doxygen)
+	IF(DOXYGEN_FOUND)
+		add_subdirectory(docs)
+	ENDIF(DOXYGEN_FOUND)
+ENDIF(ISIXE_WITH_DOCU)
+
+###############################################################################
+# Tutorials
+###############################################################################
+
+IF(ISIXE_WITH_TUTORIALS)
+	find_package(latex)
+	add_subdirectory(tutorials)
+ENDIF(ISIXE_WITH_TUTORIALS)
 
 ###########
 # Final Statements

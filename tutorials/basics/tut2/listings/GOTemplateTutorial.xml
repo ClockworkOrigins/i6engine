@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GOTemplate type="Tutorial">
+	<Component template="StaticState" owner="true">
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
+	<Component template="Camera" owner="true">
+		<Attribute name="pos">0.0 7.0 30.0</Attribute>
+		<Attribute name="lookAt">0.0 4.0 -10.0</Attribute>
+		<Attribute name="nearclip">1</Attribute>
+		<Attribute name="aspect">0.5235987755982988</Attribute>
+		<Attribute name="viewport">1</Attribute>
+		<Attribute name="vp_left">0.0</Attribute>
+		<Attribute name="vp_top">0.0</Attribute>
+		<Attribute name="vp_width">1.0</Attribute>
+		<Attribute name="vp_height">1.0</Attribute>
+		<Attribute name="vp_red">0.0</Attribute>
+		<Attribute name="vp_green">0.0</Attribute>
+		<Attribute name="vp_blue">0.0</Attribute>
+		<Attribute name="vp_alpha">1.0</Attribute>
+	</Component>
+	<Component template="MeshAppearance" owner="true">
+		<Attribute name="mesh">Ball.MESH</Attribute>
+		<Attribute name="visibility">1</Attribute>
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
+</GOTemplate>
