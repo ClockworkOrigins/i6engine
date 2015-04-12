@@ -38,6 +38,7 @@
 #include "i6engine/modules/graphics/GraphicsController.h"
 #include "i6engine/modules/graphics/GraphicsNode.h"
 #include "i6engine/modules/graphics/Terrain.h"
+#include "i6engine/modules/graphics/compositors/GaussianBlurLogic.h"
 #include "i6engine/modules/graphics/compositors/HDRLogic.h"
 #include "i6engine/modules/gui/GUIController.h"
 #include "i6engine/modules/gui/GUIMailbox.h"
@@ -102,6 +103,7 @@ namespace modules {
 
 		Ogre::CompositorManager & compMgr = Ogre::CompositorManager::getSingleton();
 		compMgr.registerCompositorLogic("HDR", new HDRLogic());
+		compMgr.registerCompositorLogic("GaussianBlur", new GaussianBlurLogic());
 
 		Ogre::ConfigOptionMap & CurrentRendererOptions = _objRoot->getRenderSystem()->getConfigOptions();
 		Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();

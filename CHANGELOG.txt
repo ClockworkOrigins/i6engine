@@ -12,10 +12,14 @@ Enhancements:
 	- added a sample showing a simple chat application
 	- added inputScale, layers and blend map generation to TerrainComponent
 	- added sample showing terrain usage
+	- drop target can be specified to accept not all drops
+	- added bloom compositor
+	- added GaussianBlur compositor
 
 Fixes:
 	- fixed GUIPrints not updating right alignment when only size is changed after creation
 	- fixed value print of fps view
+	- dragging still works if mouse moves so fast that it leaves widget for a moment
 
 v 0.8.2
 
