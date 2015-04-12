@@ -314,7 +314,7 @@ namespace gui {
 		 * \param name Name of the object.
 		 * \param target true means Widget accepts drops
 		 */
-		void enableDropTarget(const std::string & name, bool target) const;
+		void enableDropTarget(const std::string & name, bool target, const std::function<bool(std::string)> & func) const;
 
 		/**
 		 * \brief Enables or disables Widget being dragable

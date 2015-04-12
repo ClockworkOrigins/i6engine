@@ -71,7 +71,7 @@ namespace gui {
 		/**
 		 * \brief This method is called every Tick, if ticking is enabled for this widget
 		 */
-		virtual void tick() {}
+		virtual void tick();
 
 		/**
 		 * \brief loads a Layout from a .layout file and stores it in _window
@@ -121,8 +121,10 @@ namespace gui {
 		CEGUI::Window * _window;
 
 	private:
+		bool _ticking;
 		std::function<std::vector<GUIWidget *>()> _mouseOverCallback;
 		bool _dropable;
+		std::function<bool(std::string)> _canDrop;
 		bool _dragable;
 		std::function<void(const std::string &, const std::string &)> _dropCallback;
 		Vec2f _originalPos;

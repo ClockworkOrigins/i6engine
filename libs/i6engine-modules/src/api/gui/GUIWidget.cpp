@@ -27,7 +27,7 @@
 namespace i6engine {
 namespace api {
 
-	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _mouseOverCallback(), _dropable(false), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false) {
+	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false) {
 	}
 
 	GUIWidget::~GUIWidget() {
@@ -48,6 +48,7 @@ namespace api {
 			_window->setVisible(vis);
 		} else if (type == gui::GUIMessageTypes::GuiSetDropTarget) {
 			_dropable = dynamic_cast<gui::GUI_SetDropTarget *>(message)->dropable;
+			_canDrop = dynamic_cast<gui::GUI_SetDropTarget *>(message)->func;
 		} else if (type == gui::GUIMessageTypes::GuiSetDragable) {
 			_dragable = dynamic_cast<gui::GUI_SetDragable *>(message)->dragable;
 			_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
@@ -88,6 +89,7 @@ namespace api {
 		} else {
 			EngineController::GetSingletonPtr()->getGUIFacade()->removeTicker(this);
 		}
+		_ticking = enabled;
 	}
 
 	void GUIWidget::setPosition(double x, double y) {
@@ -119,10 +121,10 @@ namespace api {
 		_isDragged = false;
 		bool found = false;
 		for (auto w : getAllMouseoverWidgets()) {
-			if (w->_name != _name && w->canDrop()) {
+			if (w->_name != _name && w->canDrop() && w->_canDrop(_name)) {
 				setPosition(w->_window->getPosition().d_x.d_scale, w->_window->getPosition().d_y.d_scale);
 				_originalPos.setX(w->_window->getPosition().d_x.d_scale);
-				_originalPos.setX(w->_window->getPosition().d_y.d_scale);
+				_originalPos.setY(w->_window->getPosition().d_y.d_scale);
 				if (_dropCallback != nullptr) {
 					_dropCallback(_name, w->_name);
 				}
@@ -140,6 +142,9 @@ namespace api {
 	bool GUIWidget::mouseMove(const CEGUI::EventArgs & e) {
 		if (_isDragged) {
 			setPosition(dynamic_cast<const CEGUI::MouseEventArgs *>(&e)->position.d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _dragOffset.getX(), dynamic_cast<const CEGUI::MouseEventArgs *>(&e)->position.d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _dragOffset.getY());
+			if (_ticking) {
+				enableTicking(false);
+			}
 		}
 		return true;
 	}
@@ -158,6 +163,7 @@ namespace api {
 	bool GUIWidget::mouseLeave(const CEGUI::EventArgs & e) {
 		if (_isDragged) {
 			setPosition(CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _dragOffset.getX(), CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _dragOffset.getY());
+			enableTicking(true);
 		}
 		if (_tooltip.empty() || !_tooltipActive) {
 			return true;
@@ -165,6 +171,12 @@ namespace api {
 		_tooltipActive = false;
 		i6engine::api::EngineController::GetSingleton().getGUIFacade()->deleteWidget(_name + "_Tooltip");
 		return true;
+	}
+
+	void GUIWidget::tick() {
+		if (_isDragged) {
+			setPosition(CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _dragOffset.getX(), CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _dragOffset.getY());
+		}
 	}
 
 } /* namespace api */

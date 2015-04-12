@@ -16,6 +16,8 @@
 
 #include "DragDropApplication.h"
 
+#include "i6engine/utils/i6eString.h"
+
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/GUIConfig.h"
 #include "i6engine/api/facades/GUIFacade.h"
@@ -48,14 +50,45 @@ namespace sample {
 
 		// 20 slots accepting drops
 		for (size_t i = 0; i < 20; i++) {
-			gf->addImage("Slot" + std::to_string(i), "RPG/StaticImage", "RPG", "TbM_Filling", 0.1 + 0.1666666 * (i % 5), 0.125 + 0.2 * (i / 5), 0.1333333, 0.175);
-			gf->enableDropTarget("Slot" + std::to_string(i), true);
+			std::string image = "TbM_Filling";
+			if (i / 5 == 2) {
+				image = "Drag01";
+			} else if (i / 5 == 3) {
+				image = "Drag02";
+			}
+			gf->addImage("Slot" + std::to_string(i), "RPG/StaticImage", "RPG", image, 0.1 + 0.1666666 * (i % 5), 0.125 + 0.2 * (i / 5), 0.1333333, 0.175);
+			gf->enableDropTarget("Slot" + std::to_string(i), true, [i](std::string s) {
+				if (i / 5 < 2) { // the first two rows accept everything
+					return true;
+				} else if (i / 5 == 2) { // the third row accepts the two blue and the green image
+					auto vec = i6engine::utils::split(s, "_");
+					if (vec.size() == 2) {
+						if (vec[1] == "0" || vec[1] == "1" || vec[1] == "4") {
+							return true;
+						}
+					}
+				} else if (i / 5 == 3) { // the last row accepts the two red and the green image
+					auto vec = i6engine::utils::split(s, "_");
+					if (vec.size() == 2) {
+						if (vec[1] == "2" || vec[1] == "3" || vec[1] == "4") {
+							return true;
+						}
+					}
+				}
+				return false;
+			});
 		}
 
 		// 5 images being dragable
 		for (size_t i = 0; i < 5; i++) {
-			gf->addImage("Image" + std::to_string(i), "RPG/StaticImage", "RPG", "NewCloseButtonNormal", 0.1 + 0.1666666 * (i % 5), 0.125 + 0.2 * (i / 5), 0.1333333, 0.175);
-			gf->setDragable("Image" + std::to_string(i), true);
+			std::string image = "NewCloseButtonNormal";
+			if (i >= 2 && i < 4) {
+				image = "NewCloseButtonPressed";
+			} else if (i == 4) {
+				image = "NewCloseButtonHover";
+			}
+			gf->addImage("Image_" + std::to_string(i), "RPG/StaticImage", "RPG", image, 0.1 + 0.1666666 * (i % 5), 0.125 + 0.2 * (i / 5), 0.1333333, 0.175);
+			gf->setDragable("Image_" + std::to_string(i), true);
 		}
 
 		// register ESC to close the application

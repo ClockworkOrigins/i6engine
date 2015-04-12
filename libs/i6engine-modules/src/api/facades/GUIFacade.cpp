@@ -276,8 +276,8 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetAlignment, core::Method::Update, new gui::GUI_Alignment(windowname, alignment), core::Subsystem::Unknown));
 	}
 
-	void GUIFacade::enableDropTarget(const std::string & windowname, bool target) const {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetDropTarget, core::Method::Update, new gui::GUI_SetDropTarget(windowname, target), core::Subsystem::Unknown));
+	void GUIFacade::enableDropTarget(const std::string & windowname, bool target, const std::function<bool(std::string)> & func) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetDropTarget, core::Method::Update, new gui::GUI_SetDropTarget(windowname, target, func), core::Subsystem::Unknown));
 	}
 
 	void GUIFacade::setDragable(const std::string & windowname, bool enabled) const {

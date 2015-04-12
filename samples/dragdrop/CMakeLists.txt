@@ -26,7 +26,7 @@ include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 
 set(SampleDragDropSrc
 	main.cpp
-
+	
 	src/DragDropApplication.cpp
 )
 

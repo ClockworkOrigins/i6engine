@@ -259,4 +259,8 @@
 	<Image name="PopupMenuMiddle" xPos="800" yPos="769" width="0" height="0" />
 	<Image name="TreeListClosed" xPos="800" yPos="769" width="0" height="0" />
 	<Image name="TreeListOpened" xPos="800" yPos="769" width="0" height="0" />
+	
+	<Image name="Drag01" xPos="840" yPos="905" width="17" height="26" />
+	<Image name="Drag02" xPos="876" yPos="905" width="17" height="26" />
+	<Image name="Drag03" xPos="858" yPos="905" width="17" height="26" />
 </Imageset>

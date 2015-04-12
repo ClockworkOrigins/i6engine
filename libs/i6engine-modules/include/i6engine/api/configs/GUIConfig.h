@@ -412,7 +412,8 @@ namespace gui {
 	 */
 	typedef struct GUI_SetDropTarget : GUIUpdateMessageStruct {
 		bool dropable;
-		GUI_SetDropTarget(const std::string & name, bool d) : GUIUpdateMessageStruct(name), dropable(d) {
+		std::function<bool(std::string)> func;
+		GUI_SetDropTarget(const std::string & name, bool d, const std::function<bool(std::string)> & f) : GUIUpdateMessageStruct(name), dropable(d), func(f) {
 		}
 		GUI_SetDropTarget * copy() {
 			return new GUI_SetDropTarget(*this);
