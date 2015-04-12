@@ -15,6 +15,7 @@ Enhancements:
 	- drop target can be specified to accept not all drops
 	- added bloom compositor
 	- added GaussianBlur compositor
+	- added some tutorials
 
 Fixes:
 	- fixed GUIPrints not updating right alignment when only size is changed after creation

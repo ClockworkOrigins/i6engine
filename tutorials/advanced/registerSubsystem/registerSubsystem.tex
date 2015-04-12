@@ -1,0 +1,40 @@
+\documentclass{article}
+\input{../../header.tex}
+
+\title{i6engine Tutorial \\ Registering Subsystems manually}
+
+\begin{document}
+
+\section{Requirements}
+
+\begin{enumerate}
+\item Tutorial 1 - First Steps
+\end{enumerate}
+
+\section{Introduction}
+
+This tutorial will show you how to register subsystems manually. Sometimes you don't need all the subsystem being registered in the default implementation or you might have added an own subsystem, which is obviously not registered by default.
+
+\section{Registering a subsystem}
+
+The EngineController offers two overloads of the registerSubsystem method for the different subsystem types. Let's take a look on both of them.
+
+\subsection{registerSubsystem with frameTime}
+
+Using a frameTime when registering the subsystem implies a constant ticking independent of other subsystems. The frameTime is the time until the next frame of this subsystem is scheduled. So a frameTime of 30ms implies about 33 frames per second. If a single tick of the subsystem exceeds the frameTime, one frame is skipped. Listing \ref{code:registerTime} shows an example adding the default object subsystem using a frame time of 30ms.
+
+\begin{lstlisting}[language=C++, style=basic, caption={registering object subsystem}, label=code:registerTime]
+i6engine::api::EngineController::GetSingleton().registerSubSystem("Object", new i6engine::modules::ObjectController(), 30000);
+\end{lstlisting}
+
+\subsection{registerSubsystem with subsystem dependencies}
+
+If you want the new subsystem to wait for another subsystem, the second method is your choice. Here you just have to add a list of all the subsystem, your subsystem has to wait for. In listing \ref{code:registerWaiting} we have an example.
+
+\begin{lstlisting}[language=C++, style=basic, caption={registering graphics subsystem waiting for object subsystem}, label=code:registerWaiting]
+i6engine::api::EngineController::GetSingleton().registerSubSystem("Graphic", new i6engine::modules::GraphicsController(), { i6engine::core::Subsystem::Object });
+\end{lstlisting}
+
+Now, what happen's here? We register the default Ogre3D graphics subsystem and make its ticking dependent of the object subsystem. That means that a graphics tick starts as soon as it gets informed of the finishing of the objects tick. So if the object subsystem ticks with 30fps the graphics subsystem will also tick with 30fps and always have the complete state of the object subsystem. So this approach is used to get a consistent state across more than one subsystem, but adds dependencies. So if the object subsystem exceeds its frame time, every following subsystem in the chain (here only the graphics subsystem) is triggered less often.
+
+\end{document}

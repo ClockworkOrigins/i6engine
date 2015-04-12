@@ -14,5 +14,6 @@
 # limitations under the License.
 ##
 
-add_subdirectory(addComponent)
-add_subdirectory(registerSubsystem)
+configure_file(registerSubsystem.tex ${CMAKE_CURRENT_BINARY_DIR}/registerSubsystem.tex COPYONLY)
+
+add_custom_target(AdvancedTutorialRegisterSubsystem COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/registerSubsystem.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
