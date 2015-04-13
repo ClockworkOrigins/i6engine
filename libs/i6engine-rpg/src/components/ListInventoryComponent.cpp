@@ -260,23 +260,9 @@ namespace components {
 						for (auto & p : _items) {
 							for (auto & p2 : p.second) {
 								if (counter == _currentIndex) {
-									api::GameMessage::Ptr msg2 = std::get<ItemEntry::Message>(p2.second);
-									api::objects::Object_Create_Create * occ = dynamic_cast<api::objects::Object_Create_Create *>(msg2->getContent());
-									api::EngineController::GetSingleton().getObjectFacade()->createGO(occ->tpl, occ->tmpl, api::EngineController::GetSingleton().getUUID(), occ->send, [this](api::GOPtr go) {
-										auto ic = go->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent);
-										if (ic->use(getOwnerGO())) {
-											std::string name = go->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName();
-											std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name])--;
-											if (std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name]) == 0) {
-												_items[ic->getComponentID()].erase(name);
-											}
-											hide();
-											show();
-											for (auto & cb : _callbacks) {
-												cb(ic->getComponentID(), name, std::get<ItemEntry::Amount>(_items[ic->getComponentID()][name]));
-											}
-										}
-										go->setDie();
+									useItem(p.first, p2.first, [this]() {
+										hide();
+										show();
 									});
 									return;
 								}
@@ -297,11 +283,13 @@ namespace components {
 			if (ic->use(getOwnerGO())) {
 				std::string n = go->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName();
 				std::get<ItemEntry::Amount>(_items[ic->getComponentID()][n])--;
+				bool erased = false;
 				if (std::get<ItemEntry::Amount>(_items[ic->getComponentID()][n]) == 0) {
 					_items[ic->getComponentID()].erase(n);
+					erased = true;
 				}
 				for (auto & cb : _callbacks) {
-					cb(ic->getComponentID(), n, std::get<ItemEntry::Amount>(_items[ic->getComponentID()][n]));
+					cb(ic->getComponentID(), n, (erased) ? 0 : std::get<ItemEntry::Amount>(_items[ic->getComponentID()][n]));
 				}
 				callback();
 			}

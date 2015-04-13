@@ -141,6 +141,15 @@ namespace components {
 			auto selection = ic->getSelectedItem();
 			if (std::get<0>(selection) != UINT32_MAX) {
 				api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+				for (uint16_t i = 0; i < _slots.size(); i++) {
+					if (_slots[i].first == std::get<0>(selection) && _slots[i].second == std::get<1>(selection)) {
+						gf->setImage("Quickslot_Thumbnail_" + std::to_string(i), "RPG", "TbM_Filling");
+						gf->setText("Quickslot_Amount_" + std::to_string(i), "");
+						gf->setVisibility("Quickslot_Amount_" + std::to_string(i), false);
+						_slots[i].first = UINT32_MAX;
+						break;
+					}
+				}
 				_slots[slot].first = std::get<0>(selection);
 				_slots[slot].second = std::get<1>(selection);
 				gf->setImage("Quickslot_Thumbnail_" + std::to_string(slot), std::get<2>(selection), std::get<3>(selection));

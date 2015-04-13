@@ -26,13 +26,11 @@
 #include <set>
 
 #include "i6engine/utils/ExceptionQueue.h"
-#include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Logger.h"
-#include "i6engine/utils/Singleton.h"
-
-#include "clockUtils/iniParser/iniParser.h"
 
 #include "boost/function.hpp"
+
+#include "clockUtils/iniParser/iniParser.h"
 
 namespace i6engine {
 namespace core {

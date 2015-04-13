@@ -17,6 +17,7 @@
 #include "i6engine/api/EngineController.h"
 
 #include <csignal>
+#include <thread>
 
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 	#include <WinSock2.h>
@@ -26,7 +27,6 @@
 
 #include "i6engine/core/EngineCoreController.h"
 #include "i6engine/core/messaging/MessagingController.h"
-#include "i6engine/core/subsystem/ModuleController.h"
 #include "i6engine/core/subsystem/SubSystemController.h"
 
 #include "i6engine/configs/FrameTimes.h"
@@ -69,14 +69,14 @@
 #include "boost/uuid/uuid.hpp"
 #include "boost/uuid/uuid_generators.hpp"
 
-// Ensures that X11 key repeat is reset to original value in case of a application crash.
-void forceCleanup(int param) {
-	ISIXE_LOG_WARN("EngineController", "***Dirty shutdown detected: running forced cleanup to reset X11 key repeat rate***");
-	i6engine::api::EngineController::GetSingletonPtr()->stop();
-}
-
 namespace i6engine {
 namespace api {
+
+	// Ensures that X11 key repeat is reset to original value in case of a application crash.
+	void forceCleanup(int param) {
+		ISIXE_LOG_WARN("EngineController", "***Dirty shutdown detected: running forced cleanup to reset X11 key repeat rate***");
+		i6engine::api::EngineController::GetSingletonPtr()->stop();
+	}
 
 	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _languageManager(new LanguageManager()), _textManager(new TextManager()), _waynetManager(new WaynetManager()), _appl(), _debugdrawer(0), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
 		// WORKAROUND: Install signal handlers to overcome OIS's limitation to handle X11 key repeat rate properly when crashing.
@@ -152,7 +152,7 @@ namespace api {
 		volatile bool run = true;
 
 		// need 'this' captured to compile with gcc 4.7...
-		boost::thread thrd([this, &run]() {
+		std::thread thrd([this, &run]() {
 			// read stdin
 			std::string str;
 

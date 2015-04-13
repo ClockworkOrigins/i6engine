@@ -104,18 +104,18 @@ namespace sample {
 		{
 			i6engine::api::objects::GOTemplate tmpl;
 			i6engine::api::attributeMap params;
-			params.insert(std::make_pair("size", "1200.0"));
-			params.insert(std::make_pair("heightmap", "terrain.png"));
-			params.insert(std::make_pair("inputScale", "60.0"));
-			params.insert(std::make_pair("layers", "2"));
-			params.insert(std::make_pair("layer_0_size", "10"));
-			params.insert(std::make_pair("layer_0_diffusespecular", "GrassFloor.tga"));
-			params.insert(std::make_pair("layer_0_normal", "GrassFloor.tga"));
+			params.insert(std::make_pair("size", "1200.0")); // size of the terrain in world units
+			params.insert(std::make_pair("heightmap", "terrain.png")); // the heightmap used for terrain generation
+			params.insert(std::make_pair("inputScale", "60.0")); // scale factor for height in terrain (so maximum height here is 60 meters)
+			params.insert(std::make_pair("layers", "2")); // two texture layers
+			params.insert(std::make_pair("layer_0_size", "10")); // size of a texture tile (reduce to get more repetition of the texture)
+			params.insert(std::make_pair("layer_0_diffusespecular", "GrassFloor.tga")); // should be a texture combined of a diffuse and a specular map
+			params.insert(std::make_pair("layer_0_normal", "GrassFloor.tga")); // should be a texture combined of a normal and a displacement map
 			params.insert(std::make_pair("layer_1_size", "30"));
 			params.insert(std::make_pair("layer_1_diffusespecular", "Rock.tga"));
 			params.insert(std::make_pair("layer_1_normal", "Rock.tga"));
-			params.insert(std::make_pair("layer_1_minHeight", "7.0"));
-			params.insert(std::make_pair("layer_1_fadeDist", "2.0"));
+			params.insert(std::make_pair("layer_1_minHeight", "7.0")); // the minimum height this texture is added, not necessary for first layer because it marks a transition, so only starting from layer 2
+			params.insert(std::make_pair("layer_1_fadeDist", "2.0")); // the fadedist declares how fast the blending between the two layers is done
 
 			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("TerrainAppearance", params, "", false, false));
 
@@ -159,7 +159,7 @@ namespace sample {
 	}
 
 	void TerrainApplication::InputMailbox(const i6engine::api::GameMessage::Ptr & msg) {
-		if (msg->getSubtype() == i6engine::api::keyboard::KeyKeyboard) {
+		if (msg->getSubtype() == i6engine::api::keyboard::KeyKeyboard) { // for movement of the camera
 			i6engine::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6engine::api::input::Input_Keyboard_Update *>(msg->getContent());
 			if (!i6engine::api::EngineController::GetSingleton().getGUIFacade()->getInputCaptured()) {
 				std::string key = i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(iku->code);
@@ -168,7 +168,7 @@ namespace sample {
 					_eventMap[key].second = iku->pressed != i6engine::api::KeyState::KEY_RELEASED;
 				}
 			}
-		} else if (msg->getSubtype() == i6engine::api::mouse::MouButton) {
+		} else if (msg->getSubtype() == i6engine::api::mouse::MouButton) { // to throw balls on the terrain
 			i6engine::api::input::Input_Button_Update * ibu = dynamic_cast<i6engine::api::input::Input_Button_Update *>(msg->getContent());
 			if (ibu->pressed && ibu->code == i6engine::api::MouseButtonID::MB_Left && !i6engine::api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
 				i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
