@@ -6,6 +6,10 @@
 </Key>
 
 <!-- Items in inventory -->
+<Key key="Weight_Key">
+	<Language name="Deutsch">Gewicht</Language>
+	<Language name="English">Weight</Language>
+</Key>
 <Key key="Value_Key">
 	<Language name="Deutsch">Wert</Language>
 	<Language name="English">Value</Language>

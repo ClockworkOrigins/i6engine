@@ -34,6 +34,7 @@
 #include "i6engine/rpg/components/QuickslotComponent.h"
 #include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 #include "i6engine/rpg/components/UsableItemComponent.h"
+#include "i6engine/rpg/components/WeightInventoryComponent.h"
 
 #include "boost/bind.hpp"
 
@@ -81,6 +82,7 @@ namespace sample {
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&i6engine::rpg::components::QuickslotComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&i6engine::rpg::components::ThirdPersonControlComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&i6engine::rpg::components::WeightInventoryComponent::createC, _1, _2));
 
 		// loads the RPG demo level
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/RPGLevel.xml", "Singleplayer");

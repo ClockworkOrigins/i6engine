@@ -56,6 +56,16 @@ namespace utils {
 		return ret;
 	}
 
+	/**
+	 * \brief returns a string from a float value with given precision
+	 */
+	template<typename T>
+	std::string to_string_with_precision(const T a_value, const int n) {
+		std::ostringstream out;
+		out << std::setprecision(n) << a_value;
+		return out.str();
+	}
+
 } /* namespace utils */
 } /* namespace i6engine */
 

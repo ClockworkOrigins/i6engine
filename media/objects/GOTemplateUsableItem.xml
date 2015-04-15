@@ -17,6 +17,7 @@
 		<Attribute name="value">100</Attribute>
 		<Attribute name="imageset">UsableItem</Attribute>
 		<Attribute name="image">UsableItem</Attribute>
+		<Attribute name="weight">0.5</Attribute>
 	</Component>
 	<Component template="Name" owner="true">
 		<Attribute name="name">UsableItem_Key</Attribute>

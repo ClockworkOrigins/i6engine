@@ -59,10 +59,15 @@ namespace components {
 			return _image;
 		}
 
+		double getWeight() const {
+			return _weight;
+		}
+
 	private:
 		uint32_t _value;
 		std::string _imageset;
 		std::string _image;
+		double _weight;
 	};
 
 } /* namespace components */

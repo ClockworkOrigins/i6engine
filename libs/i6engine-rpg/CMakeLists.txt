@@ -36,6 +36,7 @@ set(i6rpgSrc
 	${srcdir}/components/QuickslotComponent.cpp
 	${srcdir}/components/ThirdPersonControlComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp
+	${srcdir}/components/WeightInventoryComponent.cpp
 	
 	${srcdir}/gui/SubtitleWidget.cpp
 )

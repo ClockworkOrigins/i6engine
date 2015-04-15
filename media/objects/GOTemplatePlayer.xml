@@ -51,7 +51,8 @@
 	</Component>
 	<Component template="Healthbar" owner="true">
 	</Component>
-	<Component template="ListInventory" owner="true">
+	<Component template="WeightInventory" owner="true">
+		<Attribute name="maxWeight">1.0</Attribute>
 	</Component>
 	<Component template="Quickslot" owner="true">
 	</Component>

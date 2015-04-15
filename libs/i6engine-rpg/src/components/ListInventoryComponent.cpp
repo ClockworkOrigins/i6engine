@@ -159,6 +159,7 @@ namespace components {
 		
 		uint32_t counter = 0;
 		uint32_t placed = 0;
+
 		for (auto & p : _items) {
 			for (auto & p2 : p.second) {
 				if (counter >= (_maxSlot - (_slotCount / _columns)) * _columns && counter < (_maxSlot - (_slotCount / _columns)) * _columns + _slotCount) {
