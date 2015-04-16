@@ -18,6 +18,7 @@ namespace api {
 			if (boost::filesystem::is_regular_file(*iter)) {
 				std::string file = iter->path().string();
 				loadFile(file);
+				ISIXE_LOG_INFO("TextManager", "Loaded XML file '" << file << "'");
 			}
 			iter++;
 		}
@@ -29,7 +30,7 @@ namespace api {
 		tinyxml2::XMLError e = doc.LoadFile(file.c_str());
 
 		if (e) {
-			ISIXE_THROW_API("TextManager", "Couldn't open xml file!");
+			ISIXE_THROW_API("TextManager", "Couldn't open file '" << file << "'. Maybe not a valid XML file?");
 			return;
 		}
 
@@ -75,7 +76,7 @@ namespace api {
 		auto it = _texts.find(_language);
 
 		if (it == _texts.end()) {
-			ISIXE_THROW_API("TextManager", "No text for key '" << key << "' with language '" << _language << "'");
+			ISIXE_THROW_API("TextManager", "Language '" << _language << "' not found");
 		}
 
 		auto it2 = it->second.find(key);
