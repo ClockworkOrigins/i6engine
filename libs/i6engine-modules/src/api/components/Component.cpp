@@ -35,8 +35,6 @@ namespace api {
 	Component::Component() : _objOwnerID(), _objOwnerGO(), _objComponentID(), _objFamilyID(), _id(-1), _sync(true), _self() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		_id = EngineController::GetSingletonPtr()->getIDManager()->getID();
-
-		EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(_id);
 	}
 
 	Component::Component(const int64_t id, const attributeMap & params) : _objOwnerID(), _objOwnerGO(), _objComponentID(), _objFamilyID(), _id(id), _sync(true), _self() {
@@ -44,7 +42,6 @@ namespace api {
 		if (params.find("identifier") != params.end()) {
 			_identifier = params.find("identifier")->second;
 		}
-		EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(_id);
 	}
 
 	Component::~Component() {
