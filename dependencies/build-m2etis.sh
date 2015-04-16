@@ -24,8 +24,8 @@ BUILD_FLAG=${2}
 . ./build-common.sh
 
 # M2etis
-ARCHIVE="m2etis-0.3-rev24.zip"
-BUILD_DIR="${BUILD_ROOT}/m2etis-0.3-rev24"
+ARCHIVE="m2etis-0.3-rev26.zip"
+BUILD_DIR="${BUILD_ROOT}/m2etis-0.3-rev26"
 
 PREFIX="${PWD}/m2etis"
 DEBUG_FLAG="DEBUG"

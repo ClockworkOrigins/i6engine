@@ -22,6 +22,7 @@
 #ifndef __I6ENGINE_UTILS_I6ESTRING_H__
 #define __I6ENGINE_UTILS_I6ESTRING_H__
 
+#include <sstream>
 #include <string>
 #include <vector>
 
