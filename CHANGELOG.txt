@@ -23,6 +23,8 @@ Fixes:
 	- fixed GUIPrints not updating right alignment when only size is changed after creation
 	- fixed value print of fps view
 	- dragging still works if mouse moves so fast that it leaves widget for a moment
+	- added exception if used GOTemplate isn't registered
+	- fixed bug that an object, that is created and deleted in same tick might not be completely deleted in Graphics subsystem in default configuration
 
 v 0.8.2
 

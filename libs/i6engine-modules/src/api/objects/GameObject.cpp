@@ -26,7 +26,6 @@
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/configs/GraphicsConfig.h"
 #include "i6engine/api/configs/ObjectConfig.h"
-#include "i6engine/api/facades/GraphicsFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
@@ -44,10 +43,9 @@ namespace api {
 
 	GameObject::~GameObject() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		GraphicsFacade * graF = EngineController::GetSingletonPtr()->getGraphicsFacade();
-		if (graF != nullptr) {
-			graF->removeNode(_objGoid);
-		}
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Delete, new graphics::Graphics_Node_Delete(_objGoid), core::Subsystem::Object);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 		clearGOCs();
 	}
 
