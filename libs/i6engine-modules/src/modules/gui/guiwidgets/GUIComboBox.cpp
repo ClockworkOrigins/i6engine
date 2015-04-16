@@ -30,6 +30,7 @@ namespace modules {
 
 		_window = wmgr.createWindow(style, name);
 		_window->setProperty("RiseOnClickEnabled", "False");
+		dynamic_cast<CEGUI::Combobox *>(_window)->setReadOnly(true);
 
 		_window->subscribeEvent(CEGUI::Combobox::EventListSelectionAccepted, CEGUI::Event::Subscriber(&GUIComboBox::selectionChanged, this));
 	}
@@ -38,7 +39,7 @@ namespace modules {
 		if (type == api::gui::GuiAddText) {
 			api::gui::GUI_Text * g = dynamic_cast<api::gui::GUI_Text *>(data);
 			dynamic_cast<CEGUI::Combobox *>(_window)->addItem(new CEGUI::ListboxTextItem(g->text));
-		} else if (type == api::gui::GuiSetSelectedCallback) {
+		} else if (type == api::gui::GuiSetSelectedStringCallback) {
 			api::gui::GUI_SetSelectedStringCallback * g = dynamic_cast<api::gui::GUI_SetSelectedStringCallback *>(data);
 			_selectedCallback = g->callback;
 		} else {

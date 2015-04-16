@@ -110,8 +110,7 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		if (owner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 			if (_templateList.find(tmpl) == _templateList.end()) {
-				ISIXE_LOG_ERROR("GOFactory", "Template with name " << tmpl << " not found");
-				return GOPtr();
+				ISIXE_THROW_FAILURE("GOFactory", "Template with name " << tmpl << " not found");
 			}
 			api::objects::GOTemplate defaultTmpl = _templateList[tmpl];
 

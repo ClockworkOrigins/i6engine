@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GOTemplate type="Light">
+	<Component template="LuminousAppearance">
+		<Attribute name="lightType">1</Attribute>
+		<Attribute name="diffuseColor">1.0 1.0 1.0</Attribute>
+		<Attribute name="specularColor">1.0 1.0 1.0</Attribute>
+		<Attribute name="attenuation">100000 1.0 0.0 0.0</Attribute>
+		<Attribute name="direction">-1.0 -1.0 -1.0</Attribute>
+	</Component>
+</GOTemplate>

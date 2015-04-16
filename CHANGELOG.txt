@@ -16,6 +16,8 @@ Enhancements:
 	- added bloom compositor
 	- added GaussianBlur compositor
 	- added some tutorials
+	- added a new inventory with weights and category filters
+	- added a sample showing the different shadow techniques
 
 Fixes:
 	- fixed GUIPrints not updating right alignment when only size is changed after creation
