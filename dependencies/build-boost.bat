@@ -1,7 +1,7 @@
 call build-common.bat
 
-Set ARCHIVE=boost_1_55_0.tar.bz2
-Set BUILD_DIR=%BUILD_ROOT%/boost_1_55_0
+Set ARCHIVE=boost_1_58_0.tar.bz2
+Set BUILD_DIR=%BUILD_ROOT%/boost_1_58_0
 
 Set PREFIX=%cd%/boost/
 Set DEBUG_FLAG="variant=debug"
@@ -12,18 +12,15 @@ Set BUILD_TYPE=%RELEASE_FLAG%
 echo "Compile Boost"
 
 call download-dependency.bat %ARCHIVE%
-call download-dependency.bat boost_1_55_patch_pre.zip
-call download-dependency.bat boost_1_55_patch_post.zip
+call download-dependency.bat boost_1_58_patch_post.zip
 
 mkdir %PATCH_DIR%\Windows
 
-move %EX_DIR%\boost_1_55_patch_pre.zip %PATCH_DIR%\Windows
-move %EX_DIR%\boost_1_55_patch_post.zip %PATCH_DIR%\Windows
+move %EX_DIR%\boost_1_58_patch_post.zip %PATCH_DIR%\Windows
 
 cd %PATCH_DIR%\Windows
 
-winrar.exe x boost_1_55_patch_pre.zip
-winrar.exe x boost_1_55_patch_post.zip
+winrar.exe x boost_1_58_patch_post.zip
 
 echo "Extracting Boost"
 if not exist %BUILD_ROOT% exit
@@ -36,7 +33,6 @@ if not exist %BUILD_DIR% exit
 
 echo "Patching Boost"
 cd %BUILD_DIR%
-xcopy /S /Y "%PATCH_DIR%/Windows/boost" "%BUILD_DIR%/boost"
 
 echo "Bootstrapping Boost"
 
