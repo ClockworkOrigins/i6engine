@@ -340,7 +340,7 @@ ENDIF(ISIXE_WITH_TOOLS)
 ###############################################################################
 
 IF(ISIXE_WITH_DOCU)
-	find_package(doxygen)
+	find_package(Doxygen)
 	IF(DOXYGEN_FOUND)
 		add_subdirectory(docs)
 	ENDIF(DOXYGEN_FOUND)
@@ -351,7 +351,7 @@ ENDIF(ISIXE_WITH_DOCU)
 ###############################################################################
 
 IF(ISIXE_WITH_TUTORIALS)
-	find_package(latex)
+	find_package(LATEX)
 	add_subdirectory(tutorials)
 ENDIF(ISIXE_WITH_TUTORIALS)
 
