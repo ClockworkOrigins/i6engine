@@ -58,7 +58,7 @@ namespace api {
 	}
 
 	void GraphicsFacade::removeNode(const int64_t id) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Delete, new graphics::Graphics_Node_Delete(id), core::Subsystem::Unknown);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Delete, new graphics::Graphics_Node_Delete(id), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
