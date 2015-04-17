@@ -140,6 +140,11 @@ namespace modules {
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg2);
 
 		_rWindow->resetStatistics();
+
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+		SetCursor(nullptr);
+		ShowCursor(false);
+#endif
 	}
 
 	GraphicsManager::~GraphicsManager() {
