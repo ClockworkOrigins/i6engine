@@ -11,6 +11,7 @@
 #include "i6engine/core/configs/SubsystemConfig.h"
 
 #include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/GraphicsFacade.h"

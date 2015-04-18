@@ -76,8 +76,8 @@ bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colO
 		if (i6engine::modules::PhysicsManager::_collisionPairs.find(std::make_pair(a, b)) == i6engine::modules::PhysicsManager::_collisionPairs.end()) {
 			i6engine::modules::PhysicsManager::_collisionPairs[std::make_pair(a, b)] = i6engine::modules::PhysicsManager::_tickCount;
 
-			if (a->getShatterInterest() & i6engine::api::PhysicalStateComponent::ShatterInterest::START) {
-				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), i6engine::api::PhysicalStateComponent::ShatterInterest::START), i6engine::core::Subsystem::Physic);
+			if (a->getShatterInterest() & i6engine::api::ShatterInterest::START) {
+				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), i6engine::api::ShatterInterest::START), i6engine::core::Subsystem::Physic);
 				// TODO: (Michael) improve this hack
 				i6engine::api::GOPtr objA = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
 				if (objA == nullptr) {
@@ -94,8 +94,8 @@ bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colO
 		} else {
 			i6engine::modules::PhysicsManager::_collisionPairs[std::make_pair(a, b)] = i6engine::modules::PhysicsManager::_tickCount;
 
-			if (a->getShatterInterest() & i6engine::api::PhysicalStateComponent::ShatterInterest::ALWAYS) {
-				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), i6engine::api::PhysicalStateComponent::ShatterInterest::ALWAYS), i6engine::core::Subsystem::Physic);
+			if (a->getShatterInterest() & i6engine::api::ShatterInterest::ALWAYS) {
+				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), i6engine::api::ShatterInterest::ALWAYS), i6engine::core::Subsystem::Physic);
 				// TODO: (Michael) improve this hack
 				i6engine::api::GOPtr objA = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
 				if (objA == nullptr) {
@@ -116,8 +116,8 @@ bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colO
 		if (i6engine::modules::PhysicsManager::_collisionPairs.find(std::make_pair(b, a)) == i6engine::modules::PhysicsManager::_collisionPairs.end()) {
 			i6engine::modules::PhysicsManager::_collisionPairs[std::make_pair(b, a)] = i6engine::modules::PhysicsManager::_tickCount;
 
-			if (b->getShatterInterest() & i6engine::api::PhysicalStateComponent::ShatterInterest::START) {
-				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), i6engine::api::PhysicalStateComponent::ShatterInterest::START), i6engine::core::Subsystem::Physic);
+			if (b->getShatterInterest() & i6engine::api::ShatterInterest::START) {
+				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), i6engine::api::ShatterInterest::START), i6engine::core::Subsystem::Physic);
 				// TODO: (Michael) improve this hack
 				i6engine::api::GOPtr objB = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
 				if (objB == nullptr) {
@@ -134,8 +134,8 @@ bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colO
 		} else {
 			i6engine::modules::PhysicsManager::_collisionPairs[std::make_pair(b, a)] = i6engine::modules::PhysicsManager::_tickCount;
 
-			if (b->getShatterInterest() & i6engine::api::PhysicalStateComponent::ShatterInterest::ALWAYS) {
-				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), i6engine::api::PhysicalStateComponent::ShatterInterest::ALWAYS), i6engine::core::Subsystem::Physic);
+			if (b->getShatterInterest() & i6engine::api::ShatterInterest::ALWAYS) {
+				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), i6engine::api::ShatterInterest::ALWAYS), i6engine::core::Subsystem::Physic);
 				// TODO: (Michael) improve this hack
 				i6engine::api::GOPtr objB = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
 				if (objB == nullptr) {
@@ -240,8 +240,8 @@ namespace modules {
 
 				for (std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t>::iterator it = _collisionPairs.begin(); it != _collisionPairs.end();) {
 					if (it->second < _tickCount) {
-						if (it->first.first->getShatterInterest() & api::PhysicalStateComponent::ShatterInterest::END) {
-							api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(it->first.first->getID(), it->first.first->getCompID(), it->first.second->getID(), api::PhysicalStateComponent::ShatterInterest::END), i6engine::core::Subsystem::Physic);
+						if (it->first.first->getShatterInterest() & api::ShatterInterest::END) {
+							api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(it->first.first->getID(), it->first.first->getCompID(), it->first.second->getID(), api::ShatterInterest::END), i6engine::core::Subsystem::Physic);
 							// TODO: (Michael) improve this hack
 							core::IPKey aOwner = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(it->first.first->getID())->getOwner();
 							if (aOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {

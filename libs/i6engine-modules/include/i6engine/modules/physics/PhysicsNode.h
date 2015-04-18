@@ -86,7 +86,7 @@ namespace modules {
 		/**
 		 * \brief constructor
 		 */
-		PhysicsNode(const int64_t id, const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::attributeMap & params, api::PhysicalStateComponent::ShatterInterest shatterInterest, PhysicsManager * pm);
+		PhysicsNode(const int64_t id, const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::attributeMap & params, api::ShatterInterest shatterInterest, PhysicsManager * pm);
 
 		/**
 		 * \brief destructor
@@ -222,7 +222,7 @@ namespace modules {
 		/**
 		 * \brief get the collision interest
 		 */
-		api::PhysicalStateComponent::ShatterInterest getShatterInterest() const { return _shatterInterest; }
+		api::ShatterInterest getShatterInterest() const { return _shatterInterest; }
 
 		/**
 		 * \brief called during every physics tick
@@ -256,7 +256,7 @@ namespace modules {
 		/**
 		 * \brief flag containing shatter interests
 		 */
-		api::PhysicalStateComponent::ShatterInterest _shatterInterest;
+		api::ShatterInterest _shatterInterest;
 
 		/**
 		 * \brief map of all periodic raytests

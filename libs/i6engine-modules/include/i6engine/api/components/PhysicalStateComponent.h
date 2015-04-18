@@ -151,19 +151,29 @@ namespace api {
 	} RayTestResult;
 
 	/**
+	 * \brief Different flags for collision interest
+	 */
+	enum ShatterInterest : uint16_t {
+		NONE = 0,		// !< shouldn't be used with responseType TRIGGER
+		START = 1 << 0,	// !< start of a collision
+		END = 1 << 1,		// !< end of a collision
+		ALWAYS = 1 << 2	// !< every collision
+	};
+
+	/**
 	 * \class PhysicalStateComponent
-	 * \brief Abstract class. Represents an object's physical state and synchronizes with the Backend.
+	 * \brief Represents an object's physical state and synchronizes with the Physics subsystem.
 	 * For creating a PhysicalStateComponent, these keys are possible:
 	 * | Name | Required | Type | Description | Public |
 	 * |------|----------|------| ----------- | ------------ |
-	 * | syncPrio | ? | ? | ? | ? |
+	 * | syncPrio | no | int | ? | ? |
 	 * | gravity | no | vector | gravity for this object. Replaces default | yes |
-	 * | pos | ? | ? | ? | ? |
-	 * | rot | ? | ? | ? | ? |
-	 * | scale | ? | ? | ? | ? |
-	 * | collisionGroup | ? | ? | ? | ? |
-	 * | shapeType | ? | ? | ? | ? |
-	 * | shatterInterest | ? | ? | ? | ? |
+	 * | pos | yes | vector | ? | ? |
+	 * | rot | yes | vector | ? | ? |
+	 * | scale | yes | vector | ? | ? |
+	 * | collisionGroup | yes | int int int | ? | ? |
+	 * | shapeType | yes | int | ? | ? |
+	 * | shatterInterest | yes | int | ? | ? |
 	 */
 	class ISIXE_MODULES_API PhysicalStateComponent : public Component {
 	public:
@@ -175,16 +185,6 @@ namespace api {
 			BOX,	// !< a cuboid
 			SPHERE,	// !< a sphere
 			FILE	// !< load from file
-		};
-
-		/**
-		 * \brief Different flags for collision interest
-		 */
-		enum ShatterInterest : uint16_t {
-			NONE = 0,		// !< shouldn't be used
-			START = 1<<0,	// !< start of a collision
-			END = 1<<1,		// !< end of a collision
-			ALWAYS = 1<<2	// !< every collision
 		};
 
 		/**

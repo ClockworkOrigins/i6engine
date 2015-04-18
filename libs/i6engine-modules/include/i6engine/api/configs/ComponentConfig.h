@@ -23,11 +23,12 @@
 #define __I6ENGINE_API_COMPONENTCONFIG_H__
 
 #include "i6engine/api/GameMessageStruct.h"
-#include "i6engine/api/components/PhysicalStateComponent.h"
 
 namespace i6engine {
 namespace api {
 	typedef std::map<std::string, std::string> attributeMap;
+
+	enum ShatterInterest : uint16_t;
 
 namespace components {
 	enum ComponentMessageTypes {
@@ -114,9 +115,9 @@ namespace components {
 	 */
 	typedef struct ISIXE_MODULES_API Component_Shatter_Update : GameMessageStruct {
 		int64_t other;
-		PhysicalStateComponent::ShatterInterest shatterInterest;
+		ShatterInterest shatterInterest;
 		Component_Shatter_Update();
-		Component_Shatter_Update(const int64_t goid, const int64_t coid, const int64_t o, PhysicalStateComponent::ShatterInterest si);
+		Component_Shatter_Update(const int64_t goid, const int64_t coid, const int64_t o, ShatterInterest si);
 		template<class Archive>
 		void serialize(Archive & ar, const unsigned int version) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);

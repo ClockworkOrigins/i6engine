@@ -5,6 +5,7 @@
 #include "i6engine/math/i6eMath.h"
 
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"

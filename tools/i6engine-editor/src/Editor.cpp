@@ -32,6 +32,7 @@
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/MovableTextComponent.h"
+#include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/components/WaypointComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"

@@ -51,9 +51,9 @@ namespace api {
 	 * | mode | yes | short | How are the frames interpolated, ignored in CIRCLE way | yes |
 	 * | way | yes | short | In which order the frames will be processed | yes |
 	 * | positioning | yes | short | Absolute or relative positioning | yes |
-	 * | continue | no | "true" | continues movement in stead of starting | no |
+	 * | continue | no | "true" | continues movement instead of starting | no |
 	 * | startTime | no | time | required when continue set to synchronize time | no |
-	 * | keyframes | *) | int | number of keyframesto follow, *) required when LINEAR or BEZIER | yes |
+	 * | keyframes | *) | int | number of keyframes to follow, *) required when LINEAR or BEZIER | yes |
 	 * | keyframe_<i>_pos | *) | vector | position of i-th keyframe, *) required for all keyframes | yes |
 	 * | keyframe_<i>_rot | *) | quaternion | rotation of i-th keyframe, *) required for all keyframes | yes |
 	 * | pos | *) | vector | centerposition of the circle, *) required if CIRCLE | yes |

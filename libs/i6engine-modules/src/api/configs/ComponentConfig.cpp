@@ -37,7 +37,7 @@ namespace components {
 
 	Component_Shatter_Update::Component_Shatter_Update() : GameMessageStruct() {
 	}
-	Component_Shatter_Update::Component_Shatter_Update(const int64_t goid, const int64_t coid, const int64_t o, PhysicalStateComponent::ShatterInterest si) : GameMessageStruct(coid, goid), other(o), shatterInterest(si) {
+	Component_Shatter_Update::Component_Shatter_Update(const int64_t goid, const int64_t coid, const int64_t o, ShatterInterest si) : GameMessageStruct(coid, goid), other(o), shatterInterest(si) {
 	}
 
 	Component_MoverResync_Update::Component_MoverResync_Update() : GameMessageStruct() {

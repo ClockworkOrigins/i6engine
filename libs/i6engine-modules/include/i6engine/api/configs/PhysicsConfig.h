@@ -85,9 +85,9 @@ namespace physics {
 		CollisionGroup collisionGroup;
 		PhysicalStateComponent::ShapeType shapeType;
 		attributeMap shapeParams;
-		PhysicalStateComponent::ShatterInterest shatterInterest;
+		ShatterInterest shatterInterest;
 
-		Physics_Node_Create(const int64_t i, const int64_t ci, const Vec3 & p, const Quaternion & r, const Vec3 & s, const CollisionGroup & cg, const PhysicalStateComponent::ShapeType st, const attributeMap & pa, const PhysicalStateComponent::ShatterInterest si);
+		Physics_Node_Create(const int64_t i, const int64_t ci, const Vec3 & p, const Quaternion & r, const Vec3 & s, const CollisionGroup & cg, const PhysicalStateComponent::ShapeType st, const attributeMap & pa, const ShatterInterest si);
 		Physics_Node_Create * copy() { return new Physics_Node_Create(*this); }
 	} Physics_Node_Create;
 
