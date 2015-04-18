@@ -21,8 +21,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 . ./build-common.sh
 
 # boost
-ARCHIVE="boost_1_55_0.tar.bz2"
-BUILD_DIR="${BUILD_ROOT}/boost_1_55_0"
+ARCHIVE="boost_1_58_0.tar.bz2"
+BUILD_DIR="${BUILD_ROOT}/boost_1_58_0"
 
 if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}

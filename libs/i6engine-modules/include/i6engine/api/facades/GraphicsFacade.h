@@ -40,11 +40,6 @@ namespace api {
 		~GraphicsFacade();
 
 		/**
-		 * \brief removes GraphicsNode with given id
-		 */
-		void removeNode(const int64_t id);
-
-		/**
 		 * \brief closes all viewports of the scene
 		 */
 		void closeViewports();

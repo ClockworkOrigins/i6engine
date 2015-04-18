@@ -127,13 +127,13 @@ namespace modules {
 		 * TODO wenn das ganze unter windows wieder laeuft muss der mousezeiger versteckt werden. hat vermutlich mit
 		 * foreground und/oder nonexclusive zu tun
 		 */
-
-		objPl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND")));
-		objPl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
-		objPl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_FOREGROUND")));
-		objPl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_NONEXCLUSIVE")));
+		if (!_objRenderWindow->isFullScreen()) {
+			objPl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND")));
+			objPl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
+			objPl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_FOREGROUND")));
+			objPl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_NONEXCLUSIVE")));
+		}
 	#else
-
 		objPl.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
 
 		objPl.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
