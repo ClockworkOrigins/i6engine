@@ -67,6 +67,8 @@ namespace api {
 			if (_tooltipActive) {
 				i6engine::api::EngineController::GetSingleton().getGUIFacade()->setText(_name + "_Tooltip", _tooltip);
 			}
+		} else if (type == gui::GUIMessageTypes::GuiSetProperty) {
+			_window->setProperty(dynamic_cast<gui::GUI_SetProperty *>(message)->prop, dynamic_cast<gui::GUI_SetProperty *>(message)->value);
 		} else {
 			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
 		}

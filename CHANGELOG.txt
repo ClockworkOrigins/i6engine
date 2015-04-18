@@ -18,6 +18,7 @@ Enhancements:
 	- added some tutorials
 	- added a new inventory with weights and category filters
 	- added a sample showing the different shadow techniques
+	- added a slot based inventory
 
 Fixes:
 	- fixed GUIPrints not updating right alignment when only size is changed after creation

@@ -122,6 +122,35 @@ namespace components {
 		for (uint16_t i = 0; i < _rows; i++) {
 			for (uint16_t j = 0; j < _columns; j++) {
 				gf->addImage("SlotInventory_BackgroundSlot_" + std::to_string(i) + "_" + std::to_string(j), "RPG/StaticImage", "RPG_Inventory_Slot", "Slot", 0.5 - width * 0.5 * _columns + j * width, 0.025 + i * height, width, height);
+				gf->enableDropTarget("SlotInventory_BackgroundSlot_" + std::to_string(i) + "_" + std::to_string(j), true, [this, i, j](std::string s) {
+					if (_slots[i][j] == UINT16_MAX) {
+						uint16_t index = uint16_t(std::stoul(utils::split(s, "_").back()));
+						uint16_t counter = 0;
+						for (size_t k = i; k < _rows && k - i < std::get<ItemEntry::Height>(_items[index]); k++) {
+							for (size_t l = j; l < _columns && l - j < std::get<ItemEntry::Width>(_items[index]); l++) {
+								if (_slots[k][l] == UINT16_MAX) {
+									counter++;
+								}
+							}
+						}
+						if (counter == std::get<ItemEntry::Height>(_items[index]) * std::get<ItemEntry::Width>(_items[index])) {
+							for (uint16_t k = 0; k < _rows; k++) {
+								for (uint16_t l = 0; l < _columns; l++) {
+									if (_slots[k][l] == index) {
+										_slots[k][l] = UINT16_MAX;
+									}
+								}
+							}
+							for (size_t k = i; k < _rows && k - i < std::get<ItemEntry::Height>(_items[index]); k++) {
+								for (size_t l = j; l < _columns && l - j < std::get<ItemEntry::Width>(_items[index]); l++) {
+									_slots[k][l] = index;
+								}
+							}
+							return true;
+						}
+					}
+					return false;
+				});
 			}
 		}
 
@@ -132,6 +161,7 @@ namespace components {
 					if (_slots[j][k] == i) {
 						found = true;
 						gf->addImage("SlotInventory_Item_" + std::to_string(i), "RPG/StaticImage", std::get<ItemEntry::Imageset>(_items[i]), std::get<ItemEntry::Image>(_items[i]), 0.5 - width * 0.5 * _columns + k * width, 0.025 + j * height, width * std::get<ItemEntry::Width>(_items[i]), height * std::get<ItemEntry::Height>(_items[i]));
+						gf->setDragable("SlotInventory_Item_" + std::to_string(i), true);
 						_widgetList.push_back("SlotInventory_Item_" + std::to_string(i));
 						break;
 					}
@@ -196,6 +226,7 @@ namespace components {
 									gf->setSize("SlotInventory_ItemMarker", width * std::get<ItemEntry::Width>(_items[_slots[i][j]]), height * std::get<ItemEntry::Height>(_items[_slots[i][j]]));
 								} else {
 									gf->addImage("SlotInventory_ItemMarker", "RPG/StaticImage", "RPG_Inventory_Highlighted", "Highlighted", 0.5 - width * 0.5 * _columns + l * width, 0.025 + k * height, width * std::get<ItemEntry::Width>(_items[_slots[i][j]]), height * std::get<ItemEntry::Height>(_items[_slots[i][j]]));
+									gf->setProperty("SlotInventory_ItemMarker", "MousePassThroughEnabled", "True");
 									_widgetList.push_back("SlotInventory_ItemMarker");
 									_slotMarker = true;
 								}
