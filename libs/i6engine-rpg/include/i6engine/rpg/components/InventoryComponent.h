@@ -77,7 +77,7 @@ namespace components {
 		/**
 		 * \brief returns the number of items for the given type
 		 */
-		uint32_t getItemCount(uint32_t item, const std::string & name) const;
+		virtual uint32_t getItemCount(uint32_t item, const std::string & name) const = 0;
 
 		/**
 		 * \brief returns the selected item
@@ -93,13 +93,6 @@ namespace components {
 		}
 
 	protected:
-		enum ItemEntry {
-			Message,
-			Amount,
-			Imageset,
-			Image
-		};
-		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>> _items;
 		bool _shown;
 		std::vector<std::function<void(uint32_t, const std::string &, uint32_t)>> _callbacks;
 	};

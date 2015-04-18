@@ -39,7 +39,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	ListInventoryComponent::ListInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _columns(5), _slotCount(0), _currentIndex(0), _widgets(), _itemTypeCount(), _maxSlot() {
+	ListInventoryComponent::ListInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _items(), _columns(5), _slotCount(0), _currentIndex(0), _widgets(), _itemTypeCount(), _maxSlot() {
 		_objComponentID = config::ComponentTypes::ListInventoryComponent;
 	}
 
@@ -309,6 +309,17 @@ namespace components {
 			}
 		}
 		return std::make_tuple(UINT32_MAX, "", "", "");
+	}
+
+	uint32_t ListInventoryComponent::getItemCount(uint32_t item, const std::string & name) const {
+		auto it = _items.find(item);
+		if (it != _items.end()) {
+			auto it2 = it->second.find(name);
+			if (it2 != it->second.end()) {
+				return std::get<ItemEntry::Amount>(it2->second);
+			}
+		}
+		return 0;
 	}
 
 	void ListInventoryComponent::Tick() {

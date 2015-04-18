@@ -40,7 +40,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	WeightInventoryComponent::WeightInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _maxWeight(), _currentWeight(0), _currentIndex(), _maxShowIndex(), _currentFilter(Filter::None), _slotsPerView(), _widgetList() {
+	WeightInventoryComponent::WeightInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _items(), _maxWeight(), _currentWeight(0), _currentIndex(), _maxShowIndex(), _currentFilter(Filter::None), _slotsPerView(), _widgetList() {
 		_objComponentID = config::ComponentTypes::WeightInventoryComponent;
 		_maxWeight = std::stoul(params.find("maxWeight")->second);
 	}
@@ -233,10 +233,6 @@ namespace components {
 		_currentFilter = Filter::None;
 	}
 
-	void WeightInventoryComponent::showItems() {
-		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
-	}
-
 	void WeightInventoryComponent::News(const api::GameMessage::Ptr & msg) {
 		if (!_shown) {
 			return;
@@ -370,6 +366,17 @@ namespace components {
 			}
 		}
 		return std::make_tuple(UINT32_MAX, "", "", "");
+	}
+
+	uint32_t WeightInventoryComponent::getItemCount(uint32_t item, const std::string & name) const {
+		auto it = _items.find(item);
+		if (it != _items.end()) {
+			auto it2 = it->second.find(name);
+			if (it2 != it->second.end()) {
+				return std::get<ItemEntry::Amount>(it2->second);
+			}
+		}
+		return 0;
 	}
 
 	void WeightInventoryComponent::Tick() {

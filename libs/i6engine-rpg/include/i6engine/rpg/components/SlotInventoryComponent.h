@@ -19,8 +19,8 @@
  * @{
  */
 
-#ifndef __I6ENGINE_RPG_COMPONENTS_LISTINVENTORYCOMPONENT_H__
-#define __I6ENGINE_RPG_COMPONENTS_LISTINVENTORYCOMPONENT_H__
+#ifndef __I6ENGINE_RPG_COMPONENTS_SLOTINVENTORYCOMPONENT_H__
+#define __I6ENGINE_RPG_COMPONENTS_SLOTINVENTORYCOMPONENT_H__
 
 #include "i6engine/api/facades/MessageSubscriberFacade.h"
 
@@ -30,9 +30,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	class ISIXE_RPG_API ListInventoryComponent : public InventoryComponent, public api::MessageSubscriberFacade {
+	class ISIXE_RPG_API SlotInventoryComponent : public InventoryComponent, public api::MessageSubscriberFacade {
 	public:
-		ListInventoryComponent(int64_t id, const api::attributeMap & params);
+		SlotInventoryComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
@@ -50,7 +50,7 @@ namespace components {
 		}
 
 		std::string getTemplateName() const {
-			return "ListInventory";
+			return "SlotInventory";
 		}
 
 		/**
@@ -86,20 +86,32 @@ namespace components {
 
 	private:
 		enum ItemEntry {
+			Type,
+			Name,
 			Message,
-			Amount,
 			Imageset,
-			Image
+			Image,
+			Width,
+			Height
 		};
-		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>> _items;
-		uint32_t _columns;
-		uint32_t _slotCount;
-		uint32_t _currentIndex;
-		std::vector<std::string> _widgets;
-		uint32_t _itemTypeCount;
-		uint32_t _maxSlot;
 
-		void showItems();
+		uint16_t _rows;
+		uint16_t _columns;
+		std::vector<std::string> _widgetList;
+		bool _slotMarker;
+		uint16_t _currentIndex;
+
+		/**
+		 * \brief contains for every slot the index of the item in list or UINT16_MAX, if empty
+		 */
+		std::vector<std::vector<uint16_t>> _slots;
+		std::vector<std::tuple<uint32_t, std::string, api::GameMessage::Ptr, std::string, std::string, uint16_t, uint16_t>> _items;
+
+
+		/**
+		 * \brief tries to use given item
+		 */
+		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback, uint16_t index);
 
 		void News(const api::GameMessage::Ptr & msg);
 		void Tick() override;
@@ -109,7 +121,7 @@ namespace components {
 } /* namespace rpg */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_RPG_COMPONENTS_LISTINVENTORYCOMPONENT_H__ */
+#endif /* __I6ENGINE_RPG_COMPONENTS_SLOTINVENTORYCOMPONENT_H__ */
 
 /**
  * @}

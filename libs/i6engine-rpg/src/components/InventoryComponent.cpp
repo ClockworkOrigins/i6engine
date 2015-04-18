@@ -24,7 +24,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	InventoryComponent::InventoryComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _items(), _shown(false), _callbacks() {
+	InventoryComponent::InventoryComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _shown(false), _callbacks() {
 		_objFamilyID = config::ComponentTypes::InventoryComponent;
 	}
 
@@ -34,17 +34,6 @@ namespace components {
 	api::attributeMap InventoryComponent::synchronize() const {
 		api::attributeMap params;
 		return params;
-	}
-
-	uint32_t InventoryComponent::getItemCount(uint32_t item, const std::string & name) const {
-		auto it = _items.find(item);
-		if (it != _items.end()) {
-			auto it2 = it->second.find(name);
-			if (it2 != it->second.end()) {
-				return std::get<ItemEntry::Amount>(it2->second);
-			}
-		}
-		return 0;
 	}
 
 } /* namespace components */

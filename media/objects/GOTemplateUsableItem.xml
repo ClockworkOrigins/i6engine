@@ -22,4 +22,8 @@
 	<Component template="Name" owner="true">
 		<Attribute name="name">UsableItem_Key</Attribute>
 	</Component>
+	<Component template="Slot" owner="true">
+		<Attribute name="width">1</Attribute>
+		<Attribute name="height">1</Attribute>
+	</Component>
 </GOTemplate>

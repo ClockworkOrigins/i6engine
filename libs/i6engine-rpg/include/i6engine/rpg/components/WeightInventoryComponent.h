@@ -79,12 +79,25 @@ namespace components {
 		 */
 		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const;
 
+		/**
+		 * \brief returns the number of items for the given type
+		 */
+		uint32_t getItemCount(uint32_t item, const std::string & name) const;
+
 	private:
 		enum class Filter {
 			None,
 			UsableItems
 		};
 
+		enum ItemEntry {
+			Message,
+			Amount,
+			Imageset,
+			Image
+		};
+
+		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>> _items;
 		double _maxWeight;
 		double _currentWeight;
 		uint32_t _currentIndex;
@@ -92,8 +105,6 @@ namespace components {
 		Filter _currentFilter;
 		uint32_t _slotsPerView;
 		std::vector<std::string> _widgetList;
-
-		void showItems();
 
 		void News(const api::GameMessage::Ptr & msg);
 		void Tick() override;

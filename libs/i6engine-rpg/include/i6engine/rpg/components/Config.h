@@ -39,7 +39,10 @@ namespace config {
 		HealthbarComponent,
 		ListInventoryComponent,
 		QuickslotComponent,
-		WeightInventoryComponent
+		WeightInventoryComponent,
+		SlotComponent,
+		SlotInventoryComponent,
+		ComponentTypesCount
 	};
 
 } /* namespace config */

@@ -34,6 +34,8 @@ set(i6rpgSrc
 	${srcdir}/components/ListInventoryComponent.cpp
 	${srcdir}/components/NameComponent.cpp
 	${srcdir}/components/QuickslotComponent.cpp
+	${srcdir}/components/SlotComponent.cpp
+	${srcdir}/components/SlotInventoryComponent.cpp
 	${srcdir}/components/ThirdPersonControlComponent.cpp
 	${srcdir}/components/UsableItemComponent.cpp
 	${srcdir}/components/WeightInventoryComponent.cpp
