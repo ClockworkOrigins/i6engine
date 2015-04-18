@@ -13,6 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * \addtogroup Physics
+ * @{
+ */
+/**
+ * \page PHY_BULLET_VARS Explanation of bullet rigid body parameters
+ * | name | type | values (forced) | values (reasonable) | Explanation |
+ * | ------ | ------ | -------- | ----------------|
+ * | linearDamping | double | 0 - 1 | | 0 - 1 | Speed will slowly decrease by factor (1 - x) ^ timeStep; also threshold for \ref Additional_Damping "additional damping" |
+ * | angularDamping | double | 0 - 1 | 0 - 1 | Rotation will slowly decrease by factor (1 - x) ^ timeStep; also theshold for \ref Additional_Damping "additional damping" |
+ * | additionalDamping | bool | T / F | T / F | Toggles additional dampings on for slow objects |
+ * | additionalDampingFactor | double | * | 0 - 1 | fixed factor to slow down speed AND rotation if Threshold is not exceeded |
+ * | additionalAngularDampingThresholdSqr | double | * | > 0 | Angular threshold to trigger additional damping |
+ * | additionalLinearDampingThresholdSqr | double | * | > 0 | Linear threshold to trigger additional damping |
+ *
+ * \anchor Additional_Damping
+ * If <em>additional damping</em> is turned on, slow objects will slow down even more</br>
+ * First, additionalDumpingFactor is used, if BOTH additional dumping thresholds are triggered</br>
+ * Second, if the speed is slower than linearDamping, it will slow down by fixed value 0.005</br>
+ * Analogous for angular speed
+ */
+/**
+ * @}
+ */
+
 /**
  * \addtogroup Components
  * @{
