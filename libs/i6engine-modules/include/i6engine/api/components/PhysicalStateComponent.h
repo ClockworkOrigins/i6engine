@@ -21,14 +21,19 @@
 /**
  * \page PHY_BULLET_VARS Explanation of bullet rigid body parameters
  * | name | type | values (forced) | values (reasonable) | Explanation |
- * | ------ | ------ | -------- | ----------------|
- * | linearDamping | double | 0 - 1 | | 0 - 1 | Speed will slowly decrease by factor (1 - x) ^ timeStep; also threshold for \ref Additional_Damping "additional damping" |
+ * | ---- | :--: | :-------------: | :----------------: | -------------|
+ * | linearDamping | double | 0 - 1 | 0 - 1 | Speed will slowly decrease by factor (1 - x) ^ timeStep; also threshold for \ref Additional_Damping "additional damping" |
  * | angularDamping | double | 0 - 1 | 0 - 1 | Rotation will slowly decrease by factor (1 - x) ^ timeStep; also theshold for \ref Additional_Damping "additional damping" |
- * | additionalDamping | bool | T / F | T / F | Toggles additional dampings on for slow objects |
- * | additionalDampingFactor | double | * | 0 - 1 | fixed factor to slow down speed AND rotation if Threshold is not exceeded |
- * | additionalAngularDampingThresholdSqr | double | * | > 0 | Angular threshold to trigger additional damping |
- * | additionalLinearDampingThresholdSqr | double | * | > 0 | Linear threshold to trigger additional damping |
+ * | \e additionalDamping | bool | T / F | T / F | Toggles additional dampings on for slow objects |
+ * | \e additionalDampingFactor | double | * | 0 - 1 | fixed factor to slow down speed AND rotation if Threshold is not exceeded |
+ * | \e additionalAngularDampingThresholdSqr | double | * | > 0 | Angular threshold to trigger additional damping |
+ * | \e additionalLinearDampingThresholdSqr | double | * | > 0 | Linear threshold to trigger additional damping |
+ * | | | | | |
+ * | linearFactor | double | * | > 0 | all linear forces applied will be scaled by this value |
+ * | angularFactor | double | * | > 0 | all angular forces applied will be scaled by this value |
  *
+ * All \e italic parameters are not yet available within the engine</br>
+ * </br>
  * \anchor Additional_Damping
  * If <em>additional damping</em> is turned on, slow objects will slow down even more</br>
  * First, additionalDumpingFactor is used, if BOTH additional dumping thresholds are triggered</br>
