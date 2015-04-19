@@ -59,8 +59,9 @@ set_target_properties(i6engine-rpg PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 IF(WIN32 AND ISIXE_BUILD_SHARED)
 	add_custom_command(TARGET i6engine-rpg POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-rpg.dll ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32 AND ISIXE_BUILD_SHARED)
+
 ########################
-# i6engine-rpg tests
+# i6engine-rpg install
 ########################
 
 install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX})
