@@ -99,7 +99,7 @@ namespace components {
 								break;
 							}
 						}
-						_items.push_back(std::make_tuple(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), msgs[0], item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), sc->getWidth(), sc->getHeight()));
+						_items.push_back(std::make_tuple(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), msgs[0], item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), sc->getWidth(), sc->getHeight(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getInfos()));
 						for (auto & cb : _callbacks) {
 							cb(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), getItemCount(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName()));
 						}
@@ -162,6 +162,16 @@ namespace components {
 						found = true;
 						gf->addImage("SlotInventory_Item_" + std::to_string(i), "RPG/StaticImage", std::get<ItemEntry::Imageset>(_items[i]), std::get<ItemEntry::Image>(_items[i]), 0.5 - width * 0.5 * _columns + k * width, 0.025 + j * height, width * std::get<ItemEntry::Width>(_items[i]), height * std::get<ItemEntry::Height>(_items[i]));
 						gf->setDragable("SlotInventory_Item_" + std::to_string(i), true);
+						std::string tooltip = "";
+
+						for (auto & p : std::get<ItemEntry::Infos>(_items[i])) {
+							if (p.first == "Weight_Key") { // weight doesn't matter for SlotInventory
+								continue;
+							}
+							tooltip += api::EngineController::GetSingleton().getTextManager()->getText(p.first) + ": " + p.second + "~";
+						}
+						tooltip = tooltip.substr(0, tooltip.size() - 1);
+						gf->setTooltip("SlotInventory_Item_" + std::to_string(i), tooltip);
 						_widgetList.push_back("SlotInventory_Item_" + std::to_string(i));
 						break;
 					}

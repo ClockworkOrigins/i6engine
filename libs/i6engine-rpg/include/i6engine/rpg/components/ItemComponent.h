@@ -63,6 +63,8 @@ namespace components {
 			return _weight;
 		}
 
+		virtual std::vector<std::pair<std::string, std::string>> getInfos() const = 0;
+
 	private:
 		uint32_t _value;
 		std::string _imageset;

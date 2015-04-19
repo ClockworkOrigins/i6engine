@@ -53,6 +53,8 @@ namespace components {
 			return _attributeChange;
 		}
 
+		std::vector<std::pair<std::string, std::string>> getInfos() const;
+
 	private:
 		std::map<Attribute, int32_t> _attributeChange;
 	};

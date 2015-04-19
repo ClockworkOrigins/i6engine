@@ -16,6 +16,8 @@
 
 #include "i6engine/rpg/components/UsableItemComponent.h"
 
+#include "i6engine/utils/i6eString.h"
+
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/AttributeComponent.h"
@@ -59,6 +61,16 @@ namespace components {
 			ac->changeAttribute(p.first, p.second);
 		}
 		return true;
+	}
+
+	std::vector<std::pair<std::string, std::string>> UsableItemComponent::getInfos() const {
+		std::vector<std::pair<std::string, std::string>> vec;
+		for (auto & p : _attributeChange) {
+			vec.push_back(std::make_pair("Attribute_" + std::to_string(uint32_t(p.first)) + "_Key", std::to_string(p.second)));
+		}
+		vec.push_back(std::make_pair("Weight_Key", utils::to_string_with_precision(getWeight(), 3)));
+		vec.push_back(std::make_pair("Value_Key", std::to_string(getValue())));
+		return vec;
 	}
 
 } /* namespace components */
