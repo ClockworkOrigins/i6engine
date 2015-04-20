@@ -97,14 +97,18 @@ namespace sample {
 			setCompositor("GaussianBlur", b);
 		});
 		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("GaussianBlurText", "RPG/Blanko", 0.87, 0.03, "Gaussian Blur", i6engine::api::gui::Alignment::Left, -1);
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("HDR", "RPG/ToggleButton", 0.85, 0.06, 0.02, 0.02, false, [this](bool b) {
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("HeatVision", "RPG/ToggleButton", 0.85, 0.06, 0.02, 0.02, false, [this](bool b) {
+			setCompositor("HeatVision", b);
+		});
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("HeatVisionText", "RPG/Blanko", 0.87, 0.06, "Heat Vision", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("HDR", "RPG/ToggleButton", 0.85, 0.09, 0.02, 0.02, false, [this](bool b) {
 			setCompositor("HDR", b);
 		});
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("HDRText", "RPG/Blanko", 0.87, 0.06, "HDR", i6engine::api::gui::Alignment::Left, -1);
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("MotionBlur", "RPG/ToggleButton", 0.85, 0.09, 0.02, 0.02, false, [this](bool b) {
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("HDRText", "RPG/Blanko", 0.87, 0.09, "HDR", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("MotionBlur", "RPG/ToggleButton", 0.85, 0.12, 0.02, 0.02, false, [this](bool b) {
 			setCompositor("MotionBlur", b);
 		});
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("MotionBlurText", "RPG/Blanko", 0.87, 0.09, "Motion Blur", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("MotionBlurText", "RPG/Blanko", 0.87, 0.12, "Motion Blur", i6engine::api::gui::Alignment::Left, -1);
 
 		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
 		// a camera to see the scene and move around

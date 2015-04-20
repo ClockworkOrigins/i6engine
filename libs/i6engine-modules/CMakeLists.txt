@@ -119,6 +119,8 @@ set(i6modulesSrc
 	${srcdir}/modules/graphics/Terrain.cpp
 	${srcdir}/modules/graphics/compositors/GaussianBlurListener.cpp
 	${srcdir}/modules/graphics/compositors/GaussianBlurLogic.cpp
+	${srcdir}/modules/graphics/compositors/HeatVisionListener.cpp
+	${srcdir}/modules/graphics/compositors/HeatVisionLogic.cpp
 	${srcdir}/modules/graphics/compositors/HDRListener.cpp
 	${srcdir}/modules/graphics/compositors/HDRLogic.cpp
 	${srcdir}/modules/graphics/graphicswidgets/MovableText.cpp

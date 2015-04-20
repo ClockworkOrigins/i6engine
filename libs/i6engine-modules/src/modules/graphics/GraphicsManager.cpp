@@ -40,6 +40,7 @@
 #include "i6engine/modules/graphics/Terrain.h"
 #include "i6engine/modules/graphics/compositors/GaussianBlurLogic.h"
 #include "i6engine/modules/graphics/compositors/HDRLogic.h"
+#include "i6engine/modules/graphics/compositors/HeatVisionLogic.h"
 #include "i6engine/modules/gui/GUIController.h"
 #include "i6engine/modules/gui/GUIMailbox.h"
 
@@ -106,6 +107,7 @@ namespace modules {
 		Ogre::CompositorManager & compMgr = Ogre::CompositorManager::getSingleton();
 		compMgr.registerCompositorLogic("HDR", new HDRLogic());
 		compMgr.registerCompositorLogic("GaussianBlur", new GaussianBlurLogic());
+		compMgr.registerCompositorLogic("HeatVision", new HeatVisionLogic());
 
 		Ogre::ConfigOptionMap & CurrentRendererOptions = _objRoot->getRenderSystem()->getConfigOptions();
 		Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
@@ -198,6 +200,54 @@ namespace modules {
 					pass->setType(Ogre::CompositionPass::PT_RENDERQUAD);
 					pass->setMaterialName("Ogre/Compositor/MotionBlur");
 					pass->setInput(0, "sum");
+				}
+			}
+		}
+		// Heat vision effect
+		Ogre::CompositorPtr comp4 = Ogre::CompositorManager::getSingleton().create("HeatVision", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		{
+			Ogre::CompositionTechnique * t = comp4->createTechnique();
+			t->setCompositorLogicName("HeatVision");
+			{
+				Ogre::CompositionTechnique::TextureDefinition * def = t->createTextureDefinition("scene");
+				def->width = 256;
+				def->height = 256;
+				def->formatList.push_back(Ogre::PF_R8G8B8);
+			}
+			{
+				Ogre::CompositionTechnique::TextureDefinition * def = t->createTextureDefinition("temp");
+				def->width = 256;
+				def->height = 256;
+				def->formatList.push_back(Ogre::PF_R8G8B8);
+			}
+			// Render scene
+			{
+				Ogre::CompositionTargetPass * tp = t->createTargetPass();
+				tp->setInputMode(Ogre::CompositionTargetPass::IM_PREVIOUS);
+				tp->setOutputName("scene");
+			}
+			// Light to heat pass
+			{
+				Ogre::CompositionTargetPass * tp = t->createTargetPass();
+				tp->setInputMode(Ogre::CompositionTargetPass::IM_NONE);
+				tp->setOutputName("temp");
+				{
+					Ogre::CompositionPass * pass = tp->createPass();
+					pass->setType(Ogre::CompositionPass::PT_RENDERQUAD);
+					pass->setIdentifier(0xDEADBABE); /// Identify pass for use in listener
+					pass->setMaterialName("Fury/HeatVision/LightToHeat");
+					pass->setInput(0, "scene");
+				}
+			}
+			// Display result
+			{
+				Ogre::CompositionTargetPass * tp = t->getOutputTargetPass();
+				tp->setInputMode(Ogre::CompositionTargetPass::IM_NONE);
+				{
+					Ogre::CompositionPass *pass = tp->createPass();
+					pass->setType(Ogre::CompositionPass::PT_RENDERQUAD);
+					pass->setMaterialName("Fury/HeatVision/Blur");
+					pass->setInput(0, "temp");
 				}
 			}
 		}
