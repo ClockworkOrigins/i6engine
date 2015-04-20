@@ -35,147 +35,25 @@
 namespace i6engine {
 namespace api {
 
-	MovingCameraComponent::MovingCameraComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _lookAt(), _nearClip(1), _aspect(), _viewport(false), _left(), _top(), _width(), _height(), _red(0), _green(0), _blue(0), _alpha(1.0f), _fov(3.14 / 6) {
-		Component::_objFamilyID = components::CameraComponent;
+	MovingCameraComponent::MovingCameraComponent(const int64_t id, const attributeMap & params) : CameraComponent(id, params), _oldPos() {
 		Component::_objComponentID = components::MovingCameraComponent;
-
-		_position = Vec3(params, "pos");
-		_lookAt = Vec3(params, "lookAt");
-		_nearClip = boost::lexical_cast<int32_t>(params.find("nearclip")->second);
-		_aspect = boost::lexical_cast<double>(params.find("aspect")->second);
-
-		if (params.find("viewport") != params.end()) {
-			_viewport = boost::lexical_cast<bool>(params.find("viewport")->second);
-			_left = boost::lexical_cast<double>(params.find("vp_left")->second);
-			_top = boost::lexical_cast<double>(params.find("vp_top")->second);
-			_width = boost::lexical_cast<double>(params.find("vp_width")->second);
-			_height = boost::lexical_cast<double>(params.find("vp_height")->second);
-			_red = boost::lexical_cast<double>(params.find("vp_red")->second);
-			_green = boost::lexical_cast<double>(params.find("vp_green")->second);
-			_blue = boost::lexical_cast<double>(params.find("vp_blue")->second);
-			_alpha = boost::lexical_cast<double>(params.find("vp_alpha")->second);
-		}
 	}
 
 	MovingCameraComponent::~MovingCameraComponent() {
 	}
 
 	ComPtr MovingCameraComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("MovingCameraComponent", "position not set!", params.find("pos") != params.end());
-		ISIXE_THROW_API_COND("MovingCameraComponent", "lookAt not set!", params.find("lookAt") != params.end());
-		ISIXE_THROW_API_COND("MovingCameraComponent", "nearclip not set!", params.find("nearclip") != params.end());
-		ISIXE_THROW_API_COND("MovingCameraComponent", "aspect not set!", params.find("aspect") != params.end());
 		return utils::make_shared<MovingCameraComponent, Component>(id, params);
 	}
 
 	void MovingCameraComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Create, new graphics::Graphics_Camera_Create(_objOwnerID, getID(), _position, _lookAt, _nearClip, _fov), i6engine::core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-
-		if (_viewport) {
-			sendViewportUpdateMessage();
-		}
-
+		CameraComponent::Init();
 		addTicker();
 	}
 
 	void MovingCameraComponent::Finalize() {
 		removeTicker();
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Delete, new graphics::Graphics_Camera_Delete(_objOwnerID), i6engine::core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-	}
-
-	void MovingCameraComponent::setPosition(const Vec3 & pos) {
-		_position = pos;
-
-		sendCameraUpdateMessage();
-	}
-
-	void MovingCameraComponent::setLookAt(const Vec3 & lookAt) {
-		_lookAt = lookAt;
-
-		sendCameraUpdateMessage();
-	}
-
-	void MovingCameraComponent::setNearClip(const int32_t n) {
-		_nearClip = n;
-
-		sendCameraUpdateMessage();
-	}
-
-	void MovingCameraComponent::setAspectRatio(const double ratio) {
-		_aspect = ratio;
-
-		sendCameraUpdateMessage();
-	}
-
-	void MovingCameraComponent::setFOVy(double fov) {
-		_fov = fov;
-
-		sendCameraUpdateMessage();
-	}
-
-	void MovingCameraComponent::setFrustumExtends(double left, double right, double top, double bottom) {
-		_frustumLeft = left;
-		_frustumRight = right;
-		_frustumTop = top;
-		_frustumBottom = bottom;
-
-		sendFrustumUpdateMessage();
-	}
-
-	void MovingCameraComponent::setViewportDimension(const double left, const double top, const double width, const double height) {
-		_viewport = true;
-
-		_left = left;
-		_top = top;
-		_width = width;
-		_height = height;
-
-		sendViewportUpdateMessage();
-	}
-
-	void MovingCameraComponent::setViewportBackground(const double red, const double green, const double blue, const double alpha) {
-		_viewport = true;
-
-		_red = red;
-		_green = green;
-		_blue = blue;
-		_alpha = alpha;
-
-		sendViewportUpdateMessage();
-	}
-
-	void MovingCameraComponent::sendCameraUpdateMessage() {
-		if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-			return;
-		}
-
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, _position, _lookAt, _nearClip, _fov), i6engine::core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-	}
-
-	void MovingCameraComponent::sendViewportUpdateMessage() {
-		if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-			return;
-		}
-
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraViewport, core::Method::Update, new graphics::Graphics_Viewport_Update(_objOwnerID, getID(), _left, _top, _width, _height, _red, _green, _blue, _alpha), i6engine::core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-	}
-
-	void MovingCameraComponent::sendFrustumUpdateMessage() {
-		if (getOwnerGO()->getOwner() != EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-			return;
-		}
-
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraFrustum, core::Method::Update, new graphics::Graphics_CameraFrustum_Update(_objOwnerID, getID(), _frustumLeft, _frustumRight, _frustumTop, _frustumBottom), i6engine::core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+		CameraComponent::Finalize();
 	}
 
 	void MovingCameraComponent::Tick() {
@@ -198,83 +76,6 @@ namespace api {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, newPosRotated, targetPos, _nearClip, _fov), i6engine::core::Subsystem::Object);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 		_oldPos = movePos;
-	}
-
-	attributeMap MovingCameraComponent::synchronize() const {
-		attributeMap params;
-		_position.insertInMap("pos", params);
-		_lookAt.insertInMap("lookAt", params);
-		params.insert(std::make_pair("nearclip", std::to_string(_nearClip)));
-		params.insert(std::make_pair("aspect", std::to_string(_aspect)));
-		params.insert(std::make_pair("viewport", std::to_string(_viewport)));
-		params.insert(std::make_pair("vp_left", std::to_string(_left)));
-		params.insert(std::make_pair("vp_top", std::to_string(_top)));
-		params.insert(std::make_pair("vp_width", std::to_string(_width)));
-		params.insert(std::make_pair("vp_height", std::to_string(_height)));
-		params.insert(std::make_pair("vp_red", std::to_string(_red)));
-		params.insert(std::make_pair("vp_green", std::to_string(_green)));
-		params.insert(std::make_pair("vp_blue", std::to_string(_blue)));
-		params.insert(std::make_pair("vp_alpha", std::to_string(_alpha)));
-		return params;
-	}
-
-	std::pair<AddStrategy, int64_t> MovingCameraComponent::howToAdd(const ComPtr & comp) const {
-		return std::make_pair(AddStrategy::ADD, 0);
-	}
-
-	std::vector<componentOptions> MovingCameraComponent::getComponentOptions() {
-		std::vector<componentOptions> result;
-
-		result.push_back(std::make_tuple(AccessState::READWRITE, "Position", [this]() {
-			return _position.toString();
-		}, [this](std::string s) {
-			try {
-				_position = Vec3(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
-			setPosition(_position);
-			return true;
-		}));
-		result.push_back(std::make_tuple(AccessState::READWRITE, "Look At", [this]() {
-			return _lookAt.toString();
-		}, [this](std::string s) {
-			try {
-				_lookAt = Vec3(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
-			setLookAt(_lookAt);
-			return true;
-		}));
-		result.push_back(std::make_tuple(AccessState::READWRITE, "Near Clip", [this]() {
-			return boost::lexical_cast<std::string>(_nearClip);
-		}, [this](std::string s) {
-			try {
-				_nearClip = boost::lexical_cast<int32_t>(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
-			setNearClip(_nearClip);
-			return true;
-		}));
-		result.push_back(std::make_tuple(AccessState::READWRITE, "Aspect Ratio", [this]() {
-			return boost::lexical_cast<std::string>(_aspect);
-		}, [this](std::string s) {
-			try {
-				_aspect = boost::lexical_cast<double>(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
-			setAspectRatio(_aspect);
-			return true;
-		}));
-
-		return result;
-	}
-
-	void MovingCameraComponent::enableCompositor(const std::string & compositor, bool enabled) {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCompositor, core::Method::Update, new graphics::Graphics_Compositor_Update(_objOwnerID, getID(), compositor, enabled), i6engine::core::Subsystem::Object));
 	}
 
 } /* namespace api */

@@ -1,5 +1,8 @@
 ﻿v 0.8.4
 
+Enhancements:
+	- MovingCamera now derives from Camera
+
 Fixes:
 	- RPG components now are also registered in SampleLeveleditor to be able to load RPG levels
 	- fixed CEGUI messages caused by leveleditor

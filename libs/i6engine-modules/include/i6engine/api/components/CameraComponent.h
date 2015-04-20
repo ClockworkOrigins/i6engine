@@ -37,7 +37,7 @@ namespace api {
 		/**
 		 * \brief Constructor with attribute map
 		 */
-		explicit CameraComponent(const int64_t id, const attributeMap & params);
+		CameraComponent(const int64_t id, const attributeMap & params);
 
 		/**
 		 * \brief Destructor
@@ -135,7 +135,7 @@ namespace api {
 
 		void enableCompositor(const std::string & compositor, bool enabled);
 
-	private:
+	protected:
 		/**
 		 * \brief Position of the camera
 		 */
