@@ -101,6 +101,10 @@ namespace sample {
 			setCompositor("HDR", b);
 		});
 		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("HDRText", "RPG/Blanko", 0.87, 0.06, "HDR", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("MotionBlur", "RPG/ToggleButton", 0.85, 0.09, 0.02, 0.02, false, [this](bool b) {
+			setCompositor("MotionBlur", b);
+		});
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("MotionBlurText", "RPG/Blanko", 0.87, 0.09, "Motion Blur", i6engine::api::gui::Alignment::Left, -1);
 
 		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
 		// a camera to see the scene and move around

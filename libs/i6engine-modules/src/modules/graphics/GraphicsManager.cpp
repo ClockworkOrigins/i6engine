@@ -47,6 +47,8 @@
 
 #include "CEGUI/CEGUI.h"
 
+#include "OGRE/OgreCompositionPass.h"
+#include "OGRE/OgreCompositionTargetPass.h"
 #include "OGRE/OgreCompositorManager.h"
 #include "OGRE/OgreEntity.h"
 #include "OGRE/OgreMeshManager.h"
@@ -126,6 +128,79 @@ namespace modules {
 		}
 
 		i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->setPossibleResolutions(res2);
+
+		// initalize MotionBlur
+		Ogre::CompositorPtr comp3 = Ogre::CompositorManager::getSingleton().create("MotionBlur", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		{
+			Ogre::CompositionTechnique * t = comp3->createTechnique();
+			{
+				Ogre::CompositionTechnique::TextureDefinition * def = t->createTextureDefinition("scene");
+				def->width = 0;
+				def->height = 0;
+				def->formatList.push_back(Ogre::PF_R8G8B8);
+			}
+			{
+				Ogre::CompositionTechnique::TextureDefinition * def = t->createTextureDefinition("sum");
+				def->width = 0;
+				def->height = 0;
+				def->formatList.push_back(Ogre::PF_R8G8B8);
+			}
+			{
+				Ogre::CompositionTechnique::TextureDefinition * def = t->createTextureDefinition("temp");
+				def->width = 0;
+				def->height = 0;
+				def->formatList.push_back(Ogre::PF_R8G8B8);
+			}
+			// Render scene
+			{
+				Ogre::CompositionTargetPass * tp = t->createTargetPass();
+				tp->setInputMode(Ogre::CompositionTargetPass::IM_PREVIOUS);
+				tp->setOutputName("scene");
+			}
+			// Initialisation pass for sum texture
+			{
+				Ogre::CompositionTargetPass * tp = t->createTargetPass();
+				tp->setInputMode(Ogre::CompositionTargetPass::IM_PREVIOUS);
+				tp->setOutputName("sum");
+				tp->setOnlyInitial(true);
+			}
+			// Do the motion blur
+			{
+				Ogre::CompositionTargetPass * tp = t->createTargetPass();
+				tp->setInputMode(Ogre::CompositionTargetPass::IM_NONE);
+				tp->setOutputName("temp");
+				{
+					Ogre::CompositionPass * pass = tp->createPass();
+					pass->setType(Ogre::CompositionPass::PT_RENDERQUAD);
+					pass->setMaterialName("Ogre/Compositor/Combine");
+					pass->setInput(0, "scene");
+					pass->setInput(1, "sum");
+				}
+			}
+			// Copy back sum texture
+			{
+				Ogre::CompositionTargetPass * tp = t->createTargetPass();
+				tp->setInputMode(Ogre::CompositionTargetPass::IM_NONE);
+				tp->setOutputName("sum");
+				{
+					Ogre::CompositionPass * pass = tp->createPass();
+					pass->setType(Ogre::CompositionPass::PT_RENDERQUAD);
+					pass->setMaterialName("Ogre/Compositor/Copyback");
+					pass->setInput(0, "temp");
+				}
+			}
+			// Display result
+			{
+				Ogre::CompositionTargetPass * tp = t->getOutputTargetPass();
+				tp->setInputMode(Ogre::CompositionTargetPass::IM_NONE);
+				{
+					Ogre::CompositionPass * pass = tp->createPass();
+					pass->setType(Ogre::CompositionPass::PT_RENDERQUAD);
+					pass->setMaterialName("Ogre/Compositor/MotionBlur");
+					pass->setInput(0, "sum");
+				}
+			}
+		}
 
 		// Start the gui subsytem. Initialization is completely delegated to the GUIController.
 		// Attention: The gui subsystem MUST be started after the renderer because it needs a valid window handle!
