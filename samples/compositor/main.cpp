@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-#include "ShadowApplication.h"
+#include "CompositorApplication.h"
 
 #include "i6engine/api/EngineController.h"
 
 int main(int argc, char ** argv) {
 	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false);
 
-	sample::ShadowApplication app;
+	sample::CompositorApplication app;
 
-	app.setName("Shadow Sample");
+	app.setName("Compositor Sample");
 
 	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
 

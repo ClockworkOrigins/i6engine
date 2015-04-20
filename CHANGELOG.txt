@@ -2,6 +2,7 @@
 
 Enhancements:
 	- MovingCamera now derives from Camera
+	- added sample showing different compositors
 
 Fixes:
 	- RPG components now are also registered in SampleLeveleditor to be able to load RPG levels
