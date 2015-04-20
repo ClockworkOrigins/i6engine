@@ -5,6 +5,7 @@ Enhancements:
 	- added sample showing different compositors
 	- added MotionBlur compositor
 	- added HeatVision compositor
+	- added RPG.ini with some settings
 
 Fixes:
 	- RPG components now are also registered in SampleLeveleditor to be able to load RPG levels

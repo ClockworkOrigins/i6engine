@@ -115,23 +115,24 @@ namespace components {
 				if (iku->pressed == api::KeyState::KEY_PRESSED || iku->pressed == api::KeyState::KEY_HOLD) {
 					auto ic = getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent);
 					auto psc = _psc.get();
-					if (iku->code == i6engine::api::KeyCode::KC_W && !ic->isActive()) {
+					std::string keyMapping = api::EngineController::GetSingleton().getInputFacade()->getKeyMapping(iku->code);
+					if (keyMapping == "forward" && !ic->isActive()) {
 						psc->applyCentralForce(Vec3(0.0, 0.0, -30.0), true);
-					} else if (iku->code == i6engine::api::KeyCode::KC_S && !ic->isActive()) {
+					} else if (keyMapping == "backward" && !ic->isActive()) {
 						psc->applyCentralForce(Vec3(0.0, 0.0, 25.0), true);
-					} else if (iku->code == i6engine::api::KeyCode::KC_A && !ic->isActive()) {
+					} else if (keyMapping == "left" && !ic->isActive()) {
 						Quaternion rot(Vec3(0.0, 1.0, 0.0), 1.5 * PI / 180);
 						psc->applyRotation(rot);
-					} else if (iku->code == i6engine::api::KeyCode::KC_D && !ic->isActive()) {
+					} else if (keyMapping == "right" && !ic->isActive()) {
 						Quaternion rot(Vec3(0.0, 1.0, 0.0), -1.5 * PI / 180);
 						psc->applyRotation(rot);
-					} else if (iku->code == i6engine::api::KeyCode::KC_TAB && iku->pressed == api::KeyState::KEY_PRESSED) {
+					} else if (keyMapping == "inventory" && iku->pressed == api::KeyState::KEY_PRESSED) {
 						if (ic->isActive()) {
 							ic->hide();
 						} else {
 							ic->show();
 						}
-					} else if (iku->code == i6engine::api::KeyCode::KC_E && iku->pressed == api::KeyState::KEY_PRESSED && !ic->isActive()) {
+					} else if (keyMapping == "action" && iku->pressed == api::KeyState::KEY_PRESSED && !ic->isActive()) {
 						if (_highlightTargetID != -1) {
 							auto targetGO = api::EngineController::GetSingleton().getObjectFacade()->getObject(_highlightTargetID);
 							if (targetGO != nullptr) {

@@ -16,6 +16,8 @@
 
 #include "RPGApplication.h"
 
+#include "i6engine/utils/i6eString.h"
+
 #include "i6engine/math/i6eVector.h"
 
 #include "i6engine/api/EngineController.h"
@@ -42,7 +44,8 @@
 
 namespace sample {
 
-	RPGApplication::RPGApplication() : i6engine::api::Application(), _showFPS(false) {
+	RPGApplication::RPGApplication() : i6engine::api::Application(), _showFPS(false), _iniParser() {
+		_iniParser.load("RPG.ini");
 	}
 
 	RPGApplication::~RPGApplication() {
@@ -58,13 +61,20 @@ namespace sample {
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
 
 		// sets gravity for the game... here like on earth
-		i6engine::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(0, -9.81, 0));
+		std::string gravityString;
+		_iniParser.getValue("PHYSIC", "gravity", gravityString);
+		i6engine::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(gravityString));
 
 		// ambient light for the scene
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(0.0, 0.0, 0.0);
+		std::string ambientLightString;
+		_iniParser.getValue("GRAPHIC", "ambientLight", ambientLightString);
+		auto vec = i6engine::utils::split(ambientLightString, " ");
+		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(std::stod(vec[0]), std::stod(vec[1]), std::stod(vec[2]));
 
 		// setting shadow technique... currently only additive stencil possible
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique::Stencil_Additive);
+		uint16_t shadowTechnique;
+		_iniParser.getValue("GRAPHIC", "shadowTechnique", shadowTechnique);
+		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique(shadowTechnique));
 
 		// setting distance fog
 		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setExponentialFog(Vec3(0.9, 0.9, 0.9), 0.005);
@@ -103,6 +113,28 @@ namespace sample {
 			}
 			_showFPS = !_showFPS;
 		});
+
+		// register keys
+		uint16_t key;
+		// action key, default: E
+		_iniParser.getValue("INPUT", "action", key);
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "action");
+		// inventory key, default: TAB
+		_iniParser.getValue("INPUT", "inventory", key);
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "inventory");
+
+		// forward key, default: W
+		_iniParser.getValue("INPUT", "forward", key);
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "forward");
+		// backward key, default: S
+		_iniParser.getValue("INPUT", "backward", key);
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "backward");
+		// left key, default: A
+		_iniParser.getValue("INPUT", "left", key);
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "left");
+		// right key, default: D
+		_iniParser.getValue("INPUT", "right", key);
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "right");
 	}
 
 	void RPGApplication::Tick() {

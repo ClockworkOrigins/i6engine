@@ -243,7 +243,8 @@ namespace components {
 				api::KeyState ks = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->pressed;
 
 				if (ks == api::KeyState::KEY_PRESSED || ks == api::KeyState::KEY_HOLD) {
-					if (kc == api::KeyCode::KC_W) {
+					std::string keyMapping = api::EngineController::GetSingleton().getInputFacade()->getKeyMapping(kc);
+					if (keyMapping == "forward") {
 						if (_currentIndex > 0) {
 							_currentIndex--;
 							if (_maxShowIndex - _currentIndex >= _slotsPerView) {
@@ -252,7 +253,7 @@ namespace components {
 							hide();
 							show();
 						}
-					} else if (kc == api::KeyCode::KC_S) {
+					} else if (keyMapping == "backward") {
 						uint32_t maxIndex = 0;
 						for (auto & p : _items) {
 							switch (_currentFilter) {
@@ -282,7 +283,7 @@ namespace components {
 							hide();
 							show();
 						}
-					} else if (kc == api::KeyCode::KC_E && ks == api::KeyState::KEY_PRESSED) {
+					} else if (keyMapping == "action" && ks == api::KeyState::KEY_PRESSED) {
 						uint32_t counter = 0;
 						for (auto & p : _items) {
 							switch (_currentFilter) {

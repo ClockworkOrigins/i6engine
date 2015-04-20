@@ -219,7 +219,8 @@ namespace components {
 				api::KeyState ks = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->pressed;
 
 				if (ks == api::KeyState::KEY_PRESSED || ks == api::KeyState::KEY_HOLD) {
-					if (kc == api::KeyCode::KC_W) {
+					std::string keyMapping = api::EngineController::GetSingleton().getInputFacade()->getKeyMapping(kc);
+					if (keyMapping == "forward") {
 						if (_currentIndex >= _columns) {
 							_currentIndex -= _columns;
 							if (_currentIndex / _columns < _maxSlot - _slotCount / _columns) {
@@ -228,7 +229,7 @@ namespace components {
 							hide();
 							show();
 						}
-					} else if (kc == api::KeyCode::KC_S) {
+					} else if (keyMapping == "backward") {
 						if (_currentIndex + _columns < _itemTypeCount) {
 							_currentIndex += _columns;
 							if (_currentIndex / _columns > _maxSlot) {
@@ -237,7 +238,7 @@ namespace components {
 							hide();
 							show();
 						}
-					} else if (kc == api::KeyCode::KC_A) {
+					} else if (keyMapping == "left") {
 						if (_currentIndex > 0) {
 							_currentIndex--;
 							if (_currentIndex / _columns < _maxSlot - _slotCount / _columns) {
@@ -246,7 +247,7 @@ namespace components {
 							hide();
 							show();
 						}
-					} else if (kc == api::KeyCode::KC_S) {
+					} else if (keyMapping == "right") {
 						if (_currentIndex + 1 < _itemTypeCount) {
 							_currentIndex++;
 							if (_currentIndex / _columns > _maxSlot) {
@@ -255,7 +256,7 @@ namespace components {
 							hide();
 							show();
 						}
-					} else if (kc == api::KeyCode::KC_E && ks == api::KeyState::KEY_PRESSED) {
+					} else if (keyMapping == "action" && ks == api::KeyState::KEY_PRESSED) {
 						// use item
 						uint32_t counter = 0;
 						for (auto & p : _items) {

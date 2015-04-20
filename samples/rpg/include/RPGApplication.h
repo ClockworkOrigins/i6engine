@@ -19,6 +19,8 @@
 
 #include "i6engine/api/Application.h"
 
+#include "clockUtils/iniParser/iniParser.h"
+
 namespace sample {
 
 	class RPGApplication : public i6engine::api::Application {
@@ -41,6 +43,7 @@ namespace sample {
 
 	private:
 		bool _showFPS;
+		clockUtils::iniParser::IniParser _iniParser;
 	};
 
 } /* namespace sample */
