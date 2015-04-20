@@ -24,6 +24,7 @@
 #cmakedefine ISIXE_NETWORK
 #cmakedefine ISIXE_PROFILING
 #cmakedefine ISIXE_SCRIPTING
+#cmakedefine ISIXE_WITH_RPG
  
 #define BT_USE_DOUBLE_PRECISION
 #define GTEST_LINKED_AS_SHARED_LIBRARY 1
