@@ -28,7 +28,7 @@ include_directories(${I6ENGINE_EDITOR_INCLUDE_DIR})
 
 set(SampleLeveleditorSrc
 	main.cpp
-
+	
 	src/LeveleditorApplication.cpp
 )
 

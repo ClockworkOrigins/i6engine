@@ -6,7 +6,7 @@
 		<Property name="Size" value="{{1,0},{1,0}}" />
 		<Property name="Image" value="Editor/TbM_Filling" />
 
-		<Window type="Editor/Tree" name="FileDialogTree">
+		<Window type="Editor/Listbox" name="FileDialogList">
 			<Property name="Position" value="{{0.02,0},{0.02,0}}" />
 			<Property name="MaxSize" value="{{1,0},{1,0}}" />
 			<Property name="Size" value="{{0.96,0},{0.8,0}}" />

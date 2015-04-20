@@ -32,12 +32,12 @@ namespace i6engine {
 namespace editor {
 namespace gui {
 
-	FileDialogWidget::FileDialogWidget(const std::string & name, const std::string & style) : GUIWidget(name), _currentPath(), _treeItems(), _callback() {
+	FileDialogWidget::FileDialogWidget(const std::string & name, const std::string & style) : GUIWidget(name), _currentPath(), _callback() {
 		loadWindowLayout(name, "FileDialog.layout");
 		_window->setRiseOnClickEnabled(false);
 
-		dynamic_cast<CEGUI::Tree *>(_window->getChild("FileDialogTree"))->subscribeEvent(CEGUI::Tree::EventSelectionChanged, CEGUI::Event::Subscriber(&FileDialogWidget::changedSelection, this));
-		dynamic_cast<CEGUI::PushButton *>(_window->getChild("FileDialogButton"))->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&FileDialogWidget::clickedButton, this));
+		_window->getChild("FileDialogList")->subscribeEvent(CEGUI::Listbox::EventSelectionChanged, CEGUI::Event::Subscriber(&FileDialogWidget::changedSelection, this));
+		_window->getChild("FileDialogButton")->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&FileDialogWidget::clickedButton, this));
 	}
 
 	FileDialogWidget::~FileDialogWidget() {
@@ -61,19 +61,15 @@ namespace gui {
 	}
 
 	void FileDialogWidget::updateView() {
-		CEGUI::Tree * tree = dynamic_cast<CEGUI::Tree *>(_window->getChild("FileDialogTree"));
+		CEGUI::Listbox * lb = dynamic_cast<CEGUI::Listbox *>(_window->getChild("FileDialogList"));
 
-		for (auto tip : _treeItems) {
-			tree->removeItem(tip.first);
+		while (lb->getItemCount()) {
+			lb->removeItem(lb->getListboxItemFromIndex(0));
 		}
 
-		_treeItems.clear();
-
 		boost::filesystem::directory_iterator iter(_currentPath), dirEnd;
-		_treeItems.push_back(std::make_pair(new CEGUI::TreeItem(".."), true));
-		tree->addItem(_treeItems.back().first);
-		_treeItems.push_back(std::make_pair(new CEGUI::TreeItem("."), true));
-		tree->addItem(_treeItems.back().first);
+		lb->addItem(new CEGUI::ListboxTextItem(".."));
+		lb->addItem(new CEGUI::ListboxTextItem("."));
 		while (iter != dirEnd) {
 			bool directory = false;
 			if (is_regular_file(*iter)) {
@@ -85,26 +81,20 @@ namespace gui {
 			} else if (boost::filesystem::is_directory(*iter)) {
 				directory = true;
 			}
-			_treeItems.push_back(std::make_pair(new CEGUI::TreeItem(iter->path().filename().string()), directory));
-			tree->addItem(_treeItems.back().first);
+			lb->addItem(new CEGUI::ListboxTextItem(iter->path().filename().string()));
 			iter++;
 		}
 	}
 
 	bool FileDialogWidget::changedSelection(const CEGUI::EventArgs & e) {
-		CEGUI::TreeItem * selected = dynamic_cast<CEGUI::Tree *>(_window->getChild("FileDialogTree"))->getFirstSelectedItem();
-		for (auto tip : _treeItems) {
-			if (selected == tip.first) {
-				if (tip.second) {
-					_currentPath += ("/" + std::string(tip.first->getText().c_str()));
-					updateView();
-					dynamic_cast<CEGUI::Editbox *>(_window->getChild("FileDialogEditbox"))->setText("");
-					break;
-				} else {
-					dynamic_cast<CEGUI::Editbox *>(_window->getChild("FileDialogEditbox"))->setText(tip.first->getText());
-					break;
-				}
-			}
+		CEGUI::ListboxTextItem * selected = dynamic_cast<CEGUI::ListboxTextItem *>(dynamic_cast<CEGUI::Listbox *>(_window->getChild("FileDialogList"))->getFirstSelectedItem());
+		std::string text = selected->getText().c_str();
+		if (text.length() > 4 && text.substr(text.length() - 4, 4) == ".xml") {
+			dynamic_cast<CEGUI::Editbox *>(_window->getChild("FileDialogEditbox"))->setText(text);
+		} else {
+			_currentPath += ("/" + text);
+			updateView();
+			dynamic_cast<CEGUI::Editbox *>(_window->getChild("FileDialogEditbox"))->setText("");
 		}
 		return true;
 	}

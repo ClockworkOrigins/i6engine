@@ -42,7 +42,6 @@ namespace gui {
 
 	private:
 		boost::filesystem::path _currentPath;
-		std::vector<std::pair<CEGUI::TreeItem *, bool>> _treeItems;
 		boost::function<void(std::string)> _callback;
 
 		void updateView();

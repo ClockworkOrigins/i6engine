@@ -2,6 +2,7 @@
 
 Fixes:
 	- RPG components now are also registered in SampleLeveleditor to be able to load RPG levels
+	- fixed CEGUI messages caused by leveleditor
 
 v 0.8.3
 
