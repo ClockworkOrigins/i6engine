@@ -1,0 +1,18 @@
+<Animations>
+	<AnimationDefinition name="HideAndShow" duration="3.0" replayMode="loop">
+		<Affector property="Alpha" interpolator="float">
+			<KeyFrame position="0.0" value="1.0" />
+			<KeyFrame position="1.5" value="0.0" />
+			<KeyFrame position="3.0" value="1.0" />
+		</Affector>
+	</AnimationDefinition>
+	<AnimationDefinition name="RotateY" duration="8.0" replayMode="loop">
+		<Affector property="Rotation" interpolator="QuaternionSlerp" applicationMethod="absolute">
+			<KeyFrame position="0.0" value="x:0 y:0 z:0" />
+			<KeyFrame position="2.0" value="x:0 y:0 z:90" />
+			<KeyFrame position="4.0" value="x:0 y:0 z:180" />
+			<KeyFrame position="6.0" value="x:0 y:0 z:270" />
+			<KeyFrame position="8.0" value="x:0 y:0 z:360" />
+		</Affector>
+	</AnimationDefinition>
+</Animations>

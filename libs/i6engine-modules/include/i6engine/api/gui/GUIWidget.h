@@ -31,6 +31,7 @@
 #include "boost/function.hpp"
 
 namespace CEGUI {
+	class AnimationInstance;
 	class EventArgs;
 	class Window;
 } /* namespace CEGUI */
@@ -133,6 +134,7 @@ namespace gui {
 		boost::function<void(void)> _clickCallback;
 		std::string _tooltip;
 		bool _tooltipActive;
+		std::map<std::string, CEGUI::AnimationInstance *> _animations;
 
 		bool drag(const CEGUI::EventArgs & e);
 		bool drop(const CEGUI::EventArgs & e);

@@ -82,6 +82,10 @@ namespace gui {
 		GuiAddColumn,
 		GuiSetSelectedStringCallback,
 		GuiSetTextAcceptCallback,
+		GuiPlayAnimation,
+		GuiStopAnimation,
+		GuiPauseAnimation,
+		GuiUnpauseAnimation,
 		GuiMessageTypesCount
 	};
 
@@ -542,6 +546,54 @@ namespace gui {
 			return new GUI_SetAcceptTextCallback(*this);
 		}
 	} GUI_SetAcceptTextCallback;
+
+	/**
+	 * \brief plays an animation on Widget
+	 */
+	typedef struct GUI_PlayAnimation : GUIUpdateMessageStruct {
+		std::string animation;
+		GUI_PlayAnimation(const std::string & name, const std::string & a) : GUIUpdateMessageStruct(name), animation(a) {
+		}
+		GUI_PlayAnimation * copy() {
+			return new GUI_PlayAnimation(*this);
+		}
+	} GUI_PlayAnimation;
+
+	/**
+	 * \brief stops an animation on Widget
+	 */
+	typedef struct GUI_StopAnimation : GUIUpdateMessageStruct {
+		std::string animation;
+		GUI_StopAnimation(const std::string & name, const std::string & a) : GUIUpdateMessageStruct(name), animation(a) {
+		}
+		GUI_StopAnimation * copy() {
+			return new GUI_StopAnimation(*this);
+		}
+	} GUI_StopAnimation;
+
+	/**
+	 * \brief pauses an animation on Widget
+	 */
+	typedef struct GUI_PauseAnimation : GUIUpdateMessageStruct {
+		std::string animation;
+		GUI_PauseAnimation(const std::string & name, const std::string & a) : GUIUpdateMessageStruct(name), animation(a) {
+		}
+		GUI_PauseAnimation * copy() {
+			return new GUI_PauseAnimation(*this);
+		}
+	} GUI_PauseAnimation;
+
+	/**
+	 * \brief unpauses an animation on Widget
+	 */
+	typedef struct GUI_UnpauseAnimation : GUIUpdateMessageStruct {
+		std::string animation;
+		GUI_UnpauseAnimation(const std::string & name, const std::string & a) : GUIUpdateMessageStruct(name), animation(a) {
+		}
+		GUI_UnpauseAnimation * copy() {
+			return new GUI_UnpauseAnimation(*this);
+		}
+	} GUI_UnpauseAnimation;
 
 } /* namespace gui */
 } /* namespace api */

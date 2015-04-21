@@ -17,6 +17,7 @@
 #include "i6engine/modules/gui/GUIManager.h"
 
 #include "i6engine/utils/Exceptions.h"
+#include "i6engine/utils/i6eString.h"
 #include "i6engine/utils/Logger.h"
 
 #include "i6engine/api/Application.h"
@@ -39,6 +40,7 @@
 #include "i6engine/modules/gui/guiwidgets/GUIToggleButton.h"
 #include "i6engine/modules/gui/guiwidgets/GUITooltip.h"
 
+#include "boost/filesystem.hpp"
 #include "boost/functional/factory.hpp"
 #include "boost/interprocess/sync/scoped_lock.hpp"
 #include "boost/lexical_cast.hpp"
@@ -99,6 +101,20 @@ namespace modules {
 			_objRoot->setArea(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0), CEGUI::UDim(1, 0), CEGUI::UDim(1, 0));
 			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage(strDefaultMouseImageSet + "/" + strDefaultMouseImageName);
 			CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(_objRoot);
+
+			std::string guiAnimationPath;
+			if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue<std::string>("GRAPHIC", "guiAnimationPath", guiAnimationPath)) {
+				ISIXE_LOG_ERROR("GUIManager", "An exception has occurred: GRAPHIC.guiAnimationPath not set in i6engine.ini!");
+				return;
+			}
+			boost::filesystem::directory_iterator iter(guiAnimationPath), dirEnd;
+			while (iter != dirEnd) {
+				if (is_regular_file(*iter)) {
+					std::string file = iter->path().string();
+					CEGUI::AnimationManager::getSingleton().loadAnimationsFromXML(utils::split(utils::split(file, "/").back(), "\\").back());
+				}
+				iter++;
+			}
 		} catch (CEGUI::Exception & e) {
 			ISIXE_THROW_API("GUI", e.getMessage());
 			std::cout << e.getMessage() << std::endl;

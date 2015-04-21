@@ -27,7 +27,7 @@
 namespace i6engine {
 namespace api {
 
-	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false) {
+	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false), _animations() {
 	}
 
 	GUIWidget::~GUIWidget() {
@@ -69,6 +69,21 @@ namespace api {
 			}
 		} else if (type == gui::GUIMessageTypes::GuiSetProperty) {
 			_window->setProperty(dynamic_cast<gui::GUI_SetProperty *>(message)->prop, dynamic_cast<gui::GUI_SetProperty *>(message)->value);
+		} else if (type == gui::GUIMessageTypes::GuiPlayAnimation) {
+			CEGUI::AnimationInstance * instance = CEGUI::AnimationManager::getSingleton().instantiateAnimation(dynamic_cast<gui::GUI_PlayAnimation *>(message)->animation);
+			instance->setTargetWindow(_window);
+			instance->start();
+			_animations.insert(std::make_pair(dynamic_cast<gui::GUI_PlayAnimation *>(message)->animation, instance));
+		} else if (type == gui::GUIMessageTypes::GuiStopAnimation) {
+			auto it = _animations.find(dynamic_cast<gui::GUI_StopAnimation *>(message)->animation);
+			it->second->stop();
+			_animations.erase(it);
+		} else if (type == gui::GUIMessageTypes::GuiPauseAnimation) {
+			auto it = _animations.find(dynamic_cast<gui::GUI_PauseAnimation *>(message)->animation);
+			it->second->pause();
+		} else if (type == gui::GUIMessageTypes::GuiUnpauseAnimation) {
+			auto it = _animations.find(dynamic_cast<gui::GUI_UnpauseAnimation *>(message)->animation);
+			it->second->unpause();
 		} else {
 			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
 		}

@@ -300,6 +300,22 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetTextAcceptCallback, core::Method::Update, new gui::GUI_SetAcceptTextCallback(name, acceptedCallback), core::Subsystem::Unknown));
 	}
 
+	void GUIFacade::playAnimation(const std::string & name, const std::string & animation) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiPlayAnimation, core::Method::Update, new gui::GUI_PlayAnimation(name, animation), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::stopAnimation(const std::string & name, const std::string & animation) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiStopAnimation, core::Method::Update, new gui::GUI_StopAnimation(name, animation), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::pauseAnimation(const std::string & name, const std::string & animation) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiPauseAnimation, core::Method::Update, new gui::GUI_PauseAnimation(name, animation), core::Subsystem::Unknown));
+	}
+
+	void GUIFacade::unpauseAnimation(const std::string & name, const std::string & animation) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiUnpauseAnimation, core::Method::Update, new gui::GUI_UnpauseAnimation(name, animation), core::Subsystem::Unknown));
+	}
+
 	void GUIFacade::addTicker(GUIWidget * widget) {
 		_addTickerCallback(widget);
 	}

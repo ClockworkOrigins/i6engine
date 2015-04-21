@@ -49,6 +49,7 @@ namespace sample {
 		// a simple image
 		gf->addImage("Image", "RPG/StaticImage", "RPG", "NewCloseButtonNormal", 0.1, 0.1, 0.2, 0.25);
 		gf->setTooltip("Image", "To add a tooltip is really simple and just a one liner.");
+		gf->playAnimation("Image", "HideAndShow");
 
 		// an editbox changing the text of the print
 		gf->addEditbox("Editbox", "RPG/Editbox", 0.1, 0.4, 0.4, 0.05, "Enter some text", [gf](std::string s) {
@@ -70,12 +71,15 @@ namespace sample {
 					gf->setProgress("ProgressBar", _counter / 10.0);
 					return true;
 				}, true, 1);
+				gf->pauseAnimation("ToggleButton", "RotateY");
 			} else {
 				gf->setTooltip("ToggleButton", "Press to activate progress bar.");
 				i6engine::api::EngineController::GetSingleton().removeTimerID(_progressTimer);
+				gf->unpauseAnimation("ToggleButton", "RotateY");
 			}
 		});
 		gf->setTooltip("ToggleButton", "Press to activate progress bar.");
+		gf->playAnimation("ToggleButton", "RotateY");
 
 		// a progress bar adding 10 percent every second
 		gf->addProgressBar("ProgressBar", "RPG/ProgressBar", 0.7, 0.4, 0.2, 0.05);

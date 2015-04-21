@@ -429,6 +429,34 @@ namespace gui {
 		void setSelectedStringCallback(const std::string & name, const std::function<void(std::string)> & selectedCallback) const;
 
 		/**
+		 * \brief plays given animation
+		 * \param name Name of the Widget
+		 * \param animation the animation to be played
+		 */
+		void playAnimation(const std::string & name, const std::string & animation) const;
+
+		/**
+		 * \brief stops given animation, is deleted
+		 * \param name Name of the Widget
+		 * \param animation the animation to be played
+		 */
+		void stopAnimation(const std::string & name, const std::string & animation) const;
+
+		/**
+		 * \brief pauses given animation, to run again use unpauseAnimation
+		 * \param name Name of the Widget
+		 * \param animation the animation to be played
+		 */
+		void pauseAnimation(const std::string & name, const std::string & animation) const;
+
+		/**
+		* \brief unpauses an animation paused before using unpauseAnimation
+		* \param name Name of the Widget
+		* \param animation the animation to be played
+		*/
+		void unpauseAnimation(const std::string & name, const std::string & animation) const;
+
+		/**
 		 * \brief Registers a new Widget-template.
 		 * \param name Name of the Widget-type
 		 * \param createFunc A function to create a widget. It gets a string for the name and a string for the style.

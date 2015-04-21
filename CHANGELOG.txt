@@ -6,6 +6,7 @@ Enhancements:
 	- added MotionBlur compositor
 	- added HeatVision compositor
 	- added RPG.ini with some settings
+	- added support for playing animations on GUIWidgets being specified via xml
 
 Fixes:
 	- RPG components now are also registered in SampleLeveleditor to be able to load RPG levels
