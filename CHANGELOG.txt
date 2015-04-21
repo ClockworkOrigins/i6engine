@@ -7,6 +7,7 @@ Enhancements:
 	- added HeatVision compositor
 	- added RPG.ini with some settings
 	- added support for playing animations on GUIWidgets being specified via xml
+	- added tool to convert textures to required format and textures for terrains
 
 Fixes:
 	- RPG components now are also registered in SampleLeveleditor to be able to load RPG levels
