@@ -62,6 +62,7 @@ namespace components {
 		MovableTextComponent,
 		WaypointComponent,
 		NavigationComponent,
+		WaynetNavigationComponent,
 		ComponentTypesCount
 	};
 

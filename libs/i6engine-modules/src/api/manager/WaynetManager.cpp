@@ -98,6 +98,21 @@ namespace api {
 		}
 	}
 
+	std::string WaynetManager::getNearestWaypoint(const Vec3 & pos) const {
+		double minDist = DBL_MAX;
+		std::string minName = "";
+
+		for (auto go : EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
+			auto ssc = go->getGOC<StaticStateComponent>(components::ComponentTypes::StaticStateComponent);
+			if ((ssc->getPosition() - pos).length() < minDist) {
+				minDist = (ssc->getPosition() - pos).length();
+				minName = go->getGOC<WaypointComponent>(components::ComponentTypes::WaypointComponent)->getName();
+			}
+		}
+
+		return minName;
+	}
+
 	void WaynetManager::reset() {
 		_waypoints.clear();
 	}

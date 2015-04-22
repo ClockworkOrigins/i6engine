@@ -42,6 +42,11 @@ namespace api {
 		 */
 		void showWaynet() const;
 
+		/**
+		 * \brief returns the waypoint name being next to the position
+		 */
+		std::string getNearestWaypoint(const Vec3 & pos) const;
+
 	private:
 		WaynetManager();
 
