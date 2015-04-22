@@ -78,6 +78,7 @@ set(i6modulesSrc
 	# These Classes are superclasses and don't need to be registered
 	${srcdir}/api/components/Component.cpp
 	${srcdir}/api/components/MoverComponent.cpp
+	${srcdir}/api/components/NavigationComponent.cpp
 	${srcdir}/api/components/ShatterComponent.cpp
 
 	${srcdir}/api/configs/AudioConfig.cpp

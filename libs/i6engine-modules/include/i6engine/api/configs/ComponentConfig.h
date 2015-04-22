@@ -61,6 +61,7 @@ namespace components {
 		FollowComponent,
 		MovableTextComponent,
 		WaypointComponent,
+		NavigationComponent,
 		ComponentTypesCount
 	};
 

@@ -13,14 +13,14 @@ call download-dependency.bat %ARCHIVE%
 call download-dependency.bat %DEP_ARCHIVE%
 
 echo "Extracting OgreDeps"
-if not exist %BUILD_ROOT% exit
+if not exist %BUILD_ROOT% exit /b
 cd %BUILD_ROOT%
 
 if exist %BUILD_DIR_DEPS% RD /S /Q "%BUILD_DIR_DEPS%"
 
 winrar.exe x %EX_DIR%/%DEP_ARCHIVE%
 
-if not exist %BUILD_DIR_DEPS% exit
+if not exist %BUILD_DIR_DEPS% exit /b
 
 echo "Configuring OgreDeps"
 cd %BUILD_DIR_DEPS%
@@ -44,14 +44,14 @@ rd /S /Q "%PREFIX_DEPS%/lib/Release"
 rd /S /Q "%PREFIX_DEPS%/lib/Debug"
 
 echo "Extracting Ogre"
-if not exist %BUILD_ROOT% exit
+if not exist %BUILD_ROOT% exit /b
 cd %BUILD_ROOT%
 
 if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
 
 winrar.exe x %EX_DIR%/%ARCHIVE%
 
-if not exist %BUILD_DIR% exit
+if not exist %BUILD_DIR% exit /b
 
 echo "Configuring Ogre"
 

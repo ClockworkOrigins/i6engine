@@ -22,14 +22,14 @@ cd %PATCH_DIR%\Windows
 winrar.exe x cegui_0_8_4_patch.zip
 
 echo "Extracting CEGUIDeps"
-if not exist %BUILD_ROOT% exit
+if not exist %BUILD_ROOT% exit /b
 cd %BUILD_ROOT%
 
 if exist %BUILD_DIR_DEPS% RD /S /Q "%BUILD_DIR_DEPS%"
 
 winrar.exe x %EX_DIR%/%DEP_ARCHIVE%
 
-if not exist %BUILD_DIR_DEPS% exit
+if not exist %BUILD_DIR_DEPS% exit /b
 
 echo "Patching CEGUIDeps"
 cd %BUILD_DIR_DEPS%
@@ -46,7 +46,7 @@ MSBuild.exe CEGUI-DEPS.sln /p:Configuration=Debug > NUL
 echo "Installing CEGUIDeps"
 mkdir "%PREFIX_DEPS%"
 
-if not exist %PREFIX_DEPS% exit
+if not exist %PREFIX_DEPS% exit /b
 xcopy /S /Y "%BUILD_DIR_DEPS%/dependencies" "%PREFIX_DEPS%" > NUL
 
 echo "Cleaning up CEGUIDeps"
@@ -54,14 +54,14 @@ cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR_DEPS%"
 
 echo "Extracting CEGUI"
-if not exist %BUILD_ROOT% exit
+if not exist %BUILD_ROOT% exit /b
 cd %BUILD_ROOT%
 
 if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
 
 winrar.exe x %EX_DIR%/%ARCHIVE% > NUL
 
-if not exist %BUILD_DIR% exit
+if not exist %BUILD_DIR% exit /b
 
 mkdir "%BUILD_DIR%/dependencies"
 xcopy /S /Y "%PREFIX_DEPS%" "%BUILD_DIR%/dependencies" > NUL

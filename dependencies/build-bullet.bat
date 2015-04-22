@@ -19,14 +19,14 @@ cd %PATCH_DIR%\Windows
 winrar.exe x bullet_2_82_patch.zip
 
 echo "Extracting Bullet"
-if not exist %BUILD_ROOT% exit
+if not exist %BUILD_ROOT% exit /b
 cd %BUILD_ROOT%
 
 if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
 
 winrar.exe x %EX_DIR%/%ARCHIVE%
 
-if not exist %BUILD_DIR% exit
+if not exist %BUILD_DIR% exit /b
 
 echo "Patching Bullet"
 xcopy /S /Y "%PATCH_DIR%/Windows/bullet/Extras" "%BUILD_DIR%/Extras"

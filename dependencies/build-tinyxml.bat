@@ -9,20 +9,20 @@ echo "Compile TinyXML"
 call download-dependency.bat %ARCHIVE%
 
 echo "Extracting TinyXML"
-if not exist %BUILD_ROOT% exit
+if not exist %BUILD_ROOT% exit /b
 cd %BUILD_ROOT%
 
 if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
 
 winrar.exe x %EX_DIR%/%ARCHIVE%
 
-if not exist %BUILD_DIR% exit
+if not exist %BUILD_DIR% exit /b
 cd %BUILD_DIR%\jni
 
 echo "Building TinyXML"
 cl /EHsc /MP /GS /TP /analyze- /W3 /Zc:wchar_t /Z7 /Gm- /Ox /fp:precise /FD /D "WIN32" /D "_WINDOWS" /D "TINYXML2_EXPORT" /D "_WINDLL" /D "_MBCS" /errorReport:prompt /WX- /Zc:forScope /GR /Gd /Oy- /MD /nologo /D_USRDLL tinyxml2.cpp /link /DLL /OUT:tinyxml2.dll
 
-if %errorlevel% gtr 0 exit
+if %errorlevel% gtr 0 exit /b
 
 echo "Installing TinyXML"
 mkdir "%PREFIX%"
@@ -30,10 +30,10 @@ mkdir "%PREFIX%/bin"
 mkdir "%PREFIX%/lib"
 mkdir "%PREFIX%/include"
 
-if not exist %PREFIX% exit
-if not exist %PREFIX%/bin exit
-if not exist %PREFIX%/lib exit
-if not exist %PREFIX%/include exit
+if not exist %PREFIX% exit /b
+if not exist %PREFIX%/bin exit /b
+if not exist %PREFIX%/lib exit /b
+if not exist %PREFIX%/include exit /b
 
 move tinyxml2.h %PREFIX%/include/tinyxml2.h
 move tinyxml2.dll %PREFIX%/bin/tinyxml2.dll

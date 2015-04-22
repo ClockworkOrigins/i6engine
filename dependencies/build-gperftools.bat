@@ -18,14 +18,14 @@ cd %PATCH_DIR%\Windows
 winrar.exe x gperftools_2_4_patch_sln.zip
 
 echo "Extracting GPerfTools"
-if not exist %BUILD_ROOT% exit
+if not exist %BUILD_ROOT% exit /b
 cd %BUILD_ROOT%
 
 if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
 
 winrar.exe x %EX_DIR%/%ARCHIVE%
 
-if not exist %BUILD_DIR% exit
+if not exist %BUILD_DIR% exit /b
 
 echo "Building GPerfTools"
 cd %BUILD_DIR%

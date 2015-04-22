@@ -23,24 +23,24 @@ cd %PATCH_DIR%\Windows
 winrar.exe x boost_1_58_patch_post.zip
 
 echo "Extracting Boost"
-if not exist %BUILD_ROOT% exit
+if not exist %BUILD_ROOT% exit /b
 cd %BUILD_ROOT%
 
 if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
 winrar.exe x %EX_DIR%/%ARCHIVE%
 
-if not exist %BUILD_DIR% exit
+if not exist %BUILD_DIR% exit /b
 
 echo "Patching Boost"
 cd %BUILD_DIR%
 
 echo "Bootstrapping Boost"
 
-if not exist bootstrap.bat exit
+if not exist bootstrap.bat exit /b
 
 call bootstrap.bat
 
-if not exist b2.exe exit
+if not exist b2.exe exit /b
 
 b2 toolset=msvc --with-atomic --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system variant=release install --prefix=%PREFIX% stage > NUL
 

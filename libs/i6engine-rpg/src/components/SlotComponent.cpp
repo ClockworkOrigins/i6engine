@@ -24,7 +24,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	SlotComponent::SlotComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _width(std::stoul(params.find("width")->second)), _height(std::stoul(params.find("height")->second)) {
+	SlotComponent::SlotComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _width(uint16_t(std::stoul(params.find("width")->second))), _height(uint16_t(std::stoul(params.find("height")->second))) {
 		_objFamilyID = config::ComponentTypes::SlotComponent;
 		_objComponentID = config::ComponentTypes::SlotComponent;
 	}

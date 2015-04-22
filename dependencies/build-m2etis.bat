@@ -16,7 +16,7 @@ call %CONFIG_BAT%
 
 echo "Compile m2etis"
 
-if exist %PREFIX% exit
+if exist %PREFIX% exit /b
 
 cd %DEP_DIR%
 
@@ -24,7 +24,7 @@ call download-dependency.bat %ARCHIVE%
 
 echo "Extracting m2etis"
 
-if not exist %BUILD_ROOT% exit
+if not exist %BUILD_ROOT% exit /b
 cd %BUILD_ROOT%
 
 if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
@@ -33,7 +33,7 @@ echo %EX_DIR%/%ARCHIVE%
 
 winrar.exe x %EX_DIR%/%ARCHIVE%
 
-if not exist %BUILD_DIR% exit
+if not exist %BUILD_DIR% exit /b
 
 echo "Configuring m2etis"
 
