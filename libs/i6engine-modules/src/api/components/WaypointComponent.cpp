@@ -19,7 +19,10 @@
 #include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eString.h"
 
+#include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/ComponentConfig.h"
+#include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/objects/GameObject.h"
 
 namespace i6engine {
 namespace api {
@@ -42,6 +45,17 @@ namespace api {
 	}
 
 	void WaypointComponent::Init() {
+	}
+
+	void WaypointComponent::Finalize() {
+		for (std::string connection : _connections) {
+			for (auto & go : EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
+				auto wp = go->getGOC<WaypointComponent>(components::ComponentTypes::WaypointComponent);
+				if (wp->getName() == connection) {
+					wp->removeConnection(_name);
+				}
+			}
+		}
 	}
 
 	attributeMap WaypointComponent::synchronize() const {

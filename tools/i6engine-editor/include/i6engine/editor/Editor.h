@@ -140,6 +140,8 @@ namespace editor {
 
 		std::set<utils::weakPtr<api::GameObject, api::GameObject>> _lastNearWaypoints;
 
+		bool _removeBox;
+
 		/**
 		 * \brief stores camera object used for navigation through level
 		 */

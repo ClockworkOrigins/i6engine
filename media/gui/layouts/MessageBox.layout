@@ -17,11 +17,13 @@
 			<Property name="Position" value="{{0.1,0},{0.7,0}}" />
 			<Property name="MaxSize" value="{{1,0},{1,0}}" />
 			<Property name="Size" value="{{0.2,0},{0.1,0}}" />
+			<Property name="Text" value="Yes" />
         </Window>
         <Window type="Editor/Button" name="No" >
 			<Property name="Position" value="{{0.7,0},{0.7,0}}" />
 			<Property name="MaxSize" value="{{1,0},{1,0}}" />
 			<Property name="Size" value="{{0.2,0},{0.1,0}}" />
+			<Property name="Text" value="No" />
         </Window>
     </Window>
 </GUILayout>

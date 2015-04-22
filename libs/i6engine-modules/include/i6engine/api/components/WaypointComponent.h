@@ -43,6 +43,8 @@ namespace api {
 
 		void Init() override;
 
+		void Finalize() override;
+
 		/**
 		 * \brief synchronizes the Components state
 		 */

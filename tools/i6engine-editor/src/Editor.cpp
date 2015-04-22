@@ -69,7 +69,7 @@
 namespace i6engine {
 namespace editor {
 
-	Editor::Editor(const std::string & name) : Application(), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints() {
+	Editor::Editor(const std::string & name) : Application(), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints(), _removeBox(false) {
 		setName(name);
 
 		_eventMap["forward"] = std::make_pair(boost::bind(&Editor::Forward, this), false);
@@ -167,6 +167,7 @@ namespace editor {
 		inputFacade->setKeyMapping(api::KeyCode::KC_F3, "freeFly");
 		inputFacade->setKeyMapping(api::KeyCode::KC_M, "moveObject");
 		inputFacade->setKeyMapping(api::KeyCode::KC_F4, "toggleWaynet");
+		inputFacade->setKeyMapping(api::KeyCode::KC_DELETE, "removeObject");
 	}
 
 	bool Editor::ShutdownRequest() {
@@ -373,6 +374,37 @@ namespace editor {
 							}
 						}
 					}
+				} else if (key == "removeObject") {
+					if (iku->pressed == api::KeyState::KEY_PRESSED) {
+						if (_selectedObjectID != -1) {
+							api::EngineController::GetSingleton().getGUIFacade()->createWidget("RemoveObjectMessageBox", "MessageBox", "");
+							api::EngineController::GetSingleton().getGUIFacade()->setPosition("RemoveObjectMessageBox", 0.3, 0.35);
+							api::EngineController::GetSingleton().getGUIFacade()->setSize("RemoveObjectMessageBox", 0.4, 0.3);
+							api::EngineController::GetSingleton().getGUIFacade()->setText("RemoveObjectMessageBox", "Really delete object?");
+							api::EngineController::GetSingleton().getGUIFacade()->subscribeEvent("RemoveObjectMessageBoxYes", "Clicked", [this]() {
+								bool waypoint = false;
+								{
+									auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+									waypoint = go->getType() == "Waypoint";
+									selectObject(-1);
+									go->setDie();
+								}
+								std::this_thread::sleep_for(std::chrono::milliseconds(100));
+								if (waypoint) {
+									api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+								}
+								updateObjectList();
+								api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
+								_removeBox = false;
+							});
+							api::EngineController::GetSingleton().getGUIFacade()->subscribeEvent("RemoveObjectMessageBoxNo", "Clicked", [this]() {
+								api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
+								_removeBox = false;
+							});
+
+							_removeBox = true;
+						}
+					}
 				}
 			}
 		} else if (msg->getSubtype() == api::mouse::MouMouse) {
@@ -432,6 +464,10 @@ namespace editor {
 				}
 			} else if (ibu->pressed && ibu->code == api::MouseButtonID::MB_Right) {
 				selectObject(-1);
+				if (_removeBox) {
+					api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
+					_removeBox = false;
+				}
 			}
 		}
 	}
@@ -459,13 +495,15 @@ namespace editor {
 		api::EngineController::GetSingleton().getGUIFacade()->setSize("ObjectList", 0.15, 0.5);
 
 		api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(id);
+		api::WeakGOPtr wgo = go;
 
 		api::EngineController::GetSingleton().getGUIFacade()->createWidget("ObjectInfo", "ObjectInfo", "");
 		api::EngineController::GetSingleton().getGUIFacade()->setPosition("ObjectInfo", 0.75, 0.5);
 		api::EngineController::GetSingleton().getGUIFacade()->setSize("ObjectInfo", 0.25, 0.5);
 		api::EngineController::GetSingleton().getGUIFacade()->setVisibility("ObjectInfo", true);
 		api::EngineController::GetSingleton().getGUIFacade()->setText("ObjectInfo", go->getType());
-		api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponentOption, core::Method::Update, new messages::GUI_AddComponentOption("ObjectInfo", true, "Flags", [go]() {
+		api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponentOption, core::Method::Update, new messages::GUI_AddComponentOption("ObjectInfo", true, "Flags", [wgo]() {
+			auto go = wgo.get();
 			std::vector<std::string> flags = go->getFlags();
 			std::string flagString;
 			for (size_t i = 0; i < flags.size(); i++) {
@@ -476,7 +514,8 @@ namespace editor {
 				}
 			}
 			return flagString;
-		}, [go](std::string s) {
+		}, [wgo](std::string s) {
+			auto go = wgo.get();
 			go->setFlags(utils::split(s, "|"));
 			return true;
 		}), i6engine::core::Subsystem::Unknown));
@@ -877,10 +916,13 @@ namespace editor {
 		std::set<api::WeakGOPtr> removables;
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		for (auto g : _lastNearWaypoints) {
-			if ((ssc->getPosition() - g.get()->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition()).length() > 50.0) {
-				g.get()->getGOC(api::components::MeshAppearanceComponent)->setDie();
-				g.get()->getGOC(api::components::MovableTextComponent)->setDie();
-				removables.insert(g);
+			auto go = g.get();
+			if (go == nullptr) {
+				removables.insert(go);
+			} else if ((ssc->getPosition() - go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition()).length() > 50.0) {
+				go->getGOC(api::components::MeshAppearanceComponent)->setDie();
+				go->getGOC(api::components::MovableTextComponent)->setDie();
+				removables.insert(go);
 			}
 		}
 		for (auto g : removables) {
