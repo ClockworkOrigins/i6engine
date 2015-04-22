@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUILayout version="4">
+    <Window type="Editor/FrameWindow" name="PopupWindow" >
+        <Property name="Text" value="" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        <Property name="MinSize" value="{{0,128},{0,128}}" />
+        <Property name="TitlebarEnabled" value="True" />
+        <Property name="FrameEnabled" value="True" />
+        <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+        
+		<Window type="Editor/Listbox" name="Text">
+			<Property name="Position" value="{{0.1,0},{0.2,0}}" />
+			<Property name="MaxSize" value="{{1,0},{1,0}}" />
+			<Property name="Size" value="{{0.8,0},{0.4,0}}" />
+		</Window>
+        <Window type="Editor/Button" name="Yes" >
+			<Property name="Position" value="{{0.1,0},{0.7,0}}" />
+			<Property name="MaxSize" value="{{1,0},{1,0}}" />
+			<Property name="Size" value="{{0.2,0},{0.1,0}}" />
+        </Window>
+        <Window type="Editor/Button" name="No" >
+			<Property name="Position" value="{{0.7,0},{0.7,0}}" />
+			<Property name="MaxSize" value="{{1,0},{1,0}}" />
+			<Property name="Size" value="{{0.2,0},{0.1,0}}" />
+        </Window>
+    </Window>
+</GUILayout>

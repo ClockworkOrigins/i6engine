@@ -59,6 +59,7 @@
 #include "i6engine/editor/gui/FileDialogWidget.h"
 #include "i6engine/editor/gui/ListboxWidget.h"
 #include "i6engine/editor/gui/MenuBarWidget.h"
+#include "i6engine/editor/gui/MessageBoxWidget.h"
 #include "i6engine/editor/gui/ObjectInfoWidget.h"
 
 #include "boost/functional/factory.hpp"
@@ -125,6 +126,7 @@ namespace editor {
 		gf->registerWidgetTemplate("FileDialog", boost::factory<gui::FileDialogWidget *>());
 		gf->registerWidgetTemplate("Listbox", boost::factory<gui::ListboxWidget *>());
 		gf->registerWidgetTemplate("MenuBar", boost::factory<gui::MenuBarWidget *>());
+		gf->registerWidgetTemplate("MessageBox", boost::factory<gui::MessageBoxWidget *>());
 		gf->registerWidgetTemplate("ObjectInfo", boost::factory<gui::ObjectInfoWidget *>());
 
 		// initialize GUI

@@ -34,6 +34,7 @@ set(editorSrc
 	${srcdir}/gui/FileDialogWidget.cpp
 	${srcdir}/gui/ListboxWidget.cpp
 	${srcdir}/gui/MenuBarWidget.cpp
+	${srcdir}/gui/MessageBoxWidget.cpp
 	${srcdir}/gui/ObjectInfoWidget.cpp
 )
 
