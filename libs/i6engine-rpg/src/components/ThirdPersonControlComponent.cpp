@@ -11,6 +11,7 @@
 #include "i6engine/core/configs/SubsystemConfig.h"
 
 #include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/components/MovementComponent.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/configs/InputConfig.h"
@@ -114,18 +115,16 @@ namespace components {
 				api::input::Input_Keyboard_Update * iku = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent());
 				if (iku->pressed == api::KeyState::KEY_PRESSED || iku->pressed == api::KeyState::KEY_HOLD) {
 					auto ic = getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent);
-					auto psc = _psc.get();
+					auto mc = getOwnerGO()->getGOC<api::MovementComponent>(api::components::ComponentTypes::MovementComponent);
 					std::string keyMapping = api::EngineController::GetSingleton().getInputFacade()->getKeyMapping(iku->code);
 					if (keyMapping == "forward" && !ic->isActive()) {
-						psc->applyCentralForce(Vec3(0.0, 0.0, -30.0), true);
+						mc->forward();
 					} else if (keyMapping == "backward" && !ic->isActive()) {
-						psc->applyCentralForce(Vec3(0.0, 0.0, 25.0), true);
+						mc->backward();
 					} else if (keyMapping == "left" && !ic->isActive()) {
-						Quaternion rot(Vec3(0.0, 1.0, 0.0), 1.5 * PI / 180);
-						psc->applyRotation(rot);
+						mc->left();
 					} else if (keyMapping == "right" && !ic->isActive()) {
-						Quaternion rot(Vec3(0.0, 1.0, 0.0), -1.5 * PI / 180);
-						psc->applyRotation(rot);
+						mc->right();
 					} else if (keyMapping == "inventory" && iku->pressed == api::KeyState::KEY_PRESSED) {
 						if (ic->isActive()) {
 							ic->hide();
@@ -145,8 +144,6 @@ namespace components {
 						}
 					}
 				}
-			} else if (subType == api::mouse::MouseMessageTypes::MouMouse) {
-				//double xPos = dynamic_cast<api::input::Input_Mouse_Update *>(msg->getContent())->intNewX / double(api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution().width);
 			}
 		}
 	}

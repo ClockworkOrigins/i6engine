@@ -31,4 +31,8 @@
 	</Component>
 	<Component template="Name" owner="true">
 	</Component>
+	<Component template="HumanMovement" owner="true">
+	</Component>
+	<Component template="WaynetNavigation" owner="true">
+	</Component>
 </GOTemplate>

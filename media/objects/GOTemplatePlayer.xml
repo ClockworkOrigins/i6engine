@@ -47,6 +47,8 @@
 	<Component template="Name" owner="true">
 		<Attribute name="name">PlayerName</Attribute>
 	</Component>
+	<Component template="HumanMovement" owner="true">
+	</Component>
 	<Component template="ThirdPersonControl" owner="true">
 	</Component>
 	<Component template="Healthbar" owner="true">
@@ -57,5 +59,7 @@
 		<Attribute name="columns">10</Attribute>
 	</Component>
 	<Component template="Quickslot" owner="true">
+	</Component>
+	<Component template="WaynetNavigation" owner="true">
 	</Component>
 </GOTemplate>

@@ -42,6 +42,7 @@ namespace config {
 		WeightInventoryComponent,
 		SlotComponent,
 		SlotInventoryComponent,
+		HumanMovementComponent,
 		ComponentTypesCount
 	};
 

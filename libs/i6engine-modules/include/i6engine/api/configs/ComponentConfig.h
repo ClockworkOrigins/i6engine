@@ -63,6 +63,8 @@ namespace components {
 		WaypointComponent,
 		NavigationComponent,
 		WaynetNavigationComponent,
+		MoveComponent,
+		MovementComponent,
 		ComponentTypesCount
 	};
 

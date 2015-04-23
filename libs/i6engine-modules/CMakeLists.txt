@@ -36,6 +36,7 @@ set(i6components
 	${srcdir}/api/components/LuminousAppearanceComponent.cpp
 	${srcdir}/api/components/MeshAppearanceComponent.cpp
 	${srcdir}/api/components/MovableTextComponent.cpp
+	${srcdir}/api/components/MoveComponent.cpp
 	${srcdir}/api/components/MoverCircleComponent.cpp
 	${srcdir}/api/components/MoverInterpolateComponent.cpp
 	${srcdir}/api/components/MovingCameraComponent.cpp
@@ -78,6 +79,7 @@ set(i6modulesSrc
 	${i6components}
 	# These Classes are superclasses and don't need to be registered
 	${srcdir}/api/components/Component.cpp
+	${srcdir}/api/components/MovementComponent.cpp
 	${srcdir}/api/components/MoverComponent.cpp
 	${srcdir}/api/components/NavigationComponent.cpp
 	${srcdir}/api/components/ShatterComponent.cpp
