@@ -62,4 +62,6 @@
 	</Component>
 	<Component template="WaynetNavigation" owner="true">
 	</Component>
+	<Component template="Move" owner="true">
+	</Component>
 </GOTemplate>

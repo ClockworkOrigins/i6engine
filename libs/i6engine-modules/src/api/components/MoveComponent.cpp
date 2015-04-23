@@ -3,6 +3,7 @@
 #include "i6engine/math/i6eMath.h"
 
 #include "i6engine/api/components/MovementComponent.h"
+#include "i6engine/api/components/NavigationComponent.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/objects/GameObject.h"
@@ -55,6 +56,16 @@ namespace api {
 
 	attributeMap MoveComponent::synchronize() const {
 		return attributeMap();
+	}
+
+	void MoveComponent::navigate(const Vec3 & from, const Vec3 & to) {
+		_path = getOwnerGO()->getGOC<NavigationComponent>(components::ComponentTypes::NavigationComponent)->getPath(from, to);
+		_index = 0;
+	}
+
+	void MoveComponent::navigate(const Vec3 & from, const std::string & to) {
+		_path = getOwnerGO()->getGOC<NavigationComponent>(components::ComponentTypes::NavigationComponent)->getPath(from, to);
+		_index = 0;
 	}
 
 } /* namespace api */
