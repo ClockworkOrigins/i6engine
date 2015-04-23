@@ -48,11 +48,15 @@ namespace api {
 		std::string getNearestWaypoint(const Vec3 & pos) const;
 
 	private:
+		std::map<std::string, std::vector<Edge>> _waypoints;
+		// first pair is start and end waypoint
+		std::map<std::pair<std::string, std::string>, std::vector<Vec3>> _paths;
+
 		WaynetManager();
 
 		void reset();
 
-		std::map<std::string, std::vector<Edge>> _waypoints;
+		std::vector<Vec3> getShortestPath(const std::string & startWP, const std::string & targetWP);
 	};
 
 } /* namespace api */

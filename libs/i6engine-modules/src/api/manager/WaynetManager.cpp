@@ -15,11 +15,11 @@
 namespace i6engine {
 namespace api {
 
-	WaynetManager::WaynetManager() : _waypoints() {
+	WaynetManager::WaynetManager() : _waypoints(), _paths() {
 	}
 
 	std::vector<Vec3> WaynetManager::getShortestPath(const Vec3 & startPos, const std::string & targetWP) {
-		return {};
+		return getShortestPath(getNearestWaypoint(startPos), targetWP);
 	}
 
 	void WaynetManager::createWaynet() {
@@ -71,10 +71,10 @@ namespace api {
 				// connection from target to go
 				Edge b;
 				b.targetWP = wc->getName();
-				a.startPosition = targetSSC->getPosition();
-				a.targetPosition = ownSSC->getPosition();
-				a.targetRotation = ownSSC->getRotation();
-				a.length = (targetSSC->getPosition() - ownSSC->getPosition()).length();
+				b.startPosition = targetSSC->getPosition();
+				b.targetPosition = ownSSC->getPosition();
+				b.targetRotation = ownSSC->getRotation();
+				b.length = (targetSSC->getPosition() - ownSSC->getPosition()).length();
 
 				_waypoints[wc->getName()].push_back(a);
 				_waypoints[target].push_back(b);
@@ -115,6 +115,51 @@ namespace api {
 
 	void WaynetManager::reset() {
 		_waypoints.clear();
+	}
+
+	std::vector<Vec3> WaynetManager::getShortestPath(const std::string & startWP, const std::string & targetWP) {
+		auto it = _paths.find(std::make_pair(startWP, targetWP)); // check if we returned this path before
+		if (it != _paths.end()) {
+			return it->second;
+		}
+		std::map<std::string, double> min_distance;
+		min_distance[startWP] = 0.0;
+		std::map<std::string, std::string> previous;
+		std::set<std::pair<double, std::string>> vertex_queue;
+		vertex_queue.insert(std::make_pair(min_distance[startWP], startWP));
+
+		while (!vertex_queue.empty()) {
+			double dist = vertex_queue.begin()->first;
+			std::string u = vertex_queue.begin()->second;
+			vertex_queue.erase(vertex_queue.begin());
+
+			// Visit each edge exiting u
+			const auto & neighbors = _waypoints[u];
+			for (auto neighbor_iter = neighbors.begin(); neighbor_iter != neighbors.end(); neighbor_iter++) {
+				std::string v = neighbor_iter->targetWP;
+				double weight = neighbor_iter->length;
+				double distance_through_u = dist + weight;
+				if (min_distance.find(v) == min_distance.end() || distance_through_u < min_distance[v]) {
+					vertex_queue.erase(std::make_pair(min_distance[v], v));
+
+					min_distance[v] = distance_through_u;
+					previous[v] = u;
+					vertex_queue.insert(std::make_pair(min_distance[v], v));
+				}
+				if (v == targetWP) {
+					break;
+				}
+			}
+		}
+
+		std::string target = targetWP;
+		std::vector<Vec3> path;
+		for (; target != startWP; target = previous[target]) {
+			path.insert(path.begin(), _waypoints[target].front().targetPosition);
+		}
+		path.insert(path.begin(), _waypoints[startWP].front().startPosition);
+		_paths.insert(std::make_pair(std::make_pair(startWP, targetWP), path));
+		return path;
 	}
 
 } /* namespace api */
