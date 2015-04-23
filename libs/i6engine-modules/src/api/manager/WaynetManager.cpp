@@ -146,9 +146,6 @@ namespace api {
 					previous[v] = u;
 					vertex_queue.insert(std::make_pair(min_distance[v], v));
 				}
-				if (v == targetWP) {
-					break;
-				}
 			}
 		}
 
