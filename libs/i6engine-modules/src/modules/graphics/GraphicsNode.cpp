@@ -543,14 +543,21 @@ namespace modules {
 	}
 
 	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
-		MovableText * movableText = new MovableText(_sceneNodes[targetID]->getAttachedObject(0), _manager->getSceneManager(), font);
-		movableText->setText(text);
-		movableText->setSize(size);
-		movableText->setColour(colour);
-		movableText->enable(true);
-		_movableTexts.insert(std::make_pair(coid, movableText));
-		_manager->addTicker(this);
-		_observer[targetID].push_back(coid);
+		if (_movableTexts.find(coid) != _movableTexts.end()) {
+			return;
+		}
+		try {
+			MovableText * movableText = new MovableText(_sceneNodes[targetID]->getAttachedObject(0), _manager->getSceneManager(), font);
+			movableText->setText(text);
+			movableText->setSize(size);
+			movableText->setColour(colour);
+			movableText->enable(true);
+			_movableTexts.insert(std::make_pair(coid, movableText));
+			_manager->addTicker(this);
+			_observer[targetID].push_back(coid);
+		} catch (Ogre::Exception & e) {
+			std::cout << e.what() << std::endl;
+		}
 	}
 
 	void GraphicsNode::updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {

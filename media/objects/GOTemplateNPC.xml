@@ -12,6 +12,7 @@
 		<Attribute name="linearFactor">1.0 1.0 1.0</Attribute>
 		<Attribute name="linearDamping">0.3</Attribute>
 		<Attribute name="angularDamping">1.0</Attribute>
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
 		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
 		<Attribute name="scale">1.0 1.0 1.0</Attribute>
 		<Attribute name="syncPrio">2</Attribute>

@@ -152,7 +152,7 @@ namespace api {
 		std::string target = targetWP;
 		std::vector<Vec3> path;
 		for (; target != startWP; target = previous[target]) {
-			path.insert(path.begin(), _waypoints[target].front().targetPosition);
+			path.insert(path.begin(), _waypoints[target].front().startPosition);
 		}
 		path.insert(path.begin(), _waypoints[startWP].front().startPosition);
 		_paths.insert(std::make_pair(std::make_pair(startWP, targetWP), path));

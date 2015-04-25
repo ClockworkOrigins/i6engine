@@ -13,7 +13,6 @@ namespace modules {
 			overlay = Ogre::OverlayManager::getSingleton().create("floatingTextOverlay");
 			overlay->show();
 		}
-
 		_container = dynamic_cast<Ogre::OverlayContainer *>(Ogre::OverlayManager::getSingleton().createOverlayElement("Panel", "c_" + p->getName()));
 
 		overlay->add2D(_container);

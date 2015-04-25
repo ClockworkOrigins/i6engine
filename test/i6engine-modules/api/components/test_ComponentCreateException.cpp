@@ -17,7 +17,6 @@
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/api/components/BillboardComponent.h"
-#include "i6engine/api/components/CameraComponent.h"
 #include "i6engine/api/components/FollowComponent.h"
 #include "i6engine/api/components/LifetimeComponent.h"
 #include "i6engine/api/components/LuminousAppearanceComponent.h"

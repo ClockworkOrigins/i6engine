@@ -55,7 +55,6 @@
 #include "i6engine/modules/physics/PhysicsController.h"
 
 #include "i6engine/editor/EditorMessageTypes.h"
-#include "i6engine/editor/components/ToggleWaynetComponent.h"
 #include "i6engine/editor/gui/FileDialogWidget.h"
 #include "i6engine/editor/gui/ListboxWidget.h"
 #include "i6engine/editor/gui/MenuBarWidget.h"
@@ -115,11 +114,6 @@ namespace editor {
 	}
 
 	void Editor::AfterInitialize() {
-		api::ObjectFacade * of = api::EngineController::GetSingletonPtr()->getObjectFacade();
-
-		// register Components
-		of->registerCTemplate("ToggleWaynet", boost::bind(&editor::components::ToggleWaynetComponent::createC, _1, _2));
-
 		api::GUIFacade * gf = api::EngineController::GetSingletonPtr()->getGUIFacade();
 
 		// register GUIWidgets
@@ -920,8 +914,14 @@ namespace editor {
 			if (go == nullptr) {
 				removables.insert(go);
 			} else if ((ssc->getPosition() - go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition()).length() > 50.0) {
-				go->getGOC(api::components::MeshAppearanceComponent)->setDie();
-				go->getGOC(api::components::MovableTextComponent)->setDie();
+				auto mac = go->getGOC(api::components::MeshAppearanceComponent);
+				if (mac != nullptr) {
+					mac->setDie();
+				}
+				auto mtc = go->getGOC(api::components::MovableTextComponent);
+				if (mtc != nullptr) {
+					mtc->setDie();
+				}
 				removables.insert(go);
 			}
 		}

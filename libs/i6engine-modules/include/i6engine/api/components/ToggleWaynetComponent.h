@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-#ifndef __I6ENGINE_EDITOR_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__
-#define __I6ENGINE_EDITOR_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__
+#ifndef __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__
+#define __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__
 
 #include "i6engine/api/components/Component.h"
 #include "i6engine/api/facades/MessageSubscriberFacade.h"
 
 namespace i6engine {
-namespace editor {
-namespace components {
+namespace api {
 
-	class ISIXE_EDITOR_API ToggleWaynetComponent : public api::Component, public api::MessageSubscriberFacade {
+	class ISIXE_MODULES_API ToggleWaynetComponent : public Component, public MessageSubscriberFacade {
 	public:
-		ToggleWaynetComponent(int64_t id, const api::attributeMap & params);
+		ToggleWaynetComponent(int64_t id, const attributeMap & params);
 
-		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
+		static ComPtr createC(int64_t id, const attributeMap & params);
 
 		void Init() override;
 
@@ -36,7 +35,7 @@ namespace components {
 
 		void Finalize() override;
 
-		api::attributeMap synchronize() const {
+		attributeMap synchronize() const {
 			return {};
 		}
 
@@ -44,18 +43,21 @@ namespace components {
 			return "ToggleWaynet";
 		}
 
-		std::vector<api::componentOptions> getComponentOptions() {
+		std::vector<componentOptions> getComponentOptions() {
 			return {};
 		}
 
-		void News(const api::GameMessage::Ptr & msg) override;
+		void News(const GameMessage::Ptr & msg) override;
+
+		void enable(bool enabled) {
+			_active = enabled;
+		}
 
 	private:
 		bool _active;
 	};
 
-} /* namespace components */
-} /* namespace editor */
+} /* namespace api */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_EDITOR_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__ */
+#endif /* __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__ */

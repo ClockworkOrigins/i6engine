@@ -33,9 +33,9 @@ namespace api {
 			return {};
 		}
 
-		void navigate(const Vec3 & from, const Vec3 & to);
+		void navigate(const Vec3 & to);
 
-		void navigate(const Vec3 & from, const std::string & to);
+		void navigate(const std::string & to);
 
 	private:
 		utils::weakPtr<MovementComponent, Component> _mc;

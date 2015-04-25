@@ -25,7 +25,7 @@ namespace components {
 
 	void HumanMovementComponent::forward() {
 		auto psc = _psc.get();
-		psc->applyCentralForce(Vec3(0.0, 0.0, -30.0), true);
+		psc->applyCentralForce(Vec3(0.0, 0.0, -50.0), true);
 	}
 
 	void HumanMovementComponent::backward() {

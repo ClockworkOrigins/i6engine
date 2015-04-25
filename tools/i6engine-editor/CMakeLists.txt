@@ -29,8 +29,6 @@ set(srcdir ./src)
 set(editorSrc
 	${srcdir}/Editor.cpp
 	
-	${srcdir}/components/ToggleWaynetComponent.cpp
-	
 	${srcdir}/gui/FileDialogWidget.cpp
 	${srcdir}/gui/ListboxWidget.cpp
 	${srcdir}/gui/MenuBarWidget.cpp

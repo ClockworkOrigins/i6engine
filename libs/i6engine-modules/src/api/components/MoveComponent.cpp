@@ -37,14 +37,14 @@ namespace api {
 					return;
 				}
 			}
-			double angle = Vec3::crossAngleSigned(math::rotateVector(Vec3(0.0, 0.0, 1.0), psc->getRotation()), _path[_index] - psc->getPosition(), Vec3(0, 1, 0));
+			double angle = Vec3::crossAngleSigned(math::rotateVector(Vec3(0.0, 0.0, -1.0), psc->getRotation()), _path[_index] - psc->getPosition(), Vec3(0, 1, 0));
 			auto mc = _mc.get();
 			if (angle > 0) {
 				mc->left();
 			} else if (angle < 0) {
 				mc->right();
 			}
-			if (std::abs(angle) < PI / 4.0) { // only move forward if the new target point is in a 45 degree range, otherwise only turn to the side just in place 
+			if (std::abs(angle) < PI / 4.0) { // only move forward if the new target point is in a 45 degree range, otherwise only turn to the side just in place
 				mc->forward();
 			}
 		}
@@ -58,13 +58,15 @@ namespace api {
 		return attributeMap();
 	}
 
-	void MoveComponent::navigate(const Vec3 & from, const Vec3 & to) {
-		_path = getOwnerGO()->getGOC<NavigationComponent>(components::ComponentTypes::NavigationComponent)->getPath(from, to);
+	void MoveComponent::navigate(const Vec3 & to) {
+		auto psc = getOwnerGO()->getGOC<PhysicalStateComponent>(components::ComponentTypes::PhysicalStateComponent);
+		_path = getOwnerGO()->getGOC<NavigationComponent>(components::ComponentTypes::NavigationComponent)->getPath(psc->getPosition(), to);
 		_index = 0;
 	}
 
-	void MoveComponent::navigate(const Vec3 & from, const std::string & to) {
-		_path = getOwnerGO()->getGOC<NavigationComponent>(components::ComponentTypes::NavigationComponent)->getPath(from, to);
+	void MoveComponent::navigate(const std::string & to) {
+		auto psc = getOwnerGO()->getGOC<PhysicalStateComponent>(components::ComponentTypes::PhysicalStateComponent);
+		_path = getOwnerGO()->getGOC<NavigationComponent>(components::ComponentTypes::NavigationComponent)->getPath(psc->getPosition(), to);
 		_index = 0;
 	}
 

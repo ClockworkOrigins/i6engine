@@ -65,6 +65,7 @@ namespace components {
 		WaynetNavigationComponent,
 		MoveComponent,
 		MovementComponent,
+		ToggleWaynetComponent,
 		ComponentTypesCount
 	};
 

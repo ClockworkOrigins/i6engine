@@ -10,6 +10,7 @@ Enhancements:
 	- added tool to convert textures to required format and textures for terrains
 	- objects now can be removed in level editor
 	- added finding of shortest path and moving to this if set
+	- added sample showing waynet navigation
 
 Fixes:
 	- RPG components now are also registered in SampleLeveleditor to be able to load RPG levels

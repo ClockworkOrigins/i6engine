@@ -1,45 +1,189 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Map>
-	<Section flags="Singleplayer">
-		<GameObject name="Floor" send="False">
-		</GameObject>
-		<GameObject name="Sun" send="False">
-		</GameObject>
-		<GameObject name="Waypoint" send="False">
-			<Component template="Waypoint">
-				<Attribute name="name">WP_01</Attribute>
-				<Attribute name="connections">WP_02;WP_03</Attribute>
-			</Component>
-			<Component template="StaticState">
-				<Attribute name="pos">0.0 0.1 0.0</Attribute>
-			</Component>
-		</GameObject>
-		<GameObject name="Waypoint" send="False">
-			<Component template="Waypoint">
-				<Attribute name="name">WP_02</Attribute>
-				<Attribute name="connections">WP_01</Attribute>
-			</Component>
-			<Component template="StaticState">
-				<Attribute name="pos">-10.0 0.1 5.0</Attribute>
-			</Component>
-		</GameObject>
-		<GameObject name="Waypoint" send="False">
-			<Component template="Waypoint">
-				<Attribute name="name">WP_03</Attribute>
-				<Attribute name="connections">WP_01;WP_04</Attribute>
-			</Component>
-			<Component template="StaticState">
-				<Attribute name="pos">10.0 0.1 5.0</Attribute>
-			</Component>
-		</GameObject>
-		<GameObject name="Waypoint" send="False">
-			<Component template="Waypoint">
-				<Attribute name="name">WP_04</Attribute>
-				<Attribute name="connections">WP_03</Attribute>
-			</Component>
-			<Component template="StaticState">
-				<Attribute name="pos">-10.0 0.1 -10.0</Attribute>
-			</Component>
-		</GameObject>
-	</Section>
+    <Section flags="Singleplayer">
+        <GameObject name="Floor" send="true">
+        </GameObject>
+        <GameObject name="Sun" send="true">
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">0 0.1 0</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_02;WP_03;WP_04</Attribute>
+                <Attribute name="name">WP_01</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-10 0.1 5</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_01;WP_04;WP_20;WP_09;WP_15</Attribute>
+                <Attribute name="name">WP_02</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">10 0.1 5</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_01;WP_04</Attribute>
+                <Attribute name="name">WP_03</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-10 0.1 -10</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_01;WP_08;WP_18;WP_02</Attribute>
+                <Attribute name="name">WP_04</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-100 0.1 -10</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_09;WP_18</Attribute>
+                <Attribute name="name">WP_05</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-10 0.1 -100</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_07;WP_12;WP_16</Attribute>
+                <Attribute name="name">WP_06</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-33 0.1 -50</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_18;WP_06;WP_08</Attribute>
+                <Attribute name="name">WP_07</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-10 0.1 -17</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_04;WP_07;WP_18</Attribute>
+                <Attribute name="name">WP_08</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-70 0.1 10</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_20;WP_05;WP_02</Attribute>
+                <Attribute name="name">WP_09</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">50 0.1 33</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_17;WP_14;WP_16</Attribute>
+                <Attribute name="name">WP_10</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">10 0.1 77</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_15;WP_17</Attribute>
+                <Attribute name="name">WP_11</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">60 0.1 -66</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_06;WP_19</Attribute>
+                <Attribute name="name">WP_12</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-42 0.1 42</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_15;WP_20</Attribute>
+                <Attribute name="name">WP_13</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">89 0.1 63</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_16;WP_17;WP_10</Attribute>
+                <Attribute name="name">WP_14</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">0 0.1 44</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_11;WP_13;WP_02</Attribute>
+                <Attribute name="name">WP_15</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">44 0.1 0</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_19;WP_14;WP_10;WP_06</Attribute>
+                <Attribute name="name">WP_16</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">54 0.1 67</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_11;WP_14;WP_10</Attribute>
+                <Attribute name="name">WP_17</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-76 0.1 -34</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_05;WP_07;WP_08;WP_04</Attribute>
+                <Attribute name="name">WP_18</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">67 0.1 -34</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_12;WP_16</Attribute>
+                <Attribute name="name">WP_19</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-47 0.1 38</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_03;WP_13;WP_09;WP_02</Attribute>
+                <Attribute name="name">WP_20</Attribute>
+            </Component>
+        </GameObject>
+    </Section>
 </Map>
