@@ -91,7 +91,7 @@ namespace modules {
 
 		Ogre::WindowEventUtilities::addWindowEventListener(_rWindow, this);
 
-		_sceneManager = _objRoot->createSceneManager(Ogre::ST_EXTERIOR_REAL_FAR);
+		_sceneManager = _objRoot->createSceneManager(Ogre::ST_GENERIC);
 
 		_sceneManager->addRenderQueueListener(new Ogre::OverlaySystem());
 
