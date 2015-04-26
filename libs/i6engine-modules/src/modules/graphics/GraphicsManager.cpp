@@ -91,7 +91,7 @@ namespace modules {
 
 		Ogre::WindowEventUtilities::addWindowEventListener(_rWindow, this);
 
-		_sceneManager = _objRoot->createSceneManager(Ogre::ST_GENERIC);
+		_sceneManager = _objRoot->createSceneManager(Ogre::ST_EXTERIOR_REAL_FAR);
 
 		_sceneManager->addRenderQueueListener(new Ogre::OverlaySystem());
 
@@ -129,7 +129,7 @@ namespace modules {
 			res2.push_back(r);
 		}
 
-		i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->setPossibleResolutions(res2);
+		api::EngineController::GetSingleton().getGraphicsFacade()->setPossibleResolutions(res2);
 
 		// initalize MotionBlur
 		Ogre::CompositorPtr comp3 = Ogre::CompositorManager::getSingleton().create("MotionBlur", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
@@ -437,8 +437,12 @@ namespace modules {
 			double size = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->size;
 			double inputScale = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->inputScale;
 			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->layers;
+			int64_t minX = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->minX;
+			int64_t minY = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->minY;
+			int64_t maxX = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->maxX;
+			int64_t maxY = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->maxY;
 
-			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, layers));
+			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, layers, minX, minY, maxX, maxY));
 		} else if (msg->getSubtype() == api::graphics::GraSkyBox) {
 			api::graphics::Graphics_SkyBox_Create * c = static_cast<api::graphics::Graphics_SkyBox_Create *>(msg->getContent());
 
@@ -516,9 +520,13 @@ namespace modules {
 			double size = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->size;
 			double inputScale = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->inputScale;
 			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->layers;
+			int64_t minX = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->minX;
+			int64_t minY = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->minY;
+			int64_t maxX = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->maxX;
+			int64_t maxY = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->maxY;
 
 			removeTerrain(msg->getContent()->getID());
-			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, layers));
+			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, layers, minX, minY, maxX, maxY));
 		} else if (msg->getSubtype() == api::graphics::GraShadowTechnique) {
 			api::graphics::ShadowTechnique st = dynamic_cast<api::graphics::Graphics_ShadowTechnique_Update *>(msg->getContent())->shadowTechnique;
 

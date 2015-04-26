@@ -59,7 +59,7 @@ namespace modules {
 		 * \return   nothing
 		 *
 		 */
-		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers);
+		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
 
 		/**
 		 * \brief Terrain::~Terrain()

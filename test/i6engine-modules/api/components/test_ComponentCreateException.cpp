@@ -202,7 +202,7 @@ TEST(Component, CreateException) {
 		}
 	}
 	{
-		attributeMap paramsTerrainAppearance = { { "heightmap", "blafoo" }, { "size", "0.0" }, { "inputScale", "0.0" }, { "layers", "0" } };
+		attributeMap paramsTerrainAppearance = { { "heightmap", "blafoo" }, { "size", "0.0" }, { "inputScale", "0.0" }, { "layers", "0" }, { "minX", "0" }, { "minY", "0" }, { "maxX", "0" }, { "maxY", "0" } };
 		i6engine::api::TerrainAppearanceComponent::createC(0, paramsTerrainAppearance);
 		for (auto it = paramsTerrainAppearance.begin(); it != paramsTerrainAppearance.end(); it++) {
 			auto newMap = paramsTerrainAppearance;

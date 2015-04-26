@@ -26,9 +26,8 @@
 namespace i6engine {
 namespace modules {
 
-	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _layers(layers) {
+	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _layers(layers) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-
 		_mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
 		_mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(_manager->getSceneManager(), Ogre::Terrain::ALIGN_X_Z, 513, _size);
@@ -37,8 +36,8 @@ namespace modules {
 
 		configureTerrainDefaults();
 
-		for (int64_t x = 0; x <= 0; ++x) {
-			for (int64_t y = 0; y <= 0; ++y) {
+		for (int64_t x = minX; x <= maxX; ++x) {
+			for (int64_t y = minY; y <= maxY; ++y) {
 				defineTerrain(x, y);
 			}
 		}
@@ -64,7 +63,6 @@ namespace modules {
 		OGRE_DELETE _mTerrainGroup;
 		OGRE_DELETE _mTerrainGlobals;
 	}
-
 
 	void Terrain::configureTerrainDefaults() {
 		ASSERT_THREAD_SAFETY_FUNCTION
@@ -104,7 +102,7 @@ namespace modules {
 
 			 getTerrainImage(x % 2 != 0, y % 2 != 0, img);
 
-			 _mTerrainGroup->defineTerrain(0, 0, &img);
+			 _mTerrainGroup->defineTerrain(long(x), long(y), &img);
 			 _mTerrainsImported = true;
 		}
 	}

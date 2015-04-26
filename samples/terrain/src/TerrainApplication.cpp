@@ -117,6 +117,10 @@ namespace sample {
 			params.insert(std::make_pair("layer_1_normal", "Rock.tga"));
 			params.insert(std::make_pair("layer_1_minHeight", "7.0")); // the minimum height this texture is added, not necessary for first layer because it marks a transition, so only starting from layer 2
 			params.insert(std::make_pair("layer_1_fadeDist", "2.0")); // the fadedist declares how fast the blending between the two layers is done
+			params.insert(std::make_pair("minX", "-2")); // the terrain consists of 20 terrain parts
+			params.insert(std::make_pair("maxX", "2"));
+			params.insert(std::make_pair("minY", "-2"));
+			params.insert(std::make_pair("maxY", "2"));
 
 			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("TerrainAppearance", params, "", false, false));
 

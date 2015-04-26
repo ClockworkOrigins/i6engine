@@ -69,6 +69,10 @@ namespace api {
 		double _size;
 		double _inputScale;
 		std::vector<std::tuple<double, std::string, std::string, double, double>> _layers;
+		int64_t _minX;
+		int64_t _maxX;
+		int64_t _minY;
+		int64_t _maxY;
 
 		void sendUpdateMessage();
 	};

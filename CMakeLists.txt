@@ -154,6 +154,7 @@ ENDIF(ISIXE_SCRIPTING)
 	find_package(EasyFind REQUIRED COMPONENTS OgreMain OgreOverlay OgrePaging OgreProperty OgreRTShaderSystem OgreTerrain)
 	include_directories(SYSTEM ${OGRE_INCLUDE_DIR})
 	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/)
+	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/Paging)
 	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/Terrain)
 
 #----------------------------------------------------

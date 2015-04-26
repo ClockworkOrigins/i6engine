@@ -34,6 +34,10 @@ namespace api {
 		Component::_objComponentID = components::TerrainAppearanceComponent;
 
 		uint32_t size = std::stoul(params.at("layers"));
+		_minX = std::stol(params.at("minX"));
+		_minY = std::stol(params.at("minY"));
+		_maxX = std::stol(params.at("maxX"));
+		_maxY = std::stol(params.at("maxY"));
 
 		for (uint32_t i = 0; i < size; i++) {
 			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_size not set!", params.find("layer_" + std::to_string(i) + "_size") != params.end());
@@ -61,17 +65,21 @@ namespace api {
 		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "size not set!", params.find("size") != params.end());
 		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "inputScale not set!", params.find("inputScale") != params.end());
 		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layers not set!", params.find("layers") != params.end());
+		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "minX not set!", params.find("minX") != params.end());
+		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "minY not set!", params.find("minY") != params.end());
+		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "maxX not set!", params.find("maxX") != params.end());
+		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "maxY not set!", params.find("maxY") != params.end());
 		return utils::make_shared<TerrainAppearanceComponent, Component>(id, params);
 	}
 
 	void TerrainAppearanceComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _layers), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _layers, _minX, _minY, _maxX, _maxY), i6engine::core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void TerrainAppearanceComponent::sendUpdateMessage() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Update, new graphics::Graphics_Terrain_Update(getID(), _heightmap, _size, _inputScale, _layers), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Update, new graphics::Graphics_Terrain_Update(getID(), _heightmap, _size, _inputScale, _layers, _minX, _minY, _maxX, _maxY), i6engine::core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -83,6 +91,10 @@ namespace api {
 		params["size"] = boost::lexical_cast<std::string>(_size);
 		params["inputScale"] = std::to_string(_inputScale);
 		params["layers"] = std::to_string(_layers.size());
+		params["minX"] = std::to_string(_minX);
+		params["minY"] = std::to_string(_minY);
+		params["maxX"] = std::to_string(_maxX);
+		params["maxY"] = std::to_string(_maxY);
 
 		for (size_t i = 0; i < _layers.size(); i++) {
 			params["layer_" + std::to_string(i) + "_size"] = std::to_string(std::get<0>(_layers[i]));
