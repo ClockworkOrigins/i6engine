@@ -111,7 +111,7 @@ namespace api {
 		GOPtr go = getOwnerGO();
 		if (go != nullptr && go->getGOC(components::NetworkSenderComponent) != nullptr) {
 			attributeMap am = synchronize();
-			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComMoverResync, core::Method::Update, new components::Component_MoverResync_Update(go->getID(), _id, am), i6engine::core::Subsystem::Object);
+			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComMoverResync, core::Method::Update, new components::Component_MoverResync_Update(go->getID(), _id, am), core::Subsystem::Object);
 			EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
 		}
 	}
@@ -239,7 +239,7 @@ namespace api {
 
 	void MoverInterpolateComponent::News(const GameMessage::Ptr & msg) {
 		uint16_t type = msg->getSubtype();
-		if (type == i6engine::api::components::ComMoverResync) {
+		if (type == api::components::ComMoverResync) {
 			attributeMap am = static_cast<components::Component_MoverResync_Update *>(msg->getContent())->attMap;
 			stop();
 

@@ -23,7 +23,7 @@
 namespace i6engine {
 namespace api {
 
-	WaynetNavigationComponent::WaynetNavigationComponent(const int64_t id, const i6engine::api::attributeMap & params) : NavigationComponent(id, params) {
+	WaynetNavigationComponent::WaynetNavigationComponent(const int64_t id, const api::attributeMap & params) : NavigationComponent(id, params) {
 		Component::_objComponentID = components::WaynetNavigationComponent;
 	}
 

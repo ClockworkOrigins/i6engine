@@ -26,7 +26,7 @@ namespace i6engine {
 namespace modules {
 
 	void DebugDrawer::drawLine(const btVector3 & from, const btVector3 & to, const btVector3 & col) {
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::GraphicsMessageType, api::graphics::GraLine, core::Method::Create, new api::graphics::Graphics_Line_Create(Vec3(from), Vec3(to)), i6engine::core::Subsystem::Unknown);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::GraphicsMessageType, api::graphics::GraLine, core::Method::Create, new api::graphics::Graphics_Line_Create(Vec3(from), Vec3(to)), core::Subsystem::Unknown);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}

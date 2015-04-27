@@ -78,7 +78,7 @@ namespace api {
 		dirZ.setZ(0);
 		dirZ.setX(0);
 
-		Vec3 projectileDir = i6engine::math::rotateVector(Vec3(0, 0, -1), ownPSC->getRotation());
+		Vec3 projectileDir = math::rotateVector(Vec3(0, 0, -1), ownPSC->getRotation());
 		double angleY = Vec3::crossAngleSigned(projectileDir, dirY, Vec3(0, 1, 0));
 		double angleZ = Vec3::crossAngleSigned(projectileDir, dirZ, Vec3(1, 0, 1).normalize());
 

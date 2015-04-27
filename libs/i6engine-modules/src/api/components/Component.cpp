@@ -59,7 +59,7 @@ namespace api {
 	}
 
 	void Component::setDie() const {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComCreate, core::Method::Delete, new components::Component_Create_Delete(_objOwnerID, getID(), getFamilyID()), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComCreate, core::Method::Delete, new components::Component_Create_Delete(_objOwnerID, getID(), getFamilyID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}

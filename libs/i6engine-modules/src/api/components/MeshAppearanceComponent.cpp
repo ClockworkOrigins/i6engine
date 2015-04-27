@@ -44,7 +44,7 @@ namespace api {
 	}
 
 	MeshAppearanceComponent::~MeshAppearanceComponent() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Delete, new graphics::Graphics_Mesh_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Delete, new graphics::Graphics_Mesh_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -59,7 +59,7 @@ namespace api {
 	}
 
 	void MeshAppearanceComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Create, new graphics::Graphics_Mesh_Create(_objOwnerID, getID(), _meshName, _isVisible, _position, _rotation, _scale), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Create, new graphics::Graphics_Mesh_Create(_objOwnerID, getID(), _meshName, _isVisible, _position, _rotation, _scale), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -80,7 +80,7 @@ namespace api {
 	}
 
 	void MeshAppearanceComponent::sendUpdateMessage() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Update, new graphics::Graphics_Mesh_Update(_objOwnerID, getID(), _meshName, _isVisible), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Update, new graphics::Graphics_Mesh_Update(_objOwnerID, getID(), _meshName, _isVisible), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -89,32 +89,32 @@ namespace api {
 		_material = materialName;
 
 		if (!_material.empty()) {
-			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMaterial, core::Method::Update, new graphics::Graphics_Material_Update(getID(), _objOwnerID, materialName), i6engine::core::Subsystem::Object);
+			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMaterial, core::Method::Update, new graphics::Graphics_Material_Update(getID(), _objOwnerID, materialName), core::Subsystem::Object);
 
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 		}
 	}
 
 	void MeshAppearanceComponent::setCustomParameter(uint32_t num, const Vec4 & value) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCusParam, core::Method::Update, new graphics::Graphics_CusParam_Update(getID(), _objOwnerID, num, value), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCusParam, core::Method::Update, new graphics::Graphics_CusParam_Update(getID(), _objOwnerID, num, value), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void MeshAppearanceComponent::playAnimation(const std::string & anim, bool looping, double offsetPercent) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraPlayAnimation, core::Method::Update, new graphics::Graphics_PlayAnimation_Update(getID(), _objOwnerID, anim, looping, offsetPercent), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraPlayAnimation, core::Method::Update, new graphics::Graphics_PlayAnimation_Update(getID(), _objOwnerID, anim, looping, offsetPercent), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void MeshAppearanceComponent::setAnimationSpeed(double animationSpeed) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraSetAnimationSpeed, core::Method::Update, new graphics::Graphics_SetAnimationSpeed_Update(getID(), _objOwnerID, animationSpeed), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraSetAnimationSpeed, core::Method::Update, new graphics::Graphics_SetAnimationSpeed_Update(getID(), _objOwnerID, animationSpeed), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void MeshAppearanceComponent::stopAnimation() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraStopAnimation, core::Method::Update, new graphics::Graphics_StopAnimation_Update(getID(), _objOwnerID), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraStopAnimation, core::Method::Update, new graphics::Graphics_StopAnimation_Update(getID(), _objOwnerID), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}

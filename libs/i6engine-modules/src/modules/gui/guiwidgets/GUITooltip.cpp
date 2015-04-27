@@ -35,7 +35,7 @@ namespace modules {
 			lb->removeItem(lb->getListboxItemFromIndex(0));
 		}
 
-		auto vec = i6engine::utils::split(text, "~");
+		auto vec = utils::split(text, "~");
 
 		for (std::string s : vec) {
 			lb->addItem(new CEGUI::ListboxTextItem(s));

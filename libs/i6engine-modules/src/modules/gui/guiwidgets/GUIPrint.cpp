@@ -49,7 +49,7 @@ namespace modules {
 			_realPosX = guiP->x;
 			_realPosY = guiP->y;
 			setText(_text);
-		} else if (type == i6engine::api::gui::GuiSetSize) {
+		} else if (type == api::gui::GuiSetSize) {
 			api::gui::GUI_Size * g = static_cast<api::gui::GUI_Size *>(data);
 			setSize(g->width, g->height);
 			setText(_text);
@@ -95,14 +95,14 @@ namespace modules {
 
 	void GUIPrint::setTimeToDie(const int64_t lifetime) {
 		_lifeTime = lifetime;
-		_startTime = i6engine::api::EngineController::GetSingleton().getCurrentTime();
+		_startTime = api::EngineController::GetSingleton().getCurrentTime();
 	}
 
 	void GUIPrint::tick() {
 		if (_lifeTime == -1) {
 			return;
 		}
-		if (uint64_t(int64_t(_startTime) + _lifeTime) <= i6engine::api::EngineController::GetSingleton().getCurrentTime()) {
+		if (uint64_t(int64_t(_startTime) + _lifeTime) <= api::EngineController::GetSingleton().getCurrentTime()) {
 			api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget(_name);
 		}
 	}

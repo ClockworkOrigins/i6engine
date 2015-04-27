@@ -644,8 +644,8 @@ namespace modules {
 
 			// Inject the time since the last tick into CEGUI to allow calculations based on the frame time (fading etc.).
 			// Inject the frame time of the graphics subsystem in seconds.
-			static uint64_t lastTime = i6engine::api::EngineController::GetSingleton().getCurrentTime();
-			uint64_t cT = i6engine::api::EngineController::GetSingleton().getCurrentTime();
+			static uint64_t lastTime = api::EngineController::GetSingleton().getCurrentTime();
+			uint64_t cT = api::EngineController::GetSingleton().getCurrentTime();
 			CEGUI::System::getSingleton().injectTimePulse((cT - lastTime) / 1000000.0f);
 			lastTime = cT;
 		}

@@ -17,7 +17,7 @@ namespace modules {
 	GUIImageButton::~GUIImageButton() {
 	}
 
-	void GUIImageButton::update(uint16_t type, i6engine::api::gui::GUIUpdateMessageStruct * data) {
+	void GUIImageButton::update(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
 		if (type == api::gui::GuiSetProperty) {
 			api::gui::GUI_SetProperty * g = dynamic_cast<api::gui::GUI_SetProperty *>(data);
 			_window->setProperty(g->prop, g->value);

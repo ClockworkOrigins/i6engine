@@ -92,7 +92,7 @@ namespace api {
 	void SpawnpointComponent::setState(bool b) {
 		_state = b;
 
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComSpawnpoint, core::Method::Update, new components::Component_Spawnpoint_Update(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComSpawnpoint, core::Method::Update, new components::Component_Spawnpoint_Update(_objOwnerID, getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->registerTimer(2000000, [msg]() {
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
@@ -103,7 +103,7 @@ namespace api {
 	void SpawnpointComponent::News(const GameMessage::Ptr & msg) {
 		uint16_t type = msg->getSubtype();
 
-		if (type == i6engine::api::components::ComSpawnpoint) {
+		if (type == api::components::ComSpawnpoint) {
 			setState(true);
 		} else {
 			ISIXE_THROW_FAILURE("SpawnpointComponent", "Unknown message type");

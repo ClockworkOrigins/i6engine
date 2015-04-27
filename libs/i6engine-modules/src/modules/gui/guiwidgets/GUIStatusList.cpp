@@ -62,7 +62,7 @@ namespace modules {
 		CEGUI::ListboxTextItem * lbi = new CEGUI::ListboxTextItem(message);
 		lb->addItem(lbi);
 
-		_startTime = i6engine::api::EngineController::GetSingleton().getCurrentTime();
+		_startTime = api::EngineController::GetSingleton().getCurrentTime();
 
 		if (lb->getItemCount() > _amount) {
 			lb->removeItem(lb->getListboxItemFromIndex(0));
@@ -87,7 +87,7 @@ namespace modules {
 			enableTicking(false);
 			return; // -1 means infinite
 		}
-		if (uint64_t(int64_t(_startTime) + _lifetime) <= i6engine::api::EngineController::GetSingleton().getCurrentTime()) {
+		if (uint64_t(int64_t(_startTime) + _lifetime) <= api::EngineController::GetSingleton().getCurrentTime()) {
 			if (lb->getItemCount() > 0) {
 				lb->removeItem(lb->getListboxItemFromIndex(0));
 			}

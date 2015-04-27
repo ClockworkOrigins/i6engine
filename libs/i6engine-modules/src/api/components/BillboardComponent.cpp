@@ -56,25 +56,25 @@ namespace api {
 	}
 
 	void BillboardComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraBillboardSet, core::Method::Create, new graphics::Graphics_BillboardSet_Create(_objOwnerID, getID(), _material, _width, _height, _billboardOrigin), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraBillboardSet, core::Method::Create, new graphics::Graphics_BillboardSet_Create(_objOwnerID, getID(), _material, _width, _height, _billboardOrigin), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void BillboardComponent::Finalize() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraBillboardSet, core::Method::Delete, new graphics::Graphics_BillboardSet_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraBillboardSet, core::Method::Delete, new graphics::Graphics_BillboardSet_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void BillboardComponent::createOrUpdateBillboard(const std::string & identifier, const Vec3 & offset, double width, double height, double u0, double v0, double u1, double v1) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraBillboard, core::Method::Update, new graphics::Graphics_Billboard_Update(_objOwnerID, getID(), identifier, offset, width, height, u0, v0, u1, v1), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraBillboard, core::Method::Update, new graphics::Graphics_Billboard_Update(_objOwnerID, getID(), identifier, offset, width, height, u0, v0, u1, v1), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void BillboardComponent::deleteBillboard(const std::string & identifier) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraBillboardRemove, core::Method::Update, new graphics::Graphics_BillboardRemove_Update(_objOwnerID, getID(), identifier), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraBillboardRemove, core::Method::Update, new graphics::Graphics_BillboardRemove_Update(_objOwnerID, getID(), identifier), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}

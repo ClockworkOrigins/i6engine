@@ -60,11 +60,11 @@ namespace api {
 		if (psc->getPosition() != _position) {
 			_position = psc->getPosition();
 			_rotation = psc->getRotation();
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioListener, core::Method::Update, new audio::Audio_Listener_Update(_position, _rotation, psc->getLinearVelocity()), i6engine::core::Subsystem::Object));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioListener, core::Method::Update, new audio::Audio_Listener_Update(_position, _rotation, psc->getLinearVelocity()), core::Subsystem::Object));
 		} else if (psc->getRotation() != _rotation) {
 			_position = psc->getPosition();
 			_rotation = psc->getRotation();
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioListener, core::Method::Update, new audio::Audio_Listener_Update(_position, _rotation, psc->getLinearVelocity()), i6engine::core::Subsystem::Object));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioListener, core::Method::Update, new audio::Audio_Listener_Update(_position, _rotation, psc->getLinearVelocity()), core::Subsystem::Object));
 		}
 	}
 

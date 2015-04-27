@@ -27,7 +27,7 @@
 namespace i6engine {
 namespace api {
 
-	WaypointComponent::WaypointComponent(const int64_t id, const i6engine::api::attributeMap & params) : Component(id, params), _name(params.at("name")), _connections() {
+	WaypointComponent::WaypointComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _name(params.at("name")), _connections() {
 		Component::_objFamilyID = components::WaypointComponent;
 		Component::_objComponentID = components::WaypointComponent;
 
@@ -38,7 +38,7 @@ namespace api {
 	WaypointComponent::~WaypointComponent() {
 	}
 
-	ComPtr WaypointComponent::createC(const int64_t id, const i6engine::api::attributeMap & params) {
+	ComPtr WaypointComponent::createC(const int64_t id, const api::attributeMap & params) {
 		ISIXE_THROW_API_COND("WaypointComponent", "name not set!", params.find("name") != params.end());
 		ISIXE_THROW_API_COND("WaypointComponent", "connections not set!", params.find("connections") != params.end());
 		return utils::make_shared<WaypointComponent, Component>(id, params);

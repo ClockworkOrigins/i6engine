@@ -52,21 +52,21 @@ namespace api {
 	}
 
 	void ParticleEmitterComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Create, new graphics::Graphics_Particle_Create(_objOwnerID, getID(), _emitterName, _pos), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Create, new graphics::Graphics_Particle_Create(_objOwnerID, getID(), _emitterName, _pos), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void ParticleEmitterComponent::Finalize() {
 		if (_fadeOut) {
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticleFadeOut, core::Method::Update, new graphics::Graphics_ParticleFadeOut_Update(_objOwnerID, getID()), i6engine::core::Subsystem::Object));
-			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticleFadeOut, core::Method::Update, new graphics::Graphics_ParticleFadeOut_Update(_objOwnerID, getID()), core::Subsystem::Object));
+			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 			EngineController::GetSingleton().registerTimer(_fadeOutCooldown, [msg]() {
 				EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 				return false;
 			}, false, 1);
 		} else {
-			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 		}
 	}

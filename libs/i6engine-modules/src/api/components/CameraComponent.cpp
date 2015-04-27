@@ -57,7 +57,7 @@ namespace api {
 	}
 
 	CameraComponent::~CameraComponent() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Delete, new graphics::Graphics_Camera_Delete(_objOwnerID), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Delete, new graphics::Graphics_Camera_Delete(_objOwnerID), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -71,7 +71,7 @@ namespace api {
 	}
 
 	void CameraComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Create, new graphics::Graphics_Camera_Create(_objOwnerID, getID(), _position, _lookAt, _nearClip, _fov), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Create, new graphics::Graphics_Camera_Create(_objOwnerID, getID(), _position, _lookAt, _nearClip, _fov), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -146,7 +146,7 @@ namespace api {
 			return;
 		}
 
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, _position, _lookAt, _nearClip, _fov), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, _position, _lookAt, _nearClip, _fov), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -156,7 +156,7 @@ namespace api {
 			return;
 		}
 
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraViewport, core::Method::Update, new graphics::Graphics_Viewport_Update(_objOwnerID, getID(), _left, _top, _width, _height, _red, _green, _blue, _alpha), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraViewport, core::Method::Update, new graphics::Graphics_Viewport_Update(_objOwnerID, getID(), _left, _top, _width, _height, _red, _green, _blue, _alpha), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -166,7 +166,7 @@ namespace api {
 			return;
 		}
 
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraFrustum, core::Method::Update, new graphics::Graphics_CameraFrustum_Update(_objOwnerID, getID(), _frustumLeft, _frustumRight, _frustumTop, _frustumBottom), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraFrustum, core::Method::Update, new graphics::Graphics_CameraFrustum_Update(_objOwnerID, getID(), _frustumLeft, _frustumRight, _frustumTop, _frustumBottom), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -245,7 +245,7 @@ namespace api {
 	}
 
 	void CameraComponent::enableCompositor(const std::string & compositor, bool enabled) {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCompositor, core::Method::Update, new graphics::Graphics_Compositor_Update(_objOwnerID, getID(), compositor, enabled), i6engine::core::Subsystem::Object));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCompositor, core::Method::Update, new graphics::Graphics_Compositor_Update(_objOwnerID, getID(), compositor, enabled), core::Subsystem::Object));
 	}
 
 } /* namespace api */

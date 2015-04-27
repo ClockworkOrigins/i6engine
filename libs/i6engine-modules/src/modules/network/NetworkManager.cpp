@@ -94,7 +94,7 @@ namespace modules {
 		msg->getContent()->_sender = api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP();
 #ifdef ISIXE_PROFILING
 		msg->insertTimestamp("NetworkManager -> m2etis");
-		if (i6engine::utils::profiling::timeStamp) {
+		if (utils::profiling::timeStamp) {
 			ISIXE_LOG_INFO("Network", "Send:" << msg->getMessageInfo() << " " << msg->getTimestamps());
 		}
 #endif /* ISIXE_PROFILING */
@@ -155,7 +155,7 @@ namespace modules {
 		core::IPKey p = m->getContent()->_sender;
 		if (api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP() == p) {
 #ifdef ISIXE_PROFILING
-			if (i6engine::utils::profiling::timeStamp) {
+			if (utils::profiling::timeStamp) {
 				ISIXE_LOG_INFO("Network", "Receive:" << m->getMessageInfo() << " " << m->getTimestamps());
 			}
 #endif /* ISIXE_PROFILING */
@@ -173,14 +173,14 @@ namespace modules {
 		uint32_t a = _counterReceived;
 		_counterReceived = 0;
 		if (a != 0) {
-			if (i6engine::utils::profiling::numberMessages) {
+			if (utils::profiling::numberMessages) {
 				ISIXE_LOG_INFO("Messages received", a);
 			}
 		}
 		a = _counterSent;
 		_counterSent = 0;
 		if (a != 0) {
-			if (i6engine::utils::profiling::numberMessages) {
+			if (utils::profiling::numberMessages) {
 				ISIXE_LOG_INFO("Messages sent", a);
 			}
 		}
@@ -192,7 +192,7 @@ namespace modules {
 		uint64_t l = cT - _lastTickTime;
 		if (l > 1000000) {
 			if (_sendPing && api::EngineController::GetSingletonPtr()->getType() == api::GameType::SERVER) {
-				api::GameMessage::Ptr msg(new api::GameMessage(api::messages::NetworkMessageType, api::network::NetPingRequest, core::Method::Update, new api::network::Network_Ping_Update(core::IPKey(), cT), i6engine::core::Subsystem::Network));
+				api::GameMessage::Ptr msg(new api::GameMessage(api::messages::NetworkMessageType, api::network::NetPingRequest, core::Method::Update, new api::network::Network_Ping_Update(core::IPKey(), cT), core::Subsystem::Network));
 				publish(PINGREQUEST_CHANNEL, msg);
 			}
 			_lastTickTime = cT;

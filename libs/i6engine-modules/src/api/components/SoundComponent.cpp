@@ -59,14 +59,14 @@ namespace api {
 		auto psc = getOwnerGO()->getGOC<PhysicalStateComponent>(components::PhysicalStateComponent);
 		_position = psc->getPosition();
 		Vec3 position = psc->getPosition() + math::rotateVector(_offset, psc->getRotation());
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(getID(), _file, _looping, _maxDist, position, _direction, _cacheable), i6engine::core::Subsystem::Object));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(getID(), _file, _looping, _maxDist, position, _direction, _cacheable), core::Subsystem::Object));
 		_psc = psc;
 	}
 
 	void SoundComponent::Finalize() {
 		removeTicker();
 
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Delete, new audio::Audio_Node_Delete(getID()), i6engine::core::Subsystem::Object));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Delete, new audio::Audio_Node_Delete(getID()), core::Subsystem::Object));
 	}
 
 	void SoundComponent::Tick() {
@@ -74,7 +74,7 @@ namespace api {
 		if (psc->getPosition() != _position) {
 			_position = psc->getPosition();
 			Vec3 position = _position + math::rotateVector(_offset, psc->getRotation());
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioPosition, core::Method::Update, new audio::Audio_Position_Update(getID(), position), i6engine::core::Subsystem::Object));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioPosition, core::Method::Update, new audio::Audio_Position_Update(getID(), position), core::Subsystem::Object));
 		}
 	}
 

@@ -35,15 +35,15 @@ namespace api {
 	}
 
 	void GUIWidget::update(uint16_t type, gui::GUIUpdateMessageStruct * message) {
-		if (type == i6engine::api::gui::GuiSetPosition) {
+		if (type == api::gui::GuiSetPosition) {
 			gui::GUI_Position * g = static_cast<gui::GUI_Position *>(message);
 			setPosition(g->x, g->y);
 			_originalPos.setX(float(g->x));
 			_originalPos.setY(float(g->y));
-		} else if (type == i6engine::api::gui::GuiSetSize) {
+		} else if (type == api::gui::GuiSetSize) {
 			gui::GUI_Size * g = static_cast<gui::GUI_Size *>(message);
 			setSize(g->width, g->height);
-		} else if (type == i6engine::api::gui::GuiSetVisible) {
+		} else if (type == api::gui::GuiSetVisible) {
 			bool vis = static_cast<gui::GUI_Visibility *>(message)->visible;
 			_window->setVisible(vis);
 		} else if (type == gui::GUIMessageTypes::GuiSetDropTarget) {
@@ -65,7 +65,7 @@ namespace api {
 			_window->subscribeEvent(CEGUI::Window::EventMouseEntersArea, CEGUI::Event::Subscriber(&GUIWidget::mouseEnter, this));
 			_window->subscribeEvent(CEGUI::Window::EventMouseLeavesArea, CEGUI::Event::Subscriber(&GUIWidget::mouseLeave, this));
 			if (_tooltipActive) {
-				i6engine::api::EngineController::GetSingleton().getGUIFacade()->setText(_name + "_Tooltip", _tooltip);
+				api::EngineController::GetSingleton().getGUIFacade()->setText(_name + "_Tooltip", _tooltip);
 			}
 		} else if (type == gui::GUIMessageTypes::GuiSetProperty) {
 			_window->setProperty(dynamic_cast<gui::GUI_SetProperty *>(message)->prop, dynamic_cast<gui::GUI_SetProperty *>(message)->value);
@@ -171,9 +171,9 @@ namespace api {
 			return true;
 		}
 		_tooltipActive = true;
-		i6engine::api::EngineController::GetSingleton().getGUIFacade()->createWidget(_name + "_Tooltip", "GUITooltip", "");
-		i6engine::api::EngineController::GetSingleton().getGUIFacade()->setSize(_name + "_Tooltip", 0.3, 0.05);
-		i6engine::api::EngineController::GetSingleton().getGUIFacade()->setText(_name + "_Tooltip", _tooltip);
+		api::EngineController::GetSingleton().getGUIFacade()->createWidget(_name + "_Tooltip", "GUITooltip", "");
+		api::EngineController::GetSingleton().getGUIFacade()->setSize(_name + "_Tooltip", 0.3, 0.05);
+		api::EngineController::GetSingleton().getGUIFacade()->setText(_name + "_Tooltip", _tooltip);
 		return true;
 	}
 
@@ -186,7 +186,7 @@ namespace api {
 			return true;
 		}
 		_tooltipActive = false;
-		i6engine::api::EngineController::GetSingleton().getGUIFacade()->deleteWidget(_name + "_Tooltip");
+		api::EngineController::GetSingleton().getGUIFacade()->deleteWidget(_name + "_Tooltip");
 		return true;
 	}
 

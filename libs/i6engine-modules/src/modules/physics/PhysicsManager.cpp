@@ -49,113 +49,113 @@
 #include "OGRE/OgreMeshManager.h"
 #include "OGRE/OgreRoot.h"
 
-struct FilterCallback : public btOverlapFilterCallback {
-	// return true when pairs need collision
-	virtual bool needBroadphaseCollision(btBroadphaseProxy * proxy0, btBroadphaseProxy * proxy1) const {
-		bool collides = (proxy0->m_collisionFilterGroup & proxy1->m_collisionFilterMask) != 0;
-		collides = collides && (proxy1->m_collisionFilterGroup & proxy0->m_collisionFilterMask);
-
-		// add some additional logic here that modified 'collides'
-		return true;
-	}
-};
-
-// TODO: move to memberfunction
-// TODO: only save contact pair if objects really collide
-bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colObj0, int partId0, int index0, const btCollisionObject * colObj1, int partId1, int index1) {
-	// do nothing only in multiplayer clients
-	if (i6engine::api::EngineController::GetSingletonPtr()->getType() != i6engine::api::GameType::SERVER && i6engine::api::EngineController::GetSingletonPtr()->getType() != i6engine::api::GameType::SINGLEPLAYER) {
-		return false;
-	}
-
-	i6engine::modules::PhysicsNode * a = reinterpret_cast<i6engine::modules::PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj0)->getCollisionObject()->getUserPointer());
-	i6engine::modules::PhysicsNode * b = reinterpret_cast<i6engine::modules::PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj1)->getCollisionObject()->getUserPointer());
-
-	if (a->getCrashMask() & b->getCrashType()) {
-		// A collides with B
-		if (i6engine::modules::PhysicsManager::_collisionPairs.find(std::make_pair(a, b)) == i6engine::modules::PhysicsManager::_collisionPairs.end()) {
-			i6engine::modules::PhysicsManager::_collisionPairs[std::make_pair(a, b)] = i6engine::modules::PhysicsManager::_tickCount;
-
-			if (a->getShatterInterest() & i6engine::api::ShatterInterest::START) {
-				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), i6engine::api::ShatterInterest::START), i6engine::core::Subsystem::Physic);
-				// TODO: (Michael) improve this hack
-				i6engine::api::GOPtr objA = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
-				if (objA == nullptr) {
-					return false;
-				}
-				i6engine::core::IPKey aOwner = objA->getOwner();
-				if (aOwner == i6engine::api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-					i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-				} else {
-					i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-					i6engine::api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
-				}
-			}
-		} else {
-			i6engine::modules::PhysicsManager::_collisionPairs[std::make_pair(a, b)] = i6engine::modules::PhysicsManager::_tickCount;
-
-			if (a->getShatterInterest() & i6engine::api::ShatterInterest::ALWAYS) {
-				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), i6engine::api::ShatterInterest::ALWAYS), i6engine::core::Subsystem::Physic);
-				// TODO: (Michael) improve this hack
-				i6engine::api::GOPtr objA = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
-				if (objA == nullptr) {
-					return false;
-				}
-				i6engine::core::IPKey aOwner = objA->getOwner();
-				if (aOwner == i6engine::api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-					i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-				} else {
-					i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-					i6engine::api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
-				}
-			}
-		}
-	}
-	if (b->getCrashMask() & a->getCrashType()) {
-		// B collides with A
-		if (i6engine::modules::PhysicsManager::_collisionPairs.find(std::make_pair(b, a)) == i6engine::modules::PhysicsManager::_collisionPairs.end()) {
-			i6engine::modules::PhysicsManager::_collisionPairs[std::make_pair(b, a)] = i6engine::modules::PhysicsManager::_tickCount;
-
-			if (b->getShatterInterest() & i6engine::api::ShatterInterest::START) {
-				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), i6engine::api::ShatterInterest::START), i6engine::core::Subsystem::Physic);
-				// TODO: (Michael) improve this hack
-				i6engine::api::GOPtr objB = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
-				if (objB == nullptr) {
-					return false;
-				}
-				i6engine::core::IPKey bOwner = objB->getOwner();
-				if (bOwner == i6engine::api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-					i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-				} else {
-					i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-					i6engine::api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
-				}
-			}
-		} else {
-			i6engine::modules::PhysicsManager::_collisionPairs[std::make_pair(b, a)] = i6engine::modules::PhysicsManager::_tickCount;
-
-			if (b->getShatterInterest() & i6engine::api::ShatterInterest::ALWAYS) {
-				i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ComponentMessageType, i6engine::api::components::ComShatter, i6engine::core::Method::Update, new i6engine::api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), i6engine::api::ShatterInterest::ALWAYS), i6engine::core::Subsystem::Physic);
-				// TODO: (Michael) improve this hack
-				i6engine::api::GOPtr objB = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
-				if (objB == nullptr) {
-					return false;
-				}
-				i6engine::core::IPKey bOwner = objB->getOwner();
-				if (bOwner == i6engine::api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-					i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-				} else {
-					i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-					i6engine::api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
-				}
-			}
-		}
-	}
-	return false;
-}
-
 namespace i6engine {
-namespace modules {
+	namespace modules {
+
+		struct FilterCallback : public btOverlapFilterCallback {
+			// return true when pairs need collision
+			virtual bool needBroadphaseCollision(btBroadphaseProxy * proxy0, btBroadphaseProxy * proxy1) const {
+				bool collides = (proxy0->m_collisionFilterGroup & proxy1->m_collisionFilterMask) != 0;
+				collides = collides && (proxy1->m_collisionFilterGroup & proxy0->m_collisionFilterMask);
+
+				// add some additional logic here that modified 'collides'
+				return true;
+			}
+		};
+
+		// TODO: move to memberfunction
+		// TODO: only save contact pair if objects really collide
+		bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colObj0, int partId0, int index0, const btCollisionObject * colObj1, int partId1, int index1) {
+			// do nothing only in multiplayer clients
+			if (api::EngineController::GetSingletonPtr()->getType() != api::GameType::SERVER && api::EngineController::GetSingletonPtr()->getType() != api::GameType::SINGLEPLAYER) {
+				return false;
+			}
+
+			PhysicsNode * a = reinterpret_cast<PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj0)->getCollisionObject()->getUserPointer());
+			PhysicsNode * b = reinterpret_cast<PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj1)->getCollisionObject()->getUserPointer());
+
+			if (a->getCrashMask() & b->getCrashType()) {
+				// A collides with B
+				if (PhysicsManager::_collisionPairs.find(std::make_pair(a, b)) == PhysicsManager::_collisionPairs.end()) {
+					PhysicsManager::_collisionPairs[std::make_pair(a, b)] = PhysicsManager::_tickCount;
+
+					if (a->getShatterInterest() & api::ShatterInterest::START) {
+						api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), api::ShatterInterest::START), core::Subsystem::Physic);
+						// TODO: (Michael) improve this hack
+						api::GOPtr objA = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
+						if (objA == nullptr) {
+							return false;
+						}
+						core::IPKey aOwner = objA->getOwner();
+						if (aOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+						} else {
+							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+							api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
+						}
+					}
+				} else {
+					PhysicsManager::_collisionPairs[std::make_pair(a, b)] = PhysicsManager::_tickCount;
+
+					if (a->getShatterInterest() & api::ShatterInterest::ALWAYS) {
+						api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), api::ShatterInterest::ALWAYS), core::Subsystem::Physic);
+						// TODO: (Michael) improve this hack
+						api::GOPtr objA = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
+						if (objA == nullptr) {
+							return false;
+						}
+						core::IPKey aOwner = objA->getOwner();
+						if (aOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+						} else {
+							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+							api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
+						}
+					}
+				}
+			}
+			if (b->getCrashMask() & a->getCrashType()) {
+				// B collides with A
+				if (PhysicsManager::_collisionPairs.find(std::make_pair(b, a)) == PhysicsManager::_collisionPairs.end()) {
+					PhysicsManager::_collisionPairs[std::make_pair(b, a)] = PhysicsManager::_tickCount;
+
+					if (b->getShatterInterest() & api::ShatterInterest::START) {
+						api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), api::ShatterInterest::START), core::Subsystem::Physic);
+						// TODO: (Michael) improve this hack
+						api::GOPtr objB = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
+						if (objB == nullptr) {
+							return false;
+						}
+						core::IPKey bOwner = objB->getOwner();
+						if (bOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+						} else {
+							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+							api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
+						}
+					}
+				} else {
+					PhysicsManager::_collisionPairs[std::make_pair(b, a)] = PhysicsManager::_tickCount;
+
+					if (b->getShatterInterest() & api::ShatterInterest::ALWAYS) {
+						api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), api::ShatterInterest::ALWAYS), core::Subsystem::Physic);
+						// TODO: (Michael) improve this hack
+						api::GOPtr objB = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
+						if (objB == nullptr) {
+							return false;
+						}
+						core::IPKey bOwner = objB->getOwner();
+						if (bOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+						} else {
+							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+							api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
+						}
+					}
+				}
+			}
+			return false;
+		}
 
 	std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t> PhysicsManager::_collisionPairs = std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t>();
 
@@ -241,13 +241,13 @@ namespace modules {
 				for (std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t>::iterator it = _collisionPairs.begin(); it != _collisionPairs.end();) {
 					if (it->second < _tickCount) {
 						if (it->first.first->getShatterInterest() & api::ShatterInterest::END) {
-							api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(it->first.first->getID(), it->first.first->getCompID(), it->first.second->getID(), api::ShatterInterest::END), i6engine::core::Subsystem::Physic);
+							api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(it->first.first->getID(), it->first.first->getCompID(), it->first.second->getID(), api::ShatterInterest::END), core::Subsystem::Physic);
 							// TODO: (Michael) improve this hack
 							core::IPKey aOwner = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(it->first.first->getID())->getOwner();
 							if (aOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 								api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 							} else {
-								i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+								api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 								api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
 							}
 						}

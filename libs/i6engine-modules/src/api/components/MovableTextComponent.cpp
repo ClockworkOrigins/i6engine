@@ -56,11 +56,11 @@ namespace api {
 	}
 
 	void MovableTextComponent::Init() {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Create, new graphics::Graphics_MovableText_Create(_objOwnerID, getID(), getOwnerGO()->getGOC(components::ComponentTypes::MeshAppearanceComponent)->getID(), _font, _text, _size, _colour), i6engine::core::Subsystem::Object));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Create, new graphics::Graphics_MovableText_Create(_objOwnerID, getID(), getOwnerGO()->getGOC(components::ComponentTypes::MeshAppearanceComponent)->getID(), _font, _text, _size, _colour), core::Subsystem::Object));
 	}
 
 	void MovableTextComponent::Finalize() {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Delete, new graphics::Graphics_MovableText_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Delete, new graphics::Graphics_MovableText_Delete(_objOwnerID, getID()), core::Subsystem::Object));
 	}
 
 	attributeMap MovableTextComponent::synchronize() const {
@@ -84,7 +84,7 @@ namespace api {
 
 	void MovableTextComponent::setText(const std::string & text) {
 		_text = text;
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Update, new graphics::Graphics_MovableText_Update(_objOwnerID, getID(), _font, _text, _size, _colour), i6engine::core::Subsystem::Object));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Update, new graphics::Graphics_MovableText_Update(_objOwnerID, getID(), _font, _text, _size, _colour), core::Subsystem::Object));
 	}
 
 } /* namespace api */

@@ -22,7 +22,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	QuickslotComponent::QuickslotComponent(const int64_t id, const i6engine::api::attributeMap & params) : Component(id, params), api::MessageSubscriberFacade(), _slots(10) {
+	QuickslotComponent::QuickslotComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), api::MessageSubscriberFacade(), _slots(10) {
 		_objFamilyID = config::QuickslotComponent;
 		_objComponentID = config::QuickslotComponent;
 

@@ -29,8 +29,8 @@ namespace i6engine {
 namespace api {
 
 	LifetimeComponent::LifetimeComponent(const int64_t id, const attributeMap & params) : Component(id, params), _startTime(EngineController::GetSingleton().getCurrentTime()), _lifetime(0) {
-		Component::_objFamilyID = components::LifetimeComponent;;
-		Component::_objComponentID = components::LifetimeComponent;
+		_objFamilyID = components::LifetimeComponent;;
+		_objComponentID = components::LifetimeComponent;
 
 		_lifetime = boost::lexical_cast<uint64_t>(params.find("lifetime")->second);
 	}

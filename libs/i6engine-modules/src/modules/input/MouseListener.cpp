@@ -32,12 +32,12 @@ namespace modules {
 	bool MouseListener::mouseMoved(const OIS::MouseEvent & objMouseEvent) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouMouse, core::Method::Update, new api::input::Input_Mouse_Update(objMouseEvent.state.X.abs, objMouseEvent.state.Y.abs), i6engine::core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouMouse, core::Method::Update, new api::input::Input_Mouse_Update(objMouseEvent.state.X.abs, objMouseEvent.state.Y.abs), core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
 		if (objMouseEvent.state.Z.abs != _lastWheelPos) {
-			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouWheel, core::Method::Update, new api::input::Input_MouseWheel_Update((objMouseEvent.state.Z.abs - _lastWheelPos) / 120), i6engine::core::Subsystem::Input));
+			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouWheel, core::Method::Update, new api::input::Input_MouseWheel_Update((objMouseEvent.state.Z.abs - _lastWheelPos) / 120), core::Subsystem::Input));
 			_lastWheelPos = objMouseEvent.state.Z.abs;
 		}
 
@@ -47,7 +47,7 @@ namespace modules {
 	bool MouseListener::mousePressed(const OIS::MouseEvent & objMouseEvent, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouButton, core::Method::Update, new api::input::Input_Button_Update(true, api::MouseButtonID(objButtonID)), i6engine::core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouButton, core::Method::Update, new api::input::Input_Button_Update(true, api::MouseButtonID(objButtonID)), core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -57,7 +57,7 @@ namespace modules {
 	bool MouseListener::mouseReleased(const OIS::MouseEvent & objMouseEvent, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouButton, core::Method::Update, new api::input::Input_Button_Update(false, api::MouseButtonID(objButtonID)), i6engine::core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouButton, core::Method::Update, new api::input::Input_Button_Update(false, api::MouseButtonID(objButtonID)), core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 

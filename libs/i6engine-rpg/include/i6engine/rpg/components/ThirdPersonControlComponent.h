@@ -16,7 +16,7 @@ namespace components {
 		ThirdPersonControlComponent(const int64_t id, const api::attributeMap & params);
 		virtual ~ThirdPersonControlComponent();
 
-		static i6engine::api::ComPtr createC(const int64_t id, const api::attributeMap & params);
+		static api::ComPtr createC(const int64_t id, const api::attributeMap & params);
 
 		void Init() override;
 

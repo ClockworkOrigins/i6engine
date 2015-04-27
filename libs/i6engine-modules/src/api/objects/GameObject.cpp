@@ -236,7 +236,7 @@ namespace api {
 	}
 
 	void GameObject::setDie() const {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectMessageType, objects::ObjCreate, core::Method::Delete, new objects::Object_Create_Delete(getID(), getOwner()), i6engine::core::Subsystem::Unknown);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectMessageType, objects::ObjCreate, core::Method::Delete, new objects::Object_Create_Delete(getID(), getOwner()), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 		EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
@@ -316,7 +316,7 @@ namespace api {
 			}
 		}
 
-		messages.push_back(boost::make_shared<GameMessage>(messages::ObjectMessageType, objects::ObjCreate, core::Method::Create, new objects::Object_Create_Create(_objGoid, _template, _owner, _uuid, tpl, false), i6engine::core::Subsystem::Unknown));
+		messages.push_back(boost::make_shared<GameMessage>(messages::ObjectMessageType, objects::ObjCreate, core::Method::Create, new objects::Object_Create_Create(_objGoid, _template, _owner, _uuid, tpl, false), core::Subsystem::Unknown));
 	}
 
 	void GameObject::initializeComponents() {

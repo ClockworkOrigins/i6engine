@@ -46,13 +46,13 @@ namespace api {
 	}
 
 	void StaticStateComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Create, new graphics::Graphics_Node_Create(_objOwnerID, getID(), _position, _rotation, _scale), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Create, new graphics::Graphics_Node_Create(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void StaticStateComponent::sendUpdateMessage() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}

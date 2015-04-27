@@ -30,7 +30,7 @@ namespace components {
 
 		void News(const api::GameMessage::Ptr & msg) override;
 
-		std::vector<i6engine::api::componentOptions> getComponentOptions() override {
+		std::vector<api::componentOptions> getComponentOptions() override {
 			return {};
 		}
 

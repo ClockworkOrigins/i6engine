@@ -11,6 +11,7 @@ Enhancements:
 	- objects now can be removed in level editor
 	- added finding of shortest path and moving to this if set
 	- added sample showing waynet navigation
+	- added support for much bigger terrains
 
 Fixes:
 	- RPG components now are also registered in SampleLeveleditor to be able to load RPG levels

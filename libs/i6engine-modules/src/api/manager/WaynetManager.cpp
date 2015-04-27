@@ -90,7 +90,7 @@ namespace api {
 		for (auto & p : _waypoints) {
 			for (auto & e : p.second) {
 				if (edges.find(std::make_pair(p.first, e.targetWP)) == edges.end()) {
-					EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraLine, i6engine::core::Method::Create, new graphics::Graphics_Line_Create(e.startPosition, e.targetPosition), core::Subsystem::Object));
+					EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraLine, core::Method::Create, new graphics::Graphics_Line_Create(e.startPosition, e.targetPosition), core::Subsystem::Object));
 					edges.insert(std::make_pair(p.first, e.targetWP));
 					edges.insert(std::make_pair(e.targetWP, p.first));
 				}

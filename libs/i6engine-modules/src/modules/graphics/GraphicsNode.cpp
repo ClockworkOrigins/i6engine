@@ -473,12 +473,12 @@ namespace modules {
 		_animationState->setTimePosition(offsetPercent * _animationState->getLength());
 		_animationSpeed = 1.0;
 
-		_lastTime = i6engine::api::EngineController::GetSingleton().getCurrentTime();
+		_lastTime = api::EngineController::GetSingleton().getCurrentTime();
 	}
 
 	void GraphicsNode::Tick() {
 		if (_animationState) {
-			uint64_t cT = i6engine::api::EngineController::GetSingleton().getCurrentTime();
+			uint64_t cT = api::EngineController::GetSingleton().getCurrentTime();
 			_animationState->addTime(_animationSpeed * (cT - _lastTime) / 1000000.0);
 			_lastTime = cT;
 		}

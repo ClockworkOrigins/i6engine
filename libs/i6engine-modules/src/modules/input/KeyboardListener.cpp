@@ -53,7 +53,7 @@ namespace modules {
 			}
 		}
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[objKeyEvent.key], api::KeyCode(objKeyEvent.key), text), i6engine::core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[objKeyEvent.key], api::KeyCode(objKeyEvent.key), text), core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -69,7 +69,7 @@ namespace modules {
 			triggerKeyFunction(api::KeyCode(objKeyEvent.key), api::KeyState::KEY_RELEASED);
 		}
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[objKeyEvent.key], api::KeyCode(objKeyEvent.key), objKeyEvent.text), i6engine::core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[objKeyEvent.key], api::KeyCode(objKeyEvent.key), objKeyEvent.text), core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -113,7 +113,7 @@ namespace modules {
 					}
 				}
 
-				api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[i], api::KeyCode(i), text), i6engine::core::Subsystem::Input);
+				api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[i], api::KeyCode(i), text), core::Subsystem::Input);
 
 				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 			}

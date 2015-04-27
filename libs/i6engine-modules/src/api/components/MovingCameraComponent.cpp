@@ -78,7 +78,7 @@ namespace api {
 		if (_oldPos != movePos) {
 			Vec3 newPos = movePos - targetPos;
 			Vec3 newPosRotated = math::rotateVector(newPos, psc->getRotation().inverse());
-			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, newPosRotated, targetPos, _nearClip, _fov), i6engine::core::Subsystem::Object);
+			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, newPosRotated, targetPos, _nearClip, _fov), core::Subsystem::Object);
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 			_oldPos = movePos;
 		}

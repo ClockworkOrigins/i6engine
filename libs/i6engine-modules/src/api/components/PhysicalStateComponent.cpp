@@ -58,7 +58,7 @@ namespace api {
 	PhysicalStateComponent::~PhysicalStateComponent() {
 	}
 
-	ComPtr PhysicalStateComponent::createC(const int64_t id, const i6engine::api::attributeMap & params) {
+	ComPtr PhysicalStateComponent::createC(const int64_t id, const api::attributeMap & params) {
 		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'shapeType' not found!", params.find("shapeType") != params.end());
 		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'shatterInterest' not found!", params.find("shatterInterest") != params.end());
 		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'collisionGroup' not found!", params.find("collisionGroup") != params.end());
@@ -70,11 +70,11 @@ namespace api {
 	}
 
 	void PhysicalStateComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Create, new physics::Physics_Node_Create(_objOwnerID, getID(), _position, _rotation, _scale, _collisionGroup, _shapeType, _shapeParams, _shatterInterest), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Create, new physics::Physics_Node_Create(_objOwnerID, getID(), _position, _rotation, _scale, _collisionGroup, _shapeType, _shapeParams, _shatterInterest), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
-		GameMessage::Ptr msg2 = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Create, new graphics::Graphics_Node_Create(_objOwnerID, getID(), _position, _rotation, _scale), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg2 = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Create, new graphics::Graphics_Node_Create(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg2);
 
@@ -90,7 +90,7 @@ namespace api {
 	void PhysicalStateComponent::Finalize() {
 		removeTicker();
 
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Delete, new physics::Physics_Node_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Delete, new physics::Physics_Node_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -109,20 +109,14 @@ namespace api {
 
 	void PhysicalStateComponent::setRotation(const Quaternion & rotation, uint32_t prio) {
 		boost::mutex::scoped_lock sl(_lock);
-		if (prio >= _rotDirty && _rotationNew != rotation) {
-			// FIXME: (Michael) better definition of 'same rotation'
-			Vec3 r11 = math::rotateVector(Vec3(10.0, 10.0, 10.0), _rotationNew);
-			Vec3 r22 = math::rotateVector(Vec3(10.0, 10.0, 10.0), rotation);
-
-			if ((r11 - r22).length() > 0.01) {
-				_rotationNew = rotation;
-				_rotDirty = prio;
-			}
+		if (prio >= _rotDirty && !_rotationNew.equals(rotation)) {
+			_rotationNew = rotation;
+			_rotDirty = prio;
 		}
 	}
 
 	void PhysicalStateComponent::applyRotation(const Quaternion & rotation) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyApplyRotation, core::Method::Update, new physics::Physics_ApplyRotation_Update(_objOwnerID, getID(), rotation), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyApplyRotation, core::Method::Update, new physics::Physics_ApplyRotation_Update(_objOwnerID, getID(), rotation), core::Subsystem::Object);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
@@ -137,7 +131,7 @@ namespace api {
 	void PhysicalStateComponent::setCollisionFlags(const CollisionGroup & col) {
 		_collisionGroup = col;
 		if (_initialized) {
-			GameMessage::Ptr msgLocal = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyCollision, core::Method::Update, new physics::Physics_Collision_Update(_objOwnerID, getID(), col), i6engine::core::Subsystem::Object);
+			GameMessage::Ptr msgLocal = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyCollision, core::Method::Update, new physics::Physics_Collision_Update(_objOwnerID, getID(), col), core::Subsystem::Object);
 
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msgLocal);
 		}
@@ -146,7 +140,7 @@ namespace api {
 	void PhysicalStateComponent::reset() {
 		setLinearVelocity(Vec3(0.0, 0.0, 0.0), UINT32_MAX);
 
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyResetForces, core::Method::Update, new physics::Physics_Reset_Update(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyResetForces, core::Method::Update, new physics::Physics_Reset_Update(_objOwnerID, getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -179,7 +173,7 @@ namespace api {
 
 	void PhysicalStateComponent::setGravity(const Vec3 & gravity) {
 		_gravity = gravity;
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNodeGravity, core::Method::Update, new physics::Physics_NodeGravity_Update(_objOwnerID, getID(), gravity), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNodeGravity, core::Method::Update, new physics::Physics_NodeGravity_Update(_objOwnerID, getID(), gravity), core::Subsystem::Object);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
@@ -211,49 +205,57 @@ namespace api {
 	void PhysicalStateComponent::Tick() {
 		bool isDirty = false;
 		uint32_t netPrio = 0;
-		boost::mutex::scoped_lock sl(_lock);
-		if (_posDirty > 0) {
-			_position = _positionNew;
-			if (_posDirty > 1) {
-				GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNodePosition, core::Method::Update, new physics::Physics_NodePosition_Update(_objOwnerID, getID(), _position), i6engine::core::Subsystem::Object);
-				EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+		{
+			boost::mutex::scoped_lock sl(_lock);
+			if (_posDirty > 0) {
+				_position = _positionNew;
+				if (_posDirty > 1) {
+					GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNodePosition, core::Method::Update, new physics::Physics_NodePosition_Update(_objOwnerID, getID(), _position), core::Subsystem::Object);
+					EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+				}
+				netPrio = std::max(netPrio, _posDirty);
+				_posDirty = 0;
+				isDirty = true;
 			}
-			netPrio = std::max(netPrio, _posDirty);
-			_posDirty = 0;
-			isDirty = true;
-		}
-		if (_rotDirty > 0) {
-			_rotation = _rotationNew;
-			if (_rotDirty > 1) {
-				GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), i6engine::core::Subsystem::Object);
-				EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+			if (_rotDirty > 0) {
+				_rotation = _rotationNew;
+				if (_rotDirty > 1) {
+					GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), core::Subsystem::Object);
+					EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+				}
+				netPrio = std::max(netPrio, _rotDirty);
+				_rotDirty = 0;
+				isDirty = true;
 			}
-			netPrio = std::max(netPrio, _rotDirty);
-			_rotDirty = 0;
-			isDirty = true;
-		}
-		if (_speedDirty > 0) {
-			_linearVelocity = _speedNew;
-			if (_speedDirty > 1) {
-				GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyLinearVelocity, core::Method::Update, new physics::Physics_LinearVelocity_Update(_objOwnerID, getID(), _linearVelocity), i6engine::core::Subsystem::Object);
-				EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+			if (_speedDirty > 0) {
+				_linearVelocity = _speedNew;
+				if (_speedDirty > 1) {
+					GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyLinearVelocity, core::Method::Update, new physics::Physics_LinearVelocity_Update(_objOwnerID, getID(), _linearVelocity), core::Subsystem::Object);
+					EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+				}
+				_speedDirty = 0;
 			}
-			_speedDirty = 0;
-		}
-		if (_scaleDirty > 0) {
-			_scale = _scaleNew;
-			if (_scaleDirty > 1) {
-				GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), i6engine::core::Subsystem::Object);
-				EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+			if (_scaleDirty > 0) {
+				_scale = _scaleNew;
+				if (_scaleDirty > 1) {
+					GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), core::Subsystem::Object);
+					EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+				}
+				netPrio = std::max(netPrio, _scaleDirty);
+				_scaleDirty = 0;
+				isDirty = true;
 			}
-			netPrio = std::max(netPrio, _scaleDirty);
-			_scaleDirty = 0;
-			isDirty = true;
+
+			if (_forces.size() > 0) {
+				GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyForce, core::Method::Update, new physics::Physics_Force_Update(_objOwnerID, getID(), _forces), core::Subsystem::Object);
+				EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+				_forces.clear();
+			}
 		}
 
 		if (isDirty) {
 			// send message to graphic
-			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), i6engine::core::Subsystem::Object);
+			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object);
 
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -261,16 +263,10 @@ namespace api {
 
 			// send message into network
 			if (go != nullptr && go->getGOC(components::NetworkSenderComponent) != nullptr && _syncPrio <= netPrio) {
-				GameMessage::Ptr msg2 = boost::make_shared<GameMessage>(messages::PositionMessageType, objects::Position, core::Method::Update, new objects::Position_Update(_objOwnerID, getID(), _position, _rotation, _scale), i6engine::core::Subsystem::Object);
+				GameMessage::Ptr msg2 = boost::make_shared<GameMessage>(messages::PositionMessageType, objects::Position, core::Method::Update, new objects::Position_Update(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object);
 
 				EngineController::GetSingletonPtr()->getNetworkFacade()->publish(POSITION_CHANNEL, msg2);
 			}
-		}
-
-		if (_forces.size() > 0) {
-			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyForce, core::Method::Update, new physics::Physics_Force_Update(_objOwnerID, getID(), _forces), i6engine::core::Subsystem::Object);
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-			_forces.clear();
 		}
 	}
 
@@ -298,8 +294,7 @@ namespace api {
 	}
 
 	void PhysicalStateComponent::rayTest(const Vec3 & from, const Vec3 & to, RayTestRepetition rtr, RayTestNotify rtn, const GameMessage::Ptr & msg) {
-		GameMessage::Ptr message = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyRayTest, core::Method::Update, new physics::Physics_RayTest_Update(_objOwnerID, _id, from, to, rtr, rtn, msg), i6engine::core::Subsystem::Object);
-
+		GameMessage::Ptr message = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyRayTest, core::Method::Update, new physics::Physics_RayTest_Update(_objOwnerID, _id, from, to, rtr, rtn, msg), core::Subsystem::Object);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(message);
 	}
 
@@ -308,7 +303,7 @@ namespace api {
 	}
 
 	void PhysicalStateComponent::addPosition(const Vec3 & pos) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyAddPosition, core::Method::Update, new physics::Physics_AddPosition_Update(_objOwnerID, getID(), pos), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyAddPosition, core::Method::Update, new physics::Physics_AddPosition_Update(_objOwnerID, getID(), pos), core::Subsystem::Object);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
@@ -323,8 +318,8 @@ namespace api {
 			} catch (boost::bad_lexical_cast &) {
 				return false;
 			}
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNodePosition, core::Method::Update, new physics::Physics_NodePosition_Update(_objOwnerID, getID(), _position), i6engine::core::Subsystem::Object));
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), i6engine::core::Subsystem::Object));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNodePosition, core::Method::Update, new physics::Physics_NodePosition_Update(_objOwnerID, getID(), _position), core::Subsystem::Object));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object));
 			return true;
 		}));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Rotation", [this]() {
@@ -337,8 +332,8 @@ namespace api {
 			} catch (boost::bad_lexical_cast &) {
 				return false;
 			}
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), i6engine::core::Subsystem::Object));
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), i6engine::core::Subsystem::Object));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), core::Subsystem::Object));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object));
 			return true;
 		}));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Scale", [this]() {
@@ -349,8 +344,8 @@ namespace api {
 			} catch (boost::bad_lexical_cast &) {
 				return false;
 			}
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), i6engine::core::Subsystem::Object));
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), i6engine::core::Subsystem::Object));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), core::Subsystem::Object));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object));
 			return true;
 		}));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Gravity", [this]() {

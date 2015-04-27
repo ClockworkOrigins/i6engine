@@ -56,7 +56,7 @@ namespace components {
 		api::GOPtr targetGO;
 		int64_t highlightTargetID = -1;
 		double distance = DBL_MAX;
-		for (auto & go : i6engine::api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
+		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
 			if (go->getType() != "Player" && go->getGOC(config::NameComponent) != nullptr) {
 				Vec3 point = (go->getGOC(api::components::PhysicalStateComponent) != nullptr) ? go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent)->getPosition() : go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition();
 				Vec3 offset = _psc.get()->getPosition();
@@ -148,8 +148,8 @@ namespace components {
 		}
 	}
 
-	i6engine::api::attributeMap ThirdPersonControlComponent::synchronize() const {
-		return i6engine::api::attributeMap();
+	api::attributeMap ThirdPersonControlComponent::synchronize() const {
+		return api::attributeMap();
 	}
 
 } /* namespace components */

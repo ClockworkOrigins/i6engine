@@ -44,7 +44,7 @@ namespace api {
 			return;
 		}
 
-		std::vector<std::string> resVec = i6engine::utils::split(res, " ");
+		std::vector<std::string> resVec = utils::split(res, " ");
 		
 		if (resVec.size() != 3) {
 			return;
@@ -140,13 +140,16 @@ namespace api {
 	}
 
 	void GraphicsFacade::showFPS(double x, double y, const std::string & imageStyle, const std::string & printStyle, const std::string & imageset, const std::string & image) const {
-		EngineController::GetSingletonPtr()->getGUIFacade()->addImage("FPSBox", imageStyle, imageset, image, x, y, 0.15, 0.11);
-		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg", printStyle, x + 0.01, y + 0.01, "Avg. FPS: ", gui::Alignment::Left, -1);
-		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best", printStyle, x + 0.01, y + 0.04, "Best FPS: ", gui::Alignment::Left, -1);
-		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst", printStyle, x + 0.01, y + 0.07, "Worst FPS: ", gui::Alignment::Left, -1);
-		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg_Value", printStyle, x + 0.01, y + 0.01, "", gui::Alignment::Right, -1);
-		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best_Value", printStyle, x + 0.01, y + 0.04, "", gui::Alignment::Right, -1);
-		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst_Value", printStyle, x + 0.01, y + 0.07, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addImage("FPSBox", imageStyle, imageset, image, x, y, 0.15, 0.13);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Cur", printStyle, x + 0.01, y + 0.01, "Cur. FPS: ", gui::Alignment::Left, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg", printStyle, x + 0.01, y + 0.04, "Avg. FPS: ", gui::Alignment::Left, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best", printStyle, x + 0.01, y + 0.07, "Best FPS: ", gui::Alignment::Left, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst", printStyle, x + 0.01, y + 0.10, "Worst FPS: ", gui::Alignment::Left, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Cur_Value", printStyle, x + 0.01, y + 0.01, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg_Value", printStyle, x + 0.01, y + 0.04, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best_Value", printStyle, x + 0.01, y + 0.07, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst_Value", printStyle, x + 0.01, y + 0.10, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Cur_Value", 0.14, 0.02);
 		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Avg_Value", 0.14, 0.02);
 		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Best_Value", 0.14, 0.02);
 		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Worst_Value", 0.14, 0.02);
@@ -156,9 +159,11 @@ namespace api {
 	void GraphicsFacade::hideFPS() const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraFPS, core::Method::Delete, new graphics::Graphics_FPS_Delete(), core::Subsystem::Unknown));
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPSBox");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Cur");
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Avg");
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Best");
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Worst");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Cur_Value");
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Avg_Value");
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Best_Value");
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Worst_Value");

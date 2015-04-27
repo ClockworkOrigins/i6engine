@@ -24,7 +24,7 @@
 namespace i6engine {
 namespace api {
 
-	NavigationComponent::NavigationComponent(const int64_t id, const i6engine::api::attributeMap & params) : Component(id, params) {
+	NavigationComponent::NavigationComponent(const int64_t id, const api::attributeMap & params) : Component(id, params) {
 		Component::_objFamilyID = components::NavigationComponent;
 		Component::_objComponentID = components::NavigationComponent;
 	}

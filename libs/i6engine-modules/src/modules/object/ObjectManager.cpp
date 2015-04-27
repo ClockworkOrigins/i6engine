@@ -258,7 +258,7 @@ namespace modules {
 			(*it)->synchronize(v);
 		}
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::AdministrationMessageType, api::network::NetGameState, core::Method::Create, new api::network::Administration_GameState_Create(receiver, v), i6engine::core::Subsystem::Object);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::AdministrationMessageType, api::network::NetGameState, core::Method::Create, new api::network::Administration_GameState_Create(receiver, v), core::Subsystem::Object);
 
 		api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
 	}

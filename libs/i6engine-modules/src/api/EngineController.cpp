@@ -75,7 +75,7 @@ namespace api {
 	// Ensures that X11 key repeat is reset to original value in case of a application crash.
 	void forceCleanup(int param) {
 		ISIXE_LOG_WARN("EngineController", "***Dirty shutdown detected: running forced cleanup to reset X11 key repeat rate***");
-		i6engine::api::EngineController::GetSingletonPtr()->stop();
+		EngineController::GetSingletonPtr()->stop();
 	}
 
 	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _languageManager(new LanguageManager()), _textManager(new TextManager()), _waynetManager(new WaynetManager()), _appl(), _debugdrawer(0), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
@@ -230,8 +230,8 @@ namespace api {
 #ifdef ISIXE_NETWORK
 			registerSubSystem("Network", new modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 #endif
-			registerSubSystem("Graphics", new modules::GraphicsController(), { i6engine::core::Subsystem::Object });
-			registerSubSystem("Object", new modules::ObjectController(), { i6engine::core::Subsystem::Physic });
+			registerSubSystem("Graphics", new modules::GraphicsController(), { core::Subsystem::Object });
+			registerSubSystem("Object", new modules::ObjectController(), { core::Subsystem::Physic });
 			registerSubSystem("Input", new modules::InputController(), LNG_INPUT_FRAME_TIME);
 			registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
 #ifdef ISIXE_SCRIPTING

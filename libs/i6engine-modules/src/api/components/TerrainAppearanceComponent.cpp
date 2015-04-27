@@ -29,7 +29,7 @@
 namespace i6engine {
 namespace api {
 
-	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const i6engine::api::attributeMap & params) : Component(id, params), _heightmap(params.at("heightmap")), _size(boost::lexical_cast<double>(params.at("size"))), _inputScale(boost::lexical_cast<double>(params.at("inputScale"))), _layers() {
+	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _heightmap(params.at("heightmap")), _size(boost::lexical_cast<double>(params.at("size"))), _inputScale(boost::lexical_cast<double>(params.at("inputScale"))), _layers() {
 		Component::_objFamilyID = components::TerrainAppearanceComponent;
 		Component::_objComponentID = components::TerrainAppearanceComponent;
 
@@ -55,12 +55,12 @@ namespace api {
 	}
 
 	TerrainAppearanceComponent::~TerrainAppearanceComponent() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Delete, new graphics::Graphics_Terrain_Delete(_objOwnerID, getID()), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Delete, new graphics::Graphics_Terrain_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	ComPtr TerrainAppearanceComponent::createC(const int64_t id, const i6engine::api::attributeMap & params) {
+	ComPtr TerrainAppearanceComponent::createC(const int64_t id, const api::attributeMap & params) {
 		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "heightmap not set!", params.find("heightmap") != params.end());
 		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "size not set!", params.find("size") != params.end());
 		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "inputScale not set!", params.find("inputScale") != params.end());
@@ -73,13 +73,13 @@ namespace api {
 	}
 
 	void TerrainAppearanceComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _layers, _minX, _minY, _maxX, _maxY), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void TerrainAppearanceComponent::sendUpdateMessage() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Update, new graphics::Graphics_Terrain_Update(getID(), _heightmap, _size, _inputScale, _layers, _minX, _minY, _maxX, _maxY), i6engine::core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Update, new graphics::Graphics_Terrain_Update(getID(), _heightmap, _size, _inputScale, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}

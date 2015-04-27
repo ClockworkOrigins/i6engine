@@ -106,16 +106,16 @@ namespace api {
 		ComPtr getGOC(uint32_t famID, const std::string & identifier) const;
 
 		template<typename T>
-		i6engine::utils::sharedPtr<T, i6engine::api::Component> getGOC(uint32_t famID) const;
+		utils::sharedPtr<T, api::Component> getGOC(uint32_t famID) const;
 
 		template<typename T>
-		i6engine::utils::sharedPtr<T, i6engine::api::Component> getGOC(uint32_t famID, const std::string & identifier) const;
+		utils::sharedPtr<T, api::Component> getGOC(uint32_t famID, const std::string & identifier) const;
 
 		template<typename T>
-		i6engine::utils::sharedPtr<T, i6engine::api::Component> getGOC() const;
+		utils::sharedPtr<T, api::Component> getGOC() const;
 
 		template<typename T>
-		i6engine::utils::sharedPtr<T, i6engine::api::Component> getGOC(const std::string & identifier) const;
+		utils::sharedPtr<T, api::Component> getGOC(const std::string & identifier) const;
 
 		/**
 		 * \brief Returns a Pointer to the searched GOComponent, if it is in the component table

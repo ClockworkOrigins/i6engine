@@ -123,7 +123,7 @@ namespace modules {
 		std::vector<api::graphics::Resolution> res2;
 		for (auto s : res) {
 			api::graphics::Resolution r;
-			std::vector<std::string> tmp = i6engine::utils::split(s, " ");
+			std::vector<std::string> tmp = utils::split(s, " ");
 			r.width = boost::lexical_cast<uint32_t>(tmp.front());
 			r.height = boost::lexical_cast<uint32_t>(tmp.back());
 			res2.push_back(r);
@@ -256,11 +256,11 @@ namespace modules {
 		// Attention: The gui subsystem MUST be started after the renderer because it needs a valid window handle!
 		_guiController->OnThreadStart();
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_objRoot)), core::Subsystem::Graphic);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
-		api::GameMessage::Ptr msg2 = boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiWindow, core::Method::Create, new api::gui::GUI_Window_Create(reinterpret_cast<void *>(_objRoot)), i6engine::core::Subsystem::Graphic);
+		api::GameMessage::Ptr msg2 = boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiWindow, core::Method::Create, new api::gui::GUI_Window_Create(reinterpret_cast<void *>(_objRoot)), core::Subsystem::Graphic);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg2);
 
@@ -329,12 +329,12 @@ namespace modules {
 						results.push_back(std::make_pair(-1, Vec3(mouseRay.getPoint(itr->distance))));
 					}
 				} else {
-					results.push_back(std::make_pair(std::atoi(split[1].c_str()), Vec3(mouseRay.getPoint(itr->distance))));
+					results.push_back(std::make_pair(std::stoi(split[1]), Vec3(mouseRay.getPoint(itr->distance))));
 				}
 			}
-			i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->setSelectables(results);
+			api::EngineController::GetSingleton().getGraphicsFacade()->setSelectables(results);
 		} else {
-			i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->setSelectables(std::vector<std::pair<int64_t, Vec3>>());
+			api::EngineController::GetSingleton().getGraphicsFacade()->setSelectables(std::vector<std::pair<int64_t, Vec3>>());
 		}
 
 		for (auto gn : _tickers) {
@@ -345,6 +345,9 @@ namespace modules {
 			Ogre::RenderTarget::FrameStats stats = _rWindow->getStatistics();
 			api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 			std::ostringstream oss;
+			oss.str("");
+			oss << std::fixed << std::setprecision(1) << stats.lastFPS;
+			gf->setText("FPS_Cur_Value", oss.str());
 			oss.str("");
 			oss << std::fixed << std::setprecision(1) << stats.avgFPS;
 			gf->setText("FPS_Avg_Value", oss.str());
@@ -478,8 +481,8 @@ namespace modules {
 			api::graphics::Graphics_Resolution_Update * ru = dynamic_cast<api::graphics::Graphics_Resolution_Update *>(msg->getContent());
 			_rWindow->setFullscreen(_rWindow->isFullScreen(), ru->resolution.width, ru->resolution.height);
 
-			_guiController->_mailbox->News(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiResolution, core::Method::Update, new api::gui::GUI_Resolution_Update(ru->resolution), i6engine::core::Subsystem::Graphic));
-			api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputResolution, core::Method::Update, new api::input::Input_Resolution_Update(ru->resolution), i6engine::core::Subsystem::Graphic));
+			_guiController->_mailbox->News(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiResolution, core::Method::Update, new api::gui::GUI_Resolution_Update(ru->resolution), core::Subsystem::Graphic));
+			api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputResolution, core::Method::Update, new api::input::Input_Resolution_Update(ru->resolution), core::Subsystem::Graphic));
 
 			Ogre::ConfigOptionMap & CurrentRendererOptions = _objRoot->getRenderSystem()->getConfigOptions();
 			Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
