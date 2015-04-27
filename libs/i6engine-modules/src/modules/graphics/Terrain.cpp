@@ -66,50 +66,47 @@ namespace modules {
 
 	void Terrain::configureTerrainDefaults() {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		_mTerrainGlobals->setMaxPixelError(8);
+		// testing composite map
+		_mTerrainGlobals->setCompositeMapDistance(3000);
+		//Ogre::Light * light = _manager->getSceneManager()->getLight("SN_3_5");
+		// _mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
+		_mTerrainGlobals->setCompositeMapAmbient(_manager->getSceneManager()->getAmbientLight());
+		// _mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
+		Ogre::Terrain::ImportData & defaultimp = _mTerrainGroup->getDefaultImportSettings();
+		defaultimp.terrainSize = 513;
+		defaultimp.worldSize = _size;
+		defaultimp.inputScale = _inputScale;
+		defaultimp.minBatchSize = 33;
+		defaultimp.maxBatchSize = 65;
 
-		 _mTerrainGlobals->setMaxPixelError(8);
-		 // testing composite map
-		 _mTerrainGlobals->setCompositeMapDistance(3000);
-		 //Ogre::Light * light = _manager->getSceneManager()->getLight("SN_3_5");
-		 // _mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
-		 _mTerrainGlobals->setCompositeMapAmbient(_manager->getSceneManager()->getAmbientLight());
-		 // _mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
-		 Ogre::Terrain::ImportData & defaultimp = _mTerrainGroup->getDefaultImportSettings();
-		 defaultimp.terrainSize = 513;
-		 defaultimp.worldSize = _size;
-		 defaultimp.inputScale = _inputScale;
-		 defaultimp.minBatchSize = 33;
-		 defaultimp.maxBatchSize = 65;
+		defaultimp.layerList.resize(_layers.size());
 
-		 defaultimp.layerList.resize(_layers.size());
-
-		 for (size_t i = 0; i < _layers.size(); i++) {
-			 defaultimp.layerList[i].worldSize = std::get<0>(_layers[i]); // scale factor of one tile
-			 defaultimp.layerList[i].textureNames.push_back(std::get<1>(_layers[i]));
-			 defaultimp.layerList[i].textureNames.push_back(std::get<2>(_layers[i]));
-		 }
+		for (size_t i = 0; i < _layers.size(); i++) {
+			defaultimp.layerList[i].worldSize = std::get<0>(_layers[i]); // scale factor of one tile
+			defaultimp.layerList[i].textureNames.push_back(std::get<1>(_layers[i]));
+			defaultimp.layerList[i].textureNames.push_back(std::get<2>(_layers[i]));
+		}
 	}
 
 	void Terrain::defineTerrain(const int64_t x, const int64_t y) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		Ogre::String filename = _mTerrainGroup->generateFilename(long(x), long(y));
 
-		 Ogre::String filename = _mTerrainGroup->generateFilename(long(x), long(y));
+		if (Ogre::ResourceGroupManager::getSingleton().resourceExists(_mTerrainGroup->getResourceGroup(), filename)) {
+			_mTerrainGroup->defineTerrain(long(x), long(y));
+		} else {
+			Ogre::Image img;
 
-		 if (Ogre::ResourceGroupManager::getSingleton().resourceExists(_mTerrainGroup->getResourceGroup(), filename)) {
-			 _mTerrainGroup->defineTerrain(long(x), long(y));
-		 } else {
-			 Ogre::Image img;
+			getTerrainImage(x % 2 != 0, y % 2 != 0, img);
 
-			 getTerrainImage(x % 2 != 0, y % 2 != 0, img);
-
-			 _mTerrainGroup->defineTerrain(long(x), long(y), &img);
-			 _mTerrainsImported = true;
+			_mTerrainGroup->defineTerrain(long(x), long(y), &img);
+			_mTerrainsImported = true;
 		}
 	}
 
 	void Terrain::getTerrainImage(const bool flipX, const bool flipY, Ogre::Image & img) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		img.load(_heightmap, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 		if (flipX) {

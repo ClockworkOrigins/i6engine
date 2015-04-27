@@ -68,18 +68,20 @@ namespace api {
 
 		utils::sharedPtr<PhysicalStateComponent, Component> psc = go->getGOC<PhysicalStateComponent>(components::PhysicalStateComponent);
 
-		// newPos := Bikeposition and LookAt Point
+		// newPos := target position and LookAt Point
 		Vec3 targetPos = psc->getPosition();
 		Vec3 camPosTarget = targetPos + math::rotateVector(_position, psc->getRotation());
 		Vec3 camPosCur = _oldPos;
 		// movePos := position where camera will be placed
 		// _oldPOs := old camera position
-		Vec3 movePos = camPosCur + (camPosTarget - camPosCur) * 0.2;
-		Vec3 newPos = movePos - targetPos;
-		Vec3 newPosRotated = math::rotateVector(newPos, psc->getRotation().inverse());
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, newPosRotated, targetPos, _nearClip, _fov), i6engine::core::Subsystem::Object);
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-		_oldPos = movePos;
+		Vec3 movePos = camPosCur + (camPosTarget - camPosCur) * 1.0;
+		if (_oldPos != movePos) {
+			Vec3 newPos = movePos - targetPos;
+			Vec3 newPosRotated = math::rotateVector(newPos, psc->getRotation().inverse());
+			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, newPosRotated, targetPos, _nearClip, _fov), i6engine::core::Subsystem::Object);
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+			_oldPos = movePos;
+		}
 	}
 
 } /* namespace api */
