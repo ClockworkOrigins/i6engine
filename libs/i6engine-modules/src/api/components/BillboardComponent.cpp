@@ -29,19 +29,17 @@
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace api {
 
 	BillboardComponent::BillboardComponent(const int64_t id, const attributeMap & params) : Component(id, params), _material(), _width(), _height(), _billboardOrigin() {
-		Component::_objFamilyID = components::BillboardComponent;
-		Component::_objComponentID = components::BillboardComponent;
+		_objFamilyID = components::BillboardComponent;
+		_objComponentID = components::BillboardComponent;
 
 		_material = params.find("material")->second;
-		_width = boost::lexical_cast<double>(params.find("width")->second);
-		_height = boost::lexical_cast<double>(params.find("height")->second);
-		_billboardOrigin = graphics::BillboardOrigin(boost::lexical_cast<uint32_t>(params.find("origin")->second));
+		_width = std::stod(params.find("width")->second);
+		_height = std::stod(params.find("height")->second);
+		_billboardOrigin = graphics::BillboardOrigin(std::stoul(params.find("origin")->second));
 	}
 
 	BillboardComponent::~BillboardComponent() {

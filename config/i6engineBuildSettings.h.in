@@ -23,7 +23,8 @@
 #cmakedefine ISIXE_WITH_AUDIO
 #cmakedefine ISIXE_NETWORK
 #cmakedefine ISIXE_PROFILING
-#cmakedefine ISIXE_SCRIPTING
+#cmakedefine ISIXE_WITH_LUA_SCRIPTING
+#cmakedefine ISIXE_WITH_PYTHON_SCRIPTING
 #cmakedefine ISIXE_WITH_RPG
  
 #define BT_USE_DOUBLE_PRECISION

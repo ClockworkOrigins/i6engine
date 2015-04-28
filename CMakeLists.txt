@@ -29,7 +29,8 @@ cmake_minimum_required (VERSION 2.8)
 option(ISIXE_LOGGING "enables Logging" OFF)
 option(ISIXE_NETWORK "build i6engine with networking capabilities" OFF)
 option(ISIXE_PROFILING "build i6engine with profiling" OFF)
-option(ISIXE_SCRIPTING "build scripting with demo game" ON)
+option(ISIXE_WITH_LUA_SCRIPTING "build lua scripting module" ON)
+option(ISIXE_WITH_PYTHON_SCRIPTING "build python scripting module" ON)
 option(ISIXE_TESTING "build i6engine with tests" OFF)
 OPTION(ISIXE_WITH_AUDIO "build i6engine with OpenAL Soft audio subsystem" ON)
 OPTION(ISIXE_WITH_EDITOR "build i6engine with the level editor" ON)
@@ -54,6 +55,10 @@ IF(NOT CMAKE_BUILD_TYPE)
       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
       FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
+
+IF(ISIXE_WITH_RPG AND NOT ISIXE_WITH_LUA_SCRIPTING)
+	MESSAGE(SEND_ERROR "rpg module requires lua scripting enabled to use all features!")
+ENDIF(ISIXE_WITH_RPG AND NOT ISIXE_WITH_LUA_SCRIPTING)
 
 #########################################################################
 # Global Macros and Definitions
@@ -124,9 +129,9 @@ ENDIF(NOT WIN32)
 	SET(LIBHEADER "boost/thread.hpp")
 	SET(BOOST_ROOT ${ISIXE_DEP_DIR}/boost)
 	set(BOOST_COMPONENTS chrono date_time filesystem serialization system thread)
-	IF(ISIXE_SCRIPTING)
+	IF(ISIXE_WITH_PYTHON_SCRIPTING)
 		SET(BOOST_COMPONENTS ${BOOST_COMPONENTS} python)
-	ENDIF(ISIXE_SCRIPTING)
+	ENDIF(ISIXE_WITH_PYTHON_SCRIPTING)
 	IF(ISIXE_LOGGING)
 		SET(BOOST_COMPONENTS ${BOOST_COMPONENTS} log log_setup)
 	ENDIF(ISIXE_LOGGING)
@@ -140,10 +145,10 @@ ENDIF(NOT WIN32)
 #----------------------------------------------------
 # Python
 #----------------------------------------------------
-IF(ISIXE_SCRIPTING)
+IF(ISIXE_WITH_PYTHON_SCRIPTING)
 	find_package(PythonLibs 2.7 REQUIRED)
 	include_directories(${PYTHON_INCLUDE_DIRS})
-ENDIF(ISIXE_SCRIPTING)
+ENDIF(ISIXE_WITH_PYTHON_SCRIPTING)
 
 #----------------------------------------------------
 # Ogre3D
@@ -305,6 +310,12 @@ set(I6ENGINE_CORE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/i6engine-core/include)
 set(I6ENGINE_MODULES_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/i6engine-modules/include)
 set(I6ENGINE_RPG_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/i6engine-rpg/include)
 set(I6ENGINE_EDITOR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/tools/i6engine-editor/include)
+
+#####################################################################################
+# deps we always build ourself
+#####################################################################################
+
+add_subdirectory(deps)
 
 #####################################################################################
 # libs
