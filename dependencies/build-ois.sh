@@ -59,6 +59,7 @@ fi
 ./download-dependency.sh ${ARCHIVE}
 ./download-dependency.sh ois-gcc-4.7.patch
 ./download-dependency.sh ois-aclocal-1.13.patch
+./download-dependency.sh ois-1.3-linkerror.patch
 
 mkdir -p ${PATCH_DIR}
 
@@ -74,6 +75,7 @@ tar xfz "${EX_DIR}/${ARCHIVE}" >/dev/null
 # patch for support with gcc 4.7
 patch -p0 -i "${PATCH_DIR}/ois-gcc-4.7.patch"
 patch -p0 -i "${PATCH_DIR}/ois-aclocal-1.13.patch"
+patch -p0 -i "${PATCH_DIR}/ois-1.3-linkerror.patch"
 
 status "Bootstrapping OIS"
 cd "${BUILD_DIR}"
