@@ -62,6 +62,7 @@ namespace modules {
 		 */
 		template<typename... args>
 		void callScript(const std::string & file, const std::string & func, args... B) {
+			ASSERT_THREAD_SAFETY_FUNCTION
 			parseScript(file);
 
 			try {
