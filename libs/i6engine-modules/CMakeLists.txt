@@ -191,6 +191,19 @@ IF(ISIXE_NETWORK)
 	)
 ENDIF(ISIXE_NETWORK)
 
+IF(ISIXE_WITH_LUA_SCRIPTING)
+	include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
+	include_directories(${I6ENGINE_LUABIND_INCLUDE_DIR})
+
+	set(i6modulesSrc
+		${i6modulesSrc}
+
+		${srcdir}/modules/luascripting/LuaScriptingController.cpp
+		${srcdir}/modules/luascripting/LuaScriptingMailbox.cpp
+		${srcdir}/modules/luascripting/LuaScriptingManager.cpp
+	)
+ENDIF(ISIXE_WITH_LUA_SCRIPTING)
+
 IF(ISIXE_WITH_PYTHON_SCRIPTING)
 	set(i6modulesSrc
 		${i6modulesSrc}
@@ -284,6 +297,7 @@ source_group(modules\\input /modules/input/*)
 source_group(modules\\network /modules/network/*)
 source_group(modules\\object /modules/object/*)
 source_group(modules\\physics /modules/physics/*)
+source_group(modules\\luascripting /modules/luascripting/*)
 source_group(modules\\scripting /modules/scripting/*)
 
 IF(ISIXE_BUILD_SHARED)
@@ -302,9 +316,13 @@ IF(ISIXE_WITH_AUDIO)
 	target_link_libraries(i6engine-modules ${OPENALSOFT_LIBRARIES})
 ENDIF(ISIXE_WITH_AUDIO)
 
-IF(ISIXE_SCRIPTING)
+IF(ISIXE_WITH_LUA_SCRIPTING)
+	target_link_libraries(i6engine-modules lua luabind)
+ENDIF(ISIXE_WITH_LUA_SCRIPTING)
+
+IF(ISIXE_WITH_PYTHON_SCRIPTING)
 	target_link_libraries(i6engine-modules ${PYTHON_LIBRARIES})
-ENDIF(ISIXE_SCRIPTING)
+ENDIF(ISIXE_WITH_PYTHON_SCRIPTING)
 
 IF(ISIXE_NETWORK)
 	target_link_libraries(i6engine-modules ${M2etis_LIBRARIES})

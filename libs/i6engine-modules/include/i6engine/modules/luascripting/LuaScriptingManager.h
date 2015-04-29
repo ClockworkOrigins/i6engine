@@ -15,45 +15,47 @@
  */
 
 /**
- * \addtogroup Scripting
+ * \addtogroup LuaScripting
  * @{
  */
 
-#ifndef __I6ENGINE_MODULES_SCRIPTINGMANAGER_H__
-#define __I6ENGINE_MODULES_SCRIPTINGMANAGER_H__
+#ifndef __I6ENGINE_MODULES_LUASCRIPTINGMANAGER_H__
+#define __I6ENGINE_MODULES_LUASCRIPTINGMANAGER_H__
 
 #include <map>
+#include <set>
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
 #include "i6engine/api/GameMessage.h"
 
-#include "boost/python.hpp"
+#include "i6engine/luabind/luabind.hpp"
 
 namespace i6engine {
 namespace modules {
 
-	class ScriptingMailbox;
+	class LuaScriptingMailbox;
 
-	class ScriptingManager {
-		friend class ScriptingMailbox;
+	class LuaScriptingManager {
+		friend class LuaScriptingMailbox;
 
 	public:
 		/**
 		 * \brief constructor
 		 */
-		ScriptingManager();
+		LuaScriptingManager();
 
 		/**
 		 * \brief destructor
 		 */
-		~ScriptingManager();
+		~LuaScriptingManager();
 
 	private:
-		std::map<std::string, boost::python::object> _scripts;
+		lua_State * _luaState;
+		std::set<std::string> _parsedFiles;
 
 		/**
-		 * \brief called by ScriptingMailbox with a message
+		 * \brief called by LuaScriptingMailbox with a message
 		 */
 		void News(const api::GameMessage::Ptr & msg);
 
@@ -62,15 +64,9 @@ namespace modules {
 		 */
 		template<typename... args>
 		void callScript(const std::string & file, const std::string & func, args... B) {
+			ASSERT_THREAD_SAFETY_FUNCTION
 			parseScript(file);
-
-			try {
-				boost::python::object f = _scripts[file][func];
-
-				f(B...);
-			} catch (const boost::python::error_already_set &) {
-				PyErr_PrintEx(0);
-			}
+			luabind::call_function<void>(_luaState, func.c_str(), B...);
 		}
 
 		/**
@@ -81,12 +77,12 @@ namespace modules {
 		/**
 		 * \brief forbidden
 		 */
-		ScriptingManager(const ScriptingManager &) = delete;
+		LuaScriptingManager(const LuaScriptingManager &) = delete;
 
 		/**
 		 * \brief forbidden
 		 */
-		ScriptingManager & operator=(const ScriptingManager &) = delete;
+		LuaScriptingManager & operator=(const LuaScriptingManager &) = delete;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};
@@ -94,7 +90,7 @@ namespace modules {
 } /* namespace modules */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_MODULES_SCRIPTINGMANAGER_H__ */
+#endif /* __I6ENGINE_MODULES_LUASCRIPTINGMANAGER_H__ */
 
 /**
  * @}

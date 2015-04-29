@@ -14,26 +14,35 @@
  * limitations under the License.
  */
 
-#include "i6engine/modules/scripting/ScriptingManager.h"
+#include "i6engine/modules/luascripting/LuaScriptingManager.h"
 
-#include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eString.h"
 
 #include "i6engine/api/configs/ScriptingConfig.h"
 
+extern "C"
+{
+	#include "i6engine/lua/lualib.h"
+}
+
 namespace i6engine {
 namespace modules {
 
-	ScriptingManager::ScriptingManager() : _scripts() {
+	LuaScriptingManager::LuaScriptingManager() : _luaState(luaL_newstate()), _parsedFiles() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
+		luaopen_base(_luaState);
+		luaopen_string(_luaState);
+		luaopen_table(_luaState);
+		luaopen_math(_luaState);
+		luaopen_io(_luaState);
+		luaopen_debug(_luaState);
 	}
 
-	ScriptingManager::~ScriptingManager() {
+	LuaScriptingManager::~LuaScriptingManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		_scripts.clear();
 	}
 
-	void ScriptingManager::News(const api::GameMessage::Ptr & msg) {
+	void LuaScriptingManager::News(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		int type = msg->getSubtype();
 
@@ -63,22 +72,15 @@ namespace modules {
 
 			callScript(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
 		} else {
-			ISIXE_THROW_MESSAGE("ScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
+			//ISIXE_THROW_MESSAGE("LuaScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
 	}
 
-	void ScriptingManager::parseScript(const std::string & file) {
+	void LuaScriptingManager::parseScript(const std::string & file) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		try {
-			if (_scripts.find(file) == _scripts.end()) {
-				boost::python::object module = boost::python::import(utils::split(utils::split(file, "/").back(), ".").front().c_str());
-				boost::python::object global = module.attr("__dict__");
-				boost::python::exec_file(file.c_str(), global, global);
-
-				_scripts[file] = global;
-			}
-		} catch(const boost::python::error_already_set &) {
-			PyErr_PrintEx(0);
+		if (_parsedFiles.find(file) == _parsedFiles.end()) {
+			luaL_dofile(_luaState, file.c_str());
+			_parsedFiles.insert(file);
 		}
 	}
 
