@@ -220,27 +220,6 @@ IF(ISIXE_WITH_PYTHON_SCRIPTING)
 		add_custom_command(TARGET ScriptingAPIPython POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingAPIPython.pyd ${CMAKE_BINARY_DIR}/bin)
 	ENDIF(WIN32)
 
-	PYTHON_ADD_MODULE(ScriptingAudioPython ${srcdir}/api/python/ScriptingAudioPython.cpp)
-	target_link_libraries(ScriptingAudioPython i6engine-modules ${PYTHON_LIBRARIES})
-
-	IF(WIN32)
-		add_custom_command(TARGET ScriptingAudioPython POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingAudioPython.pyd ${CMAKE_BINARY_DIR}/bin)
-	ENDIF(WIN32)
-
-	PYTHON_ADD_MODULE(ScriptingMathPython ${srcdir}/api/python/ScriptingMathPython.cpp)
-	target_link_libraries(ScriptingMathPython i6engine-math ${PYTHON_LIBRARIES})
-
-	IF(WIN32)
-		add_custom_command(TARGET ScriptingMathPython POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingMathPython.pyd ${CMAKE_BINARY_DIR}/bin)
-	ENDIF(WIN32)
-
-	PYTHON_ADD_MODULE(ScriptingGUIPython ${srcdir}/api/python/ScriptingGUIPython.cpp)
-	target_link_libraries(ScriptingGUIPython i6engine-modules)
-
-	IF(WIN32)
-		add_custom_command(TARGET ScriptingGUIPython POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingGUIPython.pyd ${CMAKE_BINARY_DIR}/bin)
-	ENDIF(WIN32)
-
 	PYTHON_ADD_MODULE(ScriptingObjectPython ${srcdir}/api/python/ScriptingObjectPython.cpp)
 	target_link_libraries(ScriptingObjectPython i6engine-modules)
 
@@ -249,24 +228,6 @@ IF(ISIXE_WITH_PYTHON_SCRIPTING)
 	ENDIF(WIN32)
 
 	install(TARGETS ScriptingAPIPython
-		RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-		ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-	)
-
-	install(TARGETS ScriptingAudioPython
-		RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-		ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-	)
-
-	install(TARGETS ScriptingMathPython
-		RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-		ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-	)
-
-	install(TARGETS ScriptingGUIPython
 		RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
 		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 		ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib

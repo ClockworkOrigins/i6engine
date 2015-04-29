@@ -29,8 +29,8 @@
 #include <boost/preprocessor/repetition/enum_trailing.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <luabind/detail/other.hpp>
-#include <luabind/raw_policy.hpp>
+#include "i6engine/luabind/detail/other.hpp"
+#include "i6engine/luabind/raw_policy.hpp"
 
 #if defined(__GNUC__) && __GNUC__ < 3
 # define LUABIND_NO_STRINGSTREAM
@@ -66,7 +66,7 @@ namespace luabind { namespace detail {
 namespace luabind { namespace operators {
 
    #define BOOST_PP_ITERATION_PARAMS_1 (3, \
-       (0, LUABIND_MAX_ARITY, <luabind/detail/call_operator_iterate.hpp>))
+       (0, LUABIND_MAX_ARITY, "i6engine/luabind/detail/call_operator_iterate.hpp"))
    #include BOOST_PP_ITERATE()
     
 }} // namespace luabind::operators

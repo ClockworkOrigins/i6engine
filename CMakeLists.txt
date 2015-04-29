@@ -141,7 +141,6 @@ ENDIF(NOT WIN32)
 	SET(BOOST_COMPONENTS ${libs})
 	find_package(EasyFind REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 	include_directories(SYSTEM ${BOOST_INCLUDE_DIR})
-	MESSAGE(INFO ${BOOST_INCLUDE_DIR})
 	
 #----------------------------------------------------
 # Python
@@ -325,6 +324,14 @@ add_subdirectory(deps)
 #####################################################################################
 
 add_subdirectory(libs)
+
+#####################################################################################
+# scripting exports
+#####################################################################################
+
+IF(ISIXE_WITH_LUA_SCRIPTING OR ISIXE_WITH_PYTHON_SCRIPTING)
+	add_subdirectory(scripting)
+ENDIF(ISIXE_WITH_LUA_SCRIPTING OR ISIXE_WITH_PYTHON_SCRIPTING)
 
 #####################################################################################
 # test

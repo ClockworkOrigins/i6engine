@@ -17,12 +17,29 @@
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/AudioFacade.h"
 
-#include "boost/python.hpp"
+#include "i6engine/luabind/luabind.hpp"
 
-void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
-	i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir, cacheable);
-}
+namespace i6engine {
+namespace lua {
+namespace audio {
 
-BOOST_PYTHON_MODULE(ScriptingAudioPython) {
-	boost::python::def("playSound", &playSound);
+	void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir, cacheable);
+	}
+
+} /* namespace audio */
+} /* namespace lua */
+} /* namespace i6engine */
+
+extern "C" int init(lua_State * L) {
+	using namespace luabind;
+
+	open(L);
+
+	module(L)
+		[
+			def("playSound", &i6engine::lua::audio::playSound)
+		];
+
+	return 0;
 }

@@ -19,32 +19,34 @@
 #include "boost/python.hpp"
 
 BOOST_PYTHON_MODULE(ScriptingMathPython) {
-	boost::python::def("rotateVector", &i6engine::math::rotateVector);
+	using namespace boost::python;
 
-	boost::python::class_<Quaternion>("i6eQuaternion")
-			.def(boost::python::init<i6engine::math::i6eVector, double>())
+	def("rotateVector", &i6engine::math::rotateVector);
+
+	class_<Quaternion>("i6eQuaternion")
+			.def(init<i6engine::math::i6eVector, double>())
 			.def("toVector", &Quaternion::toVector);
 
-	boost::python::class_<Vec3>("i6eVector")
-			.def(boost::python::init<double, double, double>())
-			.def(boost::python::init<std::string>())
+	class_<Vec3>("i6eVector")
+			.def(init<double, double, double>())
+			.def(init<std::string>())
 			.def("getX", &Vec3::getX)
 			.def("getY", &Vec3::getY)
 			.def("getZ", &Vec3::getZ)
 			.def("setX", &Vec3::setX)
 			.def("setY", &Vec3::setY)
 			.def("setZ", &Vec3::setZ)
-			.def(boost::python::self + boost::python::self)
-			.def(boost::python::self - boost::python::self)
-			.def(boost::python::self * boost::python::self)
-			.def(boost::python::self * double())
+			.def(self + self)
+			.def(self - self)
+			.def(self * self)
+			.def(self * double())
 			.def("scalProd", &Vec3::scalProd)
 			.staticmethod("scalProd")
-			.def(boost::python::self / double())
-			.def(boost::python::self += boost::python::self)
-			.def(boost::python::self -= boost::python::self)
-			.def(boost::python::self == boost::python::self)
-			.def(boost::python::self != boost::python::self)
+			.def(self / double())
+			.def(self += self)
+			.def(self -= self)
+			.def(self == self)
+			.def(self != self)
 			.def("normalize", &Vec3::normalize)
 			.def("crossProd", &Vec3::crossProd)
 			.staticmethod("crossProd")

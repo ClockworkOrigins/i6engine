@@ -32,7 +32,7 @@
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
 
-#include <luabind/config.hpp>
+#include "i6engine/luabind/config.hpp"
 #include <boost/config.hpp>
 
 namespace luabind
