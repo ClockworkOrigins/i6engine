@@ -212,32 +212,6 @@ IF(ISIXE_WITH_PYTHON_SCRIPTING)
 		${srcdir}/modules/scripting/ScriptingMailbox.cpp
 		${srcdir}/modules/scripting/ScriptingManager.cpp
 	)
-
-	PYTHON_ADD_MODULE(ScriptingAPIPython ${srcdir}/api/python/ScriptingAPIPython.cpp)
-	target_link_libraries(ScriptingAPIPython i6engine-modules ${PYTHON_LIBRARIES})
-
-	IF(WIN32)
-		add_custom_command(TARGET ScriptingAPIPython POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingAPIPython.pyd ${CMAKE_BINARY_DIR}/bin)
-	ENDIF(WIN32)
-
-	PYTHON_ADD_MODULE(ScriptingObjectPython ${srcdir}/api/python/ScriptingObjectPython.cpp)
-	target_link_libraries(ScriptingObjectPython i6engine-modules)
-
-	IF(WIN32)
-		add_custom_command(TARGET ScriptingObjectPython POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingObjectPython.pyd ${CMAKE_BINARY_DIR}/bin)
-	ENDIF(WIN32)
-
-	install(TARGETS ScriptingAPIPython
-		RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-		ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-	)
-
-	install(TARGETS ScriptingObjectPython
-		RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-		ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-	)
 ENDIF(ISIXE_WITH_PYTHON_SCRIPTING)
 
 # SOURCE_GROUP required for file grouping in Visual Studio

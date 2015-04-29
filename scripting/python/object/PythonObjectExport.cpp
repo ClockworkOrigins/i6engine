@@ -27,50 +27,59 @@
 
 #include "boost/python.hpp"
 
-boost::python::list getAllObjectsOfType(const std::string & types) {
-	boost::python::list l;
-	std::list<i6engine::api::GOPtr>::const_iterator it;
-	std::list<i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
-	for (it = v.begin(); it != v.end(); ++it) {
-		l.append(*it);
+namespace i6engine {
+namespace python {
+namespace object {
+
+	boost::python::list getAllObjectsOfType(const std::string & types) {
+		boost::python::list l;
+		std::list<i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
+		for (std::list<i6engine::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
+			l.append(*it);
+		}
+		return l;
 	}
-	return l;
-}
 
-i6engine::api::GOPtr getObject(const int64_t id) {
-	return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(id);
-}
+	i6engine::api::GOPtr getObject(const int64_t id) {
+		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(id);
+	}
 
-i6engine::api::GameObject * getObjectPtr(const i6engine::api::GOPtr & p) {
-	return p.get();
-}
+	i6engine::api::GameObject * getObjectPtr(const i6engine::api::GOPtr & p) {
+		return p.get();
+	}
 
-i6engine::api::PhysicalStateComponent * getPSC(const i6engine::api::ComPtr & c) {
-	return dynamic_cast<i6engine::api::PhysicalStateComponent *>(c.get());
-}
+	i6engine::api::PhysicalStateComponent * getPSC(const i6engine::api::ComPtr & c) {
+		return dynamic_cast<i6engine::api::PhysicalStateComponent *>(c.get());
+	}
 
-i6engine::api::MeshAppearanceComponent * getMesh(const i6engine::api::ComPtr & c) {
-	return dynamic_cast<i6engine::api::MeshAppearanceComponent *>(c.get());
-}
+	i6engine::api::MeshAppearanceComponent * getMesh(const i6engine::api::ComPtr & c) {
+		return dynamic_cast<i6engine::api::MeshAppearanceComponent *>(c.get());
+	}
 
-void rayTest(i6engine::api::PhysicalStateComponent * c, const Vec3 & from, const Vec3 & to, i6engine::api::PhysicalStateComponent::RayTestRepetition rtr, i6engine::api::PhysicalStateComponent::RayTestNotify rtn, const std::string & script, const std::string & func, const int64_t rayID) {
-	c->rayTest(from, to, rtr, rtn, boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ScriptingMessageType, i6engine::api::scripting::ScrRayResult, i6engine::core::Method::Update, new i6engine::api::scripting::Scripting_RayResult_Update(script, func, rayID), i6engine::core::Subsystem::Unknown));
-}
+	void rayTest(i6engine::api::PhysicalStateComponent * c, const Vec3 & from, const Vec3 & to, i6engine::api::PhysicalStateComponent::RayTestRepetition rtr, i6engine::api::PhysicalStateComponent::RayTestNotify rtn, const std::string & script, const std::string & func, const int64_t rayID) {
+		c->rayTest(from, to, rtr, rtn, boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ScriptingMessageType, i6engine::api::scripting::ScrRayResult, i6engine::core::Method::Update, new i6engine::api::scripting::Scripting_RayResult_Update(script, func, rayID), i6engine::core::Subsystem::Unknown));
+	}
+
+} /* namespace object */
+} /* namespace python */
+} /* namespace i6engine */
 
 BOOST_PYTHON_MODULE(ScriptingObjectPython) {
-	boost::python::class_<i6engine::api::GOPtr>("GOPtr")
-		.def(boost::python::init<i6engine::api::GOPtr>());
+	using namespace boost::python;
 
-	boost::python::class_<i6engine::api::ComPtr>("ComPtr")
-		.def(boost::python::init<i6engine::api::ComPtr>());
+	class_<i6engine::api::GOPtr>("GOPtr")
+		.def(init<i6engine::api::GOPtr>());
 
-	boost::python::class_<i6engine::api::Component, boost::noncopyable>("Component", boost::python::no_init)
+	class_<i6engine::api::ComPtr>("ComPtr")
+		.def(init<i6engine::api::ComPtr>());
+
+	class_<i6engine::api::Component, boost::noncopyable>("Component", no_init)
 		.def("setDie", &i6engine::api::Component::setDie);
 
-	boost::python::class_<i6engine::api::MeshAppearanceComponent, boost::noncopyable, boost::python::bases<i6engine::api::Component> >("MeshAppearanceComponent", boost::python::no_init)
+	class_<i6engine::api::MeshAppearanceComponent, boost::noncopyable, bases<i6engine::api::Component>>("MeshAppearanceComponent", no_init)
 		.def("getVisibility", &i6engine::api::MeshAppearanceComponent::getVisibility);
 
-	boost::python::class_<i6engine::api::PhysicalStateComponent, boost::noncopyable, boost::python::bases<i6engine::api::Component> >("PhysicalStateComponent", boost::python::no_init)
+	class_<i6engine::api::PhysicalStateComponent, boost::noncopyable, bases<i6engine::api::Component>>("PhysicalStateComponent", no_init)
 			.def("getPosition", &i6engine::api::PhysicalStateComponent::getPosition)
 			.def("setPosition", &i6engine::api::PhysicalStateComponent::setPosition)
 			.def("getRotation", &i6engine::api::PhysicalStateComponent::getRotation)
@@ -81,17 +90,17 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 			.def("getLinearVelocity", &i6engine::api::PhysicalStateComponent::getLinearVelocity)
 			.def("reset", &i6engine::api::PhysicalStateComponent::reset);
 
-	boost::python::class_<i6engine::api::RayTestResult>("RayTestResult")
+	class_<i6engine::api::RayTestResult>("RayTestResult")
 			.def_readonly("objID", &i6engine::api::RayTestResult::objID)
 			.def_readonly("sourceID", &i6engine::api::RayTestResult::sourceID);
 
-	boost::python::enum_<i6engine::api::PhysicalStateComponent::RayTestRepetition>("RayTestRepetition")
+	enum_<i6engine::api::PhysicalStateComponent::RayTestRepetition>("RayTestRepetition")
 			.value("STOP", i6engine::api::PhysicalStateComponent::RayTestRepetition::STOP)
 			.value("ONCE", i6engine::api::PhysicalStateComponent::RayTestRepetition::ONCE)
 			.value("PERIODIC", i6engine::api::PhysicalStateComponent::RayTestRepetition::PERIODIC)
 			.export_values();
 
-	boost::python::enum_<i6engine::api::PhysicalStateComponent::RayTestNotify>("RayTestNotify")
+	enum_<i6engine::api::PhysicalStateComponent::RayTestNotify>("RayTestNotify")
 			.value("ALWAYS", i6engine::api::PhysicalStateComponent::RayTestNotify::ALWAYS)
 			.value("CHANGE", i6engine::api::PhysicalStateComponent::RayTestNotify::CHANGE)
 			.value("FOUND", i6engine::api::PhysicalStateComponent::RayTestNotify::FOUND)
@@ -99,28 +108,28 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 			.value("OBJECTCHANGE", i6engine::api::PhysicalStateComponent::RayTestNotify::OBJECTCHANGE)
 			.export_values();
 
-	boost::python::def("getMeshAppearanceComponent", &getMesh, boost::python::return_internal_reference<>());
-	boost::python::def("getPhysicalStateComponent", &getPSC, boost::python::return_internal_reference<>());
+	def("getMeshAppearanceComponent", &i6engine::python::object::getMesh, return_internal_reference<>());
+	def("getPhysicalStateComponent", &i6engine::python::object::getPSC, return_internal_reference<>());
 
 	i6engine::api::ComPtr(i6engine::api::GameObject::*getGOC1)(uint32_t) const = &i6engine::api::GameObject::getGOC;
 	i6engine::api::ComPtr(i6engine::api::GameObject::*getGOC2)(uint32_t, const std::string &) const = &i6engine::api::GameObject::getGOC;
 
-	boost::python::class_<i6engine::api::GameObject, boost::noncopyable>("GameObject", boost::python::no_init)
+	class_<i6engine::api::GameObject, boost::noncopyable>("GameObject", no_init)
 		.def("getGOC", getGOC1)
 		.def("getGOC", getGOC2)
 		.def("getType", &i6engine::api::GameObject::getType)
 		.def("setDie", &i6engine::api::GameObject::setDie);
 
-	boost::python::def("getObject", &getObject);
-	boost::python::def("getAllObjectsOfType", &getAllObjectsOfType);
-	boost::python::def("getObjectPtr", &getObjectPtr, boost::python::return_internal_reference<>());
-	boost::python::def("rayTest", &rayTest);
+	def("getObject", &i6engine::python::object::getObject);
+	def("getAllObjectsOfType", &i6engine::python::object::getAllObjectsOfType);
+	def("getObjectPtr", &i6engine::python::object::getObjectPtr, return_internal_reference<>());
+	def("rayTest", &i6engine::python::object::rayTest);
 
-	boost::python::enum_<i6engine::api::components::ComponentTypes>("ComponentTypes")
+	enum_<i6engine::api::components::ComponentTypes>("ComponentTypes")
 		.value("MeshAppearanceComponent", i6engine::api::components::ComponentTypes::MeshAppearanceComponent)
 		.value("PhysicalStateComponent", i6engine::api::components::ComponentTypes::PhysicalStateComponent)
 		.export_values();
 
-	boost::python::class_<i6engine::api::CollisionGroup>("CollisionGroup")
-		.def(boost::python::init<uint32_t, uint32_t, uint32_t>());
+	class_<i6engine::api::CollisionGroup>("CollisionGroup")
+		.def(init<uint32_t, uint32_t, uint32_t>());
 }

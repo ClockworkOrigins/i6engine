@@ -16,12 +16,29 @@
 
 #include "i6engine/api/EngineController.h"
 
-#include "boost/python.hpp"
+#include "i6engine/luabind/luabind.hpp"
 
-uint64_t getCurrentTime() {
-	return i6engine::api::EngineController::GetSingleton().getCurrentTime();
-}
+namespace i6engine {
+namespace lua {
+namespace api {
 
-BOOST_PYTHON_MODULE(ScriptingAPIPython) {
-	boost::python::def("getCurrentTime", &getCurrentTime);
+	uint64_t getCurrentTime() {
+		return i6engine::api::EngineController::GetSingleton().getCurrentTime();
+	}
+
+} /* namespace api */
+} /* namespace lua */
+} /* namespace i6engine */
+
+extern "C" int init(lua_State * L) {
+	using namespace luabind;
+
+	open(L);
+
+	module(L)
+		[
+			def("getCurrentTime", &i6engine::lua::api::getCurrentTime)
+		];
+
+	return 0;
 }

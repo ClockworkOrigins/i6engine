@@ -15,29 +15,23 @@
  */
 
 #include "i6engine/api/EngineController.h"
-#include "i6engine/api/facades/GUIFacade.h"
 
 #include "boost/python.hpp"
 
 namespace i6engine {
 namespace python {
-namespace gui {
+namespace api {
 
-	void addImageset(const std::string & imageset) {
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addImageset(imageset);
+	uint64_t getCurrentTime() {
+		return i6engine::api::EngineController::GetSingleton().getCurrentTime();
 	}
 
-	void addText(const std::string & name, const std::string & text) {
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addTextToWidget(name, text);
-	}
-
-} /* namespace gui */
+} /* namespace api */
 } /* namespace python */
 } /* namespace i6engine */
 
-BOOST_PYTHON_MODULE(ScriptingGUIPython) {
+BOOST_PYTHON_MODULE(ScriptingAPIPython) {
 	using namespace boost::python;
 
-	def("addImageset", &i6engine::python::gui::addImageset);
-	def("addText", &i6engine::python::gui::addText);
+	def("getCurrentTime", &i6engine::python::api::getCurrentTime);
 }
