@@ -1,4 +1,4 @@
-material "Column_Column"
+material Column_Column
 {
 	technique
 	{
