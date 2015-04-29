@@ -20,14 +20,10 @@
 
 #include "i6engine/api/configs/ScriptingConfig.h"
 
-#include "i6engine/modules/scripting/ScriptingController.h"
-
-#include "boost/python.hpp"
-
 namespace i6engine {
 namespace modules {
 
-	ScriptingManager::ScriptingManager(ScriptingController * ctrl) : _scripts(), _ctrl(ctrl) {
+	ScriptingManager::ScriptingManager() : _scripts() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 	}
 
@@ -65,75 +61,8 @@ namespace modules {
 			std::string func = static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->func;
 
 			callScript(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
-		} else if (msg->getSubtype() == api::scripting::ScrReset) {
-			_ctrl->reset();
 		} else {
 			//ISIXE_THROW_MESSAGE("ScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
-		}
-	}
-
-	void ScriptingManager::callScript(const std::string & file, const std::string & func) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		parseScript(file, func);
-
-		try {
-			boost::python::object f = _scripts[file][func];
-
-			f();
-		} catch(const boost::python::error_already_set &) {
-			PyErr_PrintEx(0);
-		}
-	}
-
-	void ScriptingManager::callScript(const std::string & file, const std::string & func, const int64_t id) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		parseScript(file, func);
-
-		try {
-			boost::python::object f = _scripts[file][func];
-
-			f(id);
-		} catch(const boost::python::error_already_set &) {
-			PyErr_PrintEx(0);
-		}
-	}
-
-	void ScriptingManager::callScript(const std::string & file, const std::string & func, const int64_t id, const int64_t id2) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		parseScript(file, func);
-
-		try {
-			boost::python::object f = _scripts[file][func];
-
-			f(id, id2);
-		} catch (const boost::python::error_already_set &) {
-			PyErr_PrintEx(0);
-		}
-	}
-
-	void ScriptingManager::callScript(const std::string & file, const std::string & func, const int64_t id, const double d) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		parseScript(file, func);
-
-		try {
-			boost::python::object f = _scripts[file][func];
-
-			f(id, d);
-		} catch (const boost::python::error_already_set &) {
-			PyErr_PrintEx(0);
-		}
-	}
-
-	void ScriptingManager::callScript(const std::string & file, const std::string & func, const api::RayTestResult & rtr, const int64_t rayID) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		parseScript(file, func);
-
-		try {
-			boost::python::object f = _scripts[file][func];
-
-			f(rtr, rayID);
-		} catch(const boost::python::error_already_set &) {
-			PyErr_PrintEx(0);
 		}
 	}
 

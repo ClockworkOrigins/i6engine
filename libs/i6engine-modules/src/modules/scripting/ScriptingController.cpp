@@ -70,7 +70,7 @@ namespace PythonAPIWorkaround {
 		boost::filesystem::path workingDir2 = boost::filesystem::complete(scriptsPath.c_str()).normalize();
 		PyList_Insert(sysPath, 0, PyString_FromString(workingDir2.string().c_str()));
 
-		_manager = new ScriptingManager(this);
+		_manager = new ScriptingManager();
 		_mailbox = new ScriptingMailbox(_manager);
 
 		ISIXE_REGISTERMESSAGETYPE(api::messages::ScriptingMessageType, ScriptingMailbox::News, _mailbox);

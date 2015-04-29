@@ -28,16 +28,15 @@
 
 #include "i6engine/api/GameMessage.h"
 
-#include "boost/python/object.hpp"
+#include "boost/python.hpp"
 
 namespace i6engine {
 namespace api {
 	struct RayTestResult;
-} /* api */
+} /* namespace api */
 namespace modules {
 
 	class ScriptingMailbox;
-	class ScriptingController;
 
 	class ScriptingManager {
 		friend class ScriptingMailbox;
@@ -46,7 +45,7 @@ namespace modules {
 		/**
 		 * \brief constructor
 		 */
-		ScriptingManager(ScriptingController * ctrl);
+		ScriptingManager();
 
 		/**
 		 * \brief destructor
@@ -64,19 +63,18 @@ namespace modules {
 		/**
 		 * \brief executes the given method in the given script
 		 */
-		void callScript(const std::string & file, const std::string & func);
+		template<typename... args>
+		void callScript(const std::string & file, const std::string & func, args... B) {
+			parseScript(file, func);
 
-		/**
-		 * \brief executes the given method in the given script with parameter
-		 */
-		void callScript(const std::string & file, const std::string & func, const int64_t id);
-		void callScript(const std::string & file, const std::string & func, const int64_t id, const int64_t id2);
-		void callScript(const std::string & file, const std::string & func, const int64_t id, const double d);
+			try {
+				boost::python::object f = _scripts[file][func];
 
-		/**
-		 * \brief executes the given method in the given script with parameter
-		 */
-		void callScript(const std::string & file, const std::string & func, const api::RayTestResult & rtr, const int64_t rayID);
+				f(B...);
+			} catch (const boost::python::error_already_set &) {
+				PyErr_PrintEx(0);
+			}
+		}
 
 		/**
 		 * \brief parses the given script
@@ -92,8 +90,6 @@ namespace modules {
 		 * \brief forbidden
 		 */
 		ScriptingManager & operator=(const ScriptingManager &) = delete;
-
-		ScriptingController * _ctrl;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};
