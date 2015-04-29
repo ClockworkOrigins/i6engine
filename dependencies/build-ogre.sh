@@ -123,7 +123,7 @@ cmake -G 'Unix Makefiles'\
 	-DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE\
 	-DCMAKE_INSTALL_RPATH="${DEP_DIR}/boost/lib"\
 	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE\
-	${RELEASE_FLAG} . &> /dev/null
+	${RELEASE_FLAG} . > /dev/null
 
 status "Building release version of Ogre"
 # I'll leave the build output enabled here, because it's cmake output and because it takes fairly long

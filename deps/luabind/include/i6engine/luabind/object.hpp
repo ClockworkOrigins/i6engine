@@ -208,11 +208,11 @@ namespace adl
       detail::stack_pop pop2(L, 1); \
       detail::push(L, rhs); \
 \
-      return fn(L, -1, -2) != 0; \
+      return lua_compare(L, -1, -2, fn) != 0; \
   }
 
-LUABIND_BINARY_OP_DEF(==, lua_equal)
-LUABIND_BINARY_OP_DEF(<, lua_lessthan)
+LUABIND_BINARY_OP_DEF(==, LUA_OPEQ)
+LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
 
   template<class ValueWrapper>
   std::ostream& operator<<(std::ostream& os
@@ -225,7 +225,7 @@ LUABIND_BINARY_OP_DEF(<, lua_lessthan)
       value_wrapper_traits<ValueWrapper>::unwrap(interpreter
         , static_cast<ValueWrapper const&>(v));
 		char const* p = lua_tostring(interpreter, -1);
-        std::size_t len = lua_strlen(interpreter, -1);
+        std::size_t len = lua_rawlen(interpreter, -1);
 		std::copy(p, p + len, std::ostream_iterator<char>(os));
 		return os;
 	}

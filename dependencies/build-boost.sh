@@ -49,12 +49,12 @@ fi
 
 title "Compile Boost & Boost.Log"
 
-./download-dependency.sh ${ARCHIVE}
-
 if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}" && ! uptodate "${EX_DIR}/${BOOST_LOG_ARCHIVE}" "${PREFIX}"; then
 	status "Boost seems to be up to date, skipping build"
 	exit 0
 fi
+
+./download-dependency.sh ${ARCHIVE}
 
 status "Cleaning Boost"
 rm -rf "${DEST_DIR}" >/dev/null

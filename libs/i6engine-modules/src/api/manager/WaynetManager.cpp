@@ -1,5 +1,9 @@
 #include "i6engine/api/manager/WaynetManager.h"
 
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	#include <cfloat>
+#endif
+
 #include "i6engine/core/configs/SubsystemConfig.h"
 
 #include "i6engine/api/EngineController.h"

@@ -104,7 +104,7 @@ cmake -G 'Unix Makefiles'\
  -DWITH_TESTING=OFF\
  -DWITH_SIM=OFF\
  -DWITH_LOGGING=OFF\
- -DCMAKE_CXX_COMPILER=clang++\
+ -DCMAKE_CXX_COMPILER=g++\
  .
 
 status "Building M2etis"

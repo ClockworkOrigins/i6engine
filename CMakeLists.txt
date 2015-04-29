@@ -141,6 +141,7 @@ ENDIF(NOT WIN32)
 	SET(BOOST_COMPONENTS ${libs})
 	find_package(EasyFind REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 	include_directories(SYSTEM ${BOOST_INCLUDE_DIR})
+	MESSAGE(INFO ${BOOST_INCLUDE_DIR})
 	
 #----------------------------------------------------
 # Python
