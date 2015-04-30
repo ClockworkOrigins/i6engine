@@ -26,6 +26,7 @@
 #include "i6engine/api/components/MovingCameraComponent.h"
 #include "i6engine/api/components/ParticleEmitterComponent.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
+#include "i6engine/api/components/Point2PointConstraintComponent.h"
 #include "i6engine/api/components/SoundComponent.h"
 #include "i6engine/api/components/SoundListenerComponent.h"
 #include "i6engine/api/components/SpawnpointComponent.h"
@@ -121,6 +122,12 @@ TEST(Component, Synchronize) {
 		auto pc = i6engine::api::PhysicalStateComponent::createC(0, paramsPhysicalState);
 		auto newMap = pc->synchronize();
 		i6engine::api::PhysicalStateComponent::createC(0, newMap);
+	}
+	{
+		attributeMap paramsPoint2PointConstraint = { { "selfIdentifier", "a" }, { "targetIdentifier", "b" }, { "selfOffset", "0.0 0.0 0.0" }, { "targetOffset", "0.0 0.0 0.0" } };
+		auto pc = i6engine::api::Point2PointConstraintComponent::createC(0, paramsPoint2PointConstraint);
+		auto newMap = pc->synchronize();
+		i6engine::api::Point2PointConstraintComponent::createC(0, newMap);
 	}
 	{
 		attributeMap paramsSound = { { "file", "blafoo" }, { "direction", "0.0 0.0 0.0" }, { "offset", "0.0 0.0 0.0" }, { "looping", "0" }, { "maxDist", "10" }, { "cache", "0" } };

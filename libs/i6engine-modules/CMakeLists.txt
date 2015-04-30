@@ -42,6 +42,7 @@ set(i6components
 	${srcdir}/api/components/MovingCameraComponent.cpp
 	${srcdir}/api/components/ParticleEmitterComponent.cpp
 	${srcdir}/api/components/PhysicalStateComponent.cpp
+	${srcdir}/api/components/Point2PointConstraintComponent.cpp
 	${srcdir}/api/components/SoundComponent.cpp
 	${srcdir}/api/components/SoundListenerComponent.cpp
 	${srcdir}/api/components/SpawnpointComponent.cpp

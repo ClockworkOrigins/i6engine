@@ -27,6 +27,7 @@
 #include "i6engine/api/components/MovingCameraComponent.h"
 #include "i6engine/api/components/ParticleEmitterComponent.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
+#include "i6engine/api/components/Point2PointConstraintComponent.h"
 #include "i6engine/api/components/SoundComponent.h"
 #include "i6engine/api/components/SoundListenerComponent.h"
 #include "i6engine/api/components/SpawnpointComponent.h"
@@ -163,6 +164,15 @@ TEST(Component, CreateException) {
 			auto newMap = paramsPhysicalState;
 			newMap.erase(it->first);
 			ASSERT_THROW(i6engine::api::PhysicalStateComponent::createC(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
+	{
+		attributeMap paramsPoint2PointConstraint = { { "selfIdentifier", "a" }, { "targetIdentifier", "b" }, { "selfOffset", "0.0 0.0 0.0" }, { "targetOffset", "0.0 0.0 0.0" } };
+		i6engine::api::Point2PointConstraintComponent::createC(0, paramsPoint2PointConstraint);
+		for (auto it = paramsPoint2PointConstraint.begin(); it != paramsPoint2PointConstraint.end(); it++) {
+			auto newMap = paramsPoint2PointConstraint;
+			newMap.erase(it->first);
+			ASSERT_THROW(i6engine::api::Point2PointConstraintComponent::createC(0, newMap), i6engine::utils::exceptions::ApiException);
 		}
 	}
 	{

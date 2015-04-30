@@ -152,7 +152,7 @@ namespace modules {
 
 	uint64_t PhysicsManager::_tickCount = 0;
 
-	PhysicsManager::PhysicsManager(PhysicsController * pc) : _ctrl(pc), _collisionShapes(), _dynamicsWorld(), _broadphase(), _dispatcher(), _collisionConfiguration(), _solver(), _nodes(), _lngTime(api::EngineController::GetSingleton().getCurrentTime()), _tickList(), _paused(false) {
+	PhysicsManager::PhysicsManager(PhysicsController * pc) : _ctrl(pc), _collisionShapes(), _dynamicsWorld(), _broadphase(), _dispatcher(), _collisionConfiguration(), _solver(), _nodes(), _lngTime(api::EngineController::GetSingleton().getCurrentTime()), _tickList(), _constraints(), _paused(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			// Build the broadphase
@@ -276,6 +276,17 @@ namespace modules {
 			if (!_nodes[pnc->getWaitID()]->addChild(pnc->getID(), pnc->pos, pnc->rot, pnc->scale, pnc->collisionGroup, pnc->shapeType, pnc->shapeParams)) {
 				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg); // PhysicsNode couldn't be created, so queue this message again and try it later
 			}
+		} else if (type == api::physics::PhyP2PConstraint) {
+			api::physics::Physics_P2PConstraint_Create * ppc = dynamic_cast<api::physics::Physics_P2PConstraint_Create *>(msg->getContent());
+			auto itSelf = _nodes.find(ppc->_waitForId);
+			auto itTarget = _nodes.find(ppc->targetGOID);
+			if (itSelf == _nodes.end() || itTarget == _nodes.end()) {
+				ISIXE_THROW_FAILURE("PhysicsManager", "Tried to create constraint for not existing PhysicsNode(s)");
+			}
+			btTypedConstraint * p2p = new btPoint2PointConstraint(*itSelf->second->getRigidBody(), *itTarget->second->getRigidBody(), ppc->selfOffset.toBullet(), ppc->targetOffset.toBullet());
+			_dynamicsWorld->addConstraint(p2p);
+			_constraints[ppc->_waitForId].push_back(std::make_pair(ppc->targetGOID, p2p));
+			_constraints[ppc->targetGOID].push_back(std::make_pair(ppc->_waitForId, p2p));
 		}
 	}
 
@@ -319,8 +330,47 @@ namespace modules {
 			if (_nodes[pnc->getWaitID()]->empty()) {
 				_nodes.erase(pnc->getWaitID());
 			}
+
+			auto it = _constraints.find(pnc->getWaitID());
+			if (it != _constraints.end()) {
+				for (auto & p : it->second) {
+					auto it2 = _constraints.find(p.first);
+					if (it2 != _constraints.end()) {
+						for (auto it3 = it2->second.begin(); it3 != it2->second.end(); it3++) {
+							if (it3->first == pnc->getWaitID()) {
+								it2->second.erase(it3);
+								break;
+							}
+						}
+						break;
+					}
+					_dynamicsWorld->removeConstraint(p.second);
+					delete p.second;
+				}
+				_constraints.erase(it);
+			}
 		} else if (msg->getSubtype() == api::physics::PhyReset) {
 			_ctrl->reset();
+		} else if (msg->getSubtype() == api::physics::PhyP2PConstraint) {
+			api::physics::Physics_P2PConstraint_Delete * ppd = dynamic_cast<api::physics::Physics_P2PConstraint_Delete *>(msg->getContent());
+			auto it = _constraints.find(ppd->getWaitID());
+			if (it != _constraints.end()) {
+				for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++) {
+					if (it2->first == ppd->targetGOID) {
+						_dynamicsWorld->removeConstraint(it2->second);
+						delete it2->second;
+						it->second.erase(it2);
+					}
+				}
+			}
+			it = _constraints.find(ppd->targetGOID);
+			if (it != _constraints.end()) {
+				for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++) {
+					if (it2->first == ppd->getWaitID()) {
+						it->second.erase(it2);
+					}
+				}
+			}
 		} else {
 			ISIXE_THROW_MESSAGE("PhysicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

@@ -40,6 +40,7 @@ class btDynamicsWorld;
 class btMotionState;
 class btRigidBody;
 class btSequentialImpulseConstraintSolver;
+class btTypedConstraint;
 
 namespace i6engine {
 namespace modules {
@@ -202,6 +203,8 @@ namespace modules {
 		uint64_t _lngTime;
 
 		std::vector<PhysicsNode *> _tickList;
+
+		std::map<int64_t, std::vector<std::pair<int64_t, btTypedConstraint *>>> _constraints;
 
 		/**
 		 * \brief is the subsystem paused or not?

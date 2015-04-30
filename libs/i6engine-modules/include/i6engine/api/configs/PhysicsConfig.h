@@ -44,7 +44,8 @@ namespace physics {
 		PhyRayTest,
 		PhyRayTestResult,
 		PhyPause,
-		PhyAddPosition
+		PhyAddPosition,
+		PhyP2PConstraint
 	};
 
 	/**
@@ -226,6 +227,32 @@ namespace physics {
 			return new Physics_AddPosition_Update(*this);
 		}
 	} Physics_AddPosition_Update;
+
+	/**
+	 * \brief message for creation of Point2PointConstraint between two PhysicsNodes
+	 */
+	typedef struct Physics_P2PConstraint_Create : GameMessageStruct {
+		int64_t targetGOID;
+		Vec3 selfOffset;
+		Vec3 targetOffset;
+		Physics_P2PConstraint_Create(const int64_t goid, const int64_t targetGoid, const Vec3 & s, const Vec3 & t) : GameMessageStruct(-1, goid), targetGOID(targetGOID), selfOffset(s), targetOffset(t) {
+		}
+		Physics_P2PConstraint_Create * copy() {
+			return new Physics_P2PConstraint_Create(*this);
+		}
+	} Physics_P2PConstraint_Create;
+
+	/**
+	 * \brief message for deletion of Point2PointConstraint between two PhysicsNodes
+	 */
+	typedef struct Physics_P2PConstraint_Delete : GameMessageStruct {
+		int64_t targetGOID;
+		Physics_P2PConstraint_Delete(const int64_t goid, const int64_t targetGoid) : GameMessageStruct(-1, goid), targetGOID(targetGOID) {
+		}
+		Physics_P2PConstraint_Delete * copy() {
+			return new Physics_P2PConstraint_Delete(*this);
+		}
+	} Physics_P2PConstraint_Delete;
 
 } /* namespace physics */
 } /* namespace api */

@@ -19,8 +19,10 @@
  * @{
  */
 
-#ifndef __I6ENGINE_API_WAYPOINTCOMPONENT_H__
-#define __I6ENGINE_API_WAYPOINTCOMPONENT_H__
+#ifndef __I6ENGINE_API_POINT2POINTCONSTRAINTCOMPONENT_H__
+#define __I6ENGINE_API_POINT2POINTCONSTRAINTCOMPONENT_H__
+
+#include "i6engine/math/i6eVector.h"
 
 #include "i6engine/api/components/Component.h"
 
@@ -28,13 +30,13 @@ namespace i6engine {
 namespace api {
 
 	/**
-	 * \class WaypointComponent
-	 * \brief Tells the engine what heightmap and texture to use when rendering the GameObject.
+	 * \class Point2PointConstraintComponent
+	 * \brief Connects two PhysicalStateComponents in a point RELATIVE to their origin
 	 */
-	class ISIXE_MODULES_API WaypointComponent : public Component {
+	class ISIXE_MODULES_API Point2PointConstraintComponent : public Component {
 	public:
-		WaypointComponent(const int64_t id, const attributeMap & params);
-		~WaypointComponent();
+		Point2PointConstraintComponent(const int64_t id, const attributeMap & params);
+		~Point2PointConstraintComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap
@@ -51,34 +53,26 @@ namespace api {
 		attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
-			return "Waypoint";
+			return "Point2PointConstraint";
 		}
 
 		std::vector<componentOptions> getComponentOptions() override;
 
-		std::string getName() const {
-			return _name;
-		}
-
-		std::vector<std::string> getConnections() const {
-			return _connections;
-		}
-
-		bool isConnected(const std::string & name) const;
-
-		void addConnection(const std::string & name);
-
-		void removeConnection(const std::string & name);
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 	private:
-		std::string _name;
-		std::vector<std::string> _connections;
+		bool _connected;
+		std::string _selfIdentifier;
+		std::string _targetIdentifier;
+		Vec3 _selfOffset;
+		Vec3 _targetOffset;
+		int64_t _targetID;
 	};
 
 } /* namespace api */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_API_WAYPOINTCOMPONENT_H__ */
+#endif /* __I6ENGINE_API_POINT2POINTCONSTRAINTCOMPONENT_H__ */
 
 /**
  * @}
