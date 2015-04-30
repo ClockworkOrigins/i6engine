@@ -62,11 +62,11 @@ namespace modules {
 		/**
 		 * \brief executes the given method in the given script
 		 */
-		template<typename... args>
-		void callScript(const std::string & file, const std::string & func, args... B) {
+		template<typename Ret, typename... args>
+		Ret callScript(const std::string & file, const std::string & func, args... B) {
 			ASSERT_THREAD_SAFETY_FUNCTION
 			parseScript(file);
-			luabind::call_function<void>(_luaState, func.c_str(), B...);
+			return Ret(luabind::call_function<Ret>(_luaState, func.c_str(), B...));
 		}
 
 		/**

@@ -36,41 +36,43 @@ namespace modules {
 		luaopen_math(_luaState);
 		luaopen_io(_luaState);
 		luaopen_debug(_luaState);
+		luabind::open(_luaState);
 	}
 
 	LuaScriptingManager::~LuaScriptingManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		lua_close(_luaState);
 	}
 
 	void LuaScriptingManager::News(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		int type = msg->getSubtype();
+		uint16_t type = msg->getSubtype();
 
 		if (type == api::scripting::ScrCall) {
 			std::string file = static_cast<api::scripting::Scripting_Call_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_Call_Update *>(msg->getContent())->func;
 
-			callScript(file, func);
+			callScript<void>(file, func);
 		} else if (type == api::scripting::ScrCallID) {
 			std::string file = static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->func;
 
-			callScript(file, func, static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->intParam);
+			callScript<void>(file, func, static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->intParam);
 		} else if (type == api::scripting::ScrCallID2) {
 			std::string file = static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->func;
 
-			callScript(file, func, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam2);
+			callScript<void>(file, func, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam2);
 		} else if (type == api::scripting::ScrCallID2Double) {
 			std::string file = static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->func;
 
-			callScript(file, func, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->doubleParam);
+			callScript<void>(file, func, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->doubleParam);
 		} else if (type == api::scripting::ScrRayResult) {
 			std::string file = static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->func;
 
-			callScript(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
+			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
 		} else {
 			//ISIXE_THROW_MESSAGE("LuaScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

@@ -60,18 +60,19 @@ namespace modules {
 		/**
 		 * \brief executes the given method in the given script
 		 */
-		template<typename... args>
-		void callScript(const std::string & file, const std::string & func, args... B) {
+		template<typename Ret, typename... args>
+		Ret callScript(const std::string & file, const std::string & func, args... B) {
 			ASSERT_THREAD_SAFETY_FUNCTION
 			parseScript(file);
 
 			try {
 				boost::python::object f = _scripts[file][func];
 
-				f(B...);
+				return boost::python::call_method<Ret>(f.ptr(), func.c_str(), B...);
 			} catch (const boost::python::error_already_set &) {
 				PyErr_PrintEx(0);
 			}
+			return Ret();
 		}
 
 		/**

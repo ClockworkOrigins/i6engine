@@ -60,21 +60,7 @@ set(luaSrc
 	${srcdir}/lzio.c
 )
 
-set(luacSrc
-	${srcdir}/luac.c
-)
-
 add_library(lua STATIC ${luaSrc})
-
-add_executable(luac ${luacSrc})
-
-SET_TARGET_PROPERTIES(luac PROPERTIES LINKER_LANGUAGE CXX)
-
-target_link_libraries(luac lua)
-
-IF(WIN32)
-	add_custom_command(TARGET luac POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/luac.exe ${CMAKE_BINARY_DIR}/bin)
-ENDIF(WIN32)
 
 ########################
 # lua install
@@ -86,8 +72,4 @@ install(TARGETS lua
 	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
 	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-)
-
-install(TARGETS luac
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 )

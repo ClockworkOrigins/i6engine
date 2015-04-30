@@ -41,27 +41,27 @@ namespace modules {
 			std::string file = static_cast<api::scripting::Scripting_Call_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_Call_Update *>(msg->getContent())->func;
 
-			callScript(file, func);
+			callScript<void>(file, func);
 		} else if (type == api::scripting::ScrCallID) {
 			std::string file = static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->func;
 
-			callScript(file, func, static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->intParam);
+			callScript<void>(file, func, static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->intParam);
 		} else if (type == api::scripting::ScrCallID2) {
 			std::string file = static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->func;
 
-			callScript(file, func, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam2);
+			callScript<void>(file, func, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam2);
 		} else if (type == api::scripting::ScrCallID2Double) {
 			std::string file = static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->func;
 
-			callScript(file, func, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->doubleParam);
+			callScript<void>(file, func, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->doubleParam);
 		} else if (type == api::scripting::ScrRayResult) {
 			std::string file = static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->func;
 
-			callScript(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
+			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
 		} else {
 			ISIXE_THROW_MESSAGE("ScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

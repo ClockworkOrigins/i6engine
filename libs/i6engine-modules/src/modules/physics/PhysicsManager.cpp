@@ -37,125 +37,116 @@
 #include "i6engine/modules/physics/PhysicsController.h"
 #include "i6engine/modules/physics/PhysicsNode.h"
 
-#include "boost/lexical_cast.hpp"
-
 #include "btBulletDynamicsCommon.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 
-#include "clockUtils/iniParser/iniParser.h"
-
-#include "OGRE/OgreDefaultHardwareBufferManager.h"
-#include "OGRE/OgreEntity.h"
-#include "OGRE/OgreMeshManager.h"
-#include "OGRE/OgreRoot.h"
-
 namespace i6engine {
-	namespace modules {
+namespace modules {
 
-		struct FilterCallback : public btOverlapFilterCallback {
-			// return true when pairs need collision
-			virtual bool needBroadphaseCollision(btBroadphaseProxy * proxy0, btBroadphaseProxy * proxy1) const {
-				bool collides = (proxy0->m_collisionFilterGroup & proxy1->m_collisionFilterMask) != 0;
-				collides = collides && (proxy1->m_collisionFilterGroup & proxy0->m_collisionFilterMask);
+	struct FilterCallback : public btOverlapFilterCallback {
+		// return true when pairs need collision
+		virtual bool needBroadphaseCollision(btBroadphaseProxy * proxy0, btBroadphaseProxy * proxy1) const {
+			bool collides = (proxy0->m_collisionFilterGroup & proxy1->m_collisionFilterMask) != 0;
+			collides = collides && (proxy1->m_collisionFilterGroup & proxy0->m_collisionFilterMask);
 
-				// add some additional logic here that modified 'collides'
-				return true;
-			}
-		};
+			// add some additional logic here that modified 'collides'
+			return true;
+		}
+	};
 
-		// TODO: move to memberfunction
-		// TODO: only save contact pair if objects really collide
-		bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colObj0, int partId0, int index0, const btCollisionObject * colObj1, int partId1, int index1) {
-			// do nothing only in multiplayer clients
-			if (api::EngineController::GetSingletonPtr()->getType() != api::GameType::SERVER && api::EngineController::GetSingletonPtr()->getType() != api::GameType::SINGLEPLAYER) {
-				return false;
-			}
-
-			PhysicsNode * a = reinterpret_cast<PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj0)->getCollisionObject()->getUserPointer());
-			PhysicsNode * b = reinterpret_cast<PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj1)->getCollisionObject()->getUserPointer());
-
-			if (a->getCrashMask() & b->getCrashType()) {
-				// A collides with B
-				if (PhysicsManager::_collisionPairs.find(std::make_pair(a, b)) == PhysicsManager::_collisionPairs.end()) {
-					PhysicsManager::_collisionPairs[std::make_pair(a, b)] = PhysicsManager::_tickCount;
-
-					if (a->getShatterInterest() & api::ShatterInterest::START) {
-						api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), api::ShatterInterest::START), core::Subsystem::Physic);
-						// TODO: (Michael) improve this hack
-						api::GOPtr objA = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
-						if (objA == nullptr) {
-							return false;
-						}
-						core::IPKey aOwner = objA->getOwner();
-						if (aOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-						} else {
-							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-							api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
-						}
-					}
-				} else {
-					PhysicsManager::_collisionPairs[std::make_pair(a, b)] = PhysicsManager::_tickCount;
-
-					if (a->getShatterInterest() & api::ShatterInterest::ALWAYS) {
-						api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), api::ShatterInterest::ALWAYS), core::Subsystem::Physic);
-						// TODO: (Michael) improve this hack
-						api::GOPtr objA = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
-						if (objA == nullptr) {
-							return false;
-						}
-						core::IPKey aOwner = objA->getOwner();
-						if (aOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-						} else {
-							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-							api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
-						}
-					}
-				}
-			}
-			if (b->getCrashMask() & a->getCrashType()) {
-				// B collides with A
-				if (PhysicsManager::_collisionPairs.find(std::make_pair(b, a)) == PhysicsManager::_collisionPairs.end()) {
-					PhysicsManager::_collisionPairs[std::make_pair(b, a)] = PhysicsManager::_tickCount;
-
-					if (b->getShatterInterest() & api::ShatterInterest::START) {
-						api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), api::ShatterInterest::START), core::Subsystem::Physic);
-						// TODO: (Michael) improve this hack
-						api::GOPtr objB = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
-						if (objB == nullptr) {
-							return false;
-						}
-						core::IPKey bOwner = objB->getOwner();
-						if (bOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-						} else {
-							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-							api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
-						}
-					}
-				} else {
-					PhysicsManager::_collisionPairs[std::make_pair(b, a)] = PhysicsManager::_tickCount;
-
-					if (b->getShatterInterest() & api::ShatterInterest::ALWAYS) {
-						api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), api::ShatterInterest::ALWAYS), core::Subsystem::Physic);
-						// TODO: (Michael) improve this hack
-						api::GOPtr objB = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
-						if (objB == nullptr) {
-							return false;
-						}
-						core::IPKey bOwner = objB->getOwner();
-						if (bOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
-							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-						} else {
-							api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-							api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
-						}
-					}
-				}
-			}
+	// TODO: move to memberfunction
+	// TODO: only save contact pair if objects really collide
+	bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colObj0, int partId0, int index0, const btCollisionObject * colObj1, int partId1, int index1) {
+		// do nothing in multiplayer clients
+		if (api::EngineController::GetSingletonPtr()->getType() != api::GameType::SERVER && api::EngineController::GetSingletonPtr()->getType() != api::GameType::SINGLEPLAYER) {
 			return false;
 		}
+
+		PhysicsNode * a = reinterpret_cast<PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj0)->getCollisionObject()->getUserPointer());
+		PhysicsNode * b = reinterpret_cast<PhysicsNode *>(reinterpret_cast<const btCollisionObjectWrapper *>(colObj1)->getCollisionObject()->getUserPointer());
+
+		if (a->getCrashMask() & b->getCrashType()) {
+			// A collides with B
+			if (PhysicsManager::_collisionPairs.find(std::make_pair(a, b)) == PhysicsManager::_collisionPairs.end()) {
+				PhysicsManager::_collisionPairs[std::make_pair(a, b)] = PhysicsManager::_tickCount;
+
+				if (a->getShatterInterest() & api::ShatterInterest::START) {
+					api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), api::ShatterInterest::START), core::Subsystem::Physic);
+					// TODO: (Michael) improve this hack
+					api::GOPtr objA = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
+					if (objA == nullptr) {
+						return false;
+					}
+					core::IPKey aOwner = objA->getOwner();
+					if (aOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+						api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+					} else {
+						api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+						api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
+					}
+				}
+			} else {
+				PhysicsManager::_collisionPairs[std::make_pair(a, b)] = PhysicsManager::_tickCount;
+
+				if (a->getShatterInterest() & api::ShatterInterest::ALWAYS) {
+					api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(a->getID(), a->getCompID(), b->getID(), api::ShatterInterest::ALWAYS), core::Subsystem::Physic);
+					// TODO: (Michael) improve this hack
+					api::GOPtr objA = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(a->getID());
+					if (objA == nullptr) {
+						return false;
+					}
+					core::IPKey aOwner = objA->getOwner();
+					if (aOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+						api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+					} else {
+						api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+						api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
+					}
+				}
+			}
+		}
+		if (b->getCrashMask() & a->getCrashType()) {
+			// B collides with A
+			if (PhysicsManager::_collisionPairs.find(std::make_pair(b, a)) == PhysicsManager::_collisionPairs.end()) {
+				PhysicsManager::_collisionPairs[std::make_pair(b, a)] = PhysicsManager::_tickCount;
+
+				if (b->getShatterInterest() & api::ShatterInterest::START) {
+					api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), api::ShatterInterest::START), core::Subsystem::Physic);
+					// TODO: (Michael) improve this hack
+					api::GOPtr objB = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
+					if (objB == nullptr) {
+						return false;
+					}
+					core::IPKey bOwner = objB->getOwner();
+					if (bOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+						api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+					} else {
+						api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+						api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
+					}
+				}
+			} else {
+				PhysicsManager::_collisionPairs[std::make_pair(b, a)] = PhysicsManager::_tickCount;
+
+				if (b->getShatterInterest() & api::ShatterInterest::ALWAYS) {
+					api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComShatter, core::Method::Update, new api::components::Component_Shatter_Update(b->getID(), b->getCompID(), a->getID(), api::ShatterInterest::ALWAYS), core::Subsystem::Physic);
+					// TODO: (Michael) improve this hack
+					api::GOPtr objB = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b->getID());
+					if (objB == nullptr) {
+						return false;
+					}
+					core::IPKey bOwner = objB->getOwner();
+					if (bOwner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
+						api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+					} else {
+						api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+						api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
+					}
+				}
+			}
+		}
+		return false;
+	}
 
 	std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t> PhysicsManager::_collisionPairs = std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t>();
 
@@ -353,7 +344,7 @@ namespace i6engine {
 		assert(params.find("radius") != params.end());
 
 		if (params.find("radius") != params.end()) {
-			radius = boost::lexical_cast<double>(params.find("radius")->second);
+			radius = std::stod(params.find("radius")->second);
 		}
 
 		if (params.find("localInertia") != params.end()) {
@@ -361,7 +352,7 @@ namespace i6engine {
 		}
 
 		if (params.find("mass") != params.end()) {
-			mass = boost::lexical_cast<double>(params.find("mass")->second);
+			mass = std::stod(params.find("mass")->second);
 		}
 
 		btCollisionShape * sphereShape = new btSphereShape(radius);
@@ -389,11 +380,11 @@ namespace i6engine {
 		}
 
 		if (params.find("mass") != params.end()) {
-			mass = boost::lexical_cast<double>(params.find("mass")->second);
+			mass = std::stod(params.find("mass")->second);
 		}
 
 		if (params.find("shapeIndex") != params.end()) {
-			shapeIndex = boost::lexical_cast<uint32_t>(params.find("shapeIndex")->second);
+			shapeIndex = std::stoul(params.find("shapeIndex")->second);
 		}
 
 		btBulletWorldImporter * fileLoader = new btBulletWorldImporter(_dynamicsWorld);
@@ -435,7 +426,7 @@ namespace i6engine {
 		}
 
 		if (params.find("mass") != params.end()) {
-			mass = boost::lexical_cast<double>(params.find("mass")->second);
+			mass = std::stod(params.find("mass")->second);
 		}
 
 		btCollisionShape * boxShape = new btBoxShape(box.toBullet());
@@ -462,7 +453,7 @@ namespace i6engine {
 		}
 
 		if (params.find("planeConstant") != params.end()) {
-			planeConstant = boost::lexical_cast<double>(params.find("planeConstant")->second);
+			planeConstant = std::stod(params.find("planeConstant")->second);
 		}
 
 		btCollisionShape * groundShape = new btStaticPlaneShape(planeNormal.toBullet(), planeConstant);
