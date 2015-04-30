@@ -29,8 +29,6 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 	}
 
-
-
 	AudioNode::AudioNode(boost::shared_ptr<WavFile> file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable) : _source(), _buffer(), _wavFile() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 

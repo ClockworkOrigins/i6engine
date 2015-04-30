@@ -124,7 +124,7 @@ TEST(Component, Synchronize) {
 		i6engine::api::PhysicalStateComponent::createC(0, newMap);
 	}
 	{
-		attributeMap paramsPoint2PointConstraint = { { "selfIdentifier", "a" }, { "targetIdentifier", "b" }, { "selfOffset", "0.0 0.0 0.0" }, { "targetOffset", "0.0 0.0 0.0" } };
+		attributeMap paramsPoint2PointConstraint = { { "selfIdentifier", "a" }, { "targetIdentifier", "b" }, { "selfOffset", "0.0 0.0 0.0" }, { "targetOffset", "0.0 0.0 0.0" }, { "breakingImpulse", "0.0" } };
 		auto pc = i6engine::api::Point2PointConstraintComponent::createC(0, paramsPoint2PointConstraint);
 		auto newMap = pc->synchronize();
 		i6engine::api::Point2PointConstraintComponent::createC(0, newMap);

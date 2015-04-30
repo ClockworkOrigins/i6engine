@@ -45,7 +45,9 @@ namespace physics {
 		PhyRayTestResult,
 		PhyPause,
 		PhyAddPosition,
-		PhyP2PConstraint
+		PhyP2PConstraint,
+		PhyConstraint,
+		PhyConstraintBreakImpulse
 	};
 
 	/**
@@ -243,16 +245,29 @@ namespace physics {
 	} Physics_P2PConstraint_Create;
 
 	/**
-	 * \brief message for deletion of Point2PointConstraint between two PhysicsNodes
+	 * \brief message for setting breaking impulse for Constraint between two PhysicsNodes
 	 */
-	typedef struct Physics_P2PConstraint_Delete : GameMessageStruct {
+	typedef struct Physics_BreakConstraintImpulse_Update : GameMessageStruct {
 		int64_t targetGOID;
-		Physics_P2PConstraint_Delete(const int64_t goid, const int64_t targetGoid) : GameMessageStruct(-1, goid), targetGOID(targetGOID) {
+		double breakingImpulse;
+		Physics_BreakConstraintImpulse_Update(const int64_t goid, const int64_t targetGoid, double bi) : GameMessageStruct(-1, goid), targetGOID(targetGOID), breakingImpulse(bi) {
 		}
-		Physics_P2PConstraint_Delete * copy() {
-			return new Physics_P2PConstraint_Delete(*this);
+		Physics_BreakConstraintImpulse_Update * copy() {
+			return new Physics_BreakConstraintImpulse_Update(*this);
 		}
-	} Physics_P2PConstraint_Delete;
+	} Physics_BreakConstraintImpulse_Update;
+
+	/**
+	 * \brief message for deletion of a Constraint between two PhysicsNodes
+	 */
+	typedef struct Physics_Constraint_Delete : GameMessageStruct {
+		int64_t targetGOID;
+		Physics_Constraint_Delete(const int64_t goid, const int64_t targetGoid) : GameMessageStruct(-1, goid), targetGOID(targetGOID) {
+		}
+		Physics_Constraint_Delete * copy() {
+			return new Physics_Constraint_Delete(*this);
+		}
+	} Physics_Constraint_Delete;
 
 } /* namespace physics */
 } /* namespace api */

@@ -16,7 +16,6 @@
 
 #include "i6engine/modules/audio/AudioController.h"
 
-#include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/Logger.h"
 
 #include "i6engine/core/configs/SubsystemConfig.h"

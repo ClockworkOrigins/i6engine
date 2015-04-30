@@ -161,7 +161,7 @@ namespace modules {
 		/**
 		 * \brief returns the PhysicsNode with the given ID
 		 */
-		PhysicsNode::Ptr getPhysicsNode(const int64_t id, const int64_t componentId);
+		PhysicsNode * getPhysicsNode(const int64_t id);
 
 		/**
 		 * \brief stores all collision pairs
@@ -197,7 +197,7 @@ namespace modules {
 		btDefaultCollisionConfiguration * _collisionConfiguration;
 		btSequentialImpulseConstraintSolver * _solver;
 
-		std::map<int64_t, PhysicsNode::Ptr> _nodes;
+		std::map<int64_t, PhysicsNode *> _nodes;
 
 		// http://www.bulletphysics.org/mediawiki-1.5.8/index.php/Collision_Things
 		uint64_t _lngTime;

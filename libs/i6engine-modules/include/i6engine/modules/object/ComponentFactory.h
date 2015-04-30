@@ -96,7 +96,7 @@ namespace modules {
 		 * \return a pointer to the created GOComponent
 		 * \throw I6_FAILURE When GOCType is not registered at this factory.
 		 */
-		api::ComPtr createGOC(const int64_t id, const std::string & GOCType, const api::attributeMap & params, const api::WeakGOPtr & owner) const;
+		api::ComPtr createGOC(int64_t id, const std::string & GOCType, const api::attributeMap & params, const api::WeakGOPtr & owner) const;
 
 	private:
 		typedef std::map<std::string, api::createGOCCallback> callbackMap;

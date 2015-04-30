@@ -18,7 +18,6 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-#include "i6engine/api/Application.h"
 #include "i6engine/api/EngineController.h"
 
 #include "i6engine/api/components/Component.h"

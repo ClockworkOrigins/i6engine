@@ -13,6 +13,7 @@ Enhancements:
 	- added sample showing waynet navigation
 	- added support for much bigger terrains
 	- added LuaScripting subsystem with same functionality as PythonScripting
+	- added possibility to use Point2PointConstraints to connect objects
 
 Fixes:
 	- RPG components now are also registered in SampleLeveleditor to be able to load RPG levels

@@ -34,7 +34,6 @@ namespace modules {
 
 	AudioManager::AudioManager() : _device(), _context(), _nodes(), _sounds(), _cachedSounds() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-
 		_device = alcOpenDevice(nullptr);
 		_context = alcCreateContext(_device, nullptr);
 		alcMakeContextCurrent(_context);
@@ -49,7 +48,6 @@ namespace modules {
 
 	void AudioManager::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		for (auto it = _sounds.begin(); it != _sounds.end(); it++) {
 			ALint state;
 			alGetSourcei(it->first, AL_SOURCE_STATE, &state);
@@ -124,7 +122,7 @@ namespace modules {
 
 	void AudioManager::updateListener(const Vec3 & pos, const Quaternion & rot, const Vec3 & vel) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		Vec3 dir = math::rotateVector(Vec3(0.0, 0.0, -1.0), rot);
+		Vec3 dir = math::rotateVector(Vec3(0.0, 0.0, 1.0), rot);
 		ALfloat ListenerPos[] = { float(pos.getX()), float(pos.getY()), float(pos.getZ()) };					// Position of the listener
 		ALfloat ListenerOri[] = { float(dir.getX()), float(dir.getY()), float(dir.getZ()), 0.0f, 1.0f, 0.0f };	// Orientation of the listener
 		ALfloat ListenerVel[] = { float(vel.getX()), float(vel.getY()), float(vel.getZ()) };					// Velocity of the listener

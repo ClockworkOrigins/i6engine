@@ -66,6 +66,7 @@ namespace api {
 		std::string _targetIdentifier;
 		Vec3 _selfOffset;
 		Vec3 _targetOffset;
+		double _breakingImpulse;
 		int64_t _targetID;
 	};
 

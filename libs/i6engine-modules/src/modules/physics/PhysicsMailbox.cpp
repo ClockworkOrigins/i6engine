@@ -41,9 +41,9 @@ namespace modules {
 			if (msg->getMethod() == core::Method::Create) {
 				_manager->NewsCreate(msg);
 			} else if (msg->getMethod() == core::Method::Update) {
-				PhysicsNode::Ptr pn = _manager->getPhysicsNode(msg->getContent()->getWaitID(), msg->getContent()->getID());
+				PhysicsNode * pn = _manager->getPhysicsNode(msg->getContent()->getWaitID());
 
-				if (pn.get() != nullptr) {
+				if (pn != nullptr) {
 					pn->News(msg);
 				} else {
 					ISIXE_LOG_ERROR("PhysicsMailbox", "PhysicsNode doesn't exist!");

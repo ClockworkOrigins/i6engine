@@ -50,7 +50,7 @@ namespace modules {
 		int64_t goid = msg->getContent()->getWaitID();
 		GOPtr go = _manager->getObject(goid);
 		if (go == nullptr) {
-			ISIXE_LOG_ERROR("ObjectMailbox", "NewsComponent: Message for invalid Object: " + msg->getMessageInfo());
+			ISIXE_THROW_FAILURE("ObjectMailbox", "NewsComponent: Message for invalid Object: " << msg->getMessageInfo());
 			return;
 		}
 
@@ -67,7 +67,7 @@ namespace modules {
 			int64_t goid = msg->getContent()->getWaitID();
 			GOPtr go = _manager->getObject(goid);
 			if (go == nullptr) {
-				ISIXE_THROW_FAILURE("ObjectMailbox", "NewsComponent: Message for invalid Object: " + msg->getMessageInfo());
+				ISIXE_THROW_FAILURE("ObjectMailbox", "NewsComponent: Message for invalid Object: " << msg->getMessageInfo());
 			}
 
 			go->News(msg);

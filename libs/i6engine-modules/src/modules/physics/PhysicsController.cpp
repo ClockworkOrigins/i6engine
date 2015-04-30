@@ -16,8 +16,6 @@
 
 #include "i6engine/modules/physics/PhysicsController.h"
 
-#include "i6engine/utils/Exceptions.h"
-
 #include "i6engine/core/configs/SubsystemConfig.h"
 
 #include "i6engine/api/FrontendMessageTypes.h"

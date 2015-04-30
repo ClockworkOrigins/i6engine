@@ -35,7 +35,7 @@ class btRigidBody;
 namespace i6engine {
 namespace api {
 	struct CollisionGroup;
-}
+} /* namespace api */
 namespace modules {
 
 	typedef std::map<std::string, std::string> attributeMap;
@@ -81,8 +81,6 @@ namespace modules {
 		friend class PhysicsManager;
 
 	public:
-		typedef boost::shared_ptr<PhysicsNode> Ptr;
-
 		/**
 		 * \brief constructor
 		 */

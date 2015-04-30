@@ -40,7 +40,6 @@
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
-#include "i6engine/modules/object/ObjectController.h"
 
 #include "boost/bind.hpp"
 #include "boost/filesystem.hpp"
@@ -48,7 +47,7 @@
 namespace i6engine {
 namespace modules {
 
-	ObjectManager::ObjectManager(ObjectController * ctrl) : _GOList(), _tickList(), _componentFactory(), _goFactory(this, &_componentFactory), _ctrl(ctrl), _paused(false) {
+	ObjectManager::ObjectManager() : _GOList(), _tickList(), _componentFactory(), _goFactory(this, &_componentFactory), _paused(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback(boost::bind(&ObjectManager::addTicker, this, _1));
@@ -176,8 +175,6 @@ namespace modules {
 				sendObjectMessages(receiver);
 			} else if (msg->getSubtype() == api::objects::ObjConditionalMessage) {
 				sendConditionalMessage(*static_cast<api::objects::Object_ConditionalMessage_Update *>(msg->getContent()));
-			} else if (msg->getSubtype() == api::objects::ObjReset) {
-				_ctrl->reset();
 			} else if (msg->getSubtype() == api::objects::ObjPause) {
 				_paused = dynamic_cast<api::objects::Object_Pause_Update *>(msg->getContent())->pause;
 			} else {
@@ -211,8 +208,6 @@ namespace modules {
 				_tickList.clear();
 				GOPtr::clear();
 				api::ComPtr::clear();
-			} else if (msg->getSubtype() == api::objects::ObjReset) {
-				_ctrl->reset();
 			} else {
 				ISIXE_THROW_FAILURE("ObjectManager", "Invalid delete message type: " << msg->getSubtype());
 			}

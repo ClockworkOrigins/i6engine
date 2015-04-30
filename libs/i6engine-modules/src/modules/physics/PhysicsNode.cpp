@@ -28,8 +28,6 @@
 
 #include "i6engine/modules/physics/PhysicsManager.h"
 
-#include "boost/lexical_cast.hpp"
-
 #include "BulletCollision/CollisionShapes/btCollisionShape.h"
 #include "BulletCollision/CollisionShapes/btCompoundShape.h"
 #include "BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h"
@@ -42,7 +40,7 @@ namespace modules {
 	PhysicsNode::PhysicsNode(const int64_t id, const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::attributeMap & params, api::ShatterInterest shatterInterest, PhysicsManager * pm) : _manager(pm), _id(id), _compId(compId), _collisionGroup(cg), _position(position), _rotation(rotation), _scale(scale), _transform(rotation.toBullet(), position.toBullet()), _rigidBody(), _oldScale(1.0f, 1.0f, 1.0f), _linearVelocity(), _centralForce(), _shatterInterest(shatterInterest), _parentShape(nullptr), _childShapes() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
-		if (boost::lexical_cast<bool>(params.find("compound")->second)) {
+		if (std::stoi(params.find("compound")->second)) {
 			_parentShape = _manager->createCompound();
 		}
 	}
@@ -120,27 +118,27 @@ namespace modules {
 			}
 
 			if (shapeParams.find("mass") != shapeParams.end()) {
-				mass = boost::lexical_cast<double>(shapeParams.find("mass")->second);
+				mass = std::stod(shapeParams.find("mass")->second);
 			}
 
 			if (shapeParams.find("restitution") != shapeParams.end()) {
-				restitution = boost::lexical_cast<double>(shapeParams.find("restitution")->second);
+				restitution = std::stod(shapeParams.find("restitution")->second);
 			}
 
 			if (shapeParams.find("friction") != shapeParams.end()) {
-				friction = boost::lexical_cast<double>(shapeParams.find("friction")->second);
+				friction = std::stod(shapeParams.find("friction")->second);
 			}
 
 			if (shapeParams.find("activationState") != shapeParams.end()) {
-				activationState = boost::lexical_cast<int>(shapeParams.find("activationState")->second);
+				activationState = std::stoi(shapeParams.find("activationState")->second);
 			}
 
 			if (shapeParams.find("linearDamping") != shapeParams.end()) {
-				linearDamping = boost::lexical_cast<double>(shapeParams.find("linearDamping")->second);
+				linearDamping = std::stod(shapeParams.find("linearDamping")->second);
 			}
 
 			if (shapeParams.find("angularDamping") != shapeParams.end()) {
-				angularDamping = boost::lexical_cast<double>(shapeParams.find("angularDamping")->second);
+				angularDamping = std::stod(shapeParams.find("angularDamping")->second);
 			}
 
 			_transform = btTransform(rotation.toBullet(), position.toBullet());

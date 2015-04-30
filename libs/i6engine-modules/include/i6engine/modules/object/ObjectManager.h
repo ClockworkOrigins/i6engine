@@ -35,7 +35,6 @@ namespace api {
 namespace modules {
 
 	class ObjectMailbox;
-	class ObjectController;
 
 	typedef utils::sharedPtr<api::GameObject, api::GameObject> GOPtr;
 
@@ -47,7 +46,7 @@ namespace modules {
 		/**
 		 * \brief constructor, initializes Object stuff
 		 */
-		ObjectManager(ObjectController * ctrl);
+		ObjectManager();
 
 		/**
 		 * \brief destructor
@@ -102,8 +101,6 @@ namespace modules {
 
 		ComponentFactory _componentFactory;
 		GOFactory _goFactory;
-
-		ObjectController * _ctrl;
 
 		/**
 		 * \brief is the subsystem paused or not?

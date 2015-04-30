@@ -16,7 +16,7 @@
 
 #include "i6engine/modules/object/ObjectController.h"
 
-#include "i6engine/utils/Exceptions.h"
+#include "i6engine/utils/Logger.h"
 
 #include "i6engine/core/configs/SubsystemConfig.h"
 
@@ -40,7 +40,7 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
 
-		_manager = new ObjectManager(this);
+		_manager = new ObjectManager();
 		_mailbox = new ObjectMailbox(_manager);
 
 		ISIXE_REGISTERMESSAGETYPE(api::messages::ComponentMessageType, ObjectMailbox::NewsComponent, _mailbox);

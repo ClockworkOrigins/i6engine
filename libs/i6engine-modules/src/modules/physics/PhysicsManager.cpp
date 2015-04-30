@@ -270,7 +270,7 @@ namespace modules {
 			api::physics::Physics_Node_Create * pnc = static_cast<api::physics::Physics_Node_Create *>(msg->getContent());
 
 			if (_nodes.find(pnc->_waitForId) == _nodes.end()) {
-				PhysicsNode::Ptr newPN = boost::make_shared<PhysicsNode>(pnc->_waitForId, pnc->_id, pnc->pos, pnc->rot, pnc->scale, pnc->collisionGroup, pnc->shapeParams, pnc->shatterInterest, this);
+				PhysicsNode * newPN = new PhysicsNode(pnc->_waitForId, pnc->_id, pnc->pos, pnc->rot, pnc->scale, pnc->collisionGroup, pnc->shapeParams, pnc->shatterInterest, this);
 				_nodes.insert(std::make_pair(pnc->_waitForId, newPN));
 			}
 			if (!_nodes[pnc->getWaitID()]->addChild(pnc->getID(), pnc->pos, pnc->rot, pnc->scale, pnc->collisionGroup, pnc->shapeType, pnc->shapeParams)) {
@@ -298,6 +298,16 @@ namespace modules {
 			Vec3 vec3Gravity = static_cast<api::physics::Physics_Gravity_Update *>(msg->getContent())->grav;
 
 			setGravity(vec3Gravity);
+		} else if (type == api::physics::PhyConstraintBreakImpulse) {
+			api::physics::Physics_BreakConstraintImpulse_Update * pbu = dynamic_cast<api::physics::Physics_BreakConstraintImpulse_Update *>(msg->getContent());
+			auto it = _constraints.find(pbu->getWaitID());
+			if (it != _constraints.end()) {
+				for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++) {
+					if (it2->first == pbu->targetGOID) {
+						it2->second->setBreakingImpulseThreshold(pbu->breakingImpulse);
+					}
+				}
+			}
 		} else if (type == api::physics::PhyPause) {
 			_paused = dynamic_cast<api::physics::Physics_Pause_Update *>(msg->getContent())->pause;
 		} else {
@@ -313,7 +323,7 @@ namespace modules {
 		} else if (type == api::physics::PhyNode) {
 			api::physics::Physics_Node_Delete * pnc = static_cast<api::physics::Physics_Node_Delete *>(msg->getContent());
 
-			PhysicsNode * tmp = getPhysicsNode(pnc->_waitForId, pnc->_id).get();
+			PhysicsNode * tmp = getPhysicsNode(pnc->_waitForId);
 
 			if (tmp == nullptr) { // happens during logout: Physic receives clean message from physics subsystem and delete physicsnode from PhysicalStateComponent
 				return;
@@ -351,8 +361,8 @@ namespace modules {
 			}
 		} else if (msg->getSubtype() == api::physics::PhyReset) {
 			_ctrl->reset();
-		} else if (msg->getSubtype() == api::physics::PhyP2PConstraint) {
-			api::physics::Physics_P2PConstraint_Delete * ppd = dynamic_cast<api::physics::Physics_P2PConstraint_Delete *>(msg->getContent());
+		} else if (msg->getSubtype() == api::physics::PhyConstraint) {
+			api::physics::Physics_Constraint_Delete * ppd = dynamic_cast<api::physics::Physics_Constraint_Delete *>(msg->getContent());
 			auto it = _constraints.find(ppd->getWaitID());
 			if (it != _constraints.end()) {
 				for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++) {
@@ -532,10 +542,10 @@ namespace modules {
 		delete shape;
 	}
 
-	PhysicsNode::Ptr PhysicsManager::getPhysicsNode(const int64_t id, const int64_t compId) {
+	PhysicsNode * PhysicsManager::getPhysicsNode(const int64_t id) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		if (_nodes.find(id) == _nodes.end()) {
-			return PhysicsNode::Ptr();
+			return nullptr;
 		}
 
 		return _nodes[id];

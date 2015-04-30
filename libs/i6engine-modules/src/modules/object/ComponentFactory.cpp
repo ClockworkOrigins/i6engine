@@ -17,7 +17,6 @@
 #include "i6engine/modules/object/ComponentFactory.h"
 
 #include "i6engine/utils/Exceptions.h"
-#include "i6engine/utils/Logger.h"
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/components/Component.h"
@@ -52,7 +51,7 @@ namespace modules {
 		_callbacks.erase(GOCType);
 	}
 
-	api::ComPtr ComponentFactory::createGOC(const int64_t id, const std::string & GOCType, const api::attributeMap & params, const api::WeakGOPtr & owner) const {
+	api::ComPtr ComponentFactory::createGOC(int64_t id, const std::string & GOCType, const api::attributeMap & params, const api::WeakGOPtr & owner) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		// Check, if the GOCType is registered at the factory
 		callbackMap::const_iterator it = _callbacks.find(GOCType);
@@ -63,17 +62,16 @@ namespace modules {
 			return api::ComPtr();
 		}
 
-		int64_t realID = id;
-		if (realID == -1) {
-			realID = api::EngineController::GetSingletonPtr()->getIDManager()->getID();
+		if (id == -1) {
+			id = api::EngineController::GetSingletonPtr()->getIDManager()->getID();
 		}
 
 		// Return the new GOComponent created by the registered method
-		api::ComPtr co = (it->second)(realID, params);
+		api::ComPtr co = (it->second)(id, params);
 		owner.get()->setGOC(co);
 		co->setSelf(co);
 
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(realID);
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(id);
 
 		return co;
 	}
