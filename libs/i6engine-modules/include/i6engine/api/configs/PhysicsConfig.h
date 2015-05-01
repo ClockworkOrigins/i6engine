@@ -237,7 +237,7 @@ namespace physics {
 		int64_t targetGOID;
 		Vec3 selfOffset;
 		Vec3 targetOffset;
-		Physics_P2PConstraint_Create(const int64_t goid, const int64_t targetGoid, const Vec3 & s, const Vec3 & t) : GameMessageStruct(-1, goid), targetGOID(targetGOID), selfOffset(s), targetOffset(t) {
+		Physics_P2PConstraint_Create(const int64_t goid, const int64_t targetGoid, const Vec3 & s, const Vec3 & t) : GameMessageStruct(-1, goid), targetGOID(targetGoid), selfOffset(s), targetOffset(t) {
 		}
 		Physics_P2PConstraint_Create * copy() {
 			return new Physics_P2PConstraint_Create(*this);
@@ -250,7 +250,7 @@ namespace physics {
 	typedef struct Physics_BreakConstraintImpulse_Update : GameMessageStruct {
 		int64_t targetGOID;
 		double breakingImpulse;
-		Physics_BreakConstraintImpulse_Update(const int64_t goid, const int64_t targetGoid, double bi) : GameMessageStruct(-1, goid), targetGOID(targetGOID), breakingImpulse(bi) {
+		Physics_BreakConstraintImpulse_Update(const int64_t goid, const int64_t targetGoid, double bi) : GameMessageStruct(-1, goid), targetGOID(targetGoid), breakingImpulse(bi) {
 		}
 		Physics_BreakConstraintImpulse_Update * copy() {
 			return new Physics_BreakConstraintImpulse_Update(*this);
@@ -262,7 +262,7 @@ namespace physics {
 	 */
 	typedef struct Physics_Constraint_Delete : GameMessageStruct {
 		int64_t targetGOID;
-		Physics_Constraint_Delete(const int64_t goid, const int64_t targetGoid) : GameMessageStruct(-1, goid), targetGOID(targetGOID) {
+		Physics_Constraint_Delete(const int64_t goid, const int64_t targetGoid) : GameMessageStruct(-1, goid), targetGOID(targetGoid) {
 		}
 		Physics_Constraint_Delete * copy() {
 			return new Physics_Constraint_Delete(*this);

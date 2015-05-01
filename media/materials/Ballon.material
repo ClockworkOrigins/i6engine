@@ -1,0 +1,15 @@
+material "Ballon_Ballon"
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 0 0 1
+			diffuse 1 0 0 1
+			specular 0 0 0 0
+			emissive 0 0 0
+			
+			scene_blend alpha_blend
+		}
+	}
+}

@@ -276,17 +276,6 @@ namespace modules {
 			if (!_nodes[pnc->getWaitID()]->addChild(pnc->getID(), pnc->pos, pnc->rot, pnc->scale, pnc->collisionGroup, pnc->shapeType, pnc->shapeParams)) {
 				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg); // PhysicsNode couldn't be created, so queue this message again and try it later
 			}
-		} else if (type == api::physics::PhyP2PConstraint) {
-			api::physics::Physics_P2PConstraint_Create * ppc = dynamic_cast<api::physics::Physics_P2PConstraint_Create *>(msg->getContent());
-			auto itSelf = _nodes.find(ppc->_waitForId);
-			auto itTarget = _nodes.find(ppc->targetGOID);
-			if (itSelf == _nodes.end() || itTarget == _nodes.end()) {
-				ISIXE_THROW_FAILURE("PhysicsManager", "Tried to create constraint for not existing PhysicsNode(s)");
-			}
-			btTypedConstraint * p2p = new btPoint2PointConstraint(*itSelf->second->getRigidBody(), *itTarget->second->getRigidBody(), ppc->selfOffset.toBullet(), ppc->targetOffset.toBullet());
-			_dynamicsWorld->addConstraint(p2p);
-			_constraints[ppc->_waitForId].push_back(std::make_pair(ppc->targetGOID, p2p));
-			_constraints[ppc->targetGOID].push_back(std::make_pair(ppc->_waitForId, p2p));
 		}
 	}
 
@@ -310,6 +299,17 @@ namespace modules {
 			}
 		} else if (type == api::physics::PhyPause) {
 			_paused = dynamic_cast<api::physics::Physics_Pause_Update *>(msg->getContent())->pause;
+		} else if (type == api::physics::PhyP2PConstraint) {
+			api::physics::Physics_P2PConstraint_Create * ppc = dynamic_cast<api::physics::Physics_P2PConstraint_Create *>(msg->getContent());
+			auto itSelf = _nodes.find(ppc->_waitForId);
+			auto itTarget = _nodes.find(ppc->targetGOID);
+			if (itSelf == _nodes.end() || itTarget == _nodes.end()) {
+				ISIXE_THROW_FAILURE("PhysicsManager", "Tried to create constraint for not existing PhysicsNode(s)");
+			}
+			btTypedConstraint * p2p = new btPoint2PointConstraint(*itSelf->second->getRigidBody(), *itTarget->second->getRigidBody(), ppc->selfOffset.toBullet(), ppc->targetOffset.toBullet());
+			_dynamicsWorld->addConstraint(p2p);
+			_constraints[ppc->_waitForId].push_back(std::make_pair(ppc->targetGOID, p2p));
+			_constraints[ppc->targetGOID].push_back(std::make_pair(ppc->_waitForId, p2p));
 		} else {
 			ISIXE_THROW_MESSAGE("PhysicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

@@ -20,6 +20,7 @@ ENDIF(ISIXE_NETWORK)
 
 add_subdirectory(compositor)
 add_subdirectory(dragdrop)
+add_subdirectory(floating)
 add_subdirectory(jenga)
 
 IF(ISIXE_WITH_EDITOR AND ISIXE_WITH_TOOLS)
