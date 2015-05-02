@@ -26,6 +26,7 @@
 
 TEST(GameMessage, Serialize) {
 	i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(0, 0, i6engine::core::Method::Update, new i6engine::api::GameMessageStruct(), i6engine::core::Subsystem::Unknown);
+	msg->getContent()->_sender = i6engine::core::IPKey("127.123.123.1:12345");
 
 	EXPECT_LT(msg->Serialize().size(), 30);
 }
@@ -33,6 +34,8 @@ TEST(GameMessage, Serialize) {
 TEST(GameMessage, Position_Serialize) {
 	i6engine::api::GameMessage::Ptr msg1 = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::PositionMessageType, i6engine::api::objects::Position, i6engine::core::Method::Update, new i6engine::api::objects::Position_Update(0, 0, Vec3(), Quaternion(), Vec3()), i6engine::core::Subsystem::Unknown);
 	i6engine::api::GameMessage::Ptr msg2 = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::PositionMessageType, i6engine::api::objects::Position, i6engine::core::Method::Update, new i6engine::api::objects::Position_Update(1000, 1001, Vec3(1000.0, 50.0, 1000.0), Quaternion(1.0, 0.0, 0.0, 0.0), Vec3(1.0, 1.0, 1.0)), i6engine::core::Subsystem::Unknown);
+	msg1->getContent()->_sender = i6engine::core::IPKey("127.123.123.1:12345");
+	msg2->getContent()->_sender = i6engine::core::IPKey("127.123.123.1:12345");
 
 	std::cout << msg1->Serialize().size() << std::endl;
 	std::cout << msg1->Serialize() << std::endl;

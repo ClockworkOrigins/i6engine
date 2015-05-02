@@ -28,7 +28,7 @@ namespace core {
 			std::stringstream ss(ip.substr(pos, bytend));
 			int t;
 			ss >> t;
-			_ip[i] = t;
+			_ip += std::pow(256, 3 - i) * t;
 			pos = bytend + 1;
 		}
 	}
@@ -41,7 +41,7 @@ namespace core {
 			std::stringstream ss(str.substr(pos, bytend));
 			int t;
 			ss >> t;
-			_ip[i] = t;
+			_ip += std::pow(256, 3 - i) * t;
 			pos = bytend + 1;
 		}
 		std::stringstream sport(str.substr(ipend + 1, str.length() - ipend - 1));
@@ -50,12 +50,12 @@ namespace core {
 
 	std::string IPKey::getIP() const {
 		std::ostringstream ret;
-		ret << int(_ip[0]) << "." << int(_ip[1]) << "." << int(_ip[2]) << "." << int(_ip[3]);
+		ret << int((((_ip / 256) / 256) / 256) % 256) << "." << int(((_ip / 256) / 256) % 256) << "." << int((_ip / 256) % 256) << "." << int(_ip % 256);
 		return ret.str();
 	}
 
 	bool IPKey::operator==(const IPKey & other) const {
-		return _ip[0] == other._ip[0] && _ip[1] == other._ip[1] && _ip[2] == other._ip[2] && _ip[3] == other._ip[3] && _port == other._port;
+		return _ip == other._ip && _port == other._port;
 	}
 
 	bool IPKey::operator!=(const IPKey & other) const {

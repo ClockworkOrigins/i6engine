@@ -126,7 +126,7 @@ namespace core {
 			ar & _port;
 		}
 
-		uint8_t _ip[4];
+		uint32_t _ip;
 		uint16_t _port;
 	};
 
