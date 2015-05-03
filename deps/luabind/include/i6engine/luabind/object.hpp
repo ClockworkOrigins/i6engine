@@ -80,7 +80,7 @@ namespace detail
         , Policies
       >::type converter_policy;
 
-      push_aux(interpreter, value, (converter_policy*)0);
+      push_aux(interpreter, value, reinterpret_cast<converter_policy *>(nullptr));
   }
 
   template<class T>
@@ -111,7 +111,7 @@ namespace adl
     struct impl 
     {
         BOOST_STATIC_CONSTANT(bool, value =
-            sizeof(is_object_interface_aux::check((T*)0)) == sizeof(yes)
+            sizeof(is_object_interface_aux::check(reinterpret_cast<T *>(nullptr)) == sizeof(yes)
         );
 
         typedef mpl::bool_<value> type;
