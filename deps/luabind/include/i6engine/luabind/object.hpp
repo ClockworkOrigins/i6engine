@@ -347,9 +347,9 @@ LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
       typedef iterator_proxy_tag value_wrapper_tag;
 #endif
 
-      iterator_proxy(lua_State* interpreter, handle const& table, handle const& key)
-        : m_interpreter(interpreter)
-        , m_table_index(lua_gettop(interpreter) + 1)
+      iterator_proxy(lua_State* interp, handle const& table, handle const& key)
+        : m_interpreter(interp)
+        , m_table_index(lua_gettop(interp) + 1)
         , m_key_index(m_table_index + 1)
       {
           table.push(m_interpreter);
@@ -405,9 +405,9 @@ LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
       }
 
       // TODO: Why is it non-const?
-      void push(lua_State* interpreter)
+      void push(lua_State* interp)
       {
-          assert(interpreter == m_interpreter);
+          assert(interp == m_interpreter);
           lua_pushvalue(m_interpreter, m_key_index);
           AccessPolicy::get(m_interpreter, m_table_index);
       }
@@ -474,7 +474,7 @@ namespace detail
           lua_pushnil(m_interpreter);
           if (lua_next(m_interpreter, -2) != 0)
           {
-              detail::stack_pop pop(m_interpreter, 2);
+              detail::stack_pop pop2(m_interpreter, 2);
               handle(m_interpreter, -2).swap(m_key);
           }
           else
@@ -578,9 +578,9 @@ namespace adl
       typedef index_proxy<Next> this_type;
 
       template<class Key>
-      index_proxy(Next const& next, lua_State* interpreter, Key const& key)
-        : m_interpreter(interpreter)
-        , m_key_index(lua_gettop(interpreter) + 1)
+      index_proxy(Next const& next, lua_State* interp, Key const& key)
+        : m_interpreter(interp)
+        , m_key_index(lua_gettop(interp) + 1)
         , m_next(next)
       {
           detail::push(m_interpreter, key);
@@ -735,19 +735,19 @@ namespace adl
       }
 
       template<class T>
-      object(lua_State* interpreter, T const& value)
+      object(lua_State* interp, T const& value)
       {
-          detail::push(interpreter, value);
-          detail::stack_pop pop(interpreter, 1);
-          handle(interpreter, -1).swap(m_handle);
+          detail::push(interp, value);
+          detail::stack_pop pop(interp, 1);
+          handle(interp, -1).swap(m_handle);
       }
 
       template<class T, class Policies>
-      object(lua_State* interpreter, T const& value, Policies const&)
+      object(lua_State* interp, T const& value, Policies const&)
       {
-          detail::push(interpreter, value, Policies());
-          detail::stack_pop pop(interpreter, 1);
-          handle(interpreter, -1).swap(m_handle);
+          detail::push(interp, value, Policies());
+          detail::stack_pop pop(interp, 1);
+          handle(interp, -1).swap(m_handle);
       }
 
       void push(lua_State* interpreter) const;
@@ -771,9 +771,9 @@ namespace adl
       handle m_handle;
   };
 
-  inline void object::push(lua_State* interpreter) const
+  inline void object::push(lua_State* interp) const
   {
-      m_handle.push(interpreter);
+      m_handle.push(interp);
   }
 
   inline lua_State* object::interpreter() const
@@ -890,9 +890,9 @@ struct value_wrapper_traits<argument>
 };
 
 template<class Next>
-inline void adl::index_proxy<Next>::push(lua_State* interpreter)
+inline void adl::index_proxy<Next>::push(lua_State* interp)
 {
-    assert(interpreter == m_interpreter);
+    assert(interp == m_interpreter);
 
     value_wrapper_traits<Next>::unwrap(m_interpreter, m_next);
 
@@ -1093,9 +1093,9 @@ namespace adl
   template<class ValueWrapper, class Arguments>
   struct call_proxy
   {
-      call_proxy(ValueWrapper& value_wrapper, Arguments arguments)
-        : value_wrapper(&value_wrapper)
-        , arguments(arguments)
+      call_proxy(ValueWrapper& vw, Arguments a)
+        : value_wrapper(&vw)
+        , arguments(a)
       {}
 
       call_proxy(call_proxy const& other)

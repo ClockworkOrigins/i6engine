@@ -16,6 +16,7 @@
 
 #include "i6engine/core/messaging/IPKey.h"
 
+#include <cmath>
 #include <sstream>
 
 namespace i6engine {

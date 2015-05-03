@@ -33,7 +33,7 @@ namespace modules {
 		mVpHeight = height;
 		// Calculate gaussian texture offsets & weights
 		float deviation = 3.0f;
-		float texelSize = 1.0f / (float) std::min(mVpWidth, mVpHeight);
+		float texelSize = 1.0f / float(std::min(mVpWidth, mVpHeight));
 
 		// central sample, no offset
 		mBloomTexOffsetsHorz[0][0] = 0.0f;
@@ -45,7 +45,7 @@ namespace modules {
 
 		// 'pre' samples
 		for (int i = 1; i < 8; ++i) {
-			mBloomTexWeights[i][0] = mBloomTexWeights[i][1] = mBloomTexWeights[i][2] = Ogre::Math::gaussianDistribution((Ogre::Real)i, 0, deviation);
+			mBloomTexWeights[i][0] = mBloomTexWeights[i][1] = mBloomTexWeights[i][2] = Ogre::Math::gaussianDistribution(Ogre::Real(i), 0, deviation);
 			mBloomTexWeights[i][3] = 1.0f;
 			mBloomTexOffsetsHorz[i][0] = i * texelSize;
 			mBloomTexOffsetsHorz[i][1] = 0.0f;

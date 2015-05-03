@@ -62,6 +62,8 @@ set(luaSrc
 
 add_library(lua STATIC ${luaSrc})
 
+set_target_properties(lua PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 ########################
 # lua install
 ########################

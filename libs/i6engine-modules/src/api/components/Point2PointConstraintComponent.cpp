@@ -16,6 +16,10 @@
 
 #include "i6engine/api/components/Point2PointConstraintComponent.h"
 
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	#include <cfloat>
+#endif
+
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/core/configs/SubsystemConfig.h"
@@ -30,7 +34,7 @@
 namespace i6engine {
 namespace api {
 
-	Point2PointConstraintComponent::Point2PointConstraintComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _connected(false), _selfIdentifier(), _targetIdentifier(), _selfOffset(), _targetOffset(), _targetID(), _breakingImpulse(DBL_MAX) {
+	Point2PointConstraintComponent::Point2PointConstraintComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _connected(false), _selfIdentifier(), _targetIdentifier(), _selfOffset(), _targetOffset(), _breakingImpulse(DBL_MAX), _targetID() {
 		_objFamilyID = components::Point2PointConstraintComponent;
 		_objComponentID = components::Point2PointConstraintComponent;
 

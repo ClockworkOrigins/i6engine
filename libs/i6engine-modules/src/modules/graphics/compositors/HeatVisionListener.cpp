@@ -45,7 +45,7 @@ namespace modules {
 			fpParams->setNamedConstant("random_fractions", Ogre::Vector4(Ogre::Math::RangeRandom(0.0, 1.0), Ogre::Math::RangeRandom(0, 1.0), 0, 0));
 
 			// "depth_modulator" parameter
-			float inc = ((float) timer->getMilliseconds()) / 1000.0f;
+			float inc = float(timer->getMilliseconds()) / 1000.0f;
 			if ((fabs(curr - end) <= 0.001)) {
 				// take a new value to reach
 				end = Ogre::Math::RangeRandom(0.95, 1.0);

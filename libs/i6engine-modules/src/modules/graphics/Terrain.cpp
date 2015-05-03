@@ -134,7 +134,7 @@ namespace modules {
 					blendMap0->convertImageToTerrainSpace(x, y, &tx, &ty);
 					Ogre::Real height = terrain->getHeightAtTerrainPosition(tx, ty);
 					Ogre::Real val = (height - minHeight) / fadeDist;
-					val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
+					val = Ogre::Math::Clamp(val, Ogre::Real(0), Ogre::Real(1));
 					*pBlend0++ = val;
 				}
 			}

@@ -66,7 +66,7 @@ namespace components {
 	}
 
 	bool WeightInventoryComponent::addItem(const api::GOPtr & item) {
-		if (_maxWeight != 0.0 && item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getWeight() > _maxWeight - _currentWeight) { // if weight is limited AND new item would exceed maximum reject collection
+		if (std::abs(_maxWeight) > 1e-15 && item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getWeight() > _maxWeight - _currentWeight) { // if weight is limited AND new item would exceed maximum reject collection
 			return false;
 		}
 		auto nc = item->getGOC<NameComponent>(config::ComponentTypes::NameComponent);
@@ -130,7 +130,7 @@ namespace components {
 			}
 		});
 		gf->addPrint("WeightInventory_Weight", "RPG/Blanko", 0.8, 0.05, utils::to_string_with_precision(_currentWeight, 3) + " / " + utils::to_string_with_precision(_maxWeight, 3), api::gui::Alignment::Left, -1);
-		if (_maxWeight == 0.0) {
+		if (std::abs(_maxWeight) < 1e-15) {
 			gf->setVisibility("WeightInventory_Weight", false);
 		}
 		// calculate list slots
@@ -272,6 +272,7 @@ namespace components {
 							}
 							}
 							for (auto & p2 : p.second) {
+								if (p2.first.c_str()) {}
 								maxIndex++;
 							}
 						}

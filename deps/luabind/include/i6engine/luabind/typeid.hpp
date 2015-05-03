@@ -27,8 +27,8 @@ public:
       : id(&typeid(detail::null_type))
     {}
 
-    type_id(std::type_info const& id)
-      : id(&id)
+    type_id(std::type_info const& i)
+      : id(&i)
     {}
 
     bool operator!=(type_id const& other) const

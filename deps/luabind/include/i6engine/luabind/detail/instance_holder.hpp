@@ -17,9 +17,9 @@ namespace luabind { namespace detail {
 class instance_holder
 {
 public:
-    instance_holder(class_rep* cls, bool pointee_const)
-      : m_cls(cls)
-      , m_pointee_const(pointee_const)
+    instance_holder(class_rep* c, bool pc)
+      : m_cls(c)
+      , m_pointee_const(pc)
     {}
 
     virtual ~instance_holder()
@@ -80,13 +80,13 @@ class pointer_holder : public instance_holder
 {
 public:
     pointer_holder(
-        P p, class_id dynamic_id, void* dynamic_ptr, class_rep* cls
+        P pNew, class_id d_id, void* d_ptr, class_rep* cls
     )
       : instance_holder(cls, check_const_pointer(false ? get_pointer(p) : 0))
-      , p(p)
+      , p(pNew)
       , weak(0)
-      , dynamic_id(dynamic_id)
-      , dynamic_ptr(dynamic_ptr)
+      , dynamic_id(d_id)
+      , dynamic_ptr(d_ptr)
     {}
 
     std::pair<void*, int> get(class_id target) const
@@ -98,7 +98,7 @@ public:
             weak ? weak : get_pointer(p)));
 
         if (!naked_ptr)
-            return std::pair<void*, int>((void*)0, 0);
+            return std::pair<void*, int>(nullptr, 0);
 
         return get_class()->casts().cast(
             naked_ptr

@@ -41,7 +41,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	SlotInventoryComponent::SlotInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _rows(), _columns(), _widgetList(), _slots(), _items(), _slotMarker(false), _currentIndex(UINT16_MAX) {
+	SlotInventoryComponent::SlotInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _rows(), _columns(), _widgetList(), _slotMarker(false), _currentIndex(UINT16_MAX), _slots(), _items() {
 		_objComponentID = config::ComponentTypes::SlotInventoryComponent;
 		_rows = uint16_t(std::stoul(params.find("rows")->second));
 		_columns = uint16_t(std::stoul(params.find("columns")->second));
@@ -93,9 +93,9 @@ namespace components {
 						}
 						std::vector<api::GameMessage::Ptr> msgs;
 						item->synchronize(msgs);
-						for (size_t i = 0; i < dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.size(); i++) {
-							if (dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components[i]._template == "MovableText") {
-								dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.erase(dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.begin() + int(i));
+						for (size_t l = 0; l < dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.size(); l++) {
+							if (dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components[l]._template == "MovableText") {
+								dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.erase(dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.begin() + int(l));
 								break;
 							}
 						}
@@ -220,22 +220,22 @@ namespace components {
 					return;
 				}
 
-				if (_slots[i][j] != UINT16_MAX) {
-					if (_currentIndex == _slots[i][j]) {
+				if (_slots[size_t(i)][size_t(j)] != UINT16_MAX) {
+					if (_currentIndex == _slots[size_t(i)][size_t(j)]) {
 						return;
 					}
-					_currentIndex = _slots[i][j];
+					_currentIndex = _slots[size_t(i)][size_t(j)];
 					for (uint16_t k = 0; k < _rows; k++) {
 						bool found = false;
 						for (uint16_t l = 0; l < _columns; l++) {
-							if (_slots[k][l] == _slots[i][j]) {
+							if (_slots[k][l] == _slots[size_t(i)][size_t(j)]) {
 								found = true;
 								api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 								if (_slotMarker) {
 									gf->setPosition("SlotInventory_ItemMarker", 0.5 - width * 0.5 * _columns + l * width, 0.025 + k * height);
-									gf->setSize("SlotInventory_ItemMarker", width * std::get<ItemEntry::Width>(_items[_slots[i][j]]), height * std::get<ItemEntry::Height>(_items[_slots[i][j]]));
+									gf->setSize("SlotInventory_ItemMarker", width * std::get<ItemEntry::Width>(_items[_slots[size_t(i)][size_t(j)]]), height * std::get<ItemEntry::Height>(_items[_slots[size_t(i)][size_t(j)]]));
 								} else {
-									gf->addImage("SlotInventory_ItemMarker", "RPG/StaticImage", "RPG_Inventory_Highlighted", "Highlighted", 0.5 - width * 0.5 * _columns + l * width, 0.025 + k * height, width * std::get<ItemEntry::Width>(_items[_slots[i][j]]), height * std::get<ItemEntry::Height>(_items[_slots[i][j]]));
+									gf->addImage("SlotInventory_ItemMarker", "RPG/StaticImage", "RPG_Inventory_Highlighted", "Highlighted", 0.5 - width * 0.5 * _columns + l * width, 0.025 + k * height, width * std::get<ItemEntry::Width>(_items[_slots[size_t(i)][size_t(j)]]), height * std::get<ItemEntry::Height>(_items[_slots[size_t(i)][size_t(j)]]));
 									gf->setProperty("SlotInventory_ItemMarker", "MousePassThroughEnabled", "True");
 									_widgetList.push_back("SlotInventory_ItemMarker");
 									_slotMarker = true;

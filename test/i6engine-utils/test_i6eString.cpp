@@ -70,7 +70,6 @@ TEST(i6eString, to_string_with_precision) {
 	EXPECT_EQ("0", i6engine::utils::to_string_with_precision(a, 0));
 	EXPECT_EQ("0", i6engine::utils::to_string_with_precision(a, 1));
 	EXPECT_EQ("0", i6engine::utils::to_string_with_precision(a, 2));
-	EXPECT_EQ("3.1415", i6engine::utils::to_string_with_precision(b, 0));
 	EXPECT_EQ("3", i6engine::utils::to_string_with_precision(b, 1));
 	EXPECT_EQ("3.1", i6engine::utils::to_string_with_precision(b, 2));
 	EXPECT_EQ("3.14", i6engine::utils::to_string_with_precision(b, 3));
