@@ -111,7 +111,7 @@ namespace adl
     struct impl 
     {
         BOOST_STATIC_CONSTANT(bool, value =
-            sizeof(is_object_interface_aux::check(reinterpret_cast<T *>(nullptr)) == sizeof(yes)
+            sizeof(is_object_interface_aux::check(reinterpret_cast<T *>(nullptr))) == sizeof(yes)
         );
 
         typedef mpl::bool_<value> type;
