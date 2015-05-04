@@ -42,18 +42,8 @@ namespace modules {
 		luaopen_debug(_luaState);
 		luabind::open(_luaState);
 
-		std::cout << luaL_dostring(_luaState, "function add(first, second)\n"
-								   "    return first + second;\n"
-								   "end\n") << std::endl;
-
-		std::cout << lua_getglobal(_luaState, "add") << std::endl;
-		lua_pushnumber(_luaState, 3);
-		lua_pushnumber(_luaState, 7);
-		std::cout << lua_pcall(_luaState, 2, 1, 0) << std::endl;
-		std::cout << lua_tointeger(_luaState, -1) << std::endl;
-
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "LuaScriptsPath", _scriptsPath)) {
-			ISIXE_LOG_ERROR("ScriptingController", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
+			ISIXE_THROW_FAILURE("LuaScriptingController", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
 			return;
 		}
 	}
@@ -100,22 +90,12 @@ namespace modules {
 	bool LuaScriptingManager::parseScript(const std::string & file) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		if (_parsedFiles.find(file) == _parsedFiles.end()) {
-			std::cout << "Loading: " << (_scriptsPath + "/" + file + ".lua") << std::endl;
-			std::cout << "fetching add" << lua_getglobal(_luaState, "add") << std::endl;
-			lua_pushnumber(_luaState, 3);
-			lua_pushnumber(_luaState, 7);
-			std::cout << lua_pcall(_luaState, 2, 1, 0) << std::endl;
-			std::cout << lua_tointeger(_luaState, -1) << std::endl;
 			int status = luaL_dofile(_luaState, (_scriptsPath + "/" + file + ".lua").c_str());
-			std::cout << "fetching tick" << lua_getglobal(_luaState, "tick") << std::endl;
-			std::cout << lua_pcall(_luaState, 0, 0, 0) << std::endl;
-			std::cout << "status: " << status << std::endl;
 			if (status) {
 				return false;
 			}
 			_parsedFiles.insert(file);
 		}
-		std::this_thread::sleep_for(std::chrono::seconds(10));
 		return true;
 	}
 

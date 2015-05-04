@@ -66,24 +66,18 @@ namespace modules {
 		template<typename Ret, typename... args>
 		Ret callScript(const std::string & file, const std::string & func, args... B) {
 			ASSERT_THREAD_SAFETY_FUNCTION
-			std::cout << "#1" << std::endl;
 			if (!parseScript(file)) {
 				return Ret();
 			}
-			std::cout << lua_getglobal(_luaState, "add") << std::endl;
-			lua_pushnumber(_luaState, 3);
-			lua_pushnumber(_luaState, 7);
-			std::cout << lua_pcall(_luaState, 2, 1, 0) << std::endl;
-			std::cout << lua_tointeger(_luaState, -1) << std::endl;
-			std::cout << lua_getglobal(_luaState, "tick") << std::endl;
-			std::cout << lua_pcall(_luaState, 0, 0, 0) << std::endl;
-			std::cout << "#2 " << func << " " << func.c_str() << std::endl;
 			try {
-				return Ret(luabind::call_function<Ret>(_luaState, func.c_str(), B...));
+				lua_getglobal(_luaState, func.c_str());
+				assert(lua_isfunction(_luaState, -1));
+				luabind::object o(luabind::from_stack(_luaState, -1));
+				return Ret(luabind::call_function<Ret>(o, B...));
 			} catch (const luabind::error & e) {
 				std::cerr << e.what() << std::endl;
+				std::cerr << lua_tostring(_luaState, -1) << std::endl;
 			}
-			std::this_thread::sleep_for(std::chrono::seconds(10));
 		}
 
 		/**
