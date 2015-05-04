@@ -53,6 +53,7 @@ namespace modules {
 	private:
 		lua_State * _luaState;
 		std::set<std::string> _parsedFiles;
+		std::string _scriptsPath;
 
 		/**
 		 * \brief called by LuaScriptingMailbox with a message
@@ -65,14 +66,30 @@ namespace modules {
 		template<typename Ret, typename... args>
 		Ret callScript(const std::string & file, const std::string & func, args... B) {
 			ASSERT_THREAD_SAFETY_FUNCTION
-			parseScript(file);
-			return Ret(luabind::call_function<Ret>(_luaState, func.c_str(), B...));
+			std::cout << "#1" << std::endl;
+			if (!parseScript(file)) {
+				return Ret();
+			}
+			std::cout << lua_getglobal(_luaState, "add") << std::endl;
+			lua_pushnumber(_luaState, 3);
+			lua_pushnumber(_luaState, 7);
+			std::cout << lua_pcall(_luaState, 2, 1, 0) << std::endl;
+			std::cout << lua_tointeger(_luaState, -1) << std::endl;
+			std::cout << lua_getglobal(_luaState, "tick") << std::endl;
+			std::cout << lua_pcall(_luaState, 0, 0, 0) << std::endl;
+			std::cout << "#2 " << func << " " << func.c_str() << std::endl;
+			try {
+				return Ret(luabind::call_function<Ret>(_luaState, func.c_str(), B...));
+			} catch (const luabind::error & e) {
+				std::cerr << e.what() << std::endl;
+			}
+			std::this_thread::sleep_for(std::chrono::seconds(10));
 		}
 
 		/**
 		 * \brief parses the given script
 		 */
-		void parseScript(const std::string & file);
+		bool parseScript(const std::string & file);
 
 		/**
 		 * \brief forbidden

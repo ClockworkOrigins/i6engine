@@ -62,7 +62,9 @@
 #include "i6engine/modules/object/ObjectController.h"
 #include "i6engine/modules/physics/PhysicsController.h"
 
-#ifdef ISIXE_SCRIPTING
+#ifdef ISIXE_WITH_LUA_SCRIPTING
+	#include "i6engine/modules/luascripting/LuaScriptingController.h"
+#elif ISIXE_WITH_PYTHON_SCRIPTING
 	#include "i6engine/modules/scripting/ScriptingController.h"
 #endif
 
@@ -234,7 +236,9 @@ namespace api {
 			registerSubSystem("Object", new modules::ObjectController(), { core::Subsystem::Physic });
 			registerSubSystem("Input", new modules::InputController(), LNG_INPUT_FRAME_TIME);
 			registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
-#ifdef ISIXE_SCRIPTING
+#ifdef ISIXE_WITH_LUA_SCRIPTING
+			registerSubSystem("Scripting", new modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
+#elif ISIXE_WITH_PYTHON_SCRIPTING
 			registerSubSystem("Scripting", new modules::ScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
 #ifdef ISIXE_WITH_AUDIO
@@ -246,7 +250,9 @@ namespace api {
 #endif
 			registerSubSystem("Object", new modules::ObjectController(), LNG_OBJECT_FRAME_TIME);
 			registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
-#ifdef ISIXE_SCRIPTING
+#ifdef ISIXE_WITH_LUA_SCRIPTING
+			registerSubSystem("Scripting", new modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
+#elif ISIXE_WITH_PYTHON_SCRIPTING
 			registerSubSystem("Scripting", new modules::ScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
 		}

@@ -36,6 +36,10 @@ IF(ISIXE_WITH_RPG)
 	add_subdirectory(rpg)
 ENDIF(ISIXE_WITH_RPG)
 
+IF(ISIXE_WITH_LUA_SCRIPTING OR ISIXE_WITH_PYTHON_SCRIPTING)
+	add_subdirectory(scripting)
+ENDIF(ISIXE_WITH_LUA_SCRIPTING OR ISIXE_WITH_PYTHON_SCRIPTING)
+
 add_subdirectory(shadow)
 add_subdirectory(terrain)
 add_subdirectory(tooltip)

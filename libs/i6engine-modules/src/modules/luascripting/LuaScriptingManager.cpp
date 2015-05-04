@@ -16,8 +16,12 @@
 
 #include "i6engine/modules/luascripting/LuaScriptingManager.h"
 
+#include <thread>
+
+#include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eString.h"
 
+#include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/ScriptingConfig.h"
 
 extern "C"
@@ -28,7 +32,7 @@ extern "C"
 namespace i6engine {
 namespace modules {
 
-	LuaScriptingManager::LuaScriptingManager() : _luaState(luaL_newstate()), _parsedFiles() {
+	LuaScriptingManager::LuaScriptingManager() : _luaState(luaL_newstate()), _parsedFiles(), _scriptsPath() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		luaopen_base(_luaState);
 		luaopen_string(_luaState);
@@ -37,6 +41,21 @@ namespace modules {
 		luaopen_io(_luaState);
 		luaopen_debug(_luaState);
 		luabind::open(_luaState);
+
+		std::cout << luaL_dostring(_luaState, "function add(first, second)\n"
+								   "    return first + second;\n"
+								   "end\n") << std::endl;
+
+		std::cout << lua_getglobal(_luaState, "add") << std::endl;
+		lua_pushnumber(_luaState, 3);
+		lua_pushnumber(_luaState, 7);
+		std::cout << lua_pcall(_luaState, 2, 1, 0) << std::endl;
+		std::cout << lua_tointeger(_luaState, -1) << std::endl;
+
+		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "LuaScriptsPath", _scriptsPath)) {
+			ISIXE_LOG_ERROR("ScriptingController", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
+			return;
+		}
 	}
 
 	LuaScriptingManager::~LuaScriptingManager() {
@@ -74,16 +93,30 @@ namespace modules {
 
 			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
 		} else {
-			//ISIXE_THROW_MESSAGE("LuaScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
+			ISIXE_THROW_MESSAGE("LuaScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
 	}
 
-	void LuaScriptingManager::parseScript(const std::string & file) {
+	bool LuaScriptingManager::parseScript(const std::string & file) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		if (_parsedFiles.find(file) == _parsedFiles.end()) {
-			luaL_dofile(_luaState, file.c_str());
+			std::cout << "Loading: " << (_scriptsPath + "/" + file + ".lua") << std::endl;
+			std::cout << "fetching add" << lua_getglobal(_luaState, "add") << std::endl;
+			lua_pushnumber(_luaState, 3);
+			lua_pushnumber(_luaState, 7);
+			std::cout << lua_pcall(_luaState, 2, 1, 0) << std::endl;
+			std::cout << lua_tointeger(_luaState, -1) << std::endl;
+			int status = luaL_dofile(_luaState, (_scriptsPath + "/" + file + ".lua").c_str());
+			std::cout << "fetching tick" << lua_getglobal(_luaState, "tick") << std::endl;
+			std::cout << lua_pcall(_luaState, 0, 0, 0) << std::endl;
+			std::cout << "status: " << status << std::endl;
+			if (status) {
+				return false;
+			}
 			_parsedFiles.insert(file);
 		}
+		std::this_thread::sleep_for(std::chrono::seconds(10));
+		return true;
 	}
 
 } /* namespace modules */

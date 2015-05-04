@@ -54,7 +54,7 @@ namespace PythonAPIWorkaround {
 		PyObject * sysPath = PySys_GetObject(PythonAPIWorkaround::path);
 		PyList_Insert(sysPath, 0, PyString_FromString(workingDir.string().c_str()));
 		std::string mainDir;
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue<std::string>("GENERAL", "i6engineMainDir", mainDir)) {
+		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("GENERAL", "i6engineMainDir", mainDir)) {
 			ISIXE_LOG_WARN("Scripting", "No 'i6engineMainDir' path set in category 'GENERAL' in the config file. No additional path will be added");
 		} else {
 			mainDir += "/lib";
@@ -62,8 +62,8 @@ namespace PythonAPIWorkaround {
 		}
 
 		std::string scriptsPath;
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue<std::string>("SCRIPT", "ScriptsPath", scriptsPath)) {
-			ISIXE_LOG_ERROR("ScriptingController", "An exception has occurred: value ScriptsPath in section SCRIPT not found!");
+		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", scriptsPath)) {
+			ISIXE_LOG_ERROR("ScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
 			return;
 		}
 
