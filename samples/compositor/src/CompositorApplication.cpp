@@ -16,77 +16,28 @@
 
 #include "CompositorApplication.h"
 
-#include "i6engine/math/i6eMath.h"
 #include "i6engine/math/i6eVector.h"
 
 #include "i6engine/api/EngineController.h"
-#include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/CameraComponent.h"
-#include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/configs/GUIConfig.h"
-#include "i6engine/api/configs/InputConfig.h"
-#include "i6engine/api/facades/GraphicsFacade.h"
 #include "i6engine/api/facades/GUIFacade.h"
-#include "i6engine/api/facades/InputFacade.h"
-#include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
-#include "i6engine/api/facades/PhysicsFacade.h"
 #include "i6engine/api/objects/GameObject.h"
-
-#include "boost/bind.hpp"
 
 namespace sample {
 
-	CompositorApplication::CompositorApplication() : i6engine::api::Application(), _showFPS(false), _camera(), _eventMap() {
-		_eventMap["forward"] = std::make_pair(boost::bind(&CompositorApplication::Forward, this), false);
-		_eventMap["backward"] = std::make_pair(boost::bind(&CompositorApplication::Backward, this), false);
-		_eventMap["left"] = std::make_pair(boost::bind(&CompositorApplication::Left, this), false);
-		_eventMap["right"] = std::make_pair(boost::bind(&CompositorApplication::Right, this), false);
-		_eventMap["down"] = std::make_pair(boost::bind(&CompositorApplication::Down, this), false);
-		_eventMap["up"] = std::make_pair(boost::bind(&CompositorApplication::Up, this), false);
-		_eventMap["rotateLeft"] = std::make_pair(boost::bind(&CompositorApplication::RotateLeft, this), false);
-		_eventMap["rotateRight"] = std::make_pair(boost::bind(&CompositorApplication::RotateRight, this), false);
-		_eventMap["rotateUp"] = std::make_pair(boost::bind(&CompositorApplication::RotateUp, this), false);
-		_eventMap["rotateDown"] = std::make_pair(boost::bind(&CompositorApplication::RotateDown, this), false);
-		_eventMap["leanLeft"] = std::make_pair(boost::bind(&CompositorApplication::LeanLeft, this), false);
-		_eventMap["leanRight"] = std::make_pair(boost::bind(&CompositorApplication::LeanRight, this), false);
+	CompositorApplication::CompositorApplication() : CommonApplication(true, false) {
 	}
 
 	CompositorApplication::~CompositorApplication() {
 	}
 
-	void CompositorApplication::Initialize() {
-		ISIXE_REGISTERMESSAGETYPE(i6engine::api::messages::InputMessageType, CompositorApplication::InputMailbox, this);
-	}
-
 	void CompositorApplication::AfterInitialize() {
+		CommonApplication::AfterInitialize();
+
 		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
-
-		// register GUI scheme
-		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
-
-		// sets gravity for the game... here like on earth
-		i6engine::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(0, -9.81, 0));
-
-		// ambient light for the scene
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(0.0, 0.0, 0.0);
-
-		// register ESC to close the application
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
-
-		// register F12 to take screenshot
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F12, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::GraphicsFacade::takeScreenshot, i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "TerrainScreen_", ".jpg"));
-
-		// shows fps (activate/deactive using F1)
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F1, i6engine::api::KeyState::KEY_PRESSED, [this]() {
-			if (!_showFPS) {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->showFPS(0.0, 0.0, "RPG/StaticImage", "RPG/Blanko", "RPG", "TbM_Filling");
-			} else {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->hideFPS();
-			}
-			_showFPS = !_showFPS;
-		});
 
 		// add ToggleButtons for different compositors
 		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("Bloom", "RPG/ToggleButton", 0.85, 0.0, 0.02, 0.02, false, [this](bool b) {
@@ -210,115 +161,6 @@ namespace sample {
 			}
 
 		}
-
-		// registration of movements
-		i6engine::api::InputFacade * inputFacade = i6engine::api::EngineController::GetSingleton().getInputFacade();
-
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_W, "forward");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_S, "backward");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_A, "left");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_D, "right");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_LCONTROL, "down");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_SPACE, "up");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_Q, "rotateRight");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_E, "rotateLeft");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_DELETE, "rotateLeft");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_INSERT, "rotateRight");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_HOME, "rotateUp");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_END, "rotateDown");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGUP, "leanLeft");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGDOWN, "leanRight");
-	}
-
-	void CompositorApplication::Tick() {
-		for (auto & p : _eventMap) {
-			if (p.second.second) {
-				p.second.first();
-			}
-		}
-	}
-
-	bool CompositorApplication::ShutdownRequest() {
-		return true;
-	}
-
-	void CompositorApplication::Finalize() {
-	}
-
-	void CompositorApplication::ShutDown() {
-	}
-
-	void CompositorApplication::InputMailbox(const i6engine::api::GameMessage::Ptr & msg) {
-		if (msg->getSubtype() == i6engine::api::keyboard::KeyKeyboard) { // for movement of the camera
-			i6engine::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6engine::api::input::Input_Keyboard_Update *>(msg->getContent());
-			if (!i6engine::api::EngineController::GetSingleton().getGUIFacade()->getInputCaptured()) {
-				std::string key = i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(iku->code);
-
-				if (_eventMap.find(key) != _eventMap.end()) {
-					_eventMap[key].second = iku->pressed != i6engine::api::KeyState::KEY_RELEASED;
-				}
-			}
-		}
-	}
-
-	void CompositorApplication::Forward() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, 2.0), ssc->getRotation()));
-	}
-
-	void CompositorApplication::Backward() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, -2.0), ssc->getRotation()));
-	}
-
-	void CompositorApplication::Left() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(2.0, 0.0, 0.0), ssc->getRotation()));
-	}
-
-	void CompositorApplication::Right() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(-2.0, 0.0, 0.0), ssc->getRotation()));
-	}
-
-	void CompositorApplication::Down() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, -2.0, 0.0), ssc->getRotation()));
-	}
-
-	void CompositorApplication::Up() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 2.0, 0.0), ssc->getRotation()));
-	}
-
-	void CompositorApplication::RotateLeft() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), -(PI / 48)));
-	}
-
-	void CompositorApplication::RotateRight() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (PI / 48)));
-	}
-
-	void CompositorApplication::RotateUp() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), -(PI / 48)));
-	}
-
-	void CompositorApplication::RotateDown() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), (PI / 48)));
-	}
-
-	void CompositorApplication::LeanLeft() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), -(PI / 48)));
-	}
-
-	void CompositorApplication::LeanRight() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
 	}
 
 	void CompositorApplication::setCompositor(const std::string & compositor, bool enabled) const {

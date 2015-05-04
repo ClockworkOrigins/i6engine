@@ -33,7 +33,7 @@ set(SampleShadowSrc
 add_executable(SampleShadow ${SampleShadowSrc})
 set_target_properties(SampleShadow PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(SampleShadow i6engine-modules)
+target_link_libraries(SampleShadow SampleCommon)
 
 IF(WIN32)
 	add_custom_command(TARGET SampleShadow POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleShadow.exe ${CMAKE_BINARY_DIR}/bin)

@@ -14,6 +14,8 @@
 # limitations under the License.
 ##
 
+add_subdirectory(common)
+
 IF(ISIXE_NETWORK)
 	add_subdirectory(chat)
 ENDIF(ISIXE_NETWORK)

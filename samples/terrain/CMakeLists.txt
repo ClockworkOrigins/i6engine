@@ -33,7 +33,7 @@ set(SampleTerrainSrc
 add_executable(SampleTerrain ${SampleTerrainSrc})
 set_target_properties(SampleTerrain PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(SampleTerrain i6engine-modules)
+target_link_libraries(SampleTerrain SampleCommon)
 
 IF(WIN32)
 	add_custom_command(TARGET SampleTerrain POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleTerrain.exe ${CMAKE_BINARY_DIR}/bin)

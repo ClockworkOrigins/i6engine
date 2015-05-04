@@ -33,7 +33,7 @@ set(SampleCompositorSrc
 add_executable(SampleCompositor ${SampleCompositorSrc})
 set_target_properties(SampleCompositor PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(SampleCompositor i6engine-modules)
+target_link_libraries(SampleCompositor SampleCommon)
 
 IF(WIN32)
 	add_custom_command(TARGET SampleCompositor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleCompositor.exe ${CMAKE_BINARY_DIR}/bin)

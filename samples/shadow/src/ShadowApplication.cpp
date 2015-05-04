@@ -16,90 +16,41 @@
 
 #include "ShadowApplication.h"
 
-#include "i6engine/math/i6eMath.h"
 #include "i6engine/math/i6eVector.h"
 
 #include "i6engine/api/EngineController.h"
-#include "i6engine/api/FrontendMessageTypes.h"
-#include "i6engine/api/components/CameraComponent.h"
-#include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
-#include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/GraphicsFacade.h"
 #include "i6engine/api/facades/GUIFacade.h"
-#include "i6engine/api/facades/InputFacade.h"
-#include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
-#include "i6engine/api/facades/PhysicsFacade.h"
 #include "i6engine/api/objects/GameObject.h"
-
-#include "boost/bind.hpp"
 
 namespace sample {
 
 	const std::string STENCIL_ADDITIVE = "Stencil Additive";
 	const std::string STENCIL_MODULATIVE = "Stencil Modulative";
 
-	ShadowApplication::ShadowApplication() : i6engine::api::Application(), _showFPS(false), _camera(), _eventMap() {
-		_eventMap["forward"] = std::make_pair(boost::bind(&ShadowApplication::Forward, this), false);
-		_eventMap["backward"] = std::make_pair(boost::bind(&ShadowApplication::Backward, this), false);
-		_eventMap["left"] = std::make_pair(boost::bind(&ShadowApplication::Left, this), false);
-		_eventMap["right"] = std::make_pair(boost::bind(&ShadowApplication::Right, this), false);
-		_eventMap["down"] = std::make_pair(boost::bind(&ShadowApplication::Down, this), false);
-		_eventMap["up"] = std::make_pair(boost::bind(&ShadowApplication::Up, this), false);
-		_eventMap["rotateLeft"] = std::make_pair(boost::bind(&ShadowApplication::RotateLeft, this), false);
-		_eventMap["rotateRight"] = std::make_pair(boost::bind(&ShadowApplication::RotateRight, this), false);
-		_eventMap["rotateUp"] = std::make_pair(boost::bind(&ShadowApplication::RotateUp, this), false);
-		_eventMap["rotateDown"] = std::make_pair(boost::bind(&ShadowApplication::RotateDown, this), false);
-		_eventMap["leanLeft"] = std::make_pair(boost::bind(&ShadowApplication::LeanLeft, this), false);
-		_eventMap["leanRight"] = std::make_pair(boost::bind(&ShadowApplication::LeanRight, this), false);
+	ShadowApplication::ShadowApplication() : CommonApplication(true, false) {
 	}
 
 	ShadowApplication::~ShadowApplication() {
 	}
 
-	void ShadowApplication::Initialize() {
-		ISIXE_REGISTERMESSAGETYPE(i6engine::api::messages::InputMessageType, ShadowApplication::InputMailbox, this);
-	}
-
 	void ShadowApplication::AfterInitialize() {
+		CommonApplication::AfterInitialize();
+
 		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
 
-		// register GUI scheme
-		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
-
-		// sets gravity for the game... here like on earth
-		i6engine::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(0, -9.81, 0));
-
-		// ambient light for the scene
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(0.0, 0.0, 0.0);
-
-		// register ESC to close the application
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
-
-		// register F12 to take screenshot
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F12, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::GraphicsFacade::takeScreenshot, i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "TerrainScreen_", ".jpg"));
-
-		// shows fps (activate/deactive using F1)
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F1, i6engine::api::KeyState::KEY_PRESSED, [this]() {
-			if (!_showFPS) {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->showFPS(0.0, 0.0, "RPG/StaticImage", "RPG/Blanko", "RPG", "TbM_Filling");
-			} else {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->hideFPS();
-			}
-			_showFPS = !_showFPS;
-		});
-
 		// add ComboBox with choices for different shadow techniques
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addComboBox("ShadowTechniques", "RPG/Combobox", 0.85, 0.0, 0.15, 0.2, [](std::string s) {
+		gf->addComboBox("ShadowTechniques", "RPG/Combobox", 0.85, 0.0, 0.15, 0.2, [](std::string s) {
 			if (s == STENCIL_ADDITIVE) {
 				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique::Stencil_Additive);
 			} else if (s == STENCIL_MODULATIVE) {
 				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique::Stencil_Modulative);
 			}
 		});
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addTextToWidget("ShadowTechniques", STENCIL_ADDITIVE);
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addTextToWidget("ShadowTechniques", STENCIL_MODULATIVE);
+		gf->addTextToWidget("ShadowTechniques", STENCIL_ADDITIVE);
+		gf->addTextToWidget("ShadowTechniques", STENCIL_MODULATIVE);
 
 		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
 		// a camera to see the scene and move around
@@ -199,117 +150,7 @@ namespace sample {
 					of->createObject("Column", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
 				}
 			}
-
 		}
-
-		// registration of movements
-		i6engine::api::InputFacade * inputFacade = i6engine::api::EngineController::GetSingleton().getInputFacade();
-
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_W, "forward");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_S, "backward");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_A, "left");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_D, "right");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_LCONTROL, "down");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_SPACE, "up");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_Q, "rotateRight");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_E, "rotateLeft");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_DELETE, "rotateLeft");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_INSERT, "rotateRight");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_HOME, "rotateUp");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_END, "rotateDown");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGUP, "leanLeft");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGDOWN, "leanRight");
-	}
-
-	void ShadowApplication::Tick() {
-		for (auto & p : _eventMap) {
-			if (p.second.second) {
-				p.second.first();
-			}
-		}
-	}
-
-	bool ShadowApplication::ShutdownRequest() {
-		return true;
-	}
-
-	void ShadowApplication::Finalize() {
-	}
-
-	void ShadowApplication::ShutDown() {
-	}
-
-	void ShadowApplication::InputMailbox(const i6engine::api::GameMessage::Ptr & msg) {
-		if (msg->getSubtype() == i6engine::api::keyboard::KeyKeyboard) { // for movement of the camera
-			i6engine::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6engine::api::input::Input_Keyboard_Update *>(msg->getContent());
-			if (!i6engine::api::EngineController::GetSingleton().getGUIFacade()->getInputCaptured()) {
-				std::string key = i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(iku->code);
-
-				if (_eventMap.find(key) != _eventMap.end()) {
-					_eventMap[key].second = iku->pressed != i6engine::api::KeyState::KEY_RELEASED;
-				}
-			}
-		}
-	}
-
-	void ShadowApplication::Forward() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, 2.0), ssc->getRotation()));
-	}
-
-	void ShadowApplication::Backward() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, -2.0), ssc->getRotation()));
-	}
-
-	void ShadowApplication::Left() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(2.0, 0.0, 0.0), ssc->getRotation()));
-	}
-
-	void ShadowApplication::Right() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(-2.0, 0.0, 0.0), ssc->getRotation()));
-	}
-
-	void ShadowApplication::Down() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, -2.0, 0.0), ssc->getRotation()));
-	}
-
-	void ShadowApplication::Up() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 2.0, 0.0), ssc->getRotation()));
-	}
-
-	void ShadowApplication::RotateLeft() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), -(PI / 48)));
-	}
-
-	void ShadowApplication::RotateRight() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (PI / 48)));
-	}
-
-	void ShadowApplication::RotateUp() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), -(PI / 48)));
-	}
-
-	void ShadowApplication::RotateDown() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), (PI / 48)));
-	}
-
-	void ShadowApplication::LeanLeft() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), -(PI / 48)));
-	}
-
-	void ShadowApplication::LeanRight() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
 	}
 
 } /* namespace sample */

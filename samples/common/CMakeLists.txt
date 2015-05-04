@@ -15,7 +15,7 @@
 ##
 
 ################################
-# SampleFloating cmake
+# SampleCommon cmake
 ################################
 
 include_directories(include)
@@ -24,21 +24,11 @@ include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 
-set(SampleFloatingSrc
-	main.cpp
-	
-	src/FloatingApplication.cpp
+set(SampleCommonSrc
+	src/CommonApplication.cpp
 )
 
-add_executable(SampleFloating ${SampleFloatingSrc})
-set_target_properties(SampleFloating PROPERTIES LINKER_LANGUAGE CXX)
+add_library(SampleCommon STATIC ${SampleCommonSrc})
+set_target_properties(SampleCommon PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(SampleFloating SampleCommon)
-
-IF(WIN32)
-	add_custom_command(TARGET SampleFloating POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleFloating.exe ${CMAKE_BINARY_DIR}/bin)
-ENDIF(WIN32)
-
-install(TARGETS SampleFloating
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/samples
-	)
+target_link_libraries(SampleCommon i6engine-modules)

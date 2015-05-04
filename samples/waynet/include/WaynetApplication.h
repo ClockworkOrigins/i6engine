@@ -17,16 +17,13 @@
 #ifndef __I6ENGINE_SAMPLES_WAYNETAPPLICATION_H__
 #define __I6ENGINE_SAMPLES_WAYNETAPPLICATION_H__
 
-#include "i6engine/api/Application.h"
-
-#include "i6engine/api/GameMessage.h"
-#include "i6engine/api/objects/GameObject.h"
+#include "../../common/include/CommonApplication.h"
 
 #include "clockUtils/iniParser/iniParser.h"
 
 namespace sample {
 
-	class WaynetApplication : public i6engine::api::Application {
+	class WaynetApplication : public CommonApplication {
 	public:
 		WaynetApplication();
 
@@ -36,39 +33,10 @@ namespace sample {
 
 		void AfterInitialize();
 
-		void Tick();
-
-		bool ShutdownRequest();
-
-		void Finalize();
-		
-		void ShutDown();
-
 	private:
-		bool _showFPS;
 		clockUtils::iniParser::IniParser _iniParser;
-		i6engine::api::GOPtr _camera;
-
-		/**
-		 * \brief In this map all registered buttons and their respective actions are stored.
-		 * The boolean indicates if the button is still pressed.
-		 */
-		std::map<std::string, std::pair<boost::function<void(void)>, bool> > _eventMap;
 
 		void News(const i6engine::api::GameMessage::Ptr & msg);
-
-		void Forward();
-		void Backward();
-		void Left();
-		void Right();
-		void Down();
-		void Up();
-		void RotateLeft();
-		void RotateRight();
-		void RotateUp();
-		void RotateDown();
-		void LeanLeft();
-		void LeanRight();
 	};
 
 } /* namespace sample */
