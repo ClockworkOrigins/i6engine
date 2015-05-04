@@ -236,7 +236,6 @@ namespace api {
 		} /* switch _way */
 	}
 
-
 	void MoverInterpolateComponent::News(const GameMessage::Ptr & msg) {
 		uint16_t type = msg->getSubtype();
 		if (type == api::components::ComMoverResync) {

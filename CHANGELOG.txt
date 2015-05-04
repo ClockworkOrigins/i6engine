@@ -1,4 +1,9 @@
-﻿v 0.8.4
+﻿v 0.8.5
+
+Enhancements:
+	- reduced code redundancy in sample by moving same code in extra SampleCommon lib
+
+v 0.8.4
 
 Enhancements:
 	- MovingCamera now derives from Camera
