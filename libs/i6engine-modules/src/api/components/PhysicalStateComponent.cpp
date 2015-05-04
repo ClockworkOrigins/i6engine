@@ -109,9 +109,15 @@ namespace api {
 
 	void PhysicalStateComponent::setRotation(const Quaternion & rotation, uint32_t prio) {
 		boost::mutex::scoped_lock sl(_lock);
-		if (prio >= _rotDirty && !_rotationNew.equals(rotation)) {
-			_rotationNew = rotation;
-			_rotDirty = prio;
+		if (prio >= _rotDirty && _rotationNew != rotation) {
+			// FIXME: (Michael) better definition of 'same rotation'
+			Vec3 r11 = math::rotateVector(Vec3(10.0, 10.0, 10.0), _rotationNew);
+			Vec3 r22 = math::rotateVector(Vec3(10.0, 10.0, 10.0), rotation);
+			
+			if ((r11 - r22).length() > 0.01) {
+				_rotationNew = rotation;
+				_rotDirty = prio;
+			}
 		}
 	}
 

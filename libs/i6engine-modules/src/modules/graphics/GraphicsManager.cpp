@@ -599,7 +599,7 @@ namespace modules {
 		} else if (msg->getSubtype() == api::graphics::GraLuminous) {
 			uint16_t t = static_cast<api::graphics::Graphics_Luminous_Update *>(msg->getContent())->lightType;
 
-			api::LuminousAppearanceComponent::LightType lightType = static_cast<api::LuminousAppearanceComponent::LightType>(t);
+			api::LuminousAppearanceComponent::LightType lightType = api::LuminousAppearanceComponent::LightType(t);
 
 			Vec3 diffuse = static_cast<api::graphics::Graphics_Luminous_Update *>(msg->getContent())->diffuse;
 			Vec3 specular = static_cast<api::graphics::Graphics_Luminous_Update *>(msg->getContent())->specular;

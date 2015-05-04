@@ -3,6 +3,9 @@
 Enhancements:
 	- reduced code redundancy in sample by moving same code in extra SampleCommon lib
 
+Fixes:
+	- fixed synchronization bug of rotation in PhysicalStateComponent
+
 v 0.8.4
 
 Enhancements:
