@@ -26,10 +26,45 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/luabind/luabind.hpp"
+#include "i6engine/luabind/luabind.hpp"
 
 namespace i6engine {
 namespace lua {
 namespace object {
+
+	class ComponentTypes {
+	public:
+		enum Types {
+			CameraComponent,
+			LifetimeComponent,
+			LuminousAppearanceComponent,
+			MeshAppearanceComponent,
+			MoverCircleComponent,
+			MoverComponent,
+			MoverInterpolateComponent,
+			MovingCameraComponent,
+			NetworkSenderComponent,
+			ParticleEmitterComponent,
+			PhysicalStateComponent,
+			ShatterComponent,
+			SpawnpointComponent,
+			StaticStateComponent,
+			TerrainAppearanceComponent,
+			SoundComponent,
+			SoundListenerComponent,
+			BillboardComponent,
+			FollowComponent,
+			MovableTextComponent,
+			WaypointComponent,
+			NavigationComponent,
+			WaynetNavigationComponent,
+			MoveComponent,
+			MovementComponent,
+			ToggleWaynetComponent,
+			Point2PointConstraintComponent,
+			ComponentTypesCount
+		};
+	};
 
 	std::list<i6engine::api::GOPtr> getAllObjectsOfType(const std::string & types) {
 		std::list<i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
@@ -40,7 +75,7 @@ namespace object {
 		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(id);
 	}
 
-	i6engine::api::GameObject * getObjectPtr(const i6engine::api::GOPtr & p) {
+	const i6engine::api::GameObject * getObjectPtr(const i6engine::api::GOPtr & p) {
 		return p.get();
 	}
 
@@ -67,13 +102,13 @@ extern "C" ISIXE_LUA_API int init(lua_State * L) {
 
 	module(L)
 		[
-			class_<i6engine::api::GOPtr>("GOPtr")
-				.def(constructor<i6engine::api::GOPtr>()),
+			class_<i6engine::api::GameObject, i6engine::api::GOPtr>("GameObject")
+				.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t)const)&i6engine::api::GameObject::getGOC)
+				.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t, const std::string &)const)&i6engine::api::GameObject::getGOC)
+				.def("getType", &i6engine::api::GameObject::getType)
+				.def("setDie", &i6engine::api::GameObject::setDie),
 
-			class_<i6engine::api::ComPtr>("ComPtr")
-				.def(constructor<i6engine::api::ComPtr>()),
-
-			class_<i6engine::api::Component>("Component")
+			class_<i6engine::api::Component, i6engine::api::ComPtr>("ComPtr")
 				.def("setDie", &i6engine::api::Component::setDie),
 
 			class_<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>("MeshAppearanceComponent")
@@ -111,25 +146,20 @@ extern "C" ISIXE_LUA_API int init(lua_State * L) {
 			def("getMeshAppearanceComponent", &i6engine::lua::object::getMesh),
 			def("getPhysicalStateComponent", &i6engine::lua::object::getPSC),
 
-			class_<i6engine::api::GameObject, boost::noncopyable>("GameObject")
-				.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t)const)&i6engine::api::GameObject::getGOC)
-				.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t, const std::string &)const)&i6engine::api::GameObject::getGOC)
-				.def("getType", &i6engine::api::GameObject::getType)
-				.def("setDie", &i6engine::api::GameObject::setDie),
-
 			def("getObject", &i6engine::lua::object::getObject),
 			def("getAllObjectsOfType", &i6engine::lua::object::getAllObjectsOfType),
 			def("getObjectPtr", &i6engine::lua::object::getObjectPtr),
 			def("rayTest", &i6engine::lua::object::rayTest),
 
 			class_<i6engine::api::CollisionGroup>("CollisionGroup")
-				.def(constructor<uint32_t, uint32_t, uint32_t>())
+				.def(constructor<uint32_t, uint32_t, uint32_t>()),
 
-			/*enum_<i6engine::api::components::ComponentTypes>("ComponentTypes")
+			class_<i6engine::lua::object::ComponentTypes>("ComponentTypes")
+				.enum_("Types")
 				[
-					value("MeshAppearanceComponent", i6engine::api::components::ComponentTypes::MeshAppearanceComponent),
-					value("PhysicalStateComponent", i6engine::api::components::ComponentTypes::PhysicalStateComponent)
-				]*/
+					value("MeshAppearanceComponent", i6engine::lua::object::ComponentTypes::Types::MeshAppearanceComponent),
+					value("PhysicalStateComponent", i6engine::lua::object::ComponentTypes::Types::PhysicalStateComponent)
+				]
 		];
 
 	return 0;

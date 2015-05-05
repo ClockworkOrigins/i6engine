@@ -299,6 +299,10 @@ namespace utils {
 		return sharedPtr<T, U>(ptr, sC);
 	}
 
+	template<class T, class U> T * get_pointer(const sharedPtr<T, U> & p) {
+		return p.get();
+	}
+
 } /* namespace utils */
 } /* namespace i6engine */
 

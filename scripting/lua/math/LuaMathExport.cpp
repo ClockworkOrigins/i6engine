@@ -19,6 +19,10 @@
 #include "i6engine/luabind/luabind.hpp"
 #include "i6engine/luabind/operator.hpp"
 
+Vec3 * getVector() {
+	return new Vec3(1.0, 2.0, 3.0);
+}
+
 extern "C" ISIXE_LUA_API int init(lua_State * L) {
 	using namespace luabind;
 
@@ -26,6 +30,7 @@ extern "C" ISIXE_LUA_API int init(lua_State * L) {
 
 	module(L)
 		[
+			def("getVector", getVector),
 			def("rotateVector", i6engine::math::rotateVector),
 
 			class_<Quaternion>("i6eQuaternion")
@@ -50,6 +55,7 @@ extern "C" ISIXE_LUA_API int init(lua_State * L) {
 				.def("normalize", &Vec3::normalize)
 				.def("mulComponents", &Vec3::mulComponents)
 				.def("length", &Vec3::length)
+				.def(tostring(self))
 				.scope
 				[
 					def("scalProd", &Vec3::scalProd),

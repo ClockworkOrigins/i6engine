@@ -33,17 +33,17 @@ public:
 
     bool operator!=(type_id const& other) const
     {
-        return *id != *other.id;
+		return std::strcmp(id->name(), other.id->name()) != 0;
     }
 
     bool operator==(type_id const& other) const
     {
-        return *id == *other.id;
+		return std::strcmp(id->name(), other.id->name()) == 0;
     }
 
     bool operator<(type_id const& other) const
     {
-        return id->before(*other.id);
+		return std::strcmp(id->name(), other.id->name()) < 0;
     }
 
     char const* name() const

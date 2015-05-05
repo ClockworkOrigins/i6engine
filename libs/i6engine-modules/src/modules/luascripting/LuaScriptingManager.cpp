@@ -34,13 +34,10 @@ namespace modules {
 
 	LuaScriptingManager::LuaScriptingManager() : _luaState(luaL_newstate()), _parsedFiles(), _scriptsPath() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-		luaopen_base(_luaState);
-		luaopen_string(_luaState);
-		luaopen_table(_luaState);
-		luaopen_math(_luaState);
-		luaopen_io(_luaState);
-		luaopen_debug(_luaState);
+		luaL_openlibs(_luaState);
 		luabind::open(_luaState);
+		lua_writestring(LUA_COPYRIGHT, strlen(LUA_COPYRIGHT));
+		lua_writeline();
 
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "LuaScriptsPath", _scriptsPath)) {
 			ISIXE_THROW_FAILURE("LuaScriptingController", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
@@ -93,6 +90,7 @@ namespace modules {
 		if (_parsedFiles.find(file) == _parsedFiles.end()) {
 			int status = luaL_dofile(_luaState, (_scriptsPath + "/" + file + ".lua").c_str());
 			if (status) {
+				std::cout << lua_tostring(_luaState, -1) << std::endl;
 				return false;
 			}
 			_parsedFiles.insert(file);
