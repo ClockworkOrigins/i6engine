@@ -5,7 +5,7 @@
 #ifndef LUABIND_DETAIL_MAKE_INSTANCE_090310_HPP
 # define LUABIND_DETAIL_MAKE_INSTANCE_090310_HPP
 
-# include "boost/type_traits/is_polymorphic.hpp"
+# include <boost/type_traits/is_polymorphic.hpp>
 # include "i6engine/luabind/detail/inheritance.hpp"
 # include "i6engine/luabind/detail/object_rep.hpp"
 
@@ -33,7 +33,7 @@ template <class T>
 std::pair<class_id, void*> get_dynamic_class_aux(
     lua_State*, T const* p, mpl::false_)
 {
-    return std::make_pair(registered_class<T>::id, reinterpret_cast<void *>(const_cast<T *>(p)));
+    return std::make_pair(registered_class<T>::id, (void*)p);
 }
 
 template <class T>

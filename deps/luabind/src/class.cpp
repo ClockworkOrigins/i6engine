@@ -22,7 +22,7 @@
 
 #define LUABIND_BUILDING
 
-#include "boost/foreach.hpp"
+#include <boost/foreach.hpp>
 
 #include "i6engine/luabind/lua_include.hpp"
 

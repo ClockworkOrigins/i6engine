@@ -30,9 +30,9 @@ namespace detail
   template <class F, class Signature, class Policies>
   struct function_object_impl : function_object
   {
-      function_object_impl(F fNew, Policies const& policies)
+      function_object_impl(F f, Policies const& policies)
         : function_object(&entry_point)
-        , f(fNew)
+        , f(f)
         , policies(policies)
       {}
 

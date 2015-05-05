@@ -23,7 +23,7 @@
 #ifndef IS_INDIRECT_CONST_040211_HPP
 #define IS_INDIRECT_CONST_040211_HPP
 
-#include <luabind/detail/yes_no.hpp>
+#include "i6engine/luabind/detail/yes_no.hpp"
 #include <boost/type_traits/is_const.hpp>
 #include <boost/mpl/bool.hpp>
 

@@ -5,9 +5,9 @@
 #ifndef LUABIND_SHARED_PTR_CONVERTER_090211_HPP
 # define LUABIND_SHARED_PTR_CONVERTER_090211_HPP
 
-# include <luabind/get_main_thread.hpp>
-# include <luabind/handle.hpp>
-# include <luabind/detail/policy.hpp>
+# include "i6engine/luabind/get_main_thread.hpp"
+# include "i6engine/luabind/handle.hpp"
+# include "i6engine/luabind/detail/policy.hpp"
 # include <boost/shared_ptr.hpp>
 
 namespace luabind {

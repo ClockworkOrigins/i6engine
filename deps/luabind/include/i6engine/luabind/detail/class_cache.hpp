@@ -24,8 +24,8 @@
 #define CLASS_CACHE_040218_HPP
 
 #include "i6engine/luabind/prefix.hpp"
-#include "boost/type_traits/add_reference.hpp"
-#include "boost/type_traits/add_const.hpp"
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/type_traits/add_const.hpp>
 
 namespace luabind { namespace detail {
 

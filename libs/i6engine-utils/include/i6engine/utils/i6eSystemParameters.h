@@ -152,6 +152,14 @@
 	#endif
 #endif
 
+#ifndef ISIXE_LUA_API
+	#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+		#define ISIXE_LUA_API __declspec(dllexport)
+	#else
+		#define ISIXE_LUA_API
+	#endif
+#endif
+
 #ifdef _MSC_VER
 	#pragma warning(disable : 4251) // dll interface to be used by clients...
 #endif

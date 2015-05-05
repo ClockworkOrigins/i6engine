@@ -24,7 +24,7 @@
 #ifndef LUABIND_OBJECT_REP_HPP_INCLUDED
 #define LUABIND_OBJECT_REP_HPP_INCLUDED
 
-#include "boost/aligned_storage.hpp"
+#include <boost/aligned_storage.hpp>
 #include "i6engine/luabind/config.hpp"
 #include "i6engine/luabind/detail/instance_holder.hpp"
 #include "i6engine/luabind/detail/ref.hpp"
@@ -55,7 +55,7 @@ namespace luabind { namespace detail
 		std::pair<void*, int> get_instance(class_id target) const
 		{
 			if (m_instance == 0)
-				return std::pair<void*, int>(nullptr, -1);
+				return std::pair<void*, int>((void*)0, -1);
 			return m_instance->get(target);
 		}
 

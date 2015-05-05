@@ -30,8 +30,8 @@
 #include "i6engine/luabind/detail/ref.hpp"
 #include "i6engine/luabind/detail/call_member.hpp"
 
-#include "boost/preprocessor/repetition/enum_trailing_params.hpp"
-#include "boost/preprocessor/repetition/enum_trailing_binary_params.hpp"
+#include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+#include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 
 #include <stdexcept>
 
@@ -89,8 +89,7 @@ namespace luabind
 
 #endif // LUABIND_WRAPPER_BASE_HPP_INCLUDED
 
-#else
-#if BOOST_PP_ITERATION_FLAGS() == 1
+#elif BOOST_PP_ITERATION_FLAGS() == 1
 
 #define LUABIND_TUPLE_PARAMS(z, n, data) const A##n *
 #define LUABIND_OPERATOR_PARAMS(z, n, data) const A##n & a##n
@@ -187,5 +186,5 @@ namespace luabind
 #undef LUABIND_TUPLE_PARAMS
 
 #undef N
-#endif
+
 #endif

@@ -5,7 +5,7 @@
 #ifndef LUABIND_TYPEID_081227_HPP
 # define LUABIND_TYPEID_081227_HPP
 
-# include "boost/operators.hpp"
+# include <boost/operators.hpp>
 # include <typeinfo>
 # include "i6engine/luabind/detail/primitives.hpp"
 
@@ -27,8 +27,8 @@ public:
       : id(&typeid(detail::null_type))
     {}
 
-    type_id(std::type_info const& i)
-      : id(&i)
+    type_id(std::type_info const& id)
+      : id(&id)
     {}
 
     bool operator!=(type_id const& other) const

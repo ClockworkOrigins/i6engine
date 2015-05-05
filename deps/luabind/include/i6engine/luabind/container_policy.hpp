@@ -24,8 +24,8 @@
 #ifndef LUABIND_CONTAINER_POLICY_HPP_INCLUDED
 #define LUABIND_CONTAINER_POLICY_HPP_INCLUDED
 
-#include <luabind/config.hpp>
-#include <luabind/detail/policy.hpp>
+#include "i6engine/luabind/config.hpp"
+#include "i6engine/luabind/detail/policy.hpp"
 #include <boost/mpl/apply_wrap.hpp>
 
 namespace luabind { namespace detail {

@@ -5,9 +5,9 @@
 #ifndef LUABIND_ITERATOR_POLICY__071111_HPP
 # define LUABIND_ITERATOR_POLICY__071111_HPP
 
-# include <luabind/config.hpp>
-# include <luabind/detail/policy.hpp>
-# include <luabind/detail/convert_to_lua.hpp>
+# include "i6engine/luabind/config.hpp"
+# include "i6engine/luabind/detail/policy.hpp"
+# include "i6engine/luabind/detail/convert_to_lua.hpp"
 
 namespace luabind { namespace detail {
 

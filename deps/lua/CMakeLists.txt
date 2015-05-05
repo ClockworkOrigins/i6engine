@@ -64,6 +64,13 @@ add_library(lua STATIC ${luaSrc})
 
 set_target_properties(lua PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
+add_executable(luap ${srcdir}/lua.c)
+target_link_libraries(luap lua)
+
+IF(WIN32)
+	add_custom_command(TARGET luap POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/luap.exe ${CMAKE_BINARY_DIR}/bin)
+ENDIF(WIN32)
+
 ########################
 # lua install
 ########################

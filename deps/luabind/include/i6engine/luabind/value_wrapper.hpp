@@ -126,7 +126,7 @@ struct is_value_wrapper_arg
 
 #else
 
-# include <luabind/detail/yes_no.hpp>
+# include "i6engine/luabind/detail/yes_no.hpp"
 # include <boost/type_traits/add_reference.hpp>
 
 namespace luabind {

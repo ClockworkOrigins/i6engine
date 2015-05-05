@@ -51,7 +51,7 @@ namespace detail
   struct signature_from_function;
 
 #  define BOOST_PP_ITERATION_PARAMS_1 \
-  (3, (0, LUABIND_MAX_ARITY, <luabind/tag_function.hpp>))
+  (3, (0, LUABIND_MAX_ARITY, "i6engine/luabind/tag_function.hpp"))
 #  include BOOST_PP_ITERATE()
 
 } // namespace detail

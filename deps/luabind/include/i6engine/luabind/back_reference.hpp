@@ -27,9 +27,9 @@
 #include "i6engine/luabind/wrapper_base.hpp"
 #include "i6engine/luabind/detail/has_get_pointer.hpp"
 #include "i6engine/luabind/get_pointer.hpp"
-#include "boost/type_traits/is_polymorphic.hpp"
-#include "boost/type_traits/is_const.hpp"
-#include "boost/mpl/if.hpp"
+#include <boost/type_traits/is_polymorphic.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <boost/mpl/if.hpp>
 
 namespace luabind {
 

@@ -11,7 +11,7 @@
 # include <memory>
 # include <vector>
 # include "i6engine/luabind/typeid.hpp"
-# include "boost/scoped_ptr.hpp"
+# include <boost/scoped_ptr.hpp>
 
 namespace luabind { namespace detail {
 

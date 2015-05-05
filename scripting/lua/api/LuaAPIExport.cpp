@@ -30,7 +30,7 @@ namespace api {
 } /* namespace lua */
 } /* namespace i6engine */
 
-extern "C" int init(lua_State * L) {
+extern "C" ISIXE_LUA_API int init(lua_State * L) {
 	using namespace luabind;
 
 	open(L);

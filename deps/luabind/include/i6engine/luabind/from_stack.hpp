@@ -27,9 +27,9 @@ namespace luabind {
 
 struct from_stack
 {
-    from_stack(lua_State* interp, int i)
-      : interpreter(interp)
-      , index(i)
+    from_stack(lua_State* interpreter, int index)
+      : interpreter(interpreter)
+      , index(index)
     {}
 
     lua_State* interpreter;

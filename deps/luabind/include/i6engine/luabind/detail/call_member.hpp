@@ -33,13 +33,13 @@
 #include "i6engine/luabind/detail/stack_utils.hpp"
 #include "i6engine/luabind/object.hpp" // TODO: REMOVE DEPENDENCY
 
-#include "boost/tuple/tuple.hpp"
+#include <boost/tuple/tuple.hpp>
 
-#include "boost/preprocessor/control/if.hpp"
-#include "boost/preprocessor/facilities/expand.hpp"
-#include "boost/preprocessor/repetition/enum.hpp"
+#include <boost/preprocessor/control/if.hpp>
+#include <boost/preprocessor/facilities/expand.hpp>
+#include <boost/preprocessor/repetition/enum.hpp>
 
-#include "boost/mpl/apply_wrap.hpp"
+#include <boost/mpl/apply_wrap.hpp>
 
 namespace luabind
 {
@@ -316,8 +316,7 @@ namespace luabind
 
 #endif // LUABIND_CALL_MEMBER_HPP_INCLUDED
 
-#else
-#if BOOST_PP_ITERATION_FLAGS() == 1
+#elif BOOST_PP_ITERATION_FLAGS() == 1
 
 #define LUABIND_TUPLE_PARAMS(z, n, data) const A##n *
 #define LUABIND_OPERATOR_PARAMS(z, n, data) const A##n & a##n
@@ -360,6 +359,5 @@ namespace luabind
 #undef LUABIND_OPERATOR_PARAMS
 #undef LUABIND_TUPLE_PARAMS
 
-#endif
 #endif
 

@@ -19,14 +19,14 @@
 #include "i6engine/luabind/luabind.hpp"
 #include "i6engine/luabind/operator.hpp"
 
-extern "C" int init(lua_State * L) {
+extern "C" ISIXE_LUA_API int init(lua_State * L) {
 	using namespace luabind;
 
 	open(L);
 
 	module(L)
 		[
-			def("rotateVector", &i6engine::math::rotateVector),
+			def("rotateVector", i6engine::math::rotateVector),
 
 			class_<Quaternion>("i6eQuaternion")
 				.def(constructor<i6engine::math::i6eVector, double>())

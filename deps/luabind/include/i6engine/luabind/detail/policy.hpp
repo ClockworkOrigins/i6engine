@@ -30,21 +30,21 @@
 #include <string>
 #include <memory>
 
-#include "boost/type_traits/is_enum.hpp"
-#include "boost/type_traits/is_array.hpp"
-#include "boost/mpl/bool.hpp"
-#include "boost/mpl/integral_c.hpp"
-#include "boost/mpl/equal_to.hpp"
-#include "boost/mpl/eval_if.hpp"
-#include "boost/mpl/or.hpp"
-#include "boost/type_traits/add_reference.hpp"
-#include "boost/type_traits/remove_reference.hpp"
-#include "boost/type_traits/is_pointer.hpp"
-#include "boost/type_traits/is_base_and_derived.hpp"
-#include "boost/bind/arg.hpp"
-#include "boost/limits.hpp"
-#include "boost/tuple/tuple.hpp"
-#include "boost/version.hpp"
+#include <boost/type_traits/is_enum.hpp>
+#include <boost/type_traits/is_array.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/integral_c.hpp>
+#include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/or.hpp>
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/bind/arg.hpp>
+#include <boost/limits.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/version.hpp>
 
 #include "i6engine/luabind/detail/class_registry.hpp"
 #include "i6engine/luabind/detail/primitives.hpp"
@@ -56,7 +56,7 @@
 #include "i6engine/luabind/detail/has_get_pointer.hpp"
 #include "i6engine/luabind/detail/make_instance.hpp"
 
-#include "boost/type_traits/add_reference.hpp"
+#include <boost/type_traits/add_reference.hpp>
 
 #include "i6engine/luabind/detail/decorate_type.hpp"
 #include "i6engine/luabind/weak_ref.hpp"
@@ -65,6 +65,10 @@
 #include "i6engine/luabind/value_wrapper.hpp"
 #include "i6engine/luabind/from_stack.hpp"
 #include "i6engine/luabind/typeid.hpp"
+
+#if LUA_VERSION_NUM < 502
+# define lua_rawlen lua_objlen
+#endif
 
 namespace luabind
 {
@@ -208,7 +212,7 @@ namespace luabind { namespace detail
 
         void* result;
 
-        int consumed_args(...) const
+        int const consumed_args(...)
         {
             return 1;
         }
@@ -261,7 +265,7 @@ namespace luabind { namespace detail
 		typedef value_converter type;
         typedef mpl::false_ is_native;
 
-        int consumed_args(...) const
+        int const consumed_args(...)
         {
             return 1;
         }
@@ -313,7 +317,7 @@ namespace luabind { namespace detail
 		typedef const_pointer_converter type;
         typedef mpl::false_ is_native;
 
-        int consumed_args(...) const
+        int const consumed_args(...)
         {
             return 1;
         }
@@ -369,7 +373,7 @@ namespace luabind { namespace detail
 		typedef ref_converter type;
         typedef mpl::false_ is_native;
 
-        int consumed_args(...) const
+        int const consumed_args(...)
         {
             return 1;
         }
@@ -415,7 +419,7 @@ namespace luabind { namespace detail
 		typedef const_ref_converter type;
         typedef mpl::false_ is_native;
 
-        int consumed_args(...) const
+        int const consumed_args(...)
         {
             return 1;
         }
@@ -467,7 +471,7 @@ namespace luabind { namespace detail
 		typedef enum_converter type;
         typedef mpl::true_ is_native;
 
-        int consumed_args(...) const
+        int const consumed_args(...)
         {
             return 1;
         }
@@ -511,7 +515,7 @@ namespace luabind { namespace detail
 		typedef value_wrapper_converter<U> type;
 		typedef mpl::true_ is_native;
 
-        int consumed_args(...) const
+        int const consumed_args(...)
         {
             return 1;
         }
@@ -594,7 +598,7 @@ struct native_converter_base
 {
     typedef boost::mpl::true_ is_native;
 
-    int consumed_args(...) const
+    int const consumed_args(...)
     {
         return 1;
     }
@@ -693,6 +697,8 @@ LUABIND_NUMBER_CONVERTER(unsigned char, integer)
 LUABIND_NUMBER_CONVERTER(signed short, integer)
 LUABIND_NUMBER_CONVERTER(unsigned short, integer)
 LUABIND_NUMBER_CONVERTER(signed int, integer)
+LUABIND_NUMBER_CONVERTER(uint64_t, integer)
+LUABIND_NUMBER_CONVERTER(int64_t, integer)
 
 LUABIND_NUMBER_CONVERTER(unsigned int, number)
 LUABIND_NUMBER_CONVERTER(unsigned long, number)
@@ -769,7 +775,7 @@ struct default_converter<char const*>
 {
     typedef boost::mpl::true_ is_native;
 
-    int consumed_args(...) const
+    int const consumed_args(...)
     {
         return 1;
     }
@@ -820,7 +826,7 @@ struct default_converter<char[N]>
 template <>
 struct default_converter<lua_State*>
 {
-    int consumed_args(...) const
+    int const consumed_args(...)
     {
         return 0;
     }
@@ -1016,6 +1022,10 @@ namespace luabind { namespace
 # define LUABIND_PLACEHOLDER_ARG(N) boost::arg<N>
 #endif
 }}
+
+#if LUA_VERSION_NUM < 502
+# undef lua_rawlen
+#endif
 
 #endif // LUABIND_POLICY_HPP_INCLUDED
 

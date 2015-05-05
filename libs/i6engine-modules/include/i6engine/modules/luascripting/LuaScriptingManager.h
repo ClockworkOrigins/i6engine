@@ -77,6 +77,8 @@ namespace modules {
 			} catch (const luabind::error & e) {
 				std::cerr << e.what() << std::endl;
 				std::cerr << lua_tostring(_luaState, -1) << std::endl;
+			} catch (const std::exception & e) {
+				std::cerr << e.what() << std::endl;
 			}
 		}
 

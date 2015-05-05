@@ -25,9 +25,9 @@
 #define LUABIND_TYPETRAITS_HPP_INCLUDED
 
 #include "i6engine/luabind/config.hpp"
-#include "boost/mpl/if.hpp"
-#include "boost/type_traits/is_reference.hpp"
-#include "boost/type_traits/is_const.hpp"
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/is_reference.hpp>
+#include <boost/type_traits/is_const.hpp>
 #include "i6engine/luabind/detail/primitives.hpp"
 
 namespace luabind { namespace detail 

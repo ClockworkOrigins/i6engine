@@ -20,6 +20,7 @@
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/ScriptingFacade.h"
+#include "i6engine/api/objects/GameObject.h"
 
 #include "components/Config.h"
 
@@ -52,11 +53,11 @@ namespace components {
 	}
 
 	void ScriptingShatterComponent::Tick() {
-		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript("MoveScript", "tick"/*, _objOwnerID*/);
+		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript("MoveScript", "tick", _objOwnerID);
 	}
 
 	void ScriptingShatterComponent::shatter(const i6engine::api::GOPtr & other) {
-		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript("MoveScript", "shatter", _objOwnerID);
+		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript("MoveScript", "shatter", _objOwnerID, other->getID());
 	}
 
 } /* namespace components */

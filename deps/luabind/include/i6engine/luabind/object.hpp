@@ -23,12 +23,12 @@
 #ifndef LUABIND_OBJECT_050419_HPP
 #define LUABIND_OBJECT_050419_HPP
 
-#include "boost/implicit_cast.hpp" // detail::push()
-#include "boost/ref.hpp" // detail::push()
-#include "boost/mpl/bool.hpp" // value_wrapper_traits specializations
-#include "boost/mpl/apply_wrap.hpp"
-#include "boost/tuple/tuple.hpp"
-#include "boost/optional.hpp"
+#include <boost/implicit_cast.hpp> // detail::push()
+#include <boost/ref.hpp> // detail::push()
+#include <boost/mpl/bool.hpp> // value_wrapper_traits specializations
+#include <boost/mpl/apply_wrap.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/optional.hpp>
 
 #include "i6engine/luabind/nil.hpp"
 #include "i6engine/luabind/value_wrapper.hpp"
@@ -40,10 +40,18 @@
 #include "i6engine/luabind/detail/convert_to_lua.hpp" // REFACTOR
 #include "i6engine/luabind/typeid.hpp"
 
-#include "boost/iterator/iterator_facade.hpp" // iterator
+#include <boost/iterator/iterator_facade.hpp> // iterator
 
-#include "boost/preprocessor/iteration/iterate.hpp"
-#include "boost/utility/enable_if.hpp"
+#include <boost/preprocessor/iteration/iterate.hpp>
+#include <boost/utility/enable_if.hpp>
+
+#if LUA_VERSION_NUM < 502
+# define lua_compare(L, index1, index2, fn) fn(L, index1, index2)
+# define LUA_OPEQ lua_equal
+# define LUA_OPLT lua_lessthan
+# define lua_rawlen lua_objlen
+# define lua_pushglobaltable(L) lua_pushvalue(L, LUA_GLOBALSINDEX)
+#endif
 
 namespace luabind {
 
@@ -80,7 +88,7 @@ namespace detail
         , Policies
       >::type converter_policy;
 
-      push_aux(interpreter, value, reinterpret_cast<converter_policy *>(nullptr));
+      push_aux(interpreter, value, (converter_policy*)0);
   }
 
   template<class T>
@@ -111,7 +119,7 @@ namespace adl
     struct impl 
     {
         BOOST_STATIC_CONSTANT(bool, value =
-            sizeof(is_object_interface_aux::check(reinterpret_cast<T *>(nullptr))) == sizeof(yes)
+            sizeof(is_object_interface_aux::check((T*)0)) == sizeof(yes)
         );
 
         typedef mpl::bool_<value> type;
@@ -306,7 +314,8 @@ LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
       }
 
       // The rest of the overloads are PP-generated.
-      #define BOOST_PP_ITERATION_PARAMS_1 (3, (3, LUABIND_MAX_ARITY, "i6engine/luabind/detail/object_call.hpp"))
+      #define BOOST_PP_ITERATION_PARAMS_1 (3, \
+          (3, LUABIND_MAX_ARITY, "i6engine/luabind/detail/object_call.hpp"))
       #include BOOST_PP_ITERATE()
 
       operator safe_bool_type*() const
@@ -347,9 +356,9 @@ LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
       typedef iterator_proxy_tag value_wrapper_tag;
 #endif
 
-      iterator_proxy(lua_State* interp, handle const& table, handle const& key)
-        : m_interpreter(interp)
-        , m_table_index(lua_gettop(interp) + 1)
+      iterator_proxy(lua_State* interpreter, handle const& table, handle const& key)
+        : m_interpreter(interpreter)
+        , m_table_index(lua_gettop(interpreter) + 1)
         , m_key_index(m_table_index + 1)
       {
           table.push(m_interpreter);
@@ -405,9 +414,9 @@ LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
       }
 
       // TODO: Why is it non-const?
-      void push(lua_State* interp)
+      void push(lua_State* interpreter)
       {
-          assert(interp == m_interpreter);
+          assert(interpreter == m_interpreter);
           lua_pushvalue(m_interpreter, m_key_index);
           AccessPolicy::get(m_interpreter, m_table_index);
       }
@@ -474,7 +483,7 @@ namespace detail
           lua_pushnil(m_interpreter);
           if (lua_next(m_interpreter, -2) != 0)
           {
-              detail::stack_pop pop2(m_interpreter, 2);
+              detail::stack_pop pop(m_interpreter, 2);
               handle(m_interpreter, -2).swap(m_key);
           }
           else
@@ -578,9 +587,9 @@ namespace adl
       typedef index_proxy<Next> this_type;
 
       template<class Key>
-      index_proxy(Next const& next, lua_State* interp, Key const& key)
-        : m_interpreter(interp)
-        , m_key_index(lua_gettop(interp) + 1)
+      index_proxy(Next const& next, lua_State* interpreter, Key const& key)
+        : m_interpreter(interpreter)
+        , m_key_index(lua_gettop(interpreter) + 1)
         , m_next(next)
       {
           detail::push(m_interpreter, key);
@@ -735,19 +744,19 @@ namespace adl
       }
 
       template<class T>
-      object(lua_State* interp, T const& value)
+      object(lua_State* interpreter, T const& value)
       {
-          detail::push(interp, value);
-          detail::stack_pop pop(interp, 1);
-          handle(interp, -1).swap(m_handle);
+          detail::push(interpreter, value);
+          detail::stack_pop pop(interpreter, 1);
+          handle(interpreter, -1).swap(m_handle);
       }
 
       template<class T, class Policies>
-      object(lua_State* interp, T const& value, Policies const&)
+      object(lua_State* interpreter, T const& value, Policies const&)
       {
-          detail::push(interp, value, Policies());
-          detail::stack_pop pop(interp, 1);
-          handle(interp, -1).swap(m_handle);
+          detail::push(interpreter, value, Policies());
+          detail::stack_pop pop(interpreter, 1);
+          handle(interpreter, -1).swap(m_handle);
       }
 
       void push(lua_State* interpreter) const;
@@ -771,9 +780,9 @@ namespace adl
       handle m_handle;
   };
 
-  inline void object::push(lua_State* interp) const
+  inline void object::push(lua_State* interpreter) const
   {
-      m_handle.push(interp);
+      m_handle.push(interpreter);
   }
 
   inline lua_State* object::interpreter() const
@@ -890,9 +899,9 @@ struct value_wrapper_traits<argument>
 };
 
 template<class Next>
-inline void adl::index_proxy<Next>::push(lua_State* interp)
+inline void adl::index_proxy<Next>::push(lua_State* interpreter)
 {
-    assert(interp == m_interpreter);
+    assert(interpreter == m_interpreter);
 
     value_wrapper_traits<Next>::unwrap(m_interpreter, m_next);
 
@@ -1093,9 +1102,9 @@ namespace adl
   template<class ValueWrapper, class Arguments>
   struct call_proxy
   {
-      call_proxy(ValueWrapper& vw, Arguments a)
-        : value_wrapper(&vw)
-        , arguments(a)
+      call_proxy(ValueWrapper& value_wrapper, Arguments arguments)
+        : value_wrapper(&value_wrapper)
+        , arguments(arguments)
       {}
 
       call_proxy(call_proxy const& other)
@@ -1206,7 +1215,7 @@ inline object newtable(lua_State* interpreter)
 // this could be optimized by returning a proxy
 inline object globals(lua_State* interpreter)
 {
-	lua_pushvalue(interpreter, lua_pushglobaltable(interpreter));
+    lua_pushglobaltable(interpreter);
     detail::stack_pop pop(interpreter, 1);
     return object(from_stack(interpreter, -1));
 }
@@ -1404,6 +1413,14 @@ object property(GetValueWrapper const& get, SetValueWrapper const& set)
 
 
 } // namespace luabind
+
+#if LUA_VERSION_NUM < 502
+# undef lua_compare
+# undef LUA_OPEQ
+# undef LUA_OPLT
+# undef lua_rawlen
+# undef lua_pushglobaltable
+#endif
 
 #endif // LUABIND_OBJECT_050419_HPP
 

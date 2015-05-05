@@ -60,7 +60,7 @@ namespace object {
 } /* namespace lua */
 } /* namespace i6engine */
 
-extern "C" int init(lua_State * L) {
+extern "C" ISIXE_LUA_API int init(lua_State * L) {
 	using namespace luabind;
 
 	open(L);
@@ -117,10 +117,10 @@ extern "C" int init(lua_State * L) {
 				.def("getType", &i6engine::api::GameObject::getType)
 				.def("setDie", &i6engine::api::GameObject::setDie),
 
-				def("getObject", &i6engine::lua::object::getObject),
-				def("getAllObjectsOfType", &i6engine::lua::object::getAllObjectsOfType),
-				def("getObjectPtr", &i6engine::lua::object::getObjectPtr),
-				def("rayTest", &i6engine::lua::object::rayTest),
+			def("getObject", &i6engine::lua::object::getObject),
+			def("getAllObjectsOfType", &i6engine::lua::object::getAllObjectsOfType),
+			def("getObjectPtr", &i6engine::lua::object::getObjectPtr),
+			def("rayTest", &i6engine::lua::object::rayTest),
 
 			class_<i6engine::api::CollisionGroup>("CollisionGroup")
 				.def(constructor<uint32_t, uint32_t, uint32_t>())
