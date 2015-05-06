@@ -5,6 +5,7 @@ Enhancements:
 	- added sample showing scripting
 	- added new GUICanvas system replacing CEGUI's layout with i6engine structures
 	- added sample showing GUICanvas
+	- added sample showing a chain
 
 Fixes:
 	- fixed synchronization bug of rotation in PhysicalStateComponent

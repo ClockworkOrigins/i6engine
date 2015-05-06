@@ -17,6 +17,7 @@
 add_subdirectory(common)
 
 add_subdirectory(canvas)
+add_subdirectory(chain)
 
 IF(ISIXE_NETWORK)
 	add_subdirectory(chat)

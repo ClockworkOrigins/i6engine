@@ -306,7 +306,7 @@ namespace modules {
 			if (itSelf == _nodes.end() || itTarget == _nodes.end()) {
 				ISIXE_THROW_FAILURE("PhysicsManager", "Tried to create constraint for not existing PhysicsNode(s)");
 			}
-			btTypedConstraint * p2p = new btPoint2PointConstraint(*itSelf->second->getRigidBody(), *itTarget->second->getRigidBody(), ppc->selfOffset.toBullet(), ppc->targetOffset.toBullet());
+			btPoint2PointConstraint * p2p = new btPoint2PointConstraint(*itSelf->second->getRigidBody(), *itTarget->second->getRigidBody(), ppc->selfOffset.toBullet(), ppc->targetOffset.toBullet());
 			_dynamicsWorld->addConstraint(p2p);
 			_constraints[ppc->_waitForId].push_back(std::make_pair(ppc->targetGOID, p2p));
 			_constraints[ppc->targetGOID].push_back(std::make_pair(ppc->_waitForId, p2p));

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GOTemplate type="ChainLink">
+	<Component template="PhysicalState">
+		<Attribute name="mass">0.1</Attribute>
+		<Attribute name="friction">1.0</Attribute>
+		<Attribute name="shapeType">1</Attribute>
+		<Attribute name="box">0.06 0.01 0.075</Attribute>
+		<Attribute name="collisionGroup">0 0 0</Attribute>
+		<Attribute name="shatterInterest">0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+		<Attribute name="syncPrio">2</Attribute>
+		<Attribute name="compound">0</Attribute>
+	</Component>
+	<Component template="MeshAppearance" owner="true">
+		<Attribute name="mesh">ChainLink.MESH</Attribute>
+		<Attribute name="visibility">1</Attribute>
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
+</GOTemplate>
