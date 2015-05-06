@@ -1,6 +1,4 @@
-﻿package.loadlib('ScriptingLua','init')()
-
-function tick(id)
+﻿function tick(id)
 	local go = getObject(id)
 	if (go ~= nil) then
 		c = go:getGOC(ComponentTypes.PhysicalStateComponent)

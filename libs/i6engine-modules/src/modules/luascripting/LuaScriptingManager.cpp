@@ -36,8 +36,13 @@ namespace modules {
 		luaL_openlibs(_luaState);
 		ISIXE_LOG_INFO("LuaScriptingManager", LUA_COPYRIGHT);
 
+		int status = luaL_dostring(_luaState, "package.loadlib('ScriptingLua','init')()");
+		if (status != 0) {
+			ISIXE_THROW_FAILURE("LuaScriptingManager", "Can't load ScriptingLua library");
+		}
+
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "LuaScriptsPath", _scriptsPath)) {
-			ISIXE_THROW_FAILURE("LuaScriptingController", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
+			ISIXE_THROW_FAILURE("LuaScriptingManager", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
 			return;
 		}
 	}
