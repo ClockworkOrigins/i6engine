@@ -28,7 +28,7 @@ namespace modules {
 	ScriptingManager::ScriptingManager() : _scripts(), _scriptsPath() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
-			ISIXE_THROW_FAILURE("LuaScriptingController", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
+			ISIXE_THROW_FAILURE("ScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
 			return;
 		}
 	}
@@ -79,7 +79,6 @@ namespace modules {
 				boost::python::object module = boost::python::import(utils::split(file, "/").back().c_str());
 				boost::python::object global = module.attr("__dict__");
 				boost::python::exec_file((_scriptsPath + "/" + file + ".py").c_str(), global, global);
-				global["tick"](1);
 
 				_scripts[file] = global;
 			}

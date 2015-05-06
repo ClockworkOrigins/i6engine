@@ -2,6 +2,7 @@
 
 Enhancements:
 	- reduced code redundancy in sample by moving same code in extra SampleCommon lib
+	- added sample showing scripting
 
 Fixes:
 	- fixed synchronization bug of rotation in PhysicalStateComponent

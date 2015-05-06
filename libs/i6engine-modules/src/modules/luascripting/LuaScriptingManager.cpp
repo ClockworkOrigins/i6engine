@@ -77,8 +77,7 @@ namespace modules {
 
 			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
 		} else {
-			//ISIXE_THROW_MESSAGE("LuaScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
-			std::cout << "Unknown MessageSubtype in LuaScriptingManager " << msg->getSubtype() << std::endl;
+			ISIXE_THROW_MESSAGE("LuaScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
 	}
 
