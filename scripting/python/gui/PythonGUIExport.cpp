@@ -15,6 +15,7 @@
  */
 
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/configs/GUIConfig.h"
 #include "i6engine/api/facades/GUIFacade.h"
 
 #include "boost/python.hpp"
@@ -27,8 +28,16 @@ namespace gui {
 		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addImageset(imageset);
 	}
 
+	void addPrint(const std::string & name, const std::string & type, double x, double y, const std::string & message, api::gui::Alignment alignment, int64_t lifetime) {
+		api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint(name, type, x, y, message, alignment, lifetime);
+	}
+
 	void addText(const std::string & name, const std::string & text) {
 		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addTextToWidget(name, text);
+	}
+
+	void setSize(const std::string & name, double w, double h) {
+		api::EngineController::GetSingletonPtr()->getGUIFacade()->setSize(name, w, h);
 	}
 
 } /* namespace gui */
@@ -39,5 +48,13 @@ BOOST_PYTHON_MODULE(ScriptingGUIPython) {
 	using namespace boost::python;
 
 	def("addImageset", &i6engine::python::gui::addImageset);
+	def("addPrint", &i6engine::python::gui::addPrint);
 	def("addText", &i6engine::python::gui::addText);
+	def("setSize", &i6engine::python::gui::setSize);
+
+	enum_<i6engine::api::gui::Alignment>("Alignment")
+		.value("Left", i6engine::api::gui::Alignment::Left)
+		.value("Center", i6engine::api::gui::Alignment::Center)
+		.value("Right", i6engine::api::gui::Alignment::Right)
+		.export_values();
 }

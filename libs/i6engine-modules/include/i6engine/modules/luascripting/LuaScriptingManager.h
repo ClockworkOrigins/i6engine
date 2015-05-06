@@ -25,6 +25,7 @@
 #include <map>
 #include <set>
 
+#include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eThreadSafety.h"
 
 #include "i6engine/api/GameMessage.h"
@@ -75,10 +76,9 @@ namespace modules {
 				luabind::object o(luabind::from_stack(_luaState, -1));
 				return Ret(luabind::call_function<Ret>(o, B...));
 			} catch (const luabind::error & e) {
-				std::cerr << e.what() << std::endl;
-				std::cerr << lua_tostring(_luaState, -1) << std::endl;
+				ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
 			} catch (const std::exception & e) {
-				std::cerr << e.what() << std::endl;
+				ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
 			}
 		}
 

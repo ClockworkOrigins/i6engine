@@ -16,7 +16,7 @@
 
 #include "ScriptingApplication.h"
 
-#include "i6engine/math/i6eVector.h"
+#include "i6engine/math/i6eMath.h"
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/ComponentConfig.h"
@@ -73,6 +73,7 @@ namespace sample {
 			{
 				i6engine::api::attributeMap params;
 				params.insert(std::make_pair("pos", "10 1.0 0.0"));
+				Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0).insertInMap("rot", params);
 
 				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
 			}
@@ -83,7 +84,7 @@ namespace sample {
 			{
 				i6engine::api::attributeMap params;
 				params.insert(std::make_pair("pos", "-10 1.0 0.0"));
-				params.insert(std::make_pair("rot", "0.0 0.0 1.0 0.0"));
+				Quaternion(Vec3(0.0, 1.0, 0.0), 3 * PI / 2.0).insertInMap("rot", params);
 
 				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
 			}

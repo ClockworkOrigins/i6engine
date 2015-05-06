@@ -14,31 +14,27 @@
  * limitations under the License.
  */
 
-#include "i6engine/api/EngineController.h"
+#include "LuaAudioExport.h"
 
-#include "i6engine/luabind/luabind.hpp"
+#include "i6engine/api/EngineController.h"
+#include "i6engine/api/facades/AudioFacade.h"
 
 namespace i6engine {
 namespace lua {
-namespace api {
+namespace audio {
 
-	uint64_t getCurrentTime() {
-		return i6engine::api::EngineController::GetSingleton().getCurrentTime();
+	void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir, cacheable);
 	}
 
-} /* namespace api */
+} /* namespace audio */
 } /* namespace lua */
 } /* namespace i6engine */
 
-extern "C" ISIXE_LUA_API int init(lua_State * L) {
-	using namespace luabind;
+using namespace luabind;
 
-	open(L);
-
-	module(L)
-		[
-			def("getCurrentTime", &i6engine::lua::api::getCurrentTime)
-		];
-
-	return 0;
+scope registerAudio() {
+	return
+		def("playSound", &i6engine::lua::audio::playSound)
+		;
 }

@@ -6,7 +6,7 @@
 		<Attribute name="friction">1.0</Attribute>
 		<Attribute name="shapeType">1</Attribute>
 		<Attribute name="box">0.25 0.25 0.25</Attribute>
-		<Attribute name="collisionGroup">4 1 0</Attribute>
+		<Attribute name="collisionGroup">4 1 1</Attribute>
 		<Attribute name="shatterInterest">1</Attribute>
 		<Attribute name="angularFactor">0.0 1.0 0.0</Attribute>
 		<Attribute name="linearFactor">1.0 1.0 1.0</Attribute>

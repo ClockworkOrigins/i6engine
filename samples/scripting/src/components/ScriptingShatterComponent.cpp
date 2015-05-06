@@ -28,7 +28,6 @@ namespace sample {
 namespace components {
 
 	ScriptingShatterComponent::ScriptingShatterComponent(int64_t id, const i6engine::api::attributeMap & params) : ShatterComponent(id, params) {
-		_objFamilyID = config::ComponentTypes::ScriptingShatterComponent;
 		_objComponentID = config::ComponentTypes::ScriptingShatterComponent;
 	}
 

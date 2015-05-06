@@ -14,37 +14,26 @@
  * limitations under the License.
  */
 
-#include "i6engine/api/EngineController.h"
-#include "i6engine/api/facades/GUIFacade.h"
+#include "LuaAPIExport.h"
 
-#include "i6engine/luabind/luabind.hpp"
+#include "i6engine/api/EngineController.h"
 
 namespace i6engine {
 namespace lua {
-namespace gui {
+namespace api {
 
-	void addImageset(const std::string & imageset) {
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addImageset(imageset);
+	uint64_t getCurrentTime() {
+		return i6engine::api::EngineController::GetSingleton().getCurrentTime();
 	}
 
-	void addText(const std::string & name, const std::string & text) {
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addTextToWidget(name, text);
-	}
-
-} /* namespace gui */
+} /* namespace api */
 } /* namespace lua */
 } /* namespace i6engine */
 
-extern "C" ISIXE_LUA_API int init(lua_State * L) {
-	using namespace luabind;
+using namespace luabind;
 
-	open(L);
-
-	module(L)
-		[
-			def("addImageset", &i6engine::lua::gui::addImageset),
-			def("addText", &i6engine::lua::gui::addText)
-		];
-
-	return 0;
+scope registerAPI() {
+	return
+		def("getCurrentTime", &i6engine::lua::api::getCurrentTime)
+		;
 }

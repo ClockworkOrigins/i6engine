@@ -73,6 +73,8 @@ namespace api {
 		 * The GameObject registers itself in the ObjectController. So deleting the Object shouldn't be necessary.
 		 * \param type Type of the created object
 		 */
+		GameObject() {
+		}
 		GameObject(const int64_t goid, const core::IPKey & ownerNode, uint32_t uuid, const std::string & tpl, const boost::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f);
 
 		/**

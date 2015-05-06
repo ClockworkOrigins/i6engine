@@ -51,6 +51,7 @@ namespace modules {
 
 	private:
 		std::map<std::string, boost::python::object> _scripts;
+		std::string _scriptsPath;
 
 		/**
 		 * \brief called by ScriptingMailbox with a message
@@ -67,8 +68,7 @@ namespace modules {
 
 			try {
 				boost::python::object f = _scripts[file][func];
-
-				return boost::python::call_method<Ret>(f.ptr(), func.c_str(), B...);
+				return boost::python::call<Ret>(f.ptr(), B...);
 			} catch (const boost::python::error_already_set &) {
 				PyErr_PrintEx(0);
 			}

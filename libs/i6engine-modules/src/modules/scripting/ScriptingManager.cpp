@@ -19,13 +19,18 @@
 #include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eString.h"
 
+#include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/ScriptingConfig.h"
 
 namespace i6engine {
 namespace modules {
 
-	ScriptingManager::ScriptingManager() : _scripts() {
+	ScriptingManager::ScriptingManager() : _scripts(), _scriptsPath() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
+		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
+			ISIXE_THROW_FAILURE("LuaScriptingController", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
+			return;
+		}
 	}
 
 	ScriptingManager::~ScriptingManager() {
@@ -35,7 +40,7 @@ namespace modules {
 
 	void ScriptingManager::News(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		int type = msg->getSubtype();
+		uint16_t type = msg->getSubtype();
 
 		if (type == api::scripting::ScrCall) {
 			std::string file = static_cast<api::scripting::Scripting_Call_Update *>(msg->getContent())->file;
@@ -71,9 +76,10 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		try {
 			if (_scripts.find(file) == _scripts.end()) {
-				boost::python::object module = boost::python::import(utils::split(utils::split(file, "/").back(), ".").front().c_str());
+				boost::python::object module = boost::python::import(utils::split(file, "/").back().c_str());
 				boost::python::object global = module.attr("__dict__");
-				boost::python::exec_file(file.c_str(), global, global);
+				boost::python::exec_file((_scriptsPath + "/" + file + ".py").c_str(), global, global);
+				global["tick"](1);
 
 				_scripts[file] = global;
 			}

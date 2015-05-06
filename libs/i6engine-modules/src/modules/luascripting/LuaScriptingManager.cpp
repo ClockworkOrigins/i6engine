@@ -18,7 +18,6 @@
 
 #include <thread>
 
-#include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eString.h"
 
 #include "i6engine/api/EngineController.h"
@@ -35,9 +34,7 @@ namespace modules {
 	LuaScriptingManager::LuaScriptingManager() : _luaState(luaL_newstate()), _parsedFiles(), _scriptsPath() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		luaL_openlibs(_luaState);
-		luabind::open(_luaState);
-		lua_writestring(LUA_COPYRIGHT, strlen(LUA_COPYRIGHT));
-		lua_writeline();
+		ISIXE_LOG_INFO("LuaScriptingManager", LUA_COPYRIGHT);
 
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "LuaScriptsPath", _scriptsPath)) {
 			ISIXE_THROW_FAILURE("LuaScriptingController", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
@@ -90,7 +87,7 @@ namespace modules {
 		if (_parsedFiles.find(file) == _parsedFiles.end()) {
 			int status = luaL_dofile(_luaState, (_scriptsPath + "/" + file + ".lua").c_str());
 			if (status) {
-				std::cout << lua_tostring(_luaState, -1) << std::endl;
+				ISIXE_THROW_FAILURE("LuaScriptingManager", "Error parsing script '" << file << ".lua': " << lua_tostring(_luaState, -1));
 				return false;
 			}
 			_parsedFiles.insert(file);
