@@ -16,6 +16,8 @@
 
 add_subdirectory(common)
 
+add_subdirectory(canvas)
+
 IF(ISIXE_NETWORK)
 	add_subdirectory(chat)
 ENDIF(ISIXE_NETWORK)
