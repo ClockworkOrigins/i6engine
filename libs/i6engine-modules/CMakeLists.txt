@@ -130,7 +130,8 @@ set(i6modulesSrc
 	${srcdir}/modules/graphics/compositors/HDRListener.cpp
 	${srcdir}/modules/graphics/compositors/HDRLogic.cpp
 	${srcdir}/modules/graphics/graphicswidgets/MovableText.cpp
-
+	
+	${srcdir}/modules/gui/GUICanvas.cpp
 	${srcdir}/modules/gui/GUIController.cpp
 	${srcdir}/modules/gui/GUIFactory.cpp
 	${srcdir}/modules/gui/GUIMailbox.cpp

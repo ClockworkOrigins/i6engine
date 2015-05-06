@@ -114,6 +114,11 @@ namespace gui {
 		void addImageset(const std::string & imageset) const;
 
 		/**
+		 * \brief loads a canvas file
+		 */
+		void loadCanvas(const std::string & name, const std::string & file) const;
+
+		/**
 		 * \brief Adds a new Text to the screen.
 		 * \param name (Unique) Name of the new object.
 		 * \param type Style of the new object.

@@ -52,6 +52,9 @@ namespace gui {
 	GUI_AddImageset_Create::GUI_AddImageset_Create(const std::string & i) : GUIUpdateMessageStruct("GUIManager"), imageset(i) {
 	}
 
+	GUI_LoadCanvas_Create::GUI_LoadCanvas_Create(const std::string & n, const std::string & f) : GUIUpdateMessageStruct("GUIManager"), name(n), file(f) {
+	}
+
 } /* namespace gui */
 } /* namespace api */
 } /* namespace i6engine */

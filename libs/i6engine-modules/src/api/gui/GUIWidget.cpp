@@ -27,11 +27,13 @@
 namespace i6engine {
 namespace api {
 
-	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false), _animations() {
+	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false), _animations() {
 	}
 
 	GUIWidget::~GUIWidget() {
-		_window->destroy();
+		if (!_parent) {
+			_window->destroy();
+		}
 	}
 
 	void GUIWidget::update(uint16_t type, gui::GUIUpdateMessageStruct * message) {

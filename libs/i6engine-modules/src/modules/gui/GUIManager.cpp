@@ -27,6 +27,7 @@
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/gui/GUIWidget.h"
 
+#include "i6engine/modules/gui/GUICanvas.h"
 #include "i6engine/modules/gui/guiwidgets/GUIBar.h"
 #include "i6engine/modules/gui/guiwidgets/GUIChat.h"
 #include "i6engine/modules/gui/guiwidgets/GUIComboBox.h"
@@ -76,11 +77,19 @@ namespace modules {
 	GUIManager::~GUIManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		for (const std::pair<std::string, api::GUIWidget *> & p : _widgets) {
-			delete p.second;
+		while (!_widgets.empty()) {
+			std::queue<api::GUIWidget *> deleteW;
+			deleteW.push(_widgets.begin()->second);
+			while (!deleteW.empty()) {
+				api::GUIWidget * widget = deleteW.front();
+				deleteW.pop();
+				for (api::GUIWidget * gw : widget->_childs) {
+					deleteW.push(gw);
+				}
+				_widgets.erase(widget->_name);
+				delete widget;
+			}
 		}
-
-		_widgets.clear();
 
 		// Destroy all windows that have been created to allow a clean shutdown of the gui subsystem
 		CEGUI::WindowManager::getSingleton().destroyAllWindows();
@@ -283,8 +292,17 @@ namespace modules {
 				return;
 			}
 			api::GUIWidget * w = getWidgetByName(data->_name);
-			_widgets.erase(data->_name);
-			delete w;
+			std::queue<api::GUIWidget *> deleteW;
+			deleteW.push(w);
+			while (!deleteW.empty()) {
+				api::GUIWidget * widget = deleteW.front();
+				deleteW.pop();
+				for (api::GUIWidget * gw : widget->_childs) {
+					deleteW.push(gw);
+				}
+				_widgets.erase(widget->_name);
+				delete widget;
+			}
 		}
 	}
 
@@ -541,6 +559,8 @@ namespace modules {
 			registerGUIWidgetTemplate(static_cast<api::gui::GUI_WidgetTemplate_Create *>(data)->name, static_cast<api::gui::GUI_WidgetTemplate_Create *>(data)->func);
 		} else if (type == api::gui::GuiAddImageset) {
 			CEGUI::ImageManager::getSingleton().loadImageset(dynamic_cast<api::gui::GUI_AddImageset_Create *>(data)->imageset);
+		} else if (type == api::gui::GuiLoadCanvas) {
+			GUICanvas::load(dynamic_cast<api::gui::GUI_LoadCanvas_Create *>(data)->name, dynamic_cast<api::gui::GUI_LoadCanvas_Create *>(data)->file, this, _factory, _widgets);
 		} else {
 			ISIXE_THROW_API("GUIManager", "Can't handle create message " << type);
 		}

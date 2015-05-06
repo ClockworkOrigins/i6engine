@@ -76,6 +76,10 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddImageset, core::Method::Create, new gui::GUI_AddImageset_Create(imageset), core::Subsystem::Unknown));
 	}
 
+	void GUIFacade::loadCanvas(const std::string & name, const std::string & file) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiLoadCanvas, core::Method::Create, new gui::GUI_LoadCanvas_Create(name, file), core::Subsystem::Unknown));
+	}
+
 	void GUIFacade::registerWidgetTemplate(const std::string & name, const boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiWidgetTemplate, core::Method::Create, new gui::GUI_WidgetTemplate_Create(name, createFunc), core::Subsystem::Unknown);
 

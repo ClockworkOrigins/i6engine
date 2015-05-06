@@ -121,6 +121,9 @@ namespace gui {
 		std::string _name;
 		CEGUI::Window * _window;
 
+		GUIWidget * _parent;
+		std::vector<GUIWidget *> _childs;
+
 	private:
 		bool _ticking;
 		std::function<std::vector<GUIWidget *>()> _mouseOverCallback;

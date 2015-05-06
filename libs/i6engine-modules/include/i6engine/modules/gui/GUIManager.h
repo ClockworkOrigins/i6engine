@@ -51,19 +51,20 @@ namespace Ogre {
 namespace i6engine {
 namespace core {
 	struct MessageStruct;
-}
+} /* namespace core */
 namespace api {
 	class GUIWidget;
 
 namespace gui {
 	struct GUIUpdateMessageStruct;
 } /* namespace gui */
-}
+} /* namespace api */
 namespace modules {
 
 	const std::string GUIMAN = "GUIManager"; // i.e. GUI Manager Name
 
 	enum class KeyState;
+	class GUICanvas;
 	class GUIController;
 
 	/**
@@ -71,6 +72,7 @@ namespace modules {
 	 * \brief This class interacts with CEGUI. It's methods are executed in the OGRE / CEGUI thread
 	 */
 	class GUIManager {
+		friend class GUICanvas;
 		friend class GUIController;
 		friend class GUIMailbox;
 

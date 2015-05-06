@@ -29,11 +29,11 @@ namespace modules {
 	GUIFactory::~GUIFactory() {
 	}
 
-	api::GUIWidget * GUIFactory::createGUIWidget(const std::string & name, const std::string & type, const std::string & style) {
+	api::GUIWidget * GUIFactory::createGUIWidget(const std::string & name, const std::string & type, const std::string & style) const {
 		if (_templates.find(type) == _templates.end()) {
 			ISIXE_THROW_API("GUIFactory", "Invalid template: " << type);
 		}
-		return _templates[type](name, style);
+		return _templates.find(type)->second(name, style);
 	}
 
 	void GUIFactory::registerGUIWidgetTemplate(const std::string & name, const GUIWidget_factory & createFunc) {

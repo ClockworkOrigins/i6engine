@@ -86,6 +86,7 @@ namespace gui {
 		GuiStopAnimation,
 		GuiPauseAnimation,
 		GuiUnpauseAnimation,
+		GuiLoadCanvas,
 		GuiMessageTypesCount
 	};
 
@@ -398,6 +399,18 @@ namespace gui {
 			return new GUI_AddImageset_Create(*this);
 		}
 	} GUI_AddImageset_Create;
+
+	/**
+	 * \brief loads a canvas file
+	 */
+	typedef struct GUI_LoadCanvas_Create : GUIUpdateMessageStruct {
+		std::string name;
+		std::string file;
+		GUI_LoadCanvas_Create(const std::string & n, const std::string & f);
+		GUI_LoadCanvas_Create * copy() {
+			return new GUI_LoadCanvas_Create(*this);
+		}
+	} GUI_LoadCanvas_Create;
 
 	/**
 	 * \brief sets alignment of Widget

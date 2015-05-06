@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<GUICanvas>
+	<Widget type="GUIImage" style="RPG/StaticImage" name="Background">
+		<Property type="position">0.0 0.0</Property>
+		<Property type="size">1.0 1.0</Property>
+		<Property type="image">RPG/TbM_Filling</Property>
+		
+		<Widget type="GUIPrint" style="RPG/Blanko" name="Text">
+			<Property type="position">0.5 0.35</Property>
+			<Property type="size">1.0 0.05</Property>
+			<Property type="text">This text was set in Canvas file!</Property>
+			<Property type="font">DejaVuSansBig</Property>
+			<Property type="alignment">center</Property>
+			<Property type="animation">HideAndShow</Property>
+		</Widget>
+		<Widget type="GUIEditbox" style="RPG/Editbox" name="Box">
+			<Property type="position">0.3 0.45</Property>
+			<Property type="size">0.4 0.1</Property>
+			<Property type="tooltip">A nice Tooltip for the Editbox in Canvas!</Property>
+		</Widget>
+		<Widget type="GUIBar" style="RPG/ProgressBar" name="Bar">
+			<Property type="position">0.3 0.7</Property>
+			<Property type="size">0.4 0.05</Property>
+			<Property type="progress">0.4</Property>
+		</Widget>
+	</Widget>
+</GUICanvas>

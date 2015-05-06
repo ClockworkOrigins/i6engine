@@ -30,9 +30,10 @@
 namespace i6engine {
 namespace api {
 	class GUIWidget;
-}
+} /* namespace api */
 namespace modules {
 
+	class GUICanvas;
 	class GUIManager;
 
 	typedef boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> GUIWidget_factory;
@@ -42,6 +43,7 @@ namespace modules {
 	 * \brief This class provides methods for creating different kinds of GUI elements
 	 */
 	class GUIFactory {
+		friend class GUICanvas;
 		friend class GUIManager;
 
 	private:
@@ -61,7 +63,7 @@ namespace modules {
 		 * \param[in] type The typename registered via registerGUITemplate
 		 * \param[in] style Image
 		 */
-		api::GUIWidget * createGUIWidget(const std::string & name, const std::string & type, const std::string & style);
+		api::GUIWidget * createGUIWidget(const std::string & name, const std::string & type, const std::string & style) const;
 
 		/**
 		 * \brief Registers a template to create new Widgets

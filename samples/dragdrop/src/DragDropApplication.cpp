@@ -24,7 +24,6 @@
 #include "i6engine/api/facades/InputFacade.h"
 #include "i6engine/api/manager/LanguageManager.h"
 #include "i6engine/api/manager/TextManager.h"
-#include "i6engine/api/objects/GameObject.h"
 
 #include "boost/bind.hpp"
 
