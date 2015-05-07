@@ -20,18 +20,6 @@ namespace i6engine {
 namespace api {
 namespace scripting {
 
-	Scripting_Call_Update::Scripting_Call_Update(const std::string & fi, const std::string & fu) : GameMessageStruct(-1, -1), file(fi), func(fu) {
-	}
-
-	Scripting_CallID_Update::Scripting_CallID_Update(const std::string & fi, const std::string & fu, const int64_t i) : GameMessageStruct(), file(fi), func(fu), intParam(i) {
-	}
-
-	Scripting_CallID2_Update::Scripting_CallID2_Update(const std::string & fi, const std::string & fu, const int64_t i, const int64_t i2) : GameMessageStruct(), file(fi), func(fu), intParam(i), intParam2(i2) {
-	}
-
-	Scripting_CallID2Double_Update::Scripting_CallID2Double_Update(const std::string & fi, const std::string & fu, const int64_t i, const double d) : GameMessageStruct(), file(fi), func(fu), intParam(i), doubleParam(d) {
-	}
-
 	Scripting_RayResult_Update::Scripting_RayResult_Update(const std::string & fi, const std::string & fu, const int64_t & ri) : Physics_RayTestNotify_Update(-1, -1), file(fi), func(fu), rayID(ri) {
 	}
 

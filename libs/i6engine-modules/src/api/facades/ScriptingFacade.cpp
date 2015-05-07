@@ -25,34 +25,14 @@
 namespace i6engine {
 namespace api {
 
-	ScriptingFacade::ScriptingFacade() {
+	ScriptingFacade::ScriptingFacade()
+#if defined (ISIXE_WITH_LUA_SCRIPTING) || defined (ISIXE_WITH_PYTHON_SCRIPTING)
+		: _manager(nullptr)
+#endif
+	{
 	}
 
 	ScriptingFacade::~ScriptingFacade() {
-	}
-
-	void ScriptingFacade::callScript(const std::string & file, const std::string & func) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ScriptingMessageType, scripting::ScrCall, core::Method::Update, new scripting::Scripting_Call_Update(file, func), core::Subsystem::Unknown);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-	}
-
-	void ScriptingFacade::callScript(const std::string & file, const std::string & func, const int64_t id) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ScriptingMessageType, scripting::ScrCallID, core::Method::Update, new scripting::Scripting_CallID_Update(file, func, id), core::Subsystem::Unknown);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-	}
-
-	void ScriptingFacade::callScript(const std::string & file, const std::string & func, const int64_t ownID, const int64_t otherID) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ScriptingMessageType, scripting::ScrCallID2, core::Method::Update, new scripting::Scripting_CallID2_Update(file, func, ownID, otherID), core::Subsystem::Unknown);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-	}
-
-	void ScriptingFacade::callScript(const std::string & file, const std::string & func, const int64_t ownID, const double otherID) {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ScriptingMessageType, scripting::ScrCallID2Double, core::Method::Update, new scripting::Scripting_CallID2Double_Update(file, func, ownID, otherID), core::Subsystem::Unknown);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void ScriptingFacade::resetSubSystem() {

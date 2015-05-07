@@ -30,65 +30,8 @@ namespace api {
 namespace scripting {
 	enum ScriptingMessageTypes {
 		ScrReset = 0,
-		ScrCall,
-		ScrCallID,
-		ScrCallID2,
-		ScrCallID2Double,
 		ScrRayResult
 	};
-
-	/**
-	 * \brief struct for message executing the given method in the given script file
-	 */
-	typedef struct Scripting_Call_Update : GameMessageStruct {
-		std::string file;
-		std::string func;
-
-		Scripting_Call_Update(const std::string & fi, const std::string & fu);
-		Scripting_Call_Update * copy() {
-			return new Scripting_Call_Update(*this);
-		}
-	} Scripting_Call_Update;
-
-	/**
-	 * \brief struct for message executing the given method in the given script file using the given id as parameter
-	 */
-	typedef struct Scripting_CallID_Update : GameMessageStruct {
-		std::string file;
-		std::string func;
-		int64_t intParam;
-
-		Scripting_CallID_Update(const std::string & fi, const std::string & fu, const int64_t i);
-		Scripting_CallID_Update * copy() {
-			return new Scripting_CallID_Update(*this);
-		}
-	} Scripting_CallID_Update;
-
-	/**
-	 * \brief struct for message executing the given method in the given script file using the given id as parameter
-	 */
-	typedef struct Scripting_CallID2_Update : GameMessageStruct {
-		std::string file;
-		std::string func;
-		int64_t intParam;
-		int64_t intParam2;
-
-		Scripting_CallID2_Update(const std::string & fi, const std::string & fu, const int64_t i, const int64_t i2);
-		Scripting_CallID2_Update * copy() {
-			return new Scripting_CallID2_Update(*this);
-		}
-	} Scripting_CallID2_Update;
-	typedef struct Scripting_CallID2Double_Update : GameMessageStruct {
-		std::string file;
-		std::string func;
-		int64_t intParam;
-		double doubleParam;
-
-		Scripting_CallID2Double_Update(const std::string & fi, const std::string & fu, const int64_t i, const double d);
-		Scripting_CallID2Double_Update * copy() {
-			return new Scripting_CallID2Double_Update(*this);
-		}
-	} Scripting_CallID2Double_Update;
 
 	/**
 	 * \brief struct for message executing given method in given script file using raytest result as parameter

@@ -40,22 +40,16 @@ namespace api {
 
 	class ISIXE_MODULES_API ScriptingFacade {
 #ifdef ISIXE_WITH_LUA_SCRIPTING
-		friend class LuaScriptingManager;
+		friend class modules::LuaScriptingManager;
 #else
 	#if ISIXE_WITH_PYTHON_SCRIPTING
-		friend class ScriptingManager;
+		friend class modules::ScriptingManager;
 	#endif
 #endif
 
 	public:
 		ScriptingFacade();
 		~ScriptingFacade();
-
-		void callScript(const std::string & file, const std::string & func);
-
-		void callScript(const std::string & file, const std::string & func, const int64_t id);
-		void callScript(const std::string & file, const std::string & func, const int64_t ownID, const int64_t otherID);
-		void callScript(const std::string & file, const std::string & func, const int64_t ownID, const double otherID);
 
 #if defined (ISIXE_WITH_LUA_SCRIPTING) || defined (ISIXE_WITH_PYTHON_SCRIPTING)
 		template<typename Ret, typename... args>

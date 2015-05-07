@@ -46,9 +46,11 @@ namespace api {
 	}
 
 	GOPtr ObjectFacade::getObject(const int64_t goid) const {
-		boost::mutex::scoped_lock sl(_lock);
+		_lock.lock();
+		auto copy = _GOList;
+		_lock.unlock();
 		// Iterate through _GOList
-		for (std::list<GOPtr>::const_iterator it = _GOList.begin(); it != _GOList.end(); ++it) {
+		for (std::list<GOPtr>::const_iterator it = copy.begin(); it != copy.end(); ++it) {
 			// Wanted GameObject found
 			if ((*it)->getID() == goid) {
 				// Return a pointer to the wanted GameObject
@@ -67,9 +69,11 @@ namespace api {
 	std::list<GOPtr> ObjectFacade::getAllObjectsOfType(const std::vector<std::string> & types) const {
 		std::list<GOPtr> all;
 
-		boost::mutex::scoped_lock sl(_lock);
+		_lock.lock();
+		auto copy = _GOList;
+		_lock.unlock();
 		// Iterate through _GOList
-		for (std::list<GOPtr>::const_iterator it = _GOList.begin(); it != _GOList.end(); ++it) {
+		for (std::list<GOPtr>::const_iterator it = copy.begin(); it != copy.end(); ++it) {
 			// Wanted GameObject found
 			for (const std::string & type : types) {
 				if ((*it)->getType() == type) {

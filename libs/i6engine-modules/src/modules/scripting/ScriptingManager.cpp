@@ -29,8 +29,10 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
 			ISIXE_THROW_FAILURE("ScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
-			return;
 		}
+#if defined (ISIXE_WITH_PYTHON_SCRIPTING) && !defined (ISIXE_WITH_LUA_SCRIPTING)
+		api::EngineController::GetSingleton().getScriptingFacade()->_manager = this;
+#endif
 	}
 
 	ScriptingManager::~ScriptingManager() {
@@ -49,27 +51,7 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t type = msg->getSubtype();
 
-		if (type == api::scripting::ScrCall) {
-			std::string file = static_cast<api::scripting::Scripting_Call_Update *>(msg->getContent())->file;
-			std::string func = static_cast<api::scripting::Scripting_Call_Update *>(msg->getContent())->func;
-
-			callScript<void>(file, func);
-		} else if (type == api::scripting::ScrCallID) {
-			std::string file = static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->file;
-			std::string func = static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->func;
-
-			callScript<void>(file, func, static_cast<api::scripting::Scripting_CallID_Update *>(msg->getContent())->intParam);
-		} else if (type == api::scripting::ScrCallID2) {
-			std::string file = static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->file;
-			std::string func = static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->func;
-
-			callScript<void>(file, func, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2_Update *>(msg->getContent())->intParam2);
-		} else if (type == api::scripting::ScrCallID2Double) {
-			std::string file = static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->file;
-			std::string func = static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->func;
-
-			callScript<void>(file, func, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->intParam, static_cast<api::scripting::Scripting_CallID2Double_Update *>(msg->getContent())->doubleParam);
-		} else if (type == api::scripting::ScrRayResult) {
+		if (type == api::scripting::ScrRayResult) {
 			std::string file = static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->file;
 			std::string func = static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->func;
 

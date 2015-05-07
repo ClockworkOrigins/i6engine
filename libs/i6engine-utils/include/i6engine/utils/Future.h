@@ -33,7 +33,7 @@ namespace utils {
 	template<typename T>
 	class Future {
 	public:
-		Future() : _value(std::make_shared<T>()), _finished(false), _lockValue(), _valueCondVar() {
+		Future() : _value(), _finished(false), _lockValue(), _valueCondVar() {
 		}
 
 		T get() const {
