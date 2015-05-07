@@ -54,6 +54,7 @@ namespace modules {
 
 	void LuaScriptingController::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		_manager->Tick();
 	}
 
 } /* namespace modules */

@@ -52,11 +52,11 @@ namespace components {
 	}
 
 	void ScriptingShatterComponent::Tick() {
-		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript("MoveScript", "tick", _objOwnerID);
+		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>("MoveScript", "tick", _objOwnerID);
 	}
 
 	void ScriptingShatterComponent::shatter(const i6engine::api::GOPtr & other) {
-		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript("MoveScript", "shatter", _objOwnerID, other->getID());
+		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>("MoveScript", "shatter", _objOwnerID, other->getID());
 	}
 
 } /* namespace components */

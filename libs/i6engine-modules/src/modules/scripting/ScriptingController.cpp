@@ -88,6 +88,7 @@ namespace PythonAPIWorkaround {
 
 	void ScriptingController::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		_manager->Tick();
 		// *** Tick Code ***
 		if (PyErr_CheckSignals() == -1) {
 			ISIXE_LOG_DEBUG("ScriptingController", "CTRL-C");

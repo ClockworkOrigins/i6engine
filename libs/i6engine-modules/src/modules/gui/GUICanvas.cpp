@@ -87,7 +87,7 @@ namespace modules {
 				api::EngineController::GetSingleton().getGUIFacade()->setText(name, text);
 			} else if (t == "visibility") {
 				std::string visibility = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->setVisibility(name, bool(std::stoi(visibility)));
+				api::EngineController::GetSingleton().getGUIFacade()->setVisibility(name, std::stoi(visibility) != 0);
 			} else if (t == "amount") {
 				std::string amount = prop->GetText();
 				api::EngineController::GetSingleton().getGUIFacade()->setAmount(name, std::stoul(amount));

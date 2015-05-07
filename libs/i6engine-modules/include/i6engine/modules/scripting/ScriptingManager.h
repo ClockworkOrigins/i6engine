@@ -24,6 +24,8 @@
 
 #include <map>
 
+#include "i6engine/utils/DoubleBufferQueue.h"
+#include "i6engine/utils/Future.h"
 #include "i6engine/utils/i6eThreadSafety.h"
 
 #include "i6engine/api/GameMessage.h"
@@ -31,12 +33,16 @@
 #include "boost/python.hpp"
 
 namespace i6engine {
+namespace api {
+	class ScriptingFacade;
+} /* namespace api */
 namespace modules {
 
 	class ScriptingMailbox;
 
-	class ScriptingManager {
+	class ISIXE_MODULES_API ScriptingManager {
 		friend class ScriptingMailbox;
+		friend class api::ScriptingFacade;
 
 	public:
 		/**
@@ -49,9 +55,12 @@ namespace modules {
 		 */
 		~ScriptingManager();
 
+		void Tick();
+
 	private:
 		std::map<std::string, boost::python::object> _scripts;
 		std::string _scriptsPath;
+		utils::DoubleBufferQueue<std::function<void(void)>, true, false> _callScripts;
 
 		/**
 		 * \brief called by ScriptingMailbox with a message
@@ -62,17 +71,65 @@ namespace modules {
 		 * \brief executes the given method in the given script
 		 */
 		template<typename Ret, typename... args>
-		Ret callScript(const std::string & file, const std::string & func, args... B) {
-			ASSERT_THREAD_SAFETY_FUNCTION
-			parseScript(file);
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
+			_callScripts.push(std::bind([this, file, func, B...]() {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				parseScript(file);
 
-			try {
-				boost::python::object f = _scripts[file][func];
-				return boost::python::call<Ret>(f.ptr(), B...);
-			} catch (const boost::python::error_already_set &) {
-				PyErr_PrintEx(0);
-			}
-			return Ret();
+				try {
+					boost::python::object f = _scripts[file][func];
+					boost::python::call<Ret>(f.ptr(), B...);
+				} catch (const boost::python::error_already_set &) {
+					PyErr_PrintEx(0);
+				}
+			}));
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScript(const std::string & file, const std::string & func, args... B) {
+			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
+			_callScripts.push(std::bind([this, file, func, ret, B...]() {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				parseScript(file);
+
+				try {
+					boost::python::object f = _scripts[file][func];
+					ret->push(boost::python::call<Ret>(f.ptr(), B...));
+				} catch (const boost::python::error_already_set &) {
+					PyErr_PrintEx(0);
+				}
+			}));
+			return ret;
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
+			_callScripts.push(std::bind([this, func, B...]() {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
+				/*try {
+					boost::python::object f = _scripts[file][func];
+					boost::python::call<Ret>(f.ptr(), B...);
+				} catch (const boost::python::error_already_set &) {
+					PyErr_PrintEx(0);
+				}*/
+			}));
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... B) {
+			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
+			_callScripts.push(std::bind([this, func, ret, B...]() {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
+				/*try {
+					boost::python::object f = _scripts[func];
+					ret->push(boost::python::call<Ret>(f.ptr(), B...));
+				} catch (const boost::python::error_already_set &) {
+					PyErr_PrintEx(0);
+				}*/
+			}));
+			return ret;
 		}
 
 		/**

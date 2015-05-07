@@ -25,7 +25,7 @@
 namespace i6engine {
 namespace modules {
 
-	ScriptingManager::ScriptingManager() : _scripts(), _scriptsPath() {
+	ScriptingManager::ScriptingManager() : _scripts(), _scriptsPath(), _callScripts() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
 			ISIXE_THROW_FAILURE("ScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
@@ -36,6 +36,13 @@ namespace modules {
 	ScriptingManager::~ScriptingManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_scripts.clear();
+	}
+
+	void ScriptingManager::Tick() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		while (!_callScripts.empty()) {
+			_callScripts.poll()();
+		}
 	}
 
 	void ScriptingManager::News(const api::GameMessage::Ptr & msg) {

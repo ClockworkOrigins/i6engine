@@ -31,7 +31,7 @@ extern "C"
 namespace i6engine {
 namespace modules {
 
-	LuaScriptingManager::LuaScriptingManager() : _luaState(luaL_newstate()), _parsedFiles(), _scriptsPath() {
+	LuaScriptingManager::LuaScriptingManager() : _luaState(luaL_newstate()), _parsedFiles(), _scriptsPath(), _callScripts() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		luaL_openlibs(_luaState);
 		ISIXE_LOG_INFO("LuaScriptingManager", LUA_COPYRIGHT);
@@ -50,6 +50,13 @@ namespace modules {
 	LuaScriptingManager::~LuaScriptingManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		lua_close(_luaState);
+	}
+
+	void LuaScriptingManager::Tick() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		while (!_callScripts.empty()) {
+			_callScripts.poll()();
+		}
 	}
 
 	void LuaScriptingManager::News(const api::GameMessage::Ptr & msg) {

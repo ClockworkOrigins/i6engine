@@ -27,10 +27,26 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
+#ifdef ISIXE_WITH_LUA_SCRIPTING
+	#include "i6engine/modules/luascripting/LuaScriptingManager.h"
+#else
+	#if ISIXE_WITH_PYTHON_SCRIPTING
+		#include "i6engine/modules/scripting/ScriptingManager.h"
+	#endif
+#endif
+
 namespace i6engine {
 namespace api {
 
 	class ISIXE_MODULES_API ScriptingFacade {
+#ifdef ISIXE_WITH_LUA_SCRIPTING
+		friend class LuaScriptingManager;
+#else
+	#if ISIXE_WITH_PYTHON_SCRIPTING
+		friend class ScriptingManager;
+	#endif
+#endif
+
 	public:
 		ScriptingFacade();
 		~ScriptingFacade();
@@ -41,12 +57,42 @@ namespace api {
 		void callScript(const std::string & file, const std::string & func, const int64_t ownID, const int64_t otherID);
 		void callScript(const std::string & file, const std::string & func, const int64_t ownID, const double otherID);
 
+#if defined (ISIXE_WITH_LUA_SCRIPTING) || defined (ISIXE_WITH_PYTHON_SCRIPTING)
+		template<typename Ret, typename... args>
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
+			_manager->callScript<Ret>(file, func, B...);
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScript(const std::string & file, const std::string & func, args... B) {
+			return _manager->callScript<Ret>(file, func, B...);
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
+			_manager->callFunction<Ret>(file, func, B...);
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... B) {
+			return _manager->callFunction<Ret>(file, func, B...);
+		}
+#endif
+
 		/**
 		 * \brief resets the subsystem to it's defaults
 		 */
 		void resetSubSystem();
 
 	private:
+#ifdef ISIXE_WITH_LUA_SCRIPTING
+		modules::LuaScriptingManager * _manager;
+#else
+	#if ISIXE_WITH_PYTHON_SCRIPTING
+		modules::ScriptingManager * _manager;
+	#endif
+#endif
+
 		/**
 		 * \brief forbidden
 		 */

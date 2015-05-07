@@ -25,6 +25,7 @@ SET(testSrc
 	test_BoostVSSTL.cpp
 	test_Clock.cpp
 	test_DoubleBufferQueue.cpp
+	test_Future.cpp
 	test_i6eRandom.cpp
 	test_i6eString.cpp
 	test_RangedMap.cpp
