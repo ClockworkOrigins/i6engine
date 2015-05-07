@@ -1,11 +1,5 @@
 #include "i6engine/api/manager/LanguageManager.h"
 
-#include "i6engine/utils/Exceptions.h"
-
-#include "boost/filesystem.hpp"
-
-#include "tinyxml2.h"
-
 namespace i6engine {
 namespace api {
 

@@ -29,7 +29,7 @@ namespace api {
 	void WaynetManager::createWaynet() {
 		reset();
 
-		auto goList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint");
+		auto goList = EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint");
 		std::set<std::pair<int64_t, int64_t>> edges;
 		std::map<std::string, GOPtr> WPMapping;
 		for (auto & go : goList) {

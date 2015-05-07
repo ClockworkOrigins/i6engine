@@ -60,7 +60,7 @@ namespace modules {
 		}
 		boost::filesystem::directory_iterator iter(goTemplatePath), dirEnd;
 		while (iter != dirEnd) {
-			if (is_regular_file(*iter)) {
+			if (boost::filesystem::is_regular_file(*iter)) {
 				std::string file = iter->path().string();
 				registerGOTemplate(file);
 			}

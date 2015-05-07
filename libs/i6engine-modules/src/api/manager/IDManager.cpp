@@ -35,10 +35,6 @@ namespace api {
 		if (_idMax != -1 && _idNext > _idMax) {
 			ISIXE_THROW_FAILURE("IDManager", "no more ids available.");
 		}
-		// if (_idNext == _idMax - 10) {
-			// Feature:
-			// TODO: (Michael) request new range from server
-		// }
 		return _idNext++;
 	}
 
@@ -48,10 +44,6 @@ namespace api {
 		if (_idMax != -1 && _idNext + amount - 1 > _idMax) {
 			ISIXE_THROW_FAILURE("IDManager", "no more ids available.");
 		}
-		// if (_idNext == _idMax - 10) {
-			// Feature:
-			// TODO: (Michael) request new range from server
-		// }
 		_idNext += amount;
 		return _idNext - amount;
 	}

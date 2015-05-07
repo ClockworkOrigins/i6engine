@@ -17,7 +17,6 @@
 #include "i6engine/api/components/Component.h"
 
 #include "i6engine/utils/Exceptions.h"
-#include "i6engine/utils/i6eString.h"
 
 #include "i6engine/core/configs/SubsystemConfig.h"
 

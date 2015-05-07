@@ -77,12 +77,12 @@ namespace api {
 		void unregisterMessageType(uint16_t msgType, core::MessageSubscriber * objMessageSubscriber);
 
 	private:
+		core::MessagingController * _messagingController;
+
 		/**
 		 * \brief registers the callback in MessagingController, called from EngineController only
 		 */
 		void registerMessagingController(core::MessagingController * ctrl);
-
-		core::MessagingController * _messagingController;
 
 		/**
 		 * \brief forbidden

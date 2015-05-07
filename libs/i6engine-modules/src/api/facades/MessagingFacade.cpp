@@ -19,13 +19,12 @@
 #include "i6engine/core/messaging/MessageSubscriber.h"
 #include "i6engine/core/messaging/MessagingController.h"
 
-#include "i6engine/api/GameMessageStruct.h"
-
 namespace i6engine {
 namespace api {
 
-	MessagingFacade::MessagingFacade() : _messagingController() {
+	MessagingFacade::MessagingFacade() : _messagingController(nullptr) {
 	}
+
 	MessagingFacade::~MessagingFacade() {}
 
 	void MessagingFacade::deliverMessage(const GameMessage::Ptr & msg) {
