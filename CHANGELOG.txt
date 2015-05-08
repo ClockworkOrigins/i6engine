@@ -7,6 +7,8 @@ Enhancements:
 	- added sample showing GUICanvas
 	- added sample showing a chain
 	- improved scripting api a lot
+	- added RadialBlur compositor
+	- added NightVision compositor
 
 Fixes:
 	- fixed synchronization bug of rotation in PhysicalStateComponent
