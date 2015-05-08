@@ -40,26 +40,30 @@ namespace sample {
 		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
 
 		// add ToggleButtons for different compositors
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("Bloom", "RPG/ToggleButton", 0.85, 0.0, 0.02, 0.02, false, [this](bool b) {
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("Bloom", "RPG/ToggleButton", 0.85, 0.02, 0.02, 0.02, false, [this](bool b) {
 			setCompositor("Bloom", b);
 		});
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("BloomText", "RPG/Blanko", 0.87, 0.0, "Bloom", i6engine::api::gui::Alignment::Left, -1);
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("GaussianBlur", "RPG/ToggleButton", 0.85, 0.03, 0.02, 0.02, false, [this](bool b) {
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("BloomText", "RPG/Blanko", 0.87, 0.02, "Bloom", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("GaussianBlur", "RPG/ToggleButton", 0.85, 0.05, 0.02, 0.02, false, [this](bool b) {
 			setCompositor("GaussianBlur", b);
 		});
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("GaussianBlurText", "RPG/Blanko", 0.87, 0.03, "Gaussian Blur", i6engine::api::gui::Alignment::Left, -1);
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("HeatVision", "RPG/ToggleButton", 0.85, 0.06, 0.02, 0.02, false, [this](bool b) {
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("GaussianBlurText", "RPG/Blanko", 0.87, 0.05, "Gaussian Blur", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("HeatVision", "RPG/ToggleButton", 0.85, 0.08, 0.02, 0.02, false, [this](bool b) {
 			setCompositor("HeatVision", b);
 		});
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("HeatVisionText", "RPG/Blanko", 0.87, 0.06, "Heat Vision", i6engine::api::gui::Alignment::Left, -1);
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("HDR", "RPG/ToggleButton", 0.85, 0.09, 0.02, 0.02, false, [this](bool b) {
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("HeatVisionText", "RPG/Blanko", 0.87, 0.08, "Heat Vision", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("HDR", "RPG/ToggleButton", 0.85, 0.11, 0.02, 0.02, false, [this](bool b) {
 			setCompositor("HDR", b);
 		});
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("HDRText", "RPG/Blanko", 0.87, 0.09, "HDR", i6engine::api::gui::Alignment::Left, -1);
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("MotionBlur", "RPG/ToggleButton", 0.85, 0.12, 0.02, 0.02, false, [this](bool b) {
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("HDRText", "RPG/Blanko", 0.87, 0.11, "HDR", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("MotionBlur", "RPG/ToggleButton", 0.85, 0.14, 0.02, 0.02, false, [this](bool b) {
 			setCompositor("MotionBlur", b);
 		});
-		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("MotionBlurText", "RPG/Blanko", 0.87, 0.12, "Motion Blur", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("MotionBlurText", "RPG/Blanko", 0.87, 0.14, "Motion Blur", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("RadialBlur", "RPG/ToggleButton", 0.85, 0.20, 0.02, 0.02, false, [this](bool b) {
+			setCompositor("RadialBlur", b);
+		});
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("RadialBlurText", "RPG/Blanko", 0.87, 0.20, "Radial Blur", i6engine::api::gui::Alignment::Left, -1);
 
 		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
 		// a camera to see the scene and move around
