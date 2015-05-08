@@ -60,6 +60,10 @@ namespace sample {
 			setCompositor("MotionBlur", b);
 		});
 		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("MotionBlurText", "RPG/Blanko", 0.87, 0.14, "Motion Blur", i6engine::api::gui::Alignment::Left, -1);
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("NightVisionBlur", "RPG/ToggleButton", 0.85, 0.17, 0.02, 0.02, false, [this](bool b) {
+			setCompositor("NightVision", b);
+		});
+		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("NightVisionText", "RPG/Blanko", 0.87, 0.17, "Night Vision", i6engine::api::gui::Alignment::Left, -1);
 		i6engine::api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton("RadialBlur", "RPG/ToggleButton", 0.85, 0.20, 0.02, 0.02, false, [this](bool b) {
 			setCompositor("RadialBlur", b);
 		});
