@@ -1,9 +1,9 @@
 call build-common.bat
 
 Set ARCHIVE=boost_1_58_0.tar.bz2
-Set BUILD_DIR=%BUILD_ROOT%/boost_1_58_0
+Set BUILD_DIR=%TMP_DIR%/boost_1_58_0
 
-Set PREFIX=%cd%/boost/
+Set PREFIX=%DEP_DIR%/boost/
 Set DEBUG_FLAG="variant=debug"
 Set RELEASE_FLAG="variant=release"
 
@@ -11,27 +11,12 @@ Set BUILD_TYPE=%RELEASE_FLAG%
 
 echo "Compile Boost"
 
-call download-dependency.bat %ARCHIVE%
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 call download-dependency.bat boost_1_58_patch_post.zip
-
-mkdir %PATCH_DIR%\Windows
-
-move %EX_DIR%\boost_1_58_patch_post.zip %PATCH_DIR%\Windows
-
-cd %PATCH_DIR%\Windows
 
 winrar.exe x boost_1_58_patch_post.zip
 
-echo "Extracting Boost"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
-winrar.exe x %EX_DIR%/%ARCHIVE%
-
 if not exist %BUILD_DIR% exit /b
-
-echo "Patching Boost"
 cd %BUILD_DIR%
 
 echo "Bootstrapping Boost"
@@ -47,6 +32,6 @@ b2 toolset=msvc --with-atomic --with-date_time --with-filesystem --with-log --wi
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
-xcopy /S /Y "%PATCH_DIR%\Windows\boost_post" "%PREFIX%\include\boost\config"
+xcopy /S /Y "%TMP_DIR%\boost_post" "%PREFIX%\include\boost\config"
 
-RD /S /Q "%EX_DIR%\.."
+RD /S /Q "%TMP_DIR%"

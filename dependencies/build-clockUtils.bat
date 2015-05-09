@@ -1,22 +1,13 @@
 call build-common.bat
 
 Set ARCHIVE=clockUtils-0.3-rev128.zip
-Set BUILD_DIR=%BUILD_ROOT%/clockUtils-0.3-rev128
-Set PREFIX=%cd%/clockUtils/
+Set BUILD_DIR=%TMP_DIR%/clockUtils-0.3-rev128
+Set PREFIX=%DEP_DIR%/clockUtils/
 
 echo "Compile clockUtils"
 
-call download-dependency.bat %ARCHIVE%
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
-echo "Extracting clockUtils"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
-
-winrar.exe x %EX_DIR%/%ARCHIVE%
-
-if not exist %BUILD_DIR% exit /b
 cd %BUILD_DIR%
 
 echo "Configuring clockUtils"
@@ -32,4 +23,4 @@ MSBuild.exe INSTALL.vcxproj /p:Configuration=Release > NUL
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
-RD /S /Q "%EX_DIR%\.."
+RD /S /Q "%TMP_DIR%"

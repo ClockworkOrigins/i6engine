@@ -1,22 +1,12 @@
 call build-common.bat
 
 Set ARCHIVE=gmock-1.7.0.zip
-Set BUILD_DIR=%BUILD_ROOT%/gmock-1.7.0
-Set PREFIX=%cd%/gmock
+Set BUILD_DIR=%TMP_DIR%/gmock-1.7.0
+Set PREFIX=%DEP_DIR%/gmock
 
 echo "Compile GoogleMock with GoogleTest"
 
-call download-dependency.bat %ARCHIVE%
-
-echo "Extracting GoogleMock with GoogleTest"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
-
-winrar.exe x %EX_DIR%/%ARCHIVE%
-
-if not exist %BUILD_DIR% exit /b
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
 echo "Configuring GoogleMock with GoogleTest"
 cd %BUILD_DIR%
@@ -38,4 +28,4 @@ xcopy /S /Y "%BUILD_DIR%/Release" "%PREFIX%/lib" > NUL
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
-RD /S /Q "%EX_DIR%\.."
+RD /S /Q "%TMP_DIR%"

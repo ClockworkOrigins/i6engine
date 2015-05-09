@@ -20,26 +20,11 @@ if exist %PREFIX% exit /b
 
 cd %DEP_DIR%
 
-call download-dependency.bat %ARCHIVE%
-
-echo "Extracting m2etis"
-
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
-
-echo %EX_DIR%/%ARCHIVE%
-
-winrar.exe x %EX_DIR%/%ARCHIVE%
-
-if not exist %BUILD_DIR% exit /b
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
 echo "Configuring m2etis"
 
 xcopy /S /Y "%DEP_DIR%\..\config\m2etis" "%BUILD_DIR%\include\m2etis\config\examples"
-
-pause
 
 mkdir "%BUILD_DIR%\extern\i6engine\utils"
 mkdir "%BUILD_DIR%\extern\i6engine\core\messaging"
@@ -65,4 +50,4 @@ MSBuild.exe INSTALL.vcxproj /p:Configuration=Release
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%/.."
-RD /S /Q "%EX_DIR%\.."
+RD /S /Q "%TMP_DIR%"

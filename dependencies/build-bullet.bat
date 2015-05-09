@@ -1,35 +1,19 @@
 call build-common.bat
 
 Set ARCHIVE=bullet-2.82-r2704.tgz
-Set BUILD_DIR=%BUILD_ROOT%/bullet-2.82-r2704
-Set PREFIX=%cd%/bullet/
+Set BUILD_DIR=%TMP_DIR%/bullet-2.82-r2704
+Set PREFIX=%DEP_DIR%/bullet/
 
 echo "Compile Bullet"
 
-call download-dependency.bat %ARCHIVE%
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
 call download-dependency.bat bullet_2_82_patch.zip
 
-mkdir %PATCH_DIR%\Windows
-
-move %EX_DIR%\bullet_2_82_patch.zip %PATCH_DIR%\Windows
-
-cd %PATCH_DIR%\Windows
-
 winrar.exe x bullet_2_82_patch.zip
 
-echo "Extracting Bullet"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
-
-winrar.exe x %EX_DIR%/%ARCHIVE%
-
-if not exist %BUILD_DIR% exit /b
-
 echo "Patching Bullet"
-xcopy /S /Y "%PATCH_DIR%/Windows/bullet/Extras" "%BUILD_DIR%/Extras"
+REM xcopy /S /Y "%TMP_DIR%/Windows/bullet/Extras" "%BUILD_DIR%/Extras"
 
 echo "Configuring Bullet"
 cd %BUILD_DIR%
@@ -45,4 +29,4 @@ echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
 
-RD /S /Q "%EX_DIR%\.."
+RD /S /Q "%TMP_DIR%"

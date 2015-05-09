@@ -1,22 +1,13 @@
 call build-common.bat
 
 Set ARCHIVE=openal-soft-1.16.0.tar.bz2
-Set BUILD_DIR=%BUILD_ROOT%/openal-soft-1.16.0
-Set PREFIX=%cd%/OpenAL Soft/
+Set BUILD_DIR=%TMP_DIR%/openal-soft-1.16.0
+Set PREFIX=%DEP_DIR%/OpenAL Soft/
 
 echo "Compile OpenAL Soft"
 
-call download-dependency.bat %ARCHIVE%
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
-echo "Extracting OpenAL Soft"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
-
-winrar.exe x %EX_DIR%/%ARCHIVE%
-
-if not exist %BUILD_DIR% exit /b
 cd %BUILD_DIR%
 
 echo "Configuring OpenAL Soft"
@@ -33,4 +24,4 @@ MSBuild.exe INSTALL.vcxproj /p:Configuration=Release > NUL
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
-RD /S /Q "%EX_DIR%\.."
+RD /S /Q "%TMP_DIR%"

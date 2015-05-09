@@ -1,6 +1,18 @@
+@echo off
 Set DEP_DIR=%cd%
-Set EX_DIR=%DEP_DIR%\..\externals\libs
-Set PATCH_DIR=%DEP_DIR%\..\externals\patches
-Set BUILD_ROOT=%EX_DIR%
-
+Set TMP_DIR=%cd%\tmp
 Set CONFIG_BAT="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
+
+echo %1
+
+IF "%1" == "downloadAndUnpack" (goto downloadAndUnpack %2 %3)
+EXIT /B
+
+:downloadAndUnpack
+IF not exist %TMP_DIR% (mkdir %TMP_DIR%)
+IF not exist %TMP_DIR%\%2 (bitsadmin /transfer "myDownloadJob%2" /download /priority normal http://www.clockwork-origins.de/dependencies/%2 %TMP_DIR%\%2)
+cd %TMP_DIR%
+if exist %3 RD /S /Q "%2"
+winrar.exe x %2
+if not exist %3 exit /b
+EXIT /B 0

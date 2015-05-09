@@ -2,38 +2,21 @@ call build-common.bat
 
 Set ARCHIVE=cegui-0.8.4.tar.bz2
 Set DEP_ARCHIVE=cegui-deps-0.8.x-src.zip
-Set BUILD_DIR=%BUILD_ROOT%/cegui-0.8.4
-Set BUILD_DIR_DEPS=%BUILD_ROOT%/cegui-deps-0.8.x-src
-Set PREFIX=%cd%/cegui/
-Set PREFIX_DEPS=%cd%/ceguideps
+Set BUILD_DIR=%TMP_DIR%/cegui-0.8.4
+Set BUILD_DIR_DEPS=%TMP_DIR%/cegui-deps-0.8.x-src
+Set PREFIX=%DEP_DIR%/cegui/
+Set PREFIX_DEPS=%DEP_DIR%/ceguideps
 
 echo "Compile CEGUI"
 
-call download-dependency.bat %ARCHIVE%
-call download-dependency.bat %DEP_ARCHIVE%
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
+call build-common.bat downloadAndUnpack %DEP_ARCHIVE% %BUILD_DIR_DEPS%
 call download-dependency.bat cegui_0_8_4_patch.zip
-
-mkdir %PATCH_DIR%\Windows
-
-move %EX_DIR%\cegui_0_8_4_patch.zip %PATCH_DIR%\Windows
-
-cd %PATCH_DIR%\Windows
 
 winrar.exe x cegui_0_8_4_patch.zip
 
-echo "Extracting CEGUIDeps"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR_DEPS% RD /S /Q "%BUILD_DIR_DEPS%"
-
-winrar.exe x %EX_DIR%/%DEP_ARCHIVE%
-
-if not exist %BUILD_DIR_DEPS% exit /b
-
-echo "Patching CEGUIDeps"
 cd %BUILD_DIR_DEPS%
-xcopy /S /Y "%PATCH_DIR%/Windows/cegui-deps/src" "%BUILD_DIR_DEPS%/src"
+xcopy /S /Y "%TMP_DIR%/cegui-deps/src" "%BUILD_DIR_DEPS%/src"
 
 echo "Configuring CEGUIDeps"
 cd %BUILD_DIR_DEPS%
@@ -52,16 +35,6 @@ xcopy /S /Y "%BUILD_DIR_DEPS%/dependencies" "%PREFIX_DEPS%" > NUL
 echo "Cleaning up CEGUIDeps"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR_DEPS%"
-
-echo "Extracting CEGUI"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
-
-winrar.exe x %EX_DIR%/%ARCHIVE% > NUL
-
-if not exist %BUILD_DIR% exit /b
 
 mkdir "%BUILD_DIR%/dependencies"
 xcopy /S /Y "%PREFIX_DEPS%" "%BUILD_DIR%/dependencies" > NUL
@@ -87,4 +60,4 @@ xcopy /S /Y "%PREFIX%/include/cegui-0" "%PREFIX%/include" > NUL
 rd /S /Q "%PREFIX%/share"
 rd /S /Q "%PREFIX%/include/cegui-0"
 
-RD /S /Q "%EX_DIR%\.."
+RD /S /Q "%TMP_DIR%"

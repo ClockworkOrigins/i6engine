@@ -1,22 +1,13 @@
 call build-common.bat
 
 Set ARCHIVE=tinyxml2.zip
-Set BUILD_DIR=%BUILD_ROOT%/tinyxml2
-Set PREFIX=%cd%/tinyxml2/
+Set BUILD_DIR=%TMP_DIR%/tinyxml2
+Set PREFIX=%DEP_DIR%/tinyxml2/
 
 echo "Compile TinyXML"
 
-call download-dependency.bat %ARCHIVE%
+CALL build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
-echo "Extracting TinyXML"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
-
-winrar.exe x %EX_DIR%/%ARCHIVE%
-
-if not exist %BUILD_DIR% exit /b
 cd %BUILD_DIR%\jni
 
 echo "Building TinyXML"
@@ -42,4 +33,4 @@ move tinyxml2.lib %PREFIX%/lib/tinyxml2.lib
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
-RD /S /Q "%EX_DIR%\.."
+RD /S /Q "%TMP_DIR%\.."

@@ -2,25 +2,15 @@ call build-common.bat
 
 Set ARCHIVE=sinbad-ogre-dd30349ea667.tar.bz2
 Set DEP_ARCHIVE=cabalistic-ogredeps-0e96ef9d3475.zip
-Set BUILD_DIR=%BUILD_ROOT%/sinbad-ogre-dd30349ea667
-Set BUILD_DIR_DEPS=%BUILD_ROOT%/cabalistic-ogredeps-0e96ef9d3475
-Set PREFIX=%cd%/ogre/
-Set PREFIX_DEPS=%cd%/misc/
+Set BUILD_DIR=%TMP_DIR%/sinbad-ogre-dd30349ea667
+Set BUILD_DIR_DEPS=%TMP_DIR%/cabalistic-ogredeps-0e96ef9d3475
+Set PREFIX=%DEP_DIR%/ogre/
+Set PREFIX_DEPS=%DEP_DIR%/misc/
 
 echo "Compile Ogre"
 
-call download-dependency.bat %ARCHIVE%
-call download-dependency.bat %DEP_ARCHIVE%
-
-echo "Extracting OgreDeps"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR_DEPS% RD /S /Q "%BUILD_DIR_DEPS%"
-
-winrar.exe x %EX_DIR%/%DEP_ARCHIVE%
-
-if not exist %BUILD_DIR_DEPS% exit /b
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
+call build-common.bat downloadAndUnpack %DEP_ARCHIVE% %BUILD_DIR_DEPS%
 
 echo "Configuring OgreDeps"
 cd %BUILD_DIR_DEPS%
@@ -42,16 +32,6 @@ rd /S /Q "%PREFIX_DEPS%/bin/Release"
 rd /S /Q "%PREFIX_DEPS%/bin/Debug"
 rd /S /Q "%PREFIX_DEPS%/lib/Release"
 rd /S /Q "%PREFIX_DEPS%/lib/Debug"
-
-echo "Extracting Ogre"
-if not exist %BUILD_ROOT% exit /b
-cd %BUILD_ROOT%
-
-if exist %BUILD_DIR% RD /S /Q "%BUILD_DIR%"
-
-winrar.exe x %EX_DIR%/%ARCHIVE%
-
-if not exist %BUILD_DIR% exit /b
 
 echo "Configuring Ogre"
 
@@ -75,4 +55,4 @@ rd /S /Q "%PREFIX%/bin/Release"
 rd /S /Q "%PREFIX%/lib/Release"
 rd /S /Q "%PREFIX%/include/OIS"
 rd /S /Q "%PREFIX%/CMake"
-RD /S /Q "%EX_DIR%\.."
+RD /S /Q "%TMP_DIR%"
