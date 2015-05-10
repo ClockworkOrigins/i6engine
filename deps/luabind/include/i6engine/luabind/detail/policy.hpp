@@ -697,8 +697,11 @@ LUABIND_NUMBER_CONVERTER(unsigned char, integer)
 LUABIND_NUMBER_CONVERTER(signed short, integer)
 LUABIND_NUMBER_CONVERTER(unsigned short, integer)
 LUABIND_NUMBER_CONVERTER(signed int, integer)
+
+#ifdef WIN32
 LUABIND_NUMBER_CONVERTER(uint64_t, integer)
 LUABIND_NUMBER_CONVERTER(int64_t, integer)
+#endif
 
 LUABIND_NUMBER_CONVERTER(unsigned int, number)
 LUABIND_NUMBER_CONVERTER(unsigned long, number)

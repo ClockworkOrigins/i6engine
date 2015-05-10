@@ -64,12 +64,12 @@ namespace api {
 
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
-			_manager->callFunction<Ret>(file, func, B...);
+			_manager->callFunction<Ret>(func, B...);
 		}
 
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... B) {
-			return _manager->callFunction<Ret>(file, func, B...);
+			return _manager->callFunction<Ret>(func, B...);
 		}
 #endif
 
