@@ -9,9 +9,13 @@ Set PREFIX_DEPS=%DEP_DIR%/ceguideps
 
 echo "Compile CEGUI"
 
-call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 call build-common.bat downloadAndUnpack %DEP_ARCHIVE% %BUILD_DIR_DEPS%
+
+cd %DEP_DIR%
+
 call download-dependency.bat cegui_0_8_4_patch.zip
+
+cd %TMP_DIR%
 
 winrar.exe x cegui_0_8_4_patch.zip
 
@@ -36,8 +40,10 @@ echo "Cleaning up CEGUIDeps"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR_DEPS%"
 
-mkdir "%BUILD_DIR%/dependencies"
-xcopy /S /Y "%PREFIX_DEPS%" "%BUILD_DIR%/dependencies" > NUL
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
+
+mkdir "%BUILD_DIR%\dependencies"
+xcopy /S /Y "%PREFIX_DEPS%" "%BUILD_DIR%\dependencies" > NUL
 
 echo "Patching CEGUI"
 cd %BUILD_DIR%

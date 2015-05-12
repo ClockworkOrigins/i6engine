@@ -9,7 +9,6 @@ Set PREFIX_DEPS=%DEP_DIR%/misc/
 
 echo "Compile Ogre"
 
-call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 call build-common.bat downloadAndUnpack %DEP_ARCHIVE% %BUILD_DIR_DEPS%
 
 echo "Configuring OgreDeps"
@@ -32,6 +31,8 @@ rd /S /Q "%PREFIX_DEPS%/bin/Release"
 rd /S /Q "%PREFIX_DEPS%/bin/Debug"
 rd /S /Q "%PREFIX_DEPS%/lib/Release"
 rd /S /Q "%PREFIX_DEPS%/lib/Debug"
+
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
 echo "Configuring Ogre"
 

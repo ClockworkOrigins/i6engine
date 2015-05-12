@@ -7,7 +7,12 @@ Set PREFIX=%DEP_DIR%/ois/
 echo "Compile OIS"
 
 call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
+
+cd %DEP_DIR%
+
 call download-dependency.bat ois_1_3_patch.zip
+
+cd %TMP_DIR%
 
 winrar.exe x ois_1_3_patch.zip
 

@@ -1,4 +1,4 @@
-# easyFind version 1.0 - 25.12.2012 - # 009
+# easyFind version 1.1 - 17.10.2014 - # 010
 
 # Find $LIBNAME includes and library
 #
@@ -41,6 +41,7 @@ ENDIF (NOT EasyFind_FIND_QUIETLY)
 			${LIBNAME}_${UPPERCOMPONENT}_LIBRARY	# return value
 			NAMES ${COMPONENT}						# list of possible names, currently only exactly the name
 			HINTS ${${LIBNAME}_ROOT}/lib			# first search here
+			NO_CMAKE_FIND_ROOT_PATH					# otherwise will break with the android toolchain
 		)
 
 		IF (${LIBNAME}_${UPPERCOMPONENT}_LIBRARY)
@@ -55,11 +56,11 @@ ENDIF (NOT EasyFind_FIND_QUIETLY)
 
 	IF (${LIBNAME}_notFoundList)
 		SET (${LIBNAME}_FOUND FALSE)
-		IF (${LIBNAME}_FIND_REQUIRED)
-			message(SEND_ERROR "CEGUI marked as required, but not all components were found.")
-		ELSE (${LIBNAME}_FIND_REQUIRED)
+		IF (${EasyFind_FIND_REQUIRED})
+			message(SEND_ERROR "${LIBNAME} marked as required, but not all components were found.")
+		ELSE (${EasyFind_FIND_REQUIRED})
 			message(WARNING "Not all components were found. Continuing anyways")
-		ENDIF (${LIBNAME}_FIND_REQUIRED)
+		ENDIF (${EasyFind_FIND_REQUIRED})
 	ELSEIF (${LIBNAME}_notFoundList)
 		SET (${LIBNAME}_FOUND TRUE)
 	ENDIF (${LIBNAME}_notFoundList)
@@ -71,17 +72,18 @@ ENDIF (NOT EasyFind_FIND_QUIETLY)
 		HINTS ${${LIBNAME}_ROOT}			# first search here
 		${${LIBNAME}_ROOT}/include			# first search here
 		${${LIBNAME}_ROOT}/include/*		# first search here
+		NO_CMAKE_FIND_ROOT_PATH				# otherwise will break with the android toolchain
 	)
 
 	IF (${LIBNAME}_HEADER)
 		SET (${LIBNAME}_INCLUDE_DIR ${${LIBNAME}_HEADER})
 	ELSE (${LIBNAME}_HEADER)
 		SET (${LIBNAME}_FOUND FALSE)
-		IF (${LIBNAME}_FIND_REQUIRED)
+		IF (${EasyFind_FIND_REQUIRED})
 			message(SEND_ERROR "${LIBNAME} marked as required but header not found")
-		ELSE (${LIBNAME}_FIND_REQUIRED)
+		ELSE (${EasyFind_FIND_REQUIRED})
 			IF (NOT ${LIBNAME}_FIND_QUIETLY)
 				message(WARNING "${LIBNAME} header not found")
 			ENDIF (NOT ${LIBNAME}_FIND_QUIETLY)
-		ENDIF (${LIBNAME}_FIND_REQUIRED)
+		ENDIF (${EasyFind_FIND_REQUIRED})
 	ENDIF (${LIBNAME}_HEADER)

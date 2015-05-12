@@ -7,7 +7,12 @@ Set PREFIX=%DEP_DIR%/gperftools
 echo "Compile GPerfTools"
 
 call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
+
+cd %DEP_DIR%
+
 call download-dependency.bat gperftools_2_4_patch_sln.zip
+
+cd %TMP_DIR%
 
 winrar.exe x gperftools_2_4_patch_sln.zip
 

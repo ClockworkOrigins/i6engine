@@ -72,7 +72,7 @@ namespace modules {
 		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
-			_callScripts.push(std::bind([this, file, func, B...]() {
+			_callScripts.push(std::bind([this, file, func](args... B) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				parseScript(file);
 
@@ -82,13 +82,13 @@ namespace modules {
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
 				}
-			}));
+			}, B...));
 		}
 
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScript(const std::string & file, const std::string & func, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
-			_callScripts.push(std::bind([this, file, func, ret, B...]() {
+			_callScripts.push(std::bind([this, file, func, ret](args... B) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				parseScript(file);
 
@@ -98,13 +98,13 @@ namespace modules {
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
 				}
-			}));
+			}, B...));
 			return ret;
 		}
 
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
-			_callScripts.push(std::bind([this, func, B...]() {
+			_callScripts.push(std::bind([this, func](args... B) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
 				/*try {
@@ -113,13 +113,13 @@ namespace modules {
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
 				}*/
-			}));
+			}, B...));
 		}
 
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
-			_callScripts.push(std::bind([this, func, ret, B...]() {
+			_callScripts.push(std::bind([this, func, ret](args... B) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
 				/*try {
@@ -128,7 +128,7 @@ namespace modules {
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
 				}*/
-			}));
+			}, B...));
 			return ret;
 		}
 

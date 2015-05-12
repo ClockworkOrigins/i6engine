@@ -6,11 +6,11 @@ call "%ROOT_DIR%\build-common.bat"
 Set DEP_DIR=%ROOT_DIR%
 Set EX_DIR=%DEP_DIR%\..\externals\libs
 Set PATCH_DIR=%DEP_DIR%\..\externals\patches
-Set BUILD_ROOT=%EX_DIR%
+Set BUILD_ROOT=%ROOT_DIR%
 
 Set ARCHIVE=m2etis-0.3-rev26.zip
-Set BUILD_DIR=%BUILD_ROOT%/m2etis-0.3-rev26/library
-Set PREFIX=%ROOT_DIR%/m2etis
+Set BUILD_DIR=%ROOT_DIR%\tmp\m2etis-0.3-rev26\library
+Set PREFIX=%ROOT_DIR%\m2etis
 
 call %CONFIG_BAT%
 

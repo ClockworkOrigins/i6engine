@@ -418,23 +418,6 @@ IF(WIN32)
 	foreach(filename ${files})
 		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin)
 	endforeach()
-
-	file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/plugins)
-	execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/plugins)
-
-	file(GLOB files "${CMAKE_BINARY_DIR}/bin/Plugin_*.dll")
-	foreach(filename ${files})
-		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin/plugins)
-	endforeach()
-
-	execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${files})
-
-	file(GLOB files "${CMAKE_BINARY_DIR}/bin/RenderSystem_*.dll")
-	foreach(filename ${files})
-		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin/plugins)
-	endforeach()
-
-	execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${files})
 ENDIF(WIN32)
 
 # set symlinks if it is an out-of-source-build
