@@ -13,6 +13,6 @@
 		<Attribute name="direction">-1.0 -1.0 -1.0</Attribute>
 	</Component>
 	<Component template="ParticleEmitter">
-		<Attribute name="particleEmitter">Environment/Sun</Attribute>
+		<Attribute name="particleEmitter">ParticleSystem2</Attribute>
 	</Component>
 </GOTemplate>

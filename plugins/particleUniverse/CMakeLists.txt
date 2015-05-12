@@ -226,9 +226,9 @@ add_library(Plugin_ParticleUniverse SHARED ${pluginParticleUniverseSrc})
 
 target_link_libraries(Plugin_ParticleUniverse ${BOOST_LIBRARIES} ${OGRE_LIBRARIES})
 
-IF(WIN32 AND ISIXE_BUILD_SHARED)
+IF(WIN32)
 	add_custom_command(TARGET Plugin_ParticleUniverse POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Plugin_ParticleUniverse.dll ${CMAKE_BINARY_DIR}/bin)
-ENDIF(WIN32 AND ISIXE_BUILD_SHARED)
+ENDIF(WIN32)
 
 install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX})
 

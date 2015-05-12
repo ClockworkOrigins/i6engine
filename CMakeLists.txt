@@ -323,6 +323,7 @@ set(I6ENGINE_RPG_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/i6engine-rpg/include)
 set(I6ENGINE_EDITOR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/tools/i6engine-editor/include)
 set(I6ENGINE_LUA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/deps/lua/include)
 set(I6ENGINE_LUABIND_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/deps/luabind/include)
+set(I6ENGINE_PARTICLEUNIVERSE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/plugins/particleUniverse/include)
 
 #####################################################################################
 # deps we always build ourself

@@ -22,6 +22,7 @@ include_directories("include")
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
+include_directories(${I6ENGINE_PARTICLEUNIVERSE_INCLUDE_DIR})
 
 set(srcdir ./src)
 set(configdir ${CMAKE_SOURCE_DIR}/config)
@@ -247,7 +248,7 @@ set_target_properties(i6engine-modules PROPERTIES LINKER_LANGUAGE CXX)
 # to find the dependency libs during runtime
 set_target_properties(i6engine-modules PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-target_link_libraries(i6engine-modules i6engine-utils i6engine-math i6engine-core ${BULLET_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${CEGUI_LIBRARIES} ${TinyXML_LIBRARIES} ${CLOCKUTILS_LIBRARIES})
+target_link_libraries(i6engine-modules i6engine-utils i6engine-math i6engine-core Plugin_ParticleUniverse ${BULLET_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${CEGUI_LIBRARIES} ${TinyXML_LIBRARIES} ${CLOCKUTILS_LIBRARIES})
 
 IF(ISIXE_WITH_AUDIO)
 	target_link_libraries(i6engine-modules ${OPENALSOFT_LIBRARIES})

@@ -39,6 +39,8 @@
 #include "OGRE/OgreSceneManager.h"
 #include "OGRE/OgreSubEntity.h"
 
+#include "ParticleUniverseSystemManager.h"
+
 namespace i6engine {
 namespace modules {
 
@@ -337,9 +339,10 @@ namespace modules {
 		name << "SN_" << _gameObjectID << "_" << coid;
 
 		Ogre::SceneNode * newNode = _sceneNode->createChildSceneNode(name.str(), pos.toOgre());
-		Ogre::ParticleSystem * particleSystem = sm->createParticleSystem(name.str(), emitterName);
+		ParticleUniverse::ParticleSystem * particleSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(name.str(), emitterName, sm);
 		newNode->attachObject(particleSystem);
 		_particles[coid] = newNode;
+		particleSystem->start();
 	}
 
 	void GraphicsNode::particleFadeOut(int64_t coid) {
@@ -348,11 +351,11 @@ namespace modules {
 			ISIXE_LOG_ERROR("GraphicsNode", "Particle System is null");
 		} else {
 			Ogre::SceneNode * sn = _particles[coid];
-			Ogre::ParticleSystem * part = dynamic_cast<Ogre::ParticleSystem *>(sn->getAttachedObject(0));
+			ParticleUniverse::ParticleSystem * part = dynamic_cast<ParticleUniverse::ParticleSystem *>(sn->getAttachedObject(0));
 			if (part == nullptr) {
 				ISIXE_LOG_ERROR("GraphicNode", "Particle system broken");
 			}
-			part->removeAllEmitters();
+			part->stopFade();
 		}
 	}
 
@@ -442,12 +445,12 @@ namespace modules {
 			ISIXE_LOG_ERROR("GraphicsNode", "Particle System is null");
 		} else {
 			Ogre::SceneNode * sn = _particles[coid];
-			Ogre::ParticleSystem * part = dynamic_cast<Ogre::ParticleSystem *>(sn->getAttachedObject(0));
+			ParticleUniverse::ParticleSystem * part = dynamic_cast<ParticleUniverse::ParticleSystem *>(sn->getAttachedObject(0));
 			if (part == nullptr) {
 				ISIXE_LOG_ERROR("GraphicNode", "Particle system broken");
 			}
 			sn->detachObject(part);
-			sm->destroyParticleSystem(part);
+			part->stop();
 
 			_sceneNode->removeAndDestroyChild(sn->getName());
 
