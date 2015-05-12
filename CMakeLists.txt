@@ -256,6 +256,17 @@ IF(NOT WIN32)
 	find_package(JPEG REQUIRED)
 ENDIF(NOT WIN32)
 
+#----------------------------------------------------
+# wxWidgets
+#----------------------------------------------------
+IF(ISIXE_WITH_TOOLS)
+	SET(LIBNAME "WXWIDGETS")
+	SET(LIBHEADER "wx/wx.h")
+	SET(WXWIDGETS_ROOT ${ISIXE_DEP_DIR}/wxWidgets)
+	find_package(EasyFind REQUIRED COMPONENTS wxbase28 wxbase28_net wxbase28_xml wxexpat wxjpeg wxmsw28_adv wxmsw28_aui wxmsw28_core wxmsw28_html wxmsw28_media wxmsw28_qa wxmsw28_richtext wxmsw28_xrc wxpng wxtiff wxzlib)
+	include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR})
+ENDIF(ISIXE_WITH_TOOLS)
+
 ###############################################################################
 # Configure Build Settings (has to be before building m2etis because m2etis needs i6engineBuildSettings)
 ###############################################################################
@@ -390,6 +401,7 @@ ENDIF(ISIXE_WITH_TUTORIALS)
 install(FILES ${CMAKE_SOURCE_DIR}/config/ogre.cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 install(FILES ${CMAKE_SOURCE_DIR}/config/resources.cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 install(FILES ${CMAKE_SOURCE_DIR}/config/plugins.cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
+install(FILES ${CMAKE_SOURCE_DIR}/config/pued.cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 install(FILES ${CMAKE_SOURCE_DIR}/config/i6engine.ini DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 
 IF(ISIXE_WITH_RPG)
@@ -399,6 +411,7 @@ ENDIF(ISIXE_WITH_RPG)
 configure_file(${CMAKE_SOURCE_DIR}/config/resources.cfg ${CMAKE_BINARY_DIR}/bin/resources.cfg COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/config/ogre.cfg ${CMAKE_BINARY_DIR}/bin/ogre.cfg COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/config/plugins.cfg ${CMAKE_BINARY_DIR}/bin/plugins.cfg COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/config/pued.cfg ${CMAKE_BINARY_DIR}/bin/pued.cfg COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/config/i6engine.ini ${CMAKE_BINARY_DIR}/bin/i6engine.ini COPYONLY)
 
 IF(ISIXE_WITH_RPG)
