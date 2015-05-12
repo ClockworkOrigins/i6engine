@@ -8,7 +8,11 @@ echo "Compile Bullet"
 
 call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
+cd %DEP_DIR%
+
 call download-dependency.bat bullet_2_82_patch.zip
+
+cd %TMP_DIR%
 
 winrar.exe x bullet_2_82_patch.zip
 

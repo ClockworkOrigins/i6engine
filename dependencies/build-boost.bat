@@ -12,7 +12,12 @@ Set BUILD_TYPE=%RELEASE_FLAG%
 echo "Compile Boost"
 
 call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
+
+cd %DEP_DIR%
+
 call download-dependency.bat boost_1_58_patch_post.zip
+
+cd %TMP_DIR%
 
 winrar.exe x boost_1_58_patch_post.zip
 

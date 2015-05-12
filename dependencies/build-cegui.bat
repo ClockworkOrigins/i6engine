@@ -10,8 +10,16 @@ Set PREFIX_DEPS=%DEP_DIR%/ceguideps
 echo "Compile CEGUI"
 
 call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
+
+cd %DEP_DIR%
+
 call build-common.bat downloadAndUnpack %DEP_ARCHIVE% %BUILD_DIR_DEPS%
+
+cd %DEP_DIR%
+
 call download-dependency.bat cegui_0_8_4_patch.zip
+
+cd %TMP_DIR%
 
 winrar.exe x cegui_0_8_4_patch.zip
 
