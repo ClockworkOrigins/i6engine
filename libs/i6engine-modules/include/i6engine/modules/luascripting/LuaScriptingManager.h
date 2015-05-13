@@ -77,7 +77,7 @@ namespace modules {
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
 			_callScripts.push(std::bind([this, file, func](args... B) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				if (!parseScript(file)) {
+				if (!parseScript(file, false)) {
 					return;
 				}
 				try {
@@ -98,7 +98,7 @@ namespace modules {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
 			_callScripts.push(std::bind([this, file, func, ret](args... B) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				if (!parseScript(file)) {
+				if (!parseScript(file, false)) {
 					ret->push(Ret());
 				}
 				try {
@@ -151,10 +151,18 @@ namespace modules {
 			return ret;
 		}
 
+		template<typename T>
+		typename std::enable_if<std::is_pointer<T>::value>::type setGlobalVariable(const std::string & name, T value) {
+			_callScripts.push(std::bind([this, name, value]() {
+				ASSERT_THREAD_SAFETY_FUNCTION
+					luabind::globals(_luaState)[name] = value;
+			}));
+		}
+
 		/**
 		 * \brief parses the given script
 		 */
-		bool parseScript(const std::string & file);
+		bool parseScript(const std::string & file, bool completePath);
 
 		/**
 		 * \brief forbidden

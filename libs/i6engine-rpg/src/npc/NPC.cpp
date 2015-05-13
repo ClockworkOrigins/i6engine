@@ -14,35 +14,24 @@
  * limitations under the License.
  */
 
+#include "i6engine/rpg/npc/NPC.h"
+
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/facades/ObjectFacade.h"
 
-#include "LuaAPIExport.h"
-#include "LuaAudioExport.h"
-#include "LuaGUIExport.h"
-#include "LuaMathExport.h"
-#include "LuaObjectExport.h"
+namespace i6engine {
+namespace rpg {
+namespace npc {
 
-#ifdef ISIXE_WITH_RPG
-	#include "LuaRPGExport.h"
-#endif
+	NPC::NPC(const api::objects::GOTemplate & tpl) : _go() {
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO("NPC", tpl, api::EngineController::GetSingletonPtr()->getUUID(), false, [this](api::GOPtr go) {
+			_go = go;
+		});
+	}
 
-extern "C" ISIXE_LUA_API int init(lua_State * L) {
-	using namespace luabind;
+	NPC::~NPC() {
+	}
 
-	open(L);
-
-	module(L)
-		[
-			registerAPI(),
-			registerAudio(),
-			registerGUI(),
-			registerMath(),
-			registerObject()
-#ifdef ISIXE_WITH_RPG
-			,
-			registerRPG()
-#endif
-		];
-
-	return 0;
-}
+} /* namespace npc */
+} /* namespace rpg */
+} /* namespace i6engine */

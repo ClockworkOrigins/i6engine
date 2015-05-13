@@ -18,13 +18,17 @@
 # LuaExport cmake
 ################################
 
+include_directories("include")
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
 include_directories(${I6ENGINE_LUABIND_INCLUDE_DIR})
-include_directories("include")
+
+IF(ISIXE_WITH_RPG)
+	include_directories(${I6ENGINE_RPG_INCLUDE_DIR})
+ENDIF(ISIXE_WITH_RPG)
 
 set(srcdir .)
 
@@ -38,9 +42,22 @@ set(luaExportSrc
 	${srcdir}/src/LuaObjectExport.cpp
 )
 
+IF(ISIXE_WITH_RPG)
+	set(luaExportSrc
+		${luaExportSrc}
+
+		${srcdir}/src/LuaRPGExport.cpp
+	)
+ENDIF(ISIXE_WITH_RPG)
+
 add_library(ScriptingLua SHARED ${luaExportSrc})
 
 target_link_libraries(ScriptingLua i6engine-modules)
+
+IF(ISIXE_WITH_RPG)
+	target_link_libraries(ScriptingLua i6engine-rpg)
+ENDIF(ISIXE_WITH_RPG)
+
 # to find the dependency libs during runtime
 set_target_properties(ScriptingLua PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 

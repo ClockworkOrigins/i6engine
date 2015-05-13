@@ -56,6 +56,8 @@ namespace modules {
 			std::string func = static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->func;
 
 			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
+		} else if (type == api::scripting::ScrLoadAllScripts) {
+			ISIXE_THROW_FAILURE("ScriptingManager", "Loading of all scripts isn't implemented yet in PythonScriptingManager!");
 		} else {
 			ISIXE_THROW_MESSAGE("ScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

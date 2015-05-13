@@ -15,34 +15,34 @@
 ##
 
 ################################
-# SampleRPG cmake
+# PythonRPGExport cmake
 ################################
 
-include_directories(include)
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 include_directories(${I6ENGINE_RPG_INCLUDE_DIR})
 
-include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
-include_directories(${I6ENGINE_LUABIND_INCLUDE_DIR})
+set(srcdir .)
 
-set(SampleRPGSrc
-	main.cpp
-
-	src/RPGApplication.cpp
+set(pythonRPGSrc
+	${srcdir}/PythonRPGExport.cpp
 )
 
-add_executable(SampleRPG ${SampleRPGSrc})
-set_target_properties(SampleRPG PROPERTIES LINKER_LANGUAGE CXX)
-
-target_link_libraries(SampleRPG i6engine-rpg)
+PYTHON_ADD_MODULE(ScriptingRPGPython ${pythonRPGSrc})
+target_link_libraries(ScriptingRPGPython i6engine-rpg ${PYTHON_LIBRARIES})
 
 IF(WIN32)
-	add_custom_command(TARGET SampleRPG POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleRPG.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET ScriptingRPGPython POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingRPGPython.pyd ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(TARGETS SampleRPG
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/samples
-	)
+#############################
+# PythonRPGExport install
+#############################
+
+install(TARGETS ScriptingRPGPython
+	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+)

@@ -14,35 +14,34 @@
  * limitations under the License.
  */
 
-#include "i6engine/api/EngineController.h"
+#ifndef __I6ENGINE_RPG_NPC_NPC_H__
+#define __I6ENGINE_RPG_NPC_NPC_H__
 
-#include "LuaAPIExport.h"
-#include "LuaAudioExport.h"
-#include "LuaGUIExport.h"
-#include "LuaMathExport.h"
-#include "LuaObjectExport.h"
+#include "i6engine/utils/i6eSystemParameters.h"
+#include "i6engine/utils/weakPtr.h"
 
-#ifdef ISIXE_WITH_RPG
-	#include "LuaRPGExport.h"
-#endif
+namespace i6engine {
+namespace api {
+	class GameObject;
+	typedef utils::weakPtr<GameObject> WeakGOPtr;
+namespace objects {
+	struct GOTemplate;
+} /* namespace objects */
+} /* namespace api */
+namespace rpg {
+namespace npc {
 
-extern "C" ISIXE_LUA_API int init(lua_State * L) {
-	using namespace luabind;
+	class ISIXE_RPG_API NPC {
+	public:
+		NPC(const api::objects::GOTemplate & tpl);
+		~NPC();
 
-	open(L);
+	private:
+		api::WeakGOPtr _go;
+	};
 
-	module(L)
-		[
-			registerAPI(),
-			registerAudio(),
-			registerGUI(),
-			registerMath(),
-			registerObject()
-#ifdef ISIXE_WITH_RPG
-			,
-			registerRPG()
-#endif
-		];
+} /* namespace npc */
+} /* namespace rpg */
+} /* namespace i6engine */
 
-	return 0;
-}
+#endif /* __I6ENGINE_RPG_NPC_NPC_H__ */

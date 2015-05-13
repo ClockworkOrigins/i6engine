@@ -26,6 +26,7 @@
 #include "i6engine/api/facades/InputFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/facades/PhysicsFacade.h"
+#include "i6engine/api/facades/ScriptingFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
@@ -41,6 +42,8 @@
 #include "i6engine/rpg/components/UsableItemComponent.h"
 #include "i6engine/rpg/components/WeightInventoryComponent.h"
 
+#include "i6engine/rpg/npc/NPCParser.h"
+
 #include "boost/bind.hpp"
 
 namespace sample {
@@ -53,9 +56,17 @@ namespace sample {
 	}
 
 	void RPGApplication::Initialize() {
+		std::string NPCDirectory;
+		if (_iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {
+			ISIXE_THROW_FAILURE("RPGApplication", "'npcDirectory' in section 'SCRIPT' in RPG.ini not found!");
+		}
+		i6engine::rpg::npc::NPCParser::GetSingletonPtr()->loadNPCs(NPCDirectory);
 	}
 
 	void RPGApplication::AfterInitialize() {
+		// load all scripts in LUAScriptDir, so all function calls can be done without a file
+		i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->loadAllScripts();
+
 		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
 
 		// register GUI scheme
@@ -102,6 +113,9 @@ namespace sample {
 
 		// loads the RPG demo level
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/RPGLevel.xml", "Singleplayer");
+
+		// call Startup in script
+		i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>("Startup");
 
 		// a hack to load rpg library
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").front()->getGOC<i6engine::rpg::components::NameComponent>(i6engine::rpg::components::config::ComponentTypes::NameComponent)->getName();

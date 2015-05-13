@@ -14,35 +14,11 @@
  * limitations under the License.
  */
 
-#include "i6engine/api/EngineController.h"
+#ifndef __LUARPGEXPORT_H__
+#define __LUARPGEXPORT_H__
 
-#include "LuaAPIExport.h"
-#include "LuaAudioExport.h"
-#include "LuaGUIExport.h"
-#include "LuaMathExport.h"
-#include "LuaObjectExport.h"
+#include "i6engine/luabind/luabind.hpp"
 
-#ifdef ISIXE_WITH_RPG
-	#include "LuaRPGExport.h"
-#endif
+luabind::scope registerRPG();
 
-extern "C" ISIXE_LUA_API int init(lua_State * L) {
-	using namespace luabind;
-
-	open(L);
-
-	module(L)
-		[
-			registerAPI(),
-			registerAudio(),
-			registerGUI(),
-			registerMath(),
-			registerObject()
-#ifdef ISIXE_WITH_RPG
-			,
-			registerRPG()
-#endif
-		];
-
-	return 0;
-}
+#endif /* __LUARPGEXPORT_H__ */

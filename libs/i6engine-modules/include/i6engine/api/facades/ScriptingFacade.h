@@ -51,6 +51,8 @@ namespace api {
 		ScriptingFacade();
 		~ScriptingFacade();
 
+		void loadAllScripts() const;
+
 #if defined (ISIXE_WITH_LUA_SCRIPTING) || defined (ISIXE_WITH_PYTHON_SCRIPTING)
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
@@ -70,6 +72,11 @@ namespace api {
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... B) {
 			return _manager->callFunction<Ret>(func, B...);
+		}
+
+		template<typename T>
+		typename std::enable_if<std::is_pointer<T>::value>::type setGlobalVariable(const std::string & name, T value) {
+			_manager->setGlobalVariable(name, value);
 		}
 #endif
 

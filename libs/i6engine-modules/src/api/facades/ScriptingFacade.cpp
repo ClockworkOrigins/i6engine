@@ -35,6 +35,10 @@ namespace api {
 	ScriptingFacade::~ScriptingFacade() {
 	}
 
+	void ScriptingFacade::loadAllScripts() const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ScriptingMessageType, scripting::ScrLoadAllScripts, core::Method::Create, new GameMessageStruct(), core::Subsystem::Unknown));
+	}
+
 	void ScriptingFacade::resetSubSystem() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ScriptingMessageType, scripting::ScrReset, core::Method::Delete, new GameMessageStruct(), core::Subsystem::Unknown);
 

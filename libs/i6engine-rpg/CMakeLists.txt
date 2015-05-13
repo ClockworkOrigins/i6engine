@@ -24,6 +24,9 @@ include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 
+include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
+include_directories(${I6ENGINE_LUABIND_INCLUDE_DIR})
+
 set(srcdir ./src)
 
 set(i6rpgSrc
@@ -42,10 +45,15 @@ set(i6rpgSrc
 	${srcdir}/components/WeightInventoryComponent.cpp
 	
 	${srcdir}/gui/SubtitleWidget.cpp
+	
+	${srcdir}/npc/NPC.cpp
+	${srcdir}/npc/NPCManager.cpp
+	${srcdir}/npc/NPCParser.cpp
 )
 
 SOURCE_GROUP(rpg\\components src/components/*)
 SOURCE_GROUP(rpg\\gui src/gui/*)
+SOURCE_GROUP(rpg\\npc src/npc/*)
 
 IF(ISIXE_BUILD_SHARED)
 	add_library(i6engine-rpg SHARED ${i6rpgSrc})

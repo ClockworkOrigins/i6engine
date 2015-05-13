@@ -15,6 +15,26 @@
 		<GameObject name="Sun" send="False">
 		</GameObject>
 		
+		<!-- Waypoints -->
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">0 2.0 10.0</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_002</Attribute>
+                <Attribute name="name">WP_001</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">20.0 2.0 10.0</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">WP_001</Attribute>
+                <Attribute name="name">WP_002</Attribute>
+            </Component>
+        </GameObject>
+		
 		<GameObject name="UsableItem" send="False">
 			<Component template="StaticState">
 				<Attribute name="pos">-10.0 0.0 0.0</Attribute>
@@ -33,15 +53,6 @@
 		<GameObject name="UsableItem" send="False">
 			<Component template="StaticState">
 				<Attribute name="pos">5.0 0.0 0.0</Attribute>
-			</Component>
-		</GameObject>
-		
-		<GameObject name="NPC" send="False">
-			<Component template="PhysicalState">
-				<Attribute name="pos">0.0 2.0 10.0</Attribute>
-			</Component>
-			<Component template="Name">
-				<Attribute name="name">NPCName01</Attribute>
 			</Component>
 		</GameObject>
 		

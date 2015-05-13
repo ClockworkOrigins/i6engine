@@ -29,6 +29,8 @@ extern "C"
 	#include "i6engine/lua/lualib.h"
 }
 
+#include "boost/filesystem.hpp"
+
 namespace i6engine {
 namespace modules {
 
@@ -71,17 +73,44 @@ namespace modules {
 			std::string func = static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->func;
 
 			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
+		} else if (type == api::scripting::ScrLoadAllScripts) {
+			std::queue<std::string> directories;
+			directories.push(_scriptsPath);
+
+			while (!directories.empty()) {
+				std::string dir = directories.front();
+				directories.pop();
+				try {
+					boost::filesystem::directory_iterator iter(dir), dirEnd;
+					while (iter != dirEnd) {
+						if (boost::filesystem::is_regular_file(*iter)) {
+							std::string file = iter->path().string();
+							parseScript(file, true);
+						} else if (boost::filesystem::is_directory(*iter)) {
+							std::string path = iter->path().string();
+							directories.push(path);
+						}
+						iter++;
+					}
+				} catch (boost::filesystem::filesystem_error & e) {
+					ISIXE_THROW_FAILURE("NPCParser", e.what());
+				}
+			}
 		} else {
 			ISIXE_THROW_MESSAGE("LuaScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
 	}
 
-	bool LuaScriptingManager::parseScript(const std::string & file) {
+	bool LuaScriptingManager::parseScript(const std::string & file, bool completePath) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		if (_parsedFiles.find(file) == _parsedFiles.end()) {
-			int status = luaL_dofile(_luaState, (_scriptsPath + "/" + file + ".lua").c_str());
+			std::string path = file;
+			if (!completePath) {
+				path = _scriptsPath + "/" + file + ".lua";
+			}
+			int status = luaL_dofile(_luaState, path.c_str());
 			if (status) {
-				ISIXE_THROW_FAILURE("LuaScriptingManager", "Error parsing script '" << file << ".lua': " << lua_tostring(_luaState, -1));
+				ISIXE_THROW_FAILURE("LuaScriptingManager", "Error parsing script '" << path << "': " << lua_tostring(_luaState, -1));
 				return false;
 			}
 			_parsedFiles.insert(file);
