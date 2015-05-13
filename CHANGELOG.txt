@@ -9,6 +9,8 @@ Enhancements:
 	- improved scripting api a lot
 	- added RadialBlur compositor
 	- added NightVision compositor
+	- added possibility to configure NPCs in xml files
+	- added possibility to insert NPCs via scripts
 
 Fixes:
 	- fixed synchronization bug of rotation in PhysicalStateComponent
