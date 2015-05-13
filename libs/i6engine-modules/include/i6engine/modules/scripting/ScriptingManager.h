@@ -136,7 +136,7 @@ namespace modules {
 		typename std::enable_if<std::is_pointer<T>::value>::type setGlobalVariable(const std::string & name, T value) {
 			_callScripts.push(std::bind([this, name, value]() {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				static_assert(false, "Not supported yet!");
+				boost::python::scope().attr(name) = value;
 			}));
 		}
 
