@@ -29,16 +29,21 @@ cmake_minimum_required (VERSION 2.8)
 option(ISIXE_LOGGING "enables Logging" OFF)
 option(ISIXE_NETWORK "build i6engine with networking capabilities" OFF)
 option(ISIXE_PROFILING "build i6engine with profiling" OFF)
-option(ISIXE_WITH_LUA_SCRIPTING "build lua scripting module" ON)
-option(ISIXE_WITH_PYTHON_SCRIPTING "build python scripting module" ON)
 option(ISIXE_TESTING "build i6engine with tests" OFF)
-OPTION(ISIXE_WITH_AUDIO "build i6engine with OpenAL Soft audio subsystem" ON)
-OPTION(ISIXE_WITH_EDITOR "build i6engine with the level editor" ON)
-OPTION(ISIXE_WITH_SAMPLES "build some samples for i6engine" ON)
-OPTION(ISIXE_WITH_TOOLS "build some tools for i6engine" ON)
-OPTION(ISIXE_WITH_RPG "build rpg module for i6engine" ON)
-OPTION(ISIXE_WITH_DOCU "build documentation for i6engine" ON)
-OPTION(ISIXE_WITH_TUTORIALS "build tutorials for i6engine" ON)
+option(ISIXE_WITH_AUDIO "build i6engine with OpenAL Soft audio subsystem" ON)
+option(ISIXE_WITH_EDITOR "build i6engine with the level editor" ON)
+option(ISIXE_WITH_SAMPLES "build some samples for i6engine" ON)
+option(ISIXE_WITH_TOOLS "build some tools for i6engine" ON)
+option(ISIXE_WITH_RPG "build rpg module for i6engine" ON)
+option(ISIXE_WITH_DOCU "build documentation for i6engine" ON)
+option(ISIXE_WITH_TUTORIALS "build tutorials for i6engine" ON)
+
+# options are
+# * ""
+# * "python"
+# * "lua"
+set(ISIXE_WITH_SCRIPTING "python" CACHE STRING "specifies the scripting system to use" )
+
 set(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies" CACHE STRING "path to dependencies for i6engine")
 
 IF(ISIXE_TESTING AND NOT WIN32)
@@ -56,9 +61,23 @@ IF(NOT CMAKE_BUILD_TYPE)
       FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
-IF(ISIXE_WITH_RPG AND NOT ISIXE_WITH_LUA_SCRIPTING)
-	MESSAGE(SEND_ERROR "rpg module requires lua scripting enabled to use all features!")
-ENDIF(ISIXE_WITH_RPG AND NOT ISIXE_WITH_LUA_SCRIPTING)
+IF(ISIXE_WITH_RPG AND NOT ISIXE_WITH_SCRIPTING STREQUAL "lua")
+	MESSAGE(WARNING "rpg module requires lua scripting enabled to use all features!")
+ENDIF()
+
+IF(ISIXE_WITH_SCRIPTING STREQUAL "lua")
+	set(SCRIPTING_LUA ON)
+	set(SCRIPTING_PYTHON OFF)
+	set(ISIXE_SCRIPTING "SCRIPTING_LUA")
+ELSEIF(ISIXE_WITH_SCRIPTING STREQUAL "python")
+	set(SCRIPTING_PYTHON ON)
+	set(SCRIPTING_LUA OFF)
+	set(ISIXE_SCRIPTING "SCRIPTING_PYTHON")
+ELSE()
+	set(SCRIPTING_LUA OFF)
+	set(SCRIPTING_PYTHON OFF)
+	set(ISIXE_SCRIPTING "SCRIPTING_NONE")
+ENDIF()
 
 #########################################################################
 # Global Macros and Definitions
@@ -105,11 +124,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 
-IF(APPLE)
-	set(CMAKE_INSTALL_NAME_DIR @executable_path)
-	set(CMAKE_BUILD_ISIXE_INSTALL_RPATH ON)
-ENDIF(APPLE)
-
 #########################################################################
 #Library Section
 #########################################################################
@@ -129,9 +143,9 @@ ENDIF(NOT WIN32)
 	SET(LIBHEADER "boost/thread.hpp")
 	SET(BOOST_ROOT ${ISIXE_DEP_DIR}/boost)
 	set(BOOST_COMPONENTS chrono date_time filesystem serialization system thread)
-	IF(ISIXE_WITH_PYTHON_SCRIPTING)
+	IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
 		SET(BOOST_COMPONENTS ${BOOST_COMPONENTS} python)
-	ENDIF(ISIXE_WITH_PYTHON_SCRIPTING)
+	ENDIF()
 	IF(ISIXE_LOGGING)
 		SET(BOOST_COMPONENTS ${BOOST_COMPONENTS} log log_setup)
 	ENDIF(ISIXE_LOGGING)
@@ -141,14 +155,14 @@ ENDIF(NOT WIN32)
 	SET(BOOST_COMPONENTS ${libs})
 	find_package(EasyFind REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 	include_directories(SYSTEM ${BOOST_INCLUDE_DIR})
-	
+
 #----------------------------------------------------
 # Python
 #----------------------------------------------------
-IF(ISIXE_WITH_PYTHON_SCRIPTING)
+IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
 	find_package(PythonLibs 2.7 REQUIRED)
 	include_directories(${PYTHON_INCLUDE_DIRS})
-ENDIF(ISIXE_WITH_PYTHON_SCRIPTING)
+ENDIF()
 
 #----------------------------------------------------
 # Ogre3D
@@ -329,9 +343,9 @@ add_subdirectory(libs)
 # scripting exports
 #####################################################################################
 
-IF(ISIXE_WITH_LUA_SCRIPTING OR ISIXE_WITH_PYTHON_SCRIPTING)
+IF(ISIXE_SCRIPTING)
 	add_subdirectory(scripting)
-ENDIF(ISIXE_WITH_LUA_SCRIPTING OR ISIXE_WITH_PYTHON_SCRIPTING)
+ENDIF()
 
 #####################################################################################
 # test
