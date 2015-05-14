@@ -497,8 +497,8 @@ namespace editor {
 		api::EngineController::GetSingleton().getGUIFacade()->setVisibility("ObjectInfo", true);
 		api::EngineController::GetSingleton().getGUIFacade()->setText("ObjectInfo", go->getType());
 		api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponentOption, core::Method::Update, new messages::GUI_AddComponentOption("ObjectInfo", true, "Flags", [wgo]() {
-			auto go = wgo.get();
-			std::vector<std::string> flags = go->getFlags();
+			auto gobj = wgo.get();
+			std::vector<std::string> flags = gobj->getFlags();
 			std::string flagString;
 			for (size_t i = 0; i < flags.size(); i++) {
 				flagString += flags[i];
@@ -509,8 +509,8 @@ namespace editor {
 			}
 			return flagString;
 		}, [wgo](std::string s) {
-			auto go = wgo.get();
-			go->setFlags(utils::split(s, "|"));
+			auto gobj = wgo.get();
+			gobj->setFlags(utils::split(s, "|"));
 			return true;
 		}), i6engine::core::Subsystem::Unknown));
 

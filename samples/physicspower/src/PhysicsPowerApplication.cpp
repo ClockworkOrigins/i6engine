@@ -39,8 +39,6 @@ namespace sample {
 	void PhysicsPowerApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
 
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
-
 		// ambient light for the scene
 		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
 
