@@ -49,40 +49,40 @@ namespace components {
 			return {};
 		}
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "ListInventory";
 		}
 
 		/**
 		 * \brief checks whether the item can be added to the inventory and if so it is added
 		 */
-		bool addItem(const api::GOPtr & item);
+		bool addItem(const api::GOPtr & item) override;
 
 		/**
 		 * \brief shows the inventory, implementation depends on subclass
 		 */
-		void show();
+		void show() override;
 
 		/**
 		 * \brief hides the inventory, implementation depends on subclass
 		 */
-		void hide();
+		void hide() override;
 
 		/**
 		 * \brief tries to use given item
 		 */
-		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback);
+		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback) override;
 
 		/**
 		 * \brief returns the selected item
 		 * if none is selected, first parameter in pair is UINT32_MAX
 		 */
-		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const;
+		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const override;
 
 		/**
 		 * \brief returns the number of items for the given type
 		 */
-		uint32_t getItemCount(uint32_t item, const std::string & name) const;
+		uint32_t getItemCount(uint32_t item, const std::string & name) const override;
 
 	private:
 		enum ItemEntry {
@@ -101,7 +101,7 @@ namespace components {
 
 		void showItems();
 
-		void News(const api::GameMessage::Ptr & msg);
+		void News(const api::GameMessage::Ptr & msg) override;
 		void Tick() override;
 	};
 

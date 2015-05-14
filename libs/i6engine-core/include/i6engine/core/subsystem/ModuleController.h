@@ -236,7 +236,7 @@ namespace core {
 			return _isRunning;
 		}
 
-		void deliverMessageInternal(const ReceivedMessagePtr & msg);
+		void deliverMessageInternal(const ReceivedMessagePtr & msg) override;
 
 		void stop() {
 			_conditionVariable.notify_one();

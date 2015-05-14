@@ -24,13 +24,13 @@ namespace components {
 			return {};
 		}
 
-		void forward();
+		void forward() override;
 
-		void backward();
+		void backward() override;
 
-		void left();
+		void left() override;
 
-		void right();
+		void right() override;
 	};
 
 } /* namespace components */

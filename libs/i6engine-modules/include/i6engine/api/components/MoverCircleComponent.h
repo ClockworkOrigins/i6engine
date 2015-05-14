@@ -56,7 +56,7 @@ namespace api {
 		 * the startPos position should be the starting position of the movement
 		 * the object will be moved to this position, or in case of a circle automatically in the circle path
 		 */
-		void start(Vec3 & startPos);
+		void start(Vec3 & startPos) override;
 
 		Vec3 getCircleAxis() const { return _circleAxis; }
 		double getCircleRadius() const { return _circleRadius; }
@@ -70,7 +70,7 @@ namespace api {
 			return "MoverCircle";
 		}
 
-		void reset();
+		void reset() override;
 
 		std::vector<componentOptions> getComponentOptions() override;
 
@@ -99,7 +99,7 @@ namespace api {
 
 		void News(const GameMessage::Ptr & msg) override;
 
-		void getNewPosition(const uint64_t t, Vec3 & newPos, Quaternion & newRot);
+		void getNewPosition(const uint64_t t, Vec3 & newPos, Quaternion & newRot) override;
 
 		MoverCircleComponent(const MoverCircleComponent &) = delete;
 

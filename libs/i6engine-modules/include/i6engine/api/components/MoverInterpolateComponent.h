@@ -89,7 +89,7 @@ namespace api {
 
 		inline Way getWay() const { return _way; }
 
-		void start(Vec3 & startPos);
+		void start(Vec3 & startPos) override;
 
 		/**
 		 * \brief synchronizes the Components state
@@ -100,7 +100,7 @@ namespace api {
 			return "MoverInterpolate";
 		}
 
-		void reset();
+		void reset() override;
 
 		std::vector<componentOptions> getComponentOptions() override;
 
@@ -159,7 +159,7 @@ namespace api {
 
 		void News(const GameMessage::Ptr & msg) override;
 
-		void getNewPosition(const uint64_t t, Vec3 & newPos, Quaternion & newRot);
+		void getNewPosition(const uint64_t t, Vec3 & newPos, Quaternion & newRot) override;
 
 		/**
 		 * \brief loads all parameters from a message

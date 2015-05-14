@@ -22,9 +22,9 @@ namespace components {
 
 		void Finalize() override;
 
-		api::attributeMap synchronize() const;
+		api::attributeMap synchronize() const override;
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "Quickslot";
 		}
 

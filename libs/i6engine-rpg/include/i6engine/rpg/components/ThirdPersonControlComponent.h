@@ -24,7 +24,7 @@ namespace components {
 
 		void Finalize() override;
 
-		void News(const api::GameMessage::Ptr & msg);
+		void News(const api::GameMessage::Ptr & msg) override;
 
 		api::attributeMap synchronize() const override;
 
