@@ -23,7 +23,7 @@
 namespace i6engine {
 namespace math {
 
-	template<>
+	/*template<>
 	bool i6eVector2<int32_t>::operator==(const i6eVector2<int32_t> & b) const {
 		return std::fabs(double(_x - b.getX())) < EPSILON && std::fabs(double(_y - b.getY())) < EPSILON;
 	}
@@ -31,7 +31,7 @@ namespace math {
 	template<>
 	bool i6eVector2<uint32_t>::operator==(const i6eVector2<uint32_t> & b) const {
 		return std::fabs(double(_x - b.getX())) < EPSILON && std::fabs(double(_y - b.getY())) < EPSILON;
-	}
+	}*/
 
 } /* namespace math */
 } /* namespace i6engine */

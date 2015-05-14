@@ -168,13 +168,6 @@ namespace math {
 		}
 
 		/**
-		 * \brief Operator '==' for Vector
-		 */
-		bool operator==(const i6eVector2 & b) const {
-			return std::fabs(_x - b.getX()) < EPSILON && std::fabs(_y - b.getY()) < EPSILON;
-		}
-
-		/**
 		 * \brief Operator '!=' for Vector
 		 */
 		bool operator!=(const i6eVector2 & b) const {
@@ -260,11 +253,20 @@ namespace math {
 	template<typename T>
 	const i6eVector2<T> i6eVector2<T>::ZERO = i6eVector2<T>(T(), T());
 
-	template<>
+	template<typename T>
+	typename std::enable_if<std::is_integral<T>::value, bool>::type operator==(const i6eVector2<T> & first, const i6eVector2<T> & second) {
+		return first.getX() == second.getX() && first.getY() == second.getY();
+	}
+
+	template<typename T>
+	typename std::enable_if<std::is_floating_point<T>::value, bool>::type operator==(const i6eVector2<T> & first, const i6eVector2<T> & second) {
+		return std::fabs(first.getX() - second.getX()) < FLT_EPSILON && std::fabs(first.getY() - second.getY()) < FLT_EPSILON;
+	}
+	/*template<>
 	bool i6eVector2<int32_t>::operator==(const i6eVector2<int32_t> & b) const;
 
 	template<>
-	bool i6eVector2<uint32_t>::operator==(const i6eVector2<uint32_t> & b) const;
+	bool i6eVector2<uint32_t>::operator==(const i6eVector2<uint32_t> & b) const;*/
 
 } /* namespace math */
 } /* namespace i6engine */

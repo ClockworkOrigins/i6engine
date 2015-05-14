@@ -29,7 +29,7 @@ namespace core {
 			std::stringstream ss(ip.substr(pos, bytend));
 			int t;
 			ss >> t;
-			_ip += std::pow(256, 3 - i) * t;
+			_ip += uint32_t(std::pow(256, 3 - i) * t);
 			pos = bytend + 1;
 		}
 	}
@@ -42,7 +42,7 @@ namespace core {
 			std::stringstream ss(str.substr(pos, bytend));
 			int t;
 			ss >> t;
-			_ip += std::pow(256, 3 - i) * t;
+			_ip += uint32_t(std::pow(256, 3 - i) * t);
 			pos = bytend + 1;
 		}
 		std::stringstream sport(str.substr(ipend + 1, str.length() - ipend - 1));

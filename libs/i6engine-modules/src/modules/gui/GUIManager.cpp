@@ -116,13 +116,16 @@ namespace modules {
 				ISIXE_LOG_ERROR("GUIManager", "An exception has occurred: GRAPHIC.guiAnimationPath not set in i6engine.ini!");
 				return;
 			}
-			boost::filesystem::directory_iterator iter(guiAnimationPath), dirEnd;
-			while (iter != dirEnd) {
-				if (is_regular_file(*iter)) {
-					std::string file = iter->path().string();
-					CEGUI::AnimationManager::getSingleton().loadAnimationsFromXML(utils::split(utils::split(file, "/").back(), "\\").back());
+			try {
+				boost::filesystem::directory_iterator iter(guiAnimationPath), dirEnd;
+				while (iter != dirEnd) {
+					if (is_regular_file(*iter)) {
+						std::string file = iter->path().string();
+						CEGUI::AnimationManager::getSingleton().loadAnimationsFromXML(utils::split(utils::split(file, "/").back(), "\\").back());
+					}
+					iter++;
 				}
-				iter++;
+			} catch (const boost::filesystem::filesystem_error &) {
 			}
 		} catch (CEGUI::Exception & e) {
 			ISIXE_THROW_API("GUI", e.getMessage());

@@ -13,14 +13,17 @@ namespace api {
 	}
 
 	void TextManager::initialize(const std::string & textDir) {
-		boost::filesystem::directory_iterator iter(textDir), dirEnd;
-		while (iter != dirEnd) {
-			if (boost::filesystem::is_regular_file(*iter)) {
-				std::string file = iter->path().string();
-				loadFile(file);
-				ISIXE_LOG_INFO("TextManager", "Loaded XML file '" << file << "'");
+		try {
+			boost::filesystem::directory_iterator iter(textDir), dirEnd;
+			while (iter != dirEnd) {
+				if (boost::filesystem::is_regular_file(*iter)) {
+					std::string file = iter->path().string();
+					loadFile(file);
+					ISIXE_LOG_INFO("TextManager", "Loaded XML file '" << file << "'");
+				}
+				iter++;
 			}
-			iter++;
+		} catch (const boost::filesystem::filesystem_error &) {
 		}
 	}
 
