@@ -62,12 +62,12 @@ namespace api {
 		/**
 		 * \brief get path from position to position
 		 */
-		std::vector<Vec3> getPath(const Vec3 & from, const Vec3 & to) const;
+		std::vector<Vec3> getPath(const Vec3 & from, const Vec3 & to) const override;
 
 		/**
 		 * \brief get path from position to waypoint
 		 */
-		std::vector<Vec3> getPath(const Vec3 & from, const std::string & to) const;
+		std::vector<Vec3> getPath(const Vec3 & from, const std::string & to) const override;
 	};
 
 } /* namespace api */

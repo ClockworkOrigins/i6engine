@@ -11,9 +11,11 @@ Enhancements:
 	- added NightVision compositor
 	- added possibility to configure NPCs in xml files
 	- added possibility to insert NPCs via scripts
+	- added new particle plugin with much more possibilities
 
 Fixes:
 	- fixed synchronization bug of rotation in PhysicalStateComponent
+	- LuaScripting subsystem really works now completely
 
 v 0.8.4
 

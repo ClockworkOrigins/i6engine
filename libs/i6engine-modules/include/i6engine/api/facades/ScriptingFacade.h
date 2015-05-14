@@ -27,24 +27,20 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-#ifdef ISIXE_WITH_LUA_SCRIPTING
+#if ISIXE_SCRIPTING == SCRIPTING_LUA
 	#include "i6engine/modules/luascripting/LuaScriptingManager.h"
-#else
-	#if ISIXE_WITH_PYTHON_SCRIPTING
-		#include "i6engine/modules/scripting/ScriptingManager.h"
-	#endif
+#elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
+	#include "i6engine/modules/scripting/ScriptingManager.h"
 #endif
 
 namespace i6engine {
 namespace api {
 
 	class ISIXE_MODULES_API ScriptingFacade {
-#ifdef ISIXE_WITH_LUA_SCRIPTING
+#if ISIXE_SCRIPTING == SCRIPTING_LUA
 		friend class modules::LuaScriptingManager;
-#else
-	#if ISIXE_WITH_PYTHON_SCRIPTING
+#elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
 		friend class modules::ScriptingManager;
-	#endif
 #endif
 
 	public:
@@ -53,7 +49,7 @@ namespace api {
 
 		void loadAllScripts() const;
 
-#if defined (ISIXE_WITH_LUA_SCRIPTING) || defined (ISIXE_WITH_PYTHON_SCRIPTING)
+#if ISIXE_SCRIPTING != SCRIPTING_NONE
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
 			_manager->callScript<Ret>(file, func, B...);
@@ -86,12 +82,10 @@ namespace api {
 		void resetSubSystem();
 
 	private:
-#ifdef ISIXE_WITH_LUA_SCRIPTING
+#if ISIXE_SCRIPTING == SCRIPTING_LUA
 		modules::LuaScriptingManager * _manager;
-#else
-	#if ISIXE_WITH_PYTHON_SCRIPTING
+#elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
 		modules::ScriptingManager * _manager;
-	#endif
 #endif
 
 		/**

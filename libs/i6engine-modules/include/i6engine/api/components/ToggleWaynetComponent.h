@@ -35,15 +35,15 @@ namespace api {
 
 		void Finalize() override;
 
-		attributeMap synchronize() const {
+		attributeMap synchronize() const  override {
 			return {};
 		}
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const  override {
 			return "ToggleWaynet";
 		}
 
-		std::vector<componentOptions> getComponentOptions() {
+		std::vector<componentOptions> getComponentOptions() override {
 			return {};
 		}
 

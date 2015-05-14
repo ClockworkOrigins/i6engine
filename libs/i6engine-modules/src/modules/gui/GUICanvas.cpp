@@ -67,7 +67,6 @@ namespace modules {
 	}
 
 	void GUICanvas::load(const std::string & name, const std::string & file, GUIManager * manager, const GUIFactory & factory, std::map<std::string, api::GUIWidget *> & widgets, tinyxml2::XMLElement * node) {
-		api::GUIWidget * gw = widgets[name];
 		for (tinyxml2::XMLElement * prop = node->FirstChildElement("Property"); prop != nullptr; prop = prop->NextSiblingElement("Property")) {
 			if (!prop->Attribute("type") || !prop->GetText()) {
 				ISIXE_THROW_FAILURE("GUICanvas", "Property of widget " << name << " has no type!");

@@ -131,7 +131,7 @@ set(i6modulesSrc
 	${srcdir}/modules/graphics/compositors/HDRListener.cpp
 	${srcdir}/modules/graphics/compositors/HDRLogic.cpp
 	${srcdir}/modules/graphics/graphicswidgets/MovableText.cpp
-	
+
 	${srcdir}/modules/gui/GUICanvas.cpp
 	${srcdir}/modules/gui/GUIController.cpp
 	${srcdir}/modules/gui/GUIFactory.cpp
@@ -194,7 +194,7 @@ IF(ISIXE_NETWORK)
 	)
 ENDIF(ISIXE_NETWORK)
 
-IF(ISIXE_WITH_LUA_SCRIPTING)
+IF(SCRIPTING_LUA)
 	include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
 	include_directories(${I6ENGINE_LUABIND_INCLUDE_DIR})
 
@@ -205,9 +205,7 @@ IF(ISIXE_WITH_LUA_SCRIPTING)
 		${srcdir}/modules/luascripting/LuaScriptingMailbox.cpp
 		${srcdir}/modules/luascripting/LuaScriptingManager.cpp
 	)
-ENDIF(ISIXE_WITH_LUA_SCRIPTING)
-
-IF(ISIXE_WITH_PYTHON_SCRIPTING)
+ELSEIF(SCRIPTING_PYTHON)
 	set(i6modulesSrc
 		${i6modulesSrc}
 
@@ -215,7 +213,7 @@ IF(ISIXE_WITH_PYTHON_SCRIPTING)
 		${srcdir}/modules/scripting/ScriptingMailbox.cpp
 		${srcdir}/modules/scripting/ScriptingManager.cpp
 	)
-ENDIF(ISIXE_WITH_PYTHON_SCRIPTING)
+ENDIF()
 
 # SOURCE_GROUP required for file grouping in Visual Studio
 source_group(api\\components /api/components/*)
@@ -236,7 +234,7 @@ source_group(modules\\network /modules/network/*)
 source_group(modules\\object /modules/object/*)
 source_group(modules\\physics /modules/physics/*)
 source_group(modules\\luascripting /modules/luascripting/*)
-source_group(modules\\scripting /modules/scripting/*)
+source_group(modules\\pythonscripting /modules/scripting/*)
 
 IF(ISIXE_BUILD_SHARED)
 	add_library(i6engine-modules SHARED ${i6modulesSrc})
@@ -254,13 +252,11 @@ IF(ISIXE_WITH_AUDIO)
 	target_link_libraries(i6engine-modules ${OPENALSOFT_LIBRARIES})
 ENDIF(ISIXE_WITH_AUDIO)
 
-IF(ISIXE_WITH_LUA_SCRIPTING)
+IF(SCRIPTING_LUA)
 	target_link_libraries(i6engine-modules lua luabind)
-ENDIF(ISIXE_WITH_LUA_SCRIPTING)
-
-IF(ISIXE_WITH_PYTHON_SCRIPTING)
+ELSEIF(SCRIPTING_PYTHON)
 	target_link_libraries(i6engine-modules ${PYTHON_LIBRARIES})
-ENDIF(ISIXE_WITH_PYTHON_SCRIPTING)
+ENDIF()
 
 IF(ISIXE_NETWORK)
 	target_link_libraries(i6engine-modules ${M2etis_LIBRARIES})

@@ -65,8 +65,6 @@ namespace sample {
 	void WaynetApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
 
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
-
 		// sets gravity for the game... here like on earth
 		std::string gravityString;
 		_iniParser.getValue("PHYSIC", "gravity", gravityString);

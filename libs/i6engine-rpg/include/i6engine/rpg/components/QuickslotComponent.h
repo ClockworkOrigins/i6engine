@@ -16,15 +16,15 @@ namespace components {
 
 		static api::ComPtr createC(const int64_t id, const api::attributeMap & params);
 
-		void Init();
+		void Init() override;
 
 		void Tick() override;
 
 		void Finalize() override;
 
-		api::attributeMap synchronize() const;
+		api::attributeMap synchronize() const override;
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "Quickslot";
 		}
 

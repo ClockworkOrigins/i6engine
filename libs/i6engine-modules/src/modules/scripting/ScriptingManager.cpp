@@ -30,7 +30,7 @@ namespace modules {
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
 			ISIXE_THROW_FAILURE("ScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
 		}
-#if defined (ISIXE_WITH_PYTHON_SCRIPTING) && !defined (ISIXE_WITH_LUA_SCRIPTING)
+#if ISIXE_SCRIPTING == SCRIPTING_PYTHON
 		api::EngineController::GetSingleton().getScriptingFacade()->_manager = this;
 #endif
 	}

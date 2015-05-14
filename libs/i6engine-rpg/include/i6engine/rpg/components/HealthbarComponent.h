@@ -48,7 +48,7 @@ namespace components {
 			return {};
 		}
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "Healthbar";
 		}
 

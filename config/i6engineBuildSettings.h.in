@@ -13,21 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #ifndef __I6ENGINE_BUILDSETTINGS_H__
 #define __I6ENGINE_BUILDSETTINGS_H__
- 
+
 #cmakedefine ISIXE_BUILD_SHARED
- 
+
 #cmakedefine ISIXE_LOGGING
 #cmakedefine ISIXE_WITH_AUDIO
 #cmakedefine ISIXE_NETWORK
 #cmakedefine ISIXE_PROFILING
-#cmakedefine ISIXE_WITH_LUA_SCRIPTING
-#cmakedefine ISIXE_WITH_PYTHON_SCRIPTING
 #cmakedefine ISIXE_WITH_RPG
- 
+
+// Enum
+#define SCRIPTING_NONE 0
+#define SCRIPTING_LUA 1
+#define SCRIPTING_PYTHON 2
+// takes one of the above values (name of the constant)
+#cmakedefine ISIXE_SCRIPTING @ISIXE_SCRIPTING@
+
 #define BT_USE_DOUBLE_PRECISION
 #define GTEST_LINKED_AS_SHARED_LIBRARY 1
- 
+
 #endif /* __I6ENGINE_BUILDSETTINGS_H__ */

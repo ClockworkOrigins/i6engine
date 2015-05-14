@@ -18,14 +18,14 @@
 # lua
 #####################################################################################
 
-IF(ISIXE_WITH_LUA_SCRIPTING)
+IF(SCRIPTING_LUA)
 	add_subdirectory(lua)
-ENDIF(ISIXE_WITH_LUA_SCRIPTING)
+ENDIF()
 
 #####################################################################################
 # luabind
 #####################################################################################
 
-IF(ISIXE_WITH_LUA_SCRIPTING)
+IF(SCRIPTING_LUA)
 	add_subdirectory(luabind)
-ENDIF(ISIXE_WITH_LUA_SCRIPTING)
+ENDIF()

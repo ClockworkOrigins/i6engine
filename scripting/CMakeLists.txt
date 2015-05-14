@@ -18,14 +18,14 @@
 # lua
 #####################################################################################
 
-IF(ISIXE_WITH_LUA_SCRIPTING)
+IF(SCRIPTING_LUA)
 	add_subdirectory(lua)
-ENDIF(ISIXE_WITH_LUA_SCRIPTING)
+ENDIF()
 
 #####################################################################################
 # python
 #####################################################################################
 
-IF(ISIXE_WITH_PYTHON_SCRIPTING)
+IF(SCRIPTING_PYTHON)
 	add_subdirectory(python)
-ENDIF(ISIXE_WITH_PYTHON_SCRIPTING)
+ENDIF()

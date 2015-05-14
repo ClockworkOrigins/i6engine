@@ -26,7 +26,7 @@ namespace i6engine {
 namespace api {
 
 	ScriptingFacade::ScriptingFacade()
-#if defined (ISIXE_WITH_LUA_SCRIPTING) || defined (ISIXE_WITH_PYTHON_SCRIPTING)
+#if ISIXE_SCRIPTING
 		: _manager(nullptr)
 #endif
 	{
