@@ -67,6 +67,8 @@ namespace utils {
 		 */
 		template<typename... B>
 		struct InitDependencies {
+			InitDependencies() {
+			}
 			static void Init() {
 			}
 		};
@@ -79,6 +81,8 @@ namespace utils {
 			InitDependencies() {
 				Init();
 			}
+			~InitDependencies() {
+			}
 			static void Init() {
 				A::GetSingleton();
 				InitDependencies<B...>::Init();
@@ -89,9 +93,8 @@ namespace utils {
 		 * \brief initializes dependencies of the Singleton and the new Singleton, returns reference to the Singleton
 		 */
 		static boost::shared_ptr<T> & Init() {
-			static InitDependencies<Dependencies...> id;
+			static const InitDependencies<Dependencies...> id;
 			static boost::shared_ptr<T> _ptrSingleton = boost::shared_ptr<T>(new T());
-			if (&id) {}
 			return _ptrSingleton;
 		}
 

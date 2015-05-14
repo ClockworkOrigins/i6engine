@@ -16,7 +16,7 @@ namespace components {
 
 		static api::ComPtr createC(const int64_t id, const api::attributeMap & params);
 
-		void Init();
+		void Init() override;
 
 		void Tick() override;
 

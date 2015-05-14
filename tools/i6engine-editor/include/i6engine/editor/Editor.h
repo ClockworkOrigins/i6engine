@@ -60,12 +60,12 @@ namespace editor {
 		/**
 		 * \brief called during shutdown
 		 */
-		void Finalize();
+		void Finalize() override;
 
 		/**
 		 * \brief called during each tick of the editor
 		 */
-		void Tick();
+		void Tick() override;
 
 		/**
 		 * \brief enters an submenu entry to the window titlebar with a callback function
