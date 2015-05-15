@@ -226,11 +226,13 @@ add_library(Plugin_ParticleUniverse SHARED ${pluginParticleUniverseSrc})
 
 IF(UNIX)
 	set_target_properties(Plugin_ParticleUniverse PROPERTIES PREFIX "")
+	set_target_properties(Plugin_ParticleUniverse PROPERTIES SUFFIX ".so.1.9.0")
+
+	target_link_libraries(Plugin_ParticleUniverse ${BOOST_LIBRARIES} ${OGRE_LIBRARIES})
 ENDIF(UNIX)
 
-target_link_libraries(Plugin_ParticleUniverse ${BOOST_LIBRARIES} ${OGRE_LIBRARIES})
-
 IF(WIN32)
+	target_link_libraries(Plugin_ParticleUniverse ${BOOST_LIBRARIES} ${OGRE_LIBRARIES})
 	add_custom_command(TARGET Plugin_ParticleUniverse POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Plugin_ParticleUniverse.dll ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
