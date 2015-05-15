@@ -1,11 +1,23 @@
 /*
 -----------------------------------------------------------------------------------------------
-This source file is part of the Particle Universe product.
+Copyright (C) 2013 Henry van Merode. All rights reserved.
 
-Copyright (c) 2012 Henry van Merode
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-Usage of this program is licensed under the terms of the Particle Universe Commercial License.
-You can find a copy of the Commercial License in the Particle Universe package.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
@@ -368,7 +380,7 @@ namespace ParticleUniverse
 
 			/** Function to suppress notification of an emission change.
 			@remarks
-				This function is typically used when notification isn¥t needed anymore. An example for this 
+				This function is typically used when notification isn≈Ωt needed anymore. An example for this 
 				situation is for instance in case the ParticleTechnique is destroyed, which also causes the
 				emitters to be destroyed.
 	        */
@@ -451,7 +463,7 @@ namespace ParticleUniverse
 			bool makeParticleLocal(Particle* particle);
 
 			/** Is 'true' when the bounding box is wrapped tight around the particle system or 'false' when the
-				bounding box is only increasing and doesn¥t shrink when the particle system shrinks.
+				bounding box is only increasing and doesn≈Ωt shrink when the particle system shrinks.
 			*/
 			bool hasTightBoundingBox(void) const;
 
@@ -516,11 +528,11 @@ namespace ParticleUniverse
 
 			/** Return number of all emitted particles
 			*/
-			inline size_t getNumberOfEmittedParticles(void);
+			size_t getNumberOfEmittedParticles(void);
 
 			/** Return number of emitted particles of a certain type
 			*/
-			inline size_t getNumberOfEmittedParticles(Particle::ParticleType particleType);
+			size_t getNumberOfEmittedParticles(Particle::ParticleType particleType);
 
 			/** Get/set a category. See 'mCategory' for a description of its use.
 			*/
@@ -627,7 +639,7 @@ namespace ParticleUniverse
 	        */
 			Real mTimeSinceLastUpdate;
 
-			/** If set, the ParticleSystem automatically stops after ¥mFixedTimeout¥ seconds.
+			/** If set, the ParticleSystem automatically stops after ≈ΩmFixedTimeout≈Ω seconds.
 	        */
 			Real mFixedTimeout;
 
@@ -660,7 +672,7 @@ namespace ParticleUniverse
 			bool mMainCameraNameSet;
 			Camera* mCurrentCamera;
 
-			/** Scale the Particle Systems¥ relative positions and size.
+			/** Scale the Particle Systems≈Ω relative positions and size.
 			@remarks
 				Scaling is done on a Particle System level and is independent of the scaling of the SceneNode
 		    */

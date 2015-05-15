@@ -53,18 +53,21 @@ cd "${BUILD_DIR}"
 chmod 700 ./*
 ./configure \
 	--prefix="${PREFIX}"\
-	--disable-shared\
 	>/dev/null
 
 status "Building wxWidgets"
-make -j 8 #>/dev/null
+make -j 8 >/dev/null
 
 status "Installing wxWidgets"
-make -j 8 install #>/dev/null
+make -j 8 install >/dev/null
 
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -rf "${BUILD_ROOT}" >/dev/null
+
+mv "${PREFIX}/include/wx-2.8/wx" "${PREFIX}/include/wx"
+rm -rf "${PREFIX}/include/wx-2.8"
+cp -rf "${PREFIX}/lib/wx/include/gtk2-ansi-release-2.8/wx" "${PREFIX}/include"
 
 touch "${PREFIX}"
 

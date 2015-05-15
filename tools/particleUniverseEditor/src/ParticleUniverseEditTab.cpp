@@ -2999,7 +2999,8 @@ void EditTools::OnCursor(wxCommandEvent& event)
 {
 	// Reset the cursor
 	EditTab* parent = static_cast<EditTab*>(GetParent());
-	parent->getEditCanvas()->OnMouseRButtonPressed(wxMouseEvent(0));
+	wxMouseEvent command;
+	parent->getEditCanvas()->OnMouseRButtonPressed(command);
 }
 //-----------------------------------------------------------------------
 void EditTools::notifyConnectionsChanged(void)

@@ -1,11 +1,23 @@
 /*
 -----------------------------------------------------------------------------------------------
-This source file is part of the Particle Universe product.
+Copyright (C) 2013 Henry van Merode. All rights reserved.
 
-Copyright (c) 2012 Henry van Merode
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-Usage of this program is licensed under the terms of the Particle Universe Commercial License.
-You can find a copy of the Commercial License in the Particle Universe package.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
@@ -19,6 +31,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "ParticleUniverseController.h"
 #include "OgreSceneManager.h"
 #include "OgreRoot.h"
+#include "OgreSceneNode.h"
+#include "OgreMesh.h"
 
 namespace ParticleUniverse
 {
@@ -87,7 +101,7 @@ namespace ParticleUniverse
 		mPauseTime(0.0f),
 		mPauseTimeSet(false),
 		mPauseTimeElapsed(0.0f),
-		mTemplateName(StringUtil::BLANK),
+		mTemplateName(BLANK_STRING),
 		mStopFadeSet(false),
 		mLatestOrientation(Quaternion::IDENTITY),
 		mRotationOffset(Quaternion::IDENTITY),
@@ -138,7 +152,7 @@ namespace ParticleUniverse
 		mPauseTime(0.0f),
 		mPauseTimeSet(false),
 		mPauseTimeElapsed(0.0f),
-		mTemplateName(StringUtil::BLANK),
+		mTemplateName(BLANK_STRING),
 		mStopFadeSet(false),
 		mLatestOrientation(Quaternion::IDENTITY),
 		mRotationOffset(Quaternion::IDENTITY),
@@ -552,7 +566,7 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	ParticleTechnique* ParticleSystem::getTechnique (const String& techniqueName) const
 	{
-		if (techniqueName == StringUtil::BLANK)
+		if (techniqueName == BLANK_STRING)
 			return 0;
 
 		ParticleTechniqueConstIterator it;
@@ -599,11 +613,13 @@ namespace ParticleUniverse
 	void ParticleSystem::destroyAllTechniques (void)
 	{
 		ParticleTechniqueIterator it;
-		for (it = mTechniques.begin(); it != mTechniques.end(); ++it)
+		while (mTechniques.size() > 0)
 		{
-			ParticleSystemManager::getSingletonPtr()->destroyTechnique(*it);
+			it = mTechniques.begin();
+			ParticleTechnique* tech = *it;
+			ParticleSystemManager::getSingletonPtr()->destroyTechnique(tech);
+			mTechniques.erase(it);
 		}
-		mTechniques.clear();
 	}
 	//-----------------------------------------------------------------------
 	const Real ParticleSystem::getFastForwardTime(void) const

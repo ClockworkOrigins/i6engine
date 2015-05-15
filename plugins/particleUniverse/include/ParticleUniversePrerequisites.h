@@ -1,11 +1,23 @@
 /*
 -----------------------------------------------------------------------------------------------
-This source file is part of the Particle Universe product.
+Copyright (C) 2013 Henry van Merode. All rights reserved.
 
-Copyright (c) 2012 Henry van Merode
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-Usage of this program is licensed under the terms of the Particle Universe Commercial License.
-You can find a copy of the Commercial License in the Particle Universe package.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
@@ -22,7 +34,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #if (PU_RENDERER_OGRE)
 	#if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32) && !defined(OGRE_STATIC_LIB)
-	#   ifdef Plugin_ParticleUniverse_EXPORTS
+	#   ifdef PARTICLE_UNIVERSE_EXPORTS
 	#       define _ParticleUniverseExport __declspec(dllexport)
 	#   else
 	#       if defined( __MINGW32__ )
@@ -37,7 +49,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 	#   define _ParticleUniverseExport
 	#endif
 #else
-#ifdef Plugin_ParticleUniverse_EXPORTS
+	#ifdef PARTICLE_UNIVERSE_EXPORTS
 	#   define _ParticleUniverseExport __declspec(dllexport)
 	#else
 	#   if defined( __MINGW32__ )
@@ -77,7 +89,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 // 4217 - reference to an imported symbol that has been defined locally
 // 4251 - class 'std::list<T*>' needs to have dll-interface to be used by clients of class
 // 4800 - 'unsigned int' : forcing value to bool 'true' or 'false' (performance warning)
-#pragma warning (disable : 4217 4251 4800)
+#ifdef WIN32
+	#pragma warning (disable : 4217 4251 4800)
+#endif
 
 namespace ParticleUniverse
 {

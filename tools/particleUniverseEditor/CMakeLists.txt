@@ -28,8 +28,6 @@ include_directories(${CMAKE_SOURCE_DIR}/plugins/particleUniverse/include)
 set(srcdir ./src)
 
 set(particleUniverseEditorSrc
-	${srcdir}/main.cpp
-
 	${srcdir}/ParticleUniverseAffectorPropertyWindow.cpp
 	${srcdir}/ParticleUniverseAnimationWindow.cpp
 	${srcdir}/ParticleUniverseBehaviourPropertyWindow.cpp
@@ -164,6 +162,14 @@ set(particleUniverseEditorSrc
 	${srcdir}/RendererPropertyWindow/SphereRendererPropertyWindow.cpp
 )
 
+IF(WIN32)
+	set(particleUniverseEditorSrc
+		${particleUniverseEditorSrc}
+
+		${srcdir}/main.cpp
+		)
+ENDIF(WIN32)
+
 source_group(AffectorPropertyWindow /AffectorPropertyWindow/*)
 source_group(BehaviourPropertyWindow /BehaviourPropertyWindow/*)
 source_group(EmitterPropertyWindow /EmitterPropertyWindow/*)
@@ -175,6 +181,12 @@ source_group(propgrid /propgrid/*)
 source_group(RendererPropertyWindow /RendererPropertyWindow/*)
 
 add_executable(ParticleUniverseEditor ${particleUniverseEditorSrc})
+
+IF(UNIX)
+	target_compile_options(ParticleUniverseEditor PRIVATE "-D__WXGTK__")
+	target_link_libraries(ParticleUniverseEditor glib-2.0 jpeg png pthread X11 z)
+ENDIF(UNIX)
+
 target_link_libraries(ParticleUniverseEditor Plugin_ParticleUniverse ${OGRE_LIBRARIES} ${WXWIDGETS_LIBRARIES})
 
 IF(WIN32)

@@ -63,9 +63,9 @@ set(luaSrc
 add_library(lua STATIC ${luaSrc})
 
 IF(UNIX)
-	target_compile_options(lua PRIVATE "-DLUA_USE_DLOPEN")
+	target_compile_options(lua PRIVATE "-DLUA_USE_LINUX")
 	target_link_libraries(lua dl)
-ENDIF()
+ENDIF(UNIX)
 set_target_properties(lua PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 add_executable(luap ${srcdir}/lua.c)

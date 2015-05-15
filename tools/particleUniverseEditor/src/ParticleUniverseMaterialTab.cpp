@@ -217,7 +217,8 @@ void MaterialTab::fillMaterials(void)
 {
 	mMaterialListBox->loadMaterials();
 	restoreSelectedMaterialName();
-	selectMaterial(mMaterialListBox->GetStringSelection());
+	wxString param = mMaterialListBox->GetStringSelection();
+	selectMaterial(param);
 }
 //-----------------------------------------------------------------------
 void MaterialTab::selectMaterial(wxString& materialName)

@@ -623,7 +623,7 @@ void AnimationWindow::displayMeshInfo(Ogre::Entity* entity)
 	{
 		subEntity = entity->getSubEntity(i);
 		wxString materialName = ogre2wx(subEntity->getMaterialName());
-		mMeshInfo->InsertItem(index, wxString::Format(_("Material submesh(%u): %s"), i, materialName));
+		mMeshInfo->InsertItem(index, wxString::Format(_("Material submesh(%u): %s"), i, materialName.c_str()));
 		++index;
 	}
 

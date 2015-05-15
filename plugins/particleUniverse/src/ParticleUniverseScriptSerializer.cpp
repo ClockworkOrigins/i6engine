@@ -1,11 +1,23 @@
 /*
 -----------------------------------------------------------------------------------------------
-This source file is part of the Particle Universe product.
+Copyright (C) 2013 Henry van Merode. All rights reserved.
 
-Copyright (c) 2012 Henry van Merode
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-Usage of this program is licensed under the terms of the Particle Universe Commercial License.
-You can find a copy of the Commercial License in the Particle Universe package.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
@@ -21,11 +33,11 @@ namespace ParticleUniverse
 {
 	//-----------------------------------------------------------------------
 	ParticleScriptSerializer::ParticleScriptSerializer(void) :
-		mPath(StringUtil::BLANK),
+		mPath(BLANK_STRING),
 		mIndentation(0),
-		mKeyword(StringUtil::BLANK),
+		mKeyword(BLANK_STRING),
 		mStreamToFile(true),
-		mScriptString(StringUtil::BLANK)
+		mScriptString(BLANK_STRING)
 	{
 		mTab[0] = 0;
 		mTab[1] = 48;
@@ -84,7 +96,7 @@ namespace ParticleUniverse
 		short indentation3,
 		short indentation4)
 	{
-		String base = StringUtil::BLANK;
+		String base = BLANK_STRING;
 		base.reserve(256);
 		_appendTabbedString(0, base, s0, indentation0);
 		_appendTabbedString(1, base, s1, indentation1);
@@ -105,7 +117,7 @@ namespace ParticleUniverse
 		short indentation2,
 		short indentation3)
 	{
-		String base = StringUtil::BLANK;
+		String base = BLANK_STRING;
 		_appendTabbedString(0, base, s0, indentation0);
 		_appendTabbedString(1, base, s1, indentation1);
 		_appendTabbedString(2, base, s2, indentation2);
@@ -122,7 +134,7 @@ namespace ParticleUniverse
 		short indentation1,
 		short indentation2)
 	{
-		String base = StringUtil::BLANK;
+		String base = BLANK_STRING;
 		_appendTabbedString(0, base, s0, indentation0);
 		_appendTabbedString(1, base, s1, indentation1);
 		_appendTabbedString(2, base, s2, indentation2);
@@ -136,7 +148,7 @@ namespace ParticleUniverse
 		short indentation0,
 		short indentation1)
 	{
-		String base = StringUtil::BLANK;
+		String base = BLANK_STRING;
 		_appendTabbedString(0, base, s0, indentation0);
 		_appendTabbedString(1, base, s1, indentation1);
 		base += "\n";
@@ -147,7 +159,7 @@ namespace ParticleUniverse
 		const String& s0,
 		short indentation0)
 	{
-		String base = StringUtil::BLANK;
+		String base = BLANK_STRING;
 		_appendTabbedString(0, base, s0, indentation0);
 		base += "\n";
 		_stream(base);
@@ -177,7 +189,7 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	String ParticleScriptSerializer::toString(vector<Real> vector, bool applySqrt)
 	{
-        StringUtil::StrStreamType stream;
+    StringStream stream;
 		if (!vector.empty())
 		{
 			for (size_t i = 0; i < vector.size(); ++i)

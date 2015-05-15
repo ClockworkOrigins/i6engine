@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-This source file is part of the Particle Universe product.
+
 
 Copyright (c) 2006-2008 Henry van Merode
 

@@ -56,7 +56,8 @@ void MaterialListBox::loadMaterials(void)
 //-----------------------------------------------------------------------
 void MaterialListBox::OnMaterialsClick(wxCommandEvent& event)
 {
-	mMaterialTab->selectMaterial(GetStringSelection());
+	wxString param = GetStringSelection();
+	mMaterialTab->selectMaterial(param);
 }
 //-----------------------------------------------------------------------
 void MaterialListBox::addMaterialName(wxString& materialName)

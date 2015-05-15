@@ -36,12 +36,13 @@ const wxString& Utils::getCurrentDirectory(void)
 	    //path = getcwd(path, size);
 		//CURRENT_DIR_ATTR = wxString(path);
 		//delete [] path;
-
+#ifdef WIN32
 		size_t size = 2048;
 		wchar_t* path = new wchar_t[size];
 	    path = _wgetcwd(path, size);
 		CURRENT_DIR_ATTR = wxString(path);
 		delete [] path;
+#endif
 	}
 	return CURRENT_DIR_ATTR;
 }

@@ -75,7 +75,7 @@ namespace modules {
 		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
-			_callScripts.push(std::bind([this, file, func](args... B) {
+			_callScripts.push(std::bind([this, file, func](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				if (!parseScript(file, false)) {
 					return;
@@ -84,7 +84,7 @@ namespace modules {
 					lua_getglobal(_luaState, func.c_str());
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
-					luabind::call_function<Ret>(o, B...);
+					luabind::call_function<Ret>(o, A...);
 				} catch (const luabind::error & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
@@ -96,7 +96,7 @@ namespace modules {
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScript(const std::string & file, const std::string & func, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
-			_callScripts.push(std::bind([this, file, func, ret](args... B) {
+			_callScripts.push(std::bind([this, file, func, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				if (!parseScript(file, false)) {
 					ret->push(Ret());
@@ -105,7 +105,7 @@ namespace modules {
 					lua_getglobal(_luaState, func.c_str());
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
-					ret->push(Ret(luabind::call_function<Ret>(o, B...)));
+					ret->push(Ret(luabind::call_function<Ret>(o, A...)));
 				} catch (const luabind::error & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
@@ -117,13 +117,13 @@ namespace modules {
 
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
-			_callScripts.push(std::bind([this, func](args... B) {
+			_callScripts.push(std::bind([this, func](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				try {
 					lua_getglobal(_luaState, func.c_str());
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
-					luabind::call_function<Ret>(o, B...);
+					luabind::call_function<Ret>(o, A...);
 				} catch (const luabind::error & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
@@ -135,13 +135,13 @@ namespace modules {
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
-			_callScripts.push(std::bind([this, func, ret](args... B) {
+			_callScripts.push(std::bind([this, func, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				try {
 					lua_getglobal(_luaState, func.c_str());
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
-					ret->push(Ret(luabind::call_function<Ret>(o, B...)));
+					ret->push(Ret(luabind::call_function<Ret>(o, A...)));
 				} catch (const luabind::error & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {

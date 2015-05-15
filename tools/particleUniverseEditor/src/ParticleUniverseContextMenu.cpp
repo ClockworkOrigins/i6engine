@@ -154,11 +154,13 @@ void ContextMenu::initialise(void)
 //-----------------------------------------------------------------------
 void ContextMenu::hideIfNeeded(void)
 {
+#ifdef WIN32
 	if (!IsMouseInWindow())
 	{
 		// Hide the context menu if the mouse is in another window
 		Hide();
 	}
+#endif
 }
 //-----------------------------------------------------------------------
 void ContextMenu::hideContextMenu(void)

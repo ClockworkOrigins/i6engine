@@ -25,9 +25,9 @@
 
 #ifdef __WXGTK20__
 extern "C" {
-#include <gdk/gdkx.h>
-#include <gtk/gtk.h>
-#include <wx/gtk/win_gtk.h>
+//#include <gdk/gdkx.h>
+//#include <gtk/gtk.h>
+//#include <wx/gtk/win_gtk.h>
 }
 #endif
 
@@ -228,7 +228,7 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl)
     pl["externalWindowHandle"] = all2std((size_t)GetHandle());
 
 #elif defined(__WXGTK20__)
-
+#ifdef WIN32
     /* 
      * Ok here is the most important comment about the GTK+
      * part of this lib.
@@ -278,7 +278,7 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl)
     pl["parentWindowHandle"] = all2std(window);
 
 #endif
-
+#endif
 #else
 # error Not supported on this platform.
 #endif

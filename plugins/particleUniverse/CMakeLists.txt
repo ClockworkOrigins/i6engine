@@ -224,6 +224,10 @@ source_group(ParticleRenderers /ParticleRenderers/*)
 
 add_library(Plugin_ParticleUniverse SHARED ${pluginParticleUniverseSrc})
 
+IF(UNIX)
+	set_target_properties(Plugin_ParticleUniverse PROPERTIES PREFIX "")
+ENDIF(UNIX)
+
 target_link_libraries(Plugin_ParticleUniverse ${BOOST_LIBRARIES} ${OGRE_LIBRARIES})
 
 IF(WIN32)

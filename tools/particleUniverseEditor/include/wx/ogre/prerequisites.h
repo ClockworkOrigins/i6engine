@@ -203,7 +203,7 @@ static ComponentRelationDirection getOppositeRelationDirection(ComponentRelation
 		return CRDIR_PRIMARY;
 	}
 	return CRDIR_EQUAL;
-};
+}
 
 static const ComponentSubType CST_UNDEFINED = wxT("<undefined>");
 

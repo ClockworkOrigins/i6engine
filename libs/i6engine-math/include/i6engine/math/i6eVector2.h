@@ -22,6 +22,7 @@
 #ifndef __I6ENGINE_MATH_I6EVECTOR2_H__
 #define __I6ENGINE_MATH_I6EVECTOR2_H__
 
+#include <cfloat>
 #include <cmath>
 #include <cstdint>
 #include <map>
