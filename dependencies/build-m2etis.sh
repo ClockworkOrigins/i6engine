@@ -27,7 +27,7 @@ BUILD_FLAG=${2}
 ARCHIVE="m2etis-0.3-rev26.zip"
 BUILD_DIR="${BUILD_ROOT}/m2etis-0.3-rev26"
 
-PREFIX="${PWD}/m2etis"
+PREFIX="${DEP_DIR}/m2etis"
 DEBUG_FLAG="DEBUG"
 RELEASE_FLAG="RELEASE"
 PARALLEL_FLAG=""
@@ -63,7 +63,7 @@ rm -rf "${PREFIX}"
 
 status "Extracting M2etis"
 cd "${BUILD_ROOT}"
-unzip "${EX_DIR}/${ARCHIVE}" >/dev/null
+unzip "${ARCHIVE}" >/dev/null
 
 cd "${BUILD_DIR}"
 
@@ -115,7 +115,6 @@ make install
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-rm -r "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" >/dev/null
 
 touch "${PREFIX}"

@@ -5,7 +5,7 @@ cd "$(readlink -f "$(dirname "${0}")")"
 ARCHIVE="openal-soft-1.16.0.tar.bz2"
 BUILD_DIR="${BUILD_ROOT}/openal-soft-1.16.0"
 
-PREFIX="${PWD}/OpenAL"
+PREFIX="${DEP_DIR}/OpenAL"
 DEBUG_FLAG="DEBUG"
 RELEASE_FLAG="RELEASE"
 PARALLEL_FLAG=""
@@ -30,7 +30,7 @@ rm -rf "${PREFIX}"
 
 
 cd "${BUILD_ROOT}"
-tar xfvj "${EX_DIR}/${ARCHIVE}" > /dev/null
+tar xfvj "${ARCHIVE}" > /dev/null
 
 cd "${BUILD_DIR}"
 
@@ -53,7 +53,6 @@ make -j 8 > /dev/null
 make install > /dev/null
 
 cd "${DEP_DIR}"
-rm -r "${BUILD_DIR}" > /dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" > /dev/null
 
 touch "${PREFIX}"

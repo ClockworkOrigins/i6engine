@@ -28,7 +28,7 @@ if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
 fi
 
-PREFIX="${PWD}/ois/"
+PREFIX="${DEP_DIR}/ois/"
 RELEASE_FLAG=""
 DEBUG_FLAG="CFLAGS=-g"
 PARALLEL_FLAG=""
@@ -51,31 +51,22 @@ fi
 
 title "Compile OIS"
 
-if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
-	status "OIS seems to be up to date, skipping build"
-	exit 0
-fi
-
 ./download-dependency.sh ${ARCHIVE}
 ./download-dependency.sh ois-gcc-4.7.patch
 ./download-dependency.sh ois-aclocal-1.13.patch
 ./download-dependency.sh ois-1.3-linkerror.patch
-
-mkdir -p ${PATCH_DIR}
-
-mv ${EX_DIR}/*.patch ${PATCH_DIR}/
 
 status "Cleaning OIS"
 rm -rf "${PREFIX}"
 
 status "Extracting OIS"
 cd "${BUILD_ROOT}"
-tar xfz "${EX_DIR}/${ARCHIVE}" >/dev/null
+tar xfz "${ARCHIVE}" >/dev/null
 
 # patch for support with gcc 4.7
-patch -p0 -i "${PATCH_DIR}/ois-gcc-4.7.patch"
-patch -p0 -i "${PATCH_DIR}/ois-aclocal-1.13.patch"
-patch -p0 -i "${PATCH_DIR}/ois-1.3-linkerror.patch"
+patch -p0 -i "ois-gcc-4.7.patch"
+patch -p0 -i "ois-aclocal-1.13.patch"
+patch -p0 -i "ois-1.3-linkerror.patch"
 
 status "Bootstrapping OIS"
 cd "${BUILD_DIR}"
@@ -97,8 +88,7 @@ make ${PARALLEL_FLAG} install >/dev/null
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-rm -r "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" >/dev/null
 
 touch "${PREFIX}"
 

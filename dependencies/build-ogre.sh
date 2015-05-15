@@ -28,7 +28,7 @@ if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
 fi
 
-PREFIX="${PWD}/ogre/"
+PREFIX="${DEP_DIR}/ogre/"
 DEBUG_FLAG="-DCMAKE_BUILD_TYPE=Debug"
 RELEASE_FLAG="-DCMAKE_BUILD_TYPE=Release"
 PARALLEL_FLAG=""
@@ -45,27 +45,14 @@ fi
 
 title "Compile Ogre"
 
-if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
-	status "Ogre seems to be up to date, skipping build"
-	exit 0
-fi
-
 ./download-dependency.sh ${ARCHIVE}
-#./download-dependency.sh ogre-freetype.patch
-
-#mkdir -p ${PATCH_DIR}
-
-#mv ${EX_DIR}/ogre-freetype.patch ${PATCH_DIR}/
 
 status "Cleaning Ogre"
-rm -rf "${DEST_DIR}"
+rm -rf "${PREFIX}"
 
 status "Extracting Ogre"
 cd "${BUILD_ROOT}"
-tar xfj "${EX_DIR}/${ARCHIVE}"
-
-# applying freetype patch
-#patch -p0 -i "${PATCH_DIR}ogre-freetype.patch"
+tar xfj "${ARCHIVE}"
 
 # ../cmake_files/FindBoost.cmake tries to find the libs here
 export BOOST_ROOT="${DEP_DIR}/boost"
@@ -73,7 +60,6 @@ export BOOST_INCLUDEDIR="${DEP_DIR}/boost/include"
 export BOOST_LIBRARYDIR="${DEP_DIR}/boost/lib"
 
 export OIS_HOME="${DEP_DIR}/ois"
-
 
 cd "${BUILD_DIR}"
 
@@ -134,7 +120,6 @@ make ${PARALLEL_FLAG} install &>/dev/null
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-#rm -r "${BUILD_DIR}" &>/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" &>/dev/null
 
 touch "${PREFIX}"

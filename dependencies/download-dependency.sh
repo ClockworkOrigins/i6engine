@@ -22,11 +22,9 @@ FILE=${1}
 
 . ./build-common.sh
 
-mkdir -p ${EX_DIR}
+mkdir -p ${BUILD_ROOT}
 
-if ! [ -f "${EX_DIR}/${FILE}" ]; then
-	wget http://www.clockwork-origins.de/dependencies/${FILE}
-
-	mv ${FILE} ${EX_DIR}
+if ! [ -f "${BUILD_ROOT}/${FILE}" ]; then
+	wget http://www.clockwork-origins.de/dependencies/${FILE} -P ${BUILD_ROOT}
 fi
 
