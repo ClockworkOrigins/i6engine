@@ -60,9 +60,9 @@ void wxOgreRenderSystem::LoadPlugin(const Ogre::String& plugin)
 {
     try {
 #if WXOGRE_DEBUG and OGRE_PLATFORM == OGRE_PLATFORM_WINDOWS
-		m_root->loadPlugin(OGRE_PLUGINDIR + plugin + "_d");
+		m_root->loadPlugin(plugin + "_d");
 #else
-		m_root->loadPlugin(OGRE_PLUGINDIR + plugin);
+		m_root->loadPlugin(plugin);
 #endif
 	} catch (Ogre::Exception& e) {
         wxOgreExceptionBox(e);

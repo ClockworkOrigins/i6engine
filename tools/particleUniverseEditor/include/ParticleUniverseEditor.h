@@ -332,7 +332,7 @@ public:
         // Initialize Ogre render system
         m_rsys->LoadPlugin("RenderSystem_GL");
         m_rsys->SelectOgreRenderSystem("OpenGL Rendering Subsystem");
-		m_rsys->LoadPlugin("Plugin_ParticleUniverse");
+	m_rsys->LoadPlugin("Plugin_ParticleUniverse");
         m_rsys->Initialise();
 
 		m_frame = new ParticleUniverseEditorFrame(0, ID_EDITOR_WINDOW);
