@@ -34,7 +34,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #if (PU_RENDERER_OGRE)
 	#if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32) && !defined(OGRE_STATIC_LIB)
-	#   ifdef PARTICLE_UNIVERSE_EXPORTS
+	#   ifdef Plugin_ParticleUniverse_EXPORTS
 	#       define _ParticleUniverseExport __declspec(dllexport)
 	#   else
 	#       if defined( __MINGW32__ )
@@ -49,7 +49,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	#   define _ParticleUniverseExport
 	#endif
 #else
-	#ifdef PARTICLE_UNIVERSE_EXPORTS
+	#ifdef Plugin_ParticleUniverse_EXPORTS
 	#   define _ParticleUniverseExport __declspec(dllexport)
 	#else
 	#   if defined( __MINGW32__ )
