@@ -67,29 +67,31 @@ namespace ParticleUniverse
 			};
 
 			Particle(void) : 
-				mMarkedForEmission(false),
+				parentEmitter(0),
 				position(Vector3::ZERO),
-				mDerivedPosition(Vector3::ZERO),
 				direction(Vector3::ZERO),
+				mass(DEFAULT_MASS),
 				timeToLive(DEFAULT_TTL),
 				totalTimeToLive(DEFAULT_TTL),
 				timeFraction(0.0f),
 				particleType(PT_VISUAL),
+				mUserDefinedObject(),
 				physicsActor(0),
-				mass(DEFAULT_MASS),
+				visualData(0),
+				originalPosition(Vector3::ZERO),
+				originalDirection(Vector3::ZERO),
+				originalVelocity(0.0f),
+				originalDirectionLength(0.0f),
+				originalScaledDirectionLength(0.0f),
+				latestPosition(Vector3::ZERO),
 				mEventFlags(0),
+				mMarkedForEmission(false),
 				mEnabled(true),
 				mFreezed(false),
 				mOriginalEnabled(true),
 				mOriginalEnabledSet(false),
-				originalPosition(Vector3::ZERO),
-				latestPosition(Vector3::ZERO),
-				originalDirection(Vector3::ZERO),
-				originalDirectionLength(0.0f),
-				originalScaledDirectionLength(0.0f),
-				originalVelocity(0.0f),
-				parentEmitter(0),
-				visualData(0){};
+				mDerivedPosition(Vector3::ZERO),
+				mBehaviours() {}
 			virtual ~Particle(void);
 
 			// Note: Use public attributes for speed
@@ -278,7 +280,7 @@ namespace ParticleUniverse
 	        */
 			bool mEnabled;
 
-			/** Determines whether a particle is 'freezed'. This means that the particle doesn¥t move anymore.
+			/** Determines whether a particle is 'freezed'. This means that the particle doesn≈Ωt move anymore.
 	        */
 			bool mFreezed;
 
@@ -290,7 +292,7 @@ namespace ParticleUniverse
 	        */
 			bool mOriginalEnabledSet;
 
-			/** Because the public attribute ¥position¥ is sometimes used for both localspace and worldspace
+			/** Because the public attribute ≈Ωposition≈Ω is sometimes used for both localspace and worldspace
 				position, the mDerivedPosition attribute is introduced.
 	        */
 			Vector3 mDerivedPosition;

@@ -34,10 +34,10 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	ParticleScriptSerializer::ParticleScriptSerializer(void) :
 		mPath(BLANK_STRING),
+		mScriptString(BLANK_STRING),
 		mIndentation(0),
 		mKeyword(BLANK_STRING),
-		mStreamToFile(true),
-		mScriptString(BLANK_STRING)
+		mStreamToFile(true)
 	{
 		mTab[0] = 0;
 		mTab[1] = 48;
@@ -178,7 +178,7 @@ namespace ParticleUniverse
 		}
 		else if (indentation < 0)
 		{
-			short pos = mTab[index] - (short)(base.length());
+			short pos = mTab[index] - short(base.length());
 			pos = pos > 0 ? pos : 1;
 			pos = pos < 0 ? 1 : pos;
 			for (short i = 0; i < pos; ++i) base += " ";
@@ -207,7 +207,7 @@ namespace ParticleUniverse
         return stream.str();
 	}
 	//-----------------------------------------------------------------------
-	const short ParticleScriptSerializer::getIndentation(void) const
+	short ParticleScriptSerializer::getIndentation(void) const
 	{
 		return mIndentation;
 	}

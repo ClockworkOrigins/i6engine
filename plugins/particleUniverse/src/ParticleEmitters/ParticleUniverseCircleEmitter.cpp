@@ -53,7 +53,7 @@ namespace ParticleUniverse
 	{
 	}
 	//-----------------------------------------------------------------------
-	const Real CircleEmitter::getRadius(void) const
+	Real CircleEmitter::getRadius(void) const
 	{
 		return mRadius;
 	}
@@ -63,7 +63,7 @@ namespace ParticleUniverse
 		mRadius = radius;
 	}
 	//-----------------------------------------------------------------------
-	const Real CircleEmitter::getCircleAngle(void) const
+	Real CircleEmitter::getCircleAngle(void) const
 	{
 		return mOriginalCircleAngle;
 	}
@@ -74,7 +74,7 @@ namespace ParticleUniverse
 		mCircleAngle = circleAngle;
 	}
 	//-----------------------------------------------------------------------
-	const Real CircleEmitter::getStep(void) const
+	Real CircleEmitter::getStep(void) const
 	{
 		return mStep;
 	}
@@ -84,7 +84,7 @@ namespace ParticleUniverse
 		mStep = step;
 	}
 	//-----------------------------------------------------------------------
-	const bool CircleEmitter::isRandom(void) const
+	bool CircleEmitter::isRandom(void) const
 	{
 		return mRandom;
 	}

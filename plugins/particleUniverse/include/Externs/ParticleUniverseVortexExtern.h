@@ -40,6 +40,8 @@ namespace ParticleUniverse
     */
 	class _ParticleUniverseExport VortexExtern : public Attachable, public VortexAffector
 	{
+		using VortexAffector::copyAttributesTo;
+
 		public:
 		VortexExtern(void) : 
 			Attachable(),

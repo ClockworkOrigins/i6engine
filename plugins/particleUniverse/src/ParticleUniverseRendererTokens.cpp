@@ -93,7 +93,7 @@ namespace ParticleUniverse
 		}
 		else
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -101,7 +101,7 @@ namespace ParticleUniverse
 		ParticleRendererFactory* particleRendererFactory = ParticleSystemManager::getSingletonPtr()->getRendererFactory(type);
 		if (!particleRendererFactory)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -109,7 +109,7 @@ namespace ParticleUniverse
 		mRenderer = ParticleSystemManager::getSingletonPtr()->createRenderer(type);
 		if (!mRenderer)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -299,11 +299,11 @@ namespace ParticleUniverse
 
 		if (renderer->getUseSoftParticles() != ParticleRenderer::DEFAULT_USE_SOFT_PARTICLES) serializer->writeLine(
 			token[TOKEN_RENDERER_USE_SOFT_PARTICLES], StringConverter::toString(renderer->getUseSoftParticles()), 12);
-		if (renderer->getSoftParticlesContrastPower() != ParticleRenderer::DEFAULT_SOFT_PARTICLES_CONTRAST_POWER) serializer->writeLine(
+		if (!almostEquals(renderer->getSoftParticlesContrastPower(), ParticleRenderer::DEFAULT_SOFT_PARTICLES_CONTRAST_POWER)) serializer->writeLine(
 			token[TOKEN_RENDERER_SOFT_PARTICLES_CONTRAST_POWER], StringConverter::toString(renderer->getSoftParticlesContrastPower()), 12);
-		if (renderer->getSoftParticlesScale() != ParticleRenderer::DEFAULT_SOFT_PARTICLES_SCALE) serializer->writeLine(
+		if (!almostEquals(renderer->getSoftParticlesScale(), ParticleRenderer::DEFAULT_SOFT_PARTICLES_SCALE)) serializer->writeLine(
 			token[TOKEN_RENDERER_SOFT_PARTICLES_SCALE], StringConverter::toString(renderer->getSoftParticlesScale()), 12);
-		if (renderer->getSoftParticlesDelta() != ParticleRenderer::DEFAULT_SOFT_PARTICLES_DELTA) serializer->writeLine(
+		if (!almostEquals(renderer->getSoftParticlesDelta(), ParticleRenderer::DEFAULT_SOFT_PARTICLES_DELTA)) serializer->writeLine(
 			token[TOKEN_RENDERER_SOFT_PARTICLES_DELTA], StringConverter::toString(renderer->getSoftParticlesDelta()), 12);
 	}
 

@@ -66,32 +66,32 @@ namespace ParticleUniverse
 		IAlias(),
 		IElement(),
 		mParentTechnique(0),
-		mEmitsType(DEFAULT_EMITS),
-		mEmitsName(BLANK_STRING),
-		mRemainder(0),
-		mDurationRemain(0),
-		mRepeatDelayRemain(0),
-		mDynDurationSet(false),
-		mDynRepeatDelaySet(false),
+		_mEmitterScale(Vector3::UNIT_SCALE),
+		mName(BLANK_STRING),
 		mParticleDirection(DEFAULT_DIRECTION),
 		mOriginalParticleDirection(DEFAULT_DIRECTION),
 		mParticleOrientation(Quaternion::IDENTITY),
 		mParticleOrientationRangeStart(Quaternion::IDENTITY),
 		mParticleOrientationRangeEnd(Quaternion::IDENTITY),
 		mParticleOrientationRangeSet(false),
-		mUpVector(Vector3::ZERO),
+		mEmitsType(DEFAULT_EMITS),
+		mEmitsName(BLANK_STRING),
 		mDynParticleAllDimensionsSet(false),
 		mDynParticleWidthSet(false),
 		mDynParticleHeightSet(false),
 		mDynParticleDepthSet(false),
+		mUpVector(Vector3::ZERO),
+		mRemainder(0),
+		mDurationRemain(0),
+		mDynDurationSet(false),
+		mRepeatDelayRemain(0),
+		mDynRepeatDelaySet(false),
 		mEmissionRateCameraDependency(0),
 		mAutoDirection(DEFAULT_AUTO_DIRECTION),
 		mForceEmission(DEFAULT_FORCE_EMISSION),
 		mOriginalForceEmission(false),
 		mForceEmissionExecuted(false),
 		mOriginalForceEmissionExecuted(false),
-		mName(BLANK_STRING),
-		_mEmitterScale(Vector3::UNIT_SCALE),
 		mParticleColour(DEFAULT_COLOUR),
 		mParticleColourRangeStart(DEFAULT_START_COLOUR_RANGE),
 		mParticleColourRangeEnd(DEFAULT_END_COLOUR_RANGE),
@@ -768,7 +768,7 @@ namespace ParticleUniverse
 		angle = a;
 		if (mDynAngle->getType() == DynamicAttribute::DAT_FIXED)
 		{
-			// Make an exception here and don¥t use the fixed angle.
+			// Make an exception here and don≈Ωt use the fixed angle.
 			angle = Math::UnitRandom() * angle;
 		}
 	}
@@ -780,7 +780,7 @@ namespace ParticleUniverse
 		particle->originalVelocity = scalar;
 		particle->originalScaledDirectionLength = particle->direction.length();
 
-		// Don¥t change the originalDirection, because the real original value has already been set.
+		// Don≈Ωt change the originalDirection, because the real original value has already been set.
     }
 	//-----------------------------------------------------------------------
 	void ParticleEmitter::_initParticleOrientation(Particle* particle)
@@ -842,7 +842,7 @@ namespace ParticleUniverse
 		VisualParticle* visualParticle = static_cast<VisualParticle*>(particle);
 		if (mParticleTextureCoordsRangeSet)
 		{
-			visualParticle->textureCoordsCurrent = (uint16)Math::RangeRandom((Real)mParticleTextureCoordsRangeStart, (Real)mParticleTextureCoordsRangeEnd + 0.999f);
+			visualParticle->textureCoordsCurrent = uint16(Math::RangeRandom(Real(mParticleTextureCoordsRangeStart), Real(mParticleTextureCoordsRangeEnd) + 0.999f));
 		}
 		else
 		{
@@ -853,7 +853,7 @@ namespace ParticleUniverse
     Real ParticleEmitter::_initParticleTimeToLive(void)
     {
 		/*  Generate a value for totalTimeToLive. Use time since start from the particle system as argument 
-			in getValue(). If mDynTotalTimeToLive doesn¥t exist, use the default value.
+			in getValue(). If mDynTotalTimeToLive doesn≈Ωt exist, use the default value.
 		*/
 		return mDynamicAttributeHelper.calculate(mDynTotalTimeToLive, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart(), Particle::DEFAULT_TTL);
     }
@@ -883,7 +883,7 @@ namespace ParticleUniverse
 					{
 						// Ignore the time. Just emit everything at once (if you absolutely need it).
 						// The emitter cannot be disabled yet, because it needs to emit its particles first.
-						requestedParticles = (unsigned short)rate;
+						requestedParticles = static_cast<unsigned short>(rate);
 						mForceEmissionExecuted = true;
 					}
 				}
@@ -891,7 +891,7 @@ namespace ParticleUniverse
 				{
 					// Particle emission is time driven
 					mRemainder += rate * timeElapsed;
-					requestedParticles = (unsigned short)mRemainder;
+					requestedParticles = static_cast<unsigned short>(mRemainder);
 				}
 				
 				mRemainder -= requestedParticles;

@@ -50,7 +50,7 @@ namespace ParticleUniverse
 			static const ComparisionOperator DEFAULT_COMPARE;
 
 			OnCountObserver(void);
-	        virtual ~OnCountObserver(void) {};
+	        virtual ~OnCountObserver(void) {}
 
 			/** 
 	        */
@@ -62,13 +62,13 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			uint getThreshold(void) const {return mThreshold;};
-			void setThreshold(uint threshold){mThreshold = threshold;};
+			uint getThreshold(void) const {return mThreshold;}
+			void setThreshold(uint threshold){mThreshold = threshold;}
 
 			/** 
 	        */
-			const ComparisionOperator getCompare(void) const {return mCompare;};
-			void setCompare(ComparisionOperator op){mCompare = op;};
+			ComparisionOperator getCompare(void) const {return mCompare;}
+			void setCompare(ComparisionOperator op){mCompare = op;}
 
 			/** Copy attributes to another observer.
 	        */

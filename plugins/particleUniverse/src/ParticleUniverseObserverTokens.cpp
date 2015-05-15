@@ -38,7 +38,7 @@ namespace ParticleUniverse
 	 * ObserverTranslator
 	 *************************************************************************/
 	ObserverTranslator::ObserverTranslator()
-		:mObserver(0)
+		: mObserver(0)
 	{
 	}
 	//-------------------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace ParticleUniverse
 		}
 		else
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -64,7 +64,7 @@ namespace ParticleUniverse
 		ParticleObserverFactory* particleObserverFactory = ParticleSystemManager::getSingletonPtr()->getObserverFactory(type);
 		if (!particleObserverFactory)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -72,7 +72,7 @@ namespace ParticleUniverse
 		mObserver = ParticleSystemManager::getSingletonPtr()->createObserver(type);
 		if (!mObserver)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -231,13 +231,13 @@ namespace ParticleUniverse
 			}
 			serializer->writeLine(token[TOKEN_OBSERVE_PARTICLE_TYPE], particleType, 12);
 		}
-		if (observer->getObserverInterval() != ParticleObserver::DEFAULT_INTERVAL) serializer->writeLine(
+		if (!almostEquals(observer->getObserverInterval(), ParticleObserver::DEFAULT_INTERVAL)) serializer->writeLine(
 			token[TOKEN_OBSERVE_INTERVAL], StringConverter::toString(observer->getObserverInterval()), 12);
 		if (observer->getObserveUntilEvent() != ParticleObserver::DEFAULT_UNTIL_EVENT) serializer->writeLine(
 			token[TOKEN_OBSERVE_UNTIL_EVENT], StringConverter::toString(observer->getObserveUntilEvent()), 12);
 
 		// Write eventHandlers
-		serializer->context.beginSection(HANDLER, 0); // Don´t set the event handler
+		serializer->context.beginSection(HANDLER, 0); // DonÅ½t set the event handler
 		size_t numerOfEventHandlers = observer->getNumEventHandlers();
 		for (size_t i = 0; i < numerOfEventHandlers; ++i)
 		{

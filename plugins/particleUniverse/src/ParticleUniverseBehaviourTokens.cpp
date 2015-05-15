@@ -52,7 +52,7 @@ namespace ParticleUniverse
 		}
 		else
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -60,7 +60,7 @@ namespace ParticleUniverse
 		ParticleBehaviourFactory* behaviourFactory = ParticleSystemManager::getSingletonPtr()->getBehaviourFactory(type);
 		if (!behaviourFactory)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -68,7 +68,7 @@ namespace ParticleUniverse
 		mBehaviour = ParticleSystemManager::getSingletonPtr()->createBehaviour(type);
 		if (!mBehaviour)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 

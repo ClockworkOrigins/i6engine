@@ -56,12 +56,12 @@ namespace ParticleUniverse
 		bool changed = false;
 		if (mIncrease)
 		{
-			if (mThreshold != 0)
+			if (!almostEquals(mThreshold, 0))
 				f = dependencyValue / mThreshold;
 		}
 		else
 		{
-			if (dependencyValue != 0)
+			if (!almostEquals(dependencyValue, 0))
 				f = mThreshold / dependencyValue;
 		}
 		if (f > 0 && f <= 1)

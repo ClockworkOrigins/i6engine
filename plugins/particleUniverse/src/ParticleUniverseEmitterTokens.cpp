@@ -55,7 +55,7 @@ namespace ParticleUniverse
 		}
 		else
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -63,7 +63,7 @@ namespace ParticleUniverse
 		ParticleEmitterFactory* particleEmitterFactory = ParticleSystemManager::getSingletonPtr()->getEmitterFactory(type);
 		if (!particleEmitterFactory)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -71,7 +71,7 @@ namespace ParticleUniverse
 		mEmitter = ParticleSystemManager::getSingletonPtr()->createEmitter(type);
 		if (!mEmitter)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -393,9 +393,9 @@ namespace ParticleUniverse
 					if (passValidatePropertyNumberOfValues(compiler, prop, token[TOKEN_EMITTER_EMITS], 2))
 					{
 						String particleType;
-						String name;
-						AbstractNodeList::const_iterator i = prop->values.begin();
-						if (getString(*i, &particleType))
+						String n;
+						AbstractNodeList::const_iterator it = prop->values.begin();
+						if (getString(*it, &particleType))
 						{
 							if (particleType == token[TOKEN_VISUAL_PARTICLE])
 							{
@@ -417,10 +417,10 @@ namespace ParticleUniverse
 							{
 								mEmitter->setEmitsType(Particle::PT_SYSTEM);
 							}
-							++i;
-							if (getString(*i, &name))
+							++it;
+							if (getString(*it, &n))
 							{
-								mEmitter->setEmitsName(name);
+								mEmitter->setEmitsName(n);
 							}
 						}
 					}
@@ -666,7 +666,7 @@ namespace ParticleUniverse
 		DynamicAttributeFactory dynamicAttributeFactory;
 
 		if (emitter->getDynEmissionRate()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynEmissionRate()->getValue() != ParticleEmitter::DEFAULT_EMISSION_RATE)
+			!almostEquals(emitter->getDynEmissionRate()->getValue(), ParticleEmitter::DEFAULT_EMISSION_RATE))
 		{
 			serializer->setKeyword(token[TOKEN_EMITTER_EMISSION_RATE]);
 			serializer->setIndentation(12);
@@ -674,7 +674,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynAngle()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynAngle()->getValue() != ParticleEmitter::DEFAULT_ANGLE)
+			!almostEquals(emitter->getDynAngle()->getValue(), ParticleEmitter::DEFAULT_ANGLE))
 		{
 			serializer->setKeyword(token[TOKEN_ANGLE]);
 			serializer->setIndentation(12);
@@ -682,7 +682,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynTotalTimeToLive()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynTotalTimeToLive()->getValue() != ParticleEmitter::DEFAULT_TIME_TO_LIVE)
+			!almostEquals(emitter->getDynTotalTimeToLive()->getValue(), ParticleEmitter::DEFAULT_TIME_TO_LIVE))
 		{
 			serializer->setKeyword(token[TOKEN_TIME_TO_LIVE]);
 			serializer->setIndentation(12);
@@ -690,7 +690,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynParticleMass()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynParticleMass()->getValue() != ParticleEmitter::DEFAULT_MASS)
+			!almostEquals(emitter->getDynParticleMass()->getValue(), ParticleEmitter::DEFAULT_MASS))
 		{
 			serializer->setKeyword(token[TOKEN_EMITTER_MASS]);
 			serializer->setIndentation(12);
@@ -698,7 +698,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynVelocity()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynVelocity()->getValue() != ParticleEmitter::DEFAULT_VELOCITY)
+			!almostEquals(emitter->getDynVelocity()->getValue(), ParticleEmitter::DEFAULT_VELOCITY))
 		{
 			serializer->setKeyword(token[TOKEN_VELOCITY]);
 			serializer->setIndentation(12);
@@ -706,7 +706,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynDuration()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynDuration()->getValue() != ParticleEmitter::DEFAULT_DURATION)
+			!almostEquals(emitter->getDynDuration()->getValue(), ParticleEmitter::DEFAULT_DURATION))
 		{
 			serializer->setKeyword(token[TOKEN_EMITTER_DURATION]);
 			serializer->setIndentation(12);
@@ -714,7 +714,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynRepeatDelay()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynRepeatDelay()->getValue() != ParticleEmitter::DEFAULT_REPEAT_DELAY)
+			!almostEquals(emitter->getDynRepeatDelay()->getValue(), ParticleEmitter::DEFAULT_REPEAT_DELAY))
 		{
 			serializer->setKeyword(token[TOKEN_EMITTER_REPEAT_DELAY]);
 			serializer->setIndentation(12);
@@ -722,7 +722,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynParticleAllDimensions()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynParticleAllDimensions()->getValue() != ParticleEmitter::DEFAULT_DIMENSIONS)
+			!almostEquals(emitter->getDynParticleAllDimensions()->getValue(), ParticleEmitter::DEFAULT_DIMENSIONS))
 		{
 			serializer->setKeyword(token[TOKEN_EMITTER_ALL_PARTICLE_DIM]);
 			serializer->setIndentation(12);
@@ -730,7 +730,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynParticleWidth()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynParticleWidth()->getValue() != ParticleEmitter::DEFAULT_WIDTH)
+			!almostEquals(emitter->getDynParticleWidth()->getValue(), ParticleEmitter::DEFAULT_WIDTH))
 		{
 			serializer->setKeyword(token[TOKEN_EMITTER_PARTICLE_WIDTH]);
 			serializer->setIndentation(12);
@@ -738,7 +738,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynParticleHeight()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynParticleHeight()->getValue() != ParticleEmitter::DEFAULT_HEIGHT)
+			!almostEquals(emitter->getDynParticleHeight()->getValue(), ParticleEmitter::DEFAULT_HEIGHT))
 		{
 			serializer->setKeyword(token[TOKEN_EMITTER_PARTICLE_HEIGHT]);
 			serializer->setIndentation(12);
@@ -746,7 +746,7 @@ namespace ParticleUniverse
 		}
 
 		if (emitter->getDynParticleDepth()->getType() != DynamicAttribute::DAT_FIXED || 
-			emitter->getDynParticleDepth()->getValue() != ParticleEmitter::DEFAULT_DEPTH)
+			!almostEquals(emitter->getDynParticleDepth()->getValue(), ParticleEmitter::DEFAULT_DEPTH))
 		{
 			serializer->setKeyword(token[TOKEN_EMITTER_PARTICLE_DEPTH]);
 			serializer->setIndentation(12);
@@ -796,7 +796,7 @@ namespace ParticleUniverse
 		{
 			serializer->writeLine(token[TOKEN_CAMERA_DEPENDENCY], token[TOKEN_EMITTER_EMISSION_RATE], 12);
 			serializer->writeLine("{", 12);
-			if (Math::Sqrt(emitter->getEmissionRateCameraDependency()->getThreshold()) != CameraDependency::DEFAULT_DISTANCE_THRESHOLD) serializer->writeLine(
+			if (!almostEquals(Math::Sqrt(emitter->getEmissionRateCameraDependency()->getThreshold()), CameraDependency::DEFAULT_DISTANCE_THRESHOLD)) serializer->writeLine(
 				token[TOKEN_DISTANCE_THRESHOLD], StringConverter::toString(Math::Sqrt(emitter->getEmissionRateCameraDependency()->getThreshold())), 16);
 			if (emitter->getEmissionRateCameraDependency()->isIncrease() != CameraDependency::DEFAULT_INCREASE) serializer->writeLine(
 				token[TOKEN_INCREASE], StringConverter::toString(emitter->getEmissionRateCameraDependency()->isIncrease()), 16);

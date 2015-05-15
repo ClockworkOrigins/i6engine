@@ -46,7 +46,7 @@ namespace ParticleUniverse
 			static const bool DEFAULT_SINCE_START_SYSTEM;
 
 			OnTimeObserver(void);
-	        virtual ~OnTimeObserver(void) {};
+	        virtual ~OnTimeObserver(void) {}
 
 			/** In case there are no particles, but the observation returns true, the event handlers must still be
 				called.
@@ -59,18 +59,18 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			Real getThreshold(void) const {return mThreshold;};
-			void setThreshold(Real threshold){mThreshold = threshold;};
+			Real getThreshold(void) const {return mThreshold;}
+			void setThreshold(Real threshold){mThreshold = threshold;}
 
 			/** 
 	        */
-			const ComparisionOperator getCompare(void) const {return mCompare;};
-			void setCompare(ComparisionOperator op){mCompare = op;};
+			ComparisionOperator getCompare(void) const {return mCompare;}
+			void setCompare(ComparisionOperator op){mCompare = op;}
 
 			/** 
 	        */
-			bool isSinceStartSystem(void) const {return mSinceStartSystem;};
-			void setSinceStartSystem(bool sinceStartSystem){mSinceStartSystem = sinceStartSystem;};
+			bool isSinceStartSystem(void) const {return mSinceStartSystem;}
+			void setSinceStartSystem(bool sinceStartSystem){mSinceStartSystem = sinceStartSystem;}
 
 			/** Copy attributes to another observer.
 	        */

@@ -36,6 +36,8 @@ namespace ParticleUniverse
     */
 	class _ParticleUniverseExport SphereColliderExtern : public Attachable, public SphereCollider
 	{
+		using SphereCollider::copyAttributesTo;
+
 		public:
 			SphereColliderExtern(void) : 
 				Attachable(),

@@ -43,12 +43,12 @@ namespace ParticleUniverse
 				mFrequency(1.0f),
 				mAmplitude(1.0f),
 				mPersistence(1.0f),
-				mMappedPosition(Vector3::ZERO),
 				mMapScale(Vector3::ZERO),
-				mWorldSize(DEFAULT_WORLDSIZE)
+				mWorldSize(DEFAULT_WORLDSIZE),
+				mMappedPosition(Vector3::ZERO)
 			{
-			};
-			virtual ~ForceFieldCalculationFactory(void){};
+			}
+			virtual ~ForceFieldCalculationFactory(void){}
 
 			/** Generates the force field
 			@remarks
@@ -234,7 +234,7 @@ namespace ParticleUniverse
 			};
 
 			ForceField(void);
-			~ForceField(void);
+			virtual ~ForceField(void);
 
 			/** Initialises a ForceField */
 			virtual void initialise(ForceFieldType type,
@@ -279,7 +279,7 @@ namespace ParticleUniverse
 			
 			/** Get/Set the Forcefield type
 			*/
-			const ForceFieldType getForceFieldType(void) const;
+			ForceFieldType getForceFieldType(void) const;
 			void setForceFieldType(const ForceFieldType forceFieldType);
 
 		protected:

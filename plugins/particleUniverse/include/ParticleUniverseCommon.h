@@ -94,7 +94,7 @@ namespace ParticleUniverse
 
 	/*  Comparison function for float/double values, which determines whether a and b are almost equal
 	*/
-	static bool almostEquals(Real a, Real b, Real epsilon = std::numeric_limits<Real>::epsilon())
+	inline bool almostEquals(Real a, Real b, Real epsilon = std::numeric_limits<Real>::epsilon())
 	{
 		return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon); 
 	}

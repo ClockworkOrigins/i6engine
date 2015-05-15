@@ -96,9 +96,9 @@ namespace ParticleUniverse
 		const CameraDependency* dependency = static_cast<const CameraDependency*>(element);
 
 		// Write attributes
-		if (dependency->getThreshold() != CameraDependency::DEFAULT_DISTANCE_THRESHOLD) serializer->writeLine(
+		if (!almostEquals(dependency->getThreshold(), CameraDependency::DEFAULT_DISTANCE_THRESHOLD)) serializer->writeLine(
 			token[TOKEN_DISTANCE_THRESHOLD], StringConverter::toString(dependency->getThreshold()), 12);
-		if (dependency->isIncrease() != CameraDependency::DEFAULT_INCREASE) serializer->writeLine(
+		if (!almostEquals(dependency->isIncrease(), CameraDependency::DEFAULT_INCREASE)) serializer->writeLine(
 			token[TOKEN_INCREASE], StringConverter::toString(dependency->isIncrease()), 12);
 	}
 

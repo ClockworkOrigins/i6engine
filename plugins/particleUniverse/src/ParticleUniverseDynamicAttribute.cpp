@@ -144,15 +144,15 @@ namespace ParticleUniverse
 
 	//-----------------------------------------------------------------------
 	DynamicAttributeCurved::DynamicAttributeCurved (void) : 
-		mInterpolationType(IT_LINEAR), 
-		mRange(0)
+		mRange(0),
+		mInterpolationType(IT_LINEAR)
 	{
 		mType = DynamicAttribute::DAT_CURVED;
 	}
 	//-----------------------------------------------------------------------
 	DynamicAttributeCurved::DynamicAttributeCurved (InterpolationType interpolationType) : 
-		mInterpolationType(interpolationType), 
-		mRange(0)
+		mRange(0),
+		mInterpolationType(interpolationType)
 	{
 		mType = DynamicAttribute::DAT_CURVED;
 	}

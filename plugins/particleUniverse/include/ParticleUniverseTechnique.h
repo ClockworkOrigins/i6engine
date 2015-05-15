@@ -54,6 +54,8 @@ namespace ParticleUniverse
     */
 	class _ParticleUniverseExport ParticleTechnique : public Particle, public IAlias, public IElement
 	{
+		using Particle::copyAttributesTo;
+
 		public:
 			// Default values
 			static const bool DEFAULT_ENABLED;
@@ -130,17 +132,17 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			const Real getDefaultWidth(void) const;
+			Real getDefaultWidth(void) const;
 			void setDefaultWidth(const Real width);
 
 			/** 
 	        */
-			const Real getDefaultHeight(void) const;
+			Real getDefaultHeight(void) const;
 			void setDefaultHeight(const Real height);
 
 			/** 
 	        */
-			const Real getDefaultDepth(void) const;
+			Real getDefaultDepth(void) const;
 			void setDefaultDepth(const Real depth);
 
 			/** Returns the derived position of the technique.

@@ -73,7 +73,7 @@ namespace ParticleUniverse
 		return mBoundingRadius;
 	}
 	//-----------------------------------------------------------------------
-	const Real Attachable::getDistanceThreshold(void) const
+	Real Attachable::getDistanceThreshold(void) const
 	{
 		return mDistanceThreshold;
 	}

@@ -53,7 +53,7 @@ namespace ParticleUniverse
 		mScaleType = scaleType;
 	}
 	//-----------------------------------------------------------------------
-	const Real DoScaleEventHandler::getScaleFraction(void) const
+	Real DoScaleEventHandler::getScaleFraction(void) const
 	{
 		return mScaleFraction;
 	}

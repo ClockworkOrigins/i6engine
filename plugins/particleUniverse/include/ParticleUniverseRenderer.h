@@ -275,19 +275,19 @@ namespace ParticleUniverse
 			virtual SortMode _getSortMode(void) const = 0;
 
 			/** Returns whether the particles are sorted */
-			const bool isSorted(void) const;
+			bool isSorted(void) const;
 
 			/** Determines whether the particles are sorted */
 			void setSorted(bool sorted);
 
 			/** Get the number of textureCoords rows (stacks) of an atlas texture. */
-			const uchar getTextureCoordsRows(void) const;
+			uchar getTextureCoordsRows(void) const;
 
 			/** Set the number of textureCoords rows (stacks) of an atlas texture. */
 			void setTextureCoordsRows(uchar const textureCoordsRows);
 
 			/** Get the number of textureCoords colums (slices) of an atlas texture. */
-			const uchar getTextureCoordsColumns(void) const;
+			uchar getTextureCoordsColumns(void) const;
 
 			/** Set the number of textureCoords colums (slices) of an atlas texture. */
 			void setTextureCoordsColumns(uchar const textureCoordsColumns);

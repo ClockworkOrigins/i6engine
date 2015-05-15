@@ -44,7 +44,7 @@ namespace ParticleUniverse
 
 			/** Returns the radius of the sphere
 			*/
-			const Real getRadius(void) const;
+			Real getRadius(void) const;
 
 			/** Sets the radius of the sphere
 			*/

@@ -48,7 +48,7 @@ namespace ParticleUniverse
 	{
 	}
 	//-----------------------------------------------------------------------
-	const Real BoxEmitter::getHeight(void) const
+	Real BoxEmitter::getHeight(void) const
 	{
 		return mHeight;
 	}
@@ -59,7 +59,7 @@ namespace ParticleUniverse
 		mYRange = 0.5f * height;
 	}
 	//-----------------------------------------------------------------------
-	const Real BoxEmitter::getWidth(void) const
+	Real BoxEmitter::getWidth(void) const
 	{
 		return mWidth;
 	}
@@ -70,7 +70,7 @@ namespace ParticleUniverse
 		mXRange = 0.5f * width;
 	}
 	//-----------------------------------------------------------------------
-	const Real BoxEmitter::getDepth(void) const
+	Real BoxEmitter::getDepth(void) const
 	{
 		return mDepth;
 	}

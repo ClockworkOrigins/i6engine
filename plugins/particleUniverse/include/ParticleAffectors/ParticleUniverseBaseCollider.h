@@ -75,7 +75,7 @@ namespace ParticleUniverse
 
 			/** Returns the type of intersection.
 	        */
-			const IntersectionType getIntersectionType(void) const;
+			IntersectionType getIntersectionType(void) const;
 
 			/** Sets the type of intersection.
 	        */
@@ -83,7 +83,7 @@ namespace ParticleUniverse
 
 			/** Returns the type of collision.
 	        */
-			const CollisionType getCollisionType(void) const;
+			CollisionType getCollisionType(void) const;
 
 			/** Sets the type of collision.
 	        */
@@ -91,7 +91,7 @@ namespace ParticleUniverse
 
 			/** Returns the friction value.
 	        */
-			const Real getFriction(void) const;
+			Real getFriction(void) const;
 
 			/** Sets the friction value.
 	        */
@@ -99,7 +99,7 @@ namespace ParticleUniverse
 
 			/** Returns the bouncyness value.
 	        */
-			const Real getBouncyness(void) const;
+			Real getBouncyness(void) const;
 
 			/** Sets the bouncyness value.
 	        */

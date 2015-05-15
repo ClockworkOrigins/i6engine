@@ -41,9 +41,9 @@ namespace ParticleUniverse
 			RibbonTrailRendererVisualData (Ogre::SceneNode* sceneNode, Ogre::RibbonTrail* ribbonTrail) : 
 				IVisualData(), 
 				node(sceneNode),
-				trail(ribbonTrail),
 				addedToTrail(false),
-				index(0){};
+				trail(ribbonTrail),
+				index(0) {}
 
 			Ogre::SceneNode* node;
 			bool addedToTrail;

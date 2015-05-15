@@ -48,23 +48,23 @@ namespace ParticleUniverse
 			static const bool DEFAULT_PRE_POST;
 
 			DoAffectorEventHandler(void);
-	        virtual ~DoAffectorEventHandler(void) {};
+	        virtual ~DoAffectorEventHandler(void) {}
 
 			/** Get the indication whether pre- and postprocessing must be done.
 	        */
-			const bool getPrePost(void) const {return mPrePost;};
+			bool getPrePost(void) const {return mPrePost;}
 
 			/** Set the indication whether pre- and postprocessing must be done.
 	        */
-			void setPrePost(const bool prePost){mPrePost = prePost;};
+			void setPrePost(const bool prePost){mPrePost = prePost;}
 
 			/** Get the name of the affector that must be enabled or disabled.
 	        */
-			const String& getAffectorName(void) const {return mAffectorName;};
+			const String& getAffectorName(void) const {return mAffectorName;}
 
 			/** Set the name of the affector.
 	        */
-			void setAffectorName(const String& affectorName){mAffectorName = affectorName;};
+			void setAffectorName(const String& affectorName){mAffectorName = affectorName;}
 
 			/** If the _handle() function of this class is invoked (by an Observer), it searches the 
 				ParticleAffector defined by the its name. 

@@ -59,22 +59,22 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			const Real getRadius(void) const;
+			Real getRadius(void) const;
 			void setRadius(const Real radius);
 
 			/** 
 	        */
-			const Real getCircleAngle(void) const;
+			Real getCircleAngle(void) const;
 			void setCircleAngle(const Real circleAngle);
 
 			/** 
 	        */
-			const Real getStep(void) const;
+			Real getStep(void) const;
 			void setStep(const Real step);
 
 			/** 
 	        */
-			const bool isRandom(void) const;
+			bool isRandom(void) const;
 			void setRandom(const bool random);
 
 			/* 

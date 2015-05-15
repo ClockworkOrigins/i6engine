@@ -69,13 +69,13 @@ namespace ParticleUniverse
 			void calculateEdgeNormals (void);
 
 			/** Determine a random position on this triangle **/
-			const Vector3 getRandomTrianglePosition (void);
+			Vector3 getRandomTrianglePosition (void);
 
 			/** Determine a random position including its normal on a one of the edges **/
-			const PositionAndNormal getRandomEdgePositionAndNormal (void);
+			PositionAndNormal getRandomEdgePositionAndNormal (void);
 
 			/** Determine a random vertex including its normal of this triangle **/
-			const PositionAndNormal getRandomVertexAndNormal (void);
+			PositionAndNormal getRandomVertexAndNormal (void);
 	};
 
 	/** Comparer used for sorting vector in ascending order
@@ -146,12 +146,12 @@ namespace ParticleUniverse
 			const Triangle& getTriangle (size_t triangleIndex);
 
 				/** Get a random triangle (index) from the mesh. */
-			const size_t getRandomTriangleIndex (void);
+			size_t getRandomTriangleIndex (void);
 
 			/** Returns both a random point on a given triangle and its normal vector.
 				How the random point and the normal are determined depends on the distribution type.
 			**/
-			const Triangle::PositionAndNormal getRandomPositionAndNormal (const size_t triangleIndex);
+			Triangle::PositionAndNormal getRandomPositionAndNormal (const size_t triangleIndex);
 
 		protected:
 			Triangles _triangles;
@@ -194,7 +194,7 @@ namespace ParticleUniverse
 				There are several ways to emit particles on the surface of a mesh. This attribute indicates
 				the type of distrubution on the surface.
 	        */
-			const MeshInfo::MeshSurfaceDistribution getDistribution (void) const;
+			MeshInfo::MeshSurfaceDistribution getDistribution (void) const;
 
 			/** Set the type of particle distribution on the surface of a mesh.
 	        */

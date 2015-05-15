@@ -36,7 +36,7 @@ namespace ParticleUniverse
 		// Cast the element to a AlignAffector
 		const Attachable* attachable = static_cast<const Attachable*>(element);
 
-		if (attachable->getDistanceThreshold() != std::numeric_limits<float>::max()) serializer->writeLine(
+		if (!almostEquals(attachable->getDistanceThreshold(), std::numeric_limits<float>::max())) serializer->writeLine(
 			token[TOKEN_DISTANCE_THRESHOLD], StringConverter::toString(attachable->getDistanceThreshold()), 12);
 	}
 

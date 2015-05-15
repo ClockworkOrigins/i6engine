@@ -43,17 +43,17 @@ template<> ParticleUniverse::ParticleSystemManager* Ogre::Singleton<ParticleUniv
 namespace ParticleUniverse
 {
 	ParticleSystemManager::ParticleSystemManager (void) :
+		mAutoLoadMaterials(true),
 		mDepthTextureName(BLANK_STRING),
 		mDepthMaterialName(BLANK_STRING),
 		mDepthVertexName(BLANK_STRING),
 		mDepthFragmentName(BLANK_STRING),
-		mLastCreatedParticleSystemTemplateName(BLANK_STRING),
 		mDepthMap(0),
 		mDepthTechnique(0),
 		mDepthPass(0),
 		mDepthMapExtern(false),
-		mAutoLoadMaterials(true),
-		mDepthScale(1.0f)
+		mDepthScale(1.0f),
+		mLastCreatedParticleSystemTemplateName(BLANK_STRING)
 	{
 		// Initialise script deserialisation
 		ScriptCompilerManager::getSingleton().addScriptPattern("*.pua");
@@ -941,7 +941,7 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	void ParticleSystemManager::destroyParticleSystem(const String& particleSystemName, Ogre::SceneManager* sceneManager)
 	{
-		// Remove it from the map although it doesn¥t exist anymore
+		// Remove it from the map although it doesn≈Ωt exist anymore
 		ParticleSystemMap::iterator i = mParticleSystems.find(particleSystemName);
 		if (i != mParticleSystems.end())
 		{
@@ -958,7 +958,7 @@ namespace ParticleUniverse
 	void ParticleSystemManager::destroyAllParticleSystems(Ogre::SceneManager* sceneManager)
 	{
 		// Changed function in V1.3.1
-		// Delete all Particle Systems in the specified sceneManager. This doesn¥t include the templates
+		// Delete all Particle Systems in the specified sceneManager. This doesn≈Ωt include the templates
 		// changed this function.
 		ParticleSystemMap::iterator t = mParticleSystems.begin();
 		while ( t != mParticleSystems.end() )
@@ -1139,7 +1139,7 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	void ParticleSystemManager::createDepthMap (Camera* camera, Ogre::SceneManager* sceneManager)
 	{
-		// Don¥t recreate the depth map
+		// Don≈Ωt recreate the depth map
 		if (mDepthMap || mDepthMapExtern)
 		{
 			return;
@@ -1154,8 +1154,8 @@ namespace ParticleUniverse
 			Ogre::TexturePtr depthTexturePtr = Ogre::TextureManager::getSingleton().createManual(mDepthTextureName, 
 				Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, 
 				Ogre::TEX_TYPE_2D, 
-				camera->getViewport()->getActualWidth(), 
-				camera->getViewport()->getActualHeight(),
+				uint(camera->getViewport()->getActualWidth()),
+				uint(camera->getViewport()->getActualHeight()),
 				0, 
 //				Ogre::PF_FLOAT16_R, 
 				Ogre::PF_R8G8B8A8, 
@@ -1289,7 +1289,7 @@ namespace ParticleUniverse
 	{
 		if (!mDepthMapExtern)
 		{
-			// Unregister the renderers and destroy the depthmap, because apparently it isn¥t used anymore
+			// Unregister the renderers and destroy the depthmap, because apparently it isn≈Ωt used anymore
 			mDepthMapTargetListener.unregisterRenderer(renderer);
 			if (mDepthMapTargetListener.registeredRenderersEmpty())
 			{

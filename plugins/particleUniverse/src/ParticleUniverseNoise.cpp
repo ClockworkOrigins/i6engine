@@ -79,18 +79,18 @@ namespace ParticleUniverse
 	{
 		double x = 0.0;
 		double y = 0.0;
-		double step = 1.0 / (double)dimension;
+		double step = 1.0 / dimension;
 		size_t buffSize = 4 * dimension * dimension; // Assume Image of pixelformat 32 bits (i.e. PF_R8G8B8A8)
 		uchar* buff = new uchar[buffSize];
-		size_t p = 0;
-		while (p < buffSize)
+		size_t p2 = 0;
+		while (p2 < buffSize)
 		{
-			uchar n = (uchar)(255 * noise(x, y, 0.5));
-			buff[p] = n;
-			buff[p+1] = n;
-			buff[p+2] = n;
-			buff[p+3] = n;
-			p += 4;
+			uchar n = uchar(255 * noise(x, y, 0.5));
+			buff[p2] = n;
+			buff[p2 + 1] = n;
+			buff[p2 + 2] = n;
+			buff[p2 + 3] = n;
+			p2 += 4;
 
 			x += step;
 			if (x >= 1.0)
@@ -127,9 +127,9 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	double Noise3D::_noise(double x, double y, double z)
 	{
-		int X = (int)floor(x) & 255;
-		int Y = (int)floor(y) & 255;
-		int Z = (int)floor(z) & 255;
+		int X = int(floor(x)) & 255;
+		int Y = int(floor(y)) & 255;
+		int Z = int(floor(z)) & 255;
 		x -= floor(x);
 		y -= floor(y);
 		z -= floor(z);
@@ -147,7 +147,7 @@ namespace ParticleUniverse
 									_grad(p[BA+1], x-1, y, z-1)),
 								_lerp(u, _grad(p[AB+1], x, y-1, z-1),
 									_grad(p[BB+1], x-1, y-1, z-1))));
-		return Math::Abs((Real)lrp); // Use absolute value, because lrp in between [-1, 1]
+		return Math::Abs(Real(lrp)); // Use absolute value, because lrp in between [-1, 1]
 	}
 	//-----------------------------------------------------------------------
 	double Noise3D::_fade(double t)

@@ -62,7 +62,7 @@ namespace ParticleUniverse
 
 			/** 
 			*/
-			const AliasType getAliasType(void) const {return mAliasType;};
+			AliasType getAliasType(void) const {return mAliasType;};
 			void setAliasType(AliasType aliasType) {mAliasType = aliasType;};
 
 		protected:

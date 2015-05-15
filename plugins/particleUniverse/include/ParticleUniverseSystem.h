@@ -228,7 +228,7 @@ namespace ParticleUniverse
 
 			/** 
 			*/
-			const Real getNonVisibleUpdateTimeout(void) const;
+			Real getNonVisibleUpdateTimeout(void) const;
 
 			/** 
 			*/
@@ -300,11 +300,11 @@ namespace ParticleUniverse
 
 			/** 
 			*/
-			const Real getFastForwardTime(void) const;
+			Real getFastForwardTime(void) const;
 
 			/** 
 			*/
-			const Real getFastForwardInterval(void) const;
+			Real getFastForwardInterval(void) const;
 
 			/** 
 			*/
@@ -393,12 +393,12 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			const Real getIterationInterval(void) const;
+			Real getIterationInterval(void) const;
 			void setIterationInterval(const Real iterationInterval);
 
 			/** 
 	        */
-			const Real getFixedTimeout(void) const;
+			Real getFixedTimeout(void) const;
 			void setFixedTimeout(const Real fixedTimeout);
 
 			/** Sets whether the bounds will be automatically updated for the life of the particle system.

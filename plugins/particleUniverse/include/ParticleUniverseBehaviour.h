@@ -57,8 +57,8 @@ namespace ParticleUniverse
 
 		public:
 			ParticleBehaviour(void) : 
-				IElement(),
 				IAlias(),
+				IElement(),
 				mParentTechnique(0),
 				_mBehaviourScale(Vector3::UNIT_SCALE)
 			{

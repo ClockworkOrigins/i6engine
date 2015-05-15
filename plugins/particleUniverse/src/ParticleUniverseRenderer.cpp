@@ -61,13 +61,13 @@ namespace ParticleUniverse
 		_mRendererScale(Vector3::UNIT_SCALE),
 		mTextureCoordsRows(DEFAULT_TEXTURECOORDS_ROWS),
 		mTextureCoordsColumns(DEFAULT_TEXTURECOORDS_COLUMNS),
+		mTextureCoordsRowsAndColumnsSet(false),
 		mTextureCoordsSet(false),
 		mUseSoftParticles(DEFAULT_USE_SOFT_PARTICLES),
 		mSoftParticlesContrastPower(DEFAULT_SOFT_PARTICLES_CONTRAST_POWER),
 		mSoftParticlesScale(DEFAULT_SOFT_PARTICLES_SCALE),
 		mSoftParticlesDelta(DEFAULT_SOFT_PARTICLES_DELTA),
 		mNotifiedDepthMap(false),
-		mTextureCoordsRowsAndColumnsSet(false),
 		mVisible(true)
 	{
 		mAliasType = AT_RENDERER;
@@ -140,7 +140,7 @@ namespace ParticleUniverse
 		mQueueId = queueId;
 	}
 	//-----------------------------------------------------------------------
-	const bool ParticleRenderer::isSorted(void) const
+	bool ParticleRenderer::isSorted(void) const
 	{
 		return mSorted;
 	}
@@ -150,7 +150,7 @@ namespace ParticleUniverse
 		mSorted = sorted;
 	}
 	//-----------------------------------------------------------------------
-	const uchar ParticleRenderer::getTextureCoordsRows(void) const
+	uchar ParticleRenderer::getTextureCoordsRows(void) const
 	{
 		return mTextureCoordsRows;
 	}
@@ -161,7 +161,7 @@ namespace ParticleUniverse
 		mTextureCoordsRowsAndColumnsSet = true;
 	}
 	//-----------------------------------------------------------------------
-	const uchar ParticleRenderer::getTextureCoordsColumns(void) const
+	uchar ParticleRenderer::getTextureCoordsColumns(void) const
 	{
 		return mTextureCoordsColumns;
 	}

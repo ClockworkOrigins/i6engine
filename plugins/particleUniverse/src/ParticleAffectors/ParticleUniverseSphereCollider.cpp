@@ -44,7 +44,7 @@ namespace ParticleUniverse
 	{
 	}
 	//-----------------------------------------------------------------------
-	const Real SphereCollider::getRadius(void) const
+	Real SphereCollider::getRadius(void) const
 	{
 		return mRadius;
 	}

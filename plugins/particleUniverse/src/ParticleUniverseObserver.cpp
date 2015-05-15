@@ -42,19 +42,19 @@ namespace ParticleUniverse
 		IAlias(),
 		IElement(),
 		mParentTechnique(0),
+		mName(BLANK_STRING),
 		mEnabled(DEFAULT_ENABLED),
 		mOriginalEnabled(DEFAULT_ENABLED),
 		mOriginalEnabledSet(false),
 		mObserve(true),
+		mObserveUntilEvent(DEFAULT_UNTIL_EVENT),
+		mEventHandlersExecuted(false),
+		_mObserverScale(Vector3::UNIT_SCALE),
 		mParticleTypeToObserve(DEFAULT_PARTICLE_TYPE),
 		mParticleTypeToObserveSet(false),
-		mName(BLANK_STRING),
-		_mObserverScale(Vector3::UNIT_SCALE),
 		mObserverInterval(DEFAULT_INTERVAL),
 		mObserverIntervalRemainder(0.0),
-		mObserverIntervalSet(false),
-		mObserveUntilEvent(DEFAULT_UNTIL_EVENT),
-		mEventHandlersExecuted(false)
+		mObserverIntervalSet(false)
 	{
 		mAliasType = AT_OBSERVER;
 	}

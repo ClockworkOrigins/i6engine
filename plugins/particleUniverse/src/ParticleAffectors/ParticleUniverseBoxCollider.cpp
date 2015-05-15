@@ -53,7 +53,7 @@ namespace ParticleUniverse
 	{
 	}
 	//-----------------------------------------------------------------------
-	const Real BoxCollider::getWidth(void) const
+	Real BoxCollider::getWidth(void) const
 	{
 		return mWidth;
 	}
@@ -63,7 +63,7 @@ namespace ParticleUniverse
 		mWidth = width;
 	}
 	//-----------------------------------------------------------------------
-	const Real BoxCollider::getHeight(void) const
+	Real BoxCollider::getHeight(void) const
 	{
 		return mHeight;
 	}
@@ -73,7 +73,7 @@ namespace ParticleUniverse
 		mHeight = height;
 	}
 	//-----------------------------------------------------------------------
-	const Real BoxCollider::getDepth(void) const
+	Real BoxCollider::getDepth(void) const
 	{
 		return mDepth;
 	}

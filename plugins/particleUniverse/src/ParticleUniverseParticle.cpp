@@ -135,7 +135,7 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	Real Particle::calculateVelocity(void) const
 	{
-		if (originalScaledDirectionLength != 0)
+		if (!almostEquals(originalScaledDirectionLength, 0))
 		{
 			return originalVelocity * (direction.length() / originalScaledDirectionLength);
 		}

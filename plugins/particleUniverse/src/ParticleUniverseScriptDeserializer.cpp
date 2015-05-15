@@ -182,10 +182,10 @@ namespace ParticleUniverse
 	//-------------------------------------------------------------------------
 	bool ScriptTranslator::passValidateProperty(ScriptCompiler* compiler, 
 		PropertyAbstractNode* prop, 
-		const String& token,
+		const String& t,
 		ValidationType validationType)
 	{
-		if (!passValidatePropertyNoValues(compiler, prop, token))
+		if (!passValidatePropertyNoValues(compiler, prop, t))
 		{
 			return false;
 		}
@@ -195,52 +195,52 @@ namespace ParticleUniverse
 		{
 			case VAL_BOOL:
 			{
-				ret = passValidatePropertyNumberOfValues(compiler, prop, token, 1) && passValidatePropertyValidBool(compiler, prop);
+				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 1) && passValidatePropertyValidBool(compiler, prop);
 			}
 			break;
 			case VAL_COLOURVALUE:
 			{
-				ret = passValidatePropertyNumberOfValuesRange(compiler, prop, token, 3, 4);
+				ret = passValidatePropertyNumberOfValuesRange(compiler, prop, t, 3, 4);
 			}
 			break;
 			case VAL_INT:
 			{
-				ret = passValidatePropertyNumberOfValues(compiler, prop, token, 1) && passValidatePropertyValidInt(compiler, prop);
+				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 1) && passValidatePropertyValidInt(compiler, prop);
 			}
 			break;
 			case VAL_QUATERNION:
 			{
-				ret = passValidatePropertyNumberOfValues(compiler, prop, token, 4) && passValidatePropertyValidQuaternion(compiler, prop);
+				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 4) && passValidatePropertyValidQuaternion(compiler, prop);
 			}
 			break;
 			case VAL_REAL:
 			{
-				ret = passValidatePropertyNumberOfValues(compiler, prop, token, 1) && passValidatePropertyValidReal(compiler, prop);
+				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 1) && passValidatePropertyValidReal(compiler, prop);
 			}
 			break;
 			case VAL_STRING:
 			{
-				ret = passValidatePropertyNumberOfValues(compiler, prop, token, 1);
+				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 1);
 			}
 			break;
 			case VAL_UINT:
 			{
-				ret = passValidatePropertyNumberOfValues(compiler, prop, token, 1) && passValidatePropertyValidUint(compiler, prop);
+				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 1) && passValidatePropertyValidUint(compiler, prop);
 			}
 			break;
 			case VAL_VECTOR2:
 			{
-				ret = passValidatePropertyNumberOfValues(compiler, prop, token, 2) && passValidatePropertyValidVector2(compiler, prop);
+				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 2) && passValidatePropertyValidVector2(compiler, prop);
 			}
 			break;
 			case VAL_VECTOR3:
 			{
-				ret = passValidatePropertyNumberOfValues(compiler, prop, token, 3) && passValidatePropertyValidVector3(compiler, prop);
+				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 3) && passValidatePropertyValidVector3(compiler, prop);
 			}
 			break;
 			case VAL_VECTOR4:
 			{
-				ret = passValidatePropertyNumberOfValues(compiler, prop, token, 4) && passValidatePropertyValidVector4(compiler, prop);
+				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 4) && passValidatePropertyValidVector4(compiler, prop);
 			}
 			break;
 		}
@@ -250,11 +250,11 @@ namespace ParticleUniverse
 	//-------------------------------------------------------------------------
 	bool ScriptTranslator::passValidatePropertyNoValues(ScriptCompiler* compiler, 
 		PropertyAbstractNode* prop, 
-		const String& token)
+		const String& t)
 	{
 		if(prop->values.empty())
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line, "PU Compiler: No values found for " + token + ".");
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, int(prop->line), "PU Compiler: No values found for " + t + ".");
 			return false;
 		}
 		return true;
@@ -262,15 +262,15 @@ namespace ParticleUniverse
 	//-------------------------------------------------------------------------
 	bool ScriptTranslator::passValidatePropertyNumberOfValues(ScriptCompiler* compiler, 
 		PropertyAbstractNode* prop, 
-		const String& token,
+		const String& t,
 		ushort numberOfValues)
 	{
 		if(prop->values.size() > numberOfValues)
 		{
 			compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, 
 				prop->file, 
-				prop->line, 
-				"PU Compiler: " + token + " must have " + StringConverter::toString(numberOfValues) + " argument(s).");
+				int(prop->line),
+				"PU Compiler: " + t + " must have " + StringConverter::toString(numberOfValues) + " argument(s).");
 			return false;
 		}
 		return true;
@@ -278,7 +278,7 @@ namespace ParticleUniverse
 	//-------------------------------------------------------------------------
 	bool ScriptTranslator::passValidatePropertyNumberOfValuesRange(ScriptCompiler* compiler, 
 		PropertyAbstractNode* prop, 
-		const String& token,
+		const String& t,
 		ushort minNumberOfValues,
 		ushort maxNumberOfValues)
 	{
@@ -286,8 +286,8 @@ namespace ParticleUniverse
 		{
 			compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, 
 				prop->file, 
-				prop->line, 
-				"PU Compiler: " + token + " must have between" + 
+				int(prop->line),
+				"PU Compiler: " + t + " must have between" + 
 				StringConverter::toString(minNumberOfValues) + 
 				" and " +
 				StringConverter::toString(maxNumberOfValues) +
@@ -306,7 +306,7 @@ namespace ParticleUniverse
 			return true;
 		}
 
-		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, int(prop->line),
 			"PU Compiler: " + prop->values.front()->getValue() + " is not a valid Real");
 		return false;
 	}
@@ -320,7 +320,7 @@ namespace ParticleUniverse
 			return true;
 		}
 
-		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, int(prop->line),
 			"PU Compiler: " + prop->values.front()->getValue() + " is not a valid int");
 		return false;
 	}
@@ -334,7 +334,7 @@ namespace ParticleUniverse
 			return true;
 		}
 
-		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, int(prop->line),
 			"PU Compiler: " + prop->values.front()->getValue() + " is not a valid uint");
 		return false;
 	}
@@ -348,7 +348,7 @@ namespace ParticleUniverse
 			return true;
 		}
 
-		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, int(prop->line),
 			"PU Compiler: " + prop->values.front()->getValue() + " is not a valid bool");
 		return false;
 	}
@@ -362,7 +362,7 @@ namespace ParticleUniverse
 			return true;
 		}
 
-		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, int(prop->line),
 			"PU Compiler: " + prop->values.front()->getValue() + " is not a valid Vector2");
 		return false;
 	}
@@ -376,7 +376,7 @@ namespace ParticleUniverse
 			return true;
 		}
 
-		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, int(prop->line),
 			"PU Compiler: " + prop->values.front()->getValue() + " is not a valid Vector3");
 		return false;
 	}
@@ -390,7 +390,7 @@ namespace ParticleUniverse
 			return true;
 		}
 
-		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, int(prop->line),
 			"PU Compiler: " + prop->values.front()->getValue() + " is not a valid Vector4");
 		return false;
 	}
@@ -404,22 +404,22 @@ namespace ParticleUniverse
 			return true;
 		}
 
-		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+		compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, int(prop->line),
 			"PU Compiler: " + prop->values.front()->getValue() + " is not a valid Quaternion");
 		return false;
 	}
 	//-------------------------------------------------------------------------
 	void ScriptTranslator::errorUnexpectedToken(ScriptCompiler* compiler, 
-		AbstractNodePtr token)
+		AbstractNodePtr t)
 	{
-		compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, token.getPointer()->file, token.getPointer()->line, 
+		compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, t.getPointer()->file, int(t.getPointer()->line),
 			"PU Compiler: token is not recognized");
 	}
 	//-------------------------------------------------------------------------
 	void ScriptTranslator::errorUnexpectedProperty(ScriptCompiler* compiler, 
 		PropertyAbstractNode* prop)
 	{
-		compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line, 
+		compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, int(prop->line), 
 			"PU Compiler: token \"" + prop->name + "\" is not recognized");
 	}
 	//-------------------------------------------------------------------------

@@ -40,6 +40,7 @@ namespace ParticleUniverse
     */
 	class _ParticleUniverseExport GravityExtern : public Attachable, public GravityAffector
 	{
+		using GravityAffector::copyAttributesTo;
 		public:
 		GravityExtern(void) : 
 			Attachable(),

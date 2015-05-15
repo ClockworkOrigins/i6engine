@@ -139,7 +139,7 @@ namespace ParticleUniverse
 		particle->direction += timeElapsed * mScaleForce * mForce;
 	}
 	//-----------------------------------------------------------------------
-	const ForceField::ForceFieldType ForceFieldAffector::getForceFieldType(void) const
+	ForceField::ForceFieldType ForceFieldAffector::getForceFieldType(void) const
 	{
 		return mForceFieldType;
 	}

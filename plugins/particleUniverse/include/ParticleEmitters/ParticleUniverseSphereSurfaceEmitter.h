@@ -48,7 +48,7 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			const Real getRadius(void) const;
+			Real getRadius(void) const;
 			void setRadius(const Real radius);
 
 			/** 

@@ -45,7 +45,7 @@ namespace ParticleUniverse
 
 			/** Returns the width of the box
 			*/
-			const Real getWidth(void) const;
+			Real getWidth(void) const;
 
 			/** Sets the width of the box
 			*/
@@ -53,7 +53,7 @@ namespace ParticleUniverse
 
 			/** Returns the height of the box
 			*/
-			const Real getHeight(void) const;
+			Real getHeight(void) const;
 
 			/** Sets the height of the box
 			*/
@@ -61,7 +61,7 @@ namespace ParticleUniverse
 
 			/** Returns the depth of the box
 			*/
-			const Real getDepth(void) const;
+			Real getDepth(void) const;
 
 			/** Sets the depth of the box
 			*/

@@ -90,7 +90,7 @@ namespace ParticleUniverse
 		return true;
 	}
 	//-----------------------------------------------------------------------
-	const bool AtlasImage::getAlwaysUpdate (void) const
+	bool AtlasImage::getAlwaysUpdate (void) const
 	{
 		return mAlwaysUpdate;
 	}
@@ -126,8 +126,8 @@ namespace ParticleUniverse
 		}
 
 		// 2. Determine size of the atlas image and alloc memory - Is it possibe to create a square image?
-		size_t imageColums = (size_t)(Math::Ceil(Math::Sqrt((Real)mImageList.size())));
-		size_t imageRows = (size_t)(Math::Ceil((Real)(mImageList.size()) / (Real)imageColums));
+		size_t imageColums = size_t(Math::Ceil(Math::Sqrt(Real(mImageList.size()))));
+		size_t imageRows = size_t(Math::Ceil(Real(mImageList.size()) / Real(imageColums)));
 		size_t width = imageColums * mIndividualImageWidth;
 		size_t height = imageRows * mIndividualImageHeight;
 		size_t pixelSize = Ogre::PixelUtil::getNumElemBytes(mPixelFormat);

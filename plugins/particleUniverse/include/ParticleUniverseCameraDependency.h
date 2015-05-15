@@ -56,7 +56,7 @@ namespace ParticleUniverse
 
 			/** Todo
 	        */
-			const Real getThreshold(void) const {return mThreshold;};
+			Real getThreshold(void) const {return mThreshold;};
 			void setThreshold(const Real threshold) {mThreshold = threshold;};
 
 			/** Todo

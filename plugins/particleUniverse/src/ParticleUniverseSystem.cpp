@@ -63,18 +63,16 @@ namespace ParticleUniverse
 	};
 	//-----------------------------------------------------------------------
 	ParticleSystem::ParticleSystem(const String& name) :
-		IElement(),
-		mAABB(),
 		MovableObject(name),
-		mSceneManager(0),
-		mTimeController(0),
-		mUseController(true),
-		mTimeSinceLastVisible(0.0f),
-		mTimeElapsedSinceStart(0),
-		mLastVisibleFrame(0),
+		IElement(),
 		mState(ParticleSystem::PSS_STOPPED),
+		mAABB(),
+		mTimeController(0),
+		mTimeSinceLastVisible(0.0f),
+		mLastVisibleFrame(0),
 		mNonvisibleUpdateTimeout(DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT),
 		mNonvisibleUpdateTimeoutSet(false),
+		mTimeElapsedSinceStart(0),
 		mResourceGroupName(Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME),
 		mSmoothLod(DEFAULT_SMOOTH_LOD),
 		mSuppressNotifyEmissionChange(true),
@@ -103,9 +101,11 @@ namespace ParticleUniverse
 		mPauseTimeElapsed(0.0f),
 		mTemplateName(BLANK_STRING),
 		mStopFadeSet(false),
+		mSceneManager(0),
 		mLatestOrientation(Quaternion::IDENTITY),
 		mRotationOffset(Quaternion::IDENTITY),
 		mRotationCentre(Vector3::ZERO),
+		mUseController(true),
 		mAtLeastOneParticleEmitted(false),
 		mLastLodIndex(0)
 	{
@@ -114,18 +114,16 @@ namespace ParticleUniverse
 	}
 	//-----------------------------------------------------------------------
 	ParticleSystem::ParticleSystem(const String& name, const String& resourceGroupName) :
-		IElement(),
-		mAABB(),
 		MovableObject(name),
-		mSceneManager(0),
-		mTimeController(0),
-		mUseController(true),
-		mTimeSinceLastVisible(0.0f),
-		mTimeElapsedSinceStart(0),
-		mLastVisibleFrame(0),
+		IElement(),
 		mState(ParticleSystem::PSS_STOPPED),
+		mAABB(),
+		mTimeController(0),
+		mTimeSinceLastVisible(0.0f),
+		mLastVisibleFrame(0),
 		mNonvisibleUpdateTimeout(DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT),
 		mNonvisibleUpdateTimeoutSet(false),
+		mTimeElapsedSinceStart(0),
 		mResourceGroupName(resourceGroupName),
 		mSmoothLod(DEFAULT_SMOOTH_LOD),
 		mSuppressNotifyEmissionChange(true),
@@ -154,9 +152,11 @@ namespace ParticleUniverse
 		mPauseTimeElapsed(0.0f),
 		mTemplateName(BLANK_STRING),
 		mStopFadeSet(false),
+		mSceneManager(0),
 		mLatestOrientation(Quaternion::IDENTITY),
 		mRotationOffset(Quaternion::IDENTITY),
 		mRotationCentre(Vector3::ZERO),
+		mUseController(true),
 		mAtLeastOneParticleEmitted(false),
 		mLastLodIndex(0)
 	{
@@ -250,7 +250,7 @@ namespace ParticleUniverse
 		{
 			if (*it == particleSystemListener)
 			{
-				// Remove it (don´t destroy it, because the ParticleSystem is not the owner)
+				// Remove it (donÅ½t destroy it, because the ParticleSystem is not the owner)
 				mParticleSystemListenerList.erase(it);
 				break;
 			}
@@ -469,7 +469,7 @@ namespace ParticleUniverse
 			}
 			else
 			{
-				// Don´t know
+				// DonÅ½t know
 				return Quaternion::IDENTITY;
 			}
 		}
@@ -622,12 +622,12 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const Real ParticleSystem::getFastForwardTime(void) const
+	Real ParticleSystem::getFastForwardTime(void) const
 	{
 		return mFastForwardTime;
 	}
 	//-----------------------------------------------------------------------
-	const Real ParticleSystem::getFastForwardInterval(void) const
+	Real ParticleSystem::getFastForwardInterval(void) const
 	{
 		return mFastForwardInterval;
 	}
@@ -757,7 +757,7 @@ namespace ParticleUniverse
 
 		for (it = mTechniques.begin(); it != itEnd; ++it)
 		{
-			// Calculate the distance between the camera and each ParticleTechnique (although it isn´t always used).
+			// Calculate the distance between the camera and each ParticleTechnique (although it isnÅ½t always used).
 			if ((*it)->_isMarkedForEmission())
 			{
 				vec = cam->getDerivedPosition() - (*it)->position;
@@ -862,7 +862,7 @@ namespace ParticleUniverse
 		{
 			if (mNonvisibleUpdateTimeoutSet)
 			{
-				long frameDiff = Ogre::Root::getSingleton().getNextFrameNumber() - mLastVisibleFrame;
+				long frameDiff = long(Ogre::Root::getSingleton().getNextFrameNumber() - mLastVisibleFrame);
 				if (frameDiff > 1 || frameDiff < 0)
 				{
 					mTimeSinceLastVisible += timeElapsed;
@@ -1204,7 +1204,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const Real ParticleSystem::getNonVisibleUpdateTimeout(void) const
+	Real ParticleSystem::getNonVisibleUpdateTimeout(void) const
 	{
 		return mNonvisibleUpdateTimeout;
 	}
@@ -1334,7 +1334,7 @@ namespace ParticleUniverse
 		_markForEmission();
 	}
 	//-----------------------------------------------------------------------
-	const Real ParticleSystem::getIterationInterval(void) const
+	Real ParticleSystem::getIterationInterval(void) const
 	{
 		return mIterationInterval;
 	}
@@ -1353,7 +1353,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const Real ParticleSystem::getFixedTimeout(void) const
+	Real ParticleSystem::getFixedTimeout(void) const
 	{
 		return mFixedTimeout;
 	}
@@ -1429,7 +1429,7 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	void ParticleSystem::stop(void)
 	{
-		/*  Note, that the ParticleSystem ins´t visible anymore, but it is still attached to the
+		/*  Note, that the ParticleSystem insÅ½t visible anymore, but it is still attached to the
 			node and still consumes resources, but it allows fast start/stop iterations if needed.
 			An important thing why it keeps attached to the node is that attaching and detaching the 
 			ParticleSystem to/from a node must be done outside of the ParticleSystem. If the ParticleSystem

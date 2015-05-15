@@ -41,9 +41,9 @@ namespace ParticleUniverse
 			/**	Todo.
 			*/
 			SpatialHashTable(void) :
-				mTableSize(50),
 				mCellDimension(15),
-				mCellOverlap(5)
+				mCellOverlap(5),
+				mTableSize(50)
 			{
 				_initialise();
 			};
@@ -51,9 +51,9 @@ namespace ParticleUniverse
 			/**	Todo.
 			*/
 			SpatialHashTable(unsigned int tableSize, unsigned short cellDimension, unsigned short cellOverlap = 0.0f) :
-				mTableSize(tableSize),
 				mCellDimension(cellDimension),
-				mCellOverlap(cellOverlap)
+				mCellOverlap(cellOverlap),
+				mTableSize(tableSize)
 			{
 				_initialise();
 			};
@@ -204,9 +204,9 @@ namespace ParticleUniverse
 			*/
 			inline unsigned int _calculateIndex(const Vector3& position)
 			{
-				long x = (long)((floor (position.x / mCellDimension)) * 73856093);
-				long y = (long)((floor (position.y / mCellDimension)) * 19349663);
-				long z = (long)((floor (position.z / mCellDimension)) * 83492791);
+				long x = long((floor (position.x / mCellDimension)) * 73856093);
+				long y = long((floor (position.y / mCellDimension)) * 19349663);
+				long z = long((floor (position.z / mCellDimension)) * 83492791);
 				long i = (x ^ y ^ z) % mTableSize;
 				i = i < 0 ? mTableSize - 1 : i; // If negative, point to the last cell.
 				return static_cast<unsigned int>(i);

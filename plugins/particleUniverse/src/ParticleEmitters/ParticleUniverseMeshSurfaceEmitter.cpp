@@ -90,7 +90,7 @@ namespace ParticleUniverse
 		en3.normalise();
 	}
 	//-----------------------------------------------------------------------
-	const Vector3 Triangle::getRandomTrianglePosition (void)
+	Vector3 Triangle::getRandomTrianglePosition (void)
 	{
 		// Use barycentric coordinates. Let A, B, C be the three vertices of the triangle. Any point P inside can 
 		// be expressed uniquely as P = aA + bB + cC, where a+b+c=1 and a,b,c are each >= 0.
@@ -112,7 +112,7 @@ namespace ParticleUniverse
 		return a * v1 + b * v2 + c * v3;
 	}
 	//-----------------------------------------------------------------------
-	const Triangle::PositionAndNormal Triangle::getRandomEdgePositionAndNormal (void)
+	Triangle::PositionAndNormal Triangle::getRandomEdgePositionAndNormal (void)
 	{
 		Real mult = Math::RangeRandom(0, 1);
 		Real randomVal = Math::RangeRandom(0, 3);
@@ -148,7 +148,7 @@ namespace ParticleUniverse
 		return pAndN;
 	}
 	//-----------------------------------------------------------------------
-	const Triangle::PositionAndNormal Triangle::getRandomVertexAndNormal (void)
+	Triangle::PositionAndNormal Triangle::getRandomVertexAndNormal (void)
 	{
 		Real randomVal = Math::RangeRandom(0, 3);
 		PositionAndNormal pAndN;
@@ -228,7 +228,7 @@ namespace ParticleUniverse
 	}
 
 	//-----------------------------------------------------------------------
-	const size_t MeshInfo::getRandomTriangleIndex (void)
+	size_t MeshInfo::getRandomTriangleIndex (void)
 	{
 		size_t index;
 		if (mDistribution == MSD_HOMOGENEOUS || mDistribution == MSD_HETEROGENEOUS_1)
@@ -242,7 +242,7 @@ namespace ParticleUniverse
 	}
 
 	//-----------------------------------------------------------------------
-	const Triangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal (const size_t triangleIndex)
+	Triangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal (const size_t triangleIndex)
 	{
 		Triangle triangle = getTriangle(triangleIndex);
 		Triangle::PositionAndNormal pAndN;
@@ -544,7 +544,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const MeshInfo::MeshSurfaceDistribution MeshSurfaceEmitter::getDistribution (void) const
+	MeshInfo::MeshSurfaceDistribution MeshSurfaceEmitter::getDistribution (void) const
 	{
 		return mDistribution;
 	}

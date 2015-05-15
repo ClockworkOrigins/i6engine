@@ -41,7 +41,7 @@ namespace ParticleUniverse
 			@remarks
 				If false, compilation must be done manually (calling the _compile() function)
 			*/
-			const bool getAlwaysUpdate (void) const;
+			bool getAlwaysUpdate (void) const;
 
 			/** See getAlwaysUpdate
 			*/

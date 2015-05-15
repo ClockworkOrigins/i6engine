@@ -43,8 +43,9 @@ namespace ParticleUniverse
 		IElement(),
 		mParentTechnique(0),
 		mName(BLANK_STRING),
-		_mAffectorScale(Vector3::UNIT_SCALE),
-		mAffectSpecialisation(ParticleAffector::AFSP_DEFAULT)
+		mAffectSpecialisation(ParticleAffector::AFSP_DEFAULT),
+		mExcludedEmitters(),
+		_mAffectorScale(Vector3::UNIT_SCALE)
 	{
 		particleType = PT_AFFECTOR;
 		mAliasType = AT_AFFECTOR;

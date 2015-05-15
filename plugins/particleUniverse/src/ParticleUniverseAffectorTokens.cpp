@@ -53,7 +53,7 @@ namespace ParticleUniverse
 		}
 		else
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -61,7 +61,7 @@ namespace ParticleUniverse
 		ParticleAffectorFactory* particleAffectorFactory = ParticleSystemManager::getSingletonPtr()->getAffectorFactory(type);
 		if (!particleAffectorFactory)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -69,7 +69,7 @@ namespace ParticleUniverse
 		mAffector = ParticleSystemManager::getSingletonPtr()->createAffector(type);
 		if (!mAffector)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -173,7 +173,7 @@ namespace ParticleUniverse
 							}
 							else
 							{
-								compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line,
+								compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, int(prop->line),
 									"PU Compiler: Error in exclude_emitter arguments");
 							}
 						}
@@ -219,7 +219,7 @@ namespace ParticleUniverse
 			token[TOKEN_ENABLED], StringConverter::toString(affector->_getOriginalEnabled()), 12);
 		if (affector->position != ParticleAffector::DEFAULT_POSITION) serializer->writeLine(
 			token[TOKEN_POSITION], StringConverter::toString(affector->position), 12);
-		if (affector->mass != ParticleAffector::DEFAULT_MASS) serializer->writeLine(
+		if (!almostEquals(affector->mass, ParticleAffector::DEFAULT_MASS)) serializer->writeLine(
 			token[TOKEN_AFFECTOR_MASS], StringConverter::toString(affector->mass), 12);
 		String affectSpecialisation = token[TOKEN_AFFECTOR_SPEC_DEFAULT];
 		if (affector->getAffectSpecialisation() == ParticleAffector::AFSP_TTL_INCREASE)

@@ -43,6 +43,7 @@ namespace ParticleUniverse
     */
 	class _ParticleUniverseExport ParticleEmitter : public Particle, public IAlias, public IElement
 	{
+		using Particle::copyAttributesTo;
 		public:
 			// Default values
 			static const bool DEFAULT_ENABLED;
@@ -573,7 +574,7 @@ namespace ParticleUniverse
 				and NOT between the camera and the ParticleEmitter position. This means that it will not be accurate
 				if the emitter is emitted itself. The reason is to reduce the number of calculations.
 			@par
-				This should be typically used for a 1 camera setup, since using 2 camera¥s would result in wrong 
+				This should be typically used for a 1 camera setup, since using 2 camera≈Ωs would result in wrong 
 				calculations (mixed values).
 			*/
 			CameraDependency* mEmissionRateCameraDependency;

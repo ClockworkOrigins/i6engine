@@ -51,7 +51,7 @@ namespace modules {
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "LuaScriptsPath", _scriptsPath)) {
 			ISIXE_THROW_FAILURE("LuaScriptingManager", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
 		}
-#ifdef ISIXE_SCRIPTING == SCRIPTING_LUA
+#if ISIXE_SCRIPTING == SCRIPTING_LUA
 		api::EngineController::GetSingleton().getScriptingFacade()->_manager = this;
 #endif
 	}

@@ -59,7 +59,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const BaseCollider::IntersectionType BaseCollider::getIntersectionType(void) const
+	BaseCollider::IntersectionType BaseCollider::getIntersectionType(void) const
 	{
 		return mIntersectionType;
 	}
@@ -69,7 +69,7 @@ namespace ParticleUniverse
 		mIntersectionType = intersectionType;
 	}
 	//-----------------------------------------------------------------------
-	const BaseCollider::CollisionType BaseCollider::getCollisionType(void) const
+	BaseCollider::CollisionType BaseCollider::getCollisionType(void) const
 	{
 		return mCollisionType;
 	}
@@ -79,7 +79,7 @@ namespace ParticleUniverse
 		mCollisionType = collisionType;
 	}
 	//-----------------------------------------------------------------------
-	const Real BaseCollider::getFriction(void) const
+	Real BaseCollider::getFriction(void) const
 	{
 		return mFriction;
 	}
@@ -89,7 +89,7 @@ namespace ParticleUniverse
 		mFriction = friction;
 	}
 	//-----------------------------------------------------------------------
-	const Real BaseCollider::getBouncyness(void) const
+	Real BaseCollider::getBouncyness(void) const
 	{
 		return mBouncyness;
 	}

@@ -58,7 +58,6 @@ namespace ParticleUniverse
 				width = visible ? width : 0;
 				
 				size_t max = mBillboardChain->getMaxChainElements();
-				Ogre::BillboardChain::Element element;
 				for (size_t j = 0; j < max; j++)
 				{
 					Ogre::BillboardChain::Element element;

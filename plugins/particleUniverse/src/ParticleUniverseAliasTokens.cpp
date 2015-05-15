@@ -42,7 +42,7 @@ namespace ParticleUniverse
 	{
 		ObjectAbstractNode* obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
 		if(obj->name.empty())
-			compiler->addError(ScriptCompiler::CE_OBJECTNAMEEXPECTED, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_OBJECTNAMEEXPECTED, obj->file, int(obj->line));
 
 		for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
 		{

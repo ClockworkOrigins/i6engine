@@ -60,24 +60,27 @@ namespace ParticleUniverse
 		IElement(),
 		mParentSystem(0),
 		mName(BLANK_STRING),
-		mRenderer(0),
-		mVisualParticleQuota(DEFAULT_VISUAL_PARTICLE_QUOTA),
-		mEmittedEmitterQuota(DEFAULT_EMITTED_EMITTER_QUOTA),
-		mEmittedTechniqueQuota(DEFAULT_EMITTED_TECHNIQUE_QUOTA),
-		mEmittedAffectorQuota(DEFAULT_EMITTED_AFFECTOR_QUOTA),
-		mEmittedSystemQuota(DEFAULT_EMITTED_SYSTEM_QUOTA),
 		mVisualParticlePoolIncreased(false),
 		mParticleEmitterPoolIncreased(false),
 		mParticleTechniquePoolIncreased(false),
 		mParticleAffectorPoolIncreased(false),
 		mParticleSystemPoolIncreased(false),
+		mVisualParticleQuota(DEFAULT_VISUAL_PARTICLE_QUOTA),
+		mEmittedEmitterQuota(DEFAULT_EMITTED_EMITTER_QUOTA),
+		mEmittedTechniqueQuota(DEFAULT_EMITTED_TECHNIQUE_QUOTA),
+		mEmittedAffectorQuota(DEFAULT_EMITTED_AFFECTOR_QUOTA),
+		mEmittedSystemQuota(DEFAULT_EMITTED_SYSTEM_QUOTA),
+		mRenderer(0),
 		mSuppressNotifyEmissionChange(true),
+		mMaterialName(BLANK_STRING),
 		mDefaultWidth(DEFAULT_WIDTH),
 		mDefaultHeight(DEFAULT_HEIGHT),
 		mDefaultDepth(DEFAULT_DEPTH),
-		mMaterialName(BLANK_STRING),
 		mLodIndex(DEFAULT_LOD_INDEX),
 		mCameraSquareDistance(0),
+		mWidthCameraDependency(0),
+		mHeightCameraDependency(0),
+		mDepthCameraDependency(0),
 		mPrepareExtern(false),
 		mPrepareBehaviour(false),
 		mPrepareAffector(false),
@@ -87,20 +90,17 @@ namespace ParticleUniverse
 		mMinWorldExtend(Vector3::ZERO),
 		mMaxWorldExtend(Vector3::ZERO),
 		mHasExtents(false),
-		mWidthCameraDependency(0),
-		mHeightCameraDependency(0),
-		mDepthCameraDependency(0),
 		mKeepLocal(DEFAULT_KEEP_LOCAL),
 		_mParticleSystemScale(Vector3::UNIT_SCALE),
 		_mParticleSystemScaleVelocity(1.0),
-		mSpatialHashTableA(0),
-		mSpatialHashTableB(0),
-		mCurrentSpatialHashTable(0),
 		mIsSpatialHashingUsed(false),
 		mIsSpatialHashingInitialised(false),
 		mSpatialHashingCellDimension(DEFAULT_SPATIAL_HASHING_CELL_DIM),
 		mSpatialHashingCellOverlap(DEFAULT_SPATIAL_HASHING_CELL_OVERLAP),
 		mSpatialHashTableSize(DEFAULT_SPATIAL_HASHING_TABLE_SIZE),
+		mSpatialHashTableA(0),
+		mSpatialHashTableB(0),
+		mCurrentSpatialHashTable(0),
 		mSpatialHashingInterval(DEFAULT_SPATIAL_HASHING_INTERVAL),
 		mSpatialHashingIntervalRemainder(0.0),
 		mSpatialHashingIntervalSet(false),
@@ -420,7 +420,7 @@ namespace ParticleUniverse
 		mParticleSystemPoolIncreased = false; // Triggers function to increase the number of particle system particles
 	}
 	//-----------------------------------------------------------------------
-	const Real ParticleTechnique::getDefaultWidth(void) const
+	Real ParticleTechnique::getDefaultWidth(void) const
 	{
 		return mDefaultWidth;
 	}
@@ -436,7 +436,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const Real ParticleTechnique::getDefaultHeight(void) const
+	Real ParticleTechnique::getDefaultHeight(void) const
 	{
 		return mDefaultHeight;
 	}
@@ -452,7 +452,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const Real ParticleTechnique::getDefaultDepth(void) const
+	Real ParticleTechnique::getDefaultDepth(void) const
 	{
 		return mDefaultDepth;
 	}
@@ -1362,7 +1362,7 @@ namespace ParticleUniverse
 	{
 		/*
 		@remarks
-			Note, that the ParticleBehaviour template list stored in this ParticleTechnique is ¥prepared¥ 
+			Note, that the ParticleBehaviour template list stored in this ParticleTechnique is ≈Ωprepared≈Ω 
 			and not the ParticleBehaviour objects of each Particle. The ParticleBehaviour templates in 
 			this ParticleTechnique can be initialised quickly with certain data, while this data 
 			is automatically used in the cloned ParticleBehaviour objects stored in each Particle.
@@ -1424,6 +1424,7 @@ namespace ParticleUniverse
 			{
 				// Technique is disabled and smoothLod isn't set, so don't continue.
 				return;
+
 			}
 			else if (mPool.isEmpty())
 			{
@@ -1684,6 +1685,9 @@ namespace ParticleUniverse
 					affector->_notifyStart();
 				}
 				break;
+				default: {
+					break;
+				}
 			}
 
 			particle = static_cast<Particle*>(mPool.getNext());
@@ -1787,6 +1791,9 @@ namespace ParticleUniverse
 					affector->_notifyStop();
 				}
 				break;
+				default: {
+					break;
+				}
 			}
 
 			particle = static_cast<Particle*>(mPool.getNext());
@@ -1861,6 +1868,9 @@ namespace ParticleUniverse
 					affector->_notifyPause();
 				}
 				break;
+				default: {
+					break;
+				}
 			}
 
 			particle = static_cast<Particle*>(mPool.getNext());
@@ -1935,6 +1945,9 @@ namespace ParticleUniverse
 					affector->_notifyResume();
 				}
 				break;
+				default: {
+					break;
+				}
 			}
 
 			particle = static_cast<Particle*>(mPool.getNext());
@@ -2150,7 +2163,7 @@ namespace ParticleUniverse
 		}
 
 		/*  Iterate through all pooled affector objects (these are the affectors that are emitted).
-			The pool itself isn¥t used, but an extraction of the pooled affectors.
+			The pool itself isn≈Ωt used, but an extraction of the pooled affectors.
 		*/
 		if (mCopyOfPooledAffectors.empty())
 			return;
@@ -2394,7 +2407,7 @@ namespace ParticleUniverse
 		}
 
 		/** Externs are also called to perform expiration activities. If needed, affectors and emitters may be added, but at the moment
-			there is no reason for (and we don¥t want to waste cpu resources).
+			there is no reason for (and we don≈Ωt want to waste cpu resources).
 		*/
 		if (!mExterns.empty())
 		{
@@ -2903,7 +2916,7 @@ namespace ParticleUniverse
 		{
 			if (*it == techniqueListener)
 			{
-				// Remove it (don¥t destroy it, because the technique is not the owner)
+				// Remove it (don≈Ωt destroy it, because the technique is not the owner)
 				mTechniqueListenerList.erase(it);
 				break;
 			}

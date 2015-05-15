@@ -44,7 +44,7 @@ namespace ParticleUniverse
 			static const Real DEFAULT_VELOCITY_THRESHOLD;
 
 			OnVelocityObserver(void);
-	        virtual ~OnVelocityObserver(void) {};
+	        virtual ~OnVelocityObserver(void) {}
 
 			/** 
 	        */
@@ -52,13 +52,13 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			Real getThreshold(void) const {return mThreshold;};
-			void setThreshold(Real threshold){mThreshold = threshold;};
+			Real getThreshold(void) const {return mThreshold;}
+			void setThreshold(Real threshold){mThreshold = threshold;}
 
 			/** 
 	        */
-			const ComparisionOperator getCompare(void) const {return mCompare;};
-			void setCompare(ComparisionOperator op){mCompare = op;};
+			ComparisionOperator getCompare(void) const {return mCompare;}
+			void setCompare(ComparisionOperator op){mCompare = op;}
 
 			/** Copy attributes to another observer.
 	        */

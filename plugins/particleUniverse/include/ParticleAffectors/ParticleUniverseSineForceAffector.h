@@ -54,12 +54,12 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			const Real getFrequencyMin(void) const;
+			Real getFrequencyMin(void) const;
 			void setFrequencyMin(const Real frequencyMin);
 
 			/** 
 	        */
-			const Real getFrequencyMax(void) const;
+			Real getFrequencyMax(void) const;
 			void setFrequencyMax(const Real frequencyMax);
 
 		protected:

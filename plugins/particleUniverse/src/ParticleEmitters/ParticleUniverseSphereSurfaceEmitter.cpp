@@ -42,7 +42,7 @@ namespace ParticleUniverse
 	{
 	}
 	//-----------------------------------------------------------------------
-	const Real SphereSurfaceEmitter::getRadius(void) const
+	Real SphereSurfaceEmitter::getRadius(void) const
 	{
 		return mRadius;
 	}

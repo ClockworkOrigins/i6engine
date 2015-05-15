@@ -45,7 +45,7 @@ namespace ParticleUniverse
 			static const Real DEFAULT_SCALE_FRACTION;
 
 			DoScaleEventHandler(void);
-	        virtual ~DoScaleEventHandler(void) {};
+	        virtual ~DoScaleEventHandler(void) {}
 
 			/** Returns the scale type
 	        */
@@ -57,7 +57,7 @@ namespace ParticleUniverse
 
 			/** Returns the scale fraction
 	        */
-			const Real getScaleFraction(void) const;
+			Real getScaleFraction(void) const;
 
 			/** Set the scale fraction. This scale fraction value is used to scale different attributes if the 
 				event handler is called.

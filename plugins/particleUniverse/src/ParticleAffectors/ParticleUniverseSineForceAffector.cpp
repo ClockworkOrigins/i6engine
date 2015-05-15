@@ -74,7 +74,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const Real SineForceAffector::getFrequencyMin(void) const
+	Real SineForceAffector::getFrequencyMin(void) const
 	{
 		return mFrequencyMin;
 	}
@@ -88,7 +88,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const Real SineForceAffector::getFrequencyMax(void) const
+	Real SineForceAffector::getFrequencyMax(void) const
 	{
 		return mFrequencyMax;
 	}

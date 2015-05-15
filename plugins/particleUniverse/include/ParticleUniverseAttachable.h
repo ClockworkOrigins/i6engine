@@ -53,7 +53,7 @@ namespace ParticleUniverse
 
 			/** Get the Distance Threshold
 			*/
-			const Real getDistanceThreshold(void) const;
+			Real getDistanceThreshold(void) const;
 
 			/** Set the Distance Threshold. This threshold defines at which distance the Attachable doesn't influence 
 				the particle anymore.

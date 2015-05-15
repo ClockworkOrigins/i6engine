@@ -54,17 +54,17 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			const Real getHeight(void) const;
+			Real getHeight(void) const;
 			void setHeight(const Real height);
 
 			/** 
 	        */
-			const Real getWidth(void) const;
+			Real getWidth(void) const;
 			void setWidth(const Real width);
 
 			/** 
 	        */
-			const Real getDepth(void) const;
+			Real getDepth(void) const;
 			void setDepth(const Real depth);
 
 			/** 

@@ -36,6 +36,8 @@ namespace ParticleUniverse
 	*/
 	class _ParticleUniverseExport BoxColliderExtern : public Attachable, public BoxCollider
 	{
+		using BoxCollider::copyAttributesTo;
+
 		public:
 			BoxColliderExtern(void) : 
 				Attachable(),

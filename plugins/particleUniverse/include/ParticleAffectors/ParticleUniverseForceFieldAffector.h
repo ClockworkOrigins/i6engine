@@ -65,7 +65,7 @@ namespace ParticleUniverse
 
 			/** Get/Set Forcefield type
 			*/
-			const ForceField::ForceFieldType getForceFieldType(void) const;
+			ForceField::ForceFieldType getForceFieldType(void) const;
 			void setForceFieldType(const ForceField::ForceFieldType forceFieldType);
 
 			/** Get/Set Delta

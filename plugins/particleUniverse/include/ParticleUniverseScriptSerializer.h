@@ -119,7 +119,7 @@ namespace ParticleUniverse
 
 			/** Get/set the indentation. To be used in cases where it is unkown what the indentation is.
 			*/
-			const short getIndentation(void) const;
+			short getIndentation(void) const;
 			void setIndentation(const short indentation);
 
 			/** Get/set the keyword. To be used in cases where it is unkown what the keyword is or in case serialisation is spread across

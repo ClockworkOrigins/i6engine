@@ -145,11 +145,11 @@ namespace ParticleUniverse
 			return;
 		}
 
-		force.x = (Real)(mNoise3D.noise(mMappedPosition.x + delta, mMappedPosition.y, mMappedPosition.z) - 
+		force.x = Real(mNoise3D.noise(mMappedPosition.x + delta, mMappedPosition.y, mMappedPosition.z) - 
 			mNoise3D.noise(mMappedPosition.x - delta, mMappedPosition.y, mMappedPosition.z));
-		force.y = (Real)(mNoise3D.noise(mMappedPosition.x, mMappedPosition.y + delta, mMappedPosition.z) - 
+		force.y = Real(mNoise3D.noise(mMappedPosition.x, mMappedPosition.y + delta, mMappedPosition.z) - 
 			mNoise3D.noise(mMappedPosition.x, mMappedPosition.y - delta, mMappedPosition.z));
-		force.z = (Real)(mNoise3D.noise(mMappedPosition.x, mMappedPosition.y, mMappedPosition.z + delta) - 
+		force.z = Real(mNoise3D.noise(mMappedPosition.x, mMappedPosition.y, mMappedPosition.z + delta) - 
 			mNoise3D.noise(mMappedPosition.x, mMappedPosition.y, mMappedPosition.z - delta));
 	}
 	//-----------------------------------------------------------------------
@@ -224,9 +224,9 @@ namespace ParticleUniverse
 		}
 
 		// Ignore delta, because it is not needed to search into the matrix
-		mX = (unsigned int)(mMapScale.x * position.x);
-		mY = (unsigned int)(mMapScale.y * position.y);
-		mZ = (unsigned int)(mMapScale.z * position.z);
+		mX = static_cast<unsigned int>(mMapScale.x * position.x);
+		mY = static_cast<unsigned int>(mMapScale.y * position.y);
+		mZ = static_cast<unsigned int>(mMapScale.z * position.z);
 		if (mX >= mForceFieldSize || mY >= mForceFieldSize || mZ >= mForceFieldSize)
 		{
 			// Position is outside the forcefield
@@ -289,11 +289,11 @@ namespace ParticleUniverse
 			{
 				for(unsigned int k = 0; k < mForceFieldSize; ++k)
 				{
-					mMatrixPositions[i][j][k].x = (Real)(mNoise3D.noise(i * delta + delta, j * delta, k * delta) - 
+					mMatrixPositions[i][j][k].x = Real(mNoise3D.noise(i * delta + delta, j * delta, k * delta) - 
 						mNoise3D.noise(i * delta - delta, j * delta, k * delta));
-					mMatrixPositions[i][j][k].y = (Real)(mNoise3D.noise(i * delta, j * delta + delta, k * delta) - 
+					mMatrixPositions[i][j][k].y = Real(mNoise3D.noise(i * delta, j * delta + delta, k * delta) - 
 						mNoise3D.noise(i * delta, j * delta - delta, k * delta));
-					mMatrixPositions[i][j][k].z = (Real)(mNoise3D.noise(i * delta, j * delta, k * delta + delta) - 
+					mMatrixPositions[i][j][k].z = Real(mNoise3D.noise(i * delta, j * delta, k * delta + delta) - 
 					mNoise3D.noise(i * delta, j * delta, k * delta - delta));
 				}
 			}
@@ -324,15 +324,15 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	//-----------------------------------------------------------------------
 	ForceField::ForceField(void) :
-		mForceFieldCalculationFactory(0),
-		mForceFieldPositionBase(Vector3::ZERO),
-		mForceFieldType(FF_REALTIME_CALC),
 		mOctaves(2),
 		mFrequency(1.0f),
 		mAmplitude(1.0f),
 		mPersistence(1.0f),
+		mWorldSize(ForceFieldCalculationFactory::DEFAULT_WORLDSIZE),
 		mForceFieldSize(64),
-		mWorldSize(ForceFieldCalculationFactory::DEFAULT_WORLDSIZE)
+		mForceFieldCalculationFactory(0),
+		mForceFieldPositionBase(Vector3::ZERO),
+		mForceFieldType(FF_REALTIME_CALC)
 	{
 	}
 	//-----------------------------------------------------------------------
@@ -432,7 +432,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const ForceField::ForceFieldType ForceField::getForceFieldType(void) const
+	ForceField::ForceFieldType ForceField::getForceFieldType(void) const
 	{
 		return mForceFieldType;
 	}

@@ -44,7 +44,7 @@ namespace ParticleUniverse
 		ObjectAbstractNode* obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
 		if(obj->name.empty())
 		{
-			compiler->addError(ScriptCompiler::CE_OBJECTNAMEEXPECTED, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_OBJECTNAMEEXPECTED, obj->file, int(obj->line));
 			return;
 		}
 
@@ -52,7 +52,7 @@ namespace ParticleUniverse
 		mSystem = ParticleSystemManager::getSingletonPtr()->createParticleSystemTemplate(obj->name, compiler->getResourceGroup());
 		if (!mSystem)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 		obj->context = Any(mSystem);
@@ -112,7 +112,7 @@ namespace ParticleUniverse
 							}
 							else
 							{
-								compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line,
+								compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, int(prop->line),
 									"PU Compiler: lod_distances expects only numbers as arguments");
 							}
 						}
@@ -280,15 +280,15 @@ namespace ParticleUniverse
 		// Write attributes (only the changed ones)
 		if (system->isKeepLocal() != ParticleSystem::DEFAULT_KEEP_LOCAL) serializer->writeLine(
 			token[TOKEN_KEEP_LOCAL], StringConverter::toString(system->isKeepLocal()), 4);
-		if (system->getFixedTimeout() != ParticleSystem::DEFAULT_FIXED_TIMEOUT) serializer->writeLine(
+		if (!almostEquals(system->getFixedTimeout(), ParticleSystem::DEFAULT_FIXED_TIMEOUT)) serializer->writeLine(
 			token[TOKEN_PS_FIXED_TIMEOUT], StringConverter::toString(system->getFixedTimeout()), 4);
-		if (system->getIterationInterval() != ParticleSystem::DEFAULT_ITERATION_INTERVAL) serializer->writeLine(
+		if (!almostEquals(system->getIterationInterval(), ParticleSystem::DEFAULT_ITERATION_INTERVAL)) serializer->writeLine(
 			token[TOKEN_PS_ITERATION_INTERVAL], StringConverter::toString(system->getIterationInterval()), 4);
-		if (system->getNonVisibleUpdateTimeout() != ParticleSystem::DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT) serializer->writeLine(
+		if (!almostEquals(system->getNonVisibleUpdateTimeout(), ParticleSystem::DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT)) serializer->writeLine(
 			token[TOKEN_PS_NONVIS_UPDATE_TIMEOUT], StringConverter::toString(system->getNonVisibleUpdateTimeout()), 4);
-		if (system->isSmoothLod() != ParticleSystem::DEFAULT_SMOOTH_LOD) serializer->writeLine(
+		if (!almostEquals(system->isSmoothLod(), ParticleSystem::DEFAULT_SMOOTH_LOD)) serializer->writeLine(
 			token[TOKEN_PS_SMOOTH_LOD], StringConverter::toString(system->isSmoothLod()), 4);
-		if (system->getFastForwardTime() != ParticleSystem::DEFAULT_FAST_FORWARD_TIME ||
+		if (!almostEquals(system->getFastForwardTime(), ParticleSystem::DEFAULT_FAST_FORWARD_TIME) ||
 			system->getFastForwardInterval() != 0.0f)
 		{
 			serializer->writeLine(token[TOKEN_PS_FAST_FORWARD], StringConverter::toString(system->getFastForwardTime()) + " " +
@@ -296,9 +296,9 @@ namespace ParticleUniverse
 		}
 		if (system->getMainCameraName() != ParticleSystem::DEFAULT_MAIN_CAMERA_NAME) serializer->writeLine(
 			token[TOKEN_PS_MAIN_CAMERA_NAME], system->getMainCameraName(), 4);
-		if (system->getScaleVelocity() != ParticleSystem::DEFAULT_SCALE_VELOCITY) serializer->writeLine(
+		if (!almostEquals(system->getScaleVelocity(), ParticleSystem::DEFAULT_SCALE_VELOCITY)) serializer->writeLine(
 			token[TOKEN_PS_SCALE_VELOCITY], StringConverter::toString(system->getScaleVelocity()), 4);
-		if (system->getScaleTime() != ParticleSystem::DEFAULT_SCALE_TIME) serializer->writeLine(
+		if (!almostEquals(system->getScaleTime(), ParticleSystem::DEFAULT_SCALE_TIME)) serializer->writeLine(
 			token[TOKEN_PS_SCALE_TIME], StringConverter::toString(system->getScaleTime()), 4);
 		if (system->getScale() != ParticleSystem::DEFAULT_SCALE) serializer->writeLine(
 			token[TOKEN_PS_SCALE], StringConverter::toString(system->getScale()), 4);

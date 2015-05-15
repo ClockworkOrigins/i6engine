@@ -49,7 +49,7 @@ namespace ParticleUniverse
 		mTechnique = ParticleSystemManager::getSingletonPtr()->createTechnique();
 		if (!mTechnique)
 		{
-			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
@@ -352,6 +352,9 @@ namespace ParticleUniverse
 									mTechnique->_addBehaviourTemplate(newBehaviour);
 								}
 								break;
+								default: {
+									break;
+								}
 							}
 						}
 					}
@@ -431,11 +434,11 @@ namespace ParticleUniverse
 		serializer->writeLine(token[TOKEN_MATERIAL], technique->getMaterialName(), 8);
 		if (technique->getLodIndex() != ParticleTechnique::DEFAULT_LOD_INDEX) serializer->writeLine(
 			token[TOKEN_TECH_LOD_INDEX], StringConverter::toString(technique->getLodIndex()), 8);
-		if (technique->getDefaultWidth() != ParticleTechnique::DEFAULT_WIDTH) serializer->writeLine(
+		if (!almostEquals(technique->getDefaultWidth(), ParticleTechnique::DEFAULT_WIDTH)) serializer->writeLine(
 			token[TOKEN_TECH_DEFAULT_PARTICLE_WIDTH], StringConverter::toString(technique->getDefaultWidth()), 8);
-		if (technique->getDefaultHeight() != ParticleTechnique::DEFAULT_HEIGHT) serializer->writeLine(
+		if (!almostEquals(technique->getDefaultHeight(), ParticleTechnique::DEFAULT_HEIGHT)) serializer->writeLine(
 			token[TOKEN_TECH_DEFAULT_PARTICLE_HEIGHT], StringConverter::toString(technique->getDefaultHeight()), 8);
-		if (technique->getDefaultDepth() != ParticleTechnique::DEFAULT_DEPTH) serializer->writeLine(
+		if (!almostEquals(technique->getDefaultDepth(), ParticleTechnique::DEFAULT_DEPTH)) serializer->writeLine(
 			token[TOKEN_TECH_DEFAULT_PARTICLE_DEPTH], StringConverter::toString(technique->getDefaultDepth()), 8);
 		if (technique->getSpatialHashingCellDimension() != ParticleTechnique::DEFAULT_SPATIAL_HASHING_CELL_DIM) serializer->writeLine(
 			token[TOKEN_TECH_SPHASHING_CELL_DIMENSION], StringConverter::toString(technique->getSpatialHashingCellDimension()), 8);
@@ -443,16 +446,16 @@ namespace ParticleUniverse
 			token[TOKEN_TECH_SPHASHING_CELL_OVERLAP], StringConverter::toString(technique->getSpatialHashingCellOverlap()), 8);
 		if (technique->getSpatialHashTableSize() != ParticleTechnique::DEFAULT_SPATIAL_HASHING_TABLE_SIZE) serializer->writeLine(
 			token[TOKEN_TECH_SPHASHING_SIZE], StringConverter::toString(technique->getSpatialHashTableSize()), 8);
-		if (technique->getSpatialHashingInterval() != ParticleTechnique::DEFAULT_SPATIAL_HASHING_INTERVAL) serializer->writeLine(
+		if (!almostEquals(technique->getSpatialHashingInterval(), ParticleTechnique::DEFAULT_SPATIAL_HASHING_INTERVAL)) serializer->writeLine(
 			token[TOKEN_TECH_SPHASHING_UPDATE_INTERVAL], StringConverter::toString(technique->getSpatialHashingInterval()), 8);
-		if (technique->getMaxVelocity() != ParticleTechnique::DEFAULT_MAX_VELOCITY) serializer->writeLine(
+		if (!almostEquals(technique->getMaxVelocity(), ParticleTechnique::DEFAULT_MAX_VELOCITY)) serializer->writeLine(
 			token[TOKEN_TECH_MAX_VELOCITY], StringConverter::toString(technique->getMaxVelocity()), 8);
 
 		if (technique->getWidthCameraDependency())
 		{
 			serializer->writeLine(token[TOKEN_CAMERA_DEPENDENCY], token[TOKEN_TECH_DEFAULT_PARTICLE_WIDTH], 8);
 			serializer->writeLine("{", 8);
-			if (Math::Sqrt(technique->getWidthCameraDependency()->getThreshold()) != CameraDependency::DEFAULT_DISTANCE_THRESHOLD) serializer->writeLine(
+			if (!almostEquals(Math::Sqrt(technique->getWidthCameraDependency()->getThreshold()), CameraDependency::DEFAULT_DISTANCE_THRESHOLD)) serializer->writeLine(
 				token[TOKEN_DISTANCE_THRESHOLD], StringConverter::toString(Math::Sqrt(technique->getWidthCameraDependency()->getThreshold())), 12);
 			if (technique->getWidthCameraDependency()->isIncrease() != CameraDependency::DEFAULT_INCREASE) serializer->writeLine(
 				token[TOKEN_INCREASE], StringConverter::toString(technique->getWidthCameraDependency()->isIncrease()), 12);
@@ -463,7 +466,7 @@ namespace ParticleUniverse
 		{
 			serializer->writeLine(token[TOKEN_CAMERA_DEPENDENCY], token[TOKEN_TECH_DEFAULT_PARTICLE_HEIGHT], 8);
 			serializer->writeLine("{", 8);
-			if (Math::Sqrt(technique->getHeightCameraDependency()->getThreshold()) != CameraDependency::DEFAULT_DISTANCE_THRESHOLD) serializer->writeLine(
+			if (!almostEquals(Math::Sqrt(technique->getHeightCameraDependency()->getThreshold()), CameraDependency::DEFAULT_DISTANCE_THRESHOLD)) serializer->writeLine(
 				token[TOKEN_DISTANCE_THRESHOLD], StringConverter::toString(Math::Sqrt(technique->getHeightCameraDependency()->getThreshold())), 12);
 			if (technique->getHeightCameraDependency()->isIncrease() != CameraDependency::DEFAULT_INCREASE) serializer->writeLine(
 				token[TOKEN_INCREASE], StringConverter::toString(technique->getHeightCameraDependency()->isIncrease()), 12);
@@ -474,7 +477,7 @@ namespace ParticleUniverse
 		{
 			serializer->writeLine(token[TOKEN_CAMERA_DEPENDENCY], token[TOKEN_TECH_DEFAULT_PARTICLE_DEPTH], 8);
 			serializer->writeLine("{", 8);
-			if (Math::Sqrt(technique->getDepthCameraDependency()->getThreshold()) != CameraDependency::DEFAULT_DISTANCE_THRESHOLD) serializer->writeLine(
+			if (!almostEquals(Math::Sqrt(technique->getDepthCameraDependency()->getThreshold()), CameraDependency::DEFAULT_DISTANCE_THRESHOLD)) serializer->writeLine(
 				token[TOKEN_DISTANCE_THRESHOLD], StringConverter::toString(Math::Sqrt(technique->getDepthCameraDependency()->getThreshold())), 12);
 			if (technique->getDepthCameraDependency()->isIncrease() != CameraDependency::DEFAULT_INCREASE) serializer->writeLine(
 				token[TOKEN_INCREASE], StringConverter::toString(technique->getDepthCameraDependency()->isIncrease()), 12);
@@ -482,7 +485,7 @@ namespace ParticleUniverse
 		}
 
 		// Write renderer
-		serializer->context.beginSection(RENDERER, 0); // Don´t set the renderer
+		serializer->context.beginSection(RENDERER, 0); // DonÅ½t set the renderer
 		ParticleRenderer* renderer = technique->getRenderer();
 		ParticleRendererFactory* particleRendererFactory = ParticleSystemManager::getSingletonPtr()->getRendererFactory(renderer->getRendererType());
 		if (particleRendererFactory)
@@ -492,7 +495,7 @@ namespace ParticleUniverse
 		serializer->context.endSection();
 
 		// Write emitters
-		serializer->context.beginSection(EMITTER, 0); // Don´t set the emitter
+		serializer->context.beginSection(EMITTER, 0); // DonÅ½t set the emitter
 		size_t numberOfEmitters = technique->getNumEmitters();
 		for (size_t i = 0; i < numberOfEmitters; ++i)
 		{
@@ -506,7 +509,7 @@ namespace ParticleUniverse
 		serializer->context.endSection();
 
 		// Write affectors
-		serializer->context.beginSection(AFFECTOR, 0); // Don´t set the affector
+		serializer->context.beginSection(AFFECTOR, 0); // DonÅ½t set the affector
 		size_t numberOfAffectors = technique->getNumAffectors();
 		for (size_t i = 0; i < numberOfAffectors; ++i)
 		{
@@ -520,7 +523,7 @@ namespace ParticleUniverse
 		serializer->context.endSection();
 
 		// Write observers
-		serializer->context.beginSection(OBSERVER, 0); // Don´t set the observer
+		serializer->context.beginSection(OBSERVER, 0); // DonÅ½t set the observer
 		size_t numberOfObservers = technique->getNumObservers();
 		for (size_t i = 0; i < numberOfObservers; ++i)
 		{
@@ -534,7 +537,7 @@ namespace ParticleUniverse
 		serializer->context.endSection();
 
 		// Write behaviours
-		serializer->context.beginSection(BEHAVIOUR, 0); // Don´t set the behaviour
+		serializer->context.beginSection(BEHAVIOUR, 0); // DonÅ½t set the behaviour
 		size_t numberOfBehaviours = technique->_getNumBehaviourTemplates();
 		for (size_t i = 0; i < numberOfBehaviours; ++i)
 		{
@@ -548,7 +551,7 @@ namespace ParticleUniverse
 		serializer->context.endSection();
 
 		// Write externs
-		serializer->context.beginSection(EXTERN, 0); // Don´t set the extern
+		serializer->context.beginSection(EXTERN, 0); // DonÅ½t set the extern
 		size_t numberOfExterns = technique->getNumExterns();
 		for (size_t i = 0; i < numberOfExterns; ++i)
 		{
