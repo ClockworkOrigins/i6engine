@@ -127,7 +127,7 @@ luabind::detail::class_rep::allocate(lua_State* L) const
 {
 	const int size = sizeof(object_rep);
 	char* mem = static_cast<char*>(lua_newuserdata(L, size));
-	return std::pair<void*,void*>(mem, (void*)0);
+	return std::pair<void*,void*>(mem, reinterpret_cast<void *>(0));
 }
 
 namespace

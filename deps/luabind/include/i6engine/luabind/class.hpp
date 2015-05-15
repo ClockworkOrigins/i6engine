@@ -299,16 +299,16 @@ namespace luabind
 		template <class Class, class F, class Policies>
 		struct memfun_registration : registration
 		{
-			memfun_registration(char const* name, F f, Policies const& policies)
-			  : name(name)
-			  , f(f)
-			  , policies(policies)
+			memfun_registration(char const* n, F f_param, Policies const& p)
+			  : name(n)
+			  , f(f_param)
+			  , policies(p)
 			{}
 
 			void register_(lua_State* L) const
 			{
 				object fn = make_function(
-					L, f, deduce_signature(f, (Class*)0), policies);
+					L, f, deduce_signature(f, reinterpret_cast<Class *>(0)), policies);
 
 				add_overload(
 					object(from_stack(L, -1))
@@ -341,8 +341,8 @@ namespace luabind
         template <class Class, class Pointer, class Signature, class Policies>
         struct constructor_registration : registration
         {
-            constructor_registration(Policies const& policies)
-              : policies(policies)
+            constructor_registration(Policies const& p)
+              : policies(p)
             {}
 
             void register_(lua_State* L) const
@@ -391,17 +391,17 @@ namespace luabind
         struct property_registration : registration
         {
             property_registration(
-                char const* name
-              , Get const& get
-              , GetPolicies const& get_policies
-              , Set const& set = Set()
-              , SetPolicies const& set_policies = SetPolicies()
+                char const* n
+              , Get const& g
+              , GetPolicies const& gp
+              , Set const& s = Set()
+              , SetPolicies const& sp = SetPolicies()
             )
-              : name(name)
-              , get(get)
-              , get_policies(get_policies)
-              , set(set)
-              , set_policies(set_policies)
+              : name(n)
+              , get(g)
+              , get_policies(gp)
+              , set(s)
+              , set_policies(sp)
             {}
 
             void register_(lua_State* L) const
@@ -419,7 +419,7 @@ namespace luabind
             object make_get(lua_State* L, F const& f, mpl::false_) const
             {
                 return make_function(
-                    L, f, deduce_signature(f, (Class*)0), get_policies);
+                    L, f, deduce_signature(f, reinterpret_cast<Class *>(0)), get_policies);
             }
 
             template <class T, class D>
@@ -441,7 +441,7 @@ namespace luabind
             object make_set(lua_State* L, F const& f, mpl::false_) const
             {
                 return make_function(
-                    L, f, deduce_signature(f, (Class*)0), set_policies);
+                    L, f, deduce_signature(f, reinterpret_cast<Class *>(0)), set_policies);
             }
 
             template <class T, class D>
@@ -543,7 +543,7 @@ namespace luabind
               , detail::static_cast_<T, To>::execute
             );
 
-            add_downcast((To*)0, (T*)0, boost::is_polymorphic<To>());
+            add_downcast(reinterpret_cast<To *>(0), reinterpret_cast<T *>(0), boost::is_polymorphic<To>());
 		}
 
 		void gen_base_info(detail::type_<detail::null_type>)
@@ -759,7 +759,7 @@ namespace luabind
               , detail::static_cast_<U,T>::execute
             );
 
-            add_downcast((T*)0, (U*)0, boost::is_polymorphic<T>());
+            add_downcast(reinterpret_cast<T *>(0), reinterpret_cast<U *>(0), boost::is_polymorphic<T>());
         }
 
 		void init()
@@ -786,7 +786,7 @@ namespace luabind
               , detail::registered_class<WrappedType>::id
             );
 
-            add_wrapper_cast((WrappedType*)0);
+            add_wrapper_cast(reinterpret_cast<WrappedType *>(0));
 
 			generate_baseclass_list(detail::type_<Base>());
 		}

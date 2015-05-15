@@ -45,10 +45,10 @@ namespace luabind { namespace detail {
     {
       struct cast_entry
       {
-          cast_entry(class_id src, class_id target, cast_function cast)
-            : src(src)
-            , target(target)
-            , cast(cast)
+          cast_entry(class_id s, class_id t, cast_function c)
+            : src(s)
+            , target(t)
+            , cast(c)
           {}
 
           class_id src;
@@ -258,14 +258,14 @@ namespace luabind { namespace detail {
 
 	void class_base::add_member(registration* member)
 	{
-		std::auto_ptr<registration> ptr(member);
-		m_registration->m_members.operator,(scope(ptr));
+		std::unique_ptr<registration> ptr(member);
+		m_registration->m_members.operator,(scope(std::move(ptr)));
 	}
 
 	void class_base::add_default_member(registration* member)
 	{
-		std::auto_ptr<registration> ptr(member);
-		m_registration->m_default_members.operator,(scope(ptr));
+		std::unique_ptr<registration> ptr(member);
+		m_registration->m_default_members.operator,(scope(std::move(ptr)));
 	}
 
     const char* class_base::name() const 

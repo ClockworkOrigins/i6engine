@@ -39,12 +39,12 @@ namespace luabind
 
         if (!obj)
         {
-            class_info result;
-            result.name = lua_typename(L, lua_type(L, -1));
+            class_info res;
+            res.name = lua_typename(L, lua_type(L, -1));
             lua_pop(L, 1);
-            result.methods = newtable(L);
-            result.attributes = newtable(L);
-            return result;
+            res.methods = newtable(L);
+            res.attributes = newtable(L);
+            return res;
         }
 
         lua_pop(L, 1);
@@ -53,10 +53,10 @@ namespace luabind
         object table(from_stack(L, -1));
         lua_pop(L, 1);
 
-        class_info result;
-        result.name = obj->crep()->name();
-        result.methods = newtable(L);
-        result.attributes = newtable(L);
+        class_info res;
+        res.name = obj->crep()->name();
+        res.methods = newtable(L);
+        res.attributes = newtable(L);
 
         std::size_t index = 1;
 
@@ -74,15 +74,15 @@ namespace luabind
 
             if (lua_tocfunction(L, -1) == &detail::property_tag)
             {
-                result.attributes[index++] = i.key();
+                res.attributes[index++] = i.key();
             }
             else
             {
-                result.methods[i.key()] = *i;
+                res.methods[i.key()] = *i;
             }
         }
 
-        return result;
+        return res;
 	}
 
     LUABIND_API object get_class_names(lua_State* L)
@@ -91,16 +91,16 @@ namespace luabind
 
         std::map<type_id, detail::class_rep*> const& classes = reg->get_classes();
 
-        object result = newtable(L);
+        object res = newtable(L);
         std::size_t index = 1;
 
         for (std::map<type_id, detail::class_rep*>::const_iterator iter = classes.begin();
             iter != classes.end(); ++iter)
         {
-            result[index++] = iter->second->name();
+            res[index++] = iter->second->name();
         }
 
-        return result;
+        return res;
     }
 
 	LUABIND_API void bind_class_info(lua_State* L)

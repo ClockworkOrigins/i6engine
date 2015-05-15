@@ -23,12 +23,12 @@
 #ifndef LUABIND_OBJECT_050419_HPP
 #define LUABIND_OBJECT_050419_HPP
 
-#include <boost/implicit_cast.hpp> // detail::push()
-#include <boost/ref.hpp> // detail::push()
-#include <boost/mpl/bool.hpp> // value_wrapper_traits specializations
-#include <boost/mpl/apply_wrap.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/optional.hpp>
+#include "boost/implicit_cast.hpp" // detail::push()
+#include "boost/ref.hpp" // detail::push()
+#include "boost/mpl/bool.hpp" // value_wrapper_traits specializations
+#include "boost/mpl/apply_wrap.hpp"
+#include "boost/tuple/tuple.hpp"
+#include "boost/optional.hpp"
 
 #include "i6engine/luabind/nil.hpp"
 #include "i6engine/luabind/value_wrapper.hpp"
@@ -40,10 +40,10 @@
 #include "i6engine/luabind/detail/convert_to_lua.hpp" // REFACTOR
 #include "i6engine/luabind/typeid.hpp"
 
-#include <boost/iterator/iterator_facade.hpp> // iterator
+#include "boost/iterator/iterator_facade.hpp" // iterator
 
-#include <boost/preprocessor/iteration/iterate.hpp>
-#include <boost/utility/enable_if.hpp>
+#include "boost/preprocessor/iteration/iterate.hpp"
+#include "boost/utility/enable_if.hpp"
 
 #if LUA_VERSION_NUM < 502
 # define lua_compare(L, index1, index2, fn) fn(L, index1, index2)
@@ -88,7 +88,7 @@ namespace detail
         , Policies
       >::type converter_policy;
 
-      push_aux(interpreter, value, (converter_policy*)0);
+      push_aux(interpreter, value, reinterpret_cast<converter_policy *>(0));
   }
 
   template<class T>
@@ -119,7 +119,7 @@ namespace adl
     struct impl 
     {
         BOOST_STATIC_CONSTANT(bool, value =
-            sizeof(is_object_interface_aux::check((T*)0)) == sizeof(yes)
+            sizeof(is_object_interface_aux::check(reinterpret_cast<T *>(0))) == sizeof(yes)
         );
 
         typedef mpl::bool_<value> type;
@@ -328,7 +328,7 @@ LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
           value_wrapper_traits<Derived>::unwrap(L, derived());
           detail::stack_pop pop(L, 1);
 
-          return lua_toboolean(L, -1) == 1 ? (safe_bool_type*)1 : 0;
+          return lua_toboolean(L, -1) == 1 ? reinterpret_cast<safe_bool_type *>(1) : 0;
       }
 
   private:
@@ -483,7 +483,7 @@ namespace detail
           lua_pushnil(m_interpreter);
           if (lua_next(m_interpreter, -2) != 0)
           {
-              detail::stack_pop pop(m_interpreter, 2);
+              detail::stack_pop pop2(m_interpreter, 2);
               handle(m_interpreter, -2).swap(m_key);
           }
           else
@@ -851,8 +851,8 @@ struct value_wrapper_traits<adl::call_proxy_tag>
     template<class W, class A>
     static void unwrap(lua_State*, adl::call_proxy<W,A> const& proxy)
     {
-        object result = const_cast<adl::call_proxy<W,A>&>(proxy);
-        result.push(result.interpreter());
+        object res = const_cast<adl::call_proxy<W,A>&>(proxy);
+        res.push(res.interpreter());
     }
 };
 
@@ -1001,7 +1001,7 @@ namespace detail
               "luabind::set_error_callback()");
           std::terminate();
 #endif
-          return *(typename boost::remove_reference<T>::type*)0;
+          return *reinterpret_cast<typename boost::remove_reference<T>::type *>(nullptr);
       }
   };
 
@@ -1025,10 +1025,10 @@ T object_cast(ValueWrapper const& value_wrapper)
 {
     return detail::object_cast_aux(
         value_wrapper
-      , (T*)0
-      , (detail::null_type*)0
-      , (detail::throw_error_policy<T>*)0
-      , (T*)0
+      , reinterpret_cast<T *>(nullptr)
+      , reinterpret_cast<detail::null_type *>(0)
+      , reinterpret_cast<detail::throw_error_policy<T> *>(0)
+      , reinterpret_cast<T *>(0)
     );
 }
 
@@ -1037,10 +1037,10 @@ T object_cast(ValueWrapper const& value_wrapper, Policies const&)
 {
     return detail::object_cast_aux(
         value_wrapper
-      , (T*)0
-      , (Policies*)0
-      , (detail::throw_error_policy<T>*)0
-      , (T*)0
+      , reinterpret_cast<T *>(0)
+      , reinterpret_cast<Policies *>(0)
+      , reinterpret_cast<detail::throw_error_policy<T> *>(0)
+      , reinterpret_cast<T *>(0)
     );
 }
 
@@ -1049,10 +1049,10 @@ boost::optional<T> object_cast_nothrow(ValueWrapper const& value_wrapper)
 {
     return detail::object_cast_aux(
         value_wrapper
-      , (T*)0
-      , (detail::null_type*)0
-      , (detail::nothrow_error_policy<T>*)0
-      , (boost::optional<T>*)0
+      , reinterpret_cast<T *>(0)
+      , reinterpret_cast<detail::null_type *>(0)
+      , reinterpret_cast<detail::nothrow_error_policy<T> *>(0)
+      , reinterpret_cast<boost::optional<T> *>(0)
     );
 }
 
@@ -1061,10 +1061,10 @@ boost::optional<T> object_cast_nothrow(ValueWrapper const& value_wrapper, Polici
 {
     return detail::object_cast_aux(
         value_wrapper
-      , (T*)0
-      , (Policies*)0
-      , (detail::nothrow_error_policy<T>*)0
-      , (boost::optional<T>*)0
+      , reinterpret_cast<T *>(0)
+      , reinterpret_cast<Policies *>(0)
+      , reinterpret_cast<detail::nothrow_error_policy<T> *>(0)
+      , reinterpret_cast<boost::optional<T> *>(0)
     );
 }
 
@@ -1102,9 +1102,9 @@ namespace adl
   template<class ValueWrapper, class Arguments>
   struct call_proxy
   {
-      call_proxy(ValueWrapper& value_wrapper, Arguments arguments)
-        : value_wrapper(&value_wrapper)
-        , arguments(arguments)
+      call_proxy(ValueWrapper& vw, Arguments args)
+        : value_wrapper(&vw)
+        , arguments(args)
       {}
 
       call_proxy(call_proxy const& other)
@@ -1117,18 +1117,18 @@ namespace adl
       ~call_proxy()
       {
           if (value_wrapper)
-              call((detail::null_type*)0);
+              call(reinterpret_cast<detail::null_type *>(0));
       }
 
       operator object()
       {
-          return call((detail::null_type*)0);
+          return call(reinterpret_cast<detail::null_type *>(0));
       }
 
       template<class Policies>
       object operator[](Policies const&)
       {
-          return call((Policies*)0);
+          return call(reinterpret_cast<Policies *>(0));
       }
 
       template<class Policies>

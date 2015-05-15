@@ -704,7 +704,7 @@
 @@ LUAL_BUFFERSIZE is the buffer size used by the lauxlib buffer system.
 ** CHANGE it if it uses too much C-stack space.
 */
-#define LUAL_BUFFERSIZE	((int)(0x80 * sizeof(void*) * sizeof(lua_Integer)))
+#define LUAL_BUFFERSIZE	(int(0x80 * sizeof(void*) * sizeof(lua_Integer)))
 
 /* }================================================================== */
 

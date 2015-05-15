@@ -67,7 +67,7 @@ namespace
   int destroy_class_id_map(lua_State* L)
   {
       detail::class_id_map* m =
-          (detail::class_id_map*)lua_touserdata(L, 1);
+          reinterpret_cast<detail::class_id_map *>(lua_touserdata(L, 1));
       m->~class_id_map();
       return 0;
   }
@@ -75,7 +75,7 @@ namespace
   int destroy_cast_graph(lua_State* L)
   {
       detail::cast_graph* g =
-          (detail::cast_graph*)lua_touserdata(L, 1);
+          reinterpret_cast<detail::cast_graph *>(lua_touserdata(L, 1));
       g->~cast_graph();
       return 0;
   }
@@ -83,7 +83,7 @@ namespace
   int destroy_class_map(lua_State* L)
   {
       detail::class_map* m =
-          (detail::class_map*)lua_touserdata(L, 1);
+          reinterpret_cast<detail::class_map *>(lua_touserdata(L, 1));
       m->~class_map();
       return 0;
   }
@@ -94,13 +94,13 @@ namespace
     {
         lua_pushlightuserdata(L, &main_thread_tag);
         lua_rawget(L, LUA_REGISTRYINDEX);
-        lua_State* result = static_cast<lua_State*>(lua_touserdata(L, -1));
+        lua_State * res = static_cast<lua_State *>(lua_touserdata(L, -1));
         lua_pop(L, 1);
 
-        if (!result)
+        if (!res)
             throw std::runtime_error("Unable to get main thread, luabind::open() not called?");
 
-        return result;
+        return res;
     }
 
     LUABIND_API void open(lua_State* L)
