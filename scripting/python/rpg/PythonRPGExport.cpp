@@ -48,4 +48,6 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 	using namespace boost::python;
 
 	def("insertNPCAtWaypoint", &i6engine::python::rpg::insertNPCAtWaypoint);
+
+	class_<i6engine::rpg::npc::NPC>("NPC", no_init);
 }
