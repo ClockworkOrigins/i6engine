@@ -1,3 +1,4 @@
+@echo off
 Set ROOT_DIR=%1
 Set COPY_DIR=%2
 

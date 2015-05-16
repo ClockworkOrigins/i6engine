@@ -32,12 +32,12 @@ namespace npc {
 	NPCManager::~NPCManager() {
 	}
 
-	void NPCManager::createNPC(const std::string & identifier, const Vec3 & pos) {
+	void NPCManager::createNPC(const std::string & identifier, const Vec3 & pos, bool player) {
 		api::objects::GOTemplate tpl = NPCParser::GetSingletonPtr()->getTemplate(identifier);
 		api::attributeMap paramsPSC;
 		pos.insertInMap("pos", paramsPSC);
 		tpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
-		NPC * n = new NPC(tpl);
+		NPC * n = new NPC(tpl, player);
 		_npcs.insert(std::make_pair(identifier, n));
 		api::EngineController::GetSingletonPtr()->getScriptingFacade()->setGlobalVariable(identifier, n);
 	}

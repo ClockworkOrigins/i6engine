@@ -2,3 +2,6 @@
 <NPC identifier="NPC01">
 	<Name>NPCName01</Name>
 </NPC>
+<NPC identifier="Player01">
+	<Name>PlayerName</Name>
+</NPC>

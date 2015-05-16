@@ -33,7 +33,7 @@ namespace npc {
 
 	class ISIXE_RPG_API NPC {
 	public:
-		NPC(const api::objects::GOTemplate & tpl);
+		NPC(const api::objects::GOTemplate & tpl, bool player);
 		~NPC();
 
 	private:

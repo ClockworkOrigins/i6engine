@@ -76,7 +76,7 @@ namespace npc {
 			return;
 		}
 
-		for (tinyxml2::XMLElement * npc = doc.FirstChildElement("NPC"); npc != nullptr; npc = doc.NextSiblingElement("NPC")) {
+		for (tinyxml2::XMLElement * npc = doc.FirstChildElement("NPC"); npc != nullptr; npc = npc->NextSiblingElement("NPC")) {
 			api::objects::GOTemplate tpl;
 			if (npc->Attribute("identifier") == nullptr) {
 				ISIXE_THROW_FAILURE("NPCParser", "NPC in file '" << file << "' misses identifier!");

@@ -38,7 +38,18 @@ namespace rpg {
 				break;
 			}
 		}
-		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos);
+		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, false);
+	}
+
+	void insertPlayerAtWaypoint(const std::string & identifier, const std::string & waypoint) {
+		Vec3 pos;
+		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
+			if (go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName() == waypoint) {
+				pos = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getPosition();
+				break;
+			}
+		}
+		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, true);
 	}
 
 } /* namespace rpg */
@@ -50,8 +61,9 @@ using namespace luabind;
 scope registerRPG() {
 	return
 		def("insertNPCAtWaypoint", &i6engine::lua::rpg::insertNPCAtWaypoint),
+		def("insertPlayerAtWaypoint", &i6engine::lua::rpg::insertPlayerAtWaypoint),
 
 		class_<i6engine::rpg::npc::NPC>("NPC")
-			.def(constructor<const i6engine::api::objects::GOTemplate &>())
+			.def(constructor<const i6engine::api::objects::GOTemplate &, bool>())
 		;
 }

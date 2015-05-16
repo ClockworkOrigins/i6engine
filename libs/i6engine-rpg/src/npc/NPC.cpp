@@ -23,8 +23,8 @@ namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPC::NPC(const api::objects::GOTemplate & tpl) : _go() {
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO("NPC", tpl, api::EngineController::GetSingletonPtr()->getUUID(), false, [this](api::GOPtr go) {
+	NPC::NPC(const api::objects::GOTemplate & tpl, bool player) : _go() {
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO((player) ? "Player" : "NPC", tpl, api::EngineController::GetSingletonPtr()->getUUID(), false, [this](api::GOPtr go) {
 			_go = go;
 		});
 	}

@@ -12,10 +12,12 @@ Enhancements:
 	- added possibility to configure NPCs in xml files
 	- added possibility to insert NPCs via scripts
 	- added new particle plugin with much more possibilities
+	- added particle editor (not running on linux yet)
 
 Fixes:
 	- fixed synchronization bug of rotation in PhysicalStateComponent
 	- LuaScripting subsystem really works now completely
+	- RPGLevel now can be loaded in level editor because of Player being inserted
 
 v 0.8.4
 
