@@ -151,7 +151,7 @@ namespace modules {
 				meshEntity->getMesh()->buildTangentVectors(Ogre::VertexElementSemantic::VES_TANGENT, src, dest);
 			}
 		} catch (const Ogre::Exception & e) {
-			ISIXE_LOG_ERROR("GraphicsNode", e.what());
+			ISIXE_LOG_WARN("GraphicsNode", e.what());
 		}
 
 		if (api::EngineController::GetSingletonPtr()->getDebugdrawer() == 3 || api::EngineController::GetSingletonPtr()->getDebugdrawer() == 4) {

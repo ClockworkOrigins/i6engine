@@ -493,7 +493,7 @@ void ConfigDialog::setVideoPath(wxString& videoPath)
 //-----------------------------------------------------------------------
 ParticleUniverse::uint ConfigDialog::getImageWidth(void) const
 {
-	return uint(mImageWidth->GetValue());
+	return ParticleUniverse::uint(mImageWidth->GetValue());
 }
 //-----------------------------------------------------------------------
 void ConfigDialog::setImageWidth(ParticleUniverse::uint imageWidth)
@@ -503,7 +503,7 @@ void ConfigDialog::setImageWidth(ParticleUniverse::uint imageWidth)
 //-----------------------------------------------------------------------
 ParticleUniverse::uint ConfigDialog::getImageHeight(void) const
 {
-	return uint(mImageHeight->GetValue());
+	return ParticleUniverse::uint(mImageHeight->GetValue());
 }
 //-----------------------------------------------------------------------
 void ConfigDialog::setImageHeight(ParticleUniverse::uint imageHeight)
@@ -523,7 +523,7 @@ void ConfigDialog::setFileNameSuffix(wxString& suffix)
 //-----------------------------------------------------------------------
 ParticleUniverse::uint ConfigDialog::getFPS(void) const
 {
-	return uint(mFramesPerSecond->GetValue());
+	return ParticleUniverse::uint(mFramesPerSecond->GetValue());
 }
 //-----------------------------------------------------------------------
 void ConfigDialog::setFPS(ParticleUniverse::uint fps)
@@ -895,7 +895,7 @@ void ConfigDialog::loadConfig(void)
 	setVideoPath(videoPath);
 
 	// Load Video (image) width
-	ParticleUniverse::uint width = uint(Ogre::StringConverter::parseInt(cfg.getSetting("imagewidth")));
+	ParticleUniverse::uint width = ParticleUniverse::uint(Ogre::StringConverter::parseInt(cfg.getSetting("imagewidth")));
 	if (width < 1)
 	{
 		width = 640;
@@ -903,7 +903,7 @@ void ConfigDialog::loadConfig(void)
 	setImageWidth(width);
 
 	// Load Video (image) heigth
-	ParticleUniverse::uint height = uint(Ogre::StringConverter::parseInt(cfg.getSetting("imageheight")));
+	ParticleUniverse::uint height = ParticleUniverse::uint(Ogre::StringConverter::parseInt(cfg.getSetting("imageheight")));
 	if (height < 1)
 	{
 		height = 480;
@@ -935,7 +935,7 @@ void ConfigDialog::loadConfig(void)
 	}
 
 	// Load Frames per second
-	ParticleUniverse::uint fps = uint(Ogre::StringConverter::parseInt(cfg.getSetting("fps")));
+	ParticleUniverse::uint fps = ParticleUniverse::uint(Ogre::StringConverter::parseInt(cfg.getSetting("fps")));
 	if (fps < 1)
 	{
 		 fps = 27;
