@@ -40,18 +40,18 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	SphereSet::SphereSet(void) :
 		PrimitiveShapeSet(),
+		mDefaultRadius(20),
 		mAutoExtendPool(true),
 		mVertexData(0),
-		mIndexData(0),
-		mBuffersCreated(false),
-		mPoolSize(0),
-		mExternalData(false),
-		mNumberOfRings(16),
-		mNumberOfSegments(16),
 		mLockPtr(0),
 		pIdx(0),
-		mDefaultRadius(20),
-		mVertexIndex(1)
+		mIndexData(0),
+		mNumberOfRings(16),
+		mNumberOfSegments(16),
+		mVertexIndex(1),
+		mBuffersCreated(false),
+		mPoolSize(0),
+		mExternalData(false)
 	{
 		setNumberOfRings(16);
 		setNumberOfSegments(16);
@@ -59,18 +59,18 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	SphereSet::SphereSet(const String& name, unsigned int poolSize, bool externalData) :
 		PrimitiveShapeSet(name, poolSize, externalData),
+		mDefaultRadius(20),
 		mAutoExtendPool(true),
 		mVertexData(0),
-		mIndexData(0),
-		mBuffersCreated(false),
-		mPoolSize(poolSize),
-		mExternalData(externalData),
-		mNumberOfRings(16),
-		mNumberOfSegments(16),
 		mLockPtr(0),
 		pIdx(0),
-		mDefaultRadius(20),
-		mVertexIndex(1)
+		mIndexData(0),
+		mNumberOfRings(16),
+		mNumberOfSegments(16),
+		mVertexIndex(1),
+		mBuffersCreated(false),
+		mPoolSize(poolSize),
+		mExternalData(externalData)
 	{
 		setPoolSize(poolSize);
 		setNumberOfRings(16);
@@ -129,7 +129,7 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	unsigned int SphereSet::getNumSpheres(void) const
 	{
-		return static_cast<int>(mActiveSpheres.size());
+		return static_cast<unsigned int>(mActiveSpheres.size());
 	}
 	//-----------------------------------------------------------------------
 	void SphereSet::clear(void)
@@ -512,15 +512,15 @@ namespace ParticleUniverse
 
 				// Vertex
 				Vector3 orientedVertex = sphere.mOrientation * Vector3(x0, y0, z0);
-				*mLockPtr++ = (float) (orientedVertex.x + sphere.mPosition.x);
-				*mLockPtr++ = (float) (orientedVertex.y + sphere.mPosition.y);
-				*mLockPtr++ = (float) (orientedVertex.z + sphere.mPosition.z);
+				*mLockPtr++ = float(orientedVertex.x + sphere.mPosition.x);
+				*mLockPtr++ = float(orientedVertex.y + sphere.mPosition.y);
+				*mLockPtr++ = float(orientedVertex.z + sphere.mPosition.z);
 
 				// Normal
 				Vector3 vNormal = orientedVertex.normalisedCopy();
-				*mLockPtr++ = (float) vNormal.x;
-				*mLockPtr++ = (float) vNormal.y;
-				*mLockPtr++ = (float) vNormal.z;
+				*mLockPtr++ = float(vNormal.x);
+				*mLockPtr++ = float(vNormal.y);
+				*mLockPtr++ = float(vNormal.z);
 
 				// Colour
 				pCol = static_cast<Ogre::RGBA*>(static_cast<void*>(mLockPtr));
@@ -528,8 +528,8 @@ namespace ParticleUniverse
 				mLockPtr = static_cast<float*>(static_cast<void*>(pCol));
 
 				// Texture Coordinates
-				*mLockPtr++ = (float) segment / (float) mNumberOfSegments;
-				*mLockPtr++ = (float) ring / (float) mNumberOfRings;
+				*mLockPtr++ = float(segment) / float(mNumberOfSegments);
+				*mLockPtr++ = float(ring) / float(mNumberOfRings);
 
 				if (ring != mNumberOfRings)
 				{

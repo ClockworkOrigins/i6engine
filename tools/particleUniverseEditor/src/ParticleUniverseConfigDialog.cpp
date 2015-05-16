@@ -29,6 +29,10 @@ ConfigDialog::ConfigDialog(wxWindow* parent) :
 	mGridPlane(0),
 	mGridPlaneDistance(0),
 	mGridPlaneScale(0),
+	mDirListSizer(0),
+	mDirListPanel(0),
+	mCheckboxes(0),
+	mTexts(0),
 	mVideoPath(0),
 	mImageWidth(0),
 	mImageHeight(0),
@@ -37,27 +41,23 @@ ConfigDialog::ConfigDialog(wxWindow* parent) :
 	mPauseTime(0),
 	mFilter(0),
 	mVideoSize(0),
-	mEditProportion(0.5f),
-	mMainNodePosition(Ogre::Vector3(0, 0, -1000)),
-	mMainNodeOrientation(Ogre::Quaternion::IDENTITY),
 	mVideoSelected(false),
-	mDirListSizer(0),
-	mDirListPanel(0),
-	mCheckboxes(0),
-	mTexts(0),
 	mPhysXPlaneNormalX(0),
 	mPhysXPlaneNormalY(0),
 	mPhysXPlaneNormalZ(0),
-	mPhysXPlaneNormal(Ogre::Vector3::UNIT_Y),
-	mPhysXPlaneDistance(0),
-	mPhysXGravity(Ogre::Vector3::ZERO),
-	mCheckPhysXDialog(0),
 	mPhysXGravityX(0),
 	mPhysXGravityY(0),
 	mPhysXGravityZ(0),
+	mPhysXPlaneNormal(Ogre::Vector3::UNIT_Y),
+	mPhysXGravity(Ogre::Vector3::ZERO),
+	mPhysXPlaneDistance(0),
+	mCheckPhysXDialog(0),
 	mUsePhysXIfNoStartupDialog(false),
-	mLanguage(wxLANGUAGE_DEFAULT),
-	mCameraPosition(Ogre::Vector3::ZERO)
+	mCameraPosition(Ogre::Vector3::ZERO),
+	mEditProportion(0.5f),
+	mMainNodePosition(Ogre::Vector3(0, 0, -1000)),
+	mMainNodeOrientation(Ogre::Quaternion::IDENTITY),
+	mLanguage(wxLANGUAGE_DEFAULT)
 {
 	mParentFrame = static_cast<ParticleUniverseEditorFrame*>(parent);
 }
@@ -476,7 +476,7 @@ void ConfigDialog::setGridPlaneScale(ParticleUniverse::Real scale)
 	mGridPlaneScale->SetValue(ogre2wx(str));
 }
 //-----------------------------------------------------------------------
-const wxLanguage ConfigDialog::getLanguage(void) const
+wxLanguage ConfigDialog::getLanguage(void) const
 {
 	return mLanguage;
 }
@@ -493,22 +493,22 @@ void ConfigDialog::setVideoPath(wxString& videoPath)
 //-----------------------------------------------------------------------
 ParticleUniverse::uint ConfigDialog::getImageWidth(void) const
 {
-	return mImageWidth->GetValue();
+	return uint(mImageWidth->GetValue());
 }
 //-----------------------------------------------------------------------
 void ConfigDialog::setImageWidth(ParticleUniverse::uint imageWidth)
 {
-	mImageWidth->SetValue(imageWidth);
+	mImageWidth->SetValue(int(imageWidth));
 }
 //-----------------------------------------------------------------------
 ParticleUniverse::uint ConfigDialog::getImageHeight(void) const
 {
-	return mImageHeight->GetValue();
+	return uint(mImageHeight->GetValue());
 }
 //-----------------------------------------------------------------------
 void ConfigDialog::setImageHeight(ParticleUniverse::uint imageHeight)
 {
-	mImageHeight->SetValue(imageHeight);
+	mImageHeight->SetValue(int(imageHeight));
 }
 //-----------------------------------------------------------------------
 wxString ConfigDialog::getFileNameSuffix(void) const
@@ -523,12 +523,12 @@ void ConfigDialog::setFileNameSuffix(wxString& suffix)
 //-----------------------------------------------------------------------
 ParticleUniverse::uint ConfigDialog::getFPS(void) const
 {
-	return mFramesPerSecond->GetValue();
+	return uint(mFramesPerSecond->GetValue());
 }
 //-----------------------------------------------------------------------
 void ConfigDialog::setFPS(ParticleUniverse::uint fps)
 {
-	mFramesPerSecond->SetValue(fps);
+	mFramesPerSecond->SetValue(int(fps));
 }
 //-----------------------------------------------------------------------
 ParticleUniverse::Real ConfigDialog::getPauseTime(void) const
@@ -637,7 +637,7 @@ void ConfigDialog::setEditProportion(ParticleUniverse::Real editProportion)
 	mEditProportion = editProportion;
 }
 //-----------------------------------------------------------------------
-const Recorder::ImageFilter ConfigDialog::getFilter(void) const
+Recorder::ImageFilter ConfigDialog::getFilter(void) const
 {
 	int test = mFilter->GetCurrentSelection();
 	if (mFilter->GetCurrentSelection() == 0)
@@ -895,7 +895,7 @@ void ConfigDialog::loadConfig(void)
 	setVideoPath(videoPath);
 
 	// Load Video (image) width
-	ParticleUniverse::uint width = Ogre::StringConverter::parseInt(cfg.getSetting("imagewidth"));
+	ParticleUniverse::uint width = uint(Ogre::StringConverter::parseInt(cfg.getSetting("imagewidth")));
 	if (width < 1)
 	{
 		width = 640;
@@ -903,7 +903,7 @@ void ConfigDialog::loadConfig(void)
 	setImageWidth(width);
 
 	// Load Video (image) heigth
-	ParticleUniverse::uint height = Ogre::StringConverter::parseInt(cfg.getSetting("imageheight"));
+	ParticleUniverse::uint height = uint(Ogre::StringConverter::parseInt(cfg.getSetting("imageheight")));
 	if (height < 1)
 	{
 		height = 480;
@@ -935,7 +935,7 @@ void ConfigDialog::loadConfig(void)
 	}
 
 	// Load Frames per second
-	ParticleUniverse::uint fps = Ogre::StringConverter::parseInt(cfg.getSetting("fps"));
+	ParticleUniverse::uint fps = uint(Ogre::StringConverter::parseInt(cfg.getSetting("fps")));
 	if (fps < 1)
 	{
 		 fps = 27;
@@ -1055,7 +1055,7 @@ void ConfigDialog::saveConfig(void)
 	cfg.setSetting("pausetime", Ogre::StringConverter::toString(getPauseTime()));
 
 	// Save Filter
-	int test = mFilter->GetCurrentSelection();
+	int test = int(mFilter->GetCurrentSelection());
 	if (mFilter->GetCurrentSelection() == 0)
 	{
 		cfg.setSetting("filter", "No filtering");

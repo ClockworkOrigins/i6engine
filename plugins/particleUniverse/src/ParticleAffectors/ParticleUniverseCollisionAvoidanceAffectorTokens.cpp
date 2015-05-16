@@ -76,7 +76,7 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getRadius() != CollisionAvoidanceAffector::DEFAULT_RADIUS) serializer->writeLine(
+		if (!almostEquals(affector->getRadius(), CollisionAvoidanceAffector::DEFAULT_RADIUS)) serializer->writeLine(
 			token[TOKEN_AVOIDANCE_RADIUS], StringConverter::toString(affector->getRadius()), 12);
 
 		// Write the close bracket

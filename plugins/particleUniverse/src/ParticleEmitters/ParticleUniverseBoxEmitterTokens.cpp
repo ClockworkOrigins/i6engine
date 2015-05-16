@@ -142,11 +142,11 @@ namespace ParticleUniverse
 		ParticleEmitterWriter::write(serializer, element);
 
 		// Write own attributes
-		if (emitter->getWidth() != BoxEmitter::DEFAULT_WIDTH) serializer->writeLine(
+		if (!almostEquals(emitter->getWidth(), BoxEmitter::DEFAULT_WIDTH)) serializer->writeLine(
 			token[TOKEN_BOX_WIDTH], StringConverter::toString(emitter->getWidth()), 12);
-		if (emitter->getHeight() != BoxEmitter::DEFAULT_HEIGHT) serializer->writeLine(
+		if (!almostEquals(emitter->getHeight(), BoxEmitter::DEFAULT_HEIGHT)) serializer->writeLine(
 			token[TOKEN_BOX_HEIGHT], StringConverter::toString(emitter->getHeight()), 12);
-		if (emitter->getDepth() != BoxEmitter::DEFAULT_DEPTH) serializer->writeLine(
+		if (!almostEquals(emitter->getDepth(), BoxEmitter::DEFAULT_DEPTH)) serializer->writeLine(
 			token[TOKEN_BOX_DEPTH], StringConverter::toString(emitter->getDepth()), 12);
 
 		// Write the close bracket

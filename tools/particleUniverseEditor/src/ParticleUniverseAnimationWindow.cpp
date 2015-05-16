@@ -18,13 +18,13 @@ You can find a copy of the Commercial License in the Particle Universe package.
 //-----------------------------------------------------------------------
 AnimationWindow::AnimationWindow(ParticleUniverseEditorFrame* parent, Ogre::SceneManager* sceneManager) : 
 	wxNotebook(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM),
+	mAnimationPlayPauseStop(ANIM_NONE),
+	mTimeScale(0.0f),
 	mFrame(parent),
 	mSceneManager(sceneManager),
 	mAnimationState(0),
 	mTimeSinceLastUpdate(0.0f),
-	mTimeScale(0.0f),
-	mTagPointToWhichParticleSystemAttached(0),
-	mAnimationPlayPauseStop(ANIM_NONE)
+	mTagPointToWhichParticleSystemAttached(0)
 {
 	mBaseOrientation = Ogre::Quaternion::IDENTITY;
 	mBoneToWhichParticleSystemAttached = "";
@@ -231,10 +231,9 @@ void AnimationWindow::loadAnimationNames(Ogre::Entity* entity)
 	if (!skeleton)
 		return;
 
-	Ogre::Animation *animation = 0;
 	for (unsigned short i=0; i < skeleton->getNumAnimations(); ++i)
 	{
-		Ogre::Animation *animation = skeleton->getAnimation(i);
+		Ogre::Animation * animation = skeleton->getAnimation(i);
 		wxString animationName = ogre2wx(animation->getName());
 		mListAnimations->Append(animationName);
 	}

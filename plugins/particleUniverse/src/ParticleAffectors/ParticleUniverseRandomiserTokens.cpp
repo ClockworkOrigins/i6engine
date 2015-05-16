@@ -194,13 +194,13 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getMaxDeviationX() != Randomiser::DEFAULT_MAX_DEVIATION.x) serializer->writeLine(
+		if (!almostEquals(affector->getMaxDeviationX(), Randomiser::DEFAULT_MAX_DEVIATION.x)) serializer->writeLine(
 			token[TOKEN_MAX_DEVIATION_X], StringConverter::toString(affector->getMaxDeviationX()), 12);
-		if (affector->getMaxDeviationY() != Randomiser::DEFAULT_MAX_DEVIATION.y) serializer->writeLine(
+		if (!almostEquals(affector->getMaxDeviationY(), Randomiser::DEFAULT_MAX_DEVIATION.y)) serializer->writeLine(
 			token[TOKEN_MAX_DEVIATION_Y], StringConverter::toString(affector->getMaxDeviationY()), 12);
-		if (affector->getMaxDeviationZ() != Randomiser::DEFAULT_MAX_DEVIATION.z) serializer->writeLine(
+		if (!almostEquals(affector->getMaxDeviationZ(), Randomiser::DEFAULT_MAX_DEVIATION.z)) serializer->writeLine(
 			token[TOKEN_MAX_DEVIATION_Z], StringConverter::toString(affector->getMaxDeviationZ()), 12);
-		if (affector->getTimeStep() != Randomiser::DEFAULT_TIME_STEP) serializer->writeLine(
+		if (!almostEquals(affector->getTimeStep(), Randomiser::DEFAULT_TIME_STEP)) serializer->writeLine(
 			token[TOKEN_TIME_STEP], StringConverter::toString(affector->getTimeStep()), 12);
 		if (affector->isRandomDirection() != Randomiser::DEFAULT_RANDOM_DIRECTION) serializer->writeLine(
 			token[TOKEN_USE_DIRECTION], StringConverter::toString(affector->isRandomDirection()), 12);

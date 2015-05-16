@@ -90,7 +90,7 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getRadius() != VelocityMatchingAffector::DEFAULT_RADIUS) serializer->writeLine(
+		if (!almostEquals(affector->getRadius(), VelocityMatchingAffector::DEFAULT_RADIUS)) serializer->writeLine(
 			token[TOKEN_RADIUS], StringConverter::toString(affector->getRadius()), 12);
 
 		// Write the close bracket

@@ -99,7 +99,7 @@ class GizmoManager : public Ogre::Camera::Listener
 		void setScale (const Ogre::Vector3& scale);
 
 		// Get/set the type of Gizmo
-		const Gizmo::GizmoType getGizmoType(void) const;
+		Gizmo::GizmoType getGizmoType(void) const;
 		void setGizmoType(const Gizmo::GizmoType& gizmoType);
 
 		// Perform action: Rotate, move, scale (todo)

@@ -45,11 +45,11 @@ namespace ParticleUniverse
 		mCircleAngle(DEFAULT_ANGLE),
 		mOriginalCircleAngle(DEFAULT_ANGLE),
 		mStep(DEFAULT_STEP),
+		mX(0.0f),
+		mZ(0.0f),
 		mRandom(DEFAULT_RANDOM),
 		mOrientation(Quaternion::IDENTITY),
-		mNormal(DEFAULT_NORMAL),
-		mX(0.0f),
-		mZ(0.0f)
+		mNormal(DEFAULT_NORMAL)
 	{
 	}
 	//-----------------------------------------------------------------------

@@ -34,7 +34,7 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	void FlockCenteringAffector::_preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
 	{
-		if (mCount != 0)
+		if (!almostEquals(mCount, 0))
 		{
 			// Calculate the average of the previous update
 			mAverage = mSum / mCount;

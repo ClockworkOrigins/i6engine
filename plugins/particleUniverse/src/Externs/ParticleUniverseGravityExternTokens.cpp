@@ -102,7 +102,7 @@ namespace ParticleUniverse
 		AttachableWriter::write(serializer, element);
 
 		// Write own attributes
-		if (gravityExtern->getGravity() != GravityAffector::DEFAULT_GRAVITY) serializer->writeLine(
+		if (!almostEquals(gravityExtern->getGravity(), GravityAffector::DEFAULT_GRAVITY)) serializer->writeLine(
 			token[TOKEN_GRAVITY], StringConverter::toString(gravityExtern->getGravity()), 12);
 
 		// Write the close bracket

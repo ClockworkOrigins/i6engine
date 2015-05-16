@@ -215,7 +215,7 @@ namespace ParticleUniverse
 		} while (w >= 1.0f);
 	
 		w = sqrt((-2.0f * log(w)) / w);
-		y1 = abs(x1 * w);
+		y1 = std::abs(x1 * w);
 		y1 = y1 > cutoff ? cutoff : y1;
 		y1 *= high / cutoff;
 		return y1;
@@ -233,10 +233,10 @@ namespace ParticleUniverse
 		size_t index;
 		if (mDistribution == MSD_HOMOGENEOUS || mDistribution == MSD_HETEROGENEOUS_1)
 		{
-			index = (size_t)getGaussianRandom((Real)_triangles.size() - 1);
+			index = size_t(getGaussianRandom(Real(_triangles.size() - 1)));
 		}
 		else
-			index = (size_t)Math::RangeRandom(0.0f, (Real)(_triangles.size() - 1));
+			index = size_t(Math::RangeRandom(0.0f, Real(_triangles.size() - 1)));
 
 		return index;
 	}

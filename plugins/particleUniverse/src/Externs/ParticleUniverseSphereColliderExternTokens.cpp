@@ -226,11 +226,11 @@ namespace ParticleUniverse
 		AttachableWriter::write(serializer, element);
 
 		// Write own attributes
-		if (sphereColliderExtern->getRadius() != SphereCollider::DEFAULT_RADIUS) serializer->writeLine(
+		if (!almostEquals(sphereColliderExtern->getRadius(), SphereCollider::DEFAULT_RADIUS)) serializer->writeLine(
 			token[TOKEN_RADIUS], StringConverter::toString(sphereColliderExtern->getRadius()), 12);
-		if (sphereColliderExtern->getFriction() != BaseCollider::DEFAULT_FRICTION) serializer->writeLine(
+		if (!almostEquals(sphereColliderExtern->getFriction(), BaseCollider::DEFAULT_FRICTION)) serializer->writeLine(
 			token[TOKEN_FRICTION], StringConverter::toString(sphereColliderExtern->getFriction()), 12);
-		if (sphereColliderExtern->getBouncyness() != BaseCollider::DEFAULT_BOUNCYNESS) serializer->writeLine(
+		if (!almostEquals(sphereColliderExtern->getBouncyness(), BaseCollider::DEFAULT_BOUNCYNESS)) serializer->writeLine(
 			token[TOKEN_BOUNCYNESS], StringConverter::toString(sphereColliderExtern->getBouncyness()), 12);
 		if (sphereColliderExtern->getIntersectionType() != BaseCollider::DEFAULT_INTERSECTION_TYPE) 
 		{

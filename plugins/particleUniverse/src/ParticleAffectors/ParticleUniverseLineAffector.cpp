@@ -45,10 +45,10 @@ namespace ParticleUniverse
 		mEnd(DEFAULT_END),
 		mTimeSinceLastUpdate(0.0f),
 		mTimeStep(DEFAULT_TIME_STEP),
-		mUpdate(true),
-		mFirst(true),
 		mDrift(DEFAULT_DRIFT),
-		mOneMinusDrift(1.0f)
+		mOneMinusDrift(1.0f),
+		mUpdate(true),
+		mFirst(true)
 	{
 	}
 	//-----------------------------------------------------------------------

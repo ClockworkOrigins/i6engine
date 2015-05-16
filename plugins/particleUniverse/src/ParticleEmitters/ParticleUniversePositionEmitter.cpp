@@ -111,7 +111,7 @@ namespace ParticleUniverse
 		*/
 		if (mRandomized)
 		{
-			size_t i = (size_t)(Math::UnitRandom() * (mPositionList.size() - 1));
+			size_t i = size_t(Math::UnitRandom() * (mPositionList.size() - 1));
 			particle->position = getDerivedPosition() + _mEmitterScale * mPositionList[i];
 		}
 		else if (mIndex < mPositionList.size())

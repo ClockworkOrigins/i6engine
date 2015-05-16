@@ -122,7 +122,7 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	unsigned int BoxSet::getNumBoxes(void) const
 	{
-		return static_cast<int>(mActiveBoxes.size());
+		return static_cast<unsigned int>(mActiveBoxes.size());
 	}
 	//-----------------------------------------------------------------------
 	void BoxSet::clear(void)
@@ -625,7 +625,7 @@ namespace ParticleUniverse
 				Ogre::Vector3 corner = Ogre::Vector3::ZERO;
 				if (box.mOrientation == Ogre::Quaternion::IDENTITY)
 				{
-					// Boxes didn¥t rotate
+					// Boxes didn≈Ωt rotate
 					corner = mDefaultCorners[i];
 				}
 				else

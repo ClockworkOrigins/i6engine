@@ -192,7 +192,7 @@ enum ComponentRelationDirection
 };
 
 // Function to return the opposite relation direction
-static ComponentRelationDirection getOppositeRelationDirection(ComponentRelationDirection relationDirection)
+inline ComponentRelationDirection getOppositeRelationDirection(ComponentRelationDirection relationDirection)
 {
 	if (relationDirection == CRDIR_PRIMARY)
 	{

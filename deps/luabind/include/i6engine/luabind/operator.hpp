@@ -207,7 +207,7 @@ namespace luabind {
             { \
                 static void execute(lua_State* L, T0 _0, T1 _1) \
                 { \
-                    detail::operator_result(L, _0 op _1, (Policies*)0); \
+                    detail::operator_result(L, _0 op _1, reinterpret_cast<Policies *>(0)); \
                 } \
             }; \
 \
@@ -302,7 +302,7 @@ namespace luabind {
             { \
                 static void execute(lua_State* L, T x) \
                 { \
-                    detail::operator_result(L, op(x), (Policies*)0); \
+                    detail::operator_result(L, op(x), reinterpret_cast<Policies *>(0)); \
                 } \
             }; \
 \

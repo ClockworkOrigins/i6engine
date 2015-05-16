@@ -98,7 +98,7 @@ namespace ParticleUniverse
 		ParticleEventHandlerWriter::write(serializer, element);
 
 		// Write own attributes
-		if (eventHandler->getScaleFraction() != DoScaleEventHandler::DEFAULT_SCALE_FRACTION) serializer->writeLine(
+		if (!almostEquals(eventHandler->getScaleFraction(), DoScaleEventHandler::DEFAULT_SCALE_FRACTION)) serializer->writeLine(
 			token[TOKEN_DOSCALE_FRACTION], StringConverter::toString(eventHandler->getScaleFraction()), 16);
 		String scaleType = token[TOKEN_DOSCALE_TIME_TO_LIVE];
 		if (eventHandler->getScaleType() == DoScaleEventHandler::ST_VELOCITY) scaleType = token[TOKEN_DOSCALE_VELOCITY];

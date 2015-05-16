@@ -116,7 +116,7 @@ namespace ParticleUniverse
 				sphere.mColour = particle->colour;
 				sphere.mOrientation = particle->orientation;
 
-				if (sphere.mOwnRadius = particle->ownDimensions)
+				if (sphere.mOwnRadius == particle->ownDimensions)
 				{
 					sphere.mOwnRadius = true;
 					sphere.setRadius (0.5f * particle->width);

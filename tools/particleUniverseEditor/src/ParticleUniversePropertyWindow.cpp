@@ -158,7 +158,7 @@ unsigned int ParentPropertyWithButtonAndFloats::getNumberOfFloats(void)
 	return mFloat;
 }
 //-----------------------------------------------------------------------
-const ParticleUniverse::Real ParentPropertyWithButtonAndFloats::getFloat(wxPropertyGrid* propgrid, unsigned int index)
+ParticleUniverse::Real ParentPropertyWithButtonAndFloats::getFloat(wxPropertyGrid* propgrid, unsigned int index)
 {
 	if (index >= mFloat)
 		return 0;

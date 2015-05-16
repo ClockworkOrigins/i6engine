@@ -38,8 +38,8 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	SphereCollider::SphereCollider(void) : 
 		BaseCollider(),
-		mPredictedPosition(Vector3::ZERO),
 		mRadius(DEFAULT_RADIUS),
+		mPredictedPosition(Vector3::ZERO),
 		mInnerCollision(false)
 	{
 	}
@@ -130,13 +130,13 @@ namespace ParticleUniverse
 					}
 					else
 					{
-						AxisAlignedBox box;
-						populateAlignedBox(box,
+						AxisAlignedBox b;
+						populateAlignedBox(b,
 							mPredictedPosition, 
 							visualParticle->width, 
 							visualParticle->height,
 							visualParticle->depth);
-						if (mInnerCollision != box.intersects(mSphere))
+						if (mInnerCollision != b.intersects(mSphere))
 						{
 							// Collision detected
 							collision = true;
@@ -189,6 +189,9 @@ namespace ParticleUniverse
 				particle->position = mDerivedPosition + distance * (scaledRadius / distanceLength);
 			}
 			break;
+			default: {
+				break;
+			}
 		}
 	}
 	//-----------------------------------------------------------------------

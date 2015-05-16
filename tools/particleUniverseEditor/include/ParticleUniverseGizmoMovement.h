@@ -63,7 +63,7 @@ class GizmoMovement : public Gizmo
 		virtual void setVisible(bool visible);
 
 		// Miscellanious
-		virtual const GizmoType getType(void) const;
+		virtual GizmoType getType(void) const;
 
 		// Camera events
 		virtual void cameraPreRenderScene (Ogre::Camera* camera);

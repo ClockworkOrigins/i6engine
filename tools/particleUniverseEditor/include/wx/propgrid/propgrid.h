@@ -13,7 +13,7 @@
 #define __WX_PROPGRID_PROPGRID_H__
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "propgrid.cpp"
+//    #pragma interface "propgrid.cpp"
 #endif
 
 #include <wx/window.h>
@@ -289,7 +289,7 @@
 // (using just wxString for everything would've been better, but the current scheme
 // is necessary for better backwards compatibility).
 #define wxPG_CONST_WXCHAR_PTR       const wxChar*
-#define wxPG_CONST_WXCHAR_DEFVAL    ((const wxChar*)NULL)
+#define wxPG_CONST_WXCHAR_DEFVAL    (nullptr)
 #define wxPG_TO_WXCHAR_PTR(A)       A
 
 #define wxPG_PYTHON_STATIC    static
@@ -413,15 +413,15 @@ extern WXDLLIMPEXP_PG const wxChar *wxPropertyGridNameStr;
     #define wxPG_EMPTY_ARRAYINT     wxArrayInt()
     #define wxPG_EMPTY_ARRAYSTRING  wxArrayString()
 #elif !defined(SWIG)
-    #define wxPG_EMPTY_ARRAYINT     (*((wxArrayInt*)NULL))
-    #define wxPG_EMPTY_ARRAYSTRING  (*((wxArrayString*)NULL))
+    #define wxPG_EMPTY_ARRAYINT     (*(reinterpret_cast<wxArrayInt *>(0)))
+    #define wxPG_EMPTY_ARRAYSTRING  (*(reinterpret_cast<wxArrayString *>(0)))
 #else
     #define wxPG_EMPTY_ARRAYINT     wxArrayInt_wxPG_EMPTY
     #define wxPG_EMPTY_ARRAYSTRING  wxArrayString_wxPG_EMPTY
 #endif
 
 #if !defined(SWIG)
-    #define wxPG_LABEL              (*((wxString*)NULL))  // Used to tell wxPGProperty to use label as name as well.
+    #define wxPG_LABEL              (*(reinterpret_cast<wxString *>(0)))  // Used to tell wxPGProperty to use label as name as well.
     #define wxPG_NULL_BITMAP        wxNullBitmap
     #define wxPG_COLOUR_BLACK       (*wxBLACK)
 #else
@@ -733,10 +733,10 @@ typedef void (*wxPGPaintCallback)(wxPGProperty* property,
 class WXDLLIMPEXP_PG wxPGId
 {
 public:
-    inline wxPGId() { m_ptr = (wxPGProperty*) NULL; }
+    inline wxPGId() { m_ptr = nullptr; }
     ~wxPGId() {}
 
-    bool IsOk() const { return ( m_ptr != NULL ); }
+    bool IsOk() const { return ( m_ptr != nullptr ); }
 
     bool operator == (const wxPGId& other)
     {
@@ -1299,7 +1299,7 @@ public:
     /** Constructor for none. */
     wxPGVariant()
     {
-        m_v.m_ptr = (void*)NULL;
+        m_v.m_ptr = nullptr;
     }
 #ifndef SWIG
     /** Constructor for long integer. */
@@ -1320,52 +1320,52 @@ public:
     /** Constructor for float. */
     wxPGVariant( const double& v_ptr )
     {
-        m_v.m_ptr = (void*)&v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<double *>(&v_ptr));
     }
     /** Constructor for wxString*. */
     wxPGVariant( const wxString& v_ptr )
     {
-        m_v.m_ptr = (void*)&v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxString *>(&v_ptr));
     }
     /** Constructor for wxArrayString*. */
     wxPGVariant( const wxArrayString& v_ptr )
     {
-        m_v.m_ptr = (void*)&v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxArrayString *>(&v_ptr));
     }
     /** Constructor for wxArrayInt. */
     wxPGVariant( const wxArrayInt& v_ptr )
     {
-        m_v.m_ptr = (void*)&v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxArrayInt *>(&v_ptr));
     }
     /** Constructor for wxPoint. */
     wxPGVariant( const wxPoint& v_ptr )
     {
-        m_v.m_ptr = (void*)&v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxPoint *>(&v_ptr));
     }
     /** Constructor for wxSize. */
     wxPGVariant( const wxSize& v_ptr )
     {
-        m_v.m_ptr = (void*)&v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxSize *>(&v_ptr));
     }
     /** Constructor for wxLongLong. */
     wxPGVariant( const wxLongLong& v_ptr )
     {
-        m_v.m_ptr = (void*)&v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxLongLong *>(&v_ptr));
     }
     /** Constructor for wxULongLong. */
     wxPGVariant( const wxULongLong& v_ptr )
     {
-        m_v.m_ptr = (void*)&v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxULongLong *>(&v_ptr));
     }
     /** Constructor for wxObject&. */
     wxPGVariant( const wxObject& v_ptr )
     {
-        m_v.m_ptr = (void*)&v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxObject *>(&v_ptr));
     }
     /** Constructor for wxObject*. */
     wxPGVariant( const wxObject* v_ptr )
     {
-        m_v.m_ptr = (void*)v_ptr;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxObject *>(v_ptr));
     }
     /** Constructor for void*. */
     wxPGVariant( void* v_ptr )
@@ -1376,7 +1376,7 @@ public:
     /** Constructor for wxDateTime ptr. */
     wxPGVariant( const wxDateTime& dt )
     {
-        m_v.m_ptr = (void*) &dt;
+        m_v.m_ptr = reinterpret_cast<void *>(const_cast<wxDateTime *>(&dt));
     }
 #endif
 
@@ -1393,33 +1393,33 @@ public:
     /** Returns value as floating point number. */
     inline double GetDouble() const
     {
-        return *((double*)m_v.m_ptr);
+        return *(reinterpret_cast<double *>(m_v.m_ptr));
     }
     /** Returns value as floating point number ptr. */
     inline double* GetDoublePtr() const
     {
-        return (double*) m_v.m_ptr;
+        return reinterpret_cast<double *>(m_v.m_ptr);
     }
     /** Returns value as a wxString. */
     inline const wxString& GetString() const
     {
-        return *((const wxString*)m_v.m_ptr);
+        return *(reinterpret_cast<const wxString *>(m_v.m_ptr));
     }
     /** Returns value as a reference to a wxArrayString. */
     inline wxArrayString& GetArrayString() const
     {
-        wxArrayString* temp = (wxArrayString*)m_v.m_ptr;
+        wxArrayString* temp = reinterpret_cast<wxArrayString *>(m_v.m_ptr);
         return *temp;
     }
 
     inline const wxObject& GetWxObject() const
     {
-        return *((const wxObject*)m_v.m_ptr);
+        return *(reinterpret_cast<const wxObject *>(m_v.m_ptr));
     }
 
     inline wxObject* GetWxObjectPtr() const
     {
-        return (wxObject*)m_v.m_ptr;
+        return reinterpret_cast<wxObject *>(m_v.m_ptr);
     }
 
     /** Returns value as void*. */
@@ -1431,7 +1431,7 @@ public:
     /** Returns value as const wxDateTime&. */
     inline const wxDateTime& GetDateTime() const
     {
-        return *((const wxDateTime*)m_v.m_ptr);
+        return *(reinterpret_cast<const wxDateTime *>(m_v.m_ptr));
     }
 #endif
 
@@ -1449,16 +1449,16 @@ public:
     wxPGVariantUnion          m_v;
 };
 
-    #define wxPGVariantGetWxObjectPtr(A)    ((wxObject*)A.GetRawPtr())
+    #define wxPGVariantGetWxObjectPtr(A)    (reinterpret_cast<wxObject *>(A.GetRawPtr()))
     #define wxPGVariantToWxObjectPtr(A,B)   wxDynamicCast((wxObject*)A.GetRawPtr(),B);
     #define wxPGVariantToWxObject(A)        A.GetWxObject()
-    #define wxPGVariantToDateTime(A)        *((wxDateTime*)A.GetVoidPtr())
-    #define wxPGVariantToWxPoint(A)         *((wxPoint*)wxPGVariantToVoidPtr(A))
-    #define wxPGVariantToWxSize(A)          *((wxSize*)wxPGVariantToVoidPtr(A))
-    #define wxPGVariantToWxLongLong(A)      *((wxLongLong*)wxPGVariantToVoidPtr(A))
-    #define wxPGVariantToWxULongLong(A)     *((wxULongLong*)wxPGVariantToVoidPtr(A))
-    #define wxPGVariantToArrayInt(A)        *((wxArrayInt*)A.GetVoidPtr())
-    #define wxPGVariantFromWxObject(A)      *((const wxObject*)A)
+    #define wxPGVariantToDateTime(A)        *(reinterpret_cast<wxDateTime *>(A.GetVoidPtr()))
+    #define wxPGVariantToWxPoint(A)         *(reinterpret_cast<wxPoint *>(wxPGVariantToVoidPtr(A)))
+    #define wxPGVariantToWxSize(A)          *(reinterpret_cast<wxSize *>(wxPGVariantToVoidPtr(A)))
+    #define wxPGVariantToWxLongLong(A)      *(reinterpret_cast<wxLongLong *>(wxPGVariantToVoidPtr(A)))
+    #define wxPGVariantToWxULongLong(A)     *(reinterpret_cast<wxULongLong *>(wxPGVariantToVoidPtr(A)))
+    #define wxPGVariantToArrayInt(A)        *(reinterpret_cast<wxArrayInt *>(A.GetVoidPtr()))
+    #define wxPGVariantFromWxObject(A)      *(reinterpret_cast<const wxObject *>(A))
     #define wxPGVariantFromLong(A)          wxPGVariant(A)
     #define wxPGVariantCreator              wxPGVariant
 
@@ -1573,10 +1573,10 @@ public:
     wxPGPropertyDataExt()
     {
 #if wxUSE_VALIDATORS
-        m_validator = (wxValidator*) NULL;
+        m_validator = nullptr;
 #endif
-        m_customEditor = (wxPGEditor*) NULL;
-        m_valueBitmap = (wxBitmap*) NULL;
+        m_customEditor = nullptr;
+        m_valueBitmap = nullptr;
     }
 
     ~wxPGPropertyDataExt()
@@ -2031,7 +2031,7 @@ public:
 
     unsigned int GetFlags() const
     {
-        return (unsigned int)m_flags;
+        return static_cast<unsigned int>(m_flags);
     }
 
     const wxPGEditor* GetEditorClass() const;
@@ -2056,7 +2056,7 @@ public:
     /** Returns true if this is a sub-property. */
     inline bool IsSubProperty() const
     {
-        wxPGProperty* parent = (wxPGProperty*)m_parent;
+        wxPGProperty* parent = reinterpret_cast<wxPGProperty *>(m_parent);
         if ( parent && parent->GetParentingType() < 0 && parent->m_y > -2 )
             return true;
         return false;
@@ -2068,7 +2068,7 @@ public:
 
     inline int GetMaxLength() const
     {
-        return (int) m_maxLen;
+        return int(m_maxLen);
     }
 
 #ifdef SWIG
@@ -2090,7 +2090,7 @@ public:
     {
         if ( m_dataExt )
             return m_dataExt->m_valueBitmap;
-        return (wxBitmap*) NULL;
+        return nullptr;
     }
 
     /** Returns number of children (always 0 for normal properties). */
@@ -2098,12 +2098,12 @@ public:
 
     inline unsigned int GetArrIndex() const { return m_arrIndex; }
 
-    inline unsigned int GetDepth() const { return (unsigned int)m_depth; }
+    inline unsigned int GetDepth() const { return static_cast<unsigned int>(m_depth); }
 
     /** Returns position in parent's array. */
     inline unsigned int GetIndexInParent() const
     {
-        return (unsigned int)m_arrIndex;
+        return static_cast<unsigned int>(m_arrIndex);
     }
 
     /** Hides or reveals the property.
@@ -2425,14 +2425,14 @@ public:
     inline size_t GetCount() const { return m_children.GetCount(); }
 
     /** Returns sub-property at index i. */
-    inline wxPGProperty* Item( size_t i ) const { return (wxPGProperty*)m_children.Item(i); }
+    inline wxPGProperty* Item( size_t i ) const { return reinterpret_cast<wxPGProperty *>(m_children.Item(i)); }
 
     /** Returns last sub-property.
     */
-    wxPGProperty* Last() const { return (wxPGProperty*)m_children.Last(); }
+    wxPGProperty* Last() const { return reinterpret_cast<wxPGProperty *>(m_children.Last()); }
 
     /** Returns index of given sub-property. */
-    inline int Index( const wxPGProperty* p ) const { return m_children.Index((void*)p); }
+    inline int Index( const wxPGProperty* p ) const { return m_children.Index(reinterpret_cast<void *>(const_cast<wxPGProperty *>(p))); }
 
     /** Deletes all sub-properties. */
     void Empty();
@@ -2528,8 +2528,8 @@ public:
 
     void CalculateTextExtent( wxWindow* wnd, wxFont& font );
 
-    void SetTextColIndex( unsigned int colInd ) { m_capFgColIndex = (wxByte) colInd; }
-    unsigned int GetTextColIndex() const { return (unsigned int) m_capFgColIndex; }
+    void SetTextColIndex( unsigned int colInd ) { m_capFgColIndex = wxByte(colInd); }
+    unsigned int GetTextColIndex() const { return static_cast<unsigned int>(m_capFgColIndex); }
 
 protected:
     int     m_textExtent;  // pre-calculated length of text
@@ -2560,7 +2560,7 @@ public:
 
 };
 
-#define wxPGChoicesEmptyData    ((wxPGChoicesData*)NULL)
+#define wxPGChoicesEmptyData    (nullptr)
 
 #endif // SWIG
 
@@ -2670,7 +2670,7 @@ public:
     }
 
     /** Gets a unsigned number identifying this list. */
-    wxPGChoicesId GetId() const { return (wxPGChoicesId) m_data; };
+    wxPGChoicesId GetId() const { return wxPGChoicesId(m_data); };
 
     /** Removes count items starting at position nIndex. */
     inline void RemoveAt(size_t nIndex, size_t count = 1)
@@ -2684,7 +2684,7 @@ public:
 
 #ifndef SWIG
     /** Does not create copies for itself. */
-    void Set( const wxChar** labels, const long* values = NULL )
+    void Set( const wxChar** labels, const long* values = nullptr)
     {
         Free();
         Add(labels,values);
@@ -2693,7 +2693,7 @@ public:
     /** Version that works with wxArrayString.
         TODO: Deprecate this.
     */
-    void Set( wxArrayString& arr, const long* values = (const long*) NULL )
+    void Set( wxArrayString& arr, const long* values = nullptr)
     {
         Free();
         Add(arr,values);
@@ -2862,8 +2862,8 @@ WX_PG_DECLARE_STRING_PROPERTY_WITH_DECL(wxDirProperty,WXDLLIMPEXP_PG)
 #ifndef SWIG
 
 extern WXDLLIMPEXP_PG wxPGProperty* wxEnumProperty( const wxString& label, const wxString& name,
-    const wxChar** labels = (const wxChar**) NULL,
-    const long* values = NULL, int value = 0 );
+    const wxChar** labels = nullptr,
+    const long* values = nullptr, int value = 0 );
 
 extern WXDLLIMPEXP_PG wxPGProperty* wxEnumProperty( const wxString& label, const wxString& name,
     const wxArrayString& labels, int value = 0 );
@@ -2888,8 +2888,8 @@ extern WXDLLIMPEXP_PG wxPGPropertyClassInfo wxEnumPropertyClassInfo;
 #ifndef SWIG
 
 extern WXDLLIMPEXP_PG wxPGProperty* wxEditEnumProperty( const wxString& label, const wxString& name,
-    const wxChar** labels = (const wxChar**) NULL,
-    const long* values = NULL, const wxString& value = wxEmptyString );
+    const wxChar** labels = nullptr,
+    const long* values = nullptr, const wxString& value = wxEmptyString );
 
 extern WXDLLIMPEXP_PG wxPGProperty* wxEditEnumProperty( const wxString& label, const wxString& name,
     const wxArrayString& labels, const wxString& value = wxEmptyString );
@@ -2913,8 +2913,8 @@ extern WXDLLIMPEXP_PG wxPGPropertyClassInfo wxEditEnumPropertyClassInfo;
 
 #ifndef SWIG
 
-extern WXDLLIMPEXP_PG wxPGProperty* wxFlagsProperty( const wxString& label, const wxString& name, const wxChar** labels = (const wxChar**) NULL,
-    const long* values = NULL, int value = 0 );
+extern WXDLLIMPEXP_PG wxPGProperty* wxFlagsProperty( const wxString& label, const wxString& name, const wxChar** labels = nullptr,
+    const long* values = nullptr, int value = 0 );
 
 extern WXDLLIMPEXP_PG wxPGProperty* wxFlagsProperty( const wxString& label, const wxString& name,
     const wxArrayString& labels, int value = 0 );
@@ -2960,12 +2960,12 @@ extern WXDLLIMPEXP_PG wxPGPropertyClassInfo wxPropertyCategoryClassInfo;
 inline wxObject* wxPG_VariantToWxObject( wxVariant& variant, wxClassInfo* classInfo )
 {
     if ( !variant.IsValueKindOf(classInfo) )
-        return (wxObject*) NULL;
+        return nullptr;
     wxVariantData* vdata = variant.GetData();
 
     wxPGVariantDataWxObj* vdataWxObj = wxDynamicCastVariantData(vdata, wxPGVariantDataWxObj);
     if ( vdataWxObj )
-        return (wxObject*) vdataWxObj->GetValuePtr();
+        return reinterpret_cast<wxObject *>(vdataWxObj->GetValuePtr());
 
     return variant.GetWxObjectPtr();
 }
@@ -3027,7 +3027,7 @@ public:
 
     inline bool ClearSelection()
     {
-        return DoSelectProperty(wxPGIdGen((wxPGProperty*)NULL));
+        return DoSelectProperty(wxPGIdGen(nullptr));
     }
 
     bool Collapse( wxPGProperty* p );
@@ -3052,7 +3052,7 @@ public:
     /** Returns id of first item, whether it is a category or property. */
     inline wxPGId GetFirst() const
     {
-        wxPGProperty* p = (wxPGProperty*) NULL;
+        wxPGProperty* p = nullptr;
         if ( m_properties->GetCount() )
             p = m_properties->Item(0);
         return wxPGIdGen(p);
@@ -3074,7 +3074,7 @@ public:
 
     wxPGId GetPrevProperty( wxPGId id ) const;
 
-    wxPGId GetPropertyByLabel( const wxString& name, wxPGPropertyWithChildren* parent  = (wxPGPropertyWithChildren*) NULL ) const;
+    wxPGId GetPropertyByLabel( const wxString& name, wxPGPropertyWithChildren* parent  = nullptr) const;
 
     wxVariant GetPropertyValues( const wxString& listname, wxPGId baseparent, long flags ) const;
 
@@ -3085,7 +3085,7 @@ public:
 
     inline bool IsDisplayed() const;
 
-    inline bool IsInNonCatMode() const { return (bool)(m_properties == m_abcArray); }
+    inline bool IsInNonCatMode() const { return m_properties == m_abcArray; }
 
     /** Only inits arrays, doesn't migrate things or such. */
     void InitNonCatMode ();
@@ -3118,7 +3118,7 @@ public:
     /** Sets value (integer) of a property. */
     inline void SetPropertyValue( wxPGProperty* p, int value )
     {
-        SetPropertyValue( p, wxPG_VALUETYPE(long), wxPGVariantFromLong((long)value) );
+        SetPropertyValue( p, wxPG_VALUETYPE(long), wxPGVariantFromLong(long(value)) );
     }
     /** Sets value (floating point) of a property. */
     inline void SetPropertyValueDouble( wxPGProperty* p, double value )
@@ -3128,7 +3128,7 @@ public:
     /** Sets value (bool) of a property. */
     inline void SetPropertyValueBool( wxPGProperty* p, bool value )
     {
-        SetPropertyValue( p, wxPG_VALUETYPE(bool), wxPGVariantFromLong(value?(long)1:(long)0) );
+        SetPropertyValue( p, wxPG_VALUETYPE(bool), wxPGVariantFromLong(value ? 1L : 0L) );
     }
     /** Sets value (wxArrayString) of a property. */
     inline void SetPropertyValueArrstr2( wxPGProperty* p, const wxArrayString& value )
@@ -3393,7 +3393,7 @@ public:
     inline wxPGId GetFirstChild( wxPGId id )
     {
         wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
-        wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*) p;
+        wxPGPropertyWithChildren* pwc = reinterpret_cast<wxPGPropertyWithChildren *>(p);
         if ( pwc->GetParentingType()==0 || pwc->GetParentingType()==-1 || !pwc->GetCount() )
             return wxNullProperty;
         return wxPGIdGen(pwc->Item(0));
@@ -3519,7 +3519,7 @@ public:
         wxPG_PROP_ID_CALL_PROLOG_RETVAL(NULL)
         if ( p->GetDataExt() )
             return p->GetDataExt()->m_valueBitmap;
-        return (wxBitmap*) NULL;
+        return nullptr;
     }
 
     inline wxBitmap* GetPropertyImage( wxPGPropNameStr name ) const
@@ -3666,7 +3666,7 @@ public:
     wxPG_PYTHON_STATIC wxString GetPropertyValueAsString( wxPGId id ) wxPG_GETVALUE_CONST;
     wxPG_PYTHON_STATIC long GetPropertyValueAsLong( wxPGId id ) wxPG_GETVALUE_CONST;
 #ifndef SWIG
-    wxPG_PYTHON_STATIC inline int GetPropertyValueAsInt( wxPGId id ) wxPG_GETVALUE_CONST { return (int)GetPropertyValueAsLong(id); }
+    wxPG_PYTHON_STATIC inline int GetPropertyValueAsInt( wxPGId id ) wxPG_GETVALUE_CONST { return int(GetPropertyValueAsLong(id)); }
 #endif
     wxPG_PYTHON_STATIC bool GetPropertyValueAsBool( wxPGId id ) wxPG_GETVALUE_CONST;
     wxPG_PYTHON_STATIC double GetPropertyValueAsDouble( wxPGId id ) wxPG_GETVALUE_CONST;
@@ -3694,7 +3694,7 @@ public:
 #if !wxPG_PGVARIANT_IS_VARIANT
     wxPG_PYTHON_STATIC inline const wxPoint& GetPropertyValueAsPoint( wxPGId id ) wxPG_GETVALUE_CONST
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxPoint"), *((const wxPoint*)NULL))
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxPoint"), *(reinterpret_cast<const wxPoint *>(0)))
         return wxPGVariantToWxPoint(p->DoGetValue());
     }
 #else
@@ -3708,7 +3708,7 @@ public:
 #if !wxPG_PGVARIANT_IS_VARIANT
     wxPG_PYTHON_STATIC inline const wxSize& GetPropertyValueAsSize( wxPGId id ) wxPG_GETVALUE_CONST
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxSize"), *((const wxSize*)NULL))
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxSize"), *(reinterpret_cast<const wxSize *>(0)))
         return wxPGVariantToWxSize(p->DoGetValue());
     }
 #else
@@ -3722,7 +3722,7 @@ public:
 #if !wxPG_PGVARIANT_IS_VARIANT
     wxPG_PYTHON_STATIC inline const wxLongLong& GetPropertyValueAsLongLong( wxPGId id ) wxPG_GETVALUE_CONST
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxLongLong"), *((const wxLongLong*)NULL))
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxLongLong"), *(reinterpret_cast<const wxLongLong *>(0)))
         return wxPGVariantToWxLongLong(p->DoGetValue());
     }
 #else
@@ -3736,7 +3736,7 @@ public:
 #if !wxPG_PGVARIANT_IS_VARIANT
     wxPG_PYTHON_STATIC inline const wxULongLong& GetPropertyValueAsULongLong( wxPGId id ) wxPG_GETVALUE_CONST
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxULongLong"), *((const wxULongLong*)NULL))
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxULongLong"), *(reinterpret_cast<const wxULongLong *>(0)))
         return wxPGVariantToWxULongLong(p->DoGetValue());
     }
 #else
@@ -4964,13 +4964,13 @@ public:
     inline wxPGId AppendIn( wxPGId id, const wxString& label, const wxString& propname, wxVariant& value )
     {
         wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
-        return m_pState->AppendIn( (wxPGPropertyWithChildren*)p, label, propname, value );
+        return m_pState->AppendIn(reinterpret_cast<wxPGPropertyWithChildren *>(p), label, propname, value );
     }
 
     inline wxPGId AppendIn( wxPGPropNameStr name, const wxString& label, const wxString& propname, wxVariant& value )
     {
         wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
-        return m_pState->AppendIn( (wxPGPropertyWithChildren*)p, label, propname, value );
+        return m_pState->AppendIn(reinterpret_cast<wxPGPropertyWithChildren *>(p), label, propname, value );
     }
 
     /** This static function enables or disables automatic use of wxGetTranslation for
@@ -5150,7 +5150,7 @@ public:
         \remarks
     */
     wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
-        wxPGId baseparent = wxPGIdGen((wxPGProperty*)NULL), long flags = 0 ) const
+        wxPGId baseparent = wxPGIdGen(nullptr), long flags = 0 ) const
     {
         return m_pState->GetPropertyValues(listname,baseparent,flags);
     }
@@ -5210,7 +5210,7 @@ public:
     */
     inline wxPGId GetFirstVisible() const
     {
-        wxPGProperty* p = NULL;
+        wxPGProperty* p = nullptr;
         if ( m_pState->m_properties->GetCount() )
         {
             p = m_pState->m_properties->Item(0);
@@ -5243,7 +5243,7 @@ public:
     /** Returns size of the custom paint image in front of property.
         If no argument is given, returns preferred size.
     */
-    wxSize GetImageSize( wxPGId id = wxPGIdGen((wxPGProperty*)NULL) ) const;
+    wxSize GetImageSize( wxPGId id = wxPGIdGen(nullptr) ) const;
 
     /** Returns property (or category) at given y coordinate (relative to control's
         top left).
@@ -5254,7 +5254,7 @@ public:
     */
     inline wxPGId GetLastProperty()
     {
-        if ( !m_pState->m_properties->GetCount() ) return wxPGIdGen((wxPGProperty*)NULL);
+        if ( !m_pState->m_properties->GetCount() ) return wxPGIdGen(nullptr);
         wxPGProperty* p = GetLastItem(false, false);
         if ( p->GetParentingType() > 0 )
             return GetPrevProperty ( wxPGIdGen(p) );
@@ -5269,7 +5269,7 @@ public:
     {
         wxPG_PROP_ID_CALL_PROLOG_RETVAL(wxNullProperty)
 
-        wxPGPropertyWithChildren* pwc = (wxPGPropertyWithChildren*) p;
+        wxPGPropertyWithChildren* pwc = reinterpret_cast<wxPGPropertyWithChildren *>(p);
         if ( !pwc->GetParentingType() || !pwc->GetCount() ) return wxNullProperty;
         return wxPGIdGen(pwc->Last());
     }
@@ -5425,10 +5425,10 @@ public:
     //wxPropertyGridState* GetCopyOfState() const;
 
     /** Returns current vertical spacing. */
-    inline int GetVerticalSpacing() const { return (int)m_vspacing; }
+    inline int GetVerticalSpacing() const { return int(m_vspacing); }
 
     /** Returns true if a property is selected. */
-    inline bool HasSelection() const { return ((m_selected!=(wxPGProperty*)NULL)?true:false); }
+    inline bool HasSelection() const { return ((m_selected != nullptr) ? true : false); }
 
     /** Hides all low priority properties. */
     inline void HideLowPriority() { Compact ( true ); }
@@ -5488,23 +5488,23 @@ public:
     inline wxPGId Insert( wxPGId priorthis, wxPGProperty* newproperty )
     {
         wxPGId res = _Insert( wxPGIdToPtr( priorthis ), newproperty );
-        DrawItems( newproperty, (wxPGProperty*) NULL );
+        DrawItems( newproperty, nullptr);
         return res;
     }
     /** @link wxPropertyGrid::Insert Insert @endlink */
     inline wxPGId Insert( wxPGPropNameStr name, wxPGProperty* newproperty )
     {
         wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
-        wxPGId res = _Insert( (wxPGPropertyWithChildren*)p, newproperty );
-        DrawItems( newproperty, (wxPGProperty*) NULL );
+        wxPGId res = _Insert(reinterpret_cast<wxPGPropertyWithChildren *>(p), newproperty );
+        DrawItems( newproperty, nullptr);
         return res;
     }
 
     /** @link wxPropertyGrid::Insert Insert @endlink */
     inline wxPGId Insert( wxPGId id, int index, wxPGProperty* newproperty )
     {
-        wxPGId res = _Insert( (wxPGPropertyWithChildren*)wxPGIdToPtr (id), index, newproperty );
-        DrawItems( newproperty, (wxPGProperty*) NULL );
+        wxPGId res = _Insert(reinterpret_cast<wxPGPropertyWithChildren *>(wxPGIdToPtr(id)), index, newproperty );
+        DrawItems( newproperty, nullptr);
         return res;
     }
 
@@ -5512,8 +5512,8 @@ public:
     inline wxPGId Insert( wxPGPropNameStr name, int index, wxPGProperty* newproperty )
     {
         wxPG_PROP_NAME_CALL_PROLOG_RETVAL(wxNullProperty)
-        wxPGId res = _Insert( (wxPGPropertyWithChildren*)p, index, newproperty );
-        DrawItems( newproperty, (wxPGProperty*) NULL );
+        wxPGId res = _Insert(reinterpret_cast<wxPGPropertyWithChildren *>(p), index, newproperty );
+        DrawItems( newproperty, nullptr);
         return res;
     }
 
@@ -5633,7 +5633,7 @@ public:
     inline void SetCurrentCategory( wxPGId id )
     {
         wxPG_PROP_ID_CALL_PROLOG()
-        wxPropertyCategoryClass* pc = (wxPropertyCategoryClass*)p;
+        wxPropertyCategoryClass* pc = reinterpret_cast<wxPropertyCategoryClass *>(p);
 #ifdef __WXDEBUG__
         if ( pc ) wxASSERT( pc->GetParentingType() > 0 );
 #endif
@@ -5826,7 +5826,7 @@ public:
     */
     inline void SetPropertyValue( wxPGId id, int value )
     {
-        SetPropertyValue( id, wxPG_VALUETYPE(long), wxPGVariantFromLong((long)value) );
+        SetPropertyValue( id, wxPG_VALUETYPE(long), wxPGVariantFromLong(long(value)) );
     }
 #endif
     /** Sets value (floating point) of a property.
@@ -5839,7 +5839,7 @@ public:
     */
     inline void SetPropertyValueBool( wxPGId id, bool value )
     {
-        SetPropertyValue( id, wxPG_VALUETYPE(bool), wxPGVariantFromLong(value?(long)1:(long)0) );
+        SetPropertyValue( id, wxPG_VALUETYPE(bool), wxPGVariantFromLong(value ? 1L : 0L) );
     }
 
     /** Sets value (wxString) of a property.
@@ -5953,7 +5953,7 @@ public:
     inline void SetPropertyValueBool( wxPGPropNameStr name, bool value )
     {
         wxPG_PROP_NAME_CALL_PROLOG()
-        SetPropertyValue( wxPGIdGen(p), wxPG_VALUETYPE(bool), wxPGVariantFromLong(value?(long)1:(long)0) );
+        SetPropertyValue( wxPGIdGen(p), wxPG_VALUETYPE(bool), wxPGVariantFromLong(value ? 1L : 0L) );
     }
     /** Sets value (wxString) of a property. For properties which value type is
         not string, calls wxPGProperty::SetValueFromString to translate the value.
@@ -6103,7 +6103,7 @@ public:
     */
     inline void SetVerticalSpacing( int vspacing )
     {
-        m_vspacing = (unsigned char)vspacing;
+        m_vspacing = static_cast<unsigned char>(vspacing);
         CalculateFontAndBitmapStuff( vspacing );
         if ( !m_pState->m_itemsAdded ) Refresh();
     }
@@ -6150,7 +6150,7 @@ public:
         if ( priority == wxPG_LOW )
             m_iFlags |= wxPG_FL_ADDING_HIDEABLES;
         else
-            m_iFlags &= ~(wxPG_FL_ADDING_HIDEABLES);
+            m_iFlags &= ~static_cast<unsigned int>(wxPG_FL_ADDING_HIDEABLES);
     }
 
     /** Same as SetDefaultPriority(wxPG_HIGH). */
@@ -6171,7 +6171,7 @@ public:
     /** Reverse of EditorsValueWasModified(). */
     inline void EditorsValueWasNotModified()
     {
-        m_iFlags &= ~(wxPG_FL_VALUE_MODIFIED);
+        m_iFlags &= ~static_cast<unsigned int>(wxPG_FL_VALUE_MODIFIED);
     }
 
     /** Returns true if editor's value was marked modified. */
@@ -6382,7 +6382,7 @@ public:
     virtual bool Destroy();
     virtual wxSize DoGetBestSize() const;
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL );
+                          const wxRect *rect = nullptr);
     virtual bool SetFont( const wxFont& font );
 #if wxPG_SUPPORT_TOOLTIPS
     void SetToolTip( const wxString& tipString );
@@ -6652,7 +6652,7 @@ protected:
 
     /** Draws items from topitemy to bottomitemy */
     void DrawItems( wxDC& dc, unsigned int topitemy, unsigned int bottomitemy,
-                    const wxRect* clip_rect = (const wxRect*) NULL );
+                    const wxRect* clip_rect = nullptr);
 
     void DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 );
 
@@ -6702,10 +6702,10 @@ protected:
     {
         wxASSERT( y >= 0 );
 
-        if ( (unsigned int)y >= m_bottomy )
-            return NULL;
+        if (static_cast<unsigned int>(y) >= m_bottomy )
+            return nullptr;
 
-        return m_pState->m_properties->GetItemAtY ( y, m_lineHeight );
+        return m_pState->m_properties->GetItemAtY(static_cast<unsigned int>(y), static_cast<unsigned int>(m_lineHeight));
     }
 
     void DoPropertyChanged( wxPGProperty* p, unsigned int selFlags = 0 );
@@ -6939,7 +6939,7 @@ public:
     }
     inline int GetPropertyValueAsInt() const
     {
-        return (int)GetPropertyValueAsLong();
+        return int(GetPropertyValueAsLong());
     }
     inline long GetPropertyValueAsBool() const
     {
@@ -7007,7 +7007,7 @@ public:
 #endif
 
     /** Returns true if event has associated property. */
-    inline bool HasProperty() const { return ( m_property != (wxPGProperty*) NULL ); }
+    inline bool HasProperty() const { return m_property != nullptr; }
 
     inline bool IsPropertyEnabled() const
     {
@@ -7104,7 +7104,7 @@ public:
         \param popRoot
         Base parent property. Default is root.
     */
-    inline wxPropertyGridPopulator(wxPropertyGrid* pg = (wxPropertyGrid*) NULL,
+    inline wxPropertyGridPopulator(wxPropertyGrid* pg = nullptr,
                                    wxPGId popRoot = wxNullProperty)
     {
         Init(pg, popRoot);
@@ -7155,7 +7155,7 @@ public:
                          const wxString& name = wxPG_LABEL,
                          const wxString& value = wxEmptyString,
                          const wxString& attributes = wxEmptyString,
-                         wxPGChoicesId choicesId = (wxPGChoicesId)0,
+                         wxPGChoicesId choicesId = 0,
                          const wxArrayString& choiceLabels = wxPG_EMPTY_ARRAYSTRING,
                          const wxArrayInt& choiceValues = wxPG_EMPTY_ARRAYINT);
 
@@ -7172,7 +7172,7 @@ public:
                         const wxString& name = wxPG_LABEL,
                         const wxString& value = wxEmptyString,
                         const wxString& attributes = wxEmptyString,
-                        wxPGChoicesId choicesId = (wxPGChoicesId)0,
+                        wxPGChoicesId choicesId = 0,
                         const wxArrayString& choiceLabels = wxPG_EMPTY_ARRAYSTRING,
                         const wxArrayInt& choiceValues = wxPG_EMPTY_ARRAYINT);
 
@@ -7199,7 +7199,7 @@ public:
     {
         wxASSERT( wxPGIdIsOk(m_curParent) );
         m_curParent = wxPGIdGen(wxPGIdToPtr(m_curParent)->GetParent());
-        m_lastProperty = wxPGIdGen((wxPGProperty*)NULL);
+        m_lastProperty = wxPGIdGen(nullptr);
     }
 
 protected:

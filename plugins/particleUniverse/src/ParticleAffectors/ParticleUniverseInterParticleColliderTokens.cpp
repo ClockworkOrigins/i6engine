@@ -132,7 +132,7 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getAdjustment() != InterParticleCollider::DEFAULT_ADJUSTMENT) serializer->writeLine(
+		if (!almostEquals(affector->getAdjustment(), InterParticleCollider::DEFAULT_ADJUSTMENT)) serializer->writeLine(
 			token[TOKEN_ADJUSTMENT], StringConverter::toString(affector->getAdjustment()), 12);
 
 		if (affector->getInterParticleCollisionResponse() != InterParticleCollider::DEFAULT_COLLISION_RESPONSE) 

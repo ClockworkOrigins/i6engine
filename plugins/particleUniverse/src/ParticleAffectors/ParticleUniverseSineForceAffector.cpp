@@ -67,7 +67,7 @@ namespace ParticleUniverse
 		{
 			mAngle = 0.0f;
 
-			if (mFrequencyMin != mFrequencyMax)
+			if (!almostEquals(mFrequencyMin, mFrequencyMax))
 			{
 				mFrequency = Math::RangeRandom(mFrequencyMin, mFrequencyMax);
 			}

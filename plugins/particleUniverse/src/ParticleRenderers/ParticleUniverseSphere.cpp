@@ -35,22 +35,22 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	Sphere::Sphere(void):
         mOwnRadius(false),
+		mRadius(100.0f),
+		mRadiusChanged(false),
 		mPosition(Vector3::ZERO),
 		mColour(ColourValue::White),
-        mParentSet(0),
-		mRadius(100.0f),
-		mRadiusChanged(false)
+        	mParentSet(0)
 	{
 		mOrientation = Quaternion::IDENTITY;
 	}
     //-----------------------------------------------------------------------
     Sphere::Sphere(const Vector3& position, SphereSet* owner) :
         mOwnRadius(false),
+		mRadius(10.0f),
+		mRadiusChanged(false),
 		mPosition(Vector3::ZERO),
 		mColour(ColourValue::White),
-        mParentSet(0),
-		mRadius(10.0f),
-		mRadiusChanged(false)
+        	mParentSet(0)
 	{
 		mOrientation = Quaternion::IDENTITY;
 	}

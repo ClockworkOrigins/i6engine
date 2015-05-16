@@ -240,21 +240,21 @@ namespace ParticleUniverse
 			token[TOKEN_LIGHT_RENDER_QUEUE], StringConverter::toString(renderer->getRenderQueueGroup()), 12);
 		if (renderer->getSpecularColour() != LightRenderer::DEFAULT_SPECULAR) serializer->writeLine(
 			token[TOKEN_LIGHT_SPECULAR], StringConverter::toString(renderer->getSpecularColour()), 12);
-		if (renderer->getAttenuationRange() != LightRenderer::DEFAULT_ATT_RANGE) serializer->writeLine(
+		if (!almostEquals(renderer->getAttenuationRange(), LightRenderer::DEFAULT_ATT_RANGE)) serializer->writeLine(
 			token[TOKEN_LIGHT_ATT_RANGE], StringConverter::toString(renderer->getAttenuationRange()), 12);
-		if (renderer->getAttenuationConstant() != LightRenderer::DEFAULT_ATT_CONSTANT) serializer->writeLine(
+		if (!almostEquals(renderer->getAttenuationConstant(), LightRenderer::DEFAULT_ATT_CONSTANT)) serializer->writeLine(
 			token[TOKEN_LIGHT_ATT_CONSTANT], StringConverter::toString(renderer->getAttenuationConstant()), 12);
-		if (renderer->getAttenuationLinear() != LightRenderer::DEFAULT_ATT_LINEAR) serializer->writeLine(
+		if (!almostEquals(renderer->getAttenuationLinear(), LightRenderer::DEFAULT_ATT_LINEAR)) serializer->writeLine(
 			token[TOKEN_LIGHT_ATT_LINEAR], StringConverter::toString(renderer->getAttenuationLinear()), 12);
-		if (renderer->getAttenuationQuadratic() != LightRenderer::DEFAULT_ATT_QUADRATIC) serializer->writeLine(
+		if (!almostEquals(renderer->getAttenuationQuadratic(), LightRenderer::DEFAULT_ATT_QUADRATIC)) serializer->writeLine(
 			token[TOKEN_LIGHT_ATT_QUADRATIC], StringConverter::toString(renderer->getAttenuationQuadratic()), 12);
 		if (renderer->getSpotlightInnerAngle() != LightRenderer::DEFAULT_SPOT_INNER_ANGLE) serializer->writeLine(
 			token[TOKEN_LIGHT_SPOT_INNER], StringConverter::toString(renderer->getSpotlightInnerAngle().valueDegrees()), 12);
 		if (renderer->getSpotlightOuterAngle() != LightRenderer::DEFAULT_SPOT_OUTER_ANGLE) serializer->writeLine(
 			token[TOKEN_LIGHT_SPOT_OUTER], StringConverter::toString(renderer->getSpotlightOuterAngle().valueDegrees()), 12);
-		if (renderer->getSpotlightFalloff() != LightRenderer::DEFAULT_FALLOFF) serializer->writeLine(
+		if (!almostEquals(renderer->getSpotlightFalloff(), LightRenderer::DEFAULT_FALLOFF)) serializer->writeLine(
 			token[TOKEN_LIGHT_FALLOFF], StringConverter::toString(renderer->getSpotlightFalloff()), 12);
-		if (renderer->getPowerScale() != LightRenderer::DEFAULT_POWER_SCALE) serializer->writeLine(
+		if (!almostEquals(renderer->getPowerScale(), LightRenderer::DEFAULT_POWER_SCALE)) serializer->writeLine(
 			token[TOKEN_LIGHT_POWERSCALE], StringConverter::toString(renderer->getPowerScale()), 12);
 		if (renderer->getFlashFrequency() != 0.0f) serializer->writeLine(
 			token[TOKEN_FLASH_FREQUENCY], StringConverter::toString(renderer->getFlashFrequency()), 12);

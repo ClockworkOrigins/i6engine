@@ -46,14 +46,14 @@ namespace ParticleUniverse
 		mVertexBuffer(0),
 		mMesh(0),
 		mSubMesh(0),
+		mMeshProcessed(false),
 		mVertexSize(12),
 		mMaxVertexCount(0),
 		mVertexCount(0),
+		mSubMeshNumber(0),
+		mAllVerticesProcessed(false),
 		mStep(DEFAULT_STEP),
 		mSegments(DEFAULT_SEGMENTS),
-		mMeshProcessed(false),
-		mAllVerticesProcessed(false),
-		mSubMeshNumber(0),
 		mIterations(DEFAULT_ITERATIONS),
 		mMeshName(BLANK_STRING)
 	{
@@ -334,7 +334,7 @@ namespace ParticleUniverse
 		if (lengthIncrement > 0.0f)
 		{
 			// Determine number of dividers, based on the length increment
-			mSegments = (unsigned short)(((endVector - startVector).length()) / lengthIncrement - 1);
+			mSegments = static_cast<unsigned short>(((endVector - startVector).length()) / lengthIncrement - 1);
 		}
         Vector3 increment = (endVector - startVector) / mSegments;
 		

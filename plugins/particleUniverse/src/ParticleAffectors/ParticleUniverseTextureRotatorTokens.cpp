@@ -190,13 +190,13 @@ namespace ParticleUniverse
 		if (affector->useOwnRotationSpeed() != TextureRotator::DEFAULT_USE_OWN_SPEED) serializer->writeLine(
 			token[TOKEN_USE_OWN_ROTATION], StringConverter::toString(affector->useOwnRotationSpeed()), 12);
 		DynamicAttributeFactory dynamicAttributeFactory;
-		if (dynamicAttributeFactory._getDefaultValue(affector->getRotation()) != TextureRotator::DEFAULT_ROTATION)
+		if (!almostEquals(dynamicAttributeFactory._getDefaultValue(affector->getRotation()), TextureRotator::DEFAULT_ROTATION))
 		{
 			serializer->setKeyword(token[TOKEN_ROTATION]);
 			serializer->setIndentation(12);
 			dynamicAttributeFactory.write(serializer, affector->getRotation());
 		}
-		if (dynamicAttributeFactory._getDefaultValue(affector->getRotationSpeed()) != TextureRotator::DEFAULT_ROTATION_SPEED)
+		if (!almostEquals(dynamicAttributeFactory._getDefaultValue(affector->getRotationSpeed()), TextureRotator::DEFAULT_ROTATION_SPEED))
 		{
 			serializer->setKeyword(token[TOKEN_ROTATION_SPEED]);
 			dynamicAttributeFactory.write(serializer, affector->getRotationSpeed());

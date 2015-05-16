@@ -41,8 +41,8 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	BaseCollider::BaseCollider(void) :
 		ParticleAffector(),
-		mBouncyness(DEFAULT_BOUNCYNESS),
 		mFriction(DEFAULT_FRICTION),
+		mBouncyness(DEFAULT_BOUNCYNESS),
 		mIntersectionType(DEFAULT_INTERSECTION_TYPE),
 		mCollisionType(DEFAULT_COLLISION_TYPE),
 		mVelocityScale(1.0f)

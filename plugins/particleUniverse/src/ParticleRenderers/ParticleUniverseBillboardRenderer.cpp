@@ -226,7 +226,7 @@ namespace ParticleUniverse
 				bb.mColour = particle->colour;
 				bb.mRotation = particle->zRotation; // Use rotation around the Z-axis (2D rotation)
 
-				if (bb.mOwnDimensions = particle->ownDimensions)
+				if (bb.mOwnDimensions == particle->ownDimensions)
 				{
 					bb.mOwnDimensions = true;
 					bb.mWidth = particle->width;

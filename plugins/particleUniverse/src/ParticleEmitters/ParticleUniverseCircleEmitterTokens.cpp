@@ -192,11 +192,11 @@ namespace ParticleUniverse
 		ParticleEmitterWriter::write(serializer, element);
 
 		// Write own attributes
-		if (emitter->getRadius() != CircleEmitter::DEFAULT_RADIUS) serializer->writeLine(
+		if (!almostEquals(emitter->getRadius(), CircleEmitter::DEFAULT_RADIUS)) serializer->writeLine(
 			token[TOKEN_RADIUS], StringConverter::toString(emitter->getRadius()), 12);
-		if (emitter->getStep() != CircleEmitter::DEFAULT_STEP) serializer->writeLine(
+		if (!almostEquals(emitter->getStep(), CircleEmitter::DEFAULT_STEP)) serializer->writeLine(
 			token[TOKEN_STEP], StringConverter::toString(emitter->getStep()), 12);
-		if (emitter->getCircleAngle() != CircleEmitter::DEFAULT_ANGLE) serializer->writeLine(
+		if (!almostEquals(emitter->getCircleAngle(), CircleEmitter::DEFAULT_ANGLE)) serializer->writeLine(
 			token[TOKEN_ANGLE], StringConverter::toString(emitter->getCircleAngle()), 12);
 		if (emitter->isRandom() != CircleEmitter::DEFAULT_RANDOM) serializer->writeLine(
 			token[TOKEN_EMIT_RANDOM], StringConverter::toString(emitter->isRandom()), 12);

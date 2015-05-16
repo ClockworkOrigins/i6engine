@@ -318,7 +318,7 @@ Ogre::SceneNode* GizmoRotation::getParentNode(void)
 	return 0;
 }
 //-----------------------------------------------------------------------
-const Gizmo::GizmoType GizmoRotation::getType(void) const
+Gizmo::GizmoType GizmoRotation::getType(void) const
 {
 	return GIZMO_ROTATE;
 }

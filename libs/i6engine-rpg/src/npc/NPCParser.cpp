@@ -76,8 +76,6 @@ namespace npc {
 			return;
 		}
 
-		tinyxml2::XMLElement * root = doc.FirstChildElement("NPC");
-
 		for (tinyxml2::XMLElement * npc = doc.FirstChildElement("NPC"); npc != nullptr; npc = doc.NextSiblingElement("NPC")) {
 			api::objects::GOTemplate tpl;
 			if (npc->Attribute("identifier") == nullptr) {

@@ -38,8 +38,8 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	PrimitiveShapeSet::PrimitiveShapeSet(void) :
 		mBoundingRadius(0.0f), 
-		mWorldSpace(false),
 		mCullIndividual(false),
+		mWorldSpace(false),
 		mZRotated(false),
 		mAllDefaultSize(true)
 	{
@@ -50,8 +50,8 @@ namespace ParticleUniverse
 	PrimitiveShapeSet::PrimitiveShapeSet(const String& name, unsigned int poolSize, bool externalData) :
 		MovableObject(name),
 		mBoundingRadius(0.0f), 
-		mWorldSpace(false),
 		mCullIndividual(false),
+		mWorldSpace(false),
 		mZRotated(false),
 		mAllDefaultSize(true)
 	{

@@ -34,10 +34,7 @@ namespace ParticleUniverse
 {
 	//-----------------------------------------------------------------------
 	Box::Box(void):
-        mOwnDimensions(false),
-		mPosition(Vector3::ZERO),
-		mColour(ColourValue::White),
-        mParentSet(0),
+        	mOwnDimensions(false),
 		mWidth(10.0f),
 		mHeight(10.0f),
 		mDepth(10.0f),
@@ -45,17 +42,17 @@ namespace ParticleUniverse
 		mHalfHeight(5.0f),
 		mHalfDepth(5.0f),
 		mDimensionsChanged(false),
-		mTempCorner(Vector3::ZERO)
+		mTempCorner(Vector3::ZERO),
+		mPosition(Vector3::ZERO),
+		mColour(ColourValue::White),
+        	mParentSet(0)
 	{
 		mOrientation = Quaternion::IDENTITY;
 		_calculateCorners();
 	}
     //-----------------------------------------------------------------------
     Box::Box(const Vector3& position, BoxSet* owner) :
-        mOwnDimensions(false),
-		mPosition(Vector3::ZERO),
-		mColour(ColourValue::White),
-        mParentSet(0),
+	        mOwnDimensions(false),
 		mWidth(10.0f),
 		mHeight(10.0f),
 		mDepth(10.0f),
@@ -63,7 +60,10 @@ namespace ParticleUniverse
 		mHalfHeight(5.0f),
 		mHalfDepth(5.0f),
 		mDimensionsChanged(false),
-		mTempCorner(Vector3::ZERO)
+		mTempCorner(Vector3::ZERO),
+		mPosition(Vector3::ZERO),
+		mColour(ColourValue::White),
+        	mParentSet(0)
 	{
 		mOrientation = Quaternion::IDENTITY;
 		_calculateCorners();

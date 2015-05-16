@@ -319,7 +319,7 @@ Ogre::SceneNode* GizmoMovement::getParentNode(void)
 	return 0;
 }
 //-----------------------------------------------------------------------
-const Gizmo::GizmoType GizmoMovement::getType(void) const
+Gizmo::GizmoType GizmoMovement::getType(void) const
 {
 	return GIZMO_MOVE;
 }

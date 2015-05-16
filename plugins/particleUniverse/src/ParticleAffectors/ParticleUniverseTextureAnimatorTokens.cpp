@@ -181,7 +181,7 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getAnimationTimeStep() != TextureAnimator::DEFAULT_TIME_STEP) serializer->writeLine(
+		if (!almostEquals(affector->getAnimationTimeStep(), TextureAnimator::DEFAULT_TIME_STEP)) serializer->writeLine(
 			token[TOKEN_TIME_STEP], StringConverter::toString(affector->getAnimationTimeStep()), 12);
 		if (affector->getTextureCoordsStart() != TextureAnimator::DEFAULT_TEXCOORDS_START) serializer->writeLine(
 			token[TOKEN_START_TEXANIM_TEXCOORDS_RANGE], StringConverter::toString(affector->getTextureCoordsStart()), 12);

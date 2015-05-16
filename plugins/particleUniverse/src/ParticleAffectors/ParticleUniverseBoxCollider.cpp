@@ -156,13 +156,13 @@ namespace ParticleUniverse
 				}
 				else
 				{
-					AxisAlignedBox box;
-					populateAlignedBox(box,
+					AxisAlignedBox b;
+					populateAlignedBox(b,
 						mPredictedPosition, 
 						visualParticle->width, 
 						visualParticle->height,
 						visualParticle->depth);
-					if (mInnerCollision != box.intersects(mBox))
+					if (mInnerCollision != b.intersects(mBox))
 					{
 						// Collision detected
 						collision = true;
@@ -243,6 +243,9 @@ namespace ParticleUniverse
 				particle->direction *= -mFriction;
 			}
 			break;
+			default: {
+				break;
+			}
 		}
 	}
 	//-----------------------------------------------------------------------

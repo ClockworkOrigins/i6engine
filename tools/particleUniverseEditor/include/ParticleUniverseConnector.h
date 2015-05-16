@@ -91,12 +91,12 @@ class ConnectionPolicy
 			mTypeToBeConnectedWith(typeToBeConnectedWith),
 			mSubTypeToBeConnectedWith(subTypeToBeConnectedWith),
 			mMultipleConnectionsPossible(multipleConnectionsPossible),
-			mColourCode(colourCode),
-			mLineStyle(lineStyle),
 			mPolicyLocked(false),
-			mIgnoreSubType(ignoreSubType){};
+			mIgnoreSubType(ignoreSubType),
+			mColourCode(colourCode),
+			mLineStyle(lineStyle) {}
 		
-		~ConnectionPolicy(void){};
+		~ConnectionPolicy(void) {}
 
 		// Getters
 		ComponentRelation getRelation(void) const;

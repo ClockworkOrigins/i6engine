@@ -43,8 +43,8 @@ namespace ParticleUniverse
 
 	//-----------------------------------------------------------------------
 	BeamRenderer::BeamRenderer(void) : 
-		TechniqueListener(),
 		ParticleRenderer(),
+		TechniqueListener(),
 		mBillboardChain(0),
 		mQuota(0),
 		mUseVertexColours(DEFAULT_USE_VERTEX_COLOURS),
@@ -273,7 +273,7 @@ namespace ParticleUniverse
 						}
 
 						// 2. Set positions of the elements
-						element.position = spline.interpolate((Real)j / (Real)mMaxChainElements);
+						element.position = spline.interpolate(Real(j) / Real(mMaxChainElements));
 
 						// 3. Set the colour
 						element.colour = visualParticle->colour;
@@ -308,14 +308,14 @@ namespace ParticleUniverse
 
 			Vector3 end = particle->position - pSys->getDerivedPosition();
 			Vector3 perpendicular;
-			Real divide = (Real)mNumberOfSegments + 1.0f;
+			Real divide = Real(mNumberOfSegments) + 1.0f;
 			for (size_t numDev = 0; numDev < mNumberOfSegments; ++numDev)
 			{
 				perpendicular = end.crossProduct(Vector3(Math::RangeRandom(-1, 1), 
 					Math::RangeRandom(-1, 1), 
 					Math::RangeRandom(-1, 1)));
 				perpendicular.normalise();
-				beamRendererVisualData->destinationHalf[numDev] = (((Real)numDev + 1.0f) / divide) * end + _mRendererScale * mDeviation * perpendicular;
+				beamRendererVisualData->destinationHalf[numDev] = ((Real(numDev) + 1.0f) / divide) * end + _mRendererScale * mDeviation * perpendicular;
 			}
 			beamRendererVisualData->mTimeSinceLastUpdate += mUpdateInterval;
 		}

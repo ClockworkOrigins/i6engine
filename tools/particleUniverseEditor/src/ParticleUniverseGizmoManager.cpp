@@ -385,7 +385,7 @@ void GizmoManager::action(Ogre::Vector2 position, Ogre::Camera* camera)
 	}
 }
 //-----------------------------------------------------------------------
-const Gizmo::GizmoType GizmoManager::getGizmoType(void) const
+Gizmo::GizmoType GizmoManager::getGizmoType(void) const
 {
 	if (mGizmo)
 	{

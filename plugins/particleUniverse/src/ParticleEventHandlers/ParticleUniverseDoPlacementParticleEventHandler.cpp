@@ -41,10 +41,11 @@ namespace ParticleUniverse
 		TechniqueListener(),
 		mForceEmitterName(BLANK_STRING),
 		mNumberOfParticles(DEFAULT_NUMBER_OF_PARTICLES),
+		mTechnique(0),
+		mEmitter(0),
 		mFound(false),
 		mAlwaysUsePosition(true),
-		mEmitter(0),
-		mTechnique(0),
+		mBaseParticle(0),
 		mInheritPosition(true),
 		mInheritDirection(false),
 		mInheritOrientation(false),
@@ -54,8 +55,7 @@ namespace ParticleUniverse
 		mInheritColour(false),
 		mInheritParticleWidth(false),
 		mInheritParticleHeight(false),
-		mInheritParticleDepth(false),
-		mBaseParticle(0)
+		mInheritParticleDepth(false)
 	{
 	}
 	//-----------------------------------------------------------------------
@@ -208,6 +208,7 @@ namespace ParticleUniverse
 			}
 			if (mInheritParticleDepth)
 			{
+
 				if (mBaseParticle->particleType == Particle::PT_VISUAL && particle->particleType == Particle::PT_VISUAL)
 				{
 					VisualParticle* visualBaseParticle = static_cast<VisualParticle*>(mBaseParticle);

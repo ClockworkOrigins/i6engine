@@ -83,7 +83,7 @@ public:
         P p_param, class_id dynamic_i, void* dynamic_p, class_rep* cls
     )
       : instance_holder(cls, check_const_pointer(false ? get_pointer(p_param) : 0))
-      , p(p_param)
+      , p(std::move(p_param))
       , weak(0)
       , dynamic_id(dynamic_i)
       , dynamic_ptr(dynamic_p)

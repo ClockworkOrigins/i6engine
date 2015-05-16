@@ -77,7 +77,7 @@ namespace ParticleUniverse
 		ParticleObserverWriter::write(serializer, element);
 
 		// Write own attributes
-		if (observer->getThreshold() != OnRandomObserver::DEFAULT_THRESHOLD) serializer->writeLine(
+		if (!almostEquals(observer->getThreshold(), OnRandomObserver::DEFAULT_THRESHOLD)) serializer->writeLine(
 			token[TOKEN_ONRANDOM_THRESHOLD], StringConverter::toString(observer->getThreshold()), 12);
 
 		// Write the close bracket

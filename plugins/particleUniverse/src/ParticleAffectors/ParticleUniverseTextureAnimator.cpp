@@ -42,13 +42,13 @@ namespace ParticleUniverse
 	TextureAnimator::TextureAnimator(void) : 
 		ParticleAffector(),
 		mAnimationTimeStep(DEFAULT_TIME_STEP),
+		mAnimationTimeStepCount(0.0f),
+		mStartRandom(DEFAULT_START_RANDOM),
 		mAnimationTimeStepSet(false),
 		mNextIndex(false),
 		mTextureAnimationType(DEFAULT_ANIMATION_TYPE),
 		mTextureCoordsStart(DEFAULT_TEXCOORDS_START),
-		mTextureCoordsEnd(DEFAULT_TEXCOORDS_END),
-		mStartRandom(DEFAULT_START_RANDOM),
-		mAnimationTimeStepCount(0.0f)
+		mTextureCoordsEnd(DEFAULT_TEXCOORDS_END)
 	{
 	}
 	//-----------------------------------------------------------------------
@@ -118,7 +118,7 @@ namespace ParticleUniverse
 		// Set first image
 		if (mStartRandom)
 		{
-			visualParticle->textureCoordsCurrent = (uint16)Math::RangeRandom((Real)mTextureCoordsStart, (Real)mTextureCoordsEnd + 0.999f);
+			visualParticle->textureCoordsCurrent = uint16(Math::RangeRandom(Real(mTextureCoordsStart), Real(mTextureCoordsEnd) + 0.999f));
 		}
 		else
 		{
@@ -246,7 +246,7 @@ namespace ParticleUniverse
 			case TAT_RANDOM:
 			{
 				// Generate a random texcoord index
-				visualParticle->textureCoordsCurrent = (uint16)Math::RangeRandom((Real)mTextureCoordsStart, (Real)mTextureCoordsEnd + 0.999f);
+				visualParticle->textureCoordsCurrent = uint16(Math::RangeRandom(Real(mTextureCoordsStart), Real(mTextureCoordsEnd) + 0.999f));
 			}
 			break;
 		}

@@ -37,15 +37,15 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	SceneDecoratorExtern::SceneDecoratorExtern(void) :  
 		Extern(),
-		mEntity(0),
 		mEntitySet(false),
+		mEntity(0),
 		mMeshName(BLANK_STRING),
 		mEntityName(BLANK_STRING),
 		mMaterialName("BaseWhite"),
 		mMaterialNameSet(false),
 		mScale(Vector3::UNIT_SCALE),
-		mSubnode(0),
 		mPosition(Vector3::ZERO),
+		mSubnode(0),
 		mCount(0)
 	{
 	}

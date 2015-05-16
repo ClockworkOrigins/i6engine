@@ -175,23 +175,23 @@ namespace ParticleUniverse
 
 		// Write own attributes
 		DynamicAttributeFactory dynamicAttributeFactory;
-		if (dynamicAttributeFactory._getDefaultValue(affector->getDynScaleXYZ()) != ScaleAffector::DEFAULT_XYZ_SCALE)
+		if (!almostEquals(dynamicAttributeFactory._getDefaultValue(affector->getDynScaleXYZ()), ScaleAffector::DEFAULT_XYZ_SCALE))
 		{
 			serializer->setKeyword(token[TOKEN_SCALE_XYZ_SCALE]);
 			serializer->setIndentation(12);
 			dynamicAttributeFactory.write(serializer, affector->getDynScaleXYZ());
 		}
-		if (dynamicAttributeFactory._getDefaultValue(affector->getDynScaleX()) != ScaleAffector::DEFAULT_X_SCALE)
+		if (!almostEquals(dynamicAttributeFactory._getDefaultValue(affector->getDynScaleX()), ScaleAffector::DEFAULT_X_SCALE))
 		{
 			serializer->setKeyword(token[TOKEN_SCALE_X_SCALE]);
 			dynamicAttributeFactory.write(serializer, affector->getDynScaleX());
 		}
-		if (dynamicAttributeFactory._getDefaultValue(affector->getDynScaleY()) != ScaleAffector::DEFAULT_Y_SCALE)
+		if (!almostEquals(dynamicAttributeFactory._getDefaultValue(affector->getDynScaleY()), ScaleAffector::DEFAULT_Y_SCALE))
 		{
 			serializer->setKeyword(token[TOKEN_SCALE_Y_SCALE]);
 			dynamicAttributeFactory.write(serializer, affector->getDynScaleY());
 		}
-		if (dynamicAttributeFactory._getDefaultValue(affector->getDynScaleZ()) != ScaleAffector::DEFAULT_Z_SCALE)
+		if (!almostEquals(dynamicAttributeFactory._getDefaultValue(affector->getDynScaleZ()), ScaleAffector::DEFAULT_Z_SCALE))
 		{
 			serializer->setKeyword(token[TOKEN_SCALE_Z_SCALE]);
 			dynamicAttributeFactory.write(serializer, affector->getDynScaleZ());

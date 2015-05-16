@@ -219,9 +219,9 @@ namespace ParticleUniverse
 			token[TOKEN_USE_VERTEX_COLOURS], StringConverter::toString(renderer->isUseVertexColours()), 12);
 		if (renderer->getMaxChainElements() != BeamRenderer::DEFAULT_MAX_ELEMENTS) serializer->writeLine(
 			token[TOKEN_MAX_ELEMENTS], StringConverter::toString(renderer->getMaxChainElements()), 12);
-		if (renderer->getUpdateInterval() != BeamRenderer::DEFAULT_UPDATE_INTERVAL) serializer->writeLine(
+		if (!almostEquals(renderer->getUpdateInterval(), BeamRenderer::DEFAULT_UPDATE_INTERVAL)) serializer->writeLine(
 			token[TOKEN_UPDATE_INTERVAL], StringConverter::toString(renderer->getUpdateInterval()), 12);
-		if (renderer->getDeviation() != BeamRenderer::DEFAULT_DEVIATION) serializer->writeLine(
+		if (!almostEquals(renderer->getDeviation(), BeamRenderer::DEFAULT_DEVIATION)) serializer->writeLine(
 			token[TOKEN_BEAMRENDERER_DEVIATION], StringConverter::toString(renderer->getDeviation()), 12);
 		if (renderer->getNumberOfSegments() != BeamRenderer::DEFAULT_NUMBER_OF_SEGMENTS) serializer->writeLine(
 			token[TOKEN_NUMBER_OF_SEGMENTS], StringConverter::toString(renderer->getNumberOfSegments()), 12);

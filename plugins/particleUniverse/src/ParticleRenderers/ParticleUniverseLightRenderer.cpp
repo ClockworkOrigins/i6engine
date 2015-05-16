@@ -48,9 +48,9 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	LightRenderer::LightRenderer(void) : 
 		ParticleRenderer(),
-		mLightType(DEFAULT_LIGHT_TYPE),
 		mLightName(BLANK_STRING),
 		mQuota(0),
+		mLightType(DEFAULT_LIGHT_TYPE),
 		mSpecularColour(DEFAULT_SPECULAR),
 		mAttenuationRange(DEFAULT_ATT_RANGE),
 		mAttenuationConstant(DEFAULT_ATT_CONSTANT),
@@ -438,6 +438,9 @@ namespace ParticleUniverse
 		lightRenderer->mAttenuationLinear = mAttenuationLinear;
 		lightRenderer->mAttenuationQuadratic = mAttenuationQuadratic;
 		lightRenderer->mSpotlightInnerAngle = mSpotlightInnerAngle;
+
+
+
 		lightRenderer->mSpotlightOuterAngle = mSpotlightOuterAngle;
 		lightRenderer->mSpotlightFalloff = mSpotlightFalloff;
 		lightRenderer->mPowerScale = mPowerScale;

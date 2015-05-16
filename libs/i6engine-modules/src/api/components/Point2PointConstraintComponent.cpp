@@ -67,7 +67,7 @@ namespace api {
 					if (!p2p->_connected) {
 						ISIXE_THROW_API_COND("Point2PointConstraintComponent", "constraint with selfIdentifier '" << _targetIdentifier << "' and targetIdentifier '" << _selfIdentifier << "' don't match each others offsets!", p2p->_selfOffset == _targetOffset && p2p->_targetOffset == _selfOffset);
 						EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsMessageType, physics::PhyP2PConstraint, core::Method::Update, new physics::Physics_P2PConstraint_Create(_objOwnerID, go->getID(), _selfOffset, _targetOffset), core::Subsystem::Object));
-						if (_breakingImpulse != DBL_MAX) {
+						if (_breakingImpulse < DBL_MAX) {
 							EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsMessageType, physics::PhyConstraintBreakImpulse, core::Method::Update, new physics::Physics_BreakConstraintImpulse_Update(_objOwnerID, go->getID(), _breakingImpulse), core::Subsystem::Object));
 						}
 						_targetID = go->getID();
@@ -84,7 +84,7 @@ namespace api {
 							if (!p2p2->_connected) {
 								ISIXE_THROW_API_COND("Point2PointConstraintComponent", "constraint with selfIdentifier '" << _targetIdentifier << "' and targetIdentifier '" << _selfIdentifier << "' don't match each others offsets!", p2p2->_selfOffset == _targetOffset && p2p2->_targetOffset == _selfOffset);
 								EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsMessageType, physics::PhyP2PConstraint, core::Method::Update, new physics::Physics_P2PConstraint_Create(_objOwnerID, go->getID(), _selfOffset, _targetOffset), core::Subsystem::Object));
-								if (_breakingImpulse != DBL_MAX) {
+								if (_breakingImpulse < DBL_MAX) {
 									EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsMessageType, physics::PhyConstraintBreakImpulse, core::Method::Update, new physics::Physics_BreakConstraintImpulse_Update(_objOwnerID, go->getID(), _breakingImpulse), core::Subsystem::Object));
 								}
 								_targetID = go->getID();
@@ -112,7 +112,7 @@ namespace api {
 		params.insert(std::make_pair("targetIdentifier", _targetIdentifier));
 		_selfOffset.insertInMap("selfOffset", params);
 		_targetOffset.insertInMap("targetOffset", params);
-		if (_breakingImpulse != DBL_MAX) {
+		if (_breakingImpulse < DBL_MAX) {
 			params.insert(std::make_pair("breakingImpulse", std::to_string(_breakingImpulse)));
 		}
 

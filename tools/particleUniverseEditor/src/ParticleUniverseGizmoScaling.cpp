@@ -334,7 +334,7 @@ Ogre::SceneNode* GizmoScaling::getParentNode(void)
 	return 0;
 }
 //-----------------------------------------------------------------------
-const Gizmo::GizmoType GizmoScaling::getType(void) const
+Gizmo::GizmoType GizmoScaling::getType(void) const
 {
 	return GIZMO_SCALE;
 }

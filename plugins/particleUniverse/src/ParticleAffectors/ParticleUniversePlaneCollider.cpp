@@ -38,8 +38,8 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	PlaneCollider::PlaneCollider(void) : 
 		BaseCollider(),
-		mPredictedPosition(Vector3::ZERO),
-		mNormal(DEFAULT_NORMAL)
+		mNormal(DEFAULT_NORMAL),
+		mPredictedPosition(Vector3::ZERO)
 	{
 	}
 	//-----------------------------------------------------------------------
@@ -161,6 +161,9 @@ namespace ParticleUniverse
 				particle->position += timeElapsed * directionLength * mNormal;
 			}
 			break;
+			default: {
+				break;
+			}
 		}
 	}
 	//-----------------------------------------------------------------------

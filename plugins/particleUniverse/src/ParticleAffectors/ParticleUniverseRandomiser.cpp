@@ -44,8 +44,8 @@ namespace ParticleUniverse
 		mMaxDeviationZ(DEFAULT_MAX_DEVIATION.z),
 		mTimeSinceLastUpdate(0.0f),
 		mTimeStep(DEFAULT_TIME_STEP),
-		mUpdate(true),
-		mRandomDirection(DEFAULT_RANDOM_DIRECTION)
+		mRandomDirection(DEFAULT_RANDOM_DIRECTION),
+		mUpdate(true)
 	{
 	}
 	//-----------------------------------------------------------------------

@@ -39,10 +39,10 @@ class Gizmo
 		static const Ogre::Real SCALE_NODE_ORTHOZOOM_FACTOR;
 
 		Gizmo(GizmoManager* gizmoManager);
-		virtual ~Gizmo(void){};
+		virtual ~Gizmo(void) {}
 
 		// virtual functions
-		virtual const GizmoType getType(void) const = 0;
+		virtual GizmoType getType(void) const = 0;
 		virtual void attachToNode(Ogre::SceneNode* node) = 0;
 		virtual Ogre::SceneNode* detachFromNode(void) = 0;
 		virtual void startSelect(const Ogre::Vector2& screenPosition) = 0;
@@ -54,7 +54,7 @@ class Gizmo
 		virtual void cameraPreRenderScene (Ogre::Camera *camera) = 0;
 		virtual void setWorldspace(bool worldspace);
 		virtual void applyWorldLocalSpaceSetting(void){}; // No implementation
-		void registerIgnoreWhenSelected(Ogre::Node* node) {mIgnoreList.push_back(node);};
+		void registerIgnoreWhenSelected(Ogre::Node* node) { mIgnoreList.push_back(node); }
 		bool isIgnoredWhenSelected(Ogre::Node* node);
 		void calculateScaleFactors(Ogre::Camera *camera, Ogre::Vector3 position);
 		Ogre::Real getScaleFactor(void) const;

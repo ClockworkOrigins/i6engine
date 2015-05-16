@@ -148,9 +148,9 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getFriction() != BaseCollider::DEFAULT_FRICTION) serializer->writeLine(
+		if (!almostEquals(affector->getFriction(), BaseCollider::DEFAULT_FRICTION)) serializer->writeLine(
 			token[TOKEN_FRICTION], StringConverter::toString(affector->getFriction()), 12);
-		if (affector->getBouncyness() != BaseCollider::DEFAULT_BOUNCYNESS) serializer->writeLine(
+		if (!almostEquals(affector->getBouncyness(), BaseCollider::DEFAULT_BOUNCYNESS)) serializer->writeLine(
 			token[TOKEN_BOUNCYNESS], StringConverter::toString(affector->getBouncyness()), 12);
 		if (affector->getIntersectionType() != BaseCollider::DEFAULT_INTERSECTION_TYPE) 
 		{

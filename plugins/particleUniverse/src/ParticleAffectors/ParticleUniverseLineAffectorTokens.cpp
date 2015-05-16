@@ -168,13 +168,13 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getMaxDeviation() != LineAffector::DEFAULT_MAX_DEVIATION) serializer->writeLine(
+		if (!almostEquals(affector->getMaxDeviation(), LineAffector::DEFAULT_MAX_DEVIATION)) serializer->writeLine(
 			token[TOKEN_MAX_DEVIATION], StringConverter::toString(affector->getMaxDeviation()), 12);
-		if (affector->getTimeStep() != LineAffector::DEFAULT_TIME_STEP) serializer->writeLine(
+		if (!almostEquals(affector->getTimeStep(), LineAffector::DEFAULT_TIME_STEP)) serializer->writeLine(
 			token[TOKEN_TIME_STEP], StringConverter::toString(affector->getTimeStep()), 12);
 		if (affector->getEnd() != LineAffector::DEFAULT_END) serializer->writeLine(
 			token[TOKEN_END], StringConverter::toString(affector->getEnd()), 12);
-		if (affector->getDrift() != LineAffector::DEFAULT_DRIFT) serializer->writeLine(
+		if (!almostEquals(affector->getDrift(), LineAffector::DEFAULT_DRIFT)) serializer->writeLine(
 			token[TOKEN_DRIFT], StringConverter::toString(affector->getDrift()), 12);
 
 		// Write the close bracket

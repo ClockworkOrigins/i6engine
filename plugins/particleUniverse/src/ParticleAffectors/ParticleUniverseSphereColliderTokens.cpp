@@ -109,7 +109,7 @@ namespace ParticleUniverse
 		BaseColliderWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getRadius() != SphereCollider::DEFAULT_RADIUS) serializer->writeLine(
+		if (!almostEquals(affector->getRadius(), SphereCollider::DEFAULT_RADIUS)) serializer->writeLine(
 			token[TOKEN_RADIUS], StringConverter::toString(affector->getRadius()), 12);
 		if (affector->isInnerCollision() != false) serializer->writeLine(
 			token[TOKEN_INNER_COLLISION], StringConverter::toString(affector->isInnerCollision()), 12);

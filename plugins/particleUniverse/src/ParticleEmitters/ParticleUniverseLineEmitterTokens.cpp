@@ -170,11 +170,11 @@ namespace ParticleUniverse
 		// Write own attributes
 		if (emitter->getEnd() != LineEmitter::DEFAULT_END) serializer->writeLine(
 			token[TOKEN_END], StringConverter::toString(emitter->getEnd()), 12);
-		if (emitter->getMinIncrement() != LineEmitter::DEFAULT_MIN_INCREMENT) serializer->writeLine(
+		if (!almostEquals(emitter->getMinIncrement(), LineEmitter::DEFAULT_MIN_INCREMENT)) serializer->writeLine(
 			token[TOKEN_MIN_INCREMENT], StringConverter::toString(emitter->getMinIncrement()), 12);
-		if (emitter->getMaxIncrement() != LineEmitter::DEFAULT_MAX_INCREMENT) serializer->writeLine(
+		if (!almostEquals(emitter->getMaxIncrement(), LineEmitter::DEFAULT_MAX_INCREMENT)) serializer->writeLine(
 			token[TOKEN_MAX_INCREMENT], StringConverter::toString(emitter->getMaxIncrement()), 12);
-		if (emitter->getMaxDeviation() != LineEmitter::DEFAULT_MAX_DEVIATION) serializer->writeLine(
+		if (!almostEquals(emitter->getMaxDeviation(), LineEmitter::DEFAULT_MAX_DEVIATION)) serializer->writeLine(
 			token[TOKEN_MAX_DEVIATION], StringConverter::toString(emitter->getMaxDeviation()), 12);
 
 		// Write the close bracket

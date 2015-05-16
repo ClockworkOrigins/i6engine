@@ -42,7 +42,7 @@ class ContextMenuElement : public wxStaticText
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxStaticTextNameStr);
-		~ContextMenuElement(void){};
+		~ContextMenuElement(void) {}
 
 		// Getters/Setters
 		wxStaticBitmap* getEnabledIcon(void);
@@ -69,7 +69,7 @@ class ContextMenuCallbackObject
 	public:
 		// Constructor / Destructor
 		ContextMenuCallbackObject(void);
-		~ContextMenuCallbackObject(void){};
+		virtual ~ContextMenuCallbackObject(void) {}
 
 		// Callback function
 		virtual void callbackContextMenu(wxWindowID id, wxWindow* window) = 0;
@@ -83,7 +83,7 @@ class ContextMenu : public wxFrame
 	public:
 		// Constructor / Destructor
 		ContextMenu(wxWindow* parent, ContextMenuCallbackObject* callbackObject, const wxPoint& pos, const wxSize& size);
-		~ContextMenu(void){};
+		~ContextMenu(void) {}
 
 		// Add a menu element
 		void addMenuElement(wxWindowID id,

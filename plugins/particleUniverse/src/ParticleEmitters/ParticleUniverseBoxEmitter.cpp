@@ -39,8 +39,8 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	BoxEmitter::BoxEmitter(void) : 
 		ParticleEmitter(),
-		mWidth(DEFAULT_WIDTH),
 		mHeight(DEFAULT_HEIGHT),
+		mWidth(DEFAULT_WIDTH),
 		mDepth(DEFAULT_DEPTH),
 		mXRange(0.5f * DEFAULT_WIDTH),
 		mYRange(0.5f * DEFAULT_HEIGHT),

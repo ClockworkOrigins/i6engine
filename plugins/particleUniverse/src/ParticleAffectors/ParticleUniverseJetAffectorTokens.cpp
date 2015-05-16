@@ -116,7 +116,7 @@ namespace ParticleUniverse
 
 		// Write own attributes
 		DynamicAttributeFactory dynamicAttributeFactory;
-		if (dynamicAttributeFactory._getDefaultValue(affector->getDynAcceleration()) != JetAffector::DEFAULT_ACCELERATION)
+		if (!almostEquals(dynamicAttributeFactory._getDefaultValue(affector->getDynAcceleration()), JetAffector::DEFAULT_ACCELERATION))
 		{
 			serializer->setKeyword(token[TOKEN_ACCELERATION]);
 			serializer->setIndentation(12);

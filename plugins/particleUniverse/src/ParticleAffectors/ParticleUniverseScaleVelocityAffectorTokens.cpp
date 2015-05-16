@@ -119,7 +119,7 @@ namespace ParticleUniverse
 
 		// Write own attributes
 		DynamicAttributeFactory dynamicAttributeFactory;
-		if (dynamicAttributeFactory._getDefaultValue(affector->getDynScaleVelocity()) != ScaleVelocityAffector::DEFAULT_VELOCITY_SCALE)
+		if (!almostEquals(dynamicAttributeFactory._getDefaultValue(affector->getDynScaleVelocity()), ScaleVelocityAffector::DEFAULT_VELOCITY_SCALE))
 		{
 			serializer->setKeyword(token[TOKEN_SCALE_VELOCITY_SCALE]);
 			dynamicAttributeFactory.write(serializer, affector->getDynScaleVelocity());

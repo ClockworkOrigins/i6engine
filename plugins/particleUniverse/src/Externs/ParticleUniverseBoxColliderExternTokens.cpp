@@ -227,15 +227,15 @@ namespace ParticleUniverse
 		AttachableWriter::write(serializer, element);
 
 		// Write own attributes
-		if (boxColliderExtern->getWidth() != BoxCollider::DEFAULT_WIDTH) serializer->writeLine(
+		if (!almostEquals(boxColliderExtern->getWidth(), BoxCollider::DEFAULT_WIDTH)) serializer->writeLine(
 			token[TOKEN_BOX_WIDTH], StringConverter::toString(boxColliderExtern->getWidth()), 12);
-		if (boxColliderExtern->getHeight() != BoxCollider::DEFAULT_HEIGHT) serializer->writeLine(
+		if (!almostEquals(boxColliderExtern->getHeight(), BoxCollider::DEFAULT_HEIGHT)) serializer->writeLine(
 			token[TOKEN_BOX_HEIGHT], StringConverter::toString(boxColliderExtern->getHeight()), 12);
-		if (boxColliderExtern->getDepth() != BoxCollider::DEFAULT_DEPTH) serializer->writeLine(
+		if (!almostEquals(boxColliderExtern->getDepth(), BoxCollider::DEFAULT_DEPTH)) serializer->writeLine(
 			token[TOKEN_BOX_DEPTH], StringConverter::toString(boxColliderExtern->getDepth()), 12);
-		if (boxColliderExtern->getFriction() != BaseCollider::DEFAULT_FRICTION) serializer->writeLine(
+		if (!almostEquals(boxColliderExtern->getFriction(), BaseCollider::DEFAULT_FRICTION)) serializer->writeLine(
 			token[TOKEN_FRICTION], StringConverter::toString(boxColliderExtern->getFriction()), 12);
-		if (boxColliderExtern->getBouncyness() != BaseCollider::DEFAULT_BOUNCYNESS) serializer->writeLine(
+		if (!almostEquals(boxColliderExtern->getBouncyness(), BaseCollider::DEFAULT_BOUNCYNESS)) serializer->writeLine(
 			token[TOKEN_BOUNCYNESS], StringConverter::toString(boxColliderExtern->getBouncyness()), 12);
 		if (boxColliderExtern->getIntersectionType() != BaseCollider::DEFAULT_INTERSECTION_TYPE) 
 		{

@@ -90,7 +90,7 @@ namespace ParticleUniverse
 		ParticleEmitterWriter::write(serializer, element);
 
 		// Write own attributes
-		if (emitter->getRadius() != SphereSurfaceEmitter::DEFAULT_RADIUS) serializer->writeLine(
+		if (!almostEquals(emitter->getRadius(), SphereSurfaceEmitter::DEFAULT_RADIUS)) serializer->writeLine(
 			token[TOKEN_RADIUS], StringConverter::toString(emitter->getRadius()), 12);
 
 		// Write the close bracket

@@ -122,9 +122,9 @@ namespace ParticleUniverse
 		BaseForceAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getFrequencyMin() != SineForceAffector::DEFAULT_FREQ_MIN) serializer->writeLine(
+		if (!almostEquals(affector->getFrequencyMin(), SineForceAffector::DEFAULT_FREQ_MIN)) serializer->writeLine(
 			token[TOKEN_MIN_FREQUENCY], StringConverter::toString(affector->getFrequencyMin()), 12);
-		if (affector->getFrequencyMax() != SineForceAffector::DEFAULT_FREQ_MAX) serializer->writeLine(
+		if (!almostEquals(affector->getFrequencyMax(), SineForceAffector::DEFAULT_FREQ_MAX)) serializer->writeLine(
 			token[TOKEN_MAX_FREQUENCY], StringConverter::toString(affector->getFrequencyMax()), 12);
 
 		// Write the close bracket

@@ -145,7 +145,7 @@ namespace ParticleUniverse
 		if (vortexExtern->getRotationVector() != VortexAffector::DEFAULT_ROTATION_VECTOR) serializer->writeLine(
 			token[TOKEN_ROTATION_AXIS], StringConverter::toString(vortexExtern->getRotationVector()), 12);
 		DynamicAttributeFactory dynamicAttributeFactory;
-		if (dynamicAttributeFactory._getDefaultValue(vortexExtern->getRotationSpeed()) != VortexAffector::DEFAULT_ROTATION_SPEED)
+		if (!almostEquals(dynamicAttributeFactory._getDefaultValue(vortexExtern->getRotationSpeed()), VortexAffector::DEFAULT_ROTATION_SPEED))
 		{
 			serializer->setKeyword(token[TOKEN_ROTATION_SPEED]);
 			serializer->setIndentation(12);

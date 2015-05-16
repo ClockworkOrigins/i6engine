@@ -15,7 +15,7 @@
 #include <wx/font.h>
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "advprops.cpp"
+    //#pragma interface "advprops.cpp"
 #endif
 
 // -----------------------------------------------------------------------
@@ -228,7 +228,7 @@ WX_PG_DECLARE_VALUE_TYPE_WITH_DECL(wxFontPropertyValue,WXDLLIMPEXP_PG)
 #endif
 
 #ifndef SWIG
-    #define wxPG_EMPTY_CPV          (*((wxColourPropertyValue*)NULL))
+    #define wxPG_EMPTY_CPV          (*(reinterpret_cast<wxColourPropertyValue *>(0)))
     #define wxPG_NORMAL_FONT        (*wxNORMAL_FONT)
 #else
     #define wxPG_EMPTY_CPV          wxCPV_wxPG_EMPTY

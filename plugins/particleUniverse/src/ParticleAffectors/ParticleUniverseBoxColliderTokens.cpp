@@ -160,11 +160,11 @@ namespace ParticleUniverse
 		BaseColliderWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getWidth() != BoxCollider::DEFAULT_WIDTH) serializer->writeLine(
+		if (!almostEquals(affector->getWidth(), BoxCollider::DEFAULT_WIDTH)) serializer->writeLine(
 			token[TOKEN_BOX_WIDTH], StringConverter::toString(affector->getWidth()), 12);
-		if (affector->getHeight() != BoxCollider::DEFAULT_HEIGHT) serializer->writeLine(
+		if (!almostEquals(affector->getHeight(), BoxCollider::DEFAULT_HEIGHT)) serializer->writeLine(
 			token[TOKEN_BOX_HEIGHT], StringConverter::toString(affector->getHeight()), 12);
-		if (affector->getDepth() != BoxCollider::DEFAULT_DEPTH) serializer->writeLine(
+		if (!almostEquals(affector->getDepth(), BoxCollider::DEFAULT_DEPTH)) serializer->writeLine(
 			token[TOKEN_BOX_DEPTH], StringConverter::toString(affector->getDepth()), 12);
 		if (affector->isInnerCollision() != false) serializer->writeLine(
 			token[TOKEN_INNER_COLLISION], StringConverter::toString(affector->isInnerCollision()), 12);

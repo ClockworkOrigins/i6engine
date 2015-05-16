@@ -116,7 +116,7 @@ namespace ParticleUniverse
 				box.mColour = particle->colour;
 				box.mOrientation = particle->orientation;
 
-				if (box.mOwnDimensions = particle->ownDimensions)
+				if (box.mOwnDimensions == particle->ownDimensions)
 				{
 					box.mOwnDimensions = true;
 					box.setDimensions (particle->width, particle->height, particle->depth);

@@ -327,7 +327,7 @@ class ParentPropertyWithButtonAndFloats : public wxParentPropertyClass
 
 		/**	Returns a float by index
 		*/
-		const ParticleUniverse::Real getFloat(wxPropertyGrid* propgrid, unsigned int index);
+		ParticleUniverse::Real getFloat(wxPropertyGrid* propgrid, unsigned int index);
 
 		/**	Removes all the child properties
 		*/

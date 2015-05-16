@@ -1493,7 +1493,7 @@ public:
     */
     virtual wxValidator* GetTextCtrlValidator() const
     {
-        return (wxValidator*) NULL;
+        return nullptr;
     }
 
     // Returns true if array was actually modified

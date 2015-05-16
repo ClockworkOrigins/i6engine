@@ -224,9 +224,9 @@ namespace ParticleUniverse
 			token[TOKEN_USE_VERTEX_COLOURS], StringConverter::toString(renderer->isUseVertexColours()), 12);
 		if (renderer->getMaxChainElements() != RibbonTrailRenderer::DEFAULT_MAX_ELEMENTS) serializer->writeLine(
 			token[TOKEN_MAX_ELEMENTS], StringConverter::toString(renderer->getMaxChainElements()), 12);
-		if (renderer->getTrailLength() != RibbonTrailRenderer::DEFAULT_LENGTH) serializer->writeLine(
+		if (!almostEquals(renderer->getTrailLength(), RibbonTrailRenderer::DEFAULT_LENGTH)) serializer->writeLine(
 			token[TOKEN_RIBBONTRAIL_LENGTH], StringConverter::toString(renderer->getTrailLength()), 12);
-		if (renderer->getTrailWidth() != RibbonTrailRenderer::DEFAULT_WIDTH) serializer->writeLine(
+		if (!almostEquals(renderer->getTrailWidth(), RibbonTrailRenderer::DEFAULT_WIDTH)) serializer->writeLine(
 			token[TOKEN_RIBBONTRAIL_WIDTH], StringConverter::toString(renderer->getTrailWidth()), 12);
 		if (renderer->isRandomInitialColour() != RibbonTrailRenderer::DEFAULT_RANDOM_INITIAL_COLOUR) serializer->writeLine(
 			token[TOKEN_RANDOM_INITIAL_COLOUR], StringConverter::toString(renderer->isRandomInitialColour()), 12);

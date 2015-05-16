@@ -291,18 +291,18 @@ namespace ParticleUniverse
 			}
 			serializer->writeLine(token[TOKEN_FORCEFIELD_TYPE], type, 12);
 		}
-		if (affector->getDelta() != ForceFieldAffector::DEFAULT_DELTA) serializer->writeLine(
+		if (!almostEquals(affector->getDelta(), ForceFieldAffector::DEFAULT_DELTA)) serializer->writeLine(
 			token[TOKEN_DELTA], StringConverter::toString(affector->getDelta()), 12);
-		if (affector->getScaleForce() != ForceFieldAffector::DEFAULT_FORCE) serializer->writeLine(
+		if (!almostEquals(affector->getScaleForce(), ForceFieldAffector::DEFAULT_FORCE)) serializer->writeLine(
 			token[TOKEN_FORCE], StringConverter::toString(affector->getScaleForce()), 12);
 		if (affector->getOctaves() != ForceFieldAffector::DEFAULT_OCTAVES) serializer->writeLine(
 			token[TOKEN_OCTAVES], StringConverter::toString(affector->getOctaves()), 12);
-		if (affector->getFrequency() != ForceFieldAffector::DEFAULT_FREQUENCY) serializer->writeLine(
-			token[TOKEN_FREQUENCY], StringConverter::toString((Real)affector->getFrequency()), 12);
-		if (affector->getAmplitude() != ForceFieldAffector::DEFAULT_AMPLITUDE) serializer->writeLine(
-			token[TOKEN_AMPLITUDE], StringConverter::toString((Real)affector->getAmplitude()), 12);
-		if (affector->getPersistence() != ForceFieldAffector::DEFAULT_PERSISTENCE) serializer->writeLine(
-			token[TOKEN_PERSISTENCE], StringConverter::toString((Real)affector->getPersistence()), 12);
+		if (!almostEquals(affector->getFrequency(), ForceFieldAffector::DEFAULT_FREQUENCY)) serializer->writeLine(
+			token[TOKEN_FREQUENCY], StringConverter::toString(Real(affector->getFrequency())), 12);
+		if (!almostEquals(affector->getAmplitude(), ForceFieldAffector::DEFAULT_AMPLITUDE)) serializer->writeLine(
+			token[TOKEN_AMPLITUDE], StringConverter::toString(Real(affector->getAmplitude())), 12);
+		if (!almostEquals(affector->getPersistence(), ForceFieldAffector::DEFAULT_PERSISTENCE)) serializer->writeLine(
+			token[TOKEN_PERSISTENCE], StringConverter::toString(Real(affector->getPersistence())), 12);
 		if (affector->getForceFieldSize() != ForceFieldAffector::DEFAULT_FORCEFIELDSIZE) serializer->writeLine(
 			token[TOKEN_FORCEFIELDSIZE], StringConverter::toString(affector->getForceFieldSize()), 12);
 		if (affector->getWorldSize() != ForceFieldAffector::DEFAULT_WORLDSIZE) serializer->writeLine(
@@ -315,7 +315,7 @@ namespace ParticleUniverse
 			token[TOKEN_IGNORE_NEGATIVE_Z], StringConverter::toString(affector->getIgnoreNegativeZ()), 12);
 		if (affector->getMovement() != ForceFieldAffector::DEFAULT_MOVEMENT) serializer->writeLine(
 			token[TOKEN_MOVEMENT], StringConverter::toString(affector->getMovement()), 12);
-		if (affector->getMovementFrequency() != ForceFieldAffector::DEFAULT_MOVEMENT_FREQUENCY) serializer->writeLine(
+		if (!almostEquals(affector->getMovementFrequency(), ForceFieldAffector::DEFAULT_MOVEMENT_FREQUENCY)) serializer->writeLine(
 			token[TOKEN_MOVEMENT_FREQUENCY], StringConverter::toString(affector->getMovementFrequency()), 12);
 
 		// Write the close bracket

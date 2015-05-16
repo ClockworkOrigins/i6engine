@@ -40,12 +40,12 @@ namespace ParticleUniverse
 		mPositionXThreshold(DEFAULT_POSITION_THRESHOLD.x),
 		mPositionYThreshold(DEFAULT_POSITION_THRESHOLD.y),
 		mPositionZThreshold(DEFAULT_POSITION_THRESHOLD.z),
-		mComparePositionX(CO_LESS_THAN),
-		mComparePositionY(CO_LESS_THAN),
-		mComparePositionZ(CO_LESS_THAN),
 		mPositionXThresholdSet(false),
 		mPositionYThresholdSet(false),
-		mPositionZThresholdSet(false)
+		mPositionZThresholdSet(false),
+		mComparePositionX(CO_LESS_THAN),
+		mComparePositionY(CO_LESS_THAN),
+		mComparePositionZ(CO_LESS_THAN)
 	{
 	}
 	//-----------------------------------------------------------------------
@@ -59,21 +59,21 @@ namespace ParticleUniverse
 			return true;
 		if (mPositionXThresholdSet && mComparePositionX == CO_GREATER_THAN && particle->position.x > mPositionXThreshold * _mObserverScale.x)
 			return true;
-		if (mPositionXThresholdSet && mComparePositionX == CO_EQUALS && particle->position.x == mPositionXThreshold * _mObserverScale.x)
+		if (mPositionXThresholdSet && mComparePositionX == CO_EQUALS && almostEquals(particle->position.x, mPositionXThreshold * _mObserverScale.x))
 			return true;
 
 		if (mPositionYThresholdSet && mComparePositionY == CO_LESS_THAN && particle->position.y < mPositionYThreshold * _mObserverScale.y)
 			return true;
 		if (mPositionYThresholdSet && mComparePositionY == CO_GREATER_THAN && particle->position.y > mPositionYThreshold * _mObserverScale.y)
 			return true;
-		if (mPositionYThresholdSet && mComparePositionY == CO_EQUALS && particle->position.y == mPositionYThreshold * _mObserverScale.y)
+		if (mPositionYThresholdSet && mComparePositionY == CO_EQUALS && almostEquals(particle->position.y, mPositionYThreshold * _mObserverScale.y))
 			return true;
 
 		if (mPositionZThresholdSet && mComparePositionZ == CO_LESS_THAN && particle->position.z < mPositionZThreshold * _mObserverScale.z)
 			return true;
 		if (mPositionZThresholdSet && mComparePositionZ == CO_GREATER_THAN && particle->position.z > mPositionZThreshold * _mObserverScale.z)
 			return true;
-		if (mPositionZThresholdSet && mComparePositionZ == CO_EQUALS && particle->position.z == mPositionZThreshold * _mObserverScale.z)
+		if (mPositionZThresholdSet && mComparePositionZ == CO_EQUALS && !almostEquals(particle->position.z, mPositionZThreshold * _mObserverScale.z))
 			return true;
 
 		return false;

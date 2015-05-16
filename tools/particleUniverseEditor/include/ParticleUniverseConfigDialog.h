@@ -115,7 +115,7 @@ class ConfigDialog : public wxPropertySheetDialog
 
 		/**	Language functions
 		*/
-		const wxLanguage getLanguage(void) const;
+		wxLanguage getLanguage(void) const;
 
 		/**	Video directory functions
 		*/
@@ -163,7 +163,7 @@ class ConfigDialog : public wxPropertySheetDialog
 
 		/**	Filter functions
 		*/
-		const Recorder::ImageFilter getFilter(void) const;
+		Recorder::ImageFilter getFilter(void) const;
 		wxString getFilterAsString(void) const;
 		void setFilter(const Recorder::ImageFilter& filter);
 		void setFilter(const wxString& filter);

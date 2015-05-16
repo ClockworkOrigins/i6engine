@@ -48,11 +48,11 @@ namespace ParticleUniverse
 		mTrail(0),
 		mUseVertexColours(DEFAULT_USE_VERTEX_COLOURS),
 		mMaxChainElements(DEFAULT_MAX_ELEMENTS),
-		mSetLength(false),
 		mTrailLength(DEFAULT_LENGTH),
-		mSetWidth(false),
 		mTrailWidth(DEFAULT_WIDTH),
 		mRandomInitialColour(DEFAULT_RANDOM_INITIAL_COLOUR),
+		mSetLength(false),
+		mSetWidth(false),
 		mInitialColour(DEFAULT_INITIAL_COLOUR),
 		mColourChange(DEFAULT_COLOUR_CHANGE),
 		mChildNode(0)

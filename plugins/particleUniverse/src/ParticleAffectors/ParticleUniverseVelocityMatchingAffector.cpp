@@ -97,7 +97,7 @@ namespace ParticleUniverse
 			// Adjust direction
 			if (count > 0)
 			{
-				sumDirection /= (Real)count;
+				sumDirection /= Real(count);
 				particle->direction += (sumDirection - particle->direction) * timeElapsed;
 			}
 		}

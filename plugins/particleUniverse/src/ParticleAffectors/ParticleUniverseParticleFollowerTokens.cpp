@@ -117,9 +117,9 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->getMinDistance() != ParticleFollower::DEFAULT_MIN_DISTANCE) serializer->writeLine(
+		if (!almostEquals(affector->getMinDistance(), ParticleFollower::DEFAULT_MIN_DISTANCE)) serializer->writeLine(
 			token[TOKEN_MIN_DISTANCE], StringConverter::toString(affector->getMinDistance()), 12);
-		if (affector->getMaxDistance() != ParticleFollower::DEFAULT_MAX_DISTANCE) serializer->writeLine(
+		if (!almostEquals(affector->getMaxDistance(), ParticleFollower::DEFAULT_MAX_DISTANCE)) serializer->writeLine(
 			token[TOKEN_MAX_DISTANCE], StringConverter::toString(affector->getMaxDistance()), 12);
 
 		// Write the close bracket

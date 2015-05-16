@@ -38,8 +38,8 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
 	VortexAffector::VortexAffector(void) : 
 		ParticleAffector(),
-		mRotation(Quaternion::IDENTITY),
-		mRotationVector(DEFAULT_ROTATION_VECTOR)
+		mRotationVector(DEFAULT_ROTATION_VECTOR),
+		mRotation(Quaternion::IDENTITY)
 	{
 		mDynRotationSpeed = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
 		(static_cast<DynamicAttributeFixed*>(mDynRotationSpeed))->setValue(DEFAULT_ROTATION_SPEED);

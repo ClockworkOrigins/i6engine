@@ -440,7 +440,6 @@ namespace modules {
 	void GraphicsNode::deleteParticleComponent(const int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		Ogre::SceneManager * sm = _manager->getSceneManager();
 		if (_particles.find(coid) == _particles.end()) {
 			ISIXE_LOG_ERROR("GraphicsNode", "Particle System is null");
 		} else {
