@@ -24,10 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BASE_COLLIDER_FACTORY_H__
 #define __PU_BASE_COLLIDER_FACTORY_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseBaseColliderTokens.h"
-#include "ParticleUniverseBaseCollider.h"
 #include "ParticleUniverseAffectorFactory.h"
+#include "ParticleUniverseBaseColliderTokens.h"
+#include "ParticleUniverseException.h"
 
 namespace ParticleUniverse
 {
@@ -40,8 +39,8 @@ namespace ParticleUniverse
 			BaseColliderTranslator mBaseColliderTranslator;
 
 		public:
-			BaseColliderFactory(void) {};
-	        virtual ~BaseColliderFactory(void) {};
+			BaseColliderFactory(void) {}
+	        virtual ~BaseColliderFactory(void) {}
 
 			/** See ParticleAffectorFactory */
 			String getAffectorType(void) const
@@ -60,13 +59,13 @@ namespace ParticleUniverse
 			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
 			{
 				return mBaseColliderTranslator.translateChildProperty(compiler, node);
-			};
+			}
 
 			/** See ScriptReader */
 			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
 			{
 				return mBaseColliderTranslator.translateChildObject(compiler, node);
-			};
+			}
 
 			/*  */
 			virtual void write(ParticleScriptSerializer* serializer , const IElement* element)

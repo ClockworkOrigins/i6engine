@@ -24,12 +24,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_EMITTER_TOKENS_H__
 #define __PU_EMITTER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseScriptDeserializer.h"
-#include "ParticleUniverseEmitter.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
+
+	class ParticleEmitter;
+
 	/** The EmitterTranslator parses 'emitter' tokens
 	*/
 	class _ParticleUniverseExport EmitterTranslator : public ScriptTranslator
@@ -38,7 +40,7 @@ namespace ParticleUniverse
 			ParticleEmitter* mEmitter;
 		public:
 			EmitterTranslator(void);
-			virtual ~EmitterTranslator(void){};
+			virtual ~EmitterTranslator(void){}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -51,8 +53,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			ParticleEmitterWriter(void) {};
-			virtual ~ParticleEmitterWriter(void) {};
+			ParticleEmitterWriter(void) {}
+			virtual ~ParticleEmitterWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

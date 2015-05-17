@@ -20,9 +20,9 @@
 #ifndef _WX_OGRE_RENDERSYSTEM_H_
 #define _WX_OGRE_RENDERSYSTEM_H_
 
-#include <Ogre.h>
-
 #include "wx/ogre/utils.h"
+
+#include "OGRE/OgreRenderSystemCapabilities.h"
 
 /** Simplifies the ogre initialisation process.
  *

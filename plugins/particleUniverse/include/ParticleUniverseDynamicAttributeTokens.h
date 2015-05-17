@@ -24,13 +24,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DYNAMIC_ATTRIBUTE_TOKENS_H__
 #define __PU_DYNAMIC_ATTRIBUTE_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseScriptWriter.h"
 #include "ParticleUniverseScriptDeserializer.h"
-#include "ParticleUniverseDynamicAttribute.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
+
+	class DynamicAttribute;
+
 	/** The DynamicAttributeTranslator parses 'dynamic attributes' tokens
 	*/
 	class _ParticleUniverseExport DynamicAttributeTranslator : public ScriptTranslator
@@ -39,7 +40,7 @@ namespace ParticleUniverse
 			DynamicAttribute* mDynamicAttribute;
 		public:
 			DynamicAttributeTranslator(void);
-			virtual ~DynamicAttributeTranslator(void){};
+			virtual ~DynamicAttributeTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -52,8 +53,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			DynamicAttributeWriter(void) {};
-			virtual ~DynamicAttributeWriter(void) {};
+			DynamicAttributeWriter(void) {}
+			virtual ~DynamicAttributeWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

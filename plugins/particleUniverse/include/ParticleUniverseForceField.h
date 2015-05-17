@@ -24,9 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_FORCE_FIELD_H__
 #define __PU_FORCE_FIELD_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseNoise.h"
-#include "OgreWorkQueue.h"
+
+#include "OGRE/OgreWorkQueue.h"
 
 namespace ParticleUniverse
 {
@@ -105,7 +105,7 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport RealTimeForceFieldCalculationFactory : public ForceFieldCalculationFactory
 	{
 		public:
-			RealTimeForceFieldCalculationFactory(void) : ForceFieldCalculationFactory() {};
+			RealTimeForceFieldCalculationFactory(void) : ForceFieldCalculationFactory() {}
 			virtual ~RealTimeForceFieldCalculationFactory(void){};
 
 			/** Override from ForceFieldCalculationFactory
@@ -205,7 +205,7 @@ namespace ParticleUniverse
 				MatrixForceFieldCalculationFactory* src;
 				_ParticleUniverseExport friend std::ostream& operator<<(std::ostream& o, const MatrixRequest& r)
 					{return o;}
-				MatrixRequest(MatrixForceFieldCalculationFactory* f): src(f) {};
+				MatrixRequest(MatrixForceFieldCalculationFactory* f): src(f) {}
 			};
 			
 			struct MatrixResponse

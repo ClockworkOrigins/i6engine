@@ -52,18 +52,18 @@ namespace ParticleUniverse
 
 			IAlias(void) : 
 				mAliasName(BLANK_STRING),
-				mAliasType(AT_UNDEFINED) {};
-			virtual ~IAlias(void) {};
+				mAliasType(AT_UNDEFINED) {}
+			virtual ~IAlias(void) {}
 
 			/** 
 			*/
-			const String& getAliasName(void) const {return mAliasName;};
-			void setAliasName(String aliasName) {mAliasName = aliasName;};
+			const String& getAliasName(void) const {return mAliasName;}
+			void setAliasName(String aliasName) {mAliasName = aliasName;}
 
 			/** 
 			*/
-			AliasType getAliasType(void) const {return mAliasType;};
-			void setAliasType(AliasType aliasType) {mAliasType = aliasType;};
+			AliasType getAliasType(void) const {return mAliasType;}
+			void setAliasType(AliasType aliasType) {mAliasType = aliasType;}
 
 		protected:
 			String mAliasName;

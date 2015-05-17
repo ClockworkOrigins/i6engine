@@ -24,10 +24,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_SCRIPT_SERIALIZER_H__
 #define __PU_PARTICLE_SCRIPT_SERIALIZER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseSystem.h"
-#include "ParticleUniverseSystemTokens.h"
 #include "ParticleUniverseContext.h"
+#include "ParticleUniverseSystemTokens.h"
 
 namespace ParticleUniverse
 {
@@ -38,7 +36,7 @@ namespace ParticleUniverse
 		public:
 			Context context;
 			ParticleScriptSerializer(void);
-			virtual ~ParticleScriptSerializer(void) {};
+			virtual ~ParticleScriptSerializer(void) {}
 
 			/** Writes a ParticleSystem to a file in the script format.
 			*/

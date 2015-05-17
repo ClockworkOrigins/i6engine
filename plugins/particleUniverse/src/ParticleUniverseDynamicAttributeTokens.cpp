@@ -21,14 +21,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleUniverseDynamicAttributeFactory.h"
 #include "ParticleUniverseDynamicAttributeTokens.h"
+
+#include "ParticleUniverseAny.h"
+#include "ParticleUniverseDynamicAttributeFactory.h"
+#include "ParticleUniverseScriptSerializer.h"
 
 namespace ParticleUniverse
 {

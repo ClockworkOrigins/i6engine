@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BASE_COLLIDER_H__
 #define __PU_BASE_COLLIDER_H__
 
-#include "ParticleUniversePrerequisites.h"
+#include "ParticleUniverseAxisAlignedBox.h"
 #include "ParticleUniverseAffector.h"
 
 namespace ParticleUniverse
@@ -68,7 +68,7 @@ namespace ParticleUniverse
 			static const CollisionType DEFAULT_COLLISION_TYPE;
 
 			BaseCollider(void);
-	        virtual ~BaseCollider(void){};
+	        virtual ~BaseCollider(void) {}
 
 			/** @copydoc ParticleAffector::_preProcessParticles */
 			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);

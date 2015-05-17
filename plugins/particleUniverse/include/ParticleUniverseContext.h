@@ -24,10 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_CONTEXT_H__
 #define __PU_CONTEXT_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseSection.h"
-#include "ParticleUniverseLogManager.h"
 #include "ParticleUniverseException.h"
+#include "ParticleUniverseLogManager.h"
+#include "ParticleUniverseSection.h"
 
 namespace ParticleUniverse
 {
@@ -96,8 +95,8 @@ namespace ParticleUniverse
 				mPreviousProcessedSection.sectionName = BLANK_STRING;
 				mPreviousProcessedSection.element = 0;
 				mPreviousProcessedSection.elementName = BLANK_STRING;
-			};
-			virtual ~Context(void) {};
+			}
+			virtual ~Context(void) {}
 			
 			/** attributeToken is needed to temporary set the last attribute value of the parsed script.
 			*/

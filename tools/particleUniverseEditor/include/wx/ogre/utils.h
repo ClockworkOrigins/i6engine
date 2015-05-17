@@ -20,8 +20,10 @@
 #ifndef _WX_OGRE_UTILS_H_
 #define _WX_OGRE_UTILS_H_
 
-#include <wx/wx.h>
-#include <Ogre.h>
+#include "OGRE/OgreException.h"
+#include "OGRE/OgreSingleton.h"
+
+#include "wx/wx.h"
 
 #define IMPLEMENT_OGRE_SINGLETON(CLASS)                         \
                                                                 \

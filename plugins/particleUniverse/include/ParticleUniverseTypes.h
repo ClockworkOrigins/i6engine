@@ -29,6 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "OgreString.h"
 #include "OgreStringVector.h"
 #include "OgreVector2.h"
+#include "OgreVector3.h"
 
 namespace ParticleUniverse
 {

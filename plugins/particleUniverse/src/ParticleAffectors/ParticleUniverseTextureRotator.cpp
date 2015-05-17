@@ -21,15 +21,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseTextureRotator.h"
 
+#include "ParticleUniverseEmitter.h"
 #include "ParticleUniverseRenderer.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
 
 namespace ParticleUniverse
 {

@@ -21,11 +21,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
+#include "ParticleUniverseVisualParticle.h"
 
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
+#include "ParticleUniverseEmitter.h"
+#include "ParticleUniverseTechnique.h"
 
 namespace ParticleUniverse
 {

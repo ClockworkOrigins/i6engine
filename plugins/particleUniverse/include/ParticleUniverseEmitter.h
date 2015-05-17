@@ -24,15 +24,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_EMITTER_H__
 #define __PU_EMITTER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseCameraDependency.h"
 #include "ParticleUniverseCameraDependencyFactory.h"
-#include "ParticleUniverseIAlias.h"
-#include "ParticleUniverseParticle.h"
-#include "ParticleUniverseIElement.h"
-#include "ParticleUniverseDynamicAttribute.h"
 #include "ParticleUniverseDynamicAttributeFactory.h"
+#include "ParticleUniverseIAlias.h"
+#include "ParticleUniverseIElement.h"
 #include "ParticleUniverseMath.h"
+#include "ParticleUniverseParticle.h"
 
 namespace ParticleUniverse
 {
@@ -80,88 +77,88 @@ namespace ParticleUniverse
 
 			/** Todo
 	        */
-			inline ParticleTechnique* getParentTechnique(void) const {return mParentTechnique;};
+			inline ParticleTechnique* getParentTechnique(void) const {return mParentTechnique;}
 			void setParentTechnique(ParticleTechnique* parentTechnique);
 
 			/** Todo
 	        */
-			inline const String& getEmitterType(void) const {return mEmitterType;};
-			void setEmitterType(const String& emitterType) {mEmitterType = emitterType;};
+			inline const String& getEmitterType(void) const {return mEmitterType;}
+			void setEmitterType(const String& emitterType) {mEmitterType = emitterType;}
 
 			/** Todo
 	        */
-			inline const String& getName(void) const {return mName;};
-			void setName(const String& name) {mName = name;};
+			inline const String& getName(void) const {return mName;}
+			void setName(const String& name) {mName = name;}
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynAngle(void) const {return mDynAngle;};
+			inline DynamicAttribute* getDynAngle(void) const {return mDynAngle;}
 			void setDynAngle(DynamicAttribute* dynAngle);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynEmissionRate(void) const {return mDynEmissionRate;};
+			inline DynamicAttribute* getDynEmissionRate(void) const {return mDynEmissionRate;}
 			void setDynEmissionRate(DynamicAttribute* dynEmissionRate);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynTotalTimeToLive(void) const {return mDynTotalTimeToLive;};
+			inline DynamicAttribute* getDynTotalTimeToLive(void) const {return mDynTotalTimeToLive;}
 			void setDynTotalTimeToLive(DynamicAttribute* dynTotalTimeToLive);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynParticleMass(void) const {return mDynParticleMass;};
+			inline DynamicAttribute* getDynParticleMass(void) const {return mDynParticleMass;}
 			void setDynParticleMass(DynamicAttribute* dynParticleMass);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynVelocity(void) const {return mDynVelocity;};
+			inline DynamicAttribute* getDynVelocity(void) const {return mDynVelocity;}
 			void setDynVelocity(DynamicAttribute* dynVelocity);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynDuration(void) const {return mDynDuration;};
+			inline DynamicAttribute* getDynDuration(void) const {return mDynDuration;}
 			void setDynDuration(DynamicAttribute* dynDuration);
 			void setDynDurationSet(bool durationSet);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynRepeatDelay(void) const {return mDynRepeatDelay;};
+			inline DynamicAttribute* getDynRepeatDelay(void) const {return mDynRepeatDelay;}
 			void setDynRepeatDelay(DynamicAttribute* dynRepeatDelay);
 			void setDynRepeatDelaySet(bool repeatDelaySet);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynParticleAllDimensions(void) const {return mDynParticleAllDimensions;};
+			inline DynamicAttribute* getDynParticleAllDimensions(void) const {return mDynParticleAllDimensions;}
 			void setDynParticleAllDimensions(DynamicAttribute* dynParticleAllDimensions);
 			void setDynParticleAllDimensionsSet(bool particleAllDimensionsSet);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynParticleWidth(void) const {return mDynParticleWidth;};
+			inline DynamicAttribute* getDynParticleWidth(void) const {return mDynParticleWidth;}
 			void setDynParticleWidth(DynamicAttribute* dynParticleWidth);
 			void setDynParticleWidthSet(bool particleWidthSet);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynParticleHeight(void) const {return mDynParticleHeight;};
+			inline DynamicAttribute* getDynParticleHeight(void) const {return mDynParticleHeight;}
 			void setDynParticleHeight(DynamicAttribute* dynParticleHeight);
 			void setDynParticleHeightSet(bool particleHeightSet);
 
 			/** Todo
 	        */
-			inline DynamicAttribute* getDynParticleDepth(void) const {return mDynParticleDepth;};
+			inline DynamicAttribute* getDynParticleDepth(void) const {return mDynParticleDepth;}
 			void setDynParticleDepth(DynamicAttribute* dynParticleDepth);
 			void setDynParticleDepthSet(bool particleDepthSet);
 
 			/** Todo
 	        */
-			inline ParticleType getEmitsType(void) const {return mEmitsType;};
-			void setEmitsType(ParticleType emitsType) {mEmitsType = emitsType;};
+			inline ParticleType getEmitsType(void) const {return mEmitsType;}
+			void setEmitsType(ParticleType emitsType) {mEmitsType = emitsType;}
 
 			/** Todo
 	        */
-			inline const String& getEmitsName(void) const {return mEmitsName;};
+			inline const String& getEmitsName(void) const {return mEmitsName;}
 			void setEmitsName(const String& emitsName);
 
 			/** Set the distance-value and inc. indication to recalculate the emission rate.
@@ -242,11 +239,11 @@ namespace ParticleUniverse
 
 			/** Perform initialisation actions.
 	        */
-			inline virtual void _prepare(ParticleTechnique* particleTechnique){/* Do nothing */};
+			inline virtual void _prepare(ParticleTechnique* particleTechnique){/* Do nothing */}
 
 			/** Reverse initialisation actions.
 	        */
-			inline virtual void _unprepare(ParticleTechnique* particleTechnique){/* Do nothing */};
+			inline virtual void _unprepare(ParticleTechnique* particleTechnique){/* Do nothing */}
 
 			/** Perform activities before the individual particles are processed.
 	        */
@@ -339,11 +336,11 @@ namespace ParticleUniverse
 
 			/** Perform activities when a ParticleEmitter is paused.
 			*/
-			virtual void _notifyPause (void){/* Do nothing */};
+			virtual void _notifyPause (void){/* Do nothing */}
 
 			/** Perform activities when a ParticleEmitter is resumed.
 			*/
-			virtual void _notifyResume (void){/* Do nothing */};
+			virtual void _notifyResume (void){/* Do nothing */}
 
 			/** Notify that the Particle System is rescaled.
 	        */

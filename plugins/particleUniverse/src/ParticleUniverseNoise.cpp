@@ -23,13 +23,12 @@ The Noise algorithm however is based on the Improved Noise reference implementat
 by Ken Perlin (copyright by Ken Perlin (c) 2002)
 -----------------------------------------------------------------------------------------------
 */
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
 
 #include "ParticleUniverseNoise.h"
+
+#include "ParticleUniverseMath.h"
+
+#include "OGRE/OgreImage.h"
 
 namespace ParticleUniverse
 {

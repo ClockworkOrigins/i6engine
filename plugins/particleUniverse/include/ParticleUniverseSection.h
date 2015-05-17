@@ -25,10 +25,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_SECTION_H__
 
 #include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseIElement.h"
 
 namespace ParticleUniverse
 {
+
+	class IElement;
+
 	/** The Section class is used for parsing. A section is a piece of data between brackets {}.
 	*/
 	class _ParticleUniverseExport Section
@@ -38,8 +40,8 @@ namespace ParticleUniverse
 			String elementName;
 			String sectionName;
 
-			Section(void) : elementName(BLANK_STRING), sectionName(BLANK_STRING) {};
-			virtual ~Section(void) {};
+			Section(void) : elementName(BLANK_STRING), sectionName(BLANK_STRING) {}
+			virtual ~Section(void) {}
 	};
 
 }

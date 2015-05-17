@@ -24,7 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BASE_COLLIDER_TOKENS_H__
 #define __PU_BASE_COLLIDER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
 namespace ParticleUniverse
@@ -34,8 +33,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport BaseColliderTranslator : public ScriptTranslator
 	{
 		public:
-			BaseColliderTranslator(void){};
-			~BaseColliderTranslator(void){};
+			BaseColliderTranslator(void) {}
+			~BaseColliderTranslator(void) {}
 			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
 			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
@@ -49,8 +48,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			BaseColliderWriter(void) {};
-			virtual ~BaseColliderWriter(void) {};
+			BaseColliderWriter(void) {}
+			virtual ~BaseColliderWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

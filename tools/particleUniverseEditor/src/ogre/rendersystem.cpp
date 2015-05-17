@@ -17,9 +17,9 @@
  * USA
  */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "wx/ogre/prerequisites.h"
 #include "wx/ogre/rendersystem.h"
+
+#include "wx/ogre/prerequisites.h"
 #include "wx/ogre/utils.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX

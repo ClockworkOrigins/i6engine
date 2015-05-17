@@ -23,8 +23,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseEmitterTokens.h"
 
-//#include "ParticleUniverseCameraDependency.h"
-//#include "ParticleUniverseDynamicAttributeTokens.h"
 #include "ParticleUniverseEmitterFactory.h"
 #include "ParticleUniverseScriptSerializer.h"
 #include "ParticleUniverseSystemManager.h"

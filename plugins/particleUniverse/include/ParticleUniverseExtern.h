@@ -24,9 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_EXTERN_H__
 #define __PU_EXTERN_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseIAlias.h"
 #include "ParticleUniverseIElement.h"
+#include "ParticleUniverseTypes.h"
 
 namespace ParticleUniverse
 {
@@ -59,23 +59,23 @@ namespace ParticleUniverse
 				IElement(),
 				mExternType(BLANK_STRING),
 				mParentTechnique(0),
-				_mExternScale(Vector3::UNIT_SCALE){};
-			virtual ~Extern(void){};
+				_mExternScale(Vector3::UNIT_SCALE){}
+			virtual ~Extern(void){}
 
 			/** Todo
 	        */
-			const String& getName(void) const {return mName;};
-			void setName(const String& name) {mName = name;};
+			const String& getName(void) const {return mName;}
+			void setName(const String& name) {mName = name;}
 
 			/** Todo
 	        */
-			const String& getExternType(void) const {return mExternType;};
-			void setExternType(const String& externType) {mExternType = externType;};
+			const String& getExternType(void) const {return mExternType;}
+			void setExternType(const String& externType) {mExternType = externType;}
 
 			/** Todo
 	        */
-			ParticleTechnique* getParentTechnique(void) const {return mParentTechnique;};
-			void setParentTechnique(ParticleTechnique* parentTechnique) {mParentTechnique = parentTechnique;};
+			ParticleTechnique* getParentTechnique(void) const {return mParentTechnique;}
+			void setParentTechnique(ParticleTechnique* parentTechnique) {mParentTechnique = parentTechnique;}
 
 			/** Notify that the Particle System is rescaled.
 	        */
@@ -103,23 +103,23 @@ namespace ParticleUniverse
 
 			/** Reverse the actions from the _prepare.
 	        */
-			virtual void _unprepare(ParticleTechnique* particleTechnique){/* No implementation */};
+			virtual void _unprepare(ParticleTechnique* particleTechnique){/* No implementation */}
 
 			/** Perform activities when an Extern is started.
 			*/
-			virtual void _notifyStart (void){/* Do nothing */};
+			virtual void _notifyStart (void){/* Do nothing */}
 
 			/** Perform activities when an Extern is paused.
 			*/
-			virtual void _notifyPause (void){/* Do nothing */};
+			virtual void _notifyPause (void){/* Do nothing */}
 
 			/** Perform activities when an Extern is resumed.
 			*/
-			virtual void _notifyResume (void){/* Do nothing */};
+			virtual void _notifyResume (void){/* Do nothing */}
 
 			/** Perform activities when an Extern is stopped.
 			*/
-			virtual void _notifyStop (void){/* Do nothing */};
+			virtual void _notifyStop (void){/* Do nothing */}
 
 			/** Perform activities before the individual particles are processed.
 			@remarks
@@ -127,7 +127,7 @@ namespace ParticleUniverse
 				the preProcess is typically used to perform calculations where the result must be used in 
 				processing each individual particle.
 	        */
-			virtual void _preProcessParticles(ParticleTechnique* technique, Real timeElapsed){/* Do nothing */};
+			virtual void _preProcessParticles(ParticleTechnique* technique, Real timeElapsed){/* Do nothing */}
 
 			/** Initialise a newly emitted particle.
 			@param
@@ -162,7 +162,7 @@ namespace ParticleUniverse
 			@remarks
 				This function is called after the ParticleTechnique update-loop where all particles are traversed.
 	        */
-			virtual void _postProcessParticles(ParticleTechnique* technique, Real timeElapsed){/* Do nothing */};
+			virtual void _postProcessParticles(ParticleTechnique* technique, Real timeElapsed){/* Do nothing */}
 	};
 
 }

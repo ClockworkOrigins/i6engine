@@ -26,7 +26,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseAttachableTokens.h"
 #include "ParticleUniverseCamera.h"
+#include "ParticleUniverseCameraDependency.h"
 #include "ParticleUniverseCameraDependencyTokens.h"
+#include "ParticleUniverseDynamicAttributeTokens.h"
 #include "ParticleUniverseSingleton.h"
 #include "ParticleUniverseSystemManagerTokens.h"
 
@@ -39,6 +41,7 @@ namespace ParticleUniverse
 	class BoxSet;
 	class BoxSetFactory;
 	class ExternFactory;
+	class IAlias;
 	class ParticleAffectorFactory;
 	class ParticleBehaviourFactory;
 	class ParticleEmitterFactory;

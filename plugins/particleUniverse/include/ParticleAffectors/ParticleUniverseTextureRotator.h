@@ -24,13 +24,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_TEXTURE_ROTATOR_H__
 #define __PU_TEXTURE_ROTATOR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffector.h"
-#include "ParticleUniverseDynamicAttribute.h"
 #include "ParticleUniverseDynamicAttributeFactory.h"
+#include "ParticleUniverseMath.h"
 
 namespace ParticleUniverse
 {
+
+	class DynamicAttribute;
+
 	/** The TextureRotator rotates the texture(s) of a particle. In general it is possible to support individual
 		rotation of each particle texture-set - the same as in the geometry rotator, setting 
 		mUseOwnRotationSpeed to true -, but in practice this isn't really usable, because usually all particles
