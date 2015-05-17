@@ -36,7 +36,7 @@ class ConfigFile : public Ogre::ConfigFile
 	public:
 		// Constructor / Destructor
 		ConfigFile(void);
-		~ConfigFile(void){};
+		~ConfigFile(void) {}
 
 		/**	Write key/value pairs to an internal buffer.
 		@remarks

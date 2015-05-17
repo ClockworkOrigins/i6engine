@@ -24,22 +24,25 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_CONFIG_DIALOG_H__
 #define __PUED_CONFIG_DIALOG_H__
 
-#include "wx/ogre/prerequisites.h"
-#include "wx/propdlg.h"
-#include "wx/generic/propdlg.h"
 #include "ParticleUniverseRecorder.h"
-#include "ParticleUniverseMediaTypeComboBox.h"
+
+#include "wx/ogre/prerequisites.h"
+
+#include "wx/propdlg.h"
 #include "wx/spinctrl.h"
+#include "wx/generic/propdlg.h"
 
 /**	Configuration dialog
 */
+class MediaTypeComboBox;
 class ParticleUniverseEditorFrame;
+
 class ConfigDialog : public wxPropertySheetDialog
 {
 	public:
 		// Constructor / Destructor
 		ConfigDialog(wxWindow* parent);
-		~ConfigDialog(void){};
+		~ConfigDialog(void){}
 
 		/**	Initialise the dialog window
 		*/

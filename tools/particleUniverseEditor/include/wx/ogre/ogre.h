@@ -23,9 +23,9 @@
 #include "wx/ogre/prerequisites.h"
 
 #include "wx/ogre/app.h"
-#include "wx/ogre/utils.h"
 #include "wx/ogre/control.h"
-#include "wx/ogre/resources.h"
+#include "wx/ogre/utils.h"
 #include "wx/ogre/rendersystem.h"
+#include "wx/ogre/resources.h"
 
 #endif

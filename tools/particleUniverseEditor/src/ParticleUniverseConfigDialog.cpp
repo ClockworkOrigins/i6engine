@@ -9,13 +9,11 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "ParticleUniverseEditor.h"
 #include "ParticleUniverseConfigDialog.h"
+
 #include "ParticleUniverseConfigFile.h"
+#include "ParticleUniverseEditor.h"
 #include "ParticleUniverseMediaTypeComboBox.h"
-#include "wx/notebook.h"
-#include "wx/checkbox.h"
 
 static const Ogre::String CONFIG_FILENAME = "pued.cfg";
 

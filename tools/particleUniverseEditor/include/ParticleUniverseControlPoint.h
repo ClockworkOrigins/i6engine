@@ -24,6 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_CONTROLPOINT_
 #define __PUED_CONTROLPOINT_
 
+#include "wx/bitmap.h"
+#include "wx/colour.h"
+#include "wx/dcclient.h"
 
 /**	function to format a string (used for control points and control point grid only
 */

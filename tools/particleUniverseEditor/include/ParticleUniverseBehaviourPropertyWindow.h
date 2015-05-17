@@ -24,9 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_BEHAVIOUR_PROPERTY_WINDOW_H__
 #define __PUED_BEHAVIOUR_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseBehaviour.h"
 
 // Property names
 static wxString PRNL_BEHAVIOUR_TYPE = wxT("");
@@ -38,7 +36,7 @@ class BehaviourPropertyWindow : public PropertyWindow
 	public:
 		BehaviourPropertyWindow(wxWindow* parent, EditComponent* owner);
 		BehaviourPropertyWindow(BehaviourPropertyWindow* behaviourPropertyWindow);
-		~BehaviourPropertyWindow(void){};
+		~BehaviourPropertyWindow(void){}
 
 		/**
 			Copy basic behaviour properties from a window to an behaviour

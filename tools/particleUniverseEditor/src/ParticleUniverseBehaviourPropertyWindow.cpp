@@ -9,10 +9,11 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseBehaviourPropertyWindow.h"
+
 #include "ParticleUniverseEditComponent.h"
 #include "ParticleUniverseSystemManager.h"
+
 #include "wx/ogre/utils.h"
 
 //-----------------------------------------------------------------------

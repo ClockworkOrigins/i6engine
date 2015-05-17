@@ -9,9 +9,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "wx/ogre/utils.h"
 #include "ParticleUniverseEditTab.h"
+
+#include "ParticleUniverseSystemManager.h"
+
 #include "ParticleUniverseEditor.h"
 #include "ParticleUniverseSystemPropertyWindow.h"
 #include "ParticleUniverseTechniquePropertyWindow.h"
@@ -24,6 +25,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "ParticleUniverseOgreControlComponent.h"
 #include "ParticleUniverseSystem.h"
 #include "ParticleUniverseUtils.h"
+
+#include "wx/ogre/utils.h"
 
 //-----------------------------------------------------------------------
 EditTab::EditTab(wxWindow* parentNotebook, wxWindow* rootParent) : wxMDIParentFrame(

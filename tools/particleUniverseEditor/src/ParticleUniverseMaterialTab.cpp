@@ -21,10 +21,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseMaterialTab.h"
+
+#include "ParticleUniverseSystemManager.h"
+
 #include "ParticleUniverseEditor.h"
-#include <wx/colordlg.h>
+
+#include "wx/colordlg.h"
 
 //-----------------------------------------------------------------------
 MaterialTab::MaterialTab(wxWindow* parent, wxWindow* rootParent) : 

@@ -24,9 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_AFFECTOR_PROPERTY_WINDOW_H__
 #define __PUED_AFFECTOR_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseAffector.h"
+
+#include "wx/ogre/utils.h"
 
 // Property names
 static wxString PRNL_AFFECTOR_TYPE = wxT("");
@@ -45,7 +45,7 @@ class AffectorPropertyWindow : public PropertyWindow
 	public:
 		AffectorPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
 		AffectorPropertyWindow(AffectorPropertyWindow* affectorPropertyWindow);
-		~AffectorPropertyWindow(void){};
+		~AffectorPropertyWindow(void){}
 
 		/**
 			Copy basic affector properties from a window to an affector

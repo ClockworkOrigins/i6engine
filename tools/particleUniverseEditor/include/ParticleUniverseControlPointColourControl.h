@@ -25,7 +25,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PUED_CONTROLPOINT_COLOUR_CONTROL_
 
 #include "ParticleUniverseContextMenu.h"
-#include "ParticleUniverseControlPoint.h"
 
 #define ID_COLOUR_CP_CTRL 1
 #define ID_ALPHA_CP_CTRL 2
@@ -35,6 +34,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 static const int CONTROL_POINT_CONTROL_RECT_HEIGHT = 48;
 static const int CONTROL_POINT_CONTROL_RECT_HALF_HEIGHT = 24;
 static const int CONTROL_POINT_CONTROL_Y = CONTROL_POINT_CONTROL_RECT_HEIGHT + 8;
+
+class ControlPoint;
+
 class ControlPointColourControl : public wxControl, ContextMenuCallbackObject
 {
 	public:

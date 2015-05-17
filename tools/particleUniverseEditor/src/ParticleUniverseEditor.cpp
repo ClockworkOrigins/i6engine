@@ -9,21 +9,38 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseEditor.h"
-#include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseUtils.h"
-#include "ParticleUniverseMeshSelector.h"
+
+#ifdef WIN32
+	#include <Shellapi.h>
+#endif
+
+#include "ParticleUniverseSystemManager.h"
+
+#include "ParticleUniverseAnimationWindow.h"
+#include "ParticleUniverseConfigDialog.h"
+#include "ParticleUniverseEditTab.h"
+#include "ParticleUniverseFileDropTarget.h"
+#include "ParticleUniverseGizmoManager.h"
+#include "ParticleUniverseMainToolbar.h"
 #include "ParticleUniverseMaterialSelector.h"
+#include "ParticleUniverseMaterialTab.h"
+#include "ParticleUniverseMeshSelector.h"
+#include "ParticleUniverseOgreControlComponent.h"
+#include "ParticleUniversePropertyWindow.h"
+#include "ParticleUniverseSystemTreeControl.h"
+#include "ParticleUniverseTextControl.h"
+#include "ParticleUniverseUtils.h"
+
 #include "OGRE/Overlay/OgreFontManager.h"
 #include "OGRE/Overlay/OgreOverlaySystem.h"
+
 #include "wx/cmndata.h"
 #include "wx/colordlg.h"
 
 #ifdef PU_PHYSICS_PHYSX
 	#include "Externs/ParticleUniversePhysXBridge.h"
 #endif // PU_PHYSICS_PHYSX
-//#include "Procedural.h" // TESTTESTTEST: Also remove compiler dirs + link dirs/lib
 
 IMPLEMENT_APP(ParticleUniverseEditorApp)
 

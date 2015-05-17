@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseConfigFile.h"
+
 #include <fstream>
 
 //-----------------------------------------------------------------------

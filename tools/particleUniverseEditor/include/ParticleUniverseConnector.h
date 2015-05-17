@@ -42,7 +42,7 @@ class DrawConnector : public wxFrame
 			wxPoint& position, 
 			const Ogre::String& colourCode = DRAW_DEFAULT_COLOURCODE, 
 			int lineStyle = wxSOLID);
-		~DrawConnector(void){};
+		~DrawConnector(void) {}
 		void drawLine(wxWindow* canvas, wxPaintDC* dc);
 		bool hasNode(wxWindow* node);
 		bool hasNodesAndRelation(wxWindow* node1, wxWindow* node2, ComponentRelation relation);

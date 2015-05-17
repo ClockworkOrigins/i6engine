@@ -14,13 +14,15 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseSystem.h"
 
+#include "OGRE/OgreFrameListener.h"
+#include "OGRE/OgreImage.h"
 
 /** Extension of the Image class.
 */
 class ImageX : public Ogre::Image
 {
 	public:
-		ImageX() : Ogre::Image() {};
+		ImageX() : Ogre::Image() {}
 
 		/** Filter functions
 		*/

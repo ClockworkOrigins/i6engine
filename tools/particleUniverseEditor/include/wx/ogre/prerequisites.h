@@ -21,8 +21,10 @@
 #define _WX_OGRE_PREREQUISITES_H_
 
 #include "ParticleUniversePrerequisites.h"
-#include <wx/wx.h>
-#include <Ogre.h>
+
+#include "OGRE/Ogre.h"
+
+#include "wx/wx.h"
 
 // Comment this line if NVidia's PhysX is not used
 //#define PU_PHYSICS_PHYSX

@@ -24,7 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_EMITTER_PROPERTY_FACTORY_H__
 #define __PUED_EMITTER_PROPERTY_FACTORY_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "EmitterPropertyWindow/BoxEmitterPropertyWindow.h"
 #include "EmitterPropertyWindow/CircleEmitterPropertyWindow.h"
 #include "EmitterPropertyWindow/LineEmitterPropertyWindow.h"
@@ -34,6 +33,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "EmitterPropertyWindow/SlaveEmitterPropertyWindow.h"
 #include "EmitterPropertyWindow/SphereSurfaceEmitterPropertyWindow.h"
 #include "EmitterPropertyWindow/VertexEmitterPropertyWindow.h"
+
+#include "wx/ogre/prerequisites.h"
+#include "wx/ogre/utils.h"
 
 /**	
 */

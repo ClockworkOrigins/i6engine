@@ -25,8 +25,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PUED_ANIMATION_WINDOW_H__
 
 #include "wx/ogre/prerequisites.h"
-#include <wx/treectrl.h>
-#include <wx/listctrl.h>
+
+#include "wx/listctrl.h"
+#include "wx/notebook.h"
+#include "wx/treectrl.h"
 
 /**	Class that represents the animation details of the loaded mesh
 */

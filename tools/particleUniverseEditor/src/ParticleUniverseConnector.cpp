@@ -9,10 +9,12 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "wx/ogre/utils.h"
 #include "ParticleUniverseConnector.h"
+
 #include "ParticleUniverseEditComponent.h"
+#include "ParticleUniverseEditTab.h"
+
+#include "wx/ogre/utils.h"
 
 //-----------------------------------------------------------------------
 DrawConnector::DrawConnector(wxWindow* node1,

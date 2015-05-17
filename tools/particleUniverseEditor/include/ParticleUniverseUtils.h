@@ -23,8 +23,8 @@ class Utils
 		static wxString SCRIPT_DIR_ATTR;
 
 		// Constructor / Destructor
-		Utils(void){};
-		~Utils(void){};
+		Utils(void) {}
+		~Utils(void) {}
 
 		/**	Return the current working directory
 		*/

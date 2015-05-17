@@ -9,11 +9,12 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseAnimationWindow.h"
+
 #include "ParticleUniverseEditor.h"
-#include "OgreTagPoint.h"
-#include "iostream"
+#include "ParticleUniverseGizmoManager.h"
+
+#include "OGRE/OgreTagPoint.h"
 
 //-----------------------------------------------------------------------
 AnimationWindow::AnimationWindow(ParticleUniverseEditorFrame* parent, Ogre::SceneManager* sceneManager) : 

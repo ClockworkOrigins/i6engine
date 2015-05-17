@@ -24,28 +24,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_H__
 #define __PUED_H__
 
+#include "ParticleUniverseGizmo.h"
+
 #include "wx/ogre/ogre.h"
+
 #include "wx/notebook.h"
-#include "ParticleUniverseMainToolbar.h"
-#include "ParticleUniverseSystemManager.h"
-#include "ParticleUniverseEditorListener.h"
-#include "ParticleUniverseEditTab.h"
-#include "ParticleUniverseMaterialTab.h"
-#include "ParticleUniverseConfigDialog.h"
-#include "ParticleUniverseSystemTreeControl.h"
-#include "ParticleUniverseRecorder.h"
-#include "ParticleUniverseTextControl.h"
-#include "OGRE/Overlay/OgreOverlayManager.h"
-#include "OGRE/Overlay/OgreOverlayContainer.h"
-#include "OGRE/Overlay/OgreTextAreaOverlayElement.h"
-#include "ParticleUniverseContextMenu.h"
-#include "ParticleUniverseTypes.h"
-#include "ParticleUniverseGizmoManager.h"
-#include "ParticleUniverseFileDropTarget.h"
-#include "ParticleUniverseAnimationWindow.h"
+#include "wx/treebase.h"
+
+namespace Ogre {
+	class Overlay;
+	class OverlayContainer;
+	class TextAreaOverlayElement;
+}
 
 // Global Particle System for editor
 static const ParticleUniverse::String CURRENT_PS_NAME = "currentParticleSystemName";
+
+class AnimationWindow;
+class ConfigDialog;
+class EditTab;
+class GizmoManager;
+class MaterialTab;
+class OgreControlComponent;
+class PropertyWindow;
+class Recorder;
+class SystemTreeControl;
+class TextControl;
+class UIMainToolbar;
+class wxPropertyGrid;
 
 class ParticleUniverseEditorFrame : public wxFrame
 {

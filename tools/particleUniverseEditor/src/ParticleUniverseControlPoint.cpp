@@ -9,8 +9,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseControlPoint.h"
+
+#include "wx/ogre/prerequisites.h"
+#include "wx/ogre/utils.h"
 
 //-----------------------------------------------------------------------
 ControlPoint::ControlPoint(CTRL_POINT_TYPE type, const wxPoint& pos, const bool movable, float width, float min, float max) : 
