@@ -9,9 +9,12 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseControlPointDialog.h"
-#include <wx/wx.h>
+
+#include "ParticleUniverseControlPoint.h"
+#include "ParticleUniverseControlPointControl.h"
+
+#include "wx/wx.h"
 
 //-----------------------------------------------------------------------
 HorizontalSlider::HorizontalSlider(

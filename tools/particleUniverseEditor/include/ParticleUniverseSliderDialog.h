@@ -12,11 +12,12 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_SLIDER_DIALOG_H__
 #define __PUED_SLIDER_DIALOG_H__
 
-#include "ParticleUniverseSliderDialog.h"
-#include <wx/dialog.h>
+#include "wx/dialog.h"
 
 #define ID_TEXT_ENTERED 2000
 #define ID_SLIDER 2001
+
+class wxTextCtrl;
 
 class SliderDialog : public wxDialog
 {
@@ -32,7 +33,7 @@ class SliderDialog : public wxDialog
 			float min = 0.0f,
 			float max = 255.0f,
 			float divider = 255.0f);
-		~SliderDialog(void){};
+		~SliderDialog(void) {}
 		void OnTextUpdated(wxCommandEvent& evt);
 		void OnScroll(wxScrollEvent& evt);
 		float getValue(void) const;

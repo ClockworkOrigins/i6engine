@@ -15,10 +15,14 @@ You can find a copy of the Commercial License in the Particle Universe package.
 	#include <Shellapi.h>
 #endif
 
+#include "ParticleUniverseEmitter.h"
+#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 #include "ParticleUniverseAnimationWindow.h"
 #include "ParticleUniverseConfigDialog.h"
+#include "ParticleUniverseEditCanvas.h"
 #include "ParticleUniverseEditTab.h"
 #include "ParticleUniverseFileDropTarget.h"
 #include "ParticleUniverseGizmoManager.h"

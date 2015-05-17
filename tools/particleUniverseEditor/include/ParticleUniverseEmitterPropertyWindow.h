@@ -24,9 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_EMITTER_PROPERTY_WINDOW_H__
 #define __PUED_EMITTER_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseEmitter.h"
+
+#include "wx/ogre/prerequisites.h"
 
 // Property names
 static wxString PRNL_EMITTER_TYPE = wxT("");
@@ -64,7 +64,7 @@ class EmitterPropertyWindow : public PropertyWindow
 	public:
 		EmitterPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
 		EmitterPropertyWindow(EmitterPropertyWindow* emitterPropertyWindow);
-		~EmitterPropertyWindow(void){};
+		~EmitterPropertyWindow(void) {}
 
 		/**
 			Copy basic emitter properties from a window to an emitter

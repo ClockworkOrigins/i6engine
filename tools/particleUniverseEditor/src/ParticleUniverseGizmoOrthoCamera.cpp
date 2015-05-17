@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseGizmoOrthoCamera.h"
+
 #include "ParticleUniverseGizmoManager.h"
 
 const Ogre::Real OrthoCameraGizmo::SCALE_NODE_ORTHO_CAMERA = 0.7f;

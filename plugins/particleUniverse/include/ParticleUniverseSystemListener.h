@@ -28,6 +28,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace ParticleUniverse
 {
+
+	struct ParticleUniverseEvent;
+
 	/*  ParticleSystemListener establishes a channel between a ParticleSystem and some other object, which is a 
 	    type of ParticleSystemListener.
 	*/
@@ -35,8 +38,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			ParticleSystemListener(void) {};
-			virtual ~ParticleSystemListener(void) {};
+			ParticleSystemListener(void) {}
+			virtual ~ParticleSystemListener(void) {}
 
 			/*  Callback function, called for all event types.
 			*/

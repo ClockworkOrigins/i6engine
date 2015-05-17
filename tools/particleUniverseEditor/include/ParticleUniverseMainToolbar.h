@@ -13,15 +13,16 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #define __PUED_MAIN_TOOLBAR_H__
 
 #include "wx/ogre/prerequisites.h"
-#include "wx/toolbar.h"
-#include "ParticleUniverseSpinCtrl.h"
 
-class UIFileIcons;
-class UICompileIcons;
-class UIPlayIcons;
-class UIMiscIcons;
-class TimeScaleSlider;
+#include "wx/toolbar.h"
+
 class ParticleUniverseEditorFrame;
+class SpinCtrlXYZ;
+class TimeScaleSlider;
+class UICompileIcons;
+class UIFileIcons;
+class UIMiscIcons;
+class UIPlayIcons;
 
 /**	Main toolbar with all icons
 */
@@ -47,7 +48,7 @@ class UIMainToolbar
 		UIMiscIcons* mUIMiscIcons;
 
 	private:
-		UIMainToolbar(void){};
+		UIMainToolbar(void) {}
 };
 
 
@@ -58,7 +59,7 @@ class UIPlayIcons
 	public:
 		// Constructor / Destructor
 		UIPlayIcons(wxToolBar* toolbar);
-		~UIPlayIcons(void){};
+		~UIPlayIcons(void) {}
 
 		// Actions
 		void reset(unsigned int numberOfListItems);
@@ -74,7 +75,7 @@ class UIPlayIcons
 		wxToolBar* mToolbar;
 	
 	private:
-		UIPlayIcons(void){};
+		UIPlayIcons(void) {}
 };
 
 /**	New, Load, Save icons
@@ -84,7 +85,7 @@ class UIFileIcons
 	public:
 		// Constructor / Destructor
 		UIFileIcons(wxToolBar* toolbar);
-		~UIFileIcons(void){};
+		~UIFileIcons(void) {}
 
 		// Actions
 		void reset(unsigned int numberOfListItems);
@@ -94,7 +95,7 @@ class UIFileIcons
 		wxToolBar* mToolbar;
 	
 	private:
-		UIFileIcons(void){};
+		UIFileIcons(void) {}
 };
 
 /**	Compile icons
@@ -104,7 +105,7 @@ class UICompileIcons
 	public:
 		// Constructor / Destructor
 		UICompileIcons(wxToolBar* toolbar);
-		~UICompileIcons(void){};
+		~UICompileIcons(void) {}
 
 		// Actions
 		void reset(unsigned int numberOfListItems);
@@ -114,7 +115,7 @@ class UICompileIcons
 		wxToolBar* mToolbar;
 	
 	private:
-		UICompileIcons(void){};
+		UICompileIcons(void) {}
 };
 
 /**	Miscelanious icons
@@ -124,7 +125,7 @@ class UIMiscIcons
 	public:
 		// Constructor / Destructor
 		UIMiscIcons(ParticleUniverseEditorFrame* frame, wxToolBar* toolbar);
-		~UIMiscIcons(void){};
+		~UIMiscIcons(void) {}
 
 		// Enable/Disable the icon
 		void enableRemoveEntity(bool enable);
@@ -168,7 +169,7 @@ class UIMiscIcons
 		wxBitmap mOrtho90AngleBitmap;
 	
 	private:
-		UIMiscIcons(void){};
+		UIMiscIcons(void) {}
 };
 
 /**	
@@ -178,7 +179,7 @@ class TimeScaleSlider : public wxSlider
 	public:
 		// Constructor / Destructor
 		TimeScaleSlider(ParticleUniverseEditorFrame* frame, wxControl* panel, int value , int minValue, int maxValue);
-		virtual ~TimeScaleSlider(void){};
+		virtual ~TimeScaleSlider(void) {}
 		ParticleUniverse::Real getTimeScale(void) const;
 		void setTimeScale(ParticleUniverse::Real scale);
 		void resetTimeScale(void);

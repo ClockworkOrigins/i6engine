@@ -12,8 +12,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_ORTHO_CAMERA_GIZMO_H__
 #define __PUED_ORTHO_CAMERA_GIZMO_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniverseGizmo.h"
+
+#include "wx/ogre/prerequisites.h"
 
 class OrthoCameraGizmo
 {

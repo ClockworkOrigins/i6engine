@@ -21,10 +21,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "ParticleUniverseEditor.h"
 #include "ParticleUniverseFileDropTarget.h"
-#include <wx/msgdlg.h>
+
+#include "ParticleUniverseEditor.h"
+
+#include "wx/msgdlg.h"
 
 //-----------------------------------------------------------------------
 FileDropTarget::FileDropTarget(ParticleUniverseEditorFrame* parent) : 

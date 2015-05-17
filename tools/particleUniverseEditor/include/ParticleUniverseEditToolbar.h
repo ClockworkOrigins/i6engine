@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PUED_EDIT_TOOLBAR_H__
 
 #include "wx/ogre/prerequisites.h"
+
 #include "wx/toolbar.h"
 
 class UIEditIcons1;
@@ -48,7 +49,7 @@ class UIEditToolbar
 		UIEditIcons2* mUIEditIcons2;
 
 	private:
-		UIEditToolbar(void){};
+		UIEditToolbar(void) {}
 };
 
 /**	Edit icons
@@ -58,7 +59,7 @@ class UIEditIcons1
 	public:
 		// Constructor / Destructor
 		UIEditIcons1(wxToolBar* toolbar);
-		~UIEditIcons1(void){};
+		~UIEditIcons1(void) {}
 
 		// Actions
 		void reset(void);
@@ -67,7 +68,7 @@ class UIEditIcons1
 		wxToolBar* mToolbar;
 	
 	private:
-		UIEditIcons1(void){};
+		UIEditIcons1(void) {}
 };
 
 /**	Edit icons
@@ -77,7 +78,7 @@ class UIEditIcons2
 	public:
 		// Constructor / Destructor
 		UIEditIcons2(wxToolBar* toolbar);
-		~UIEditIcons2(void){};
+		~UIEditIcons2(void) {}
 
 		// Actions
 		void reset(unsigned int numberOfListItems, unsigned int numberOfConnections = 0);
@@ -86,7 +87,7 @@ class UIEditIcons2
 		wxToolBar* mToolbar;
 	
 	private:
-		UIEditIcons2(void){};
+		UIEditIcons2(void) {}
 };
 
 #endif

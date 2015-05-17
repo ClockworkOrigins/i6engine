@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseGizmoScaling.h"
+
 #include "ParticleUniverseGizmoManager.h"
 #include "ParticleUniverseUtils.h"
 

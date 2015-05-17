@@ -23,9 +23,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseMaterialTab.h"
 
+#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 #include "ParticleUniverseEditor.h"
+#include "ParticleUniverseMaterialListBox.h"
 
 #include "wx/colordlg.h"
 

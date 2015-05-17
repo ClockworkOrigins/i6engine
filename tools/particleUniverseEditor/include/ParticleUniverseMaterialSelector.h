@@ -12,7 +12,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_MATERIAL_SELECTOR_H__
 #define __PUED_MATERIAL_SELECTOR_H__
 
-#include "ParticleUniversePropertyWindow.h"
+#include "wx/ogre/utils.h"
+
+#include "wx/propgrid/propdev.h"
 
 /**	Selection dialog for materials
 */
@@ -27,8 +29,8 @@ class MaterialSelector : public wxSingleChoiceDialog
 			const wxString* choices, 
 			long style = wxCHOICEDLG_STYLE, 
 			const wxPoint& pos = wxDefaultPosition) : 
-		wxSingleChoiceDialog(parent, message, caption, n, choices, 0, style, pos){};
-		~MaterialSelector(void){};
+		wxSingleChoiceDialog(parent, message, caption, n, choices, 0, style, pos) {}
+		~MaterialSelector(void) {}
 };
 
 /**	Class that creates a button property. After clicking a material can be selected
@@ -39,7 +41,7 @@ class MaterialProperty : public wxStringPropertyClass
 		MaterialProperty(
 			const wxString& label, 
 			const wxString& name);
-		virtual ~MaterialProperty(void){};
+		virtual ~MaterialProperty(void) {}
 
 		/**	
 		*/
@@ -58,8 +60,8 @@ class MaterialProperty : public wxStringPropertyClass
 class MaterialDialog
 {
 	public:
-		MaterialDialog(void){};
-		virtual ~MaterialDialog(void){};
+		MaterialDialog(void) {}
+		virtual ~MaterialDialog(void) {}
 
 		/**	Open the dialog
 		*/

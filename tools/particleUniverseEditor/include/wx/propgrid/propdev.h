@@ -12,6 +12,10 @@
 #ifndef _WX_PROPGRID_PROPDEV_H_
 #define _WX_PROPGRID_PROPDEV_H_
 
+#include "wx/propgrid/propgrid.h"
+
+#include "wx/textctrl.h"
+
 // -----------------------------------------------------------------------
 
 #ifdef _WX_PROPGRID_ADVPROPS_H_
@@ -1439,10 +1443,6 @@ private:
 // -----------------------------------------------------------------------
 // wxArrayEditorDialog
 // -----------------------------------------------------------------------
-
-#include <wx/textctrl.h>
-#include <wx/button.h>
-#include <wx/listbox.h>
 
 #define wxAEDIALOG_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE)

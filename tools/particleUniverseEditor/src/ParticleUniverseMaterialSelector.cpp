@@ -21,9 +21,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseMaterialSelector.h"
+
 #include "wx/ogre/utils.h"
+
+#include "OGRE/OgreMaterialManager.h"
+#include "OGRE/OgreResourceManager.h"
 
 //-----------------------------------------------------------------------
 MaterialProperty::MaterialProperty(

@@ -24,18 +24,26 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_EDIT_COMPONENT_H__
 #define __PUED_EDIT_COMPONENT_H__
 
-#include "wx/ogre/prerequisites.h"
-#include "ParticleUniverseConnector.h"
-#include "ParticleUniversePropertyWindow.h"
-#include "EmitterPropertyWindow/EmitterPropertyWindowFactory.h"
 #include "AffectorPropertyWindow/AffectorPropertyWindowFactory.h"
-#include "RendererPropertyWindow/RendererPropertyWindowFactory.h"
-#include "ObserverPropertyWindow/ObserverPropertyWindowFactory.h"
+
 #include "BehaviourPropertyWindow/BehaviourPropertyWindowFactory.h"
+
+#include "EmitterPropertyWindow/EmitterPropertyWindowFactory.h"
+
 #include "EventHandlerPropertyWindow/EventHandlerPropertyWindowFactory.h"
+
 #include "ExternPropertyWindow/ExternPropertyWindowFactory.h"
 
+#include "ObserverPropertyWindow/ObserverPropertyWindowFactory.h"
+
+#include "RendererPropertyWindow/RendererPropertyWindowFactory.h"
+
+#include "wx/ogre/prerequisites.h"
+
+class Connection;
+class ConnectionPolicy;
 class ParticleUniverseEditorFrame;
+class UniqueRelation;
 
 /**	Edit Component: This defines the modules on the EditCanvas.
 */
@@ -199,12 +207,12 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	Get/Set PU element
 		*/
-		ParticleUniverse::IElement* getPUElement(void) {return mPUElement;};
-		void setPUElement(ParticleUniverse::IElement* puElement){mPUElement = puElement;};
+		ParticleUniverse::IElement* getPUElement(void) {return mPUElement;}
+		void setPUElement(ParticleUniverse::IElement* puElement){mPUElement = puElement;}
 
 		/**	Returns the size at the moment the component was created
 		*/
-		wxSize getOriginalSize() {return mOriginalSize;};
+		wxSize getOriginalSize() {return mOriginalSize;}
 
 		/**
 			Get/Set root frame
@@ -244,7 +252,7 @@ class EditComponent : public wxMDIChildFrame
 		ParticleUniverseEditorFrame* mRootFrame;
 
 	private:
-		EditComponent(void){};
+		EditComponent(void) {}
 };
 
 #endif

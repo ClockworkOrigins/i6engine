@@ -23,12 +23,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_GIZMO_MANAGER_H__
 #define __PU_GIZMO_MANAGER_H__
 
+#include "ParticleUniverseGizmo.h"
+
 #include "wx/ogre/prerequisites.h"
-#include "OgreSingleton.h"
-#include "ParticleUniverseGizmoOrthoCamera.h"
-#include "ParticleUniverseGizmoMovement.h"
-#include "ParticleUniverseGizmoRotation.h"
-#include "ParticleUniverseGizmoScaling.h"
+
+#include "OGRE/OgreSingleton.h"
+
+class OrthoCameraGizmo;
 
 /** GizmoManager */
 class GizmoManager : public Ogre::Camera::Listener

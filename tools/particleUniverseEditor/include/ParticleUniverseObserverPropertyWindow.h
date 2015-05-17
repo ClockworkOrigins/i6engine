@@ -12,9 +12,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_OBSERVER_PROPERTY_WINDOW_H__
 #define __PUED_OBSERVER_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseObserver.h"
+
+#include "wx/ogre/prerequisites.h"
 
 // Property names
 static wxString PRNL_OBSERVER_TYPE = wxT("");
@@ -29,7 +29,7 @@ class ObserverPropertyWindow : public PropertyWindow
 	public:
 		ObserverPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
 		ObserverPropertyWindow(ObserverPropertyWindow* observerPropertyWindow);
-		~ObserverPropertyWindow(void){};
+		~ObserverPropertyWindow(void) {}
 
 		/**
 			Copy basic observer properties from a window to an observer

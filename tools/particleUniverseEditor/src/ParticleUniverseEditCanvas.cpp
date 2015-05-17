@@ -9,10 +9,13 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "wx/ogre/utils.h"
 #include "ParticleUniverseEditCanvas.h"
+
+#include "ParticleUniverseConnector.h"
+#include "ParticleUniverseEditComponent.h"
 #include "ParticleUniverseEditTab.h"
+
+#include "wx/ogre/utils.h"
 
 //-----------------------------------------------------------------------
 EditCanvas::EditCanvas(wxMDIParentFrame* parent) : 

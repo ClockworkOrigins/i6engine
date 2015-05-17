@@ -11,6 +11,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseAnimationWindow.h"
 
+#include "ParticleUniverseSystem.h"
+
 #include "ParticleUniverseEditor.h"
 #include "ParticleUniverseGizmoManager.h"
 

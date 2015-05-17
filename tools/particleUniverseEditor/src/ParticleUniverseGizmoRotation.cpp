@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseGizmoRotation.h"
+
 #include "ParticleUniverseGizmoManager.h"
 
 const Ogre::Real GizmoRotation::SCALE_NODE_ROTATION_OUTER = 28.0f;

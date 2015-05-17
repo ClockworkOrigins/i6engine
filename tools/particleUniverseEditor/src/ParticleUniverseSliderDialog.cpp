@@ -21,9 +21,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseSliderDialog.h"
-#include <wx/wx.h>
+
+#include "wx/ogre/utils.h"
+
+#include "OGRE/OgreStringConverter.h"
+
+#include "wx/wx.h"
+#include "wx/textctrl.h"
 
 //-----------------------------------------------------------------------
 SliderDialog::SliderDialog(wxWindow* parent, 

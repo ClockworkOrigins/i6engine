@@ -12,12 +12,15 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_PROPERTY_WINDOW_H__
 #define __PUED_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
-#include "wx/propgrid/propgrid.h"
-#include "wx/propgrid/propdev.h"
-#include "wx/hyperlink.h"
 #include "ParticleUniverseDynamicAttribute.h"
 #include "ParticleUniverseParticle.h"
+
+#include "wx/ogre/prerequisites.h"
+
+#include "wx/propgrid/propdev.h"
+#include "wx/propgrid/propgrid.h"
+
+#include "wx/hyperlink.h"
 
 // Dynamic Attributes
 static wxString DYN_FIXED = wxT("");
@@ -262,7 +265,7 @@ class EnumPropertyWithButton : public wxEnumPropertyClass
 			const wxString& label, 
 			const wxString& name,
 			const wxArrayString& choices);
-		virtual ~EnumPropertyWithButton(void){};
+		virtual ~EnumPropertyWithButton(void) {}
 
 		/**	
 		*/
@@ -277,7 +280,7 @@ class ParentPropertyWithButtonAndPositions : public wxParentPropertyClass
 		ParentPropertyWithButtonAndPositions(
 			const wxString& label, 
 			const wxString& name);
-		virtual ~ParentPropertyWithButtonAndPositions(void){};
+		virtual ~ParentPropertyWithButtonAndPositions(void) {}
 
 		/**	
 		*/
@@ -311,7 +314,7 @@ class ParentPropertyWithButtonAndFloats : public wxParentPropertyClass
 		ParentPropertyWithButtonAndFloats(
 			const wxString& label, 
 			const wxString& name);
-		virtual ~ParentPropertyWithButtonAndFloats(void){};
+		virtual ~ParentPropertyWithButtonAndFloats(void) {}
 
 		/**	
 		*/
@@ -344,7 +347,7 @@ class PropertyWindow : public wxPropertyGrid
 {
 	public:
 		PropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		~PropertyWindow(void){};
+		~PropertyWindow(void) {}
 
 		// public attributes
 		typedef std::map<wxString, ParticleUniverse::DynamicAttributeCurved::ControlPointList> ControlPointListMap;

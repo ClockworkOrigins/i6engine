@@ -21,8 +21,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseGizmoManager.h"
+
+#include "ParticleUniverseGizmoMovement.h"
+#include "ParticleUniverseGizmoOrthoCamera.h"
+#include "ParticleUniverseGizmoRotation.h"
+#include "ParticleUniverseGizmoScaling.h"
 
 const Ogre::uint32 GizmoManager::GIZMO_FLAG = 1<<1;
 const Ogre::uint32 GizmoManager::OBJECT_FLAG = 1<<2;

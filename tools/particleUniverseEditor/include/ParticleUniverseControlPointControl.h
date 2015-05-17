@@ -25,7 +25,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PUED_CONTROLPOINT_CONTROL_
 
 #include "ParticleUniverseContextMenu.h"
-#include "ParticleUniverseControlPoint.h"
+
+class ControlPoint;
 
 /**	Control that represents a controlpoint, needed in the ControlPointSlider
 */

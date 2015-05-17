@@ -12,9 +12,13 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_RENDERER_PROPERTY_WINDOW_H__
 #define __PUED_RENDERER_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseRenderer.h"
+
+#include "wx/ogre/prerequisites.h"
+
+namespace ParticleUniverse {
+	class ParticleRenderer;
+} /* namespace ParticleUniverse */
 
 // Property names
 static wxString PRNL_RENDERER_TYPE = wxT("");
@@ -38,7 +42,7 @@ class RendererPropertyWindow : public PropertyWindow
 	public:
 		RendererPropertyWindow(wxWindow* parent, EditComponent* owner);
 		RendererPropertyWindow(RendererPropertyWindow* rendererPropertyWindow);
-		~RendererPropertyWindow(void){};
+		~RendererPropertyWindow(void) {}
 
 		/**
 			Copy basic renderer properties from a window to a renderer

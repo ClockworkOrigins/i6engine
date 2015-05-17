@@ -12,9 +12,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_SYSTEM_PROPERTY_WINDOW_H__
 #define __PUED_SYSTEM_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseSystem.h"
+
+#include "wx/ogre/prerequisites.h"
 
 // Property names
 static wxString PRNL_SYSTEM_CATEGORY = wxT("");
@@ -34,13 +34,14 @@ static wxString PRNL_SYSTEM_SCALE = wxT("");
 static wxString PRNL_SYSTEM_TIGHT_BOUNDING_BOX = wxT("");
 
 class ParticleUniverseEditorFrame;
+
 /**	
 */
 class SystemPropertyWindow : public PropertyWindow
 {
 	public:
 		SystemPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		~SystemPropertyWindow(void){};
+		~SystemPropertyWindow(void) {}
 
 		/**
 			Copy basic system properties from a window to a system

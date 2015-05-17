@@ -24,14 +24,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_CONTROLPOINT_DIALOG_H__
 #define __PUED_CONTROLPOINT_DIALOG_H__
 
-#include "ParticleUniverseControlPointControl.h"
+#include "ParticleUniversePropertyWindow.h"
+
 #include "wx/ogre/prerequisites.h"
-#include <wx/dialog.h>
+
+#include "wx/dialog.h"
 #include "wx/radiobox.h"
 
 #define ID_HORIZONTAL_SLIDER 2010
 #define ID_VERTICAL_SLIDER 2011
 
+class ControlPoint;
+class ControlPointControl;
 class ControlPointDialog;
 
 // Sliders to set scale

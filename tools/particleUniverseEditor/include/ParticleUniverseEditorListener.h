@@ -24,13 +24,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_LISTENER_H__
 #define __PUED_LISTENER_H__
 
-#include "wx/ogre/prerequisites.h"
-#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseSystemListener.h"
+
+#include "wx/ogre/prerequisites.h"
 
 /**	
 */
 class ParticleUniverseEditorFrame;
+
 class SystemListener : public ParticleUniverse::ParticleSystemListener
 {
 	public:
@@ -47,7 +48,7 @@ class SystemListener : public ParticleUniverse::ParticleSystemListener
 		ParticleUniverseEditorFrame* mFrame;
 
 	private:
-		SystemListener(void){};
+		SystemListener(void) {}
 };
 
 /**	
@@ -57,7 +58,7 @@ class LogListener : public Ogre::LogListener
 	public:
 		// Constructor / Destructor
 		LogListener(ParticleUniverseEditorFrame* frame);
-		~LogListener(void){};
+		~LogListener(void) {}
 
 		/* 
 		*/
@@ -77,7 +78,7 @@ class LogListener : public Ogre::LogListener
 		ParticleUniverseEditorFrame* mFrame;
 
 	private:
-		LogListener(void){};
+		LogListener(void) {}
 };
 
 #endif

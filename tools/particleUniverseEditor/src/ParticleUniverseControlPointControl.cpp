@@ -9,9 +9,13 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseControlPointControl.h"
-#include <wx/colordlg.h>
+
+#include "ParticleUniverseControlPoint.h"
+
+#include "wx/ogre/utils.h"
+
+#include "wx/colordlg.h"
 
 //-----------------------------------------------------------------------
 ControlPointControl::ControlPointControl(std::vector<ControlPoint*>& v,

@@ -21,9 +21,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "ParticleUniverseEditor.h"
 #include "ParticleUniverseSystemTreeControl.h"
+
+#include "ParticleUniverseEditor.h"
 
 #include "wx/imaglist.h"
 

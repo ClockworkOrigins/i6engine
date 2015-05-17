@@ -25,8 +25,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PUED_EDIT_CANVAS_H__
 
 #include "wx/ogre/prerequisites.h"
-#include "ParticleUniverseConnector.h"
-#include "ParticleUniverseEditComponent.h"
+
+class DrawConnector;
+class EditComponent;
 
 /**	Draw surface: The background canvas on which the EditComponents are placed. The EditCanvas is used to draw the lines.
 */
@@ -43,7 +44,7 @@ class EditCanvas : public wxMDIChildFrame
 
 		// Constructor / Destructor
 		EditCanvas(wxMDIParentFrame* parent);
-		~EditCanvas(void){};
+		~EditCanvas(void) {}
 
 		/**	Handlers
 		*/
@@ -116,7 +117,7 @@ class EditCanvas : public wxMDIChildFrame
 		std::vector<EditComponent*> mSelectedComponents;
 
 	private:
-		EditCanvas(void){};
+		EditCanvas(void) {}
 };
 
 #endif

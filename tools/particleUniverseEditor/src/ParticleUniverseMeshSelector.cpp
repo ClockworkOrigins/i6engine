@@ -21,9 +21,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseMeshSelector.h"
-#include "wx/ogre/utils.h"
+
+#include "OGRE/OgreResourceManager.h"
+#include "OGRE/OgreStringVector.h"
 
 //-----------------------------------------------------------------------
 MeshProperty::MeshProperty(

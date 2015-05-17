@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseGizmo.h"
+
 #include "ParticleUniverseGizmoManager.h"
 
 const Ogre::Real Gizmo::SCALE_NODE_ZOOM_FACTOR = 0.000333f;

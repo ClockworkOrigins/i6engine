@@ -43,7 +43,6 @@ set(particleUniverseEditorSrc
 	${srcdir}/ParticleUniverseEditComponent.cpp
 	${srcdir}/ParticleUniverseEditor.cpp
 	${srcdir}/ParticleUniverseEditorListener.cpp
-	${srcdir}/ParticleUniverseEditorPCH.cpp
 	${srcdir}/ParticleUniverseEditTab.cpp
 	${srcdir}/ParticleUniverseEditToolbar.cpp
 	${srcdir}/ParticleUniverseEmitterPropertyWindow.cpp

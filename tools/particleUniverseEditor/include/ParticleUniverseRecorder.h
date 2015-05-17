@@ -12,10 +12,15 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PU_RECORDER_H__
 #define __PU_RECORDER_H__
 
-#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTypes.h"
 
+#include "OGRE/OgreColourValue.h"
 #include "OGRE/OgreFrameListener.h"
 #include "OGRE/OgreImage.h"
+
+namespace ParticleUniverse {
+	class ParticleSystem;
+}
 
 /** Extension of the Image class.
 */

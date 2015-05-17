@@ -15,6 +15,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "wx/ogre/prerequisites.h"
 
 class ParticleUniverseEditorFrame;
+
 class TextControl : public wxTextCtrl
 {
 	public:
@@ -25,7 +26,7 @@ class TextControl : public wxTextCtrl
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
 			   const wxString& name = wxTextCtrlNameStr);
-		virtual ~TextControl(){};
+		virtual ~TextControl() {}
 		
 		/**
 			Detect that the script has been changed

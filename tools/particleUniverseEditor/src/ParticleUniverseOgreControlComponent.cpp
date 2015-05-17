@@ -21,11 +21,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "ParticleUniverseEditComponent.h"
 #include "ParticleUniverseOgreControlComponent.h"
+
+#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseSystemManager.h"
-#include "ParticleUniverseEditor.h"
 
 /**
 	This component is associated with the EditComponent for a particle system. Each change in the Edit-tab reflects

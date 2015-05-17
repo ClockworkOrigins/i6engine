@@ -12,9 +12,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_TECHNIQUE_PROPERTY_WINDOW_H__
 #define __PUED_TECHNIQUE_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseTechnique.h"
+
+#include "wx/ogre/prerequisites.h"
 
 // Property names
 static wxString PRNL_TECHNIQUE_ENABLED = wxT("");
@@ -42,7 +42,7 @@ class TechniquePropertyWindow : public PropertyWindow
 {
 	public:
 		TechniquePropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		~TechniquePropertyWindow(void){};
+		~TechniquePropertyWindow(void) {}
 
 		/**
 			Copy technique properties from a particle technique to a window

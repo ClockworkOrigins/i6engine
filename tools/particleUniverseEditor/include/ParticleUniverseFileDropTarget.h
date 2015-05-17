@@ -25,16 +25,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PUED_FILE_DROP_TARGET_H__
 
 #include "wx/ogre/prerequisites.h"
-#include <wx/dnd.h>
+
+#include "wx/dnd.h"
 
 /**	Class to handle drag and drop of files
 */
 class ParticleUniverseEditorFrame;
+
 class FileDropTarget : public wxFileDropTarget
 {
 	public:
 		FileDropTarget(ParticleUniverseEditorFrame* parent);
-		virtual ~FileDropTarget(void){};
+		virtual ~FileDropTarget(void) {}
 
 		// Overridden from wxFileDropTarget
 		virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);

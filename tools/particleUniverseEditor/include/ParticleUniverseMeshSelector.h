@@ -12,7 +12,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_MESH_SELECTOR_H__
 #define __PUED_MESH_SELECTOR_H__
 
-#include "ParticleUniversePropertyWindow.h"
+#include "wx/ogre/utils.h"
+
+#include "wx/propgrid/propdev.h"
 
 /**	Selection dialog for meshes
 */
@@ -27,8 +29,8 @@ class MeshSelector : public wxSingleChoiceDialog
 			const wxString* choices, 
 			long style = wxCHOICEDLG_STYLE, 
 			const wxPoint& pos = wxDefaultPosition) : 
-		wxSingleChoiceDialog(parent, message, caption, n, choices, 0, style, pos){};
-		~MeshSelector(void){};
+		wxSingleChoiceDialog(parent, message, caption, n, choices, 0, style, pos) {}
+		~MeshSelector(void) {}
 };
 
 /**	Class that creates a button property. After clicking a mesh can be selected
@@ -39,7 +41,7 @@ class MeshProperty : public wxStringPropertyClass
 		MeshProperty(
 			const wxString& label, 
 			const wxString& name);
-		virtual ~MeshProperty(void){};
+		virtual ~MeshProperty(void) {}
 
 		/**	Open the dialog after a property window event
 		*/
@@ -58,8 +60,8 @@ class MeshProperty : public wxStringPropertyClass
 class MeshDialog
 {
 	public:
-		MeshDialog(void){};
-		virtual ~MeshDialog(void){};
+		MeshDialog(void) {}
+		virtual ~MeshDialog(void) {}
 
 		/**	Open the dialog
 		*/

@@ -21,9 +21,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseMaterialListBox.h"
+
 #include "ParticleUniverseMaterialTab.h"
+
+#include "wx/ogre/utils.h"
 
 //-----------------------------------------------------------------------
 MaterialListBox::MaterialListBox(MaterialTab* materialTab,

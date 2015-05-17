@@ -9,17 +9,20 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "ParticleUniverseEditor.h"
-#include "wx/ogre/utils.h"
 #include "ParticleUniverseEditComponent.h"
+
+#include "ParticleUniverseConnector.h"
+#include "ParticleUniverseEditCanvas.h"
+#include "ParticleUniverseEditor.h"
 #include "ParticleUniverseEditTab.h"
+#include "ParticleUniverseAffectorPropertyWindow.h"
+#include "ParticleUniverseEmitterPropertyWindow.h"
+#include "ParticleUniverseObserverPropertyWindow.h"
+#include "ParticleUniverseRendererPropertyWindow.h"
 #include "ParticleUniverseSystemPropertyWindow.h"
 #include "ParticleUniverseTechniquePropertyWindow.h"
-#include "ParticleUniverseRendererPropertyWindow.h"
-#include "ParticleUniverseEmitterPropertyWindow.h"
-#include "ParticleUniverseAffectorPropertyWindow.h"
-#include "ParticleUniverseObserverPropertyWindow.h"
+
+#include "wx/ogre/utils.h"
 
 //-----------------------------------------------------------------------
 EditComponent::EditComponent(

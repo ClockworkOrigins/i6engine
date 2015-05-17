@@ -13,7 +13,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #define __PUED_MATERIAL_TAB_H__
 
 #include "wx/ogre/prerequisites.h"
-#include "ParticleUniverseMaterialListBox.h"
+
 #include "wx/notebook.h"
 
 static wxString SBT_ADD = wxT("");
@@ -29,6 +29,8 @@ static wxString SBT_DEST_COLOUR_SOURCE_COLOUR = wxT("");
 static wxString TAM_WRAP = wxT("");
 static wxString TAM_MIRROR = wxT("");
 static wxString TAM_CLAMP = wxT("");
+
+class MaterialListBox;
 
 /**	Material Tab: Class that defines the actual material tab.
 */

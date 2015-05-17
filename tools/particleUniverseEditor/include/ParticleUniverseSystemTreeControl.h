@@ -12,9 +12,11 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #ifndef __PUED_TREE_CTRL_H__
 #define __PUED_TREE_CTRL_H__
 
-#include "wx/ogre/prerequisites.h"
-#include <wx/treectrl.h>
 #include "ParticleUniverseContextMenu.h"
+
+#include "wx/ogre/prerequisites.h"
+
+#include "wx/treectrl.h"
 
 class ParticleUniverseEditorFrame;
 
@@ -31,7 +33,7 @@ class SystemTreeControl : public wxTreeCtrl, ContextMenuCallbackObject
 			wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize);
-		~SystemTreeControl(void){};
+		~SystemTreeControl(void) {}
 
 		/**	Handle mouse event
 		*/

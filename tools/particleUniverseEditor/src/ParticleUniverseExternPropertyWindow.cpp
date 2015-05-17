@@ -21,11 +21,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
-#include "ParticleUniverseEditor.h"
 #include "ParticleUniverseExternPropertyWindow.h"
-#include "ParticleUniverseEditComponent.h"
+
 #include "ParticleUniverseSystemManager.h"
+
+#include "ParticleUniverseEditor.h"
+#include "ParticleUniverseEditComponent.h"
+
 #include "wx/ogre/utils.h"
 
 //-----------------------------------------------------------------------

@@ -14,10 +14,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/prerequisites.h"
 
-
 /**	This is an extension of the wxComboBox class
 */
 class ConfigDialog;
+
 class MediaTypeComboBox : public wxComboBox
 {
 	public:
@@ -27,7 +27,7 @@ class MediaTypeComboBox : public wxComboBox
 			wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize);
-		~MediaTypeComboBox(void){};
+		~MediaTypeComboBox(void) {}
 
 		/**	Handle event
 		*/

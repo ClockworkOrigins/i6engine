@@ -24,9 +24,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_EVENT_HANDLER_PROPERTY_WINDOW_H__
 #define __PUED_EVENT_HANDLER_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseEventHandler.h"
+
+#include "wx/ogre/prerequisites.h"
+
+namespace ParticleUniverse {
+	class ParticleEventHandler;
+}
 
 // Property names
 static wxString PRNL_HANDLER_TYPE = wxT("");
@@ -38,7 +42,7 @@ class EventHandlerPropertyWindow : public PropertyWindow
 	public:
 		EventHandlerPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
 		EventHandlerPropertyWindow(EventHandlerPropertyWindow* eventHandlerPropertyWindow);
-		~EventHandlerPropertyWindow(void){};
+		~EventHandlerPropertyWindow(void) {}
 
 		/**
 			Copy basic eventHandler properties from a window to an eventHandler

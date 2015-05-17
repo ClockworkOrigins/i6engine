@@ -24,8 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_GIZMO_MOVEMENT_H__
 #define __PUED_GIZMO_MOVEMENT_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniverseGizmo.h"
+
+#include "wx/ogre/prerequisites.h"
 
 class GizmoMovement : public Gizmo
 {

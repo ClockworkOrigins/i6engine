@@ -21,11 +21,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseRecorder.h"
+
+#include "ParticleUniverseSystem.h"
+
+#include "OgreHardwarePixelBuffer.h"
 #include "OgreMaterialManager.h"
 #include "OgreRoot.h"
-#include "OgreHardwarePixelBuffer.h"
 
 //-----------------------------------------------------------------------
 void ImageX::filterAlphaFromLuminance(void)

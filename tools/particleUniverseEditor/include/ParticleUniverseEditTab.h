@@ -24,13 +24,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_EDIT_TAB_H__
 #define __PUED_EDIT_TAB_H__
 
-#include "wx/ogre/prerequisites.h"
-#include "wx/notebook.h"
-#include "ParticleUniverseEditToolbar.h"
-#include "ParticleUniverseEditCanvas.h"
-#include "ParticleUniverseEditComponent.h"
 #include "ParticleUniverseOgreControlComponent.h"
 #include "ParticleUniverseSystemPropertyWindow.h"
+
+#include "wx/ogre/prerequisites.h"
+
+#include "wx/notebook.h"
 
 // Enums: Component + Relation Descriptions
 static ComponentType CT_SYSTEM = wxT("");
@@ -69,7 +68,14 @@ static wxString CRD_PLACES = wxT("");
 static wxString CRD_PLACED_BY = wxT("");
 static wxString CRD_UNKNOWN = wxT("");
 
+namespace ParticleUniverse {
+	class ParticleEventHandler;
+	class ParticleRenderer;
+} /* namespace ParticleUniverse */
+
+class EditCanvas;
 class EditTools;
+class UIEditToolbar;
 
 /**	Client Window
 */
@@ -78,12 +84,12 @@ class ClientWindow : public wxMDIClientWindow
 	public:
 		// Constructor / Destructor
 		ClientWindow(wxMDIParentFrame* parent);
-		~ClientWindow(void){};
+		~ClientWindow(void) {}
 
 	protected:
 
 	private:
-		ClientWindow(void){};
+		ClientWindow(void) {}
 };
 
 
@@ -436,7 +442,7 @@ class EditTab : public wxMDIParentFrame
 		bool _processPlaceRemoved(EditComponent* node1, EditComponent* node2);
 
 	private:
-		EditTab(void){};
+		EditTab(void) {}
 };
 
 /**	Edit Tools: The toolbar on the edit window.
@@ -446,7 +452,7 @@ class EditTools : public wxDialog
 	public:
 		// Constructor / Destructor
 		EditTools(EditTab* parent);
-		~EditTools(void){};
+		~EditTools(void) {}
 
 		/**	Event Handlers
 		*/
@@ -483,7 +489,7 @@ class EditTools : public wxDialog
 		void resetIcons(void);
 
 	private:
-		EditTools(void){};
+		EditTools(void) {}
 		virtual bool Destroy();
 };
 

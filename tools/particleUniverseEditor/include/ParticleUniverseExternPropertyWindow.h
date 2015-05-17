@@ -24,9 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_EXTERN_PROPERTY_WINDOW_H__
 #define __PUED_EXTERN_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniversePropertyWindow.h"
-#include "ParticleUniverseExtern.h"
+
+#include "wx/ogre/prerequisites.h"
 
 // Property names
 static wxString PRNL_EXTERN_TYPE = wxT("");
@@ -39,7 +39,7 @@ class ExternPropertyWindow : public PropertyWindow
 	public:
 		ExternPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
 		ExternPropertyWindow(ExternPropertyWindow* externPropertyWindow);
-		~ExternPropertyWindow(void){};
+		~ExternPropertyWindow(void) {}
 
 		/**
 			Copy basic extern properties from a window to an extern
