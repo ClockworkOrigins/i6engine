@@ -24,7 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_CAMERA_DEPENDENCY_H__
 #define __PU_CAMERA_DEPENDENCY_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseIDependency.h"
 
 namespace ParticleUniverse
@@ -56,13 +55,13 @@ namespace ParticleUniverse
 
 			/** Todo
 	        */
-			Real getThreshold(void) const {return mThreshold;};
-			void setThreshold(const Real threshold) {mThreshold = threshold;};
+			Real getThreshold(void) const {return mThreshold;}
+			void setThreshold(const Real threshold) {mThreshold = threshold;}
 
 			/** Todo
 	        */
-			bool isIncrease(void) const {return mIncrease;};
-			void setIncrease(bool increase) {mIncrease = increase;};
+			bool isIncrease(void) const {return mIncrease;}
+			void setIncrease(bool increase) {mIncrease = increase;}
 
 			/** Copy attributes to another camera dependency.
 	        */

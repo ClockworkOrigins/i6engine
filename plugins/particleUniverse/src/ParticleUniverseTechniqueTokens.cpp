@@ -28,7 +28,19 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 
 #include "ParticleUniverseTechniqueTokens.h"
+
+#include "ParticleUniverseAffector.h"
+#include "ParticleUniverseAffectorFactory.h"
+#include "ParticleUniverseBehaviour.h"
+#include "ParticleUniverseBehaviourFactory.h"
 #include "ParticleUniverseCameraDependency.h"
+#include "ParticleUniverseEmitterFactory.h"
+#include "ParticleUniverseExtern.h"
+#include "ParticleUniverseExternFactory.h"
+#include "ParticleUniverseObserver.h"
+#include "ParticleUniverseObserverFactory.h"
+#include "ParticleUniverseRenderer.h"
+#include "ParticleUniverseRendererFactory.h"
 
 namespace ParticleUniverse
 {

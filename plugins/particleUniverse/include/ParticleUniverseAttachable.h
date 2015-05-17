@@ -24,10 +24,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ATTACHABLE_H__
 #define __PU_ATTACHABLE_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseExtern.h"
+#include "ParticleUniverseAxisAlignedBox.h"
 #include "ParticleUniverseCamera.h"
-#include "OgreMovableObject.h"
+#include "ParticleUniverseExtern.h"
+
+#include "OGRE/OgreMovableObject.h"
 
 namespace ParticleUniverse
 {
@@ -49,7 +50,7 @@ namespace ParticleUniverse
 			static String PU_ATTACHABLE;
 
 			Attachable(void);
-	        virtual ~Attachable(void){};
+	        virtual ~Attachable(void) {}
 
 			/** Get the Distance Threshold
 			*/
@@ -99,7 +100,7 @@ namespace ParticleUniverse
 			/** @see MovableObject
 		    */
 			virtual void visitRenderables(Ogre::Renderable::Visitor* visitor,
-				bool debugRenderables = false) {/* No implementation */};
+				bool debugRenderables = false) {/* No implementation */}
 
 			/** Copy attributes to another Extern object.
 	        */

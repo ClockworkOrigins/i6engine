@@ -21,20 +21,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleUniverseAttachableTokens.h"
+
+#include "ParticleUniverseAttachable.h"
+#include "ParticleUniverseScriptSerializer.h"
 
 namespace ParticleUniverse
 {
 	void AttachableWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
 	{
 		// Cast the element to a AlignAffector
-		const Attachable* attachable = static_cast<const Attachable*>(element);
+		const Attachable * attachable = static_cast<const Attachable*>(element);
 
 		if (!almostEquals(attachable->getDistanceThreshold(), std::numeric_limits<float>::max())) serializer->writeLine(
 			token[TOKEN_DISTANCE_THRESHOLD], StringConverter::toString(attachable->getDistanceThreshold()), 12);

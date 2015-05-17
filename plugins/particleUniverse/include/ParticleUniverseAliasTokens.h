@@ -24,7 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_ALIAS_TOKENS_H__
 #define __PU_PARTICLE_ALIAS_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseScriptDeserializer.h"
 
 namespace ParticleUniverse
@@ -35,7 +34,7 @@ namespace ParticleUniverse
 	{
 		public:
 			AliasTranslator(void);
-			virtual ~AliasTranslator(void){};
+			virtual ~AliasTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 

@@ -28,6 +28,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseParticle.h"
 #include "ParticleUniverseMath.h"
 
+#include "OGRE/OgreColourValue.h"
+
 namespace ParticleUniverse
 {
 	/** A VisualParticle is the most obvious implementation of a particle. It represents that particles that can be
@@ -37,7 +39,7 @@ namespace ParticleUniverse
 	{
 		public:
 			VisualParticle(void);
-			virtual ~VisualParticle(void) {};
+			virtual ~VisualParticle(void) {}
 
 			/** Current and original colour */
 			ColourValue colour;

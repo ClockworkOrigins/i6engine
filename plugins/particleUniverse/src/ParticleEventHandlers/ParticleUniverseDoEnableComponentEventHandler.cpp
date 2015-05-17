@@ -29,6 +29,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleEventHandlers/ParticleUniverseDoEnableComponentEventHandler.h"
 
+#include "ParticleUniverseAffector.h"
+#include "ParticleUniverseObserver.h"
+
 namespace ParticleUniverse
 {
 	//-----------------------------------------------------------------------

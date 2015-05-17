@@ -24,12 +24,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_EVENT_HANDLER_TOKENS_H__
 #define __PU_PARTICLE_EVENT_HANDLER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseEventHandler.h"
 #include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
+
+	class ParticleEventHandler;
+
 	/** The ParticleEventHandlerTranslator parses 'ParticleEventHandler' tokens
 	*/
 	class _ParticleUniverseExport ParticleEventHandlerTranslator : public ScriptTranslator
@@ -39,7 +41,7 @@ namespace ParticleUniverse
 
 		public:
 			ParticleEventHandlerTranslator(void);
-			virtual ~ParticleEventHandlerTranslator(void){};
+			virtual ~ParticleEventHandlerTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -52,8 +54,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			ParticleEventHandlerWriter(void) {};
-			virtual ~ParticleEventHandlerWriter(void) {};
+			ParticleEventHandlerWriter(void) {}
+			virtual ~ParticleEventHandlerWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

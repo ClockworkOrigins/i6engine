@@ -24,10 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_AFFECTOR_H__
 #define __PU_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseParticle.h"
 #include "ParticleUniverseIAlias.h"
 #include "ParticleUniverseIElement.h"
+#include "ParticleUniverseParticle.h"
 
 namespace ParticleUniverse
 {
@@ -57,26 +56,26 @@ namespace ParticleUniverse
 			static const AffectSpecialisation DEFAULT_SPECIALISATION;
 
 			ParticleAffector(void);
-			virtual ~ParticleAffector(void) {};
+			virtual ~ParticleAffector(void) {}
 
 			/** Todo
 	        */
-			const AffectSpecialisation& getAffectSpecialisation(void) const {return mAffectSpecialisation;};
-			void setAffectSpecialisation(const AffectSpecialisation& affectSpecialisation) {mAffectSpecialisation = affectSpecialisation;};
+			const AffectSpecialisation& getAffectSpecialisation(void) const {return mAffectSpecialisation;}
+			void setAffectSpecialisation(const AffectSpecialisation& affectSpecialisation) {mAffectSpecialisation = affectSpecialisation;}
 
 			/** Todo
 	        */
-			const String& getAffectorType(void) const {return mAffectorType;};
-			void setAffectorType(const String& affectorType) {mAffectorType = affectorType;};
+			const String& getAffectorType(void) const {return mAffectorType;}
+			void setAffectorType(const String& affectorType) {mAffectorType = affectorType;}
 
 			/** Todo
 	        */
-			const String& getName(void) const {return mName;};
-			void setName(const String& name) {mName = name;};
+			const String& getName(void) const {return mName;}
+			void setName(const String& name) {mName = name;}
 
 			/** Todo
 	        */
-			ParticleTechnique* getParentTechnique(void) const {return mParentTechnique;};
+			ParticleTechnique* getParentTechnique(void) const {return mParentTechnique;}
 			void setParentTechnique(ParticleTechnique* parentTechnique);
 
 			/** Perform initialisation actions.
@@ -85,11 +84,11 @@ namespace ParticleUniverse
 				ParticleTechnique. A subclass could implement this function to perform initialisation 
 				actions.
 	        */
-			virtual void _prepare(ParticleTechnique* particleTechnique){/* Do nothing */};
+			virtual void _prepare(ParticleTechnique* particleTechnique){/* Do nothing */}
 
 			/** Reverse the actions from the _prepare.
 	        */
-			virtual void _unprepare(ParticleTechnique* particleTechnique){/* Do nothing */};
+			virtual void _unprepare(ParticleTechnique* particleTechnique){/* Do nothing */}
 
 			/** Perform activities when a ParticleAffector is started.
 			*/
@@ -97,15 +96,15 @@ namespace ParticleUniverse
 
 			/** Perform activities when a ParticleAffector is stopped.
 			*/
-			virtual void _notifyStop (void){/* Do nothing */};
+			virtual void _notifyStop (void){/* Do nothing */}
 
 			/** Perform activities when a ParticleAffector is paused.
 			*/
-			virtual void _notifyPause (void){/* Do nothing */};
+			virtual void _notifyPause (void){/* Do nothing */}
 
 			/** Perform activities when a ParticleAffector is resumed.
 			*/
-			virtual void _notifyResume (void){/* Do nothing */};
+			virtual void _notifyResume (void){/* Do nothing */}
 
 			/** Notify that the Affector is rescaled.
 	        */
@@ -117,7 +116,7 @@ namespace ParticleUniverse
 				the preProcess is typically used to perform calculations where the result must be used in 
 				processing each individual particle.
 	        */
-			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed){/* Do nothing */};
+			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed){/* Do nothing */}
 
 			/** Perform precalculations if the first Particle in the update-loop is processed.
 			*/
@@ -162,7 +161,7 @@ namespace ParticleUniverse
 			@remarks
 				This function is called after the ParticleTechnique update-loop where all particles are traversed.
 	        */
-			virtual void _postProcessParticles(ParticleTechnique* technique, Real timeElapsed){/* Do nothing */};
+			virtual void _postProcessParticles(ParticleTechnique* technique, Real timeElapsed){/* Do nothing */}
 
 			/** Affect a particle.
 			@param

@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PU_ANY_H__
-#define __PU_ANY_H__
+#ifndef __PU_SCRIPTTRANSLATOR_H__
+#define __PU_SCRIPTTRANSLATOR_H__
 
 #include "OgreScriptTranslator.h"
 

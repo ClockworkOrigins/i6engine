@@ -17,11 +17,14 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __PU_PARTICLE_AFFECTOR_TOKENS_H__
 #define __PU_PARTICLE_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseAffector.h"
+#include "ParticleUniverseScriptCompiler.h"
+#include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+//#include "ParticleUniverseAffector.h"
+
+namespace ParticleUniverse {
+
 	/** The AffectorTranslator parses 'affector' tokens
 	*/
 	class _ParticleUniverseExport AffectorTranslator : public ScriptTranslator
@@ -31,7 +34,7 @@ namespace ParticleUniverse
 
 		public:
 			AffectorTranslator(void);
-			virtual ~AffectorTranslator(void){};
+			virtual ~AffectorTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -54,8 +57,8 @@ namespace ParticleUniverse
 			static const String KEYWORD_SPEC_TTL_INCREASE;
 			static const String KEYWORD_SPEC_TTL_DECREASE;
 
-			ParticleAffectorWriter(void) {};
-			virtual ~ParticleAffectorWriter(void) {};
+			ParticleAffectorWriter(void) {}
+			virtual ~ParticleAffectorWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

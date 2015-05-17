@@ -24,26 +24,24 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_TECHNIQUE_H__
 #define __PU_TECHNIQUE_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseRenderer.h"
-#include "ParticleUniverseParticle.h"
-#include "ParticleUniverseEmitter.h"
-#include "ParticleUniverseAffector.h"
-#include "ParticleUniverseObserver.h"
-#include "ParticleUniverseEventHandler.h"
-#include "ParticleUniverseBehaviour.h"
-#include "ParticleUniverseIAlias.h"
-#include "ParticleUniverseParticlePool.h"
-#include "ParticleUniverseIElement.h"
-#include "ParticleUniverseHook.h"
-#include "ParticleUniverseSpatialHashTable.h"
-#include "ParticleUniverseCameraDependency.h"
-#include "ParticleUniverseCameraDependencyFactory.h"
-#include "ParticleUniverseTechniqueListener.h"
 #include "ParticleUniverseAxisAlignedBox.h"
+#include "ParticleUniverseCamera.h"
+#include "ParticleUniverseCameraDependencyFactory.h"
+#include "ParticleUniverseCommon.h"
+#include "ParticleUniverseParticle.h"
+#include "ParticleUniverseParticlePool.h"
+#include "ParticleUniverseRadixSort.h"
+#include "ParticleUniverseSpatialHashTable.h"
+#include "ParticleUniverseTypes.h"
 
 namespace ParticleUniverse
 {
+
+	class CameraDependency;
+	class ParticleRenderer;
+	struct ParticleUniverseEvent;
+	class TechniqueListener;
+
 	static const Vector3 HALFSCALE(0.5f, 0.5f, 0.5f);
 
 	/** In analogy of Ogre's material system, the ParticleTechnique is introduced. It forms an extra layer 
@@ -97,13 +95,13 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			inline ParticleSystem* getParentSystem(void) const {return mParentSystem;};
-			void setParentSystem(ParticleSystem* parentSystem) {mParentSystem = parentSystem;};
+			inline ParticleSystem* getParentSystem(void) const {return mParentSystem;}
+			void setParentSystem(ParticleSystem* parentSystem) {mParentSystem = parentSystem;}
 
 			/** 
 	        */
-			inline const String& getName(void) const {return mName;};
-			void setName(const String& name) {mName = name;};
+			inline const String& getName(void) const {return mName;}
+			void setName(const String& name) {mName = name;}
 
 			/** 
 	        */
@@ -155,8 +153,8 @@ namespace ParticleUniverse
 
 			/** Get/Set the squared distance between camera and ParticleTechnique.
 	        */
-			inline Real getCameraSquareDistance(void) const {return mCameraSquareDistance;};
-			void setCameraSquareDistance(Real cameraSquareDistance){mCameraSquareDistance = cameraSquareDistance;};
+			inline Real getCameraSquareDistance(void) const {return mCameraSquareDistance;}
+			void setCameraSquareDistance(Real cameraSquareDistance){mCameraSquareDistance = cameraSquareDistance;}
 
 			/** Function to suppress notification of an emission change.
 			@see
@@ -589,11 +587,11 @@ namespace ParticleUniverse
 				The Lod index determines at which distance this ParticleTechnique is active. This has only effect
 				if the Lod distances of the ParticleSystem to which this ParticleTechnique belongs have been defined.
 			*/
-			inline unsigned short getLodIndex(void) const {return mLodIndex;};
+			inline unsigned short getLodIndex(void) const {return mLodIndex;}
 
 			/** Set the Lod index.
 			*/
-			void setLodIndex(unsigned short lodIndex) {mLodIndex = lodIndex;};
+			void setLodIndex(unsigned short lodIndex) {mLodIndex = lodIndex;}
 
 			/** Determine which techniques, affectors, emitters will be emitted.
 			@remarks

@@ -24,12 +24,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_BEHAVIOUR_TOKENS_H__
 #define __PU_PARTICLE_BEHAVIOUR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseBehaviour.h"
 #include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
+
+	class ParticleBehaviour;
+
 	/** The BehaviourTranslator parses 'behaviour' tokens
 	*/
 	class _ParticleUniverseExport BehaviourTranslator : public ScriptTranslator
@@ -39,7 +41,7 @@ namespace ParticleUniverse
 
 		public:
 			BehaviourTranslator(void);
-			virtual ~BehaviourTranslator(void){};
+			virtual ~BehaviourTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -52,8 +54,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			ParticleBehaviourWriter(void) {};
-			virtual ~ParticleBehaviourWriter(void) {};
+			ParticleBehaviourWriter(void) {}
+			virtual ~ParticleBehaviourWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

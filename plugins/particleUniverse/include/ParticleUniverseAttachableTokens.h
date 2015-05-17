@@ -24,9 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ATTACHABLE_TOKENS_H__
 #define __PU_ATTACHABLE_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseAttachable.h"
-#include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
@@ -36,8 +34,8 @@ namespace ParticleUniverse
 	{
 		public:
 			
-			AttachableWriter(void) {};
-			virtual ~AttachableWriter(void) {};
+			AttachableWriter(void) {}
+			virtual ~AttachableWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

@@ -28,6 +28,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseIAlias.h"
 #include "ParticleUniverseIElement.h"
 
+#include "OGRE/OgreVector3.h"
+
 namespace ParticleUniverse
 {
 	/** A ParticleEventHandlers is used to perform a task in case a certain event happens.

@@ -25,7 +25,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_ATLAS_IMAGE_H__
 
 #include "ParticleUniversePrerequisites.h"
-#include "OgreImage.h"
+
+#include "OGRE/OgreImage.h"
 
 namespace ParticleUniverse
 {

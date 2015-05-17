@@ -24,12 +24,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_OBSERVER_TOKENS_H__
 #define __PU_OBSERVER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseObserver.h"
 #include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
+
+	class ParticleObserver;
+
 	/** The ObserverTranslator parses 'Observer' tokens
 	*/
 	class _ParticleUniverseExport ObserverTranslator : public ScriptTranslator
@@ -39,7 +41,7 @@ namespace ParticleUniverse
 
 		public:
 			ObserverTranslator(void);
-			virtual ~ObserverTranslator(void){};
+			virtual ~ObserverTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -52,8 +54,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			ParticleObserverWriter(void) {};
-			virtual ~ParticleObserverWriter(void) {};
+			ParticleObserverWriter(void) {}
+			virtual ~ParticleObserverWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

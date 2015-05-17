@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_FORCE_FIELD_AFFECTOR_H__
 #define __PU_FORCE_FIELD_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
+#include "ParticleUniverseAffector.h"
 #include "ParticleUniverseForceField.h"
 
 namespace ParticleUniverse

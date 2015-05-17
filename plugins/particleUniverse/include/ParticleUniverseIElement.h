@@ -38,8 +38,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport IElement
 	{
 		public:
-			IElement(void) {};
-			virtual ~IElement(void) {};
+			IElement(void) {}
+			virtual ~IElement(void) {}
 	};
 
 }

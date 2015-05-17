@@ -24,12 +24,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_EXTERN_TOKENS_H__
 #define __PU_PARTICLE_EXTERN_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseExtern.h"
 #include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
+
+	class Extern;
+
 	/** The ExternTranslator parses 'Extern' tokens
 	*/
 	class _ParticleUniverseExport ExternTranslator : public ScriptTranslator
@@ -39,7 +41,7 @@ namespace ParticleUniverse
 
 		public:
 			ExternTranslator(void);
-			virtual ~ExternTranslator(void){};
+			virtual ~ExternTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -52,8 +54,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			ExternWriter(void) {};
-			virtual ~ExternWriter(void) {};
+			ExternWriter(void) {}
+			virtual ~ExternWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

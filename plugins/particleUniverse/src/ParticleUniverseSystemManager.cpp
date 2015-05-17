@@ -21,25 +21,36 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
+#include "ParticleUniverseSystemManager.h"
 
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
+#include "ParticleUniverseAffectorFactory.h"
+#include "ParticleUniverseAttachable.h"
+#include "ParticleUniverseBehaviourFactory.h"
+#include "ParticleUniverseEmitterFactory.h"
+#include "ParticleUniverseEventHandlerFactory.h"
+#include "ParticleUniverseExternFactory.h"
+#include "ParticleUniverseObserver.h"
+#include "ParticleUniverseObserverFactory.h"
+#include "ParticleUniverseRenderer.h"
+#include "ParticleUniverseRendererFactory.h"
 #include "ParticleUniverseScriptCompiler.h"
-#include "OgreRoot.h"
-#include "OgreHighLevelGpuProgramManager.h"
-#include "OgreHighLevelGpuProgram.h"
-#include "OgreMaterialManager.h"
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreSceneNode.h"
-#include "OgreRenderTexture.h"
-#include "OgreViewport.h"
-#include "OgreTextureManager.h"
-#include "OgreTechnique.h"
+#include "ParticleUniverseScriptSerializer.h"
+#include "ParticleRenderers/ParticleUniverseBoxSet.h"
+#include "ParticleRenderers/ParticleUniverseSphereSet.h"
 
-template<> ParticleUniverse::ParticleSystemManager* Ogre::Singleton<ParticleUniverse::ParticleSystemManager>::msSingleton = 0;
+#include "OGRE/OgreHardwarePixelBuffer.h"
+#include "OGRE/OgreHighLevelGpuProgram.h"
+#include "OGRE/OgreHighLevelGpuProgramManager.h"
+#include "OGRE/OgreMaterialManager.h"
+#include "OGRE/OgreRenderTexture.h"
+#include "OGRE/OgreRoot.h"
+#include "OGRE/OgreSceneNode.h"
+#include "OGRE/OgreTechnique.h"
+#include "OGRE/OgreTextureManager.h"
+#include "OGRE/OgreViewport.h"
+
+template<> ParticleUniverse::ParticleSystemManager * Ogre::Singleton<ParticleUniverse::ParticleSystemManager>::msSingleton = nullptr;
+
 namespace ParticleUniverse
 {
 	ParticleSystemManager::ParticleSystemManager (void) :

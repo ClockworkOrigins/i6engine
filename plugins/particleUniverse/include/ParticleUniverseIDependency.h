@@ -24,7 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_I_DEPENDENCY_H__
 #define __PU_I_DEPENDENCY_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseIElement.h"
 
 namespace ParticleUniverse
@@ -38,8 +37,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport IDependency : public IElement
 	{
 		public:
-			IDependency(void) : IElement() {};
-			virtual ~IDependency(void){};
+			IDependency(void) : IElement() {}
+			virtual ~IDependency(void) {}
 	};
 
 }

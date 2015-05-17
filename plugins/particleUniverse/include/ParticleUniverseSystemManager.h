@@ -24,40 +24,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_SYSTEM_MANAGER_H__
 #define __PU_PARTICLE_SYSTEM_MANAGER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseScriptDeserializer.h"
-#include "ParticleUniverseScriptSerializer.h"
-#include "ParticleUniverseRendererFactory.h"
-#include "ParticleRenderers/ParticleUniverseBoxSet.h"
-#include "ParticleRenderers/ParticleUniverseBox.h"
-#include "ParticleRenderers/ParticleUniverseSphereSet.h"
-#include "ParticleRenderers/ParticleUniverseSphere.h"
-#include "ParticleUniverseEmitterFactory.h"
-#include "ParticleUniverseAffectorFactory.h"
-#include "ParticleUniverseObserverFactory.h"
-#include "ParticleUniverseEventHandlerFactory.h"
-#include "ParticleUniverseExternFactory.h"
-#include "ParticleUniverseBehaviourFactory.h"
-#include "ParticleUniverseIAlias.h"
-#include "ParticleUniverseCameraDependency.h"
-#include "ParticleUniverseSystemTokens.h"
-#include "ParticleUniverseTechniqueTokens.h"
-#include "ParticleUniverseRendererTokens.h"
-#include "ParticleUniverseEmitterTokens.h"
-#include "ParticleUniverseAffectorTokens.h"
-#include "ParticleUniverseObserverTokens.h"
-#include "ParticleUniverseDynamicAttributeTokens.h"
-#include "ParticleUniverseSystemManagerTokens.h"
-#include "ParticleUniverseCameraDependencyTokens.h"
 #include "ParticleUniverseAttachableTokens.h"
-#include "OgreRenderTargetListener.h"
+#include "ParticleUniverseCamera.h"
+#include "ParticleUniverseCameraDependencyTokens.h"
 #include "ParticleUniverseSingleton.h"
+#include "ParticleUniverseSystemManagerTokens.h"
 
-#include <OgreRenderQueue.h>
+#include "OGRE/OgreRenderQueue.h"
+#include "OGRE/OgreRenderTargetListener.h"
 
 namespace ParticleUniverse
 {
+	class Attachable;
+	class BoxSet;
+	class BoxSetFactory;
+	class ExternFactory;
+	class ParticleAffectorFactory;
+	class ParticleBehaviourFactory;
+	class ParticleEmitterFactory;
+	class ParticleEventHandlerFactory;
+	class ParticleObserverFactory;
+	class ParticleRenderer;
+	class ParticleRendererFactory;
 	class ParticleSystemFactory;
+	class SphereSet;
+	class SphereSetFactory;
 
 	/** RenderTargetListener to be used for depth map */
 	class _ParticleUniverseExport DepthMapTargetListener : public Ogre::RenderTargetListener, public Ogre::RenderQueue::RenderableListener
@@ -67,8 +58,8 @@ namespace ParticleUniverse
 				RenderTargetListener(),
 				mSceneManager(0),
 				mCamera(0),
-				mDepthMap(0){};
-			~DepthMapTargetListener(void){};
+				mDepthMap(0) {}
+			~DepthMapTargetListener(void) {}
 
 			virtual void preViewportUpdate(const Ogre::RenderTargetViewportEvent& evt);
 			virtual void postViewportUpdate(const Ogre::RenderTargetViewportEvent& evt);
@@ -126,7 +117,7 @@ namespace ParticleUniverse
 			CameraDependencyWriter mCameraDependencyWriter;
 
 			// Emitter Factories
-			typedef map<String, ParticleEmitterFactory*> EmitterFactoryMap;
+			typedef map<String, ParticleEmitterFactory *> EmitterFactoryMap;
 			EmitterFactoryMap mEmitterFactories;
 
 			// Affector Factories
@@ -607,7 +598,7 @@ namespace ParticleUniverse
 			/** @see
 				ScriptWriter::write
 			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element){};
+			virtual void write(ParticleScriptSerializer* serializer, const IElement* element){}
 
 			/** Returns Camera Dependency.
 			@remarks
@@ -686,8 +677,8 @@ namespace ParticleUniverse
 			Ogre::MovableObject* createInstanceImpl(const String& name, const Ogre::NameValuePairList* params);
 		
 		public:
-			ParticleSystemFactory(void) {};
-			~ParticleSystemFactory(void) {};
+			ParticleSystemFactory(void) {}
+			~ParticleSystemFactory(void) {}
 		
 			static String PU_FACTORY_TYPE_NAME;
 

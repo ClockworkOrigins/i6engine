@@ -24,9 +24,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DYNAMIC_ATTRIBUTE_H__
 #define __PU_DYNAMIC_ATTRIBUTE_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseIElement.h"
 #include "ParticleUniverseCommon.h"
+#include "ParticleUniverseIElement.h"
 #include "ParticleUniverseSimpleSpline.h"
 
 namespace ParticleUniverse

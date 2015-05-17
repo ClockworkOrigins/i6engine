@@ -24,9 +24,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_CAMERA_DEPENDENCY_TOKENS_H__
 #define __PU_CAMERA_DEPENDENCY_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseCameraDependency.h"
 #include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
@@ -36,7 +35,7 @@ namespace ParticleUniverse
 	{
 		public:
 			CameraDependencyTranslator(void);
-			virtual ~CameraDependencyTranslator(void){};
+			virtual ~CameraDependencyTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -49,8 +48,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			CameraDependencyWriter(void) {};
-			virtual ~CameraDependencyWriter(void) {};
+			CameraDependencyWriter(void) {}
+			virtual ~CameraDependencyWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

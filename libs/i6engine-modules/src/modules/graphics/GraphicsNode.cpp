@@ -28,6 +28,9 @@
 #include "i6engine/modules/graphics/GraphicsManager.h"
 #include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+
 #include "OGRE/OgreBillboard.h"
 #include "OGRE/OgreBillboardSet.h"
 #include "OGRE/OgreCamera.h"
@@ -38,8 +41,6 @@
 #include "OGRE/OgreRoot.h"
 #include "OGRE/OgreSceneManager.h"
 #include "OGRE/OgreSubEntity.h"
-
-#include "ParticleUniverseSystemManager.h"
 
 namespace i6engine {
 namespace modules {

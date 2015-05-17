@@ -24,19 +24,21 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_RENDERER_TOKENS_H__
 #define __PU_RENDERER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseRenderer.h"
 #include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
+
+	class ParticleRenderer;
+
 	/** The RendererSetTranslator parses 'Renderer Set' tokens
 	*/
 	class _ParticleUniverseExport RendererSetTranslator : public ScriptTranslator
 	{
 		public:
-			RendererSetTranslator(void){};
-			virtual ~RendererSetTranslator(void){};
+			RendererSetTranslator(void) {}
+			virtual ~RendererSetTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -51,7 +53,7 @@ namespace ParticleUniverse
 
 		public:
 			RendererTranslator(void);
-			virtual ~RendererTranslator(void){};
+			virtual ~RendererTranslator(void) {}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -65,8 +67,8 @@ namespace ParticleUniverse
 
 		public:
 
-			ParticleRendererWriter(void) {};
-			virtual ~ParticleRendererWriter(void) {};
+			ParticleRendererWriter(void) {}
+			virtual ~ParticleRendererWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

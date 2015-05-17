@@ -24,9 +24,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_SCRIPT_DESERIALIZER_H__
 #define __PU_PARTICLE_SCRIPT_DESERIALIZER_H__
 
-#include "ParticleUniverseDynamicAttribute.h"
-#include "OgreScriptTranslator.h"
 #include "ParticleUniverseScriptCompiler.h"
+#include "ParticleUniverseDynamicAttribute.h"
+
+#include "OGRE/OgreScriptTranslator.h"
 
 // If the Ogre renderer is replaced by another renderer, the ScriptTranslator class must be re-implemented
 
@@ -1202,14 +1203,14 @@ namespace ParticleUniverse
 			};
 
 			ScriptTranslator(void);
-			virtual ~ScriptTranslator(void){};
+			virtual ~ScriptTranslator(void) {}
 
 			/** @See ScriptTranslator
 			*/
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node)
 			{
 				// No own implementation
-			};
+			}
 
 			/** Only parses a certain child property
 			*/
@@ -1217,7 +1218,7 @@ namespace ParticleUniverse
 			{
 				// No own implementation
 				return false;
-			};
+			}
 
 			/** Only parses a certain child objec
 			*/
@@ -1225,7 +1226,7 @@ namespace ParticleUniverse
 			{
 				// No own implementation
 				return false;
-			};
+			}
 
 			/** Parse Vector2
 			*/

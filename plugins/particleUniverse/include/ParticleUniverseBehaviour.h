@@ -24,9 +24,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BEHAVIOUR_H__
 #define __PU_BEHAVIOUR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseIAlias.h"
 #include "ParticleUniverseIElement.h"
+
+#include "OGRE/OgreVector3.h"
 
 namespace ParticleUniverse
 {
@@ -63,22 +64,22 @@ namespace ParticleUniverse
 				_mBehaviourScale(Vector3::UNIT_SCALE)
 			{
 				mAliasType = AT_BEHAVIOUR;
-			};
-			virtual ~ParticleBehaviour(void) {};
+			}
+			virtual ~ParticleBehaviour(void) {}
 
 			/** Todo
 	        */
-			const String& getBehaviourType(void) const {return mBehaviourType;};
-			void setBehaviourType(const String& behaviourType) {mBehaviourType = behaviourType;};
+			const String& getBehaviourType(void) const { return mBehaviourType; }
+			void setBehaviourType(const String& behaviourType) { mBehaviourType = behaviourType; }
 
 			/** Todo
 	        */
-			ParticleTechnique* getParentTechnique(void) const {return mParentTechnique;};
-			void setParentTechnique(ParticleTechnique* parentTechnique){mParentTechnique = parentTechnique;};
+			ParticleTechnique* getParentTechnique(void) const { return mParentTechnique; }
+			void setParentTechnique(ParticleTechnique* parentTechnique) { mParentTechnique = parentTechnique; }
 
 			/** Notify that the Behaviour is rescaled.
 	        */
-			virtual void _notifyRescaled(const Vector3& scale){_mBehaviourScale = scale;};
+			virtual void _notifyRescaled(const Vector3& scale) { _mBehaviourScale = scale; }
 
 			/** Perform initialisation actions.
 			@remarks
@@ -86,16 +87,16 @@ namespace ParticleUniverse
 				ParticleTechnique. A subclass could implement this function to perform initialisation 
 				actions.
 	        */
-			virtual void _prepare(ParticleTechnique* technique){/* No implementation */};
+			virtual void _prepare(ParticleTechnique* technique) {/* No implementation */}
 
 			/** Reverse the actions from the _prepare.
 	        */
-			virtual void _unprepare(ParticleTechnique* particleTechnique){/* No implementation */};
+			virtual void _unprepare(ParticleTechnique* particleTechnique) {/* No implementation */}
 
 			/** Perform initialising activities as soon as the particle with which the ParticleBehaviour is
 				associated, is emitted.
 	        */
-			virtual void _initParticleForEmission(Particle* particle){/* No implementation */};
+			virtual void _initParticleForEmission(Particle* particle) {/* No implementation */}
 
 			/** Process a particle.
 	        */
@@ -103,14 +104,14 @@ namespace ParticleUniverse
 
 			/** Perform some action if a particle expires.
 	        */
-			virtual void _initParticleForExpiration(ParticleTechnique* technique, Particle* particle, Real timeElapsed){/* No implementation */};
+			virtual void _initParticleForExpiration(ParticleTechnique* technique, Particle* particle, Real timeElapsed) {/* No implementation */}
 
 			/** Copy attributes to another ParticleBehaviour.
 	        */
 			virtual void copyAttributesTo (ParticleBehaviour* behaviour)
 			{
 				copyParentAttributesTo(behaviour);
-			};
+			}
 
 			/** Copy parent attributes to another behaviour.
 	        */
@@ -118,7 +119,7 @@ namespace ParticleUniverse
 			{
 				behaviour->mParentTechnique = mParentTechnique;
 				behaviour->_mBehaviourScale = _mBehaviourScale;
-			};
+			}
 	};
 
 }

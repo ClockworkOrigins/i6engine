@@ -26,6 +26,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseRenderer.h"
+#include "ParticleUniverseTechniqueListener.h"
 #include "OgreRibbonTrail.h"
 #include "OgreSceneNode.h"
 
