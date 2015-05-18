@@ -24,9 +24,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SYSTEM_TOKENS_H__
 #define __PU_SYSTEM_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseScriptWriter.h"
 #include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 #include "ParticleUniverseTechniqueTokens.h"
 
 namespace ParticleUniverse
@@ -39,7 +38,7 @@ namespace ParticleUniverse
 			ParticleSystem* mSystem;
 		public:
 			SystemTranslator(void);
-			virtual ~SystemTranslator(void){};
+			virtual ~SystemTranslator(void){}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -52,8 +51,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			ParticleSystemWriter(void) {};
-			virtual ~ParticleSystemWriter(void) {};
+			ParticleSystemWriter(void) {}
+			virtual ~ParticleSystemWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

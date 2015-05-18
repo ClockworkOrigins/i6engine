@@ -24,16 +24,21 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SYSTEM_H__
 #define __PU_SYSTEM_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseParticle.h"
-#include "ParticleUniverseTechnique.h"
-#include "ParticleUniverseIElement.h"
-#include "ParticleUniverseSystemListener.h"
-#include "OgreMovableObject.h"
+#include "ParticleUniverseAxisAlignedBox.h"
+#include "ParticleUniverseCamera.h"
+#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseController.h"
+#include "ParticleUniverseIElement.h"
+#include "ParticleUniverseParticle.h"
+
+#include "OGRE/OgreMovableObject.h"
 
 namespace ParticleUniverse
 {
+
+	struct ParticleUniverseEvent;
+	class ParticleSystemListener;
+
 	/** A ParticleSystem is the most top level of a particle structure, that consists of Particles, ParticleEmitters, 
 		ParticleAffectors, ParticleObservers, etc. 
 	@remarks
@@ -104,15 +109,15 @@ namespace ParticleUniverse
 
 			/** Is smooth Lod set?.
 	        */
-			inline bool isSmoothLod (void) const {return mSmoothLod;};
+			inline bool isSmoothLod (void) const {return mSmoothLod;}
 
 			/** Set smooth Lod.
 	        */
-			void setSmoothLod (bool smoothLod) {mSmoothLod = smoothLod;};
+			void setSmoothLod (bool smoothLod) {mSmoothLod = smoothLod;}
 
 			/** Returns the time since the ParticleSystem was started.
 	        */
-			inline Real getTimeElapsedSinceStart(void) const {return mTimeElapsedSinceStart;};
+			inline Real getTimeElapsedSinceStart(void) const {return mTimeElapsedSinceStart;}
 
 			/** Assignment operator.
 			*/
@@ -120,11 +125,11 @@ namespace ParticleUniverse
 		
 			/** Get the name of the resource group that is assigned to this ParticleSystem.
 			*/
-			const String& getResourceGroupName(void) const {return mResourceGroupName;};
+			const String& getResourceGroupName(void) const {return mResourceGroupName;}
 
 			/** Set the name of the resource group for this ParticleSystem.
 			*/
-			void setResourceGroupName(const String& resourceGroupName){mResourceGroupName = resourceGroupName;};
+			void setResourceGroupName(const String& resourceGroupName){mResourceGroupName = resourceGroupName;}
 
 			/** Create a ParticleTechnique and add it to this ParticleSystem.
 	        */
@@ -296,7 +301,7 @@ namespace ParticleUniverse
 
 			/** Returns the state of the particle system.
 			*/
-			ParticleSystemState getState (void) const {return mState;};
+			ParticleSystemState getState (void) const {return mState;}
 
 			/** 
 			*/
@@ -339,7 +344,7 @@ namespace ParticleUniverse
 
 			/** Determines whether the parent is a TagPoint or a SceneNode.
 			*/
-			inline bool isParentIsTagPoint(void) {return mParentIsTagPoint;};
+			inline bool isParentIsTagPoint(void) {return mParentIsTagPoint;}
 
 			/** Returns the distances at which level-of-detail (LOD) levels come into effect.
 			*/
@@ -486,7 +491,7 @@ namespace ParticleUniverse
 			/** @see MovableObject
 		    */
 			virtual void visitRenderables (Ogre::Renderable::Visitor* visitor,
-				bool debugRenderables = false) {/* No implementation */};
+				bool debugRenderables = false) {/* No implementation */}
 
 			/** Returns the time of a pause (if set)
 			*/
@@ -536,8 +541,8 @@ namespace ParticleUniverse
 
 			/** Get/set a category. See 'mCategory' for a description of its use.
 			*/
-			const String& getCategory(void) const {return mCategory;};
-			void setCategory(const String& category){mCategory = category;};
+			const String& getCategory(void) const {return mCategory;}
+			void setCategory(const String& category){mCategory = category;}
 
 		protected:
 			/** Gets the LOD index to use at the given distance.

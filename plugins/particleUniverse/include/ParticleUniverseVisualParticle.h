@@ -24,7 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_VISUAL_PARTICLE_H__
 #define __PU_VISUAL_PARTICLE_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseParticle.h"
 #include "ParticleUniverseMath.h"
 

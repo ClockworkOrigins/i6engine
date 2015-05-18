@@ -23,15 +23,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseSystem.h"
 
-#include "ParticleUniverseController.h"
 #include "ParticleUniverseControllerManager.h"
 #include "ParticleUniverseEmitter.h"
+#include "ParticleUniverseSystemListener.h"
 #include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 #include "OGRE/OgreMesh.h"
 #include "OGRE/OgreRoot.h"
 #include "OGRE/OgreSceneManager.h"
-#include "OGRE/OgreSceneNode.h"
 #include "OGRE/OgreSceneNode.h"
 
 namespace ParticleUniverse

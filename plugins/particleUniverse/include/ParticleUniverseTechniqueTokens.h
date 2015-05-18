@@ -24,9 +24,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_TECHNIQUE_TOKENS_H__
 #define __PU_TECHNIQUE_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseScriptWriter.h"
 #include "ParticleUniverseScriptDeserializer.h"
+#include "ParticleUniverseScriptWriter.h"
 
 namespace ParticleUniverse
 {
@@ -38,7 +37,7 @@ namespace ParticleUniverse
 			ParticleTechnique* mTechnique;
 		public:
 			TechniqueTranslator(void);
-			virtual ~TechniqueTranslator(void){};
+			virtual ~TechniqueTranslator(void){}
 			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
 	};
 	//-------------------------------------------------------------------------
@@ -51,8 +50,8 @@ namespace ParticleUniverse
 	{
 		public:
 
-			ParticleTechniqueWriter(void) {};
-			virtual ~ParticleTechniqueWriter(void) {};
+			ParticleTechniqueWriter(void) {}
+			virtual ~ParticleTechniqueWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

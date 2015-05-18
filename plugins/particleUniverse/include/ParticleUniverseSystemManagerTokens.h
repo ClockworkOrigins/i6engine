@@ -24,18 +24,16 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SYSTEM_MANAGER_TOKENS_H__
 #define __PU_SYSTEM_MANAGER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseScriptDeserializer.h"
-#include "ParticleUniverseSystemTokens.h"
-#include "ParticleUniverseAliasTokens.h"
-#include "ParticleUniverseTechniqueTokens.h"
-#include "ParticleUniverseRendererTokens.h"
-#include "ParticleUniverseEmitterTokens.h"
 #include "ParticleUniverseAffectorTokens.h"
+#include "ParticleUniverseAliasTokens.h"
 #include "ParticleUniverseBehaviourTokens.h"
-#include "ParticleUniverseObserverTokens.h"
+#include "ParticleUniverseEmitterTokens.h"
 #include "ParticleUniverseEventHandlerTokens.h"
 #include "ParticleUniverseExternTokens.h"
+#include "ParticleUniverseObserverTokens.h"
+#include "ParticleUniverseRendererTokens.h"
+#include "ParticleUniverseSystemTokens.h"
+#include "ParticleUniverseTechniqueTokens.h"
 
 namespace ParticleUniverse
 {
@@ -78,8 +76,8 @@ namespace ParticleUniverse
 
 		public:
 
-			ParticleSystemManagerWriter(void) {};
-			virtual ~ParticleSystemManagerWriter(void) {};
+			ParticleSystemManagerWriter(void) {}
+			virtual ~ParticleSystemManagerWriter(void) {}
 
 			/** @see
 				ScriptWriter::write

@@ -26,6 +26,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseAffector.h"
 #include "ParticleUniverseEmitter.h"
 #include "ParticleUniverseObserver.h"
+#include "ParticleUniverseTechnique.h"
 
 namespace ParticleUniverse
 {

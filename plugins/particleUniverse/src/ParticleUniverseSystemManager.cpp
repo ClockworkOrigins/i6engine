@@ -36,6 +36,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptCompiler.h"
 #include "ParticleUniverseScriptSerializer.h"
 #include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
 
 #include "ParticleRenderers/ParticleUniverseBoxSet.h"
 #include "ParticleRenderers/ParticleUniverseSphereSet.h"

@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__
 
 #include "ParticleUniversePrerequisites.h"
+#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseEventHandler.h"
 #include "ParticleUniverseSystem.h"
 
@@ -48,31 +49,31 @@ namespace ParticleUniverse
 
 		public:
 			DoEnableComponentEventHandler(void);
-	        virtual ~DoEnableComponentEventHandler(void) {};
+	        virtual ~DoEnableComponentEventHandler(void) {}
 
 			/** Get the name of the component that must be enabled or disabled.
 	        */
-			const String& getComponentName(void) const {return mComponentName;};
+			const String& getComponentName(void) const {return mComponentName;}
 
 			/** Set the name of the component that must be enabled or disables.
 	        */
-			void setComponentName(const String& componentName){mComponentName = componentName;};
+			void setComponentName(const String& componentName){mComponentName = componentName;}
 
 			/** Get the value that identifies whether the component must be enabled or disabled.
 	        */
-			bool isComponentEnabled(void) const {return mComponentEnabled;};
+			bool isComponentEnabled(void) const {return mComponentEnabled;}
 
 			/** Set the value that identifies whether the component must be enabled or disabled.
 	        */
-			void setComponentEnabled(bool enabled){mComponentEnabled = enabled;};
+			void setComponentEnabled(bool enabled){mComponentEnabled = enabled;}
 
 			/** Get the value that identifies whether the component must be enabled or disabled.
 	        */
-			ComponentType getComponentType(void) const {return mComponentType;};
+			ComponentType getComponentType(void) const {return mComponentType;}
 
 			/** Set the value that identifies whether the component must be enabled or disabled.
 	        */
-			void setComponentType(ComponentType componentType){mComponentType = componentType;};
+			void setComponentType(ComponentType componentType){mComponentType = componentType;}
 
 			/** If the _handle() function of this class is invoked (by an Observer), it searches the 
 				ParticleEmitter, ParticleAffector or ParticleTechnique defined by the its name. 
