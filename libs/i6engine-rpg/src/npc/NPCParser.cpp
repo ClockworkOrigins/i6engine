@@ -54,7 +54,6 @@ namespace npc {
 					iter++;
 				}
 			} catch (boost::filesystem::filesystem_error & e) {
-				std::cout << e.what() << std::endl;
 				ISIXE_THROW_FAILURE("NPCParser", e.what());
 			}
 		}

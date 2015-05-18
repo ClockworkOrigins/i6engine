@@ -42,6 +42,7 @@
 #include "i6engine/rpg/components/UsableItemComponent.h"
 #include "i6engine/rpg/components/WeightInventoryComponent.h"
 
+#include "i6engine/rpg/dialog/DialogManager.h"
 #include "i6engine/rpg/npc/NPCParser.h"
 
 #include "boost/bind.hpp"
@@ -61,6 +62,13 @@ namespace sample {
 			ISIXE_THROW_FAILURE("RPGApplication", "'npcDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
 		i6engine::rpg::npc::NPCParser::GetSingletonPtr()->loadNPCs(NPCDirectory);
+
+		// Load Dialogs after NPCs because they require them
+		std::string DialogDirectory;
+		if (_iniParser.getValue("SCRIPT", "dialogDirectory", DialogDirectory) != clockUtils::ClockError::SUCCESS) {
+			ISIXE_THROW_FAILURE("RPGApplication", "'dialogDirectory' in section 'SCRIPT' in RPG.ini not found!");
+		}
+		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->loadDialogs(DialogDirectory);
 	}
 
 	void RPGApplication::AfterInitialize() {

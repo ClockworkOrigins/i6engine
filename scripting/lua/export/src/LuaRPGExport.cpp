@@ -23,6 +23,8 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
+#include "i6engine/rpg/dialog/Dialog.h"
+
 #include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/NPCManager.h"
 
@@ -62,6 +64,9 @@ scope registerRPG() {
 	return
 		def("insertNPCAtWaypoint", &i6engine::lua::rpg::insertNPCAtWaypoint),
 		def("insertPlayerAtWaypoint", &i6engine::lua::rpg::insertPlayerAtWaypoint),
+
+		class_<i6engine::rpg::dialog::Dialog>("Dialog")
+			.def(constructor<const std::string &, const std::string &>()),
 
 		class_<i6engine::rpg::npc::NPC>("NPC")
 			.def(constructor<const i6engine::api::objects::GOTemplate &, bool>())

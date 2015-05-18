@@ -46,6 +46,10 @@ set(i6rpgSrc
 	${srcdir}/components/UsableItemComponent.cpp
 	${srcdir}/components/WeightInventoryComponent.cpp
 	
+	${srcdir}/dialog/Dialog.cpp
+	${srcdir}/dialog/DialogManager.cpp
+	${srcdir}/dialog/DialogParser.cpp
+	
 	${srcdir}/gui/SubtitleWidget.cpp
 	
 	${srcdir}/npc/NPC.cpp
@@ -54,6 +58,7 @@ set(i6rpgSrc
 )
 
 SOURCE_GROUP(rpg\\components src/components/*)
+SOURCE_GROUP(rpg\\dialog src/dialog/*)
 SOURCE_GROUP(rpg\\gui src/gui/*)
 SOURCE_GROUP(rpg\\npc src/npc/*)
 

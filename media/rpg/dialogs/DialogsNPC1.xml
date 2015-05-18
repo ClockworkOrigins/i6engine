@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<Dialog identifier="Dialog_NPC1_Hi">
+	<Participants>NPC01;Player01</Participants>
+	<Nr>0</Nr>
+	<Info>Dialog_NPC1_Hi_Info</Info>
+	<Important>True</Important>
+</Dialog>
+<Dialog identifier="Dialog_NPC1_Exit">
+	<Participants>NPC01;Player01</Participants>
+	<Nr>999</Nr>
+	<Info>Dialog_NPC1_Exit_Info</Info>
+	<Description>DIALOG_EXIT</Description>
+	<Permanent>True</Permanent>
+</Dialog>
