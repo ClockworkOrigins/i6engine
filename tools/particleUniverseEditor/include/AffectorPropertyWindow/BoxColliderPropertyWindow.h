@@ -24,9 +24,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_BOX_COLLIDER_PROPERTY_WINDOW_H__
 #define __PUED_BOX_COLLIDER_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniverseAffectorPropertyWindow.h"
-#include "ParticleAffectors/ParticleUniverseBoxCollider.h"
+
+#include "wx/ogre/prerequisites.h"
+
+namespace ParticleUniverse {
+	class BoxCollider;
+} /* namespace ParticleUniverse */
 
 // Property names
 static wxString PRNL_BOX_COLLIDER_WIDTH = wxT("");;
@@ -57,7 +61,7 @@ class BoxColliderPropertyWindow : public AffectorPropertyWindow
 		/**
 			Destructor
 		*/
-		~BoxColliderPropertyWindow(void){};
+		~BoxColliderPropertyWindow(void) {}
 
 		/**
 			See AffectorPropertyWindow

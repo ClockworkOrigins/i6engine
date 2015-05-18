@@ -1,4 +1,9 @@
-﻿v 0.8.5
+﻿v 0.8.6
+
+Fixes:
+	- fixed error in template of callFunction in LuaScriptingManager with return value
+
+v 0.8.5
 
 Enhancements:
 	- reduced code redundancy in sample by moving same code in extra SampleCommon lib

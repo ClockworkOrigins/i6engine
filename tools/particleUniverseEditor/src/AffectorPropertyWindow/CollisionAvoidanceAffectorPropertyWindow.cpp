@@ -9,10 +9,12 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "AffectorPropertyWindow/CollisionAvoidanceAffectorPropertyWindow.h"
-#include "ParticleUniverseSystemManager.h"
+
 #include "ParticleUniverseEditComponent.h"
+
+#include "ParticleAffectors/ParticleUniverseCollisionAvoidanceAffector.h"
+
 #include "wx/propgrid/advprops.h"
 
 //-----------------------------------------------------------------------

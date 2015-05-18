@@ -24,9 +24,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_ALIGN_AFFECTOR_PROPERTY_WINDOW_H__
 #define __PUED_ALIGN_AFFECTOR_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniverseAffectorPropertyWindow.h"
-#include "ParticleAffectors/ParticleUniverseAlignAffector.h"
+
+#include "wx/ogre/prerequisites.h"
+
+namespace ParticleUniverse {
+	class AlignAffector;
+} /* namespace ParticleUniverse */
 
 // Property names
 static wxString PRNL_AFFECTOR_ALIGN_RESIZE = wxT("");
@@ -54,7 +58,7 @@ class AlignAffectorPropertyWindow : public AffectorPropertyWindow
 		/**
 			Destructor
 		*/
-		~AlignAffectorPropertyWindow(void){};
+		~AlignAffectorPropertyWindow(void) {}
 
 		/**
 			See AffectorPropertyWindow

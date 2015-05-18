@@ -9,10 +9,11 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "AffectorPropertyWindow/AlignAffectorPropertyWindow.h"
-#include "ParticleUniverseSystemManager.h"
+
 #include "ParticleUniverseEditComponent.h"
+
+#include "ParticleAffectors/ParticleUniverseAlignAffector.h"
 
 //-----------------------------------------------------------------------
 AlignAffectorPropertyWindow::AlignAffectorPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name) :

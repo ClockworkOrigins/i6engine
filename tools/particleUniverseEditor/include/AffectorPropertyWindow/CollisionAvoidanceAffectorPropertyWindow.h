@@ -24,9 +24,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_COLLISION_AVOIDANCE_AFFECTOR_PROPERTY_WINDOW_H__
 #define __PUED_COLLISION_AVOIDANCE_AFFECTOR_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniverseAffectorPropertyWindow.h"
-#include "ParticleAffectors/ParticleUniverseCollisionAvoidanceAffector.h"
+
+#include "wx/ogre/prerequisites.h"
+
+namespace ParticleUniverse {
+	class CollisionAvoidanceAffector;
+} /* namespace ParticleUniverse */
 
 // Property names
 static wxString PRNL_COLLISON_AVOIDANCE_RADIUS = wxT("");
