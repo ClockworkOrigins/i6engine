@@ -26,7 +26,7 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	class Dialog;
+	struct Dialog;
 
 	class ISIXE_RPG_API DialogManager : public utils::Singleton<DialogManager> {
 		friend class utils::Singleton<DialogManager>;
@@ -38,6 +38,7 @@ namespace dialog {
 
 	private:
 		DialogParser _parser;
+		std::map<std::string, std::vector<Dialog *>> _npcDialogs;
 
 		DialogManager();
 	};

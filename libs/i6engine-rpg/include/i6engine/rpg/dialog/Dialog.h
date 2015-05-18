@@ -27,44 +27,18 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	class ISIXE_RPG_API Dialog {
-	public:
-		Dialog(const std::string & identifier, const std::string & participants);
+	struct ISIXE_RPG_API Dialog {
+		Dialog(const std::string & i, const std::string & p);
 		~Dialog();
 
-		void setNr(uint32_t nr) {
-			_nr = nr;
-		}
-
-		void setPermanent(bool p) {
-			_permanent = p;
-		}
-
-		void setImportant(bool i) {
-			_important = i;
-		}
-
-		void setDescription(const std::string & description) {
-			_description = description;
-		}
-
-		void setConditionScript(const std::string & conditionScript) {
-			_conditionScript = conditionScript;
-		}
-
-		void setInfoScript(const std::string & infoScript) {
-			_infoScript = infoScript;
-		}
-
-	private:
-		std::string _identifier;
-		uint32_t _nr;
-		std::vector<std::string> _participants;
-		bool _permanent;
-		bool _important;
-		std::string _description;
-		std::string _conditionScript;
-		std::string _infoScript;
+		std::string identifier;
+		uint32_t nr;
+		std::vector<std::string> participants;
+		bool permanent;
+		bool important;
+		std::string description;
+		std::string conditionScript;
+		std::string infoScript;
 	};
 
 } /* namespace dialog */

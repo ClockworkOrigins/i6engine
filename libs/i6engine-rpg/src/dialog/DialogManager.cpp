@@ -16,11 +16,13 @@
 
 #include "i6engine/rpg/dialog/DialogManager.h"
 
+#include "i6engine/rpg/dialog/Dialog.h"
+
 namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	DialogManager::DialogManager() : _parser() {
+	DialogManager::DialogManager() : _parser(), _npcDialogs() {
 	}
 
 	DialogManager::~DialogManager() {
@@ -28,6 +30,18 @@ namespace dialog {
 
 	void DialogManager::loadDialogs(const std::string & directory) {
 		_parser.loadDialogs(directory);
+
+		for (auto & p : _parser._dialogs) {
+			for (std::string & s : p.second->participants) {
+				_npcDialogs[s].push_back(p.second);
+			}
+		}
+
+		for (auto it = _npcDialogs.begin(); it != _npcDialogs.end(); it++) {
+			std::sort(it->second.begin(), it->second.end(), [](Dialog * a, Dialog * b) {
+				return a->nr < b->nr;
+			});
+		}
 	}
 
 } /* namespace dialog */

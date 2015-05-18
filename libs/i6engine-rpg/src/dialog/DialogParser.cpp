@@ -91,26 +91,26 @@ namespace dialog {
 			std::string info = dialog->FirstChildElement("Info")->GetText();
 
 			Dialog * d = new Dialog(identifier, participants);
-			d->setInfoScript(info);
+			d->infoScript = info;
 
 			if (dialog->FirstChildElement("Nr") != nullptr) {
-				d->setNr(std::stoul(dialog->FirstChildElement("Nr")->GetText()));
+				d->nr = std::stoul(dialog->FirstChildElement("Nr")->GetText());
 			}
 			if (dialog->FirstChildElement("Permanent") != nullptr) {
 				std::string perm = dialog->FirstChildElement("Permanent")->GetText();
 				std::transform(perm.begin(), perm.end(), perm.begin(), std::tolower);
-				d->setPermanent((perm == "true" || perm == "1") ? true : false);
+				d->permanent  = (perm == "true" || perm == "1") ? true : false;
 			}
 			if (dialog->FirstChildElement("Important") != nullptr) {
 				std::string perm = dialog->FirstChildElement("Important")->GetText();
 				std::transform(perm.begin(), perm.end(), perm.begin(), std::tolower);
-				d->setImportant((perm == "true" || perm == "1") ? true : false);
+				d->important = (perm == "true" || perm == "1") ? true : false;
 			}
 			if (dialog->FirstChildElement("Description") != nullptr) {
-				d->setDescription(dialog->FirstChildElement("Description")->GetText());
+				d->description = dialog->FirstChildElement("Description")->GetText();
 			}
 			if (dialog->FirstChildElement("Condition") != nullptr) {
-				d->setConditionScript(dialog->FirstChildElement("Condition")->GetText());
+				d->conditionScript = dialog->FirstChildElement("Condition")->GetText();
 			}
 
 			_dialogs.insert(std::make_pair(identifier, d));

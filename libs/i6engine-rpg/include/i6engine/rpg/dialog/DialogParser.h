@@ -26,9 +26,11 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	class Dialog;
+	struct Dialog;
 
 	class ISIXE_RPG_API DialogParser {
+		friend class DialogManager;
+
 	public:
 		DialogParser();
 		~DialogParser();
