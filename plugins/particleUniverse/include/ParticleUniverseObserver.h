@@ -24,14 +24,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_OBSERVER_H__
 #define __PU_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseIAlias.h"
-#include "ParticleUniverseParticle.h"
-#include "ParticleUniverseEventHandler.h"
 #include "ParticleUniverseIElement.h"
+#include "ParticleUniverseParticle.h"
 
 namespace ParticleUniverse
 {
+
+	class ParticleEventHandler;
+
 	/** ParticleObservers are used to observe whether a certain condition occurs. This condition is often related to 
 		the state of a Particle, but also certain situations regarding a ParticleTechnique, ParticleEmitter or even
 		the ParticleSystem can be validated.
@@ -63,8 +64,8 @@ namespace ParticleUniverse
 
 			/** Todo
 	        */
-			const String& getObserverType(void) const {return mObserverType;};
-			void setObserverType(const String& observerType) {mObserverType = observerType;};
+			const String& getObserverType(void) const {return mObserverType;}
+			void setObserverType(const String& observerType) {mObserverType = observerType;}
 
 			/** Todo
 	        */
@@ -86,17 +87,17 @@ namespace ParticleUniverse
 
 			/** Todo
 	        */
-			ParticleTechnique* getParentTechnique(void) const {return mParentTechnique;};
-			void setParentTechnique(ParticleTechnique* parentTechnique){mParentTechnique = parentTechnique;};
+			ParticleTechnique* getParentTechnique(void) const {return mParentTechnique;}
+			void setParentTechnique(ParticleTechnique* parentTechnique){mParentTechnique = parentTechnique;}
 
 			/** Todo
 	        */
-			const String& getName(void) const {return mName;};
-			void setName(const String& name) {mName = name;};
+			const String& getName(void) const {return mName;}
+			void setName(const String& name) {mName = name;}
 
 			/** Todo
 	        */
-			const Particle::ParticleType& getParticleTypeToObserve(void) const {return mParticleTypeToObserve;};
+			const Particle::ParticleType& getParticleTypeToObserve(void) const {return mParticleTypeToObserve;}
 			void setParticleTypeToObserve(const Particle::ParticleType particleTypeToObserve);
 
 			/** Perform activities when a ParticleTechnique is started.
@@ -105,7 +106,7 @@ namespace ParticleUniverse
 
 			/** Perform activities when a ParticleTechnique is stopped.
 			*/
-			virtual void _notifyStop (void){/* Do nothing */};
+			virtual void _notifyStop (void){/* Do nothing */}
 
 			/** Notify that the Particle System is rescaled.
 	        */
@@ -129,7 +130,7 @@ namespace ParticleUniverse
 
 			/** Perform activities after the individual particles are processed.
 	        */
-			virtual void _postProcessParticles(ParticleTechnique* technique, Real timeElapsed){/* Do nothing */};
+			virtual void _postProcessParticles(ParticleTechnique* technique, Real timeElapsed){/* Do nothing */}
 
 			/** This function determines whether a condition (the event) is true or false.
 	        */

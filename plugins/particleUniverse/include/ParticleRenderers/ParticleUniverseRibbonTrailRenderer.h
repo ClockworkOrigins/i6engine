@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_RIBBONTRAIL_RENDERER_H__
 
 #include "ParticleUniversePrerequisites.h"
+#include "ParticleUniverseIVisualData.h"
 #include "ParticleUniverseRenderer.h"
 #include "ParticleUniverseTechniqueListener.h"
 #include "OgreRibbonTrail.h"

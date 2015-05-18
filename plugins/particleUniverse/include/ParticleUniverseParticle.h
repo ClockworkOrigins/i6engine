@@ -25,13 +25,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_PARTICLE_H__
 
 #include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseBehaviour.h"
-#include "ParticleUniverseIVisualData.h"
 #include "ParticleUniverseAny.h"
-#include "ParticleUniversePhysicsActor.h"
 
 namespace ParticleUniverse
 {
+
+	class IVisualData;
+	class ParticleBehaviour;
+	class PhysicsActor;
+
 	/** Particle is the abstract/virtual class that represents the object to be emitted.
 	@remarks
 		Several types of particles are distinguished, where the visual particle is the most obvious one.
@@ -165,8 +167,8 @@ namespace ParticleUniverse
 
 			/** Todo
 	        */
-			inline bool _isMarkedForEmission(void) const {return mMarkedForEmission;};
-			inline void _setMarkedForEmission(bool markedForEmission) {mMarkedForEmission = markedForEmission;};
+			inline bool _isMarkedForEmission(void) const {return mMarkedForEmission;}
+			inline void _setMarkedForEmission(bool markedForEmission) {mMarkedForEmission = markedForEmission;}
 
 			/** Perform initialising activities as soon as the particle is emitted.
 	        */

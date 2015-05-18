@@ -21,17 +21,16 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleUniverseRenderer.h"
-#include "OgreTechnique.h"
-#include "OgreMaterialManager.h"
-#include "OgreHighLevelGpuProgramManager.h"
-#include "OgreHighLevelGpuProgram.h"
+
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
+
+#include "OGRE/OgreHighLevelGpuProgram.h"
+#include "OGRE/OgreHighLevelGpuProgramManager.h"
+#include "OGRE/OgreMaterialManager.h"
+#include "OGRE/OgreTechnique.h"
 
 namespace ParticleUniverse
 {

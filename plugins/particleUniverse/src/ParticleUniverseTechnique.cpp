@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseTechnique.h"
 
 #include "ParticleUniverseAffector.h"
+#include "ParticleUniverseBehaviour.h"
 #include "ParticleUniverseEmitter.h"
 #include "ParticleUniverseExtern.h"
 #include "ParticleUniverseHook.h"

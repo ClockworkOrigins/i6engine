@@ -24,8 +24,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_SCRIPT_DESERIALIZER_H__
 #define __PU_PARTICLE_SCRIPT_DESERIALIZER_H__
 
+#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseScriptCompiler.h"
-#include "ParticleUniverseDynamicAttribute.h"
+#include "ParticleUniverseTypes.h"
 
 #include "OGRE/OgreScriptTranslator.h"
 

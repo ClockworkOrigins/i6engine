@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseAttachableTokens.h"
 
 #include "ParticleUniverseAttachable.h"
+#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseScriptSerializer.h"
 
 namespace ParticleUniverse

@@ -50,7 +50,6 @@ set(pluginParticleUniverseSrc
 	${srcdir}/ParticleUniverseObserverTokens.cpp
 	${srcdir}/ParticleUniverseParticle.cpp
 	${srcdir}/ParticleUniverseParticlePool.cpp
-	${srcdir}/ParticleUniversePCH.cpp
 	${srcdir}/ParticleUniversePlugin.cpp
 	${srcdir}/ParticleUniverseRenderer.cpp
 	${srcdir}/ParticleUniverseRendererTokens.cpp

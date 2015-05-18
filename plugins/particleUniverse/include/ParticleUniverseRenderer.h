@@ -24,8 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_RENDERER_H__
 #define __PU_RENDERER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseParticlePool.h"
 #include "ParticleUniverseCamera.h"
 #include "ParticleUniverseIAlias.h"
 #include "ParticleUniverseIElement.h"
@@ -33,6 +31,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace ParticleUniverse
 {
+
+	class ParticlePool;
+
 	/** ParticleRenderer is a virtual class and must be subclassed. A subclass of ParticleRenderer is
 		responsible for rendering the visual particles. 
 	@remarks
@@ -185,7 +186,7 @@ namespace ParticleUniverse
 
 			/** To make currently displayed objects visible or not.
 			*/
-			virtual void setVisible(bool visible = true) {mVisible = visible;};
+			virtual void setVisible(bool visible = true) {mVisible = visible;}
 
 			/** Prepare the renderer before it can be used.
 			*/
@@ -193,7 +194,7 @@ namespace ParticleUniverse
 
 			/** Reverse the actions from the _prepare.
 	        */
-			virtual void _unprepare(ParticleTechnique* particleTechnique){/* No implementation */};
+			virtual void _unprepare(ParticleTechnique* particleTechnique){/* No implementation */}
 
 			/** Entry point for processing an individual particle.
 			@remarks
@@ -204,7 +205,7 @@ namespace ParticleUniverse
 			inline virtual void _processParticle(ParticleTechnique* particleTechnique, 
 				Particle* particle, 
 				Real timeElapsed, 
-				bool firstParticle){/* No default behaviour */};
+				bool firstParticle){/* No default behaviour */}
 
 			/** Returns value that indicates whether usage of soft particles is on or off.
 			*/

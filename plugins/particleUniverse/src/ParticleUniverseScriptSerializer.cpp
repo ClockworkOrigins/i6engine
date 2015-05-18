@@ -21,13 +21,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
+#include "ParticleUniverseScriptSerializer.h"
 
 #include <iostream>
+
+#include "ParticleUniverseSystem.h"
 
 namespace ParticleUniverse
 {

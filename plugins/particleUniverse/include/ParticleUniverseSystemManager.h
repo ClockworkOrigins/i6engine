@@ -28,6 +28,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseCamera.h"
 #include "ParticleUniverseCameraDependency.h"
 #include "ParticleUniverseCameraDependencyTokens.h"
+#include "ParticleUniverseDynamicAttribute.h"
 #include "ParticleUniverseDynamicAttributeTokens.h"
 #include "ParticleUniverseSingleton.h"
 #include "ParticleUniverseSystemManagerTokens.h"

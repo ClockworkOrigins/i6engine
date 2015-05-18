@@ -67,7 +67,7 @@ namespace ParticleUniverse
 
 		public:
 
-			ParticlePool(void) : mLatestParticle(0){};
+			ParticlePool(void) : mLatestParticle(0){}
 			virtual ~ParticlePool (void);
 
 			/** 

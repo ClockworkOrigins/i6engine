@@ -28,6 +28,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseCamera.h"
 #include "ParticleUniverseCameraDependencyFactory.h"
 #include "ParticleUniverseCommon.h"
+#include "ParticleUniverseIAlias.h"
 #include "ParticleUniverseParticle.h"
 #include "ParticleUniverseParticlePool.h"
 #include "ParticleUniverseRadixSort.h"

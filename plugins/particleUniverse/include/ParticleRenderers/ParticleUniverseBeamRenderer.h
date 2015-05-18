@@ -25,10 +25,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_BEAM_RENDERER_H__
 
 #include "ParticleUniversePrerequisites.h"
+#include "ParticleUniverseIVisualData.h"
 #include "ParticleUniverseRenderer.h"
 #include "ParticleUniverseTechnique.h"
 #include "ParticleUniverseTechniqueListener.h"
-#include "OgreBillboardChain.h"
+
+#include "OGRE/OgreBillboardChain.h"
 
 namespace ParticleUniverse
 {
@@ -44,7 +46,7 @@ namespace ParticleUniverse
 				mBillboardChain(billboardChain){};
 
 			// Set the chain visible or invisible (PU 1.4)
-			virtual void setVisible(bool visible){/* No implementation */};
+			virtual void setVisible(bool visible){/* No implementation */}
 
 			/** The is no decent way to make the individual chains/elements invisible. The width of each element is set to 0 to make it invisible.
 				PU 1.4
@@ -138,7 +140,7 @@ namespace ParticleUniverse
 
 			/** 
 			*/
-			virtual void _notifyAttached(Ogre::Node* parent, bool isTagPoint = false){/* No implementation here */};
+			virtual void _notifyAttached(Ogre::Node* parent, bool isTagPoint = false){/* No implementation here */}
 
 			/** @copydoc ParticleRenderer::_setMaterialName */
 			virtual void _setMaterialName(const String& materialName);
@@ -153,15 +155,15 @@ namespace ParticleUniverse
 
 			/** 
 			*/
-			virtual void _notifyDefaultDimensions(Real width, Real height, Real depth){/* No implementation */};
+			virtual void _notifyDefaultDimensions(Real width, Real height, Real depth){/* No implementation */}
 
 			/** 
 			*/
-			virtual void _notifyParticleResized(void){/* No implementation */};
+			virtual void _notifyParticleResized(void){/* No implementation */}
 
 			/** 
 			*/
-			virtual void _notifyParticleZRotated(void){/* No implementation */};
+			virtual void _notifyParticleZRotated(void){/* No implementation */}
 
 			/** 
 			*/

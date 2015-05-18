@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseAny.h"
 #include "ParticleUniverseCameraDependency.h"
+#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseScriptSerializer.h"
 
 namespace ParticleUniverse
