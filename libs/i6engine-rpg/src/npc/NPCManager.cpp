@@ -39,7 +39,9 @@ namespace npc {
 		tpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 		NPC * n = new NPC(tpl, player);
 		_npcs.insert(std::make_pair(identifier, n));
+#if ISIXE_SCRIPTING != SCRIPTING_NONE
 		api::EngineController::GetSingletonPtr()->getScriptingFacade()->setGlobalVariable(identifier, n);
+#endif
 	}
 
 } /* namespace npc */
