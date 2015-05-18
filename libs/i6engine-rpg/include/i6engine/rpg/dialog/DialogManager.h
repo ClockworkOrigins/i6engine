@@ -17,6 +17,10 @@
 #ifndef __I6ENGINE_RPG_DIALOG_DIALOGMANAGER_H__
 #define __I6ENGINE_RPG_DIALOG_DIALOGMANAGER_H__
 
+#include <set>
+
+#include "i6engine/utils/DoubleBufferQueue.h"
+#include "i6engine/utils/Future.h"
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Singleton.h"
 
@@ -34,13 +38,45 @@ namespace dialog {
 	public:
 		~DialogManager();
 
+		/**
+		 * \brief loads all dialog files in directory and subdirectories
+		 */
 		void loadDialogs(const std::string & directory);
+
+		/**
+		 * \brief checks all important dialogs of given npc
+		 * starts dialog, if an important dialog was found
+		 */
+		void checkImportantDialogs(const std::string & identifier);
+
+		/**
+		 * \brief checks all dialogs of the given npcs and shows updated dialog box
+		 */
+		void checkDialogs(const std::string & identifier);
 
 	private:
 		DialogParser _parser;
 		std::map<std::string, std::vector<Dialog *>> _npcDialogs;
 
+		enum DialogCheck {
+			NPCIdentifier,
+			DialogIdentifier,
+			Result
+		};
+
+		utils::DoubleBufferQueue<std::tuple<std::string, std::string, std::shared_ptr<utils::Future<bool>>>, true, false> _importantChecks;
+		utils::DoubleBufferQueue<std::tuple<std::string, std::string, std::shared_ptr<utils::Future<bool>>>, true, false> _showDialogboxChecks;
+		std::atomic<bool> _dialogActive;
+
+		mutable std::mutex _lock;
+
+		std::set<Dialog *> _heardDialogs;
+
 		DialogManager();
+
+		bool checkDialogsLoop();
+		bool runDialog(const std::string & npc, const std::string & dia);
+		void showDialog(const std::string & npc, const std::string & dia);
 	};
 
 } /* namespace dialog */

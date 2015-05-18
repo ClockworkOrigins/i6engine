@@ -133,7 +133,7 @@ namespace modules {
 		}
 
 		template<typename Ret, typename... args>
-		typename std::enable_if<!std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
 			_callScripts.push(std::bind([this, func, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION

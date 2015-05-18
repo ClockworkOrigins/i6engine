@@ -16,13 +16,16 @@
 
 #include "i6engine/rpg/dialog/DialogManager.h"
 
+#include "i6engine/api/EngineController.h"
+#include "i6engine/api/facades/ScriptingFacade.h"
+
 #include "i6engine/rpg/dialog/Dialog.h"
 
 namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	DialogManager::DialogManager() : _parser(), _npcDialogs() {
+	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs() {
 	}
 
 	DialogManager::~DialogManager() {
@@ -42,6 +45,107 @@ namespace dialog {
 				return a->nr < b->nr;
 			});
 		}
+	}
+
+	void DialogManager::checkImportantDialogs(const std::string & identifier) {
+		// while in a dialog, important dialogs mustn't be checked
+		if (_dialogActive) {
+			return;
+		}
+		std::lock_guard<std::mutex> lg(_lock);
+		auto it = _npcDialogs.find(identifier);
+		if (it != _npcDialogs.end()) {
+			for (Dialog * d : it->second) {
+				if (d->important) {
+					if (d->conditionScript.empty()) {
+						auto r = std::make_shared<utils::Future<bool>>();
+						r->push(true);
+						_importantChecks.push(std::make_tuple(identifier, d->identifier, r));
+					} else {
+						_importantChecks.push(std::make_tuple(identifier, d->identifier, api::EngineController::GetSingleton().getScriptingFacade()->callFunction<bool>(d->conditionScript)));
+					}
+				}
+			}
+		}
+	}
+
+	void DialogManager::checkDialogs(const std::string & identifier) {
+		std::lock_guard<std::mutex> lg(_lock);
+		auto it = _npcDialogs.find(identifier);
+		if (it != _npcDialogs.end()) {
+			for (Dialog * d : it->second) {
+				if (d->conditionScript.empty()) {
+					auto r = std::make_shared<utils::Future<bool>>();
+					r->push(true);
+					_showDialogboxChecks.push(std::make_tuple(identifier, d->identifier, r));
+				} else {
+					_showDialogboxChecks.push(std::make_tuple(identifier, d->identifier, api::EngineController::GetSingleton().getScriptingFacade()->callFunction<bool>(d->conditionScript)));
+				}
+			}
+		}
+	}
+
+	bool DialogManager::checkDialogsLoop() {
+		// while a dialog is active new important dialogs mustn't start
+		if (_dialogActive) {
+			_importantChecks.clear();
+		}
+		while (!_importantChecks.empty()) {
+			auto t = _importantChecks.poll();
+			if (std::get<DialogCheck::Result>(t)->get()) {
+				// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
+				if (runDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t))) {
+					_importantChecks.clear();
+					_showDialogboxChecks.clear();
+				}
+			}
+		}
+		while (!_showDialogboxChecks.empty()) {
+			auto t = _showDialogboxChecks.poll();
+			if (std::get<DialogCheck::Result>(t)->get()) {
+				// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
+				showDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t));
+			}
+		}
+
+		return true;
+	}
+
+	bool DialogManager::runDialog(const std::string & npc, const std::string & dia) {
+		// TODO: (Daniel) check whether NPC is still in dialog range
+
+		// get dialog
+		std::lock_guard<std::mutex> lg(_lock);
+		auto it = _npcDialogs.find(npc);
+
+		if (it != _npcDialogs.end()) {
+			for (Dialog * d : it->second) {
+				if (d->identifier == dia) {
+					api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(d->infoScript);
+					_heardDialogs.insert(d);
+					if (!d->permanent) {
+						for (auto p : d->participants) {
+							auto it2 = _npcDialogs.find(p);
+							if (it2 != _npcDialogs.end()) {
+								for (size_t i = 0; i < it2->second.size(); i++) {
+									if (it2->second[i] == d) {
+										it2->second.erase(it2->second.begin() + int(i));
+										break;
+									}
+								}
+							}
+						}
+					}
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	void DialogManager::showDialog(const std::string & npc, const std::string & dia) {
+
 	}
 
 } /* namespace dialog */
