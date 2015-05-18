@@ -85,6 +85,15 @@ namespace dialog {
 		}
 	}
 
+	bool DialogManager::wasHeard(const std::string & identifier) const {
+		auto it = _parser._dialogs.find(identifier);
+		if (it != _parser._dialogs.end()) {
+			std::lock_guard<std::mutex> lg(_lock);
+			return _heardDialogs.find(it->second) != _heardDialogs.end();
+		}
+		return false;
+	}
+
 	bool DialogManager::checkDialogsLoop() {
 		// while a dialog is active new important dialogs mustn't start
 		if (_dialogActive) {

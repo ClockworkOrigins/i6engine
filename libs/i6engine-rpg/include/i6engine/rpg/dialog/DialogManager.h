@@ -54,6 +54,11 @@ namespace dialog {
 		 */
 		void checkDialogs(const std::string & identifier);
 
+		/**
+		 * \brief returns true if this dialog was already heard
+		 */
+		bool wasHeard(const std::string & identifier) const;
+
 	private:
 		DialogParser _parser;
 		std::map<std::string, std::vector<Dialog *>> _npcDialogs;

@@ -24,6 +24,7 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/dialog/Dialog.h"
+#include "i6engine/rpg/dialog/DialogManager.h"
 
 #include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/NPCManager.h"
@@ -54,6 +55,10 @@ namespace rpg {
 		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, true);
 	}
 
+	bool wasHeard(const std::string & identifier) {
+		return i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->wasHeard(identifier);
+	}
+
 } /* namespace rpg */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -64,6 +69,7 @@ scope registerRPG() {
 	return
 		def("insertNPCAtWaypoint", &i6engine::lua::rpg::insertNPCAtWaypoint),
 		def("insertPlayerAtWaypoint", &i6engine::lua::rpg::insertPlayerAtWaypoint),
+		def("wasHeards", &i6engine::lua::rpg::wasHeard),
 
 		class_<i6engine::rpg::dialog::Dialog>("Dialog")
 			.def(constructor<const std::string &, const std::string &>()),

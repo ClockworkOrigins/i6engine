@@ -21,6 +21,10 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
+#include "i6engine/rpg/dialog/Dialog.h"
+#include "i6engine/rpg/dialog/DialogManager.h"
+
+#include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/NPCManager.h"
 
 #include "boost/python.hpp"
@@ -51,6 +55,10 @@ namespace rpg {
 		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, true);
 	}
 
+	bool wasHeard(const std::string & identifier) {
+		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->wasHeard(identifier);
+	}
+
 } /* namespace rpg */
 } /* namespace python */
 } /* namespace i6engine */
@@ -59,7 +67,9 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 	using namespace boost::python;
 
 	def("insertNPCAtWaypoint", &i6engine::python::rpg::insertNPCAtWaypoint);
-	def("insertPlayerAtWaypoint", &i6engine::lua::rpg::insertPlayerAtWaypoint);
+	def("insertPlayerAtWaypoint", &i6engine::python::rpg::insertPlayerAtWaypoint);
+	def("wasHeards", &i6engine::python::rpg::wasHeard);
 
+	class_<i6engine::rpg::dialog::Dialog>("Dialog", no_init);
 	class_<i6engine::rpg::npc::NPC>("NPC", no_init);
 }
