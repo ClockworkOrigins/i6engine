@@ -35,7 +35,7 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)), _guiInitialized(false) {
+	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)), _guiInitialized(false), _activeNPC(), _dialogMapping() {
 	}
 
 	DialogManager::~DialogManager() {
@@ -64,6 +64,15 @@ namespace dialog {
 		if (_dialogActive) {
 			return;
 		}
+		if (!_guiInitialized) {
+			_guiInitialized = true;
+			api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+			gf->addImage("DialogBox", "RPG/StaticImage", "RPG", "TbM_Filling", 0.2, 0.75, 0.6, 0.2);
+			gf->addStatusList("DialogList", "RPG/Listbox", 0.21, 0.76, -1);
+			gf->setSize("DialogList", 0.58, 0.18);
+			gf->setVisibility("DialogBox", false);
+			gf->setVisibility("DialogList", false);
+		}
 		std::lock_guard<std::mutex> lg(_lock);
 		auto it = _npcDialogs.find(identifier);
 		if (it != _npcDialogs.end()) {
@@ -85,13 +94,17 @@ namespace dialog {
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		if (!_guiInitialized) {
 			_guiInitialized = true;
-			gf->addImage("Dialogbox", "RPG/StaticImage", "RPG", "TbM_Filling", 0.2, 0.75, 0.6, 0.2);
+			gf->addImage("DialogBox", "RPG/StaticImage", "RPG", "TbM_Filling", 0.2, 0.75, 0.6, 0.2);
 			gf->addStatusList("DialogList", "RPG/Listbox", 0.21, 0.76, -1);
 			gf->setSize("DialogList", 0.58, 0.18);
 		} else {
-			gf->setVisibility("Dialogbox", true);
+			gf->setVisibility("DialogBox", true);
 			gf->setVisibility("DialogList", true);
 		}
+		gf->setSelectedStringCallback("DialogList", [this](std::string s) {
+			runDialog(_activeNPC, _dialogMapping[s]);
+		});
+		_activeNPC = identifier;
 		_dialogActive = true;
 		std::lock_guard<std::mutex> lg(_lock);
 		auto it = _npcDialogs.find(identifier);
@@ -210,6 +223,7 @@ namespace dialog {
 							break;
 						}
 					}
+
 					// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
 					if (allNear) {
 						showDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t));
@@ -224,12 +238,16 @@ namespace dialog {
 
 	bool DialogManager::runDialog(const std::string & npc, const std::string & dia) {
 		// get dialog
+		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+		gf->clearWidget("DialogList");
+		gf->setVisibility("DialogBox", false);
+		gf->setVisibility("DialogList", false);
 		std::lock_guard<std::mutex> lg(_lock);
 		auto it = _npcDialogs.find(npc);
-
 		if (it != _npcDialogs.end()) {
 			for (Dialog * d : it->second) {
 				if (d->identifier == dia) {
+					_dialogMapping.clear();
 					api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(d->infoScript);
 					_heardDialogs.insert(d);
 					_dialogActive = true;
@@ -238,6 +256,7 @@ namespace dialog {
 					npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
 					npc::NPC * nt = npc::NPCManager::GetSingleton().getNPC(*d->participants.begin());
 					p->turnToNPC(nt);
+					_activeNPC = *d->participants.begin();
 					if (!d->permanent) {
 						for (auto p : d->participants) {
 							auto it2 = _npcDialogs.find(p);
@@ -278,6 +297,8 @@ namespace dialog {
 			}
 			n->turnToNPC(p);
 		}
+
+		_dialogMapping.insert(std::make_pair(it->second->description, dia));
 
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		gf->addTextToWidget("DialogList", api::EngineController::GetSingleton().getTextManager()->getText(it->second->description));

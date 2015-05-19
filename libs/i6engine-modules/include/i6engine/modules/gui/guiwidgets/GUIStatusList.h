@@ -91,10 +91,13 @@ namespace modules {
 		 */
 		void clearEntries();
 
+		bool selectionChanged(const CEGUI::EventArgs & evt);
+
 		uint64_t _startTime;
 		int64_t _lifetime;
 		CEGUI::Listbox * lb;
 		uint32_t _amount;
+		std::function<void(std::string)> _selectedCallback;
 	};
 
 } /* namespace modules */

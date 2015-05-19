@@ -27,7 +27,7 @@
 namespace i6engine {
 namespace modules {
 
-	GUIStatusList::GUIStatusList(const std::string & name, const std::string & type) : api::GUIWidget(name), _startTime(), _lifetime(-1), _amount(8) {
+	GUIStatusList::GUIStatusList(const std::string & name, const std::string & type) : api::GUIWidget(name), _startTime(), _lifetime(-1), _amount(8), _selectedCallback() {
 		CEGUI::WindowManager & wmgr = CEGUI::WindowManager::getSingleton();
 
 		lb = dynamic_cast<CEGUI::Listbox *>(wmgr.createWindow(type, _name));
@@ -52,6 +52,10 @@ namespace modules {
 			clearEntries();
 		} else if (type == api::gui::GuiSetAmount) {
 			_amount = static_cast<api::gui::GUI_Amount *>(data)->amount;
+		} else if (type == api::gui::GuiSetSelectedStringCallback) {
+			_selectedCallback = static_cast<api::gui::GUI_SetSelectedStringCallback *>(data)->callback;
+
+			_window->subscribeEvent(CEGUI::Listbox::EventSelectionChanged, CEGUI::Event::Subscriber(&GUIStatusList::selectionChanged, this));
 		} else {
 			GUIWidget::update(type, data);
 		}
@@ -92,6 +96,14 @@ namespace modules {
 				lb->removeItem(lb->getListboxItemFromIndex(0));
 			}
 		}
+	}
+
+	bool GUIStatusList::selectionChanged(const CEGUI::EventArgs & evt) {
+		if (_selectedCallback == nullptr) {
+			return true;
+		}
+		_selectedCallback(dynamic_cast<CEGUI::ListboxTextItem *>(dynamic_cast<CEGUI::Listbox *>(_window)->getFirstSelectedItem())->getText().c_str());
+		return true;
 	}
 
 } /* namespace modules */

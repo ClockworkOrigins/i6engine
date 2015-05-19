@@ -71,7 +71,6 @@ namespace components {
 				auto playerPSC = player->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent);
 
 				if ((psc->getPosition() - playerPSC->getPosition()).length() < i6engine::rpg::config::NPC_CHECK_TALK_DISTANCE) {
-					std::cout << "Check" << std::endl;
 					dialog::DialogManager::GetSingleton().checkImportantDialogs(_identifier);
 				}
 			}

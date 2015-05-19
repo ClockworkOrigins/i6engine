@@ -427,7 +427,7 @@ namespace gui {
 		void addTextToWidget(const std::string & name, const std::string & text) const;
 
 		/**
-		 * \brief Sets a selected callback to a ComboBox
+		 * \brief Sets a selected callback to a ComboBox/Listbox
 		 * \param name Name of the Widget
 		 * \param selectedCallback callback to be called when selection changes
 		 */
