@@ -26,10 +26,10 @@ cmake_minimum_required (VERSION 2.8)
 #
 #########################################################################
 
-option(ISIXE_LOGGING "enables Logging" OFF)
-option(ISIXE_NETWORK "build i6engine with networking capabilities" OFF)
-option(ISIXE_PROFILING "build i6engine with profiling" OFF)
-option(ISIXE_TESTING "build i6engine with tests" OFF)
+option(ISIXE_WITH_LOGGING "enables Logging" OFF)
+option(ISIXE_WITH_NETWORK "build i6engine with networking capabilities" OFF)
+option(ISIXE_WITH_PROFILING "build i6engine with profiling" OFF)
+option(ISIXE_WITH_TESTING "build i6engine with tests" OFF)
 option(ISIXE_WITH_AUDIO "build i6engine with OpenAL Soft audio subsystem" ON)
 option(ISIXE_WITH_EDITOR "build i6engine with the level editor" ON)
 option(ISIXE_WITH_SAMPLES "build some samples for i6engine" ON)
@@ -46,12 +46,12 @@ set(ISIXE_WITH_SCRIPTING "python" CACHE STRING "specifies the scripting system t
 
 set(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies" CACHE STRING "path to dependencies for i6engine")
 
-IF(ISIXE_TESTING AND NOT WIN32)
+IF(ISIXE_WITH_TESTING AND NOT WIN32)
 	# static for gmock
 	option(ISIXE_BUILD_SHARED "build project with shared libraries" OFF)
-ELSE(ISIXE_TESTING AND NOT WIN32)
+ELSE(ISIXE_WITH_TESTING AND NOT WIN32)
 	option(ISIXE_BUILD_SHARED "build project with shared libraries" ON)
-ENDIF(ISIXE_TESTING AND NOT WIN32)
+ENDIF(ISIXE_WITH_TESTING AND NOT WIN32)
 
 project(i6engine)
 
@@ -86,9 +86,9 @@ ENDIF()
 # Sets appropriate Compilerflags
 
 set (CXX_FLAGS "-pedantic -Wall -Wextra -Wold-style-cast -Woverloaded-virtual -Wnon-virtual-dtor -Wformat=2 -Winit-self -Wswitch-default -Wfloat-equal -Wshadow -Wredundant-decls -Wctor-dtor-privacy -Wsign-conversion -Wno-unused-parameter -Wno-long-long -std=c++11")
-IF(ISIXE_TESTING)
+IF(ISIXE_WITH_TESTING)
 	set(CXX_FLAGS "${CXX_FLAGS} -fPIC")
-ENDIF(ISIXE_TESTING)
+ENDIF(ISIXE_WITH_TESTING)
 set (CLANG_FLAGS "-Wstring-plus-int")
 
 IF(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
@@ -146,9 +146,9 @@ ENDIF(NOT WIN32)
 	IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
 		SET(BOOST_COMPONENTS ${BOOST_COMPONENTS} python)
 	ENDIF()
-	IF(ISIXE_LOGGING)
+	IF(ISIXE_WITH_LOGGING)
 		SET(BOOST_COMPONENTS ${BOOST_COMPONENTS} log log_setup)
-	ENDIF(ISIXE_LOGGING)
+	ENDIF(ISIXE_WITH_LOGGING)
 	FOREACH(comp ${BOOST_COMPONENTS})
 		list(APPEND libs boost_${comp})
 	ENDFOREACH(comp)
@@ -222,18 +222,18 @@ ENDIF(ISIXE_WITH_AUDIO)
 #----------------------------------------------------
 # Google Test
 #----------------------------------------------------
-IF(ISIXE_TESTING)
+IF(ISIXE_WITH_TESTING)
 	SET(LIBNAME "GTEST")
 	SET(LIBHEADER "gtest/gtest.h")
 	SET(GTEST_ROOT ${ISIXE_DEP_DIR}/gmock)
 	find_package(EasyFind REQUIRED COMPONENTS gmock_main gmock gtest gtest_main)
 	include_directories(SYSTEM ${GTEST_INCLUDE_DIR})
-ENDIF(ISIXE_TESTING)
+ENDIF(ISIXE_WITH_TESTING)
 
 #----------------------------------------------------
 # Google Performance Tools
 #----------------------------------------------------
-IF(ISIXE_PROFILING)
+IF(ISIXE_WITH_PROFILING)
 	SET(LIBNAME "GPerfTools")
 	SET(LIBHEADER "gperftools/tcmalloc.h")
 	SET(GPerfTools_ROOT ${ISIXE_DEP_DIR}/gperftools)
@@ -243,7 +243,7 @@ IF(ISIXE_PROFILING)
 		find_package(EasyFind REQUIRED COMPONENTS tcmalloc profiler)
 	ENDIF(WIN32)
 	include_directories(SYSTEM ${GPerfTools_INCLUDE_DIR})
-ENDIF(ISIXE_PROFILING)
+ENDIF(ISIXE_WITH_PROFILING)
 
 #----------------------------------------------------
 # TinyXML
@@ -295,7 +295,7 @@ install(FILES ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h DESTI
 #----------------------------------------------------
 # m2etis
 #----------------------------------------------------
-IF(ISIXE_NETWORK)
+IF(ISIXE_WITH_NETWORK)
 	# Build m2etis
 	IF(WIN32)
 		execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.bat "${ISIXE_DEP_DIR}" "${CMAKE_BINARY_DIR}/include")
@@ -306,14 +306,14 @@ IF(ISIXE_NETWORK)
 	#----------------------------------------------------
 	# I6M2ETIS
 	#----------------------------------------------------
-	IF(ISIXE_NETWORK)
+	IF(ISIXE_WITH_NETWORK)
 		SET(LIBNAME "M2etis")
 		SET(LIBHEADER "m2etis/pubsub/PubSubSystem.h")
 		SET(M2etis_ROOT ${ISIXE_DEP_DIR}/m2etis)
 		find_package(EasyFind REQUIRED COMPONENTS m2etis)
 		include_directories(SYSTEM ${M2etis_INCLUDE_DIR})
-	ENDIF(ISIXE_NETWORK)
-ENDIF(ISIXE_NETWORK)
+	ENDIF(ISIXE_WITH_NETWORK)
+ENDIF(ISIXE_WITH_NETWORK)
 
 ####################################################################################
 # Install paths
@@ -327,9 +327,9 @@ set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}" CACHE PATH "The subdirectory t
 # Debug and Testing (non permanent subdirs)
 ###############################################################################
 
-IF(ISIXE_TESTING)
+IF(ISIXE_WITH_TESTING)
 	enable_testing()
-ENDIF(ISIXE_TESTING)
+ENDIF(ISIXE_WITH_TESTING)
 
 include_directories(${CMAKE_BINARY_DIR}/include/)
 
@@ -367,9 +367,9 @@ ENDIF()
 # test
 #####################################################################################
 
-IF(ISIXE_TESTING)
+IF(ISIXE_WITH_TESTING)
 	add_subdirectory(test)
-ENDIF(ISIXE_TESTING)
+ENDIF(ISIXE_WITH_TESTING)
 
 #####################################################################################
 # plugins
@@ -437,9 +437,9 @@ IF(ISIXE_WITH_RPG)
 	configure_file(${CMAKE_SOURCE_DIR}/config/RPG.ini ${CMAKE_BINARY_DIR}/bin/RPG.ini COPYONLY)
 ENDIF(ISIXE_WITH_RPG)
 
-IF(ISIXE_PROFILING)
+IF(ISIXE_WITH_PROFILING)
 	configure_file(${CMAKE_SOURCE_DIR}/config/profiling.info ${CMAKE_BINARY_DIR}/bin/profiling.info COPYONLY)
-ENDIF(ISIXE_PROFILING)
+ENDIF(ISIXE_WITH_PROFILING)
 
 IF(UNIX)
 	file(GLOB files "${ISIXE_DEP_DIR}/ogre/lib/OGRE/*.so.*")

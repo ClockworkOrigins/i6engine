@@ -55,7 +55,7 @@
 #include "i6engine/modules/graphics/GraphicsController.h"
 #include "i6engine/modules/input/InputController.h"
 
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 	#include "i6engine/modules/network/NetworkController.h"
 #endif
 
@@ -229,7 +229,7 @@ namespace api {
 
 	void EngineController::registerDefault(const bool ds) {
 		if (!ds) {
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 			registerSubSystem("Network", new modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 #endif
 			registerSubSystem("Graphics", new modules::GraphicsController(), { core::Subsystem::Object });
@@ -245,7 +245,7 @@ namespace api {
 			registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
 #endif
 		} else {
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 			registerSubSystem("Network", new modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 #endif
 			registerSubSystem("Object", new modules::ObjectController(), LNG_OBJECT_FRAME_TIME);

@@ -81,7 +81,7 @@ namespace core {
 		return stream;
 	}
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 	void Message::insertTimestamp(const std::string & text) {
 		_content->insertTimestamp(text);
 	}
@@ -89,7 +89,7 @@ namespace core {
 	std::string Message::getTimestamps() {
 		return _content->getTimestamps();
 	}
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 } /* namespace core */
 } /* namespace i6engine */

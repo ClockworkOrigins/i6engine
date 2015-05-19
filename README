@@ -35,10 +35,7 @@
 		$ cmake .
 		$ make
 
-	* now, you'll find the executable in the bin subdirectory and can run it
-
-		$ ./tri6
-
+	* now, you'll find the executables in the bin subdirectory and can run it
 	* That's all
 
 	***********
@@ -67,10 +64,7 @@
 		$ cmake .
 
 	* now you find a i6engine.sln file you can open in Visual Studio. You can compile it using F7. After this, all library files
-	* and the executable are in the bin subdirectory and you can run it
-
-		$ tri6.exe
-
+	* and the executables are in the bin subdirectory and you can run it
 	* That's all
 
 +++++++++++++++++
@@ -79,59 +73,12 @@
 
 	* You can specifiy some build options with CMake parameters: (values are the defaults if not specified)
 
-	- With Logging: ISIXE_LOGGING=OFF
-	- With Network:	ISIXE_NETWORK=OFF
-	- With Testing:	ISIXE_TESTING=OFF
-	- With Profiling: ISIXE_PROFILING=OFF
-	- With Scripting: ISIXE_SCRIPTING=ON
-	- With Tri6: ISIXE_TRI6=ON
+	- With Logging: ISIXE_WITH_LOGGING=OFF
+	- With Network:	ISIXE_WITH_NETWORK=OFF
+	- With Testing:	ISIXE_WITH_TESTING=OFF
+	- With Profiling: ISIXE_WITH_PROFILING=OFF
+	- With Scripting: ISIXE_WITH_SCRIPTING=python
 
 	* e.g. This line build the engine with logging, no network, no profiling, scripting, tri6 and no tests
 
-		$ cmake -DISIXE_LOGGING=ON -DISIXE_NETWORKING=ON .
-
-+++++++++++
-+ Running +
-+++++++++++
-
-	* For running the program, there are several options as well:
-
-	./tri6 [ [-ds] | [ [-dd level] [-mm] [-dm] [-remoteip ip-address] [-remoteport port] ] [-localport port] [-level levelname] [-loglevel loglevel]
-
-	-dd <level>
-		specifies the level of graphical debugging. (The values can be toggled ingame with the numblock keys 1-4, but this doesn't work quite well)
-		0	completely off
-		1	lines indicating the collisionshapes are drawn
-		2	identical to 1
-		3	draws the Ogre BoundingBoxes as well (not very helpful, huge performance decrease)
-		4	only Ogre BoundingBoxes are drawn (huge performance decrease)
-
-	-ds
-		starts the dedicated server. Needed for multiplayer. This options is incompatible to all other options. The server must run on an other machine than the clients or specify another port and
-		the IP of the server is by default in Tri6.h, but can be specified by command -remoteip <ip-address>
-
-	-mm
-		the client tries to automatically start the game, just like pressing "Start" in the main menu
-
-	-dm
-		Enables the Debug Mode. In Debug Mode the energy-regeneration is maxed and you can give yourself powerups and change your colour.
-
-	-remoteip <ip-address>
-		sets the remote-ip
-
-	-remoteport <port>
-		sets the port the server is listening on
-
-	-localport <port>
-		sets the port the local machine should use
-
-	-level <levelname>
-		Name of the level to be loaded. Make sure it is set to the same on server and all clients. Use just the name (without path and .xml extension)
-
-	-loglevel <loglevel>
-		Loglevel being print:
-			0	Debug
-			1	Info
-			2	Warn
-			3	Error
-			4	Fatal
+		$ cmake -DISIXE_WITH_LOGGING=ON -DISIXE_WITH_NETWORK=ON .

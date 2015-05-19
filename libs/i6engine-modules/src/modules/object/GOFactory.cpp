@@ -22,7 +22,7 @@
 
 #include "i6engine/api/components/Component.h"
 
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 	#include "i6engine/api/components/NetworkSenderComponent.h"
 #endif
 
@@ -170,7 +170,7 @@ namespace modules {
 
 		go->initializeComponents();
 
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 		// add NetworkSenderComponent if sending object and Multiplayer
 		if (sender && api::EngineController::GetSingletonPtr()->getType() != api::GameType::SINGLEPLAYER) {
 			api::ComPtr nsc = utils::make_shared<api::NetworkSenderComponent, api::Component>();

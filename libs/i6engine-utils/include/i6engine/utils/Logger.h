@@ -26,7 +26,7 @@
 
 #include "i6engine/i6engineBuildSettings.h"
 
-#ifdef ISIXE_LOGGING
+#ifdef ISIXE_WITH_LOGGING
 	#include "i6engine/utils/i6eSystemParameters.h"
 	#include "i6engine/utils/Singleton.h"
 
@@ -35,7 +35,7 @@
 	#include "boost/log/sinks.hpp"
 #endif
 
-#ifdef ISIXE_LOGGING
+#ifdef ISIXE_WITH_LOGGING
 	#define ISIXE_LOG_DEBUG(module, message) {\
 		std::stringstream logMessageString; \
 		logMessageString << message; \
@@ -79,7 +79,7 @@
 
 	#define ISIXE_LOG_SETLEVEL(level) {\
 	}
-#endif // ISIXE_LOGGING
+#endif // ISIXE_WITH_LOGGING
 
 namespace i6engine {
 namespace utils {
@@ -98,7 +98,7 @@ namespace utils {
 		LOGNONE = 5
 	};
 
-#ifdef ISIXE_LOGGING
+#ifdef ISIXE_WITH_LOGGING
 	class Logger;
 
 	typedef boost::log::sinks::synchronous_sink<boost::log::sinks::text_ostream_backend> TextSink;
@@ -138,7 +138,7 @@ namespace utils {
 		boost::log::sources::channel_logger_mt<std::string> _logger;
 		LogLevel _logLevel;
 	};
-#endif /* ISIXE_LOGGING */
+#endif /* ISIXE_WITH_LOGGING */
 
 } /* namespace utils */
 } /* namespace i6engine */

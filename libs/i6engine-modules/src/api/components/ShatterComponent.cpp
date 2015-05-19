@@ -54,9 +54,9 @@ namespace api {
 				return;
 			}
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 			msg->insertTimestamp("ShatterComponent: " + _objComponentID);
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 			shatter(objB);
 		} else {

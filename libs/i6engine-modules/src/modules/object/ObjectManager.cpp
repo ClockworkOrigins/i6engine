@@ -23,7 +23,7 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 	#include "i6engine/utils/Profiling.h"
 #endif
 
@@ -91,7 +91,7 @@ namespace modules {
 		GOPtr::clear();
 		api::ComPtr::clear();
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		if (utils::profiling::numberObjects) {
 			ISIXE_LOG_INFO("ObjectManager", "Current amount of GameObjects: " << _GOList.size());
 		}

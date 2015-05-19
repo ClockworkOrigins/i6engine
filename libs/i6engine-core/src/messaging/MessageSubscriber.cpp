@@ -27,9 +27,9 @@ namespace i6engine {
 namespace core {
 
 	void MessageSubscriber::receiveMessage(const Message::Ptr & msg) {
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		msg->getContent()->insertTimestamp("MessageSubscriber receiveMessage");
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 		buffer(boost::make_shared<ReceivedMessage>(msg));
 	}
 
@@ -39,9 +39,9 @@ namespace core {
 	}
 
 	void MessageSubscriber::buffer(const ReceivedMessagePtr & msg) {
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		msg->message->insertTimestamp("MessageSubscriber buffer");
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 		// Step 4
 		// Determine whether to buffer or not
 		int64_t id = msg->message->getContent()->_id;
@@ -204,9 +204,9 @@ namespace core {
 	}
 
 	void MessageSubscriber::deliverMessageInternal(const ReceivedMessagePtr & msg) {
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		msg->message->insertTimestamp("MessagingController deliverMessageInternal");
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 		// Step 5
 		// Step 7
 		// send messages to subscribers
@@ -261,9 +261,9 @@ namespace core {
 			}
 			assert(_ptrMessageMethod.find(m->getMessageType()) != _ptrMessageMethod.end());
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 			m->getContent()->insertTimestamp("MessageSubscriber processMessages");
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 			_ptrMessageMethod[m->getMessageType()](m);
 		}

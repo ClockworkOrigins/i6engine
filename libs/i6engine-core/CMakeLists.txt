@@ -22,10 +22,6 @@ include_directories("include")
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 
-IF(ISIXE_TESTING)
-	set(testdir ./test)
-ENDIF(ISIXE_TESTING)
-
 set(srcdir ./src)
 set(utildir /util)
 set(configdir ${CMAKE_SOURCE_DIR}/config)
@@ -67,16 +63,16 @@ set_target_properties(i6engine-core PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 target_link_libraries(i6engine-core i6engine-utils)
 
-IF(ISIXE_PROFILING)
+IF(ISIXE_WITH_PROFILING)
 	target_link_libraries(i6engine-core ${GPerfTools_LIBRARIES})
-ENDIF(ISIXE_PROFILING)
+ENDIF(ISIXE_WITH_PROFILING)
 
 IF(WIN32 AND ISIXE_BUILD_SHARED)
 	add_custom_command(TARGET i6engine-core POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-core.dll ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32 AND ISIXE_BUILD_SHARED)
 
 ########################
-# i6engine-core tests
+# i6engine-core install
 ########################
 
 install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX})

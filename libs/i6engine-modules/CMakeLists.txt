@@ -181,7 +181,7 @@ IF(ISIXE_WITH_AUDIO)
 	)
 ENDIF(ISIXE_WITH_AUDIO)
 
-IF(ISIXE_NETWORK)
+IF(ISIXE_WITH_NETWORK)
 	set(i6modulesSrc
 		${i6modulesSrc}
 
@@ -192,7 +192,7 @@ IF(ISIXE_NETWORK)
 		${srcdir}/modules/network/NetworkMailbox.cpp
 		${srcdir}/modules/network/NetworkManager.cpp
 	)
-ENDIF(ISIXE_NETWORK)
+ENDIF(ISIXE_WITH_NETWORK)
 
 IF(SCRIPTING_LUA)
 	include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
@@ -258,9 +258,9 @@ ELSEIF(SCRIPTING_PYTHON)
 	target_link_libraries(i6engine-modules ${PYTHON_LIBRARIES})
 ENDIF()
 
-IF(ISIXE_NETWORK)
+IF(ISIXE_WITH_NETWORK)
 	target_link_libraries(i6engine-modules ${M2etis_LIBRARIES})
-ENDIF(ISIXE_NETWORK)
+ENDIF(ISIXE_WITH_NETWORK)
 
 IF(WIN32)
 	target_link_libraries(i6engine-modules ws2_32)

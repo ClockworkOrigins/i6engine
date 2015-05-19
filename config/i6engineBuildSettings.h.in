@@ -19,10 +19,10 @@
 
 #cmakedefine ISIXE_BUILD_SHARED
 
-#cmakedefine ISIXE_LOGGING
+#cmakedefine ISIXE_WITH_LOGGING
 #cmakedefine ISIXE_WITH_AUDIO
-#cmakedefine ISIXE_NETWORK
-#cmakedefine ISIXE_PROFILING
+#cmakedefine ISIXE_WITH_NETWORK
+#cmakedefine ISIXE_WITH_PROFILING
 #cmakedefine ISIXE_WITH_RPG
 
 // Enum

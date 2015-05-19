@@ -80,16 +80,16 @@ namespace modules {
 				uint64_t time = dynamic_cast<api::network::Network_TimeSynchro_Update *>(msg->getContent())->time;
 				api::EngineController::GetSingleton().setCurrentTime(time + ping);
 			} else {
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 				msg->insertTimestamp("NetworkMailbox -> messaging");
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 				// deliver message if we're not the receiver
 				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 			}
 		} else {
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 			msg->insertTimestamp("NetworkMailbox -> messaging");
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 			// deliver into local system
 			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 		}

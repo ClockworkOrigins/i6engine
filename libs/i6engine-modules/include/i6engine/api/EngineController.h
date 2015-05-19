@@ -68,7 +68,7 @@ namespace api {
 	 * Create an instance of this class and use the functions to start / stop / ...
 	 * the Engine
 	 */
-#ifdef ISIXE_LOGGING
+#ifdef ISIXE_WITH_LOGGING
 	class ISIXE_MODULES_API EngineController : public utils::Singleton<EngineController, utils::Logger, utils::exceptions::ExceptionQueue> {
 		friend class utils::Singleton<EngineController, utils::Logger, utils::exceptions::ExceptionQueue>;
 #else

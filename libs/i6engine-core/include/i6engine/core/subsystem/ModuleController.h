@@ -205,7 +205,7 @@ namespace core {
 		mutable std::mutex _lock;
 		std::condition_variable _conditionVariable;
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		/**
 		 * \brief last frame time
 		 */
@@ -220,7 +220,7 @@ namespace core {
 		 * \brief frames being expected for this subsystem
 		 */
 		uint16_t _expectedFps;
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		/**
 		 * \brief activates the Subsystem

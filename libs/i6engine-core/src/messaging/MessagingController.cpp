@@ -18,7 +18,7 @@
 
 #include "i6engine/utils/Logger.h"
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 	#include "i6engine/utils/Profiling.h"
 #endif
 
@@ -56,9 +56,9 @@ namespace core {
 	}
 
 	void MessagingController::deliverMessageToSubscribers(const Message::Ptr & msg) const {
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		msg->insertTimestamp("MessagingController deliverMessageToSubscribers");
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 		uint16_t msgType = msg->getMessageType();
 
 		boost::mutex::scoped_lock objScopeLock(_objDictionaryMutex);
@@ -115,9 +115,9 @@ namespace core {
 	}
 
 	void MessagingController::deliverMessage(const Message::Ptr & msg) {
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		msg->insertTimestamp("MessagingController deliverMessage");
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 		// Step 1
 		// entry point for other Threads
 		// save Message

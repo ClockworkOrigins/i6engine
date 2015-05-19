@@ -203,46 +203,6 @@
 * <td> ISIXE_MPLATFORM </td> <td> i6eSystemParameters.h </td>
 * <td> Is defined either as '1' when running in a MS Windows environment or as '2' when running in a Linux environment. </td>
 * </tr>
-* <tr>
-* <td> ISIXE_LOGGING </td> <td> i6eSystemParameters.h </td>
-* <td> Indicates building with logging</td>
-* </tr>
-* <tr>
-* <td> ISIXE_NETWORK </td> <td> i6eSystemParameters.h </td>
-* <td> Indicates building with m2etis network system</td>
-* </tr>
-* <tr>
-* <td> ISIXE_PROFILING </td> <td> i6eSystemParameters.h </td>
-* <td> Indicates building with profiling</td>
-* </tr>
-* <tr>
-* <td> ISIXE_SCRIPTING </td> <td> i6eSystemParameters.h </td>
-* <td> Indicates building with scripting</td>
-* </tr>
-* <tr>
-* <td> ISIXE_TESTING </td> <td> i6eSystemParameters.h </td>
-* <td> Indicates building with tests</td>
-* </tr>
-* <tr>
-* <td> ISIXE_TRI6 </td> <td> i6eSystemParameters.h </td>
-* <td> Indicates building with tri6</td>
-* </tr>
-* <tr>
-* <td> LNG_GRAPHICS_FRAME_TIME </td> <td> EngineController.h </td>
-* <td> This macro sets the frametime the GraphicsController subsystem works with. </td>
-* </tr>
-* <tr>
-* <td> LNG_INPUT_FRAME_TIME </td> <td> EngineController.h </td>
-* <td> This macro sets the frametime the InputController subsystem works with. </td>
-* </tr>
-* <tr>
-* <td> LNG_MESSAGING_FRAME_TIME </td> <td> SubSystemController.h </td>
-* <td> This macro sets the frametime the MessagingController subsystem works with. </td>
-* </tr>
-* <tr>
-* <td> LNG_OBJECT_FRAME_TIME </td> <td> EngineController.h </td>
-* <td> This macro sets the frametime the ObjectController subsystem works with. </td>
-* </tr>
 * </table>
 *
 * \section funcLike Function-like macros

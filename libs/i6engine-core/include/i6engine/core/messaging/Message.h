@@ -126,7 +126,7 @@ namespace core {
 		 */
 		inline MessageStruct * getContent() const { return _content; }
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		/**
 		 * \bief insert an timestamp into the message struct.
 		 *
@@ -138,7 +138,7 @@ namespace core {
 		 * \brief returns a string with all saved timestamps
 		 */
 		std::string getTimestamps();
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		/**
 		 * \brief Changes the message type to the given parameter.

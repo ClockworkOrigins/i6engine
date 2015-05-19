@@ -19,9 +19,9 @@
 #include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/Logger.h"
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 	#include "i6engine/utils/Profiling.h"
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 #include "i6engine/core/configs/SubsystemConfig.h"
 
@@ -92,12 +92,12 @@ namespace modules {
 			return;
 		}
 		msg->getContent()->_sender = api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP();
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		msg->insertTimestamp("NetworkManager -> m2etis");
 		if (utils::profiling::timeStamp) {
 			ISIXE_LOG_INFO("Network", "Send:" << msg->getMessageInfo() << " " << msg->getTimestamps());
 		}
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		publishInternal(m2etis::pubsub::ChannelName(channel), _pubsub->createMessage<api::GameMessage>(m2etis::pubsub::ChannelName(channel), *msg));
 	}
@@ -145,20 +145,20 @@ namespace modules {
 	void NetworkManager::deliverCallback(const m2etis::message::M2Message<api::GameMessage>::Ptr msg) {
 		api::GameMessage::Ptr m = boost::make_shared<api::GameMessage>(*msg->payload);
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		m->insertTimestamp("m2etis -> NetworkManager");
 
 		_counterReceived++;
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		// only forward message to game if this node isn't the sender
 		core::IPKey p = m->getContent()->_sender;
 		if (api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP() == p) {
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 			if (utils::profiling::timeStamp) {
 				ISIXE_LOG_INFO("Network", "Receive:" << m->getMessageInfo() << " " << m->getTimestamps());
 			}
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 			return;
 		}
 
@@ -169,7 +169,7 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		// writes the amount of messages being sent during the last tick
 		// As the counter isn't thread safe, the counter won't be
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		uint32_t a = _counterReceived;
 		_counterReceived = 0;
 		if (a != 0) {
@@ -184,7 +184,7 @@ namespace modules {
 				ISIXE_LOG_INFO("Messages sent", a);
 			}
 		}
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		// Get current time.
 		uint64_t cT = api::EngineController::GetSingleton().getCurrentTime();
@@ -200,9 +200,9 @@ namespace modules {
 	}
 
 	void NetworkManager::publishInternal(m2etis::pubsub::ChannelName channel, const m2etis::message::M2Message<api::GameMessage>::Ptr & msg) const {
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		const_cast<NetworkManager *>(this)->_counterSent++;
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		try {
 			_pubsub->publish<api::GameMessage>(channel, msg);

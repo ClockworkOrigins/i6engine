@@ -19,9 +19,9 @@ add_subdirectory(common)
 add_subdirectory(canvas)
 add_subdirectory(chain)
 
-IF(ISIXE_NETWORK)
+IF(ISIXE_WITH_NETWORK)
 	add_subdirectory(chat)
-ENDIF(ISIXE_NETWORK)
+ENDIF(ISIXE_WITH_NETWORK)
 
 add_subdirectory(compositor)
 add_subdirectory(dragdrop)
