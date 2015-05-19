@@ -15,12 +15,12 @@
  */
 
 /**
- * \addtogroup Scripting
+ * \addtogroup PythonScripting
  * @{
  */
 
-#ifndef __I6ENGINE_MODULES_SCRIPTINGCONTROLLER_H__
-#define __I6ENGINE_MODULES_SCRIPTINGCONTROLLER_H__
+#ifndef __I6ENGINE_MODULES_PYTHONSCRIPTINGCONTROLLER_H__
+#define __I6ENGINE_MODULES_PYTHONSCRIPTINGCONTROLLER_H__
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
@@ -29,26 +29,26 @@
 namespace i6engine {
 namespace modules {
 
-	class ScriptingMailbox;
-	class ScriptingManager;
+	class PythonScriptingMailbox;
+	class PythonScriptingManager;
 
 	/**
-	 * \class ScriptingController
+	 * \class PythonScriptingController
 	 * \brief Controls the scripting
 	 *
 	 * This class creates the scripting and manages its objects.
 	 */
-	class ISIXE_MODULES_API ScriptingController : public core::ModuleController {
+	class ISIXE_MODULES_API PythonScriptingController : public core::ModuleController {
 	public:
 		/**
 		 * \brief constructor
 		 */
-		ScriptingController();
+		PythonScriptingController();
 
 		/**
 		 * \brief destructor
 		 */
-		~ScriptingController();
+		~PythonScriptingController();
 
 		/**
 		 * \brief This method will be called when starting the thread of the subsystem.
@@ -66,18 +66,18 @@ namespace modules {
 		void Tick() override;
 
 	private:
-		ScriptingMailbox * _mailbox;
-		ScriptingManager * _manager;
+		PythonScriptingMailbox * _mailbox;
+		PythonScriptingManager * _manager;
 
 		/**
 		 * \brief forbidden
 		 */
-		ScriptingController(const ScriptingController &) = delete;
+		PythonScriptingController(const PythonScriptingController &) = delete;
 
 		/**
 		 * \brief forbidden
 		 */
-		const ScriptingController & operator=(const ScriptingController &) = delete;
+		const PythonScriptingController & operator=(const PythonScriptingController &) = delete;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};
@@ -85,7 +85,7 @@ namespace modules {
 } /* namespace modules */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_MODULES_SCRIPTINGCONTROLLER_H__ */
+#endif /* __I6ENGINE_MODULES_PYTHONSCRIPTINGCONTROLLER_H__ */
 
 /**
  * @}

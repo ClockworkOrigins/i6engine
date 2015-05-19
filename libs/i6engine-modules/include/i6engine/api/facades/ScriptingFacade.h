@@ -30,7 +30,7 @@
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
 	#include "i6engine/modules/luascripting/LuaScriptingManager.h"
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
-	#include "i6engine/modules/scripting/ScriptingManager.h"
+	#include "i6engine/modules/pythonscripting/PythonScriptingManager.h"
 #endif
 
 namespace i6engine {
@@ -40,7 +40,7 @@ namespace api {
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
 		friend class modules::LuaScriptingManager;
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
-		friend class modules::ScriptingManager;
+		friend class modules::PythonScriptingManager;
 #endif
 
 	public:
@@ -85,7 +85,7 @@ namespace api {
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
 		modules::LuaScriptingManager * _manager;
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
-		modules::ScriptingManager * _manager;
+		modules::PythonScriptingManager * _manager;
 #endif
 
 		/**

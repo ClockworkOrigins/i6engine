@@ -65,7 +65,7 @@
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
 	#include "i6engine/modules/luascripting/LuaScriptingController.h"
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
-	#include "i6engine/modules/scripting/ScriptingController.h"
+	#include "i6engine/modules/pythonscripting/PythonScriptingController.h"
 #endif
 
 #include "boost/uuid/uuid.hpp"
@@ -239,7 +239,7 @@ namespace api {
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
 			registerSubSystem("Scripting", new modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
-			registerSubSystem("Scripting", new modules::ScriptingController(), LNG_SCRIPTING_FRAME_TIME);
+			registerSubSystem("Scripting", new modules::PythonScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
 #ifdef ISIXE_WITH_AUDIO
 			registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
@@ -253,7 +253,7 @@ namespace api {
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
 			registerSubSystem("Scripting", new modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
-			registerSubSystem("Scripting", new modules::ScriptingController(), LNG_SCRIPTING_FRAME_TIME);
+			registerSubSystem("Scripting", new modules::PythonScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
 		}
 	}

@@ -41,7 +41,7 @@ namespace rpg {
 				break;
 			}
 		}
-		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos);
+		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, false);
 	}
 
 	void insertPlayerAtWaypoint(const std::string & identifier, const std::string & waypoint) {
@@ -56,7 +56,7 @@ namespace rpg {
 	}
 
 	bool wasHeard(const std::string & identifier) {
-		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->wasHeard(identifier);
+		return i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->wasHeard(identifier);
 	}
 
 } /* namespace rpg */

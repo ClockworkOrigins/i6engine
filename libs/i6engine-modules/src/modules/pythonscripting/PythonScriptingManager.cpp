@@ -14,40 +14,41 @@
  * limitations under the License.
  */
 
-#include "i6engine/modules/scripting/ScriptingManager.h"
+#include "i6engine/modules/pythonscripting/PythonScriptingManager.h"
 
 #include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eString.h"
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/ScriptingConfig.h"
+#include "i6engine/api/facades/ScriptingFacade.h"
 
 namespace i6engine {
 namespace modules {
 
-	ScriptingManager::ScriptingManager() : _scripts(), _scriptsPath(), _callScripts() {
+	PythonScriptingManager::PythonScriptingManager() : _scripts(), _scriptsPath(), _callScripts() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
-			ISIXE_THROW_FAILURE("ScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
+			ISIXE_THROW_FAILURE("PythonScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
 		}
 #if ISIXE_SCRIPTING == SCRIPTING_PYTHON
 		api::EngineController::GetSingleton().getScriptingFacade()->_manager = this;
 #endif
 	}
 
-	ScriptingManager::~ScriptingManager() {
+	PythonScriptingManager::~PythonScriptingManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_scripts.clear();
 	}
 
-	void ScriptingManager::Tick() {
+	void PythonScriptingManager::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		while (!_callScripts.empty()) {
 			_callScripts.poll()();
 		}
 	}
 
-	void ScriptingManager::News(const api::GameMessage::Ptr & msg) {
+	void PythonScriptingManager::News(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t type = msg->getSubtype();
 
@@ -57,13 +58,13 @@ namespace modules {
 
 			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
 		} else if (type == api::scripting::ScrLoadAllScripts) {
-			ISIXE_THROW_FAILURE("ScriptingManager", "Loading of all scripts isn't implemented yet in PythonScriptingManager!");
+			ISIXE_THROW_FAILURE("PythonScriptingManager", "Loading of all scripts isn't implemented yet in PythonScriptingManager!");
 		} else {
-			ISIXE_THROW_MESSAGE("ScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
+			ISIXE_THROW_MESSAGE("PythonScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
 	}
 
-	void ScriptingManager::parseScript(const std::string & file) {
+	void PythonScriptingManager::parseScript(const std::string & file) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		try {
 			if (_scripts.find(file) == _scripts.end()) {

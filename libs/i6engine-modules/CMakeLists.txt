@@ -209,9 +209,9 @@ ELSEIF(SCRIPTING_PYTHON)
 	set(i6modulesSrc
 		${i6modulesSrc}
 
-		${srcdir}/modules/scripting/ScriptingController.cpp
-		${srcdir}/modules/scripting/ScriptingMailbox.cpp
-		${srcdir}/modules/scripting/ScriptingManager.cpp
+		${srcdir}/modules/pythonscripting/PythonScriptingController.cpp
+		${srcdir}/modules/pythonscripting/PythonScriptingMailbox.cpp
+		${srcdir}/modules/pythonscripting/PythonScriptingManager.cpp
 	)
 ENDIF()
 
@@ -234,7 +234,7 @@ source_group(modules\\network /modules/network/*)
 source_group(modules\\object /modules/object/*)
 source_group(modules\\physics /modules/physics/*)
 source_group(modules\\luascripting /modules/luascripting/*)
-source_group(modules\\pythonscripting /modules/scripting/*)
+source_group(modules\\pythonscripting /modules/pythonscripting/*)
 
 IF(ISIXE_BUILD_SHARED)
 	add_library(i6engine-modules SHARED ${i6modulesSrc})

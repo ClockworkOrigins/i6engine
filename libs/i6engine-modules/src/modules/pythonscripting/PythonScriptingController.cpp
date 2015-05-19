@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "i6engine/modules/scripting/ScriptingController.h"
+#include "i6engine/modules/pythonscripting/PythonScriptingController.h"
 
 #include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/Logger.h"
@@ -24,8 +24,8 @@
 #include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-#include "i6engine/modules/scripting/ScriptingMailbox.h"
-#include "i6engine/modules/scripting/ScriptingManager.h"
+#include "i6engine/modules/pythonscripting/PythonScriptingMailbox.h"
+#include "i6engine/modules/pythonscripting/PythonScriptingManager.h"
 
 #include "boost/filesystem.hpp"
 #include "boost/python.hpp"
@@ -38,17 +38,17 @@ namespace PythonAPIWorkaround {
 	char path[] = "path";
 }
 
-	ScriptingController::ScriptingController() : core::ModuleController(core::Subsystem::Scripting), _mailbox(), _manager() {
+	PythonScriptingController::PythonScriptingController() : core::ModuleController(core::Subsystem::Scripting), _mailbox(), _manager() {
 	}
 
-	ScriptingController::~ScriptingController() {
+	PythonScriptingController::~PythonScriptingController() {
 	}
 
-	void ScriptingController::OnThreadStart() {
+	void PythonScriptingController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		// *** Initialization goes here ***
 		Py_Initialize();
-		ISIXE_LOG_INFO("ScriptingController", Py_GetVersion());
+		ISIXE_LOG_INFO("PythonScriptingController", Py_GetVersion());
 
 		boost::filesystem::path workingDir = boost::filesystem::complete("./").normalize();
 		PyObject * sysPath = PySys_GetObject(PythonAPIWorkaround::path);
@@ -63,22 +63,22 @@ namespace PythonAPIWorkaround {
 
 		std::string scriptsPath;
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", scriptsPath)) {
-			ISIXE_LOG_ERROR("ScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
+			ISIXE_LOG_ERROR("PythonScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
 			return;
 		}
 
 		boost::filesystem::path workingDir2 = boost::filesystem::complete(scriptsPath.c_str()).normalize();
 		PyList_Insert(sysPath, 0, PyString_FromString(workingDir2.string().c_str()));
 
-		_manager = new ScriptingManager();
-		_mailbox = new ScriptingMailbox(_manager);
+		_manager = new PythonScriptingManager();
+		_mailbox = new PythonScriptingMailbox(_manager);
 
-		ISIXE_REGISTERMESSAGETYPE(api::messages::ScriptingMessageType, ScriptingMailbox::News, _mailbox);
+		ISIXE_REGISTERMESSAGETYPE(api::messages::ScriptingMessageType, PythonScriptingMailbox::News, _mailbox);
 	}
 
-	void ScriptingController::ShutDown() {
+	void PythonScriptingController::ShutDown() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		ISIXE_LOG_INFO("ScriptingController", "***Shutting down subsystem***");
+		ISIXE_LOG_INFO("PythonScriptingController", "***Shutting down subsystem***");
 
 		ISIXE_UNREGISTERMESSAGETYPE(api::messages::ScriptingMessageType);
 		Py_Finalize();
@@ -86,12 +86,12 @@ namespace PythonAPIWorkaround {
 		delete _mailbox;
 	}
 
-	void ScriptingController::Tick() {
+	void PythonScriptingController::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_manager->Tick();
 		// *** Tick Code ***
 		if (PyErr_CheckSignals() == -1) {
-			ISIXE_LOG_DEBUG("ScriptingController", "CTRL-C");
+			ISIXE_LOG_DEBUG("PythonScriptingController", "CTRL-C");
 			api::EngineController::GetSingletonPtr()->stop();
 		}
 	}

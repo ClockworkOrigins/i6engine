@@ -15,12 +15,12 @@
  */
 
 /**
- * \addtogroup Scripting
+ * \addtogroup PythonScripting
  * @{
  */
 
-#ifndef __I6ENGINE_MODULES_SCRIPTINGMANAGER_H__
-#define __I6ENGINE_MODULES_SCRIPTINGMANAGER_H__
+#ifndef __I6ENGINE_MODULES_PYTHONSCRIPTINGMANAGER_H__
+#define __I6ENGINE_MODULES_PYTHONSCRIPTINGMANAGER_H__
 
 #include <map>
 
@@ -38,22 +38,22 @@ namespace api {
 } /* namespace api */
 namespace modules {
 
-	class ScriptingMailbox;
+	class PythonScriptingMailbox;
 
-	class ISIXE_MODULES_API ScriptingManager {
-		friend class ScriptingMailbox;
+	class ISIXE_MODULES_API PythonScriptingManager {
+		friend class PythonScriptingMailbox;
 		friend class api::ScriptingFacade;
 
 	public:
 		/**
 		 * \brief constructor
 		 */
-		ScriptingManager();
+		PythonScriptingManager();
 
 		/**
 		 * \brief destructor
 		 */
-		~ScriptingManager();
+		~PythonScriptingManager();
 
 		void Tick();
 
@@ -63,7 +63,7 @@ namespace modules {
 		utils::DoubleBufferQueue<std::function<void(void)>, true, false> _callScripts;
 
 		/**
-		 * \brief called by ScriptingMailbox with a message
+		 * \brief called by PythonScriptingMailbox with a message
 		 */
 		void News(const api::GameMessage::Ptr & msg);
 
@@ -86,7 +86,7 @@ namespace modules {
 		}
 
 		template<typename Ret, typename... args>
-		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScript(const std::string & file, const std::string & func, args... A) {
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScript(const std::string & file, const std::string & func, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
 			_callScripts.push(std::bind([this, file, func, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
@@ -103,7 +103,7 @@ namespace modules {
 		}
 
 		template<typename Ret, typename... args>
-		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... A) {
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
 			_callScripts.push(std::bind([this, func](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
@@ -117,7 +117,7 @@ namespace modules {
 		}
 
 		template<typename Ret, typename... args>
-		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... A) {
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
 			_callScripts.push(std::bind([this, func, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
@@ -136,7 +136,7 @@ namespace modules {
 		typename std::enable_if<std::is_pointer<T>::value>::type setGlobalVariable(const std::string & name, T value) {
 			_callScripts.push(std::bind([this, name, value]() {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				boost::python::scope().attr(name) = value;
+				boost::python::scope().attr(name.c_str()) = value;
 			}));
 		}
 
@@ -148,12 +148,12 @@ namespace modules {
 		/**
 		 * \brief forbidden
 		 */
-		ScriptingManager(const ScriptingManager &) = delete;
+		PythonScriptingManager(const PythonScriptingManager &) = delete;
 
 		/**
 		 * \brief forbidden
 		 */
-		ScriptingManager & operator=(const ScriptingManager &) = delete;
+		PythonScriptingManager & operator=(const PythonScriptingManager &) = delete;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};
@@ -161,7 +161,7 @@ namespace modules {
 } /* namespace modules */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_MODULES_SCRIPTINGMANAGER_H__ */
+#endif /* __I6ENGINE_MODULES_PYTHONSCRIPTINGMANAGER_H__ */
 
 /**
  * @}

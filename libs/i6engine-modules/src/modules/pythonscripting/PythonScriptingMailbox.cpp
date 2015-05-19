@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-#include "i6engine/modules/scripting/ScriptingMailbox.h"
+#include "i6engine/modules/pythonscripting/PythonScriptingMailbox.h"
 
 #include "i6engine/api/FrontendMessageTypes.h"
 
-#include "i6engine/modules/scripting/ScriptingManager.h"
+#include "i6engine/modules/pythonscripting/PythonScriptingManager.h"
 
 namespace i6engine {
 namespace modules {
 
-	ScriptingMailbox::ScriptingMailbox(ScriptingManager * m) : _manager(m) {
+	PythonScriptingMailbox::PythonScriptingMailbox(PythonScriptingManager * m) : _manager(m) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 	}
 
-	void ScriptingMailbox::News(const api::GameMessage::Ptr & msg) const {
+	void PythonScriptingMailbox::News(const api::GameMessage::Ptr & msg) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t msgType = msg->getMessageType();
 

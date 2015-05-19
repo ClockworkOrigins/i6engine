@@ -15,12 +15,12 @@
  */
 
 /**
- * \addtogroup Scripting
+ * \addtogroup PythonScripting
  * @{
  */
 
-#ifndef __I6ENGINE_MODULES_SCRIPTINGMAILBOX_H__
-#define __I6ENGINE_MODULES_SCRIPTINGMAILBOX_H__
+#ifndef __I6ENGINE_MODULES_PYTHONSCRIPTINGMAILBOX_H__
+#define __I6ENGINE_MODULES_PYTHONSCRIPTINGMAILBOX_H__
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
@@ -29,26 +29,26 @@
 namespace i6engine {
 namespace modules {
 
-	class ScriptingController;
-	class ScriptingManager;
+	class PythonScriptingController;
+	class PythonScriptingManager;
 
 	/**
-	 * \class ScriptingMailbox
+	 * \class PythonScriptingMailbox
 	 * \brief Handles the incoming messages on the scripting channel and calls the corresponding methods.
 	 */
-	class ScriptingMailbox {
-		friend class ScriptingController;
+	class PythonScriptingMailbox {
+		friend class PythonScriptingController;
 
 	protected:
 		/**
 		 * \brief Constructor
 		 */
-		explicit ScriptingMailbox(ScriptingManager * m);
+		explicit PythonScriptingMailbox(PythonScriptingManager * m);
 
 		/**
 		 * \brief Destructor
 		 */
-		~ScriptingMailbox() {}
+		~PythonScriptingMailbox() {}
 
 		/**
 		 * \brief Handles incoming messages.
@@ -56,17 +56,17 @@ namespace modules {
 		void News(const api::GameMessage::Ptr & msg) const;
 
 	private:
-		ScriptingManager * _manager;
+		PythonScriptingManager * _manager;
 
 		/**
 		 * \brief forbidden
 		 */
-		ScriptingMailbox(const ScriptingMailbox &) = delete;
+		PythonScriptingMailbox(const PythonScriptingMailbox &) = delete;
 
 		/**
 		 * \brief forbidden
 		 */
-		ScriptingMailbox & operator=(const ScriptingMailbox &) = delete;
+		PythonScriptingMailbox & operator=(const PythonScriptingMailbox &) = delete;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};
@@ -74,7 +74,7 @@ namespace modules {
 } /* namespace modules */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_MODULES_SCRIPTINGMAILBOX_H__ */
+#endif /* __I6ENGINE_MODULES_PYTHONSCRIPTINGMAILBOX_H__ */
 
 /**
  * @}
