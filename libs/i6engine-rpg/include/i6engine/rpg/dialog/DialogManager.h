@@ -82,6 +82,8 @@ namespace dialog {
 		bool _running;
 		std::thread _worker;
 
+		bool _guiInitialized;
+
 		DialogManager();
 
 		bool checkDialogsLoop();

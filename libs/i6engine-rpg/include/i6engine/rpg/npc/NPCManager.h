@@ -36,6 +36,8 @@ namespace npc {
 
 		void createNPC(const std::string & identifier, const Vec3 & pos, bool player);
 
+		NPC * getNPC(const std::string & identifier) const;
+
 	private:
 		std::map<std::string, NPC *> _npcs;
 

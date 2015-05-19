@@ -42,6 +42,10 @@ namespace npc {
 			api::attributeMap paramsDC;
 			paramsDC.insert(std::make_pair("ident", identifier));
 			tpl._components.push_back(api::objects::GOTemplateComponent("DialogChecker", paramsDC, "", false, false));
+		} else {
+			api::attributeMap paramsTPC;
+			paramsTPC.insert(std::make_pair("ident", identifier));
+			tpl._components.push_back(api::objects::GOTemplateComponent("ThirdPersonControl", paramsTPC, "", false, false));
 		}
 
 		NPC * n = new NPC(tpl, player);
@@ -49,6 +53,14 @@ namespace npc {
 #if ISIXE_SCRIPTING != SCRIPTING_NONE
 		api::EngineController::GetSingletonPtr()->getScriptingFacade()->setGlobalVariable(identifier, n);
 #endif
+	}
+
+	NPC * NPCManager::getNPC(const std::string & identifier) const {
+		auto it = _npcs.find(identifier);
+		if (it != _npcs.end()) {
+			return it->second;
+		}
+		return nullptr;
 	}
 
 } /* namespace npc */

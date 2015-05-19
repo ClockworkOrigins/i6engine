@@ -24,23 +24,29 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/DialogCheckerComponent.h"
 #include "i6engine/rpg/components/InventoryComponent.h"
 #include "i6engine/rpg/components/ItemComponent.h"
 #include "i6engine/rpg/components/NameComponent.h"
+#include "i6engine/rpg/config/ExternalConstants.h"
+#include "i6engine/rpg/dialog/DialogManager.h"
 
 namespace i6engine {
 namespace rpg {
 namespace components {
 
-	ThirdPersonControlComponent::ThirdPersonControlComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), api::MessageSubscriberFacade(), _psc(), _highlightTargetID(-1) {
+	ThirdPersonControlComponent::ThirdPersonControlComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), api::MessageSubscriberFacade(), _psc(), _highlightTargetID(-1), _identifier() {
 		_objFamilyID = config::ThirdPersonControlComponent;
 		_objComponentID = config::ThirdPersonControlComponent;
+
+		_identifier = params.find("ident")->second;
 	}
 
 	ThirdPersonControlComponent::~ThirdPersonControlComponent() {
 	}
 
 	api::ComPtr ThirdPersonControlComponent::createC(const int64_t id, const api::attributeMap & params) {
+		ISIXE_THROW_API_COND("ThirdPersonControlComponent", "ident not found!", params.find("ident") != params.end());
 		return utils::make_shared<ThirdPersonControlComponent, api::Component>(id, params);
 	}
 
@@ -138,6 +144,12 @@ namespace components {
 								if (targetGO->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent) != nullptr) {
 									if (ic->addItem(targetGO)) {
 										targetGO->setDie();
+									}
+								} else {
+									if (targetGO->getType() == "NPC") {
+										if ((getOwnerGO()->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - targetGO->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= i6engine::rpg::config::NPC_TALK_DISTANCE) {
+											dialog::DialogManager::GetSingleton().checkDialogs(targetGO->getGOC<DialogCheckerComponent>(config::ComponentTypes::DialogCheckerComponent)->getNPCIdentifier());
+										}
 									}
 								}
 							}

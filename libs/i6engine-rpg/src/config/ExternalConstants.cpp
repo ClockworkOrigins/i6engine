@@ -24,12 +24,14 @@ namespace rpg {
 namespace config {
 
 	double NPC_CHECK_TALK_DISTANCE = 10.0;
+	double NPC_TALK_DISTANCE = 7.5;
 
 	void parseExternalConstants(const std::string & file) {
 		boost::property_tree::ptree pt;
 		boost::property_tree::read_info(file, pt);
 
 		NPC_CHECK_TALK_DISTANCE = pt.get("NPC_CHECK_TALK_DISTANCE", NPC_CHECK_TALK_DISTANCE);
+		NPC_TALK_DISTANCE = pt.get("NPC_TALK_DISTANCE", NPC_TALK_DISTANCE);
 	}
 
 } /* namespace config */

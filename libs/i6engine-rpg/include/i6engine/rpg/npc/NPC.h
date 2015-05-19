@@ -23,6 +23,7 @@
 namespace i6engine {
 namespace api {
 	class GameObject;
+	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;
 	typedef utils::weakPtr<GameObject> WeakGOPtr;
 namespace objects {
 	struct GOTemplate;
@@ -35,6 +36,12 @@ namespace npc {
 	public:
 		NPC(const api::objects::GOTemplate & tpl, bool player);
 		~NPC();
+
+		api::GOPtr getGO() const {
+			return _go.get();
+		}
+
+		void turnToNPC(NPC * npc);
 
 	private:
 		api::WeakGOPtr _go;

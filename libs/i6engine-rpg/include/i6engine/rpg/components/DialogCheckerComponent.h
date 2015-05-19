@@ -57,6 +57,10 @@ namespace components {
 			return "DialogChecker";
 		}
 
+		std::string getNPCIdentifier() const {
+			return _identifier;
+		}
+
 	private:
 		utils::weakPtr<api::PhysicalStateComponent, api::Component> _psc;
 		api::WeakGOPtr _player;

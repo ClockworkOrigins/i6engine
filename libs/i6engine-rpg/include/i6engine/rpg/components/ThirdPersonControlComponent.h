@@ -36,9 +36,14 @@ namespace components {
 			return {};
 		}
 
+		std::string getNPCIdentifier() const {
+			return _identifier;
+		}
+
 	private:
 		utils::weakPtr<api::PhysicalStateComponent, api::Component> _psc;
 		int64_t _highlightTargetID;
+		std::string _identifier;
 	};
 
 } /* namespace components */

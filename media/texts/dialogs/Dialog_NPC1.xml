@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<!-- Dialogs names -->
+<Key key="Dialog_NPC1_HaveYouQuest_Description">
+	<Language name="Deutsch">Hast du etwas für mich zu tun?</Language>
+	<Language name="English">Is there something I can do for you?</Language>
+</Key>
+<Key key="DIALOG_EXIT">
+	<Language name="Deutsch">ENDE</Language>
+	<Language name="English">EXIT</Language>
+</Key>

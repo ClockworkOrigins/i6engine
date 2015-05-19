@@ -31,6 +31,7 @@ namespace rpg {
 namespace config {
 
 	extern ISIXE_RPG_API double NPC_CHECK_TALK_DISTANCE;
+	extern ISIXE_RPG_API double NPC_TALK_DISTANCE;
 
 	ISIXE_RPG_API void parseExternalConstants(const std::string & file);
 

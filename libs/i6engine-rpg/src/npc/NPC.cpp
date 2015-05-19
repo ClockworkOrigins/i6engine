@@ -32,6 +32,9 @@ namespace npc {
 	NPC::~NPC() {
 	}
 
+	void NPC::turnToNPC(NPC * npc) {
+	}
+
 } /* namespace npc */
 } /* namespace rpg */
 } /* namespace i6engine */
