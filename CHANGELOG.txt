@@ -3,6 +3,7 @@
 Enhancements:
 	- renamed python scripting module so it is named as lua scripting module is
 	- renamed cmake variables to be more consistent
+	- reduced samples to a minimum configuration
 
 Fixes:
 	- fixed error in template of callFunction in LuaScriptingManager with return value

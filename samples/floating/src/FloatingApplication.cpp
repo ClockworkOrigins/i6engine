@@ -40,9 +40,6 @@ namespace sample {
 		// ambient light for the scene
 		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
 
-		// setting shadow technique... currently only additive stencil possible
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique::Stencil_Additive);
-
 		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
 		{
 			i6engine::api::objects::GOTemplate tmpl;
