@@ -14,27 +14,41 @@
  * limitations under the License.
  */
 
-#include "i6engine/rpg/npc/NPC.h"
-
-#include "i6engine/api/EngineController.h"
-#include "i6engine/api/facades/ObjectFacade.h"
+#ifndef __I6ENGINE_RPG_NPC_NPCQUEUEJOB_H__
+#define __I6ENGINE_RPG_NPC_NPCQUEUEJOB_H__
 
 namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPC::NPC(const api::objects::GOTemplate & tpl, bool player) : _go(), _queue() {
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO((player) ? "Player" : "NPC", tpl, api::EngineController::GetSingletonPtr()->getUUID(), false, [this](api::GOPtr go) {
-			_go = go;
-		});
-	}
+	class NPCQueueJob {
+	public:
+		/**
+		 * \brief called when job is created
+		 * use this method for initialization
+		 */
+		virtual void start() = 0;
 
-	NPC::~NPC() {
-	}
+		/**
+		 * \brief called during every check
+		 * use for stuff to be done more often
+		 */
+		virtual void loop() = 0;
 
-	void NPC::turnToNPC(NPC * npc) {
-	}
+		/**
+		 * \brief called before job is deleted
+		 * use this method for cleanup
+		 */
+		virtual void finish() = 0;
+
+		/**
+		 * \brief returns true if job is completed and can be removed
+		 */
+		virtual bool condition() = 0;
+	};
 
 } /* namespace npc */
 } /* namespace rpg */
 } /* namespace i6engine */
+
+#endif /* __I6ENGINE_RPG_NPC_NPCQUEUEJOB_H__ */

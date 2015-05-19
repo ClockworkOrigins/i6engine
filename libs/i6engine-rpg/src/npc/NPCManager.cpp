@@ -26,10 +26,12 @@ namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPCManager::NPCManager() : _npcs() {
+	NPCManager::NPCManager() : _npcs(), _worker(std::bind(&NPCManager::checkNPCs, this)), _running(true) {
 	}
 
 	NPCManager::~NPCManager() {
+		_running = false;
+		_worker.join();
 	}
 
 	void NPCManager::createNPC(const std::string & identifier, const Vec3 & pos, bool player) {
@@ -61,6 +63,16 @@ namespace npc {
 			return it->second;
 		}
 		return nullptr;
+	}
+
+	void NPCManager::checkNPCs() {
+		while (_running) {
+			for (auto & p : _npcs) {
+				p.second->workQueue();
+			}
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		}
 	}
 
 } /* namespace npc */

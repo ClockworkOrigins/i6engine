@@ -20,6 +20,8 @@
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/weakPtr.h"
 
+#include "i6engine/rpg/npc/NPCQueue.h"
+
 namespace i6engine {
 namespace api {
 	class GameObject;
@@ -43,8 +45,13 @@ namespace npc {
 
 		void turnToNPC(NPC * npc);
 
+		void workQueue() {
+			_queue.checkJobs();
+		}
+
 	private:
 		api::WeakGOPtr _go;
+		NPCQueue _queue;
 	};
 
 } /* namespace npc */

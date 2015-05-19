@@ -58,6 +58,7 @@ set(i6rpgSrc
 	${srcdir}/npc/NPC.cpp
 	${srcdir}/npc/NPCManager.cpp
 	${srcdir}/npc/NPCParser.cpp
+	${srcdir}/npc/NPCQueue.cpp
 )
 
 SOURCE_GROUP(rpg\\components src/components/*)

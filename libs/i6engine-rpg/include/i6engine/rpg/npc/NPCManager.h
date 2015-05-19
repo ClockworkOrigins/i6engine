@@ -17,6 +17,8 @@
 #ifndef __I6ENGINE_RPG_NPC_NPCMANAGER_H__
 #define __I6ENGINE_RPG_NPC_NPCMANAGER_H__
 
+#include <thread>
+
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Singleton.h"
 
@@ -41,7 +43,13 @@ namespace npc {
 	private:
 		std::map<std::string, NPC *> _npcs;
 
+		// TODO: (Daniel) exchange this with scheduler job implementing ticket ISIXE-1457
+		std::thread _worker;
+		bool _running;
+
 		NPCManager();
+
+		void checkNPCs();
 	};
 
 } /* namespace npc */

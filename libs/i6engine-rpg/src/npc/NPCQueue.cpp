@@ -14,25 +14,33 @@
  * limitations under the License.
  */
 
-#include "i6engine/rpg/npc/NPC.h"
+#include "i6engine/rpg/npc/NPCQueue.h"
 
-#include "i6engine/api/EngineController.h"
-#include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/rpg/npc/NPCQueueJob.h"
 
 namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPC::NPC(const api::objects::GOTemplate & tpl, bool player) : _go(), _queue() {
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO((player) ? "Player" : "NPC", tpl, api::EngineController::GetSingletonPtr()->getUUID(), false, [this](api::GOPtr go) {
-			_go = go;
-		});
+	NPCQueue::NPCQueue() : _queue() {
 	}
 
-	NPC::~NPC() {
+	void NPCQueue::addJob(NPCQueueJob * job) {
+		job->start();
+		_queue.push(job);
 	}
 
-	void NPC::turnToNPC(NPC * npc) {
+	void NPCQueue::checkJobs() {
+		if (!_queue.empty()) {
+			NPCQueueJob * job = _queue.front();
+			if (!job->condition()) {
+				job->loop();
+			} else {
+				job->finish();
+				delete job;
+				_queue.pop();
+			}
+		}
 	}
 
 } /* namespace npc */

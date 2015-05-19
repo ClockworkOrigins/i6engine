@@ -14,27 +14,31 @@
  * limitations under the License.
  */
 
-#include "i6engine/rpg/npc/NPC.h"
+#ifndef __I6ENGINE_RPG_NPC_NPCQUEUE_H__
+#define __I6ENGINE_RPG_NPC_NPCQUEUE_H__
 
-#include "i6engine/api/EngineController.h"
-#include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/utils/DoubleBufferQueue.h"
 
 namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPC::NPC(const api::objects::GOTemplate & tpl, bool player) : _go(), _queue() {
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO((player) ? "Player" : "NPC", tpl, api::EngineController::GetSingletonPtr()->getUUID(), false, [this](api::GOPtr go) {
-			_go = go;
-		});
-	}
+	class NPCQueueJob;
 
-	NPC::~NPC() {
-	}
+	class NPCQueue {
+	public:
+		NPCQueue();
 
-	void NPC::turnToNPC(NPC * npc) {
-	}
+		void addJob(NPCQueueJob * job);
+
+		void checkJobs();
+
+	private:
+		utils::DoubleBufferQueue<NPCQueueJob *, true, false> _queue;
+	};
 
 } /* namespace npc */
 } /* namespace rpg */
 } /* namespace i6engine */
+
+#endif /* __I6ENGINE_RPG_NPC_NPCQUEUE_H__ */
