@@ -37,6 +37,13 @@ namespace npc {
 		api::attributeMap paramsPSC;
 		pos.insertInMap("pos", paramsPSC);
 		tpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+
+		if (!player) {
+			api::attributeMap paramsDC;
+			paramsDC.insert(std::make_pair("ident", identifier));
+			tpl._components.push_back(api::objects::GOTemplateComponent("DialogChecker", paramsDC, "", false, false));
+		}
+
 		NPC * n = new NPC(tpl, player);
 		_npcs.insert(std::make_pair(identifier, n));
 #if ISIXE_SCRIPTING != SCRIPTING_NONE

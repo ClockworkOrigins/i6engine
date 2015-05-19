@@ -38,4 +38,6 @@
 	</Component>
 	<Component template="Move" owner="true">
 	</Component>
+	<Component template="DialogChecker" owner="true">
+	</Component>
 </GOTemplate>

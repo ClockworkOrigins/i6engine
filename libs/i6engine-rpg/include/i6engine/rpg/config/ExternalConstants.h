@@ -19,40 +19,26 @@
  * @{
  */
 
-#ifndef __I6ENGINE_RPG_COMPONENTS_CONFIG_H__
-#define __I6ENGINE_RPG_COMPONENTS_CONFIG_H__
+#ifndef __I6ENGINE_RPG_CONFIG_EXTERNALCONSTANTS_H__
+#define __I6ENGINE_RPG_CONFIG_EXTERNALCONSTANTS_H__
 
-#include "i6engine/api/configs/ComponentConfig.h"
+#include <string>
+
+#include "i6engine/utils/i6eSystemParameters.h"
 
 namespace i6engine {
 namespace rpg {
-namespace components {
 namespace config {
 
-	enum ComponentTypes {
-		ItemComponent = api::components::ComponentTypes::ComponentTypesCount,
-		UsableItemComponent,
-		AttributeComponent,
-		NameComponent,
-		InventoryComponent,
-		ThirdPersonControlComponent,
-		HealthbarComponent,
-		ListInventoryComponent,
-		QuickslotComponent,
-		WeightInventoryComponent,
-		SlotComponent,
-		SlotInventoryComponent,
-		HumanMovementComponent,
-		DialogCheckerComponent,
-		ComponentTypesCount
-	};
+	extern ISIXE_RPG_API double NPC_CHECK_TALK_DISTANCE;
+
+	ISIXE_RPG_API void parseExternalConstants(const std::string & file);
 
 } /* namespace config */
-} /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_RPG_COMPONENTS_CONFIG_H__ */
+#endif /* __I6ENGINE_RPG_CONFIG_EXTERNALCONSTANTS_H__ */
 
 /**
  * @}

@@ -69,7 +69,7 @@ scope registerRPG() {
 	return
 		def("insertNPCAtWaypoint", &i6engine::lua::rpg::insertNPCAtWaypoint),
 		def("insertPlayerAtWaypoint", &i6engine::lua::rpg::insertPlayerAtWaypoint),
-		def("wasHeards", &i6engine::lua::rpg::wasHeard),
+		def("wasHeard", &i6engine::lua::rpg::wasHeard),
 
 		class_<i6engine::rpg::dialog::Dialog>("Dialog")
 			.def(constructor<const std::string &, const std::string &>()),

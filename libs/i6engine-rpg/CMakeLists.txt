@@ -33,6 +33,7 @@ set(srcdir ./src)
 
 set(i6rpgSrc
 	${srcdir}/components/AttributeComponent.cpp
+	${srcdir}/components/DialogCheckerComponent.cpp
 	${srcdir}/components/HealthbarComponent.cpp
 	${srcdir}/components/HumanMovementComponent.cpp
 	${srcdir}/components/InventoryComponent.cpp
@@ -46,6 +47,8 @@ set(i6rpgSrc
 	${srcdir}/components/UsableItemComponent.cpp
 	${srcdir}/components/WeightInventoryComponent.cpp
 	
+	${srcdir}/config/ExternalConstants.cpp
+	
 	${srcdir}/dialog/Dialog.cpp
 	${srcdir}/dialog/DialogManager.cpp
 	${srcdir}/dialog/DialogParser.cpp
@@ -58,6 +61,7 @@ set(i6rpgSrc
 )
 
 SOURCE_GROUP(rpg\\components src/components/*)
+SOURCE_GROUP(rpg\\config src/config/*)
 SOURCE_GROUP(rpg\\dialog src/dialog/*)
 SOURCE_GROUP(rpg\\gui src/gui/*)
 SOURCE_GROUP(rpg\\npc src/npc/*)

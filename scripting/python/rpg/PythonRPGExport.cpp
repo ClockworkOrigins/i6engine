@@ -68,7 +68,7 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 
 	def("insertNPCAtWaypoint", &i6engine::python::rpg::insertNPCAtWaypoint);
 	def("insertPlayerAtWaypoint", &i6engine::python::rpg::insertPlayerAtWaypoint);
-	def("wasHeards", &i6engine::python::rpg::wasHeard);
+	def("wasHeard", &i6engine::python::rpg::wasHeard);
 
 	class_<i6engine::rpg::dialog::Dialog>("Dialog", no_init);
 	class_<i6engine::rpg::npc::NPC>("NPC", no_init);

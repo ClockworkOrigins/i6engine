@@ -55,13 +55,16 @@ namespace dialog {
 		std::lock_guard<std::mutex> lg(_lock);
 		auto it = _npcDialogs.find(identifier);
 		if (it != _npcDialogs.end()) {
+			std::cout << "Hier" << std::endl;
 			for (Dialog * d : it->second) {
 				if (d->important) {
 					if (d->conditionScript.empty()) {
+						std::cout << "Found Important Dialog without condition" << std::endl;
 						auto r = std::make_shared<utils::Future<bool>>();
 						r->push(true);
 						_importantChecks.push(std::make_tuple(identifier, d->identifier, r));
 					} else {
+						std::cout << "Found Important Dialog with condition" << std::endl;
 						_importantChecks.push(std::make_tuple(identifier, d->identifier, api::EngineController::GetSingleton().getScriptingFacade()->callFunction<bool>(d->conditionScript)));
 					}
 				}

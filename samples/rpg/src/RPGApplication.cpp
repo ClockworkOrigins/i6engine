@@ -31,6 +31,7 @@
 
 #include "i6engine/rpg/components/Config.h"
 #include "i6engine/rpg/components/AttributeComponent.h"
+#include "i6engine/rpg/components/DialogCheckerComponent.h"
 #include "i6engine/rpg/components/HealthbarComponent.h"
 #include "i6engine/rpg/components/HumanMovementComponent.h"
 #include "i6engine/rpg/components/ListInventoryComponent.h"
@@ -41,6 +42,8 @@
 #include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 #include "i6engine/rpg/components/UsableItemComponent.h"
 #include "i6engine/rpg/components/WeightInventoryComponent.h"
+
+#include "i6engine/rpg/config/ExternalConstants.h"
 
 #include "i6engine/rpg/dialog/DialogManager.h"
 #include "i6engine/rpg/npc/NPCParser.h"
@@ -57,6 +60,12 @@ namespace sample {
 	}
 
 	void RPGApplication::Initialize() {
+		std::string externalConstantsFile;
+		if (_iniParser.getValue("SCRIPT", "externalConstants", externalConstantsFile) != clockUtils::ClockError::SUCCESS) {
+			ISIXE_THROW_FAILURE("RPGApplication", "'externalConstants' in section 'SCRIPT' in RPG.ini not found!");
+		}
+		i6engine::rpg::config::parseExternalConstants(externalConstantsFile);
+
 		std::string NPCDirectory;
 		if (_iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'npcDirectory' in section 'SCRIPT' in RPG.ini not found!");
@@ -108,6 +117,7 @@ namespace sample {
 		// register rpg components we want to use
 		// do this befor loading the level
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6engine::rpg::components::AttributeComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&i6engine::rpg::components::DialogCheckerComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&i6engine::rpg::components::HealthbarComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&i6engine::rpg::components::HumanMovementComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&i6engine::rpg::components::ListInventoryComponent::createC, _1, _2));
