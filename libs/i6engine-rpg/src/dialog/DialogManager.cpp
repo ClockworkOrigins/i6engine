@@ -25,10 +25,12 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs() {
+	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)) {
 	}
 
 	DialogManager::~DialogManager() {
+		_running = false;
+		_worker.join();
 	}
 
 	void DialogManager::loadDialogs(const std::string & directory) {
@@ -55,7 +57,6 @@ namespace dialog {
 		std::lock_guard<std::mutex> lg(_lock);
 		auto it = _npcDialogs.find(identifier);
 		if (it != _npcDialogs.end()) {
-			std::cout << "Hier" << std::endl;
 			for (Dialog * d : it->second) {
 				if (d->important) {
 					if (d->conditionScript.empty()) {
@@ -98,26 +99,29 @@ namespace dialog {
 	}
 
 	bool DialogManager::checkDialogsLoop() {
-		// while a dialog is active new important dialogs mustn't start
-		if (_dialogActive) {
-			_importantChecks.clear();
-		}
-		while (!_importantChecks.empty()) {
-			auto t = _importantChecks.poll();
-			if (std::get<DialogCheck::Result>(t)->get()) {
-				// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
-				if (runDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t))) {
-					_importantChecks.clear();
-					_showDialogboxChecks.clear();
+		while (_running) {
+			// while a dialog is active new important dialogs mustn't start
+			if (_dialogActive) {
+				_importantChecks.clear();
+			}
+			while (!_importantChecks.empty()) {
+				auto t = _importantChecks.poll();
+				if (std::get<DialogCheck::Result>(t)->get()) {
+					// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
+					if (runDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t))) {
+						_importantChecks.clear();
+						_showDialogboxChecks.clear();
+					}
 				}
 			}
-		}
-		while (!_showDialogboxChecks.empty()) {
-			auto t = _showDialogboxChecks.poll();
-			if (std::get<DialogCheck::Result>(t)->get()) {
-				// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
-				showDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t));
+			while (!_showDialogboxChecks.empty()) {
+				auto t = _showDialogboxChecks.poll();
+				if (std::get<DialogCheck::Result>(t)->get()) {
+					// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
+					showDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t));
+				}
 			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		}
 
 		return true;
@@ -135,6 +139,8 @@ namespace dialog {
 				if (d->identifier == dia) {
 					api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(d->infoScript);
 					_heardDialogs.insert(d);
+					_dialogActive = true;
+					std::cout << "Oh my god, this dialog would be ran: " << d->identifier << std::endl;
 					if (!d->permanent) {
 						for (auto p : d->participants) {
 							auto it2 = _npcDialogs.find(p);
