@@ -47,6 +47,7 @@
     #include "wx/statusbr.h"
     #include "wx/intl.h"
     #include "wx/frame.h"
+    #include "wx/listbox.h"
 #endif
 
 #include <wx/filename.h>

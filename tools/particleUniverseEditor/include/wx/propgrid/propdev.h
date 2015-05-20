@@ -24,6 +24,7 @@
 
 
 class WXDLLIMPEXP_PG wxArrayEditorDialog;
+class wxListBox;
 
 // -----------------------------------------------------------------------
 

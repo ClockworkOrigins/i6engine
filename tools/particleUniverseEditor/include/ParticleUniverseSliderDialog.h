@@ -18,6 +18,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #define ID_SLIDER 2001
 
 class wxTextCtrl;
+class wxSlider;
 
 class SliderDialog : public wxDialog
 {
