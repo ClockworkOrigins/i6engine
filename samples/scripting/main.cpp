@@ -37,8 +37,6 @@ int main(int argc, char ** argv) {
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6engine::modules::ObjectController(), { i6engine::core::Subsystem::Physic });
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6engine::modules::InputController(), LNG_INPUT_FRAME_TIME);
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new i6engine::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Network", new i6engine::modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new i6engine::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Scripting", new i6engine::modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
@@ -55,4 +53,3 @@ int main(int argc, char ** argv) {
 
 	return 0;
 }
-
