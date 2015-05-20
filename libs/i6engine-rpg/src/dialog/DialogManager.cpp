@@ -30,12 +30,13 @@
 #include "i6engine/rpg/dialog/Dialog.h"
 #include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/NPCManager.h"
+#include "i6engine/rpg/npc/queueJobs/ShowDialogsJob.h"
 
 namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)), _guiInitialized(false), _activeNPC(), _dialogMapping() {
+	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)), _guiInitialized(false), _activeNPCs(), _dialogMapping(), _showDialogCalls(0) {
 	}
 
 	DialogManager::~DialogManager() {
@@ -91,6 +92,10 @@ namespace dialog {
 	}
 
 	void DialogManager::checkDialogs(const std::string & identifier) {
+		_showDialogCalls++;
+		if (_showDialogCalls < _activeNPCs.size() + 1) {
+			return;
+		}
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		if (!_guiInitialized) {
 			_guiInitialized = true;
@@ -101,10 +106,11 @@ namespace dialog {
 			gf->setVisibility("DialogBox", true);
 			gf->setVisibility("DialogList", true);
 		}
-		gf->setSelectedStringCallback("DialogList", [this](std::string s) {
-			runDialog(_activeNPC, _dialogMapping[s]);
+		gf->setSelectedStringCallback("DialogList", [this, identifier](std::string s) {
+			if (!_dialogMapping.empty()) {
+				runDialog(identifier, _dialogMapping[s]);
+			}
 		});
-		_activeNPC = identifier;
 		_dialogActive = true;
 		std::lock_guard<std::mutex> lg(_lock);
 		auto it = _npcDialogs.find(identifier);
@@ -248,15 +254,25 @@ namespace dialog {
 			for (Dialog * d : it->second) {
 				if (d->identifier == dia) {
 					_dialogMapping.clear();
-					api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(d->infoScript);
+					_showDialogCalls = 0;
 					_heardDialogs.insert(d);
 					_dialogActive = true;
 					auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
 					auto player = *playerList.begin();
-					npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
 					npc::NPC * nt = npc::NPCManager::GetSingleton().getNPC(*d->participants.begin());
+					npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
 					p->turnToNPC(nt);
-					_activeNPC = *d->participants.begin();
+					api::EngineController::GetSingleton().getScriptingFacade()->callFunctionWithCallback<void>(d->infoScript, [d]() {
+						auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
+						auto player = *playerList.begin();
+						npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
+						p->addJob(new npc::ShowDialogsJob(*d->participants.begin()));
+						for (std::string s : d->participants) {
+							npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(s);
+							n->addJob(new npc::ShowDialogsJob(*d->participants.begin()));
+						}
+					});
+					_activeNPCs = d->participants;
 					if (!d->permanent) {
 						for (auto p : d->participants) {
 							auto it2 = _npcDialogs.find(p);
@@ -297,8 +313,7 @@ namespace dialog {
 			}
 			n->turnToNPC(p);
 		}
-
-		_dialogMapping.insert(std::make_pair(it->second->description, dia));
+		_dialogMapping.insert(std::make_pair(api::EngineController::GetSingleton().getTextManager()->getText(it->second->description), dia));
 
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		gf->addTextToWidget("DialogList", api::EngineController::GetSingleton().getTextManager()->getText(it->second->description));

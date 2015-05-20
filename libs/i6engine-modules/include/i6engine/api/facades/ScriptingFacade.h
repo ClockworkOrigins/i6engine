@@ -70,6 +70,26 @@ namespace api {
 			return _manager->callFunction<Ret>(func, B...);
 		}
 
+		template<typename Ret, typename... args>
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
+			_manager->callScriptWithCallback<Ret>(file, func, callback, B...);
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
+			return _manager->callScriptWithCallback<Ret>(file, func, callback, B...);
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
+			_manager->callFunctionWithCallback<Ret>(func, callback, B...);
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
+			return _manager->callFunction<Ret>(func, callback, B...);
+		}
+
 		template<typename T>
 		typename std::enable_if<std::is_pointer<T>::value>::type setGlobalVariable(const std::string & name, T value) {
 			_manager->setGlobalVariable(name, value);

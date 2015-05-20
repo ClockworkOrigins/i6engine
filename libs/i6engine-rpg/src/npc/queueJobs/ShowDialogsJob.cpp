@@ -14,39 +14,29 @@
  * limitations under the License.
  */
 
-#include "i6engine/rpg/npc/NPCQueue.h"
+#include "i6engine/rpg/npc/queueJobs/ShowDialogsJob.h"
 
-#include "i6engine/rpg/npc/NPCQueueJob.h"
+#include "i6engine/rpg/dialog/DialogManager.h"
 
 namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPCQueue::NPCQueue() : _queue() {
+	ShowDialogsJob::ShowDialogsJob(const std::string & identifier) : _identifier(identifier) {
 	}
 
-	void NPCQueue::addJob(NPCQueueJob * job) {
-		if (_queue.empty()) {
-			job->start();
-		}
-		_queue.push(job);
+	void ShowDialogsJob::start() {
 	}
 
-	void NPCQueue::checkJobs() {
-		while (!_queue.empty()) {
-			NPCQueueJob * job = _queue.front();
-			if (!job->condition()) {
-				job->loop();
-				break;
-			} else {
-				job->finish();
-				delete job;
-				_queue.pop();
-				if (!_queue.empty()) {
-					_queue.front()->start();
-				}
-			}
-		}
+	void ShowDialogsJob::loop() {
+	}
+
+	void ShowDialogsJob::finish() {
+		dialog::DialogManager::GetSingleton().checkDialogs(_identifier);
+	}
+
+	bool ShowDialogsJob::condition() {
+		return true;
 	}
 
 } /* namespace npc */

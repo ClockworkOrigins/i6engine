@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-#include "i6engine/rpg/npc/NPCQueue.h"
+#ifndef __I6ENGINE_RPG_NPC_QUEUE_SHOWDIALOGSJOB_H__
+#define __I6ENGINE_RPG_NPC_QUEUE_SHOWDIALOGSJOB_H__
+
+#include <string>
 
 #include "i6engine/rpg/npc/NPCQueueJob.h"
 
@@ -22,33 +25,27 @@ namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPCQueue::NPCQueue() : _queue() {
-	}
+	class ShowDialogsJob : public NPCQueueJob {
+	public:
+		ShowDialogsJob(const std::string & identifier);
 
-	void NPCQueue::addJob(NPCQueueJob * job) {
-		if (_queue.empty()) {
-			job->start();
+		~ShowDialogsJob() {
 		}
-		_queue.push(job);
-	}
 
-	void NPCQueue::checkJobs() {
-		while (!_queue.empty()) {
-			NPCQueueJob * job = _queue.front();
-			if (!job->condition()) {
-				job->loop();
-				break;
-			} else {
-				job->finish();
-				delete job;
-				_queue.pop();
-				if (!_queue.empty()) {
-					_queue.front()->start();
-				}
-			}
-		}
-	}
+		void start();
+
+		void loop();
+
+		void finish();
+
+		bool condition();
+
+	private:
+		std::string _identifier;
+	};
 
 } /* namespace npc */
 } /* namespace rpg */
 } /* namespace i6engine */
+
+#endif /* __I6ENGINE_RPG_NPC_QUEUE_SHOWDIALOGSJOB_H__ */

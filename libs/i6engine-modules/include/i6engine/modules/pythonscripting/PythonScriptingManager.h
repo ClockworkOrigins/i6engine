@@ -132,6 +132,72 @@ namespace modules {
 			return ret;
 		}
 
+		template<typename Ret, typename... args>
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
+			_callScripts.push(std::bind([this, file, func, callback](args... A) {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				parseScript(file);
+
+				try {
+					boost::python::object f = _scripts[file][func];
+					boost::python::call<Ret>(f.ptr(), A...);
+				} catch (const boost::python::error_already_set &) {
+					PyErr_PrintEx(0);
+				}
+				callback();
+			}, B...));
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
+			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
+			_callScripts.push(std::bind([this, file, func, callback, ret](args... A) {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				parseScript(file);
+
+				try {
+					boost::python::object f = _scripts[file][func];
+					ret->push(boost::python::call<Ret>(f.ptr(), A...));
+				} catch (const boost::python::error_already_set &) {
+					PyErr_PrintEx(0);
+				}
+				callback();
+			}, B...));
+			return ret;
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
+			_callScripts.push(std::bind([this, func, callback](args... A) {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
+				/*try {
+				boost::python::object f = _scripts[file][func];
+				boost::python::call<Ret>(f.ptr(), B...);
+				} catch (const boost::python::error_already_set &) {
+				PyErr_PrintEx(0);
+				}*/
+				callback();
+			}, B...));
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
+			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
+			_callScripts.push(std::bind([this, func, callback, ret](args... A) {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
+				/*try {
+				boost::python::object f = _scripts[func];
+				ret->push(boost::python::call<Ret>(f.ptr(), B...));
+				} catch (const boost::python::error_already_set &) {
+				PyErr_PrintEx(0);
+				}*/
+				callback();
+			}, B...));
+			return ret;
+		}
+
 		template<typename T>
 		typename std::enable_if<std::is_pointer<T>::value>::type setGlobalVariable(const std::string & name, T value) {
 			_callScripts.push(std::bind([this, name, value]() {

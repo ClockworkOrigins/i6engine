@@ -53,9 +53,10 @@ namespace modules {
 		} else if (type == api::gui::GuiSetAmount) {
 			_amount = static_cast<api::gui::GUI_Amount *>(data)->amount;
 		} else if (type == api::gui::GuiSetSelectedStringCallback) {
+			if (_selectedCallback == nullptr) {
+				_window->subscribeEvent(CEGUI::Listbox::EventSelectionChanged, CEGUI::Event::Subscriber(&GUIStatusList::selectionChanged, this));
+			}
 			_selectedCallback = static_cast<api::gui::GUI_SetSelectedStringCallback *>(data)->callback;
-
-			_window->subscribeEvent(CEGUI::Listbox::EventSelectionChanged, CEGUI::Event::Subscriber(&GUIStatusList::selectionChanged, this));
 		} else {
 			GUIWidget::update(type, data);
 		}

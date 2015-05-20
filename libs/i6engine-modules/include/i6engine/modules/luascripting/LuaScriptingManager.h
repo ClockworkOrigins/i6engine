@@ -151,6 +151,88 @@ namespace modules {
 			return ret;
 		}
 
+		template<typename Ret, typename... args>
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
+			_callScripts.push(std::bind([this, file, func, callback](args... A) {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				if (!parseScript(file, false)) {
+					return;
+				}
+				try {
+					lua_getglobal(_luaState, func.c_str());
+					assert(lua_isfunction(_luaState, -1));
+					luabind::object o(luabind::from_stack(_luaState, -1));
+					luabind::call_function<Ret>(o, A...);
+				} catch (const luabind::error & e) {
+					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (const std::exception & e) {
+					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				}
+				callback();
+			}, B...));
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
+			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
+			_callScripts.push(std::bind([this, file, func, callback, ret](args... A) {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				if (!parseScript(file, false)) {
+					ret->push(Ret());
+				}
+				try {
+					lua_getglobal(_luaState, func.c_str());
+					assert(lua_isfunction(_luaState, -1));
+					luabind::object o(luabind::from_stack(_luaState, -1));
+					ret->push(Ret(luabind::call_function<Ret>(o, A...)));
+				} catch (const luabind::error & e) {
+					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (const std::exception & e) {
+					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				}
+				callback();
+			}, B...));
+			return ret;
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
+			_callScripts.push(std::bind([this, func, callback](args... A) {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				try {
+					lua_getglobal(_luaState, func.c_str());
+					assert(lua_isfunction(_luaState, -1));
+					luabind::object o(luabind::from_stack(_luaState, -1));
+					luabind::call_function<Ret>(o, A...);
+				} catch (const luabind::error & e) {
+					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (const std::exception & e) {
+					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				}
+				callback();
+			}, B...));
+		}
+
+		template<typename Ret, typename... args>
+		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
+			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
+			_callScripts.push(std::bind([this, func, ret](args... A) {
+				ASSERT_THREAD_SAFETY_FUNCTION
+				try {
+					lua_getglobal(_luaState, func.c_str());
+					assert(lua_isfunction(_luaState, -1));
+					luabind::object o(luabind::from_stack(_luaState, -1));
+					ret->push(Ret(luabind::call_function<Ret>(o, A...)));
+				} catch (const luabind::error & e) {
+					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (const std::exception & e) {
+					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				}
+				callback();
+			}, B...));
+			return ret;
+		}
+
 		template<typename T>
 		typename std::enable_if<std::is_pointer<T>::value>::type setGlobalVariable(const std::string & name, T value) {
 			_callScripts.push(std::bind([this, name, value]() {

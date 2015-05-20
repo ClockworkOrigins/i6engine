@@ -45,6 +45,10 @@ namespace npc {
 
 		void turnToNPC(NPC * npc);
 
+		void addJob(NPCQueueJob * job) {
+			_queue.addJob(job);
+		}
+
 		void workQueue() {
 			_queue.checkJobs();
 		}

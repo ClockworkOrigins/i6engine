@@ -59,6 +59,8 @@ set(i6rpgSrc
 	${srcdir}/npc/NPCManager.cpp
 	${srcdir}/npc/NPCParser.cpp
 	${srcdir}/npc/NPCQueue.cpp
+	
+	${srcdir}/npc/queueJobs/ShowDialogsJob.cpp
 	${srcdir}/npc/queueJobs/TurnToNpcJob.cpp
 )
 

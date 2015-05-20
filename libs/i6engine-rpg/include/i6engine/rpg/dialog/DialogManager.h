@@ -84,8 +84,9 @@ namespace dialog {
 
 		bool _guiInitialized;
 
-		std::string _activeNPC;
+		std::vector<std::string> _activeNPCs;
 		std::map<std::string, std::string> _dialogMapping;
+		uint8_t _showDialogCalls;
 
 		DialogManager();
 
