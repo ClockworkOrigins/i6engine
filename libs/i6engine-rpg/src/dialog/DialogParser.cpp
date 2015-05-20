@@ -99,12 +99,12 @@ namespace dialog {
 			if (dialog->FirstChildElement("Permanent") != nullptr) {
 				std::string perm = dialog->FirstChildElement("Permanent")->GetText();
 				std::transform(perm.begin(), perm.end(), perm.begin(), ::tolower);
-				d->permanent  = (perm == "true" || perm == "1") ? true : false;
+				d->permanent = (perm == "true" || perm == "1");
 			}
 			if (dialog->FirstChildElement("Important") != nullptr) {
 				std::string perm = dialog->FirstChildElement("Important")->GetText();
 				std::transform(perm.begin(), perm.end(), perm.begin(), ::tolower);
-				d->important = (perm == "true" || perm == "1") ? true : false;
+				d->important = (perm == "true" || perm == "1");
 			}
 			if (dialog->FirstChildElement("Description") != nullptr) {
 				d->description = dialog->FirstChildElement("Description")->GetText();
