@@ -218,8 +218,8 @@ namespace math {
 		/**
 		 * \brief length of the Vector
 		 */
-		double length() const {
-			return std::sqrt(_x * _x + _y * _y);
+		T length() const {
+			return T(std::sqrt(_x * _x + _y * _y));
 		}
 
 		/**
@@ -263,11 +263,6 @@ namespace math {
 	typename std::enable_if<std::is_floating_point<T>::value, bool>::type operator==(const i6eVector2<T> & first, const i6eVector2<T> & second) {
 		return std::fabs(first.getX() - second.getX()) < FLT_EPSILON && std::fabs(first.getY() - second.getY()) < FLT_EPSILON;
 	}
-	/*template<>
-	bool i6eVector2<int32_t>::operator==(const i6eVector2<int32_t> & b) const;
-
-	template<>
-	bool i6eVector2<uint32_t>::operator==(const i6eVector2<uint32_t> & b) const;*/
 
 } /* namespace math */
 } /* namespace i6engine */

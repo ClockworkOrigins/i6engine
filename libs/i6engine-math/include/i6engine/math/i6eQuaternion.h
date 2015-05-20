@@ -102,7 +102,7 @@ namespace math {
 		/*
 		 * \brief Constructs a quaternion from a string
 		 */
-		i6eQuaternion(const std::string & str);
+		explicit i6eQuaternion(const std::string & str);
 
 		/**
 		 * \brief Empty
