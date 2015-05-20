@@ -34,7 +34,7 @@ set(srcdir .)
 
 set(luaExportSrc
 	${srcdir}/LuaExport.cpp
-	
+
 	${srcdir}/src/LuaAPIExport.cpp
 	${srcdir}/src/LuaAudioExport.cpp
 	${srcdir}/src/LuaGUIExport.cpp
@@ -60,6 +60,7 @@ ENDIF(ISIXE_WITH_RPG)
 
 # to find the dependency libs during runtime
 set_target_properties(ScriptingLua PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+set_target_properties(ScriptingLua PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 IF(WIN32)
 	add_custom_command(TARGET ScriptingLua POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingLua.dll ${CMAKE_BINARY_DIR}/bin)
