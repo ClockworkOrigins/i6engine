@@ -216,7 +216,7 @@ namespace modules {
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
-			_callScripts.push(std::bind([this, func, ret](args... A) {
+			_callScripts.push(std::bind([this, func, callback, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				try {
 					lua_getglobal(_luaState, func.c_str());

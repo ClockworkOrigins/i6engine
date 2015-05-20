@@ -137,7 +137,6 @@ namespace modules {
 			_callScripts.push(std::bind([this, file, func, callback](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				parseScript(file);
-
 				try {
 					boost::python::object f = _scripts[file][func];
 					boost::python::call<Ret>(f.ptr(), A...);
@@ -154,7 +153,6 @@ namespace modules {
 			_callScripts.push(std::bind([this, file, func, callback, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
 				parseScript(file);
-
 				try {
 					boost::python::object f = _scripts[file][func];
 					ret->push(boost::python::call<Ret>(f.ptr(), A...));
