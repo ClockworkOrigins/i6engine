@@ -59,6 +59,10 @@ namespace rpg {
 		return i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->wasHeard(identifier);
 	}
 
+	void exitDialog() {
+		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->exitDialog();
+	}
+
 } /* namespace rpg */
 } /* namespace python */
 } /* namespace i6engine */
@@ -69,6 +73,7 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 	def("insertNPCAtWaypoint", &i6engine::python::rpg::insertNPCAtWaypoint);
 	def("insertPlayerAtWaypoint", &i6engine::python::rpg::insertPlayerAtWaypoint);
 	def("wasHeard", &i6engine::python::rpg::wasHeard);
+	def("exitDialog", &i6engine::python::rpg::exitDialog);
 
 	class_<i6engine::rpg::dialog::Dialog>("Dialog", no_init);
 	class_<i6engine::rpg::npc::NPC>("NPC", no_init);

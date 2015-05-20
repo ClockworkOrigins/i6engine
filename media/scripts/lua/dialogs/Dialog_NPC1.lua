@@ -24,4 +24,5 @@ function Dialog_NPC1_QuestSolved_Info()
 end
 
 function Dialog_NPC1_Exit_Info()
+	exitDialog()
 end

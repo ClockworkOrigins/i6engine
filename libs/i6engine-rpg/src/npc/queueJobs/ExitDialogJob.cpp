@@ -14,33 +14,31 @@
  * limitations under the License.
  */
 
-#ifndef __I6ENGINE_RPG_NPC_NPCQUEUE_H__
-#define __I6ENGINE_RPG_NPC_NPCQUEUE_H__
+#include "i6engine/rpg/npc/queueJobs/ExitDialogJob.h"
 
-#include "i6engine/utils/DoubleBufferQueue.h"
+#include "i6engine/rpg/dialog/DialogManager.h"
 
 namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	class NPCQueueJob;
+	ExitDialogJob::ExitDialogJob() {
+	}
 
-	class NPCQueue {
-	public:
-		NPCQueue();
+	void ExitDialogJob::start() {
+	}
 
-		void addJob(NPCQueueJob * job);
+	void ExitDialogJob::loop() {
+	}
 
-		void checkJobs();
+	void ExitDialogJob::finish() {
+		dialog::DialogManager::GetSingleton().stopDialog();
+	}
 
-	private:
-		utils::DoubleBufferQueue<NPCQueueJob *, true, false> _queue;
-
-		NPCQueue(const NPCQueue &) = delete;
-	};
+	bool ExitDialogJob::condition() {
+		return true;
+	}
 
 } /* namespace npc */
 } /* namespace rpg */
 } /* namespace i6engine */
-
-#endif /* __I6ENGINE_RPG_NPC_NPCQUEUE_H__ */

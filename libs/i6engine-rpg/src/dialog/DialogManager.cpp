@@ -30,6 +30,7 @@
 #include "i6engine/rpg/dialog/Dialog.h"
 #include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/NPCManager.h"
+#include "i6engine/rpg/npc/queueJobs/ExitDialogJob.h"
 #include "i6engine/rpg/npc/queueJobs/ShowDialogsJob.h"
 
 namespace i6engine {
@@ -92,8 +93,13 @@ namespace dialog {
 	}
 
 	void DialogManager::checkDialogs(const std::string & identifier) {
-		_showDialogCalls++;
-		if (_showDialogCalls < _activeNPCs.size() + 1) {
+		if (_showDialogCalls >= 0) {
+			_showDialogCalls++;
+		}
+		if (_showDialogCalls < int8_t(_activeNPCs.size() + 1)) {
+			if (_showDialogCalls == -int8_t(_activeNPCs.size()) - 1) {
+				_dialogActive = false;
+			}
 			return;
 		}
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
@@ -136,6 +142,17 @@ namespace dialog {
 			return _heardDialogs.find(it->second) != _heardDialogs.end();
 		}
 		return false;
+	}
+
+	void DialogManager::exitDialog() {
+		auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
+		auto player = *playerList.begin();
+		npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
+		p->addJob(new npc::ExitDialogJob());
+		for (std::string s : _activeNPCs) {
+			npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(s);
+			n->addJob(new npc::ExitDialogJob());
+		}
 	}
 
 	bool DialogManager::checkDialogsLoop() {

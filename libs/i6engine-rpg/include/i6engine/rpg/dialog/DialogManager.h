@@ -29,12 +29,16 @@
 
 namespace i6engine {
 namespace rpg {
+namespace npc {
+	class ExitDialogJob;
+} /* namespace npc */
 namespace dialog {
 
 	struct Dialog;
 
 	class ISIXE_RPG_API DialogManager : public utils::Singleton<DialogManager> {
 		friend class utils::Singleton<DialogManager>;
+		friend class npc::ExitDialogJob;
 
 	public:
 		~DialogManager();
@@ -59,6 +63,11 @@ namespace dialog {
 		 * \brief returns true if this dialog was already heard
 		 */
 		bool wasHeard(const std::string & identifier) const;
+
+		/**
+		 * \brief exits a dialog
+		 */
+		void exitDialog();
 
 	private:
 		DialogParser _parser;
@@ -86,13 +95,16 @@ namespace dialog {
 
 		std::vector<std::string> _activeNPCs;
 		std::map<std::string, std::string> _dialogMapping;
-		uint8_t _showDialogCalls;
+		int8_t _showDialogCalls;
 
 		DialogManager();
 
 		bool checkDialogsLoop();
 		bool runDialog(const std::string & npc, const std::string & dia);
 		void showDialog(const std::string & npc, const std::string & dia);
+		void stopDialog() {
+			_showDialogCalls--;
+		}
 	};
 
 } /* namespace dialog */

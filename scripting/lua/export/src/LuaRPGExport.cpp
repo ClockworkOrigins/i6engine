@@ -59,6 +59,10 @@ namespace rpg {
 		return i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->wasHeard(identifier);
 	}
 
+	void exitDialog() {
+		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->exitDialog();
+	}
+
 } /* namespace rpg */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -70,6 +74,7 @@ scope registerRPG() {
 		def("insertNPCAtWaypoint", &i6engine::lua::rpg::insertNPCAtWaypoint),
 		def("insertPlayerAtWaypoint", &i6engine::lua::rpg::insertPlayerAtWaypoint),
 		def("wasHeard", &i6engine::lua::rpg::wasHeard),
+		def("exitDialog", &i6engine::lua::rpg::exitDialog),
 
 		class_<i6engine::rpg::dialog::Dialog>("Dialog")
 			.def(constructor<const std::string &, const std::string &>()),

@@ -22,7 +22,6 @@
 
 #include "i6engine/modules/graphics/GraphicsController.h"
 #include "i6engine/modules/input/InputController.h"
-#include "i6engine/modules/network/NetworkController.h"
 #include "i6engine/modules/object/ObjectController.h"
 #include "i6engine/modules/physics/PhysicsController.h"
 
@@ -40,7 +39,7 @@ int main(int argc, char ** argv) {
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Scripting", new i6engine::modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Scripting", new i6engine::modules::PhytonScriptingController(), LNG_SCRIPTING_FRAME_TIME);
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Scripting", new i6engine::modules::PythonScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
 
 	sample::ScriptingApplication app;

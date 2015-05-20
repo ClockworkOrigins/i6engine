@@ -14,54 +14,39 @@
  * limitations under the License.
  */
 
-#ifndef __I6ENGINE_RPG_NPC_NPC_H__
-#define __I6ENGINE_RPG_NPC_NPC_H__
+#ifndef __I6ENGINE_RPG_NPC_QUEUE_EXITDIALOGJOB_H__
+#define __I6ENGINE_RPG_NPC_QUEUE_EXITDIALOGJOB_H__
 
-#include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/weakPtr.h"
 
-#include "i6engine/rpg/npc/NPCQueue.h"
+#include "i6engine/rpg/npc/NPCQueueJob.h"
 
 namespace i6engine {
 namespace api {
 	class GameObject;
-	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;
 	typedef utils::weakPtr<GameObject> WeakGOPtr;
-namespace objects {
-	struct GOTemplate;
-} /* namespace objects */
 } /* namespace api */
 namespace rpg {
 namespace npc {
 
-	class ISIXE_RPG_API NPC {
+	class ExitDialogJob : public NPCQueueJob {
 	public:
-		NPC(const api::objects::GOTemplate & tpl, bool player);
-		NPC(const NPC & other) : _go(other._go), _queue() {
-		}
-		~NPC();
+		ExitDialogJob();
 
-		api::GOPtr getGO() const {
-			return _go.get();
+		~ExitDialogJob() {
 		}
 
-		void turnToNPC(NPC * npc);
+		void start();
 
-		void addJob(NPCQueueJob * job) {
-			_queue.addJob(job);
-		}
+		void loop();
 
-		void workQueue() {
-			_queue.checkJobs();
-		}
+		void finish();
 
-	private:
-		api::WeakGOPtr _go;
-		NPCQueue _queue;
+		bool condition();
 	};
 
 } /* namespace npc */
 } /* namespace rpg */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_RPG_NPC_NPC_H__ */
+#endif /* __I6ENGINE_RPG_NPC_QUEUE_EXITDIALOGJOB_H__ */
