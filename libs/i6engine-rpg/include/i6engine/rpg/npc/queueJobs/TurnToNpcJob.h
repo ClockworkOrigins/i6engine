@@ -14,36 +14,43 @@
  * limitations under the License.
  */
 
-#include "i6engine/rpg/npc/NPCQueue.h"
+#ifndef __I6ENGINE_RPG_NPC_QUEUE_TURNTONPCJOB_H__
+#define __I6ENGINE_RPG_NPC_QUEUE_TURNTONPCJOB_H__
+
+#include "i6engine/utils/weakPtr.h"
 
 #include "i6engine/rpg/npc/NPCQueueJob.h"
 
 namespace i6engine {
+namespace api {
+	class GameObject;
+	typedef utils::weakPtr<GameObject> WeakGOPtr;
+} /* namespace api */
 namespace rpg {
 namespace npc {
 
-	NPCQueue::NPCQueue() : _queue() {
-	}
+	class TurnToNpcJob : public NPCQueueJob {
+	public:
+		TurnToNpcJob(const api::WeakGOPtr & self, const api::WeakGOPtr & target);
 
-	void NPCQueue::addJob(NPCQueueJob * job) {
-		job->start();
-		_queue.push(job);
-	}
-
-	void NPCQueue::checkJobs() {
-		while (!_queue.empty()) {
-			NPCQueueJob * job = _queue.front();
-			if (!job->condition()) {
-				job->loop();
-				break;
-			} else {
-				job->finish();
-				delete job;
-				_queue.pop();
-			}
+		~TurnToNpcJob() {
 		}
-	}
+
+		void start();
+
+		void loop();
+
+		void finish();
+
+		bool condition();
+
+	private:
+		api::WeakGOPtr _self;
+		api::WeakGOPtr _target;
+	};
 
 } /* namespace npc */
 } /* namespace rpg */
 } /* namespace i6engine */
+
+#endif /* __I6ENGINE_RPG_NPC_QUEUE_TURNTONPCJOB_H__ */

@@ -19,6 +19,8 @@
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 
+#include "i6engine/rpg/npc/queueJobs/TurnToNpcJob.h"
+
 namespace i6engine {
 namespace rpg {
 namespace npc {
@@ -33,6 +35,7 @@ namespace npc {
 	}
 
 	void NPC::turnToNPC(NPC * npc) {
+		_queue.addJob(new TurnToNpcJob(_go, npc->_go));
 	}
 
 } /* namespace npc */

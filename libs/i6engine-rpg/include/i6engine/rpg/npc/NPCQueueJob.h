@@ -23,6 +23,9 @@ namespace npc {
 
 	class NPCQueueJob {
 	public:
+		virtual ~NPCQueueJob() {
+		}
+
 		/**
 		 * \brief called when job is created
 		 * use this method for initialization

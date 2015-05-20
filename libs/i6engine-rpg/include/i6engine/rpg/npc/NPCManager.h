@@ -44,8 +44,8 @@ namespace npc {
 		std::map<std::string, NPC *> _npcs;
 
 		// TODO: (Daniel) exchange this with scheduler job implementing ticket ISIXE-1457
-		std::thread _worker;
 		bool _running;
+		std::thread _worker;
 
 		NPCManager();
 

@@ -26,7 +26,7 @@ namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPCManager::NPCManager() : _npcs(), _worker(std::bind(&NPCManager::checkNPCs, this)), _running(true) {
+	NPCManager::NPCManager() : _npcs(), _running(true), _worker(std::bind(&NPCManager::checkNPCs, this)) {
 	}
 
 	NPCManager::~NPCManager() {
