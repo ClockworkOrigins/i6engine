@@ -40,6 +40,7 @@ set(luaExportSrc
 	${srcdir}/src/LuaGUIExport.cpp
 	${srcdir}/src/LuaMathExport.cpp
 	${srcdir}/src/LuaObjectExport.cpp
+	${srcdir}/src/LuaUtilsExport.cpp
 )
 
 IF(ISIXE_WITH_RPG)

@@ -51,3 +51,9 @@ add_subdirectory(object)
 IF(ISIXE_WITH_RPG)
 	add_subdirectory(rpg)
 ENDIF(ISIXE_WITH_RPG)
+
+#####################################################################################
+# PythonUtilsExport
+#####################################################################################
+
+add_subdirectory(utils)
