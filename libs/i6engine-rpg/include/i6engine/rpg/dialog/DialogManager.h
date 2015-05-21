@@ -69,6 +69,13 @@ namespace dialog {
 		 */
 		void exitDialog();
 
+		/**
+		 * \brief returns all NPCs being part of active dialog
+		 */
+		std::vector<std::string> getActiveNPCs() const {
+			return _activeNPCs;
+		}
+
 	private:
 		DialogParser _parser;
 		std::map<std::string, std::vector<Dialog *>> _npcDialogs;

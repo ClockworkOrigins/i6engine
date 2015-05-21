@@ -18,8 +18,15 @@
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/objects/GameObject.h"
 
+#include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/ThirdPersonControlComponent.h"
+#include "i6engine/rpg/dialog/DialogManager.h"
+#include "i6engine/rpg/npc/NPCManager.h"
+#include "i6engine/rpg/npc/queueJobs/SayJob.h"
 #include "i6engine/rpg/npc/queueJobs/TurnToNpcJob.h"
+#include "i6engine/rpg/npc/queueJobs/WaitSayJob.h"
 
 namespace i6engine {
 namespace rpg {
@@ -36,6 +43,37 @@ namespace npc {
 
 	void NPC::turnToNPC(NPC * npc) {
 		_queue.addJob(new TurnToNpcJob(_go, npc->_go));
+	}
+
+	void NPC::say(const std::string & soundKey, const std::string & subtitleKey) {
+		std::vector<std::string> npcs = dialog::DialogManager::GetSingleton().getActiveNPCs();
+
+		std::vector<NPC *> realNPCs;
+
+		for (std::string s : npcs) {
+			NPC * n = NPCManager::GetSingleton().getNPC(s);
+			if (n != this) {
+				realNPCs.push_back(n);
+			}
+		}
+
+		auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
+		auto player = *playerList.begin();
+		npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
+
+		if (this != p) {
+			realNPCs.push_back(p);
+		}
+
+		std::vector<WaitSayJob *> waitJobs;
+
+		for (NPC * n : realNPCs) {
+			WaitSayJob * job = new WaitSayJob();
+			n->addJob(job);
+			waitJobs.push_back(job);
+		}
+
+		_queue.addJob(new SayJob(this, soundKey, subtitleKey, waitJobs));
 	}
 
 } /* namespace npc */

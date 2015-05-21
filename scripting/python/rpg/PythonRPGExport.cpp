@@ -76,5 +76,8 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 	def("exitDialog", &i6engine::python::rpg::exitDialog);
 
 	class_<i6engine::rpg::dialog::Dialog>("Dialog", no_init);
-	class_<i6engine::rpg::npc::NPC>("NPC", no_init);
+	class_<i6engine::rpg::npc::NPC>("NPC", no_init)
+		.def("getGO", &i6engine::rpg::npc::NPC::getGO)
+		.def("turnToNPC", &i6engine::rpg::npc::NPC::turnToNPC)
+		.def("say", &i6engine::rpg::npc::NPC::say);
 }

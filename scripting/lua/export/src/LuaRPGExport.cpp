@@ -81,5 +81,8 @@ scope registerRPG() {
 
 		class_<i6engine::rpg::npc::NPC>("NPC")
 			.def(constructor<const i6engine::api::objects::GOTemplate &, bool>())
+			.def("getGO", &i6engine::rpg::npc::NPC::getGO)
+			.def("turnToNPC", &i6engine::rpg::npc::NPC::turnToNPC)
+			.def("say", &i6engine::rpg::npc::NPC::say)
 		;
 }

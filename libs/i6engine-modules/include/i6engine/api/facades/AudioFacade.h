@@ -23,6 +23,7 @@
 #define __I6ENGINE_API_AUDIOFACADE_H__
 
 #include <cstdint>
+#include <functional>
 
 #include "i6engine/math/i6eQuaternion.h"
 #include "i6engine/math/i6eVector.h"
@@ -59,6 +60,11 @@ namespace api {
 		 * \brief plays given sound once
 		 */
 		void playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable);
+
+		/**
+		 * \brief plays given sound if found and calls callback afterwards
+		 */
+		void playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::function<void(bool)> callback);
 
 		/**
 		 * \brief resets the subsystem to it's defaults

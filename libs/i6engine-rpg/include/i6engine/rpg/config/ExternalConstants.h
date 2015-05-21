@@ -33,6 +33,9 @@ namespace config {
 	extern ISIXE_RPG_API double NPC_CHECK_TALK_DISTANCE;
 	extern ISIXE_RPG_API double NPC_TALK_DISTANCE;
 
+	extern ISIXE_RPG_API double SUBTITLE_TIME_PER_CHARACTER;
+	extern ISIXE_RPG_API double DIALOG_MAX_DISTANCE;
+
 	ISIXE_RPG_API void parseExternalConstants(const std::string & file);
 
 } /* namespace config */

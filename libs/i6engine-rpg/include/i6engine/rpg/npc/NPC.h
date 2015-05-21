@@ -47,6 +47,8 @@ namespace npc {
 
 		void turnToNPC(NPC * npc);
 
+		void say(const std::string & soundKey, const std::string & subtitleKey);
+
 		void addJob(NPCQueueJob * job) {
 			_queue.addJob(job);
 		}

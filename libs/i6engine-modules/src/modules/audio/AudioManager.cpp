@@ -48,12 +48,17 @@ namespace modules {
 
 	void AudioManager::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		for (auto it = _sounds.begin(); it != _sounds.end(); it++) {
+		for (auto it = _sounds.begin(); it != _sounds.end(); ) {
 			ALint state;
-			alGetSourcei(it->first, AL_SOURCE_STATE, &state);
+			alGetSourcei(std::get<0>(*it), AL_SOURCE_STATE, &state);
 
 			if (state == AL_STOPPED) {
+				std::get<2>(*it)(true);
+				alDeleteSources(1, &std::get<0>(*it));	// Delete the OpenAL Source
+				alDeleteBuffers(1, &std::get<1>(*it));	// Delete the OpenAL Buffer
 				it = _sounds.erase(it);
+			} else {
+				it++;
 			}
 		}
 	}
@@ -66,6 +71,10 @@ namespace modules {
 			api::audio::Audio_PlaySound_Create * apsc = dynamic_cast<api::audio::Audio_PlaySound_Create *>(msg->getContent());
 
 			playSound(apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable);
+		} else if (type == api::audio::AudioPlaySoundWithCallback) {
+			api::audio::Audio_PlaySoundWithCallback_Create * apsc = dynamic_cast<api::audio::Audio_PlaySoundWithCallback_Create *>(msg->getContent());
+
+			playSound(apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable, apsc->callback);
 		}
 	}
 
@@ -132,14 +141,19 @@ namespace modules {
 		alListenerfv(AL_VELOCITY, ListenerVel);		// Set velocity of the listener
 	}
 
-	void AudioManager::playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
+	void AudioManager::playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::function<void(bool)> & callback) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		auto it = _cachedSounds.find(file);
 		boost::shared_ptr<WavFile> wh;
 		if (it != _cachedSounds.end()) {
 			wh = it->second;
 		} else {
-			wh = loadWavFile(file);
+			try {
+				wh = loadWavFile(file);
+			} catch (utils::exceptions::ApiException & e) {
+				callback(false);
+				return;
+			}
 			if (cacheable) {
 				_cachedSounds.insert(std::make_pair(file, wh));
 			}
@@ -192,7 +206,7 @@ namespace modules {
 		// PLAY 
 		alSourcePlay(source);							// Play the sound buffer linked to the source
 
-		_sounds.push_back(std::make_pair(source, buffer));
+		_sounds.push_back(std::make_tuple(source, buffer, callback));
 	}
 
 } /* namespace modules */

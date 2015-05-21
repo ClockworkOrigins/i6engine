@@ -25,6 +25,8 @@ namespace config {
 
 	double NPC_CHECK_TALK_DISTANCE = 10.0;
 	double NPC_TALK_DISTANCE = 7.5;
+	double SUBTITLE_TIME_PER_CHARACTER = 1.0;
+	double DIALOG_MAX_DISTANCE = 15.0;
 
 	void parseExternalConstants(const std::string & file) {
 		boost::property_tree::ptree pt;
@@ -32,6 +34,8 @@ namespace config {
 
 		NPC_CHECK_TALK_DISTANCE = pt.get("NPC_CHECK_TALK_DISTANCE", NPC_CHECK_TALK_DISTANCE);
 		NPC_TALK_DISTANCE = pt.get("NPC_TALK_DISTANCE", NPC_TALK_DISTANCE);
+		SUBTITLE_TIME_PER_CHARACTER = pt.get("SUBTITLE_TIME_PER_CHARACTER", SUBTITLE_TIME_PER_CHARACTER);
+		DIALOG_MAX_DISTANCE = pt.get("DIALOG_MAX_DISTANCE", DIALOG_MAX_DISTANCE);
 	}
 
 } /* namespace config */

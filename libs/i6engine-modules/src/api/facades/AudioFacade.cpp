@@ -50,6 +50,10 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySound, core::Method::Create, new audio::Audio_PlaySound_Create(f, m, p, d, cacheable), core::Subsystem::Unknown));
 	}
 
+	void AudioFacade::playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::function<void(bool)> callback) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySoundWithCallback, core::Method::Create, new audio::Audio_PlaySoundWithCallback_Create(f, m, p, d, cacheable, callback), core::Subsystem::Unknown));
+	}
+
 	void AudioFacade::resetSubSystem() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioReset, core::Method::Delete, new GameMessageStruct(), core::Subsystem::Unknown);
 
