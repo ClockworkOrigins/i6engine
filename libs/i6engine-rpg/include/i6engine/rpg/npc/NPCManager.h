@@ -22,6 +22,7 @@
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Singleton.h"
 
+#include "i6engine/math/i6eQuaternion.h"
 #include "i6engine/math/i6eVector.h"
 
 namespace i6engine {
@@ -36,7 +37,7 @@ namespace npc {
 	public:
 		~NPCManager();
 
-		void createNPC(const std::string & identifier, const Vec3 & pos, bool player);
+		void createNPC(const std::string & identifier, const Vec3 & pos, const Quaternion & rot, bool player);
 
 		NPC * getNPC(const std::string & identifier) const;
 

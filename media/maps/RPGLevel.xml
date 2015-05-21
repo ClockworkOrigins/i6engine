@@ -19,6 +19,7 @@
         <GameObject name="Waypoint" send="true">
             <Component template="StaticState">
                 <Attribute name="pos">0 2.0 0.0</Attribute>
+                <Attribute name="rot">0.0 0.0 1.0 0.0</Attribute>
             </Component>
             <Component template="Waypoint">
                 <Attribute name="connections">WP_001;WP_002</Attribute>

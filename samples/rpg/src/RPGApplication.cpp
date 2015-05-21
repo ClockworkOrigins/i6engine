@@ -45,10 +45,14 @@
 
 #include "i6engine/rpg/config/ExternalConstants.h"
 
+#include "i6engine/rpg/gui/SubtitleWidget.h"
+
 #include "i6engine/rpg/dialog/DialogManager.h"
+
 #include "i6engine/rpg/npc/NPCParser.h"
 
 #include "boost/bind.hpp"
+#include "boost/functional/factory.hpp"
 
 namespace sample {
 
@@ -85,6 +89,7 @@ namespace sample {
 		i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->loadAllScripts();
 
 		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
+		gf->registerWidgetTemplate("Subtitle", boost::factory<i6engine::rpg::gui::SubtitleWidget *>());
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");

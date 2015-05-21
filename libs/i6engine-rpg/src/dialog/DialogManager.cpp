@@ -16,9 +16,13 @@
 
 #include "i6engine/rpg/dialog/DialogManager.h"
 
+#include "i6engine/core/configs/SubsystemConfig.h"
+
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/facades/GUIFacade.h"
+#include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/facades/ScriptingFacade.h"
 #include "i6engine/api/manager/TextManager.h"
@@ -28,6 +32,7 @@
 #include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 #include "i6engine/rpg/config/ExternalConstants.h"
 #include "i6engine/rpg/dialog/Dialog.h"
+#include "i6engine/rpg/gui/Config.h"
 #include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/NPCManager.h"
 #include "i6engine/rpg/npc/queueJobs/ExitDialogJob.h"
@@ -74,6 +79,12 @@ namespace dialog {
 			gf->setSize("DialogList", 0.58, 0.18);
 			gf->setVisibility("DialogBox", false);
 			gf->setVisibility("DialogList", false);
+			gf->createWidget("SubtitleWidget", "Subtitle", "RPG/StaticImage");
+			gf->setProperty("SubtitleWidget", "Image", "RPG/TbM_Filling");
+			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, gui::SetListboxStyle, core::Method::Update, new gui::GUI_SetListboxStyle("SubtitleWidget", "RPG/Listbox"), core::Subsystem::Unknown));
+			gf->setPosition("SubtitleWidget", 0.2, 0.05);
+			gf->setSize("SubtitleWidget", 0.6, 0.25);
+			gf->setVisibility("SubtitleWidget", false);
 		}
 		std::lock_guard<std::mutex> lg(_lock);
 		auto it = _npcDialogs.find(identifier);
@@ -99,6 +110,8 @@ namespace dialog {
 		if (_showDialogCalls < int8_t(_activeNPCs.size() + 1)) {
 			if (_showDialogCalls == -int8_t(_activeNPCs.size()) - 1) {
 				_dialogActive = false;
+				_showDialogCalls = 0;
+				_activeNPCs.clear();
 			}
 			return;
 		}
@@ -108,6 +121,12 @@ namespace dialog {
 			gf->addImage("DialogBox", "RPG/StaticImage", "RPG", "TbM_Filling", 0.2, 0.75, 0.6, 0.2);
 			gf->addStatusList("DialogList", "RPG/Listbox", 0.21, 0.76, -1);
 			gf->setSize("DialogList", 0.58, 0.18);
+			gf->createWidget("SubtitleWidget", "Subtitle", "RPG/StaticImage");
+			gf->setProperty("SubtitleWidget", "Image", "RPG/TbM_Filling");
+			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, gui::SetListboxStyle, core::Method::Update, new gui::GUI_SetListboxStyle("SubtitleWidget", "RPG/Listbox"), core::Subsystem::Unknown));
+			gf->setPosition("SubtitleWidget", 0.2, 0.05);
+			gf->setSize("SubtitleWidget", 0.6, 0.25);
+			gf->setVisibility("SubtitleWidget", false);
 		} else {
 			gf->setVisibility("DialogBox", true);
 			gf->setVisibility("DialogList", true);

@@ -35,24 +35,32 @@ namespace rpg {
 
 	void insertNPCAtWaypoint(const std::string & identifier, const std::string & waypoint) {
 		Vec3 pos;
+		Quaternion rot;
 		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
 			if (go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName() == waypoint) {
 				pos = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getPosition();
+				rot = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getRotation();
 				break;
 			}
 		}
-		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, false);
+		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, rot, false);
 	}
 
 	void insertPlayerAtWaypoint(const std::string & identifier, const std::string & waypoint) {
 		Vec3 pos;
+		Quaternion rot;
 		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
 			if (go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName() == waypoint) {
 				pos = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getPosition();
+				rot = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getRotation();
 				break;
 			}
 		}
-		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, true);
+		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, rot, true);
+	}
+
+	i6engine::rpg::npc::NPC * getNPC(const std::string & identifier) {
+		return i6engine::rpg::npc::NPCManager::GetSingleton().getNPC(identifier);
 	}
 
 	bool wasHeard(const std::string & identifier) {
@@ -72,6 +80,7 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 
 	def("insertNPCAtWaypoint", &i6engine::python::rpg::insertNPCAtWaypoint);
 	def("insertPlayerAtWaypoint", &i6engine::python::rpg::insertPlayerAtWaypoint);
+	def("getNPC", &i6engine::python::rpg::getNPC, return_internal_reference<>());
 	def("wasHeard", &i6engine::python::rpg::wasHeard);
 	def("exitDialog", &i6engine::python::rpg::exitDialog);
 

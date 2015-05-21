@@ -349,14 +349,12 @@ namespace modules {
 
 	void GUIManager::removeTicker(api::GUIWidget * widget) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		boost::mutex::scoped_lock sl(_tickerLock);
 		_toTick.remove(widget);
 	}
 
 	void GUIManager::tickWidgets() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		boost::mutex::scoped_lock sl(_tickerLock);
 		for (api::GUIWidget * widget : _toTick) {
 			widget->tick();
@@ -365,25 +363,21 @@ namespace modules {
 
 	void GUIManager::registerGUIWidgetTemplate(const std::string & name, GUIWidget_factory createFunc) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		_factory.registerGUIWidgetTemplate(name, createFunc);
 	}
 
 	void GUIManager::addChildWindow(const std::string & parent_widget, const std::string & child_widget) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		getWidgetByName(parent_widget)->_window->addChild(getWidgetByName(child_widget)->_window);
 	}
 
 	void GUIManager::addToRootWindow(CEGUI::Window * window) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		_objRoot->addChild(window);
 	}
 
 	void GUIManager::setMouseVisibility(const bool visibility) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setVisible(visibility);
 	}
 

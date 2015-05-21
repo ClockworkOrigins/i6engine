@@ -16,6 +16,8 @@
 
 #include "i6engine/rpg/npc/queueJobs/SayJob.h"
 
+#include "i6engine/utils/i6eString.h"
+
 #include "i6engine/math/i6eMath.h"
 
 #include "i6engine/api/EngineController.h"
@@ -42,9 +44,10 @@ namespace npc {
 		_startTime = api::EngineController::GetSingleton().getCurrentTime();
 		std::string subtitleText = api::EngineController::GetSingleton().getTextManager()->getText(_subtitleKey);
 
-		_subtitleDuration = uint64_t(subtitleText.size() * config::SUBTITLE_TIME_PER_CHARACTER);
+		_subtitleDuration = uint64_t(utils::split(subtitleText, " ").size() * config::SUBTITLE_TIME_PER_WORD) * 1000000;
 
 		api::EngineController::GetSingleton().getGUIFacade()->setText("SubtitleWidget", subtitleText);
+		api::EngineController::GetSingleton().getGUIFacade()->setVisibility("SubtitleWidget", true);
 
 		// start sound
 		auto psc = _self->getGO()->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent);
@@ -64,6 +67,7 @@ namespace npc {
 		for (WaitSayJob * j : _jobs) {
 			j->setFinished(true);
 		}
+		api::EngineController::GetSingleton().getGUIFacade()->setVisibility("SubtitleWidget", false);
 	}
 
 	bool SayJob::condition() {

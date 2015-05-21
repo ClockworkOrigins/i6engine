@@ -34,10 +34,11 @@ namespace npc {
 		_worker.join();
 	}
 
-	void NPCManager::createNPC(const std::string & identifier, const Vec3 & pos, bool player) {
+	void NPCManager::createNPC(const std::string & identifier, const Vec3 & pos, const Quaternion & rot, bool player) {
 		api::objects::GOTemplate tpl = NPCParser::GetSingletonPtr()->getTemplate(identifier);
 		api::attributeMap paramsPSC;
 		pos.insertInMap("pos", paramsPSC);
+		rot.insertInMap("rot", paramsPSC);
 		tpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 		if (!player) {

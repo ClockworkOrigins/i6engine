@@ -37,7 +37,7 @@ namespace modules {
 	LuaScriptingManager::LuaScriptingManager() : _luaState(luaL_newstate()), _parsedFiles(), _scriptsPath(), _callScripts() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		luaL_openlibs(_luaState);
-		luabind::open(_luaState);
+		//luabind::open(_luaState);
 		ISIXE_LOG_INFO("LuaScriptingManager", LUA_COPYRIGHT);
 
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32

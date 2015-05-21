@@ -9,7 +9,7 @@ namespace i6engine {
 namespace rpg {
 namespace gui {
 
-	class SubtitleWidget : public api::GUIWidget {
+	class ISIXE_RPG_API SubtitleWidget : public api::GUIWidget {
 	public:
 		/**
 		 * \brief type has to be the style for the image, e.g. RPG/StaticImage
