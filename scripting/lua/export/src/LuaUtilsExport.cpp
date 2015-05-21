@@ -93,16 +93,16 @@ scope registerUtils() {
 		def("split", &i6engine::utils::split),
 
 		class_<i6engine::lua::utils::LogLevel>("LogLevel")
-		.def(constructor<>())
-		.enum_("LogLevel")
-		[
-			value("LOGDEBUG", i6engine::lua::utils::LogLevel::LV::LOGDEBUG),
-			value("LOGINFO", i6engine::lua::utils::LogLevel::LV::LOGINFO),
-			value("LOGWARN", i6engine::lua::utils::LogLevel::LV::LOGWARN),
-			value("LOGERROR", i6engine::lua::utils::LogLevel::LV::LOGERROR),
-			value("LOGFATAL", i6engine::lua::utils::LogLevel::LV::LOGFATAL),
-			value("LOGNONE", i6engine::lua::utils::LogLevel::LV::LOGNONE)
-		],
+			.def(constructor<>())
+			.enum_("LogLevel")
+			[
+				value("LOGDEBUG", i6engine::lua::utils::LogLevel::LV::LOGDEBUG),
+				value("LOGINFO", i6engine::lua::utils::LogLevel::LV::LOGINFO),
+				value("LOGWARN", i6engine::lua::utils::LogLevel::LV::LOGWARN),
+				value("LOGERROR", i6engine::lua::utils::LogLevel::LV::LOGERROR),
+				value("LOGFATAL", i6engine::lua::utils::LogLevel::LV::LOGFATAL),
+				value("LOGNONE", i6engine::lua::utils::LogLevel::LV::LOGNONE)
+			],
 
 		class_<i6engine::utils::Semaphore>("Semaphore")
 			.def(constructor<>())

@@ -86,11 +86,13 @@ namespace dialog {
 			gf->setSize("SubtitleWidget", 0.6, 0.25);
 			gf->setVisibility("SubtitleWidget", false);
 		}
+		std::cout << "Checking Important" << std::endl;
 		std::lock_guard<std::mutex> lg(_lock);
 		auto it = _npcDialogs.find(identifier);
 		if (it != _npcDialogs.end()) {
 			for (Dialog * d : it->second) {
 				if (d->important) {
+					std::cout << "Checking: " << d->identifier << std::endl;
 					if (d->conditionScript.empty()) {
 						auto r = std::make_shared<utils::Future<bool>>();
 						r->push(true);
@@ -182,7 +184,9 @@ namespace dialog {
 			}
 			while (!_importantChecks.empty()) {
 				auto t = _importantChecks.poll();
+				std::cout << "Checking Important Loop" << std::endl;
 				if (std::get<DialogCheck::Result>(t)->get()) {
+					std::cout << "Checking Important Loop 2" << std::endl;
 					// dialog can be run, but we have to check the distance between the participants
 					auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
 					if (playerList.empty()) {
@@ -220,9 +224,11 @@ namespace dialog {
 							break;
 						}
 					}
+					std::cout << "Checking Important Loop 3" << std::endl;
 
 					// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
 					if (allNear && runDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t))) {
+						std::cout << "Checking Important Loop 4" << std::endl;
 						_importantChecks.clear();
 						_showDialogboxChecks.clear();
 					}

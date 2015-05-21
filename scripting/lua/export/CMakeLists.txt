@@ -37,6 +37,7 @@ set(luaExportSrc
 
 	${srcdir}/src/LuaAPIExport.cpp
 	${srcdir}/src/LuaAudioExport.cpp
+	${srcdir}/src/LuaCoreExport.cpp
 	${srcdir}/src/LuaGUIExport.cpp
 	${srcdir}/src/LuaMathExport.cpp
 	${srcdir}/src/LuaObjectExport.cpp
