@@ -25,7 +25,7 @@ namespace config {
 
 	double NPC_CHECK_TALK_DISTANCE = 10.0;
 	double NPC_TALK_DISTANCE = 7.5;
-	double SUBTITLE_TIME_PER_WORD = 0.3;
+	double SUBTITLE_TIME_PER_WORD = 0.5;
 	double DIALOG_MAX_DISTANCE = 15.0;
 
 	void parseExternalConstants(const std::string & file) {

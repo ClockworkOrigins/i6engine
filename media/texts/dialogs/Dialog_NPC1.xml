@@ -26,3 +26,46 @@
 	<Language name="Deutsch">Ich bin der Spieler. Schön dich kennenzulernen.</Language>
 	<Language name="English">I am the player. Nice to meet you.</Language>
 </Key>
+
+<Key key="Dialog_NPC1_HaveYouQuest_01_Sound">
+	<Language name="Deutsch">Dialog_NPC1_HaveYouQuest_01_de.wav</Language>
+	<Language name="English">Dialog_NPC1_HaveYouQuest_01_en.wav</Language>
+</Key>
+<Key key="Dialog_NPC1_HaveYouQuest_01_Subtitle">
+	<Language name="Deutsch">Hast du was zu tun für mich?</Language>
+	<Language name="English">Is there something I can do for you?</Language>
+</Key>
+<Key key="Dialog_NPC1_HaveYouQuest_02_Sound">
+	<Language name="Deutsch">Dialog_NPC1_HaveYouQuest_02_de.wav</Language>
+	<Language name="English">Dialog_NPC1_HaveYouQuest_02_en.wav</Language>
+</Key>
+<Key key="Dialog_NPC1_HaveYouQuest_02_Subtitle">
+	<Language name="Deutsch">Ja. Beende das Gespräch mit mir und lass dich dann noch einmal von mir ansprechen. Das wird dir zeigen, dass auch automatische Gespräche mit Bedingung funktionieren.</Language>
+	<Language name="English">Yes. Leave this talk with me and let me talk to you again. This will show you, that important dialogs also work with conditions.</Language>
+</Key>
+
+<Key key="Dialog_NPC1_QuestSolved_01_Sound">
+	<Language name="Deutsch">Dialog_NPC1_QuestSolved_01_de.wav</Language>
+	<Language name="English">Dialog_NPC1_QuestSolved_01_en.wav</Language>
+</Key>
+<Key key="Dialog_NPC1_QuestSolved_01_Subtitle">
+	<Language name="Deutsch">Siehst du? Obwohl dieser Dialog eine Bedingung hat, kann ich dich jetzt wieder ansprechen.</Language>
+	<Language name="English">You see, though this dialog has a condition I can speak to you now.</Language>
+</Key>
+<Key key="Dialog_NPC1_QuestSolved_02_Sound">
+	<Language name="Deutsch">Dialog_NPC1_QuestSolved_02_de.wav</Language>
+	<Language name="English">Dialog_NPC1_QuestSolved_02_en.wav</Language>
+</Key>
+<Key key="Dialog_NPC1_QuestSolved_02_Subtitle">
+	<Language name="Deutsch">Nice.</Language>
+	<Language name="English">Nice.</Language>
+</Key>
+
+<Key key="Dialog_NPC1_Exit_01_Sound">
+	<Language name="Deutsch">Dialog_NPC1_Exit_01_de.wav</Language>
+	<Language name="English">Dialog_NPC1_Exit_01_en.wav</Language>
+</Key>
+<Key key="Dialog_NPC1_Exit_01_Subtitle">
+	<Language name="Deutsch">Bis später.</Language>
+	<Language name="English">See you.</Language>
+</Key>
