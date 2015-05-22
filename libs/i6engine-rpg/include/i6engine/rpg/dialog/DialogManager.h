@@ -76,6 +76,20 @@ namespace dialog {
 			return _activeNPCs;
 		}
 
+		/**
+		 * \brief call this to change state of subtitles (on/off)
+		 */
+		void setSubtitlesEnabled(bool b) {
+			_subtitles = b;
+		}
+
+		/**
+		 * \brief returns whether subtitles are activated or not
+		 */
+		bool getSubtitlesEnabled() const {
+			return _subtitles;
+		}
+
 	private:
 		DialogParser _parser;
 		std::map<std::string, std::vector<Dialog *>> _npcDialogs;
@@ -103,6 +117,8 @@ namespace dialog {
 		std::vector<std::string> _activeNPCs;
 		std::map<std::string, std::string> _dialogMapping;
 		int8_t _showDialogCalls;
+
+		bool _subtitles;
 
 		DialogManager();
 

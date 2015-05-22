@@ -29,6 +29,7 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/config/ExternalConstants.h"
+#include "i6engine/rpg/dialog/DialogManager.h"
 #include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/queueJobs/WaitSayJob.h"
 
@@ -44,10 +45,12 @@ namespace npc {
 		_startTime = api::EngineController::GetSingleton().getCurrentTime();
 		std::string subtitleText = api::EngineController::GetSingleton().getTextManager()->getText(_subtitleKey);
 
-		_subtitleDuration = uint64_t(utils::split(subtitleText, " ").size() * config::SUBTITLE_TIME_PER_WORD) * 1000000;
+		if (dialog::DialogManager::GetSingleton().getSubtitlesEnabled()) {
+			_subtitleDuration = uint64_t(utils::split(subtitleText, " ").size() * config::SUBTITLE_TIME_PER_WORD) * 1000000;
 
-		api::EngineController::GetSingleton().getGUIFacade()->setText("SubtitleWidget", subtitleText);
-		api::EngineController::GetSingleton().getGUIFacade()->setVisibility("SubtitleWidget", true);
+			api::EngineController::GetSingleton().getGUIFacade()->setText("SubtitleWidget", subtitleText);
+			api::EngineController::GetSingleton().getGUIFacade()->setVisibility("SubtitleWidget", true);
+		}
 
 		// start sound
 		auto psc = _self->getGO()->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent);

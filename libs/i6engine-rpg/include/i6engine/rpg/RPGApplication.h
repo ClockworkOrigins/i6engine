@@ -14,25 +14,39 @@
  * limitations under the License.
  */
 
-#ifndef __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
-#define __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
+#ifndef __I6ENGINE_RPG_RPGAPPLICATION_H__
+#define __I6ENGINE_RPG_RPGAPPLICATION_H__
 
-#include "i6engine/rpg/RPGApplication.h"
+#include "i6engine/api/Application.h"
 
-namespace sample {
+#include "clockUtils/iniParser/iniParser.h"
 
-	class RPGApplication : public i6engine::rpg::RPGApplication {
+namespace i6engine {
+namespace rpg {
+
+	class ISIXE_RPG_API RPGApplication : public i6engine::api::Application {
 	public:
 		RPGApplication();
 
-		~RPGApplication();
+		virtual ~RPGApplication();
 
-		void AfterInitialize();
+		virtual void Initialize();
 
-	private:
-		bool _showFPS;
+		virtual void AfterInitialize();
+
+		virtual void Tick();
+
+		virtual bool ShutdownRequest();
+
+		virtual void Finalize();
+
+		virtual void ShutDown();
+
+	protected:
+		clockUtils::iniParser::IniParser _iniParser;
 	};
 
-} /* namespace sample */
+} /* namespace rpg */
+} /* namespace i6engine */
 
-#endif /* __I6ENGINE_SAMPLES_RPGAPPLICATION_H__ */
+#endif /* __I6ENGINE_RPG_RPGAPPLICATION_H__ */

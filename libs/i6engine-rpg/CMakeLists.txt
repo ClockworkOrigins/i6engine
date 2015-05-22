@@ -32,6 +32,8 @@ ENDIF(SCRIPTING_LUA)
 set(srcdir ./src)
 
 set(i6rpgSrc
+	${srcdir}/RPGApplication.cpp
+
 	${srcdir}/components/AttributeComponent.cpp
 	${srcdir}/components/DialogCheckerComponent.cpp
 	${srcdir}/components/HealthbarComponent.cpp

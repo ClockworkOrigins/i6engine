@@ -42,7 +42,7 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)), _guiInitialized(false), _activeNPCs(), _dialogMapping(), _showDialogCalls(0) {
+	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)), _guiInitialized(false), _activeNPCs(), _dialogMapping(), _showDialogCalls(0), _subtitles(true) {
 	}
 
 	DialogManager::~DialogManager() {

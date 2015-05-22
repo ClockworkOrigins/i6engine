@@ -66,12 +66,6 @@ namespace core {
 		MessageStructWrapper() : MessageStruct() {
 		}
 
-		/**
-		* \brief Constructor for MessageStruct.
-		* \param id ID.
-		* \param send Sender.
-		* \param waitID waitForId.
-		*/
 		MessageStructWrapper(const int64_t id, const i6engine::core::IPKey & send, const int64_t waitID) : MessageStruct(id, send, waitID) {
 		}
 
