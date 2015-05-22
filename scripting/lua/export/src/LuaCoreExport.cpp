@@ -18,6 +18,8 @@
 
 #include "i6engine/core/messaging/IPKey.h"
 #include "i6engine/core/messaging/Message.h"
+#include "i6engine/core/messaging/MessageSubscriber.h"
+#include "i6engine/core/subsystem/ModuleController.h"
 
 #include "i6engine/luabind/operator.hpp"
 
@@ -62,14 +64,14 @@ namespace core {
 		return Subsystem::Type(int(m->getSender()));
 	}
 
-	struct MessageStructWrapper : i6engine::core::MessageStruct, luabind::wrap_base {
-		MessageStructWrapper() : MessageStruct() {
+	struct MessageStructWrapper : public i6engine::core::MessageStruct, public luabind::wrap_base {
+		MessageStructWrapper() : MessageStruct(), luabind::wrap_base() {
 		}
 
-		MessageStructWrapper(const int64_t id, const i6engine::core::IPKey & send, const int64_t waitID) : MessageStruct(id, send, waitID) {
+		MessageStructWrapper(const int64_t id, const i6engine::core::IPKey & send, const int64_t waitID) : MessageStruct(id, send, waitID), luabind::wrap_base() {
 		}
 
-		MessageStructWrapper(int64_t id, int64_t waitID) : MessageStruct(id, waitID) {
+		MessageStructWrapper(int64_t id, int64_t waitID) : MessageStruct(id, waitID), luabind::wrap_base() {
 		}
 
 		virtual MessageStruct * copy() {
@@ -78,6 +80,36 @@ namespace core {
 
 		static MessageStruct * default_copy(i6engine::core::MessageStruct * ptr) {
 			return ptr->MessageStruct::copy();
+		}
+	};
+
+	struct MessageSubscriberWrapper : public i6engine::core::MessageSubscriber, public luabind::wrap_base {
+		MessageSubscriberWrapper() : MessageSubscriber(), luabind::wrap_base() {
+		}
+
+		virtual void processMessages() {
+			luabind::call_member<void>(this, "processMessages");
+		}
+
+		static void default_processMessages(i6engine::core::MessageSubscriber * ptr) {
+			ptr->MessageSubscriber::processMessages();
+		}
+	};
+
+	struct ModuleControllerWrapper : i6engine::core::ModuleController, public luabind::wrap_base {
+		ModuleControllerWrapper(Subsystem::Type s) : ModuleController(i6engine::core::Subsystem(int(s))), luabind::wrap_base() {
+		}
+
+		virtual void OnThreadStart() {
+			luabind::call_member<void>(this, "OnThreadStart");
+		}
+
+		virtual void Tick() {
+			luabind::call_member<void>(this, "Tick");
+		}
+
+		virtual void ShutDown() {
+			luabind::call_member<void>(this, "ShutDown");
 		}
 	};
 
@@ -145,6 +177,18 @@ scope registerCore() {
 			.def("getWaitID", &i6engine::core::MessageStruct::getWaitID)
 			.def_readwrite("id", &i6engine::core::MessageStruct::_id)
 			.def_readwrite("sender", &i6engine::core::MessageStruct::_sender)
-			.def_readwrite("waitID", &i6engine::core::MessageStruct::_waitForId)
+			.def_readwrite("waitID", &i6engine::core::MessageStruct::_waitForId),
+
+		class_<i6engine::core::MessageSubscriber, i6engine::lua::core::MessageSubscriberWrapper>("MessageSubscriber")
+			.def(constructor<>())
+			.def("processMessages", &i6engine::core::MessageSubscriber::processMessages, &i6engine::lua::core::MessageSubscriberWrapper::default_processMessages)
+			.def("notifyNewID", &i6engine::core::MessageSubscriber::notifyNewID),
+
+		class_<i6engine::core::ModuleController, i6engine::lua::core::ModuleControllerWrapper>("ModuleController")
+			.def(constructor<i6engine::lua::core::Subsystem::Type>())
+			.def("OnThreadStart", &i6engine::lua::core::ModuleControllerWrapper::OnThreadStart)
+			.def("Tick", &i6engine::lua::core::ModuleControllerWrapper::Tick)
+			.def("ShutDown", &i6engine::lua::core::ModuleControllerWrapper::ShutDown)
+			.def("getFrameTime", &i6engine::core::ModuleController::getFrameTime)
 		;
 }

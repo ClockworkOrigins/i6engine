@@ -98,6 +98,25 @@ namespace core {
 			_messagingController = mc;
 		}
 
+		/**
+		 * \brief Called just after the Controller got created
+		 */
+		virtual void OnThreadStart() = 0;
+
+		/**
+		 * \brief Called repeatedly according to the frametime
+		 */
+		virtual void Tick() = 0;
+
+		/**
+		 * \brief Called to Shutdown the Module
+		 */
+		virtual void ShutDown() = 0;
+
+		Subsystem getSubsystem() const {
+			return _subsystem;
+		}
+
 	protected:
 		/**
 		 * \brief the Subsystem
@@ -113,21 +132,6 @@ namespace core {
 		 * \brief pointer to MessagingController
 		 */
 		MessagingController * _messagingController;
-
-		/**
-		 * \brief Called just after the Controller got created
-		 */
-		virtual void OnThreadStart() = 0;
-
-		/**
-		 * \brief Called repeatedly according to the frametime
-		 */
-		virtual void Tick() = 0;
-
-		/**
-		 * \brief Called to Shutdown the Module
-		 */
-		virtual void ShutDown() = 0;
 
 		/**
 		 * \brief override of processMessages of MessageSubscriber for waiting subsystems

@@ -18,6 +18,8 @@
 
 #include "i6engine/core/messaging/IPKey.h"
 #include "i6engine/core/messaging/Message.h"
+#include "i6engine/core/messaging/MessageSubscriber.h"
+#include "i6engine/core/subsystem/ModuleController.h"
 
 #include "boost/python.hpp"
 
@@ -51,6 +53,48 @@ namespace core {
 
 		MessageStruct * default_copy() {
 			return this->MessageStruct::copy();
+		}
+	};
+
+	struct MessageSubscriberWrapper : public i6engine::core::MessageSubscriber, public boost::python::wrapper<i6engine::core::MessageSubscriber> {
+		MessageSubscriberWrapper() : MessageSubscriber(), boost::python::wrapper<i6engine::core::MessageSubscriber>() {
+		}
+
+		MessageSubscriberWrapper(const i6engine::core::MessageSubscriber & arg) : i6engine::core::MessageSubscriber(), boost::python::wrapper<i6engine::core::MessageSubscriber>() {
+		}
+
+		virtual void processMessages() {
+			if (boost::python::override processMessages = this->get_override("processMessages")) {
+				boost::python::call<void>(processMessages.ptr());
+			}
+			MessageSubscriber::processMessages();
+		}
+
+		void default_processMessages() {
+			this->MessageSubscriber::processMessages();
+		}
+	};
+
+	struct ModuleControllerWrapper : public i6engine::core::ModuleController, public boost::python::wrapper<i6engine::core::ModuleController> {
+		ModuleControllerWrapper() : ModuleController(i6engine::core::Subsystem::Unknown), boost::python::wrapper<i6engine::core::ModuleController>() {
+		}
+
+		ModuleControllerWrapper(i6engine::core::Subsystem s) : ModuleController(s), boost::python::wrapper<i6engine::core::ModuleController>() {
+		}
+
+		ModuleControllerWrapper(const i6engine::core::ModuleController & arg) : i6engine::core::ModuleController(arg.getSubsystem()), boost::python::wrapper<i6engine::core::ModuleController>() {
+		}
+
+		virtual void OnThreadStart() {
+			boost::python::call<void>(this->get_override("OnThreadStart").ptr());
+		}
+
+		virtual void Tick() {
+			boost::python::call<void>(this->get_override("Tick").ptr());
+		}
+
+		virtual void ShutDown() {
+			boost::python::call<void>(this->get_override("ShutDown").ptr());
 		}
 	};
 
@@ -98,14 +142,27 @@ BOOST_PYTHON_MODULE(ScriptingAudioPython) {
 		.def("getSender", &i6engine::core::Message::getSender)
 		.def("getMessageInfo", &i6engine::core::Message::getMessageInfo);
 
-	class_<i6engine::python::core::MessageStructWrapper>("MessageStruct")
+	class_<i6engine::python::core::MessageStructWrapper, boost::noncopyable>("MessageStruct")
 		.def(init<>())
 		.def(init<const int64_t, const i6engine::core::IPKey &, const int64_t>())
 		.def(init<const int64_t, const int64_t>())
-		/*.def("copy", &i6engine::core::MessageStruct::copy, &i6engine::python::core::MessageStructWrapper::default_copy)*/
+		.def("copy", &i6engine::core::MessageStruct::copy, &i6engine::python::core::MessageStructWrapper::default_copy, return_internal_reference<>())
 		.def("getID", &i6engine::core::MessageStruct::getID)
 		.def("getWaitID", &i6engine::core::MessageStruct::getWaitID)
 		.def_readwrite("id", &i6engine::core::MessageStruct::_id)
 		.def_readwrite("sender", &i6engine::core::MessageStruct::_sender)
 		.def_readwrite("waitID", &i6engine::core::MessageStruct::_waitForId);
+
+	class_<i6engine::python::core::MessageSubscriberWrapper>("MessageSubscriber")
+		.def(init<>())
+		.def("processMessages", &i6engine::core::MessageSubscriber::processMessages, &i6engine::python::core::MessageSubscriberWrapper::default_processMessages)
+		.def("notifyNewID", &i6engine::core::MessageSubscriber::notifyNewID);
+
+	class_<i6engine::python::core::ModuleControllerWrapper, boost::noncopyable>("ModuleController")
+		.def(init<>())
+		.def(init<i6engine::core::Subsystem>())
+		.def("OnThreadStart", pure_virtual(&i6engine::core::ModuleController::OnThreadStart))
+		.def("Tick", pure_virtual(&i6engine::core::ModuleController::Tick))
+		.def("ShutDown", pure_virtual(&i6engine::core::ModuleController::ShutDown))
+		.def("getFrameTime", &i6engine::core::ModuleController::getFrameTime);
 }
