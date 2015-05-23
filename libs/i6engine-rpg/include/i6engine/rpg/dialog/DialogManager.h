@@ -90,6 +90,13 @@ namespace dialog {
 			return _subtitles;
 		}
 
+		/**
+		 * \brief returns true if a dialog is running
+		 */
+		bool isDialogRunning() const {
+			return _dialogActive;
+		}
+
 	private:
 		DialogParser _parser;
 		std::map<std::string, std::vector<Dialog *>> _npcDialogs;
