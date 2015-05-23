@@ -18,13 +18,46 @@
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/AudioFacade.h"
+#include "i6engine/api/facades/ScriptingFacade.h"
 
 namespace i6engine {
 namespace lua {
 namespace audio {
 
+	void createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool cacheable) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->createNode(comId, f, l, m, p, d, cacheable);
+	}
+
+	void deleteNode(int64_t comId) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->deleteNode(comId);
+	}
+
+	void updateListener(const Vec3 & position, const Quaternion & rotation, const Vec3 & velocity) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->updateListener(position, rotation, velocity);
+	}
+
+	void updatePosition(int64_t comId, const Vec3 & position) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->updatePosition(comId, position);
+	}
+
 	void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
 		i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir, cacheable);
+	}
+
+	void playSoundWithCallbackScript(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & file, const std::string & func) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, [file, func](bool b) {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(file, func, b);
+		});
+	}
+
+	void playSoundWithCallbackFunction(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & func) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, [func](bool b) {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, b);
+		});
+	}
+
+	void resetAudioSubSystem() {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->resetSubSystem();
 	}
 
 } /* namespace audio */
@@ -35,6 +68,13 @@ using namespace luabind;
 
 scope registerAudio() {
 	return
-		def("playSound", &i6engine::lua::audio::playSound)
+		def("createNode", &i6engine::lua::audio::createNode),
+		def("deleteNode", &i6engine::lua::audio::deleteNode),
+		def("updateListener", &i6engine::lua::audio::updateListener),
+		def("updatePosition", &i6engine::lua::audio::updatePosition),
+		def("playSound", &i6engine::lua::audio::playSound),
+		def("playSoundWithCallback", &i6engine::lua::audio::playSoundWithCallbackScript),
+		def("playSoundWithCallback", &i6engine::lua::audio::playSoundWithCallbackFunction),
+		def("resetAudioSubSystem", &i6engine::lua::audio::resetAudioSubSystem)
 		;
 }
