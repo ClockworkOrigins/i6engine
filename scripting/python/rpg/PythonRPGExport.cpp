@@ -71,6 +71,10 @@ namespace rpg {
 		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->exitDialog();
 	}
 
+	void isDialogRunning() {
+		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->isDialogRunning();
+	}
+
 } /* namespace rpg */
 } /* namespace python */
 } /* namespace i6engine */
@@ -83,6 +87,7 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 	def("getNPC", &i6engine::python::rpg::getNPC, return_internal_reference<>());
 	def("wasHeard", &i6engine::python::rpg::wasHeard);
 	def("exitDialog", &i6engine::python::rpg::exitDialog);
+	def("isDialogRunning", &i6engine::python::rpg::isDialogRunning);
 
 	class_<i6engine::rpg::dialog::Dialog>("Dialog", no_init);
 	class_<i6engine::rpg::npc::NPC>("NPC", no_init)

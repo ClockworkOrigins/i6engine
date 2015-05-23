@@ -34,6 +34,10 @@ namespace components {
 			return {};
 		}
 
+		void show();
+
+		void hide();
+
 	private:
 		std::vector<std::pair<uint32_t, std::string>> _slots;
 

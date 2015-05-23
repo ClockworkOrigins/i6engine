@@ -71,6 +71,10 @@ namespace rpg {
 		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->exitDialog();
 	}
 
+	void isDialogRunning() {
+		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->isDialogRunning();
+	}
+
 } /* namespace rpg */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -84,6 +88,7 @@ scope registerRPG() {
 		def("getNPC", &i6engine::lua::rpg::getNPC),
 		def("wasHeard", &i6engine::lua::rpg::wasHeard),
 		def("exitDialog", &i6engine::lua::rpg::exitDialog),
+		def("isDialogRunning", &i6engine::lua::rpg::isDialogRunning),
 
 		class_<i6engine::rpg::dialog::Dialog>("Dialog")
 			.def(constructor<const std::string &, const std::string &>()),

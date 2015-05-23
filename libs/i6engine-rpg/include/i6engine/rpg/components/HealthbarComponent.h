@@ -52,6 +52,10 @@ namespace components {
 			return "Healthbar";
 		}
 
+		void show();
+
+		void hide();
+
 	private:
 		int32_t _currentHP;
 		int32_t _maxHP;

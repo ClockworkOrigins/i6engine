@@ -191,6 +191,28 @@ namespace components {
 		}
 	}
 
+	void QuickslotComponent::show() {
+		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+		for (uint32_t i = 0; i < 10; i++) {
+			gf->setVisibility("Quickslot_Image_" + std::to_string(i), true);
+			gf->setVisibility("Quickslot_Thumbnail_" + std::to_string(i), true);
+			gf->setVisibility("Quickslot_Key_" + std::to_string(i), true);
+			if (_slots[i].first != UINT32_MAX) {
+				gf->setVisibility("Quickslot_Amount_" + std::to_string(i), true);
+			}
+		}
+	}
+
+	void QuickslotComponent::hide() {
+		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+		for (uint32_t i = 0; i < 10; i++) {
+			gf->setVisibility("Quickslot_Image_" + std::to_string(i), false);
+			gf->setVisibility("Quickslot_Thumbnail_" + std::to_string(i), false);
+			gf->setVisibility("Quickslot_Key_" + std::to_string(i), false);
+			gf->setVisibility("Quickslot_Amount_" + std::to_string(i), false);
+		}
+	}
+
 } /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */

@@ -29,6 +29,8 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/HealthbarComponent.h"
+#include "i6engine/rpg/components/QuickslotComponent.h"
 #include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 #include "i6engine/rpg/config/ExternalConstants.h"
 #include "i6engine/rpg/dialog/Dialog.h"
@@ -114,6 +116,19 @@ namespace dialog {
 				_dialogActive = false;
 				_showDialogCalls = 0;
 				_activeNPCs.clear();
+				auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
+				if (playerList.empty()) {
+					return;
+				}
+				auto player = *playerList.begin();
+				auto qc = player->getGOC<components::QuickslotComponent>(components::config::ComponentTypes::QuickslotComponent);
+				if (qc != nullptr) {
+					qc->show();
+				}
+				auto hc = player->getGOC<components::HealthbarComponent>(components::config::ComponentTypes::HealthbarComponent);
+				if (hc != nullptr) {
+					hc->show();
+				}
 			}
 			return;
 		}
@@ -315,6 +330,15 @@ namespace dialog {
 						}
 					});
 					_activeNPCs = d->participants;
+					// hide gui elements
+					auto qc = player->getGOC<components::QuickslotComponent>(components::config::ComponentTypes::QuickslotComponent);
+					if (qc != nullptr) {
+						qc->hide();
+					}
+					auto hc = player->getGOC<components::HealthbarComponent>(components::config::ComponentTypes::HealthbarComponent);
+					if (hc != nullptr) {
+						hc->hide();
+					}
 					if (!d->permanent) {
 						for (auto p : d->participants) {
 							auto it2 = _npcDialogs.find(p);
