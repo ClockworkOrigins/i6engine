@@ -15,6 +15,8 @@ namespace api {
 		friend class EngineController;
 
 	public:
+		TextManager();
+
 		/**
 		 * \brief returns the text in the actual language for the given key
 		 */
@@ -23,9 +25,7 @@ namespace api {
 	private:
 		std::string _language;
 		std::map<std::string, std::map<std::string, std::string>> _texts;
-
-		TextManager();
-
+		
 		void setLanguage(const std::string & language) {
 			_language = language;
 		}

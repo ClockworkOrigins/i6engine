@@ -204,6 +204,18 @@ namespace api {
 		}
 	};
 
+	void addLanguageScriptCallback(i6engine::api::LanguageManager * lm, const std::string & file, const std::string & func) {
+		lm->addCallback([file, func](std::string language) {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(file, func, language);
+		});
+	}
+
+	void addLanguageFunctionCallback(i6engine::api::LanguageManager * lm, const std::string & func) {
+		lm->addCallback([func](std::string language) {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, language);
+		});
+	}
+
 } /* namespace api */
 } /* namespace python */
 } /* namespace i6engine */
@@ -425,4 +437,23 @@ BOOST_PYTHON_MODULE(ScriptingAPIPython) {
 		.value("MB_Button5", i6engine::api::MouseButtonID::MB_Button5)
 		.value("MB_Button6", i6engine::api::MouseButtonID::MB_Button6)
 		.value("MB_Button7", i6engine::api::MouseButtonID::MB_Button7);
+
+	class_<i6engine::api::IDManager, boost::noncopyable>("IDManager", no_init)
+		.def("setBounds", &i6engine::api::IDManager::setBounds)
+		.def("getID", (int64_t(i6engine::api::IDManager::*)()) &i6engine::api::IDManager::getID)
+		.def("getID", (int64_t(i6engine::api::IDManager::*)(uint32_t)) &i6engine::api::IDManager::getID);
+
+	class_<i6engine::api::LanguageManager, boost::noncopyable>("LanguageManager", no_init)
+		.def("addCallback", &i6engine::python::api::addLanguageScriptCallback)
+		.def("addCallback", &i6engine::python::api::addLanguageFunctionCallback)
+		.def("setLanguage", &i6engine::api::LanguageManager::setLanguage);
+
+	class_<i6engine::api::TextManager, boost::noncopyable>("TextManager", no_init)
+		.def("getText", &i6engine::api::TextManager::getText);
+
+	class_<i6engine::api::WaynetManager, boost::noncopyable>("WaynetManager", no_init)
+		.def("createWaynet", &i6engine::api::WaynetManager::createWaynet)
+		.def("getShortestPath", (std::vector<Vec3>(i6engine::api::WaynetManager::*)(const Vec3 &, const std::string &)) &i6engine::api::WaynetManager::getShortestPath)
+		.def("showWaynet", &i6engine::api::WaynetManager::showWaynet)
+		.def("getNearestWaypoint", &i6engine::api::WaynetManager::getNearestWaypoint);
 }

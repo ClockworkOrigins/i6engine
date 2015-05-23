@@ -27,6 +27,8 @@ namespace api {
 		};
 
 	public:
+		WaynetManager();
+
 		/**
 		 * \brief recreates waynet out of all found waypoints
 		 */
@@ -51,8 +53,6 @@ namespace api {
 		std::map<std::string, std::vector<Edge>> _waypoints;
 		// first pair is start and end waypoint
 		std::map<std::pair<std::string, std::string>, std::vector<Vec3>> _paths;
-
-		WaynetManager();
 
 		void reset();
 

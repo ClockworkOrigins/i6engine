@@ -104,10 +104,15 @@ scope registerObject() {
 	return
 		class_<i6engine::api::GameObject, i6engine::api::GOPtr>("GameObject")
 			.def(constructor<>())
-			.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t)const)&i6engine::api::GameObject::getGOC)
-			.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t, const std::string &)const)&i6engine::api::GameObject::getGOC)
+			.def("getID", &i6engine::api::GameObject::getID)
+			.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t)const) &i6engine::api::GameObject::getGOC)
+			.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t, const std::string &)const) &i6engine::api::GameObject::getGOC)
+			.def("getGOCID", &i6engine::api::GameObject::getGOCID)
+			.def("getGOCList", &i6engine::api::GameObject::getGOCList)
 			.def("getType", &i6engine::api::GameObject::getType)
-			.def("setDie", &i6engine::api::GameObject::setDie),
+			.def("setDie", &i6engine::api::GameObject::setDie)
+			.def("getOwner", &i6engine::api::GameObject::getOwner)
+			.def("getUUID", &i6engine::api::GameObject::getUUID),
 
 		class_<i6engine::api::Component, i6engine::api::ComPtr>("ComPtr")
 			.def("setDie", &i6engine::api::Component::setDie),

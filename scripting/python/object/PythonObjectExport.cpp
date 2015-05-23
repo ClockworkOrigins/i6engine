@@ -64,31 +64,36 @@ namespace object {
 } /* namespace python */
 } /* namespace i6engine */
 
+namespace boost {
+namespace python {
+
+	template<typename T, typename U>
+	struct pointee<i6engine::utils::sharedPtr<T, U>> {
+		typedef T type;
+	};
+
+} /* namespace python */
+} /* namespace boost */
+
 BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	using namespace boost::python;
 
-	class_<i6engine::api::GOPtr>("GOPtr")
-		.def(init<i6engine::api::GOPtr>());
-
-	class_<i6engine::api::ComPtr>("ComPtr")
-		.def(init<i6engine::api::ComPtr>());
-
-	class_<i6engine::api::Component, boost::noncopyable>("Component", no_init)
+	class_<i6engine::api::Component, i6engine::api::ComPtr, boost::noncopyable>("Component", no_init)
 		.def("setDie", &i6engine::api::Component::setDie);
 
 	class_<i6engine::api::MeshAppearanceComponent, boost::noncopyable, bases<i6engine::api::Component>>("MeshAppearanceComponent", no_init)
 		.def("getVisibility", &i6engine::api::MeshAppearanceComponent::getVisibility);
 
 	class_<i6engine::api::PhysicalStateComponent, boost::noncopyable, bases<i6engine::api::Component>>("PhysicalStateComponent", no_init)
-			.def("getPosition", &i6engine::api::PhysicalStateComponent::getPosition)
-			.def("setPosition", &i6engine::api::PhysicalStateComponent::setPosition)
-			.def("getRotation", &i6engine::api::PhysicalStateComponent::getRotation)
-			.def("setRotation", &i6engine::api::PhysicalStateComponent::setRotation)
-			.def("applyRotation", &i6engine::api::PhysicalStateComponent::applyRotation)
-			.def("applyCentralForce", &i6engine::api::PhysicalStateComponent::applyCentralForce)
-			.def("applyForce", &i6engine::api::PhysicalStateComponent::applyForce)
-			.def("getLinearVelocity", &i6engine::api::PhysicalStateComponent::getLinearVelocity)
-			.def("reset", &i6engine::api::PhysicalStateComponent::reset);
+		.def("getPosition", &i6engine::api::PhysicalStateComponent::getPosition)
+		.def("setPosition", &i6engine::api::PhysicalStateComponent::setPosition)
+		.def("getRotation", &i6engine::api::PhysicalStateComponent::getRotation)
+		.def("setRotation", &i6engine::api::PhysicalStateComponent::setRotation)
+		.def("applyRotation", &i6engine::api::PhysicalStateComponent::applyRotation)
+		.def("applyCentralForce", &i6engine::api::PhysicalStateComponent::applyCentralForce)
+		.def("applyForce", &i6engine::api::PhysicalStateComponent::applyForce)
+		.def("getLinearVelocity", &i6engine::api::PhysicalStateComponent::getLinearVelocity)
+		.def("reset", &i6engine::api::PhysicalStateComponent::reset);
 
 	class_<i6engine::api::RayTestResult>("RayTestResult")
 			.def_readonly("objID", &i6engine::api::RayTestResult::objID)
@@ -114,11 +119,16 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	i6engine::api::ComPtr(i6engine::api::GameObject::*getGOC1)(uint32_t) const = &i6engine::api::GameObject::getGOC;
 	i6engine::api::ComPtr(i6engine::api::GameObject::*getGOC2)(uint32_t, const std::string &) const = &i6engine::api::GameObject::getGOC;
 
-	class_<i6engine::api::GameObject, boost::noncopyable>("GameObject", no_init)
+	class_<i6engine::api::GameObject, i6engine::api::GOPtr, boost::noncopyable>("GameObject", no_init)
+		.def("getID", &i6engine::api::GameObject::getID)
 		.def("getGOC", getGOC1)
 		.def("getGOC", getGOC2)
+		.def("getGOCID", &i6engine::api::GameObject::getGOCID)
+		.def("getGOCList", &i6engine::api::GameObject::getGOCList)
 		.def("getType", &i6engine::api::GameObject::getType)
-		.def("setDie", &i6engine::api::GameObject::setDie);
+		.def("setDie", &i6engine::api::GameObject::setDie)
+		.def("getOwner", &i6engine::api::GameObject::getOwner)
+		.def("getUUID", &i6engine::api::GameObject::getUUID);
 
 	def("getObject", &i6engine::python::object::getObject);
 	def("getAllObjectsOfType", &i6engine::python::object::getAllObjectsOfType);
