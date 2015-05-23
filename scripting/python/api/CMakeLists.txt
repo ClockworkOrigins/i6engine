@@ -19,6 +19,8 @@
 ################################
 
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
+include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
+include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 
 set(srcdir .)

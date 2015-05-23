@@ -31,7 +31,7 @@
 namespace i6engine {
 namespace core {
 	class IPKey;
-}
+} /* namespace core */
 namespace api {
 
 	class EngineController;
@@ -116,7 +116,7 @@ namespace api {
 		/**
 		 * \brief called when connecting to server failes
 		 */
-		virtual void connectionFailed(const i6engine::core::IPKey & s) {}
+		virtual void connectionFailed(const core::IPKey & s) {}
 
 		/**
 		 * \brief called when address or port is already in use while connecting to m2etis
