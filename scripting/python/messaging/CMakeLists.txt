@@ -15,31 +15,32 @@
 ##
 
 ################################
-# PythonCoreExport cmake
+# PythonMessagingExport cmake
 ################################
 
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
+include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 
 set(srcdir .)
 
-set(pythonCoreSrc
-	${srcdir}/PythonCoreExport.cpp
+set(pythonMessagingSrc
+	${srcdir}/PythonMessagingExport.cpp
 )
 
-PYTHON_ADD_MODULE(ScriptingCorePython ${pythonCoreSrc})
-target_link_libraries(ScriptingCorePython i6engine-modules ${PYTHON_LIBRARIES})
+PYTHON_ADD_MODULE(ScriptingMessagingPython ${pythonMessagingSrc})
+target_link_libraries(ScriptingMessagingPython i6engine-modules ${PYTHON_LIBRARIES})
 
 IF(WIN32)
-	add_custom_command(TARGET ScriptingCorePython POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingCorePython.pyd ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET ScriptingMessagingPython POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ScriptingMessagingPython.pyd ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
 ###########################
-# PythonCoreExport install
+# PythonMessagingExport install
 ###########################
 
-install(TARGETS ScriptingCorePython
+install(TARGETS ScriptingMessagingPython
 	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
 	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib

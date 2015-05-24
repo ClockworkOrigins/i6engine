@@ -14,43 +14,26 @@
  * limitations under the License.
  */
 
-#include "i6engine/api/EngineController.h"
-
-#include "LuaAPIExport.h"
-#include "LuaAudioExport.h"
-#include "LuaCoreExport.h"
-#include "LuaGUIExport.h"
-#include "LuaMathExport.h"
 #include "LuaMessagingExport.h"
-#include "LuaObjectExport.h"
-#include "LuaPhysicsExport.h"
-#include "LuaUtilsExport.h"
 
-#ifdef ISIXE_WITH_RPG
-	#include "LuaRPGExport.h"
-#endif
+#include "i6engine/api/facades/MessagingFacade.h"
 
-extern "C" ISIXE_LUA_API int init(lua_State * L) {
-	using namespace luabind;
+namespace i6engine {
+namespace lua {
+namespace messaging {
 
-	open(L);
+	void sendMessage(const i6engine::api::GameMessage::Ptr & msg) {
+		i6engine::api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(msg);
+	}
 
-	module(L)
-		[
-			registerAPI(),
-			registerAudio(),
-			registerCore(),
-			registerGUI(),
-			registerMath(),
-			registerMessaging(),
-			registerObject(),
-			registerPhysics(),
-			registerUtils()
-#ifdef ISIXE_WITH_RPG
-			,
-			registerRPG()
-#endif
-		];
+} /* namespace messaging */
+} /* namespace lua */
+} /* namespace i6engine */
 
-	return 0;
+using namespace luabind;
+
+scope registerMessaging() {
+	return
+		def("sendMessage", &i6engine::lua::messaging::sendMessage)
+		;
 }

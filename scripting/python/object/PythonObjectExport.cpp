@@ -23,6 +23,7 @@
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/configs/ScriptingConfig.h"
 #include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/facades/ScriptingFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include "boost/python.hpp"
@@ -44,8 +45,55 @@ namespace object {
 		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(id);
 	}
 
-	i6engine::api::GameObject * getObjectPtr(const i6engine::api::GOPtr & p) {
-		return p.get();
+	boost::python::list getGOList() {
+		boost::python::list l;
+		std::list<i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOList();
+		for (std::list<i6engine::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
+			l.append(*it);
+		}
+		return l;
+	}
+
+	void deleteAllObjectsOfType(const std::string & types) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->deleteAllObjectsOfType(types);
+	}
+
+	void createObject(const std::string & gTemplate, const i6engine::api::objects::GOTemplate & tmpl, uint32_t uuid, const bool sender) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createObject(gTemplate, tmpl, uuid, sender);
+	}
+
+	void cleanUpAll() {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
+	}
+
+	void loadLevel(const std::string & file, const std::string & flags) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags);
+	}
+
+	uint32_t getFrameTime() {
+		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime();
+	}
+
+	void createGO(const std::string & gTemplate, const i6engine::api::objects::GOTemplate & tmpl, uint32_t uuid, const bool sender, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO(gTemplate, tmpl, uuid, sender, [func](i6engine::api::GOPtr go) {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, go);
+		});
+	}
+
+	void createComponent(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponent(goid, coid, component, params);
+	}
+
+	void resetObjectSubSystem() {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->resetSubSystem();
+	}
+
+	void pauseObject() {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->pause();
+	}
+
+	void unpauseObject() {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->unpause();
 	}
 
 	i6engine::api::PhysicalStateComponent * getPSC(const i6engine::api::ComPtr & c) {
@@ -132,7 +180,17 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 
 	def("getObject", &i6engine::python::object::getObject);
 	def("getAllObjectsOfType", &i6engine::python::object::getAllObjectsOfType);
-	def("getObjectPtr", &i6engine::python::object::getObjectPtr, return_internal_reference<>());
+	def("getGOList", &i6engine::python::object::getGOList);
+	def("deleteAllObjectsOfType", &i6engine::python::object::deleteAllObjectsOfType);
+	def("createObject", &i6engine::python::object::createObject);
+	def("cleanUpAll", &i6engine::python::object::cleanUpAll);
+	def("loadLevel", &i6engine::python::object::loadLevel);
+	def("getFrameTime", &i6engine::python::object::getFrameTime);
+	def("createGO", &i6engine::python::object::createGO);
+	def("createComponent", &i6engine::python::object::createComponent);
+	def("resetObjectSubSystem", &i6engine::python::object::resetObjectSubSystem);
+	def("pauseObject", &i6engine::python::object::pauseObject);
+	def("unpauseObject", &i6engine::python::object::unpauseObject);
 	def("rayTest", &i6engine::python::object::rayTest);
 
 	enum_<i6engine::api::components::ComponentTypes>("ComponentTypes")

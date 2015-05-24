@@ -21,6 +21,8 @@
 #include "i6engine/core/messaging/MessageSubscriber.h"
 #include "i6engine/core/subsystem/ModuleController.h"
 
+#include "i6engine/api/facades/MessagingFacade.h"
+
 #include "boost/python.hpp"
 
 namespace i6engine {
@@ -96,6 +98,16 @@ namespace core {
 		virtual void ShutDown() {
 			boost::python::call<void>(this->get_override("ShutDown").ptr());
 		}
+
+		void registerMessageType(int msgType, const std::string & func) {
+			i6engine::api::EngineController::GetSingleton().getMessagingFacade()->registerMessageType(msgType, this, [this, func](const i6engine::core::Message::Ptr & msg) {
+				boost::python::call<void>(this->get_override(func.c_str()).ptr());
+			});
+		}
+
+		void unregisterMessageType(int msgType) {
+			i6engine::api::EngineController::GetSingleton().getMessagingFacade()->unregisterMessageType(msgType, this);
+		}
 	};
 
 } /* namespace core */
@@ -140,7 +152,8 @@ BOOST_PYTHON_MODULE(ScriptingAudioPython) {
 		.def("getMethod", &i6engine::core::Message::getMethod)
 		.def("setMessageType", &i6engine::core::Message::setMessageType)
 		.def("getSender", &i6engine::core::Message::getSender)
-		.def("getMessageInfo", &i6engine::core::Message::getMessageInfo);
+		.def("getMessageInfo", &i6engine::core::Message::getMessageInfo)
+		.def("getContent", &i6engine::core::Message::getContent, return_internal_reference<>());
 
 	class_<i6engine::python::core::MessageStructWrapper, boost::noncopyable>("MessageStruct")
 		.def(init<>())
@@ -164,5 +177,7 @@ BOOST_PYTHON_MODULE(ScriptingAudioPython) {
 		.def("OnThreadStart", pure_virtual(&i6engine::core::ModuleController::OnThreadStart))
 		.def("Tick", pure_virtual(&i6engine::core::ModuleController::Tick))
 		.def("ShutDown", pure_virtual(&i6engine::core::ModuleController::ShutDown))
+		.def("registerMessageType", &i6engine::python::core::ModuleControllerWrapper::registerMessageType)
+		.def("unregisterMessageType", &i6engine::python::core::ModuleControllerWrapper::unregisterMessageType)
 		.def("getFrameTime", &i6engine::core::ModuleController::getFrameTime);
 }

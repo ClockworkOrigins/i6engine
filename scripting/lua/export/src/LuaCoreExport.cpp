@@ -21,6 +21,8 @@
 #include "i6engine/core/messaging/MessageSubscriber.h"
 #include "i6engine/core/subsystem/ModuleController.h"
 
+#include "i6engine/api/facades/MessagingFacade.h"
+
 #include "i6engine/luabind/operator.hpp"
 
 namespace i6engine {
@@ -111,6 +113,16 @@ namespace core {
 		virtual void ShutDown() {
 			luabind::call_member<void>(this, "ShutDown");
 		}
+
+		void registerMessageType(int msgType, const std::string & func) {
+			i6engine::api::EngineController::GetSingleton().getMessagingFacade()->registerMessageType(msgType, this, [this, func](const i6engine::core::Message::Ptr & msg) {
+				luabind::call_member<void>(this, func.c_str(), msg);
+			});
+		}
+
+		void unregisterMessageType(int msgType) {
+			i6engine::api::EngineController::GetSingleton().getMessagingFacade()->unregisterMessageType(msgType, this);
+		}
 	};
 
 } /* namespace core */
@@ -166,7 +178,8 @@ scope registerCore() {
 			.def("getMethod", &i6engine::lua::core::getMethod)
 			.def("setMessageType", &i6engine::core::Message::setMessageType)
 			.def("getSender", &i6engine::lua::core::getSender)
-			.def("getMessageInfo", &i6engine::core::Message::getMessageInfo),
+			.def("getMessageInfo", &i6engine::core::Message::getMessageInfo)
+			.def("getContent", &i6engine::core::Message::getContent),
 
 		class_<i6engine::core::MessageStruct, i6engine::lua::core::MessageStructWrapper>("MessageStruct")
 			.def(constructor<>())
@@ -189,6 +202,8 @@ scope registerCore() {
 			.def("OnThreadStart", &i6engine::lua::core::ModuleControllerWrapper::OnThreadStart)
 			.def("Tick", &i6engine::lua::core::ModuleControllerWrapper::Tick)
 			.def("ShutDown", &i6engine::lua::core::ModuleControllerWrapper::ShutDown)
+			.def("registerMessageType", &i6engine::lua::core::ModuleControllerWrapper::registerMessageType)
+			.def("unregisterMessageType", &i6engine::lua::core::ModuleControllerWrapper::unregisterMessageType)
 			.def("getFrameTime", &i6engine::core::ModuleController::getFrameTime)
 		;
 }
