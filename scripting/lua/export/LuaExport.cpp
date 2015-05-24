@@ -22,6 +22,7 @@
 #include "LuaGUIExport.h"
 #include "LuaMathExport.h"
 #include "LuaObjectExport.h"
+#include "LuaPhysicsExport.h"
 #include "LuaUtilsExport.h"
 
 #ifdef ISIXE_WITH_RPG
@@ -41,6 +42,7 @@ extern "C" ISIXE_LUA_API int init(lua_State * L) {
 			registerGUI(),
 			registerMath(),
 			registerObject(),
+			registerPhysics(),
 			registerUtils()
 #ifdef ISIXE_WITH_RPG
 			,

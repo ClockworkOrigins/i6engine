@@ -41,7 +41,7 @@ namespace api {
 		/**
 		 * \brief Contructor
 		 */
-		PhysicsFacade() : _notify(), _notifyInit(false) {}
+		PhysicsFacade() : _notify() {}
 
 		/**
 		 * \brief Destructor
@@ -53,11 +53,6 @@ namespace api {
 		 * \param[in] i6eVector vec3Gravity - The "force" direction. The usual gravity is (0, -y, 0) where -y is the value of the desired gravity (9.8 in rl)
 		 */
 		void setGravity(const math::i6eVector & vec3Gravity) const;
-
-		/**
-		 * \brief removes all meshes save for creation of collision shape out of mesh
-		 */
-		void clean() const;
 
 		/**
 		 * \brief register callback for notifying IDs, call only from PhysicsController
@@ -86,8 +81,6 @@ namespace api {
 
 	private:
 		boost::function<void(int64_t)> _notify;
-
-		bool _notifyInit;
 
 		/**
 		 * \brief forbidden

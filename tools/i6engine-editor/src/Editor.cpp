@@ -227,7 +227,6 @@ namespace editor {
 			}
 
 			api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
-			api::EngineController::GetSingletonPtr()->getPhysicsFacade()->clean();
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
