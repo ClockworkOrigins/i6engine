@@ -19,7 +19,9 @@
 #include "LuaAPIExport.h"
 #include "LuaAudioExport.h"
 #include "LuaCoreExport.h"
+#include "LuaGraphicsExport.h"
 #include "LuaGUIExport.h"
+#include "LuaInputExport.h"
 #include "LuaMathExport.h"
 #include "LuaMessagingExport.h"
 #include "LuaObjectExport.h"
@@ -40,7 +42,9 @@ extern "C" ISIXE_LUA_API int init(lua_State * L) {
 			registerAPI(),
 			registerAudio(),
 			registerCore(),
+			registerGraphics(),
 			registerGUI(),
+			registerInput(),
 			registerMath(),
 			registerMessaging(),
 			registerObject(),

@@ -148,22 +148,22 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("reset", &i6engine::api::PhysicalStateComponent::reset);
 
 	class_<i6engine::api::RayTestResult>("RayTestResult")
-			.def_readonly("objID", &i6engine::api::RayTestResult::objID)
-			.def_readonly("sourceID", &i6engine::api::RayTestResult::sourceID);
+		.def_readonly("objID", &i6engine::api::RayTestResult::objID)
+		.def_readonly("sourceID", &i6engine::api::RayTestResult::sourceID);
 
 	enum_<i6engine::api::PhysicalStateComponent::RayTestRepetition>("RayTestRepetition")
-			.value("STOP", i6engine::api::PhysicalStateComponent::RayTestRepetition::STOP)
-			.value("ONCE", i6engine::api::PhysicalStateComponent::RayTestRepetition::ONCE)
-			.value("PERIODIC", i6engine::api::PhysicalStateComponent::RayTestRepetition::PERIODIC)
-			.export_values();
+		.value("STOP", i6engine::api::PhysicalStateComponent::RayTestRepetition::STOP)
+		.value("ONCE", i6engine::api::PhysicalStateComponent::RayTestRepetition::ONCE)
+		.value("PERIODIC", i6engine::api::PhysicalStateComponent::RayTestRepetition::PERIODIC)
+		.export_values();
 
 	enum_<i6engine::api::PhysicalStateComponent::RayTestNotify>("RayTestNotify")
-			.value("ALWAYS", i6engine::api::PhysicalStateComponent::RayTestNotify::ALWAYS)
-			.value("CHANGE", i6engine::api::PhysicalStateComponent::RayTestNotify::CHANGE)
-			.value("FOUND", i6engine::api::PhysicalStateComponent::RayTestNotify::FOUND)
-			.value("NOTFOUND", i6engine::api::PhysicalStateComponent::RayTestNotify::NOTFOUND)
-			.value("OBJECTCHANGE", i6engine::api::PhysicalStateComponent::RayTestNotify::OBJECTCHANGE)
-			.export_values();
+		.value("ALWAYS", i6engine::api::PhysicalStateComponent::RayTestNotify::ALWAYS)
+		.value("CHANGE", i6engine::api::PhysicalStateComponent::RayTestNotify::CHANGE)
+		.value("FOUND", i6engine::api::PhysicalStateComponent::RayTestNotify::FOUND)
+		.value("NOTFOUND", i6engine::api::PhysicalStateComponent::RayTestNotify::NOTFOUND)
+		.value("OBJECTCHANGE", i6engine::api::PhysicalStateComponent::RayTestNotify::OBJECTCHANGE)
+		.export_values();
 
 	def("getMeshAppearanceComponent", &i6engine::python::object::getMesh, return_internal_reference<>());
 	def("getPhysicalStateComponent", &i6engine::python::object::getPSC, return_internal_reference<>());
