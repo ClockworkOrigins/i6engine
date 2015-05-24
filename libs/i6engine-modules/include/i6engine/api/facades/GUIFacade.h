@@ -96,14 +96,6 @@ namespace gui {
 		void changeEvent(const std::string & windowname, bool b) const;
 
 		/**
-		 * \brief Wrapper to set both visibility of a window and the cursor
-		 * \param windowname name of the window
-		 * \param wVisibilty visibility of the window
-		 * \param mVisibilty visibility of the cursor
-		 */
-		void setWindowAndMouseVisibility(const std::string & windowname, const bool wVisibility, const bool mVisibility) const;
-
-		/**
 		 * \brief sets image for mouse cursor
 		 */
 		void setMouseCursorImage(const std::string & image) const;
