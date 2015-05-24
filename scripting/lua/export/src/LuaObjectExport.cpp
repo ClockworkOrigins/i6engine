@@ -136,6 +136,10 @@ namespace object {
 		c->rayTest(from, to, rtr, rtn, boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ScriptingMessageType, i6engine::api::scripting::ScrRayResult, i6engine::core::Method::Update, new i6engine::api::scripting::Scripting_RayResult_Update(script, func, rayID), i6engine::core::Subsystem::Unknown));
 	}
 
+	void insertPairInAttributeMap(i6engine::api::attributeMap * am, const std::string & key, const std::string & value) {
+		am->insert(std::make_pair(key, value));
+	}
+
 } /* namespace object */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -209,6 +213,28 @@ scope registerObject() {
 		def("pauseObject", &i6engine::lua::object::pauseObject),
 		def("unpauseObject", &i6engine::lua::object::unpauseObject),
 		def("rayTest", &i6engine::lua::object::rayTest),
+
+		class_<i6engine::api::objects::GOTemplateComponent>("GOTemplateComponent")
+			.def(constructor<const std::string &, const i6engine::api::attributeMap &, const std::string &, bool, bool>())
+			.def_readwrite("template", &i6engine::api::objects::GOTemplateComponent::_template)
+			.def_readwrite("id", &i6engine::api::objects::GOTemplateComponent::_id)
+			.def_readwrite("params", &i6engine::api::objects::GOTemplateComponent::_params)
+			.def_readwrite("owner", &i6engine::api::objects::GOTemplateComponent::_owner)
+			.def_readwrite("identifier", &i6engine::api::objects::GOTemplateComponent::_identifier)
+			.def_readwrite("deleted", &i6engine::api::objects::GOTemplateComponent::_deleted),
+
+		class_<i6engine::api::objects::GOTemplate>("GOTemplate")
+			.def(constructor<>())
+			.def_readwrite("type", &i6engine::api::objects::GOTemplate::_type)
+			.def_readwrite("components", &i6engine::api::objects::GOTemplate::_components),
+
+		class_<i6engine::api::attributeMap>("attributeMap")
+			.def(constructor<>())
+			.def("insert", &i6engine::lua::object::insertPairInAttributeMap),
+
+		class_<std::vector<i6engine::api::objects::GOTemplateComponent>>("GOTemplateComponentVector")
+			.def(constructor<>())
+			.def("push_back", (void(std::vector<i6engine::api::objects::GOTemplateComponent>::*)(const i6engine::api::objects::GOTemplateComponent &)) &std::vector<i6engine::api::objects::GOTemplateComponent>::push_back),
 
 		class_<i6engine::api::CollisionGroup>("CollisionGroup")
 			.def(constructor<uint32_t, uint32_t, uint32_t>()),
