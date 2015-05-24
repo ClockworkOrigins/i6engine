@@ -25,6 +25,9 @@
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Singleton.h"
 
+#include "i6engine/api/GameMessage.h"
+#include "i6engine/api/facades/MessageSubscriberFacade.h"
+
 #include "i6engine/rpg/dialog/DialogParser.h"
 
 namespace i6engine {
@@ -36,7 +39,7 @@ namespace dialog {
 
 	struct Dialog;
 
-	class ISIXE_RPG_API DialogManager : public utils::Singleton<DialogManager> {
+	class ISIXE_RPG_API DialogManager : public utils::Singleton<DialogManager>, public api::MessageSubscriberFacade {
 		friend class utils::Singleton<DialogManager>;
 		friend class npc::ExitDialogJob;
 
@@ -91,6 +94,13 @@ namespace dialog {
 		}
 
 		/**
+		 * \brief call this to change state of subtitles (on/off)
+		 */
+		void setDialogNumbersEnabled(bool b) {
+			_dialogNumbers = b;
+		}
+
+		/**
 		 * \brief returns true if a dialog is running
 		 */
 		bool isDialogRunning() const {
@@ -123,9 +133,11 @@ namespace dialog {
 
 		std::vector<std::string> _activeNPCs;
 		std::map<std::string, std::string> _dialogMapping;
+		std::vector<std::string> _dialogNumberVector;
 		int8_t _showDialogCalls;
 
 		bool _subtitles;
+		bool _dialogNumbers;
 
 		DialogManager();
 
@@ -135,6 +147,8 @@ namespace dialog {
 		void stopDialog() {
 			_showDialogCalls--;
 		}
+
+		void News(const api::GameMessage::Ptr & msg);
 	};
 
 } /* namespace dialog */

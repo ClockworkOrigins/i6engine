@@ -21,7 +21,9 @@
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
+#include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/GUIFacade.h"
+#include "i6engine/api/facades/InputFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/facades/ScriptingFacade.h"
@@ -44,10 +46,12 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	DialogManager::DialogManager() : _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)), _guiInitialized(false), _activeNPCs(), _dialogMapping(), _showDialogCalls(0), _subtitles(true) {
+	DialogManager::DialogManager() : api::MessageSubscriberFacade(), _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)), _guiInitialized(false), _activeNPCs(), _dialogMapping(), _dialogNumberVector(), _showDialogCalls(0), _subtitles(true), _dialogNumbers(false) {
+		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, DialogManager::News, this);
 	}
 
 	DialogManager::~DialogManager() {
+		ISIXE_UNREGISTERMESSAGETYPE(api::messages::InputMessageType);
 		_running = false;
 		_worker.join();
 	}
@@ -193,6 +197,7 @@ namespace dialog {
 
 	bool DialogManager::checkDialogsLoop() {
 		while (_running) {
+			processMessages();
 			// while a dialog is active new important dialogs mustn't start
 			if (_dialogActive) {
 				_importantChecks.clear();
@@ -311,6 +316,7 @@ namespace dialog {
 			for (Dialog * d : it->second) {
 				if (d->identifier == dia) {
 					_dialogMapping.clear();
+					_dialogNumberVector.clear();
 					_showDialogCalls = 0;
 					_heardDialogs.insert(d);
 					_dialogActive = true;
@@ -379,10 +385,49 @@ namespace dialog {
 			}
 			n->turnToNPC(p);
 		}
-		_dialogMapping.insert(std::make_pair(api::EngineController::GetSingleton().getTextManager()->getText(it->second->description), dia));
+		std::string description = api::EngineController::GetSingleton().getTextManager()->getText(it->second->description);
+
+		if (_dialogNumbers) {
+			description = std::to_string(_dialogMapping.size() + 1) + ": " + description;
+		}
+
+		_dialogNumberVector.push_back(dia);
+		_dialogMapping.insert(std::make_pair(description, dia));
 
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
-		gf->addTextToWidget("DialogList", api::EngineController::GetSingleton().getTextManager()->getText(it->second->description));
+		gf->addTextToWidget("DialogList", description);
+	}
+
+	void DialogManager::News(const api::GameMessage::Ptr & msg) {
+		if (msg->getMessageType() == api::messages::InputMessageType) {
+			if (msg->getSubtype() == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
+				api::input::Input_Keyboard_Update * iku = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent());
+
+				if (iku->pressed == api::KeyState::KEY_PRESSED) {
+					if (iku->code == api::KeyCode::KC_1 && _dialogNumberVector.size() >= 1) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[0]);
+					} else if (iku->code == api::KeyCode::KC_2 && _dialogNumberVector.size() >= 2) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[1]);
+					} else if (iku->code == api::KeyCode::KC_3 && _dialogNumberVector.size() >= 3) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[2]);
+					} else if (iku->code == api::KeyCode::KC_4 && _dialogNumberVector.size() >= 4) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[3]);
+					} else if (iku->code == api::KeyCode::KC_5 && _dialogNumberVector.size() >= 5) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[4]);
+					} else if (iku->code == api::KeyCode::KC_6 && _dialogNumberVector.size() >= 6) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[5]);
+					} else if (iku->code == api::KeyCode::KC_7 && _dialogNumberVector.size() >= 7) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[6]);
+					} else if (iku->code == api::KeyCode::KC_8 && _dialogNumberVector.size() >= 8) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[7]);
+					} else if (iku->code == api::KeyCode::KC_9 && _dialogNumberVector.size() >= 9) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[8]);
+					} else if (iku->code == api::KeyCode::KC_0 && _dialogNumberVector.size() >= 10) {
+						runDialog(_activeNPCs[0], _dialogNumberVector[9]);
+					}
+				}
+			}
+		}
 	}
 
 } /* namespace dialog */

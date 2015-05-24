@@ -162,6 +162,11 @@ namespace rpg {
 		bool subtitles;
 		_iniParser.getValue("GAME", "subtitles", subtitles);
 		dialog::DialogManager::GetSingleton().setSubtitlesEnabled(subtitles);
+
+		// dialog numbers
+		bool dialogNumbers;
+		_iniParser.getValue("GAME", "dialogNumbers", dialogNumbers);
+		dialog::DialogManager::GetSingleton().setDialogNumbersEnabled(dialogNumbers);
 	}
 
 	void RPGApplication::Tick() {
