@@ -28,6 +28,10 @@
 #include "LuaPhysicsExport.h"
 #include "LuaUtilsExport.h"
 
+#ifdef ISIXE_WITH_NETWORK
+	#include "LuaNetworkExport.h"
+#endif
+
 #ifdef ISIXE_WITH_RPG
 	#include "LuaRPGExport.h"
 #endif
@@ -50,6 +54,10 @@ extern "C" ISIXE_LUA_API int init(lua_State * L) {
 			registerObject(),
 			registerPhysics(),
 			registerUtils()
+#ifdef ISIXE_WITH_NETWORK
+			,
+			registerNetwork()
+#endif
 #ifdef ISIXE_WITH_RPG
 			,
 			registerRPG()

@@ -43,6 +43,7 @@ set(luaExportSrc
 	${srcdir}/src/LuaInputExport.cpp
 	${srcdir}/src/LuaMathExport.cpp
 	${srcdir}/src/LuaMessagingExport.cpp
+	${srcdir}/src/LuaNetworkExport.cpp
 	${srcdir}/src/LuaObjectExport.cpp
 	${srcdir}/src/LuaPhysicsExport.cpp
 	${srcdir}/src/LuaUtilsExport.cpp
