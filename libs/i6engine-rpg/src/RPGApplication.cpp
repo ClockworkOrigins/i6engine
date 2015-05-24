@@ -163,6 +163,25 @@ namespace rpg {
 		_iniParser.getValue("GAME", "subtitles", subtitles);
 		dialog::DialogManager::GetSingleton().setSubtitlesEnabled(subtitles);
 
+		// subtitle position
+		double subtitleBoxPositionX;
+		_iniParser.getValue("GAME", "subtitleBoxPositionX", subtitleBoxPositionX);
+		double subtitleBoxPositionY;
+		_iniParser.getValue("GAME", "subtitleBoxPositionY", subtitleBoxPositionY);
+		dialog::DialogManager::GetSingleton().setSubtitlePosition(Vec2(subtitleBoxPositionX, subtitleBoxPositionY));
+
+		// subtitle size
+		double subtitleBoxSizeX;
+		_iniParser.getValue("GAME", "subtitleBoxSizeX", subtitleBoxSizeX);
+		double subtitleBoxSizeY;
+		_iniParser.getValue("GAME", "subtitleBoxSizeY", subtitleBoxSizeY);
+		dialog::DialogManager::GetSingleton().setSubtitleSize(Vec2(subtitleBoxSizeX, subtitleBoxSizeY));
+
+		// subtitle font
+		std::string subtitleFont;
+		_iniParser.getValue("GAME", "subtitleFont", subtitleFont);
+		dialog::DialogManager::GetSingleton().setSubtitleFont(subtitleFont);
+
 		// dialog numbers
 		bool dialogNumbers;
 		_iniParser.getValue("GAME", "dialogNumbers", dialogNumbers);

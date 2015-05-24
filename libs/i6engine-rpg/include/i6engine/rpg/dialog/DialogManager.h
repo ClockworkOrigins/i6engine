@@ -25,6 +25,8 @@
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Singleton.h"
 
+#include "i6engine/math/i6eVector2.h"
+
 #include "i6engine/api/GameMessage.h"
 #include "i6engine/api/facades/MessageSubscriberFacade.h"
 
@@ -107,6 +109,21 @@ namespace dialog {
 			return _dialogActive;
 		}
 
+		/**
+		 * \brief sets position of subtitle box
+		 */
+		void setSubtitlePosition(const Vec2 & pos);
+
+		/**
+		 * \brief sets size of subtitle box
+		 */
+		void setSubtitleSize(const Vec2 & size);
+
+		/**
+		* \brief sets font of subtitle box
+		*/
+		void setSubtitleFont(const std::string & font);
+
 	private:
 		DialogParser _parser;
 		std::map<std::string, std::vector<Dialog *>> _npcDialogs;
@@ -137,6 +154,9 @@ namespace dialog {
 		int8_t _showDialogCalls;
 
 		bool _subtitles;
+		Vec2 _subtitlePosition;
+		Vec2 _subtitleSize;
+		std::string _subtitleFont;
 		bool _dialogNumbers;
 
 		DialogManager();

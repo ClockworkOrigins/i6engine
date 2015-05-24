@@ -29,7 +29,7 @@ namespace gui {
 			_font = g->text;
 			setText(_text);
 		} else if (type == rpg::gui::GUIMessageTypes::SetListboxStyle) {
-			rpg::gui::GUI_SetListboxStyle * g = dynamic_cast<rpg::gui::GUI_SetListboxStyle *>(data);
+			GUI_SetListboxStyle * g = dynamic_cast<GUI_SetListboxStyle *>(data);
 			_listboxStyle = g->style;
 		} else {
 			GUIWidget::update(type, data);
