@@ -39,7 +39,7 @@ namespace api {
 		/**
 		 * \brief type of the light emitted
 		 */
-		enum class LightType : uint8_t {
+		enum class LightType {
 			POINT = 0,		//!< Point light (e.g. a light bulb or torch)
 			DIRECTIONAL = 1,	//!< Directional Light (e.g. the sun)
 			SPOT = 2		//!< Spot light (e.g. a flashlight)
@@ -50,7 +50,7 @@ namespace api {
 		 */
 		LuminousAppearanceComponent(const int64_t id, const attributeMap & params);
 
-		virtual ~LuminousAppearanceComponent();
+		~LuminousAppearanceComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap
@@ -155,7 +155,7 @@ namespace api {
 		 */
 		attributeMap synchronize() const override;
 
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "LuminousAppearance";

@@ -47,11 +47,11 @@ namespace graphics {
 		/**
 		 * \brief Destructor
 		 */
-		virtual ~BillboardComponent();
+		~BillboardComponent();
 
 		/**
-		* \brief creates the Component with given attributeMap
-		*/
+		 * \brief creates the Component with given attributeMap
+		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
 		void Init() override;
@@ -67,7 +67,7 @@ namespace graphics {
 		 */
 		attributeMap synchronize() const override;
 
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "Billboard";

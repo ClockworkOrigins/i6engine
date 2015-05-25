@@ -47,7 +47,7 @@ namespace graphics {
 		/**
 		 * \brief Destructor
 		 */
-		virtual ~MovableTextComponent();
+		~MovableTextComponent();
 
 		/**
 		* \brief creates the Component with given attributeMap
@@ -63,7 +63,7 @@ namespace graphics {
 		 */
 		attributeMap synchronize() const override;
 
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "MovableText";

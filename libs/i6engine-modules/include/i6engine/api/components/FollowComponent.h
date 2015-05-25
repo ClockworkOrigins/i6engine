@@ -12,7 +12,7 @@ namespace api {
 	public:
 		FollowComponent(const int64_t id, const attributeMap & params);
 
-		virtual ~FollowComponent();
+		~FollowComponent();
 
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 

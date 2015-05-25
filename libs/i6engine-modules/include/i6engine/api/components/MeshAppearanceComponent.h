@@ -55,7 +55,7 @@ namespace api {
 		/**
 		 * \brief Destructor
 		 */
-		virtual ~MeshAppearanceComponent();
+		~MeshAppearanceComponent();
 
 		/**
 		* \brief creates the Component with given attributeMap

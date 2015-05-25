@@ -39,7 +39,7 @@ namespace api {
 		 */
 		LifetimeComponent(const int64_t id, const attributeMap & params);
 
-		virtual ~LifetimeComponent();
+		~LifetimeComponent();
 
 		void Init() override;
 
