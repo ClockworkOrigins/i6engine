@@ -94,9 +94,9 @@ namespace api {
 
 		virtual void Tick() override;
 
-		void Init() override;
+		virtual void Init() override;
 
-		void Finalize() override;
+		virtual void Finalize() override;
 
 		/**
 		 * \brief resets progress to initial status

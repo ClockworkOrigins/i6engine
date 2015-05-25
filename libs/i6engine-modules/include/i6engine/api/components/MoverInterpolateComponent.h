@@ -45,7 +45,7 @@ namespace api {
 		};
 
 		MoverInterpolateComponent(const int64_t id, const attributeMap & params);
-		virtual ~MoverInterpolateComponent();
+		~MoverInterpolateComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap

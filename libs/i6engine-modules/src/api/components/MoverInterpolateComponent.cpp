@@ -55,6 +55,11 @@ namespace api {
 		_keyFrames.push_back(keyFrame(position, rotation));
 	}
 
+	void MoverInterpolateComponent::removeKeyFrame(const uint32_t id) {
+		boost::mutex::scoped_lock l(_lock);
+		_keyFrames.erase(_keyFrames.begin() + int(id));
+	}
+
 	void MoverInterpolateComponent::start(Vec3 & startPos) {
 		addTicker();
 

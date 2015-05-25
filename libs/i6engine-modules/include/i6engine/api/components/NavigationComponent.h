@@ -31,7 +31,7 @@ namespace api {
 
 	/**
 	 * \class NavigationComponent
-	 * \brief Tells the engine what heightmap and texture to use when rendering the GameObject.
+	 * \brief Used for navigation between points
 	 */
 	class ISIXE_MODULES_API NavigationComponent : public Component {
 	public:

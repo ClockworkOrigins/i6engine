@@ -36,7 +36,7 @@ namespace api {
 	class ISIXE_MODULES_API MoverCircleComponent : public MoverComponent {
 	public:
 		MoverCircleComponent(const int64_t id, const attributeMap & params);
-		virtual ~MoverCircleComponent();
+		~MoverCircleComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap

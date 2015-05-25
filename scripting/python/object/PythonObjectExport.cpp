@@ -586,6 +586,167 @@ namespace object {
 		}
 	};
 
+	struct MoverComponentWrapper : public i6engine::api::MoverComponent, public boost::python::wrapper<i6engine::api::MoverComponent> {
+		MoverComponentWrapper(const int64_t id, const attributeMap & params) : MoverComponent(id, params), boost::python::wrapper<i6engine::api::MoverComponent>() {
+		}
+
+		MoverComponentWrapper(const i6engine::api::MoverComponent & arg) : i6engine::api::MoverComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::MoverComponent>() {
+		}
+
+		virtual void Tick() override {
+			if (boost::python::override Tick = this->get_override("Tick")) {
+				boost::python::call<void>(Tick.ptr());
+				return;
+			}
+			MoverComponent::Tick();
+		}
+
+		void default_Tick() {
+			this->MoverComponent::Tick();
+		}
+
+		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+			boost::python::call<void>(this->get_override("News").ptr(), msg);
+		}
+
+		virtual void Init() override {
+			if (boost::python::override Init = this->get_override("Init")) {
+				boost::python::call<void>(Init.ptr());
+				return;
+			}
+			MoverComponent::Init();
+		}
+
+		void default_Init() {
+			this->MoverComponent::Init();
+		}
+
+		virtual void Finalize() override {
+			if (boost::python::override Finalize = this->get_override("Finalize")) {
+				boost::python::call<void>(Finalize.ptr());
+				return;
+			}
+			MoverComponent::Finalize();
+		}
+
+		void default_Finalize() {
+			this->MoverComponent::Finalize();
+		}
+
+		virtual i6engine::api::attributeMap synchronize() const {
+			i6engine::api::attributeMap params = MoverComponent::synchronize();
+			i6engine::api::attributeMap params2 = boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+			params.insert(params2.begin(), params2.end());
+			return params;
+		}
+
+		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+			if (boost::python::override howToAdd = this->get_override("howToAdd")) {
+				return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(howToAdd.ptr(), comp);
+			}
+			return MoverComponent::howToAdd(comp);
+		}
+
+		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+			return this->MoverComponent::howToAdd(comp);
+		}
+
+		virtual std::string getTemplateName() const {
+			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
+		}
+
+		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+			return {};
+		}
+
+		void start(Vec3 & startPos) override {
+			boost::python::call<void>(this->get_override("start").ptr());
+		}
+
+		virtual void reset() override {
+			boost::python::call<void>(this->get_override("reset").ptr());
+		}
+
+		void getNewPosition(const uint64_t time, Vec3 & pos, Quaternion & rot) override {
+			boost::python::call<void>(this->get_override("getNewPosition").ptr(), time, pos, rot);
+		}
+	};
+
+	struct NavigationComponentWrapper : public i6engine::api::NavigationComponent, public boost::python::wrapper<i6engine::api::NavigationComponent> {
+		NavigationComponentWrapper(const int64_t id, const attributeMap & params) : NavigationComponent(id, params), boost::python::wrapper<i6engine::api::NavigationComponent>() {
+		}
+
+		NavigationComponentWrapper(const i6engine::api::NavigationComponent & arg) : i6engine::api::NavigationComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::NavigationComponent>() {
+		}
+
+		virtual void Tick() override {
+			if (boost::python::override Tick = this->get_override("Tick")) {
+				boost::python::call<void>(Tick.ptr());
+				return;
+			}
+			Component::Tick();
+		}
+
+		void default_Tick() {
+			this->Component::Tick();
+		}
+
+		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+			if (boost::python::override News = this->get_override("News")) {
+				return boost::python::call<void>(News.ptr(), msg);
+			}
+			Component::News(msg);
+		}
+
+		void default_News(const i6engine::api::GameMessage::Ptr & msg) {
+			this->Component::News(msg);
+		}
+
+		virtual void Init() override {
+			boost::python::call<void>(this->get_override("Init").ptr());
+		}
+
+		virtual void Finalize() override {
+			if (boost::python::override Finalize = this->get_override("Finalize")) {
+				boost::python::call<void>(Finalize.ptr());
+				return;
+			}
+			Component::Finalize();
+		}
+
+		void default_Finalize() {
+			this->NavigationComponent::Finalize();
+		}
+
+		virtual i6engine::api::attributeMap synchronize() const {
+			return boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+		}
+
+		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+			return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
+		}
+
+		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+			return this->Component::howToAdd(comp);
+		}
+
+		virtual std::string getTemplateName() const {
+			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
+		}
+
+		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+			return {};
+		}
+
+		std::vector<Vec3> getPath(const Vec3 & from, const Vec3 & to) const override {
+			return boost::python::call<std::vector<Vec3>>(this->get_override("getPathPos").ptr(), from, to);
+		}
+
+		std::vector<Vec3> getPath(const Vec3 & from, const std::string & to) const override {
+			return boost::python::call<std::vector<Vec3>>(this->get_override("getPathWP").ptr(), from, to);
+		}
+	};
+
 } /* namespace object */
 } /* namespace python */
 } /* namespace i6engine */
@@ -794,6 +955,74 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("backward", pure_virtual(&i6engine::python::object::MovementComponentWrapper::backward))
 		.def("left", pure_virtual(&i6engine::python::object::MovementComponentWrapper::left))
 		.def("right", pure_virtual(&i6engine::python::object::MovementComponentWrapper::right));
+
+	class_<i6engine::api::MoverCircleComponent, i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>, boost::noncopyable>("MoverCircleComponent", no_init)
+		.def("synchronize", &i6engine::api::MoverCircleComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::MoverCircleComponent::getTemplateName)
+		.def("setPositioning", &i6engine::api::MoverCircleComponent::setPositioning)
+		.def("setCircleParameters", &i6engine::api::MoverCircleComponent::setCircleParameters)
+		.def("start", &i6engine::api::MoverCircleComponent::start)
+		.def("getCircleAxis", &i6engine::api::MoverCircleComponent::getCircleAxis)
+		.def("getCircleRadius", &i6engine::api::MoverCircleComponent::getCircleRadius)
+		.def("reset", &i6engine::api::MoverCircleComponent::reset);
+
+	class_<i6engine::python::object::MoverComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component>, boost::noncopyable>("MoverComponent", no_init)
+		.def("Tick", &i6engine::api::MoverComponent::Tick, &i6engine::python::object::MoverComponentWrapper::default_Tick)
+		.def("News", &i6engine::python::object::MoverComponentWrapper::News)
+		.def("Init", &i6engine::python::object::MoverComponentWrapper::Init)
+		.def("Finalize", &i6engine::api::MoverComponent::Finalize, &i6engine::python::object::MoverComponentWrapper::default_Finalize)
+		.def("synchronize", &i6engine::python::object::MoverComponentWrapper::synchronize)
+		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::MoverComponentWrapper::default_howToAdd)
+		.def("getTemplateName", &i6engine::python::object::MoverComponentWrapper::getTemplateName)
+		.def("start", &i6engine::python::object::MoverComponentWrapper::start)
+		.def("reset", &i6engine::python::object::MoverComponentWrapper::reset);
+
+	enum_<i6engine::api::MoverComponent::Positioning>("Positioning")
+		.value("POSITIONING_ABSOLUTE", i6engine::api::MoverComponent::Positioning::POSITIONING_ABSOLUTE)
+		.value("POSITIONING_RELATIVE", i6engine::api::MoverComponent::Positioning::POSITIONING_RELATIVE)
+		.export_values();
+
+	class_<i6engine::api::MoverInterpolateComponent, i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>, boost::noncopyable>("MoverInterpolateComponent", no_init)
+		.def("synchronize", &i6engine::api::MoverInterpolateComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::MoverInterpolateComponent::getTemplateName)
+		.def("addKeyFrame", &i6engine::api::MoverInterpolateComponent::addKeyFrame)
+		.def("removeKeyFrame", &i6engine::api::MoverInterpolateComponent::removeKeyFrame)
+		.def("getKeyframe", &i6engine::api::MoverInterpolateComponent::getKeyframe)
+		.def("setMode", &i6engine::api::MoverInterpolateComponent::setMode)
+		.def("setOpenTime", &i6engine::api::MoverInterpolateComponent::setOpenTime)
+		.def("setWay", &i6engine::api::MoverInterpolateComponent::setWay)
+		.def("getWay", &i6engine::api::MoverInterpolateComponent::getWay)
+		.def("start", &i6engine::api::MoverInterpolateComponent::start)
+		.def("reset", &i6engine::api::MoverInterpolateComponent::reset);
+
+	enum_<i6engine::api::MoverInterpolateComponent::Mode>("Mode")
+		.value("TWOSTATE_TOGGLE", i6engine::api::MoverInterpolateComponent::Mode::TWOSTATE_TOGGLE)
+		.value("TWOSTATE_OPENTIME", i6engine::api::MoverInterpolateComponent::Mode::TWOSTATE_OPENTIME)
+		.value("NSTATE_LOOP", i6engine::api::MoverInterpolateComponent::Mode::NSTATE_LOOP)
+		.value("ONCE", i6engine::api::MoverInterpolateComponent::Mode::ONCE)
+		.export_values();
+		
+	enum_<i6engine::api::MoverInterpolateComponent::Way>("Way")
+		.value("LINEAR", i6engine::api::MoverInterpolateComponent::Way::LINEAR)
+		.value("BEZIER", i6engine::api::MoverInterpolateComponent::Way::BEZIER)
+		.export_values();
+
+	class_<i6engine::api::MovingCameraComponent, i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>, boost::noncopyable>("MovingCameraComponent", no_init)
+		.def("getTemplateName", &i6engine::api::MoverCircleComponent::getTemplateName),
+
+	class_<i6engine::python::object::NavigationComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component>, boost::noncopyable>("NavigationComponent", no_init)
+		.def("Tick", &i6engine::api::Component::Tick, &i6engine::python::object::NavigationComponentWrapper::default_Tick)
+		.def("News", &i6engine::api::Component::News, &i6engine::python::object::NavigationComponentWrapper::default_News)
+		.def("Init", &i6engine::python::object::NavigationComponentWrapper::Init)
+		.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::python::object::NavigationComponentWrapper::default_Finalize)
+		.def("synchronize", &i6engine::python::object::NavigationComponentWrapper::synchronize)
+		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::NavigationComponentWrapper::default_howToAdd)
+		.def("getTemplateName", &i6engine::python::object::NavigationComponentWrapper::getTemplateName)
+		.def("getPathPos", (std::vector<Vec3>(i6engine::python::object::NavigationComponentWrapper::*)(const Vec3 &, const Vec3 &) const) &i6engine::python::object::NavigationComponentWrapper::getPath)
+		.def("getPathWP", (std::vector<Vec3>(i6engine::python::object::NavigationComponentWrapper::*)(const Vec3 &, const std::string &) const) &i6engine::python::object::NavigationComponentWrapper::getPath);
+
+	class_<i6engine::api::NetworkSenderComponent, i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>, boost::noncopyable>("NetworkSenderComponent", no_init)
+		.def("getTemplateName", &i6engine::api::NetworkSenderComponent::getTemplateName);
 
 	class_<i6engine::api::PhysicalStateComponent, i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>, boost::noncopyable>("PhysicalStateComponent", no_init)
 		.def("getPosition", &i6engine::api::PhysicalStateComponent::getPosition)

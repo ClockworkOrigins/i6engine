@@ -45,6 +45,10 @@ namespace api {
 
 		void Tick() override;
 
+		std::string getTemplateName() const override {
+			return "MovingCamera";
+		}
+
 	private:
 		Vec3 _oldPos;
 	};

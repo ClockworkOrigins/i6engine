@@ -549,6 +549,146 @@ namespace object {
 		}
 	};
 
+	struct MoverComponentWrapper : public i6engine::api::MoverComponent, public luabind::wrap_base {
+		MoverComponentWrapper(const int64_t id, const attributeMap & params) : MoverComponent(id, params), luabind::wrap_base() {
+		}
+
+		virtual void Tick() override {
+			MoverComponent::Tick();
+			luabind::call_member<void>(this, "Tick");
+		}
+
+		static void default_Tick(i6engine::api::MoverComponent * ptr) {
+			ptr->MoverComponent::Tick();
+		}
+
+		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+			luabind::call_member<void>(this, "News", msg);
+		}
+
+		virtual void Init() override {
+			MoverComponent::Init();
+			luabind::call_member<void>(this, "Init");
+		}
+
+		static void default_Init(i6engine::api::MoverComponent * ptr) {
+			ptr->MoverComponent::Init();
+		}
+
+		virtual void Finalize() override {
+			MoverComponent::Finalize();
+			luabind::call_member<void>(this, "Finalize");
+		}
+
+		static void default_Finalize(i6engine::api::MoverComponent * ptr) {
+			ptr->MoverComponent::Finalize();
+		}
+
+		virtual i6engine::api::attributeMap synchronize() const {
+			i6engine::api::attributeMap params = MoverComponent::synchronize();
+			i6engine::api::attributeMap params2 = luabind::call_member<i6engine::api::attributeMap>(this, "synchronize");
+			params.insert(params2.begin(), params2.end());
+			return params;
+		}
+
+		static i6engine::api::attributeMap default_synchronize(i6engine::api::MoverComponent * ptr) {
+			return ptr->MoverComponent::synchronize();
+		}
+
+		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+			return luabind::call_member<std::pair<i6engine::api::AddStrategy, int64_t>>(this, "howToAdd", comp);
+		}
+
+		static std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(i6engine::api::MoverComponent * ptr, const i6engine::api::ComPtr & comp) {
+			return ptr->Component::howToAdd(comp);
+		}
+
+		virtual std::string getTemplateName() const {
+			return luabind::call_member<std::string>(this, "getTemplateName");
+		}
+
+		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+			return {};
+		}
+
+		void start(Vec3 & startPos) override {
+			luabind::call_member<void>(this, "start");
+		}
+
+		virtual void reset() override {
+			luabind::call_member<void>(this, "reset");
+		}
+
+		void getNewPosition(const uint64_t time, Vec3 & pos, Quaternion & rot) override {
+			luabind::call_member<void>(this, "getNewPosition", time, pos, rot);
+		}
+	};
+
+	int getWay(i6engine::api::MoverInterpolateComponent * c) {
+		return int(c->getWay());
+	}
+
+	struct NavigationComponentWrapper : public i6engine::api::NavigationComponent, public luabind::wrap_base {
+		NavigationComponentWrapper(const int64_t id, const attributeMap & params) : NavigationComponent(id, params), luabind::wrap_base() {
+		}
+
+		virtual void Tick() override {
+			luabind::call_member<void>(this, "Tick");
+		}
+
+		static void default_Tick(i6engine::api::NavigationComponent * ptr) {
+			ptr->Component::Tick();
+		}
+
+		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+			luabind::call_member<void>(this, "News", msg);
+		}
+
+		static void default_News(i6engine::api::NavigationComponent * ptr, const i6engine::api::GameMessage::Ptr & msg) {
+			ptr->Component::News(msg);
+		}
+
+		virtual void Init() override {
+			luabind::call_member<void>(this, "Init");
+		}
+
+		virtual void Finalize() override {
+			luabind::call_member<void>(this, "Finalize");
+		}
+
+		static void default_Finalize(i6engine::api::NavigationComponent * ptr) {
+			ptr->NavigationComponent::Finalize();
+		}
+
+		virtual i6engine::api::attributeMap synchronize() const {
+			return luabind::call_member<i6engine::api::attributeMap>(this, "synchronize");
+		}
+
+		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+			return luabind::call_member<std::pair<i6engine::api::AddStrategy, int64_t>>(this, "howToAdd", comp);
+		}
+
+		static std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(i6engine::api::NavigationComponent * ptr, const i6engine::api::ComPtr & comp) {
+			return ptr->Component::howToAdd(comp);
+		}
+
+		virtual std::string getTemplateName() const {
+			return luabind::call_member<std::string>(this, "getTemplateName");
+		}
+
+		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+			return {};
+		}
+
+		std::vector<Vec3> getPath(const Vec3 & from, const Vec3 & to) const override {
+			return luabind::call_member<std::vector<Vec3>>(this, "getPathPos", from, to);
+		}
+
+		std::vector<Vec3> getPath(const Vec3 & from, const std::string & to) const override {
+			return luabind::call_member<std::vector<Vec3>>(this, "getPathWP", from, to);
+		}
+	};
+
 } /* namespace object */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -756,6 +896,80 @@ scope registerObject() {
 			.def("backward", &i6engine::lua::object::MovementComponentWrapper::backward)
 			.def("left", &i6engine::lua::object::MovementComponentWrapper::left)
 			.def("right", &i6engine::lua::object::MovementComponentWrapper::right),
+
+		class_<i6engine::api::MoverCircleComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>>("MoverCircleComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::MoverCircleComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::MoverCircleComponent::getTemplateName)
+			.def("setPositioning", &i6engine::api::MoverCircleComponent::setPositioning)
+			.def("setCircleParameters", &i6engine::api::MoverCircleComponent::setCircleParameters)
+			.def("start", &i6engine::api::MoverCircleComponent::start)
+			.def("getCircleAxis", &i6engine::api::MoverCircleComponent::getCircleAxis)
+			.def("getCircleRadius", &i6engine::api::MoverCircleComponent::getCircleRadius)
+			.def("reset", &i6engine::api::MoverCircleComponent::reset),
+
+		class_<i6engine::api::MoverComponent, i6engine::lua::object::MoverComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component>>("MoverComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("Tick", &i6engine::api::MoverComponent::Tick, &i6engine::lua::object::MoverComponentWrapper::default_Tick)
+			.def("News", &i6engine::lua::object::MoverComponentWrapper::News)
+			.def("Init", &i6engine::lua::object::MoverComponentWrapper::Init)
+			.def("Finalize", &i6engine::api::MoverComponent::Finalize, &i6engine::lua::object::MoverComponentWrapper::default_Finalize)
+			.def("synchronize", &i6engine::api::MoverComponent::synchronize, &i6engine::lua::object::MoverComponentWrapper::synchronize)
+			.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::lua::object::MoverComponentWrapper::default_howToAdd)
+			.def("getTemplateName", &i6engine::lua::object::MoverComponentWrapper::getTemplateName)
+			.def("start", &i6engine::lua::object::MoverComponentWrapper::start)
+			.def("reset", &i6engine::lua::object::MoverComponentWrapper::reset)
+			.enum_("Positioning")
+			[
+				value("POSITIONING_ABSOLUTE", int(i6engine::api::MoverComponent::Positioning::POSITIONING_ABSOLUTE)),
+				value("POSITIONING_RELATIVE", int(i6engine::api::MoverComponent::Positioning::POSITIONING_RELATIVE))
+			],
+
+		class_<i6engine::api::MoverInterpolateComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>>("MoverInterpolateComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::MoverInterpolateComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::MoverInterpolateComponent::getTemplateName)
+			.def("addKeyFrame", &i6engine::api::MoverInterpolateComponent::addKeyFrame)
+			.def("removeKeyFrame", &i6engine::api::MoverInterpolateComponent::removeKeyFrame)
+			.def("getKeyframe", &i6engine::api::MoverInterpolateComponent::getKeyframe)
+			.def("setMode", &i6engine::api::MoverInterpolateComponent::setMode)
+			.def("setOpenTime", &i6engine::api::MoverInterpolateComponent::setOpenTime)
+			.def("setWay", &i6engine::api::MoverInterpolateComponent::setWay)
+			.def("getWay", &i6engine::lua::object::getWay)
+			.def("start", &i6engine::api::MoverInterpolateComponent::start)
+			.def("reset", &i6engine::api::MoverInterpolateComponent::reset)
+			.enum_("Mode")
+			[
+				value("TWOSTATE_TOGGLE", int(i6engine::api::MoverInterpolateComponent::Mode::TWOSTATE_TOGGLE)),
+				value("TWOSTATE_OPENTIME", int(i6engine::api::MoverInterpolateComponent::Mode::TWOSTATE_OPENTIME)),
+				value("NSTATE_LOOP", int(i6engine::api::MoverInterpolateComponent::Mode::NSTATE_LOOP)),
+				value("ONCE", int(i6engine::api::MoverInterpolateComponent::Mode::ONCE))
+			]
+			.enum_("Way")
+			[
+				value("LINEAR", int(i6engine::api::MoverInterpolateComponent::Way::LINEAR)),
+				value("BEZIER", int(i6engine::api::MoverInterpolateComponent::Way::BEZIER))
+			],
+
+		class_<i6engine::api::MovingCameraComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>>("MovingCameraComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("getTemplateName", &i6engine::api::MoverCircleComponent::getTemplateName),
+
+		class_<i6engine::api::NavigationComponent, i6engine::lua::object::NavigationComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component>>("NavigationComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("Tick", &i6engine::api::Component::Tick, &i6engine::lua::object::NavigationComponentWrapper::default_Tick)
+			.def("News", &i6engine::api::Component::News, &i6engine::lua::object::NavigationComponentWrapper::default_News)
+			.def("Init", &i6engine::lua::object::NavigationComponentWrapper::Init)
+			.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::lua::object::NavigationComponentWrapper::default_Finalize)
+			.def("synchronize", &i6engine::lua::object::NavigationComponentWrapper::synchronize)
+			.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::lua::object::NavigationComponentWrapper::default_howToAdd)
+			.def("getTemplateName", &i6engine::lua::object::NavigationComponentWrapper::getTemplateName)
+			.def("getPathPos", (std::vector<Vec3>(i6engine::lua::object::NavigationComponentWrapper::*)(const Vec3 &, const Vec3 &) const) &i6engine::lua::object::NavigationComponentWrapper::getPath)
+			.def("getPathWP", (std::vector<Vec3>(i6engine::lua::object::NavigationComponentWrapper::*)(const Vec3 &, const std::string &) const) &i6engine::lua::object::NavigationComponentWrapper::getPath),
+
+		class_<i6engine::api::NetworkSenderComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>>("NetworkSenderComponent")
+			.def(constructor<>())
+			.def("getTemplateName", &i6engine::api::NetworkSenderComponent::getTemplateName),
 
 		class_<i6engine::api::PhysicalStateComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>>("PhysicalStateComponent")
 			.def("getPosition", &i6engine::api::PhysicalStateComponent::getPosition)
