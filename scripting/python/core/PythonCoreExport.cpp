@@ -127,7 +127,8 @@ BOOST_PYTHON_MODULE(ScriptingAudioPython) {
 		.value("Network", i6engine::core::Subsystem::Network)
 		.value("Object", i6engine::core::Subsystem::Object)
 		.value("Physic", i6engine::core::Subsystem::Physic)
-		.value("Scripting", i6engine::core::Subsystem::Scripting);
+		.value("Scripting", i6engine::core::Subsystem::Scripting)
+		.export_values();
 
 	class_<i6engine::core::IPKey>("IPKey")
 		.def(init<>())
@@ -143,7 +144,8 @@ BOOST_PYTHON_MODULE(ScriptingAudioPython) {
 	enum_<i6engine::core::Method>("Method")
 		.value("Create", i6engine::core::Method::Create)
 		.value("Update", i6engine::core::Method::Update)
-		.value("Delete", i6engine::core::Method::Delete);
+		.value("Delete", i6engine::core::Method::Delete)
+		.export_values();
 
 	class_<i6engine::core::Message, boost::shared_ptr<i6engine::core::Message>>("Message")
 		.def(init<>())

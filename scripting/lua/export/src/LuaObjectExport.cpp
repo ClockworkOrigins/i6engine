@@ -36,40 +36,6 @@ namespace i6engine {
 namespace lua {
 namespace object {
 
-	class ComponentTypes {
-	public:
-		enum Types {
-			CameraComponent,
-			LifetimeComponent,
-			LuminousAppearanceComponent,
-			MeshAppearanceComponent,
-			MoverCircleComponent,
-			MoverComponent,
-			MoverInterpolateComponent,
-			MovingCameraComponent,
-			NetworkSenderComponent,
-			ParticleEmitterComponent,
-			PhysicalStateComponent,
-			ShatterComponent,
-			SpawnpointComponent,
-			StaticStateComponent,
-			TerrainAppearanceComponent,
-			SoundComponent,
-			SoundListenerComponent,
-			BillboardComponent,
-			FollowComponent,
-			MovableTextComponent,
-			WaypointComponent,
-			NavigationComponent,
-			WaynetNavigationComponent,
-			MoveComponent,
-			MovementComponent,
-			ToggleWaynetComponent,
-			Point2PointConstraintComponent,
-			ComponentTypesCount
-		};
-	};
-
 	std::list<i6engine::api::GOPtr> getAllObjectsOfType(const std::string & types) {
 		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
 	}
@@ -100,6 +66,12 @@ namespace object {
 
 	uint32_t getFrameTime() {
 		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime();
+	}
+
+	void registerCTemplate(const std::string & GOCType, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->registerCTemplate(GOCType, [func](int64_t id, const i6engine::api::attributeMap & params) {
+			return utils::sharedPtr<i6engine::api::Component, i6engine::api::Component>(i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<i6engine::api::Component *>(func, id, params)->get());
+		});
 	}
 
 	void createGO(const std::string & gTemplate, const i6engine::api::objects::GOTemplate & tmpl, uint32_t uuid, const bool sender, const std::string & func) {
@@ -140,6 +112,67 @@ namespace object {
 		am->insert(std::make_pair(key, value));
 	}
 
+	struct ComponentWrapper : public i6engine::api::Component, public luabind::wrap_base {
+		ComponentWrapper(const int64_t id, const attributeMap & params) : Component(id, params), luabind::wrap_base() {
+		}
+
+		virtual void Tick() override {
+			luabind::call_member<void>(this, "Tick");
+		}
+
+		static void default_Tick(i6engine::api::Component * ptr) {
+			ptr->Component::Tick();
+		}
+
+		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+			luabind::call_member<void>(this, "News", msg);
+		}
+
+		static void default_News(i6engine::api::Component * ptr, const i6engine::api::GameMessage::Ptr & msg) {
+			ptr->Component::News(msg);
+		}
+
+		virtual void Init() override {
+			luabind::call_member<void>(this, "Init");
+		}
+
+		virtual void Finalize() override {
+			luabind::call_member<void>(this, "Finalize");
+		}
+
+		static void default_Finalize(i6engine::api::Component * ptr) {
+			ptr->Component::Finalize();
+		}
+
+		virtual i6engine::api::attributeMap synchronize() const {
+			return luabind::call_member<i6engine::api::attributeMap>(this, "synchronize");
+		}
+
+		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+			return luabind::call_member<std::pair<i6engine::api::AddStrategy, int64_t>>(this, "howToAdd", comp);
+		}
+
+		static std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(i6engine::api::Component * ptr, const i6engine::api::ComPtr & comp) {
+			return ptr->Component::howToAdd(comp);
+		}
+
+		virtual std::string getTemplateName() const {
+			return luabind::call_member<std::string>(this, "getTemplateName");
+		}
+
+		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+			return {};
+		}
+
+		void addTicker() {
+			Component::addTicker();
+		}
+
+		void removeTicker() {
+			Component::removeTicker();
+		}
+	};
+
 } /* namespace object */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -160,8 +193,35 @@ scope registerObject() {
 			.def("getOwner", &i6engine::api::GameObject::getOwner)
 			.def("getUUID", &i6engine::api::GameObject::getUUID),
 
-		class_<i6engine::api::Component, i6engine::api::ComPtr>("ComPtr")
-			.def("setDie", &i6engine::api::Component::setDie),
+		class_<i6engine::api::AddStrategy>("AddStrategy")
+			.def(constructor<>())
+			.enum_("AddStrategy")
+			[
+				value("ADD", int(i6engine::api::AddStrategy::ADD)),
+				value("REPLACE", int(i6engine::api::AddStrategy::REPLACE)),
+				value("REPLACE_DIS", int(i6engine::api::AddStrategy::REPLACE_DIS)),
+				value("REJECT", int(i6engine::api::AddStrategy::REJECT))
+			],
+
+		class_<i6engine::api::Component, i6engine::lua::object::ComponentWrapper, i6engine::api::ComPtr>("Component")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("getOwnerGO", &i6engine::api::Component::getOwnerGO)
+			.def("getComponentID", &i6engine::api::Component::getComponentID)
+			.def("getFamilyID", &i6engine::api::Component::getFamilyID)
+			.def("getIdentifier", &i6engine::api::Component::getIdentifier)
+			.def("Tick", &i6engine::api::Component::Tick, &i6engine::lua::object::ComponentWrapper::default_Tick)
+			.def("setDie", &i6engine::api::Component::setDie)
+			.def("getID", &i6engine::api::Component::getID)
+			.def("News", &i6engine::api::Component::News, &i6engine::lua::object::ComponentWrapper::default_News)
+			.def("Init", &i6engine::lua::object::ComponentWrapper::Init)
+			.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::lua::object::ComponentWrapper::default_Finalize)
+			.def("synchronize", &i6engine::lua::object::ComponentWrapper::synchronize)
+			.def("setSync", &i6engine::api::Component::setSync)
+			.def("getSync", &i6engine::api::Component::getSync)
+			.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::lua::object::ComponentWrapper::default_howToAdd)
+			.def("getTemplateName", &i6engine::lua::object::ComponentWrapper::getTemplateName)
+			.def("addTicker", &i6engine::lua::object::ComponentWrapper::addTicker)
+			.def("removeTicker", &i6engine::lua::object::ComponentWrapper::removeTicker),
 
 		class_<i6engine::api::MeshAppearanceComponent, i6engine::api::ComPtr>("MeshAppearanceComponent")
 			.def("getVisibility", &i6engine::api::MeshAppearanceComponent::getVisibility),
@@ -207,6 +267,7 @@ scope registerObject() {
 		def("cleanUpAll", &i6engine::lua::object::cleanUpAll),
 		def("loadLevel", &i6engine::lua::object::loadLevel),
 		def("getFrameTime", &i6engine::lua::object::getFrameTime),
+		def("registerCTemplate", &i6engine::lua::object::registerCTemplate),
 		def("createGO", &i6engine::lua::object::createGO),
 		def("createComponent", &i6engine::lua::object::createComponent),
 		def("resetObjectSubSystem", &i6engine::lua::object::resetObjectSubSystem),
@@ -239,12 +300,38 @@ scope registerObject() {
 		class_<i6engine::api::CollisionGroup>("CollisionGroup")
 			.def(constructor<uint32_t, uint32_t, uint32_t>()),
 
-		class_<i6engine::lua::object::ComponentTypes>("ComponentTypes")
+		class_<i6engine::api::components::ComponentTypes>("ComponentTypes")
 			.def(constructor<>())
 			.enum_("Types")
 			[
-				value("MeshAppearanceComponent", i6engine::lua::object::ComponentTypes::Types::MeshAppearanceComponent),
-				value("PhysicalStateComponent", i6engine::lua::object::ComponentTypes::Types::PhysicalStateComponent)
+				value("CameraComponent", i6engine::api::components::ComponentTypes::CameraComponent),
+				value("LifetimeComponent", i6engine::api::components::ComponentTypes::LifetimeComponent),
+				value("LuminousAppearanceComponent", i6engine::api::components::ComponentTypes::LuminousAppearanceComponent),
+				value("MeshAppearanceComponent", i6engine::api::components::ComponentTypes::MeshAppearanceComponent),
+				value("MoverCircleComponent", i6engine::api::components::ComponentTypes::MoverCircleComponent),
+				value("MoverComponent", i6engine::api::components::ComponentTypes::MoverComponent),
+				value("MoverInterpolateComponent", i6engine::api::components::ComponentTypes::MoverInterpolateComponent),
+				value("MovingCameraComponent", i6engine::api::components::ComponentTypes::MovingCameraComponent),
+				value("NetworkSenderComponent", i6engine::api::components::ComponentTypes::NetworkSenderComponent),
+				value("ParticleEmitterComponent", i6engine::api::components::ComponentTypes::ParticleEmitterComponent),
+				value("PhysicalStateComponent", i6engine::api::components::ComponentTypes::PhysicalStateComponent),
+				value("ShatterComponent", i6engine::api::components::ComponentTypes::ShatterComponent),
+				value("SpawnpointComponent", i6engine::api::components::ComponentTypes::SpawnpointComponent),
+				value("StaticStateComponent", i6engine::api::components::ComponentTypes::StaticStateComponent),
+				value("TerrainAppearanceComponent", i6engine::api::components::ComponentTypes::TerrainAppearanceComponent),
+				value("SoundComponent", i6engine::api::components::ComponentTypes::SoundComponent),
+				value("SoundListenerComponent", i6engine::api::components::ComponentTypes::SoundListenerComponent),
+				value("BillboardComponent", i6engine::api::components::ComponentTypes::BillboardComponent),
+				value("FollowComponent", i6engine::api::components::ComponentTypes::FollowComponent),
+				value("MovableTextComponent", i6engine::api::components::ComponentTypes::MovableTextComponent),
+				value("WaypointComponent", i6engine::api::components::ComponentTypes::WaypointComponent),
+				value("NavigationComponent", i6engine::api::components::ComponentTypes::NavigationComponent),
+				value("WaynetNavigationComponent", i6engine::api::components::ComponentTypes::WaynetNavigationComponent),
+				value("MoveComponent", i6engine::api::components::ComponentTypes::MoveComponent),
+				value("MovementComponent", i6engine::api::components::ComponentTypes::MovementComponent),
+				value("ToggleWaynetComponent", i6engine::api::components::ComponentTypes::ToggleWaynetComponent),
+				value("Point2PointConstraintComponent", i6engine::api::components::ComponentTypes::Point2PointConstraintComponent),
+				value("ComponentTypesCount", i6engine::api::components::ComponentTypes::ComponentTypesCount)
 			]
 		;
 }

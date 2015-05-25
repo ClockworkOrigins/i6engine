@@ -119,7 +119,8 @@ BOOST_PYTHON_MODULE(ScriptingGraphicsPython) {
 	enum_<i6engine::api::graphics::ShadowTechnique>("ShadowTechnique")
 		.value("None", i6engine::api::graphics::ShadowTechnique::None)
 		.value("Stencil_Additive", i6engine::api::graphics::ShadowTechnique::Stencil_Additive)
-		.value("Stencil_Modulative", i6engine::api::graphics::ShadowTechnique::Stencil_Modulative);
+		.value("Stencil_Modulative", i6engine::api::graphics::ShadowTechnique::Stencil_Modulative)
+		.export_values();
 
 	class_<i6engine::api::graphics::Resolution>("Resolution")
 		.def(init<>())

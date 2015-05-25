@@ -239,7 +239,8 @@ BOOST_PYTHON_MODULE(ScriptingAPIPython) {
 		.value("AudioMessageType", i6engine::api::messages::EngineMessageTypes::AudioMessageType)
 		.value("AudioNodeMessageType", i6engine::api::messages::EngineMessageTypes::AudioNodeMessageType)
 		.value("ChatMessageType", i6engine::api::messages::EngineMessageTypes::ChatMessageType)
-		.value("MessageTypeCount", i6engine::api::messages::EngineMessageTypes::MessageTypeCount);
+		.value("MessageTypeCount", i6engine::api::messages::EngineMessageTypes::MessageTypeCount)
+		.export_values();
 
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, uint32_t)) &i6engine::python::api::getCurrentTime);
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, const std::set<i6engine::core::Subsystem> &)) &i6engine::python::api::getCurrentTime);

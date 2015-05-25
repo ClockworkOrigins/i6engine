@@ -112,6 +112,82 @@ namespace object {
 		am->insert(std::make_pair(key, value));
 	}
 
+	struct ComponentWrapper : public i6engine::api::Component, public boost::python::wrapper<i6engine::api::Component> {
+		ComponentWrapper(const int64_t id, const attributeMap & params) : Component(id, params), boost::python::wrapper<i6engine::api::Component>() {
+		}
+
+		ComponentWrapper(const i6engine::api::Component & arg) : i6engine::api::Component(), boost::python::wrapper<i6engine::api::Component>() {
+		}
+
+		virtual void Tick() override {
+			if (boost::python::override Tick = this->get_override("Tick")) {
+				boost::python::call<void>(Tick.ptr());
+			}
+			Component::Tick();
+		}
+
+		void default_Tick() {
+			this->Component::Tick();
+		}
+
+		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+			if (boost::python::override News = this->get_override("News")) {
+				boost::python::call<void>(News.ptr(), msg);
+			}
+			Component::News(msg);
+		}
+
+		void default_News(const i6engine::api::GameMessage::Ptr & msg) {
+			this->Component::News(msg);
+		}
+
+		virtual void Init() override {
+			boost::python::call<void>(this->get_override("Init").ptr());
+		}
+
+		virtual void Finalize() override {
+			if (boost::python::override Finalize = this->get_override("Finalize")) {
+				boost::python::call<void>(Finalize.ptr());
+			}
+			Component::Finalize();
+		}
+
+		void default_Finalize() {
+			this->Component::Finalize();
+		}
+
+		virtual i6engine::api::attributeMap synchronize() const {
+			return boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+		}
+
+		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+			if (boost::python::override howToAdd = this->get_override("howToAdd")) {
+				return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(howToAdd.ptr(), comp);
+			}
+			return Component::howToAdd(comp);
+		}
+
+		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+			return this->Component::howToAdd(comp);
+		}
+
+		virtual std::string getTemplateName() const {
+			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
+		}
+
+		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+			return {};
+		}
+
+		void addTicker() {
+			Component::addTicker();
+		}
+
+		void removeTicker() {
+			Component::removeTicker();
+		}
+	};
+
 } /* namespace object */
 } /* namespace python */
 } /* namespace i6engine */
@@ -130,8 +206,43 @@ namespace python {
 BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	using namespace boost::python;
 
-	class_<i6engine::api::Component, i6engine::api::ComPtr, boost::noncopyable>("Component", no_init)
-		.def("setDie", &i6engine::api::Component::setDie);
+	class_<i6engine::api::GameObject, i6engine::api::GOPtr, boost::noncopyable>("GameObject", no_init)
+		.def("getID", &i6engine::api::GameObject::getID)
+		.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t) const) &i6engine::api::GameObject::getGOC)
+		.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t, const std::string &) const) &i6engine::api::GameObject::getGOC)
+		.def("getGOCID", &i6engine::api::GameObject::getGOCID)
+		.def("getGOCList", &i6engine::api::GameObject::getGOCList)
+		.def("getType", &i6engine::api::GameObject::getType)
+		.def("setDie", &i6engine::api::GameObject::setDie)
+		.def("getOwner", &i6engine::api::GameObject::getOwner)
+		.def("getUUID", &i6engine::api::GameObject::getUUID);
+	
+	enum_<i6engine::api::AddStrategy>("AddStrategy")
+		.value("ADD", i6engine::api::AddStrategy::ADD)
+		.value("REPLACE", i6engine::api::AddStrategy::REPLACE)
+		.value("REPLACE_DIS", i6engine::api::AddStrategy::REPLACE_DIS)
+		.value("REJECT", i6engine::api::AddStrategy::REJECT)
+		.export_values();
+
+	class_<i6engine::api::Component, i6engine::python::object::ComponentWrapper, i6engine::api::ComPtr, boost::noncopyable>("Component", no_init)
+		.def(init<int64_t, const i6engine::api::attributeMap &>())
+		.def("getOwnerGO", &i6engine::api::Component::getOwnerGO)
+		.def("getComponentID", &i6engine::api::Component::getComponentID)
+		.def("getFamilyID", &i6engine::api::Component::getFamilyID)
+		.def("getIdentifier", &i6engine::api::Component::getIdentifier)
+		.def("Tick", &i6engine::api::Component::Tick, &i6engine::python::object::ComponentWrapper::default_Tick)
+		.def("setDie", &i6engine::api::Component::setDie)
+		.def("getID", &i6engine::api::Component::getID)
+		.def("News", &i6engine::api::Component::News, &i6engine::python::object::ComponentWrapper::default_News)
+		.def("Init", pure_virtual(&i6engine::python::object::ComponentWrapper::Init))
+		.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::python::object::ComponentWrapper::default_Finalize)
+		.def("synchronize", pure_virtual(&i6engine::python::object::ComponentWrapper::synchronize))
+		.def("setSync", &i6engine::api::Component::setSync)
+		.def("getSync", &i6engine::api::Component::getSync)
+		.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::ComponentWrapper::default_howToAdd)
+		.def("getTemplateName", pure_virtual(&i6engine::python::object::ComponentWrapper::getTemplateName))
+		.def("addTicker", &i6engine::python::object::ComponentWrapper::addTicker)
+		.def("removeTicker", &i6engine::python::object::ComponentWrapper::removeTicker);
 
 	class_<i6engine::api::MeshAppearanceComponent, boost::noncopyable, bases<i6engine::api::Component>>("MeshAppearanceComponent", no_init)
 		.def("getVisibility", &i6engine::api::MeshAppearanceComponent::getVisibility);
@@ -167,17 +278,6 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 
 	def("getMeshAppearanceComponent", &i6engine::python::object::getMesh, return_internal_reference<>());
 	def("getPhysicalStateComponent", &i6engine::python::object::getPSC, return_internal_reference<>());
-
-	class_<i6engine::api::GameObject, i6engine::api::GOPtr, boost::noncopyable>("GameObject", no_init)
-		.def("getID", &i6engine::api::GameObject::getID)
-		.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t) const) &i6engine::api::GameObject::getGOC)
-		.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t, const std::string &) const) &i6engine::api::GameObject::getGOC)
-		.def("getGOCID", &i6engine::api::GameObject::getGOCID)
-		.def("getGOCList", &i6engine::api::GameObject::getGOCList)
-		.def("getType", &i6engine::api::GameObject::getType)
-		.def("setDie", &i6engine::api::GameObject::setDie)
-		.def("getOwner", &i6engine::api::GameObject::getOwner)
-		.def("getUUID", &i6engine::api::GameObject::getUUID);
 
 	def("getObject", &i6engine::python::object::getObject);
 	def("getAllObjectsOfType", &i6engine::python::object::getAllObjectsOfType);
@@ -216,11 +316,37 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def(init<>())
 		.def("push_back", (void(std::vector<i6engine::api::objects::GOTemplateComponent>::*)(const i6engine::api::objects::GOTemplateComponent &)) &std::vector<i6engine::api::objects::GOTemplateComponent>::push_back);
 
-	enum_<i6engine::api::components::ComponentTypes>("ComponentTypes")
-		.value("MeshAppearanceComponent", i6engine::api::components::ComponentTypes::MeshAppearanceComponent)
-		.value("PhysicalStateComponent", i6engine::api::components::ComponentTypes::PhysicalStateComponent)
-		.export_values();
-
 	class_<i6engine::api::CollisionGroup>("CollisionGroup")
 		.def(init<uint32_t, uint32_t, uint32_t>());
+
+	enum_<i6engine::api::components::ComponentTypes>("ComponentTypes")
+		.value("CameraComponent", i6engine::api::components::ComponentTypes::CameraComponent)
+		.value("LifetimeComponent", i6engine::api::components::ComponentTypes::LifetimeComponent)
+		.value("LuminousAppearanceComponent", i6engine::api::components::ComponentTypes::LuminousAppearanceComponent)
+		.value("MeshAppearanceComponent", i6engine::api::components::ComponentTypes::MeshAppearanceComponent)
+		.value("MoverCircleComponent", i6engine::api::components::ComponentTypes::MoverCircleComponent)
+		.value("MoverComponent", i6engine::api::components::ComponentTypes::MoverComponent)
+		.value("MoverInterpolateComponent", i6engine::api::components::ComponentTypes::MoverInterpolateComponent)
+		.value("MovingCameraComponent", i6engine::api::components::ComponentTypes::MovingCameraComponent)
+		.value("NetworkSenderComponent", i6engine::api::components::ComponentTypes::NetworkSenderComponent)
+		.value("ParticleEmitterComponent", i6engine::api::components::ComponentTypes::ParticleEmitterComponent)
+		.value("PhysicalStateComponent", i6engine::api::components::ComponentTypes::PhysicalStateComponent)
+		.value("ShatterComponent", i6engine::api::components::ComponentTypes::ShatterComponent)
+		.value("SpawnpointComponent", i6engine::api::components::ComponentTypes::SpawnpointComponent)
+		.value("StaticStateComponent", i6engine::api::components::ComponentTypes::StaticStateComponent)
+		.value("TerrainAppearanceComponent", i6engine::api::components::ComponentTypes::TerrainAppearanceComponent)
+		.value("SoundComponent", i6engine::api::components::ComponentTypes::SoundComponent)
+		.value("SoundListenerComponent", i6engine::api::components::ComponentTypes::SoundListenerComponent)
+		.value("BillboardComponent", i6engine::api::components::ComponentTypes::BillboardComponent)
+		.value("FollowComponent", i6engine::api::components::ComponentTypes::FollowComponent)
+		.value("MovableTextComponent", i6engine::api::components::ComponentTypes::MovableTextComponent)
+		.value("WaypointComponent", i6engine::api::components::ComponentTypes::WaypointComponent)
+		.value("NavigationComponent", i6engine::api::components::ComponentTypes::NavigationComponent)
+		.value("WaynetNavigationComponent", i6engine::api::components::ComponentTypes::WaynetNavigationComponent)
+		.value("MoveComponent", i6engine::api::components::ComponentTypes::MoveComponent)
+		.value("MovementComponent", i6engine::api::components::ComponentTypes::MovementComponent)
+		.value("ToggleWaynetComponent", i6engine::api::components::ComponentTypes::ToggleWaynetComponent)
+		.value("Point2PointConstraintComponent", i6engine::api::components::ComponentTypes::Point2PointConstraintComponent)
+		.value("ComponentTypesCount", i6engine::api::components::ComponentTypes::ComponentTypesCount)
+		.export_values();
 }

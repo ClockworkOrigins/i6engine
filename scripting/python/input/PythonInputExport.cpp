@@ -69,7 +69,8 @@ BOOST_PYTHON_MODULE(ScriptingInputPython) {
 	enum_<i6engine::api::KeyState>("KeyState")
 		.value("KEY_RELEASED", i6engine::api::KeyState::KEY_RELEASED)
 		.value("KEY_PRESSED", i6engine::api::KeyState::KEY_PRESSED)
-		.value("KEY_HOLD", i6engine::api::KeyState::KEY_HOLD);
+		.value("KEY_HOLD", i6engine::api::KeyState::KEY_HOLD)
+		.export_values();
 
 	enum_<i6engine::api::KeyCode>("KeyCode")
 		.value("KC_UNASSIGNED", i6engine::api::KeyCode::KC_UNASSIGNED)
@@ -216,7 +217,8 @@ BOOST_PYTHON_MODULE(ScriptingInputPython) {
 		.value("KC_WEBBACK", i6engine::api::KeyCode::KC_WEBBACK)
 		.value("KC_MYCOMPUTER", i6engine::api::KeyCode::KC_MYCOMPUTER)
 		.value("KC_MAIL", i6engine::api::KeyCode::KC_MAIL)
-		.value("KC_MEDIASELECT", i6engine::api::KeyCode::KC_MEDIASELECT);
+		.value("KC_MEDIASELECT", i6engine::api::KeyCode::KC_MEDIASELECT)
+		.export_values();
 
 	enum_<i6engine::api::MouseButtonID>("MouseButtonID")
 		.value("MB_Left", i6engine::api::MouseButtonID::MB_Left)
@@ -226,7 +228,8 @@ BOOST_PYTHON_MODULE(ScriptingInputPython) {
 		.value("MB_Button4", i6engine::api::MouseButtonID::MB_Button4)
 		.value("MB_Button5", i6engine::api::MouseButtonID::MB_Button5)
 		.value("MB_Button6", i6engine::api::MouseButtonID::MB_Button6)
-		.value("MB_Button7", i6engine::api::MouseButtonID::MB_Button7);
+		.value("MB_Button7", i6engine::api::MouseButtonID::MB_Button7)
+		.export_values();
 
 	def("setMouseButtonMapping", &i6engine::python::input::setMouseButtonMapping);
 	def("getMouseButtonMapping", &i6engine::python::input::getMouseButtonMapping);

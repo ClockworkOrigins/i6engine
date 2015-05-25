@@ -84,7 +84,8 @@ BOOST_PYTHON_MODULE(ScriptingUtilsPython) {
 		.value("LOGWARN", i6engine::utils::LogLevel::LOGWARN)
 		.value("LOGERROR", i6engine::utils::LogLevel::LOGERROR)
 		.value("LOGFATAL", i6engine::utils::LogLevel::LOGFATAL)
-		.value("LOGNONE", i6engine::utils::LogLevel::LOGNONE);
+		.value("LOGNONE", i6engine::utils::LogLevel::LOGNONE)
+		.export_values();
 
 	class_<i6engine::utils::Semaphore, boost::noncopyable>("Semaphore")
 		.def(init<>())
