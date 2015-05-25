@@ -22,7 +22,7 @@
 #ifndef __I6ENGINE_MODULES_PYTHONSCRIPTINGMANAGER_H__
 #define __I6ENGINE_MODULES_PYTHONSCRIPTINGMANAGER_H__
 
-#include <map>
+#include <set>
 
 #include "i6engine/utils/DoubleBufferQueue.h"
 #include "i6engine/utils/Future.h"
@@ -58,7 +58,7 @@ namespace modules {
 		void Tick();
 
 	private:
-		std::map<std::string, boost::python::object> _scripts;
+		std::set<std::string> _scripts;
 		std::string _scriptsPath;
 		utils::DoubleBufferQueue<std::function<void(void)>, true, false> _callScripts;
 
@@ -74,10 +74,12 @@ namespace modules {
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
 			_callScripts.push(std::bind([this, file, func](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				parseScript(file);
+				parseScript(file, false);
 
 				try {
-					boost::python::object f = _scripts[file][func];
+					boost::python::object module = boost::python::import("__main__");
+					boost::python::object global = module.attr("__dict__");
+					boost::python::object f = global[func];
 					boost::python::call<Ret>(f.ptr(), A...);
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
@@ -90,10 +92,12 @@ namespace modules {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
 			_callScripts.push(std::bind([this, file, func, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				parseScript(file);
+				parseScript(file, false);
 
 				try {
-					boost::python::object f = _scripts[file][func];
+					boost::python::object module = boost::python::import("__main__");
+					boost::python::object global = module.attr("__dict__");
+					boost::python::object f = global[func];
 					ret->push(boost::python::call<Ret>(f.ptr(), A...));
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
@@ -106,13 +110,14 @@ namespace modules {
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
 			_callScripts.push(std::bind([this, func](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
-				/*try {
-					boost::python::object f = _scripts[file][func];
-					boost::python::call<Ret>(f.ptr(), B...);
+				try {
+					boost::python::object module = boost::python::import("__main__");
+					boost::python::object global = module.attr("__dict__");
+					boost::python::object f = global[func];
+					boost::python::call<Ret>(f.ptr(), A...);
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
-				}*/
+				}
 			}, B...));
 		}
 
@@ -121,13 +126,14 @@ namespace modules {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
 			_callScripts.push(std::bind([this, func, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
-				/*try {
-					boost::python::object f = _scripts[func];
-					ret->push(boost::python::call<Ret>(f.ptr(), B...));
+					try {
+					boost::python::object module = boost::python::import("__main__");
+					boost::python::object global = module.attr("__dict__");
+					boost::python::object f = global[func];
+					ret->push(boost::python::call<Ret>(f.ptr(), A...));
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
-				}*/
+				}
 			}, B...));
 			return ret;
 		}
@@ -136,9 +142,11 @@ namespace modules {
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
 			_callScripts.push(std::bind([this, file, func, callback](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				parseScript(file);
+				parseScript(file, false);
 				try {
-					boost::python::object f = _scripts[file][func];
+					boost::python::object module = boost::python::import("__main__");
+					boost::python::object global = module.attr("__dict__");
+					boost::python::object f = global[func];
 					boost::python::call<Ret>(f.ptr(), A...);
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
@@ -152,9 +160,11 @@ namespace modules {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
 			_callScripts.push(std::bind([this, file, func, callback, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				parseScript(file);
+				parseScript(file, false);
 				try {
-					boost::python::object f = _scripts[file][func];
+					boost::python::object module = boost::python::import("__main__");
+					boost::python::object global = module.attr("__dict__");
+					boost::python::object f = global[func];
 					ret->push(boost::python::call<Ret>(f.ptr(), A...));
 				} catch (const boost::python::error_already_set &) {
 					PyErr_PrintEx(0);
@@ -168,13 +178,14 @@ namespace modules {
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
 			_callScripts.push(std::bind([this, func, callback](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
-				/*try {
-				boost::python::object f = _scripts[file][func];
-				boost::python::call<Ret>(f.ptr(), B...);
+				try {
+					boost::python::object module = boost::python::import("__main__");
+					boost::python::object global = module.attr("__dict__");
+					boost::python::object f = global[func];
+					boost::python::call<Ret>(f.ptr(), A...);
 				} catch (const boost::python::error_already_set &) {
-				PyErr_PrintEx(0);
-				}*/
+					PyErr_PrintEx(0);
+				}
 				callback();
 			}, B...));
 		}
@@ -184,13 +195,14 @@ namespace modules {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
 			_callScripts.push(std::bind([this, func, callback, ret](args... A) {
 				ASSERT_THREAD_SAFETY_FUNCTION
-				static_assert(false, "Not supported yet! Needs all python scripts in a global space like lua has!");
-				/*try {
-				boost::python::object f = _scripts[func];
-				ret->push(boost::python::call<Ret>(f.ptr(), B...));
+				try {
+					boost::python::object module = boost::python::import("__main__");
+					boost::python::object global = module.attr("__dict__");
+					boost::python::object f = global[func];
+					ret->push(boost::python::call<Ret>(f.ptr(), A...));
 				} catch (const boost::python::error_already_set &) {
-				PyErr_PrintEx(0);
-				}*/
+					PyErr_PrintEx(0);
+				}
 				callback();
 			}, B...));
 			return ret;
@@ -207,7 +219,7 @@ namespace modules {
 		/**
 		 * \brief parses the given script
 		 */
-		void parseScript(const std::string & file);
+		void parseScript(const std::string & file, bool completePath);
 
 		/**
 		 * \brief forbidden

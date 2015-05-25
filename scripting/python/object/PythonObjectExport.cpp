@@ -419,6 +419,9 @@ namespace object {
 	}
 
 	struct CameraComponentWrapper : public i6engine::api::CameraComponent, public boost::python::wrapper<i6engine::api::CameraComponent> {
+		CameraComponentWrapper() : CameraComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::CameraComponent>() {
+		}
+
 		CameraComponentWrapper(const int64_t id, const attributeMap & params) : CameraComponent(id, params), boost::python::wrapper<i6engine::api::CameraComponent>() {
 		}
 
@@ -474,8 +477,8 @@ namespace object {
 			return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
 		}
 
-		static std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(i6engine::api::CameraComponent * ptr, const i6engine::api::ComPtr & comp) {
-			return ptr->CameraComponent::howToAdd(comp);
+		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+			return this->CameraComponent::howToAdd(comp);
 		}
 
 		virtual std::string getTemplateName() const {
@@ -673,8 +676,12 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.value("REJECT", i6engine::api::AddStrategy::REJECT)
 		.export_values();
 
-	class_<i6engine::api::Component, i6engine::python::object::ComponentWrapper, i6engine::api::ComPtr, boost::noncopyable>("Component", no_init)
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<std::pair<i6engine::api::AddStrategy, int64_t>>("AddStrategyPair")
+		.def(init<>())
+		.def_readwrite("first", &std::pair<i6engine::api::AddStrategy, int64_t>::first)
+		.def_readwrite("second", &std::pair<i6engine::api::AddStrategy, int64_t>::second);
+
+	class_<i6engine::python::object::ComponentWrapper, i6engine::api::ComPtr, boost::noncopyable>("Component", no_init)
 		.def("getOwnerGO", &i6engine::api::Component::getOwnerGO)
 		.def("getComponentID", &i6engine::api::Component::getComponentID)
 		.def("getFamilyID", &i6engine::api::Component::getFamilyID)
@@ -688,26 +695,24 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("synchronize", pure_virtual(&i6engine::python::object::ComponentWrapper::synchronize))
 		.def("setSync", &i6engine::api::Component::setSync)
 		.def("getSync", &i6engine::api::Component::getSync)
-		.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::ComponentWrapper::default_howToAdd)
+		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::ComponentWrapper::default_howToAdd)
 		.def("getTemplateName", pure_virtual(&i6engine::python::object::ComponentWrapper::getTemplateName))
 		.def("addTicker", &i6engine::python::object::ComponentWrapper::addTicker)
 		.def("removeTicker", &i6engine::python::object::ComponentWrapper::removeTicker);
 
-	class_<i6engine::api::BillboardComponent, bases<i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>>, boost::noncopyable>("BillboardComponent")
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<i6engine::api::BillboardComponent, i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>, boost::noncopyable>("BillboardComponent", no_init)
 		.def("createOrUpdateBillboard", &i6engine::api::BillboardComponent::createOrUpdateBillboard)
 		.def("deleteBillboard", &i6engine::api::BillboardComponent::deleteBillboard)
 		.def("synchronize", &i6engine::api::BillboardComponent::synchronize)
 		.def("getTemplateName", &i6engine::api::BillboardComponent::getTemplateName);
 
-	class_<i6engine::api::CameraComponent, i6engine::python::object::CameraComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>, boost::noncopyable>("CameraComponent")
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<i6engine::python::object::CameraComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>, boost::noncopyable>("CameraComponent", no_init)
 		.def("Tick", &i6engine::api::Component::Tick, &i6engine::python::object::CameraComponentWrapper::default_Tick)
 		.def("News", &i6engine::api::Component::News, &i6engine::python::object::CameraComponentWrapper::default_News)
 		.def("Init", &i6engine::python::object::CameraComponentWrapper::Init)
 		.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::python::object::CameraComponentWrapper::default_Finalize)
 		.def("synchronize", &i6engine::python::object::CameraComponentWrapper::synchronize)
-		.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::CameraComponentWrapper::default_howToAdd)
+		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::CameraComponentWrapper::default_howToAdd)
 		.def("getTemplateName", &i6engine::python::object::CameraComponentWrapper::getTemplateName)
 		.def("addTicker", &i6engine::python::object::CameraComponentWrapper::addTicker)
 		.def("removeTicker", &i6engine::python::object::CameraComponentWrapper::removeTicker)
@@ -723,19 +728,16 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("getLookAt", &i6engine::api::CameraComponent::getLookAt)
 		.def("enableCompositor", &i6engine::api::CameraComponent::enableCompositor);
 
-	class_<i6engine::api::FollowComponent, bases<i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component>>, boost::noncopyable>("FollowComponent")
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<i6engine::api::FollowComponent, i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component>, boost::noncopyable>("FollowComponent", no_init)
 		.def("synchronize", &i6engine::api::FollowComponent::synchronize)
 		.def("getTemplateName", &i6engine::api::FollowComponent::getTemplateName);
 
-	class_<i6engine::api::LifetimeComponent, bases<i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>>, boost::noncopyable>("LifetimeComponent")
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<i6engine::api::LifetimeComponent, i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>, boost::noncopyable>("LifetimeComponent", no_init)
 		.def("synchronize", &i6engine::api::LifetimeComponent::synchronize)
 		.def("getTemplateName", &i6engine::api::LifetimeComponent::getTemplateName)
 		.def("instantKill", &i6engine::api::LifetimeComponent::instantKill);
 
-	class_<i6engine::api::LuminousAppearanceComponent, bases<i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component>>, boost::noncopyable>("LuminousAppearanceComponent")
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<i6engine::api::LuminousAppearanceComponent, i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component>, boost::noncopyable>("LuminousAppearanceComponent", no_init)
 		.def("synchronize", &i6engine::api::LuminousAppearanceComponent::synchronize)
 		.def("getTemplateName", &i6engine::api::LuminousAppearanceComponent::getTemplateName)
 		.def("setLightType", &i6engine::api::LuminousAppearanceComponent::setLightType)
@@ -755,8 +757,7 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.value("SPOT", i6engine::api::LuminousAppearanceComponent::LightType::SPOT)
 		.export_values();
 
-	class_<i6engine::api::MeshAppearanceComponent, bases<i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>>, boost::noncopyable>("MeshAppearanceComponent")
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<i6engine::api::MeshAppearanceComponent, i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>, boost::noncopyable>("MeshAppearanceComponent", no_init)
 		.def("synchronize", &i6engine::api::MeshAppearanceComponent::synchronize)
 		.def("getTemplateName", &i6engine::api::MeshAppearanceComponent::getTemplateName)
 		.def("getPosition", &i6engine::api::MeshAppearanceComponent::getPosition)
@@ -770,34 +771,31 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("setAnimationSpeed", &i6engine::api::MeshAppearanceComponent::setAnimationSpeed)
 		.def("stopAnimation", &i6engine::api::MeshAppearanceComponent::stopAnimation);
 
-	class_<i6engine::api::MovableTextComponent, bases<i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>>, boost::noncopyable>("MovableTextComponent")
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<i6engine::api::MovableTextComponent, i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>, boost::noncopyable>("MovableTextComponent", no_init)
 		.def("synchronize", &i6engine::api::MovableTextComponent::synchronize)
 		.def("getTemplateName", &i6engine::api::MovableTextComponent::getTemplateName)
 		.def("setText", &i6engine::api::MovableTextComponent::setText);
 
-	class_<i6engine::api::MoveComponent, bases<i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component>>, boost::noncopyable>("MoveComponent")
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<i6engine::api::MoveComponent, i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component>, boost::noncopyable>("MoveComponent", no_init)
 		.def("synchronize", &i6engine::api::MoveComponent::synchronize)
 		.def("getTemplateName", &i6engine::api::MoveComponent::getTemplateName)
 		.def("navigate", (void(i6engine::api::MoveComponent::*)(const Vec3 &)) &i6engine::api::MoveComponent::navigate)
 		.def("navigate", (void(i6engine::api::MoveComponent::*)(const std::string &)) &i6engine::api::MoveComponent::navigate);
 
-	class_<i6engine::api::MovementComponent, i6engine::python::object::MovementComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component>>("MovementComponent")
-		.def(init<int64_t, const i6engine::api::attributeMap &>())
+	class_<i6engine::python::object::MovementComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component>, boost::noncopyable>("MovementComponent", no_init)
 		.def("Tick", &i6engine::api::MovementComponent::Tick, &i6engine::python::object::MovementComponentWrapper::default_Tick)
 		.def("News", &i6engine::api::MovementComponent::News, &i6engine::python::object::MovementComponentWrapper::default_News)
 		.def("Init", &i6engine::python::object::MovementComponentWrapper::Init)
 		.def("Finalize", &i6engine::api::MovementComponent::Finalize, &i6engine::python::object::MovementComponentWrapper::default_Finalize)
 		.def("synchronize", pure_virtual(&i6engine::python::object::MovementComponentWrapper::synchronize))
-		.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::MovementComponentWrapper::default_howToAdd)
+		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::MovementComponentWrapper::default_howToAdd)
 		.def("getTemplateName", pure_virtual(&i6engine::python::object::MovementComponentWrapper::getTemplateName))
 		.def("forward", pure_virtual(&i6engine::python::object::MovementComponentWrapper::forward))
 		.def("backward", pure_virtual(&i6engine::python::object::MovementComponentWrapper::backward))
 		.def("left", pure_virtual(&i6engine::python::object::MovementComponentWrapper::left))
 		.def("right", pure_virtual(&i6engine::python::object::MovementComponentWrapper::right));
 
-	class_<i6engine::api::PhysicalStateComponent, boost::noncopyable, bases<i6engine::api::Component>>("PhysicalStateComponent", no_init)
+	class_<i6engine::api::PhysicalStateComponent, i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>, boost::noncopyable>("PhysicalStateComponent", no_init)
 		.def("getPosition", &i6engine::api::PhysicalStateComponent::getPosition)
 		.def("setPosition", &i6engine::api::PhysicalStateComponent::setPosition)
 		.def("getRotation", &i6engine::api::PhysicalStateComponent::getRotation)

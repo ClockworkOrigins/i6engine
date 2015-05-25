@@ -244,16 +244,16 @@ BOOST_PYTHON_MODULE(ScriptingAPIPython) {
 
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, uint32_t)) &i6engine::python::api::getCurrentTime);
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, const std::set<i6engine::core::Subsystem> &)) &i6engine::python::api::getCurrentTime);
-	def("getIDManager", &i6engine::python::api::getIDManager);
-	def("getLanguageManager", &i6engine::python::api::getLanguageManager);
-	def("getTextManager", &i6engine::python::api::getTextManager);
-	def("getWaynetManager", &i6engine::python::api::getWaynetManager);
+	def("getIDManager", &i6engine::python::api::getIDManager, return_internal_reference<>());
+	def("getLanguageManager", &i6engine::python::api::getLanguageManager, return_internal_reference<>());
+	def("getTextManager", &i6engine::python::api::getTextManager, return_internal_reference<>());
+	def("getWaynetManager", &i6engine::python::api::getWaynetManager, return_internal_reference<>());
 	def("registerApplication", &i6engine::python::api::registerApplication);
 	def("start", &i6engine::python::api::start);
 	def("setType", &i6engine::python::api::setType);
 	def("setDebugdrawer", &i6engine::python::api::setDebugdrawer);
 	def("getDebugdrawer", &i6engine::python::api::getDebugdrawer);
-	def("getAppl", &i6engine::python::api::getAppl);
+	def("getAppl", &i6engine::python::api::getAppl, return_internal_reference<>());
 	def("registerDefault", &i6engine::python::api::registerDefault);
 	def("stop", &i6engine::python::api::stop);
 	def("registerTimer", (uint64_t(*)(uint64_t, const std::string &, const std::string &, bool, uint16_t)) &i6engine::python::api::registerTimer);
@@ -267,8 +267,7 @@ BOOST_PYTHON_MODULE(ScriptingAPIPython) {
 	def("getNewUUID", &i6engine::python::api::getNewUUID);
 	def("getType", &i6engine::python::api::getType);
 
-	class_<i6engine::api::Application, i6engine::python::api::ApplicationWrapper>("Application")
-		.def(init<>())
+	class_<i6engine::api::Application, i6engine::python::api::ApplicationWrapper, boost::noncopyable>("Application", no_init)
 		.def("Initialize", pure_virtual(&i6engine::python::api::ApplicationWrapper::Initialize))
 		.def("AfterInitialize", pure_virtual(&i6engine::python::api::ApplicationWrapper::AfterInitialize))
 		.def("Tick", pure_virtual(&i6engine::python::api::ApplicationWrapper::Tick))

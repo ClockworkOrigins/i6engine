@@ -98,7 +98,7 @@ namespace modules {
 						iter++;
 					}
 				} catch (boost::filesystem::filesystem_error & e) {
-					ISIXE_THROW_FAILURE("NPCParser", e.what());
+					ISIXE_THROW_FAILURE("LuaScriptingManager", e.what());
 				}
 			}
 		} else {

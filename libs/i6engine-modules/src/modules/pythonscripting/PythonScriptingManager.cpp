@@ -23,6 +23,8 @@
 #include "i6engine/api/configs/ScriptingConfig.h"
 #include "i6engine/api/facades/ScriptingFacade.h"
 
+#include "boost/filesystem.hpp"
+
 namespace i6engine {
 namespace modules {
 
@@ -58,21 +60,45 @@ namespace modules {
 
 			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
 		} else if (type == api::scripting::ScrLoadAllScripts) {
-			ISIXE_THROW_FAILURE("PythonScriptingManager", "Loading of all scripts isn't implemented yet in PythonScriptingManager!");
+			std::queue<std::string> directories;
+			directories.push(_scriptsPath);
+
+			while (!directories.empty()) {
+				std::string dir = directories.front();
+				directories.pop();
+				try {
+					boost::filesystem::directory_iterator iter(dir), dirEnd;
+					while (iter != dirEnd) {
+						if (boost::filesystem::is_regular_file(*iter)) {
+							std::string file = iter->path().string();
+							parseScript(file, true);
+						} else if (boost::filesystem::is_directory(*iter)) {
+							std::string path = iter->path().string();
+							directories.push(path);
+						}
+						iter++;
+					}
+				} catch (boost::filesystem::filesystem_error & e) {
+					ISIXE_THROW_FAILURE("PythonScriptingManager", e.what());
+				}
+			}
 		} else {
 			ISIXE_THROW_MESSAGE("PythonScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
 	}
 
-	void PythonScriptingManager::parseScript(const std::string & file) {
+	void PythonScriptingManager::parseScript(const std::string & file, bool completePath) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		try {
 			if (_scripts.find(file) == _scripts.end()) {
-				boost::python::object module = boost::python::import(utils::split(file, "/").back().c_str());
+				std::string path = file;
+				if (!completePath) {
+					path = _scriptsPath + "/" + file + ".py";
+				}
+				boost::python::object module = boost::python::import("__main__");
 				boost::python::object global = module.attr("__dict__");
-				boost::python::exec_file((_scriptsPath + "/" + file + ".py").c_str(), global, global);
-
-				_scripts[file] = global;
+				boost::python::exec_file(path.c_str(), global, global);
+				_scripts.insert(file);
 			}
 		} catch(const boost::python::error_already_set &) {
 			PyErr_PrintEx(0);

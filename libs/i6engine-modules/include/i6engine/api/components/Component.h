@@ -134,7 +134,7 @@ namespace api {
 		 * \brief Returns the family identification string
 		 * \return name of the family
 		 */
-		const std::string & getIdentifier() const { return _identifier; }
+		std::string getIdentifier() const { return _identifier; }
 
 		/**
 		 * \brief Components can have Tick method like normal Subsystems

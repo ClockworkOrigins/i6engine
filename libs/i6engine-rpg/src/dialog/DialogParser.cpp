@@ -21,7 +21,6 @@
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/api/EngineController.h"
-#include "i6engine/api/facades/ScriptingFacade.h"
 
 #include "i6engine/rpg/dialog/Dialog.h"
 
