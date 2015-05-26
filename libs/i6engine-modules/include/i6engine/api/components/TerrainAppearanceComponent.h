@@ -34,7 +34,7 @@ namespace api {
 	class ISIXE_MODULES_API TerrainAppearanceComponent : public Component {
 	public:
 		TerrainAppearanceComponent(const int64_t id, const attributeMap & params);
-		virtual ~TerrainAppearanceComponent();
+		~TerrainAppearanceComponent();
 
 		/**
 		* \brief creates the Component with given attributeMap

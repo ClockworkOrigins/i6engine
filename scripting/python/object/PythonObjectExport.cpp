@@ -136,6 +136,7 @@ namespace object {
 		virtual void Tick() override {
 			if (boost::python::override Tick = this->get_override("Tick")) {
 				boost::python::call<void>(Tick.ptr());
+				return;
 			}
 			Component::Tick();
 		}
@@ -147,6 +148,7 @@ namespace object {
 		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
 			if (boost::python::override News = this->get_override("News")) {
 				boost::python::call<void>(News.ptr(), msg);
+				return;
 			}
 			Component::News(msg);
 		}
@@ -162,6 +164,7 @@ namespace object {
 		virtual void Finalize() override {
 			if (boost::python::override Finalize = this->get_override("Finalize")) {
 				boost::python::call<void>(Finalize.ptr());
+				return;
 			}
 			Component::Finalize();
 		}
@@ -431,6 +434,7 @@ namespace object {
 		virtual void Tick() override {
 			if (boost::python::override Tick = this->get_override("Tick")) {
 				boost::python::call<void>(Tick.ptr());
+				return;
 			}
 			Component::Tick();
 		}
@@ -442,6 +446,7 @@ namespace object {
 		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
 			if (boost::python::override News = this->get_override("News")) {
 				boost::python::call<void>(News.ptr(), msg);
+				return;
 			}
 			CameraComponent::News(msg);
 		}
@@ -459,6 +464,7 @@ namespace object {
 			CameraComponent::Finalize();
 			if (boost::python::override Finalize = this->get_override("Finalize")) {
 				boost::python::call<void>(Finalize.ptr());
+				return;
 			}
 		}
 
@@ -509,6 +515,7 @@ namespace object {
 			MovementComponent::Tick();
 			if (boost::python::override Tick = this->get_override("Tick")) {
 				boost::python::call<void>(Tick.ptr());
+				return;
 			}
 		}
 
@@ -531,6 +538,7 @@ namespace object {
 			MovementComponent::Init();
 			if (boost::python::override Init = this->get_override("Init")) {
 				boost::python::call<void>(Init.ptr());
+				return;
 			}
 		}
 
@@ -541,7 +549,8 @@ namespace object {
 		virtual void Finalize() override {
 			MovementComponent::Finalize();
 			if (boost::python::override Finalize = this->get_override("Finalize")) {
-				return boost::python::call<void>(Finalize.ptr());
+				boost::python::call<void>(Finalize.ptr());
+				return;
 			}
 		}
 
@@ -744,6 +753,86 @@ namespace object {
 
 		std::vector<Vec3> getPath(const Vec3 & from, const std::string & to) const override {
 			return boost::python::call<std::vector<Vec3>>(this->get_override("getPathWP").ptr(), from, to);
+		}
+	};
+
+	struct ShatterComponentWrapper : public i6engine::api::ShatterComponent, public boost::python::wrapper<i6engine::api::ShatterComponent> {
+		ShatterComponentWrapper(const int64_t id, const attributeMap & params) : ShatterComponent(id, params), boost::python::wrapper<i6engine::api::ShatterComponent>() {
+		}
+
+		ShatterComponentWrapper(const i6engine::api::NavigationComponent & arg) : i6engine::api::ShatterComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::ShatterComponent>() {
+		}
+
+		virtual void Tick() override {
+			if (boost::python::override Tick = this->get_override("Tick")) {
+				boost::python::call<void>(Tick.ptr());
+				return;
+			}
+			Component::Tick();
+		}
+
+		void default_Tick() {
+			this->Component::Tick();
+		}
+
+		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+			if (boost::python::override News = this->get_override("News")) {
+				boost::python::call<void>(News.ptr(), msg);
+				return;
+			}
+			ShatterComponent::News(msg);
+		}
+
+		void default_News(const i6engine::api::GameMessage::Ptr & msg) {
+			this->ShatterComponent::News(msg);
+		}
+
+		virtual void Init() override {
+			if (boost::python::override Init = this->get_override("Init")) {
+				boost::python::call<void>(Init.ptr());
+				return;
+			}
+			Component::Init();
+		}
+
+		void default_Init() {
+			this->ShatterComponent::Init();
+		}
+
+		virtual void Finalize() override {
+			if (boost::python::override Finalize = this->get_override("Finalize")) {
+				boost::python::call<void>(Finalize.ptr());
+				return;
+			}
+			Component::Finalize();
+		}
+
+		void default_Finalize() {
+			this->Component::Finalize();
+		}
+
+		virtual i6engine::api::attributeMap synchronize() const {
+			return boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+		}
+
+		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+			return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
+		}
+
+		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+			return this->Component::howToAdd(comp);
+		}
+
+		virtual std::string getTemplateName() const {
+			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
+		}
+
+		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+			return {};
+		}
+
+		void shatter(const i6engine::api::GOPtr & other) override {
+			boost::python::call<void>(this->get_override("shatter").ptr(), other);
 		}
 	};
 
@@ -1024,20 +1113,53 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	class_<i6engine::api::NetworkSenderComponent, i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>, boost::noncopyable>("NetworkSenderComponent", no_init)
 		.def("getTemplateName", &i6engine::api::NetworkSenderComponent::getTemplateName);
 
+	class_<i6engine::api::ParticleEmitterComponent, i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>, boost::noncopyable>("ParticleEmitterComponent", no_init)
+		.def("synchronize", &i6engine::api::ParticleEmitterComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::ParticleEmitterComponent::getTemplateName);
+
+	enum_<i6engine::api::ResponseType::ResponseType>("ResponseType")
+		.value("NONE", i6engine::api::ResponseType::ResponseType::NONE)
+		.value("STATIC", i6engine::api::ResponseType::ResponseType::STATIC)
+		.value("GHOST", i6engine::api::ResponseType::ResponseType::GHOST)
+		.value("TRIGGER", i6engine::api::ResponseType::ResponseType::TRIGGER)
+		.export_values();
+
+	enum_<i6engine::api::ShatterInterest>("ShatterInterest")
+		.value("NONE", i6engine::api::ShatterInterest::NONE)
+		.value("START", i6engine::api::ShatterInterest::START)
+		.value("END", i6engine::api::ShatterInterest::END)
+		.value("ALWAYS", i6engine::api::ShatterInterest::ALWAYS)
+		.export_values();
+
 	class_<i6engine::api::PhysicalStateComponent, i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>, boost::noncopyable>("PhysicalStateComponent", no_init)
 		.def("getPosition", &i6engine::api::PhysicalStateComponent::getPosition)
 		.def("setPosition", &i6engine::api::PhysicalStateComponent::setPosition)
 		.def("getRotation", &i6engine::api::PhysicalStateComponent::getRotation)
 		.def("setRotation", &i6engine::api::PhysicalStateComponent::setRotation)
+		.def("getScale", &i6engine::api::PhysicalStateComponent::getScale)
+		.def("setScale", &i6engine::api::PhysicalStateComponent::setScale)
+		.def("setCollisionFlags", &i6engine::api::PhysicalStateComponent::setCollisionFlags)
+		.def("getCollisionFlags", &i6engine::api::PhysicalStateComponent::getCollisionFlags)
+		.def("reset", &i6engine::api::PhysicalStateComponent::reset)
+		.def("setCollisionShape", &i6engine::api::PhysicalStateComponent::setCollisionShape)
 		.def("applyRotation", &i6engine::api::PhysicalStateComponent::applyRotation)
+		.def("getLinearVelocity", &i6engine::api::PhysicalStateComponent::getLinearVelocity)
+		.def("setLinearVelocity", &i6engine::api::PhysicalStateComponent::setLinearVelocity)
 		.def("applyCentralForce", &i6engine::api::PhysicalStateComponent::applyCentralForce)
 		.def("applyForce", &i6engine::api::PhysicalStateComponent::applyForce)
-		.def("getLinearVelocity", &i6engine::api::PhysicalStateComponent::getLinearVelocity)
-		.def("reset", &i6engine::api::PhysicalStateComponent::reset);
-
-	class_<i6engine::api::RayTestResult>("RayTestResult")
-		.def_readonly("objID", &i6engine::api::RayTestResult::objID)
-		.def_readonly("sourceID", &i6engine::api::RayTestResult::sourceID);
+		.def("setShatterInterest", &i6engine::api::PhysicalStateComponent::setShatterInterest)
+		.def("setGravity", &i6engine::api::PhysicalStateComponent::setGravity)
+		.def("synchronize", &i6engine::api::PhysicalStateComponent::synchronize)
+		.def("rayTest", &i6engine::api::PhysicalStateComponent::rayTest)
+		.def("getTemplateName", &i6engine::api::PhysicalStateComponent::getTemplateName)
+		.def("addPosition", &i6engine::api::PhysicalStateComponent::addPosition);
+	
+	enum_<i6engine::api::PhysicalStateComponent::ShapeType>("ShapeType")
+		.value("PLANE", i6engine::api::PhysicalStateComponent::ShapeType::PLANE)
+		.value("BOX", i6engine::api::PhysicalStateComponent::ShapeType::BOX)
+		.value("SPHERE", i6engine::api::PhysicalStateComponent::ShapeType::SPHERE)
+		.value("FILE", i6engine::api::PhysicalStateComponent::ShapeType::FILE)
+		.export_values();
 
 	enum_<i6engine::api::PhysicalStateComponent::RayTestRepetition>("RayTestRepetition")
 		.value("STOP", i6engine::api::PhysicalStateComponent::RayTestRepetition::STOP)
@@ -1052,6 +1174,81 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.value("NOTFOUND", i6engine::api::PhysicalStateComponent::RayTestNotify::NOTFOUND)
 		.value("OBJECTCHANGE", i6engine::api::PhysicalStateComponent::RayTestNotify::OBJECTCHANGE)
 		.export_values();
+
+	class_<i6engine::api::RayTestResult>("RayTestResult")
+		.def(init<>())
+		.def_readonly("objID", &i6engine::api::RayTestResult::objID)
+		.def_readonly("sourceID", &i6engine::api::RayTestResult::sourceID)
+		.def_readonly("collisionPoint", &i6engine::api::RayTestResult::collisionPoint);
+
+	class_<i6engine::api::Point2PointConstraintComponent, i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>, boost::noncopyable>("Point2PointConstraintComponent", no_init)
+		.def("synchronize", &i6engine::api::Point2PointConstraintComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::Point2PointConstraintComponent::getTemplateName);
+
+	class_<i6engine::python::object::ShatterComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>, boost::noncopyable>("ShatterComponent", no_init)
+		.def("Tick", &i6engine::api::Component::Tick, &i6engine::python::object::ShatterComponentWrapper::default_Tick)
+		.def("News", &i6engine::api::ShatterComponent::News, &i6engine::python::object::ShatterComponentWrapper::default_News)
+		.def("Init", &i6engine::api::ShatterComponent::Init, &i6engine::python::object::ShatterComponentWrapper::Init)
+		.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::python::object::ShatterComponentWrapper::default_Finalize)
+		.def("synchronize", &i6engine::python::object::CameraComponentWrapper::synchronize)
+		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::ShatterComponentWrapper::default_howToAdd)
+		.def("getTemplateName", &i6engine::python::object::ShatterComponentWrapper::getTemplateName)
+		.def("shatter", pure_virtual(&i6engine::python::object::ShatterComponentWrapper::shatter))
+		.def("resetRespawn", &i6engine::api::ShatterComponent::resetRespawn);
+
+	class_<i6engine::api::SoundComponent, i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>, boost::noncopyable>("SoundComponent", no_init)
+		.def("synchronize", &i6engine::api::SoundComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::SoundComponent::getTemplateName);
+
+	class_<i6engine::api::SoundListenerComponent, i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>, boost::noncopyable>("SoundListenerComponent", no_init)
+		.def("synchronize", &i6engine::api::SoundListenerComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::SoundListenerComponent::getTemplateName);
+
+	class_<i6engine::api::SpawnpointComponent, i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>, boost::noncopyable>("SpawnpointComponent", no_init)
+		.def("synchronize", &i6engine::api::SpawnpointComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::SpawnpointComponent::getTemplateName)
+		.def("addSpawntype", &i6engine::api::SpawnpointComponent::addSpawntype)
+		.def("addSpawntypes", &i6engine::api::SpawnpointComponent::addSpawntypes)
+		.def("removeSpawntype", &i6engine::api::SpawnpointComponent::removeSpawntype)
+		.def("containsSpawntype", &i6engine::api::SpawnpointComponent::containsSpawntype)
+		.def("available", &i6engine::api::SpawnpointComponent::available)
+		.def("setState", &i6engine::api::SpawnpointComponent::setState);
+
+	class_<i6engine::api::StaticStateComponent, i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>, boost::noncopyable>("StaticStateComponent", no_init)
+		.def("synchronize", &i6engine::api::StaticStateComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::StaticStateComponent::getTemplateName)
+		.def("setPosition", &i6engine::api::StaticStateComponent::setPosition)
+		.def("setRotation", &i6engine::api::StaticStateComponent::setRotation)
+		.def("setScale", &i6engine::api::StaticStateComponent::setScale)
+		.def("getPosition", &i6engine::api::StaticStateComponent::getPosition)
+		.def("getRotation", &i6engine::api::StaticStateComponent::getRotation)
+		.def("getScale", &i6engine::api::StaticStateComponent::getScale);
+
+	class_<i6engine::api::TerrainAppearanceComponent, i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>, boost::noncopyable>("TerrainAppearanceComponent", no_init)
+		.def("synchronize", &i6engine::api::TerrainAppearanceComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::TerrainAppearanceComponent::getTemplateName)
+		.def("getHeightmap", &i6engine::api::TerrainAppearanceComponent::getHeightmap)
+		.def("getSize", &i6engine::api::TerrainAppearanceComponent::getSize);
+
+	class_<i6engine::api::ToggleWaynetComponent, i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>, boost::noncopyable>("ToggleWaynetComponent", no_init)
+		.def("synchronize", &i6engine::api::ToggleWaynetComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::ToggleWaynetComponent::getTemplateName)
+		.def("enable", &i6engine::api::ToggleWaynetComponent::enable);
+
+	class_<i6engine::api::WaynetNavigationComponent, i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>, boost::noncopyable>("WaynetNavigationComponent", no_init)
+		.def("synchronize", &i6engine::api::WaynetNavigationComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::WaynetNavigationComponent::getTemplateName)
+		.def("getPathPos", (std::vector<Vec3>(i6engine::api::WaynetNavigationComponent::*)(const Vec3 &, const Vec3 &) const) &i6engine::api::WaynetNavigationComponent::getPath)
+		.def("getPathWP", (std::vector<Vec3>(i6engine::api::WaynetNavigationComponent::*)(const Vec3 &, const std::string &) const) &i6engine::api::WaynetNavigationComponent::getPath);
+
+	class_<i6engine::api::WaypointComponent, i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component>, boost::noncopyable>("WaypointComponent", no_init)
+		.def("synchronize", &i6engine::api::WaypointComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::WaypointComponent::getTemplateName)
+		.def("getName", &i6engine::api::WaypointComponent::getName)
+		.def("getConnections", &i6engine::api::WaypointComponent::getConnections)
+		.def("isConnected", &i6engine::api::WaypointComponent::isConnected)
+		.def("addConnection", &i6engine::api::WaypointComponent::addConnection)
+		.def("removeConnection", &i6engine::api::WaypointComponent::removeConnection);
 
 	def("getObject", &i6engine::python::object::getObject);
 	def("getAllObjectsOfType", &i6engine::python::object::getAllObjectsOfType);
@@ -1091,7 +1288,12 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("push_back", (void(std::vector<i6engine::api::objects::GOTemplateComponent>::*)(const i6engine::api::objects::GOTemplateComponent &)) &std::vector<i6engine::api::objects::GOTemplateComponent>::push_back);
 
 	class_<i6engine::api::CollisionGroup>("CollisionGroup")
-		.def(init<uint32_t, uint32_t, uint32_t>());
+		.def(init<>())
+		.def(init<uint32_t, uint32_t, uint32_t>())
+		.def(init<const std::string &>())
+		.def_readwrite("responseType", &i6engine::api::CollisionGroup::responseType)
+		.def_readwrite("crashType", &i6engine::api::CollisionGroup::crashType)
+		.def_readwrite("crashMask", &i6engine::api::CollisionGroup::crashMask);
 
 	enum_<i6engine::api::components::ComponentTypes>("ComponentTypes")
 		.value("CameraComponent", i6engine::api::components::ComponentTypes::CameraComponent)

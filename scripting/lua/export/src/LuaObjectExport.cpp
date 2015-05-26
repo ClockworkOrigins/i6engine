@@ -689,6 +689,67 @@ namespace object {
 		}
 	};
 
+	struct ShatterComponentWrapper : public i6engine::api::ShatterComponent, public luabind::wrap_base {
+		ShatterComponentWrapper(const int64_t id, const attributeMap & params) : ShatterComponent(id, params), luabind::wrap_base() {
+		}
+
+		virtual void Tick() override {
+			luabind::call_member<void>(this, "Tick");
+		}
+
+		static void default_Tick(i6engine::api::ShatterComponent * ptr) {
+			ptr->Component::Tick();
+		}
+
+		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+			luabind::call_member<void>(this, "News", msg);
+		}
+
+		static void default_News(i6engine::api::ShatterComponent * ptr, const i6engine::api::GameMessage::Ptr & msg) {
+			ptr->ShatterComponent::News(msg);
+		}
+
+		virtual void Init() override {
+			luabind::call_member<void>(this, "Init");
+		}
+
+		static void default_Init(i6engine::api::ShatterComponent * ptr) {
+			ptr->ShatterComponent::Init();
+		}
+
+		virtual void Finalize() override {
+			luabind::call_member<void>(this, "Finalize");
+		}
+
+		static void default_Finalize(i6engine::api::ShatterComponent * ptr) {
+			ptr->Component::Finalize();
+		}
+
+		virtual i6engine::api::attributeMap synchronize() const {
+			return luabind::call_member<i6engine::api::attributeMap>(this, "synchronize");
+		}
+
+		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+			return luabind::call_member<std::pair<i6engine::api::AddStrategy, int64_t>>(this, "howToAdd", comp);
+		}
+
+		static std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(i6engine::api::ShatterComponent * ptr, const i6engine::api::ComPtr & comp) {
+			return ptr->Component::howToAdd(comp);
+		}
+
+		virtual std::string getTemplateName() const {
+			return luabind::call_member<std::string>(this, "getTemplateName");
+		}
+
+		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+			return {};
+		}
+
+		void shatter(const i6engine::api::GOPtr & other) override {
+			luabind::call_member<void>(this, "shatter", other);
+		}
+	};
+
 } /* namespace object */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -971,16 +1032,61 @@ scope registerObject() {
 			.def(constructor<>())
 			.def("getTemplateName", &i6engine::api::NetworkSenderComponent::getTemplateName),
 
+		class_<i6engine::api::ParticleEmitterComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>>("ParticleEmitterComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::ParticleEmitterComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::ParticleEmitterComponent::getTemplateName),
+
+		class_<i6engine::api::ResponseType::ResponseType>("ResponseType")
+			.def(constructor<>())
+			.enum_("ResponseType")
+			[
+				value("NONE", i6engine::api::ResponseType::ResponseType::NONE),
+				value("STATIC", i6engine::api::ResponseType::ResponseType::STATIC),
+				value("GHOST", i6engine::api::ResponseType::ResponseType::GHOST),
+				value("TRIGGER", i6engine::api::ResponseType::ResponseType::TRIGGER)
+			],
+
+		class_<i6engine::api::ShatterInterest>("ShatterInterest")
+			.def(constructor<>())
+			.enum_("ShatterInterest")
+			[
+				value("NONE", i6engine::api::ShatterInterest::NONE),
+				value("START", i6engine::api::ShatterInterest::START),
+				value("END", i6engine::api::ShatterInterest::END),
+				value("ALWAYS", i6engine::api::ShatterInterest::ALWAYS)
+			],
+
 		class_<i6engine::api::PhysicalStateComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>>("PhysicalStateComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("getPosition", &i6engine::api::PhysicalStateComponent::getPosition)
 			.def("setPosition", &i6engine::api::PhysicalStateComponent::setPosition)
 			.def("getRotation", &i6engine::api::PhysicalStateComponent::getRotation)
 			.def("setRotation", &i6engine::api::PhysicalStateComponent::setRotation)
+			.def("getScale", &i6engine::api::PhysicalStateComponent::getScale)
+			.def("setScale", &i6engine::api::PhysicalStateComponent::setScale)
+			.def("setCollisionFlags", &i6engine::api::PhysicalStateComponent::setCollisionFlags)
+			.def("getCollisionFlags", &i6engine::api::PhysicalStateComponent::getCollisionFlags)
+			.def("reset", &i6engine::api::PhysicalStateComponent::reset)
+			.def("setCollisionShape", &i6engine::api::PhysicalStateComponent::setCollisionShape)
 			.def("applyRotation", &i6engine::api::PhysicalStateComponent::applyRotation)
+			.def("getLinearVelocity", &i6engine::api::PhysicalStateComponent::getLinearVelocity)
+			.def("setLinearVelocity", &i6engine::api::PhysicalStateComponent::setLinearVelocity)
 			.def("applyCentralForce", &i6engine::api::PhysicalStateComponent::applyCentralForce)
 			.def("applyForce", &i6engine::api::PhysicalStateComponent::applyForce)
-			.def("getLinearVelocity", &i6engine::api::PhysicalStateComponent::getLinearVelocity)
-			.def("reset", &i6engine::api::PhysicalStateComponent::reset)
+			.def("setShatterInterest", &i6engine::api::PhysicalStateComponent::setShatterInterest)
+			.def("setGravity", &i6engine::api::PhysicalStateComponent::setGravity)
+			.def("synchronize", &i6engine::api::PhysicalStateComponent::synchronize)
+			.def("rayTest", &i6engine::api::PhysicalStateComponent::rayTest)
+			.def("getTemplateName", &i6engine::api::PhysicalStateComponent::getTemplateName)
+			.def("addPosition", &i6engine::api::PhysicalStateComponent::addPosition)
+			.enum_("ShapeType")
+			[
+				value("PLANE", int(i6engine::api::PhysicalStateComponent::ShapeType::PLANE)),
+				value("BOX", int(i6engine::api::PhysicalStateComponent::ShapeType::BOX)),
+				value("SPHERE", int(i6engine::api::PhysicalStateComponent::ShapeType::SPHERE)),
+				value("FILE", int(i6engine::api::PhysicalStateComponent::ShapeType::FILE))
+			]
 			.enum_("RayTestRepetition")
 			[
 				value("STOP", int(i6engine::api::PhysicalStateComponent::RayTestRepetition::STOP)),
@@ -999,7 +1105,87 @@ scope registerObject() {
 		class_<i6engine::api::RayTestResult>("RayTestResult")
 			.def(constructor<>())
 			.def_readonly("objID", &i6engine::api::RayTestResult::objID)
-			.def_readonly("sourceID", &i6engine::api::RayTestResult::sourceID),
+			.def_readonly("sourceID", &i6engine::api::RayTestResult::sourceID)
+			.def_readonly("collisionPoint", &i6engine::api::RayTestResult::collisionPoint),
+
+		class_<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>>("Point2PointConstraintComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::Point2PointConstraintComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::Point2PointConstraintComponent::getTemplateName),
+
+		class_<i6engine::api::ShatterComponent, i6engine::lua::object::ShatterComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>>("ShatterComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("Tick", &i6engine::api::Component::Tick, &i6engine::lua::object::ShatterComponentWrapper::default_Tick)
+			.def("News", &i6engine::api::ShatterComponent::News, &i6engine::lua::object::ShatterComponentWrapper::default_News)
+			.def("Init", &i6engine::api::ShatterComponent::Init, &i6engine::lua::object::ShatterComponentWrapper::Init)
+			.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::lua::object::ShatterComponentWrapper::default_Finalize)
+			.def("synchronize", &i6engine::lua::object::CameraComponentWrapper::synchronize)
+			.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::lua::object::ShatterComponentWrapper::default_howToAdd)
+			.def("getTemplateName", &i6engine::lua::object::ShatterComponentWrapper::getTemplateName)
+			.def("shatter", &i6engine::lua::object::ShatterComponentWrapper::shatter)
+			.def("resetRespawn", &i6engine::api::ShatterComponent::resetRespawn),
+
+		class_<i6engine::api::SoundComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>>("SoundComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::SoundComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::SoundComponent::getTemplateName),
+
+		class_<i6engine::api::SoundListenerComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>>("SoundListenerComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::SoundListenerComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::SoundListenerComponent::getTemplateName),
+
+		class_<i6engine::api::SpawnpointComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>>("SpawnpointComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::SpawnpointComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::SpawnpointComponent::getTemplateName)
+			.def("addSpawntype", &i6engine::api::SpawnpointComponent::addSpawntype)
+			.def("addSpawntypes", &i6engine::api::SpawnpointComponent::addSpawntypes)
+			.def("removeSpawntype", &i6engine::api::SpawnpointComponent::removeSpawntype)
+			.def("containsSpawntype", &i6engine::api::SpawnpointComponent::containsSpawntype)
+			.def("available", &i6engine::api::SpawnpointComponent::available)
+			.def("setState", &i6engine::api::SpawnpointComponent::setState),
+
+		class_<i6engine::api::StaticStateComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>>("StaticStateComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::StaticStateComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::StaticStateComponent::getTemplateName)
+			.def("setPosition", &i6engine::api::StaticStateComponent::setPosition)
+			.def("setRotation", &i6engine::api::StaticStateComponent::setRotation)
+			.def("setScale", &i6engine::api::StaticStateComponent::setScale)
+			.def("getPosition", &i6engine::api::StaticStateComponent::getPosition)
+			.def("getRotation", &i6engine::api::StaticStateComponent::getRotation)
+			.def("getScale", &i6engine::api::StaticStateComponent::getScale),
+
+		class_<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>>("TerrainAppearanceComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::TerrainAppearanceComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::TerrainAppearanceComponent::getTemplateName)
+			.def("getHeightmap", &i6engine::api::TerrainAppearanceComponent::getHeightmap)
+			.def("getSize", &i6engine::api::TerrainAppearanceComponent::getSize),
+
+		class_<i6engine::api::ToggleWaynetComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>>("ToggleWaynetComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::ToggleWaynetComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::ToggleWaynetComponent::getTemplateName)
+			.def("enable", &i6engine::api::ToggleWaynetComponent::enable),
+
+		class_<i6engine::api::WaynetNavigationComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>>("WaynetNavigationComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::WaynetNavigationComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::WaynetNavigationComponent::getTemplateName)
+			.def("getPathPos", (std::vector<Vec3>(i6engine::api::WaynetNavigationComponent::*)(const Vec3 &, const Vec3 &) const) &i6engine::api::WaynetNavigationComponent::getPath)
+			.def("getPathWP", (std::vector<Vec3>(i6engine::api::WaynetNavigationComponent::*)(const Vec3 &, const std::string &) const) &i6engine::api::WaynetNavigationComponent::getPath),
+
+		class_<i6engine::api::WaypointComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component>>("WaypointComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::WaypointComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::WaypointComponent::getTemplateName)
+			.def("getName", &i6engine::api::WaypointComponent::getName)
+			.def("getConnections", &i6engine::api::WaypointComponent::getConnections)
+			.def("isConnected", &i6engine::api::WaypointComponent::isConnected)
+			.def("addConnection", &i6engine::api::WaypointComponent::addConnection)
+			.def("removeConnection", &i6engine::api::WaypointComponent::removeConnection),
 
 		def("getObject", &i6engine::lua::object::getObject),
 		def("getAllObjectsOfType", &i6engine::lua::object::getAllObjectsOfType),
@@ -1040,7 +1226,12 @@ scope registerObject() {
 			.def("push_back", (void(std::vector<i6engine::api::objects::GOTemplateComponent>::*)(const i6engine::api::objects::GOTemplateComponent &)) &std::vector<i6engine::api::objects::GOTemplateComponent>::push_back),
 
 		class_<i6engine::api::CollisionGroup>("CollisionGroup")
-			.def(constructor<uint32_t, uint32_t, uint32_t>()),
+			.def(constructor<>())
+			.def(constructor<uint32_t, uint32_t, uint32_t>())
+			.def(constructor<const std::string &>())
+			.def_readwrite("responseType", &i6engine::api::CollisionGroup::responseType)
+			.def_readwrite("crashType", &i6engine::api::CollisionGroup::crashType)
+			.def_readwrite("crashMask", &i6engine::api::CollisionGroup::crashMask),
 
 		class_<i6engine::api::components::ComponentTypes>("ComponentTypes")
 			.def(constructor<>())

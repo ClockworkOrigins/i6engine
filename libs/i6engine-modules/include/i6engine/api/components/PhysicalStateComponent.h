@@ -215,7 +215,7 @@ namespace api {
 		/**
 		 * \brief destructor
 		 */
-		virtual ~PhysicalStateComponent();
+		~PhysicalStateComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap
@@ -283,7 +283,7 @@ namespace api {
 		/**
 		 * \brief returns a reference to the Collision Flags of this GameObject
 		 */
-		CollisionGroup & getCollisionFlags() { return _collisionGroup; }
+		CollisionGroup getCollisionFlags() const { return _collisionGroup; }
 
 		/**
 		 * \brief Clears all forces and sets the velocity to 0

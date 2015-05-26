@@ -38,7 +38,7 @@ namespace api {
 		* \brief Constructor
 		*/
 		SpawnpointComponent(const int64_t id, const attributeMap & params);
-		virtual ~SpawnpointComponent();
+		~SpawnpointComponent();
 
 		/**
 		* \brief creates the Component with given attributeMap

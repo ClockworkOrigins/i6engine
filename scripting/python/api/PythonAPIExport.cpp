@@ -161,6 +161,7 @@ namespace api {
 		virtual void disconnectCallback(const i6engine::core::IPKey & key) {
 			if (boost::python::override disconnectCallback = this->get_override("disconnectCallback")) {
 				boost::python::call<void>(disconnectCallback.ptr(), key);
+				return;
 			}
 			Application::disconnectCallback(key);
 		}
@@ -172,6 +173,7 @@ namespace api {
 		virtual void connectionFailed(const i6engine::core::IPKey & s) {
 			if (boost::python::override connectionFailed = this->get_override("connectionFailed")) {
 				boost::python::call<void>(connectionFailed.ptr(), s);
+				return;
 			}
 			Application::connectionFailed(s);
 		}
@@ -183,6 +185,7 @@ namespace api {
 		virtual void bindFailure() {
 			if (boost::python::override bindFailure = this->get_override("bindFailure")) {
 				boost::python::call<void>(bindFailure.ptr());
+				return;
 			}
 			Application::bindFailure();
 		}
@@ -194,6 +197,7 @@ namespace api {
 		virtual void connected(const i6engine::core::IPKey & key) {
 			if (boost::python::override connected = this->get_override("connected")) {
 				boost::python::call<void>(connected.ptr(), key);
+				return;
 			}
 			Application::connected(key);
 		}

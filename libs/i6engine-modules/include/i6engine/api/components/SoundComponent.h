@@ -45,7 +45,7 @@ namespace api {
 		/**
 		 * \brief Destructor
 		 */
-		virtual ~SoundComponent();
+		~SoundComponent();
 
 		static ComPtr createC(int64_t id, const attributeMap & params);
 

@@ -68,6 +68,7 @@ namespace core {
 		virtual void processMessages() {
 			if (boost::python::override processMessages = this->get_override("processMessages")) {
 				boost::python::call<void>(processMessages.ptr());
+				return;
 			}
 			MessageSubscriber::processMessages();
 		}

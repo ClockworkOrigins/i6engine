@@ -36,9 +36,6 @@ namespace api {
 	ShatterComponent::~ShatterComponent() {
 	}
 
-	void ShatterComponent::Tick() {
-	}
-
 	void ShatterComponent::Init() {
 	}
 

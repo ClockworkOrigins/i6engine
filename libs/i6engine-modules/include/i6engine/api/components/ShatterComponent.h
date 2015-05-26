@@ -49,11 +49,6 @@ namespace api {
 		virtual ~ShatterComponent();
 
 		/**
-		 * \brief Checks for collisions
-		 */
-		virtual void Tick() override;
-
-		/**
 		 * \brief Initializes the Component
 		 */
 		virtual void Init() override;

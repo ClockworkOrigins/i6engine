@@ -41,7 +41,7 @@ namespace api {
 		 */
 		StaticStateComponent(const int64_t id, const attributeMap & params);
 
-		virtual ~StaticStateComponent();
+		~StaticStateComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap
