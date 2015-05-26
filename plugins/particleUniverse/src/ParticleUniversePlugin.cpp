@@ -422,7 +422,7 @@ namespace ParticleUniverse
 	{
 		// Delete the manager.
 		// The manager must be deleted before all factories are deleted (also the factories of other plugins)
-		PU_DELETE_T(mParticleSystemManager, ParticleSystemManager, MEMCATEGORY_SCENE_CONTROL);
+		// PU_DELETE_T(mParticleSystemManager, ParticleSystemManager, MEMCATEGORY_SCENE_CONTROL); // TODO: (Daniel) check this, crashes actually
 	}
 	//---------------------------------------------------------------------
 	void ParticleUniversePlugin::uninstall()

@@ -16,6 +16,7 @@
 
 #include "i6engine/rpg/npc/queueJobs/SayJob.h"
 
+#include "i6engine/utils/i6eRandom.h"
 #include "i6engine/utils/i6eString.h"
 
 #include "i6engine/math/i6eMath.h"
@@ -25,6 +26,7 @@
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/facades/AudioFacade.h"
 #include "i6engine/api/facades/GUIFacade.h"
+#include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/manager/TextManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
@@ -61,12 +63,22 @@ namespace npc {
 				_soundFound = false;
 			}
 		});
+
+		i6engine::api::objects::GOTemplate tmpl;
+		i6engine::api::attributeMap params;
+		Vec3 pos = psc->getPosition() + Vec3(0.0, 1.0, 0.0) + Vec3(0.0, utils::Random::GetSingleton().rand(101) / 100.0, 0.0) + math::rotateVector(Vec3(0.0, 0.0, -5.0), psc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (-45 + utils::Random::GetSingleton().rand(91)) * PI / 180.0));
+		pos.insertInMap("pos", params);
+		psc->getPosition().insertInMap("lookAt", params);
+
+		tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Camera", params, "", false, false));
+		api::EngineController::GetSingleton().getObjectFacade()->createObject("DialogCam", tmpl, api::EngineController::GetSingleton().getUUID(), false);
 	}
 
 	void SayJob::loop() {
 	}
 
 	void SayJob::finish() {
+		api::EngineController::GetSingleton().getObjectFacade()->deleteAllObjectsOfType("DialogCam");
 		for (WaitSayJob * j : _jobs) {
 			j->setFinished(true);
 		}
