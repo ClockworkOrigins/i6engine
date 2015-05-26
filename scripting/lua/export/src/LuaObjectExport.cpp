@@ -187,220 +187,220 @@ namespace object {
 		}
 	};
 
-	i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component> getCameraComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::CameraComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component> getCameraComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component> getCameraComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::CameraComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component> getCameraComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component> getLifetimeComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::LifetimeComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component> getLifetimeComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::LifetimeComponent>(i6engine::api::components::ComponentTypes::LifetimeComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component> getLifetimeComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::LifetimeComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component> getLifetimeComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::LifetimeComponent>(i6engine::api::components::ComponentTypes::LifetimeComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component> getLuminousAppearanceComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::LuminousAppearanceComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component> getLuminousAppearanceComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::LuminousAppearanceComponent>(i6engine::api::components::ComponentTypes::LuminousAppearanceComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component> getLuminousAppearanceComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::LuminousAppearanceComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component> getLuminousAppearanceComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::LuminousAppearanceComponent>(i6engine::api::components::ComponentTypes::LuminousAppearanceComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component> getMeshAppearanceComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::MeshAppearanceComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component> getMeshAppearanceComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::MeshAppearanceComponent>(i6engine::api::components::ComponentTypes::MeshAppearanceComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component> getMeshAppearanceComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MeshAppearanceComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component> getMeshAppearanceComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::MeshAppearanceComponent>(i6engine::api::components::ComponentTypes::MeshAppearanceComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component> getMoverCircleComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::MoverCircleComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component> getMoverCircleComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::MoverCircleComponent>(i6engine::api::components::ComponentTypes::MoverCircleComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component> getMoverCircleComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MoverCircleComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component> getMoverCircleComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::MoverCircleComponent>(i6engine::api::components::ComponentTypes::MoverCircleComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component> getMoverComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::MoverComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component> getMoverComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::MoverComponent>(i6engine::api::components::ComponentTypes::MoverComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component> getMoverComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MoverComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component> getMoverComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::MoverComponent>(i6engine::api::components::ComponentTypes::MoverComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component> getMoverInterpolateComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::MoverInterpolateComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component> getMoverInterpolateComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::MoverInterpolateComponent>(i6engine::api::components::ComponentTypes::MoverInterpolateComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component> getMoverInterpolateComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MoverInterpolateComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component> getMoverInterpolateComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::MoverInterpolateComponent>(i6engine::api::components::ComponentTypes::MoverInterpolateComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component> getMovingCameraComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::MovingCameraComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component> getMovingCameraComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::MovingCameraComponent>(i6engine::api::components::ComponentTypes::MovingCameraComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component> getMovingCameraComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MovingCameraComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component> getMovingCameraComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::MovingCameraComponent>(i6engine::api::components::ComponentTypes::MovingCameraComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component> getNetworkSenderComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::NetworkSenderComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component> getNetworkSenderComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::NetworkSenderComponent>(i6engine::api::components::ComponentTypes::NetworkSenderComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component> getNetworkSenderComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::NetworkSenderComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component> getNetworkSenderComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::NetworkSenderComponent>(i6engine::api::components::ComponentTypes::NetworkSenderComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component> getParticleEmitterComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::ParticleEmitterComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component> getParticleEmitterComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::ParticleEmitterComponent>(i6engine::api::components::ComponentTypes::ParticleEmitterComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component> getParticleEmitterComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::ParticleEmitterComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component> getParticleEmitterComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::ParticleEmitterComponent>(i6engine::api::components::ComponentTypes::ParticleEmitterComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component> getPhysicalStateComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::PhysicalStateComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component> getPhysicalStateComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::PhysicalStateComponent>(i6engine::api::components::ComponentTypes::PhysicalStateComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component> getPhysicalStateComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::PhysicalStateComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component> getPhysicalStateComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::PhysicalStateComponent>(i6engine::api::components::ComponentTypes::PhysicalStateComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component> getShatterComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::ShatterComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component> getShatterComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::ShatterComponent>(i6engine::api::components::ComponentTypes::ShatterComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component> getShatterComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::ShatterComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component> getShatterComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::ShatterComponent>(i6engine::api::components::ComponentTypes::ShatterComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component> getSpawnpointComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::SpawnpointComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component> getSpawnpointComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::SpawnpointComponent>(i6engine::api::components::ComponentTypes::SpawnpointComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component> getSpawnpointComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::SpawnpointComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component> getSpawnpointComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::SpawnpointComponent>(i6engine::api::components::ComponentTypes::SpawnpointComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> getStaticStateComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::StaticStateComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> getStaticStateComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::ComponentTypes::StaticStateComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> getStaticStateComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::StaticStateComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> getStaticStateComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::ComponentTypes::StaticStateComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component> getTerrainAppearanceComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::TerrainAppearanceComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component> getTerrainAppearanceComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::TerrainAppearanceComponent>(i6engine::api::components::ComponentTypes::TerrainAppearanceComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component> getTerrainAppearanceComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::TerrainAppearanceComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component> getTerrainAppearanceComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::TerrainAppearanceComponent>(i6engine::api::components::ComponentTypes::TerrainAppearanceComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component> getSoundComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::SoundComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component> getSoundComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::SoundComponent>(i6engine::api::components::ComponentTypes::SoundComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component> getSoundComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::SoundComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component> getSoundComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::SoundComponent>(i6engine::api::components::ComponentTypes::SoundComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component> getSoundListenerComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::SoundListenerComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component> getSoundListenerComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::SoundListenerComponent>(i6engine::api::components::ComponentTypes::SoundListenerComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component> getSoundListenerComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::SoundListenerComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component> getSoundListenerComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::SoundListenerComponent>(i6engine::api::components::ComponentTypes::SoundListenerComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component> getBillboardComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::BillboardComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component> getBillboardComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::BillboardComponent>(i6engine::api::components::ComponentTypes::BillboardComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component> getBillboardComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::BillboardComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component> getBillboardComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::BillboardComponent>(i6engine::api::components::ComponentTypes::BillboardComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component> getFollowComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::FollowComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component> getFollowComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::FollowComponent>(i6engine::api::components::ComponentTypes::FollowComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component> getFollowComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::FollowComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component> getFollowComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::FollowComponent>(i6engine::api::components::ComponentTypes::FollowComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component> getMovableTextComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::MovableTextComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component> getMovableTextComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::MovableTextComponent>(i6engine::api::components::ComponentTypes::MovableTextComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component> getMovableTextComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MovableTextComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component> getMovableTextComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::MovableTextComponent>(i6engine::api::components::ComponentTypes::MovableTextComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component> getWaypointComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::WaypointComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component> getWaypointComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::WaypointComponent>(i6engine::api::components::ComponentTypes::WaypointComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component> getWaypointComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::WaypointComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component> getWaypointComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::WaypointComponent>(i6engine::api::components::ComponentTypes::WaypointComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component> getNavigationComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::NavigationComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component> getNavigationComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::NavigationComponent>(i6engine::api::components::ComponentTypes::NavigationComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component> getNavigationComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::NavigationComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component> getNavigationComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::NavigationComponent>(i6engine::api::components::ComponentTypes::NavigationComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component> getWaynetNavigationComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::WaynetNavigationComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component> getWaynetNavigationComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::WaynetNavigationComponent>(i6engine::api::components::ComponentTypes::WaynetNavigationComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component> getWaynetNavigationComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::WaynetNavigationComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component> getWaynetNavigationComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::WaynetNavigationComponent>(i6engine::api::components::ComponentTypes::WaynetNavigationComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component> getMoveComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::MoveComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component> getMoveComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::MoveComponent>(i6engine::api::components::ComponentTypes::MoveComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component> getMoveComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MoveComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component> getMoveComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::MoveComponent>(i6engine::api::components::ComponentTypes::MoveComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component> getMovementComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::MovementComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component> getMovementComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::MovementComponent>(i6engine::api::components::ComponentTypes::MovementComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component> getMovementComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MovementComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component> getMovementComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::MovementComponent>(i6engine::api::components::ComponentTypes::MovementComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component> getToggleWaynetComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::ToggleWaynetComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component> getToggleWaynetComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::ToggleWaynetComponent>(i6engine::api::components::ComponentTypes::ToggleWaynetComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component> getToggleWaynetComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::ToggleWaynetComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component> getToggleWaynetComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::ToggleWaynetComponent>(i6engine::api::components::ComponentTypes::ToggleWaynetComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component> getPoint2PointConstraintComponent(i6engine::api::GameObject * go, uint32_t type) {
-		return go->getGOC<i6engine::api::Point2PointConstraintComponent>(type);
+	i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component> getPoint2PointConstraintComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::Point2PointConstraintComponent>(i6engine::api::components::ComponentTypes::Point2PointConstraintComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component> getPoint2PointConstraintComponent(i6engine::api::GameObject * go, uint32_t type, const std::string & identifier) {
-		return go->getGOC<i6engine::api::Point2PointConstraintComponent>(type, identifier);
+	i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component> getPoint2PointConstraintComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::Point2PointConstraintComponent>(i6engine::api::components::ComponentTypes::Point2PointConstraintComponent, identifier);
 	}
 
 	struct CameraComponentWrapper : public i6engine::api::CameraComponent, public luabind::wrap_base {
@@ -769,60 +769,60 @@ scope registerObject() {
 			.def("setDie", &i6engine::api::GameObject::setDie)
 			.def("getOwner", &i6engine::api::GameObject::getOwner)
 			.def("getUUID", &i6engine::api::GameObject::getUUID)
-			.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getCameraComponent)
-			.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getCameraComponent)
-			.def("getLifetimeComponent", (i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getLifetimeComponent)
-			.def("getLifetimeComponent", (i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getLifetimeComponent)
-			.def("getLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getLuminousAppearanceComponent)
-			.def("getLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getLuminousAppearanceComponent)
-			.def("getMeshAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getMeshAppearanceComponent)
-			.def("getMeshAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getMeshAppearanceComponent)
-			.def("getMoverCircleComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getMoverCircleComponent)
-			.def("getMoverCircleComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getMoverCircleComponent)
-			.def("getMoverComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getMoverComponent)
-			.def("getMoverComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getMoverComponent)
-			.def("getMoverInterpolateComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getMoverInterpolateComponent)
-			.def("getMoverInterpolateComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getMoverInterpolateComponent)
-			.def("getMovingCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getMovingCameraComponent)
-			.def("getMovingCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getMovingCameraComponent)
-			.def("getNetworkSenderComponent", (i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getNetworkSenderComponent)
-			.def("getNetworkSenderComponent", (i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getNetworkSenderComponent)
-			.def("getParticleEmitterComponent", (i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getParticleEmitterComponent)
-			.def("getParticleEmitterComponent", (i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getParticleEmitterComponent)
-			.def("getPhysicalStateComponent", (i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getPhysicalStateComponent)
-			.def("getPhysicalStateComponent", (i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getPhysicalStateComponent)
-			.def("getShatterComponent", (i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getShatterComponent)
-			.def("getShatterComponent", (i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getShatterComponent)
-			.def("getSpawnpointComponent", (i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getSpawnpointComponent)
-			.def("getSpawnpointComponent", (i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getSpawnpointComponent)
-			.def("getStaticStateComponent", (i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getStaticStateComponent)
-			.def("getStaticStateComponent", (i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getStaticStateComponent)
-			.def("getTerrainAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getTerrainAppearanceComponent)
-			.def("getTerrainAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getTerrainAppearanceComponent)
-			.def("getSoundComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getSoundComponent)
-			.def("getSoundComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getSoundComponent)
-			.def("getSoundListenerComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getSoundListenerComponent)
-			.def("getSoundListenerComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getSoundListenerComponent)
-			.def("getBillboardComponent", (i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getBillboardComponent)
-			.def("getBillboardComponent", (i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getBillboardComponent)
-			.def("getFollowComponent", (i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getFollowComponent)
-			.def("getFollowComponent", (i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getFollowComponent)
-			.def("getMovableTextComponent", (i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getMovableTextComponent)
-			.def("getMovableTextComponent", (i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getMovableTextComponent)
-			.def("getWaypointComponent", (i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getWaypointComponent)
-			.def("getWaypointComponent", (i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getWaypointComponent)
-			.def("getNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getNavigationComponent)
-			.def("getNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getNavigationComponent)
-			.def("getWaynetNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getWaynetNavigationComponent)
-			.def("getWaynetNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getWaynetNavigationComponent)
-			.def("getMoveComponent", (i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getMoveComponent)
-			.def("getMoveComponent", (i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getMoveComponent)
-			.def("getMovementComponent", (i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getMovementComponent)
-			.def("getMovementComponent", (i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getMovementComponent)
-			.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getToggleWaynetComponent)
-			.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getToggleWaynetComponent)
-			.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t)) &i6engine::lua::object::getPoint2PointConstraintComponent)
-			.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, uint32_t, const std::string &)) &i6engine::lua::object::getPoint2PointConstraintComponent),
+			.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getCameraComponent)
+			.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getCameraComponent)
+			.def("getLifetimeComponent", (i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getLifetimeComponent)
+			.def("getLifetimeComponent", (i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getLifetimeComponent)
+			.def("getLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getLuminousAppearanceComponent)
+			.def("getLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getLuminousAppearanceComponent)
+			.def("getMeshAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getMeshAppearanceComponent)
+			.def("getMeshAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMeshAppearanceComponent)
+			.def("getMoverCircleComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getMoverCircleComponent)
+			.def("getMoverCircleComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMoverCircleComponent)
+			.def("getMoverComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getMoverComponent)
+			.def("getMoverComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMoverComponent)
+			.def("getMoverInterpolateComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getMoverInterpolateComponent)
+			.def("getMoverInterpolateComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMoverInterpolateComponent)
+			.def("getMovingCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getMovingCameraComponent)
+			.def("getMovingCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMovingCameraComponent)
+			.def("getNetworkSenderComponent", (i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getNetworkSenderComponent)
+			.def("getNetworkSenderComponent", (i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getNetworkSenderComponent)
+			.def("getParticleEmitterComponent", (i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getParticleEmitterComponent)
+			.def("getParticleEmitterComponent", (i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getParticleEmitterComponent)
+			.def("getPhysicalStateComponent", (i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getPhysicalStateComponent)
+			.def("getPhysicalStateComponent", (i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getPhysicalStateComponent)
+			.def("getShatterComponent", (i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getShatterComponent)
+			.def("getShatterComponent", (i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getShatterComponent)
+			.def("getSpawnpointComponent", (i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getSpawnpointComponent)
+			.def("getSpawnpointComponent", (i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getSpawnpointComponent)
+			.def("getStaticStateComponent", (i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getStaticStateComponent)
+			.def("getStaticStateComponent", (i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getStaticStateComponent)
+			.def("getTerrainAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getTerrainAppearanceComponent)
+			.def("getTerrainAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getTerrainAppearanceComponent)
+			.def("getSoundComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getSoundComponent)
+			.def("getSoundComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getSoundComponent)
+			.def("getSoundListenerComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getSoundListenerComponent)
+			.def("getSoundListenerComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getSoundListenerComponent)
+			.def("getBillboardComponent", (i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getBillboardComponent)
+			.def("getBillboardComponent", (i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getBillboardComponent)
+			.def("getFollowComponent", (i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getFollowComponent)
+			.def("getFollowComponent", (i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getFollowComponent)
+			.def("getMovableTextComponent", (i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getMovableTextComponent)
+			.def("getMovableTextComponent", (i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMovableTextComponent)
+			.def("getWaypointComponent", (i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getWaypointComponent)
+			.def("getWaypointComponent", (i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getWaypointComponent)
+			.def("getNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getNavigationComponent)
+			.def("getNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getNavigationComponent)
+			.def("getWaynetNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getWaynetNavigationComponent)
+			.def("getWaynetNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getWaynetNavigationComponent)
+			.def("getMoveComponent", (i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getMoveComponent)
+			.def("getMoveComponent", (i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMoveComponent)
+			.def("getMovementComponent", (i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getMovementComponent)
+			.def("getMovementComponent", (i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMovementComponent)
+			.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getToggleWaynetComponent)
+			.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getToggleWaynetComponent)
+			.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getPoint2PointConstraintComponent)
+			.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getPoint2PointConstraintComponent),
 
 		class_<i6engine::api::AddStrategy>("AddStrategy")
 			.def(constructor<>())

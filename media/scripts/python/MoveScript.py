@@ -9,7 +9,7 @@ def tick(id):
 	go = getObject(id)
 	if go == None:
 		return
-	psc = go.getPhysicalStateComponent(ComponentTypes.PhysicalStateComponent)
+	psc = go.getPhysicalStateComponent()
 	if psc == None:
 		return
 
@@ -20,7 +20,7 @@ def shatter(selfID, otherID):
 	go = getObject(selfID)
 	if go == None:
 		return
-	psc = go.getPhysicalStateComponent(ComponentTypes.PhysicalStateComponent)
+	psc = go.getPhysicalStateComponent()
 	if psc == None:
 		return
 
