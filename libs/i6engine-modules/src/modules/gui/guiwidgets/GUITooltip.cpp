@@ -55,8 +55,8 @@ namespace modules {
 			x = 0;
 		}
 
-		if (x + 0.3 * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width > CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width) {
-			x = int(0.7 * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width);
+		if (x + _window->getSize().d_width.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width > CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width) {
+			x = int(CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _window->getSize().d_width.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width);
 		}
 
 		int y = int(mousePos.d_y + _window->getSize().d_height.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height);

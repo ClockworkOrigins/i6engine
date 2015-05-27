@@ -10,6 +10,7 @@ Enhancements:
 
 Fixes:
 	- fixed error in template of callFunction in LuaScriptingManager with return value
+	- tooltip can't reach over right side of the window anymore
 
 v 0.8.5
 
