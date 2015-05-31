@@ -40,10 +40,11 @@ namespace modules {
 		//luabind::open(_luaState);
 		ISIXE_LOG_INFO("LuaScriptingManager", LUA_COPYRIGHT);
 
+		// load i6engine exports once during startup, so user hasn't to
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
-		int status = luaL_dostring(_luaState, "package.loadlib('ScriptingLua','init')() ");
+		int status = luaL_dostring(_luaState, "package.loadlib('ScriptingLua','init')()");
 #elif ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
-		int status = luaL_dostring(_luaState, "package.loadlib('libScriptingLua.so','init')() ");
+		int status = luaL_dostring(_luaState, "package.loadlib('libScriptingLua.so','init')()");
 #endif
 		if (status != 0) {
 			ISIXE_THROW_FAILURE("LuaScriptingManager", "Can't load ScriptingLua library. Lua reports: " << lua_tostring(_luaState, -1));
@@ -66,6 +67,11 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		while (!_callScripts.empty()) {
 			_callScripts.poll()();
+		}
+		// after all scripts have been called collect garbage!
+		int status = luaL_dostring(_luaState, "collectgarbage('collect')");
+		if (status != 0) {
+			ISIXE_LOG_WARN("LuaScriptingManager", "Collect garbage reported some error. Lua reports: " << lua_tostring(_luaState, -1));
 		}
 	}
 
