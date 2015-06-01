@@ -51,6 +51,8 @@
 
 #include "i6engine/rpg/npc/NPCParser.h"
 
+#include "i6engine/rpg/quest/QuestLog.h"
+
 #include "boost/bind.hpp"
 #include "boost/functional/factory.hpp"
 
@@ -83,6 +85,13 @@ namespace rpg {
 			ISIXE_THROW_FAILURE("RPGApplication", "'dialogDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
 		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->loadDialogs(DialogDirectory);
+
+		// Load Quests
+		std::string QuestDirectory;
+		if (_iniParser.getValue("SCRIPT", "questDirectory", QuestDirectory) != clockUtils::ClockError::SUCCESS) {
+			ISIXE_THROW_FAILURE("RPGApplication", "'questDirectory' in section 'SCRIPT' in RPG.ini not found!");
+		}
+		i6engine::rpg::quest::QuestLog::GetSingletonPtr()->loadQuests(QuestDirectory);
 	}
 
 	void RPGApplication::AfterInitialize() {

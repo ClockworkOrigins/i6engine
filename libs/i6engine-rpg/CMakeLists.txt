@@ -67,6 +67,10 @@ set(i6rpgSrc
 	${srcdir}/npc/queueJobs/ShowDialogsJob.cpp
 	${srcdir}/npc/queueJobs/TurnToNpcJob.cpp
 	${srcdir}/npc/queueJobs/WaitSayJob.cpp
+	
+	${srcdir}/quest/Quest.cpp
+	${srcdir}/quest/QuestLog.cpp
+	${srcdir}/quest/QuestParser.cpp
 )
 
 SOURCE_GROUP(rpg\\components src/components/*)
@@ -75,6 +79,7 @@ SOURCE_GROUP(rpg\\dialog src/dialog/*)
 SOURCE_GROUP(rpg\\gui src/gui/*)
 SOURCE_GROUP(rpg\\npc src/npc/*)
 SOURCE_GROUP(rpg\\npc\\queueJobs src/npc/queueJobs/*)
+SOURCE_GROUP(rpg\\quest src/quest/*)
 
 IF(ISIXE_BUILD_SHARED)
 	add_library(i6engine-rpg SHARED ${i6rpgSrc})
