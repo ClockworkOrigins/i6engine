@@ -270,6 +270,8 @@ IF(WIN32 AND ISIXE_BUILD_SHARED)
 	add_custom_command(TARGET i6engine-modules POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-modules.dll ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32 AND ISIXE_BUILD_SHARED)
 
+set_target_properties(i6engine-modules PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 ########################
 # i6engine-modules tests
 ########################

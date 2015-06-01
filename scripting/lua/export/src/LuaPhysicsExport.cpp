@@ -16,6 +16,8 @@
 
 #include "LuaPhysicsExport.h"
 
+#include "i6engine/math/i6eVector.h"
+
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/PhysicsFacade.h"
 
