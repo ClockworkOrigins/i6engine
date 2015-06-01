@@ -22,7 +22,7 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	Dialog::Dialog(const std::string & i, const std::string & p) : identifier(i), nr(0), participants(), permanent(false), important(false), description(), conditionScript(), infoScript() {
+	Dialog::Dialog(const std::string & i, const std::string & p) : identifier(i), nr(0), participants(), permanent(false), important(false), description(), conditionScript(), infoScript(), conditionFunc(), infoFunc() {
 		participants = utils::split(p, ";");
 	}
 

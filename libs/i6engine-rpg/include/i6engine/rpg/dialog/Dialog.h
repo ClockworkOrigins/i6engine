@@ -18,6 +18,7 @@
 #define __I6ENGINE_RPG_DIALOG_DIALOG_H__
 
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -39,6 +40,8 @@ namespace dialog {
 		std::string description;
 		std::string conditionScript;
 		std::string infoScript;
+		std::function<bool(void)> conditionFunc;
+		std::function<void(void)> infoFunc;
 	};
 
 } /* namespace dialog */

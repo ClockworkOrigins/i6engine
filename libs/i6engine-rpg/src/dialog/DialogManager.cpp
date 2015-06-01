@@ -99,11 +99,21 @@ namespace dialog {
 			for (Dialog * d : it->second) {
 				if (d->important) {
 					if (d->conditionScript.empty()) {
-						auto r = std::make_shared<utils::Future<bool>>();
-						r->push(true);
-						_importantChecks.push(std::make_tuple(identifier, d->identifier, r));
+						if (d->conditionFunc == nullptr) {
+							auto r = std::make_shared<utils::Future<bool>>();
+							r->push(true);
+							_importantChecks.push(std::make_tuple(identifier, d->identifier, r));
+						} else {
+							auto r = std::make_shared<utils::Future<bool>>();
+							r->push(d->conditionFunc());
+							_importantChecks.push(std::make_tuple(identifier, d->identifier, r));
+						}
 					} else {
+#if ISIXE_SCRIPTING != SCRIPTING_NONE
 						_importantChecks.push(std::make_tuple(identifier, d->identifier, api::EngineController::GetSingleton().getScriptingFacade()->callFunction<bool>(d->conditionScript)));
+#else
+						ISIXE_THROW_FAILURE("DialogManager", "Dialog '" << identifier << "' has condition script but engine was built without scripting!");
+#endif
 					}
 				}
 			}
@@ -164,11 +174,21 @@ namespace dialog {
 			for (Dialog * d : it->second) {
 				if (!d->important) {
 					if (d->conditionScript.empty()) {
-						auto r = std::make_shared<utils::Future<bool>>();
-						r->push(true);
-						_showDialogboxChecks.push(std::make_tuple(identifier, d->identifier, r));
+						if (d->conditionFunc == nullptr) {
+							auto r = std::make_shared<utils::Future<bool>>();
+							r->push(true);
+							_showDialogboxChecks.push(std::make_tuple(identifier, d->identifier, r));
+						} else {
+							auto r = std::make_shared<utils::Future<bool>>();
+							r->push(d->conditionFunc());
+							_showDialogboxChecks.push(std::make_tuple(identifier, d->identifier, r));
+						}
 					} else {
+#if ISIXE_SCRIPTING != SCRIPTING_NONE
 						_showDialogboxChecks.push(std::make_tuple(identifier, d->identifier, api::EngineController::GetSingleton().getScriptingFacade()->callFunction<bool>(d->conditionScript)));
+#else
+						ISIXE_THROW_FAILURE("DialogManager", "Dialog '" << identifier << "' has condition script but engine was built without scripting!");
+#endif
 					}
 				}
 			}
@@ -345,7 +365,25 @@ namespace dialog {
 					npc::NPC * nt = npc::NPCManager::GetSingleton().getNPC(*d->participants.begin());
 					npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
 					p->turnToNPC(nt);
-					api::EngineController::GetSingleton().getScriptingFacade()->callFunctionWithCallback<void>(d->infoScript, [d]() {
+					if (d->infoScript.empty() && d->infoFunc == nullptr) {
+						ISIXE_THROW_FAILURE("DialogManager", "Dialog '" << d->identifier << "' has no info script or function!");
+#if ISIXE_SCRIPTING != SCRIPTING_NONE
+					} else if (!d->infoScript.empty()) {
+						api::EngineController::GetSingleton().getScriptingFacade()->callFunctionWithCallback<void>(d->infoScript, [d]() {
+							auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
+							auto player = *playerList.begin();
+							npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
+							p->addJob(new npc::ShowDialogsJob(*d->participants.begin()));
+							for (std::string s : d->participants) {
+								npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(s);
+								n->addJob(new npc::ShowDialogsJob(*d->participants.begin()));
+							}
+						});
+#endif
+					} else if (d->infoFunc == nullptr) {
+						ISIXE_THROW_FAILURE("DialogManager", "Dialog '" << d->identifier << "' has no info function!");
+					} else {
+						d->infoFunc();
 						auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
 						auto player = *playerList.begin();
 						npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
@@ -354,7 +392,7 @@ namespace dialog {
 							npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(s);
 							n->addJob(new npc::ShowDialogsJob(*d->participants.begin()));
 						}
-					});
+					}
 					_activeNPCs = d->participants;
 					// hide gui elements
 					auto qc = player->getGOC<components::QuickslotComponent>(components::config::ComponentTypes::QuickslotComponent);
@@ -408,7 +446,7 @@ namespace dialog {
 		std::string description = api::EngineController::GetSingleton().getTextManager()->getText(it->second->description);
 
 		if (_dialogNumbers) {
-			description = std::to_string(_dialogMapping.size() + 1) + ": " + description;
+			description = std::to_string(_dialogMapping.size() + 1) + ". " + description;
 		}
 
 		_dialogNumberVector.push_back(dia);

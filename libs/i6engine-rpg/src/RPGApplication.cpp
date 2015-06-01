@@ -133,7 +133,9 @@ namespace rpg {
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/RPGLevel.xml", "Singleplayer");
 
 		// call Startup in script
+#if ISIXE_SCRIPTING != SCRIPTING_NONE
 		i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>("Startup");
+#endif
 
 		// register keys
 		uint16_t key;
