@@ -47,7 +47,6 @@ namespace modules {
 		int status = luaL_dostring(_luaState, "package.loadlib('libScriptingLua.so','init')()");
 #endif
 		if (status != 0) {
-			std::cout << lua_tostring(_luaState, -1) << std::endl;
 			ISIXE_THROW_FAILURE("LuaScriptingManager", "Can't load ScriptingLua library. Lua reports: " << lua_tostring(_luaState, -1));
 		}
 
