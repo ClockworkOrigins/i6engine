@@ -99,7 +99,7 @@ namespace exceptions {
 		/**
 		 * \brief Overrides std::exception method to output message to console.
 		 */
-		ISIXE_UTILS_API virtual const char * what() const throw();
+		ISIXE_UTILS_API virtual const char * what() const throw() override;
 
 	protected:
 		i6exception(const LogLevel loglevel, const std::string & logmodule, const std::string & logmsg, const std::string & file, const uint16_t line);

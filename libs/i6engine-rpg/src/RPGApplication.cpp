@@ -154,6 +154,9 @@ namespace rpg {
 		// inventory key, default: TAB
 		_iniParser.getValue("INPUT", "inventory", key);
 		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "inventory");
+		// questLog key, default: J
+		_iniParser.getValue("INPUT", "questLog", key);
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "questLog");
 
 		// forward key, default: W
 		_iniParser.getValue("INPUT", "forward", key);

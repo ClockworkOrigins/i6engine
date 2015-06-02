@@ -39,9 +39,21 @@ namespace quest {
 			_parser.loadQuests(directory);
 		}
 
+		void show();
+
+		void hide();
+
+		bool isActive() const {
+			return _active;
+		}
+
 	private:
 		std::map<size_t, std::vector<Quest *>> _quests;
 		QuestParser _parser;
+		bool _active;
+
+		std::map<std::string, std::string> _questTypeMapping;
+		std::map<std::string, Quest *> _questMapping;
 	};
 
 } /* namespace quest */

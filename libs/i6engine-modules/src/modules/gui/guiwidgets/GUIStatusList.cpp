@@ -57,6 +57,8 @@ namespace modules {
 				_window->subscribeEvent(CEGUI::Listbox::EventSelectionChanged, CEGUI::Event::Subscriber(&GUIStatusList::selectionChanged, this));
 			}
 			_selectedCallback = static_cast<api::gui::GUI_SetSelectedStringCallback *>(data)->callback;
+		} else if (type == api::gui::GuiSetFont) {
+			dynamic_cast<CEGUI::Listbox *>(_window)->setFont(static_cast<api::gui::GUI_Text *>(data)->text);
 		} else {
 			GUIWidget::update(type, data);
 		}

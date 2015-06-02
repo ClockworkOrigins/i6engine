@@ -30,6 +30,7 @@
 #include "i6engine/rpg/components/NameComponent.h"
 #include "i6engine/rpg/config/ExternalConstants.h"
 #include "i6engine/rpg/dialog/DialogManager.h"
+#include "i6engine/rpg/quest/QuestLog.h"
 
 namespace i6engine {
 namespace rpg {
@@ -126,21 +127,24 @@ namespace components {
 						auto ic = getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent);
 						auto mc = getOwnerGO()->getGOC<api::MovementComponent>(api::components::ComponentTypes::MovementComponent);
 						std::string keyMapping = api::EngineController::GetSingleton().getInputFacade()->getKeyMapping(iku->code);
-						if (keyMapping == "forward" && !ic->isActive()) {
+						if (keyMapping == "forward" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
 							mc->forward();
-						} else if (keyMapping == "backward" && !ic->isActive()) {
+						} else if (keyMapping == "backward" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
 							mc->backward();
-						} else if (keyMapping == "left" && !ic->isActive()) {
+						} else if (keyMapping == "left" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
 							mc->left();
-						} else if (keyMapping == "right" && !ic->isActive()) {
+						} else if (keyMapping == "right" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
 							mc->right();
 						} else if (keyMapping == "inventory" && iku->pressed == api::KeyState::KEY_PRESSED) {
+							if (quest::QuestLog::GetSingleton().isActive()) {
+								quest::QuestLog::GetSingleton().hide();
+							}
 							if (ic->isActive()) {
 								ic->hide();
 							} else {
 								ic->show();
 							}
-						} else if (keyMapping == "action" && iku->pressed == api::KeyState::KEY_PRESSED && !ic->isActive()) {
+						} else if (keyMapping == "action" && iku->pressed == api::KeyState::KEY_PRESSED && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
 							if (_highlightTargetID != -1) {
 								auto targetGO = api::EngineController::GetSingleton().getObjectFacade()->getObject(_highlightTargetID);
 								if (targetGO != nullptr) {
@@ -156,6 +160,15 @@ namespace components {
 										}
 									}
 								}
+							}
+						} else if (keyMapping == "questLog" && iku->pressed == api::KeyState::KEY_PRESSED) {
+							if (ic->isActive()) {
+								ic->hide();
+							}
+							if (quest::QuestLog::GetSingleton().isActive()) {
+								quest::QuestLog::GetSingleton().hide();
+							} else {
+								quest::QuestLog::GetSingleton().show();
 							}
 						}
 					}
