@@ -37,6 +37,8 @@ function Dialog_NPC1_QuestSolved_Info()
 	local Player = getNPC("Player01")
 	NPC01:say("Dialog_NPC1_QuestSolved_01_Sound", "Dialog_NPC1_QuestSolved_01_Subtitle")
 	Player:say("Dialog_NPC1_QuestSolved_02_Sound", "Dialog_NPC1_QuestSolved_02_Subtitle")
+
+	giveXP(Player, 500)
 end
 
 function Dialog_NPC1_Exit_Info()

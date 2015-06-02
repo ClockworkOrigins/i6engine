@@ -40,4 +40,6 @@
 	</Component>
 	<Component template="DialogChecker" owner="true">
 	</Component>
+	<Component template="Experience" owner="true">
+	</Component>
 </GOTemplate>

@@ -85,9 +85,28 @@ namespace npc {
 				ISIXE_THROW_FAILURE("NPCParser", "NPC with identifier '" << identifier << "' in file '" << file << "' misses Name!");
 			}
 			std::string name = npc->FirstChildElement("Name")->GetText();
+			if (npc->FirstChildElement("XP") == nullptr) {
+				ISIXE_THROW_FAILURE("NPCParser", "NPC with identifier '" << identifier << "' in file '" << file << "' misses XP!");
+			}
+			std::string xp = npc->FirstChildElement("XP")->GetText();
+			if (npc->FirstChildElement("NextXP") == nullptr) {
+				ISIXE_THROW_FAILURE("NPCParser", "NPC with identifier '" << identifier << "' in file '" << file << "' misses NextXP!");
+			}
+			std::string nextXP = npc->FirstChildElement("NextXP")->GetText();
+			if (npc->FirstChildElement("Level") == nullptr) {
+				ISIXE_THROW_FAILURE("NPCParser", "NPC with identifier '" << identifier << "' in file '" << file << "' misses Level!");
+			}
+			std::string level = npc->FirstChildElement("Level")->GetText();
+
 			api::attributeMap paramsName;
 			paramsName.insert(std::make_pair("name", name));
 			tpl._components.push_back(api::objects::GOTemplateComponent("Name", paramsName, "", false, false));
+
+			api::attributeMap paramsExperience;
+			paramsExperience.insert(std::make_pair("currentXP", xp));
+			paramsExperience.insert(std::make_pair("nextXP", nextXP));
+			paramsExperience.insert(std::make_pair("level", level));
+			tpl._components.push_back(api::objects::GOTemplateComponent("Experience", paramsExperience, "", false, false));
 
 			// optional stuff
 			// attributes

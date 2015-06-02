@@ -36,6 +36,7 @@ set(i6rpgSrc
 
 	${srcdir}/components/AttributeComponent.cpp
 	${srcdir}/components/DialogCheckerComponent.cpp
+	${srcdir}/components/ExperienceComponent.cpp
 	${srcdir}/components/HealthbarComponent.cpp
 	${srcdir}/components/HumanMovementComponent.cpp
 	${srcdir}/components/InventoryComponent.cpp

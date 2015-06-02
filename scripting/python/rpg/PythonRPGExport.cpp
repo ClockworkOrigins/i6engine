@@ -122,7 +122,16 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 		.def("turnToNPC", &i6engine::rpg::npc::NPC::turnToNPC)
 		.def("say", &i6engine::rpg::npc::NPC::say)
 		.def("getItemCount", &i6engine::rpg::npc::NPC::getItemCount)
-		.def("addJob", &i6engine::rpg::npc::NPC::addJob);
+		.def("addJob", &i6engine::rpg::npc::NPC::addJob)
+		.def("setCurrentXP", &i6engine::rpg::npc::NPC::setCurrentXP)
+		.def("getCurrentXP", &i6engine::rpg::npc::NPC::getCurrentXP)
+		.def("setNextXP", &i6engine::rpg::npc::NPC::setNextXP)
+		.def("getNextXP", &i6engine::rpg::npc::NPC::getNextXP)
+		.def("setLevel", &i6engine::rpg::npc::NPC::setLevel)
+		.def("getLevel", &i6engine::rpg::npc::NPC::getLevel)
+		.add_property("xp", &i6engine::rpg::npc::NPC::getCurrentXP, &i6engine::rpg::npc::NPC::setCurrentXP)
+		.add_property("nextXP", &i6engine::rpg::npc::NPC::getNextXP, &i6engine::rpg::npc::NPC::setNextXP)
+		.add_property("level", &i6engine::rpg::npc::NPC::getLevel, &i6engine::rpg::npc::NPC::setLevel);
 
 	enum_<i6engine::rpg::quest::QuestStatus>("QuestStatus")
 		.value("LOCKED", i6engine::rpg::quest::QuestStatus::LOCKED)

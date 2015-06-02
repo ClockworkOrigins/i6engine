@@ -51,6 +51,18 @@ namespace npc {
 
 		uint32_t getItemCount(const std::string & identifier) const;
 
+		uint32_t getCurrentXP() const;
+
+		void setCurrentXP(uint32_t xp);
+
+		uint32_t getNextXP() const;
+
+		void setNextXP(uint32_t xp);
+
+		uint32_t getLevel() const;
+
+		void setLevel(uint32_t level);
+
 		void addJob(NPCQueueJob * job) {
 			_queue.addJob(job);
 		}

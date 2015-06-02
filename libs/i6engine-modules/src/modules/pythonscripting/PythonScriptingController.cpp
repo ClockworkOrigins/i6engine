@@ -51,7 +51,7 @@ namespace PythonAPIWorkaround {
 		ISIXE_LOG_INFO("PythonScriptingController", Py_GetVersion());
 
 		boost::filesystem::path workingDir = boost::filesystem::complete("./").normalize();
-		PyObject * sysPath = PySys_GetObject(PythonAPIWorkaround::path);
+		PyObject * sysPath = PySys_GetObject("path");
 		PyList_Insert(sysPath, 0, PyString_FromString(workingDir.string().c_str()));
 		std::string mainDir;
 		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("GENERAL", "i6engineMainDir", mainDir)) {
@@ -67,7 +67,7 @@ namespace PythonAPIWorkaround {
 			return;
 		}
 
-		boost::filesystem::path workingDir2 = boost::filesystem::complete(scriptsPath.c_str()).normalize();
+		boost::filesystem::path workingDir2 = boost::filesystem::complete((scriptsPath + "/").c_str()).normalize();
 		PyList_Insert(sysPath, 0, PyString_FromString(workingDir2.string().c_str()));
 
 		_manager = new PythonScriptingManager();

@@ -1,7 +1,13 @@
 <?xml version="1.0" ?>
 <NPC identifier="NPC01">
 	<Name>NPCName01</Name>
+	<XP>1000</XP>
+	<NextXP>1500</NextXP>
+	<Level>1</Level>
 </NPC>
 <NPC identifier="Player01">
 	<Name>PlayerName</Name>
+	<XP>0</XP>
+	<NextXP>500</NextXP>
+	<Level>0</Level>
 </NPC>

@@ -21,6 +21,7 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/ExperienceComponent.h"
 #include "i6engine/rpg/components/InventoryComponent.h"
 #include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 #include "i6engine/rpg/dialog/DialogManager.h"
@@ -83,6 +84,54 @@ namespace npc {
 			return 0;
 		}
 		return go->getGOC<components::InventoryComponent>(components::config::ComponentTypes::InventoryComponent)->getItemCount(identifier);
+	}
+
+	uint32_t NPC::getCurrentXP() const {
+		auto go = _go.get();
+		if (go == nullptr) {
+			return 0;
+		}
+		return go->getGOC<components::ExperienceComponent>(components::config::ComponentTypes::ExperienceComponent)->getCurrentXP();
+	}
+
+	void NPC::setCurrentXP(uint32_t xp) {
+		auto go = _go.get();
+		if (go == nullptr) {
+			return;
+		}
+		return go->getGOC<components::ExperienceComponent>(components::config::ComponentTypes::ExperienceComponent)->setCurrentXP(xp);
+	}
+
+	uint32_t NPC::getNextXP() const {
+		auto go = _go.get();
+		if (go == nullptr) {
+			return 0;
+		}
+		return go->getGOC<components::ExperienceComponent>(components::config::ComponentTypes::ExperienceComponent)->getNextXP();
+	}
+
+	void NPC::setNextXP(uint32_t xp) {
+		auto go = _go.get();
+		if (go == nullptr) {
+			return;
+		}
+		return go->getGOC<components::ExperienceComponent>(components::config::ComponentTypes::ExperienceComponent)->setNextXP(xp);
+	}
+
+	uint32_t NPC::getLevel() const {
+		auto go = _go.get();
+		if (go == nullptr) {
+			return 0;
+		}
+		return go->getGOC<components::ExperienceComponent>(components::config::ComponentTypes::ExperienceComponent)->getLevel();
+	}
+
+	void NPC::setLevel(uint32_t xp) {
+		auto go = _go.get();
+		if (go == nullptr) {
+			return;
+		}
+		return go->getGOC<components::ExperienceComponent>(components::config::ComponentTypes::ExperienceComponent)->setLevel(xp);
 	}
 
 } /* namespace npc */

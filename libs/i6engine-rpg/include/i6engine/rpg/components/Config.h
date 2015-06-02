@@ -44,6 +44,7 @@ namespace config {
 		SlotInventoryComponent,
 		HumanMovementComponent,
 		DialogCheckerComponent,
+		ExperienceComponent,
 		ComponentTypesCount
 	};
 
