@@ -63,6 +63,10 @@ namespace components {
 			return _weight;
 		}
 
+		std::string getIdentifier() const {
+			return _identifier;
+		}
+
 		virtual std::vector<std::pair<std::string, std::string>> getInfos() const = 0;
 
 	private:
@@ -70,6 +74,7 @@ namespace components {
 		std::string _imageset;
 		std::string _image;
 		double _weight;
+		std::string _identifier;
 	};
 
 } /* namespace components */

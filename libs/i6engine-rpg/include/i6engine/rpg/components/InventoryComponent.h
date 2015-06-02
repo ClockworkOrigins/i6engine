@@ -77,6 +77,11 @@ namespace components {
 		/**
 		 * \brief returns the number of items for the given type
 		 */
+		virtual uint32_t getItemCount(const std::string & identifier) const = 0;
+
+		/**
+		 * \brief returns the number of items for the given type
+		 */
 		virtual uint32_t getItemCount(uint32_t item, const std::string & name) const = 0;
 
 		/**

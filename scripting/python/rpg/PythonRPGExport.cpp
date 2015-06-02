@@ -24,14 +24,32 @@
 #include "i6engine/rpg/dialog/Dialog.h"
 #include "i6engine/rpg/dialog/DialogManager.h"
 
+#include "i6engine/rpg/item/ItemManager.h"
+
 #include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/NPCManager.h"
+
+#include "i6engine/rpg/quest/Quest.h"
+#include "i6engine/rpg/quest/QuestLog.h"
 
 #include "boost/python.hpp"
 
 namespace i6engine {
 namespace python {
 namespace rpg {
+
+	void insertItemAtWaypoint(const std::string & identifier, const std::string & waypoint) {
+		Vec3 pos;
+		Quaternion rot;
+		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
+			if (go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName() == waypoint) {
+				pos = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getPosition();
+				rot = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getRotation();
+				break;
+			}
+		}
+		i6engine::rpg::item::ItemManager::GetSingletonPtr()->createItem(identifier, pos, rot);
+	}
 
 	void insertNPCAtWaypoint(const std::string & identifier, const std::string & waypoint) {
 		Vec3 pos;
@@ -75,6 +93,14 @@ namespace rpg {
 		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->isDialogRunning();
 	}
 
+	void setQuestStatus(const std::string & identifier, i6engine::rpg::quest::QuestStatus status) {
+		i6engine::rpg::quest::QuestLog::GetSingleton().setQuestStatus(identifier, status);
+	}
+
+	void addLogEntry(const std::string & identifier, const std::string & entry) {
+		i6engine::rpg::quest::QuestLog::GetSingleton().addLogEntry(identifier, entry);
+	}
+
 } /* namespace rpg */
 } /* namespace python */
 } /* namespace i6engine */
@@ -82,6 +108,7 @@ namespace rpg {
 BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 	using namespace boost::python;
 
+	def("insertItemAtWaypoint", &i6engine::python::rpg::insertItemAtWaypoint);
 	def("insertNPCAtWaypoint", &i6engine::python::rpg::insertNPCAtWaypoint);
 	def("insertPlayerAtWaypoint", &i6engine::python::rpg::insertPlayerAtWaypoint);
 	def("getNPC", &i6engine::python::rpg::getNPC, return_internal_reference<>());
@@ -93,5 +120,17 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 	class_<i6engine::rpg::npc::NPC>("NPC", no_init)
 		.def("getGO", &i6engine::rpg::npc::NPC::getGO)
 		.def("turnToNPC", &i6engine::rpg::npc::NPC::turnToNPC)
-		.def("say", &i6engine::rpg::npc::NPC::say);
+		.def("say", &i6engine::rpg::npc::NPC::say)
+		.def("getItemCount", &i6engine::rpg::npc::NPC::getItemCount)
+		.def("addJob", &i6engine::rpg::npc::NPC::addJob);
+
+	enum_<i6engine::rpg::quest::QuestStatus>("QuestStatus")
+		.value("LOCKED", i6engine::rpg::quest::QuestStatus::LOCKED)
+		.value("RUNNING", i6engine::rpg::quest::QuestStatus::RUNNING)
+		.value("COMPLETED", i6engine::rpg::quest::QuestStatus::COMPLETED)
+		.value("FAILED", i6engine::rpg::quest::QuestStatus::FAILED)
+		.export_values();
+
+	def("setQuestStatus", &i6engine::python::rpg::setQuestStatus);
+	def("addLogEntry", &i6engine::python::rpg::addLogEntry);
 }

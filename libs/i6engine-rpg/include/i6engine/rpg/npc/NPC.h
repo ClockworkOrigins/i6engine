@@ -49,6 +49,8 @@ namespace npc {
 
 		void say(const std::string & soundKey, const std::string & subtitleKey);
 
+		uint32_t getItemCount(const std::string & identifier) const;
+
 		void addJob(NPCQueueJob * job) {
 			_queue.addJob(job);
 		}

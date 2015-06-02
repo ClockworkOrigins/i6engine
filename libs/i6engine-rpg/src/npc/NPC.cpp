@@ -21,6 +21,7 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/InventoryComponent.h"
 #include "i6engine/rpg/components/ThirdPersonControlComponent.h"
 #include "i6engine/rpg/dialog/DialogManager.h"
 #include "i6engine/rpg/npc/NPCManager.h"
@@ -74,6 +75,14 @@ namespace npc {
 		}
 
 		_queue.addJob(new SayJob(this, soundKey, subtitleKey, waitJobs));
+	}
+
+	uint32_t NPC::getItemCount(const std::string & identifier) const {
+		auto go = _go.get();
+		if (go == nullptr) {
+			return 0;
+		}
+		return go->getGOC<components::InventoryComponent>(components::config::ComponentTypes::InventoryComponent)->getItemCount(identifier);
 	}
 
 } /* namespace npc */

@@ -1,4 +1,10 @@
-﻿v 0.8.6
+﻿v 0.8.7
+
+Enhancements:
+	- added generic method for enum classes to be used in streams (just include i6engine/utils/EnumClassStream.h)
+	- added basic quest support and functionality to open Quest Log (default: J)
+
+v 0.8.6
 
 Enhancements:
 	- renamed python scripting module so it is named as lua scripting module is

@@ -57,6 +57,9 @@ set(i6rpgSrc
 	
 	${srcdir}/gui/SubtitleWidget.cpp
 	
+	${srcdir}/item/ItemManager.cpp
+	${srcdir}/item/ItemParser.cpp
+	
 	${srcdir}/npc/NPC.cpp
 	${srcdir}/npc/NPCManager.cpp
 	${srcdir}/npc/NPCParser.cpp
@@ -77,6 +80,7 @@ SOURCE_GROUP(rpg\\components src/components/*)
 SOURCE_GROUP(rpg\\config src/config/*)
 SOURCE_GROUP(rpg\\dialog src/dialog/*)
 SOURCE_GROUP(rpg\\gui src/gui/*)
+SOURCE_GROUP(rpg\\item src/item/*)
 SOURCE_GROUP(rpg\\npc src/npc/*)
 SOURCE_GROUP(rpg\\npc\\queueJobs src/npc/queueJobs/*)
 SOURCE_GROUP(rpg\\quest src/quest/*)

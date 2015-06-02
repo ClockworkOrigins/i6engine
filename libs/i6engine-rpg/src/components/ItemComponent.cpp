@@ -25,9 +25,11 @@ namespace rpg {
 namespace components {
 
 	ItemComponent::ItemComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _value(), _imageset(), _image(), _weight(0.0) {
+		ISIXE_THROW_API_COND("ItemComponent", "ident not set!", params.find("ident") != params.end());
 		ISIXE_THROW_API_COND("ItemComponent", "value not set!", params.find("value") != params.end());
 		ISIXE_THROW_API_COND("ItemComponent", "imageset not set!", params.find("imageset") != params.end());
 		ISIXE_THROW_API_COND("ItemComponent", "image not set!", params.find("image") != params.end());
+		_identifier = params.find("ident")->second;
 		_value = std::stoul(params.find("value")->second.c_str());
 		_imageset = params.find("imageset")->second;
 		_image = params.find("image")->second;
@@ -42,6 +44,7 @@ namespace components {
 	api::attributeMap ItemComponent::synchronize() const {
 		api::attributeMap params;
 
+		params.insert(std::make_pair("ident", _identifier));
 		params.insert(std::make_pair("value", std::to_string(_value)));
 		params.insert(std::make_pair("imageset", _imageset));
 		params.insert(std::make_pair("image", _image));

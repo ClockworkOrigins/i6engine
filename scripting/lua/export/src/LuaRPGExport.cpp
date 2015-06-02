@@ -26,12 +26,30 @@
 #include "i6engine/rpg/dialog/Dialog.h"
 #include "i6engine/rpg/dialog/DialogManager.h"
 
+#include "i6engine/rpg/item/ItemManager.h"
+
 #include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/NPCManager.h"
+
+#include "i6engine/rpg/quest/Quest.h"
+#include "i6engine/rpg/quest/QuestLog.h"
 
 namespace i6engine {
 namespace lua {
 namespace rpg {
+
+	void insertItemAtWaypoint(const std::string & identifier, const std::string & waypoint) {
+		Vec3 pos;
+		Quaternion rot;
+		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
+			if (go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName() == waypoint) {
+				pos = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getPosition();
+				rot = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getRotation();
+				break;
+			}
+		}
+		i6engine::rpg::item::ItemManager::GetSingletonPtr()->createItem(identifier, pos, rot);
+	}
 
 	void insertNPCAtWaypoint(const std::string & identifier, const std::string & waypoint) {
 		Vec3 pos;
@@ -75,6 +93,14 @@ namespace rpg {
 		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->isDialogRunning();
 	}
 
+	void setQuestStatus(const std::string & identifier, i6engine::rpg::quest::QuestStatus status) {
+		i6engine::rpg::quest::QuestLog::GetSingleton().setQuestStatus(identifier, status);
+	}
+
+	void addLogEntry(const std::string & identifier, const std::string & entry) {
+		i6engine::rpg::quest::QuestLog::GetSingleton().addLogEntry(identifier, entry);
+	}
+
 } /* namespace rpg */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -83,6 +109,7 @@ using namespace luabind;
 
 scope registerRPG() {
 	return
+		def("insertItemAtWaypoint", &i6engine::lua::rpg::insertItemAtWaypoint),
 		def("insertNPCAtWaypoint", &i6engine::lua::rpg::insertNPCAtWaypoint),
 		def("insertPlayerAtWaypoint", &i6engine::lua::rpg::insertPlayerAtWaypoint),
 		def("getNPC", &i6engine::lua::rpg::getNPC),
@@ -98,5 +125,20 @@ scope registerRPG() {
 			.def("getGO", &i6engine::rpg::npc::NPC::getGO)
 			.def("turnToNPC", &i6engine::rpg::npc::NPC::turnToNPC)
 			.def("say", &i6engine::rpg::npc::NPC::say)
+			.def("getItemCount", &i6engine::rpg::npc::NPC::getItemCount)
+			.def("addJob", &i6engine::rpg::npc::NPC::addJob),
+
+		class_<i6engine::rpg::quest::QuestStatus>("QuestStatus")
+			.def(constructor<>())
+			.enum_("QuestStatus")
+			[
+				value("LOCKED", int(i6engine::rpg::quest::QuestStatus::LOCKED)),
+				value("RUNNING", int(i6engine::rpg::quest::QuestStatus::RUNNING)),
+				value("COMPLETED", int(i6engine::rpg::quest::QuestStatus::COMPLETED)),
+				value("FAILED", int(i6engine::rpg::quest::QuestStatus::FAILED))
+			],
+
+		def("setQuestStatus", &i6engine::lua::rpg::setQuestStatus),
+		def("addLogEntry", &i6engine::lua::rpg::addLogEntry)
 		;
 }

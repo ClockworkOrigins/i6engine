@@ -49,6 +49,8 @@
 
 #include "i6engine/rpg/dialog/DialogManager.h"
 
+#include "i6engine/rpg/item/ItemManager.h"
+
 #include "i6engine/rpg/npc/NPCParser.h"
 
 #include "i6engine/rpg/quest/QuestLog.h"
@@ -72,6 +74,12 @@ namespace rpg {
 			ISIXE_THROW_FAILURE("RPGApplication", "'externalConstants' in section 'SCRIPT' in RPG.ini not found!");
 		}
 		i6engine::rpg::config::parseExternalConstants(externalConstantsFile);
+
+		std::string ItemDirectory;
+		if (_iniParser.getValue("SCRIPT", "itemDirectory", ItemDirectory) != clockUtils::ClockError::SUCCESS) {
+			ISIXE_THROW_FAILURE("RPGApplication", "'itemDirectory' in section 'SCRIPT' in RPG.ini not found!");
+		}
+		i6engine::rpg::item::ItemManager::GetSingletonPtr()->loadItems(ItemDirectory);
 
 		std::string NPCDirectory;
 		if (_iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {

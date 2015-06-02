@@ -44,26 +44,41 @@
                 <Attribute name="name">WP_002</Attribute>
             </Component>
         </GameObject>
-		
-		<GameObject name="UsableItem" send="False">
-			<Component template="StaticState">
-				<Attribute name="pos">-10.0 0.0 0.0</Attribute>
-			</Component>
-		</GameObject>
-		<GameObject name="UsableItem" send="False">
-			<Component template="StaticState">
-				<Attribute name="pos">10.0 0.0 0.0</Attribute>
-			</Component>
-		</GameObject>
-		<GameObject name="UsableItem" send="False">
-			<Component template="StaticState">
-				<Attribute name="pos">-5.0 0.0 0.0</Attribute>
-			</Component>
-		</GameObject>
-		<GameObject name="UsableItem" send="False">
-			<Component template="StaticState">
-				<Attribute name="pos">5.0 0.0 0.0</Attribute>
-			</Component>
-		</GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-10.0 0.0 0.0</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">Start</Attribute>
+                <Attribute name="name">WP_Item_01</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">10.0 0.0 0.0</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">Start</Attribute>
+                <Attribute name="name">WP_Item_02</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">-5.0 0.0 0.0</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">Start</Attribute>
+                <Attribute name="name">WP_Item_03</Attribute>
+            </Component>
+        </GameObject>
+        <GameObject name="Waypoint" send="true">
+            <Component template="StaticState">
+                <Attribute name="pos">5.0 0.0 0.0</Attribute>
+            </Component>
+            <Component template="Waypoint">
+                <Attribute name="connections">Start</Attribute>
+                <Attribute name="name">WP_Item_04</Attribute>
+            </Component>
+        </GameObject>
 	</Section>
 </Map>

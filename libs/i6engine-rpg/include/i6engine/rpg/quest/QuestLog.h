@@ -29,6 +29,7 @@ namespace i6engine {
 namespace rpg {
 namespace quest {
 
+	enum class QuestStatus;
 	struct Quest;
 
 	class ISIXE_RPG_API QuestLog : public utils::Singleton<QuestLog> {
@@ -37,6 +38,9 @@ namespace quest {
 
 		void loadQuests(const std::string & directory) {
 			_parser.loadQuests(directory);
+			for (size_t i = 0; i < _parser._questTypes.size(); i++) {
+				_quests.insert(std::make_pair(i, std::vector<Quest *>()));
+			}
 		}
 
 		void show();
@@ -47,6 +51,10 @@ namespace quest {
 			return _active;
 		}
 
+		void setQuestStatus(const std::string & identifier, QuestStatus status);
+
+		void addLogEntry(const std::string & identifier, const std::string & entry);
+
 	private:
 		std::map<size_t, std::vector<Quest *>> _quests;
 		QuestParser _parser;
@@ -54,6 +62,8 @@ namespace quest {
 
 		std::map<std::string, std::string> _questTypeMapping;
 		std::map<std::string, Quest *> _questMapping;
+
+		std::map<size_t, std::vector<Quest *>>::iterator getCategoryIterator(const std::string & category);
 	};
 
 } /* namespace quest */

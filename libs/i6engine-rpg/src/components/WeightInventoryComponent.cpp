@@ -84,7 +84,7 @@ namespace components {
 						break;
 					}
 				}
-				it->second.insert(std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage())));
+				it->second.insert(std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier())));
 			}
 		} else {
 			std::vector<api::GameMessage::Ptr> msgs;
@@ -95,7 +95,7 @@ namespace components {
 					break;
 				}
 			}
-			_items.insert(std::make_pair(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>({ std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage())) })));
+			_items.insert(std::make_pair(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string>>({ std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier())) })));
 		}
 		for (auto & cb : _callbacks) {
 			cb(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), nc->getName(), std::get<ItemEntry::Amount>(_items[item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID()][nc->getName()]));
@@ -368,6 +368,17 @@ namespace components {
 			}
 		}
 		return std::make_tuple(UINT32_MAX, "", "", "");
+	}
+
+	uint32_t WeightInventoryComponent::getItemCount(const std::string & identifier) const {
+		for (auto it = _items.begin(); it != _items.end(); it++) {
+			for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++) {
+				if (std::get<ItemEntry::Identifier>(it2->second) == identifier) {
+					return std::get<ItemEntry::Amount>(it2->second);
+				}
+			}
+		}
+		return 0;
 	}
 
 	uint32_t WeightInventoryComponent::getItemCount(uint32_t item, const std::string & name) const {

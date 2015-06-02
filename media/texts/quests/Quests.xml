@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<!-- quests -->
+<Key key="CollectUsableItemsQuest_Name">
+	<Language name="Deutsch">Sammle 3 benutzbare Items</Language>
+	<Language name="English">Collect 3 usable items</Language>
+</Key>

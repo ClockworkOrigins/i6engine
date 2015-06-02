@@ -18,10 +18,14 @@ function Dialog_NPC1_HaveYouQuest_Info()
 	local Player = getNPC("Player01")
 	Player:say("Dialog_NPC1_HaveYouQuest_01_Sound", "Dialog_NPC1_HaveYouQuest_01_Subtitle")
 	NPC01:say("Dialog_NPC1_HaveYouQuest_02_Sound", "Dialog_NPC1_HaveYouQuest_02_Subtitle")
+
+	setQuestStatus("CollectUsableItemsQuest", QuestStatus.RUNNING)
+	addLogEntry("CollectUsableItemsQuest", "CollectUsableItemsQuest_Entry_1")
 end
 
 function Dialog_NPC1_QuestSolved_Condition()
-	if (wasHeard("Dialog_NPC1_HaveYouQuest")) then
+	local Player = getNPC("Player01")
+	if (wasHeard("Dialog_NPC1_HaveYouQuest") and Player:getItemCount("UsableItem") >= 3) then
 		return true
 	end
 

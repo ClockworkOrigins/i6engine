@@ -40,8 +40,8 @@
 	<Language name="English">Dialog_NPC1_HaveYouQuest_02_en.wav</Language>
 </Key>
 <Key key="Dialog_NPC1_HaveYouQuest_02_Subtitle">
-	<Language name="Deutsch">Ja. Beende das Gespräch mit mir und lass dich dann noch einmal von mir ansprechen. Das wird dir zeigen, dass auch automatische Gespräche mit Bedingung funktionieren.</Language>
-	<Language name="English">Yes. Leave this talk with me and let me talk to you again. This will show you, that important dialogs also work with conditions.</Language>
+	<Language name="Deutsch">Ja. Hier liegen verschiedene Verbrauchsgegenstände herum. Bring mir drei davon.</Language>
+	<Language name="English">Yes. Here are some usable items around. Bring me three of them.</Language>
 </Key>
 
 <Key key="Dialog_NPC1_QuestSolved_01_Sound">
@@ -49,8 +49,8 @@
 	<Language name="English">Dialog_NPC1_QuestSolved_01_en.wav</Language>
 </Key>
 <Key key="Dialog_NPC1_QuestSolved_01_Subtitle">
-	<Language name="Deutsch">Siehst du? Obwohl dieser Dialog eine Bedingung hat, kann ich dich jetzt wieder ansprechen.</Language>
-	<Language name="English">You see, though this dialog has a condition I can speak to you now.</Language>
+	<Language name="Deutsch">Wunderbar, damit bin ich gut bedient.</Language>
+	<Language name="English">Wonderful, that's enough for me.</Language>
 </Key>
 <Key key="Dialog_NPC1_QuestSolved_02_Sound">
 	<Language name="Deutsch">Dialog_NPC1_QuestSolved_02_de.wav</Language>

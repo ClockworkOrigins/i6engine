@@ -82,6 +82,7 @@ namespace components {
 		/**
 		 * \brief returns the number of items for the given type
 		 */
+		uint32_t getItemCount(const std::string & identifier) const override;
 		uint32_t getItemCount(uint32_t item, const std::string & name) const override;
 
 	private:
@@ -93,7 +94,8 @@ namespace components {
 			Image,
 			Width,
 			Height,
-			Infos
+			Infos,
+			Identifier
 		};
 
 		uint16_t _rows;
@@ -106,7 +108,7 @@ namespace components {
 		 * \brief contains for every slot the index of the item in list or UINT16_MAX, if empty
 		 */
 		std::vector<std::vector<uint16_t>> _slots;
-		std::vector<std::tuple<uint32_t, std::string, api::GameMessage::Ptr, std::string, std::string, uint16_t, uint16_t, std::vector<std::pair<std::string, std::string>>>> _items;
+		std::vector<std::tuple<uint32_t, std::string, api::GameMessage::Ptr, std::string, std::string, uint16_t, uint16_t, std::vector<std::pair<std::string, std::string>>, std::string>> _items;
 
 
 		/**

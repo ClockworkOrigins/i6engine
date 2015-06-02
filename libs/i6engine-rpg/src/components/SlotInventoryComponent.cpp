@@ -99,7 +99,7 @@ namespace components {
 								break;
 							}
 						}
-						_items.push_back(std::make_tuple(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), msgs[0], item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), sc->getWidth(), sc->getHeight(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getInfos()));
+						_items.push_back(std::make_tuple(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), msgs[0], item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), sc->getWidth(), sc->getHeight(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getInfos(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier()));
 						for (auto & cb : _callbacks) {
 							cb(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), getItemCount(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName()));
 						}
@@ -315,6 +315,16 @@ namespace components {
 			return std::make_tuple(std::get<ItemEntry::Type>(_items[_currentIndex]), std::get<ItemEntry::Name>(_items[_currentIndex]), std::get<ItemEntry::Imageset>(_items[_currentIndex]), std::get<ItemEntry::Image>(_items[_currentIndex]));
 		}
 		return std::make_tuple(UINT32_MAX, "", "", "");
+	}
+
+	uint32_t SlotInventoryComponent::getItemCount(const std::string & identifier) const {
+		uint32_t counter = 0;
+		for (auto & t : _items) {
+			if (std::get<ItemEntry::Identifier>(t) == identifier) {
+				counter++;
+			}
+		}
+		return counter;
 	}
 
 	uint32_t SlotInventoryComponent::getItemCount(uint32_t item, const std::string & name) const {

@@ -77,6 +77,90 @@ namespace quest {
 		_questMapping.clear();
 	}
 
+	void QuestLog::setQuestStatus(const std::string & identifier, QuestStatus status) {
+		auto it = _parser._quests.find(identifier);
+		if (it == _parser._quests.end()) {
+			ISIXE_THROW_FAILURE("QuestLog", "Quest with identifier '" << identifier << "' not found!");
+		}
+		if (status == QuestStatus::LOCKED) {
+			// reset quest?
+			if (it->second->status == QuestStatus::RUNNING) {
+				auto it2 = getCategoryIterator(it->second->category);
+				for (size_t i = 0; i < it2->second.size(); i++) {
+					if (it2->second[i] == it->second) {
+						it2->second.erase(it2->second.begin() + int(i));
+						break;
+					}
+				}
+			} else if (it->second->status == QuestStatus::COMPLETED) {
+				auto it2 = getCategoryIterator("CompletedQuest");
+				for (size_t i = 0; i < it2->second.size(); i++) {
+					if (it2->second[i] == it->second) {
+						it2->second.erase(it2->second.begin() + int(i));
+						break;
+					}
+				}
+			} else if (it->second->status == QuestStatus::FAILED) {
+				auto it2 = getCategoryIterator("FailedQuest");
+				for (size_t i = 0; i < it2->second.size(); i++) {
+					if (it2->second[i] == it->second) {
+						it2->second.erase(it2->second.begin() + int(i));
+						break;
+					}
+				}
+			}
+		} else if (status == QuestStatus::RUNNING) {
+			// start quest
+			if (it->second->status == QuestStatus::LOCKED) {
+				auto it2 = getCategoryIterator(it->second->category);
+				it2->second.push_back(it->second);
+			}
+		} else if (status == QuestStatus::COMPLETED) {
+			// complete quest
+			if (it->second->status == QuestStatus::RUNNING) {
+				auto it2 = getCategoryIterator(it->second->category);
+				for (size_t i = 0; i < it2->second.size(); i++) {
+					if (it2->second[i] == it->second) {
+						it2->second.erase(it2->second.begin() + int(i));
+						break;
+					}
+				}
+			}
+			auto it2 = getCategoryIterator("CompletedQuest");
+			it2->second.push_back(it->second);
+		} else if (status == QuestStatus::FAILED) {
+			// failed quest
+			if (it->second->status == QuestStatus::RUNNING) {
+				auto it2 = getCategoryIterator(it->second->category);
+				for (size_t i = 0; i < it2->second.size(); i++) {
+					if (it2->second[i] == it->second) {
+						it2->second.erase(it2->second.begin() + int(i));
+						break;
+					}
+				}
+			}
+			auto it2 = getCategoryIterator("FailedQuest");
+			it2->second.push_back(it->second);
+		}
+	}
+
+	void QuestLog::addLogEntry(const std::string & identifier, const std::string & entry) {
+		auto it = _parser._quests.find(identifier);
+		if (it == _parser._quests.end()) {
+			ISIXE_THROW_FAILURE("QuestLog", "Quest with identifier '" << identifier << "' not found!");
+		}
+		it->second->entries.push_back(entry);
+	}
+
+	std::map<size_t, std::vector<Quest *>>::iterator QuestLog::getCategoryIterator(const std::string & category) {
+		for (size_t i = 0; i < _parser._questTypes.size(); i++) {
+			if (_parser._questTypes[i] == category) {
+				return _quests.find(i);
+			}
+		}
+		return _quests.end();
+	}
+
 } /* namespace quest */
 } /* namespace rpg */
 } /* namespace i6engine */

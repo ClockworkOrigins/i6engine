@@ -82,6 +82,7 @@ namespace components {
 		/**
 		 * \brief returns the number of items for the given type
 		 */
+		uint32_t getItemCount(const std::string & identifier) const override;
 		uint32_t getItemCount(uint32_t item, const std::string & name) const override;
 
 	private:
@@ -89,9 +90,10 @@ namespace components {
 			Message,
 			Amount,
 			Imageset,
-			Image
+			Image,
+			Identifier
 		};
-		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>> _items;
+		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string>>> _items;
 		uint32_t _columns;
 		uint32_t _slotCount;
 		uint32_t _currentIndex;
