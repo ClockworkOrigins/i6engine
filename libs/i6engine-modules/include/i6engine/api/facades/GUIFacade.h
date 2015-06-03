@@ -454,6 +454,11 @@ namespace gui {
 		void unpauseAnimation(const std::string & name, const std::string & animation) const;
 
 		/**
+		 * \brief sets automatic line break to the widget (currently only implemtend for Statuslist
+		 */
+		void setAutoLineBreak(const std::string & name, bool enabled) const;
+
+		/**
 		 * \brief Registers a new Widget-template.
 		 * \param name Name of the Widget-type
 		 * \param createFunc A function to create a widget. It gets a string for the name and a string for the style.

@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!-- misc -->
+<Key key="XPGained">
+	<Language name="Deutsch">Erfahrung: +</Language>
+	<Language name="English">Experience: +</Language>
+</Key>
+<Key key="NewLogEntry">
+	<Language name="Deutsch">Neuer Tagebucheintrag</Language>
+	<Language name="English">New log entry</Language>
+</Key>
+<Key key="Levelup">
+	<Language name="Deutsch">Stufe gestiegen!</Language>
+	<Language name="English">Levelup!</Language>
+</Key>
+<Key key="GaveItem">
+	<Language name="Deutsch"> gegeben</Language>
+	<Language name="English"> given</Language>
+</Key>
+<Key key="GotItem">
+	<Language name="Deutsch"> erhalten</Language>
+	<Language name="English"> taken</Language>
+</Key>

@@ -47,6 +47,7 @@ namespace quest {
 			assert(_questTypeMapping.find(s) != _questTypeMapping.end());
 			std::string category = _questTypeMapping[s];
 			gf->clearWidget("QuestList");
+			gf->clearWidget("QuestEntriesList");
 
 			for (size_t i = 0; i < _parser._questTypes.size(); i++) {
 				if (_parser._questTypes[i] == category) {
@@ -64,6 +65,23 @@ namespace quest {
 
 		gf->addStatusList("QuestList", "RPG/Listbox", 0.3, 0.1, -1);
 		gf->setSize("QuestList", 0.2, 0.8);
+
+		gf->setSelectedStringCallback("QuestList", [this, gf](std::string s) {
+			assert(_questMapping.find(s) != _questMapping.end());
+			Quest * q = _questMapping[s];
+			gf->clearWidget("QuestEntriesList");
+
+			for (size_t i = 0; i < q->entries.size(); i++) {
+				gf->addTextToWidget("QuestEntriesList", api::EngineController::GetSingleton().getTextManager()->getText(q->entries[i]));
+				if (i < q->entries.size() - 1) {
+					gf->addTextToWidget("QuestEntriesList", " "); // add an empty line between two entries
+				}
+			}
+		});
+
+		gf->addStatusList("QuestEntriesList", "RPG/Listbox", 0.5, 0.1, -1);
+		gf->setSize("QuestEntriesList", 0.45, 0.8);
+		gf->setAutoLineBreak("QuestEntriesList", true);
 	}
 
 	void QuestLog::hide() {
@@ -73,6 +91,7 @@ namespace quest {
 
 		gf->deleteWidget("QuestTypeList");
 		gf->deleteWidget("QuestList");
+		gf->deleteWidget("QuestEntriesList");
 
 		_questMapping.clear();
 	}
@@ -109,11 +128,13 @@ namespace quest {
 					}
 				}
 			}
+			it->second->status = QuestStatus::LOCKED;
 		} else if (status == QuestStatus::RUNNING) {
 			// start quest
 			if (it->second->status == QuestStatus::LOCKED) {
 				auto it2 = getCategoryIterator(it->second->category);
 				it2->second.push_back(it->second);
+				it->second->status = QuestStatus::RUNNING;
 			}
 		} else if (status == QuestStatus::COMPLETED) {
 			// complete quest
@@ -128,6 +149,7 @@ namespace quest {
 			}
 			auto it2 = getCategoryIterator("CompletedQuest");
 			it2->second.push_back(it->second);
+			it->second->status = QuestStatus::COMPLETED;
 		} else if (status == QuestStatus::FAILED) {
 			// failed quest
 			if (it->second->status == QuestStatus::RUNNING) {
@@ -141,6 +163,7 @@ namespace quest {
 			}
 			auto it2 = getCategoryIterator("FailedQuest");
 			it2->second.push_back(it->second);
+			it->second->status = QuestStatus::FAILED;
 		}
 	}
 

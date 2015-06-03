@@ -87,6 +87,7 @@ namespace gui {
 		GuiPauseAnimation,
 		GuiUnpauseAnimation,
 		GuiLoadCanvas,
+		GuiSetAutoLineBreak,
 		GuiMessageTypesCount
 	};
 
@@ -607,6 +608,18 @@ namespace gui {
 			return new GUI_UnpauseAnimation(*this);
 		}
 	} GUI_UnpauseAnimation;
+
+	/**
+	 * \brief sets auto line break to Widget
+	 */
+	typedef struct GUI_SetAutoLineBreak : GUIUpdateMessageStruct {
+		bool enabled;
+		GUI_SetAutoLineBreak(const std::string & name, bool e) : GUIUpdateMessageStruct(name), enabled(e) {
+		}
+		GUI_SetAutoLineBreak * copy() {
+			return new GUI_SetAutoLineBreak(*this);
+		}
+	} GUI_SetAutoLineBreak;
 
 } /* namespace gui */
 } /* namespace api */

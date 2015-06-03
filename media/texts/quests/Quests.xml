@@ -1,6 +1,14 @@
 <?xml version="1.0" ?>
 <!-- quests -->
 <Key key="CollectUsableItemsQuest_Name">
-	<Language name="Deutsch">Sammle 3 benutzbare Items</Language>
+	<Language name="Deutsch">Sammle 3 Verbrauchsgegenstände</Language>
 	<Language name="English">Collect 3 usable items</Language>
+</Key>
+<Key key="CollectUsableItemsQuest_Entry_1">
+	<Language name="Deutsch">NPC1 hat mich gebeten ihm drei der hier herumliegenden Verbrauchsgegenstände zu bringen.</Language>
+	<Language name="English">NPC1 asked me to bring him three of the usable items lying around here.</Language>
+</Key>
+<Key key="CollectUsableItemsQuest_Entry_2">
+	<Language name="Deutsch">Ich habe die Verbrauchsgegenstände abgegeben und den Auftrag abgeschlossen.</Language>
+	<Language name="English">I handed the usable items and completed the quest.</Language>
 </Key>

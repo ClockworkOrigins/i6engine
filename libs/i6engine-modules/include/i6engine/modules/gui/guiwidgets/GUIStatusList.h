@@ -26,7 +26,7 @@
 
 namespace CEGUI {
 	class Listbox;
-}
+} /* namespace CEGUI */
 
 namespace i6engine {
 namespace modules {
@@ -95,9 +95,10 @@ namespace modules {
 
 		uint64_t _startTime;
 		int64_t _lifetime;
-		CEGUI::Listbox * lb;
+		CEGUI::Listbox * _listbox;
 		uint32_t _amount;
 		std::function<void(std::string)> _selectedCallback;
+		bool _autoLineBreak;
 	};
 
 } /* namespace modules */

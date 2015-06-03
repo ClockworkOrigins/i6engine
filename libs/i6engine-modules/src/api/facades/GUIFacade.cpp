@@ -320,6 +320,10 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiUnpauseAnimation, core::Method::Update, new gui::GUI_UnpauseAnimation(name, animation), core::Subsystem::Unknown));
 	}
 
+	void GUIFacade::setAutoLineBreak(const std::string & name, bool enabled) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetAutoLineBreak, core::Method::Update, new gui::GUI_SetAutoLineBreak(name, enabled), core::Subsystem::Unknown));
+	}
+
 	void GUIFacade::addTicker(GUIWidget * widget) {
 		_addTickerCallback(widget);
 	}
