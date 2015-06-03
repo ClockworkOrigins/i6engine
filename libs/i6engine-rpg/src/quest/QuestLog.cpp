@@ -161,6 +161,14 @@ namespace quest {
 		return _quests.end();
 	}
 
+	std::string QuestLog::getQuestName(const std::string & identifier) const {
+		auto it = _parser._quests.find(identifier);
+		if (it == _parser._quests.end()) {
+			ISIXE_THROW_FAILURE("QuestLog", "Quest with identifier '" << identifier << "' not found!");
+		}
+		return api::EngineController::GetSingleton().getTextManager()->getText(it->second->name);
+	}
+
 } /* namespace quest */
 } /* namespace rpg */
 } /* namespace i6engine */

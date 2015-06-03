@@ -45,6 +45,8 @@ namespace item {
 			return _parser.getTemplate(identifier);
 		}
 
+		std::string getItemName(const std::string & identifier) const;
+
 	private:
 		ItemParser _parser;
 

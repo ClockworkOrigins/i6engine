@@ -248,10 +248,10 @@ BOOST_PYTHON_MODULE(ScriptingAPIPython) {
 
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, uint32_t)) &i6engine::python::api::getCurrentTime);
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, const std::set<i6engine::core::Subsystem> &)) &i6engine::python::api::getCurrentTime);
-	def("getIDManager", &i6engine::python::api::getIDManager, return_internal_reference<>());
-	def("getLanguageManager", &i6engine::python::api::getLanguageManager, return_internal_reference<>());
-	def("getTextManager", &i6engine::python::api::getTextManager, return_internal_reference<>());
-	def("getWaynetManager", &i6engine::python::api::getWaynetManager, return_internal_reference<>());
+	def("getIDManager", &i6engine::python::api::getIDManager, return_value_policy<reference_existing_object>());
+	def("getLanguageManager", &i6engine::python::api::getLanguageManager, return_value_policy<reference_existing_object>());
+	def("getTextManager", &i6engine::python::api::getTextManager, return_value_policy<reference_existing_object>());
+	def("getWaynetManager", &i6engine::python::api::getWaynetManager, return_value_policy<reference_existing_object>());
 	def("registerApplication", &i6engine::python::api::registerApplication);
 	def("start", &i6engine::python::api::start);
 	def("setType", &i6engine::python::api::setType);
@@ -294,7 +294,7 @@ BOOST_PYTHON_MODULE(ScriptingAPIPython) {
 		.def("addCallback", &i6engine::python::api::addLanguageFunctionCallback)
 		.def("setLanguage", &i6engine::api::LanguageManager::setLanguage);
 
-	class_<i6engine::api::TextManager, boost::noncopyable>("TextManager", no_init)
+	class_<i6engine::api::TextManager>("TextManager", no_init)
 		.def("getText", &i6engine::api::TextManager::getText);
 
 	class_<i6engine::api::WaynetManager, boost::noncopyable>("WaynetManager", no_init)

@@ -18,6 +18,7 @@
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/manager/TextManager.h"
 
 namespace i6engine {
 namespace rpg {
@@ -38,6 +39,19 @@ namespace item {
 		p.second._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
 
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->createObject(p.first, p.second, api::EngineController::GetSingletonPtr()->getUUID(), false);
+	}
+
+	std::string ItemManager::getItemName(const std::string & identifier) const {
+		auto it = _parser._items.find(identifier);
+		if (it == _parser._items.end()) {
+			ISIXE_THROW_FAILURE("ItemManager", "Item with identifier '" << identifier << "' not found!");
+		}
+		for (auto c : it->second.second._components) {
+			if (c._template == "Name") {
+				return api::EngineController::GetSingleton().getTextManager()->getText(c._params["name"]);
+			}
+		}
+		return "";
 	}
 
 } /* namespace item */

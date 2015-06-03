@@ -25,7 +25,11 @@ namespace i6engine {
 namespace rpg {
 namespace item {
 
+	class ItemManager;
+
 	class ISIXE_RPG_API ItemParser {
+		friend class ItemManager;
+
 	public:
 		ItemParser();
 		~ItemParser();

@@ -21,7 +21,7 @@ def Dialog_NPC1_HaveYouQuest_Info():
 	NPC01.say("Dialog_NPC1_HaveYouQuest_02_Sound", "Dialog_NPC1_HaveYouQuest_02_Subtitle")
 
 	setQuestStatus("CollectUsableItemsQuest", QuestStatus.RUNNING)
-	addLogEntry("CollectUsableItemsQuest", "CollectUsableItemsQuest_Entry_1")
+	addLogEntryHelper("CollectUsableItemsQuest", "CollectUsableItemsQuest_Entry_1")
 	return
 
 def Dialog_NPC1_QuestSolved_Condition():
@@ -39,7 +39,7 @@ def Dialog_NPC1_QuestSolved_Info():
 
 	giveInvItems(Player, NPC01, "UsableItem", 3)
 	giveXP(Player, 500)
-	addLogEntry("CollectUsableItemsQuest", "CollectUsableItemsQuest_Entry_2")
+	addLogEntryHelper("CollectUsableItemsQuest", "CollectUsableItemsQuest_Entry_2")
 	setQuestStatus("CollectUsableItemsQuest", QuestStatus.COMPLETED)
 	return
 

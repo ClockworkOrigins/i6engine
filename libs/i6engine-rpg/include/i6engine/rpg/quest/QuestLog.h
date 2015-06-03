@@ -55,6 +55,8 @@ namespace quest {
 
 		void addLogEntry(const std::string & identifier, const std::string & entry);
 
+		std::string getQuestName(const std::string & identifier) const;
+
 	private:
 		std::map<size_t, std::vector<Quest *>> _quests;
 		QuestParser _parser;

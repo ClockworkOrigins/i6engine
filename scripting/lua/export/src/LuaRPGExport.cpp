@@ -101,6 +101,14 @@ namespace rpg {
 		i6engine::rpg::quest::QuestLog::GetSingleton().addLogEntry(identifier, entry);
 	}
 
+	std::string getItemName(const std::string & identifier) {
+		return i6engine::rpg::item::ItemManager::GetSingleton().getItemName(identifier);
+	}
+
+	std::string getQuestName(const std::string & identifier) {
+		return i6engine::rpg::quest::QuestLog::GetSingleton().getQuestName(identifier);
+	}
+
 } /* namespace rpg */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -150,6 +158,8 @@ scope registerRPG() {
 			],
 
 		def("setQuestStatus", &i6engine::lua::rpg::setQuestStatus),
-		def("addLogEntry", &i6engine::lua::rpg::addLogEntry)
+		def("addLogEntry", &i6engine::lua::rpg::addLogEntry),
+		def("getItemName", &i6engine::lua::rpg::getItemName),
+		def("getQuestName", &i6engine::lua::rpg::getQuestName)
 		;
 }

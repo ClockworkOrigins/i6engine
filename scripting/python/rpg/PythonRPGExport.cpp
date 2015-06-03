@@ -101,6 +101,14 @@ namespace rpg {
 		i6engine::rpg::quest::QuestLog::GetSingleton().addLogEntry(identifier, entry);
 	}
 
+	std::string getItemName(const std::string & identifier) {
+		return i6engine::rpg::item::ItemManager::GetSingleton().getItemName(identifier);
+	}
+
+	std::string getQuestName(const std::string & identifier) {
+		return i6engine::rpg::quest::QuestLog::GetSingleton().getQuestName(identifier);
+	}
+
 } /* namespace rpg */
 } /* namespace python */
 } /* namespace i6engine */
@@ -131,7 +139,9 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 		.def("getLevel", &i6engine::rpg::npc::NPC::getLevel)
 		.add_property("xp", &i6engine::rpg::npc::NPC::getCurrentXP, &i6engine::rpg::npc::NPC::setCurrentXP)
 		.add_property("nextXP", &i6engine::rpg::npc::NPC::getNextXP, &i6engine::rpg::npc::NPC::setNextXP)
-		.add_property("level", &i6engine::rpg::npc::NPC::getLevel, &i6engine::rpg::npc::NPC::setLevel);
+		.add_property("level", &i6engine::rpg::npc::NPC::getLevel, &i6engine::rpg::npc::NPC::setLevel)
+		.def("createItems", &i6engine::rpg::npc::NPC::createItems)
+		.def("removeItems", &i6engine::rpg::npc::NPC::removeItems);
 
 	enum_<i6engine::rpg::quest::QuestStatus>("QuestStatus")
 		.value("LOCKED", i6engine::rpg::quest::QuestStatus::LOCKED)
@@ -142,4 +152,6 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 
 	def("setQuestStatus", &i6engine::python::rpg::setQuestStatus);
 	def("addLogEntry", &i6engine::python::rpg::addLogEntry);
+	def("getItemName", &i6engine::python::rpg::getItemName);
+	def("getQuestName", &i6engine::python::rpg::getQuestName);
 }
