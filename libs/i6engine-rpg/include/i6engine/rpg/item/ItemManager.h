@@ -41,6 +41,10 @@ namespace item {
 
 		void createItem(const std::string & identifier, const Vec3 & pos, const Quaternion & rot);
 
+		std::pair<std::string, i6engine::api::objects::GOTemplate> getTemplate(const std::string & identifier) const {
+			return _parser.getTemplate(identifier);
+		}
+
 	private:
 		ItemParser _parser;
 

@@ -134,6 +134,22 @@ namespace npc {
 		return go->getGOC<components::ExperienceComponent>(components::config::ComponentTypes::ExperienceComponent)->setLevel(xp);
 	}
 
+	void NPC::createItems(const std::string & identifier, uint32_t amount) {
+		auto go = _go.get();
+		if (go == nullptr) {
+			return;
+		}
+		go->getGOC<components::InventoryComponent>(components::config::ComponentTypes::InventoryComponent)->createItems(identifier, amount);
+	}
+
+	void NPC::removeItems(const std::string & identifier, uint32_t amount) {
+		auto go = _go.get();
+		if (go == nullptr) {
+			return;
+		}
+		go->getGOC<components::InventoryComponent>(components::config::ComponentTypes::InventoryComponent)->removeItems(identifier, amount);
+	}
+
 } /* namespace npc */
 } /* namespace rpg */
 } /* namespace i6engine */

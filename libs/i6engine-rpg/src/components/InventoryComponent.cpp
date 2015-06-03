@@ -18,7 +18,12 @@
 
 #include "i6engine/utils/Exceptions.h"
 
+#include "i6engine/api/EngineController.h"
+#include "i6engine/api/facades/ObjectFacade.h"
+
 #include "i6engine/rpg/components/Config.h"
+
+#include "i6engine/rpg/item/ItemManager.h"
 
 namespace i6engine {
 namespace rpg {
@@ -34,6 +39,20 @@ namespace components {
 	api::attributeMap InventoryComponent::synchronize() const {
 		api::attributeMap params;
 		return params;
+	}
+
+	void InventoryComponent::createItems(const std::string & identifier, uint32_t amount) {
+		for (uint32_t i = 0; i < amount; i++) {
+			auto p = item::ItemManager::GetSingleton().getTemplate(identifier);
+			api::attributeMap paramsSSC;
+			paramsSSC.insert(std::make_pair("pos", "0.0 0.0 0.0"));
+			paramsSSC.insert(std::make_pair("rot", "1.0 0.0 0.0 0.0"));
+			p.second._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
+
+			api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO(p.first, p.second, api::EngineController::GetSingletonPtr()->getUUID(), false, [this](api::GOPtr go) {
+				addItem(go);
+			});
+		}
 	}
 
 } /* namespace components */

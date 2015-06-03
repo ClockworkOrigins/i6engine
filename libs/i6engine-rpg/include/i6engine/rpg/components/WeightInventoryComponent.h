@@ -85,6 +85,11 @@ namespace components {
 		uint32_t getItemCount(const std::string & identifier) const override;
 		uint32_t getItemCount(uint32_t item, const std::string & name) const override;
 
+		/**
+		 * \brief used to create an item in the inventory
+		 */
+		void removeItems(const std::string & identifier, uint32_t amount) override;
+
 	private:
 		enum class Filter {
 			None,

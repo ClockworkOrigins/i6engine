@@ -91,6 +91,16 @@ namespace components {
 		virtual std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const = 0;
 
 		/**
+		 * \brief used to create an item in the inventory
+		 */
+		void createItems(const std::string & identifier, uint32_t amount);
+
+		/**
+		 * \brief used to create an item in the inventory
+		 */
+		virtual void removeItems(const std::string & identifier, uint32_t amount) = 0;
+
+		/**
 		 * \brief registers a callback to be called on every change on the item count
 		 */
 		void registerUpdateCallback(const std::function<void(uint32_t, const std::string &, uint32_t)> & callback) {

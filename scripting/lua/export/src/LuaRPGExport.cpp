@@ -135,7 +135,9 @@ scope registerRPG() {
 			.def("getLevel", &i6engine::rpg::npc::NPC::getLevel)
 			.property("xp", &i6engine::rpg::npc::NPC::getCurrentXP, &i6engine::rpg::npc::NPC::setCurrentXP)
 			.property("nextXP", &i6engine::rpg::npc::NPC::getNextXP, &i6engine::rpg::npc::NPC::setNextXP)
-			.property("level", &i6engine::rpg::npc::NPC::getLevel, &i6engine::rpg::npc::NPC::setLevel),
+			.property("level", &i6engine::rpg::npc::NPC::getLevel, &i6engine::rpg::npc::NPC::setLevel)
+			.def("createItems", &i6engine::rpg::npc::NPC::createItems)
+			.def("removeItems", &i6engine::rpg::npc::NPC::removeItems),
 
 		class_<i6engine::rpg::quest::QuestStatus>("QuestStatus")
 			.def(constructor<>())

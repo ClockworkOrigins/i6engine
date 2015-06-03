@@ -34,6 +34,11 @@
 	</Component>
 	<Component template="HumanMovement" owner="true">
 	</Component>
+	<Component template="SlotInventory" owner="true">
+		<Attribute name="maxWeight">1.0</Attribute>
+		<Attribute name="rows">10</Attribute>
+		<Attribute name="columns">10</Attribute>
+	</Component>
 	<Component template="WaynetNavigation" owner="true">
 	</Component>
 	<Component template="Move" owner="true">

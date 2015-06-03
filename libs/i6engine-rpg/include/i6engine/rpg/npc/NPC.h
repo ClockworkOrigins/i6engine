@@ -71,6 +71,9 @@ namespace npc {
 			_queue.checkJobs();
 		}
 
+		void createItems(const std::string & identifier, uint32_t amount);
+		void removeItems(const std::string & identifier, uint32_t amount);
+
 	private:
 		api::WeakGOPtr _go;
 		NPCQueue _queue;

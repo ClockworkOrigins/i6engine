@@ -392,6 +392,21 @@ namespace components {
 		return 0;
 	}
 
+	void WeightInventoryComponent::removeItems(const std::string & identifier, uint32_t amount) {
+		for (uint32_t i = 0; i < amount; i++) {
+			for (auto it = _items.begin(); it != _items.end(); it++) {
+				for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++) {
+					if (std::get<ItemEntry::Identifier>(it2->second) == identifier) {
+						if (--std::get<ItemEntry::Amount>(it2->second) == 0) {
+							it->second.erase(it2);
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+
 	void WeightInventoryComponent::Tick() {
 		processMessages();
 	}

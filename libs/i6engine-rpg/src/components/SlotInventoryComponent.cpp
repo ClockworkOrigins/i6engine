@@ -337,6 +337,36 @@ namespace components {
 		return counter;
 	}
 
+	void SlotInventoryComponent::removeItems(const std::string & identifier, uint32_t amount) {
+		for (uint32_t i = 0; i < amount; i++) {
+			bool erased = false;
+			for (size_t j = 0; j < _slots.size(); j++) {
+				for (size_t k = 0; k < _slots[j].size(); k++) {
+					if (_slots[j][k] != UINT16_MAX) {
+						if (std::get<ItemEntry::Identifier>(_items[_slots[j][k]]) == identifier) {
+							uint16_t index = _slots[j][k];
+							for (size_t l = 0; l < _slots.size(); l++) {
+								for (size_t m = 0; m < _slots[l].size(); m++) {
+									if (_slots[l][m] == index) {
+										_slots[l][m] = UINT16_MAX;
+									} else if (_slots[l][m] > index && _slots[l][m] != UINT16_MAX) {
+										_slots[l][m]--;
+									}
+								}
+							}
+							_items.erase(_items.begin() + int(index));
+							erased = true;
+							break;
+						}
+					}
+				}
+				if (erased) {
+					break;
+				}
+			}
+		}
+	}
+
 	void SlotInventoryComponent::Tick() {
 		processMessages();
 	}
