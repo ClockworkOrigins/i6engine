@@ -313,6 +313,8 @@ namespace components {
 								counter++;
 							}
 						}
+					} else if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
+						hide();
 					}
 				}
 			}

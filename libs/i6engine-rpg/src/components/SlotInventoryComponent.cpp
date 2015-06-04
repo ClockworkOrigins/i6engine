@@ -259,7 +259,7 @@ namespace components {
 					_slotMarker = false;
 					_currentIndex = UINT16_MAX;
 				}
-			} if (msg->getSubtype() == api::mouse::MouseMessageTypes::MouButton) {
+			} else if (msg->getSubtype() == api::mouse::MouseMessageTypes::MouButton) {
 				api::MouseButtonID mbi = dynamic_cast<api::input::Input_Button_Update *>(msg->getContent())->code;
 				bool pressed = dynamic_cast<api::input::Input_Button_Update *>(msg->getContent())->pressed;
 
@@ -270,6 +270,12 @@ namespace components {
 							show();
 						}, _currentIndex);
 					}
+				}
+			} else if (msg->getSubtype() == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
+				api::KeyCode kc = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->code;
+				api::KeyState ks = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->pressed;
+				if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
+					hide();
 				}
 			}
 		}

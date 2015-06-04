@@ -23,6 +23,9 @@
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Singleton.h"
 
+#include "i6engine/api/GameMessage.h"
+#include "i6engine/api/facades/MessageSubscriberFacade.h"
+
 #include "i6engine/rpg/quest/QuestParser.h"
 
 namespace i6engine {
@@ -32,7 +35,7 @@ namespace quest {
 	enum class QuestStatus;
 	struct Quest;
 
-	class ISIXE_RPG_API QuestLog : public utils::Singleton<QuestLog> {
+	class ISIXE_RPG_API QuestLog : public utils::Singleton<QuestLog>, public api::MessageSubscriberFacade {
 	public:
 		QuestLog();
 
@@ -66,6 +69,8 @@ namespace quest {
 		std::map<std::string, Quest *> _questMapping;
 
 		std::map<size_t, std::vector<Quest *>>::iterator getCategoryIterator(const std::string & category);
+
+		void News(const api::GameMessage::Ptr & msg);
 	};
 
 } /* namespace quest */

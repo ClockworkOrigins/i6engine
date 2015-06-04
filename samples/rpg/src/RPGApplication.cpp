@@ -20,6 +20,15 @@
 #include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/GraphicsFacade.h"
 #include "i6engine/api/facades/InputFacade.h"
+#include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/objects/GameObject.h"
+
+#include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/InventoryComponent.h"
+
+#include "i6engine/rpg/dialog/DialogManager.h"
+
+#include "i6engine/rpg/quest/QuestLog.h"
 
 #include "boost/bind.hpp"
 
@@ -35,7 +44,12 @@ namespace sample {
 		i6engine::rpg::RPGApplication::AfterInitialize();
 
 		// register ESC to close the application
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, []() {
+			auto go = *i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").begin();
+			if (!go->getGOC<i6engine::rpg::components::InventoryComponent>(i6engine::rpg::components::config::ComponentTypes::InventoryComponent)->isActive() && !i6engine::rpg::dialog::DialogManager::GetSingleton().isDialogRunning() && !i6engine::rpg::quest::QuestLog::GetSingleton().isActive()) {
+				i6engine::api::EngineController::GetSingletonPtr()->stop();
+			}
+		});
 
 		// register F12 to take screenshot
 		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F12, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::GraphicsFacade::takeScreenshot, i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "RPGScreen_", ".jpg"));

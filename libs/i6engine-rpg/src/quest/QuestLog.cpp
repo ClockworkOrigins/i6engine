@@ -17,7 +17,11 @@
 #include "i6engine/rpg/quest/QuestLog.h"
 
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/GUIFacade.h"
+#include "i6engine/api/facades/InputFacade.h"
+#include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/manager/TextManager.h"
 
 #include "i6engine/rpg/quest/Quest.h"
@@ -30,6 +34,7 @@ namespace quest {
 	}
 
 	void QuestLog::show() {
+		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, QuestLog::News, this);
 		_active = true;
 
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
@@ -82,9 +87,15 @@ namespace quest {
 		gf->addStatusList("QuestEntriesList", "RPG/Listbox", 0.5, 0.1, -1);
 		gf->setSize("QuestEntriesList", 0.45, 0.8);
 		gf->setAutoLineBreak("QuestEntriesList", true);
+
+		api::EngineController::GetSingleton().registerTimer(100000, [this]() {
+			processMessages();
+			return _active;
+		}, true, 1);
 	}
 
 	void QuestLog::hide() {
+		ISIXE_UNREGISTERMESSAGETYPE(api::messages::InputMessageType);
 		_active = false;
 
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
@@ -190,6 +201,21 @@ namespace quest {
 			ISIXE_THROW_FAILURE("QuestLog", "Quest with identifier '" << identifier << "' not found!");
 		}
 		return api::EngineController::GetSingleton().getTextManager()->getText(it->second->name);
+	}
+
+	void QuestLog::News(const api::GameMessage::Ptr & msg) {
+		if (!_active) {
+			return;
+		}
+		if (msg->getMessageType() == api::messages::InputMessageType) {
+			if (msg->getSubtype() == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
+				api::KeyCode kc = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->code;
+				api::KeyState ks = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->pressed;
+				if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
+					hide();
+				}
+			}
+		}
 	}
 
 } /* namespace quest */

@@ -259,7 +259,9 @@ namespace core {
 			if (m->getMessageType() == messages::MessageTypes::SubsystemMessageType) {
 				continue;
 			}
-			assert(_ptrMessageMethod.find(m->getMessageType()) != _ptrMessageMethod.end());
+			if (_ptrMessageMethod.find(m->getMessageType()) == _ptrMessageMethod.end()) {
+				continue;
+			}
 
 #ifdef ISIXE_WITH_PROFILING
 			m->getContent()->insertTimestamp("MessageSubscriber processMessages");
