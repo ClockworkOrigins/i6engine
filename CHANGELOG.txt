@@ -4,6 +4,7 @@ Enhancements:
 	- added generic method for enum classes to be used in streams (just include i6engine/utils/EnumClassStream.h)
 	- added basic quest support and functionality to open Quest Log (default: J)
 	- using ESC can be used now to close inventory, questlog and skip dialogs
+	- added a particle effect for moving light in SampleShadow and SampleCompositor and slowed down the speed of the light
 
 v 0.8.6
 
