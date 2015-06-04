@@ -50,12 +50,12 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		for (auto it = _sounds.begin(); it != _sounds.end(); ) {
 			ALint state;
-			alGetSourcei(std::get<0>(*it), AL_SOURCE_STATE, &state);
+			alGetSourcei(std::get<SoundEntry::Source>(*it), AL_SOURCE_STATE, &state);
 
 			if (state == AL_STOPPED) {
-				std::get<2>(*it)(true);
-				alDeleteSources(1, &std::get<0>(*it));	// Delete the OpenAL Source
-				alDeleteBuffers(1, &std::get<1>(*it));	// Delete the OpenAL Buffer
+				std::get<SoundEntry::Callback>(*it)(true);
+				alDeleteSources(1, &std::get<SoundEntry::Source>(*it));	// Delete the OpenAL Source
+				alDeleteBuffers(1, &std::get<SoundEntry::Buffer>(*it));	// Delete the OpenAL Buffer
 				it = _sounds.erase(it);
 			} else {
 				it++;
@@ -70,11 +70,13 @@ namespace modules {
 		if (type == api::audio::AudioPlaySound) {
 			api::audio::Audio_PlaySound_Create * apsc = dynamic_cast<api::audio::Audio_PlaySound_Create *>(msg->getContent());
 
-			playSound(apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable);
+			playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable);
 		} else if (type == api::audio::AudioPlaySoundWithCallback) {
 			api::audio::Audio_PlaySoundWithCallback_Create * apsc = dynamic_cast<api::audio::Audio_PlaySoundWithCallback_Create *>(msg->getContent());
 
-			playSound(apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable, apsc->callback);
+			playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable, apsc->callback);
+		} else {
+			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 		}
 	}
 
@@ -86,11 +88,36 @@ namespace modules {
 			api::audio::Audio_Listener_Update * alu = dynamic_cast<api::audio::Audio_Listener_Update *>(msg->getContent());
 
 			updateListener(alu->position, alu->rotation, alu->velocity);
+		} else {
+			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 		}
 	}
 
 	void AudioManager::NewsDelete(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		uint16_t type = msg->getSubtype();
+		if (type == api::audio::AudioStopSound) {
+			api::audio::Audio_StopSound_Delete * ass = dynamic_cast<api::audio::Audio_StopSound_Delete *>(msg->getContent());
+
+			for (auto it = _sounds.begin(); it != _sounds.end(); it++) {
+				if (std::get<SoundEntry::Handle>(*it) == ass->handle) {
+					ALint state;
+					alGetSourcei(std::get<SoundEntry::Source>(*it), AL_SOURCE_STATE, &state);
+					if (state == AL_STOPPED) {
+						std::get<SoundEntry::Callback>(*it)(true);
+					} else if (state == AL_PLAYING) {
+						std::get<SoundEntry::Callback>(*it)(false);
+						alSourceStop(std::get<SoundEntry::Source>(*it));
+					}
+					alDeleteSources(1, &std::get<SoundEntry::Source>(*it));
+					alDeleteBuffers(1, &std::get<SoundEntry::Buffer>(*it));
+					_sounds.erase(it);
+					break;
+				}
+			}
+		} else {
+			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
+		}
 	}
 
 	void AudioManager::NewsNodeCreate(const api::GameMessage::Ptr & msg) {
@@ -108,6 +135,8 @@ namespace modules {
 					_cachedSounds.insert(std::make_pair(anc->file, _nodes[msg->getContent()->getID()]->_wavFile));
 				}
 			}
+		} else {
+			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 		}
 	}
 
@@ -126,6 +155,8 @@ namespace modules {
 
 		if (type == api::audio::AudioNode) {
 			_nodes.erase(msg->getContent()->getID());
+		} else {
+			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 		}
 	}
 
@@ -141,7 +172,7 @@ namespace modules {
 		alListenerfv(AL_VELOCITY, ListenerVel);		// Set velocity of the listener
 	}
 
-	void AudioManager::playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::function<void(bool)> & callback) {
+	void AudioManager::playSound(uint64_t handle, const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::function<void(bool)> & callback) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		auto it = _cachedSounds.find(file);
 		boost::shared_ptr<WavFile> wh;
@@ -150,7 +181,7 @@ namespace modules {
 		} else {
 			try {
 				wh = loadWavFile(file);
-			} catch (utils::exceptions::ApiException & e) {
+			} catch (utils::exceptions::ApiException &) {
 				callback(false);
 				return;
 			}
@@ -206,7 +237,7 @@ namespace modules {
 		// PLAY 
 		alSourcePlay(source);							// Play the sound buffer linked to the source
 
-		_sounds.push_back(std::make_tuple(source, buffer, callback));
+		_sounds.push_back(std::make_tuple(source, buffer, callback, handle));
 	}
 
 } /* namespace modules */

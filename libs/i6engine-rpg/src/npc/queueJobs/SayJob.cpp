@@ -22,10 +22,14 @@
 #include "i6engine/math/i6eMath.h"
 
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
+#include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/AudioFacade.h"
 #include "i6engine/api/facades/GUIFacade.h"
+#include "i6engine/api/facades/InputFacade.h"
+#include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/manager/TextManager.h"
 #include "i6engine/api/objects/GameObject.h"
@@ -39,10 +43,11 @@ namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	SayJob::SayJob(NPC * self, const std::string & soundKey, const std::string & subtitleKey, const std::vector<WaitSayJob *> & jobs) : _self(self), _soundKey(soundKey), _subtitleKey(subtitleKey), _jobs(jobs), _startTime(), _subtitleDuration(), _soundFound(true), _soundFinished(false) {
+	SayJob::SayJob(NPC * self, const std::string & soundKey, const std::string & subtitleKey, const std::vector<WaitSayJob *> & jobs) : api::MessageSubscriberFacade(), _self(self), _soundKey(soundKey), _subtitleKey(subtitleKey), _jobs(jobs), _startTime(), _subtitleDuration(), _soundFound(true), _soundFinished(false), _soundHandle() {
 	}
 
 	void SayJob::start() {
+		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, SayJob::News, this);
 		// print subtitle
 		_startTime = api::EngineController::GetSingleton().getCurrentTime();
 		std::string subtitleText = api::EngineController::GetSingleton().getTextManager()->getText(_subtitleKey);
@@ -56,7 +61,7 @@ namespace npc {
 
 		// start sound
 		auto psc = _self->getGO()->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent);
-		api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(api::EngineController::GetSingleton().getTextManager()->getText(_soundKey), config::DIALOG_MAX_DISTANCE, psc->getPosition(), math::rotateVector(Vec3(0.0, 0.0, 1.0), psc->getRotation()), false, [this](bool b) {
+		_soundHandle = api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(api::EngineController::GetSingleton().getTextManager()->getText(_soundKey), config::DIALOG_MAX_DISTANCE, psc->getPosition(), math::rotateVector(Vec3(0.0, 0.0, 1.0), psc->getRotation()), false, [this](bool b) {
 			if (b) {
 				_soundFinished = true;
 			} else {
@@ -75,9 +80,11 @@ namespace npc {
 	}
 
 	void SayJob::loop() {
+		processMessages();
 	}
 
 	void SayJob::finish() {
+		ISIXE_UNREGISTERMESSAGETYPE(api::messages::InputMessageType);
 		api::EngineController::GetSingleton().getObjectFacade()->deleteAllObjectsOfType("DialogCam");
 		for (WaitSayJob * j : _jobs) {
 			j->setFinished(true);
@@ -87,6 +94,20 @@ namespace npc {
 
 	bool SayJob::condition() {
 		return (_soundFound && _soundFinished) || (!_soundFound && api::EngineController::GetSingleton().getCurrentTime() - _startTime >= _subtitleDuration);
+	}
+
+	void SayJob::News(const api::GameMessage::Ptr & msg) {
+		if (msg->getMessageType() == api::messages::InputMessageType) {
+			if (msg->getSubtype() == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
+				api::KeyCode kc = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->code;
+				api::KeyState ks = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->pressed;
+				if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
+					api::EngineController::GetSingleton().getAudioFacade()->stopSound(_soundHandle);
+					_soundFound = false;
+					_subtitleDuration = 0;
+				}
+			}
+		}
 	}
 
 } /* namespace npc */

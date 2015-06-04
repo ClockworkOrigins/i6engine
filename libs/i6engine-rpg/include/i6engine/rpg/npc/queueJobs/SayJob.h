@@ -21,6 +21,9 @@
 #include <string>
 #include <vector>
 
+#include "i6engine/api/GameMessage.h"
+#include "i6engine/api/facades/MessageSubscriberFacade.h"
+
 #include "i6engine/rpg/npc/NPCQueueJob.h"
 
 namespace i6engine {
@@ -30,7 +33,7 @@ namespace npc {
 	class NPC;
 	class WaitSayJob;
 
-	class SayJob : public NPCQueueJob {
+	class SayJob : public NPCQueueJob, public api::MessageSubscriberFacade {
 	public:
 		SayJob(NPC * self, const std::string & soundKey, const std::string & subtitleKey, const std::vector<WaitSayJob *> & jobs);
 
@@ -54,6 +57,9 @@ namespace npc {
 		uint64_t _subtitleDuration;
 		bool _soundFound;
 		bool _soundFinished;
+		uint64_t _soundHandle;
+
+		void News(const api::GameMessage::Ptr & msg);
 	};
 
 } /* namespace npc */

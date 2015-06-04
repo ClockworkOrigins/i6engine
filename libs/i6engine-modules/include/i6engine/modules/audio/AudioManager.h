@@ -67,7 +67,13 @@ namespace modules {
 
 		std::map<int64_t, boost::shared_ptr<AudioNode>> _nodes;
 
-		std::vector<std::tuple<ALuint, ALuint, std::function<void(bool)>>> _sounds;
+		enum SoundEntry {
+			Source,
+			Buffer,
+			Callback,
+			Handle
+		};
+		std::vector<std::tuple<ALuint, ALuint, std::function<void(bool)>, uint64_t>> _sounds;
 
 		std::map<std::string, boost::shared_ptr<WavFile>> _cachedSounds;
 
@@ -89,7 +95,7 @@ namespace modules {
 		/**
 		 * \brief plays given sound
 		 */
-		void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::function<void(bool)> & callback = [](bool) {});
+		void playSound(uint64_t handle, const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::function<void(bool)> & callback = [](bool) {});
 
 		/**
 		 * \brief forbidden

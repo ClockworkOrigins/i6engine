@@ -40,6 +40,7 @@ namespace audio {
 		AudioUnlock,
 		AudioPlaySound,
 		AudioPlaySoundWithCallback,
+		AudioStopSound,
 		AudioMessageTypesCount
 	};
 
@@ -101,12 +102,13 @@ namespace audio {
 	 * \brief plays given sound once
 	 */
 	typedef struct Audio_PlaySound_Create : GameMessageStruct {
+		uint64_t handle;
 		std::string file;
 		double maxDist;
 		Vec3 position;
 		Vec3 direction;
 		bool cacheable;
-		Audio_PlaySound_Create(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c) : GameMessageStruct(), file(f), maxDist(m), position(p), direction(d), cacheable(c) {
+		Audio_PlaySound_Create(uint64_t h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c) {
 		}
 		Audio_PlaySound_Create * copy() {
 			return new Audio_PlaySound_Create(*this);
@@ -117,18 +119,31 @@ namespace audio {
 	 * \brief plays given sound with callback
 	 */
 	typedef struct Audio_PlaySoundWithCallback_Create : GameMessageStruct {
+		uint64_t handle;
 		std::string file;
 		double maxDist;
 		Vec3 position;
 		Vec3 direction;
 		bool cacheable;
 		std::function<void(bool)> callback;
-		Audio_PlaySoundWithCallback_Create(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c, const std::function<void(bool)> & cb) : GameMessageStruct(), file(f), maxDist(m), position(p), direction(d), cacheable(c), callback(cb) {
+		Audio_PlaySoundWithCallback_Create(uint64_t h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c, const std::function<void(bool)> & cb) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c), callback(cb) {
 		}
 		Audio_PlaySoundWithCallback_Create * copy() {
 			return new Audio_PlaySoundWithCallback_Create(*this);
 		}
 	} Audio_PlaySoundWithCallback_Create;
+
+	/**
+	 * \brief stops given sound
+	 */
+	typedef struct Audio_StopSound_Delete : GameMessageStruct {
+		uint64_t handle;
+		Audio_StopSound_Delete(uint64_t h) : GameMessageStruct(), handle(h) {
+		}
+		Audio_StopSound_Delete * copy() {
+			return new Audio_StopSound_Delete(*this);
+		}
+	} Audio_StopSound_Delete;
 
 } /* namespace audio */
 } /* namespace api */

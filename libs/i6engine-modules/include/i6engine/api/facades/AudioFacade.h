@@ -22,6 +22,7 @@
 #ifndef __I6ENGINE_API_AUDIOFACADE_H__
 #define __I6ENGINE_API_AUDIOFACADE_H__
 
+#include <atomic>
 #include <cstdint>
 #include <functional>
 
@@ -59,12 +60,17 @@ namespace api {
 		/**
 		 * \brief plays given sound once
 		 */
-		void playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable);
+		uint64_t playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable);
 
 		/**
 		 * \brief plays given sound if found and calls callback afterwards
 		 */
-		void playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::function<void(bool)> callback);
+		uint64_t playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::function<void(bool)> callback);
+
+		/**
+		 * \brief stops sound with this handle ID
+		 */
+		void stopSound(uint64_t handle);
 
 		/**
 		 * \brief resets the subsystem to it's defaults
@@ -72,6 +78,8 @@ namespace api {
 		void resetSubSystem();
 
 	private:
+		std::atomic<uint64_t> _handleCounter;
+
 		/**
 		 * \brief forbidden
 		 */

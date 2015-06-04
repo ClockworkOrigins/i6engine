@@ -40,20 +40,24 @@ namespace audio {
 		i6engine::api::EngineController::GetSingleton().getAudioFacade()->updatePosition(comId, position);
 	}
 
-	void playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
-		i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir, cacheable);
+	uint64_t playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
+		return i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir, cacheable);
 	}
 
-	void playSoundWithCallbackScript(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & file, const std::string & func) {
-		i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, [file, func](bool b) {
+	uint64_t playSoundWithCallbackScript(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & file, const std::string & func) {
+		return i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, [file, func](bool b) {
 			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(file, func, b);
 		});
 	}
 
-	void playSoundWithCallbackFunction(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & func) {
-		i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, [func](bool b) {
+	uint64_t playSoundWithCallbackFunction(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & func) {
+		return i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, [func](bool b) {
 			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, b);
 		});
+	}
+
+	void stopSound(uint64_t handle) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->stopSound(handle);
 	}
 
 	void resetAudioSubSystem() {
@@ -74,5 +78,6 @@ BOOST_PYTHON_MODULE(ScriptingAudioPython) {
 	def("playSound", &i6engine::python::audio::playSound);
 	def("playSoundWithCallback", &i6engine::python::audio::playSoundWithCallbackScript);
 	def("playSoundWithCallback", &i6engine::python::audio::playSoundWithCallbackFunction);
+	def("stopSound", &i6engine::python::audio::stopSound);
 	def("resetAudioSubSystem", &i6engine::python::audio::resetAudioSubSystem);
 }

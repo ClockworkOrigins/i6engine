@@ -25,7 +25,8 @@
 namespace i6engine {
 namespace api {
 
-	AudioFacade::AudioFacade() {}
+	AudioFacade::AudioFacade() : _handleCounter(0) {
+	}
 
 	AudioFacade::~AudioFacade() {
 	}
@@ -46,12 +47,20 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPosition, core::Method::Update, new audio::Audio_Position_Update(comId, position), core::Subsystem::Unknown));
 	}
 
-	void AudioFacade::playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable) {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySound, core::Method::Create, new audio::Audio_PlaySound_Create(f, m, p, d, cacheable), core::Subsystem::Unknown));
+	uint64_t AudioFacade::playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable) {
+		uint64_t handle = _handleCounter++;
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySound, core::Method::Create, new audio::Audio_PlaySound_Create(handle, f, m, p, d, cacheable), core::Subsystem::Unknown));
+		return handle;
 	}
 
-	void AudioFacade::playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::function<void(bool)> callback) {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySoundWithCallback, core::Method::Create, new audio::Audio_PlaySoundWithCallback_Create(f, m, p, d, cacheable, callback), core::Subsystem::Unknown));
+	uint64_t AudioFacade::playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::function<void(bool)> callback) {
+		uint64_t handle = _handleCounter++;
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySoundWithCallback, core::Method::Create, new audio::Audio_PlaySoundWithCallback_Create(handle, f, m, p, d, cacheable, callback), core::Subsystem::Unknown));
+		return handle;
+	}
+
+	void AudioFacade::stopSound(uint64_t handle) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioStopSound, core::Method::Delete, new audio::Audio_StopSound_Delete(handle), core::Subsystem::Unknown));
 	}
 
 	void AudioFacade::resetSubSystem() {
