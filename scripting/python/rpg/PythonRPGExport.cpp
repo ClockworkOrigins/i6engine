@@ -28,6 +28,7 @@
 
 #include "i6engine/rpg/npc/NPC.h"
 #include "i6engine/rpg/npc/NPCManager.h"
+#include "i6engine/rpg/npc/NPCQueueJob.h"
 
 #include "i6engine/rpg/quest/Quest.h"
 #include "i6engine/rpg/quest/QuestLog.h"

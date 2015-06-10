@@ -19,11 +19,13 @@
 
 #include "../../common/include/CommonApplication.h"
 
+#include "i6engine/rpg/RPGApplication.h"
+
 #include "clockUtils/iniParser/iniParser.h"
 
 namespace sample {
 
-	class WaynetApplication : public CommonApplication {
+	class WaynetApplication : public CommonApplication, public i6engine::rpg::RPGApplication {
 	public:
 		WaynetApplication();
 
@@ -32,6 +34,22 @@ namespace sample {
 		void Initialize();
 
 		void AfterInitialize();
+
+		void Tick() {}
+
+		void Finalize() {
+			CommonApplication::Finalize();
+			RPGApplication::Finalize();
+		}
+
+		void ShutDown() {
+			CommonApplication::ShutDown();
+			RPGApplication::ShutDown();
+		}
+
+		bool ShutdownRequest() {
+			return true;
+		}
 
 	private:
 		clockUtils::iniParser::IniParser _iniParser;

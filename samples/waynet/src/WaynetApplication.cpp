@@ -51,7 +51,7 @@
 
 namespace sample {
 
-	WaynetApplication::WaynetApplication() : CommonApplication(true, false), _iniParser() {
+	WaynetApplication::WaynetApplication() : CommonApplication(true, false), RPGApplication(), _iniParser() {
 		_iniParser.load("RPG.ini");
 	}
 
@@ -60,10 +60,12 @@ namespace sample {
 
 	void WaynetApplication::Initialize() {
 		ISIXE_REGISTERMESSAGETYPE(i6engine::api::messages::InputMessageType, WaynetApplication::News, this);
+		RPGApplication::Initialize();
 	}
 
 	void WaynetApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
+		RPGApplication::AfterInitialize();
 
 		// sets gravity for the game... here like on earth
 		std::string gravityString;

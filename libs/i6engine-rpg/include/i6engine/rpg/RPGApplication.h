@@ -24,7 +24,7 @@
 namespace i6engine {
 namespace rpg {
 
-	class ISIXE_RPG_API RPGApplication : public i6engine::api::Application {
+	class ISIXE_RPG_API RPGApplication : virtual public i6engine::api::Application {
 	public:
 		RPGApplication();
 
