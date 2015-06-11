@@ -29,7 +29,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	InventoryComponent::InventoryComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _shown(false), _callbacks() {
+	InventoryComponent::InventoryComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _shown(false), _callbacks(), _trading(false) {
 		_objFamilyID = config::ComponentTypes::InventoryComponent;
 	}
 
@@ -53,6 +53,11 @@ namespace components {
 				addItem(go);
 			});
 		}
+	}
+
+	void InventoryComponent::startTrade(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory, double selfMultiplier, double otherMultiplier) {
+		showTradeView(false);
+		otherInventory->showTradeView(true);
 	}
 
 } /* namespace components */

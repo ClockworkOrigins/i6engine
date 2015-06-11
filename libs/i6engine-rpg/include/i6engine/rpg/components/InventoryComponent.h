@@ -107,9 +107,21 @@ namespace components {
 			_callbacks.push_back(callback);
 		}
 
+		/**
+		 * \brief starts trading with other inventory
+		 * \param[in] otherInventory inventory of the other NPC to trade with
+		 * \param[in] selfMultiplier multiplier for the value player gets when selling item (1.0 = full value, 0.1 = 10 percent of value)
+		 * \param[in] otherMultiplier multiplier for the value player has to pay buying item (1.0 = full value, 0.1 = 10 percent of value)
+		 */
+		void startTrade(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory, double selfMultiplier, double otherMultiplier);
+
 	protected:
 		bool _shown;
 		std::vector<std::function<void(uint32_t, const std::string &, uint32_t)>> _callbacks;
+		bool _trading;
+
+		virtual void showTradeView(bool other) {
+		}//= 0;
 	};
 
 } /* namespace components */
