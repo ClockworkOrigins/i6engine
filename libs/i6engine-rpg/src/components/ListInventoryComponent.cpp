@@ -103,13 +103,19 @@ namespace components {
 
 		api::graphics::Resolution res = api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution();
 
+		double startPos = 0.6;
+
+		if (!_isSelfInventory) {
+			startPos = 0.05;
+		}
+
 		double width = 0.35 / _columns;
 		double height = (width * res.width) / res.height;
 
 		_slotCount = 0;
 		for (uint32_t i = 0; 0.1 + height * (i / _columns + 1) < 0.8; i++) {
 			std::string namePrefix = "Inventory_" + std::to_string(_id) + "_" + std::to_string(i) + "_";
-			gf->addImage(namePrefix + "Back", "RPG/StaticImage", "RPG_Inventory_Back", "Back", 0.6 + width * (i % _columns), 0.1 + height * (i / _columns), width, height);
+			gf->addImage(namePrefix + "Back", "RPG/StaticImage", "RPG_Inventory_Back", "Back", startPos + width * (i % _columns), 0.1 + height * (i / _columns), width, height);
 			_slotCount++;
 		}
 		if (_maxSlot == 0) {
@@ -117,7 +123,9 @@ namespace components {
 		}
 
 		// info screen in the middle of the bottom
-		gf->addImage("Inventory_InfoScreen", "RPG/StaticImage", "RPG", "TbM_Filling", 0.25, 0.8, 0.5, 0.15);
+		if (_isSelfInventory) {
+			gf->addImage("Inventory_InfoScreen", "RPG/StaticImage", "RPG", "TbM_Filling", 0.25, 0.8, 0.5, 0.15);
+		}
 		showItems();
 
 		if (_currentIndex >= _itemTypeCount && _currentIndex != 0) {
@@ -125,8 +133,8 @@ namespace components {
 		}
 		for (uint32_t i = 0; i < _slotCount; i++) {
 			std::string namePrefix = "Inventory_" + std::to_string(_id) + "_" + std::to_string(i) + "_";
-			gf->addImage(namePrefix + "Slot", "RPG/StaticImage", "RPG_Inventory_Slot", "Slot", 0.6 + width * (i % _columns), 0.1 + height * (i / _columns), width, height);
-			if (i == _currentIndex) {
+			gf->addImage(namePrefix + "Slot", "RPG/StaticImage", "RPG_Inventory_Slot", "Slot", startPos + width * (i % _columns), 0.1 + height * (i / _columns), width, height);
+			if (i == _currentIndex && _isSelfInventory) {
 				gf->setImage(namePrefix + "Slot", "RPG_Inventory_Highlighted", "Highlighted");
 			}
 		}
@@ -273,6 +281,7 @@ namespace components {
 						}
 					} else if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
 						hide();
+						_trading = false;
 					}
 				}
 			}
@@ -353,6 +362,10 @@ namespace components {
 
 	void ListInventoryComponent::Tick() {
 		processMessages();
+	}
+
+	void ListInventoryComponent::showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) {
+		show();
 	}
 
 } /* namespace components */

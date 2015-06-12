@@ -40,7 +40,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	WeightInventoryComponent::WeightInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _items(), _maxWeight(), _currentWeight(0), _currentIndex(), _maxShowIndex(), _currentFilter(Filter::None), _slotsPerView(), _widgetList() {
+	WeightInventoryComponent::WeightInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _items(), _maxWeight(), _currentWeight(0), _currentIndex(), _maxShowIndex(), _currentFilter(Filter::None), _slotsPerView(), _widgetList(), _otherInventory() {
 		_objComponentID = config::ComponentTypes::WeightInventoryComponent;
 		_maxWeight = std::stoul(params.find("maxWeight")->second);
 	}
@@ -129,9 +129,31 @@ namespace components {
 				show();
 			}
 		});
-		gf->addPrint("WeightInventory_Weight", "RPG/Blanko", 0.8, 0.05, utils::to_string_with_precision(_currentWeight, 3) + " / " + utils::to_string_with_precision(_maxWeight, 3), api::gui::Alignment::Left, -1);
-		if (std::abs(_maxWeight) < 1e-15) {
-			gf->setVisibility("WeightInventory_Weight", false);
+		if (_trading) {
+			if (!_isSelfInventory) {
+				gf->addImageButton("WeightInventory_Sell", "RPG/ImageButton", 0.25, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
+				gf->subscribeEvent("WeightInventory_Sell", "Clicked", [this]() {
+					hide();
+					_otherInventory.get()->show();
+				});
+			} else {
+				gf->addImageButton("WeightInventory_Buy", "RPG/ImageButton", 0.25, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
+				gf->subscribeEvent("WeightInventory_Buy", "Clicked", [this]() {
+					hide();
+					_otherInventory.get()->show();
+				});
+			}
+		}
+		if (_isSelfInventory) {
+			gf->addPrint("WeightInventory_Weight", "RPG/Blanko", 0.8, 0.05, utils::to_string_with_precision(_currentWeight, 3) + " / " + utils::to_string_with_precision(_maxWeight, 3), api::gui::Alignment::Left, -1);
+			if (std::abs(_maxWeight) < 1e-15) {
+				gf->setVisibility("WeightInventory_Weight", false);
+			}
+		} else {
+			gf->addPrint("WeightInventory_Weight", "RPG/Blanko", 0.8, 0.05, utils::to_string_with_precision(_otherInventory.get()->_currentWeight, 3) + " / " + utils::to_string_with_precision(_otherInventory.get()->_maxWeight, 3), api::gui::Alignment::Left, -1);
+			if (std::abs(_otherInventory.get()->_maxWeight) < 1e-15) {
+				gf->setVisibility("WeightInventory_Weight", false);
+			}
 		}
 		// calculate list slots
 		_slotsPerView = uint32_t(0.8 / 0.05);
@@ -223,6 +245,13 @@ namespace components {
 		gf->deleteWidget("WeightInventory_Category_All");
 		gf->deleteWidget("WeightInventory_Category_Usable");
 		gf->deleteWidget("WeightInventory_Weight");
+		if (_trading) {
+			if (_isSelfInventory) {
+				gf->deleteWidget("WeightInventory_Buy");
+			} else {
+				gf->deleteWidget("WeightInventory_Sell");
+			}
+		}
 		for (std::string s : _widgetList) {
 			gf->deleteWidget(s);
 		}
@@ -315,6 +344,7 @@ namespace components {
 						}
 					} else if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
 						hide();
+						_trading = false;
 					}
 				}
 			}
@@ -411,6 +441,13 @@ namespace components {
 
 	void WeightInventoryComponent::Tick() {
 		processMessages();
+	}
+
+	void WeightInventoryComponent::showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) {
+		_otherInventory = utils::dynamic_pointer_cast<WeightInventoryComponent>(otherInventory);
+		if (!_isSelfInventory) {
+			show();
+		}
 	}
 
 } /* namespace components */

@@ -119,9 +119,9 @@ namespace components {
 		bool _shown;
 		std::vector<std::function<void(uint32_t, const std::string &, uint32_t)>> _callbacks;
 		bool _trading;
+		bool _isSelfInventory;
 
-		virtual void showTradeView(bool other) {
-		}//= 0;
+		virtual void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) = 0;
 	};
 
 } /* namespace components */

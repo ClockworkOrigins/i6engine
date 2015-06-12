@@ -115,7 +115,6 @@ namespace components {
 		std::vector<std::vector<uint16_t>> _slots;
 		std::vector<std::tuple<uint32_t, std::string, api::GameMessage::Ptr, std::string, std::string, uint16_t, uint16_t, std::vector<std::pair<std::string, std::string>>, std::string>> _items;
 
-
 		/**
 		 * \brief tries to use given item
 		 */
@@ -123,6 +122,8 @@ namespace components {
 
 		void News(const api::GameMessage::Ptr & msg) override;
 		void Tick() override;
+
+		void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) override;
 	};
 
 } /* namespace components */

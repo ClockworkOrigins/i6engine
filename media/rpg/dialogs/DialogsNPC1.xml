@@ -19,6 +19,13 @@
 	<Info>Dialog_NPC1_QuestSolved_Info</Info>
 	<Important>True</Important>
 </Dialog>
+<Dialog identifier="Dialog_NPC1_Trade">
+	<Participants>NPC01</Participants>
+	<Nr>999</Nr>
+	<Info>Dialog_NPC1_Trade_Info</Info>
+	<Description>Dialog_NPC1_Trade_Description</Description>
+	<Permanent>True</Permanent>
+</Dialog>
 <Dialog identifier="Dialog_NPC1_Exit">
 	<Participants>NPC01</Participants>
 	<Nr>999</Nr>

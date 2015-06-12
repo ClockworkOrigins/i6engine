@@ -110,6 +110,8 @@ namespace components {
 
 		void News(const api::GameMessage::Ptr & msg) override;
 		void Tick() override;
+
+		void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) override;
 	};
 
 } /* namespace components */

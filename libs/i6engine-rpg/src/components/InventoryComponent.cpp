@@ -29,7 +29,7 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	InventoryComponent::InventoryComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _shown(false), _callbacks(), _trading(false) {
+	InventoryComponent::InventoryComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _shown(false), _callbacks(), _trading(false), _isSelfInventory(true) {
 		_objFamilyID = config::ComponentTypes::InventoryComponent;
 	}
 
@@ -56,8 +56,12 @@ namespace components {
 	}
 
 	void InventoryComponent::startTrade(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory, double selfMultiplier, double otherMultiplier) {
-		showTradeView(false);
-		otherInventory->showTradeView(true);
+		_isSelfInventory = true;
+		otherInventory->_isSelfInventory = false;
+		_trading = true;
+		otherInventory->_trading = true;
+		showTradeView(otherInventory);
+		otherInventory->showTradeView(utils::dynamic_pointer_cast<InventoryComponent>(_self.get()));
 	}
 
 } /* namespace components */

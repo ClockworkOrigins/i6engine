@@ -112,9 +112,12 @@ namespace components {
 		Filter _currentFilter;
 		uint32_t _slotsPerView;
 		std::vector<std::string> _widgetList;
+		utils::weakPtr<WeightInventoryComponent, api::Component> _otherInventory;
 
 		void News(const api::GameMessage::Ptr & msg) override;
 		void Tick() override;
+
+		void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) override;
 	};
 
 } /* namespace components */

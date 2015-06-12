@@ -116,13 +116,25 @@ namespace components {
 		_shown = true;
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		api::graphics::Resolution res = api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution();
+
 		double height = 0.75 / _rows;
 		double width = (height * res.height) / res.width;
+		double startPos = 0.5 - width * 0.5 * _columns;
+
+		if (_trading) {
+			width = 0.4 / _columns;
+			height = (width * res.width) / res.height;
+			if (_isSelfInventory) {
+				startPos = 0.05;
+			} else {
+				startPos = 0.55;
+			}
+		}
 
 		for (uint16_t i = 0; i < _rows; i++) {
 			for (uint16_t j = 0; j < _columns; j++) {
-				gf->addImage("SlotInventory_BackgroundSlot_" + std::to_string(i) + "_" + std::to_string(j), "RPG/StaticImage", "RPG_Inventory_Slot", "Slot", 0.5 - width * 0.5 * _columns + j * width, 0.025 + i * height, width, height);
-				gf->enableDropTarget("SlotInventory_BackgroundSlot_" + std::to_string(i) + "_" + std::to_string(j), true, [this, i, j](std::string s) {
+				gf->addImage("SlotInventory_BackgroundSlot_" + std::to_string(_id) + "_" + std::to_string(i) + "_" + std::to_string(j), "RPG/StaticImage", "RPG_Inventory_Slot", "Slot", startPos + j * width, 0.025 + i * height, width, height);
+				gf->enableDropTarget("SlotInventory_BackgroundSlot_" + std::to_string(_id) + "_" + std::to_string(i) + "_" + std::to_string(j), true, [this, i, j](std::string s) {
 					if (_slots[i][j] == UINT16_MAX) {
 						uint16_t index = uint16_t(std::stoul(utils::split(s, "_").back()));
 						uint16_t counter = 0;
@@ -160,8 +172,8 @@ namespace components {
 				for (uint16_t k = 0; k < _columns; k++) {
 					if (_slots[j][k] == i) {
 						found = true;
-						gf->addImage("SlotInventory_Item_" + std::to_string(i), "RPG/StaticImage", std::get<ItemEntry::Imageset>(_items[i]), std::get<ItemEntry::Image>(_items[i]), 0.5 - width * 0.5 * _columns + k * width, 0.025 + j * height, width * std::get<ItemEntry::Width>(_items[i]), height * std::get<ItemEntry::Height>(_items[i]));
-						gf->setDragable("SlotInventory_Item_" + std::to_string(i), true);
+						gf->addImage("SlotInventory_Item_" + std::to_string(_id) + "_" + std::to_string(i), "RPG/StaticImage", std::get<ItemEntry::Imageset>(_items[i]), std::get<ItemEntry::Image>(_items[i]), startPos + k * width, 0.025 + j * height, width * std::get<ItemEntry::Width>(_items[i]), height * std::get<ItemEntry::Height>(_items[i]));
+						gf->setDragable("SlotInventory_Item_" + std::to_string(_id) + "_" + std::to_string(i), true);
 						std::string tooltip = "";
 
 						for (auto & p : std::get<ItemEntry::Infos>(_items[i])) {
@@ -171,8 +183,8 @@ namespace components {
 							tooltip += api::EngineController::GetSingleton().getTextManager()->getText(p.first) + ": " + p.second + "~";
 						}
 						tooltip = tooltip.substr(0, tooltip.size() - 1);
-						gf->setTooltip("SlotInventory_Item_" + std::to_string(i), tooltip);
-						_widgetList.push_back("SlotInventory_Item_" + std::to_string(i));
+						gf->setTooltip("SlotInventory_Item_" + std::to_string(_id) + "_" + std::to_string(i), tooltip);
+						_widgetList.push_back("SlotInventory_Item_" + std::to_string(_id) + "_" + std::to_string(i));
 						break;
 					}
 				}
@@ -186,10 +198,11 @@ namespace components {
 	void SlotInventoryComponent::hide() {
 		ISIXE_UNREGISTERMESSAGETYPE(api::messages::InputMessageType);
 		_shown = false;
+		_trading = false;
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		for (uint16_t i = 0; i < _rows; i++) {
 			for (uint16_t j = 0; j < _columns; j++) {
-				gf->deleteWidget("SlotInventory_BackgroundSlot_" + std::to_string(i) + "_" + std::to_string(j));
+				gf->deleteWidget("SlotInventory_BackgroundSlot_" + std::to_string(_id) + "_" + std::to_string(i) + "_" + std::to_string(j));
 			}
 		}
 		for (std::string s : _widgetList) {
@@ -276,6 +289,7 @@ namespace components {
 				api::KeyState ks = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->pressed;
 				if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
 					hide();
+					_trading = false;
 				}
 			}
 		}
@@ -375,6 +389,10 @@ namespace components {
 
 	void SlotInventoryComponent::Tick() {
 		processMessages();
+	}
+
+	void SlotInventoryComponent::showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) {
+		show();
 	}
 
 } /* namespace components */
