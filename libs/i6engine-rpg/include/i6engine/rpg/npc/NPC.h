@@ -74,6 +74,8 @@ namespace npc {
 		void createItems(const std::string & identifier, uint32_t amount);
 		void removeItems(const std::string & identifier, uint32_t amount);
 
+		void trade(NPC * other, double selfMultiplier, double otherMultiplier);
+
 	private:
 		api::WeakGOPtr _go;
 		NPCQueue _queue;

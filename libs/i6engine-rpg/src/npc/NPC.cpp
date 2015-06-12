@@ -27,6 +27,7 @@
 #include "i6engine/rpg/dialog/DialogManager.h"
 #include "i6engine/rpg/npc/NPCManager.h"
 #include "i6engine/rpg/npc/queueJobs/SayJob.h"
+#include "i6engine/rpg/npc/queueJobs/StartTradeJob.h"
 #include "i6engine/rpg/npc/queueJobs/TurnToNpcJob.h"
 #include "i6engine/rpg/npc/queueJobs/WaitSayJob.h"
 
@@ -148,6 +149,10 @@ namespace npc {
 			return;
 		}
 		go->getGOC<components::InventoryComponent>(components::config::ComponentTypes::InventoryComponent)->removeItems(identifier, amount);
+	}
+
+	void NPC::trade(NPC * other, double selfMultiplier, double otherMultiplier) {
+		_queue.addJob(new StartTradeJob(this, other, selfMultiplier, otherMultiplier));
 	}
 
 } /* namespace npc */

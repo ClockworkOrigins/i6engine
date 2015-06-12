@@ -4,6 +4,10 @@
 	<Language name="Deutsch">Hast du etwas für mich zu tun?</Language>
 	<Language name="English">Is there something I can do for you?</Language>
 </Key>
+<Key key="Dialog_NPC1_Trade_Description">
+	<Language name="Deutsch">Zeig mir deine Ware.</Language>
+	<Language name="English">Show me your wares.</Language>
+</Key>
 <Key key="DIALOG_EXIT">
 	<Language name="Deutsch">ENDE</Language>
 	<Language name="English">EXIT</Language>
@@ -59,6 +63,23 @@
 <Key key="Dialog_NPC1_QuestSolved_02_Subtitle">
 	<Language name="Deutsch">Nice.</Language>
 	<Language name="English">Nice.</Language>
+</Key>
+
+<Key key="Dialog_NPC1_Trade_01_Sound">
+	<Language name="Deutsch">Dialog_NPC1_Trade_01_de.wav</Language>
+	<Language name="English">Dialog_NPC1_Trade_01_en.wav</Language>
+</Key>
+<Key key="Dialog_NPC1_Trade_01_Subtitle">
+	<Language name="Deutsch">Zeig mir deine Ware.</Language>
+	<Language name="English">Show me your wares.</Language>
+</Key>
+<Key key="Dialog_NPC1_Trade_02_Sound">
+	<Language name="Deutsch">Dialog_NPC1_Trade_02_de.wav</Language>
+	<Language name="English">Dialog_NPC1_Trade_02_en.wav</Language>
+</Key>
+<Key key="Dialog_NPC1_Trade_02_Subtitle">
+	<Language name="Deutsch">Bitte sehr, schau dich um.</Language>
+	<Language name="English">Please, take a look.</Language>
 </Key>
 
 <Key key="Dialog_NPC1_Exit_01_Sound">

@@ -142,7 +142,8 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 		.add_property("nextXP", &i6engine::rpg::npc::NPC::getNextXP, &i6engine::rpg::npc::NPC::setNextXP)
 		.add_property("level", &i6engine::rpg::npc::NPC::getLevel, &i6engine::rpg::npc::NPC::setLevel)
 		.def("createItems", &i6engine::rpg::npc::NPC::createItems)
-		.def("removeItems", &i6engine::rpg::npc::NPC::removeItems);
+		.def("removeItems", &i6engine::rpg::npc::NPC::removeItems)
+		.def("trade", &i6engine::rpg::npc::NPC::trade);
 
 	enum_<i6engine::rpg::quest::QuestStatus>("QuestStatus")
 		.value("LOCKED", i6engine::rpg::quest::QuestStatus::LOCKED)

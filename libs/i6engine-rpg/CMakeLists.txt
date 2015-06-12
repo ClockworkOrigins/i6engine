@@ -69,6 +69,7 @@ set(i6rpgSrc
 	${srcdir}/npc/queueJobs/ExitDialogJob.cpp
 	${srcdir}/npc/queueJobs/SayJob.cpp
 	${srcdir}/npc/queueJobs/ShowDialogsJob.cpp
+	${srcdir}/npc/queueJobs/StartTradeJob.cpp
 	${srcdir}/npc/queueJobs/TurnToNpcJob.cpp
 	${srcdir}/npc/queueJobs/WaitSayJob.cpp
 	
