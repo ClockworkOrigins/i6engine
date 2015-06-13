@@ -37,6 +37,10 @@
 #include "i6engine/rpg/components/SlotComponent.h"
 #include "i6engine/rpg/components/UsableItemComponent.h"
 
+#ifdef max
+	#undef max
+#endif
+
 namespace i6engine {
 namespace rpg {
 namespace components {
@@ -92,14 +96,14 @@ namespace components {
 							}
 						}
 						std::vector<api::GameMessage::Ptr> msgs;
-						item->synchronize(msgs);
+						item->synchronize(msgs, true);
 						for (size_t l = 0; l < dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.size(); l++) {
 							if (dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components[l]._template == "MovableText") {
 								dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.erase(dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.begin() + int(l));
 								break;
 							}
 						}
-						_items.push_back(std::make_tuple(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), msgs[0], item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), sc->getWidth(), sc->getHeight(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getInfos(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier()));
+						_items.push_back(std::make_tuple(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), msgs[0], item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), sc->getWidth(), sc->getHeight(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getInfos(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getValue()));
 						for (auto & cb : _callbacks) {
 							cb(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), getItemCount(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName()));
 						}
@@ -114,6 +118,9 @@ namespace components {
 	void SlotInventoryComponent::show() {
 		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, SlotInventoryComponent::News, this);
 		_shown = true;
+		if (!_trading) {
+			_multiplier = 1.0;
+		}
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		api::graphics::Resolution res = api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution();
 
@@ -182,7 +189,7 @@ namespace components {
 							}
 							tooltip += api::EngineController::GetSingleton().getTextManager()->getText(p.first) + ": " + p.second + "~";
 						}
-						tooltip = tooltip.substr(0, tooltip.size() - 1);
+						tooltip += api::EngineController::GetSingleton().getTextManager()->getText("Value_Key") + ": " + std::to_string(std::max(1u, uint32_t(std::get<ItemEntry::Value>(_items[i]) * _multiplier)));
 						gf->setTooltip("SlotInventory_Item_" + std::to_string(_id) + "_" + std::to_string(i), tooltip);
 						_widgetList.push_back("SlotInventory_Item_" + std::to_string(_id) + "_" + std::to_string(i));
 						break;
@@ -198,7 +205,6 @@ namespace components {
 	void SlotInventoryComponent::hide() {
 		ISIXE_UNREGISTERMESSAGETYPE(api::messages::InputMessageType);
 		_shown = false;
-		_trading = false;
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		for (uint16_t i = 0; i < _rows; i++) {
 			for (uint16_t j = 0; j < _columns; j++) {
@@ -225,11 +231,34 @@ namespace components {
 				api::graphics::Resolution res = api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution();
 				double height = 0.75 / _rows;
 				double width = (height * res.height) / res.width;
+				double startPos = 0.5 - width * 0.5 * _columns;
 
-				int32_t j = int32_t((x / double(res.width) - (0.5 - width * 0.5 * _columns)) / width);
+				if (_trading) {
+					width = 0.4 / _columns;
+					height = (width * res.width) / res.height;
+					if (_isSelfInventory) {
+						startPos = 0.05;
+					} else {
+						startPos = 0.55;
+					}
+				}
+
+				int32_t j = int32_t((x / double(res.width) - startPos) / width);
 				int32_t i = int32_t((y / double(res.height) - 0.025) / height);
 
 				if (i < 0 || i >= _rows || j < 0 || j >= _columns) {
+					if (_trading && _slotMarker) {
+						api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+						gf->deleteWidget("SlotInventory_ItemMarker");
+						for (size_t k = 0; k < _widgetList.size(); k++) {
+							if (_widgetList[k] == "SlotInventory_ItemMarker") {
+								_widgetList.erase(_widgetList.begin() + int(k));
+								break;
+							}
+						}
+						_slotMarker = false;
+						_currentIndex = UINT16_MAX;
+					}
 					return;
 				}
 
@@ -245,10 +274,10 @@ namespace components {
 								found = true;
 								api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 								if (_slotMarker) {
-									gf->setPosition("SlotInventory_ItemMarker", 0.5 - width * 0.5 * _columns + l * width, 0.025 + k * height);
+									gf->setPosition("SlotInventory_ItemMarker", startPos + l * width, 0.025 + k * height);
 									gf->setSize("SlotInventory_ItemMarker", width * std::get<ItemEntry::Width>(_items[_slots[size_t(i)][size_t(j)]]), height * std::get<ItemEntry::Height>(_items[_slots[size_t(i)][size_t(j)]]));
 								} else {
-									gf->addImage("SlotInventory_ItemMarker", "RPG/StaticImage", "RPG_Inventory_Highlighted", "Highlighted", 0.5 - width * 0.5 * _columns + l * width, 0.025 + k * height, width * std::get<ItemEntry::Width>(_items[_slots[size_t(i)][size_t(j)]]), height * std::get<ItemEntry::Height>(_items[_slots[size_t(i)][size_t(j)]]));
+									gf->addImage("SlotInventory_ItemMarker", "RPG/StaticImage", "RPG_Inventory_Highlighted", "Highlighted", startPos + l * width, 0.025 + k * height, width * std::get<ItemEntry::Width>(_items[_slots[size_t(i)][size_t(j)]]), height * std::get<ItemEntry::Height>(_items[_slots[size_t(i)][size_t(j)]]));
 									gf->setProperty("SlotInventory_ItemMarker", "MousePassThroughEnabled", "True");
 									_widgetList.push_back("SlotInventory_ItemMarker");
 									_slotMarker = true;
@@ -278,10 +307,14 @@ namespace components {
 
 				if (pressed && mbi == api::MouseButtonID::MB_Right) {
 					if (_currentIndex != UINT16_MAX) {
-						useItem(std::get<ItemEntry::Type>(_items[_currentIndex]), std::get<ItemEntry::Name>(_items[_currentIndex]), [this]() {
-							hide();
-							show();
-						}, _currentIndex);
+						if (_trading) {
+							tradeItem(std::get<ItemEntry::Identifier>(_items[_currentIndex]), std::get<ItemEntry::Value>(_items[_currentIndex]));
+						} else {
+							useItem(std::get<ItemEntry::Type>(_items[_currentIndex]), std::get<ItemEntry::Name>(_items[_currentIndex]), [this]() {
+								hide();
+								show();
+							}, _currentIndex);
+						}
 					}
 				}
 			} else if (msg->getSubtype() == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
@@ -290,6 +323,7 @@ namespace components {
 				if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
 					hide();
 					_trading = false;
+					_multiplier = 1.0;
 				}
 			}
 		}

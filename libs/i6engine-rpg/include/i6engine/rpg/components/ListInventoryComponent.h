@@ -96,15 +96,18 @@ namespace components {
 			Amount,
 			Imageset,
 			Image,
-			Identifier
+			Identifier,
+			Value
 		};
-		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string>>> _items;
+		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string, uint32_t>>> _items;
 		uint32_t _columns;
 		uint32_t _slotCount;
 		uint32_t _currentIndex;
 		std::vector<std::string> _widgets;
 		uint32_t _itemTypeCount;
 		uint32_t _maxSlot;
+		bool _active;
+		bool _infoScreen;
 
 		void showItems();
 

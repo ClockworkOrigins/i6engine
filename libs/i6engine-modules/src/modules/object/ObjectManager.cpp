@@ -250,7 +250,7 @@ namespace modules {
 		for (std::list<GOPtr>::const_iterator it = _GOList.begin(); it != _GOList.end(); ++it) {
 			assert(*it != nullptr);
 
-			(*it)->synchronize(v);
+			(*it)->synchronize(v, false);
 		}
 
 		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::AdministrationMessageType, api::network::NetGameState, core::Method::Create, new api::network::Administration_GameState_Create(receiver, v), core::Subsystem::Object);

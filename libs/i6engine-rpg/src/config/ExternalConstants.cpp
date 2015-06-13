@@ -19,6 +19,8 @@
 #include "boost/property_tree/info_parser.hpp"
 #include "boost/property_tree/ptree.hpp"
 
+#include <iostream>
+
 namespace i6engine {
 namespace rpg {
 namespace config {
@@ -27,6 +29,8 @@ namespace config {
 	double NPC_TALK_DISTANCE = 7.5;
 	double SUBTITLE_TIME_PER_WORD = 0.5;
 	double DIALOG_MAX_DISTANCE = 15.0;
+	std::string CURRENCY = "Gold";
+	bool LIMITED_TRADER_GOLD = false;
 
 	void parseExternalConstants(const std::string & file) {
 		boost::property_tree::ptree pt;
@@ -36,6 +40,8 @@ namespace config {
 		NPC_TALK_DISTANCE = pt.get("NPC_TALK_DISTANCE", NPC_TALK_DISTANCE);
 		SUBTITLE_TIME_PER_WORD = pt.get("SUBTITLE_TIME_PER_WORD", SUBTITLE_TIME_PER_WORD);
 		DIALOG_MAX_DISTANCE = pt.get("DIALOG_MAX_DISTANCE", DIALOG_MAX_DISTANCE);
+		CURRENCY = pt.get("CURRENCY", CURRENCY);
+		LIMITED_TRADER_GOLD = pt.get("LIMITED_TRADER_GOLD", LIMITED_TRADER_GOLD);
 	}
 
 } /* namespace config */

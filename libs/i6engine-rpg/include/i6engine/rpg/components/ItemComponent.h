@@ -32,7 +32,7 @@ namespace components {
 	public:
 		ItemComponent(int64_t id, const api::attributeMap & params);
 
-		api::attributeMap synchronize() const override;
+		virtual api::attributeMap synchronize() const override;
 
 		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
 			return std::make_pair(api::AddStrategy::REJECT, -1);

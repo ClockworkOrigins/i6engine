@@ -45,6 +45,7 @@ namespace config {
 		HumanMovementComponent,
 		DialogCheckerComponent,
 		ExperienceComponent,
+		MiscItemComponent,
 		ComponentTypesCount
 	};
 

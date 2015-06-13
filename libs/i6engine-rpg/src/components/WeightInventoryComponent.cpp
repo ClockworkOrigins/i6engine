@@ -77,25 +77,25 @@ namespace components {
 				std::get<ItemEntry::Amount>(it2->second)++;
 			} else {
 				std::vector<api::GameMessage::Ptr> msgs;
-				item->synchronize(msgs);
+				item->synchronize(msgs, true);
 				for (size_t i = 0; i < dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.size(); i++) {
 					if (dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components[i]._template == "MovableText") {
 						dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.erase(dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.begin() + int(i));
 						break;
 					}
 				}
-				it->second.insert(std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier())));
+				it->second.insert(std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getValue(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getWeight())));
 			}
 		} else {
 			std::vector<api::GameMessage::Ptr> msgs;
-			item->synchronize(msgs);
+			item->synchronize(msgs, true);
 			for (size_t i = 0; i < dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.size(); i++) {
 				if (dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components[i]._template == "MovableText") {
 					dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.erase(dynamic_cast<api::objects::Object_Create_Create *>(msgs[0]->getContent())->tmpl._components.begin() + int(i));
 					break;
 				}
 			}
-			_items.insert(std::make_pair(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string>>({ std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier())) })));
+			_items.insert(std::make_pair(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string, uint32_t, double>>({ std::make_pair(nc->getName(), std::make_tuple(msgs[0], 1, item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getValue(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getWeight())) })));
 		}
 		for (auto & cb : _callbacks) {
 			cb(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), nc->getName(), std::get<ItemEntry::Amount>(_items[item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID()][nc->getName()]));
@@ -129,15 +129,25 @@ namespace components {
 				show();
 			}
 		});
+		gf->addImageButton("WeightInventory_Category_Misc", "RPG/ImageButton", 0.25, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
+		gf->subscribeEvent("WeightInventory_Category_Misc", "Clicked", [this]() {
+			if (_currentFilter != Filter::MiscItems) {
+				_currentFilter = Filter::MiscItems;
+				_currentIndex = 0;
+				_maxShowIndex = 0;
+				hide();
+				show();
+			}
+		});
 		if (_trading) {
 			if (!_isSelfInventory) {
-				gf->addImageButton("WeightInventory_Sell", "RPG/ImageButton", 0.25, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
+				gf->addImageButton("WeightInventory_Sell", "RPG/ImageButton", 0.35, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
 				gf->subscribeEvent("WeightInventory_Sell", "Clicked", [this]() {
 					hide();
 					_otherInventory.get()->show();
 				});
 			} else {
-				gf->addImageButton("WeightInventory_Buy", "RPG/ImageButton", 0.25, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
+				gf->addImageButton("WeightInventory_Buy", "RPG/ImageButton", 0.35, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
 				gf->subscribeEvent("WeightInventory_Buy", "Clicked", [this]() {
 					hide();
 					_otherInventory.get()->show();
@@ -171,6 +181,12 @@ namespace components {
 			}
 			case Filter::UsableItems: {
 				if (p.first != config::UsableItemComponent) {
+					continue;
+				}
+				break;
+			}
+			case Filter::MiscItems: {
+				if (p.first != config::MiscItemComponent) {
 					continue;
 				}
 				break;
@@ -296,6 +312,12 @@ namespace components {
 								}
 								break;
 							}
+							case Filter::MiscItems: {
+								if (p.first != config::MiscItemComponent) {
+									continue;
+								}
+								break;
+							}
 							default: {
 								ISIXE_THROW_FAILURE("WeightInventoryComponent", "unimplemented filter " << int(_currentFilter));
 							}
@@ -327,16 +349,26 @@ namespace components {
 								}
 								break;
 							}
+							case Filter::MiscItems: {
+								if (p.first != config::MiscItemComponent) {
+									continue;
+								}
+								break;
+							}
 							default: {
 								ISIXE_THROW_FAILURE("WeightInventoryComponent", "unimplemented filter " << int(_currentFilter));
 							}
 							}
 							for (auto & p2 : p.second) {
 								if (counter == _currentIndex) {
-									useItem(p.first, p2.first, [this]() {
-										hide();
-										show();
-									});
+									if (_trading) {
+										tradeItem(std::get<ItemEntry::Identifier>(p2.second), std::get<ItemEntry::Value>(p2.second));
+									} else {
+										useItem(p.first, p2.first, [this]() {
+											hide();
+											show();
+										});
+									}
 									break;
 								}
 								counter++;
@@ -345,6 +377,7 @@ namespace components {
 					} else if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
 						hide();
 						_trading = false;
+						_multiplier = 1.0;
 					}
 				}
 			}
@@ -384,6 +417,12 @@ namespace components {
 			}
 			case Filter::UsableItems: {
 				if (p.first != config::UsableItemComponent) {
+					continue;
+				}
+				break;
+			}
+			case Filter::MiscItems: {
+				if (p.first != config::MiscItemComponent) {
 					continue;
 				}
 				break;
@@ -431,6 +470,7 @@ namespace components {
 					if (std::get<ItemEntry::Identifier>(it2->second) == identifier) {
 						if (--std::get<ItemEntry::Amount>(it2->second) == 0) {
 							it->second.erase(it2);
+							_currentWeight -= std::get<ItemEntry::Weight>(it2->second);
 						}
 						break;
 					}

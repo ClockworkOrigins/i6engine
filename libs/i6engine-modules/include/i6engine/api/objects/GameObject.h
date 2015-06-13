@@ -180,8 +180,9 @@ namespace api {
 
 		/**
 		 * \brief adds synchronize messages for GameObject and all Components of this GO
+		 * set param all false if you just want Components with sync flag to be added to message
 		 */
-		void synchronize(std::vector<GameMessage::Ptr> & messages) const;
+		void synchronize(std::vector<GameMessage::Ptr> & messages, bool all) const;
 
 		/**
 		 * \brief sends a message to delete the GameObject

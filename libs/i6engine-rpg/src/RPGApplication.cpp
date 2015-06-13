@@ -36,6 +36,7 @@
 #include "i6engine/rpg/components/HealthbarComponent.h"
 #include "i6engine/rpg/components/HumanMovementComponent.h"
 #include "i6engine/rpg/components/ListInventoryComponent.h"
+#include "i6engine/rpg/components/MiscItemComponent.h"
 #include "i6engine/rpg/components/NameComponent.h"
 #include "i6engine/rpg/components/QuickslotComponent.h"
 #include "i6engine/rpg/components/SlotComponent.h"
@@ -140,6 +141,7 @@ namespace rpg {
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&i6engine::rpg::components::HealthbarComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&i6engine::rpg::components::HumanMovementComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&i6engine::rpg::components::ListInventoryComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&i6engine::rpg::components::MiscItemComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&i6engine::rpg::components::NameComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&i6engine::rpg::components::QuickslotComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&i6engine::rpg::components::SlotComponent::createC, _1, _2));

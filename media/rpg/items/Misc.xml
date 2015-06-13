@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<Item identifier="Gold" type="MiscItem">
+	<Name>Gold_Key</Name>
+	<Mesh>UsableItem.MESH</Mesh>
+	<Imageset>UsableItem</Imageset>
+	<Image>UsableItem</Image>
+	<Value>1</Value>
+	<Weight>0.0</Weight>
+	<SlotWidth>1</SlotWidth>
+	<SlotHeight>1</SlotHeight>
+</Item>

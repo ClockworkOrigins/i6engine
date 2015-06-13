@@ -67,7 +67,7 @@ namespace dialog {
 
 		for (auto it = _npcDialogs.begin(); it != _npcDialogs.end(); it++) {
 			std::sort(it->second.begin(), it->second.end(), [](Dialog * a, Dialog * b) {
-				return a->nr < b->nr;
+				return a->nr <= b->nr;
 			});
 		}
 	}

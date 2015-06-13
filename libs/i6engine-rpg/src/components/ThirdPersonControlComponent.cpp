@@ -136,6 +136,9 @@ namespace components {
 						} else if (keyMapping == "right" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
 							mc->right();
 						} else if (keyMapping == "inventory" && iku->pressed == api::KeyState::KEY_PRESSED) {
+							if (ic->isTrading()) {
+								return;
+							}
 							if (quest::QuestLog::GetSingleton().isActive()) {
 								quest::QuestLog::GetSingleton().hide();
 							}

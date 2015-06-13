@@ -42,6 +42,7 @@ set(i6rpgSrc
 	${srcdir}/components/InventoryComponent.cpp
 	${srcdir}/components/ItemComponent.cpp
 	${srcdir}/components/ListInventoryComponent.cpp
+	${srcdir}/components/MiscItemComponent.cpp
 	${srcdir}/components/NameComponent.cpp
 	${srcdir}/components/QuickslotComponent.cpp
 	${srcdir}/components/SlotComponent.cpp

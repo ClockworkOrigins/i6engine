@@ -70,6 +70,13 @@ namespace components {
 		}
 
 		/**
+		 * \brief returns true if shown AND in trading mode
+		 */
+		bool isTrading() const {
+			return _shown && _trading;
+		}
+
+		/**
 		 * \brief tries to use given item
 		 */
 		virtual void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback) = 0;
@@ -120,8 +127,12 @@ namespace components {
 		std::vector<std::function<void(uint32_t, const std::string &, uint32_t)>> _callbacks;
 		bool _trading;
 		bool _isSelfInventory;
+		double _multiplier;
+		utils::weakPtr<InventoryComponent, api::Component> _otherTradeInventory;
 
 		virtual void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) = 0;
+
+		void tradeItem(const std::string & identifier, uint64_t value);
 	};
 
 } /* namespace components */

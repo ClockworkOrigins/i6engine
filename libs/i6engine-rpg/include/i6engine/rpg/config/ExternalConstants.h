@@ -36,6 +36,9 @@ namespace config {
 	extern ISIXE_RPG_API double SUBTITLE_TIME_PER_WORD;
 	extern ISIXE_RPG_API double DIALOG_MAX_DISTANCE;
 
+	extern ISIXE_RPG_API std::string CURRENCY;
+	extern ISIXE_RPG_API bool LIMITED_TRADER_GOLD;
+
 	ISIXE_RPG_API void parseExternalConstants(const std::string & file);
 
 } /* namespace config */
