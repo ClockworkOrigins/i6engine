@@ -41,9 +41,6 @@ namespace api {
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override {
-		}
-
 		/**
 		 * \brief synchronizes the Components state
 		 */
@@ -68,6 +65,10 @@ namespace api {
 		 * \brief get path from position to waypoint
 		 */
 		std::vector<Vec3> getPath(const Vec3 & from, const std::string & to) const override;
+
+	private:
+		void Init() override {
+		}
 	};
 
 } /* namespace api */

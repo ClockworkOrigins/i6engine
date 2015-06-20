@@ -54,16 +54,10 @@ namespace graphics {
 		*/
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
 		/**
 		 * \brief synchronizes the Components state
 		 */
 		attributeMap synchronize() const override;
-
-		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "MovableText";
@@ -78,6 +72,12 @@ namespace graphics {
 		std::string _text;
 		uint16_t _size;
 		Vec3 _colour;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};
 
 } /* namespace api */

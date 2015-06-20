@@ -62,8 +62,6 @@ namespace api {
 		*/
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
 		/**
 		 * \brief returns the position of the mesh
 		 */
@@ -144,8 +142,6 @@ namespace api {
 		 */
 		attributeMap synchronize() const override;
 
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
-
 		std::string getTemplateName() const override {
 			return "MeshAppearance";
 		}
@@ -169,11 +165,13 @@ namespace api {
 
 		std::string _material;
 
+		void Init() override;
+
+		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
+
 		/**
 		 * \brief Sends message to MessagingController
-		 *
 		 * Sends message to MessagingController containing ObjectID, meshname, visibility and component
-		 *
 		 */
 		void sendUpdateMessage();
 	};

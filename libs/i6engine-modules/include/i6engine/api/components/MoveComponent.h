@@ -17,12 +17,6 @@ namespace api {
 
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Tick() override;
-
-		void Finalize() override;
-
 		attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
@@ -41,6 +35,12 @@ namespace api {
 		utils::weakPtr<MovementComponent, Component> _mc;
 		uint16_t _index;
 		std::vector<Vec3> _path;
+
+		void Init() override;
+
+		void Tick() override;
+
+		void Finalize() override;
 	};
 
 } /* namespace api */

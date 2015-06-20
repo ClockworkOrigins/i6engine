@@ -45,8 +45,6 @@ namespace api {
 		*/
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
 		/**
 		 * \brief Adds an object type to spawn on this component
 		 *
@@ -90,11 +88,6 @@ namespace api {
 		 */
 		void setState(bool b);
 
-		/**
-		 * \brief Receives messages for this component
-		 */
-		void News(const GameMessage::Ptr & msg) override;
-
 		std::string getTemplateName() const override {
 			return "Spawnpoint";
 		}
@@ -104,6 +97,13 @@ namespace api {
 	private:
 		std::vector<std::string> _spawntypes;
 		bool _state;
+
+		void Init() override;
+
+		/**
+		 * \brief Receives messages for this component
+		 */
+		void News(const GameMessage::Ptr & msg) override;
 	};
 
 } /* namespace api */

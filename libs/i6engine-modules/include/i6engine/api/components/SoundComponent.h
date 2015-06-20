@@ -50,19 +50,9 @@ namespace api {
 		static ComPtr createC(int64_t id, const attributeMap & params);
 
 		/**
-		 * \brief initializes the component
-		 * \info don't use this method at the moment, because all properties will be random
-		 */
-		void Init() override;
-
-		void Finalize() override;
-
-		/**
 		 * \brief synchronizes the Components state
 		 */
 		attributeMap synchronize() const override;
-
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "Sound";
@@ -112,6 +102,15 @@ namespace api {
 		 * \brief will this sound file be cached
 		 */
 		bool _cacheable;
+
+		/**
+		 * \brief initializes the component
+		 */
+		void Init() override;
+
+		void Finalize() override;
+
+		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};
 
 } /* namespace api */

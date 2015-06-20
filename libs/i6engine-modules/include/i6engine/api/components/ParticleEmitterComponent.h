@@ -56,16 +56,10 @@ namespace api {
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
 		/**
 		 * \brief synchronizes the Components state
 		 */
 		attributeMap synchronize() const override;
-
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "ParticleEmitter";
@@ -78,6 +72,12 @@ namespace api {
 		Vec3 _pos;
 		bool _fadeOut;
 		uint32_t _fadeOutCooldown;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		/**
 		 * \brief Sends message to MessagingController

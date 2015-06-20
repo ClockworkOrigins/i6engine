@@ -41,10 +41,6 @@ namespace api {
 
 		~LifetimeComponent();
 
-		void Init() override;
-
-		void Finalize() override;
-
 		/**
 		 * \brief creates the Component with given attributeMap
 		 */
@@ -54,11 +50,6 @@ namespace api {
 		 * \brief Called when the time for this GameObject is over.
 		 */
 		void dead();
-
-		/**
-		 * \brief ticking the component
-		 */
-		void Tick() override;
 
 		/**
 		 * \brief Instant kill
@@ -86,6 +77,15 @@ namespace api {
 		 * ticks left until the object will be removed
 		 */
 		uint64_t _lifetime;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		/**
+		 * \brief ticking the component
+		 */
+		void Tick() override;
 	};
 
 } /* namespace api */

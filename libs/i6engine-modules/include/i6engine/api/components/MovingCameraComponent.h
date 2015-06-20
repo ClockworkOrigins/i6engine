@@ -39,18 +39,18 @@ namespace api {
 
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
-		void Tick() override;
-
 		std::string getTemplateName() const override {
 			return "MovingCamera";
 		}
 
 	private:
 		Vec3 _oldPos;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		void Tick() override;
 	};
 
 } /* namespace api */

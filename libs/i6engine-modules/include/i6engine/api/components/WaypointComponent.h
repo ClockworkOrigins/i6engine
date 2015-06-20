@@ -41,10 +41,6 @@ namespace api {
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
 		/**
 		 * \brief synchronizes the Components state
 		 */
@@ -73,6 +69,10 @@ namespace api {
 	private:
 		std::string _name;
 		std::vector<std::string> _connections;
+
+		void Init() override;
+
+		void Finalize() override;
 	};
 
 } /* namespace api */

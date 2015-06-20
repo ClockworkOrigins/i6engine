@@ -41,8 +41,6 @@ namespace api {
 		*/
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
 		/**
 		 * \brief Gets the GameObject's heightmap.
 		 */
@@ -73,6 +71,8 @@ namespace api {
 		int64_t _maxX;
 		int64_t _minY;
 		int64_t _maxY;
+
+		void Init() override;
 
 		void sendUpdateMessage();
 	};

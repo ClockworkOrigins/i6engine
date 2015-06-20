@@ -39,8 +39,6 @@ namespace components {
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-
 		api::attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
@@ -57,6 +55,8 @@ namespace components {
 
 	private:
 		std::map<Attribute, int32_t> _attributeChange;
+
+		void Init() override;
 	};
 
 } /* namespace components */

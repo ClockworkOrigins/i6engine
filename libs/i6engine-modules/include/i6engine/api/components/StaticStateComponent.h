@@ -49,11 +49,6 @@ namespace api {
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
 		/**
-		 * \brief Initialized the Component;
-		 */
-		void Init() override;
-
-		/**
 		 * \brief Sets position
 		 */
 		inline void setPosition(const Vec3 & position) {
@@ -122,6 +117,11 @@ namespace api {
 		 * \brief Stores the scale of the object.
 		 */
 		Vec3 _scale;
+
+		/**
+		 * \brief Initialized the Component
+		 */
+		void Init() override;
 
 		void sendUpdateMessage();
 	};

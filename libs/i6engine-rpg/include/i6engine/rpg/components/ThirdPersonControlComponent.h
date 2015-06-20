@@ -18,14 +18,6 @@ namespace components {
 
 		static api::ComPtr createC(const int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-
-		void Tick() override;
-
-		void Finalize() override;
-
-		void News(const api::GameMessage::Ptr & msg) override;
-
 		api::attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
@@ -44,6 +36,14 @@ namespace components {
 		utils::weakPtr<api::PhysicalStateComponent, api::Component> _psc;
 		int64_t _highlightTargetID;
 		std::string _identifier;
+
+		void Init() override;
+
+		void Tick() override;
+
+		void Finalize() override;
+
+		void News(const api::GameMessage::Ptr & msg) override;
 	};
 
 } /* namespace components */

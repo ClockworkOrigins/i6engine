@@ -16,19 +16,11 @@ namespace components {
 
 		static api::ComPtr createC(const int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-
-		void Tick() override;
-
-		void Finalize() override;
-
 		api::attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
 			return "Quickslot";
 		}
-
-		void News(const api::GameMessage::Ptr & msg) override;
 
 		std::vector<api::componentOptions> getComponentOptions() override {
 			return {};
@@ -40,6 +32,14 @@ namespace components {
 
 	private:
 		std::vector<std::pair<uint32_t, std::string>> _slots;
+
+		void Init() override;
+
+		void Tick() override;
+
+		void Finalize() override;
+
+		void News(const api::GameMessage::Ptr & msg) override;
 
 		void selectSlot(uint32_t slot);
 

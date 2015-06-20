@@ -43,10 +43,6 @@ namespace api {
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
 		/**
 		 * \brief synchronizes the Components state
 		 */
@@ -58,8 +54,6 @@ namespace api {
 
 		std::vector<componentOptions> getComponentOptions() override;
 
-		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
-
 	private:
 		bool _connected;
 		std::string _selfIdentifier;
@@ -68,6 +62,12 @@ namespace api {
 		Vec3 _targetOffset;
 		double _breakingImpulse;
 		int64_t _targetID;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};
 
 } /* namespace api */

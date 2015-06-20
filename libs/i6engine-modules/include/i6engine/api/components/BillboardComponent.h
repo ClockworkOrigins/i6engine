@@ -54,10 +54,6 @@ namespace graphics {
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
 		void createOrUpdateBillboard(const std::string & identifier, const Vec3 & offset, double width, double height, double u0, double v0, double u1, double v1);
 
 		void deleteBillboard(const std::string & identifier);
@@ -66,8 +62,6 @@ namespace graphics {
 		 * \brief synchronizes the Components state
 		 */
 		attributeMap synchronize() const override;
-
-		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "Billboard";
@@ -80,6 +74,12 @@ namespace graphics {
 		double _width;
 		double _height;
 		graphics::BillboardOrigin _billboardOrigin;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};
 
 } /* namespace api */

@@ -29,12 +29,6 @@ namespace api {
 
 		static ComPtr createC(int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Tick() override;
-
-		void Finalize() override;
-
 		attributeMap synchronize() const  override {
 			return {};
 		}
@@ -47,14 +41,20 @@ namespace api {
 			return {};
 		}
 
-		void News(const GameMessage::Ptr & msg) override;
-
 		void enable(bool enabled) {
 			_active = enabled;
 		}
 
 	private:
 		bool _active;
+
+		void Init() override;
+
+		void Tick() override;
+
+		void Finalize() override;
+
+		void News(const GameMessage::Ptr & msg) override;
 	};
 
 } /* namespace api */

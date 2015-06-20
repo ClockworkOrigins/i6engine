@@ -57,8 +57,6 @@ namespace api {
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
 		/**
 		 * \brief Sets light type
 		 *
@@ -155,8 +153,6 @@ namespace api {
 		 */
 		attributeMap synchronize() const override;
 
-		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
-
 		std::string getTemplateName() const override {
 			return "LuminousAppearance";
 		}
@@ -209,6 +205,10 @@ namespace api {
 		 * in degree, whole angle
 		 */
 		double _spotlightRangeOuter;
+
+		void Init() override;
+
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		/**
 		 * \brief Sends update message to the MessagingController

@@ -47,12 +47,6 @@ namespace api {
 		static ComPtr createC(int64_t id, const attributeMap & params);
 
 		/**
-		 * \brief initializes the component
-		 * \info don't use this method at the moment, because all properties will be random
-		 */
-		void Init() override;
-
-		/**
 		 * \brief Sets position of the camera
 		 * Sets position of the component relative to its parent GameObject
 		 * \param[in] relativePosition New Position of the camera
@@ -125,8 +119,6 @@ namespace api {
 		 */
 		attributeMap synchronize() const override;
 
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
-
 		std::string getTemplateName() const override {
 			return "Camera";
 		}
@@ -134,6 +126,8 @@ namespace api {
 		std::vector<componentOptions> getComponentOptions() override;
 
 		void enableCompositor(const std::string & compositor, bool enabled);
+
+		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 	protected:
 		/**
@@ -172,6 +166,11 @@ namespace api {
 		double _frustumRight;
 		double _frustumTop;
 		double _frustumBottom;
+
+		/**
+		 * \brief initializes the component
+		 */
+		void Init() override;
 
 		/**
 		 * \brief Sends message to MessagingController

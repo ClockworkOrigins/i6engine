@@ -16,12 +16,6 @@ namespace api {
 
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
-		void Tick() override;
-
 		attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
@@ -42,6 +36,12 @@ namespace api {
 		 * \brief speed in m/s
 		 */
 		double _speed;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		void Tick() override;
 	};
 
 } /* namespace api */

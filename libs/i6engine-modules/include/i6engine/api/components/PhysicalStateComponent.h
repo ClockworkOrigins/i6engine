@@ -223,14 +223,6 @@ namespace api {
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
 		/**
-		 * \brief sends initialising messages
-		 * call this after you set all starting values
-		 */
-		void Init() override;
-
-		void Finalize() override;
-
-		/**
 		 * \brief Returns the position of the object.
 		 * \return Position of the object
 		 */
@@ -328,16 +320,6 @@ namespace api {
 		void applyForce(const Vec3 & force, const Vec3 & offset, bool forceIsLocalSpace);
 
 		/**
-		 * \brief processes a msg
-		 */
-		void News(const GameMessage::Ptr & msg) override;
-
-		/**
-		 * \brief ticks the component
-		 */
-		void Tick() override;
-
-		/**
 		 * \brief sets type of the collision interest for this entity
 		 */
 		void setShatterInterest(ShatterInterest si);
@@ -361,8 +343,6 @@ namespace api {
 		 * \param[in] msg message to be send on notify
 		 */
 		void rayTest(const Vec3 & from, const Vec3 & to, RayTestRepetition rtr, RayTestNotify rtn, const GameMessage::Ptr & msg);
-
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "PhysicalState";
@@ -448,6 +428,26 @@ namespace api {
 		mutable boost::mutex _lock;
 
 		uint32_t _syncPrio;
+
+		/**
+		 * \brief sends initialising messages
+		 * call this after you set all starting values
+		 */
+		void Init() override;
+
+		void Finalize() override;
+
+		/**
+		 * \brief processes a msg
+		 */
+		void News(const GameMessage::Ptr & msg) override;
+
+		/**
+		 * \brief ticks the component
+		 */
+		void Tick() override;
+
+		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};
 
 } /* namespace api */

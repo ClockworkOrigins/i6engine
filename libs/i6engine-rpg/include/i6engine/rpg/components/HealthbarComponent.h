@@ -34,10 +34,6 @@ namespace components {
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
 		api::attributeMap synchronize() const override;
 
 		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
@@ -59,6 +55,10 @@ namespace components {
 	private:
 		int32_t _currentHP;
 		int32_t _maxHP;
+
+		void Init() override;
+
+		void Finalize() override;
 	};
 
 } /* namespace components */
