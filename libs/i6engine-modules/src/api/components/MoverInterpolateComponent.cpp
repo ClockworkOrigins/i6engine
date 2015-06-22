@@ -278,6 +278,12 @@ namespace api {
 		if (params.find("direction") != params.end()) {
 			_direction = boost::lexical_cast<bool>(params.find("direction")->second);
 		}
+		if (_mode == Mode::TWOSTATE_OPENTIME) {
+			if (params.find("openTime") == params.end()) {
+				ISIXE_THROW_API("MoverComponent", "required parameter 'openTime' not set");
+			}
+			_openTime = boost::lexical_cast<uint64_t>(params.find("openTime")->second);
+		}
 
 		ISIXE_THROW_API_COND("MoverComponent", "required parameter 'keyframes' not set", params.find("keyframes") != params.end());
 		uint32_t frames = boost::lexical_cast<uint32_t>(params.find("keyframes")->second);

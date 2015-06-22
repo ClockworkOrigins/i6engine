@@ -34,7 +34,7 @@ namespace api {
 	public:
 		enum class Mode : uint16_t {
 			TWOSTATE_TOGGLE, 	// ! loops forward through all keyframes and afterwards backwards. This is repeated endlessly.
-			TWOSTATE_OPENTIME, 	// ! same as TWOSTATE_TOGGLE but waits opentime befor returning
+			TWOSTATE_OPENTIME, 	// ! same as TWOSTATE_TOGGLE but waits opentime before returning
 			NSTATE_LOOP,		// ! loops through all keyframes (moving from last to first keyframe is interpolated just like all other segments)
 			ONCE				// ! moves from start to end and stops there
 		};

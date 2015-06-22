@@ -3,6 +3,9 @@
 Enhancements:
 	- improved member access of components
 
+Fixes:
+	- fixed missing reading of openTime from attributeMap of MoverInterpolate
+
 v 0.8.7
 
 Enhancements:
