@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "LuaPhysicsExport.h"
+#include "LuaNetworkExport.h"
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/NetworkFacade.h"
