@@ -33,7 +33,11 @@
 #include "i6engine/api/components/MoverCircleComponent.h"
 #include "i6engine/api/components/MoverInterpolateComponent.h"
 #include "i6engine/api/components/MovingCameraComponent.h"
-#include "i6engine/api/components/NetworkSenderComponent.h"
+
+#ifdef ISIXE_WITH_NETWORK
+	#include "i6engine/api/components/NetworkSenderComponent.h"
+#endif
+
 #include "i6engine/api/components/ParticleEmitterComponent.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/components/Point2PointConstraintComponent.h"
@@ -251,6 +255,7 @@ namespace object {
 		return go->getGOC<i6engine::api::MovingCameraComponent>(i6engine::api::components::ComponentTypes::MovingCameraComponent, identifier);
 	}
 
+#ifdef ISIXE_WITH_NETWORK
 	i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component> getNetworkSenderComponent(i6engine::api::GameObject * go) {
 		return go->getGOC<i6engine::api::NetworkSenderComponent>(i6engine::api::components::ComponentTypes::NetworkSenderComponent);
 	}
@@ -258,6 +263,7 @@ namespace object {
 	i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component> getNetworkSenderComponent(i6engine::api::GameObject * go, const std::string & identifier) {
 		return go->getGOC<i6engine::api::NetworkSenderComponent>(i6engine::api::components::ComponentTypes::NetworkSenderComponent, identifier);
 	}
+#endif
 
 	i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component> getParticleEmitterComponent(i6engine::api::GameObject * go) {
 		return go->getGOC<i6engine::api::ParticleEmitterComponent>(i6engine::api::components::ComponentTypes::ParticleEmitterComponent);
@@ -785,8 +791,10 @@ scope registerObject() {
 			.def("getMoverInterpolateComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMoverInterpolateComponent)
 			.def("getMovingCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getMovingCameraComponent)
 			.def("getMovingCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getMovingCameraComponent)
+#ifdef ISIXE_WITH_NETWORK
 			.def("getNetworkSenderComponent", (i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getNetworkSenderComponent)
 			.def("getNetworkSenderComponent", (i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getNetworkSenderComponent)
+#endif
 			.def("getParticleEmitterComponent", (i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getParticleEmitterComponent)
 			.def("getParticleEmitterComponent", (i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getParticleEmitterComponent)
 			.def("getPhysicalStateComponent", (i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getPhysicalStateComponent)
@@ -1028,9 +1036,11 @@ scope registerObject() {
 			.def("getPathPos", (std::vector<Vec3>(i6engine::lua::object::NavigationComponentWrapper::*)(const Vec3 &, const Vec3 &) const) &i6engine::lua::object::NavigationComponentWrapper::getPath)
 			.def("getPathWP", (std::vector<Vec3>(i6engine::lua::object::NavigationComponentWrapper::*)(const Vec3 &, const std::string &) const) &i6engine::lua::object::NavigationComponentWrapper::getPath),
 
+#ifdef ISIXE_WITH_NETWORK
 		class_<i6engine::api::NetworkSenderComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>>("NetworkSenderComponent")
 			.def(constructor<>())
 			.def("getTemplateName", &i6engine::api::NetworkSenderComponent::getTemplateName),
+#endif
 
 		class_<i6engine::api::ParticleEmitterComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>>("ParticleEmitterComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
