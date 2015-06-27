@@ -107,10 +107,10 @@ namespace core {
 		/**
 		 * \brief starts a timer beeing scheduled after the given time
 		 *
-		 * \params[in] name name of the timer
-		 * \params[in] time the time until calling the given method
-		 * \params[in] f the method to be called if time is over
-		 * \params[in] priority the priority in which order the timers are scheduled if time is equal
+		 * \param[in] name name of the timer
+		 * \param[in] time the time until calling the given method
+		 * \param[in] f the method to be called if time is over
+		 * \param[in] priority the priority in which order the timers are scheduled if time is equal
 		 */
 		uint64_t runOnce(uint64_t time, const boost::function<bool(void)> & f, JobPriorities priority) {
 			if (time <= 0) {
@@ -130,10 +130,10 @@ namespace core {
 		/**
 		 * \brief starts a timer repeating in the given interval
 		 *
-		 * \params[in] name name of the timer
-		 * \params[in] interval the time between repetition of this method
-		 * \params[in] f the method to be called if time is over
-		 * \params[in] priority the priority in which order the timers are scheduled if time is equal
+		 * \param[in] name name of the timer
+		 * \param[in] interval the time between repetition of this method
+		 * \param[in] f the method to be called if time is over
+		 * \param[in] priority the priority in which order the timers are scheduled if time is equal
 		 */
 		uint64_t runRepeated(uint64_t interval, const boost::function<bool(void)> & f, JobPriorities priority) {
 			if (interval <= 0) {
