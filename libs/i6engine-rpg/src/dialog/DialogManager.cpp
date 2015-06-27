@@ -46,14 +46,15 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
-	DialogManager::DialogManager() : api::MessageSubscriberFacade(), _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _worker(std::bind(&DialogManager::checkDialogsLoop, this)), _guiInitialized(false), _activeNPCs(), _dialogMapping(), _dialogNumberVector(), _showDialogCalls(0), _subtitles(true), _subtitlePosition(0.2, 0.05), _subtitleSize(0.6, 0.25), _subtitleFont("DejaVuSans-8"), _dialogNumbers(false) {
+	DialogManager::DialogManager() : api::MessageSubscriberFacade(), _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _jobID(), _guiInitialized(false), _activeNPCs(), _dialogMapping(), _dialogNumberVector(), _showDialogCalls(0), _subtitles(true), _subtitlePosition(0.2, 0.05), _subtitleSize(0.6, 0.25), _subtitleFont("DejaVuSans-8"), _dialogNumbers(false) {
 		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, DialogManager::News, this);
+		_jobID = api::EngineController::GetSingleton().registerTimer(10000, boost::bind(&DialogManager::checkDialogsLoop, this), true, core::JobPriorities::Prio_Medium);
 	}
 
 	DialogManager::~DialogManager() {
 		ISIXE_UNREGISTERMESSAGETYPE(api::messages::InputMessageType);
 		_running = false;
-		_worker.join();
+		api::EngineController::GetSingleton().removeTimerID(_jobID);
 	}
 
 	void DialogManager::loadDialogs(const std::string & directory) {
@@ -240,106 +241,104 @@ namespace dialog {
 	}
 
 	bool DialogManager::checkDialogsLoop() {
-		while (_running) {
-			processMessages();
-			// while a dialog is active new important dialogs mustn't start
-			if (_dialogActive) {
-				_importantChecks.clear();
-			}
-			while (!_importantChecks.empty()) {
-				auto t = _importantChecks.poll();
-				if (std::get<DialogCheck::Result>(t)->get()) {
-					// dialog can be run, but we have to check the distance between the participants
-					auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
-					if (playerList.empty()) {
-						break;
-					}
-					auto player = *playerList.begin();
+		processMessages();
+		// while a dialog is active new important dialogs mustn't start
+		if (_dialogActive) {
+			_importantChecks.clear();
+		}
+		while (!_importantChecks.empty()) {
+			auto t = _importantChecks.poll();
+			if (std::get<DialogCheck::Result>(t)->get()) {
+				// dialog can be run, but we have to check the distance between the participants
+				auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
+				if (playerList.empty()) {
+					break;
+				}
+				auto player = *playerList.begin();
 
-					auto it = _parser._dialogs.find(std::get<DialogCheck::DialogIdentifier>(t));
-					if (it == _parser._dialogs.end()) {
+				auto it = _parser._dialogs.find(std::get<DialogCheck::DialogIdentifier>(t));
+				if (it == _parser._dialogs.end()) {
+					break;
+				}
+				npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
+				if (p == nullptr) {
+					break;
+				}
+				bool allNear = true;
+				for (std::string npcIdentifier : it->second->participants) {
+					npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(npcIdentifier);
+					if (n == nullptr) {
+						allNear = false;
 						break;
 					}
-					npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
-					if (p == nullptr) {
+					auto go = n->getGO();
+					if (go == nullptr) {
+						allNear = false;
 						break;
 					}
-					bool allNear = true;
-					for (std::string npcIdentifier : it->second->participants) {
-						npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(npcIdentifier);
-						if (n == nullptr) {
-							allNear = false;
-							break;
-						}
-						auto go = n->getGO();
-						if (go == nullptr) {
-							allNear = false;
-							break;
-						}
-						if ((go->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - player->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= config::NPC_TALK_DISTANCE) {
+					if ((go->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - player->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= config::NPC_TALK_DISTANCE) {
+						n->turnToNPC(p);
+					} else {
+						if ((go->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - player->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= config::NPC_CHECK_TALK_DISTANCE) {
 							n->turnToNPC(p);
-						} else {
-							if ((go->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - player->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= config::NPC_CHECK_TALK_DISTANCE) {
-								n->turnToNPC(p);
-							}
-							allNear = false;
-							break;
 						}
-					}
-
-					// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
-					if (allNear && runDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t))) {
-						_importantChecks.clear();
-						_showDialogboxChecks.clear();
+						allNear = false;
+						break;
 					}
 				}
-			}
-			while (!_showDialogboxChecks.empty()) {
-				auto t = _showDialogboxChecks.poll();
-				if (std::get<DialogCheck::Result>(t)->get()) {
-					// dialog can be run, but we have to check the distance between the participants
-					auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
-					if (playerList.empty()) {
-						break;
-					}
-					auto player = *playerList.begin();
 
-					auto it = _parser._dialogs.find(std::get<DialogCheck::DialogIdentifier>(t));
-					if (it == _parser._dialogs.end()) {
-						break;
-					}
-					npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
-					if (p == nullptr) {
-						break;
-					}
-					bool allNear = true;
-					for (std::string npcIdentifier : it->second->participants) {
-						npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(npcIdentifier);
-						if (n == nullptr) {
-							allNear = false;
-							break;
-						}
-						auto go = n->getGO();
-						if (go == nullptr) {
-							allNear = false;
-							break;
-						}
-						if ((go->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - player->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= config::NPC_TALK_DISTANCE) {
-							n->turnToNPC(p);
-						} else {
-							allNear = false;
-							break;
-						}
-					}
-
-					// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
-					if (allNear) {
-						showDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t));
-					}
+				// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
+				if (allNear && runDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t))) {
+					_importantChecks.clear();
+					_showDialogboxChecks.clear();
 				}
 			}
 		}
-		return true;
+		while (!_showDialogboxChecks.empty()) {
+			auto t = _showDialogboxChecks.poll();
+			if (std::get<DialogCheck::Result>(t)->get()) {
+				// dialog can be run, but we have to check the distance between the participants
+				auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
+				if (playerList.empty()) {
+					break;
+				}
+				auto player = *playerList.begin();
+
+				auto it = _parser._dialogs.find(std::get<DialogCheck::DialogIdentifier>(t));
+				if (it == _parser._dialogs.end()) {
+					break;
+				}
+				npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
+				if (p == nullptr) {
+					break;
+				}
+				bool allNear = true;
+				for (std::string npcIdentifier : it->second->participants) {
+					npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(npcIdentifier);
+					if (n == nullptr) {
+						allNear = false;
+						break;
+					}
+					auto go = n->getGO();
+					if (go == nullptr) {
+						allNear = false;
+						break;
+					}
+					if ((go->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - player->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= config::NPC_TALK_DISTANCE) {
+						n->turnToNPC(p);
+					} else {
+						allNear = false;
+						break;
+					}
+				}
+
+				// if an important dialog was found, drop all other results (if dialog is really executed) and start dialog
+				if (allNear) {
+					showDialog(std::get<DialogCheck::NPCIdentifier>(t), std::get<DialogCheck::DialogIdentifier>(t));
+				}
+			}
+		}
+		return _running;
 	}
 
 	bool DialogManager::runDialog(const std::string & npc, const std::string & dia) {

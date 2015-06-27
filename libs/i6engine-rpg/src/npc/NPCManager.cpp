@@ -26,12 +26,13 @@ namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPCManager::NPCManager() : _npcs(), _running(true), _worker(std::bind(&NPCManager::checkNPCs, this)) {
+	NPCManager::NPCManager() : _npcs(), _running(true), _jobID() {
+		_jobID = api::EngineController::GetSingleton().registerTimer(10000, boost::bind(&NPCManager::checkNPCs, this), true, core::JobPriorities::Prio_Medium);
 	}
 
 	NPCManager::~NPCManager() {
 		_running = false;
-		_worker.join();
+		api::EngineController::GetSingleton().removeTimerID(_jobID);
 	}
 
 	void NPCManager::createNPC(const std::string & identifier, const Vec3 & pos, const Quaternion & rot, bool player) {
@@ -63,14 +64,11 @@ namespace npc {
 		return nullptr;
 	}
 
-	void NPCManager::checkNPCs() {
-		while (_running) {
-			for (auto & p : _npcs) {
-				p.second->workQueue();
-			}
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	bool NPCManager::checkNPCs() {
+		for (auto & p : _npcs) {
+			p.second->workQueue();
 		}
+		return _running;
 	}
 
 } /* namespace npc */

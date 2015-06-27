@@ -18,7 +18,6 @@
 #define __I6ENGINE_RPG_DIALOG_DIALOGMANAGER_H__
 
 #include <set>
-#include <thread>
 
 #include "i6engine/utils/DoubleBufferQueue.h"
 #include "i6engine/utils/Future.h"
@@ -142,9 +141,8 @@ namespace dialog {
 
 		std::set<Dialog *> _heardDialogs;
 
-		// TODO: (Daniel) exchange this with scheduler job implementing ticket ISIXE-1457
 		bool _running;
-		std::thread _worker;
+		uint64_t _jobID;
 
 		bool _guiInitialized;
 
