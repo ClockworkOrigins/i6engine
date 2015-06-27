@@ -85,21 +85,21 @@ namespace api {
 		i6engine::api::EngineController::GetSingleton().stop();
 	}
 
-	uint64_t registerTimer(uint64_t time, const std::string & file, const std::string & func, bool looping, uint16_t priority) {
+	uint64_t registerTimer(uint64_t time, const std::string & file, const std::string & func, bool looping, i6engine::core::JobPriorities priority) {
 		return i6engine::api::EngineController::GetSingleton().registerTimer(time, [file, func]() {
 			auto ret = i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<bool>(file, func);
 			return ret->get();
 		}, looping, priority);
 	}
 
-	uint64_t registerTimer(uint64_t time, const std::string & func, bool looping, uint16_t priority) {
+	uint64_t registerTimer(uint64_t time, const std::string & func, bool looping, i6engine::core::JobPriorities priority) {
 		return i6engine::api::EngineController::GetSingleton().registerTimer(time, [func]() {
 			auto ret = i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<bool>(func);
 			return ret->get();
 		}, looping, priority);
 	}
 
-	void removeTimer(uint16_t priority) {
+	void removeTimer(i6engine::core::JobPriorities priority) {
 		i6engine::api::EngineController::GetSingleton().removeTimer(priority);
 	}
 
@@ -246,6 +246,12 @@ BOOST_PYTHON_MODULE(ScriptingAPIPython) {
 		.value("MessageTypeCount", i6engine::api::messages::EngineMessageTypes::MessageTypeCount)
 		.export_values();
 
+	enum_<i6engine::core::JobPriorities>("JobPriorities")
+		.value("Prio_High", i6engine::core::JobPriorities::Prio_High)
+		.value("Prio_Medium", i6engine::core::JobPriorities::Prio_Medium)
+		.value("Prio_Low", i6engine::core::JobPriorities::Prio_Low)
+		.export_values();
+
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, uint32_t)) &i6engine::python::api::getCurrentTime);
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, const std::set<i6engine::core::Subsystem> &)) &i6engine::python::api::getCurrentTime);
 	def("getIDManager", &i6engine::python::api::getIDManager, return_value_policy<reference_existing_object>());
@@ -260,8 +266,8 @@ BOOST_PYTHON_MODULE(ScriptingAPIPython) {
 	def("getAppl", &i6engine::python::api::getAppl, return_internal_reference<>());
 	def("registerDefault", &i6engine::python::api::registerDefault);
 	def("stop", &i6engine::python::api::stop);
-	def("registerTimer", (uint64_t(*)(uint64_t, const std::string &, const std::string &, bool, uint16_t)) &i6engine::python::api::registerTimer);
-	def("registerTimer", (uint64_t(*)(uint64_t, const std::string &, bool, uint16_t)) &i6engine::python::api::registerTimer);
+	def("registerTimer", (uint64_t(*)(uint64_t, const std::string &, const std::string &, bool, i6engine::core::JobPriorities)) &i6engine::python::api::registerTimer);
+	def("registerTimer", (uint64_t(*)(uint64_t, const std::string &, bool, i6engine::core::JobPriorities)) &i6engine::python::api::registerTimer);
 	def("removeTimer", &i6engine::python::api::removeTimer);
 	def("removeTimerID", &i6engine::python::api::removeTimerID);
 	def("getTimeLeft", &i6engine::python::api::getTimeLeft);

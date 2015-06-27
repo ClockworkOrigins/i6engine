@@ -27,6 +27,8 @@
 #include "i6engine/utils/Clock.h"
 #include "i6engine/utils/Exceptions.h"
 
+#include "i6engine/core/configs/JobPriorities.h"
+
 #include "boost/thread.hpp"
 
 namespace i6engine {
@@ -42,7 +44,7 @@ namespace core {
 			/**
 			 * \brief constructor of the timer
 			 */
-			Job(const boost::function<bool(void)> & f, uint64_t t, uint16_t p, uint64_t d, uint64_t i = UINT64_MAX) : func(f), time(t), priority(p), interval(i), id(d) {
+			Job(const boost::function<bool(void)> & f, uint64_t t, JobPriorities p, uint64_t d, uint64_t i = UINT64_MAX) : func(f), time(t), priority(p), interval(i), id(d) {
 			}
 
 			/**
@@ -58,7 +60,7 @@ namespace core {
 			/**
 			 * \brief priority of this job
 			 */
-			uint16_t priority; // the higher, the better
+			JobPriorities priority; // the higher, the better
 
 			/**
 			 * \brief interval in which this job is repeated, LONG_MAX if only once
@@ -75,7 +77,7 @@ namespace core {
 					return time > other.time;
 				}
 				if (priority != other.priority) {
-					return priority < other.priority;
+					return priority > other.priority;
 				}
 				return interval > other.interval;
 			}
@@ -110,7 +112,7 @@ namespace core {
 		 * \params[in] f the method to be called if time is over
 		 * \params[in] priority the priority in which order the timers are scheduled if time is equal
 		 */
-		uint64_t runOnce(uint64_t time, const boost::function<bool(void)> & f, uint16_t priority) {
+		uint64_t runOnce(uint64_t time, const boost::function<bool(void)> & f, JobPriorities priority) {
 			if (time <= 0) {
 				ISIXE_THROW_API("Scheduler", "time need to be > 0");
 			}
@@ -133,7 +135,7 @@ namespace core {
 		 * \params[in] f the method to be called if time is over
 		 * \params[in] priority the priority in which order the timers are scheduled if time is equal
 		 */
-		uint64_t runRepeated(uint64_t interval, const boost::function<bool(void)> & f, uint16_t priority) {
+		uint64_t runRepeated(uint64_t interval, const boost::function<bool(void)> & f, JobPriorities priority) {
 			if (interval <= 0) {
 				ISIXE_THROW_API("Scheduler", "interval has to be greater than 0, otherwise there would be an instant call");
 			}
@@ -171,7 +173,7 @@ namespace core {
 		/**
 		 * \brief removes all timers with given priority
 		 */
-		void removeTimer(uint16_t priority) {
+		void removeTimer(JobPriorities priority) {
 			boost::mutex::scoped_lock sl(_lock);
 			std::priority_queue<Job> copy = _queue;
 

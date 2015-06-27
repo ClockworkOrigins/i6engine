@@ -120,21 +120,21 @@ namespace api {
 		i6engine::api::EngineController::GetSingleton().stop();
 	}
 
-	uint64_t registerTimer(uint64_t time, const std::string & file, const std::string & func, bool looping, uint16_t priority) {
+	uint64_t registerTimer(uint64_t time, const std::string & file, const std::string & func, bool looping, i6engine::core::JobPriorities priority) {
 		return i6engine::api::EngineController::GetSingleton().registerTimer(time, [file, func]() {
 			auto ret = i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<bool>(file, func);
 			return ret->get();
 		}, looping, priority);
 	}
 
-	uint64_t registerTimer(uint64_t time, const std::string & func, bool looping, uint16_t priority) {
+	uint64_t registerTimer(uint64_t time, const std::string & func, bool looping, i6engine::core::JobPriorities priority) {
 		return i6engine::api::EngineController::GetSingleton().registerTimer(time, [func]() {
 			auto ret = i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<bool>(func);
 			return ret->get();
 		}, looping, priority);
 	}
 
-	void removeTimer(uint16_t priority) {
+	void removeTimer(i6engine::core::JobPriorities priority) {
 		i6engine::api::EngineController::GetSingleton().removeTimer(priority);
 	}
 
@@ -270,6 +270,15 @@ scope registerAPI() {
 				value("MessageTypeCount", int(i6engine::api::messages::EngineMessageTypes::MessageTypeCount))
 			],
 
+		class_<i6engine::core::JobPriorities>("JobPriorities")
+			.def(constructor<>())
+			.enum_("JobPriorities")
+			[
+				value("Prio_High", i6engine::core::JobPriorities::Prio_High),
+				value("Prio_Medium", i6engine::core::JobPriorities::Prio_Medium),
+				value("Prio_Low", i6engine::core::JobPriorities::Prio_Low)
+			],
+
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, uint32_t)) &i6engine::lua::api::getCurrentTime),
 	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, const std::set<i6engine::lua::core::Subsystem::Type> &)) &i6engine::lua::api::getCurrentTime),
 	def("getIDManager", &i6engine::lua::api::getIDManager),
@@ -284,8 +293,8 @@ scope registerAPI() {
 	def("getAppl", &i6engine::lua::api::getAppl),
 	def("registerDefault", &i6engine::lua::api::registerDefault),
 	def("stop", &i6engine::lua::api::stop),
-	def("registerTimer", (uint64_t(*)(uint64_t, const std::string &, const std::string &, bool, uint16_t)) &i6engine::lua::api::registerTimer),
-	def("registerTimer", (uint64_t(*)(uint64_t, const std::string &, bool, uint16_t)) &i6engine::lua::api::registerTimer),
+	def("registerTimer", (uint64_t(*)(uint64_t, const std::string &, const std::string &, bool, i6engine::core::JobPriorities)) &i6engine::lua::api::registerTimer),
+	def("registerTimer", (uint64_t(*)(uint64_t, const std::string &, bool, i6engine::core::JobPriorities)) &i6engine::lua::api::registerTimer),
 	def("removeTimer", &i6engine::lua::api::removeTimer),
 	def("removeTimerID", &i6engine::lua::api::removeTimerID),
 	def("getTimeLeft", &i6engine::lua::api::getTimeLeft),

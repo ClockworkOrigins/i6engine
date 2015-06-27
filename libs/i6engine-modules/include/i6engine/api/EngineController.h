@@ -28,6 +28,8 @@
 #include "i6engine/utils/ExceptionQueue.h"
 #include "i6engine/utils/Logger.h"
 
+#include "i6engine/core/configs/JobPriorities.h"
+
 #include "boost/function.hpp"
 
 #include "clockUtils/iniParser/iniParser.h"
@@ -192,16 +194,17 @@ namespace api {
 
 		/**
 		 * \brief registers a timer
-		 * \param[in] name name of the timer to identify
 		 * \param[in] time time in microseconds until func is called
 		 * \param[in] func function to be called after given time
+		 * \param[in] looping defines whether method is looping or just running once
+		 * \param[in] priority priority of this task, defining which Job will be handles preferred
 		 */
-		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, uint16_t priority);
+		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, core::JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given priority
 		 */
-		void removeTimer(uint16_t priority);
+		void removeTimer(core::JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given name

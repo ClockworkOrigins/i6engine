@@ -91,7 +91,7 @@ namespace quest {
 		api::EngineController::GetSingleton().registerTimer(100000, [this]() {
 			processMessages();
 			return _active;
-		}, true, 1);
+		}, true, core::JobPriorities::Prio_Medium);
 	}
 
 	void QuestLog::hide() {

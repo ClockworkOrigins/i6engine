@@ -101,12 +101,12 @@ namespace core {
 		 * \param[in] time time in microseconds until func is called
 		 * \param[in] func function to be called after given time
 		 */
-		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, uint16_t priority);
+		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given priority
 		 */
-		void removeTimer(uint16_t priority);
+		void removeTimer(JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given name

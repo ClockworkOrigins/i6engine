@@ -64,7 +64,7 @@ namespace api {
 			EngineController::GetSingleton().registerTimer(_fadeOutCooldown, [msg]() {
 				EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 				return false;
-			}, false, 1);
+			}, false, core::JobPriorities::Prio_Medium);
 		} else {
 			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);

@@ -53,7 +53,7 @@ namespace sample {
 			}
 			gf->setProgress("Canvas/Background/Bar", _percent);
 			return true;
-		}, true, 1);
+		}, true, i6engine::core::JobPriorities::Prio_Medium);
 
 		// register ESC to close the application
 		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));

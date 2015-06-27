@@ -97,7 +97,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->registerTimer(2000000, [msg]() {
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 			return false;
-		}, false, 0);
+		}, false, core::JobPriorities::Prio_Low);
 	}
 
 	void SpawnpointComponent::News(const GameMessage::Ptr & msg) {

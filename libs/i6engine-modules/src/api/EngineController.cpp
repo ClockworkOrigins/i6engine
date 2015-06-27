@@ -258,11 +258,11 @@ namespace api {
 		}
 	}
 
-	uint64_t EngineController::registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, uint16_t priority) {
+	uint64_t EngineController::registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, core::JobPriorities priority) {
 		return _coreController->registerTimer(time, func, looping, priority);
 	}
 
-	void EngineController::removeTimer(uint16_t priority) {
+	void EngineController::removeTimer(core::JobPriorities priority) {
 		_coreController->removeTimer(priority);
 	}
 

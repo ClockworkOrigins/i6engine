@@ -26,10 +26,10 @@ namespace i6engine {
 namespace core {
 
 	enum JobPriorities {
-		Subsystem,		//!< Highest priority, used only internally for ticking of subsystems, don't use this one
-		High,			//!< High job priority, use this if this task should be preferred for running before other tasks
-		Medium,			//!< Task can wait, but shouldn't wait to long
-		Low			//!< Task can wait really long, isn't that important
+		Prio_Subsystem,		//!< Highest priority, used only internally for ticking of subsystems, don't use this one
+		Prio_High,			//!< High job priority, use this if this task should be preferred for running before other tasks
+		Prio_Medium,			//!< Task can wait, but shouldn't wait to long
+		Prio_Low			//!< Task can wait really long, isn't that important
 	};
 
 } /* namespace core */
