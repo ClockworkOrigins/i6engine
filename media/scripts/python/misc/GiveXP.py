@@ -1,11 +1,4 @@
-﻿import ScriptingAPIPython
-from ScriptingAPIPython import *
-import ScriptingGUIPython
-from ScriptingGUIPython import *
-import ScriptingRPGPython
-from ScriptingRPGPython import *
-
-# gives xp to an NPC
+﻿# gives xp to an NPC
 def giveXP(self, xp):
 	printMessage("XPMessage", 0.5, 0.45, getTextManager().getText("XPGained") + str(xp), Alignment.Center, 5000000, "DejaVuSans-8")
 	self.setCurrentXP(self.getCurrentXP() + xp)

@@ -1,7 +1,4 @@
-﻿import ScriptingRPGPython
-from ScriptingRPGPython import *
-
-# This method is called during first loading of a level in RPG
+﻿# This method is called during first loading of a level in RPG
 def Startup():
 	insertItemAtWaypoint("UsableItem", "WP_Item_01")
 	insertItemAtWaypoint("UsableItem", "WP_Item_02")

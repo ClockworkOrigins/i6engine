@@ -83,6 +83,30 @@ namespace utils {
 		}
 
 		/**
+		 * \brief += operator
+		 */
+		AutoUpdater<T> & operator+=(const T & val) {
+			set(_value + val);
+			return *this;
+		}
+
+		/**
+		 * \brief -= operator
+		 */
+		AutoUpdater<T> & operator-=(const T & val) {
+			set(_value - val);
+			return *this;
+		}
+
+		/**
+		 * \brief *= operator
+		 */
+		AutoUpdater<T> & operator*=(const T & val) {
+			set(_value * val);
+			return *this;
+		}
+
+		/**
 		 * \brief returns value as the datatype it really is
 		 */
 		operator T() const {

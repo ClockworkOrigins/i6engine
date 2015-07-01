@@ -1,10 +1,3 @@
-import ScriptingMathPython
-from ScriptingMathPython import *
-import ScriptingObjectPython
-from ScriptingObjectPython import *
-import ScriptingGUIPython
-from ScriptingGUIPython import *
-
 def tick(id):
 	go = getObject(id)
 	if go == None:

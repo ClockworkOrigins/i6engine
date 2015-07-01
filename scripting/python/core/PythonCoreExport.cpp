@@ -115,7 +115,7 @@ namespace core {
 } /* namespace python */
 } /* namespace i6engine */
 
-BOOST_PYTHON_MODULE(ScriptingAudioPython) {
+BOOST_PYTHON_MODULE(ScriptingCorePython) {
 	using namespace boost::python;
 
 	enum_<i6engine::core::Subsystem>("Subsystem")
