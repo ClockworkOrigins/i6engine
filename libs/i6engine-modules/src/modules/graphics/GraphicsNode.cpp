@@ -156,7 +156,7 @@ namespace modules {
 		}
 
 		if (api::EngineController::GetSingletonPtr()->getDebugdrawer() == 3 || api::EngineController::GetSingletonPtr()->getDebugdrawer() == 4) {
-			_sceneNode->showBoundingBox(true);
+			_sceneNodes[coid]->showBoundingBox(true);
 		}
 	}
 
