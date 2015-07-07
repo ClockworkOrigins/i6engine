@@ -3,6 +3,7 @@
 Enhancements:
 	- improved member access of components
 	- python modules are now also preloaded
+	- changed getting of ip
 
 Fixes:
 	- fixed missing reading of openTime from attributeMap of MoverInterpolate
