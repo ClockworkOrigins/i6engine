@@ -559,6 +559,22 @@ namespace modules {
 		} else if (msg->getSubtype() == api::graphics::GraSetExponentialFog2) {
 			api::graphics::Graphics_SetExponentialFog_Update * gsefu = dynamic_cast<api::graphics::Graphics_SetExponentialFog_Update *>(msg->getContent());
 			_sceneManager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(gsefu->colour.getX(), gsefu->colour.getY(), gsefu->colour.getZ()), gsefu->density);
+		} else if (msg->getSubtype() == api::graphics::GraGetHighestCoordinate) {
+			api::graphics::Graphics_GetHighestCoordinate_Update * ggu = dynamic_cast<api::graphics::Graphics_GetHighestCoordinate_Update *>(msg->getContent());
+			Vec3 startPos = ggu->startPos;
+			startPos.setY(DBL_MAX);
+			Ogre::Ray ray(startPos.toOgre(), Ogre::Vector3(0.0, -1.0, 0.0));
+			_raySceneQuery->setRay(ray);
+			_raySceneQuery->setSortByDistance(true);
+			// Execute query
+			Ogre::RaySceneQueryResult & result = _raySceneQuery->execute();
+			Ogre::RaySceneQueryResult::iterator itr;
+
+			if (result.empty()) {
+				ggu->callback(Vec3::ZERO);
+			} else {
+				ggu->callback(Vec3(ray.getPoint(result[0].distance)));
+			}
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

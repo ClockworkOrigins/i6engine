@@ -67,7 +67,8 @@ namespace graphics {
 		GraCompositor,
 		GraScreenshot,
 		GraFPS,
-		GraParticleFadeOut
+		GraParticleFadeOut,
+		GraGetHighestCoordinate
 	};
 
 	enum class ShadowTechnique {
@@ -729,6 +730,19 @@ namespace graphics {
 			return new Graphics_FPS_Delete(*this);
 		}
 	} Graphics_FPS_Delete;
+
+	/**
+	 * \brief get highest coordinate
+	 */
+	typedef struct Graphics_GetHighestCoordinate_Update : GameMessageStruct {
+		Vec3 startPos;
+		std::function<void(Vec3)> callback;
+		Graphics_GetHighestCoordinate_Update(const Vec3 & s, const std::function<void(Vec3)> & c) : GameMessageStruct(), startPos(s), callback(c) {
+		}
+		Graphics_GetHighestCoordinate_Update * copy() {
+			return new Graphics_GetHighestCoordinate_Update(*this);
+		}
+	} Graphics_GetHighestCoordinate_Update;
 
 } /* namespace graphics */
 } /* namespace api */

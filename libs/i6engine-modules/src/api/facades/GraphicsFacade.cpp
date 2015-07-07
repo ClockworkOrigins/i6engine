@@ -169,6 +169,10 @@ namespace api {
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Worst_Value");
 	}
 
+	void GraphicsFacade::getHighestCoordinate(const Vec3 & startPos, const std::function<void(Vec3)> & callback) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraGetHighestCoordinate, core::Method::Update, new graphics::Graphics_GetHighestCoordinate_Update(startPos, callback), core::Subsystem::Unknown));
+	}
+
 	void GraphicsFacade::registerNotifyCallback(const boost::function<void(int64_t)> & f) {
 		_notify = f;
 		_notifyInit = true;
