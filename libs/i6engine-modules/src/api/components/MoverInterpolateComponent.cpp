@@ -229,7 +229,7 @@ namespace api {
 			}
 			for (uint32_t i = 0; i < n + 1; ++i) {
 				newPos += _keyFrames[i % n].first * fak1 * fak2 * double(math::binom(n, i));
-				fak1 /= (1-tt);
+				fak1 /= (1 - tt);
 				fak2 *= tt;
 			}
 			break;

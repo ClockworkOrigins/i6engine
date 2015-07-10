@@ -799,7 +799,7 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 
 			if (node == nullptr) {
-				return; // FIXME: (Daniel) happened after adding animations, but this musn't happen because of messaging system
+				return; // FIXME: (Daniel) happened after adding animations, but this mustn't happen because of messaging system
 			}
 
 			api::graphics::Graphics_SetAnimationSpeed_Update * gsu = dynamic_cast<api::graphics::Graphics_SetAnimationSpeed_Update *>(msg->getContent());
@@ -807,7 +807,9 @@ namespace modules {
 			node->setAnimationSpeed(gsu->speed);
 		} else if (msg->getSubtype() == api::graphics::GraStopAnimation) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
+			if (node == nullptr) {
+				return;
+			}
 			node->stopAnimation();
 		} else if (msg->getSubtype() == api::graphics::GraBillboard) {
 			api::graphics::Graphics_Billboard_Update * gbu = static_cast<api::graphics::Graphics_Billboard_Update *>(msg->getContent());
