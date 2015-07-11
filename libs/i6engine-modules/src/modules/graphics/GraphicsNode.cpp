@@ -538,6 +538,7 @@ namespace modules {
 		Ogre::Billboard * bb = _billboardSets[coid].second[identifier];
 		_billboardSets[coid].first->removeBillboard(bb);
 		_billboardSets[coid].second.erase(identifier);
+		delete bb;
 	}
 
 	void GraphicsNode::deleteBillboardSetComponent(int64_t coid) {
