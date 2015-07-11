@@ -842,6 +842,20 @@ namespace modules {
 			}
 
 			node->particleFadeOut(coid);
+		} else if (msg->getSubtype() == api::graphics::GraDrawBB) {
+			api::graphics::Graphics_DrawBB_Update * gdu = dynamic_cast<api::graphics::Graphics_DrawBB_Update *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			if (node == nullptr) {
+				return;
+			}
+			node->drawBoundingBox(coid, gdu->colour);
+		} else if (msg->getSubtype() == api::graphics::GraRemoveBB) {
+			api::graphics::Graphics_Compositor_Update * gcu = dynamic_cast<api::graphics::Graphics_Compositor_Update *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			if (node == nullptr) {
+				return;
+			}
+			node->removeBoundingBox();
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

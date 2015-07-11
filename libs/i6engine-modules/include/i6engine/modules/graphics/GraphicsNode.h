@@ -34,9 +34,10 @@ namespace Ogre {
 	class Camera;
 	class Entity;
 	class Light;
+	class ManualObject;
 	class ParticleSystem;
 	class SceneNode;
-}
+} /* namespace Ogre */
 
 namespace i6engine {
 namespace api {
@@ -273,6 +274,10 @@ namespace modules {
 
 		void enableCompositor(int64_t coid, const std::string & compositor, bool enabled);
 
+		void drawBoundingBox(int64_t coid, const Vec3 & colour);
+
+		void removeBoundingBox();
+
 		/**
 		 * \brief forbidden
 		 */
@@ -341,6 +346,11 @@ namespace modules {
 		 * \brief list of all MovableTexts depending on a mesh. Key is mesh
 		 */
 		std::map<int64_t, std::vector<int64_t>> _observer;
+
+		/**
+		 * \brief bounding box of this object
+		 */
+		Ogre::ManualObject * _boundingBox;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

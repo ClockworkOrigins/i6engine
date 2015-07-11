@@ -148,6 +148,16 @@ namespace api {
 
 		std::vector<componentOptions> getComponentOptions() override;
 
+		/**
+		 * \brief shows the bounding box of this mesh in given colour
+		 */
+		void drawBoundingBox(const Vec3 & colour) const;
+
+		/**
+		 * \brief removes the bounding box of this mesh
+		 */
+		void removeBoundingBox() const;
+
 	private:
 		/**
 		 * Name of the mesh file of the component

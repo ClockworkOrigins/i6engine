@@ -68,7 +68,9 @@ namespace graphics {
 		GraScreenshot,
 		GraFPS,
 		GraParticleFadeOut,
-		GraGetHighestCoordinate
+		GraGetHighestCoordinate,
+		GraDrawBB,
+		GraRemoveBB
 	};
 
 	enum class ShadowTechnique {
@@ -743,6 +745,29 @@ namespace graphics {
 			return new Graphics_GetHighestCoordinate_Update(*this);
 		}
 	} Graphics_GetHighestCoordinate_Update;
+
+	/**
+	 * \brief draws BoundingBox
+	 */
+	typedef struct Graphics_DrawBB_Update : GameMessageStruct {
+		Vec3 colour;
+		Graphics_DrawBB_Update(int64_t coid, int64_t goid, const Vec3 & c) : GameMessageStruct(coid, goid), colour(c) {
+		}
+		Graphics_DrawBB_Update * copy() {
+			return new Graphics_DrawBB_Update(*this);
+		}
+	} Graphics_DrawBB_Update;
+
+	/**
+	 * \brief removes BoundingBox
+	 */
+	typedef struct Graphics_RemoveBB_Update : GameMessageStruct {
+		Graphics_RemoveBB_Update(int64_t coid, int64_t goid) : GameMessageStruct(coid, goid) {
+		}
+		Graphics_RemoveBB_Update * copy() {
+			return new Graphics_RemoveBB_Update(*this);
+		}
+	} Graphics_RemoveBB_Update;
 
 } /* namespace graphics */
 } /* namespace api */

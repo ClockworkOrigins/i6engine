@@ -205,5 +205,13 @@ namespace api {
 		return result;
 	}
 
+	void MeshAppearanceComponent::drawBoundingBox(const Vec3 & colour) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraDrawBB, core::Method::Update, new graphics::Graphics_DrawBB_Update(getID(), _objOwnerID, colour), core::Subsystem::Object));
+	}
+
+	void MeshAppearanceComponent::removeBoundingBox() const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraRemoveBB, core::Method::Update, new graphics::Graphics_RemoveBB_Update(getID(), _objOwnerID), core::Subsystem::Object));
+	}
+
 } /* namespace api */
 } /* namespace i6engine */

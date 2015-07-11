@@ -31,6 +31,7 @@
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/components/MeshAppearanceComponent.h"
 #include "i6engine/api/components/MovableTextComponent.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/components/StaticStateComponent.h"
@@ -485,6 +486,13 @@ namespace editor {
 	void Editor::selectObject(int64_t id) {
 		if (_selectedObjectID != -1) {
 			api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("ObjectInfo");
+			auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			if (go != nullptr) {
+				auto mc = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
+				if (mc != nullptr) {
+					mc->removeBoundingBox();
+				}
+			}
 		}
 		_selectedObjectID = id;
 
@@ -529,6 +537,11 @@ namespace editor {
 			for (auto option : c->getComponentOptions()) {
 				api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponentOption, core::Method::Update, new messages::GUI_AddComponentOption("ObjectInfo", std::get<api::ComponentOptionsParameter::ACCESSSTATE>(option) == api::AccessState::READWRITE, std::get<api::ComponentOptionsParameter::NAME>(option), std::get<api::ComponentOptionsParameter::READFUNC>(option), std::get<api::ComponentOptionsParameter::WRITEFUNC>(option)), i6engine::core::Subsystem::Unknown));
 			}
+		}
+
+		auto mc = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
+		if (mc != nullptr) {
+			mc->drawBoundingBox(Vec3(1.0, 0.0, 0.0));
 		}
 	}
 
