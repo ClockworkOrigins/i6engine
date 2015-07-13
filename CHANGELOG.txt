@@ -9,6 +9,7 @@ Enhancements:
 Fixes:
 	- fixed missing reading of openTime from attributeMap of MoverInterpolate
 	- camera in level editor is now always above the highest mesh when level is loaded
+	- fixed two memory leaks
 
 v 0.8.7
 
