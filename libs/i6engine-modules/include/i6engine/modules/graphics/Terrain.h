@@ -50,58 +50,34 @@ namespace modules {
 	public:
 		/**
 		 * \brief Creates a new node with unique name
-		 *
-		 *     Creates a new Ogre terrain by using Ogre's TerrainGroup object
-		 *     Thereby passing a filename and calling Ogre's loadAllTerrains
-		 *     Then configuring
-		 *
-		 * \param[in] goid Timestamp
-		 * \return   nothing
+		 * Creates a new Ogre terrain by using Ogre's TerrainGroup object
+		 * Thereby passing a filename and calling Ogre's loadAllTerrains
+		 * Then configuring
 		 *
 		 */
 		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
 
 		/**
 		 * \brief Terrain::~Terrain()
-		 *
-		 *     Calls Ogre's terrain object delete functions
-		 *
-		 * \param   no params
-		 * \return   nothing
-		 *
+		 * Calls Ogre's terrain object delete functions
 		 */
 		~Terrain();
 
 		/**
 		 * \brief Terrain::defineTerrain(const long x, const long y)
-		 *
-		 *     Configures Ogre Terrain texture (?)
-		 *
-		 * \param   const long x, const long y
-		 * \return   nothing
-		 *
+		 * Configures Ogre Terrain texture (?)
 		 */
 		void defineTerrain(const int64_t x, const int64_t y);
 
 		/**
 		 * \brief Terrain::configureTerrainDefaults()
-		 *
-		 *     Configures Ogre Terrain using default values
-		 *
-		 * \param   no params
-		 * \return   nothing
-		 *
+		 * Configures Ogre Terrain using default values
 		 */
 		void configureTerrainDefaults();
 
 		/**
 		 * \brief Terrain::getTerrainImage(const bool flipX, const bool flipY, Ogre::Image & img)
-		 *
-		 *     loads an Ogre terain image and flips it depending on flipX and flipY params.
-		 *
-		 * \param   const bool flipX, const bool flipY, Ogre::Image & img
-		 * \return   nothing
-		 *
+		 * loads an Ogre terain image and flips it depending on flipX and flipY params.
 		 */
 		void getTerrainImage(const bool flipX, const bool flipY, Ogre::Image & img);
 
@@ -109,19 +85,13 @@ namespace modules {
 
 		/**
 		 * \brief Returns a pointer to the TerrainGroup of the graphics library
-		 *
 		 * Returns a pointer to the TerrainGroup of the graphics library
-		 *
-		 * \return TerrainGroup of the object
 		 */
 		inline Ogre::TerrainGroup * getTerrainGroup() const { return _mTerrainGroup; }
 
 		/**
 		 * \brief Returns a pointer to the TerrainGlobalsOptions of the graphics library
-		 *
 		 * Returns a pointer to the TerrainGlobalOptions of the graphics library
-		 *
-		 * \return TerrainGlobalOptions of the object
 		 */
 		inline Ogre::TerrainGlobalOptions * getTerrainGlobalOptions() const { return _mTerrainGlobals; }
 
