@@ -14,6 +14,7 @@
 # limitations under the License.
 ##
 
-add_subdirectory(tut1)
-add_subdirectory(tut2)
-add_subdirectory(tut3)
+configure_file(tut3.tex ${CMAKE_CURRENT_BINARY_DIR}/tut3.tex COPYONLY)
+configure_file(listings/level.xml ${CMAKE_CURRENT_BINARY_DIR}/listings/level.xml COPYONLY)
+
+add_custom_target(BasicTutorial03 COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/tut3.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
