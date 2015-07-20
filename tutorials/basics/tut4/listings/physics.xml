@@ -12,20 +12,3 @@
 	<Attribute name="syncPrio">2</Attribute>
 	<Attribute name="compound">0</Attribute>
 </Component>
-
-i6engine::api::PhysicalStateComponent * physicsComp = new i6engine::api::PhysicalStateComponent(go->getID() + 2, position, rotation, scale);
-
-i6engine::api::attributeMap shapeParams;
-shapeParams.insert(std::make_pair("mass", "10.0"));
-shapeParams.insert(std::make_pair("friction", "1.0"));
-shapeParams.insert(std::make_pair("boxX", "2"));
-shapeParams.insert(std::make_pair("boxY", "1"));
-shapeParams.insert(std::make_pair("boxZ", "1"));
-physicsComp->setCollisionShape(i6engine::api::PhysicalStateComponent::ShapeType::BOX, shapeParams);
-
-namespace RT = i6engine::api::ResponseType;
-physicsComp->setCollisionFlags(i6engine::api::CollisionGroup(RT::TRIGGER, 1, 9));
-physicsComp->setShatterInterest(i6engine::api::PhysicalStateComponent::ShatterInterest::ALWAYS);
-
-go->setGOC(physicsComp);
-physicsComp->Init();
