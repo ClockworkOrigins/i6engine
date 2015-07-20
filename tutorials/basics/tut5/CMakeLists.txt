@@ -14,8 +14,9 @@
 # limitations under the License.
 ##
 
-add_subdirectory(tut1)
-add_subdirectory(tut2)
-add_subdirectory(tut3)
-add_subdirectory(tut4)
-add_subdirectory(tut5)
+configure_file(tut5.tex ${CMAKE_CURRENT_BINARY_DIR}/tut5.tex COPYONLY)
+configure_file(listings/BasicMove.h ${CMAKE_CURRENT_BINARY_DIR}/listings/BasicMove.h COPYONLY)
+configure_file(listings/FullMove.h ${CMAKE_CURRENT_BINARY_DIR}/listings/FullMove.h COPYONLY)
+
+add_custom_target(BasicTutorial05 COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/tut5.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET BasicTutorial05 POST_BUILD COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/tut5.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
