@@ -17,15 +17,15 @@ In this tutorial, we will create four completely different boxes (you'll need di
 \section{Extending Template}
 
 First of all, we have to modify our template. Currently, we add a StaticStateComponent to the objects. Such a component only defines an object in the world, that will never interact with other objects. There's no collision, no movement etc. We will now change this to a PhysicalStateComponent that allows you to modify the physical properties of the object. One important thing to keep in mind: Whilst a StaticStateComponent only describes a postion in the world, a PhysicalStateComponent that is marked as \textit{STATIC} defines a physical entity that is just unmovable (like a wall).\newline
-\lstinputlisting[language=C++, style=basic, caption={PhysicalStateComponent}, label=code:PSC]{listings/physics.cpp}
+\lstinputlisting[language=xml, style=basic, caption={PhysicalStateComponent}, label=code:PSC]{listings/physics.xml}
 Listing \ref{code:PSC} shows the code necessary for addings physics. We will go through it step by step.\newline
-We define a position, rotation and scale.\ref{note:scaling}. Than comes the definition of a collision shape:
+We define a position, rotation and scale (\ref{note:scaling}). Than comes the definition of a collision shape:
 
 \section{Collisionshape}
 
 You have to differentiate two shapes of an object. The \textit{mesh} as defined in .mesh files. This defines the real shape of an object (or at least a highly accurate approximation). This is used in the graphic to render the object as realistic as possible. And second, the collision shape. This defines the shape used in physical calculations. Whilst a graphic card is optimized to handle complex objects, there is no physic card. Thus, the collision shape should be simple. Again, it is impossible to define \textit{simple}. You have to try it. But most of the time, even one basic shape like box, sphere oder cylinder is enough. Therefore, we currently only support these basic shapes and complex ones generated out of .mesh files being stored in .bullet files. You create the collision shape using the \textit{shapeType} parameter. Here you define the type of the collision shape (PLANE, BOX, FILE, SPHERE) and. See \ref{note:shapes} for explanation of the values to be set for different shape attributes. In our template, we create a box in line 6. Our cube will weight 10 kg and has the size 1 meter x 1 meter x 1 meter.\newline
 You should now be able to run the game and see objects falling down that are not already ontop of the terrain. If something is not working as expected, a good idea is to turn on \textit{Debug Drawing}. This will add white lines to indicate the border of the collision shapes. This is for example  helpful to see whether the shape matches the mesh. But if your level is large, you will see a huge performance drop as this is a non optimized mode and causes high traffic in the engine. To turn the DebugDrawer on, call at anytime:
-\begin{lstlisting}[language=C++, style=basic, caption={loading a level}, label=code:load]
+\begin{lstlisting}[language=C++, style=basic, caption={enabling debug drawer}, label=code:load]
 i6engine::api::EngineController::GetSingleton().setDebugdrawer(1);
 \end{lstlisting}
 
