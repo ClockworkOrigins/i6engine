@@ -2,10 +2,10 @@
 
 IF "[%1]" == "[getRevision]" (goto getRevision)
 
-SET REV=
-IF "[%1]" == "[packageRevision]" (for /f %%i in ('build-archive.bat getRevision') do SET REV=-rev%%i)
+SET SUFFIX=@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@-src
+IF "[%1]" == "[packageRevision]" (for /f %%i in ('build-archive.bat getRevision') do SET SUFFIX=@LAST_VERSION_MAJOR@.@LAST_VERSION_MINOR@.@LAST_VERSION_PATCH@-src-rev%%i)
 
-SET archiveName=i6engine-@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@-src%REV%
+SET archiveName=i6engine-%SUFFIX%
 
 mkdir "%archiveName%"
 mkdir "%archiveName%/dependencies"
