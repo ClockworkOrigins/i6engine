@@ -14,8 +14,9 @@
 # limitations under the License.
 ##
 
-configure_file(tut3.tex ${CMAKE_CURRENT_BINARY_DIR}/tut3.tex COPYONLY)
-configure_file(listings/level.xml ${CMAKE_CURRENT_BINARY_DIR}/listings/level.xml COPYONLY)
+configure_file(tut4.tex ${CMAKE_CURRENT_BINARY_DIR}/tut4.tex COPYONLY)
+configure_file(listings/physics.xml ${CMAKE_CURRENT_BINARY_DIR}/listings/physics.xml COPYONLY)
+configure_file(listings/Shatter1.h ${CMAKE_CURRENT_BINARY_DIR}/listings/Shatter1.h COPYONLY)
 
-add_custom_target(BasicTutorial03 COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/tut3.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-add_custom_command(TARGET BasicTutorial03 POST_BUILD COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/tut3.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_target(BasicTutorial04 COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/tut4.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET BasicTutorial04 POST_BUILD COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/tut4.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
