@@ -1,0 +1,69 @@
+@echo OFF
+
+IF "[%1]" == "[getRevision]" (goto getRevision)
+
+SET REV=
+IF "[%1]" == "[packageRevision]" (for /f %%i in ('build-archive.bat getRevision') do SET REV=-rev%%i)
+
+SET archiveName=i6engine-@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@-src%REV%
+
+mkdir "%archiveName%"
+mkdir "%archiveName%/dependencies"
+
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/cmake_modules" "@CMAKE_BINARY_DIR@/%archiveName%/cmake_modules"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/config" "@CMAKE_BINARY_DIR@/%archiveName%/config"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/deps" "@CMAKE_BINARY_DIR@/%archiveName%/deps"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/docs" "@CMAKE_BINARY_DIR@/%archiveName%/docs"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/libs" "@CMAKE_BINARY_DIR@/%archiveName%/libs"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/media" "@CMAKE_BINARY_DIR@/%archiveName%/media"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/plugins" "@CMAKE_BINARY_DIR@/%archiveName%/plugins"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/samples" "@CMAKE_BINARY_DIR@/%archiveName%/samples"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/scripting" "@CMAKE_BINARY_DIR@/%archiveName%/scripting"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/test" "@CMAKE_BINARY_DIR@/%archiveName%/test"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/tools" "@CMAKE_BINARY_DIR@/%archiveName%/tools"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/tutorials" "@CMAKE_BINARY_DIR@/%archiveName%/tutorials"
+
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-boost.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-boost.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-boost.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-boost.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-bullet.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-bullet.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-bullet.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-bullet.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-cegui.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-cegui.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-cegui.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-cegui.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-clockUtils.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-clockUtils.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-clockUtils.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-clockUtils.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-common.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-common.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-common.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-common.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-dependencies.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-dependencies.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-dependencies.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-dependencies.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-gmock.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-gmock.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-gmock.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-gmock.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-gperftools.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-gperftools.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-gperftools.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-gperftools.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-m2etis.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-m2etis.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-m2etis.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-m2etis.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-ogre.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-ogre.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-ogre.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-ogre.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-ois.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-ois.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-ois.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-ois.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-openalsoft.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-openalsoft.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-openalsoft.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-openalsoft.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-tinyxml.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-tinyxml.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-tinyxml.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-tinyxml.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-wxWidgets.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-wxWidgets.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-wxWidgets.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/build-wxWidgets.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/download-dependency.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/download-dependency.bat*"
+xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/download-dependency.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/download-dependency.sh*"
+xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "@CMAKE_BINARY_DIR@/%archiveName%/AUTHORS*"
+xcopy /F "@CMAKE_SOURCE_DIR@/CHANGELOG.txt" "@CMAKE_BINARY_DIR@/%archiveName%/CHANGELOG.txt*"
+xcopy /F "@CMAKE_SOURCE_DIR@/CMakeLists.txt" "@CMAKE_BINARY_DIR@/%archiveName%/CMakeLists.txt*"
+xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "@CMAKE_BINARY_DIR@/%archiveName%/LICENSE*"
+xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "@CMAKE_BINARY_DIR@/%archiveName%/NOTICE*"
+xcopy /F "@CMAKE_SOURCE_DIR@/README" "@CMAKE_BINARY_DIR@/%archiveName%/README*"
+
+winrar a -afzip -df %archiveName%.zip %archiveName%
+exit /b
+
+:getRevision
+cd @CMAKE_SOURCE_DIR@
+git rev-list HEAD --count
+exit /b

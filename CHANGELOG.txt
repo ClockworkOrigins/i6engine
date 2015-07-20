@@ -1,4 +1,10 @@
-﻿v 0.8.8
+﻿v 0.8.10
+
+Enhancements:
+	- added more basic tutorials
+	- improved documentation
+
+v 0.8.8
 
 Enhancements:
 	- improved member access of components
