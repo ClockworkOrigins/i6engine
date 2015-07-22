@@ -5,6 +5,9 @@ Enhancements:
 	- improved documentation
 	- added possibility to set selected text for ComboBox
 
+Fixes:
+	- fixed order of messages loading a GUICanvas
+
 v 0.8.8
 
 Enhancements:

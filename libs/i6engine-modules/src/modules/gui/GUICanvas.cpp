@@ -74,31 +74,49 @@ namespace modules {
 			std::string t = prop->Attribute("type");
 			if (t == "position") {
 				Vec2 pos(prop->GetText());
-				api::EngineController::GetSingleton().getGUIFacade()->setPosition(name, pos.getX(), pos.getY());
+				auto data = new api::gui::GUI_Position(name, pos.getX(), pos.getY());
+				widgets[name]->update(api::gui::GuiSetPosition, data);
+				delete data;
 			} else if (t == "size") {
 				Vec2 size(prop->GetText());
-				api::EngineController::GetSingleton().getGUIFacade()->setSize(name, size.getX(), size.getY());
+				auto data = new api::gui::GUI_Size(name, size.getX(), size.getY());
+				widgets[name]->update(api::gui::GuiSetSize, data);
+				delete data;
 			} else if (t == "image") {
 				std::string image = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->setImage(name, utils::split(image, "/").front(), utils::split(image, "/").back());
+				auto data = new api::gui::GUI_Image(name, utils::split(image, "/").front(), utils::split(image, "/").back());
+				widgets[name]->update(api::gui::GuiSetImage, data);
+				delete data;
 			} else if (t == "text") {
 				std::string text = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->setText(name, text);
+				auto data = new api::gui::GUI_Text(name, text);
+				widgets[name]->update(api::gui::GuiSetText, data);
+				delete data;
 			} else if (t == "visibility") {
 				std::string visibility = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->setVisibility(name, std::stoi(visibility) != 0);
+				auto data = new api::gui::GUI_Visibility(name, std::stoi(visibility) != 0);
+				widgets[name]->update(api::gui::GuiSetVisible, data);
+				delete data;
 			} else if (t == "amount") {
 				std::string amount = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->setAmount(name, std::stoul(amount));
+				auto data = new api::gui::GUI_Amount(name, std::stoul(amount));
+				widgets[name]->update(api::gui::GuiSetAmount, data);
+				delete data;
 			} else if (t == "colour") {
 				Vec4 colour(prop->GetText());
-				api::EngineController::GetSingleton().getGUIFacade()->setColour(name, colour.getX(), colour.getY(), colour.getZ(), colour.getW());
+				auto data = new api::gui::GUI_Colour(name, colour.getX(), colour.getY(), colour.getZ(), colour.getW());
+				widgets[name]->update(api::gui::GuiSetColour, data);
+				delete data;
 			} else if (t == "font") {
 				std::string font = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->setFont(name, font);
+				auto data = new api::gui::GUI_Text(name, font);
+				widgets[name]->update(api::gui::GuiSetFont, data);
+				delete data;
 			} else if (t == "lifetime") {
 				std::string lifetime = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->setLifetime(name, std::stol(lifetime));
+				auto data = new api::gui::GUI_Lifetime(name, std::stol(lifetime));
+				widgets[name]->update(api::gui::GuiSetLifetime, data);
+				delete data;
 			} else if (t == "alignment") {
 				std::string alignment = prop->GetText();
 				api::gui::Alignment align;
@@ -111,24 +129,33 @@ namespace modules {
 				} else {
 					ISIXE_THROW_FAILURE("GUICanvas", "'" << alignment << "' is not a known alignment type. Used in canvas " << file << " unkown!");
 				}
-
-				api::EngineController::GetSingleton().getGUIFacade()->setAlignment(name, align);
+				auto data = new api::gui::GUI_Alignment(name, align);
+				widgets[name]->update(api::gui::GuiSetAlignment, data);
+				delete data;
 			} else if (t == "progress") {
 				std::string progress = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->setProgress(name, std::stod(progress));
+				auto data = new api::gui::GUI_Progress(name, std::stod(progress));
+				widgets[name]->update(api::gui::GuiSetProgress, data);
+				delete data;
 			} else if (t == "property") {
 				std::string propertyValue = prop->GetText();
 				if (!prop->Attribute("name")) {
 					ISIXE_THROW_FAILURE("GUICanvas", "Type 'property' requires attribute 'name' in canvas " << file);
 				}
 				std::string n = prop->Attribute("name");
-				api::EngineController::GetSingleton().getGUIFacade()->setProperty(name, n, propertyValue);
+				auto data = new api::gui::GUI_SetProperty(name, n, propertyValue);
+				widgets[name]->update(api::gui::GuiSetProperty, data);
+				delete data;
 			} else if (t == "tooltip") {
 				std::string tooltip = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->setTooltip(name, tooltip);
+				auto data = new api::gui::GUI_SetTooltip(name, tooltip);
+				widgets[name]->update(api::gui::GuiSetTooltip, data);
+				delete data;
 			} else if (t == "animation") {
 				std::string animation = prop->GetText();
-				api::EngineController::GetSingleton().getGUIFacade()->playAnimation(name, animation);
+				auto data = new api::gui::GUI_PlayAnimation(name, animation);
+				widgets[name]->update(api::gui::GuiPlayAnimation, data);
+				delete data;
 			} else {
 				ISIXE_THROW_FAILURE("GUICanvas", "Type '" << t << "' in canvas " << file << " unkown!");
 			}
