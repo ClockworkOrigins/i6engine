@@ -42,6 +42,16 @@ namespace modules {
 		} else if (type == api::gui::GuiSetSelectedStringCallback) {
 			api::gui::GUI_SetSelectedStringCallback * g = dynamic_cast<api::gui::GUI_SetSelectedStringCallback *>(data);
 			_selectedCallback = g->callback;
+		} else if (api::gui::GuiSetText) {
+			std::string selection = dynamic_cast<api::gui::GUI_Text *>(data)->text;
+			for (size_t i = 0; i < dynamic_cast<CEGUI::Combobox *>(_window)->getItemCount(); i++) {
+				CEGUI::ListboxTextItem * lti = dynamic_cast<CEGUI::ListboxTextItem *>(dynamic_cast<CEGUI::Combobox *>(_window)->getListboxItemFromIndex(i));
+				if (lti->getText() == selection) {
+					lti->setSelected(true);
+					dynamic_cast<CEGUI::Combobox *>(_window)->setText(selection);
+					break;
+				}
+			}
 		} else {
 			GUIWidget::update(type, data);
 		}
