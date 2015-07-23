@@ -79,54 +79,6 @@ namespace core {
 	/**
 	 * \class MessagingController
 	 * \brief Central controller for messaging between subsystems and subsystems of different clients
-	 *
-	 * This class is responsible for accepting, queuing and delivering messages to subscribers. Furthermore an object that inherits from
-	 * the super class MessageSubscriber may subscribe to a certain message type to receive messages of this type.
-	 * Every object is allowed to send messages. To do so, create an instance of the Message class, add some variables and call deliverMessage:
-	 * \code
-	 * objMessage = new Message("type");
-	 * objMessage->addVariable("value", 10);
-	 * objMessage->addVariable("a_text", "here is a text");
-	 * objMessage->addVariable("another_text", "here is another text");
-	 * MessagingController::GetSingleton().deliverMessage(objMessage);
-	 * \endcode
-	 *
-	 * To receive messages of a certain type, use the ISIXE_REGISTERMESSAGETYPE macro. There, the handling method for the message type has to be
-	 * specified. This method will be called, when a message of this type arrives and should look like in the example below. Inside the
-	 * method, use getVariable of the Message class as well as the macros RETURNIFVARIABLEISNULL and CONVERTVARIABLE to 'unpack' the message:
-	 * \code
-	 * ISIXE_REGISTERMESSAGETYPE("Type1", AudioController::Mailbox); // When a message of 'Type1' arrives, 'Mailbox' will be called
-	 * ...
-	 * // handling method
-	 * void AudioController::Mailbox(Message * objMessage)
-	 * {
-	 * // unpack the variable 'value'
-	 * int i;
-	 * MessageVariable * objValue = objMessage->getVariable("value");
-	 * RETURNIFVARIABLEISNULL(objValue);
-	 * CONVERTVARIABLE(i, int, objValue);
-	 * // do some stuff with i or unpack further variables of the message
-	 * ...
-	 * }
-	 * \endcode
-	 * \internal To get an overview on the usage and functionality of the whole messaging subsystem in German have a look at our wiki
-	 * (topic: 'Messaging in der i6engine (Kurzbeschreibung)' )
-	 *
-	 * \note
-	 * MessagingController.h defines the types:
-	 * \li \c MessageTypeInfoList is an alias for std::list<const MessageTypeInfo *>
-	 * \li \c MessageList is an alias for std::list<const Message *>
-	 * \li \c MessageTypeDictionary is an alias for std::map<const std::string, MessageTypeInfoList *>
-	 *
-	 * MessagingController.h defines the macros:
-	 * \li \c ISIXE_REGISTERMESSAGETYPE(strMessageTypeName, ptrMessageMethod) This macro wraps the registerMessageType method. It simplifies the use
-	 * of this method by setting objMessageSubscriber to 'this' and binding the function pointer so that users can just type in the method name
-	 * as second parameter.
-	 * \li \c ISIXE_UNREGISTERMESSAGETYPE(strMessageTypeName) This macro wraps the unregisterMessageType method. It just sets objMessageSubscriber to
-	 * 'this'.
-	 *
-	 * Have a look at \link i6engine here \endlink for an overview of typedef's in namespace %i6engine.
-	 * See \ref macrodoc for a list of all globally defined macros.
 	 */
 	class ISIXE_CORE_API MessagingController {
 	public:
@@ -170,9 +122,9 @@ namespace core {
 		void deliverMessages();
 
 		/**
-	   * \brief Entry point for other Thread to deliver a message.
-	   * \param msg Message to be delivered.
-	   */
+		 * \brief Entry point for other Thread to deliver a message.
+		 * \param msg Message to be delivered.
+		 */
 		void deliverMessageToSubscribers(const Message::Ptr & msg) const;
 
 		/**

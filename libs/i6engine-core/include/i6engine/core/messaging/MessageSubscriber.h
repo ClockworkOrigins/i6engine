@@ -36,7 +36,7 @@ namespace core {
 	class MessageTypeInfo;
 
 	/**
-	 * \brief Status of an 'Object'
+	 * \brief Status of an ID
 	 */
 	enum class IDStatus : uint16_t {
 		NONE,		//! unknown (most likely not created yet)
@@ -45,7 +45,7 @@ namespace core {
 	};
 
 	/**
-	 * \TODO Docu
+	 * \brief a received message within a MessageSubscriber
 	 */
 	struct ReceivedMessage {
 		Message::Ptr message;
@@ -66,7 +66,6 @@ namespace core {
 	 *
 	 * \note
 	 * MessageSubscriber.h defines the types:
-	 * \li \c ReceivedMessage is an alias for struct { Message::Ptr message; const MessageTypeInfo * messagetypeinfo; }
 	 * \li \c MessageVector is an alias for std::vector<ReceivedMessage>
 	 *
 	 * Have a look at \link i6engine here \endlink for an overview of typedef's in namespace %i6engine.
@@ -115,10 +114,16 @@ namespace core {
 		 */
 		void reset();
 
+		/**
+		 * \brief adds a method for given message type where messages shall be delivered
+		 */
 		inline void addMethod(uint16_t msgType, const boost::function<void(const Message::Ptr &)> & ptrMessageMethod) {
 			_ptrMessageMethod[msgType] = ptrMessageMethod;
 		}
 
+		/**
+		 * \brief removes method for given message type
+		 */
 		inline void removeMethod(uint16_t msgType) {
 			_ptrMessageMethod.erase(msgType);
 			boost::mutex::scoped_lock objScopeLock(_objMessageVectorMutex);
@@ -144,7 +149,6 @@ namespace core {
 		 * \brief This method delivers all waiting Messages that can now be delivered.
 		 */
 		bool updateBuffer();
-
 
 		boost::mutex _objMessageVectorMutex;
 		MessageVector _objMessageVectorA;
@@ -203,8 +207,8 @@ namespace core {
 } /* namespace core */
 } /* namespace i6engine */
 
+#endif /* __I6ENGINE_CORE_MESSAGESUBSCRIBER_H__ */
+
 /**
  * @}
  */
-
-#endif /* __I6ENGINE_CORE_MESSAGESUBSCRIBER_H__ */
