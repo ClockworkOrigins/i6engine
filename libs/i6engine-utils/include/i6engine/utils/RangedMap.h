@@ -29,8 +29,187 @@ namespace utils {
 	 */
 	template<typename Key, typename Value>
 	class RangedMap {
-	public:
 		struct Element;
+
+	public:
+		struct iterator {
+			iterator(Element * e) : _cur(e) {
+			}
+
+			bool valid() const {
+				return _cur != nullptr;
+			}
+
+			Value operator*() {
+				return _cur->_val;
+			}
+
+		private:
+			Element * _cur;
+		};
+
+		/**
+		 * \brief default constructor
+		 */
+		RangedMap(const Key & minVal, const Key & maxVal, const Value & def) : _head(nullptr), _merged(false) {
+			_head = new Element(minVal, maxVal, def);
+		}
+
+		/**
+		 * \brief destructor
+		 */
+		~RangedMap() {
+			delete _head;
+		}
+
+		/**
+		 * \brief writes dot graph to given file
+		 */
+		void dump(const std::string & fileName) {
+			std::ofstream of;
+			of.open(fileName.c_str());
+			of << "digraph {\n";
+			_head->dump(of);
+			of << "}";
+			of.close();
+		}
+
+		/**
+		 * \brief returns value for given key
+		 */
+		Value get(const Key & k) const {
+			Element * e = _head;
+			if (k < e->_start || k > e->_end) {
+				ISIXE_THROW_FAILURE("RangedMap", "Key " << k << " not found");
+			}
+			while (e->_next != nullptr) { // iterate as long as there is no further level
+				Block * b = e->_next;
+				if (k > b->middleSplit) {
+					e = b->right;
+				} else if (k > b->leftSplit) {
+					e = b->mid;
+				} else {
+					e = b->left;
+				}
+			}
+			return e->_val;
+		}
+
+		/**
+		 * \brief sets value for key
+		 */
+		void set(const Key k, const Value v) {
+			Element * e = _head;
+			Block * bLast;
+			if (k < e->_start || k > e->_end) {
+				ISIXE_THROW_FAILURE("RangedMap", "Key " << k << " not found");
+			}
+			while(e->_next != nullptr) { // iterate as long as there is no further level
+				bLast = e->_next;
+				if (k > bLast->middleSplit) {
+					e = bLast->right;
+				} else if (k > bLast->leftSplit) {
+					e = bLast->mid;
+				} else {
+					e = bLast->left;
+				}
+			}
+			if (e->_val == v) {
+				return;
+			}
+			_merged = false;
+			if (isMid(e)) {
+				// mid
+				e = tryMergeToLeft(e, k, v, 1);
+				int r = 1;
+				if (_merged) {
+					r = e->_end - e->_start + 1;
+				}
+				e = tryMergeToRight(e, k, v, r);
+			} else if (isLeft(e)) {
+				// left
+				e = tryMergeToRight(e, k, v, 1);
+				int r = 1;
+				if (_merged) {
+					r = e->_end - e->_start + 1;
+				}
+				e = tryMergeToLeft(e, k, v, r);
+			} else if (isRight(e)) {
+				// right
+				e = tryMergeToLeft(e, k, v, 1);
+				int r = 1;
+				if (_merged) {
+					r = e->_end - e->_start + 1;
+				}
+				e = tryMergeToRight(e, k, v, r);
+			}
+
+			if (!_merged) {
+				if (k == e->_start && k == e->_end) {
+					e->_val = v;
+				} else if (isRight(e) && k == e->_start && !e->_leftNext->isValid()) {
+					e->_leftNext->_start = k;
+					e->_leftNext->_end = k;
+					e->_start++;
+					e->_parent->_next->middleSplit++;
+					e->_leftNext->_val = v;
+				} else if (isLeft(e) && k == e->_end && !e->_rightNext->isValid()) {
+					e->_rightNext->_start = k;
+					e->_rightNext->_end = k;
+					e->_end--;
+					e->_parent->_next->leftSplit--;
+					e->_rightNext->_val = v;
+				} else {
+					Block * b = new Block();
+					if (k == e->_start) {
+						b->left = new Element(k, k, v);
+						b->mid = new Element(k + 1, k, v);
+						b->right = new Element(k + 1, e->_end, e->_val);
+						b->leftSplit = k;
+						b->middleSplit = k;
+					} else if (k == e->_end) {
+						b->left = new Element(e->_start, k - 1, e->_val);
+						b->mid = new Element(k, k - 1, v);
+						b->right = new Element(k, k, v);
+						b->leftSplit = k - 1;
+						b->middleSplit = k - 1;
+					} else {
+						b->left = new Element(e->_start, k - 1, e->_val);
+						b->mid = new Element(k, k, v);
+						b->right = new Element(k + 1, e->_end, e->_val);
+						b->leftSplit = k - 1;
+						b->middleSplit = k;
+					}
+					b->left->_parent = e;
+					b->mid->_parent = e;
+					b->right->_parent = e;
+
+					// Element neighbours
+					b->left->_leftNext = e->_leftNext;
+					if (e->_leftNext != nullptr) {
+						e->_leftNext->_rightNext = b->left;
+					}
+
+					b->mid->_leftNext = b->left;
+					b->left->_rightNext = b->mid;
+					b->mid->_rightNext = b->right;
+					b->right->_leftNext = b->mid;
+
+					b->right->_rightNext = e->_rightNext;
+					if (e->_rightNext != nullptr) {
+						e->_rightNext->_leftNext = b->right;
+					}
+
+					e->_leftNext = nullptr;
+					e->_rightNext = nullptr;
+
+					e->_next = b;
+				}
+			}
+			return;
+		}
+
+	private:
 		struct Block {
 			Element * left;
 			Element * mid;
@@ -83,59 +262,8 @@ namespace utils {
 			}
 		};
 
-		struct iterator {
-			iterator(Element * e) : _cur(e) {
-			}
-
-			bool valid() const {
-				return _cur != nullptr;
-			}
-
-			Value operator*() {
-				return _cur->_val;
-			}
-
-		private:
-			Element * _cur;
-		};
-
-		/**
-		 * \brief default constructor
-		 */
-		RangedMap(const Key & minVal, const Key & maxVal, const Value & def) : _head(nullptr), _merged(false) {
-			_head = new Element(minVal, maxVal, def);
-		}
-
-		~RangedMap() {
-			delete _head;
-		}
-
-		void dump(const std::string & fileName) {
-			std::ofstream of;
-			of.open(fileName.c_str());
-			of << "digraph {\n";
-			_head->dump(of);
-			of << "}";
-			of.close();
-		}
-
-		Value get(const Key & k) const {
-			Element * e = _head;
-			if (k < e->_start || k > e->_end) {
-				ISIXE_THROW_FAILURE("RangedMap", "Key " << k << " not found");
-			}
-			while (e->_next != nullptr) { // iterate as long as there is no further level
-				Block * b = e->_next;
-				if (k > b->middleSplit) {
-					e = b->right;
-				} else if (k > b->leftSplit) {
-					e = b->mid;
-				} else {
-					e = b->left;
-				}
-			}
-			return e->_val;
-		}
+		Element * _head;
+		bool _merged;
 
 		void eraseElement(Element * e) {
 			if (e->_leftNext) {
@@ -558,121 +686,6 @@ namespace utils {
 			}
 			return std::make_pair(e, false);
 		}
-
-		void set(const Key k, const Value v) {
-			Element * e = _head;
-			Block * bLast;
-			if (k < e->_start || k > e->_end) {
-				ISIXE_THROW_FAILURE("RangedMap", "Key " << k << " not found");
-			}
-			while(e->_next != nullptr) { // iterate as long as there is no further level
-				bLast = e->_next;
-				if (k > bLast->middleSplit) {
-					e = bLast->right;
-				} else if (k > bLast->leftSplit) {
-					e = bLast->mid;
-				} else {
-					e = bLast->left;
-				}
-			}
-			if (e->_val == v) {
-				return;
-			}
-			_merged = false;
-			if (isMid(e)) {
-				// mid
-				e = tryMergeToLeft(e, k, v, 1);
-				int r = 1;
-				if (_merged) {
-					r = e->_end - e->_start + 1;
-				}
-				e = tryMergeToRight(e, k, v, r);
-			} else if (isLeft(e)) {
-				// left
-				e = tryMergeToRight(e, k, v, 1);
-				int r = 1;
-				if (_merged) {
-					r = e->_end - e->_start + 1;
-				}
-				e = tryMergeToLeft(e, k, v, r);
-			} else if (isRight(e)) {
-				// right
-				e = tryMergeToLeft(e, k, v, 1);
-				int r = 1;
-				if (_merged) {
-					r = e->_end - e->_start + 1;
-				}
-				e = tryMergeToRight(e, k, v, r);
-			}
-
-			if (!_merged) {
-				if (k == e->_start && k == e->_end) {
-					e->_val = v;
-				} else if (isRight(e) && k == e->_start && !e->_leftNext->isValid()) {
-					e->_leftNext->_start = k;
-					e->_leftNext->_end = k;
-					e->_start++;
-					e->_parent->_next->middleSplit++;
-					e->_leftNext->_val = v;
-				} else if (isLeft(e) && k == e->_end && !e->_rightNext->isValid()) {
-					e->_rightNext->_start = k;
-					e->_rightNext->_end = k;
-					e->_end--;
-					e->_parent->_next->leftSplit--;
-					e->_rightNext->_val = v;
-				} else {
-					Block * b = new Block();
-					if (k == e->_start) {
-						b->left = new Element(k, k, v);
-						b->mid = new Element(k + 1, k, v);
-						b->right = new Element(k + 1, e->_end, e->_val);
-						b->leftSplit = k;
-						b->middleSplit = k;
-					} else if (k == e->_end) {
-						b->left = new Element(e->_start, k - 1, e->_val);
-						b->mid = new Element(k, k - 1, v);
-						b->right = new Element(k, k, v);
-						b->leftSplit = k - 1;
-						b->middleSplit = k - 1;
-					} else {
-						b->left = new Element(e->_start, k - 1, e->_val);
-						b->mid = new Element(k, k, v);
-						b->right = new Element(k + 1, e->_end, e->_val);
-						b->leftSplit = k - 1;
-						b->middleSplit = k;
-					}
-					b->left->_parent = e;
-					b->mid->_parent = e;
-					b->right->_parent = e;
-
-					// Element neighbours
-					b->left->_leftNext = e->_leftNext;
-					if (e->_leftNext != nullptr) {
-						e->_leftNext->_rightNext = b->left;
-					}
-
-					b->mid->_leftNext = b->left;
-					b->left->_rightNext = b->mid;
-					b->mid->_rightNext = b->right;
-					b->right->_leftNext = b->mid;
-
-					b->right->_rightNext = e->_rightNext;
-					if (e->_rightNext != nullptr) {
-						e->_rightNext->_leftNext = b->right;
-					}
-
-					e->_leftNext = nullptr;
-					e->_rightNext = nullptr;
-
-					e->_next = b;
-				}
-			}
-			return;
-		}
-
-	private:
-		Element * _head;
-		bool _merged;
 	};
 
 } /* namespace utils */

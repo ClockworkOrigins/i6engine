@@ -34,6 +34,7 @@ namespace utils {
 
 	/**
 	 * \brief returns a vector of strings separated by the given delimitter
+	 * e.g. a;b;c with delimitter ; will return a vector containing a, b and c
 	 */
 	inline std::vector<std::string> split(const std::string & str, const std::string & delim) {
 		std::vector<std::string> ret;
@@ -59,10 +60,10 @@ namespace utils {
 	}
 
 	/**
-	 * \brief returns a string from a float value with given precision
+	 * \brief returns a string from a floating point value with given precision
 	 */
 	template<typename T>
-	std::string to_string_with_precision(const T a_value, const int n) {
+	typename std::enable_if<std::is_floating_point<T>::value, std::string>::type to_string_with_precision(const T a_value, const int n) {
 		std::ostringstream out;
 		out << std::setprecision(n) << a_value;
 		return out.str();

@@ -38,17 +38,12 @@ namespace exceptions {
 	 * \class ExceptionQueue
 	 * \brief Implements a queue that supports multiple producers but only one consumer.
 	 *
-	 * Implements a queue that supports multiple producers but only one consumer by using boost::mutex.
+	 * Implements a queue that supports multiple producers but only one consumer for exceptions.
 	 */
 	class ISIXE_UTILS_API ExceptionQueue : public Singleton<ExceptionQueue> {
 		friend class Singleton<ExceptionQueue>;
 
 	public:
-		/**
-		 * \brief constructor
-		 */
-		ExceptionQueue();
-
 		/**
 		 * \brief Enqueues data.
 		 *
@@ -77,6 +72,11 @@ namespace exceptions {
 		std::queue<loginfo> _queue;
 		mutable std::mutex _mutex;
 		std::vector<std::function<void(void)>> _callbacks;
+
+		/**
+		 * \brief constructor
+		 */
+		ExceptionQueue();
 	};
 
 } /* namespace exceptions */

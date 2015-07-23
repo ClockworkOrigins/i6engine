@@ -26,17 +26,24 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-// TODO: (Daniel) Docu
-
 namespace i6engine {
 namespace utils {
 
 	class ISIXE_UTILS_API Semaphore {
 	public:
+		/**
+		 * \brief default constructor
+		 */
 		Semaphore();
 
+		/**
+		 * \brief unlocks one thread
+		 */
 		void notify();
 
+		/**
+		 * \brief locks one thread
+		 */
 		void wait();
 
 	private:

@@ -40,7 +40,7 @@ namespace utils {
 		~RealTimeClock();
 
 		/**
-		 * \brief returns the time between the current time and the creation of the clock
+		 * \brief returns the time between the current time and the creation of the clock in microseconds
 		 */
 		uint64_t getCurrentTime(uint64_t lastTime) const;
 
@@ -55,11 +55,6 @@ namespace utils {
 		void Stop();
 
 	private:
-		/**
-		 * \brief updater method
-		 */
-		void clockUpdater();
-
 		boost::posix_time::ptime _startTime;
 
 		uint64_t _offset;
@@ -69,6 +64,11 @@ namespace utils {
 		std::atomic<bool> _running;
 
 		boost::thread _thread;
+
+		/**
+		 * \brief updater method
+		 */
+		void clockUpdater();
 
 		/**
 		 * \brief forbidden

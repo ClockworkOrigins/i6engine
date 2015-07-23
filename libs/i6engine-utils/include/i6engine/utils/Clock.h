@@ -117,7 +117,7 @@ namespace utils {
 		}
 
 		/**
-		 * \brief lets a time wait for the given time
+		 * \brief let's a timer wait for the given time
 		 */
 		bool waitForTime(uint64_t timerID, uint64_t time) {
 			if (time <= _systemTime) {
@@ -137,11 +137,18 @@ namespace utils {
 		}
 
 	private:
+		//        			wakeuptime      variable
+		std::vector<std::pair<uint64_t, std::condition_variable *>> _timer;
+
 		/**
-		 * \brief forbidden
+		 * \brief lock to prevent conflicts regarding the timer vector
 		 */
-		Clock(const Clock &) = delete;
-		Clock & operator=(const Clock &) = delete;
+		mutable std::mutex _lock;
+
+		// last system time
+		std::atomic<uint64_t> _systemTime;
+
+		std::atomic<bool> _running;
 
 		/**
 		 * \brief activates every timer waiting for current systemTime
@@ -156,18 +163,11 @@ namespace utils {
 			}
 		}
 
-		//        			wakeuptime      variable
-		std::vector<std::pair<uint64_t, std::condition_variable *>> _timer;
-
 		/**
-		 * \brief lock to prevent conflicts regarding the timer vector
+		 * \brief forbidden
 		 */
-		mutable std::mutex _lock;
-
-		// last system time
-		std::atomic<uint64_t> _systemTime;
-
-		std::atomic<bool> _running;
+		Clock(const Clock &) = delete;
+		Clock & operator=(const Clock &) = delete;
 	};
 
 } /* namespace utils */
