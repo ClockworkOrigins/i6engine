@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup utils
+ * @{
+ */
+
 #ifndef __I6ENGINE_UTILS_REALTIMECLOCK_H__
 #define __I6ENGINE_UTILS_REALTIMECLOCK_H__
 
@@ -81,3 +86,7 @@ namespace utils {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_UTILS_REALTIMECLOCK_H__ */
+
+/**
+ * @}
+ */

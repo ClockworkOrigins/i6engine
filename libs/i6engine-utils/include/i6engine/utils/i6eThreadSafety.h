@@ -45,16 +45,7 @@
 	#endif
 #endif
 
-/**
- * @}
- */
-
 #endif /* __I6ENGINE_UTILS_I6ETHREADSAFETY_H__ */
-
-/**
- * \addtogroup Macros
- * @{
- */
 
 /**
  * @}
