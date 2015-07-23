@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup math
+ * @{
+ */
+
 /*
  * A class to "transport" 3D vector
  *
  * for the math stuff use the vector of the lib (bullet, ogre...)
  *
  * its better to send only 1 "type" to the game then many
- */
-
-/**
- * \addtogroup math
- * @{
  */
 
 #ifndef __I6ENGINE_MATH_I6EVECTOR4_H__
@@ -37,7 +37,7 @@
 
 namespace Ogre {
 	class Vector4;
-}
+} /* namespace Ogre */
 class btVector4;
 
 namespace i6engine {
@@ -151,6 +151,9 @@ namespace math {
 		 */
 		void insertInMap(const std::string & prefix, std::map<std::string, std::string> & map) const;
 
+		/**
+		 * \brief returns string representation of Vec4
+		 */
 		std::string toString() const;
 
 		/**
