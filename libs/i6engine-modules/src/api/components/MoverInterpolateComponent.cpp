@@ -144,7 +144,7 @@ namespace api {
 			}
 		} else if (_mode == Mode::ONCE) {
 			timeElapsed %= _duration;
-			tt = 1 - double(timeElapsed - _duration) / _duration;
+			tt = double(timeElapsed) / _duration;
 
 			if (t > _duration) {
 				stop();
