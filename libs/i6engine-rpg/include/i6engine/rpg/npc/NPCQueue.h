@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_NPC_NPCQUEUE_H__
 #define __I6ENGINE_RPG_NPC_NPCQUEUE_H__
 
@@ -25,12 +30,21 @@ namespace npc {
 
 	class NPCQueueJob;
 
+	/**
+	 * \brief a queue every NPC has handling its jobs
+	 */
 	class NPCQueue {
 	public:
 		NPCQueue();
 
+		/**
+		 * \brief adds a job to the queue
+		 */
 		void addJob(NPCQueueJob * job);
 
+		/**
+		 * \brief handles current job, starts new job etc.
+		 */
 		void checkJobs();
 
 	private:
@@ -44,3 +58,7 @@ namespace npc {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_NPC_NPCQUEUE_H__ */
+
+/**
+ * @}
+ */

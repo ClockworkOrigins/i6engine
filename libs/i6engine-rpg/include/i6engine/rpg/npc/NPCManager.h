@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_NPC_NPCMANAGER_H__
 #define __I6ENGINE_RPG_NPC_NPCMANAGER_H__
 
@@ -31,14 +36,23 @@ namespace npc {
 
 	class NPC;
 
+	/**
+	 * \brief handles NPCs
+	 */
 	class ISIXE_RPG_API NPCManager : public utils::Singleton<NPCManager> {
 		friend class utils::Singleton<NPCManager>;
 
 	public:
 		~NPCManager();
 
+		/**
+		 * \brief creates an NPC with given identifier at position and with rotation
+		 */
 		void createNPC(const std::string & identifier, const Vec3 & pos, const Quaternion & rot, bool player);
 
+		/**
+		 * \brief returns active NPC for given identifier
+		 */
 		NPC * getNPC(const std::string & identifier) const;
 
 	private:
@@ -58,3 +72,7 @@ namespace npc {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_NPC_NPCPARSER_H__ */
+
+/**
+ * @}
+ */

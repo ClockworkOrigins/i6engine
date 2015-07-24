@@ -1,3 +1,8 @@
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_COMPONENT_QUICKSLOTCOMPONENT_H__
 #define __I6ENGINE_RPG_COMPONENT_QUICKSLOTCOMPONENT_H__
 
@@ -8,6 +13,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief Adds a Quickslot bar to the screen enabling quick use of items
+	 */
 	class ISIXE_RPG_API QuickslotComponent : public api::Component, api::MessageSubscriberFacade {
 	public:
 		QuickslotComponent(const int64_t id, const api::attributeMap & params);
@@ -51,3 +59,7 @@ namespace components {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_COMPONENT_QUICKSLOTCOMPONENT_H__ */
+
+/**
+ * @}
+ */

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_NPC_NPC_H__
 #define __I6ENGINE_RPG_NPC_NPC_H__
 
@@ -34,6 +39,9 @@ namespace objects {
 namespace rpg {
 namespace npc {
 
+	/**
+	 * \brief represents one NPC
+	 */
 	class ISIXE_RPG_API NPC {
 	public:
 		NPC(const api::objects::GOTemplate & tpl, bool player);
@@ -86,3 +94,7 @@ namespace npc {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_NPC_NPC_H__ */
+
+/**
+ * @}
+ */

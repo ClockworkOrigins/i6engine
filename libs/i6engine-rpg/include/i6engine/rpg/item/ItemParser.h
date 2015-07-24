@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_ITEM_ITEMPARSER_H__
 #define __I6ENGINE_RPG_ITEM_ITEMPARSER_H__
 
@@ -27,6 +32,9 @@ namespace item {
 
 	class ItemManager;
 
+	/**
+	 * \brief loads and stores all item templates
+	 */
 	class ISIXE_RPG_API ItemParser {
 		friend class ItemManager;
 
@@ -34,8 +42,14 @@ namespace item {
 		ItemParser();
 		~ItemParser();
 
+		/**
+		 * \brief loads all items templates from given directory
+		 */
 		void loadItems(const std::string & directory);
 
+		/**
+		 * \brief returns the template for the given identifier
+		 */
 		std::pair<std::string, i6engine::api::objects::GOTemplate> getTemplate(const std::string & identifier) const;
 
 	private:
@@ -49,3 +63,7 @@ namespace item {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_ITEM_ITEMPARSER_H__ */
+
+/**
+ * @}
+ */

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_QUEST_QUESTPARSER_H__
 #define __I6ENGINE_RPG_QUEST_QUESTPARSER_H__
 
@@ -30,6 +35,9 @@ namespace quest {
 	struct Quest;
 	class QuestLog;
 
+	/**
+	 * \brief parses and stores Quests
+	 */
 	class ISIXE_RPG_API QuestParser {
 		friend class QuestLog;
 
@@ -51,3 +59,7 @@ namespace quest {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_QUEST_QUESTPARSER_H__ */
+
+/**
+ * @}
+ */

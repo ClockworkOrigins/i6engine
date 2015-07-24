@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -30,6 +30,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief inventory sorting items depending on their type listing all in one view
+	 */
 	class ISIXE_RPG_API ListInventoryComponent : public InventoryComponent, public api::MessageSubscriberFacade {
 	public:
 		ListInventoryComponent(int64_t id, const api::attributeMap & params);
@@ -44,6 +47,32 @@ namespace components {
 
 		std::string getTemplateName() const override {
 			return "ListInventory";
+		}
+
+	private:
+		enum ItemEntry {
+			Message,
+			Amount,
+			Imageset,
+			Image,
+			Identifier,
+			Value
+		};
+		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string, uint32_t>>> _items;
+		uint32_t _columns;
+		uint32_t _slotCount;
+		uint32_t _currentIndex;
+		std::vector<std::string> _widgets;
+		uint32_t _itemTypeCount;
+		uint32_t _maxSlot;
+		bool _active;
+		bool _infoScreen;
+
+		void Init() override;
+		void Finalize() override;
+
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+			return std::make_pair(api::AddStrategy::REJECT, -1);
 		}
 
 		/**
@@ -82,32 +111,6 @@ namespace components {
 		 * \brief used to create an item in the inventory
 		 */
 		void removeItems(const std::string & identifier, uint32_t amount) override;
-
-	private:
-		enum ItemEntry {
-			Message,
-			Amount,
-			Imageset,
-			Image,
-			Identifier,
-			Value
-		};
-		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string, uint32_t>>> _items;
-		uint32_t _columns;
-		uint32_t _slotCount;
-		uint32_t _currentIndex;
-		std::vector<std::string> _widgets;
-		uint32_t _itemTypeCount;
-		uint32_t _maxSlot;
-		bool _active;
-		bool _infoScreen;
-
-		void Init() override;
-		void Finalize() override;
-
-		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
-			return std::make_pair(api::AddStrategy::REJECT, -1);
-		}
 
 		void showItems();
 

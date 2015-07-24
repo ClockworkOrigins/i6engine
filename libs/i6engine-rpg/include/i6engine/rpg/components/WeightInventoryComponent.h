@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -30,6 +30,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief represents an inventory limited by weight and offering the possibility to filter items depending on their category
+	 */
 	class ISIXE_RPG_API WeightInventoryComponent : public InventoryComponent, public api::MessageSubscriberFacade {
 	public:
 		WeightInventoryComponent(int64_t id, const api::attributeMap & params);
@@ -45,43 +48,6 @@ namespace components {
 		std::string getTemplateName() const override {
 			return "WeightInventory";
 		}
-
-		/**
-		 * \brief checks whether the item can be added to the inventory and if so it is added
-		 */
-		bool addItem(const api::GOPtr & item) override;
-
-		/**
-		 * \brief shows the inventory, implementation depends on subclass
-		 */
-		void show() override;
-
-		/**
-		 * \brief hides the inventory, implementation depends on subclass
-		 */
-		void hide() override;
-
-		/**
-		 * \brief tries to use given item
-		 */
-		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback) override;
-
-		/**
-		 * \brief returns the selected item
-		 * if none is selected, first parameter in pair is UINT32_MAX
-		 */
-		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const override;
-
-		/**
-		 * \brief returns the number of items for the given type
-		 */
-		uint32_t getItemCount(const std::string & identifier) const override;
-		uint32_t getItemCount(uint32_t item, const std::string & name) const override;
-
-		/**
-		 * \brief used to create an item in the inventory
-		 */
-		void removeItems(const std::string & identifier, uint32_t amount) override;
 
 	private:
 		enum class Filter {
@@ -121,6 +87,43 @@ namespace components {
 		}
 
 		void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) override;
+
+		/**
+		 * \brief checks whether the item can be added to the inventory and if so it is added
+		 */
+		bool addItem(const api::GOPtr & item) override;
+
+		/**
+		 * \brief shows the inventory, implementation depends on subclass
+		 */
+		void show() override;
+
+		/**
+		 * \brief hides the inventory, implementation depends on subclass
+		 */
+		void hide() override;
+
+		/**
+		 * \brief tries to use given item
+		 */
+		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback) override;
+
+		/**
+		 * \brief returns the selected item
+		 * if none is selected, first parameter in pair is UINT32_MAX
+		 */
+		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const override;
+
+		/**
+		 * \brief returns the number of items for the given type
+		 */
+		uint32_t getItemCount(const std::string & identifier) const override;
+		uint32_t getItemCount(uint32_t item, const std::string & name) const override;
+
+		/**
+		 * \brief used to create an item in the inventory
+		 */
+		void removeItems(const std::string & identifier, uint32_t amount) override;
 	};
 
 } /* namespace components */

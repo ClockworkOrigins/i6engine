@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,6 +28,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief handles experience points and level of characters
+	 */
 	class ISIXE_RPG_API ExperienceComponent : public api::Component {
 	public:
 		ExperienceComponent(int64_t id, const api::attributeMap & params);
@@ -44,26 +47,44 @@ namespace components {
 			return "Experience";
 		}
 
+		/**
+		 * \brief returns the current XP
+		 */
 		uint32_t getCurrentXP() const {
 			return _currentXP;
 		}
 
+		/**
+		 * \brief sets the current xp
+		 */
 		void setCurrentXP(uint32_t xp) {
 			_currentXP = xp;
 		}
 
+		/**
+		 * \brief returns xp for next level
+		 */
 		uint32_t getNextXP() const {
 			return _nextXP;
 		}
 
+		/**
+		 * \brief sets xp for next level
+		 */
 		void setNextXP(uint32_t xp) {
 			_nextXP = xp;
 		}
 
+		/**
+		 * \brief returns current level
+		 */
 		uint32_t getLevel() const {
 			return _level;
 		}
 
+		/**
+		 * \brief sets new level
+		 */
 		void setLevel(uint32_t level) {
 			_level = level;
 		}

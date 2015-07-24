@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -36,6 +36,9 @@ namespace components {
 		COUNT
 	};
 
+	/**
+	 * \brief container for attributes and their values
+	 */
 	class ISIXE_RPG_API AttributeComponent : public api::Component {
 	public:
 		AttributeComponent(int64_t id, const api::attributeMap & params);
@@ -52,12 +55,21 @@ namespace components {
 			return "Attribute";
 		}
 
+		/**
+		 * \brief returns the value of given attribute
+		 */
 		int32_t getAttributeValue(Attribute attribute) const {
 			return _attributes[size_t(attribute)];
 		}
 
+		/**
+		 * \brief changes the value of the attribute by given diff value
+		 */
 		void changeAttribute(Attribute attribute, int32_t diff);
 
+		/**
+		 * \brief registers a callback being notified on change of the attribute
+		 */
 		void registerListener(Attribute attribute, const std::function<void(int32_t)> & func);
 
 	private:

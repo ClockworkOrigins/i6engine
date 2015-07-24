@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_DIALOG_DIALOGMANAGER_H__
 #define __I6ENGINE_RPG_DIALOG_DIALOGMANAGER_H__
 
@@ -41,6 +46,10 @@ namespace dialog {
 
 	struct Dialog;
 
+	/**
+	 * \brief handles all dialogs
+	 * checks if dialogs can be used, manages jobs etc.
+	 */
 	class ISIXE_RPG_API DialogManager : public utils::Singleton<DialogManager>, public api::MessageSubscriberFacade {
 		friend class utils::Singleton<DialogManager>;
 		friend class npc::ExitDialogJob;
@@ -176,3 +185,7 @@ namespace dialog {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_DIALOG_DIALOGMANAGER_H__ */
+
+/**
+ * @}
+ */

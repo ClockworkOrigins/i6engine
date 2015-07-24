@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -29,7 +29,7 @@ namespace rpg {
 namespace components {
 
 	/**
-	 * \brief a usable item is an item that changes attributes of the user and is removed from inventory afterwards
+	 * \brief a misc item is an item that that can do nothing like gold
 	 */
 	class ISIXE_RPG_API MiscItemComponent : public ItemComponent {
 	public:

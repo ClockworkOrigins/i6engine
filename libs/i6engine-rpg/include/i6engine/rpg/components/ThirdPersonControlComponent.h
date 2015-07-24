@@ -1,3 +1,8 @@
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_COMPONENTS_THIRDPERSONCONTROLCOMPONENT_H__
 #define __I6ENGINE_RPG_COMPONENTS_THIRDPERSONCONTROLCOMPONENT_H__
 
@@ -11,6 +16,9 @@ namespace api {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief handles input for player character
+	 */
 	class ISIXE_RPG_API ThirdPersonControlComponent : public api::Component, public api::MessageSubscriberFacade {
 	public:
 		ThirdPersonControlComponent(const int64_t id, const api::attributeMap & params);
@@ -51,3 +59,7 @@ namespace components {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_COMPONENTS_THIRDPERSONCONTROLCOMPONENT_H__ */
+
+/**
+ * @}
+ */

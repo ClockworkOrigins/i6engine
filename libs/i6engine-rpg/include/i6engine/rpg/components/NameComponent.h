@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,6 +28,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief all GameObject's with a name use this Component, e.g. Items and NPCs
+	 */
 	class ISIXE_RPG_API NameComponent : public api::Component {
 	public:
 		NameComponent(int64_t id, const api::attributeMap & params);

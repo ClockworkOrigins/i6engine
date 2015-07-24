@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,6 +28,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief Component showing healthbar in the left lower corner
+	 */
 	class ISIXE_RPG_API HealthbarComponent : public api::Component {
 	public:
 		HealthbarComponent(int64_t id, const api::attributeMap & params);
@@ -48,8 +51,14 @@ namespace components {
 			return "Healthbar";
 		}
 
+		/**
+		 * \brief shows the healthbar
+		 */
 		void show();
 
+		/**
+		 * \brief hides the healthbar
+		 */
 		void hide();
 
 	private:

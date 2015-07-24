@@ -1,3 +1,8 @@
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_GUI_CONFIG_H__
 #define __I6ENGINE_RPG_GUI_CONFIG_H__
 
@@ -28,3 +33,7 @@ namespace gui {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_GUI_CONFIG_H__ */
+
+/**
+ * @}
+ */

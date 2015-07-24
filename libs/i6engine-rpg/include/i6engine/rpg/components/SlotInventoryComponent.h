@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -30,6 +30,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief this inventory is like in action RPGs showing the inventory in a slot based and limited way
+	 */
 	class ISIXE_RPG_API SlotInventoryComponent : public InventoryComponent, public api::MessageSubscriberFacade {
 	public:
 		SlotInventoryComponent(int64_t id, const api::attributeMap & params);

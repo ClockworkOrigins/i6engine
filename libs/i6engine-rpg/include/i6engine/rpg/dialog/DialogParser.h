@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_DIALOG_DIALOGPARSER_H__
 #define __I6ENGINE_RPG_DIALOG_DIALOGPARSER_H__
 
@@ -28,6 +33,9 @@ namespace dialog {
 
 	struct Dialog;
 
+	/**
+	 * \brief loads and stores all dialog files
+	 */
 	class ISIXE_RPG_API DialogParser {
 		friend class DialogManager;
 
@@ -35,6 +43,9 @@ namespace dialog {
 		DialogParser();
 		~DialogParser();
 
+		/**
+		 * \brief load all dialogs from given directory and subdirectories
+		 */
 		void loadDialogs(const std::string & directory);
 
 	private:
@@ -48,3 +59,7 @@ namespace dialog {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_DIALOG_DIALOGPARSER_H__ */
+
+/**
+ * @}
+ */
