@@ -205,16 +205,6 @@ namespace api {
 
 	protected:
 		/**
-		 * \brief adds this component to ticklist
-		 */
-		void addTicker();
-
-		/**
-		 * \brief removes this component from ticklist
-		 */
-		void removeTicker();
-
-		/**
 		 * \brief ID of the GameObject that owns this Component
 		 */
 		int64_t _objOwnerID;
@@ -255,6 +245,16 @@ namespace api {
 		 * \brief a weak_ptr on the own shared_ptr
 		 */
 		WeakComPtr _self;
+
+		/**
+		 * \brief adds this component to ticklist
+		 */
+		void addTicker();
+
+		/**
+		 * \brief removes this component from ticklist
+		 */
+		void removeTicker();
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

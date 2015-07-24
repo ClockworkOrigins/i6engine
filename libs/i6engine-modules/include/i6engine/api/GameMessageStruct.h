@@ -27,6 +27,9 @@
 namespace i6engine {
 namespace api {
 
+	/**
+	 * \brief simple typedef to use it in API but leave overhead of new struct
+	 */
 	typedef core::MessageStruct GameMessageStruct;
 
 } /* namespace api */

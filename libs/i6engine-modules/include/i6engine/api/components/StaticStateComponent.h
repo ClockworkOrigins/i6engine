@@ -65,7 +65,7 @@ namespace api {
 		}
 
 		/**
-		 * \brief Sets scalation
+		 * \brief Sets scale
 		 */
 		inline void setScale(const Vec3 & scale) {
 			_scale = scale;
@@ -129,8 +129,8 @@ namespace api {
 } /* namespace api */
 } /* namespace i6engine */
 
+#endif /* __I6ENGINE_API_STATICSTATECOMPONENT_H__ */
+
 /**
  * @}
  */
-
-#endif /* __I6ENGINE_API_STATICSTATECOMPONENT_H__ */

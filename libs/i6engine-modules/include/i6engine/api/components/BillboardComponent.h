@@ -54,8 +54,14 @@ namespace graphics {
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
+		/**
+		 * \brief creates or updates a billboard in this billboard set
+		 */
 		void createOrUpdateBillboard(const std::string & identifier, const Vec3 & offset, double width, double height, double u0, double v0, double u1, double v1);
 
+		/**
+		 * \brief deletes a billboard
+		 */
 		void deleteBillboard(const std::string & identifier);
 
 		/**

@@ -18,6 +18,7 @@
  * \addtogroup Physics
  * @{
  */
+
 /**
  * \page PHY_BULLET_VARS Explanation of bullet rigid body parameters
  * | name | type | values (forced) | values (reasonable) | Explanation |
@@ -40,6 +41,7 @@
  * Second, if the speed is slower than linearDamping, it will slow down by fixed value 0.005</br>
  * Analogous for angular speed
  */
+
 /**
  * @}
  */

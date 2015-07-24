@@ -125,6 +125,9 @@ namespace api {
 
 		std::vector<componentOptions> getComponentOptions() override;
 
+		/**
+		 * \brief enables or disables a compositor
+		 */
 		void enableCompositor(const std::string & compositor, bool enabled);
 
 		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;

@@ -37,8 +37,8 @@ namespace api {
 		~TerrainAppearanceComponent();
 
 		/**
-		* \brief creates the Component with given attributeMap
-		*/
+		 * \brief creates the Component with given attributeMap
+		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
 		/**

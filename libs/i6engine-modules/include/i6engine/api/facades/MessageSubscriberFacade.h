@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup Subsystems
+ * \addtogroup Messaging
  * @{
  */
 

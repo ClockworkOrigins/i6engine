@@ -64,7 +64,6 @@ namespace api {
 	 * \li \c component_table_pair_t is an alias for std::pair<const goc_id_type, GOComponent*>.
 	 *
 	 * Have a look at \link i6engine here \endlink for an overview of typedef's in namespace %i6engine.
-	 *
 	 */
 	class ISIXE_MODULES_API GameObject {
 	public:

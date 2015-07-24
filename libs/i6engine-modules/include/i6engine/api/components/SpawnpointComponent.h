@@ -109,8 +109,8 @@ namespace api {
 } /* namespace api */
 } /* namespace i6engine */
 
+#endif /* __I6ENGINE_API_SPAWNPOINTCOMPONENT_H__ */
+
 /**
  * @}
  */
-
-#endif /* __I6ENGINE_API_SPAWNPOINTCOMPONENT_H__ */

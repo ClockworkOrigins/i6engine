@@ -72,13 +72,13 @@ namespace api {
 		virtual attributeMap synchronize() const override;
 
 	private:
+		uint32_t _respawn;
+
 		/**
 		 * \brief This Method resets the respawn counter
 		 */
 		ShatterComponent(const ShatterComponent &) = delete;
 		const ShatterComponent & operator=(const ShatterComponent &) = delete;
-
-		uint32_t _respawn;
 	};
 
 } /* namespace api */

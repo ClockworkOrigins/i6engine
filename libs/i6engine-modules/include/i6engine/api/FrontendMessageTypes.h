@@ -28,6 +28,9 @@ namespace i6engine {
 namespace api {
 namespace messages {
 
+	/**
+	 * \brief the engine message types
+	 */
 	enum EngineMessageTypes {
 		AdministrationMessageType = core::messages::MessageTypesCount,
 		ComponentMessageType,

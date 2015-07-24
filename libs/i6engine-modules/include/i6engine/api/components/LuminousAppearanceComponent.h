@@ -72,7 +72,6 @@ namespace api {
 		 * Gets component's light type
 		 *
 		 * \return Light type of the component
-		 *
 		 */
 		inline LightType getLightType() const { return _lightType; }
 

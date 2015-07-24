@@ -48,7 +48,6 @@ namespace api {
 		 * \brief Constructor of the component
 		 *
 		 * Sets visibility and ID
-		 *
 		 */
 		MeshAppearanceComponent(const int64_t id, const attributeMap & params);
 
@@ -75,7 +74,6 @@ namespace api {
 		 * Sets the visibility of the component and sends message to MessagingController
 		 *
 		 * \param[in] visible Visibility of the component (true/false)
-		 *
 		 */
 		void setVisibility(const bool visible);
 
@@ -85,7 +83,6 @@ namespace api {
 		 * Sets the mesh of the component and sends message to MessagingController
 		 *
 		 * \param[in] meshName Name of the mesh of the component
-		 *
 		 */
 		void setMesh(const std::string & meshName);
 

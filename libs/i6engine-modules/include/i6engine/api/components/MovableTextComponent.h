@@ -50,8 +50,8 @@ namespace graphics {
 		~MovableTextComponent();
 
 		/**
-		* \brief creates the Component with given attributeMap
-		*/
+		 * \brief creates the Component with given attributeMap
+		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
 		/**
@@ -65,6 +65,9 @@ namespace graphics {
 
 		std::vector<componentOptions> getComponentOptions() override;
 
+		/**
+		 * \brief sets the text
+		 */
 		void setText(const std::string & text);
 
 	private:

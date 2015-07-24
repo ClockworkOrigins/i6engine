@@ -110,16 +110,6 @@ namespace api {
 
 	private:
 		/**
-		 * \brief forbidden
-		 */
-		NetworkFacade(const NetworkFacade &) = delete;
-
-		/**
-		 * \brief forbidden
-		 */
-		NetworkFacade & operator= (const NetworkFacade &) = delete;
-
-		/**
 		 * \brief represents the IP of this node
 		 */
 		core::IPKey _ownIP;
@@ -181,6 +171,16 @@ namespace api {
 		 * This is used to create _ownIP
 		 */
 		std::string _IP;
+
+		/**
+		 * \brief forbidden
+		 */
+		NetworkFacade(const NetworkFacade &) = delete;
+
+		/**
+		 * \brief forbidden
+		 */
+		NetworkFacade & operator= (const NetworkFacade &) = delete;
 	};
 
 } /* namespace api */

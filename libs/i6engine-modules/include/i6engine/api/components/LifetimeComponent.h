@@ -68,9 +68,6 @@ namespace api {
 		std::vector<componentOptions> getComponentOptions() override;
 
 	private:
-		LifetimeComponent(const LifetimeComponent &) = delete;
-		const LifetimeComponent & operator=(const LifetimeComponent &) = delete;
-
 		uint64_t _startTime;
 
 		/**
@@ -86,6 +83,9 @@ namespace api {
 		 * \brief ticking the component
 		 */
 		void Tick() override;
+
+		LifetimeComponent(const LifetimeComponent &) = delete;
+		const LifetimeComponent & operator=(const LifetimeComponent &) = delete;
 	};
 
 } /* namespace api */

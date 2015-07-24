@@ -70,6 +70,12 @@ namespace api {
 		MoverComponent(const int64_t id, const attributeMap & params);
 		virtual ~MoverComponent();
 
+		virtual void Tick() override;
+
+		virtual void Init() override;
+
+		virtual void Finalize() override;
+
 		/**
 		 * \brief
 		 * \param[in] duration time in microseconds
@@ -91,12 +97,6 @@ namespace api {
 		 * \brief stops movement
 		 */
 		void stop();
-
-		virtual void Tick() override;
-
-		virtual void Init() override;
-
-		virtual void Finalize() override;
 
 		/**
 		 * \brief resets progress to initial status

@@ -47,49 +47,79 @@ namespace api {
 		ScriptingFacade();
 		~ScriptingFacade();
 
+		/**
+		 * \brief preloads all scripts in the in i6engine.ini specified script directory
+		 */
 		void loadAllScripts() const;
 
 #if ISIXE_SCRIPTING != SCRIPTING_NONE
+		/**
+		 * \brief runs method in script with void return type
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
 			_manager->callScript<Ret>(file, func, B...);
 		}
 
+		/**
+		 * \brief runs method in script with non-void return type
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScript(const std::string & file, const std::string & func, args... B) {
 			return _manager->callScript<Ret>(file, func, B...);
 		}
 
+		/**
+		 * \brief runs method with void return type
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
 			_manager->callFunction<Ret>(func, B...);
 		}
 
+		/**
+		 * \brief runs method with non-void return type
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... B) {
 			return _manager->callFunction<Ret>(func, B...);
 		}
 
+		/**
+		 * \brief runs method in script with void return type and calls callback after execution of the method
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
 			_manager->callScriptWithCallback<Ret>(file, func, callback, B...);
 		}
 
+		/**
+		 * \brief runs method in script with non-void return type and calls callback after execution of the method
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
 			return _manager->callScriptWithCallback<Ret>(file, func, callback, B...);
 		}
 
+		/**
+		 * \brief runs method with void return type and calls callback after execution of the method
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
 			_manager->callFunctionWithCallback<Ret>(func, callback, B...);
 		}
 
+		/**
+		 * \brief runs method with non-void return type and calls callback after execution of the method
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
 			return _manager->callFunction<Ret>(func, callback, B...);
 		}
 
+		/**
+		 * \brief sets a global variable
+		 */
 		template<typename T>
 		typename std::enable_if<std::is_pointer<T>::value>::type setGlobalVariable(const std::string & name, T value) {
 			_manager->setGlobalVariable(name, value);

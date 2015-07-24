@@ -58,8 +58,6 @@ namespace api {
 			return "Sound";
 		}
 
-		void Tick() override;
-
 		std::vector<componentOptions> getComponentOptions() override;
 
 	private:
@@ -109,6 +107,8 @@ namespace api {
 		void Init() override;
 
 		void Finalize() override;
+
+		void Tick() override;
 
 		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};

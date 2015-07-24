@@ -39,7 +39,6 @@ namespace api {
 		 * \brief Constructor of the component
 		 *
 		 * Sets visibility and ID
-		 *
 		 */
 		ParticleEmitterComponent(const int64_t id, const attributeMap & params);
 
@@ -47,7 +46,6 @@ namespace api {
 		 * \brief Empty
 		 *
 		 * Hasn't to do anything right now
-		 *
 		 */
 		~ParticleEmitterComponent();
 
