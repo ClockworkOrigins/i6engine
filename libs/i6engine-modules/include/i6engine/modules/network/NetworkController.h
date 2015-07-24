@@ -40,9 +40,7 @@ namespace modules {
 	public:
 		/**
 		 * \brief Nothing to do yet
-		 *
 		 * This method has nothing to to do yet
-		 *
 		 */
 		NetworkController();
 
@@ -52,9 +50,13 @@ namespace modules {
 		 */
 		~NetworkController();
 
+	private:
+		NetworkMailbox * _mailbox;
+		NetworkManager * _manager;
+
 		/**
 		 * \brief Called when starting the thread of the graphics subsystem.
-		 * \details Registers with the messaging subsystem and initializes the graphics library.
+		 * \details Registers with the messaging subsystem
 		 */
 		void OnThreadStart() override;
 
@@ -64,16 +66,11 @@ namespace modules {
 		 */
 		void ShutDown() override;
 
-	protected:
 		/**
 		 * \brief Called on every tick of the network subsystem.
 		 * \details Updates the network
 		 */
 		void Tick() override;
-
-	private:
-		NetworkMailbox * _mailbox;
-		NetworkManager * _manager;
 
 		/**
 		 * \brief forbidden

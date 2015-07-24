@@ -68,7 +68,7 @@ namespace modules {
 		void News(const api::GameMessage::Ptr & msg);
 
 		/**
-		 * \brief executes the given method in the given script
+		 * \brief executes the given method in the given script with return type void
 		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScript(const std::string & file, const std::string & func, args... B) {
@@ -87,6 +87,9 @@ namespace modules {
 			}, B...));
 		}
 
+		/**
+		 * \brief executes the given method in the given script with return type non-void
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScript(const std::string & file, const std::string & func, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
@@ -106,6 +109,9 @@ namespace modules {
 			return ret;
 		}
 
+		/**
+		 * \brief executes the given method with return type void
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunction(const std::string & func, args... B) {
 			_callScripts.push(std::bind([this, func](args... A) {
@@ -121,6 +127,9 @@ namespace modules {
 			}, B...));
 		}
 
+		/**
+		 * \brief executes the given method with return type non-void
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunction(const std::string & func, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
@@ -138,6 +147,9 @@ namespace modules {
 			return ret;
 		}
 
+		/**
+		 * \brief executes the given method in the given script with return type void and calls callback after execution of the script
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
 			_callScripts.push(std::bind([this, file, func, callback](args... A) {
@@ -155,6 +167,9 @@ namespace modules {
 			}, B...));
 		}
 
+		/**
+		 * \brief executes the given method in the given script with return type non-void and calls callback after execution of the script
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callScriptWithCallback(const std::string & file, const std::string & func, const std::function<void(void)> & callback, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
@@ -174,6 +189,9 @@ namespace modules {
 			return ret;
 		}
 
+		/**
+		 * \brief executes the given method with return type void and calls callback after execution of the script
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<std::is_void<Ret>::value, Ret>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
 			_callScripts.push(std::bind([this, func, callback](args... A) {
@@ -190,6 +208,9 @@ namespace modules {
 			}, B...));
 		}
 
+		/**
+		 * \brief executes the given method with return type non-void and calls callback after execution of the script
+		 */
 		template<typename Ret, typename... args>
 		typename std::enable_if<!std::is_void<Ret>::value, std::shared_ptr<utils::Future<Ret>>>::type callFunctionWithCallback(const std::string & func, const std::function<void(void)> & callback, args... B) {
 			std::shared_ptr<utils::Future<Ret>> ret = std::make_shared<utils::Future<Ret>>();
@@ -208,6 +229,9 @@ namespace modules {
 			return ret;
 		}
 
+		/**
+		 * \brief sets a global variable
+		 */
 		template<typename T>
 		typename std::enable_if<std::is_pointer<T>::value>::type setGlobalVariable(const std::string & name, T value) {
 			_callScripts.push(std::bind([this, name, value]() {

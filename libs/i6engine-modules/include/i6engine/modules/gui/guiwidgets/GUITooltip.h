@@ -1,3 +1,8 @@
+/**
+ * \addtogroup GUI
+ * @{
+ */
+
 #ifndef __I6ENGINE_MODULES_GUITOOLTIP_H__
 #define __I6ENGINE_MODULES_GUITOOLTIP_H__
 
@@ -24,3 +29,7 @@ namespace modules {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_MODULES_GUITOOLTIP_H__ */
+
+/**
+ * @}
+ */

@@ -50,6 +50,16 @@ namespace modules {
 	class PhysicsManager {
 	public:
 		/**
+		 * \brief stores all collision pairs
+		 */
+		static std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t> _collisionPairs;
+
+		/**
+		 * \brief counts ticks for this subsystem
+		 */
+		static uint64_t _tickCount;
+
+		/**
 		 * \brief constructor
 		 */
 		explicit PhysicsManager(PhysicsController * pc);
@@ -131,12 +141,6 @@ namespace modules {
 		btDynamicsWorld * getPhysicsWorld() const;
 
 		/**
-		 * \brief gets the Broadphase
-		 * \deprecated Unused function.
-		 */
-		inline btBroadphaseInterface * getBroadphase() const { return _broadphase; }
-
-		/**
 		 * \brief Sets the gravity of the world
 		 * \param[in] i6eVector gravity - The "force" direction. The usual gravity is (0, -y, 0) where -y is the value of the desired gravity (9.8 in rl)
 		 */
@@ -162,16 +166,6 @@ namespace modules {
 		 * \brief returns the PhysicsNode with the given ID
 		 */
 		PhysicsNode * getPhysicsNode(const int64_t id);
-
-		/**
-		 * \brief stores all collision pairs
-		 */
-		static std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t> _collisionPairs;
-
-		/**
-		 * \brief counts ticks for this subsystem
-		 */
-		static uint64_t _tickCount;
 
 		/**
 		 * \brief adds a ticking PhysicsNode

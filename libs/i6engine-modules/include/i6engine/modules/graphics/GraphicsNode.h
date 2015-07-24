@@ -66,9 +66,6 @@ namespace modules {
 		 *     Invokes Ogre's SceneNode constructor createChildSceneNode
 		 *
 		 *			Creates a new SceneNode with unique name according to the goid
-		 * \param   const int goid, const Vec3 & position
-		 * \return   nothing
-		 *
 		 */
 		GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale);
 
@@ -77,9 +74,6 @@ namespace modules {
 		 *
 		 *     Deletes whatever variables have been pointing to objects (_parentNode, _cameraNode, _meshEntity, _light)
 		 *     Then calls Ogre's removeChild to delete Ogre's SceneNode-Object and Ogre's SceneManager's destroySceneNode to destroy the scene.
-		 * \param   no params
-		 * \return   nothing
-		 *
 		 */
 		~GraphicsNode();
 
@@ -96,10 +90,6 @@ namespace modules {
 		 * \brief Sets the node's parent node
 		 *
 		 *     Sets the Node's parent node. If newParent is NULL, the node is attached to the scenegraph's root node.
-		 *
-		 * \param   GraphicsNode * newParent)
-		 * \return   nothing
-		 *
 		 */
 		void setParent(GraphicsNode * newParent);
 
@@ -109,10 +99,6 @@ namespace modules {
 		 *     sets material name
 		 *
 		 *			Creates or updates a material component for the object with given materialName.
-		 *
-		 * \param   const std::string & materialName
-		 * \return   nothing
-		 *
 		 */
 		void setMaterial(const int64_t coid, const std::string & materialName);
 
@@ -134,9 +120,6 @@ namespace modules {
 		 *
 		 *			Creates or updates a mesh component for the object with given meshFile and visibility-state
 		 * \param[in] coid ComponentID to identifiy the subentity
-		 * \param   const std::string & meshName, const bool isVisible
-		 * \return   nothing
-		 *
 		 */
 		void createMeshComponent(const int64_t coid, const std::string & meshName, const bool visible);
 		void updateMeshComponent(const int64_t coid, const std::string & meshName, const bool visible);
@@ -147,9 +130,6 @@ namespace modules {
 		 *     creates a new Ogre camera by calling Ogre's createCamera, then configures it
 		 *
 		 *			Creates a new camera if _camera is NULL, otherwise it changes position to parameter
-		 * \param   const Vec3 & position, const Vec3 & lookAt, const int nC
-		 * \return   nothing
-		 *
 		 */
 		void createCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov);
 		void updateCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov);
@@ -158,10 +138,6 @@ namespace modules {
 		 * \brief Creates or updates a viewport
 		 *
 		 *     creates a new Ogre viewport by calling Ogre's addViewport, then sets its dimensions
-		 *
-		 * \param   const float left, const float top, const float width, const float height, const float red, const float green, const float blue, const float alpha
-		 * \return   nothing
-		 *
 		 */
 		void createOrUpdateViewport(const int64_t coid, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha);
 
@@ -176,8 +152,6 @@ namespace modules {
 		 * \param[in] specular Specular colour of the light
 		 * \param[in] attenuation Attenuation of den light
 		 * \param[in] direction Direction of the light
-		 * \return   nothing
-		 *
 		 */
 		void createLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter);
 		void updateLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter);
@@ -204,10 +178,6 @@ namespace modules {
 		 * \brief Deletes the MeshComponent of the Node
 		 *
 		 *     Deletes an Ogre Entity by calling sm->destroyEntity
-		 *
-		 * \param   no params
-		 * \return   nothing
-		 *
 		 */
 		void deleteMeshComponent(const int64_t coid);
 
@@ -215,10 +185,6 @@ namespace modules {
 		 * \brief Deletes the LuminousComponent of the Node
 		 *
 		 *     Deletes an Ogre lighting object by calling sm->destroyLight
-		 *
-		 * \param   no params
-		 * \return   nothing
-		 *
 		 */
 		void deleteLuminousComponent(const int64_t coid);
 
@@ -226,10 +192,6 @@ namespace modules {
 		 * \brief Deletes CameraComponent of the Node
 		 *
 		 *     Deletes an Ogre Camera by calling sm->destroyCamera
-		 *
-		 * \param   no params
-		 * \return   nothing
-		 *
 		 */
 		void deleteCameraComponent(const int64_t coid);
 
@@ -260,22 +222,54 @@ namespace modules {
 			_animationSpeed = animationSpeed;
 		}
 
+		/**
+		 * \brief creates a billboard set
+		 */
 		void createBilldboardSetComponent(int64_t coid, const std::string & material, double width, double height, api::graphics::BillboardOrigin bo);
 
+		/**
+		 * \brief creates a billboard on the billboard set
+		 */
 		void createOrUpdateBillboard(int64_t coid, const std::string & identifier, const Vec3 & offset, double width, double height, double u0, double v0, double u1, double v1);
 
+		/**
+		 * \brief deletes the billboard
+		 */
 		void deleteBillboard(int64_t coid, const std::string & identifier);
 
+		/**
+		 * \brief deletes the billboard set
+		 */
 		void deleteBillboardSetComponent(int64_t coid);
 
+		/**
+		 * \brief creates a movable text upon the target mesh
+		 */
 		void createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour);
+
+		/**
+		 * \brief updates settings of the movable text
+		 */
 		void updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour);
+
+		/**
+		 * \brief deletes movable text
+		 */
 		void deleteMovableText(int64_t coid);
 
+		/**
+		 * \brief enables or disables a compositor
+		 */
 		void enableCompositor(int64_t coid, const std::string & compositor, bool enabled);
 
+		/**
+		 * \brief draws the surrounding bounding box of the mesh with given colour
+		 */
 		void drawBoundingBox(int64_t coid, const Vec3 & colour);
 
+		/**
+		 * \brief removes the bounding box
+		 */
 		void removeBoundingBox();
 
 		/**

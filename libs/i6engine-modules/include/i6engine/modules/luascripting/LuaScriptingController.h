@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup Scripting
+ * \addtogroup LuaScripting
  * @{
  */
 
@@ -50,6 +50,10 @@ namespace modules {
 		 */
 		~LuaScriptingController();
 
+	private:
+		LuaScriptingMailbox * _mailbox;
+		LuaScriptingManager * _manager;
+
 		/**
 		 * \brief This method will be called when starting the thread of the subsystem.
 		 */
@@ -64,10 +68,6 @@ namespace modules {
 		 * \brief This method will be called in every tick of the subsystem.
 		 */
 		void Tick() override;
-
-	private:
-		LuaScriptingMailbox * _mailbox;
-		LuaScriptingManager * _manager;
 
 		/**
 		 * \brief forbidden

@@ -79,16 +79,6 @@ namespace modules {
 		void registerCTemplate(const std::string & GOCType, const api::createGOCCallback & fn);
 
 		/**
-		 * \brief Unregisters the Create method of the given GOCType by deleting it from the callback map
-		 * of the factory.
-		 *
-		 * \deprecated Pointless function.
-		 *
-		 * \param[in] GOCType name of the template to unregister
-		 */
-		void unregisterGOC(const std::string & GOCType);
-
-		/**
 		 * \brief Creates a new Component
 		 *
 		 * \param[in] GOCType name of the Component to create.

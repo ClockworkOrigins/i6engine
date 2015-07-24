@@ -45,12 +45,6 @@ namespace modules {
 		_callbacks[GOCType] = fn;
 	}
 
-	void ComponentFactory::unregisterGOC(const std::string & GOCType) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		// Unregister GOCType from the factory
-		_callbacks.erase(GOCType);
-	}
-
 	api::ComPtr ComponentFactory::createGOC(int64_t id, const std::string & GOCType, const api::attributeMap & params, const api::WeakGOPtr & owner) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		// Check, if the GOCType is registered at the factory

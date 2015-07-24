@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup Audio
+ * @{
+ */
+
 #ifndef __I6ENGINE_MODULES_AUDIONODE_H__
 #define __I6ENGINE_MODULES_AUDIONODE_H__
-
-#include "boost/shared_ptr.hpp"
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
@@ -27,18 +30,35 @@
 
 #include "AL/al.h"
 
+#include "boost/shared_ptr.hpp"
+
 namespace i6engine {
 namespace modules {
 
 	class AudioManager;
 	struct WavFile;
 
+	/**
+	 * \class AudioNode
+	 * \brief represents one sound
+	 */
 	class AudioNode {
 		friend class AudioManager;
 
 	public:
+		/**
+		 * \brief constructor loading file
+		 */
 		AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable);
+
+		/**
+		 * \brief constructor using cached sound
+		 */
 		AudioNode(boost::shared_ptr<WavFile> file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable);
+
+		/**
+		 * \brief destructor
+		 */
 		~AudioNode();
 
 	private:
@@ -55,3 +75,7 @@ namespace modules {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_MODULES_AUDIONODE_H__ */
+
+/**
+ * @}
+ */
