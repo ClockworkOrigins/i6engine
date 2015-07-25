@@ -33,6 +33,17 @@ namespace api {
 	/**
 	 * \class LuminousAppearanceComponent
 	 * \brief Tells the engine that this GameObject is emitting light.
+	 * For creating a LuminousAppearanceComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | lightType | yes | int | one of the LightTypes | yes |
+	 * | diffuseColor | yes | Vec3 | diffuse colour of the light | yes |
+	 * | specularColor | yes | Vec3 | specular colour of the light | yes |
+	 * | attenuation | yes | Vec4 | attenuation of the light, W = range (range in world units), X = constant (1.0 never attenuate, 0.0 complete attenuation), Y = linear (linear attenuation depending on distance), Z = quadratic | yes |
+	 * | pos | no | Vec3 | relative position to SceneNode | yes |
+	 * | direction | *) | Vec3 | direction of the light shaft, *) required if lightType is DIRECTIONAL or SPOT | yes |
+	 * | spotLightRangeInner | *) | double | range of the inner cone of a spot light in degree, *) required if lightType is SPOT | yes |
+	 * | spotLightRangeOuter | *) | double | range of the outer cone of a spot light in degree, *) required if lightType is SPOT | yes |
 	 */
 	class ISIXE_MODULES_API LuminousAppearanceComponent : public Component {
 	public:

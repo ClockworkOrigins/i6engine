@@ -44,6 +44,7 @@ namespace api {
 	}
 
 	MeshAppearanceComponent::~MeshAppearanceComponent() {
+		// TODO: (Daniel) move this to Finalize method
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Delete, new graphics::Graphics_Mesh_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);

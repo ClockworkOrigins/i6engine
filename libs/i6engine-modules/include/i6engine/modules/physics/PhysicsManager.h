@@ -142,13 +142,13 @@ namespace modules {
 
 		/**
 		 * \brief Sets the gravity of the world
-		 * \param[in] i6eVector gravity - The "force" direction. The usual gravity is (0, -y, 0) where -y is the value of the desired gravity (9.8 in rl)
+		 * \param[in] gravity The "force" direction. The usual gravity is (0, -y, 0) where -y is the value of the desired gravity (9.8 in rl)
 		 */
 		void setGravity(const Vec3 & gravity);
 
 		/**
 		 * \brief Sets the gravity of the world.
-		 * \param[in] double gravityDown - Sets gravity to (0, -gravityDown, 0).
+		 * \param[in] gravityDown Sets gravity to (0, -gravityDown, 0).
 		 */
 		void setGravity(const double gravityDown);
 

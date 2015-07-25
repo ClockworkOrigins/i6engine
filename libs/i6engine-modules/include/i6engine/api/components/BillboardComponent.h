@@ -36,6 +36,13 @@ namespace graphics {
 	/**
 	 * \class BillboardComponent
 	 * \brief Tells the engine what billboard to show
+	 * For creating a BillboardComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | material | yes | std::string | Material used for the Billboard | yes |
+	 * | width | yes | double | relative width | yes |
+	 * | height | yes | double | relative height | yes |
+	 * | origin | yes | int | one of BillboardOrigin's int values | yes |
 	 */
 	class ISIXE_MODULES_API BillboardComponent : public Component {
 	public:

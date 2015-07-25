@@ -30,7 +30,7 @@
 namespace i6engine {
 namespace api {
 
-	LuminousAppearanceComponent::LuminousAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _lightType(LightType(boost::lexical_cast<uint32_t>(params.find("lightType")->second))), _diffuseColor(Vec3(params, "diffuseColor")), _specularColor(Vec3(params, "specularColor")), _attenuation(Vec4(params, "attenuation")), _direction(), _position(), _spotlightRangeInner(0.0), _spotlightRangeOuter(0.0) {
+	LuminousAppearanceComponent::LuminousAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _lightType(LightType(std::stoul(params.find("lightType")->second))), _diffuseColor(Vec3(params, "diffuseColor")), _specularColor(Vec3(params, "specularColor")), _attenuation(Vec4(params, "attenuation")), _direction(), _position(), _spotlightRangeInner(0.0), _spotlightRangeOuter(0.0) {
 		Component::_objFamilyID = components::LuminousAppearanceComponent;
 		Component::_objComponentID = components::LuminousAppearanceComponent;
 
@@ -38,8 +38,8 @@ namespace api {
 			_direction = Vec3(params, "direction");
 		}
 		if (_lightType == LightType::SPOT) {
-			_spotlightRangeInner = boost::lexical_cast<double>(params.find("spotLightRangeInner")->second);
-			_spotlightRangeOuter = boost::lexical_cast<double>(params.find("spotLightRangeOuter")->second);
+			_spotlightRangeInner = std::stod(params.find("spotLightRangeInner")->second);
+			_spotlightRangeOuter = std::stod(params.find("spotLightRangeOuter")->second);
 		}
 
 		if (params.find("pos") != params.end()) {
@@ -143,14 +143,14 @@ namespace api {
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Inner Spotlight Range", [this]() {
 			return boost::lexical_cast<std::string>(_spotlightRangeInner);
 		}, [this](std::string s) {
-			_spotlightRangeInner = boost::lexical_cast<double>(s);
+			_spotlightRangeInner = std::stod(s);
 			sendUpdateMessage();
 			return true;
 		}));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Outer Spotlight Range", [this]() {
 			return boost::lexical_cast<std::string>(_spotlightRangeOuter);
 		}, [this](std::string s) {
-			_spotlightRangeOuter = boost::lexical_cast<double>(s);
+			_spotlightRangeOuter = std::stod(s);
 			sendUpdateMessage();
 			return true;
 		}));

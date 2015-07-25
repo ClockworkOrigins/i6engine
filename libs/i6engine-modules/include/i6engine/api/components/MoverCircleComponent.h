@@ -33,6 +33,16 @@
 namespace i6engine {
 namespace api {
 
+	/**
+	 * \brief moves an object around a point in a circular way
+	 * For creating a MoverCircleComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | pos | yes | Vec3 | center of the circle | yes |
+	 * | axis | yes | Vec3 | axis around which the mover should circle | yes |
+	 * | radius | yes | double | radius of the circle | yes |
+	 * | realCenterPos | no | Vec3 | the real start pos of the circle | no |
+	 */
 	class ISIXE_MODULES_API MoverCircleComponent : public MoverComponent {
 	public:
 		MoverCircleComponent(const int64_t id, const attributeMap & params);

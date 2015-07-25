@@ -41,6 +41,15 @@ namespace api {
 	/**
 	 * \class MeshAppearanceComponent
 	 * \brief Tells the engine what model/mesh to use when rendering the GameObject.
+	 * For creating a MeshAppearanceComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | mesh | yes | std::string | mesh file | yes |
+	 * | visibility | yes | bool | is this mesh visible or not | yes |
+	 * | pos | yes | Vec3 | relative position to SceneNode | yes |
+	 * | rot | yes | Vec3 | relative rotation to SceneNode | yes |
+	 * | scale | yes | Vec3 | relative scale to SceneNode | yes |
+	 * | material | no | std::string | optional change of the material on the mesh | yes |
 	 */
 	class ISIXE_MODULES_API MeshAppearanceComponent : public Component {
 	public:

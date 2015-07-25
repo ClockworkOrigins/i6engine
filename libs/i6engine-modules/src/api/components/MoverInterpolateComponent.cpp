@@ -275,9 +275,7 @@ namespace api {
 		if (params.find("direction") == params.end()) {
 			ISIXE_THROW_API("MoverComponent", "required parameter 'direction' not set");
 		}
-		if (params.find("direction") != params.end()) {
-			_direction = boost::lexical_cast<bool>(params.find("direction")->second);
-		}
+		_direction = boost::lexical_cast<bool>(params.find("direction")->second);
 		if (_mode == Mode::TWOSTATE_OPENTIME) {
 			if (params.find("openTime") == params.end()) {
 				ISIXE_THROW_API("MoverComponent", "required parameter 'openTime' not set");
