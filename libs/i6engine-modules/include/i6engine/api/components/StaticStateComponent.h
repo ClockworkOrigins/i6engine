@@ -32,7 +32,13 @@ namespace api {
 
 	/**
 	 * \class StaticStateComponent
-	 * \brief Makes it possible to place a static gameobject
+	 * \brief Makes it possible to place a static GameObject
+	 * For creating a StaticStateComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | pos | yes | Vec3 | position of the SceneNode | yes |
+	 * | rot | yes | Quaternion | rotation of the SceneNode | yes |
+	 * | scale | yes | Vec3 | scale of the SceneNode | yes |
 	 */
 	class ISIXE_MODULES_API StaticStateComponent : public Component {
 	public:

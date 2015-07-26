@@ -171,7 +171,7 @@ namespace api {
 	 * | syncPrio | no | int | priority from which upwards updates should be sent through network | yes |
 	 * | gravity | no | Vec3 | gravity for this object. Replaces default | yes |
 	 * | pos | yes | Vec3 | position of the SceneNode | yes |
-	 * | rot | yes | Vec3 | rotation of the SceneNode | yes |
+	 * | rot | yes | Quaternion | rotation of the SceneNode | yes |
 	 * | scale | yes | Vec3 | scale of the SceneNode | yes |
 	 * | collisionGroup | yes | int int int | ResponseType CrashType CrashMask | yes |
 	 * | shapeType | yes | int | one of the shapeTypes from ShapeType enum | yes |

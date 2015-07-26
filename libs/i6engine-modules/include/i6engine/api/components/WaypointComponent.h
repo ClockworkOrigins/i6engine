@@ -30,6 +30,11 @@ namespace api {
 	/**
 	 * \class WaypointComponent
 	 * \brief Represents a Waypoint in the world, containing an identifier and a list of connections
+	 * For creating a WaypointComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | name | yes | std::string | name of this waypoint | yes |
+	 * | connections | yes | std::string | names of the waypoints this one is connected to, seperated by delimitter ; | yes |
 	 */
 	class ISIXE_MODULES_API WaypointComponent : public Component {
 	public:
