@@ -406,6 +406,46 @@ namespace editor {
 							_removeBox = true;
 						}
 					}
+				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBLeft && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
+					auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
+
+					for (auto & p : targetList) {
+						auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
+						if (go != nullptr && go->getType() != "EditorCam") {
+							selectObject(p.first);
+							break;
+						}
+					}
+				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBMiddle && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
+					auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
+
+					for (auto & p : targetList) {
+						auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
+
+						if (go != nullptr && go->getType() != "EditorCam") {
+							auto selected = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+							if (go->getType() == "Waypoint" && selected != nullptr && selected->getType() == "Waypoint") {
+								auto newWC = go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent);
+								auto selectedWC = selected->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent);
+								if (newWC->isConnected(selectedWC->getName())) {
+									newWC->removeConnection(selectedWC->getName());
+									selectedWC->removeConnection(newWC->getName());
+								} else {
+									newWC->addConnection(selectedWC->getName());
+									selectedWC->addConnection(newWC->getName());
+								}
+								selectObject(_selectedObjectID);
+								api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+							}
+							break;
+						}
+					}
+				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBRight) {
+					selectObject(-1);
+					if (_removeBox) {
+						api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
+						_removeBox = false;
+					}
 				}
 			}
 		} else if (msg->getSubtype() == api::mouse::MouMouse) {
@@ -426,49 +466,6 @@ namespace editor {
 			} else {
 				_lastX = imu->intNewX;
 				_lastY = imu->intNewY;
-			}
-		} else if (msg->getSubtype() == api::mouse::MouButton) {
-			api::input::Input_Button_Update * ibu = dynamic_cast<api::input::Input_Button_Update *>(msg->getContent());
-			if (ibu->pressed && ibu->code == api::MouseButtonID::MB_Left && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
-				auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
-
-				for (auto & p : targetList) {
-					auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
-					if (go != nullptr && go->getType() != "EditorCam") {
-						selectObject(p.first);
-						break;
-					}
-				}
-			} else if (ibu->pressed && ibu->code == api::MouseButtonID::MB_Middle && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
-				auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
-
-				for (auto & p : targetList) {
-					auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
-
-					if (go != nullptr && go->getType() != "EditorCam") {
-						auto selected = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
-						if (go->getType() == "Waypoint" && selected != nullptr && selected->getType() == "Waypoint") {
-							auto newWC = go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent);
-							auto selectedWC = selected->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent);
-							if (newWC->isConnected(selectedWC->getName())) {
-								newWC->removeConnection(selectedWC->getName());
-								selectedWC->removeConnection(newWC->getName());
-							} else {
-								newWC->addConnection(selectedWC->getName());
-								selectedWC->addConnection(newWC->getName());
-							}
-							selectObject(_selectedObjectID);
-							api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
-						}
-						break;
-					}
-				}
-			} else if (ibu->pressed && ibu->code == api::MouseButtonID::MB_Right) {
-				selectObject(-1);
-				if (_removeBox) {
-					api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
-					_removeBox = false;
-				}
 			}
 		}
 	}

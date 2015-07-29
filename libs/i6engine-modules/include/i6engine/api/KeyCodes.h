@@ -177,21 +177,17 @@ namespace api {
 		KC_WEBBACK   = 0xEA,  // Web Back
 		KC_MYCOMPUTER = 0xEB,  // My Computer
 		KC_MAIL    = 0xEC,  // Mail
-		KC_MEDIASELECT = 0xED   // Media Select
-	};
+		KC_MEDIASELECT = 0xED,   // Media Select
 
-	/**
-	 * \brief defines mouse buttons
-	 */
-	enum class MouseButtonID : uint32_t {
-		MB_Left = 0,
-		MB_Right,
-		MB_Middle,
-		MB_Button3,
-		MB_Button4,
-		MB_Button5,
-		MB_Button6,
-		MB_Button7
+		MOUSEBUTTONS = 0xF00,			// all following key are for mouse buttons
+		KC_MBLeft,		// Left mouse button
+		KC_MBRight,				// right mouse button
+		KC_MBMiddle,			// middle mouse button (= mouse wheel)
+		KC_MBButton3,
+		KC_MBButton4,
+		KC_MBButton5,
+		KC_MBButton6,
+		KC_MBButton7
 	};
 
 } /* namespace api */

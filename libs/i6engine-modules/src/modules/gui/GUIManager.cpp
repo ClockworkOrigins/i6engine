@@ -149,81 +149,71 @@ namespace modules {
 		CEGUI::System::getSingleton().getDefaultGUIContext().injectMousePosition(float(fltPosX), float(fltPosY));
 	}
 
-	void GUIManager::MouseDown(const api::MouseButtonID enuButton) const {
+	void GUIManager::MouseDown(const api::KeyCode enuButton) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		switch (enuButton) {
-			case api::MouseButtonID::MB_Left: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::LeftButton);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Right: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::RightButton);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Middle: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::MiddleButton);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Button3: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::X1Button);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Button4: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::X2Button);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Button5: { break; }
-			case api::MouseButtonID::MB_Button6: { break; }
-			case api::MouseButtonID::MB_Button7: { break; }
-			default: {
-				ISIXE_THROW_API("GUI", "Button doesn't exist");
-				break;
-			}
+		case api::KeyCode::KC_MBLeft: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::LeftButton);
+			break;
+		}
+		case api::KeyCode::KC_MBRight: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::RightButton);
+			break;
+		}
+		case api::KeyCode::KC_MBMiddle: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::MiddleButton);
+			break;
+		}
+		case api::KeyCode::KC_MBButton3: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::X1Button);
+			break;
+		}
+		case api::KeyCode::KC_MBButton4: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::X2Button);
+			break;
+		}
+		case api::KeyCode::KC_MBButton5: { break; }
+		case api::KeyCode::KC_MBButton6: { break; }
+		case api::KeyCode::KC_MBButton7: { break; }
+		default: {
+			ISIXE_THROW_API("GUI", "Button doesn't exist");
+			break;
+		}
 		}
 	}
 
-	void GUIManager::MouseUp(const api::MouseButtonID enuButton) const {
+	void GUIManager::MouseUp(const api::KeyCode enuButton) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		switch (enuButton) {
-			case api::MouseButtonID::MB_Left: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::LeftButton);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Right: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::RightButton);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Middle: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::MiddleButton);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Button3: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::X1Button);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Button4: {
-				CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::X2Button);
-				break;
-			}
-
-			case api::MouseButtonID::MB_Button5: { break; }
-			case api::MouseButtonID::MB_Button6: { break; }
-			case api::MouseButtonID::MB_Button7: { break; }
-			default: {
-				ISIXE_THROW_API("GUI", "Button doesn't exist");
-				break;
-			}
+		case api::KeyCode::KC_MBLeft: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::LeftButton);
+			break;
+		}
+		case api::KeyCode::KC_MBRight: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::RightButton);
+			break;
+		}
+		case api::KeyCode::KC_MBMiddle: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::MiddleButton);
+			break;
+		}
+		case api::KeyCode::KC_MBButton3: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::X1Button);
+			break;
+		}
+		case api::KeyCode::KC_MBButton4: {
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::X2Button);
+			break;
+		}
+		case api::KeyCode::KC_MBButton5: { break; }
+		case api::KeyCode::KC_MBButton6: { break; }
+		case api::KeyCode::KC_MBButton7: { break; }
+		default: {
+			ISIXE_THROW_API("GUI", "Button doesn't exist");
+			break;
+		}
 		}
 	}
 
@@ -317,25 +307,29 @@ namespace modules {
 			int32_t intNewY = static_cast<api::input::Input_Mouse_Update *>(data)->intNewY;
 
 			MousePos(intNewX, intNewY);
-		} else if (type == api::mouse::MouButton) {
-			api::MouseButtonID newButton = static_cast<api::input::Input_Button_Update *>(data)->code;
-			bool pressed = static_cast<api::input::Input_Button_Update *>(data)->pressed;
-
-			if (pressed) {
-				MouseDown(newButton);
-			} else {
-				MouseUp(newButton);
-			}
 		} else if (type == api::keyboard::KeyKeyboard) {
 			api::KeyCode keyCode = static_cast<api::input::Input_Keyboard_Update *>(data)->code;
 			api::KeyState pressed = static_cast<api::input::Input_Keyboard_Update *>(data)->pressed;
 
 			if (pressed == api::KeyState::KEY_PRESSED) {
-				KeyDown(keyCode, static_cast<api::input::Input_Keyboard_Update *>(data)->text);
+				if (keyCode < api::KeyCode::MOUSEBUTTONS) {
+					KeyDown(keyCode, static_cast<api::input::Input_Keyboard_Update *>(data)->text);
+				} else {
+					MouseDown(keyCode);
+				}
 			} else if (pressed == api::KeyState::KEY_RELEASED) {
+				if (keyCode < api::KeyCode::MOUSEBUTTONS) {
+					KeyUp(keyCode);
+				} else {
+					MouseUp(keyCode);
+				}
 				KeyUp(keyCode);
 			} else if (pressed == api::KeyState::KEY_HOLD) {
-				KeyHold(keyCode);
+				if (keyCode < api::KeyCode::MOUSEBUTTONS) {
+					KeyHold(keyCode);
+				} else {
+					MouseDown(keyCode);
+				}
 			}
 		}
 	}

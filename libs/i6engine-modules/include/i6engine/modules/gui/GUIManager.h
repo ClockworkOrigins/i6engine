@@ -234,7 +234,7 @@ namespace modules {
 		 *			Injected mouse buttons: left, right, middle, b3, b4
 		 * \param[in] enuButton Button which was pressed
 		 */
-		void MouseDown(const api::MouseButtonID enuButton) const;
+		void MouseDown(const api::KeyCode enuButton) const;
 
 		/**
 		 * \brief Injects the release of a mouse button into the gui subsytem.
@@ -244,7 +244,7 @@ namespace modules {
 		 *			Injected mouse buttons: left, right, middle, b3, b4
 		 * \param[in] enuButton Button which was released
 		 */
-		void MouseUp(const api::MouseButtonID enuButton) const;
+		void MouseUp(const api::KeyCode enuButton) const;
 
 		/**
 		 * \brief Injects the press of a keyboard key into the gui subsystem.

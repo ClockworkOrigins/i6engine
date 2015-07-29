@@ -2,6 +2,7 @@
 
 Enhancements:
 	- added docu page with cmake variables
+	- merged mouse buttons and keyboard keys to just one enum
 
 Fixes:
 	- fixed crash of engine when sound configuration of PC is corrupted
