@@ -1,5 +1,8 @@
 ﻿v 0.8.11
 
+Enhancements:
+	- added docu page with cmake variables
+
 Fixes:
 	- fixed crash of engine when sound configuration of PC is corrupted
 
