@@ -32,33 +32,45 @@
 namespace i6engine {
 namespace modules {
 
-	AudioManager::AudioManager() : _device(), _context(), _nodes(), _sounds(), _cachedSounds() {
+	AudioManager::AudioManager() : _initialized(false), _device(), _context(), _nodes(), _sounds(), _cachedSounds() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		_device = alcOpenDevice(nullptr);
-		_context = alcCreateContext(_device, nullptr);
-		alcMakeContextCurrent(_context);
+		if (_device) {
+			_context = alcCreateContext(_device, nullptr);
+		}
+		if (_context) {
+			alcMakeContextCurrent(_context);
+			_initialized = true;
+		}
+		if (!_initialized) {
+			ISIXE_LOG_ERROR("AudioManager", "Couldn't initialize audio subsystem. Running without audio!");
+		}
 	}
 
 	AudioManager::~AudioManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		alcMakeContextCurrent(nullptr);	// Make no context current
-		alcDestroyContext(_context);	// Destroy the OpenAL Context
-		alcCloseDevice(_device);		// Close the OpenAL Device
+		if (_initialized) {
+			alcMakeContextCurrent(nullptr);	// Make no context current
+			alcDestroyContext(_context);	// Destroy the OpenAL Context
+			alcCloseDevice(_device);		// Close the OpenAL Device
+		}
 	}
 
 	void AudioManager::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		for (auto it = _sounds.begin(); it != _sounds.end(); ) {
-			ALint state;
-			alGetSourcei(std::get<SoundEntry::Source>(*it), AL_SOURCE_STATE, &state);
+		if (_initialized) {
+			for (auto it = _sounds.begin(); it != _sounds.end();) {
+				ALint state;
+				alGetSourcei(std::get<SoundEntry::Source>(*it), AL_SOURCE_STATE, &state);
 
-			if (state == AL_STOPPED) {
-				std::get<SoundEntry::Callback>(*it)(true);
-				alDeleteSources(1, &std::get<SoundEntry::Source>(*it));	// Delete the OpenAL Source
-				alDeleteBuffers(1, &std::get<SoundEntry::Buffer>(*it));	// Delete the OpenAL Buffer
-				it = _sounds.erase(it);
-			} else {
-				it++;
+				if (state == AL_STOPPED) {
+					std::get<SoundEntry::Callback>(*it)(true);
+					alDeleteSources(1, &std::get<SoundEntry::Source>(*it));	// Delete the OpenAL Source
+					alDeleteBuffers(1, &std::get<SoundEntry::Buffer>(*it));	// Delete the OpenAL Buffer
+					it = _sounds.erase(it);
+				} else {
+					it++;
+				}
 			}
 		}
 	}
@@ -67,16 +79,18 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t type = msg->getSubtype();
 
-		if (type == api::audio::AudioPlaySound) {
-			api::audio::Audio_PlaySound_Create * apsc = dynamic_cast<api::audio::Audio_PlaySound_Create *>(msg->getContent());
+		if (_initialized) {
+			if (type == api::audio::AudioPlaySound) {
+				api::audio::Audio_PlaySound_Create * apsc = dynamic_cast<api::audio::Audio_PlaySound_Create *>(msg->getContent());
 
-			playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable);
-		} else if (type == api::audio::AudioPlaySoundWithCallback) {
-			api::audio::Audio_PlaySoundWithCallback_Create * apsc = dynamic_cast<api::audio::Audio_PlaySoundWithCallback_Create *>(msg->getContent());
+				playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable);
+			} else if (type == api::audio::AudioPlaySoundWithCallback) {
+				api::audio::Audio_PlaySoundWithCallback_Create * apsc = dynamic_cast<api::audio::Audio_PlaySoundWithCallback_Create *>(msg->getContent());
 
-			playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable, apsc->callback);
-		} else {
-			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
+				playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable, apsc->callback);
+			} else {
+				ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
+			}
 		}
 	}
 
@@ -84,79 +98,91 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t type = msg->getSubtype();
 
-		if (type == api::audio::AudioListener) {
-			api::audio::Audio_Listener_Update * alu = dynamic_cast<api::audio::Audio_Listener_Update *>(msg->getContent());
+		if (_initialized) {
+			if (type == api::audio::AudioListener) {
+				api::audio::Audio_Listener_Update * alu = dynamic_cast<api::audio::Audio_Listener_Update *>(msg->getContent());
 
-			updateListener(alu->position, alu->rotation, alu->velocity);
-		} else {
-			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
+				updateListener(alu->position, alu->rotation, alu->velocity);
+			} else {
+				ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
+			}
 		}
 	}
 
 	void AudioManager::NewsDelete(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t type = msg->getSubtype();
-		if (type == api::audio::AudioStopSound) {
-			api::audio::Audio_StopSound_Delete * ass = dynamic_cast<api::audio::Audio_StopSound_Delete *>(msg->getContent());
 
-			for (auto it = _sounds.begin(); it != _sounds.end(); it++) {
-				if (std::get<SoundEntry::Handle>(*it) == ass->handle) {
-					ALint state;
-					alGetSourcei(std::get<SoundEntry::Source>(*it), AL_SOURCE_STATE, &state);
-					if (state == AL_STOPPED) {
-						std::get<SoundEntry::Callback>(*it)(true);
-					} else if (state == AL_PLAYING) {
-						std::get<SoundEntry::Callback>(*it)(false);
-						alSourceStop(std::get<SoundEntry::Source>(*it));
+		if (_initialized) {
+			if (type == api::audio::AudioStopSound) {
+				api::audio::Audio_StopSound_Delete * ass = dynamic_cast<api::audio::Audio_StopSound_Delete *>(msg->getContent());
+
+				for (auto it = _sounds.begin(); it != _sounds.end(); it++) {
+					if (std::get<SoundEntry::Handle>(*it) == ass->handle) {
+						ALint state;
+						alGetSourcei(std::get<SoundEntry::Source>(*it), AL_SOURCE_STATE, &state);
+						if (state == AL_STOPPED) {
+							std::get<SoundEntry::Callback>(*it)(true);
+						} else if (state == AL_PLAYING) {
+							std::get<SoundEntry::Callback>(*it)(false);
+							alSourceStop(std::get<SoundEntry::Source>(*it));
+						}
+						alDeleteSources(1, &std::get<SoundEntry::Source>(*it));
+						alDeleteBuffers(1, &std::get<SoundEntry::Buffer>(*it));
+						_sounds.erase(it);
+						break;
 					}
-					alDeleteSources(1, &std::get<SoundEntry::Source>(*it));
-					alDeleteBuffers(1, &std::get<SoundEntry::Buffer>(*it));
-					_sounds.erase(it);
-					break;
 				}
+			} else {
+				ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 			}
-		} else {
-			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 		}
 	}
 
 	void AudioManager::NewsNodeCreate(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t type = msg->getSubtype();
-		if (type == api::audio::AudioNode) {
-			api::audio::Audio_Node_Create * anc = dynamic_cast<api::audio::Audio_Node_Create *>(msg->getContent());
 
-			auto it = _cachedSounds.find(anc->file);
-			if (it != _cachedSounds.end()) {
-				_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(it->second, anc->looping, anc->maxDist, anc->position, anc->direction, false);
-			} else {
-				_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(anc->file, anc->looping, anc->maxDist, anc->position, anc->direction, anc->cacheable);
-				if (anc->cacheable) {
-					_cachedSounds.insert(std::make_pair(anc->file, _nodes[msg->getContent()->getID()]->_wavFile));
+		if (_initialized) {
+			if (type == api::audio::AudioNode) {
+				api::audio::Audio_Node_Create * anc = dynamic_cast<api::audio::Audio_Node_Create *>(msg->getContent());
+
+				auto it = _cachedSounds.find(anc->file);
+				if (it != _cachedSounds.end()) {
+					_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(it->second, anc->looping, anc->maxDist, anc->position, anc->direction, false);
+				} else {
+					_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(anc->file, anc->looping, anc->maxDist, anc->position, anc->direction, anc->cacheable);
+					if (anc->cacheable) {
+						_cachedSounds.insert(std::make_pair(anc->file, _nodes[msg->getContent()->getID()]->_wavFile));
+					}
 				}
+			} else {
+				ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 			}
-		} else {
-			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 		}
 	}
 
 	void AudioManager::NewsNodeUpdate(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		if (_nodes.find(msg->getContent()->getID()) == _nodes.end()) {
-			ISIXE_THROW_SUBSYSTEM("AudioManager", "Update message for non existend audio node!");
-		}
+		if (_initialized) {
+			if (_nodes.find(msg->getContent()->getID()) == _nodes.end()) {
+				ISIXE_THROW_SUBSYSTEM("AudioManager", "Update message for non existend audio node!");
+			}
 
-		_nodes[msg->getContent()->getID()]->News(msg);
+			_nodes[msg->getContent()->getID()]->News(msg);
+		}
 	}
 
 	void AudioManager::NewsNodeDelete(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t type = msg->getSubtype();
 
-		if (type == api::audio::AudioNode) {
-			_nodes.erase(msg->getContent()->getID());
-		} else {
-			ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
+		if (_initialized) {
+			if (type == api::audio::AudioNode) {
+				_nodes.erase(msg->getContent()->getID());
+			} else {
+				ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
+			}
 		}
 	}
 

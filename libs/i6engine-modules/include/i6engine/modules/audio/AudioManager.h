@@ -62,6 +62,7 @@ namespace modules {
 		void Tick();
 
 	private:
+		bool _initialized;
 		ALCdevice * _device;
 		ALCcontext * _context;
 

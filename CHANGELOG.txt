@@ -1,4 +1,9 @@
-﻿v 0.8.10
+﻿v 0.8.11
+
+Fixes:
+	- fixed crash of engine when sound configuration of PC is corrupted
+
+v 0.8.10
 
 Enhancements:
 	- added more basic tutorials
