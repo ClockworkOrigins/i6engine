@@ -38,6 +38,15 @@
 		<Attribute name="maxWeight">50.0</Attribute>
 		<Attribute name="rows">10</Attribute>
 		<Attribute name="columns">10</Attribute>
+		<Attribute name="filters">2</Attribute>
+		<Attribute name="filter_0_type">UsableItem</Attribute>
+		<Attribute name="filter_0_normalImage">RPG/Drag01</Attribute>
+		<Attribute name="filter_0_hoverImage">RPG/Drag02</Attribute>
+		<Attribute name="filter_0_pushedImage">RPG/Drag03</Attribute>
+		<Attribute name="filter_1_type">MiscItem</Attribute>
+		<Attribute name="filter_1_normalImage">RPG/Drag01</Attribute>
+		<Attribute name="filter_1_hoverImage">RPG/Drag02</Attribute>
+		<Attribute name="filter_1_pushedImage">RPG/Drag03</Attribute>
 	</Component>
 	<Component template="WaynetNavigation" owner="true">
 	</Component>

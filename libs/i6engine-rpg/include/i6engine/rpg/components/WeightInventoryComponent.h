@@ -50,12 +50,6 @@ namespace components {
 		}
 
 	private:
-		enum class Filter {
-			None,
-			UsableItems,
-			MiscItems
-		};
-
 		enum ItemEntry {
 			Message,
 			Amount,
@@ -63,18 +57,27 @@ namespace components {
 			Image,
 			Identifier,
 			Value,
-			Weight
+			Weight,
+			Template
 		};
 
-		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string, uint32_t, double>>> _items;
+		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string, uint32_t, double, std::string>>> _items;
 		double _maxWeight;
 		double _currentWeight;
 		uint32_t _currentIndex;
 		uint32_t _maxShowIndex;
-		Filter _currentFilter;
+		std::string _currentFilter;
 		uint32_t _slotsPerView;
 		std::vector<std::string> _widgetList;
 		utils::weakPtr<WeightInventoryComponent, api::Component> _otherInventory;
+
+		enum FilterEntry {
+			Type,
+			NormalImage,
+			HoverImage,
+			PushedImage
+		};
+		std::vector<std::tuple<std::string, std::string, std::string, std::string>> _filter;
 
 		void Init() override;
 		void Finalize() override;
