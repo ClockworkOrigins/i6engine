@@ -58,7 +58,10 @@ namespace api {
 	}
 
 	void LifetimeComponent::dead() {
-		getOwnerGO()->setDie();
+		auto go = getOwnerGO();
+		if (go != nullptr) {
+			go->setDie();
+		}
 	}
 
 	void LifetimeComponent::instantKill() {
