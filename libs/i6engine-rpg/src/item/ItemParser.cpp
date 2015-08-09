@@ -28,7 +28,7 @@ namespace i6engine {
 namespace rpg {
 namespace item {
 
-	ItemParser::ItemParser() : _items() {
+	ItemParser::ItemParser() : _items(), _itemAttributes() {
 	}
 
 	ItemParser::~ItemParser() {
@@ -130,12 +130,12 @@ namespace item {
 				tpl._components.push_back(api::objects::GOTemplateComponent("Slot", paramsSlot, "", false, false));
 			}
 
-			if (type == "UsableItem") {
-				if (item->FirstChildElement("HP") != nullptr) {
-					paramsItem.insert(std::make_pair("attribute_0", item->FirstChildElement("HP")->GetText()));
-				}
-				if (item->FirstChildElement("HP_MAX") != nullptr) {
-					paramsItem.insert(std::make_pair("attribute_1", item->FirstChildElement("HP_MAX")->GetText()));
+			auto it = _itemAttributes.find(type);
+			if (it != _itemAttributes.end()) {
+				for (auto & p : it->second) {
+					if (item->FirstChildElement(p.first.c_str()) != nullptr) {
+						paramsItem.insert(std::make_pair(p.second, item->FirstChildElement(p.first.c_str())->GetText()));
+					}
 				}
 			}
 

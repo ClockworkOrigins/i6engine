@@ -52,8 +52,16 @@ namespace item {
 		 */
 		std::pair<std::string, i6engine::api::objects::GOTemplate> getTemplate(const std::string & identifier) const;
 
+		/**
+		 * \brief add item attributes, call this before loadItems
+		 */
+		void addItemAttributes(const std::string & itemType, const std::vector<std::pair<std::string, std::string>> & itemAttributes) {
+			_itemAttributes.insert(std::make_pair(itemType, itemAttributes));
+		}
+
 	private:
 		std::map<std::string, std::pair<std::string, i6engine::api::objects::GOTemplate>> _items;
+		std::map<std::string, std::vector<std::pair<std::string, std::string>>> _itemAttributes;
 
 		void loadItem(const std::string & file);
 	};

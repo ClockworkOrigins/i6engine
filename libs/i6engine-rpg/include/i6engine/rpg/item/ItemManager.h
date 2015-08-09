@@ -64,6 +64,13 @@ namespace item {
 		 */
 		std::string getItemName(const std::string & identifier) const;
 
+		/**
+		 * \brief add item attributes, call this before loadItems
+		 */
+		void addItemAttributes(const std::string & itemType, const std::vector<std::pair<std::string, std::string>> & itemAttributes) {
+			_parser.addItemAttributes(itemType, itemAttributes);
+		}
+
 	private:
 		ItemParser _parser;
 
