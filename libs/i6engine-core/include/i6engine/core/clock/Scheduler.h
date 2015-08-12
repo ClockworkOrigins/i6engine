@@ -28,6 +28,7 @@
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/core/configs/JobPriorities.h"
+#include "i6engine/core/configs/SchedulerConfig.h"
 
 #include "boost/thread.hpp"
 
@@ -60,7 +61,7 @@ namespace core {
 			/**
 			 * \brief priority of this job
 			 */
-			JobPriorities priority; // the higher, the better
+			JobPriorities priority; // the lower, the better
 
 			/**
 			 * \brief interval in which this job is repeated, LONG_MAX if only once

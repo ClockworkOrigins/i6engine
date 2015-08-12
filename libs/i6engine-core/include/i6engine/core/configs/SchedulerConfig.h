@@ -19,23 +19,20 @@
  * @{
  */
 
-#ifndef __I6ENGINE_CORE_CONFIG_JOBPRIORITIES_H__
-#define __I6ENGINE_CORE_CONFIG_JOBPRIORITIES_H__
+#ifndef __I6ENGINE_CORE_CONFIG_SCHEDULERCONFIG_H__
+#define __I6ENGINE_CORE_CONFIG_SCHEDULERCONFIG_H__
+
+#include "i6engine/utils/i6eSystemParameters.h"
 
 namespace i6engine {
 namespace core {
 
-	enum JobPriorities {
-		Prio_Subsystem,		//!< Highest priority, used only internally for ticking of subsystems, don't use this one
-		Prio_High,			//!< High job priority, use this if this task should be preferred for running before other tasks
-		Prio_Medium,		//!< Task can wait, but shouldn't wait to long
-		Prio_Low			//!< Task can wait really long, isn't that important
-	};
+	const uint16_t SCHEDULER_THREAD_AMOUNT = 10;
 
 } /* namespace core */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_CORE_CONFIG_JOBPRIORITIES_H__ */
+#endif /* __I6ENGINE_CORE_CONFIG_SCHEDULERCONFIG_H__ */
 
 /**
  * @}
