@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,6 +28,10 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief add this Component to your items if you use SlotInventory
+	 * specifies the amount of slots being used by this item
+	 */
 	class ISIXE_RPG_API SlotComponent : public api::Component {
 	public:
 		SlotComponent(int64_t id, const api::attributeMap & params);

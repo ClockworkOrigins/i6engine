@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_ITEM_ITEMMANAGER_H__
 #define __I6ENGINE_RPG_ITEM_ITEMMANAGER_H__
 
@@ -29,23 +34,42 @@ namespace i6engine {
 namespace rpg {
 namespace item {
 
+	/**
+	 * \brief manages all item related stuff
+	 */
 	class ISIXE_RPG_API ItemManager : public utils::Singleton<ItemManager> {
 		friend class utils::Singleton<ItemManager>;
 
 	public:
 		~ItemManager();
 
+		/**
+		 * \brief loads all item templates in given directory and subdirectories
+		 */
 		void loadItems(const std::string & directory) {
 			_parser.loadItems(directory);
 		}
 
+		/**
+		 * \brief creates item with given identifier on position with rotation
+		 */
 		void createItem(const std::string & identifier, const Vec3 & pos, const Quaternion & rot);
 
 		std::pair<std::string, i6engine::api::objects::GOTemplate> getTemplate(const std::string & identifier) const {
 			return _parser.getTemplate(identifier);
 		}
 
+		/**
+		 * \brief returns the item name for the given identifier
+		 */
 		std::string getItemName(const std::string & identifier) const;
+
+		/**
+		 * \brief add item attributes, call this before loadItems
+		 */
+		void addItemAttributes(const std::string & itemType, const std::vector<std::pair<std::string, std::string>> & itemAttributes) {
+			_parser.addItemAttributes(itemType, itemAttributes);
+		}
 
 	private:
 		ItemParser _parser;
@@ -58,3 +82,7 @@ namespace item {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_ITEM_ITEMMANAGER_H__ */
+
+/**
+ * @}
+ */

@@ -50,6 +50,10 @@ namespace modules {
 		 */
 		~PhysicsController();
 
+	private:
+		PhysicsManager * _manager;
+		PhysicsMailbox * _mailbox;
+
 		/**
 		 * \brief This method will be called when starting the thread of the subsystem.
 		 */
@@ -64,10 +68,6 @@ namespace modules {
 		 * \brief This method will be called in every tick of the subsystem.
 		 */
 		void Tick() override;
-
-	private:
-		PhysicsManager * _manager;
-		PhysicsMailbox * _mailbox;
 
 		/**
 		 * \brief forbidden

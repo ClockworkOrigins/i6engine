@@ -67,6 +67,9 @@ namespace core {
 			 */
 			uint64_t interval;
 
+			/**
+			 * \brief id of this job
+			 */
 			uint64_t id;
 
 			/**

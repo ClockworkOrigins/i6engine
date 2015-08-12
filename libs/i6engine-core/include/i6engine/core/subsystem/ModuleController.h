@@ -58,7 +58,7 @@ namespace core {
 
 	public:
 		/**
-		 * \brief Constructs a new ModuleController with the given name
+		 * \brief Constructs a new ModuleController with the given subsystem type
 		 */
 		ModuleController(Subsystem sub);
 

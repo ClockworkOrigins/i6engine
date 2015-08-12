@@ -1,3 +1,8 @@
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_GUI_SUBTITLEWIDGET_H__
 #define __I6ENGINE_RPG_GUI_SUBTITLEWIDGET_H__
 
@@ -9,6 +14,9 @@ namespace i6engine {
 namespace rpg {
 namespace gui {
 
+	/**
+	 * \brief allows subtitles with automatic line break and centering in subtitle widget
+	 */
 	class ISIXE_RPG_API SubtitleWidget : public api::GUIWidget {
 	public:
 		/**
@@ -34,3 +42,7 @@ namespace gui {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_GUI_SUBTITLEWIDGET_H__ */
+
+/**
+ * @}
+ */

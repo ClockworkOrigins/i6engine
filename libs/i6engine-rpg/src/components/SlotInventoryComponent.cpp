@@ -301,11 +301,14 @@ namespace components {
 					_slotMarker = false;
 					_currentIndex = UINT16_MAX;
 				}
-			} else if (msg->getSubtype() == api::mouse::MouseMessageTypes::MouButton) {
-				api::MouseButtonID mbi = dynamic_cast<api::input::Input_Button_Update *>(msg->getContent())->code;
-				bool pressed = dynamic_cast<api::input::Input_Button_Update *>(msg->getContent())->pressed;
-
-				if (pressed && mbi == api::MouseButtonID::MB_Right) {
+			} else if (msg->getSubtype() == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
+				api::KeyCode kc = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->code;
+				api::KeyState ks = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->pressed;
+				if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
+					hide();
+					_trading = false;
+					_multiplier = 1.0;
+				} else if (kc == api::KeyCode::KC_MBRight && ks == api::KeyState::KEY_PRESSED) {
 					if (_currentIndex != UINT16_MAX) {
 						if (_trading) {
 							tradeItem(std::get<ItemEntry::Identifier>(_items[_currentIndex]), std::get<ItemEntry::Value>(_items[_currentIndex]));
@@ -316,14 +319,6 @@ namespace components {
 							}, _currentIndex);
 						}
 					}
-				}
-			} else if (msg->getSubtype() == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
-				api::KeyCode kc = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->code;
-				api::KeyState ks = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent())->pressed;
-				if (kc == api::KeyCode::KC_ESCAPE && ks == api::KeyState::KEY_PRESSED) {
-					hide();
-					_trading = false;
-					_multiplier = 1.0;
 				}
 			}
 		}

@@ -83,16 +83,6 @@ namespace modules {
 
 	private:
 		/**
-		 * \brief register a new Template
-		 * After a template is registered you can easily create new objects of that type with createGO()
-		 *
-		 * \see createGO()
-		 * \param[in] name the string used to identify this Template. The name must be unique.
-		 * \param[in] fn the CreateGO function, which creates the GameObject
-		 */
-		void registerGOTemplate(const std::string & file);
-
-		/**
 		 * \brief List with all current GameObjects.
 		 */
 		std::list<GOPtr> _GOList;
@@ -106,6 +96,16 @@ namespace modules {
 		 * \brief is the subsystem paused or not?
 		 */
 		bool _paused;
+
+		/**
+		 * \brief register a new Template
+		 * After a template is registered you can easily create new objects of that type with createGO()
+		 *
+		 * \see createGO()
+		 * \param[in] name the string used to identify this Template. The name must be unique.
+		 * \param[in] fn the CreateGO function, which creates the GameObject
+		 */
+		void registerGOTemplate(const std::string & file);
 
 		/**
 		 * \brief Handles incoming create messages for GameObjects and the ObjectManager
@@ -162,7 +162,6 @@ namespace modules {
 		/**
 		 * \brief It returns a pointer to the GameObject with GUID guid.
 		 * If there is no GameObject with GUID guid, NULL is returned.
-		 * \param[in] GameObjectID
 		 * \return A pointer to the wanted GameObject
 		 */
 		GOPtr getObject(const int64_t guid) const;

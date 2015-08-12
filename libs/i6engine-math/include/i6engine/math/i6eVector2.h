@@ -196,7 +196,7 @@ namespace math {
 
 		/**
 		 * \brief muliplies two Vectors per component
-		 * \param b
+		 * \param[in] b
 		 */
 		void mulComponents(const i6eVector2 & b) {
 			_x = _x * b.getX();
@@ -223,10 +223,10 @@ namespace math {
 		}
 
 		/**
-		* \brief converts Vector to std::string
-		*
-		* converts the vector to a std::string using the Format "x y z"
-		*/
+		 * \brief converts Vector to std::string
+		 *
+		 * converts the vector to a std::string using the Format "x y z"
+		 */
 		std::string toString() const {
 			std::stringstream s;
 			s.precision(100);

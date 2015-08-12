@@ -41,6 +41,15 @@ namespace api {
 	/**
 	 * \class MeshAppearanceComponent
 	 * \brief Tells the engine what model/mesh to use when rendering the GameObject.
+	 * For creating a MeshAppearanceComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | mesh | yes | std::string | mesh file | yes |
+	 * | visibility | yes | bool | is this mesh visible or not | yes |
+	 * | pos | yes | Vec3 | relative position to SceneNode | yes |
+	 * | rot | yes | Vec3 | relative rotation to SceneNode | yes |
+	 * | scale | yes | Vec3 | relative scale to SceneNode | yes |
+	 * | material | no | std::string | optional change of the material on the mesh | yes |
 	 */
 	class ISIXE_MODULES_API MeshAppearanceComponent : public Component {
 	public:
@@ -48,7 +57,6 @@ namespace api {
 		 * \brief Constructor of the component
 		 *
 		 * Sets visibility and ID
-		 *
 		 */
 		MeshAppearanceComponent(const int64_t id, const attributeMap & params);
 
@@ -75,7 +83,6 @@ namespace api {
 		 * Sets the visibility of the component and sends message to MessagingController
 		 *
 		 * \param[in] visible Visibility of the component (true/false)
-		 *
 		 */
 		void setVisibility(const bool visible);
 
@@ -85,7 +92,6 @@ namespace api {
 		 * Sets the mesh of the component and sends message to MessagingController
 		 *
 		 * \param[in] meshName Name of the mesh of the component
-		 *
 		 */
 		void setMesh(const std::string & meshName);
 
@@ -147,6 +153,16 @@ namespace api {
 		}
 
 		std::vector<componentOptions> getComponentOptions() override;
+
+		/**
+		 * \brief shows the bounding box of this mesh in given colour
+		 */
+		void drawBoundingBox(const Vec3 & colour) const;
+
+		/**
+		 * \brief removes the bounding box of this mesh
+		 */
+		void removeBoundingBox() const;
 
 	private:
 		/**

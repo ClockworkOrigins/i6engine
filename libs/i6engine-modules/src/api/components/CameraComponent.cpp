@@ -40,19 +40,19 @@ namespace api {
 
 		_position = Vec3(params, "pos");
 		_lookAt = Vec3(params, "lookAt");
-		_nearClip = boost::lexical_cast<int32_t>(params.find("nearclip")->second);
-		_aspect = boost::lexical_cast<double>(params.find("aspect")->second);
+		_nearClip = std::stoi(params.find("nearclip")->second);
+		_aspect = std::stod(params.find("aspect")->second);
 
 		if (params.find("viewport") != params.end()) {
 			_viewport = boost::lexical_cast<bool>(params.find("viewport")->second);
-			_left = boost::lexical_cast<double>(params.find("vp_left")->second);
-			_top = boost::lexical_cast<double>(params.find("vp_top")->second);
-			_width = boost::lexical_cast<double>(params.find("vp_width")->second);
-			_height = boost::lexical_cast<double>(params.find("vp_height")->second);
-			_red = boost::lexical_cast<double>(params.find("vp_red")->second);
-			_green = boost::lexical_cast<double>(params.find("vp_green")->second);
-			_blue = boost::lexical_cast<double>(params.find("vp_blue")->second);
-			_alpha = boost::lexical_cast<double>(params.find("vp_alpha")->second);
+			_left = std::stod(params.find("vp_left")->second);
+			_top = std::stod(params.find("vp_top")->second);
+			_width = std::stod(params.find("vp_width")->second);
+			_height = std::stod(params.find("vp_height")->second);
+			_red = std::stod(params.find("vp_red")->second);
+			_green = std::stod(params.find("vp_green")->second);
+			_blue = std::stod(params.find("vp_blue")->second);
+			_alpha = std::stod(params.find("vp_alpha")->second);
 		}
 	}
 
@@ -233,7 +233,7 @@ namespace api {
 			return boost::lexical_cast<std::string>(_aspect);
 		}, [this](std::string s) {
 			try {
-				_aspect = boost::lexical_cast<double>(s);
+				_aspect = std::stod(s);
 			} catch (boost::bad_lexical_cast &) {
 				return false;
 			}

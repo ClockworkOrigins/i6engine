@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup Components
+ * @{
+ */
+
 #ifndef __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__
 #define __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__
 
@@ -23,6 +28,9 @@
 namespace i6engine {
 namespace api {
 
+	/**
+	 * \brief Component used to show the waynet
+	 */
 	class ISIXE_MODULES_API ToggleWaynetComponent : public Component, public MessageSubscriberFacade {
 	public:
 		ToggleWaynetComponent(int64_t id, const attributeMap & params);
@@ -41,6 +49,9 @@ namespace api {
 			return {};
 		}
 
+		/**
+		 * \brief enables or disables the showing of the waynet
+		 */
 		void enable(bool enabled) {
 			_active = enabled;
 		}
@@ -61,3 +72,7 @@ namespace api {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__ */
+
+/**
+ * @}
+ */

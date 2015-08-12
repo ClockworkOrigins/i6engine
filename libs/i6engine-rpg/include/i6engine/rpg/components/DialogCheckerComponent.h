@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -31,6 +31,10 @@ namespace api {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief Component for characters with dialogs
+	 * This component checks every tick when in talk distance to player if it has an important dialog to start
+	 */
 	class ISIXE_RPG_API DialogCheckerComponent : public api::Component {
 	public:
 		DialogCheckerComponent(int64_t id, const api::attributeMap & params);

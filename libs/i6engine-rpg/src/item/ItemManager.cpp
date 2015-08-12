@@ -24,7 +24,7 @@ namespace i6engine {
 namespace rpg {
 namespace item {
 
-	ItemManager::ItemManager() : _parser() {
+	ItemManager::ItemManager() : utils::Singleton<ItemManager>(), _parser() {
 	}
 
 	ItemManager::~ItemManager() {

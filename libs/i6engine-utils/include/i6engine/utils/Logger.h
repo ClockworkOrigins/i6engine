@@ -112,8 +112,8 @@ namespace utils {
 	 * Allows thread-safe logging to file and console.
 	 * \note
 	 * Logger.h defines the macros:
-	 * \li \c LOG_X("Module", "Message") Writes log message with LogLevel X ('DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL')
-	 * \li \c ISIXE_LOG_SETLEVEL(level) Sets the new LogLevel (for example: i6utils::Logger::DEBUG)
+	 * \li \c ISIXE_LOG_X("Module", "Message") Writes log message with LogLevel X ('LOGDEBUG', 'LOGINFO', LOG'WARN', 'LOGERROR', 'LOGFATAL', 'LOGNONE')
+	 * \li \c ISIXE_LOG_SETLEVEL(level) Sets the new LogLevel (for example: i6engine::utils::LogLevel::LOGDEBUG)
 	 *
 	 * See \ref macrodoc for a list of all globally defined macros.
 	 */

@@ -36,6 +36,24 @@ namespace modules {
 #if ISIXE_SCRIPTING == SCRIPTING_PYTHON
 		api::EngineController::GetSingleton().getScriptingFacade()->_manager = this;
 #endif
+		// preload all exports
+		boost::python::object module = boost::python::import("__main__");
+		boost::python::object global = module.attr("__dict__");
+
+		boost::filesystem::directory_iterator iter("."), dirEnd;
+		while (iter != dirEnd) {
+			if (boost::filesystem::is_regular_file(*iter)) {
+				std::string file = iter->path().string();
+				if (file.find("Scripting") != std::string::npos && file.find("Python") != std::string::npos) {
+					size_t n = file.find("Scripting");
+					size_t n2 = file.find("Python");
+					file = file.substr(n, n2 - n + 6);
+					boost::python::exec(boost::python::str((std::string("import ") + file).c_str()), global, global);
+					boost::python::exec(boost::python::str((std::string("from ") + file + std::string(" import *")).c_str()), global, global);
+				}
+			}
+			iter++;
+		}
 	}
 
 	PythonScriptingManager::~PythonScriptingManager() {

@@ -1,7 +1,4 @@
-﻿import ScriptingRPGPython
-from ScriptingRPGPython import *
-
-def Dialog_NPC1_Hi_Info():
+﻿def Dialog_NPC1_Hi_Info():
 	NPC01 = getNPC("NPC01")
 	Player = getNPC("Player01")
 	NPC01.say("Dialog_NPC1_Hi_01_Sound", "Dialog_NPC1_Hi_01_Subtitle")

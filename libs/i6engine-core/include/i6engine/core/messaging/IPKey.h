@@ -52,7 +52,7 @@ namespace core {
 
 	public:
 		/**
-		 * \brief default constructor, construction an invalid Key
+		 * \brief default constructor, constructs an invalid Key
 		 */
 		IPKey() : _ip(), _port(0) {
 		}
@@ -64,7 +64,7 @@ namespace core {
 
 		/**
 		 * \brief constructor taking a string
-		 * \param[in] str formated like ip:port
+		 * \param[in] str formatted like ip:port
 		 */
 		explicit IPKey(const std::string & str);
 

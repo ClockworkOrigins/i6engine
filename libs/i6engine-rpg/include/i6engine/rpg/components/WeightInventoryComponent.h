@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -30,6 +30,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief represents an inventory limited by weight and offering the possibility to filter items depending on their category
+	 */
 	class ISIXE_RPG_API WeightInventoryComponent : public InventoryComponent, public api::MessageSubscriberFacade {
 	public:
 		WeightInventoryComponent(int64_t id, const api::attributeMap & params);
@@ -45,6 +48,48 @@ namespace components {
 		std::string getTemplateName() const override {
 			return "WeightInventory";
 		}
+
+	private:
+		enum ItemEntry {
+			Message,
+			Amount,
+			Imageset,
+			Image,
+			Identifier,
+			Value,
+			Weight,
+			Template
+		};
+
+		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string, uint32_t, double, std::string>>> _items;
+		double _maxWeight;
+		double _currentWeight;
+		uint32_t _currentIndex;
+		uint32_t _maxShowIndex;
+		std::string _currentFilter;
+		uint32_t _slotsPerView;
+		std::vector<std::string> _widgetList;
+		utils::weakPtr<WeightInventoryComponent, api::Component> _otherInventory;
+
+		enum FilterEntry {
+			Type,
+			NormalImage,
+			HoverImage,
+			PushedImage
+		};
+		std::vector<std::tuple<std::string, std::string, std::string, std::string>> _filter;
+
+		void Init() override;
+		void Finalize() override;
+
+		void News(const api::GameMessage::Ptr & msg) override;
+		void Tick() override;
+
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+			return std::make_pair(api::AddStrategy::REJECT, -1);
+		}
+
+		void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) override;
 
 		/**
 		 * \brief checks whether the item can be added to the inventory and if so it is added
@@ -82,45 +127,6 @@ namespace components {
 		 * \brief used to create an item in the inventory
 		 */
 		void removeItems(const std::string & identifier, uint32_t amount) override;
-
-	private:
-		enum class Filter {
-			None,
-			UsableItems,
-			MiscItems
-		};
-
-		enum ItemEntry {
-			Message,
-			Amount,
-			Imageset,
-			Image,
-			Identifier,
-			Value,
-			Weight
-		};
-
-		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string, uint32_t, double>>> _items;
-		double _maxWeight;
-		double _currentWeight;
-		uint32_t _currentIndex;
-		uint32_t _maxShowIndex;
-		Filter _currentFilter;
-		uint32_t _slotsPerView;
-		std::vector<std::string> _widgetList;
-		utils::weakPtr<WeightInventoryComponent, api::Component> _otherInventory;
-
-		void Init() override;
-		void Finalize() override;
-
-		void News(const api::GameMessage::Ptr & msg) override;
-		void Tick() override;
-
-		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
-			return std::make_pair(api::AddStrategy::REJECT, -1);
-		}
-
-		void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) override;
 	};
 
 } /* namespace components */

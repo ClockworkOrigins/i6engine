@@ -164,6 +164,9 @@ namespace utils {
 		}
 
 	private:
+		sharedCounter * _sharedCounter;
+		T * _ptr;
+
 		/**
 		 * \brief handles deletion of a reference
 		 */
@@ -174,9 +177,6 @@ namespace utils {
 				}
 			}
 		}
-
-		sharedCounter * _sharedCounter;
-		T * _ptr;
 	};
 
 } /* namespace utils */

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_DIALOG_DIALOG_H__
 #define __I6ENGINE_RPG_DIALOG_DIALOG_H__
 
@@ -28,6 +33,9 @@ namespace i6engine {
 namespace rpg {
 namespace dialog {
 
+	/**
+	 * \brief contains all information about a single dialog
+	 */
 	struct ISIXE_RPG_API Dialog {
 		Dialog(const std::string & i, const std::string & p);
 		~Dialog();
@@ -49,3 +57,7 @@ namespace dialog {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_DIALOG_DIALOG_H__ */
+
+/**
+ * @}
+ */

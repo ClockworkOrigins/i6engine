@@ -53,6 +53,16 @@ namespace modules {
 		friend class InputMailbox;
 
 	private:
+		Ogre::Radian _objRotX, _objRotY;
+		OIS::InputManager * _objOisInputManager;
+		OIS::Keyboard * _objOisKeyboard;
+		OIS::Mouse * _objOisMouse;
+		Ogre::RenderWindow * _objRenderWindow;
+		KeyboardListener * _keyboardListener;
+		MouseListener * _mouseListener;
+
+		InputController * _ctrl;
+
 		/**
 		 * \brief constructor, initializes all OIS stuff
 		 */
@@ -124,16 +134,6 @@ namespace modules {
 		 * \brief handles delete messages for Input Subsystem
 		 */
 		void NewsDelete(const api::GameMessage::Ptr & msg);
-
-		Ogre::Radian _objRotX, _objRotY;
-		OIS::InputManager * _objOisInputManager;
-		OIS::Keyboard * _objOisKeyboard;
-		OIS::Mouse * _objOisMouse;
-		Ogre::RenderWindow * _objRenderWindow;
-		KeyboardListener * _keyboardListener;
-		MouseListener * _mouseListener;
-
-		InputController * _ctrl;
 
 		/**
 		 * \brief forbidden

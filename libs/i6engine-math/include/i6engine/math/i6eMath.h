@@ -38,7 +38,7 @@ namespace i6engine {
 namespace math {
 
 	/**
-	 * \brief returns the distance of a point to a line
+	 * \brief returns the distance of a point to a line specified by offset and direction
 	 */
 	inline double disPointLine(const Vec3 & offset, const Vec3 & direction, const Vec3 & point) {
 		if (std::fabs(direction.length()) < 1e-15) {

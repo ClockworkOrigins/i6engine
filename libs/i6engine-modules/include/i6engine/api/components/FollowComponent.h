@@ -1,3 +1,8 @@
+/**
+ * \addtogroup Components
+ * @{
+ */
+
 #ifndef __I6ENGINE_API_FOLLOWCOMPONENT_H__
 #define __I6ENGINE_API_FOLLOWCOMPONENT_H__
 
@@ -8,6 +13,14 @@ namespace api {
 
 	class PhysicalStateComponent;
 
+	/**
+	 * \brief Component for objects following another one (e.g. projectiles)
+	 * For creating a FollowComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | targetID | yes | int64_t | id of the GameObject that should be followed | yes |
+	 * | speed | yes | double | speed in meters / second | yes |
+	 */
 	class ISIXE_MODULES_API FollowComponent : public Component {
 	public:
 		FollowComponent(const int64_t id, const attributeMap & params);
@@ -48,3 +61,7 @@ namespace api {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_API_FOLLOWCOMPONENT_H__ */
+
+/**
+ * @}
+ */

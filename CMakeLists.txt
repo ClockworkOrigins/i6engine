@@ -75,6 +75,16 @@ ELSE()
 	set(ISIXE_SCRIPTING "SCRIPTING_NONE")
 ENDIF()
 
+# Setting last version
+SET(LAST_VERSION_MAJOR 0)
+SET(LAST_VERSION_MINOR 8)
+SET(LAST_VERSION_PATCH 0)
+
+# Setting current version
+SET(VERSION_MAJOR 0)
+SET(VERSION_MINOR 9)
+SET(VERSION_PATCH 0)
+
 #########################################################################
 # Global Macros and Definitions
 #########################################################################
@@ -254,7 +264,7 @@ ENDIF(ISIXE_WITH_PROFILING)
 	SET(LIBNAME "CLOCKUTILS")
 	SET(LIBHEADER "clockUtils/errors.h")
 	SET(CLOCKUTILS_ROOT ${ISIXE_DEP_DIR}/clockUtils)
-	find_package(EasyFind REQUIRED COMPONENTS clock_iniParser)
+	find_package(EasyFind REQUIRED COMPONENTS clock_iniParser clock_sockets)
 	include_directories(SYSTEM ${CLOCKUTILS_INCLUDE_DIR})
 
 #----------------------------------------------------
@@ -448,6 +458,11 @@ IF(WIN32)
 	foreach(filename ${files})
 		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin)
 	endforeach()
+
+	configure_file(${CMAKE_SOURCE_DIR}/config/build-archive.bat.in ${CMAKE_BINARY_DIR}/build-archive.bat @ONLY)
+	
+	add_custom_target(BuildReleaseSourceArchive COMMAND build-archive.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+	add_custom_target(BuildRevisionSourceArchive COMMAND build-archive.bat packageRevision WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 ENDIF(WIN32)
 
 # set symlinks if it is an out-of-source-build

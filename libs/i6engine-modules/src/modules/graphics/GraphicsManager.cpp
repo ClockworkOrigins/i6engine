@@ -559,6 +559,22 @@ namespace modules {
 		} else if (msg->getSubtype() == api::graphics::GraSetExponentialFog2) {
 			api::graphics::Graphics_SetExponentialFog_Update * gsefu = dynamic_cast<api::graphics::Graphics_SetExponentialFog_Update *>(msg->getContent());
 			_sceneManager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(gsefu->colour.getX(), gsefu->colour.getY(), gsefu->colour.getZ()), gsefu->density);
+		} else if (msg->getSubtype() == api::graphics::GraGetHighestCoordinate) {
+			api::graphics::Graphics_GetHighestCoordinate_Update * ggu = dynamic_cast<api::graphics::Graphics_GetHighestCoordinate_Update *>(msg->getContent());
+			Vec3 startPos = ggu->startPos;
+			startPos.setY(DBL_MAX);
+			Ogre::Ray ray(startPos.toOgre(), Ogre::Vector3(0.0, -1.0, 0.0));
+			_raySceneQuery->setRay(ray);
+			_raySceneQuery->setSortByDistance(true);
+			// Execute query
+			Ogre::RaySceneQueryResult & result = _raySceneQuery->execute();
+			Ogre::RaySceneQueryResult::iterator itr;
+
+			if (result.empty()) {
+				ggu->callback(Vec3::ZERO);
+			} else {
+				ggu->callback(Vec3(ray.getPoint(result[0].distance)));
+			}
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -783,7 +799,7 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 
 			if (node == nullptr) {
-				return; // FIXME: (Daniel) happened after adding animations, but this musn't happen because of messaging system
+				return; // FIXME: (Daniel) happened after adding animations, but this mustn't happen because of messaging system
 			}
 
 			api::graphics::Graphics_SetAnimationSpeed_Update * gsu = dynamic_cast<api::graphics::Graphics_SetAnimationSpeed_Update *>(msg->getContent());
@@ -791,7 +807,9 @@ namespace modules {
 			node->setAnimationSpeed(gsu->speed);
 		} else if (msg->getSubtype() == api::graphics::GraStopAnimation) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
+			if (node == nullptr) {
+				return;
+			}
 			node->stopAnimation();
 		} else if (msg->getSubtype() == api::graphics::GraBillboard) {
 			api::graphics::Graphics_Billboard_Update * gbu = static_cast<api::graphics::Graphics_Billboard_Update *>(msg->getContent());
@@ -824,6 +842,20 @@ namespace modules {
 			}
 
 			node->particleFadeOut(coid);
+		} else if (msg->getSubtype() == api::graphics::GraDrawBB) {
+			api::graphics::Graphics_DrawBB_Update * gdu = dynamic_cast<api::graphics::Graphics_DrawBB_Update *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			if (node == nullptr) {
+				return;
+			}
+			node->drawBoundingBox(coid, gdu->colour);
+		} else if (msg->getSubtype() == api::graphics::GraRemoveBB) {
+			api::graphics::Graphics_Compositor_Update * gcu = dynamic_cast<api::graphics::Graphics_Compositor_Update *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			if (node == nullptr) {
+				return;
+			}
+			node->removeBoundingBox();
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

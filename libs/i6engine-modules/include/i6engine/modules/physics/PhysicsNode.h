@@ -134,14 +134,11 @@ namespace modules {
 
 		/**
 		 * \brief Called by Bullet when the object is first scheduled for simulation to retrieve the initial transform.
-		 *
-		 * \params[out] worldTrans
 		 */
 		inline void getWorldTransform(btTransform & worldTrans) const { worldTrans = _transform; }
 
 		/**
 		 * \brief Called by Bullet when the simulated object has moved.
-		 *
 		 */
 		void setWorldTransform(const btTransform & worldTrans);
 
@@ -149,8 +146,6 @@ namespace modules {
 		 * \brief returns the rigidBody of the PhysicsNode
 		 */
 		inline btRigidBody * getRigidBody() const { return _rigidBody; }
-
-		inline Vec3 getOldScale() const { return _oldScale; }
 
 		/**
 		 * \brief Tests a Hit with a ray given by the vector
@@ -246,7 +241,6 @@ namespace modules {
 
 		btTransform _transform;
 		btRigidBody * _rigidBody;
-		Vec3 _oldScale;
 
 		Vec3 _linearVelocity;
 		Vec3 _centralForce;

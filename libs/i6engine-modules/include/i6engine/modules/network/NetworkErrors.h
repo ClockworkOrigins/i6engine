@@ -35,6 +35,8 @@ namespace modules {
 		friend class NetworkManager;
 
 	private:
+		NetworkManager * _manager;
+
 		/**
 		 * \brief constructor taking NetworkController
 		 */
@@ -59,8 +61,6 @@ namespace modules {
 		 * \brief called when address or port is already in use while connecting
 		 */
 		void bindFailure(const std::string & other);
-
-		NetworkManager * _manager;
 
 		/**
 		 * \brief forbidden

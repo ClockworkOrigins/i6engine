@@ -30,12 +30,23 @@
 namespace i6engine {
 namespace utils {
 
+	/**
+	 * \class Future
+	 * \brief class for returning a result before it is ready
+	 */
 	template<typename T>
 	class Future {
 	public:
+		/**
+		 * \brief constructor
+		 */
 		Future() : _value(), _finished(false), _lockValue(), _valueCondVar() {
 		}
 
+		/**
+		 * \brief returns the contained value
+		 * if value wasn't set, this call blocks until it is set
+		 */
 		T get() const {
 			if (!_finished) {
 				std::unique_lock<std::mutex> ul(_lockValue);
@@ -44,6 +55,9 @@ namespace utils {
 			return _value;
 		}
 
+		/**
+		 * \brief sets value for this variable, notifies waiting get if existing
+		 */
 		void push(T value) {
 			_value = value;
 			_finished = true;

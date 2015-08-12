@@ -144,7 +144,7 @@ namespace api {
 			}
 		} else if (_mode == Mode::ONCE) {
 			timeElapsed %= _duration;
-			tt = 1 - double(timeElapsed - _duration) / _duration;
+			tt = double(timeElapsed) / _duration;
 
 			if (t > _duration) {
 				stop();
@@ -229,7 +229,7 @@ namespace api {
 			}
 			for (uint32_t i = 0; i < n + 1; ++i) {
 				newPos += _keyFrames[i % n].first * fak1 * fak2 * double(math::binom(n, i));
-				fak1 /= (1-tt);
+				fak1 /= (1 - tt);
 				fak2 *= tt;
 			}
 			break;
@@ -275,9 +275,7 @@ namespace api {
 		if (params.find("direction") == params.end()) {
 			ISIXE_THROW_API("MoverComponent", "required parameter 'direction' not set");
 		}
-		if (params.find("direction") != params.end()) {
-			_direction = boost::lexical_cast<bool>(params.find("direction")->second);
-		}
+		_direction = boost::lexical_cast<bool>(params.find("direction")->second);
 		if (_mode == Mode::TWOSTATE_OPENTIME) {
 			if (params.find("openTime") == params.end()) {
 				ISIXE_THROW_API("MoverComponent", "required parameter 'openTime' not set");

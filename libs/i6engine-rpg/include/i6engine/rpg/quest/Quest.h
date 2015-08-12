@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_QUEST_QUEST_H__
 #define __I6ENGINE_RPG_QUEST_QUEST_H__
 
@@ -34,6 +39,9 @@ namespace quest {
 		FAILED
 	};
 
+	/**
+	 * \brief represents a Quest
+	 */
 	struct ISIXE_RPG_API Quest {
 		std::string name;
 		std::string category;
@@ -47,3 +55,7 @@ namespace quest {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_QUEST_QUEST_H__ */
+
+/**
+ * @}
+ */

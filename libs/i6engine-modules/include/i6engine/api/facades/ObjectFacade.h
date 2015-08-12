@@ -153,6 +153,7 @@ namespace api {
 
 		/**
 		 * \brief updates the GOList with current state in ObjectSubsystem
+		 * \note only call from within object subsystem
 		 */
 		void updateGOList(const std::list<GOPtr> & GOList);
 
@@ -207,16 +208,6 @@ namespace api {
 
 	private:
 		/**
-		 * \brief forbidden
-		 */
-		ObjectFacade(const ObjectFacade &) = delete;
-
-		/**
-		 * \brief forbidden
-		 */
-		ObjectFacade & operator=(const ObjectFacade &) = delete;
-
-		/**
 		 * \brief List with all current GameObjects.
 		 */
 		std::list<GOPtr> _GOList;
@@ -238,6 +229,16 @@ namespace api {
 
 		mutable std::mutex _loadLevelLock;
 		mutable std::condition_variable _loadLevelCondVar;
+
+		/**
+		 * \brief forbidden
+		 */
+		ObjectFacade(const ObjectFacade &) = delete;
+
+		/**
+		 * \brief forbidden
+		 */
+		ObjectFacade & operator=(const ObjectFacade &) = delete;
 	};
 
 } /* namespace api */

@@ -41,10 +41,6 @@
 	#include "boost/thread/mutex.hpp"
 #endif /* ISIXE_WITH_PROFILING */
 
-/**
- * \TODO Docu
- */
-
 namespace i6engine {
 namespace core {
 

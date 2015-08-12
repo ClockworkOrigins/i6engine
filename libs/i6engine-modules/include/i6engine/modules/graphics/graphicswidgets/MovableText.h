@@ -1,3 +1,8 @@
+/**
+ * \addtogroup Graphics
+ * @{
+ */
+
 #ifndef __I6ENGINE_MODULES_GRAPHICS_MOVABLETEXT_H__
 #define __I6ENGINE_MODULES_GRAPHICS_MOVABLETEXT_H__
 
@@ -14,10 +19,19 @@ namespace modules {
 	public:
 		static Ogre::Overlay * overlay;
 
+		/**
+		 * \brief constructor
+		 */
 		MovableText(Ogre::MovableObject * p, Ogre::SceneManager * s, const std::string & font);
 
+		/**
+		 * \brief destructor
+		 */
 		~MovableText();
 
+		/**
+		 * \brief enables or disables movable text
+		 */
 		void enable(bool b) {
 			_enabled = b;
 			if (b) {
@@ -27,19 +41,32 @@ namespace modules {
 			}
 		}
 
+		/**
+		 * \brief sets text
+		 */
 		void setText(const Ogre::String & text) {
 			_text = text;
 			_pText->setCaption(_text);
 		}
 
+		/**
+		 * \brief sets size
+		 */
 		void setSize(uint16_t size) {
 			_pText->setParameter("char_height", std::to_string(size));
 		}
 
+		/**
+		 * \brief sets colour
+		 */
 		void setColour(const Vec3 & colour) {
 			_pText->setColour(Ogre::ColourValue(colour.getX(), colour.getY(), colour.getZ()));
 		}
 
+		/**
+		 * \brief updates position and visibility of this movable text
+		 * call this on every update of the graphics subsystem
+		 */
 		void update();
 
 	protected:
@@ -55,3 +82,7 @@ namespace modules {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_MODULES_GRAPHICS_MOVABLETEXT_H__ */
+
+/**
+ * @}
+ */

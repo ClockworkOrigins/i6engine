@@ -172,6 +172,11 @@ namespace api {
 		 */
 		void hideFPS() const;
 
+		/**
+		 * \brief calls callback with highest position of a mesh
+		 */
+		void getHighestCoordinate(const Vec3 & startPos, const std::function<void(Vec3)> & callback) const;
+
 	private:
 		boost::function<void(int64_t)> _notify;
 

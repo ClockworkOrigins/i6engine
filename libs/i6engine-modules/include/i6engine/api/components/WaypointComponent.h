@@ -29,7 +29,12 @@ namespace api {
 
 	/**
 	 * \class WaypointComponent
-	 * \brief Tells the engine what heightmap and texture to use when rendering the GameObject.
+	 * \brief Represents a Waypoint in the world, containing an identifier and a list of connections
+	 * For creating a WaypointComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | name | yes | std::string | name of this waypoint | yes |
+	 * | connections | yes | std::string | names of the waypoints this one is connected to, seperated by delimitter ; | yes |
 	 */
 	class ISIXE_MODULES_API WaypointComponent : public Component {
 	public:
@@ -56,14 +61,26 @@ namespace api {
 			return _name;
 		}
 
+		/**
+		 * \brief returns a vector with all connected Waypoints
+		 */
 		std::vector<std::string> getConnections() const {
 			return _connections;
 		}
 
+		/**
+		 * \brief returns true, if a connection to given Waypoint exists
+		 */
 		bool isConnected(const std::string & name) const;
 
+		/**
+		 * \brief adds connection to given Waypoint
+		 */
 		void addConnection(const std::string & name);
 
+		/**
+		 * \brief removes connection to given Waypoint
+		 */
 		void removeConnection(const std::string & name);
 
 	private:

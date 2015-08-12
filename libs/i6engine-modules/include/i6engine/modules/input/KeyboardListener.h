@@ -49,6 +49,11 @@ namespace modules {
 		typedef std::map<std::pair<api::KeyCode, api::KeyState>, boost::function<void(void)>> InputKeyFunctions;
 
 	private:
+		std::array<api::KeyState, 238> _keyStates;
+		std::array<char, 238> _keyTexts;
+
+		InputKeyFunctions _objInputKeyFunctions;
+
 		/**
 		 * \brief constructor
 		 */
@@ -79,8 +84,6 @@ namespace modules {
 		 * \param name OIS::api::KeyCode of the designated Key
 		 * \param type must either be "Pressed" or "Released"
 		 * \param ptrEventMethod Pointer to the designated function
-		 * \return   nothing
-		 *
 		 */
 		void setKeyFunction(const api::KeyCode name, const api::KeyState type, const boost::function<void(void)> & ptrEventMethod);
 
@@ -89,8 +92,6 @@ namespace modules {
 		 *
 		 * \param name OIS::api::KeyCode of the designated Key
 		 * \param type must either be "Pressed" or "Released"
-		 * \return   nothing
-		 *
 		 */
 		void removeKeyFunction(const api::KeyCode name, const api::KeyState type);
 
@@ -100,9 +101,7 @@ namespace modules {
 		 *    seems to invoke a function call to function in _objGUIFunctions specified by name and type
 		 *    merely checks existance of name and type value pair in _objGUIFunctions and calls boost::thread(iter->second) on success
 		 *
-		 * \param  name
 		 * \return   bool true if enabled, false otherwise
-		 *
 		 */
 		void triggerKeyFunction(const api::KeyCode keyCode, const api::KeyState type);
 
@@ -110,11 +109,6 @@ namespace modules {
 		 * \brief checks whether keys are hold
 		 */
 		void Tick();
-
-		std::array<api::KeyState, 238> _keyStates;
-		std::array<char, 238> _keyTexts;
-
-		InputKeyFunctions _objInputKeyFunctions;
 
 		/**
 		 * \brief forbidden

@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup Manager
+ * \addtogroup API
  * @{
  */
 
@@ -29,6 +29,9 @@
 namespace i6engine {
 namespace api {
 
+	/**
+	 * \brief handles IDs for GameObjects
+	 */
 	class ISIXE_MODULES_API IDManager {
 	public:
 		/**

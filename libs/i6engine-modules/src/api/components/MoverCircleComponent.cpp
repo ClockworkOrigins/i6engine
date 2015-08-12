@@ -126,10 +126,6 @@ namespace api {
 		if (params.find("realCenterPos") != params.end()) {
 			_realStartPos = Vec3(params, "realCenterPos");
 		}
-		// override lastpos if set
-		if (params.find("lastPos") != params.end()) {
-			_lastPos = Vec3(params, "lastPos");
-		}
 	}
 
 	attributeMap MoverCircleComponent::synchronize() const {

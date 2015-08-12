@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -30,15 +30,39 @@ namespace i6engine {
 namespace rpg {
 namespace config {
 
+	/**
+	 * \brief distance for NPCs starting to check if they have an important dialog
+	 */
 	extern ISIXE_RPG_API double NPC_CHECK_TALK_DISTANCE;
+
+	/**
+	 * \brief distance for NPCs starting to talk if they have an important dialog or they can be talked to
+	 */
 	extern ISIXE_RPG_API double NPC_TALK_DISTANCE;
 
+	/**
+	 * \brief time per word a subtitle is shown
+	 */
 	extern ISIXE_RPG_API double SUBTITLE_TIME_PER_WORD;
+
+	/**
+	 * \brief maximum distance where dialog sounds should be hearable
+	 */
 	extern ISIXE_RPG_API double DIALOG_MAX_DISTANCE;
 
+	/**
+	 * \brief item identifier for used currency
+	 */
 	extern ISIXE_RPG_API std::string CURRENCY;
+
+	/**
+	 * \brief specifies whether traders should have limited gold or not
+	 */
 	extern ISIXE_RPG_API bool LIMITED_TRADER_GOLD;
 
+	/**
+	 * \brief parses external constants in specified file
+	 */
 	ISIXE_RPG_API void parseExternalConstants(const std::string & file);
 
 } /* namespace config */

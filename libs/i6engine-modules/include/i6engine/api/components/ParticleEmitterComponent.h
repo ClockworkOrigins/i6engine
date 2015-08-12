@@ -32,6 +32,13 @@ namespace api {
 	/**
 	 * \class ParticleEmitterComponent
 	 * \brief Emits Particles
+	 * For creating a ParticleEmitterComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | particleEmitter | yes | std::string | The emitter for the particle | yes |
+	 * | pos | no | Vec3 | relative position to SceneNode | yes |
+	 * | fadeOut | no | bool | if set to true, the particle isn't removed immediately but emitters are stopped and so the particle fades out | yes |
+	 * | fadeOutCooldown | *) | uint64_t | time after stopping emitters until particle will be destroyed, *) required if fadeOut is set | yes |
 	 */
 	class ISIXE_MODULES_API ParticleEmitterComponent : public Component {
 	public:
@@ -39,7 +46,6 @@ namespace api {
 		 * \brief Constructor of the component
 		 *
 		 * Sets visibility and ID
-		 *
 		 */
 		ParticleEmitterComponent(const int64_t id, const attributeMap & params);
 
@@ -47,7 +53,6 @@ namespace api {
 		 * \brief Empty
 		 *
 		 * Hasn't to do anything right now
-		 *
 		 */
 		~ParticleEmitterComponent();
 

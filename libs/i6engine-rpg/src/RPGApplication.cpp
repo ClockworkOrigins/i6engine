@@ -77,6 +77,8 @@ namespace rpg {
 		}
 		i6engine::rpg::config::parseExternalConstants(externalConstantsFile);
 
+		i6engine::rpg::item::ItemManager::GetSingletonPtr()->addItemAttributes("UsableItem", { { "HP", "attribute_0" }, { "HP_MAX", "attribute_1" } });
+
 		std::string ItemDirectory;
 		if (_iniParser.getValue("SCRIPT", "itemDirectory", ItemDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'itemDirectory' in section 'SCRIPT' in RPG.ini not found!");

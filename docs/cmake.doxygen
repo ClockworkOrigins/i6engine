@@ -1,0 +1,29 @@
+/**
+ * \addtogroup cmake
+ * @{
+ */
+ 
+/**
+ * \page page_cmake All CMake variables
+ *
+ * Variable | Default | Description
+ * ---------|------------|-----------
+ * ISIXE_WITH_LOGGING | OFF | Enables building with logging, requires boost_log
+ * ISIXE_WITH_NETWORK | OFF | Enables build of the network subsystem using m2etis
+ * ISIXE_WITH_PROFILING | OFF | Enables building with profiling, requires gperftools
+ * ISIXE_WITH_TESTING | OFF | Enables building with tests, requires gtest
+ * ISIXE_WITH_AUDIO | ON | Enables build of the audio subsystem using OpenALSoft
+ * ISIXE_WITH_EDITOR | ON | Enables build of the level editor
+ * ISIXE_WITH_SAMPLES | ON | Enables build of sample appilcations
+ * ISIXE_WITH_TOOLS | ON | Enables build of tools
+ * ISIXE_WITH_RPG | ON | Enables build of RPG module and, if ISIXE_WITH_SAMPLES is ON, also with RPG sample
+ * ISIXE_WITH_DOCU | ON | Enables docu target bulding doxygen docu, requires doxygen
+ * ISIXE_WITH_TUTORIALS | ON | Enables build of tutorials, requires pdflatex
+ * ISIXE_WITH_SCRIPTING | python | Enables build of the scripting subsystem, parameters are "python", "lua" or "" (for no scripting)
+ * ISIXE_DEP_DIR | ${CMAKE_SOURCE_DIR}/dependencies | Allows setting of dependencies directory for engine deps (like boost, bullet etc.)
+ *
+ */
+ 
+/**
+ * @}
+ */

@@ -25,14 +25,6 @@ namespace i6engine {
 namespace lua {
 namespace input {
 
-	void setMouseButtonMapping(const i6engine::api::MouseButtonID id, const std::string & strAction) {
-		i6engine::api::EngineController::GetSingleton().getInputFacade()->setMouseButtonMapping(id, strAction);
-	}
-
-	std::string getMouseButtonMapping(const i6engine::api::MouseButtonID id) {
-		return i6engine::api::EngineController::GetSingleton().getInputFacade()->getMouseButtonMapping(id);
-	}
-
 	void setKeyMapping(const i6engine::api::KeyCode id, const std::string & strAction) {
 		i6engine::api::EngineController::GetSingleton().getInputFacade()->setKeyMapping(id, strAction);
 	}
@@ -224,25 +216,17 @@ scope registerInput() {
 				value("KC_WEBBACK", int(i6engine::api::KeyCode::KC_WEBBACK)),
 				value("KC_MYCOMPUTER", int(i6engine::api::KeyCode::KC_MYCOMPUTER)),
 				value("KC_MAIL", int(i6engine::api::KeyCode::KC_MAIL)),
-				value("KC_MEDIASELECT", int(i6engine::api::KeyCode::KC_MEDIASELECT))
+				value("KC_MEDIASELECT", int(i6engine::api::KeyCode::KC_MEDIASELECT)),
+				value("KC_MBLeft", int(i6engine::api::KeyCode::KC_MBLeft)),
+				value("KC_MBRight", int(i6engine::api::KeyCode::KC_MBRight)),
+				value("KC_MBMiddle", int(i6engine::api::KeyCode::KC_MBMiddle)),
+				value("KC_MBButton3", int(i6engine::api::KeyCode::KC_MBButton3)),
+				value("KC_MBButton4", int(i6engine::api::KeyCode::KC_MBButton4)),
+				value("KC_MBButton5", int(i6engine::api::KeyCode::KC_MBButton5)),
+				value("KC_MBButton6", int(i6engine::api::KeyCode::KC_MBButton6)),
+				value("KC_MBButton7", int(i6engine::api::KeyCode::KC_MBButton7))
 			],
 
-		class_<i6engine::api::MouseButtonID>("MouseButtonID")
-			.def(constructor<>())
-			.enum_("MouseButtonID")
-			[
-				value("MB_Left", int(i6engine::api::MouseButtonID::MB_Left)),
-				value("MB_Right", int(i6engine::api::MouseButtonID::MB_Right)),
-				value("MB_Middle", int(i6engine::api::MouseButtonID::MB_Middle)),
-				value("MB_Button3", int(i6engine::api::MouseButtonID::MB_Button3)),
-				value("MB_Button4", int(i6engine::api::MouseButtonID::MB_Button4)),
-				value("MB_Button5", int(i6engine::api::MouseButtonID::MB_Button5)),
-				value("MB_Button6", int(i6engine::api::MouseButtonID::MB_Button6)),
-				value("MB_Button7", int(i6engine::api::MouseButtonID::MB_Button7))
-			],
-
-		def("setMouseButtonMapping", &i6engine::lua::input::setMouseButtonMapping),
-		def("getMouseButtonMapping", &i6engine::lua::input::getMouseButtonMapping),
 		def("setKeyMapping", &i6engine::lua::input::setKeyMapping),
 		def("removeKeyMapping", &i6engine::lua::input::removeKeyMapping),
 		def("getKeyMapping", &i6engine::lua::input::getKeyMapping),

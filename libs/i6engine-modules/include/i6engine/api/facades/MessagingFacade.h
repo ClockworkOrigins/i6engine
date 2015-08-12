@@ -55,7 +55,7 @@ namespace api {
 		~MessagingFacade();
 
 		/**
-		 * \brief
+		 * \brief sends a message
 		 */
 		void deliverMessage(const GameMessage::Ptr & msg);
 

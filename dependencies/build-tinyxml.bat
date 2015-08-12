@@ -33,4 +33,4 @@ move tinyxml2.lib %PREFIX%/lib/tinyxml2.lib
 echo "Cleaning up"
 cd %DEP_DIR%
 RD /S /Q "%BUILD_DIR%"
-RD /S /Q "%TMP_DIR%\.."
+RD /S /Q "%TMP_DIR%"

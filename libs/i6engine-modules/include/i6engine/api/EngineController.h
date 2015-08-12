@@ -184,8 +184,14 @@ namespace api {
 		 */
 		inline Application * getAppl() const { return _appl; }
 
+		/**
+		 * \brief registers a basic default configuration
+		 */
 		void registerDefault(const bool ds);
 
+		/**
+		 * \brief call this method to shutdown everything
+		 */
 		void stop();
 
 		inline core::EngineCoreController * getController() const {
@@ -211,6 +217,9 @@ namespace api {
 		 */
 		bool removeTimerID(uint64_t id);
 
+		/**
+		 * \brief returns the left time for the given timer ID in microseconds
+		 */
 		uint64_t getTimeLeft(uint64_t id) const;
 
 		/**

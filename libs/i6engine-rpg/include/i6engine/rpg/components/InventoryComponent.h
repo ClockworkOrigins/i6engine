@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,14 +28,15 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief base class for inventory implementations
+	 */
 	class ISIXE_RPG_API InventoryComponent : public api::Component {
 	public:
 		InventoryComponent(int64_t id, const api::attributeMap & params);
 
 		virtual ~InventoryComponent() {
 		}
-
-		void Init() override;
 
 		api::attributeMap synchronize() const override;
 
@@ -129,6 +130,8 @@ namespace components {
 		bool _isSelfInventory;
 		double _multiplier;
 		utils::weakPtr<InventoryComponent, api::Component> _otherTradeInventory;
+
+		void Init() override;
 
 		virtual void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) = 0;
 

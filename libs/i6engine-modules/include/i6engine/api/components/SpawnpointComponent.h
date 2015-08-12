@@ -31,6 +31,10 @@ namespace api {
 
 	/**
 	* \brief Only defines this object as a spawnpoint
+	 * For creating a SpawnpointComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | spawntypes | yes | std::string | GameObject types being spawnable at this Spawnpoint, separated by delimitter ; | yes |
 	*/
 	class ISIXE_MODULES_API SpawnpointComponent : public Component {
 	public:
@@ -109,8 +113,8 @@ namespace api {
 } /* namespace api */
 } /* namespace i6engine */
 
+#endif /* __I6ENGINE_API_SPAWNPOINTCOMPONENT_H__ */
+
 /**
  * @}
  */
-
-#endif /* __I6ENGINE_API_SPAWNPOINTCOMPONENT_H__ */

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_RPGAPPLICATION_H__
 #define __I6ENGINE_RPG_RPGAPPLICATION_H__
 
@@ -24,14 +29,24 @@
 namespace i6engine {
 namespace rpg {
 
+	/**
+	 * \brief base class for RPG module
+	 * derive from this class to get basic RPG setup
+	 */
 	class ISIXE_RPG_API RPGApplication : virtual public i6engine::api::Application {
 	public:
 		RPGApplication();
 
 		virtual ~RPGApplication();
 
+		/**
+		 * \brief reads RPG.ini and loads items, NPCs and dialogs
+		 */
 		virtual void Initialize();
-
+		
+		/**
+		 * \brief registers GUI widgets, Components, loads level and sets basic settings
+		 */
 		virtual void AfterInitialize();
 
 		virtual void Tick();
@@ -50,3 +65,7 @@ namespace rpg {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_RPGAPPLICATION_H__ */
+
+/**
+ * @}
+ */

@@ -358,6 +358,7 @@ namespace modules {
 				}
 				_constraints.erase(it);
 			}
+			delete tmp;
 		} else if (msg->getSubtype() == api::physics::PhyReset) {
 			_ctrl->reset();
 		} else if (msg->getSubtype() == api::physics::PhyConstraint) {

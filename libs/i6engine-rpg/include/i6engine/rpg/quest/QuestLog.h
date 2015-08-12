@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_QUEST_QUESTLOG_H__
 #define __I6ENGINE_RPG_QUEST_QUESTLOG_H__
 
@@ -35,6 +40,9 @@ namespace quest {
 	enum class QuestStatus;
 	struct Quest;
 
+	/**
+	 * \brief represents a Questlog containing all quest informations and the state of the quest
+	 */
 	class ISIXE_RPG_API QuestLog : public utils::Singleton<QuestLog>, public api::MessageSubscriberFacade {
 	public:
 		QuestLog();
@@ -78,3 +86,7 @@ namespace quest {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_QUEST_QUESTLOG_H__ */
+
+/**
+ * @}
+ */

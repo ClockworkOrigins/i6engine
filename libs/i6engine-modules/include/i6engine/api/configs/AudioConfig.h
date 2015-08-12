@@ -29,8 +29,6 @@
 
 namespace i6engine {
 namespace api {
-	enum class KeyState : uint16_t;
-
 namespace audio {
 	enum AudioMessageTypes {
 		AudioReset = 0,

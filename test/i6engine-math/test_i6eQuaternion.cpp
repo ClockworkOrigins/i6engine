@@ -16,6 +16,7 @@
 
 #include "i6engine/utils/Exceptions.h"
 
+#include "i6engine/math/i6eMath.h"
 #include "i6engine/math/i6eQuaternion.h"
 #include "i6engine/math/i6eVector.h"
 
@@ -103,6 +104,10 @@ TEST(i6eQuaternion, Inverse) {
 	btQuaternion bq(5, 6, 7, 4);
 
 	EXPECT_TRUE(q.inverse().toBullet() == bq.inverse());
+
+	Quaternion a(Vec3(0.0, 1.0, 0.0), PI / 2.0);
+	Quaternion b(Vec3(0.0, 1.0, 0.0), PI / 4.0);
+	EXPECT_EQ(a * a.inverse() * b, b);
 }
 
 TEST(i6eQuaternion, length) {

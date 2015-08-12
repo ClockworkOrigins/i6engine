@@ -1,10 +1,35 @@
-﻿v 0.8.8
+﻿v 0.8.11
+
+Enhancements:
+	- added docu page with cmake variables
+	- merged mouse buttons and keyboard keys to just one enum
+
+Fixes:
+	- fixed crash of engine when sound configuration of PC is corrupted
+
+v 0.8.10
+
+Enhancements:
+	- added more basic tutorials
+	- improved documentation
+	- added possibility to set selected text for ComboBox
+
+Fixes:
+	- fixed order of messages loading a GUICanvas
+	- fixed mode ONCE in MoverInterpolate not working correct
+
+v 0.8.8
 
 Enhancements:
 	- improved member access of components
+	- python modules are now also preloaded
+	- changed getting of ip
+	- selected objects in leveleditor are highlighted now
 
 Fixes:
 	- fixed missing reading of openTime from attributeMap of MoverInterpolate
+	- camera in level editor is now always above the highest mesh when level is loaded
+	- fixed two memory leaks
 
 v 0.8.7
 

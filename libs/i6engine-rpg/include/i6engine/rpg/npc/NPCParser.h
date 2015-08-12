@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_NPC_NPCPARSER_H__
 #define __I6ENGINE_RPG_NPC_NPCPARSER_H__
 
@@ -25,18 +30,24 @@ namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	class ISIXE_RPG_API NPCParser : public i6engine::utils::Singleton<NPCParser> {
-		friend class i6engine::utils::Singleton<NPCParser>;
+	/**
+	 * \brief parses and stores all NPC templates
+	 */
+	class ISIXE_RPG_API NPCParser : public utils::Singleton<NPCParser> {
+		friend class utils::Singleton<NPCParser>;
 
 	public:
 		~NPCParser();
 
+		/**
+		 * \brief loads all NPC templates from given directory and all subdirectories
+		 */
 		void loadNPCs(const std::string & directory);
 
-		i6engine::api::objects::GOTemplate getTemplate(const std::string & identifier) const;
+		api::objects::GOTemplate getTemplate(const std::string & identifier) const;
 
 	private:
-		std::map<std::string, i6engine::api::objects::GOTemplate> _npcs;
+		std::map<std::string, api::objects::GOTemplate> _npcs;
 
 		NPCParser();
 
@@ -48,3 +59,7 @@ namespace npc {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_NPC_NPCPARSER_H__ */
+
+/**
+ * @}
+ */

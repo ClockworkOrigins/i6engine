@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup utils
+ * @{
+ */
+
 #ifndef __I6ENGINE_UTILS_DOUBLEBUFFERQUEUE_H__
 #define __I6ENGINE_UTILS_DOUBLEBUFFERQUEUE_H__
 
@@ -65,33 +70,6 @@ namespace utils {
 			pop(Bool2Type<consumer>());
 		}
 
-		void pop(Bool2Type<true>) {
-			static_assert(consumer, "Consumer must be true here");
-			boost::mutex::scoped_lock scopeLock(_readLock);
-			if (_queueRead->empty()) {
-				swap();
-
-				if (_queueRead->empty()) {
-					ISIXE_THROW_API("DoubleBufferQueue", "nothing to pop");
-				}
-			}
-
-			_queueRead->pop();
-		}
-
-		void pop(Bool2Type<false>) {
-			static_assert(!consumer, "Consumer must be false here");
-			if (_queueRead->empty()) {
-				swap();
-
-				if (_queueRead->empty()) {
-					ISIXE_THROW_API("DoubleBufferQueue", "nothing to pop");
-				}
-			}
-
-			_queueRead->pop();
-		}
-
 		/**
 		 * \brief returns first entry of the queue
 		 */
@@ -99,67 +77,11 @@ namespace utils {
 			return front(Bool2Type<consumer>());
 		}
 
-		T front(Bool2Type<true>) {
-			static_assert(consumer, "Consumer must be true here");
-			boost::mutex::scoped_lock scopeLock(_readLock);
-			if (_queueRead->empty()) {
-				swap();
-
-				if (_queueRead->empty()) {
-					ISIXE_THROW_API("DoubleBufferQueue", "nothing to get");
-				}
-			}
-			return _queueRead->front();
-		}
-
-		T front(Bool2Type<false>) {
-			static_assert(!consumer, "Consumer must be false here");
-			if (_queueRead->empty()) {
-				swap();
-
-				if (_queueRead->empty()) {
-					ISIXE_THROW_API("DoubleBufferQueue", "nothing to get");
-				}
-			}
-			return _queueRead->front();
-		}
-
 		/**
 		 * \brief removes first entry of the queue and returns its value
 		 */
 		T poll() {
 			return poll(Bool2Type<consumer>());
-		}
-
-		T poll(Bool2Type<true> b) {
-			static_assert(consumer, "Consumer must be true here");
-			boost::mutex::scoped_lock scopeLock(_readLock);
-			if (_queueRead->empty()) {
-				swap();
-
-				if (_queueRead->empty()) {
-					ISIXE_THROW_API("DoubleBufferQueue", "nothing to get");
-				}
-			}
-
-			T ret = _queueRead->front();
-			_queueRead->pop();
-			return ret;
-		}
-
-		T poll(Bool2Type<false> b) {
-			static_assert(!consumer, "Consumer must be false here");
-			if (_queueRead->empty()) {
-				swap();
-
-				if (_queueRead->empty()) {
-					ISIXE_THROW_API("DoubleBufferQueue", "nothing to get");
-				}
-			}
-
-			T ret = _queueRead->front();
-			_queueRead->pop();
-			return ret;
 		}
 
 		/**
@@ -208,13 +130,91 @@ namespace utils {
 		boost::mutex _readLock;
 		boost::mutex _writeLock;
 
-		/**
-		 * \brief forbidden
-		 */
-		DoubleBufferQueue(const DoubleBufferQueue &) = delete;
+		void pop(Bool2Type<true>) {
+			static_assert(consumer, "Consumer must be true here");
+			boost::mutex::scoped_lock scopeLock(_readLock);
+			if (_queueRead->empty()) {
+				swap();
+
+				if (_queueRead->empty()) {
+					ISIXE_THROW_API("DoubleBufferQueue", "nothing to pop");
+				}
+			}
+
+			_queueRead->pop();
+		}
+
+		void pop(Bool2Type<false>) {
+			static_assert(!consumer, "Consumer must be false here");
+			if (_queueRead->empty()) {
+				swap();
+
+				if (_queueRead->empty()) {
+					ISIXE_THROW_API("DoubleBufferQueue", "nothing to pop");
+				}
+			}
+
+			_queueRead->pop();
+		}
+
+		T front(Bool2Type<true>) {
+			static_assert(consumer, "Consumer must be true here");
+			boost::mutex::scoped_lock scopeLock(_readLock);
+			if (_queueRead->empty()) {
+				swap();
+
+				if (_queueRead->empty()) {
+					ISIXE_THROW_API("DoubleBufferQueue", "nothing to get");
+				}
+			}
+			return _queueRead->front();
+		}
+
+		T front(Bool2Type<false>) {
+			static_assert(!consumer, "Consumer must be false here");
+			if (_queueRead->empty()) {
+				swap();
+
+				if (_queueRead->empty()) {
+					ISIXE_THROW_API("DoubleBufferQueue", "nothing to get");
+				}
+			}
+			return _queueRead->front();
+		}
+
+		T poll(Bool2Type<true> b) {
+			static_assert(consumer, "Consumer must be true here");
+			boost::mutex::scoped_lock scopeLock(_readLock);
+			if (_queueRead->empty()) {
+				swap();
+
+				if (_queueRead->empty()) {
+					ISIXE_THROW_API("DoubleBufferQueue", "nothing to get");
+				}
+			}
+
+			T ret = _queueRead->front();
+			_queueRead->pop();
+			return ret;
+		}
+
+		T poll(Bool2Type<false> b) {
+			static_assert(!consumer, "Consumer must be false here");
+			if (_queueRead->empty()) {
+				swap();
+
+				if (_queueRead->empty()) {
+					ISIXE_THROW_API("DoubleBufferQueue", "nothing to get");
+				}
+			}
+
+			T ret = _queueRead->front();
+			_queueRead->pop();
+			return ret;
+		}
 
 		/**
-		 * \brief switches read and write buffer
+		 * \brief swaps read and write buffer
 		 */
 		void swap() {
 			boost::mutex::scoped_lock scopeLock2(_writeLock);
@@ -226,9 +226,18 @@ namespace utils {
 				_queueRead = &_queueA;
 			}
 		}
+
+		/**
+		 * \brief forbidden
+		 */
+		DoubleBufferQueue(const DoubleBufferQueue &) = delete;
 	};
 
 } /* namespace utils */
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_UTILS_DOUBLEBUFFERQUEUE_H__ */
+
+/**
+ * @}
+ */

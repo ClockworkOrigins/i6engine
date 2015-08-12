@@ -139,6 +139,8 @@ namespace api {
 		ASSERT_THREAD_SAFETY_HEADER
 
 	private:
+		std::string _windowName; //!< name of the application being used as the window title
+
 		/**
 		 * \brief called after the thread was created
 		 */
@@ -155,8 +157,6 @@ namespace api {
 		 * \brief forbidden
 		 */
 		Application & operator=(const Application &) = delete;
-
-		std::string _windowName; //!< name of the application being used as the window title
 	};
 
 } /* namespace api */

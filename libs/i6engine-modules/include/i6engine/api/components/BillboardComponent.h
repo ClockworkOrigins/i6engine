@@ -36,6 +36,13 @@ namespace graphics {
 	/**
 	 * \class BillboardComponent
 	 * \brief Tells the engine what billboard to show
+	 * For creating a BillboardComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | material | yes | std::string | Material used for the Billboard | yes |
+	 * | width | yes | double | relative width | yes |
+	 * | height | yes | double | relative height | yes |
+	 * | origin | yes | int | one of BillboardOrigin's int values | yes |
 	 */
 	class ISIXE_MODULES_API BillboardComponent : public Component {
 	public:
@@ -54,8 +61,14 @@ namespace graphics {
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
+		/**
+		 * \brief creates or updates a billboard in this billboard set
+		 */
 		void createOrUpdateBillboard(const std::string & identifier, const Vec3 & offset, double width, double height, double u0, double v0, double u1, double v1);
 
+		/**
+		 * \brief deletes a billboard
+		 */
 		void deleteBillboard(const std::string & identifier);
 
 		/**

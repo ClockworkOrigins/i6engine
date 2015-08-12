@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup tri6
+ * \addtogroup GUI
  * @{
  */
 

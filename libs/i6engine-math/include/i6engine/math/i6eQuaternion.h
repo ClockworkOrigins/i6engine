@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * A class to "transport" 3D vector
- *
- * its better to send only 1 "type" to the game then many
- */
 
 /**
  * \addtogroup math
  * @{
+ */
+
+/*
+ * A class to "transport" Quaternion
+ *
+ * its better to send only 1 "type" to the game then many
  */
 
 #ifndef  __I6ENGINE_MATH_I6EQUATERNION_H__
@@ -34,7 +35,7 @@
 
 namespace Ogre {
 	class Quaternion;
-}
+} /* namespace Ogre */
 class btQuaternion;
 
 namespace i6engine {

@@ -157,8 +157,6 @@ namespace api {
 		std::thread thrd([this, &run]() {
 			// read stdin
 			std::string str;
-
-#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
 			struct timeval tv;
 
 			while (run) {
@@ -176,7 +174,6 @@ namespace api {
 					}
 				}
 			}
-#endif
 		});
 
 		_coreController->RunEngine();

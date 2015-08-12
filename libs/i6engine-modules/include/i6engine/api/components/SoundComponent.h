@@ -34,6 +34,15 @@ namespace api {
 	/**
 	 * \class SoundComponent
 	 * \brief Attaches a sound node to an object. The Sound will follow the object
+	 * For creating a SoundComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | offset | yes | Vec3 | offset to the position of the PhysicalStateComponent this Component is connected to | yes |
+	 * | direction | yes | Vec3 | direction of the sound | yes |
+	 * | file | yes | std::string | sound file for this sound, currently only wav is supported | yes |
+	 * | looping | yes | bool | is this sound looping or only played once | yes |
+	 * | maxDist | yes | double | maxmimum distance this sound should be hearable, volume is interpolated | yes |
+	 * | cache | yes | bool | if set to true, this sound is cached in memory and mustn't be loaded from harddisk every time it is played | yes |
 	 */
 	class ISIXE_MODULES_API SoundComponent : public Component {
 	public:
@@ -57,8 +66,6 @@ namespace api {
 		std::string getTemplateName() const override {
 			return "Sound";
 		}
-
-		void Tick() override;
 
 		std::vector<componentOptions> getComponentOptions() override;
 
@@ -109,6 +116,8 @@ namespace api {
 		void Init() override;
 
 		void Finalize() override;
+
+		void Tick() override;
 
 		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};

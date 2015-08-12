@@ -23,8 +23,6 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace api {
 
@@ -32,7 +30,7 @@ namespace api {
 		_objFamilyID = components::LifetimeComponent;;
 		_objComponentID = components::LifetimeComponent;
 
-		_lifetime = boost::lexical_cast<uint64_t>(params.find("lifetime")->second);
+		_lifetime = std::stoull(params.find("lifetime")->second);
 	}
 
 	ComPtr LifetimeComponent::createC(const int64_t id, const attributeMap & params) {
@@ -60,7 +58,10 @@ namespace api {
 	}
 
 	void LifetimeComponent::dead() {
-		getOwnerGO()->setDie();
+		auto go = getOwnerGO();
+		if (go != nullptr) {
+			go->setDie();
+		}
 	}
 
 	void LifetimeComponent::instantKill() {
@@ -69,7 +70,7 @@ namespace api {
 
 	attributeMap LifetimeComponent::synchronize() const {
 		attributeMap params;
-		params["lifetime"] = boost::lexical_cast<std::string>(_lifetime - (EngineController::GetSingleton().getCurrentTime() - _startTime));
+		params["lifetime"] = std::to_string(_lifetime - (EngineController::GetSingleton().getCurrentTime() - _startTime));
 		return params;
 	}
 
@@ -77,9 +78,9 @@ namespace api {
 		std::vector<componentOptions> result;
 
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Lifetime", [this]() {
-			return boost::lexical_cast<std::string>(_lifetime);
+			return std::to_string(_lifetime);
 		}, [this](std::string s) {
-			_lifetime = boost::lexical_cast<uint64_t>(s);
+			_lifetime = std::stoull(s);
 			return true;
 		}));
 

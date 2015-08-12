@@ -134,22 +134,21 @@ namespace sample {
 
 				if (_eventMap.find(key) != _eventMap.end()) {
 					_eventMap[key].second = iku->pressed != i6engine::api::KeyState::KEY_RELEASED;
-				}
-			}
-		} else if (_shootBall && msg->getSubtype() == i6engine::api::mouse::MouButton) {
-			i6engine::api::input::Input_Button_Update * ibu = dynamic_cast<i6engine::api::input::Input_Button_Update *>(msg->getContent());
-			if (ibu->pressed && ibu->code == i6engine::api::MouseButtonID::MB_Left && !i6engine::api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
-				i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-				Vec3 pos = ssc->getPosition();
+				} else {
+					if (iku->code == i6engine::api::KeyCode::KC_MBLeft && !i6engine::api::EngineController::GetSingleton().getGUIFacade()->getOnWindow() && iku->pressed == i6engine::api::KeyState::KEY_PRESSED) {
+						i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+						Vec3 pos = ssc->getPosition();
 
-				i6engine::api::attributeMap paramsPSC;
-				pos.insertInMap("pos", paramsPSC);
-				i6engine::api::objects::GOTemplate tmpl;
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
-				i6engine::api::EngineController::GetSingleton().getObjectFacade()->createGO("Ball", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this, ssc](i6engine::api::GOPtr go) {
-					auto cc = _camera->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent);
-					go->getGOC<i6engine::api::PhysicalStateComponent>(i6engine::api::components::ComponentTypes::PhysicalStateComponent)->setLinearVelocity(i6engine::math::rotateVector((cc->getLookAt() - cc->getPosition() + Vec3(0.0, 0.0, 2.0)).normalize() * 100.0, ssc->getRotation()), 2);
-				});
+						i6engine::api::attributeMap paramsPSC;
+						pos.insertInMap("pos", paramsPSC);
+						i6engine::api::objects::GOTemplate tmpl;
+						tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+						i6engine::api::EngineController::GetSingleton().getObjectFacade()->createGO("Ball", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this, ssc](i6engine::api::GOPtr go) {
+							auto cc = _camera->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent);
+							go->getGOC<i6engine::api::PhysicalStateComponent>(i6engine::api::components::ComponentTypes::PhysicalStateComponent)->setLinearVelocity(i6engine::math::rotateVector((cc->getLookAt() - cc->getPosition() + Vec3(0.0, 0.0, 2.0)).normalize() * 100.0, ssc->getRotation()), 2);
+						});
+					}
+				}
 			}
 		}
 	}

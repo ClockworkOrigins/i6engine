@@ -29,13 +29,17 @@
 
 namespace i6engine {
 namespace api {
-namespace graphics {
-	enum class BillboardOrigin;
-} /* namespace graphics */
 
 	/**
 	 * \class MovableTextComponent
 	 * \brief shows a text above a mesh
+	 * For creating a MovableTextComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | font | yes | std::string | font used for this Text | yes |
+	 * | text | yes | std::string | the text shown above the GameObject | yes |
+	 * | size | yes | uint16_t | font size | yes |
+	 * | colour | yes | Vec3 | colour of the text | yes |
 	 */
 	class ISIXE_MODULES_API MovableTextComponent : public Component {
 	public:
@@ -50,8 +54,8 @@ namespace graphics {
 		~MovableTextComponent();
 
 		/**
-		* \brief creates the Component with given attributeMap
-		*/
+		 * \brief creates the Component with given attributeMap
+		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
 		/**
@@ -65,6 +69,9 @@ namespace graphics {
 
 		std::vector<componentOptions> getComponentOptions() override;
 
+		/**
+		 * \brief sets the text
+		 */
 		void setText(const std::string & text);
 
 	private:

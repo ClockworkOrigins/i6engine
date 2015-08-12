@@ -31,6 +31,22 @@ namespace api {
 	/**
 	 * \class CameraComponent
 	 * \brief Attaches a camera to an object. The Camera will follow the object
+	 * For creating a CameraComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | pos | yes | Vec3 | relative position of camera to SceneNode | yes |
+	 * | lookAt | yes | Vec3 | absolute look at position in the world | yes |
+	 * | nearclip | yes | double | near clipping distance | yes |
+	 * | aspect | yes | double | aspect ration of the camera | yes |
+	 * | viewport | no | bool | defines whether this camera has a viewport or not | yes |
+	 * | vp_left | *) | double | left startpoint of the viewport, value between 0 and 1, *) required when viewport true | yes |
+	 * | vp_top | *) | double | uppper startpoint of the viewport, value between 0 and 1, *) required when viewport true | yes |
+	 * | vp_width | *) | double | width of the viewport, value between 0 and 1, *) required when viewport true | yes |
+	 * | vp_height | *) | double | height of the viewport, value between 0 and 1, *) required when viewport true | yes |
+	 * | vp_red | *) | double | red part of the viewports background colour, *) required when viewport true | yes |
+	 * | vp_green | *) | double | green part of the viewports background colour, *) required when viewport true | yes |
+	 * | vp_blue | *) | double | blue part of the viewports background colour, *) required when viewport true | yes |
+	 * | vp_alpha | *) | double | alpha part of the viewports background colour, *) required when viewport true | yes |
 	 */
 	class ISIXE_MODULES_API CameraComponent : public Component {
 	public:
@@ -125,6 +141,9 @@ namespace api {
 
 		std::vector<componentOptions> getComponentOptions() override;
 
+		/**
+		 * \brief enables or disables a compositor
+		 */
 		void enableCompositor(const std::string & compositor, bool enabled);
 
 		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;

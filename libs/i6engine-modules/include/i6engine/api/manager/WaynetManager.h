@@ -1,3 +1,8 @@
+/**
+ * \addtogroup API
+ * @{
+ */
+
 #ifndef __I6ENGINE_API_WAYNETMANAGER_H__
 #define __I6ENGINE_API_WAYNETMANAGER_H__
 
@@ -15,6 +20,9 @@ namespace api {
 
 	class EngineController;
 
+	/**
+	 * \brief handles the current Waynet
+	 */
 	class ISIXE_MODULES_API WaynetManager {
 		friend class EngineController;
 
@@ -63,3 +71,7 @@ namespace api {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_API_WAYNETMANAGER_H__ */
+
+/**
+ * @}
+ */

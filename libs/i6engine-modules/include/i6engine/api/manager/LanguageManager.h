@@ -1,3 +1,8 @@
+/**
+ * \addtogroup API
+ * @{
+ */
+
 #ifndef __I6ENGINE_API_LANGUAGEMANAGER_H__
 #define __I6ENGINE_API_LANGUAGEMANAGER_H__
 
@@ -10,6 +15,10 @@
 namespace i6engine {
 namespace api {
 
+	/**
+	 * \brief handles the current language of the Game
+	 * a change of the language notifies all registered callbacks
+	 */
 	class ISIXE_MODULES_API LanguageManager {
 	public:
 		LanguageManager();
@@ -35,3 +44,7 @@ namespace api {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_API_LANGUAGEMANAGER_H__ */
+
+/**
+ * @}
+ */

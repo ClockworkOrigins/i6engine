@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_NPC_NPCQUEUEJOB_H__
 #define __I6ENGINE_RPG_NPC_NPCQUEUEJOB_H__
 
@@ -21,6 +26,9 @@ namespace i6engine {
 namespace rpg {
 namespace npc {
 
+	/**
+	 * \brief abstract base class for all jobs for NPCQueue
+	 */
 	class NPCQueueJob {
 	public:
 		virtual ~NPCQueueJob() {
@@ -55,3 +63,7 @@ namespace npc {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_NPC_NPCQUEUEJOB_H__ */
+
+/**
+ * @}
+ */

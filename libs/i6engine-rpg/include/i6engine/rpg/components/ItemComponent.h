@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,6 +28,10 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief base class for all items
+	 * derive from it and implement virtual methods to create own behavior
+	 */
 	class ISIXE_RPG_API ItemComponent : public api::Component {
 	public:
 		ItemComponent(int64_t id, const api::attributeMap & params);
@@ -67,6 +71,9 @@ namespace components {
 			return _identifier;
 		}
 
+		/**
+		 * \brief returns key value pairs for info screen for this item in inventory
+		 */
 		virtual std::vector<std::pair<std::string, std::string>> getInfos() const = 0;
 
 	private:

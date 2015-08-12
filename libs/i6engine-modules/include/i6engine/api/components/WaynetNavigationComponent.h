@@ -29,7 +29,7 @@ namespace api {
 
 	/**
 	 * \class WaynetNavigationComponent
-	 * \brief Tells the engine what heightmap and texture to use when rendering the GameObject.
+	 * \brief Use for navigation by waypoints
 	 */
 	class ISIXE_MODULES_API WaynetNavigationComponent : public NavigationComponent {
 	public:
