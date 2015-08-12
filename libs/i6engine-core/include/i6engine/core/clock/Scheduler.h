@@ -23,6 +23,7 @@
 #define __I6ENGINE_CORE_SCHEDULER_H__
 
 #include <queue>
+#include <set>
 
 #include "i6engine/utils/Clock.h"
 #include "i6engine/utils/Exceptions.h"
@@ -90,7 +91,11 @@ namespace core {
 		/**
 		 * \brief constructor for scheduler taking a clock
 		 */
-		explicit Scheduler(utils::Clock<ClockUpdater> & c) : _running(true), _clock(c), _queue(), _lock(), _tID(_clock.registerTimer()), _worker(boost::bind(&Scheduler<ClockUpdater>::worker, this)), _id() {
+		explicit Scheduler(utils::Clock<ClockUpdater> & c) : _running(true), _clock(c), _queue(), _lock(), _id(), _workerThreads(), _removeIDs() {
+			for (uint16_t i = 0; i < SCHEDULER_THREAD_AMOUNT; i++) {
+				uint64_t tid = _clock.registerTimer();
+				_workerThreads.push_back(std::make_pair(tid, new boost::thread(boost::bind(&Scheduler<ClockUpdater>::worker, this, tid))));
+			}
 		}
 
 		/**
@@ -103,9 +108,11 @@ namespace core {
 				_queue.pop();
 			}
 			_lock.unlock();
-			_worker.interrupt();
-			_clock.updateWaitTime(_tID, 0);
-			_worker.join();
+			for (uint16_t i = 0; i < SCHEDULER_THREAD_AMOUNT; i++) {
+				_clock.updateWaitTime(_workerThreads[i].first, 0);
+				_workerThreads[i].second->join();
+				delete _workerThreads[i].second;
+			}
 		}
 
 		/**
@@ -125,7 +132,9 @@ namespace core {
 			boost::mutex::scoped_lock sl(_lock);
 			_queue.push(j);
 			if (_queue.top().time == j.time) {
-				_clock.updateWaitTime(_tID, j.time);
+				for (uint16_t i = 0; i < SCHEDULER_THREAD_AMOUNT; i++) {
+					_clock.updateWaitTime(_workerThreads[i].first, j.time);
+				}
 			}
 
 			return j.id;
@@ -148,7 +157,9 @@ namespace core {
 			boost::mutex::scoped_lock sl(_lock);
 			_queue.push(j);
 			if (_queue.top().time == j.time) {
-				_clock.updateWaitTime(_tID, j.time);
+				for (uint16_t i = 0; i < SCHEDULER_THREAD_AMOUNT; i++) {
+					_clock.updateWaitTime(_workerThreads[i].first, j.time);
+				}
 			}
 			return j.id;
 		}
@@ -201,26 +212,8 @@ namespace core {
 		 */
 		bool stop(uint64_t id) {
 			boost::mutex::scoped_lock sl(_lock);
-			std::priority_queue<Job> copy = _queue;
-
-			while (!_queue.empty()) {
-				_queue.pop();
-			}
-
-			bool b = false;
-
-			while (!copy.empty()) {
-				Job j = copy.top();
-				copy.pop();
-
-				if (j.id != id) {
-					_queue.push(j);
-				} else {
-					b = true;
-				}
-			}
-
-			return b;
+			_removeIDs.insert(id);
+			return true;
 		}
 
 	private:
@@ -228,18 +221,26 @@ namespace core {
 		/**
 		 * \brief waits until a job is done and handles this stuff
 		 */
-		void worker() {
+		void worker(uint64_t tid) {
 			while (_running) {
 				_lock.lock();
 				while (!_queue.empty() && _queue.top().time <= _clock.getTime()) {
 					Job j = _queue.top();
 					_queue.pop();
+					if (_removeIDs.find(j.id) != _removeIDs.end()) {
+						_removeIDs.erase(j.id);
+						continue;
+					}
 					_lock.unlock();
 					bool b = j.func();
 					_lock.lock();
 					if (j.interval != UINT64_MAX && b) {
 						j.time = _clock.getTime() + j.interval;
-						_queue.push(j);
+						if (_removeIDs.find(j.id) != _removeIDs.end()) {
+							_removeIDs.erase(j.id);
+						} else {
+							_queue.push(j);
+						}
 					}
 				}
 				uint64_t t = _clock.getTime() + 1000000; // sleep 1 second if no task is there
@@ -247,7 +248,7 @@ namespace core {
 					t = _queue.top().time;
 				}
 				_lock.unlock();
-				if (!_clock.waitForTime(_tID, t)) {
+				if (!_clock.waitForTime(tid, t)) {
 					break;
 				}
 			}
@@ -273,17 +274,14 @@ namespace core {
 		 */
 		mutable boost::mutex _lock;
 
-		/**
-		 * \brief tID of the timer used
-		 */
-		uint64_t _tID;
-
-		/**
-		 * \brief internal thread for worker method
-		 */
-		boost::thread _worker;
-
 		std::atomic<uint64_t> _id;
+
+		/**
+		 * \brief internal threads for worker method and their timer id
+		 */
+		std::vector<std::pair<uint64_t, boost::thread *>> _workerThreads;
+
+		std::set<uint64_t> _removeIDs;
 
 		/**
 		 * \brief forbidden
