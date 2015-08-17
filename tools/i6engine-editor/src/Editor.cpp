@@ -274,12 +274,21 @@ namespace editor {
 			updateObjectList();
 
 			// show TemplateList
-			api::EngineController::GetSingleton().getGUIFacade()->addStatusList("TemplateList", "Editor/Listbox", 0.0, 0.4, -1);
+			api::EngineController::GetSingleton().getGUIFacade()->addStatusList("TemplateList", "Editor/Listbox", 0.0, 0.04, -1);
 			api::EngineController::GetSingleton().getGUIFacade()->setSize("TemplateList", 0.2, 0.9);
 
 			for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOTemplates()) {
 				api::EngineController::GetSingleton().getGUIFacade()->addTextToWidget("TemplateList", p.first);
 			}
+
+			api::EngineController::GetSingleton().getGUIFacade()->setSelectedStringCallback("TemplateList", [this](std::string tpl) {
+				auto tmpl = api::EngineController::GetSingleton().getObjectFacade()->getGOTemplates()[tpl];
+				api::EngineController::GetSingleton().getObjectFacade()->createObject(tpl, tmpl, api::EngineController::GetSingleton().getUUID(), false);
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+				updateObjectList();
+			});
 		}).detach();
 	}
 
