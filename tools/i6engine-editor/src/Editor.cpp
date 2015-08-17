@@ -283,6 +283,15 @@ namespace editor {
 
 			api::EngineController::GetSingleton().getGUIFacade()->setSelectedStringCallback("TemplateList", [this](std::string tpl) {
 				auto tmpl = api::EngineController::GetSingleton().getObjectFacade()->getGOTemplates()[tpl];
+
+				for (auto & c : tmpl._components) {
+					if (c._template == "PhysicalState" || c._template == "StaticState") {
+						utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+						Vec3 newPos = ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 5.0), ssc->getRotation());
+						newPos.insertInMap("pos", c._params);
+					}
+				}
+
 				api::EngineController::GetSingleton().getObjectFacade()->createObject(tpl, tmpl, api::EngineController::GetSingleton().getUUID(), false);
 
 				std::this_thread::sleep_for(std::chrono::milliseconds(500));
