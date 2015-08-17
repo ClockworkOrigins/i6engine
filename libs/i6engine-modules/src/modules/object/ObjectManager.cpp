@@ -42,7 +42,6 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "boost/bind.hpp"
-#include "boost/filesystem.hpp"
 
 namespace i6engine {
 namespace modules {
@@ -52,20 +51,6 @@ namespace modules {
 
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback(boost::bind(&ObjectManager::addTicker, this, _1));
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerRemoveTickerCallback(boost::bind(&ObjectManager::removeTicker, this, _1));
-
-		std::string goTemplatePath;
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue<std::string>("OBJECT", "GOTemplatePath", goTemplatePath)) {
-			ISIXE_LOG_ERROR("Object", "An exception has occurred: value GOTemplatePath in section OBJECT not found!");
-			return;
-		}
-		boost::filesystem::directory_iterator iter(goTemplatePath), dirEnd;
-		while (iter != dirEnd) {
-			if (boost::filesystem::is_regular_file(*iter)) {
-				std::string file = iter->path().string();
-				registerGOTemplate(file);
-			}
-			iter++;
-		}
 
 		for (std::pair<std::string, api::createGOCCallback> & p : api::componentList) {
 			registerCTemplate(p.first, p.second);

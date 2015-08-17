@@ -272,6 +272,14 @@ namespace editor {
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 			updateObjectList();
+
+			// show TemplateList
+			api::EngineController::GetSingleton().getGUIFacade()->addStatusList("TemplateList", "Editor/Listbox", 0.0, 0.4, -1);
+			api::EngineController::GetSingleton().getGUIFacade()->setSize("TemplateList", 0.2, 0.9);
+
+			for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOTemplates()) {
+				api::EngineController::GetSingleton().getGUIFacade()->addTextToWidget("TemplateList", p.first);
+			}
 		}).detach();
 	}
 

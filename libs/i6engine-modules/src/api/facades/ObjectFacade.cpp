@@ -32,7 +32,7 @@
 namespace i6engine {
 namespace api {
 
-	ObjectFacade::ObjectFacade() : _GOList(), _lock(), _notify(), _addTicker(), _removeTicker(), _loadLevelLock(), _loadLevelCondVar() {
+	ObjectFacade::ObjectFacade() : _GOList(), _lock(), _notify(), _addTicker(), _removeTicker(), _loadLevelLock(), _loadLevelCondVar(), _templateList() {
 	}
 
 	ObjectFacade::~ObjectFacade() {

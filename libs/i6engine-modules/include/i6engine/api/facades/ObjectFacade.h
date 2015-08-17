@@ -206,6 +206,21 @@ namespace api {
 		 */
 		void unpause() const;
 
+		/**
+		 * \brief sets all available GOTemplates
+		 * don't use, only for Object Subsystem
+		 */
+		void setGOTemplates(const std::map<std::string, objects::GOTemplate> & templates) {
+			_templateList = templates;
+		}
+
+		/**
+		 * \brief returns all available GOTemplates
+		 */
+		std::map<std::string, objects::GOTemplate> getGOTemplates() const {
+			return _templateList;
+		}
+
 	private:
 		/**
 		 * \brief List with all current GameObjects.
@@ -229,6 +244,8 @@ namespace api {
 
 		mutable std::mutex _loadLevelLock;
 		mutable std::condition_variable _loadLevelCondVar;
+
+		std::map<std::string, objects::GOTemplate> _templateList;
 
 		/**
 		 * \brief forbidden
