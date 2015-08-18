@@ -1,4 +1,11 @@
-﻿v 0.8.11
+﻿v 0.8.12
+
+Enhancements:
+	- added possibility to specify thread amount for Scheduler
+	- added possibility to insert GOTemplates in level editor
+	- added possibility to specify meshes and particles to preload while loading a level
+
+v 0.8.11
 
 Enhancements:
 	- added docu page with cmake variables
