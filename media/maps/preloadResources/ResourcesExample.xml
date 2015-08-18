@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Resources>
+    <Mesh>Ball.MESH</Mesh>
+    <Mesh>Ballon.MESH</Mesh>
+    <Particle>ParticleSystem2</Particle>
+</Resources>
