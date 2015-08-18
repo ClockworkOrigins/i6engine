@@ -458,6 +458,7 @@ namespace modules {
 			_sceneNode->removeAndDestroyChild(sn->getName());
 
 			_particles.erase(coid);
+			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(part, _manager->getSceneManager());
 		}
 	}
 

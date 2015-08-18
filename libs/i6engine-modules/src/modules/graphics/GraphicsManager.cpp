@@ -44,6 +44,9 @@
 #include "i6engine/modules/gui/GUIController.h"
 #include "i6engine/modules/gui/GUIMailbox.h"
 
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+
 #include "boost/lexical_cast.hpp"
 
 #include "CEGUI/CEGUI.h"
@@ -56,6 +59,8 @@
 #include "OGRE/OgreRenderWindow.h"
 #include "OGRE/OgreRoot.h"
 #include "OGRE/Overlay/OgreOverlaySystem.h"
+
+#include "tinyxml2.h"
 
 namespace i6engine {
 namespace modules {
@@ -923,7 +928,63 @@ namespace modules {
 	}
 
 	void GraphicsManager::loadResources(const std::string & resourcesFile) {
-		std::vector<std::string> meshes = { "Baby.MESH", "Djinn.MESH" };
+		tinyxml2::XMLDocument doc;
+
+		if (doc.LoadFile(resourcesFile.c_str())) {
+			ISIXE_LOG_ERROR("GraphicsManager", "Couldn't open resources file (" << resourcesFile << ")");
+			return;
+		}
+
+		tinyxml2::XMLElement * root = doc.FirstChildElement("Resources");
+
+		std::vector<std::string> meshes;
+
+		for (tinyxml2::XMLElement * mesh = root->FirstChildElement("Mesh"); mesh != nullptr; mesh = mesh->NextSiblingElement("Mesh")) {
+			if (mesh->GetText() == nullptr) {
+				ISIXE_LOG_ERROR("GraphicsManager", "Found Mesh entry without value!");
+			}
+			meshes.push_back(mesh->GetText());
+		}
+
+		std::vector<std::string> particles;
+
+		for (tinyxml2::XMLElement * particle = root->FirstChildElement("Particle"); particle != nullptr; particle = particle->NextSiblingElement("Particle")) {
+			if (particle->GetText() == nullptr) {
+				ISIXE_LOG_ERROR("GraphicsManager", "Found Particle entry without value!");
+			}
+			particles.push_back(particle->GetText());
+		}
+
+		Ogre::SceneNode * sn = _sceneManager->getRootSceneNode()->createChildSceneNode("PreLoadSceneNode_0_0", Ogre::Vector3::ZERO);
+		Ogre::Camera * camera = _sceneManager->createCamera("PreLoadSceneCamera_0_0");
+		sn->attachObject(camera);
+		Ogre::Viewport * vp = _objRoot->getAutoCreatedWindow()->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
+
+		for (std::string m : meshes) {
+			Ogre::Entity * meshEntity = _sceneManager->createEntity("PreLoadSceneMesh_0_0", m);
+			meshEntity->setVisible(true);
+			meshEntity->setCastShadows(true);
+			sn->attachObject(meshEntity);
+			_objRoot->renderOneFrame();
+			sn->detachObject(meshEntity);
+			_sceneManager->destroyEntity(meshEntity);
+		}
+
+		for (std::string p : particles) {
+			ParticleUniverse::ParticleSystem * particleSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem("PreLoadSceneParticle_0_0", p, _sceneManager);
+			sn->attachObject(particleSystem);
+			particleSystem->start();
+			_objRoot->renderOneFrame();
+			sn->detachObject(particleSystem);
+			particleSystem->stop();
+			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(particleSystem, _sceneManager);
+		}
+
+		_objRoot->getAutoCreatedWindow()->removeViewport(0);
+		sn->detachObject(camera);
+		_sceneManager->destroyCamera(camera);
+		_sceneManager->getRootSceneNode()->removeChild(sn);
+		_sceneManager->destroySceneNode("PreLoadSceneNode_0_0");
 	}
 
 } /* namespace modules */
