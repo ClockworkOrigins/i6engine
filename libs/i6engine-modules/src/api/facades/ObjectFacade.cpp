@@ -23,6 +23,7 @@
 #include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/Component.h"
 #include "i6engine/api/configs/ComponentConfig.h"
+#include "i6engine/api/configs/GraphicsConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/objects/GameObject.h"
@@ -104,9 +105,14 @@ namespace api {
 	}
 
 	void ObjectFacade::loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) const {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjLevel, core::Method::Create, new objects::Object_Level_Create(file, flags, resourcesFile, [this]() {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjLevel, core::Method::Create, new objects::Object_Level_Create(file, flags, [this]() {
 			_loadLevelCondVar.notify_all();
-		}), core::Subsystem::Unknown));
+		}), core::Subsystem::Unknown);
+		if (resourcesFile.empty()) {
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+		} else {
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraLoadResources, core::Method::Create, new graphics::Graphics_LoadResources_Create(resourcesFile, msg), core::Subsystem::Unknown));
+		}
 		std::unique_lock<std::mutex> ul(_loadLevelLock);
 		_loadLevelCondVar.wait(ul);
 	}

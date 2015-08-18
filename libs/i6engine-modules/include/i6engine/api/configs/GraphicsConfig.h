@@ -27,6 +27,7 @@
 #include "i6engine/math/i6eVector4.h"
 
 #include "i6engine/api/GameMessageStruct.h"
+#include "i6engine/api/GameMessage.h"
 
 namespace i6engine {
 namespace api {
@@ -70,7 +71,8 @@ namespace graphics {
 		GraParticleFadeOut,
 		GraGetHighestCoordinate,
 		GraDrawBB,
-		GraRemoveBB
+		GraRemoveBB,
+		GraLoadResources
 	};
 
 	enum class ShadowTechnique {
@@ -768,6 +770,19 @@ namespace graphics {
 			return new Graphics_RemoveBB_Update(*this);
 		}
 	} Graphics_RemoveBB_Update;
+
+	/**
+	 * \brief preload resources of a level
+	 */
+	typedef struct Graphics_LoadResources_Create : GameMessageStruct {
+		std::string resourcesFile;
+		GameMessage::Ptr msg;
+		Graphics_LoadResources_Create(const std::string & rf, const GameMessage::Ptr & m) : GameMessageStruct(), resourcesFile(rf), msg(m) {
+		}
+		Graphics_LoadResources_Create * copy() {
+			return new Graphics_LoadResources_Create(*this);
+		}
+	} Graphics_LoadResources_Create;
 
 } /* namespace graphics */
 } /* namespace api */

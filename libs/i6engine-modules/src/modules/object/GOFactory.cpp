@@ -206,7 +206,7 @@ namespace modules {
 		return go;
 	}
 
-	void GOFactory::loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) {
+	void GOFactory::loadLevel(const std::string & file, const std::string & flags) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		tinyxml2::XMLDocument doc;
 

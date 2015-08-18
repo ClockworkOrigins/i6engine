@@ -150,16 +150,14 @@ namespace objects {
 	typedef struct ISIXE_MODULES_API Object_Level_Create : GameMessageStruct {
 		std::string file;
 		std::string flags;
-		std::string resourcesFile;
 		std::function<void(void)> func;
 		Object_Level_Create();
-		Object_Level_Create(const std::string & fi, const std::string & fl, const std::string & rf, const std::function<void(void)> & fu);
+		Object_Level_Create(const std::string & fi, const std::string & fl, const std::function<void(void)> & fu);
 		template<class Archive>
 		void serialize(Archive & ar, const unsigned int version) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & file;
 			ar & flags;
-			ar & resourcesFile;
 		}
 		Object_Level_Create * copy() { return new Object_Level_Create(*this); }
 	} Object_Level_Create;

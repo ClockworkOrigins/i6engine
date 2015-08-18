@@ -16,6 +16,8 @@
 
 #include "i6engine/api/gui/GUIWidget.h"
 
+#include <thread>
+
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/api/EngineController.h"
@@ -121,7 +123,7 @@ namespace api {
 
 	bool GUIWidget::drag(const CEGUI::EventArgs & e) {
 		if (!_clickCallback.empty()) {
-			_clickCallback();
+			std::thread(_clickCallback).detach();
 		}
 		if (!_dragable) {
 			return false;

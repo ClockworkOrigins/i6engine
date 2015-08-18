@@ -467,6 +467,10 @@ namespace modules {
 			}
 		} else if (msg->getSubtype() == api::graphics::GraFPS) {
 			_showFPS = true;
+		} else if (msg->getSubtype() == api::graphics::GraLoadResources) {
+			api::graphics::Graphics_LoadResources_Create * glrc = dynamic_cast<api::graphics::Graphics_LoadResources_Create *>(msg->getContent());
+			loadResources(glrc->resourcesFile);
+			api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(glrc->msg);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -916,6 +920,10 @@ namespace modules {
 
 	void GraphicsManager::removeTicker(GraphicsNode * gn) {
 		_tickers.erase(gn);
+	}
+
+	void GraphicsManager::loadResources(const std::string & resourcesFile) {
+		std::vector<std::string> meshes = { "Baby.MESH", "Djinn.MESH" };
 	}
 
 } /* namespace modules */

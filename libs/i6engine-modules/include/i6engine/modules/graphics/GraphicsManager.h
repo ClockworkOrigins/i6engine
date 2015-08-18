@@ -224,6 +224,8 @@ namespace modules {
 
 		bool _showFPS;
 
+		void loadResources(const std::string & resourcesFile);
+
 		/**
 		 * \brief forbidden
 		 */
