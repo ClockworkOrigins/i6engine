@@ -103,8 +103,8 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void ObjectFacade::loadLevel(const std::string & file, const std::string & flags) const {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjLevel, core::Method::Create, new objects::Object_Level_Create(file, flags, [this]() {
+	void ObjectFacade::loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjLevel, core::Method::Create, new objects::Object_Level_Create(file, flags, resourcesFile, [this]() {
 			_loadLevelCondVar.notify_all();
 		}), core::Subsystem::Unknown));
 		std::unique_lock<std::mutex> ul(_loadLevelLock);

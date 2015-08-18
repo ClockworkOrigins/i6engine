@@ -106,7 +106,14 @@ namespace api {
 		/**
 		 * \brief loads a level from an xml file only using the objects with given flags
 		 */
-		void loadLevel(const std::string & file, const std::string & flags) const;
+		void loadLevel(const std::string & file, const std::string & flags) const {
+			loadLevel(file, flags, "");
+		}
+
+		/**
+		 * \brief loads a level from an xml file only using the objects with given flags and preloads resources specified in resourcesFile
+		 */
+		void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) const;
 
 		/**
 		 * \brief registers a component to be ticked in every Frame

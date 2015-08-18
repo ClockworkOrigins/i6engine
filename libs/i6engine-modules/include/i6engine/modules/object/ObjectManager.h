@@ -79,7 +79,7 @@ namespace modules {
 		 * \param[in] flags
 		 * \throws I6_FAILURE When file can't be opened
 		 */
-		void loadLevel(const std::string & file, const std::string & flags);
+		void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile);
 
 	private:
 		/**
