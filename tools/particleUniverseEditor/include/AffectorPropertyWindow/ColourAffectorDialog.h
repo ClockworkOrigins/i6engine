@@ -25,7 +25,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PUED_COLOUR_AFFECTOR_DIALOG_H__
 
 #include "ParticleUniverseControlPointColourControl.h"
-#include <wx/dialog.h>
+
+#include "ParticleAffectors/ParticleUniverseColourAffector.h"
+
+#include "wx/dialog.h"
+#include "wx/wx.h"
 
 //#define ID_RESET 1999
 
@@ -35,22 +39,22 @@ class ColourAffectorDialog : public wxDialog
 {
 	public:
 		// Constructor / Destructor
-		ColourAffectorDialog(ParticleUniverse::ColourAffector::ColourMap& map, 
-			wxWindow* parent, 
+		ColourAffectorDialog(ParticleUniverse::ColourAffector::ColourMap & map, 
+			wxWindow * parent, 
 			wxWindowID id, 
-			const wxString& title, 
-			const wxPoint& pos = wxDefaultPosition, 
-			const wxSize& size = wxDefaultSize, 
-			const wxString& name = wxT("ColourAffectorDialog"));
-		~ColourAffectorDialog(void){};
-		void OnReset(wxCommandEvent& event);
+			const wxString & title, 
+			const wxPoint & pos = wxDefaultPosition, 
+			const wxSize & size = wxDefaultSize, 
+			const wxString & name = wxT("ColourAffectorDialog"));
+		~ColourAffectorDialog(void) {}
+		void OnReset(wxCommandEvent & event);
 		bool Destroy();
-		ParticleUniverse::ColourAffector::ColourMap& getColourMap(void);
+		ParticleUniverse::ColourAffector::ColourMap & getColourMap(void);
 
 	protected:
-		ControlPointColourControl* mControlPointColourControl;
+		ControlPointColourControl * mControlPointColourControl;
 		ParticleUniverse::ColourAffector::ColourMap mColourMap;
-		std::vector<ControlPoint*> mControlPoints;
+		std::vector<ControlPoint *> mControlPoints;
 		wxSize mControlSize;
 };
 

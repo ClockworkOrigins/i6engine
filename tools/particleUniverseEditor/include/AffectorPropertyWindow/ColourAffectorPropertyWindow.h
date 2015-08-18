@@ -24,9 +24,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_COLOUR_AFFECTOR_PROPERTY_WINDOW_H__
 #define __PUED_COLOUR_AFFECTOR_PROPERTY_WINDOW_H__
 
-#include "wx/ogre/prerequisites.h"
 #include "ParticleUniverseAffectorPropertyWindow.h"
+
 #include "ParticleAffectors/ParticleUniverseColourAffector.h"
+
+#include "wx/ogre/prerequisites.h"
 
 // Property names
 static wxString PRNL_TIME_AND_COLOUR = wxT("");
@@ -45,7 +47,7 @@ class ParentPropertyTimeAndColour : public wxParentPropertyClass
 		ParentPropertyTimeAndColour(
 			const wxString& label, 
 			const wxString& name);
-		virtual ~ParentPropertyTimeAndColour(void){};
+		virtual ~ParentPropertyTimeAndColour(void) {}
 
 		/**	
 		*/
@@ -98,7 +100,7 @@ class ColourAffectorPropertyWindow : public AffectorPropertyWindow
 		/**
 			Destructor
 		*/
-		~ColourAffectorPropertyWindow(void){};
+		~ColourAffectorPropertyWindow(void) {}
 
 		/**
 			See AffectorPropertyWindow
@@ -117,8 +119,6 @@ class ColourAffectorPropertyWindow : public AffectorPropertyWindow
 			Initialises all box affector properties
 		*/
 		virtual void _initProperties(void);
-
 };
 
 #endif
-

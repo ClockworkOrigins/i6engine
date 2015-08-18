@@ -9,10 +9,11 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseControlPoint.h"
-#include "ParticleUniverseEditorPCH.h"
 #include "AffectorPropertyWindow/ColourAffectorDialog.h"
-#include <wx/wx.h>
+
+#include "ParticleUniverseControlPoint.h"
+
+#include "wx/wx.h"
 
 //-----------------------------------------------------------------------
 ColourAffectorDialog::ColourAffectorDialog(ParticleUniverse::ColourAffector::ColourMap& map,

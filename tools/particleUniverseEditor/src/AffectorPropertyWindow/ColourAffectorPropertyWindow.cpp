@@ -9,11 +9,13 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "AffectorPropertyWindow/ColourAffectorPropertyWindow.h"
-#include "AffectorPropertyWindow/ColourAffectorDialog.h"
-#include "ParticleUniverseSystemManager.h"
+
 #include "ParticleUniverseEditComponent.h"
+#include "ParticleUniverseSystemManager.h"
+
+#include "AffectorPropertyWindow/ColourAffectorDialog.h"
+
 #include "wx/ogre/utils.h"
 #include "wx/propgrid/advprops.h"
 
