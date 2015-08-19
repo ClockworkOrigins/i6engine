@@ -59,7 +59,7 @@ wxOgreRenderSystem::~wxOgreRenderSystem()
 void wxOgreRenderSystem::LoadPlugin(const Ogre::String& plugin)
 {
     try {
-#if WXOGRE_DEBUG and OGRE_PLATFORM == OGRE_PLATFORM_WINDOWS
+#if WXOGRE_DEBUG == 1
 		m_root->loadPlugin(plugin + "_d");
 #else
 		m_root->loadPlugin(plugin);
