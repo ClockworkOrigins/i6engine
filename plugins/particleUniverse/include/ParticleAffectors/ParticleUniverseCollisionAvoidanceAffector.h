@@ -40,7 +40,7 @@ namespace ParticleUniverse
 			static const Real DEFAULT_RADIUS;
 
 			CollisionAvoidanceAffector(void);
-	        virtual ~CollisionAvoidanceAffector(void){};
+	        virtual ~CollisionAvoidanceAffector(void) {}
 
 			/** Todo
 			*/

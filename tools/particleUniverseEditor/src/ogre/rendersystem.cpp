@@ -24,7 +24,7 @@
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
  #ifndef OGRE_PLUGINDIR
- #define OGRE_PLUGINDIR "/usr/local/lib/OGRE"
+ #define OGRE_PLUGINDIR ""
  #endif
 #else 
  #define OGRE_PLUGINDIR ""

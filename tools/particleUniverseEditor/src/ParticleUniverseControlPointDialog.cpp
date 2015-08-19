@@ -132,11 +132,11 @@ ControlPointDialog::ControlPointDialog(
 	const wxSize& size, 
 	const wxString& name) : 
 wxDialog(parent, id, title, pos, size, wxDEFAULT_DIALOG_STYLE | wxSTAY_ON_TOP, name),
+mControlPointsForPUCommunication(controlPointList),
 mPreviousHorizontalScale(1.0f),
 mPreviousVerticalScale(1.0f),
 mPreviousHorizontalScroll(5.0f),
-mPreviousVerticalScroll(5.0f),
-mControlPointsForPUCommunication(controlPointList)
+mPreviousVerticalScroll(5.0f)
 {
 	// Fill mControlPoints with values passed in the dialog
 	ControlPoint* cp;
@@ -328,7 +328,7 @@ const ParticleUniverse::DynamicAttributeCurved::ControlPointList ControlPointDia
 	return mControlPointsForPUCommunication;
 }
 //-----------------------------------------------------------------------
-const ParticleUniverse::InterpolationType ControlPointDialog::getInterpolationType(void)
+ParticleUniverse::InterpolationType ControlPointDialog::getInterpolationType(void)
 {
 	if (mControlPointControl && mControlPointControl->useLinearInterpolation())
 	{

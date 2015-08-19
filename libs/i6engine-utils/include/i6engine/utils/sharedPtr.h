@@ -31,7 +31,6 @@
 
 namespace i6engine {
 namespace utils {
-namespace {
 
 	/**
 	 * \brief struct handling counters for the references
@@ -46,8 +45,6 @@ namespace {
 		~sharedCounter() {
 		}
 	} sharedCounter;
-
-} /* namespace */
 
 	template<typename T, typename U>
 	class sharedPtr;

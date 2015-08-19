@@ -151,7 +151,7 @@ class ControlPointDialog : public wxDialog
 		void setHorizontalScroll(int horizontal);
 		void setVerticalScroll(int vertical);
 		const ParticleUniverse::DynamicAttributeCurved::ControlPointList getControlPointList(void);
-		const ParticleUniverse::InterpolationType getInterpolationType(void);
+		ParticleUniverse::InterpolationType getInterpolationType(void);
 		void setInterpolationType(ParticleUniverse::InterpolationType type);
 
 

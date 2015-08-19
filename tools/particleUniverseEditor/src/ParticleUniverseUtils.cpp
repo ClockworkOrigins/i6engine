@@ -23,6 +23,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseUtils.h"
 
+#include "i6engine/utils/i6eSystemParameters.h"
+
 wxString Utils::CURRENT_DIR_ATTR = wxT("");
 wxString Utils::SCRIPT_DIR_ATTR = wxT("/manual/script/");
 //-----------------------------------------------------------------------
@@ -35,13 +37,19 @@ const wxString& Utils::getCurrentDirectory(void)
 	    //path = getcwd(path, size);
 		//CURRENT_DIR_ATTR = wxString(path);
 		//delete [] path;
-#ifdef WIN32
 		size_t size = 2048;
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 		wchar_t* path = new wchar_t[size];
-	    path = _wgetcwd(path, size);
+		path = _wgetcwd(path, size);
 		CURRENT_DIR_ATTR = wxString(path);
-		delete [] path;
+#else
+		char * path = new char[size];
+	    	path = getcwd(path, size);
+		std::string s(path);
+		std::wstring ws(s.begin(), s.end());
+		CURRENT_DIR_ATTR = wxString(ws.c_str());
 #endif
+		delete [] path;
 	}
 	return CURRENT_DIR_ATTR;
 }

@@ -327,5 +327,5 @@ namespace ParticleUniverse
 			Real calculate(DynamicAttribute* dyn, Real x, Real defaultValue = 0.0f);
 	};
 
-};
+}
 #endif

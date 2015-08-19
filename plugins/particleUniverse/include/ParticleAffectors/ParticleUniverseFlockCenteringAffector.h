@@ -45,8 +45,8 @@ namespace ParticleUniverse
 				mAverage(Vector3::ZERO),
 				mCount(0.0f)
 			{
-			};
-	        virtual ~FlockCenteringAffector(void) {};
+			}
+	        virtual ~FlockCenteringAffector(void) {}
 
 			/** @copydoc ParticleAffector::_preProcessParticles */
 			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);

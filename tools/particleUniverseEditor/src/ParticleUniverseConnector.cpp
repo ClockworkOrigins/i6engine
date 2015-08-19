@@ -24,11 +24,11 @@ DrawConnector::DrawConnector(wxWindow* node1,
 							 int lineStyle) : 
 	mNode1(node1), 
 	mNode2(node2), 
-	mRelation(relation),
+	mPosition(wxPoint(0, 0)),
+	usePosition(false), 
 	mColourCode(colourCode),
 	mLineStyle(lineStyle),
-	usePosition(false), 
-	mPosition(wxPoint(0, 0)),
+	mRelation(relation),
 	xOffsetMin(24)
 {
 }
@@ -39,10 +39,10 @@ DrawConnector::DrawConnector(wxWindow* node,
 							 int lineStyle) : 
 	mNode1(node), 
 	mNode2(0), 
+	mPosition(position),
+	usePosition(true), 
 	mColourCode(colourCode),
 	mLineStyle(lineStyle),
-	usePosition(true), 
-	mPosition(position),
 	xOffsetMin(24)
 {
 }

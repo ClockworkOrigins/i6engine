@@ -33,7 +33,7 @@ namespace ParticleUniverse {
 } /* namespace ParticleUniverse */
 
 // Property names
-static wxString PRNL_BOX_COLLIDER_WIDTH = wxT("");;
+static wxString PRNL_BOX_COLLIDER_WIDTH = wxT("");
 static wxString PRNL_BOX_COLLIDER_HEIGHT = wxT("");
 static wxString PRNL_BOX_COLLIDER_DEPTH = wxT("");
 static wxString PRNL_BOX_COLLIDER_INNER = wxT("");

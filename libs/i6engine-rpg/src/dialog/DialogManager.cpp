@@ -367,10 +367,10 @@ namespace dialog {
 #if ISIXE_SCRIPTING != SCRIPTING_NONE
 					} else if (!d->infoScript.empty()) {
 						api::EngineController::GetSingleton().getScriptingFacade()->callFunctionWithCallback<void>(d->infoScript, [d]() {
-							auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
-							auto player = *playerList.begin();
-							npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
-							p->addJob(new npc::ShowDialogsJob(*d->participants.begin()));
+							auto playerList2 = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
+							auto player2 = *playerList2.begin();
+							npc::NPC * p2 = npc::NPCManager::GetSingleton().getNPC(player2->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
+							p2->addJob(new npc::ShowDialogsJob(*d->participants.begin()));
 							for (std::string s : d->participants) {
 								npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(s);
 								n->addJob(new npc::ShowDialogsJob(*d->participants.begin()));
@@ -381,9 +381,6 @@ namespace dialog {
 						ISIXE_THROW_FAILURE("DialogManager", "Dialog '" << d->identifier << "' has no info function!");
 					} else {
 						d->infoFunc();
-						auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
-						auto player = *playerList.begin();
-						npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
 						p->addJob(new npc::ShowDialogsJob(*d->participants.begin()));
 						for (std::string s : d->participants) {
 							npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(s);
@@ -401,8 +398,8 @@ namespace dialog {
 						hc->hide();
 					}
 					if (!d->permanent) {
-						for (auto p : d->participants) {
-							auto it2 = _npcDialogs.find(p);
+						for (auto p2 : d->participants) {
+							auto it2 = _npcDialogs.find(p2);
 							if (it2 != _npcDialogs.end()) {
 								for (size_t i = 0; i < it2->second.size(); i++) {
 									if (it2->second[i] == d) {

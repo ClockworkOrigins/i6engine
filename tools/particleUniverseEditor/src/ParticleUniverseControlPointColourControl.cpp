@@ -263,10 +263,10 @@ void ControlPointColourControl::fillGradient(wxPaintDC& dc)
 		nextColour = (*it)->getColour();
 		nextPosition = (*it)->getPosition();
 		diff = nextPosition.x - firstPosition.x;
-		r = (float)((nextColour.Red() - firstColour.Red())) / diff;
-		g = (float)((nextColour.Green() - firstColour.Green())) / diff;
-		b = (float)((nextColour.Blue() - firstColour.Blue())) / diff;
-		a = (float)((nextColour.Alpha() - firstColour.Alpha())) / diff;
+		r = float((nextColour.Red() - firstColour.Red())) / diff;
+		g = float((nextColour.Green() - firstColour.Green())) / diff;
+		b = float((nextColour.Blue() - firstColour.Blue())) / diff;
+		a = float((nextColour.Alpha() - firstColour.Alpha())) / diff;
 
 		int count = 0;
 		for (int i = firstPosition.x; i < nextPosition.x; ++i)

@@ -37,7 +37,7 @@
 namespace i6engine {
 namespace api {
 
-	MoverInterpolateComponent::MoverInterpolateComponent(const int64_t id, const attributeMap & params) : MoverComponent(id, params), _frameID(0), _keyFrames(), _mode(), _openTime(2), _way(), _totalDistance(0), _currentDist(0), _currentFrame(0), _direction(true), _lock() {
+	MoverInterpolateComponent::MoverInterpolateComponent(const int64_t id, const attributeMap & params) : MoverComponent(id, params), _keyFrames(), _mode(), _openTime(2), _way(), _totalDistance(0), _currentDist(0), _currentFrame(0), _direction(true), _lock() {
 		_objComponentID = components::MoverInterpolateComponent;
 
 		loadParams(params);

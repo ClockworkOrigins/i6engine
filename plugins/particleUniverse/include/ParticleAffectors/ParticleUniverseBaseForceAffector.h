@@ -45,7 +45,7 @@ namespace ParticleUniverse
 			static const ForceApplication DEFAULT_FORCE_APPL;
 
 			BaseForceAffector(void);
-	        virtual ~BaseForceAffector(void) {};
+	        virtual ~BaseForceAffector(void) {}
 
 			/** @copydoc ParticleAffector::copyAttributesTo */
 			virtual void copyAttributesTo (ParticleAffector* affector);

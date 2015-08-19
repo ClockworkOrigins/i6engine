@@ -859,7 +859,6 @@ namespace modules {
 			}
 			node->drawBoundingBox(coid, gdu->colour);
 		} else if (msg->getSubtype() == api::graphics::GraRemoveBB) {
-			api::graphics::Graphics_Compositor_Update * gcu = dynamic_cast<api::graphics::Graphics_Compositor_Update *>(msg->getContent());
 			GraphicsNode * node = getGraphicsNode(goid);
 			if (node == nullptr) {
 				return;
@@ -958,7 +957,7 @@ namespace modules {
 		Ogre::SceneNode * sn = _sceneManager->getRootSceneNode()->createChildSceneNode("PreLoadSceneNode_0_0", Ogre::Vector3::ZERO);
 		Ogre::Camera * camera = _sceneManager->createCamera("PreLoadSceneCamera_0_0");
 		sn->attachObject(camera);
-		Ogre::Viewport * vp = _objRoot->getAutoCreatedWindow()->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
+		_objRoot->getAutoCreatedWindow()->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
 
 		for (std::string m : meshes) {
 			Ogre::Entity * meshEntity = _sceneManager->createEntity("PreLoadSceneMesh_0_0", m);

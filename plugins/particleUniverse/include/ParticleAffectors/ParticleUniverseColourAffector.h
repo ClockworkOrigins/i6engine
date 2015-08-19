@@ -49,7 +49,7 @@ namespace ParticleUniverse
 			ColourAffector(void);
 
 			// Destructor
-	        virtual ~ColourAffector(void) {};
+	        virtual ~ColourAffector(void) {}
 
 			/** 
 	        */

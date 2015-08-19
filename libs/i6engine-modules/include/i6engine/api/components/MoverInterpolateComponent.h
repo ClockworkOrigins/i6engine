@@ -119,11 +119,6 @@ namespace api {
 
 	private:
 		/**
-		 * \brief current frame
-		 */
-		uint32_t _frameID;
-
-		/**
 		 * \brief list of all keyframes defining a path
 		 * used in all path modes
 		 */

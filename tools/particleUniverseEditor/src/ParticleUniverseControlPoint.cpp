@@ -66,7 +66,7 @@ void ControlPoint::paint(wxPaintDC& dc)
 		{
 			if (mCtrlPointType == CTRL_POINT_TYPE_SOLID)
 			{
-				float value = (mPos.x + mPos.x * (float)CONTROL_POINT_RECT_SIZE/mWidth) * mDiff; // Value must be within 0 to 1 and not 0 to 0.96
+				float value = (mPos.x + mPos.x * float(CONTROL_POINT_RECT_SIZE) / mWidth) * mDiff; // Value must be within 0 to 1 and not 0 to 0.96
 				//Ogre::String s = Ogre::StringConverter::toString(value, 2);
 				Ogre::String s;
 				trunc (value, s, 2);

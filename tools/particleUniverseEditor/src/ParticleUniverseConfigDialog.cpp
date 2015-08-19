@@ -94,7 +94,7 @@ void ConfigDialog::loadLanguage(void)
 	wxString language = ogre2wx(cfg.getSetting("language"));
 	wxLocale locale;
 	const wxLanguageInfo* info = locale.FindLanguageInfo(language);
-	mLanguage = (wxLanguage)info->Language; // Nasty cast
+	mLanguage = wxLanguage(info->Language); // Nasty cast
 }
 //-----------------------------------------------------------------------
 wxString ConfigDialog::getLanguageAsString(const wxLanguage& language)
@@ -637,7 +637,6 @@ void ConfigDialog::setEditProportion(ParticleUniverse::Real editProportion)
 //-----------------------------------------------------------------------
 Recorder::ImageFilter ConfigDialog::getFilter(void) const
 {
-	int test = mFilter->GetCurrentSelection();
 	if (mFilter->GetCurrentSelection() == 0)
 	{
 		return Recorder::IF_NONE;
@@ -1053,7 +1052,6 @@ void ConfigDialog::saveConfig(void)
 	cfg.setSetting("pausetime", Ogre::StringConverter::toString(getPauseTime()));
 
 	// Save Filter
-	int test = int(mFilter->GetCurrentSelection());
 	if (mFilter->GetCurrentSelection() == 0)
 	{
 		cfg.setSetting("filter", "No filtering");

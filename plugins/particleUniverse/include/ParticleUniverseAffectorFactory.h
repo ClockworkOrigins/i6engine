@@ -45,11 +45,11 @@ namespace ParticleUniverse
 				ParticleAffector* particleAffector = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
 				particleAffector->setAffectorType(getAffectorType());
 				return particleAffector;
-			};
+			}
 
 		public:
-			ParticleAffectorFactory(void) {};
-	        virtual ~ParticleAffectorFactory(void) {};
+			ParticleAffectorFactory(void) {}
+	        virtual ~ParticleAffectorFactory(void) {}
 
 		    /** Returns the type of the factory, which identifies the particle affector type this factory creates. */
 			virtual String getAffectorType(void) const = 0;
@@ -64,7 +64,7 @@ namespace ParticleUniverse
 			void destroyAffector (ParticleAffector* affector)
 			{
 				PU_DELETE_T(affector, ParticleAffector, MEMCATEGORY_SCENE_OBJECTS);
-			};
+			}
 	};
 
 }

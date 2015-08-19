@@ -53,7 +53,7 @@ namespace ParticleUniverse
 			static const bool DEFAULT_RESIZE;
 
 			AlignAffector(void);
-	        virtual ~AlignAffector(void){};
+	        virtual ~AlignAffector(void) {}
 
 			/** @copydoc ParticleAffector::copyAttributesTo */
 			virtual void copyAttributesTo (ParticleAffector* affector);

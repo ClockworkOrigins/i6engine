@@ -36,8 +36,8 @@ namespace ParticleUniverse
 	{
 	    public:
 
-			DynamicAttributeFactory(void) {};
-	        virtual ~DynamicAttributeFactory(void) {};
+			DynamicAttributeFactory(void) {}
+	        virtual ~DynamicAttributeFactory(void) {}
 
 			/** 
 	        */
@@ -45,7 +45,7 @@ namespace ParticleUniverse
 			T* createDynamicAttribute(void)
 			{
 				return PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
-			};
+			}
 
 
 			/** 
@@ -98,7 +98,7 @@ namespace ParticleUniverse
 			void destroyDynamicAttribute (DynamicAttribute* dynamicAttribute)
 			{
 				PU_DELETE_T(dynamicAttribute, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-			};
+			}
 
 			/** See ScriptWriter */
 			virtual void write(ParticleScriptSerializer* serializer, const IElement* element)

@@ -183,7 +183,8 @@ add_executable(ParticleUniverseEditor ${particleUniverseEditorSrc})
 
 IF(UNIX)
 	target_compile_options(ParticleUniverseEditor PRIVATE "-D__WXGTK__")
-	target_link_libraries(ParticleUniverseEditor glib-2.0 jpeg png pthread X11 z)
+	target_link_libraries(ParticleUniverseEditor gdk-x11-2.0 gobject-2.0 gtk-x11-2.0 glib-2.0 jpeg png pthread X11 z)
+	set_target_properties(ParticleUniverseEditor PROPERTIES POSITION_INDEPENDENT_CODE ON)
 ENDIF(UNIX)
 
 target_link_libraries(ParticleUniverseEditor Plugin_ParticleUniverse ${OGRE_LIBRARIES} ${WXWIDGETS_LIBRARIES})

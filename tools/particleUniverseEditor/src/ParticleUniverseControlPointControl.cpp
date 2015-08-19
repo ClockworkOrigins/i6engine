@@ -85,10 +85,6 @@ void ControlPointControl::OnPaint(wxPaintEvent& event)
 			std::vector<ControlPoint*>::iterator itNext;
 			itNext = itFirst;
 			++itNext;
-			int xFirst = 0;
-			int yFirst = 0;
-			int xNext = 0;
-			int yNext = 0;
 			std::vector<ControlPoint*>::iterator itEnd = mControlPointList.end();
 			while (itNext != itEnd)
 			{
@@ -212,11 +208,11 @@ void ControlPointControl::OnMouseLButtonPressed(wxMouseEvent& event)
 		event.GetPosition(),
 		true);
 
-	float xDiff = (float)(event.GetPosition().x - 36) / (float)(GetSize().x - 58);
+	float xDiff = float(event.GetPosition().x - 36) / float(GetSize().x - 58);
 	//float xValue = mMinXGraph + xDiff * (abs(mMinXGraph) + abs(mMaxXGraph));
 	float xValue = mMinXGraph + xDiff * (mMaxXGraph - mMinXGraph);
 	cp->setXval(xValue);
-	float yDiff = (float)(event.GetPosition().y + 0.5 * CONTROL_POINT_RECT_SIZE - 20) / (float)(GetSize().y - 39);
+	float yDiff = float(event.GetPosition().y + 0.5 * CONTROL_POINT_RECT_SIZE - 20) / float(GetSize().y - 39);
 	//float yValue = mMaxYGraph - yDiff * (abs(mMinYGraph) + abs(mMaxYGraph));
 	float yValue = mMaxYGraph - yDiff * (mMaxYGraph - mMinYGraph);
 	cp->setYval(yValue);
@@ -255,11 +251,11 @@ void ControlPointControl::OnMove(wxMouseEvent& event)
 		mMovingControlPoint->setMoving(true);
 		Freeze();
 
-		float xDiff = (float)(event.GetPosition().x + 0.5 * CONTROL_POINT_RECT_SIZE - 36) / (float)(GetSize().x - 58);
+		float xDiff = float(event.GetPosition().x + 0.5 * CONTROL_POINT_RECT_SIZE - 36) / float(GetSize().x - 58);
 		//float xValue = mMinXGraph + xDiff * (abs(mMinXGraph) + abs(mMaxXGraph));
 		float xValue = mMinXGraph + xDiff * (mMaxXGraph - mMinXGraph);
 		mMovingControlPoint->setXval(xValue);
-		float yDiff = (float)(event.GetPosition().y + 0.5 * CONTROL_POINT_RECT_SIZE - 20) / (float)(GetSize().y - 39);
+		float yDiff = float(event.GetPosition().y + 0.5 * CONTROL_POINT_RECT_SIZE - 20) / float(GetSize().y - 39);
 		//float yValue = mMaxYGraph - yDiff * (abs(mMinYGraph) + abs(mMaxYGraph));
 		float yValue = mMaxYGraph - yDiff * (mMaxYGraph - mMinYGraph);
 		mMovingControlPoint->setYval(yValue);
@@ -333,9 +329,9 @@ void ControlPointControl::addInitialControlpoints(void)
 		cp->setYval((*it)->getYval());
 
 		// Calculate positions
-		float xDiff = ((float)(GetSize().x - 58) / (mMaxXGraph - mMinXGraph));
+		float xDiff = (float(GetSize().x - 58) / (mMaxXGraph - mMinXGraph));
 		float x = 36 + xDiff * ((*it)->getXval() - mMinXGraph) - 0.5 * CONTROL_POINT_RECT_SIZE;
-		float yDiff = ((float)(GetSize().y - 39) / (mMaxYGraph - mMinYGraph));
+		float yDiff = (float(GetSize().y - 39) / (mMaxYGraph - mMinYGraph));
 		float y = 20 + yDiff * (mMaxYGraph - (*it)->getYval()) - 0.5 * CONTROL_POINT_RECT_SIZE;
 		cp->setPosition(wxPoint(x, y));
 		mControlPointList.push_back(cp);
@@ -427,7 +423,7 @@ void ControlPointControl::scaleMinMaxXGraph(float scale)
 {
 	mMinXGraph *= scale;
 	mMaxXGraph *= scale;
-	float diff = ((float)(GetSize().x - 58) / (mMaxXGraph - mMinXGraph));
+	float diff = (float(GetSize().x - 58) / (mMaxXGraph - mMinXGraph));
 	std::vector<ControlPoint*>::iterator it;
 	std::vector<ControlPoint*>::iterator itEnd = mControlPointList.end();
 	for (it = mControlPointList.begin(); it != itEnd; ++it)
@@ -441,7 +437,7 @@ void ControlPointControl::scaleMinMaxYGraph(float scale)
 {
 	mMinYGraph *= scale;
 	mMaxYGraph *= scale;
-	float diff = ((float)(GetSize().y - 39) / (mMaxYGraph - mMinYGraph));
+	float diff = (float(GetSize().y - 39) / (mMaxYGraph - mMinYGraph));
 	std::vector<ControlPoint*>::iterator it;
 	std::vector<ControlPoint*>::iterator itEnd = mControlPointList.end();
 	for (it = mControlPointList.begin(); it != itEnd; ++it)

@@ -11,6 +11,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseContextMenu.h"
 
+#include "i6engine/utils/i6eSystemParameters.h"
+
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -24,8 +26,8 @@ ContextMenuElement::ContextMenuElement(ContextMenu* parent,
                  long style,
                  const wxString& name) :
 	wxStaticText(parent, id, label, pos, size, style, name),
-	mParent(parent),
-	mEnabled(true)
+	mEnabled(true),
+	mParent(parent)
 {
 	Connect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(ContextMenuElement::OnWindowEnter));
 	Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(ContextMenuElement::OnWindowLeave));
@@ -153,7 +155,7 @@ void ContextMenu::initialise(void)
 //-----------------------------------------------------------------------
 void ContextMenu::hideIfNeeded(void)
 {
-#ifdef WIN32
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 	if (!IsMouseInWindow())
 	{
 		// Hide the context menu if the mouse is in another window

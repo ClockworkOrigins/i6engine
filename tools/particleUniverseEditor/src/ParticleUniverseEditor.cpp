@@ -11,7 +11,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseEditor.h"
 
-#ifdef WIN32
+#include "i6engine/utils/i6eSystemParameters.h"
+
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 	#include <Shellapi.h>
 #endif
 
@@ -875,6 +877,7 @@ void ParticleUniverseEditorFrame::doToggleLight(void)
 			mLightEntity->setQueryFlags(0);
 			if (mGizmoManager->isAttachedToNode(mLightSceneNode))
 			{
+
 				// Attach the gizmo to the particle system, because the light becomes invisible
 				mGizmoManager->attachToNode(mMainSceneNode);
 				_cameraLookAt(mMainSceneNode->_getDerivedPosition());
@@ -1102,11 +1105,15 @@ void ParticleUniverseEditorFrame::OnHelp(void)
 	if (mPropertyWindow)
 	{
 		// Start the browser
-#ifdef WIN32
 		wxString url = CURRENT_DIR + SCRIPT_DIR + mPropertyWindow->getHelpHtml();
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 		ShellExecute(NULL, wxT("open"), url.c_str(), NULL, NULL, SW_SHOWNORMAL);
-		mEditNotebookPage->getEditCanvas()->SetFocus(); // Needed to prevent exception
+#else
+		std::wstring ws = (std::wstring(wxT("open")) + std::wstring(wxT(" ")) + std::wstring(url.c_str()));
+		std::string s(ws.begin(), ws.end());
+		system(s.c_str());
 #endif
+		mEditNotebookPage->getEditCanvas()->SetFocus(); // Needed to prevent exception
 	}
 }
 //-----------------------------------------------------------------------
@@ -1321,7 +1328,11 @@ void ParticleUniverseEditorFrame::doLoadFile(void)
 		ParticleUniverse::String inputLine;
 		ParticleUniverse::String script;
 		std::ifstream fpIn;
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 		fpIn.open(loadDialog.GetPath());
+#else
+		fpIn.open(loadDialog.GetPath().mb_str());
+#endif
 		if (fpIn)
 		{
 			while (!fpIn.eof())
@@ -3139,6 +3150,7 @@ void ParticleUniverseEditorFrame::setOrthoGridVisible(bool visible, Gizmo::Axis 
 		{
 			mGridBottom->setVisible(!visible);
 			mGridX->setVisible(!visible);
+
 			mGridMinX->setVisible(!visible);
 			mGridZ->setVisible(!visible);
 			mGridMinZ->setVisible(visible);

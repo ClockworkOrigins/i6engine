@@ -309,12 +309,12 @@ void EditCanvas::selectComponents(void)
 	}
 }
 //------------------------------------------------------------------------------
-void EditCanvas::moveSelectedComponents(const wxPoint& previousMousePosition, const wxPoint& mMousePosition)
+void EditCanvas::moveSelectedComponents(const wxPoint& previousMousePosition, const wxPoint& mp)
 {
 	if (mSelectedComponents.empty())
 		return;
 
-	wxPoint diff = mMousePosition - previousMousePosition;
+	wxPoint diff = mp - previousMousePosition;
 	std::vector<EditComponent*>::iterator it;
 	std::vector<EditComponent*>::iterator itEnd = mSelectedComponents.end();
 	for (it = mSelectedComponents.begin(); it != itEnd; ++it)

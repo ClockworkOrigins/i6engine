@@ -154,7 +154,7 @@ namespace api {
 		i6engine::api::EngineController::GetSingleton().setCurrentTime(time);
 	}
 
-	int32_t getUUID() {
+	uint32_t getUUID() {
 		return i6engine::api::EngineController::GetSingleton().getUUID();
 	}
 
@@ -279,8 +279,8 @@ scope registerAPI() {
 				value("Prio_Low", i6engine::core::JobPriorities::Prio_Low)
 			],
 
-	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, uint32_t)) &i6engine::lua::api::getCurrentTime),
-	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, const std::set<i6engine::lua::core::Subsystem::Type> &)) &i6engine::lua::api::getCurrentTime),
+	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, uint32_t)) &i6engine::lua::api::registerSubSystem),
+	def("registerSubSystem", (void(*)(const std::string &, i6engine::core::ModuleController *, const std::set<i6engine::lua::core::Subsystem::Type> &)) &i6engine::lua::api::registerSubSystem),
 	def("getIDManager", &i6engine::lua::api::getIDManager),
 	def("getLanguageManager", &i6engine::lua::api::getLanguageManager),
 	def("getTextManager", &i6engine::lua::api::getTextManager),

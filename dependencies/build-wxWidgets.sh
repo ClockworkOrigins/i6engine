@@ -53,6 +53,7 @@ cd "${BUILD_DIR}"
 chmod 700 ./*
 ./configure \
 	--prefix="${PREFIX}"\
+	--enable-unicode\
 	>/dev/null
 
 status "Building wxWidgets"
@@ -67,7 +68,7 @@ rm -rf "${BUILD_ROOT}" >/dev/null
 
 mv "${PREFIX}/include/wx-2.8/wx" "${PREFIX}/include/wx"
 rm -rf "${PREFIX}/include/wx-2.8"
-cp -rf "${PREFIX}/lib/wx/include/gtk2-ansi-release-2.8/wx" "${PREFIX}/include"
+cp -rf "${PREFIX}/lib/wx/include/gtk2-unicode-release-2.8/wx" "${PREFIX}/include"
 
 touch "${PREFIX}"
 

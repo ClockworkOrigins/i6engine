@@ -38,6 +38,7 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport ParticleAffector : public Particle, public IAlias, public IElement
 	{
 		using Particle::copyAttributesTo;
+
 		public:
 			/**
 				The AffectSpecialisation enumeration is used to specialise the affector even more. This enumeration 

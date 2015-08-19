@@ -52,10 +52,10 @@ private:
 };
 
 int func1_counter;
-std::mutex lock;
+std::mutex jobLock;
 
 bool func1(uint64_t time, i6engine::utils::Clock<TestTimeClock> * cl, int counter) {
-	std::lock_guard<std::mutex> lg(lock);
+	std::lock_guard<std::mutex> lg(jobLock);
 	EXPECT_LE(time, cl->getTime());
 	EXPECT_EQ(counter, func1_counter);
 	func1_counter++;
@@ -85,7 +85,7 @@ TEST(Scheduler, Once) {
 std::vector<int> jobs;
 
 bool func2(int counter) {
-	std::lock_guard<std::mutex> lg(lock);
+	std::lock_guard<std::mutex> lg(jobLock);
 	jobs.push_back(counter);
 	return true;
 }
@@ -111,7 +111,7 @@ TEST(Scheduler, Repeat) {
 
 	std::vector<int> ref({ 0, 3, 1, 0, 2, 3, 0, 1 });
 
-	std::lock_guard<std::mutex> lg(lock);
+	std::lock_guard<std::mutex> lg(jobLock);
 	EXPECT_EQ(ref, jobs);
 }
 
@@ -138,7 +138,7 @@ TEST(Scheduler, stop) {
 	i6engine::core::Scheduler<TestTimeClock> sched(cl);
 
 	{
-		std::lock_guard<std::mutex> lg(lock);
+		std::lock_guard<std::mutex> lg(jobLock);
 		jobs.clear();
 	}
 
@@ -160,7 +160,7 @@ TEST(Scheduler, stop) {
 	std::vector<int> ref({ 0, 3, 1, 2, 1 });
 
 	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
-	std::lock_guard<std::mutex> lg(lock);
+	std::lock_guard<std::mutex> lg(jobLock);
 	EXPECT_EQ(ref, jobs);
 }
 

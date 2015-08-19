@@ -19,15 +19,20 @@
 
 #include "ParticleUniverseEditorPCH.h"
 #include "ParticleUniverseEditor.h"
+
+#include "i6engine/utils/i6eSystemParameters.h"
+
 #include "wx/ogre/prerequisites.h"
 #include "wx/ogre/control.h"
 #include "wx/ogre/utils.h"
 
 #ifdef __WXGTK20__
 extern "C" {
-//#include <gdk/gdkx.h>
-//#include <gtk/gtk.h>
-//#include <wx/gtk/win_gtk.h>
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	#include <gdk/gdkx.h>
+	#include <gtk/gtk.h>
+	#include "wx/gtk/win_gtk.h"
+#endif
 }
 #endif
 
@@ -228,7 +233,6 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl)
     pl["externalWindowHandle"] = all2std((size_t)GetHandle());
 
 #elif defined(__WXGTK20__)
-#ifdef WIN32
     /* 
      * Ok here is the most important comment about the GTK+
      * part of this lib.
@@ -277,7 +281,6 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl)
 
     pl["parentWindowHandle"] = all2std(window);
 
-#endif
 #endif
 #else
 # error Not supported on this platform.
@@ -330,9 +333,9 @@ void wxOgreControl::SetCamera(Ogre::Camera* cam)
 void wxOgreControl::RotateCamera(float relX, float relY, float relZ)
 {
 	if (m_cam) {
-		m_cam->roll((Ogre::Radian)relZ);
-		m_cam->yaw((Ogre::Radian)relY);
-		m_cam->pitch((Ogre::Radian)relX);
+		m_cam->roll(Ogre::Radian(relZ));
+		m_cam->yaw(Ogre::Radian(relY));
+		m_cam->pitch(Ogre::Radian(relX));
 	}
 }
 //------------------------------------------------------------------------------
