@@ -51,12 +51,12 @@ namespace tools {
 		posElem->baseVertexPointerToElement(reinterpret_cast<void *>(const_cast<unsigned char *>(*vertexbase)), &pReal);
 		*vertexbase = reinterpret_cast<unsigned char *>(pReal);
 
-		stride = static_cast<int>(vbuf->getVertexSize());
+		stride = int(vbuf->getVertexSize());
 
-		numverts = static_cast<int>(vertex_data->vertexCount);
+		numverts = int(vertex_data->vertexCount);
 
 		if (numverts == 0) {
-			ISIXE_THROW_FAILURE("MeshStrider", "Fehler: numverts is 0");
+			ISIXE_THROW_FAILURE("MeshStrider", "Error: numverts is 0");
 		}
 
 		type = PHY_FLOAT;
@@ -68,17 +68,17 @@ namespace tools {
 			indicestype = PHY_INTEGER;
 		} else {
 			if (ibuf->getType() != Ogre::HardwareIndexBuffer::IT_16BIT) {
-				ISIXE_THROW_FAILURE("MeshStrider", "Fehler: wrong type: " << ibuf->getType());
+				ISIXE_THROW_FAILURE("MeshStrider", "Error: wrong type: " << ibuf->getType());
 			}
 			indicestype = PHY_SHORT;
 		}
 
 		if (submesh->operationType == Ogre::RenderOperation::OT_TRIANGLE_LIST) {
-			numfaces = static_cast<int>(index_data->indexCount) / 3;
-			indexstride = static_cast<int>(ibuf->getIndexSize()) * 3;
+			numfaces = int(index_data->indexCount) / 3;
+			indexstride = int(ibuf->getIndexSize()) * 3;
 		} else if (submesh->operationType == Ogre::RenderOperation::OT_TRIANGLE_STRIP) {
-			numfaces = static_cast<int>(index_data->indexCount) -2;
-			indexstride = static_cast<int>(ibuf->getIndexSize());
+			numfaces = int(index_data->indexCount) -2;
+			indexstride = int(ibuf->getIndexSize());
 		}
 
 		*indexbase = reinterpret_cast<unsigned char *>(ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));

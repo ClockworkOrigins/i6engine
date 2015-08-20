@@ -57,7 +57,6 @@ int main(int argc, char ** argv) {
 
 		std::cout << "Loading mesh '" << mesh << "'" << std::endl;
 		Ogre::MeshPtr meshPtr = Ogre::MeshManager::getSingleton().load(mesh, "i6engine");
-
 		Ogre::Mesh * mp = meshPtr.get();
 
 		std::cout << "Creating collision shape" << std::endl;
