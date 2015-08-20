@@ -369,8 +369,6 @@ namespace modules {
 			_objRoot->renderOneFrame();
 			Debug::getSingleton().clear();
 
-			//std::cout << _rWindow->getAverageFPS() << std::endl;
-
 			Ogre::WindowEventUtilities::messagePump();
 
 			_guiController->Tick();
