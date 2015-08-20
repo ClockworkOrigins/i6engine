@@ -384,7 +384,9 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		auto it = _nodes.find(goid);
 		if (it == _nodes.end()) {
-			_nodes.insert(std::make_pair(goid, new GraphicsNode(this, goid, position, rotation, scale)));
+			GraphicsNode * gn = new GraphicsNode(this, goid, position, rotation, scale);
+			_nodes.insert(std::make_pair(goid, gn));
+			return gn;
 		}
 		return it->second;
 	}
