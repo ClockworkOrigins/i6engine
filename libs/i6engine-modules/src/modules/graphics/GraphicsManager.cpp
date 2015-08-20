@@ -382,39 +382,34 @@ namespace modules {
 
 	GraphicsNode * GraphicsManager::getOrCreateGraphicsNode(const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		if (_nodes.find(goid) == _nodes.end()) {
-			_nodes[goid] = new GraphicsNode(this, goid, position, rotation, scale);
+		auto it = _nodes.find(goid);
+		if (it == _nodes.end()) {
+			_nodes.insert(std::make_pair(goid, new GraphicsNode(this, goid, position, rotation, scale)));
 		}
-
-		return _nodes[goid];
+		return it->second;
 	}
 
 	GraphicsNode * GraphicsManager::getGraphicsNode(const int64_t goid) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		if (_nodes.find(goid) == _nodes.end()) {
+		auto it = _nodes.find(goid);
+		if (it == _nodes.end()) {
 			return nullptr;
 		}
-
-		return _nodes.find(goid)->second;
+		return it->second;
 	}
 
 	void GraphicsManager::deleteGraphicsNode(const int64_t goid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		if (_nodes.find(goid) == _nodes.end()) {
+		auto it = _nodes.find(goid);
+		if (it == _nodes.end()) {
 			return;
 		}
-
-		delete _nodes[goid];
-
-		_nodes.erase(_nodes.find(goid));
+		delete it->second;
+		_nodes.erase(it);
 	}
 
 	bool GraphicsManager::windowClosing(Ogre::RenderWindow * rw) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		return true;
 	}
 
