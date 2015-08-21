@@ -57,9 +57,9 @@ namespace ParticleUniverse
 		return mPositionList;
 	}
 	//-----------------------------------------------------------------------
-	void PositionEmitter::addPosition(const Vector3& position)
+	void PositionEmitter::addPosition(const Vector3& pos)
 	{
-		mPositionList.push_back(position);
+		mPositionList.push_back(pos);
 	}
 	//-----------------------------------------------------------------------
 	void PositionEmitter::_notifyStart(void)

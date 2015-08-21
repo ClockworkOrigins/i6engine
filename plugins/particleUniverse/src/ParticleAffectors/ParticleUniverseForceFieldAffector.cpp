@@ -67,11 +67,11 @@ namespace ParticleUniverse
 		mBasePosition(Vector3::ZERO),
 		mSuppressGeneration(false)
 	{
-	};
+	}
 	//-----------------------------------------------------------------------
 	ForceFieldAffector::~ForceFieldAffector(void)
 	{
-	};
+	}
 	//-----------------------------------------------------------------------
 	void ForceFieldAffector::_prepare(ParticleTechnique* particleTechnique)
 	{

@@ -34,11 +34,13 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport LinearForceAffector : public BaseForceAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			LinearForceAffector(void) : 
 				BaseForceAffector()
 			{
-			};
-	        virtual ~LinearForceAffector(void) {};
+			}
+	        virtual ~LinearForceAffector(void) {}
 
 			/** 
 	        */

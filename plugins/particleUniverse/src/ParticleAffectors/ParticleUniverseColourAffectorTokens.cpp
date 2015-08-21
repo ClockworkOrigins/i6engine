@@ -70,6 +70,9 @@ namespace ParticleUniverse
 							case 4:
 								colour.a = v;
 							break;
+							default: {
+								break;
+							}
 						}
 					}
 					++n;

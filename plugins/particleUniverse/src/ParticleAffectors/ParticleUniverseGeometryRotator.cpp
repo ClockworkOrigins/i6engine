@@ -47,7 +47,7 @@ namespace ParticleUniverse
 	{
 		mDynRotationSpeed = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
 		(static_cast<DynamicAttributeFixed*>(mDynRotationSpeed))->setValue(DEFAULT_ROTATION_SPEED);
-	};
+	}
 	//-----------------------------------------------------------------------
 	GeometryRotator::~GeometryRotator(void)
 	{
@@ -91,9 +91,9 @@ namespace ParticleUniverse
 		return mUseOwnRotationSpeed;
 	}
 	//-----------------------------------------------------------------------
-	void GeometryRotator::setUseOwnRotationSpeed (bool useOwnRotationSpeed)
+	void GeometryRotator::setUseOwnRotationSpeed (bool uors)
 	{
-		mUseOwnRotationSpeed = useOwnRotationSpeed;
+		mUseOwnRotationSpeed = uors;
 	}
 	//-----------------------------------------------------------------------
 	Real GeometryRotator::_calculateRotationSpeed(Particle* particle)

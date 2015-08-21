@@ -100,7 +100,7 @@ namespace ParticleUniverse
 	}
 	//-----------------------------------------------------------------------
 	void BaseCollider::populateAlignedBox(AxisAlignedBox& box,
-		const Vector3& position, 
+		const Vector3& pos,
 		const Real width,
 		const Real height,
 		const Real depth)
@@ -108,12 +108,12 @@ namespace ParticleUniverse
 		Real halfWidth = 0.5f * width;
 		Real halfHeight = 0.5f * height;
 		Real halfDepth = 0.5f * depth;
-		box.setMinimum(position.x - halfWidth, 
-			position.y - halfHeight, 
-			position.z - halfDepth);
-		box.setMaximum(position.x + halfWidth, 
-			position.y + halfHeight, 
-			position.z + halfDepth);
+		box.setMinimum(pos.x - halfWidth,
+				pos.y - halfHeight,
+				pos.z - halfDepth);
+		box.setMaximum(pos.x + halfWidth,
+				pos.y + halfHeight,
+				pos.z + halfDepth);
 	}
 	//-----------------------------------------------------------------------
 	void BaseCollider::calculateRotationSpeedAfterCollision(Particle* particle)

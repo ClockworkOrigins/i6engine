@@ -41,7 +41,7 @@ namespace ParticleUniverse
 		mCompare(CO_GREATER_THAN),
 		mSinceStartSystem(DEFAULT_SINCE_START_SYSTEM)
 	{
-	};
+	}
 	//-----------------------------------------------------------------------
 	void OnTimeObserver::_preProcessParticles(ParticleTechnique* technique, Real timeElapsed)
 	{

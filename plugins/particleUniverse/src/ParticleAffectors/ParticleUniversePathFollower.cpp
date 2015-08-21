@@ -60,10 +60,10 @@ namespace ParticleUniverse
 		{
 			// PU 1.4
 			Real timeLeft = particle->totalTimeToLive - particle->timeToLive;
-			Real timeFraction = timeLeft / particle->totalTimeToLive;
+			Real tf = timeLeft / particle->totalTimeToLive;
 			Ogre::Real timeFractionPlusDelta = (timeLeft + timeElapsed ) / particle->totalTimeToLive;
 			timeFractionPlusDelta = timeFractionPlusDelta < 1.0f ? timeFractionPlusDelta : 1.0f;
-			particle->position += _mAffectorScale * (mSpline.interpolate(timeFractionPlusDelta) - mSpline.interpolate(timeFraction));
+			particle->position += _mAffectorScale * (mSpline.interpolate(timeFractionPlusDelta) - mSpline.interpolate(tf));
 		}
 	}
 }

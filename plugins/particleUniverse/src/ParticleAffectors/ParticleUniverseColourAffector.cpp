@@ -60,9 +60,9 @@ namespace ParticleUniverse
 		mColourOperation = colourOperation;
 	}
 	//-----------------------------------------------------------------------
-	void ColourAffector::addColour (Real timeFraction, const ColourValue& colour)
+	void ColourAffector::addColour (Real tf, const ColourValue& colour)
 	{
-		mColourMap[timeFraction] = colour;
+		mColourMap[tf] = colour;
 	}
     //-----------------------------------------------------------------------
 	const ColourAffector::ColourMap& ColourAffector::getTimeAndColour(void) const
@@ -89,14 +89,14 @@ namespace ParticleUniverse
 		
 		// Linear interpolation of the colour
 		ColourValue colour = ColourValue::White;
-		Real timeFraction = (visualParticle->totalTimeToLive - visualParticle->timeToLive) / visualParticle->totalTimeToLive;
-		ColourMapIterator it1 = _findNearestColourMapIterator(timeFraction);
+		Real tf = (visualParticle->totalTimeToLive - visualParticle->timeToLive) / visualParticle->totalTimeToLive;
+		ColourMapIterator it1 = _findNearestColourMapIterator(tf);
 		ColourMapIterator it2 = it1;
 		it2++;
 		if (it2 != mColourMap.end())
 		{
 			// Interpolate colour
-			colour = it1->second + ((it2->second - it1->second) * ((timeFraction - it1->first)/(it2->first - it1->first)));
+			colour = it1->second + ((it2->second - it1->second) * ((tf - it1->first)/(it2->first - it1->first)));
 		}
 		else
 		{
@@ -116,12 +116,12 @@ namespace ParticleUniverse
 		}
 	}
     //-----------------------------------------------------------------------
-    ColourAffector::ColourMapIterator ColourAffector::_findNearestColourMapIterator(Real timeFraction)
+    ColourAffector::ColourMapIterator ColourAffector::_findNearestColourMapIterator(Real tf)
     {
 		ColourMapIterator it;
 		for (it = mColourMap.begin(); it != mColourMap.end(); ++it)
 		{
-			if (timeFraction < it->first)
+			if (tf < it->first)
 			{
 				if (it == mColourMap.begin())
 					return it;

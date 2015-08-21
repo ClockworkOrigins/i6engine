@@ -23,6 +23,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseSystemTokens.h"
 
+#include <float.h>
+
 #include "ParticleUniverseAny.h"
 #include "ParticleUniverseIAlias.h"
 #include "ParticleUniverseScriptSerializer.h"
@@ -290,7 +292,7 @@ namespace ParticleUniverse
 		if (!almostEquals(system->isSmoothLod(), ParticleSystem::DEFAULT_SMOOTH_LOD)) serializer->writeLine(
 			token[TOKEN_PS_SMOOTH_LOD], StringConverter::toString(system->isSmoothLod()), 4);
 		if (!almostEquals(system->getFastForwardTime(), ParticleSystem::DEFAULT_FAST_FORWARD_TIME) ||
-			system->getFastForwardInterval() != 0.0f)
+			std::abs(system->getFastForwardInterval()) > DBL_EPSILON)
 		{
 			serializer->writeLine(token[TOKEN_PS_FAST_FORWARD], StringConverter::toString(system->getFastForwardTime()) + " " +
 				StringConverter::toString(system->getFastForwardInterval()), 4);

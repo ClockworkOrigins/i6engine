@@ -17,9 +17,9 @@ namespace luabind { namespace detail {
 class instance_holder
 {
 public:
-    instance_holder(class_rep* cls, bool pointee_const)
+    instance_holder(class_rep* cls, bool pc)
       : m_cls(cls)
-      , m_pointee_const(pointee_const)
+      , m_pointee_const(pc)
     {}
 
     virtual ~instance_holder()

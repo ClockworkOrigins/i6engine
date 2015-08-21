@@ -36,11 +36,13 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport SphereCollider : public BaseCollider
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_RADIUS;
 
 			SphereCollider(void);
-	        virtual ~SphereCollider(void){};
+	        virtual ~SphereCollider(void) {}
 
 			/** Returns the radius of the sphere
 			*/

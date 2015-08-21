@@ -34,6 +34,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport InterParticleCollider : public BaseCollider
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			enum InterParticleCollisionResponse
 			{
 				IPCR_AVERAGE_VELOCITY,
@@ -45,7 +47,7 @@ namespace ParticleUniverse
 			static const InterParticleCollisionResponse DEFAULT_COLLISION_RESPONSE;
 
 			InterParticleCollider(void);
-	        virtual ~InterParticleCollider(void){};
+	        virtual ~InterParticleCollider(void){}
 
 			/** Todo
 			*/

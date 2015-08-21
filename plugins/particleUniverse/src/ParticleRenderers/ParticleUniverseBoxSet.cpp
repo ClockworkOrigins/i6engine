@@ -340,9 +340,9 @@ namespace ParticleUniverse
 		op.vertexData->vertexStart = 0;
 		op.operationType = Ogre::RenderOperation::OT_TRIANGLE_LIST;
 		op.useIndexes = true;
-		op.vertexData->vertexCount = mNumVisibleBoxes * 16;
+		op.vertexData->vertexCount = mNumVisibleBoxes * 16u;
 		op.indexData = mIndexData;
-		op.indexData->indexCount = mNumVisibleBoxes * 36; // 36 indices
+		op.indexData->indexCount = mNumVisibleBoxes * 36u; // 36 indices
 		op.indexData->indexStart = 0;
 	}
 	//-----------------------------------------------------------------------

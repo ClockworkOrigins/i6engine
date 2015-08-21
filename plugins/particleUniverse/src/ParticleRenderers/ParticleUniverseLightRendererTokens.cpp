@@ -27,6 +27,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define PARTICLE_UNIVERSE_EXPORTS
 #endif
 
+#include <float.h>
+
 #include "ParticleRenderers/ParticleUniverseLightRendererTokens.h"
 #include "ParticleRenderers/ParticleUniverseLightRenderer.h"
 
@@ -256,9 +258,9 @@ namespace ParticleUniverse
 			token[TOKEN_LIGHT_FALLOFF], StringConverter::toString(renderer->getSpotlightFalloff()), 12);
 		if (!almostEquals(renderer->getPowerScale(), LightRenderer::DEFAULT_POWER_SCALE)) serializer->writeLine(
 			token[TOKEN_LIGHT_POWERSCALE], StringConverter::toString(renderer->getPowerScale()), 12);
-		if (renderer->getFlashFrequency() != 0.0f) serializer->writeLine(
+		if (std::abs(renderer->getFlashFrequency()) > DBL_EPSILON) serializer->writeLine(
 			token[TOKEN_FLASH_FREQUENCY], StringConverter::toString(renderer->getFlashFrequency()), 12);
-		if (renderer->getFlashLength() != 0.0f) serializer->writeLine(
+		if (std::abs(renderer->getFlashLength()) > DBL_EPSILON) serializer->writeLine(
 			token[TOKEN_FLASH_LENGTH], StringConverter::toString(renderer->getFlashLength()), 12);
 		if (renderer->isFlashRandom()) serializer->writeLine(
 			token[TOKEN_FLASH_RANDOM], StringConverter::toString(renderer->isFlashRandom()), 12);

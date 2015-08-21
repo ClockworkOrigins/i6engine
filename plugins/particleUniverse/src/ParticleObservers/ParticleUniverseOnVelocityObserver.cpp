@@ -40,7 +40,7 @@ namespace ParticleUniverse
 		mThreshold(DEFAULT_VELOCITY_THRESHOLD),
 		mCompare(CO_LESS_THAN)
 	{
-	};
+	}
 	//-----------------------------------------------------------------------
 	bool OnVelocityObserver::_observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
 	{

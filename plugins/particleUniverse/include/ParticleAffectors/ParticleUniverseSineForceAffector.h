@@ -34,12 +34,14 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport SineForceAffector : public BaseForceAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_FREQ_MIN;
 			static const Real DEFAULT_FREQ_MAX;
 
 			SineForceAffector(void);
-	        virtual ~SineForceAffector(void) {};
+	        virtual ~SineForceAffector(void) {}
 
 			/** @copydoc ParticleAffector::copyAttributesTo */
 			virtual void copyAttributesTo (ParticleAffector* affector);

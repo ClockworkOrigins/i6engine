@@ -224,8 +224,6 @@ namespace luabind
 		// prints the types of the values on the stack, in the
 		// range [start_index, lua_gettop()]
 
-		LUABIND_API std::string stack_content_by_name(lua_State* L, int start_index);
-	
 		struct LUABIND_API create_class
 		{
 			static int stage1(lua_State* L);
@@ -568,28 +566,28 @@ namespace luabind
 		}
 
 		template<class F>
-		class_& def(const char* name, F f)
+		class_& def(const char* n, F f)
 		{
 			return this->virtual_def(
-				name, f, detail::null_type()
+				n, f, detail::null_type()
 			  , detail::null_type(), boost::mpl::true_());
 		}
 
 		// virtual functions
 		template<class F, class DefaultOrPolicies>
-		class_& def(char const* name, F fn, DefaultOrPolicies default_or_policies)
+		class_& def(char const* n, F fn, DefaultOrPolicies default_or_policies)
 		{
 			return this->virtual_def(
-				name, fn, default_or_policies, detail::null_type()
+				n, fn, default_or_policies, detail::null_type()
 			  , LUABIND_MSVC_TYPENAME detail::is_policy_cons<DefaultOrPolicies>::type());
 		}
 
 		template<class F, class Default, class Policies>
-		class_& def(char const* name, F fn
+		class_& def(char const* n, F fn
 			, Default default_, Policies const& policies)
 		{
 			return this->virtual_def(
-				name, fn, default_
+				n, fn, default_
 			  , policies, boost::mpl::false_());
 		}
 
@@ -606,38 +604,38 @@ namespace luabind
 		}
 
         template <class Getter>
-        class_& property(const char* name, Getter g)
+        class_& property(const char* n, Getter g)
         {
             this->add_member(
                 new detail::property_registration<T, Getter, detail::null_type>(
-                    name, g, detail::null_type()));
+                    n, g, detail::null_type()));
             return *this;
         }
 
         template <class Getter, class MaybeSetter>
-        class_& property(const char* name, Getter g, MaybeSetter s)
+        class_& property(const char* n, Getter g, MaybeSetter s)
         {
             return property_impl(
-                name, g, s
+                n, g, s
               , boost::mpl::bool_<detail::is_policy_cons<MaybeSetter>::value>()
             );
         }
 
         template<class Getter, class Setter, class GetPolicies>
-        class_& property(const char* name, Getter g, Setter s, const GetPolicies& get_policies)
+        class_& property(const char* n, Getter g, Setter s, const GetPolicies& get_policies)
         {
             typedef detail::property_registration<
                 T, Getter, GetPolicies, Setter, detail::null_type
             > registration_type;
 
             this->add_member(
-                new registration_type(name, g, get_policies, s));
+                new registration_type(n, g, get_policies, s));
             return *this;
         }
 
         template<class Getter, class Setter, class GetPolicies, class SetPolicies>
         class_& property(
-            const char* name
+            const char* n
           , Getter g, Setter s
           , GetPolicies const& get_policies
           , SetPolicies const& set_policies)
@@ -647,34 +645,34 @@ namespace luabind
             > registration_type;
 
             this->add_member(
-                new registration_type(name, g, get_policies, s, set_policies));
+                new registration_type(n, g, get_policies, s, set_policies));
             return *this;
         }
 
         template <class C, class D>
-        class_& def_readonly(const char* name, D C::*mem_ptr)
+        class_& def_readonly(const char* n, D C::*mem_ptr)
         {
             typedef detail::property_registration<T, D C::*, detail::null_type>
                 registration_type;
 
             this->add_member(
-                new registration_type(name, mem_ptr, detail::null_type()));
+                new registration_type(n, mem_ptr, detail::null_type()));
             return *this;
         }
 
         template <class C, class D, class Policies>
-        class_& def_readonly(const char* name, D C::*mem_ptr, Policies const& policies)
+        class_& def_readonly(const char* n, D C::*mem_ptr, Policies const& policies)
         {
             typedef detail::property_registration<T, D C::*, Policies>
                 registration_type;
 
             this->add_member(
-                new registration_type(name, mem_ptr, policies));
+                new registration_type(n, mem_ptr, policies));
             return *this;
         }
 
         template <class C, class D>
-        class_& def_readwrite(const char* name, D C::*mem_ptr)
+        class_& def_readwrite(const char* n, D C::*mem_ptr)
         {
             typedef detail::property_registration<
                 T, D C::*, detail::null_type, D C::*
@@ -682,13 +680,13 @@ namespace luabind
 
             this->add_member(
                 new registration_type(
-                    name, mem_ptr, detail::null_type(), mem_ptr));
+                    n, mem_ptr, detail::null_type(), mem_ptr));
             return *this;
         }
 
         template <class C, class D, class GetPolicies>
         class_& def_readwrite(
-            const char* name, D C::*mem_ptr, GetPolicies const& get_policies)
+            const char* n, D C::*mem_ptr, GetPolicies const& get_policies)
         {
             typedef detail::property_registration<
                 T, D C::*, GetPolicies, D C::*
@@ -696,13 +694,13 @@ namespace luabind
 
             this->add_member(
                 new registration_type(
-                    name, mem_ptr, get_policies, mem_ptr));
+                    n, mem_ptr, get_policies, mem_ptr));
             return *this;
         }
 
         template <class C, class D, class GetPolicies, class SetPolicies>
         class_& def_readwrite(
-            const char* name
+            const char* n
           , D C::*mem_ptr
           , GetPolicies const& get_policies
           , SetPolicies const& set_policies
@@ -714,7 +712,7 @@ namespace luabind
 
             this->add_member(
                 new registration_type(
-                    name, mem_ptr, get_policies, mem_ptr, set_policies));
+                    n, mem_ptr, get_policies, mem_ptr, set_policies));
             return *this;
         }
 

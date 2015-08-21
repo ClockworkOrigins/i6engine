@@ -23,6 +23,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseVisualParticle.h"
 
+#include <float.h>
+
 #include "ParticleUniverseEmitter.h"
 #include "ParticleUniverseIVisualData.h"
 #include "ParticleUniverseTechnique.h"
@@ -57,12 +59,15 @@ namespace ParticleUniverse
 	void VisualParticle::setOwnDimensions(Real newWidth, Real newHeight, Real newDepth)
 	{
 		ownDimensions = true;
-		if (newWidth)
+		if (std::abs(newWidth) > DBL_EPSILON) {
 			width = newWidth;
-		if (newHeight)
+		}
+		if (std::abs(newHeight) > DBL_EPSILON) {
 			height = newHeight;
-		if (newDepth)
+		}
+		if (std::abs(newDepth) > DBL_EPSILON) {
 			depth = newDepth;
+		}
 		_calculateBoundingSphereRadius();
 		parentEmitter->getParentTechnique()->_notifyParticleResized();
 	}

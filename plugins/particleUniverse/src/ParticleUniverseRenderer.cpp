@@ -176,12 +176,12 @@ namespace ParticleUniverse
 		// PU 1.4: There is at least one.
 		if (mTextureCoordsRowsAndColumnsSet)
 		{
-			return mTextureCoordsRows * mTextureCoordsColumns;
+			return size_t(mTextureCoordsRows) * size_t(mTextureCoordsColumns);
 		}
 
 		size_t num = mUVList.size();
 		num = num < 1 ? 1 : num;
-		return mTextureCoordsRows * mTextureCoordsColumns;
+		return size_t(mTextureCoordsRows) * size_t(mTextureCoordsColumns);
 	}
 	//-----------------------------------------------------------------------
 	void ParticleRenderer::_notifyRescaled(const Vector3& scale)
@@ -206,7 +206,7 @@ namespace ParticleUniverse
 	void ParticleRenderer::_updateRenderQueue(Ogre::RenderQueue* queue, ParticlePool* pool)
 	{
 		/** Notify the Particle System Manager in case soft particles are used. This cannot be done elsewhere, because 
-			it isn´t sure whether there is already a camera created.
+			it isnï¿½t sure whether there is already a camera created.
 		*/
 		if (mUseSoftParticles && !mNotifiedDepthMap)
 		{

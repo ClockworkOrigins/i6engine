@@ -61,6 +61,9 @@ namespace ParticleUniverse
 				case Particle::PT_SYSTEM:
 					quota = particleTechnique->getEmittedAffectorQuota();
 				break;
+				default: {
+					break;
+				}
 			}
 
 			mResult = particleTechnique->getNumberOfEmittedParticles(mParticleTypeToObserve) >= quota;

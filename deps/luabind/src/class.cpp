@@ -234,9 +234,9 @@ namespace luabind { namespace detail {
     
     // -- interface ---------------------------------------------------------
 
-    class_base::class_base(char const* name)
+    class_base::class_base(char const* n)
         : scope(std::unique_ptr<registration>(
-                m_registration = new class_registration(name))
+                m_registration = new class_registration(n))
           )
     {
     }
@@ -273,9 +273,9 @@ namespace luabind { namespace detail {
         return m_registration->m_name; 
     }
 
-    void class_base::add_static_constant(const char* name, int val)
+    void class_base::add_static_constant(const char* n, int val)
     {
-        m_registration->m_static_constants[name] = val;
+        m_registration->m_static_constants[n] = val;
     }
 
     void class_base::add_inner_scope(scope& s)

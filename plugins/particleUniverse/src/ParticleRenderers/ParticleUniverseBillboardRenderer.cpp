@@ -128,6 +128,9 @@ namespace ParticleUniverse
 			case BBT_PERPENDICULAR_SELF:
 				mBillboardSet->setBillboardType(Ogre::BBT_PERPENDICULAR_SELF);
 				break;
+			default: {
+				break;
+			}
 		}
 	}
 	//-----------------------------------------------------------------------

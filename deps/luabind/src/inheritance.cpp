@@ -196,7 +196,7 @@ std::pair<void*, int> cast_graph::impl::cast(
 }
 
 void cast_graph::impl::insert(
-    class_id src, class_id target, cast_function cast)
+    class_id src, class_id target, cast_function c)
 {
     class_id const max_id = std::max(src, target);
 
@@ -215,7 +215,7 @@ void cast_graph::impl::insert(
 
     if (i == edges.end() || i->target != target)
     {
-        edges.insert(i, edge(target, cast));
+        edges.insert(i, edge(target, c));
         m_cache.invalidate();
     }
 }
@@ -227,9 +227,9 @@ std::pair<void*, int> cast_graph::cast(
     return m_impl->cast(p, src, target, dynamic_id, dynamic_ptr);
 }
 
-void cast_graph::insert(class_id src, class_id target, cast_function cast)
+void cast_graph::insert(class_id src, class_id target, cast_function c)
 {
-    m_impl->insert(src, target, cast);
+    m_impl->insert(src, target, c);
 }
 
 cast_graph::cast_graph()

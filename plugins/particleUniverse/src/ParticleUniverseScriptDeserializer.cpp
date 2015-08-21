@@ -50,6 +50,9 @@ namespace ParticleUniverse
 				case 1:
 					result->y = v;
 					break;
+				default: {
+					break;
+				}
 				}
 			}
 			else
@@ -85,6 +88,9 @@ namespace ParticleUniverse
 				case 2:
 					result->z = v;
 					break;
+				default: {
+					break;
+				}
 				}
 			}
 			else
@@ -123,6 +129,9 @@ namespace ParticleUniverse
 				case 3:
 					result->w = v;
 					break;
+				default: {
+					break;
+				}
 				}
 			}
 			else
@@ -161,6 +170,9 @@ namespace ParticleUniverse
 				case 3:
 					result->z = v;
 					break;
+				default: {
+					break;
+				}
 				}
 			}
 			else
@@ -237,6 +249,9 @@ namespace ParticleUniverse
 				ret = passValidatePropertyNumberOfValues(compiler, prop, t, 4) && passValidatePropertyValidVector4(compiler, prop);
 			}
 			break;
+			default: {
+				break;
+			}
 		}
 
 		return ret;

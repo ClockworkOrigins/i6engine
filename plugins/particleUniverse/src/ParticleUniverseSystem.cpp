@@ -1579,14 +1579,14 @@ namespace ParticleUniverse
 		return total;
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleSystem::getNumberOfEmittedParticles(Particle::ParticleType particleType)
+	size_t ParticleSystem::getNumberOfEmittedParticles(Particle::ParticleType pt)
 	{
 		size_t total = 0;
 		ParticleTechniqueIterator it;
 		ParticleTechniqueIterator itEnd = mTechniques.end();
 		for (it = mTechniques.begin(); it != itEnd; ++it)
 		{
-			total += (*it)->getNumberOfEmittedParticles(particleType);
+			total += (*it)->getNumberOfEmittedParticles(pt);
 		}
 		return total;
 	}

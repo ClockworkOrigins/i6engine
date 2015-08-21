@@ -34,9 +34,9 @@ namespace luabind { namespace detail
 {
 
 	// dest is a function that is called to delete the c++ object this struct holds
-	object_rep::object_rep(instance_holder* instance, class_rep* crep)
+	object_rep::object_rep(instance_holder* instance, class_rep* c)
 		: m_instance(instance)
-		, m_classrep(crep)
+		, m_classrep(c)
 		, m_dependency_cnt(0)
 	{}
 

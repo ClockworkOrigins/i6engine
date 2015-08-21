@@ -170,6 +170,9 @@ namespace ParticleUniverse
 				}
 			}
 			break;
+			default: {
+				break;
+			}
 		}
 
 		if (collision)

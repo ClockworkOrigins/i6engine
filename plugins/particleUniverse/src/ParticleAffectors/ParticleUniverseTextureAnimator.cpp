@@ -148,6 +148,9 @@ namespace ParticleUniverse
 					visualParticle->textureAnimationTimeStep = visualParticle->timeToLive;
 				}
 				break;
+				default: {
+					break;
+				}
 			}
 		}
 	}
@@ -249,6 +252,9 @@ namespace ParticleUniverse
 				visualParticle->textureCoordsCurrent = uint16(Math::RangeRandom(Real(mTextureCoordsStart), Real(mTextureCoordsEnd) + 0.999f));
 			}
 			break;
+			default: {
+				break;
+			}
 		}
 	}
 

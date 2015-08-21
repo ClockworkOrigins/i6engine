@@ -284,9 +284,9 @@ namespace ParticleUniverse
 	void ParticleTechnique::_resetBounds()
 	{
 		mWorldAABB.setNull();
-		Vector3 position = getDerivedPosition();
-		mMinWorldExtend = position;
-		mMaxWorldExtend = position;
+		Vector3 pos = getDerivedPosition();
+		mMinWorldExtend = pos;
+		mMaxWorldExtend = pos;
 		mHasExtents = false;
 	}
 	//-----------------------------------------------------------------------
@@ -2486,7 +2486,7 @@ namespace ParticleUniverse
 		_executeEmitParticles(emitter, requested, 0);
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::forceEmission(const Particle::ParticleType particleType, unsigned requested)
+	void ParticleTechnique::forceEmission(const Particle::ParticleType pt, unsigned requested)
 	{
 		// Fast rejection: Don't emit if the technique is not enabled
 		if (!mEnabled)
@@ -2500,7 +2500,7 @@ namespace ParticleUniverse
 		ParticleEmitterIterator emitterItEnd = mEmitters.end();
 		for (emitterIt = mEmitters.begin(); emitterIt != emitterItEnd; ++emitterIt)
 		{
-			if ((*emitterIt)->getEmitsType() == particleType)
+			if ((*emitterIt)->getEmitsType() == pt)
 			{
 				_executeEmitParticles(*emitterIt, requested, 0);
 				return;
@@ -2750,10 +2750,10 @@ namespace ParticleUniverse
 		return total;
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getNumberOfEmittedParticles(Particle::ParticleType particleType)
+	size_t ParticleTechnique::getNumberOfEmittedParticles(Particle::ParticleType pt)
 	{
 		// Get number from the pool
-		size_t total = mPool.getSize(particleType);
+		size_t total = mPool.getSize(pt);
 
 		if (mPool.isEmpty(Particle::PT_TECHNIQUE))
 		{
@@ -2766,10 +2766,10 @@ namespace ParticleUniverse
 		{
 			if (technique)
 			{
-				total += technique->getNumberOfEmittedParticles(particleType);
+				total += technique->getNumberOfEmittedParticles(pt);
 			}
 			
-			technique = static_cast<ParticleTechnique*>(mPool.getNext(Particle::PT_TECHNIQUE));
+			technique = static_cast<ParticleTechnique *>(mPool.getNext(Particle::PT_TECHNIQUE));
 		}
 
 		return total;

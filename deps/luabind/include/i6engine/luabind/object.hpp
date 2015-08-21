@@ -356,9 +356,9 @@ LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
       typedef iterator_proxy_tag value_wrapper_tag;
 #endif
 
-      iterator_proxy(lua_State* interpreter, handle const& table, handle const& key)
-        : m_interpreter(interpreter)
-        , m_table_index(lua_gettop(interpreter) + 1)
+      iterator_proxy(lua_State* ip, handle const& table, handle const& key)
+        : m_interpreter(ip)
+        , m_table_index(lua_gettop(ip) + 1)
         , m_key_index(m_table_index + 1)
       {
           table.push(m_interpreter);
@@ -414,9 +414,9 @@ LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
       }
 
       // TODO: Why is it non-const?
-      void push(lua_State* interpreter)
+      void push(lua_State* ip)
       {
-          assert(interpreter == m_interpreter);
+          assert(ip == m_interpreter);
           lua_pushvalue(m_interpreter, m_key_index);
           AccessPolicy::get(m_interpreter, m_table_index);
       }
@@ -744,19 +744,19 @@ namespace adl
       }
 
       template<class T>
-      object(lua_State* interpreter, T const& value)
+      object(lua_State* ip, T const& value)
       {
-          detail::push(interpreter, value);
-          detail::stack_pop pop(interpreter, 1);
-          handle(interpreter, -1).swap(m_handle);
+          detail::push(ip, value);
+          detail::stack_pop pop(ip, 1);
+          handle(ip, -1).swap(m_handle);
       }
 
       template<class T, class Policies>
-      object(lua_State* interpreter, T const& value, Policies const&)
+      object(lua_State* ip, T const& value, Policies const&)
       {
-          detail::push(interpreter, value, Policies());
-          detail::stack_pop pop(interpreter, 1);
-          handle(interpreter, -1).swap(m_handle);
+          detail::push(ip, value, Policies());
+          detail::stack_pop pop(ip, 1);
+          handle(ip, -1).swap(m_handle);
       }
 
       void push(lua_State* interpreter) const;
@@ -780,9 +780,9 @@ namespace adl
       handle m_handle;
   };
 
-  inline void object::push(lua_State* interpreter) const
+  inline void object::push(lua_State* ip) const
   {
-      m_handle.push(interpreter);
+      m_handle.push(ip);
   }
 
   inline lua_State* object::interpreter() const
@@ -899,9 +899,9 @@ struct value_wrapper_traits<argument>
 };
 
 template<class Next>
-inline void adl::index_proxy<Next>::push(lua_State* interpreter)
+inline void adl::index_proxy<Next>::push(lua_State* ip)
 {
-    assert(interpreter == m_interpreter);
+    assert(ip == m_interpreter);
 
     value_wrapper_traits<Next>::unwrap(m_interpreter, m_next);
 

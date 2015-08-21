@@ -1101,6 +1101,9 @@ namespace ParticleUniverse
 				EXCEPT(Exception::ERR_INVALIDPARAMS, "PU: Trying to delete alias of undetermined type.", 
 			        "ParticleSystemManager::~ParticleSystemManager");
 			break;
+			default: {
+				break;
+			}
 		}
 	}
 	//-----------------------------------------------------------------------
@@ -1358,6 +1361,9 @@ namespace ParticleUniverse
 			case DynamicAttribute::DAT_OSCILLATE:
 				return PU_NEW_T(DynamicAttributeOscillate, MEMCATEGORY_SCENE_OBJECTS)();
 			break;
+			default: {
+				break;
+			}
 		}
 
 		return 0;

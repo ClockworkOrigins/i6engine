@@ -77,6 +77,9 @@ namespace ParticleUniverse
 			case ST_VELOCITY:
 				particle->direction += timeElapsed * mScaleFraction * particle->direction;
 			break;
+			default: {
+				break;
+			}
 		}
 	}
 	//-----------------------------------------------------------------------

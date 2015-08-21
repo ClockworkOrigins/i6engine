@@ -36,11 +36,13 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport PlaneCollider : public BaseCollider
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Vector3 DEFAULT_NORMAL;
 
 			PlaneCollider(void);
-	        virtual ~PlaneCollider(void){};
+	        virtual ~PlaneCollider(void){}
 
 			/** Returns the normal of the plane
 			*/

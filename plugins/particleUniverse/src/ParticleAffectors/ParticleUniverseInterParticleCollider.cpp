@@ -148,6 +148,9 @@ namespace ParticleUniverse
 					vp2->direction = velocity2 * vp1->mass * -n;
 				}
 				break;
+				default: {
+					break;
+				}
 			}
 			vp1->direction *= mBouncyness;
 			vp2->direction *= mBouncyness;

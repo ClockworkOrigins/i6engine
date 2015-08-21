@@ -68,9 +68,9 @@ namespace ParticleUniverse
 		return mUseOwnRotationSpeed;
 	}
 	//-----------------------------------------------------------------------
-	void TextureRotator::setUseOwnRotationSpeed (bool useOwnRotationSpeed)
+	void TextureRotator::setUseOwnRotationSpeed (bool uors)
 	{
-		mUseOwnRotationSpeed = useOwnRotationSpeed;
+		mUseOwnRotationSpeed = uors;
 	}
 	//-----------------------------------------------------------------------
 	DynamicAttribute* TextureRotator::getRotation(void) const

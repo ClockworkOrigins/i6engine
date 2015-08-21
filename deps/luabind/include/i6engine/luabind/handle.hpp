@@ -67,20 +67,20 @@ inline handle::handle(handle const& other)
     m_index = luaL_ref(m_interpreter, LUA_REGISTRYINDEX);
 }
 
-inline handle::handle(lua_State* interpreter, int stack_index)
-  : m_interpreter(interpreter)
+inline handle::handle(lua_State* ip, int stack_index)
+  : m_interpreter(ip)
   , m_index(LUA_NOREF)
 {
-    lua_pushvalue(interpreter, stack_index);
-    m_index = luaL_ref(interpreter, LUA_REGISTRYINDEX);
+    lua_pushvalue(ip, stack_index);
+    m_index = luaL_ref(ip, LUA_REGISTRYINDEX);
 }
 
-inline handle::handle(lua_State* main, lua_State* interpreter, int stack_index)
+inline handle::handle(lua_State* main, lua_State* ip, int stack_index)
   : m_interpreter(main)
   , m_index(LUA_NOREF)
 {
-    lua_pushvalue(interpreter, stack_index);
-    m_index = luaL_ref(interpreter, LUA_REGISTRYINDEX);
+    lua_pushvalue(ip, stack_index);
+    m_index = luaL_ref(ip, LUA_REGISTRYINDEX);
 }
 
 inline handle::~handle()
@@ -101,9 +101,9 @@ inline void handle::swap(handle& other)
     std::swap(m_index, other.m_index);
 }
 
-inline void handle::push(lua_State* interpreter) const
+inline void handle::push(lua_State* ip) const
 {
-    lua_rawgeti(interpreter, LUA_REGISTRYINDEX, m_index);
+    lua_rawgeti(ip, LUA_REGISTRYINDEX, m_index);
 }
 
 inline lua_State* handle::interpreter() const
@@ -111,10 +111,10 @@ inline lua_State* handle::interpreter() const
     return m_interpreter;
 }
 
-inline void handle::replace(lua_State* interpreter, int stack_index)
+inline void handle::replace(lua_State* ip, int stack_index)
 {
-    lua_pushvalue(interpreter, stack_index);
-    lua_rawseti(interpreter, LUA_REGISTRYINDEX, m_index);
+    lua_pushvalue(ip, stack_index);
+    lua_rawseti(ip, LUA_REGISTRYINDEX, m_index);
 }
 
 template<>

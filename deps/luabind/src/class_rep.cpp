@@ -48,11 +48,11 @@ namespace luabind { namespace detail
 }}
 
 luabind::detail::class_rep::class_rep(type_id const& type
-	, const char* name
+	, const char* n
 	, lua_State* L
 )
 	: m_type(type)
-	, m_name(name)
+	, m_name(n)
 	, m_class_type(cpp_class)
 	, m_operator_cache(0)
 {
@@ -84,9 +84,9 @@ luabind::detail::class_rep::class_rep(type_id const& type
     lua_pop(L, 1);
 }
 
-luabind::detail::class_rep::class_rep(lua_State* L, const char* name)
+luabind::detail::class_rep::class_rep(lua_State* L, const char* n)
 	: m_type(typeid(null_type))
-	, m_name(name)
+	, m_name(n)
 	, m_class_type(lua_class)
 	, m_operator_cache(0)
 {
