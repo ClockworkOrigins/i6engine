@@ -40,8 +40,9 @@ namespace ParticleUniverse
     */
 	class _ParticleUniverseExport ParticleEmitter : public Particle, public IAlias, public IElement
 	{
-		using Particle::copyAttributesTo;
 		public:
+			using Particle::copyAttributesTo;
+
 			// Default values
 			static const bool DEFAULT_ENABLED;
 			static const Vector3 DEFAULT_POSITION;

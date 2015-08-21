@@ -46,11 +46,11 @@ namespace ParticleUniverse
 				Extern* externObject = PU_NEW T();
 				externObject->setExternType(getExternType());
 				return externObject;
-			};
+			}
 
 	public:
-			ExternFactory(void){};
-			virtual ~ExternFactory(void){};
+			ExternFactory(void) {}
+			virtual ~ExternFactory(void) {}
 
 		    /** Returns the type of the factory, which identifies the Extern type this factory creates. */
 			virtual String getExternType(void) const = 0;
@@ -66,7 +66,7 @@ namespace ParticleUniverse
 			{
 				if (externObject)
 					PU_DELETE externObject;
-			};
+			}
 	};
 
 }

@@ -45,6 +45,8 @@ namespace ParticleUniverse
 			bool mFirst;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_MAX_DEVIATION;
 			static const Real DEFAULT_TIME_STEP;
@@ -52,7 +54,7 @@ namespace ParticleUniverse
 			static const Real DEFAULT_DRIFT;
 			
 			LineAffector(void);
-	        virtual ~LineAffector(void) {};
+	        virtual ~LineAffector(void) {}
 
 			/** 
 	        */

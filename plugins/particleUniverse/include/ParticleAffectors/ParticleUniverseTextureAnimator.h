@@ -37,6 +37,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport TextureAnimator : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			enum TextureAnimationType
 			{
 				TAT_LOOP,

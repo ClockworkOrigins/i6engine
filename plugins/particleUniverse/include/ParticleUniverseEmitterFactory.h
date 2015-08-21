@@ -46,11 +46,11 @@ namespace ParticleUniverse
 				ParticleEmitter* particleEmitter = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
 				particleEmitter->setEmitterType(getEmitterType());
 				return particleEmitter;
-			};
+			}
 
 	public:
-			ParticleEmitterFactory(void) {};
-	        virtual ~ParticleEmitterFactory(void) {};
+			ParticleEmitterFactory(void) {}
+	        virtual ~ParticleEmitterFactory(void) {}
 
 			/** Returns the type of the factory, which identifies the particle emitter type this factory creates. */
 			virtual String getEmitterType(void) const = 0;
@@ -65,7 +65,7 @@ namespace ParticleUniverse
 			void destroyEmitter (ParticleEmitter* emitter)
 			{
 				PU_DELETE_T(emitter, ParticleEmitter, MEMCATEGORY_SCENE_OBJECTS);
-			};
+			}
 
 	};
 

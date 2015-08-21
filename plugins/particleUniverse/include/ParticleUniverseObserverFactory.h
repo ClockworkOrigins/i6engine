@@ -46,11 +46,11 @@ namespace ParticleUniverse
 				ParticleObserver* particleObserver = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
 				particleObserver->setObserverType(getObserverType());
 				return particleObserver;
-			};
+			}
 
 	public:
-			ParticleObserverFactory(void) {};
-	        virtual ~ParticleObserverFactory(void) {};
+			ParticleObserverFactory(void) {}
+	        virtual ~ParticleObserverFactory(void) {}
 
 		    /** Returns the type of the factory, which identifies the particle observer type this factory creates. */
 			virtual String getObserverType(void) const = 0;
@@ -65,7 +65,7 @@ namespace ParticleUniverse
 			void destroyObserver (ParticleObserver* observer)
 			{
 				PU_DELETE_T(observer, ParticleObserver, MEMCATEGORY_SCENE_OBJECTS);
-			};
+			}
 	};
 
 }

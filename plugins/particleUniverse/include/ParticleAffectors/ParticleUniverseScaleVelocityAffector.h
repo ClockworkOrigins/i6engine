@@ -36,6 +36,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport ScaleVelocityAffector : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_VELOCITY_SCALE;
 
@@ -51,19 +53,19 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			DynamicAttribute* getDynScaleVelocity(void) const {return mDynScaleVelocity;};
+			DynamicAttribute* getDynScaleVelocity(void) const {return mDynScaleVelocity;}
 			void setDynScaleVelocity(DynamicAttribute* dynScaleVelocity);
 			void resetDynScaleVelocity(bool resetToDefault = true);
 
 			/** 
 	        */
-			bool isSinceStartSystem(void) const {return mSinceStartSystem;};
-			void setSinceStartSystem(bool sinceStartSystem){mSinceStartSystem = sinceStartSystem;};
+			bool isSinceStartSystem(void) const {return mSinceStartSystem;}
+			void setSinceStartSystem(bool sinceStartSystem){mSinceStartSystem = sinceStartSystem;}
 
 			/** 
 	        */
-			bool isStopAtFlip(void) const {return mStopAtFlip;};
-			void setStopAtFlip(bool stopAtFlip){mStopAtFlip = stopAtFlip;};
+			bool isStopAtFlip(void) const {return mStopAtFlip;}
+			void setStopAtFlip(bool stopAtFlip){mStopAtFlip = stopAtFlip;}
 
 	protected:
 			DynamicAttribute* mDynScaleVelocity;

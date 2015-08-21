@@ -36,6 +36,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport ScaleAffector : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_X_SCALE;
 			static const Real DEFAULT_Y_SCALE;
@@ -54,32 +56,32 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			DynamicAttribute* getDynScaleX(void) const {return mDynScaleX;};
+			DynamicAttribute* getDynScaleX(void) const {return mDynScaleX;}
 			void setDynScaleX(DynamicAttribute* dynScaleX);
 			void resetDynScaleX(bool resetToDefault = true);
 
 			/** 
 	        */
-			DynamicAttribute* getDynScaleY(void) const {return mDynScaleY;};
+			DynamicAttribute* getDynScaleY(void) const {return mDynScaleY;}
 			void setDynScaleY(DynamicAttribute* dynScaleY);
 			void resetDynScaleY(bool resetToDefault = true);
 
 			/** 
 	        */
-			DynamicAttribute* getDynScaleZ(void) const {return mDynScaleZ;};
+			DynamicAttribute* getDynScaleZ(void) const {return mDynScaleZ;}
 			void setDynScaleZ(DynamicAttribute* dynScaleZ);
 			void resetDynScaleZ(bool resetToDefault = true);
 
 			/** 
 	        */
-			DynamicAttribute* getDynScaleXYZ(void) const {return mDynScaleXYZ;};
+			DynamicAttribute* getDynScaleXYZ(void) const {return mDynScaleXYZ;}
 			void setDynScaleXYZ(DynamicAttribute* dynScaleXYZ);
 			void resetDynScaleXYZ(bool resetToDefault = true);
 
 			/** 
 	        */
-			bool isSinceStartSystem(void) const {return mSinceStartSystem;};
-			void setSinceStartSystem(bool sinceStartSystem){mSinceStartSystem = sinceStartSystem;};
+			bool isSinceStartSystem(void) const {return mSinceStartSystem;}
+			void setSinceStartSystem(bool sinceStartSystem){mSinceStartSystem = sinceStartSystem;}
 
 	protected:
 			DynamicAttribute* mDynScaleX;

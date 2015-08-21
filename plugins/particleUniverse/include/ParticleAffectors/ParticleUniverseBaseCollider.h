@@ -35,6 +35,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport BaseCollider : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			/** Determines how a particle collision should be determined. IT_POINT means that the position of 
 				the particle will be validated against the Colliders' shape. IT_BOX means that the dimensions
 				(width, height and depth) are used to determine whether the particle collides.
@@ -46,10 +48,10 @@ namespace ParticleUniverse
 			};
 
 			/** Determines how a particle behaves after collision with this collider. The behaviour of the
-				particle is solved in the collider and only behaviour that needs the colliders´ data is taken
+				particle is solved in the collider and only behaviour that needs the collidersï¿½ data is taken
 				into account. The fact that a particle expires for example, can be achieved by using an 
 				Observer in combination with an EventHandler (DoExpireEventHandler).
-				CT_NONE means that the particle doesn´t do anything. This value should be set if the behaviour 
+				CT_NONE means that the particle doesnï¿½t do anything. This value should be set if the behaviour 
 				of the particle is determined outside the collider (for example, expiring the particle).
 				CT_BOUNCE means that the particle bounces off the collider.
 				CT_FLOW means that the particle flows around the contours of the collider.

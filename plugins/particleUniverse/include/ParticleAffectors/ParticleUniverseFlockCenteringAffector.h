@@ -39,6 +39,8 @@ namespace ParticleUniverse
 			Real mCount;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			FlockCenteringAffector(void) : 
 				ParticleAffector(),
 				mSum(Vector3::ZERO),

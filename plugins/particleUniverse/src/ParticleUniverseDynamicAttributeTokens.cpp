@@ -296,6 +296,9 @@ namespace ParticleUniverse
 					serializer->writeLine("}", serializer->getIndentation());
 				}
 				break;
+			default: {
+				break;
+			}
 		}
 	}
 

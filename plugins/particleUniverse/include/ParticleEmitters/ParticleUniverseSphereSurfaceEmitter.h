@@ -29,7 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace ParticleUniverse
 {
-	/** The SphereSurfaceEmitter emits particles from the surface of a sphere (instead within the sphere´s
+	/** The SphereSurfaceEmitter emits particles from the surface of a sphere (instead within the sphereï¿½s
 		volume). The particles are emitted in a direction perpendicular to the tangentvector where 
 		the particle emits. Using the angle attribute, the direction can be influenced.
     */
@@ -40,11 +40,13 @@ namespace ParticleUniverse
 			Vector3 mRandomVector;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_RADIUS;
 
 			SphereSurfaceEmitter(void);
-	        virtual ~SphereSurfaceEmitter(void) {};
+	        virtual ~SphereSurfaceEmitter(void) {}
 
 			/** 
 	        */

@@ -45,7 +45,7 @@ namespace ParticleUniverse
 				ParticleBehaviour* particleBehaviour = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
 				particleBehaviour->setBehaviourType(getBehaviourType());
 				return particleBehaviour;
-			};
+			}
 
 	public:
 			ParticleBehaviourFactory(void) {};
@@ -64,7 +64,7 @@ namespace ParticleUniverse
 			void destroyBehaviour (ParticleBehaviour* behaviour)
 			{
 				PU_DELETE_T(behaviour, ParticleBehaviour, MEMCATEGORY_SCENE_OBJECTS);
-			};
+			}
 	};
 
 }

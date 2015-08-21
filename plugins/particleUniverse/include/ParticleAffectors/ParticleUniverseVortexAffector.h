@@ -36,6 +36,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport VortexAffector : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Vector3 DEFAULT_ROTATION_VECTOR;
 			static const Real DEFAULT_ROTATION_SPEED;

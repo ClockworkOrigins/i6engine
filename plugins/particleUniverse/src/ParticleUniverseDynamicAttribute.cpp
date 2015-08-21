@@ -226,6 +226,9 @@ namespace ParticleUniverse
 				return (mSpline.interpolate(fraction < 1.0f ? fraction : 1.0f)).y;
 			}
 			break;
+		default: {
+			break;
+		}
 		}
 
 		return 0;
@@ -405,6 +408,9 @@ namespace ParticleUniverse
 				return mBase + mAmplitude * Math::Sign(Math::Sin(mPhase + mFrequency * x * Math::TWO_PI));
 			}
 			break;
+			default: {
+				break;
+			}
 		}
 
 		return 0;

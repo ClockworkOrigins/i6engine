@@ -75,6 +75,9 @@ namespace ParticleUniverse
 			case Particle::PT_SYSTEM:
 				destroyAllSystemParticles();
 				break;
+			default: {
+				break;
+			}
 		}
 	}
 	//-----------------------------------------------------------------------
@@ -125,7 +128,7 @@ namespace ParticleUniverse
 	void ParticlePool::destroyAllSystemParticles(void)
 	{
 		// There is still a problem if the scene is cleared and this Particle System isn't deleted yet.
-		// mParentTechnique doesn´t always have a parent ParticleSystem; this is in case of an alias technique.
+		// mParentTechnique doesnï¿½t always have a parent ParticleSystem; this is in case of an alias technique.
 		vector<String>::iterator itSystem;
 		if (mParentTechnique->getParentSystem())
 		{
@@ -151,7 +154,7 @@ namespace ParticleUniverse
 			mParticleTechniquePool.isEmpty() && 
 			mParticleAffectorPool.isEmpty() &&
 			mParticleSystemPool.isEmpty();
-	};
+	}
 	//-----------------------------------------------------------------------
 	bool ParticlePool::isEmpty(const Particle::ParticleType particleType)
 	{
@@ -176,10 +179,13 @@ namespace ParticleUniverse
 			case Particle::PT_SYSTEM:
 				return mParticleSystemPool.isEmpty();
 				break;
+			default: {
+				break;
+			}
 		}
 
 		return true;
-	};
+	}
 	//-----------------------------------------------------------------------
 	size_t ParticlePool::getSize(void)
 	{
@@ -188,7 +194,7 @@ namespace ParticleUniverse
 			mParticleTechniquePool.getSize() + 
 			mParticleAffectorPool.getSize() + 
 			mParticleSystemPool.getSize();
-	};
+	}
 	//-----------------------------------------------------------------------
 	size_t ParticlePool::getSize(const Particle::ParticleType particleType)
 	{
@@ -213,10 +219,13 @@ namespace ParticleUniverse
 			case Particle::PT_SYSTEM:
 				return mParticleSystemPool.getSize();
 				break;
+			default: {
+				break;
+			}
 		}
 
 		return 0;
-	};
+	}
 	//-----------------------------------------------------------------------
 	void ParticlePool::_increaseVisualParticlePool(size_t size, 
 		Particle::ParticleBehaviourList& behaviours)
@@ -468,6 +477,9 @@ namespace ParticleUniverse
 			case Particle::PT_SYSTEM:
 				_increaseParticleSystemPool(size, behaviours, technique);
 				break;
+			default: {
+				break;
+			}
 		}
 		resetIterator();
 	}
@@ -495,6 +507,9 @@ namespace ParticleUniverse
 			case Particle::PT_SYSTEM:
 				return mParticleSystemPool.releaseElement(name);
 				break;
+			default: {
+				break;
+			}
 		}
 		
 		return 0;
@@ -535,6 +550,9 @@ namespace ParticleUniverse
 				case Particle::PT_SYSTEM:
 					mParticleSystemPool.lockLatestElement();
 					break;
+				default: {
+					break;
+				}
 			}
 		}
 	}
@@ -679,6 +697,9 @@ namespace ParticleUniverse
 					mLatestParticle = mParticleSystemPool.getNext();
 				}
 				break;
+			default: {
+				break;
+			}
 		}
 		return mLatestParticle;
 	}
@@ -707,6 +728,9 @@ namespace ParticleUniverse
 			case Particle::PT_SYSTEM:
 				mLatestParticle = mParticleSystemPool.getFirst();
 				break;
+			default: {
+				break;
+			}
 		}
 
 		return mLatestParticle;
@@ -736,6 +760,9 @@ namespace ParticleUniverse
 			case Particle::PT_SYSTEM:
 				mLatestParticle = mParticleSystemPool.getNext();
 				break;
+			default: {
+				break;
+			}
 		}
 
 		return mLatestParticle;
@@ -773,6 +800,9 @@ namespace ParticleUniverse
 			case Particle::PT_SYSTEM:
 				return mParticleSystemPool.end();
 				break;
+			default: {
+				break;
+			}
 		}
 
 		return end(); // To get rid of the warning

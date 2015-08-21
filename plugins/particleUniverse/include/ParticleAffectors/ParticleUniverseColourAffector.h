@@ -34,6 +34,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport ColourAffector : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			typedef map<Real, ColourValue> ColourMap;
 			typedef map<Real, ColourValue>::iterator ColourMapIterator;
 			enum ColourOperation

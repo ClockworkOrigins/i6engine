@@ -132,7 +132,7 @@ namespace ParticleUniverse
 			/** Destructor **/
 			~MeshInfo (void);
 
-			/** Generate a random number. The ´high´ argument determines that numbers are 
+			/** Generate a random number. The ï¿½highï¿½ argument determines that numbers are 
 				returned between [0..high] **/
 			Real getGaussianRandom (Real high, Real cutoff = 4);
 
@@ -166,6 +166,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport MeshSurfaceEmitter : public ParticleEmitter
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Vector3 DEFAULT_SCALE;
 			static const MeshInfo::MeshSurfaceDistribution DEFAULT_DISTRIBUTION;

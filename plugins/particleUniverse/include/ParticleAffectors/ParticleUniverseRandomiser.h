@@ -43,13 +43,15 @@ namespace ParticleUniverse
 			bool mUpdate;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Vector3 DEFAULT_MAX_DEVIATION;
 			static const Real DEFAULT_TIME_STEP;
 			static const bool DEFAULT_RANDOM_DIRECTION;
 
 			Randomiser(void);
-	        virtual ~Randomiser(void) {};
+	        virtual ~Randomiser(void) {}
 
 			/** 
 	        */

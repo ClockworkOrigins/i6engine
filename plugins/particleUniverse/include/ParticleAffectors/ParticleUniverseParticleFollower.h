@@ -34,12 +34,14 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport ParticleFollower : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_MAX_DISTANCE;
 			static const Real DEFAULT_MIN_DISTANCE;
 
 			ParticleFollower(void);
-	        virtual ~ParticleFollower(void) {};
+	        virtual ~ParticleFollower(void) {}
 
 			/** @copydoc ParticleAffector::copyAttributesTo */
 			virtual void copyAttributesTo (ParticleAffector* affector);

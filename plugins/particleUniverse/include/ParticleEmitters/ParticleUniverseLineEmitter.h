@@ -57,6 +57,8 @@ namespace ParticleUniverse
 			Real _mScaledLength;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Vector3 DEFAULT_END;
 			static const Real DEFAULT_MIN_INCREMENT;
@@ -64,7 +66,7 @@ namespace ParticleUniverse
 			static const Real DEFAULT_MAX_DEVIATION;
 
 			LineEmitter(void);
-	        virtual ~LineEmitter(void) {};
+	        virtual ~LineEmitter(void) {}
 
 			/** 
 	        */

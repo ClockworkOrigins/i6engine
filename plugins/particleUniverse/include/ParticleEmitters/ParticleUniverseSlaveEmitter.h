@@ -45,8 +45,10 @@ namespace ParticleUniverse
 			bool mMasterEmitterNameSet;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			SlaveEmitter(void);
-	        virtual ~SlaveEmitter(void){};
+	        virtual ~SlaveEmitter(void){}
 
 			/** 
 	        */
@@ -86,7 +88,7 @@ namespace ParticleUniverse
 
 			/** No implementation.
 	        */
-			virtual void particleExpired(ParticleTechnique* particleTechnique, Particle* particle){};
+			virtual void particleExpired(ParticleTechnique* particleTechnique, Particle* particle){}
 
 			/** 
 	        */

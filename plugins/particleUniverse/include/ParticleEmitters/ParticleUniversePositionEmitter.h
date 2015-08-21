@@ -44,11 +44,13 @@ namespace ParticleUniverse
 			size_t mIndex;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const bool DEFAULT_RANDOMIZE;
 
 			PositionEmitter(void);
-	        virtual ~PositionEmitter(void) {};
+	        virtual ~PositionEmitter(void) {}
 
 			/** 
 	        */

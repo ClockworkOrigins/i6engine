@@ -46,11 +46,11 @@ namespace ParticleUniverse
 				ParticleEventHandler* particleEventHandler = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
 				particleEventHandler->setEventHandlerType(getEventHandlerType());
 				return particleEventHandler;
-			};
+			}
 
 	public:
-			ParticleEventHandlerFactory(void) {};
-	        virtual ~ParticleEventHandlerFactory(void) {};
+			ParticleEventHandlerFactory(void) {}
+	        virtual ~ParticleEventHandlerFactory(void) {}
 
 		    /** Returns the type of the factory, which identifies the event handler type this factory creates. */
 			virtual String getEventHandlerType(void) const = 0;
@@ -65,7 +65,7 @@ namespace ParticleUniverse
 			void destroyEventHandler (ParticleEventHandler* eventHandler)
 			{
 				PU_DELETE_T(eventHandler, ParticleEventHandler, MEMCATEGORY_SCENE_OBJECTS);
-			};
+			}
 	};
 
 }

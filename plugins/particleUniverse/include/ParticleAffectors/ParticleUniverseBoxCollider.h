@@ -36,6 +36,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport BoxCollider : public BaseCollider
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			static const Real DEFAULT_WIDTH;
 			static const Real DEFAULT_HEIGHT;
 			static const Real DEFAULT_DEPTH;

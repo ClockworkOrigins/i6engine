@@ -47,7 +47,7 @@ namespace ParticleUniverse
 	{
 		particleType = PT_AFFECTOR;
 		mAliasType = AT_AFFECTOR;
-	};
+	}
 	//-----------------------------------------------------------------------
 	void ParticleAffector::_notifyStart (void)
 	{

@@ -587,9 +587,9 @@ namespace adl
       typedef index_proxy<Next> this_type;
 
       template<class Key>
-      index_proxy(Next const& next, lua_State* interpreter, Key const& key)
-        : m_interpreter(interpreter)
-        , m_key_index(lua_gettop(interpreter) + 1)
+      index_proxy(Next const& next, lua_State* ip, Key const& key)
+        : m_interpreter(ip)
+        , m_key_index(lua_gettop(ip) + 1)
         , m_next(next)
       {
           detail::push(m_interpreter, key);

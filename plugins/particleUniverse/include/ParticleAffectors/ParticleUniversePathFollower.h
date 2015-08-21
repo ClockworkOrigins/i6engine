@@ -39,11 +39,13 @@ namespace ParticleUniverse
 			SimpleSpline mSpline;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			PathFollower(void) : 
 				ParticleAffector()
 			{
-			};
-	        virtual ~PathFollower(void) {};
+			}
+	        virtual ~PathFollower(void) {}
 
 			/** 
 	        */
@@ -55,11 +57,11 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			unsigned short getNumPoints(void) const {return mSpline.getNumPoints();};
+			unsigned short getNumPoints(void) const {return mSpline.getNumPoints();}
 				
 			/** 
 	        */
-			const Vector3& getPoint(unsigned short index) const {return mSpline.getPoint(index);};
+			const Vector3& getPoint(unsigned short index) const {return mSpline.getPoint(index);}
 			
 			/** 
 	        */

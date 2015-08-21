@@ -34,11 +34,13 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport VelocityMatchingAffector : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_RADIUS;
 
 			VelocityMatchingAffector(void);
-	        virtual ~VelocityMatchingAffector(void){};
+	        virtual ~VelocityMatchingAffector(void){}
 
 			/** Todo
 			*/

@@ -34,13 +34,13 @@ namespace ParticleUniverse
     */
 	class _ParticleUniverseExport PointEmitter : public ParticleEmitter
 	{
-		protected:
-
 		public:
+			using Particle::copyAttributesTo;
+
 			PointEmitter(void) : ParticleEmitter()
 			{
-			};
-	        virtual ~PointEmitter(void) {};
+			}
+	        virtual ~PointEmitter(void) {}
 
 			/** 
 	        */

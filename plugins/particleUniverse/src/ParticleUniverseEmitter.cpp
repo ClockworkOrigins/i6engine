@@ -590,10 +590,10 @@ namespace ParticleUniverse
 		return mParticleDirection;
 	}
 	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleDirection(const Vector3& direction)
+	void ParticleEmitter::setParticleDirection(const Vector3& dir)
 	{
-		mParticleDirection = direction;
-		mOriginalParticleDirection = direction;
+		mParticleDirection = dir;
+		mOriginalParticleDirection = dir;
 		mParticleDirection.normalise();
 		mUpVector = mParticleDirection.perpendicular();
 		mUpVector.normalise();
@@ -806,8 +806,8 @@ namespace ParticleUniverse
 	//-----------------------------------------------------------------------
     void ParticleEmitter::_initParticleMass(Particle* particle)
     {
-		Real mass = mDynamicAttributeHelper.calculate(mDynParticleMass, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart(), Particle::DEFAULT_MASS);
-		particle->mass = mass;
+		Real m = mDynamicAttributeHelper.calculate(mDynParticleMass, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart(), Particle::DEFAULT_MASS);
+		particle->mass = m;
     }
 	//-----------------------------------------------------------------------
 	void ParticleEmitter::_initParticleColour(Particle* particle)

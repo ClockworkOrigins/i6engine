@@ -49,6 +49,8 @@ namespace ParticleUniverse
 			bool mResize;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const bool DEFAULT_RESIZE;
 

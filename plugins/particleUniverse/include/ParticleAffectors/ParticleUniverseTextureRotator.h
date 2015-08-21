@@ -41,6 +41,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport TextureRotator : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const bool DEFAULT_USE_OWN_SPEED;
 			static const Real DEFAULT_ROTATION_SPEED;

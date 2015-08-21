@@ -27,7 +27,7 @@ namespace core {
 
 	Timer::~Timer() {
 		_bolTimerStopped = true;
-		_ctrl->removeTimerID(_timerID);
+		_objCondExecutable.wait(_objCondUniqLock);
 	}
 
 	void Timer::update() {

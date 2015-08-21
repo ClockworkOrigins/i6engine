@@ -35,6 +35,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport ForceFieldAffector : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const ForceField::ForceFieldType DEFAULT_FORCEFIELD_TYPE;
 			static const Real DEFAULT_DELTA;

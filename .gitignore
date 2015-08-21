@@ -1,0 +1,11 @@
+dependencies/boost
+dependencies/bullet
+dependencies/cegui
+dependencies/clockUtils
+dependencies/gmock
+dependencies/gperftools
+dependencies/OpenAL
+dependencies/ogre
+dependencies/ois
+dependencies/tinyxml2
+dependencies/wxWidgets

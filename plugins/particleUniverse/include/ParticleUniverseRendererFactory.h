@@ -46,11 +46,11 @@ namespace ParticleUniverse
 				ParticleRenderer* particleRenderer = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
 				particleRenderer->setRendererType(getRendererType());
 				return particleRenderer;
-			};
+			}
 
 	public:
-			ParticleRendererFactory(void){};
-			virtual ~ParticleRendererFactory(void){};
+			ParticleRendererFactory(void){}
+			virtual ~ParticleRendererFactory(void){}
 
 		    /** Returns the type of the factory, which identifies the particle Renderer type this factory creates. */
 			virtual String getRendererType(void) const = 0;
@@ -66,7 +66,7 @@ namespace ParticleUniverse
 			{
 				if (renderer)
 					PU_DELETE_T(renderer, ParticleRenderer, MEMCATEGORY_SCENE_OBJECTS);
-			};
+			}
 	};
 
 }

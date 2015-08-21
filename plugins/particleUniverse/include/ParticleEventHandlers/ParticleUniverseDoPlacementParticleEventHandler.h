@@ -52,14 +52,14 @@ namespace ParticleUniverse
 
 			/** Store the technique value to keep up to speed.
 			@remarks
-				If the ParticleTechnique has been destroyed, the DoPlacementParticleEventHandler isn´t automatically
+				If the ParticleTechnique has been destroyed, the DoPlacementParticleEventHandler isnï¿½t automatically
 				notified. Using the pointer causes an exception.
 	        */
 			ParticleTechnique* mTechnique;
 
 			/** Store the emitter value to keep up to speed.
 			@remarks
-				If the ParticleEmitter has been destroyed, the DoPlacementParticleEventHandler isn´t automatically
+				If the ParticleEmitter has been destroyed, the DoPlacementParticleEventHandler isnï¿½t automatically
 				notified. Using the pointer causes an exception.
 	        */
 			ParticleEmitter* mEmitter;
@@ -100,31 +100,31 @@ namespace ParticleUniverse
 
 			/** Getters/Setters
 	        */
-			bool isInheritPosition(void) const {return mInheritPosition;};
-			bool isInheritDirection(void) const {return mInheritDirection;};
-			bool isInheritOrientation(void) const {return mInheritOrientation;};
-			bool isInheritTimeToLive(void) const {return mInheritTimeToLive;};
-			bool isInheritMass(void) const {return mInheritMass;};
-			bool isInheritTextureCoordinate(void) const {return mInheritTextureCoordinate;};
-			bool isInheritColour(void) const {return mInheritColour;};
-			bool isInheritParticleWidth(void) const {return mInheritParticleWidth;};
-			bool isInheritParticleHeight(void) const {return mInheritParticleHeight;};
-			bool isInheritParticleDepth(void) const {return mInheritParticleDepth;};
+			bool isInheritPosition(void) const {return mInheritPosition;}
+			bool isInheritDirection(void) const {return mInheritDirection;}
+			bool isInheritOrientation(void) const {return mInheritOrientation;}
+			bool isInheritTimeToLive(void) const {return mInheritTimeToLive;}
+			bool isInheritMass(void) const {return mInheritMass;}
+			bool isInheritTextureCoordinate(void) const {return mInheritTextureCoordinate;}
+			bool isInheritColour(void) const {return mInheritColour;}
+			bool isInheritParticleWidth(void) const {return mInheritParticleWidth;}
+			bool isInheritParticleHeight(void) const {return mInheritParticleHeight;}
+			bool isInheritParticleDepth(void) const {return mInheritParticleDepth;}
 
-			void setInheritPosition(bool inheritPosition) {mInheritPosition = inheritPosition;};
-			void setInheritDirection(bool inheritDirection) {mInheritDirection = inheritDirection;};
-			void setInheritOrientation(bool inheritOrientation) {mInheritOrientation = inheritOrientation;};
-			void setInheritTimeToLive(bool inheritTimeToLive) {mInheritTimeToLive = inheritTimeToLive;};
-			void setInheritMass(bool inheritMass) {mInheritMass = inheritMass;};
-			void setInheritTextureCoordinate(bool inheritTextureCoordinate) {mInheritTextureCoordinate = inheritTextureCoordinate;};
-			void setInheritColour(bool inheritColour) {mInheritColour = inheritColour;};
-			void setInheritParticleWidth(bool inheritParticleWidth) {mInheritParticleWidth = inheritParticleWidth;};
-			void setInheritParticleHeight(bool inheritParticleHeight) {mInheritParticleHeight = inheritParticleHeight;};
-			void setInheritParticleDepth(bool inheritParticleDepth) {mInheritParticleDepth = inheritParticleDepth;};
+			void setInheritPosition(bool inheritPosition) {mInheritPosition = inheritPosition;}
+			void setInheritDirection(bool inheritDirection) {mInheritDirection = inheritDirection;}
+			void setInheritOrientation(bool inheritOrientation) {mInheritOrientation = inheritOrientation;}
+			void setInheritTimeToLive(bool inheritTimeToLive) {mInheritTimeToLive = inheritTimeToLive;}
+			void setInheritMass(bool inheritMass) {mInheritMass = inheritMass;}
+			void setInheritTextureCoordinate(bool inheritTextureCoordinate) {mInheritTextureCoordinate = inheritTextureCoordinate;}
+			void setInheritColour(bool inheritColour) {mInheritColour = inheritColour;}
+			void setInheritParticleWidth(bool inheritParticleWidth) {mInheritParticleWidth = inheritParticleWidth;}
+			void setInheritParticleHeight(bool inheritParticleHeight) {mInheritParticleHeight = inheritParticleHeight;}
+			void setInheritParticleDepth(bool inheritParticleDepth) {mInheritParticleDepth = inheritParticleDepth;}
 
 			/** Get the name of the emitter that is used to emit its particles.
 	        */
-			const String& getForceEmitterName(void) const {return mForceEmitterName;};
+			const String& getForceEmitterName(void) const {return mForceEmitterName;}
 
 			/** Set the name of the emitter that is used to emit its particles.
 	        */
@@ -145,22 +145,22 @@ namespace ParticleUniverse
 
 			/** Get the number of particles to emit.
 	        */
-			unsigned int getNumberOfParticles(void) const {return mNumberOfParticles;};
+			unsigned int getNumberOfParticles(void) const {return mNumberOfParticles;}
 
 			/** Set the number of particles to emit.
 	        */
-			void setNumberOfParticles(unsigned int numberOfParticles){mNumberOfParticles = numberOfParticles;};
+			void setNumberOfParticles(unsigned int numberOfParticles){mNumberOfParticles = numberOfParticles;}
 
 			/** Boolean that determines whether always the position of the particle that is handled must be used for emission of 
 				the new particle.
 	        */
-			bool alwaysUsePosition(void) const {return mAlwaysUsePosition;};
+			bool alwaysUsePosition(void) const {return mAlwaysUsePosition;}
 
 			/** Set the boolean to indicate whether the position of the particle that is handled must be used for emission of 
 				the new particle or whether the contact point of the physics actor must be used. This only applies if a physics angine
 				is used, otherwise the default is used.
 	        */
-			void setAlwaysUsePosition(bool alwaysUsePosition) {mAlwaysUsePosition = alwaysUsePosition;};
+			void setAlwaysUsePosition(bool aup) {mAlwaysUsePosition = aup;}
 
 			/** If the _handle() function of this class is invoked (by an Observer), it searches the 
 				ParticleEmitter defined by the mForceEmitterName. This ParticleEmitter is either part of 
@@ -176,7 +176,7 @@ namespace ParticleUniverse
 
 			/** No implementation.
 	        */
-			virtual void particleExpired(ParticleTechnique* particleTechnique, Particle* particle){};
+			virtual void particleExpired(ParticleTechnique* particleTechnique, Particle* particle){}
 
 			/** Copy attributes to another event handler.
 	        */

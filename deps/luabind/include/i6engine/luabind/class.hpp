@@ -559,7 +559,7 @@ namespace luabind
 
 #undef LUABIND_GEN_BASE_INFO
 
-		class_(const char* name): class_base(name), scope(*this)
+		class_(const char* n): class_base(n), scope(*this)
 		{
 #ifndef NDEBUG
 			detail::check_link_compatibility();
@@ -792,19 +792,19 @@ namespace luabind
 		}
 
 		template<class Getter, class GetPolicies>
-		class_& property_impl(const char* name,
+		class_& property_impl(const char* n,
 									 Getter g,
 									 GetPolicies policies,
 									 boost::mpl::bool_<true>)
 		{
             this->add_member(
                 new detail::property_registration<T, Getter, GetPolicies>(
-                    name, g, policies));
+                    n, g, policies));
 			return *this;
 		}
 
 		template<class Getter, class Setter>
-		class_& property_impl(const char* name,
+		class_& property_impl(const char* n,
 									 Getter g,
 									 Setter s,
 									 boost::mpl::bool_<false>)
@@ -814,32 +814,32 @@ namespace luabind
             > registration_type;
 
             this->add_member(
-                new registration_type(name, g, detail::null_type(), s));
+                new registration_type(n, g, detail::null_type(), s));
 			return *this;
 		}
 
 		// these handle default implementation of virtual functions
 		template<class F, class Policies>
-		class_& virtual_def(char const* name, F const& fn
+		class_& virtual_def(char const* n, F const& fn
 			, Policies const&, detail::null_type, boost::mpl::true_)
 		{
 			this->add_member(
 				new detail::memfun_registration<T, F, Policies>(
-					name, fn, Policies()));
+					n, fn, Policies()));
 			return *this;
 		}
 
 		template<class F, class Default, class Policies>
-		class_& virtual_def(char const* name, F const& fn
+		class_& virtual_def(char const* n, F const& fn
 			, Default const& default_, Policies const&, boost::mpl::false_)
 		{
 			this->add_member(
 				new detail::memfun_registration<T, F, Policies>(
-					name, fn, Policies()));
+					n, fn, Policies()));
 
 			this->add_default_member(
 				new detail::memfun_registration<T, Default, Policies>(
-					name, default_, Policies()));
+					n, default_, Policies()));
 
 			return *this;
 		}

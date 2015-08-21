@@ -87,6 +87,9 @@ namespace ParticleUniverse
 							return dynAttr;
 						}
 						break;
+						default: {
+							break;
+						}
 					}
 				}
 
@@ -145,6 +148,9 @@ namespace ParticleUniverse
 							DynamicAttributeOscillate d(*dynOscillate); // Needed to get rid of the const
 							return d.getValue();
 						}
+					default: {
+						break;
+					}
 				}
 
 				return 0; // Take 0 as the default

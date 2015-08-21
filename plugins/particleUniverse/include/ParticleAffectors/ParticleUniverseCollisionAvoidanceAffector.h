@@ -31,11 +31,13 @@ namespace ParticleUniverse
 {
 	/** The CollisionAvoidanceAffector is used to prevent particles from colliding with each other.
 	@remarks
-		The current implementation doesn´t take avoidance of colliders (box, sphere, plane) into account (yet).
+		The current implementation doesnï¿½t take avoidance of colliders (box, sphere, plane) into account (yet).
     */
 	class _ParticleUniverseExport CollisionAvoidanceAffector : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_RADIUS;
 

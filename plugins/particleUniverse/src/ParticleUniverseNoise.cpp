@@ -79,7 +79,7 @@ namespace ParticleUniverse
 		double x = 0.0;
 		double y = 0.0;
 		double step = 1.0 / dimension;
-		size_t buffSize = 4 * dimension * dimension; // Assume Image of pixelformat 32 bits (i.e. PF_R8G8B8A8)
+		size_t buffSize = 4U * dimension * dimension; // Assume Image of pixelformat 32 bits (i.e. PF_R8G8B8A8)
 		uchar* buff = new uchar[buffSize];
 		size_t p2 = 0;
 		while (p2 < buffSize)

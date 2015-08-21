@@ -34,6 +34,8 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport BaseForceAffector : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			enum ForceApplication
 			{
 				FA_AVERAGE,

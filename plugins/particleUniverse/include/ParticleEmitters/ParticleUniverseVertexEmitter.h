@@ -120,13 +120,15 @@ namespace ParticleUniverse
 				Real lengthIncrement = 0.0f);
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const unsigned short DEFAULT_STEP;
 			static const unsigned short DEFAULT_SEGMENTS;
 			static const unsigned short DEFAULT_ITERATIONS;
 
 			VertexEmitter(void);
-	        virtual ~VertexEmitter(void) {};
+	        virtual ~VertexEmitter(void) {}
 
 			/** 
 	        */

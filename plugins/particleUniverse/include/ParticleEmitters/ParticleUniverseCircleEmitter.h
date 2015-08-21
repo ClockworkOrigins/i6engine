@@ -47,6 +47,8 @@ namespace ParticleUniverse
 			Vector3 mNormal;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_RADIUS;
 			static const Real DEFAULT_STEP;
@@ -55,7 +57,7 @@ namespace ParticleUniverse
 			static const Vector3 DEFAULT_NORMAL;
 
 			CircleEmitter(void);
-	        virtual ~CircleEmitter(void) {};
+	        virtual ~CircleEmitter(void) {}
 
 			/** 
 	        */

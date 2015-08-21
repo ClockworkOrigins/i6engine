@@ -47,6 +47,8 @@ namespace ParticleUniverse
 			DynamicAttributeFactory mDynamicAttributeFactory;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_ACCELERATION;
 
@@ -55,7 +57,7 @@ namespace ParticleUniverse
 
 			/** 
 	        */
-			DynamicAttribute* getDynAcceleration(void) const {return mDynAcceleration;};
+			DynamicAttribute* getDynAcceleration(void) const {return mDynAcceleration;}
 			void setDynAcceleration(DynamicAttribute* dynAcceleration);
 
 			/** 

@@ -44,13 +44,15 @@ namespace ParticleUniverse
 			Real mZRange;
 
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_WIDTH;
 			static const Real DEFAULT_HEIGHT;
 			static const Real DEFAULT_DEPTH;
 
 			BoxEmitter(void);
-	        virtual ~BoxEmitter(void) {};
+	        virtual ~BoxEmitter(void) {}
 
 			/** 
 	        */

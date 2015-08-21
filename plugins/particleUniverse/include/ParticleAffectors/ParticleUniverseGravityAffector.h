@@ -36,11 +36,13 @@ namespace ParticleUniverse
 	class _ParticleUniverseExport GravityAffector : public ParticleAffector
 	{
 		public:
+			using Particle::copyAttributesTo;
+
 			// Constants
 			static const Real DEFAULT_GRAVITY;
 			
 			GravityAffector(void);
-	        virtual ~GravityAffector(void) {};
+	        virtual ~GravityAffector(void) {}
 
 			/** @copydoc ParticleAffector::copyAttributesTo */
 			virtual void copyAttributesTo (ParticleAffector* affector);
