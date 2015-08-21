@@ -71,7 +71,7 @@ namespace npc {
 
 		i6engine::api::objects::GOTemplate tmpl;
 		i6engine::api::attributeMap params;
-		Vec3 pos = psc->getPosition() + Vec3(0.0, 1.0, 0.0) + Vec3(0.0, utils::Random::GetSingleton().rand(101) / 100.0, 0.0) + math::rotateVector(Vec3(0.0, 0.0, -5.0), psc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (-45 + utils::Random::GetSingleton().rand(91)) * PI / 180.0));
+		Vec3 pos = psc->getPosition() + Vec3(0.0, 1.0, 0.0) + Vec3(0.0, utils::Random::GetSingleton().rand(101) / 100.0, 0.0) + math::rotateVector(Vec3(0.0, 0.0, -5.0), psc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (-45 + int(utils::Random::GetSingleton().rand(91))) * PI / 180.0));
 		pos.insertInMap("pos", params);
 		psc->getPosition().insertInMap("lookAt", params);
 

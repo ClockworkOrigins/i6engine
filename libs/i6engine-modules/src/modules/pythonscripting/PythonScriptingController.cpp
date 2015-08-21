@@ -33,11 +33,6 @@
 namespace i6engine {
 namespace modules {
 
-// Phyton API needs constant char *
-namespace PythonAPIWorkaround {
-	char path[] = "path";
-}
-
 	PythonScriptingController::PythonScriptingController() : core::ModuleController(core::Subsystem::Scripting), _mailbox(), _manager() {
 	}
 

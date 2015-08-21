@@ -119,7 +119,7 @@ namespace api {
 		i6engine::api::EngineController::GetSingleton().setCurrentTime(time);
 	}
 
-	int32_t getUUID() {
+	uint32_t getUUID() {
 		return i6engine::api::EngineController::GetSingleton().getUUID();
 	}
 
@@ -159,8 +159,8 @@ namespace api {
 		}
 
 		virtual void disconnectCallback(const i6engine::core::IPKey & key) {
-			if (boost::python::override disconnectCallback = this->get_override("disconnectCallback")) {
-				boost::python::call<void>(disconnectCallback.ptr(), key);
+			if (boost::python::override dc = this->get_override("disconnectCallback")) {
+				boost::python::call<void>(dc.ptr(), key);
 				return;
 			}
 			Application::disconnectCallback(key);
@@ -171,8 +171,8 @@ namespace api {
 		}
 
 		virtual void connectionFailed(const i6engine::core::IPKey & s) {
-			if (boost::python::override connectionFailed = this->get_override("connectionFailed")) {
-				boost::python::call<void>(connectionFailed.ptr(), s);
+			if (boost::python::override cf = this->get_override("connectionFailed")) {
+				boost::python::call<void>(cf.ptr(), s);
 				return;
 			}
 			Application::connectionFailed(s);
@@ -183,8 +183,8 @@ namespace api {
 		}
 
 		virtual void bindFailure() {
-			if (boost::python::override bindFailure = this->get_override("bindFailure")) {
-				boost::python::call<void>(bindFailure.ptr());
+			if (boost::python::override bf = this->get_override("bindFailure")) {
+				boost::python::call<void>(bf.ptr());
 				return;
 			}
 			Application::bindFailure();
@@ -195,8 +195,8 @@ namespace api {
 		}
 
 		virtual void connected(const i6engine::core::IPKey & key) {
-			if (boost::python::override connected = this->get_override("connected")) {
-				boost::python::call<void>(connected.ptr(), key);
+			if (boost::python::override c = this->get_override("connected")) {
+				boost::python::call<void>(c.ptr(), key);
 				return;
 			}
 			Application::connected(key);

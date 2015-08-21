@@ -138,8 +138,8 @@ namespace object {
 		}
 
 		virtual void Tick() override {
-			if (boost::python::override Tick = this->get_override("Tick")) {
-				boost::python::call<void>(Tick.ptr());
+			if (boost::python::override t = this->get_override("Tick")) {
+				boost::python::call<void>(t.ptr());
 				return;
 			}
 			Component::Tick();
@@ -150,8 +150,8 @@ namespace object {
 		}
 
 		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
-			if (boost::python::override News = this->get_override("News")) {
-				boost::python::call<void>(News.ptr(), msg);
+			if (boost::python::override n = this->get_override("News")) {
+				boost::python::call<void>(n.ptr(), msg);
 				return;
 			}
 			Component::News(msg);
@@ -166,8 +166,8 @@ namespace object {
 		}
 
 		virtual void Finalize() override {
-			if (boost::python::override Finalize = this->get_override("Finalize")) {
-				boost::python::call<void>(Finalize.ptr());
+			if (boost::python::override f = this->get_override("Finalize")) {
+				boost::python::call<void>(f.ptr());
 				return;
 			}
 			Component::Finalize();
@@ -182,8 +182,8 @@ namespace object {
 		}
 
 		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
-			if (boost::python::override howToAdd = this->get_override("howToAdd")) {
-				return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(howToAdd.ptr(), comp);
+			if (boost::python::override hta = this->get_override("howToAdd")) {
+				return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(hta.ptr(), comp);
 			}
 			return Component::howToAdd(comp);
 		}
@@ -438,8 +438,8 @@ namespace object {
 		}
 
 		virtual void Tick() override {
-			if (boost::python::override Tick = this->get_override("Tick")) {
-				boost::python::call<void>(Tick.ptr());
+			if (boost::python::override t = this->get_override("Tick")) {
+				boost::python::call<void>(t.ptr());
 				return;
 			}
 			Component::Tick();
@@ -450,8 +450,8 @@ namespace object {
 		}
 
 		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
-			if (boost::python::override News = this->get_override("News")) {
-				boost::python::call<void>(News.ptr(), msg);
+			if (boost::python::override n = this->get_override("News")) {
+				boost::python::call<void>(n.ptr(), msg);
 				return;
 			}
 			CameraComponent::News(msg);
@@ -468,8 +468,8 @@ namespace object {
 
 		virtual void Finalize() override {
 			CameraComponent::Finalize();
-			if (boost::python::override Finalize = this->get_override("Finalize")) {
-				boost::python::call<void>(Finalize.ptr());
+			if (boost::python::override f = this->get_override("Finalize")) {
+				boost::python::call<void>(f.ptr());
 				return;
 			}
 		}
@@ -519,8 +519,8 @@ namespace object {
 
 		virtual void Tick() override {
 			MovementComponent::Tick();
-			if (boost::python::override Tick = this->get_override("Tick")) {
-				boost::python::call<void>(Tick.ptr());
+			if (boost::python::override t = this->get_override("Tick")) {
+				boost::python::call<void>(t.ptr());
 				return;
 			}
 		}
@@ -530,8 +530,8 @@ namespace object {
 		}
 
 		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
-			if (boost::python::override News = this->get_override("News")) {
-				return boost::python::call<void>(News.ptr(), msg);
+			if (boost::python::override n = this->get_override("News")) {
+				return boost::python::call<void>(n.ptr(), msg);
 			}
 			Component::News(msg);
 		}
@@ -542,8 +542,8 @@ namespace object {
 
 		virtual void Init() override {
 			MovementComponent::Init();
-			if (boost::python::override Init = this->get_override("Init")) {
-				boost::python::call<void>(Init.ptr());
+			if (boost::python::override i = this->get_override("Init")) {
+				boost::python::call<void>(i.ptr());
 				return;
 			}
 		}
@@ -554,8 +554,8 @@ namespace object {
 
 		virtual void Finalize() override {
 			MovementComponent::Finalize();
-			if (boost::python::override Finalize = this->get_override("Finalize")) {
-				boost::python::call<void>(Finalize.ptr());
+			if (boost::python::override f = this->get_override("Finalize")) {
+				boost::python::call<void>(f.ptr());
 				return;
 			}
 		}
@@ -609,8 +609,8 @@ namespace object {
 		}
 
 		virtual void Tick() override {
-			if (boost::python::override Tick = this->get_override("Tick")) {
-				boost::python::call<void>(Tick.ptr());
+			if (boost::python::override t = this->get_override("Tick")) {
+				boost::python::call<void>(t.ptr());
 				return;
 			}
 			MoverComponent::Tick();
@@ -625,8 +625,8 @@ namespace object {
 		}
 
 		virtual void Init() override {
-			if (boost::python::override Init = this->get_override("Init")) {
-				boost::python::call<void>(Init.ptr());
+			if (boost::python::override i = this->get_override("Init")) {
+				boost::python::call<void>(i.ptr());
 				return;
 			}
 			MoverComponent::Init();
@@ -637,8 +637,8 @@ namespace object {
 		}
 
 		virtual void Finalize() override {
-			if (boost::python::override Finalize = this->get_override("Finalize")) {
-				boost::python::call<void>(Finalize.ptr());
+			if (boost::python::override f = this->get_override("Finalize")) {
+				boost::python::call<void>(f.ptr());
 				return;
 			}
 			MoverComponent::Finalize();
@@ -656,8 +656,8 @@ namespace object {
 		}
 
 		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
-			if (boost::python::override howToAdd = this->get_override("howToAdd")) {
-				return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(howToAdd.ptr(), comp);
+			if (boost::python::override hta = this->get_override("howToAdd")) {
+				return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(hta.ptr(), comp);
 			}
 			return MoverComponent::howToAdd(comp);
 		}
@@ -695,8 +695,8 @@ namespace object {
 		}
 
 		virtual void Tick() override {
-			if (boost::python::override Tick = this->get_override("Tick")) {
-				boost::python::call<void>(Tick.ptr());
+			if (boost::python::override t = this->get_override("Tick")) {
+				boost::python::call<void>(t.ptr());
 				return;
 			}
 			Component::Tick();
@@ -707,8 +707,8 @@ namespace object {
 		}
 
 		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
-			if (boost::python::override News = this->get_override("News")) {
-				return boost::python::call<void>(News.ptr(), msg);
+			if (boost::python::override n = this->get_override("News")) {
+				return boost::python::call<void>(n.ptr(), msg);
 			}
 			Component::News(msg);
 		}
@@ -722,8 +722,8 @@ namespace object {
 		}
 
 		virtual void Finalize() override {
-			if (boost::python::override Finalize = this->get_override("Finalize")) {
-				boost::python::call<void>(Finalize.ptr());
+			if (boost::python::override f = this->get_override("Finalize")) {
+				boost::python::call<void>(f.ptr());
 				return;
 			}
 			Component::Finalize();
@@ -770,8 +770,8 @@ namespace object {
 		}
 
 		virtual void Tick() override {
-			if (boost::python::override Tick = this->get_override("Tick")) {
-				boost::python::call<void>(Tick.ptr());
+			if (boost::python::override t = this->get_override("Tick")) {
+				boost::python::call<void>(t.ptr());
 				return;
 			}
 			Component::Tick();
@@ -782,8 +782,8 @@ namespace object {
 		}
 
 		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
-			if (boost::python::override News = this->get_override("News")) {
-				boost::python::call<void>(News.ptr(), msg);
+			if (boost::python::override n = this->get_override("News")) {
+				boost::python::call<void>(n.ptr(), msg);
 				return;
 			}
 			ShatterComponent::News(msg);
@@ -794,8 +794,8 @@ namespace object {
 		}
 
 		virtual void Init() override {
-			if (boost::python::override Init = this->get_override("Init")) {
-				boost::python::call<void>(Init.ptr());
+			if (boost::python::override i = this->get_override("Init")) {
+				boost::python::call<void>(i.ptr());
 				return;
 			}
 			Component::Init();
@@ -806,8 +806,8 @@ namespace object {
 		}
 
 		virtual void Finalize() override {
-			if (boost::python::override Finalize = this->get_override("Finalize")) {
-				boost::python::call<void>(Finalize.ptr());
+			if (boost::python::override f = this->get_override("Finalize")) {
+				boost::python::call<void>(f.ptr());
 				return;
 			}
 			Component::Finalize();

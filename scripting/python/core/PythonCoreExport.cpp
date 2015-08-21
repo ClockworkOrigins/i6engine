@@ -47,8 +47,8 @@ namespace core {
 		}
 
 		virtual MessageStruct * copy() {
-			if (boost::python::override copy = this->get_override("copy")) {
-				return boost::python::call<MessageStruct *>(copy.ptr());
+			if (boost::python::override c = this->get_override("copy")) {
+				return boost::python::call<MessageStruct *>(c.ptr());
 			}
 			return MessageStruct::copy();
 		}
@@ -66,8 +66,8 @@ namespace core {
 		}
 
 		virtual void processMessages() {
-			if (boost::python::override processMessages = this->get_override("processMessages")) {
-				boost::python::call<void>(processMessages.ptr());
+			if (boost::python::override pm = this->get_override("processMessages")) {
+				boost::python::call<void>(pm.ptr());
 				return;
 			}
 			MessageSubscriber::processMessages();

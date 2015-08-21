@@ -25,14 +25,6 @@ namespace i6engine {
 namespace python {
 namespace input {
 
-	void setMouseButtonMapping(const i6engine::api::MouseButtonID id, const std::string & strAction) {
-		i6engine::api::EngineController::GetSingleton().getInputFacade()->setMouseButtonMapping(id, strAction);
-	}
-
-	std::string getMouseButtonMapping(const i6engine::api::MouseButtonID id) {
-		return i6engine::api::EngineController::GetSingleton().getInputFacade()->getMouseButtonMapping(id);
-	}
-
 	void setKeyMapping(const i6engine::api::KeyCode id, const std::string & strAction) {
 		i6engine::api::EngineController::GetSingleton().getInputFacade()->setKeyMapping(id, strAction);
 	}
@@ -218,21 +210,16 @@ BOOST_PYTHON_MODULE(ScriptingInputPython) {
 		.value("KC_MYCOMPUTER", i6engine::api::KeyCode::KC_MYCOMPUTER)
 		.value("KC_MAIL", i6engine::api::KeyCode::KC_MAIL)
 		.value("KC_MEDIASELECT", i6engine::api::KeyCode::KC_MEDIASELECT)
+		.value("KC_MBLeft", i6engine::api::KeyCode::KC_MBLeft)
+		.value("KC_MBRight", i6engine::api::KeyCode::KC_MBRight)
+		.value("KC_MBMiddle", i6engine::api::KeyCode::KC_MBMiddle)
+		.value("KC_MBButton3", i6engine::api::KeyCode::KC_MBButton3)
+		.value("KC_MBButton4", i6engine::api::KeyCode::KC_MBButton4)
+		.value("KC_MBButton5", i6engine::api::KeyCode::KC_MBButton5)
+		.value("KC_MBButton6", i6engine::api::KeyCode::KC_MBButton6)
+		.value("KC_MBButton7", i6engine::api::KeyCode::KC_MBButton7)
 		.export_values();
 
-	enum_<i6engine::api::MouseButtonID>("MouseButtonID")
-		.value("MB_Left", i6engine::api::MouseButtonID::MB_Left)
-		.value("MB_Right", i6engine::api::MouseButtonID::MB_Right)
-		.value("MB_Middle", i6engine::api::MouseButtonID::MB_Middle)
-		.value("MB_Button3", i6engine::api::MouseButtonID::MB_Button3)
-		.value("MB_Button4", i6engine::api::MouseButtonID::MB_Button4)
-		.value("MB_Button5", i6engine::api::MouseButtonID::MB_Button5)
-		.value("MB_Button6", i6engine::api::MouseButtonID::MB_Button6)
-		.value("MB_Button7", i6engine::api::MouseButtonID::MB_Button7)
-		.export_values();
-
-	def("setMouseButtonMapping", &i6engine::python::input::setMouseButtonMapping);
-	def("getMouseButtonMapping", &i6engine::python::input::getMouseButtonMapping);
 	def("setKeyMapping", &i6engine::python::input::setKeyMapping);
 	def("removeKeyMapping", &i6engine::python::input::removeKeyMapping);
 	def("getKeyMapping", &i6engine::python::input::getKeyMapping);
