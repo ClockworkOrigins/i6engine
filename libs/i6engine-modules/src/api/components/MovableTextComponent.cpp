@@ -36,20 +36,16 @@ namespace api {
 		Component::_objFamilyID = components::MovableTextComponent;
 		Component::_objComponentID = components::MovableTextComponent;
 
-		_font = params.find("font")->second;
-		_text = params.find("text")->second;
-		_size = std::stoi(params.find("size")->second);
-		_colour = Vec3(params.find("colour")->second);
+		parseAttribute<true>(params, "font", _font);
+		parseAttribute<true>(params, "text", _text);
+		parseAttribute<true>(params, "size", _size);
+		parseAttribute<true>(params, "colour", _colour);
 	}
 
 	MovableTextComponent::~MovableTextComponent() {
 	}
 
 	ComPtr MovableTextComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("MovableTextComponent", "font not set!", params.find("font") != params.end());
-		ISIXE_THROW_API_COND("MovableTextComponent", "text not set!", params.find("text") != params.end());
-		ISIXE_THROW_API_COND("MovableTextComponent", "size not set!", params.find("size") != params.end());
-		ISIXE_THROW_API_COND("MovableTextComponent", "colour not set!", params.find("colour") != params.end());
 		return utils::make_shared<MovableTextComponent, Component>(id, params);
 	}
 

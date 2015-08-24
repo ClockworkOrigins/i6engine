@@ -32,14 +32,15 @@ namespace api {
 		Component::_objFamilyID = components::ParticleEmitterComponent;
 		Component::_objComponentID = components::ParticleEmitterComponent;
 
+		parseAttribute<true>(params, "particleEmitter", _emitterName);
+		parseAttribute<false>(params, "pos", _pos);
+		parseAttribute<false>(params, "fadeOut", _fadeOut);
+
 		if (params.find("pos") != params.end()) {
 			_pos = Vec3(params, "pos");
 		}
-		if (params.find("fadeOut") != params.end()) {
-			_fadeOut = params.find("fadeOut")->second == "1";
-
-			ISIXE_THROW_API_COND("ParticleEmitterComponent", "fadeOut set without fadeOutCooldown", params.find("fadeOutCooldown") != params.end());
-			_fadeOutCooldown = std::stoul(params.find("fadeOutCooldown")->second);
+		if (_fadeOut) {
+			parseAttribute<true>(params, "fadeOutCooldown", _fadeOutCooldown);
 		}
 	}
 
@@ -47,7 +48,6 @@ namespace api {
 	}
 
 	ComPtr ParticleEmitterComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("ParticleEmitterComponent", "particleEmitter not set!", params.find("particleEmitter") != params.end());
 		return utils::make_shared<ParticleEmitterComponent, Component>(id, params);
 	}
 

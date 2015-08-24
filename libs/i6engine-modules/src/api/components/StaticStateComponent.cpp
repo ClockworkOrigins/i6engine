@@ -30,18 +30,19 @@
 namespace i6engine {
 namespace api {
 
-	StaticStateComponent::StaticStateComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(Vec3(params, "pos")), _rotation(Quaternion(params, "rot")), _scale(Vec3(params, "scale")) {
+	StaticStateComponent::StaticStateComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _rotation(), _scale() {
 		Component::_objFamilyID = components::StaticStateComponent;
 		Component::_objComponentID = components::StaticStateComponent;
+
+		parseAttribute<true>(params, "pos", _position);
+		parseAttribute<true>(params, "rot", _rotation);
+		parseAttribute<true>(params, "scale", _scale);
 	}
 
 	StaticStateComponent::~StaticStateComponent() {
 	}
 
 	ComPtr StaticStateComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("StaticStateComponent", "position not set!", params.find("pos") != params.end());
-		ISIXE_THROW_API_COND("StaticStateComponent", "rotation not set!", params.find("rot") != params.end());
-		ISIXE_THROW_API_COND("StaticStateComponent", "scale not set!", params.find("scale") != params.end());
 		return utils::make_shared<StaticStateComponent, Component>(id, params);
 	}
 

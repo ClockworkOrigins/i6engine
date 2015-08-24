@@ -30,11 +30,10 @@ namespace api {
 		_objFamilyID = components::LifetimeComponent;;
 		_objComponentID = components::LifetimeComponent;
 
-		_lifetime = std::stoull(params.find("lifetime")->second);
+		parseAttribute<true>(params, "lifetime", _lifetime);
 	}
 
 	ComPtr LifetimeComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("LifetimeComponent", "lifetime not set!", params.find("lifetime") != params.end());
 		return utils::make_shared<LifetimeComponent, Component>(id, params);
 	}
 

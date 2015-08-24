@@ -15,8 +15,9 @@ namespace api {
 		Component::_objFamilyID = components::ComponentTypes::FollowComponent;
 		Component::_objComponentID = components::ComponentTypes::FollowComponent;
 
-		int64_t targetID = std::stoll(params.find("targetID")->second);
-		_speed = std::stod(params.find("speed")->second);
+		int64_t targetID;
+		parseAttribute<true>(params, "targetID", targetID);
+		parseAttribute<true>(params, "speed", _speed);
 
 		auto go = EngineController::GetSingleton().getObjectFacade()->getObject(targetID);
 		if (go != nullptr) {

@@ -38,24 +38,17 @@ namespace api {
 		_objFamilyID = components::Point2PointConstraintComponent;
 		_objComponentID = components::Point2PointConstraintComponent;
 
-		_selfIdentifier = params.find("selfIdentifier")->second;
-		_targetIdentifier = params.find("targetIdentifier")->second;
-		_selfOffset = Vec3(params.find("selfOffset")->second);
-		_targetOffset = Vec3(params.find("targetOffset")->second);
-
-		if (params.find("breakingImpulse") != params.end()) {
-			_breakingImpulse = std::stod(params.find("breakingImpulse")->second);
-		}
+		parseAttribute<true>(params, "selfIdentifier", _selfIdentifier);
+		parseAttribute<true>(params, "targetIdentifier", _targetIdentifier);
+		parseAttribute<true>(params, "selfOffset", _selfOffset);
+		parseAttribute<true>(params, "targetOffset", _targetOffset);
+		parseAttribute<false>(params, "breakingImpulse", _breakingImpulse);
 	}
 
 	Point2PointConstraintComponent::~Point2PointConstraintComponent() {
 	}
 
 	ComPtr Point2PointConstraintComponent::createC(const int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("Point2PointConstraintComponent", "'selfIdentifier' not set!", params.find("selfIdentifier") != params.end());
-		ISIXE_THROW_API_COND("Point2PointConstraintComponent", "'targetIdentifier' not set!", params.find("targetIdentifier") != params.end());
-		ISIXE_THROW_API_COND("Point2PointConstraintComponent", "'selfOffset' not set!", params.find("selfOffset") != params.end());
-		ISIXE_THROW_API_COND("Point2PointConstraintComponent", "'targetOffset' not set!", params.find("targetOffset") != params.end());
 		return utils::make_shared<Point2PointConstraintComponent, Component>(id, params);
 	}
 

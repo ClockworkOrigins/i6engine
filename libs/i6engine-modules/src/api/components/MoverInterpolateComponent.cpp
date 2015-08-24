@@ -262,33 +262,24 @@ namespace api {
 	}
 
 	void MoverInterpolateComponent::loadParams(const attributeMap & params) {
-		if (params.find("mode") == params.end()) {
-			ISIXE_THROW_API("MoverComponent", "required parameter 'mode' not set");
-		}
-		_mode = static_cast<Mode>(boost::lexical_cast<uint16_t>(params.at("mode")));
+		parseAttribute<true>(params, "mode", _mode);
+		parseAttribute<true>(params, "way", _way);
+		parseAttribute<true>(params, "direction", _direction);
 
-		if (params.find("way") == params.end()) {
-			ISIXE_THROW_API("MoverComponent", "required parameter 'way' not set");
-		}
-		_way = static_cast<Way>(boost::lexical_cast<uint16_t>(params.at("way")));
-
-		if (params.find("direction") == params.end()) {
-			ISIXE_THROW_API("MoverComponent", "required parameter 'direction' not set");
-		}
-		_direction = boost::lexical_cast<bool>(params.find("direction")->second);
 		if (_mode == Mode::TWOSTATE_OPENTIME) {
-			if (params.find("openTime") == params.end()) {
-				ISIXE_THROW_API("MoverComponent", "required parameter 'openTime' not set");
-			}
-			_openTime = boost::lexical_cast<uint64_t>(params.find("openTime")->second);
+			parseAttribute<true>(params, "openTime", _openTime);
 		}
 
-		ISIXE_THROW_API_COND("MoverComponent", "required parameter 'keyframes' not set", params.find("keyframes") != params.end());
-		uint32_t frames = boost::lexical_cast<uint32_t>(params.find("keyframes")->second);
+		uint32_t frames;
+		parseAttribute<true>(params, "keyframes", frames);
 		for (uint32_t i = 0; i < frames; ++i) {
 			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos") != params.end());
-			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot") != params.end());
-			addKeyFrame(Vec3(params, std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos"), Quaternion(params, std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot"));
+			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) +"_rot" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) +"_rot") != params.end());
+			Vec3 pos;
+			Quaternion rot;
+			parseAttribute<true>(params, std::string("keyframe_") + std::to_string(i) + "_pos", pos);
+			parseAttribute<true>(params, std::string("keyframe_") + std::to_string(i) + "_rot", rot);
+			addKeyFrame(pos, rot);
 		}
 		if (_direction) {
 			_lastPos = _keyFrames[0].first;

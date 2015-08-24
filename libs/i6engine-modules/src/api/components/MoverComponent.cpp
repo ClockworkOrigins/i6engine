@@ -106,32 +106,23 @@ namespace api {
 	}
 
 	void MoverComponent::loadParams(const attributeMap & params) {
-		if (params.find("duration") == params.end()) {
-			ISIXE_THROW_API("MoverComponent", "required parameter 'duration' not set");
-		}
-		_duration = boost::lexical_cast<uint64_t>(params.at("duration"));
-
-		if (params.find("positioning") == params.end()) {
-			ISIXE_THROW_API("MoverComponent", "required parameter 'positioning' not set");
-		}
-		_positioning = Positioning(boost::lexical_cast<uint16_t>(params.at("positioning")));
+		parseAttribute<true>(params, "duration", _duration);
+		parseAttribute<true>(params, "positioning", _positioning);
 
 		// movement continues (after sync)
 		if (params.find("continue") != params.end() && params.at("continue") == "true") {
 			_initial = false;
-			if (params.find("startTime") == params.end()) {
-				ISIXE_THROW_API("MoverComponent", "optional required parameter 'startTime' not set, but 'continue' set to true");
-			}
-			_startTime = boost::lexical_cast<uint64_t>(params.at("startTime"));
+			parseAttribute<true>(params, "startTime", _startTime);
 		}
 
-		// override lastpos if set
-		if (params.find("lastPos") != params.end()) {
-			_lastPos = Vec3(params, "lastPos");
-		}
+		parseAttribute<false>(params, "lastPos", _lastPos);
+
 		if (_positioning == Positioning::POSITIONING_ABSOLUTE) {
 			_realStartPos = _lastPos;
 		}
+
+		parseAttribute<true>(params, "started", _started);
+		parseAttribute<false>(params, "linkable", _linkable);
 
 		if (params.find("started") == params.end()) {
 			ISIXE_THROW_API("MoverComponent", "required paramter 'started' to set");

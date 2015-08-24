@@ -170,22 +170,23 @@ TEST(Scheduler, removeTimerPriority) {
 
 	jobs.clear();
 
-	sched.runRepeated(50050, boost::bind(func2, 0), i6engine::core::JobPriorities::Prio_Low);
+	sched.runRepeated(50001, boost::bind(func2, 0), i6engine::core::JobPriorities::Prio_Low);
 	sched.runRepeated(100000, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
 	sched.runRepeated(150000, boost::bind(func2, 2), i6engine::core::JobPriorities::Prio_Medium);
-	sched.runRepeated(75050, boost::bind(func2, 3), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(75050, boost::bind(func2, 4), i6engine::core::JobPriorities::Prio_Medium);
+	sched.runRepeated(75001, boost::bind(func2, 3), i6engine::core::JobPriorities::Prio_Low);
 
 	for (int i = 0; i < 40; ++i) {
 		boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 		cl.passedTime(5000);
 		cl.Update();
 		if (i == 20) {
+			boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 			sched.removeTimer(i6engine::core::JobPriorities::Prio_Low);
 		}
 	}
 
-    std::vector<int> ref({ 0, 4, 3, 1, 2, 4 });
+	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+    std::vector<int> ref({ 0, 3, 1, 2 });
 	EXPECT_EQ(ref, jobs);
 }
 

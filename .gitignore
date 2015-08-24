@@ -1,9 +1,12 @@
 dependencies/boost
 dependencies/bullet
 dependencies/cegui
+dependencies/ceguideps
 dependencies/clockUtils
 dependencies/gmock
 dependencies/gperftools
+dependencies/m2etis
+dependencies/misc
 dependencies/OpenAL
 dependencies/ogre
 dependencies/ois

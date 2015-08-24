@@ -35,21 +35,22 @@
 namespace i6engine {
 namespace api {
 
-	SoundComponent::SoundComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _offset(Vec3(params, "offset")), _direction(Vec3(params, "direction")), _file(params.find("file")->second), _looping(boost::lexical_cast<bool>(params.find("looping")->second)), _maxDist(boost::lexical_cast<double>(params.find("maxDist")->second)), _psc(), _cacheable(boost::lexical_cast<bool>(params.find("cache")->second)) {
+	SoundComponent::SoundComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _offset(), _direction(), _file(), _looping(), _maxDist(), _psc(), _cacheable() {
 		Component::_objFamilyID = components::SoundComponent;
 		Component::_objComponentID = components::SoundComponent;
+
+		parseAttribute<true>(params, "offset", _offset);
+		parseAttribute<true>(params, "direction", _direction);
+		parseAttribute<true>(params, "file", _file);
+		parseAttribute<true>(params, "looping", _looping);
+		parseAttribute<true>(params, "maxDist", _maxDist);
+		parseAttribute<true>(params, "cache", _cacheable);
 	}
 
 	SoundComponent::~SoundComponent() {
 	}
 
 	ComPtr SoundComponent::createC(int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("SoundComponent", "offset not set!", params.find("offset") != params.end());
-		ISIXE_THROW_API_COND("SoundComponent", "direction not set!", params.find("direction") != params.end());
-		ISIXE_THROW_API_COND("SoundComponent", "file not set!", params.find("file") != params.end());
-		ISIXE_THROW_API_COND("SoundComponent", "looping not set!", params.find("looping") != params.end());
-		ISIXE_THROW_API_COND("SoundComponent", "maxDist not set!", params.find("maxDist") != params.end());
-		ISIXE_THROW_API_COND("SoundComponent", "cache not set!", params.find("cache") != params.end());
 		return utils::make_shared<SoundComponent, Component>(id, params);
 	}
 

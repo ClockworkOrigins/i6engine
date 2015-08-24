@@ -41,31 +41,25 @@
 namespace i6engine {
 namespace api {
 
-	PhysicalStateComponent::PhysicalStateComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(Vec3(params, "pos")), _positionNew(), _posDirty(0), _rotDirty(0), _speedDirty(0), _rotation(Quaternion(params, "rot")), _scale(Vec3(params, "scale")), _scaleNew(), _scaleDirty(0), _linearVelocity(0.0, 0.0, 0.0), _forces(), _gravity(), _collisionGroup(params.find("collisionGroup")->second), _shapeType(ShapeType(boost::lexical_cast<uint16_t>(params.find("shapeType")->second))), _shapeParams(params), _initialized(false), _shatterInterest(ShatterInterest(boost::lexical_cast<uint16_t>(params.find("shatterInterest")->second))), _lock(), _syncPrio(0) {
+	PhysicalStateComponent::PhysicalStateComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _positionNew(), _posDirty(0), _rotDirty(0), _speedDirty(0), _rotation(), _scale(), _scaleNew(), _scaleDirty(0), _linearVelocity(0.0, 0.0, 0.0), _forces(), _gravity(), _collisionGroup(params.find("collisionGroup")->second), _shapeType(), _shapeParams(params), _initialized(false), _shatterInterest(), _lock(), _syncPrio(0) {
 		_objFamilyID = components::PhysicalStateComponent;
 		_objComponentID = components::PhysicalStateComponent;
 
 		_shapeParams.erase("identifier");
 
-		if (params.find("syncPrio") != params.end()) {
-			_syncPrio = boost::lexical_cast<uint32_t>(params.find("syncPrio")->second);
-		}
-		if (params.find("gravity") != params.end()) {
-			_gravity = Vec3(params, "gravity");
-		}
+		parseAttribute<true>(params, "pos", _position);
+		parseAttribute<true>(params, "rot", _rotation);
+		parseAttribute<true>(params, "scale", _scale);
+		parseAttribute<true>(params, "shapeType", _shapeType);
+		parseAttribute<true>(params, "shatterInterest", _shatterInterest);
+		parseAttribute<false>(params, "syncPrio", _syncPrio);
+		parseAttribute<false>(params, "gravity", _gravity);
 	}
 
 	PhysicalStateComponent::~PhysicalStateComponent() {
 	}
 
 	ComPtr PhysicalStateComponent::createC(const int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'shapeType' not found!", params.find("shapeType") != params.end());
-		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'shatterInterest' not found!", params.find("shatterInterest") != params.end());
-		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'collisionGroup' not found!", params.find("collisionGroup") != params.end());
-		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'compound' not found!", params.find("compound") != params.end());
-		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'pos' not found!", params.find("pos") != params.end());
-		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'rot' not found!", params.find("rot") != params.end());
-		ISIXE_THROW_API_COND("PhysicalStateComponent", "parameter 'scale' not found!", params.find("scale") != params.end());
 		return utils::make_shared<PhysicalStateComponent, Component>(id, params);
 	}
 

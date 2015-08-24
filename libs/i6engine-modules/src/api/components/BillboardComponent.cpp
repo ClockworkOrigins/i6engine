@@ -36,20 +36,16 @@ namespace api {
 		_objFamilyID = components::BillboardComponent;
 		_objComponentID = components::BillboardComponent;
 
-		_material = params.find("material")->second;
-		_width = std::stod(params.find("width")->second);
-		_height = std::stod(params.find("height")->second);
-		_billboardOrigin = graphics::BillboardOrigin(std::stoul(params.find("origin")->second));
+		parseAttribute<true>(params, "material", _material);
+		parseAttribute<true>(params, "width", _width);
+		parseAttribute<true>(params, "height", _height);
+		parseAttribute<true>(params, "origin", _billboardOrigin);
 	}
 
 	BillboardComponent::~BillboardComponent() {
 	}
 
 	ComPtr BillboardComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("BillboardComponent", "origin not set!", params.find("origin") != params.end());
-		ISIXE_THROW_API_COND("BillboardComponent", "material not set!", params.find("material") != params.end());
-		ISIXE_THROW_API_COND("BillboardComponent", "width not set!", params.find("width") != params.end());
-		ISIXE_THROW_API_COND("BillboardComponent", "height not set!", params.find("height") != params.end());
 		return utils::make_shared<BillboardComponent, Component>(id, params);
 	}
 

@@ -33,7 +33,9 @@ namespace api {
 		Component::_objFamilyID = components::SpawnpointComponent;
 		Component::_objComponentID = components::SpawnpointComponent;
 
-		addSpawntypes(params.find("spawntypes")->second);
+		std::string spawnTypes;
+		parseAttribute<true>(params, "spawntypes", spawnTypes);
+		addSpawntypes(spawnTypes);
 	}
 
 	SpawnpointComponent::~SpawnpointComponent() {
@@ -41,7 +43,6 @@ namespace api {
 	}
 
 	ComPtr SpawnpointComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("SpawnpointComponent", "spawntypes not set!", params.find("spawntypes") != params.end());
 		return utils::make_shared<SpawnpointComponent, Component>(id, params);
 	}
 

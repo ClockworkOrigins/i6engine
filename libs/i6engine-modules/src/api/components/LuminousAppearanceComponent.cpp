@@ -30,21 +30,24 @@
 namespace i6engine {
 namespace api {
 
-	LuminousAppearanceComponent::LuminousAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _lightType(LightType(std::stoul(params.find("lightType")->second))), _diffuseColor(Vec3(params, "diffuseColor")), _specularColor(Vec3(params, "specularColor")), _attenuation(Vec4(params, "attenuation")), _direction(), _position(), _spotlightRangeInner(0.0), _spotlightRangeOuter(0.0) {
+	LuminousAppearanceComponent::LuminousAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _lightType(), _diffuseColor(), _specularColor(), _attenuation(), _direction(), _position(), _spotlightRangeInner(0.0), _spotlightRangeOuter(0.0) {
 		Component::_objFamilyID = components::LuminousAppearanceComponent;
 		Component::_objComponentID = components::LuminousAppearanceComponent;
 
+		parseAttribute<true>(params, "lightType", _lightType);
+		parseAttribute<true>(params, "diffuseColor", _diffuseColor);
+		parseAttribute<true>(params, "specularColor", _specularColor);
+		parseAttribute<true>(params, "attenuation", _attenuation);
+
 		if (_lightType != LightType::POINT) {
-			_direction = Vec3(params, "direction");
+			parseAttribute<true>(params, "direction", _direction);
 		}
 		if (_lightType == LightType::SPOT) {
-			_spotlightRangeInner = std::stod(params.find("spotLightRangeInner")->second);
-			_spotlightRangeOuter = std::stod(params.find("spotLightRangeOuter")->second);
+			parseAttribute<true>(params, "spotLightRangeInner", _spotlightRangeInner);
+			parseAttribute<true>(params, "spotLightRangeOuter", _spotlightRangeOuter);
 		}
 
-		if (params.find("pos") != params.end()) {
-			_position = Vec3(params, "pos");
-		}
+		parseAttribute<false>(params, "pos", _position);
 	}
 
 	LuminousAppearanceComponent::~LuminousAppearanceComponent() {
@@ -54,18 +57,6 @@ namespace api {
 	}
 
 	ComPtr LuminousAppearanceComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("LuminousAppearanceComponent", "diffuseColor not set!", params.find("diffuseColor") != params.end());
-		ISIXE_THROW_API_COND("LuminousAppearanceComponent", "attenuation not set!", params.find("attenuation") != params.end());
-		ISIXE_THROW_API_COND("LuminousAppearanceComponent", "specularColor not set!", params.find("specularColor") != params.end());
-		ISIXE_THROW_API_COND("LuminousAppearanceComponent", "lightType not set!", params.find("lightType") != params.end());
-
-		if (params.find("lightType")->second != "0") {
-			ISIXE_THROW_API_COND("LuminousAppearanceComponent", "direction not set!", params.find("direction") != params.end());
-		}
-		if (params.find("lightType")->second == "2") {
-			ISIXE_THROW_API_COND("LuminousAppearanceComponent", "spotLightRangeInner not set!", params.find("spotLightRangeInner") != params.end());
-			ISIXE_THROW_API_COND("LuminousAppearanceComponent", "spotLightRangeOuter not set!", params.find("spotLightRangeOuter") != params.end());
-		}
 		return utils::make_shared<LuminousAppearanceComponent, Component>(id, params);
 	}
 

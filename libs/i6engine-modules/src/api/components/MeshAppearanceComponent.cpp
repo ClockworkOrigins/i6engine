@@ -34,13 +34,16 @@
 namespace i6engine {
 namespace api {
 
-	MeshAppearanceComponent::MeshAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _meshName(params.find("mesh")->second), _isVisible(boost::lexical_cast<bool>(params.find("visibility")->second)), _position(Vec3(params, "pos")), _rotation(Quaternion(params, "rot")), _scale(Vec3(params, "scale")), _material() {
+	MeshAppearanceComponent::MeshAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _meshName(), _isVisible(), _position(), _rotation(), _scale(), _material() {
 		Component::_objFamilyID = components::MeshAppearanceComponent;
 		Component::_objComponentID = components::MeshAppearanceComponent;
 
-		if (params.find("material") != params.end()) {
-			_material = params.find("material")->second;
-		}
+		parseAttribute<true>(params, "mesh", _meshName);
+		parseAttribute<true>(params, "visibility", _isVisible);
+		parseAttribute<true>(params, "pos", _position);
+		parseAttribute<true>(params, "rot", _rotation);
+		parseAttribute<true>(params, "scale", _scale);
+		parseAttribute<false>(params, "material", _material);
 	}
 
 	MeshAppearanceComponent::~MeshAppearanceComponent() {
@@ -51,11 +54,6 @@ namespace api {
 	}
 
 	ComPtr MeshAppearanceComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("MeshAppearanceComponent", "position not set!", params.find("pos") != params.end());
-		ISIXE_THROW_API_COND("MeshAppearanceComponent", "rotation not set!", params.find("rot") != params.end());
-		ISIXE_THROW_API_COND("MeshAppearanceComponent", "scale not set!", params.find("scale") != params.end());
-		ISIXE_THROW_API_COND("MeshAppearanceComponent", "mesh not set!", params.find("mesh") != params.end());
-		ISIXE_THROW_API_COND("MeshAppearanceComponent", "visibility not set!", params.find("visibility") != params.end());
 		return utils::make_shared<MeshAppearanceComponent, Component>(id, params);
 	}
 

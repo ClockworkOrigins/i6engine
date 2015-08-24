@@ -29,27 +29,38 @@
 namespace i6engine {
 namespace api {
 
-	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _heightmap(params.at("heightmap")), _size(boost::lexical_cast<double>(params.at("size"))), _inputScale(boost::lexical_cast<double>(params.at("inputScale"))), _layers() {
+	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _heightmap(), _size(), _inputScale(), _layers() {
 		Component::_objFamilyID = components::TerrainAppearanceComponent;
 		Component::_objComponentID = components::TerrainAppearanceComponent;
 
-		uint32_t size = std::stoul(params.at("layers"));
-		_minX = std::stol(params.at("minX"));
-		_minY = std::stol(params.at("minY"));
-		_maxX = std::stol(params.at("maxX"));
-		_maxY = std::stol(params.at("maxY"));
+		parseAttribute<true>(params, "heightmap", _heightmap);
+		parseAttribute<true>(params, "size", _size);
+		parseAttribute<true>(params, "inputScale", _inputScale);
+
+		uint32_t size;
+
+		parseAttribute<true>(params, "layers", size);
+		parseAttribute<true>(params, "minX", _minX);
+		parseAttribute<true>(params, "minY", _minY);
+		parseAttribute<true>(params, "maxX", _maxX);
+		parseAttribute<true>(params, "maxY", _maxY);
 
 		for (uint32_t i = 0; i < size; i++) {
-			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_size not set!", params.find("layer_" + std::to_string(i) + "_size") != params.end());
-			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_diffusespecular not set!", params.find("layer_" + std::to_string(i) + "_diffusespecular") != params.end());
-			ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_normal not set!", params.find("layer_" + std::to_string(i) + "_normal") != params.end());
+			double layerSize;
+			std::string diffuseSpecular;
+			std::string normalDisplacement;
+			parseAttribute<true>(params, "layer_" + std::to_string(i) + "_size", layerSize);
+			parseAttribute<true>(params, "layer_" + std::to_string(i) + "_diffusespecular", diffuseSpecular);
+			parseAttribute<true>(params, "layer_" + std::to_string(i) + "_normal", normalDisplacement);
 
 			if (i == 0) { // special case, first layer is always there
-				_layers.push_back(std::make_tuple(boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_size")), params.at("layer_" + std::to_string(i) + "_diffusespecular"), params.at("layer_" + std::to_string(i) + "_normal"), 0.0, 0.0));
+				_layers.push_back(std::make_tuple(layerSize, diffuseSpecular, normalDisplacement, 0.0, 0.0));
 			} else {
-				ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_minHeight not set!", params.find("layer_" + std::to_string(i) + "_minHeight") != params.end());
-				ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layer_" << i << "_fadeDist not set!", params.find("layer_" + std::to_string(i) + "_fadeDist") != params.end());
-				_layers.push_back(std::make_tuple(boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_size")), params.at("layer_" + std::to_string(i) + "_diffusespecular"), params.at("layer_" + std::to_string(i) + "_normal"), boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_minHeight")), boost::lexical_cast<double>(params.at("layer_" + std::to_string(i) + "_fadeDist"))));
+				double minHeight;
+				double fadeDist;
+				parseAttribute<true>(params, "layer_" + std::to_string(i) + "_minHeight", minHeight);
+				parseAttribute<true>(params, "layer_" + std::to_string(i) + "_fadeDist", fadeDist);
+				_layers.push_back(std::make_tuple(layerSize, diffuseSpecular, normalDisplacement, minHeight, fadeDist));
 			}
 		}
 	}
@@ -61,14 +72,6 @@ namespace api {
 	}
 
 	ComPtr TerrainAppearanceComponent::createC(const int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "heightmap not set!", params.find("heightmap") != params.end());
-		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "size not set!", params.find("size") != params.end());
-		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "inputScale not set!", params.find("inputScale") != params.end());
-		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "layers not set!", params.find("layers") != params.end());
-		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "minX not set!", params.find("minX") != params.end());
-		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "minY not set!", params.find("minY") != params.end());
-		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "maxX not set!", params.find("maxX") != params.end());
-		ISIXE_THROW_API_COND("TerrainAppearanceComponent", "maxY not set!", params.find("maxY") != params.end());
 		return utils::make_shared<TerrainAppearanceComponent, Component>(id, params);
 	}
 
