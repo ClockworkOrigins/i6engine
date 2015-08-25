@@ -73,7 +73,7 @@ set(particleUniverseEditorSrc
 	${srcdir}/ParticleUniverseTechniquePropertyWindow.cpp
 	${srcdir}/ParticleUniverseTextControl.cpp
 	${srcdir}/ParticleUniverseUtils.cpp
-	
+
 	${srcdir}/AffectorPropertyWindow/AlignAffectorPropertyWindow.cpp
 	${srcdir}/AffectorPropertyWindow/BoxColliderPropertyWindow.cpp
 	${srcdir}/AffectorPropertyWindow/CollisionAvoidanceAffectorPropertyWindow.cpp
@@ -99,9 +99,9 @@ set(particleUniverseEditorSrc
 	${srcdir}/AffectorPropertyWindow/TextureRotatorPropertyWindow.cpp
 	${srcdir}/AffectorPropertyWindow/VelocityMatchingAffectorPropertyWindow.cpp
 	${srcdir}/AffectorPropertyWindow/VortexAffectorPropertyWindow.cpp
-	
+
 	${srcdir}/BehaviourPropertyWindow/SlaveBehaviourPropertyWindow.cpp
-	
+
 	${srcdir}/EmitterPropertyWindow/BoxEmitterPropertyWindow.cpp
 	${srcdir}/EmitterPropertyWindow/CircleEmitterPropertyWindow.cpp
 	${srcdir}/EmitterPropertyWindow/LineEmitterPropertyWindow.cpp
@@ -111,7 +111,7 @@ set(particleUniverseEditorSrc
 	${srcdir}/EmitterPropertyWindow/SlaveEmitterPropertyWindow.cpp
 	${srcdir}/EmitterPropertyWindow/SphereSurfaceEmitterPropertyWindow.cpp
 	${srcdir}/EmitterPropertyWindow/VertexEmitterPropertyWindow.cpp
-	
+
 	${srcdir}/EventHandlerPropertyWindow/DoAffectorEventHandlerPropertyWindow.cpp
 	${srcdir}/EventHandlerPropertyWindow/DoEnableComponentEventHandlerPropertyWindow.cpp
 	${srcdir}/EventHandlerPropertyWindow/DoExpireEventHandlerPropertyWindow.cpp
@@ -119,14 +119,14 @@ set(particleUniverseEditorSrc
 	${srcdir}/EventHandlerPropertyWindow/DoPlacementParticleEventHandlerPropertyWindow.cpp
 	${srcdir}/EventHandlerPropertyWindow/DoScaleEventHandlerPropertyWindow.cpp
 	${srcdir}/EventHandlerPropertyWindow/DoStopSystemEventHandlerPropertyWindow.cpp
-	
+
 	${srcdir}/ExternPropertyWindow/BoxColliderExternPropertyWindow.cpp
 	${srcdir}/ExternPropertyWindow/GravityExternPropertyWindow.cpp
 	${srcdir}/ExternPropertyWindow/PhysXActorExternPropertyWindow.cpp
 	${srcdir}/ExternPropertyWindow/PhysXFluidExternPropertyWindow.cpp
 	${srcdir}/ExternPropertyWindow/SphereColliderExternPropertyWindow.cpp
 	${srcdir}/ExternPropertyWindow/VortexExternPropertyWindow.cpp
-	
+
 	${srcdir}/ObserverPropertyWindow/OnClearObserverPropertyWindow.cpp
 	${srcdir}/ObserverPropertyWindow/OnCollisionObserverPropertyWindow.cpp
 	${srcdir}/ObserverPropertyWindow/OnCountObserverPropertyWindow.cpp
@@ -138,20 +138,20 @@ set(particleUniverseEditorSrc
 	${srcdir}/ObserverPropertyWindow/OnRandomObserverPropertyWindow.cpp
 	${srcdir}/ObserverPropertyWindow/OnTimeObserverPropertyWindow.cpp
 	${srcdir}/ObserverPropertyWindow/OnVelocityObserverPropertyWindow.cpp
-	
+
 	${srcdir}/ogre/app.cpp
 	${srcdir}/ogre/control.cpp
 	${srcdir}/ogre/rendersystem.cpp
 	${srcdir}/ogre/resources.cpp
 	${srcdir}/ogre/utils.cpp
-	
+
 	${srcdir}/propgrid/advprops.cpp
 	${srcdir}/propgrid/extras.cpp
 	${srcdir}/propgrid/manager.cpp
 	${srcdir}/propgrid/odcombo.cpp
 	${srcdir}/propgrid/propgrid.cpp
 	${srcdir}/propgrid/props.cpp
-	
+
 	${srcdir}/RendererPropertyWindow/BeamRendererPropertyWindow.cpp
 	${srcdir}/RendererPropertyWindow/BillboardRendererPropertyWindow.cpp
 	${srcdir}/RendererPropertyWindow/BoxRendererPropertyWindow.cpp
@@ -181,17 +181,14 @@ source_group(RendererPropertyWindow /RendererPropertyWindow/*)
 
 add_executable(ParticleUniverseEditor ${particleUniverseEditorSrc})
 
+target_link_libraries(ParticleUniverseEditor Plugin_ParticleUniverse ${OGRE_LIBRARIES} ${WXWIDGETS_LIBRARIES})
 IF(UNIX)
 	target_compile_options(ParticleUniverseEditor PRIVATE "-D__WXGTK__")
-	target_link_libraries(ParticleUniverseEditor gdk-x11-2.0 gobject-2.0 gtk-x11-2.0 glib-2.0 jpeg png pthread X11 z)
+	target_link_libraries(ParticleUniverseEditor ${GTK2_LIBRARIES} ${GLIB2_LIBRARIES} jpeg png pthread X11 z)
 	set_target_properties(ParticleUniverseEditor PROPERTIES POSITION_INDEPENDENT_CODE ON)
-ENDIF(UNIX)
-
-target_link_libraries(ParticleUniverseEditor Plugin_ParticleUniverse ${OGRE_LIBRARIES} ${WXWIDGETS_LIBRARIES})
-
-IF(WIN32)
+ELSEIF(WIN32)
 	target_link_libraries(ParticleUniverseEditor comctl32 rpcrt4)
-ENDIF(WIN32)
+ENDIF()
 
 IF(WIN32)
 	add_custom_command(TARGET ParticleUniverseEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ParticleUniverseEditor.exe ${CMAKE_BINARY_DIR}/bin)

@@ -54,6 +54,8 @@ chmod 700 ./*
 ./configure \
 	--prefix="${PREFIX}"\
 	--enable-unicode\
+	--disable-compat26\
+	--disable-compat28\
 	>/dev/null
 
 status "Building wxWidgets"

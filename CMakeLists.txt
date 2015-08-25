@@ -17,7 +17,7 @@
 # CMake main configfile i6engine project
 #
 
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.0)
 
 #########################################################################
 #########################################################################
@@ -282,9 +282,9 @@ IF(ISIXE_WITH_TOOLS)
 	SET(LIBHEADER "wx/wx.h")
 	SET(WXWIDGETS_ROOT ${ISIXE_DEP_DIR}/wxWidgets)
 	IF(WIN32)
-		find_package(EasyFind REQUIRED COMPONENTS wxbase28 wxbase28_net wxbase28_xml wxexpat wxjpeg wxmsw28_adv wxmsw28_aui wxmsw28_core wxmsw28_html wxmsw28_media wxmsw28_qa wxmsw28_richtext wxmsw28_xrc wxpng wxtiff wxzlib)
+		find_package(EasyFind REQUIRED COMPONENTS wxbase30 wxbase30_net wxbase30_xml wxexpat wxjpeg wxmsw30_adv wxmsw30_aui wxmsw30_core wxmsw30_html wxmsw30_media wxmsw30_qa wxmsw30_richtext wxmsw30_xrc wxpng wxtiff wxzlib)
 	ELSEIF(UNIX)
-		find_package(EasyFind REQUIRED COMPONENTS wx_baseu-2.8 wx_baseu_net-2.8 wx_baseu_xml-2.8 wx_gtk2u_adv-2.8 wx_gtk2u_aui-2.8 wx_gtk2u_core-2.8 wx_gtk2u_html-2.8 wx_gtk2u_qa-2.8 wx_gtk2u_richtext-2.8 wx_gtk2u_xrc-2.8)
+		find_package(EasyFind REQUIRED COMPONENTS wx_baseu-3.0 wx_baseu_net-3.0 wx_baseu_xml-3.0 wx_gtk2u_adv-3.0 wx_gtk2u_aui-3.0 wx_gtk2u_core-3.0 wx_gtk2u_html-3.0 wx_gtk2u_qa-3.0 wx_gtk2u_richtext-3.0 wx_gtk2u_xrc-3.0)
 	ENDIF(WIN32)
 	include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR})
 ENDIF(ISIXE_WITH_TOOLS)
@@ -293,14 +293,9 @@ ENDIF(ISIXE_WITH_TOOLS)
 # GTK
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS AND UNIX)
-	include_directories(SYSTEM /usr/include/gtk-2.0)
-	include_directories(SYSTEM /usr/include/glib-2.0)
-	include_directories(SYSTEM /usr/lib/x86_64-linux-gnu/glib-2.0/include/)
-	include_directories(SYSTEM /usr/include/cairo/)
-	include_directories(SYSTEM /usr/include/pango-1.0/)
-	include_directories(SYSTEM /usr/lib/x86_64-linux-gnu/gtk-2.0/include/)
-	include_directories(SYSTEM /usr/include/gdk-pixbuf-2.0/)
-	include_directories(SYSTEM /usr/include/atk-1.0/)
+	find_package(GTK2 REQUIRED gtk)
+	find_package(PkgConfig REQUIRED)
+	pkg_check_modules(GLIB2 glib-2.0)
 ENDIF(ISIXE_WITH_TOOLS AND UNIX)
 
 ###############################################################################
@@ -474,7 +469,7 @@ IF(WIN32)
 	endforeach()
 
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-archive.bat.in ${CMAKE_BINARY_DIR}/build-archive.bat @ONLY)
-	
+
 	add_custom_target(BuildReleaseSourceArchive COMMAND build-archive.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 	add_custom_target(BuildRevisionSourceArchive COMMAND build-archive.bat packageRevision WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 ENDIF(WIN32)
