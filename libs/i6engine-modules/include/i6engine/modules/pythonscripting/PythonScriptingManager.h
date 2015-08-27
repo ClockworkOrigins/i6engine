@@ -82,7 +82,7 @@ namespace modules {
 					boost::python::object f = global[func];
 					boost::python::call<Ret>(f.ptr(), A...);
 				} catch (const boost::python::error_already_set &) {
-					PyErr_PrintEx(0);
+					logStacktrace();
 				}
 			}, B...));
 		}
@@ -103,7 +103,7 @@ namespace modules {
 					boost::python::object f = global[func];
 					ret->push(boost::python::call<Ret>(f.ptr(), A...));
 				} catch (const boost::python::error_already_set &) {
-					PyErr_PrintEx(0);
+					logStacktrace();
 				}
 			}, B...));
 			return ret;
@@ -122,7 +122,7 @@ namespace modules {
 					boost::python::object f = global[func];
 					boost::python::call<Ret>(f.ptr(), A...);
 				} catch (const boost::python::error_already_set &) {
-					PyErr_PrintEx(0);
+					logStacktrace();
 				}
 			}, B...));
 		}
@@ -141,7 +141,7 @@ namespace modules {
 					boost::python::object f = global[func];
 					ret->push(boost::python::call<Ret>(f.ptr(), A...));
 				} catch (const boost::python::error_already_set &) {
-					PyErr_PrintEx(0);
+					logStacktrace();
 				}
 			}, B...));
 			return ret;
@@ -161,7 +161,7 @@ namespace modules {
 					boost::python::object f = global[func];
 					boost::python::call<Ret>(f.ptr(), A...);
 				} catch (const boost::python::error_already_set &) {
-					PyErr_PrintEx(0);
+					logStacktrace();
 				}
 				callback();
 			}, B...));
@@ -182,7 +182,7 @@ namespace modules {
 					boost::python::object f = global[func];
 					ret->push(boost::python::call<Ret>(f.ptr(), A...));
 				} catch (const boost::python::error_already_set &) {
-					PyErr_PrintEx(0);
+					logStacktrace();
 				}
 				callback();
 			}, B...));
@@ -202,7 +202,7 @@ namespace modules {
 					boost::python::object f = global[func];
 					boost::python::call<Ret>(f.ptr(), A...);
 				} catch (const boost::python::error_already_set &) {
-					PyErr_PrintEx(0);
+					logStacktrace();
 				}
 				callback();
 			}, B...));
@@ -222,7 +222,7 @@ namespace modules {
 					boost::python::object f = global[func];
 					ret->push(boost::python::call<Ret>(f.ptr(), A...));
 				} catch (const boost::python::error_already_set &) {
-					PyErr_PrintEx(0);
+					logStacktrace();
 				}
 				callback();
 			}, B...));
@@ -244,6 +244,11 @@ namespace modules {
 		 * \brief parses the given script
 		 */
 		void parseScript(const std::string & file, bool completePath);
+
+		/**
+		 * \brief log stacktrace
+		 */
+		void logStacktrace();
 
 		/**
 		 * \brief forbidden
