@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GOTemplate type="Terrain">
 	<Component template="TerrainAppearance">
+		<Attribute name="size">1200.0</Attribute>
+		<Attribute name="heightmap">terrain.png</Attribute>
+		<Attribute name="inputScale">60.0</Attribute>
+		<Attribute name="layers">2</Attribute>
+		<Attribute name="layer_0_size">10</Attribute>
+		<Attribute name="layer_0_diffusespecular">GrassFloor.tga</Attribute>
+		<Attribute name="layer_0_normal">GrassFloor.tga</Attribute>
+		<Attribute name="layer_1_size">30</Attribute>
+		<Attribute name="layer_1_diffusespecular">Rock.tga</Attribute>
+		<Attribute name="layer_1_normal">Rock.tga</Attribute>
+		<Attribute name="layer_1_minHeight">7.0</Attribute>
+		<Attribute name="layer_1_fadeDist">2.0</Attribute>
+		<Attribute name="minX">-2</Attribute>
+		<Attribute name="maxX">2</Attribute>
+		<Attribute name="minY">-2</Attribute>
+		<Attribute name="maxY">2</Attribute>
 	</Component>
 	<Component template="PhysicalState">
 		<Attribute name="planeConstant">1</Attribute>

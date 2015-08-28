@@ -46,7 +46,7 @@ namespace modules {
 	 * \class Terrain
 	 * \brief Saves all Terrain-specific things
 	 */
-	class Terrain {
+	class ISIXE_MODULES_API Terrain {
 	public:
 		/**
 		 * \brief Creates a new node with unique name
