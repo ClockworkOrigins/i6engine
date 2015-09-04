@@ -24,7 +24,7 @@ cd "$(readlink -f "$(dirname "${0}")")"
 ARCHIVE="tinyxml2.zip"
 BUILD_DIR="${BUILD_ROOT}/tinyxml2"
 
-PREFIX="${PWD}/tinyxml2"
+PREFIX="${DEP_DIR}/tinyxml2"
 DEBUG_FLAG=""
 RELEASE_FLAG=""
 PARALLEL_FLAG=""
@@ -47,15 +47,9 @@ fi
 
 title "Compile TinyXML"
 
-if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
-	status "TinyXML seems to be up to date, skipping build"
-	exit 0
-fi
-
 ./download-dependency.sh ${ARCHIVE}
 
 status "Cleaning TinyXML"
-rm -rf "${DEST_DIR}"
 rm -rf "${PREFIX}"
 
 status "Extracting TinyXML"
@@ -65,7 +59,7 @@ cd "${BUILD_ROOT}"
 # this should be done during "Cleanup" but doesn't work properly with bamboo
 rm -rf "tinyxml2"
 
-unzip "${EX_DIR}/${ARCHIVE}" >/dev/null
+unzip "${ARCHIVE}" >/dev/null
 
 cd "${BUILD_DIR}/jni"
 
@@ -84,7 +78,6 @@ cp ./*.so "${PREFIX}/lib"
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-rm -r "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" >/dev/null
 
 touch "${PREFIX}"

@@ -27,6 +27,7 @@
 #include "i6engine/math/i6eVector4.h"
 
 #include "i6engine/api/GameMessageStruct.h"
+#include "i6engine/api/GameMessage.h"
 
 namespace i6engine {
 namespace api {
@@ -67,7 +68,11 @@ namespace graphics {
 		GraCompositor,
 		GraScreenshot,
 		GraFPS,
-		GraParticleFadeOut
+		GraParticleFadeOut,
+		GraGetHighestCoordinate,
+		GraDrawBB,
+		GraRemoveBB,
+		GraLoadResources
 	};
 
 	enum class ShadowTechnique {
@@ -729,6 +734,55 @@ namespace graphics {
 			return new Graphics_FPS_Delete(*this);
 		}
 	} Graphics_FPS_Delete;
+
+	/**
+	 * \brief get highest coordinate
+	 */
+	typedef struct Graphics_GetHighestCoordinate_Update : GameMessageStruct {
+		Vec3 startPos;
+		std::function<void(Vec3)> callback;
+		Graphics_GetHighestCoordinate_Update(const Vec3 & s, const std::function<void(Vec3)> & c) : GameMessageStruct(), startPos(s), callback(c) {
+		}
+		Graphics_GetHighestCoordinate_Update * copy() {
+			return new Graphics_GetHighestCoordinate_Update(*this);
+		}
+	} Graphics_GetHighestCoordinate_Update;
+
+	/**
+	 * \brief draws BoundingBox
+	 */
+	typedef struct Graphics_DrawBB_Update : GameMessageStruct {
+		Vec3 colour;
+		Graphics_DrawBB_Update(int64_t coid, int64_t goid, const Vec3 & c) : GameMessageStruct(coid, goid), colour(c) {
+		}
+		Graphics_DrawBB_Update * copy() {
+			return new Graphics_DrawBB_Update(*this);
+		}
+	} Graphics_DrawBB_Update;
+
+	/**
+	 * \brief removes BoundingBox
+	 */
+	typedef struct Graphics_RemoveBB_Update : GameMessageStruct {
+		Graphics_RemoveBB_Update(int64_t coid, int64_t goid) : GameMessageStruct(coid, goid) {
+		}
+		Graphics_RemoveBB_Update * copy() {
+			return new Graphics_RemoveBB_Update(*this);
+		}
+	} Graphics_RemoveBB_Update;
+
+	/**
+	 * \brief preload resources of a level
+	 */
+	typedef struct Graphics_LoadResources_Create : GameMessageStruct {
+		std::string resourcesFile;
+		GameMessage::Ptr msg;
+		Graphics_LoadResources_Create(const std::string & rf, const GameMessage::Ptr & m) : GameMessageStruct(), resourcesFile(rf), msg(m) {
+		}
+		Graphics_LoadResources_Create * copy() {
+			return new Graphics_LoadResources_Create(*this);
+		}
+	} Graphics_LoadResources_Create;
 
 } /* namespace graphics */
 } /* namespace api */

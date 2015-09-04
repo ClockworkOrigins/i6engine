@@ -34,7 +34,7 @@ namespace api {
 
 	/**
 	 * \class SoundListenerComponent
-	 * \brief Attaches a camera to an object. The Camera will follow the object
+	 * \brief Attaches a sound listener to an object. The Listener will follow the object
 	 */
 	class ISIXE_MODULES_API SoundListenerComponent : public Component {
 	public:
@@ -46,26 +46,14 @@ namespace api {
 		/**
 		 * \brief Destructor
 		 */
-		virtual ~SoundListenerComponent();
+		~SoundListenerComponent();
 
 		static ComPtr createC(int64_t id, const attributeMap & params);
-
-		/**
-		 * \brief initializes the component
-		 * \info don't use this method at the moment, because all properties will be random
-		 */
-		void Init() override;
-
-		void Finalize() override;
-
-		void Tick() override;
 
 		/**
 		 * \brief synchronizes the Components state
 		 */
 		attributeMap synchronize() const override;
-
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "SoundListener";
@@ -90,6 +78,17 @@ namespace api {
 		 * \brief weakPtr on PhysicalStateComponent for faster access
 		 */
 		utils::weakPtr<PhysicalStateComponent, Component> _psc;
+
+		/**
+		 * \brief initializes the component
+		 */
+		void Init() override;
+
+		void Finalize() override;
+
+		void Tick() override;
+
+		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};
 
 } /* namespace api */

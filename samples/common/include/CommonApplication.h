@@ -22,7 +22,7 @@
 
 namespace sample {
 
-	class CommonApplication : public i6engine::api::Application {
+	class CommonApplication : virtual public i6engine::api::Application {
 	public:
 		CommonApplication(bool move, bool shootBall);
 

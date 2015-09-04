@@ -1,3 +1,8 @@
+/**
+ * \addtogroup API
+ * @{
+ */
+
 #ifndef __I6ENGINE_API_WAYNETMANAGER_H__
 #define __I6ENGINE_API_WAYNETMANAGER_H__
 
@@ -15,6 +20,9 @@ namespace api {
 
 	class EngineController;
 
+	/**
+	 * \brief handles the current Waynet
+	 */
 	class ISIXE_MODULES_API WaynetManager {
 		friend class EngineController;
 
@@ -27,6 +35,8 @@ namespace api {
 		};
 
 	public:
+		WaynetManager();
+
 		/**
 		 * \brief recreates waynet out of all found waypoints
 		 */
@@ -52,8 +62,6 @@ namespace api {
 		// first pair is start and end waypoint
 		std::map<std::pair<std::string, std::string>, std::vector<Vec3>> _paths;
 
-		WaynetManager();
-
 		void reset();
 
 		std::vector<Vec3> getShortestPath(const std::string & startWP, const std::string & targetWP);
@@ -63,3 +71,7 @@ namespace api {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_API_WAYNETMANAGER_H__ */
+
+/**
+ * @}
+ */

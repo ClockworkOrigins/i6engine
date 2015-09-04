@@ -17,10 +17,10 @@ namespace detail
   template <class F, class Policies>
   struct function_registration : registration
   {
-      function_registration(char const* name, F f, Policies const& policies)
-        : name(name)
-        , f(f)
-        , policies(policies)
+      function_registration(char const* n, F f_params, Policies const& p)
+        : name(n)
+        , f(f_params)
+        , policies(p)
       {}
 
       void register_(lua_State* L) const
@@ -46,7 +46,7 @@ namespace detail
 template <class F, class Policies>
 scope def(char const* name, F f, Policies const& policies)
 {
-    return scope(std::auto_ptr<detail::registration>(
+    return scope(std::unique_ptr<detail::registration>(
         new detail::function_registration<F, Policies>(name, f, policies)));
 }
 

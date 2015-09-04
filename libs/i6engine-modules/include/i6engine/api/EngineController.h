@@ -28,6 +28,8 @@
 #include "i6engine/utils/ExceptionQueue.h"
 #include "i6engine/utils/Logger.h"
 
+#include "i6engine/core/configs/JobPriorities.h"
+
 #include "boost/function.hpp"
 
 #include "clockUtils/iniParser/iniParser.h"
@@ -68,7 +70,7 @@ namespace api {
 	 * Create an instance of this class and use the functions to start / stop / ...
 	 * the Engine
 	 */
-#ifdef ISIXE_LOGGING
+#ifdef ISIXE_WITH_LOGGING
 	class ISIXE_MODULES_API EngineController : public utils::Singleton<EngineController, utils::Logger, utils::exceptions::ExceptionQueue> {
 		friend class utils::Singleton<EngineController, utils::Logger, utils::exceptions::ExceptionQueue>;
 #else
@@ -182,8 +184,14 @@ namespace api {
 		 */
 		inline Application * getAppl() const { return _appl; }
 
+		/**
+		 * \brief registers a basic default configuration
+		 */
 		void registerDefault(const bool ds);
 
+		/**
+		 * \brief call this method to shutdown everything
+		 */
 		void stop();
 
 		inline core::EngineCoreController * getController() const {
@@ -192,22 +200,26 @@ namespace api {
 
 		/**
 		 * \brief registers a timer
-		 * \param[in] name name of the timer to identify
 		 * \param[in] time time in microseconds until func is called
 		 * \param[in] func function to be called after given time
+		 * \param[in] looping defines whether method is looping or just running once
+		 * \param[in] priority priority of this task, defining which Job will be handles preferred
 		 */
-		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, uint16_t priority);
+		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, core::JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given priority
 		 */
-		void removeTimer(uint16_t priority);
+		void removeTimer(core::JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given name
 		 */
 		bool removeTimerID(uint64_t id);
 
+		/**
+		 * \brief returns the left time for the given timer ID in microseconds
+		 */
 		uint64_t getTimeLeft(uint64_t id) const;
 
 		/**

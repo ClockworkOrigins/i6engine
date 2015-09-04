@@ -6,24 +6,15 @@
 		<Attribute name="scale">1.0 1.0 1.0</Attribute>
 	</Component>
 	<Component template="MeshAppearance" owner="true">
-		<Attribute name="mesh">UsableItem.MESH</Attribute>
 		<Attribute name="visibility">1</Attribute>
 		<Attribute name="pos">0.0 0.0 0.0</Attribute>
 		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
 		<Attribute name="scale">1.0 1.0 1.0</Attribute>
 	</Component>
 	<Component template="UsableItem" owner="true">
-		<Attribute name="attribute_0">50</Attribute>
-		<Attribute name="value">100</Attribute>
-		<Attribute name="imageset">UsableItem</Attribute>
-		<Attribute name="image">UsableItem</Attribute>
-		<Attribute name="weight">0.5</Attribute>
 	</Component>
 	<Component template="Name" owner="true">
-		<Attribute name="name">UsableItem_Key</Attribute>
 	</Component>
 	<Component template="Slot" owner="true">
-		<Attribute name="width">1</Attribute>
-		<Attribute name="height">1</Attribute>
 	</Component>
 </GOTemplate>

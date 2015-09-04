@@ -48,16 +48,16 @@ namespace utils {
 		}
 
 		/**
-		 * \brief Registers a callback for autoUpdate.
-		 * \param func Function to be called when the variable change.
+		 * \brief Registers a callback for autoUpdate being called on every change of the value
+		 * \param func function to be called when the variable changes
 		 */
 		void registerUpdate(const std::function<void(T)> & func) {
-			_functions.push_back(std::bind(func, std::placeholders::_1));
+			_functions.push_back(func);
 		}
 
 		/**
-		 * \brief Getter for the variable.
-		 * \return value.
+		 * \brief Getter for the value
+		 * \return value
 		 */
 		T get() const {
 			return _value;
@@ -80,6 +80,38 @@ namespace utils {
 		T & operator=(const T & val) {
 			set(val);
 			return _value;
+		}
+
+		/**
+		 * \brief += operator
+		 */
+		AutoUpdater<T> & operator+=(const T & val) {
+			set(_value + val);
+			return *this;
+		}
+
+		/**
+		 * \brief -= operator
+		 */
+		AutoUpdater<T> & operator-=(const T & val) {
+			set(_value - val);
+			return *this;
+		}
+
+		/**
+		 * \brief *= operator
+		 */
+		AutoUpdater<T> & operator*=(const T & val) {
+			set(_value * val);
+			return *this;
+		}
+
+		/**
+		 * \brief /= operator
+		 */
+		AutoUpdater<T> & operator/=(const T & val) {
+			set(_value / val);
+			return *this;
 		}
 
 		/**

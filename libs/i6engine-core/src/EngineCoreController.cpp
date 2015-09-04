@@ -109,7 +109,7 @@ namespace core {
 		_subsystemController->JoinAllSubsystems();
 	}
 
-	uint64_t EngineCoreController::registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, uint16_t priority /* = 0 */) {
+	uint64_t EngineCoreController::registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, JobPriorities priority /* = 0 */) {
 		if (looping) {
 			return _scheduler.runRepeated(time, func, priority);
 		} else {
@@ -117,7 +117,7 @@ namespace core {
 		}
 	}
 
-	void EngineCoreController::removeTimer(uint16_t priority) {
+	void EngineCoreController::removeTimer(JobPriorities priority) {
 		_scheduler.removeTimer(priority);
 	}
 

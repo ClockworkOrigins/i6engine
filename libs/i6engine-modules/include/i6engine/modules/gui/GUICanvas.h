@@ -47,10 +47,13 @@ namespace modules {
 
 	private:
 		/**
-		 * \brief constructor
+		 * \brief loads canvas file
 		 */
 		static void load(const std::string & name, const std::string & file, GUIManager * manager, const GUIFactory & factory, std::map<std::string, api::GUIWidget *> & widgets);
 
+		/**
+		 * \brief internal helper walking down the XML tree
+		 */
 		static void load(const std::string & name, const std::string & file, GUIManager * manager, const GUIFactory & factory, std::map<std::string, api::GUIWidget *> & widgets, tinyxml2::XMLElement * node);
 	};
 

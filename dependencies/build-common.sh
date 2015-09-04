@@ -80,9 +80,7 @@ fi
 
 # shared variables
 DEP_DIR="${PWD}"
-EX_DIR="${PWD}/../externals/libs/"
-PATCH_DIR="${PWD}/../externals/patches/"
-BUILD_ROOT="/tmp/`whoami`"
+BUILD_ROOT="/tmp/`whoami`/i6engine"
 
 mkdir -p "${BUILD_ROOT}"
 

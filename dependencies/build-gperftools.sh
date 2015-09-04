@@ -28,7 +28,7 @@ if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
 fi
 
-PREFIX="${PWD}/gperftools/"
+PREFIX="${DEP_DIR}/gperftools/"
 PARALLEL_FLAG=""
 
 if [ ! -z "${BUILD_PARALLEL}" ]; then
@@ -37,6 +37,7 @@ fi
 
 RELEASE_FLAG=""
 DEBUG_FLAG="CFLAGS=-g"
+
 if [ -z "${DEBUG}" ]; then
 	BUILD_TYPE="${RELEASE_FLAG}"
 else
@@ -51,27 +52,15 @@ fi
 
 title "Compile GPerfTools"
 
-if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
-	status "GPerfTools seem to be up to date, skipping build"
-	exit 0
-fi
-
 ./download-dependency.sh ${ARCHIVE}
-#./download-dependency.sh gperftools-gcc-4.7-siginfo.patch
-
-mkdir -p ${PATCH_DIR}
-
-#mv ${EX_DIR}/gperftools-gcc-4.7-siginfo.patch ${PATCH_DIR}/
 
 status "Extracting GPerfTools"
 cd "${BUILD_ROOT}"
-tar xfz "${EX_DIR}/${ARCHIVE}" >/dev/null
+tar xfz "${ARCHIVE}" >/dev/null
 cd "${BUILD_DIR}"
 
 # set readable
 chmod -R u+w .
-
-#patch -p0 -i "${PATCH_DIR}/gperftools-gcc-4.7-siginfo.patch"
 
 status "Configuring GPerfTools"
 ./configure --libdir="${PREFIX}/lib" --prefix="${PREFIX}" --enable-frame-pointers ${BUILD_TYPE} >/dev/null
@@ -84,8 +73,7 @@ make ${PARALLEL_FLAG} install >/dev/null
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-rm -rf "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" >/dev/null
 
 touch "${PREFIX}"
 

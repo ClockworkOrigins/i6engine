@@ -20,6 +20,7 @@
 
 #include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/configs/InputConfig.h"
+#include "i6engine/api/facades/InputFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
 namespace i6engine {
@@ -47,7 +48,7 @@ namespace modules {
 	bool MouseListener::mousePressed(const OIS::MouseEvent & objMouseEvent, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouButton, core::Method::Update, new api::input::Input_Button_Update(true, api::MouseButtonID(objButtonID)), core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, api::KeyCode(int(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1), 0x0), core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -57,7 +58,7 @@ namespace modules {
 	bool MouseListener::mouseReleased(const OIS::MouseEvent & objMouseEvent, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouButton, core::Method::Update, new api::input::Input_Button_Update(false, api::MouseButtonID(objButtonID)), core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, api::KeyCode(int(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1), 0x0), core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 

@@ -58,7 +58,7 @@ namespace core {
 
 	public:
 		/**
-		 * \brief Constructs a new ModuleController with the given name
+		 * \brief Constructs a new ModuleController with the given subsystem type
 		 */
 		ModuleController(Subsystem sub);
 
@@ -98,6 +98,25 @@ namespace core {
 			_messagingController = mc;
 		}
 
+		/**
+		 * \brief Called just after the Controller got created
+		 */
+		virtual void OnThreadStart() = 0;
+
+		/**
+		 * \brief Called repeatedly according to the frametime
+		 */
+		virtual void Tick() = 0;
+
+		/**
+		 * \brief Called to Shutdown the Module
+		 */
+		virtual void ShutDown() = 0;
+
+		Subsystem getSubsystem() const {
+			return _subsystem;
+		}
+
 	protected:
 		/**
 		 * \brief the Subsystem
@@ -113,21 +132,6 @@ namespace core {
 		 * \brief pointer to MessagingController
 		 */
 		MessagingController * _messagingController;
-
-		/**
-		 * \brief Called just after the Controller got created
-		 */
-		virtual void OnThreadStart() = 0;
-
-		/**
-		 * \brief Called repeatedly according to the frametime
-		 */
-		virtual void Tick() = 0;
-
-		/**
-		 * \brief Called to Shutdown the Module
-		 */
-		virtual void ShutDown() = 0;
 
 		/**
 		 * \brief override of processMessages of MessageSubscriber for waiting subsystems
@@ -205,7 +209,7 @@ namespace core {
 		mutable std::mutex _lock;
 		std::condition_variable _conditionVariable;
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		/**
 		 * \brief last frame time
 		 */
@@ -220,7 +224,7 @@ namespace core {
 		 * \brief frames being expected for this subsystem
 		 */
 		uint16_t _expectedFps;
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		/**
 		 * \brief activates the Subsystem
@@ -236,7 +240,7 @@ namespace core {
 			return _isRunning;
 		}
 
-		void deliverMessageInternal(const ReceivedMessagePtr & msg);
+		void deliverMessageInternal(const ReceivedMessagePtr & msg) override;
 
 		void stop() {
 			_conditionVariable.notify_one();

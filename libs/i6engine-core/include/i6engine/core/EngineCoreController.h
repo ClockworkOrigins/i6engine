@@ -65,7 +65,9 @@ namespace core {
 		/**
 		 * \brief This method will set the callback which will be called after initialization.
 		 */
-		void SetOnAfterInitializedCallback(const boost::function<void(void)> & ptrOnAfterInitialize) { _vptrOnAfterInitialize.push_back(ptrOnAfterInitialize); }
+		void SetOnAfterInitializedCallback(const boost::function<void(void)> & ptrOnAfterInitialize) {
+			_vptrOnAfterInitialize.push_back(ptrOnAfterInitialize);
+		}
 
 		/**
 		 * \brief This method will initialize and start the game engine.
@@ -83,7 +85,9 @@ namespace core {
 		/**
 		 * \brief This method will tell the EngineController that the subsystems have been initialized.
 		 */
-		inline void SetInitialized() { _bolIsInitialized = true; }
+		inline void SetInitialized() {
+			_bolIsInitialized = true;
+		}
 
 		/**
 		 * \brief This method will wait until all subsystems have been shut down.
@@ -93,7 +97,9 @@ namespace core {
 		/**
 		 * \brief This method initializes the final shutdown of the main loop.
 		 */
-		inline void SetShutdownComplete() { _bolShutdownComplete = true; }
+		inline void SetShutdownComplete() {
+			_bolShutdownComplete = true;
+		}
 
 		/**
 		 * \brief registers a timer
@@ -101,12 +107,12 @@ namespace core {
 		 * \param[in] time time in microseconds until func is called
 		 * \param[in] func function to be called after given time
 		 */
-		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, uint16_t priority);
+		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given priority
 		 */
-		void removeTimer(uint16_t priority);
+		void removeTimer(JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given name
@@ -133,6 +139,17 @@ namespace core {
 		}
 
 	private:
+		SubSystemController * _subsystemController;
+		bool _bolIsInitialized;
+		bool _bolLoop;
+		bool _bolShutdownComplete;
+		std::vector<boost::function<void(void)>> _vptrOnAfterInitialize;
+		mutable std::mutex _lock;
+		mutable std::condition_variable _condVar;
+
+		utils::Clock<utils::RealTimeClock> _rClock;
+		Scheduler<utils::RealTimeClock> _scheduler;
+
 		/**
 		 * \brief This method is the main loop for the engine.
 		 */
@@ -147,17 +164,6 @@ namespace core {
 		 * \brief This method will initialize and start all subsystems.
 		 */
 		void Initialize() const;
-
-		SubSystemController * _subsystemController;
-		bool _bolIsInitialized;
-		bool _bolLoop;
-		bool _bolShutdownComplete;
-		std::vector<boost::function<void(void)>> _vptrOnAfterInitialize;
-		mutable std::mutex _lock;
-		mutable std::condition_variable _condVar;
-
-		utils::Clock<utils::RealTimeClock> _rClock;
-		Scheduler<utils::RealTimeClock> _scheduler;
 
 		/**
 		 * \brief forbidden

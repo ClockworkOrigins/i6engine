@@ -44,6 +44,9 @@
 #include "i6engine/modules/gui/GUIController.h"
 #include "i6engine/modules/gui/GUIMailbox.h"
 
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+
 #include "boost/lexical_cast.hpp"
 
 #include "CEGUI/CEGUI.h"
@@ -56,6 +59,8 @@
 #include "OGRE/OgreRenderWindow.h"
 #include "OGRE/OgreRoot.h"
 #include "OGRE/Overlay/OgreOverlaySystem.h"
+
+#include "tinyxml2.h"
 
 namespace i6engine {
 namespace modules {
@@ -364,8 +369,6 @@ namespace modules {
 			_objRoot->renderOneFrame();
 			Debug::getSingleton().clear();
 
-			//std::cout << _rWindow->getAverageFPS() << std::endl;
-
 			Ogre::WindowEventUtilities::messagePump();
 
 			_guiController->Tick();
@@ -377,39 +380,36 @@ namespace modules {
 
 	GraphicsNode * GraphicsManager::getOrCreateGraphicsNode(const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		if (_nodes.find(goid) == _nodes.end()) {
-			_nodes[goid] = new GraphicsNode(this, goid, position, rotation, scale);
+		auto it = _nodes.find(goid);
+		if (it == _nodes.end()) {
+			GraphicsNode * gn = new GraphicsNode(this, goid, position, rotation, scale);
+			_nodes.insert(std::make_pair(goid, gn));
+			return gn;
 		}
-
-		return _nodes[goid];
+		return it->second;
 	}
 
 	GraphicsNode * GraphicsManager::getGraphicsNode(const int64_t goid) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		if (_nodes.find(goid) == _nodes.end()) {
+		auto it = _nodes.find(goid);
+		if (it == _nodes.end()) {
 			return nullptr;
 		}
-
-		return _nodes.find(goid)->second;
+		return it->second;
 	}
 
 	void GraphicsManager::deleteGraphicsNode(const int64_t goid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		if (_nodes.find(goid) == _nodes.end()) {
+		auto it = _nodes.find(goid);
+		if (it == _nodes.end()) {
 			return;
 		}
-
-		delete _nodes[goid];
-
-		_nodes.erase(_nodes.find(goid));
+		delete it->second;
+		_nodes.erase(it);
 	}
 
 	bool GraphicsManager::windowClosing(Ogre::RenderWindow * rw) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		return true;
 	}
 
@@ -467,6 +467,10 @@ namespace modules {
 			}
 		} else if (msg->getSubtype() == api::graphics::GraFPS) {
 			_showFPS = true;
+		} else if (msg->getSubtype() == api::graphics::GraLoadResources) {
+			api::graphics::Graphics_LoadResources_Create * glrc = dynamic_cast<api::graphics::Graphics_LoadResources_Create *>(msg->getContent());
+			loadResources(glrc->resourcesFile);
+			api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(glrc->msg);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -559,6 +563,22 @@ namespace modules {
 		} else if (msg->getSubtype() == api::graphics::GraSetExponentialFog2) {
 			api::graphics::Graphics_SetExponentialFog_Update * gsefu = dynamic_cast<api::graphics::Graphics_SetExponentialFog_Update *>(msg->getContent());
 			_sceneManager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(gsefu->colour.getX(), gsefu->colour.getY(), gsefu->colour.getZ()), gsefu->density);
+		} else if (msg->getSubtype() == api::graphics::GraGetHighestCoordinate) {
+			api::graphics::Graphics_GetHighestCoordinate_Update * ggu = dynamic_cast<api::graphics::Graphics_GetHighestCoordinate_Update *>(msg->getContent());
+			Vec3 startPos = ggu->startPos;
+			startPos.setY(DBL_MAX);
+			Ogre::Ray ray(startPos.toOgre(), Ogre::Vector3(0.0, -1.0, 0.0));
+			_raySceneQuery->setRay(ray);
+			_raySceneQuery->setSortByDistance(true);
+			// Execute query
+			Ogre::RaySceneQueryResult & result = _raySceneQuery->execute();
+			Ogre::RaySceneQueryResult::iterator itr;
+
+			if (result.empty()) {
+				ggu->callback(Vec3::ZERO);
+			} else {
+				ggu->callback(Vec3(ray.getPoint(result[0].distance)));
+			}
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -783,7 +803,7 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 
 			if (node == nullptr) {
-				return; // FIXME: (Daniel) happened after adding animations, but this musn't happen because of messaging system
+				return; // FIXME: (Daniel) happened after adding animations, but this mustn't happen because of messaging system
 			}
 
 			api::graphics::Graphics_SetAnimationSpeed_Update * gsu = dynamic_cast<api::graphics::Graphics_SetAnimationSpeed_Update *>(msg->getContent());
@@ -791,7 +811,9 @@ namespace modules {
 			node->setAnimationSpeed(gsu->speed);
 		} else if (msg->getSubtype() == api::graphics::GraStopAnimation) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
+			if (node == nullptr) {
+				return;
+			}
 			node->stopAnimation();
 		} else if (msg->getSubtype() == api::graphics::GraBillboard) {
 			api::graphics::Graphics_Billboard_Update * gbu = static_cast<api::graphics::Graphics_Billboard_Update *>(msg->getContent());
@@ -824,6 +846,19 @@ namespace modules {
 			}
 
 			node->particleFadeOut(coid);
+		} else if (msg->getSubtype() == api::graphics::GraDrawBB) {
+			api::graphics::Graphics_DrawBB_Update * gdu = dynamic_cast<api::graphics::Graphics_DrawBB_Update *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			if (node == nullptr) {
+				return;
+			}
+			node->drawBoundingBox(coid, gdu->colour);
+		} else if (msg->getSubtype() == api::graphics::GraRemoveBB) {
+			GraphicsNode * node = getGraphicsNode(goid);
+			if (node == nullptr) {
+				return;
+			}
+			node->removeBoundingBox();
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -884,6 +919,66 @@ namespace modules {
 
 	void GraphicsManager::removeTicker(GraphicsNode * gn) {
 		_tickers.erase(gn);
+	}
+
+	void GraphicsManager::loadResources(const std::string & resourcesFile) {
+		tinyxml2::XMLDocument doc;
+
+		if (doc.LoadFile(resourcesFile.c_str())) {
+			ISIXE_LOG_ERROR("GraphicsManager", "Couldn't open resources file (" << resourcesFile << ")");
+			return;
+		}
+
+		tinyxml2::XMLElement * root = doc.FirstChildElement("Resources");
+
+		std::vector<std::string> meshes;
+
+		for (tinyxml2::XMLElement * mesh = root->FirstChildElement("Mesh"); mesh != nullptr; mesh = mesh->NextSiblingElement("Mesh")) {
+			if (mesh->GetText() == nullptr) {
+				ISIXE_LOG_ERROR("GraphicsManager", "Found Mesh entry without value!");
+			}
+			meshes.push_back(mesh->GetText());
+		}
+
+		std::vector<std::string> particles;
+
+		for (tinyxml2::XMLElement * particle = root->FirstChildElement("Particle"); particle != nullptr; particle = particle->NextSiblingElement("Particle")) {
+			if (particle->GetText() == nullptr) {
+				ISIXE_LOG_ERROR("GraphicsManager", "Found Particle entry without value!");
+			}
+			particles.push_back(particle->GetText());
+		}
+
+		Ogre::SceneNode * sn = _sceneManager->getRootSceneNode()->createChildSceneNode("PreLoadSceneNode_0_0", Ogre::Vector3::ZERO);
+		Ogre::Camera * camera = _sceneManager->createCamera("PreLoadSceneCamera_0_0");
+		sn->attachObject(camera);
+		_objRoot->getAutoCreatedWindow()->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
+
+		for (std::string m : meshes) {
+			Ogre::Entity * meshEntity = _sceneManager->createEntity("PreLoadSceneMesh_0_0", m);
+			meshEntity->setVisible(true);
+			meshEntity->setCastShadows(true);
+			sn->attachObject(meshEntity);
+			_objRoot->renderOneFrame();
+			sn->detachObject(meshEntity);
+			_sceneManager->destroyEntity(meshEntity);
+		}
+
+		for (std::string p : particles) {
+			ParticleUniverse::ParticleSystem * particleSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem("PreLoadSceneParticle_0_0", p, _sceneManager);
+			sn->attachObject(particleSystem);
+			particleSystem->start();
+			_objRoot->renderOneFrame();
+			sn->detachObject(particleSystem);
+			particleSystem->stop();
+			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(particleSystem, _sceneManager);
+		}
+
+		_objRoot->getAutoCreatedWindow()->removeViewport(0);
+		sn->detachObject(camera);
+		_sceneManager->destroyCamera(camera);
+		_sceneManager->getRootSceneNode()->removeChild(sn);
+		_sceneManager->destroySceneNode("PreLoadSceneNode_0_0");
 	}
 
 } /* namespace modules */

@@ -30,21 +30,24 @@
 namespace i6engine {
 namespace api {
 
-	LuminousAppearanceComponent::LuminousAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _lightType(LightType(boost::lexical_cast<uint32_t>(params.find("lightType")->second))), _diffuseColor(Vec3(params, "diffuseColor")), _specularColor(Vec3(params, "specularColor")), _attenuation(Vec4(params, "attenuation")), _direction(), _position(), _spotlightRangeInner(0.0), _spotlightRangeOuter(0.0) {
+	LuminousAppearanceComponent::LuminousAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _lightType(), _diffuseColor(), _specularColor(), _attenuation(), _direction(), _position(), _spotlightRangeInner(0.0), _spotlightRangeOuter(0.0) {
 		Component::_objFamilyID = components::LuminousAppearanceComponent;
 		Component::_objComponentID = components::LuminousAppearanceComponent;
 
+		parseAttribute<true>(params, "lightType", _lightType);
+		parseAttribute<true>(params, "diffuseColor", _diffuseColor);
+		parseAttribute<true>(params, "specularColor", _specularColor);
+		parseAttribute<true>(params, "attenuation", _attenuation);
+
 		if (_lightType != LightType::POINT) {
-			_direction = Vec3(params, "direction");
+			parseAttribute<true>(params, "direction", _direction);
 		}
 		if (_lightType == LightType::SPOT) {
-			_spotlightRangeInner = boost::lexical_cast<double>(params.find("spotLightRangeInner")->second);
-			_spotlightRangeOuter = boost::lexical_cast<double>(params.find("spotLightRangeOuter")->second);
+			parseAttribute<true>(params, "spotLightRangeInner", _spotlightRangeInner);
+			parseAttribute<true>(params, "spotLightRangeOuter", _spotlightRangeOuter);
 		}
 
-		if (params.find("pos") != params.end()) {
-			_position = Vec3(params, "pos");
-		}
+		parseAttribute<false>(params, "pos", _position);
 	}
 
 	LuminousAppearanceComponent::~LuminousAppearanceComponent() {
@@ -54,18 +57,6 @@ namespace api {
 	}
 
 	ComPtr LuminousAppearanceComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("LuminousAppearanceComponent", "diffuseColor not set!", params.find("diffuseColor") != params.end());
-		ISIXE_THROW_API_COND("LuminousAppearanceComponent", "attenuation not set!", params.find("attenuation") != params.end());
-		ISIXE_THROW_API_COND("LuminousAppearanceComponent", "specularColor not set!", params.find("specularColor") != params.end());
-		ISIXE_THROW_API_COND("LuminousAppearanceComponent", "lightType not set!", params.find("lightType") != params.end());
-
-		if (params.find("lightType")->second != "0") {
-			ISIXE_THROW_API_COND("LuminousAppearanceComponent", "direction not set!", params.find("direction") != params.end());
-		}
-		if (params.find("lightType")->second == "2") {
-			ISIXE_THROW_API_COND("LuminousAppearanceComponent", "spotLightRangeInner not set!", params.find("spotLightRangeInner") != params.end());
-			ISIXE_THROW_API_COND("LuminousAppearanceComponent", "spotLightRangeOuter not set!", params.find("spotLightRangeOuter") != params.end());
-		}
 		return utils::make_shared<LuminousAppearanceComponent, Component>(id, params);
 	}
 
@@ -143,14 +134,14 @@ namespace api {
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Inner Spotlight Range", [this]() {
 			return boost::lexical_cast<std::string>(_spotlightRangeInner);
 		}, [this](std::string s) {
-			_spotlightRangeInner = boost::lexical_cast<double>(s);
+			_spotlightRangeInner = std::stod(s);
 			sendUpdateMessage();
 			return true;
 		}));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Outer Spotlight Range", [this]() {
 			return boost::lexical_cast<std::string>(_spotlightRangeOuter);
 		}, [this](std::string s) {
-			_spotlightRangeOuter = boost::lexical_cast<double>(s);
+			_spotlightRangeOuter = std::stod(s);
 			sendUpdateMessage();
 			return true;
 		}));

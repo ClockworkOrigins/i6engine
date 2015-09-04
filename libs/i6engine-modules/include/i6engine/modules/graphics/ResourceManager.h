@@ -46,15 +46,11 @@ namespace modules {
 		 *
 		 *     loads Ogre's resources by telling it to read the configuration file and then add the entries (addResourceLocation).
 		 * Loads all resources defined in the configuration file "resources.cfg".
-		 * \param   no params
-		 * \return   nothing
-		 *
 		 */
 		ResourceManager(const std::string & ogrePath);
 
 		/**
 		 * \brief removes resource group i6engine
-		 *
 		 */
 		~ResourceManager();
 

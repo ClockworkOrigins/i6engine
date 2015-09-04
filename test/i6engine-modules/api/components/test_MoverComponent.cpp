@@ -69,7 +69,7 @@ TEST(MoverComponent, absolute) {
 		mover->Init();
 
 		mover->start(start);
-		psc->Tick();
+		utils::dynamic_pointer_cast<Component>(psc)->Tick();
 
 		ASSERT_EQ(Vec3(-45, 10, 15), psc->getPosition());
 		}

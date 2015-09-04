@@ -36,6 +36,13 @@ namespace graphics {
 	/**
 	 * \class BillboardComponent
 	 * \brief Tells the engine what billboard to show
+	 * For creating a BillboardComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | material | yes | std::string | Material used for the Billboard | yes |
+	 * | width | yes | double | relative width | yes |
+	 * | height | yes | double | relative height | yes |
+	 * | origin | yes | int | one of BillboardOrigin's int values | yes |
 	 */
 	class ISIXE_MODULES_API BillboardComponent : public Component {
 	public:
@@ -47,27 +54,27 @@ namespace graphics {
 		/**
 		 * \brief Destructor
 		 */
-		virtual ~BillboardComponent();
+		~BillboardComponent();
 
 		/**
-		* \brief creates the Component with given attributeMap
-		*/
+		 * \brief creates the Component with given attributeMap
+		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
+		/**
+		 * \brief creates or updates a billboard in this billboard set
+		 */
 		void createOrUpdateBillboard(const std::string & identifier, const Vec3 & offset, double width, double height, double u0, double v0, double u1, double v1);
 
+		/**
+		 * \brief deletes a billboard
+		 */
 		void deleteBillboard(const std::string & identifier);
 
 		/**
 		 * \brief synchronizes the Components state
 		 */
 		attributeMap synchronize() const override;
-
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "Billboard";
@@ -80,6 +87,12 @@ namespace graphics {
 		double _width;
 		double _height;
 		graphics::BillboardOrigin _billboardOrigin;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};
 
 } /* namespace api */

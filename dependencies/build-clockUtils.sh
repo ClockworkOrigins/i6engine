@@ -5,7 +5,7 @@ cd "$(readlink -f "$(dirname "${0}")")"
 ARCHIVE="clockUtils-0.3-rev128.zip"
 BUILD_DIR="${BUILD_ROOT}/clockUtils-0.3-rev128"
 
-PREFIX="${PWD}/clockUtils"
+PREFIX="${DEP_DIR}/clockUtils"
 DEBUG_FLAG="DEBUG"
 RELEASE_FLAG="RELEASE"
 PARALLEL_FLAG=""
@@ -30,7 +30,7 @@ rm -rf "${PREFIX}"
 
 
 cd "${BUILD_ROOT}"
-unzip "${EX_DIR}/${ARCHIVE}" >/dev/null
+unzip "${ARCHIVE}" >/dev/null
 
 cd "${BUILD_DIR}"
 
@@ -54,7 +54,6 @@ make -j 8
 make install
 
 cd "${DEP_DIR}"
-rm -r "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" >/dev/null
 
 touch "${PREFIX}"

@@ -25,4 +25,5 @@ ENDIF(ISIXE_WITH_EDITOR)
 
 add_subdirectory(includeGraphBuilder)
 add_subdirectory(meshToBulletConverter)
+add_subdirectory(particleUniverseEditor)
 add_subdirectory(terrainTextureConverter)

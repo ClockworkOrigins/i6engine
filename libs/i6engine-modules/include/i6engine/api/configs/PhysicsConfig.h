@@ -35,7 +35,6 @@ namespace physics {
 		PhyNode,
 		PhyNodeGravity,
 		PhyNodePosition,
-		PhyClean,
 		PhyLinearVelocity,
 		PhyForce,
 		PhyVelForce,
@@ -69,14 +68,6 @@ namespace physics {
 		Physics_Gravity_Update(const Vec3 & v);
 		Physics_Gravity_Update * copy() { return new Physics_Gravity_Update(*this); }
 	} Physics_Gravity_Update;
-
-	/**
-	 * \brief cleans up all physics objects
-	 */
-	typedef struct Physics_Clean_Delete : GameMessageStruct {
-		Physics_Clean_Delete();
-		Physics_Clean_Delete * copy() { return new Physics_Clean_Delete(*this); }
-	} Physics_Clean_Delete;
 
 	/**
 	 * \brief message for creation of new PhysicsNode

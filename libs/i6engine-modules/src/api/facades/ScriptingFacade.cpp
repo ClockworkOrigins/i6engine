@@ -26,13 +26,17 @@ namespace i6engine {
 namespace api {
 
 	ScriptingFacade::ScriptingFacade()
-#if defined (ISIXE_WITH_LUA_SCRIPTING) || defined (ISIXE_WITH_PYTHON_SCRIPTING)
+#if ISIXE_SCRIPTING
 		: _manager(nullptr)
 #endif
 	{
 	}
 
 	ScriptingFacade::~ScriptingFacade() {
+	}
+
+	void ScriptingFacade::loadAllScripts() const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ScriptingMessageType, scripting::ScrLoadAllScripts, core::Method::Create, new GameMessageStruct(), core::Subsystem::Unknown));
 	}
 
 	void ScriptingFacade::resetSubSystem() {

@@ -89,6 +89,9 @@ namespace utils {
 		 */
 		const_iterator erase(const_iterator position) {
 			_map.erase(position->first);
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+			return _list.erase(position);
+#elif ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
 			// This is O(n) but as of a bug in libstdc++, there is no list::erase for const_iterator
 			// See http://gcc.gnu.org/onlinedocs/libstdc++/manual/status.html#status.iso.2011 Section 23.3.5 for current support
 			for (iterator it = _list.begin(); it != _list.end(); ++it) {
@@ -97,6 +100,7 @@ namespace utils {
 				}
 			}
 			return _list.end();
+#endif
 		}
 
 		/**
@@ -128,26 +132,44 @@ namespace utils {
 			return _list.end();
 		}
 
+		/**
+		 * \brief returns iterator to the begin of the list
+		 */
 		typename std::list<std::pair<KeyType, ValueType>>::iterator begin() {
 			return _list.begin();
 		}
-
+		
+		/**
+		 * \brief returns const_iterator to the begin of the list
+		 */
 		typename std::list<std::pair<KeyType, ValueType>>::const_iterator begin() const {
 			return _list.begin();
 		}
-
+		
+		/**
+		 * \brief returns iterator to the end of the list
+		 */
 		typename std::list<std::pair<KeyType, ValueType>>::iterator end() {
 			return _list.end();
 		}
-
+		
+		/**
+		 * \brief returns const_iterator to the end of the list
+		 */
 		typename std::list<std::pair<KeyType, ValueType>>::const_iterator end() const {
 			return _list.end();
 		}
-
+		
+		/**
+		 * \brief returns const_iterator to the begin of the list
+		 */
 		typename std::list<std::pair<KeyType, ValueType>>::const_iterator cbegin() const {
 			return _list.cbegin();
 		}
-
+		
+		/**
+		 * \brief returns const_iterator to the end of the list
+		 */
 		typename std::list<std::pair<KeyType, ValueType>>::const_iterator cend() const {
 			return _list.cend();
 		}

@@ -42,7 +42,7 @@ namespace tools {
 		/**
 		 * \brief constructor
 		 */
-		explicit MeshStrider(Ogre::Mesh * m = nullptr) : _mesh(m) {}
+		explicit MeshStrider(Ogre::Mesh * m) : _mesh(m) {}
 
 		/**
 		 * \brief sets the mesh

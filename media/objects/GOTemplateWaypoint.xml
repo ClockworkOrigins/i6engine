@@ -7,5 +7,6 @@
 	</Component>
 	<Component template="Waypoint">
 		<Attribute name="name">1</Attribute>
+		<Attribute name="connections">EMPTY</Attribute>
 	</Component>
 </GOTemplate>

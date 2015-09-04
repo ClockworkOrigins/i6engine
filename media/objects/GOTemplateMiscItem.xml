@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GOTemplate type="MiscItem">
+	<Component template="StaticState" owner="true">
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
+	<Component template="MeshAppearance" owner="true">
+		<Attribute name="visibility">1</Attribute>
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
+	<Component template="MiscItem" owner="true">
+	</Component>
+	<Component template="Name" owner="true">
+	</Component>
+	<Component template="Slot" owner="true">
+	</Component>
+</GOTemplate>

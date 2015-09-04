@@ -17,33 +17,20 @@
 #ifndef __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
 #define __I6ENGINE_SAMPLES_RPGAPPLICATION_H__
 
-#include "i6engine/api/Application.h"
-
-#include "clockUtils/iniParser/iniParser.h"
+#include "i6engine/rpg/RPGApplication.h"
 
 namespace sample {
 
-	class RPGApplication : public i6engine::api::Application {
+	class RPGApplication : public i6engine::rpg::RPGApplication {
 	public:
 		RPGApplication();
 
 		~RPGApplication();
 
-		void Initialize();
-
 		void AfterInitialize();
-
-		void Tick();
-
-		bool ShutdownRequest();
-
-		void Finalize();
-		
-		void ShutDown();
 
 	private:
 		bool _showFPS;
-		clockUtils::iniParser::IniParser _iniParser;
 	};
 
 } /* namespace sample */

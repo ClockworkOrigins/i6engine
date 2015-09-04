@@ -28,7 +28,7 @@ if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
 fi
 
-PREFIX="${PWD}/bullet/"
+PREFIX="${DEP_DIR}/bullet/"
 PARALLEL_FLAG=""
 
 if [ ! -z "${BUILD_PARALLEL}" ]; then
@@ -37,6 +37,7 @@ fi
 
 RELEASE_FLAG=Release
 DEBUG_FLAG=Debug
+
 if [ -z "${DEBUG}" ]; then
 	BUILD_TYPE="${RELEASE_FLAG}"
 else
@@ -51,19 +52,14 @@ fi
 
 title "Compile Bullet"
 
-if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
-	status "Bullet seems to be up to date, skipping build"
-	exit 0
-fi
-
 ./download-dependency.sh ${ARCHIVE}
 
 status "Cleaning Bullet"
-rm -rf "${DEST_DIR}" >/dev/null
+rm -rf "${PREFIX}" >/dev/null
 
 status "Extracting Bullet"
 cd "${BUILD_ROOT}"
-tar xfz "${EX_DIR}/${ARCHIVE}" >/dev/null
+tar xfz "${ARCHIVE}" >/dev/null
 
 status "Configuring Bullet"
 cd "${BUILD_DIR}"
@@ -88,7 +84,6 @@ make ${PARALLEL_FLAG} install >/dev/null
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-rm -r "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" >/dev/null
 
 touch "${PREFIX}"

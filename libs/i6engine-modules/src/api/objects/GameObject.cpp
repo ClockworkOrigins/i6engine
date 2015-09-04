@@ -185,7 +185,7 @@ namespace api {
 	void GameObject::sendCreateMessage() const {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		std::vector<GameMessage::Ptr> v;
-		synchronize(v);
+		synchronize(v, false);
 
 		EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, v[0]);
 	}
@@ -299,16 +299,14 @@ namespace api {
 		}
 	}
 
-	void GameObject::synchronize(std::vector<GameMessage::Ptr> & messages) const {
+	void GameObject::synchronize(std::vector<GameMessage::Ptr> & messages, bool all) const {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		objects::GOTemplate tpl;
 		tpl._type = getType();
 		for (const std::pair<int64_t, ComPtr> & p : _objComponents) {
-			if (p.second->getFamilyID() != components::NetworkSenderComponent && p.second->getSync()) {
+			if (p.second->getFamilyID() != components::NetworkSenderComponent && (all || p.second->getSync())) {
 				tpl._components.push_back(objects::GOTemplateComponent(p.second->getTemplateName(), p.second->getID(), p.second->synchronize(), false, p.second->getIdentifier(), false));
 			}
-
 			for (ComPtr & c : p.second->_subComps) {
 				if (c->getSync()) {
 					tpl._components.push_back(objects::GOTemplateComponent(c->getTemplateName(), c->getID(), c->synchronize(), false, c->getIdentifier(), false));

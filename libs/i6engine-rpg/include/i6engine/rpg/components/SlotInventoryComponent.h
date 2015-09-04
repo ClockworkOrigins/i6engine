@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -30,59 +30,61 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief this inventory is like in action RPGs showing the inventory in a slot based and limited way
+	 */
 	class ISIXE_RPG_API SlotInventoryComponent : public InventoryComponent, public api::MessageSubscriberFacade {
 	public:
 		SlotInventoryComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-		void Finalize() override;
-
 		api::attributeMap synchronize() const override;
-
-		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
-			return std::make_pair(api::AddStrategy::REJECT, -1);
-		}
 
 		std::vector<api::componentOptions> getComponentOptions() override {
 			return {};
 		}
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "SlotInventory";
 		}
 
 		/**
 		 * \brief checks whether the item can be added to the inventory and if so it is added
 		 */
-		bool addItem(const api::GOPtr & item);
+		bool addItem(const api::GOPtr & item) override;
 
 		/**
 		 * \brief shows the inventory, implementation depends on subclass
 		 */
-		void show();
+		void show() override;
 
 		/**
 		 * \brief hides the inventory, implementation depends on subclass
 		 */
-		void hide();
+		void hide() override;
 
 		/**
 		 * \brief tries to use given item
 		 */
-		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback);
+		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback) override;
 
 		/**
 		 * \brief returns the selected item
 		 * if none is selected, first parameter in pair is UINT32_MAX
 		 */
-		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const;
+		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const override;
 
 		/**
 		 * \brief returns the number of items for the given type
 		 */
-		uint32_t getItemCount(uint32_t item, const std::string & name) const;
+		uint32_t getItemCount(const std::string & identifier) const override;
+		uint32_t getItemCount(uint32_t item, const std::string & name) const override;
+
+		/**
+		 * \brief used to create an item in the inventory
+		 */
+		void removeItems(const std::string & identifier, uint32_t amount) override;
 
 	private:
 		enum ItemEntry {
@@ -93,7 +95,9 @@ namespace components {
 			Image,
 			Width,
 			Height,
-			Infos
+			Infos,
+			Identifier,
+			Value
 		};
 
 		uint16_t _rows;
@@ -106,16 +110,24 @@ namespace components {
 		 * \brief contains for every slot the index of the item in list or UINT16_MAX, if empty
 		 */
 		std::vector<std::vector<uint16_t>> _slots;
-		std::vector<std::tuple<uint32_t, std::string, api::GameMessage::Ptr, std::string, std::string, uint16_t, uint16_t, std::vector<std::pair<std::string, std::string>>>> _items;
+		std::vector<std::tuple<uint32_t, std::string, api::GameMessage::Ptr, std::string, std::string, uint16_t, uint16_t, std::vector<std::pair<std::string, std::string>>, std::string, uint32_t>> _items;
 
+		void Init() override;
+		void Finalize() override;
+
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+			return std::make_pair(api::AddStrategy::REJECT, -1);
+		}
 
 		/**
 		 * \brief tries to use given item
 		 */
 		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback, uint16_t index);
 
-		void News(const api::GameMessage::Ptr & msg);
+		void News(const api::GameMessage::Ptr & msg) override;
 		void Tick() override;
+
+		void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) override;
 	};
 
 } /* namespace components */

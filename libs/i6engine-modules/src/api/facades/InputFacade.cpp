@@ -25,26 +25,9 @@
 namespace i6engine {
 namespace api {
 
-	InputFacade::InputFacade() : _keymap(), _mbmap(), _lock() {}
+	InputFacade::InputFacade() : _keymap(), _lock() {}
 
 	InputFacade::~InputFacade() {}
-
-	// mouse methods
-	void InputFacade::setMouseButtonMapping(const MouseButtonID id, const std::string & strAction) {
-		boost::mutex::scoped_lock sl(_lock);
-		_mbmap[id] = strAction;
-	}
-
-	std::string InputFacade::getMouseButtonMapping(const MouseButtonID id) const {
-		boost::mutex::scoped_lock sl(_lock);
-		mapMouseButtonMap::const_iterator iter = _mbmap.find(id);
-
-		if (iter == _mbmap.end()) {
-			return "NULL";
-		}
-
-		return iter->second;
-	}
 
 	// keyboard methods
 	void InputFacade::setKeyMapping(const KeyCode id, const std::string & strAction) {

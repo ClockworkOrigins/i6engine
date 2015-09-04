@@ -32,12 +32,12 @@ set(i6utilsSrc
 	${srcdir}/Splash.cpp
 )
 
-IF(ISIXE_LOGGING)
+IF(ISIXE_WITH_LOGGING)
 	set(i6utilsSrc
 		${i6utilsSrc}
 		${srcdir}/Logger.cpp
 	)
-ENDIF(ISIXE_LOGGING)
+ENDIF(ISIXE_WITH_LOGGING)
 
 SOURCE_GROUP(utils src/*)
 

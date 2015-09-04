@@ -49,8 +49,8 @@ namespace detail
       typedef E const& argument;
 #  endif
 
-      exception_handler(Handler handler)
-        : handler(handler)
+      exception_handler(Handler h)
+        : handler(h)
       {}
 
       void handle(lua_State* L) const

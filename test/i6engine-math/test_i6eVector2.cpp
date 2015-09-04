@@ -66,7 +66,7 @@ TEST(i6eVector2, Equal) {
 	Vec2 v1(1.0, 2);
 	Vec2 v2(1.1, 2);
 	Vec2 v3(1.0 + 1e-16, 2);
-	Vec2 v4(1.0 + 1e-14, 2);
+	Vec2 v4(1.0 + 1e-04, 2);
 
 	EXPECT_TRUE(v1 != v2);
 	EXPECT_TRUE(v1 == v3);

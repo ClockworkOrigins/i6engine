@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,25 +28,23 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief add this Component to your items if you use SlotInventory
+	 * specifies the amount of slots being used by this item
+	 */
 	class ISIXE_RPG_API SlotComponent : public api::Component {
 	public:
 		SlotComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-
 		api::attributeMap synchronize() const override;
-
-		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
-			return std::make_pair(api::AddStrategy::REJECT, -1);
-		}
 
 		std::vector<api::componentOptions> getComponentOptions() override {
 			return {};
 		}
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "Slot";
 		}
 
@@ -61,6 +59,12 @@ namespace components {
 	private:
 		uint16_t _width;
 		uint16_t _height;
+
+		void Init() override;
+
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+			return std::make_pair(api::AddStrategy::REJECT, -1);
+		}
 	};
 
 } /* namespace components */

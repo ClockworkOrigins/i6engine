@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<Category identifier="MainQuest" />
+<Category identifier="CompletedQuest" />
+<Category identifier="FailedQuest" />

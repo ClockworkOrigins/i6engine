@@ -43,10 +43,6 @@ namespace api {
 	}
 
 	ComPtr MovingCameraComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("MovingCameraComponent", "position not set!", params.find("pos") != params.end());
-		ISIXE_THROW_API_COND("MovingCameraComponent", "lookAt not set!", params.find("lookAt") != params.end());
-		ISIXE_THROW_API_COND("MovingCameraComponent", "nearclip not set!", params.find("nearclip") != params.end());
-		ISIXE_THROW_API_COND("MovingCameraComponent", "aspect not set!", params.find("aspect") != params.end());
 		return utils::make_shared<MovingCameraComponent, Component>(id, params);
 	}
 

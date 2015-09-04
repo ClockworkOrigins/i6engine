@@ -43,7 +43,6 @@
  *
  * \section sec_core_subsystem Subsystem
  * For the future, all SubSystems should have this structure:
- * \li ~Factory: Uses the factory pattern; creates all objects and handles (3rd party objects as well)
  * \li ~Controller: coordinates the Subsystem; Implements the Tick() function
  * \li ~Facade: implements the facade pattern
  * Currently available SubSystems are:
@@ -53,6 +52,7 @@
  * \li \ref page_network
  * \li \ref page_input
  * \li \ref page_physics
+ * \li \ref page_scripting
  */
 
 namespace i6engine {
@@ -77,11 +77,6 @@ namespace core {
 	 *
 	 * All subsystem have to register at the SubSystemController.
 	 * Each registered subsystem will be notified by the SubSystemController of any possible operation.
-	 *
-	 * SubSystemController.h defines the macro:
-	 * \li \c LNG_MESSAGING_FRAME_TIME 	This macro sets the frametime the MessagingController subsystem works with.
-	 *
-	 * See \ref macrodoc for a list of all globally defined macros.
 	 */
 	class ISIXE_CORE_API SubSystemController {
 		/* Only the EngineCoreController should run methods of this class */

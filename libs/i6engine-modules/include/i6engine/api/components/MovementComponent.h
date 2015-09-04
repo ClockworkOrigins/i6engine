@@ -1,3 +1,8 @@
+/**
+ * \addtogroup Components
+ * @{
+ */
+
 #ifndef __I6ENGINE_API_COMPONENTS_MOVEMENTCOMPONENT_H__
 #define __I6ENGINE_API_COMPONENTS_MOVEMENTCOMPONENT_H__
 
@@ -5,8 +10,12 @@
 
 namespace i6engine {
 namespace api {
+
 	class PhysicalStateComponent;
 
+	/**
+	 * \brief base class for Movement components
+	 */
 	class ISIXE_MODULES_API MovementComponent : public Component {
 	public:
 		MovementComponent(const int64_t id, const attributeMap & params);
@@ -34,3 +43,7 @@ namespace api {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_API_COMPONENTS_MOVEMENTCOMPONENT_H__ */
+
+/**
+ * @}
+ */

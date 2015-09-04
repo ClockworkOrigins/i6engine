@@ -18,3 +18,4 @@ configure_file(tut2.tex ${CMAKE_CURRENT_BINARY_DIR}/tut2.tex COPYONLY)
 configure_file(listings/GOTemplateTutorial.xml ${CMAKE_CURRENT_BINARY_DIR}/listings/GOTemplateTutorial.xml COPYONLY)
 
 add_custom_target(BasicTutorial02 COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/tut2.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET BasicTutorial02 POST_BUILD COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/tut2.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})

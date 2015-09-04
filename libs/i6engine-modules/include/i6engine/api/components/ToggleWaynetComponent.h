@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * \addtogroup Components
+ * @{
+ */
+
 #ifndef __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__
 #define __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__
 
@@ -23,11 +28,36 @@
 namespace i6engine {
 namespace api {
 
+	/**
+	 * \brief Component used to show the waynet
+	 */
 	class ISIXE_MODULES_API ToggleWaynetComponent : public Component, public MessageSubscriberFacade {
 	public:
 		ToggleWaynetComponent(int64_t id, const attributeMap & params);
 
 		static ComPtr createC(int64_t id, const attributeMap & params);
+
+		attributeMap synchronize() const  override {
+			return {};
+		}
+
+		std::string getTemplateName() const  override {
+			return "ToggleWaynet";
+		}
+
+		std::vector<componentOptions> getComponentOptions() override {
+			return {};
+		}
+
+		/**
+		 * \brief enables or disables the showing of the waynet
+		 */
+		void enable(bool enabled) {
+			_active = enabled;
+		}
+
+	private:
+		bool _active;
 
 		void Init() override;
 
@@ -35,29 +65,14 @@ namespace api {
 
 		void Finalize() override;
 
-		attributeMap synchronize() const {
-			return {};
-		}
-
-		std::string getTemplateName() const {
-			return "ToggleWaynet";
-		}
-
-		std::vector<componentOptions> getComponentOptions() {
-			return {};
-		}
-
 		void News(const GameMessage::Ptr & msg) override;
-
-		void enable(bool enabled) {
-			_active = enabled;
-		}
-
-	private:
-		bool _active;
 	};
 
 } /* namespace api */
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__ */
+
+/**
+ * @}
+ */

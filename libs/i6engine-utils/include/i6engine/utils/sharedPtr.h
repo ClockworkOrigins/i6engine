@@ -299,6 +299,10 @@ namespace utils {
 		return sharedPtr<T, U>(ptr, sC);
 	}
 
+	/**
+	 * \brief gets pointer of a shared pointer
+	 * necessary for luabind and boost::python
+	 */
 	template<class T, class U> T * get_pointer(const sharedPtr<T, U> & p) {
 		return p.get();
 	}

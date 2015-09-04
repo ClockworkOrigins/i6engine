@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,25 +28,22 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief all GameObject's with a name use this Component, e.g. Items and NPCs
+	 */
 	class ISIXE_RPG_API NameComponent : public api::Component {
 	public:
 		NameComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-
 		api::attributeMap synchronize() const override;
-
-		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
-			return std::make_pair(api::AddStrategy::REJECT, -1);
-		}
 
 		std::vector<api::componentOptions> getComponentOptions() override {
 			return {};
 		}
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const  override{
 			return "Name";
 		}
 
@@ -56,6 +53,12 @@ namespace components {
 
 	private:
 		std::string _name;
+
+		void Init() override;
+
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+			return std::make_pair(api::AddStrategy::REJECT, -1);
+		}
 	};
 
 } /* namespace components */

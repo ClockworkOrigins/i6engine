@@ -38,8 +38,6 @@ namespace sample {
 	void ScriptingApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
 
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
-
 		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
 
 		of->registerCTemplate("ScriptingShatter", boost::bind(&components::ScriptingShatterComponent::createC, _1, _2));

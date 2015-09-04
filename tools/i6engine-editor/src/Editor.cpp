@@ -31,6 +31,7 @@
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/components/MeshAppearanceComponent.h"
 #include "i6engine/api/components/MovableTextComponent.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/components/StaticStateComponent.h"
@@ -227,7 +228,6 @@ namespace editor {
 			}
 
 			api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
-			api::EngineController::GetSingletonPtr()->getPhysicsFacade()->clean();
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
@@ -253,7 +253,14 @@ namespace editor {
 
 			api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags);
 
-			api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO("EditorCam", api::objects::GOTemplate(), api::EngineController::GetSingleton().getUUID(), false, boost::bind(&Editor::setCamera, this, _1));
+			api::EngineController::GetSingletonPtr()->getGraphicsFacade()->getHighestCoordinate(Vec3::ZERO, [this](Vec3 pos) {
+				i6engine::api::objects::GOTemplate tmpl;
+				i6engine::api::attributeMap paramsCamera;
+				(pos + Vec3(0.0, 2.0, 0.0)).insertInMap("pos", paramsCamera);
+				(pos + Vec3(0.0, 2.0, 1.0)).insertInMap("lookAt", paramsCamera);
+				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Camera", paramsCamera, "", false, false));
+				api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO("EditorCam", tmpl, api::EngineController::GetSingleton().getUUID(), false, boost::bind(&Editor::setCamera, this, _1));
+			});
 
 			_inLevel = true;
 
@@ -265,6 +272,32 @@ namespace editor {
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 			updateObjectList();
+
+			// show TemplateList
+			api::EngineController::GetSingleton().getGUIFacade()->addStatusList("TemplateList", "Editor/Listbox", 0.0, 0.04, -1);
+			api::EngineController::GetSingleton().getGUIFacade()->setSize("TemplateList", 0.2, 0.9);
+
+			for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOTemplates()) {
+				api::EngineController::GetSingleton().getGUIFacade()->addTextToWidget("TemplateList", p.first);
+			}
+
+			api::EngineController::GetSingleton().getGUIFacade()->setSelectedStringCallback("TemplateList", [this](std::string tpl) {
+				auto tmpl = api::EngineController::GetSingleton().getObjectFacade()->getGOTemplates()[tpl];
+
+				for (auto & c : tmpl._components) {
+					if (c._template == "PhysicalState" || c._template == "StaticState") {
+						utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
+						Vec3 newPos = ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 5.0), ssc->getRotation());
+						newPos.insertInMap("pos", c._params);
+					}
+				}
+
+				api::EngineController::GetSingleton().getObjectFacade()->createObject(tpl, tmpl, api::EngineController::GetSingleton().getUUID(), false);
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+				updateObjectList();
+			});
 		}).detach();
 	}
 
@@ -399,6 +432,46 @@ namespace editor {
 							_removeBox = true;
 						}
 					}
+				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBLeft && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
+					auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
+
+					for (auto & p : targetList) {
+						auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
+						if (go != nullptr && go->getType() != "EditorCam") {
+							selectObject(p.first);
+							break;
+						}
+					}
+				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBMiddle && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
+					auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
+
+					for (auto & p : targetList) {
+						auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
+
+						if (go != nullptr && go->getType() != "EditorCam") {
+							auto selected = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+							if (go->getType() == "Waypoint" && selected != nullptr && selected->getType() == "Waypoint") {
+								auto newWC = go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent);
+								auto selectedWC = selected->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent);
+								if (newWC->isConnected(selectedWC->getName())) {
+									newWC->removeConnection(selectedWC->getName());
+									selectedWC->removeConnection(newWC->getName());
+								} else {
+									newWC->addConnection(selectedWC->getName());
+									selectedWC->addConnection(newWC->getName());
+								}
+								selectObject(_selectedObjectID);
+								api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+							}
+							break;
+						}
+					}
+				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBRight) {
+					selectObject(-1);
+					if (_removeBox) {
+						api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
+						_removeBox = false;
+					}
 				}
 			}
 		} else if (msg->getSubtype() == api::mouse::MouMouse) {
@@ -420,49 +493,6 @@ namespace editor {
 				_lastX = imu->intNewX;
 				_lastY = imu->intNewY;
 			}
-		} else if (msg->getSubtype() == api::mouse::MouButton) {
-			api::input::Input_Button_Update * ibu = dynamic_cast<api::input::Input_Button_Update *>(msg->getContent());
-			if (ibu->pressed && ibu->code == api::MouseButtonID::MB_Left && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
-				auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
-
-				for (auto & p : targetList) {
-					auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
-					if (go != nullptr && go->getType() != "EditorCam") {
-						selectObject(p.first);
-						break;
-					}
-				}
-			} else if (ibu->pressed && ibu->code == api::MouseButtonID::MB_Middle && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
-				auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
-
-				for (auto & p : targetList) {
-					auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
-
-					if (go != nullptr && go->getType() != "EditorCam") {
-						auto selected = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
-						if (go->getType() == "Waypoint" && selected != nullptr && selected->getType() == "Waypoint") {
-							auto newWC = go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent);
-							auto selectedWC = selected->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent);
-							if (newWC->isConnected(selectedWC->getName())) {
-								newWC->removeConnection(selectedWC->getName());
-								selectedWC->removeConnection(newWC->getName());
-							} else {
-								newWC->addConnection(selectedWC->getName());
-								selectedWC->addConnection(newWC->getName());
-							}
-							selectObject(_selectedObjectID);
-							api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
-						}
-						break;
-					}
-				}
-			} else if (ibu->pressed && ibu->code == api::MouseButtonID::MB_Right) {
-				selectObject(-1);
-				if (_removeBox) {
-					api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
-					_removeBox = false;
-				}
-			}
 		}
 	}
 
@@ -479,6 +509,13 @@ namespace editor {
 	void Editor::selectObject(int64_t id) {
 		if (_selectedObjectID != -1) {
 			api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("ObjectInfo");
+			auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			if (go != nullptr) {
+				auto mc = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
+				if (mc != nullptr) {
+					mc->removeBoundingBox();
+				}
+			}
 		}
 		_selectedObjectID = id;
 
@@ -497,8 +534,8 @@ namespace editor {
 		api::EngineController::GetSingleton().getGUIFacade()->setVisibility("ObjectInfo", true);
 		api::EngineController::GetSingleton().getGUIFacade()->setText("ObjectInfo", go->getType());
 		api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponentOption, core::Method::Update, new messages::GUI_AddComponentOption("ObjectInfo", true, "Flags", [wgo]() {
-			auto go = wgo.get();
-			std::vector<std::string> flags = go->getFlags();
+			auto gobj = wgo.get();
+			std::vector<std::string> flags = gobj->getFlags();
 			std::string flagString;
 			for (size_t i = 0; i < flags.size(); i++) {
 				flagString += flags[i];
@@ -509,8 +546,8 @@ namespace editor {
 			}
 			return flagString;
 		}, [wgo](std::string s) {
-			auto go = wgo.get();
-			go->setFlags(utils::split(s, "|"));
+			auto gobj = wgo.get();
+			gobj->setFlags(utils::split(s, "|"));
 			return true;
 		}), i6engine::core::Subsystem::Unknown));
 
@@ -523,6 +560,11 @@ namespace editor {
 			for (auto option : c->getComponentOptions()) {
 				api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponentOption, core::Method::Update, new messages::GUI_AddComponentOption("ObjectInfo", std::get<api::ComponentOptionsParameter::ACCESSSTATE>(option) == api::AccessState::READWRITE, std::get<api::ComponentOptionsParameter::NAME>(option), std::get<api::ComponentOptionsParameter::READFUNC>(option), std::get<api::ComponentOptionsParameter::WRITEFUNC>(option)), i6engine::core::Subsystem::Unknown));
 			}
+		}
+
+		auto mc = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
+		if (mc != nullptr) {
+			mc->drawBoundingBox(Vec3(1.0, 0.0, 0.0));
 		}
 	}
 

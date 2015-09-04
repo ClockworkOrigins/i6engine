@@ -31,6 +31,10 @@ namespace api {
 
 	/**
 	* \brief Only defines this object as a spawnpoint
+	 * For creating a SpawnpointComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | spawntypes | yes | std::string | GameObject types being spawnable at this Spawnpoint, separated by delimitter ; | yes |
 	*/
 	class ISIXE_MODULES_API SpawnpointComponent : public Component {
 	public:
@@ -38,14 +42,12 @@ namespace api {
 		* \brief Constructor
 		*/
 		SpawnpointComponent(const int64_t id, const attributeMap & params);
-		virtual ~SpawnpointComponent();
+		~SpawnpointComponent();
 
 		/**
 		* \brief creates the Component with given attributeMap
 		*/
 		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		void Init() override;
 
 		/**
 		 * \brief Adds an object type to spawn on this component
@@ -90,11 +92,6 @@ namespace api {
 		 */
 		void setState(bool b);
 
-		/**
-		 * \brief Receives messages for this component
-		 */
-		void News(const GameMessage::Ptr & msg) override;
-
 		std::string getTemplateName() const override {
 			return "Spawnpoint";
 		}
@@ -104,13 +101,20 @@ namespace api {
 	private:
 		std::vector<std::string> _spawntypes;
 		bool _state;
+
+		void Init() override;
+
+		/**
+		 * \brief Receives messages for this component
+		 */
+		void News(const GameMessage::Ptr & msg) override;
 	};
 
 } /* namespace api */
 } /* namespace i6engine */
 
+#endif /* __I6ENGINE_API_SPAWNPOINTCOMPONENT_H__ */
+
 /**
  * @}
  */
-
-#endif /* __I6ENGINE_API_SPAWNPOINTCOMPONENT_H__ */

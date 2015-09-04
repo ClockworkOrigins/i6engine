@@ -95,15 +95,12 @@ namespace modules {
 		 * \brief Automatically sets up all necessary dat structures of the underlying gui library.
 		 *
 		 *     initializes CEGUI by calling its initialization functions
-		 * \param   no params
-		 * \return   nothing
-		 *
 		 */
 		void initializeGUI(Ogre::Root * root);
 
 		/**
-		 *\brief Returns a pointer to gui root window.
-		 *\return Pointer to the gui root window
+		 * \brief Returns a pointer to gui root window.
+		 * \return Pointer to the gui root window
 		 */
 		inline CEGUI::Window * getRootWindow() const { return _objRoot; }
 
@@ -115,8 +112,6 @@ namespace modules {
 		 *
 		 * \param name Name of the associated window
 		 * \param ptrEventMethod Pointer to the designated function
-		 * \return   nothing
-		 *
 		 */
 		void setFunction(const std::string & name, const boost::function<void(void)> & ptrEventMethod);
 
@@ -127,7 +122,6 @@ namespace modules {
 		 *
 		 * \param   const std::string & name
 		 * \return   bool true if enabled, false otherwise
-		 *
 		 */
 		bool allowedEvent(const std::string & name);
 
@@ -143,7 +137,6 @@ namespace modules {
 		 *
 		 * \param   const std::string & windowname
 		 * \return   bool - true on visible, false otherwise
-		 *
 		 */
 		bool getVisibility(const std::string & windowname);
 
@@ -208,8 +201,6 @@ namespace modules {
 		 * \param[in] strDefaultFont - the default font (out of the set)
 		 * \param[in] strDefaultMouseImageSet - the mouse image set
 		 * \param[in] strDefaultMouseImageName - the name out of the mouseimageset
-		 * \return   nothing
-		 *
 		 */
 		void createGUI(const std::string & strScheme, const std::string & strFont, const std::string & strDefaultFont, const std::string & strDefaultMouseImageSet, const std::string & strDefaultMouseImageName);
 
@@ -222,8 +213,6 @@ namespace modules {
 		 * \param[in] fltDelatX Change of the cursor`s x position
 		 * \param[in] fltDeltaY Change of the cursor`s y position
 		 * \param[in] fltDeltaZ Change of the mousewheel position
-		 * \return   nothing
-		 *
 		 */
 		void MouseMove(const double fltDeltaX, const double fltDeltaY, const double fltDeltaZ) const;
 
@@ -234,8 +223,6 @@ namespace modules {
 		 *
 		 * \param[in] fltPosX New absolute x position of the cursor
 		 * \param[in] FltPosY New absolute y position of the cursor
-		 * \return   nothing
-		 *
 		 */
 		void MousePos(const double fltPosX, const double fltPosY) const;
 
@@ -246,10 +233,8 @@ namespace modules {
 		 *
 		 *			Injected mouse buttons: left, right, middle, b3, b4
 		 * \param[in] enuButton Button which was pressed
-		 * \return   nothing
-		 *
 		 */
-		void MouseDown(const api::MouseButtonID enuButton) const;
+		void MouseDown(const api::KeyCode enuButton) const;
 
 		/**
 		 * \brief Injects the release of a mouse button into the gui subsytem.
@@ -258,10 +243,8 @@ namespace modules {
 		 *
 		 *			Injected mouse buttons: left, right, middle, b3, b4
 		 * \param[in] enuButton Button which was released
-		 * \return   nothing
-		 *
 		 */
-		void MouseUp(const api::MouseButtonID enuButton) const;
+		void MouseUp(const api::KeyCode enuButton) const;
 
 		/**
 		 * \brief Injects the press of a keyboard key into the gui subsystem.
@@ -270,8 +253,6 @@ namespace modules {
 		 *     possibly handler for OIS
 		 *
 		 * \param[in] intapi::KeyCode Keycode of the keyboard key that was pressed
-		 * \return   nothing
-		 *
 		 */
 		void KeyDown(const api::KeyCode intKeyCode, uint32_t text);
 
@@ -287,8 +268,6 @@ namespace modules {
 		 *     possibly handler for OIS
 		 *
 		 * \param[in] intapi::KeyCode Keycode of the keyboard key that was released
-		 * \return   nothing
-		 *
 		 */
 		void KeyUp(const api::KeyCode intKeyCode);
 
@@ -300,10 +279,8 @@ namespace modules {
 		/**
 		 * \brief Calls the CEGUI method addChildWindow (see CEGUI documentation)
 		 *
-		 *
  		 * \param parent_widget Name of the parent widget
 		 * \param child_widget Name of the child widget
-		 *
 		 */
 		void addChildWindow(const std::string & parent_widget, const std::string & child_widget);
 
@@ -313,8 +290,6 @@ namespace modules {
 		 *     adds a given window to root
 		 *
 		 * \param child The window to add to root
-		 * \return   nothing
-		 *
 		 */
 		void addToRootWindow(CEGUI::Window * child);
 
@@ -324,8 +299,6 @@ namespace modules {
 		 *     sets mouse visibility by calling CEGUI's setVisible function
 		 *
  		 * \param visibility True to show, false to hide.
- 		 * \return   nothing
- 		 *
  		 */
 		void setMouseVisibility(const bool visibility);
 
@@ -333,10 +306,6 @@ namespace modules {
 		 * \brief Calls clear on _objGUIWindows
 		 *
 		 *     calls clear on _objGUIWindows
-		 *
-		 * \param   none
-		 * \return   nothing
-		 *
 		 */
 		void cleanUpAllWindows();
 
@@ -347,8 +316,6 @@ namespace modules {
 		 *
 		 * \param name The name of the window OR the OIS::api::KeyCode of the designated key.
 		 * \param type Type of the event, either "Clicked" for mouseklicks on windows OR "Pressed"/"Released" for key actions.
-		 * \return   nothing
-		 *
 		 */
 		void subscribeEvent(const std::string & name, const std::string & type);
 
@@ -360,7 +327,6 @@ namespace modules {
 		 *
 		 * \param   name
 		 * \return   bool true if enabled, false otherwise
-		 *
 		 */
 		void triggerFunction(const std::string & name);
 
@@ -370,9 +336,7 @@ namespace modules {
 		 *    seems to invoke a function call to function in _objGUIFunctions specified by name and type
 		 *    merely checks existance of name and type value pair in _objGUIFunctions and calls boost::thread(iter->second) on success
 		 *
-		 * \param  name
 		 * \return   bool true if enabled, false otherwise
-		 *
 		 */
 		void triggerKeyFunction(const uint32_t keyCode, const std::string & type);
 
@@ -411,7 +375,6 @@ namespace modules {
 		 *    See GUIFacade.h SubscribeEvent method documentation for details.
 		 * \param e The event passed by the SubscribeEvent method
 		 * \return   bool, true on success and failure
-		 *
 		 */
 		bool ClickedEventHandler(const CEGUI::EventArgs & e);
 
@@ -421,9 +384,7 @@ namespace modules {
 		 *     EventHandler for PressedEvent
 		 *
 		 *			Note that currently EVERY pressed key triggers this event, when at least one KeyEvent with type "Pressed" has been subscribed in the SubscribeKeyEvent method.
-		 * \param   const CEGUI::EventArgs & e
 		 * \return   bool, true on success and failure
-		 *
 		 */
 		bool PressedEventHandler(const CEGUI::EventArgs & e);
 
@@ -433,9 +394,7 @@ namespace modules {
 		 *     EventHandler for ReleasedEvent
 		 *
 		 *			Note that currently EVERY released key triggers this event, when at least one KeyEvent with type "Released" has been subscribed in the SubscribeKeyEvent method.
-		 * \param   const CEGUI::EventArgs & e
 		 * \return   bool, true on success and failure
-		 *
 		 */
 		bool ReleasedEventHandler(const CEGUI::EventArgs & e);
 
@@ -444,7 +403,6 @@ namespace modules {
 		 *
 		 * \param name The name of the widget
 		 * \return The Widget you are seeking for.
-		 *
 		 */
 		api::GUIWidget * getWidgetByName(const std::string & name);
 

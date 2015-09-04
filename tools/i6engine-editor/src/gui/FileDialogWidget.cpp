@@ -71,15 +71,11 @@ namespace gui {
 		lb->addItem(new CEGUI::ListboxTextItem(".."));
 		lb->addItem(new CEGUI::ListboxTextItem("."));
 		while (iter != dirEnd) {
-			bool directory = false;
 			if (is_regular_file(*iter)) {
 				if (iter->path().extension().string() != ".xml") {
 					iter++;
 					continue;
 				}
-				directory = false;
-			} else if (boost::filesystem::is_directory(*iter)) {
-				directory = true;
 			}
 			lb->addItem(new CEGUI::ListboxTextItem(iter->path().filename().string()));
 			iter++;

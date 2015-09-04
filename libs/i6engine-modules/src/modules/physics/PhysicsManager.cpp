@@ -319,8 +319,7 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		uint16_t type = msg->getSubtype();
 
-		if (type == api::physics::PhyClean) {
-		} else if (type == api::physics::PhyNode) {
+		if (type == api::physics::PhyNode) {
 			api::physics::Physics_Node_Delete * pnc = static_cast<api::physics::Physics_Node_Delete *>(msg->getContent());
 
 			PhysicsNode * tmp = getPhysicsNode(pnc->_waitForId);
@@ -359,6 +358,7 @@ namespace modules {
 				}
 				_constraints.erase(it);
 			}
+			delete tmp;
 		} else if (msg->getSubtype() == api::physics::PhyReset) {
 			_ctrl->reset();
 		} else if (msg->getSubtype() == api::physics::PhyConstraint) {

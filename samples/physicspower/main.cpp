@@ -16,10 +16,20 @@
 
 #include "PhysicsPowerApplication.h"
 
+#include "i6engine/configs/FrameTimes.h"
+
 #include "i6engine/api/EngineController.h"
 
+#include "i6engine/modules/graphics/GraphicsController.h"
+#include "i6engine/modules/input/InputController.h"
+#include "i6engine/modules/object/ObjectController.h"
+#include "i6engine/modules/physics/PhysicsController.h"
+
 int main(int argc, char ** argv) {
-	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false);
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), { i6engine::core::Subsystem::Object });
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6engine::modules::ObjectController(), { i6engine::core::Subsystem::Physic });
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6engine::modules::InputController(), LNG_INPUT_FRAME_TIME);
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new i6engine::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
 
 	sample::PhysicsPowerApplication app;
 

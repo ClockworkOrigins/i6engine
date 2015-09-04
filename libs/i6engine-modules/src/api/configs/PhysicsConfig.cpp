@@ -27,8 +27,6 @@ namespace physics {
 	Physics_Gravity_Update::Physics_Gravity_Update() {}
 	Physics_Gravity_Update::Physics_Gravity_Update(const Vec3 & v) : grav(v) {}
 
-	Physics_Clean_Delete::Physics_Clean_Delete() {}
-
 	Physics_Node_Create::Physics_Node_Create(const int64_t i, const int64_t ci, const Vec3 & p, const Quaternion & r, const Vec3 & s, const CollisionGroup & cg, const PhysicalStateComponent::ShapeType st, const attributeMap & pa, const ShatterInterest si) : GameMessageStruct(ci, i), pos(p), rot(r), scale(s), collisionGroup(cg), shapeType(st), shapeParams(pa), shatterInterest(si) {
 	}
 

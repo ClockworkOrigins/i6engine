@@ -30,10 +30,10 @@ namespace detail
   template <class F, class Signature, class Policies>
   struct function_object_impl : function_object
   {
-      function_object_impl(F f, Policies const& policies)
+      function_object_impl(F f_param, Policies const& p)
         : function_object(&entry_point)
-        , f(f)
-        , policies(policies)
+        , f(f_param)
+        , policies(p)
       {}
 
       int call(lua_State* L, invoke_context& ctx) const
@@ -49,7 +49,7 @@ namespace detail
       static int entry_point(lua_State* L)
       {
           function_object_impl const* impl =
-              *(function_object_impl const**)lua_touserdata(L, lua_upvalueindex(1));
+              *(reinterpret_cast<function_object_impl const **>(lua_touserdata(L, lua_upvalueindex(1))));
 
           invoke_context ctx;
 

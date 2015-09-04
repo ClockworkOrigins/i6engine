@@ -1,5 +1,7 @@
 #include "i6engine/api/manager/TextManager.h"
 
+#include <queue>
+
 #include "i6engine/utils/Exceptions.h"
 
 #include "boost/filesystem.hpp"
@@ -13,14 +15,27 @@ namespace api {
 	}
 
 	void TextManager::initialize(const std::string & textDir) {
-		boost::filesystem::directory_iterator iter(textDir), dirEnd;
-		while (iter != dirEnd) {
-			if (boost::filesystem::is_regular_file(*iter)) {
-				std::string file = iter->path().string();
-				loadFile(file);
-				ISIXE_LOG_INFO("TextManager", "Loaded XML file '" << file << "'");
+		std::queue<std::string> directories;
+		directories.push(textDir);
+
+		while (!directories.empty()) {
+			std::string dir = directories.front();
+			directories.pop();
+			try {
+				boost::filesystem::directory_iterator iter(dir), dirEnd;
+				while (iter != dirEnd) {
+					if (boost::filesystem::is_regular_file(*iter)) {
+						std::string file = iter->path().string();
+						loadFile(file);
+					} else if (boost::filesystem::is_directory(*iter)) {
+						std::string path = iter->path().string();
+						directories.push(path);
+					}
+					iter++;
+				}
+			} catch (boost::filesystem::filesystem_error & e) {
+				ISIXE_THROW_FAILURE("DialogParser", e.what());
 			}
-			iter++;
 		}
 	}
 

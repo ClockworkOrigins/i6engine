@@ -1,7 +1,5 @@
 #include "i6engine/api/components/FollowComponent.h"
 
-#include "boost/lexical_cast.hpp"
-
 #include "i6engine/math/i6eMath.h"
 
 #include "i6engine/api/EngineController.h"
@@ -17,8 +15,9 @@ namespace api {
 		Component::_objFamilyID = components::ComponentTypes::FollowComponent;
 		Component::_objComponentID = components::ComponentTypes::FollowComponent;
 
-		int64_t targetID = boost::lexical_cast<int64_t>(params.find("targetID")->second);
-		_speed = boost::lexical_cast<double>(params.find("speed")->second);
+		int64_t targetID;
+		parseAttribute<true>(params, "targetID", targetID);
+		parseAttribute<true>(params, "speed", _speed);
 
 		auto go = EngineController::GetSingleton().getObjectFacade()->getObject(targetID);
 		if (go != nullptr) {

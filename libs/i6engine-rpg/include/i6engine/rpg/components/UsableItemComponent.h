@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -39,24 +39,24 @@ namespace components {
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-
 		api::attributeMap synchronize() const override;
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "UsableItem";
 		}
 
-		bool use(const api::GOPtr & self);
+		bool use(const api::GOPtr & self) override;
 
 		std::map<Attribute, int32_t> getAttributeChanges() const {
 			return _attributeChange;
 		}
 
-		std::vector<std::pair<std::string, std::string>> getInfos() const;
+		std::vector<std::pair<std::string, std::string>> getInfos() const override;
 
 	private:
 		std::map<Attribute, int32_t> _attributeChange;
+
+		void Init() override;
 	};
 
 } /* namespace components */

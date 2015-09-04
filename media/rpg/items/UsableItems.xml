@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<Item identifier="UsableItem" type="UsableItem">
+	<Name>UsableItem_Key</Name>
+	<Mesh>UsableItem.MESH</Mesh>
+	<Imageset>UsableItem</Imageset>
+	<Image>UsableItem</Image>
+	<HP>50</HP>
+	<Value>100</Value>
+	<Weight>0.5</Weight>
+	<SlotWidth>1</SlotWidth>
+	<SlotHeight>1</SlotHeight>
+</Item>

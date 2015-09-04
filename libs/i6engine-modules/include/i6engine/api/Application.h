@@ -31,7 +31,7 @@
 namespace i6engine {
 namespace core {
 	class IPKey;
-}
+} /* namespace core */
 namespace api {
 
 	class EngineController;
@@ -116,7 +116,7 @@ namespace api {
 		/**
 		 * \brief called when connecting to server failes
 		 */
-		virtual void connectionFailed(const i6engine::core::IPKey & s) {}
+		virtual void connectionFailed(const core::IPKey & s) {}
 
 		/**
 		 * \brief called when address or port is already in use while connecting to m2etis
@@ -139,6 +139,8 @@ namespace api {
 		ASSERT_THREAD_SAFETY_HEADER
 
 	private:
+		std::string _windowName; //!< name of the application being used as the window title
+
 		/**
 		 * \brief called after the thread was created
 		 */
@@ -155,8 +157,6 @@ namespace api {
 		 * \brief forbidden
 		 */
 		Application & operator=(const Application &) = delete;
-
-		std::string _windowName; //!< name of the application being used as the window title
 	};
 
 } /* namespace api */

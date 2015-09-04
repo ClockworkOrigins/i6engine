@@ -77,20 +77,13 @@ namespace modules {
 
 		/**
 		 * \brief Gets or creates a graphic node for given goid
-		 *
-		 * \param   const int goid, const Vec3 & position
-		 * \return   GraphicsNode
-		 *
 		 */
 		GraphicsNode * getOrCreateGraphicsNode(const int64_t goid, const Vec3 & position = Vec3(0.0, 0.0, 0.0), const Quaternion & rotation = Quaternion(1.0, 0.0, 0.0, 0.0), const Vec3 & scale = Vec3(1.0, 1.0, 1.0));
 
 		/**
 		 * \brief Gets a graphic node for given goid
 		 *
-		 *
 		 * \param[in] goid ID for the graphic node
-		 * \return   GraphicsNode
-		 *
 		 */
 		GraphicsNode * getGraphicsNode(const int64_t goid) const;
 
@@ -98,9 +91,6 @@ namespace modules {
 		 * \brief Deletes GraphicsNode by goid
 		 *
 		 *     Deletes GraphicsNode by goid
-		 * \param[in] const int goid
-		 * \return   nothing
-		 *
 		 */
 		void deleteGraphicsNode(const int64_t goid);
 
@@ -108,10 +98,6 @@ namespace modules {
 		 * \brief addTerrain
 		 *
 		 *     Writes terrain object to an array by index (possibly overwriting!)
-		 *
-		 * \param   const int id, const boost::shared_ptr<Terrain> t
-		 * \return   nothing
-		 *
 		 */
 		void addTerrain(const int64_t id, const boost::shared_ptr<Terrain> & t);
 
@@ -119,10 +105,6 @@ namespace modules {
 		 * \brief removeTerrain
 		 *
 		 *     Removes terrain object in array by index.
-		 *
-		 * \param   const int id
-		 * \return   nothing
-		 *
 		 */
 		void removeTerrain(const int64_t id);
 
@@ -134,9 +116,6 @@ namespace modules {
 		 *			calls tick on GUIController and injectTimePulse on CEGUI
 		 *
 		 *			Updates the GUI and tells Ogre to render the scene.
-		 * \param   no params
-		 * \return   nothing
-		 *
 		 */
 		void Tick();
 
@@ -148,7 +127,6 @@ namespace modules {
 		 *
 		 * \param   Ogre::RenderWindow * rw
 		 * \return   bool: true on success
-		 *
 		 */
 		bool windowClosing(Ogre::RenderWindow * rw);
 
@@ -182,8 +160,14 @@ namespace modules {
 		 */
 		void NewsNodeDelete(const api::GameMessage::Ptr & msg);
 
+		/**
+		 * \brief adds GraphicsNode to tickList
+		 */
 		void addTicker(GraphicsNode * gn);
 
+		/**
+		 * \brief removes GraphicsNode to tickList
+		 */
 		void removeTicker(GraphicsNode * gn);
 
 	private:
@@ -239,6 +223,8 @@ namespace modules {
 		bool _initialized;
 
 		bool _showFPS;
+
+		void loadResources(const std::string & resourcesFile);
 
 		/**
 		 * \brief forbidden

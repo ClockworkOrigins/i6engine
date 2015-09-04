@@ -33,7 +33,6 @@ namespace i6engine {
 namespace api {
 
 	enum class KeyCode : uint32_t;
-	enum class MouseButtonID : uint32_t;
 
 	/**
 	 * \brief defines the current state of a key
@@ -50,28 +49,9 @@ namespace api {
 		 */
 		typedef std::map<const KeyCode, std::string> mapKeymap;
 
-		/**
-		 * \brief Data structure to store mappings of mousebuttons and corresponding actions.
-		 */
-		typedef std::map<const MouseButtonID, std::string> mapMouseButtonMap;
-
 	public:
 		InputFacade();
 		~InputFacade();
-
-		/**
-		 * \brief Sets a mouse button mapping
-		 * \param[in] id			mouse button to bind action to
-		 * \param[in] strAction		action to be bound
-		 */
-		void setMouseButtonMapping(const MouseButtonID id, const std::string & strAction);
-
-		/**
-		 * \brief Retrieves a mouse button mapping
-		 * \param[in] id			mouse button to get action for
-		 * \return					action bound to the mouse button
-		 */
-		std::string getMouseButtonMapping(const MouseButtonID id) const;
 
 		/**
 		 * \brief Sets a key mapping
@@ -115,7 +95,6 @@ namespace api {
 
 	private:
 		mapKeymap _keymap;
-		mapMouseButtonMap _mbmap;
 
 		mutable boost::mutex _lock;
 

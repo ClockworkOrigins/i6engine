@@ -18,6 +18,7 @@
  * \addtogroup Physics
  * @{
  */
+
 /**
  * \page PHY_BULLET_VARS Explanation of bullet rigid body parameters
  * | name | type | values (forced) | values (reasonable) | Explanation |
@@ -40,6 +41,7 @@
  * Second, if the speed is slower than linearDamping, it will slow down by fixed value 0.005</br>
  * Analogous for angular speed
  */
+
 /**
  * @}
  */
@@ -166,14 +168,15 @@ namespace api {
 	 * For creating a PhysicalStateComponent, these keys are possible:
 	 * | Name | Required | Type | Description | Public |
 	 * |------|----------|------| ----------- | ------------ |
-	 * | syncPrio | no | int | ? | ? |
-	 * | gravity | no | vector | gravity for this object. Replaces default | yes |
-	 * | pos | yes | vector | ? | ? |
-	 * | rot | yes | vector | ? | ? |
-	 * | scale | yes | vector | ? | ? |
-	 * | collisionGroup | yes | int int int | ? | ? |
-	 * | shapeType | yes | int | ? | ? |
-	 * | shatterInterest | yes | int | ? | ? |
+	 * | syncPrio | no | int | priority from which upwards updates should be sent through network | yes |
+	 * | gravity | no | Vec3 | gravity for this object. Replaces default | yes |
+	 * | pos | yes | Vec3 | position of the SceneNode | yes |
+	 * | rot | yes | Quaternion | rotation of the SceneNode | yes |
+	 * | scale | yes | Vec3 | scale of the SceneNode | yes |
+	 * | collisionGroup | yes | int int int | ResponseType CrashType CrashMask | yes |
+	 * | shapeType | yes | int | one of the shapeTypes from ShapeType enum | yes |
+	 * | shatterInterest | yes | int | one of the shatterInterests from ShatterInterest enum | yes |
+	 * | compound | yes | bool | should this PSC be used as a compound shape together with other ones of this GameObject | yes |
 	 */
 	class ISIXE_MODULES_API PhysicalStateComponent : public Component {
 	public:
@@ -215,20 +218,12 @@ namespace api {
 		/**
 		 * \brief destructor
 		 */
-		virtual ~PhysicalStateComponent();
+		~PhysicalStateComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
-		 * \brief sends initialising messages
-		 * call this after you set all starting values
-		 */
-		void Init() override;
-
-		void Finalize() override;
 
 		/**
 		 * \brief Returns the position of the object.
@@ -283,7 +278,7 @@ namespace api {
 		/**
 		 * \brief returns a reference to the Collision Flags of this GameObject
 		 */
-		CollisionGroup & getCollisionFlags() { return _collisionGroup; }
+		CollisionGroup getCollisionFlags() const { return _collisionGroup; }
 
 		/**
 		 * \brief Clears all forces and sets the velocity to 0
@@ -328,16 +323,6 @@ namespace api {
 		void applyForce(const Vec3 & force, const Vec3 & offset, bool forceIsLocalSpace);
 
 		/**
-		 * \brief processes a msg
-		 */
-		void News(const GameMessage::Ptr & msg) override;
-
-		/**
-		 * \brief ticks the component
-		 */
-		void Tick() override;
-
-		/**
 		 * \brief sets type of the collision interest for this entity
 		 */
 		void setShatterInterest(ShatterInterest si);
@@ -361,8 +346,6 @@ namespace api {
 		 * \param[in] msg message to be send on notify
 		 */
 		void rayTest(const Vec3 & from, const Vec3 & to, RayTestRepetition rtr, RayTestNotify rtn, const GameMessage::Ptr & msg);
-
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "PhysicalState";
@@ -448,6 +431,26 @@ namespace api {
 		mutable boost::mutex _lock;
 
 		uint32_t _syncPrio;
+
+		/**
+		 * \brief sends initialising messages
+		 * call this after you set all starting values
+		 */
+		void Init() override;
+
+		void Finalize() override;
+
+		/**
+		 * \brief processes a msg
+		 */
+		void News(const GameMessage::Ptr & msg) override;
+
+		/**
+		 * \brief ticks the component
+		 */
+		void Tick() override;
+
+		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};
 
 } /* namespace api */

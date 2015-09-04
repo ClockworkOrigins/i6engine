@@ -70,7 +70,7 @@ namespace sample {
 					_counter = (_counter + 1) % 11;
 					gf->setProgress("ProgressBar", _counter / 10.0);
 					return true;
-				}, true, 1);
+				}, true, i6engine::core::JobPriorities::Prio_Medium);
 				gf->pauseAnimation("ToggleButton", "RotateY");
 			} else {
 				gf->setTooltip("ToggleButton", "Press to activate progress bar.");

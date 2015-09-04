@@ -22,6 +22,7 @@
 #ifndef __I6ENGINE_MATH_I6EVECTOR2_H__
 #define __I6ENGINE_MATH_I6EVECTOR2_H__
 
+#include <cfloat>
 #include <cmath>
 #include <cstdint>
 #include <map>
@@ -168,13 +169,6 @@ namespace math {
 		}
 
 		/**
-		 * \brief Operator '==' for Vector
-		 */
-		bool operator==(const i6eVector2 & b) const {
-			return std::fabs(_x - b.getX()) < EPSILON && std::fabs(_y - b.getY()) < EPSILON;
-		}
-
-		/**
 		 * \brief Operator '!=' for Vector
 		 */
 		bool operator!=(const i6eVector2 & b) const {
@@ -202,7 +196,7 @@ namespace math {
 
 		/**
 		 * \brief muliplies two Vectors per component
-		 * \param b
+		 * \param[in] b
 		 */
 		void mulComponents(const i6eVector2 & b) {
 			_x = _x * b.getX();
@@ -224,15 +218,15 @@ namespace math {
 		/**
 		 * \brief length of the Vector
 		 */
-		double length() const {
-			return std::sqrt(_x * _x + _y * _y);
+		T length() const {
+			return T(std::sqrt(_x * _x + _y * _y));
 		}
 
 		/**
-		* \brief converts Vector to std::string
-		*
-		* converts the vector to a std::string using the Format "x y z"
-		*/
+		 * \brief converts Vector to std::string
+		 *
+		 * converts the vector to a std::string using the Format "x y z"
+		 */
 		std::string toString() const {
 			std::stringstream s;
 			s.precision(100);
@@ -260,11 +254,15 @@ namespace math {
 	template<typename T>
 	const i6eVector2<T> i6eVector2<T>::ZERO = i6eVector2<T>(T(), T());
 
-	template<>
-	bool i6eVector2<int32_t>::operator==(const i6eVector2<int32_t> & b) const;
+	template<typename T>
+	typename std::enable_if<std::is_integral<T>::value, bool>::type operator==(const i6eVector2<T> & first, const i6eVector2<T> & second) {
+		return first.getX() == second.getX() && first.getY() == second.getY();
+	}
 
-	template<>
-	bool i6eVector2<uint32_t>::operator==(const i6eVector2<uint32_t> & b) const;
+	template<typename T>
+	typename std::enable_if<std::is_floating_point<T>::value, bool>::type operator==(const i6eVector2<T> & first, const i6eVector2<T> & second) {
+		return std::fabs(first.getX() - second.getX()) < FLT_EPSILON && std::fabs(first.getY() - second.getY()) < FLT_EPSILON;
+	}
 
 } /* namespace math */
 } /* namespace i6engine */

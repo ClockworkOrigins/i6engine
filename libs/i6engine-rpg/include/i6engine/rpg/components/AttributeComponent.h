@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -36,38 +36,50 @@ namespace components {
 		COUNT
 	};
 
+	/**
+	 * \brief container for attributes and their values
+	 */
 	class ISIXE_RPG_API AttributeComponent : public api::Component {
 	public:
 		AttributeComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-
 		api::attributeMap synchronize() const override;
-
-		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
-			return std::make_pair(api::AddStrategy::REJECT, -1);
-		}
 
 		std::vector<api::componentOptions> getComponentOptions() override {
 			return {};
 		}
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "Attribute";
 		}
 
+		/**
+		 * \brief returns the value of given attribute
+		 */
 		int32_t getAttributeValue(Attribute attribute) const {
 			return _attributes[size_t(attribute)];
 		}
 
+		/**
+		 * \brief changes the value of the attribute by given diff value
+		 */
 		void changeAttribute(Attribute attribute, int32_t diff);
 
+		/**
+		 * \brief registers a callback being notified on change of the attribute
+		 */
 		void registerListener(Attribute attribute, const std::function<void(int32_t)> & func);
 
 	private:
 		std::vector<utils::AutoUpdater<int32_t>> _attributes;
+
+		void Init() override;
+
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+			return std::make_pair(api::AddStrategy::REJECT, -1);
+		}
 	};
 
 } /* namespace components */

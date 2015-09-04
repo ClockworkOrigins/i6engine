@@ -118,18 +118,12 @@ namespace api {
 	}
 
 	void MoverCircleComponent::loadParams(const attributeMap & params) {
-		ISIXE_THROW_API_COND("MoverCircleComponent", "required parameter 'pos' not set", params.find("pos") != params.end());
-		ISIXE_THROW_API_COND("MoverCircleComponent", "required parameter 'axis' not set", params.find("axis") != params.end());
-		ISIXE_THROW_API_COND("MoverCircleComponent", "required parameter 'radius' not set", params.find("radius") != params.end());
-		setCircleParameters(Vec3(params, "pos"), Vec3(params, "axis"), boost::lexical_cast<double>(params.at("radius")));
+		parseAttribute<true>(params, "pos", _circleCenter);
+		parseAttribute<true>(params, "axis", _circleAxis);
+		parseAttribute<true>(params, "radius", _circleRadius);
+		parseAttribute<false>(params, "realCenterPos", _realStartPos);
+
 		_lastPos = _circleCenter;
-		if (params.find("realCenterPos") != params.end()) {
-			_realStartPos = Vec3(params, "realCenterPos");
-		}
-		// override lastpos if set
-		if (params.find("lastPos") != params.end()) {
-			_lastPos = Vec3(params, "lastPos");
-		}
 	}
 
 	attributeMap MoverCircleComponent::synchronize() const {

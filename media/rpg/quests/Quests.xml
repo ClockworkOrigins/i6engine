@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<Quest identifier="CollectUsableItemsQuest">
+	<Name>CollectUsableItemsQuest_Name</Name>
+	<Category>MainQuest</Category>
+</Quest>

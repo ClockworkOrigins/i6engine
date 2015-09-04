@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup Object
+ * \addtogroup Components
  * @{
  */
 

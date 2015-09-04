@@ -32,6 +32,13 @@ namespace api {
 	/**
 	 * \class ParticleEmitterComponent
 	 * \brief Emits Particles
+	 * For creating a ParticleEmitterComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | particleEmitter | yes | std::string | The emitter for the particle | yes |
+	 * | pos | no | Vec3 | relative position to SceneNode | yes |
+	 * | fadeOut | no | bool | if set to true, the particle isn't removed immediately but emitters are stopped and so the particle fades out | yes |
+	 * | fadeOutCooldown | *) | uint64_t | time after stopping emitters until particle will be destroyed, *) required if fadeOut is set | yes |
 	 */
 	class ISIXE_MODULES_API ParticleEmitterComponent : public Component {
 	public:
@@ -39,7 +46,6 @@ namespace api {
 		 * \brief Constructor of the component
 		 *
 		 * Sets visibility and ID
-		 *
 		 */
 		ParticleEmitterComponent(const int64_t id, const attributeMap & params);
 
@@ -47,7 +53,6 @@ namespace api {
 		 * \brief Empty
 		 *
 		 * Hasn't to do anything right now
-		 *
 		 */
 		~ParticleEmitterComponent();
 
@@ -56,16 +61,10 @@ namespace api {
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
 
-		void Init() override;
-
-		void Finalize() override;
-
 		/**
 		 * \brief synchronizes the Components state
 		 */
 		attributeMap synchronize() const override;
-
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		std::string getTemplateName() const override {
 			return "ParticleEmitter";
@@ -78,6 +77,12 @@ namespace api {
 		Vec3 _pos;
 		bool _fadeOut;
 		uint32_t _fadeOutCooldown;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		/**
 		 * \brief Sends message to MessagingController

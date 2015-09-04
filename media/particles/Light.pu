@@ -1,0 +1,29 @@
+system Light
+{
+    technique 
+    {
+        visual_particle_quota                   5000
+        emitted_emitter_quota                   500
+        emitted_technique_quota                 500
+        emitted_affector_quota                  500
+        emitted_system_quota                    100
+        material                                Particles/Sun
+        default_particle_width                  0.1
+        default_particle_height                 0.1
+        default_particle_depth                  0.1
+        renderer                                Billboard
+        {
+        }
+        emitter                                 Point 
+        {
+            emission_rate                       50
+            angle                               dyn_random
+            {
+                min                             1
+                max                             360
+            }
+            time_to_live                        0.5
+            velocity                            0.25
+        }
+    }
+}

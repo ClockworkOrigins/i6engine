@@ -28,7 +28,7 @@ if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
 fi
 
-PREFIX="${PWD}/cegui/"
+PREFIX="${DEP_DIR}/cegui/"
 
 PARALLEL_FLAG=""
 if [ ! -z "${BUILD_PARALLEL}" ]; then
@@ -37,6 +37,7 @@ fi
 
 DEBUG_FLAG="Debug"
 RELEASE_FLAG="Release"
+
 if [ -z "${DEBUG}" ]; then
 	BUILD_TYPE="${RELEASE_FLAG}"
 else
@@ -51,19 +52,14 @@ fi
 
 title "Compile CEGUI"
 
-if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
-	status "CEGUI seems to be up to date, skipping build"
-	exit 0
-fi
-
 ./download-dependency.sh ${ARCHIVE}
 
 status "Cleaning CEGUI"
-rm -rf "${DEST_DIR}" >/dev/null
+rm -rf "${PREFIX}" >/dev/null
 
 status "Extracting CEGUI"
 cd "${BUILD_ROOT}"
-tar xf "${EX_DIR}/${ARCHIVE}" >/dev/null
+tar xf "${ARCHIVE}" >/dev/null
 
 cd ${BUILD_DIR}
 
@@ -117,7 +113,6 @@ cp -r ${PREFIX}include/cegui-0/* ${PREFIX}include/
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-rm -r "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" >/dev/null
 
 touch "${PREFIX}"

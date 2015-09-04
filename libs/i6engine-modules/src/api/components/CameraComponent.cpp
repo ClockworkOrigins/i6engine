@@ -38,21 +38,21 @@ namespace api {
 		Component::_objFamilyID = components::CameraComponent;
 		Component::_objComponentID = components::CameraComponent;
 
-		_position = Vec3(params, "pos");
-		_lookAt = Vec3(params, "lookAt");
-		_nearClip = boost::lexical_cast<int32_t>(params.find("nearclip")->second);
-		_aspect = boost::lexical_cast<double>(params.find("aspect")->second);
+		parseAttribute<true>(params, "pos", _position);
+		parseAttribute<true>(params, "lookAt", _lookAt);
+		parseAttribute<true>(params, "nearclip", _nearClip);
+		parseAttribute<true>(params, "aspect", _aspect);
 
 		if (params.find("viewport") != params.end()) {
-			_viewport = boost::lexical_cast<bool>(params.find("viewport")->second);
-			_left = boost::lexical_cast<double>(params.find("vp_left")->second);
-			_top = boost::lexical_cast<double>(params.find("vp_top")->second);
-			_width = boost::lexical_cast<double>(params.find("vp_width")->second);
-			_height = boost::lexical_cast<double>(params.find("vp_height")->second);
-			_red = boost::lexical_cast<double>(params.find("vp_red")->second);
-			_green = boost::lexical_cast<double>(params.find("vp_green")->second);
-			_blue = boost::lexical_cast<double>(params.find("vp_blue")->second);
-			_alpha = boost::lexical_cast<double>(params.find("vp_alpha")->second);
+			parseAttribute<true>(params, "viewport", _viewport);
+			parseAttribute<true>(params, "vp_left", _left);
+			parseAttribute<true>(params, "vp_top", _top);
+			parseAttribute<true>(params, "vp_width", _width);
+			parseAttribute<true>(params, "vp_height", _height);
+			parseAttribute<true>(params, "vp_red", _red);
+			parseAttribute<true>(params, "vp_green", _green);
+			parseAttribute<true>(params, "vp_blue", _blue);
+			parseAttribute<true>(params, "vp_alpha", _alpha);
 		}
 	}
 
@@ -63,10 +63,6 @@ namespace api {
 	}
 
 	ComPtr CameraComponent::createC(int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("CameraComponent", "position not set!", params.find("pos") != params.end());
-		ISIXE_THROW_API_COND("CameraComponent", "lookAt not set!", params.find("lookAt") != params.end());
-		ISIXE_THROW_API_COND("CameraComponent", "nearclip not set!", params.find("nearclip") != params.end());
-		ISIXE_THROW_API_COND("CameraComponent", "aspect not set!", params.find("aspect") != params.end());
 		return utils::make_shared<CameraComponent, Component>(id, params);
 	}
 
@@ -233,7 +229,7 @@ namespace api {
 			return boost::lexical_cast<std::string>(_aspect);
 		}, [this](std::string s) {
 			try {
-				_aspect = boost::lexical_cast<double>(s);
+				_aspect = std::stod(s);
 			} catch (boost::bad_lexical_cast &) {
 				return false;
 			}

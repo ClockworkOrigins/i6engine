@@ -44,21 +44,16 @@ namespace api {
 	 * You can control the behaviour by defining a mode, a way and the way of positioning. Consult the enum definitions
 	 * for a detailed description
 	 * \info This Component will soon be split into several subclasses for different Ways.
-	 * For creating a Mover Component, these keys are possible:
+	 * For creating a MoverComponent, these keys are possible:
 	 * | Name | Required | Type | Description | Public |
 	 * |------|----------|------| ----------- | ------------ |
-	 * | duration | yes | long | Duration of one movement cycle | yes |
-	 * | mode | yes | short | How are the frames interpolated, ignored in CIRCLE way | yes |
-	 * | way | yes | short | In which order the frames will be processed | yes |
+	 * | duration | yes | uint64_t | Duration of one movement cycle | yes |
 	 * | positioning | yes | short | Absolute or relative positioning | yes |
 	 * | continue | no | "true" | continues movement instead of starting | no |
-	 * | startTime | no | time | required when continue set to synchronize time | no |
-	 * | keyframes | *) | int | number of keyframes to follow, *) required when LINEAR or BEZIER | yes |
-	 * | keyframe_<i>_pos | *) | vector | position of i-th keyframe, *) required for all keyframes | yes |
-	 * | keyframe_<i>_rot | *) | quaternion | rotation of i-th keyframe, *) required for all keyframes | yes |
-	 * | pos | *) | vector | centerposition of the circle, *) required if CIRCLE | yes |
-	 * | axis | *) | vector | axis of the circle, *) required if CIRCLE | yes |
-	 * | radius | *) | double | radius of the circle, *) required if CIRCLE | yes |
+	 * | startTime | *) | uint64_t | *) required when continue set to synchronize time | no |
+	 * | lastPos | no | Vec3 | the last position of the circle | no |
+	 * | linkable | no | bool | should colliding objects (with correct flags) be linked to this mover and moved with it | yes |
+	 * | started | yes | bool | should this mover start directly | yes |
 	 */
 	class ISIXE_MODULES_API MoverComponent : public ShatterComponent {
 	public:
@@ -69,6 +64,12 @@ namespace api {
 
 		MoverComponent(const int64_t id, const attributeMap & params);
 		virtual ~MoverComponent();
+
+		virtual void Tick() override;
+
+		virtual void Init() override;
+
+		virtual void Finalize() override;
 
 		/**
 		 * \brief
@@ -91,12 +92,6 @@ namespace api {
 		 * \brief stops movement
 		 */
 		void stop();
-
-		virtual void Tick() override;
-
-		void Init() override;
-
-		void Finalize() override;
 
 		/**
 		 * \brief resets progress to initial status

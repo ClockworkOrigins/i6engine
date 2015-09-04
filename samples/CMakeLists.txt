@@ -19,9 +19,9 @@ add_subdirectory(common)
 add_subdirectory(canvas)
 add_subdirectory(chain)
 
-IF(ISIXE_NETWORK)
+IF(ISIXE_WITH_NETWORK)
 	add_subdirectory(chat)
-ENDIF(ISIXE_NETWORK)
+ENDIF(ISIXE_WITH_NETWORK)
 
 add_subdirectory(compositor)
 add_subdirectory(dragdrop)
@@ -39,9 +39,9 @@ IF(ISIXE_WITH_RPG)
 	add_subdirectory(rpg)
 ENDIF(ISIXE_WITH_RPG)
 
-IF(ISIXE_WITH_LUA_SCRIPTING OR ISIXE_WITH_PYTHON_SCRIPTING)
+IF(SCRIPTING_LUA OR SCRIPTING_PYTHON)
 	add_subdirectory(scripting)
-ENDIF(ISIXE_WITH_LUA_SCRIPTING OR ISIXE_WITH_PYTHON_SCRIPTING)
+ENDIF(SCRIPTING_LUA OR SCRIPTING_PYTHON)
 
 add_subdirectory(shadow)
 add_subdirectory(terrain)

@@ -32,6 +32,14 @@ namespace api {
 	/**
 	 * \class Point2PointConstraintComponent
 	 * \brief Connects two PhysicalStateComponents in a point RELATIVE to their origin
+	 * For creating a Point2PointConstraintComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | selfIdentifier | yes | std::string | identifier for this constraint component, must be unique over the complete game | yes |
+	 * | targetIdentifier | yes | std::string | identifier of the constraint this component is connected to | yes |
+	 * | selfOffset | yes | Vec3 | offset on which this constraint is connected relative to origin | yes |
+	 * | targetOffset | yes | Vec3 | offset on which target constraint is connected relative to its origin | yes |
+	 * | breakingImpulse | no | double | impulse that is necessary to break connection, not breakable if not set | yes |
 	 */
 	class ISIXE_MODULES_API Point2PointConstraintComponent : public Component {
 	public:
@@ -42,10 +50,6 @@ namespace api {
 		 * \brief creates the Component with given attributeMap
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		void Init() override;
-
-		void Finalize() override;
 
 		/**
 		 * \brief synchronizes the Components state
@@ -58,8 +62,6 @@ namespace api {
 
 		std::vector<componentOptions> getComponentOptions() override;
 
-		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
-
 	private:
 		bool _connected;
 		std::string _selfIdentifier;
@@ -68,6 +70,12 @@ namespace api {
 		Vec3 _targetOffset;
 		double _breakingImpulse;
 		int64_t _targetID;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 	};
 
 } /* namespace api */

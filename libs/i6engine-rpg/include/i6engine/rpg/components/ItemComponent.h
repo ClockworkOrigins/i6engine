@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,11 +28,15 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief base class for all items
+	 * derive from it and implement virtual methods to create own behavior
+	 */
 	class ISIXE_RPG_API ItemComponent : public api::Component {
 	public:
 		ItemComponent(int64_t id, const api::attributeMap & params);
 
-		api::attributeMap synchronize() const override;
+		virtual api::attributeMap synchronize() const override;
 
 		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
 			return std::make_pair(api::AddStrategy::REJECT, -1);
@@ -63,6 +67,13 @@ namespace components {
 			return _weight;
 		}
 
+		std::string getIdentifier() const {
+			return _identifier;
+		}
+
+		/**
+		 * \brief returns key value pairs for info screen for this item in inventory
+		 */
 		virtual std::vector<std::pair<std::string, std::string>> getInfos() const = 0;
 
 	private:
@@ -70,6 +81,7 @@ namespace components {
 		std::string _imageset;
 		std::string _image;
 		double _weight;
+		std::string _identifier;
 	};
 
 } /* namespace components */

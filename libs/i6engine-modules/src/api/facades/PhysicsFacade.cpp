@@ -33,19 +33,12 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void PhysicsFacade::clean() const {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsMessageType, physics::PhyClean, core::Method::Delete, new physics::Physics_Clean_Delete(), core::Subsystem::Unknown);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-	}
-
 	void PhysicsFacade::registerNotifyCallback(const boost::function<void(int64_t)> & f) {
 		_notify = f;
-		_notifyInit = true;
 	}
 
 	void PhysicsFacade::notifyNewID(int64_t id) {
-		if (_notifyInit) {
+		if (!_notify.empty()) {
 			_notify(id);
 		}
 	}

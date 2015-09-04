@@ -22,12 +22,12 @@ namespace i6engine {
 namespace core {
 
 	Timer::Timer(EngineCoreController * ctrl, const uint32_t lngFrameTime) : _ctrl(ctrl), _bolTimerStopped(false), _objCondExecutable(), _objCondMut(), _objCondUniqLock(_objCondMut), _timerID() {
-		_timerID = _ctrl->registerTimer(lngFrameTime, boost::bind(&Timer::setLastUpdate, this), true, 100);
+		_timerID = _ctrl->registerTimer(lngFrameTime, boost::bind(&Timer::setLastUpdate, this), true, JobPriorities::Prio_Subsystem);
 	}
 
 	Timer::~Timer() {
 		_bolTimerStopped = true;
-		_ctrl->removeTimerID(_timerID);
+		_objCondExecutable.wait(_objCondUniqLock);
 	}
 
 	void Timer::update() {

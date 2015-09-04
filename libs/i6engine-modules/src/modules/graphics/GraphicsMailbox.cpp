@@ -16,11 +16,11 @@
 
 #include "i6engine/modules/graphics/GraphicsMailbox.h"
 
-#include <boost/shared_ptr.hpp>
-
 #include "i6engine/api/FrontendMessageTypes.h"
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
+
+#include "boost/shared_ptr.hpp"
 
 namespace i6engine {
 namespace modules {
@@ -35,7 +35,6 @@ namespace modules {
 
 	void GraphicsMailbox::News(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		if (msg->getMessageType() == api::messages::GraphicsMessageType) {
 			if (msg->getMethod() == core::Method::Create) {
 				_manager->NewsCreate(msg);

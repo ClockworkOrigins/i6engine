@@ -24,10 +24,10 @@ include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 
-IF(ISIXE_WITH_LUA_SCRIPTING)
+IF(SCRIPTING_LUA)
 	include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
 	include_directories(${I6ENGINE_LUABIND_INCLUDE_DIR})
-ENDIF(ISIXE_WITH_LUA_SCRIPTING)
+ENDIF(SCRIPTING_LUA)
 
 set(SampleScriptingSrc
 	main.cpp

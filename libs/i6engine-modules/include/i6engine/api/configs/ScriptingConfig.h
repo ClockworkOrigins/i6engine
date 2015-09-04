@@ -30,7 +30,8 @@ namespace api {
 namespace scripting {
 	enum ScriptingMessageTypes {
 		ScrReset = 0,
-		ScrRayResult
+		ScrRayResult,
+		ScrLoadAllScripts
 	};
 
 	/**

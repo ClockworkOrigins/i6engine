@@ -23,12 +23,12 @@
 #ifndef OPERATOR_040729_HPP
 #define OPERATOR_040729_HPP
 
-#include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/identity.hpp>
-#include <boost/mpl/apply_wrap.hpp>
-#include <boost/preprocessor/repetition/enum_trailing.hpp>
-#include <boost/preprocessor/repetition/enum_trailing_params.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include "boost/mpl/eval_if.hpp"
+#include "boost/mpl/identity.hpp"
+#include "boost/mpl/apply_wrap.hpp"
+#include "boost/preprocessor/repetition/enum_trailing.hpp"
+#include "boost/preprocessor/repetition/enum_trailing_params.hpp"
+#include "boost/type_traits/is_same.hpp"
 #include "i6engine/luabind/detail/other.hpp"
 #include "i6engine/luabind/raw_policy.hpp"
 
@@ -71,7 +71,7 @@ namespace luabind { namespace operators {
     
 }} // namespace luabind::operators
 
-#include <boost/preprocessor/iteration/local.hpp>
+#include "boost/preprocessor/iteration/local.hpp"
 
 namespace luabind {
 
@@ -207,7 +207,7 @@ namespace luabind {
             { \
                 static void execute(lua_State* L, T0 _0, T1 _1) \
                 { \
-                    detail::operator_result(L, _0 op _1, (Policies*)0); \
+                    detail::operator_result(L, _0 op _1, reinterpret_cast<Policies *>(0)); \
                 } \
             }; \
 \
@@ -302,7 +302,7 @@ namespace luabind {
             { \
                 static void execute(lua_State* L, T x) \
                 { \
-                    detail::operator_result(L, op(x), (Policies*)0); \
+                    detail::operator_result(L, op(x), reinterpret_cast<Policies *>(0)); \
                 } \
             }; \
 \
@@ -344,8 +344,8 @@ namespace luabind {
 
     namespace {
 
-        LUABIND_ANONYMOUS_FIX self_type self;
-        LUABIND_ANONYMOUS_FIX const_self_type const_self;
+        LUABIND_ANONYMOUS_FIX self_type const self = self_type();
+        LUABIND_ANONYMOUS_FIX const_self_type const const_self = const_self_type();
 
     } // namespace unnamed
     

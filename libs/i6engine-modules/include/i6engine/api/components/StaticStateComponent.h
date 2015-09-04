@@ -32,7 +32,13 @@ namespace api {
 
 	/**
 	 * \class StaticStateComponent
-	 * \brief Makes it possible to place a static gameobject
+	 * \brief Makes it possible to place a static GameObject
+	 * For creating a StaticStateComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | pos | yes | Vec3 | position of the SceneNode | yes |
+	 * | rot | yes | Quaternion | rotation of the SceneNode | yes |
+	 * | scale | yes | Vec3 | scale of the SceneNode | yes |
 	 */
 	class ISIXE_MODULES_API StaticStateComponent : public Component {
 	public:
@@ -41,17 +47,12 @@ namespace api {
 		 */
 		StaticStateComponent(const int64_t id, const attributeMap & params);
 
-		virtual ~StaticStateComponent();
+		~StaticStateComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
-		 * \brief Initialized the Component;
-		 */
-		void Init() override;
 
 		/**
 		 * \brief Sets position
@@ -70,7 +71,7 @@ namespace api {
 		}
 
 		/**
-		 * \brief Sets scalation
+		 * \brief Sets scale
 		 */
 		inline void setScale(const Vec3 & scale) {
 			_scale = scale;
@@ -123,14 +124,19 @@ namespace api {
 		 */
 		Vec3 _scale;
 
+		/**
+		 * \brief Initialized the Component
+		 */
+		void Init() override;
+
 		void sendUpdateMessage();
 	};
 
 } /* namespace api */
 } /* namespace i6engine */
 
+#endif /* __I6ENGINE_API_STATICSTATECOMPONENT_H__ */
+
 /**
  * @}
  */
-
-#endif /* __I6ENGINE_API_STATICSTATECOMPONENT_H__ */

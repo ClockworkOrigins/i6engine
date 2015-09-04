@@ -1,0 +1,116 @@
+\documentclass{article}
+\input{../../header.tex}
+
+\title{i6engine Tutorial 4 \\ Physics}
+
+\begin{document}
+
+\section{Requirements}
+
+Tutorial 3 - Loading Levels
+
+\section{Introduction}
+
+Ok, now we can create static worlds. But as this is kinda boring, we need some motion and some physics. We will start with an introduction on how to use the physics system of the engine. As this is a quite complex and propbably one of the most difficult parts of the engine, this tutorial is quite long and difficult to follow.\newline
+In this tutorial, we will create four completely different boxes (you'll need different templates for them) and a terrain. One box will be an unmovable object, one a movable object. One will be simply a ghost you can walk through and the last one the character penguin that can move and collide with the other boxes. The files that come along with the tutorial are a working sample of this setting. As we can't move objects yet, the CharacterBox will fall from the sky onto another one lying on the ground. Modify the level.xml to get the different boxes on the ground. The next tutorial will cover the relevant parts for creating a keyboard controlled entity.
+
+\section{Extending Template}
+
+First of all, we have to modify our template. Currently, we add a StaticStateComponent to the objects. Such a component only defines an object in the world, that will never interact with other objects. There's no collision, no movement etc. We will now change this to a PhysicalStateComponent that allows you to modify the physical properties of the object. One important thing to keep in mind: Whilst a StaticStateComponent only describes a postion in the world, a PhysicalStateComponent that is marked as \textit{STATIC} defines a physical entity that is just unmovable (like a wall).\newline
+\lstinputlisting[language=xml, style=basic, caption={PhysicalStateComponent}, label=code:PSC]{listings/physics.xml}
+Listing \ref{code:PSC} shows the code necessary for addings physics. We will go through it step by step.\newline
+We define a position, rotation and scale (\ref{note:scaling}). Than comes the definition of a collision shape:
+
+\section{Collisionshape}
+
+You have to differentiate two shapes of an object. The \textit{mesh} as defined in .mesh files. This defines the real shape of an object (or at least a highly accurate approximation). This is used in the graphic to render the object as realistic as possible. And second, the collision shape. This defines the shape used in physical calculations. Whilst a graphic card is optimized to handle complex objects, there is no physic card. Thus, the collision shape should be simple. Again, it is impossible to define \textit{simple}. You have to try it. But most of the time, even one basic shape like box, sphere oder cylinder is enough. Therefore, we currently only support these basic shapes and complex ones generated out of .mesh files being stored in .bullet files. You create the collision shape using the \textit{shapeType} parameter. Here you define the type of the collision shape (PLANE, BOX, FILE, SPHERE) and. See \ref{note:shapes} for explanation of the values to be set for different shape attributes. In our template, we create a box in line 6. Our cube will weight 10 kg and has the size 1 meter x 1 meter x 1 meter.\newline
+You should now be able to run the game and see objects falling down that are not already ontop of the terrain. If something is not working as expected, a good idea is to turn on \textit{Debug Drawing}. This will add white lines to indicate the border of the collision shapes. This is for example  helpful to see whether the shape matches the mesh. But if your level is large, you will see a huge performance drop as this is a non optimized mode and causes high traffic in the engine. To turn the DebugDrawer on, call at anytime:
+\begin{lstlisting}[language=C++, style=basic, caption={enabling debug drawer}, label=code:load]
+i6engine::api::EngineController::GetSingleton().setDebugdrawer(1);
+\end{lstlisting}
+
+\section{Collision Flags}
+
+Now we have defined our collision shape. But we need some more properties for the physic to work: The collision flags. They define how objects will interact on collision. To create a powerful and flexible yet easy to use system, the collision properties are two basic values: A value defining the general overall physical properties of the object and the flags used to drop many collision events and only get the ones needed (You don't want to get informed whenever a tree collides with the terrain it is placed on). Line 9 sets the collision flags. The first parameter is either NONE or a combination of STATIC, GHOST and TRIGGER. They are explained at the end of this chapter. Here we define a static object that shall be notified on collisions.\newline
+There are two more values in this line. They are basically integers, but think of them as bit sets: Each of the 32 can be either set (1) or not set (0). The first of these parameters (second in total) is the type of the object. Pass an integer with exactly one bit set. The bit which is set describes the group the object belongs to. For the second type parameter (third in total), pass the types of objects for which this object shall get notifies. Let's look at our example: We have about 4 different types of objects: A character box, the terrain (nobody cares about collision with terrain), the ghost box and the other two boxes we can crash into. We now assign each group an integer with only one bit set: character 1, terrain 2, ghost 4, others 8. These are the values we pass as the second parameter. For the third parameter, we use the combined (with logical or ($|$), same as sum ($+$) in this case) values of all groups we want to get notified on collision. The terrain gets 0 as it doesn't care about any collision. The character gets 9 (= 8 + 1): We want to get informed when colliding with a solid box (8) as well as other character boxes (1). The solid boxes get 0 as well and the ghost box gets 1, because he wants to know whenever a character penguin moves through it. Note that our character box won't notice the collision with the ghost. As these are many magic numbers within your code, consider using enums or similar constructs to make it more readable.\newline
+
+\subsection{STATIC}
+
+This object is unmovable from physical actions. Thus if an object collides with a static object, only the moving object will be pushed back whilst the static object remains unchanged. This is a good flag for walls, trees etc. Note: You can still move this object explicitly with a call to setPosition() but not through applying forces.
+
+\subsection{GHOST}
+
+Objects defined as ghost never interact with other objects. Thus, they are similar to objects with a StaticStateComponent. But differently, they notice collision if another object passes through. They can be used to create special effects if an objects enters an area. You'll probably want to set the TRIGGER flag as well.
+
+\subsection{TRIGGER}
+
+Normally, objects will just collide and bounce away, but the game doesn't now, there was a collision. If you need to react to a collision, set the TRIGGER flag. Additionally, you will need to add a ShatterComponent to the object and specify whether you want to be notified in every frame the objects collide or only in the first or the last frame of the collision. Whenever the object with the TRIGGER flag notices a collision, the shatter() method from the ShatterComponent will be invoked. The one and only parameter in this function is a pointer to other gameobject. We will work on this notifies later on in this tutorial.
+
+\section{Shatter Interest}
+
+Last thing to do here: Set the shatter interest. Sometimes you want to get informed as soon as a collision occures (a character enters our ghost box) whilst sometimes you want to get informed as long as the collision is present (as long as our character collides with a solid box, he will loose health). That's what shatter interest is for. In line 10 you see the definition as it is used for out ghost box. Possible values are START, END and ALWAYS as well as START $|$ END for entering and leaving.\newline
+Now, that was quite little code but an enormous amount of concepts concerning the physic. Luckily, we covered nearly everything related to collisions. Thus there is nothing more you have to know. But we have to talk about two remaining minor things for our boxes: Reacting to collisions being detected and moving the box (at least in a very stupid way).
+
+\section{Collision Handling}
+
+As already mentioned, we need a ShatterComponent for each trigger object that will eventually receive collision events. There is a ShatterComponent defined in i6engine/api/components/ShatterComponent.h. There are some more things you have to do for receiving collision events, but this component does all this stuff for you. You only have to derive from this class and implement a method called \textit{void shatter(const i6engine::api::GOPtr \& other)}. In listing \ref{code:SC} you can see the simpliest shatter component subclass. The GameObject \textit{other} is the object that collided with the current game object. For our example, we can use two different subclasses ShatterBox for the character box and ShatterGhost for the ghost box. The plane and the solid penguins don't need such a component as they are not interested in collisions.
+\lstinputlisting[float, language=C++, style=basic, caption={ShatterComponent}, label=code:SC]{listings/Shatter1.h}
+
+\section{Shapes}\label{note:shapes}
+
+If not other stated, all parameters are optional. If not set, a common default values is used.
+
+\subsection{All Shapes}
+
+These parameters are possible for all shapes:
+\begin{itemize}
+	\item localInertia
+	\item angularFactor each angular force is multiplied with this value befor being applied
+	\item linearFactor each linear force is multiplied with this value befor being applied
+	\item mass
+	\item restitution A value defining how much an object will bounce of after colliding. 0 is a good value in most cases.
+	\item friction The product of both friction values from two colliding objects determines how much they are slowed down
+	\item linearDamping
+	\item angularDamping
+\end{itemize}
+
+\subsection{PLANE}
+
+Defines an infinite large plane.
+\begin{itemize}
+	\item planeVector [required] a vector describing the normal of the plane. E.g. a terrain will have a vector of (0, 1, 0) describing the x-z-plane.
+	\item planeConstant [required] defines how far away from the center along the normal vector the plane is.
+\end{itemize}
+
+\subsection{BOX}
+
+Defines a simple box
+\begin{itemize}
+	\item box [required] size extends of the box. These values are the extends from the center to one corner. Thus the actual size is twice the values.
+\end{itemize}
+
+\subsection{FILE}
+
+This is a special shape. It uses a complex shape read from a .bullet file.
+\begin{itemize}
+	\item file [required] defines the bullet file to be used.
+\end{itemize}
+
+\subsection{SPHERE}
+
+Defines a simple sphere.
+\begin{itemize}
+	\item radius [required]
+\end{itemize}
+
+\section{Important notes}
+
+\subsection{Scaling}\label{note:scaling}
+
+For the physic to work correctly, you have to keep the sizes small. Our unit size is one meter, meaning, if you pass a size value of 4, your object is 4 meters large. There is no fix value you shouldn't exceed, but for a first value, try not to create objects larger than 1000 units. Same goes for weights. A value of 1 is 1 kilogramm and objects shouldn't exceed 1000 kg.
+
+\section{What's next?}
+
+???
+
+\end{document}

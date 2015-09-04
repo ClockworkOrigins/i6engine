@@ -29,7 +29,8 @@
 #include "i6engine/luabind/detail/policy.hpp"
 #include "i6engine/luabind/back_reference_fwd.hpp"
 #include "i6engine/luabind/wrapper_base.hpp"
-#include <boost/type_traits/is_polymorphic.hpp>
+
+#include "boost/type_traits/is_polymorphic.hpp"
 
 namespace luabind { namespace detail 
 {
@@ -103,7 +104,7 @@ namespace luabind { namespace detail
 			if (luabind::move_back_reference(L, ptr))
 				return;
 
-            make_instance(L, std::auto_ptr<T>(ptr));
+            make_instance(L, std::unique_ptr<T>(ptr));
 		}
 	};
 

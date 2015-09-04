@@ -36,9 +36,12 @@
 
 #include "i6engine/rpg/components/Config.h"
 #include "i6engine/rpg/components/AttributeComponent.h"
+#include "i6engine/rpg/components/DialogCheckerComponent.h"
+#include "i6engine/rpg/components/ExperienceComponent.h"
 #include "i6engine/rpg/components/HealthbarComponent.h"
 #include "i6engine/rpg/components/HumanMovementComponent.h"
 #include "i6engine/rpg/components/ListInventoryComponent.h"
+#include "i6engine/rpg/components/MiscItemComponent.h"
 #include "i6engine/rpg/components/NameComponent.h"
 #include "i6engine/rpg/components/QuickslotComponent.h"
 #include "i6engine/rpg/components/SlotComponent.h"
@@ -65,8 +68,6 @@ namespace sample {
 	void WaynetApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
 
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
-
 		// sets gravity for the game... here like on earth
 		std::string gravityString;
 		_iniParser.getValue("PHYSIC", "gravity", gravityString);
@@ -89,9 +90,12 @@ namespace sample {
 		// register rpg components we want to use
 		// do this befor loading the level
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6engine::rpg::components::AttributeComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&i6engine::rpg::components::DialogCheckerComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(&i6engine::rpg::components::ExperienceComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&i6engine::rpg::components::HealthbarComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&i6engine::rpg::components::HumanMovementComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&i6engine::rpg::components::ListInventoryComponent::createC, _1, _2));
+		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&i6engine::rpg::components::MiscItemComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&i6engine::rpg::components::NameComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&i6engine::rpg::components::QuickslotComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&i6engine::rpg::components::SlotComponent::createC, _1, _2));
@@ -121,20 +125,24 @@ namespace sample {
 			i6engine::api::attributeMap params;
 			params.insert(std::make_pair("name", "NPCName01")); // size of the terrain in world units
 			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Name", params, "", false, false));
+			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("DialogChecker", i6engine::api::attributeMap(), "", true, false));
+			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Experience", i6engine::api::attributeMap(), "", true, false));
 			of->createObject("NPC", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
 		}
 	}
 
 	void WaynetApplication::News(const i6engine::api::GameMessage::Ptr & msg) {
 		if (msg->getMessageType() == i6engine::api::messages::InputMessageType) {
-			if (msg->getSubtype() == i6engine::api::mouse::MouseMessageTypes::MouButton) {
-				i6engine::api::input::Input_Button_Update * ibu = dynamic_cast<i6engine::api::input::Input_Button_Update *>(msg->getContent());
-				if (ibu->code == i6engine::api::MouseButtonID::MB_Left && ibu->pressed) {
+			if (msg->getSubtype() == i6engine::api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
+				i6engine::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6engine::api::input::Input_Keyboard_Update *>(msg->getContent());
+				if (iku->code == i6engine::api::KeyCode::KC_MBLeft && iku->pressed == i6engine::api::KeyState::KEY_PRESSED) {
 					auto vec = i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->getSelectables();
 					if (vec.size() > 0) {
 						auto go = i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("NPC").front();
 						go->getGOC<i6engine::api::MoveComponent>(i6engine::api::components::ComponentTypes::MoveComponent)->navigate(vec.front().second);
 					}
+				} else {
+					CommonApplication::InputMailbox(msg);
 				}
 			} else {
 				CommonApplication::InputMailbox(msg);

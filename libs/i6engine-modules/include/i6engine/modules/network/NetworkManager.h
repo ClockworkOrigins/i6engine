@@ -57,6 +57,27 @@ namespace modules {
 
 	private:
 		/**
+		 * \brief mailbox for the networking subsystem
+		 */
+		NetworkMailbox * _mailbox;
+
+		bool _sendPing;
+		int32_t _counterSent;
+		int32_t _counterReceived;
+
+		NetworkErrors _ne;
+
+		m2etis::pubsub::PubSubSystem * _pubsub;
+
+		uint64_t _lastTickTime;
+
+		volatile bool _connectionFailed;
+
+		std::map<uint32_t, uint32_t> _usedChannels;
+
+		boost::mutex _pubSubLock;
+
+		/**
 		 * \brief constructor
 		 */
 		explicit NetworkManager(NetworkMailbox * mailbox);
@@ -117,27 +138,6 @@ namespace modules {
 		 * \brief Ticking the subsystem
 		 */
 		void Tick();
-
-		/**
-		 * \brief mailbox for the networking subsystem
-		 */
-		NetworkMailbox * _mailbox;
-
-		bool _sendPing;
-		int32_t _counterSent;
-		int32_t _counterReceived;
-
-		NetworkErrors _ne;
-
-		m2etis::pubsub::PubSubSystem * _pubsub;
-
-		uint64_t _lastTickTime;
-
-		volatile bool _connectionFailed;
-
-		std::map<uint32_t, uint32_t> _usedChannels;
-
-		boost::mutex _pubSubLock;
 
 		/**
 		 * \brief forbidden

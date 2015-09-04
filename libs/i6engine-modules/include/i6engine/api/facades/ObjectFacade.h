@@ -106,7 +106,14 @@ namespace api {
 		/**
 		 * \brief loads a level from an xml file only using the objects with given flags
 		 */
-		void loadLevel(const std::string & file, const std::string & flags) const;
+		void loadLevel(const std::string & file, const std::string & flags) const {
+			loadLevel(file, flags, "");
+		}
+
+		/**
+		 * \brief loads a level from an xml file only using the objects with given flags and preloads resources specified in resourcesFile
+		 */
+		void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) const;
 
 		/**
 		 * \brief registers a component to be ticked in every Frame
@@ -153,6 +160,7 @@ namespace api {
 
 		/**
 		 * \brief updates the GOList with current state in ObjectSubsystem
+		 * \note only call from within object subsystem
 		 */
 		void updateGOList(const std::list<GOPtr> & GOList);
 
@@ -205,17 +213,22 @@ namespace api {
 		 */
 		void unpause() const;
 
+		/**
+		 * \brief sets all available GOTemplates
+		 * don't use, only for Object Subsystem
+		 */
+		void setGOTemplates(const std::map<std::string, objects::GOTemplate> & templates) {
+			_templateList = templates;
+		}
+
+		/**
+		 * \brief returns all available GOTemplates
+		 */
+		std::map<std::string, objects::GOTemplate> getGOTemplates() const {
+			return _templateList;
+		}
+
 	private:
-		/**
-		 * \brief forbidden
-		 */
-		ObjectFacade(const ObjectFacade &) = delete;
-
-		/**
-		 * \brief forbidden
-		 */
-		ObjectFacade & operator=(const ObjectFacade &) = delete;
-
 		/**
 		 * \brief List with all current GameObjects.
 		 */
@@ -238,6 +251,18 @@ namespace api {
 
 		mutable std::mutex _loadLevelLock;
 		mutable std::condition_variable _loadLevelCondVar;
+
+		std::map<std::string, objects::GOTemplate> _templateList;
+
+		/**
+		 * \brief forbidden
+		 */
+		ObjectFacade(const ObjectFacade &) = delete;
+
+		/**
+		 * \brief forbidden
+		 */
+		ObjectFacade & operator=(const ObjectFacade &) = delete;
 	};
 
 } /* namespace api */

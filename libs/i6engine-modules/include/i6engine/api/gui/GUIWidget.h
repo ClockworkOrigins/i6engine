@@ -115,7 +115,14 @@ namespace gui {
 			_mouseOverCallback = func;
 		}
 
+		/**
+		 * \brief sets position of this widget
+		 */
 		void setPosition(double x, double y);
+
+		/**
+		 * \brief sets size of this widget
+		 */
 		void setSize(double w, double h);
 
 		std::string _name;

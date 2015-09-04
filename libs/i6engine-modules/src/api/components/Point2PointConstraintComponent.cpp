@@ -38,24 +38,17 @@ namespace api {
 		_objFamilyID = components::Point2PointConstraintComponent;
 		_objComponentID = components::Point2PointConstraintComponent;
 
-		_selfIdentifier = params.find("selfIdentifier")->second;
-		_targetIdentifier = params.find("targetIdentifier")->second;
-		_selfOffset = Vec3(params.find("selfOffset")->second);
-		_targetOffset = Vec3(params.find("targetOffset")->second);
-
-		if (params.find("breakingImpulse") != params.end()) {
-			_breakingImpulse = std::stod(params.find("breakingImpulse")->second);
-		}
+		parseAttribute<true>(params, "selfIdentifier", _selfIdentifier);
+		parseAttribute<true>(params, "targetIdentifier", _targetIdentifier);
+		parseAttribute<true>(params, "selfOffset", _selfOffset);
+		parseAttribute<true>(params, "targetOffset", _targetOffset);
+		parseAttribute<false>(params, "breakingImpulse", _breakingImpulse);
 	}
 
 	Point2PointConstraintComponent::~Point2PointConstraintComponent() {
 	}
 
 	ComPtr Point2PointConstraintComponent::createC(const int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("Point2PointConstraintComponent", "'selfIdentifier' not set!", params.find("selfIdentifier") != params.end());
-		ISIXE_THROW_API_COND("Point2PointConstraintComponent", "'targetIdentifier' not set!", params.find("targetIdentifier") != params.end());
-		ISIXE_THROW_API_COND("Point2PointConstraintComponent", "'selfOffset' not set!", params.find("selfOffset") != params.end());
-		ISIXE_THROW_API_COND("Point2PointConstraintComponent", "'targetOffset' not set!", params.find("targetOffset") != params.end());
 		return utils::make_shared<Point2PointConstraintComponent, Component>(id, params);
 	}
 
@@ -67,7 +60,7 @@ namespace api {
 					if (!p2p->_connected) {
 						ISIXE_THROW_API_COND("Point2PointConstraintComponent", "constraint with selfIdentifier '" << _targetIdentifier << "' and targetIdentifier '" << _selfIdentifier << "' don't match each others offsets!", p2p->_selfOffset == _targetOffset && p2p->_targetOffset == _selfOffset);
 						EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsMessageType, physics::PhyP2PConstraint, core::Method::Update, new physics::Physics_P2PConstraint_Create(_objOwnerID, go->getID(), _selfOffset, _targetOffset), core::Subsystem::Object));
-						if (_breakingImpulse != DBL_MAX) {
+						if (_breakingImpulse < DBL_MAX) {
 							EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsMessageType, physics::PhyConstraintBreakImpulse, core::Method::Update, new physics::Physics_BreakConstraintImpulse_Update(_objOwnerID, go->getID(), _breakingImpulse), core::Subsystem::Object));
 						}
 						_targetID = go->getID();
@@ -84,7 +77,7 @@ namespace api {
 							if (!p2p2->_connected) {
 								ISIXE_THROW_API_COND("Point2PointConstraintComponent", "constraint with selfIdentifier '" << _targetIdentifier << "' and targetIdentifier '" << _selfIdentifier << "' don't match each others offsets!", p2p2->_selfOffset == _targetOffset && p2p2->_targetOffset == _selfOffset);
 								EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsMessageType, physics::PhyP2PConstraint, core::Method::Update, new physics::Physics_P2PConstraint_Create(_objOwnerID, go->getID(), _selfOffset, _targetOffset), core::Subsystem::Object));
-								if (_breakingImpulse != DBL_MAX) {
+								if (_breakingImpulse < DBL_MAX) {
 									EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsMessageType, physics::PhyConstraintBreakImpulse, core::Method::Update, new physics::Physics_BreakConstraintImpulse_Update(_objOwnerID, go->getID(), _breakingImpulse), core::Subsystem::Object));
 								}
 								_targetID = go->getID();
@@ -112,7 +105,7 @@ namespace api {
 		params.insert(std::make_pair("targetIdentifier", _targetIdentifier));
 		_selfOffset.insertInMap("selfOffset", params);
 		_targetOffset.insertInMap("targetOffset", params);
-		if (_breakingImpulse != DBL_MAX) {
+		if (_breakingImpulse < DBL_MAX) {
 			params.insert(std::make_pair("breakingImpulse", std::to_string(_breakingImpulse)));
 		}
 

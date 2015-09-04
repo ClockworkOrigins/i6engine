@@ -29,9 +29,6 @@ namespace input {
 	Input_MouseWheel_Update::Input_MouseWheel_Update(int d) : GameMessageStruct(), diff(d) {
 	}
 
-	Input_Button_Update::Input_Button_Update(const bool b, const MouseButtonID c) : GameMessageStruct(), pressed(b), code(c) {
-	}
-
 	Input_Window_Create::Input_Window_Create(void * w) : GameMessageStruct(), window(w) {
 	}
 

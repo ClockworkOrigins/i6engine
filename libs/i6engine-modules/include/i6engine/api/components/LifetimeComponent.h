@@ -30,6 +30,10 @@ namespace api {
 	/**
 	 * \class LifetimeComponent
 	 * \brief destroys the owning game object after given lifetime
+	 * For creating a LifetimeComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | lifetime | yes | uint64_t | time until this GameObject will be destroyed | yes |
 	 */
 	class ISIXE_MODULES_API LifetimeComponent : public Component {
 	public:
@@ -39,11 +43,7 @@ namespace api {
 		 */
 		LifetimeComponent(const int64_t id, const attributeMap & params);
 
-		virtual ~LifetimeComponent();
-
-		void Init() override;
-
-		void Finalize() override;
+		~LifetimeComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap
@@ -54,11 +54,6 @@ namespace api {
 		 * \brief Called when the time for this GameObject is over.
 		 */
 		void dead();
-
-		/**
-		 * \brief ticking the component
-		 */
-		void Tick() override;
 
 		/**
 		 * \brief Instant kill
@@ -77,15 +72,24 @@ namespace api {
 		std::vector<componentOptions> getComponentOptions() override;
 
 	private:
-		LifetimeComponent(const LifetimeComponent &) = delete;
-		const LifetimeComponent & operator=(const LifetimeComponent &) = delete;
-
 		uint64_t _startTime;
 
 		/**
 		 * ticks left until the object will be removed
 		 */
 		uint64_t _lifetime;
+
+		void Init() override;
+
+		void Finalize() override;
+
+		/**
+		 * \brief ticking the component
+		 */
+		void Tick() override;
+
+		LifetimeComponent(const LifetimeComponent &) = delete;
+		const LifetimeComponent & operator=(const LifetimeComponent &) = delete;
 	};
 
 } /* namespace api */

@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!-- quest categories -->
+<Key key="MainQuest">
+	<Language name="Deutsch">Hauptquests</Language>
+	<Language name="English">Main Quests</Language>
+</Key>
+<Key key="CompletedQuest">
+	<Language name="Deutsch">Abgeschlossene Quests</Language>
+	<Language name="English">Completed Quests</Language>
+</Key>
+<Key key="FailedQuest">
+	<Language name="Deutsch">Fehlgeschlagene Quests</Language>
+	<Language name="English">Failed Quests</Language>
+</Key>

@@ -69,7 +69,6 @@ namespace components {
 			vec.push_back(std::make_pair("Attribute_" + std::to_string(uint32_t(p.first)) + "_Key", std::to_string(p.second)));
 		}
 		vec.push_back(std::make_pair("Weight_Key", utils::to_string_with_precision(getWeight(), 3)));
-		vec.push_back(std::make_pair("Value_Key", std::to_string(getValue())));
 		return vec;
 	}
 

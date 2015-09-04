@@ -42,7 +42,6 @@ namespace modules {
 		 * \brief Nothing to do yet
 		 *
 		 * This method has nothing to to do yet
-		 *
 		 */
 		GraphicsController();
 
@@ -50,40 +49,8 @@ namespace modules {
 		 * \brief Nothing to do yet
 		 *
 		 * This method has nothing to do yet
-		 *
 		 */
 		~GraphicsController();
-
-		/**
-		 * \brief starts GraphicsManager
-		 */
-		void OnThreadStart() override;
-
-		/**
-		 * \brief Called when shutting down the graphics subsystem.
-		 *
-		 *     Sends shutdown message informing GraphicsController shutdown to other objects via message pipe
-		 * Sends a message in order to shutdown the Graphics Subsystem
-		 * \param   no params
-		 * \return   nothing
-		 *
-		 */
-		void ShutDown() override;
-
-	protected:
-		/**
-		 * \brief Called on every tick of the graphics subsystem
-		 *
-		 *     In effect the main render-loop
-		 *     invokes Ogre's _objRoot->renderOneFrame()
-		 *			calls tick on GUIController and injectTimePulse on CEGUI
-		 *
-		 *			Updates the GUI and tells Ogre to render the scene.
-		 * \param   no params
-		 * \return   nothing
-		 *
-		 */
-		void Tick() override;
 
 	private:
 		/**
@@ -95,6 +62,27 @@ namespace modules {
 		 * \brief
 		 */
 		GraphicsMailbox * _mailbox;
+
+		/**
+		 * \brief starts GraphicsManager
+		 */
+		void OnThreadStart() override;
+
+		/**
+		 * \brief Called when shutting down the graphics subsystem.
+		 */
+		void ShutDown() override;
+
+		/**
+		 * \brief Called on every tick of the graphics subsystem
+		 *
+		 *     In effect the main render-loop
+		 *     invokes Ogre's _objRoot->renderOneFrame()
+		 *			calls tick on GUIController and injectTimePulse on CEGUI
+		 *
+		 *			Updates the GUI and tells Ogre to render the scene.
+		 */
+		void Tick() override;
 
 		/**
 		 * \brief forbidden

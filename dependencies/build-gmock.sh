@@ -28,7 +28,7 @@ if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
 fi
 
-PREFIX="${PWD}/gmock/"
+PREFIX="${DEP_DIR}/gmock/"
 PARALLEL_FLAG=""
 
 if [ ! -z "${BUILD_PARALLEL}" ]; then
@@ -37,6 +37,7 @@ fi
 
 DEBUG_FLAG="-DCMAKE_OSX_ARCHITECTURES=i386;x86_64 -DCMAKE_BUILD_TYPE=Debug"
 RELEASE_FLAG="-DCMAKE_OSX_ARCHITECTURES=i386;x86_64 -DCMAKE_BUILD_TYPE=Release"
+
 if [ -z "${DEBUG}" ]; then
 	BUILD_TYPE="${RELEASE_FLAG}"
 else
@@ -51,16 +52,11 @@ fi
 
 title "Compile GoogleMock with GoogleTest"
 
-if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}"; then
-	status "GoogleMock/Test seems to be up to date, skipping build"
-	exit 0
-fi
-
 ./download-dependency.sh ${ARCHIVE}
 
 status "Extracting GoogleMock with GoogleTest"
 cd "${BUILD_ROOT}"
-unzip "${EX_DIR}/${ARCHIVE}" >/dev/null
+unzip "${ARCHIVE}" >/dev/null
 
 status "Configuring GoogleMock with GoogleTest"
 cd "${BUILD_DIR}"
@@ -84,7 +80,6 @@ cp -R gtest/include ${PREFIX} >/dev/null
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-rm -rf "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" >/dev/null
 
 touch "${PREFIX}"

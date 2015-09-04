@@ -4,6 +4,10 @@
 	<Language name="Deutsch">Verbrauchsgegenstand</Language>
 	<Language name="English">Usable Item</Language>
 </Key>
+<Key key="Gold_Key">
+	<Language name="Deutsch">Gold</Language>
+	<Language name="English">Gold</Language>
+</Key>
 
 <!-- Items in inventory -->
 <Key key="Weight_Key">

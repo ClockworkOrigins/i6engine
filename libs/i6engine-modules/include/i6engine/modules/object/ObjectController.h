@@ -54,7 +54,11 @@ namespace modules {
 		 */
 		~ObjectController();
 
-	protected:
+	private:
+		ObjectMailbox * _mailbox;
+
+		ObjectManager * _manager;
+
 		/**
 		 * \brief This method will be called when starting the thread of ObjectController.
 		 * The ObjectController subscribes itself on the Messaging System on start.
@@ -72,11 +76,6 @@ namespace modules {
 		 * For every GameObject in _GOList DeleteObject will be called.
 		 */
 		void ShutDown() override;
-
-	private:
-		ObjectMailbox * _mailbox;
-
-		ObjectManager * _manager;
 
 		/**
 		 * \brief forbidden

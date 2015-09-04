@@ -1,4 +1,10 @@
-#pragma once
+/**
+ * \addtogroup Audio
+ * @{
+ */
+
+#ifndef __I6ENGINE_MODULES_WAVFILE_H__
+#define __I6ENGINE_MODULES_WAVFILE_H__
 
 #include <cstdint>
 
@@ -7,6 +13,9 @@
 namespace i6engine {
 namespace modules {
 
+	/**
+	 * \brief parsed wave file
+	 */
 	typedef struct WavFile {
 		uint8_t Chunk_ID[4];
 		uint32_t ChunkSize;
@@ -35,7 +44,16 @@ namespace modules {
 		}
 	} WavFile;
 
+	/**
+	 * \brief loads a wav file
+	 */
 	boost::shared_ptr<WavFile> loadWavFile(const std::string & file);
 
 } /* namespace modules */
 } /* namespace i6engine */
+
+#endif /* __I6ENGINE_MODULES_WAVFILE_H__ */
+
+/**
+ * @}
+ */

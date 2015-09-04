@@ -16,9 +16,9 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-#ifndef ISIXE_LOGGING
+#ifndef ISIXE_WITH_LOGGING
 	#include <iostream>
-#endif /* ISIXE_LOGGING */
+#endif /* ISIXE_WITH_LOGGING */
 
 #include "i6engine/utils/ExceptionQueue.h"
 
@@ -32,11 +32,11 @@ namespace exceptions {
 
 	void i6exception::writeLog() {
 		if (loginfo const * info = boost::get_error_info<excinfo_log>(*this)) {
-#ifdef ISIXE_LOGGING
+#ifdef ISIXE_WITH_LOGGING
 			Logger::GetSingleton().LogMessage(info->level, info->file, info->line, info->module, info->message);
-#else /* ISIXE_LOGGING */
+#else /* ISIXE_WITH_LOGGING */
 			std::cerr << logEnumNames[int(info->level)] << ": " << info->module << " - " << info->message << " (" << info->file << ":" << info->line << ")" << std::endl;
-#endif /* ISIXE_LOGGING */
+#endif /* ISIXE_WITH_LOGGING */
 		}
 	}
 

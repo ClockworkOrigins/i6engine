@@ -1,3 +1,8 @@
+/**
+ * \addtogroup RPG
+ * @{
+ */
+
 #ifndef __I6ENGINE_RPG_COMPONENTS_HUMANMOVEMENTCOMPONENT_H__
 #define __I6ENGINE_RPG_COMPONENTS_HUMANMOVEMENTCOMPONENT_H__
 
@@ -7,6 +12,9 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief movement component for humans
+	 */
 	class ISIXE_RPG_API HumanMovementComponent : public api::MovementComponent {
 	public:
 		HumanMovementComponent(const int64_t id, const api::attributeMap & params);
@@ -24,13 +32,13 @@ namespace components {
 			return {};
 		}
 
-		void forward();
+		void forward() override;
 
-		void backward();
+		void backward() override;
 
-		void left();
+		void left() override;
 
-		void right();
+		void right() override;
 	};
 
 } /* namespace components */
@@ -38,3 +46,7 @@ namespace components {
 } /* namespace i6engine */
 
 #endif /* __I6ENGINE_RPG_COMPONENTS_HUMANMOVEMENTCOMPONENT_H__ */
+
+/**
+ * @}
+ */

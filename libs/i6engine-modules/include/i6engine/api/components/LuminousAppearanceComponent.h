@@ -33,13 +33,24 @@ namespace api {
 	/**
 	 * \class LuminousAppearanceComponent
 	 * \brief Tells the engine that this GameObject is emitting light.
+	 * For creating a LuminousAppearanceComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | lightType | yes | int | one of the LightTypes | yes |
+	 * | diffuseColor | yes | Vec3 | diffuse colour of the light | yes |
+	 * | specularColor | yes | Vec3 | specular colour of the light | yes |
+	 * | attenuation | yes | Vec4 | attenuation of the light, W = range (range in world units), X = constant (1.0 never attenuate, 0.0 complete attenuation), Y = linear (linear attenuation depending on distance), Z = quadratic | yes |
+	 * | pos | no | Vec3 | relative position to SceneNode | yes |
+	 * | direction | *) | Vec3 | direction of the light shaft, *) required if lightType is DIRECTIONAL or SPOT | yes |
+	 * | spotLightRangeInner | *) | double | range of the inner cone of a spot light in degree, *) required if lightType is SPOT | yes |
+	 * | spotLightRangeOuter | *) | double | range of the outer cone of a spot light in degree, *) required if lightType is SPOT | yes |
 	 */
 	class ISIXE_MODULES_API LuminousAppearanceComponent : public Component {
 	public:
 		/**
 		 * \brief type of the light emitted
 		 */
-		enum class LightType : uint8_t {
+		enum class LightType {
 			POINT = 0,		//!< Point light (e.g. a light bulb or torch)
 			DIRECTIONAL = 1,	//!< Directional Light (e.g. the sun)
 			SPOT = 2		//!< Spot light (e.g. a flashlight)
@@ -50,14 +61,12 @@ namespace api {
 		 */
 		LuminousAppearanceComponent(const int64_t id, const attributeMap & params);
 
-		virtual ~LuminousAppearanceComponent();
+		~LuminousAppearanceComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		void Init() override;
 
 		/**
 		 * \brief Sets light type
@@ -74,7 +83,6 @@ namespace api {
 		 * Gets component's light type
 		 *
 		 * \return Light type of the component
-		 *
 		 */
 		inline LightType getLightType() const { return _lightType; }
 
@@ -155,8 +163,6 @@ namespace api {
 		 */
 		attributeMap synchronize() const override;
 
-		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
-
 		std::string getTemplateName() const override {
 			return "LuminousAppearance";
 		}
@@ -209,6 +215,10 @@ namespace api {
 		 * in degree, whole angle
 		 */
 		double _spotlightRangeOuter;
+
+		void Init() override;
+
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		/**
 		 * \brief Sends update message to the MessagingController

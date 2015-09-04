@@ -28,6 +28,9 @@
 #include "i6engine/modules/graphics/GraphicsManager.h"
 #include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+
 #include "OGRE/OgreBillboard.h"
 #include "OGRE/OgreBillboardSet.h"
 #include "OGRE/OgreCamera.h"
@@ -42,7 +45,7 @@
 namespace i6engine {
 namespace modules {
 
-	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _parentNode(nullptr), _cameras(), _lights(), _particles(), _sceneNodes(), _animationState(), _animationSpeed(1.0), _lastTime(), _billboardSets(), _movableTexts(), _observer() {
+	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _parentNode(nullptr), _cameras(), _lights(), _particles(), _sceneNodes(), _animationState(), _animationSpeed(1.0), _lastTime(), _billboardSets(), _movableTexts(), _observer(), _boundingBox() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		Ogre::SceneManager * sm = _manager->getSceneManager();
@@ -84,6 +87,9 @@ namespace modules {
 		}
 		for (const std::pair<int64_t, MovableText *> & text : _movableTexts) {
 			deleteMovableText(text.first);
+		}
+		if (_boundingBox) {
+			removeBoundingBox();
 		}
 
 		root->removeChild(_sceneNode);
@@ -149,11 +155,11 @@ namespace modules {
 				meshEntity->getMesh()->buildTangentVectors(Ogre::VertexElementSemantic::VES_TANGENT, src, dest);
 			}
 		} catch (const Ogre::Exception & e) {
-			ISIXE_LOG_ERROR("GraphicsNode", e.what());
+			ISIXE_LOG_WARN("GraphicsNode", e.what());
 		}
 
 		if (api::EngineController::GetSingletonPtr()->getDebugdrawer() == 3 || api::EngineController::GetSingletonPtr()->getDebugdrawer() == 4) {
-			_sceneNode->showBoundingBox(true);
+			_sceneNodes[coid]->showBoundingBox(true);
 		}
 	}
 
@@ -182,7 +188,7 @@ namespace modules {
 		}
 
 		if (api::EngineController::GetSingletonPtr()->getDebugdrawer() == 3 || api::EngineController::GetSingletonPtr()->getDebugdrawer() == 4) {
-			_sceneNode->showBoundingBox(true);
+			_sceneNodes[coid]->showBoundingBox(true);
 		}
 	}
 
@@ -337,9 +343,10 @@ namespace modules {
 		name << "SN_" << _gameObjectID << "_" << coid;
 
 		Ogre::SceneNode * newNode = _sceneNode->createChildSceneNode(name.str(), pos.toOgre());
-		Ogre::ParticleSystem * particleSystem = sm->createParticleSystem(name.str(), emitterName);
+		ParticleUniverse::ParticleSystem * particleSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(name.str(), emitterName, sm);
 		newNode->attachObject(particleSystem);
 		_particles[coid] = newNode;
+		particleSystem->start();
 	}
 
 	void GraphicsNode::particleFadeOut(int64_t coid) {
@@ -348,11 +355,11 @@ namespace modules {
 			ISIXE_LOG_ERROR("GraphicsNode", "Particle System is null");
 		} else {
 			Ogre::SceneNode * sn = _particles[coid];
-			Ogre::ParticleSystem * part = dynamic_cast<Ogre::ParticleSystem *>(sn->getAttachedObject(0));
+			ParticleUniverse::ParticleSystem * part = dynamic_cast<ParticleUniverse::ParticleSystem *>(sn->getAttachedObject(0));
 			if (part == nullptr) {
 				ISIXE_LOG_ERROR("GraphicNode", "Particle system broken");
 			}
-			part->removeAllEmitters();
+			part->stopFade();
 		}
 	}
 
@@ -437,21 +444,21 @@ namespace modules {
 	void GraphicsNode::deleteParticleComponent(const int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		Ogre::SceneManager * sm = _manager->getSceneManager();
 		if (_particles.find(coid) == _particles.end()) {
 			ISIXE_LOG_ERROR("GraphicsNode", "Particle System is null");
 		} else {
 			Ogre::SceneNode * sn = _particles[coid];
-			Ogre::ParticleSystem * part = dynamic_cast<Ogre::ParticleSystem *>(sn->getAttachedObject(0));
+			ParticleUniverse::ParticleSystem * part = dynamic_cast<ParticleUniverse::ParticleSystem *>(sn->getAttachedObject(0));
 			if (part == nullptr) {
 				ISIXE_LOG_ERROR("GraphicNode", "Particle system broken");
 			}
 			sn->detachObject(part);
-			sm->destroyParticleSystem(part);
+			part->stop();
 
 			_sceneNode->removeAndDestroyChild(sn->getName());
 
 			_particles.erase(coid);
+			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(part, _manager->getSceneManager());
 		}
 	}
 
@@ -532,6 +539,7 @@ namespace modules {
 		Ogre::Billboard * bb = _billboardSets[coid].second[identifier];
 		_billboardSets[coid].first->removeBillboard(bb);
 		_billboardSets[coid].second.erase(identifier);
+		delete bb;
 	}
 
 	void GraphicsNode::deleteBillboardSetComponent(int64_t coid) {
@@ -578,6 +586,63 @@ namespace modules {
 		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(sn->getAttachedObject(0));
 		Ogre::Viewport * vp = camera->getViewport();
 		Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, compositor, enabled);
+	}
+
+	void GraphicsNode::drawBoundingBox(int64_t coid, const Vec3 & colour) {
+		Ogre::SceneManager * sm = _manager->getSceneManager();
+		_boundingBox = sm->createManualObject("MO_" + std::to_string(_gameObjectID));
+
+		// NOTE: The second parameter to the create method is the resource group the material will be added to.
+		// If the group you name does not exist (in your resources.cfg file) the library will assert() and your program will crash
+		Ogre::MaterialPtr myManualObjectMaterial = Ogre::MaterialManager::getSingleton().create("MO_" + std::to_string(_gameObjectID) + "_Material", "General");
+		myManualObjectMaterial->setReceiveShadows(false);
+		myManualObjectMaterial->getTechnique(0)->setLightingEnabled(true);
+		myManualObjectMaterial->getTechnique(0)->getPass(0)->setDiffuse(colour.getX(), colour.getY(), colour.getZ(), 0);
+		myManualObjectMaterial->getTechnique(0)->getPass(0)->setAmbient(colour.getX(), colour.getY(), colour.getZ());
+		myManualObjectMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(colour.getX(), colour.getY(), colour.getZ());
+
+
+		_boundingBox->begin("MO_" + std::to_string(_gameObjectID) + "_Material", Ogre::RenderOperation::OT_LINE_LIST);
+
+		Ogre::MovableObject * meshEntity = _sceneNodes[coid]->getAttachedObject(0);
+
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_BOTTOM));
+
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_TOP));
+
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_TOP));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_BOTTOM));
+		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_TOP));
+
+		_boundingBox->end();
+
+		_sceneNode->attachObject(_boundingBox);
+	}
+
+	void GraphicsNode::removeBoundingBox() {
+		_sceneNode->detachObject(_boundingBox);
+		Ogre::SceneManager * sm = _manager->getSceneManager();
+		sm->destroyManualObject(_boundingBox);
+		_boundingBox = nullptr;
 	}
 
 } /* namespace modules */

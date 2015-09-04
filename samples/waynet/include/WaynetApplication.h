@@ -33,6 +33,22 @@ namespace sample {
 
 		void AfterInitialize();
 
+		void Tick() {
+			CommonApplication::Tick();
+		}
+
+		void Finalize() {
+			CommonApplication::Finalize();
+		}
+
+		void ShutDown() {
+			CommonApplication::ShutDown();
+		}
+
+		bool ShutdownRequest() {
+			return true;
+		}
+
 	private:
 		clockUtils::iniParser::IniParser _iniParser;
 

@@ -55,8 +55,8 @@ namespace modules {
 		~GUIMailbox();
 
 		/**
-		 *\brief See Class-Description
-		 *\param objMessage Any message on the channel
+		 * \brief See Class-Description
+		 * \param objMessage Any message on the channel
 		 */
 		void News(const api::GameMessage::Ptr & msg) const;
 

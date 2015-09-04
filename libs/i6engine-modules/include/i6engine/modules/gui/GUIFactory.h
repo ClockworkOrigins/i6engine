@@ -47,6 +47,8 @@ namespace modules {
 		friend class GUIManager;
 
 	private:
+		std::map<std::string, GUIWidget_factory> _templates;
+
 		/**
 		 * \brief constructor
 		 */
@@ -72,8 +74,6 @@ namespace modules {
 		 *  Tip: You can use boost::factory to register a GUIWidget constructor as a template
 		 */
 		void registerGUIWidgetTemplate(const std::string & name, const GUIWidget_factory & createFunc);
-
-		std::map<std::string, GUIWidget_factory> _templates;
 
 		/**
 		 * \brief forbidden

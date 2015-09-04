@@ -64,7 +64,6 @@ namespace api {
 	 * \li \c component_table_pair_t is an alias for std::pair<const goc_id_type, GOComponent*>.
 	 *
 	 * Have a look at \link i6engine here \endlink for an overview of typedef's in namespace %i6engine.
-	 *
 	 */
 	class ISIXE_MODULES_API GameObject {
 	public:
@@ -180,8 +179,9 @@ namespace api {
 
 		/**
 		 * \brief adds synchronize messages for GameObject and all Components of this GO
+		 * set param all false if you just want Components with sync flag to be added to message
 		 */
-		void synchronize(std::vector<GameMessage::Ptr> & messages) const;
+		void synchronize(std::vector<GameMessage::Ptr> & messages, bool all) const;
 
 		/**
 		 * \brief sends a message to delete the GameObject

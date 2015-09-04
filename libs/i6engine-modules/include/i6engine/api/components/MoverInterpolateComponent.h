@@ -30,11 +30,24 @@
 namespace i6engine {
 namespace api {
 
+	/**
+	 * \brief moving an object interpolating in some way
+	 * For creating a MoverInterpolateComponent, these keys are possible:
+	 * | Name | Required | Type | Description | Public |
+	 * |------|----------|------| ----------- | ------------ |
+	 * | way | yes | short | How are the frames interpolated, one of enum entries of Way | yes |
+	 * | mode | yes | short | In which order the frames will be processed | yes |
+	 * | direction | yes | bool | Direction of this mover, true is forward, false is backward | yes |
+	 * | openTime | *) | uint64_t | time mover stays at end position before moving backwards, *) required when mode is TWOSTATE_OPENTIME | yes |
+	 * | keyframes | yes | int | number of keyframes to follow | yes |
+	 * | keyframe_<i>_pos | *) | vector | position of i-th keyframe, *) required for all keyframes | yes |
+	 * | keyframe_<i>_rot | *) | quaternion | rotation of i-th keyframe, *) required for all keyframes | yes |
+	 */
 	class ISIXE_MODULES_API MoverInterpolateComponent : public MoverComponent {
 	public:
 		enum class Mode : uint16_t {
 			TWOSTATE_TOGGLE, 	// ! loops forward through all keyframes and afterwards backwards. This is repeated endlessly.
-			TWOSTATE_OPENTIME, 	// ! same as TWOSTATE_TOGGLE but waits opentime befor returning
+			TWOSTATE_OPENTIME, 	// ! same as TWOSTATE_TOGGLE but waits opentime before returning
 			NSTATE_LOOP,		// ! loops through all keyframes (moving from last to first keyframe is interpolated just like all other segments)
 			ONCE				// ! moves from start to end and stops there
 		};
@@ -45,7 +58,7 @@ namespace api {
 		};
 
 		MoverInterpolateComponent(const int64_t id, const attributeMap & params);
-		virtual ~MoverInterpolateComponent();
+		~MoverInterpolateComponent();
 
 		/**
 		 * \brief creates the Component with given attributeMap
@@ -89,7 +102,7 @@ namespace api {
 
 		inline Way getWay() const { return _way; }
 
-		void start(Vec3 & startPos);
+		void start(Vec3 & startPos) override;
 
 		/**
 		 * \brief synchronizes the Components state
@@ -100,16 +113,11 @@ namespace api {
 			return "MoverInterpolate";
 		}
 
-		void reset();
+		void reset() override;
 
 		std::vector<componentOptions> getComponentOptions() override;
 
 	private:
-		/**
-		 * \brief current frame
-		 */
-		uint32_t _frameID;
-
 		/**
 		 * \brief list of all keyframes defining a path
 		 * used in all path modes
@@ -159,7 +167,7 @@ namespace api {
 
 		void News(const GameMessage::Ptr & msg) override;
 
-		void getNewPosition(const uint64_t t, Vec3 & newPos, Quaternion & newRot);
+		void getNewPosition(const uint64_t t, Vec3 & newPos, Quaternion & newRot) override;
 
 		/**
 		 * \brief loads all parameters from a message

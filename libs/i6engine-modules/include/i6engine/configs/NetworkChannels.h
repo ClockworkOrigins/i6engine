@@ -17,7 +17,7 @@
 #ifndef __I6ENGINE_CONFIGS_NETWORKCHANNELS_H__
 #define __I6ENGINE_CONFIGS_NETWORKCHANNELS_H__
 
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 	#include "m2etis/pubsub/config/ChannelName.h"
 
 	// used for all messages containing information about GameObjects and their components
@@ -34,7 +34,7 @@
 
 	// used for all chat messages
 	#define CHAT_CHANNEL m2etis::pubsub::I6ENGINE_Direct_Null_Null_Null_Null_Null_DirectBroadcast_Null_GameMessage_TCP
-#else /* ISIXE_NETWORK */
+#else /* ISIXE_WITH_NETWORK */
 	// used for all messages containing information about GameObjects and their components
 	#define OBJECT_CHANNEL 0
 
@@ -49,6 +49,6 @@
 
 	// used for all chat messages
 	#define CHAT_CHANNEL 0
-#endif /* ISIXE_NETWORK */
+#endif /* ISIXE_WITH_NETWORK */
 
 #endif /* __I6ENGINE_CONFIGS_NETWORKCHANNELS_H__ */

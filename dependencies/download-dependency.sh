@@ -19,14 +19,16 @@
 cd "$(readlink -f "$(dirname "${0}")")"
 
 FILE=${1}
+URL=http://www.clockwork-origins.de/dependencies/
+if [ -n "$2" ]; then
+	URL=${2}
+fi
 
 . ./build-common.sh
 
-mkdir -p ${EX_DIR}
+mkdir -p ${BUILD_ROOT}
 
-if ! [ -f "${EX_DIR}/${FILE}" ]; then
-	wget http://www.clockwork-origins.de/dependencies/${FILE}
-
-	mv ${FILE} ${EX_DIR}
+if ! [ -f "${BUILD_ROOT}/${FILE}" ]; then
+	wget ${URL}/${FILE} -P ${BUILD_ROOT}
 fi
 

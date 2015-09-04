@@ -45,10 +45,10 @@ namespace luabind { namespace detail {
     {
       struct cast_entry
       {
-          cast_entry(class_id src, class_id target, cast_function cast)
-            : src(src)
-            , target(target)
-            , cast(cast)
+          cast_entry(class_id s, class_id t, cast_function c)
+            : src(s)
+            , target(t)
+            , cast(c)
           {}
 
           class_id src;
@@ -234,9 +234,9 @@ namespace luabind { namespace detail {
     
     // -- interface ---------------------------------------------------------
 
-    class_base::class_base(char const* name)
-        : scope(std::auto_ptr<registration>(
-                m_registration = new class_registration(name))
+    class_base::class_base(char const* n)
+        : scope(std::unique_ptr<registration>(
+                m_registration = new class_registration(n))
           )
     {
     }
@@ -258,14 +258,14 @@ namespace luabind { namespace detail {
 
 	void class_base::add_member(registration* member)
 	{
-		std::auto_ptr<registration> ptr(member);
-		m_registration->m_members.operator,(scope(ptr));
+		std::unique_ptr<registration> ptr(member);
+		m_registration->m_members.operator,(scope(std::move(ptr)));
 	}
 
 	void class_base::add_default_member(registration* member)
 	{
-		std::auto_ptr<registration> ptr(member);
-		m_registration->m_default_members.operator,(scope(ptr));
+		std::unique_ptr<registration> ptr(member);
+		m_registration->m_default_members.operator,(scope(std::move(ptr)));
 	}
 
     const char* class_base::name() const 
@@ -273,9 +273,9 @@ namespace luabind { namespace detail {
         return m_registration->m_name; 
     }
 
-    void class_base::add_static_constant(const char* name, int val)
+    void class_base::add_static_constant(const char* n, int val)
     {
-        m_registration->m_static_constants[name] = val;
+        m_registration->m_static_constants[n] = val;
     }
 
     void class_base::add_inner_scope(scope& s)

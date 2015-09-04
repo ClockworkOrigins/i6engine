@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * \addtogroup Input
  * @{
@@ -39,6 +40,8 @@ namespace modules {
 		friend class InputController;
 
 	private:
+		InputManager * _manager;
+
 		/**
 		 * \brief constructor taking InputManager
 		 */
@@ -48,8 +51,6 @@ namespace modules {
 		 * \brief dispatcher for messages for input subsystem
 		 */
 		void News(const api::GameMessage::Ptr & msg);
-
-		InputManager * _manager;
 
 		/**
 		 * \brief forbidden

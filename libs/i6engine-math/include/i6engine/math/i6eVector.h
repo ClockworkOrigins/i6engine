@@ -30,7 +30,7 @@
 namespace Ogre {
 	class Vector2;
 	class Vector3;
-}
+} /* namespace Ogre */
 class btVector3;
 
 namespace i6engine {

@@ -13,7 +13,6 @@ namespace gui {
 	SubtitleWidget::SubtitleWidget(const std::string & name, const std::string & style) : GUIWidget(name), _text(), _font(), _lines(), _listboxStyle() {
 		CEGUI::WindowManager & wmgr = CEGUI::WindowManager::getSingleton();
 		_window = wmgr.createWindow(style, name);
-
 		_window->setRiseOnClickEnabled(true);
 		_window->setMousePassThroughEnabled(true);
 	}
@@ -30,7 +29,7 @@ namespace gui {
 			_font = g->text;
 			setText(_text);
 		} else if (type == rpg::gui::GUIMessageTypes::SetListboxStyle) {
-			rpg::gui::GUI_SetListboxStyle * g = dynamic_cast<rpg::gui::GUI_SetListboxStyle *>(data);
+			GUI_SetListboxStyle * g = dynamic_cast<GUI_SetListboxStyle *>(data);
 			_listboxStyle = g->style;
 		} else {
 			GUIWidget::update(type, data);
@@ -61,8 +60,10 @@ namespace gui {
 			if (lb->getWidestItemWidth() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width >= _window->getSize().d_width.d_scale) {
 				dynamic_cast<CEGUI::ListboxTextItem *>(lb->getListboxItemFromIndex(0))->setText(last);
 				// center listbox
-				lb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.5f - (lb->getWidestItemWidth() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width) / 2, 0.0f), CEGUI::UDim(_window->getPosition().d_y.d_scale + 0.01f + (lb->getTotalItemsHeight() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height) * _lines.size(), 0.0f)));
-				lb->setSize(CEGUI::USize(CEGUI::UDim(lb->getWidestItemWidth() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width + 0.015f, 0.0f), CEGUI::UDim(lb->getTotalItemsHeight() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height + 0.015f, 0.0f)));
+				lb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.5f - ((lb->getWidestItemWidth() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width) / 2) / _window->getSize().d_width.d_scale, 0.0f), CEGUI::UDim((_window->getPosition().d_y.d_scale + 0.01f + (lb->getTotalItemsHeight() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height) * _lines.size()) / _window->getSize().d_height.d_scale, 0.0f)));
+				float realWorldScale = lb->getWidestItemWidth() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width + 0.015f;
+				realWorldScale = (realWorldScale / _window->getSize().d_width.d_scale);
+				lb->setSize(CEGUI::USize(CEGUI::UDim(realWorldScale, 0.0f), CEGUI::UDim((lb->getTotalItemsHeight() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height + 0.015f) / _window->getSize().d_height.d_scale, 0.0)));
 				_lines.push_back(lb);
 				lb = dynamic_cast<CEGUI::Listbox *>(_window->createChild(_listboxStyle, _name + "_Text_" + std::to_string(_lines.size())));
 				lb->addItem(new CEGUI::ListboxTextItem(""));
@@ -74,8 +75,10 @@ namespace gui {
 			}
 		}
 		dynamic_cast<CEGUI::ListboxTextItem *>(lb->getListboxItemFromIndex(0))->setText(current);
-		lb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.5f - (lb->getWidestItemWidth() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width) / 2, 0.0f), CEGUI::UDim(_window->getPosition().d_y.d_scale + 0.01f + (lb->getTotalItemsHeight() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height) * _lines.size(), 0.0f)));
-		lb->setSize(CEGUI::USize(CEGUI::UDim(lb->getWidestItemWidth() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width + 0.015f, 0.0f), CEGUI::UDim(lb->getTotalItemsHeight() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height + 0.015f, 0.0)));
+		lb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.5f - ((lb->getWidestItemWidth() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width) / 2) / _window->getSize().d_width.d_scale, 0.0f), CEGUI::UDim((_window->getPosition().d_y.d_scale + 0.01f + (lb->getTotalItemsHeight() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height) * _lines.size()) / _window->getSize().d_height.d_scale, 0.0f)));
+		float realWorldScale = lb->getWidestItemWidth() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width + 0.015f;
+		realWorldScale = (realWorldScale / _window->getSize().d_width.d_scale);
+		lb->setSize(CEGUI::USize(CEGUI::UDim(realWorldScale, 0.0f), CEGUI::UDim((lb->getTotalItemsHeight() / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height + 0.015f) / _window->getSize().d_height.d_scale, 0.0)));
 		_lines.push_back(lb);
 	}
 

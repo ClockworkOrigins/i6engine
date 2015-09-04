@@ -22,7 +22,7 @@
 
 #include "i6engine/api/components/Component.h"
 
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 	#include "i6engine/api/components/NetworkSenderComponent.h"
 #endif
 
@@ -37,6 +37,7 @@
 #include "i6engine/modules/object/ObjectManager.h"
 
 #include "boost/bind.hpp"
+#include "boost/filesystem.hpp"
 
 #include "tinyxml2.h"
 
@@ -45,6 +46,22 @@ namespace modules {
 
 	GOFactory::GOFactory(ObjectManager * m, ComponentFactory * c) : _templateList(), _manager(m), _compFactory(c) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
+
+		std::string goTemplatePath;
+		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("OBJECT", "GOTemplatePath", goTemplatePath)) {
+			ISIXE_LOG_ERROR("Object", "An exception has occurred: value GOTemplatePath in section OBJECT not found!");
+			return;
+		}
+		boost::filesystem::directory_iterator iter(goTemplatePath), dirEnd;
+		while (iter != dirEnd) {
+			if (boost::filesystem::is_regular_file(*iter)) {
+				std::string file = iter->path().string();
+				registerGOTemplate(file);
+			}
+			iter++;
+		}
+
+		api::EngineController::GetSingleton().getObjectFacade()->setGOTemplates(_templateList);
 	}
 
 	void GOFactory::registerGOTemplate(const std::string & file) {
@@ -170,7 +187,7 @@ namespace modules {
 
 		go->initializeComponents();
 
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 		// add NetworkSenderComponent if sending object and Multiplayer
 		if (sender && api::EngineController::GetSingletonPtr()->getType() != api::GameType::SINGLEPLAYER) {
 			api::ComPtr nsc = utils::make_shared<api::NetworkSenderComponent, api::Component>();

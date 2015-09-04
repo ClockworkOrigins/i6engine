@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -43,6 +43,9 @@ namespace config {
 		SlotComponent,
 		SlotInventoryComponent,
 		HumanMovementComponent,
+		DialogCheckerComponent,
+		ExperienceComponent,
+		MiscItemComponent,
 		ComponentTypesCount
 	};
 

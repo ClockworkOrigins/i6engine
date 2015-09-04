@@ -25,6 +25,9 @@ include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 include_directories(${I6ENGINE_RPG_INCLUDE_DIR})
 
+include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
+include_directories(${I6ENGINE_LUABIND_INCLUDE_DIR})
+
 set(SampleRPGSrc
 	main.cpp
 

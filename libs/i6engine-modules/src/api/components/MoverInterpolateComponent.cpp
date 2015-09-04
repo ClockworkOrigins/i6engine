@@ -37,7 +37,7 @@
 namespace i6engine {
 namespace api {
 
-	MoverInterpolateComponent::MoverInterpolateComponent(const int64_t id, const attributeMap & params) : MoverComponent(id, params), _frameID(0), _keyFrames(), _mode(), _openTime(2), _way(), _totalDistance(0), _currentDist(0), _currentFrame(0), _direction(true), _lock() {
+	MoverInterpolateComponent::MoverInterpolateComponent(const int64_t id, const attributeMap & params) : MoverComponent(id, params), _keyFrames(), _mode(), _openTime(2), _way(), _totalDistance(0), _currentDist(0), _currentFrame(0), _direction(true), _lock() {
 		_objComponentID = components::MoverInterpolateComponent;
 
 		loadParams(params);
@@ -53,6 +53,11 @@ namespace api {
 	void MoverInterpolateComponent::addKeyFrame(const Vec3 & position, const Quaternion & rotation) {
 		boost::mutex::scoped_lock l(_lock);
 		_keyFrames.push_back(keyFrame(position, rotation));
+	}
+
+	void MoverInterpolateComponent::removeKeyFrame(const uint32_t id) {
+		boost::mutex::scoped_lock l(_lock);
+		_keyFrames.erase(_keyFrames.begin() + int(id));
 	}
 
 	void MoverInterpolateComponent::start(Vec3 & startPos) {
@@ -139,7 +144,7 @@ namespace api {
 			}
 		} else if (_mode == Mode::ONCE) {
 			timeElapsed %= _duration;
-			tt = 1 - double(timeElapsed - _duration) / _duration;
+			tt = double(timeElapsed) / _duration;
 
 			if (t > _duration) {
 				stop();
@@ -224,7 +229,7 @@ namespace api {
 			}
 			for (uint32_t i = 0; i < n + 1; ++i) {
 				newPos += _keyFrames[i % n].first * fak1 * fak2 * double(math::binom(n, i));
-				fak1 /= (1-tt);
+				fak1 /= (1 - tt);
 				fak2 *= tt;
 			}
 			break;
@@ -257,29 +262,24 @@ namespace api {
 	}
 
 	void MoverInterpolateComponent::loadParams(const attributeMap & params) {
-		if (params.find("mode") == params.end()) {
-			ISIXE_THROW_API("MoverComponent", "required parameter 'mode' not set");
-		}
-		_mode = static_cast<Mode>(boost::lexical_cast<uint16_t>(params.at("mode")));
+		parseAttribute<true>(params, "mode", _mode);
+		parseAttribute<true>(params, "way", _way);
+		parseAttribute<true>(params, "direction", _direction);
 
-		if (params.find("way") == params.end()) {
-			ISIXE_THROW_API("MoverComponent", "required parameter 'way' not set");
-		}
-		_way = static_cast<Way>(boost::lexical_cast<uint16_t>(params.at("way")));
-
-		if (params.find("direction") == params.end()) {
-			ISIXE_THROW_API("MoverComponent", "required parameter 'direction' not set");
-		}
-		if (params.find("direction") != params.end()) {
-			_direction = boost::lexical_cast<bool>(params.find("direction")->second);
+		if (_mode == Mode::TWOSTATE_OPENTIME) {
+			parseAttribute<true>(params, "openTime", _openTime);
 		}
 
-		ISIXE_THROW_API_COND("MoverComponent", "required parameter 'keyframes' not set", params.find("keyframes") != params.end());
-		uint32_t frames = boost::lexical_cast<uint32_t>(params.find("keyframes")->second);
+		uint32_t frames;
+		parseAttribute<true>(params, "keyframes", frames);
 		for (uint32_t i = 0; i < frames; ++i) {
 			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos") != params.end());
-			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot") != params.end());
-			addKeyFrame(Vec3(params, std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos"), Quaternion(params, std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot"));
+			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) +"_rot" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) +"_rot") != params.end());
+			Vec3 pos;
+			Quaternion rot;
+			parseAttribute<true>(params, std::string("keyframe_") + std::to_string(i) + "_pos", pos);
+			parseAttribute<true>(params, std::string("keyframe_") + std::to_string(i) + "_rot", rot);
+			addKeyFrame(pos, rot);
 		}
 		if (_direction) {
 			_lastPos = _keyFrames[0].first;

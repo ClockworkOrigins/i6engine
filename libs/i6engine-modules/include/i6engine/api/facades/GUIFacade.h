@@ -42,8 +42,6 @@ namespace gui {
 	 *
 	 * The Application shall only use methods from this class and get them via GetSingleton()
 	 * GUIFacede creates Messages of type GUIMessageType and sends them. GUIMailbox will read this Messages and calls wanted Methods from GUIManager
-	 * Some Functionality directly calls Methods from the GUIManager
-	 * All Methods with an (m) at the end of the brief description send a Message (m)
 	 */
 	class ISIXE_MODULES_API GUIFacade {
 	public:
@@ -53,7 +51,7 @@ namespace gui {
 		}
 
 		/**
-		 * \brief Creates the GUI. This function has to be called before you can start creating windows ect. (m)
+		 * \brief Creates the GUI. This function has to be called before you can start creating windows ect.
 		 * \param strScheme The Scheme filename which should be loaded (.scheme / XML)
 		 * \param strFont The default font set (can be empty)
 		 * \param strDefaultFont The default font (out of the set, can be empty)
@@ -63,7 +61,7 @@ namespace gui {
 		void startGUI(const std::string & strScheme, const std::string & strFont, const std::string & strDefaultFont, const std::string & strDefaultMouseImageSet, const std::string & strDefaultMouseImageName) const;
 
 		/**
-		 * \brief Add the child_window to the RootWindow. (m)
+		 * \brief Add the child_window to the RootWindow.
 		 * \details The RootWindow is an invisibly full-screen window on top of your application.
 		 * Adding windows to it will form your GUI-Interface
 		 * Widgets are automatically added to the RootWindow, when they are created.
@@ -71,18 +69,18 @@ namespace gui {
 		void addToRootWindow(const std::string & child_window) const;
 
 		/**
-		 * \brief Sets the MouseVisibility (m)
+		 * \brief Sets the MouseVisibility
 		 * \param visibility True to display the mouse, False to hide it.
 		 */
 		void setMouseVisibility(const bool visibility) const;
 
 		/**
-		 * \brief Delete all windows. Should be used when shutting down. (m)
+		 * \brief Delete all windows. Should be used when shutting down.
 		 */
 		void clearAllWindows() const;
 
 		/**
-		 * \brief Subscribes for an event (Mouse-Click). (m)
+		 * \brief Subscribes for an event (Mouse-Click).
 		 * \param windowname The name of the window to be connected for an event. This can be either a manually created window or the name of a window specified in the .layout file
 		 * \param eventType Type of the event. Note that the window type (e.g. PushButton) has to support this type of event. At the moment there's only one event type namely "Clicked"
 		 * \param ptrEventMethod Everytime the Event occurs on this window, the Method leading to this pointer will be called
@@ -94,14 +92,6 @@ namespace gui {
 		 * \param b true means enabled, false meands disabled
 		 */
 		void changeEvent(const std::string & windowname, bool b) const;
-
-		/**
-		 * \brief Wrapper to set both visibility of a window and the cursor
-		 * \param windowname name of the window
-		 * \param wVisibilty visibility of the window
-		 * \param mVisibilty visibility of the cursor
-		 */
-		void setWindowAndMouseVisibility(const std::string & windowname, const bool wVisibility, const bool mVisibility) const;
 
 		/**
 		 * \brief sets image for mouse cursor
@@ -270,7 +260,7 @@ namespace gui {
 		void setSize(const std::string & name, const double w, const double h) const;
 
 		/**
-		 * \brief Sets visibility of a window (m)
+		 * \brief Sets visibility of a window
 		 * \param windowname name of the window
 		 * \param visibilty
 		 */
@@ -349,7 +339,7 @@ namespace gui {
 		void addRowToList(const std::string & name) const;
 
 		/**
-		 * \brief quite self-explanatory. See addRowToList. (m)
+		 * \brief quite self-explanatory. See addRowToList.
 		 */
 		void addRowEntry(const std::string & name, const uint32_t row, const uint32_t column, const std::string & entry) const;
 
@@ -427,7 +417,7 @@ namespace gui {
 		void addTextToWidget(const std::string & name, const std::string & text) const;
 
 		/**
-		 * \brief Sets a selected callback to a ComboBox
+		 * \brief Sets a selected callback to a ComboBox/Listbox
 		 * \param name Name of the Widget
 		 * \param selectedCallback callback to be called when selection changes
 		 */
@@ -460,6 +450,11 @@ namespace gui {
 		* \param animation the animation to be played
 		*/
 		void unpauseAnimation(const std::string & name, const std::string & animation) const;
+
+		/**
+		 * \brief sets automatic line break to the widget (currently only implemtend for Statuslist
+		 */
+		void setAutoLineBreak(const std::string & name, bool enabled) const;
 
 		/**
 		 * \brief Registers a new Widget-template.
@@ -510,19 +505,30 @@ namespace gui {
 
 		/**
 		 * \brief called only by GUI subsystem setting state whether input is captured or not
+		 * call this only from within GUIManager
 		 */
 		void setInputCaptured(bool captured) {
 			_captured = captured;
 		}
 
+		/**
+		 * \brief returns true, if the input is captured in a GUI widget
+		 */
 		bool getInputCaptured() const {
 			return _captured;
 		}
 
+		/**
+		 * \brief sets whether mouse in on a GUI window or not
+		 * call this only from within GUIManager
+		 */
 		void setOnWindow(bool onWindow) {
 			_onWindow = onWindow;
 		}
 
+		/**
+		 * \brief returns true if mouse is above a GUI widget
+		 */
 		bool getOnWindow() const {
 			return _onWindow;
 		}

@@ -27,6 +27,9 @@
 namespace i6engine {
 namespace api {
 
+	/**
+	 * \brief simple typedef to use in API but leave overhead
+	 */
 	typedef core::Message GameMessage;
 
 } /* namespace api */

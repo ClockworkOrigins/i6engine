@@ -55,19 +55,17 @@
 #include "i6engine/modules/graphics/GraphicsController.h"
 #include "i6engine/modules/input/InputController.h"
 
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 	#include "i6engine/modules/network/NetworkController.h"
 #endif
 
 #include "i6engine/modules/object/ObjectController.h"
 #include "i6engine/modules/physics/PhysicsController.h"
 
-#ifdef ISIXE_WITH_LUA_SCRIPTING
+#if ISIXE_SCRIPTING == SCRIPTING_LUA
 	#include "i6engine/modules/luascripting/LuaScriptingController.h"
-#else
-	#if ISIXE_WITH_PYTHON_SCRIPTING
-		#include "i6engine/modules/scripting/ScriptingController.h"
-	#endif
+#elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
+	#include "i6engine/modules/pythonscripting/PythonScriptingController.h"
 #endif
 
 #include "boost/uuid/uuid.hpp"
@@ -159,8 +157,6 @@ namespace api {
 		std::thread thrd([this, &run]() {
 			// read stdin
 			std::string str;
-
-#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
 			struct timeval tv;
 
 			while (run) {
@@ -178,7 +174,6 @@ namespace api {
 					}
 				}
 			}
-#endif
 		});
 
 		_coreController->RunEngine();
@@ -231,44 +226,40 @@ namespace api {
 
 	void EngineController::registerDefault(const bool ds) {
 		if (!ds) {
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 			registerSubSystem("Network", new modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 #endif
 			registerSubSystem("Graphics", new modules::GraphicsController(), { core::Subsystem::Object });
 			registerSubSystem("Object", new modules::ObjectController(), { core::Subsystem::Physic });
 			registerSubSystem("Input", new modules::InputController(), LNG_INPUT_FRAME_TIME);
 			registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
-#ifdef ISIXE_WITH_LUA_SCRIPTING
+#if ISIXE_SCRIPTING == SCRIPTING_LUA
 			registerSubSystem("Scripting", new modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
-#else
-	#if ISIXE_WITH_PYTHON_SCRIPTING
-			registerSubSystem("Scripting", new modules::ScriptingController(), LNG_SCRIPTING_FRAME_TIME);
-	#endif
+#elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
+			registerSubSystem("Scripting", new modules::PythonScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
 #ifdef ISIXE_WITH_AUDIO
 			registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
 #endif
 		} else {
-#ifdef ISIXE_NETWORK
+#ifdef ISIXE_WITH_NETWORK
 			registerSubSystem("Network", new modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 #endif
 			registerSubSystem("Object", new modules::ObjectController(), LNG_OBJECT_FRAME_TIME);
 			registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
-#ifdef ISIXE_WITH_LUA_SCRIPTING
+#if ISIXE_SCRIPTING == SCRIPTING_LUA
 			registerSubSystem("Scripting", new modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
-#else
-	#if ISIXE_WITH_PYTHON_SCRIPTING
-			registerSubSystem("Scripting", new modules::ScriptingController(), LNG_SCRIPTING_FRAME_TIME);
-	#endif
+#elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
+			registerSubSystem("Scripting", new modules::PythonScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
 		}
 	}
 
-	uint64_t EngineController::registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, uint16_t priority) {
+	uint64_t EngineController::registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, core::JobPriorities priority) {
 		return _coreController->registerTimer(time, func, looping, priority);
 	}
 
-	void EngineController::removeTimer(uint16_t priority) {
+	void EngineController::removeTimer(core::JobPriorities priority) {
 		_coreController->removeTimer(priority);
 	}
 

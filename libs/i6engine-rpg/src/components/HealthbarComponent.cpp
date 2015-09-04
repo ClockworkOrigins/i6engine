@@ -60,6 +60,14 @@ namespace components {
 		return api::attributeMap();
 	}
 
+	void HealthbarComponent::show() {
+		api::EngineController::GetSingleton().getGUIFacade()->setVisibility("HPBar_" + std::to_string(_id), true);
+	}
+
+	void HealthbarComponent::hide() {
+		api::EngineController::GetSingleton().getGUIFacade()->setVisibility("HPBar_" + std::to_string(_id), false);
+	}
+
 } /* namespace components */
 } /* namespace rpg */
 } /* namespace i6engine */

@@ -23,7 +23,7 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 	#include "i6engine/utils/Profiling.h"
 #endif
 
@@ -42,7 +42,6 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "boost/bind.hpp"
-#include "boost/filesystem.hpp"
 
 namespace i6engine {
 namespace modules {
@@ -52,20 +51,6 @@ namespace modules {
 
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback(boost::bind(&ObjectManager::addTicker, this, _1));
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerRemoveTickerCallback(boost::bind(&ObjectManager::removeTicker, this, _1));
-
-		std::string goTemplatePath;
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue<std::string>("OBJECT", "GOTemplatePath", goTemplatePath)) {
-			ISIXE_LOG_ERROR("Object", "An exception has occurred: value GOTemplatePath in section OBJECT not found!");
-			return;
-		}
-		boost::filesystem::directory_iterator iter(goTemplatePath), dirEnd;
-		while (iter != dirEnd) {
-			if (boost::filesystem::is_regular_file(*iter)) {
-				std::string file = iter->path().string();
-				registerGOTemplate(file);
-			}
-			iter++;
-		}
 
 		for (std::pair<std::string, api::createGOCCallback> & p : api::componentList) {
 			registerCTemplate(p.first, p.second);
@@ -91,7 +76,7 @@ namespace modules {
 		GOPtr::clear();
 		api::ComPtr::clear();
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		if (utils::profiling::numberObjects) {
 			ISIXE_LOG_INFO("ObjectManager", "Current amount of GameObjects: " << _GOList.size());
 		}
@@ -250,7 +235,7 @@ namespace modules {
 		for (std::list<GOPtr>::const_iterator it = _GOList.begin(); it != _GOList.end(); ++it) {
 			assert(*it != nullptr);
 
-			(*it)->synchronize(v);
+			(*it)->synchronize(v, false);
 		}
 
 		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::AdministrationMessageType, api::network::NetGameState, core::Method::Create, new api::network::Administration_GameState_Create(receiver, v), core::Subsystem::Object);

@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -30,79 +30,94 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief inventory sorting items depending on their type listing all in one view
+	 */
 	class ISIXE_RPG_API ListInventoryComponent : public InventoryComponent, public api::MessageSubscriberFacade {
 	public:
 		ListInventoryComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
 
-		void Init() override;
-		void Finalize() override;
-
 		api::attributeMap synchronize() const override;
-
-		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
-			return std::make_pair(api::AddStrategy::REJECT, -1);
-		}
 
 		std::vector<api::componentOptions> getComponentOptions() override {
 			return {};
 		}
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "ListInventory";
 		}
-
-		/**
-		 * \brief checks whether the item can be added to the inventory and if so it is added
-		 */
-		bool addItem(const api::GOPtr & item);
-
-		/**
-		 * \brief shows the inventory, implementation depends on subclass
-		 */
-		void show();
-
-		/**
-		 * \brief hides the inventory, implementation depends on subclass
-		 */
-		void hide();
-
-		/**
-		 * \brief tries to use given item
-		 */
-		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback);
-
-		/**
-		 * \brief returns the selected item
-		 * if none is selected, first parameter in pair is UINT32_MAX
-		 */
-		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const;
-
-		/**
-		 * \brief returns the number of items for the given type
-		 */
-		uint32_t getItemCount(uint32_t item, const std::string & name) const;
 
 	private:
 		enum ItemEntry {
 			Message,
 			Amount,
 			Imageset,
-			Image
+			Image,
+			Identifier,
+			Value
 		};
-		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string>>> _items;
+		std::map<uint32_t, std::map<std::string, std::tuple<api::GameMessage::Ptr, uint32_t, std::string, std::string, std::string, uint32_t>>> _items;
 		uint32_t _columns;
 		uint32_t _slotCount;
 		uint32_t _currentIndex;
 		std::vector<std::string> _widgets;
 		uint32_t _itemTypeCount;
 		uint32_t _maxSlot;
+		bool _active;
+		bool _infoScreen;
+
+		void Init() override;
+		void Finalize() override;
+
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+			return std::make_pair(api::AddStrategy::REJECT, -1);
+		}
+
+		/**
+		 * \brief checks whether the item can be added to the inventory and if so it is added
+		 */
+		bool addItem(const api::GOPtr & item) override;
+
+		/**
+		 * \brief shows the inventory, implementation depends on subclass
+		 */
+		void show() override;
+
+		/**
+		 * \brief hides the inventory, implementation depends on subclass
+		 */
+		void hide() override;
+
+		/**
+		 * \brief tries to use given item
+		 */
+		void useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback) override;
+
+		/**
+		 * \brief returns the selected item
+		 * if none is selected, first parameter in pair is UINT32_MAX
+		 */
+		std::tuple<uint32_t, std::string, std::string, std::string> getSelectedItem() const override;
+
+		/**
+		 * \brief returns the number of items for the given type
+		 */
+		uint32_t getItemCount(const std::string & identifier) const override;
+		uint32_t getItemCount(uint32_t item, const std::string & name) const override;
+
+		/**
+		 * \brief used to create an item in the inventory
+		 */
+		void removeItems(const std::string & identifier, uint32_t amount) override;
 
 		void showItems();
 
-		void News(const api::GameMessage::Ptr & msg);
+		void News(const api::GameMessage::Ptr & msg) override;
 		void Tick() override;
+
+		void showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) override;
 	};
 
 } /* namespace components */

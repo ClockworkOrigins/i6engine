@@ -18,9 +18,23 @@
 
 #include "LuaAPIExport.h"
 #include "LuaAudioExport.h"
+#include "LuaCoreExport.h"
+#include "LuaGraphicsExport.h"
 #include "LuaGUIExport.h"
+#include "LuaInputExport.h"
 #include "LuaMathExport.h"
+#include "LuaMessagingExport.h"
 #include "LuaObjectExport.h"
+#include "LuaPhysicsExport.h"
+#include "LuaUtilsExport.h"
+
+#ifdef ISIXE_WITH_NETWORK
+	#include "LuaNetworkExport.h"
+#endif
+
+#ifdef ISIXE_WITH_RPG
+	#include "LuaRPGExport.h"
+#endif
 
 extern "C" ISIXE_LUA_API int init(lua_State * L) {
 	using namespace luabind;
@@ -31,9 +45,23 @@ extern "C" ISIXE_LUA_API int init(lua_State * L) {
 		[
 			registerAPI(),
 			registerAudio(),
+			registerCore(),
+			registerGraphics(),
 			registerGUI(),
+			registerInput(),
 			registerMath(),
-			registerObject()
+			registerMessaging(),
+			registerObject(),
+			registerPhysics(),
+			registerUtils()
+#ifdef ISIXE_WITH_NETWORK
+			,
+			registerNetwork()
+#endif
+#ifdef ISIXE_WITH_RPG
+			,
+			registerRPG()
+#endif
 		];
 
 	return 0;

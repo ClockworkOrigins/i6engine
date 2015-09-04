@@ -24,23 +24,30 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
+#include "i6engine/rpg/components/DialogCheckerComponent.h"
 #include "i6engine/rpg/components/InventoryComponent.h"
 #include "i6engine/rpg/components/ItemComponent.h"
 #include "i6engine/rpg/components/NameComponent.h"
+#include "i6engine/rpg/config/ExternalConstants.h"
+#include "i6engine/rpg/dialog/DialogManager.h"
+#include "i6engine/rpg/quest/QuestLog.h"
 
 namespace i6engine {
 namespace rpg {
 namespace components {
 
-	ThirdPersonControlComponent::ThirdPersonControlComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), api::MessageSubscriberFacade(), _psc(), _highlightTargetID(-1) {
+	ThirdPersonControlComponent::ThirdPersonControlComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), api::MessageSubscriberFacade(), _psc(), _highlightTargetID(-1), _identifier() {
 		_objFamilyID = config::ThirdPersonControlComponent;
 		_objComponentID = config::ThirdPersonControlComponent;
+
+		_identifier = params.find("ident")->second;
 	}
 
 	ThirdPersonControlComponent::~ThirdPersonControlComponent() {
 	}
 
 	api::ComPtr ThirdPersonControlComponent::createC(const int64_t id, const api::attributeMap & params) {
+		ISIXE_THROW_API_COND("ThirdPersonControlComponent", "ident not found!", params.find("ident") != params.end());
 		return utils::make_shared<ThirdPersonControlComponent, api::Component>(id, params);
 	}
 
@@ -55,19 +62,21 @@ namespace components {
 
 		api::GOPtr targetGO;
 		int64_t highlightTargetID = -1;
-		double distance = DBL_MAX;
-		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
-			if (go->getType() != "Player" && go->getGOC(config::NameComponent) != nullptr) {
-				Vec3 point = (go->getGOC(api::components::PhysicalStateComponent) != nullptr) ? go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent)->getPosition() : go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition();
-				Vec3 offset = _psc.get()->getPosition();
-				Vec3 direction = math::rotateVector(Vec3(0.0, 0.0, 8.0), _psc.get()->getRotation());
-				double currentDistance = (point - offset).length();
-				double currentDistanceFromLine = math::disPointLine(offset, direction, point);
-				if (currentDistance <= 8.0 && currentDistanceFromLine <= 2.0 && (point - (offset + direction)).length() > (point - (offset - direction)).length()) {
-					if (currentDistance + currentDistanceFromLine < distance) {
-						distance = currentDistance + currentDistanceFromLine;
-						highlightTargetID = go->getID();
-						targetGO = go;
+		if (!dialog::DialogManager::GetSingleton().isDialogRunning()) {
+			double distance = DBL_MAX;
+			for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
+				if (go->getType() != "Player" && go->getGOC(config::NameComponent) != nullptr) {
+					Vec3 point = (go->getGOC(api::components::PhysicalStateComponent) != nullptr) ? go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent)->getPosition() : go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition();
+					Vec3 offset = _psc.get()->getPosition();
+					Vec3 direction = math::rotateVector(Vec3(0.0, 0.0, 8.0), _psc.get()->getRotation());
+					double currentDistance = (point - offset).length();
+					double currentDistanceFromLine = math::disPointLine(offset, direction, point);
+					if (currentDistance <= 8.0 && currentDistanceFromLine <= 2.0 && (point - (offset + direction)).length() > (point - (offset - direction)).length()) {
+						if (currentDistance + currentDistanceFromLine < distance) {
+							distance = currentDistance + currentDistanceFromLine;
+							highlightTargetID = go->getID();
+							targetGO = go;
+						}
 					}
 				}
 			}
@@ -110,36 +119,59 @@ namespace components {
 		uint16_t msgType = msg->getMessageType();
 		uint16_t subType = msg->getSubtype();
 
-		if (msgType == api::messages::InputMessageType) {
-			if (subType == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
-				api::input::Input_Keyboard_Update * iku = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent());
-				if (iku->pressed == api::KeyState::KEY_PRESSED || iku->pressed == api::KeyState::KEY_HOLD) {
-					auto ic = getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent);
-					auto mc = getOwnerGO()->getGOC<api::MovementComponent>(api::components::ComponentTypes::MovementComponent);
-					std::string keyMapping = api::EngineController::GetSingleton().getInputFacade()->getKeyMapping(iku->code);
-					if (keyMapping == "forward" && !ic->isActive()) {
-						mc->forward();
-					} else if (keyMapping == "backward" && !ic->isActive()) {
-						mc->backward();
-					} else if (keyMapping == "left" && !ic->isActive()) {
-						mc->left();
-					} else if (keyMapping == "right" && !ic->isActive()) {
-						mc->right();
-					} else if (keyMapping == "inventory" && iku->pressed == api::KeyState::KEY_PRESSED) {
-						if (ic->isActive()) {
-							ic->hide();
-						} else {
-							ic->show();
-						}
-					} else if (keyMapping == "action" && iku->pressed == api::KeyState::KEY_PRESSED && !ic->isActive()) {
-						if (_highlightTargetID != -1) {
-							auto targetGO = api::EngineController::GetSingleton().getObjectFacade()->getObject(_highlightTargetID);
-							if (targetGO != nullptr) {
-								if (targetGO->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent) != nullptr) {
-									if (ic->addItem(targetGO)) {
-										targetGO->setDie();
+		if (!dialog::DialogManager::GetSingleton().isDialogRunning()) {
+			if (msgType == api::messages::InputMessageType) {
+				if (subType == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
+					api::input::Input_Keyboard_Update * iku = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent());
+					if (iku->pressed == api::KeyState::KEY_PRESSED || iku->pressed == api::KeyState::KEY_HOLD) {
+						auto ic = getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent);
+						auto mc = getOwnerGO()->getGOC<api::MovementComponent>(api::components::ComponentTypes::MovementComponent);
+						std::string keyMapping = api::EngineController::GetSingleton().getInputFacade()->getKeyMapping(iku->code);
+						if (keyMapping == "forward" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
+							mc->forward();
+						} else if (keyMapping == "backward" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
+							mc->backward();
+						} else if (keyMapping == "left" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
+							mc->left();
+						} else if (keyMapping == "right" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
+							mc->right();
+						} else if (keyMapping == "inventory" && iku->pressed == api::KeyState::KEY_PRESSED) {
+							if (ic->isTrading()) {
+								return;
+							}
+							if (quest::QuestLog::GetSingleton().isActive()) {
+								quest::QuestLog::GetSingleton().hide();
+							}
+							if (ic->isActive()) {
+								ic->hide();
+							} else {
+								ic->show();
+							}
+						} else if (keyMapping == "action" && iku->pressed == api::KeyState::KEY_PRESSED && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
+							if (_highlightTargetID != -1) {
+								auto targetGO = api::EngineController::GetSingleton().getObjectFacade()->getObject(_highlightTargetID);
+								if (targetGO != nullptr) {
+									if (targetGO->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent) != nullptr) {
+										if (ic->addItem(targetGO)) {
+											targetGO->setDie();
+										}
+									} else {
+										if (targetGO->getType() == "NPC") {
+											if ((getOwnerGO()->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - targetGO->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= i6engine::rpg::config::NPC_TALK_DISTANCE) {
+												dialog::DialogManager::GetSingleton().checkDialogs(targetGO->getGOC<DialogCheckerComponent>(config::ComponentTypes::DialogCheckerComponent)->getNPCIdentifier());
+											}
+										}
 									}
 								}
+							}
+						} else if (keyMapping == "questLog" && iku->pressed == api::KeyState::KEY_PRESSED) {
+							if (ic->isActive()) {
+								ic->hide();
+							}
+							if (quest::QuestLog::GetSingleton().isActive()) {
+								quest::QuestLog::GetSingleton().hide();
+							} else {
+								quest::QuestLog::GetSingleton().show();
 							}
 						}
 					}

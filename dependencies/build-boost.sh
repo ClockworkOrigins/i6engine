@@ -47,21 +47,16 @@ if [ ! -z "${CLEAN}" ]; then
 	exit 0
 fi
 
-title "Compile Boost & Boost.Log"
-
-if ! uptodate "${EX_DIR}/${ARCHIVE}" "${PREFIX}" && ! uptodate "${EX_DIR}/${BOOST_LOG_ARCHIVE}" "${PREFIX}"; then
-	status "Boost seems to be up to date, skipping build"
-	exit 0
-fi
+title "Compile Boost"
 
 ./download-dependency.sh ${ARCHIVE}
 
 status "Cleaning Boost"
-rm -rf "${DEST_DIR}" >/dev/null
+rm -rf "${PREFIX}" >/dev/null
 
 status "Extracting Boost"
 cd "${BUILD_ROOT}"
-tar xfj "${EX_DIR}/${ARCHIVE}" >/dev/null
+tar xfj "${ARCHIVE}" >/dev/null
 
 status "Bootstrapping Boost"
 cd "${BUILD_DIR}"
@@ -84,7 +79,6 @@ fi
 
 status "Cleaning up"
 cd "${DEP_DIR}"
-rm -rf "${BUILD_DIR}" >/dev/null
-rm -rf "${DEP_DIR}/../externals"
+rm -rf "${BUILD_ROOT}" >/dev/null
 
 touch "${PREFIX}"

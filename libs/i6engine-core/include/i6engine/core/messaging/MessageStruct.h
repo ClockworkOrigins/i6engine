@@ -27,23 +27,19 @@
 #include "boost/archive/text_iarchive.hpp"
 #include "boost/archive/text_oarchive.hpp"
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 	#include "boost/date_time/posix_time/posix_time.hpp"
 	#include "boost/date_time/posix_time/time_serialize.hpp"
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 #include "boost/serialization/export.hpp"
 #include "boost/serialization/list.hpp"
 #include "boost/serialization/map.hpp"
 #include "boost/serialization/vector.hpp"
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 	#include "boost/thread/mutex.hpp"
-#endif /* ISIXE_PROFILING */
-
-/**
- * \TODO Docu
- */
+#endif /* ISIXE_WITH_PROFILING */
 
 namespace i6engine {
 namespace core {
@@ -53,23 +49,23 @@ namespace core {
 		IPKey _sender;
 		int64_t _waitForId;
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		std::vector<std::pair<std::string, boost::posix_time::ptime>> _timestamps;
 		mutable boost::mutex _lock;
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		template<class Archive>
 		void serialize(Archive & ar, const unsigned int /*version*/) {
 			ar & _id;
 			ar & _sender;
 			ar & _waitForId;
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 			boost::mutex::scoped_lock sl(_lock);
 			ar & _timestamps;
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 		}
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		/**
 		 * \brief Default constructor for MessageStruct.
 		 */
@@ -105,7 +101,7 @@ namespace core {
 		}
 
 		MessageStruct(int64_t id, int64_t waitID) : _id(id), _sender(), _waitForId(waitID), _timestamps(), _lock() {}
-#else /* ISIXE_PROFILING */
+#else /* ISIXE_WITH_PROFILING */
 		/**
 		 * \brief Default constructor for MessageStruct.
 		 */
@@ -128,7 +124,7 @@ namespace core {
 
 		MessageStruct(int64_t id, int64_t waitID) : _id(id), _sender(), _waitForId(waitID) {
 		}
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 
 		/**
@@ -142,7 +138,7 @@ namespace core {
 		 */
 		virtual MessageStruct * copy() { return new MessageStruct(*this); }
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		/**
 		 * \brief inserts a new timestamp in the message
 		 * \param[in] text short text describing the current location of the message
@@ -175,7 +171,7 @@ namespace core {
 			}
 			return ret.str();
 		}
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		/**
 		 * \brief returns the id

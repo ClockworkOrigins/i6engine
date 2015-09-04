@@ -1,4 +1,67 @@
-﻿v 0.8.5
+﻿v 0.8.12
+
+Enhancements:
+	- added possibility to specify thread amount for Scheduler
+	- added possibility to insert GOTemplates in level editor
+	- added possibility to specify meshes and particles to preload while loading a level
+
+v 0.8.11
+
+Enhancements:
+	- added docu page with cmake variables
+	- merged mouse buttons and keyboard keys to just one enum
+
+Fixes:
+	- fixed crash of engine when sound configuration of PC is corrupted
+
+v 0.8.10
+
+Enhancements:
+	- added more basic tutorials
+	- improved documentation
+	- added possibility to set selected text for ComboBox
+
+Fixes:
+	- fixed order of messages loading a GUICanvas
+	- fixed mode ONCE in MoverInterpolate not working correct
+
+v 0.8.8
+
+Enhancements:
+	- improved member access of components
+	- python modules are now also preloaded
+	- changed getting of ip
+	- selected objects in leveleditor are highlighted now
+
+Fixes:
+	- fixed missing reading of openTime from attributeMap of MoverInterpolate
+	- camera in level editor is now always above the highest mesh when level is loaded
+	- fixed two memory leaks
+
+v 0.8.7
+
+Enhancements:
+	- added generic method for enum classes to be used in streams (just include i6engine/utils/EnumClassStream.h)
+	- added basic quest support and functionality to open Quest Log (default: J)
+	- using ESC can be used now to close inventory, questlog and skip dialogs
+	- added a particle effect for moving light in SampleShadow and SampleCompositor and slowed down the speed of the light
+	- added trading system
+
+v 0.8.6
+
+Enhancements:
+	- renamed python scripting module so it is named as lua scripting module is
+	- renamed cmake variables to be more consistent
+	- reduced samples to a minimum configuration
+	- exported complete API to both lua and python
+	- python now offers same methods as lua
+	- added completely scriptable dialogs
+
+Fixes:
+	- fixed error in template of callFunction in LuaScriptingManager with return value
+	- tooltip can't reach over right side of the window anymore
+
+v 0.8.5
 
 Enhancements:
 	- reduced code redundancy in sample by moving same code in extra SampleCommon lib
@@ -9,9 +72,15 @@ Enhancements:
 	- improved scripting api a lot
 	- added RadialBlur compositor
 	- added NightVision compositor
+	- added possibility to configure NPCs in xml files
+	- added possibility to insert NPCs via scripts
+	- added new particle plugin with much more possibilities
+	- added particle editor (not running on linux yet)
 
 Fixes:
 	- fixed synchronization bug of rotation in PhysicalStateComponent
+	- LuaScripting subsystem really works now completely
+	- RPGLevel now can be loaded in level editor because of Player being inserted
 
 v 0.8.4
 

@@ -52,16 +52,17 @@ namespace modules {
 		 */
 		~GUIController();
 
+	private:
+		GUIManager * _manager;
+		GUIMailbox * _mailbox;
+
 		/**
 		 * \brief Called on startup of the gui subsystem.
 		 *
 		 *     calls initialize GUI and registers with message pipe
 		 *
-		 *Currently used as a wrapper to delegate the initialziation of the gui subsystem.
+		 * Currently used as a wrapper to delegate the initialziation of the gui subsystem.
 		 * If a thread safe gui library is used in the future, this method will be called automatically by the SubSystemController when starting the gui subsytem.
-		 * \param   no params
-		 * \return   nothing
-		 *
 		 */
 		void OnThreadStart() override;
 
@@ -71,9 +72,6 @@ namespace modules {
 		 *     shuts down by calling CEGUI's shut down functions
 		 *
 		 *			Will destroy all gui elements and the CEGUI rendering system. Leaves Log_Info with its steps.
-		 * \param   none
-		 * \return   nothing
-		 *
 		 */
 		void ShutDown() override;
 
@@ -81,15 +79,8 @@ namespace modules {
 		 * \brief This method will be called in every tick of the subsystem.
 		 *
 		 *     tells core to process Messages
-		 * \param   none
-		 * \return   nothing
-		 *
 		 */
 		void Tick() override;
-
-	private:
-		GUIManager * _manager;
-		GUIMailbox * _mailbox;
 
 		/**
 		 * \brief forbidden

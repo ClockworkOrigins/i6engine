@@ -18,11 +18,11 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 	#include "i6engine/utils/Profiling.h"
 
 	#include "i6engine/core/EngineCoreController.h"
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 #include "i6engine/core/clock/Timer.h"
 #include "i6engine/core/messaging/MessageTypes.h"
@@ -35,9 +35,9 @@ namespace i6engine {
 namespace core {
 
 	ModuleController::ModuleController(Subsystem sub) : MessageSubscriber(), _subsystem(sub), _frameTime(0), _messagingController(), _ctrl(nullptr), _ptrTimer(nullptr), _isRunning(false), _subsystemController(), _type(SubsystemType::Ticking), _waitingSubsystems(), _notifiedSubsystems(), _waitingMessages(), _messages(), _lock(), _conditionVariable()
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		, _lastTime(0), _fps(0), _expectedFps(0)
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 	{
 	}
 
@@ -70,7 +70,7 @@ namespace core {
 				_messagingController->deliverMessage(boost::make_shared<Message>(messages::MessageTypes::SubsystemMessageType, messages::SubsystemMessage::SubsystemFinish, Method::Update, new MessageStruct(), _subsystem));
 				_ptrTimer->update();
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 				// Get current time.
 				uint64_t cT = _ctrl->getCurrentTime();
 				// Compute new game time (the difference between the starting time and the current time).
@@ -89,7 +89,7 @@ namespace core {
 					_fps = 0;
 					_lastTime = cT;
 				}
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 			} catch (utils::exceptions::i6exception & e) {
 				e.writeLog();
 				throw e;
@@ -130,7 +130,7 @@ namespace core {
 					Tick();
 					_messagingController->deliverMessage(boost::make_shared<Message>(messages::MessageTypes::SubsystemMessageType, messages::SubsystemMessage::SubsystemFinish, Method::Update, new MessageStruct(), _subsystem));
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 					// Get current time.
 					uint64_t cT = _ctrl->getCurrentTime();
 					// Compute new game time (the difference between the starting time and the current time).
@@ -143,7 +143,7 @@ namespace core {
 						_fps = 0;
 						_lastTime = cT;
 					}
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 				}
 			} catch (utils::exceptions::i6exception & e) {
 				e.writeLog();
@@ -160,10 +160,10 @@ namespace core {
 		setTimer(new Timer(_ctrl, lngFrameTime));
 		_subsystemController->SubSystemInitialized();
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		_expectedFps = 1000000 / getFrameTime();
 		_lastTime = _ctrl->getCurrentTime();
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		runLoopTicking();
 	}
@@ -176,9 +176,9 @@ namespace core {
 		OnThreadStart();
 		_subsystemController->SubSystemInitialized();
 
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 		_lastTime = _ctrl->getCurrentTime();
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 
 		runLoopWaiting();
 	}
@@ -194,9 +194,9 @@ namespace core {
 				reset();
 				return;
 			}
-#ifdef ISIXE_PROFILING
+#ifdef ISIXE_WITH_PROFILING
 			m->getContent()->insertTimestamp("ModuleController processMessages");
-#endif /* ISIXE_PROFILING */
+#endif /* ISIXE_WITH_PROFILING */
 			if (m->getMessageType() == messages::SubsystemMessageType) {
 				_notifiedSubsystems.insert(m->getSender());
 				_messages.insert(_messages.end(), _waitingMessages[m->getSender()].begin(), _waitingMessages[m->getSender()].end());

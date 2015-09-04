@@ -29,7 +29,7 @@ namespace api {
 
 	/**
 	 * \class WaynetNavigationComponent
-	 * \brief Tells the engine what heightmap and texture to use when rendering the GameObject.
+	 * \brief Use for navigation by waypoints
 	 */
 	class ISIXE_MODULES_API WaynetNavigationComponent : public NavigationComponent {
 	public:
@@ -40,9 +40,6 @@ namespace api {
 		 * \brief creates the Component with given attributeMap
 		 */
 		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		void Init() override {
-		}
 
 		/**
 		 * \brief synchronizes the Components state
@@ -62,12 +59,16 @@ namespace api {
 		/**
 		 * \brief get path from position to position
 		 */
-		std::vector<Vec3> getPath(const Vec3 & from, const Vec3 & to) const;
+		std::vector<Vec3> getPath(const Vec3 & from, const Vec3 & to) const override;
 
 		/**
 		 * \brief get path from position to waypoint
 		 */
-		std::vector<Vec3> getPath(const Vec3 & from, const std::string & to) const;
+		std::vector<Vec3> getPath(const Vec3 & from, const std::string & to) const override;
+
+	private:
+		void Init() override {
+		}
 	};
 
 } /* namespace api */

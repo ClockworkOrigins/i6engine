@@ -15,7 +15,7 @@
  */
 
 /**
- * \addtogroup rpg
+ * \addtogroup RPG
  * @{
  */
 
@@ -28,15 +28,14 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
+	/**
+	 * \brief Component showing healthbar in the left lower corner
+	 */
 	class ISIXE_RPG_API HealthbarComponent : public api::Component {
 	public:
 		HealthbarComponent(int64_t id, const api::attributeMap & params);
 
 		static api::ComPtr createC(int64_t id, const api::attributeMap & params);
-
-		void Init() override;
-
-		void Finalize() override;
 
 		api::attributeMap synchronize() const override;
 
@@ -48,13 +47,27 @@ namespace components {
 			return {};
 		}
 
-		std::string getTemplateName() const {
+		std::string getTemplateName() const override {
 			return "Healthbar";
 		}
+
+		/**
+		 * \brief shows the healthbar
+		 */
+		void show();
+
+		/**
+		 * \brief hides the healthbar
+		 */
+		void hide();
 
 	private:
 		int32_t _currentHP;
 		int32_t _maxHP;
+
+		void Init() override;
+
+		void Finalize() override;
 	};
 
 } /* namespace components */

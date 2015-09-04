@@ -31,7 +31,7 @@
 
 namespace OIS {
 	class MouseEvent;
-}
+} /* namespace OIS */
 
 namespace i6engine {
 namespace modules {

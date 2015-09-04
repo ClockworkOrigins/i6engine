@@ -33,7 +33,7 @@ namespace api {
 	class ISIXE_MODULES_API NetworkSenderComponent : public Component {
 	public:
 		NetworkSenderComponent();
-		virtual ~NetworkSenderComponent();
+		~NetworkSenderComponent();
 
 		void Init() override;
 

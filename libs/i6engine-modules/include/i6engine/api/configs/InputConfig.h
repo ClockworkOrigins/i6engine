@@ -79,17 +79,6 @@ namespace input {
 	} Input_MouseWheel_Update;
 
 	/**
-	 * \brief notifies state of a mouse button
-	 */
-	typedef struct Input_Button_Update : GameMessageStruct {
-		bool pressed;
-		MouseButtonID code;
-		Input_Button_Update() {}
-		Input_Button_Update(const bool b, const MouseButtonID c);
-		Input_Button_Update * copy() { return new Input_Button_Update(*this); }
-	} Input_Button_Update;
-
-	/**
 	 * \brief registers a RenderWindow for Input subsystem
 	 */
 	typedef struct Input_Window_Create : GameMessageStruct {
@@ -162,7 +151,6 @@ namespace mouse {
 	enum MouseMessageTypes {
 		MouReset = keyboard::KeyboardMessageTypesCount,
 		MouMouse,
-		MouButton,
 		MouWheel
 	};
 } /* namespace mouse */

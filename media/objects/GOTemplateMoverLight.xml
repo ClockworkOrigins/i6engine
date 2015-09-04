@@ -7,6 +7,7 @@
 		<Attribute name="radius">1.0</Attribute>
 		<Attribute name="collisionGroup">1 0 0</Attribute>
 		<Attribute name="shatterInterest">0</Attribute>
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
 		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
 		<Attribute name="scale">1.0 1.0 1.0</Attribute>
 		<Attribute name="syncPrio">2</Attribute>
@@ -15,7 +16,7 @@
 	<Component template="MoverInterpolate">
 		<Attribute name="direction">1</Attribute>
 		<Attribute name="way">0</Attribute>
-		<Attribute name="duration">10000000</Attribute>
+		<Attribute name="duration">100000000</Attribute>
 		<Attribute name="mode">2</Attribute>
 		<Attribute name="positioning">0</Attribute>
 		<Attribute name="started">1</Attribute>
@@ -26,5 +27,8 @@
 		<Attribute name="specularColor">1.0 1.0 1.0</Attribute>
 		<Attribute name="attenuation">100000 1.0 0.0 0.0</Attribute>
 		<Attribute name="direction">-1.0 -1.0 -1.0</Attribute>
+	</Component>
+	<Component template="ParticleEmitter">
+		<Attribute name="particleEmitter">Light</Attribute>
 	</Component>
 </GOTemplate>

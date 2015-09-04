@@ -25,14 +25,21 @@
 #include <map>
 #include <vector>
 
+#include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eThreadSafety.h"
 #include "i6engine/utils/Singleton.h"
 #include "i6engine/utils/weakPtr.h"
+#include "i6engine/utils/EnumClassStream.h"
+
+#include "i6engine/math/i6eQuaternion.h"
+#include "i6engine/math/i6eVector.h"
+#include "i6engine/math/i6eVector4.h"
 
 #include "i6engine/api/GameMessage.h"
 
 #include "boost/bind.hpp"
 #include "boost/function.hpp"
+#include "boost/lexical_cast.hpp"
 
 namespace i6engine {
 namespace api {
@@ -134,7 +141,7 @@ namespace api {
 		 * \brief Returns the family identification string
 		 * \return name of the family
 		 */
-		const std::string & getIdentifier() const { return _identifier; }
+		std::string getIdentifier() const { return _identifier; }
 
 		/**
 		 * \brief Components can have Tick method like normal Subsystems
@@ -205,16 +212,6 @@ namespace api {
 
 	protected:
 		/**
-		 * \brief adds this component to ticklist
-		 */
-		void addTicker();
-
-		/**
-		 * \brief removes this component from ticklist
-		 */
-		void removeTicker();
-
-		/**
 		 * \brief ID of the GameObject that owns this Component
 		 */
 		int64_t _objOwnerID;
@@ -255,6 +252,62 @@ namespace api {
 		 * \brief a weak_ptr on the own shared_ptr
 		 */
 		WeakComPtr _self;
+
+		/**
+		 * \brief adds this component to ticklist
+		 */
+		void addTicker();
+
+		/**
+		 * \brief removes this component from ticklist
+		 */
+		void removeTicker();
+
+		/**
+		 * \brief parses a value from attribute map into a variable with possibility to through exception, if entry not available
+		 */
+		template<bool Required, typename T>
+		typename std::enable_if<Required, void>::type parseAttribute(const attributeMap & params, const std::string & entry, T & value) {
+			auto it = params.find(entry);
+			if (it == params.end()) {
+				ISIXE_THROW_API(getTemplateName() + "Component", entry + " not set!");
+			} else {
+				parseAttribute(it, value);
+			}
+		}
+
+		template<bool Required, typename T>
+		typename std::enable_if<!Required, void>::type parseAttribute(const attributeMap & params, const std::string & entry, T & value) {
+			auto it = params.find(entry);
+			if (it != params.end()) {
+				parseAttribute(it, value);
+			}
+		}
+
+		template<typename T>
+		typename std::enable_if<std::is_enum<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+			value = T(std::stoul(it->second));
+		}
+
+		template<typename T>
+		typename std::enable_if<std::is_same<T, Vec3>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+			value = Vec3(it->second);
+		}
+
+		template<typename T>
+		typename std::enable_if<std::is_same<T, Vec4>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+			value = Vec4(it->second);
+		}
+
+		template<typename T>
+		typename std::enable_if<std::is_same<T, Quaternion>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+			value = Quaternion(it->second);
+		}
+
+		template<typename T>
+		typename std::enable_if<!std::is_enum<T>::value && !std::is_same<T, Vec3>::value && !std::is_same<T, Vec4>::value && !std::is_same<T, Quaternion>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+			value = boost::lexical_cast<T>(it->second);
+		}
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};
