@@ -19,7 +19,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "OGRE/OgreTagPoint.h"
 
 //-----------------------------------------------------------------------
-AnimationWindow::AnimationWindow(ParticleUniverseEditorFrame* parent, Ogre::SceneManager* sceneManager) : 
+AnimationWindow::AnimationWindow(ParticleUniverseEditorFrame* parent, Ogre::SceneManager* sceneManager) :
 	wxNotebook(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM),
 	mAnimationPlayPauseStop(ANIM_NONE),
 	mTimeScale(0.0f),
@@ -92,7 +92,7 @@ AnimationWindow::AnimationWindow(ParticleUniverseEditorFrame* parent, Ogre::Scen
 	mMeshPanel->SetSizer(meshInfoSizer);
 	mMeshPanel->Fit();
 	mMeshPanel->Layout();
-	
+
 	Layout();
 }
 //-----------------------------------------------------------------------
@@ -107,7 +107,7 @@ void AnimationWindow::updateAnimation(void)
 		// Check is there is an animation.
 		if (!mAnimationState)
 			return;
-	
+
 		if (!mCheckboxLoopAnimation->GetValue() && mAnimationState->hasEnded())
 		{
 			// If animation has ended, reset
@@ -323,7 +323,7 @@ void AnimationWindow::onAttachDetachParticleSystem(wxCommandEvent& event)
 
 	wxString name = mListOfBones->GetItemText(selection);
 	Ogre::String boneName = wx2ogre(name);
-	
+
 	if (mAttachDetachButton->GetLabel() == _("Attach particle system"))
 	{
 		// Attach the particle system
@@ -537,6 +537,11 @@ void AnimationWindow::setAttachDetachLabel(AttachDetachOptions options)
 				mAttachDetachButton->Enable(false);
 			}
 			break;
+		default:
+			{
+				throw "AnimationWindow::setAttachDetachlabel - Unknown Case.";
+			}
+			break;
 	}
 }
 //-----------------------------------------------------------------------
@@ -591,10 +596,15 @@ void AnimationWindow::setEnableAnimationControls(AnimationPlayPauseStop animatio
 				mCheckboxInheritOrientationFromBone->Enable(false);
 			}
 			break;
+		default:
+			{
+				throw "AnimationWindow::setAttachDetachlabel - Unknown Case.";
+			}
+			break;
 	}
 }
 //-----------------------------------------------------------------------
-bool AnimationWindow::isOrientationInheritedFromBone(void) const 
+bool AnimationWindow::isOrientationInheritedFromBone(void) const
 {
 	return mCheckboxInheritOrientationFromBone->GetValue();
 }

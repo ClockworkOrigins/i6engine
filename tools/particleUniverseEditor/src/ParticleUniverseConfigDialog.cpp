@@ -15,10 +15,12 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "ParticleUniverseEditor.h"
 #include "ParticleUniverseMediaTypeComboBox.h"
 
+#include "wx/notebook.h"
+
 static const Ogre::String CONFIG_FILENAME = "pued.cfg";
 
 //-----------------------------------------------------------------------
-ConfigDialog::ConfigDialog(wxWindow* parent) : 
+ConfigDialog::ConfigDialog(wxWindow* parent) :
 	wxPropertySheetDialog(),
 	mCheckAutoStart(0),
 	mHighlight(0),
@@ -73,12 +75,12 @@ void ConfigDialog::initWindow(void)
 	wxPanel* generalPanel = createGeneralPanel(notebook);
 	wxPanel* directoriesPanel = createDirectoriesPanel(notebook);
 	wxPanel* recordPanel = createRecordPanel(notebook);
-	notebook->AddPage(generalPanel, _("General"), true, 0);
-	notebook->AddPage(directoriesPanel, _("Directories"), false, 1);
-	notebook->AddPage(recordPanel, _("Record"), false, 2);
+	notebook->AddPage(generalPanel, _("General"), true, -1);
+	notebook->AddPage(directoriesPanel, _("Directories"), false, -1);
+	notebook->AddPage(recordPanel, _("Record"), false, -1);
 #ifdef PU_PHYSICS_PHYSX
 	wxPanel* physXPanel = createPhysXPanel(notebook);
-	notebook->AddPage(physXPanel, _("PhysX"), false, 3);
+	notebook->AddPage(physXPanel, _("PhysX"), false, -1);
 #endif //PU_PHYSICS_PHYSX
 	LayoutDialog();
 	SetSize(size);
@@ -116,7 +118,7 @@ wxPanel* ConfigDialog::createGeneralPanel(wxWindow* parent)
     mCheckAutoStart = new wxCheckBox(panel, wxID_ANY, _("Auto rendering on/off"), wxDefaultPosition, wxDefaultSize);
     itemSizer->Add(mCheckAutoStart, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
     item->Add(itemSizer, 0, wxGROW|wxALL, 0);
-	
+
     // Highlight keywords
     wxBoxSizer* highlightSizer = new wxBoxSizer(wxHORIZONTAL);
     mHighlight = new wxCheckBox(panel, wxID_ANY, _("Highlight keywords on/off"), wxDefaultPosition, wxDefaultSize);
@@ -236,7 +238,7 @@ wxPanel* ConfigDialog::createRecordPanel(wxWindow* parent)
 	sizeSizer->Add(mImageWidth, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
 	sizeSizer->Add(mImageHeight, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
 	item->Add(sizeSizer, 0, wxGROW|wxALL, 0);
-	
+
 	// Type
 	wxBoxSizer* typeSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* txtType = new wxStaticText(panel, -1, _("Media type"));

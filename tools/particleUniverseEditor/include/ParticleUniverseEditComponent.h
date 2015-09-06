@@ -51,10 +51,10 @@ class EditComponent : public wxMDIChildFrame
 {
 	public:
 		// Constructor / Destructor
-		EditComponent(wxMDIParentFrame* parent, 
-			const Ogre::String& name, 
-			ComponentType type, 
-			ComponentSubType subType, 
+		EditComponent(wxMDIParentFrame* parent,
+			const Ogre::String& name,
+			ComponentType type,
+			ComponentSubType subType,
 			const wxColour& backgroundColor = wxNullColour,
 			wxSize size = wxSize(200, 80),
 			long style = wxSYSTEM_MENU | wxCAPTION);
@@ -68,29 +68,29 @@ class EditComponent : public wxMDIChildFrame
 			ComponentRelation relation,
 			ComponentRelationDirection relationDirection,
 			const wxString& relationDescription,
-			ComponentType typeToBeConnectedWith, 
+			ComponentType typeToBeConnectedWith,
 			ComponentSubType subTypeToBeConnectedWith = CST_UNDEFINED,
 			bool multipleConnectionsPossible = true,
 			bool ignoreSubType = true,
 			const Ogre::String& colourCode = DRAW_DEFAULT_COLOURCODE,
 			int lineStyle = wxSOLID);
 
-		/**	Make a relation unique. This is an addition to the policies. Sometimes, a relation can be used in combination with 
+		/**	Make a relation unique. This is an addition to the policies. Sometimes, a relation can be used in combination with
 			several component types, but only one relation is allowed.
 		*/
 		void addUniqueRelation(ComponentRelation relation, ComponentRelationDirection relationDirection);
 
 		/**	Add a connection. These are the actual connections with other components
 		*/
-		void addConnection(EditComponent* componentToBeConnectedWith, 
-			ComponentRelation relation, 
+		void addConnection(EditComponent* componentToBeConnectedWith,
+			ComponentRelation relation,
 			ComponentRelationDirection relationDirection);
 
 		/**	Returns a connection policy
 		*/
-		ConnectionPolicy* getPolicy(ComponentRelation relation,  
-			ComponentRelationDirection relationDirection, 
-			ComponentType typeToBeConnectedWith, 
+		ConnectionPolicy* getPolicy(ComponentRelation relation,
+			ComponentRelationDirection relationDirection,
+			ComponentType typeToBeConnectedWith,
 			ComponentSubType subTypeToBeConnectedWith = CST_UNDEFINED);
 
 		/**	Checks whether a relation is unique for this component
@@ -110,9 +110,9 @@ class EditComponent : public wxMDIChildFrame
 		/**	Checks whether this component can be connected.
 			All registered policies are checked against the passed arguments.
 		*/
-		bool isConnectionPossible(ComponentRelation relation, 
+		bool isConnectionPossible(ComponentRelation relation,
 			ComponentRelationDirection relationDirection,
-			ComponentType typeToBeConnectedWith, 
+			ComponentType typeToBeConnectedWith,
 			ComponentSubType subTypeToBeConnectedWith);
 
 		/**	Determines whether it is possible to disconnect a connection.
@@ -137,8 +137,8 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	Deletes a Connection if the arguments match (and also take care of the connected component)
 		*/
-		void deleteConnection(EditComponent* componentConnectedWith, 
-			ComponentRelation relation, 
+		void deleteConnection(EditComponent* componentConnectedWith,
+			ComponentRelation relation,
 			ComponentRelationDirection relationDirection);
 
 		/**	Deletes a Connection (and also take care of the connected component)
@@ -151,16 +151,16 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	Unlocks a policy based on the arguments
 		*/
-		void unlockPolicy(ComponentRelation relation, 
+		void unlockPolicy(ComponentRelation relation,
 			ComponentRelationDirection relationDirection,
-			ComponentType typeToBeConnectedWith, 
+			ComponentType typeToBeConnectedWith,
 			ComponentSubType subTypeToBeConnectedWith);
 
 		/**	Returns a description of the relation with this direction, type and subtype
 		*/
-		const wxString& getRelationDescription(ComponentRelation relation, 
-			ComponentRelationDirection relationDirection, 
-			ComponentType typeToBeConnectedWith, 
+		const wxString& getRelationDescription(ComponentRelation relation,
+			ComponentRelationDirection relationDirection,
+			ComponentType typeToBeConnectedWith,
 			ComponentSubType subTypeToBeConnectedWith);
 
 		/**	Set the name on the header, with the class attributes

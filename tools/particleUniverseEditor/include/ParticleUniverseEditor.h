@@ -28,7 +28,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/ogre/ogre.h"
 
-#include "wx/notebook.h"
 #include "wx/treebase.h"
 
 namespace Ogre {
@@ -51,20 +50,22 @@ class Recorder;
 class SystemTreeControl;
 class TextControl;
 class UIMainToolbar;
+
+// wx Classes
+class wxNotebook;
 class wxPropertyGrid;
 
-class ParticleUniverseEditorFrame : public wxFrame
-{
-    DECLARE_CLASS(ParticleUniverseEditorFrame)
-    DECLARE_EVENT_TABLE()
+class ParticleUniverseEditorFrame : public wxFrame {
+	DECLARE_CLASS(ParticleUniverseEditorFrame)
+	DECLARE_EVENT_TABLE()
 
 	public:
-	    ParticleUniverseEditorFrame(wxWindow* parent, wxWindowID id);
+		ParticleUniverseEditorFrame(wxWindow* parent, wxWindowID id);
 
 		void CreateToolbar(void);
-		void CreateListOfTemplates(void);
-		void LoadListOfTemplates(void);
-		void InitialiseListOfTemplates(void);
+		void CreateParticleExplorer(void);
+		void LoadParticleExplorer(void);
+		void InitialiseParticleExplorer(void);
 		void CreateTabs(void);
 		void LoadTextControl(wxString text);
 		void CreateScene(void);
@@ -144,7 +145,7 @@ class ParticleUniverseEditorFrame : public wxFrame
 		wxLanguage mLanguage;
 
 	private:
-	    virtual bool Destroy(void);
+		virtual bool Destroy(void);
 		void SetLanguage(void);
 		void SetMenu(void);
 		void OnNewParticleSystem(wxCommandEvent& event);
@@ -174,11 +175,11 @@ class ParticleUniverseEditorFrame : public wxFrame
 		void OnGizmoRotateSelect(wxCommandEvent& event);
 		void OnGizmoScaleSelect(wxCommandEvent& event);
 		void OnOptions(wxCommandEvent& event);
-	    void OnAbout(wxCommandEvent& event);
+		void OnAbout(wxCommandEvent& event);
 		void OnTabChanging(wxCommandEvent& event);
 		void OnTabChanged(wxCommandEvent& event);
 		void OnRewind(wxCommandEvent& event);
-	    void OnPlay(wxCommandEvent& event);
+		void OnPlay(wxCommandEvent& event);
 		void OnRecord(wxCommandEvent& event);
 		void OnPause(wxCommandEvent& event);
 		void OnStop(wxCommandEvent& event);
@@ -226,13 +227,13 @@ class ParticleUniverseEditorFrame : public wxFrame
 		wxBoxSizer* mEditSizer;
 		wxBoxSizer* mLBAndPropSizer;
 		wxBoxSizer* mSubHSizer;
-	    wxNotebook* mNotebook;
-		SystemTreeControl* mListOfTemplates;
+		wxNotebook* mNotebook;
+		SystemTreeControl* mParticleExplorer;
 		wxTreeItemId mLatestSelection;
 		TextControl* mTextCtrl;
-	    wxOgreControl* mControl;
+		wxOgreControl* mControl;
 		wxStatusBar* mStatusBar;
-	    Ogre::SceneManager* mSceneManager;
+		Ogre::SceneManager* mSceneManager;
 		Ogre::SceneNode* mMainSceneNode;
 		Ogre::SceneNode* mParticlerSystemSceneNode;
 		Ogre::SceneNode* mMarkerSceneNode;
@@ -305,8 +306,8 @@ class ParticleUniverseEditorFrame : public wxFrame
 		wxPanel* mControlPanelWithSmallRenderWindow;
 		OgreControlComponent* mOgreControlSmall;
 
-		 // If a template is selected, the focus changes to other objects. This flag is used to set focus on the mListOfTemplates again.
-		bool mCheckFocusListOfTemplates;
+		 // If a template is selected, the focus changes to other objects. This flag is used to set focus on the mParticleExplorer again.
+		bool mCheckFocusParticleExplorer;
 
 		// Gizmo's
 		GizmoManager* mGizmoManager;
@@ -329,38 +330,39 @@ class ParticleUniverseEditorFrame : public wxFrame
 };
 
 
-class ParticleUniverseEditorApp : public wxOgreApp
-{
+class ParticleUniverseEditorApp : public wxOgreApp {
 public:
 
-    bool OnInit()
-    {
-        // Initialize Ogre render system
-        m_rsys->LoadPlugin("RenderSystem_GL");
-        m_rsys->SelectOgreRenderSystem("OpenGL Rendering Subsystem");
-	m_rsys->LoadPlugin("Plugin_ParticleUniverse");
-        m_rsys->Initialise();
+	bool OnInit() {
+		// Initialize Ogre render system
+		m_rsys->LoadPlugin("RenderSystem_GL");
+		m_rsys->SelectOgreRenderSystem("OpenGL Rendering Subsystem");
+		m_rsys->LoadPlugin("Plugin_ParticleUniverse");
+		m_rsys->Initialise();
 
-		m_frame = new ParticleUniverseEditorFrame(0, ID_EDITOR_WINDOW);
-		m_frame->CreateToolbar();
-		m_frame->CreateListOfTemplates();
-        m_frame->CreateTabs();
+		m_Editor = new ParticleUniverseEditorFrame(0, ID_EDITOR_WINDOW);
+		// Create the Toolbar
+		m_Editor->CreateToolbar();
+		// Create the explorer on the left
+		m_Editor->CreateParticleExplorer();
+		// Create the tabs on the right side
+		m_Editor->CreateTabs();
 
 		m_res->LoadResourceFile("resources.cfg");
 		m_res->InitialiseAllResources();
 
-		m_frame->Show();
-        m_frame->CreateScene();
+		m_Editor->Show();
+		m_Editor->CreateScene();
 
 		// The SceneManager has been created, so start filling the list of templates
-		m_frame->LoadListOfTemplates();
+		m_Editor->LoadParticleExplorer();
 
-        return true;
-    }
+		return true;
+	}
 
 private:
 
-    ParticleUniverseEditorFrame* m_frame;
+	ParticleUniverseEditorFrame* m_Editor;
 };
 
 DECLARE_APP(ParticleUniverseEditorApp)

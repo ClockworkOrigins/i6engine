@@ -33,7 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "wx/colordlg.h"
 
 //-----------------------------------------------------------------------
-MaterialTab::MaterialTab(wxWindow* parent, wxWindow* rootParent) : 
+MaterialTab::MaterialTab(wxWindow* parent, wxWindow* rootParent) :
 	wxPanel(parent, wxID_ANY),
 	mNewMaterialCounter(0),
 	mLastSelectedMaterial(wxT("")),
@@ -42,8 +42,7 @@ MaterialTab::MaterialTab(wxWindow* parent, wxWindow* rootParent) :
 	mRootParent(rootParent),
 	mCurrentTextureFileName(Ogre::StringUtil::BLANK),
 	mCurrentTextureBitmap(0),
-	mCurrentTextureImage(0)
-{
+	mCurrentTextureImage(0) {
 	SBT_ADD = _("Add");
 	SBT_TRANSPARENT_ALPHA = _("Transparent alpha");
 	SBT_TRANSPARENT_COLOUR = _("Transparent colour");
@@ -131,13 +130,13 @@ MaterialTab::MaterialTab(wxWindow* parent, wxWindow* rootParent) :
 	sceneBlendChoices[7] = SBT_SOURCE_COLOUR_DEST_COLOUR;
 	sceneBlendChoices[8] = SBT_DEST_COLOUR_ONE;
 	sceneBlendChoices[9] = SBT_DEST_COLOUR_SOURCE_COLOUR;
-	mSceneBlendList = new wxComboBox(this, 
-		wxID_ANY, 
-		SBT_ADD, 
-		wxDefaultPosition, 
-		wxSize(256, 24), 
+	mSceneBlendList = new wxComboBox(this,
+		wxID_ANY,
+		SBT_ADD,
+		wxDefaultPosition,
+		wxSize(256, 24),
 		10,
-		sceneBlendChoices, 
+		sceneBlendChoices,
 		wxCB_READONLY);
 	passLightingColourSizer->Add(mAmbientButton, 0, wxALL, 8);
 	passLightingColourSizer->Add(mDiffuseButton, 0, wxALL, 8);
@@ -171,13 +170,13 @@ MaterialTab::MaterialTab(wxWindow* parent, wxWindow* rootParent) :
 	addressingModeChoices[0] = TAM_WRAP;
 	addressingModeChoices[1] = TAM_CLAMP;
 	addressingModeChoices[2] = TAM_MIRROR ;
-	mAddressingModeList = new wxComboBox(this, 
-		wxID_ANY, 
-		TAM_WRAP, 
-		wxDefaultPosition, 
-		wxSize(120, 24), 
-		3, 
-		addressingModeChoices, 
+	mAddressingModeList = new wxComboBox(this,
+		wxID_ANY,
+		TAM_WRAP,
+		wxDefaultPosition,
+		wxSize(120, 24),
+		3,
+		addressingModeChoices,
 		wxCB_READONLY);
 
 	mTexturePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(320, 320), wxBORDER_SIMPLE);
@@ -214,21 +213,18 @@ MaterialTab::MaterialTab(wxWindow* parent, wxWindow* rootParent) :
 	mTexturePanel->Connect(wxEVT_PAINT, wxPaintEventHandler(MaterialTab::OnPaint), NULL, this);
 }
 //-----------------------------------------------------------------------
-MaterialTab::~MaterialTab(void)
-{
+MaterialTab::~MaterialTab(void) {
 	// Unload resources????
 }
 //-----------------------------------------------------------------------
-void MaterialTab::fillMaterials(void)
-{
+void MaterialTab::fillMaterials(void) {
 	mMaterialListBox->loadMaterials();
 	restoreSelectedMaterialName();
 	wxString param = mMaterialListBox->GetStringSelection();
 	selectMaterial(param);
 }
 //-----------------------------------------------------------------------
-void MaterialTab::selectMaterial(wxString& materialName)
-{
+void MaterialTab::selectMaterial(wxString& materialName) {
 	Ogre::TextureUnitState* textureUnitState = 0;
 	mTxtMaterialName->SetValue(materialName);
 	if (isSelectedMaterialInUse())
@@ -280,8 +276,7 @@ void MaterialTab::selectMaterial(wxString& materialName)
 	viewTexture(textureUnitState); // Clear the old texture if no TextureUnitState
 }
 //-----------------------------------------------------------------------
-void MaterialTab::viewTexture(Ogre::TextureUnitState* textureUnitState)
-{
+void MaterialTab::viewTexture(Ogre::TextureUnitState* textureUnitState) {
 	if (!textureUnitState)
 	{
 		mCurrentTextureFileName = Ogre::StringUtil::BLANK;
@@ -310,13 +305,11 @@ void MaterialTab::viewTexture(Ogre::TextureUnitState* textureUnitState)
 	mTexturePanel->Refresh();
 }
 //-----------------------------------------------------------------------
-void MaterialTab::saveSelectedMaterialName(void)
-{
+void MaterialTab::saveSelectedMaterialName(void) {
 	mLastSelectedMaterial = mMaterialListBox->GetStringSelection();
 }
 //-----------------------------------------------------------------------
-void MaterialTab::restoreSelectedMaterialName(void)
-{
+void MaterialTab::restoreSelectedMaterialName(void) {
 	if (mLastSelectedMaterial == wxT(""))
 	{
 		mMaterialListBox->Select(0);
@@ -327,8 +320,7 @@ void MaterialTab::restoreSelectedMaterialName(void)
 	}
 }
 //-----------------------------------------------------------------------
-Ogre::Pass* MaterialTab::getFirstPass(void)
-{
+Ogre::Pass* MaterialTab::getFirstPass(void) {
 	wxString materialName = mMaterialListBox->GetStringSelection();
 	Ogre::String name = wx2ogre(materialName);
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(name);
@@ -345,8 +337,7 @@ Ogre::Pass* MaterialTab::getFirstPass(void)
 	return 0;
 }
 //-----------------------------------------------------------------------
-Ogre::TextureUnitState* MaterialTab::getFirstTexture(void)
-{
+Ogre::TextureUnitState* MaterialTab::getFirstTexture(void) {
 	wxString materialName = mMaterialListBox->GetStringSelection();
 	Ogre::String name = wx2ogre(materialName);
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(name);
@@ -366,8 +357,7 @@ Ogre::TextureUnitState* MaterialTab::getFirstTexture(void)
 	return 0;
 }
 //-----------------------------------------------------------------------
-Ogre::TextureUnitState* MaterialTab::getFirstTexture(Ogre::Pass* pass)
-{
+Ogre::TextureUnitState* MaterialTab::getFirstTexture(Ogre::Pass* pass) {
 	if (pass->getNumTextureUnitStates() > 0)
 	{
 		return pass->getTextureUnitState(0); // Get the first
@@ -375,8 +365,7 @@ Ogre::TextureUnitState* MaterialTab::getFirstTexture(Ogre::Pass* pass)
 	return 0;
 }
 //-----------------------------------------------------------------------
-Ogre::TextureUnitState* MaterialTab::forceCreateFirstTexture(const Ogre::String textureName)
-{
+Ogre::TextureUnitState* MaterialTab::forceCreateFirstTexture(const Ogre::String textureName) {
 	// Ignore some materials because they result in a crash while unloading
 	wxString materialName = mMaterialListBox->GetStringSelection();
 	if (materialName == wxT("DefaultSettings"))
@@ -422,8 +411,7 @@ Ogre::TextureUnitState* MaterialTab::forceCreateFirstTexture(const Ogre::String 
 	return texture;
 }
 //-----------------------------------------------------------------------
-const wxString& MaterialTab::getSceneBlending(const Ogre::Pass* pass)
-{
+const wxString& MaterialTab::getSceneBlending(const Ogre::Pass* pass) {
 	if (!pass)
 	{
 		return SBT_ADD;
@@ -474,8 +462,7 @@ const wxString& MaterialTab::getSceneBlending(const Ogre::Pass* pass)
 	return SBT_ADD;
 }
 //-----------------------------------------------------------------------
-const wxString& MaterialTab::getTextureAddressingMode(const Ogre::TextureUnitState* texture)
-{
+const wxString& MaterialTab::getTextureAddressingMode(const Ogre::TextureUnitState* texture) {
 	if (!texture)
 	{
 		return TAM_WRAP;
@@ -498,8 +485,7 @@ const wxString& MaterialTab::getTextureAddressingMode(const Ogre::TextureUnitSta
 	return TAM_WRAP;
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnNewMaterial(wxCommandEvent& event)
-{
+void MaterialTab::OnNewMaterial(wxCommandEvent& event) {
 	if (mMaterialListBox)
 	{
 		wxString name = wxT("Material") + ogre2wx(ParticleUniverse::StringConverter::toString(mNewMaterialCounter));
@@ -513,8 +499,7 @@ void MaterialTab::OnNewMaterial(wxCommandEvent& event)
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnChangeName(wxCommandEvent& event)
-{
+void MaterialTab::OnChangeName(wxCommandEvent& event) {
 	wxString newName = mTxtMaterialName->GetValue();
 	wxString oldName = mMaterialListBox->GetStringSelection();
 	Ogre::String newMaterialName = wx2ogre(newName);
@@ -536,8 +521,7 @@ void MaterialTab::OnChangeName(wxCommandEvent& event)
 	}
 }
 //-----------------------------------------------------------------------
-bool MaterialTab::isSelectedMaterialInUse()
-{
+bool MaterialTab::isSelectedMaterialInUse() {
 	wxString materialName = mMaterialListBox->GetStringSelection();
 	Ogre::String name = wx2ogre(materialName);
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
@@ -568,8 +552,7 @@ bool MaterialTab::isSelectedMaterialInUse()
 	return false;
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnCheckLighting(wxCommandEvent& event)
-{
+void MaterialTab::OnCheckLighting(wxCommandEvent& event) {
 	Ogre::Pass* pass = getFirstPass();
 	if (pass)
 	{
@@ -577,8 +560,7 @@ void MaterialTab::OnCheckLighting(wxCommandEvent& event)
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnAmbient(wxCommandEvent& event)
-{
+void MaterialTab::OnAmbient(wxCommandEvent& event) {
 	Ogre::Pass* pass = getFirstPass();
 	if (pass)
 	{
@@ -596,17 +578,16 @@ void MaterialTab::OnAmbient(wxCommandEvent& event)
 			// Set colour in pass
 			colourData = colourDialog.GetColourData();
 			wxCol = colourData.GetColour();
-			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f, 
-			((ParticleUniverse::Real)wxCol.Green())/255.0f, 
-			((ParticleUniverse::Real)wxCol.Blue())/255.0f, 
+			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f,
+			((ParticleUniverse::Real)wxCol.Green())/255.0f,
+			((ParticleUniverse::Real)wxCol.Blue())/255.0f,
 			((ParticleUniverse::Real)wxCol.Alpha())/255.0f);
 		}
 		pass->setAmbient(colour);
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnDiffuse(wxCommandEvent& event)
-{
+void MaterialTab::OnDiffuse(wxCommandEvent& event) {
 	Ogre::Pass* pass = getFirstPass();
 	if (pass)
 	{
@@ -624,17 +605,16 @@ void MaterialTab::OnDiffuse(wxCommandEvent& event)
 			// Set colour in pass
 			colourData = colourDialog.GetColourData();
 			wxCol = colourData.GetColour();
-			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f, 
-			((ParticleUniverse::Real)wxCol.Green())/255.0f, 
-			((ParticleUniverse::Real)wxCol.Blue())/255.0f, 
+			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f,
+			((ParticleUniverse::Real)wxCol.Green())/255.0f,
+			((ParticleUniverse::Real)wxCol.Blue())/255.0f,
 			((ParticleUniverse::Real)wxCol.Alpha())/255.0f);
 		}
 		pass->setDiffuse(colour);
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnSpecular(wxCommandEvent& event)
-{
+void MaterialTab::OnSpecular(wxCommandEvent& event) {
 	Ogre::Pass* pass = getFirstPass();
 	if (pass)
 	{
@@ -652,45 +632,42 @@ void MaterialTab::OnSpecular(wxCommandEvent& event)
 			// Set colour in pass
 			colourData = colourDialog.GetColourData();
 			wxCol = colourData.GetColour();
-			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f, 
-			((ParticleUniverse::Real)wxCol.Green())/255.0f, 
-			((ParticleUniverse::Real)wxCol.Blue())/255.0f, 
+			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f,
+			((ParticleUniverse::Real)wxCol.Green())/255.0f,
+			((ParticleUniverse::Real)wxCol.Blue())/255.0f,
 			((ParticleUniverse::Real)wxCol.Alpha())/255.0f);
 		}
 		pass->setSpecular(colour);
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnEmissive(wxCommandEvent& event)
-{
+void MaterialTab::OnEmissive(wxCommandEvent& event) {
 	Ogre::Pass* pass = getFirstPass();
-	if (pass)
-	{
+	if (pass) {
 		Ogre::ColourValue colour = pass->getSelfIllumination();
 		wxColour wxCol(colour.r * 255, colour.g * 255, colour.b * 255, colour.a * 255);
 		wxColourData colourData;
 		colourData.SetColour(wxCol); // Set the current pass colour
 		wxColourDialog colourDialog(this, &colourData);
-		if (event.GetEventObject() && event.GetEventObject()->IsKindOf(CLASSINFO(wxButton)))
-		{
+		if (event.GetEventObject() && event.GetEventObject()->IsKindOf(CLASSINFO(wxButton))) {
 			colourDialog.SetPosition(((wxButton*)event.GetEventObject())->GetPosition());
 		}
-		if (colourDialog.ShowModal() == wxID_OK)
-		{
+		if (colourDialog.ShowModal() == wxID_OK) {
 			// Set colour in pass
 			colourData = colourDialog.GetColourData();
 			wxCol = colourData.GetColour();
-			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f, 
-			((ParticleUniverse::Real)wxCol.Green())/255.0f, 
-			((ParticleUniverse::Real)wxCol.Blue())/255.0f, 
-			((ParticleUniverse::Real)wxCol.Alpha())/255.0f);
+			colour = Ogre::ColourValue(
+				static_cast<ParticleUniverse::Real>(wxCol.Red())/255.0f,
+				static_cast<ParticleUniverse::Real>(wxCol.Green())/255.0f,
+				static_cast<ParticleUniverse::Real>(wxCol.Blue())/255.0f,
+				static_cast<ParticleUniverse::Real>(wxCol.Alpha())/255.0f
+			);
 		}
 		pass->setSelfIllumination(colour);
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnCheckDepthCheck(wxCommandEvent& event)
-{
+void MaterialTab::OnCheckDepthCheck(wxCommandEvent& event) {
 	Ogre::Pass* pass = getFirstPass();
 	if (pass)
 	{
@@ -698,8 +675,7 @@ void MaterialTab::OnCheckDepthCheck(wxCommandEvent& event)
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnCheckDepthWrite(wxCommandEvent& event)
-{
+void MaterialTab::OnCheckDepthWrite(wxCommandEvent& event) {
 	Ogre::Pass* pass = getFirstPass();
 	if (pass)
 	{
@@ -707,8 +683,7 @@ void MaterialTab::OnCheckDepthWrite(wxCommandEvent& event)
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnSceneBlendSelected(wxCommandEvent& event)
-{
+void MaterialTab::OnSceneBlendSelected(wxCommandEvent& event) {
 	Ogre::Pass* pass = getFirstPass();
 	if (pass)
 	{
@@ -756,19 +731,18 @@ void MaterialTab::OnSceneBlendSelected(wxCommandEvent& event)
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnSaveMaterial(wxCommandEvent& event)
-{
+void MaterialTab::OnSaveMaterial(wxCommandEvent& event) {
 #ifdef PU_FULL_VERSION
 	if (mMaterialListBox)
 	{
 		wxString filename = mMaterialListBox->GetStringSelection();
-		wxFileDialog saveDialog(this, 
-			_("Save the material"), 
-			wxT(""), 
+		wxFileDialog saveDialog(this,
+			_("Save the material"),
+			wxT(""),
 			filename,
 			_("material scripts (*.material;*.osm)|*.material;*.osm"),
-			wxFD_SAVE | wxFD_OVERWRITE_PROMPT, 
-			wxDefaultPosition, 
+			wxFD_SAVE | wxFD_OVERWRITE_PROMPT,
+			wxDefaultPosition,
 			wxDefaultSize, _("Save"));
 		if (saveDialog.ShowModal() == wxID_OK)
 		{
@@ -787,30 +761,29 @@ void MaterialTab::OnSaveMaterial(wxCommandEvent& event)
 				Ogre::String dir;
 				Ogre::StringUtil::splitFullFilename(path, baseName, extension, dir);
 				ms.exportMaterial(material, path);
-				
+
 				// Save the selected material + resource locations of material and texture
 				ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 				mResourceLocationMaterial = ogre2wx(dir);
 				frame->addResourcePathToConfig(mResourceLocationMaterial);
 				frame->addResourcePathToConfig(mResourceLocationTexture);
 			}
-			
+
 			SetCursor(wxNullCursor);
 		}
 	}
 #endif // PU_FULL_VERSION
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnLoadTexture(wxCommandEvent& event)
-{
+void MaterialTab::OnLoadTexture(wxCommandEvent& event) {
 	// Add a new directory and parse all resources in that directory
-	wxFileDialog loadDialog(this, 
-		_("Load a texture"), 
-		wxT(""), 
+	wxFileDialog loadDialog(this,
+		_("Load a texture"),
+		wxT(""),
 		wxT(""),
 		_("Textures (*.*)|*.*"),
-		wxFD_OPEN, 
-		wxDefaultPosition, 
+		wxFD_OPEN,
+		wxDefaultPosition,
 		wxDefaultSize, _("Load"));
 	if (loadDialog.ShowModal() == wxID_OK)
 	{
@@ -869,8 +842,7 @@ void MaterialTab::OnLoadTexture(wxCommandEvent& event)
 	}
 }
 //-----------------------------------------------------------------------
-void MaterialTab::OnPaint(wxPaintEvent& event)
-{
+void MaterialTab::OnPaint(wxPaintEvent& event) {
 	wxPaintDC dc(mTexturePanel);
     int neww, newh;
     dc.GetSize( &neww, &newh );
@@ -896,7 +868,7 @@ void MaterialTab::OnPaint(wxPaintEvent& event)
 			mCurrentTextureBitmap = new wxBitmap(*mCurrentTextureImage);
 			mCurrentTextureBitmap->SetWidth(neww);
 			mCurrentTextureBitmap->SetHeight(newh);
-	
+
 			if (mCurrentTextureBitmap)
 			{
 				dc.DrawBitmap(*mCurrentTextureBitmap, 0, 0);

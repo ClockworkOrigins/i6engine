@@ -124,7 +124,7 @@ class EditTab : public wxMDIParentFrame
 		/**	Returns the number of systems on the edit canvas
 		*/
 		unsigned int getNumberOfSystems() const;
-		
+
 		/**	Returns the number of components on the edit canvas
 		*/
 		unsigned int getNumberOfComponents() const;
@@ -173,15 +173,15 @@ class EditTab : public wxMDIParentFrame
 
 		/**	A connection between 2 components is removed
 		*/
-		void notifyConnectionRemoved(EditComponent* node1, 
-			EditComponent* node2, 
+		void notifyConnectionRemoved(EditComponent* node1,
+			EditComponent* node2,
 			ComponentRelation relation,
 			ComponentRelationDirection relationDirection);
 
 		/**	A connection between 2 components is established
 		*/
-		void notifyConnectionAdded(EditComponent* node1, 
-			EditComponent* node2, 
+		void notifyConnectionAdded(EditComponent* node1,
+			EditComponent* node2,
 			ComponentRelation relation,
 			ComponentRelationDirection relationDirection);
 
@@ -233,7 +233,7 @@ class EditTab : public wxMDIParentFrame
 
 		/**	Set of functions to destroy one particle universe component (of a specific type).
 		@remarks
-			These functions are used to destroy a particle universe component, remove it from the EditComponent and update the ParticleSystem 
+			These functions are used to destroy a particle universe component, remove it from the EditComponent and update the ParticleSystem
 			structure is needed.
 		*/
 		void destroyTechniqueFromComponent(EditComponent* component);
@@ -260,7 +260,7 @@ class EditTab : public wxMDIParentFrame
 		EditComponent* createExternEditComponent(const wxString& type);
 
 		/**	Delete and Create all edit components, including property windows for the edit page at once, based on a template name.
-			These functions are typically called when another template script is selected or when a new template script is 
+			These functions are typically called when another template script is selected or when a new template script is
 			created.
 		*/
 		void deleteParticleSystemComponents(void);
@@ -273,65 +273,65 @@ class EditTab : public wxMDIParentFrame
 		void destroyDanglingPUComponents(void);
 
 		/**	Create all edit components, including property windows for the edit page at once, based on a template name.
-			This function is typically called when another template script is selected or when a new template script is 
+			This function is typically called when another template script is selected or when a new template script is
 			created.
 		*/
-		wxPoint createComponentsFromTechnique(EditComponent* systemEditComponent, 
+		wxPoint createComponentsFromTechnique(EditComponent* systemEditComponent,
 			ParticleUniverse::ParticleTechnique* technique,
 			wxPoint position);
 
 		/**	Create renderer edit component from a certain renderer.
 		*/
-		void createComponentFromRenderer(EditComponent* techniqueEditComponent, 
+		void createComponentFromRenderer(EditComponent* techniqueEditComponent,
 			ParticleUniverse::ParticleRenderer* renderer,
 			wxPoint position);
 
 		/**	Create emitter edit component from a certain emitter.
 		*/
-		void createComponentFromEmitter(EditComponent* techniqueEditComponent, 
+		void createComponentFromEmitter(EditComponent* techniqueEditComponent,
 			ParticleUniverse::ParticleEmitter* emitter,
 			wxPoint position);
 
 		/**	Create affector edit component from a certain emitter.
 		*/
-		void createComponentFromAffector(EditComponent* techniqueEditComponent, 
+		void createComponentFromAffector(EditComponent* techniqueEditComponent,
 			ParticleUniverse::ParticleAffector* affector,
 			wxPoint position);
 
 		/**	Create observer edit component from a certain observer.
 		*/
-		int createComponentFromObserver(EditComponent* techniqueEditComponent, 
+		int createComponentFromObserver(EditComponent* techniqueEditComponent,
 			ParticleUniverse::ParticleObserver* observer,
 			wxPoint position,
 			int latestHandlerY);
-		
+
 		/**	Create event handler edit component from a certain event handler.
 		*/
-		void createComponentFromEventHandler(EditComponent* observerEditComponent, 
+		void createComponentFromEventHandler(EditComponent* observerEditComponent,
 			ParticleUniverse::ParticleEventHandler* eventHandler,
 			wxPoint position);
 
 		/**	Create behaviour edit component from a certain behaviour.
 		*/
-		void createComponentFromBehaviour(EditComponent* techniqueEditComponent, 
+		void createComponentFromBehaviour(EditComponent* techniqueEditComponent,
 			ParticleUniverse::ParticleBehaviour* behaviour,
 			wxPoint position);
-	
+
 		/**	Create extern edit component from a certain extern object.
 		*/
-		void createComponentFromExtern(EditComponent* techniqueEditComponent, 
+		void createComponentFromExtern(EditComponent* techniqueEditComponent,
 			ParticleUniverse::Extern* externObject,
 			wxPoint position);
-	
+
 		/**	Establish all connections other than CR_INCLUDE
 		*/
 		void createOtherConnections(const ParticleUniverse::ParticleTechnique* technique);
 
 		/**	Establish a connection between 2 edit components
 		*/
-		void createConnection(EditComponent* componentPrimary, 
-			EditComponent* componentSecundairy, 
-			ComponentRelation relation, 
+		void createConnection(EditComponent* componentPrimary,
+			EditComponent* componentSecundairy,
+			ComponentRelation relation,
 			ComponentRelationDirection direction);
 
 		/**	Search for a component

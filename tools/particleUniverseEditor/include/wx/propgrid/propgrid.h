@@ -438,7 +438,7 @@ extern WXDLLIMPEXP_PG const wxChar *wxPropertyGridNameStr;
 
 /** Convert Red, Green and Blue to a single 32-bit value.
 */
-#define wxPG_COLOUR(R,G,B) ((wxUint32)(R+(G<<8)+(B<<16)))
+#define wxPG_COLOUR(R,G,B) (static_cast<wxUint32>((R+(G<<8)+(B<<16))))
 
 /** Return this in GetImageSize() to indicate that the custom painted
     property image is flexible. That is, it will paint (dropdown)
@@ -7272,4 +7272,3 @@ protected:
 // -----------------------------------------------------------------------
 
 #endif // __WX_PROPGRID_PROPGRID_H__
-

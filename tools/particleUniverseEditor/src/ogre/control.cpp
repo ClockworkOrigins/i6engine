@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2008 Martin Pieuchot 
+ * Copyright (C) 2007-2008 Martin Pieuchot
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,38 +40,34 @@ unsigned int wxOgreControl::m_instances = 0;
 
 BEGIN_EVENT_TABLE(wxOgreControl, wxControl)
     EVT_MOUSE_EVENTS    (wxOgreControl::OnMouseMove)
-    EVT_ERASE_BACKGROUND(wxOgreControl::OnEraseBackground) 
+    EVT_ERASE_BACKGROUND(wxOgreControl::OnEraseBackground)
     EVT_PAINT           (wxOgreControl::OnPaint)
     EVT_SIZE            (wxOgreControl::OnSize)
 	EVT_IDLE            (wxOgreControl::OnIdle)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxOgreControl, wxControl)    
+IMPLEMENT_DYNAMIC_CLASS(wxOgreControl, wxControl)
 
 //------------------------------------------------------------------------------
-wxOgreControl::wxOgreControl()
-{
+wxOgreControl::wxOgreControl() {
     Init();
 }
 //------------------------------------------------------------------------------
-wxOgreControl::wxOgreControl(wxWindow* parent, wxWindowID id, 
+wxOgreControl::wxOgreControl(wxWindow* parent, wxWindowID id,
                              const wxPoint& pos, const wxSize& size, long style,
-                             const wxValidator& val, const wxString& name)
-{
+                             const wxValidator& val, const wxString& name) {
     Init();
     Create(parent, id, pos, size, style, val, name);
 }
 //------------------------------------------------------------------------------
-wxOgreControl::~wxOgreControl()
-{
+wxOgreControl::~wxOgreControl() {
     Destroy();
 }
 //------------------------------------------------------------------------------
 bool wxOgreControl::Create(wxWindow* parent, wxWindowID id,
                            const wxPoint& pos, const wxSize& size, long style,
-                           const wxValidator& val, const wxString& name)
-{
-    wxString instance_name = name + wxString::Format(wxT("%u"), m_instances); 
+                           const wxValidator& val, const wxString& name) {
+    wxString instance_name = name + wxString::Format(wxT("%u"), m_instances);
 
     if (!wxControl::Create(parent, id, pos, size, style, val, instance_name)) {
         wxFAIL_MSG(_("wxOgreControl creation failed"));
@@ -83,8 +79,7 @@ bool wxOgreControl::Create(wxWindow* parent, wxWindowID id,
     return true;
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::Init()
-{
+void wxOgreControl::Init() {
     m_cam  = 0;
     m_rwin = 0;
     m_vp   = 0;
@@ -96,8 +91,7 @@ void wxOgreControl::Init()
     m_instances++;
 }
 //------------------------------------------------------------------------------
-bool wxOgreControl::Destroy()
-{
+bool wxOgreControl::Destroy() {
 	if (m_cam) {
         m_sm->destroyCamera(m_cam);
         m_cam = 0;
@@ -116,8 +110,7 @@ bool wxOgreControl::Destroy()
     return true;
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::Update()
-{
+void wxOgreControl::Update() {
 	m_root->renderOneFrame();
 
 //    m_root->_fireFrameStarted();
@@ -130,8 +123,7 @@ void wxOgreControl::Update()
 //    m_root->_fireFrameEnded();
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
+void wxOgreControl::OnPaint(wxPaintEvent& WXUNUSED(event)) {
     //  wxWidgets documentation: Note that In a paint event handler,
     // the application must *always* create a wxPaintDC object, even
     // if you do not use it. Otherwise, under MS Windows, refreshing
@@ -140,13 +132,11 @@ void wxOgreControl::OnPaint(wxPaintEvent& WXUNUSED(event))
     Update();
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
-{
+void wxOgreControl::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
     Update();
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::OnSize(wxSizeEvent& WXUNUSED(event))
-{
+void wxOgreControl::OnSize(wxSizeEvent& WXUNUSED(event)) {
     int width, height;
     GetSize(&width, &height);
 
@@ -167,15 +157,13 @@ void wxOgreControl::OnSize(wxSizeEvent& WXUNUSED(event))
         m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::OnIdle(wxIdleEvent& WXUNUSED(event))
-{
+void wxOgreControl::OnIdle(wxIdleEvent& WXUNUSED(event)) {
 	SetSize(GetParent()->GetSize()); // This is needed to auto resize so it always fits its parent
 	Refresh();
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::AddViewport(Ogre::Camera* cam, int ZOrder, float left,
-                     float top, float  width, float height)
-{
+                     float top, float  width, float height) {
     if (m_vp)
         m_rwin->removeAllViewports();
 
@@ -212,8 +200,7 @@ Ogre::RenderWindow* wxOgreControl::CreateRenderWindow(const Ogre::String& name)
     return m_rwin;
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::DestroyRenderWindow()
-{
+void wxOgreControl::DestroyRenderWindow() {
     if (m_rwin) {
         m_root->detachRenderTarget(m_rwin);
         m_rwin = 0;
@@ -221,19 +208,17 @@ void wxOgreControl::DestroyRenderWindow()
     }
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::setCallbackFrame(ParticleUniverseEditorFrame* frame)
-{
+void wxOgreControl::setCallbackFrame(ParticleUniverseEditorFrame* frame) {
 	mCallbackFrame = frame;
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl)
-{
+void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl) {
 #ifdef __WXMSW__
 
     pl["externalWindowHandle"] = all2std((size_t)GetHandle());
 
 #elif defined(__WXGTK20__)
-    /* 
+    /*
      * Ok here is the most important comment about the GTK+
      * part of this lib.
      *
@@ -288,34 +273,29 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl)
 }
 //------------------------------------------------------------------------------
 Ogre::SceneManager* wxOgreControl::CreateSceneManager(const Ogre::String& tn,
-                                                    const Ogre::String& name)
-{
+                                                    const Ogre::String& name) {
     SetSceneManager(Ogre::Root::getSingleton().createSceneManager(tn, name));
     return m_sm;
 }
 //------------------------------------------------------------------------------
 Ogre::SceneManager* wxOgreControl::CreateSceneManager(Ogre::SceneTypeMask tm,
-                                                    const Ogre::String& name)
-{
+                                                    const Ogre::String& name) {
 	SetSceneManager(Ogre::Root::getSingleton().createSceneManager(tm, name));
     return m_sm;
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::SetSceneManager(Ogre::SceneManager* sm)
-{
+void wxOgreControl::SetSceneManager(Ogre::SceneManager* sm) {
     //SetCamera(sm->createCamera(wx2std(GetName()) + "Cam"));
 	SetCamera(sm->createCamera("MainCamera"));
     m_sm = sm;
 }
 //------------------------------------------------------------------------------
-Ogre::SceneManager* wxOgreControl::GetSceneManager(void)
-{
+Ogre::SceneManager* wxOgreControl::GetSceneManager(void) {
 	return m_sm;
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::SetCamera(Ogre::Camera* cam)
-{
-    if (m_cam) 
+void wxOgreControl::SetCamera(Ogre::Camera* cam) {
+    if (m_cam)
         m_sm->destroyCamera(m_cam);
 
     int width, height;
@@ -330,8 +310,7 @@ void wxOgreControl::SetCamera(Ogre::Camera* cam)
     AddViewport(m_cam);
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::RotateCamera(float relX, float relY, float relZ)
-{
+void wxOgreControl::RotateCamera(float relX, float relY, float relZ) {
 	if (m_cam) {
 		m_cam->roll(Ogre::Radian(relZ));
 		m_cam->yaw(Ogre::Radian(relY));
@@ -339,25 +318,21 @@ void wxOgreControl::RotateCamera(float relX, float relY, float relZ)
 	}
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::TranslateCamera(float x, float y, float z)
-{
+void wxOgreControl::TranslateCamera(float x, float y, float z) {
 	if (m_cam) {
         m_cam->moveRelative(Ogre::Vector3(x, y, z));
 	}
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::SetPolygonMode(const Ogre::PolygonMode& pm)
-{
+void wxOgreControl::SetPolygonMode(const Ogre::PolygonMode& pm) {
     if (m_cam)
         m_cam->setPolygonMode(pm);
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::ProcessSelection(const wxPoint& pt)
-{
+void wxOgreControl::ProcessSelection(const wxPoint& pt) {
 }
 //------------------------------------------------------------------------------
-void wxOgreControl::OnMouseMove(wxMouseEvent& event)
-{
+void wxOgreControl::OnMouseMove(wxMouseEvent& event) {
 	mCallbackFrame->OnMouseMoveCallback(event);
     Refresh();
 }

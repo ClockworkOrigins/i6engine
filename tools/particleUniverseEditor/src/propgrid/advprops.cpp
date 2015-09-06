@@ -275,7 +275,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
                 double dSpinMax = (double) spinMax;
                 if ( v_d > dSpinMax ) v_d = dSpinMax;
                 else if ( v_d < dSpinMin ) v_d = dSpinMin;
-                
+
                 wxPropertyGrid::DoubleToString(s, v_d, 6, true, NULL);
             }
             else
@@ -513,16 +513,11 @@ wxFontPropertyClass::wxFontPropertyClass( const wxString& label, const wxString&
         wxFontEnumerator enumerator;
         enumerator.EnumerateFacenames();
 
-#if wxMINOR_VERSION > 6
-        wxArrayString faceNames = enumerator.GetFacenames();
-#else
-        wxArrayString& faceNames = *enumerator.GetFacenames();
-#endif
 		// Allow empty string as a default facename
-		faceNames.Add( wxEmptyString );
-        faceNames.Sort();
+        enumerator.GetFacenames().Add(wxEmptyString);
+        enumerator.GetFacenames().Sort();
 
-        wxPGGlobalVars->m_fontFamilyChoices = new wxPGChoices(faceNames);
+        wxPGGlobalVars->m_fontFamilyChoices = new wxPGChoices(enumerator.GetFacenames());
     }
 
     wxString emptyString(wxEmptyString);
@@ -1063,7 +1058,7 @@ bool wxSystemColourPropertyClass::SetValueFromString( const wxString& text, int 
         val.m_type = wxPG_COLOUR_CUSTOM;
 
         int r, g, b;
-        wxSscanf(text.c_str(),wxT("(%i,%i,%i)"),&r,&g,&b);
+        scanf(text.c_str(),"(%i,%i,%i)",&r,&g,&b);
         val.m_colour.Set(r,g,b);
 
         wxSystemColourPropertyClass::DoSetValue( &val );
@@ -1760,9 +1755,8 @@ wxPGVariant wxDatePropertyClass::DoGetValue() const
 bool wxDatePropertyClass::SetValueFromString( const wxString& text,
                                                   int WXUNUSED(argFlags) )
 {
-    const wxChar* c = m_valueDateTime.ParseFormat(text.c_str(),wxDefaultDateTimeFormat);
-
-    return c ? true : false;
+    m_valueDateTime.ParseFormat(text.c_str(),wxDefaultDateTimeFormat);
+    return true;
 }
 
 wxString wxDatePropertyClass::GetValueAsString( int argFlags ) const

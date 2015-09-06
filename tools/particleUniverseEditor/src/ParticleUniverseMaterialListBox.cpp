@@ -29,11 +29,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 //-----------------------------------------------------------------------
 MaterialListBox::MaterialListBox(MaterialTab* materialTab,
-	wxWindow* parent, 
+	wxWindow* parent,
 	wxWindowID id,
 	const wxPoint& pos,
-	const wxSize& size)	: 
-	wxListBox(parent, id, pos, size, 0, wxLB_SORT),
+	const wxSize& size)	:
+	wxListBox(parent, id, pos, size, 0, nullptr, wxLB_SORT),
 	mMaterialTab(materialTab)
 {
 

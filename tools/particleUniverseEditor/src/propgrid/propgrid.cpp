@@ -317,7 +317,7 @@
     #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        8
 #else
     #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        2
-#endif 
+#endif
 
 #define wxPG_HIDER_BUTTON_HEIGHT        25
 
@@ -804,7 +804,7 @@ void wxPGProperty::ShowError( const wxString& msg )
         }
     }
 #endif
-    ::wxLogError(msg);
+    wxLogError(msg);
 }
 
 
@@ -3637,7 +3637,7 @@ void wxPropertyGrid::Init2()
 #ifdef __WXMAC__
    // Smaller controls on Mac
    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
-#endif 
+#endif
 
     // Now create state, if one didn't exist already
     // (wxPropertyGridManager might have created it for us).
@@ -4972,7 +4972,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
    p.x = pos.x + sz.x - but->GetSize().x - 2;
    but->Move(p);
 
-#else 
+#else
     wxSize s(sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2),
         sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2));
 
@@ -8657,7 +8657,7 @@ bool wxPropertyGrid::SetPropertyPriority( wxPGProperty* p, int priority )
     */
     // Stefan Battmer:
     // Changed in a way that this update is only forced when the
-    // properties new priority actually differs from the current 
+    // properties new priority actually differs from the current
     // priority to improve update speed
     if ( p )
     {

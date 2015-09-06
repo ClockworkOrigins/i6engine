@@ -106,7 +106,7 @@ class wxPGWindowPair
 public:
     wxPGWindowPair()
     {
-        m_primary = m_secondary = NULL;
+        m_primary = m_secondary = nullptr;
     }
 
     wxWindow*   m_primary;
@@ -116,7 +116,7 @@ public:
     wxPGWindowPair( wxWindow* a )
     {
         m_primary = a;
-        m_secondary = NULL;
+        m_secondary = nullptr;
     };
     wxPGWindowPair( wxWindow* a, wxWindow* b )
     {
@@ -156,7 +156,7 @@ public:
     wxPGEditor()
     {
     #if defined(__WXPYTHON__)
-        m_scriptObject = NULL;
+        m_scriptObject = nullptr;
     #endif
     }
 
@@ -272,7 +272,7 @@ wxPG_CONST_WXCHAR_PTR CLASSNAME::GetName() const \
 { \
     return wxT(#EDITOR); \
 } \
-wxPGEditor* wxPGEditor_##EDITOR = (wxPGEditor*) NULL; \
+wxPGEditor* wxPGEditor_##EDITOR = nullptr; \
 wxPGEditor* wxPGConstruct##EDITOR##EditorClass() \
 { \
     wxASSERT( !wxPGEditor_##EDITOR ); \
@@ -414,14 +414,14 @@ public:
 // Value type registeration macros
 
 #define wxPGRegisterValueType(TYPENAME) \
-    if ( wxPGValueType_##TYPENAME == (wxPGValueType*) NULL ) \
+    if ( wxPGValueType_##TYPENAME == nullptr ) \
     { \
         wxPGValueType_##TYPENAME = wxPropertyGrid::RegisterValueType( wxPGNewVT##TYPENAME(), false, wxT(#TYPENAME) ); \
     }
 
 // Use this in RegisterDefaultValues.
 #define wxPGRegisterDefaultValueType(TYPENAME) \
-    if ( wxPGValueType_##TYPENAME == (wxPGValueType*) NULL ) \
+    if ( wxPGValueType_##TYPENAME == nullptr ) \
     { \
         wxPGValueType_##TYPENAME = wxPropertyGrid::RegisterValueType( new wxPGValueType##TYPENAME##Class, true, wxT(#TYPENAME) ); \
     }
@@ -431,7 +431,7 @@ public:
 
 // Use this with 'simple' value types (derived)
 #define wxPG_INIT_REQUIRED_TYPE2(T) \
-    if ( wxPGValueType_##T == (wxPGValueType*) NULL ) \
+    if ( wxPGValueType_##T == nullptr ) \
     { \
         wxPGValueType_##T = wxPropertyGrid::RegisterValueType( new wxPGValueType##T##Class, false, wxT(#T) ); \
     }
@@ -440,14 +440,14 @@ public:
 // Editor class registeration macros
 
 #define wxPGRegisterEditorClass(EDITOR) \
-    if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
+    if ( wxPGEditor_##EDITOR == nullptr ) \
     { \
         wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( wxPGConstruct##EDITOR##EditorClass(), wxT(#EDITOR) ); \
     }
 
 // Use this in RegisterDefaultEditors.
 #define wxPGRegisterDefaultEditorClass(EDITOR) \
-if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
+if ( wxPGEditor_##EDITOR == nullptr ) \
     { \
         wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( wxPGConstruct##EDITOR##EditorClass(), wxT(#EDITOR), true ); \
     }
@@ -458,7 +458,7 @@ if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
 // -----------------------------------------------------------------------
 
 #define WX_PG_IMPLEMENT_SUBTYPE(VALUETYPE,CVALUETYPE,DEFPROPERTY,TYPESTRING,GETTER,DEFVAL) \
-const wxPGValueType *wxPGValueType_##VALUETYPE = (wxPGValueType*) NULL; \
+const wxPGValueType *wxPGValueType_##VALUETYPE = nullptr; \
 class wxPGValueType##VALUETYPE##Class : public wxPGValueType \
 { \
 public: \
@@ -513,17 +513,17 @@ bool VDCLASS::Eq(wxVariantData& data) const \
     VDCLASS& otherData = (VDCLASS&) data; \
     return otherData.m_value == m_value; \
 } \
-void* VDCLASS::GetValuePtr() { return (void*)&m_value; }
+void* VDCLASS::GetValuePtr() { return reinterpret_cast<void*>(&m_value); }
 
 
 #define WX_PG_GENVARIANT_WXOBJ_BASE(VALUETYPE) \
 virtual wxVariant GenerateVariant( wxPGVariant value, const wxString& name ) const \
-{ return wxVariant( new wxVariantData_##VALUETYPE( (*(VALUETYPE*)wxPGVariantGetWxObjectPtr(value)) ), name ); }
+{ return wxVariant( new wxVariantData_##VALUETYPE( (*static_cast<VALUETYPE*>(wxPGVariantGetWxObjectPtr(value))) ), name ); }
 
 #define WX_PG_GENVARIANT_VOIDP_SIMPLE() \
 virtual wxVariant GenerateVariant( wxPGVariant value, const wxString& name ) const \
 { \
-    void* ptr = (void*)wxPGVariantToVoidPtr(value); \
+    void* ptr = reinterpret_cast<void*>(wxPGVariantToVoidPtr(value)); \
     wxASSERT( ptr ); \
     if ( !ptr ) return wxVariant(); \
     return wxVariant( ptr, name ); \
@@ -532,10 +532,10 @@ virtual wxVariant GenerateVariant( wxPGVariant value, const wxString& name ) con
 #define WX_PG_GENVARIANT_VOIDP_CVD(VDCLASS, VALUETYPE) \
 virtual wxVariant GenerateVariant( wxPGVariant value, const wxString& name ) const \
 { \
-    void* ptr = (void*)wxPGVariantToVoidPtr(value); \
+    void* ptr = reinterpret_cast<void*>(wxPGVariantToVoidPtr(value)); \
     wxASSERT( ptr ); \
     if ( !ptr ) return wxVariant(); \
-    return wxVariant( new VDCLASS(*((VALUETYPE*)ptr)), name ); \
+    return wxVariant( new VDCLASS(*(static_cast<VALUETYPE*>(ptr))), name ); \
 }
 
 
@@ -549,7 +549,7 @@ wxClassInfo* wxVariantData_##VALUETYPE::GetValueClassInfo() \
 { \
     return m_value.GetClassInfo(); \
 } \
-const wxPGValueType *wxPGValueType_##VALUETYPE = (wxPGValueType*) NULL; \
+const wxPGValueType *wxPGValueType_##VALUETYPE = nullptr; \
 class wxPGValueType##VALUETYPE##Class : public wxPGValueType \
 { \
 public: \
@@ -568,8 +568,8 @@ public: \
         if ( vd ) \
             real_value = &vd->GetValue(); \
         else \
-            real_value  = ((const VALUETYPE*)value.GetWxObjectPtr()); \
-        property->DoSetValue( (wxObject*) real_value ); \
+            real_value  = (const VALUETYPE*)value.GetWxObjectPtr(); \
+        property->DoSetValue( (wxObject*)real_value); \
     }
 
 // This should not be used by built-in types (advprops.cpp types should use it though)
@@ -586,7 +586,7 @@ WX_PG_IMPLEMENT_VALUE_TYPE_CREATOR(VALUETYPE)
 WX_PG_IMPLEMENT_VALUE_TYPE_WXOBJ_BASE(VALUETYPE,DEFPROPERTY,DEFVAL) \
     wxPGValueType##VALUETYPE##Class() { m_default = DEFVAL; } \
     virtual ~wxPGValueType##VALUETYPE##Class() { } \
-    virtual wxPGVariant GetDefaultValue() const { return wxPGVariantCreator((wxObject*)&m_default); } \
+    virtual wxPGVariant GetDefaultValue() const { return wxPGVariantCreator(static_cast<wxObject*>(&m_default)); } \
 protected: \
     VALUETYPE   m_default; \
 }; \
@@ -594,7 +594,7 @@ WX_PG_IMPLEMENT_VALUE_TYPE_CREATOR(VALUETYPE)
 
 
 #define WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP_BASE(VALUETYPE,DEFPROPERTY,DEFVAL,VDCLASS) \
-const wxPGValueType *wxPGValueType_##VALUETYPE = (wxPGValueType*)NULL; \
+const wxPGValueType *wxPGValueType_##VALUETYPE = nullptr; \
 class wxPGValueType##VALUETYPE##Class : public wxPGValueType \
 { \
 protected: \
@@ -602,7 +602,7 @@ protected: \
 public: \
     virtual wxPG_CONST_WXCHAR_PTR GetTypeName() const { return wxT(#VALUETYPE); } \
     virtual wxPG_CONST_WXCHAR_PTR GetCustomTypeName() const { return wxT(#VALUETYPE); } \
-    virtual wxPGVariant GetDefaultValue() const { return wxPGVariantCreator((void*)&m_default); } \
+    virtual wxPGVariant GetDefaultValue() const { return wxPGVariantCreator(reinterpret_cast<void*>(const_cast<wxArrayInt*>(&m_default))); } \
     virtual wxPGProperty* GenerateProperty( const wxString& label, const wxString& name ) const \
     { \
         return wxPG_CONSTFUNC(DEFPROPERTY)(label,name); \
@@ -611,10 +611,10 @@ public: \
     { \
         wxPG_CHECK_RET_DBG( wxStrcmp(GetTypeName(),value.GetType().c_str()) == 0, \
             wxT("SetValueFromVariant: wxVariant type mismatch.") ); \
-        VDCLASS* vd = (VDCLASS*)value.GetData(); \
+        VDCLASS* vd = static_cast<VDCLASS*>(value.GetData()); \
         wxPG_CHECK_RET_DBG( wxDynamicCastVariantData(vd, VDCLASS), \
             wxT("SetValueFromVariant: wxVariantData mismatch.")); \
-        property->DoSetValue((void*)&vd->GetValue() ); \
+        property->DoSetValue(reinterpret_cast<void*>(const_cast<wxArrayInt*>(&vd->GetValue()))); \
     } \
     wxPGValueType##VALUETYPE##Class() { m_default = DEFVAL; } \
     virtual ~wxPGValueType##VALUETYPE##Class() { }
@@ -647,7 +647,7 @@ WX_PG_IMPLEMENT_VALUE_TYPE_VOIDP2(VALUETYPE,DEFPROPERTY,DEFVAL,wxVariantData_##V
 // NOTE: With this type you need to use wxPG_INIT_REQUIRED_TYPE2
 //   instead of wxPG_INIT_REQUIRED_TYPE.
 #define WX_PG_IMPLEMENT_DERIVED_TYPE(VALUETYPE,PARENTVT,DEFVAL) \
-const wxPGValueType *wxPGValueType_##VALUETYPE = (wxPGValueType*) NULL; \
+const wxPGValueType *wxPGValueType_##VALUETYPE = nullptr; \
 class wxPGValueType##VALUETYPE##Class : public wxPGValueType \
 { \
 protected: \
@@ -670,7 +670,7 @@ wxPGValueType##VALUETYPE##Class::wxPGValueType##VALUETYPE##Class() \
 { \
     m_default = DEFVAL; \
     m_parentClass = wxPGValueType_##PARENTVT; \
-    wxASSERT( m_parentClass != (wxPGValueType*) NULL); \
+    wxASSERT( m_parentClass != nullptr); \
 } \
 wxPGValueType##VALUETYPE##Class::~wxPGValueType##VALUETYPE##Class() { }
 
@@ -833,7 +833,7 @@ NAME##Class::~NAME##Class() { }
 #define WX_PG_IMPLEMENT_STRING_PROPERTY(NAME,FLAGS) \
 WX_PG_IMPLEMENT_STRING_PROPERTY_WITH_VALIDATOR(NAME,FLAGS) \
 wxValidator* wxPG_PROPCLASS(NAME)::DoGetValidator () const \
-{ return (wxValidator*) NULL; }
+{ return nullptr; }
 
 #else
 
@@ -1003,13 +1003,13 @@ long CLASSNAME::GetColour( int index ) \
 // These macros helps creating DoGetValidator
 #define WX_PG_DOGETVALIDATOR_ENTRY() \
     WX_PG_GLOBALS_LOCKER() \
-    static wxValidator* s_ptr = (wxValidator*) NULL; \
+    static wxValidator* s_ptr = nullptr; \
     if ( s_ptr ) return s_ptr;
 
 // Common function exit
 #define WX_PG_DOGETVALIDATOR_EXIT(VALIDATOR) \
     s_ptr = VALIDATOR; \
-    wxPGGlobalVars->m_arrValidators.Add( (void*) VALIDATOR ); \
+    wxPGGlobalVars->m_arrValidators.Add( reinterpret_cast<void*>(VALIDATOR)); \
     return VALIDATOR;
 
 // -----------------------------------------------------------------------
@@ -1059,7 +1059,7 @@ class WXDLLIMPEXP_PG wxPGInDialogValidator
 public:
     wxPGInDialogValidator()
     {
-        m_textCtrl = NULL;
+        m_textCtrl = nullptr;
     }
 
     ~wxPGInDialogValidator()
@@ -1125,8 +1125,8 @@ public:
     virtual int GetIndexForValue( int value ) const;
 
     // This returns string and value for index
-    // Returns NULL if beyond last item
-    // pvalue is never NULL - always set it.
+    // Returns nullptr if beyond last item
+    // pvalue is never nullptr - always set it.
     virtual const wxString* GetEntry( size_t index, int* pvalue ) const = 0;
 
 protected:
@@ -1137,7 +1137,7 @@ protected:
 // -----------------------------------------------------------------------
 
 // If set, then selection of choices is static and should not be
-// changed (i.e. returns NULL in GetPropertyChoices).
+// changed (i.e. returns nullptr in GetPropertyChoices).
 #define wxPG_PROP_STATIC_CHOICES    wxPG_PROP_CLASS_SPECIFIC_1
 
 class WXDLLIMPEXP_PG wxEnumPropertyClass : public wxBaseEnumPropertyClass
@@ -1147,7 +1147,7 @@ public:
 
 #ifndef SWIG
     wxEnumPropertyClass( const wxString& label, const wxString& name, const wxChar** labels,
-        const long* values = NULL, int value = 0 );
+        const long* values = nullptr, int value = 0 );
     wxEnumPropertyClass( const wxString& label, const wxString& name,
         wxPGChoices& choices, int value = 0 );
 
@@ -1180,7 +1180,7 @@ public:
 
 #ifndef SWIG
     wxFlagsPropertyClass( const wxString& label, const wxString& name, const wxChar** labels,
-        const long* values = NULL, long value = 0 );
+        const long* values = nullptr, long value = 0 );
     wxFlagsPropertyClass( const wxString& label, const wxString& name,
         wxPGChoices& choices, long value = 0 );
 #endif
@@ -1389,7 +1389,7 @@ bool wxPG_PROPCLASS(PROPNAME)::OnEvent( wxPropertyGrid* propgrid, wxWindow* prim
 #define WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY(PROPNAME,DELIMCHAR,CUSTBUTTXT) \
 WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAME,DELIMCHAR,CUSTBUTTXT) \
 wxValidator* wxPG_PROPCLASS(PROPNAME)::DoGetValidator () const \
-{ return (wxValidator*) NULL; }
+{ return nullptr; }
 
 #else
 
@@ -1426,7 +1426,7 @@ public:
                           const wxString& caption,
                           const wxString& message,
                           wxVariant value,
-                          const wxChar* custBtText = NULL ) = 0;
+                          const wxChar* custBtText = nullptr ) = 0;
 
     virtual wxVariant GetValue() const = 0;
 
