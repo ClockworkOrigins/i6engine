@@ -77,22 +77,6 @@ class EditCanvas;
 class EditTools;
 class UIEditToolbar;
 
-/**	Client Window
-*/
-class ClientWindow : public wxMDIClientWindow
-{
-	public:
-		// Constructor / Destructor
-		ClientWindow(wxMDIParentFrame* parent);
-		~ClientWindow(void) {}
-
-	protected:
-
-	private:
-		ClientWindow(void) {}
-};
-
-
 /**	Edit Tab: Class that defines the actual notebook tab.
 */
 class EditTab : public wxMDIParentFrame
@@ -405,7 +389,6 @@ class EditTab : public wxMDIParentFrame
 		ParticleUniverse::Real mScale;
 
 		wxWindow* mRootParent;
-		ClientWindow* mClientWindow;
 		EditTools* mEditTools;
 		std::vector<EditComponent*> mComponents;
 		unsigned int mNumberOfSystems;

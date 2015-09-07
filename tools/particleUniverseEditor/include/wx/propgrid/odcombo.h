@@ -983,14 +983,14 @@ private:
 //
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT_PGODC wxPGOwnerDrawnComboBox : public wxPGComboControl, public wxItemContainer
+class WXDLLEXPORT_PGODC wxPGOwnerDrawnComboBox : public wxWindowWithItems<wxPGComboControl, wxItemContainer>
 {
     friend class wxPGComboPopupWindow;
     friend class wxPGComboControlBase;
 public:
 
     // ctors and such
-    wxPGOwnerDrawnComboBox() : wxPGComboControl() { Init(); }
+    wxPGOwnerDrawnComboBox() : wxWindowWithItems() { Init(); }
 
     wxPGOwnerDrawnComboBox(wxWindow *parent,
                wxWindowID id,
@@ -1003,7 +1003,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr)
-        : wxPGComboControl()
+        : wxWindowWithItems()
     {
         Init();
 
@@ -1063,8 +1063,6 @@ public:
     virtual void Select(int n);
     virtual int GetSelection() const;
     void SetSelection(int n) { Select(n); }
-
-    wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
 protected:
 

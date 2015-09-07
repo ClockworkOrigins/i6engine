@@ -95,6 +95,33 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(ParticleUniverseEditorFrame, wxFrame)
 
 bool ParticleUniverseEditorFrame::mUsePhysX = false;
+
+bool ParticleUniverseEditorApp::OnInit() {
+	// Initialize Ogre render system
+	m_rsys->LoadPlugin("RenderSystem_GL");
+	m_rsys->SelectOgreRenderSystem("OpenGL Rendering Subsystem");
+	m_rsys->LoadPlugin("Plugin_ParticleUniverse");
+	m_rsys->Initialise();
+
+	m_Editor = new ParticleUniverseEditorFrame(0, ID_EDITOR_WINDOW);
+	// Create the Toolbar
+	m_Editor->CreateToolbar();
+	// Create the explorer on the left
+	m_Editor->CreateParticleExplorer();
+	// Create the tabs on the right side
+	m_Editor->CreateTabs();
+
+	m_res->LoadResourceFile("resources.cfg");
+	m_res->InitialiseAllResources();
+
+	m_Editor->Show();
+	m_Editor->CreateScene();
+
+	// The SceneManager has been created, so start filling the list of templates
+	m_Editor->LoadParticleExplorer();
+	return true;
+}
+
 //-----------------------------------------------------------------------
 // Use MAX_WIDTH to make it extremely wide. The width is corrected later, but it sizes the toolbar correctly.
 ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow* parent, wxWindowID id)
@@ -177,9 +204,9 @@ ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow* parent, wxWin
 	m45DegreesOrtho(true),
 	mLanguage(wxLANGUAGE_DEFAULT) {
 	mDefaultCameraPosition = Ogre::Vector3(-1100, 0, -1100);
-//	wxInitAllImageHandlers();
-//	Maximize();
-//	wxImage::AddHandler(new wxPNGHandler());
+	wxInitAllImageHandlers();
+	Maximize();
+	wxImage::AddHandler(new wxPNGHandler());
 
 	// Status bar
 	mStatusBar = CreateStatusBar();
@@ -189,7 +216,7 @@ ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow* parent, wxWin
 	mSubHSizer = new wxBoxSizer(wxHORIZONTAL);
 	mSubHSizer->Add(mLBAndPropSizer, 0, wxGROW|wxALL, 0);
 	mMainVSizer->Add(mSubHSizer, 1, wxTOP | wxEXPAND, 28);
-	SetSizer(mMainVSizer);
+	SetSizer(mMainVSizer); // FIXME: (Michael) really needed?
 
 	mSystemListener = new SystemListener(this);
 
@@ -1060,23 +1087,30 @@ void ParticleUniverseEditorFrame::CreateTabs() {
 	mNotebook = new wxNotebook(this, wxID_ANY, wxPoint(TAB_POS_X, TAB_POS_Y));
 
 	// Set the drop target
-//	mNotebook->SetDropTarget(new FileDropTarget(this));
+	mNotebook->SetDropTarget(new FileDropTarget(this));
 
-	// Render page (beware that the order of creating the tabs in the notebook is important)
+	// ----------
+	// Render page
+	// ----------
 	mControl = new wxOgreControl(mNotebook, ID_TAB_RENDER);
-	mControl->setCallbackFrame(this);
-	mNotebook->AddPage(mControl, _("Render"), false);
+//	mControl->setCallbackFrame(this);
+//	mNotebook->AddPage(mControl, _("Render"), false);
 
+	// ----------
 	// Edit page
-/*	wxBoxSizer* split = new wxBoxSizer(wxHORIZONTAL); // Main sizer
-	mEditNotebookPage = new EditTab(mNotebook, this);
-	mNotebook->AddPage(mEditNotebookPage, _("Edit"), true);
+	// ----------
+	wxPanel * pan = new wxPanel(mNotebook, ID_TAB_EDIT);
+	mEditNotebookPage = new EditTab(pan, this);
+	mNotebook->AddPage(pan, _("Edit"), true);
+
+	wxBoxSizer* split = new wxBoxSizer(wxHORIZONTAL); // Main sizer
 	mControlPanelWithSmallRenderWindow = new wxPanel(this);
-	wxPanel* ogreControlSmallPanel = new wxPanel(mControlPanelWithSmallRenderWindow);
-	mOgreControlSmall = new OgreControlComponent(ogreControlSmallPanel);
-	wxPanel* dividerPanel = new wxPanel(mControlPanelWithSmallRenderWindow);
-	split->Add(ogreControlSmallPanel, 2, wxEXPAND);
-	split->Add(dividerPanel, 1, wxEXPAND);
+		wxPanel* ogreControlSmallPanel = new wxPanel(mControlPanelWithSmallRenderWindow);
+			mOgreControlSmall = new OgreControlComponent(ogreControlSmallPanel);
+		split->Add(ogreControlSmallPanel, 2, wxEXPAND);
+
+		wxPanel* dividerPanel = new wxPanel(mControlPanelWithSmallRenderWindow);
+		split->Add(dividerPanel, 1, wxEXPAND);
 	mControlPanelWithSmallRenderWindow->SetSizer(split);
 
 	Ogre::Real editProportion = 0.5f;
@@ -1089,21 +1123,25 @@ void ParticleUniverseEditorFrame::CreateTabs() {
 	mEditSizer->Layout();
 	mSubHSizer->Add(mEditSizer, 1, wxEXPAND);
 
+	// ----------
+	// Script page
+	// ----------
+	mTextCtrl = new TextControl(this, mNotebook, ID_TAB_SCRIPT, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxHSCROLL | wxTE_RICH);
+	mNotebook->AddPage(mTextCtrl, _("Script"), false);
+	mTextCtrl->SetFont(wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+
+	// ----------
+	// Materials page
+	// ----------
+	mMaterialNotebookPage = new MaterialTab(mNotebook, this);
+	mNotebook->AddPage(mMaterialNotebookPage, _("Material"), false);
+
 	Connect(wxEVT_MOVING, wxMoveEventHandler(ParticleUniverseEditorFrame::OnMoveAndSize));
 	Connect(wxEVT_MOVE, wxMoveEventHandler(ParticleUniverseEditorFrame::OnMoveAndSize));
 	Connect(wxEVT_SIZING, wxMoveEventHandler(ParticleUniverseEditorFrame::OnMoveAndSize));
 	Connect(wxEVT_MAXIMIZE, wxSizeEventHandler(ParticleUniverseEditorFrame::OnMinMax));
 	Connect(wxEVT_ICONIZE, wxSizeEventHandler(ParticleUniverseEditorFrame::OnMinMax));
 	Connect(wxEVT_IDLE, wxIdleEventHandler(ParticleUniverseEditorFrame::OnIdle));
-*/
-	// Script page
-//	mTextCtrl = new TextControl(this, mNotebook, ID_TAB_SCRIPT, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxHSCROLL | wxTE_RICH);
-//	mNotebook->AddPage(mTextCtrl, _("Script"), false);
-//	mTextCtrl->SetFont(wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
-
-	// Implement Materials page
-//	mMaterialNotebookPage = new MaterialTab(mNotebook, this);
-//	mNotebook->AddPage(mMaterialNotebookPage, _("Material"), false);
 
 //	Connect(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxCommandEventHandler(ParticleUniverseEditorFrame::OnTabChanging));
 //	Connect(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxCommandEventHandler(ParticleUniverseEditorFrame::OnTabChanged));
@@ -1922,6 +1960,11 @@ void ParticleUniverseEditorFrame::doPlay(void) {
 			}
 		}
 		break;
+
+		default: {
+			// do nothing
+		}
+		break;
 	}
 }
 //-----------------------------------------------------------------------
@@ -2276,15 +2319,6 @@ void ParticleUniverseEditorFrame::validateAndReparse(void) {
 	}
 }
 //-----------------------------------------------------------------------
-//void ParticleUniverseEditorFrame::validateScript(void)
-//{
-//	// Only validate script
-//	if (mTextCtrl && !(mTextCtrl->IsEmpty()))
-//	{
-//		parseScript(wx2ogre(mTextCtrl->GetValue()));
-//	}
-//}
-//-----------------------------------------------------------------------
 void ParticleUniverseEditorFrame::replaceTemplateName(const ParticleUniverse::String& templateName) {
 	// Set the new template name in the particle systems (both renderer + small panel for edittab)
 	wxString wxOldTemplateName = mParticleExplorer->GetItemText(mParticleExplorer->GetSelection());
@@ -2390,14 +2424,11 @@ bool ParticleUniverseEditorFrame::createNewSystem(const ParticleUniverse::String
 				// 5. Also create a copy for the edit page (including all components)
 				createParticleSystemCopyForEditPage(templateName);
 			}
-#ifdef PU_FULL_VERSION
 			if (script != mCurrentParticleScript) {
 				// 6. Load the script in the script tab
 				mCurrentParticleScript = script;
 				LoadTextControl(ogre2wx(mCurrentParticleScript));
 			}
-#endif // PU_FULL_VERSION
-
 
 			// 7. If the particle systen was detached from the entity, it must be reattached in case particleSystemWasAttachedToEntity is true
 			if (mAnimationWindow && particleSystemWasAttachedToEntity) {
@@ -2767,6 +2798,18 @@ void ParticleUniverseEditorFrame::setOrthoGridVisible(bool visible, Gizmo::Axis 
 			mGridMinX->setVisible(!visible);
 			mGridZ->setVisible(!visible);
 			mGridMinZ->setVisible(visible);
+		}
+		break;
+		case Gizmo::AXIS_OUTER: {
+			throw "EditorFrame::setOrthoGridVisible";
+		}
+		break;
+		case Gizmo::AXIS_NONE: {
+			throw "EditorFrame::setOrthoGridVisible";
+		}
+		break;
+		default: {
+			throw "EditorFrame::setOrthoGridVisible";
 		}
 		break;
 	}

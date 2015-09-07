@@ -3603,10 +3603,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxPGComboControl, wxPGComboControlBase)
 // ----------------------------------------------------------------------------
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxPGOwnerDrawnComboBox, wxPGComboControl)
+IMPLEMENT_DYNAMIC_CLASS(wxPGOwnerDrawnComboBox, wxWindowWithItems)
 
 
-BEGIN_EVENT_TABLE(wxPGOwnerDrawnComboBox, wxPGComboControl)
+BEGIN_EVENT_TABLE(wxPGOwnerDrawnComboBox, wxWindowWithItems)
 END_EVENT_TABLE()
 
 
@@ -3635,7 +3635,7 @@ wxPGOwnerDrawnComboBox::wxPGOwnerDrawnComboBox(wxWindow *parent,
                        long style,
                        const wxValidator& validator,
                        const wxString& name)
-    : wxPGComboControl()
+    : wxWindowWithItems()
 {
     Init();
 

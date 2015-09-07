@@ -49,7 +49,7 @@ TextControl::TextControl(ParticleUniverseEditorFrame* frame, wxWindow *parent, w
 
 	Connect(wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(TextControl::OnTextUpdated));
 	Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(TextControl::OnKeyPressed));
-};
+}
 //-----------------------------------------------------------------------
 void TextControl::addHighLightedText(wxString str, wxTextAttr attr) {
 	wxFont font = wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
@@ -83,7 +83,7 @@ void TextControl::OnTextUpdated(wxCommandEvent& evt) {
 
 	// Set the colours
 	long insert = GetInsertionPoint();
-	long x = 0; {
+	{
 		long from = 0;
 		long to = 0;
 		long l = 0;

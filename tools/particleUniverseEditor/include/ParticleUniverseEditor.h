@@ -190,7 +190,6 @@ class ParticleUniverseEditorFrame : public wxFrame {
 		void OnTemplatesClick(wxCommandEvent& event);
 		void doWindowLeave(wxMouseEvent& event);
 		void validateAndReparse(void);
-		//void validateScript(void);
 		bool createNewSystem(const ParticleUniverse::String& templateName, bool forcedByEditTab = false);
 		void createParticleSystemCopyForEditPage(const ParticleUniverse::String& templateName);
 		void parseScript(const ParticleUniverse::String& script);
@@ -333,32 +332,7 @@ class ParticleUniverseEditorFrame : public wxFrame {
 class ParticleUniverseEditorApp : public wxOgreApp {
 public:
 
-	bool OnInit() {
-		// Initialize Ogre render system
-		m_rsys->LoadPlugin("RenderSystem_GL");
-		m_rsys->SelectOgreRenderSystem("OpenGL Rendering Subsystem");
-		m_rsys->LoadPlugin("Plugin_ParticleUniverse");
-		m_rsys->Initialise();
-
-		m_Editor = new ParticleUniverseEditorFrame(0, ID_EDITOR_WINDOW);
-		// Create the Toolbar
-		m_Editor->CreateToolbar();
-		// Create the explorer on the left
-		m_Editor->CreateParticleExplorer();
-		// Create the tabs on the right side
-		m_Editor->CreateTabs();
-
-		m_res->LoadResourceFile("resources.cfg");
-		m_res->InitialiseAllResources();
-
-		m_Editor->Show();
-		m_Editor->CreateScene();
-
-		// The SceneManager has been created, so start filling the list of templates
-		m_Editor->LoadParticleExplorer();
-
-		return true;
-	}
+	bool OnInit();
 
 private:
 

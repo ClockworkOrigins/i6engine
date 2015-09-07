@@ -106,7 +106,6 @@ EditTab::EditTab(wxWindow* parentNotebook, wxWindow* rootParent) : wxMDIParentFr
 	CST_OBSERVER_ON_CLEAR = ogre2wxTranslate(OBSERVER_ON_CLEAR);
 	CST_EXTERN_BOX_COLLIDER = ogre2wxTranslate(EXTERN_BOX_COLLIDER);
 
-	mClientWindow = new ClientWindow(this);
 	mEditTools = new EditTools(this);
 	wxPoint pos(0.93 * mRootParent->GetSize().x, GetPosition().y + 8);
 	mEditTools->SetPosition(pos);
@@ -2854,25 +2853,7 @@ void EditTab::enableTools(bool enable)
 	}
 }
 //-----------------------------------------------------------------------
-void EditTab::FreezeClientWindow()
-{
-	mClientWindow->Freeze();
-}
-//-----------------------------------------------------------------------
-void EditTab::ThawClientWindow()
-{
-	mClientWindow->Thaw();
-}
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-ClientWindow::ClientWindow(wxMDIParentFrame* parent) : wxMDIClientWindow(parent)
-{
-}
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-EditTools::EditTools(EditTab* parent) : 
+EditTools::EditTools(EditTab* parent) :
 		wxDialog(
 		parent, 
 		wxID_ANY, 
