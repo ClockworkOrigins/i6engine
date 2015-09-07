@@ -139,7 +139,6 @@ class ParticleUniverseEditorFrame : public wxFrame {
 		GizmoManager* getGizmoManager(void);
 		void notifyAnimationStarted(void);
 		void notifyAnimationStopped(void);
-
 	protected:
 		wxLocale mLocale;
 		wxLanguage mLanguage;

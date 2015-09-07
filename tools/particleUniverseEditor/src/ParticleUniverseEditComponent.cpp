@@ -49,8 +49,8 @@ EditComponent::EditComponent(
 	mSelectedPolicy(0),
 	mOldPropertyWindow(0),
 	mPUElement(0),
-	mRootFrame(0)
-{
+	mRootFrame(0) {
+
 	// Internationize the strings
 	CT_SYSTEM = _("System");
 	CT_TECHNIQUE = _("Technique");

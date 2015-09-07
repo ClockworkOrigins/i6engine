@@ -266,11 +266,11 @@ bool ParticleUniverseEditorFrame::Destroy() {
 	// Destroy overlay
 	Ogre::OverlayManager::getSingleton().destroyAll();
 
-	#ifdef PU_PHYSICS_PHYSX
+#ifdef PU_PHYSICS_PHYSX
 	if (mUsePhysX) {
 		ParticleUniverse::PhysXBridge::getSingletonPtr()->exitNx();
 	}
-	#endif //PU_PHYSICS_PHYSX
+#endif //PU_PHYSICS_PHYSX
 
 	ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(CURRENT_PS_NAME, mSceneManager);
 	ParticleUniverse::ParticleSystemManager::getSingletonPtr()->removeAndDestroyDanglingSceneNodes(mParticlerSystemSceneNode);
@@ -292,7 +292,7 @@ bool ParticleUniverseEditorFrame::Destroy() {
 	return wxFrame::Destroy();
 }
 //-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::CreateScene(void) {
+void ParticleUniverseEditorFrame::CreateScene() {
 	SetCursor(*wxHOURGLASS_CURSOR);
 
 	// Setup context menu
@@ -2578,7 +2578,7 @@ void ParticleUniverseEditorFrame::initialiseOrthoCameraGizmo(void) {
 }
 //-----------------------------------------------------------------------
 void ParticleUniverseEditorFrame::updateOverlay(void) {
-	if (!mDebugOverlay->isVisible())
+	if (!mDebugOverlay || !mDebugOverlay->isVisible())
 		return;
 
 	// Camera projection
@@ -2667,8 +2667,6 @@ void ParticleUniverseEditorFrame::resetOverlay(void) {
 //-----------------------------------------------------------------------
 void ParticleUniverseEditorFrame::createGridPlane(ParticleUniverse::Real distance) {
 	distance = Ogre::Math::Abs(distance);
-	ParticleUniverse::Real uTile = 1.0f;
-	ParticleUniverse::Real vTile = 1.0f;
 
 	// Create the mesh (called "grid")
 	Ogre::MeshManager::getSingleton().createPlane("gridplane",

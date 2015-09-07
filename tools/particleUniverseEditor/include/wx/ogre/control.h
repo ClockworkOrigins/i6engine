@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2008 Martin Pieuchot 
+ * Copyright (C) 2007-2008 Martin Pieuchot
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,15 +24,15 @@
 #include <wx/wx.h>
 #include "ParticleUniverseEditorListener.h"
 
-/** Manages an Ogre rendering window and its viewport. 
+/** Manages an Ogre rendering window and its viewport.
  *
- * @remark This class creates an embedded Ogre::RenderWindow, set up 
+ * @remark This class creates an embedded Ogre::RenderWindow, set up
  *         and manages a Ogre::Viewport for a given Ogre::Camera and
  *         provides basic input handling to control the camera
  *         movements.
  *
  * @author Martin Pieuchot
- */ 
+ */
 class ParticleUniverseEditorFrame;
 class wxOgreControl : public wxControl
 {
@@ -42,9 +42,9 @@ class wxOgreControl : public wxControl
 public:
 
     /** Default constructor. */
-    wxOgreControl(); 
+    wxOgreControl();
 
-    /** Constructs a window, with an embedded Ogre rendering window. */    
+    /** Constructs a window, with an embedded Ogre rendering window. */
     wxOgreControl(wxWindow* parent, wxWindowID id = wxID_ANY,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
@@ -55,7 +55,7 @@ public:
     /** Destructor, call Destroy to clean Ogre stuff.
      *
      * @remark This destructor is needed to correctly destroy ogre
-     *         instances when the control is not deleted using the 
+     *         instances when the control is not deleted using the
      *         Destroy method, for example when destroyed by a
      *         wxNotebook::DeletePage call.
      *
@@ -63,7 +63,7 @@ public:
      */
     virtual ~wxOgreControl();
 
-    /** Constructs a window, with an embedded Ogre rendering window. */    
+    /** Constructs a window, with an embedded Ogre rendering window. */
     virtual bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
@@ -71,10 +71,10 @@ public:
                         const wxValidator& val = wxDefaultValidator,
                         const wxString& name = wxT("OgreControl"));
 
-    /** Destructor, deletes the camera if exists, */ 
+    /** Destructor, deletes the camera if exists, */
     virtual bool Destroy();
 
-    /** Render a frame and update the rendering window. */  
+    /** Render a frame and update the rendering window. */
     virtual void Update();
 
     /** Returns a small 3:4 window size.
@@ -85,27 +85,27 @@ public:
 
 
     /** Creates a scene manager instance of a given type.
-     * 
+     *
      * @see Ogre::createSceneManager
-     */ 
+     */
     virtual Ogre::SceneManager* CreateSceneManager(const Ogre::String& tn,
                                                    const Ogre::String& name="");
 
     /** Creates a SceneManager instance of a given type.
-     * 
+     *
      * @see Ogre::createSceneManager
-     */ 
+     */
     virtual Ogre::SceneManager* CreateSceneManager(Ogre::SceneTypeMask tm,
                                                    const Ogre::String& name="");
 
 
     /** Set-up the rendering window for the given scene manager.
      *
-     * This method creates a camera and attaches a viewport to the 
+     * This method creates a camera and attaches a viewport to the
      * rendering window for the given scene manager.
      *
      * @see SetCamera
-     * @see AddViewport 
+     * @see AddViewport
      */
     virtual void SetSceneManager(Ogre::SceneManager* sm);
 
@@ -131,14 +131,14 @@ public:
      */
     virtual void RotateCamera(float relX, float relY, float relZ);
 
-    /** Moves the camera's position by the x, y, and z offsets 
+    /** Moves the camera's position by the x, y, and z offsets
      * along it's own axes (relative to orientation).
      *
      * @see Ogre::Camera::moveRelative
      */
     virtual void TranslateCamera(float x, float y, float z);
 
-    /** Sets the level of rendering detail required from this camera. 
+    /** Sets the level of rendering detail required from this camera.
      *
      * @see Ogre::Camera::setPolygonMode
      */
@@ -148,10 +148,10 @@ public:
      *
      * @param pt the position clicked by the user.
      *
-     * @remark This method is defined in order to simplify the 
+     * @remark This method is defined in order to simplify the
      *         selection of 3D components. Just define here, in your
      *         custom subcontrol, the action associated with the left
-     *         click mouse button. 
+     *         click mouse button.
      *
      * @see OnMouseMove
      * @see Tutorial 3
@@ -162,12 +162,12 @@ public:
     Ogre::Camera* GetCamera() const { return m_cam; }
 
     /** Retrieves the control's render window. */
-    Ogre::RenderWindow* GetRenderWindow() const { return m_rwin; } 
+    Ogre::RenderWindow* GetRenderWindow() const { return m_rwin; }
 
     /** Retrieves the control's viewport. */
     Ogre::Viewport* GetViewport() const { return m_vp; }
 
-    /** Adds a viewport to the rendering target. 
+    /** Adds a viewport to the rendering target.
      *
      * @see Ogre::RenderTarget::addViewport
      */

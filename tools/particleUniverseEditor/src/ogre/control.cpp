@@ -39,122 +39,123 @@ extern "C" {
 unsigned int wxOgreControl::m_instances = 0;
 
 BEGIN_EVENT_TABLE(wxOgreControl, wxControl)
-    EVT_MOUSE_EVENTS    (wxOgreControl::OnMouseMove)
-    EVT_ERASE_BACKGROUND(wxOgreControl::OnEraseBackground)
-    EVT_PAINT           (wxOgreControl::OnPaint)
-    EVT_SIZE            (wxOgreControl::OnSize)
-	EVT_IDLE            (wxOgreControl::OnIdle)
+	EVT_MOUSE_EVENTS	(wxOgreControl::OnMouseMove)
+	EVT_ERASE_BACKGROUND(wxOgreControl::OnEraseBackground)
+	EVT_PAINT		   (wxOgreControl::OnPaint)
+	EVT_SIZE			(wxOgreControl::OnSize)
+	EVT_IDLE			(wxOgreControl::OnIdle)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxOgreControl, wxControl)
 
 //------------------------------------------------------------------------------
 wxOgreControl::wxOgreControl() {
-    Init();
+	Init();
 }
 //------------------------------------------------------------------------------
 wxOgreControl::wxOgreControl(wxWindow* parent, wxWindowID id,
-                             const wxPoint& pos, const wxSize& size, long style,
-                             const wxValidator& val, const wxString& name) {
-    Init();
-    Create(parent, id, pos, size, style, val, name);
+							 const wxPoint& pos, const wxSize& size, long style,
+							 const wxValidator& val, const wxString& name) : wxControl(parent, id, pos, size, style, val, name) {
+	Init();
+	Create(parent, id, pos, size, style, val, name);
 }
 //------------------------------------------------------------------------------
 wxOgreControl::~wxOgreControl() {
-    Destroy();
+	Destroy();
 }
 //------------------------------------------------------------------------------
 bool wxOgreControl::Create(wxWindow* parent, wxWindowID id,
-                           const wxPoint& pos, const wxSize& size, long style,
-                           const wxValidator& val, const wxString& name) {
-    wxString instance_name = name + wxString::Format(wxT("%u"), m_instances);
+						   const wxPoint& pos, const wxSize& size, long style,
+						   const wxValidator& val, const wxString& name) {
+	wxString instance_name = name + wxString::Format(wxT("%u"), m_instances);
+	/*if (!wxControl::Create(parent, id, pos, size, style, val, instance_name)) {
+		wxFAIL_MSG(_("wxOgreControl creation failed"));
+		return false;
+	}*/
 
-    if (!wxControl::Create(parent, id, pos, size, style, val, instance_name)) {
-        wxFAIL_MSG(_("wxOgreControl creation failed"));
-        return false;
-    }
+	CreateRenderWindow(wx2std(instance_name));
 
-    CreateRenderWindow(wx2std(instance_name));
-
-    return true;
+	return true;
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::Init() {
-    m_cam  = 0;
-    m_rwin = 0;
-    m_vp   = 0;
+	m_cam  = 0;
+	m_rwin = 0;
+	m_vp   = 0;
 
-    m_x   = 0;
-    m_y   = 0;
+	m_x   = 0;
+	m_y   = 0;
 
-    m_root = Ogre::Root::getSingletonPtr();
-    m_instances++;
+	m_root = Ogre::Root::getSingletonPtr();
+	m_instances++;
 }
 //------------------------------------------------------------------------------
 bool wxOgreControl::Destroy() {
 	if (m_cam) {
-        m_sm->destroyCamera(m_cam);
-        m_cam = 0;
-    }
+		m_sm->destroyCamera(m_cam);
+		m_cam = 0;
+	}
 
-    /* Don't delete the SceneManager, it can be used by others. */
-    m_sm = 0;
+	/* Don't delete the SceneManager, it can be used by others. */
+	m_sm = 0;
 
-    if (m_vp) {
-        m_rwin->removeAllViewports();
-        m_vp = 0;
-    }
+	if (m_vp) {
+		m_rwin->removeAllViewports();
+		m_vp = 0;
+	}
 
-    DestroyRenderWindow();
+	DestroyRenderWindow();
 
-    return true;
+	return true;
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::Update() {
 	m_root->renderOneFrame();
 
-//    m_root->_fireFrameStarted();
+//	m_root->_fireFrameStarted();
 
 //	if (m_rwin)
-//       m_rwin->update();
+//	   m_rwin->update();
 
 //	m_root->_updateAllRenderTargets();
 
-//    m_root->_fireFrameEnded();
+//	m_root->_fireFrameEnded();
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::OnPaint(wxPaintEvent& WXUNUSED(event)) {
-    //  wxWidgets documentation: Note that In a paint event handler,
-    // the application must *always* create a wxPaintDC object, even
-    // if you do not use it. Otherwise, under MS Windows, refreshing
-    // for this and other windows will go wrong.
-    wxPaintDC dc(this);
-    Update();
+	//  wxWidgets documentation: Note that In a paint event handler,
+	// the application must *always* create a wxPaintDC object, even
+	// if you do not use it. Otherwise, under MS Windows, refreshing
+	// for this and other windows will go wrong.
+	wxPaintDC dc(this);
+	Update();
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
-    Update();
+	Update();
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::OnSize(wxSizeEvent& WXUNUSED(event)) {
-    int width, height;
-    GetSize(&width, &height);
-
-    if (m_rwin) {
-        m_rwin->resize(width, height);
-        m_rwin->windowMovedOrResized();
-    }
+	int width, height;
+	static bool first = true;
+	GetSize(&width, &height);
+	if (!first) return;
+	first = false;
+	if (m_rwin) {
+		m_rwin->resize(static_cast<unsigned int>(width), static_cast<unsigned int>(height));
+		m_rwin->windowMovedOrResized();
+	}
 
 #ifdef __WXGTK20__
-    // Fix because it is not automaticaly done with gtk+
-    if (m_vp)
-        m_vp->_updateDimensions();
+	// Fix because it is not automaticaly done with gtk+
+	if (m_vp)
+		m_vp->_updateDimensions();
 #endif
 
-    // Let Ogre know the window has been resized;
-    // Set the aspect ratio for the new size;
-    if (m_cam)
-        m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
+	// Let Ogre know the window has been resized;
+	// Set the aspect ratio for the new size;
+	if (m_cam)
+		m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::OnIdle(wxIdleEvent& WXUNUSED(event)) {
@@ -163,49 +164,47 @@ void wxOgreControl::OnIdle(wxIdleEvent& WXUNUSED(event)) {
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::AddViewport(Ogre::Camera* cam, int ZOrder, float left,
-                     float top, float  width, float height) {
-    if (m_vp)
-        m_rwin->removeAllViewports();
+					 float top, float  width, float height) {
+	if (m_vp)
+		m_rwin->removeAllViewports();
 
-    if (m_rwin) {
-        m_vp = m_rwin->addViewport(cam, ZOrder, left, top, width, height);
-    }
+	if (m_rwin) {
+		m_vp = m_rwin->addViewport(cam, ZOrder, left, top, width, height);
+	}
 }
 //------------------------------------------------------------------------------
-Ogre::RenderWindow* wxOgreControl::CreateRenderWindow(const Ogre::String& name)
-{
-    if (!m_root->isInitialised())
-        m_rwin = m_root->initialise(false);
+Ogre::RenderWindow* wxOgreControl::CreateRenderWindow(const Ogre::String& name) {
+	if (!m_root->isInitialised())
+		m_rwin = m_root->initialise(false);
 
-	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
-    Ogre::NameValuePairList params;
-    GetParentWindowHandle(params); 
+	Ogre::NameValuePairList params;
+	GetParentWindowHandle(params);
 
-    int w, h;
-    GetSize(&w, &h);
+	int w, h;
+	GetSize(&w, &h);
+	try {
+		m_rwin = m_root->createRenderWindow(name, w, h, false, &params);
+		m_rwin->setActive(true);
 
-    try {
-        m_rwin = m_root->createRenderWindow(name, w, h, false, &params);
-        m_rwin->setActive(true);
+		// Even if we are not always using Ogre's
+		// rendering loop, set it as AutoUpdated
+		// in case of...
+		m_rwin->setAutoUpdated(true);
+	} catch (Ogre::Exception& e) {
+		wxOgreExceptionBox(e);
+	}
 
-        // Even if we are not always using Ogre's
-        // rendering loop, set it as AutoUpdated
-        // in case of...
-        m_rwin->setAutoUpdated(true);
-    } catch (Ogre::Exception& e) {
-        wxOgreExceptionBox(e);
-    }
-
-    return m_rwin;
+	return m_rwin;
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::DestroyRenderWindow() {
-    if (m_rwin) {
-        m_root->detachRenderTarget(m_rwin);
-        m_rwin = 0;
-        SetBackgroundStyle(wxBG_STYLE_SYSTEM);
-    }
+	if (m_rwin) {
+		m_root->detachRenderTarget(m_rwin);
+		m_rwin = 0;
+		SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+	}
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::setCallbackFrame(ParticleUniverseEditorFrame* frame) {
@@ -273,21 +272,21 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl) {
 }
 //------------------------------------------------------------------------------
 Ogre::SceneManager* wxOgreControl::CreateSceneManager(const Ogre::String& tn,
-                                                    const Ogre::String& name) {
-    SetSceneManager(Ogre::Root::getSingleton().createSceneManager(tn, name));
-    return m_sm;
+													const Ogre::String& name) {
+	SetSceneManager(Ogre::Root::getSingleton().createSceneManager(tn, name));
+	return m_sm;
 }
 //------------------------------------------------------------------------------
 Ogre::SceneManager* wxOgreControl::CreateSceneManager(Ogre::SceneTypeMask tm,
-                                                    const Ogre::String& name) {
+													const Ogre::String& name) {
 	SetSceneManager(Ogre::Root::getSingleton().createSceneManager(tm, name));
-    return m_sm;
+	return m_sm;
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::SetSceneManager(Ogre::SceneManager* sm) {
-    //SetCamera(sm->createCamera(wx2std(GetName()) + "Cam"));
+	//SetCamera(sm->createCamera(wx2std(GetName()) + "Cam"));
 	SetCamera(sm->createCamera("MainCamera"));
-    m_sm = sm;
+	m_sm = sm;
 }
 //------------------------------------------------------------------------------
 Ogre::SceneManager* wxOgreControl::GetSceneManager(void) {
@@ -295,19 +294,19 @@ Ogre::SceneManager* wxOgreControl::GetSceneManager(void) {
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::SetCamera(Ogre::Camera* cam) {
-    if (m_cam)
-        m_sm->destroyCamera(m_cam);
+	if (m_cam)
+		m_sm->destroyCamera(m_cam);
 
-    int width, height;
-    GetSize(&width, &height);
+	int width, height;
+	GetSize(&width, &height);
 
 	m_cam = cam;
-    m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
+	m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 
 	// TESTTESTTESTTESTTESTTESTTEST
 	//m_cam->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
 
-    AddViewport(m_cam);
+	AddViewport(m_cam);
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::RotateCamera(float relX, float relY, float relZ) {
@@ -320,19 +319,22 @@ void wxOgreControl::RotateCamera(float relX, float relY, float relZ) {
 //------------------------------------------------------------------------------
 void wxOgreControl::TranslateCamera(float x, float y, float z) {
 	if (m_cam) {
-        m_cam->moveRelative(Ogre::Vector3(x, y, z));
+		m_cam->moveRelative(Ogre::Vector3(x, y, z));
 	}
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::SetPolygonMode(const Ogre::PolygonMode& pm) {
-    if (m_cam)
-        m_cam->setPolygonMode(pm);
+	if (m_cam)
+		m_cam->setPolygonMode(pm);
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::ProcessSelection(const wxPoint& pt) {
 }
 //------------------------------------------------------------------------------
 void wxOgreControl::OnMouseMove(wxMouseEvent& event) {
+	if (!mCallbackFrame) {
+		return;
+	}
 	mCallbackFrame->OnMouseMoveCallback(event);
-    Refresh();
+	Refresh();
 }
