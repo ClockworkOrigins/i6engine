@@ -70,7 +70,6 @@ EditComponent::EditComponent(
 //	wxStaticText* text = new wxStaticText(this, wxID_ANY, "\n" + ogre2wx(name), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
 //	text->SetFont(font);
 
-	mPropertyWindow = 0,
 	mPropertyWindow = createPropertyWindow(mSubType);
 	mOriginalSize = GetSize();
 	// Add connections if the component is double clicked, closed, moved, ...etc.
@@ -84,8 +83,8 @@ EditComponent::EditComponent(
 	Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(EditComponent::OnMouseRButtonPressed));
 	Connect(wxEVT_ACTIVATE, wxActivateEventHandler(EditComponent::OnActivate));
 }
-//-----------------------------------------------------------------------
-EditComponent::~EditComponent(void) {
+
+EditComponent::~EditComponent() {
 	// Delete all policies
 	std::vector<ConnectionPolicy*>::iterator itCp;
 	std::vector<ConnectionPolicy*>::iterator itCpEnd = mPolicies.end();
@@ -110,15 +109,15 @@ EditComponent::~EditComponent(void) {
 	}
 	mUniqueRelations.clear();
 }
-//-----------------------------------------------------------------------
-ComponentType EditComponent::getComponentType(void) const {
+
+ComponentType EditComponent::getComponentType() const {
 	return mType;
 }
-//-----------------------------------------------------------------------
-ComponentSubType EditComponent::getComponentSubType(void) const {
+
+ComponentSubType EditComponent::getComponentSubType() const {
 	return mSubType;
 }
-//-----------------------------------------------------------------------
+
 void EditComponent::addPolicy(
 	ComponentRelation relation,
 	ComponentRelationDirection relationDirection,
@@ -139,11 +138,11 @@ void EditComponent::addPolicy(
 		colourCode,
 		lineStyle));
 }
-//-----------------------------------------------------------------------
+
 void EditComponent::addUniqueRelation(ComponentRelation relation, ComponentRelationDirection relationDirection) {
 	mUniqueRelations.push_back(new UniqueRelation(relation, relationDirection));
 }
-//-----------------------------------------------------------------------
+
 void EditComponent::addConnection(EditComponent* componentToBeConnectedWith,
 	ComponentRelation relation,
 	ComponentRelationDirection relationDirection) {
@@ -165,7 +164,7 @@ void EditComponent::addConnection(EditComponent* componentToBeConnectedWith,
 		}
 	}
 }
-//-----------------------------------------------------------------------
+
 ConnectionPolicy* EditComponent::getPolicy(ComponentRelation relation,
 	ComponentRelationDirection relationDirection,
 	ComponentType typeToBeConnectedWith,
@@ -188,7 +187,7 @@ ConnectionPolicy* EditComponent::getPolicy(ComponentRelation relation,
 	}
 	return 0;
 }
-//-----------------------------------------------------------------------
+
 bool EditComponent::isRelationUnique(ComponentRelation relation, ComponentRelationDirection relationDirection) {
 	std::vector<UniqueRelation*>::iterator it;
 	std::vector<UniqueRelation*>::iterator itEnd = mUniqueRelations.end();
@@ -200,8 +199,8 @@ bool EditComponent::isRelationUnique(ComponentRelation relation, ComponentRelati
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
-bool EditComponent::isConnectionPossible(void) {
+
+bool EditComponent::isConnectionPossible() {
 	std::vector<ConnectionPolicy*>::iterator it;
 	std::vector<ConnectionPolicy*>::iterator itEnd = mPolicies.end();
 	for (it = mPolicies.begin(); it != itEnd; ++it) {
@@ -211,7 +210,7 @@ bool EditComponent::isConnectionPossible(void) {
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditComponent::isConnectionPossible(EditComponent* component) {
 	if (component) {
 		std::vector<ConnectionPolicy*>::iterator it;
@@ -232,7 +231,7 @@ bool EditComponent::isConnectionPossible(EditComponent* component) {
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditComponent::isConnectionPossible(ComponentRelation relation,
 	ComponentRelationDirection relationDirection,
 	ComponentType typeToBeConnectedWith,
@@ -246,11 +245,11 @@ bool EditComponent::isConnectionPossible(ComponentRelation relation,
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
-bool EditComponent::isDisconnectionPossible(void) {
+
+bool EditComponent::isDisconnectionPossible() {
 	return !mConnections.empty();
 }
-//-----------------------------------------------------------------------
+
 bool EditComponent::isConnected(EditComponent* componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection) {
 	std::vector<Connection*>::iterator it;
 	std::vector<Connection*>::iterator itEnd = mConnections.end();
@@ -347,7 +346,7 @@ void EditComponent::_sortConnections(void) {
 	mConnections.clear();
 	mConnections = temp;
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::deleteConnection(EditComponent* componentConnectedWith,
 	ComponentRelation relation,
 	ComponentRelationDirection relationDirection) {
@@ -365,7 +364,7 @@ void EditComponent::deleteConnection(EditComponent* componentConnectedWith,
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::deleteConnection(Connection* connection) {
 	if (!connection)
 		return;
@@ -388,7 +387,7 @@ void EditComponent::deleteConnection(Connection* connection) {
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::deleteConnection(ComponentRelation relation, ComponentRelationDirection relationDirection) {
 	std::vector<Connection*>::iterator it = mConnections.begin();
 	std::vector<Connection*>::iterator itEnd = mConnections.end();
@@ -408,7 +407,7 @@ void EditComponent::deleteConnection(ComponentRelation relation, ComponentRelati
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::unlockPolicy(ComponentRelation relation,
 	ComponentRelationDirection relationDirection,
 	ComponentType typeToBeConnectedWith,
@@ -582,7 +581,7 @@ void EditComponent::selectConnection(bool viewOnly) {
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 ConnectionPolicy* EditComponent::selectPolicy(EditComponent* componentToBeConnectedWith) {
 	wxString choices[MAX_NUMBER_OF_CONNECTIONS];
 	ConnectionPolicy* policiesAsArray[MAX_NUMBER_OF_CONNECTIONS];
@@ -654,11 +653,11 @@ ConnectionPolicy* EditComponent::selectPolicy(EditComponent* componentToBeConnec
 
 	return mSelectedPolicy;
 }
-//------------------------------------------------------------------------------
-ConnectionPolicy* EditComponent::getSelectedPolicy(void) {
+
+ConnectionPolicy* EditComponent::getSelectedPolicy() {
 	return mSelectedPolicy;
 }
-//------------------------------------------------------------------------------
+
 const wxString& EditComponent::getRelationDescription(ComponentRelation relation,
 	ComponentRelationDirection relationDirection,
 	ComponentType typeToBeConnectedWith,
@@ -674,8 +673,8 @@ const wxString& EditComponent::getRelationDescription(ComponentRelation relation
 
 	return CRD_UNKNOWN;
 }
-//------------------------------------------------------------------------------
-void EditComponent::setCaption(void) {
+
+void EditComponent::setCaption() {
 	wxString caption = mType;
 	wxString name = ogre2wx(mName);
 	if (mSubType != CST_UNDEFINED) {

@@ -58,9 +58,9 @@ class EditComponent : public wxMDIChildFrame
 			const wxColour& backgroundColor = wxNullColour,
 			wxSize size = wxSize(200, 80),
 			long style = wxSYSTEM_MENU | wxCAPTION);
-		~EditComponent(void);
-		ComponentType getComponentType(void) const;
-		ComponentSubType getComponentSubType(void) const;
+		~EditComponent();
+		ComponentType getComponentType() const;
+		ComponentSubType getComponentSubType() const;
 
 		/**	Add a connection policy. These are the possible policies
 		*/
@@ -99,7 +99,7 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	Checks whether a component can be connected at all (to another component)
 		*/
-		bool isConnectionPossible(void);
+		bool isConnectionPossible();
 
 		/**	Checks whether a component can be connected to another component.
 			This function validates its own connection policies and determines for each possible policy whether the component - passed as an
@@ -117,7 +117,7 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	Determines whether it is possible to disconnect a connection.
 		*/
-		bool isDisconnectionPossible(void);
+		bool isDisconnectionPossible();
 
 		/**	Determines whether it is possible to disconnect a connection.
 		*/
@@ -133,7 +133,7 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	Returns the selected policy
 		*/
-		ConnectionPolicy* getSelectedPolicy(void);
+		ConnectionPolicy* getSelectedPolicy();
 
 		/**	Deletes a Connection if the arguments match (and also take care of the connected component)
 		*/
@@ -165,18 +165,18 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	Set the name on the header, with the class attributes
 		*/
-		void setCaption(void);
+		void setCaption();
 
 		/**	Getters/Setters
 		*/
-		const ComponentSubType& getSubType(void) const;
+		const ComponentSubType& getSubType() const;
 		void setSubType(ComponentSubType subType);
-		const Ogre::String& getComponentName(void) const;
+		const Ogre::String& getComponentName() const;
 		void setComponentName(const Ogre::String& componentName);
 
 		/**	Refreshes the canvas
 		*/
-		void refreshCanvas(void);
+		void refreshCanvas();
 
 		/**	Create a property window and use the argument for propagation
 		*/
@@ -184,11 +184,11 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	Returns the property window
 		*/
-		PropertyWindow* getPropertyWindow(void);
+		PropertyWindow* getPropertyWindow();
 
 		/**	Notify the parent if a property has been changed
 		*/
-		void notifyPropertyChanged(void);
+		void notifyPropertyChanged();
 
 		/**	Notify the parent if the name of a component has been changed
 		*/
@@ -207,7 +207,7 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	Get/Set PU element
 		*/
-		ParticleUniverse::IElement* getPUElement(void) {return mPUElement;}
+		ParticleUniverse::IElement* getPUElement() {return mPUElement;}
 		void setPUElement(ParticleUniverse::IElement* puElement){mPUElement = puElement;}
 
 		/**	Returns the size at the moment the component was created
@@ -217,7 +217,7 @@ class EditComponent : public wxMDIChildFrame
 		/**
 			Get/Set root frame
 		*/
-		ParticleUniverseEditorFrame* getRootFrame(void);
+		ParticleUniverseEditorFrame* getRootFrame();
 		void setRootFrame(ParticleUniverseEditorFrame* rootFrame);
 
 	protected:
@@ -244,15 +244,12 @@ class EditComponent : public wxMDIChildFrame
 
 		/**	If the edit component is closed, connections with other components must be deleted in a certain order.
 		*/
-		void _sortConnections(void);
+		void _sortConnections();
 
 		/**
 			Keep pointer to the root frame
 		*/
 		ParticleUniverseEditorFrame* mRootFrame;
-
-	private:
-		EditComponent(void) {}
 };
 
 #endif

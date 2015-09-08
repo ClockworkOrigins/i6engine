@@ -60,9 +60,9 @@ class EditCanvas : public wxMDIChildFrame
 
 		/**	Connect two components
 		*/
-		void connect(EditComponent* node1, 
-			EditComponent* node2, 
-			ComponentRelation relation, 
+		void connect(EditComponent* node1,
+			EditComponent* node2,
+			ComponentRelation relation,
 			const Ogre::String colourCode = DRAW_DEFAULT_COLOURCODE,
 			int lineStyle = wxSOLID);
 

@@ -24,12 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_EDIT_TAB_H__
 #define __PUED_EDIT_TAB_H__
 
-#include "ParticleUniverseOgreControlComponent.h"
-#include "ParticleUniverseSystemPropertyWindow.h"
-
 #include "wx/ogre/prerequisites.h"
-
-#include "wx/notebook.h"
 
 // Enums: Component + Relation Descriptions
 static ComponentType CT_SYSTEM = wxT("");
@@ -69,13 +64,19 @@ static wxString CRD_PLACED_BY = wxT("");
 static wxString CRD_UNKNOWN = wxT("");
 
 namespace ParticleUniverse {
+	class IElement;
+	class ParticleBehaviour;
 	class ParticleEventHandler;
 	class ParticleRenderer;
 } /* namespace ParticleUniverse */
 
 class EditCanvas;
+class EditComponent;
 class EditTools;
+class PropertyWindow;
 class UIEditToolbar;
+
+class wxPropertyGrid;
 
 /**	Edit Tab: Class that defines the actual notebook tab.
 */
@@ -423,6 +424,7 @@ class EditTab : public wxMDIParentFrame
 		bool _processEnableRemoved(EditComponent* node1, EditComponent* node2);
 		bool _processForceRemoved(EditComponent* node1, EditComponent* node2);
 		bool _processPlaceRemoved(EditComponent* node1, EditComponent* node2);
+
 
 	private:
 		EditTab(void) {}

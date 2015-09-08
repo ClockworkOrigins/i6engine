@@ -99,9 +99,9 @@ void EditCanvas::OnActivate(wxActivateEvent& event)
 	event.Skip();
 }
 //-----------------------------------------------------------------------
-void EditCanvas::connect(EditComponent* node1, 
-	EditComponent* node2, 
-	ComponentRelation relation, 
+void EditCanvas::connect(EditComponent* node1,
+	EditComponent* node2,
+	ComponentRelation relation,
 	const Ogre::String colourCode,
 	int lineStyle)
 {
@@ -188,7 +188,7 @@ void EditCanvas::OnMouseMove(wxMouseEvent& event)
 	{
 		moveSelectedComponents(previousMousePosition, mMousePosition);
 		Refresh();
-	} 
+	}
 	else if (mSelectionMode == SM_SELECTING)
 	{
 		Refresh();
@@ -351,4 +351,3 @@ void EditCanvas::adjustMousePosition(const wxPoint& componentPosition,  const wx
 	}
 	Refresh(); // To update the selection box or the conection line
 }
-

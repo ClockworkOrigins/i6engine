@@ -232,7 +232,7 @@ void EditTab::notifyReferers(EditComponent* component, SimpleEvent simpleEvent) 
 		}
 	}
 }
-//-----------------------------------------------------------------------
+
 void EditTab::notifyComponentRemoved(EditComponent* component) {
 	mCanvas->removeConnection(component);
 	popComponent(component);
@@ -276,15 +276,15 @@ void EditTab::notifyComponentRemoved(EditComponent* component) {
 	mEditChanged = true; // If a component is deleted manually, the flag must be set.
 	refreshCanvas();
 }
-//-----------------------------------------------------------------------
-void EditTab::resetConnectionMode(void) {
+
+void EditTab::resetConnectionMode() {
 	// End connecting
 	mCanvas->destroyMouseConnector();
 	mStartConnector = 0;
 	mEndConnector = 0;
 	setConnectionMode(CM_CONNECT_NONE);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::notifyConnectionRemoved(EditComponent* node1,
 	EditComponent* node2,
 	ComponentRelation relation,
@@ -348,7 +348,7 @@ void EditTab::notifyConnectionRemoved(EditComponent* node1,
 	refreshCanvas(); // V1.6
 	_mustRestartParticleSystem(wasStarted);
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processIncludeRemoved(EditComponent* node1, EditComponent* node2) {
 	// If element is not set, ignore removing it.
 	ParticleUniverse::IElement* element2 = node2->getPUElement();
@@ -432,7 +432,7 @@ bool EditTab::_processIncludeRemoved(EditComponent* node1, EditComponent* node2)
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processExcludeRemoved(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -454,7 +454,7 @@ bool EditTab::_processExcludeRemoved(EditComponent* node1, EditComponent* node2)
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processEmitRemoved(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -464,7 +464,7 @@ bool EditTab::_processEmitRemoved(EditComponent* node1, EditComponent* node2) {
 	if (node1->getComponentType() == CT_EMITTER) {
 		// Check what type of particle is emitted.
 		ParticleUniverse::ParticleEmitter* emitter = static_cast<ParticleUniverse::ParticleEmitter*>(element1);
-		ParticleUniverse::ParticleTechnique* technique;
+		ParticleUniverse::ParticleTechnique* technique = nullptr;
 		if (element2) {
 			// Use the technique from the emitted component; this is preferred, because the technique from the emitter might be 0
 			// (if the emitter component was closed, the CR_INCLUDE connection is deleted first and removes the emitter from its
@@ -526,7 +526,7 @@ bool EditTab::_processEmitRemoved(EditComponent* node1, EditComponent* node2) {
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processInterfaceRemoved(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -548,7 +548,7 @@ bool EditTab::_processInterfaceRemoved(EditComponent* node1, EditComponent* node
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processSlaveRemoved(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -569,7 +569,7 @@ bool EditTab::_processSlaveRemoved(EditComponent* node1, EditComponent* node2) {
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processEnableRemoved(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -585,7 +585,7 @@ bool EditTab::_processEnableRemoved(EditComponent* node1, EditComponent* node2) 
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processForceRemoved(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -600,7 +600,7 @@ bool EditTab::_processForceRemoved(EditComponent* node1, EditComponent* node2) {
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processPlaceRemoved(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -615,7 +615,7 @@ bool EditTab::_processPlaceRemoved(EditComponent* node1, EditComponent* node2) {
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 void EditTab::notifyConnectionAdded(EditComponent* node1,
 	EditComponent* node2,
 	ComponentRelation relation,
@@ -675,7 +675,7 @@ void EditTab::notifyConnectionAdded(EditComponent* node1,
 	_mustRestartParticleSystem(wasStarted);
 }
 
-//-----------------------------------------------------------------------
+
 bool EditTab::_processIncludeAdded(EditComponent* node1, EditComponent* node2) {
 	// If element is not set, ignore removing it.
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
@@ -766,7 +766,7 @@ bool EditTab::_processIncludeAdded(EditComponent* node1, EditComponent* node2) {
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processExcludeAdded(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -792,7 +792,7 @@ bool EditTab::_processExcludeAdded(EditComponent* node1, EditComponent* node2) {
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processEmitAdded(EditComponent* node1, EditComponent* node2, ComponentRelationDirection relationDirection) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -863,7 +863,7 @@ bool EditTab::_processEmitAdded(EditComponent* node1, EditComponent* node2, Comp
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processInterfaceAdded(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -885,7 +885,7 @@ bool EditTab::_processInterfaceAdded(EditComponent* node1, EditComponent* node2)
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processSlaveAdded(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -928,7 +928,7 @@ bool EditTab::_processSlaveAdded(EditComponent* node1, EditComponent* node2) {
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processEnableAdded(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -984,7 +984,7 @@ bool EditTab::_processEnableAdded(EditComponent* node1, EditComponent* node2) {
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processForceAdded(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -1009,7 +1009,7 @@ bool EditTab::_processForceAdded(EditComponent* node1, EditComponent* node2) {
 
 	return false;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::_processPlaceAdded(EditComponent* node1, EditComponent* node2) {
 	ParticleUniverse::IElement* element1 = node1->getPUElement();
 	if (!element1)
@@ -1035,15 +1035,15 @@ bool EditTab::_processPlaceAdded(EditComponent* node1, EditComponent* node2) {
 
 	return false;
 }
-//-----------------------------------------------------------------------
-EditCanvas* EditTab::getEditCanvas(void) const {
+
+EditCanvas* EditTab::getEditCanvas() const {
 	return mCanvas;
 }
-//-----------------------------------------------------------------------
-EditTab::ConnectionMode EditTab::getConnectionMode(void) const {
+
+EditTab::ConnectionMode EditTab::getConnectionMode() const {
 	return mConnectionMode;
 }
-//-----------------------------------------------------------------------
+
 void EditTab::setConnectionMode(ConnectionMode connectionMode) {
 	mConnectionMode = connectionMode;
 	wxCursor connectCursor = wxNullCursor;
@@ -1063,11 +1063,11 @@ void EditTab::setConnectionMode(ConnectionMode connectionMode) {
 		(*it)->SetCursor(connectCursor);
 	}
 }
-//-----------------------------------------------------------------------
-std::vector<EditComponent*>& EditTab::getComponents(void) {
+
+std::vector<EditComponent*>& EditTab::getComponents() {
 	return mComponents;
 }
-//-----------------------------------------------------------------------
+
 void EditTab::notifyMouseMovedInComponent(const EditComponent* component, const wxPoint& mousePosition) {
 	wxPoint position;
 	int titlebarHeight = component->GetSize().GetHeight() - 2 * component->GetWindowBorderSize().GetHeight() - component->GetClientSize().GetHeight();
@@ -1075,7 +1075,7 @@ void EditTab::notifyMouseMovedInComponent(const EditComponent* component, const 
 	position.y = component->GetPosition().y + titlebarHeight;
 	mCanvas->adjustMousePosition(position, mousePosition);
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::isConnectionPossible(EditComponent* component) {
 	if (mStartConnector) {
 		// Check both sides
@@ -1083,11 +1083,11 @@ bool EditTab::isConnectionPossible(EditComponent* component) {
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
-EditComponent* EditTab::getStartConnector(void) {
+
+EditComponent* EditTab::getStartConnector() {
 	return mStartConnector;
 }
-//-----------------------------------------------------------------------
+
 void EditTab::setPropertyWindow(PropertyWindow* propertyWindow) {
 	if (!propertyWindow)
 		return;
@@ -1096,14 +1096,14 @@ void EditTab::setPropertyWindow(PropertyWindow* propertyWindow) {
 	frame->setPropertyWindow(propertyWindow);
 	adjustPosition();
 }
-//-----------------------------------------------------------------------
+
 void EditTab::removePropertyWindow(wxPropertyGrid* propertyWindow) {
 	ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 	frame->removePropertyWindow(propertyWindow);
 	adjustPosition();
-}
-//-----------------------------------------------------------------------
-void EditTab::deleteParticleSystemComponents(void) {
+}*/
+
+void EditTab::deleteParticleSystemComponents() {
 	/** (1) Set all references to the particle system in the small render window to 0, because the particle system is not deleted through the
 		individual Edit Components.
 	*/
@@ -1124,8 +1124,8 @@ void EditTab::deleteParticleSystemComponents(void) {
 		}
 	}
 }
-//-----------------------------------------------------------------------
-EditComponent* EditTab::forceCreateParticleSystemEditComponent(void) {
+
+EditComponent* EditTab::forceCreateParticleSystemEditComponent() {
 	std::vector<EditComponent*>::iterator it;
 	std::vector<EditComponent*> newList = mComponents;
 	EditComponent* particleSystemEditComponent = 0;
@@ -1145,7 +1145,7 @@ EditComponent* EditTab::forceCreateParticleSystemEditComponent(void) {
 	// Return the SYSTEM EditComponent
 	return particleSystemEditComponent;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::copyParticleSystemPropertiesToPropertyWindow(EditComponent* particleSystemEditComponent, ParticleUniverse::ParticleSystem* particleSystem) {
 	if (!particleSystem || !particleSystemEditComponent)
 		return false;
@@ -1422,7 +1422,7 @@ void EditTab::createComponentFromRenderer(EditComponent* techniqueEditComponent,
 	static_cast<RendererPropertyWindow*>(rendererEditComponent->getPropertyWindow())->copyAttributesFromRenderer(renderer);
 	createConnection(techniqueEditComponent, rendererEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createComponentFromEmitter(EditComponent* techniqueEditComponent,
 	ParticleUniverse::ParticleEmitter* emitter,
 	wxPoint position) {
@@ -1435,7 +1435,7 @@ void EditTab::createComponentFromEmitter(EditComponent* techniqueEditComponent,
 	static_cast<EmitterPropertyWindow*>(emitterEditComponent->getPropertyWindow())->copyAttributesFromEmitter(emitter);
 	createConnection(techniqueEditComponent, emitterEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createComponentFromAffector(EditComponent* techniqueEditComponent,
 	ParticleUniverse::ParticleAffector* affector,
 	wxPoint position) {
@@ -1448,7 +1448,7 @@ void EditTab::createComponentFromAffector(EditComponent* techniqueEditComponent,
 	static_cast<AffectorPropertyWindow*>(affectorEditComponent->getPropertyWindow())->copyAttributesFromAffector(affector);
 	createConnection(techniqueEditComponent, affectorEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 }
-//-----------------------------------------------------------------------
+
 int EditTab::createComponentFromObserver(EditComponent* techniqueEditComponent,
 	ParticleUniverse::ParticleObserver* observer,
 	wxPoint position,
@@ -1476,7 +1476,7 @@ int EditTab::createComponentFromObserver(EditComponent* techniqueEditComponent,
 
 	return position.y;
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createComponentFromEventHandler(EditComponent* observerEditComponent,
 	ParticleUniverse::ParticleEventHandler* eventHandler,
 	wxPoint position) {
@@ -1488,7 +1488,7 @@ void EditTab::createComponentFromEventHandler(EditComponent* observerEditCompone
 	static_cast<EventHandlerPropertyWindow*>(handlerEditComponent->getPropertyWindow())->copyAttributesFromEventHandler(eventHandler);
 	createConnection(observerEditComponent, handlerEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createComponentFromBehaviour(EditComponent* techniqueEditComponent,
 	ParticleUniverse::ParticleBehaviour* behaviour,
 	wxPoint position) {
@@ -1501,7 +1501,7 @@ void EditTab::createComponentFromBehaviour(EditComponent* techniqueEditComponent
 	static_cast<BehaviourPropertyWindow*>(behaviourEditComponent->getPropertyWindow())->copyAttributesFromBehaviour(behaviour);
 	createConnection(techniqueEditComponent, behaviourEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createComponentFromExtern(EditComponent* techniqueEditComponent,
 	ParticleUniverse::Extern* externObject,
 	wxPoint position) {
@@ -1667,7 +1667,7 @@ EditComponent* EditTab::getParticleSystemEditComponent(void) {
 	}
 	return 0;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::findEditComponent(const wxString& name, const ComponentType& type, EditComponent* skip) {
 	/*  This implementation returns the first component found, but it ignores the fact that the same type with the same name
 		can occur multiple times (i.e. an emitter with the same name in another technique).
@@ -1688,7 +1688,7 @@ EditComponent* EditTab::findEditComponent(const wxString& name, const ComponentT
 
 	return 0;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::findEditComponent(const ParticleUniverse::IElement* puElement) {
 	std::vector<EditComponent*>::iterator it;
 	std::vector<EditComponent*>::iterator itEnd = mComponents.end();
@@ -1701,7 +1701,7 @@ EditComponent* EditTab::findEditComponent(const ParticleUniverse::IElement* puEl
 	}
 	return 0;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::findEditComponentForTechnique(const wxString& name, const wxString& techniqueName) {
 	// Search for a component that is included by a certain technique component
 	std::vector<EditComponent*>::iterator it;
@@ -1718,61 +1718,61 @@ EditComponent* EditTab::findEditComponentForTechnique(const wxString& name, cons
 	}
 	return 0;
 }
-//-----------------------------------------------------------------------
+/*
 void EditTab::createTechniqueForComponent(EditComponent* component) {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::ParticleTechnique* newTechnique = particleSystemManager->createTechnique();
 	newTechnique->setName(component->getPropertyWindow()->getComponentName());
 	component->setPUElement(newTechnique);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createRendererForComponent(const Ogre::String& type, EditComponent* component) {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::ParticleRenderer* newRenderer = particleSystemManager->createRenderer(type);
 	component->setPUElement(newRenderer);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createEmitterForComponent(const Ogre::String& type, EditComponent* component) {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::ParticleEmitter* newEmitter = particleSystemManager->createEmitter(type);
 	newEmitter->setName(component->getPropertyWindow()->getComponentName());
 	component->setPUElement(newEmitter);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createAffectorForComponent(const Ogre::String& type, EditComponent* component) {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::ParticleAffector* newAffector = particleSystemManager->createAffector(type);
 	newAffector->setName(component->getPropertyWindow()->getComponentName());
 	component->setPUElement(newAffector);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createObserverForComponent(const Ogre::String& type, EditComponent* component) {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::ParticleObserver* newObserver = particleSystemManager->createObserver(type);
 	newObserver->setName(component->getPropertyWindow()->getComponentName());
 	component->setPUElement(newObserver);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createHandlerForComponent(const Ogre::String& type, EditComponent* component) {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::ParticleEventHandler* newHandler = particleSystemManager->createEventHandler(type);
 	newHandler->setName(component->getPropertyWindow()->getComponentName());
 	component->setPUElement(newHandler);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createBehaviourForComponent(const Ogre::String& type, EditComponent* component) {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::ParticleBehaviour* newBehaviour = particleSystemManager->createBehaviour(type);
 	component->setPUElement(newBehaviour);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createExternForComponent(const Ogre::String& type, EditComponent* component) {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::Extern* newExtern = particleSystemManager->createExtern(type);
 	newExtern->setName(component->getPropertyWindow()->getComponentName());
 	component->setPUElement(newExtern);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::destroyTechniqueFromComponent(EditComponent* component) {
 	if (!component->getPUElement())
 		return;
@@ -1793,7 +1793,7 @@ void EditTab::destroyTechniqueFromComponent(EditComponent* component) {
 
 	component->setPUElement(0);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::_removeComponentsFromTechnique(ParticleUniverse::ParticleTechnique* technique) {
 	// Cleanup emitted systems, techniques, emitters, affectors, etc.
 	technique->_unprepareSystem();
@@ -1841,7 +1841,7 @@ void EditTab::_removeComponentsFromTechnique(ParticleUniverse::ParticleTechnique
 		technique->removeExtern(technique->getExtern(i));
 	}
 }
-//-----------------------------------------------------------------------
+
 void EditTab::destroyRendererFromComponent(EditComponent* component) {
 	if (!component->getPUElement())
 		return;
@@ -1860,7 +1860,7 @@ void EditTab::destroyRendererFromComponent(EditComponent* component) {
 
 	component->setPUElement(0);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::destroyEmitterFromComponent(EditComponent* component) {
 	if (!component->getPUElement())
 		return;
@@ -1879,7 +1879,7 @@ void EditTab::destroyEmitterFromComponent(EditComponent* component) {
 
 	component->setPUElement(0);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::destroyAffectorFromComponent(EditComponent* component) {
 	if (!component->getPUElement())
 		return;
@@ -1898,7 +1898,7 @@ void EditTab::destroyAffectorFromComponent(EditComponent* component) {
 
 	component->setPUElement(0);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::destroyObserverFromComponent(EditComponent* component) {
 	if (!component->getPUElement())
 		return;
@@ -1924,7 +1924,7 @@ void EditTab::destroyObserverFromComponent(EditComponent* component) {
 
 	component->setPUElement(0);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::destroyHandlerFromComponent(EditComponent* component) {
 	if (!component->getPUElement())
 		return;
@@ -1943,7 +1943,7 @@ void EditTab::destroyHandlerFromComponent(EditComponent* component) {
 
 	component->setPUElement(0);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::destroyBehaviourFromComponent(EditComponent* component) {
 	if (!component->getPUElement())
 		return;
@@ -1962,7 +1962,7 @@ void EditTab::destroyBehaviourFromComponent(EditComponent* component) {
 
 	component->setPUElement(0);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::destroyExternFromComponent(EditComponent* component) {
 	if (!component->getPUElement())
 		return;
@@ -2034,7 +2034,7 @@ EditComponent* EditTab::createRendererEditComponent(const wxString& type) {
 	mRendererCounter++;
 	return rendererComponent;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::createEmitterEditComponent(const wxString& type) {
 	Ogre::String name = "Emitter" + Ogre::StringConverter::toString(mEmitterCounter);
 	wxColour col;
@@ -2058,7 +2058,7 @@ EditComponent* EditTab::createEmitterEditComponent(const wxString& type) {
 	mEmitterCounter++;
 	return emitterComponent;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::createAffectorEditComponent(const wxString& type) {
 	Ogre::String name = "Affector" + Ogre::StringConverter::toString(mAffectorCounter);
 	wxColour col;
@@ -2074,7 +2074,7 @@ EditComponent* EditTab::createAffectorEditComponent(const wxString& type) {
 	mAffectorCounter++;
 	return affectorComponent;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::createObserverEditComponent(const wxString& type) {
 	Ogre::String name = "Observer" + Ogre::StringConverter::toString(mObserverCounter);
 	wxColour col;
@@ -2088,7 +2088,7 @@ EditComponent* EditTab::createObserverEditComponent(const wxString& type) {
 	mObserverCounter++;
 	return observerComponent;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::createHandlerEditComponent(const wxString& type) {
 	Ogre::String name = "Handler" + Ogre::StringConverter::toString(mHandlerCounter);
 	wxColour col;
@@ -2107,7 +2107,7 @@ EditComponent* EditTab::createHandlerEditComponent(const wxString& type) {
 	mHandlerCounter++;
 	return handler;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::createBehaviourEditComponent(const wxString& type) {
 	Ogre::String name = "Behaviour" + Ogre::StringConverter::toString(mBehaviourCounter);
 	wxColour col;
@@ -2119,7 +2119,7 @@ EditComponent* EditTab::createBehaviourEditComponent(const wxString& type) {
 	mBehaviourCounter++;
 	return behaviourComponent;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::createExternEditComponent(const wxString& type) {
 	Ogre::String name = "Extern" + Ogre::StringConverter::toString(mExternCounter);
 	wxColour col;
@@ -2131,7 +2131,7 @@ EditComponent* EditTab::createExternEditComponent(const wxString& type) {
 	mExternCounter++;
 	return externObjectComponent;
 }
-//-----------------------------------------------------------------------
+
 void EditTab::scaleEditComponents(ParticleUniverse::Real scale) {
 	std::vector<EditComponent*>::iterator it;
 	std::vector<EditComponent*>::iterator itEnd = mComponents.end();
@@ -2191,7 +2191,6 @@ void EditTab::OnKeyPressed(wxKeyEvent& event) {
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 		frame->doLoadResourcePath();
 	}
-#ifdef PU_FULL_VERSION
 	else if ((event.GetKeyCode() == 83 || event.GetKeyCode() == 115) && event.GetModifiers() == wxMOD_CONTROL) {
 		// CTRL-S => Menu-item, so redirect
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
@@ -2202,7 +2201,6 @@ void EditTab::OnKeyPressed(wxKeyEvent& event) {
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 		frame->doSaveAs();
 	}
-#endif // PU_FULL_VERSION
 	else if ((event.GetKeyCode() == 81 || event.GetKeyCode() == 113) && event.GetModifiers() == wxMOD_CONTROL) {
 		// CTRL-Q => Menu-item, so redirect
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
@@ -2213,13 +2211,11 @@ void EditTab::OnKeyPressed(wxKeyEvent& event) {
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 		frame->doPlay();
 	}
-#ifdef PU_FULL_VERSION
 	else if (event.GetKeyCode() == WXK_F7) {
 		// F7 => Menu-item, so redirect
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 		frame->doRecord();
 	}
-#endif // PU_FULL_VERSION
 	else if (event.GetKeyCode() == WXK_F8) {
 		// F8 => Menu-item, so redirect
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
@@ -2286,7 +2282,7 @@ bool EditTab::_mustStopParticleSystem(void) {
 	}
 	return wasStarted;
 }
-//-----------------------------------------------------------------------
+
 void EditTab::_mustRestartParticleSystem(bool wasStarted) {
 	// Start the system if needed
 
@@ -2301,7 +2297,7 @@ void EditTab::_mustRestartParticleSystem(bool wasStarted) {
 		}
 	}
 }
-//-----------------------------------------------------------------------
+
 void EditTab::_generateNameForComponentAndPUElement(EditComponent* component, ComponentType type) {
 	if (!component)
 		return;
@@ -2337,7 +2333,7 @@ void EditTab::_generateNameForComponentAndPUElement(EditComponent* component, Co
 	component->setComponentName(name);
 	component->setCaption();
 }
-//-----------------------------------------------------------------------
+
 void EditTab::adjustNames(const Ogre::String& oldName, const Ogre::String& newName, ComponentType type) {
 	// Run through the all components and change references that are based on the name
 	std::vector<EditComponent*>::iterator it;
@@ -2430,7 +2426,7 @@ void EditTab::enableTools(bool enable) {
 		mEditTools->Hide();
 	}
 }
-//-----------------------------------------------------------------------
+
 EditTools::EditTools(EditTab* parent) :
 		wxDialog(
 		parent,
