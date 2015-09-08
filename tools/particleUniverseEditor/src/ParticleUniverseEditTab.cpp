@@ -32,15 +32,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/utils.h"
 
-//-----------------------------------------------------------------------
-EditTab::EditTab(wxWindow* parentNotebook, wxWindow* rootParent) : wxMDIParentFrame(
+EditTab::EditTab(wxWindow* parentNotebook, wxWindow* rootParent) : wxPanel(
 		parentNotebook,
-		ID_TAB_EDIT,
-		wxT(""),
-		wxPoint(rootParent->GetPosition().x + TAB_POS_X + 10, rootParent->GetPosition().y + TAB_POS_Y + 72),
-		wxSize(MAX_WIDTH, MAX_HEIGHT),
-		wxVSCROLL | wxHSCROLL | wxFRAME_FLOAT_ON_PARENT,
-		wxT("editframe")),
+		wxID_ANY),
 	mRootParent(rootParent),
 	mNumberOfSystems(0),
 	mConnectionMode(CM_CONNECT_NONE),
@@ -111,38 +105,40 @@ EditTab::EditTab(wxWindow* parentNotebook, wxWindow* rootParent) : wxMDIParentFr
 	mCanvas = new EditCanvas(this);
 	Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(EditTab::OnMouseWheel));
 	Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(EditTab::OnKeyPressed));
+
+	new wxButton(this, wxID_ANY, _("Load"), wxDefaultPosition, wxSize(124, 24));
 }
-//-----------------------------------------------------------------------
-EditTab::~EditTab(void) {
+
+EditTab::~EditTab() {
 	mEditTools = 0;
 }
-//-----------------------------------------------------------------------
-void EditTab::adjustPosition(void) {
+
+void EditTab::adjustPosition() {
 	SetPosition(wxPoint(mRootParent->GetPosition().x + TAB_POS_X + 10, mRootParent->GetPosition().y + TAB_POS_Y + 72));
 	if (mCanvas) {
 		mCanvas->SetFocus();
 	}
 }
-//-----------------------------------------------------------------------
+
 unsigned int EditTab::getNumberOfSystems() const {
 	return mNumberOfSystems;
 }
-//-----------------------------------------------------------------------
+
 unsigned int EditTab::getNumberOfComponents() const {
 	return mComponents.size();
 }
-//-----------------------------------------------------------------------
+
 void EditTab::pushSystem(EditComponent* system) {
 	if (mNumberOfSystems == 0) {
 		mComponents.push_back(system);
 		mNumberOfSystems++;
 	}
 }
-//-----------------------------------------------------------------------
+
 void EditTab::pushComponent(EditComponent* component) {
 	mComponents.push_back(component);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::popComponent(EditComponent* component) {
 	std::vector<EditComponent*>::iterator it;
 	for (it = mComponents.begin(); it != mComponents.end(); ++it) {
@@ -152,17 +148,17 @@ void EditTab::popComponent(EditComponent* component) {
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void EditTab::refreshCanvas(void) {
+
+void EditTab::refreshCanvas() {
 	mCanvas->Refresh();
 }
-//-----------------------------------------------------------------------
-void EditTab::notifyFocusLeft(void) {
+
+void EditTab::notifyFocusLeft() {
 	if (mCanvas) {
 		mCanvas->SetFocus();
 	}
 }
-//-----------------------------------------------------------------------
+
 void EditTab::notifyComponentActivated(EditComponent* component) {
 	// A component is activated, check the mode
 	if (mConnectionMode == CM_CONNECT_STARTING) {
@@ -195,12 +191,12 @@ void EditTab::notifyComponentActivated(EditComponent* component) {
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void EditTab::notifyConnectionsChanged(void) {
+
+void EditTab::notifyConnectionsChanged() {
 	mEditTools->notifyConnectionsChanged();
 	mEditChanged = true; // If a connection is made or removed, the flag must be set.
 }
-//-----------------------------------------------------------------------
+
 void EditTab::notifyReferers(EditComponent* component, SimpleEvent simpleEvent) {
 	// Notify other components that don't have a connection, but do have some kind of reference (name, pointer) to this component
 	// Todo: Add other types?
@@ -1101,7 +1097,7 @@ void EditTab::removePropertyWindow(wxPropertyGrid* propertyWindow) {
 	ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 	frame->removePropertyWindow(propertyWindow);
 	adjustPosition();
-}*/
+}
 
 void EditTab::deleteParticleSystemComponents() {
 	/** (1) Set all references to the particle system in the small render window to 0, because the particle system is not deleted through the
@@ -1158,7 +1154,7 @@ bool EditTab::copyParticleSystemPropertiesToPropertyWindow(EditComponent* partic
 
 	return true;
 }
-//-----------------------------------------------------------------------
+
 bool EditTab::createParticleSystemComponents(EditComponent* particleSystemEditComponent, ParticleUniverse::ParticleSystem* particleSystem) {
 	if (!particleSystem || !particleSystemEditComponent)
 		return false;
@@ -1192,8 +1188,8 @@ bool EditTab::createParticleSystemComponents(EditComponent* particleSystemEditCo
 	mEditChanged = false;
 	return true;
 }
-//-----------------------------------------------------------------------
-void EditTab::destroyDanglingPUComponents(void) {
+
+void EditTab::destroyDanglingPUComponents() {
 	/** Run through all EditComponents and check whether its corresponding ParticleUniverse component (IElement) has a parent.
 		If not, destroy it and set the IElement in the EditComponent to 0. In case of a ParticleTechnique and ParticleObserver,
 		they may have included other ParticleUniverse components. Therefor, scan the EditComponents again and check whether a component
@@ -1203,7 +1199,6 @@ void EditTab::destroyDanglingPUComponents(void) {
 	std::vector<EditComponent*>::iterator it;
 	std::vector<EditComponent*>::iterator itSub;
 	std::vector<EditComponent*> newList = mComponents;
-	EditComponent* particleSystemEditComponent = 0;
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	for (it = newList.begin(); it != newList.end(); ++it) {
 		EditComponent* component = *it;
@@ -1324,7 +1319,7 @@ void EditTab::destroyDanglingPUComponents(void) {
 		}
 	}
 }
-//-----------------------------------------------------------------------
+
 wxPoint EditTab::createComponentsFromTechnique(EditComponent* systemEditComponent,
 	ParticleUniverse::ParticleTechnique* technique,
 	wxPoint position) {
@@ -1409,7 +1404,7 @@ wxPoint EditTab::createComponentsFromTechnique(EditComponent* systemEditComponen
 	position.y = highestY;
 	return position;
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createComponentFromRenderer(EditComponent* techniqueEditComponent,
 	ParticleUniverse::ParticleRenderer* renderer,
 	wxPoint position) {
@@ -1514,7 +1509,7 @@ void EditTab::createComponentFromExtern(EditComponent* techniqueEditComponent,
 	static_cast<ExternPropertyWindow*>(externEditComponent->getPropertyWindow())->copyAttributesFromExtern(externObject);
 	createConnection(techniqueEditComponent, externEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createOtherConnections(const ParticleUniverse::ParticleTechnique* technique) {
 	/** Creating the other connections can only be done if all components are already created, so you need to run through
 		the particle technique again.
@@ -1642,19 +1637,20 @@ void EditTab::createOtherConnections(const ParticleUniverse::ParticleTechnique* 
 		}
 	}
 }
-//-----------------------------------------------------------------------
+
 void EditTab::createConnection(EditComponent* componentPrimary,
 	EditComponent* componentSecundairy,
 	ComponentRelation relation,
 	ComponentRelationDirection direction) {
+
 	// Establish the connection between the two
 	ConnectionPolicy* policy = componentPrimary->getPolicy(relation, direction, componentSecundairy->getComponentType());
 	mCanvas->connect(componentPrimary, componentSecundairy, relation, policy->getColourCode(), policy->getLineStyle());
 	componentPrimary->addConnection(componentSecundairy, relation, direction);
 	componentSecundairy->addConnection(componentPrimary, relation, getOppositeRelationDirection(direction));
 }
-//-----------------------------------------------------------------------
-EditComponent* EditTab::getParticleSystemEditComponent(void) {
+
+EditComponent* EditTab::getParticleSystemEditComponent() {
 	std::vector<EditComponent*>::iterator it;
 	std::vector<EditComponent*>::iterator itEnd = mComponents.end();
 	EditComponent* component = 0;
@@ -1718,7 +1714,7 @@ EditComponent* EditTab::findEditComponentForTechnique(const wxString& name, cons
 	}
 	return 0;
 }
-/*
+
 void EditTab::createTechniqueForComponent(EditComponent* component) {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::ParticleTechnique* newTechnique = particleSystemManager->createTechnique();
@@ -1981,8 +1977,8 @@ void EditTab::destroyExternFromComponent(EditComponent* component) {
 
 	component->setPUElement(0);
 }
-//-----------------------------------------------------------------------
-EditComponent* EditTab::createParticleSystemEditComponent(void) {
+
+EditComponent* EditTab::createParticleSystemEditComponent() {
 	if (mSystemCounter > 0)
 		return 0;
 
@@ -2001,8 +1997,8 @@ EditComponent* EditTab::createParticleSystemEditComponent(void) {
 	mSystemCounter++;
 	return systemComponent;
 }
-//-----------------------------------------------------------------------
-EditComponent* EditTab::createTechniqueEditComponent(void) {
+
+EditComponent* EditTab::createTechniqueEditComponent() {
 	Ogre::String name = "Technique" + Ogre::StringConverter::toString(mTechniqueCounter);
 	wxColour col;
 	col.Set(wxT("#6698FF"));
@@ -2021,7 +2017,7 @@ EditComponent* EditTab::createTechniqueEditComponent(void) {
 	mTechniqueCounter++;
 	return technique;
 }
-//-----------------------------------------------------------------------
+
 EditComponent* EditTab::createRendererEditComponent(const wxString& type) {
 	//Ogre::String name = "Renderer" + Ogre::StringConverter::toString(mRendererCounter);
 	Ogre::String name = Ogre::StringUtil::BLANK;
@@ -2144,10 +2140,11 @@ void EditTab::scaleEditComponents(ParticleUniverse::Real scale) {
 	}
 	mScale = scale;
 }
-//-----------------------------------------------------------------------
+
 void EditTab::OnMouseWheel(wxMouseEvent& event) {
 	// Scroll the window up or down
-	wxMDIClientWindow* clientWindow = static_cast<wxMDIClientWindow*>(GetClientWindow());
+	// TODO: uncomment
+/*	wxMDIClientWindow* clientWindow = static_cast<wxMDIClientWindow*>(GetClientWindow());
 	if (!clientWindow)
 		return;
 
@@ -2160,9 +2157,9 @@ void EditTab::OnMouseWheel(wxMouseEvent& event) {
 	}
 	clientWindow->Refresh();
 //	clientWindow->Thaw();
-	clientWindow->SetScrollPos(wxVERTICAL, 0, true);
+	clientWindow->SetScrollPos(wxVERTICAL, 0, true);*/
 }
-//-----------------------------------------------------------------------
+
 void EditTab::OnKeyPressed(wxKeyEvent& event) {
 	if (event.GetKeyCode() == WXK_PAGEUP) {
 		if (mScale < 1.5) {
@@ -2240,34 +2237,30 @@ void EditTab::OnKeyPressed(wxKeyEvent& event) {
 		// CTRL-Z => Menu-item, so redirect
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 		frame->doCameraReset();
-	}
-#ifdef PU_FULL_VERSION
-	else if ((event.GetKeyCode() == 79 || event.GetKeyCode() == 111) && event.GetModifiers() == wxMOD_CONTROL) {
+	} else if ((event.GetKeyCode() == 79 || event.GetKeyCode() == 111) && event.GetModifiers() == wxMOD_CONTROL) {
 		// CTRL-O => Menu-item, so redirect
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 		frame->doOptions();
-	}
-#endif // PU_FULL_VERSION
-	else if (event.GetKeyCode() == WXK_F1) {
+	} else if (event.GetKeyCode() == WXK_F1) {
 		// F1 => Menu-item, so redirect
 		ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(mRootParent);
 		frame->doAbout();
 	}
 }
-//-----------------------------------------------------------------------
-bool EditTab::isSystemUpdatedByEditPage(void) {
+
+bool EditTab::isSystemUpdatedByEditPage() {
 	return mEditChanged;
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::ParticleSystem* EditTab::getParticleSystemFromSystemComponent(void) {
+
+ParticleUniverse::ParticleSystem* EditTab::getParticleSystemFromSystemComponent() {
 	EditComponent* component = getParticleSystemEditComponent();
 	if (!component)
 		return 0;
 
 	return static_cast<ParticleUniverse::ParticleSystem*>(component->getPUElement());
 }
-//-----------------------------------------------------------------------
-bool EditTab::_mustStopParticleSystem(void) {
+
+bool EditTab::_mustStopParticleSystem() {
 	// Get the Particle System Edit Component, because it is associated with the Particle System
 	EditComponent* component = getParticleSystemEditComponent();
 	if (!component)
@@ -2414,7 +2407,7 @@ void EditTab::adjustNames(const Ogre::String& oldName, const Ogre::String& newNa
 		}
 	}
 }
-//-----------------------------------------------------------------------
+
 void EditTab::enableTools(bool enable) {
 	if (!mEditTools)
 		return;
@@ -2451,148 +2444,136 @@ EditTools::EditTools(EditTab* parent) :
 	Connect(ID_HELP_HTML, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler(EditTools::OnHelp));
 	Connect(ID_CURSOR, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler(EditTools::OnCursor));
 }
-//-----------------------------------------------------------------------
-bool EditTools::Destroy(void) {
+
+bool EditTools::Destroy() {
 	delete mEditToolbar;
 	return wxDialog::Destroy();
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnNewTechnique(wxCommandEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	EditComponent* component = parent->createTechniqueEditComponent();
 	parent->createTechniqueForComponent(component);
 	resetIcons();
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnNewRenderer(wxCommandEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	EditComponent* component = parent->createRendererEditComponent(CST_RENDERER_BILLBOARD);
 	parent->createRendererForComponent(RENDERER_BILLBOARD, component);
 	resetIcons();
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnNewEmitter(wxCommandEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	EditComponent* component = parent->createEmitterEditComponent(CST_EMITTER_BOX);
 	parent->createEmitterForComponent(EMITTER_BOX, component);
 	resetIcons();
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnNewAffector(wxCommandEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	EditComponent* component = parent->createAffectorEditComponent(CST_AFFECTOR_ALIGN);
 	parent->createAffectorForComponent(AFFECTOR_ALIGN, component);
 	resetIcons();
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnNewObserver(wxCommandEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	EditComponent* component = parent->createObserverEditComponent(CST_OBSERVER_ON_CLEAR);
 	parent->createObserverForComponent(OBSERVER_ON_CLEAR, component);
 	resetIcons();
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnNewHandler(wxCommandEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	EditComponent* component = parent->createHandlerEditComponent(CST_HANDLER_DO_AFFECTOR);
 	parent->createHandlerForComponent(HANDLER_DO_AFFECTOR, component);
 	resetIcons();
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnNewBehaviour(wxCommandEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	EditComponent* component = parent->createBehaviourEditComponent(CST_BEHAVIOUR_SLAVE);
 	parent->createBehaviourForComponent(BEHAVIOUR_SLAVE, component);
 	resetIcons();
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnNewExtern(wxCommandEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	EditComponent* component = parent->createExternEditComponent(CST_EXTERN_BOX_COLLIDER);
 	parent->createExternForComponent(EXTERN_BOX_COLLIDER, component);
 	resetIcons();
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnConnect(wxCommandEvent& event) {
 	// The connect icon has been pressed, so the mouse is in 'connect mode'.
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	parent->setConnectionMode(EditTab::CM_CONNECT_STARTING);
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnDisconnect(wxCommandEvent& event) {
 	// The disconnect icon has been pressed, so the mouse is in 'disconnect mode'.
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	parent->setConnectionMode(EditTab::CM_DISCONNECT);
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnHelp(wxCommandEvent& event) {
 	// Get property window
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(parent->GetGrandParent());
 	frame->OnHelp();
-//	PropertyWindow* propWin = frame->getPropertyWindow();
-//	if (propWin)
-//	{
-//		// Start the browser
-//		wxString url = CURRENT_DIR + SCRIPT_DIR + propWin->getHelpHtml();
-//
-//		// TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
-//		// TODO: Starting the browser causes the application to crash if clicking on the edit components
-//		ShellExecute(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
-//		//ShellExecute((HWND)frame->GetHWND(), "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
-//		// TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
-//	}
 }
-//-----------------------------------------------------------------------
+
 void EditTools::OnCursor(wxCommandEvent& event) {
 	// Reset the cursor
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	wxMouseEvent command;
 	parent->getEditCanvas()->OnMouseRButtonPressed(command);
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyConnectionsChanged(void) {
+
+void EditTools::notifyConnectionsChanged() {
 	// A connection has been added or deleted
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyDeleteSystem(void) {
+
+void EditTools::notifyDeleteSystem() {
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyDeleteTechnique(void) {
+
+void EditTools::notifyDeleteTechnique() {
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyDeleteRenderer(void) {
+
+void EditTools::notifyDeleteRenderer() {
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyDeleteEmitter(void) {
+
+void EditTools::notifyDeleteEmitter() {
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyDeleteAffector(void) {
+
+void EditTools::notifyDeleteAffector() {
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyDeleteObserver(void) {
+
+void EditTools::notifyDeleteObserver() {
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyDeleteHandler(void) {
+
+void EditTools::notifyDeleteHandler() {
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyDeleteBehaviour(void) {
+
+void EditTools::notifyDeleteBehaviour() {
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::notifyDeleteExtern(void) {
+
+void EditTools::notifyDeleteExtern() {
 	resetIcons();
 }
-//-----------------------------------------------------------------------
-void EditTools::resetIcons(void) {
+
+void EditTools::resetIcons() {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	unsigned int connections = (parent->getEditCanvas())->getNumberOfConnections();
 	UIEditIcons2* editIcons = mEditToolbar->getEditIcons2();

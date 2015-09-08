@@ -1,7 +1,7 @@
 call build-common.bat
 
-Set ARCHIVE=wxWidgets-2.8.12.zip
-Set BUILD_DIR=%TMP_DIR%\wxWidgets-2.8.12
+Set ARCHIVE=wxWidgets-3.0.2.tar.bz2
+Set BUILD_DIR=%TMP_DIR%\wxWidgets-3.0.2
 Set PREFIX=%DEP_DIR%\wxWidgets
 
 echo "Compile wxWidgets"

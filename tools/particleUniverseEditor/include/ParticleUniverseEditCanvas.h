@@ -31,7 +31,7 @@ class EditComponent;
 
 /**	Draw surface: The background canvas on which the EditComponents are placed. The EditCanvas is used to draw the lines.
 */
-class EditCanvas : public wxMDIChildFrame
+class EditCanvas : public wxFrame
 {
 	public:
 		enum SelectionMode
@@ -43,7 +43,7 @@ class EditCanvas : public wxMDIChildFrame
 		};
 
 		// Constructor / Destructor
-		EditCanvas(wxMDIParentFrame* parent);
+		EditCanvas(wxPanel* parent);
 		~EditCanvas(void) {}
 
 		/**	Handlers

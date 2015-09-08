@@ -33,8 +33,8 @@ ContextMenuElement::ContextMenuElement(ContextMenu* parent,
 	Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(ContextMenuElement::OnWindowLeave));
 	Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(ContextMenuElement::OnMouseLButtonPressed));
 
-	mBitmapEnabled = new wxStaticBitmap(this, wxID_ANY, wxBitmap(ICONS_DIR + bitmapNameEnabled, wxBITMAP_TYPE_ANY), wxDefaultPosition, wxDefaultSize, 0); 
-	mBitmapDisabled = new wxStaticBitmap(this, wxID_ANY, wxBitmap(ICONS_DIR + bitmapNameDisabled, wxBITMAP_TYPE_ANY), wxDefaultPosition, wxDefaultSize, 0); 
+	mBitmapEnabled = new wxStaticBitmap(parent, wxID_ANY, wxBitmap(ICONS_DIR + bitmapNameEnabled, wxBITMAP_TYPE_ANY), wxDefaultPosition, wxDefaultSize, 0);
+	mBitmapDisabled = new wxStaticBitmap(parent, wxID_ANY, wxBitmap(ICONS_DIR + bitmapNameDisabled, wxBITMAP_TYPE_ANY), wxDefaultPosition, wxDefaultSize, 0);
 	mBitmapDisabled->Hide();
 }
 //------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ void ContextMenuElement::setEnabled(bool enabled)
 		mBitmapEnabled->Hide();
 		mBitmapDisabled->Show();
 	}
-	
+
 	Refresh();
 }
 //-----------------------------------------------------------------------

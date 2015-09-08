@@ -47,11 +47,11 @@ class UniqueRelation;
 
 /**	Edit Component: This defines the modules on the EditCanvas.
 */
-class EditComponent : public wxMDIChildFrame
+class EditComponent : public wxFrame
 {
 	public:
 		// Constructor / Destructor
-		EditComponent(wxMDIParentFrame* parent,
+		EditComponent(wxWindow* parent,
 			const Ogre::String& name,
 			ComponentType type,
 			ComponentSubType subType,

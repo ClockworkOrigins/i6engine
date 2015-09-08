@@ -18,14 +18,14 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "wx/ogre/utils.h"
 
 //-----------------------------------------------------------------------
-EditCanvas::EditCanvas(wxMDIParentFrame* parent) : 
-		wxMDIChildFrame(
-		parent, 
-		wxID_ANY, 
-		wxT(""), 
-		wxPoint(0, 0), 
-		parent->GetSize(), 
-		0, 
+EditCanvas::EditCanvas(wxPanel* parent) :
+		wxFrame(
+		parent,
+		wxID_ANY,
+		wxT(""),
+		wxPoint(0, 0),
+		parent->GetSize(),
+		0,
 		wxT("canvas")),
 		mMouseConnector(0),
 		mMousePosition(wxPoint(0, 0)),
@@ -239,7 +239,7 @@ void EditCanvas::OnMouseRButtonPressed(wxMouseEvent& event)
 
 	// Reset connection mode (state is kept by parent)
 	(static_cast<EditTab*>(GetParent()))->resetConnectionMode();
-	
+
 	Refresh(); // Removes the selection box
 }
 //------------------------------------------------------------------------------

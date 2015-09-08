@@ -24,9 +24,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/utils.h"
 
-//-----------------------------------------------------------------------
+
 EditComponent::EditComponent(
-		wxMDIParentFrame* parent,
+		wxWindow* parent,
 		const Ogre::String& name,
 		ComponentType type,
 		ComponentSubType subType,
@@ -34,7 +34,7 @@ EditComponent::EditComponent(
 		wxSize size,
 		long style) :
 
-		wxMDIChildFrame(
+		wxFrame(
 		parent,
 		wxID_ANY,
 		wxT(""),
@@ -264,12 +264,12 @@ bool EditComponent::isConnected(EditComponent* componentToBeConnectedWith, Compo
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
+
 void EditComponent::OnMove(wxMoveEvent& event) {
 	// Notify the parent
 	(static_cast<EditTab*>(GetParent()))->refreshCanvas();
 }
-//-----------------------------------------------------------------------
+
 void EditComponent::OnClose(wxCloseEvent& event) {
 	// Notify its child
 	// ??????????????????
@@ -310,8 +310,8 @@ void EditComponent::OnClose(wxCloseEvent& event) {
 
 	Destroy();
 }
-//------------------------------------------------------------------------------
-void EditComponent::_sortConnections(void) {
+
+void EditComponent::_sortConnections() {
 	std::vector<Connection*> temp;
 	std::vector<Connection*>::iterator it;
 	std::vector<Connection*>::iterator itEnd = mConnections.end();
@@ -427,12 +427,12 @@ void EditComponent::unlockPolicy(ComponentRelation relation,
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::OnMouseMove(wxMouseEvent& event) {
 	wxPoint position = event.GetPosition();
 	(static_cast<EditTab*>(GetParent()))->notifyMouseMovedInComponent(this, position);
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::OnWindowEnter(wxMouseEvent& event) {
 	// Change mouse cursor if the policies don't allow connection
 	EditTab* parent = static_cast<EditTab*>(GetParent());
@@ -458,7 +458,7 @@ void EditComponent::OnWindowEnter(wxMouseEvent& event) {
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::OnWindowLeave(wxMouseEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	if (parent->getConnectionMode() == EditTab::CM_CONNECT_STARTING) {
@@ -472,7 +472,7 @@ void EditComponent::OnWindowLeave(wxMouseEvent& event) {
 		SetCursor(connectCursor);
 	}
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::OnMouseLButtonPressed(wxMouseEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 
@@ -491,16 +491,16 @@ void EditComponent::OnMouseLButtonPressed(wxMouseEvent& event) {
 	// Notify the parent
 	parent->notifyComponentActivated(this);
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::OnMouseRButtonPressed(wxMouseEvent& event) {
 	selectConnection(true);
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::OnActivate(wxActivateEvent& event) {
 	if (IsBeingDeleted())
 		return;
 
-	EditTab* parent = static_cast<EditTab*>(GetMDIParent());
+	EditTab* parent = static_cast<EditTab*>(GetParent());
 	parent->getEditCanvas()->SetPosition(wxPoint(0, 0)); // In case scrolling has ruined the layout.
 	parent->setPropertyWindow(mPropertyWindow);
 	if (mOldPropertyWindow && !mOldPropertyWindow->IsBeingDeleted()) {
@@ -512,7 +512,7 @@ void EditComponent::OnActivate(wxActivateEvent& event) {
 		mOldPropertyWindow = 0;
 	}
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::selectConnection(bool viewOnly) {
 	//	Display connections. These are actual connections this component has with other components
 	wxString choices[MAX_NUMBER_OF_CONNECTIONS];
@@ -686,27 +686,27 @@ void EditComponent::setCaption() {
 	SetLabel(caption);
 	SetToolTip(caption);
 }
-//------------------------------------------------------------------------------
-const ComponentSubType& EditComponent::getSubType(void) const {
+
+const ComponentSubType& EditComponent::getSubType() const {
 	return mSubType;
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::setSubType(ComponentSubType subType) {
 	mSubType = subType;
 }
-//------------------------------------------------------------------------------
-const Ogre::String& EditComponent::getComponentName(void) const {
+
+const Ogre::String& EditComponent::getComponentName() const {
 	return mName;
 }
-//------------------------------------------------------------------------------
+
 void EditComponent::setComponentName(const Ogre::String& componentName) {
 	mName = componentName;
 }
-//------------------------------------------------------------------------------
-void EditComponent::refreshCanvas(void) {
+
+void EditComponent::refreshCanvas() {
 	(static_cast<EditTab*>(GetParent()))->refreshCanvas();
 }
-//------------------------------------------------------------------------------
+
 PropertyWindow* EditComponent::createPropertyWindow(ComponentSubType subType, const PropertyWindow* propertyWindow) {
 	// Create new propertyWindow and propagate the attributes of the old one.
 	// Don't delete the existing one, because it is deleting itself.
@@ -718,93 +718,77 @@ PropertyWindow* EditComponent::createPropertyWindow(ComponentSubType subType, co
 		SystemPropertyWindow* pWin = new SystemPropertyWindow(mRootParent, this, mName);
 		pWin->setRootFrame(mRootFrame); // To keep a pointer to the main (root) frame
 		mPropertyWindow = pWin;
-	}
-	else if (mType == CT_TECHNIQUE) {
+	} else if (mType == CT_TECHNIQUE) {
 		mPropertyWindow = new TechniquePropertyWindow(mRootParent, this, mName);
-	}
-	else if (mType == CT_RENDERER) {
+	} else if (mType == CT_RENDERER) {
 		if (propertyWindow) {
 			mPropertyWindow = mRendererPropertyWindowFactory.createRendererPropertyWindow(mSubType, static_cast<RendererPropertyWindow*>(mPropertyWindow));
-		}
-		else {
+		} else {
 			mPropertyWindow = mRendererPropertyWindowFactory.createRendererPropertyWindow(mRootParent, this, mName, mSubType);
 		}
-	}
-	else if (mType == CT_EMITTER) {
+	} else if (mType == CT_EMITTER) {
 		if (propertyWindow) {
 			mPropertyWindow = mEmitterPropertyWindowFactory.createEmitterPropertyWindow(mSubType, static_cast<EmitterPropertyWindow*>(mPropertyWindow));
-		}
-		else {
+		} else {
 			mPropertyWindow = mEmitterPropertyWindowFactory.createEmitterPropertyWindow(mRootParent, this, mName, mSubType);
 		}
-	}
-	else if (mType == CT_AFFECTOR) {
+	} else if (mType == CT_AFFECTOR) {
 		if (propertyWindow) {
 			mPropertyWindow = mAffectorPropertyWindowFactory.createAffectorPropertyWindow(mSubType, static_cast<AffectorPropertyWindow*>(mPropertyWindow));
-		}
-		else {
+		} else {
 			mPropertyWindow = mAffectorPropertyWindowFactory.createAffectorPropertyWindow(mRootParent, this, mName, mSubType);
 		}
-	}
-	else if (mType == CT_OBSERVER) {
+	} else if (mType == CT_OBSERVER) {
 		if (propertyWindow) {
 			mPropertyWindow = mObserverPropertyWindowFactory.createObserverPropertyWindow(mSubType, static_cast<ObserverPropertyWindow*>(mPropertyWindow));
-		}
-		else {
+		} else {
 			mPropertyWindow = mObserverPropertyWindowFactory.createObserverPropertyWindow(mRootParent, this, mName, mSubType);
 		}
-	}
-	else if (mType == CT_HANDLER) {
+	} else if (mType == CT_HANDLER) {
 		if (propertyWindow) {
 			mPropertyWindow = mEventHandlerPropertyWindowFactory.createEventHandlerPropertyWindow(mSubType, static_cast<EventHandlerPropertyWindow*>(mPropertyWindow));
-		}
-		else {
+		} else {
 			mPropertyWindow = mEventHandlerPropertyWindowFactory.createEventHandlerPropertyWindow(mRootParent, this, mName, mSubType);
 		}
-	}
-	else if (mType == CT_BEHAVIOUR) {
+	} else if (mType == CT_BEHAVIOUR) {
 		if (propertyWindow) {
 			mPropertyWindow = mBehaviourPropertyWindowFactory.createBehaviourPropertyWindow(mSubType, static_cast<BehaviourPropertyWindow*>(mPropertyWindow));
-		}
-		else {
+		} else {
 			mPropertyWindow = mBehaviourPropertyWindowFactory.createBehaviourPropertyWindow(mRootParent, this, mName, mSubType);
 		}
-	}
-	else if (mType == CT_EXTERN) {
+	} else if (mType == CT_EXTERN) {
 		if (propertyWindow) {
 			mPropertyWindow = mExternPropertyWindowFactory.createExternPropertyWindow(mSubType, static_cast<ExternPropertyWindow*>(mPropertyWindow));
-		}
-		else {
+		} else {
 			mPropertyWindow = mExternPropertyWindowFactory.createExternPropertyWindow(mRootParent, this, mName, mSubType);
 		}
 	}
 
 	mPropertyWindow->Hide();
-	std::cout << "EditComponent(createProp): this=" << this << ", EditTab=" << GetMDIParent() << std::endl;
-	(static_cast<EditTab*>(GetMDIParent()))->setPropertyWindow(mPropertyWindow);
+//	(dynamic_cast<EditTab*>(GetParent()))->setPropertyWindow(mPropertyWindow); // TODO: assertion wenn render->edit switch
 	return mPropertyWindow;
 }
-//------------------------------------------------------------------------------
-PropertyWindow* EditComponent::getPropertyWindow(void) {
+
+PropertyWindow* EditComponent::getPropertyWindow() {
 	return mPropertyWindow;
 }
-//-----------------------------------------------------------------------
-void EditComponent::notifyPropertyChanged(void) {
+
+void EditComponent::notifyPropertyChanged() {
 	// Inform the parent
 	EditTab* parent = static_cast<EditTab*>(GetParent());
 	parent->setSystemUpdatedByEditPage(true);
 }
-//-----------------------------------------------------------------------
+
 void EditComponent::notifyAdjustNames(const Ogre::String& newName) {
 	// Inform the parent
 	EditTab* parent = static_cast<EditTab*>(GetParent());
-	parent->adjustNames(mName, newName, mType);
+//	parent->adjustNames(mName, newName, mType);
 }
-//-----------------------------------------------------------------------
-ParticleUniverseEditorFrame* EditComponent::getRootFrame(void) {
+
+ParticleUniverseEditorFrame* EditComponent::getRootFrame() {
 	return mRootFrame;
 }
-//-----------------------------------------------------------------------
+
 void EditComponent::setRootFrame(ParticleUniverseEditorFrame* rootFrame) {
 	mRootFrame = rootFrame;
 }

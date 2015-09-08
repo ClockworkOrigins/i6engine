@@ -80,7 +80,7 @@ class wxPropertyGrid;
 
 /**	Edit Tab: Class that defines the actual notebook tab.
 */
-class EditTab : public wxMDIParentFrame
+class EditTab : public wxPanel
 {
 	public:
 		enum ConnectionMode

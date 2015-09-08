@@ -228,8 +228,8 @@ class ParticleUniverseEditorFrame : public wxFrame {
 		wxNotebook* mNotebook;
 		SystemTreeControl* mParticleExplorer;
 		wxTreeItemId mLatestSelection;
-		TextControl* mTextCtrl;
 		wxOgreControl* mControl;
+		TextControl* mTextCtrl;
 		wxStatusBar* mStatusBar;
 		Ogre::SceneManager* mSceneManager;
 		Ogre::SceneNode* mMainSceneNode;

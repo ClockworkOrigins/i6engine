@@ -650,7 +650,7 @@ void MaterialTab::OnEmissive(wxCommandEvent& event) {
 		colourData.SetColour(wxCol); // Set the current pass colour
 		wxColourDialog colourDialog(this, &colourData);
 		if (event.GetEventObject() && event.GetEventObject()->IsKindOf(CLASSINFO(wxButton))) {
-			colourDialog.SetPosition(((wxButton*)event.GetEventObject())->GetPosition());
+			colourDialog.SetPosition(static_cast<wxButton*>(event.GetEventObject())->GetPosition());
 		}
 		if (colourDialog.ShowModal() == wxID_OK) {
 			// Set colour in pass
