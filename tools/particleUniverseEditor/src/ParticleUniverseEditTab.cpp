@@ -116,6 +116,7 @@ bool EditTab::OnDropText(wxCoord x, wxCoord y, const wxString& text) { // TODO: 
 
 wxDragResult EditTab::OnDragOver(wxCoord x, wxCoord y, wxDragResult defResult) {
 	_currentDrag->SetPosition(wxPoint(x, y) - _dragOffset);
+	mCanvas->Refresh();
 	return defResult;
 }
 
