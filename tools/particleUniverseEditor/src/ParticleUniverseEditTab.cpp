@@ -105,6 +105,18 @@ EditTab::EditTab(wxWindow* parentNotebook, wxWindow* rootParent) : wxPanel(
 	mCanvas = new EditCanvas(this);
 	Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(EditTab::OnMouseWheel));
 	Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(EditTab::OnKeyPressed));
+
+	SetDropTarget(this);
+}
+
+bool EditTab::OnDropText(wxCoord x, wxCoord y, const wxString& text) { // TODO: move to a new class: droptarget
+	_currentDrag->SetPosition(wxPoint(x, y) - _dragOffset);
+	return true;
+}
+
+wxDragResult EditTab::OnDragOver(wxCoord x, wxCoord y, wxDragResult defResult) {
+	_currentDrag->SetPosition(wxPoint(x, y) - _dragOffset);
+	return defResult;
 }
 
 EditTab::~EditTab() {
@@ -1662,10 +1674,24 @@ EditComponent* EditTab::getParticleSystemEditComponent() {
 	return 0;
 }
 
+EditComponent* EditTab::findEditComponent(const wxWindowID & id) {
+	std::vector<EditComponent*>::iterator it;
+	std::vector<EditComponent*>::iterator itEnd = mComponents.end();
+	EditComponent* component;
+	for (it = mComponents.begin(); it != itEnd; ++it) {
+		component = *it;
+		if (component->GetId() == id) {
+			return component;
+		}
+	}
+
+	return nullptr;
+}
+
 EditComponent* EditTab::findEditComponent(const wxString& name, const ComponentType& type, EditComponent* skip) {
 	/*  This implementation returns the first component found, but it ignores the fact that the same type with the same name
 		can occur multiple times (i.e. an emitter with the same name in another technique).
-		Todo: Add another parameter to make the search unique.
+		TODO: Add another parameter to make the search unique.
 	*/
 	std::vector<EditComponent*>::iterator it;
 	std::vector<EditComponent*>::iterator itEnd = mComponents.end();

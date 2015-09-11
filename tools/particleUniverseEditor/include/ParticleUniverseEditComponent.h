@@ -45,13 +45,15 @@ class ConnectionPolicy;
 class ParticleUniverseEditorFrame;
 class UniqueRelation;
 
+class EditTab;
+
 /**	Edit Component: This defines the modules on the EditCanvas.
 */
 class EditComponent : public wxPanel
 {
 	public:
 		// Constructor / Destructor
-		EditComponent(wxWindow* parent,
+		EditComponent(EditTab * parent,
 			const Ogre::String& name,
 			ComponentType type,
 			ComponentSubType subType,
