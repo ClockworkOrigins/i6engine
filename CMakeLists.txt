@@ -17,7 +17,7 @@
 # CMake main configfile i6engine project
 #
 
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 2.8)
 
 #########################################################################
 #########################################################################
@@ -279,11 +279,13 @@ ENDIF(NOT WIN32)
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS)
 	SET(LIBNAME "WXWIDGETS")
-	SET(LIBHEADER "wx/wx.h")
 	SET(WXWIDGETS_ROOT ${ISIXE_DEP_DIR}/wxWidgets)
 	IF(WIN32)
-		find_package(EasyFind REQUIRED COMPONENTS wxbase30 wxbase30_net wxbase30_xml wxexpat wxjpeg wxmsw30_adv wxmsw30_aui wxmsw30_core wxmsw30_html wxmsw30_media wxmsw30_qa wxmsw30_richtext wxmsw30_xrc wxpng wxtiff wxzlib)
+		SET(LIBHEADER "wx/wx/wx.h")
+		find_package(EasyFind REQUIRED COMPONENTS wxbase30u wxbase30u_net wxbase30u_xml wxexpat wxjpeg wxmsw30u_adv wxmsw30u_aui wxmsw30u_core wxmsw30u_gl wxmsw30u_html wxmsw30u_media wxmsw30u_propgrid wxmsw30u_qa wxmsw30u_ribbon wxmsw30u_richtext wxmsw30u_stc wxmsw30u_webview wxmsw30u_xrc wxpng wxregexu wxscintilla wxtiff wxzlib)
+		include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR}/wx)
 	ELSEIF(UNIX)
+		SET(LIBHEADER "wx/wx.h")
 		find_package(EasyFind REQUIRED COMPONENTS wx_baseu-3.0 wx_baseu_net-3.0 wx_baseu_xml-3.0 wx_gtk2u_adv-3.0 wx_gtk2u_aui-3.0 wx_gtk2u_core-3.0 wx_gtk2u_html-3.0 wx_gtk2u_qa-3.0 wx_gtk2u_richtext-3.0 wx_gtk2u_xrc-3.0)
 	ENDIF(WIN32)
 	include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR})

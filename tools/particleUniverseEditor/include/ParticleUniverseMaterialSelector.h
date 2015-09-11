@@ -29,7 +29,7 @@ class MaterialSelector : public wxSingleChoiceDialog
 			const wxString* choices, 
 			long style = wxCHOICEDLG_STYLE, 
 			const wxPoint& pos = wxDefaultPosition) : 
-		wxSingleChoiceDialog(parent, message, caption, n, choices, 0, style, pos) {}
+		wxSingleChoiceDialog(parent, message, caption, n, choices, reinterpret_cast<void **>(0), style, pos) {}
 		~MaterialSelector(void) {}
 };
 

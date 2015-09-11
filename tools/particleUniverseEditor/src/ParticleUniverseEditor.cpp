@@ -1225,11 +1225,7 @@ void ParticleUniverseEditorFrame::doLoadFile() {
 		ParticleUniverse::String inputLine;
 		ParticleUniverse::String script;
 		std::ifstream fpIn;
-#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
-		fpIn.open(loadDialog.GetPath());
-#else
 		fpIn.open(loadDialog.GetPath().mb_str());
-#endif
 		if (fpIn) {
 			while (!fpIn.eof()) {
 				getline(fpIn, inputLine);

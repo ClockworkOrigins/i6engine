@@ -24,6 +24,10 @@
 
 #include "OGRE/Ogre.h"
 
+#ifdef __WXMSW__
+#   include "wx/msw/winundef.h"
+#endif
+
 #include "wx/wx.h"
 
 // Comment this line if NVidia's PhysX is not used

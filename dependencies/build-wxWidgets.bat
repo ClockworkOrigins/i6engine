@@ -11,16 +11,20 @@ call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 echo "Building wxWidgets"
 cd %BUILD_DIR%\build\msw
 
-nmake /f makefile.vc BUILD=release CXXFLAGS="/DNEED_PBT_H" > NUL
+MSBuild.exe wx_vc12.sln /p:Configuration=Release > NUL
 
 echo "Installing wxWidgets"
 mkdir "%PREFIX%"
 mkdir "%PREFIX%/include"
 mkdir "%PREFIX%/lib"
-xcopy /S /Y "%BUILD_DIR%\include" "%PREFIX%\include" > NUL
-xcopy /S /Y "%BUILD_DIR%\lib\vc_lib\msw" "%PREFIX%/include" > NUL
+mkdir "%PREFIX%/include/wx"
+mkdir "%PREFIX%/lib/vc_lib"
+mkdir "%PREFIX%/lib/vc_lib/mswu"
+xcopy /S /Y "%BUILD_DIR%\include" "%PREFIX%\include\wx" > NUL
+xcopy /S /Y "%BUILD_DIR%\include\msvc" "%PREFIX%/include\wx" > NUL
 
 xcopy /S /Y "%BUILD_DIR%\lib\vc_lib\*.lib" "%PREFIX%\lib\" > NUL
+xcopy /S /Y "%BUILD_DIR%\lib\vc_lib\mswu" "%PREFIX%\lib\vc_lib\mswu" > NUL
 
 echo "Cleaning up"
 cd %DEP_DIR%
