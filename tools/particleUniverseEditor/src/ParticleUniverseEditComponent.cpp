@@ -78,6 +78,9 @@ EditComponent::EditComponent(
 	wxFont font(10, wxDEFAULT, wxNORMAL, wxFONTWEIGHT_NORMAL, true);
 	wxStaticText* text = new wxStaticText(this, wxID_ANY, "\n" + caption, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
 	text->SetFont(font);
+	if (backgroundColor == *wxBLACK) {
+		text->SetForegroundColour(*wxWHITE);
+	}
 
 	mPropertyWindow = createPropertyWindow(mSubType);
 	mOriginalSize = GetSize();
