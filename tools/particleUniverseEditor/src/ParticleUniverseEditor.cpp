@@ -1023,7 +1023,7 @@ void ParticleUniverseEditorFrame::OnHelp() {
 		std::string s(ws.begin(), ws.end());
 		system(s.c_str());
 #endif
-		mEditNotebookPage->getEditCanvas()->SetFocus(); // Needed to prevent exception
+		mEditNotebookPage->getEditCanvas()->SetFocus(); // Needed to prevent exception. TODO: wtf? if we can eleminate this, we can kick the canvas include
 	}
 }
 

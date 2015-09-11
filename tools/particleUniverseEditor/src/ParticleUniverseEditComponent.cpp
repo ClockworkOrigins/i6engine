@@ -34,10 +34,9 @@ EditComponent::EditComponent(
 		wxSize size,
 		long style) :
 
-		wxFrame(
+		wxPanel(
 		parent,
 		wxID_ANY,
-		wxT(""),
 		wxDefaultPosition,
 		size,
 		style,
@@ -66,9 +65,19 @@ EditComponent::EditComponent(
 	mRootParent = parent->GetParent()->GetParent();
 	setCaption();
 	SetBackgroundColour(backgroundColor);
-//	wxFont font(10, wxDEFAULT, wxNORMAL, wxFONTWEIGHT_NORMAL, true);
-//	wxStaticText* text = new wxStaticText(this, wxID_ANY, "\n" + ogre2wx(name), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
-//	text->SetFont(font);
+
+	// Generating the name TODO: same as "SetCaption()". Make one: getCaption() or similar
+	wxString caption = mType;
+	wxString nameTmp = ogre2wx(mName);
+	if (mSubType != CST_UNDEFINED) {
+		caption = caption + wxT("(") + mSubType + wxT(")");
+	}
+	if (!nameTmp.empty()) {
+		caption = caption + wxT(" - ") + nameTmp;
+	}
+	wxFont font(10, wxDEFAULT, wxNORMAL, wxFONTWEIGHT_NORMAL, true);
+	wxStaticText* text = new wxStaticText(this, wxID_ANY, "\n" + caption, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
+	text->SetFont(font);
 
 	mPropertyWindow = createPropertyWindow(mSubType);
 	mOriginalSize = GetSize();

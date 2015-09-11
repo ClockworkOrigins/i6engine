@@ -105,8 +105,6 @@ EditTab::EditTab(wxWindow* parentNotebook, wxWindow* rootParent) : wxPanel(
 	mCanvas = new EditCanvas(this);
 	Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(EditTab::OnMouseWheel));
 	Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(EditTab::OnKeyPressed));
-
-	new wxButton(this, wxID_ANY, _("Load"), wxDefaultPosition, wxSize(124, 24));
 }
 
 EditTab::~EditTab() {

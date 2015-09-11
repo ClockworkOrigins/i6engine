@@ -47,7 +47,7 @@ class UniqueRelation;
 
 /**	Edit Component: This defines the modules on the EditCanvas.
 */
-class EditComponent : public wxFrame
+class EditComponent : public wxPanel
 {
 	public:
 		// Constructor / Destructor
