@@ -2010,6 +2010,7 @@ EditComponent* EditTab::createParticleSystemEditComponent() {
 	wxColour col;
 	col.Set(wxT("#000000"));
 	EditComponent* systemComponent = new EditComponent(this, "mySystem", CT_SYSTEM, CST_UNDEFINED, col, wxSize(200, 80));
+	systemComponent->Raise();
 	systemComponent->setRootFrame(static_cast<ParticleUniverseEditorFrame*>(mRootParent));
 	//systemComponent->createPropertyWindow(CT_SYSTEM); // Recreate it, so it contains the root frame TESTTESTTESTTESTTESTTEST
 	systemComponent->createPropertyWindow(CST_UNDEFINED); // Recreate it, so it contains the root frame
@@ -2049,6 +2050,7 @@ EditComponent* EditTab::createRendererEditComponent(const wxString& type) {
 	wxColour col;
 	col.Set(wxT("#E42217"));
 	EditComponent* rendererComponent = new EditComponent(this, name, CT_RENDERER, type, col);
+	rendererComponent->Raise();
 	rendererComponent->SetSize(rendererComponent->getOriginalSize().Scale(mScale, mScale));
 	rendererComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 	pushComponent(rendererComponent);
