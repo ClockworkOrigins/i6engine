@@ -267,8 +267,7 @@ wxString wxUIntPropertyClass::GetValueAsString( int ) const
     size_t index = m_base + m_prefix;
     if ( index >= wxPG_UINT_TEMPLATE_MAX )
         index = wxPG_BASE_DEC;
-
-    return wxString::Format(gs_uintTemplates[index],m_value);
+    return wxString::Format(gs_uintTemplates[index],(unsigned int) m_value);
 }
 
 bool wxUIntPropertyClass::SetValueFromString( const wxString& text, int WXUNUSED(argFlags) )
