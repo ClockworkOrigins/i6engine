@@ -33,7 +33,6 @@ EditCanvas::EditCanvas(wxPanel* parent) :
 		mEndPositionSelection(wxPoint(0, 0)) {
 
 	Connect(wxEVT_PAINT, wxPaintEventHandler(EditCanvas::OnPaint));
-	Connect(wxEVT_ACTIVATE, wxActivateEventHandler(EditCanvas::OnActivate));
 	Connect(wxEVT_MOTION, wxMouseEventHandler(EditCanvas::OnMouseMove));
 	Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(EditCanvas::OnMouseLButtonPressed));
 	Connect(wxEVT_LEFT_UP, wxMouseEventHandler(EditCanvas::OnMouseLButtonReleased));
@@ -87,12 +86,6 @@ void EditCanvas::OnPaint(wxPaintEvent& event) {
 		points[4] = wxPoint(mStartPositionSelection.x, mStartPositionSelection.y);
 		dc.DrawLines(5, points);
 	}
-}
-
-void EditCanvas::OnActivate(wxActivateEvent& event) {
-	// Put it lower in the hierarchy so all other windows are not covered by the canvas
-	Lower();
-	event.Skip();
 }
 
 void EditCanvas::connect(EditComponent* node1, EditComponent* node2, ComponentRelation relation, const Ogre::String colourCode, int lineStyle) {
@@ -287,18 +280,4 @@ void EditCanvas::deleteSelectedComponents() {
 		(*it)->Close(true);
 	}
 	mSelectedComponents.clear();
-}
-
-void EditCanvas::adjustMousePosition(const wxPoint& componentPosition,  const wxPoint& mousePosition) {
-	// Only adjust if a specific action is going on
-	if (mSelectionMode == SM_SELECT_NONE && !mMouseConnector) {
-		return;
-	}
-
-	// Adjust the mouse and correct it with the canvas position (the componentPosition has not taken this into account)
-	mMousePosition = componentPosition + mousePosition - GetPosition();
-	if (mMouseConnector) {
-		mMouseConnector->setPosition(mMousePosition);
-	}
-	Refresh(); // To update the selection box or the conection line
 }

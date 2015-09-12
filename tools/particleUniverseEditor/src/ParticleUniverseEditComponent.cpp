@@ -25,10 +25,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "wx/ogre/utils.h"
 #include <wx/dnd.h>
 
-EditComponent::EditComponent(EditTab* parent, const Ogre::String& name, ComponentType type, ComponentSubType subType, const wxColour& backgroundColor, wxSize size, long style) :
+EditComponent::EditComponent(EditCanvas* parent, const Ogre::String& name, ComponentType type, ComponentSubType subType, const wxColour& backgroundColor, wxSize size, long style) :
 		wxPanel(parent, wxID_ANY, wxDefaultPosition, size, style, ogre2wx(name)),
 		mPUElement(nullptr),
-		mRootParent(parent->GetParent()->GetParent()),
+		mRootParent(parent->GetParent()->GetParent()->GetParent()), // TODO: das is doch kaese // TODO: genauso wie die ganzen GetParent->GetParetn() aufrufe
 		mName(name),
 		mParentName(Ogre::StringUtil::BLANK),
 		mType(type),
@@ -277,7 +277,7 @@ bool EditComponent::isConnected(EditComponent* componentToBeConnectedWith, Compo
 
 void EditComponent::OnMove(wxMoveEvent& event) {
 	// Notify the parent
-	(static_cast<EditTab*>(GetParent()))->refreshCanvas();
+	(static_cast<EditTab*>(GetParent()->GetParent()))->refreshCanvas();
 }
 
 void EditComponent::OnClose(wxCloseEvent& event) {
@@ -285,7 +285,7 @@ void EditComponent::OnClose(wxCloseEvent& event) {
 	// ??????????????????
 
 	// Before this component is deleted, notify other components (not components that are connected) that this one is going to be deleted.
-	(static_cast<EditTab*>(GetParent()))->notifyReferers(this, EditTab::SE_CLOSE);
+	(static_cast<EditTab*>(GetParent()->GetParent()))->notifyReferers(this, EditTab::SE_CLOSE);
 
 	// Delete all connections, including that of other components
 	_sortConnections(); // The order of deleting connections matter, so rearrange them.
@@ -304,16 +304,16 @@ void EditComponent::OnClose(wxCloseEvent& event) {
 	mConnections.clear();
 
 	// Notify the parent that the component is removed.
-	(static_cast<EditTab*>(GetParent()))->notifyComponentRemoved(this);
+	(static_cast<EditTab*>(GetParent()->GetParent()))->notifyComponentRemoved(this);
 
 	// Remove corresponding propertyWindow.
 	if (mPropertyWindow) {
-		(static_cast<EditTab*>(GetParent()))->removePropertyWindow(mPropertyWindow);
+		(static_cast<EditTab*>(GetParent()->GetParent()))->removePropertyWindow(mPropertyWindow);
 		mPropertyWindow->Destroy();
 		mPropertyWindow = 0;
 	}
 	if (mOldPropertyWindow) {
-		(static_cast<EditTab*>(GetParent()))->removePropertyWindow(mOldPropertyWindow);
+		(static_cast<EditTab*>(GetParent()->GetParent()))->removePropertyWindow(mOldPropertyWindow);
 		mOldPropertyWindow->Destroy();
 		mOldPropertyWindow = 0;
 	}
@@ -366,7 +366,7 @@ void EditComponent::deleteConnection(EditComponent* componentConnectedWith,
 		if (componentConnectedWith == (*it)->getComponentToBeConnectedWith() &&
 			relation == (*it)->getRelation() &&
 			relationDirection == (*it)->getRelationDirection()) {
-			(static_cast<EditTab*>(GetParent()))->notifyConnectionRemoved(this, componentConnectedWith, relation, relationDirection);
+			(static_cast<EditTab*>(GetParent()->GetParent()))->notifyConnectionRemoved(this, componentConnectedWith, relation, relationDirection);
 			unlockPolicy(relation, relationDirection, componentConnectedWith->getComponentType(), componentConnectedWith->getComponentSubType());
 			delete (*it);
 			mConnections.erase(it);
@@ -440,12 +440,12 @@ void EditComponent::unlockPolicy(ComponentRelation relation,
 
 void EditComponent::OnMouseMove(wxMouseEvent& event) {
 	wxPoint position = event.GetPosition();
-	(static_cast<EditTab*>(GetParent()))->notifyMouseMovedInComponent(this, position);
+	(static_cast<EditTab*>(GetParent()->GetParent()))->notifyMouseMovedInComponent(this, position);
 }
 
 void EditComponent::OnWindowEnter(wxMouseEvent& event) {
 	// Change mouse cursor if the policies don't allow connection
-	EditTab* parent = static_cast<EditTab*>(GetParent());
+	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
 	if (parent->getConnectionMode() == EditTab::CM_CONNECT_ENDING) {
 		// Check both sides
 		if (!isConnectionPossible(parent->getStartConnector())) {
@@ -470,7 +470,7 @@ void EditComponent::OnWindowEnter(wxMouseEvent& event) {
 }
 
 void EditComponent::OnWindowLeave(wxMouseEvent& event) {
-	EditTab* parent = static_cast<EditTab*>(GetParent());
+	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
 	if (parent->getConnectionMode() == EditTab::CM_CONNECT_STARTING) {
 		// Reset mouse cursor to connecting cursor
 		wxCursor connectCursor = wxCursor(wxImage(ICONS_DIR + wxT("connect.png")));
@@ -484,7 +484,7 @@ void EditComponent::OnWindowLeave(wxMouseEvent& event) {
 }
 
 void EditComponent::OnMouseLButtonPressed(wxMouseEvent& event) {
-	EditTab* parent = static_cast<EditTab*>(GetParent());
+	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
 
 	// Part of 'OnActivate'
 	parent->setPropertyWindow(mPropertyWindow);
@@ -527,7 +527,7 @@ void EditComponent::OnActivate(wxActivateEvent& event) {
 	if (IsBeingDeleted())
 		return;
 
-	EditTab* parent = static_cast<EditTab*>(GetParent());
+	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
 	parent->getEditCanvas()->SetPosition(wxPoint(0, 0)); // In case scrolling has ruined the layout.
 	parent->setPropertyWindow(mPropertyWindow);
 	if (mOldPropertyWindow && !mOldPropertyWindow->IsBeingDeleted()) {
@@ -583,7 +583,7 @@ void EditComponent::selectConnection(bool viewOnly) {
 	}
 
 	if (viewOnly) {
-		GetParent()->Enable(false); // Disables input from the parent
+		GetParent()->GetParent()->Enable(false); // Disables input from the parent
 		wxSingleChoiceDialog choiceWindow(this,
 			_("overview of existing connections"),
 			_("Existing connections"),-
@@ -593,18 +593,18 @@ void EditComponent::selectConnection(bool viewOnly) {
 			wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCENTRE);
 			choiceWindow.SetSize(320, 200);
 			choiceWindow.ShowModal();
-		GetParent()->Enable(true); // Enable input from the parent
-		GetParent()->SetFocus();
+		GetParent()->GetParent()->Enable(true); // Enable input from the parent
+		GetParent()->GetParent()->SetFocus();
 	} else {
 		if (count > 0) {
-			GetParent()->Enable(false); // Disables input from the parent
+			GetParent()->GetParent()->Enable(false); // Disables input from the parent
 			wxSingleChoiceDialog choiceWindow(this, _("Select a connection to be deleted"), _("Delete a connection"), count, choices);
 			choiceWindow.SetSize(320, 200);
 			if (choiceWindow.ShowModal() == wxID_OK) {
 				deleteConnection(connectionsAsArray[choiceWindow.GetSelection()]);
 			}
-			GetParent()->Enable(true); // Enable input from the parent
-			GetParent()->SetFocus();
+			GetParent()->GetParent()->Enable(true); // Enable input from the parent
+			GetParent()->GetParent()->SetFocus();
 		}
 	}
 }
@@ -659,7 +659,7 @@ ConnectionPolicy* EditComponent::selectPolicy(EditComponent* componentToBeConnec
 	}
 
 	if (count > 1) {
-		GetParent()->Enable(false); // Disables input from the parent
+		GetParent()->GetParent()->Enable(false); // Disables input from the parent
 		wxSingleChoiceDialog choiceWindow(this, _("Select a connection type"), _("Add a connection"), count, choices);
 		choiceWindow.SetSize(320, 200);
 		if (choiceWindow.ShowModal() == wxID_OK) {
@@ -668,8 +668,8 @@ ConnectionPolicy* EditComponent::selectPolicy(EditComponent* componentToBeConnec
 		else {
 			mSelectedPolicy = 0;
 		}
-		GetParent()->Enable(true); // Enable input from the parent
-		GetParent()->SetFocus();
+		GetParent()->GetParent()->Enable(true); // Enable input from the parent
+		GetParent()->GetParent()->SetFocus();
 	}
 	else if (count == 1) {
 		mSelectedPolicy = policiesAsArray[0];
@@ -731,7 +731,7 @@ void EditComponent::setComponentName(const Ogre::String& componentName) {
 }
 
 void EditComponent::refreshCanvas() {
-	(static_cast<EditTab*>(GetParent()))->refreshCanvas();
+	(static_cast<EditTab*>(GetParent()->GetParent()))->refreshCanvas();
 }
 
 PropertyWindow* EditComponent::createPropertyWindow(ComponentSubType subType, const PropertyWindow* propertyWindow) {
@@ -792,7 +792,7 @@ PropertyWindow* EditComponent::createPropertyWindow(ComponentSubType subType, co
 	}
 
 	mPropertyWindow->Hide();
-//	(dynamic_cast<EditTab*>(GetParent()))->setPropertyWindow(mPropertyWindow); // TODO: assertion wenn render->edit switch
+//	(dynamic_cast<EditTab*>(GetParent()->GetParent()))->setPropertyWindow(mPropertyWindow); // TODO: assertion wenn render->edit switch
 	return mPropertyWindow;
 }
 
@@ -802,13 +802,13 @@ PropertyWindow* EditComponent::getPropertyWindow() {
 
 void EditComponent::notifyPropertyChanged() {
 	// Inform the parent
-	EditTab* parent = static_cast<EditTab*>(GetParent());
+	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
 	parent->setSystemUpdatedByEditPage(true);
 }
 
 void EditComponent::notifyAdjustNames(const Ogre::String& newName) {
 	// Inform the parent
-	EditTab* parent = static_cast<EditTab*>(GetParent());
+	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
 //	parent->adjustNames(mName, newName, mType);
 }
 

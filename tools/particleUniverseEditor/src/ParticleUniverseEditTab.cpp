@@ -1080,7 +1080,6 @@ void EditTab::notifyMouseMovedInComponent(const EditComponent* component, const 
 	int titlebarHeight = component->GetSize().GetHeight() - 2 * component->GetWindowBorderSize().GetHeight() - component->GetClientSize().GetHeight();
 	position.x = component->GetPosition().x + component->GetWindowBorderSize().GetWidth();
 	position.y = component->GetPosition().y + titlebarHeight;
-	mCanvas->adjustMousePosition(position, mousePosition);
 }
 
 bool EditTab::isConnectionPossible(EditComponent* component) {
@@ -2009,7 +2008,7 @@ EditComponent* EditTab::createParticleSystemEditComponent() {
 
 	wxColour col;
 	col.Set(wxT("#000000"));
-	EditComponent* systemComponent = new EditComponent(this, "mySystem", CT_SYSTEM, CST_UNDEFINED, col, wxSize(200, 80));
+	EditComponent* systemComponent = new EditComponent(mCanvas, "mySystem", CT_SYSTEM, CST_UNDEFINED, col, wxSize(200, 80));
 	systemComponent->Raise();
 	systemComponent->setRootFrame(static_cast<ParticleUniverseEditorFrame*>(mRootParent));
 	//systemComponent->createPropertyWindow(CT_SYSTEM); // Recreate it, so it contains the root frame TESTTESTTESTTESTTESTTEST
@@ -2028,7 +2027,7 @@ EditComponent* EditTab::createTechniqueEditComponent() {
 	Ogre::String name = "Technique" + Ogre::StringConverter::toString(mTechniqueCounter);
 	wxColour col;
 	col.Set(wxT("#6698FF"));
-	EditComponent* technique = new EditComponent(this, name, CT_TECHNIQUE, CST_UNDEFINED, col);
+	EditComponent* technique = new EditComponent(mCanvas, name, CT_TECHNIQUE, CST_UNDEFINED, col);
 	technique->SetSize(technique->getOriginalSize().Scale(mScale, mScale));
 	technique->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_SYSTEM, CST_UNDEFINED, false);
 	technique->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_RENDERER, CST_UNDEFINED, false);
@@ -2049,7 +2048,7 @@ EditComponent* EditTab::createRendererEditComponent(const wxString& type) {
 	Ogre::String name = Ogre::StringUtil::BLANK;
 	wxColour col;
 	col.Set(wxT("#E42217"));
-	EditComponent* rendererComponent = new EditComponent(this, name, CT_RENDERER, type, col);
+	EditComponent* rendererComponent = new EditComponent(mCanvas, name, CT_RENDERER, type, col);
 	rendererComponent->Raise();
 	rendererComponent->SetSize(rendererComponent->getOriginalSize().Scale(mScale, mScale));
 	rendererComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
@@ -2062,7 +2061,7 @@ EditComponent* EditTab::createEmitterEditComponent(const wxString& type) {
 	Ogre::String name = "Emitter" + Ogre::StringConverter::toString(mEmitterCounter);
 	wxColour col;
 	col.Set(wxT("#4CC417"));
-	EditComponent* emitterComponent = new EditComponent(this, name, CT_EMITTER, type, col);
+	EditComponent* emitterComponent = new EditComponent(mCanvas, name, CT_EMITTER, type, col);
 	emitterComponent->SetSize(emitterComponent->getOriginalSize().Scale(mScale, mScale));
 
 	// Altough it is possible to emit a particle system, the connection to the system is not defined (there can only be one system on the canvas)
@@ -2086,7 +2085,7 @@ EditComponent* EditTab::createAffectorEditComponent(const wxString& type) {
 	Ogre::String name = "Affector" + Ogre::StringConverter::toString(mAffectorCounter);
 	wxColour col;
 	col.Set(wxT("#FBB117"));
-	EditComponent* affectorComponent = new EditComponent(this, name, CT_AFFECTOR, type, col);
+	EditComponent* affectorComponent = new EditComponent(mCanvas, name, CT_AFFECTOR, type, col);
 	affectorComponent->SetSize(affectorComponent->getOriginalSize().Scale(mScale, mScale));
 	affectorComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 	affectorComponent->addPolicy(CR_EMIT, CRDIR_SECUNDAIRY, CRD_EMITTED_BY, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_EMITTED_COLOURCODE);
@@ -2102,7 +2101,7 @@ EditComponent* EditTab::createObserverEditComponent(const wxString& type) {
 	Ogre::String name = "Observer" + Ogre::StringConverter::toString(mObserverCounter);
 	wxColour col;
 	col.Set(wxT("#254117"));
-	EditComponent* observerComponent = new EditComponent(this, name, CT_OBSERVER, type, col);
+	EditComponent* observerComponent = new EditComponent(mCanvas, name, CT_OBSERVER, type, col);
 	observerComponent->SetSize(observerComponent->getOriginalSize().Scale(mScale, mScale));
 	observerComponent->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_HANDLER, CST_UNDEFINED, true);
 	observerComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
@@ -2116,7 +2115,7 @@ EditComponent* EditTab::createHandlerEditComponent(const wxString& type) {
 	Ogre::String name = "Handler" + Ogre::StringConverter::toString(mHandlerCounter);
 	wxColour col;
 	col.Set(wxT("#8D38C9"));
-	EditComponent* handler = new EditComponent(this, name, CT_HANDLER, type, col);
+	EditComponent* handler = new EditComponent(mCanvas, name, CT_HANDLER, type, col);
 	handler->SetSize(handler->getOriginalSize().Scale(mScale, mScale));
 	handler->addUniqueRelation(CR_ENABLE, CRDIR_PRIMARY); // Only enabling of one type is allowed
 	handler->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_OBSERVER, CST_UNDEFINED, false);
@@ -2135,7 +2134,7 @@ EditComponent* EditTab::createBehaviourEditComponent(const wxString& type) {
 	Ogre::String name = "Behaviour" + Ogre::StringConverter::toString(mBehaviourCounter);
 	wxColour col;
 	col.Set(wxT("#307D7E"));
-	EditComponent* behaviourComponent = new EditComponent(this, name, CT_BEHAVIOUR, type, col);
+	EditComponent* behaviourComponent = new EditComponent(mCanvas, name, CT_BEHAVIOUR, type, col);
 	behaviourComponent->SetSize(behaviourComponent->getOriginalSize().Scale(mScale, mScale));
 	behaviourComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 	pushComponent(behaviourComponent);
@@ -2147,7 +2146,7 @@ EditComponent* EditTab::createExternEditComponent(const wxString& type) {
 	Ogre::String name = "Extern" + Ogre::StringConverter::toString(mExternCounter);
 	wxColour col;
 	col.Set(wxT("#827B60"));
-	EditComponent* externObjectComponent = new EditComponent(this, name, CT_EXTERN, type, col);
+	EditComponent* externObjectComponent = new EditComponent(mCanvas, name, CT_EXTERN, type, col);
 	externObjectComponent->SetSize(externObjectComponent->getOriginalSize().Scale(mScale, mScale));
 	externObjectComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 	pushComponent(externObjectComponent);
