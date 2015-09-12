@@ -90,6 +90,8 @@ EditComponent::EditComponent(EditTab* parent, const Ogre::String& name, Componen
 	Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(EditComponent::OnWindowLeave));
 	Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(EditComponent::OnMouseLButtonPressed));
 	Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(EditComponent::OnMouseRButtonPressed));
+
+	std::cerr << "Created EditComponent of type " << mSubType << std::endl;
 }
 
 EditComponent::~EditComponent() {
