@@ -25,30 +25,29 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "wx/ogre/utils.h"
 #include <wx/dnd.h>
 
-EditComponent::EditComponent(
-		EditTab* parent,
-		const Ogre::String& name,
-		ComponentType type,
-		ComponentSubType subType,
-		const wxColour& backgroundColor,
-		wxSize size,
-		long style) :
-
-		wxPanel(
-		parent,
-		wxID_ANY,
-		wxDefaultPosition,
-		size,
-		style,
-		ogre2wx(name)),
-	mName(name),
-	mType(type),
-	mSubType(subType),
-	mParentName(Ogre::StringUtil::BLANK),
-	mSelectedPolicy(0),
-	mOldPropertyWindow(0),
-	mPUElement(0),
-	mRootFrame(0) {
+EditComponent::EditComponent(EditTab* parent, const Ogre::String& name, ComponentType type, ComponentSubType subType, const wxColour& backgroundColor, wxSize size, long style) :
+		wxPanel(parent, wxID_ANY, wxDefaultPosition, size, style, ogre2wx(name)),
+		mPUElement(nullptr),
+		mRootParent(parent->GetParent()->GetParent()),
+		mName(name),
+		mParentName(Ogre::StringUtil::BLANK),
+		mType(type),
+		mSubType(subType),
+		mPolicies(),
+		mConnections(),
+		mUniqueRelations(),
+		mSelectedPolicy(nullptr),
+		mPropertyWindow(0),
+		mOldPropertyWindow(0),
+		mEmitterPropertyWindowFactory(),
+		mRendererPropertyWindowFactory(),
+		mAffectorPropertyWindowFactory(),
+		mObserverPropertyWindowFactory(),
+		mBehaviourPropertyWindowFactory(),
+		mEventHandlerPropertyWindowFactory(),
+		mExternPropertyWindowFactory(),
+		mOriginalSize(GetSize()),
+		mRootFrame(0) {
 
 	// Internationize the strings
 	CT_SYSTEM = _("System");
@@ -62,7 +61,6 @@ EditComponent::EditComponent(
 	CT_EXTERN = _("Extern");
 	CT_VISUAL = _("Visual");
 
-	mRootParent = parent->GetParent()->GetParent();
 	setCaption();
 	SetBackgroundColour(backgroundColor);
 
@@ -83,7 +81,6 @@ EditComponent::EditComponent(
 	}
 
 	mPropertyWindow = createPropertyWindow(mSubType);
-	mOriginalSize = GetSize();
 	// Add connections if the component is double clicked, closed, moved, ...etc.
 	Connect(wxID_ANY, wxEVT_MOVE, wxMoveEventHandler(EditComponent::OnMove));
 	Connect(wxID_ANY, wxEVT_MOVING, wxMoveEventHandler(EditComponent::OnMove));
