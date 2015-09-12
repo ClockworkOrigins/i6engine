@@ -93,7 +93,6 @@ EditComponent::EditComponent(
 	Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(EditComponent::OnWindowLeave));
 	Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(EditComponent::OnMouseLButtonPressed));
 	Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(EditComponent::OnMouseRButtonPressed));
-	Connect(wxEVT_ACTIVATE, wxActivateEventHandler(EditComponent::OnActivate));
 }
 
 EditComponent::~EditComponent() {
@@ -487,6 +486,18 @@ void EditComponent::OnWindowLeave(wxMouseEvent& event) {
 
 void EditComponent::OnMouseLButtonPressed(wxMouseEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
+
+	// Part of 'OnActivate'
+	parent->setPropertyWindow(mPropertyWindow);
+	if (mOldPropertyWindow && !mOldPropertyWindow->IsBeingDeleted()) {
+		/** Remove the old property window here and not in the createPropertyWindow(), because that would give a runtime exception. The
+			createPropertyWindow() function sets the old property window (mOldPropertyWindow), which must be destroyed on a later moment.
+		*/
+		parent->removePropertyWindow(mOldPropertyWindow);
+		mOldPropertyWindow->Destroy();
+		mOldPropertyWindow = 0;
+	}
+
 	parent->_currentDrag = this;
 	parent->_dragOffset = event.GetPosition();
 	wxTextDataObject tdo(std::to_string(GetId()));

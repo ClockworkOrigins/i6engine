@@ -2009,7 +2009,7 @@ EditComponent* EditTab::createParticleSystemEditComponent() {
 
 	wxColour col;
 	col.Set(wxT("#000000"));
-	EditComponent* systemComponent = new EditComponent(this, "mySystem", CT_SYSTEM, CST_UNDEFINED, col, wxSize(200, 80), wxBORDER_RAISED | wxCAPTION);
+	EditComponent* systemComponent = new EditComponent(this, "mySystem", CT_SYSTEM, CST_UNDEFINED, col, wxSize(200, 80));
 	systemComponent->setRootFrame(static_cast<ParticleUniverseEditorFrame*>(mRootParent));
 	//systemComponent->createPropertyWindow(CT_SYSTEM); // Recreate it, so it contains the root frame TESTTESTTESTTESTTESTTEST
 	systemComponent->createPropertyWindow(CST_UNDEFINED); // Recreate it, so it contains the root frame
@@ -2439,8 +2439,7 @@ void EditTab::enableTools(bool enable) {
 
 	if (enable) {
 		mEditTools->Show();
-	}
-	else {
+	} else {
 		mEditTools->Hide();
 	}
 }
@@ -2452,7 +2451,7 @@ EditTools::EditTools(EditTab* parent) :
 		_("Tools"),
 		wxPoint(16, 16),
 		wxSize(TOOLS_EDIT_WIDTH, TOOLS_EDIT_HEIGHT),
-		wxCAPTION,
+		wxSTAY_ON_TOP | wxCAPTION,
 		_("edittools")),
 		mParent(parent) {
 	mEditToolbar = new UIEditToolbar(this);
