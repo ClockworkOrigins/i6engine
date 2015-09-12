@@ -23,10 +23,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "ParticleUniverseTechniquePropertyWindow.h"
 
 #include "wx/ogre/utils.h"
-
+#include <wx/dnd.h>
 
 EditComponent::EditComponent(
-		wxWindow* parent,
+		EditTab* parent,
 		const Ogre::String& name,
 		ComponentType type,
 		ComponentSubType subType,
@@ -487,13 +487,18 @@ void EditComponent::OnWindowLeave(wxMouseEvent& event) {
 
 void EditComponent::OnMouseLButtonPressed(wxMouseEvent& event) {
 	EditTab* parent = static_cast<EditTab*>(GetParent());
+	parent->_currentDrag = this;
+	parent->_dragOffset = event.GetPosition();
+	wxTextDataObject tdo(std::to_string(GetId()));
+	wxDropSource tds(tdo, this);
+	tds.DoDragDrop(wxDrag_DefaultMove);
+	parent->_currentDrag = nullptr;
 
 	// TODO: The 'if' must be implemented as one single call to the parent
 	if (parent->getConnectionMode() == EditTab::CM_CONNECT_ENDING && this != parent->getStartConnector()) {
 		// First make a selection of available policies
 		selectPolicy(parent->getStartConnector());
-	}
-	else if (parent->getConnectionMode() == EditTab::CM_DISCONNECT) {
+	} else if (parent->getConnectionMode() == EditTab::CM_DISCONNECT) {
 		// Make a selection of available connections (to be deleted)
 		selectConnection(false);
 		parent->notifyConnectionsChanged();

@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PUED_EDIT_TAB_H__
 
 #include "wx/ogre/prerequisites.h"
+#include "wx/dnd.h"
 
 // Enums: Component + Relation Descriptions
 static ComponentType CT_SYSTEM = wxT("");
@@ -80,7 +81,7 @@ class wxPropertyGrid;
 
 /**	Edit Tab: Class that defines the actual notebook tab.
 */
-class EditTab : public wxPanel
+class EditTab : public wxPanel, public wxTextDropTarget
 {
 	public:
 		enum ConnectionMode
@@ -325,6 +326,7 @@ class EditTab : public wxPanel
 		EditComponent* findEditComponent(const wxString& name, const ComponentType& type, EditComponent* skip = 0);
 		EditComponent* findEditComponent(const ParticleUniverse::IElement* puElement);
 		EditComponent* findEditComponentForTechnique(const wxString& name, const wxString& techniqueName);
+		EditComponent* findEditComponent(const wxWindowID & id);
 
 		/**	Scale all components.
 		*/
@@ -374,6 +376,11 @@ class EditTab : public wxPanel
 		void FreezeClientWindow();
 		void ThawClientWindow();
 
+		virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text);
+		virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult defResult);
+
+		wxPoint _dragOffset;
+		EditComponent * _currentDrag;
 	protected:
 		unsigned int mSystemCounter;
 		unsigned int mTechniqueCounter;
