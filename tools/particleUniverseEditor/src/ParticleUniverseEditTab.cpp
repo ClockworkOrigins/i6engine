@@ -127,7 +127,7 @@ EditTab::~EditTab() {
 void EditTab::adjustPosition() {
 	SetPosition(wxPoint(mRootParent->GetPosition().x + TAB_POS_X + 10, mRootParent->GetPosition().y + TAB_POS_Y + 72));
 	if (mCanvas) {
-		mCanvas->SetFocus();
+		//mCanvas->SetFocus();
 	}
 }
 
@@ -166,7 +166,7 @@ void EditTab::refreshCanvas() {
 
 void EditTab::notifyFocusLeft() {
 	if (mCanvas) {
-		mCanvas->SetFocus();
+		//mCanvas->SetFocus();
 	}
 }
 

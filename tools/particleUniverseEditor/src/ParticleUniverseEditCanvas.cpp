@@ -40,6 +40,7 @@ EditCanvas::EditCanvas(wxPanel* parent) :
 	Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(EditCanvas::OnMouseRButtonPressed));
 	Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(EditCanvas::OnKeyPressed));
 	Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(EditCanvas::OnMouseWheel));
+	SetBackgroundStyle(wxBG_STYLE_PAINT );
 }
 
 void EditCanvas::OnPaint(wxPaintEvent& event) {
