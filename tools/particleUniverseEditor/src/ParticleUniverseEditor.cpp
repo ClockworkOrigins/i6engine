@@ -534,18 +534,16 @@ void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event) {
 			// Drag with the mouse while pressing the left mouse button.
 			// Depending on the Gizmo it is a rotation or movement
 			Ogre::Vector2 pos(position.x, position.y);
-			if (mGizmoManager) {
-				mGizmoManager->action(pos, _getCamera());
-			}
-		}
-		else {
+//			if (mGizmoManager) {
+//				mGizmoManager->action(pos, _getCamera());
+//			}
+		} else {
 			// Just pressing the left mouse button to select an object (gizmo, entity, light)
 			doMouseButtonPressed(event);
 		}
 		mLastPositionGizmo = position;
 		restoreFocus();
-	}
-	else if (event.RightIsDown()) {
+	} else if (event.RightIsDown()) {
 		if (event.Dragging()) {
 			if (_isCameraOrthographic()) {
 				// Don't allow dragging in ortho mode
@@ -573,23 +571,20 @@ void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event) {
 		}
 		mLastPositionGizmo = position;
 		restoreFocus();
-	}
-	else if (event.LeftUp()) {
-		mGizmoManager->getAttachedNode()->showBoundingBox(false); // Reset after scaling
-	}
-	else if (event.GetWheelRotation() > 0) {
+	} else if (event.LeftUp()) {
+//		mGizmoManager->getAttachedNode()->showBoundingBox(false); // Reset after scaling
+	} else if (event.GetWheelRotation() > 0) {
 		// Zoom out
 		zoom(1.05f);
-	}
-	else if (event.GetWheelRotation() < 0) {
+	} else if (event.GetWheelRotation() < 0) {
 		// Zoom in
 		zoom(0.95f);
 	}
 	if (event.LeftDClick()) {
 		// Double click left. If an object is selected, select the material
-		if (mGizmoManager && mGizmoManager->isMovableObjectSelected(mAddEntity)) {
-			selectMaterialForAddedMesh();
-		}
+//		if (mGizmoManager && mGizmoManager->isMovableObjectSelected(mAddEntity)) {
+//			selectMaterialForAddedMesh();
+//		}
 	}
 }
 
