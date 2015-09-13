@@ -112,13 +112,14 @@ bool ParticleUniverseEditorApp::OnInit() {
 	m_Editor->CreateTabs();
 
 	m_res->LoadResourceFile("resources.cfg");
-	m_res->InitialiseAllResources();
 
 	m_Editor->Show();
-	m_Editor->CreateScene();
 
 	// The SceneManager has been created, so start filling the list of templates
 	m_Editor->LoadParticleExplorer();
+
+	Yield();
+	m_Editor->AfterInit(m_res);
 	return true;
 }
 
@@ -314,14 +315,14 @@ void ParticleUniverseEditorFrame::CreateScene() {
 	_getCamera()->setFarClipDistance(99999.0f);
 
 	// Initialise Gizmo's
-	mGizmoManager = OGRE_NEW_T (GizmoManager, Ogre::MEMCATEGORY_SCENE_OBJECTS)(mSceneManager);
-	mGizmoManager->initialize(mSceneManager, mControl->GetRenderWindow(), mControl->GetViewport());
-	mGizmoManager->initialiseCameraListeners(_getCamera());
+//	mGizmoManager = OGRE_NEW_T (GizmoManager, Ogre::MEMCATEGORY_SCENE_OBJECTS)(mSceneManager);
+//	mGizmoManager->initialize(mSceneManager, mControl->GetRenderWindow(), mControl->GetViewport());
+//	mGizmoManager->initialiseCameraListeners(_getCamera());
 
 	// Create the ortho camera gizmo
-	mGizmoManager->set45DegreesOrtho(m45DegreesOrtho);
+//	mGizmoManager->set45DegreesOrtho(m45DegreesOrtho);
 	_setCameraPosition(mDefaultCameraPosition);
-	initialiseOrthoCameraGizmo();
+//	initialiseOrthoCameraGizmo();
 
 	// Create the background
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingletonPtr()->getByName("ParticleUniverseEditor/BackgroundMaterial");
@@ -336,6 +337,7 @@ void ParticleUniverseEditorFrame::CreateScene() {
 	mMainSceneNode->showBoundingBox(false); // For testing
 	mParticlerSystemSceneNode = mMainSceneNode->createChildSceneNode();
 	mParticlerSystemSceneNode->setInheritScale(false); // Don't scale the particle system
+
 
 	mMarkerSceneNode = mMainSceneNode->createChildSceneNode();
 	mMarker = mSceneManager->createEntity("pu_marker_system", "pu_marker.mesh");
@@ -441,13 +443,14 @@ void ParticleUniverseEditorFrame::CreateScene() {
 	if (!mConfigDialog->isStatistics()) {
 		showOverlay(false);
 	}
+
 	createLight();
 	if (!mConfigDialog->isLightCheck()) {
 		showLight(false);
 	}
 
 	// Register nodes at GizmoManager
-	mGizmoManager->registerNode(mAddEntitySceneNode); // Gizmo's can be attached to mAddEntitySceneNode
+/*	mGizmoManager->registerNode(mAddEntitySceneNode); // Gizmo's can be attached to mAddEntitySceneNode
 	mGizmoManager->registerNode(mLightSceneNode); // Gizmo's can be attached to mLightSceneNode
 	mGizmoManager->registerNode(mMainSceneNode); // Gizmo's can be attached to mMainSceneNode
 	mGizmoManager->registerHideWhenAttached(Gizmo::GIZMO_MOVE, mMarker); // Hide mMarker entity when the Move gizmo is attached
@@ -459,7 +462,7 @@ void ParticleUniverseEditorFrame::CreateScene() {
 	mGizmoManager->registerNodeForUpdatingScale(mLightSceneNode, Ogre::Vector3(2.0f, 2.0f, 0.0f)); // Scale the light
 	mGizmoManager->registerNodeForFacingCamera(mLightSceneNode); // Align the light to the camera
 	mGizmoManager->registerNodeForMakingVisibleAfterDetach(mMarkerSceneNode); // This scenenode is the only one with entities that are partly visible
-	mGizmoManager->attachToNode(mMainSceneNode);
+	mGizmoManager->attachToNode(mMainSceneNode);*/
 
 	// Create the animation window
 	mAnimationWindow = new AnimationWindow(this, mSceneManager);
@@ -1045,19 +1048,18 @@ void ParticleUniverseEditorFrame::LoadParticleExplorer() {
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::vector<ParticleUniverse::String> names;
 	particleSystemManager->particleSystemTemplateNames(names);
-	ParticleUniverse::vector<ParticleUniverse::String>::iterator it;
-	ParticleUniverse::vector<ParticleUniverse::String>::iterator itEnd = names.end();
 	mParticleExplorer->DeleteAllItems(); // Clear the tree
 	ROOT_NODE_NAME = _("Particle Systems");
 	DEFAULT_CATEGORY_NAME = _("General");
 	wxTreeItemId rootNode = mParticleExplorer->AddRoot(ROOT_NODE_NAME, 0);
 	wxTreeItemId generalCategoryNode = mParticleExplorer->AppendItem(rootNode, DEFAULT_CATEGORY_NAME, 1); // Add the general node by default
-	for (it = names.begin(); it != itEnd; ++it) {
+
+	for (ParticleUniverse::String & str : names) {
 		bool append = true;
 
 		// Check on particle systems with a PhysX type and don't append them to the list
 		// This must always be done, even if PU_PHYSICS_PHYSX is not defined.
-		ParticleUniverse::ParticleSystem* pSys = particleSystemManager->getParticleSystemTemplate(*it);
+		ParticleUniverse::ParticleSystem* pSys = particleSystemManager->getParticleSystemTemplate(str);
 		if (!mUsePhysX) {
 			append = !(pSys && (pSys->hasExternType("PhysXActor") || pSys->hasExternType("PhysXFluid")));
 		}
@@ -1068,7 +1070,7 @@ void ParticleUniverseEditorFrame::LoadParticleExplorer() {
 			if (pSys) {
 				categoryName = ogre2wx(pSys->getCategory());
 			}
-			wxString particleSystem = ogre2wx(*it);
+			wxString particleSystem = ogre2wx(str);
 			mParticleExplorer->addItem(categoryName, particleSystem, false);
 		}
 	}
@@ -1082,8 +1084,7 @@ void ParticleUniverseEditorFrame::LoadParticleExplorer() {
 	wxTreeItemId item = mParticleExplorer->setToFirstParticleSystem();
 	if (item.IsOk()) {
 		mLatestSelection = item;
-	}
-	else {
+	} else {
 		// There is no item, so return to the root
 		mLatestSelection = mParticleExplorer->GetRootItem();
 		mParticleExplorer->SelectItem(mLatestSelection);
@@ -1100,14 +1101,13 @@ void ParticleUniverseEditorFrame::CreateTabs() {
 
 	// Set the drop target
 	mNotebook->SetDropTarget(new FileDropTarget(this));
-
 	// ----------
 	// Render page
 	// ----------
-	mControl = new wxOgreControl(mNotebook, ID_TAB_RENDER);
+	wxPanel * p1 = new wxPanel(mNotebook);
+	mControl = new wxOgreControl(p1, ID_TAB_RENDER);
 	mControl->setCallbackFrame(this);
-//	mNotebook->AddPage(mControl, _("Render"), false);
-	mNotebook->AddPage(new wxPanel(mNotebook, ID_TAB_RENDER), _("Render"), false);
+	mNotebook->AddPage(p1, _("Render"), false);
 
 	// ----------
 	// Edit page
@@ -1482,6 +1482,16 @@ void ParticleUniverseEditorFrame::OnIdle(wxIdleEvent& event) {
 
 void ParticleUniverseEditorFrame::OnQuit(wxCommandEvent& event) {
 	doQuit();
+}
+
+void ParticleUniverseEditorFrame::AfterInit(wxOgreResources * ogreResMan) {
+	mControl->CreateRenderWindow("OgreControl1");
+	wxGetApp().Yield();
+	ogreResMan->InitialiseAllResources();
+	wxGetApp().Yield();
+	CreateScene();
+	mOgreControlSmall->createScene();
+	LoadParticleExplorer();
 }
 
 void ParticleUniverseEditorFrame::doQuit() {
