@@ -24,36 +24,29 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_EDIT_COMPONENT_H__
 #define __PUED_EDIT_COMPONENT_H__
 
-#include "AffectorPropertyWindow/AffectorPropertyWindowFactory.h"
-
+#include "AffectorPropertyWindow/AffectorPropertyWindowFactory.h" // TODO: macht das sinn, dass jede component n member für jeden typ hat?
 #include "BehaviourPropertyWindow/BehaviourPropertyWindowFactory.h"
-
 #include "EmitterPropertyWindow/EmitterPropertyWindowFactory.h"
-
 #include "EventHandlerPropertyWindow/EventHandlerPropertyWindowFactory.h"
-
 #include "ExternPropertyWindow/ExternPropertyWindowFactory.h"
-
 #include "ObserverPropertyWindow/ObserverPropertyWindowFactory.h"
-
 #include "RendererPropertyWindow/RendererPropertyWindowFactory.h"
 
 #include "wx/ogre/prerequisites.h"
 
 class Connection;
 class ConnectionPolicy;
+class EditCanvas;
 class ParticleUniverseEditorFrame;
 class UniqueRelation;
 
-class EditTab;
-
-/**	Edit Component: This defines the modules on the EditCanvas.
-*/
-class EditComponent : public wxPanel
-{
+/**
+ * \brief Edit Component: This defines the modules on the EditCanvas.
+ */
+class EditComponent : public wxPanel {
 	public:
 		// Constructor / Destructor
-		EditComponent(EditTab * parent,
+		EditComponent(EditCanvas * parent,
 			const Ogre::String& name,
 			ComponentType type,
 			ComponentSubType subType,
@@ -61,6 +54,7 @@ class EditComponent : public wxPanel
 			wxSize size = wxSize(200, 80),
 			long style = wxSYSTEM_MENU | wxCAPTION);
 		~EditComponent();
+
 		ComponentType getComponentType() const;
 		ComponentSubType getComponentSubType() const;
 
@@ -84,7 +78,7 @@ class EditComponent : public wxPanel
 
 		/**	Add a connection. These are the actual connections with other components
 		*/
-		void addConnection(EditComponent* componentToBeConnectedWith,
+		void addConnection(EditComponent * componentToBeConnectedWith,
 			ComponentRelation relation,
 			ComponentRelationDirection relationDirection);
 
@@ -107,7 +101,7 @@ class EditComponent : public wxPanel
 			This function validates its own connection policies and determines for each possible policy whether the component - passed as an
 			argument - can be connected using the attributes of that policy.
 		*/
-		bool isConnectionPossible(EditComponent* component);
+		bool isConnectionPossible(EditComponent * component);
 
 		/**	Checks whether this component can be connected.
 			All registered policies are checked against the passed arguments.
@@ -123,11 +117,11 @@ class EditComponent : public wxPanel
 
 		/**	Determines whether it is possible to disconnect a connection.
 		*/
-		bool isConnected(EditComponent* componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection);
+		bool isConnected(EditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection);
 
 		/**	Displays a selection dialog with all possible connections (for a component to which it must be connected)
 		*/
-		ConnectionPolicy* selectPolicy(EditComponent* componentToBeConnectedWith);
+		ConnectionPolicy* selectPolicy(EditComponent * componentToBeConnectedWith);
 
 		/**	Displays a selection dialog with all connections. If viewOnly is set to false, it is also possible to delete a connection.
 		*/
@@ -139,13 +133,13 @@ class EditComponent : public wxPanel
 
 		/**	Deletes a Connection if the arguments match (and also take care of the connected component)
 		*/
-		void deleteConnection(EditComponent* componentConnectedWith,
+		void deleteConnection(EditComponent * componentConnectedWith,
 			ComponentRelation relation,
 			ComponentRelationDirection relationDirection);
 
 		/**	Deletes a Connection (and also take care of the connected component)
 		*/
-		void deleteConnection(Connection* connection);
+		void deleteConnection(Connection * connection);
 
 		/**	Deletes all connections of a certain relation and direction (and also take care of the connected component)
 		*/
@@ -182,7 +176,7 @@ class EditComponent : public wxPanel
 
 		/**	Create a property window and use the argument for propagation
 		*/
-		PropertyWindow* createPropertyWindow(ComponentSubType subType, const PropertyWindow* propertyWindow = 0);
+		PropertyWindow* createPropertyWindow(ComponentSubType subType, const PropertyWindow * propertyWindow = nullptr);
 
 		/**	Returns the property window
 		*/
@@ -209,32 +203,39 @@ class EditComponent : public wxPanel
 
 		/**	Get/Set PU element
 		*/
-		ParticleUniverse::IElement* getPUElement() {return mPUElement;}
-		void setPUElement(ParticleUniverse::IElement* puElement){mPUElement = puElement;}
+		ParticleUniverse::IElement * getPUElement() {
+			return mPUElement;
+		}
+
+		void setPUElement(ParticleUniverse::IElement * puElement) {
+			mPUElement = puElement;
+		}
 
 		/**	Returns the size at the moment the component was created
 		*/
-		wxSize getOriginalSize() {return mOriginalSize;}
+		wxSize getOriginalSize() {
+			return mOriginalSize;
+		}
 
 		/**
 			Get/Set root frame
 		*/
-		ParticleUniverseEditorFrame* getRootFrame();
-		void setRootFrame(ParticleUniverseEditorFrame* rootFrame);
+		ParticleUniverseEditorFrame * getRootFrame();
+		void setRootFrame(ParticleUniverseEditorFrame * rootFrame);
 
 	protected:
-		ParticleUniverse::IElement* mPUElement;
-		wxWindow* mRootParent;
+		ParticleUniverse::IElement * mPUElement;
+		wxWindow * mRootParent;
 		Ogre::String mName;
 		Ogre::String mParentName;
 		ComponentType mType;
 		ComponentSubType mSubType;
-		std::vector<ConnectionPolicy*> mPolicies;
-		std::vector<Connection*> mConnections;
-		std::vector<UniqueRelation*> mUniqueRelations;
-		ConnectionPolicy* mSelectedPolicy;
-		PropertyWindow* mPropertyWindow;
-		PropertyWindow* mOldPropertyWindow;
+		std::vector<ConnectionPolicy *> mPolicies;
+		std::vector<Connection *> mConnections;
+		std::vector<UniqueRelation *> mUniqueRelations;
+		ConnectionPolicy * mSelectedPolicy;
+		PropertyWindow * mPropertyWindow;
+		PropertyWindow * mOldPropertyWindow;
 		EmitterPropertyWindowFactory mEmitterPropertyWindowFactory;
 		RendererPropertyWindowFactory mRendererPropertyWindowFactory;
 		AffectorPropertyWindowFactory mAffectorPropertyWindowFactory;
@@ -251,7 +252,7 @@ class EditComponent : public wxPanel
 		/**
 			Keep pointer to the root frame
 		*/
-		ParticleUniverseEditorFrame* mRootFrame;
+		ParticleUniverseEditorFrame * mRootFrame;
 };
 
 #endif

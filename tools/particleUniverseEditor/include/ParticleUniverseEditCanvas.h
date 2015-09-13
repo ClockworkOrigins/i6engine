@@ -29,8 +29,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 class DrawConnector;
 class EditComponent;
 
-/**	Draw surface: The background canvas on which the EditComponents are placed. The EditCanvas is used to draw the lines.
-*/
+/**
+ *	\breif Draw surface: The background canvas on which the EditComponents are placed. The EditCanvas is used to draw the lines.
+ */
 class EditCanvas : public wxPanel
 {
 	public:
@@ -44,12 +45,11 @@ class EditCanvas : public wxPanel
 
 		// Constructor / Destructor
 		EditCanvas(wxPanel* parent);
-		~EditCanvas(void) {}
+		~EditCanvas() {}
 
 		/**	Handlers
 		*/
 		virtual void OnPaint(wxPaintEvent& event);
-		void OnActivate(wxActivateEvent& event);
 		void OnMouseMove(wxMouseEvent& event);
 		void OnMouseLeave(wxMouseEvent& event);
 		void OnMouseLButtonPressed(wxMouseEvent& event);
@@ -68,11 +68,11 @@ class EditCanvas : public wxPanel
 
 		/**	Return all connections between windows
 		*/
-		std::vector<DrawConnector*>& getDrawConnections(void);
+		std::vector<DrawConnector*>& getDrawConnections();
 
 		/**	Return the number of connected windows
 		*/
-		unsigned int getNumberOfConnections(void) const;
+		unsigned int getNumberOfConnections() const;
 
 		/**	Remove connection: This removes all connections of this component
 		*/
@@ -88,11 +88,11 @@ class EditCanvas : public wxPanel
 
 		/**	Destroy the Connector between the node and the mouse
 		*/
-		void destroyMouseConnector(void);
+		void destroyMouseConnector();
 
 		/**	Store the selected components in a list
 		*/
-		void selectComponents(void);
+		void selectComponents();
 
 		/**	Move the the selected components in the list
 		*/
@@ -100,11 +100,7 @@ class EditCanvas : public wxPanel
 
 		/**	Delete the selected components
 		*/
-		void deleteSelectedComponents(void);
-
-		/**	Adjustment the mousePosition based on mouse movement in MDI Child windows
-		*/
-		void adjustMousePosition(const wxPoint& componentPosition,  const wxPoint& mousePosition);
+		void deleteSelectedComponents();
 
 	protected:
 		std::vector<DrawConnector*> mDrawConnectors;
@@ -117,7 +113,7 @@ class EditCanvas : public wxPanel
 		std::vector<EditComponent*> mSelectedComponents;
 
 	private:
-		EditCanvas(void) {}
+		EditCanvas();
 };
 
 #endif
