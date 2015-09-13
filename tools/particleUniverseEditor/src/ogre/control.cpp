@@ -53,7 +53,7 @@ wxOgreControl::wxOgreControl() {
 
 wxOgreControl::wxOgreControl(wxWindow* parent, wxWindowID id,
 							 const wxPoint& pos, const wxSize& size, long style,
-							 const wxValidator& val, const wxString& name) /*: wxControl(parent, id, pos, size, style, val, name) */{
+							 const wxValidator& val, const wxString& name) /*: wxControl(parent, id, pos, size, style, val, name) */: m_sm(nullptr), m_cam(nullptr), mCallbackFrame(nullptr), m_root(nullptr), m_rwin(nullptr), m_vp(nullptr), m_x(0), m_y(0) {
 	Init();
 	Create(parent, id, pos, size, style, val, name);
 }
@@ -70,9 +70,7 @@ bool wxOgreControl::Create(wxWindow* parent, wxWindowID id,
 		wxFAIL_MSG(_("wxOgreControl creation failed"));
 		return false;
 	}
-
-	CreateRenderWindow(wx2std(instance_name));
-
+//	CreateRenderWindow(wx2std(instance_name));
 	return true;
 }
 
@@ -121,10 +119,6 @@ void wxOgreControl::Update() {
 }
 
 void wxOgreControl::OnPaint(wxPaintEvent& WXUNUSED(event)) {
-	//  wxWidgets documentation: Note that In a paint event handler,
-	// the application must *always* create a wxPaintDC object, even
-	// if you do not use it. Otherwise, under MS Windows, refreshing
-	// for this and other windows will go wrong.
 	wxPaintDC dc(this);
 	Update();
 }
@@ -252,13 +246,13 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl) {
 	/* Get the Screen */
 	unsigned int screen = DefaultScreen(display);
 
-	pl["parentWindowHandle"] = all2std((unsigned long)display) + ":"
+	pl["externalWindowHandle"] = all2std((unsigned long)display) + ":"
 							 + all2std(screen) + ":"
 							 + all2std(window);
 
 #else // WXOGRE_OGRE_VER < 150
 
-	pl["parentWindowHandle"] = all2std(window);
+	pl["externalWindowHandle"] = all2std(window);
 
 #endif
 #else

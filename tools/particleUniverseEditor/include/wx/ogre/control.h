@@ -185,6 +185,12 @@ public:
 	void setCallbackFrame(ParticleUniverseEditorFrame* frame);
 
 
+    /** Creates an Ogre's rendering window.
+     *
+     * @param name the internal name of the Ogre::RenderWindow
+     */
+    Ogre::RenderWindow* CreateRenderWindow(const Ogre::String& name);
+
 protected:
 
     virtual void OnSize(wxSizeEvent& event);
@@ -201,12 +207,6 @@ private:
 
     /** Initializes private variables. */
     virtual void Init();
-
-    /** Creates an Ogre's rendering window.
-     *
-     * @param name the internal name of the Ogre::RenderWindow
-     */
-    Ogre::RenderWindow* CreateRenderWindow(const Ogre::String& name);
 
     /** Retrieves the unique window identifier of this control.
      *

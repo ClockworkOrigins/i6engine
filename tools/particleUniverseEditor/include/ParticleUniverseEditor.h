@@ -62,6 +62,7 @@ class ParticleUniverseEditorFrame : public wxFrame {
 	public:
 		ParticleUniverseEditorFrame(wxWindow* parent, wxWindowID id);
 
+		void AfterInit(wxOgreResources * ogreResMan);
 		void CreateToolbar(void);
 		void CreateParticleExplorer(void);
 		void LoadParticleExplorer(void);

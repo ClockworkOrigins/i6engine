@@ -55,7 +55,7 @@ OgreControlComponent::OgreControlComponent(wxWindow* parent,
 //	Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(OgreControlComponent::OnMouseLButtonPressed));
 //	Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(OgreControlComponent::OnMouseRButtonPressed));
 	Connect(wxEVT_DESTROY, wxCommandEventHandler(OgreControlComponent::OnClose));
-	createScene();
+//	createScene();
 }
 //-----------------------------------------------------------------------
 void OgreControlComponent::createScene()
