@@ -48,7 +48,6 @@ EditComponent::EditComponent(EditCanvas* parent, const Ogre::String& name, Compo
 		mExternPropertyWindowFactory(),
 		mOriginalSize(GetSize()),
 		mRootFrame(0) {
-
 	// Internationize the strings
 	CT_SYSTEM = _("System");
 	CT_TECHNIQUE = _("Technique");

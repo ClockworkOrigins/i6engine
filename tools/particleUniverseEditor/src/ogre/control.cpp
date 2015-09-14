@@ -107,15 +107,6 @@ bool wxOgreControl::Destroy() {
 
 void wxOgreControl::Update() {
 	m_root->renderOneFrame();
-
-	m_root->_fireFrameStarted();
-
-	if (m_rwin)
-	   m_rwin->update();
-
-	m_root->_updateAllRenderTargets();
-
-	m_root->_fireFrameEnded();
 }
 
 void wxOgreControl::OnPaint(wxPaintEvent& WXUNUSED(event)) {

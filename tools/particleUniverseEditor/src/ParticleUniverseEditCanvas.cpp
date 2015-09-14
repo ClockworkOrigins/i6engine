@@ -22,7 +22,7 @@ EditCanvas::EditCanvas(wxPanel* parent) :
 		parent,
 		wxID_ANY,
 		wxPoint(0, 0),
-		parent->GetParent()->GetSize(),
+		parent->GetSize(),
 		0,
 		wxT("canvas")),
 		mMouseConnector(0),
@@ -31,7 +31,7 @@ EditCanvas::EditCanvas(wxPanel* parent) :
 		mSelectionMode(SM_SELECT_NONE),
 		mStartPositionSelection(wxPoint(0, 0)),
 		mEndPositionSelection(wxPoint(0, 0)) {
-
+	SetBackgroundColour(*wxWHITE);
 	Connect(wxEVT_PAINT, wxPaintEventHandler(EditCanvas::OnPaint));
 	Connect(wxEVT_MOTION, wxMouseEventHandler(EditCanvas::OnMouseMove));
 	Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(EditCanvas::OnMouseLButtonPressed));
@@ -42,8 +42,8 @@ EditCanvas::EditCanvas(wxPanel* parent) :
 }
 
 void EditCanvas::OnPaint(wxPaintEvent& event) {
-	if (GetSize() != GetParent()->GetParent()->GetSize()) {
-		SetSize(GetParent()->GetParent()->GetSize()); // TODO: optimize these calls
+	if (GetSize() != GetParent()->GetSize()) {
+		SetSize(GetParent()->GetSize()); // TODO: optimize these calls
 	}
 	SetPosition(wxPoint(0, 0)); // Always set the canvas to the original position TODO: need this?
 
