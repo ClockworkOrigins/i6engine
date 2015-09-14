@@ -43,6 +43,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/cmndata.h"
 #include "wx/colordlg.h"
+#include "wx/splitter.h"
 
 #ifdef PU_PHYSICS_PHYSX
 	#include "Externs/ParticleUniversePhysXBridge.h"
@@ -313,6 +314,7 @@ void ParticleUniverseEditorFrame::CreateScene() {
 	mSceneManager->addRenderQueueListener(new Ogre::OverlaySystem());
 	_getCamera()->setNearClipDistance(0.1f);
 	_getCamera()->setFarClipDistance(99999.0f);
+	mOgreControlSmall->SetCamera(_getCamera());
 
 	// Initialise Gizmo's
 //	mGizmoManager = OGRE_NEW_T (GizmoManager, Ogre::MEMCATEGORY_SCENE_OBJECTS)(mSceneManager);
@@ -534,18 +536,16 @@ void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event) {
 			// Drag with the mouse while pressing the left mouse button.
 			// Depending on the Gizmo it is a rotation or movement
 			Ogre::Vector2 pos(position.x, position.y);
-			if (mGizmoManager) {
-				mGizmoManager->action(pos, _getCamera());
-			}
-		}
-		else {
+//			if (mGizmoManager) {
+//				mGizmoManager->action(pos, _getCamera());
+//			}
+		} else {
 			// Just pressing the left mouse button to select an object (gizmo, entity, light)
 			doMouseButtonPressed(event);
 		}
 		mLastPositionGizmo = position;
 		restoreFocus();
-	}
-	else if (event.RightIsDown()) {
+	} else if (event.RightIsDown()) {
 		if (event.Dragging()) {
 			if (_isCameraOrthographic()) {
 				// Don't allow dragging in ortho mode
@@ -573,23 +573,20 @@ void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event) {
 		}
 		mLastPositionGizmo = position;
 		restoreFocus();
-	}
-	else if (event.LeftUp()) {
-		mGizmoManager->getAttachedNode()->showBoundingBox(false); // Reset after scaling
-	}
-	else if (event.GetWheelRotation() > 0) {
+	} else if (event.LeftUp()) {
+//		mGizmoManager->getAttachedNode()->showBoundingBox(false); // Reset after scaling
+	} else if (event.GetWheelRotation() > 0) {
 		// Zoom out
 		zoom(1.05f);
-	}
-	else if (event.GetWheelRotation() < 0) {
+	} else if (event.GetWheelRotation() < 0) {
 		// Zoom in
 		zoom(0.95f);
 	}
 	if (event.LeftDClick()) {
 		// Double click left. If an object is selected, select the material
-		if (mGizmoManager && mGizmoManager->isMovableObjectSelected(mAddEntity)) {
-			selectMaterialForAddedMesh();
-		}
+//		if (mGizmoManager && mGizmoManager->isMovableObjectSelected(mAddEntity)) {
+//			selectMaterialForAddedMesh();
+//		}
 	}
 }
 
@@ -1012,6 +1009,7 @@ void ParticleUniverseEditorFrame::removeLeftSideWindow(wxWindow* window) {
 }
 
 void ParticleUniverseEditorFrame::resetLeftSideWindow() {
+	if (!mNotebook) return; // TODO: no idea why, but this line is needed to make the renderview show stuff
 	if (mAnimationWindow) {
 		mAnimationWindow->Hide();
 	}
@@ -1112,28 +1110,23 @@ void ParticleUniverseEditorFrame::CreateTabs() {
 	// ----------
 	// Edit page
 	// ----------
-	mEditNotebookPage = new EditTab(mNotebook, this);
-	mNotebook->AddPage(mEditNotebookPage, _("Edit"), true);
+	wxPanel * editPanel = new wxPanel(mNotebook);
+	wxBoxSizer * wbs = new wxBoxSizer(wxVERTICAL);
+	wxSplitterWindow * splitWin = new wxSplitterWindow(editPanel, wxID_ANY);
+	wbs->Add(splitWin, 1, wxEXPAND);
+	wbs->Layout();
+	editPanel->SetSizer(wbs);
+	splitWin->SetSashGravity(0.5);
+	mEditNotebookPage = new EditTab(splitWin, this);
+	mNotebook->AddPage(editPanel, _("Edit"), true);
+	editPanel->FitInside();
+	splitWin->FitInside();
 
-	wxBoxSizer* split = new wxBoxSizer(wxHORIZONTAL); // Main sizer
-	mControlPanelWithSmallRenderWindow = new wxPanel(this);
-		wxPanel* ogreControlSmallPanel = new wxPanel(mControlPanelWithSmallRenderWindow);
-			mOgreControlSmall = new OgreControlComponent(ogreControlSmallPanel);
-		split->Add(ogreControlSmallPanel, 2, wxEXPAND);
+	mControlPanelWithSmallRenderWindow = new wxPanel(splitWin);
+			mOgreControlSmall = new wxOgreControl(mControlPanelWithSmallRenderWindow, wxID_ANY);
+	splitWin->SplitHorizontally(mEditNotebookPage, mControlPanelWithSmallRenderWindow);
 
-		wxPanel* dividerPanel = new wxPanel(mControlPanelWithSmallRenderWindow);
-		split->Add(dividerPanel, 1, wxEXPAND);
-	mControlPanelWithSmallRenderWindow->SetSizer(split);
-
-	Ogre::Real editProportion = 0.5f;
-	if (mConfigDialog) {
-		editProportion = mConfigDialog->getEditProportion();
-	}
-	editProportion *= 100;
-	mEditSizer->Add(mNotebook, int(editProportion), wxEXPAND);
-	mEditSizer->Add(mControlPanelWithSmallRenderWindow, int(100 - editProportion), wxEXPAND);
-	mEditSizer->Layout();
-	mSubHSizer->Add(mEditSizer, 1, wxEXPAND);
+	mSubHSizer->Add(mNotebook, 1, wxEXPAND);
 
 	// ----------
 	// Script page
@@ -1481,12 +1474,13 @@ void ParticleUniverseEditorFrame::OnQuit(wxCommandEvent& event) {
 }
 
 void ParticleUniverseEditorFrame::AfterInit(wxOgreResources * ogreResMan) {
+
 	mControl->CreateRenderWindow("OgreControl1");
+	mOgreControlSmall->CreateRenderWindow("OgreControl2");
 	wxGetApp().Yield();
 	ogreResMan->InitialiseAllResources();
 	wxGetApp().Yield();
 	CreateScene();
-	mOgreControlSmall->createScene();
 	LoadParticleExplorer();
 }
 
@@ -1874,6 +1868,7 @@ void ParticleUniverseEditorFrame::OnTabChanged(wxCommandEvent& event) {
 			if (mControlPanelWithSmallRenderWindow) {
 				// Show the small render window again
 				mControlPanelWithSmallRenderWindow->Show();
+				mNotebook->InvalidateBestSize();
 				mEditSizer->Layout();
 			}
 			mEditNotebookPage->enableTools(false);
@@ -1940,8 +1935,8 @@ void ParticleUniverseEditorFrame::OnPlay(wxCommandEvent& event) {
 }
 
 void ParticleUniverseEditorFrame::doPlay() {
-	switch (mNotebook->GetSelection()) {
-		case NOTEBOOK_RENDER: {
+//	switch (mNotebook->GetSelection()) {
+//		case NOTEBOOK_RENDER: {
 			// Start/resume the particle system and set play icons if 'play' has been pressed
 			mUIMainToolbar->getPlayIcons()->play();
 			mParticleExplorer->setPlayInContextMenuEnabled(false);
@@ -1961,17 +1956,18 @@ void ParticleUniverseEditorFrame::doPlay() {
 					mCurrentParticleSystemForRenderer->start();
 				}
 			}
-		}
-		break;
+	//	}
+//		break;
 
-		case NOTEBOOK_EDIT: {
+/*		case NOTEBOOK_EDIT: {
 			// Start/resume the particle system and set play icons if 'play' has been pressed
 			if (mEditNotebookPage) {
 				mUIMainToolbar->getPlayIcons()->play();
 				mParticleExplorer->setPlayInContextMenuEnabled(false);
 				if (mOgreControlSmall) {
-					mOgreControlSmall->notifyPlay();
+//					mOgreControlSmall->notifyPlay();
 				}
+				mCurrentParticleSystemForRenderer->start();
 			}
 		}
 		break;
@@ -1980,7 +1976,7 @@ void ParticleUniverseEditorFrame::doPlay() {
 			// do nothing
 		}
 		break;
-	}
+	}*/
 }
 
 void ParticleUniverseEditorFrame::OnRecord(wxCommandEvent& event) {
@@ -2013,7 +2009,7 @@ void ParticleUniverseEditorFrame::doPause() {
 		mCurrentParticleSystemForRenderer->pause();
 	}
 	if (mOgreControlSmall) {
-		mOgreControlSmall->notifyPause();
+//		mOgreControlSmall->notifyPause();
 	}
 }
 
@@ -2042,7 +2038,7 @@ void ParticleUniverseEditorFrame::doStop() {
 		mCurrentParticleSystemForRenderer->stop();
 	}
 	if (mOgreControlSmall) {
-		mOgreControlSmall->notifyStop();
+//		mOgreControlSmall->notifyStop();
 	}
 }
 
@@ -2337,10 +2333,10 @@ void ParticleUniverseEditorFrame::replaceTemplateName(const ParticleUniverse::St
 	wxString wxTemplateName = ogre2wx(templateName);
 	if (mCurrentParticleSystemForRenderer) {
 		mCurrentParticleSystemForRenderer->setTemplateName(templateName);
-	}
-	if (mOgreControlSmall && mOgreControlSmall->getParticleSystem()) {
-		mOgreControlSmall->getParticleSystem()->setTemplateName(templateName);
-	}
+	}/*
+	if (mOgreControlSmall && static_cast<OgreControlComponent*>(mOgreControlSmall)->getParticleSystem()) {
+		static_cast<OgreControlComponent*>(mOgreControlSmall)->getParticleSystem()->setTemplateName(templateName);
+	}*/
 	particleSystemManager->destroyParticleSystemTemplate(oldTemplateName);
 
 	// Find the old name in the tree and remove it
@@ -2430,7 +2426,7 @@ bool ParticleUniverseEditorFrame::createNewSystem(const ParticleUniverse::String
 			}
 			// 5. Also create a copy for the edit page (including all components)
 			if (!forcedByEditTab && mEditNotebookPage) {
-				createParticleSystemCopyForEditPage(templateName);
+				createParticleSystemCopyForEditPage(templateName, mCurrentParticleSystemForRenderer);
 			}
 			// 6. Load the script in the script tab
 			if (script != mCurrentParticleScript) {
@@ -2460,15 +2456,14 @@ bool ParticleUniverseEditorFrame::createNewSystem(const ParticleUniverse::String
 	return false;
 }
 
-void ParticleUniverseEditorFrame::createParticleSystemCopyForEditPage(const ParticleUniverse::String& templateName) {
+void ParticleUniverseEditorFrame::createParticleSystemCopyForEditPage(const ParticleUniverse::String& templateName, ParticleUniverse::ParticleSystem* partSystem) {
 	mEditNotebookPage->Freeze();
 	mEditNotebookPage->destroyDanglingPUComponents();
 	mEditNotebookPage->deleteParticleSystemComponents();
 	if (mOgreControlSmall) {
-		ParticleUniverse::ParticleSystem* particleSystem = mOgreControlSmall->notifyCreateNewSystem(templateName);
 		EditComponent* particleSystemEditComponent = mEditNotebookPage->forceCreateParticleSystemEditComponent(); // 'Guarantees' a valid particleSystemEditComponent
-		if (mEditNotebookPage->copyParticleSystemPropertiesToPropertyWindow(particleSystemEditComponent, particleSystem)) {
-			mEditNotebookPage->createParticleSystemComponents(particleSystemEditComponent, particleSystem);
+		if (mEditNotebookPage->copyParticleSystemPropertiesToPropertyWindow(particleSystemEditComponent, partSystem)) {
+			mEditNotebookPage->createParticleSystemComponents(particleSystemEditComponent, partSystem);
 		}
 	}
 	mEditNotebookPage->Thaw();
@@ -2544,7 +2539,7 @@ void ParticleUniverseEditorFrame::notifyTimeRescaled(ParticleUniverse::Real scal
 
 	// scale time of the particle system of the small rendering window
 	if (mOgreControlSmall) {
-		mOgreControlSmall->notifyTimeRescaled(scale);
+//		mOgreControlSmall->notifyTimeRescaled(scale);
 	}
 
 	if (mControl) {
@@ -2914,6 +2909,7 @@ void ParticleUniverseEditorFrame::synchronizeSmallOgreControlWithRenderTab() {
 	if (!mOgreControlSmall) {
 		return;
 	}
+	return;
 	Ogre::Camera* cameraRenderTab = _getCamera();
 	Ogre::Camera* cameraEditTab = mOgreControlSmall->GetCamera();
 	if (cameraRenderTab && cameraEditTab) {
@@ -2924,9 +2920,9 @@ void ParticleUniverseEditorFrame::synchronizeSmallOgreControlWithRenderTab() {
 	if (mCurrentParticleSystemForRenderer) {
 		Ogre::Node* pSysNode = mCurrentParticleSystemForRenderer->getParentNode(); // This is either mMainSceneNode or a Bone (TagPoint)
 		if (pSysNode) {
-			Ogre::SceneNode* nodeEditTab = mOgreControlSmall->getMainSceneNode();
-			nodeEditTab->setPosition(pSysNode->_getDerivedPosition());
-			nodeEditTab->setOrientation(pSysNode->_getDerivedOrientation());
+//			Ogre::SceneNode* nodeEditTab = mOgreControlSmall->getMainSceneNode();
+//			nodeEditTab->setPosition(pSysNode->_getDerivedPosition());
+//			nodeEditTab->setOrientation(pSysNode->_getDerivedOrientation());
 		}
 	}
 }

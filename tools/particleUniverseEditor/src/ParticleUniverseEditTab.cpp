@@ -124,7 +124,7 @@ EditTab::~EditTab() {
 	mEditTools = 0;
 }
 
-void EditTab::adjustPosition() {
+void EditTab::adjustPosition() {return;
 	SetPosition(wxPoint(mRootParent->GetPosition().x + TAB_POS_X + 10, mRootParent->GetPosition().y + TAB_POS_Y + 72));
 	if (mCanvas) {
 		//mCanvas->SetFocus();
@@ -2546,7 +2546,7 @@ void EditTools::OnDisconnect(wxCommandEvent& event) {
 void EditTools::OnHelp(wxCommandEvent& event) {
 	// Get property window
 	EditTab* parent = static_cast<EditTab*>(GetParent());
-	ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(parent->GetGrandParent());
+	ParticleUniverseEditorFrame* frame = static_cast<ParticleUniverseEditorFrame*>(parent->GetGrandParent()); // TODO parent ding unsicher
 	frame->OnHelp();
 }
 
@@ -2599,7 +2599,7 @@ void EditTools::notifyDeleteExtern() {
 }
 
 void EditTools::resetIcons() {
-	EditTab* parent = static_cast<EditTab*>(GetParent());
+	EditTab* parent = dynamic_cast<EditTab*>(GetParent());
 	unsigned int connections = (parent->getEditCanvas())->getNumberOfConnections();
 	UIEditIcons2* editIcons = mEditToolbar->getEditIcons2();
 	editIcons->reset(parent->getNumberOfComponents(), connections);
