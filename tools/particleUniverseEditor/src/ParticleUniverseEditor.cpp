@@ -316,15 +316,7 @@ void ParticleUniverseEditorFrame::CreateScene() {
 	_getCamera()->setFarClipDistance(99999.0f);
 	mOgreControlSmall->SetCamera(_getCamera());
 
-	// Initialise Gizmo's
-//	mGizmoManager = OGRE_NEW_T (GizmoManager, Ogre::MEMCATEGORY_SCENE_OBJECTS)(mSceneManager);
-//	mGizmoManager->initialize(mSceneManager, mControl->GetRenderWindow(), mControl->GetViewport());
-//	mGizmoManager->initialiseCameraListeners(_getCamera());
-
-	// Create the ortho camera gizmo
-//	mGizmoManager->set45DegreesOrtho(m45DegreesOrtho);
 	_setCameraPosition(mDefaultCameraPosition);
-//	initialiseOrthoCameraGizmo();
 
 	// Create the background
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingletonPtr()->getByName("ParticleUniverseEditor/BackgroundMaterial");
@@ -339,20 +331,6 @@ void ParticleUniverseEditorFrame::CreateScene() {
 	mMainSceneNode->showBoundingBox(false); // For testing
 	mParticlerSystemSceneNode = mMainSceneNode->createChildSceneNode();
 	mParticlerSystemSceneNode->setInheritScale(false); // Don't scale the particle system
-
-
-	mMarkerSceneNode = mMainSceneNode->createChildSceneNode();
-	mMarker = mSceneManager->createEntity("pu_marker_system", "pu_marker.mesh");
-	mMarkerBold = mSceneManager->createEntity("pu_bold_marker_system", "pu_bold_marker.mesh");
-	mMarker->setMaterialName("pu_marker_system");
-	mMarkerBold->setMaterialName("pu_marker_system");
-	mMarker->setQueryFlags(GizmoManager::OBJECT_FLAG);
-	mMarkerBold->setQueryFlags(GizmoManager::OBJECT_FLAG);
-	mMarkerSceneNode->attachObject(mMarker);
-	mMarkerSceneNode->attachObject(mMarkerBold);
-	mMarkerSceneNode->setScale(0.4, 0.4, 0.4);
-	Ogre::Vector3 mainSceneNodePosition = Ogre::Vector3::ZERO;
-	mMainSceneNode->_setDerivedPosition(mainSceneNodePosition);
 
 	// Create a scenenode for adding entity
 	mAddEntitySceneNode = mSceneManager->getRootSceneNode()->createChildSceneNode();
@@ -450,21 +428,6 @@ void ParticleUniverseEditorFrame::CreateScene() {
 	if (!mConfigDialog->isLightCheck()) {
 		showLight(false);
 	}
-
-	// Register nodes at GizmoManager
-/*	mGizmoManager->registerNode(mAddEntitySceneNode); // Gizmo's can be attached to mAddEntitySceneNode
-	mGizmoManager->registerNode(mLightSceneNode); // Gizmo's can be attached to mLightSceneNode
-	mGizmoManager->registerNode(mMainSceneNode); // Gizmo's can be attached to mMainSceneNode
-	mGizmoManager->registerHideWhenAttached(Gizmo::GIZMO_MOVE, mMarker); // Hide mMarker entity when the Move gizmo is attached
-	mGizmoManager->registerHideWhenAttached(Gizmo::GIZMO_SCALE, mMarker); // Hide mMarker entity when the Scale gizmo is attached (not used for now)
-	mGizmoManager->registerIgnoreGizmoWhenSelected(mLightSceneNode, Gizmo::GIZMO_ROTATE); // Do not allow rotation of the light, because it doesn't make sense
-	mGizmoManager->registerIgnoreGizmoWhenSelected(mLightSceneNode, Gizmo::GIZMO_SCALE); // Do not scaling of the light, because it doesn't make sense
-	mGizmoManager->registerIgnoreGizmoWhenSelected(mMainSceneNode, Gizmo::GIZMO_SCALE); // Do not allow scaling of the particle system
-	mGizmoManager->registerNodeForUpdatingScale(mMainSceneNode, Ogre::Vector3(2.0f, 2.0f, 2.0f)); // Scale the mMainSceneNode similar to the gizmo, while zooming and moving
-	mGizmoManager->registerNodeForUpdatingScale(mLightSceneNode, Ogre::Vector3(2.0f, 2.0f, 0.0f)); // Scale the light
-	mGizmoManager->registerNodeForFacingCamera(mLightSceneNode); // Align the light to the camera
-	mGizmoManager->registerNodeForMakingVisibleAfterDetach(mMarkerSceneNode); // This scenenode is the only one with entities that are partly visible
-	mGizmoManager->attachToNode(mMainSceneNode);*/
 
 	// Create the animation window
 	mAnimationWindow = new AnimationWindow(this, mSceneManager);
@@ -576,11 +539,11 @@ void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event) {
 	} else if (event.LeftUp()) {
 //		mGizmoManager->getAttachedNode()->showBoundingBox(false); // Reset after scaling
 	} else if (event.GetWheelRotation() > 0) {
-		// Zoom out
-		zoom(1.05f);
-	} else if (event.GetWheelRotation() < 0) {
 		// Zoom in
 		zoom(0.95f);
+	} else if (event.GetWheelRotation() < 0) {
+		// Zoom out
+		zoom(1.05f);
 	}
 	if (event.LeftDClick()) {
 		// Double click left. If an object is selected, select the material
@@ -602,166 +565,6 @@ void ParticleUniverseEditorFrame::zoom(Ogre::Real zoomFactor) {
 }
 
 void ParticleUniverseEditorFrame::doMouseButtonPressed(wxMouseEvent& event) {
-	if (!mGizmoManager)
-		return;
-
-	// Determine which object in the scene was selected
-	wxPoint pos = event.GetPosition();
-	mGizmoManager->startSelect(mSceneManager, _getCamera(), Ogre::Vector2(pos.x + 0.002 * pos.x, pos.y + 0.002 * pos.y)); // Slightly offset
-
-	// Determine whether the camera is set to ortho mode and that the ortho camera gizmo was selected
-	if (mGizmoManager->isOrthoCameraGizmoSelected() && _isCameraOrthographic()) {
-		Ogre::Vector3 newCameraPosition = _getCameraPosition();
-		Ogre::Real l = newCameraPosition.length();
-		Ogre::Real sqrt0dot5 = sqrt(0.5);
-
-		// The ortho camera gizmo has been selected
-		switch (mGizmoManager->getOrthoCameraAxisSelection()) {
-			case Gizmo::AXIS_X: {
-					if (m45DegreesOrtho) {
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						Ogre::Quaternion q;
-						if (newCameraPosition.z > 0) {
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, 0.3826834323650897f, 0.0f);
-						}
-						else {
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, -0.3826834323650897f, 0.0f);
-						}
-						newCameraPosition = q * newCameraPosition;
-						if (newCameraPosition.x > -2.0f && newCameraPosition.x < 2.0f)
-							newCameraPosition.x = 0.0f;
-						if (newCameraPosition.z > -2.0f && newCameraPosition.z < 2.0f)
-							newCameraPosition.z = 0.0f;
-					}
-					else {
-						// X-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_X);
-						newCameraPosition.x = -l;
-						newCameraPosition.y = 0;
-						newCameraPosition.z = 0;
-
-					}
-					startCameraAnimation(newCameraPosition);
-				}
-				break;
-
-			case Gizmo::AXIS_MIN_X: {
-					if (m45DegreesOrtho) {
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						Ogre::Quaternion q;
-						if (newCameraPosition.z < 0) {
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, 0.3826834323650897f, 0.0f);
-						}
-						else {
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, -0.3826834323650897f, 0.0f);
-						}
-						newCameraPosition = q * newCameraPosition;
-						if (newCameraPosition.x > -2.0f && newCameraPosition.x < 2.0f)
-							newCameraPosition.x = 0.0f;
-						if (newCameraPosition.z > -2.0f && newCameraPosition.z < 2.0f)
-							newCameraPosition.z = 0.0f;
-					}
-					else {
-						// -X-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_MIN_X);
-						newCameraPosition.x = l;
-						newCameraPosition.y = 0;
-						newCameraPosition.z = 0;
-					}
-					startCameraAnimation(newCameraPosition);
-				}
-				break;
-
-			case Gizmo::AXIS_Y: {
-					if (m45DegreesOrtho) {
-						// Do nothing
-					}
-					else {
-						// Y-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						newCameraPosition.x = 0;
-						newCameraPosition.y = l;
-						newCameraPosition.z = 0;
-						startCameraAnimation(newCameraPosition);
-					}
-				}
-				break;
-
-			case Gizmo::AXIS_Z: {
-					if (m45DegreesOrtho) {
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						Ogre::Quaternion q;
-						if (newCameraPosition.x < 0) {
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, 0.3826834323650897f, 0.0f);
-						}
-						else {
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, -0.3826834323650897f, 0.0f);
-						}
-						newCameraPosition = q * newCameraPosition;
-						if (newCameraPosition.x > -2.0f && newCameraPosition.x < 2.0f)
-							newCameraPosition.x = 0.0f;
-						if (newCameraPosition.z > -2.0f && newCameraPosition.z < 2.0f)
-							newCameraPosition.z = 0.0f;
-					}
-					else {
-						// Z-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_Z);
-						newCameraPosition.x = 0;
-						newCameraPosition.y = 0;
-						newCameraPosition.z = -l;
-					}
-					startCameraAnimation(newCameraPosition);
-				}
-				break;
-
-			case Gizmo::AXIS_MIN_Z: {
-					if (m45DegreesOrtho) {
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						Ogre::Quaternion q;
-						if (newCameraPosition.x > 0) {
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, 0.3826834323650897f, 0.0f);
-						}
-						else {
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, -0.3826834323650897f, 0.0f);
-						}
-						newCameraPosition = q * newCameraPosition;
-						if (newCameraPosition.x > -2.0f && newCameraPosition.x < 2.0f)
-							newCameraPosition.x = 0.0f;
-						if (newCameraPosition.z > -2.0f && newCameraPosition.z < 2.0f)
-							newCameraPosition.z = 0.0f;
-					}
-					else {
-						// -Z-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_MIN_Z);
-						newCameraPosition.x = 0;
-						newCameraPosition.y = 0;
-						newCameraPosition.z = l;
-					}
-					startCameraAnimation(newCameraPosition);
-				}
-				break;
-		}
-	}
-	else if (!mGizmoManager->isGizmoSelected()) {
-		// No gizmo selected. Validate if it was something else
-		if (mGizmoManager->isMovableObjectSelected(mMarker)) {
-			mGizmoManager->attachToNode(mMainSceneNode);
-			_cameraLookAt(mMainSceneNode->_getDerivedPosition());
-		}
-		else if (mGizmoManager->isMovableObjectSelected(mMarkerBold)) {
-			mGizmoManager->attachToNode(mMainSceneNode);
-			_cameraLookAt(mMainSceneNode->_getDerivedPosition());
-		}
-		else if (mGizmoManager->isMovableObjectSelected(mAddEntity)) {
-			mGizmoManager->attachToNode(mAddEntitySceneNode);
-			_cameraLookAt(mAddEntitySceneNode->_getDerivedPosition());
-		}
-		else if (mGizmoManager->isMovableObjectSelected(mLightEntity)) {
-			mGizmoManager->attachToNode(mLightSceneNode);
-			_cameraLookAt(mLightSceneNode->_getDerivedPosition());
-		}
-	}
-	mGizmoManager->endSelect(mSceneManager);
 }
 
 void ParticleUniverseEditorFrame::startCameraAnimation(const Ogre::Vector3& targetPosition) {
@@ -813,11 +616,6 @@ void ParticleUniverseEditorFrame::doAddMesh(const Ogre::String& meshName) {
 		mAddEntitySceneNode->setScale(Ogre::Vector3::UNIT_SCALE);
 		if (mUIMainToolbar) {
 			mUIMainToolbar->getMiscIcons()->enableRemoveEntity(true);
-		}
-		if (mGizmoManager) {
-			// Reset the Gizmo orientation to the orientation of the node to which the entity is attached
-			mGizmoManager->setOrientation(mAddEntitySceneNode->getOrientation());
-			mGizmoManager->setScale(Ogre::Vector3::UNIT_SCALE);
 		}
 		setLeftSideWindow(mAnimationWindow);
 	}
@@ -1650,12 +1448,6 @@ void ParticleUniverseEditorFrame::OnToggleGizmo(wxCommandEvent& event) {
 }
 
 void ParticleUniverseEditorFrame::doToggleGizmo() {
-	if (mGizmoManager) {
-		bool visible = !mGizmoManager->isVisible();
-		mGizmoManager->setVisible(visible);
-		mMarker->setVisible(visible);
-		mMarkerBold->setVisible(visible);
-	}
 }
 
 void ParticleUniverseEditorFrame::OnToggleWorldLocalSpace(wxCommandEvent& event) {
@@ -1686,32 +1478,12 @@ void ParticleUniverseEditorFrame::doToggleGridPlane() {
 }
 
 void ParticleUniverseEditorFrame::OnGizmoMoveSelect(wxCommandEvent& event) {
-	if (mGizmoManager) {
-		mGizmoManager->setGizmoType(Gizmo::GIZMO_MOVE);
-		mGizmoManager->setVisible(true);
-		if (mGizmoManager->getAttachedNode() != mMainSceneNode) {
-			mMarker->setVisible(true);
-		}
-		mMarkerBold->setVisible(true);
-	}
 }
 
 void ParticleUniverseEditorFrame::OnGizmoRotateSelect(wxCommandEvent& event) {
-	if (mGizmoManager) {
-		mGizmoManager->setGizmoType(Gizmo::GIZMO_ROTATE);
-		mGizmoManager->setVisible(true);
-		mMarker->setVisible(true);
-		mMarkerBold->setVisible(true);
-	}
 }
 
 void ParticleUniverseEditorFrame::OnGizmoScaleSelect(wxCommandEvent& event) {
-	if (mGizmoManager) {
-		mGizmoManager->setGizmoType(Gizmo::GIZMO_SCALE);
-		mGizmoManager->setVisible(true);
-		mMarker->setVisible(true);
-		mMarkerBold->setVisible(true);
-	}
 }
 
 void ParticleUniverseEditorFrame::OnOptions(wxCommandEvent& event) {
@@ -1847,6 +1619,9 @@ void ParticleUniverseEditorFrame::OnTabChanged(wxCommandEvent& event) {
 	// Check which page is active
 	switch (mNotebook->GetSelection()) {
 		case NOTEBOOK_RENDER: {
+			int width, height;
+			mControl->GetSize(&width, &height);
+			mControl->GetCamera()->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 			if (mControlPanelWithSmallRenderWindow) {
 				// Hide the small render window and reset the icons
 				mControlPanelWithSmallRenderWindow->Hide();
@@ -1872,6 +1647,9 @@ void ParticleUniverseEditorFrame::OnTabChanged(wxCommandEvent& event) {
 			if (mControlPanelWithSmallRenderWindow) {
 				// Show the small render window again
 				mControlPanelWithSmallRenderWindow->Show();
+				int width, height;
+				mOgreControlSmall->GetSize(&width, &height);
+				mOgreControlSmall->GetCamera()->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 				mNotebook->InvalidateBestSize();
 				mEditSizer->Layout();
 			}
@@ -1990,9 +1768,6 @@ void ParticleUniverseEditorFrame::OnRecord(wxCommandEvent& event) {
 void ParticleUniverseEditorFrame::doRecord() {
 	// Record the particle system and set play icons if 'record' has been pressed
 	mUIMainToolbar->getPlayIcons()->record();
-	mGizmoManager->setVisible(false);
-	mMarker->setVisible(false);
-	mMarkerBold->setVisible(false);
 	doPlay();
 	if (mRecorder) {
 		ParticleUniverse::String delFrames = "del " + wx2ogre(mConfigDialog->getVideoPath()) + "\\Frame*.*";
@@ -2025,13 +1800,6 @@ void ParticleUniverseEditorFrame::doStop() {
 	// Stop the particle system and set play icons if 'stop' has been pressed
 	resetPlayIcons();
 	mParticleExplorer->setPlayInContextMenuEnabled(true);
-	if (mGizmoManager) {
-		mGizmoManager->setVisible(true);
-		mMarkerBold->setVisible(true);
-		if (mGizmoManager->getAttachedNode() != mMainSceneNode) {
-			mMarker->setVisible(true);
-		}
-	}
 
 	if (mRecorder && mRecorder->isRecording()) {
 		bool recording = mRecorder->isRecording();
@@ -2887,8 +2655,6 @@ void ParticleUniverseEditorFrame::doWindowLeave(wxMouseEvent& event) {
 
 void ParticleUniverseEditorFrame::activateQueryFlags(bool active) {
 	if (active) {
-		mMarker->setQueryFlags(GizmoManager::OBJECT_FLAG);
-		mMarkerBold->setQueryFlags(GizmoManager::OBJECT_FLAG);
 		if (mAddEntity) {
 			mAddEntity->setQueryFlags(GizmoManager::OBJECT_FLAG);
 		}
@@ -2897,8 +2663,6 @@ void ParticleUniverseEditorFrame::activateQueryFlags(bool active) {
 		}
 	}
 	else {
-		mMarker->setQueryFlags(0);
-		mMarkerBold->setQueryFlags(0);
 		if (mAddEntity) {
 			mAddEntity->setQueryFlags(0);
 		}

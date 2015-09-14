@@ -143,8 +143,8 @@ void wxOgreControl::OnSize(wxSizeEvent& WXUNUSED(event)) {
 
 	// Let Ogre know the window has been resized;
 	// Set the aspect ratio for the new size;
-	if (m_cam)
-		m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
+//	if (m_cam)
+//		m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 }
 
 void wxOgreControl::OnIdle(wxIdleEvent& WXUNUSED(event)) {
@@ -290,7 +290,7 @@ void wxOgreControl::SetCamera(Ogre::Camera* cam) {
 	GetSize(&width, &height);
 
 	m_cam = cam;
-	m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
+//	m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 
 	// TESTTESTTESTTESTTESTTESTTEST
 	//m_cam->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
