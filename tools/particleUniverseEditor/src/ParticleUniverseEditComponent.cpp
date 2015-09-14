@@ -28,7 +28,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 EditComponent::EditComponent(EditCanvas* parent, const Ogre::String& name, ComponentType type, ComponentSubType subType, const wxColour& backgroundColor, wxSize size, long style) :
 		wxPanel(parent, wxID_ANY, wxDefaultPosition, size, style, ogre2wx(name)),
 		mPUElement(nullptr),
-		mRootParent(parent->GetParent()->GetParent()->GetParent()), // TODO: das is doch kaese // TODO: genauso wie die ganzen GetParent->GetParetn() aufrufe
+		mRootParent(parent->GetParent()->GetParent()->GetParent()->GetParent()), // TODO: das is doch kaese // TODO: genauso wie die ganzen GetParent->GetParetn() aufrufe
 		mName(name),
 		mParentName(Ogre::StringUtil::BLANK),
 		mType(type),
@@ -90,8 +90,6 @@ EditComponent::EditComponent(EditCanvas* parent, const Ogre::String& name, Compo
 	Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(EditComponent::OnWindowLeave));
 	Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(EditComponent::OnMouseLButtonPressed));
 	Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(EditComponent::OnMouseRButtonPressed));
-
-	std::cerr << "Created EditComponent of type " << mSubType << std::endl;
 }
 
 EditComponent::~EditComponent() {

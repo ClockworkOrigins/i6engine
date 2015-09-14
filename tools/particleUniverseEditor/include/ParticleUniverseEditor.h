@@ -191,7 +191,7 @@ class ParticleUniverseEditorFrame : public wxFrame {
 		void doWindowLeave(wxMouseEvent& event);
 		void validateAndReparse(void);
 		bool createNewSystem(const ParticleUniverse::String& templateName, bool forcedByEditTab = false);
-		void createParticleSystemCopyForEditPage(const ParticleUniverse::String& templateName);
+		void createParticleSystemCopyForEditPage(const ParticleUniverse::String& templateName, ParticleUniverse::ParticleSystem* partSystem);
 		void parseScript(const ParticleUniverse::String& script);
 		void _generateVideoIfNeeded(bool recording);
 		void createStatisticsOverlay(void);
@@ -303,7 +303,7 @@ class ParticleUniverseEditorFrame : public wxFrame {
 		wxMenu* mTmenu;
 
 		wxPanel* mControlPanelWithSmallRenderWindow;
-		OgreControlComponent* mOgreControlSmall;
+		wxOgreControl * mOgreControlSmall;
 
 		 // If a template is selected, the focus changes to other objects. This flag is used to set focus on the mParticleExplorer again.
 		bool mCheckFocusParticleExplorer;
