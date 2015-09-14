@@ -915,11 +915,11 @@ void ParticleUniverseEditorFrame::setPropertyWindow(PropertyWindow* propertyWind
 	// Hide it by default
 	propertyWindow->Hide();
 
-	if (mPropertyWindow) {
 		// Remove the old one
 		mLBAndPropSizer->Clear();
 		mLBAndPropSizer->Add(mParticleExplorer, 2, wxTOP);
 		mLBAndPropSizer->AddSpacer(4);
+	if (mPropertyWindow) {
 		mPropertyWindow->Hide();
 	}
 

@@ -28,7 +28,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 EditComponent::EditComponent(EditCanvas* parent, const Ogre::String& name, ComponentType type, ComponentSubType subType, const wxColour& backgroundColor, wxSize size, long style) :
 		wxPanel(parent, wxID_ANY, wxDefaultPosition, size, style, ogre2wx(name)),
 		mPUElement(nullptr),
-		mRootParent(parent->GetParent()->GetParent()->GetParent()->GetParent()), // TODO: das is doch kaese // TODO: genauso wie die ganzen GetParent->GetParetn() aufrufe
+		mRootParent(parent->GetParent()->GetParent()->GetParent()->GetParent()->GetParent()), // TODO: das is doch kaese // TODO: genauso wie die ganzen GetParent->GetParetn() aufrufe
 		mName(name),
 		mParentName(Ogre::StringUtil::BLANK),
 		mType(type),
@@ -580,7 +580,7 @@ void EditComponent::selectConnection(bool viewOnly) {
 		count++;
 	}
 
-	if (viewOnly) {
+	if (viewOnly) { // TODO: check die GetParent() aufrufe hier
 		GetParent()->GetParent()->Enable(false); // Disables input from the parent
 		wxSingleChoiceDialog choiceWindow(this,
 			_("overview of existing connections"),
@@ -656,7 +656,7 @@ ConnectionPolicy* EditComponent::selectPolicy(EditComponent* componentToBeConnec
 		}
 	}
 
-	if (count > 1) {
+	if (count > 1) {// TODO: check die GetParent() aufrufe hier
 		GetParent()->GetParent()->Enable(false); // Disables input from the parent
 		wxSingleChoiceDialog choiceWindow(this, _("Select a connection type"), _("Add a connection"), count, choices);
 		choiceWindow.SetSize(320, 200);
