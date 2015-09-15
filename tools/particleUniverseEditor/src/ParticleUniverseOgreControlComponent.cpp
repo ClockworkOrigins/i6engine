@@ -65,10 +65,9 @@ void OgreControlComponent::createScene()
 	//Ogre::Vector3 position = Ogre::Vector3(0, 0, -1) + ParticleUniverseEditorFrame::getScale() * Ogre::Vector3(0, 0, -1100);
 	Ogre::Vector3 position(0, 0, 0); 
 	mMainSceneNode->setPosition(position); 
-	if (m_cam)
-	{
-		m_cam->setNearClipDistance(0.0001f);
-		m_cam->lookAt(position);
+	if (_camera) {
+		_camera->setNearClipDistance(0.0001f);
+		_camera->lookAt(position);
 	}
     Refresh();
 }

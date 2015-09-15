@@ -17,55 +17,38 @@
  * USA
  */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "wx/ogre/utils.h"
 
-#include <string>
-#include <algorithm>
-
-//------------------------------------------------------------------------------
-void wxOgreExceptionBox(Ogre::Exception& e)
-{
-    wxMessageBox(std2wx(e.getFullDescription()),  _T("OGRE Exception"),
-                 wxICON_ERROR);
+void wxOgreExceptionBox(Ogre::Exception & e) {
+    wxMessageBox(std2wx(e.getFullDescription()), _T("OGRE Exception"), wxICON_ERROR);
 }
-//------------------------------------------------------------------------------
-std::string wx2std(const wxString& s)
-{
+
+std::string wx2std(const wxString & s) {
     return std::string(s.mb_str());
 }
-//------------------------------------------------------------------------------
-wxString std2wx(const std::string& s)
-{
+
+wxString std2wx(const std::string & s) {
     return wxString::FromAscii(s.c_str());
 }
-//------------------------------------------------------------------------------
-wxString ogre2wx(const Ogre::String& s)
-{
+
+wxString ogre2wx(const Ogre::String & s) {
 	return wxString::FromAscii(s.c_str());
 }
-//------------------------------------------------------------------------------
-wxString ogre2wxTranslate(const Ogre::String& s)
-{
+
+wxString ogre2wxTranslate(const Ogre::String & s) {
 	return wxGetTranslation(wxString::FromAscii(s.c_str()));
 }
-//------------------------------------------------------------------------------
-Ogre::String wx2ogre(const wxString& s)
-{
-	//return Ogre::String(s.mb_str());
+
+Ogre::String wx2ogre(const wxString & s) {
 	return Ogre::String(s.mb_str(wxConvUTF8));
 }
-//------------------------------------------------------------------------------
-std::string getExtension(const std::string& s)
-{
-    std::string ext;
 
+std::string getExtension(const std::string & s) {
+    std::string ext;
     // Find the dot position.
     size_t pos = s.rfind('.');
-
-    if (pos != std::string::npos)
-        ext = s.substr(pos);
-
+	if (pos != std::string::npos) {
+		ext = s.substr(pos);
+	}
     return ext;
 }
-//------------------------------------------------------------------------------

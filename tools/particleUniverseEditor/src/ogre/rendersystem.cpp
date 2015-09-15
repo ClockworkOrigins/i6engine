@@ -30,70 +30,55 @@
  #define OGRE_PLUGINDIR ""
 #endif
 
-IMPLEMENT_OGRE_SINGLETON(wxOgreRenderSystem)
-
-//------------------------------------------------------------------------------
-wxOgreRenderSystem::wxOgreRenderSystem()
-{
+wxOgreRenderSystem::wxOgreRenderSystem() {
 #ifndef WXOGRE_DEBUG
-	m_root = new Ogre::Root("", "", "");
+	_root = new Ogre::Root("", "", "");
 #else
-	m_root = new Ogre::Root("", "", "boot.log");
+	_root = new Ogre::Root("", "", "boot.log");
 #endif
 }
-//------------------------------------------------------------------------------
-wxOgreRenderSystem::wxOgreRenderSystem(const Ogre::String& plugins,
-                           const Ogre::String& config, const Ogre::String& log)
-{
+
+wxOgreRenderSystem::wxOgreRenderSystem(const Ogre::String & plugins, const Ogre::String & config, const Ogre::String & log) {
 	// Create a new Ogre ROOT
     // Root("plugins.cfg","config.cfg","boot.log");
-	m_root = new Ogre::Root(plugins, config, log);
+	_root = new Ogre::Root(plugins, config, log);
 }
-//------------------------------------------------------------------------------
-wxOgreRenderSystem::~wxOgreRenderSystem()
-{
-    delete m_root;
-    m_root = 0;
+
+wxOgreRenderSystem::~wxOgreRenderSystem() {
+    delete _root;
+    _root = nullptr;
 }
-//------------------------------------------------------------------------------
-void wxOgreRenderSystem::LoadPlugin(const Ogre::String& plugin)
-{
+
+void wxOgreRenderSystem::LoadPlugin(const Ogre::String & plugin) {
     try {
 #if WXOGRE_DEBUG == 1
-		m_root->loadPlugin(plugin + "_d");
+		_root->loadPlugin(plugin + "_d");
 #else
-		m_root->loadPlugin(plugin);
+		_root->loadPlugin(plugin);
 #endif
-	} catch (Ogre::Exception& e) {
+	} catch (Ogre::Exception & e) {
         wxOgreExceptionBox(e);
     }
 }
-//------------------------------------------------------------------------------
-void wxOgreRenderSystem::SelectOgreRenderSystem(const Ogre::String& render)
-{
-    Ogre::RenderSystemList renderList;
-    Ogre::RenderSystemList::iterator it;
 
-    renderList = m_root->getAvailableRenderers();
+void wxOgreRenderSystem::SelectOgreRenderSystem(const Ogre::String & render) {
+    Ogre::RenderSystemList renderList = _root->getAvailableRenderers();
     // check through all available renderers, if there is one the
     // string is "render"
-    for (it = renderList.begin(); it != renderList.end(); ++it) {
-        Ogre::RenderSystem* renderSys = *it;
-        if (std::string (renderSys->getName()) == render) {
-            m_root->setRenderSystem(renderSys);
+	for (Ogre::RenderSystemList::iterator it = renderList.begin(); it != renderList.end(); ++it) {
+        Ogre::RenderSystem * renderSys = *it;
+        if (renderSys->getName() == render) {
+            _root->setRenderSystem(renderSys);
             break;
         }
     }
 
 }
-//------------------------------------------------------------------------------
-void wxOgreRenderSystem::Initialise()
-{
-    m_root->initialise(false);
+
+void wxOgreRenderSystem::Initialise() {
+    _root->initialise(false);
 }
-//------------------------------------------------------------------------------
-bool wxOgreRenderSystem::HasCapability(const Ogre::Capabilities& c)
-{
-    return m_root->getRenderSystem()->getCapabilities()->hasCapability(c);
+
+bool wxOgreRenderSystem::HasCapability(const Ogre::Capabilities & c) {
+    return _root->getRenderSystem()->getCapabilities()->hasCapability(c);
 }
-//------------------------------------------------------------------------------

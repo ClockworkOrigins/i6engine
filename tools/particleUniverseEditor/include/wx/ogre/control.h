@@ -17,12 +17,18 @@
  * USA
  */
 
-#ifndef _WX_OGRE_CONTROL_H_
-#define _WX_OGRE_CONTROL_H_
+#ifndef __WX_OGRE_CONTROL_H__
+#define __WX_OGRE_CONTROL_H__
 
-#include <Ogre.h>
+#include "OGRE/OgreSceneManager.h"
+
 #include <wx/wx.h>
-#include "ParticleUniverseEditorListener.h"
+
+namespace Ogre {
+	class RenderWindow;
+	class Root;
+	class Viewport;
+} /* namespace Ogre */
 
 /** Manages an Ogre rendering window and its viewport.
  *
@@ -34,23 +40,17 @@
  * @author Martin Pieuchot
  */
 class ParticleUniverseEditorFrame;
-class wxOgreControl : public wxControl
-{
+
+class wxOgreControl : public wxControl {
     DECLARE_DYNAMIC_CLASS(wxOgreControl)
     DECLARE_EVENT_TABLE()
 
 public:
-
     /** Default constructor. */
     wxOgreControl();
 
     /** Constructs a window, with an embedded Ogre rendering window. */
-    wxOgreControl(wxWindow* parent, wxWindowID id = wxID_ANY,
-                        const wxPoint& pos = wxDefaultPosition,
-                        const wxSize& size = wxDefaultSize,
-                        long style = wxSUNKEN_BORDER | wxTRANSPARENT_WINDOW,
-                        const wxValidator& val = wxDefaultValidator,
-                        const wxString& name = wxT("OgreControl"));
+    wxOgreControl(wxWindow * parent, wxWindowID id = wxID_ANY, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize, long style = wxSUNKEN_BORDER | wxTRANSPARENT_WINDOW, const wxValidator & val = wxDefaultValidator, const wxString & name = wxT("OgreControl"));
 
     /** Destructor, call Destroy to clean Ogre stuff.
      *
@@ -64,12 +64,7 @@ public:
     virtual ~wxOgreControl();
 
     /** Constructs a window, with an embedded Ogre rendering window. */
-    virtual bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
-                        const wxPoint& pos = wxDefaultPosition,
-                        const wxSize& size = wxDefaultSize,
-                        long style = wxSUNKEN_BORDER | wxTRANSPARENT_WINDOW,
-                        const wxValidator& val = wxDefaultValidator,
-                        const wxString& name = wxT("OgreControl"));
+    virtual bool Create(wxWindow * parent, wxWindowID id = wxID_ANY, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize, long style = wxSUNKEN_BORDER | wxTRANSPARENT_WINDOW, const wxValidator & val = wxDefaultValidator, const wxString & name = wxT("OgreControl"));
 
     /** Destructor, deletes the camera if exists, */
     virtual bool Destroy();
@@ -83,21 +78,17 @@ public:
      */
     virtual wxSize DoGetBestSize() const { return wxSize(320, 240); }
 
-
     /** Creates a scene manager instance of a given type.
      *
      * @see Ogre::createSceneManager
      */
-    virtual Ogre::SceneManager* CreateSceneManager(const Ogre::String& tn,
-                                                   const Ogre::String& name="");
+    virtual Ogre::SceneManager * CreateSceneManager(const Ogre::String & tn, const Ogre::String & name = "");
 
     /** Creates a SceneManager instance of a given type.
      *
      * @see Ogre::createSceneManager
      */
-    virtual Ogre::SceneManager* CreateSceneManager(Ogre::SceneTypeMask tm,
-                                                   const Ogre::String& name="");
-
+    virtual Ogre::SceneManager * CreateSceneManager(Ogre::SceneTypeMask tm, const Ogre::String & name = "");
 
     /** Set-up the rendering window for the given scene manager.
      *
@@ -107,11 +98,11 @@ public:
      * @see SetCamera
      * @see AddViewport
      */
-    virtual void SetSceneManager(Ogre::SceneManager* sm);
+    virtual void SetSceneManager(Ogre::SceneManager * sm);
 
     /** Returns the scene manager for this rendering window.
      */
-	virtual Ogre::SceneManager* GetSceneManager(void);
+	virtual Ogre::SceneManager * GetSceneManager();
 
     /** Creates a viewport and attach the given camera to it.
      *
@@ -120,7 +111,7 @@ public:
      *
      * @see AddViewport
      */
-    virtual void SetCamera(Ogre::Camera* cam);
+    virtual void SetCamera(Ogre::Camera * cam);
 
     /** Rotates the camera anticlockwise, around its local x, y and
      *  z axis.
@@ -142,7 +133,7 @@ public:
      *
      * @see Ogre::Camera::setPolygonMode
      */
-    virtual void SetPolygonMode(const Ogre::PolygonMode& pm);
+    virtual void SetPolygonMode(const Ogre::PolygonMode & pm);
 
     /** Virtual method called by the default mouse handler.
      *
@@ -156,23 +147,22 @@ public:
      * @see OnMouseMove
      * @see Tutorial 3
      */
-    virtual void ProcessSelection(const wxPoint& pt);
+    virtual void ProcessSelection(const wxPoint & pt);
 
     /** Retrieves the control's camera. */
-    Ogre::Camera* GetCamera() const { return m_cam; }
+    Ogre::Camera * GetCamera() const { return _camera; }
 
     /** Retrieves the control's render window. */
-    Ogre::RenderWindow* GetRenderWindow() const { return m_rwin; }
+    Ogre::RenderWindow * GetRenderWindow() const { return _renderWindow; }
 
     /** Retrieves the control's viewport. */
-    Ogre::Viewport* GetViewport() const { return m_vp; }
+    Ogre::Viewport * GetViewport() const { return _viewport; }
 
     /** Adds a viewport to the rendering target.
      *
      * @see Ogre::RenderTarget::addViewport
      */
-    void AddViewport(Ogre::Camera* cam, int ZOrder=0, float left=0.0f,
-                     float top=0.0f, float  width=1.0f, float height=1.0f);
+    void AddViewport(Ogre::Camera * cam, int ZOrder = 0, float left = 0.0f, float top = 0.0f, float  width = 1.0f, float height = 1.0f);
 
     /** Detaches the control's render window if exists.
      *
@@ -182,57 +172,54 @@ public:
 
     /** Used for mouse movement.
      */
-	void setCallbackFrame(ParticleUniverseEditorFrame* frame);
+	void setCallbackFrame(ParticleUniverseEditorFrame * frame);
 
 
     /** Creates an Ogre's rendering window.
      *
      * @param name the internal name of the Ogre::RenderWindow
      */
-    Ogre::RenderWindow* CreateRenderWindow(const Ogre::String& name);
+    Ogre::RenderWindow * CreateRenderWindow(const Ogre::String & name);
 
 protected:
+    virtual void OnSize(wxSizeEvent & event);
+    virtual void OnPaint(wxPaintEvent & event);
+    virtual void OnMouseMove(wxMouseEvent & event);
+    virtual void OnEraseBackground(wxEraseEvent & event);
+	void OnIdle(wxIdleEvent & WXUNUSED(event));
 
-    virtual void OnSize(wxSizeEvent& event);
-    virtual void OnPaint(wxPaintEvent& event);
-    virtual void OnMouseMove(wxMouseEvent& event);
-    virtual void OnEraseBackground(wxEraseEvent& event);
-	void OnIdle(wxIdleEvent& WXUNUSED(event));
-
-    Ogre::SceneManager* m_sm;
-    Ogre::Camera*       m_cam;
-	ParticleUniverseEditorFrame* mCallbackFrame;
+    Ogre::SceneManager * _sceneManager;
+    Ogre::Camera * _camera;
+	ParticleUniverseEditorFrame * _callbackFrame;
 
 private:
-
-    /** Initializes private variables. */
-    virtual void Init();
-
-    /** Retrieves the unique window identifier of this control.
-     *
-     * @remark This is *the* platform independent method of the
-     *         library.
-     *
-     * @param pl an Ogre pair list passed to the createRenderWinow
-     *        function.
-     *
-     * @see Ogre::Root::createRenderWindow
-     */
-    void GetParentWindowHandle(Ogre::NameValuePairList& pl);
-
-
-    Ogre::Root*         m_root;
-    Ogre::RenderWindow* m_rwin;
-    Ogre::Viewport*     m_vp;
-
+    Ogre::Root * _root;
+    Ogre::RenderWindow * _renderWindow;
+    Ogre::Viewport * _viewport;
 
     /** Last x position of the cursor. */
-    long m_x;
+    long _lastX;
+
     /** Last y position of the cursor. */
-    long m_y;
+    long _lastY;
 
     /** Number of rendering windows instantiated. */
-    static unsigned int m_instances;
+	static unsigned int instances;
+
+	/** Initializes private variables. */
+	virtual void Init();
+
+	/** Retrieves the unique window identifier of this control.
+	*
+	* @remark This is *the* platform independent method of the
+	*         library.
+	*
+	* @param pl an Ogre pair list passed to the createRenderWinow
+	*        function.
+	*
+	* @see Ogre::Root::createRenderWindow
+	*/
+	void GetParentWindowHandle(Ogre::NameValuePairList & pl);
 };
 
-#endif
+#endif /* __WX_OGRE_CONTROL_H__ */

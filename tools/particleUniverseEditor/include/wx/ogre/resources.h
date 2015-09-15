@@ -17,55 +17,47 @@
  * USA
  */
 
-#ifndef _WX_OGRE_RESOURCES_H_ 
-#define _WX_OGRE_RESOURCES_H_ 
+#ifndef __WX_OGRE_RESOURCES_H__
+#define __WX_OGRE_RESOURCES_H__ 
 
-#include <Ogre.h>
+#include "i6engine/utils/Singleton.h"
 
-#include "wx/ogre/utils.h"
+#include "OGRE/OgreResourceGroupManager.h"
 
 /** Wrapper around the Ogre resources system.
  *
  * @author Martin Pieuchot
  */
-class wxOgreResources : public Ogre::Singleton<wxOgreResources> 
-{
-// Is it possible to have longer names? :p
-#define DEFAULT_GROUP Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME
+class wxOgreResources : public i6engine::utils::Singleton<wxOgreResources> {
+	// Is it possible to have longer names? :p
+	#define DEFAULT_GROUP Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME
 
 public:
-
     wxOgreResources();
 
     /** Initialise all resource groups which are yet to be initialised. */
     void InitialiseAllResources();
 
     /** Add a resource location to for a given resource group. */
-    void AddResource(const Ogre::String& path,
-                     const Ogre::String& type = "FileSystem",
-                     const Ogre::String& group = DEFAULT_GROUP);
+    void AddResource(const Ogre::String & path, const Ogre::String & type = "FileSystem", const Ogre::String & group = DEFAULT_GROUP);
 
     /** Load a resource config file like the one used by Ogre's demos.
      *
      * @param file the comple path to the resource file. 
      */
-    bool LoadResourceFile(const Ogre::String& file);
+    bool LoadResourceFile(const Ogre::String & file);
 
     /** Find all file names matching a given pattern in a group. */
-    Ogre::StringVectorPtr GetResourcesList(const Ogre::String& group,
-                                           const Ogre::String& pattern);
+    Ogre::StringVectorPtr GetResourcesList(const Ogre::String & group, const Ogre::String & pattern);
 
     /** List all file names in a group. */ 
-    Ogre::StringVectorPtr GetResourcesList(const Ogre::String& group);
+    Ogre::StringVectorPtr GetResourcesList(const Ogre::String & group);
 
     /** Get a list of the currently defined resource groups. */
     Ogre::StringVector GetResourcesGroups();
 
 private:
-
-    Ogre::ResourceGroupManager* m_rmgr;
-
-    DECLARE_OGRE_SINGLETON(wxOgreResources)
+    Ogre::ResourceGroupManager * _resourceGroupManager;
 };
 
-#endif
+#endif /* __WX_OGRE_RESOURCES_H__ */

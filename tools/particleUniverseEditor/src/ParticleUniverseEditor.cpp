@@ -38,6 +38,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "ParticleUniverseTextControl.h"
 #include "ParticleUniverseUtils.h"
 
+#include "wx/ogre/rendersystem.h"
+#include "wx/ogre/resources.h"
+
 #include "OGRE/Overlay/OgreFontManager.h"
 #include "OGRE/Overlay/OgreOverlaySystem.h"
 
@@ -99,10 +102,10 @@ bool ParticleUniverseEditorFrame::mUsePhysX = false;
 
 bool ParticleUniverseEditorApp::OnInit() {
 	// Initialize Ogre render system
-	m_rsys->LoadPlugin("RenderSystem_GL");
-	m_rsys->SelectOgreRenderSystem("OpenGL Rendering Subsystem");
-	m_rsys->LoadPlugin("Plugin_ParticleUniverse");
-	m_rsys->Initialise();
+	_renderSystem->LoadPlugin("RenderSystem_GL");
+	_renderSystem->SelectOgreRenderSystem("OpenGL Rendering Subsystem");
+	_renderSystem->LoadPlugin("Plugin_ParticleUniverse");
+	_renderSystem->Initialise();
 
 	m_Editor = new ParticleUniverseEditorFrame(0, ID_EDITOR_WINDOW);
 	// Create the Toolbar
@@ -112,7 +115,7 @@ bool ParticleUniverseEditorApp::OnInit() {
 	// Create the tabs on the right side
 	m_Editor->CreateTabs();
 
-	m_res->LoadResourceFile("resources.cfg");
+	_resources->LoadResourceFile("resources.cfg");
 
 	m_Editor->Show();
 
@@ -120,7 +123,7 @@ bool ParticleUniverseEditorApp::OnInit() {
 	m_Editor->LoadParticleExplorer();
 
 	Yield();
-	m_Editor->AfterInit(m_res);
+	m_Editor->AfterInit(_resources);
 	return true;
 }
 
@@ -242,7 +245,7 @@ ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow* parent, wxWin
 
 	SetAutoLayout(true);
 
-	mBackgroundColour = Ogre::ColourValue(0.3, 0.3, 0.3);
+	mBackgroundColour = Ogre::ColourValue(0.3f, 0.3f, 0.3f);
 
 	// Set the language
 	mConfigDialog = new ConfigDialog(this);
@@ -321,9 +324,9 @@ void ParticleUniverseEditorFrame::CreateScene() {
 	// Create the background
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingletonPtr()->getByName("ParticleUniverseEditor/BackgroundMaterial");
 	material->load();
-	material->getTechnique(0)->getPass(0)->setAmbient(Ogre::ColourValue(0.3, 0.3, 0.3));
-	material->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue(0.3, 0.3, 0.3));
-	material->getTechnique(0)->getPass(0)->setSpecular(Ogre::ColourValue(0.3, 0.3, 0.3));
+	material->getTechnique(0)->getPass(0)->setAmbient(Ogre::ColourValue(0.3f, 0.3f, 0.3f));
+	material->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue(0.3f, 0.3f, 0.3f));
+	material->getTechnique(0)->getPass(0)->setSpecular(Ogre::ColourValue(0.3f, 0.3f, 0.3f));
 	mSceneManager->setSkyBox(true, "ParticleUniverseEditor/BackgroundMaterial");
 
 	// Create the nodes for the particle system and attach the marker

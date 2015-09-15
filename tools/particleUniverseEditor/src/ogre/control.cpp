@@ -17,14 +17,11 @@
  * USA
  */
 
-#include "ParticleUniverseEditorPCH.h"
+#include "wx/ogre/control.h"
+
 #include "ParticleUniverseEditor.h"
 
 #include "i6engine/utils/i6eSystemParameters.h"
-
-#include "wx/ogre/prerequisites.h"
-#include "wx/ogre/control.h"
-#include "wx/ogre/utils.h"
 
 #ifdef __WXGTK20__
 extern "C" {
@@ -35,7 +32,7 @@ extern "C" {
 }
 #endif
 
-unsigned int wxOgreControl::m_instances = 0;
+unsigned int wxOgreControl::instances = 0;
 
 BEGIN_EVENT_TABLE(wxOgreControl, wxControl)
 	EVT_MOUSE_EVENTS	(wxOgreControl::OnMouseMove)
@@ -51,9 +48,7 @@ wxOgreControl::wxOgreControl() {
 	Init();
 }
 
-wxOgreControl::wxOgreControl(wxWindow* parent, wxWindowID id,
-							 const wxPoint& pos, const wxSize& size, long style,
-							 const wxValidator& val, const wxString& name) /*: wxControl(parent, id, pos, size, style, val, name) */: m_sm(nullptr), m_cam(nullptr), mCallbackFrame(nullptr), m_root(nullptr), m_rwin(nullptr), m_vp(nullptr), m_x(0), m_y(0) {
+wxOgreControl::wxOgreControl(wxWindow * parent, wxWindowID id, const wxPoint & pos, const wxSize & size, long style, const wxValidator & val, const wxString & name) /*: wxControl(parent, id, pos, size, style, val, name) */: _sceneManager(nullptr), _camera(nullptr), _callbackFrame(nullptr), _root(nullptr), _renderWindow(nullptr), _viewport(nullptr), _lastX(0), _lastY(0) {
 	Init();
 	Create(parent, id, pos, size, style, val, name);
 }
@@ -62,42 +57,39 @@ wxOgreControl::~wxOgreControl() {
 	Destroy();
 }
 
-bool wxOgreControl::Create(wxWindow* parent, wxWindowID id,
-						   const wxPoint& pos, const wxSize& size, long style,
-						   const wxValidator& val, const wxString& name) {
-	wxString instance_name = name + wxString::Format(wxT("%u"), m_instances);
+bool wxOgreControl::Create(wxWindow * parent, wxWindowID id, const wxPoint & pos, const wxSize & size, long style, const wxValidator & val, const wxString & name) {
+	wxString instance_name = name + wxString::Format(wxT("%u"), instances);
 	if (!wxControl::Create(parent, id, pos, size, style, val, instance_name)) {
 		wxFAIL_MSG(_("wxOgreControl creation failed"));
 		return false;
 	}
-//	CreateRenderWindow(wx2std(instance_name));
 	return true;
 }
 
 void wxOgreControl::Init() {
-	m_cam  = 0;
-	m_rwin = 0;
-	m_vp   = 0;
+	_camera = nullptr;
+	_renderWindow = nullptr;
+	_viewport = nullptr;
 
-	m_x   = 0;
-	m_y   = 0;
+	_lastX = 0;
+	_lastY = 0;
 
-	m_root = Ogre::Root::getSingletonPtr();
-	m_instances++;
+	_root = Ogre::Root::getSingletonPtr();
+	instances++;
 }
 
 bool wxOgreControl::Destroy() {
-	if (m_cam) {
-		m_sm->destroyCamera(m_cam);
-		m_cam = 0;
+	if (_camera) {
+		_sceneManager->destroyCamera(_camera);
+		_camera = 0;
 	}
 
 	/* Don't delete the SceneManager, it can be used by others. */
-	m_sm = 0;
+	_sceneManager = nullptr;
 
-	if (m_vp) {
-		m_rwin->removeAllViewports();
-		m_vp = 0;
+	if (_viewport) {
+		_renderWindow->removeAllViewports();
+		_viewport = nullptr;
 	}
 
 	DestroyRenderWindow();
@@ -106,96 +98,97 @@ bool wxOgreControl::Destroy() {
 }
 
 void wxOgreControl::Update() {
-	m_root->renderOneFrame();
+	_root->renderOneFrame();
 }
 
-void wxOgreControl::OnPaint(wxPaintEvent& WXUNUSED(event)) {
+void wxOgreControl::OnPaint(wxPaintEvent & WXUNUSED(event)) {
 	wxPaintDC dc(this);
 	Update();
 }
 
-void wxOgreControl::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
+void wxOgreControl::OnEraseBackground(wxEraseEvent & WXUNUSED(event)) {
 	Update();
 }
 
-void wxOgreControl::OnSize(wxSizeEvent& WXUNUSED(event)) {
-	int width, height;
-	GetSize(&width, &height); // TODO: This function is called everytime the containing Tab gets or looses focus. Maybe check the size value to reduce resizes?
-	if (m_rwin) {
-		m_rwin->resize(static_cast<unsigned int>(width), static_cast<unsigned int>(height));
-		m_rwin->windowMovedOrResized();
+void wxOgreControl::OnSize(wxSizeEvent & WXUNUSED(event)) {
+	if (_renderWindow) {
+		int width, height;
+		GetSize(&width, &height);
+		_renderWindow->resize(static_cast<unsigned int>(width), static_cast<unsigned int>(height));
+		_renderWindow->windowMovedOrResized();
 	}
 
 #ifdef __WXGTK20__
 	// Fix because it is not automaticaly done with gtk+
-	if (m_vp)
-		m_vp->_updateDimensions();
+	if (_viewport) {
+		_viewport->_updateDimensions();
+	}
 #endif
 
 	// Let Ogre know the window has been resized;
 	// Set the aspect ratio for the new size;
-//	if (m_cam)
-//		m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
+//	if (_camera)
+//		_camera->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 }
 
-void wxOgreControl::OnIdle(wxIdleEvent& WXUNUSED(event)) {
-	SetSize(GetParent()->GetSize()); // This is needed to auto resize so it always fits its parent
+void wxOgreControl::OnIdle(wxIdleEvent & WXUNUSED(event)) {
+	if (GetSize() != GetParent()->GetSize()) {
+		SetSize(GetParent()->GetSize()); // This is needed to auto resize so it always fits its parent
+	}
 	Refresh();
 }
 
-void wxOgreControl::AddViewport(Ogre::Camera* cam, int ZOrder, float left,
-					 float top, float  width, float height) {
-	if (m_vp)
-		m_rwin->removeAllViewports();
-
-	if (m_rwin) {
-		m_vp = m_rwin->addViewport(cam, ZOrder, left, top, width, height);
+void wxOgreControl::AddViewport(Ogre::Camera * cam, int ZOrder, float left, float top, float  width, float height) {
+	if (_viewport) {
+		_renderWindow->removeAllViewports();
+	}
+	if (_renderWindow) {
+		_viewport = _renderWindow->addViewport(cam, ZOrder, left, top, width, height);
 	}
 }
 
-Ogre::RenderWindow* wxOgreControl::CreateRenderWindow(const Ogre::String& name) {
-	if (!m_root->isInitialised())
-		m_rwin = m_root->initialise(false);
+Ogre::RenderWindow* wxOgreControl::CreateRenderWindow(const Ogre::String & name) {
+	if (!_root->isInitialised()) {
+		_renderWindow = _root->initialise(false);
+	}
 
 	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
 	Ogre::NameValuePairList params;
 	GetParentWindowHandle(params);
 
-	int w, h;
-	GetSize(&w, &h);
 	try {
-		m_rwin = m_root->createRenderWindow(name, w, h, false, &params);
-		m_rwin->setActive(true);
+		int w, h;
+		GetSize(&w, &h);
+		_renderWindow = _root->createRenderWindow(name, w, h, false, &params);
+		_renderWindow->setActive(true);
 
 		// Even if we are not always using Ogre's
 		// rendering loop, set it as AutoUpdated
 		// in case of...
-		m_rwin->setAutoUpdated(true);
-	} catch (Ogre::Exception& e) {
+		_renderWindow->setAutoUpdated(true);
+	} catch (Ogre::Exception & e) {
 		wxOgreExceptionBox(e);
 	}
 
-	return m_rwin;
+	return _renderWindow;
 }
 
 void wxOgreControl::DestroyRenderWindow() {
-	if (m_rwin) {
-		m_root->detachRenderTarget(m_rwin);
-		m_rwin = 0;
+	if (_renderWindow) {
+		_root->detachRenderTarget(_renderWindow);
+		_renderWindow = 0;
 		SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 	}
 }
 
-void wxOgreControl::setCallbackFrame(ParticleUniverseEditorFrame* frame) {
-	mCallbackFrame = frame;
+void wxOgreControl::setCallbackFrame(ParticleUniverseEditorFrame * frame) {
+	_callbackFrame = frame;
 }
 
-void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl) {
+void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList & pl) {
 #ifdef __WXMSW__
-
-	pl["externalWindowHandle"] = all2std((size_t)GetHandle());
-
+	pl["externalWindowHandle"] = all2std(size_t(GetHandle()));
 #elif defined(__WXGTK20__)
 	/*
 	 * Ok here is the most important comment about the GTK+
@@ -216,7 +209,7 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl) {
 	 * UPDATE: after changing to wxWidgets 3.0, GTK_PIZZA diesn't exist anymore
 	 * GDK_WINDOW_XWINDOW( widget->window ); should do the job (according to a forum post)
 	 */
-	GtkWidget* widget = m_wxwindow;
+	GtkWidget * widget = m_wxwindow;
 
 	/* May prevent from flickering */
 	gtk_widget_set_double_buffered(widget, false);
@@ -227,12 +220,12 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl) {
 	 */
 	gtk_widget_realize(widget);
 
-	Window window = GDK_WINDOW_XWINDOW( widget->window );   // Window is a typedef for XID, which is a typedef for unsigned int
+	Window window = GDK_WINDOW_XWINDOW(widget->window);   // Window is a typedef for XID, which is a typedef for unsigned int
 
 #if WXOGRE_OGRE_VER < 150
 
 	/* Get the display */
-	Display* display = GDK_WINDOW_XDISPLAY(gdkWin);
+	Display * display = GDK_WINDOW_XDISPLAY(gdkWin);
 
 	/* Get the Screen */
 	unsigned int screen = DefaultScreen(display);
@@ -251,70 +244,66 @@ void wxOgreControl::GetParentWindowHandle(Ogre::NameValuePairList& pl) {
 #endif
 }
 
-Ogre::SceneManager* wxOgreControl::CreateSceneManager(const Ogre::String& tn,
-													const Ogre::String& name) {
+Ogre::SceneManager * wxOgreControl::CreateSceneManager(const Ogre::String & tn, const Ogre::String & name) {
 	SetSceneManager(Ogre::Root::getSingleton().createSceneManager(tn, name));
-	return m_sm;
+	return _sceneManager;
 }
 
-Ogre::SceneManager* wxOgreControl::CreateSceneManager(Ogre::SceneTypeMask tm,
-													const Ogre::String& name) {
+Ogre::SceneManager * wxOgreControl::CreateSceneManager(Ogre::SceneTypeMask tm, const Ogre::String & name) {
 	SetSceneManager(Ogre::Root::getSingleton().createSceneManager(tm, name));
-	return m_sm;
+	return _sceneManager;
 }
 
-void wxOgreControl::SetSceneManager(Ogre::SceneManager* sm) {
-	//SetCamera(sm->createCamera(wx2std(GetName()) + "Cam"));
+void wxOgreControl::SetSceneManager(Ogre::SceneManager * sm) {
 	SetCamera(sm->createCamera("MainCamera"));
-	m_sm = sm;
+	_sceneManager = sm;
 }
 
-Ogre::SceneManager* wxOgreControl::GetSceneManager(void) {
-	return m_sm;
+Ogre::SceneManager * wxOgreControl::GetSceneManager() {
+	return _sceneManager;
 }
 
-void wxOgreControl::SetCamera(Ogre::Camera* cam) {
-	if (m_cam)
-		m_sm->destroyCamera(m_cam);
+void wxOgreControl::SetCamera(Ogre::Camera * cam) {
+	if (_camera) {
+		_sceneManager->destroyCamera(_camera);
+	}
 
 	int width, height;
 	GetSize(&width, &height);
 
-	m_cam = cam;
-//	m_cam->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
+	_camera = cam;
+	_camera->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 
-	// TESTTESTTESTTESTTESTTESTTEST
-	//m_cam->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
-
-	AddViewport(m_cam);
+	AddViewport(_camera);
 }
 
 void wxOgreControl::RotateCamera(float relX, float relY, float relZ) {
-	if (m_cam) {
-		m_cam->roll(Ogre::Radian(relZ));
-		m_cam->yaw(Ogre::Radian(relY));
-		m_cam->pitch(Ogre::Radian(relX));
+	if (_camera) {
+		_camera->roll(Ogre::Radian(relZ));
+		_camera->yaw(Ogre::Radian(relY));
+		_camera->pitch(Ogre::Radian(relX));
 	}
 }
 
 void wxOgreControl::TranslateCamera(float x, float y, float z) {
-	if (m_cam) {
-		m_cam->moveRelative(Ogre::Vector3(x, y, z));
+	if (_camera) {
+		_camera->moveRelative(Ogre::Vector3(x, y, z));
 	}
 }
 
-void wxOgreControl::SetPolygonMode(const Ogre::PolygonMode& pm) {
-	if (m_cam)
-		m_cam->setPolygonMode(pm);
+void wxOgreControl::SetPolygonMode(const Ogre::PolygonMode & pm) {
+	if (_camera) {
+		_camera->setPolygonMode(pm);
+	}
 }
 
-void wxOgreControl::ProcessSelection(const wxPoint& pt) {
+void wxOgreControl::ProcessSelection(const wxPoint & pt) {
 }
 
-void wxOgreControl::OnMouseMove(wxMouseEvent& event) {
-	if (!mCallbackFrame) {
+void wxOgreControl::OnMouseMove(wxMouseEvent & event) {
+	if (!_callbackFrame) {
 		return;
 	}
-	mCallbackFrame->OnMouseMoveCallback(event);
+	_callbackFrame->OnMouseMoveCallback(event);
 	Refresh();
 }

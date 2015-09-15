@@ -17,21 +17,18 @@
  * USA
  */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "wx/ogre/app.h"
 
-//------------------------------------------------------------------------------
-bool wxOgreApp::Initialize(int& argc, wxChar **argv)
-{
-    m_rsys = new wxOgreRenderSystem();
-    m_res  = new wxOgreResources();
+#include "wx/ogre/rendersystem.h"
+#include "wx/ogre/resources.h"
 
+bool wxOgreApp::Initialize(int & argc, wxChar ** argv) {
+    _renderSystem = new wxOgreRenderSystem();
+    _resources  = new wxOgreResources();
     return wxApp::Initialize(argc, argv);
 }
-//------------------------------------------------------------------------------
-void wxOgreApp::CleanUp()
-{
-    delete m_res;
-    delete m_rsys;
+
+void wxOgreApp::CleanUp() {
+    delete _renderSystem;
+    delete _resources;
 }
-//------------------------------------------------------------------------------

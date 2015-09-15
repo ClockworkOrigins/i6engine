@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PUED_H__
 
 #include "ParticleUniverseGizmo.h"
+#include "ParticleUniverseEditorListener.h"
 
 #include "wx/ogre/ogre.h"
 
@@ -331,12 +332,10 @@ class ParticleUniverseEditorFrame : public wxFrame {
 
 class ParticleUniverseEditorApp : public wxOgreApp {
 public:
-
 	bool OnInit();
 
 private:
-
-	ParticleUniverseEditorFrame* m_Editor;
+	ParticleUniverseEditorFrame * m_Editor;
 };
 
 DECLARE_APP(ParticleUniverseEditorApp)
