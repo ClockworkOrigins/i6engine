@@ -25,6 +25,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseEditor.h"
 
+#include "OGRE/OgreHighLevelGpuProgramManager.h"
+#include "OGRE/OgreMeshManager.h"
+#include "OGRE/OgreSkeletonManager.h"
+#include "OGRE/OgreSubMesh.h"
+
 #include "wx/msgdlg.h"
 
 //-----------------------------------------------------------------------

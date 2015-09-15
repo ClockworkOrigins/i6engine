@@ -26,6 +26,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseGizmoManager.h"
 #include "ParticleUniverseUtils.h"
 
+#include "OGRE/OgreEntity.h"
+#include "OGRE/OgreSceneManager.h"
+
 const Ogre::Real GizmoScaling::SCALE_NODE_SCALING = 0.5f;
 //-----------------------------------------------------------------------
 GizmoScaling::GizmoScaling(GizmoManager* gizmoManager, Ogre::SceneManager* sceneManager) : 

@@ -15,6 +15,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/utils.h"
 
+#include "ogre/OgreSimpleSpline.h"
+
 #include "wx/colordlg.h"
 
 //-----------------------------------------------------------------------

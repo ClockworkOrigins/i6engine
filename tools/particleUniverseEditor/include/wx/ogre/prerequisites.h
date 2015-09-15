@@ -17,12 +17,12 @@
  * USA
  */
 
-#ifndef _WX_OGRE_PREREQUISITES_H_
-#define _WX_OGRE_PREREQUISITES_H_
+#ifndef __WX_OGRE_PREREQUISITES_H__
+#define __WX_OGRE_PREREQUISITES_H__
 
 #include "ParticleUniversePrerequisites.h"
 
-#include "OGRE/Ogre.h"
+#include "OGRE/OgreString.h"
 
 #ifdef __WXMSW__
 #   include "wx/msw/winundef.h"
@@ -171,8 +171,7 @@ typedef wxString ComponentType;
 typedef wxString ComponentSubType;
 
 // Enum: Component Relation
-enum ComponentRelation
-{
+enum ComponentRelation {
 	CR_INCLUDE,
 	CR_EXCLUDE,
 	CR_HANDLE,
@@ -190,22 +189,17 @@ enum ComponentRelation
 };
 
 // Enum: Component Relation
-enum ComponentRelationDirection
-{
+enum ComponentRelationDirection {
 	CRDIR_PRIMARY,
 	CRDIR_SECUNDAIRY,
 	CRDIR_EQUAL
 };
 
 // Function to return the opposite relation direction
-inline ComponentRelationDirection getOppositeRelationDirection(ComponentRelationDirection relationDirection)
-{
-	if (relationDirection == CRDIR_PRIMARY)
-	{
+inline ComponentRelationDirection getOppositeRelationDirection(ComponentRelationDirection relationDirection) {
+	if (relationDirection == CRDIR_PRIMARY) {
 		return CRDIR_SECUNDAIRY;
-	}
-	else if (relationDirection == CRDIR_SECUNDAIRY)
-	{
+	} else if (relationDirection == CRDIR_SECUNDAIRY) {
 		return CRDIR_PRIMARY;
 	}
 	return CRDIR_EQUAL;
@@ -213,5 +207,4 @@ inline ComponentRelationDirection getOppositeRelationDirection(ComponentRelation
 
 static const ComponentSubType CST_UNDEFINED = wxT("<undefined>");
 
-
-#endif
+#endif /* __WX_OGRE_PREREQUISITES_H__ */

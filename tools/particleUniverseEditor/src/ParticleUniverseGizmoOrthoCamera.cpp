@@ -25,6 +25,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseGizmoManager.h"
 
+#include "OGRE/OgreEntity.h"
+#include "OGRE/OgreSceneManager.h"
+
 const Ogre::Real OrthoCameraGizmo::SCALE_NODE_ORTHO_CAMERA = 0.7f;
 //-----------------------------------------------------------------------
 OrthoCameraGizmo::OrthoCameraGizmo(GizmoManager* gizmoManager, Ogre::SceneManager* sceneManager) : 

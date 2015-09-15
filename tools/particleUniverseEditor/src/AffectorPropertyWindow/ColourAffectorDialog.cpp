@@ -13,6 +13,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseControlPoint.h"
 
+#include "OGRE/OgreColourValue.h"
+
 #include "wx/wx.h"
 
 //-----------------------------------------------------------------------

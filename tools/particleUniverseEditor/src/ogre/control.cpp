@@ -23,6 +23,9 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
+#include "OGRE/OgreRenderWindow.h"
+#include "OGRE/OgreRoot.h"
+
 #ifdef __WXGTK20__
 extern "C" {
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX

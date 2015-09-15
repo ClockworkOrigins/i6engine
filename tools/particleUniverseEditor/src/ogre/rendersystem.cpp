@@ -22,6 +22,8 @@
 #include "wx/ogre/prerequisites.h"
 #include "wx/ogre/utils.h"
 
+#include "OGRE/OgreRoot.h"
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
  #ifndef OGRE_PLUGINDIR
  #define OGRE_PLUGINDIR ""

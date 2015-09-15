@@ -41,6 +41,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "wx/ogre/rendersystem.h"
 #include "wx/ogre/resources.h"
 
+#include "OGRE/OgreEntity.h"
+#include "OGRE/OgreMeshManager.h"
+#include "OGRE/OgreRenderWindow.h"
+
 #include "OGRE/Overlay/OgreFontManager.h"
 #include "OGRE/Overlay/OgreOverlaySystem.h"
 

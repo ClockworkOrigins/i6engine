@@ -16,6 +16,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "ParticleUniverseEditor.h"
 #include "ParticleUniverseGizmoManager.h"
 
+#include "OGRE/OgreEntity.h"
+#include "OGRE/OgreSubEntity.h"
+#include "OGRE/OgreSubMesh.h"
 #include "OGRE/OgreTagPoint.h"
 
 //-----------------------------------------------------------------------

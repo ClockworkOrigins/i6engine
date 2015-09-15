@@ -26,6 +26,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/ogre/prerequisites.h"
 
+#include "OGRE/OgreConfigFile.h"
+
 /**	This is an extension of the ConfigFile class, with additional functions to save a configfile
 */
 class ConfigFile : public Ogre::ConfigFile

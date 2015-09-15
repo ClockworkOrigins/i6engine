@@ -25,6 +25,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
+#include "OGRE/OgreCamera.h"
+
 wxString Utils::CURRENT_DIR_ATTR = wxT("");
 wxString Utils::SCRIPT_DIR_ATTR = wxT("/manual/script/");
 //-----------------------------------------------------------------------

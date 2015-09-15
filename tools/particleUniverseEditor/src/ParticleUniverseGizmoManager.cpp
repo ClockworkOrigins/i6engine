@@ -28,6 +28,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseGizmoRotation.h"
 #include "ParticleUniverseGizmoScaling.h"
 
+#include "OGRE/OgreRenderWindow.h"
+#include "OGRE/OgreSceneManager.h"
+#include "OGRE/OgreViewport.h"
+
 const Ogre::uint32 GizmoManager::GIZMO_FLAG = 1<<1;
 const Ogre::uint32 GizmoManager::OBJECT_FLAG = 1<<2;
 //-----------------------------------------------------------------------
