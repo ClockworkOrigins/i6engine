@@ -102,6 +102,16 @@ bool wxOgreControl::Destroy() {
 
 void wxOgreControl::Update() {
 	_root->renderOneFrame();
+
+	_root->_fireFrameStarted();
+
+	if (_renderWindow) {
+		_renderWindow->update();
+	}
+
+	_root->_updateAllRenderTargets();
+
+	_root->_fireFrameEnded();
 }
 
 void wxOgreControl::OnPaint(wxPaintEvent & WXUNUSED(event)) {
@@ -155,7 +165,7 @@ Ogre::RenderWindow* wxOgreControl::CreateRenderWindow(const Ogre::String & name)
 		_renderWindow = _root->initialise(false);
 	}
 
-	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+	SetBackgroundStyle(wxBG_STYLE_PAINT);
 
 	Ogre::NameValuePairList params;
 	GetParentWindowHandle(params);
