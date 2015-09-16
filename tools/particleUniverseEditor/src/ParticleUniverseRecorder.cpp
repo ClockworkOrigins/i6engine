@@ -158,7 +158,7 @@ void Recorder::setVideoDirectory (const Ogre::String& videoDirectory)
 //-----------------------------------------------------------------------
 void Recorder::setImageWidth (const ParticleUniverse::Real imageWidth, bool realloc)
 {
-	mImageWidth = imageWidth;
+	mImageWidth = ParticleUniverse::uint(imageWidth);
 	if (realloc)
 	{
 		_reallocImageMemory();
@@ -167,7 +167,7 @@ void Recorder::setImageWidth (const ParticleUniverse::Real imageWidth, bool real
 //-----------------------------------------------------------------------
 void Recorder::setImageHeight (const ParticleUniverse::Real imageHeight, bool realloc)
 {
-	mImageHeight = imageHeight;
+	mImageHeight = ParticleUniverse::uint(imageHeight);
 	if (realloc)
 	{
 		_reallocImageMemory();
