@@ -45,10 +45,10 @@ bool ParentPropertyTimeAndColour::OnEvent (wxPropertyGrid* propgrid, wxWindow* w
 		if (dlg.ShowModal() == wxID_OK)
 		{
 			affector->clearColourMap();
-			ParticleUniverse::ColourAffector::ColourMap& map = dlg.getColourMap();
+			ParticleUniverse::ColourAffector::ColourMap& map2 = dlg.getColourMap();
 			ParticleUniverse::ColourAffector::ColourMap::iterator it;
-			ParticleUniverse::ColourAffector::ColourMap::iterator itEnd = map.end();
-			for (it = map.begin(); it != itEnd; ++it)
+			ParticleUniverse::ColourAffector::ColourMap::iterator itEnd = map2.end();
+			for (it = map2.begin(); it != itEnd; ++it)
 			{
 				// Add to affector
 				affector->addColour(it->first, it->second);
@@ -61,7 +61,7 @@ bool ParentPropertyTimeAndColour::OnEvent (wxPropertyGrid* propgrid, wxWindow* w
 //-----------------------------------------------------------------------
 int ParentPropertyTimeAndColour::getNumberOfTimeAndColourEntries(void)
 {
-	return mTimeAndColour;
+	return int(mTimeAndColour);
 }
 //-----------------------------------------------------------------------
 void ParentPropertyTimeAndColour::reset(void)

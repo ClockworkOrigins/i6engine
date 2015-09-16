@@ -178,6 +178,9 @@ void ObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::Partic
 			case ParticleUniverse::Particle::PT_SYSTEM:
 				pType = PT_SYSTEM;
 			break;
+			default: {
+				break;
+			}
 		}
 	}
 	else
@@ -339,7 +342,6 @@ void ObserverPropertyWindow::copyHandlersTo(ParticleUniverse::ParticleObserver* 
 	newObserver->destroyAllEventHandlers();
 
 	// Move the handlers from the old observer to the new one
-	size_t size = oldObserver->getNumEventHandlers();
 	ParticleUniverse::ParticleEventHandler* handler;
 	while(oldObserver->getNumEventHandlers() > 0)
 	{
@@ -387,6 +389,9 @@ const Ogre::String& ObserverPropertyWindow::getObserverTypeByProperty(wxPGProper
 		case 10:
 			return OBSERVER_ON_VELOCITY;
 		break;
+		default: {
+			break;
+		}
 	}
 
 	return Ogre::StringUtil::BLANK;

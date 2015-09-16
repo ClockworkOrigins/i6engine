@@ -11,6 +11,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseEmitterPropertyWindow.h"
 
+#include <cfloat>
+
 #include "ParticleUniverseSystemManager.h"
 
 #include "ParticleUniverseEditComponent.h"
@@ -799,7 +801,7 @@ void EmitterPropertyWindow::copyDurationToEmitter(wxString propertyName, wxPGPro
 	{
 		emitter->setDynDuration(dynAttr);
 	}
-	if (emitter->getDynDuration()->getValue() == ParticleUniverse::ParticleEmitter::DEFAULT_DURATION)
+	if (std::abs(emitter->getDynDuration()->getValue() - ParticleUniverse::ParticleEmitter::DEFAULT_DURATION) < DBL_EPSILON)
 	{
 		emitter->setDynDurationSet(false); // Supressing writing this property the script and setting the emitter to the right state.
 	}
@@ -891,8 +893,8 @@ bool EmitterPropertyWindow::validateTextureCoord(wxPGProperty* prop, ParticleUni
 		if (renderer)
 		{
 			size_t max = renderer->getNumTextureCoords();
-			size_t val = prop->DoGetValue().GetLong();
-			if (val < 0 || val > max - 1)
+			size_t val = size_t(prop->DoGetValue().GetLong());
+			if (val > max - 1)
 			{
 				Ogre::String ogreMax = Ogre::StringConverter::toString(max);
 				wxString wxMax = ogre2wx(ogreMax);
@@ -909,10 +911,10 @@ void EmitterPropertyWindow::copyColourToEmitter(wxPGProperty* prop, ParticleUniv
 {
 	wxColor c;
 	c = doGetColourWithAlpha(PRNL_EMITTER_COLOUR, c);
-	Ogre::ColourValue colour(((ParticleUniverse::Real)c.Red())/255.0f, 
-		((ParticleUniverse::Real)c.Green())/255.0f, 
-		((ParticleUniverse::Real)c.Blue())/255.0f, 
-		((ParticleUniverse::Real)c.Alpha())/255.0f);
+	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, 
+		ParticleUniverse::Real(c.Green()) / 255.0f, 
+		ParticleUniverse::Real(c.Blue()) / 255.0f, 
+		ParticleUniverse::Real(c.Alpha()) / 255.0f);
 	emitter->setParticleColour(colour);
 }
 //-----------------------------------------------------------------------
@@ -920,10 +922,10 @@ void EmitterPropertyWindow::copyColourRangeStartToEmitter(wxPGProperty* prop, Pa
 {
 	wxColor c;
 	c = doGetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_START, c);
-	Ogre::ColourValue colour(((ParticleUniverse::Real)c.Red())/255.0f, 
-		((ParticleUniverse::Real)c.Green())/255.0f, 
-		((ParticleUniverse::Real)c.Blue())/255.0f, 
-		((ParticleUniverse::Real)c.Alpha())/255.0f);
+	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, 
+		ParticleUniverse::Real(c.Green()) / 255.0f, 
+		ParticleUniverse::Real(c.Blue()) / 255.0f, 
+		ParticleUniverse::Real(c.Alpha()) / 255.0f);
 	emitter->setParticleColourRangeStart(colour);
 }
 //-----------------------------------------------------------------------
@@ -931,10 +933,10 @@ void EmitterPropertyWindow::copyColourRangeEndToEmitter(wxPGProperty* prop, Part
 {
 	wxColor c;
 	c = doGetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_END, c);
-	Ogre::ColourValue colour(((ParticleUniverse::Real)c.Red())/255.0f, 
-		((ParticleUniverse::Real)c.Green())/255.0f, 
-		((ParticleUniverse::Real)c.Blue())/255.0f, 
-		((ParticleUniverse::Real)c.Alpha())/255.0f);
+	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, 
+		ParticleUniverse::Real(c.Green()) / 255.0f, 
+		ParticleUniverse::Real(c.Blue()) / 255.0f, 
+		ParticleUniverse::Real(c.Alpha()) / 255.0f);
 	emitter->setParticleColourRangeEnd(colour);
 }
 //-----------------------------------------------------------------------
@@ -1020,6 +1022,9 @@ const Ogre::String& EmitterPropertyWindow::getEmitterTypeByProperty(wxPGProperty
 		case 8:
 			return EMITTER_VERTEX;
 		break;
+		default: {
+			break;
+		}
 	}
 
 	return Ogre::StringUtil::BLANK;

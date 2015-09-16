@@ -56,7 +56,7 @@ void RibbonTrailRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* pr
 	else if (propertyName == PRNL_MAX_ELEMENTS)
 	{
 		// Max Chain Elements: unsigned int
-		renderer->setMaxChainElements(prop->DoGetValue().GetLong());
+		renderer->setMaxChainElements(size_t(prop->DoGetValue().GetLong()));
 		ParticleUniverse::ParticleTechnique* technique = renderer->getParentTechnique();
 		if (technique)
 		{
@@ -100,7 +100,7 @@ void RibbonTrailRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* pr
 		wxString name = prop->GetParent()->GetName();
 		wxColor c;
 		c = doGetColourWithAlpha(name, c);
-		Ogre::ColourValue colour(((ParticleUniverse::Real)c.Red())/255.0f, ((ParticleUniverse::Real)c.Green())/255.0f, ((ParticleUniverse::Real)c.Blue())/255.0f, ((ParticleUniverse::Real)c.Alpha())/255.0f);
+		Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, ParticleUniverse::Real(c.Green()) / 255.0f, ParticleUniverse::Real(c.Blue()) / 255.0f, ParticleUniverse::Real(c.Alpha()) / 255.0f);
 		renderer->setInitialColour(colour);
 		ParticleUniverse::ParticleTechnique* technique = renderer->getParentTechnique();
 		if (technique)
@@ -115,7 +115,7 @@ void RibbonTrailRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* pr
 		wxString name = prop->GetParent()->GetName();
 		wxColor c;
 		c = doGetColourWithAlpha(name, c);
-		Ogre::ColourValue colour(((ParticleUniverse::Real)c.Red())/255.0f, ((ParticleUniverse::Real)c.Green())/255.0f, ((ParticleUniverse::Real)c.Blue())/255.0f, ((ParticleUniverse::Real)c.Alpha())/255.0f);
+		Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, ParticleUniverse::Real(c.Green()) / 255.0f, ParticleUniverse::Real(c.Blue()) / 255.0f, ParticleUniverse::Real(c.Alpha()) / 255.0f);
 		renderer->setColourChange(colour);
 		ParticleUniverse::ParticleTechnique* technique = renderer->getParentTechnique();
 		if (technique)

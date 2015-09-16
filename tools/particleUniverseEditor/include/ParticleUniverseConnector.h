@@ -81,7 +81,7 @@ class ConnectionPolicy
 			ComponentType typeToBeConnectedWith, 
 			ComponentSubType subTypeToBeConnectedWith = CST_UNDEFINED,
 			bool multipleConnectionsPossible = false,
-			bool ignoreSubType = true,
+			bool ignoreST = true,
 			Ogre::String colourCode = DRAW_DEFAULT_COLOURCODE,
 			int lineStyle = wxSOLID) : 
 			
@@ -92,7 +92,7 @@ class ConnectionPolicy
 			mSubTypeToBeConnectedWith(subTypeToBeConnectedWith),
 			mMultipleConnectionsPossible(multipleConnectionsPossible),
 			mPolicyLocked(false),
-			mIgnoreSubType(ignoreSubType),
+			mIgnoreSubType(ignoreST),
 			mColourCode(colourCode),
 			mLineStyle(lineStyle) {}
 		

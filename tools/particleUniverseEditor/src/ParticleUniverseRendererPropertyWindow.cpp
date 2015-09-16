@@ -279,12 +279,12 @@ void RendererPropertyWindow::replaceRendererType(wxPGProperty* prop)
 				ParticleUniverse::String s = entityRenderer->getMeshName();
 				if (entityRenderer->getMeshName() == Ogre::StringUtil::BLANK)
 				{
-					ParticleUniverse::String s = "pu_bold_marker.mesh";
-					entityRenderer->setMeshName(s);
-					wxPGProperty* prop = GetPropertyPtr(PRNL_MESH_NAME);
-					if (prop)
+					ParticleUniverse::String s2 = "pu_bold_marker.mesh";
+					entityRenderer->setMeshName(s2);
+					wxPGProperty* p = GetPropertyPtr(PRNL_MESH_NAME);
+					if (p)
 					{
-						prop->SetValueFromString(ogre2wx(s));
+						p->SetValueFromString(ogre2wx(s2));
 					}
 				}
 			}
@@ -348,6 +348,9 @@ const Ogre::String& RendererPropertyWindow::getRendererTypeByProperty(wxPGProper
 		case 6:
 			return RENDERER_SPHERE;
 		break;
+		default: {
+			break;
+		}
 	}
 
 	return Ogre::StringUtil::BLANK;

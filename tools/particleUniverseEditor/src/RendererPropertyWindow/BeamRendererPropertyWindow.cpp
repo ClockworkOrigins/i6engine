@@ -51,7 +51,7 @@ void BeamRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* prop, wxS
 	else if (propertyName == PRNL_MAX_ELEMENTS)
 	{
 		// Max Elements: size_t
-		renderer->setMaxChainElements(prop->DoGetValue().GetLong());
+		renderer->setMaxChainElements(size_t(prop->DoGetValue().GetLong()));
 	}
 	else if (propertyName == PRNL_UPDATE_INTERVAL)
 	{
@@ -66,7 +66,7 @@ void BeamRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* prop, wxS
 	else if (propertyName == PRNL_NUMBER_OF_SEGMENTS)
 	{
 		// Number Of Segments: size_t
-		renderer->setNumberOfSegments(prop->DoGetValue().GetLong());
+		renderer->setNumberOfSegments(size_t(prop->DoGetValue().GetLong()));
 	}
 	else if (propertyName == PRNL_JUMP)
 	{
@@ -104,7 +104,7 @@ void BeamRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::Pa
 	doSetBool(PRNL_USE_VERTEX_COLOURS, beamRenderer->isUseVertexColours());
 
 	// Max Elements: size_t
-	doSetLong(PRNL_MAX_ELEMENTS, beamRenderer->getMaxChainElements());
+	doSetLong(PRNL_MAX_ELEMENTS, int64_t(beamRenderer->getMaxChainElements()));
 
 	// Update Interval: ParticleUniverse::Real
 	doSetDouble(PRNL_UPDATE_INTERVAL, beamRenderer->getUpdateInterval());
@@ -113,7 +113,7 @@ void BeamRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::Pa
 	doSetDouble(PRNL_DEVIATION, beamRenderer->getDeviation());
 
 	// Number Of Segments: size_t
-	doSetLong(PRNL_NUMBER_OF_SEGMENTS, beamRenderer->getNumberOfSegments());
+	doSetLong(PRNL_NUMBER_OF_SEGMENTS, int64_t(beamRenderer->getNumberOfSegments()));
 
 	// Number Of Segments: size_t
 	doSetBool(PRNL_JUMP, beamRenderer->isJump());

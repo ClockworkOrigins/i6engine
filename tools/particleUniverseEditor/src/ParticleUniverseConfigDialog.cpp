@@ -11,6 +11,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseConfigDialog.h"
 
+#include <cfloat>
+
 #include "ParticleUniverseConfigFile.h"
 #include "ParticleUniverseEditor.h"
 #include "ParticleUniverseMediaTypeComboBox.h"
@@ -673,6 +675,9 @@ void ConfigDialog::setFilter(const Recorder::ImageFilter& filter)
 		case Recorder::IF_ALPHA_FROM_BACKGROUND_COLOUR:
 			mFilter->SetValue(_("Alpha from background colour"));
 		break;
+		default: {
+			break;
+		}
 	}
 }
 //-----------------------------------------------------------------------
@@ -856,7 +861,7 @@ void ConfigDialog::loadConfig(void)
 
 	// Load gridplane distance
 	ParticleUniverse::Real gridplaneDistance = Ogre::StringConverter::parseReal(cfg.getSetting("gridplane_distance"));
-	if (gridplaneDistance == 0.0f)
+	if (std::abs(gridplaneDistance) < DBL_EPSILON)
 	{
 		gridplaneDistance = -200.0f;
 	}
@@ -864,7 +869,7 @@ void ConfigDialog::loadConfig(void)
 
 	// Load gridplane scale
 	ParticleUniverse::Real gridplaneScale = Ogre::StringConverter::parseReal(cfg.getSetting("gridplane_scale"));
-	if (gridplaneScale == 0.0f)
+	if (std::abs(gridplaneScale) < DBL_EPSILON)
 	{
 		gridplaneScale = 0.25f;
 	}
@@ -943,7 +948,7 @@ void ConfigDialog::loadConfig(void)
 
 	// Load Pausetime
 	ParticleUniverse::Real pauseTime = Ogre::StringConverter::parseReal(cfg.getSetting("pausetime"));
-	if (pauseTime == 0.0f)
+	if (std::abs(pauseTime) < DBL_EPSILON)
 	{
 		pauseTime = 0.2f;
 	}
@@ -959,7 +964,7 @@ void ConfigDialog::loadConfig(void)
 
 	// Load Edit Proportion
 	ParticleUniverse::Real editProportion = Ogre::StringConverter::parseReal(cfg.getSetting("edit_window_proportion"));
-	if (editProportion == 0.0f)
+	if (std::abs(editProportion) < DBL_EPSILON)
 	{
 		editProportion = 0.5f;
 	}

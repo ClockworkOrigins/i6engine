@@ -223,6 +223,9 @@ const Ogre::String& ExternPropertyWindow::getExternTypeByProperty(wxPGProperty* 
 		case 5:
 			return EXTERN_PHYSX_FLUID;
 		break;
+		default: {
+			break;
+		}
 	}
 
 	return Ogre::StringUtil::BLANK;

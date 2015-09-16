@@ -127,6 +127,9 @@ void SystemTreeControl::callbackContextMenu(wxWindowID id, wxWindow* window)
 		case ID_REMOVE:
 			mParentFrame->doRemove();
 		break;
+		default: {
+			break;
+		}
 	}
 }
 //-----------------------------------------------------------------------

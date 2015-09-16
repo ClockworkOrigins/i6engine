@@ -35,15 +35,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 EditTab::EditTab(wxWindow* parentNotebook, wxWindow* rootParent) : wxPanel(
 		parentNotebook,
 		wxID_ANY),
-	mRootParent(rootParent),
-	mNumberOfSystems(0),
-	mConnectionMode(CM_CONNECT_NONE),
-	mStartConnector(0),
-	mEndConnector(0),
 	mSystemCounter(0),
 	mTechniqueCounter(0),
-	mRendererCounter(0),
 	mEmitterCounter(0),
+	mRendererCounter(0),
 	mAffectorCounter(0),
 	mObserverCounter(0),
 	mHandlerCounter(0),
@@ -53,6 +48,11 @@ EditTab::EditTab(wxWindow* parentNotebook, wxWindow* rootParent) : wxPanel(
 	mOffsetY(8),
 	mOffsetFraction(0.05f),
 	mScale(0.75f),
+	mRootParent(rootParent),
+	mNumberOfSystems(0),
+	mConnectionMode(CM_CONNECT_NONE),
+	mStartConnector(0),
+	mEndConnector(0),
 	mEditChanged(false) {
 	// Internationize the strings
 	CT_SYSTEM = _("System");
@@ -529,6 +529,9 @@ bool EditTab::_processEmitRemoved(EditComponent* node1, EditComponent* node2) {
 				return true;
 			}
 			break;
+			default: {
+				break;
+			}
 		}
 	}
 	return false;
@@ -1121,7 +1124,6 @@ void EditTab::deleteParticleSystemComponents() {
 
 	/** (2) Delete all Edit Components, except the particle system edit component.
 	*/
-	it;
 	newList = mComponents;
 	for (it = newList.begin(); it != newList.end(); ++it) {
 		if ((*it)->getComponentType() != CT_SYSTEM) {

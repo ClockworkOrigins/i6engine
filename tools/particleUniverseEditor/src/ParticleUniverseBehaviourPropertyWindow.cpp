@@ -168,6 +168,9 @@ const Ogre::String& BehaviourPropertyWindow::getBehaviourTypeByProperty(wxPGProp
 		case 0:
 			return BEHAVIOUR_SLAVE;
 		break;
+		default: {
+			break;
+		}
 	}
 
 	return Ogre::StringUtil::BLANK;

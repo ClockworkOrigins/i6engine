@@ -805,7 +805,7 @@ void EditComponent::notifyPropertyChanged() {
 
 void EditComponent::notifyAdjustNames(const Ogre::String& newName) {
 	// Inform the parent
-	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
+	//EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
 //	parent->adjustNames(mName, newName, mType);
 }
 

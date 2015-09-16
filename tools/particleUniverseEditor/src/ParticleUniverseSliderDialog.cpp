@@ -23,6 +23,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseSliderDialog.h"
 
+#include <cfloat>
+
 #include "wx/ogre/utils.h"
 
 #include "OGRE/OgreStringConverter.h"
@@ -74,10 +76,10 @@ void SliderDialog::OnTextUpdated(wxCommandEvent& evt)
 //-----------------------------------------------------------------------
 void SliderDialog::OnScroll(wxScrollEvent& evt)
 {
-	if (!mSlider || mDivider == 0)
+	if (!mSlider || std::abs(mDivider) < DBL_EPSILON)
 		return;
 
-	mValue = (float)mSlider->GetValue() / mDivider;
+	mValue = float(mSlider->GetValue()) / mDivider;
 	Ogre::String s = Ogre::StringConverter::toString(mValue, 2);
 	mValueCtrl->SetValue(ogre2wx(s));
 }

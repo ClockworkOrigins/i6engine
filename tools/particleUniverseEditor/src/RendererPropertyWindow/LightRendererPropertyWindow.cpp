@@ -63,7 +63,7 @@ void LightRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* prop, wx
 		wxString name = prop->GetParent()->GetName();
 		wxColor c;
 		c = doGetColourWithAlpha(name, c);
-		Ogre::ColourValue colour(((ParticleUniverse::Real)c.Red())/255.0f, ((ParticleUniverse::Real)c.Green())/255.0f, ((ParticleUniverse::Real)c.Blue())/255.0f, ((ParticleUniverse::Real)c.Alpha())/255.0f);
+		Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, ParticleUniverse::Real(c.Green()) / 255.0f, ParticleUniverse::Real(c.Blue()) / 255.0f, ParticleUniverse::Real(c.Alpha()) / 255.0f);
 		renderer->setSpecularColour(colour);
 	}
 	else if (propertyName == PRNL_ATT_RANGE)

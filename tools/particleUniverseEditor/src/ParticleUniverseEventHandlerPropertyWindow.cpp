@@ -235,6 +235,9 @@ const Ogre::String& EventHandlerPropertyWindow::getHandlerTypeByProperty(wxPGPro
 		case 6:
 			return HANDLER_DO_STOP_SYSTEM;
 		break;
+		default: {
+			break;
+		}
 	}
 
 	return Ogre::StringUtil::BLANK;

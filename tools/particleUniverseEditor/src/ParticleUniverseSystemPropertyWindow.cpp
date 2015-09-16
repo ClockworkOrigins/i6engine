@@ -196,14 +196,14 @@ void SystemPropertyWindow::copyAttributeToSystem(wxPGProperty* prop, wxString pr
 		propertyName == PRNL_SYSTEM_FAST_FORWARD_INTERVAL)
 	{
 		// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
-		wxPGProperty* prop = GetPropertyPtr(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME);
-		if (!prop)
+		wxPGProperty* p = GetPropertyPtr(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME);
+		if (!p)
 			return;
-		ParticleUniverse::Real time = prop->DoGetValue().GetDouble();
-		prop = GetPropertyPtr(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL);
-		if (!prop)
+		ParticleUniverse::Real time = p->DoGetValue().GetDouble();
+		p = GetPropertyPtr(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL);
+		if (!p)
 			return;
-		ParticleUniverse::Real interval = prop->DoGetValue().GetDouble();
+		ParticleUniverse::Real interval = p->DoGetValue().GetDouble();
 		system->setFastForward(time, interval);
 	}
 	else if (propertyName == PRNL_SYSTEM_MAIN_CAMERA_NAME)

@@ -456,6 +456,9 @@ const Ogre::String& AffectorPropertyWindow::getAffectorTypeByProperty(wxPGProper
 		case 23:
 			return AFFECTOR_VORTEX;			
 		break;
+		default: {
+			break;
+		}
 	}
 
 	return Ogre::StringUtil::BLANK;

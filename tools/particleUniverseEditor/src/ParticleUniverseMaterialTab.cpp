@@ -35,11 +35,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //-----------------------------------------------------------------------
 MaterialTab::MaterialTab(wxWindow* parent, wxWindow* rootParent) :
 	wxPanel(parent, wxID_ANY),
+	mRootParent(rootParent),
 	mNewMaterialCounter(0),
 	mLastSelectedMaterial(wxT("")),
 	mResourceLocationTexture(wxT("")),
 	mResourceLocationMaterial(wxT("")),
-	mRootParent(rootParent),
 	mCurrentTextureFileName(Ogre::StringUtil::BLANK),
 	mCurrentTextureBitmap(0),
 	mCurrentTextureImage(0) {
@@ -261,8 +261,8 @@ void MaterialTab::selectMaterial(wxString& materialName) {
 						// Set texture properties
 						if (textureUnitState->getNumFrames() > 0)
 						{
-							wxString name = ogre2wx(textureUnitState->getFrameTextureName(0));
-							mTxtTextureLoad->SetValue(name);
+							wxString n = ogre2wx(textureUnitState->getFrameTextureName(0));
+							mTxtTextureLoad->SetValue(n);
 						}
 
 						mAddressingModeList->SetValue(getTextureAddressingMode(textureUnitState));
@@ -386,7 +386,7 @@ Ogre::TextureUnitState* MaterialTab::forceCreateFirstTexture(const Ogre::String 
 	else
 	{
 		// There is no pass
-		wxString materialName = mMaterialListBox->GetStringSelection();
+		materialName = mMaterialListBox->GetStringSelection();
 		Ogre::String name = wx2ogre(materialName);
 		Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(name);
 		if (!material.isNull())
@@ -571,17 +571,17 @@ void MaterialTab::OnAmbient(wxCommandEvent& event) {
 		wxColourDialog colourDialog(this, &colourData);
 		if (event.GetEventObject() && event.GetEventObject()->IsKindOf(CLASSINFO(wxButton)))
 		{
-			colourDialog.SetPosition(((wxButton*)event.GetEventObject())->GetPosition());
+			colourDialog.SetPosition(dynamic_cast<wxButton *>(event.GetEventObject())->GetPosition());
 		}
 		if (colourDialog.ShowModal() == wxID_OK)
 		{
 			// Set colour in pass
 			colourData = colourDialog.GetColourData();
 			wxCol = colourData.GetColour();
-			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f,
-			((ParticleUniverse::Real)wxCol.Green())/255.0f,
-			((ParticleUniverse::Real)wxCol.Blue())/255.0f,
-			((ParticleUniverse::Real)wxCol.Alpha())/255.0f);
+			colour = Ogre::ColourValue(ParticleUniverse::Real(wxCol.Red()) / 255.0f,
+			ParticleUniverse::Real(wxCol.Green()) / 255.0f,
+			ParticleUniverse::Real(wxCol.Blue()) / 255.0f,
+			ParticleUniverse::Real(wxCol.Alpha()) / 255.0f);
 		}
 		pass->setAmbient(colour);
 	}
@@ -598,17 +598,17 @@ void MaterialTab::OnDiffuse(wxCommandEvent& event) {
 		wxColourDialog colourDialog(this, &colourData);
 		if (event.GetEventObject() && event.GetEventObject()->IsKindOf(CLASSINFO(wxButton)))
 		{
-			colourDialog.SetPosition(((wxButton*)event.GetEventObject())->GetPosition());
+			colourDialog.SetPosition(dynamic_cast<wxButton *>(event.GetEventObject())->GetPosition());
 		}
 		if (colourDialog.ShowModal() == wxID_OK)
 		{
 			// Set colour in pass
 			colourData = colourDialog.GetColourData();
 			wxCol = colourData.GetColour();
-			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f,
-			((ParticleUniverse::Real)wxCol.Green())/255.0f,
-			((ParticleUniverse::Real)wxCol.Blue())/255.0f,
-			((ParticleUniverse::Real)wxCol.Alpha())/255.0f);
+			colour = Ogre::ColourValue(ParticleUniverse::Real(wxCol.Red()) / 255.0f,
+			ParticleUniverse::Real(wxCol.Green()) / 255.0f,
+			ParticleUniverse::Real(wxCol.Blue()) / 255.0f,
+			ParticleUniverse::Real(wxCol.Alpha()) / 255.0f);
 		}
 		pass->setDiffuse(colour);
 	}
@@ -625,17 +625,17 @@ void MaterialTab::OnSpecular(wxCommandEvent& event) {
 		wxColourDialog colourDialog(this, &colourData);
 		if (event.GetEventObject() && event.GetEventObject()->IsKindOf(CLASSINFO(wxButton)))
 		{
-			colourDialog.SetPosition(((wxButton*)event.GetEventObject())->GetPosition());
+			colourDialog.SetPosition(dynamic_cast<wxButton *>(event.GetEventObject())->GetPosition());
 		}
 		if (colourDialog.ShowModal() == wxID_OK)
 		{
 			// Set colour in pass
 			colourData = colourDialog.GetColourData();
 			wxCol = colourData.GetColour();
-			colour = Ogre::ColourValue(((ParticleUniverse::Real)wxCol.Red())/255.0f,
-			((ParticleUniverse::Real)wxCol.Green())/255.0f,
-			((ParticleUniverse::Real)wxCol.Blue())/255.0f,
-			((ParticleUniverse::Real)wxCol.Alpha())/255.0f);
+			colour = Ogre::ColourValue(ParticleUniverse::Real(wxCol.Red()) / 255.0f,
+			ParticleUniverse::Real(wxCol.Green()) / 255.0f,
+			ParticleUniverse::Real(wxCol.Blue()) / 255.0f,
+			ParticleUniverse::Real(wxCol.Alpha()) / 255.0f);
 		}
 		pass->setSpecular(colour);
 	}
@@ -657,10 +657,10 @@ void MaterialTab::OnEmissive(wxCommandEvent& event) {
 			colourData = colourDialog.GetColourData();
 			wxCol = colourData.GetColour();
 			colour = Ogre::ColourValue(
-				static_cast<ParticleUniverse::Real>(wxCol.Red())/255.0f,
-				static_cast<ParticleUniverse::Real>(wxCol.Green())/255.0f,
-				static_cast<ParticleUniverse::Real>(wxCol.Blue())/255.0f,
-				static_cast<ParticleUniverse::Real>(wxCol.Alpha())/255.0f
+				ParticleUniverse::Real(wxCol.Red()) / 255.0f,
+				ParticleUniverse::Real(wxCol.Green()) / 255.0f,
+				ParticleUniverse::Real(wxCol.Blue()) / 255.0f,
+				ParticleUniverse::Real(wxCol.Alpha()) / 255.0f
 			);
 		}
 		pass->setSelfIllumination(colour);

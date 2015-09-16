@@ -71,7 +71,7 @@ void SpinCtrlXYZ::OnChar(wxKeyEvent& event)
 			}
 		}
 
-        case WXK_TAB:
+		case WXK_TAB:
 		{
 			mUIMiscIcons->callbackSpinCtrlXYZ(this);
 			if (mNextSpinCtrl)
@@ -81,5 +81,8 @@ void SpinCtrlXYZ::OnChar(wxKeyEvent& event)
 			}
 		}
 		break;
+		default: {
+			break;
+		}
     }
 }

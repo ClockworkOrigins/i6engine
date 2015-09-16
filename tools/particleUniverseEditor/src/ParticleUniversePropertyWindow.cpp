@@ -174,8 +174,8 @@ PropertyWindow::PropertyWindow(wxWindow* parent, EditComponent* owner, const Ogr
 	wxSize(PROPERTIES_WIDTH, PROPERTIES_HEIGHT),
 	wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE,
 	wxT("")),
-	mName(name),
-	mOwner(owner) {
+	mOwner(owner),
+	mName(name) {
 	/* Fix Version 1.3.1: Set y-coord by default to infinite (99999) to prevent that it is displayed over the listbox with templates. This prevents
 	   jittering of the listbox (= wxTreeCtrl from  version 1.4).
 	*/

@@ -413,6 +413,9 @@ void ControlPointColourControl::callbackContextMenu(wxWindowID id, wxWindow* win
 				}
 			}
 		break;
+		default: {
+			break;
+		}
 	}
 }
 //-----------------------------------------------------------------------

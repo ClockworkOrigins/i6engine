@@ -58,7 +58,6 @@ bool FileDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& file
 	Ogre::String path;
 	wxArrayString::const_iterator it;
 	wxArrayString::const_iterator itEnd = filenames.end();
-	bool meshAvailable = false;
 
 	// 1. First validate whether the filetype is allowed
 	for (it = filenames.begin(); it != itEnd; ++it)
@@ -471,7 +470,6 @@ bool FileDropTarget::loadMaterialFile(const Ogre::String& baseNameAndExtension, 
 {
 	// Load the material file
 	wxString wxBaseNameAndExtension = ogre2wx(baseNameAndExtension);
-	Ogre::MaterialPtr material;
 	bool resourceAdded = false;
 
 	// Assume that programs and textures referenced to in 1 material file are in the same location

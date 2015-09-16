@@ -855,7 +855,7 @@ void ParticleUniverseEditorFrame::LoadParticleExplorer() {
 	ROOT_NODE_NAME = _("Particle Systems");
 	DEFAULT_CATEGORY_NAME = _("General");
 	wxTreeItemId rootNode = mParticleExplorer->AddRoot(ROOT_NODE_NAME, 0);
-	wxTreeItemId generalCategoryNode = mParticleExplorer->AppendItem(rootNode, DEFAULT_CATEGORY_NAME, 1); // Add the general node by default
+	mParticleExplorer->AppendItem(rootNode, DEFAULT_CATEGORY_NAME, 1); // Add the general node by default
 
 	for (ParticleUniverse::String & str : names) {
 		bool append = true;
@@ -1311,6 +1311,9 @@ void ParticleUniverseEditorFrame::doCompile() {
 			mLogListener->suppressLogging(true);
 		}
 		break;
+		default: {
+			break;
+		}
 	}
 }
 
@@ -1323,10 +1326,10 @@ void ParticleUniverseEditorFrame::doBackgroundColour() {
 	if (colourDialog.ShowModal() == wxID_OK) {
 		wxColourData colourData = colourDialog.GetColourData();
 		wxColour c = colourData.GetColour();
-		mBackgroundColour.r = ((ParticleUniverse::Real)c.Red())/255.0f;
-		mBackgroundColour.g = ((ParticleUniverse::Real)c.Green())/255.0f;
-		mBackgroundColour.b = ((ParticleUniverse::Real)c.Blue())/255.0f;
-		mBackgroundColour.a = ((ParticleUniverse::Real)c.Alpha())/255.0f;
+		mBackgroundColour.r = ParticleUniverse::Real(c.Red())/255.0f;
+		mBackgroundColour.g = ParticleUniverse::Real(c.Green())/255.0f;
+		mBackgroundColour.b = ParticleUniverse::Real(c.Blue())/255.0f;
+		mBackgroundColour.a = ParticleUniverse::Real(c.Alpha())/255.0f;
 
 		// Change the light
 		Ogre::MaterialPtr material = Ogre::MaterialManager::getSingletonPtr()->getByName("ParticleUniverseEditor/BackgroundMaterial");

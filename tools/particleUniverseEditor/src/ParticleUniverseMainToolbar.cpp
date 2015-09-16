@@ -562,15 +562,15 @@ void UIMiscIcons::enable(bool enabled)
 	mSpinZ->Enable(enabled);
 }
 //-----------------------------------------------------------------------
-void UIMiscIcons::enableRemoveEntity(bool enable)
+void UIMiscIcons::enableRemoveEntity(bool en)
 {
-	mToolbar->EnableTool(ID_REMOVE_MESH_FROM_SCENE, enable);
+	mToolbar->EnableTool(ID_REMOVE_MESH_FROM_SCENE, en);
 }
 //-----------------------------------------------------------------------
-void UIMiscIcons::enableOrthoCameraSelected(bool enabled)
+void UIMiscIcons::enableOrthoCameraSelected(bool en)
 {
-	mToolbar->EnableTool(ID_CAMERA_RESET, enabled);
-	mToolbar->EnableTool(ID_CAMERA_SAVE, enabled);
+	mToolbar->EnableTool(ID_CAMERA_RESET, en);
+	mToolbar->EnableTool(ID_CAMERA_SAVE, en);
 }
 //-----------------------------------------------------------------------
 void UIMiscIcons::callbackSpinCtrlXYZ(SpinCtrlXYZ* spinCtrl)

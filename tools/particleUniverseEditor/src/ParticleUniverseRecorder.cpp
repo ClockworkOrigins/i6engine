@@ -23,6 +23,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseRecorder.h"
 
+#include <cfloat>
+
 #include "ParticleUniverseSystem.h"
 
 #include "OgreHardwarePixelBuffer.h"
@@ -52,7 +54,7 @@ void ImageX::filterAlphaFromBackgroundColour(const Ogre::ColourValue& background
 	{
 		Ogre::ColourValue colour;
 		Ogre::PixelUtil::unpackColour(&colour, mFormat, (mBuffer + pointer));
-		if (colour.r == backgroundColour.r && colour.g == backgroundColour.g && colour.b == backgroundColour.b)
+		if (std::abs(colour.r - backgroundColour.r) < DBL_EPSILON && std::abs(colour.g - backgroundColour.g) < DBL_EPSILON && std::abs(colour.b - backgroundColour.b) < DBL_EPSILON)
 		{
 			colour.a = 0.0f;
 		}
@@ -65,27 +67,27 @@ void ImageX::filterAlphaFromBackgroundColour(const Ogre::ColourValue& background
 //-----------------------------------------------------------------------
 Recorder::Recorder(Ogre::Camera* camera) :
 	FrameListener(),
-	mCamera(camera),
 	mFramesPerSecond(27),
 	mFrameLength(0.037f),
-	mVideoDirectory(Ogre::StringUtil::BLANK),
-	mFileNameSuffix(".png"),
-	mParticleSystem(0),
 	mTimeElapsed(0.0f),
 	mTimeElapsedFrame(0.0f),
 	mStart(0.0f),
 	mEnd(0.0f),
+	mVideoDirectory(Ogre::StringUtil::BLANK),
+	mFileNameSuffix(".png"),
 	mImageWidth(640),
 	mImageHeight(480),
+	mParticleSystem(0),
+	mCamera(camera),
 	mRecording(false),
 	mPauseTime(0.2f),
 	mRenderTexture(0),
 	mFrameCounter(0),
+	mInitialised(false),
 	mImageData(0),
 	mPixelBox(),
 	mFilter(IF_NONE),
 	mBackgroundColour(Ogre::ColourValue::Black),
-	mInitialised(false),
 	mOldViewport(0)
 {
 	// Create an image
@@ -131,7 +133,7 @@ void Recorder::setPauseTime (const ParticleUniverse::Real pauseTime)
 void Recorder::setFramesPerSecond (const size_t framesPerSecond)
 {
 	mFramesPerSecond = framesPerSecond;
-	mFrameLength = 1.0f / (ParticleUniverse::Real)framesPerSecond;
+	mFrameLength = 1.0f / ParticleUniverse::Real(framesPerSecond);
 }
 //-----------------------------------------------------------------------
 void Recorder::setFileNameSuffix (const Ogre::String& fileNameSuffix)
@@ -302,6 +304,9 @@ bool Recorder::frameEnded (const Ogre::FrameEvent& evt)
 							case IF_ALPHA_FROM_BACKGROUND_COLOUR:
 								mImage->filterAlphaFromBackgroundColour(mBackgroundColour);
 							break;
+							default: {
+								break;
+							}
 						}
 						mImage->save(fullName);
 					}

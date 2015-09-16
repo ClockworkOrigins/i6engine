@@ -95,10 +95,10 @@ void ControlPoint::paint(wxPaintDC& dc)
 
 				Ogre::String s = sX + ", " + sY;
 				wxPoint textPos;
-				textPos.x = mPos.x - 2 * s.length();
+				textPos.x = mPos.x - int(2 * s.length());
 				if (mXval > mXCenterVal)
 				{
-					textPos.x = mPos.x - 4 * s.length();
+					textPos.x = mPos.x - int(4 * s.length());
 				}
 				else
 				{

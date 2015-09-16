@@ -97,9 +97,9 @@ ParticleUniverse::ColourAffector::ColourMap& ColourAffectorDialog::getColourMap(
 	for (it = controlPoints.begin(); it != itEnd; ++it)
 	{
 		cp = *it;
-		time = (float)cp->getPosition().x / (float)(mControlSize.x - CONTROL_POINT_RECT_SIZE - CONTROL_POINT_BORDER_SIZE_BOLD);
+		time = float(cp->getPosition().x) / float(mControlSize.x - CONTROL_POINT_RECT_SIZE - CONTROL_POINT_BORDER_SIZE_BOLD);
 		wxColour col = cp->getColour();
-		ParticleUniverse::ColourValue colour(col.Red()/255.0f, col.Green()/255.0f, col.Blue()/255.0f, col.Alpha()/255.0f);
+		ParticleUniverse::ColourValue colour(col.Red() / 255.0f, col.Green() / 255.0f, col.Blue() / 255.0f, col.Alpha() / 255.0f);
 		mColourMap.insert(std::make_pair(time, colour));
 	}
 	return mColourMap;

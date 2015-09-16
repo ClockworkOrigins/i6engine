@@ -11,6 +11,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseEditorPCH.h"
 #include "AffectorPropertyWindow/ScaleAffectorPropertyWindow.h"
+
+#include <cfloat>
+
 #include "ParticleUniverseSystemManager.h"
 #include "ParticleUniverseEditComponent.h"
 
@@ -52,7 +55,7 @@ void ScaleAffectorPropertyWindow::copyAttributeToAffector(wxPGProperty* prop, wx
 			affector->setDynScaleXYZ(dynAttr);
 		}
 		dynAttr = affector->getDynScaleXYZ();
-		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && dynAttr->getValue() == ParticleUniverse::ScaleAffector::DEFAULT_XYZ_SCALE)
+		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && std::abs(dynAttr->getValue() - ParticleUniverse::ScaleAffector::DEFAULT_XYZ_SCALE) < DBL_EPSILON)
 		{
 			// Force default state; internal flag in PU must be reset, which isn't done if the value is changed.
 			affector->resetDynScaleXYZ(true);
@@ -73,7 +76,7 @@ void ScaleAffectorPropertyWindow::copyAttributeToAffector(wxPGProperty* prop, wx
 			affector->setDynScaleX(dynAttr);
 		}
 		dynAttr = affector->getDynScaleX();
-		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && dynAttr->getValue() == ParticleUniverse::ScaleAffector::DEFAULT_X_SCALE)
+		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && std::abs(dynAttr->getValue() - ParticleUniverse::ScaleAffector::DEFAULT_X_SCALE) < DBL_EPSILON)
 		{
 			// Force default state
 			affector->resetDynScaleX(true);
@@ -94,7 +97,7 @@ void ScaleAffectorPropertyWindow::copyAttributeToAffector(wxPGProperty* prop, wx
 			affector->setDynScaleY(dynAttr);
 		}
 		dynAttr = affector->getDynScaleY();
-		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && dynAttr->getValue() == ParticleUniverse::ScaleAffector::DEFAULT_Y_SCALE)
+		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && std::abs(dynAttr->getValue() - ParticleUniverse::ScaleAffector::DEFAULT_Y_SCALE) < DBL_EPSILON)
 		{
 			// Force default state
 			affector->resetDynScaleY(true);
@@ -115,7 +118,7 @@ void ScaleAffectorPropertyWindow::copyAttributeToAffector(wxPGProperty* prop, wx
 			affector->setDynScaleZ(dynAttr);
 		}
 		dynAttr = affector->getDynScaleZ();
-		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && dynAttr->getValue() == ParticleUniverse::ScaleAffector::DEFAULT_Z_SCALE)
+		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && std::abs(dynAttr->getValue() - ParticleUniverse::ScaleAffector::DEFAULT_Z_SCALE) < DBL_EPSILON)
 		{
 			// Force default state
 			affector->resetDynScaleZ(true);
