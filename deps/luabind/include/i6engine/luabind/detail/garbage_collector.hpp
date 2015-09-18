@@ -21,33 +21,32 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-#ifndef LUABIND_GARBAGE_COLLECTOR_HPP_INCLUDED
-#define LUABIND_GARBAGE_COLLECTOR_HPP_INCLUDED
+#ifndef __LUABIND_DETAIL_GARBAGE_COLLECTOR_HPP__
+#define __LUABIND_DETAIL_GARBAGE_COLLECTOR_HPP__
 
 #include "i6engine/luabind/config.hpp"
 
-namespace luabind { namespace detail
-{
+namespace luabind {
+namespace detail {
+
 	// function that is used as __gc metafunction on several objects
 	template<class T>
-	inline int garbage_collector(lua_State* L)
-	{
-		T* obj = static_cast<T*>(lua_touserdata(L, -1));
+	inline int garbage_collector(lua_State * L) {
+		T * obj = static_cast<T *>(lua_touserdata(L, -1));
 		obj->~T();
 		return 0;
 	}
 
 	template<class T>
-	struct garbage_collector_s
-	{
-		static int apply(lua_State* L)
-		{
-			T* obj = static_cast<T*>(lua_touserdata(L, -1));
+	struct garbage_collector_s {
+		static int apply(lua_State * L) {
+			T * obj = static_cast<T *>(lua_touserdata(L, -1));
 			obj->~T();
 			return 0;
 		}
 	};
 
-}}
+} /* namespace detail */
+} /* namespace luabind */
 
-#endif // LUABIND_GARBAGE_COLLECTOR_HPP_INCLUDED
+#endif /* __LUABIND_DETAIL_GARBAGE_COLLECTOR_HPP__ */

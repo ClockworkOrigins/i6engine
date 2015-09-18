@@ -21,16 +21,15 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-#ifndef LUABIND_OPEN_HPP_INCLUDED
-#define LUABIND_OPEN_HPP_INCLUDED
+#ifndef __LUABIND_OPEN_HPP__
+#define __LUABIND_OPEN_HPP__
 
 #include "i6engine/luabind/config.hpp"
 
 namespace luabind {
 
-	LUABIND_API void open(lua_State* L);
+	LUABIND_API void open(lua_State * L);
 
-}
+} /* namespace luabind */
 
-#endif // LUABIND_OPEN_HPP_INCLUDED
-
+#endif /* __LUABIND_OPEN_HPP__ */

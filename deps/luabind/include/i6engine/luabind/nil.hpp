@@ -20,21 +20,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
-#ifndef LUABIND_NIL_HPP
-#define LUABIND_NIL_HPP
+#ifndef __LUABIND_NIL_HPP__
+#define __LUABIND_NIL_HPP__
 
 #include "i6engine/luabind/config.hpp"
 
-namespace luabind
-{
-   namespace detail
-   {
-      struct nil_type {};
-   }
+namespace luabind {
+namespace detail {
+
+    struct nil_type {};
+
+} /* namespace detail */
 
    // defined in class.cpp
    extern LUABIND_API detail::nil_type nil;
-}
 
-#endif
+} /* namespace luabind */
 
+#endif /* __LUABIND_NIL_HPP__ */

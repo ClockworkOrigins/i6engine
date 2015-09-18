@@ -21,10 +21,10 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-#ifndef LUABIND_CONFIG_HPP_INCLUDED
-#define LUABIND_CONFIG_HPP_INCLUDED
+#ifndef __LUABIND_CONFIG_HPP__
+#define __LUABIND_CONFIG_HPP__
 
-#include <boost/config.hpp>
+#include "boost/config.hpp"
 
 #ifdef BOOST_MSVC
 	#define LUABIND_ANONYMOUS_FIX static
@@ -38,8 +38,7 @@
 
 #include <cstring>
 
-namespace std
-{
+namespace std {
 	using ::strlen;
 	using ::strcmp;
 	using ::type_info;
@@ -115,14 +114,13 @@ namespace std
 #endif
 
 #ifndef LUABIND_API
-# define LUABIND_API
+	#define LUABIND_API
 #endif
 
 namespace luabind {
 
-LUABIND_API void disable_super_deprecation();
+	LUABIND_API void disable_super_deprecation();
 
-} // namespace luabind
+} /* namespace luabind */
 
-#endif // LUABIND_CONFIG_HPP_INCLUDED
-
+#endif /* __LUABIND_CONFIG_HPP__ */

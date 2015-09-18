@@ -20,9 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
-
-#ifndef LUABIND_ADOPT_POLICY_HPP_INCLUDED
-#define LUABIND_ADOPT_POLICY_HPP_INCLUDED
+#ifndef __LUABIND_ADOPT_POLICY_HPP__
+#define __LUABIND_ADOPT_POLICY_HPP__
 
 #include "i6engine/luabind/config.hpp"
 #include "i6engine/luabind/wrapper_base.hpp"
@@ -32,40 +31,33 @@
 
 #include "boost/type_traits/is_polymorphic.hpp"
 
-namespace luabind { namespace detail 
-{
-    template <class T>
-    void adjust_backref_ownership(T* ptr, mpl::true_)
-    {
-        if (wrap_base* p = dynamic_cast<wrap_base*>(ptr))
-        {
-            wrapped_self_t& wrapper = wrap_access::ref(*p);
+namespace luabind {
+namespace detail {
+
+    template<class T>
+    void adjust_backref_ownership(T * ptr, mpl::true_) {
+        if (wrap_base* p = dynamic_cast<wrap_base *>(ptr)) {
+            wrapped_self_t & wrapper = wrap_access::ref(*p);
             wrapper.get(wrapper.state());
             wrapper.m_strong_ref.set(wrapper.state());
         }
     }
 
-    inline void adjust_backref_ownership(void*, mpl::false_)
-    {}
+    inline void adjust_backref_ownership(void *, mpl::false_) {}
 
 	template<class Direction = lua_to_cpp>
-    struct adopt_pointer : pointer_converter
-	{
+    struct adopt_pointer : pointer_converter {
 		typedef adopt_pointer type;
 
-        int const consumed_args(...)
-        {
+        int const consumed_args(...) {
             return 1;
         }
 
 		template<class T>
-		T* apply(lua_State* L, by_pointer<T>, int index)
-		{
-            T* ptr = pointer_converter::apply(
-                L, LUABIND_DECORATE_TYPE(T*), index);
+		T * apply(lua_State * L, by_pointer<T>, int index) {
+            T * ptr = pointer_converter::apply(L, LUABIND_DECORATE_TYPE(T*), index);
 
-            object_rep* obj = static_cast<object_rep*>(
-                lua_touserdata(L, index));
+            object_rep * obj = static_cast<object_rep *>(lua_touserdata(L, index));
             obj->release();
 
             adjust_backref_ownership(ptr, boost::is_polymorphic<T>());
@@ -74,26 +66,21 @@ namespace luabind { namespace detail
 		}
 
 		template<class T>
-		int match(lua_State* L, by_pointer<T>, int index)
-		{
-            return pointer_converter::match(
-                L, LUABIND_DECORATE_TYPE(T*), index);
+		int match(lua_State * L, by_pointer<T>, int index) {
+            return pointer_converter::match(L, LUABIND_DECORATE_TYPE(T *), index);
 		}
 
 		template<class T>
-		void converter_postcall(lua_State*, T, int) {}
+		void converter_postcall(lua_State *, T, int) {}
 	};
 
 	template<>
-	struct adopt_pointer<cpp_to_lua>
-	{
+	struct adopt_pointer<cpp_to_lua> {
 		typedef adopt_pointer type;
 
 		template<class T>
-		void apply(lua_State* L, T* ptr)
-		{
-			if (ptr == 0) 
-			{
+		void apply(lua_State * L, T * ptr) {
+			if (ptr == nullptr) {
 				lua_pushnil(L);
 				return;
 			}
@@ -101,8 +88,9 @@ namespace luabind { namespace detail
 			// if there is a back_reference, then the
 			// ownership will be removed from the
 			// back reference and put on the lua stack.
-			if (luabind::move_back_reference(L, ptr))
+			if (move_back_reference(L, ptr)) {
 				return;
+			}
 
             make_instance(L, std::unique_ptr<T>(ptr));
 		}
@@ -110,34 +98,31 @@ namespace luabind { namespace detail
 
 	template<int N>
 //	struct adopt_policy : converter_policy_tag
-	struct adopt_policy : conversion_policy<N>
-	{
+	struct adopt_policy : conversion_policy<N> {
 //		BOOST_STATIC_CONSTANT(int, index = N);
 
-		static void precall(lua_State*, const index_map&) {}
-		static void postcall(lua_State*, const index_map&) {}
+		static void precall(lua_State *, const index_map &) {}
+		static void postcall(lua_State *, const index_map &) {}
 
 		struct only_accepts_nonconst_pointers {};
 
 		template<class T, class Direction>
-		struct apply
-		{
+		struct apply {
 			typedef luabind::detail::is_nonconst_pointer<T> is_nonconst_p;
 			typedef typename boost::mpl::if_<is_nonconst_p, adopt_pointer<Direction>, only_accepts_nonconst_pointers>::type type;
 		};
 	};
 
-}}
+} /* namespace detail */
+} /* namespace luabind */
 
-namespace luabind
-{
+namespace luabind {
+
 	template<int N>
-	detail::policy_cons<detail::adopt_policy<N>, detail::null_type> 
-	adopt(LUABIND_PLACEHOLDER_ARG(N))
-	{ 
+	detail::policy_cons<detail::adopt_policy<N>, detail::null_type> adopt(LUABIND_PLACEHOLDER_ARG(N)) { 
 		return detail::policy_cons<detail::adopt_policy<N>, detail::null_type>(); 
 	}
-}
 
-#endif // LUABIND_ADOPT_POLICY_HPP_INCLUDE
+} /* namespace luabind */
 
+#endif /* __LUABIND_ADOPT_POLICY_HPP__ */
