@@ -14,34 +14,7 @@
  * limitations under the License.
  */
 
-#include "i6engine/api/Application.h"
+#include "i6engine/modules/physics/collisionShapes/MeshStriderCollisionShape.h"
 
-namespace i6engine {
-namespace tools {
-
-	class TerrainShapeCreatorApplication : public api::Application {
-	public:
-		TerrainShapeCreatorApplication(const std::string & goTemplate, const std::string & outFile) : api::Application(), _goTemplate(goTemplate), _outFile(outFile) {
-		}
-
-	private:
-		std::string _goTemplate;
-		std::string _outFile;
-
-		void Initialize();
-
-		void AfterInitialize();
-
-		void Tick() {
-		}
-
-		bool ShutdownRequest() {
-			return true;
-		}
-
-		void Finalize() {
-		}
-	};
-
-} /* namespace tools */
-} /* namespace i6engine */
+BOOST_CLASS_EXPORT_GUID(i6engine::modules::MeshStriderCollisionShapeData, "CS2")
+BOOST_CLASS_IMPLEMENTATION(i6engine::modules::MeshStriderCollisionShapeData, boost::serialization::object_serializable)

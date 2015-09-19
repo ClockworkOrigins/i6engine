@@ -20,17 +20,19 @@
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
 
+#include "i6engine/modules/physics/collisionShapes/HeightmapCollisionShape.h"
+
 #include "OGRE/OgreImage.h"
 #include "OGRE/Terrain/OgreTerrainGroup.h"
 
 namespace i6engine {
 namespace modules {
 
-	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _layers(layers) {
+	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _vertices(vertices), _layers(layers), _minX(minX), _maxX(maxX), _minY(minY), _maxY(maxY) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		_mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-		_mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(_manager->getSceneManager(), Ogre::Terrain::ALIGN_X_Z, 513, _size);
+		_mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(_manager->getSceneManager(), Ogre::Terrain::ALIGN_X_Z, _vertices, _size);
 		_mTerrainGroup->setFilenameConvention(Ogre::String("i6engineTerrain"), Ogre::String("dat"));
 		_mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
@@ -74,7 +76,7 @@ namespace modules {
 		_mTerrainGlobals->setCompositeMapAmbient(_manager->getSceneManager()->getAmbientLight());
 		// _mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
 		Ogre::Terrain::ImportData & defaultimp = _mTerrainGroup->getDefaultImportSettings();
-		defaultimp.terrainSize = 513;
+		defaultimp.terrainSize = _vertices;
 		defaultimp.worldSize = _size;
 		defaultimp.inputScale = _inputScale;
 		defaultimp.minBatchSize = 33;
@@ -142,6 +144,30 @@ namespace modules {
 			blendMap0->dirty();
 			blendMap0->update();
 		}
+	}
+
+	void Terrain::saveCollisionShape(const std::string & outFile) {
+		Ogre::Terrain * pTerrain = _mTerrainGroup->getTerrain(0, 0);
+		int terrainPageSize = pTerrain->getSize(); // Number of vertices along x/z axe
+
+		float * pTerrainHeightData = pTerrain->getHeightData();
+		std::vector<double> pTerrainHeightDataConvert(terrainPageSize * terrainPageSize, 0.0);
+		for (int x = 0; x < terrainPageSize; x++) {
+			for (int z = 0; z < terrainPageSize; z++) {
+				pTerrainHeightDataConvert[x * terrainPageSize + z] = double(pTerrainHeightData[(terrainPageSize - x - 1) * terrainPageSize + z]);
+			}
+		}
+
+		double unitsBetweenVertices = pTerrain->getWorldSize() / (terrainPageSize - 1);
+		Vec3 scaling(unitsBetweenVertices, 1, unitsBetweenVertices);
+		HeightmapCollisionShapeData * hcsd = new HeightmapCollisionShapeData(terrainPageSize, terrainPageSize, pTerrainHeightDataConvert, pTerrain->getMinHeight(), pTerrain->getMaxHeight(), scaling);
+		std::string serialized = hcsd->Serialize();
+
+		delete hcsd;
+
+		std::ofstream fs(outFile.c_str(), std::ios_base::binary);
+		fs << serialized;
+		fs.close();
 	}
 
 } /* namespace modules */

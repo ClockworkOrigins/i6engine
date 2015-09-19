@@ -4,6 +4,7 @@
 		<Attribute name="size">1200.0</Attribute>
 		<Attribute name="heightmap">terrain.png</Attribute>
 		<Attribute name="inputScale">60.0</Attribute>
+		<Attribute name="vertices">65</Attribute>
 		<Attribute name="layers">2</Attribute>
 		<Attribute name="layer_0_size">10</Attribute>
 		<Attribute name="layer_0_diffusespecular">GrassFloor.tga</Attribute>
@@ -19,13 +20,12 @@
 		<Attribute name="maxY">2</Attribute>
 	</Component>
 	<Component template="PhysicalState">
-		<Attribute name="planeConstant">1</Attribute>
 		<Attribute name="restitution">0.0</Attribute>
 		<Attribute name="friction">1.0</Attribute>
-		<Attribute name="shapeType">0</Attribute>
+		<Attribute name="shapeType">3</Attribute>
+		<Attribute name="fileName">terrain.bullet</Attribute>
 		<Attribute name="collisionGroup">1 0 0</Attribute>
 		<Attribute name="shatterInterest">0</Attribute>
-		<Attribute name="planeVector">0.0 0.1 0.0</Attribute>
 		<Attribute name="angularFactor">0.0 0.0 0.0</Attribute>
 		<Attribute name="linearFactor">0.0 0.0 0.0</Attribute>
 		<Attribute name="pos">0.0 0.0 0.0</Attribute>

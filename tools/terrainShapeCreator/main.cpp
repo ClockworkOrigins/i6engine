@@ -19,6 +19,7 @@
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/api/EngineController.h"
+#include "i6engine/modules/graphics/GraphicsController.h"
 #include "i6engine/modules/object/ObjectController.h"
 
 #include "TerrainShapeCreatorApplication.h"
@@ -35,6 +36,7 @@ int main(int argc, char ** argv) {
 
 		std::cout << "Initializing i6engine" << std::endl;
 
+		i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), 10000);
 		i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6engine::modules::ObjectController(), 10000);
 
 		i6engine::tools::TerrainShapeCreatorApplication app(goTemplate, bullet);

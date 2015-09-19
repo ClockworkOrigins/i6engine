@@ -92,10 +92,10 @@ namespace graphics {
 	}
 
 	// Terrain
-	Graphics_Terrain_Create::Graphics_Terrain_Create(const int64_t goID, const int64_t coID, const std::string & h, const double s, double i, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(coID, goID), heightmap(h), size(s), inputScale(i), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
+	Graphics_Terrain_Create::Graphics_Terrain_Create(const int64_t goID, const int64_t coID, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(coID, goID), heightmap(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
 	}
 
-	Graphics_Terrain_Update::Graphics_Terrain_Update(const int64_t goID, const std::string & h, const double s, double i, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(goID, -1), heightmap(h), size(s), inputScale(i), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
+	Graphics_Terrain_Update::Graphics_Terrain_Update(const int64_t goID, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(goID, -1), heightmap(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
 	}
 
 	Graphics_Terrain_Delete::Graphics_Terrain_Delete() : GameMessageStruct() {}
@@ -179,6 +179,9 @@ namespace graphics {
 	}
 
 	Graphics_ShadowTechnique_Update::Graphics_ShadowTechnique_Update(ShadowTechnique st) : GameMessageStruct(), shadowTechnique(st) {
+	}
+
+	Graphics_SaveTerrainShape_Create::Graphics_SaveTerrainShape_Create(const int64_t goID, const std::string & f, const std::function<void(void)> & cb) : GameMessageStruct(-1, goID), file(f), callback(cb) {
 	}
 
 } /* namespace graphics */
