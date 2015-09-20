@@ -79,7 +79,7 @@ namespace modules {
 		defaultimp.terrainSize = _vertices;
 		defaultimp.worldSize = _size;
 		defaultimp.inputScale = _inputScale;
-		defaultimp.minBatchSize = 33;
+		defaultimp.minBatchSize = 3;
 		defaultimp.maxBatchSize = 65;
 
 		defaultimp.layerList.resize(_layers.size());
@@ -150,17 +150,24 @@ namespace modules {
 		Ogre::Terrain * pTerrain = _mTerrainGroup->getTerrain(0, 0);
 		int terrainPageSize = pTerrain->getSize(); // Number of vertices along x/z axe
 
-		float * pTerrainHeightData = pTerrain->getHeightData();
-		std::vector<double> pTerrainHeightDataConvert(terrainPageSize * terrainPageSize, 0.0);
-		for (int x = 0; x < terrainPageSize; x++) {
-			for (int z = 0; z < terrainPageSize; z++) {
-				pTerrainHeightDataConvert[x * terrainPageSize + z] = double(pTerrainHeightData[(terrainPageSize - x - 1) * terrainPageSize + z]);
+		std::vector<double> pTerrainHeightDataConvert((terrainPageSize * (std::abs(_maxX - _minX) + 1) - (std::abs(_maxX - _minX))) * (terrainPageSize * (std::abs(_maxY - _minY) + 1) - (std::abs(_maxY - _minY))), 0.0);
+		int singleRowLength = terrainPageSize * (std::abs(_maxY - _minY) + 1) - (std::abs(_maxY - _minY));
+		for (int64_t i = _minX; i <= _maxX; i++) {
+			for (int64_t j = _minY; j <= _maxY; j++) {
+				float * pTerrainHeightData = _mTerrainGroup->getTerrain(j, i)->getHeightData();
+				for (int x = (i == _minX) ? 0 : 1; x < terrainPageSize; x++) {
+					for (int z = (j == _minY) ? 0 : 1; z < terrainPageSize; z++) {
+						int blockRow = (terrainPageSize * (i - _minX) - (i - _minX) + x) * singleRowLength;
+						int columnOffset = (j - _minY) * terrainPageSize - (j - _minY) + z;
+						pTerrainHeightDataConvert[singleRowLength * ((std::abs(_maxX - _minX) + 1) * terrainPageSize - (std::abs(_maxX - _minX)) - 1) - blockRow + columnOffset] = double(pTerrainHeightData[x * terrainPageSize + z]);
+					}
+				}
 			}
 		}
 
 		double unitsBetweenVertices = pTerrain->getWorldSize() / (terrainPageSize - 1);
 		Vec3 scaling(unitsBetweenVertices, 1, unitsBetweenVertices);
-		HeightmapCollisionShapeData * hcsd = new HeightmapCollisionShapeData(terrainPageSize, terrainPageSize, pTerrainHeightDataConvert, pTerrain->getMinHeight(), pTerrain->getMaxHeight(), scaling);
+		HeightmapCollisionShapeData * hcsd = new HeightmapCollisionShapeData(terrainPageSize * (std::abs(_maxX - _minX) + 1) - (std::abs(_maxX - _minX)), terrainPageSize * (std::abs(_maxY - _minY) + 1) - (std::abs(_maxY - _minY)), pTerrainHeightDataConvert, pTerrain->getMinHeight(), pTerrain->getMaxHeight(), scaling);
 		std::string serialized = hcsd->Serialize();
 
 		delete hcsd;
