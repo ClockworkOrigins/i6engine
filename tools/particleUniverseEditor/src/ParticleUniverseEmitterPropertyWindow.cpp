@@ -28,8 +28,8 @@ EmitterPropertyWindow::EmitterPropertyWindow(wxWindow* parent, EditComponent* ow
 }
 //-----------------------------------------------------------------------
 EmitterPropertyWindow::EmitterPropertyWindow(EmitterPropertyWindow* emitterPropertyWindow) : PropertyWindow(
-	emitterPropertyWindow->GetParent(), 
-	emitterPropertyWindow->getOwner(), 
+	emitterPropertyWindow->GetParent(),
+	emitterPropertyWindow->getOwner(),
 	emitterPropertyWindow->getComponentName())
 {
 	_initProperties();
@@ -47,9 +47,9 @@ void EmitterPropertyWindow::copyAttributesFromPropertyWindow(EmitterPropertyWind
 	doSetString(PRNL_NAME, emitterPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_EMITTER_TYPE);
-	wxPGProperty* propFrom = emitterPropertyWindow->GetPropertyPtr(PRNL_EMITTER_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	wxPGProperty* propTo = GetPropertyByName(PRNL_EMITTER_TYPE);
+	wxPGProperty* propFrom = emitterPropertyWindow->GetPropertyByName(PRNL_EMITTER_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 
 	// Enabled: Bool
 	doSetBool(PRNL_EMITTER_ENABLED, emitterPropertyWindow->doGetBool(PRNL_EMITTER_ENABLED));
@@ -68,7 +68,7 @@ void EmitterPropertyWindow::copyAttributesFromPropertyWindow(EmitterPropertyWind
 
 	// Orientation range start: Quaternion
 	doSetQuaternion(PRNL_EMITTER_ORIENTATION_START, emitterPropertyWindow->doGetQuaternion(PRNL_EMITTER_ORIENTATION_START, q));
-	
+
 	// Orientation range end: Quaternion
 	doSetQuaternion(PRNL_EMITTER_ORIENTATION_END, emitterPropertyWindow->doGetQuaternion(PRNL_EMITTER_ORIENTATION_END, q));
 
@@ -88,16 +88,16 @@ void EmitterPropertyWindow::copyAttributesFromPropertyWindow(EmitterPropertyWind
 
 	// Emission rate: Dynamic attibute
 	doSetDynamicAttribute(PRNL_EMITTER_EMISSION_RATE, emitterPropertyWindow);
-	
+
 	// Time to live: Dynamic attibute
 	doSetDynamicAttribute(PRNL_EMITTER_TIME_TO_LIVE, emitterPropertyWindow);
 
 	// Mass: Dynamic attibute
-	doSetDynamicAttribute(PRNL_EMITTER_MASS, emitterPropertyWindow);	
-	
+	doSetDynamicAttribute(PRNL_EMITTER_MASS, emitterPropertyWindow);
+
 	// Texture coordinate: Uint16
 	doSetUint16(PRNL_EMITTER_TEXTURE_COORD, emitterPropertyWindow->doGetUint16(PRNL_EMITTER_TEXTURE_COORD));
-	
+
 	// Texture coordinate Start: Uint16
 	doSetUint16(PRNL_EMITTER_TEXTURE_COORD_START, emitterPropertyWindow->doGetUint16(PRNL_EMITTER_TEXTURE_COORD_START));
 
@@ -366,7 +366,7 @@ void EmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::Particle
 	doSetString(PRNL_NAME, ogre2wx(emitter->getName()));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_EMITTER_TYPE);
+	wxPGProperty* propTo = GetPropertyByName(PRNL_EMITTER_TYPE);
 	wxString type = ogre2wxTranslate(emitter->getEmitterType());
 	propTo->SetValueFromString(type);
 
@@ -387,7 +387,7 @@ void EmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::Particle
 
 	// Orientation range start: Quaternion
 	doSetQuaternion(PRNL_EMITTER_ORIENTATION_START, emitter->getParticleOrientationRangeStart());
-	
+
 	// Orientation range end: Quaternion
 	doSetQuaternion(PRNL_EMITTER_ORIENTATION_END, emitter->getParticleOrientationRangeEnd());
 
@@ -407,16 +407,16 @@ void EmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::Particle
 
 	// Emission rate: Dynamic attibute
 	doSetDynamicAttribute(PRNL_EMITTER_EMISSION_RATE, emitter->getDynEmissionRate());
-	
+
 	// Time to live: Dynamic attibute
 	doSetDynamicAttribute(PRNL_EMITTER_TIME_TO_LIVE, emitter->getDynTotalTimeToLive());
 
 	// Mass: Dynamic attibute
 	doSetDynamicAttribute(PRNL_EMITTER_MASS, emitter->getDynParticleMass());
-	
+
 	// Texture coordinate: Uint16
 	doSetUint16(PRNL_EMITTER_TEXTURE_COORD, emitter->getParticleTextureCoords());
-	
+
 	// Texture coordinate Start: Uint16
 	doSetUint16(PRNL_EMITTER_TEXTURE_COORD_START, emitter->getParticleTextureCoordsRangeStart());
 
@@ -424,22 +424,22 @@ void EmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::Particle
 	doSetUint16(PRNL_EMITTER_TEXTURE_COORD_END, emitter->getParticleTextureCoordsRangeEnd());
 
 	// Colour: Colour attibute with alpha
-	wxColor colour(255 * emitter->getParticleColour().r, 
-		255 * emitter->getParticleColour().g, 
-		255 * emitter->getParticleColour().b, 
+	wxColor colour(255 * emitter->getParticleColour().r,
+		255 * emitter->getParticleColour().g,
+		255 * emitter->getParticleColour().b,
 		255 * emitter->getParticleColour().a);
 	doSetColourWithAlpha(PRNL_EMITTER_COLOUR, colour);
 
 	// Colour range start: Colour attibute with alpha
-	wxColor colourStart(255 * emitter->getParticleColourRangeStart().r, 
-		255 * emitter->getParticleColourRangeStart().g, 
+	wxColor colourStart(255 * emitter->getParticleColourRangeStart().r,
+		255 * emitter->getParticleColourRangeStart().g,
 		255 * emitter->getParticleColourRangeStart().b,
 		255 * emitter->getParticleColourRangeStart().a);
 	doSetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_START, colourStart);
 
 	// Colour range end: Colour attibute with alpha
-	wxColor colourEnd(255 * emitter->getParticleColourRangeEnd().r, 
-		255 * emitter->getParticleColourRangeEnd().g, 
+	wxColor colourEnd(255 * emitter->getParticleColourRangeEnd().r,
+		255 * emitter->getParticleColourRangeEnd().g,
 		255 * emitter->getParticleColourRangeEnd().b,
 		255 * emitter->getParticleColourRangeEnd().a);
 	doSetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_END, colourEnd);
@@ -521,17 +521,17 @@ void EmitterPropertyWindow::_initProperties(void)
 	mTypes.Add(CST_EMITTER_SLAVE);
 	mTypes.Add(CST_EMITTER_SPHERE);
 	mTypes.Add(CST_EMITTER_VERTEX);
-	wxPGId pid = Append(wxEnumProperty(PRNL_EMITTER_TYPE, PRNL_EMITTER_TYPE, mTypes));
+	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_EMITTER_TYPE, PRNL_EMITTER_TYPE, mTypes));
 
 	// Enabled: Bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization
-	Append(wxBoolProperty(PRNL_EMITTER_ENABLED, PRNL_EMITTER_ENABLED, ParticleUniverse::ParticleEmitter::DEFAULT_ENABLED));
+	Append(new wxBoolProperty(PRNL_EMITTER_ENABLED, PRNL_EMITTER_ENABLED, ParticleUniverse::ParticleEmitter::DEFAULT_ENABLED));
 
 	// Position: Vector3
 	appendVector3(PRNL_EMITTER_POSITION, PRNL_EMITTER_POSITION, ParticleUniverse::ParticleEmitter::DEFAULT_POSITION);
 
 	// Keep local: Bool
-	Append(wxBoolProperty(PRNL_EMITTER_KEEP_LOCAL, PRNL_EMITTER_KEEP_LOCAL, ParticleUniverse::ParticleEmitter::DEFAULT_KEEP_LOCAL));
+	Append(new wxBoolProperty(PRNL_EMITTER_KEEP_LOCAL, PRNL_EMITTER_KEEP_LOCAL, ParticleUniverse::ParticleEmitter::DEFAULT_KEEP_LOCAL));
 
 	// Direction: Vector3
 	appendVector3(PRNL_EMITTER_DIRECTION, PRNL_EMITTER_DIRECTION, ParticleUniverse::ParticleEmitter::DEFAULT_DIRECTION);
@@ -577,15 +577,15 @@ void EmitterPropertyWindow::_initProperties(void)
 	appendDynamicAttribute(PRNL_EMITTER_MASS, PRNL_EMITTER_MASS, dynAttr);
 
 	// Texture coordinate: Uint16
-	Append(wxUIntProperty(PRNL_EMITTER_TEXTURE_COORD, PRNL_EMITTER_TEXTURE_COORD, ParticleUniverse::ParticleEmitter::DEFAULT_TEXTURE_COORDS));
+	Append(new wxUIntProperty(PRNL_EMITTER_TEXTURE_COORD, PRNL_EMITTER_TEXTURE_COORD, ParticleUniverse::ParticleEmitter::DEFAULT_TEXTURE_COORDS));
 	SetPropertyEditor(PRNL_EMITTER_TEXTURE_COORD, wxPG_EDITOR(SpinCtrl));
 
 	// Texture coordinate Start: Uint16
-	Append(wxUIntProperty(PRNL_EMITTER_TEXTURE_COORD_START, PRNL_EMITTER_TEXTURE_COORD_START, ParticleUniverse::ParticleEmitter::DEFAULT_TEXTURE_COORDS));
+	Append(new wxUIntProperty(PRNL_EMITTER_TEXTURE_COORD_START, PRNL_EMITTER_TEXTURE_COORD_START, ParticleUniverse::ParticleEmitter::DEFAULT_TEXTURE_COORDS));
 	SetPropertyEditor(PRNL_EMITTER_TEXTURE_COORD_START, wxPG_EDITOR(SpinCtrl));
 
 	// Texture coordinate End: Uint16
-	Append(wxUIntProperty(PRNL_EMITTER_TEXTURE_COORD_END, PRNL_EMITTER_TEXTURE_COORD_END, ParticleUniverse::ParticleEmitter::DEFAULT_TEXTURE_COORDS));
+	Append(new wxUIntProperty(PRNL_EMITTER_TEXTURE_COORD_END, PRNL_EMITTER_TEXTURE_COORD_END, ParticleUniverse::ParticleEmitter::DEFAULT_TEXTURE_COORDS));
 	SetPropertyEditor(PRNL_EMITTER_TEXTURE_COORD_END, wxPG_EDITOR(SpinCtrl));
 
 	// Colour: Colour attibute with alpha
@@ -614,16 +614,16 @@ void EmitterPropertyWindow::_initProperties(void)
 	appendDynamicAttribute(PRNL_EMITTER_PARTICLE_DEPTH, PRNL_EMITTER_PARTICLE_DEPTH, dynAttr);
 
 	// Auto direction: Bool
-	Append(wxBoolProperty(PRNL_EMITTER_AUTO_DIRECTION, PRNL_EMITTER_AUTO_DIRECTION, ParticleUniverse::ParticleEmitter::DEFAULT_AUTO_DIRECTION));
+	Append(new wxBoolProperty(PRNL_EMITTER_AUTO_DIRECTION, PRNL_EMITTER_AUTO_DIRECTION, ParticleUniverse::ParticleEmitter::DEFAULT_AUTO_DIRECTION));
 
 	// Force emission: Bool
-	Append(wxBoolProperty(PRNL_EMITTER_FORCE_EMISSION, PRNL_EMITTER_FORCE_EMISSION, ParticleUniverse::ParticleEmitter::DEFAULT_FORCE_EMISSION));
+	Append(new wxBoolProperty(PRNL_EMITTER_FORCE_EMISSION, PRNL_EMITTER_FORCE_EMISSION, ParticleUniverse::ParticleEmitter::DEFAULT_FORCE_EMISSION));
 }
 //-----------------------------------------------------------------------
 void EmitterPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty* prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToEmitter(prop, propertyName);
 	ParticleUniverse::ParticleEmitter* emitter = static_cast<ParticleUniverse::ParticleEmitter*>(mOwner->getPUElement());
@@ -639,31 +639,31 @@ void EmitterPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 void EmitterPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
 {
 	// Perform additional validations.
-	if (!_validatePropertyColourWithAlpha(event.GetPropertyPtr(), PRNL_EMITTER_COLOUR))
+	if (!_validatePropertyColourWithAlpha(event.GetProperty(), PRNL_EMITTER_COLOUR))
 		return;
-	if (!_validatePropertyColourWithAlpha(event.GetPropertyPtr(), PRNL_EMITTER_COLOUR_RANGE_START))
+	if (!_validatePropertyColourWithAlpha(event.GetProperty(), PRNL_EMITTER_COLOUR_RANGE_START))
 		return;
-	if (!_validatePropertyColourWithAlpha(event.GetPropertyPtr(), PRNL_EMITTER_COLOUR_RANGE_END))
+	if (!_validatePropertyColourWithAlpha(event.GetProperty(), PRNL_EMITTER_COLOUR_RANGE_END))
 		return;
 
 	// Allow only positive values of dynamic attributes
-	if (!_validatePropertyDynamicAttribute(event.GetPropertyPtr(), PRNL_EMITTER_VELOCITY))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_VELOCITY))
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetPropertyPtr(), PRNL_EMITTER_DURATION))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_DURATION))
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetPropertyPtr(), PRNL_EMITTER_REPEAT_DELAY))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_REPEAT_DELAY))
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetPropertyPtr(), PRNL_EMITTER_EMISSION_RATE))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_EMISSION_RATE))
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetPropertyPtr(), PRNL_EMITTER_TIME_TO_LIVE))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_TIME_TO_LIVE))
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetPropertyPtr(), PRNL_EMITTER_ALL_PARTICLE_DIM))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_ALL_PARTICLE_DIM))
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetPropertyPtr(), PRNL_EMITTER_PARTICLE_WIDTH))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_PARTICLE_WIDTH))
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetPropertyPtr(), PRNL_EMITTER_PARTICLE_HEIGHT))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_PARTICLE_HEIGHT))
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetPropertyPtr(), PRNL_EMITTER_PARTICLE_DEPTH))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_PARTICLE_DEPTH))
 		return;
 
 	wxString propertyName = event.GetPropertyName();
@@ -673,7 +673,7 @@ void EmitterPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
 	{
 		// Replace this window by another one
 		notifyDestroyUnnecessaryConnections();
-		wxString subType = event.GetPropertyValueAsString();
+		wxString subType = event.GetProperty()->GetValueAsString();
 		mOwner->createPropertyWindow(subType, this);
 		mOwner->setCaption();
 		getOwner()->refreshCanvas();
@@ -911,9 +911,9 @@ void EmitterPropertyWindow::copyColourToEmitter(wxPGProperty* prop, ParticleUniv
 {
 	wxColor c;
 	c = doGetColourWithAlpha(PRNL_EMITTER_COLOUR, c);
-	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, 
-		ParticleUniverse::Real(c.Green()) / 255.0f, 
-		ParticleUniverse::Real(c.Blue()) / 255.0f, 
+	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f,
+		ParticleUniverse::Real(c.Green()) / 255.0f,
+		ParticleUniverse::Real(c.Blue()) / 255.0f,
 		ParticleUniverse::Real(c.Alpha()) / 255.0f);
 	emitter->setParticleColour(colour);
 }
@@ -922,9 +922,9 @@ void EmitterPropertyWindow::copyColourRangeStartToEmitter(wxPGProperty* prop, Pa
 {
 	wxColor c;
 	c = doGetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_START, c);
-	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, 
-		ParticleUniverse::Real(c.Green()) / 255.0f, 
-		ParticleUniverse::Real(c.Blue()) / 255.0f, 
+	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f,
+		ParticleUniverse::Real(c.Green()) / 255.0f,
+		ParticleUniverse::Real(c.Blue()) / 255.0f,
 		ParticleUniverse::Real(c.Alpha()) / 255.0f);
 	emitter->setParticleColourRangeStart(colour);
 }
@@ -933,9 +933,9 @@ void EmitterPropertyWindow::copyColourRangeEndToEmitter(wxPGProperty* prop, Part
 {
 	wxColor c;
 	c = doGetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_END, c);
-	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, 
-		ParticleUniverse::Real(c.Green()) / 255.0f, 
-		ParticleUniverse::Real(c.Blue()) / 255.0f, 
+	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f,
+		ParticleUniverse::Real(c.Green()) / 255.0f,
+		ParticleUniverse::Real(c.Blue()) / 255.0f,
 		ParticleUniverse::Real(c.Alpha()) / 255.0f);
 	emitter->setParticleColourRangeEnd(colour);
 }

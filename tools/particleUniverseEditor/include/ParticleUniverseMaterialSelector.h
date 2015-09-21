@@ -14,7 +14,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/utils.h"
 
-#include "wx/propgrid/propdev.h"
+#include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/advprops.h"
 
 /**	Selection dialog for materials
 */
@@ -22,28 +23,28 @@ class MaterialSelector : public wxSingleChoiceDialog
 {
 	public:
 		// Constructor / Destructor
-		MaterialSelector(wxWindow* parent, 
-			const wxString& message, 
-			const wxString& caption, 
-			int n, 
-			const wxString* choices, 
-			long style = wxCHOICEDLG_STYLE, 
-			const wxPoint& pos = wxDefaultPosition) : 
+		MaterialSelector(wxWindow* parent,
+			const wxString& message,
+			const wxString& caption,
+			int n,
+			const wxString* choices,
+			long style = wxCHOICEDLG_STYLE,
+			const wxPoint& pos = wxDefaultPosition) :
 		wxSingleChoiceDialog(parent, message, caption, n, choices, reinterpret_cast<void **>(0), style, pos) {}
 		~MaterialSelector(void) {}
 };
 
 /**	Class that creates a button property. After clicking a material can be selected
 */
-class MaterialProperty : public wxStringPropertyClass
+class MaterialProperty : public wxStringProperty
 {
 	public:
 		MaterialProperty(
-			const wxString& label, 
+			const wxString& label,
 			const wxString& name);
 		virtual ~MaterialProperty(void) {}
 
-		/**	
+		/**
 		*/
 		virtual bool OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event);
 

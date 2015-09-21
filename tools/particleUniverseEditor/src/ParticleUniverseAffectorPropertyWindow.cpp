@@ -9,6 +9,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
+#include "wx/bitmap.h"
+#include "wx/font.h"
+#include "wx/window.h"
+#include <wx/propgrid/property.h>
 #include "ParticleUniverseAffectorPropertyWindow.h"
 
 #include "ParticleUniverseEditComponent.h"
@@ -23,8 +27,8 @@ AffectorPropertyWindow::AffectorPropertyWindow(wxWindow* parent, EditComponent* 
 }
 //-----------------------------------------------------------------------
 AffectorPropertyWindow::AffectorPropertyWindow(AffectorPropertyWindow* affectorPropertyWindow) : PropertyWindow(
-	affectorPropertyWindow->GetParent(), 
-	affectorPropertyWindow->getOwner(), 
+	affectorPropertyWindow->GetParent(),
+	affectorPropertyWindow->getOwner(),
 	affectorPropertyWindow->getComponentName())
 {
 	_initProperties();
@@ -39,9 +43,9 @@ void AffectorPropertyWindow::copyAttributesFromPropertyWindow(AffectorPropertyWi
 	doSetString(PRNL_NAME, affectorPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_AFFECTOR_TYPE);
-	wxPGProperty* propFrom = affectorPropertyWindow->GetPropertyPtr(PRNL_AFFECTOR_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	wxPGProperty* propTo = GetPropertyByName(PRNL_AFFECTOR_TYPE);
+	wxPGProperty* propFrom = affectorPropertyWindow->GetPropertyByName(PRNL_AFFECTOR_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 
 	// Enabled: Bool
 	doSetBool(PRNL_AFFECTOR_ENABLED, affectorPropertyWindow->doGetBool(PRNL_AFFECTOR_ENABLED));
@@ -54,8 +58,8 @@ void AffectorPropertyWindow::copyAttributesFromPropertyWindow(AffectorPropertyWi
 
 	// Specialisation: List of specialisations
 	// Todo: Since there are no good cases, the option is disable for now
-	//propTo = GetPropertyPtr(PRNL_AFFECTOR_SPECIALISATION);
-	//propFrom = affectorPropertyWindow->GetPropertyPtr(PRNL_AFFECTOR_SPECIALISATION);
+	//propTo = GetProperty(PRNL_AFFECTOR_SPECIALISATION);
+	//propFrom = affectorPropertyWindow->GetProperty(PRNL_AFFECTOR_SPECIALISATION);
 	//propTo->DoSetValue(propFrom->DoGetValue());
 }
 //-----------------------------------------------------------------------
@@ -130,7 +134,7 @@ void AffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::Partic
 	doSetString(PRNL_NAME, ogre2wx(affector->getName()));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_AFFECTOR_TYPE);
+	wxPGProperty* propTo = GetPropertyByName(PRNL_AFFECTOR_TYPE);
 	wxString type = ogre2wxTranslate(affector->getAffectorType());
 	propTo->SetValueFromString(type);
 
@@ -144,7 +148,7 @@ void AffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::Partic
 	doSetDouble(PRNL_AFFECTOR_MASS, affector->mass);
 
 	// Specialisation: List of specialisations
-//	propTo = GetPropertyPtr(PRNL_AFFECTOR_SPECIALISATION);
+//	propTo = GetProperty(PRNL_AFFECTOR_SPECIALISATION);
 //	ParticleUniverse::ParticleAffector::AffectSpecialisation specialisation = affector->getAffectSpecialisation();
 //	wxString specialisationString = PRNL_AFFECTOR_SPEC_DEFAULT;
 //	if (specialisation == ParticleUniverse::ParticleAffector::AFSP_TTL_DECREASE)
@@ -224,17 +228,17 @@ void AffectorPropertyWindow::_initProperties(void)
 	mTypes.Add(CST_AFFECTOR_TEXTURE_ROTATOR);
 	mTypes.Add(CST_AFFECTOR_VELOCITY_MATCHING);
 	mTypes.Add(CST_AFFECTOR_VORTEX);
-	wxPGId pid = Append(wxEnumProperty(PRNL_AFFECTOR_TYPE, PRNL_AFFECTOR_TYPE, mTypes));
+	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_AFFECTOR_TYPE, PRNL_AFFECTOR_TYPE, mTypes));
 
 	// Enabled: Bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization
-	Append(wxBoolProperty(PRNL_AFFECTOR_ENABLED, PRNL_AFFECTOR_ENABLED, ParticleUniverse::ParticleAffector::DEFAULT_ENABLED));
+	Append(new wxBoolProperty(PRNL_AFFECTOR_ENABLED, PRNL_AFFECTOR_ENABLED, ParticleUniverse::ParticleAffector::DEFAULT_ENABLED));
 
 	// Position: Ogre::Vector3
 	appendVector3(PRNL_AFFECTOR_POSITION, PRNL_AFFECTOR_POSITION, ParticleUniverse::ParticleAffector::DEFAULT_POSITION);
 
 	// Mass: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_AFFECTOR_MASS, PRNL_AFFECTOR_MASS, ParticleUniverse::ParticleAffector::DEFAULT_MASS));
+	Append(new wxFloatProperty(PRNL_AFFECTOR_MASS, PRNL_AFFECTOR_MASS, ParticleUniverse::ParticleAffector::DEFAULT_MASS));
 	SetPropertyEditor(PRNL_AFFECTOR_MASS, wxPG_EDITOR(SpinCtrl));
 
 	// Exclude Emitter: This is not a property, but done by means of a connection
@@ -243,13 +247,13 @@ void AffectorPropertyWindow::_initProperties(void)
 //	mSpecialisation.Add(PRNL_AFFECTOR_SPEC_DEFAULT);
 //	mSpecialisation.Add(PRNL_AFFECTOR_SPEC_TT_INCREASE);
 //	mSpecialisation.Add(PRNL_AFFECTOR_SPEC_TT_DECREASE);
-//	pid = Append(wxEnumProperty(PRNL_AFFECTOR_SPECIALISATION, PRNL_AFFECTOR_SPECIALISATION, mSpecialisation));
+//	pid = Append(new wxEnumProperty(PRNL_AFFECTOR_SPECIALISATION, PRNL_AFFECTOR_SPECIALISATION, mSpecialisation));
 }
 //-----------------------------------------------------------------------
 void AffectorPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty* prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToAffector(prop, propertyName);
 	ParticleUniverse::ParticleAffector* affector = static_cast<ParticleUniverse::ParticleAffector*>(mOwner->getPUElement());
@@ -270,7 +274,7 @@ void AffectorPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
 	{
 		// Replace this window by another one
 		//notifyDestroyUnnecessaryConnections();
-		wxString subType = event.GetPropertyValueAsString();
+		wxString subType = event.GetProperty()->GetValueAsString();
 		mOwner->createPropertyWindow(subType, this);
 		mOwner->setCaption();
 		getOwner()->refreshCanvas();
@@ -454,7 +458,7 @@ const Ogre::String& AffectorPropertyWindow::getAffectorTypeByProperty(wxPGProper
 		break;
 
 		case 23:
-			return AFFECTOR_VORTEX;			
+			return AFFECTOR_VORTEX;
 		break;
 		default: {
 			break;

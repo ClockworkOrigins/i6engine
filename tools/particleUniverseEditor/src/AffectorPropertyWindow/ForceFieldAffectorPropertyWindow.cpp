@@ -144,7 +144,7 @@ void ForceFieldAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniver
 	ParticleUniverse::ForceFieldAffector* forceFieldAffector = static_cast<ParticleUniverse::ForceFieldAffector*>(affector);
 
 	// forcefield_type: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_AFFECTOR_FORCEFIELD_FF_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_AFFECTOR_FORCEFIELD_FF_TYPE);
 	ParticleUniverse::ForceField::ForceFieldType type = forceFieldAffector->getForceFieldType();
 	wxString typeString = FORCEFIELD_REALTIME;
 	if (type == ParticleUniverse::ForceField::FF_MATRIX_CALC)
@@ -222,52 +222,52 @@ void ForceFieldAffectorPropertyWindow::_initProperties(void)
 	wxArrayString type;
 	type.Add(FORCEFIELD_REALTIME);
 	type.Add(FORCEFIELD_MATRIX);
-	Append(wxEnumProperty(PRNL_AFFECTOR_FORCEFIELD_FF_TYPE, PRNL_AFFECTOR_FORCEFIELD_FF_TYPE, type));
+	Append(new wxEnumProperty(PRNL_AFFECTOR_FORCEFIELD_FF_TYPE, PRNL_AFFECTOR_FORCEFIELD_FF_TYPE, type));
 
 	// delta: Real
-	Append(wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_DELTA, PRNL_AFFECTOR_FORCEFIELD_DELTA, ParticleUniverse::ForceFieldAffector::DEFAULT_DELTA));
+	Append(new wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_DELTA, PRNL_AFFECTOR_FORCEFIELD_DELTA, ParticleUniverse::ForceFieldAffector::DEFAULT_DELTA));
 	SetPropertyEditor(PRNL_AFFECTOR_FORCEFIELD_DELTA, wxPG_EDITOR(SpinCtrl));
 
 	// force: Real
-	Append(wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_FORCE, PRNL_AFFECTOR_FORCEFIELD_FORCE, ParticleUniverse::ForceFieldAffector::DEFAULT_FORCE));
+	Append(new wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_FORCE, PRNL_AFFECTOR_FORCEFIELD_FORCE, ParticleUniverse::ForceFieldAffector::DEFAULT_FORCE));
 	SetPropertyEditor(PRNL_AFFECTOR_FORCEFIELD_FORCE, wxPG_EDITOR(SpinCtrl));
 	
 	// octaves: uint
-	Append(wxUIntProperty(PRNL_AFFECTOR_FORCEFIELD_OCTAVES, PRNL_AFFECTOR_FORCEFIELD_OCTAVES, ParticleUniverse::ForceFieldAffector::DEFAULT_OCTAVES));
+	Append(new wxUIntProperty(PRNL_AFFECTOR_FORCEFIELD_OCTAVES, PRNL_AFFECTOR_FORCEFIELD_OCTAVES, ParticleUniverse::ForceFieldAffector::DEFAULT_OCTAVES));
 	SetPropertyEditor(PRNL_AFFECTOR_FORCEFIELD_OCTAVES, wxPG_EDITOR(SpinCtrl));
 	
 	// frequency: Real
-	Append(wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_FREQUENCY, PRNL_AFFECTOR_FORCEFIELD_FREQUENCY, ParticleUniverse::ForceFieldAffector::DEFAULT_FREQUENCY));
+	Append(new wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_FREQUENCY, PRNL_AFFECTOR_FORCEFIELD_FREQUENCY, ParticleUniverse::ForceFieldAffector::DEFAULT_FREQUENCY));
 	SetPropertyEditor(PRNL_AFFECTOR_FORCEFIELD_FREQUENCY, wxPG_EDITOR(SpinCtrl));
 	
 	// amplitude: Real
-	Append(wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_AMPLITUDE, PRNL_AFFECTOR_FORCEFIELD_AMPLITUDE, ParticleUniverse::ForceFieldAffector::DEFAULT_AMPLITUDE));
+	Append(new wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_AMPLITUDE, PRNL_AFFECTOR_FORCEFIELD_AMPLITUDE, ParticleUniverse::ForceFieldAffector::DEFAULT_AMPLITUDE));
 	SetPropertyEditor(PRNL_AFFECTOR_FORCEFIELD_AMPLITUDE, wxPG_EDITOR(SpinCtrl));
 	
 	// persistence: Real
-	Append(wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_PERSISTENCE, PRNL_AFFECTOR_FORCEFIELD_PERSISTENCE, ParticleUniverse::ForceFieldAffector::DEFAULT_PERSISTENCE));
+	Append(new wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_PERSISTENCE, PRNL_AFFECTOR_FORCEFIELD_PERSISTENCE, ParticleUniverse::ForceFieldAffector::DEFAULT_PERSISTENCE));
 	SetPropertyEditor(PRNL_AFFECTOR_FORCEFIELD_PERSISTENCE, wxPG_EDITOR(SpinCtrl));
 	
 	// forcefield_size: uint
-	Append(wxUIntProperty(PRNL_AFFECTOR_FORCEFIELD_FF_SIZE, PRNL_AFFECTOR_FORCEFIELD_FF_SIZE, ParticleUniverse::ForceFieldAffector::DEFAULT_FORCEFIELDSIZE));
+	Append(new wxUIntProperty(PRNL_AFFECTOR_FORCEFIELD_FF_SIZE, PRNL_AFFECTOR_FORCEFIELD_FF_SIZE, ParticleUniverse::ForceFieldAffector::DEFAULT_FORCEFIELDSIZE));
 	SetPropertyEditor(PRNL_AFFECTOR_FORCEFIELD_FF_SIZE, wxPG_EDITOR(SpinCtrl));
 
 	// worldsize: Vector3
 	appendVector3(PRNL_AFFECTOR_FORCEFIELD_WORLDSIZE, PRNL_AFFECTOR_FORCEFIELD_WORLDSIZE, ParticleUniverse::ForceFieldAffector::DEFAULT_WORLDSIZE);
 	
 	// ignore_negative_x: bool
-	Append(wxBoolProperty(PRNL_AFFECTOR_FORCEFIELD_IGNORE_X, PRNL_AFFECTOR_FORCEFIELD_IGNORE_X, false));
+	Append(new wxBoolProperty(PRNL_AFFECTOR_FORCEFIELD_IGNORE_X, PRNL_AFFECTOR_FORCEFIELD_IGNORE_X, false));
 
 	// ignore_negative_y: bool
-	Append(wxBoolProperty(PRNL_AFFECTOR_FORCEFIELD_IGNORE_Y, PRNL_AFFECTOR_FORCEFIELD_IGNORE_Y, false));
+	Append(new wxBoolProperty(PRNL_AFFECTOR_FORCEFIELD_IGNORE_Y, PRNL_AFFECTOR_FORCEFIELD_IGNORE_Y, false));
 
 	// ignore_negative_z: bool
-	Append(wxBoolProperty(PRNL_AFFECTOR_FORCEFIELD_IGNORE_Z, PRNL_AFFECTOR_FORCEFIELD_IGNORE_Z, false));
+	Append(new wxBoolProperty(PRNL_AFFECTOR_FORCEFIELD_IGNORE_Z, PRNL_AFFECTOR_FORCEFIELD_IGNORE_Z, false));
 	
 	// movement: Vector3
 	appendVector3(PRNL_AFFECTOR_FORCEFIELD_MOVEMENT, PRNL_AFFECTOR_FORCEFIELD_MOVEMENT, ParticleUniverse::ForceFieldAffector::DEFAULT_MOVEMENT);
 	
 	// movement_frequency: Real
-	Append(wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY, PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY, ParticleUniverse::ForceFieldAffector::DEFAULT_MOVEMENT_FREQUENCY));
+	Append(new wxFloatProperty(PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY, PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY, ParticleUniverse::ForceFieldAffector::DEFAULT_MOVEMENT_FREQUENCY));
 	SetPropertyEditor(PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY, wxPG_EDITOR(SpinCtrl));
 }

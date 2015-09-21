@@ -27,145 +27,21 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseControlPointDialog.h"
 #include "ParticleUniverseEditComponent.h"
-//#include "ParticleUniverseUtils.h"
 
 #include "wx/ogre/utils.h"
-
-// #include "wx/propgrid/advprops.h"
+#include "wx/propgrid/editors.h"
 
 
 EnumPropertyWithButton::EnumPropertyWithButton(
 	const wxString& label,
 	const wxString& name,
 	const wxArrayString& choices) :
-	wxEnumPropertyClass(label, name, choices) {
+	wxEnumProperty(label, name, choices) {
 }
 
 bool EnumPropertyWithButton::OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event) {
 	return true;
 }
-
-
-
-ParentPropertyWithButtonAndPositions::ParentPropertyWithButtonAndPositions(
-	const wxString& label,
-	const wxString& name) :
-	wxParentPropertyClass(label, name),
-	mPosition(0) {
-}
-
-bool ParentPropertyWithButtonAndPositions::OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event) {
-	if (event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED) {
-		// Insert a position
-		addPosition(propgrid);
-	}
-	return true;
-}
-
-wxPGId* ParentPropertyWithButtonAndPositions::addPosition(wxPropertyGrid* propgrid, Ogre::Vector3 vec3) {
-	// Insert a position
-	wxString postFix = ogre2wx(Ogre::StringConverter::toString(mPosition));
-	wxString name = PRNL_POSITION + postFix;
-	wxPGId pid = propgrid->AppendIn(this, wxParentProperty(PRNL_POSITION, name));
-//	wxPGId xid = propgrid->AppendIn(pid, wxFloatProperty(PRNL_POSITION + PRNL_POSITION_X, name + PRNL_POSITION_X, vec3.x));
-//	propgrid->SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
-//	wxPGId yid = propgrid->AppendIn(pid, wxFloatProperty(PRNL_POSITION + PRNL_POSITION_Y, name + PRNL_POSITION_Y, vec3.y));
-//	propgrid->SetPropertyEditor(yid, wxPG_EDITOR(SpinCtrl));
-//	wxPGId zid = propgrid->AppendIn(pid, wxFloatProperty(PRNL_POSITION + PRNL_POSITION_Z, name + PRNL_POSITION_Z, vec3.z));
-//	propgrid->SetPropertyEditor(zid, wxPG_EDITOR(SpinCtrl));
-	mPosition++;
-//	propgrid->GetPrevProperty(xid);
-//	return &xid;
-	return nullptr;
-}
-
-unsigned int ParentPropertyWithButtonAndPositions::getNumberOfPositions(void) {
-	return mPosition;
-}
-
-const Ogre::Vector3& ParentPropertyWithButtonAndPositions::getPosition(wxPropertyGrid* propgrid, unsigned int index, Ogre::Vector3& vector) {
-	if (index >= mPosition)
-		return vector;
-
-	// Use 'parent.child1.child2' construction, where child 1 is the parent of child 2
-	wxString postFix = ogre2wx(Ogre::StringConverter::toString(index));
-	wxString name = GetName() + wxT(".") + PRNL_POSITION + postFix + wxT(".") + PRNL_POSITION + postFix + PRNL_POSITION_X;
-	wxPGProperty* prop = propgrid->GetPropertyPtr(name);
-	if (prop) {
-		vector.x = prop->DoGetValue().GetDouble();
-	}
-	name = GetName() + wxT(".") + PRNL_POSITION + postFix + wxT(".") + PRNL_POSITION + postFix + PRNL_POSITION_Y;
-	prop = propgrid->GetPropertyPtr(name);
-	if (prop) {
-		vector.y = prop->DoGetValue().GetDouble();
-	}
-	name = GetName() + wxT(".") + PRNL_POSITION + postFix + wxT(".") + PRNL_POSITION + postFix + PRNL_POSITION_Z;
-	prop = propgrid->GetPropertyPtr(name);
-	if (prop) {
-		vector.z = prop->DoGetValue().GetDouble();
-	}
-
-	return vector;
-}
-
-void ParentPropertyWithButtonAndPositions::reset(void) {
-	mPosition = 0;
-	this->Empty();
-}
-
-
-
-ParentPropertyWithButtonAndFloats::ParentPropertyWithButtonAndFloats(
-	const wxString& label,
-	const wxString& name) :
-	wxParentPropertyClass(label, name),
-	mFloat(0) {
-}
-
-bool ParentPropertyWithButtonAndFloats::OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event) {
-	if (event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED) {
-		// Insert a float
-		addFloat(propgrid);
-	}
-	return true;
-}
-
-wxPGId* ParentPropertyWithButtonAndFloats::addFloat(wxPropertyGrid* propgrid, float value) {
-	// Insert a float
-//	wxString postFix = ogre2wx(Ogre::StringConverter::toString(mFloat));
-//	wxString name = PRNL_FLOAT + postFix;
-//	wxPGId xid = propgrid->AppendIn(this, wxFloatProperty(PRNL_FLOAT, name, value));
-//	propgrid->SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
-//	mFloat++;
-//	propgrid->GetPrevProperty(xid);
-//	return &xid;
-	return nullptr;
-}
-
-unsigned int ParentPropertyWithButtonAndFloats::getNumberOfFloats(void) {
-	return mFloat;
-}
-
-ParticleUniverse::Real ParentPropertyWithButtonAndFloats::getFloat(wxPropertyGrid* propgrid, unsigned int index) {
-	if (index >= mFloat)
-		return 0;
-
-	wxString postFix = ogre2wx(Ogre::StringConverter::toString(index));
-	wxString name = this->GetName() + wxT(".") + PRNL_FLOAT + postFix;
-	wxPGProperty* prop = propgrid->GetPropertyPtr(name);
-	if (prop) {
-		return prop->DoGetValue().GetDouble();
-	}
-
-	return 0;
-}
-
-void ParentPropertyWithButtonAndFloats::reset(void) {
-	mFloat = 0;
-	this->Empty();
-}
-
-
 
 PropertyWindow::PropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name) : wxPropertyGrid(
 	parent,
@@ -180,7 +56,7 @@ PropertyWindow::PropertyWindow(wxWindow* parent, EditComponent* owner, const Ogr
 	   jittering of the listbox (= wxTreeCtrl from  version 1.4).
 	*/
 	_initProperties();
-	Connect(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &wxPropertyGrid::OnCustomEditorEvent);
+//	Connect(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &wxPropertyGrid::OnCustomEditorEvent); TODO (Michael) uncomment
 	Connect(wxID_ANY, wxEVT_PG_CHANGED, wxPropertyGridEventHandler(PropertyWindow::onPropertyChanged));
 }
 
@@ -190,7 +66,7 @@ const Ogre::String& PropertyWindow::getComponentName() const {
 
 void PropertyWindow::setComponentName(const Ogre::String& name) {
 	mName = name;
-	wxPGProperty* prop = GetPropertyPtr(PRNL_NAME);
+	wxPGProperty* prop = GetPropertyByName(PRNL_NAME);
 	if (prop) {
 		wxString n = ogre2wx(name);
 		prop->SetValueFromString(n);
@@ -241,12 +117,12 @@ void PropertyWindow::_initProperties(void) {
 
 	mHelpHtml = wxT("index.html");
 	if (mName.length() > 0) {
-		Append (wxStringProperty(PRNL_NAME, PRNL_NAME, ogre2wx(mName)));
+		Append (new wxStringProperty(PRNL_NAME, PRNL_NAME, ogre2wx(mName)));
 	}
 }
 
 void PropertyWindow::doSetBool(const wxString& name, bool boolValue) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return;
 
@@ -254,79 +130,80 @@ void PropertyWindow::doSetBool(const wxString& name, bool boolValue) {
 }
 
 bool PropertyWindow::doGetBool(const wxString& name) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return false;
 	return prop->DoGetValue().GetBool();
 }
 
 void PropertyWindow::doSetDouble(const wxString& name, double doubleValue) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return;
-	prop->DoSetValue(doubleValue);
+	prop->SetValue(doubleValue);
 }
 
 double PropertyWindow::doGetDouble(const wxString& name) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return 0;
 	return prop->DoGetValue().GetDouble();
 }
 
 void PropertyWindow::doSetLong(const wxString& name, long longValue) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return;
-	prop->DoSetValue(longValue);
+	prop->SetValue(longValue);
 }
 
 long PropertyWindow::doGetLong(const wxString& name) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return 0;
 	return prop->DoGetValue().GetLong();
 }
 
 void PropertyWindow::doSetUint16(const wxString& name, wxUint16 uInt16Value) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return;
-	prop->DoSetValue(uInt16Value);
+	prop->SetValue(uInt16Value);
 }
 
 wxUint16 PropertyWindow::doGetUint16(const wxString& name) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return 0;
 	return prop->DoGetValue().GetLong();
 }
 
 void PropertyWindow::doSetString(const wxString& name, const wxString& stringValue) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return;
-	prop->DoSetValue(stringValue);
+	prop->SetValue(stringValue);
 }
 
 const wxString& PropertyWindow::doGetString(const wxString& name) {
-	wxPGProperty* prop = GetPropertyPtr(name);
+	wxPGProperty* prop = GetPropertyByName(name);
 	if (!prop)
 		return WX_STRING_BLANK;
-	return prop->DoGetValue().GetString();
+	wxString res = prop->DoGetValue().GetString();
+	return res;
 }
 
 void PropertyWindow::appendColourWithAlphaProperty(const wxString& label, const wxString& name, const wxColour& colour) {
-//	wxPGId pid = Append(wxParentProperty(label, name));
+//	wxPGProperty* pid = Append(new wxParentProperty(label, name));
 //	AppendIn(pid, wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
-//	wxPGId aid = AppendIn(pid, wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
+//	wxPGProperty* aid = AppendIn(pid, wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
 //	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
 }
 
 void PropertyWindow::appendInColourWithAlphaProperty(wxPGId& id, const wxString& label, const wxString& name, const wxColour& colour) {
-//	wxPGId pid = AppendIn(id, wxParentProperty(label, name));
+//	wxPGProperty* pid = AppendIn(id, wxParentProperty(label, name));
 //	AppendIn(pid, wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
-//	wxPGId aid = AppendIn(pid, wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
+//	wxPGProperty* aid = AppendIn(pid, wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
 //	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
 }
 
@@ -338,16 +215,16 @@ void PropertyWindow::doSetColourWithAlpha(const wxString& name, const wxColour& 
 		// Child accessable with name "parent.string"
 		baseName = name + wxT(".") + name;
 	}
-	wxPGProperty* prop = GetPropertyPtr(baseName + PRNL_POST_RGB);
+	wxPGProperty* prop = GetPropertyByName(baseName + PRNL_POST_RGB);
 	if (!prop)
 		return;
-	prop->DoSetValue(colour);
+	prop->SetValue(wxAny(colour));
 
-	prop = GetPropertyPtr(baseName + PRNL_POST_ALPHA);
+	prop = GetPropertyByName(baseName + PRNL_POST_ALPHA);
 	if (!prop)
 		return;
 
-	prop->DoSetValue(colour.Alpha());
+	prop->SetValue(colour.Alpha());
 }
 
 const wxColour& PropertyWindow::doGetColourWithAlpha(const wxString& name, wxColour& colour, bool nameIsBaseName) {
@@ -358,14 +235,14 @@ const wxColour& PropertyWindow::doGetColourWithAlpha(const wxString& name, wxCol
 		// Child accessable with name "parent.string"
 		baseName = name + wxT(".") + name;
 	}
-	wxPGProperty* prop = GetPropertyPtr(baseName + PRNL_POST_RGB);
+	wxPGProperty* prop = GetPropertyByName(baseName + PRNL_POST_RGB);
 	if (!prop)
 		return colour;
-	wxVariant value = prop->GetValueAsVariant();
+	wxVariant value = prop->GetValue();
 	wxColour* txcol = wxGetVariantCast(value, wxColour);
 	colour = wxColour(txcol->Red(), txcol->Green(), txcol->Blue());
 
-	prop = GetPropertyPtr(baseName + PRNL_POST_ALPHA);
+	prop = GetPropertyByName(baseName + PRNL_POST_ALPHA);
 	if (!prop)
 		return colour;
 	unsigned char alpha = prop->DoGetValue().GetLong();
@@ -374,44 +251,38 @@ const wxColour& PropertyWindow::doGetColourWithAlpha(const wxString& name, wxCol
 }
 
 void PropertyWindow::appendVector3(const wxString& label, const wxString& name, const Ogre::Vector3& vector3) {
-/*	wxPGId pid = Append(wxParentProperty(label, name));
-	wxPGId xid = AppendIn(pid, wxFloatProperty(name + PRNL_X, name + PRNL_X, vector3.x));
-	SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
-	wxPGId yid = AppendIn(pid, wxFloatProperty(name + PRNL_Y, name + PRNL_Y, vector3.y));
-	SetPropertyEditor(yid, wxPG_EDITOR(SpinCtrl));
-	wxPGId zid = AppendIn(pid, wxFloatProperty(name + PRNL_Z, name + PRNL_Z, vector3.z));
-	SetPropertyEditor(zid, wxPG_EDITOR(SpinCtrl));*/
+	// TODO
 }
 
 void PropertyWindow::doSetVector3(const wxString& name, const Ogre::Vector3& vector3) {
 	// Child accessable with name "parent.string"
 	wxString baseName = name + wxT(".") + name;
-	wxPGProperty* prop = GetPropertyPtr(baseName + PRNL_X);
+	wxPGProperty* prop = GetPropertyByName(baseName + PRNL_X);
 	if (!prop)
 		return;
-	prop->DoSetValue(vector3.x);
-	prop = GetPropertyPtr(baseName + PRNL_Y);
+	prop->SetValue(vector3.x);
+	prop = GetPropertyByName(baseName + PRNL_Y);
 	if (!prop)
 		return;
-	prop->DoSetValue(vector3.y);
-	prop = GetPropertyPtr(baseName + PRNL_Z);
+	prop->SetValue(vector3.y);
+	prop = GetPropertyByName(baseName + PRNL_Z);
 	if (!prop)
 		return;
-	prop->DoSetValue(vector3.z);
+	prop->SetValue(vector3.z);
 }
 
 const Ogre::Vector3& PropertyWindow::doGetVector3(const wxString& name, Ogre::Vector3& vector3) {
 	// Child accessable with name "parent.string"
 	wxString baseName = name + wxT(".") + name;
-	wxPGProperty* prop = GetPropertyPtr(baseName + PRNL_X);
+	wxPGProperty* prop = GetPropertyByName(baseName + PRNL_X);
 	if (!prop)
 		return Ogre::Vector3::ZERO;
 	vector3.x = prop->DoGetValue().GetDouble();
-	prop = GetPropertyPtr(baseName + PRNL_Y);
+	prop = GetPropertyByName(baseName + PRNL_Y);
 	if (!prop)
 		return Ogre::Vector3::ZERO;
 	vector3.y = prop->DoGetValue().GetDouble();
-	prop = GetPropertyPtr(baseName + PRNL_Z);
+	prop = GetPropertyByName(baseName + PRNL_Z);
 	if (!prop)
 		return Ogre::Vector3::ZERO;
 	vector3.z = prop->DoGetValue().GetDouble();
@@ -419,57 +290,57 @@ const Ogre::Vector3& PropertyWindow::doGetVector3(const wxString& name, Ogre::Ve
 }
 
 void PropertyWindow::appendVector4(const wxString& label, const wxString& name, const Ogre::Vector4& vector4) {
-/*	wxPGId pid = Append(wxParentProperty(label, name));
-	wxPGId xid = AppendIn(pid, wxFloatProperty(name + PRNL_X, name + PRNL_X, vector4.x));
+/*	wxPGProperty* pid = Append(new wxParentProperty(label, name));
+	wxPGProperty* xid = AppendIn(pid, wxFloatProperty(name + PRNL_X, name + PRNL_X, vector4.x));
 	SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
-	wxPGId yid = AppendIn(pid, wxFloatProperty(name + PRNL_Y, name + PRNL_Y, vector4.y));
+	wxPGProperty* yid = AppendIn(pid, wxFloatProperty(name + PRNL_Y, name + PRNL_Y, vector4.y));
 	SetPropertyEditor(yid, wxPG_EDITOR(SpinCtrl));
-	wxPGId zid = AppendIn(pid, wxFloatProperty(name + PRNL_Z, name + PRNL_Z, vector4.z));
+	wxPGProperty* zid = AppendIn(pid, wxFloatProperty(name + PRNL_Z, name + PRNL_Z, vector4.z));
 	SetPropertyEditor(zid, wxPG_EDITOR(SpinCtrl));
-	wxPGId wid = AppendIn(pid, wxFloatProperty(name + PRNL_W, name + PRNL_W, vector4.w));
+	wxPGProperty* wid = AppendIn(pid, wxFloatProperty(name + PRNL_W, name + PRNL_W, vector4.w));
 	SetPropertyEditor(wid, wxPG_EDITOR(SpinCtrl));*/
 }
 
 void PropertyWindow::doSetVector4(const wxString& name, const Ogre::Vector4& vector4) {
 	// Child accessable with name "parent.string"
 	wxString baseName = name + wxT(".") + name;
-	wxPGProperty* prop = GetPropertyPtr(baseName + PRNL_X);
+	wxPGProperty* prop = GetPropertyByName(baseName + PRNL_X);
 	if (!prop)
 		return;
-	prop->DoSetValue(vector4.x);
+	prop->SetValue(vector4.x);
 
-	prop = GetPropertyPtr(baseName + PRNL_Y);
+	prop = GetPropertyByName(baseName + PRNL_Y);
 	if (!prop)
 		return;
-	prop->DoSetValue(vector4.y);
+	prop->SetValue(vector4.y);
 
-	prop = GetPropertyPtr(baseName + PRNL_Z);
+	prop = GetPropertyByName(baseName + PRNL_Z);
 	if (!prop)
 		return;
-	prop->DoSetValue(vector4.z);
+	prop->SetValue(vector4.z);
 
-	prop = GetPropertyPtr(baseName + PRNL_W);
+	prop = GetPropertyByName(baseName + PRNL_W);
 	if (!prop)
 		return;
-	prop->DoSetValue(vector4.w);
+	prop->SetValue(vector4.w);
 }
 
 const Ogre::Vector4& PropertyWindow::doGetVector4(const wxString& name, Ogre::Vector4& vector4) {
 	// Child accessable with name "parent.string"
 	wxString baseName = name + wxT(".") + name;
-	wxPGProperty* prop = GetPropertyPtr(baseName + PRNL_X);
+	wxPGProperty* prop = GetPropertyByName(baseName + PRNL_X);
 	if (!prop)
 		return Ogre::Vector4::ZERO;
 	vector4.x = prop->DoGetValue().GetDouble();
-	prop = GetPropertyPtr(baseName + PRNL_Y);
+	prop = GetPropertyByName(baseName + PRNL_Y);
 	if (!prop)
 		return Ogre::Vector4::ZERO;
 	vector4.y = prop->DoGetValue().GetDouble();
-	prop = GetPropertyPtr(baseName + PRNL_Z);
+	prop = GetPropertyByName(baseName + PRNL_Z);
 	if (!prop)
 		return Ogre::Vector4::ZERO;
 	vector4.z = prop->DoGetValue().GetDouble();
-	prop = GetPropertyPtr(baseName + PRNL_W);
+	prop = GetPropertyByName(baseName + PRNL_W);
 	if (!prop)
 		return Ogre::Vector4::ZERO;
 	vector4.w = prop->DoGetValue().GetDouble();
@@ -477,52 +348,52 @@ const Ogre::Vector4& PropertyWindow::doGetVector4(const wxString& name, Ogre::Ve
 }
 
 void PropertyWindow::appendQuaternion(const wxString& label, const wxString& name, const Ogre::Quaternion& quaternion) {
-/*	wxPGId pid = Append(wxParentProperty(label, name));
-	wxPGId wid = AppendIn(pid, wxFloatProperty(name + PRNL_W, name + PRNL_W, quaternion.w));
+/*	wxPGProperty* pid = Append(new wxParentProperty(label, name));
+	wxPGProperty* wid = AppendIn(pid, wxFloatProperty(name + PRNL_W, name + PRNL_W, quaternion.w));
 	SetPropertyEditor(wid, wxPG_EDITOR(SpinCtrl));
-	wxPGId xid = AppendIn(pid, wxFloatProperty(name + PRNL_X, name + PRNL_X, quaternion.x));
+	wxPGProperty* xid = AppendIn(pid, wxFloatProperty(name + PRNL_X, name + PRNL_X, quaternion.x));
 	SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
-	wxPGId yid = AppendIn(pid, wxFloatProperty(name + PRNL_Y, name + PRNL_Y, quaternion.y));
+	wxPGProperty* yid = AppendIn(pid, wxFloatProperty(name + PRNL_Y, name + PRNL_Y, quaternion.y));
 	SetPropertyEditor(yid, wxPG_EDITOR(SpinCtrl));
-	wxPGId zid = AppendIn(pid, wxFloatProperty(name + PRNL_Z, name + PRNL_Z, quaternion.z));
+	wxPGProperty* zid = AppendIn(pid, wxFloatProperty(name + PRNL_Z, name + PRNL_Z, quaternion.z));
 	SetPropertyEditor(zid, wxPG_EDITOR(SpinCtrl));*/
 }
 
 void PropertyWindow::doSetQuaternion(const wxString& name, const Ogre::Quaternion& quaternion) {
 	wxString baseName = name + wxT(".") + name;
-	wxPGProperty* prop = GetPropertyPtr(baseName + PRNL_W);
+	wxPGProperty* prop = GetPropertyByName(baseName + PRNL_W);
 	if (!prop)
 		return;
-	prop->DoSetValue(quaternion.w);
-	prop = GetPropertyPtr(baseName + PRNL_X);
+	prop->SetValue(quaternion.w);
+	prop = GetPropertyByName(baseName + PRNL_X);
 	if (!prop)
 		return;
-	prop->DoSetValue(quaternion.x);
-	prop = GetPropertyPtr(baseName + PRNL_Y);
+	prop->SetValue(quaternion.x);
+	prop = GetPropertyByName(baseName + PRNL_Y);
 	if (!prop)
 		return;
-	prop->DoSetValue(quaternion.y);
-	prop = GetPropertyPtr(baseName + PRNL_Z);
+	prop->SetValue(quaternion.y);
+	prop = GetPropertyByName(baseName + PRNL_Z);
 	if (!prop)
 		return;
-	prop->DoSetValue(quaternion.z);
+	prop->SetValue(quaternion.z);
 }
 
 const Ogre::Quaternion& PropertyWindow::doGetQuaternion(const wxString& name, Ogre::Quaternion& quaternion) {
 	wxString baseName = name + wxT(".") + name;
-	wxPGProperty* prop = GetPropertyPtr(baseName + PRNL_W);
+	wxPGProperty* prop = GetPropertyByName(baseName + PRNL_W);
 	if (!prop)
 		return Ogre::Quaternion::IDENTITY;
 	quaternion.w = prop->DoGetValue().GetDouble();
-	prop = GetPropertyPtr(baseName + PRNL_X);
+	prop = GetPropertyByName(baseName + PRNL_X);
 	if (!prop)
 		return Ogre::Quaternion::IDENTITY;
 	quaternion.x = prop->DoGetValue().GetDouble();
-	prop = GetPropertyPtr(baseName + PRNL_Y);
+	prop = GetPropertyByName(baseName + PRNL_Y);
 	if (!prop)
 		return Ogre::Quaternion::IDENTITY;
 	quaternion.y = prop->DoGetValue().GetDouble();
-	prop = GetPropertyPtr(baseName + PRNL_Z);
+	prop = GetPropertyByName(baseName + PRNL_Z);
 	if (!prop)
 		return Ogre::Quaternion::IDENTITY;
 	quaternion.z = prop->DoGetValue().GetDouble();
@@ -530,22 +401,23 @@ const Ogre::Quaternion& PropertyWindow::doGetQuaternion(const wxString& name, Og
 }
 
 void PropertyWindow::appendDynamicAttribute(const wxString& label, const wxString& name, ParticleUniverse::DynamicAttribute& dynamicAttribute) {
+	// TODO
 	// Remove previous property and replace it with the new values
-	unsigned int index = 0;
-	wxPGId pid = GetPropertyByName(name);
+/*	unsigned int index = 0;
+	wxPGProperty* pid = GetPropertyByName(name);
 	if (pid.IsOk()) {
-		index = pid.GetPropertyPtr()->GetIndexInParent();
-		wxPGId prop = wxPropertyContainerMethods::GetNextSibling(pid); // To avoid ambiguity
+		index = pid.GetPropertyByName()->GetIndexInParent();
+		wxPGProperty* prop = wxPropertyContainerMethods::GetNextSibling(pid); // To avoid ambiguity
 		Delete(name);
 		if (prop) {
 			pid = Insert(prop, wxParentProperty(label, name));
 		}
 		else {
 			// This means that the Dynamic Attribute was at the end of all properties
-			pid = Append(wxParentProperty(label, name));
+			pid = Append(new wxParentProperty(label, name));
 		}
 	} else {
-		pid = Append(wxParentProperty(label, name));
+		pid = Append(new wxParentProperty(label, name));
 	}
 
 	// Add properties
@@ -560,27 +432,27 @@ void PropertyWindow::appendDynamicAttribute(const wxString& label, const wxStrin
 	switch (dynamicAttribute.getType()) {
 		case ParticleUniverse::DynamicAttribute::DAT_FIXED: {
 			// Show fixed value
-/*			AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
+			AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
 			ParticleUniverse::DynamicAttributeFixed* df = static_cast<ParticleUniverse::DynamicAttributeFixed*>(&dynamicAttribute);
-			wxPGId id = AppendIn(pid, wxFloatProperty(PRNL_VALUE, name + PRNL_VALUE, df->getValue()));
-			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));*/
+			wxPGProperty* id = AppendIn(pid, wxFloatProperty(PRNL_VALUE, name + PRNL_VALUE, df->getValue()));
+			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 		}
 		break;
 
 		case ParticleUniverse::DynamicAttribute::DAT_RANDOM: {
 			// Show min and max
-/*/			AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
+			AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
 			ParticleUniverse::DynamicAttributeRandom* dr = static_cast<ParticleUniverse::DynamicAttributeRandom*>(&dynamicAttribute);
-			wxPGId id = AppendIn(pid, wxFloatProperty(PRNL_MIN_VALUE, name + PRNL_MIN_VALUE, dr->getMin()));
+			wxPGProperty* id = AppendIn(pid, wxFloatProperty(PRNL_MIN_VALUE, name + PRNL_MIN_VALUE, dr->getMin()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 			id = AppendIn(pid, wxFloatProperty(PRNL_MAX_VALUE, name + PRNL_MAX_VALUE, dr->getMax()));
-			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));*/
+			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 		}
 		break;
 
 		case ParticleUniverse::DynamicAttribute::DAT_CURVED: {
 			EnumPropertyWithButton* enumProperty = new EnumPropertyWithButton(PRNL_TYPE, name + PRNL_TYPE, types);
-			wxPGId id = AppendIn(pid, enumProperty);
+			wxPGProperty* id = AppendIn(pid, enumProperty);
 			SetPropertyEditor(id, wxPG_EDITOR(ChoiceAndButton)); // Add a button
 
 			// Copy controlpoints from dynamicAttribute to internal mControlPointListMap
@@ -596,32 +468,32 @@ void PropertyWindow::appendDynamicAttribute(const wxString& label, const wxStrin
 
 		case ParticleUniverse::DynamicAttribute::DAT_OSCILLATE: {
 			// Show oscillation type, frequency, phase, base and amplitude
-/*			AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
+			AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
 			ParticleUniverse::DynamicAttributeOscillate* dosc = static_cast<ParticleUniverse::DynamicAttributeOscillate*>(&dynamicAttribute);
 			wxArrayString oscillationTypes;
 			oscillationTypes.Add(PRNL_OSC_SINE);
 			oscillationTypes.Add(PRNL_OSC_SQUARE);
 			AppendIn(pid, wxEnumProperty(PRNL_OSC_TYPE, PRNL_OSC_TYPE, oscillationTypes));
-			wxPGId id = AppendIn(pid, wxFloatProperty(PRNL_OSC_FREQUENCY, name + PRNL_OSC_FREQUENCY, dosc->getFrequency()));
+			wxPGProperty* id = AppendIn(pid, wxFloatProperty(PRNL_OSC_FREQUENCY, name + PRNL_OSC_FREQUENCY, dosc->getFrequency()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 			id = AppendIn(pid, wxFloatProperty(PRNL_OSC_PHASE, name + PRNL_OSC_PHASE, dosc->getPhase()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 			id = AppendIn(pid, wxFloatProperty(PRNL_OSC_BASE, name + PRNL_OSC_BASE, dosc->getBase()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 			id = AppendIn(pid, wxFloatProperty(PRNL_OSC_AMPLITUDE, name + PRNL_OSC_AMPLITUDE, dosc->getAmplitude()));
-			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));*/
+			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 		}
 		break;
-	}
+	}*/
 }
 
 void PropertyWindow::doSetDynamicAttribute(const wxString& name, PropertyWindow* propertyWindow) {
 	// Get the type
 	wxString baseName = name + wxT(".") + name;
-	wxPGProperty* propFrom = propertyWindow->GetPropertyPtr(baseName + PRNL_TYPE);
-	wxPGProperty* propTo = GetPropertyPtr(baseName + PRNL_TYPE);
+	wxPGProperty* propFrom = propertyWindow->GetPropertyByName(baseName + PRNL_TYPE);
+	wxPGProperty* propTo = GetPropertyByName(baseName + PRNL_TYPE);
 	if (propFrom && propTo) {
-		propTo->DoSetValue(propFrom->DoGetValue());
+		propTo->SetValue(propFrom->DoGetValue());
 	} else {
 		return;
 	}
@@ -630,37 +502,37 @@ void PropertyWindow::doSetDynamicAttribute(const wxString& name, PropertyWindow*
 		// Be sure that both types are the same, so replace the existing one
 		ParticleUniverse::DynamicAttributeFixed dynAttr;
 		appendDynamicAttribute(name, name, dynAttr);
-		propTo = GetPropertyPtr(baseName + PRNL_TYPE);
+		propTo = GetPropertyByName(baseName + PRNL_TYPE);
 		if (!propTo) return;
 		propTo->SetValueFromString(DYN_FIXED);
 
-		propFrom = propertyWindow->GetPropertyPtr(baseName + PRNL_VALUE);
-		propTo = GetPropertyPtr(baseName + PRNL_VALUE);
+		propFrom = propertyWindow->GetPropertyByName(baseName + PRNL_VALUE);
+		propTo = GetPropertyByName(baseName + PRNL_VALUE);
 		if (propFrom && propTo) {
-			propTo->DoSetValue(propFrom->DoGetValue());
+			propTo->SetValue(propFrom->DoGetValue());
 		}
 	} else if (propFrom->GetValueAsString() == DYN_RANDOM) {
 		// Be sure that both types are the same, so replace the existing one
 		ParticleUniverse::DynamicAttributeRandom dynAttr;
 		appendDynamicAttribute(name, name, dynAttr);
-		propTo = GetPropertyPtr(baseName + PRNL_TYPE);
+		propTo = GetPropertyByName(baseName + PRNL_TYPE);
 		if (!propTo) return;
 		propTo->SetValueFromString(DYN_RANDOM);
 
-		propFrom = propertyWindow->GetPropertyPtr(baseName + PRNL_MIN_VALUE);
-		propTo = GetPropertyPtr(baseName + PRNL_MIN_VALUE);
+		propFrom = propertyWindow->GetPropertyByName(baseName + PRNL_MIN_VALUE);
+		propTo = GetPropertyByName(baseName + PRNL_MIN_VALUE);
 		if (propFrom && propTo) {
-			propTo->DoSetValue(propFrom->DoGetValue());
+			propTo->SetValue(propFrom->DoGetValue());
 		}
-		propFrom = propertyWindow->GetPropertyPtr(baseName + PRNL_MAX_VALUE);
-		propTo = GetPropertyPtr(baseName + PRNL_MAX_VALUE);
+		propFrom = propertyWindow->GetPropertyByName(baseName + PRNL_MAX_VALUE);
+		propTo = GetPropertyByName(baseName + PRNL_MAX_VALUE);
 		if (propFrom && propTo) {
-			propTo->DoSetValue(propFrom->DoGetValue());
+			propTo->SetValue(propFrom->DoGetValue());
 		}
 	} else if (propFrom->GetValueAsString() == DYN_CURVED) {
 		ParticleUniverse::DynamicAttributeCurved dynAttr;
 		appendDynamicAttribute(name, name, dynAttr);
-		propTo = GetPropertyPtr(baseName + PRNL_TYPE);
+		propTo = GetPropertyByName(baseName + PRNL_TYPE);
 		if (!propTo) return;
 		propTo->SetValueFromString(DYN_CURVED);
 
@@ -673,34 +545,34 @@ void PropertyWindow::doSetDynamicAttribute(const wxString& name, PropertyWindow*
 		// Be sure that both types are the same, so replace the existing one
 		ParticleUniverse::DynamicAttributeOscillate dynAttr;
 		appendDynamicAttribute(name, name, dynAttr);
-		propTo = GetPropertyPtr(baseName + PRNL_TYPE);
+		propTo = GetPropertyByName(baseName + PRNL_TYPE);
 		if (!propTo) return;
 		propTo->SetValueFromString(DYN_OSCILLATE);
 
-		propFrom = propertyWindow->GetPropertyPtr(baseName + PRNL_OSC_TYPE);
-		propTo = GetPropertyPtr(baseName + PRNL_OSC_TYPE);
+		propFrom = propertyWindow->GetPropertyByName(baseName + PRNL_OSC_TYPE);
+		propTo = GetPropertyByName(baseName + PRNL_OSC_TYPE);
 		if (propFrom && propTo) {
-			propTo->DoSetValue(propFrom->DoGetValue());
+			propTo->SetValue(propFrom->DoGetValue());
 		}
-		propFrom = propertyWindow->GetPropertyPtr(baseName + PRNL_OSC_FREQUENCY);
-		propTo = GetPropertyPtr(baseName + PRNL_OSC_FREQUENCY);
+		propFrom = propertyWindow->GetPropertyByName(baseName + PRNL_OSC_FREQUENCY);
+		propTo = GetPropertyByName(baseName + PRNL_OSC_FREQUENCY);
 		if (propFrom && propTo) {
-			propTo->DoSetValue(propFrom->DoGetValue());
+			propTo->SetValue(propFrom->DoGetValue());
 		}
-		propFrom = propertyWindow->GetPropertyPtr(baseName + PRNL_OSC_PHASE);
-		propTo = GetPropertyPtr(baseName + PRNL_OSC_PHASE);
+		propFrom = propertyWindow->GetPropertyByName(baseName + PRNL_OSC_PHASE);
+		propTo = GetPropertyByName(baseName + PRNL_OSC_PHASE);
 		if (propFrom && propTo) {
-			propTo->DoSetValue(propFrom->DoGetValue());
+			propTo->SetValue(propFrom->DoGetValue());
 		}
-		propFrom = propertyWindow->GetPropertyPtr(baseName + PRNL_OSC_BASE);
-		propTo = GetPropertyPtr(baseName + PRNL_OSC_BASE);
+		propFrom = propertyWindow->GetPropertyByName(baseName + PRNL_OSC_BASE);
+		propTo = GetPropertyByName(baseName + PRNL_OSC_BASE);
 		if (propFrom && propTo) {
-			propTo->DoSetValue(propFrom->DoGetValue());
+			propTo->SetValue(propFrom->DoGetValue());
 		}
-		propFrom = propertyWindow->GetPropertyPtr(baseName + PRNL_OSC_AMPLITUDE);
-		propTo = GetPropertyPtr(baseName + PRNL_OSC_AMPLITUDE);
+		propFrom = propertyWindow->GetPropertyByName(baseName + PRNL_OSC_AMPLITUDE);
+		propTo = GetPropertyByName(baseName + PRNL_OSC_AMPLITUDE);
 		if (propFrom && propTo) {
-			propTo->DoSetValue(propFrom->DoGetValue());
+			propTo->SetValue(propFrom->DoGetValue());
 		}
 	}
 }
@@ -711,7 +583,7 @@ void PropertyWindow::doSetDynamicAttribute(const wxString& name, ParticleUnivers
 
 	wxString baseName = name + wxT(".") + name;
 	appendDynamicAttribute(name, name, *dynamicAttribute);
-	wxPGProperty* propTo = propTo = GetPropertyPtr(baseName + PRNL_TYPE);
+	wxPGProperty* propTo = GetPropertyByName(baseName + PRNL_TYPE);
 	if (!propTo) {
 		std::cerr << "PropertyWindow::doSetSynamicAttribute: " << (baseName + PRNL_TYPE) << " not found" << std::endl;
 		return;
@@ -750,14 +622,16 @@ EditComponent* PropertyWindow::getOwner(void) {
 
 void PropertyWindow::onPropertyChanged(wxPropertyGridEvent& event) {
 	// Inform others that a property has been changed.
-	notifyPropertyChanged();
+	// TODO:
+	/*notifyPropertyChanged();
 
 	// Handle other changes
-	wxString name = event.GetPropertyName();
-	wxString label = event.GetPropertyLabel();
+	wxPGProperty* prop = event.GetProperty()->GetMainParent();
+	wxString name = prop->GetName();
+	wxString label = prop->GetLabel();
 
 	// Perform additional validations
-	if (mName.length() > 0 && !_validatePropertyStringNoSpaces(event.GetPropertyPtr(), PRNL_NAME))
+	if (mName.length() > 0 && !_validatePropertyStringNoSpaces(event.GetProperty(), PRNL_NAME))
 		return;
 
 	if (name == PRNL_NAME) {
@@ -767,7 +641,6 @@ void PropertyWindow::onPropertyChanged(wxPropertyGridEvent& event) {
 		mOwner->setCaption();
 	} else if (label == PRNL_TYPE) {
 		// Dynamic attribute changed.
-		wxPGProperty* prop = event.GetPropertyPtr()->GetMainParent();
 		if (!prop) return;
 		name = prop->GetName(); // Reuse of 'name'
 		label = prop->GetLabel(); // Reuse of 'label'
@@ -821,9 +694,9 @@ void PropertyWindow::onPropertyChanged(wxPropertyGridEvent& event) {
 			prop = GetPropertyByName(name); // Property has been replaced, so search it again to get the new pointer
 			prop->SetValueFromString(DYN_OSCILLATE);
 		}
-		wxPGId pid = GetPropertyByName(name);
+		wxPGProperty* pid = GetPropertyByName(name);
 		Expand(pid);
-	}
+	}*/
 }
 
 void PropertyWindow::notifyPropertyChanged(void) {
@@ -927,7 +800,7 @@ bool PropertyWindow::_validatePropertyDynamicAttribute(wxPGProperty* prop, const
 bool PropertyWindow::_setPropertyError(wxPGProperty* prop, const wxString& message) {
 	_showMessage(_("'") + prop->GetValueAsString() + _("': ") + message);
 	prop->SetValueToUnspecified();
-	SelectProperty(prop->GetId(), true);
+//	SelectProperty(prop->GetId(), true); TODO: (Michael) uncomment
 	return false;
 }
 
@@ -1117,16 +990,15 @@ void PropertyWindow::propertyDump(wxPropertyGrid* propgrid) {
 	if (!propgrid)
 		return;
 
-	wxPGId prop;
 	Ogre::LogManager* log = Ogre::LogManager::getSingletonPtr();
 	log->setLogDetail(Ogre::LL_BOREME);
 	log->createLog("Dump.log", true);
-	wxPGId propId = propgrid->GetFirstProperty();
-	while (propId.IsOk()) {
-		wxPGProperty* prop = propId.GetPropertyPtr();
+	wxPropertyGridIterator gridIt = propgrid->GetIterator();
+	while (!gridIt.AtEnd()) {
+		wxPGProperty* prop = gridIt.GetProperty();
 		wxString s = prop->GetName();
 		log->logMessage("Property name" + wx2ogre(s));
-		propId = propgrid->GetNextProperty(propId);
+		gridIt.Next();
 	}
 	log->destroyLog("Dump.log");
 }

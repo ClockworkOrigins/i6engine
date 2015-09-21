@@ -14,45 +14,21 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/utils.h"
 
-#include "wx/propgrid/propdev.h"
-
 /**	Selection dialog for meshes
 */
 class MeshSelector : public wxSingleChoiceDialog
 {
 	public:
 		// Constructor / Destructor
-		MeshSelector(wxWindow* parent, 
-			const wxString& message, 
-			const wxString& caption, 
-			int n, 
-			const wxString* choices, 
-			long style = wxCHOICEDLG_STYLE, 
-			const wxPoint& pos = wxDefaultPosition) : 
+		MeshSelector(wxWindow* parent,
+			const wxString& message,
+			const wxString& caption,
+			int n,
+			const wxString* choices,
+			long style = wxCHOICEDLG_STYLE,
+			const wxPoint& pos = wxDefaultPosition) :
 		wxSingleChoiceDialog(parent, message, caption, n, choices, reinterpret_cast<void **>(0), style, pos) {}
 		~MeshSelector(void) {}
-};
-
-/**	Class that creates a button property. After clicking a mesh can be selected
-*/
-class MeshProperty : public wxStringPropertyClass
-{
-	public:
-		MeshProperty(
-			const wxString& label, 
-			const wxString& name);
-		virtual ~MeshProperty(void) {}
-
-		/**	Open the dialog after a property window event
-		*/
-		virtual bool OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event);
-
-		/**	Returns the selected meshname
-		*/
-		const Ogre::String& getMeshName(void) const;
-
-	protected:
-		Ogre::String mMeshName;
 };
 
 /**	Class that displays a mesh selection dialog

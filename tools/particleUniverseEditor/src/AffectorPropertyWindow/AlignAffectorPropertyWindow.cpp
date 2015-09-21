@@ -60,7 +60,7 @@ void AlignAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::P
 
 	// Copy properties from affector to property window
 	ParticleUniverse::AlignAffector* alignAffector = static_cast<ParticleUniverse::AlignAffector*>(affector);
-	
+
 	// Resize: bool
 	doSetBool(PRNL_AFFECTOR_ALIGN_RESIZE, alignAffector->isResize());
 }
@@ -73,7 +73,7 @@ void AlignAffectorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorAlign.html");
 
 	// Resize: bool
-	Append(wxBoolProperty(PRNL_AFFECTOR_ALIGN_RESIZE, 
-		PRNL_AFFECTOR_ALIGN_RESIZE, 
+	Append(new wxBoolProperty(PRNL_AFFECTOR_ALIGN_RESIZE,
+		PRNL_AFFECTOR_ALIGN_RESIZE,
 		ParticleUniverse::AlignAffector::DEFAULT_RESIZE));
 }

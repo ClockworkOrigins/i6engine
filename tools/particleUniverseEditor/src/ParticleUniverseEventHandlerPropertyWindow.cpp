@@ -36,8 +36,8 @@ EventHandlerPropertyWindow::EventHandlerPropertyWindow(wxWindow* parent, EditCom
 }
 //-----------------------------------------------------------------------
 EventHandlerPropertyWindow::EventHandlerPropertyWindow(EventHandlerPropertyWindow* eventHandlerPropertyWindow) : PropertyWindow(
-	eventHandlerPropertyWindow->GetParent(), 
-	eventHandlerPropertyWindow->getOwner(), 
+	eventHandlerPropertyWindow->GetParent(),
+	eventHandlerPropertyWindow->getOwner(),
 	eventHandlerPropertyWindow->getComponentName())
 {
 	_initProperties();
@@ -50,9 +50,9 @@ void EventHandlerPropertyWindow::copyAttributesFromPropertyWindow(EventHandlerPr
 	doSetString(PRNL_NAME, eventHandlerPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_HANDLER_TYPE);
-	wxPGProperty* propFrom = eventHandlerPropertyWindow->GetPropertyPtr(PRNL_HANDLER_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	wxPGProperty* propTo = GetProperty(PRNL_HANDLER_TYPE);
+	wxPGProperty* propFrom = eventHandlerPropertyWindow->GetProperty(PRNL_HANDLER_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 }
 //-----------------------------------------------------------------------
 void EventHandlerPropertyWindow::copyAttributeToEventHandler(wxPGProperty* prop, wxString propertyName)
@@ -88,7 +88,7 @@ void EventHandlerPropertyWindow::copyAttributesFromEventHandler(ParticleUniverse
 	doSetString(PRNL_NAME, ogre2wx(eventHandler->getName()));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_HANDLER_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_HANDLER_TYPE);
 	wxString type = ogre2wxTranslate(eventHandler->getEventHandlerType());
 	propTo->SetValueFromString(type);
 }
@@ -117,13 +117,13 @@ void EventHandlerPropertyWindow::_initProperties(void)
 	mTypes.Add(CST_HANDLER_DO_PLACEMENT_PARTICLE);
 	mTypes.Add(CST_HANDLER_DO_SCALE);
 	mTypes.Add(CST_HANDLER_DO_STOP_SYSTEM);
-	wxPGId pid = Append(wxEnumProperty(PRNL_HANDLER_TYPE, PRNL_HANDLER_TYPE, mTypes));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_HANDLER_TYPE, PRNL_HANDLER_TYPE, mTypes));
 }
 //-----------------------------------------------------------------------
 void EventHandlerPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty* prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToEventHandler(prop, propertyName);
 	notifyPropertyChanged();
@@ -138,7 +138,7 @@ void EventHandlerPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& ev
 	{
 		// Replace this window by another one
 		notifyDestroyUnnecessaryConnections();
-		wxString subType = event.GetPropertyValueAsString();
+		wxString subType = event.GetProperty()->GetValueAsString();
 		mOwner->createPropertyWindow(subType, this);
 		mOwner->setCaption();
 		getOwner()->refreshCanvas();
@@ -190,7 +190,7 @@ void EventHandlerPropertyWindow::replaceHandlerType(wxPGProperty* prop)
 		}
 		else
 		{
-			/** The old handler didn't have an observer, so create a new handler by means of the ParticleSystemManager itself and also 
+			/** The old handler didn't have an observer, so create a new handler by means of the ParticleSystemManager itself and also
 				delete the old handler by means of the ParticleSystemManager
 			*/
 			ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();

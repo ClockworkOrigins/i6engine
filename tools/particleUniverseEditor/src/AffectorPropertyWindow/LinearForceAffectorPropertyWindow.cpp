@@ -82,7 +82,7 @@ void LinearForceAffectorPropertyWindow::copyAttributesFromAffector(ParticleUnive
 	doSetVector3(PRNL_FORCE_VECTOR, linearForceAffector->getForceVector());
 
 	// Force Application: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_LINEAR_FORCE_APPLICATION);
+	wxPGProperty* propTo = GetProperty(PRNL_LINEAR_FORCE_APPLICATION);
 	ParticleUniverse::BaseForceAffector::ForceApplication application = linearForceAffector->getForceApplication();
 	wxString applicationString = APP_ADD;
 	if (application == ParticleUniverse::BaseForceAffector::FA_AVERAGE)
@@ -111,5 +111,5 @@ void LinearForceAffectorPropertyWindow::_initProperties(void)
 	// Force Application: List
 	mApplication.Add(APP_ADD);
 	mApplication.Add(APP_AVG);
-	wxPGId pid = Append(wxEnumProperty(PRNL_LINEAR_FORCE_APPLICATION, PRNL_LINEAR_FORCE_APPLICATION, mApplication));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_LINEAR_FORCE_APPLICATION, PRNL_LINEAR_FORCE_APPLICATION, mApplication));
 }

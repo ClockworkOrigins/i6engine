@@ -119,7 +119,7 @@ void BeamRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::Pa
 	doSetBool(PRNL_JUMP, beamRenderer->isJump());
 
 	// Accurate Facing: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_TEXTURE_DIRECTION);
+	wxPGProperty* propTo = GetProperty(PRNL_TEXTURE_DIRECTION);
 	wxString textureDirection = TEXTURE_DIRECTION_U;
 	if (beamRenderer->getTexCoordDirection() == Ogre::BillboardChain::TCD_V)
 	{
@@ -145,41 +145,41 @@ void BeamRendererPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("RendererBeam.html");
 
 	// Use Vertex Colours: bool
-	Append(wxBoolProperty(PRNL_USE_VERTEX_COLOURS, 
-		PRNL_USE_VERTEX_COLOURS, 
+	Append(new wxBoolProperty(PRNL_USE_VERTEX_COLOURS,
+		PRNL_USE_VERTEX_COLOURS,
 		ParticleUniverse::BeamRenderer::DEFAULT_USE_VERTEX_COLOURS));
 
 	// Max Elements: size_t
-	Append(wxUIntProperty(PRNL_MAX_ELEMENTS, 
-		PRNL_MAX_ELEMENTS, 
+	Append(new wxUIntProperty(PRNL_MAX_ELEMENTS,
+		PRNL_MAX_ELEMENTS,
 		ParticleUniverse::BeamRenderer::DEFAULT_MAX_ELEMENTS));
 	SetPropertyEditor(PRNL_MAX_ELEMENTS, wxPG_EDITOR(SpinCtrl));
 
 	// Update Interval: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_UPDATE_INTERVAL, 
-		PRNL_UPDATE_INTERVAL, 
+	Append(new wxFloatProperty(PRNL_UPDATE_INTERVAL,
+		PRNL_UPDATE_INTERVAL,
 		ParticleUniverse::BeamRenderer::DEFAULT_UPDATE_INTERVAL));
 	SetPropertyEditor(PRNL_UPDATE_INTERVAL, wxPG_EDITOR(SpinCtrl));
 
 	// Deviation: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_DEVIATION, 
-		PRNL_DEVIATION, 
+	Append(new wxFloatProperty(PRNL_DEVIATION,
+		PRNL_DEVIATION,
 		ParticleUniverse::BeamRenderer::DEFAULT_DEVIATION));
 	SetPropertyEditor(PRNL_DEVIATION, wxPG_EDITOR(SpinCtrl));
 
 	// Number Of Segments: size_t
-	Append(wxUIntProperty(PRNL_NUMBER_OF_SEGMENTS, 
-		PRNL_NUMBER_OF_SEGMENTS, 
+	Append(new wxUIntProperty(PRNL_NUMBER_OF_SEGMENTS,
+		PRNL_NUMBER_OF_SEGMENTS,
 		ParticleUniverse::BeamRenderer::DEFAULT_NUMBER_OF_SEGMENTS));
 	SetPropertyEditor(PRNL_NUMBER_OF_SEGMENTS, wxPG_EDITOR(SpinCtrl));
 
 	// Jump: bool
-	Append(wxBoolProperty(PRNL_JUMP, PRNL_JUMP, false));
+	Append(new wxBoolProperty(PRNL_JUMP, PRNL_JUMP, false));
 
 	// Texture Direction: List
 	mTextureDirection.Add(TEXTURE_DIRECTION_U);
 	mTextureDirection.Add(TEXTURE_DIRECTION_V);
-	wxPGProperty* prop = wxEnumProperty(PRNL_TEXTURE_DIRECTION, PRNL_TEXTURE_DIRECTION, mTextureDirection);
+	wxPGProperty* prop = new wxEnumProperty(PRNL_TEXTURE_DIRECTION, PRNL_TEXTURE_DIRECTION, mTextureDirection);
 	Append(prop);
 	prop->SetValueFromString(TEXTURE_DIRECTION_V);
 

@@ -51,6 +51,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "wx/cmndata.h"
 #include "wx/colordlg.h"
 #include "wx/splitter.h"
+#include "wx/propgrid/propgridiface.h"
 
 #ifdef PU_PHYSICS_PHYSX
 	#include "Externs/ParticleUniversePhysXBridge.h"
@@ -75,10 +76,10 @@ BEGIN_EVENT_TABLE(ParticleUniverseEditorFrame, wxFrame)
 	EVT_MENU(ID_RESET_TIME, ParticleUniverseEditorFrame::OnResetTime)
 	EVT_MENU(ID_TOGGLE_STATS, ParticleUniverseEditorFrame::OnToggleStats)
 	EVT_MENU(ID_TOGGLE_GRID_PLANE, ParticleUniverseEditorFrame::OnToggleGridPlane)
-	EVT_MENU(ID_GIZMO_MOVE, ParticleUniverseEditorFrame::OnGizmoMoveSelect)
-	EVT_MENU(ID_GIZMO_ROTATE, ParticleUniverseEditorFrame::OnGizmoRotateSelect)
-	EVT_MENU(ID_GIZMO_SCALE, ParticleUniverseEditorFrame::OnGizmoScaleSelect)
-	EVT_MENU(ID_TOGGLE_GIZMO, ParticleUniverseEditorFrame::OnToggleGizmo)
+//	EVT_MENU(ID_GIZMO_MOVE, ParticleUniverseEditorFrame::OnGizmoMoveSelect)
+//	EVT_MENU(ID_GIZMO_ROTATE, ParticleUniverseEditorFrame::OnGizmoRotateSelect)
+//	EVT_MENU(ID_GIZMO_SCALE, ParticleUniverseEditorFrame::OnGizmoScaleSelect)
+//	EVT_MENU(ID_TOGGLE_GIZMO, ParticleUniverseEditorFrame::OnToggleGizmo)
 	EVT_MENU(ID_WORLD_LOCAL_SPACE, ParticleUniverseEditorFrame::OnToggleWorldLocalSpace)
 	EVT_MENU(ID_CAMERA_RESET, ParticleUniverseEditorFrame::OnCameraReset)
 	EVT_MENU(ID_CENTRE_OBJECT, ParticleUniverseEditorFrame::OnCentreObject)

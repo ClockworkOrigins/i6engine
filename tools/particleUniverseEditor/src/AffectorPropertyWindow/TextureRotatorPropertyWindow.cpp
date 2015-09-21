@@ -109,7 +109,7 @@ void TextureRotatorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorTextureRotator.html");
 
 	// Use Own Rotation speed
-	Append(wxBoolProperty(PRNL_USE_OWN_SPEED, PRNL_USE_OWN_SPEED, ParticleUniverse::TextureRotator::DEFAULT_USE_OWN_SPEED));
+	Append(new wxBoolProperty(PRNL_USE_OWN_SPEED, PRNL_USE_OWN_SPEED, ParticleUniverse::TextureRotator::DEFAULT_USE_OWN_SPEED));
 
 	// Rotation: Dynamic Attribute
 	ParticleUniverse::DynamicAttributeFixed dynAttr;

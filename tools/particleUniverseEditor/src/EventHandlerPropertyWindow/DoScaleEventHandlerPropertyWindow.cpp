@@ -79,7 +79,7 @@ void DoScaleEventHandlerPropertyWindow::copyAttributesFromEventHandler(ParticleU
 	doSetDouble(PRNL_SCALE_FRACTION, doScaleEventHandler->getScaleFraction());
 
 	// Scale Type: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_SCALE_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_SCALE_TYPE);
 	ParticleUniverse::DoScaleEventHandler::ScaleType scaleType = doScaleEventHandler->getScaleType();
 	wxString scaleTypeString = SC_TIME_TO_LIVE;
 	if (scaleType == ParticleUniverse::DoScaleEventHandler::ST_VELOCITY)
@@ -100,7 +100,7 @@ void DoScaleEventHandlerPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("EventHandlerDoScale.html");
 
 	// Scale Fraction: Ogre:: Real
-	Append(wxFloatProperty(PRNL_SCALE_FRACTION, 
+	Append(new wxFloatProperty(PRNL_SCALE_FRACTION, 
 		PRNL_SCALE_FRACTION, 
 		ParticleUniverse::DoScaleEventHandler::DEFAULT_SCALE_FRACTION));
 	SetPropertyEditor(PRNL_SCALE_FRACTION, wxPG_EDITOR(SpinCtrl));
@@ -108,5 +108,5 @@ void DoScaleEventHandlerPropertyWindow::_initProperties(void)
 	// Scale Type: List
 	mScaleTypes.Add(SC_TIME_TO_LIVE);
 	mScaleTypes.Add(SC_VELOCITY);
-	wxPGId pid = Append(wxEnumProperty(PRNL_SCALE_TYPE, PRNL_SCALE_TYPE, mScaleTypes));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_SCALE_TYPE, PRNL_SCALE_TYPE, mScaleTypes));
 }

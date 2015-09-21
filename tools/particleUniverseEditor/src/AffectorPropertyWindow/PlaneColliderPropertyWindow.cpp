@@ -130,7 +130,7 @@ void PlaneColliderPropertyWindow::copyAttributesFromAffector(ParticleUniverse::P
 	doSetDouble(PRNL_COLLIDER_BOUNCYNESS, planeCollider->getBouncyness());
 
 	// Intersection type: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_INTERSECTION_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_INTERSECTION_TYPE);
 	ParticleUniverse::BaseCollider::IntersectionType intersectionType = planeCollider->getIntersectionType();
 	wxString intersectionTypeString = IST_POINT;
 	if (intersectionType == ParticleUniverse::BaseCollider::IT_BOX)
@@ -140,7 +140,7 @@ void PlaneColliderPropertyWindow::copyAttributesFromAffector(ParticleUniverse::P
 	propTo->SetValueFromString(intersectionTypeString);
 
 	// Collision type: List
-	propTo = GetPropertyPtr(PRNL_COLLISION_TYPE);
+	propTo = GetProperty(PRNL_COLLISION_TYPE);
 	ParticleUniverse::BaseCollider::CollisionType collisionType = planeCollider->getCollisionType();
 	wxString collisionTypeString = COLLT_NONE;
 	if (collisionType == ParticleUniverse::BaseCollider::CT_BOUNCE)
@@ -178,21 +178,21 @@ void PlaneColliderPropertyWindow::_initProperties(void)
 	appendVector3(PRNL_PLANE_COLLIDER_NORMAL, PRNL_PLANE_COLLIDER_NORMAL, ParticleUniverse::PlaneCollider::DEFAULT_NORMAL);
 
 	// Friction: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_COLLIDER_FRICTION, PRNL_COLLIDER_FRICTION, ParticleUniverse::PlaneCollider::DEFAULT_FRICTION));
+	Append(new wxFloatProperty(PRNL_COLLIDER_FRICTION, PRNL_COLLIDER_FRICTION, ParticleUniverse::PlaneCollider::DEFAULT_FRICTION));
 	SetPropertyEditor(PRNL_COLLIDER_FRICTION, wxPG_EDITOR(SpinCtrl));
 
 	// Bouncyness: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_COLLIDER_BOUNCYNESS, PRNL_COLLIDER_BOUNCYNESS, ParticleUniverse::PlaneCollider::DEFAULT_BOUNCYNESS));
+	Append(new wxFloatProperty(PRNL_COLLIDER_BOUNCYNESS, PRNL_COLLIDER_BOUNCYNESS, ParticleUniverse::PlaneCollider::DEFAULT_BOUNCYNESS));
 	SetPropertyEditor(PRNL_COLLIDER_BOUNCYNESS, wxPG_EDITOR(SpinCtrl));
 
 	// Intersection type: List
 	mIntersectionTypes.Add(IST_POINT);
 	mIntersectionTypes.Add(IST_BOX);
-	Append(wxEnumProperty(PRNL_INTERSECTION_TYPE, PRNL_INTERSECTION_TYPE, mIntersectionTypes));
+	Append(new wxEnumProperty(PRNL_INTERSECTION_TYPE, PRNL_INTERSECTION_TYPE, mIntersectionTypes));
 
 	// Collision type: List
 	mCollisionTypes.Add(COLLT_NONE);
 	mCollisionTypes.Add(COLLT_BOUNCE);
 	mCollisionTypes.Add(COLLT_FLOW);
-	Append(wxEnumProperty(PRNL_COLLISION_TYPE, PRNL_COLLISION_TYPE, mCollisionTypes));
+	Append(new wxEnumProperty(PRNL_COLLISION_TYPE, PRNL_COLLISION_TYPE, mCollisionTypes));
 }

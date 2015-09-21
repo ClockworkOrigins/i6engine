@@ -80,7 +80,7 @@ void OnCountObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse:
 	ParticleUniverse::OnCountObserver* onCountObserver = static_cast<ParticleUniverse::OnCountObserver*>(observer);
 
 	// Count Threshold Compare: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_ON_COUNT_COMPARE);
+	wxPGProperty* propTo = GetProperty(PRNL_ON_COUNT_COMPARE);
 	ParticleUniverse::ComparisionOperator compare = onCountObserver->getCompare();
 	wxString compareString = PRNL_COMPARE_LESS_THAN;
 	if (compare == ParticleUniverse::CO_GREATER_THAN)
@@ -112,9 +112,9 @@ void OnCountObserverPropertyWindow::_initProperties(void)
 	mCompare.Add(PRNL_COMPARE_LESS_THAN);
 	mCompare.Add(PRNL_COMPARE_GREATER_THAN);
 	mCompare.Add(PRNL_COMPARE_EQUALS);
-	Append(wxEnumProperty(PRNL_ON_COUNT_COMPARE, PRNL_ON_COUNT_COMPARE, mCompare));
+	Append(new wxEnumProperty(PRNL_ON_COUNT_COMPARE, PRNL_ON_COUNT_COMPARE, mCompare));
 
 	// Count Threshold Value: ParticleUniverse::uint
-	Append(wxUIntProperty(PRNL_ON_COUNT_THRESHOLD, PRNL_ON_COUNT_THRESHOLD, ParticleUniverse::OnCountObserver::DEFAULT_THRESHOLD));
+	Append(new wxUIntProperty(PRNL_ON_COUNT_THRESHOLD, PRNL_ON_COUNT_THRESHOLD, ParticleUniverse::OnCountObserver::DEFAULT_THRESHOLD));
 	SetPropertyEditor(PRNL_ON_COUNT_THRESHOLD, wxPG_EDITOR(SpinCtrl));
 }

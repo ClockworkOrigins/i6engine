@@ -197,7 +197,7 @@ void BillboardRendererPropertyWindow::copyAttributesFromRenderer(ParticleUnivers
 	ParticleUniverse::BillboardRenderer* billboardRenderer = static_cast<ParticleUniverse::BillboardRenderer*>(renderer);
 
 	// Billboard Type: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_BILLBOARD_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_BILLBOARD_TYPE);
 	ParticleUniverse::BillboardRenderer::BillboardType billboardType = billboardRenderer->getBillboardType();
 	wxString billboardTypeString = BBT_POINT;
 	if (billboardType == ParticleUniverse::BillboardRenderer::BBT_ORIENTED_COMMON)
@@ -223,7 +223,7 @@ void BillboardRendererPropertyWindow::copyAttributesFromRenderer(ParticleUnivers
 	propTo->SetValueFromString(billboardTypeString);
 
 	// Origin: List
-	propTo = GetPropertyPtr(PRNL_ORIGIN);
+	propTo = GetProperty(PRNL_ORIGIN);
 	Ogre::BillboardOrigin origin = billboardRenderer->getBillboardOrigin();
 	wxString originString = ORG_CENTER;
 	if (origin == Ogre::BBO_BOTTOM_CENTER)
@@ -261,7 +261,7 @@ void BillboardRendererPropertyWindow::copyAttributesFromRenderer(ParticleUnivers
 	propTo->SetValueFromString(originString);
 
 	// Rotation Type: List
-	propTo = GetPropertyPtr(PRNL_ROTATION_TYPE);
+	propTo = GetProperty(PRNL_ROTATION_TYPE);
 	Ogre::BillboardRotationType rotationType = billboardRenderer->getBillboardRotationType();
 	wxString rotationTypeString = RT_VERTEX;
 	if (rotationType == Ogre::BBR_TEXCOORD)
@@ -280,7 +280,7 @@ void BillboardRendererPropertyWindow::copyAttributesFromRenderer(ParticleUnivers
 	doSetBool(PRNL_POINT_RENDERING, billboardRenderer->isPointRenderingEnabled());
 
 	// Accurate Facing: List
-	propTo = GetPropertyPtr(PRNL_ACCURATE_FACING);
+	propTo = GetProperty(PRNL_ACCURATE_FACING);
 	wxString accurateFacingString = ACF_OFF;
 	if (billboardRenderer->isUseAccurateFacing())
 	{
@@ -348,7 +348,7 @@ void BillboardRendererPropertyWindow::_initProperties(void)
 	mBillboardTypes.Add(BBT_PERPENDICULAR_COMMON);
 	mBillboardTypes.Add(BBT_PERPENDICULAR_SELF);
 	mBillboardTypes.Add(BBT_ORIENTED_SHAPE);
-	wxPGId pid = Append(wxEnumProperty(PRNL_BILLBOARD_TYPE, PRNL_BILLBOARD_TYPE, mBillboardTypes));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_BILLBOARD_TYPE, PRNL_BILLBOARD_TYPE, mBillboardTypes));
 
 	// Origin: List
 	mOrigin.Add(ORG_TOP_LEFT);
@@ -360,12 +360,12 @@ void BillboardRendererPropertyWindow::_initProperties(void)
 	mOrigin.Add(ORG_BOTTOM_LEFT);
 	mOrigin.Add(ORG_BOTTOM_RIGHT);
 	mOrigin.Add(ORG_BOTTOM_CENTER);
-	pid = Append(wxEnumProperty(PRNL_ORIGIN, PRNL_ORIGIN, mOrigin));
+	pid = Append(new wxEnumProperty(PRNL_ORIGIN, PRNL_ORIGIN, mOrigin));
 
 	// Rotation Type: List
 	mRotationTypes.Add(RT_VERTEX);
 	mRotationTypes.Add(RT_TEXTURE_COORDINATES);
-	pid = Append(wxEnumProperty(PRNL_ROTATION_TYPE, PRNL_ROTATION_TYPE, mRotationTypes));
+	pid = Append(new wxEnumProperty(PRNL_ROTATION_TYPE, PRNL_ROTATION_TYPE, mRotationTypes));
 
 	// Common Direction: Ogre::Vector3
 	appendVector3(PRNL_COMMON_DIRECTION, PRNL_COMMON_DIRECTION, ParticleUniverse::BillboardRenderer::DEFAULT_COMMON_DIRECTION);
@@ -374,37 +374,37 @@ void BillboardRendererPropertyWindow::_initProperties(void)
 	appendVector3(PRNL_UP_VECTOR, PRNL_UP_VECTOR, ParticleUniverse::BillboardRenderer::DEFAULT_COMMON_UP_VECTOR);
 
 	// Point Rendering: bool
-	Append(wxBoolProperty(PRNL_POINT_RENDERING, PRNL_POINT_RENDERING, ParticleUniverse::BillboardRenderer::DEFAULT_POINT_RENDERING));
+	Append(new wxBoolProperty(PRNL_POINT_RENDERING, PRNL_POINT_RENDERING, ParticleUniverse::BillboardRenderer::DEFAULT_POINT_RENDERING));
 
 	// Accurate Facing: List
 	mAccurateFacing.Add(ACF_ON);
 	mAccurateFacing.Add(ACF_OFF);
-	wxPGProperty* prop = wxEnumProperty(PRNL_ACCURATE_FACING, PRNL_ACCURATE_FACING, mAccurateFacing);
+	wxPGProperty* prop = new wxEnumProperty(PRNL_ACCURATE_FACING, PRNL_ACCURATE_FACING, mAccurateFacing);
 	Append(prop);
 	prop->SetValueFromString(ACF_OFF);
 
 	// Note: Although soft particles are generic renderer properties, they currently only work in combination with a billboard renderer.
 
 	// Use soft particles: Bool
-	Append(wxBoolProperty(PRNL_RENDERER_USE_SOFT_PARTICLES, 
-		PRNL_RENDERER_USE_SOFT_PARTICLES, 
+	Append(new wxBoolProperty(PRNL_RENDERER_USE_SOFT_PARTICLES,
+		PRNL_RENDERER_USE_SOFT_PARTICLES,
 		ParticleUniverse::ParticleRenderer::DEFAULT_USE_SOFT_PARTICLES));
 
 	// Soft particles contrast power: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER, 
-		PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER, 
+	Append(new wxFloatProperty(PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER,
+		PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER,
 		ParticleUniverse::ParticleRenderer::DEFAULT_SOFT_PARTICLES_CONTRAST_POWER));
 	SetPropertyEditor(PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER, wxPG_EDITOR(SpinCtrl));
 
 	// Soft particles scale: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_RENDERER_SOFT_PARTICLES_SCALE, 
-		PRNL_RENDERER_SOFT_PARTICLES_SCALE, 
+	Append(new wxFloatProperty(PRNL_RENDERER_SOFT_PARTICLES_SCALE,
+		PRNL_RENDERER_SOFT_PARTICLES_SCALE,
 		ParticleUniverse::ParticleRenderer::DEFAULT_SOFT_PARTICLES_SCALE));
 	SetPropertyEditor(PRNL_RENDERER_SOFT_PARTICLES_SCALE, wxPG_EDITOR(SpinCtrl));
 
 	// Soft particles delta: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_RENDERER_SOFT_PARTICLES_DELTA, 
-		PRNL_RENDERER_SOFT_PARTICLES_DELTA, 
+	Append(new wxFloatProperty(PRNL_RENDERER_SOFT_PARTICLES_DELTA,
+		PRNL_RENDERER_SOFT_PARTICLES_DELTA,
 		ParticleUniverse::ParticleRenderer::DEFAULT_SOFT_PARTICLES_DELTA));
 	SetPropertyEditor(PRNL_RENDERER_SOFT_PARTICLES_DELTA, wxPG_EDITOR(SpinCtrl));
 }

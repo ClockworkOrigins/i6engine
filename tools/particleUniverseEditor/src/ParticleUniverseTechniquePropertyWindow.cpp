@@ -45,7 +45,7 @@ void TechniquePropertyWindow::copyAttributesFromTechnique(const ParticleUniverse
 
 	// Enabled: bool
 	doSetBool(PRNL_TECHNIQUE_ENABLED, technique->isEnabled());
-	
+
 	// Position: Vector3
 	doSetVector3(PRNL_TECHNIQUE_POSITION, technique->position);
 
@@ -248,98 +248,98 @@ void TechniquePropertyWindow::_initProperties(void)
 
 	// Enabled: bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization
-	Append(wxBoolProperty(PRNL_TECHNIQUE_ENABLED, PRNL_TECHNIQUE_ENABLED, ParticleUniverse::ParticleTechnique::DEFAULT_ENABLED));
+	Append(new wxBoolProperty(PRNL_TECHNIQUE_ENABLED, PRNL_TECHNIQUE_ENABLED, ParticleUniverse::ParticleTechnique::DEFAULT_ENABLED));
 
 	// Position: Vector3
 	appendVector3(PRNL_TECHNIQUE_POSITION, PRNL_TECHNIQUE_POSITION, ParticleUniverse::ParticleTechnique::DEFAULT_POSITION);
 
 	// Keep local: bool
-	Append(wxBoolProperty(PRNL_TECHNIQUE_KEEP_LOCAL, PRNL_TECHNIQUE_KEEP_LOCAL, ParticleUniverse::ParticleTechnique::DEFAULT_KEEP_LOCAL));
+	Append(new wxBoolProperty(PRNL_TECHNIQUE_KEEP_LOCAL, PRNL_TECHNIQUE_KEEP_LOCAL, ParticleUniverse::ParticleTechnique::DEFAULT_KEEP_LOCAL));
 
 	// Visual particle quota: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_VISUAL_PARTICLE_QUOTA, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_VISUAL_PARTICLE_QUOTA,
 		PRNL_TECHNIQUE_VISUAL_PARTICLE_QUOTA, ParticleUniverse::ParticleTechnique::DEFAULT_VISUAL_PARTICLE_QUOTA));
 	SetPropertyEditor(PRNL_TECHNIQUE_VISUAL_PARTICLE_QUOTA, wxPG_EDITOR(SpinCtrl));
 
 	// Emitted emitter quota: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA, 
-		PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA,
+		PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA,
 		ParticleUniverse::ParticleTechnique::DEFAULT_EMITTED_EMITTER_QUOTA));
 	SetPropertyEditor(PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA, wxPG_EDITOR(SpinCtrl));
 
 	// Emitted affector quota: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA, 
-		PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA,
+		PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA,
 		ParticleUniverse::ParticleTechnique::DEFAULT_EMITTED_AFFECTOR_QUOTA));
 	SetPropertyEditor(PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA, wxPG_EDITOR(SpinCtrl));
 
 	// Emitted technique quota: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA, 
-		PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA,
+		PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA,
 		ParticleUniverse::ParticleTechnique::DEFAULT_EMITTED_TECHNIQUE_QUOTA));
 	SetPropertyEditor(PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA, wxPG_EDITOR(SpinCtrl));
 
 	// Emitted system quota: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA, 
-		PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA,
+		PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA,
 		ParticleUniverse::ParticleTechnique::DEFAULT_EMITTED_SYSTEM_QUOTA));
 	SetPropertyEditor(PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA, wxPG_EDITOR(SpinCtrl));
 
 	// Material: Ogre::String
-	wxPGId pid = Append(new MaterialProperty(PRNL_TECHNIQUE_MATERIAL, PRNL_TECHNIQUE_MATERIAL));
+	wxPGProperty * pid = Append(new MaterialProperty(PRNL_TECHNIQUE_MATERIAL, PRNL_TECHNIQUE_MATERIAL));
 	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Lod index: unsigned short
-	Append(wxUIntProperty(PRNL_TECHNIQUE_LOD_INDEX, 
-		PRNL_TECHNIQUE_LOD_INDEX, 
+	Append(new wxUIntProperty(PRNL_TECHNIQUE_LOD_INDEX,
+		PRNL_TECHNIQUE_LOD_INDEX,
 		ParticleUniverse::ParticleTechnique::DEFAULT_LOD_INDEX));
 	SetPropertyEditor(PRNL_TECHNIQUE_LOD_INDEX, wxPG_EDITOR(SpinCtrl));
 
 	// Default particle width: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH, 
-		PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH,
+		PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH,
 		ParticleUniverse::ParticleTechnique::DEFAULT_WIDTH));
 	SetPropertyEditor(PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH, wxPG_EDITOR(SpinCtrl));
 
 	// Default particle height: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT,
-		PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT,
+		PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT,
 		ParticleUniverse::ParticleTechnique::DEFAULT_HEIGHT));
 	SetPropertyEditor(PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT, wxPG_EDITOR(SpinCtrl));
 
 	// Default particle depth: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH, 
-		PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH,
+		PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH,
 		ParticleUniverse::ParticleTechnique::DEFAULT_DEPTH));
 	SetPropertyEditor(PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH, wxPG_EDITOR(SpinCtrl));
 
 	// Spatial hashing cell dimension: ParticleUniverse::ushort
-	Append(wxUIntProperty(PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION, 
-		PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION, 
+	Append(new wxUIntProperty(PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION,
+		PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION,
 		ParticleUniverse::ParticleTechnique::DEFAULT_SPATIAL_HASHING_CELL_DIM));
 	SetPropertyEditor(PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION, wxPG_EDITOR(SpinCtrl));
 
 	// Spatial hashing cell overlap: ParticleUniverse::ushort
-	Append(wxUIntProperty(PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP, 
-		PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP, 
+	Append(new wxUIntProperty(PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP,
+		PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP,
 		ParticleUniverse::ParticleTechnique::DEFAULT_SPATIAL_HASHING_CELL_OVERLAP));
 	SetPropertyEditor(PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP, wxPG_EDITOR(SpinCtrl));
 
 	// Spatial hashtable size: unsigned int
-	Append(wxUIntProperty(PRNL_TECHNIQUE_SPHASHING_SIZE, 
-		PRNL_TECHNIQUE_SPHASHING_SIZE, 
+	Append(new wxUIntProperty(PRNL_TECHNIQUE_SPHASHING_SIZE,
+		PRNL_TECHNIQUE_SPHASHING_SIZE,
 		ParticleUniverse::ParticleTechnique::DEFAULT_SPATIAL_HASHING_TABLE_SIZE));
 	SetPropertyEditor(PRNL_TECHNIQUE_SPHASHING_SIZE, wxPG_EDITOR(SpinCtrl));
 
 	// Spatial hashing update interval: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL, 
-		PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL,
+		PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL,
 		ParticleUniverse::ParticleTechnique::DEFAULT_SPATIAL_HASHING_INTERVAL));
 	SetPropertyEditor(PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL, wxPG_EDITOR(SpinCtrl));
 
 	// Maximum velocity: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TECHNIQUE_MAX_VELOCITY, 
-		PRNL_TECHNIQUE_MAX_VELOCITY, 
+	Append(new wxFloatProperty(PRNL_TECHNIQUE_MAX_VELOCITY,
+		PRNL_TECHNIQUE_MAX_VELOCITY,
 		ParticleUniverse::ParticleTechnique::DEFAULT_MAX_VELOCITY));
 	SetPropertyEditor(PRNL_TECHNIQUE_MAX_VELOCITY, wxPG_EDITOR(SpinCtrl));
 }
@@ -347,7 +347,7 @@ void TechniquePropertyWindow::_initProperties(void)
 void TechniquePropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty * prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToTechnique(prop, propertyName);
 	ParticleUniverse::ParticleTechnique* technique = static_cast<ParticleUniverse::ParticleTechnique*>(mOwner->getPUElement());

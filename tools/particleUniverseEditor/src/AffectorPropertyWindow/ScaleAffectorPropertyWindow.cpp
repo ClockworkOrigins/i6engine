@@ -196,5 +196,5 @@ void ScaleAffectorPropertyWindow::_initProperties(void)
 	appendDynamicAttribute(PRNL_Z_SCALE, PRNL_Z_SCALE, dynAttr);
 
 	// Since Start System: bool
-	Append(wxBoolProperty(PRNL_SINCE_START_SYSTEM, PRNL_SINCE_START_SYSTEM, false));
+	Append(new wxBoolProperty(PRNL_SINCE_START_SYSTEM, PRNL_SINCE_START_SYSTEM, false));
 }
