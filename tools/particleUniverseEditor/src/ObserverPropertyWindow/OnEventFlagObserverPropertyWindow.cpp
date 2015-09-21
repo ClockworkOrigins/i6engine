@@ -74,6 +74,6 @@ void OnEventFlagObserverPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("ObserverOnEventFlag.html");
 
 	// Event Flag: ParticleUniverse::uint32
-	Append(wxUIntProperty(PRNL_ON_EVENTFLAG_FLAG, PRNL_ON_EVENTFLAG_FLAG, ParticleUniverse::OnEventFlagObserver::DEFAULT_EVENT_FLAG));
+	Append(new wxUIntProperty(PRNL_ON_EVENTFLAG_FLAG, PRNL_ON_EVENTFLAG_FLAG, ParticleUniverse::OnEventFlagObserver::DEFAULT_EVENT_FLAG));
 	SetPropertyEditor(PRNL_ON_EVENTFLAG_FLAG, wxPG_EDITOR(SpinCtrl));
 }

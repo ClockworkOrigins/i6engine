@@ -23,8 +23,8 @@ BehaviourPropertyWindow::BehaviourPropertyWindow(wxWindow* parent, EditComponent
 }
 //-----------------------------------------------------------------------
 BehaviourPropertyWindow::BehaviourPropertyWindow(BehaviourPropertyWindow* behaviourPropertyWindow) : PropertyWindow(
-	behaviourPropertyWindow->GetParent(), 
-	behaviourPropertyWindow->getOwner(), 
+	behaviourPropertyWindow->GetParent(),
+	behaviourPropertyWindow->getOwner(),
 	Ogre::StringUtil::BLANK)
 {
 	_initProperties();
@@ -37,9 +37,9 @@ void BehaviourPropertyWindow::copyAttributesFromPropertyWindow(BehaviourProperty
 	//doSetString(PRNL_NAME, behaviourPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_BEHAVIOUR_TYPE);
-	wxPGProperty* propFrom = behaviourPropertyWindow->GetPropertyPtr(PRNL_BEHAVIOUR_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	wxPGProperty* propTo = GetPropertyByName(PRNL_BEHAVIOUR_TYPE);
+	wxPGProperty* propFrom = behaviourPropertyWindow->GetPropertyByName(PRNL_BEHAVIOUR_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 }
 //-----------------------------------------------------------------------
 void BehaviourPropertyWindow::copyAttributeToBehaviour(wxPGProperty* prop, wxString propertyName)
@@ -66,7 +66,7 @@ void BehaviourPropertyWindow::copyAttributeToBehaviour(wxPGProperty* prop, wxStr
 void BehaviourPropertyWindow::copyAttributesFromBehaviour(const ParticleUniverse::ParticleBehaviour* behaviour)
 {
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_BEHAVIOUR_TYPE);
+	wxPGProperty* propTo = GetPropertyByName(PRNL_BEHAVIOUR_TYPE);
 	wxString type = ogre2wxTranslate(behaviour->getBehaviourType());
 	propTo->SetValueFromString(type);
 }
@@ -82,13 +82,13 @@ void BehaviourPropertyWindow::_initProperties(void)
 
 	// Type
 	mTypes.Add(CST_BEHAVIOUR_SLAVE);
-	wxPGId pid = Append(wxEnumProperty(PRNL_BEHAVIOUR_TYPE, PRNL_BEHAVIOUR_TYPE, mTypes));
+	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_BEHAVIOUR_TYPE, PRNL_BEHAVIOUR_TYPE, mTypes));
 }
 //-----------------------------------------------------------------------
 void BehaviourPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty* prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToBehaviour(prop, propertyName);
 	notifyPropertyChanged();
@@ -102,7 +102,7 @@ void BehaviourPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event
 	if (propertyName == PRNL_BEHAVIOUR_TYPE)
 	{
 		// Replace this window by another one
-		wxString subType = event.GetPropertyValueAsString();
+		wxString subType = event.GetProperty()->GetValueAsString();
 		mOwner->createPropertyWindow(subType, this);
 		mOwner->setCaption();
 		getOwner()->refreshCanvas();

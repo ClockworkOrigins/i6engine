@@ -74,6 +74,6 @@ void GravityAffectorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorGravity.html");
 
 	// Gravity: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_GRAVITY, PRNL_GRAVITY, ParticleUniverse::GravityAffector::DEFAULT_GRAVITY));
+	Append(new wxFloatProperty(PRNL_GRAVITY, PRNL_GRAVITY, ParticleUniverse::GravityAffector::DEFAULT_GRAVITY));
 	SetPropertyEditor(PRNL_GRAVITY, wxPG_EDITOR(SpinCtrl));
 }

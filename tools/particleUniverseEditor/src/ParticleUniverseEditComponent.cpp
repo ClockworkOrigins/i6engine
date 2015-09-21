@@ -788,7 +788,7 @@ PropertyWindow* EditComponent::createPropertyWindow(ComponentSubType subType, co
 		}
 	}
 
-	mPropertyWindow->Hide();
+//	mPropertyWindow->Hide();
 //	(dynamic_cast<EditTab*>(GetParent()->GetParent()))->setPropertyWindow(mPropertyWindow); // TODO: assertion wenn render->edit switch
 	return mPropertyWindow;
 }

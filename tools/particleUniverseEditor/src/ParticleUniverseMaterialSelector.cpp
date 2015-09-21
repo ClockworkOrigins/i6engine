@@ -30,9 +30,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 //-----------------------------------------------------------------------
 MaterialProperty::MaterialProperty(
-	const wxString& label, 
+	const wxString& label,
 	const wxString& name) :
-	wxStringPropertyClass(label, name, wxT("BaseWhite")),
+	wxStringProperty(label, name, wxT("BaseWhite")),
 	mMaterialName("BaseWhite")
 {
 }
@@ -61,7 +61,7 @@ bool MaterialProperty::OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary,
 			SetValueFromString(mat);
 
 			// Force changing the value on screen. Doesn't work probably if this is the last property in the propgrid
-			propgrid->SelectProperty(propgrid->GetNextProperty(GetId()));
+			// propgrid->SelectProperty(propgrid->GetNextProperty(GetId())); TODO: (Michael) reactivate this. But compile error
 		}
 	}
 	return true;

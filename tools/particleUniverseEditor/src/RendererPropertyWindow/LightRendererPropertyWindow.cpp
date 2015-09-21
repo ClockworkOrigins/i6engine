@@ -136,7 +136,7 @@ void LightRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::P
 	ParticleUniverse::LightRenderer* lightRenderer = static_cast<ParticleUniverse::LightRenderer*>(renderer);
 
 	// Light Type: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_LIGHT_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_LIGHT_TYPE);
 	Ogre::Light::LightTypes lightType = lightRenderer->getLightType();
 	wxString lightTypeString = LT_POINT;
 	if (lightType == Ogre::Light::LT_SPOTLIGHT)
@@ -213,51 +213,51 @@ void LightRendererPropertyWindow::_initProperties(void)
 	// Light Type: List
 	mLightTypes.Add(LT_POINT);
 	mLightTypes.Add(LT_SPOT);
-	wxPGId pid = Append(wxEnumProperty(PRNL_LIGHT_TYPE, PRNL_LIGHT_TYPE, mLightTypes));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_LIGHT_TYPE, PRNL_LIGHT_TYPE, mLightTypes));
 
 	// Specular Colour: Ogre::Colour
 	appendColourWithAlphaProperty(PRNL_SPECULAR_COLOUR, PRNL_SPECULAR_COLOUR, wxColour(255, 255, 255, 255));
 
 	// Attenuation Range: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_ATT_RANGE, PRNL_ATT_RANGE, ParticleUniverse::LightRenderer::DEFAULT_ATT_RANGE));
+	Append(new wxFloatProperty(PRNL_ATT_RANGE, PRNL_ATT_RANGE, ParticleUniverse::LightRenderer::DEFAULT_ATT_RANGE));
 	SetPropertyEditor(PRNL_ATT_RANGE, wxPG_EDITOR(SpinCtrl));
 
 	// Attenuation Constant: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_ATT_CONSTANT, PRNL_ATT_CONSTANT, ParticleUniverse::LightRenderer::DEFAULT_ATT_CONSTANT));
+	Append(new wxFloatProperty(PRNL_ATT_CONSTANT, PRNL_ATT_CONSTANT, ParticleUniverse::LightRenderer::DEFAULT_ATT_CONSTANT));
 	SetPropertyEditor(PRNL_ATT_CONSTANT, wxPG_EDITOR(SpinCtrl));
 
 	// Attenuation Linear: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_ATT_LINEAR, PRNL_ATT_LINEAR, ParticleUniverse::LightRenderer::DEFAULT_ATT_LINEAR));
+	Append(new wxFloatProperty(PRNL_ATT_LINEAR, PRNL_ATT_LINEAR, ParticleUniverse::LightRenderer::DEFAULT_ATT_LINEAR));
 	SetPropertyEditor(PRNL_ATT_LINEAR, wxPG_EDITOR(SpinCtrl));
 
 	// Attenuation Quadratic: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_ATT_QUADRATIC, PRNL_ATT_QUADRATIC, ParticleUniverse::LightRenderer::DEFAULT_ATT_QUADRATIC));
+	Append(new wxFloatProperty(PRNL_ATT_QUADRATIC, PRNL_ATT_QUADRATIC, ParticleUniverse::LightRenderer::DEFAULT_ATT_QUADRATIC));
 	SetPropertyEditor(PRNL_ATT_QUADRATIC, wxPG_EDITOR(SpinCtrl));
 
 	// Spotlight Inner Angle: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_SPOT_INNER_ANGLE, PRNL_SPOT_INNER_ANGLE, 0.0f));
+	Append(new wxFloatProperty(PRNL_SPOT_INNER_ANGLE, PRNL_SPOT_INNER_ANGLE, 0.0f));
 	SetPropertyEditor(PRNL_SPOT_INNER_ANGLE, wxPG_EDITOR(SpinCtrl));
 
 	// Spotlight Outer Angle: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_SPOT_OUTER_ANGLE, PRNL_SPOT_OUTER_ANGLE, 0.0f));
+	Append(new wxFloatProperty(PRNL_SPOT_OUTER_ANGLE, PRNL_SPOT_OUTER_ANGLE, 0.0f));
 	SetPropertyEditor(PRNL_SPOT_OUTER_ANGLE, wxPG_EDITOR(SpinCtrl));
 
 	// Falloff: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_FALLOFF, PRNL_FALLOFF, ParticleUniverse::LightRenderer::DEFAULT_FALLOFF));
+	Append(new wxFloatProperty(PRNL_FALLOFF, PRNL_FALLOFF, ParticleUniverse::LightRenderer::DEFAULT_FALLOFF));
 	SetPropertyEditor(PRNL_FALLOFF, wxPG_EDITOR(SpinCtrl));
 
 	// Power Scale: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_POWER_SCALE, PRNL_POWER_SCALE, ParticleUniverse::LightRenderer::DEFAULT_POWER_SCALE));
+	Append(new wxFloatProperty(PRNL_POWER_SCALE, PRNL_POWER_SCALE, ParticleUniverse::LightRenderer::DEFAULT_POWER_SCALE));
 	SetPropertyEditor(PRNL_POWER_SCALE, wxPG_EDITOR(SpinCtrl));
 
 	// Flash Frequency: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_FLASH_FREQUENCY, PRNL_FLASH_FREQUENCY, 0.0f));
+	Append(new wxFloatProperty(PRNL_FLASH_FREQUENCY, PRNL_FLASH_FREQUENCY, 0.0f));
 	SetPropertyEditor(PRNL_FLASH_FREQUENCY, wxPG_EDITOR(SpinCtrl));
 
 	// Flash Length: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_FLASH_LENGTH, PRNL_FLASH_LENGTH, 0.0f));
+	Append(new wxFloatProperty(PRNL_FLASH_LENGTH, PRNL_FLASH_LENGTH, 0.0f));
 	SetPropertyEditor(PRNL_FLASH_LENGTH, wxPG_EDITOR(SpinCtrl));
 
 	// Flash Random: bool
-	Append(wxBoolProperty(PRNL_FLASH_RANDOM, PRNL_FLASH_RANDOM, false));
+	Append(new wxBoolProperty(PRNL_FLASH_RANDOM, PRNL_FLASH_RANDOM, false));
 }

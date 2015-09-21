@@ -74,6 +74,6 @@ void VelocityMatchingAffectorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorVelocityMatching.html");
 
 	// Radius: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_VELOCITY_MATCHING_RADIUS, PRNL_VELOCITY_MATCHING_RADIUS, ParticleUniverse::VelocityMatchingAffector::DEFAULT_RADIUS));
+	Append(new wxFloatProperty(PRNL_VELOCITY_MATCHING_RADIUS, PRNL_VELOCITY_MATCHING_RADIUS, ParticleUniverse::VelocityMatchingAffector::DEFAULT_RADIUS));
 	SetPropertyEditor(PRNL_VELOCITY_MATCHING_RADIUS, wxPG_EDITOR(SpinCtrl));
 }

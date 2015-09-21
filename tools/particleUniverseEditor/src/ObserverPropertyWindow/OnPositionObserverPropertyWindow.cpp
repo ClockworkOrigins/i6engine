@@ -75,7 +75,7 @@ void OnPositionObserverPropertyWindow::copyAttributeToObserver(wxPGProperty* pro
 		observer->setPositionXThreshold(prop->DoGetValue().GetDouble());
 
 		// Adjust the compare operator
-		prop = GetPropertyPtr(PRNL_ON_POSITION_X_COMPARE);
+		prop = GetProperty(PRNL_ON_POSITION_X_COMPARE);
 		if (prop)
 		{
 			wxString compareString = PRNL_COMPARE_LESS_THAN;
@@ -122,7 +122,7 @@ void OnPositionObserverPropertyWindow::copyAttributeToObserver(wxPGProperty* pro
 		observer->setPositionYThreshold(prop->DoGetValue().GetDouble());
 
 		// Adjust the compare operator
-		prop = GetPropertyPtr(PRNL_ON_POSITION_Y_COMPARE);
+		prop = GetProperty(PRNL_ON_POSITION_Y_COMPARE);
 		if (prop)
 		{
 			wxString compareString = PRNL_COMPARE_LESS_THAN;
@@ -169,7 +169,7 @@ void OnPositionObserverPropertyWindow::copyAttributeToObserver(wxPGProperty* pro
 		observer->setPositionZThreshold(prop->DoGetValue().GetDouble());
 
 		// Adjust the compare operator
-		prop = GetPropertyPtr(PRNL_ON_POSITION_Z_COMPARE);
+		prop = GetProperty(PRNL_ON_POSITION_Z_COMPARE);
 		if (prop)
 		{
 			wxString compareString = PRNL_COMPARE_LESS_THAN;
@@ -199,7 +199,7 @@ void OnPositionObserverPropertyWindow::copyAttributesFromObserver(ParticleUniver
 	ParticleUniverse::OnPositionObserver* onPositionObserver = static_cast<ParticleUniverse::OnPositionObserver*>(observer);
 
 	// Compare X
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_ON_POSITION_X_COMPARE);
+	wxPGProperty* propTo = GetProperty(PRNL_ON_POSITION_X_COMPARE);
 	ParticleUniverse::ComparisionOperator compare = onPositionObserver->getComparePositionX();
 	wxString compareString = PRNL_COMPARE_NOT_USED;
 	if (onPositionObserver->isPositionXThresholdSet())
@@ -223,7 +223,7 @@ void OnPositionObserverPropertyWindow::copyAttributesFromObserver(ParticleUniver
 	doSetDouble(PRNL_ON_POSITION_X, onPositionObserver->getPositionXThreshold());
 
 	// Compare Y
-	propTo = GetPropertyPtr(PRNL_ON_POSITION_Y_COMPARE);
+	propTo = GetProperty(PRNL_ON_POSITION_Y_COMPARE);
 	compare = onPositionObserver->getComparePositionY();
 	compareString = PRNL_COMPARE_NOT_USED;
 	if (onPositionObserver->isPositionYThresholdSet())
@@ -247,7 +247,7 @@ void OnPositionObserverPropertyWindow::copyAttributesFromObserver(ParticleUniver
 	doSetDouble(PRNL_ON_POSITION_Y, onPositionObserver->getPositionYThreshold());
 
 	// Compare Z
-	propTo = GetPropertyPtr(PRNL_ON_POSITION_Z_COMPARE);
+	propTo = GetProperty(PRNL_ON_POSITION_Z_COMPARE);
 	compare = onPositionObserver->getComparePositionZ();
 	compareString = PRNL_COMPARE_NOT_USED;
 	if (onPositionObserver->isPositionZThresholdSet())
@@ -292,10 +292,10 @@ void OnPositionObserverPropertyWindow::_initProperties(void)
 	mCompareX.Add(PRNL_COMPARE_LESS_THAN);
 	mCompareX.Add(PRNL_COMPARE_GREATER_THAN);
 	mCompareX.Add(PRNL_COMPARE_EQUALS);
-	Append(wxEnumProperty(PRNL_ON_POSITION_X_COMPARE, PRNL_ON_POSITION_X_COMPARE, mCompareX));
+	Append(new wxEnumProperty(PRNL_ON_POSITION_X_COMPARE, PRNL_ON_POSITION_X_COMPARE, mCompareX));
 
 	// Position X
-	Append(wxFloatProperty(PRNL_ON_POSITION_X, PRNL_ON_POSITION_X, ParticleUniverse::OnPositionObserver::DEFAULT_POSITION_THRESHOLD.x));
+	Append(new wxFloatProperty(PRNL_ON_POSITION_X, PRNL_ON_POSITION_X, ParticleUniverse::OnPositionObserver::DEFAULT_POSITION_THRESHOLD.x));
 	SetPropertyEditor(PRNL_ON_POSITION_X, wxPG_EDITOR(SpinCtrl));
 
 	// Compare Y
@@ -303,10 +303,10 @@ void OnPositionObserverPropertyWindow::_initProperties(void)
 	mCompareY.Add(PRNL_COMPARE_LESS_THAN);
 	mCompareY.Add(PRNL_COMPARE_GREATER_THAN);
 	mCompareY.Add(PRNL_COMPARE_EQUALS);
-	Append(wxEnumProperty(PRNL_ON_POSITION_Y_COMPARE, PRNL_ON_POSITION_Y_COMPARE, mCompareY));
+	Append(new wxEnumProperty(PRNL_ON_POSITION_Y_COMPARE, PRNL_ON_POSITION_Y_COMPARE, mCompareY));
 
 	// Position Y
-	Append(wxFloatProperty(PRNL_ON_POSITION_Y, PRNL_ON_POSITION_Y, ParticleUniverse::OnPositionObserver::DEFAULT_POSITION_THRESHOLD.y));
+	Append(new wxFloatProperty(PRNL_ON_POSITION_Y, PRNL_ON_POSITION_Y, ParticleUniverse::OnPositionObserver::DEFAULT_POSITION_THRESHOLD.y));
 	SetPropertyEditor(PRNL_ON_POSITION_Y, wxPG_EDITOR(SpinCtrl));
 
 	// Compare Z
@@ -314,9 +314,9 @@ void OnPositionObserverPropertyWindow::_initProperties(void)
 	mCompareZ.Add(PRNL_COMPARE_LESS_THAN);
 	mCompareZ.Add(PRNL_COMPARE_GREATER_THAN);
 	mCompareZ.Add(PRNL_COMPARE_EQUALS);
-	Append(wxEnumProperty(PRNL_ON_POSITION_Z_COMPARE, PRNL_ON_POSITION_Z_COMPARE, mCompareZ));
+	Append(new wxEnumProperty(PRNL_ON_POSITION_Z_COMPARE, PRNL_ON_POSITION_Z_COMPARE, mCompareZ));
 	
 	// Position Z
-	Append(wxFloatProperty(PRNL_ON_POSITION_Z, PRNL_ON_POSITION_Z, ParticleUniverse::OnPositionObserver::DEFAULT_POSITION_THRESHOLD.z));
+	Append(new wxFloatProperty(PRNL_ON_POSITION_Z, PRNL_ON_POSITION_Z, ParticleUniverse::OnPositionObserver::DEFAULT_POSITION_THRESHOLD.z));
 	SetPropertyEditor(PRNL_ON_POSITION_Z, wxPG_EDITOR(SpinCtrl));
 }

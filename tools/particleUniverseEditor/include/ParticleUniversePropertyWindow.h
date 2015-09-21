@@ -17,10 +17,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/prerequisites.h"
 
-#include "wx/propgrid/propdev.h"
-#include "wx/propgrid/propgrid.h"
-
 #include "wx/hyperlink.h"
+#include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/props.h"
+#include "wx/propgrid/advprops.h"
 
 // Dynamic Attributes
 static wxString DYN_FIXED = wxT("");
@@ -255,93 +255,26 @@ static const Ogre::String EXTERN_PHYSX_FLUID = "PhysXFluid";
 static const Ogre::String EXTERN_VORTEX = "Vortex";
 
 class EditComponent;
+class wxPGProperty;
+class wxPGId;
 
 /**	Class that combines a listbox with a button. After clicking, new controlpoints are added
 */
-class EnumPropertyWithButton : public wxEnumPropertyClass
+class EnumPropertyWithButton : public wxEnumProperty
 {
 	public:
 		EnumPropertyWithButton(
-			const wxString& label, 
+			const wxString& label,
 			const wxString& name,
 			const wxArrayString& choices);
 		virtual ~EnumPropertyWithButton(void) {}
 
-		/**	
+		/**
 		*/
 		virtual bool OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event);
 };
 
-/**	Class that creates a button property. After clicking, new vector3 entries are added
-*/
-class ParentPropertyWithButtonAndPositions : public wxParentPropertyClass
-{
-	public:
-		ParentPropertyWithButtonAndPositions(
-			const wxString& label, 
-			const wxString& name);
-		virtual ~ParentPropertyWithButtonAndPositions(void) {}
-
-		/**	
-		*/
-		virtual bool OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event);
-
-		/**	Add the position
-		*/
-		wxPGId* addPosition(wxPropertyGrid* propgrid, Ogre::Vector3 vec3 = Ogre::Vector3::ZERO);
-
-		/**	Returns the number of positions
-		*/
-		unsigned int getNumberOfPositions(void);
-
-		/**	Returns the position of index
-		*/
-		const Ogre::Vector3& getPosition(wxPropertyGrid* propgrid, unsigned int index, Ogre::Vector3& vector);
-
-		/**	Removes all the child properties
-		*/
-		void reset(void);
-
-	protected:
-		unsigned int mPosition;
-};
-
-/**	Class that creates a button property. After clicking, new float entries are added
-*/
-class ParentPropertyWithButtonAndFloats : public wxParentPropertyClass
-{
-	public:
-		ParentPropertyWithButtonAndFloats(
-			const wxString& label, 
-			const wxString& name);
-		virtual ~ParentPropertyWithButtonAndFloats(void) {}
-
-		/**	
-		*/
-		virtual bool OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event);
-
-		/**	Add a float
-		*/
-		wxPGId* addFloat(wxPropertyGrid* propgrid, float value = 0.0f);
-
-		/**	Get number of floats
-		*/
-		unsigned int getNumberOfFloats(void);
-
-		/**	Returns a float by index
-		*/
-		ParticleUniverse::Real getFloat(wxPropertyGrid* propgrid, unsigned int index);
-
-		/**	Removes all the child properties
-		*/
-		void reset(void);
-
-	protected:
-		unsigned int mFloat;
-};
-
-
-/**	
+/**
 */
 class PropertyWindow : public wxPropertyGrid
 {
@@ -443,9 +376,9 @@ class PropertyWindow : public wxPropertyGrid
 		@remarks
 			If a DynamicAttribute pointer is returned, the type has been changed, so it needs to be set.
 		*/
-		ParticleUniverse::DynamicAttribute* copyValuesToDynamicAttribute(wxString name, 
-			wxPGProperty* prop, 
-			wxString baseName, 
+		ParticleUniverse::DynamicAttribute* copyValuesToDynamicAttribute(wxString name,
+			wxPGProperty* prop,
+			wxString baseName,
 			ParticleUniverse::DynamicAttribute* dynAttr);
 
 		/**
@@ -462,8 +395,8 @@ class PropertyWindow : public wxPropertyGrid
 		/**
 			Unprepares emitted emitters, emitted affectors, ...
 		*/
-		void _unprepare(ParticleUniverse::IElement* element, 
-						ParticleUniverse::Particle::ParticleType elementType, 
+		void _unprepare(ParticleUniverse::IElement* element,
+						ParticleUniverse::Particle::ParticleType elementType,
 						ParticleUniverse::Particle::ParticleType unprepareType);
 
 		/**
@@ -509,4 +442,3 @@ class PropertyWindow : public wxPropertyGrid
 };
 
 #endif
-

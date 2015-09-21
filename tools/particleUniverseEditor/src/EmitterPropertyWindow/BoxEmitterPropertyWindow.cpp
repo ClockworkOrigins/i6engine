@@ -92,15 +92,15 @@ void BoxEmitterPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("EmitterBox.html");
 
 	// Width: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_BOX_EMITTER_WIDTH, PRNL_BOX_EMITTER_WIDTH, ParticleUniverse::BoxEmitter::DEFAULT_WIDTH));
+	Append(new wxFloatProperty(PRNL_BOX_EMITTER_WIDTH, PRNL_BOX_EMITTER_WIDTH, ParticleUniverse::BoxEmitter::DEFAULT_WIDTH));
 	SetPropertyEditor(PRNL_BOX_EMITTER_WIDTH, wxPG_EDITOR(SpinCtrl));
 
 	// Height: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_BOX_EMITTER_HEIGHT, PRNL_BOX_EMITTER_HEIGHT, ParticleUniverse::BoxEmitter::DEFAULT_HEIGHT));
+	Append(new wxFloatProperty(PRNL_BOX_EMITTER_HEIGHT, PRNL_BOX_EMITTER_HEIGHT, ParticleUniverse::BoxEmitter::DEFAULT_HEIGHT));
 	SetPropertyEditor(PRNL_BOX_EMITTER_HEIGHT, wxPG_EDITOR(SpinCtrl));
 
 	// Depth: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_BOX_EMITTER_DEPTH, PRNL_BOX_EMITTER_DEPTH, ParticleUniverse::BoxEmitter::DEFAULT_DEPTH));
+	Append(new wxFloatProperty(PRNL_BOX_EMITTER_DEPTH, PRNL_BOX_EMITTER_DEPTH, ParticleUniverse::BoxEmitter::DEFAULT_DEPTH));
 	SetPropertyEditor(PRNL_BOX_EMITTER_DEPTH, wxPG_EDITOR(SpinCtrl));
 }
 //-----------------------------------------------------------------------

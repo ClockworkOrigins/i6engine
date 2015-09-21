@@ -115,8 +115,8 @@ void ScaleVelocityAffectorPropertyWindow::_initProperties(void)
 	appendDynamicAttribute(PRNL_VELOCITY_SCALE, PRNL_VELOCITY_SCALE, dynAttr);
 
 	// Since Start System: bool
-	Append(wxBoolProperty(PRNL_SINCE_START_SYSTEM, PRNL_SINCE_START_SYSTEM, false));
+	Append(new wxBoolProperty(PRNL_SINCE_START_SYSTEM, PRNL_SINCE_START_SYSTEM, false));
 
 	// Stop at flip: bool
-	Append(wxBoolProperty(PRNL_STOP_AT_FLIP, PRNL_STOP_AT_FLIP, false));
+	Append(new wxBoolProperty(PRNL_STOP_AT_FLIP, PRNL_STOP_AT_FLIP, false));
 }

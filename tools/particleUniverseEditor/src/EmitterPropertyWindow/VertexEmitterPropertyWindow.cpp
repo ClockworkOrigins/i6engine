@@ -63,12 +63,12 @@ void VertexEmitterPropertyWindow::copyAttributeToEmitter(wxPGProperty* prop, wxS
 	else if (propertyName == PRNL_VERTEX_EMITTER_MESH_NAME)
 	{
 		// Update emitter with Mesh name
-		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
+/*		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
 		Ogre::String meshName = meshProperty->getMeshName();
 		if (meshName != Ogre::StringUtil::BLANK)
 		{
 			vertexEmitter->setMeshName(meshName);
-		}
+		}*/
 	}
 	else
 	{
@@ -109,20 +109,20 @@ void VertexEmitterPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("EmitterVertex.html");
 
 	// Step: ParticleUniverse::uint
-	Append(wxUIntProperty(PRNL_VERTEX_EMITTER_STEP, PRNL_VERTEX_EMITTER_STEP, ParticleUniverse::VertexEmitter::DEFAULT_STEP));
+	Append(new wxUIntProperty(PRNL_VERTEX_EMITTER_STEP, PRNL_VERTEX_EMITTER_STEP, ParticleUniverse::VertexEmitter::DEFAULT_STEP));
 	SetPropertyEditor(PRNL_VERTEX_EMITTER_STEP, wxPG_EDITOR(SpinCtrl));
 
 	// Segments: ParticleUniverse::uint
-	Append(wxUIntProperty(PRNL_VERTEX_EMITTER_SEGMENTS, PRNL_VERTEX_EMITTER_SEGMENTS, ParticleUniverse::VertexEmitter::DEFAULT_SEGMENTS));
+	Append(new wxUIntProperty(PRNL_VERTEX_EMITTER_SEGMENTS, PRNL_VERTEX_EMITTER_SEGMENTS, ParticleUniverse::VertexEmitter::DEFAULT_SEGMENTS));
 	SetPropertyEditor(PRNL_VERTEX_EMITTER_SEGMENTS, wxPG_EDITOR(SpinCtrl));
 
 	// Iterations: ParticleUniverse::uint
-	Append(wxUIntProperty(PRNL_VERTEX_EMITTER_ITERATION, PRNL_VERTEX_EMITTER_ITERATION, ParticleUniverse::VertexEmitter::DEFAULT_ITERATIONS));
+	Append(new wxUIntProperty(PRNL_VERTEX_EMITTER_ITERATION, PRNL_VERTEX_EMITTER_ITERATION, ParticleUniverse::VertexEmitter::DEFAULT_ITERATIONS));
 	SetPropertyEditor(PRNL_VERTEX_EMITTER_ITERATION, wxPG_EDITOR(SpinCtrl));
 
 	// Step: Ogre::String
-	wxPGId pid = Append(new MeshProperty(PRNL_VERTEX_EMITTER_MESH_NAME, PRNL_VERTEX_EMITTER_MESH_NAME));
-	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+//	wxPGProperty* pid = Append(new MeshProperty(PRNL_VERTEX_EMITTER_MESH_NAME, PRNL_VERTEX_EMITTER_MESH_NAME));
+//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 }
 //-----------------------------------------------------------------------
 void VertexEmitterPropertyWindow::copyStepToVertexEmitter(wxPGProperty* prop, ParticleUniverse::VertexEmitter* vertexEmitter)

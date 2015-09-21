@@ -374,7 +374,7 @@ void PhysXFluidExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse::
 	doSetLong(PRNL_PHYSX_COLLISION_GROUP, physXFluidExtern->mFluidDesc.collisionGroup);
 
 	// Simulation method: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_PHYSX_SIMULATION_METHOD);
+	wxPGProperty* propTo = GetProperty(PRNL_PHYSX_SIMULATION_METHOD);
 	NxU32 simulationMethod = physXFluidExtern->mFluidDesc.simulationMethod;
 	wxString simulationMethodString = PHYSX_INTERCOLLISION;
 	if (simulationMethod == NX_F_NO_PARTICLE_INTERACTION)
@@ -388,7 +388,7 @@ void PhysXFluidExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse::
 	propTo->SetValueFromString(simulationMethodString);
 
 	// Collision method: List
-	propTo = GetPropertyPtr(PRNL_PHYSX_COLLISION_METHOD);
+	propTo = GetProperty(PRNL_PHYSX_COLLISION_METHOD);
 	NxU32 collisionMethod = physXFluidExtern->mFluidDesc.collisionMethod;
 	wxString collisionMethodString = PHYSX_STATIC;
 	if (collisionMethod == NX_F_DYNAMIC)
@@ -467,43 +467,43 @@ void PhysXFluidExternPropertyWindow::_initProperties(void)
 	fluidDesc.setToDefault();
 
 	// Rest particle per meter: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_REST_PARTICLE_PER_METER, PRNL_PHYSX_REST_PARTICLE_PER_METER, fluidDesc.restParticlesPerMeter));
+	Append(new wxFloatProperty(PRNL_PHYSX_REST_PARTICLE_PER_METER, PRNL_PHYSX_REST_PARTICLE_PER_METER, fluidDesc.restParticlesPerMeter));
 	SetPropertyEditor(PRNL_PHYSX_REST_PARTICLE_PER_METER, wxPG_EDITOR(SpinCtrl));
 
 	// Rest density: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_REST_DENSITY, PRNL_PHYSX_REST_DENSITY, fluidDesc.restDensity));
+	Append(new wxFloatProperty(PRNL_PHYSX_REST_DENSITY, PRNL_PHYSX_REST_DENSITY, fluidDesc.restDensity));
 	SetPropertyEditor(PRNL_PHYSX_REST_DENSITY, wxPG_EDITOR(SpinCtrl));
 
 	// Kernel radius multiplier: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_KERNEL_RADIUS_MULTIPLIER, PRNL_PHYSX_KERNEL_RADIUS_MULTIPLIER, fluidDesc.kernelRadiusMultiplier));
+	Append(new wxFloatProperty(PRNL_PHYSX_KERNEL_RADIUS_MULTIPLIER, PRNL_PHYSX_KERNEL_RADIUS_MULTIPLIER, fluidDesc.kernelRadiusMultiplier));
 	SetPropertyEditor(PRNL_PHYSX_KERNEL_RADIUS_MULTIPLIER, wxPG_EDITOR(SpinCtrl));
 
 	// Motion limit multiplier: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_MOTION_LIMIT_MULTIPLIER, PRNL_PHYSX_MOTION_LIMIT_MULTIPLIER, fluidDesc.motionLimitMultiplier));
+	Append(new wxFloatProperty(PRNL_PHYSX_MOTION_LIMIT_MULTIPLIER, PRNL_PHYSX_MOTION_LIMIT_MULTIPLIER, fluidDesc.motionLimitMultiplier));
 	SetPropertyEditor(PRNL_PHYSX_MOTION_LIMIT_MULTIPLIER, wxPG_EDITOR(SpinCtrl));
 
 	// Collision distance multiplier: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_COLLISION_DISTANCE_MULTIPLIER, PRNL_PHYSX_COLLISION_DISTANCE_MULTIPLIER, fluidDesc.collisionDistanceMultiplier));
+	Append(new wxFloatProperty(PRNL_PHYSX_COLLISION_DISTANCE_MULTIPLIER, PRNL_PHYSX_COLLISION_DISTANCE_MULTIPLIER, fluidDesc.collisionDistanceMultiplier));
 	SetPropertyEditor(PRNL_PHYSX_COLLISION_DISTANCE_MULTIPLIER, wxPG_EDITOR(SpinCtrl));
 
 	// Packet size multiplier: NxU32
-	Append(wxUIntProperty(PRNL_PHYSX_PACKET_SIZE_MULTIPLIER, PRNL_PHYSX_PACKET_SIZE_MULTIPLIER, fluidDesc.packetSizeMultiplier));
+	Append(new wxUIntProperty(PRNL_PHYSX_PACKET_SIZE_MULTIPLIER, PRNL_PHYSX_PACKET_SIZE_MULTIPLIER, fluidDesc.packetSizeMultiplier));
 	SetPropertyEditor(PRNL_PHYSX_PACKET_SIZE_MULTIPLIER, wxPG_EDITOR(SpinCtrl));
 
 	// Stiffness: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_STIFFNESS, PRNL_PHYSX_STIFFNESS, fluidDesc.stiffness));
+	Append(new wxFloatProperty(PRNL_PHYSX_STIFFNESS, PRNL_PHYSX_STIFFNESS, fluidDesc.stiffness));
 	SetPropertyEditor(PRNL_PHYSX_STIFFNESS, wxPG_EDITOR(SpinCtrl));
 
 	// Viscosity: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_VISCOSITY, PRNL_PHYSX_VISCOSITY, fluidDesc.viscosity));
+	Append(new wxFloatProperty(PRNL_PHYSX_VISCOSITY, PRNL_PHYSX_VISCOSITY, fluidDesc.viscosity));
 	SetPropertyEditor(PRNL_PHYSX_VISCOSITY, wxPG_EDITOR(SpinCtrl));
 
 	// Surface tension: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_SURFACE_TENSION, PRNL_PHYSX_SURFACE_TENSION, fluidDesc.surfaceTension));
+	Append(new wxFloatProperty(PRNL_PHYSX_SURFACE_TENSION, PRNL_PHYSX_SURFACE_TENSION, fluidDesc.surfaceTension));
 	SetPropertyEditor(PRNL_PHYSX_SURFACE_TENSION, wxPG_EDITOR(SpinCtrl));
 
 	// Damping: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_DAMPING, PRNL_PHYSX_DAMPING, fluidDesc.damping));
+	Append(new wxFloatProperty(PRNL_PHYSX_DAMPING, PRNL_PHYSX_DAMPING, fluidDesc.damping));
 	SetPropertyEditor(PRNL_PHYSX_DAMPING, wxPG_EDITOR(SpinCtrl));
 
 	// External acceleration: NxVec3
@@ -511,43 +511,43 @@ void PhysXFluidExternPropertyWindow::_initProperties(void)
 		ParticleUniverse::PhysXMath::convert(fluidDesc.externalAcceleration));
 
 	// Restitution for static shapes: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_RESTITUTION_FOR_STATIC_SHAPES, PRNL_PHYSX_RESTITUTION_FOR_STATIC_SHAPES, fluidDesc.restitutionForStaticShapes));
+	Append(new wxFloatProperty(PRNL_PHYSX_RESTITUTION_FOR_STATIC_SHAPES, PRNL_PHYSX_RESTITUTION_FOR_STATIC_SHAPES, fluidDesc.restitutionForStaticShapes));
 	SetPropertyEditor(PRNL_PHYSX_RESTITUTION_FOR_STATIC_SHAPES, wxPG_EDITOR(SpinCtrl));
 
 	// Dynamic friction for static shapes: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_DYNAMIC_FRICTION_FOR_STATIC_SHAPES, PRNL_PHYSX_DYNAMIC_FRICTION_FOR_STATIC_SHAPES, fluidDesc.dynamicFrictionForStaticShapes));
+	Append(new wxFloatProperty(PRNL_PHYSX_DYNAMIC_FRICTION_FOR_STATIC_SHAPES, PRNL_PHYSX_DYNAMIC_FRICTION_FOR_STATIC_SHAPES, fluidDesc.dynamicFrictionForStaticShapes));
 	SetPropertyEditor(PRNL_PHYSX_DYNAMIC_FRICTION_FOR_STATIC_SHAPES, wxPG_EDITOR(SpinCtrl));
 
 	// Static friction for static shapes: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_STATIC_FRICTION_FOR_STATIC_SHAPES, PRNL_PHYSX_STATIC_FRICTION_FOR_STATIC_SHAPES, fluidDesc.staticFrictionForStaticShapes));
+	Append(new wxFloatProperty(PRNL_PHYSX_STATIC_FRICTION_FOR_STATIC_SHAPES, PRNL_PHYSX_STATIC_FRICTION_FOR_STATIC_SHAPES, fluidDesc.staticFrictionForStaticShapes));
 	SetPropertyEditor(PRNL_PHYSX_STATIC_FRICTION_FOR_STATIC_SHAPES, wxPG_EDITOR(SpinCtrl));
 
 	// Attraction for static shapes: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_ATTRACTION_FOR_STATIC_SHAPES, PRNL_PHYSX_ATTRACTION_FOR_STATIC_SHAPES, fluidDesc.attractionForStaticShapes));
+	Append(new wxFloatProperty(PRNL_PHYSX_ATTRACTION_FOR_STATIC_SHAPES, PRNL_PHYSX_ATTRACTION_FOR_STATIC_SHAPES, fluidDesc.attractionForStaticShapes));
 	SetPropertyEditor(PRNL_PHYSX_ATTRACTION_FOR_STATIC_SHAPES, wxPG_EDITOR(SpinCtrl));
 
 	// Restitution for dynamic shapes: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_RESTITUTION_FOR_DYNAMIC_SHAPES, PRNL_PHYSX_RESTITUTION_FOR_DYNAMIC_SHAPES, fluidDesc.restitutionForDynamicShapes));
+	Append(new wxFloatProperty(PRNL_PHYSX_RESTITUTION_FOR_DYNAMIC_SHAPES, PRNL_PHYSX_RESTITUTION_FOR_DYNAMIC_SHAPES, fluidDesc.restitutionForDynamicShapes));
 	SetPropertyEditor(PRNL_PHYSX_RESTITUTION_FOR_DYNAMIC_SHAPES, wxPG_EDITOR(SpinCtrl));
 
 	// Dynamic friction for dynamic shapes: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_DYNAMIC_FRICTION_FOR_DYNAMIC_SHAPES, PRNL_PHYSX_DYNAMIC_FRICTION_FOR_DYNAMIC_SHAPES, fluidDesc.dynamicFrictionForDynamicShapes));
+	Append(new wxFloatProperty(PRNL_PHYSX_DYNAMIC_FRICTION_FOR_DYNAMIC_SHAPES, PRNL_PHYSX_DYNAMIC_FRICTION_FOR_DYNAMIC_SHAPES, fluidDesc.dynamicFrictionForDynamicShapes));
 	SetPropertyEditor(PRNL_PHYSX_DYNAMIC_FRICTION_FOR_DYNAMIC_SHAPES, wxPG_EDITOR(SpinCtrl));
 
 	// Static friction for dynamic shapes: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_STATIC_FRICTION_FOR_DYNAMIC_SHAPES, PRNL_PHYSX_STATIC_FRICTION_FOR_DYNAMIC_SHAPES, fluidDesc.staticFrictionForDynamicShapes));
+	Append(new wxFloatProperty(PRNL_PHYSX_STATIC_FRICTION_FOR_DYNAMIC_SHAPES, PRNL_PHYSX_STATIC_FRICTION_FOR_DYNAMIC_SHAPES, fluidDesc.staticFrictionForDynamicShapes));
 	SetPropertyEditor(PRNL_PHYSX_STATIC_FRICTION_FOR_DYNAMIC_SHAPES, wxPG_EDITOR(SpinCtrl));
 
 	// Attraction for dynamic shapes: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_ATTRACTION_FOR_DYNAMIC_SHAPES, PRNL_PHYSX_ATTRACTION_FOR_DYNAMIC_SHAPES, fluidDesc.attractionForDynamicShapes));
+	Append(new wxFloatProperty(PRNL_PHYSX_ATTRACTION_FOR_DYNAMIC_SHAPES, PRNL_PHYSX_ATTRACTION_FOR_DYNAMIC_SHAPES, fluidDesc.attractionForDynamicShapes));
 	SetPropertyEditor(PRNL_PHYSX_ATTRACTION_FOR_DYNAMIC_SHAPES, wxPG_EDITOR(SpinCtrl));
 
 	// Collision response coefficient: NxReal
-	Append(wxFloatProperty(PRNL_PHYSX_COLLISION_RESPONSE_COEFFICIENT, PRNL_PHYSX_COLLISION_RESPONSE_COEFFICIENT, fluidDesc.collisionResponseCoefficient));
+	Append(new wxFloatProperty(PRNL_PHYSX_COLLISION_RESPONSE_COEFFICIENT, PRNL_PHYSX_COLLISION_RESPONSE_COEFFICIENT, fluidDesc.collisionResponseCoefficient));
 	SetPropertyEditor(PRNL_PHYSX_COLLISION_RESPONSE_COEFFICIENT, wxPG_EDITOR(SpinCtrl));
 
 	// Collision group: NxCollisionGroup
-	Append(wxUIntProperty(PRNL_PHYSX_COLLISION_GROUP, PRNL_PHYSX_COLLISION_GROUP, fluidDesc.collisionGroup));
+	Append(new wxUIntProperty(PRNL_PHYSX_COLLISION_GROUP, PRNL_PHYSX_COLLISION_GROUP, fluidDesc.collisionGroup));
 	SetPropertyEditor(PRNL_PHYSX_COLLISION_GROUP, wxPG_EDITOR(SpinCtrl));
 
 	// Simulation method: List
@@ -555,53 +555,53 @@ void PhysXFluidExternPropertyWindow::_initProperties(void)
 	simulationMethod.Add(PHYSX_INTERCOLLISION);
 	simulationMethod.Add(PHYSX_NOINTERCOLLISION);
 	simulationMethod.Add(PHYSX_MIX_INTERCOLLISION);
-	wxPGId pid = Append(wxEnumProperty(PRNL_PHYSX_SIMULATION_METHOD, PRNL_PHYSX_SIMULATION_METHOD, simulationMethod));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_PHYSX_SIMULATION_METHOD, PRNL_PHYSX_SIMULATION_METHOD, simulationMethod));
 
 	// Collision method: List
 	wxArrayString collisionMethod;
 	collisionMethod.Add(PHYSX_STATIC);
 	collisionMethod.Add(PHYSX_DYNAMIC);
-	wxPGId pid2 = Append(wxEnumProperty(PRNL_PHYSX_COLLISION_METHOD, PRNL_PHYSX_COLLISION_METHOD, collisionMethod));
+	wxPGProperty* pid2 = Append(new wxEnumProperty(PRNL_PHYSX_COLLISION_METHOD, PRNL_PHYSX_COLLISION_METHOD, collisionMethod));
 
 	// Visualisation: bool
-	Append(wxBoolProperty(PRNL_PHYSX_FLAG_VISUALIZATION, PRNL_PHYSX_FLAG_VISUALIZATION, fluidDesc.flags & NX_FF_VISUALIZATION));
+	Append(new wxBoolProperty(PRNL_PHYSX_FLAG_VISUALIZATION, PRNL_PHYSX_FLAG_VISUALIZATION, fluidDesc.flags & NX_FF_VISUALIZATION));
 
 	// Disable gravity: bool
-	Append(wxBoolProperty(PRNL_PHYSX_FLAG_DISABLE_GRAVITY, PRNL_PHYSX_FLAG_DISABLE_GRAVITY, fluidDesc.flags & NX_FF_DISABLE_GRAVITY));
+	Append(new wxBoolProperty(PRNL_PHYSX_FLAG_DISABLE_GRAVITY, PRNL_PHYSX_FLAG_DISABLE_GRAVITY, fluidDesc.flags & NX_FF_DISABLE_GRAVITY));
 
 	// Collision twoway: bool
-	Append(wxBoolProperty(PRNL_PHYSX_FLAG_COLLISION_TWOWAY, PRNL_PHYSX_FLAG_COLLISION_TWOWAY, fluidDesc.flags & NX_FF_COLLISION_TWOWAY));
+	Append(new wxBoolProperty(PRNL_PHYSX_FLAG_COLLISION_TWOWAY, PRNL_PHYSX_FLAG_COLLISION_TWOWAY, fluidDesc.flags & NX_FF_COLLISION_TWOWAY));
 
 	// Fluid enabled: bool
-	Append(wxBoolProperty(PRNL_PHYSX_FLAG_FLUID_ENABLED, PRNL_PHYSX_FLAG_FLUID_ENABLED, fluidDesc.flags & NX_FF_ENABLED));
+	Append(new wxBoolProperty(PRNL_PHYSX_FLAG_FLUID_ENABLED, PRNL_PHYSX_FLAG_FLUID_ENABLED, fluidDesc.flags & NX_FF_ENABLED));
 
 	// Hardware: bool
-	Append(wxBoolProperty(PRNL_PHYSX_FLAG_HARDWARE, PRNL_PHYSX_FLAG_HARDWARE, fluidDesc.flags & NX_FF_HARDWARE));
+	Append(new wxBoolProperty(PRNL_PHYSX_FLAG_HARDWARE, PRNL_PHYSX_FLAG_HARDWARE, fluidDesc.flags & NX_FF_HARDWARE));
 
 	// Priority mode: bool
-	Append(wxBoolProperty(PRNL_PHYSX_FLAG_PRIORITY_MODE, PRNL_PHYSX_FLAG_PRIORITY_MODE, fluidDesc.flags & NX_FF_PRIORITY_MODE));
+	Append(new wxBoolProperty(PRNL_PHYSX_FLAG_PRIORITY_MODE, PRNL_PHYSX_FLAG_PRIORITY_MODE, fluidDesc.flags & NX_FF_PRIORITY_MODE));
 
 	// Project to plane: bool
-	Append(wxBoolProperty(PRNL_PHYSX_FLAG_PROJECT_TO_PLANE, PRNL_PHYSX_FLAG_PROJECT_TO_PLANE, fluidDesc.flags & NX_FF_PROJECT_TO_PLANE));
+	Append(new wxBoolProperty(PRNL_PHYSX_FLAG_PROJECT_TO_PLANE, PRNL_PHYSX_FLAG_PROJECT_TO_PLANE, fluidDesc.flags & NX_FF_PROJECT_TO_PLANE));
 
 	// Strict cooking format: bool
-	Append(wxBoolProperty(PRNL_PHYSX_FLAG_STRICT_COOKING_FORMAT, PRNL_PHYSX_FLAG_STRICT_COOKING_FORMAT, fluidDesc.flags & NX_FF_FORCE_STRICT_COOKING_FORMAT));
+	Append(new wxBoolProperty(PRNL_PHYSX_FLAG_STRICT_COOKING_FORMAT, PRNL_PHYSX_FLAG_STRICT_COOKING_FORMAT, fluidDesc.flags & NX_FF_FORCE_STRICT_COOKING_FORMAT));
 }
 //-----------------------------------------------------------------------
 void PhysXFluidExternPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	// Perform additional validations.
-	if (!_validatePropertyFloatPositive(event.GetPropertyPtr(), PRNL_PHYSX_STIFFNESS))
+	if (!_validatePropertyFloatPositive(event.GetProperty(), PRNL_PHYSX_STIFFNESS))
 		return;
-	if (!_validatePropertyFloatPositive(event.GetPropertyPtr(), PRNL_PHYSX_SURFACE_TENSION))
+	if (!_validatePropertyFloatPositive(event.GetProperty(), PRNL_PHYSX_SURFACE_TENSION))
 		return;
-	if (!_validatePropertyFloatPositive(event.GetPropertyPtr(), PRNL_PHYSX_VISCOSITY))
+	if (!_validatePropertyFloatPositive(event.GetProperty(), PRNL_PHYSX_VISCOSITY))
 		return;
-	if (!_validatePropertyFloatPositive(event.GetPropertyPtr(), PRNL_PHYSX_DAMPING))
+	if (!_validatePropertyFloatPositive(event.GetProperty(), PRNL_PHYSX_DAMPING))
 		return;
-	if (!_validatePropertyFloatPositive(event.GetPropertyPtr(), PRNL_PHYSX_COLLISION_RESPONSE_COEFFICIENT))
+	if (!_validatePropertyFloatPositive(event.GetProperty(), PRNL_PHYSX_COLLISION_RESPONSE_COEFFICIENT))
 		return;
-	if (!_validatePropertyFloatPositive(event.GetPropertyPtr(), PRNL_PHYSX_COLLISION_GROUP))
+	if (!_validatePropertyFloatPositive(event.GetProperty(), PRNL_PHYSX_COLLISION_GROUP))
 		return;
 
 	ExternPropertyWindow::onPropertyChanged(event);

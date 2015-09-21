@@ -123,7 +123,7 @@ void PhysXActorExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse::
 	doSetUint16(PRNL_PHYSX_COLLISION_GROUP, physXActorExtern->getCollisionGroup());
 
 	// Shape: list
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_PHYSX_SHAPE_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_PHYSX_SHAPE_TYPE);
 	ParticleUniverse::PhysicsShapeType shapeType = physXActorExtern->mPhysicsShapeDesc->mPhysicsShapeType;
 	wxString shapeTypeString = PHYSX_SHAPE_BOX;
 	if (shapeType == ParticleUniverse::ST_SPHERE)
@@ -178,7 +178,7 @@ void PhysXActorExternPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("ExternPhysXActor.html");
 
 	// Actor Group: ParticleUniverse::uint16
-	Append(wxUIntProperty(PRNL_PHYSX_COLLISION_GROUP, PRNL_PHYSX_COLLISION_GROUP, 0));
+	Append(new wxUIntProperty(PRNL_PHYSX_COLLISION_GROUP, PRNL_PHYSX_COLLISION_GROUP, 0));
 	SetPropertyEditor(PRNL_PHYSX_COLLISION_GROUP, wxPG_EDITOR(SpinCtrl));
 
 	// Shape: list
@@ -186,10 +186,10 @@ void PhysXActorExternPropertyWindow::_initProperties(void)
 	shapeTypes.Add(PHYSX_SHAPE_BOX);
 	shapeTypes.Add(PHYSX_SHAPE_SPHERE);
 	shapeTypes.Add(PHYSX_SHAPE_CAPSULE);
-	wxPGId pid = Append(wxEnumProperty(PRNL_PHYSX_SHAPE_TYPE, PRNL_PHYSX_SHAPE_TYPE, shapeTypes));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_PHYSX_SHAPE_TYPE, PRNL_PHYSX_SHAPE_TYPE, shapeTypes));
 
 	// Shape Group: ParticleUniverse::uint16
-	Append(wxUIntProperty(PRNL_PHYSX_SHAPE_COLLISION_GROUP, PRNL_PHYSX_SHAPE_COLLISION_GROUP, 0));
+	Append(new wxUIntProperty(PRNL_PHYSX_SHAPE_COLLISION_GROUP, PRNL_PHYSX_SHAPE_COLLISION_GROUP, 0));
 	SetPropertyEditor(PRNL_PHYSX_SHAPE_COLLISION_GROUP, wxPG_EDITOR(SpinCtrl));
 
 	// Group Mask: ParticleUniverse::GroupMask
@@ -199,18 +199,18 @@ void PhysXActorExternPropertyWindow::_initProperties(void)
 	appendVector3(PRNL_PHYSX_ANGULAR_VELOCITY, PRNL_PHYSX_ANGULAR_VELOCITY, Ogre::Vector3::ZERO);
 
 	// Angular Damping: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_PHYSX_ANGULAR_DAMPING, PRNL_PHYSX_ANGULAR_DAMPING, 0));
+	Append(new wxFloatProperty(PRNL_PHYSX_ANGULAR_DAMPING, PRNL_PHYSX_ANGULAR_DAMPING, 0));
 	SetPropertyEditor(PRNL_PHYSX_ANGULAR_DAMPING, wxPG_EDITOR(SpinCtrl));
 
 	// Material Index: ParticleUniverse::uint16
-	Append(wxUIntProperty(PRNL_PHYSX_MATERIAL_INDEX, PRNL_PHYSX_MATERIAL_INDEX, 0));
+	Append(new wxUIntProperty(PRNL_PHYSX_MATERIAL_INDEX, PRNL_PHYSX_MATERIAL_INDEX, 0));
 	SetPropertyEditor(PRNL_PHYSX_MATERIAL_INDEX, wxPG_EDITOR(SpinCtrl));
 }
 //-----------------------------------------------------------------------
 void PhysXActorExternPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	// Perform additional validations.
-	if (!_validatePropertyFloatPositive(event.GetPropertyPtr(), PRNL_PHYSX_ANGULAR_DAMPING))
+	if (!_validatePropertyFloatPositive(event.GetProperty(), PRNL_PHYSX_ANGULAR_DAMPING))
 		return;
 
 	ExternPropertyWindow::onPropertyChanged(event);

@@ -38,8 +38,8 @@ ObserverPropertyWindow::ObserverPropertyWindow(wxWindow* parent, EditComponent* 
 }
 //-----------------------------------------------------------------------
 ObserverPropertyWindow::ObserverPropertyWindow(ObserverPropertyWindow* observerPropertyWindow) : PropertyWindow(
-	observerPropertyWindow->GetParent(), 
-	observerPropertyWindow->getOwner(), 
+	observerPropertyWindow->GetParent(),
+	observerPropertyWindow->getOwner(),
 	observerPropertyWindow->getComponentName())
 {
 	_initProperties();
@@ -54,18 +54,18 @@ void ObserverPropertyWindow::copyAttributesFromPropertyWindow(ObserverPropertyWi
 	doSetString(PRNL_NAME, observerPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_OBSERVER_TYPE);
-	wxPGProperty* propFrom = observerPropertyWindow->GetPropertyPtr(PRNL_OBSERVER_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	wxPGProperty* propTo = GetPropertyByName(PRNL_OBSERVER_TYPE);
+	wxPGProperty* propFrom = observerPropertyWindow->GetPropertyByName(PRNL_OBSERVER_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 
 	// Enabled: bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization
 	doSetBool(PRNL_OBSERVER_ENABLED, observerPropertyWindow->doGetBool(PRNL_OBSERVER_ENABLED));
 
 	// Observe Particle Type: List
-	propTo = GetPropertyPtr(PRNL_PARTICLE_TYPE);
-	propFrom = observerPropertyWindow->GetPropertyPtr(PRNL_PARTICLE_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	propTo = GetPropertyByName(PRNL_PARTICLE_TYPE);
+	propFrom = observerPropertyWindow->GetPropertyByName(PRNL_PARTICLE_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 
 	// Observe Interval: ParticleUniverse::Real
 	doSetDouble(PRNL_OBSERVE_INTERVAL, observerPropertyWindow->doGetDouble(PRNL_OBSERVE_INTERVAL));
@@ -148,7 +148,7 @@ void ObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::Partic
 	doSetString(PRNL_NAME, ogre2wx(observer->getName()));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_OBSERVER_TYPE);
+	wxPGProperty* propTo = GetPropertyByName(PRNL_OBSERVER_TYPE);
 	wxString type = ogre2wxTranslate(observer->getObserverType());
 	propTo->SetValueFromString(type);
 
@@ -156,7 +156,7 @@ void ObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::Partic
 	doSetBool(PRNL_OBSERVER_ENABLED, observer->isEnabled());
 
 	// Observe Particle Type: List
-	propTo = GetPropertyPtr(PRNL_PARTICLE_TYPE);
+	propTo = GetPropertyByName(PRNL_PARTICLE_TYPE);
 	wxString pType = wxT("");
 	if (observer->isParticleTypeToObserveSet())
 	{
@@ -236,11 +236,11 @@ void ObserverPropertyWindow::_initProperties(void)
 	mTypes.Add(CST_OBSERVER_ON_RANDOM);
 	mTypes.Add(CST_OBSERVER_ON_TIME);
 	mTypes.Add(CST_OBSERVER_ON_VELOCITY);
-	wxPGId pid = Append(wxEnumProperty(PRNL_OBSERVER_TYPE, PRNL_OBSERVER_TYPE, mTypes));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_OBSERVER_TYPE, PRNL_OBSERVER_TYPE, mTypes));
 
 	// Enabled: bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization
-	Append(wxBoolProperty(PRNL_OBSERVER_ENABLED, PRNL_OBSERVER_ENABLED, ParticleUniverse::ParticleObserver::DEFAULT_ENABLED));
+	Append(new wxBoolProperty(PRNL_OBSERVER_ENABLED, PRNL_OBSERVER_ENABLED, ParticleUniverse::ParticleObserver::DEFAULT_ENABLED));
 
 	// Observe Particle Type: List
 	mParticleTypes.Add(PT_ALL);
@@ -249,20 +249,20 @@ void ObserverPropertyWindow::_initProperties(void)
 	mParticleTypes.Add(PT_AFFECTOR);
 	mParticleTypes.Add(PT_SYSTEM);
 	mParticleTypes.Add(PT_TECHNIQUE);
-	pid = Append(wxEnumProperty(PRNL_PARTICLE_TYPE, PRNL_PARTICLE_TYPE, mParticleTypes));
+	pid = Append(new wxEnumProperty(PRNL_PARTICLE_TYPE, PRNL_PARTICLE_TYPE, mParticleTypes));
 
 	// Observe Interval: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_OBSERVE_INTERVAL, PRNL_OBSERVE_INTERVAL, 0.0f));
+	Append(new wxFloatProperty(PRNL_OBSERVE_INTERVAL, PRNL_OBSERVE_INTERVAL, 0.0f));
 	SetPropertyEditor(PRNL_OBSERVE_INTERVAL, wxPG_EDITOR(SpinCtrl));
 
 	// Observe Until Event: bool
-	Append(wxBoolProperty(PRNL_UNTIL_EVENT, PRNL_UNTIL_EVENT, ParticleUniverse::ParticleObserver::DEFAULT_UNTIL_EVENT));
+	Append(new wxBoolProperty(PRNL_UNTIL_EVENT, PRNL_UNTIL_EVENT, ParticleUniverse::ParticleObserver::DEFAULT_UNTIL_EVENT));
 }
 //-----------------------------------------------------------------------
 void ObserverPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty* prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToObserver(prop, propertyName);
 	notifyPropertyChanged();
@@ -276,7 +276,7 @@ void ObserverPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
 	if (propertyName == PRNL_OBSERVER_TYPE)
 	{
 		// Replace this window by another one
-		wxString subType = event.GetPropertyValueAsString();
+		wxString subType = event.GetProperty()->GetValueAsString();
 		mOwner->createPropertyWindow(subType, this);
 		mOwner->setCaption();
 		getOwner()->refreshCanvas();

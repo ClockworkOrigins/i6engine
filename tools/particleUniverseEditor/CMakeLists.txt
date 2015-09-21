@@ -145,13 +145,6 @@ set(particleUniverseEditorSrc
 	${srcdir}/ogre/resources.cpp
 	${srcdir}/ogre/utils.cpp
 
-	${srcdir}/propgrid/advprops.cpp
-	${srcdir}/propgrid/extras.cpp
-	${srcdir}/propgrid/manager.cpp
-	${srcdir}/propgrid/odcombo.cpp
-	${srcdir}/propgrid/propgrid.cpp
-	${srcdir}/propgrid/props.cpp
-
 	${srcdir}/RendererPropertyWindow/BeamRendererPropertyWindow.cpp
 	${srcdir}/RendererPropertyWindow/BillboardRendererPropertyWindow.cpp
 	${srcdir}/RendererPropertyWindow/BoxRendererPropertyWindow.cpp

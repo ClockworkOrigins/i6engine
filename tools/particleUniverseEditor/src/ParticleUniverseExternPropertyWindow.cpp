@@ -37,8 +37,8 @@ ExternPropertyWindow::ExternPropertyWindow(wxWindow* parent, EditComponent* owne
 }
 //-----------------------------------------------------------------------
 ExternPropertyWindow::ExternPropertyWindow(ExternPropertyWindow* externPropertyWindow) : PropertyWindow(
-	externPropertyWindow->GetParent(), 
-	externPropertyWindow->getOwner(), 
+	externPropertyWindow->GetParent(),
+	externPropertyWindow->getOwner(),
 	externPropertyWindow->getComponentName())
 {
 	_initProperties();
@@ -51,9 +51,9 @@ void ExternPropertyWindow::copyAttributesFromPropertyWindow(ExternPropertyWindow
 	doSetString(PRNL_NAME, externPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_EXTERN_TYPE);
-	wxPGProperty* propFrom = externPropertyWindow->GetPropertyPtr(PRNL_EXTERN_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	wxPGProperty* propTo = GetProperty(PRNL_EXTERN_TYPE);
+	wxPGProperty* propFrom = externPropertyWindow->GetProperty(PRNL_EXTERN_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 }
 //-----------------------------------------------------------------------
 void ExternPropertyWindow::copyAttributeToExtern(wxPGProperty* prop, wxString propertyName)
@@ -89,7 +89,7 @@ void ExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse::Extern* ex
 	doSetString(PRNL_NAME, ogre2wx(externObject->getName()));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_EXTERN_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_EXTERN_TYPE);
 	wxString type = ogre2wxTranslate(externObject->getExternType());
 	propTo->SetValueFromString(type);
 }
@@ -122,13 +122,13 @@ void ExternPropertyWindow::_initProperties(void)
 		mTypes.Add(CST_EXTERN_PHYSX_FLUID);
 	}
 #endif //PU_PHYSICS_PHYSX
-	wxPGId pid = Append(wxEnumProperty(PRNL_EXTERN_TYPE, PRNL_EXTERN_TYPE, mTypes));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_EXTERN_TYPE, PRNL_EXTERN_TYPE, mTypes));
 }
 //-----------------------------------------------------------------------
 void ExternPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty* prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToExtern(prop, propertyName);
 	notifyPropertyChanged();
@@ -142,7 +142,7 @@ void ExternPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
 	if (propertyName == PRNL_EXTERN_TYPE)
 	{
 		// Replace this window by another one
-		wxString subType = event.GetPropertyValueAsString();
+		wxString subType = event.GetProperty()->GetValueAsString();
 		mOwner->createPropertyWindow(subType, this);
 		mOwner->setCaption();
 		getOwner()->refreshCanvas();

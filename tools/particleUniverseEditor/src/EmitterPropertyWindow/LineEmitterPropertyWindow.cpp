@@ -109,15 +109,15 @@ void LineEmitterPropertyWindow::_initProperties(void)
 	appendVector3(PRNL_LINE_END, PRNL_LINE_END, ParticleUniverse::LineEmitter::DEFAULT_END);
 
 	// Max increment: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_LINE_MAX_INCREMENT, PRNL_LINE_MAX_INCREMENT, ParticleUniverse::LineEmitter::DEFAULT_MAX_INCREMENT));
+	Append(new wxFloatProperty(PRNL_LINE_MAX_INCREMENT, PRNL_LINE_MAX_INCREMENT, ParticleUniverse::LineEmitter::DEFAULT_MAX_INCREMENT));
 	SetPropertyEditor(PRNL_LINE_MAX_INCREMENT, wxPG_EDITOR(SpinCtrl));
 
 	// Min increment: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_LINE_MIN_INCREMENT, PRNL_LINE_MIN_INCREMENT, ParticleUniverse::LineEmitter::DEFAULT_MIN_INCREMENT));
+	Append(new wxFloatProperty(PRNL_LINE_MIN_INCREMENT, PRNL_LINE_MIN_INCREMENT, ParticleUniverse::LineEmitter::DEFAULT_MIN_INCREMENT));
 	SetPropertyEditor(PRNL_LINE_MIN_INCREMENT, wxPG_EDITOR(SpinCtrl));
 
 	// Deviation: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_LINE_DEVIATION, PRNL_LINE_DEVIATION, ParticleUniverse::LineEmitter::DEFAULT_MAX_DEVIATION));
+	Append(new wxFloatProperty(PRNL_LINE_DEVIATION, PRNL_LINE_DEVIATION, ParticleUniverse::LineEmitter::DEFAULT_MAX_DEVIATION));
 	SetPropertyEditor(PRNL_LINE_DEVIATION, wxPG_EDITOR(SpinCtrl));
 }
 //-----------------------------------------------------------------------

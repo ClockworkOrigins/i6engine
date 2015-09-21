@@ -105,7 +105,7 @@ void VortexExternPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("ExternVortex.html");
 
 	// Distance Threshold: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_EXTERN_THRESHOLD, PRNL_EXTERN_THRESHOLD, std::numeric_limits<float>::max()));
+	Append(new wxFloatProperty(PRNL_EXTERN_THRESHOLD, PRNL_EXTERN_THRESHOLD, std::numeric_limits<float>::max()));
 	SetPropertyEditor(PRNL_EXTERN_THRESHOLD, wxPG_EDITOR(SpinCtrl));
 
 	// Rotation Vector: Ogre::Vector3

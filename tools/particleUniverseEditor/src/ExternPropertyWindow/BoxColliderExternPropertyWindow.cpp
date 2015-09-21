@@ -136,7 +136,7 @@ void BoxColliderExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse:
 	doSetDouble(PRNL_COLLIDER_BOUNCYNESS, boxColliderExtern->getBouncyness());
 
 	// Intersection type: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_INTERSECTION_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_INTERSECTION_TYPE);
 	ParticleUniverse::BaseCollider::IntersectionType intersectionType = boxColliderExtern->getIntersectionType();
 	wxString intersectionTypeString = IST_POINT;
 	if (intersectionType == ParticleUniverse::BaseCollider::IT_BOX)
@@ -146,7 +146,7 @@ void BoxColliderExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse:
 	propTo->SetValueFromString(intersectionTypeString);
 
 	// Collision type: List
-	propTo = GetPropertyPtr(PRNL_COLLISION_TYPE);
+	propTo = GetProperty(PRNL_COLLISION_TYPE);
 	ParticleUniverse::BaseCollider::CollisionType collisionType = boxColliderExtern->getCollisionType();
 	wxString collisionTypeString = COLLT_NONE;
 	if (collisionType == ParticleUniverse::BaseCollider::CT_BOUNCE)
@@ -178,37 +178,37 @@ void BoxColliderExternPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("ExternBoxCollider.html");
 
 	// Distance Threshold: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_EXTERN_THRESHOLD, PRNL_EXTERN_THRESHOLD, std::numeric_limits<float>::max()));
+	Append(new wxFloatProperty(PRNL_EXTERN_THRESHOLD, PRNL_EXTERN_THRESHOLD, std::numeric_limits<float>::max()));
 	SetPropertyEditor(PRNL_EXTERN_THRESHOLD, wxPG_EDITOR(SpinCtrl));
 
 	// Friction: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_COLLIDER_FRICTION, PRNL_COLLIDER_FRICTION, ParticleUniverse::BoxCollider::DEFAULT_FRICTION));
+	Append(new wxFloatProperty(PRNL_COLLIDER_FRICTION, PRNL_COLLIDER_FRICTION, ParticleUniverse::BoxCollider::DEFAULT_FRICTION));
 	SetPropertyEditor(PRNL_COLLIDER_FRICTION, wxPG_EDITOR(SpinCtrl));
 
 	// Bouncyness: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_COLLIDER_BOUNCYNESS, PRNL_COLLIDER_BOUNCYNESS, ParticleUniverse::BoxCollider::DEFAULT_BOUNCYNESS));
+	Append(new wxFloatProperty(PRNL_COLLIDER_BOUNCYNESS, PRNL_COLLIDER_BOUNCYNESS, ParticleUniverse::BoxCollider::DEFAULT_BOUNCYNESS));
 	SetPropertyEditor(PRNL_COLLIDER_BOUNCYNESS, wxPG_EDITOR(SpinCtrl));
 
 	// Intersection Type: List
 	mIntersectionTypes.Add(IST_POINT);
 	mIntersectionTypes.Add(IST_BOX);
-	Append(wxEnumProperty(PRNL_INTERSECTION_TYPE, PRNL_INTERSECTION_TYPE, mIntersectionTypes));
+	Append(new wxEnumProperty(PRNL_INTERSECTION_TYPE, PRNL_INTERSECTION_TYPE, mIntersectionTypes));
 
 	// Collision Type: List
 	mCollisionTypes.Add(COLLT_NONE);
 	mCollisionTypes.Add(COLLT_BOUNCE);
 	mCollisionTypes.Add(COLLT_FLOW);
-	Append(wxEnumProperty(PRNL_COLLISION_TYPE, PRNL_COLLISION_TYPE, mCollisionTypes));
+	Append(new wxEnumProperty(PRNL_COLLISION_TYPE, PRNL_COLLISION_TYPE, mCollisionTypes));
 
 	// Box Width: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_BOX_COLLIDER_WIDTH, PRNL_BOX_COLLIDER_WIDTH, ParticleUniverse::BoxCollider::DEFAULT_WIDTH));
+	Append(new wxFloatProperty(PRNL_BOX_COLLIDER_WIDTH, PRNL_BOX_COLLIDER_WIDTH, ParticleUniverse::BoxCollider::DEFAULT_WIDTH));
 	SetPropertyEditor(PRNL_BOX_COLLIDER_WIDTH, wxPG_EDITOR(SpinCtrl));
 
 	// Box Height: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_BOX_COLLIDER_HEIGHT, PRNL_BOX_COLLIDER_HEIGHT, ParticleUniverse::BoxCollider::DEFAULT_HEIGHT));
+	Append(new wxFloatProperty(PRNL_BOX_COLLIDER_HEIGHT, PRNL_BOX_COLLIDER_HEIGHT, ParticleUniverse::BoxCollider::DEFAULT_HEIGHT));
 	SetPropertyEditor(PRNL_BOX_COLLIDER_HEIGHT, wxPG_EDITOR(SpinCtrl));
 
 	// Box Depth: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_BOX_COLLIDER_DEPTH, PRNL_BOX_COLLIDER_DEPTH, ParticleUniverse::BoxCollider::DEFAULT_DEPTH));
+	Append(new wxFloatProperty(PRNL_BOX_COLLIDER_DEPTH, PRNL_BOX_COLLIDER_DEPTH, ParticleUniverse::BoxCollider::DEFAULT_DEPTH));
 	SetPropertyEditor(PRNL_BOX_COLLIDER_DEPTH, wxPG_EDITOR(SpinCtrl));
 }

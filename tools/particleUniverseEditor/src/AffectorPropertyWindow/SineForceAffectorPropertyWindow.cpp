@@ -93,7 +93,7 @@ void SineForceAffectorPropertyWindow::copyAttributesFromAffector(ParticleUnivers
 	doSetVector3(PRNL_FORCE_VECTOR, sineForceAffector->getForceVector());
 
 	// Force Application: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_LINEAR_FORCE_APPLICATION);
+	wxPGProperty* propTo = GetProperty(PRNL_LINEAR_FORCE_APPLICATION);
 	ParticleUniverse::BaseForceAffector::ForceApplication application = sineForceAffector->getForceApplication();
 	wxString applicationString = APP_ADD;
 	if (application == ParticleUniverse::BaseForceAffector::FA_AVERAGE)
@@ -130,13 +130,13 @@ void SineForceAffectorPropertyWindow::_initProperties(void)
 	// Force Application: 
 	mApplication.Add(APP_ADD);
 	mApplication.Add(APP_AVG);
-	wxPGId pid = Append(wxEnumProperty(PRNL_LINEAR_FORCE_APPLICATION, PRNL_LINEAR_FORCE_APPLICATION, mApplication));
+	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_LINEAR_FORCE_APPLICATION, PRNL_LINEAR_FORCE_APPLICATION, mApplication));
 
 	// Minimum Frequency: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_FREQ_MIN, PRNL_FREQ_MIN, ParticleUniverse::SineForceAffector::DEFAULT_FREQ_MIN));
+	Append(new wxFloatProperty(PRNL_FREQ_MIN, PRNL_FREQ_MIN, ParticleUniverse::SineForceAffector::DEFAULT_FREQ_MIN));
 	SetPropertyEditor(PRNL_FREQ_MIN, wxPG_EDITOR(SpinCtrl));
 
 	// Maximum Frequency: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_FREQ_MAX, PRNL_FREQ_MAX, ParticleUniverse::SineForceAffector::DEFAULT_FREQ_MAX));
+	Append(new wxFloatProperty(PRNL_FREQ_MAX, PRNL_FREQ_MAX, ParticleUniverse::SineForceAffector::DEFAULT_FREQ_MAX));
 	SetPropertyEditor(PRNL_FREQ_MAX, wxPG_EDITOR(SpinCtrl));
 }

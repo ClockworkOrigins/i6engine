@@ -33,7 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "wx/propgrid/advprops.h"
 
 //-----------------------------------------------------------------------
-SystemPropertyWindow::SystemPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name) : 
+SystemPropertyWindow::SystemPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name) :
 	PropertyWindow(parent, owner, name),
 	mRootFrame(0)
 {
@@ -63,8 +63,8 @@ void SystemPropertyWindow::copyAttributesFromSystem(const ParticleUniverse::Part
 	doSetDouble(PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, system->getNonVisibleUpdateTimeout());
 
 	// Lod distances: List of ParticleUniverse::Real
-	wxPGProperty* prop = GetPropertyPtr(PRNL_SYSTEM_LOD_DISTANCES);
-	if (prop)
+	wxPGProperty* prop = GetPropertyByName(PRNL_SYSTEM_LOD_DISTANCES);
+/*	if (prop) TODO
 	{
 		ParentPropertyWithButtonAndFloats* propLodDistances = static_cast<ParentPropertyWithButtonAndFloats*>(prop);
 		propLodDistances->reset();
@@ -75,24 +75,24 @@ void SystemPropertyWindow::copyAttributesFromSystem(const ParticleUniverse::Part
 		{
 			propLodDistances->addFloat(this, Ogre::Math::Sqrt(*it));
 		}
-	}
+	}*/
 
 	// Smooth lod: bool
 	doSetBool(PRNL_SYSTEM_SMOOTH_LOD, system->isSmoothLod());
 
 	// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
 	wxString name = PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME;
-	prop = GetPropertyPtr(name);
+	prop = GetPropertyByName(name);
 	if (prop)
 	{
-		prop->DoSetValue(system->getFastForwardTime());
+		prop->SetValue(system->getFastForwardTime());
 	}
 
 	name = PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL;
-	prop = GetPropertyPtr(name);
+	prop = GetPropertyByName(name);
 	if (prop)
 	{
-		prop->DoSetValue(system->getFastForwardInterval());
+		prop->SetValue(system->getFastForwardInterval());
 	}
 
 	// Main camera name: Ogre::String
@@ -168,7 +168,7 @@ void SystemPropertyWindow::copyAttributeToSystem(wxPGProperty* prop, wxString pr
 	{
 		// Lod distances: List of ParticleUniverse::Real
 		// Todo: Checking on PRNL_FLOAT only is not sufficient if more lists of floats are added to this propertygrid.
-		ParentPropertyWithButtonAndFloats* parentPropertyWithButtonAndFloats = 0;
+/*	TODO	ParentPropertyWithButtonAndFloats* parentPropertyWithButtonAndFloats = 0;
 		if (propertyName == PRNL_SYSTEM_LOD_DISTANCES)
 		{
 			parentPropertyWithButtonAndFloats = static_cast<ParentPropertyWithButtonAndFloats*>(prop);
@@ -184,7 +184,7 @@ void SystemPropertyWindow::copyAttributeToSystem(wxPGProperty* prop, wxString pr
 		{
 			ParticleUniverse::Real f = parentPropertyWithButtonAndFloats->getFloat(this, i);
 			system->addLodDistance(f);
-		}
+		}*/
 	}
 	else if (propertyName == PRNL_SYSTEM_SMOOTH_LOD)
 	{
@@ -196,11 +196,11 @@ void SystemPropertyWindow::copyAttributeToSystem(wxPGProperty* prop, wxString pr
 		propertyName == PRNL_SYSTEM_FAST_FORWARD_INTERVAL)
 	{
 		// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
-		wxPGProperty* p = GetPropertyPtr(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME);
+		wxPGProperty* p = GetPropertyByName(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME);
 		if (!p)
 			return;
 		ParticleUniverse::Real time = p->DoGetValue().GetDouble();
-		p = GetPropertyPtr(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL);
+		p = GetPropertyByName(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL);
 		if (!p)
 			return;
 		ParticleUniverse::Real interval = p->DoGetValue().GetDouble();
@@ -277,64 +277,64 @@ void SystemPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("ParticleSystem.html");
 
 	// Category: String
-	Append(wxStringProperty(PRNL_SYSTEM_CATEGORY, PRNL_SYSTEM_CATEGORY, WX_STRING_BLANK));
+	Append(new wxStringProperty(PRNL_SYSTEM_CATEGORY, PRNL_SYSTEM_CATEGORY, WX_STRING_BLANK));
 
 	// Keep local: Bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization
-	Append(wxBoolProperty(PRNL_SYSTEM_KEEP_LOCAL, PRNL_SYSTEM_KEEP_LOCAL, ParticleUniverse::ParticleSystem::DEFAULT_KEEP_LOCAL));
+	Append(new wxBoolProperty(PRNL_SYSTEM_KEEP_LOCAL, PRNL_SYSTEM_KEEP_LOCAL, ParticleUniverse::ParticleSystem::DEFAULT_KEEP_LOCAL));
 
 	// Iteration interval: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_SYSTEM_ITERATION_INTERVAL, PRNL_SYSTEM_ITERATION_INTERVAL, ParticleUniverse::ParticleSystem::DEFAULT_ITERATION_INTERVAL));
+	Append(new wxFloatProperty(PRNL_SYSTEM_ITERATION_INTERVAL, PRNL_SYSTEM_ITERATION_INTERVAL, ParticleUniverse::ParticleSystem::DEFAULT_ITERATION_INTERVAL));
 	SetPropertyEditor(PRNL_SYSTEM_ITERATION_INTERVAL, wxPG_EDITOR(SpinCtrl));
 
 	// Fixed timeout: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_SYSTEM_FIXED_TIMEOUT, PRNL_SYSTEM_FIXED_TIMEOUT, ParticleUniverse::ParticleSystem::DEFAULT_FIXED_TIMEOUT));
+	Append(new wxFloatProperty(PRNL_SYSTEM_FIXED_TIMEOUT, PRNL_SYSTEM_FIXED_TIMEOUT, ParticleUniverse::ParticleSystem::DEFAULT_FIXED_TIMEOUT));
 	SetPropertyEditor(PRNL_SYSTEM_FIXED_TIMEOUT, wxPG_EDITOR(SpinCtrl));
 
 	// Non-visible update timeout: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, ParticleUniverse::ParticleSystem::DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT));
+	Append(new wxFloatProperty(PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, ParticleUniverse::ParticleSystem::DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT));
 	SetPropertyEditor(PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, wxPG_EDITOR(SpinCtrl));
 
 	// Lod distances: List of ParticleUniverse::Real
-	wxPGId pid = Append(new ParentPropertyWithButtonAndFloats(PRNL_SYSTEM_LOD_DISTANCES, PRNL_SYSTEM_LOD_DISTANCES));
-	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+//	wxPGProperty* pid = Append(new ParentPropertyWithButtonAndFloats(PRNL_SYSTEM_LOD_DISTANCES, PRNL_SYSTEM_LOD_DISTANCES));
+//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Smooth lod: bool
-	Append(wxBoolProperty(PRNL_SYSTEM_SMOOTH_LOD, PRNL_SYSTEM_SMOOTH_LOD, ParticleUniverse::ParticleSystem::DEFAULT_SMOOTH_LOD));
+	Append(new wxBoolProperty(PRNL_SYSTEM_SMOOTH_LOD, PRNL_SYSTEM_SMOOTH_LOD, ParticleUniverse::ParticleSystem::DEFAULT_SMOOTH_LOD));
 
 	// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
-	pid = Append(wxParentProperty(PRNL_SYSTEM_FAST_FORWARD, PRNL_SYSTEM_FAST_FORWARD));
-	AppendIn(pid, wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_TIME, PRNL_SYSTEM_FAST_FORWARD_TIME, ParticleUniverse::ParticleSystem::DEFAULT_FAST_FORWARD_TIME));
-	AppendIn(pid, wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_INTERVAL, PRNL_SYSTEM_FAST_FORWARD_INTERVAL, 0.0f));
-	SetPropertyEditor(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME, wxPG_EDITOR(SpinCtrl));
-	SetPropertyEditor(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL, wxPG_EDITOR(SpinCtrl));
+//	pid = Append(new wxParentProperty(PRNL_SYSTEM_FAST_FORWARD, PRNL_SYSTEM_FAST_FORWARD));
+//	AppendIn(pid, wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_TIME, PRNL_SYSTEM_FAST_FORWARD_TIME, ParticleUniverse::ParticleSystem::DEFAULT_FAST_FORWARD_TIME));
+//	AppendIn(pid, wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_INTERVAL, PRNL_SYSTEM_FAST_FORWARD_INTERVAL, 0.0f));
+//	SetPropertyEditor(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME, wxPG_EDITOR(SpinCtrl));
+//	SetPropertyEditor(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL, wxPG_EDITOR(SpinCtrl));
 
 	// Main camera name: Ogre::String
-	Append(wxStringProperty(PRNL_SYSTEM_MAIN_CAMERA_NAME, PRNL_SYSTEM_MAIN_CAMERA_NAME, WX_STRING_BLANK));
+	Append(new wxStringProperty(PRNL_SYSTEM_MAIN_CAMERA_NAME, PRNL_SYSTEM_MAIN_CAMERA_NAME, WX_STRING_BLANK));
 
 	// Scale velocity: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_SYSTEM_SCALE_VELOCITY, PRNL_SYSTEM_SCALE_VELOCITY, ParticleUniverse::ParticleSystem::DEFAULT_SCALE_VELOCITY));
+	Append(new wxFloatProperty(PRNL_SYSTEM_SCALE_VELOCITY, PRNL_SYSTEM_SCALE_VELOCITY, ParticleUniverse::ParticleSystem::DEFAULT_SCALE_VELOCITY));
 	SetPropertyEditor(PRNL_SYSTEM_SCALE_VELOCITY, wxPG_EDITOR(SpinCtrl));
 
 	// Scale time: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_SYSTEM_SCALE_TIME, PRNL_SYSTEM_SCALE_TIME, ParticleUniverse::ParticleSystem::DEFAULT_SCALE_TIME));
+	Append(new wxFloatProperty(PRNL_SYSTEM_SCALE_TIME, PRNL_SYSTEM_SCALE_TIME, ParticleUniverse::ParticleSystem::DEFAULT_SCALE_TIME));
 	SetPropertyEditor(PRNL_SYSTEM_SCALE_TIME, wxPG_EDITOR(SpinCtrl));
 
 	// Scale dimensions: Ogre::Vector3
 	appendVector3(PRNL_SYSTEM_SCALE, PRNL_SYSTEM_SCALE, Ogre::Vector3::UNIT_SCALE);
 
 	// Use tight bounding box: bool
-	Append(wxBoolProperty(PRNL_SYSTEM_TIGHT_BOUNDING_BOX, PRNL_SYSTEM_TIGHT_BOUNDING_BOX, ParticleUniverse::ParticleSystem::DEFAULT_TIGHT_BOUNDINGBOX));
+	Append(new wxBoolProperty(PRNL_SYSTEM_TIGHT_BOUNDING_BOX, PRNL_SYSTEM_TIGHT_BOUNDING_BOX, ParticleUniverse::ParticleSystem::DEFAULT_TIGHT_BOUNDINGBOX));
 }
 //-----------------------------------------------------------------------
 void SystemPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	// Perform additional validations.
-	if (!_validatePropertyStringNoSpaces(event.GetPropertyPtr(), PRNL_SYSTEM_MAIN_CAMERA_NAME))
+	if (!_validatePropertyStringNoSpaces(event.GetProperty(), PRNL_SYSTEM_MAIN_CAMERA_NAME))
 		return;
 
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty* prop = event.GetProperty();
 	PropertyWindow::onPropertyChanged(event);
 	copyAttributeToSystem(prop, propertyName);
 	ParticleUniverse::ParticleSystem* system = static_cast<ParticleUniverse::ParticleSystem*>(mOwner->getPUElement());

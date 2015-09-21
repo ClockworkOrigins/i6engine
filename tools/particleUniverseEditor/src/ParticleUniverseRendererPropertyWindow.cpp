@@ -38,7 +38,7 @@ RendererPropertyWindow::RendererPropertyWindow(wxWindow* parent, EditComponent* 
 }
 //-----------------------------------------------------------------------
 RendererPropertyWindow::RendererPropertyWindow(RendererPropertyWindow* rendererPropertyWindow) : PropertyWindow(
-	rendererPropertyWindow->GetParent(), 
+	rendererPropertyWindow->GetParent(),
 	rendererPropertyWindow->getOwner(),
 	Ogre::StringUtil::BLANK)
 {
@@ -54,9 +54,9 @@ void RendererPropertyWindow::copyAttributesFromPropertyWindow(RendererPropertyWi
 	doSetString(PRNL_NAME, rendererPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_RENDERER_TYPE);
-	wxPGProperty* propFrom = rendererPropertyWindow->GetPropertyPtr(PRNL_RENDERER_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	wxPGProperty* propTo = GetPropertyByName(PRNL_RENDERER_TYPE);
+	wxPGProperty* propFrom = rendererPropertyWindow->GetPropertyByName(PRNL_RENDERER_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 
 	// Render queue group: ParticleUniverse::uint8
 	doSetLong(PRNL_RENDERER_RENDER_Q_GROUP, rendererPropertyWindow->doGetLong(PRNL_RENDERER_RENDER_Q_GROUP));
@@ -74,7 +74,7 @@ void RendererPropertyWindow::copyAttributesFromPropertyWindow(RendererPropertyWi
 	// Texture coords columns: uchar
 	doSetLong(PRNL_RENDERER_TEXCOORDS_COLUMNS, rendererPropertyWindow->doGetLong(PRNL_RENDERER_TEXCOORDS_COLUMNS));
 
-	// Note: Enable the part below if soft particles can also be used for other renderer types than billboards (and don't forget to add 
+	// Note: Enable the part below if soft particles can also be used for other renderer types than billboards (and don't forget to add
 	// soft particle attributes to copyAttributesFromRenderer, _initProperties, ...
 
 	// Use soft particles: Bool
@@ -143,7 +143,7 @@ void RendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* prop, wxStrin
 void RendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer* renderer)
 {
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_RENDERER_TYPE);
+	wxPGProperty* propTo = GetPropertyByName(PRNL_RENDERER_TYPE);
 	wxString type = ogre2wxTranslate(renderer->getRendererType());
 	propTo->SetValueFromString(type);
 
@@ -199,18 +199,18 @@ void RendererPropertyWindow::_initProperties(void)
 	mTypes.Add(CST_RENDERER_LIGHT);
 	mTypes.Add(CST_RENDERER_RIBBONTRAIL);
 	mTypes.Add(CST_RENDERER_SPHERE);
-	wxPGId pid = Append(wxEnumProperty(PRNL_RENDERER_TYPE, PRNL_RENDERER_TYPE, mTypes));
+	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_RENDERER_TYPE, PRNL_RENDERER_TYPE, mTypes));
 
 	// Render queue group: ParticleUniverse::uint8
-	Append(wxUIntProperty(PRNL_RENDERER_RENDER_Q_GROUP, 
-		PRNL_RENDERER_RENDER_Q_GROUP, 
+	Append(new wxUIntProperty(PRNL_RENDERER_RENDER_Q_GROUP,
+		PRNL_RENDERER_RENDER_Q_GROUP,
 		ParticleUniverse::ParticleRenderer::DEFAULT_RENDER_QUEUE_GROUP));
 	SetPropertyEditor(PRNL_RENDERER_RENDER_Q_GROUP, wxPG_EDITOR(SpinCtrl));
 
 	// Sorting: Bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization
-	Append(wxBoolProperty(PRNL_RENDERER_SORTING, 
-		PRNL_RENDERER_SORTING, 
+	Append(new wxBoolProperty(PRNL_RENDERER_SORTING,
+		PRNL_RENDERER_SORTING,
 		ParticleUniverse::ParticleRenderer::DEFAULT_SORTED));
 
 	// Texture coords define: Is no attribute, but only a 'container' in the script
@@ -219,14 +219,14 @@ void RendererPropertyWindow::_initProperties(void)
 	// Todo
 
 	// Texture coords rows: uchar
-	Append(wxUIntProperty(PRNL_RENDERER_TEXCOORDS_ROWS, 
-		PRNL_RENDERER_TEXCOORDS_ROWS, 
+	Append(new wxUIntProperty(PRNL_RENDERER_TEXCOORDS_ROWS,
+		PRNL_RENDERER_TEXCOORDS_ROWS,
 		ParticleUniverse::ParticleRenderer::DEFAULT_TEXTURECOORDS_ROWS));
 	SetPropertyEditor(PRNL_RENDERER_TEXCOORDS_ROWS, wxPG_EDITOR(SpinCtrl));
 
 	// Texture coords columns: uchar
-	Append(wxUIntProperty(PRNL_RENDERER_TEXCOORDS_COLUMNS, 
-		PRNL_RENDERER_TEXCOORDS_COLUMNS, 
+	Append(new wxUIntProperty(PRNL_RENDERER_TEXCOORDS_COLUMNS,
+		PRNL_RENDERER_TEXCOORDS_COLUMNS,
 		ParticleUniverse::ParticleRenderer::DEFAULT_TEXTURECOORDS_COLUMNS));
 	SetPropertyEditor(PRNL_RENDERER_TEXCOORDS_COLUMNS, wxPG_EDITOR(SpinCtrl));
 }
@@ -234,7 +234,7 @@ void RendererPropertyWindow::_initProperties(void)
 void RendererPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty* prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToRenderer(prop, propertyName);
 	notifyPropertyChanged();
@@ -248,7 +248,7 @@ void RendererPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
 	if (propertyName == PRNL_RENDERER_TYPE)
 	{
 		// Replace this window by another one
-		wxString subType = event.GetPropertyValueAsString();
+		wxString subType = event.GetProperty()->GetValueAsString();
 		mOwner->createPropertyWindow(subType, this);
 		mOwner->setCaption();
 		getOwner()->refreshCanvas();
@@ -281,7 +281,7 @@ void RendererPropertyWindow::replaceRendererType(wxPGProperty* prop)
 				{
 					ParticleUniverse::String s2 = "pu_bold_marker.mesh";
 					entityRenderer->setMeshName(s2);
-					wxPGProperty* p = GetPropertyPtr(PRNL_MESH_NAME);
+					wxPGProperty* p = GetPropertyByName(PRNL_MESH_NAME);
 					if (p)
 					{
 						p->SetValueFromString(ogre2wx(s2));
