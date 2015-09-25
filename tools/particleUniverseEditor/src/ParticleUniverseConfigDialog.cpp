@@ -22,50 +22,11 @@ You can find a copy of the Commercial License in the Particle Universe package.
 static const Ogre::String CONFIG_FILENAME = "pued.cfg";
 
 //-----------------------------------------------------------------------
-ConfigDialog::ConfigDialog(wxWindow* parent) :
-	wxPropertySheetDialog(),
-	mCheckAutoStart(0),
-	mHighlight(0),
-	mStatistics(0),
-	mLightCheck(0),
-	mGridPlane(0),
-	mGridPlaneDistance(0),
-	mGridPlaneScale(0),
-	mDirListSizer(0),
-	mDirListPanel(0),
-	mCheckboxes(0),
-	mTexts(0),
-	mVideoPath(0),
-	mImageWidth(0),
-	mImageHeight(0),
-	mFramesPerSecond(0),
-	mFileNameSuffix(0),
-	mPauseTime(0),
-	mFilter(0),
-	mVideoSize(0),
-	mVideoSelected(false),
-	mPhysXPlaneNormalX(0),
-	mPhysXPlaneNormalY(0),
-	mPhysXPlaneNormalZ(0),
-	mPhysXGravityX(0),
-	mPhysXGravityY(0),
-	mPhysXGravityZ(0),
-	mPhysXPlaneNormal(Ogre::Vector3::UNIT_Y),
-	mPhysXGravity(Ogre::Vector3::ZERO),
-	mPhysXPlaneDistance(0),
-	mCheckPhysXDialog(0),
-	mUsePhysXIfNoStartupDialog(false),
-	mCameraPosition(Ogre::Vector3::ZERO),
-	mEditProportion(0.5f),
-	mMainNodePosition(Ogre::Vector3(0, 0, -1000)),
-	mMainNodeOrientation(Ogre::Quaternion::IDENTITY),
-	mLanguage(wxLANGUAGE_DEFAULT)
-{
-	mParentFrame = static_cast<ParticleUniverseEditorFrame*>(parent);
+ConfigDialog::ConfigDialog(wxWindow * parent) : wxPropertySheetDialog(), mCheckAutoStart(nullptr), mHighlight(nullptr), mStatistics(nullptr), mLightCheck(nullptr), mGridPlane(nullptr), mGridPlaneDistance(nullptr), mGridPlaneScale(nullptr), mDirListSizer(nullptr), mDirListPanel(nullptr), mCheckboxes(), mTexts(), mVideoPath(nullptr), mImageWidth(nullptr), mImageHeight(nullptr), mFramesPerSecond(nullptr), mFileNameSuffix(nullptr), mPauseTime(nullptr), mFilter(nullptr), mVideoSize(nullptr), mVideoSelected(false), mPhysXPlaneNormalX(nullptr), mPhysXPlaneNormalY(nullptr), mPhysXPlaneNormalZ(nullptr), mPhysXGravityX(nullptr), mPhysXGravityY(nullptr), mPhysXGravityZ(nullptr), mPhysXPlaneNormal(Ogre::Vector3::UNIT_Y), mPhysXGravity(Ogre::Vector3::ZERO), mPhysXPlaneDistance(nullptr), mCheckPhysXDialog(nullptr), mUsePhysXIfNoStartupDialog(false), mCameraPosition(Ogre::Vector3::ZERO), mEditProportion(0.5f), mMainNodePosition(Ogre::Vector3(0, 0, -1000)), mMainNodeOrientation(Ogre::Quaternion::IDENTITY), mLanguage(wxLANGUAGE_DEFAULT) {
+	mParentFrame = static_cast<ParticleUniverseEditorFrame *>(parent);
 }
 //-----------------------------------------------------------------------
-void ConfigDialog::initWindow(void)
-{
+void ConfigDialog::initWindow() {
 	mCameraPosition = Ogre::Vector3(-1100, 0, -1100);
 	wxSize size = wxSize(0.7 * APP_WIDTH, 0.7 * APP_HEIGHT);
 	SetSheetStyle(wxPROPSHEET_NOTEBOOK);
@@ -73,104 +34,100 @@ void ConfigDialog::initWindow(void)
 	CreateButtons(wxOK | wxCANCEL);
 	wxBookCtrlBase* notebook = GetBookCtrl();
 	notebook->SetSize(size);
-	notebook->SetImageList(0);
-	wxPanel* generalPanel = createGeneralPanel(notebook);
-	wxPanel* directoriesPanel = createDirectoriesPanel(notebook);
-	wxPanel* recordPanel = createRecordPanel(notebook);
+	notebook->SetImageList(nullptr);
+	wxPanel * generalPanel = createGeneralPanel(notebook);
+	wxPanel * directoriesPanel = createDirectoriesPanel(notebook);
+	wxPanel * recordPanel = createRecordPanel(notebook);
 	notebook->AddPage(generalPanel, _("General"), true, -1);
 	notebook->AddPage(directoriesPanel, _("Directories"), false, -1);
 	notebook->AddPage(recordPanel, _("Record"), false, -1);
 #ifdef PU_PHYSICS_PHYSX
-	wxPanel* physXPanel = createPhysXPanel(notebook);
+	wxPanel * physXPanel = createPhysXPanel(notebook);
 	notebook->AddPage(physXPanel, _("PhysX"), false, -1);
 #endif //PU_PHYSICS_PHYSX
 	LayoutDialog();
 	SetSize(size);
 	Center();
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::loadLanguage(void)
-{
+
+void ConfigDialog::loadLanguage() {
 	ConfigFile cfg;
 	cfg.load(CONFIG_FILENAME);
 
 	// Load language (no widget for language)
 	wxString language = ogre2wx(cfg.getSetting("language"));
 	wxLocale locale;
-	const wxLanguageInfo* info = locale.FindLanguageInfo(language);
+	const wxLanguageInfo * info = locale.FindLanguageInfo(language);
 	mLanguage = wxLanguage(info->Language); // Nasty cast
 }
-//-----------------------------------------------------------------------
-wxString ConfigDialog::getLanguageAsString(const wxLanguage& language)
-{
+
+wxString ConfigDialog::getLanguageAsString(const wxLanguage & language) {
 	wxLocale locale;
 	const wxLanguageInfo* info = locale.GetLanguageInfo(language);
 	return info->CanonicalName;
 }
-//-----------------------------------------------------------------------
-wxPanel* ConfigDialog::createGeneralPanel(wxWindow* parent)
-{
+
+wxPanel * ConfigDialog::createGeneralPanel(wxWindow * parent) {
 	// Fill in panel
-	wxPanel* panel = new wxPanel(parent, wxID_ANY);
-    wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
-    wxBoxSizer* item = new wxBoxSizer(wxVERTICAL);
+	wxPanel * panel = new wxPanel(parent, wxID_ANY);
+    wxBoxSizer * topSizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer * item = new wxBoxSizer(wxVERTICAL);
 
     // Autostart
-    wxBoxSizer* itemSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer * itemSizer = new wxBoxSizer(wxHORIZONTAL);
     mCheckAutoStart = new wxCheckBox(panel, wxID_ANY, _("Auto rendering on/off"), wxDefaultPosition, wxDefaultSize);
-    itemSizer->Add(mCheckAutoStart, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-    item->Add(itemSizer, 0, wxGROW|wxALL, 0);
+    itemSizer->Add(mCheckAutoStart, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+    item->Add(itemSizer, 0, wxGROW | wxALL, 0);
 
     // Highlight keywords
-    wxBoxSizer* highlightSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer * highlightSizer = new wxBoxSizer(wxHORIZONTAL);
     mHighlight = new wxCheckBox(panel, wxID_ANY, _("Highlight keywords on/off"), wxDefaultPosition, wxDefaultSize);
-    highlightSizer->Add(mHighlight, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-    item->Add(highlightSizer, 0, wxGROW|wxALL, 0);
+    highlightSizer->Add(mHighlight, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+    item->Add(highlightSizer, 0, wxGROW | wxALL, 0);
 
     // Statistics
-    wxBoxSizer* statisticsSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer * statisticsSizer = new wxBoxSizer(wxHORIZONTAL);
     mStatistics = new wxCheckBox(panel, wxID_ANY, _("Statistics overlay on/off"), wxDefaultPosition, wxDefaultSize);
-    statisticsSizer->Add(mStatistics, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-    item->Add(statisticsSizer, 0, wxGROW|wxALL, 0);
+    statisticsSizer->Add(mStatistics, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+    item->Add(statisticsSizer, 0, wxGROW | wxALL, 0);
 
 	// Light
-    wxBoxSizer* lightSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer * lightSizer = new wxBoxSizer(wxHORIZONTAL);
     mLightCheck = new wxCheckBox(panel, wxID_ANY, _("Point light on/off"), wxDefaultPosition, wxDefaultSize);
-    lightSizer->Add(mLightCheck, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-    item->Add(lightSizer, 0, wxGROW|wxALL, 0);
+    lightSizer->Add(mLightCheck, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+    item->Add(lightSizer, 0, wxGROW | wxALL, 0);
 
 	// Gridplane
-    wxBoxSizer* gridSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer * gridSizer = new wxBoxSizer(wxHORIZONTAL);
     mGridPlane = new wxCheckBox(panel, wxID_ANY, _("Gridplane on/off"), wxDefaultPosition, wxDefaultSize);
-    gridSizer->Add(mGridPlane, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-    item->Add(gridSizer, 0, wxGROW|wxALL, 0);
+    gridSizer->Add(mGridPlane, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+    item->Add(gridSizer, 0, wxGROW | wxALL, 0);
 
 	// Gridplane distance
-	wxBoxSizer* distanceSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * distanceSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* txtDistance = new wxStaticText(panel, -1, _("Gridplane distance"));
 	mGridPlaneDistance = new wxSpinCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mGridPlaneDistance->SetRange(-99999, 99999);
 	mGridPlaneDistance->SetValue(-200);
-	distanceSizer->Add(txtDistance, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	distanceSizer->Add(mGridPlaneDistance, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(distanceSizer, 0, wxGROW|wxALL, 0);
+	distanceSizer->Add(txtDistance, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	distanceSizer->Add(mGridPlaneDistance, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(distanceSizer, 0, wxGROW | wxALL, 0);
 
 	// Gridplane scale
-	wxBoxSizer* gridPlaneScaleSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtScale = new wxStaticText(panel, -1, _("Gridplane scale"));
+	wxBoxSizer * gridPlaneScaleSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtScale = new wxStaticText(panel, -1, _("Gridplane scale"));
 	mGridPlaneScale = new wxTextCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
-	gridPlaneScaleSizer->Add(txtScale, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	gridPlaneScaleSizer->Add(mGridPlaneScale, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(gridPlaneScaleSizer, 0, wxGROW|wxALL, 0);
+	gridPlaneScaleSizer->Add(txtScale, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	gridPlaneScaleSizer->Add(mGridPlaneScale, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(gridPlaneScaleSizer, 0, wxGROW | wxALL, 0);
 
-	topSizer->Add(item, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5);
+	topSizer->Add(item, 1, wxGROW | wxALIGN_CENTRE | wxALL, 5);
 	panel->SetSizer(topSizer);
 	topSizer->Fit(panel);
 	return panel;
 }
-//-----------------------------------------------------------------------
-wxPanel* ConfigDialog::createDirectoriesPanel(wxWindow* parent)
-{
+
+wxPanel * ConfigDialog::createDirectoriesPanel(wxWindow * parent) {
 	// Fill in panel
 	mDirListPanel = new wxPanel(parent, wxID_ANY);
 	mDirListSizer = new wxBoxSizer(wxVERTICAL);
@@ -179,11 +136,10 @@ wxPanel* ConfigDialog::createDirectoriesPanel(wxWindow* parent)
 	mDirListSizer->Fit(mDirListPanel);
 	return mDirListPanel;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::rebuildDirectoriesPanel(void)
-{
-	wxBoxSizer* item;
-    wxBoxSizer* itemSizer;
+
+void ConfigDialog::rebuildDirectoriesPanel() {
+	wxBoxSizer * item;
+    wxBoxSizer * itemSizer;
 	mDirListSizer->Clear(true);
 
 	// Resource directories
@@ -193,57 +149,55 @@ void ConfigDialog::rebuildDirectoriesPanel(void)
 
 	Ogre::StringVector::iterator it;
 	Ogre::StringVector::iterator itEnd = mDirlist.end();
-	for (it = mDirlist.begin(); it != itEnd; ++it)
-	{
+	for (it = mDirlist.begin(); it != itEnd; ++it) {
 		itemSizer = new wxBoxSizer(wxHORIZONTAL);
 		item = new wxBoxSizer(wxVERTICAL);
-		wxCheckBox* checkbox = new wxCheckBox(mDirListPanel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+		wxCheckBox * checkbox = new wxCheckBox(mDirListPanel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
 		checkbox->SetValue(true);
 		mCheckboxes.push_back(checkbox);
 		wxString dir = ogre2wx(*it);
-		wxTextCtrl* text = new wxTextCtrl(mDirListPanel, wxID_ANY, dir, wxDefaultPosition, wxSize(0.4 * APP_WIDTH, 24));
+		wxTextCtrl * text = new wxTextCtrl(mDirListPanel, wxID_ANY, dir, wxDefaultPosition, wxSize(0.4 * APP_WIDTH, 24));
 		mTexts.push_back(text);
-		itemSizer->Add(checkbox, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-		itemSizer->Add(text, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-		item->Add(itemSizer, 0, wxGROW|wxALL, 0);
-		mDirListSizer->Add(item, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5);
+		itemSizer->Add(checkbox, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+		itemSizer->Add(text, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+		item->Add(itemSizer, 0, wxGROW | wxALL, 0);
+		mDirListSizer->Add(item, 1, wxGROW | wxALIGN_CENTRE | wxALL, 5);
 	}
 	mDirListSizer->Layout();
 	mDirListSizer->Fit(mDirListPanel);
 }
-//-----------------------------------------------------------------------
-wxPanel* ConfigDialog::createRecordPanel(wxWindow* parent)
-{
+
+wxPanel * ConfigDialog::createRecordPanel(wxWindow * parent) {
 	// Fill in panel
-	wxPanel* panel = new wxPanel(parent, wxID_ANY);
-    wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
-    wxBoxSizer* item = new wxBoxSizer(wxVERTICAL);
+	wxPanel * panel = new wxPanel(parent, wxID_ANY);
+    wxBoxSizer * topSizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer * item = new wxBoxSizer(wxVERTICAL);
 
     // Output directory
-    wxBoxSizer* pathSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtOutputDir = new wxStaticText(panel, -1, _("Output directory"));
+    wxBoxSizer * pathSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtOutputDir = new wxStaticText(panel, -1, _("Output directory"));
 	mVideoPath = new wxTextCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(0.4 * APP_WIDTH, 24));
-	pathSizer->Add(txtOutputDir, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-    pathSizer->Add(mVideoPath, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(pathSizer, 0, wxGROW|wxALL, 0);
+	pathSizer->Add(txtOutputDir, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+    pathSizer->Add(mVideoPath, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(pathSizer, 0, wxGROW | wxALL, 0);
 
 	// Size
-	wxBoxSizer* sizeSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtSize = new wxStaticText(panel, -1, _("Image size"));
+	wxBoxSizer * sizeSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtSize = new wxStaticText(panel, -1, _("Image size"));
 	mImageWidth = new wxSpinCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mImageWidth->SetRange(8, 4096);
 	mImageWidth->SetValue(1024);
 	mImageHeight = new wxSpinCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mImageHeight->SetRange(8, 4096);
 	mImageHeight->SetValue(768);
-	sizeSizer->Add(txtSize, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	sizeSizer->Add(mImageWidth, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	sizeSizer->Add(mImageHeight, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(sizeSizer, 0, wxGROW|wxALL, 0);
+	sizeSizer->Add(txtSize, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	sizeSizer->Add(mImageWidth, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	sizeSizer->Add(mImageHeight, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(sizeSizer, 0, wxGROW | wxALL, 0);
 
 	// Type
-	wxBoxSizer* typeSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtType = new wxStaticText(panel, -1, _("Media type"));
+	wxBoxSizer * typeSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtType = new wxStaticText(panel, -1, _("Media type"));
 	mFileNameSuffix = new MediaTypeComboBox(panel, this, -1); // Use the derived one
 	mVideoSize = new wxComboBox(panel, -1, wxT(""));
 	mFileNameSuffix->Append(_(".png"));
@@ -263,431 +217,352 @@ wxPanel* ConfigDialog::createRecordPanel(wxWindow* parent)
 	mVideoSize->Append(_("1280x720"));
 	mVideoSize->Append(_("1440x1080"));
 	mVideoSize->Append(_("1920x1080"));
-	typeSizer->Add(txtType, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	typeSizer->Add(mFileNameSuffix, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	typeSizer->Add(mVideoSize, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(typeSizer, 0, wxGROW|wxALL, 0);
+	typeSizer->Add(txtType, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	typeSizer->Add(mFileNameSuffix, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	typeSizer->Add(mVideoSize, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(typeSizer, 0, wxGROW | wxALL, 0);
 
 	// Frames per second
-	wxBoxSizer* fpsSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtFPS = new wxStaticText(panel, -1, _("Frames per second"));
+	wxBoxSizer * fpsSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtFPS = new wxStaticText(panel, -1, _("Frames per second"));
 	mFramesPerSecond = new wxSpinCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mFramesPerSecond->SetRange(1, 256);
 	mFramesPerSecond->SetValue(27);
-	fpsSizer->Add(txtFPS, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	fpsSizer->Add(mFramesPerSecond, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(fpsSizer, 0, wxGROW|wxALL, 0);
+	fpsSizer->Add(txtFPS, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	fpsSizer->Add(mFramesPerSecond, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(fpsSizer, 0, wxGROW | wxALL, 0);
 
 	// Filter
-	wxBoxSizer* filterSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtFilter = new wxStaticText(panel, -1, _("Filter"));
+	wxBoxSizer * filterSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtFilter = new wxStaticText(panel, -1, _("Filter"));
 	mFilter = new wxComboBox(panel, -1, wxT(""));
 	mFilter->Append(_("No filtering")); // Use this order. No filtering = 1
 	mFilter->Append(_("Alpha from luminance")); // Use this order. Alpha from luminance = 2
 	mFilter->Append(_("Alpha from background colour")); // Use this order. Alpha from background colour = 3
-	filterSizer->Add(txtFilter, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	filterSizer->Add(mFilter, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(filterSizer, 0, wxGROW|wxALL, 0);
+	filterSizer->Add(txtFilter, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	filterSizer->Add(mFilter, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(filterSizer, 0, wxGROW | wxALL, 0);
 
 	// Pause time
-	wxBoxSizer* pauseSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtPause = new wxStaticText(panel, -1, _("Calibration pause"));
+	wxBoxSizer * pauseSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtPause = new wxStaticText(panel, -1, _("Calibration pause"));
 	mPauseTime = new wxTextCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
-	pauseSizer->Add(txtPause, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	pauseSizer->Add(mPauseTime, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(pauseSizer, 0, wxGROW|wxALL, 0);
+	pauseSizer->Add(txtPause, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	pauseSizer->Add(mPauseTime, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(pauseSizer, 0, wxGROW | wxALL, 0);
 
 	// Set in panel
-	topSizer->Add(item, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5);
+	topSizer->Add(item, 1, wxGROW | wxALIGN_CENTRE | wxALL, 5);
 	panel->SetSizer(topSizer);
 	topSizer->Fit(panel);
 	return panel;
 }
-//-----------------------------------------------------------------------
+
 #ifdef PU_PHYSICS_PHYSX
-wxPanel* ConfigDialog::createPhysXPanel(wxWindow* parent)
-{
+wxPanel * ConfigDialog::createPhysXPanel(wxWindow * parent) {
 	// Fill in panel
-	wxPanel* panel = new wxPanel(parent, wxID_ANY);
-    wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
-    wxBoxSizer* item = new wxBoxSizer(wxVERTICAL);
+	wxPanel * panel = new wxPanel(parent, wxID_ANY);
+    wxBoxSizer * topSizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer * item = new wxBoxSizer(wxVERTICAL);
 
 	// Display dialog at startup
 	mCheckPhysXDialog = new wxCheckBox(panel, wxID_ANY, _("Display PhysX detection dialog at startup? (Restart the application to apply the settings!)"));
 	mCheckPhysXDialog->SetValue(false);
-	item->Add(mCheckPhysXDialog, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(mCheckPhysXDialog, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
 	item->AddSpacer(16);
 
 	// Plane normal
-	wxBoxSizer* normalSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtNormal = new wxStaticText(panel, -1, _("Plane normal"));
+	wxBoxSizer * normalSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtNormal = new wxStaticText(panel, -1, _("Plane normal"));
 	mPhysXPlaneNormalX = new wxTextCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mPhysXPlaneNormalX->SetValue(ogre2wx("0.0"));
 	mPhysXPlaneNormalY = new wxTextCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mPhysXPlaneNormalY->SetValue(ogre2wx("0.0"));
 	mPhysXPlaneNormalZ = new wxTextCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mPhysXPlaneNormalZ->SetValue(ogre2wx("0.0"));
-	normalSizer->Add(txtNormal, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	normalSizer->Add(mPhysXPlaneNormalX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	normalSizer->Add(mPhysXPlaneNormalY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	normalSizer->Add(mPhysXPlaneNormalZ, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(normalSizer, 0, wxGROW|wxALL, 0);
+	normalSizer->Add(txtNormal, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	normalSizer->Add(mPhysXPlaneNormalX, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	normalSizer->Add(mPhysXPlaneNormalY, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	normalSizer->Add(mPhysXPlaneNormalZ, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(normalSizer, 0, wxGROW | wxALL, 0);
 
 	// Plane distance
-	wxBoxSizer* distanceSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtDistance = new wxStaticText(panel, -1, _("Plane distance"));
+	wxBoxSizer * distanceSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtDistance = new wxStaticText(panel, -1, _("Plane distance"));
 	mPhysXPlaneDistance = new wxSpinCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mPhysXPlaneDistance->SetRange(-99999, 99999);
 	mPhysXPlaneDistance->SetValue(-200);
-	distanceSizer->Add(txtDistance, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	distanceSizer->Add(mPhysXPlaneDistance, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(distanceSizer, 0, wxGROW|wxALL, 0);
+	distanceSizer->Add(txtDistance, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	distanceSizer->Add(mPhysXPlaneDistance, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(distanceSizer, 0, wxGROW | wxALL, 0);
 
 	// Gravity
-	wxBoxSizer* gravitySizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* txtGravity = new wxStaticText(panel, -1, _("Gravity"));
+	wxBoxSizer * gravitySizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText * txtGravity = new wxStaticText(panel, -1, _("Gravity"));
 	mPhysXGravityX = new wxTextCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mPhysXGravityX->SetValue(ogre2wx("0.0"));
 	mPhysXGravityY = new wxTextCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mPhysXGravityY->SetValue(ogre2wx("0.0"));
 	mPhysXGravityZ = new wxTextCtrl(panel, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(80, 24));
 	mPhysXGravityZ->SetValue(ogre2wx("0.0"));
-	gravitySizer->Add(txtGravity, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	gravitySizer->Add(mPhysXGravityX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	gravitySizer->Add(mPhysXGravityY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	gravitySizer->Add(mPhysXGravityZ, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-	item->Add(gravitySizer, 0, wxGROW|wxALL, 0);
+	gravitySizer->Add(txtGravity, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	gravitySizer->Add(mPhysXGravityX, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	gravitySizer->Add(mPhysXGravityY, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	gravitySizer->Add(mPhysXGravityZ, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+	item->Add(gravitySizer, 0, wxGROW | wxALL, 0);
 
 	// Set in panel
-	topSizer->Add(item, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5);
+	topSizer->Add(item, 1, wxGROW | wxALIGN_CENTRE | wxALL, 5);
 	panel->SetSizer(topSizer);
 	topSizer->Fit(panel);
 	return panel;
 }
 #endif //PU_PHYSICS_PHYSX
-//-----------------------------------------------------------------------
-bool ConfigDialog::isAutoStart(void) const
-{
-	if (mCheckAutoStart)
-	{
+
+bool ConfigDialog::isAutoStart() const {
+	if (mCheckAutoStart) {
 		return mCheckAutoStart->GetValue();
 	}
 
 	return false;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setAutoStart(bool autoStart)
-{
-	if (mCheckAutoStart)
-	{
+
+void ConfigDialog::setAutoStart(bool autoStart) {
+	if (mCheckAutoStart) {
 		mCheckAutoStart->SetValue(autoStart);
 	}
 }
-//-----------------------------------------------------------------------
-bool ConfigDialog::isHighlight(void) const
-{
-	if (mHighlight)
-	{
+
+bool ConfigDialog::isHighlight() const {
+	if (mHighlight) {
 		return mHighlight->GetValue();
 	}
 
 	return false;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setHighlight(bool highlight)
-{
-	if (mHighlight)
-	{
+
+void ConfigDialog::setHighlight(bool highlight) {
+	if (mHighlight) {
 		mHighlight->SetValue(highlight);
 	}
 }
-//-----------------------------------------------------------------------
-bool ConfigDialog::isStatistics(void) const
-{
-	if (mStatistics)
-	{
+
+bool ConfigDialog::isStatistics() const {
+	if (mStatistics) {
 		return mStatistics->GetValue();
 	}
 
 	return false;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setStatistics(bool statistics)
-{
-	if (mStatistics)
-	{
+
+void ConfigDialog::setStatistics(bool statistics) {
+	if (mStatistics) {
 		mStatistics->SetValue(statistics);
 	}
 }
-//-----------------------------------------------------------------------
-bool ConfigDialog::isLightCheck(void) const
-{
-	if (mLightCheck)
-	{
+
+bool ConfigDialog::isLightCheck() const {
+	if (mLightCheck) {
 		return mLightCheck->GetValue();
 	}
 
 	return false;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setLightCheck(bool lightCheck)
-{
-	if (mLightCheck)
-	{
+
+void ConfigDialog::setLightCheck(bool lightCheck) {
+	if (mLightCheck) {
 		mLightCheck->SetValue(lightCheck);
 	}
 }
-//-----------------------------------------------------------------------
-bool ConfigDialog::isGridPlane(void) const
-{
-	if (mGridPlane)
-	{
+
+bool ConfigDialog::isGridPlane() const {
+	if (mGridPlane) {
 		return mGridPlane->GetValue();
 	}
 
 	return false;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setGridPlane(bool gridplane)
-{
-	if (mGridPlane)
-	{
+
+void ConfigDialog::setGridPlane(bool gridplane) {
+	if (mGridPlane) {
 		mGridPlane->SetValue(gridplane);
 	}
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::Real ConfigDialog::getGridPlaneDistance(void) const
-{
-	return static_cast<ParticleUniverse::Real>(mGridPlaneDistance->GetValue());
+
+ParticleUniverse::Real ConfigDialog::getGridPlaneDistance() const {
+	return ParticleUniverse::Real(mGridPlaneDistance->GetValue());
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setGridPlaneDistance(ParticleUniverse::Real distance)
-{
+
+void ConfigDialog::setGridPlaneDistance(ParticleUniverse::Real distance) {
 	mGridPlaneDistance->SetValue(distance);
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::Real ConfigDialog::getGridPlaneScale(void) const
-{
-	Ogre::String strVal = wx2ogre(mGridPlaneScale->GetValue());
-	return Ogre::StringConverter::parseReal(strVal);
+
+ParticleUniverse::Real ConfigDialog::getGridPlaneScale() const {
+	return Ogre::StringConverter::parseReal(wx2ogre(mGridPlaneScale->GetValue()));
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setGridPlaneScale(ParticleUniverse::Real scale)
-{
-	Ogre::String str = Ogre::StringConverter::toString(scale);
-	mGridPlaneScale->SetValue(ogre2wx(str));
+
+void ConfigDialog::setGridPlaneScale(ParticleUniverse::Real scale) {
+	mGridPlaneScale->SetValue(ogre2wx(Ogre::StringConverter::toString(scale)));
 }
-//-----------------------------------------------------------------------
-wxLanguage ConfigDialog::getLanguage(void) const
-{
+
+wxLanguage ConfigDialog::getLanguage() const {
 	return mLanguage;
 }
-//-----------------------------------------------------------------------
-wxString ConfigDialog::getVideoPath(void) const
-{
+
+wxString ConfigDialog::getVideoPath() const {
 	return mVideoPath->GetValue();
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setVideoPath(wxString& videoPath)
-{
+
+void ConfigDialog::setVideoPath(wxString & videoPath) {
 	mVideoPath->SetValue(videoPath);
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::uint ConfigDialog::getImageWidth(void) const
-{
+
+ParticleUniverse::uint ConfigDialog::getImageWidth() const {
 	return ParticleUniverse::uint(mImageWidth->GetValue());
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setImageWidth(ParticleUniverse::uint imageWidth)
-{
+
+void ConfigDialog::setImageWidth(ParticleUniverse::uint imageWidth) {
 	mImageWidth->SetValue(int(imageWidth));
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::uint ConfigDialog::getImageHeight(void) const
-{
+
+ParticleUniverse::uint ConfigDialog::getImageHeight() const {
 	return ParticleUniverse::uint(mImageHeight->GetValue());
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setImageHeight(ParticleUniverse::uint imageHeight)
-{
+
+void ConfigDialog::setImageHeight(ParticleUniverse::uint imageHeight) {
 	mImageHeight->SetValue(int(imageHeight));
 }
-//-----------------------------------------------------------------------
-wxString ConfigDialog::getFileNameSuffix(void) const
-{
+
+wxString ConfigDialog::getFileNameSuffix() const {
 	return mFileNameSuffix->GetValue();
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setFileNameSuffix(wxString& suffix)
-{
+
+void ConfigDialog::setFileNameSuffix(wxString & suffix) {
 	mFileNameSuffix->SetValue(suffix);
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::uint ConfigDialog::getFPS(void) const
+
+ParticleUniverse::uint ConfigDialog::getFPS() const
 {
 	return ParticleUniverse::uint(mFramesPerSecond->GetValue());
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setFPS(ParticleUniverse::uint fps)
-{
+
+void ConfigDialog::setFPS(ParticleUniverse::uint fps) {
 	mFramesPerSecond->SetValue(int(fps));
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::Real ConfigDialog::getPauseTime(void) const
-{
-	Ogre::String strVal = wx2ogre(mPauseTime->GetValue());
-	return Ogre::StringConverter::parseReal(strVal);
+
+ParticleUniverse::Real ConfigDialog::getPauseTime() const {
+	return Ogre::StringConverter::parseReal(wx2ogre(mPauseTime->GetValue()));
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setPauseTime(ParticleUniverse::Real pauseTime)
-{
-	Ogre::String str = Ogre::StringConverter::toString(pauseTime);
-	mPauseTime->SetValue(ogre2wx(str));
+
+void ConfigDialog::setPauseTime(ParticleUniverse::Real pauseTime) {
+	mPauseTime->SetValue(ogre2wx(Ogre::StringConverter::toString(pauseTime)));
 }
-//-----------------------------------------------------------------------
-bool ConfigDialog::isVideoSelected(void) const
-{
+
+bool ConfigDialog::isVideoSelected() const {
 	return mVideoSelected;
 }
-//-----------------------------------------------------------------------
-wxString ConfigDialog::getVideoSize(bool propagate)
-{
-	if (propagate)
-	{
+
+wxString ConfigDialog::getVideoSize(bool propagate) {
+	if (propagate) {
 		_propagateVideoSize();
 	}
 	return mVideoSize->GetValue();
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setVideoSize(wxString& videoSize, bool propagate)
-{
-	if (propagate)
-	{
+
+void ConfigDialog::setVideoSize(wxString & videoSize, bool propagate) {
+	if (propagate) {
 		_propagateVideoSize();
 	}
 	mVideoSize->SetValue(videoSize);
 }
-//-----------------------------------------------------------------------
-const Ogre::Vector3& ConfigDialog::getCameraPosition(void) const
-{
+
+const Ogre::Vector3 & ConfigDialog::getCameraPosition() const {
 	return mCameraPosition;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setCameraPosition(const Ogre::Vector3& position)
-{
+
+void ConfigDialog::setCameraPosition(const Ogre::Vector3 & position) {
 	mCameraPosition = position;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::_propagateVideoSize(void)
-{
+
+void ConfigDialog::_propagateVideoSize() {
 	wxString videoSize = mVideoSize->GetValue();
-	if (videoSize == wxT(""))
-	{
+	if (videoSize == wxT("")) {
 		mVideoSize->SetValue(_("720x576"));
 		videoSize = mVideoSize->GetValue();
 	}
 
-	if (videoSize == _("352x288"))
-	{
+	if (videoSize == _("352x288")) {
 		setImageWidth(352);
 		setImageHeight(288);
-	}
-	else if (videoSize == _("352x240"))
-	{
+	} else if (videoSize == _("352x240")) {
 		setImageWidth(352);
 		setImageHeight(240);
-	}
-	else if (videoSize == _("720x480"))
-	{
+	} else if (videoSize == _("720x480")) {
 		setImageWidth(720);
 		setImageHeight(440);
-	}
-	else if (videoSize == _("720x576"))
-	{
+	} else if (videoSize == _("720x576")) {
 		setImageWidth(720);
 		setImageHeight(576);
-	}
-	else if (videoSize == _("1024x768"))
-	{
+	} else if (videoSize == _("1024x768")) {
 		setImageWidth(1024);
 		setImageHeight(768);
-	}
-	else if (videoSize == _("1280x720"))
-	{
+	} else if (videoSize == _("1280x720")) {
 		setImageWidth(1280);
 		setImageHeight(720);
-	}
-	else if (videoSize == _("1440x1080"))
-	{
+	} else if (videoSize == _("1440x1080")) {
 		setImageWidth(1440);
 		setImageHeight(1080);
-	}
-	else if (videoSize == _("1920x1080"))
-	{
+	} else if (videoSize == _("1920x1080")) {
 		setImageWidth(1920);
 		setImageHeight(1080);
 	}
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::Real ConfigDialog::getEditProportion(void)
-{
+
+ParticleUniverse::Real ConfigDialog::getEditProportion() {
 	return mEditProportion;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setEditProportion(ParticleUniverse::Real editProportion)
-{
+
+void ConfigDialog::setEditProportion(ParticleUniverse::Real editProportion) {
 	mEditProportion = editProportion;
 }
-//-----------------------------------------------------------------------
-Recorder::ImageFilter ConfigDialog::getFilter(void) const
-{
-	if (mFilter->GetCurrentSelection() == 0)
-	{
+
+Recorder::ImageFilter ConfigDialog::getFilter() const {
+	if (mFilter->GetCurrentSelection() == 0) {
 		return Recorder::IF_NONE;
-	}
-	else if (mFilter->GetCurrentSelection() == 1)
-	{
+	} else if (mFilter->GetCurrentSelection() == 1) {
 		return Recorder::IF_ALPHA_FROM_LUMINANCE;
-	}
-	else if (mFilter->GetCurrentSelection() == 2)
-	{
+	} else if (mFilter->GetCurrentSelection() == 2) {
 		return Recorder::IF_ALPHA_FROM_BACKGROUND_COLOUR;
 	}
-
 	return Recorder::IF_NONE;
 }
-//-----------------------------------------------------------------------
-wxString ConfigDialog::getFilterAsString(void) const
-{
+
+wxString ConfigDialog::getFilterAsString() const {
 	return mFilter->GetValue();
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setFilter(const Recorder::ImageFilter& filter)
-{
-	switch(filter)
-	{
-		case Recorder::IF_NONE:
-			mFilter->SetValue(_("No filtering"));
+
+void ConfigDialog::setFilter(const Recorder::ImageFilter & filter) {
+	switch (filter) {
+	case Recorder::IF_NONE:
+		mFilter->SetValue(_("No filtering"));
+	break;
+	case Recorder::IF_ALPHA_FROM_LUMINANCE:
+		mFilter->SetValue(_("Alpha from luminance"));
+	break;
+	case Recorder::IF_ALPHA_FROM_BACKGROUND_COLOUR:
+		mFilter->SetValue(_("Alpha from background colour"));
+	break;
+	default: {
 		break;
-		case Recorder::IF_ALPHA_FROM_LUMINANCE:
-			mFilter->SetValue(_("Alpha from luminance"));
-		break;
-		case Recorder::IF_ALPHA_FROM_BACKGROUND_COLOUR:
-			mFilter->SetValue(_("Alpha from background colour"));
-		break;
-		default: {
-			break;
-		}
+	}
 	}
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setFilter(const wxString& filter)
-{
+
+void ConfigDialog::setFilter(const wxString & filter) {
 	mFilter->SetValue(filter);
 }
-//-----------------------------------------------------------------------
-Ogre::Vector3& ConfigDialog::getPhysXPlaneNormal(void)
-{
+
+Ogre::Vector3 & ConfigDialog::getPhysXPlaneNormal() {
 	Ogre::String strVal = wx2ogre(mPhysXPlaneNormalX->GetValue());
 	mPhysXPlaneNormal.x = Ogre::StringConverter::parseReal(strVal);
 	strVal = wx2ogre(mPhysXPlaneNormalY->GetValue());
@@ -696,9 +571,8 @@ Ogre::Vector3& ConfigDialog::getPhysXPlaneNormal(void)
 	mPhysXPlaneNormal.z = Ogre::StringConverter::parseReal(strVal);
 	return mPhysXPlaneNormal;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setPhysXPlaneNormal(Ogre::Vector3& normal)
-{
+
+void ConfigDialog::setPhysXPlaneNormal(Ogre::Vector3 & normal) {
 	mPhysXPlaneNormal = normal;
 	Ogre::String str = Ogre::StringConverter::toString(mPhysXPlaneNormal.x);
 	mPhysXPlaneNormalX->SetValue(ogre2wx(str));
@@ -707,39 +581,32 @@ void ConfigDialog::setPhysXPlaneNormal(Ogre::Vector3& normal)
 	str = Ogre::StringConverter::toString(mPhysXPlaneNormal.z);
 	mPhysXPlaneNormalZ->SetValue(ogre2wx(str));
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::Real ConfigDialog::getPhysXPlaneDistance(void) const
-{
-	return static_cast<ParticleUniverse::Real>(mPhysXPlaneDistance->GetValue());
+
+ParticleUniverse::Real ConfigDialog::getPhysXPlaneDistance() const {
+	return ParticleUniverse::Real(mPhysXPlaneDistance->GetValue());
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setPhysXPlaneDistance(ParticleUniverse::Real distance)
-{
+
+void ConfigDialog::setPhysXPlaneDistance(ParticleUniverse::Real distance) {
 	mPhysXPlaneDistance->SetValue(distance);
 }
-//-----------------------------------------------------------------------
-bool ConfigDialog::isDisplayPhysXStartupDialog(void) const
-{
+
+bool ConfigDialog::isDisplayPhysXStartupDialog() const {
 	return mCheckPhysXDialog->GetValue();
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setDisplayPhysXStartupDialog(bool displayPhysXStartupDialog)
-{
+
+void ConfigDialog::setDisplayPhysXStartupDialog(bool displayPhysXStartupDialog) {
 	mCheckPhysXDialog->SetValue(displayPhysXStartupDialog);
 }
-//-----------------------------------------------------------------------
-bool ConfigDialog::isUsePhysXIfNoStartupDialog(void) const
-{
+
+bool ConfigDialog::isUsePhysXIfNoStartupDialog() const {
 	return mUsePhysXIfNoStartupDialog;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setUsePhysXIfNoStartupDialog(bool usePhysXIfNoStartupDialog)
-{
+
+void ConfigDialog::setUsePhysXIfNoStartupDialog(bool usePhysXIfNoStartupDialog) {
 	mUsePhysXIfNoStartupDialog = usePhysXIfNoStartupDialog;
 }
-//-----------------------------------------------------------------------
-Ogre::Vector3& ConfigDialog::getPhysXGravity(void)
-{
+
+Ogre::Vector3 & ConfigDialog::getPhysXGravity() {
 	Ogre::String strVal = wx2ogre(mPhysXGravityX->GetValue());
 	mPhysXGravity.x = Ogre::StringConverter::parseReal(strVal);
 	strVal = wx2ogre(mPhysXGravityY->GetValue());
@@ -748,9 +615,8 @@ Ogre::Vector3& ConfigDialog::getPhysXGravity(void)
 	mPhysXGravity.z = Ogre::StringConverter::parseReal(strVal);
 	return mPhysXGravity;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setPhysXGravity(Ogre::Vector3& gravity)
-{
+
+void ConfigDialog::setPhysXGravity(Ogre::Vector3 & gravity) {
 	mPhysXGravity = gravity;
 	Ogre::String str = Ogre::StringConverter::toString(mPhysXGravity.x);
 	mPhysXGravityX->SetValue(ogre2wx(str));
@@ -759,88 +625,72 @@ void ConfigDialog::setPhysXGravity(Ogre::Vector3& gravity)
 	str = Ogre::StringConverter::toString(mPhysXGravity.z);
 	mPhysXGravityZ->SetValue(ogre2wx(str));
 }
-//-----------------------------------------------------------------------
-const Ogre::Vector3& ConfigDialog::getMainNodePosition(void) const
-{
+
+const Ogre::Vector3 & ConfigDialog::getMainNodePosition() const {
 	return mMainNodePosition;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setMainNodePosition(const Ogre::Vector3& position)
-{
+
+void ConfigDialog::setMainNodePosition(const Ogre::Vector3 & position) {
 	mMainNodePosition = position;
 }
-//-----------------------------------------------------------------------
-const Ogre::Quaternion& ConfigDialog::getMainNodeOrientation(void) const
-{
+
+const Ogre::Quaternion & ConfigDialog::getMainNodeOrientation() const {
 	return mMainNodeOrientation;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::setMainNodeOrientation(const Ogre::Quaternion& orientation)
-{
+
+void ConfigDialog::setMainNodeOrientation(const Ogre::Quaternion & orientation) {
 	mMainNodeOrientation = orientation;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::addToDirList(const Ogre::String& dir)
-{
+
+void ConfigDialog::addToDirList(const Ogre::String & dir) {
 	// Add to mDirlist and remove duplicates
 	mDirlist.push_back(dir);
-	Ogre::StringVector::iterator r , w;
+	Ogre::StringVector::iterator r, w;
 	std::set<Ogre::String> tmpset;
-	for(r = mDirlist.begin() , w = mDirlist.begin() ; r != mDirlist.end() ; ++r)
-	{
-		if(tmpset.insert(*r).second)
-		{
+	for (r = mDirlist.begin(), w = mDirlist.begin() ; r != mDirlist.end() ; ++r) {
+		if (tmpset.insert(*r).second) {
 			*w++ = *r;
 		}
 	}
 	mDirlist.erase(w , mDirlist.end());
 }
-//-----------------------------------------------------------------------
-const Ogre::StringVector& ConfigDialog::getResourceLocations(void)
-{
+
+const Ogre::StringVector & ConfigDialog::getResourceLocations() {
 	getExcludeDirList(); // For force removal of the ones not used.
 	return mDirlist;
 }
-//-----------------------------------------------------------------------
-const Ogre::StringVector ConfigDialog::getExcludeDirList(void)
-{
-	std::vector<wxCheckBox*>::iterator it;
-	std::vector<wxCheckBox*>::iterator itEnd = mCheckboxes.end();
-	std::vector<wxTextCtrl*>::iterator itTexts = mTexts.begin();
-	for (it = mCheckboxes.begin(); it != itEnd; ++it)
-	{
-		if (!(*it)->GetValue())
-		{
+
+const Ogre::StringVector ConfigDialog::getExcludeDirList() {
+	std::vector<wxCheckBox *>::iterator it;
+	std::vector<wxCheckBox *>::iterator itEnd = mCheckboxes.end();
+	std::vector<wxTextCtrl *>::iterator itTexts = mTexts.begin();
+	for (it = mCheckboxes.begin(); it != itEnd; ++it) {
+		if (!(*it)->GetValue()) {
 			Ogre::String dir = wx2ogre((*itTexts)->GetValue());
 			mExcludeDirlist.push_back(dir);
 			_removeFromDirList(dir);
 		}
 		itTexts++;
 	}
-
-
 	return mExcludeDirlist;
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::_removeFromDirList(const Ogre::String& dir)
-{
-	if (mDirlist.empty())
+
+void ConfigDialog::_removeFromDirList(const Ogre::String & dir) {
+	if (mDirlist.empty()) {
 		return;
+	}
 
 	Ogre::StringVector::iterator it;
 	Ogre::StringVector::iterator itEnd = mDirlist.end();
-	for (it = mDirlist.begin(); it != itEnd; ++it)
-	{
-		if (*it == dir)
-		{
+	for (it = mDirlist.begin(); it != itEnd; ++it) {
+		if (*it == dir) {
 			mDirlist.erase(it);
 			return;
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::loadConfig(void)
-{
+
+void ConfigDialog::loadConfig() {
 	ConfigFile cfg;
 	cfg.load(CONFIG_FILENAME);
 
@@ -861,17 +711,15 @@ void ConfigDialog::loadConfig(void)
 
 	// Load gridplane distance
 	ParticleUniverse::Real gridplaneDistance = Ogre::StringConverter::parseReal(cfg.getSetting("gridplane_distance"));
-	if (std::abs(gridplaneDistance) < DBL_EPSILON)
-	{
-		gridplaneDistance = -200.0f;
+	if (std::abs(gridplaneDistance) < DBL_EPSILON) {
+		gridplaneDistance = -200.0;
 	}
 	setGridPlaneDistance(gridplaneDistance);
 
 	// Load gridplane scale
 	ParticleUniverse::Real gridplaneScale = Ogre::StringConverter::parseReal(cfg.getSetting("gridplane_scale"));
-	if (std::abs(gridplaneScale) < DBL_EPSILON)
-	{
-		gridplaneScale = 0.25f;
+	if (std::abs(gridplaneScale) < DBL_EPSILON) {
+		gridplaneScale = 0.25;
 	}
 	setGridPlaneScale(gridplaneScale);
 
@@ -881,43 +729,36 @@ void ConfigDialog::loadConfig(void)
 
 	// Load resource locations
 	Ogre::String list = cfg.getSetting("resource_locations");
-	if (!list.empty())
-	{
+	if (!list.empty()) {
 		mDirlist = Ogre::StringUtil::split(list, ";,");
-	}
-	else
-	{
+	} else {
 		mDirlist.clear();
 	}
 
 	// Load Video directory
 	wxString videoPath = ogre2wx(cfg.getSetting("videopath"));
-	if (videoPath == wxT(""))
-	{
+	if (videoPath == wxT("")) {
 		videoPath = wxT("media/video");
 	}
 	setVideoPath(videoPath);
 
 	// Load Video (image) width
 	ParticleUniverse::uint width = ParticleUniverse::uint(Ogre::StringConverter::parseInt(cfg.getSetting("imagewidth")));
-	if (width < 1)
-	{
+	if (width < 1) {
 		width = 640;
 	}
 	setImageWidth(width);
 
 	// Load Video (image) heigth
 	ParticleUniverse::uint height = ParticleUniverse::uint(Ogre::StringConverter::parseInt(cfg.getSetting("imageheight")));
-	if (height < 1)
-	{
+	if (height < 1) {
 		height = 480;
 	}
 	setImageHeight(height);
 
 	// Load Image type
 	wxString type = ogre2wx(cfg.getSetting("mediatype"));
-	if (type == wxT(""))
-	{
+	if (type == wxT("")) {
 		type = _(".png");
 	}
 	setFileNameSuffix(type);
@@ -925,48 +766,40 @@ void ConfigDialog::loadConfig(void)
 
 	// Load Video size
 	wxString vsize = ogre2wx(cfg.getSetting("videosize"));
-	if (vsize == wxT(""))
-	{
+	if (vsize == wxT("")) {
 		vsize = _("720x576");
 	}
-	if (mVideoSelected)
-	{
+	if (mVideoSelected) {
 		setVideoSize(vsize, true);
-	}
-	else
-	{
+	} else {
 		setVideoSize(vsize, false);
 	}
 
 	// Load Frames per second
 	ParticleUniverse::uint fps = ParticleUniverse::uint(Ogre::StringConverter::parseInt(cfg.getSetting("fps")));
-	if (fps < 1)
-	{
+	if (fps < 1) {
 		 fps = 27;
 	}
 	setFPS(fps);
 
 	// Load Pausetime
 	ParticleUniverse::Real pauseTime = Ogre::StringConverter::parseReal(cfg.getSetting("pausetime"));
-	if (std::abs(pauseTime) < DBL_EPSILON)
-	{
-		pauseTime = 0.2f;
+	if (std::abs(pauseTime) < DBL_EPSILON) {
+		pauseTime = 0.2;
 	}
 	setPauseTime(pauseTime);
 
 	// Load Filter
 	wxString filter = wxGetTranslation(ogre2wx(cfg.getSetting("filter")));
-	if (videoPath == wxT(""))
-	{
+	if (videoPath == wxT("")) {
 		filter = _("No filtering");
 	}
 	setFilter(filter);
 
 	// Load Edit Proportion
 	ParticleUniverse::Real editProportion = Ogre::StringConverter::parseReal(cfg.getSetting("edit_window_proportion"));
-	if (std::abs(editProportion) < DBL_EPSILON)
-	{
-		editProportion = 0.5f;
+	if (std::abs(editProportion) < DBL_EPSILON) {
+		editProportion = 0.5;
 	}
 	setEditProportion(editProportion);
 
@@ -978,9 +811,8 @@ void ConfigDialog::loadConfig(void)
 
 	// Load PhysX plane distance
 	ParticleUniverse::Real planeDistance = Ogre::StringConverter::parseReal(cfg.getSetting("physx_plane_distance"));
-	if (planeDistance == 0.0f)
-	{
-		planeDistance = -200.0f;
+	if (std::abs(planeDistance) < DBL_EPSILON) {
+		planeDistance = -200.0;
 	}
 	setPhysXPlaneDistance(planeDistance);
 
@@ -993,7 +825,6 @@ void ConfigDialog::loadConfig(void)
 	// Load PhysX Gravity
 	Ogre::Vector3 gravity = Ogre::StringConverter::parseVector3(cfg.getSetting("physx_gravity"));
 	setPhysXGravity(gravity);
-
 #endif //PU_PHYSICS_PHYSX
 
 	// Load Camera position
@@ -1003,9 +834,8 @@ void ConfigDialog::loadConfig(void)
 	// Rebuild
 	rebuildDirectoriesPanel();
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::saveConfig(void)
-{
+
+void ConfigDialog::saveConfig() {
 	ConfigFile cfg;
 
 	// Save autostart
@@ -1059,16 +889,11 @@ void ConfigDialog::saveConfig(void)
 	cfg.setSetting("pausetime", Ogre::StringConverter::toString(getPauseTime()));
 
 	// Save Filter
-	if (mFilter->GetCurrentSelection() == 0)
-	{
+	if (mFilter->GetCurrentSelection() == 0) {
 		cfg.setSetting("filter", "No filtering");
-	}
-	else if (mFilter->GetCurrentSelection() == 1)
-	{
+	} else if (mFilter->GetCurrentSelection() == 1) {
 		cfg.setSetting("filter", "Alpha from luminance");
-	}
-	else if (mFilter->GetCurrentSelection() == 2)
-	{
+	} else if (mFilter->GetCurrentSelection() == 2) {
 		cfg.setSetting("filter", "Alpha from background colour");
 	}
 
@@ -1087,7 +912,6 @@ void ConfigDialog::saveConfig(void)
 
 	// Save PhysX gravity
 	cfg.setSetting("physx_gravity", Ogre::StringConverter::toString(getPhysXGravity()));
-
 #endif //PU_PHYSICS_PHYSX
 
 	// Save Camera position
@@ -1096,29 +920,24 @@ void ConfigDialog::saveConfig(void)
 	// Save the config file
 	cfg.save(CONFIG_FILENAME);
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::OnFileNameSuffixChanged(wxCommandEvent& event)
-{
+
+void ConfigDialog::OnFileNameSuffixChanged(wxCommandEvent & event) {
 	doFileNameSuffixChanged();
 }
-//-----------------------------------------------------------------------
-void ConfigDialog::doFileNameSuffixChanged(void)
-{
+
+void ConfigDialog::doFileNameSuffixChanged() {
 	// Change some things if it concerns an AVI (video) file
 	wxString type = mFileNameSuffix->GetValue();
 	if (type == _(".avi") || type == _(".swf") || type == _(".wmv")
 #ifdef PU_USE_MP4
 	|| type == _(".mp4")
 #endif
-	)
-	{
+	) {
 		mVideoSize->Show();
 		mImageWidth->Disable();
 		mImageHeight->Disable();
 		mVideoSelected = true;
-	}
-	else
-	{
+	} else {
 		mVideoSize->Hide();
 		mImageWidth->Enable();
 		mImageHeight->Enable();

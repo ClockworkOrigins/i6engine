@@ -33,71 +33,84 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "wx/notebook.h"
 #include "wx/treectrl.h"
 
+class ParticleUniverseEditorFrame;
+
 /**	Class that represents the animation details of the loaded mesh
 */
-class ParticleUniverseEditorFrame;
-class AnimationWindow : public wxNotebook
-{
-	public:
-		enum AnimationPlayPauseStop {ANIM_PLAY, ANIM_PAUSE, ANIM_STOP, ANIM_NONE} mAnimationPlayPauseStop;
-		enum AttachDetachOptions {ATTACH, DETACH, NO_SKELETON, SELECT_BONE};
-		AnimationWindow(ParticleUniverseEditorFrame* parent, Ogre::SceneManager* sceneManager);
-		virtual ~AnimationWindow(void){};
-		void updateAnimation(void);
-		void onPlayAnimation(wxCommandEvent& event);
-		void onPauseAnimation(wxCommandEvent& event);
-		void onStopAnimation(wxCommandEvent& event);
-		void loadAnimationNames(Ogre::Entity* entity);
-		void loadBoneNames(Ogre::Entity* entity);
-		void displayMeshInfo(Ogre::Entity* entity);
-		void loadBoneBranche(wxTreeItemId boneNode, Ogre::Node::ChildNodeIterator boneIterator);
-		void notifyTimeRescaled(Ogre::Real scale);
-		void doStopAnimation(void);
-		void notifyMeshDeleted(Ogre::Entity* entity);
-		void notifyParticleSystemDeleted(Ogre::Entity* entity);
-		void onRestoreFocus(wxCommandEvent& event);
-		void onSelectAnimation(wxCommandEvent& event);
-		void onAttachDetachParticleSystem(wxCommandEvent& event);
-		void onBoneTreeSelected(wxTreeEvent& event);
-		bool attachParticleSystemToEntity(Ogre::String boneName, Ogre::Entity* entity);
-		bool detachParticleSystemFromEntity(Ogre::Entity* entity);
-		bool isParticleSystemAttachedToEntity() const;
-		const Ogre::String& getBoneNameToWhichParticleSystemIsAttached(void) const;
-		const Ogre::Vector3& _getDerivedPositionTagPoint(void) const;
-		const Ogre::Quaternion& _getDerivedOrientationTagPointParent(void) const;
-		const Ogre::Quaternion& _getDerivedOrientationTagPoint(void) const;
-		void setOrientationTagPoint(const Ogre::Quaternion& orientation);
-		void _setDerivedOrientationTagPoint(const Ogre::Quaternion& orientation);
-		const Ogre::Quaternion& _getDerivedBaseOrientation(void) const;
-		bool isAnimationRunning(void) const;
-		bool isOrientationInheritedFromBone(void) const;
+class AnimationWindow : public wxNotebook {
+public:
+	enum AnimationPlayPauseStop {
+		ANIM_PLAY,
+		ANIM_PAUSE,
+		ANIM_STOP,
+		ANIM_NONE
+	};
+	enum AttachDetachOptions {
+		ATTACH,
+		DETACH,
+		NO_SKELETON,
+		SELECT_BONE
+	};
 
-	protected:
-		Ogre::Real mTimeScale;
-		wxPanel* mAnimationPanel;
-		wxPanel* mMeshPanel;
-		wxButton* mAttachDetachButton;
-		wxTreeCtrl* mListOfBones;
-		wxListCtrl* mMeshInfo;
-		ParticleUniverseEditorFrame* mFrame;
-		Ogre::SceneManager* mSceneManager;
-		Ogre::Timer mTimer;
-		wxStaticText* mTxtAnimation;
-		wxComboBox* mListAnimations;
-		wxCheckBox* mCheckboxLoopAnimation;
-		wxCheckBox* mCheckboxInheritOrientationFromBone;
-		wxButton* mPauseAnimationButton;
-		wxButton* mPlayAnimationButton;
-		wxButton* mStopAnimationButton;
-		Ogre::AnimationState* mAnimationState;
-		Ogre::Real mTimeSinceLastUpdate;
-		Ogre::Entity* mBoneMarker;
-		Ogre::String mBoneToWhichParticleSystemAttached;
-		Ogre::TagPoint* mTagPointToWhichParticleSystemAttached;
-		Ogre::Quaternion mBaseOrientation;
-		void setAttachDetachLabel(AttachDetachOptions options);
-		void setEnableAnimationControls(AnimationPlayPauseStop animationState);
-		void onInheritOrientationFromBone(wxCommandEvent& event);
+	AnimationWindow(ParticleUniverseEditorFrame * parent, Ogre::SceneManager * sceneManager);
+	virtual ~AnimationWindow() {}
+	void updateAnimation();
+	void onPlayAnimation(wxCommandEvent & event);
+	void onPauseAnimation(wxCommandEvent & event);
+	void onStopAnimation(wxCommandEvent & event);
+	void loadAnimationNames(Ogre::Entity * entity);
+	void loadBoneNames(Ogre::Entity * entity);
+	void displayMeshInfo(Ogre::Entity * entity);
+	void loadBoneBranche(wxTreeItemId boneNode, Ogre::Node::ChildNodeIterator boneIterator);
+	void notifyTimeRescaled(Ogre::Real scale);
+	void doStopAnimation();
+	void notifyMeshDeleted(Ogre::Entity * entity);
+	void notifyParticleSystemDeleted(Ogre::Entity * entity);
+	void onRestoreFocus(wxCommandEvent & event);
+	void onSelectAnimation(wxCommandEvent & event);
+	void onAttachDetachParticleSystem(wxCommandEvent & event);
+	void onBoneTreeSelected(wxTreeEvent & event);
+	bool attachParticleSystemToEntity(Ogre::String boneName, Ogre::Entity * entity);
+	bool detachParticleSystemFromEntity(Ogre::Entity * entity);
+	bool isParticleSystemAttachedToEntity() const;
+	const Ogre::String & getBoneNameToWhichParticleSystemIsAttached() const;
+	const Ogre::Vector3 & _getDerivedPositionTagPoint() const;
+	const Ogre::Quaternion & _getDerivedOrientationTagPointParent(void) const;
+	const Ogre::Quaternion & _getDerivedOrientationTagPoint(void) const;
+	void setOrientationTagPoint(const Ogre::Quaternion & orientation);
+	void _setDerivedOrientationTagPoint(const Ogre::Quaternion & orientation);
+	const Ogre::Quaternion & _getDerivedBaseOrientation() const;
+	bool isAnimationRunning() const;
+	bool isOrientationInheritedFromBone() const;
+
+protected:
+	AnimationPlayPauseStop mAnimationPlayPauseStop;
+	Ogre::Real mTimeScale;
+	wxPanel * mAnimationPanel;
+	wxPanel * mMeshPanel;
+	wxButton * mAttachDetachButton;
+	wxTreeCtrl * mListOfBones;
+	wxListCtrl * mMeshInfo;
+	ParticleUniverseEditorFrame * mFrame;
+	Ogre::SceneManager * mSceneManager;
+	Ogre::Timer mTimer;
+	wxStaticText * mTxtAnimation;
+	wxComboBox * mListAnimations;
+	wxCheckBox * mCheckboxLoopAnimation;
+	wxCheckBox * mCheckboxInheritOrientationFromBone;
+	wxButton * mPauseAnimationButton;
+	wxButton * mPlayAnimationButton;
+	wxButton * mStopAnimationButton;
+	Ogre::AnimationState * mAnimationState;
+	Ogre::Real mTimeSinceLastUpdate;
+	Ogre::Entity * mBoneMarker;
+	Ogre::String mBoneToWhichParticleSystemAttached;
+	Ogre::TagPoint * mTagPointToWhichParticleSystemAttached;
+	Ogre::Quaternion mBaseOrientation;
+
+	void setAttachDetachLabel(AttachDetachOptions options);
+	void setEnableAnimationControls(AnimationPlayPauseStop animationState);
+	void onInheritOrientationFromBone(wxCommandEvent & event);
 };
 
-#endif
+#endif /* __PUED_ANIMATION_WINDOW_H__ */
