@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_CONTROLPOINT_CONTROL_
-#define __PUED_CONTROLPOINT_CONTROL_
+#ifndef __PUED_CONTROLPOINTCONTROL_H__
+#define __PUED_CONTROLPOINTCONTROL_H__
 
 #include "ParticleUniverseContextMenu.h"
 
@@ -30,54 +30,48 @@ class ControlPoint;
 
 /**	Control that represents a controlpoint, needed in the ControlPointSlider
 */
-class ControlPointControl : public wxControl
-{
-	public:
-		ControlPointControl(std::vector<ControlPoint*>& v,
-			wxWindow* parent, 
-			wxWindowID id, 
-			const wxPoint& pos = wxDefaultPosition, 
-			const wxSize& size = wxDefaultSize, 
-			const wxString& name = wxT("ControlPointControl"));
-		virtual ~ControlPointControl(void);
-		void reset(void);
-		void addInitialControlpoints(void);
-		std::vector<ControlPoint*>& getControlPointList(void);
-		void drawGraph(wxPaintDC& dc);
-		void sortControlPoints(void);
-		bool useLinearInterpolation(void);
-		void setLinearInterpolation(bool);
+class ControlPointControl : public wxControl {
+public:
+	ControlPointControl(std::vector<ControlPoint *> & v, wxWindow * parent, wxWindowID id, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize, const wxString & name = wxT("ControlPointControl"));
+	virtual ~ControlPointControl();
+	void reset();
+	void addInitialControlpoints();
+	std::vector<ControlPoint *> & getControlPointList();
+	void drawGraph(wxPaintDC & dc);
+	void sortControlPoints();
+	bool useLinearInterpolation();
+	void setLinearInterpolation(bool);
 
-		// Getters/Setters
-		float getMinXGraph(void) const;
-		float getMinYGraph(void) const;
-		float getMaxXGraph(void) const;
-		float getMaxYGraph(void) const;
-		void scaleMinMaxXGraph(float scale);
-		void scaleMinMaxYGraph(float scale);
-		void scrollMinMaxXGraph(float scroll);
-		void scrollMinMaxYGraph(float scroll);
+	// Getters/Setters
+	float getMinXGraph() const;
+	float getMinYGraph() const;
+	float getMaxXGraph() const;
+	float getMaxYGraph() const;
+	void scaleMinMaxXGraph(float scale);
+	void scaleMinMaxYGraph(float scale);
+	void scrollMinMaxXGraph(float scroll);
+	void scrollMinMaxYGraph(float scroll);
 
-	protected:
-		wxWindow* mParent;
-		ControlPoint* mMovingControlPoint;
-		bool mMoving;
-		std::vector<ControlPoint*> mControlPointList;
-		std::vector<ControlPoint*> mInitialControlPointList;
-		float mMinXGraph;
-		float mMaxXGraph;
-		float mMinYGraph;
-		float mMaxYGraph;
-		int mNumberOfGridLines;
+protected:
+	wxWindow * mParent;
+	ControlPoint * mMovingControlPoint;
+	bool mMoving;
+	std::vector<ControlPoint *> mControlPointList;
+	std::vector<ControlPoint *> mInitialControlPointList;
+	float mMinXGraph;
+	float mMaxXGraph;
+	float mMinYGraph;
+	float mMaxYGraph;
+	int mNumberOfGridLines;
+	bool mLinearInterpolation; // Default is linear interpolation, otherwise use spline
 
-		void OnPaint(wxPaintEvent& event);
-		void OnClear(wxEraseEvent& event);
-		void OnMouseLButtonPressed(wxMouseEvent& event);
-		void OnMouseLButtonReleased(wxMouseEvent& event);
-		void OnMove(wxMouseEvent& event);
-		void OnMouseRButtonPressed(wxMouseEvent& event);
-		void OnWindowEnter(wxMouseEvent& event);
-		bool mLinearInterpolation; // Default is linear interpolation, otherwise use spline
+	void OnPaint(wxPaintEvent & event);
+	void OnClear(wxEraseEvent & event);
+	void OnMouseLButtonPressed(wxMouseEvent & event);
+	void OnMouseLButtonReleased(wxMouseEvent & event);
+	void OnMove(wxMouseEvent & event);
+	void OnMouseRButtonPressed(wxMouseEvent & event);
+	void OnWindowEnter(wxMouseEvent & event);
 };
 
-#endif
+#endif /* __PUED_CONTROLPOINTCONTROL_H__ */

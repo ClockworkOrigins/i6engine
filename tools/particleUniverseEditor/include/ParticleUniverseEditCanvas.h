@@ -32,88 +32,83 @@ class EditComponent;
 /**
  *	\breif Draw surface: The background canvas on which the EditComponents are placed. The EditCanvas is used to draw the lines.
  */
-class EditCanvas : public wxPanel
-{
-	public:
-		enum SelectionMode
-		{
-			SM_SELECT_NONE,
-			SM_SELECTING,
-			SM_SELECTED,
-			SM_MOVING
-		};
+class EditCanvas : public wxPanel {
+public:
+	enum SelectionMode
+	{
+		SM_SELECT_NONE,
+		SM_SELECTING,
+		SM_SELECTED,
+		SM_MOVING
+	};
 
-		// Constructor / Destructor
-		EditCanvas(wxPanel* parent);
-		~EditCanvas() {}
+	// Constructor / Destructor
+	EditCanvas(wxPanel * parent);
+	~EditCanvas() {}
 
-		/**	Handlers
-		*/
-		virtual void OnPaint(wxPaintEvent& event);
-		void OnMouseMove(wxMouseEvent& event);
-		void OnMouseLeave(wxMouseEvent& event);
-		void OnMouseLButtonPressed(wxMouseEvent& event);
-		void OnMouseLButtonReleased(wxMouseEvent& event);
-		void OnMouseRButtonPressed(wxMouseEvent& event);
-		void OnKeyPressed(wxKeyEvent& event);
-		void OnMouseWheel(wxMouseEvent& event);
+	/**	Handlers
+	*/
+	virtual void OnPaint(wxPaintEvent & event);
+	void OnMouseMove(wxMouseEvent & event);
+	void OnMouseLeave(wxMouseEvent & event);
+	void OnMouseLButtonPressed(wxMouseEvent & event);
+	void OnMouseLButtonReleased(wxMouseEvent & event);
+	void OnMouseRButtonPressed(wxMouseEvent & event);
+	void OnKeyPressed(wxKeyEvent & event);
+	void OnMouseWheel(wxMouseEvent & event);
 
-		/**	Connect two components
-		*/
-		void connect(EditComponent* node1,
-			EditComponent* node2,
-			ComponentRelation relation,
-			const Ogre::String colourCode = DRAW_DEFAULT_COLOURCODE,
-			int lineStyle = wxSOLID);
+	/**	Connect two components
+	*/
+	void connect(EditComponent * node1, EditComponent * node2, ComponentRelation relation, const Ogre::String colourCode = DRAW_DEFAULT_COLOURCODE, int lineStyle = wxSOLID);
 
-		/**	Return all connections between windows
-		*/
-		std::vector<DrawConnector*>& getDrawConnections();
+	/**	Return all connections between windows
+	*/
+	std::vector<DrawConnector *> & getDrawConnections();
 
-		/**	Return the number of connected windows
-		*/
-		unsigned int getNumberOfConnections() const;
+	/**	Return the number of connected windows
+	*/
+	unsigned int getNumberOfConnections() const;
 
-		/**	Remove connection: This removes all connections of this component
-		*/
-		void removeConnection(EditComponent* node);
+	/**	Remove connection: This removes all connections of this component
+	*/
+	void removeConnection(EditComponent * node);
 
-		/**	Remove connection between 2 nodes with a specific relation
-		*/
-		void removeConnection(EditComponent* node1, EditComponent* node2, ComponentRelation relation);
+	/**	Remove connection between 2 nodes with a specific relation
+	*/
+	void removeConnection(EditComponent * node1, EditComponent * node2, ComponentRelation relation);
 
-		/**	Create a Connector between a node and the mouse
-		*/
-		void createMouseConnector(wxWindow* node);
+	/**	Create a Connector between a node and the mouse
+	*/
+	void createMouseConnector(wxWindow * node);
 
-		/**	Destroy the Connector between the node and the mouse
-		*/
-		void destroyMouseConnector();
+	/**	Destroy the Connector between the node and the mouse
+	*/
+	void destroyMouseConnector();
 
-		/**	Store the selected components in a list
-		*/
-		void selectComponents();
+	/**	Store the selected components in a list
+	*/
+	void selectComponents();
 
-		/**	Move the the selected components in the list
-		*/
-		void moveSelectedComponents(const wxPoint& previousMousePosition, const wxPoint& mMousePosition);
+	/**	Move the the selected components in the list
+	*/
+	void moveSelectedComponents(const wxPoint & previousMousePosition, const wxPoint & mMousePosition);
 
-		/**	Delete the selected components
-		*/
-		void deleteSelectedComponents();
+	/**	Delete the selected components
+	*/
+	void deleteSelectedComponents();
 
-	protected:
-		std::vector<DrawConnector*> mDrawConnectors;
-		DrawConnector* mMouseConnector;
-		wxPoint mMousePosition;
-		wxPoint mMousePositionAdjustment;
-		SelectionMode mSelectionMode;
-		wxPoint mStartPositionSelection;
-		wxPoint mEndPositionSelection;
-		std::vector<EditComponent*> mSelectedComponents;
+protected:
+	std::vector<DrawConnector *> mDrawConnectors;
+	DrawConnector * mMouseConnector;
+	wxPoint mMousePosition;
+	wxPoint mMousePositionAdjustment;
+	SelectionMode mSelectionMode;
+	wxPoint mStartPositionSelection;
+	wxPoint mEndPositionSelection;
+	std::vector<EditComponent *> mSelectedComponents;
 
-	private:
-		EditCanvas();
+private:
+	EditCanvas();
 };
 
-#endif
+#endif /* __PUED_EDIT_CANVAS_H__ */

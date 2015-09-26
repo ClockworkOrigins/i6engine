@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PUED_EDIT_COMPONENT_H__
 #define __PUED_EDIT_COMPONENT_H__
 
-#include "AffectorPropertyWindow/AffectorPropertyWindowFactory.h" // TODO: macht das sinn, dass jede component n member für jeden typ hat?
+#include "AffectorPropertyWindow/AffectorPropertyWindowFactory.h" // TODO: (Michael) does this make sense every component having a factory for each type?
 #include "BehaviourPropertyWindow/BehaviourPropertyWindowFactory.h"
 #include "EmitterPropertyWindow/EmitterPropertyWindowFactory.h"
 #include "EventHandlerPropertyWindow/EventHandlerPropertyWindowFactory.h"
@@ -44,215 +44,184 @@ class UniqueRelation;
  * \brief Edit Component: This defines the modules on the EditCanvas.
  */
 class EditComponent : public wxPanel {
-	public:
-		// Constructor / Destructor
-		EditComponent(EditCanvas * parent,
-			const Ogre::String& name,
-			ComponentType type,
-			ComponentSubType subType,
-			const wxColour& backgroundColor = wxNullColour,
-			wxSize size = wxSize(200, 80),
-			long style = wxSYSTEM_MENU | wxCAPTION);
-		~EditComponent();
+public:
+	// Constructor / Destructor
+	EditComponent(EditCanvas * parent, const Ogre::String & name, ComponentType type, ComponentSubType subType, const wxColour & backgroundColor = wxNullColour, wxSize size = wxSize(200, 80), long style = wxSYSTEM_MENU | wxCAPTION);
+	~EditComponent();
 
-		ComponentType getComponentType() const;
-		ComponentSubType getComponentSubType() const;
+	ComponentType getComponentType() const;
+	ComponentSubType getComponentSubType() const;
 
-		/**	Add a connection policy. These are the possible policies
-		*/
-		void addPolicy(
-			ComponentRelation relation,
-			ComponentRelationDirection relationDirection,
-			const wxString& relationDescription,
-			ComponentType typeToBeConnectedWith,
-			ComponentSubType subTypeToBeConnectedWith = CST_UNDEFINED,
-			bool multipleConnectionsPossible = true,
-			bool ignoreSubType = true,
-			const Ogre::String& colourCode = DRAW_DEFAULT_COLOURCODE,
-			int lineStyle = wxSOLID);
+	/**	Add a connection policy. These are the possible policies
+	*/
+	void addPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, const wxString & relationDescription, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith = CST_UNDEFINED, bool multipleConnectionsPossible = true, bool ignoreSubType = true, const Ogre::String & colourCode = DRAW_DEFAULT_COLOURCODE, int lineStyle = wxSOLID);
 
-		/**	Make a relation unique. This is an addition to the policies. Sometimes, a relation can be used in combination with
-			several component types, but only one relation is allowed.
-		*/
-		void addUniqueRelation(ComponentRelation relation, ComponentRelationDirection relationDirection);
+	/**	Make a relation unique. This is an addition to the policies. Sometimes, a relation can be used in combination with
+		several component types, but only one relation is allowed.
+	*/
+	void addUniqueRelation(ComponentRelation relation, ComponentRelationDirection relationDirection);
 
-		/**	Add a connection. These are the actual connections with other components
-		*/
-		void addConnection(EditComponent * componentToBeConnectedWith,
-			ComponentRelation relation,
-			ComponentRelationDirection relationDirection);
+	/**	Add a connection. These are the actual connections with other components
+	*/
+	void addConnection(EditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection);
 
-		/**	Returns a connection policy
-		*/
-		ConnectionPolicy* getPolicy(ComponentRelation relation,
-			ComponentRelationDirection relationDirection,
-			ComponentType typeToBeConnectedWith,
-			ComponentSubType subTypeToBeConnectedWith = CST_UNDEFINED);
+	/**	Returns a connection policy
+	*/
+	ConnectionPolicy * getPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith = CST_UNDEFINED);
 
-		/**	Checks whether a relation is unique for this component
-		*/
-		bool isRelationUnique(ComponentRelation relation, ComponentRelationDirection relationDirection);
+	/**	Checks whether a relation is unique for this component
+	*/
+	bool isRelationUnique(ComponentRelation relation, ComponentRelationDirection relationDirection);
 
-		/**	Checks whether a component can be connected at all (to another component)
-		*/
-		bool isConnectionPossible();
+	/**	Checks whether a component can be connected at all (to another component)
+	*/
+	bool isConnectionPossible();
 
-		/**	Checks whether a component can be connected to another component.
-			This function validates its own connection policies and determines for each possible policy whether the component - passed as an
-			argument - can be connected using the attributes of that policy.
-		*/
-		bool isConnectionPossible(EditComponent * component);
+	/**	Checks whether a component can be connected to another component.
+		This function validates its own connection policies and determines for each possible policy whether the component - passed as an
+		argument - can be connected using the attributes of that policy.
+	*/
+	bool isConnectionPossible(EditComponent * component);
 
-		/**	Checks whether this component can be connected.
-			All registered policies are checked against the passed arguments.
-		*/
-		bool isConnectionPossible(ComponentRelation relation,
-			ComponentRelationDirection relationDirection,
-			ComponentType typeToBeConnectedWith,
-			ComponentSubType subTypeToBeConnectedWith);
+	/**	Checks whether this component can be connected.
+		All registered policies are checked against the passed arguments.
+	*/
+	bool isConnectionPossible(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith);
 
-		/**	Determines whether it is possible to disconnect a connection.
-		*/
-		bool isDisconnectionPossible();
+	/**	Determines whether it is possible to disconnect a connection.
+	*/
+	bool isDisconnectionPossible();
 
-		/**	Determines whether it is possible to disconnect a connection.
-		*/
-		bool isConnected(EditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection);
+	/**	Determines whether it is possible to disconnect a connection.
+	*/
+	bool isConnected(EditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection);
 
-		/**	Displays a selection dialog with all possible connections (for a component to which it must be connected)
-		*/
-		ConnectionPolicy* selectPolicy(EditComponent * componentToBeConnectedWith);
+	/**	Displays a selection dialog with all possible connections (for a component to which it must be connected)
+	*/
+	ConnectionPolicy * selectPolicy(EditComponent * componentToBeConnectedWith);
 
-		/**	Displays a selection dialog with all connections. If viewOnly is set to false, it is also possible to delete a connection.
-		*/
-		void selectConnection(bool viewOnly = true);
+	/**	Displays a selection dialog with all connections. If viewOnly is set to false, it is also possible to delete a connection.
+	*/
+	void selectConnection(bool viewOnly = true);
 
-		/**	Returns the selected policy
-		*/
-		ConnectionPolicy* getSelectedPolicy();
+	/**	Returns the selected policy
+	*/
+	ConnectionPolicy * getSelectedPolicy();
 
-		/**	Deletes a Connection if the arguments match (and also take care of the connected component)
-		*/
-		void deleteConnection(EditComponent * componentConnectedWith,
-			ComponentRelation relation,
-			ComponentRelationDirection relationDirection);
+	/**	Deletes a Connection if the arguments match (and also take care of the connected component)
+	*/
+	void deleteConnection(EditComponent * componentConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection);
 
-		/**	Deletes a Connection (and also take care of the connected component)
-		*/
-		void deleteConnection(Connection * connection);
+	/**	Deletes a Connection (and also take care of the connected component)
+	*/
+	void deleteConnection(Connection * connection);
 
-		/**	Deletes all connections of a certain relation and direction (and also take care of the connected component)
-		*/
-		void deleteConnection(ComponentRelation relation, ComponentRelationDirection relationDirection);
+	/**	Deletes all connections of a certain relation and direction (and also take care of the connected component)
+	*/
+	void deleteConnection(ComponentRelation relation, ComponentRelationDirection relationDirection);
 
-		/**	Unlocks a policy based on the arguments
-		*/
-		void unlockPolicy(ComponentRelation relation,
-			ComponentRelationDirection relationDirection,
-			ComponentType typeToBeConnectedWith,
-			ComponentSubType subTypeToBeConnectedWith);
+	/**	Unlocks a policy based on the arguments
+	*/
+	void unlockPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith);
 
-		/**	Returns a description of the relation with this direction, type and subtype
-		*/
-		const wxString& getRelationDescription(ComponentRelation relation,
-			ComponentRelationDirection relationDirection,
-			ComponentType typeToBeConnectedWith,
-			ComponentSubType subTypeToBeConnectedWith);
+	/**	Returns a description of the relation with this direction, type and subtype
+	*/
+	const wxString & getRelationDescription(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith);
 
-		/**	Set the name on the header, with the class attributes
-		*/
-		void setCaption();
+	/**	Set the name on the header, with the class attributes
+	*/
+	void setCaption();
 
-		/**	Getters/Setters
-		*/
-		const ComponentSubType& getSubType() const;
-		void setSubType(ComponentSubType subType);
-		const Ogre::String& getComponentName() const;
-		void setComponentName(const Ogre::String& componentName);
+	/**	Getters/Setters
+	*/
+	const ComponentSubType & getSubType() const;
+	void setSubType(ComponentSubType subType);
+	const Ogre::String & getComponentName() const;
+	void setComponentName(const Ogre::String & componentName);
 
-		/**	Refreshes the canvas
-		*/
-		void refreshCanvas();
+	/**	Refreshes the canvas
+	*/
+	void refreshCanvas();
 
-		/**	Create a property window and use the argument for propagation
-		*/
-		PropertyWindow* createPropertyWindow(ComponentSubType subType, const PropertyWindow * propertyWindow = nullptr);
+	/**	Create a property window and use the argument for propagation
+	*/
+	PropertyWindow * createPropertyWindow(ComponentSubType subType, const PropertyWindow * propertyWindow = nullptr);
 
-		/**	Returns the property window
-		*/
-		PropertyWindow* getPropertyWindow();
+	/**	Returns the property window
+	*/
+	PropertyWindow * getPropertyWindow();
 
-		/**	Notify the parent if a property has been changed
-		*/
-		void notifyPropertyChanged();
+	/**	Notify the parent if a property has been changed
+	*/
+	void notifyPropertyChanged();
 
-		/**	Notify the parent if the name of a component has been changed
-		*/
-		void notifyAdjustNames(const Ogre::String& newName);
+	/**	Notify the parent if the name of a component has been changed
+	*/
+	void notifyAdjustNames(const Ogre::String & newName);
 
-		/**	Handle events
-		*/
-		void OnMove(wxMoveEvent& event);
-		void OnClose(wxCloseEvent& event);
-		void OnMouseMove(wxMouseEvent& event);
-		void OnWindowEnter(wxMouseEvent& event);
-		void OnWindowLeave(wxMouseEvent& event);
-		void OnMouseLButtonPressed(wxMouseEvent& event);
-		void OnMouseRButtonPressed(wxMouseEvent& event);
-		void OnActivate(wxActivateEvent& event);
+	/**	Handle events
+	*/
+	void OnMove(wxMoveEvent & event);
+	void OnClose(wxCloseEvent & event);
+	void OnMouseMove(wxMouseEvent & event);
+	void OnWindowEnter(wxMouseEvent & event);
+	void OnWindowLeave(wxMouseEvent & event);
+	void OnMouseLButtonPressed(wxMouseEvent & event);
+	void OnMouseRButtonPressed(wxMouseEvent & event);
+	void OnActivate(wxActivateEvent & event);
 
-		/**	Get/Set PU element
-		*/
-		ParticleUniverse::IElement * getPUElement() {
-			return mPUElement;
-		}
+	/**	Get/Set PU element
+	*/
+	ParticleUniverse::IElement * getPUElement() const {
+		return mPUElement;
+	}
 
-		void setPUElement(ParticleUniverse::IElement * puElement) {
-			mPUElement = puElement;
-		}
+	void setPUElement(ParticleUniverse::IElement * puElement) {
+		mPUElement = puElement;
+	}
 
-		/**	Returns the size at the moment the component was created
-		*/
-		wxSize getOriginalSize() {
-			return mOriginalSize;
-		}
+	/**	Returns the size at the moment the component was created
+	*/
+	wxSize getOriginalSize() {
+		return mOriginalSize;
+	}
 
-		/**
-			Get/Set root frame
-		*/
-		ParticleUniverseEditorFrame * getRootFrame();
-		void setRootFrame(ParticleUniverseEditorFrame * rootFrame);
+	/**
+		Get/Set root frame
+	*/
+	ParticleUniverseEditorFrame * getRootFrame();
+	void setRootFrame(ParticleUniverseEditorFrame * rootFrame);
 
-	protected:
-		ParticleUniverse::IElement * mPUElement;
-		wxWindow * mRootParent;
-		Ogre::String mName;
-		Ogre::String mParentName;
-		ComponentType mType;
-		ComponentSubType mSubType;
-		std::vector<ConnectionPolicy *> mPolicies;
-		std::vector<Connection *> mConnections;
-		std::vector<UniqueRelation *> mUniqueRelations;
-		ConnectionPolicy * mSelectedPolicy;
-		PropertyWindow * mPropertyWindow;
-		PropertyWindow * mOldPropertyWindow;
-		EmitterPropertyWindowFactory mEmitterPropertyWindowFactory;
-		RendererPropertyWindowFactory mRendererPropertyWindowFactory;
-		AffectorPropertyWindowFactory mAffectorPropertyWindowFactory;
-		ObserverPropertyWindowFactory mObserverPropertyWindowFactory;
-		BehaviourPropertyWindowFactory mBehaviourPropertyWindowFactory;
-		EventHandlerPropertyWindowFactory mEventHandlerPropertyWindowFactory;
-		ExternPropertyWindowFactory mExternPropertyWindowFactory;
-		wxSize mOriginalSize;
+protected:
+	ParticleUniverse::IElement * mPUElement;
+	wxWindow * mRootParent;
+	Ogre::String mName;
+	Ogre::String mParentName;
+	ComponentType mType;
+	ComponentSubType mSubType;
+	std::vector<ConnectionPolicy *> mPolicies;
+	std::vector<Connection *> mConnections;
+	std::vector<UniqueRelation *> mUniqueRelations;
+	ConnectionPolicy * mSelectedPolicy;
+	PropertyWindow * mPropertyWindow;
+	PropertyWindow * mOldPropertyWindow;
+	EmitterPropertyWindowFactory mEmitterPropertyWindowFactory;
+	RendererPropertyWindowFactory mRendererPropertyWindowFactory;
+	AffectorPropertyWindowFactory mAffectorPropertyWindowFactory;
+	ObserverPropertyWindowFactory mObserverPropertyWindowFactory;
+	BehaviourPropertyWindowFactory mBehaviourPropertyWindowFactory;
+	EventHandlerPropertyWindowFactory mEventHandlerPropertyWindowFactory;
+	ExternPropertyWindowFactory mExternPropertyWindowFactory;
+	wxSize mOriginalSize;
 
-		/**	If the edit component is closed, connections with other components must be deleted in a certain order.
-		*/
-		void _sortConnections();
+	/**	If the edit component is closed, connections with other components must be deleted in a certain order.
+	*/
+	void _sortConnections();
 
-		/**
-			Keep pointer to the root frame
-		*/
-		ParticleUniverseEditorFrame * mRootFrame;
+	/**
+		Keep pointer to the root frame
+	*/
+	ParticleUniverseEditorFrame * mRootFrame;
 };
 
-#endif
+#endif /* __PUED_EDIT_COMPONENT_H__ */

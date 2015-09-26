@@ -23,31 +23,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "ParticleUniverseTechniquePropertyWindow.h"
 
 #include "wx/ogre/utils.h"
-#include <wx/dnd.h>
 
-EditComponent::EditComponent(EditCanvas* parent, const Ogre::String& name, ComponentType type, ComponentSubType subType, const wxColour& backgroundColor, wxSize size, long style) :
-		wxPanel(parent, wxID_ANY, wxDefaultPosition, size, style, ogre2wx(name)),
-		mPUElement(nullptr),
-		mRootParent(parent->GetParent()->GetParent()->GetParent()->GetParent()->GetParent()), // TODO: das is doch kaese // TODO: genauso wie die ganzen GetParent->GetParetn() aufrufe
-		mName(name),
-		mParentName(Ogre::StringUtil::BLANK),
-		mType(type),
-		mSubType(subType),
-		mPolicies(),
-		mConnections(),
-		mUniqueRelations(),
-		mSelectedPolicy(nullptr),
-		mPropertyWindow(0),
-		mOldPropertyWindow(0),
-		mEmitterPropertyWindowFactory(),
-		mRendererPropertyWindowFactory(),
-		mAffectorPropertyWindowFactory(),
-		mObserverPropertyWindowFactory(),
-		mBehaviourPropertyWindowFactory(),
-		mEventHandlerPropertyWindowFactory(),
-		mExternPropertyWindowFactory(),
-		mOriginalSize(GetSize()),
-		mRootFrame(0) {
+#include "wx/dnd.h"
+
+EditComponent::EditComponent(EditCanvas * parent, const Ogre::String & name, ComponentType type, ComponentSubType subType, const wxColour & backgroundColor, wxSize size, long style) : wxPanel(parent, wxID_ANY, wxDefaultPosition, size, style, ogre2wx(name)), mPUElement(nullptr), mRootParent(parent->GetParent()->GetParent()->GetParent()->GetParent()->GetParent()), /* TODO: (Michael) that's stupid*/ mName(name), mParentName(Ogre::StringUtil::BLANK), mType(type), mSubType(subType), mPolicies(), mConnections(), mUniqueRelations(), mSelectedPolicy(nullptr), mPropertyWindow(nullptr), mOldPropertyWindow(nullptr), mEmitterPropertyWindowFactory(), mRendererPropertyWindowFactory(), mAffectorPropertyWindowFactory(), mObserverPropertyWindowFactory(), mBehaviourPropertyWindowFactory(), mEventHandlerPropertyWindowFactory(), mExternPropertyWindowFactory(), mOriginalSize(GetSize()), mRootFrame(nullptr) {
 	// Internationize the strings
 	CT_SYSTEM = _("System");
 	CT_TECHNIQUE = _("Technique");
@@ -73,7 +52,7 @@ EditComponent::EditComponent(EditCanvas* parent, const Ogre::String& name, Compo
 		caption = caption + wxT(" - ") + nameTmp;
 	}
 	wxFont font(10, wxDEFAULT, wxNORMAL, wxFONTWEIGHT_NORMAL, true);
-	wxStaticText* text = new wxStaticText(this, wxID_ANY, "\n" + caption, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
+	wxStaticText * text = new wxStaticText(this, wxID_ANY, "\n" + caption, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
 	text->SetFont(font);
 	if (backgroundColor == *wxBLACK) {
 		text->SetForegroundColour(*wxWHITE);
@@ -93,25 +72,19 @@ EditComponent::EditComponent(EditCanvas* parent, const Ogre::String& name, Compo
 
 EditComponent::~EditComponent() {
 	// Delete all policies
-	std::vector<ConnectionPolicy*>::iterator itCp;
-	std::vector<ConnectionPolicy*>::iterator itCpEnd = mPolicies.end();
-	for (itCp = mPolicies.begin(); itCp != itCpEnd; ++itCp) {
+	for (std::vector<ConnectionPolicy *>::iterator itCp = mPolicies.begin(); itCp != mPolicies.end(); ++itCp) {
 		delete (*itCp);
 	}
 	mPolicies.clear();
 
 	// Delete all connections, but on close they are already deleted.
-	std::vector<Connection*>::iterator itC;
-	std::vector<Connection*>::iterator itCEnd = mConnections.end();
-	for (itC = mConnections.begin(); itC != itCEnd; ++itC) {
+	for (std::vector<Connection *>::iterator itC = mConnections.begin(); itC != mConnections.end(); ++itC) {
 		delete (*itC);
 	}
 	mConnections.clear();
 
 	// Delete all unique relations
-	std::vector<UniqueRelation*>::iterator it;
-	std::vector<UniqueRelation*>::iterator itEnd = mUniqueRelations.end();
-	for (it = mUniqueRelations.begin(); it != itEnd; ++it) {
+	for (std::vector<UniqueRelation *>::iterator it = mUniqueRelations.begin(); it != mUniqueRelations.end(); ++it) {
 		delete *it;
 	}
 	mUniqueRelations.clear();
@@ -125,80 +98,45 @@ ComponentSubType EditComponent::getComponentSubType() const {
 	return mSubType;
 }
 
-void EditComponent::addPolicy(
-	ComponentRelation relation,
-	ComponentRelationDirection relationDirection,
-	const wxString& relationDescription,
-	ComponentType typeToBeConnectedWith,
-	ComponentSubType subTypeToBeConnectedWith,
-	bool multipleConnectionsPossible,
-	bool ignoreSubType,
-	const Ogre::String& colourCode,
-	int lineStyle) {
-	mPolicies.push_back(new ConnectionPolicy(relation,
-		relationDirection,
-		relationDescription,
-		typeToBeConnectedWith,
-		subTypeToBeConnectedWith,
-		multipleConnectionsPossible,
-		ignoreSubType,
-		colourCode,
-		lineStyle));
+void EditComponent::addPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, const wxString & relationDescription, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith, bool multipleConnectionsPossible, bool ignoreSubType, const Ogre::String & colourCode, int lineStyle) {
+	mPolicies.push_back(new ConnectionPolicy(relation, relationDirection, relationDescription, typeToBeConnectedWith, subTypeToBeConnectedWith, multipleConnectionsPossible, ignoreSubType, colourCode, lineStyle));
 }
 
 void EditComponent::addUniqueRelation(ComponentRelation relation, ComponentRelationDirection relationDirection) {
 	mUniqueRelations.push_back(new UniqueRelation(relation, relationDirection));
 }
 
-void EditComponent::addConnection(EditComponent* componentToBeConnectedWith,
-	ComponentRelation relation,
-	ComponentRelationDirection relationDirection) {
+void EditComponent::addConnection(EditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection) {
 	mConnections.push_back(new Connection(componentToBeConnectedWith, relation, relationDirection));
 
 	// Loop through the policies and possibly lock it
-	std::vector<ConnectionPolicy*>::iterator it;
-	std::vector<ConnectionPolicy*>::iterator itEnd = mPolicies.end();
-	for (it = mPolicies.begin(); it != itEnd; ++it) {
+	for (std::vector<ConnectionPolicy *>::iterator it = mPolicies.begin(); it != mPolicies.end(); ++it) {
 		if (isRelationUnique(relation, relationDirection)) {
 			// Ignore a possible policy setting of mMultipleConnectionsPossible = true and just override
 			(*it)->validateAndLock(relation, relationDirection);
-		}
-		else {
-			(*it)->validateAndLock(relation,
-				relationDirection,
-				componentToBeConnectedWith->getComponentType(),
-				componentToBeConnectedWith->getComponentSubType());
+		} else {
+			(*it)->validateAndLock(relation, relationDirection, componentToBeConnectedWith->getComponentType(), componentToBeConnectedWith->getComponentSubType());
 		}
 	}
 }
 
-ConnectionPolicy* EditComponent::getPolicy(ComponentRelation relation,
-	ComponentRelationDirection relationDirection,
-	ComponentType typeToBeConnectedWith,
-	ComponentSubType subTypeToBeConnectedWith) {
-	std::vector<ConnectionPolicy*>::iterator it;
-	std::vector<ConnectionPolicy*>::iterator itEnd = mPolicies.end();
-	ConnectionPolicy* policy;
-	for (it = mPolicies.begin(); it != itEnd; ++it) {
+ConnectionPolicy * EditComponent::getPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith) {
+	ConnectionPolicy * policy = nullptr;
+	for (std::vector<ConnectionPolicy *>::iterator it = mPolicies.begin(); it != mPolicies.end(); ++it) {
 		policy = *it;
-		if (policy->getRelation() == relation &&
-			policy->getRelationDirection() == relationDirection &&
-			policy->getTypeToBeConnectedWith() == typeToBeConnectedWith) {
+		if (policy->getRelation() == relation && policy->getRelationDirection() == relationDirection && policy->getTypeToBeConnectedWith() == typeToBeConnectedWith) {
 			if (policy->ignoreSubType()) {
-				return policy;
-			}
-			else if (policy->getSubTypeToBeConnectedWith() == subTypeToBeConnectedWith) {
-				return policy;
+				break;
+			} else if (policy->getSubTypeToBeConnectedWith() == subTypeToBeConnectedWith) {
+				break;
 			}
 		}
 	}
-	return 0;
+	return policy;
 }
 
 bool EditComponent::isRelationUnique(ComponentRelation relation, ComponentRelationDirection relationDirection) {
-	std::vector<UniqueRelation*>::iterator it;
-	std::vector<UniqueRelation*>::iterator itEnd = mUniqueRelations.end();
-	for (it = mUniqueRelations.begin(); it != itEnd; ++it) {
+	for (std::vector<UniqueRelation *>::iterator it = mUniqueRelations.begin(); it != mUniqueRelations.end(); ++it) {
 		if ((*it)->isRelationUnique(relation, relationDirection)) {
 			// Found
 			return true;
@@ -208,9 +146,7 @@ bool EditComponent::isRelationUnique(ComponentRelation relation, ComponentRelati
 }
 
 bool EditComponent::isConnectionPossible() {
-	std::vector<ConnectionPolicy*>::iterator it;
-	std::vector<ConnectionPolicy*>::iterator itEnd = mPolicies.end();
-	for (it = mPolicies.begin(); it != itEnd; ++it) {
+	for (std::vector<ConnectionPolicy *>::iterator it = mPolicies.begin(); it != mPolicies.end(); ++it) {
 		if (!(*it)->isPolicyLocked()) {
 			return true;
 		}
@@ -218,19 +154,14 @@ bool EditComponent::isConnectionPossible() {
 	return false;
 }
 
-bool EditComponent::isConnectionPossible(EditComponent* component) {
+bool EditComponent::isConnectionPossible(EditComponent * component) {
 	if (component) {
-		std::vector<ConnectionPolicy*>::iterator it;
-		std::vector<ConnectionPolicy*>::iterator itEnd = mPolicies.end();
-		for (it = mPolicies.begin(); it != itEnd; ++it) {
+		for (std::vector<ConnectionPolicy *>::iterator it = mPolicies.begin(); it != mPolicies.end(); ++it) {
 			// The policy of 'this' component cannot be checked against a relation and relation direction (because there isn't one)
-			ConnectionPolicy* connectionPolicy = *it;
+			ConnectionPolicy * connectionPolicy = *it;
 			if ((*it)->isConnectionPossible(component->getComponentType(), component->getComponentSubType())) {
 				// The second one (the component) can be checked against all four attributes
-				if (component->isConnectionPossible(connectionPolicy->getRelation(),
-					getOppositeRelationDirection(connectionPolicy->getRelationDirection()),
-					mType,
-					mSubType)) {
+				if (component->isConnectionPossible(connectionPolicy->getRelation(), getOppositeRelationDirection(connectionPolicy->getRelationDirection()), mType, mSubType)) {
 					return true;
 				}
 			}
@@ -239,13 +170,8 @@ bool EditComponent::isConnectionPossible(EditComponent* component) {
 	return false;
 }
 
-bool EditComponent::isConnectionPossible(ComponentRelation relation,
-	ComponentRelationDirection relationDirection,
-	ComponentType typeToBeConnectedWith,
-	ComponentSubType subTypeToBeConnectedWith) {
-	std::vector<ConnectionPolicy*>::iterator it;
-	std::vector<ConnectionPolicy*>::iterator itEnd = mPolicies.end();
-	for (it = mPolicies.begin(); it != itEnd; ++it) {
+bool EditComponent::isConnectionPossible(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith) {
+	for (std::vector<ConnectionPolicy *>::iterator it = mPolicies.begin(); it != mPolicies.end(); ++it) {
 		if ((*it)->isConnectionPossible(relation, relationDirection, typeToBeConnectedWith, subTypeToBeConnectedWith)) {
 			return true;
 		}
@@ -257,94 +183,73 @@ bool EditComponent::isDisconnectionPossible() {
 	return !mConnections.empty();
 }
 
-bool EditComponent::isConnected(EditComponent* componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection) {
-	std::vector<Connection*>::iterator it;
-	std::vector<Connection*>::iterator itEnd = mConnections.end();
-	Connection* connection;
-	for (it = mConnections.begin(); it != itEnd; ++it) {
+bool EditComponent::isConnected(EditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection) {
+	Connection * connection;
+	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {
 		connection = *it;
-		if (connection->getComponentToBeConnectedWith() == componentToBeConnectedWith &&
-			connection->getRelation() == relation &&
-			connection->getRelationDirection() == relationDirection) {
+		if (connection->getComponentToBeConnectedWith() == componentToBeConnectedWith && connection->getRelation() == relation && connection->getRelationDirection() == relationDirection) {
 			return true;
 		}
 	}
 	return false;
 }
 
-void EditComponent::OnMove(wxMoveEvent& event) {
+void EditComponent::OnMove(wxMoveEvent & event) {
 	// Notify the parent
-	(static_cast<EditTab*>(GetParent()->GetParent()))->refreshCanvas();
+	static_cast<EditTab *>(GetParent()->GetParent())->refreshCanvas();
 }
 
-void EditComponent::OnClose(wxCloseEvent& event) {
+void EditComponent::OnClose(wxCloseEvent & event) {
 	// Notify its child
 	// ??????????????????
 
 	// Before this component is deleted, notify other components (not components that are connected) that this one is going to be deleted.
-	(static_cast<EditTab*>(GetParent()->GetParent()))->notifyReferers(this, EditTab::SE_CLOSE);
+	static_cast<EditTab *>(GetParent()->GetParent())->notifyReferers(this, EditTab::SE_CLOSE);
 
 	// Delete all connections, including that of other components
 	_sortConnections(); // The order of deleting connections matter, so rearrange them.
-	std::vector<Connection*>::iterator it;
-	std::vector<Connection*>::iterator itEnd = mConnections.end();
-	for (it = mConnections.begin(); it != itEnd; ++it) {
-		Connection* connection = *it;
-		EditComponent* componentConnectedWith = (*it)->getComponentToBeConnectedWith();
+	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {
+		Connection * connection = *it;
+		EditComponent * componentConnectedWith = (*it)->getComponentToBeConnectedWith();
 		componentConnectedWith->deleteConnection(this, (*it)->getRelation(), getOppositeRelationDirection((*it)->getRelationDirection()));
-		unlockPolicy(connection->getRelation(),
-			connection->getRelationDirection(),
-			connection->getComponentToBeConnectedWith()->getComponentType(),
-			connection->getComponentToBeConnectedWith()->getComponentSubType());
+		unlockPolicy(connection->getRelation(), connection->getRelationDirection(), connection->getComponentToBeConnectedWith()->getComponentType(), connection->getComponentToBeConnectedWith()->getComponentSubType());
 		delete *it;
 	}
 	mConnections.clear();
 
 	// Notify the parent that the component is removed.
-	(static_cast<EditTab*>(GetParent()->GetParent()))->notifyComponentRemoved(this);
+	static_cast<EditTab *>(GetParent()->GetParent())->notifyComponentRemoved(this);
 
 	// Remove corresponding propertyWindow.
 	if (mPropertyWindow) {
-		(static_cast<EditTab*>(GetParent()->GetParent()))->removePropertyWindow(mPropertyWindow);
+		static_cast<EditTab *>(GetParent()->GetParent())->removePropertyWindow(mPropertyWindow);
 		mPropertyWindow->Destroy();
-		mPropertyWindow = 0;
+		mPropertyWindow = nullptr;
 	}
 	if (mOldPropertyWindow) {
-		(static_cast<EditTab*>(GetParent()->GetParent()))->removePropertyWindow(mOldPropertyWindow);
+		static_cast<EditTab*>(GetParent()->GetParent())->removePropertyWindow(mOldPropertyWindow);
 		mOldPropertyWindow->Destroy();
-		mOldPropertyWindow = 0;
+		mOldPropertyWindow = nullptr;
 	}
 
 	Destroy();
 }
 
 void EditComponent::_sortConnections() {
-	std::vector<Connection*> temp;
-	std::vector<Connection*>::iterator it;
-	std::vector<Connection*>::iterator itEnd = mConnections.end();
-
-	for (it = mConnections.begin(); it != itEnd; ++it) {
+	std::vector<Connection *> temp;
+	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {
 		ComponentRelation relation = (*it)->getRelation();
-		if (relation == CR_PLACE ||
-			relation == CR_FORCE ||
-			relation == CR_ENABLE ||
-			relation == CR_EMIT ||
-			relation == CR_SLAVE) {
+		if (relation == CR_PLACE || relation == CR_FORCE || relation == CR_ENABLE || relation == CR_EMIT || relation == CR_SLAVE) {
 			temp.push_back(*it);
 		}
 	}
-	for (it = mConnections.begin(); it != itEnd; ++it) {
+	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {
 		ComponentRelation relation = (*it)->getRelation();
-		if (relation != CR_PLACE &&
-			relation != CR_FORCE &&
-			relation != CR_ENABLE &&
-			relation != CR_EMIT &&
-			relation != CR_SLAVE &&
-			relation != CR_INCLUDE) {
+		if (relation != CR_PLACE && relation != CR_FORCE && relation != CR_ENABLE && relation != CR_EMIT && relation != CR_SLAVE && relation != CR_INCLUDE) {
 			temp.push_back(*it);
 		}
 	}
-	for (it = mConnections.begin(); it != itEnd; ++it) {
+	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {
 		if ((*it)->getRelation() == CR_INCLUDE) {
 			temp.push_back(*it);
 		}
@@ -354,41 +259,29 @@ void EditComponent::_sortConnections() {
 	mConnections = temp;
 }
 
-void EditComponent::deleteConnection(EditComponent* componentConnectedWith,
-	ComponentRelation relation,
-	ComponentRelationDirection relationDirection) {
-	std::vector<Connection*>::iterator it;
-	std::vector<Connection*>::iterator itEnd = mConnections.end();
-	for (it = mConnections.begin(); it != itEnd; ++it) {
-		if (componentConnectedWith == (*it)->getComponentToBeConnectedWith() &&
-			relation == (*it)->getRelation() &&
-			relationDirection == (*it)->getRelationDirection()) {
-			(static_cast<EditTab*>(GetParent()->GetParent()))->notifyConnectionRemoved(this, componentConnectedWith, relation, relationDirection);
+void EditComponent::deleteConnection(EditComponent * componentConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection) {
+	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {
+		if (componentConnectedWith == (*it)->getComponentToBeConnectedWith() && relation == (*it)->getRelation() && relationDirection == (*it)->getRelationDirection()) {
+			static_cast<EditTab *>(GetParent()->GetParent())->notifyConnectionRemoved(this, componentConnectedWith, relation, relationDirection);
 			unlockPolicy(relation, relationDirection, componentConnectedWith->getComponentType(), componentConnectedWith->getComponentSubType());
-			delete (*it);
+			delete *it;
 			mConnections.erase(it);
 			return;
 		}
 	}
 }
 
-void EditComponent::deleteConnection(Connection* connection) {
-	if (!connection)
+void EditComponent::deleteConnection(Connection * connection) {
+	if (!connection) {
 		return;
+	}
 
-	std::vector<Connection*>::iterator it;
-	std::vector<Connection*>::iterator itEnd = mConnections.end();
-	for (it = mConnections.begin(); it != itEnd; ++it) {
-		Connection* connectionFromList = *it;
+	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {
+		Connection * connectionFromList = *it;
 		if (connection == connectionFromList) {
-			connection->getComponentToBeConnectedWith()->deleteConnection(this,
-				connection->getRelation(),
-				getOppositeRelationDirection(connection->getRelationDirection()));
-			unlockPolicy(connection->getRelation(),
-				connection->getRelationDirection(),
-				connection->getComponentToBeConnectedWith()->getComponentType(),
-				connection->getComponentToBeConnectedWith()->getComponentSubType());
-			delete (*it);
+			connection->getComponentToBeConnectedWith()->deleteConnection(this, connection->getRelation(), getOppositeRelationDirection(connection->getRelationDirection()));
+			unlockPolicy(connection->getRelation(), connection->getRelationDirection(), connection->getComponentToBeConnectedWith()->getComponentType(), connection->getComponentToBeConnectedWith()->getComponentSubType());
+			delete *it;
 			mConnections.erase(it);
 			return;
 		}
@@ -396,68 +289,49 @@ void EditComponent::deleteConnection(Connection* connection) {
 }
 
 void EditComponent::deleteConnection(ComponentRelation relation, ComponentRelationDirection relationDirection) {
-	std::vector<Connection*>::iterator it = mConnections.begin();
-	std::vector<Connection*>::iterator itEnd = mConnections.end();
-	for (it = mConnections.begin(); it != itEnd; ++it) {
-		Connection* connectionFromList = *it;
+	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {
+		Connection * connectionFromList = *it;
 		if (connectionFromList->getRelation() == relation && connectionFromList->getRelationDirection() == relationDirection) {
-			connectionFromList->getComponentToBeConnectedWith()->deleteConnection(this,
-				relation,
-				getOppositeRelationDirection(relationDirection));
-			unlockPolicy(relation,
-				relationDirection,
-				connectionFromList->getComponentToBeConnectedWith()->getComponentType(),
-				connectionFromList->getComponentToBeConnectedWith()->getComponentSubType());
-			delete (*it);
+			connectionFromList->getComponentToBeConnectedWith()->deleteConnection(this, relation, getOppositeRelationDirection(relationDirection));
+			unlockPolicy(relation, relationDirection, connectionFromList->getComponentToBeConnectedWith()->getComponentType(), connectionFromList->getComponentToBeConnectedWith()->getComponentSubType());
+			delete *it;
 			mConnections.erase(it);
 			return;
 		}
 	}
 }
 
-void EditComponent::unlockPolicy(ComponentRelation relation,
-	ComponentRelationDirection relationDirection,
-	ComponentType typeToBeConnectedWith,
-	ComponentSubType subTypeToBeConnectedWith) {
-	std::vector<ConnectionPolicy*>::iterator it;
-	std::vector<ConnectionPolicy*>::iterator itEnd = mPolicies.end();
-	for (it = mPolicies.begin(); it != itEnd; ++it) {
+void EditComponent::unlockPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith) {
+	for (std::vector<ConnectionPolicy *>::iterator it = mPolicies.begin(); it != mPolicies.end(); ++it) {
 		if (isRelationUnique(relation, relationDirection)) {
 			(*it)->validateAndLock(relation, relationDirection, false);
-		}
-		else {
-			(*it)->validateAndLock(relation,
-				relationDirection,
-				typeToBeConnectedWith,
-				subTypeToBeConnectedWith,
-				false);
+		} else {
+			(*it)->validateAndLock(relation, relationDirection, typeToBeConnectedWith, subTypeToBeConnectedWith, false);
 		}
 	}
 }
 
-void EditComponent::OnMouseMove(wxMouseEvent& event) {
+void EditComponent::OnMouseMove(wxMouseEvent & event) {
 	wxPoint position = event.GetPosition();
-	(static_cast<EditTab*>(GetParent()->GetParent()))->notifyMouseMovedInComponent(this, position);
+	static_cast<EditTab *>(GetParent()->GetParent())->notifyMouseMovedInComponent(this, position);
 }
 
-void EditComponent::OnWindowEnter(wxMouseEvent& event) {
+void EditComponent::OnWindowEnter(wxMouseEvent & event) {
 	// Change mouse cursor if the policies don't allow connection
-	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
+	EditTab * parent = static_cast<EditTab *>(GetParent()->GetParent());
 	if (parent->getConnectionMode() == EditTab::CM_CONNECT_ENDING) {
 		// Check both sides
 		if (!isConnectionPossible(parent->getStartConnector())) {
 			wxCursor connectCursor = wxCursor(wxImage(ICONS_DIR + wxT("no_connect.png")));
 			SetCursor(connectCursor);
 		}
-	}
-	else if (parent->getConnectionMode() == EditTab::CM_CONNECT_STARTING) {
+	} else if (parent->getConnectionMode() == EditTab::CM_CONNECT_STARTING) {
 		// Only check if connection is at all possible
 		if (!isConnectionPossible()) {
 			wxCursor connectCursor = wxCursor(wxImage(ICONS_DIR + wxT("no_connect.png")));
 			SetCursor(connectCursor);
 		}
-	}
-	else if (parent->getConnectionMode() == EditTab::CM_DISCONNECT) {
+	} else if (parent->getConnectionMode() == EditTab::CM_DISCONNECT) {
 		// Only check if disconnection is possible
 		if (!isDisconnectionPossible()) {
 			wxCursor connectCursor = wxCursor(wxImage(ICONS_DIR + wxT("no_disconnect.png")));
@@ -466,22 +340,21 @@ void EditComponent::OnWindowEnter(wxMouseEvent& event) {
 	}
 }
 
-void EditComponent::OnWindowLeave(wxMouseEvent& event) {
-	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
+void EditComponent::OnWindowLeave(wxMouseEvent & event) {
+	EditTab * parent = static_cast<EditTab *>(GetParent()->GetParent());
 	if (parent->getConnectionMode() == EditTab::CM_CONNECT_STARTING) {
 		// Reset mouse cursor to connecting cursor
 		wxCursor connectCursor = wxCursor(wxImage(ICONS_DIR + wxT("connect.png")));
 		SetCursor(connectCursor);
-	}
-	else if (parent->getConnectionMode() == EditTab::CM_DISCONNECT) {
+	} else if (parent->getConnectionMode() == EditTab::CM_DISCONNECT) {
 		// Reset mouse cursor to disconnecting cursor
 		wxCursor connectCursor = wxCursor(wxImage(ICONS_DIR + wxT("disconnect.png")));
 		SetCursor(connectCursor);
 	}
 }
 
-void EditComponent::OnMouseLButtonPressed(wxMouseEvent& event) {
-	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
+void EditComponent::OnMouseLButtonPressed(wxMouseEvent & event) {
+	EditTab * parent = static_cast<EditTab*>(GetParent()->GetParent());
 
 	// Part of 'OnActivate'
 	parent->setPropertyWindow(mPropertyWindow);
@@ -491,7 +364,7 @@ void EditComponent::OnMouseLButtonPressed(wxMouseEvent& event) {
 		*/
 		parent->removePropertyWindow(mOldPropertyWindow);
 		mOldPropertyWindow->Destroy();
-		mOldPropertyWindow = 0;
+		mOldPropertyWindow = nullptr;
 	}
 
 	parent->_currentDrag = this;
@@ -516,15 +389,16 @@ void EditComponent::OnMouseLButtonPressed(wxMouseEvent& event) {
 	parent->notifyComponentActivated(this);
 }
 
-void EditComponent::OnMouseRButtonPressed(wxMouseEvent& event) {
+void EditComponent::OnMouseRButtonPressed(wxMouseEvent & event) {
 	selectConnection(true);
 }
 
-void EditComponent::OnActivate(wxActivateEvent& event) {
-	if (IsBeingDeleted())
+void EditComponent::OnActivate(wxActivateEvent & event) {
+	if (IsBeingDeleted()) {
 		return;
+	}
 
-	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
+	EditTab * parent = static_cast<EditTab *>(GetParent()->GetParent());
 	parent->getEditCanvas()->SetPosition(wxPoint(0, 0)); // In case scrolling has ruined the layout.
 	parent->setPropertyWindow(mPropertyWindow);
 	if (mOldPropertyWindow && !mOldPropertyWindow->IsBeingDeleted()) {
@@ -533,7 +407,7 @@ void EditComponent::OnActivate(wxActivateEvent& event) {
 		*/
 		parent->removePropertyWindow(mOldPropertyWindow);
 		mOldPropertyWindow->Destroy();
-		mOldPropertyWindow = 0;
+		mOldPropertyWindow = nullptr;
 	}
 }
 
@@ -541,17 +415,14 @@ void EditComponent::selectConnection(bool viewOnly) {
 	//	Display connections. These are actual connections this component has with other components
 	wxString choices[MAX_NUMBER_OF_CONNECTIONS];
 	Connection* connectionsAsArray[MAX_NUMBER_OF_CONNECTIONS];
-	std::vector<Connection*>::iterator it;
-	std::vector<Connection*>::iterator itEnd = mConnections.end();
 	int count = 0;
-	Connection* connection = 0;
-	for (it = mConnections.begin(); it != itEnd; ++it) {
+	Connection * connection = nullptr;
+	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {
 		connection = *it;
 		connectionsAsArray[count] = connection;
 		if (!getComponentName().empty()) {
 			choices[count] = ogre2wx(getComponentName());
-		}
-		else {
+		} else {
 			choices[count] = getComponentType();
 			if (!getComponentSubType().empty()) {
 				if (getComponentSubType() != CST_UNDEFINED) {
@@ -559,16 +430,10 @@ void EditComponent::selectConnection(bool viewOnly) {
 				}
 			}
 		}
-		choices[count] += wxT(" ") +
-			getRelationDescription(connection->getRelation(),
-			connection->getRelationDirection(),
-			connection->getComponentToBeConnectedWith()->getComponentType(),
-			connection->getComponentToBeConnectedWith()->getComponentSubType()) +
-			wxT(" ");
+		choices[count] += wxT(" ") + getRelationDescription(connection->getRelation(), connection->getRelationDirection(), connection->getComponentToBeConnectedWith()->getComponentType(), connection->getComponentToBeConnectedWith()->getComponentSubType()) + wxT(" ");
 		if (!connection->getComponentToBeConnectedWith()->getComponentName().empty()) {
 			choices[count] += ogre2wx(connection->getComponentToBeConnectedWith()->getComponentName());
-		}
-		else {
+		} else {
 			choices[count] += connection->getComponentToBeConnectedWith()->getComponentType();
 			if (!connection->getComponentToBeConnectedWith()->getComponentSubType().empty()) {
 				if (connection->getComponentToBeConnectedWith()->getComponentSubType() != CST_UNDEFINED) {
@@ -579,17 +444,11 @@ void EditComponent::selectConnection(bool viewOnly) {
 		count++;
 	}
 
-	if (viewOnly) { // TODO: check die GetParent() aufrufe hier
+	if (viewOnly) { // TODO: (Michael) check the GetParent() calls here
 		GetParent()->GetParent()->Enable(false); // Disables input from the parent
-		wxSingleChoiceDialog choiceWindow(this,
-			_("overview of existing connections"),
-			_("Existing connections"),-
-			count,
-			choices,
-			reinterpret_cast<void **>(0),
-			wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCENTRE);
-			choiceWindow.SetSize(320, 200);
-			choiceWindow.ShowModal();
+		wxSingleChoiceDialog choiceWindow(this, _("overview of existing connections"), _("Existing connections"), count, choices, reinterpret_cast<void **>(0), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCENTRE);
+		choiceWindow.SetSize(320, 200);
+		choiceWindow.ShowModal();
 		GetParent()->GetParent()->Enable(true); // Enable input from the parent
 		GetParent()->GetParent()->SetFocus();
 	} else {
@@ -606,34 +465,26 @@ void EditComponent::selectConnection(bool viewOnly) {
 	}
 }
 
-ConnectionPolicy* EditComponent::selectPolicy(EditComponent* componentToBeConnectedWith) {
+ConnectionPolicy * EditComponent::selectPolicy(EditComponent * componentToBeConnectedWith) {
 	wxString choices[MAX_NUMBER_OF_CONNECTIONS];
-	ConnectionPolicy* policiesAsArray[MAX_NUMBER_OF_CONNECTIONS];
-	std::vector<ConnectionPolicy*>::iterator it;
-	std::vector<ConnectionPolicy*>::iterator itEnd = mPolicies.end();
+	ConnectionPolicy * policiesAsArray[MAX_NUMBER_OF_CONNECTIONS];
 	int count = 0;
-	ConnectionPolicy* policy = 0;
-	for (it = mPolicies.begin(); it != itEnd; ++it) {
+	ConnectionPolicy * policy = nullptr;
+	for (std::vector<ConnectionPolicy *>::iterator it = mPolicies.begin(); it != mPolicies.end(); ++it) {
 		policy = *it;
 
 		/*	Display only available connections. These are connections where the policy of this component allows it to connect
 			and if the other component (componentToBeConnectedWith) can also make the same connection.
 		**/
-		if (componentToBeConnectedWith->isConnectionPossible(policy->getRelation(),
-				getOppositeRelationDirection(policy->getRelationDirection()),
-				mType,
-				mSubType) &&
-			policy->isConnectionPossible(componentToBeConnectedWith->getComponentType(), componentToBeConnectedWith->getComponentSubType())) {
+		if (componentToBeConnectedWith->isConnectionPossible(policy->getRelation(), getOppositeRelationDirection(policy->getRelationDirection()), mType, mSubType) && policy->isConnectionPossible(componentToBeConnectedWith->getComponentType(), componentToBeConnectedWith->getComponentSubType())) {
 			policiesAsArray[count] = policy;
 			choices[count] = getComponentType() + wxT(" ");
 			if (!getComponentName().empty()) {
 				choices[count] = ogre2wx(getComponentName());
-			}
-			else {
+			} else {
 				choices[count] = getComponentType();
 				if (!getComponentSubType().empty()) {
-					if (getComponentSubType() != CST_UNDEFINED)
-					{
+					if (getComponentSubType() != CST_UNDEFINED) {
 						choices[count] += wxT(" ") + getComponentSubType();
 					}
 				}
@@ -641,12 +492,10 @@ ConnectionPolicy* EditComponent::selectPolicy(EditComponent* componentToBeConnec
 			choices[count] += wxT(" ") + policy->getRelationDescription() + wxT(" ");
 			if (!componentToBeConnectedWith->getComponentName().empty()) {
 				choices[count] += ogre2wx(componentToBeConnectedWith->getComponentName());
-			}
-			else {
+			} else {
 				choices[count] += componentToBeConnectedWith->getComponentType();
 				if (!componentToBeConnectedWith->getComponentSubType().empty()) {
-					if (componentToBeConnectedWith->getComponentSubType() != CST_UNDEFINED)
-					{
+					if (componentToBeConnectedWith->getComponentSubType() != CST_UNDEFINED) {
 						choices[count] += wxT(" ") + componentToBeConnectedWith->getComponentSubType();
 					}
 				}
@@ -655,40 +504,32 @@ ConnectionPolicy* EditComponent::selectPolicy(EditComponent* componentToBeConnec
 		}
 	}
 
-	if (count > 1) {// TODO: check die GetParent() aufrufe hier
+	if (count > 1) {// TODO: (Michael) check the GetParent() calls here
 		GetParent()->GetParent()->Enable(false); // Disables input from the parent
 		wxSingleChoiceDialog choiceWindow(this, _("Select a connection type"), _("Add a connection"), count, choices);
 		choiceWindow.SetSize(320, 200);
 		if (choiceWindow.ShowModal() == wxID_OK) {
 			mSelectedPolicy = policiesAsArray[choiceWindow.GetSelection()];
-		}
-		else {
-			mSelectedPolicy = 0;
+		} else {
+			mSelectedPolicy = nullptr;
 		}
 		GetParent()->GetParent()->Enable(true); // Enable input from the parent
 		GetParent()->GetParent()->SetFocus();
-	}
-	else if (count == 1) {
+	} else if (count == 1) {
 		mSelectedPolicy = policiesAsArray[0];
-	}
-	else {
-		mSelectedPolicy = 0;
+	} else {
+		mSelectedPolicy = nullptr;
 	}
 
 	return mSelectedPolicy;
 }
 
-ConnectionPolicy* EditComponent::getSelectedPolicy() {
+ConnectionPolicy * EditComponent::getSelectedPolicy() {
 	return mSelectedPolicy;
 }
 
-const wxString& EditComponent::getRelationDescription(ComponentRelation relation,
-	ComponentRelationDirection relationDirection,
-	ComponentType typeToBeConnectedWith,
-	ComponentSubType subTypeToBeConnectedWith) {
-	std::vector<ConnectionPolicy*>::iterator it;
-	std::vector<ConnectionPolicy*>::iterator itEnd = mPolicies.end();
-	for (it = mPolicies.begin(); it != itEnd; ++it) {
+const wxString & EditComponent::getRelationDescription(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith) {
+	for (std::vector<ConnectionPolicy *>::iterator it = mPolicies.begin(); it != mPolicies.end(); ++it) {
 		wxString description = (*it)->getRelationDescription(relation, relationDirection, typeToBeConnectedWith, subTypeToBeConnectedWith);
 		if (description != CRD_UNKNOWN) {
 			return (*it)->getRelationDescription(relation, relationDirection, typeToBeConnectedWith, subTypeToBeConnectedWith);
@@ -711,7 +552,7 @@ void EditComponent::setCaption() {
 	SetToolTip(caption);
 }
 
-const ComponentSubType& EditComponent::getSubType() const {
+const ComponentSubType & EditComponent::getSubType() const {
 	return mSubType;
 }
 
@@ -719,19 +560,19 @@ void EditComponent::setSubType(ComponentSubType subType) {
 	mSubType = subType;
 }
 
-const Ogre::String& EditComponent::getComponentName() const {
+const Ogre::String & EditComponent::getComponentName() const {
 	return mName;
 }
 
-void EditComponent::setComponentName(const Ogre::String& componentName) {
+void EditComponent::setComponentName(const Ogre::String & componentName) {
 	mName = componentName;
 }
 
 void EditComponent::refreshCanvas() {
-	(static_cast<EditTab*>(GetParent()->GetParent()))->refreshCanvas();
+	static_cast<EditTab*>(GetParent()->GetParent())->refreshCanvas();
 }
 
-PropertyWindow* EditComponent::createPropertyWindow(ComponentSubType subType, const PropertyWindow* propertyWindow) {
+PropertyWindow * EditComponent::createPropertyWindow(ComponentSubType subType, const PropertyWindow * propertyWindow) {
 	// Create new propertyWindow and propagate the attributes of the old one.
 	// Don't delete the existing one, because it is deleting itself.
 
@@ -739,80 +580,77 @@ PropertyWindow* EditComponent::createPropertyWindow(ComponentSubType subType, co
 	mOldPropertyWindow = mPropertyWindow;
 
 	if (mType == CT_SYSTEM) {
-		SystemPropertyWindow* pWin = new SystemPropertyWindow(mRootParent, this, mName);
+		SystemPropertyWindow * pWin = new SystemPropertyWindow(mRootParent, this, mName);
 		pWin->setRootFrame(mRootFrame); // To keep a pointer to the main (root) frame
 		mPropertyWindow = pWin;
 	} else if (mType == CT_TECHNIQUE) {
 		mPropertyWindow = new TechniquePropertyWindow(mRootParent, this, mName);
 	} else if (mType == CT_RENDERER) {
 		if (propertyWindow) {
-			mPropertyWindow = mRendererPropertyWindowFactory.createRendererPropertyWindow(mSubType, static_cast<RendererPropertyWindow*>(mPropertyWindow));
+			mPropertyWindow = mRendererPropertyWindowFactory.createRendererPropertyWindow(mSubType, static_cast<RendererPropertyWindow *>(mPropertyWindow));
 		} else {
 			mPropertyWindow = mRendererPropertyWindowFactory.createRendererPropertyWindow(mRootParent, this, mName, mSubType);
 		}
 	} else if (mType == CT_EMITTER) {
 		if (propertyWindow) {
-			mPropertyWindow = mEmitterPropertyWindowFactory.createEmitterPropertyWindow(mSubType, static_cast<EmitterPropertyWindow*>(mPropertyWindow));
+			mPropertyWindow = mEmitterPropertyWindowFactory.createEmitterPropertyWindow(mSubType, static_cast<EmitterPropertyWindow *>(mPropertyWindow));
 		} else {
 			mPropertyWindow = mEmitterPropertyWindowFactory.createEmitterPropertyWindow(mRootParent, this, mName, mSubType);
 		}
 	} else if (mType == CT_AFFECTOR) {
 		if (propertyWindow) {
-			mPropertyWindow = mAffectorPropertyWindowFactory.createAffectorPropertyWindow(mSubType, static_cast<AffectorPropertyWindow*>(mPropertyWindow));
+			mPropertyWindow = mAffectorPropertyWindowFactory.createAffectorPropertyWindow(mSubType, static_cast<AffectorPropertyWindow *>(mPropertyWindow));
 		} else {
 			mPropertyWindow = mAffectorPropertyWindowFactory.createAffectorPropertyWindow(mRootParent, this, mName, mSubType);
 		}
 	} else if (mType == CT_OBSERVER) {
 		if (propertyWindow) {
-			mPropertyWindow = mObserverPropertyWindowFactory.createObserverPropertyWindow(mSubType, static_cast<ObserverPropertyWindow*>(mPropertyWindow));
+			mPropertyWindow = mObserverPropertyWindowFactory.createObserverPropertyWindow(mSubType, static_cast<ObserverPropertyWindow *>(mPropertyWindow));
 		} else {
 			mPropertyWindow = mObserverPropertyWindowFactory.createObserverPropertyWindow(mRootParent, this, mName, mSubType);
 		}
 	} else if (mType == CT_HANDLER) {
 		if (propertyWindow) {
-			mPropertyWindow = mEventHandlerPropertyWindowFactory.createEventHandlerPropertyWindow(mSubType, static_cast<EventHandlerPropertyWindow*>(mPropertyWindow));
+			mPropertyWindow = mEventHandlerPropertyWindowFactory.createEventHandlerPropertyWindow(mSubType, static_cast<EventHandlerPropertyWindow *>(mPropertyWindow));
 		} else {
 			mPropertyWindow = mEventHandlerPropertyWindowFactory.createEventHandlerPropertyWindow(mRootParent, this, mName, mSubType);
 		}
 	} else if (mType == CT_BEHAVIOUR) {
 		if (propertyWindow) {
-			mPropertyWindow = mBehaviourPropertyWindowFactory.createBehaviourPropertyWindow(mSubType, static_cast<BehaviourPropertyWindow*>(mPropertyWindow));
+			mPropertyWindow = mBehaviourPropertyWindowFactory.createBehaviourPropertyWindow(mSubType, static_cast<BehaviourPropertyWindow *>(mPropertyWindow));
 		} else {
 			mPropertyWindow = mBehaviourPropertyWindowFactory.createBehaviourPropertyWindow(mRootParent, this, mName, mSubType);
 		}
 	} else if (mType == CT_EXTERN) {
 		if (propertyWindow) {
-			mPropertyWindow = mExternPropertyWindowFactory.createExternPropertyWindow(mSubType, static_cast<ExternPropertyWindow*>(mPropertyWindow));
+			mPropertyWindow = mExternPropertyWindowFactory.createExternPropertyWindow(mSubType, static_cast<ExternPropertyWindow *>(mPropertyWindow));
 		} else {
 			mPropertyWindow = mExternPropertyWindowFactory.createExternPropertyWindow(mRootParent, this, mName, mSubType);
 		}
 	}
-
-//	mPropertyWindow->Hide();
-//	(dynamic_cast<EditTab*>(GetParent()->GetParent()))->setPropertyWindow(mPropertyWindow); // TODO: assertion wenn render->edit switch
 	return mPropertyWindow;
 }
 
-PropertyWindow* EditComponent::getPropertyWindow() {
+PropertyWindow * EditComponent::getPropertyWindow() {
 	return mPropertyWindow;
 }
 
 void EditComponent::notifyPropertyChanged() {
 	// Inform the parent
-	EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
+	EditTab * parent = static_cast<EditTab *>(GetParent()->GetParent());
 	parent->setSystemUpdatedByEditPage(true);
 }
 
-void EditComponent::notifyAdjustNames(const Ogre::String& newName) {
+void EditComponent::notifyAdjustNames(const Ogre::String & newName) {
 	// Inform the parent
 	//EditTab* parent = static_cast<EditTab*>(GetParent()->GetParent());
 //	parent->adjustNames(mName, newName, mType);
 }
 
-ParticleUniverseEditorFrame* EditComponent::getRootFrame() {
+ParticleUniverseEditorFrame * EditComponent::getRootFrame() {
 	return mRootFrame;
 }
 
-void EditComponent::setRootFrame(ParticleUniverseEditorFrame* rootFrame) {
+void EditComponent::setRootFrame(ParticleUniverseEditorFrame * rootFrame) {
 	mRootFrame = rootFrame;
 }

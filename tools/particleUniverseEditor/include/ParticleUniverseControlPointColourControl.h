@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_CONTROLPOINT_COLOUR_CONTROL_
-#define __PUED_CONTROLPOINT_COLOUR_CONTROL_
+#ifndef __PUED_CONTROLPOINTCOLOURCONTROL_H__
+#define __PUED_CONTROLPOINTCOLOURCONTROL_H__
 
 #include "ParticleUniverseContextMenu.h"
 
@@ -37,42 +37,34 @@ static const int CONTROL_POINT_CONTROL_Y = CONTROL_POINT_CONTROL_RECT_HEIGHT + 8
 
 class ControlPoint;
 
-class ControlPointColourControl : public wxControl, ContextMenuCallbackObject
-{
-	public:
-		ControlPointColourControl(std::vector<ControlPoint*>& v,
-			wxWindow* parent, 
-			wxWindowID id, 
-			const wxPoint& pos = wxDefaultPosition, 
-			const wxSize& size = wxDefaultSize, 
-			const wxString& name = wxT("ControlPointColourControl"),
-			float min = 0.0f,
-			float max = 1.0f);
-		virtual ~ControlPointColourControl(void);
-		virtual void callbackContextMenu(wxWindowID id, wxWindow* window);
-		void reset(void);
-		void addInitialControlpoints(void);
-		std::vector<ControlPoint*>& getControlPointList(void);
+class ControlPointColourControl : public wxControl, ContextMenuCallbackObject {
+public:
+	ControlPointColourControl(std::vector<ControlPoint *> & v, wxWindow * parent, wxWindowID id, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize, const wxString & name = wxT("ControlPointColourControl"), float min = 0.0f, float max = 1.0f);
+	virtual ~ControlPointColourControl();
+	virtual void callbackContextMenu(wxWindowID id, wxWindow * window);
+	void reset();
+	void addInitialControlpoints();
+	std::vector<ControlPoint *> & getControlPointList();
 
-	protected:
-		wxWindow* mParent;
-		std::vector<ControlPoint*> mControlPointList;
-		ControlPoint* mMovingControlPoint;
-		bool mMoving;
-		float mMin;
-		float mMax;
-		ContextMenu* mContextMenu;
-		std::vector<ControlPoint*> mInitialControlPointList;
+protected:
+	wxWindow * mParent;
+	std::vector<ControlPoint *> mControlPointList;
+	ControlPoint * mMovingControlPoint;
+	bool mMoving;
+	float mMin;
+	float mMax;
+	ContextMenu * mContextMenu;
+	std::vector<ControlPoint *> mInitialControlPointList;
 
-		void OnPaint(wxPaintEvent& event);
-		void OnClear(wxEraseEvent& event);
-		void OnMouseLButtonPressed(wxMouseEvent& event);
-		void OnMouseLButtonReleased(wxMouseEvent& event);
-		void OnMove(wxMouseEvent& event);
-		void OnMouseRButtonPressed(wxMouseEvent& event);
-		void OnWindowEnter(wxMouseEvent& event);
-		void fillGradient(wxPaintDC& dc);
-		void sortControlPoints(void);
+	void OnPaint(wxPaintEvent & event);
+	void OnClear(wxEraseEvent & event);
+	void OnMouseLButtonPressed(wxMouseEvent & event);
+	void OnMouseLButtonReleased(wxMouseEvent & event);
+	void OnMove(wxMouseEvent & event);
+	void OnMouseRButtonPressed(wxMouseEvent & event);
+	void OnWindowEnter(wxMouseEvent & event);
+	void fillGradient(wxPaintDC & dc);
+	void sortControlPoints();
 };
 
-#endif
+#endif /* __PUED_CONTROLPOINTCOLOURCONTROL_H__ */

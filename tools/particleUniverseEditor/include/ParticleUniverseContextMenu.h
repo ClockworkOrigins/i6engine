@@ -26,97 +26,82 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/ogre/prerequisites.h"
 
+class ContextMenu;
+
 /**	Menu item of the context menu.
 */
-class ContextMenu;
-class ContextMenuElement : public wxStaticText
-{
-	public:
-		// Constructor / Destructor
-		ContextMenuElement(ContextMenu *parent,
-                 wxWindowID id,
-                 const wxString& label,
-				 const wxString& bitmapNameEnabled,
-				 const wxString& bitmapNameDisabled,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = 0,
-                 const wxString& name = wxStaticTextNameStr);
-		~ContextMenuElement(void) {}
+class ContextMenuElement : public wxStaticText {
+public:
+	// Constructor / Destructor
+	ContextMenuElement(ContextMenu * parent, wxWindowID id, const wxString & label, const wxString & bitmapNameEnabled, const wxString & bitmapNameDisabled, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize, long style = 0, const wxString & name = wxStaticTextNameStr);
+	~ContextMenuElement() {}
 
-		// Getters/Setters
-		wxStaticBitmap* getEnabledIcon(void);
+	// Getters/Setters
+	wxStaticBitmap * getEnabledIcon();
 
-		// Event handlers
-		void OnWindowEnter(wxMouseEvent& event);
-		void OnWindowLeave(wxMouseEvent& event);
-		void OnMouseLButtonPressed(wxMouseEvent& event);
+	// Event handlers
+	void OnWindowEnter(wxMouseEvent & event);
+	void OnWindowLeave(wxMouseEvent & event);
+	void OnMouseLButtonPressed(wxMouseEvent & event);
 
-		// Other functions
-		void setEnabled(bool enabled);
+	// Other functions
+	void setEnabled(bool enabled);
 
-	protected:
-		bool mEnabled;
-		ContextMenu* mParent;
-		wxStaticBitmap* mBitmapEnabled;
-		wxStaticBitmap* mBitmapDisabled;
+protected:
+	bool mEnabled;
+	ContextMenu * mParent;
+	wxStaticBitmap * mBitmapEnabled;
+	wxStaticBitmap * mBitmapDisabled;
 };
 
 /**	Used to perform a callback. Every class that uses a context menu must have this function, so it can handle the selected element.
 */
-class ContextMenuCallbackObject
-{
-	public:
-		// Constructor / Destructor
-		ContextMenuCallbackObject(void);
-		virtual ~ContextMenuCallbackObject(void) {}
+class ContextMenuCallbackObject {
+public:
+	// Constructor / Destructor
+	ContextMenuCallbackObject();
+	virtual ~ContextMenuCallbackObject() {}
 
-		// Callback function
-		virtual void callbackContextMenu(wxWindowID id, wxWindow* window) = 0;
+	// Callback function
+	virtual void callbackContextMenu(wxWindowID id, wxWindow * window) = 0;
 };
 
 
 /**	Context menu, that can be selected with a right mouse click.
 */
-class ContextMenu : public wxFrame
-{
-	public:
-		// Constructor / Destructor
-		ContextMenu(wxWindow* parent, ContextMenuCallbackObject* callbackObject, const wxPoint& pos, const wxSize& size);
-		~ContextMenu(void) {}
+class ContextMenu : public wxFrame {
+public:
+	// Constructor / Destructor
+	ContextMenu(wxWindow * parent, ContextMenuCallbackObject * callbackObject, const wxPoint & pos, const wxSize & size);
+	~ContextMenu() {}
 
-		// Add a menu element
-		void addMenuElement(wxWindowID id,
-			const wxString& label,
-			const wxString& bitmapNameEnabled,
-			const wxString& bitmapNameDisabled,
-			const wxSize& size);
+	// Add a menu element
+	void addMenuElement(wxWindowID id, const wxString & label, const wxString & bitmapNameEnabled, const wxString & bitmapNameDisabled, const wxSize & size);
 
+	// Enable or disable a menu element
+	void enableMenuElement(wxWindowID id, bool enabled);
 
-		// Enable or disable a menu element
-		void enableMenuElement(wxWindowID id, bool enabled);
+	// Generate the menu
+	void initialise();
 
-		// Generate the menu
-		void initialise(void);
+	// Hide the context menu if the mouse is in another window
+	void hideIfNeeded();
 
-		// Hide the context menu if the mouse is in another window
-		void hideIfNeeded(void);
+	// Hide the menu
+	void hideContextMenu();
 
-		// Hide the menu
-		void hideContextMenu(void);
+	// Perform an action if the menu-item was selected
+	void callbackContextMenu(wxWindowID id, wxWindow * window);
 
-		// Perform an action if the menu-item was selected
-		void callbackContextMenu(wxWindowID id, wxWindow* window);
+	/**	Handle mouse event
+	*/
+	virtual void showContextMenu(wxPoint position);
 
-		/**	Handle mouse event
-		*/
-		virtual void showContextMenu(wxPoint position);
-
-	protected:
-		wxWindow* mParent;
-		std::vector<ContextMenuElement*> mMenuElements;
-		bool mInitialised;
-		ContextMenuCallbackObject* mCallbackObject;
+protected:
+	wxWindow * mParent;
+	std::vector<ContextMenuElement *> mMenuElements;
+	bool mInitialised;
+	ContextMenuCallbackObject * mCallbackObject;
 };
 
-#endif
+#endif /* __PUED_CONTEXTMENU_H__ */
