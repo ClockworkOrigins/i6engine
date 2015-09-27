@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_PROPERTY_WINDOW_H__
-#define __PUED_PROPERTY_WINDOW_H__
+#ifndef __PUED_PROPERTYWINDOW_H__
+#define __PUED_PROPERTYWINDOW_H__
 
 #include "ParticleUniverseDynamicAttribute.h"
 #include "ParticleUniverseParticle.h"
@@ -260,185 +260,175 @@ class wxPGId;
 
 /**	Class that combines a listbox with a button. After clicking, new controlpoints are added
 */
-class EnumPropertyWithButton : public wxEnumProperty
-{
-	public:
-		EnumPropertyWithButton(
-			const wxString& label,
-			const wxString& name,
-			const wxArrayString& choices);
-		virtual ~EnumPropertyWithButton(void) {}
+class EnumPropertyWithButton : public wxEnumProperty {
+public:
+	EnumPropertyWithButton(const wxString & label, const wxString & name, const wxArrayString & choices);
+	virtual ~EnumPropertyWithButton() {}
 
-		/**
-		*/
-		virtual bool OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event);
+	/**
+	*/
+	virtual bool OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_primary, wxEvent & event);
 };
 
 /**
 */
-class PropertyWindow : public wxPropertyGrid
-{
-	public:
-		PropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		~PropertyWindow(void) {}
+class PropertyWindow : public wxPropertyGrid {
+public:
+	PropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name);
+	~PropertyWindow() {}
 
-		// public attributes
-		typedef std::map<wxString, ParticleUniverse::DynamicAttributeCurved::ControlPointList> ControlPointListMap;
-		ControlPointListMap mControlPointListMap;
+	// public attributes
+	typedef std::map<wxString, ParticleUniverse::DynamicAttributeCurved::ControlPointList> ControlPointListMap;
+	ControlPointListMap mControlPointListMap;
 
-		// public attributes
-		typedef std::map<wxString, ParticleUniverse::InterpolationType> InterpolationTypeMap;
-		InterpolationTypeMap mInterpolationTypeMap;
+	// public attributes
+	typedef std::map<wxString, ParticleUniverse::InterpolationType> InterpolationTypeMap;
+	InterpolationTypeMap mInterpolationTypeMap;
 
-		/**
-			Get/Set name
-		*/
-		const Ogre::String& getComponentName() const;
-		void setComponentName(const Ogre::String& name);
+	/**
+		Get/Set name
+	*/
+	const Ogre::String & getComponentName() const;
+	void setComponentName(const Ogre::String & name);
 
-		/**
-			Bool-, Float-, UInt16-, Long and String-properties
-		*/
-		void doSetBool(const wxString& name, bool boolValue);
-		bool doGetBool(const wxString& name);
+	/**
+		Bool-, Float-, UInt16-, Long and String-properties
+	*/
+	void doSetBool(const wxString & name, bool boolValue);
+	bool doGetBool(const wxString & name);
 
-		void doSetDouble(const wxString& name, double doubleValue);
-		double doGetDouble(const wxString& name);
+	void doSetDouble(const wxString & name, double doubleValue);
+	double doGetDouble(const wxString & name);
 
-		void doSetLong(const wxString& name, long longValue);
-		long doGetLong(const wxString& name);
+	void doSetLong(const wxString & name, long longValue);
+	long doGetLong(const wxString & name);
 
-		void doSetUint16(const wxString& name, wxUint16 uIntValue);
-		wxUint16 doGetUint16(const wxString& name);
+	void doSetUint16(const wxString & name, wxUint16 uIntValue);
+	wxUint16 doGetUint16(const wxString & name);
 
-		void doSetString(const wxString& name, const wxString& stringValue);
-		const wxString& doGetString(const wxString& name);
+	void doSetString(const wxString & name, const wxString & stringValue);
+	const wxString & doGetString(const wxString & name);
 
-		/**
-			Colour property with alpha
-		*/
-		void appendColourWithAlphaProperty(const wxString& label, const wxString& name, const wxColour& colour);
-		void appendInColourWithAlphaProperty(wxPGId& id, const wxString& label, const wxString& name, const wxColour& colour);
-		void doSetColourWithAlpha(const wxString& name, const wxColour& colour, bool nameIsBaseName = false);
-		const wxColour& doGetColourWithAlpha(const wxString& name, wxColour& colour, bool nameIsBaseName = false);
+	/**
+		Colour property with alpha
+	*/
+	void appendColourWithAlphaProperty(const wxString & label, const wxString & name, const wxColour & colour);
+	void appendInColourWithAlphaProperty(wxPGId & id, const wxString & label, const wxString & name, const wxColour & colour);
+	void doSetColourWithAlpha(const wxString & name, const wxColour & colour, bool nameIsBaseName = false);
+	const wxColour & doGetColourWithAlpha(const wxString & name, wxColour & colour, bool nameIsBaseName = false);
 
-		/**
-			Vector3 property
-		*/
-		void appendVector3(const wxString& label, const wxString& name, const Ogre::Vector3& vector3);
-		void doSetVector3(const wxString& name, const Ogre::Vector3& vector3);
-		const Ogre::Vector3& doGetVector3(const wxString& name, Ogre::Vector3& vector3);
+	/**
+		Vector3 property
+	*/
+	void appendVector3(const wxString & label, const wxString & name, const Ogre::Vector3 & vector3);
+	void doSetVector3(const wxString & name, const Ogre::Vector3 & vector3);
+	const Ogre::Vector3 & doGetVector3(const wxString & name, Ogre::Vector3 & vector3);
 
-		/**
-			Vector4 property
-		*/
-		void appendVector4(const wxString& label, const wxString& name, const Ogre::Vector4& vector4);
-		void doSetVector4(const wxString& name, const Ogre::Vector4& vector4);
-		const Ogre::Vector4& doGetVector4(const wxString& name, Ogre::Vector4& vector4);
+	/**
+		Vector4 property
+	*/
+	void appendVector4(const wxString & label, const wxString & name, const Ogre::Vector4 & vector4);
+	void doSetVector4(const wxString & name, const Ogre::Vector4 & vector4);
+	const Ogre::Vector4 & doGetVector4(const wxString & name, Ogre::Vector4 & vector4);
 
-		/**
-			Quaternion property
-		*/
-		void appendQuaternion(const wxString& label, const wxString& name, const Ogre::Quaternion& quaternion);
-		void doSetQuaternion(const wxString& name, const Ogre::Quaternion& quaternion);
-		const Ogre::Quaternion& doGetQuaternion(const wxString& name, Ogre::Quaternion& quaternion);
+	/**
+		Quaternion property
+	*/
+	void appendQuaternion(const wxString & label, const wxString & name, const Ogre::Quaternion & quaternion);
+	void doSetQuaternion(const wxString & name, const Ogre::Quaternion & quaternion);
+	const Ogre::Quaternion & doGetQuaternion(const wxString & name, Ogre::Quaternion & quaternion);
 
-		/**
-			Dynamic Attribute property
-		*/
-		void appendDynamicAttribute(const wxString& label, const wxString& name, ParticleUniverse::DynamicAttribute& dynamicAttribute);
-		void doSetDynamicAttribute(const wxString& name, PropertyWindow* propertyWindow);
-		void doSetDynamicAttribute(const wxString& name, ParticleUniverse::DynamicAttribute* dynamicAttribute);
-		//ParticleUniverse::DynamicAttribute* DoGetDynamicAttribute(const wxString& name);
+	/**
+		Dynamic Attribute property
+	*/
+	void appendDynamicAttribute(const wxString & label, const wxString & name, ParticleUniverse::DynamicAttribute & dynamicAttribute);
+	void doSetDynamicAttribute(const wxString & name, PropertyWindow * propertyWindow);
+	void doSetDynamicAttribute(const wxString & name, ParticleUniverse::DynamicAttribute * dynamicAttribute);
+	//ParticleUniverse::DynamicAttribute * DoGetDynamicAttribute(const wxString & name);
 
-		/**
-			Returns the owner of this property window (this is not the parent).
-		*/
-		EditComponent* getOwner(void);
+	/**
+		Returns the owner of this property window (this is not the parent).
+	*/
+	EditComponent * getOwner();
 
-		/**
-			Handles the property changes
-		*/
-		virtual void onPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		Handles the property changes
+	*/
+	virtual void onPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Notify the parent that a property has been changed.
-		*/
-		void notifyPropertyChanged(void);
+	/**
+		Notify the parent that a property has been changed.
+	*/
+	void notifyPropertyChanged();
 
-		/**
-			Update the ParticleUniverse::ParticleSystem component with the property.
-		*/
-		void copyAttributeToComponent(wxPGProperty* prop, wxString propertyName);
+	/**
+		Update the ParticleUniverse::ParticleSystem component with the property.
+	*/
+	void copyAttributeToComponent(wxPGProperty * prop, wxString propertyName);
 
-		/**
-			Update the ParticleUniverse::DynamicAttribute.
-		@remarks
-			If a DynamicAttribute pointer is returned, the type has been changed, so it needs to be set.
-		*/
-		ParticleUniverse::DynamicAttribute* copyValuesToDynamicAttribute(wxString name,
-			wxPGProperty* prop,
-			wxString baseName,
-			ParticleUniverse::DynamicAttribute* dynAttr);
+	/**
+		Update the ParticleUniverse::DynamicAttribute.
+	@remarks
+		If a DynamicAttribute pointer is returned, the type has been changed, so it needs to be set.
+	*/
+	ParticleUniverse::DynamicAttribute * copyValuesToDynamicAttribute(wxString name, wxPGProperty * prop, wxString baseName, ParticleUniverse::DynamicAttribute * dynAttr);
 
-		/**
-			Copy all controlpoints from a property (defined with baseName) to a ParticleUniverse::DynamicAttributeCurved.
-		*/
-		void copyControlPointsToDynamicAttribute(wxString baseName, ParticleUniverse::DynamicAttribute* dynAttr);
+	/**
+		Copy all controlpoints from a property (defined with baseName) to a ParticleUniverse::DynamicAttributeCurved.
+	*/
+	void copyControlPointsToDynamicAttribute(wxString baseName, ParticleUniverse::DynamicAttribute * dynAttr);
 
-		/**
-			Start, stop particle system if needed
-		*/
-		bool _mustStopParticleSystem(ParticleUniverse::ParticleSystem* system);
-		void _mustRestartParticleSystem(ParticleUniverse::ParticleSystem* system, bool wasStarted);
+	/**
+		Start, stop particle system if needed
+	*/
+	bool _mustStopParticleSystem(ParticleUniverse::ParticleSystem * system);
+	void _mustRestartParticleSystem(ParticleUniverse::ParticleSystem * system, bool wasStarted);
 
-		/**
-			Unprepares emitted emitters, emitted affectors, ...
-		*/
-		void _unprepare(ParticleUniverse::IElement* element,
-						ParticleUniverse::Particle::ParticleType elementType,
-						ParticleUniverse::Particle::ParticleType unprepareType);
+	/**
+		Unprepares emitted emitters, emitted affectors, ...
+	*/
+	void _unprepare(ParticleUniverse::IElement * element, ParticleUniverse::Particle::ParticleType elementType, ParticleUniverse::Particle::ParticleType unprepareType);
 
-		/**
-			Testfunction to dump all properties
-		*/
-		void propertyDump(wxPropertyGrid* propgrid);
+	/**
+		Testfunction to dump all properties
+	*/
+	void propertyDump(wxPropertyGrid * propgrid);
 
-		/**
-			Return the help html
-		*/
-		const wxString& getHelpHtml(void) const;
+	/**
+		Return the help html
+	*/
+	const wxString & getHelpHtml() const;
 
-	protected:
-		EditComponent* mOwner;
-		Ogre::String mName;
-		wxString mHelpHtml;
+protected:
+	EditComponent * mOwner;
+	Ogre::String mName;
+	wxString mHelpHtml;
 
-		/**
-			Initialises basic properties
-		*/
-		virtual void _initProperties(void);
+	/**
+		Initialises basic properties
+	*/
+	virtual void _initProperties();
 
-		/**
-			Various validation functions. Checks whether the name equals the property name.
-		*/
-		bool _validatePropertyStringNoSpaces(wxPGProperty* prop, const wxString& name);
-		bool _validatePropertyColourWithAlpha(wxPGProperty* prop, const wxString& name);
-		bool _validatePropertyIntMinMax(wxPGProperty* prop, const wxString& name, int min, int max);
-		bool _validatePropertyIntPositive(wxPGProperty* prop, const wxString& name);
-		bool _validatePropertyFloatMinMax(wxPGProperty* prop, const wxString& name, float min, float max);
-		bool _validatePropertyFloatPositive(wxPGProperty* prop, const wxString& name);
-		bool _validatePropertyDynamicAttribute(wxPGProperty* prop, const wxString& name);
+	/**
+		Various validation functions. Checks whether the name equals the property name.
+	*/
+	bool _validatePropertyStringNoSpaces(wxPGProperty * prop, const wxString & name);
+	bool _validatePropertyColourWithAlpha(wxPGProperty * prop, const wxString & name);
+	bool _validatePropertyIntMinMax(wxPGProperty * prop, const wxString & name, int min, int max);
+	bool _validatePropertyIntPositive(wxPGProperty * prop, const wxString & name);
+	bool _validatePropertyFloatMinMax(wxPGProperty * prop, const wxString & name, float min, float max);
+	bool _validatePropertyFloatPositive(wxPGProperty * prop, const wxString & name);
+	bool _validatePropertyDynamicAttribute(wxPGProperty * prop, const wxString & name);
 
-		/**
-			Set the property in error state
-		*/
-		bool _setPropertyError(wxPGProperty* prop, const wxString& message);
+	/**
+		Set the property in error state
+	*/
+	bool _setPropertyError(wxPGProperty * prop, const wxString & message);
 
-		/**
-			Show message (used for proerty validation
-		*/
-		void _showMessage(const wxString& message, long style = wxOK | wxICON_EXCLAMATION);
+	/**
+		Show message (used for proerty validation
+	*/
+	void _showMessage(const wxString & message, long style = wxOK | wxICON_EXCLAMATION);
 };
 
-#endif
+#endif /* __PUED_PROPERTYWINDOW_H__ */

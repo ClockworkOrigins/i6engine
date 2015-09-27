@@ -25,18 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseEditor.h"
 
-//-----------------------------------------------------------------------
-TextControl::TextControl(ParticleUniverseEditorFrame* frame, wxWindow *parent, wxWindowID id,
-			   const wxString& value,
-			   const wxPoint& pos,
-			   const wxSize& size,
-			   long style,
-			   const wxValidator& validator,
-			   const wxString& name) :
-	wxTextCtrl(parent, id, value, pos, size, style, validator, name),
-	mFrame(frame),
-	mHighlightKeywords(true),
-	mPaste(false) {
+TextControl::TextControl(ParticleUniverseEditorFrame * frame, wxWindow * parent, wxWindowID id, const wxString & value, const wxPoint & pos, const wxSize & size, long style, const wxValidator & validator, const wxString & name) : wxTextCtrl(parent, id, value, pos, size, style, validator, name), mFrame(frame), mHighlightKeywords(true), mPaste(false) {
 	addHighLightedText(wxT("system"), wxTextAttr(wxT("#151B8D")));
 	addHighLightedText(wxT("technique"), wxTextAttr(wxT("#6698FF")));
 	addHighLightedText(wxT("renderer"), wxTextAttr(wxT("#E42217")));
@@ -50,21 +39,23 @@ TextControl::TextControl(ParticleUniverseEditorFrame* frame, wxWindow *parent, w
 	Connect(wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(TextControl::OnTextUpdated));
 	Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(TextControl::OnKeyPressed));
 }
-//-----------------------------------------------------------------------
+
 void TextControl::addHighLightedText(wxString str, wxTextAttr attr) {
 	wxFont font = wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
 	attr.SetFont(font);
 	mHighlightedText[str] = attr;
 }
-//-----------------------------------------------------------------------
-void TextControl::OnTextUpdated(wxCommandEvent& evt) {
-	if (IsFrozen())
+
+void TextControl::OnTextUpdated(wxCommandEvent & evt) {
+	if (IsFrozen()) {
 		return;
+	}
 
 	mFrame->notifyScriptChanged();
 
-	if (!mHighlightKeywords)
+	if (!mHighlightKeywords) {
 		return;
+	}
 
 	if (mPaste) {
 		long insert = GetInsertionPoint() == GetLastPosition() ? GetLastPosition() : GetInsertionPoint() + 1;
@@ -104,7 +95,7 @@ void TextControl::OnTextUpdated(wxCommandEvent& evt) {
 			while (l >= 0 && validChar(l)) {
 				l--;
 			}
-			from = l+1;
+			from = l + 1;
 
 			// Get the right part of the word
 			l = insert;
@@ -124,9 +115,10 @@ void TextControl::OnTextUpdated(wxCommandEvent& evt) {
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void TextControl::OnKeyPressed(wxKeyEvent& event) {
+
+void TextControl::OnKeyPressed(wxKeyEvent & event) {
 	event.Skip();
+	// TODO: (Daniel) no magic numbers, use keycodes instead
 	if ((event.GetKeyCode() == 86 || event.GetKeyCode() == 118) && event.GetModifiers() == wxMOD_CONTROL) {
 		// CTRL-V => Paste
 		mPaste = true;
@@ -135,7 +127,7 @@ void TextControl::OnKeyPressed(wxKeyEvent& event) {
 		mPaste = true;
 	}
 }
-//-----------------------------------------------------------------------
+
 void TextControl::checkKeywords(long from, long to, bool freeze) {
 	if (freeze) {
 		Freeze();
@@ -160,12 +152,11 @@ void TextControl::checkKeywords(long from, long to, bool freeze) {
 		Thaw();
 	}
 }
-//-----------------------------------------------------------------------
+
 void TextControl::checkKeyword(long from, long to) {
 	bool keyword = false;
 	wxString text = GetRange(from, to);
-	std::map<wxString, wxTextAttr>::iterator it;
-	for (it = mHighlightedText.begin(); it != mHighlightedText.end(); ++it) {
+	for (std::map<wxString, wxTextAttr>::iterator it = mHighlightedText.begin(); it != mHighlightedText.end(); ++it) {
 		wxString compare = it->first;
 		if (text == compare) {
 			SetStyle(from, to, it->second);
@@ -179,20 +170,20 @@ void TextControl::checkKeyword(long from, long to) {
 		SetStyle(from, to, textAttr);
 	}
 }
-//-----------------------------------------------------------------------
-void TextControl::AppendText(const wxString& text) {
+
+void TextControl::AppendText(const wxString & text) {
 	wxTextCtrl::AppendText(text);
 	if (mHighlightKeywords) {
 		checkKeywords(0, GetLastPosition());
 	}
 }
-//-----------------------------------------------------------------------
+
 bool TextControl::validChar(long pos) {
 	wxString text = GetRange(pos, pos + 1);
 	return !(text == wxT(" ") || text == wxT("\n"));
 }
-//-----------------------------------------------------------------------
-void TextControl::findWordToRight(long insert, long& from, long& to) {
+
+void TextControl::findWordToRight(long insert, long & from, long & to) {
 	from = insert;
 	long l = insert + 1;
 	while (l < GetLastPosition() && validChar(l)) {
@@ -200,8 +191,8 @@ void TextControl::findWordToRight(long insert, long& from, long& to) {
 	}
 	to = l;
 }
-//-----------------------------------------------------------------------
-void TextControl::findWordToLeft(long insert, long& from, long& to) {
+
+void TextControl::findWordToLeft(long insert, long & from, long & to) {
 	long l = insert - 1;
 	while (l >= 0 && validChar(l)) {
 		l--;
@@ -209,20 +200,19 @@ void TextControl::findWordToLeft(long insert, long& from, long& to) {
 	from = l + 1;
 	to = insert;
 }
-//-----------------------------------------------------------------------
+
 void TextControl::setHighlightKeywords(bool highlightKeywords) {
 	mHighlightKeywords = highlightKeywords;
 	if (highlightKeywords) {
 		checkKeywords(0, GetLastPosition());
-	}
-	else {
+	} else {
 		wxTextAttr textAttr = wxTextAttr(*wxBLACK);
 		wxFont font = wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 		textAttr.SetFont(font);
 		SetStyle(0, GetLastPosition(), textAttr);
 	}
 }
-//-----------------------------------------------------------------------
-bool TextControl::getHighlightKeywords(void) const {
+
+bool TextControl::getHighlightKeywords() const {
 	return mHighlightKeywords;
 }

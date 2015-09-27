@@ -32,16 +32,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/propgrid/advprops.h"
 
-//-----------------------------------------------------------------------
-SystemPropertyWindow::SystemPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name) :
-	PropertyWindow(parent, owner, name),
-	mRootFrame(0)
-{
+SystemPropertyWindow::SystemPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name) : PropertyWindow(parent, owner, name), mRootFrame(nullptr) {
 	_initProperties();
 }
-//-----------------------------------------------------------------------
-void SystemPropertyWindow::copyAttributesFromSystem(const ParticleUniverse::ParticleSystem* system)
-{
+
+void SystemPropertyWindow::copyAttributesFromSystem(const ParticleUniverse::ParticleSystem * system) {
 	// Name: Ogre::String
 	wxString templateName = ogre2wx(system->getTemplateName());
 	doSetString(PRNL_NAME, templateName);
@@ -63,7 +58,7 @@ void SystemPropertyWindow::copyAttributesFromSystem(const ParticleUniverse::Part
 	doSetDouble(PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, system->getNonVisibleUpdateTimeout());
 
 	// Lod distances: List of ParticleUniverse::Real
-	wxPGProperty* prop = GetPropertyByName(PRNL_SYSTEM_LOD_DISTANCES);
+	wxPGProperty * prop = GetPropertyByName(PRNL_SYSTEM_LOD_DISTANCES);
 /*	if (prop) TODO
 	{
 		ParentPropertyWithButtonAndFloats* propLodDistances = static_cast<ParentPropertyWithButtonAndFloats*>(prop);
@@ -83,15 +78,13 @@ void SystemPropertyWindow::copyAttributesFromSystem(const ParticleUniverse::Part
 	// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
 	wxString name = PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME;
 	prop = GetPropertyByName(name);
-	if (prop)
-	{
+	if (prop) {
 		prop->SetValue(system->getFastForwardTime());
 	}
 
 	name = PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL;
 	prop = GetPropertyByName(name);
-	if (prop)
-	{
+	if (prop) {
 		prop->SetValue(system->getFastForwardInterval());
 	}
 
@@ -111,71 +104,56 @@ void SystemPropertyWindow::copyAttributesFromSystem(const ParticleUniverse::Part
 	// Use tight bounding box: bool
 	doSetBool(PRNL_SYSTEM_TIGHT_BOUNDING_BOX, system->hasTightBoundingBox());
 }
-//-----------------------------------------------------------------------
-void SystemPropertyWindow::copyAttributeToSystem(wxPGProperty* prop, wxString propertyName)
-{
-	if (!prop)
-		return;
 
-	ParticleUniverse::ParticleSystem* system = static_cast<ParticleUniverse::ParticleSystem*>(mOwner->getPUElement());
-	if (!system)
+void SystemPropertyWindow::copyAttributeToSystem(wxPGProperty * prop, wxString propertyName) {
+	if (!prop) {
 		return;
+	}
 
-	if (propertyName == PRNL_NAME)
-	{
+	ParticleUniverse::ParticleSystem * system = static_cast<ParticleUniverse::ParticleSystem *>(mOwner->getPUElement());
+	if (!system) {
+		return;
+	}
+
+	if (propertyName == PRNL_NAME) {
 		// Name: String
 		Ogre::String name = wx2ogre(prop->GetValueAsString());
 		system->setTemplateName(name);
 
 		// Update everything
-		if (mRootFrame)
-		{
-			ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		if (mRootFrame) {
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 			particleSystemManager->createParticleSystemTemplate(name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 			mRootFrame->replaceTemplateName(name);
 		}
-	}
-	else if (propertyName == PRNL_SYSTEM_CATEGORY)
-	{
+	} else if (propertyName == PRNL_SYSTEM_CATEGORY) {
 		// Category: String
 		system->setCategory(wx2ogre(prop->GetValueAsString()));
-		if (mRootFrame)
-		{
+		if (mRootFrame) {
 			mRootFrame->notifyCategoryChanged(system);
 		}
-	}
-	else if (propertyName == PRNL_SYSTEM_KEEP_LOCAL)
-	{
+	} else if (propertyName == PRNL_SYSTEM_KEEP_LOCAL) {
 		// Keep local: Bool
 		system->setKeepLocal(prop->DoGetValue().GetBool());
-	}
-	else if (propertyName == PRNL_SYSTEM_ITERATION_INTERVAL)
-	{
+	} else if (propertyName == PRNL_SYSTEM_ITERATION_INTERVAL) {
 		// Iteration interval: ParticleUniverse::Real
 		system->setIterationInterval(prop->DoGetValue().GetDouble());
-	}
-	else if (propertyName == PRNL_SYSTEM_FIXED_TIMEOUT)
-	{
+	} else if (propertyName == PRNL_SYSTEM_FIXED_TIMEOUT) {
 		// Fixed timeout: ParticleUniverse::Real
 		system->setFixedTimeout(prop->DoGetValue().GetDouble());
-	}
-	else if (propertyName == PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT)
-	{
+	} else if (propertyName == PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT) {
 		// Non-visible update timeout: ParticleUniverse::Real
 		system->setNonVisibleUpdateTimeout(prop->DoGetValue().GetDouble());
-	}
-	else if (propertyName == PRNL_SYSTEM_LOD_DISTANCES || propertyName.StartsWith(PRNL_FLOAT))
-	{
+	} else if (propertyName == PRNL_SYSTEM_LOD_DISTANCES || propertyName.StartsWith(PRNL_FLOAT)) {
 		// Lod distances: List of ParticleUniverse::Real
 		// Todo: Checking on PRNL_FLOAT only is not sufficient if more lists of floats are added to this propertygrid.
-/*	TODO	ParentPropertyWithButtonAndFloats* parentPropertyWithButtonAndFloats = 0;
-		if (propertyName == PRNL_SYSTEM_LOD_DISTANCES)
-		{
+/*	TODO	ParentPropertyWithButtonAndFloats * parentPropertyWithButtonAndFloats = nullptr;
+		if (propertyName == PRNL_SYSTEM_LOD_DISTANCES) {
 			parentPropertyWithButtonAndFloats = static_cast<ParentPropertyWithButtonAndFloats*>(prop);
 		}
 		else
 		{
-			wxPGProperty* p = prop->GetParent();
+			wxPGProperty * p = prop->GetParent();
 			parentPropertyWithButtonAndFloats = static_cast<ParentPropertyWithButtonAndFloats*>(p);
 		}
 		unsigned int size = parentPropertyWithButtonAndFloats->getNumberOfFloats();
@@ -185,73 +163,51 @@ void SystemPropertyWindow::copyAttributeToSystem(wxPGProperty* prop, wxString pr
 			ParticleUniverse::Real f = parentPropertyWithButtonAndFloats->getFloat(this, i);
 			system->addLodDistance(f);
 		}*/
-	}
-	else if (propertyName == PRNL_SYSTEM_SMOOTH_LOD)
-	{
+	} else if (propertyName == PRNL_SYSTEM_SMOOTH_LOD) {
 		// Smooth lod: bool
 		system->setSmoothLod(prop->DoGetValue().GetBool());
-	}
-	else if (propertyName == PRNL_SYSTEM_FAST_FORWARD ||
-		propertyName == PRNL_SYSTEM_FAST_FORWARD_TIME ||
-		propertyName == PRNL_SYSTEM_FAST_FORWARD_INTERVAL)
-	{
+	} else if (propertyName == PRNL_SYSTEM_FAST_FORWARD || propertyName == PRNL_SYSTEM_FAST_FORWARD_TIME || propertyName == PRNL_SYSTEM_FAST_FORWARD_INTERVAL) {
 		// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
-		wxPGProperty* p = GetPropertyByName(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME);
-		if (!p)
+		wxPGProperty * p = GetPropertyByName(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME);
+		if (!p) {
 			return;
+		}
 		ParticleUniverse::Real time = p->DoGetValue().GetDouble();
 		p = GetPropertyByName(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL);
-		if (!p)
+		if (!p) {
 			return;
+		}
 		ParticleUniverse::Real interval = p->DoGetValue().GetDouble();
 		system->setFastForward(time, interval);
-	}
-	else if (propertyName == PRNL_SYSTEM_MAIN_CAMERA_NAME)
-	{
+	} else if (propertyName == PRNL_SYSTEM_MAIN_CAMERA_NAME) {
 		// Main camera name: Ogre::String
 		wxString name = prop->GetValueAsString();
 		Ogre::String cameraName = wx2ogre(name);
-		try
-		{
+		try {
 			system->setMainCameraName(cameraName);
-		}
-		catch (Ogre::Exception e)
-		{
+		} catch (Ogre::Exception e) {
 			// Ignore the exception
 		}
-	}
-	else if (propertyName == PRNL_SYSTEM_SCALE_VELOCITY)
-	{
+	} else if (propertyName == PRNL_SYSTEM_SCALE_VELOCITY) {
 		// Scale velocity: ParticleUniverse::Real
 		system->setScaleVelocity(prop->DoGetValue().GetDouble());
-	}
-	else if (propertyName == PRNL_SYSTEM_SCALE_TIME)
-	{
+	} else if (propertyName == PRNL_SYSTEM_SCALE_TIME) {
 		// Scale time: ParticleUniverse::Real
 		system->setScaleTime(prop->DoGetValue().GetDouble());
-	}
-	else if (propertyName == PRNL_SYSTEM_SCALE + PRNL_X ||
-		propertyName == PRNL_SYSTEM_SCALE + PRNL_Y ||
-		propertyName == PRNL_SYSTEM_SCALE + PRNL_Z)
-	{
+	} else if (propertyName == PRNL_SYSTEM_SCALE + PRNL_X || propertyName == PRNL_SYSTEM_SCALE + PRNL_Y || propertyName == PRNL_SYSTEM_SCALE + PRNL_Z) {
 		// Scale dimensions: Ogre::Vector3
 		Ogre::Vector3 v3;
 		v3 = doGetVector3(PRNL_SYSTEM_SCALE, v3);
 		system->setScale(v3);
-	}
-	else if (propertyName == PRNL_SYSTEM_TIGHT_BOUNDING_BOX)
-	{
+	} else if (propertyName == PRNL_SYSTEM_TIGHT_BOUNDING_BOX) {
 		// Use tight bounding box: bool
 		system->setTightBoundingBox(prop->DoGetValue().GetBool());
-	}
-	else
-	{
+	} else {
 		PropertyWindow::copyAttributeToComponent(prop, propertyName);
 	}
 }
-//-----------------------------------------------------------------------
-void SystemPropertyWindow::_initProperties(void)
-{
+
+void SystemPropertyWindow::_initProperties() {
 	// Set the (internationalized) property names
 	PRNL_NAME = _("Name");
 	PRNL_SYSTEM_CATEGORY = _("Category");
@@ -296,7 +252,7 @@ void SystemPropertyWindow::_initProperties(void)
 	SetPropertyEditor(PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, wxPG_EDITOR(SpinCtrl));
 
 	// Lod distances: List of ParticleUniverse::Real
-//	wxPGProperty* pid = Append(new ParentPropertyWithButtonAndFloats(PRNL_SYSTEM_LOD_DISTANCES, PRNL_SYSTEM_LOD_DISTANCES));
+//	wxPGProperty * pid = Append(new ParentPropertyWithButtonAndFloats(PRNL_SYSTEM_LOD_DISTANCES, PRNL_SYSTEM_LOD_DISTANCES));
 //	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Smooth lod: bool
@@ -326,32 +282,29 @@ void SystemPropertyWindow::_initProperties(void)
 	// Use tight bounding box: bool
 	Append(new wxBoolProperty(PRNL_SYSTEM_TIGHT_BOUNDING_BOX, PRNL_SYSTEM_TIGHT_BOUNDING_BOX, ParticleUniverse::ParticleSystem::DEFAULT_TIGHT_BOUNDINGBOX));
 }
-//-----------------------------------------------------------------------
-void SystemPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
-{
+
+void SystemPropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {
 	// Perform additional validations.
-	if (!_validatePropertyStringNoSpaces(event.GetProperty(), PRNL_SYSTEM_MAIN_CAMERA_NAME))
+	if (!_validatePropertyStringNoSpaces(event.GetProperty(), PRNL_SYSTEM_MAIN_CAMERA_NAME)) {
 		return;
+	}
 
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetProperty();
+	wxPGProperty * prop = event.GetProperty();
 	PropertyWindow::onPropertyChanged(event);
 	copyAttributeToSystem(prop, propertyName);
-	ParticleUniverse::ParticleSystem* system = static_cast<ParticleUniverse::ParticleSystem*>(mOwner->getPUElement());
-	if (system && system->_isMarkedForEmission())
-	{
+	ParticleUniverse::ParticleSystem * system = static_cast<ParticleUniverse::ParticleSystem *>(mOwner->getPUElement());
+	if (system && system->_isMarkedForEmission()) {
 		// Force recreation of new emitted systems
 		// Todo: Implement later, because this version of the editor doesn't support emitted particle systems.
 	}
 	notifyPropertyChanged();
 }
-//-----------------------------------------------------------------------
-ParticleUniverseEditorFrame* SystemPropertyWindow::getRootFrame(void)
-{
+
+ParticleUniverseEditorFrame * SystemPropertyWindow::getRootFrame() {
 	return mRootFrame;
 }
-//-----------------------------------------------------------------------
-void SystemPropertyWindow::setRootFrame(ParticleUniverseEditorFrame* rootFrame)
-{
+
+void SystemPropertyWindow::setRootFrame(ParticleUniverseEditorFrame * rootFrame) {
 	mRootFrame = rootFrame;
 }

@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_SPIN_CTRL_H__
-#define __PUED_SPIN_CTRL_H__
+#ifndef __PUED_SPINCTRL_H__
+#define __PUED_SPINCTRL_H__
 
 #include "wx/ogre/prerequisites.h"
 
@@ -20,31 +20,19 @@ You can find a copy of the Commercial License in the Particle Universe package.
 */
 class UIMiscIcons;
 
-class SpinCtrlXYZ : public wxSpinCtrl
-{
-	public:
+class SpinCtrlXYZ : public wxSpinCtrl {
+public:
 
-		SpinCtrlXYZ (UIMiscIcons* icons, 
-			wxWindow* parent,
-			wxWindowID id = -1, 
-			const wxString& value = wxT(""), 
-			const wxPoint& pos = wxDefaultPosition, 
-			const wxSize& size = wxDefaultSize, 
-			long style = wxSP_ARROW_KEYS, 
-			int min = 0, 
-			int max = 100, 
-			int initial = 0, 
-			const wxString& name = _T("wxSpinCtrl"),
-			SpinCtrlXYZ* nextSpinCtrl = 0);
+	SpinCtrlXYZ (UIMiscIcons * icons, wxWindow * parent, wxWindowID id = -1, const wxString & value = wxT(""), const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize, long style = wxSP_ARROW_KEYS, int min = 0, int max = 100, int initial = 0, const wxString & name = _T("wxSpinCtrl"), SpinCtrlXYZ * nextSpinCtrl = nullptr);
 
-		virtual ~SpinCtrlXYZ(void) {}
-		void setNextSpinCtrl(SpinCtrlXYZ* nextSpinCtrl);
-		void OnSpinUpdate(wxCommandEvent& event);
-		virtual void OnChar(wxKeyEvent& event);
+	virtual ~SpinCtrlXYZ() {}
+	void setNextSpinCtrl(SpinCtrlXYZ * nextSpinCtrl);
+	void OnSpinUpdate(wxCommandEvent & event);
+	virtual void OnChar(wxKeyEvent & event);
 
-	protected:
-		UIMiscIcons* mUIMiscIcons;
-		SpinCtrlXYZ* mNextSpinCtrl;
+protected:
+	UIMiscIcons * mUIMiscIcons;
+	SpinCtrlXYZ * mNextSpinCtrl;
 };
 
-#endif
+#endif /* __PUED_SPINCTRL_H__ */

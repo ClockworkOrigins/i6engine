@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_RENDERER_PROPERTY_WINDOW_H__
-#define __PUED_RENDERER_PROPERTY_WINDOW_H__
+#ifndef __PUED_RENDERERPROPERTYWINDOW_H__
+#define __PUED_RENDERERPROPERTYWINDOW_H__
 
 #include "ParticleUniversePropertyWindow.h"
 
@@ -37,57 +37,55 @@ static wxString PRNL_MAX_ELEMENTS = wxT("");
 
 /**	
 */
-class RendererPropertyWindow : public PropertyWindow
-{
-	public:
-		RendererPropertyWindow(wxWindow* parent, EditComponent* owner);
-		RendererPropertyWindow(RendererPropertyWindow* rendererPropertyWindow);
-		~RendererPropertyWindow(void) {}
+class RendererPropertyWindow : public PropertyWindow {
+public:
+	RendererPropertyWindow(wxWindow * parent, EditComponent * owner);
+	RendererPropertyWindow(RendererPropertyWindow * rendererPropertyWindow);
+	~RendererPropertyWindow() {}
 
-		/**
-			Copy basic renderer properties from a window to a renderer
-		*/
-		virtual void copyAttributeToRenderer(wxPGProperty* prop, wxString propertyName);
+	/**
+		Copy basic renderer properties from a window to a renderer
+	*/
+	virtual void copyAttributeToRenderer(wxPGProperty * prop, wxString propertyName);
 
-		/**
-			Copy basic renderer properties from an renderer to a window
-		*/
-		virtual void copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer* renderer);
+	/**
+		Copy basic renderer properties from an renderer to a window
+	*/
+	virtual void copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer);
 
-		/**
-			Copy basic renderer properties from another renderer property window
-		*/
-		virtual void copyAttributesFromPropertyWindow(RendererPropertyWindow* rendererPropertyWindow);
+	/**
+		Copy basic renderer properties from another renderer property window
+	*/
+	virtual void copyAttributesFromPropertyWindow(RendererPropertyWindow * rendererPropertyWindow);
 
-		/**
-			See PropertyWindow
-		*/
-		virtual void onPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		See PropertyWindow
+	*/
+	virtual void onPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Only handle parent properties if they are changed.
-		*/
-		void onParentPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		Only handle parent properties if they are changed.
+	*/
+	void onParentPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Updating function
-		*/
-		void replaceRendererType(wxPGProperty* prop);
+	/**
+		Updating function
+	*/
+	void replaceRendererType(wxPGProperty * prop);
 
-		/**
-			Determine selected render type (take internationalisation into account)
-		*/
-		const Ogre::String& getRendererTypeByProperty(wxPGProperty* prop);
+	/**
+		Determine selected render type (take internationalisation into account)
+	*/
+	const Ogre::String & getRendererTypeByProperty(wxPGProperty * prop);
 
 
-	protected:
-		wxArrayString mTypes;
+protected:
+	wxArrayString mTypes;
 
-		/**
-			Initialises all renderer properties
-		*/
-		virtual void _initProperties(void);
+	/**
+		Initialises all renderer properties
+	*/
+	virtual void _initProperties();
 };
 
-#endif
-
+#endif /* __PUED_RENDERERPROPERTYWINDOW_H__ */

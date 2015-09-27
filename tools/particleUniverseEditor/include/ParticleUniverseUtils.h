@@ -9,50 +9,46 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_CUTILS_H__
-#define __PUED_CUTILS_H__
+#ifndef __PUED_UTILS_H__
+#define __PUED_UTILS_H__
 
 #include "wx/ogre/prerequisites.h"
 
 /**	Utils class
 */
-class Utils
-{
-	public:
-		static wxString CURRENT_DIR_ATTR;
-		static wxString SCRIPT_DIR_ATTR;
+class Utils {
+public:
+	static wxString CURRENT_DIR_ATTR;
+	static wxString SCRIPT_DIR_ATTR;
 
-		// Constructor / Destructor
-		Utils(void) {}
-		~Utils(void) {}
+	// Constructor / Destructor
+	Utils() {}
+	~Utils() {}
 
-		/**	Return the current working directory
-		*/
-		static const wxString& getCurrentDirectory(void);
+	/**	Return the current working directory
+	*/
+	static const wxString & getCurrentDirectory();
 
-		/**	Return the directory where the html files are
-		*/
-		static const wxString& getManualScriptDirectory(void);
+	/**	Return the directory where the html files are
+	*/
+	static const wxString & getManualScriptDirectory();
 
-		/**	Calculate the world position from a local position
-			worldOrientation = world orientation of the vector
-			localPosition = the local position (in relation to its parent)
-			worldPosition = world position of the parent
-			worldScale = world scale of the parent (?)
-		*/
-		static Ogre::Vector3 convertLocalToWorldPosition (const Ogre::Quaternion& worldOrientation,
-			const Ogre::Vector3& localPosition, 
-			const Ogre::Vector3& worldPosition,
-			const Ogre::Vector3& worldScale = Ogre::Vector3::UNIT_SCALE);
+	/**	Calculate the world position from a local position
+		worldOrientation = world orientation of the vector
+		localPosition = the local position (in relation to its parent)
+		worldPosition = world position of the parent
+		worldScale = world scale of the parent (?)
+	*/
+	static Ogre::Vector3 convertLocalToWorldPosition (const Ogre::Quaternion & worldOrientation, const Ogre::Vector3 & localPosition, const Ogre::Vector3 & worldPosition, const Ogre::Vector3 & worldScale = Ogre::Vector3::UNIT_SCALE);
 
-		/**	Calculate the screen position from a world position
-			worldPosition = world position of the vector
-			camera = camera associated with the screen
-		*/
-		static Ogre::Vector2 convertWorldToScreenPosition(const Ogre::Vector3& worldPosition, Ogre::Camera* camera);
+	/**	Calculate the screen position from a world position
+		worldPosition = world position of the vector
+		camera = camera associated with the screen
+	*/
+	static Ogre::Vector2 convertWorldToScreenPosition(const Ogre::Vector3 & worldPosition, Ogre::Camera * camera);
 };
 
 #define CURRENT_DIR Utils::getCurrentDirectory()
 #define SCRIPT_DIR Utils::getManualScriptDirectory()
 
-#endif
+#endif /* __PUED_UTILS_H__ */
