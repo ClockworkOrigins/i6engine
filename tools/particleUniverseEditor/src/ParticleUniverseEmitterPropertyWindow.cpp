@@ -21,23 +21,16 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/propgrid/advprops.h"
 
-//-----------------------------------------------------------------------
-EmitterPropertyWindow::EmitterPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name) : PropertyWindow(parent, owner, name)
-{
+EmitterPropertyWindow::EmitterPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name) : PropertyWindow(parent, owner, name) {
 	_initProperties();
 }
-//-----------------------------------------------------------------------
-EmitterPropertyWindow::EmitterPropertyWindow(EmitterPropertyWindow* emitterPropertyWindow) : PropertyWindow(
-	emitterPropertyWindow->GetParent(),
-	emitterPropertyWindow->getOwner(),
-	emitterPropertyWindow->getComponentName())
-{
+
+EmitterPropertyWindow::EmitterPropertyWindow(EmitterPropertyWindow * emitterPropertyWindow) : PropertyWindow(emitterPropertyWindow->GetParent(), emitterPropertyWindow->getOwner(), emitterPropertyWindow->getComponentName()) {
 	_initProperties();
 	copyAttributesFromPropertyWindow(emitterPropertyWindow);
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyAttributesFromPropertyWindow(EmitterPropertyWindow* emitterPropertyWindow)
-{
+
+void EmitterPropertyWindow::copyAttributesFromPropertyWindow(EmitterPropertyWindow * emitterPropertyWindow) {
 	Ogre::Vector3 v;
 	Ogre::Quaternion q;
 	wxColor c;
@@ -47,8 +40,8 @@ void EmitterPropertyWindow::copyAttributesFromPropertyWindow(EmitterPropertyWind
 	doSetString(PRNL_NAME, emitterPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyByName(PRNL_EMITTER_TYPE);
-	wxPGProperty* propFrom = emitterPropertyWindow->GetPropertyByName(PRNL_EMITTER_TYPE);
+	wxPGProperty * propTo = GetPropertyByName(PRNL_EMITTER_TYPE);
+	wxPGProperty * propFrom = emitterPropertyWindow->GetPropertyByName(PRNL_EMITTER_TYPE);
 	propTo->SetValue(propFrom->DoGetValue());
 
 	// Enabled: Bool
@@ -131,242 +124,158 @@ void EmitterPropertyWindow::copyAttributesFromPropertyWindow(EmitterPropertyWind
 	// Force emission: Bool
 	doSetBool(PRNL_EMITTER_FORCE_EMISSION, emitterPropertyWindow->doGetBool(PRNL_EMITTER_FORCE_EMISSION));
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyAttributeToEmitter(wxPGProperty* prop, wxString propertyName)
-{
-	if (!prop)
-		return;
 
-	ParticleUniverse::ParticleEmitter* emitter = static_cast<ParticleUniverse::ParticleEmitter*>(mOwner->getPUElement());
-	if (!emitter)
+void EmitterPropertyWindow::copyAttributeToEmitter(wxPGProperty * prop, wxString propertyName) {
+	if (!prop) {
 		return;
+	}
 
-	if (propertyName == PRNL_NAME)
-	{
+	ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(mOwner->getPUElement());
+	if (!emitter) {
+		return;
+	}
+
+	if (propertyName == PRNL_NAME) {
 		// Name: String
 		Ogre::String name = wx2ogre(prop->GetValueAsString());
 		emitter->setName(name);
-	}
-	else if (propertyName == PRNL_EMITTER_TYPE)
-	{
+	} else if (propertyName == PRNL_EMITTER_TYPE) {
 		// Type: List of types
 		// This requires the emitter to be replaced.
 		replaceEmitterType(prop);
-	}
-	else if (propertyName == PRNL_EMITTER_ENABLED)
-	{
+	} else if (propertyName == PRNL_EMITTER_ENABLED) {
 		// Enabled: Bool
 		copyEnabledToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_POSITION + PRNL_X ||
-		propertyName == PRNL_EMITTER_POSITION + PRNL_Y ||
-		propertyName == PRNL_EMITTER_POSITION + PRNL_Z)
-	{
+	} else if (propertyName == PRNL_EMITTER_POSITION + PRNL_X || propertyName == PRNL_EMITTER_POSITION + PRNL_Y || propertyName == PRNL_EMITTER_POSITION + PRNL_Z) {
 		// Position: Vector3
 		copyPositionToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_KEEP_LOCAL)
-	{
+	} else if (propertyName == PRNL_EMITTER_KEEP_LOCAL) {
 		// Keep local: Bool
 		copyKeepLocalToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_DIRECTION + PRNL_X ||
-		propertyName == PRNL_EMITTER_DIRECTION + PRNL_Y ||
-		propertyName == PRNL_EMITTER_DIRECTION + PRNL_Z)
-	{
+	} else if (propertyName == PRNL_EMITTER_DIRECTION + PRNL_X || propertyName == PRNL_EMITTER_DIRECTION + PRNL_Y || propertyName == PRNL_EMITTER_DIRECTION + PRNL_Z) {
 		// Direction: Vector3
 		copyDirectionToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_ORIENTATION + PRNL_W ||
-		propertyName == PRNL_EMITTER_ORIENTATION + PRNL_X ||
-		propertyName == PRNL_EMITTER_ORIENTATION + PRNL_Y ||
-		propertyName == PRNL_EMITTER_ORIENTATION + PRNL_Z)
-	{
+	} else if (propertyName == PRNL_EMITTER_ORIENTATION + PRNL_W || propertyName == PRNL_EMITTER_ORIENTATION + PRNL_X || propertyName == PRNL_EMITTER_ORIENTATION + PRNL_Y || propertyName == PRNL_EMITTER_ORIENTATION + PRNL_Z) {
 		// Orientation: Quaternion
 		copyOrientationToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_ORIENTATION_START + PRNL_W ||
-		propertyName == PRNL_EMITTER_ORIENTATION_START + PRNL_X ||
-		propertyName == PRNL_EMITTER_ORIENTATION_START + PRNL_Y ||
-		propertyName == PRNL_EMITTER_ORIENTATION_START + PRNL_Z)
-	{
+	} else if (propertyName == PRNL_EMITTER_ORIENTATION_START + PRNL_W || propertyName == PRNL_EMITTER_ORIENTATION_START + PRNL_X || propertyName == PRNL_EMITTER_ORIENTATION_START + PRNL_Y || propertyName == PRNL_EMITTER_ORIENTATION_START + PRNL_Z) {
 		// Orientation range start: Quaternion
 		copyOrientationRangeStartToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_ORIENTATION_END + PRNL_W ||
-		propertyName == PRNL_EMITTER_ORIENTATION_END + PRNL_X ||
-		propertyName == PRNL_EMITTER_ORIENTATION_END + PRNL_Y ||
-		propertyName == PRNL_EMITTER_ORIENTATION_END + PRNL_Z)
-	{
+	} else if (propertyName == PRNL_EMITTER_ORIENTATION_END + PRNL_W || propertyName == PRNL_EMITTER_ORIENTATION_END + PRNL_X || propertyName == PRNL_EMITTER_ORIENTATION_END + PRNL_Y || propertyName == PRNL_EMITTER_ORIENTATION_END + PRNL_Z) {
 		// Orientation range end: Quaternion
 		copyOrientationRangeEndToEmitter(prop, emitter);
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_VELOCITY))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_VELOCITY)) {
 		// Velocity type: Dynamic attibute
 		copyVelocityToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_DURATION))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_DURATION)) {
 		// Duration: Dynamic attibute
 		copyDurationToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_REPEAT_DELAY))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_REPEAT_DELAY)) {
 		// Repeat - Delay: Dynamic attibute
 		copyRepeatDelayToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_ANGLE))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_ANGLE)) {
 		// Angle: Dynamic attibute
 		copyAngleToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_EMISSION_RATE))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_EMISSION_RATE)) {
 		// Emission rate: Dynamic attibute
 		copyEmissionRateToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_TIME_TO_LIVE))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_TIME_TO_LIVE)) {
 		// Time to live: Dynamic attibute
 		copyTimeToLiveToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_MASS))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_MASS)) {
 		// Mass: Dynamic attibute
 		copyMassToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName == PRNL_EMITTER_TEXTURE_COORD)
-	{
+	} else if (propertyName == PRNL_EMITTER_TEXTURE_COORD) {
 		// Texture coordinate: Uint16
 		copyTextureCoordinateToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_TEXTURE_COORD_START)
-	{
+	} else if (propertyName == PRNL_EMITTER_TEXTURE_COORD_START) {
 		// Texture coordinate Start: Uint16
 		copyTextureCoordinateStartToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_TEXTURE_COORD_END)
-	{
+	} else if (propertyName == PRNL_EMITTER_TEXTURE_COORD_END) {
 		// Texture coordinate End: Uint16
 		copyTextureCoordinateEndToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_COLOUR + PRNL_POST_RGB ||
-		propertyName == PRNL_EMITTER_COLOUR + PRNL_POST_ALPHA)
-	{
+	} else if (propertyName == PRNL_EMITTER_COLOUR + PRNL_POST_RGB || propertyName == PRNL_EMITTER_COLOUR + PRNL_POST_ALPHA) {
 		// Colour: Colour attibute with alpha
 		copyColourToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_COLOUR_RANGE_START + PRNL_POST_RGB ||
-		propertyName == PRNL_EMITTER_COLOUR_RANGE_START + PRNL_POST_ALPHA)
-	{
+	} else if (propertyName == PRNL_EMITTER_COLOUR_RANGE_START + PRNL_POST_RGB || propertyName == PRNL_EMITTER_COLOUR_RANGE_START + PRNL_POST_ALPHA) {
 		// Colour range start: Colour attibute with alpha
 		copyColourRangeStartToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_COLOUR_RANGE_END + PRNL_POST_RGB ||
-		propertyName == PRNL_EMITTER_COLOUR_RANGE_END + PRNL_POST_ALPHA)
-	{
+	} else if (propertyName == PRNL_EMITTER_COLOUR_RANGE_END + PRNL_POST_RGB || propertyName == PRNL_EMITTER_COLOUR_RANGE_END + PRNL_POST_ALPHA) {
 		// Colour range end: Colour attibute with alpha
 		copyColourRangeEndToEmitter(prop, emitter);
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_ALL_PARTICLE_DIM))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_ALL_PARTICLE_DIM)) {
 		// All particle dimensions: Dynamic attibute
 		copyAllParticleDimensionsToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_PARTICLE_WIDTH))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_PARTICLE_WIDTH)) {
 		// Particle width: Dynamic attibute
 		copyParticleWidthToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_PARTICLE_HEIGHT))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_PARTICLE_HEIGHT)) {
 		// Particle height: Dynamic attibute
 		copyParticleHeightToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName.StartsWith(PRNL_EMITTER_PARTICLE_DEPTH))
-	{
+	} else if (propertyName.StartsWith(PRNL_EMITTER_PARTICLE_DEPTH)) {
 		// Particle depth: Dynamic attibute
 		copyParticleDepthToEmitter(propertyName, prop, emitter);
-		if (emitter->_isMarkedForEmission())
-		{
+		if (emitter->_isMarkedForEmission()) {
 			//_unprepareEmitters(emitter);
 			_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-	}
-	else if (propertyName == PRNL_EMITTER_AUTO_DIRECTION)
-	{
+	} else if (propertyName == PRNL_EMITTER_AUTO_DIRECTION) {
 		// Auto direction: Bool
 		copyAutoDirectionToEmitter(prop, emitter);
-	}
-	else if (propertyName == PRNL_EMITTER_FORCE_EMISSION)
-	{
+	} else if (propertyName == PRNL_EMITTER_FORCE_EMISSION) {
 		// Force emission: Bool
 		copyForceEmissionToEmitter(prop, emitter);
-	}
-	else
-	{
+	} else {
 		PropertyWindow::copyAttributeToComponent(prop, propertyName);
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) {
 	// Name: Ogre::String
 	doSetString(PRNL_NAME, ogre2wx(emitter->getName()));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyByName(PRNL_EMITTER_TYPE);
+	wxPGProperty * propTo = GetPropertyByName(PRNL_EMITTER_TYPE);
 	wxString type = ogre2wxTranslate(emitter->getEmitterType());
 	propTo->SetValueFromString(type);
 
@@ -424,24 +333,15 @@ void EmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::Particle
 	doSetUint16(PRNL_EMITTER_TEXTURE_COORD_END, emitter->getParticleTextureCoordsRangeEnd());
 
 	// Colour: Colour attibute with alpha
-	wxColor colour(255 * emitter->getParticleColour().r,
-		255 * emitter->getParticleColour().g,
-		255 * emitter->getParticleColour().b,
-		255 * emitter->getParticleColour().a);
+	wxColor colour(255 * emitter->getParticleColour().r, 255 * emitter->getParticleColour().g, 255 * emitter->getParticleColour().b, 255 * emitter->getParticleColour().a);
 	doSetColourWithAlpha(PRNL_EMITTER_COLOUR, colour);
 
 	// Colour range start: Colour attibute with alpha
-	wxColor colourStart(255 * emitter->getParticleColourRangeStart().r,
-		255 * emitter->getParticleColourRangeStart().g,
-		255 * emitter->getParticleColourRangeStart().b,
-		255 * emitter->getParticleColourRangeStart().a);
+	wxColor colourStart(255 * emitter->getParticleColourRangeStart().r, 255 * emitter->getParticleColourRangeStart().g, 255 * emitter->getParticleColourRangeStart().b, 255 * emitter->getParticleColourRangeStart().a);
 	doSetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_START, colourStart);
 
 	// Colour range end: Colour attibute with alpha
-	wxColor colourEnd(255 * emitter->getParticleColourRangeEnd().r,
-		255 * emitter->getParticleColourRangeEnd().g,
-		255 * emitter->getParticleColourRangeEnd().b,
-		255 * emitter->getParticleColourRangeEnd().a);
+	wxColor colourEnd(255 * emitter->getParticleColourRangeEnd().r, 255 * emitter->getParticleColourRangeEnd().g, 255 * emitter->getParticleColourRangeEnd().b, 255 * emitter->getParticleColourRangeEnd().a);
 	doSetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_END, colourEnd);
 
 	// All particle dimensions: Dynamic attibute
@@ -462,9 +362,8 @@ void EmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::Particle
 	// Force emission: Bool
 	doSetBool(PRNL_EMITTER_FORCE_EMISSION, emitter->isForceEmission());
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::_initProperties(void)
-{
+
+void EmitterPropertyWindow::_initProperties() {
 	// Set the (internationalized) property names
 	CST_EMITTER_BOX = ogre2wxTranslate(EMITTER_BOX);
 	CST_EMITTER_CIRCLE = ogre2wxTranslate(EMITTER_CIRCLE);
@@ -619,58 +518,66 @@ void EmitterPropertyWindow::_initProperties(void)
 	// Force emission: Bool
 	Append(new wxBoolProperty(PRNL_EMITTER_FORCE_EMISSION, PRNL_EMITTER_FORCE_EMISSION, ParticleUniverse::ParticleEmitter::DEFAULT_FORCE_EMISSION));
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
-{
+
+void EmitterPropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetProperty();
+	wxPGProperty * prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToEmitter(prop, propertyName);
-	ParticleUniverse::ParticleEmitter* emitter = static_cast<ParticleUniverse::ParticleEmitter*>(mOwner->getPUElement());
-	if (emitter && emitter->_isMarkedForEmission() && emitter->getParentTechnique())
-	{
+	ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(mOwner->getPUElement());
+	if (emitter && emitter->_isMarkedForEmission() && emitter->getParentTechnique()) {
 		// Unprepare, to change a property of an emitted emitter
 		//_unprepareEmitters(emitter);
 		_unprepare(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 	}
 	notifyPropertyChanged();
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
-{
+
+void EmitterPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent & event) {
 	// Perform additional validations.
-	if (!_validatePropertyColourWithAlpha(event.GetProperty(), PRNL_EMITTER_COLOUR))
+	if (!_validatePropertyColourWithAlpha(event.GetProperty(), PRNL_EMITTER_COLOUR)) {
 		return;
-	if (!_validatePropertyColourWithAlpha(event.GetProperty(), PRNL_EMITTER_COLOUR_RANGE_START))
+	}
+	if (!_validatePropertyColourWithAlpha(event.GetProperty(), PRNL_EMITTER_COLOUR_RANGE_START)) {
 		return;
-	if (!_validatePropertyColourWithAlpha(event.GetProperty(), PRNL_EMITTER_COLOUR_RANGE_END))
+	}
+	if (!_validatePropertyColourWithAlpha(event.GetProperty(), PRNL_EMITTER_COLOUR_RANGE_END)) {
 		return;
+	}
 
 	// Allow only positive values of dynamic attributes
-	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_VELOCITY))
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_VELOCITY)) {
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_DURATION))
+	}
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_DURATION)) {
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_REPEAT_DELAY))
+	}
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_REPEAT_DELAY)) {
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_EMISSION_RATE))
+	}
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_EMISSION_RATE)) {
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_TIME_TO_LIVE))
+	}
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_TIME_TO_LIVE)) {
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_ALL_PARTICLE_DIM))
+	}
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_ALL_PARTICLE_DIM)) {
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_PARTICLE_WIDTH))
+	}
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_PARTICLE_WIDTH)) {
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_PARTICLE_HEIGHT))
+	}
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_PARTICLE_HEIGHT)) {
 		return;
-	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_PARTICLE_DEPTH))
+	}
+	if (!_validatePropertyDynamicAttribute(event.GetProperty(), PRNL_EMITTER_PARTICLE_DEPTH)) {
 		return;
+	}
 
 	wxString propertyName = event.GetPropertyName();
 	PropertyWindow::onPropertyChanged(event);
 
-	if (propertyName == PRNL_EMITTER_TYPE)
-	{
+	if (propertyName == PRNL_EMITTER_TYPE) {
 		// Replace this window by another one
 		notifyDestroyUnnecessaryConnections();
 		wxString subType = event.GetProperty()->GetValueAsString();
@@ -680,222 +587,181 @@ void EmitterPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
 	}
 	notifyPropertyChanged();
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::notifyDestroyUnnecessaryConnections(void)
-{
+
+void EmitterPropertyWindow::notifyDestroyUnnecessaryConnections() {
 	// Delete unnecessary connections
 	getOwner()->deleteConnection(CR_SLAVE, CRDIR_PRIMARY);
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::replaceEmitterType(wxPGProperty* prop)
-{
+
+void EmitterPropertyWindow::replaceEmitterType(wxPGProperty * prop) {
 	// Type: List of types
 	Ogre::String type = getEmitterTypeByProperty(prop);
-	if (type == Ogre::StringUtil::BLANK)
+	if (type == Ogre::StringUtil::BLANK) {
 		return;
+	}
 
-	ParticleUniverse::ParticleEmitter* oldEmitter = static_cast<ParticleUniverse::ParticleEmitter*>(mOwner->getPUElement());
-	if (oldEmitter)
-	{
-		ParticleUniverse::ParticleTechnique* technique = oldEmitter->getParentTechnique();
-		if (technique)
-		{
-			ParticleUniverse::ParticleEmitter* newEmitter = technique->createEmitter(type);
+	ParticleUniverse::ParticleEmitter * oldEmitter = static_cast<ParticleUniverse::ParticleEmitter *>(mOwner->getPUElement());
+	if (oldEmitter) {
+		ParticleUniverse::ParticleTechnique * technique = oldEmitter->getParentTechnique();
+		if (technique) {
+			ParticleUniverse::ParticleEmitter * newEmitter = technique->createEmitter(type);
 			oldEmitter->copyParentAttributesTo(newEmitter);
 			bool wasStarted = false;
-			ParticleUniverse::ParticleSystem* system = technique->getParentSystem();
-			if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED)
-			{
+			ParticleUniverse::ParticleSystem * system = technique->getParentSystem();
+			if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
 				wasStarted = true;
 				system->stop();
 			}
 			technique->destroyEmitter(oldEmitter);
 			mOwner->setPUElement(newEmitter);
 			technique->_unprepareEmitters();
-			if (wasStarted)
-			{
+			if (wasStarted) {
 				system->start();
 			}
-		}
-		else
-		{
+		} else {
 			/** The old emitter didn't have a technique, so create a new emitter by means of the ParticleSystemManager itself and also delete
 				the old emitter by means of the ParticleSystemManager
 			*/
-			ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
-			ParticleUniverse::ParticleEmitter* newEmitter = particleSystemManager->createEmitter(type);
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::ParticleEmitter * newEmitter = particleSystemManager->createEmitter(type);
 			oldEmitter->copyParentAttributesTo(newEmitter);
 			particleSystemManager->destroyEmitter(oldEmitter);
 			mOwner->setPUElement(newEmitter);
 		}
-	}
-	else
-	{
+	} else {
 		// There is no old emitter. Create a new emitter by means of the ParticleSystemManager
-		ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
-		ParticleUniverse::ParticleEmitter* newEmitter = particleSystemManager->createEmitter(type);
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::ParticleEmitter * newEmitter = particleSystemManager->createEmitter(type);
 		mOwner->setPUElement(newEmitter);
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyEnabledToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyEnabledToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	emitter->_setOriginalEnabled(prop->DoGetValue().GetBool());
 	emitter->setEnabled(prop->DoGetValue().GetBool());
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyPositionToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyPositionToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	Ogre::Vector3 v3;
 	v3 = doGetVector3(PRNL_EMITTER_POSITION, v3);
 	emitter->position = v3;
 	emitter->originalPosition = v3;
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyKeepLocalToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyKeepLocalToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	emitter->setKeepLocal(prop->DoGetValue().GetBool());
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyDirectionToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyDirectionToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	Ogre::Vector3 v3;
 	v3 = doGetVector3(PRNL_EMITTER_DIRECTION, v3);
 	emitter->setParticleDirection(v3);
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyOrientationToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
+
+void EmitterPropertyWindow::copyOrientationToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter)
 {
 	Ogre::Quaternion q;
 	q = doGetQuaternion(PRNL_EMITTER_ORIENTATION, q);
 	emitter->setParticleOrientation(q);
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyOrientationRangeStartToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyOrientationRangeStartToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	Ogre::Quaternion q;
 	q = doGetQuaternion(PRNL_EMITTER_ORIENTATION_START, q);
 	emitter->setParticleOrientationRangeStart(q);
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyOrientationRangeEndToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyOrientationRangeEndToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	Ogre::Quaternion q;
 	q = doGetQuaternion(PRNL_EMITTER_ORIENTATION_END, q);
 	emitter->setParticleOrientationRangeEnd(q);
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyVelocityToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_VELOCITY, emitter->getDynVelocity());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyVelocityToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_VELOCITY, emitter->getDynVelocity());
+	if (dynAttr) {
 		emitter->setDynVelocity(dynAttr);
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyDurationToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_DURATION, emitter->getDynDuration());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyDurationToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_DURATION, emitter->getDynDuration());
+	if (dynAttr) {
 		emitter->setDynDuration(dynAttr);
 	}
-	if (std::abs(emitter->getDynDuration()->getValue() - ParticleUniverse::ParticleEmitter::DEFAULT_DURATION) < DBL_EPSILON)
-	{
+	if (std::abs(emitter->getDynDuration()->getValue() - ParticleUniverse::ParticleEmitter::DEFAULT_DURATION) < DBL_EPSILON) {
 		emitter->setDynDurationSet(false); // Supressing writing this property the script and setting the emitter to the right state.
-	}
-	else
-	{
+	} else {
 		emitter->setDynDurationSet(true); // Force writing this property to the script and setting the emitter to the right state.
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyRepeatDelayToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_REPEAT_DELAY, emitter->getDynRepeatDelay());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyRepeatDelayToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_REPEAT_DELAY, emitter->getDynRepeatDelay());
+	if (dynAttr) {
 		emitter->setDynRepeatDelay(dynAttr);
 	}
 	emitter->setDynRepeatDelaySet(true); // Force writing to the script
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyAngleToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_ANGLE, emitter->getDynAngle());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyAngleToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_ANGLE, emitter->getDynAngle());
+	if (dynAttr) {
 		emitter->setDynAngle(dynAttr);
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyEmissionRateToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_EMISSION_RATE, emitter->getDynEmissionRate());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyEmissionRateToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_EMISSION_RATE, emitter->getDynEmissionRate());
+	if (dynAttr) {
 		emitter->setDynEmissionRate(dynAttr);
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyTimeToLiveToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_TIME_TO_LIVE, emitter->getDynTotalTimeToLive());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyTimeToLiveToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_TIME_TO_LIVE, emitter->getDynTotalTimeToLive());
+	if (dynAttr) {
 		emitter->setDynTotalTimeToLive(dynAttr);
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyMassToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_MASS, emitter->getDynParticleMass());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyMassToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_MASS, emitter->getDynParticleMass());
+	if (dynAttr) {
 		emitter->setDynParticleMass(dynAttr);
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyTextureCoordinateToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	if (validateTextureCoord(prop, emitter))
-	{
+
+void EmitterPropertyWindow::copyTextureCoordinateToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	if (validateTextureCoord(prop, emitter)) {
 		emitter->setParticleTextureCoords(prop->DoGetValue().GetLong());
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyTextureCoordinateStartToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	if (validateTextureCoord(prop, emitter))
-	{
+
+void EmitterPropertyWindow::copyTextureCoordinateStartToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	if (validateTextureCoord(prop, emitter)) {
 		emitter->setParticleTextureCoordsRangeStart(prop->DoGetValue().GetLong());
 	}
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyTextureCoordinateEndToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	if (validateTextureCoord(prop, emitter))
-	{
+
+void EmitterPropertyWindow::copyTextureCoordinateEndToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	if (validateTextureCoord(prop, emitter)) {
 		emitter->setParticleTextureCoordsRangeEnd(prop->DoGetValue().GetLong());
 	}
 }
-//-----------------------------------------------------------------------
-bool EmitterPropertyWindow::validateTextureCoord(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	if (!prop || !emitter)
-		return false;
 
-	ParticleUniverse::ParticleTechnique* technique = emitter->getParentTechnique();
-	if (technique)
-	{
-		ParticleUniverse::ParticleRenderer* renderer = technique->getRenderer();
-		if (renderer)
-		{
+bool EmitterPropertyWindow::validateTextureCoord(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	if (!prop || !emitter) {
+		return false;
+	}
+
+	ParticleUniverse::ParticleTechnique * technique = emitter->getParentTechnique();
+	if (technique) {
+		ParticleUniverse::ParticleRenderer * renderer = technique->getRenderer();
+		if (renderer) {
 			size_t max = renderer->getNumTextureCoords();
 			size_t val = size_t(prop->DoGetValue().GetLong());
-			if (val > max - 1)
-			{
+			if (val > max - 1) {
 				Ogre::String ogreMax = Ogre::StringConverter::toString(max);
 				wxString wxMax = ogre2wx(ogreMax);
 				wxString message = _("Value must be less than ") + wxMax + _(" (but positive or 0)");
@@ -906,125 +772,111 @@ bool EmitterPropertyWindow::validateTextureCoord(wxPGProperty* prop, ParticleUni
 
 	return true;
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyColourToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyColourToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	wxColor c;
 	c = doGetColourWithAlpha(PRNL_EMITTER_COLOUR, c);
-	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f,
-		ParticleUniverse::Real(c.Green()) / 255.0f,
-		ParticleUniverse::Real(c.Blue()) / 255.0f,
-		ParticleUniverse::Real(c.Alpha()) / 255.0f);
+	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, ParticleUniverse::Real(c.Green()) / 255.0f, ParticleUniverse::Real(c.Blue()) / 255.0f, ParticleUniverse::Real(c.Alpha()) / 255.0f);
 	emitter->setParticleColour(colour);
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyColourRangeStartToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyColourRangeStartToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	wxColor c;
 	c = doGetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_START, c);
-	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f,
-		ParticleUniverse::Real(c.Green()) / 255.0f,
-		ParticleUniverse::Real(c.Blue()) / 255.0f,
-		ParticleUniverse::Real(c.Alpha()) / 255.0f);
+	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, ParticleUniverse::Real(c.Green()) / 255.0f, ParticleUniverse::Real(c.Blue()) / 255.0f, ParticleUniverse::Real(c.Alpha()) / 255.0f);
 	emitter->setParticleColourRangeStart(colour);
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyColourRangeEndToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyColourRangeEndToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	wxColor c;
 	c = doGetColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_END, c);
-	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f,
-		ParticleUniverse::Real(c.Green()) / 255.0f,
-		ParticleUniverse::Real(c.Blue()) / 255.0f,
-		ParticleUniverse::Real(c.Alpha()) / 255.0f);
+	Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, ParticleUniverse::Real(c.Green()) / 255.0f, ParticleUniverse::Real(c.Blue()) / 255.0f, ParticleUniverse::Real(c.Alpha()) / 255.0f);
 	emitter->setParticleColourRangeEnd(colour);
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyAllParticleDimensionsToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_ALL_PARTICLE_DIM, emitter->getDynParticleAllDimensions());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyAllParticleDimensionsToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_ALL_PARTICLE_DIM, emitter->getDynParticleAllDimensions());
+	if (dynAttr) {
 		emitter->setDynParticleAllDimensions(dynAttr);
 	}
 	emitter->setDynParticleAllDimensionsSet(true); // Force writing to the script
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyParticleWidthToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_PARTICLE_WIDTH, emitter->getDynParticleWidth());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyParticleWidthToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_PARTICLE_WIDTH, emitter->getDynParticleWidth());
+	if (dynAttr) {
 		emitter->setDynParticleWidth(dynAttr);
 	}
 	emitter->setDynParticleWidthSet(true); // Force writing to the script
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyParticleHeightToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_PARTICLE_HEIGHT, emitter->getDynParticleHeight());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyParticleHeightToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_PARTICLE_HEIGHT, emitter->getDynParticleHeight());
+	if (dynAttr) {
 		emitter->setDynParticleHeight(dynAttr);
 	}
 	emitter->setDynParticleHeightSet(true); // Force writing to the script
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyParticleDepthToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
-	ParticleUniverse::DynamicAttribute* dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_PARTICLE_DEPTH, emitter->getDynParticleDepth());
-	if (dynAttr)
-	{
+
+void EmitterPropertyWindow::copyParticleDepthToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
+	ParticleUniverse::DynamicAttribute * dynAttr = copyValuesToDynamicAttribute(propertyName, prop, PRNL_EMITTER_PARTICLE_DEPTH, emitter->getDynParticleDepth());
+	if (dynAttr) {
 		emitter->setDynParticleDepth(dynAttr);
 	}
 	emitter->setDynParticleDepthSet(true); // Force writing to the script
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyAutoDirectionToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyAutoDirectionToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	emitter->setAutoDirection(prop->DoGetValue().GetBool());
 }
-//-----------------------------------------------------------------------
-void EmitterPropertyWindow::copyForceEmissionToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter)
-{
+
+void EmitterPropertyWindow::copyForceEmissionToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter) {
 	emitter->setForceEmission(prop->DoGetValue().GetBool());
 }
-//-----------------------------------------------------------------------
-const Ogre::String& EmitterPropertyWindow::getEmitterTypeByProperty(wxPGProperty* prop)
+
+const Ogre::String & EmitterPropertyWindow::getEmitterTypeByProperty(wxPGProperty * prop)
 {
 	int type = prop->DoGetValue().GetLong(); // The property must be a list (PRNL_EMITTER_TYPE)
-	switch (type)
-	{
-		case 0:
-			return EMITTER_BOX;
+	switch (type) {
+	case 0: {
+		return EMITTER_BOX;
 		break;
-		case 1:
-			return EMITTER_CIRCLE;
+	}
+	case 1: {
+		return EMITTER_CIRCLE;
 		break;
-		case 2:
-			return EMITTER_LINE;
+	}
+	case 2: {
+		return EMITTER_LINE;
 		break;
-		case 3:
-			return EMITTER_MESH_SURFACE;
+	}
+	case 3: {
+		return EMITTER_MESH_SURFACE;
 		break;
-		case 4:
-			return EMITTER_POINT;
+	}
+	case 4: {
+		return EMITTER_POINT;
 		break;
-		case 5:
-			return EMITTER_POSITION;
+	}
+	case 5: {
+		return EMITTER_POSITION;
 		break;
-		case 6:
-			return EMITTER_SLAVE;
+	}
+	case 6: {
+		return EMITTER_SLAVE;
 		break;
-		case 7:
-			return EMITTER_SPHERE;
+	}
+	case 7: {
+		return EMITTER_SPHERE;
 		break;
-		case 8:
-			return EMITTER_VERTEX;
+	}
+	case 8: {
+		return EMITTER_VERTEX;
 		break;
-		default: {
-			break;
-		}
+	}
+	default: {
+		break;
+	}
 	}
 
 	return Ogre::StringUtil::BLANK;

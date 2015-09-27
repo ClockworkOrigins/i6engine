@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_EVENT_HANDLER_PROPERTY_WINDOW_H__
-#define __PUED_EVENT_HANDLER_PROPERTY_WINDOW_H__
+#ifndef __PUED_EVENTHANDLERPROPERTYWINDOW_H__
+#define __PUED_EVENTHANDLERPROPERTYWINDOW_H__
 
 #include "ParticleUniversePropertyWindow.h"
 
@@ -30,68 +30,66 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace ParticleUniverse {
 	class ParticleEventHandler;
-}
+} /* namespace ParticleUniverse */
 
 // Property names
 static wxString PRNL_HANDLER_TYPE = wxT("");
 
 /**	
 */
-class EventHandlerPropertyWindow : public PropertyWindow
-{
-	public:
-		EventHandlerPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		EventHandlerPropertyWindow(EventHandlerPropertyWindow* eventHandlerPropertyWindow);
-		~EventHandlerPropertyWindow(void) {}
+class EventHandlerPropertyWindow : public PropertyWindow {
+public:
+	EventHandlerPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name);
+	EventHandlerPropertyWindow(EventHandlerPropertyWindow * eventHandlerPropertyWindow);
+	~EventHandlerPropertyWindow() {}
 
-		/**
-			Copy basic eventHandler properties from a window to an eventHandler
-		*/
-		virtual void copyAttributeToEventHandler(wxPGProperty* prop, wxString propertyName);
+	/**
+		Copy basic eventHandler properties from a window to an eventHandler
+	*/
+	virtual void copyAttributeToEventHandler(wxPGProperty * prop, wxString propertyName);
 
-		/**
-			Copy basic eventHandler properties from an eventHandler to a window
-		*/
-		virtual void copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler* eventHandler);
+	/**
+		Copy basic eventHandler properties from an eventHandler to a window
+	*/
+	virtual void copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler);
 
-		/**
-			Copy basic eventHandler properties from another eventHandler property window
-		*/
-		virtual void copyAttributesFromPropertyWindow(EventHandlerPropertyWindow* eventHandlerPropertyWindow);
+	/**
+		Copy basic eventHandler properties from another eventHandler property window
+	*/
+	virtual void copyAttributesFromPropertyWindow(EventHandlerPropertyWindow * eventHandlerPropertyWindow);
 
-		/**
-			Replace event handler type window, depending on the new type.
-		*/
-		void replaceHandlerType(wxPGProperty* prop);
+	/**
+		Replace event handler type window, depending on the new type.
+	*/
+	void replaceHandlerType(wxPGProperty * prop);
 
-		/**
-			See PropertyWindow
-		*/
-		virtual void onPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		See PropertyWindow
+	*/
+	virtual void onPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Only handle parent properties if they are changed.
-		*/
-		void onParentPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		Only handle parent properties if they are changed.
+	*/
+	void onParentPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Determine selected event handler type (take internationalisation into account)
-		*/
-		const Ogre::String& getHandlerTypeByProperty(wxPGProperty* prop);
+	/**
+		Determine selected event handler type (take internationalisation into account)
+	*/
+	const Ogre::String & getHandlerTypeByProperty(wxPGProperty * prop);
 
-	protected:
-		wxArrayString mTypes;
+protected:
+	wxArrayString mTypes;
 
-		/**
-			Initialises all eventHandler properties
-		*/
-		virtual void _initProperties(void);
+	/**
+		Initialises all eventHandler properties
+	*/
+	virtual void _initProperties();
 
-		/**
-			Destroy connections that are not needed in case of a type-switch
-		*/
-		void notifyDestroyUnnecessaryConnections(void);
+	/**
+		Destroy connections that are not needed in case of a type-switch
+	*/
+	void notifyDestroyUnnecessaryConnections();
 };
 
-#endif
-
+#endif /* __PUED_EVENTHANDLERPROPERTYWINDOW_H__ */
