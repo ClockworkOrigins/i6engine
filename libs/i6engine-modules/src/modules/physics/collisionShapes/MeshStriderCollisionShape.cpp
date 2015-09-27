@@ -16,5 +16,23 @@
 
 #include "i6engine/modules/physics/collisionShapes/MeshStriderCollisionShape.h"
 
+namespace i6engine {
+namespace modules {
+
+	MeshStriderCollisionShapeData::MeshStriderCollisionShapeData() : CollisionShapeData(), data() {
+	}
+
+	MeshStriderCollisionShapeData::MeshStriderCollisionShapeData(const std::vector<char> & d) : CollisionShapeData(CollisionShapeType::Heightmap), data(d) {
+	}
+
+	template<class Archive>
+	void MeshStriderCollisionShapeData::serialize(Archive & ar, const unsigned int /*version*/) {
+		ar & boost::serialization::base_object<CollisionShapeData>(*this);
+		ar & data;
+	}
+
+} /* namespace modules */
+} /* namespace i6engine */
+
 BOOST_CLASS_EXPORT_GUID(i6engine::modules::MeshStriderCollisionShapeData, "CS2")
 BOOST_CLASS_IMPLEMENTATION(i6engine::modules::MeshStriderCollisionShapeData, boost::serialization::object_serializable)

@@ -34,7 +34,7 @@
 namespace i6engine {
 namespace modules {
 
-	struct HeightmapCollisionShapeData : public CollisionShapeData {
+	struct ISIXE_MODULES_API HeightmapCollisionShapeData : public CollisionShapeData {
 		uint32_t width;
 		uint32_t height;
 		std::vector<double> data;
@@ -42,22 +42,12 @@ namespace modules {
 		double maxHeight;
 		Vec3 scaling;
 
-		HeightmapCollisionShapeData() : CollisionShapeData(), width(), height(), data(), minHeight(), maxHeight(), scaling() {
-		}
+		HeightmapCollisionShapeData();
 
-		HeightmapCollisionShapeData(uint32_t w, uint32_t h, const std::vector<double> & d, double minH, double maxH, const Vec3 & s) : CollisionShapeData(CollisionShapeType::Heightmap), width(w), height(h), data(d), minHeight(minH), maxHeight(maxH), scaling(s) {
-		}
+		HeightmapCollisionShapeData(uint32_t w, uint32_t h, const std::vector<double> & d, double minH, double maxH, const Vec3 & s);
 
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int /*version*/) {
-			ar & boost::serialization::base_object<CollisionShapeData>(*this);
-			ar & width;
-			ar & height;
-			ar & data;
-			ar & minHeight;
-			ar & maxHeight;
-			ar & scaling;
-		}
+		void serialize(Archive & ar, const unsigned int /*version*/);
 	};
 
 } /* namespace modules */

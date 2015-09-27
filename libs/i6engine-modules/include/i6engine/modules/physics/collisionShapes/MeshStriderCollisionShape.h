@@ -37,17 +37,12 @@ namespace modules {
 	struct ISIXE_MODULES_API MeshStriderCollisionShapeData : public CollisionShapeData {
 		std::vector<char> data;
 
-		MeshStriderCollisionShapeData() : CollisionShapeData(), data() {
-		}
+		MeshStriderCollisionShapeData();
 
-		MeshStriderCollisionShapeData(const std::vector<char> & d) : CollisionShapeData(CollisionShapeType::Heightmap), data(d) {
-		}
+		MeshStriderCollisionShapeData(const std::vector<char> & d);
 
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int /*version*/) {
-			ar & boost::serialization::base_object<CollisionShapeData>(*this);
-			ar & data;
-		}
+		void serialize(Archive & ar, const unsigned int /*version*/);
 	};
 
 } /* namespace modules */

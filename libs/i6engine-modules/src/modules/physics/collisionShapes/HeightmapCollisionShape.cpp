@@ -16,5 +16,28 @@
 
 #include "i6engine/modules/physics/collisionShapes/HeightmapCollisionShape.h"
 
+namespace i6engine {
+namespace modules {
+
+	HeightmapCollisionShapeData::HeightmapCollisionShapeData() : CollisionShapeData(), width(), height(), data(), minHeight(), maxHeight(), scaling() {
+	}
+
+	HeightmapCollisionShapeData::HeightmapCollisionShapeData(uint32_t w, uint32_t h, const std::vector<double> & d, double minH, double maxH, const Vec3 & s) : CollisionShapeData(CollisionShapeType::Heightmap), width(w), height(h), data(d), minHeight(minH), maxHeight(maxH), scaling(s) {
+	}
+
+	template<class Archive>
+	void HeightmapCollisionShapeData::serialize(Archive & ar, const unsigned int /*version*/) {
+		ar & boost::serialization::base_object<CollisionShapeData>(*this);
+		ar & width;
+		ar & height;
+		ar & data;
+		ar & minHeight;
+		ar & maxHeight;
+		ar & scaling;
+	}
+
+} /* namespace modules */
+} /* namespace i6engine */
+
 BOOST_CLASS_EXPORT_GUID(i6engine::modules::HeightmapCollisionShapeData, "CS1")
 BOOST_CLASS_IMPLEMENTATION(i6engine::modules::HeightmapCollisionShapeData, boost::serialization::object_serializable)
