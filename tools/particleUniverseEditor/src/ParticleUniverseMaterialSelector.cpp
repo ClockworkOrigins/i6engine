@@ -28,34 +28,24 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "OGRE/OgreMaterialManager.h"
 #include "OGRE/OgreResourceManager.h"
 
-//-----------------------------------------------------------------------
-MaterialProperty::MaterialProperty(
-	const wxString& label,
-	const wxString& name) :
-	wxStringProperty(label, name, wxT("BaseWhite")),
-	mMaterialName("BaseWhite")
-{
+MaterialProperty::MaterialProperty(const wxString & label, const wxString & name) : wxStringProperty(label, name, wxT("BaseWhite")), mMaterialName("BaseWhite") {
 }
-//-----------------------------------------------------------------------
-bool MaterialProperty::OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event)
-{
-	if (event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED)
-	{
+
+bool MaterialProperty::OnEvent (wxPropertyGrid * propgrid, wxWindow * wnd_primary, wxEvent & event) {
+	if (event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED) {
 		// Open the dialog
 		size_t count = 0;
 		wxString choices[2000];
 
 		Ogre::ResourceManager::ResourceMapIterator materialIterator = Ogre::MaterialManager::getSingleton().getResourceIterator();
-		while (materialIterator.hasMoreElements())
-		{
-			choices[count] = ogre2wx((materialIterator.peekNextValue().staticCast<Ogre::Material>())->getName());
+		while (materialIterator.hasMoreElements()) {
+			choices[count] = ogre2wx(materialIterator.peekNextValue().staticCast<Ogre::Material>()->getName());
 			materialIterator.moveNext();
 			count++;
 		}
 
 		MaterialSelector materialSelector(propgrid, _("Material Selector"), _("Select a material"), count, choices);
-		if (materialSelector.ShowModal() == wxID_OK)
-		{
+		if (materialSelector.ShowModal() == wxID_OK) {
 			wxString mat = choices[materialSelector.GetSelection()];
 			mMaterialName = wx2ogre(mat);
 			SetValueFromString(mat);
@@ -66,39 +56,34 @@ bool MaterialProperty::OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary,
 	}
 	return true;
 }
-//-----------------------------------------------------------------------
-const Ogre::String& MaterialProperty::getMaterialName(void) const
-{
+
+const Ogre::String & MaterialProperty::getMaterialName() const {
 	return mMaterialName;
 }
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-const Ogre::String& MaterialDialog::openDialog(wxWindow* parent)
-{
+
+
+
+const Ogre::String & MaterialDialog::openDialog(wxWindow * parent) {
 	// Open the dialog
 	size_t count = 0;
 	wxString choices[2000];
 
 	Ogre::ResourceManager::ResourceMapIterator materialIterator = Ogre::MaterialManager::getSingleton().getResourceIterator();
-	while (materialIterator.hasMoreElements())
-	{
+	while (materialIterator.hasMoreElements()) {
 		choices[count] = ogre2wx((materialIterator.peekNextValue().staticCast<Ogre::Material>())->getName());
 		materialIterator.moveNext();
 		count++;
 	}
 
 	MaterialSelector materialSelector(parent, _("Material Selector"), _("Select a material"), count, choices);
-	if (materialSelector.ShowModal() == wxID_OK)
-	{
+	if (materialSelector.ShowModal() == wxID_OK) {
 		wxString mat = choices[materialSelector.GetSelection()];
 		mMaterialName = wx2ogre(mat);
 		return mMaterialName;
 	}
 	return Ogre::StringUtil::BLANK;
 }
-//-----------------------------------------------------------------------
-const Ogre::String& MaterialDialog::getMaterialName(void) const
-{
+
+const Ogre::String & MaterialDialog::getMaterialName() const {
 	return mMaterialName;
 }

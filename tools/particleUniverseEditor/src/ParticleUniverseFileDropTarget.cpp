@@ -32,17 +32,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/msgdlg.h"
 
-//-----------------------------------------------------------------------
-FileDropTarget::FileDropTarget(ParticleUniverseEditorFrame* parent) : 
-	wxFileDropTarget(), 
-	mFrame(parent)
-{
+FileDropTarget::FileDropTarget(ParticleUniverseEditorFrame * parent) : wxFileDropTarget(), mFrame(parent) {
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames)
-{
-	if (filenames.GetCount() == 0)
-	{
+
+bool FileDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString & filenames) {
+	if (filenames.GetCount() == 0) {
 		// No files dropped
 		wxMessageDialog message(mFrame, _("No files are dropped"), _("Drag/drop a file"), wxOK);
 		message.ShowModal();
@@ -56,12 +50,9 @@ bool FileDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& file
 	Ogre::String baseNameAndExtension;
 	Ogre::String extension;
 	Ogre::String path;
-	wxArrayString::const_iterator it;
-	wxArrayString::const_iterator itEnd = filenames.end();
 
 	// 1. First validate whether the filetype is allowed
-	for (it = filenames.begin(); it != itEnd; ++it)
-	{
+	for (wxArrayString::const_iterator it = filenames.begin(); it != filenames.end(); ++it) {
 		fileName = *it;
 		fullyQualifiedFileName = wx2ogre(fileName);
 		Ogre::StringUtil::toLowerCase(fullyQualifiedFileName);
@@ -69,11 +60,9 @@ bool FileDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& file
 		baseNameAndExtension = baseName + "." + extension;
 
 		//if (extension != "material" && extension != "skeleton" && extension != "mesh")
-		if (extension != "material" && extension != "mesh")
-		{
+		if (extension != "material" && extension != "mesh") {
 			wxString fileOrFiles = wxT("file");
-			if (filenames.GetCount() > 1)
-			{
+			if (filenames.GetCount() > 1) {
 				fileOrFiles = wxT("files");
 			}
 			wxString wxExtension = ogre2wx(extension);
@@ -85,19 +74,16 @@ bool FileDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& file
 
 	// 2. Handle material files
 	unsigned int loadedFiles = 0;
-	for (it = filenames.begin(); it != itEnd; ++it)
-	{
+	for (wxArrayString::const_iterator it = filenames.begin(); it != filenames.end(); ++it) {
 		fileName = *it;
 		fullyQualifiedFileName = wx2ogre(fileName);
 		Ogre::StringUtil::toLowerCase(fullyQualifiedFileName);
 		Ogre::StringUtil::splitFullFilename(fullyQualifiedFileName, baseName, extension, path);
 		baseNameAndExtension = baseName + "." + extension;
 
-		if (extension == "material")
-		{
+		if (extension == "material") {
 			// Load material file
-			if (!loadMaterialFile(baseNameAndExtension, path))
-			{
+			if (!loadMaterialFile(baseNameAndExtension, path)) {
 				// Display the already loaded files, but stop from there
 				displayMessageNumberOfLoadedFiles(loadedFiles);
 				return true;
@@ -107,18 +93,15 @@ bool FileDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& file
 	}
 
 	// 3. Handle mesh file(s)
-	for (it = filenames.begin(); it != itEnd; ++it)
-	{
+	for (wxArrayString::const_iterator it = filenames.begin(); it != filenames.end(); ++it) {
 		fileName = *it;
 		fullyQualifiedFileName = wx2ogre(fileName);
 		Ogre::StringUtil::toLowerCase(fullyQualifiedFileName);
 		Ogre::StringUtil::splitFullFilename(fullyQualifiedFileName, baseName, extension, path);
 		baseNameAndExtension = baseName + "." + extension;
-		if (extension == "mesh")
-		{
+		if (extension == "mesh") {
 			// Load the mesh file
-			if (loadMeshFile(baseNameAndExtension, path))
-			{
+			if (loadMeshFile(baseNameAndExtension, path)) {
 				// Mesh successfully loaded
 				mFrame->doAddMesh(baseNameAndExtension);
 				++loadedFiles;
@@ -130,14 +113,12 @@ bool FileDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& file
 	displayMessageNumberOfLoadedFiles(loadedFiles);
 	return true;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::validateMesh(Ogre::MeshPtr mesh, const Ogre::String& path)
-{
+
+bool FileDropTarget::validateMesh(Ogre::MeshPtr mesh, const Ogre::String & path) {
 	bool resourceAdded = false;
 
 	// --------------- Load skeleton ---------------
-	if (mesh->hasSkeleton())
-	{
+	if (mesh->hasSkeleton()) {
 		Ogre::String skeletonName = mesh->getSkeletonName();
 		resourceAdded = loadSkeletonFile(skeletonName, path);
 	}
@@ -149,27 +130,16 @@ bool FileDropTarget::validateMesh(Ogre::MeshPtr mesh, const Ogre::String& path)
 	bool vertexLocationAdded = false;
 	bool geometryLocationAdded = false;
 	bool textureLocationAdded = false;
-	while (it.hasMoreElements())
-	{
-		Ogre::SubMesh* subMesh = it.peekNext();
-		if (subMesh)
-		{
+	while (it.hasMoreElements()) {
+		Ogre::SubMesh * subMesh = it.peekNext();
+		if (subMesh) {
 			Ogre::String materialName = subMesh->getMaterialName();
-			resourceAdded = loadMaterial(materialName, 
-				path, 
-				materialLocationAdded,
-				fragmentLocationAdded, 
-				vertexLocationAdded, 
-				geometryLocationAdded, 
-				textureLocationAdded);
+			resourceAdded = loadMaterial(materialName, path, materialLocationAdded, fragmentLocationAdded, vertexLocationAdded, geometryLocationAdded, textureLocationAdded);
 		}
 
-		if (!resourceAdded)
-		{
+		if (!resourceAdded) {
 			it.moveNext();
-		}
-		else
-		{
+		} else {
 			// A resource was added, so start all over; the iterator is screwed up if after clearing/initialising the resource group
 			it = mesh->getSubMeshIterator();
 			resourceAdded = false;
@@ -178,60 +148,45 @@ bool FileDropTarget::validateMesh(Ogre::MeshPtr mesh, const Ogre::String& path)
 
 	return true;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::validateSkeleton(Ogre::SkeletonPtr skeleton, const Ogre::String& path)
-{
+
+bool FileDropTarget::validateSkeleton(Ogre::SkeletonPtr skeleton, const Ogre::String & path) {
 	// TODO
 	return true;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::validateMaterial(Ogre::MaterialPtr material, 
-	const Ogre::String& path, 
-	bool& fragmentLocationAdded, 
-	bool& vertexLocationAdded, 
-	bool& geometryLocationAdded,
-	bool& textureLocationAdded)
-{
+
+bool FileDropTarget::validateMaterial(Ogre::MaterialPtr material, const Ogre::String & path, bool & fragmentLocationAdded, bool & vertexLocationAdded, bool & geometryLocationAdded, bool & textureLocationAdded) {
 	// Run through the material to check whether vertex shaders, fragment shaders and textures are loaded.
 	unsigned short numTechniques = material->getNumTechniques();
-	Ogre::Technique* technique = 0;
-	Ogre::Pass* pass = 0;
+	Ogre::Technique * technique = nullptr;
+	Ogre::Pass * pass = nullptr;
 	bool resourceAdded = false;
-	for (unsigned short iTechnique = 0; iTechnique < numTechniques; ++iTechnique)
-	{
+	for (unsigned short iTechnique = 0; iTechnique < numTechniques; ++iTechnique) {
 		technique = material->getTechnique(iTechnique);
-		if (technique)
-		{
+		if (technique) {
 			unsigned short numPasses = technique->getNumPasses();
-			for (unsigned short iPass = 0; iPass < numPasses; ++iPass)
-			{
+			for (unsigned short iPass = 0; iPass < numPasses; ++iPass) {
 				pass = technique->getPass(iPass);
-				if (pass)
-				{
+				if (pass) {
 					// --------------- Validate fragment programs ---------------
-					if (!fragmentLocationAdded)
-					{
+					if (!fragmentLocationAdded) {
 						resourceAdded = validateFragmentShader(pass, path);
 						fragmentLocationAdded = resourceAdded;
 					}
 
 					// --------------- Validate vertex programs ---------------
-					if (!vertexLocationAdded)
-					{
+					if (!vertexLocationAdded) {
 						resourceAdded = validateVertexShader(pass, path);
 						vertexLocationAdded = resourceAdded;
 					}
 
 					// --------------- Validate geometry programs ---------------
-					if (!geometryLocationAdded)
-					{
+					if (!geometryLocationAdded) {
 						resourceAdded = validateGeometryShader(pass, path);
 						geometryLocationAdded = resourceAdded;
 					}
 
 					// --------------- Validate textures (image files) ---------------
-					if (!textureLocationAdded)
-					{
+					if (!textureLocationAdded) {
 						resourceAdded = validateTextures(pass, path);
 						textureLocationAdded = resourceAdded;
 					}
@@ -241,39 +196,30 @@ bool FileDropTarget::validateMaterial(Ogre::MaterialPtr material,
 	}
 	return resourceAdded;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::validateFragmentShader(Ogre::Pass* pass, const Ogre::String& path)
-{
+
+bool FileDropTarget::validateFragmentShader(Ogre::Pass * pass, const Ogre::String & path) {
 	bool resourceAdded = false;
-	if (pass->hasFragmentProgram())
-	{
+	if (pass->hasFragmentProgram()) {
 		Ogre::String fragmentProgramName = pass->getFragmentProgramName();
 		Ogre::ResourcePtr program;
-		if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(fragmentProgramName))
-		{
+		if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(fragmentProgramName)) {
 			// Fragment shader does not exist; add it to the resources
 			addDirectoryToResources(path, fragmentProgramName, "Fragment shader");
 			resourceAdded = true;
 			program = Ogre::TextureManager::getSingletonPtr()->load(fragmentProgramName, PU_EDITOR_RESOURCE_LOCATION);
-			if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(fragmentProgramName))
-			{
+			if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(fragmentProgramName)) {
 				// Fragment shader still does not exist
 				displayMessageFileCannotBeLoaded(ogre2wx(fragmentProgramName));
 				throw Ogre::Exception(1, "Fragment shader does not exist", "validateFragmentShader");
 			}
-		}
-		else
-		{
+		} else {
 			program = Ogre::HighLevelGpuProgramManager::getSingletonPtr()->getByName(fragmentProgramName);
 			Ogre::GpuProgramPtr gpuProgram = pass->getFragmentProgram();
-			if (program.isNull() || gpuProgram.isNull())
-			{
+			if (program.isNull() || gpuProgram.isNull()) {
 				// Fragment shader still does not exist
 				displayMessageFileCannotBeLoaded(ogre2wx(fragmentProgramName));
 				throw Ogre::Exception(2, "Fragment shader does not exist", "validateFragmentShader");
-			}
-			else if (gpuProgram->getSource() == Ogre::StringUtil::BLANK)
-			{
+			} else if (gpuProgram->getSource() == Ogre::StringUtil::BLANK) {
 				// TODO: Source is never filled, so the directory dialog is always displayed
 
 				// Fragment shader source does not exist
@@ -285,39 +231,30 @@ bool FileDropTarget::validateFragmentShader(Ogre::Pass* pass, const Ogre::String
 	}
 	return resourceAdded;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::validateVertexShader(Ogre::Pass* pass, const Ogre::String& path)
-{
+
+bool FileDropTarget::validateVertexShader(Ogre::Pass * pass, const Ogre::String & path) {
 	bool resourceAdded = false;
-	if (pass->hasVertexProgram())
-	{
+	if (pass->hasVertexProgram()) {
 		Ogre::String vertexProgramName = pass->getVertexProgramName();
 		Ogre::ResourcePtr program;
-		if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(vertexProgramName))
-		{
+		if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(vertexProgramName)) {
 			// Vertex shader does not exist; add it to the resources
 			addDirectoryToResources(path, vertexProgramName, "Vertex shader");
 			resourceAdded = true;
 			program = Ogre::TextureManager::getSingletonPtr()->load(vertexProgramName, PU_EDITOR_RESOURCE_LOCATION);
-			if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(vertexProgramName))
-			{
+			if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(vertexProgramName)) {
 				// Vertex shader still does not exist
 				displayMessageFileCannotBeLoaded(ogre2wx(vertexProgramName));
 				throw Ogre::Exception(1, "Vertex shader does not exist", "validateVertexShader");
 			}
-		}
-		else
-		{
+		} else {
 			program = Ogre::HighLevelGpuProgramManager::getSingletonPtr()->getByName(vertexProgramName);
 			Ogre::GpuProgramPtr gpuProgram = pass->getVertexProgram();
-			if (program.isNull() || gpuProgram.isNull())
-			{
+			if (program.isNull() || gpuProgram.isNull()) {
 				// Vertex shader still does not exist
 				displayMessageFileCannotBeLoaded(ogre2wx(vertexProgramName));
 				throw Ogre::Exception(2, "Vertex shader does not exist", "validateVertexShader");
-			}
-			else if (gpuProgram->getSource() == Ogre::StringUtil::BLANK)
-			{
+			} else if (gpuProgram->getSource() == Ogre::StringUtil::BLANK) {
 				// TODO: Source is never filled, so the directory dialog is always displayed
 
 				// Vertex shader source does not exist
@@ -329,39 +266,30 @@ bool FileDropTarget::validateVertexShader(Ogre::Pass* pass, const Ogre::String& 
 	}
 	return resourceAdded;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::validateGeometryShader(Ogre::Pass* pass, const Ogre::String& path)
-{
+
+bool FileDropTarget::validateGeometryShader(Ogre::Pass * pass, const Ogre::String & path) {
 	bool resourceAdded = false;
-	if (pass->hasGeometryProgram())
-	{
+	if (pass->hasGeometryProgram()) {
 		Ogre::String geometryProgramName = pass->getGeometryProgramName();
 		Ogre::ResourcePtr program;
-		if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(geometryProgramName))
-		{
+		if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(geometryProgramName)) {
 			// Geometry shader does not exist; add it to the resources
 			addDirectoryToResources(path, geometryProgramName, "Geometry shader");
 			resourceAdded = true;
 			program = Ogre::TextureManager::getSingletonPtr()->load(geometryProgramName, PU_EDITOR_RESOURCE_LOCATION);
-			if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(geometryProgramName))
-			{
+			if (!Ogre::HighLevelGpuProgramManager::getSingleton().resourceExists(geometryProgramName)) {
 				// Geometry shader still does not exist
 				displayMessageFileCannotBeLoaded(ogre2wx(geometryProgramName));
 				throw Ogre::Exception(1, "Geometry shader does not exist", "validateGeometryShader");
 			}
-		}
-		else
-		{
+		} else {
 			program = Ogre::HighLevelGpuProgramManager::getSingletonPtr()->getByName(geometryProgramName);
 			Ogre::GpuProgramPtr gpuProgram = pass->getGeometryProgram();
-			if (program.isNull() || gpuProgram.isNull())
-			{
+			if (program.isNull() || gpuProgram.isNull()) {
 				// Geometry shader still does not exist
 				displayMessageFileCannotBeLoaded(ogre2wx(geometryProgramName));
 				throw Ogre::Exception(2, "Geometry shader does not exist", "validateGeometryShader");
-			}
-			else if (gpuProgram->getSource() == Ogre::StringUtil::BLANK)
-			{
+			} else if (gpuProgram->getSource() == Ogre::StringUtil::BLANK) {
 				// TODO: Source is never filled, so the directory dialog is always displayed
 
 				// Geometry shader source does not exist
@@ -373,45 +301,34 @@ bool FileDropTarget::validateGeometryShader(Ogre::Pass* pass, const Ogre::String
 	}
 	return resourceAdded;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::validateTextures(Ogre::Pass* pass, const Ogre::String& path)
-{
+
+bool FileDropTarget::validateTextures(Ogre::Pass * pass, const Ogre::String & path) {
 	bool resourceAdded = false;
 	unsigned short numTexures = pass->getNumTextureUnitStates();
-	for (unsigned short iTUT = 0; iTUT < numTexures; ++iTUT)
-	{
+	for (unsigned short iTUT = 0; iTUT < numTexures; ++iTUT) {
 		Ogre::TextureUnitState* textureUnit = pass->getTextureUnitState(iTUT);
-		if (textureUnit)
-		{
+		if (textureUnit) {
 			unsigned int numFrames = textureUnit->getNumFrames();
-			if (numFrames > 0)
-			{
+			if (numFrames > 0) {
 				Ogre::String frameTextureName = textureUnit->getFrameTextureName(0);
 				Ogre::ResourcePtr texture;
-				if (!Ogre::TextureManager::getSingleton().resourceExists(frameTextureName))
-				{
+				if (!Ogre::TextureManager::getSingleton().resourceExists(frameTextureName)) {
 					// Texture does not exist; add it to the resources
 					addDirectoryToResources(path, frameTextureName, "Texture");
 					resourceAdded = true;
 					texture = Ogre::TextureManager::getSingletonPtr()->load(frameTextureName, PU_EDITOR_RESOURCE_LOCATION);
-					if (!Ogre::TextureManager::getSingleton().resourceExists(frameTextureName))
-					{
+					if (!Ogre::TextureManager::getSingleton().resourceExists(frameTextureName)) {
 						// Texture still does not exist
 						displayMessageFileCannotBeLoaded(ogre2wx(frameTextureName));
 						throw Ogre::Exception(1, "Texture does not exist", "validateTextures");
 					}
-				}
-				else
-				{
+				} else {
 					texture = Ogre::TextureManager::getSingletonPtr()->getByName(frameTextureName);
-					if (texture.isNull())
-					{
+					if (texture.isNull()) {
 						// Texture still does not exist
 						displayMessageFileCannotBeLoaded(ogre2wx(frameTextureName));
 						throw Ogre::Exception(2, "Texture does not exist", "validateTextures");
-					}
-					else if (!texture->isLoaded())
-					{
+					} else if (!texture->isLoaded()) {
 						// Texture does exist, but is not loaded
 						addDirectoryToResources(path, frameTextureName, "Texture");
 						resourceAdded = true;
@@ -423,40 +340,31 @@ bool FileDropTarget::validateTextures(Ogre::Pass* pass, const Ogre::String& path
 	}
 	return resourceAdded;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::loadSkeletonFile(const Ogre::String& baseNameAndExtension, const Ogre::String& path)
-{
+
+bool FileDropTarget::loadSkeletonFile(const Ogre::String & baseNameAndExtension, const Ogre::String & path) {
 	bool resourceAdded = false;
 
 	// Load the skeleton file
 	wxString wxBaseNameAndExtension = ogre2wx(baseNameAndExtension);
 	Ogre::SkeletonPtr skeleton;
-	if (!Ogre::SkeletonManager::getSingleton().resourceExists(baseNameAndExtension))
-	{
+	if (!Ogre::SkeletonManager::getSingleton().resourceExists(baseNameAndExtension)) {
 		// Skeleton does not exist
 		addDirectoryToResources(path, baseNameAndExtension, "Skeleton");
 		resourceAdded = true;
 	}
 
-	try
-	{
+	try {
 		skeleton = Ogre::SkeletonManager::getSingleton().getByName(baseNameAndExtension, PU_EDITOR_RESOURCE_LOCATION);
-		if (skeleton.isNull())
-		{
+		if (skeleton.isNull()) {
 			// Skeleton not loaded. It stops here.
 			displayMessageFileCannotBeLoaded(wxBaseNameAndExtension);
 			return false;
-		}
-		else if (!skeleton->isLoaded())
-		{
+		} else if (!skeleton->isLoaded()) {
 			// Skeleton does exist, but is not loaded?
 			addDirectoryToResources(path, baseNameAndExtension, "Skeleton");
 			resourceAdded = true;
 		}
-	}
-
-	catch (Ogre::Exception e)
-	{
+	} catch (Ogre::Exception e) {
 		// Skeleton not loaded
 		displayMessageFileCannotBeLoaded(wxBaseNameAndExtension);
 		return false;
@@ -465,9 +373,8 @@ bool FileDropTarget::loadSkeletonFile(const Ogre::String& baseNameAndExtension, 
 	skeleton->load();
 	return resourceAdded;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::loadMaterialFile(const Ogre::String& baseNameAndExtension, const Ogre::String& path)
-{
+
+bool FileDropTarget::loadMaterialFile(const Ogre::String & baseNameAndExtension, const Ogre::String & path) {
 	// Load the material file
 	wxString wxBaseNameAndExtension = ogre2wx(baseNameAndExtension);
 	bool resourceAdded = false;
@@ -479,67 +386,48 @@ bool FileDropTarget::loadMaterialFile(const Ogre::String& baseNameAndExtension, 
 	bool textureLocationAdded = false;
 
 	Ogre::String materialFileName;
-	try
-	{
+	try {
 		initialiseResourceGroup(path);
 		Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(baseNameAndExtension, PU_EDITOR_RESOURCE_LOCATION);
-		if (stream.isNull())
-		{
+		if (stream.isNull()) {
 			// Cannot open the file
 			displayMessageFileCannotBeLoaded(wxBaseNameAndExtension);
 			return false;
-		}
-		else
-		{
+		} else {
 			// Parse the material
 			Ogre::MaterialManager::getSingleton().parseScript(stream, PU_EDITOR_RESOURCE_LOCATION);
 			stream->close();
 
 			// Search the materials from the file and compile them
 			Ogre::ResourceManager::ResourceMapIterator materialIterator = Ogre::MaterialManager::getSingleton().getResourceIterator();
-			while (materialIterator.hasMoreElements())
-			{
+			while (materialIterator.hasMoreElements()) {
 				Ogre::MaterialPtr material = materialIterator.peekNextValue().staticCast<Ogre::Material>();
-				if (!material.isNull())
-				{
+				if (!material.isNull()) {
 					materialFileName = material->getOrigin();
 					Ogre::StringUtil::toLowerCase(materialFileName);
-					if (materialFileName == wx2ogre(wxBaseNameAndExtension))
-					{
+					if (materialFileName == wx2ogre(wxBaseNameAndExtension)) {
 						// This was a material from the file that was just parsed
 						material->load();
 
 						// Validate the material
-						if (!(fragmentLocationAdded && vertexLocationAdded && geometryLocationAdded && geometryLocationAdded && textureLocationAdded))
-						{
-							resourceAdded = validateMaterial(material, 
-								path, 
-								fragmentLocationAdded, 
-								vertexLocationAdded, 
-								geometryLocationAdded, 
-								textureLocationAdded);
+						if (!(fragmentLocationAdded && vertexLocationAdded && geometryLocationAdded && geometryLocationAdded && textureLocationAdded)) {
+							resourceAdded = validateMaterial(material, path, fragmentLocationAdded, vertexLocationAdded, geometryLocationAdded, textureLocationAdded);
 						}
 
 						// Compile again in case the program and textures were loaded
 						material->compile();
 					}
 				}
-				if (!resourceAdded)
-				{
+				if (!resourceAdded) {
 					materialIterator.moveNext();
-				}
-				else
-				{
+				} else {
 					// A resource was added, so start all over; the iterator is screwed up if after clearing/initialising the resource group
 					materialIterator = Ogre::MaterialManager::getSingleton().getResourceIterator();
 					resourceAdded = false;
 				}
 			}
 		}
-	}
-
-	catch (Ogre::Exception e)
-	{
+	} catch (Ogre::Exception e) {
 		// Material file not loaded
 		displayMessageFileCannotBeLoaded(wxBaseNameAndExtension);
 		return false;
@@ -547,30 +435,20 @@ bool FileDropTarget::loadMaterialFile(const Ogre::String& baseNameAndExtension, 
 
 	return true;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::loadMaterial(const Ogre::String& materialName, 
-	const Ogre::String& path,
-	bool& materialLocationAdded, 
-	bool& fragmentLocationAdded, 
-	bool& vertexLocationAdded, 
-	bool& geometryLocationAdded, 
-	bool& textureLocationAdded)
-{
+
+bool FileDropTarget::loadMaterial(const Ogre::String & materialName, const Ogre::String & path, bool & materialLocationAdded, bool & fragmentLocationAdded, bool & vertexLocationAdded, bool & geometryLocationAdded, bool & textureLocationAdded) {
 	// Check whether the material (not the file) has been loaded. If not, load the material
 	bool resourceAdded = false;
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(materialName, PU_EDITOR_RESOURCE_LOCATION);
-	if (material.isNull())
-	{
+	if (material.isNull()) {
 		// Material does not exist
-		if (!materialLocationAdded)
-		{
+		if (!materialLocationAdded) {
 			addDirectoryToResources(path, materialName, "Material");
 			materialLocationAdded = true;
 			resourceAdded = true;
 		}
 		material = Ogre::MaterialManager::getSingleton().getByName(materialName, PU_EDITOR_RESOURCE_LOCATION);
-		if (material.isNull())
-		{
+		if (material.isNull()) {
 			// Material not loaded. It stops here, what is there more to do?
 			displayMessageFileCannotBeLoaded(ogre2wx(materialName));
 			return false;
@@ -579,12 +457,7 @@ bool FileDropTarget::loadMaterial(const Ogre::String& materialName,
 	material->load();
 
 	// Load and compile the material. If other resources are missing they are loaded also
-	bool added = validateMaterial(material, 
-		path, 
-		fragmentLocationAdded, 
-		vertexLocationAdded, 
-		geometryLocationAdded, 
-		textureLocationAdded);
+	bool added = validateMaterial(material, path, fragmentLocationAdded, vertexLocationAdded, geometryLocationAdded, textureLocationAdded);
 	resourceAdded = resourceAdded || added;
 
 	// Compile again in case the program and textures were loaded
@@ -592,30 +465,24 @@ bool FileDropTarget::loadMaterial(const Ogre::String& materialName,
 
 	return resourceAdded;
 }
-//-----------------------------------------------------------------------
-bool FileDropTarget::loadMeshFile(const Ogre::String& baseNameAndExtension, const Ogre::String& path)
-{
+
+bool FileDropTarget::loadMeshFile(const Ogre::String & baseNameAndExtension, const Ogre::String & path) {
 	// Load the mesh file
 	wxString wxBaseNameAndExtension = ogre2wx(baseNameAndExtension);
 	Ogre::MeshPtr mesh;
-	try
-	{
+	try {
 		initialiseResourceGroup(path);
 		mesh = Ogre::MeshManager::getSingletonPtr()->load(baseNameAndExtension, PU_EDITOR_RESOURCE_LOCATION);
 
 		// Validate the mesh (check for skeleton file and material file)
 		validateMesh(mesh, path);
-	}
-
-	catch (Ogre::Exception e)
-	{
+	} catch (Ogre::Exception e) {
 		// Mesh not loaded
 		displayMessageFileCannotBeLoaded(wxBaseNameAndExtension);
 		return false;
 	}
 
-	if (mesh.isNull())
-	{
+	if (mesh.isNull()) {
 		// Mesh not loaded
 		displayMessageFileCannotBeLoaded(wxBaseNameAndExtension);
 		return false;
@@ -623,36 +490,30 @@ bool FileDropTarget::loadMeshFile(const Ogre::String& baseNameAndExtension, cons
 
 	return true;
 }
-//-----------------------------------------------------------------------
-void FileDropTarget::addDirectoryToResources(const Ogre::String& path, const Ogre::String& name, const Ogre::String& fileType)
-{
+
+void FileDropTarget::addDirectoryToResources(const Ogre::String & path, const Ogre::String & name, const Ogre::String & fileType) {
 	wxString title = ogre2wx(name) + wxT(" (") + ogre2wx(fileType) + _(") cannot be found. Select a directory where it can be loaded");
 	wxString dir = wxDirSelector(title, ogre2wx(path));
-	if (!dir.empty())
-	{
+	if (!dir.empty()) {
 		initialiseResourceGroup(wx2ogre(dir));
 	}
 }
-//-----------------------------------------------------------------------
-void FileDropTarget::initialiseResourceGroup(const Ogre::String& location)
-{
-	if (!Ogre::ResourceGroupManager::getSingletonPtr()->resourceLocationExists(location, PU_EDITOR_RESOURCE_LOCATION))
-	{
+
+void FileDropTarget::initialiseResourceGroup(const Ogre::String & location) {
+	if (!Ogre::ResourceGroupManager::getSingletonPtr()->resourceLocationExists(location, PU_EDITOR_RESOURCE_LOCATION)) {
 		Ogre::ResourceGroupManager::getSingletonPtr()->addResourceLocation(location, "FileSystem", PU_EDITOR_RESOURCE_LOCATION);
 		Ogre::ResourceGroupManager::getSingletonPtr()->clearResourceGroup(PU_EDITOR_RESOURCE_LOCATION);
 		Ogre::ResourceGroupManager::getSingletonPtr()->initialiseResourceGroup(PU_EDITOR_RESOURCE_LOCATION);
 	}
 }
-//-----------------------------------------------------------------------
-void FileDropTarget::displayMessageFileCannotBeLoaded(const wxString& filename)
-{
+
+void FileDropTarget::displayMessageFileCannotBeLoaded(const wxString & filename) {
 	// Cannot open the file
 	wxMessageDialog message(mFrame, filename + _(" was not succesfully loaded"), _("Drag/drop a file"), wxOK);
 	message.ShowModal();
 }
-//-----------------------------------------------------------------------
-void FileDropTarget::displayMessageNumberOfLoadedFiles(unsigned int loadedFiles)
-{
+
+void FileDropTarget::displayMessageNumberOfLoadedFiles(unsigned int loadedFiles) {
 	Ogre::String numberOfLoadedFiles = Ogre::StringConverter::toString(loadedFiles);
 	wxMessageDialog message(mFrame, ogre2wx(numberOfLoadedFiles) + _(" files succesfully loaded"), _("Drag/drop a file"), wxOK);
 	message.ShowModal();

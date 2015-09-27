@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_FILE_DROP_TARGET_H__
-#define __PUED_FILE_DROP_TARGET_H__
+#ifndef __PUED_FILEDROPTARGET_H__
+#define __PUED_FILEDROPTARGET_H__
 
 #include "wx/ogre/prerequisites.h"
 
@@ -32,46 +32,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 class ParticleUniverseEditorFrame;
 
-class FileDropTarget : public wxFileDropTarget
-{
-	public:
-		FileDropTarget(ParticleUniverseEditorFrame* parent);
-		virtual ~FileDropTarget(void) {}
+class FileDropTarget : public wxFileDropTarget {
+public:
+	FileDropTarget(ParticleUniverseEditorFrame * parent);
+	virtual ~FileDropTarget() {}
 
-		// Overridden from wxFileDropTarget
-		virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
+	// Overridden from wxFileDropTarget
+	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString & filenames);
 
-		// Load the program, material, skeleton, mesh
-		bool validateMesh(Ogre::MeshPtr mesh, const Ogre::String& path);
-		bool validateSkeleton(Ogre::SkeletonPtr skeleton, const Ogre::String& path);
-		bool validateMaterial(Ogre::MaterialPtr material, 
-			const Ogre::String& path, 
-			bool& fragmentLocationAdded, 
-			bool& vertexLocationAdded, 
-			bool& geometryLocationAdded, 
-			bool& textureLocationAdded);
-		bool validateFragmentShader(Ogre::Pass* pass, const Ogre::String& path);
-		bool validateVertexShader(Ogre::Pass* pass, const Ogre::String& path);
-		bool validateGeometryShader(Ogre::Pass* pass, const Ogre::String& path);
-		bool validateTextures(Ogre::Pass* pass, const Ogre::String& path);
-		bool loadSkeletonFile(const Ogre::String& baseNameAndExtension, const Ogre::String& path);
-		bool loadMaterialFile(const Ogre::String& baseNameAndExtension, const Ogre::String& path);
-		bool loadMaterial(const Ogre::String& materialName, 
-			const Ogre::String& path, 
-			bool& materialLocationAdded,
-			bool& fragmentLocationAdded, 
-			bool& vertexLocationAdded, 
-			bool& geometryLocationAdded, 
-			bool& textureLocationAdded);
-		bool loadMeshFile(const Ogre::String& meshName, const Ogre::String& path);
-		void addDirectoryToResources(const Ogre::String& path, const Ogre::String& name, const Ogre::String& fileType);
-		void initialiseResourceGroup(const Ogre::String& location);
-		void displayMessageFileCannotBeLoaded(const wxString& filename);
-		void displayMessageNumberOfLoadedFiles(unsigned int loadedFiles);
+	// Load the program, material, skeleton, mesh
+	bool validateMesh(Ogre::MeshPtr mesh, const Ogre::String & path);
+	bool validateSkeleton(Ogre::SkeletonPtr skeleton, const Ogre::String & path);
+	bool validateMaterial(Ogre::MaterialPtr material, const Ogre::String & path, bool & fragmentLocationAdded, bool & vertexLocationAdded, bool & geometryLocationAdded, bool & textureLocationAdded);
+	bool validateFragmentShader(Ogre::Pass * pass, const Ogre::String & path);
+	bool validateVertexShader(Ogre::Pass * pass, const Ogre::String & path);
+	bool validateGeometryShader(Ogre::Pass * pass, const Ogre::String & path);
+	bool validateTextures(Ogre::Pass * pass, const Ogre::String & path);
+	bool loadSkeletonFile(const Ogre::String & baseNameAndExtension, const Ogre::String & path);
+	bool loadMaterialFile(const Ogre::String & baseNameAndExtension, const Ogre::String & path);
+	bool loadMaterial(const Ogre::String & materialName, const Ogre::String & path, bool & materialLocationAdded, bool & fragmentLocationAdded, bool & vertexLocationAdded, bool & geometryLocationAdded, bool & textureLocationAdded);
+	bool loadMeshFile(const Ogre::String & meshName, const Ogre::String & path);
+	void addDirectoryToResources(const Ogre::String & path, const Ogre::String & name, const Ogre::String & fileType);
+	void initialiseResourceGroup(const Ogre::String & location);
+	void displayMessageFileCannotBeLoaded(const wxString & filename);
+	void displayMessageNumberOfLoadedFiles(unsigned int loadedFiles);
 
-	protected:
-		ParticleUniverseEditorFrame* mFrame;
-
+protected:
+	ParticleUniverseEditorFrame * mFrame;
 };
 
-#endif
+#endif /* __PUED_FILEDROPTARGET_H__ */

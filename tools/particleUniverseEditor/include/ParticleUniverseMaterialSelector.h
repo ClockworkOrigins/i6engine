@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_MATERIAL_SELECTOR_H__
-#define __PUED_MATERIAL_SELECTOR_H__
+#ifndef __PUED_MATERIALSELECTOR_H__
+#define __PUED_MATERIALSELECTOR_H__
 
 #include "wx/ogre/utils.h"
 
@@ -19,61 +19,49 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 /**	Selection dialog for materials
 */
-class MaterialSelector : public wxSingleChoiceDialog
-{
-	public:
-		// Constructor / Destructor
-		MaterialSelector(wxWindow* parent,
-			const wxString& message,
-			const wxString& caption,
-			int n,
-			const wxString* choices,
-			long style = wxCHOICEDLG_STYLE,
-			const wxPoint& pos = wxDefaultPosition) :
-		wxSingleChoiceDialog(parent, message, caption, n, choices, reinterpret_cast<void **>(0), style, pos) {}
-		~MaterialSelector(void) {}
+class MaterialSelector : public wxSingleChoiceDialog {
+public:
+	// Constructor / Destructor
+	MaterialSelector(wxWindow * parent, const wxString & message, const wxString & caption, int n, const wxString * choices, long style = wxCHOICEDLG_STYLE, const wxPoint & pos = wxDefaultPosition) : wxSingleChoiceDialog(parent, message, caption, n, choices, reinterpret_cast<void **>(0), style, pos) {}
+	~MaterialSelector() {}
 };
 
 /**	Class that creates a button property. After clicking a material can be selected
 */
-class MaterialProperty : public wxStringProperty
-{
-	public:
-		MaterialProperty(
-			const wxString& label,
-			const wxString& name);
-		virtual ~MaterialProperty(void) {}
+class MaterialProperty : public wxStringProperty {
+public:
+	MaterialProperty(const wxString & label, const wxString & name);
+	virtual ~MaterialProperty() {}
 
-		/**
-		*/
-		virtual bool OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event);
+	/**
+	*/
+	virtual bool OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_primary, wxEvent & event);
 
-		/**	Returns the selected materialname
-		*/
-		const Ogre::String& getMaterialName(void) const;
+	/**	Returns the selected materialname
+	*/
+	const Ogre::String & getMaterialName() const;
 
-	protected:
-		Ogre::String mMaterialName;
+protected:
+	Ogre::String mMaterialName;
 };
 
 /**	Class that displays a material selection dialog
 */
-class MaterialDialog
-{
-	public:
-		MaterialDialog(void) {}
-		virtual ~MaterialDialog(void) {}
+class MaterialDialog {
+public:
+	MaterialDialog() {}
+	virtual ~MaterialDialog() {}
 
-		/**	Open the dialog
-		*/
-		const Ogre::String& openDialog (wxWindow* parent);
+	/**	Open the dialog
+	*/
+	const Ogre::String & openDialog(wxWindow * parent);
 
-		/**	Returns the selected material name
-		*/
-		const Ogre::String& getMaterialName(void) const;
+	/**	Returns the selected material name
+	*/
+	const Ogre::String & getMaterialName() const;
 
-	protected:
-		Ogre::String mMaterialName;
+protected:
+	Ogre::String mMaterialName;
 };
 
-#endif
+#endif /* __PUED_MATERIALSELECTOR_H__ */
