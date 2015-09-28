@@ -30,7 +30,7 @@ namespace i6engine {
 namespace integration {
 namespace components {
 
-	DriveComponent::DriveComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _counter(0) {
+	DriveComponent::DriveComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _counter(0), _sum(0.0), _sumCounter(0) {
 		_objComponentID = config::ComponentTypes::DriveComponent;
 	}
 
@@ -59,12 +59,17 @@ namespace components {
 		psc->applyCentralForce(Vec3(0.0, 0.0, -150.0), true);
 
 		if (psc->getPosition().getX() < -100.0) {
-			psc->setPosition(Vec3(100.0, 1.0, 0.0), 10);
+			psc->setPosition(Vec3(100.0, 0.3, 0.0), 10);
 		}
 
-		if (psc->getPosition().getY() > 1.5) {
-			_counter++;
-			api::EngineController::GetSingleton().getGUIFacade()->setText("JumpCounter", std::to_string(_counter));
+		if (_sumCounter < 1000) {
+			_sum += psc->getPosition().getY();
+			_sumCounter++;
+		} else {
+			if (std::abs(psc->getPosition().getY() - _sum / 1000.0) > 0.1 * _sum / 1000.0) {
+				_counter++;
+				api::EngineController::GetSingleton().getGUIFacade()->setText("JumpCounter", std::to_string(_counter));
+			}
 		}
 	}
 

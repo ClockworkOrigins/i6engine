@@ -25,6 +25,7 @@
 #include "i6engine/modules/physics/collisionShapes/MeshStriderCollisionShape.h"
 
 #include "btBulletDynamicsCommon.h"
+#include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 
 #include "clockUtils/iniParser/iniParser.h"
@@ -62,11 +63,20 @@ int main(int argc, char ** argv) {
 		Ogre::Mesh * mp = meshPtr.get();
 
 		std::cout << "Creating collision shape" << std::endl;
-		btCollisionShape * fallShape = new btBvhTriangleMeshShape(new i6engine::tools::MeshStrider(mp), true);
+		btBvhTriangleMeshShape * fallShape = new btBvhTriangleMeshShape(new i6engine::tools::MeshStrider(mp), true);
+		btConvexTriangleMeshShape * ctms = new btConvexTriangleMeshShape(fallShape->getMeshInterface());
+		ctms->initializePolyhedralFeatures();
+		btShapeHull * sh = new btShapeHull(ctms);
+		sh->buildHull(0.0);
+		btConvexHullShape * chs = new btConvexHullShape();
+		std::cout << sh->numVertices() << std::endl;
+		for (int i = 0; i < sh->numVertices(); i++) {
+			chs->addPoint(sh->getVertexPointer()[i]);
+		}
 
 		btDefaultSerializer * serializer = new btDefaultSerializer();
 		serializer->startSerialization();
-		fallShape->serializeSingleShape(serializer);
+		chs->serializeSingleShape(serializer);
 		serializer->finishSerialization();
 
 		std::vector<char> data(serializer->getCurrentBufferSize());

@@ -56,6 +56,8 @@ namespace components {
 
 	private:
 		uint32_t _counter;
+		double _sum;
+		uint64_t _sumCounter;
 	};
 
 } /* namespace components */

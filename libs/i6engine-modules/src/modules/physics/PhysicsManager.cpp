@@ -220,7 +220,7 @@ namespace modules {
 		try {
 			// the time to be simulated, in seconds
 			uint64_t cT = api::EngineController::GetSingleton().getCurrentTime();
-			btScalar timestep = double(cT - _lngTime) / 1000000.0;
+			btScalar timestep = btScalar(cT - _lngTime) / 1000000.0;
 			_lngTime = cT;
 
 			// referring to bullet wiki, this formula must be always true: http://bulletphysics.org/mediawiki-1.5.8/index.php/Stepping_The_World

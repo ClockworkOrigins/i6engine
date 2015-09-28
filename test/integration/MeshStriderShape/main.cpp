@@ -33,7 +33,7 @@ int main(int argc, char ** argv) {
 
 	i6engine::integration::MeshStriderShapeIntegrationTestApplication app;
 
-	app.setName("Scripting Sample");
+	app.setName("MeshStriderShape Test");
 
 	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
 
