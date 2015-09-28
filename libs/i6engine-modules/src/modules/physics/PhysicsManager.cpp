@@ -16,6 +16,8 @@
 
 #include "i6engine/modules/physics/PhysicsManager.h"
 
+#include <fstream>
+
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/core/configs/SubsystemConfig.h"
@@ -37,7 +39,11 @@
 #include "i6engine/modules/physics/PhysicsController.h"
 #include "i6engine/modules/physics/PhysicsNode.h"
 
+#include "i6engine/modules/physics/collisionShapes/HeightmapCollisionShape.h"
+#include "i6engine/modules/physics/collisionShapes/MeshStriderCollisionShape.h"
+
 #include "btBulletDynamicsCommon.h"
+#include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 
 namespace i6engine {
@@ -447,10 +453,59 @@ namespace modules {
 			shapeIndex = std::stoul(params.find("shapeIndex")->second);
 		}
 
-		btBulletWorldImporter * fileLoader = new btBulletWorldImporter(_dynamicsWorld);
-		fileLoader->loadFile(fileName.c_str());
-		btCollisionShape * shape = fileLoader->getCollisionShapeByIndex(int(shapeIndex));
-		delete fileLoader;
+		std::ifstream fs(fileName.c_str(), std::ios_base::binary);
+
+		std::string serialized;
+		while (fs.good()) {
+			std::string line;
+			std::getline(fs, line);
+			serialized += line + "\n";
+		}
+		serialized.pop_back();
+		fs.close();
+
+		CollisionShapeData * csData = CollisionShapeData::Deserialize(serialized);
+
+		btCollisionShape * shape = nullptr;
+
+		switch (csData->type) {
+		case CollisionShapeType::None: {
+			ISIXE_THROW_API("PhysicsManager", "Invalid CollisionShapeType");
+			break;
+		}
+		case CollisionShapeType::Heightmap: {
+			HeightmapCollisionShapeData * hcsd = dynamic_cast<HeightmapCollisionShapeData *>(csData);
+			btScalar * arr = new btScalar[hcsd->width * hcsd->height];
+
+			for (size_t i = 0; i < hcsd->data.size(); i++) {
+				arr[i] = hcsd->data[i];
+			}
+
+			shape = new btHeightfieldTerrainShape(hcsd->width, hcsd->height, arr, 1.0, hcsd->minHeight, hcsd->maxHeight, 1, PHY_FLOAT, true);
+			dynamic_cast<btHeightfieldTerrainShape *>(shape)->setUseDiamondSubdivision(true);
+			shape->setLocalScaling(hcsd->scaling.toBullet());
+			break;
+		}
+		case CollisionShapeType::MeshStrider: {
+			MeshStriderCollisionShapeData * mscsd = dynamic_cast<MeshStriderCollisionShapeData *>(csData);
+			char * data = new char[mscsd->data.size()];
+			for (size_t i = 0; i < mscsd->data.size(); i++) {
+				data[i] = mscsd->data[i];
+			}
+			btBulletWorldImporter * fileLoader = new btBulletWorldImporter(_dynamicsWorld);
+			fileLoader->loadFileFromMemory(data, mscsd->data.size());
+			shape = fileLoader->getCollisionShapeByIndex(int(shapeIndex));
+			delete fileLoader;
+			delete[] data;
+			break;
+		}
+		default: {
+			ISIXE_THROW_API("PhysicsManager", "Invalid CollisionShapeType");
+			break;
+		}
+		}
+
+		delete csData;
 
 		if (shape == nullptr) {
 			ISIXE_THROW_API("PhysicsManager", "Couldn't load collisionShape from file " << fileName);

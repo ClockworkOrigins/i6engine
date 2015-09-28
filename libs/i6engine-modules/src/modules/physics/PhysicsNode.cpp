@@ -169,7 +169,7 @@ namespace modules {
 
 			_rigidBody->setUserPointer(reinterpret_cast<void *>(this));
 
-			_rigidBody->getCollisionShape()->setLocalScaling(_scale.toBullet());
+			_rigidBody->getCollisionShape()->setLocalScaling(_scale.toBullet() * _rigidBody->getCollisionShape()->getLocalScaling());
 
 			startSimulatingBody();
 
@@ -190,14 +190,14 @@ namespace modules {
 			}
 
 			if (_parentShape != nullptr) {
-				newShape->setLocalScaling(_scale.toBullet());
+				newShape->setLocalScaling(_scale.toBullet() * newShape->getLocalScaling());
 				btTransform transform;
 				transform.setIdentity();
 				_childShapes.insert(std::make_pair(compId, std::make_pair(_parentShape->getNumChildShapes(), newShape)));
 				_parentShape->addChildShape(transform, newShape);
 			}
 		} else {
-			newShape->setLocalScaling(_scale.toBullet());
+			newShape->setLocalScaling(_scale.toBullet() * newShape->getLocalScaling());
 
 			_childShapes.insert(std::make_pair(compId, std::make_pair(_parentShape->getNumChildShapes(), newShape)));
 			_parentShape->addChildShape(btTransform(rotation.toBullet(), position.toBullet()), newShape);

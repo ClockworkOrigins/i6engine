@@ -14,12 +14,34 @@
  * limitations under the License.
  */
 
-#include "i6engine/i6eComponentRegister.h"
+#include "i6engine/api/Application.h"
 
-#include "boost/bind.hpp"
+namespace i6engine {
+namespace tools {
 
-#include "gtest/gtest.h"
+	class TerrainShapeCreatorApplication : public api::Application {
+	public:
+		TerrainShapeCreatorApplication(const std::string & goTemplate, const std::string & outFile) : api::Application(), _goTemplate(goTemplate), _outFile(outFile) {
+		}
 
-TEST(Component, Registration) {
-	EXPECT_EQ(18, i6engine::api::componentList.size());
-}
+	private:
+		std::string _goTemplate;
+		std::string _outFile;
+
+		void Initialize();
+
+		void AfterInitialize();
+
+		void Tick() {
+		}
+
+		bool ShutdownRequest() {
+			return true;
+		}
+
+		void Finalize() {
+		}
+	};
+
+} /* namespace tools */
+} /* namespace i6engine */

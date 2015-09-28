@@ -15,28 +15,29 @@
 ##
 
 ################################
-# meshToBulletConverter cmake
+# terrainShapeCreator cmake
 ################################
 
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
+include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 
-set(meshToBulletConverterSrc
+set(terrainShapeCreatorSrc
 	main.cpp
 
-	MeshStrider.cpp
+	TerrainShapeCreatorApplication.cpp
 )
 
-add_executable(meshToBulletConverter ${meshToBulletConverterSrc})
-set_target_properties(meshToBulletConverter PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(terrainShapeCreator ${terrainShapeCreatorSrc})
+set_target_properties(terrainShapeCreator PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(meshToBulletConverter ${BULLET_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} i6engine-modules)
+target_link_libraries(terrainShapeCreator ${BULLET_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} i6engine-modules)
 
 IF(WIN32)
-	add_custom_command(TARGET meshToBulletConverter POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/meshToBulletConverter.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET terrainShapeCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/terrainShapeCreator.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(TARGETS meshToBulletConverter
+install(TARGETS terrainShapeCreator
 		DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 	)

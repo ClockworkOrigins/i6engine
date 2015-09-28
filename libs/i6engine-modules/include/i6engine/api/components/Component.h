@@ -290,18 +290,8 @@ namespace api {
 		}
 
 		template<typename T>
-		typename std::enable_if<std::is_same<T, Vec3>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
-			value = Vec3(it->second);
-		}
-
-		template<typename T>
-		typename std::enable_if<std::is_same<T, Vec4>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
-			value = Vec4(it->second);
-		}
-
-		template<typename T>
-		typename std::enable_if<std::is_same<T, Quaternion>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
-			value = Quaternion(it->second);
+		typename std::enable_if<std::is_same<T, Vec3>::value || std::is_same<T, Vec4>::value || std::is_same<T, Quaternion>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+			value = T(it->second);
 		}
 
 		template<typename T>

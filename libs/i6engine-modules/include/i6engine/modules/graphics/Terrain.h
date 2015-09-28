@@ -46,7 +46,7 @@ namespace modules {
 	 * \class Terrain
 	 * \brief Saves all Terrain-specific things
 	 */
-	class Terrain {
+	class ISIXE_MODULES_API Terrain {
 	public:
 		/**
 		 * \brief Creates a new node with unique name
@@ -54,7 +54,7 @@ namespace modules {
 		 * Thereby passing a filename and calling Ogre's loadAllTerrains
 		 * Then configuring
 		 */
-		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
+		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
 
 		/**
 		 * \brief Terrain::~Terrain()
@@ -94,6 +94,11 @@ namespace modules {
 		 */
 		inline Ogre::TerrainGlobalOptions * getTerrainGlobalOptions() const { return _mTerrainGlobals; }
 
+		/**
+		 * \brief saves collision shape as bullet collisionshape to given file
+		 */
+		void saveCollisionShape(const std::string & outFile);
+
 	private:
 		/**
 		 * \brief pointer to the graphics subsystem
@@ -127,7 +132,14 @@ namespace modules {
 
 		double _inputScale;
 
+		uint32_t _vertices;
+
 		std::vector<std::tuple<double, std::string, std::string, double, double>> _layers;
+
+		int64_t _minX;
+		int64_t _maxX;
+		int64_t _minY;
+		int64_t _maxY;
 
 		/**
 		 * \brief forbidden

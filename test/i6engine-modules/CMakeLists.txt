@@ -26,7 +26,6 @@ include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
 SET(testSrc
 	api/test_GameMessage.cpp
 	
-	#api/components/test_Component.cpp
 	api/components/test_ComponentCreateException.cpp
 	api/components/test_ComponentSynchronize.cpp
 	api/components/test_MoverComponent.cpp
@@ -35,6 +34,8 @@ SET(testSrc
 	api/manager/test_TextManager.cpp
 
 	api/objects/test_GameObject.cpp
+
+	modules/physics/test_CollisionShape.cpp
 )
 add_executable(ModulesTester ${testSrc})
 

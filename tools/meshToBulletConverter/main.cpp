@@ -22,6 +22,8 @@
 
 #include "i6engine/modules/graphics/ResourceManager.h"
 
+#include "i6engine/modules/physics/collisionShapes/MeshStriderCollisionShape.h"
+
 #include "btBulletDynamicsCommon.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 
@@ -67,9 +69,21 @@ int main(int argc, char ** argv) {
 		fallShape->serializeSingleShape(serializer);
 		serializer->finishSerialization();
 
-		FILE * file = fopen((bullet).c_str(), "wb");
-		fwrite(serializer->getBufferPointer(), size_t(serializer->getCurrentBufferSize()), 1, file);
-		fclose(file);
+		std::vector<char> data(serializer->getCurrentBufferSize());
+
+		for (size_t i = 0; i < data.size(); i++) {
+			data[i] = serializer->getBufferPointer()[i];
+		}
+
+		i6engine::modules::MeshStriderCollisionShapeData * mscsd = new i6engine::modules::MeshStriderCollisionShapeData(data);
+
+		std::string serialized = mscsd->Serialize();
+
+		delete mscsd;
+
+		std::ofstream fs(bullet.c_str(), std::ios_base::binary);
+		fs << serialized;
+		fs.close();
 		std::cout << "Exported '" << bullet << "'" << std::endl;
 		
 		delete serializer;
