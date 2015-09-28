@@ -22,7 +22,7 @@ namespace modules {
 	MeshStriderCollisionShapeData::MeshStriderCollisionShapeData() : CollisionShapeData(), data() {
 	}
 
-	MeshStriderCollisionShapeData::MeshStriderCollisionShapeData(const std::vector<char> & d) : CollisionShapeData(CollisionShapeType::Heightmap), data(d) {
+	MeshStriderCollisionShapeData::MeshStriderCollisionShapeData(const std::vector<char> & d) : CollisionShapeData(CollisionShapeType::MeshStrider), data(d) {
 	}
 
 	template<class Archive>

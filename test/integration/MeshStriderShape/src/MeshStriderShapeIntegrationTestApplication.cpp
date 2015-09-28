@@ -39,64 +39,64 @@ namespace integration {
 	void MeshStriderShapeIntegrationTestApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
 
-		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
+		api::ObjectFacade * of = api::EngineController::GetSingleton().getObjectFacade();
 
 		of->registerCTemplate("Drive", boost::bind(&components::DriveComponent::createC, _1, _2));
 
 		// a camera to see the scene and move around
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			api::objects::GOTemplate tmpl;
 			{
-				i6engine::api::attributeMap params;
+				api::attributeMap params;
 				params.insert(std::make_pair("pos", "0 50 -200"));
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", params, "", false, false));
+				tmpl._components.push_back(api::objects::GOTemplateComponent("StaticState", params, "", false, false));
 			}
-			of->createGO("SpectatorCam", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this](i6engine::api::GOPtr go) {
+			of->createGO("SpectatorCam", tmpl, api::EngineController::GetSingleton().getUUID(), false, [this](api::GOPtr go) {
 				_camera = go;
 			});
 		}
 		// a ground so we can see shadows on it
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			api::objects::GOTemplate tmpl;
 			{
-				i6engine::api::attributeMap params;
+				api::attributeMap params;
 				params.insert(std::make_pair("mesh", "MeshStriderTestMesh.MESH"));
 				params.insert(std::make_pair("scale", "1.0 1.0 1.0"));
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("MeshAppearance", params, "", false, false));
+				tmpl._components.push_back(api::objects::GOTemplateComponent("MeshAppearance", params, "", false, false));
 			}
 			{
-				i6engine::api::attributeMap params;
+				api::attributeMap params;
 				params.insert(std::make_pair("shapeType", "3"));
 				params.insert(std::make_pair("fileName", "../media/cshapes/MeshStriderTestShape.bullet"));
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
+				tmpl._components.push_back(api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
 			}
-			of->createObject("Floor", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Floor", tmpl, api::EngineController::GetSingleton().getUUID(), false);
 		}
 		// a sun
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			of->createObject("Sun", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			api::objects::GOTemplate tmpl;
+			of->createObject("Sun", tmpl, api::EngineController::GetSingleton().getUUID(), false);
 		}
 		// first scripted block
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			api::objects::GOTemplate tmpl;
 			{
-				i6engine::api::attributeMap params;
+				api::attributeMap params;
 				params.insert(std::make_pair("pos", "10 1.0 0.0"));
 				Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0).insertInMap("rot", params);
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
+				tmpl._components.push_back(api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
 			}
 			{
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("ScriptingShatter", i6engine::api::attributeMap(), "", true, false));
+				tmpl._components.push_back(api::objects::GOTemplateComponent("ScriptingShatter", api::attributeMap(), "", true, false));
 			}
 			{
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Drive", i6engine::api::attributeMap(), "", false, false));
+				tmpl._components.push_back(api::objects::GOTemplateComponent("Drive", api::attributeMap(), "", false, false));
 			}
-			of->createObject("ScriptBlock", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ScriptBlock", tmpl, api::EngineController::GetSingleton().getUUID(), false);
 		}
 	}
 

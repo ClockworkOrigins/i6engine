@@ -162,8 +162,8 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			// Build the broadphase
-			// _broadphase = new btDbvtBroadphase();
-			_broadphase = new btAxisSweep3(btVector3(-50000, -50000, -50000), btVector3(50000, 50000, 50000));
+			 _broadphase = new btDbvtBroadphase();
+			//_broadphase = new btAxisSweep3(btVector3(-50000, -50000, -50000), btVector3(50000, 50000, 50000));
 
 			// Set up the collision configuration and dispatcher
 			_collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -174,7 +174,7 @@ namespace modules {
 
 			// The world.
 			_dynamicsWorld = new btDiscreteDynamicsWorld(_dispatcher, _broadphase, _solver, _collisionConfiguration);
-			_dynamicsWorld->getDispatchInfo().m_allowedCcdPenetration = 0.0001f;
+			_dynamicsWorld->getDispatchInfo().m_allowedCcdPenetration = 0.0001;
 			_dynamicsWorld->getDispatchInfo().m_useContinuous = true;
 
 			// FilterCallback
