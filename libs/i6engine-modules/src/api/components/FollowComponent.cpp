@@ -29,8 +29,6 @@ namespace api {
 	}
 
 	ComPtr FollowComponent::createC(const int64_t id, const attributeMap & params) {
-		ISIXE_THROW_API_COND("FollowComponent", "Parameter 'targetID' not set!", params.find("targetID") != params.end());
-		ISIXE_THROW_API_COND("FollowComponent", "Parameter 'speed' not set!", params.find("speed") != params.end());
 		return utils::make_shared<FollowComponent, Component>(id, params);
 	}
 

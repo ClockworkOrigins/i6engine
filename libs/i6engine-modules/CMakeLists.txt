@@ -50,6 +50,7 @@ set(i6components
 	${srcdir}/api/components/StaticStateComponent.cpp
 	${srcdir}/api/components/TerrainAppearanceComponent.cpp
 	${srcdir}/api/components/ToggleWaynetComponent.cpp
+	${srcdir}/api/components/VelocityComponent.cpp
 	${srcdir}/api/components/WaynetNavigationComponent.cpp
 	${srcdir}/api/components/WaypointComponent.cpp
 )
