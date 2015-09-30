@@ -20,16 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
-#ifndef __LUABIND_DETAIL_YES_NO_HPP__
-#define __LUABIND_DETAIL_YES_NO_HPP__
+#ifndef YES_NO_040211_HPP
+#define YES_NO_040211_HPP
 
-namespace luabind {
-namespace detail {
+namespace luabind { namespace detail {
 
     typedef char(&yes_t)[1];
     typedef char(&no_t)[2];
 
-} /* namespace detail */
-} /* namespace luabind */
+}} // namespace luabind::detail
 
-#endif /* __LUABIND_DETAIL_YES_NO_HPP__ */
+#endif // YES_NO_040211_HPP
+
