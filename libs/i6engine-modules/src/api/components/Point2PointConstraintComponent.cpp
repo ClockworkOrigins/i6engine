@@ -48,10 +48,6 @@ namespace api {
 	Point2PointConstraintComponent::~Point2PointConstraintComponent() {
 	}
 
-	ComPtr Point2PointConstraintComponent::createC(const int64_t id, const api::attributeMap & params) {
-		return utils::make_shared<Point2PointConstraintComponent, Component>(id, params);
-	}
-
 	void Point2PointConstraintComponent::Init() {
 		for (auto & go : EngineController::GetSingleton().getObjectFacade()->getGOList()) {
 			auto p2p = go->getGOC<Point2PointConstraintComponent>(components::ComponentTypes::Point2PointConstraintComponent);

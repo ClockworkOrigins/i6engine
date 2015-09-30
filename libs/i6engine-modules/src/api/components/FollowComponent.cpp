@@ -28,10 +28,6 @@ namespace api {
 	FollowComponent::~FollowComponent() {
 	}
 
-	ComPtr FollowComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<FollowComponent, Component>(id, params);
-	}
-
 	void FollowComponent::Init() {
 		_ownPSC = getOwnerGO()->getGOC<PhysicalStateComponent>(components::ComponentTypes::PhysicalStateComponent);
 		_lastTime = EngineController::GetSingleton().getCurrentTime();

@@ -56,10 +56,6 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	ComPtr LuminousAppearanceComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<LuminousAppearanceComponent, Component>(id, params);
-	}
-
 	void LuminousAppearanceComponent::Init() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraLuminous, core::Method::Create, new graphics::Graphics_Luminous_Update(_objOwnerID, getID(), int(_lightType), _diffuseColor, _specularColor, _attenuation, _direction, _spotlightRangeInner, _spotlightRangeOuter, _position), core::Subsystem::Object);
 

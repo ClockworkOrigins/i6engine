@@ -71,10 +71,6 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	ComPtr TerrainAppearanceComponent::createC(const int64_t id, const api::attributeMap & params) {
-		return utils::make_shared<TerrainAppearanceComponent, Component>(id, params);
-	}
-
 	void TerrainAppearanceComponent::Init() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
 

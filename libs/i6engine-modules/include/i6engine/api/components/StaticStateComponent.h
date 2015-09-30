@@ -50,11 +50,6 @@ namespace api {
 		~StaticStateComponent();
 
 		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief Sets position
 		 */
 		inline void setPosition(const Vec3 & position) {

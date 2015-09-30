@@ -42,10 +42,6 @@ namespace api {
 		_spawntypes.clear();
 	}
 
-	ComPtr SpawnpointComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<SpawnpointComponent, Component>(id, params);
-	}
-
 	void SpawnpointComponent::Init() {
 	}
 

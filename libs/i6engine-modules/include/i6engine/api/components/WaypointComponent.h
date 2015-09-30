@@ -42,11 +42,6 @@ namespace api {
 		~WaypointComponent();
 
 		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief synchronizes the Components state
 		 */
 		attributeMap synchronize() const override;

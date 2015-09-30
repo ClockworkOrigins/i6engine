@@ -45,10 +45,6 @@ namespace api {
 	BillboardComponent::~BillboardComponent() {
 	}
 
-	ComPtr BillboardComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<BillboardComponent, Component>(id, params);
-	}
-
 	void BillboardComponent::Init() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraBillboardSet, core::Method::Create, new graphics::Graphics_BillboardSet_Create(_objOwnerID, getID(), _material, _width, _height, _billboardOrigin), core::Subsystem::Object);
 

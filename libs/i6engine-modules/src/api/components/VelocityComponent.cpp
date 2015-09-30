@@ -20,10 +20,6 @@ namespace api {
 	VelocityComponent::~VelocityComponent() {
 	}
 
-	ComPtr VelocityComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<VelocityComponent, Component>(id, params);
-	}
-
 	void VelocityComponent::Init() {
 	}
 

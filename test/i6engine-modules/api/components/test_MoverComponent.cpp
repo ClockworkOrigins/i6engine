@@ -60,7 +60,7 @@ TEST(MoverComponent, absolute) {
 		phyMap["collisionGroup"] = "0";
 		phyMap["shatterInterest"] = "0";
 
-		i6engine::utils::sharedPtr<MoverCircleComponent, Component> mover = i6engine::utils::dynamic_pointer_cast<MoverCircleComponent>(MoverCircleComponent::createC(0, aMap));
+		i6engine::utils::sharedPtr<MoverCircleComponent, Component> mover = i6engine::utils::dynamic_pointer_cast<MoverCircleComponent>(Component::createC<MoverCircleComponent>(0, aMap));
 		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(1, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", func);
 		i6engine::utils::sharedPtr<PhysicalStateComponent, Component> psc = i6engine::utils::make_shared<PhysicalStateComponent, Component>(2, phyMap);
 		owner->setSelf(owner);

@@ -34,8 +34,6 @@ namespace api {
 
 		~VelocityComponent();
 
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
 		attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {

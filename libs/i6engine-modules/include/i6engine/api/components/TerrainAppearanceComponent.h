@@ -53,11 +53,6 @@ namespace api {
 		~TerrainAppearanceComponent();
 
 		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief Gets the GameObject's heightmap.
 		 */
 		inline std::string getHeightmap() const { return _heightmap; }

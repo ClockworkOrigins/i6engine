@@ -45,10 +45,6 @@ namespace api {
 	MovableTextComponent::~MovableTextComponent() {
 	}
 
-	ComPtr MovableTextComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<MovableTextComponent, Component>(id, params);
-	}
-
 	void MovableTextComponent::Init() {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Create, new graphics::Graphics_MovableText_Create(_objOwnerID, getID(), getOwnerGO()->getGOC(components::ComponentTypes::MeshAppearanceComponent)->getID(), _font, _text, _size, _colour), core::Subsystem::Object));
 	}

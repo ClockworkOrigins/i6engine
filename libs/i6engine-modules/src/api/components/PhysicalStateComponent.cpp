@@ -59,10 +59,6 @@ namespace api {
 	PhysicalStateComponent::~PhysicalStateComponent() {
 	}
 
-	ComPtr PhysicalStateComponent::createC(const int64_t id, const api::attributeMap & params) {
-		return utils::make_shared<PhysicalStateComponent, Component>(id, params);
-	}
-
 	void PhysicalStateComponent::Init() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Create, new physics::Physics_Node_Create(_objOwnerID, getID(), _position, _rotation, _scale, _collisionGroup, _shapeType, _shapeParams, _shatterInterest), core::Subsystem::Object);
 

@@ -109,6 +109,11 @@ namespace api {
 		 */
 		virtual ~Component();
 
+		template<typename T>
+		static ComPtr createC(const int64_t id, const attributeMap & params) {
+			return utils::make_shared<T, Component>(id, params);
+		}
+
 		/**
 		 * \brief Sets the GameObject that owns this Component
 		 * \param[in] objGO type of GameObject*
