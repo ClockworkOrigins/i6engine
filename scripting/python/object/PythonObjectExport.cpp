@@ -44,6 +44,7 @@
 #include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/components/TerrainAppearanceComponent.h"
 #include "i6engine/api/components/ToggleWaynetComponent.h"
+#include "i6engine/api/components/VelocityComponent.h"
 #include "i6engine/api/components/WaynetNavigationComponent.h"
 #include "i6engine/api/components/WaypointComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
@@ -425,6 +426,14 @@ namespace object {
 
 	i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component> getPoint2PointConstraintComponent(i6engine::api::GameObject * go, const std::string & identifier) {
 		return go->getGOC<i6engine::api::Point2PointConstraintComponent>(i6engine::api::components::ComponentTypes::Point2PointConstraintComponent, identifier);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component> getVelocityComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::VelocityComponent>(i6engine::api::components::ComponentTypes::VelocityComponent);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component> getVelocityComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::VelocityComponent>(i6engine::api::components::ComponentTypes::VelocityComponent, identifier);
 	}
 
 	struct CameraComponentWrapper : public i6engine::api::CameraComponent, public boost::python::wrapper<i6engine::api::CameraComponent> {
@@ -842,6 +851,30 @@ namespace object {
 		}
 	};
 
+	void accelerate(i6engine::api::VelocityComponent * c, const Vec3 & acceleration, i6engine::api::VelocityComponent::MaxSpeedHandling handling, const std::string & func) {
+		c->accelerate(acceleration, handling, [func]() {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+		});
+	}
+
+	void accelerate(i6engine::api::VelocityComponent * c, const std::string & func) {
+		c->accelerate([func]() {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+		});
+	}
+
+	void decelerate(i6engine::api::VelocityComponent * c, const Vec3 & deceleration, const std::string & func) {
+		c->decelerate(deceleration, [func]() {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+		});
+	}
+
+	void decelerate(i6engine::api::VelocityComponent * c, const std::string & func) {
+		c->decelerate([func]() {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+		});
+	}
+
 } /* namespace object */
 } /* namespace python */
 } /* namespace i6engine */
@@ -925,7 +958,9 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getToggleWaynetComponent)
 		.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getToggleWaynetComponent)
 		.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getPoint2PointConstraintComponent)
-		.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getPoint2PointConstraintComponent);
+		.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getPoint2PointConstraintComponent)
+		.def("getVelocityComponent", (i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getVelocityComponent)
+		.def("getVelocityComponent", (i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getVelocityComponent);
 	
 	enum_<i6engine::api::AddStrategy>("AddStrategy")
 		.value("ADD", i6engine::api::AddStrategy::ADD)
@@ -1245,6 +1280,22 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("getTemplateName", &i6engine::api::ToggleWaynetComponent::getTemplateName)
 		.def("enable", &i6engine::api::ToggleWaynetComponent::enable);
 
+	class_<i6engine::api::VelocityComponent, i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>, boost::noncopyable>("VelocityComponent", no_init)
+		.def("synchronize", &i6engine::api::VelocityComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::VelocityComponent::getTemplateName)
+		.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, i6engine::api::VelocityComponent::MaxSpeedHandling, const std::string &)) &i6engine::python::object::accelerate)
+		.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::python::object::accelerate)
+		.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, const std::string &)) &i6engine::python::object::decelerate)
+		.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::python::object::decelerate)
+		.def("setMaxSpeed", &i6engine::api::VelocityComponent::setMaxSpeed)
+		.def("setResistanceCoefficient", &i6engine::api::VelocityComponent::setResistanceCoefficient)
+		.def("setWindage", &i6engine::api::VelocityComponent::setWindage);
+
+	enum_<i6engine::api::VelocityComponent::MaxSpeedHandling>("MaxSpeedHandling")
+		.value("KeepSpeed", i6engine::api::VelocityComponent::MaxSpeedHandling::KeepSpeed)
+		.value("StopAcceleration", i6engine::api::VelocityComponent::MaxSpeedHandling::StopAcceleration)
+		.export_values();
+
 	class_<i6engine::api::WaynetNavigationComponent, i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>, boost::noncopyable>("WaynetNavigationComponent", no_init)
 		.def("synchronize", &i6engine::api::WaynetNavigationComponent::synchronize)
 		.def("getTemplateName", &i6engine::api::WaynetNavigationComponent::getTemplateName)
@@ -1333,6 +1384,7 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.value("MovementComponent", i6engine::api::components::ComponentTypes::MovementComponent)
 		.value("ToggleWaynetComponent", i6engine::api::components::ComponentTypes::ToggleWaynetComponent)
 		.value("Point2PointConstraintComponent", i6engine::api::components::ComponentTypes::Point2PointConstraintComponent)
+		.value("VelocityComponent", i6engine::api::components::ComponentTypes::VelocityComponent)
 		.value("ComponentTypesCount", i6engine::api::components::ComponentTypes::ComponentTypesCount)
 		.export_values();
 }
