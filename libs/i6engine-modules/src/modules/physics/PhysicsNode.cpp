@@ -467,6 +467,16 @@ namespace modules {
 
 					api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pru->message);
 				}
+			} else if (msg->getSubtype() == api::physics::PhyAccelerate) {
+				// TODO: (Daniel) implement
+			} else if (msg->getSubtype() == api::physics::PhyDecelerate) {
+				// TODO: (Daniel) implement
+			} else if (msg->getSubtype() == api::physics::PhyMaxSpeed) {
+				// TODO: (Daniel) implement
+			} else if (msg->getSubtype() == api::physics::PhyResistanceCoefficient) {
+				// TODO: (Daniel) implement
+			} else if (msg->getSubtype() == api::physics::PhyWindage) {
+				// TODO: (Daniel) implement
 			} else {
 				ISIXE_THROW_MESSAGE("PhysicsNode", "Unknown message received: " << msg->getMessageInfo());
 			}

@@ -276,6 +276,8 @@ namespace modules {
 			if (!_nodes[pnc->getWaitID()]->addChild(pnc->getID(), pnc->pos, pnc->rot, pnc->scale, pnc->collisionGroup, pnc->shapeType, pnc->shapeParams)) {
 				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg); // PhysicsNode couldn't be created, so queue this message again and try it later
 			}
+		} else if (type == api::physics::PhyVelocityComponent) {
+			// TODO: (Daniel) implement
 		}
 	}
 
@@ -381,6 +383,8 @@ namespace modules {
 					}
 				}
 			}
+		} else if (type == api::physics::PhyVelocityComponent) {
+			// TODO: (Daniel) implement
 		} else {
 			ISIXE_THROW_MESSAGE("PhysicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

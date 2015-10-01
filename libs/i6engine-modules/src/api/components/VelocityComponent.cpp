@@ -1,6 +1,12 @@
 #include "i6engine/api/components/VelocityComponent.h"
 
+#include "i6engine/core/configs/SubsystemConfig.h"
+
+#include "i6engine/api/EngineController.h"
+#include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/configs/ComponentConfig.h"
+#include "i6engine/api/configs/PhysicsConfig.h"
+#include "i6engine/api/facades/MessagingFacade.h"
 
 namespace i6engine {
 namespace api {
@@ -21,15 +27,17 @@ namespace api {
 	}
 
 	void VelocityComponent::Init() {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyVelocityComponent, core::Method::Create, new physics::Physics_VelocityComponent_Create(_objOwnerID, getID(), _maxSpeed, _resistanceCoefficient, _windage), core::Subsystem::Object));
 	}
 
 	void VelocityComponent::Finalize() {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyVelocityComponent, core::Method::Delete, new physics::Physics_VelocityComponent_Delete(_objOwnerID, getID()), core::Subsystem::Object));
 	}
 
 	attributeMap VelocityComponent::synchronize() const {
 		attributeMap params;
-		params.insert(std::make_pair("acceleration", std::to_string(_acceleration)));
-		params.insert(std::make_pair("deceleration", std::to_string(_deceleration)));
+		_acceleration.insertInMap("acceleration", params);
+		_deceleration.insertInMap("deceleration", params);
 		params.insert(std::make_pair("maxSpeed", std::to_string(_maxSpeed)));
 		params.insert(std::make_pair("resistanceCoefficient", std::to_string(_resistanceCoefficient)));
 		params.insert(std::make_pair("windage", std::to_string(_windage)));
@@ -37,30 +45,35 @@ namespace api {
 		return params;
 	}
 
-	void VelocityComponent::accelerate(double acceleration, MaxSpeedHandling handling, const std::function<void(void)> & callback) {
+	void VelocityComponent::accelerate(const Vec3 & acceleration, MaxSpeedHandling handling, const std::function<void(void)> & callback) {
 		_acceleration = acceleration;
 		_handling = handling;
-		// TODO: (Daniel) implement
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyAccelerate, core::Method::Update, new physics::Physics_Accelerate_Update(_objOwnerID, getID(), _acceleration, _handling, callback), core::Subsystem::Object));
 	}
 
-	void VelocityComponent::decelerate(double deceleration, const std::function<void(void)> & callback) {
+	void VelocityComponent::decelerate(const Vec3 & deceleration, const std::function<void(void)> & callback) {
 		_deceleration = deceleration;
-		// TODO: (Daniel) implement
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyDecelerate, core::Method::Update, new physics::Physics_Decelerate_Update(_objOwnerID, getID(), _deceleration, callback), core::Subsystem::Object));
 	}
 
 	void VelocityComponent::setMaxSpeed(double maxSpeed) {
 		_maxSpeed = maxSpeed;
-		// TODO: (Daniel) implement
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyMaxSpeed, core::Method::Update, new physics::Physics_SetMaxSpeed_Update(_objOwnerID, getID(), _maxSpeed), core::Subsystem::Object));
 	}
 
 	void VelocityComponent::setResistanceCoefficient(double coeff) {
 		_resistanceCoefficient = coeff;
-		// TODO: (Daniel) implement
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyResistanceCoefficient, core::Method::Update, new physics::Physics_SetResistanceCoefficient_Update(_objOwnerID, getID(), _resistanceCoefficient), core::Subsystem::Object));
 	}
 
 	void VelocityComponent::setWindage(double windage) {
 		_windage = windage;
-		// TODO: (Daniel) implement
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyWindage, core::Method::Update, new physics::Physics_SetWindage_Update(_objOwnerID, getID(), _windage), core::Subsystem::Object));
 	}
 
 } /* namespace api */

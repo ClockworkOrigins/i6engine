@@ -48,7 +48,7 @@ namespace api {
 		 * \brief accelerates the GameObject using acceleration
 		 * reaching maxSpeed, it will perform as defined in handling parameter and callback will be called
 		 */
-		void accelerate(double acceleration, MaxSpeedHandling handling, const std::function<void(void)> & callback);
+		void accelerate(const Vec3 & acceleration, MaxSpeedHandling handling, const std::function<void(void)> & callback);
 		void accelerate(const std::function<void(void)> & callback) {
 			accelerate(_acceleration, _handling, callback);
 		}
@@ -57,7 +57,7 @@ namespace api {
 		 * \brief decelerates the GameObject using deceleration
 		 * reaching 0 speed,callback will be called
 		 */
-		void decelerate(double deceleration, const std::function<void(void)> & callback);
+		void decelerate(const Vec3 & deceleration, const std::function<void(void)> & callback);
 		void decelerate(const std::function<void(void)> & callback) {
 			decelerate(_deceleration, callback);
 		}
@@ -78,8 +78,8 @@ namespace api {
 		void setWindage(double windage);
 
 	private:
-		double _acceleration;
-		double _deceleration;
+		Vec3 _acceleration;
+		Vec3 _deceleration;
 		double _maxSpeed;
 		double _resistanceCoefficient;
 		double _windage;
