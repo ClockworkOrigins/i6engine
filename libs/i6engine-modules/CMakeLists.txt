@@ -168,12 +168,13 @@ set(i6modulesSrc
 	${srcdir}/modules/physics/PhysicsMailbox.cpp
 	${srcdir}/modules/physics/PhysicsManager.cpp
 	${srcdir}/modules/physics/PhysicsNode.cpp
+	${srcdir}/modules/physics/PhysicsVelocityComponent.cpp
 )
 
 IF(ISIXE_WITH_AUDIO)
 	set(i6modulesSrc
 		${i6modulesSrc}
-
+		
 		${srcdir}/modules/audio/AudioController.cpp
 		${srcdir}/modules/audio/AudioMailbox.cpp
 		${srcdir}/modules/audio/AudioManager.cpp

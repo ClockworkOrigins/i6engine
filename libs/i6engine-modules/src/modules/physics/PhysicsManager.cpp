@@ -277,7 +277,13 @@ namespace modules {
 				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg); // PhysicsNode couldn't be created, so queue this message again and try it later
 			}
 		} else if (type == api::physics::PhyVelocityComponent) {
-			// TODO: (Daniel) implement
+			api::physics::Physics_VelocityComponent_Create * pvcc = dynamic_cast<api::physics::Physics_VelocityComponent_Create *>(msg->getContent());
+			double maxSpeed = pvcc->maxSpeed;
+			double resistanceCoefficient = pvcc->resistanceCoefficient;
+			double windage = pvcc->windage;
+			auto it = _nodes.find(pvcc->_waitForId);
+			assert(it != _nodes.end());
+			it->second->createVelocityComponent(maxSpeed, resistanceCoefficient, windage);
 		}
 	}
 
@@ -385,6 +391,10 @@ namespace modules {
 			}
 		} else if (type == api::physics::PhyVelocityComponent) {
 			// TODO: (Daniel) implement
+			api::physics::Physics_VelocityComponent_Delete * pvcd = dynamic_cast<api::physics::Physics_VelocityComponent_Delete *>(msg->getContent());
+			auto it = _nodes.find(pvcd->_waitForId);
+			assert(it != _nodes.end());
+			it->second->deleteVelocityComponent();
 		} else {
 			ISIXE_THROW_MESSAGE("PhysicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

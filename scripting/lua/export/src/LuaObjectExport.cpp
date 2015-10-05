@@ -767,25 +767,33 @@ namespace object {
 
 	void accelerate(i6engine::api::VelocityComponent * c, const Vec3 & acceleration, i6engine::api::VelocityComponent::MaxSpeedHandling handling, const std::string & func) {
 		c->accelerate(acceleration, handling, [func]() {
-			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
 		});
 	}
 
 	void accelerate(i6engine::api::VelocityComponent * c, const std::string & func) {
 		c->accelerate([func]() {
-			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
 		});
 	}
 
 	void decelerate(i6engine::api::VelocityComponent * c, const Vec3 & deceleration, const std::string & func) {
 		c->decelerate(deceleration, [func]() {
-			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
 		});
 	}
 
 	void decelerate(i6engine::api::VelocityComponent * c, const std::string & func) {
 		c->decelerate([func]() {
-			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
 		});
 	}
 

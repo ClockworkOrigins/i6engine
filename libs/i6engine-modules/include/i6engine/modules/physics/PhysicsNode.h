@@ -42,6 +42,7 @@ namespace modules {
 
 	class PhysicsMailbox;
 	class PhysicsManager;
+	class PhysicsVelocityComponent;
 
 	/**
 	 * \brief contains informations for periodic raytests
@@ -79,6 +80,7 @@ namespace modules {
 	class PhysicsNode : public btMotionState {
 		friend class PhysicsMailbox;
 		friend class PhysicsManager;
+		friend class PhysicsVelocityComponent;
 
 	public:
 		/**
@@ -222,6 +224,16 @@ namespace modules {
 		 */
 		void Tick();
 
+		/**
+		 * \brief creates a new VelocityComponent
+		 */
+		void createVelocityComponent(double maxSpeed, double resistanceCoefficient, double windage);
+
+		/**
+		 * \brief deletes a VelocityComponent
+		 */
+		void deleteVelocityComponent();
+
 	private:
 		/**
 		 * \brief pointer to the PhysicsManager
@@ -263,6 +275,12 @@ namespace modules {
 
 		std::map<int64_t, std::pair<int64_t, btCollisionShape *>> _childShapes;
 
+		PhysicsVelocityComponent * _velocityComponent;
+
+		uint16_t _tickCount;
+
+		double _mass;
+
 		/**
 		 * \brief Adds the component's RigidBody to Bullet's world.
 		 */
@@ -287,6 +305,10 @@ namespace modules {
 		 * \brief removes this node from ticking list
 		 */
 		void removeTicker();
+
+		Vec3 getVelocity() const;
+
+		void applyForce(const Vec3 & force, const Vec3 & offset, bool local);
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

@@ -1,12 +1,15 @@
-def tick(id):
+def init(id):
 	go = getObject(id)
 	if go == None:
 		return
-	psc = go.getPhysicalStateComponent()
-	if psc == None:
+	vc = go.getVelocityComponent()
+	if vc == None:
 		return
 
-	psc.applyCentralForce(Vec3(0.0, 0.0, -50.0), True)
+	vc.accelerate("")
+	return
+
+def tick(id):
 	return
 
 def shatter(selfID, otherID):
