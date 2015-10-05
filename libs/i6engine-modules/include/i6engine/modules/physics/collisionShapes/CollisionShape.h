@@ -54,7 +54,9 @@ namespace modules {
 		static CollisionShapeData * Deserialize(const std::string & serialized);
 
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int /*version*/);
+		void serialize(Archive & ar, const unsigned int /*version*/) {
+			ar & type;
+		}
 	};
 
 } /* namespace modules */

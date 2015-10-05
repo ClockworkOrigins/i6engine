@@ -25,12 +25,6 @@ namespace modules {
 	MeshStriderCollisionShapeData::MeshStriderCollisionShapeData(const std::vector<char> & d) : CollisionShapeData(CollisionShapeType::MeshStrider), data(d) {
 	}
 
-	template<class Archive>
-	void MeshStriderCollisionShapeData::serialize(Archive & ar, const unsigned int /*version*/) {
-		ar & boost::serialization::base_object<CollisionShapeData>(*this);
-		ar & data;
-	}
-
 } /* namespace modules */
 } /* namespace i6engine */
 

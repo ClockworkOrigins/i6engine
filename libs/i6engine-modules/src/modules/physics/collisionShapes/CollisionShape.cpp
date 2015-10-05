@@ -44,11 +44,6 @@ namespace modules {
 		return m;
 	}
 
-	template<class Archive>
-	void CollisionShapeData::serialize(Archive & ar, const unsigned int /*version*/) {
-		ar & type;
-	}
-
 } /* namespace modules */
 } /* namespace i6engine */
 

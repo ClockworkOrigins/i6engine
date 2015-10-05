@@ -42,7 +42,10 @@ namespace modules {
 		MeshStriderCollisionShapeData(const std::vector<char> & d);
 
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int /*version*/);
+		void serialize(Archive & ar, const unsigned int /*version*/) {
+			ar & boost::serialization::base_object<CollisionShapeData>(*this);
+			ar & data;
+		}
 	};
 
 } /* namespace modules */

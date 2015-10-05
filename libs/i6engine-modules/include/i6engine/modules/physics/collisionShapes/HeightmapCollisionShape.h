@@ -47,7 +47,15 @@ namespace modules {
 		HeightmapCollisionShapeData(uint32_t w, uint32_t h, const std::vector<double> & d, double minH, double maxH, const Vec3 & s);
 
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int /*version*/);
+		void serialize(Archive & ar, const unsigned int /*version*/) {
+			ar & boost::serialization::base_object<CollisionShapeData>(*this);
+			ar & width;
+			ar & height;
+			ar & data;
+			ar & minHeight;
+			ar & maxHeight;
+			ar & scaling;
+		}
 	};
 
 } /* namespace modules */
