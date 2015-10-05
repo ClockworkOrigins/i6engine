@@ -69,7 +69,6 @@ int main(int argc, char ** argv) {
 		btShapeHull * sh = new btShapeHull(ctms);
 		sh->buildHull(0.0);
 		btConvexHullShape * chs = new btConvexHullShape();
-		std::cout << sh->numVertices() << std::endl;
 		for (int i = 0; i < sh->numVertices(); i++) {
 			chs->addPoint(sh->getVertexPointer()[i]);
 		}

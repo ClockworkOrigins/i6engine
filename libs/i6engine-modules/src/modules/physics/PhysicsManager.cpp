@@ -191,6 +191,13 @@ namespace modules {
 		} catch(std::exception & e) {
 			ISIXE_LOG_ERROR("Physics", "An exception has occurred: " << e.what());
 		}
+
+		// (Daniel) it's a bit hacky, but necessary for static build to link against serialization code
+#ifndef ISIXE_BUILD_SHARED
+		MeshStriderCollisionShapeData * mscsd = new MeshStriderCollisionShapeData(std::vector<char>());
+		std::string s = mscsd->Serialize();
+		delete mscsd;
+#endif
 	}
 
 	PhysicsManager::~PhysicsManager() {
