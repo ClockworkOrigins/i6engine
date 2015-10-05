@@ -23,7 +23,6 @@ namespace modules {
 
 	PhysicsVelocityComponent::PhysicsVelocityComponent(PhysicsNode * node, double mass, double maxSpeed, double resistanceCoefficient, double windage) : _node(node), _mass(mass), _maxSpeed(maxSpeed), _resistanceCoefficient(resistanceCoefficient), _windage(windage), _acceleration(), _handling(api::VelocityComponent::MaxSpeedHandling::StopAcceleration), _callback(), _accelerating(false), _decelerating(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-		std::cout << "Create" << std::endl;
 	}
 
 	void PhysicsVelocityComponent::accelerate(const Vec3 & acceleration, api::VelocityComponent::MaxSpeedHandling handling, const std::function<void(void)> & callback) {
@@ -40,7 +39,6 @@ namespace modules {
 			_node->addTicker();
 			_accelerating = true;
 		}
-		std::cout << "Accel" << std::endl;
 	}
 
 	void PhysicsVelocityComponent::decelerate(const Vec3 & deceleration, const std::function<void(void)> & callback) {
@@ -60,9 +58,7 @@ namespace modules {
 
 	void PhysicsVelocityComponent::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		std::cout << "Here1" << std::endl;
 		if (_accelerating || _decelerating) {
-			std::cout << "Here2" << std::endl;
 			Vec3 F = _acceleration * _mass;
 			Vec3 Fw = (_acceleration.normalize() * _node->getVelocity().length() * 1.2041 / 2) * _resistanceCoefficient * _windage;
 
