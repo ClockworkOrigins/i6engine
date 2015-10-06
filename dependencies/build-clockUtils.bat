@@ -1,3 +1,11 @@
+SET ARCH=Visual Studio 12
+IF [%1] == [64] (
+	SET ARCH=Visual Studio 12 Win64
+)
+IF [%1] == [32] (
+	SET ARCH=Visual Studio 12
+)
+
 call build-common.bat
 
 Set ARCHIVE=clockUtils-0.3-rev128.zip
@@ -11,7 +19,7 @@ call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 cd %BUILD_DIR%
 
 echo "Configuring clockUtils"
-cmake -DWITH_TESTING=OFF -DWITH_LIBRARY_SOCKETS=ON -DWITH_LIBRARY_INIPARSER=ON -DWITH_LIBRARY_ARGPARSER=ON -DCMAKE_INSTALL_PREFIX=%PREFIX% .
+cmake -DWITH_TESTING=OFF -DWITH_LIBRARY_SOCKETS=ON -DWITH_LIBRARY_INIPARSER=ON -DWITH_LIBRARY_ARGPARSER=ON -DCMAKE_INSTALL_PREFIX=%PREFIX% -G "%ARCH%" .
 
 echo "Building clockUtils"
 MSBuild.exe clockUtils.sln /p:Configuration=Release > NUL
