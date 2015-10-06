@@ -1,17 +1,26 @@
+SET ARCH=32
+
+IF [%1] == [64] (
+	SET ARCH=64
+)
+IF [%1] == [] (
+	SET ARCH=32
+)
+
 call build-common.bat
 
-call build-boost.bat
-call build-bullet.bat
-call build-ois.bat
+call build-boost.bat %ARCH%
+call build-bullet.bat %ARCH%
+call build-ois.bat %ARCH%
 REM depends on boost and ois
-call build-ogre.bat
+call build-ogre.bat %ARCH%
 REM depends on ois, ogre and boost
-call build-cegui.bat
-call build-gperftools.bat
-call build-gmock.bat
-call build-tinyxml.bat
-call build-clockUtils.bat
-call build-openalsoft.bat
+call build-cegui.bat %ARCH%
+call build-gperftools.bat %ARCH%
+call build-gmock.bat %ARCH%
+call build-tinyxml.bat %ARCH%
+call build-clockUtils.bat %ARCH%
+call build-openalsoft.bat %ARCH%
 REM depends on boost
 REM call build-m2etis.bat
 
