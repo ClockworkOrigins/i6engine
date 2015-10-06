@@ -1,3 +1,11 @@
+SET ARCH=32
+IF [%1] == [64] (
+	SET ARCH=64
+)
+IF [%1] == [32] (
+	SET ARCH=32
+)
+
 call build-common.bat
 
 Set ARCHIVE=boost_1_58_0.tar.bz2
@@ -32,7 +40,14 @@ call bootstrap.bat
 
 if not exist b2.exe exit /b
 
-b2 toolset=msvc --with-atomic --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system variant=release install --prefix=%PREFIX% stage > NUL
+IF [%ARCH%] == [64] (
+	echo using python : 2.7 : %PYTHON_PATH_x64% ; >> user-config.jam
+)
+IF [%ARCH%] == [32] (
+	echo using python : 2.7 : %PYTHON_PATH_x86% ; >> user-config.jam
+)
+
+b2 --user-config=user-config.jam toolset=msvc address-model=%ARCH% --with-atomic --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system variant=release install --prefix=%PREFIX% stage > D:\out
 
 echo "Cleaning up"
 cd %DEP_DIR%
