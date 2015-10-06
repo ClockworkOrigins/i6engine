@@ -11,10 +11,9 @@ call build-common.bat
 
 call build-boost.bat %ARCH%
 call build-bullet.bat %ARCH%
-call build-ois.bat %ARCH%
-REM depends on boost and ois
+REM depends on boost
 call build-ogre.bat %ARCH%
-REM depends on ois, ogre and boost
+REM depends on ogre and boost
 call build-cegui.bat %ARCH%
 call build-gperftools.bat %ARCH%
 call build-gmock.bat %ARCH%
