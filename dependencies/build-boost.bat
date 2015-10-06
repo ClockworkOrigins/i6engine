@@ -47,7 +47,7 @@ IF [%ARCH%] == [32] (
 	echo using python : 2.7 : %PYTHON_PATH_x86% ; >> user-config.jam
 )
 
-b2 --user-config=user-config.jam toolset=msvc address-model=%ARCH% --with-atomic --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system variant=release install --prefix=%PREFIX% stage > D:\out
+b2 --user-config=user-config.jam toolset=msvc address-model=%ARCH% --with-atomic --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system variant=release install --prefix=%PREFIX% stage > NUL
 
 echo "Cleaning up"
 cd %DEP_DIR%
