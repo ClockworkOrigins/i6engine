@@ -1,6 +1,14 @@
+SET ARCH=Visual Studio 12
+IF [%1] == [64] (
+	SET ARCH=Visual Studio 12 Win64
+)
+IF [%1] == [32] (
+	SET ARCH=Visual Studio 12
+)
+
 @echo off
-Set ROOT_DIR=%1
-Set COPY_DIR=%2
+Set ROOT_DIR=%2
+Set COPY_DIR=%3
 
 call "%ROOT_DIR%\build-common.bat"
 
@@ -40,7 +48,7 @@ xcopy "%DEP_DIR%\..\libs\i6engine-modules\include\i6engine\api\GameMessageStruct
 xcopy "%COPY_DIR%\i6engine\i6engineBuildSettings.h" "%BUILD_DIR%\extern\i6engine"
 
 cd %BUILD_DIR%
-cmake . -DCMAKE_INSTALL_PREFIX=%PREFIX% -DADDITIONAL_INCLUDE_DIRECTORIES=%BUILD_DIR%\extern -DCMAKE_BUILD_TYPE=Release -DDEP_DIR=%DEP_DIR%/ -DWITH_TESTING=OFF -DWITH_SIM=OFF -DWITH_LOGGING=OFF -DWITH_MESSAGECOMPRESSION=OFF .
+cmake . -DCMAKE_INSTALL_PREFIX=%PREFIX% -DADDITIONAL_INCLUDE_DIRECTORIES=%BUILD_DIR%\extern -DCMAKE_BUILD_TYPE=Release -DDEP_DIR=%DEP_DIR%/ -DWITH_TESTING=OFF -DWITH_SIM=OFF -DWITH_LOGGING=OFF -DWITH_MESSAGECOMPRESSION=OFF -G "%ARCH%" .
 
 echo "Building m2etis"
 MSBuild.exe m2etis.sln /p:Configuration=Release

@@ -185,7 +185,7 @@ ENDIF()
 #----------------------------------------------------
 	SET(LIBNAME "OIS")
 	SET(LIBHEADER "OIS/OIS.h")
-	SET(OIS_ROOT ${ISIXE_DEP_DIR}/ois)
+	SET(OIS_ROOT ${ISIXE_DEP_DIR}/misc)
 	find_package(EasyFind REQUIRED COMPONENTS OIS)
 	include_directories(SYSTEM ${OIS_INCLUDE_DIR})
 
@@ -316,7 +316,11 @@ install(FILES ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h DESTI
 IF(ISIXE_WITH_NETWORK)
 	# Build m2etis
 	IF(WIN32)
-		execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.bat "${ISIXE_DEP_DIR}" "${CMAKE_BINARY_DIR}/include")
+		IF(CMAKE_GENERATOR MATCHES "Win64")
+			execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.bat 64 "${ISIXE_DEP_DIR}" "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${ISIXE_DEP_DIR})
+		ELSE(CMAKE_GENERATOR MATCHES "Win64")
+			execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.bat 32 "${ISIXE_DEP_DIR}" "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${ISIXE_DEP_DIR})
+		ENDIF(CMAKE_GENERATOR MATCHES "Win64")
 	ELSE(WIN32)
 		execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.sh "${CMAKE_BINARY_DIR}/include/i6engine" "${CMAKE_BUILD_TYPE}")
 	ENDIF(WIN32)
