@@ -167,6 +167,9 @@ set(i6modulesSrc
 	${srcdir}/modules/physics/PhysicsMailbox.cpp
 	${srcdir}/modules/physics/PhysicsManager.cpp
 	${srcdir}/modules/physics/PhysicsNode.cpp
+	${srcdir}/modules/physics/collisionShapes/CollisionShape.cpp
+	${srcdir}/modules/physics/collisionShapes/HeightmapCollisionShape.cpp
+	${srcdir}/modules/physics/collisionShapes/MeshStriderCollisionShape.cpp
 )
 
 IF(ISIXE_WITH_AUDIO)
@@ -233,6 +236,7 @@ source_group(modules\\input /modules/input/*)
 source_group(modules\\network /modules/network/*)
 source_group(modules\\object /modules/object/*)
 source_group(modules\\physics /modules/physics/*)
+source_group(modules\\physics\\collisionShapes /modules/physics/collisionShapes/*)
 source_group(modules\\luascripting /modules/luascripting/*)
 source_group(modules\\pythonscripting /modules/pythonscripting/*)
 

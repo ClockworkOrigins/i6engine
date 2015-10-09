@@ -48,7 +48,7 @@ namespace modules {
 	class ResourceManager;
 	class Terrain;
 
-	class GraphicsManager : public Ogre::WindowEventListener {
+	class ISIXE_MODULES_API GraphicsManager : public Ogre::WindowEventListener {
 	public:
 		/**
 		 * \brief initializes Ogre graphics

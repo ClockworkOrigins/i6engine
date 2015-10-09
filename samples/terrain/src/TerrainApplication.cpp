@@ -55,6 +55,7 @@ namespace sample {
 			params.insert(std::make_pair("size", "1200.0")); // size of the terrain in world units
 			params.insert(std::make_pair("heightmap", "terrain.png")); // the heightmap used for terrain generation
 			params.insert(std::make_pair("inputScale", "60.0")); // scale factor for height in terrain (so maximum height here is 60 meters)
+			params.insert(std::make_pair("vertices", "65")); // vertices along one edge, must be 2^n + 1
 			params.insert(std::make_pair("layers", "2")); // two texture layers
 			params.insert(std::make_pair("layer_0_size", "10")); // size of a texture tile (reduce to get more repetition of the texture)
 			params.insert(std::make_pair("layer_0_diffusespecular", "GrassFloor.tga")); // should be a texture combined of a diffuse and a specular map

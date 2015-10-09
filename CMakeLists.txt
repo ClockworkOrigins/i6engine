@@ -264,7 +264,7 @@ ENDIF(ISIXE_WITH_PROFILING)
 	SET(LIBNAME "CLOCKUTILS")
 	SET(LIBHEADER "clockUtils/errors.h")
 	SET(CLOCKUTILS_ROOT ${ISIXE_DEP_DIR}/clockUtils)
-	find_package(EasyFind REQUIRED COMPONENTS clock_iniParser clock_sockets)
+	find_package(EasyFind REQUIRED COMPONENTS clock_compression clock_iniParser clock_sockets)
 	include_directories(SYSTEM ${CLOCKUTILS_INCLUDE_DIR})
 
 #----------------------------------------------------
