@@ -35,8 +35,6 @@ namespace api {
 	public:
 		ToggleWaynetComponent(int64_t id, const attributeMap & params);
 
-		static ComPtr createC(int64_t id, const attributeMap & params);
-
 		attributeMap synchronize() const  override {
 			return {};
 		}

@@ -20,36 +20,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
-#ifndef __LUABIND_DETAIL_CLASS_REP_HPP__
-#define __LUABIND_DETAIL_CLASS_REP_HPP__
+
+#ifndef LUABIND_CLASS_REP_HPP_INCLUDED
+#define LUABIND_CLASS_REP_HPP_INCLUDED
+
+#include <boost/limits.hpp>
+#include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
 #include <string>
 #include <utility>
 #include <vector>
 
+#include "i6engine/luabind/config.hpp"
+#include "i6engine/luabind/lua_include.hpp"
+#include "i6engine/luabind/detail/object_rep.hpp"
+#include "i6engine/luabind/detail/garbage_collector.hpp"
+#include "i6engine/luabind/detail/operator_id.hpp"
+#include "i6engine/luabind/detail/class_registry.hpp"
 #include "i6engine/luabind/error.hpp"
 #include "i6engine/luabind/handle.hpp"
-#include "i6engine/luabind/detail/class_registry.hpp"
-#include "i6engine/luabind/detail/garbage_collector.hpp"
-#include "i6engine/luabind/detail/object_rep.hpp"
-#include "i6engine/luabind/detail/operator_id.hpp"
 #include "i6engine/luabind/detail/primitives.hpp"
+#include "i6engine/luabind/typeid.hpp"
 #include "i6engine/luabind/detail/ref.hpp"
 
-#include "boost/limits.hpp"
-#include "boost/preprocessor/repetition/enum_params_with_a_default.hpp"
+namespace luabind { namespace detail
+{
 
-namespace luabind {
-namespace detail {
-
-	LUABIND_API std::string stack_content_by_name(lua_State * L, int start_index);
+	LUABIND_API std::string stack_content_by_name(lua_State* L, int start_index);
 
 	struct class_registration;
 
 	struct conversion_storage;
 
 	// This function is used as a tag to identify "properties".
-	LUABIND_API int property_tag(lua_State *);
+	LUABIND_API int property_tag(lua_State*);
 
 	// this is class-specific information, poor man's vtable
 	// this is allocated statically (removed by the compiler)
@@ -63,16 +67,18 @@ namespace detail {
     class cast_graph;
     class class_id_map;
 
-	class LUABIND_API class_rep {
-		friend struct class_registration;
-		friend int super_callback(lua_State *);
-		// TODO: avoid the lua-prefix
-		friend int lua_class_gettable(lua_State *);
-		friend int lua_class_settable(lua_State *);
-		friend int static_class_gettable(lua_State *);
-
+	class LUABIND_API class_rep
+	{
+	friend struct class_registration;
+	friend int super_callback(lua_State*);
+//TODO: avoid the lua-prefix
+	friend int lua_class_gettable(lua_State*);
+	friend int lua_class_settable(lua_State*);
+	friend int static_class_gettable(lua_State*);
 	public:
-		enum class_type {
+
+		enum class_type
+		{
 			cpp_class = 0,
 			lua_class = 1
 		};
@@ -80,65 +86,72 @@ namespace detail {
 		// EXPECTS THE TOP VALUE ON THE LUA STACK TO
 		// BE THE USER DATA WHERE THIS CLASS IS BEING
 		// INSTANTIATED!
-		class_rep(type_id const & type, const char * name, lua_State * L);
+		class_rep(type_id const& type
+			, const char* name
+			, lua_State* L
+        );
 
 		// used when creating a lua class
 		// EXPECTS THE TOP VALUE ON THE LUA STACK TO
 		// BE THE USER DATA WHERE THIS CLASS IS BEING
 		// INSTANTIATED!
-		class_rep(lua_State * L, const char * name);
+		class_rep(lua_State* L, const char* name);
 
 		~class_rep();
 
-		std::pair<void *,void *> allocate(lua_State * L) const;
+		std::pair<void*,void*> allocate(lua_State* L) const;
 
 		// this is called as metamethod __call on the class_rep.
-		static int constructor_dispatcher(lua_State * L);
+		static int constructor_dispatcher(lua_State* L);
 
-		struct base_info {
+		struct base_info
+		{
 			int pointer_offset; // the offset added to the pointer to obtain a basepointer (due to multiple-inheritance)
-			class_rep * base;
+			class_rep* base;
 		};
 
-		void add_base_class(const base_info & binfo);
+		void add_base_class(const base_info& binfo);
 
-		const std::vector<base_info> & bases() const throw() { return m_bases; }
+		const std::vector<base_info>& bases() const throw() { return m_bases; }
 
-		void set_type(type_id const & t) { m_type = t; }
-		type_id const & type() const throw() { return m_type; }
+		void set_type(type_id const& t) { m_type = t; }
+		type_id const& type() const throw() { return m_type; }
 
-		const char * name() const throw() { return m_name; }
+		const char* name() const throw() { return m_name; }
 
 		// the lua reference to the metatable for this class' instances
 		int metatable_ref() const throw() { return m_instance_metatable; }
 
-		void get_table(lua_State * L) const { m_table.push(L); }
-		void get_default_table(lua_State * L) const { m_default_table.push(L); }
+		void get_table(lua_State* L) const { m_table.push(L); }
+		void get_default_table(lua_State* L) const { m_default_table.push(L); }
 
 		class_type get_class_type() const { return m_class_type; }
 
-		void add_static_constant(const char * name, int val);
+		void add_static_constant(const char* name, int val);
 
-		static int super_callback(lua_State * L);
+		static int super_callback(lua_State* L);
 
-		static int lua_settable_dispatcher(lua_State * L);
+		static int lua_settable_dispatcher(lua_State* L);
 
 		// called from the metamethod for __index
 		// obj is the object pointer
-		static int static_class_gettable(lua_State * L);
+		static int static_class_gettable(lua_State* L);
 
-		bool has_operator_in_lua(lua_State *, int id);
+		bool has_operator_in_lua(lua_State*, int id);
 
-        cast_graph const & casts() const {
+        cast_graph const& casts() const
+        {
             return *m_casts;
         }
 
-        class_id_map const & classes() const {
+        class_id_map const& classes() const
+        {
             return *m_classes;
         }
 
 	private:
-		void cache_operators(lua_State *);
+
+		void cache_operators(lua_State*);
 
 		// this is a pointer to the type_info structure for
 		// this type
@@ -153,13 +166,13 @@ namespace detail {
 		std::vector<base_info> m_bases;
 
 		// the class' name (as given when registered to lua with class_)
-		const char * m_name;
+		const char* m_name;
 
 		// a reference to this structure itself. Since this struct
 		// is kept inside lua (to let lua collect it when lua_close()
 		// is called) we need to lock it to prevent collection.
 		// the actual reference is not currently used.
-		lua_reference m_self_ref;
+		detail::lua_reference m_self_ref;
 
 		// this should always be used when accessing
 		// members in instances of a class.
@@ -180,20 +193,21 @@ namespace detail {
 		// of this class.
 		int m_instance_metatable;
 
-		std::map<const char *, int, ltstr> m_static_constants;
+		std::map<const char*, int, ltstr> m_static_constants;
 
 		// the first time an operator is invoked
 		// we check the associated lua table
 		// and cache the result
 		int m_operator_cache;
 
-        cast_graph * m_casts;
-        class_id_map * m_classes;
+        cast_graph* m_casts;
+        class_id_map* m_classes;
 	};
 
-	bool is_class_rep(lua_State * L, int index);
+	bool is_class_rep(lua_State* L, int index);
 
-} /* namespace detail */
-} /* namespace luabind */
+}}
 
-#endif /* __LUABIND_DETAIL_CLASS_REP_HPP__ */
+//#include "i6engine/luabind/detail/overload_rep_impl.hpp"
+
+#endif // LUABIND_CLASS_REP_HPP_INCLUDED

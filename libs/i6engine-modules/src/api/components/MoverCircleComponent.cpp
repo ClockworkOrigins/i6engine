@@ -42,10 +42,6 @@ namespace api {
 	MoverCircleComponent::~MoverCircleComponent() {
 	}
 
-	ComPtr MoverCircleComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<MoverCircleComponent, Component>(id, params);
-	}
-
 	void MoverCircleComponent::start(Vec3 & startPos) {
 		addTicker();
 

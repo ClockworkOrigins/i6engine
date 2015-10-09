@@ -64,11 +64,6 @@ namespace api {
 		~LuminousAppearanceComponent();
 
 		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief Sets light type
 		 *
 		 * Sets the light type of the component and sends update message

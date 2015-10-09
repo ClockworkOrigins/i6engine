@@ -46,10 +46,6 @@ namespace api {
 	MoverInterpolateComponent::~MoverInterpolateComponent() {
 	}
 
-	ComPtr MoverInterpolateComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<MoverInterpolateComponent, Component>(id, params);
-	}
-
 	void MoverInterpolateComponent::addKeyFrame(const Vec3 & position, const Quaternion & rotation) {
 		boost::mutex::scoped_lock l(_lock);
 		_keyFrames.push_back(keyFrame(position, rotation));

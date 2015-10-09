@@ -48,11 +48,6 @@ namespace api {
 		MoverCircleComponent(const int64_t id, const attributeMap & params);
 		~MoverCircleComponent();
 
-		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
 		void setPositioning(const Positioning posing) { _positioning = posing; }
 
 		void setCircleParameters(const Vec3 & cC, const Vec3 & cA, const double & cR) {

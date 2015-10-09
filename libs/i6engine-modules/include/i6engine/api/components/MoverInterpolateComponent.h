@@ -61,11 +61,6 @@ namespace api {
 		~MoverInterpolateComponent();
 
 		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief add a new keyframe at the end of the current path
 		 */
 		void addKeyFrame(const Vec3 & position, const Quaternion & rotation);

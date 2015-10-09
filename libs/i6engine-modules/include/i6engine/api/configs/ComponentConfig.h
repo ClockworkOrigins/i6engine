@@ -67,6 +67,7 @@ namespace components {
 		MovementComponent,
 		ToggleWaynetComponent,
 		Point2PointConstraintComponent,
+		VelocityComponent,
 		ComponentTypesCount
 	};
 

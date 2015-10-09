@@ -32,10 +32,6 @@ namespace api {
 		_objComponentID = components::ComponentTypes::ToggleWaynetComponent;
 	}
 
-	ComPtr ToggleWaynetComponent::createC(int64_t id, const attributeMap & params) {
-		return utils::make_shared<ToggleWaynetComponent, Component>(id, params);
-	}
-
 	void ToggleWaynetComponent::Init() {
 		ISIXE_REGISTERMESSAGETYPE(messages::InputMessageType, ToggleWaynetComponent::News, this);
 		addTicker();

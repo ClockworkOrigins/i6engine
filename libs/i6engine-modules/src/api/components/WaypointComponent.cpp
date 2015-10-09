@@ -40,10 +40,6 @@ namespace api {
 	WaypointComponent::~WaypointComponent() {
 	}
 
-	ComPtr WaypointComponent::createC(const int64_t id, const api::attributeMap & params) {
-		return utils::make_shared<WaypointComponent, Component>(id, params);
-	}
-
 	void WaypointComponent::Init() {
 	}
 

@@ -46,11 +46,6 @@ namespace api {
 		~LifetimeComponent();
 
 		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief Called when the time for this GameObject is over.
 		 */
 		void dead();

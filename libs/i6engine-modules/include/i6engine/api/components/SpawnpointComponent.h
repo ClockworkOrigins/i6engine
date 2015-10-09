@@ -39,15 +39,10 @@ namespace api {
 	class ISIXE_MODULES_API SpawnpointComponent : public Component {
 	public:
 		/**
-		* \brief Constructor
-		*/
+		 * \brief Constructor
+		 */
 		SpawnpointComponent(const int64_t id, const attributeMap & params);
 		~SpawnpointComponent();
-
-		/**
-		* \brief creates the Component with given attributeMap
-		*/
-		static ComPtr createC(const int64_t id, const attributeMap & params);
 
 		/**
 		 * \brief Adds an object type to spawn on this component

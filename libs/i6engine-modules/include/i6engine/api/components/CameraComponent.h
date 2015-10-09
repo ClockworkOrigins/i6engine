@@ -60,8 +60,6 @@ namespace api {
 		 */
 		virtual ~CameraComponent();
 
-		static ComPtr createC(int64_t id, const attributeMap & params);
-
 		/**
 		 * \brief Sets position of the camera
 		 * Sets position of the component relative to its parent GameObject

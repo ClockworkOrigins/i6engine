@@ -42,10 +42,6 @@ namespace api {
 	MovingCameraComponent::~MovingCameraComponent() {
 	}
 
-	ComPtr MovingCameraComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<MovingCameraComponent, Component>(id, params);
-	}
-
 	void MovingCameraComponent::Init() {
 		CameraComponent::Init();
 		addTicker();

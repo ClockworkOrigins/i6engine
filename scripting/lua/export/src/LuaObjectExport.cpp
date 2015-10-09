@@ -48,6 +48,7 @@
 #include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/components/TerrainAppearanceComponent.h"
 #include "i6engine/api/components/ToggleWaynetComponent.h"
+#include "i6engine/api/components/VelocityComponent.h"
 #include "i6engine/api/components/WaynetNavigationComponent.h"
 #include "i6engine/api/components/WaypointComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
@@ -409,6 +410,14 @@ namespace object {
 		return go->getGOC<i6engine::api::Point2PointConstraintComponent>(i6engine::api::components::ComponentTypes::Point2PointConstraintComponent, identifier);
 	}
 
+	i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component> getVelocityComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::VelocityComponent>(i6engine::api::components::ComponentTypes::VelocityComponent);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component> getVelocityComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::VelocityComponent>(i6engine::api::components::ComponentTypes::VelocityComponent, identifier);
+	}
+
 	struct CameraComponentWrapper : public i6engine::api::CameraComponent, public luabind::wrap_base {
 		CameraComponentWrapper(const int64_t id, const attributeMap & params) : CameraComponent(id, params), luabind::wrap_base() {
 		}
@@ -756,6 +765,38 @@ namespace object {
 		}
 	};
 
+	void accelerate(i6engine::api::VelocityComponent * c, const Vec3 & acceleration, i6engine::api::VelocityComponent::MaxSpeedHandling handling, const std::string & func) {
+		c->accelerate(acceleration, handling, [func]() {
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
+		});
+	}
+
+	void accelerate(i6engine::api::VelocityComponent * c, const std::string & func) {
+		c->accelerate([func]() {
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
+		});
+	}
+
+	void decelerate(i6engine::api::VelocityComponent * c, const Vec3 & deceleration, const std::string & func) {
+		c->decelerate(deceleration, [func]() {
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
+		});
+	}
+
+	void decelerate(i6engine::api::VelocityComponent * c, const std::string & func) {
+		c->decelerate([func]() {
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
+		});
+	}
+
 } /* namespace object */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -830,7 +871,9 @@ scope registerObject() {
 			.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getToggleWaynetComponent)
 			.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getToggleWaynetComponent)
 			.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getPoint2PointConstraintComponent)
-			.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getPoint2PointConstraintComponent),
+			.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getPoint2PointConstraintComponent)
+			.def("getVelocityComponent", (i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getVelocityComponent)
+			.def("getVelocityComponent", (i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getVelocityComponent),
 
 		class_<i6engine::api::AddStrategy>("AddStrategy")
 			.def(constructor<>())
@@ -1180,6 +1223,23 @@ scope registerObject() {
 			.def("getTemplateName", &i6engine::api::ToggleWaynetComponent::getTemplateName)
 			.def("enable", &i6engine::api::ToggleWaynetComponent::enable),
 
+		class_<i6engine::api::VelocityComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>>("VelocityComponent")
+			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
+			.def("synchronize", &i6engine::api::VelocityComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::VelocityComponent::getTemplateName)
+			.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, i6engine::api::VelocityComponent::MaxSpeedHandling, const std::string &)) &i6engine::lua::object::accelerate)
+			.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::lua::object::accelerate)
+			.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, const std::string &)) &i6engine::lua::object::decelerate)
+			.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::lua::object::decelerate)
+			.def("setMaxSpeed", &i6engine::api::VelocityComponent::setMaxSpeed)
+			.def("setResistanceCoefficient", &i6engine::api::VelocityComponent::setResistanceCoefficient)
+			.def("setWindage", &i6engine::api::VelocityComponent::setWindage)
+			.enum_("MaxSpeedHandling")
+			[
+				value("KeepSpeed", int(i6engine::api::VelocityComponent::MaxSpeedHandling::KeepSpeed)),
+				value("StopAcceleration", int(i6engine::api::VelocityComponent::MaxSpeedHandling::StopAcceleration))
+			],
+
 		class_<i6engine::api::WaynetNavigationComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>>("WaynetNavigationComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("synchronize", &i6engine::api::WaynetNavigationComponent::synchronize)
@@ -1274,6 +1334,7 @@ scope registerObject() {
 				value("MovementComponent", i6engine::api::components::ComponentTypes::MovementComponent),
 				value("ToggleWaynetComponent", i6engine::api::components::ComponentTypes::ToggleWaynetComponent),
 				value("Point2PointConstraintComponent", i6engine::api::components::ComponentTypes::Point2PointConstraintComponent),
+				value("VelocityComponent", i6engine::api::components::ComponentTypes::VelocityComponent),
 				value("ComponentTypesCount", i6engine::api::components::ComponentTypes::ComponentTypesCount)
 			]
 		;

@@ -62,10 +62,6 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	ComPtr CameraComponent::createC(int64_t id, const attributeMap & params) {
-		return utils::make_shared<CameraComponent, Component>(id, params);
-	}
-
 	void CameraComponent::Init() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Create, new graphics::Graphics_Camera_Create(_objOwnerID, getID(), _position, _lookAt, _nearClip, _fov), core::Subsystem::Object);
 
