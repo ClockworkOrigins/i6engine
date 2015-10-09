@@ -465,6 +465,9 @@ IF(UNIX)
 		get_filename_component(filename_pure ${filename} NAME)
 		execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${filename} ${CMAKE_BINARY_DIR}/bin/${filename_pure})
 	endforeach()
+
+	configure_file(${CMAKE_SOURCE_DIR}/config/test-buildconfigurations.sh.in ${CMAKE_BINARY_DIR}/test-buildconfigurations.sh @ONLY)
+	add_custom_target(TestConfigurations COMMAND test-buildconfigurations.sh WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 ENDIF(UNIX)
 
 IF(WIN32)
