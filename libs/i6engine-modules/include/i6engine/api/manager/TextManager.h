@@ -32,10 +32,13 @@ namespace api {
 
 	private:
 		std::string _language;
-		std::map<std::string, std::map<std::string, std::string>> _texts;
+		std::map<std::string, std::string> _texts;
+		std::string _textDir;
 		
 		void setLanguage(const std::string & language) {
 			_language = language;
+			_texts.clear();
+			initialize(_textDir);
 		}
 
 		void initialize(const std::string & textDir);
