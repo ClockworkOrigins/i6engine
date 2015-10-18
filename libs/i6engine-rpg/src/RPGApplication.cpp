@@ -165,6 +165,8 @@ namespace rpg {
 		// action key, default: E
 		_iniParser.getValue("INPUT", "action", key);
 		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "action");
+		_iniParser.getValue("INPUT", "action2", key);
+		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "action");
 		// inventory key, default: TAB
 		_iniParser.getValue("INPUT", "inventory", key);
 		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "inventory");
