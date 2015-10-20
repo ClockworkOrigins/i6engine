@@ -44,7 +44,7 @@ class AffectorPropertyWindow : public PropertyWindow {
 public:
 	AffectorPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name);
 	AffectorPropertyWindow(AffectorPropertyWindow * affectorPropertyWindow);
-	~AffectorPropertyWindow(void) {}
+	~AffectorPropertyWindow() {}
 
 	/**
 		Copy basic affector properties from a window to an affector
@@ -88,7 +88,7 @@ protected:
 	/**
 		Initialises all affector properties
 	*/
-	virtual void _initProperties(void);
+	virtual void _initProperties();
 
 	/**
 		Validation

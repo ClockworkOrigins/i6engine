@@ -31,7 +31,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "wx/ogre/utils.h"
 #include "wx/propgrid/editors.h"
 
-
 EnumPropertyWithButton::EnumPropertyWithButton(const wxString & label, const wxString & name, const wxArrayString & choices) : wxEnumProperty(label, name, choices) {
 }
 
