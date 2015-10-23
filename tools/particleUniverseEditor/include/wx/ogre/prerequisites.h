@@ -20,6 +20,8 @@
 #ifndef __WX_OGRE_PREREQUISITES_H__
 #define __WX_OGRE_PREREQUISITES_H__
 
+#include "i6engine/utils/i6eSystemParameters.h"
+
 #include "ParticleUniversePrerequisites.h"
 
 #include "OGRE/OgreString.h"
@@ -77,10 +79,18 @@ static const int LB_TEMPLATES_WIDTH = (1.0 - APP_WIDTH_FRACTION) * APP_WIDTH;
 static const int LB_TEMPLATES_HEIGHT =  (1.0 - APP_HEIGHT_FRACTION) * APP_HEIGHT - TAB_POS_Y - 24;
 static const int PROPERTIES_WIDTH = LB_TEMPLATES_WIDTH;
 static const int PROPERTIES_HEIGHT =  APP_HEIGHT_FRACTION * APP_HEIGHT - TAB_POS_Y - 24;
-static const int TOOLS_EDIT_WIDTH = 90;
-static const int TOOLS_EDIT_HEIGHT = 240;
-static const int TOOLBAR_EDIT_WIDTH = 40;
-static const int TOOLBAR_EDIT_HEIGHT = 240;
+
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+	static const int TOOLS_EDIT_WIDTH = 64;
+	static const int TOOLS_EDIT_HEIGHT = 240;
+	static const int TOOLBAR_EDIT_WIDTH = 24;
+	static const int TOOLBAR_EDIT_HEIGHT = 240;
+#else
+	static const int TOOLS_EDIT_WIDTH = 90;
+	static const int TOOLS_EDIT_HEIGHT = 240;
+	static const int TOOLBAR_EDIT_WIDTH = 40;
+	static const int TOOLBAR_EDIT_HEIGHT = 240;
+#endif
 
 // Notebook constants
 static const int NOTEBOOK_RENDER = 0;

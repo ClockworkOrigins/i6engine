@@ -23,15 +23,20 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseMainToolbar.h"
 
+#include "i6engine/utils/i6eSystemParameters.h"
+
 #include "ParticleUniverseEditor.h"
 #include "ParticleUniverseSpinCtrl.h"
 
 #include "wx/file.h"
 
-
 UIMainToolbar::UIMainToolbar(ParticleUniverseEditorFrame * parent) {
 	mParent = parent;
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+	mWxToolBar = new wxToolBar(parent, wxID_ANY, wxDefaultPosition, wxSize(MAX_WIDTH, 20), wxTB_FLAT);
+#else
 	mWxToolBar = new wxToolBar(parent, wxID_ANY, wxDefaultPosition, wxSize(MAX_WIDTH, 40), wxTB_FLAT);
+#endif
 	mWxToolBar->SetMargins(4, 4);
 	mWxToolBar->SetToolBitmapSize(wxSize(16, 16));
 
@@ -75,12 +80,10 @@ UIMiscIcons * UIMainToolbar::getMiscIcons() const {
 
 UIPlayIcons::UIPlayIcons(wxToolBar * toolbar) {
 	// Create the bitmaps of the main toolbar
-	wxBitmap playBitmap(ICONS_DIR + wxT("control_play_blue.png"), wxBITMAP_TYPE_PNG);
-playBitmap.SetHeight(100);
 	mToolbar = toolbar;
 	toolbar->AddTool(ID_REWIND, _("Rewind"), wxBitmap(ICONS_DIR + wxT("control_rewind_blue.png"), wxBITMAP_TYPE_PNG), wxNullBitmap, wxITEM_NORMAL, _("Rewind"), _("Get the previous particle system from the list"));
 	toolbar->AddTool(ID_PAUSE, _("Pause"), wxBitmap(ICONS_DIR + wxT("control_pause_blue.png"), wxBITMAP_TYPE_PNG), wxNullBitmap, wxITEM_NORMAL, _("Pause"), _("Pause the current particle system"));
-	toolbar->AddTool(ID_PLAY, _("Play"), playBitmap, wxNullBitmap, wxITEM_NORMAL, _("Play"), _("Run the current particle system"));
+	toolbar->AddTool(ID_PLAY, _("Play"), wxBitmap(ICONS_DIR + wxT("control_play_blue.png"), wxBITMAP_TYPE_PNG), wxNullBitmap, wxITEM_NORMAL, _("Play"), _("Run the current particle system"));
 	toolbar->AddTool(ID_STOP, _("Stop"), wxBitmap(ICONS_DIR + wxT("control_stop_blue.png"), wxBITMAP_TYPE_PNG), wxNullBitmap, wxITEM_NORMAL, _("Stop"), _("Stop the current particle system"));
 	toolbar->AddTool(ID_RECORD, _("Record"), wxBitmap(ICONS_DIR + wxT("control_record_blue.png"), wxBITMAP_TYPE_PNG), wxNullBitmap, wxITEM_NORMAL, _("Record"), _("Record the current particle system"));
 	toolbar->AddTool(ID_WIND, _("Wind"), wxBitmap(ICONS_DIR + wxT("control_fastforward_blue.png"), wxBITMAP_TYPE_PNG), wxNullBitmap, wxITEM_NORMAL, _("Wind"), _("Get the next particle system from the list"));
