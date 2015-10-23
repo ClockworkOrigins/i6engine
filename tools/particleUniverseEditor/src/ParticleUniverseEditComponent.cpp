@@ -227,7 +227,7 @@ void EditComponent::OnClose(wxCloseEvent & event) {
 		mPropertyWindow = nullptr;
 	}
 	if (mOldPropertyWindow) {
-		static_cast<EditTab*>(GetParent()->GetParent())->removePropertyWindow(mOldPropertyWindow);
+		static_cast<EditTab *>(GetParent()->GetParent())->removePropertyWindow(mOldPropertyWindow);
 		mOldPropertyWindow->Destroy();
 		mOldPropertyWindow = nullptr;
 	}
@@ -354,7 +354,7 @@ void EditComponent::OnWindowLeave(wxMouseEvent & event) {
 }
 
 void EditComponent::OnMouseLButtonPressed(wxMouseEvent & event) {
-	EditTab * parent = static_cast<EditTab*>(GetParent()->GetParent());
+	EditTab * parent = static_cast<EditTab *>(GetParent()->GetParent());
 
 	// Part of 'OnActivate'
 	parent->setPropertyWindow(mPropertyWindow);
