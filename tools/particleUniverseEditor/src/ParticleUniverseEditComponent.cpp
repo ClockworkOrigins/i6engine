@@ -26,6 +26,18 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/dnd.h"
 
+// just used to enable dragging of the EditComponent also by clicking on the text
+class DragStaticText : public wxStaticText {
+public:
+	DragStaticText(wxWindow * parent, wxWindowID id, const wxString & label, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize, long style = 0, const wxString & name = wxStaticTextNameStr) : wxStaticText(parent, id, label, pos, size, style, name) {
+		Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(DragStaticText::OnMouseLButtonPressed));
+	}
+
+	void OnMouseLButtonPressed(wxMouseEvent & evt) {
+		wxPostEvent(GetParent(), evt);
+	}
+};
+
 EditComponent::EditComponent(EditCanvas * parent, const Ogre::String & name, ComponentType type, ComponentSubType subType, const wxColour & backgroundColor, wxSize size, long style) : wxPanel(parent, wxID_ANY, wxDefaultPosition, size, style, ogre2wx(name)), mPUElement(nullptr), mRootParent(parent->GetParent()->GetParent()->GetParent()->GetParent()->GetParent()), /* TODO: (Michael) that's stupid*/ mName(name), mParentName(Ogre::StringUtil::BLANK), mType(type), mSubType(subType), mPolicies(), mConnections(), mUniqueRelations(), mSelectedPolicy(nullptr), mPropertyWindow(nullptr), mOldPropertyWindow(nullptr), mEmitterPropertyWindowFactory(), mRendererPropertyWindowFactory(), mAffectorPropertyWindowFactory(), mObserverPropertyWindowFactory(), mBehaviourPropertyWindowFactory(), mEventHandlerPropertyWindowFactory(), mExternPropertyWindowFactory(), mOriginalSize(GetSize()), mRootFrame(nullptr) {
 	// Internationize the strings
 	CT_SYSTEM = _("System");
@@ -52,7 +64,7 @@ EditComponent::EditComponent(EditCanvas * parent, const Ogre::String & name, Com
 		caption = caption + wxT(" - ") + nameTmp;
 	}
 	wxFont font(10, wxDEFAULT, wxNORMAL, wxFONTWEIGHT_NORMAL, true);
-	wxStaticText * text = new wxStaticText(this, wxID_ANY, "\n" + caption, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
+	wxStaticText * text = new DragStaticText(this, wxID_ANY, "\n" + caption, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
 	text->SetFont(font);
 	if (backgroundColor == *wxBLACK) {
 		text->SetForegroundColour(*wxWHITE);
