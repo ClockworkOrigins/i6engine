@@ -96,7 +96,6 @@ bool wxOgreControl::Destroy() {
 	}
 
 	DestroyRenderWindow();
-std::cout << "2Destroying OgreControl: " << this << std::endl;
 
 	return true;
 }
