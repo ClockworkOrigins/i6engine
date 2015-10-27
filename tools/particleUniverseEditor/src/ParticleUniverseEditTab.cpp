@@ -32,7 +32,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/utils.h"
 
-EditTab::EditTab(wxWindow * parentNotebook, wxWindow * rootParent) : wxPanel(parentNotebook, wxID_ANY), mSystemCounter(0), mTechniqueCounter(0), mEmitterCounter(0), mRendererCounter(0), mAffectorCounter(0), mObserverCounter(0), mHandlerCounter(0), mBehaviourCounter(0), mExternCounter(0), mOffsetX(48), mOffsetY(8), mOffsetFraction(0.05), mScale(0.75), mRootParent(rootParent), mNumberOfSystems(0), mConnectionMode(CM_CONNECT_NONE), mStartConnector(nullptr), mEndConnector(nullptr), mEditChanged(false) {
+EditTab::EditTab(wxWindow * parentNotebook, wxWindow * rootParent) : wxPanel(parentNotebook, wxID_ANY), _dragOffset(), _currentDrag(nullptr), mSystemCounter(0), mTechniqueCounter(0), mEmitterCounter(0), mRendererCounter(0), mAffectorCounter(0), mObserverCounter(0), mHandlerCounter(0), mBehaviourCounter(0), mExternCounter(0), mOffsetX(48), mOffsetY(8), mOffsetFraction(0.05), mScale(0.75), mRootParent(rootParent), mNumberOfSystems(0), mConnectionMode(CM_CONNECT_NONE), mStartConnector(nullptr), mEndConnector(nullptr), mEditChanged(false) {
 	// Internationize the strings
 	CT_SYSTEM = _("System");
 	CT_TECHNIQUE = _("Technique");

@@ -59,7 +59,6 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 IMPLEMENT_APP(ParticleUniverseEditorApp)
 
-
 BEGIN_EVENT_TABLE(ParticleUniverseEditorFrame, wxFrame)
 	EVT_MENU(wxID_NEW, ParticleUniverseEditorFrame::OnNewParticleSystem)
 	EVT_MENU(wxID_FILE, ParticleUniverseEditorFrame::OnLoadFile)
@@ -179,7 +178,7 @@ ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow * parent, wxWi
 bool ParticleUniverseEditorFrame::Destroy() {
 	// Delete the droptarget
 	delete GetDropTarget();
-	SetDropTarget(0);
+	SetDropTarget(nullptr);
 
 	// Remove the camera listeners
 	mGizmoManager->unInitialiseCameraListeners(_getCamera());

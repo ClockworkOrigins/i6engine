@@ -82,9 +82,9 @@ void wxOgreControl::Init() {
 }
 
 bool wxOgreControl::Destroy() {
-	if (_camera) {
+	if (_camera && _sceneManager) {
 		_sceneManager->destroyCamera(_camera);
-		_camera = 0;
+		_camera = nullptr;
 	}
 
 	/* Don't delete the SceneManager, it can be used by others. */
@@ -96,22 +96,25 @@ bool wxOgreControl::Destroy() {
 	}
 
 	DestroyRenderWindow();
+std::cout << "2Destroying OgreControl: " << this << std::endl;
 
 	return true;
 }
 
 void wxOgreControl::Update() {
-	_root->renderOneFrame();
+	if (_root) {
+		_root->renderOneFrame();
 
-	_root->_fireFrameStarted();
+		_root->_fireFrameStarted();
 
-	if (_renderWindow) {
-		_renderWindow->update();
+		if (_renderWindow) {
+			_renderWindow->update();
+		}
+
+		_root->_updateAllRenderTargets();
+
+		_root->_fireFrameEnded();
 	}
-
-	_root->_updateAllRenderTargets();
-
-	_root->_fireFrameEnded();
 }
 
 void wxOgreControl::OnPaint(wxPaintEvent & WXUNUSED(event)) {
@@ -160,7 +163,7 @@ void wxOgreControl::AddViewport(Ogre::Camera * cam, int ZOrder, float left, floa
 	}
 }
 
-Ogre::RenderWindow* wxOgreControl::CreateRenderWindow(const Ogre::String & name) {
+Ogre::RenderWindow * wxOgreControl::CreateRenderWindow(const Ogre::String & name) {
 	if (!_root->isInitialised()) {
 		_renderWindow = _root->initialise(false);
 	}
@@ -190,8 +193,9 @@ Ogre::RenderWindow* wxOgreControl::CreateRenderWindow(const Ogre::String & name)
 void wxOgreControl::DestroyRenderWindow() {
 	if (_renderWindow) {
 		_root->detachRenderTarget(_renderWindow);
-		_renderWindow = 0;
+		_renderWindow = nullptr;
 		SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+		_root = nullptr;
 	}
 }
 
