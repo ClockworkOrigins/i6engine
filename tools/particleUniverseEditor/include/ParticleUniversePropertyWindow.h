@@ -404,6 +404,8 @@ protected:
 	Ogre::String mName;
 	wxString mHelpHtml;
 
+	wxArrayString _types;
+
 	/**
 		Initialises basic properties
 	*/

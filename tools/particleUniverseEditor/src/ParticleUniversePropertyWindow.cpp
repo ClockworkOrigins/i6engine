@@ -28,6 +28,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseControlPointDialog.h"
 #include "ParticleUniverseEditComponent.h"
 
+#include "i6engine/utils/i6eString.h"
+
 #include "wx/ogre/utils.h"
 #include "wx/propgrid/editors.h"
 
@@ -38,10 +40,14 @@ bool EnumPropertyWithButton::OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_p
 	return true;
 }
 
-PropertyWindow::PropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name) : wxPropertyGrid(parent, wxID_ANY, wxPoint(0, 99999), wxSize(PROPERTIES_WIDTH, PROPERTIES_HEIGHT), wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE, wxT("")), mOwner(owner), mName(name) {
+PropertyWindow::PropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name) : wxPropertyGrid(parent, wxID_ANY, wxPoint(0, 99999), wxSize(PROPERTIES_WIDTH, PROPERTIES_HEIGHT), wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE, wxT("")), mOwner(owner), mName(name), _types() {
 	/* Fix Version 1.3.1: Set y-coord by default to infinite (99999) to prevent that it is displayed over the listbox with templates. This prevents
 	   jittering of the listbox (= wxTreeCtrl from  version 1.4).
 	*/
+	_types.Add(DYN_FIXED);
+	_types.Add(DYN_RANDOM);
+	_types.Add(DYN_CURVED);
+	_types.Add(DYN_OSCILLATE);
 	_initProperties();
 //	Connect(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &wxPropertyGrid::OnCustomEditorEvent); TODO (Michael) uncomment
 	Connect(wxID_ANY, wxEVT_PG_CHANGED, wxPropertyGridEventHandler(PropertyWindow::onPropertyChanged));
@@ -426,55 +432,40 @@ const Ogre::Quaternion & PropertyWindow::doGetQuaternion(const wxString & name, 
 void PropertyWindow::appendDynamicAttribute(const wxString & label, const wxString & name, ParticleUniverse::DynamicAttribute & dynamicAttribute) {
 	// TODO
 	// Remove previous property and replace it with the new values
-/*	unsigned int index = 0;
 	wxPGProperty * pid = GetPropertyByName(name);
-	if (pid.IsOk()) {
-		index = pid.GetPropertyByName()->GetIndexInParent();
-		wxPGProperty * prop = wxPropertyContainerMethods::GetNextSibling(pid); // To avoid ambiguity
-		Delete(name);
-		if (prop) {
-			pid = Insert(prop, wxParentProperty(label, name));
-		}
-		else {
-			// This means that the Dynamic Attribute was at the end of all properties
-			pid = Append(new wxParentProperty(label, name));
-		}
+	if (pid) {
+		//wxPGProperty * prop = GetPropertyByName(name); // To avoid ambiguity
+		wxPGProperty * newPid = new wxStringProperty(label, name);
+		ReplaceProperty(pid, newPid);
+		pid = newPid;
 	} else {
-		pid = Append(new wxParentProperty(label, name));
+		pid = Append(new wxStringProperty(label, name));
 	}
-
-	// Add properties
-	wxArrayString types;
-	types.Add(DYN_FIXED);
-	types.Add(DYN_RANDOM);
-	types.Add(DYN_CURVED);
-	types.Add(DYN_OSCILLATE);
-	//AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
 
 	// Show properties of certain type
 	switch (dynamicAttribute.getType()) {
 		case ParticleUniverse::DynamicAttribute::DAT_FIXED: {
 			// Show fixed value
-			AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
+			AppendIn(pid, new wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, _types));
 			ParticleUniverse::DynamicAttributeFixed * df = static_cast<ParticleUniverse::DynamicAttributeFixed *>(&dynamicAttribute);
-			wxPGProperty * id = AppendIn(pid, wxFloatProperty(PRNL_VALUE, name + PRNL_VALUE, df->getValue()));
+			wxPGProperty * id = AppendIn(pid, new wxFloatProperty(PRNL_VALUE, name + PRNL_VALUE, df->getValue()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 		}
 		break;
 
 		case ParticleUniverse::DynamicAttribute::DAT_RANDOM: {
 			// Show min and max
-			AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
+			AppendIn(pid, new wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, _types));
 			ParticleUniverse::DynamicAttributeRandom * dr = static_cast<ParticleUniverse::DynamicAttributeRandom *>(&dynamicAttribute);
-			wxPGProperty * id = AppendIn(pid, wxFloatProperty(PRNL_MIN_VALUE, name + PRNL_MIN_VALUE, dr->getMin()));
+			wxPGProperty * id = AppendIn(pid, new wxFloatProperty(PRNL_MIN_VALUE, name + PRNL_MIN_VALUE, dr->getMin()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
-			id = AppendIn(pid, wxFloatProperty(PRNL_MAX_VALUE, name + PRNL_MAX_VALUE, dr->getMax()));
+			id = AppendIn(pid, new wxFloatProperty(PRNL_MAX_VALUE, name + PRNL_MAX_VALUE, dr->getMax()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 		}
 		break;
 
 		case ParticleUniverse::DynamicAttribute::DAT_CURVED: {
-			EnumPropertyWithButton* enumProperty = new EnumPropertyWithButton(PRNL_TYPE, name + PRNL_TYPE, types);
+			EnumPropertyWithButton* enumProperty = new EnumPropertyWithButton(PRNL_TYPE, name + PRNL_TYPE, _types);
 			wxPGProperty * id = AppendIn(pid, enumProperty);
 			SetPropertyEditor(id, wxPG_EDITOR(ChoiceAndButton)); // Add a button
 
@@ -491,23 +482,26 @@ void PropertyWindow::appendDynamicAttribute(const wxString & label, const wxStri
 
 		case ParticleUniverse::DynamicAttribute::DAT_OSCILLATE: {
 			// Show oscillation type, frequency, phase, base and amplitude
-			AppendIn(pid, wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, types));
+			AppendIn(pid, new wxEnumProperty(PRNL_TYPE, name + PRNL_TYPE, _types));
 			ParticleUniverse::DynamicAttributeOscillate * dosc = static_cast<ParticleUniverse::DynamicAttributeOscillate *>(&dynamicAttribute);
 			wxArrayString oscillationTypes;
 			oscillationTypes.Add(PRNL_OSC_SINE);
 			oscillationTypes.Add(PRNL_OSC_SQUARE);
-			AppendIn(pid, wxEnumProperty(PRNL_OSC_TYPE, PRNL_OSC_TYPE, oscillationTypes));
-			wxPGProperty * id = AppendIn(pid, wxFloatProperty(PRNL_OSC_FREQUENCY, name + PRNL_OSC_FREQUENCY, dosc->getFrequency()));
+			AppendIn(pid, new wxEnumProperty(PRNL_OSC_TYPE, PRNL_OSC_TYPE, oscillationTypes));
+			wxPGProperty * id = AppendIn(pid, new wxFloatProperty(PRNL_OSC_FREQUENCY, name + PRNL_OSC_FREQUENCY, dosc->getFrequency()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
-			id = AppendIn(pid, wxFloatProperty(PRNL_OSC_PHASE, name + PRNL_OSC_PHASE, dosc->getPhase()));
+			id = AppendIn(pid, new wxFloatProperty(PRNL_OSC_PHASE, name + PRNL_OSC_PHASE, dosc->getPhase()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
-			id = AppendIn(pid, wxFloatProperty(PRNL_OSC_BASE, name + PRNL_OSC_BASE, dosc->getBase()));
+			id = AppendIn(pid, new wxFloatProperty(PRNL_OSC_BASE, name + PRNL_OSC_BASE, dosc->getBase()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
-			id = AppendIn(pid, wxFloatProperty(PRNL_OSC_AMPLITUDE, name + PRNL_OSC_AMPLITUDE, dosc->getAmplitude()));
+			id = AppendIn(pid, new wxFloatProperty(PRNL_OSC_AMPLITUDE, name + PRNL_OSC_AMPLITUDE, dosc->getAmplitude()));
 			SetPropertyEditor(id, wxPG_EDITOR(SpinCtrl));
 		}
 		break;
-	}*/
+		default: {
+			break;
+		}
+	}
 }
 
 void PropertyWindow::doSetDynamicAttribute(const wxString & name, PropertyWindow * propertyWindow) {
@@ -617,7 +611,7 @@ void PropertyWindow::doSetDynamicAttribute(const wxString & name, ParticleUniver
 	appendDynamicAttribute(name, name, *dynamicAttribute);
 	wxPGProperty * propTo = GetPropertyByName(baseName + PRNL_TYPE);
 	if (!propTo) {
-		std::cerr << "PropertyWindow::doSetSynamicAttribute: " << (baseName + PRNL_TYPE) << " not found" << std::endl;
+		std::cerr << "PropertyWindow::doSetDynamicAttribute: " << (baseName + PRNL_TYPE) << " not found" << std::endl;
 		return;
 	}
 
@@ -655,44 +649,48 @@ EditComponent * PropertyWindow::getOwner() {
 void PropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {
 	// Inform others that a property has been changed.
 	// TODO:
-	/*notifyPropertyChanged();
+
+	notifyPropertyChanged();
 
 	// Handle other changes
 	wxPGProperty * prop = event.GetProperty()->GetMainParent();
 	wxString name = prop->GetName();
 	wxString label = prop->GetLabel();
 
+	label = event.GetPropertyName();
+
 	// Perform additional validations
 	if (mName.length() > 0 && !_validatePropertyStringNoSpaces(event.GetProperty(), PRNL_NAME))
 		return;
 
-	if (name == PRNL_NAME) {
-		Ogre::String newName = wx2ogre(event.GetPropertyValueAsString());
+	if (name.Contains(PRNL_NAME)) {
+		Ogre::String newName = wx2ogre(event.GetPropertyValue().GetString());
 		mOwner->notifyAdjustNames(newName); // Must perform this first if the name changes (may not be included in setComponentName())
 		mOwner->setComponentName(newName);
 		mOwner->setCaption();
-	} else if (label == PRNL_TYPE) {
+	} else if (label.Contains(PRNL_TYPE)) {
 		// Dynamic attribute changed.
 		if (!prop) return;
-		name = prop->GetName(); // Reuse of 'name'
-		label = prop->GetLabel(); // Reuse of 'label'
-		if (event.GetPropertyValueAsString() == DYN_FIXED) {
+		assert(event.GetPropertyValue().GetInteger() < _types.size());
+		name = i6engine::utils::split(event.GetPropertyName().ToStdString(), ".").front(); // Reuse of 'name'
+		label = i6engine::utils::split(event.GetPropertyName().ToStdString(), ".").front(); // Reuse of 'label'
+		if (_types[event.GetPropertyValue().GetInteger()] == DYN_FIXED) {
 			ParticleUniverse::DynamicAttributeFixed dynAttr;
 			appendDynamicAttribute(label, name, dynAttr);
-			prop = GetPropertyByName(name); // Property has been replaced, so search it again to get the new pointer
+			prop = GetPropertyByName(event.GetPropertyName()); // Property has been replaced, so search it again to get the new pointer
 			prop->SetValueFromString(DYN_FIXED);
 		}
-		else if (event.GetPropertyValueAsString() == DYN_RANDOM) {
+		else if (_types[event.GetPropertyValue().GetInteger()] == DYN_RANDOM) {
 			ParticleUniverse::DynamicAttributeRandom dynAttr;
 			appendDynamicAttribute(label, name, dynAttr);
-			prop = GetPropertyByName(name); // Property has been replaced, so search it again to get the new pointer
+			prop = GetPropertyByName(event.GetPropertyName()); // Property has been replaced, so search it again to get the new pointer
 			prop->SetValueFromString(DYN_RANDOM);
 		}
-		else if (event.GetPropertyValueAsString() == DYN_CURVED) {
+		else if (_types[event.GetPropertyValue().GetInteger()] == DYN_CURVED) {
 			// Show dialog to create a curve with control points
 			ParticleUniverse::DynamicAttributeCurved dynAttr;
 			appendDynamicAttribute(label, name, dynAttr);
-			prop = GetPropertyByName(name); // Property has been replaced, so search it again to get the new pointer
+			prop = GetPropertyByName(event.GetPropertyName()); // Property has been replaced, so search it again to get the new pointer
 			prop->SetValueFromString(DYN_CURVED);
 
 			// Open dialog
@@ -712,23 +710,23 @@ void PropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {
 			wxString s = label + _(" - Curved");
 			ControlPointDialog dlg(type, list, this, wxID_ANY, s, wxDefaultPosition, wxSize(800, 640));
 			if (dlg.ShowModal() == wxID_OK) {
-				ParticleUniverse::DynamicAttributeCurved::ControlPointList list = dlg.getControlPointList();
+				list = dlg.getControlPointList();
 				mControlPointListMap.erase(name);
 				mControlPointListMap.insert(std::make_pair(name, list));
-				ParticleUniverse::InterpolationType type = dlg.getInterpolationType();
+				type = dlg.getInterpolationType();
 				mInterpolationTypeMap.erase(name);
 				mInterpolationTypeMap.insert(std::make_pair(name, type));
 			}
 		}
-		else if (event.GetPropertyValueAsString() == DYN_OSCILLATE) {
+		else if (_types[event.GetPropertyValue().GetInteger()] == DYN_OSCILLATE) {
 			ParticleUniverse::DynamicAttributeOscillate dynAttr;
 			appendDynamicAttribute(label, name, dynAttr);
-			prop = GetPropertyByName(name); // Property has been replaced, so search it again to get the new pointer
+			prop = GetPropertyByName(event.GetPropertyName()); // Property has been replaced, so search it again to get the new pointer
 			prop->SetValueFromString(DYN_OSCILLATE);
 		}
 		wxPGProperty * pid = GetPropertyByName(name);
 		Expand(pid);
-	}*/
+	}
 }
 
 void PropertyWindow::notifyPropertyChanged() {
