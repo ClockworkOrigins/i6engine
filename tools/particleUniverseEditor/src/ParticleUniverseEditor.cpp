@@ -201,6 +201,8 @@ bool ParticleUniverseEditorFrame::Destroy() {
 	}
 #endif //PU_PHYSICS_PHYSX
 
+	mEditNotebookPage->destroyDanglingPUComponents();
+
 	ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(CURRENT_PS_NAME, mSceneManager);
 	ParticleUniverse::ParticleSystemManager::getSingletonPtr()->removeAndDestroyDanglingSceneNodes(mParticlerSystemSceneNode);
 
@@ -216,8 +218,6 @@ bool ParticleUniverseEditorFrame::Destroy() {
 	if (mUIMainToolbar) {
 		delete mUIMainToolbar;
 	}
-
-	mEditNotebookPage->destroyDanglingPUComponents();
 
 	return wxFrame::Destroy();
 }
