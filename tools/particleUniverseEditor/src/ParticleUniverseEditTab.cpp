@@ -32,6 +32,23 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/utils.h"
 
+class EditTabDropTarget : public wxTextDropTarget {
+public:
+	EditTabDropTarget(EditTab * editTab) : wxTextDropTarget(), _editTab(editTab) {
+	}
+
+	bool OnDropText(wxCoord x, wxCoord y, const wxString & text) {
+		return _editTab->OnDropText(x, y, text);
+	}
+
+	wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult defResult) {
+		return _editTab->OnDragOver(x, y, defResult);
+	}
+
+private:
+	EditTab * _editTab;
+};
+
 EditTab::EditTab(wxWindow * parentNotebook, wxWindow * rootParent) : wxPanel(parentNotebook, wxID_ANY), _dragOffset(), _currentDrag(nullptr), mSystemCounter(0), mTechniqueCounter(0), mEmitterCounter(0), mRendererCounter(0), mAffectorCounter(0), mObserverCounter(0), mHandlerCounter(0), mBehaviourCounter(0), mExternCounter(0), mOffsetX(48), mOffsetY(8), mOffsetFraction(0.05), mScale(0.75), mRootParent(rootParent), mNumberOfSystems(0), mConnectionMode(CM_CONNECT_NONE), mStartConnector(nullptr), mEndConnector(nullptr), mEditChanged(false) {
 	// Internationize the strings
 	CT_SYSTEM = _("System");
@@ -85,7 +102,7 @@ EditTab::EditTab(wxWindow * parentNotebook, wxWindow * rootParent) : wxPanel(par
 	Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(EditTab::OnMouseWheel));
 	Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(EditTab::OnKeyPressed));
 
-	SetDropTarget(this);
+	SetDropTarget(new EditTabDropTarget(this));
 }
 
 bool EditTab::OnDropText(wxCoord x, wxCoord y, const wxString & text) { // TODO: move to a new class: droptarget
