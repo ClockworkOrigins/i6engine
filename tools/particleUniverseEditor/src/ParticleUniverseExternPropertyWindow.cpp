@@ -107,7 +107,7 @@ void ExternPropertyWindow::_initProperties() {
 		mTypes.Add(CST_EXTERN_PHYSX_FLUID);
 	}
 #endif //PU_PHYSICS_PHYSX
-	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_EXTERN_TYPE, PRNL_EXTERN_TYPE, mTypes));
+	Append(new wxEnumProperty(PRNL_EXTERN_TYPE, PRNL_EXTERN_TYPE, mTypes));
 }
 
 void ExternPropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {

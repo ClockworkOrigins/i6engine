@@ -432,7 +432,7 @@ void MaterialTab::OnChangeName(wxCommandEvent & event) {
 			clonedMaterial->load();
 			Ogre::MaterialManager * materialManager = Ogre::MaterialManager::getSingletonPtr();
 			materialManager->remove(oldMaterialName);
-			mMaterialListBox->Delete(mMaterialListBox->GetSelection());
+			mMaterialListBox->Delete(uint32_t(mMaterialListBox->GetSelection()));
 			mMaterialListBox->addMaterialName(newName);
 			selectMaterial(newName);
 		}

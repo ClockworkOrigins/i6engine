@@ -108,5 +108,5 @@ void DoScaleEventHandlerPropertyWindow::_initProperties(void)
 	// Scale Type: List
 	mScaleTypes.Add(SC_TIME_TO_LIVE);
 	mScaleTypes.Add(SC_VELOCITY);
-	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_SCALE_TYPE, PRNL_SCALE_TYPE, mScaleTypes));
+	Append(new wxEnumProperty(PRNL_SCALE_TYPE, PRNL_SCALE_TYPE, mScaleTypes));
 }

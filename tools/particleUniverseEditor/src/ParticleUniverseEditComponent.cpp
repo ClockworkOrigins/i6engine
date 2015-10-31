@@ -426,7 +426,7 @@ void EditComponent::OnActivate(wxActivateEvent & event) {
 void EditComponent::selectConnection(bool viewOnly) {
 	//	Display connections. These are actual connections this component has with other components
 	wxString choices[MAX_NUMBER_OF_CONNECTIONS];
-	Connection* connectionsAsArray[MAX_NUMBER_OF_CONNECTIONS];
+	Connection * connectionsAsArray[MAX_NUMBER_OF_CONNECTIONS];
 	int count = 0;
 	Connection * connection = nullptr;
 	for (std::vector<Connection *>::iterator it = mConnections.begin(); it != mConnections.end(); ++it) {

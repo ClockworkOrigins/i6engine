@@ -175,7 +175,7 @@ Ogre::RenderWindow * wxOgreControl::CreateRenderWindow(const Ogre::String & name
 	try {
 		int w, h;
 		GetSize(&w, &h);
-		_renderWindow = _root->createRenderWindow(name, w, h, false, &params);
+		_renderWindow = _root->createRenderWindow(name, uint32_t(w), uint32_t(h), false, &params);
 		_renderWindow->setActive(true);
 
 		// Even if we are not always using Ogre's

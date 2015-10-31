@@ -111,5 +111,5 @@ void LinearForceAffectorPropertyWindow::_initProperties(void)
 	// Force Application: List
 	mApplication.Add(APP_ADD);
 	mApplication.Add(APP_AVG);
-	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_LINEAR_FORCE_APPLICATION, PRNL_LINEAR_FORCE_APPLICATION, mApplication));
+	Append(new wxEnumProperty(PRNL_LINEAR_FORCE_APPLICATION, PRNL_LINEAR_FORCE_APPLICATION, mApplication));
 }

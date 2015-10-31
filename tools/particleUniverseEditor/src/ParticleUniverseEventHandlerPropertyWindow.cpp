@@ -104,7 +104,7 @@ void EventHandlerPropertyWindow::_initProperties() {
 	mTypes.Add(CST_HANDLER_DO_PLACEMENT_PARTICLE);
 	mTypes.Add(CST_HANDLER_DO_SCALE);
 	mTypes.Add(CST_HANDLER_DO_STOP_SYSTEM);
-	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_HANDLER_TYPE, PRNL_HANDLER_TYPE, mTypes));
+	Append(new wxEnumProperty(PRNL_HANDLER_TYPE, PRNL_HANDLER_TYPE, mTypes));
 }
 
 void EventHandlerPropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {

@@ -348,7 +348,7 @@ void BillboardRendererPropertyWindow::_initProperties(void)
 	mBillboardTypes.Add(BBT_PERPENDICULAR_COMMON);
 	mBillboardTypes.Add(BBT_PERPENDICULAR_SELF);
 	mBillboardTypes.Add(BBT_ORIENTED_SHAPE);
-	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_BILLBOARD_TYPE, PRNL_BILLBOARD_TYPE, mBillboardTypes));
+	Append(new wxEnumProperty(PRNL_BILLBOARD_TYPE, PRNL_BILLBOARD_TYPE, mBillboardTypes));
 
 	// Origin: List
 	mOrigin.Add(ORG_TOP_LEFT);
@@ -360,12 +360,12 @@ void BillboardRendererPropertyWindow::_initProperties(void)
 	mOrigin.Add(ORG_BOTTOM_LEFT);
 	mOrigin.Add(ORG_BOTTOM_RIGHT);
 	mOrigin.Add(ORG_BOTTOM_CENTER);
-	pid = Append(new wxEnumProperty(PRNL_ORIGIN, PRNL_ORIGIN, mOrigin));
+	Append(new wxEnumProperty(PRNL_ORIGIN, PRNL_ORIGIN, mOrigin));
 
 	// Rotation Type: List
 	mRotationTypes.Add(RT_VERTEX);
 	mRotationTypes.Add(RT_TEXTURE_COORDINATES);
-	pid = Append(new wxEnumProperty(PRNL_ROTATION_TYPE, PRNL_ROTATION_TYPE, mRotationTypes));
+	Append(new wxEnumProperty(PRNL_ROTATION_TYPE, PRNL_ROTATION_TYPE, mRotationTypes));
 
 	// Common Direction: Ogre::Vector3
 	appendVector3(PRNL_COMMON_DIRECTION, PRNL_COMMON_DIRECTION, ParticleUniverse::BillboardRenderer::DEFAULT_COMMON_DIRECTION);

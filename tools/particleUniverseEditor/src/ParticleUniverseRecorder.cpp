@@ -230,7 +230,7 @@ bool Recorder::frameEnded(const Ogre::FrameEvent & evt) {
 						mImage->save(fullName);
 					}
 					mFrameCounter++;
-					mTimeElapsedFrame =- mFrameLength;
+					mTimeElapsedFrame -= mFrameLength;
 				}
 			}
 		}

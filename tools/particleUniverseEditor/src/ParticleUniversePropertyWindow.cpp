@@ -642,6 +642,9 @@ void PropertyWindow::doSetDynamicAttribute(const wxString & name, ParticleUniver
 		propTo->SetValueFromString(DYN_OSCILLATE);
 		break;
 	}
+	default: {
+		break;
+	}
 	}
 }
 
@@ -857,12 +860,12 @@ ParticleUniverse::DynamicAttribute * PropertyWindow::copyValuesToDynamicAttribut
 
 				// Copy the interpolation type
 				InterpolationTypeMap::iterator it = mInterpolationTypeMap.find(baseName);
-				ParticleUniverse::InterpolationType type = ParticleUniverse::IT_LINEAR;
+				ParticleUniverse::InterpolationType interpolationType = ParticleUniverse::IT_LINEAR;
 				if (it != mInterpolationTypeMap.end()) {
 					// Found interpolation type
-					type = it->second;
+					interpolationType = it->second;
 				}
-				dynCurved->setInterpolationType(type);
+				dynCurved->setInterpolationType(interpolationType);
 
 				// Copy controlpoints and process them
 				copyControlPointsToDynamicAttribute(baseName, dynCurved);
@@ -964,7 +967,7 @@ void PropertyWindow::_unprepare(ParticleUniverse::IElement * element, ParticleUn
 		return;
 	}
 
-	ParticleUniverse::ParticleTechnique * technique;
+	ParticleUniverse::ParticleTechnique * technique = nullptr;
 	switch (elementType) {
 	case ParticleUniverse::Particle::PT_TECHNIQUE: {
 		technique = static_cast<ParticleUniverse::ParticleTechnique *>(element);
@@ -978,6 +981,9 @@ void PropertyWindow::_unprepare(ParticleUniverse::IElement * element, ParticleUn
 	case ParticleUniverse::Particle::PT_AFFECTOR: {
 		ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(element);
 		technique = affector->getParentTechnique();
+		break;
+	}
+	default: {
 		break;
 	}
 	}
@@ -1007,6 +1013,9 @@ void PropertyWindow::_unprepare(ParticleUniverse::IElement * element, ParticleUn
 	}
 	case  ParticleUniverse::Particle::PT_VISUAL: {
 		technique->_unprepareVisualParticles();
+		break;
+	}
+	default: {
 		break;
 	}
 	}

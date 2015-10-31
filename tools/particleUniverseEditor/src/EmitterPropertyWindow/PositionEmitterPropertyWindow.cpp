@@ -75,7 +75,7 @@ void PositionEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::
 	ParticleUniverse::PositionEmitter* positionEmitter = static_cast<ParticleUniverse::PositionEmitter*>(emitter);
 
 	// Positions: List
-	wxPGProperty* propTo = GetProperty(PRNL_POSITION_EMITTER_POSITION);
+	//wxPGProperty* propTo = GetProperty(PRNL_POSITION_EMITTER_POSITION);
 /*	ParentPropertyWithButtonAndPositions* parentPropertyWithButtonAndPositions = static_cast<ParentPropertyWithButtonAndPositions*>(propTo);
 	ParticleUniverse::vector<Ogre::Vector3> positions = positionEmitter->getPositions();
 	ParticleUniverse::vector<Ogre::Vector3>::iterator it;

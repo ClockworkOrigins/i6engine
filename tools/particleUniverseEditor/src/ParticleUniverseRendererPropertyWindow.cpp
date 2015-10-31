@@ -179,7 +179,7 @@ void RendererPropertyWindow::_initProperties() {
 	mTypes.Add(CST_RENDERER_LIGHT);
 	mTypes.Add(CST_RENDERER_RIBBONTRAIL);
 	mTypes.Add(CST_RENDERER_SPHERE);
-	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_RENDERER_TYPE, PRNL_RENDERER_TYPE, mTypes));
+	Append(new wxEnumProperty(PRNL_RENDERER_TYPE, PRNL_RENDERER_TYPE, mTypes));
 
 	// Render queue group: ParticleUniverse::uint8
 	Append(new wxUIntProperty(PRNL_RENDERER_RENDER_Q_GROUP, PRNL_RENDERER_RENDER_Q_GROUP, ParticleUniverse::ParticleRenderer::DEFAULT_RENDER_QUEUE_GROUP));

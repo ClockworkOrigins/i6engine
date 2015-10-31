@@ -75,7 +75,7 @@ void PathFollowerPropertyWindow::copyAttributesFromAffector(ParticleUniverse::Pa
 	AffectorPropertyWindow::copyAttributesFromAffector(affector);
 
 	// Copy properties from affector to property window
-	ParticleUniverse::PathFollower* pathFollower = static_cast<ParticleUniverse::PathFollower*>(affector);
+	//ParticleUniverse::PathFollower * pathFollower = static_cast<ParticleUniverse::PathFollower*>(affector);
 
 	// Positions: List
 	/* TODO wxPGProperty* propTo = GetProperty(PRNL_PATHFOLLOWER_POSITION);

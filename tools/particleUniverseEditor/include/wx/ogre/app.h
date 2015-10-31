@@ -38,7 +38,7 @@ public:
      *         must override it, do not forget to call the base class
      *         version!
      */
-    virtual bool Initialize(int & argc, wxChar ** argv);
+    virtual bool Initialize(int & ac, wxChar ** av);
 
     /** Clean the Ogre Render Engine instance. 
      * @remark This is the very last function called on wxApp object 

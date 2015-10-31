@@ -130,7 +130,7 @@ void SineForceAffectorPropertyWindow::_initProperties(void)
 	// Force Application: 
 	mApplication.Add(APP_ADD);
 	mApplication.Add(APP_AVG);
-	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_LINEAR_FORCE_APPLICATION, PRNL_LINEAR_FORCE_APPLICATION, mApplication));
+	Append(new wxEnumProperty(PRNL_LINEAR_FORCE_APPLICATION, PRNL_LINEAR_FORCE_APPLICATION, mApplication));
 
 	// Minimum Frequency: ParticleUniverse::Real
 	Append(new wxFloatProperty(PRNL_FREQ_MIN, PRNL_FREQ_MIN, ParticleUniverse::SineForceAffector::DEFAULT_FREQ_MIN));

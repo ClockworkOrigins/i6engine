@@ -213,7 +213,7 @@ void LightRendererPropertyWindow::_initProperties(void)
 	// Light Type: List
 	mLightTypes.Add(LT_POINT);
 	mLightTypes.Add(LT_SPOT);
-	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_LIGHT_TYPE, PRNL_LIGHT_TYPE, mLightTypes));
+	Append(new wxEnumProperty(PRNL_LIGHT_TYPE, PRNL_LIGHT_TYPE, mLightTypes));
 
 	// Specular Colour: Ogre::Colour
 	appendColourWithAlphaProperty(PRNL_SPECULAR_COLOUR, PRNL_SPECULAR_COLOUR, wxColour(255, 255, 255, 255));

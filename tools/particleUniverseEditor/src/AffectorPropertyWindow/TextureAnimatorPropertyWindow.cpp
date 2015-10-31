@@ -149,7 +149,7 @@ void TextureAnimatorPropertyWindow::_initProperties(void)
 	mAnimationTypes.Add(TAT_LOOP);
 	mAnimationTypes.Add(TAT_UP_DOWN);
 	mAnimationTypes.Add(TAT_RANDOM);
-	wxPGProperty* pid = Append(new wxEnumProperty(PRNL_ANIMATION_TYPE, PRNL_ANIMATION_TYPE, mAnimationTypes));
+	Append(new wxEnumProperty(PRNL_ANIMATION_TYPE, PRNL_ANIMATION_TYPE, mAnimationTypes));
 
 	// Start Texture Coordinates: ParticleUniverse::uint16
 	Append(new wxUIntProperty(PRNL_TEXCOORDS_START, PRNL_TEXCOORDS_START, ParticleUniverse::TextureAnimator::DEFAULT_TEXCOORDS_START));

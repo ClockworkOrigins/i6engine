@@ -420,7 +420,7 @@ void EmitterPropertyWindow::_initProperties() {
 	mTypes.Add(CST_EMITTER_SLAVE);
 	mTypes.Add(CST_EMITTER_SPHERE);
 	mTypes.Add(CST_EMITTER_VERTEX);
-	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_EMITTER_TYPE, PRNL_EMITTER_TYPE, mTypes));
+	Append(new wxEnumProperty(PRNL_EMITTER_TYPE, PRNL_EMITTER_TYPE, mTypes));
 
 	// Enabled: Bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization

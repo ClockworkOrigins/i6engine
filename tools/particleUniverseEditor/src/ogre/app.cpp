@@ -22,10 +22,10 @@
 #include "wx/ogre/rendersystem.h"
 #include "wx/ogre/resources.h"
 
-bool wxOgreApp::Initialize(int & argc, wxChar ** argv) {
+bool wxOgreApp::Initialize(int & ac, wxChar ** av) {
     _renderSystem = new wxOgreRenderSystem();
     _resources  = new wxOgreResources();
-    return wxApp::Initialize(argc, argv);
+    return wxApp::Initialize(ac, av);
 }
 
 void wxOgreApp::CleanUp() {

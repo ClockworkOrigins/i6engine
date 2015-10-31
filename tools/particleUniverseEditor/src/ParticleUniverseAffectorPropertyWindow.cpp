@@ -209,7 +209,7 @@ void AffectorPropertyWindow::_initProperties(void) {
 	mTypes.Add(CST_AFFECTOR_TEXTURE_ROTATOR);
 	mTypes.Add(CST_AFFECTOR_VELOCITY_MATCHING);
 	mTypes.Add(CST_AFFECTOR_VORTEX);
-	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_AFFECTOR_TYPE, PRNL_AFFECTOR_TYPE, mTypes));
+	Append(new wxEnumProperty(PRNL_AFFECTOR_TYPE, PRNL_AFFECTOR_TYPE, mTypes));
 
 	// Enabled: Bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization

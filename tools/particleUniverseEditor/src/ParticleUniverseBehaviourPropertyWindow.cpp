@@ -71,7 +71,7 @@ void BehaviourPropertyWindow::_initProperties() {
 
 	// Type
 	mTypes.Add(CST_BEHAVIOUR_SLAVE);
-	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_BEHAVIOUR_TYPE, PRNL_BEHAVIOUR_TYPE, mTypes));
+	Append(new wxEnumProperty(PRNL_BEHAVIOUR_TYPE, PRNL_BEHAVIOUR_TYPE, mTypes));
 }
 
 void BehaviourPropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {

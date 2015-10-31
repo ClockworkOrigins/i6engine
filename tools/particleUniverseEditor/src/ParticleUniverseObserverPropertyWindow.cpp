@@ -207,7 +207,7 @@ void ObserverPropertyWindow::_initProperties() {
 	mTypes.Add(CST_OBSERVER_ON_RANDOM);
 	mTypes.Add(CST_OBSERVER_ON_TIME);
 	mTypes.Add(CST_OBSERVER_ON_VELOCITY);
-	wxPGProperty * pid = Append(new wxEnumProperty(PRNL_OBSERVER_TYPE, PRNL_OBSERVER_TYPE, mTypes));
+	Append(new wxEnumProperty(PRNL_OBSERVER_TYPE, PRNL_OBSERVER_TYPE, mTypes));
 
 	// Enabled: bool
 	SetBoolChoices (_("True"), _("False")); // Forces Internationalization
@@ -220,7 +220,7 @@ void ObserverPropertyWindow::_initProperties() {
 	mParticleTypes.Add(PT_AFFECTOR);
 	mParticleTypes.Add(PT_SYSTEM);
 	mParticleTypes.Add(PT_TECHNIQUE);
-	pid = Append(new wxEnumProperty(PRNL_PARTICLE_TYPE, PRNL_PARTICLE_TYPE, mParticleTypes));
+	Append(new wxEnumProperty(PRNL_PARTICLE_TYPE, PRNL_PARTICLE_TYPE, mParticleTypes));
 
 	// Observe Interval: ParticleUniverse::Real
 	Append(new wxFloatProperty(PRNL_OBSERVE_INTERVAL, PRNL_OBSERVE_INTERVAL, 0.0f));

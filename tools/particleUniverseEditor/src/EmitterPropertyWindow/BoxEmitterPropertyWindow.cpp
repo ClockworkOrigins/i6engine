@@ -118,4 +118,3 @@ void BoxEmitterPropertyWindow::copyDepthToBoxEmitter(wxPGProperty* prop, Particl
 {
 	boxEmitter->setDepth(prop->DoGetValue().GetDouble());
 }
-

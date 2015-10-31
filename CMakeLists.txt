@@ -296,10 +296,10 @@ ENDIF(ISIXE_WITH_TOOLS)
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS AND UNIX)
 	find_package(GTK2 REQUIRED gtk)
-	INCLUDE_DIRECTORIES(${GTK2_INCLUDE_DIRS})
+	INCLUDE_DIRECTORIES(SYSTEM ${GTK2_INCLUDE_DIRS})
 	find_package(PkgConfig REQUIRED)
 	pkg_check_modules(GLIB2 glib-2.0)
-	INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIRS})
+	INCLUDE_DIRECTORIES(SYSTEM ${GLIB2_INCLUDE_DIRS})
 ENDIF(ISIXE_WITH_TOOLS AND UNIX)
 
 ###############################################################################
