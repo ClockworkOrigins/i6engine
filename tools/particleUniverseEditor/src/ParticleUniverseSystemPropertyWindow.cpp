@@ -259,11 +259,11 @@ void SystemPropertyWindow::_initProperties() {
 	Append(new wxBoolProperty(PRNL_SYSTEM_SMOOTH_LOD, PRNL_SYSTEM_SMOOTH_LOD, ParticleUniverse::ParticleSystem::DEFAULT_SMOOTH_LOD));
 
 	// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
-//	pid = Append(new wxParentProperty(PRNL_SYSTEM_FAST_FORWARD, PRNL_SYSTEM_FAST_FORWARD));
-//	AppendIn(pid, wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_TIME, PRNL_SYSTEM_FAST_FORWARD_TIME, ParticleUniverse::ParticleSystem::DEFAULT_FAST_FORWARD_TIME));
-//	AppendIn(pid, wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_INTERVAL, PRNL_SYSTEM_FAST_FORWARD_INTERVAL, 0.0f));
-//	SetPropertyEditor(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME, wxPG_EDITOR(SpinCtrl));
-//	SetPropertyEditor(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL, wxPG_EDITOR(SpinCtrl));
+	wxPGProperty * pid = Append(new wxStringProperty(PRNL_SYSTEM_FAST_FORWARD, PRNL_SYSTEM_FAST_FORWARD));
+	AppendIn(pid, new wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_TIME, PRNL_SYSTEM_FAST_FORWARD_TIME, ParticleUniverse::ParticleSystem::DEFAULT_FAST_FORWARD_TIME));
+	AppendIn(pid, new wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_INTERVAL, PRNL_SYSTEM_FAST_FORWARD_INTERVAL, 0.0f));
+	SetPropertyEditor(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME, wxPG_EDITOR(SpinCtrl));
+	SetPropertyEditor(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_INTERVAL, wxPG_EDITOR(SpinCtrl));
 
 	// Main camera name: Ogre::String
 	Append(new wxStringProperty(PRNL_SYSTEM_MAIN_CAMERA_NAME, PRNL_SYSTEM_MAIN_CAMERA_NAME, WX_STRING_BLANK));

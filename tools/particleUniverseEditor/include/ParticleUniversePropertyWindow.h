@@ -256,7 +256,6 @@ static const Ogre::String EXTERN_VORTEX = "Vortex";
 
 class EditComponent;
 class wxPGProperty;
-class wxPGId;
 
 /**	Class that combines a listbox with a button. After clicking, new controlpoints are added
 */
@@ -313,7 +312,7 @@ public:
 		Colour property with alpha
 	*/
 	void appendColourWithAlphaProperty(const wxString & label, const wxString & name, const wxColour & colour);
-	void appendInColourWithAlphaProperty(wxPGId & id, const wxString & label, const wxString & name, const wxColour & colour);
+	void appendInColourWithAlphaProperty(wxPGProperty * id, const wxString & label, const wxString & name, const wxColour & colour);
 	void doSetColourWithAlpha(const wxString & name, const wxColour & colour, bool nameIsBaseName = false);
 	const wxColour & doGetColourWithAlpha(const wxString & name, wxColour & colour, bool nameIsBaseName = false);
 

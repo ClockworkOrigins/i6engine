@@ -128,8 +128,8 @@ void MeshSurfaceEmitterPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("EmitterMeshSurface.html");
 
 	// Mesh name: Ogre::String
-//	wxPGProperty* pid = Append(new MeshProperty(PRNL_MESH_SURFACE_EMITTER_NAME, PRNL_MESH_SURFACE_EMITTER_NAME));
-//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+	wxPGProperty * pid = Append(new wxStringProperty(PRNL_MESH_SURFACE_EMITTER_NAME, PRNL_MESH_SURFACE_EMITTER_NAME));
+	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Distribution: List
 	wxArrayString distribution;

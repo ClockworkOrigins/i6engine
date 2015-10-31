@@ -123,14 +123,14 @@ void EntityRendererPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("RendererEntity.html");
 
 	// Mesh Name: Ogre::String
-//	wxPGProperty* pid = Append(new MeshProperty(PRNL_MESH_NAME, PRNL_MESH_NAME));
-//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+	wxPGProperty * pid = Append(new wxStringProperty(PRNL_MESH_NAME, PRNL_MESH_NAME));
+	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Orientation Type: List
-//	mOrientationTypes.Add(OTT_ORIENTED_SELF);
-//	mOrientationTypes.Add(OTT_ORIENTED_SELF_MIRRORED);
-//	mOrientationTypes.Add(OTT_ORIENTED_SHAPE);
-//	pid = Append(new wxEnumProperty(PRNL_ORIENTATION_TYPE, PRNL_ORIENTATION_TYPE, mOrientationTypes));
+	mOrientationTypes.Add(OTT_ORIENTED_SELF);
+	mOrientationTypes.Add(OTT_ORIENTED_SELF_MIRRORED);
+	mOrientationTypes.Add(OTT_ORIENTED_SHAPE);
+	pid = Append(new wxEnumProperty(PRNL_ORIENTATION_TYPE, PRNL_ORIENTATION_TYPE, mOrientationTypes));
 }
 //-----------------------------------------------------------------------
 void EntityRendererPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)

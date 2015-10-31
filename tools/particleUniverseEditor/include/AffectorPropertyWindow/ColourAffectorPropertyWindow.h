@@ -39,7 +39,6 @@ static wxString PRNL_COLOUR_OPERATION = wxT("");
 static wxString COP_SET = wxT("");
 static wxString COP_MULTIPLY = wxT("");
 
-
 /**
 */
 class ColourAffectorPropertyWindow : public AffectorPropertyWindow

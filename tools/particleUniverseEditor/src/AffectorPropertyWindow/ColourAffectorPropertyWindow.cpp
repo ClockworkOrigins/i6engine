@@ -22,7 +22,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 /*ParentPropertyTimeAndColour::ParentPropertyTimeAndColour(
 	const wxString& label,
 	const wxString& name) :
-	wxParentPropertyClass(label, name),
+	wxStringProperty(label, name),
 	mTimeAndColour(0)
 {
 }
@@ -151,7 +151,7 @@ void ColourAffectorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorColour.html");
 
 	// Time and Colour: List
-//	wxPGProperty* pid = Append(new ParentPropertyTimeAndColour(PRNL_TIME_AND_COLOUR, PRNL_TIME_AND_COLOUR));
+//	wxPGProperty * pid = Append(new ParentPropertyTimeAndColour(PRNL_TIME_AND_COLOUR, PRNL_TIME_AND_COLOUR));
 //	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Colour Operation: List of types

@@ -121,8 +121,8 @@ void VertexEmitterPropertyWindow::_initProperties(void)
 	SetPropertyEditor(PRNL_VERTEX_EMITTER_ITERATION, wxPG_EDITOR(SpinCtrl));
 
 	// Step: Ogre::String
-//	wxPGProperty* pid = Append(new MeshProperty(PRNL_VERTEX_EMITTER_MESH_NAME, PRNL_VERTEX_EMITTER_MESH_NAME));
-//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+	wxPGProperty * pid = Append(new wxStringProperty(PRNL_VERTEX_EMITTER_MESH_NAME, PRNL_VERTEX_EMITTER_MESH_NAME));
+	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 }
 //-----------------------------------------------------------------------
 void VertexEmitterPropertyWindow::copyStepToVertexEmitter(wxPGProperty* prop, ParticleUniverse::VertexEmitter* vertexEmitter)

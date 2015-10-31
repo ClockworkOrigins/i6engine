@@ -197,17 +197,17 @@ const wxString & PropertyWindow::doGetString(const wxString & name) {
 }
 
 void PropertyWindow::appendColourWithAlphaProperty(const wxString & label, const wxString & name, const wxColour & colour) {
-//	wxPGProperty * pid = Append(new wxParentProperty(label, name));
-//	AppendIn(pid, wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
-//	wxPGProperty * aid = AppendIn(pid, wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
-//	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
+	wxPGProperty * pid = Append(new wxStringProperty(label, name));
+	AppendIn(pid, new wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
+	wxPGProperty * aid = AppendIn(pid, new wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
+	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
 }
 
-void PropertyWindow::appendInColourWithAlphaProperty(wxPGId & id, const wxString & label, const wxString & name, const wxColour & colour) {
-//	wxPGProperty * pid = AppendIn(id, wxParentProperty(label, name));
-//	AppendIn(pid, wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
-//	wxPGProperty * aid = AppendIn(pid, wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
-//	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
+void PropertyWindow::appendInColourWithAlphaProperty(wxPGProperty * id, const wxString & label, const wxString & name, const wxColour & colour) {
+	wxPGProperty * pid = AppendIn(id, new wxStringProperty(label, name));
+	AppendIn(pid, new wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
+	wxPGProperty * aid = AppendIn(pid, new wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
+	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
 }
 
 void PropertyWindow::doSetColourWithAlpha(const wxString & name, const wxColour & colour, bool nameIsBaseName) {
@@ -671,22 +671,22 @@ void PropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {
 	} else if (label.Contains(PRNL_TYPE)) {
 		// Dynamic attribute changed.
 		if (!prop) return;
-		assert(event.GetPropertyValue().GetInteger() < _types.size());
+		assert(size_t(event.GetPropertyValue().GetInteger()) < _types.size());
 		name = i6engine::utils::split(event.GetPropertyName().ToStdString(), ".").front(); // Reuse of 'name'
 		label = i6engine::utils::split(event.GetPropertyName().ToStdString(), ".").front(); // Reuse of 'label'
-		if (_types[event.GetPropertyValue().GetInteger()] == DYN_FIXED) {
+		if (_types[size_t(event.GetPropertyValue().GetInteger())] == DYN_FIXED) {
 			ParticleUniverse::DynamicAttributeFixed dynAttr;
 			appendDynamicAttribute(label, name, dynAttr);
 			prop = GetPropertyByName(event.GetPropertyName()); // Property has been replaced, so search it again to get the new pointer
 			prop->SetValueFromString(DYN_FIXED);
 		}
-		else if (_types[event.GetPropertyValue().GetInteger()] == DYN_RANDOM) {
+		else if (_types[size_t(event.GetPropertyValue().GetInteger())] == DYN_RANDOM) {
 			ParticleUniverse::DynamicAttributeRandom dynAttr;
 			appendDynamicAttribute(label, name, dynAttr);
 			prop = GetPropertyByName(event.GetPropertyName()); // Property has been replaced, so search it again to get the new pointer
 			prop->SetValueFromString(DYN_RANDOM);
 		}
-		else if (_types[event.GetPropertyValue().GetInteger()] == DYN_CURVED) {
+		else if (_types[size_t(event.GetPropertyValue().GetInteger())] == DYN_CURVED) {
 			// Show dialog to create a curve with control points
 			ParticleUniverse::DynamicAttributeCurved dynAttr;
 			appendDynamicAttribute(label, name, dynAttr);
@@ -718,7 +718,7 @@ void PropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {
 				mInterpolationTypeMap.insert(std::make_pair(name, type));
 			}
 		}
-		else if (_types[event.GetPropertyValue().GetInteger()] == DYN_OSCILLATE) {
+		else if (_types[size_t(event.GetPropertyValue().GetInteger())] == DYN_OSCILLATE) {
 			ParticleUniverse::DynamicAttributeOscillate dynAttr;
 			appendDynamicAttribute(label, name, dynAttr);
 			prop = GetPropertyByName(event.GetPropertyName()); // Property has been replaced, so search it again to get the new pointer
