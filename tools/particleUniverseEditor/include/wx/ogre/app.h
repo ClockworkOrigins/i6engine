@@ -38,18 +38,18 @@ public:
      *         must override it, do not forget to call the base class
      *         version!
      */
-    virtual bool Initialize(int & ac, wxChar ** av);
+	virtual bool Initialize(int & ac, wxChar ** av) override;
 
     /** Clean the Ogre Render Engine instance. 
      * @remark This is the very last function called on wxApp object 
      *         before it is destroyed. If you override it do not 
      *         forget to call the base class version!
      */
-    virtual void CleanUp();
+    virtual void CleanUp() override;
 
 protected:
     wxOgreRenderSystem * _renderSystem;
-    wxOgreResources *    _resources;
+    wxOgreResources * _resources;
 };
 
 #endif /* __WX_OGRE_APP_H__ */
