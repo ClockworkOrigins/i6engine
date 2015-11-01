@@ -57,7 +57,7 @@ void ImageX::filterAlphaFromBackgroundColour(const Ogre::ColourValue & backgroun
 	}
 }
 
-Recorder::Recorder(Ogre::Camera * camera) : FrameListener(), mFramesPerSecond(27), mFrameLength(0.037), mTimeElapsed(0.0), mTimeElapsedFrame(0.0), mStart(0.0), mEnd(0.0), mVideoDirectory(Ogre::StringUtil::BLANK), mFileNameSuffix(".png"), mImageWidth(640), mImageHeight(480), mParticleSystem(nullptr), mCamera(camera), mRecording(false), mPauseTime(0.2), mRenderTexture(nullptr), mFrameCounter(0), mInitialised(false), mImageData(nullptr), mPixelBox(), mFilter(IF_NONE), mBackgroundColour(Ogre::ColourValue::Black), mOldViewport(nullptr) {
+Recorder::Recorder(Ogre::Camera * camera) : FrameListener(), mFramesPerSecond(27), mFrameLength(0.037), mTimeElapsed(0.0), mTimeElapsedFrame(0.0), mStart(0.0), mEnd(0.0), mVideoDirectory(Ogre::StringUtil::BLANK), mFileNameSuffix(".png"), mImageWidth(640), mImageHeight(480), mParticleSystem(nullptr), mCamera(camera), mRecording(false), mPauseTime(0.2), mRenderTexture(nullptr), mFrameCounter(0), mInitialised(false), mImageData(nullptr), mPixelBox(nullptr), mFilter(IF_NONE), mBackgroundColour(Ogre::ColourValue::Black), mOldViewport(nullptr) {
 	// Create an image
 	mImage = new ImageX();
 	mPixelFormat = Ogre::PF_R8G8B8A8;
