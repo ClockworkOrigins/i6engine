@@ -72,6 +72,7 @@ Recorder::Recorder(Ogre::Camera * camera) : FrameListener(), mFramesPerSecond(27
 Recorder::~Recorder() {
 	// Delete image
 	delete mImage;
+	delete mPixelBox;
 
 	// Delete image memory
 	if (mImageData) {
