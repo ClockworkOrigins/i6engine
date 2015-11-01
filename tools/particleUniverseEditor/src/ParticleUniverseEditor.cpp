@@ -50,6 +50,7 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/cmndata.h"
 #include "wx/colordlg.h"
+#include "wx/evtloop.h"
 #include "wx/splitter.h"
 #include "wx/propgrid/propgridiface.h"
 
@@ -173,6 +174,8 @@ ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow * parent, wxWi
 
 	// Create menu bar
 	SetMenu();
+
+	Connect(wxID_ANY, wxEVT_CLOSE_WINDOW, wxCloseEventHandler(ParticleUniverseEditorFrame::OnClose));
 }
 
 bool ParticleUniverseEditorFrame::Destroy() {
@@ -1168,6 +1171,7 @@ void ParticleUniverseEditorFrame::AfterInit(wxOgreResources * ogreResMan) {
 
 void ParticleUniverseEditorFrame::doQuit() {
 	Close(true);
+	wxEventLoopBase::GetActive()->Exit(0);
 }
 
 void ParticleUniverseEditorFrame::OnCompile(wxCommandEvent & event) {
@@ -1789,6 +1793,11 @@ void ParticleUniverseEditorFrame::OnTemplatesClick(wxCommandEvent & event) {
 	mTextCtrl->Thaw();
 	mEditNotebookPage->Thaw();
 	mControl->Thaw();
+}
+
+void ParticleUniverseEditorFrame::OnClose(wxCloseEvent & event) {
+	event.Skip(true);
+	wxEventLoopBase::GetActive()->Exit(0);
 }
 
 void ParticleUniverseEditorFrame::notifyScriptChanged() {

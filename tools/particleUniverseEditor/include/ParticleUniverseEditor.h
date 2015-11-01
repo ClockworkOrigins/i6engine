@@ -191,6 +191,7 @@ private:
 	void OnPaint(wxPaintEvent & WXUNUSED(event));
 	void OnTemplatesClick(wxCommandEvent & event);
 	void doWindowLeave(wxMouseEvent & event);
+	void OnClose(wxCloseEvent & event);
 	void validateAndReparse();
 	bool createNewSystem(const ParticleUniverse::String & templateName, bool forcedByEditTab = false);
 	void createParticleSystemCopyForEditPage(const ParticleUniverse::String & templateName, ParticleUniverse::ParticleSystem * partSystem);
