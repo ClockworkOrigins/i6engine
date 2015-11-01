@@ -112,7 +112,7 @@ void GeometryRotatorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorGeometryRotator.html");
 
 	// Use own rotation speed: bool
-	Append(wxBoolProperty(PRNL_USE_OWN_ROTATION, PRNL_USE_OWN_ROTATION, ParticleUniverse::GeometryRotator::DEFAULT_USE_OWN));
+	Append(new wxBoolProperty(PRNL_USE_OWN_ROTATION, PRNL_USE_OWN_ROTATION, ParticleUniverse::GeometryRotator::DEFAULT_USE_OWN));
 
 	// Rotation speed: DynamicAttribute
 	ParticleUniverse::DynamicAttributeFixed dynAttr;

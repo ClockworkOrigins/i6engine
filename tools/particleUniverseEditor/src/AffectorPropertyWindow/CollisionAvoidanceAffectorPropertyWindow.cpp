@@ -79,6 +79,6 @@ void CollisionAvoidanceAffectorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorCollisionAvoidance.html");
 
 	// Avoidance Radius: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_COLLISON_AVOIDANCE_RADIUS, PRNL_COLLISON_AVOIDANCE_RADIUS, ParticleUniverse::CollisionAvoidanceAffector::DEFAULT_RADIUS));
+	Append(new wxFloatProperty(PRNL_COLLISON_AVOIDANCE_RADIUS, PRNL_COLLISON_AVOIDANCE_RADIUS, ParticleUniverse::CollisionAvoidanceAffector::DEFAULT_RADIUS));
 	SetPropertyEditor(PRNL_COLLISON_AVOIDANCE_RADIUS, wxPG_EDITOR(SpinCtrl));
 }

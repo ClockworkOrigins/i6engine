@@ -27,7 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/ogre/prerequisites.h"
 
-#include "OGRE/OgreSingleton.h"
+#include "OGRE/OgreCamera.h"
 
 class OrthoCameraGizmo;
 

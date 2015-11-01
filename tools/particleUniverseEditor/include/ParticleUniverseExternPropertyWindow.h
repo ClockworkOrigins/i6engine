@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_EXTERN_PROPERTY_WINDOW_H__
-#define __PUED_EXTERN_PROPERTY_WINDOW_H__
+#ifndef __PUED_EXTERNPROPERTYWINDOW_H__
+#define __PUED_EXTERNPROPERTYWINDOW_H__
 
 #include "ParticleUniversePropertyWindow.h"
 
@@ -34,57 +34,55 @@ static wxString PRNL_PHYSX_COLLISION_GROUP = wxT("");
 
 /**	
 */
-class ExternPropertyWindow : public PropertyWindow
-{
-	public:
-		ExternPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		ExternPropertyWindow(ExternPropertyWindow* externPropertyWindow);
-		~ExternPropertyWindow(void) {}
+class ExternPropertyWindow : public PropertyWindow {
+public:
+	ExternPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name);
+	ExternPropertyWindow(ExternPropertyWindow * externPropertyWindow);
+	~ExternPropertyWindow() {}
 
-		/**
-			Copy basic extern properties from a window to an extern
-		*/
-		virtual void copyAttributeToExtern(wxPGProperty* prop, wxString propertyName);
+	/**
+		Copy basic extern properties from a window to an extern
+	*/
+	virtual void copyAttributeToExtern(wxPGProperty * prop, wxString propertyName);
 
-		/**
-			Copy basic extern properties from an extern to a window
-		*/
-		virtual void copyAttributesFromExtern(ParticleUniverse::Extern* externObject);
+	/**
+		Copy basic extern properties from an extern to a window
+	*/
+	virtual void copyAttributesFromExtern(ParticleUniverse::Extern * externObject);
 
-		/**
-			Copy basic extern properties from another extern property window
-		*/
-		virtual void copyAttributesFromPropertyWindow(ExternPropertyWindow* externPropertyWindow);
+	/**
+		Copy basic extern properties from another extern property window
+	*/
+	virtual void copyAttributesFromPropertyWindow(ExternPropertyWindow * externPropertyWindow);
 
-		/**
-			See PropertyWindow
-		*/
-		virtual void onPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		See PropertyWindow
+	*/
+	virtual void onPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Only handle parent properties if they are changed.
-		*/
-		void onParentPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		Only handle parent properties if they are changed.
+	*/
+	void onParentPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Updating function
-		*/
-		void replaceExternType(wxPGProperty* prop);
+	/**
+		Updating function
+	*/
+	void replaceExternType(wxPGProperty * prop);
 
-		/**
-			Determine selected extern type (take internationalisation into account)
-		*/
-		const Ogre::String& getExternTypeByProperty(wxPGProperty* prop);
+	/**
+		Determine selected extern type (take internationalisation into account)
+	*/
+	const Ogre::String & getExternTypeByProperty(wxPGProperty * prop);
 
-	protected:
-		wxArrayString mTypes;
-		wxArrayString mSpecialisation;
+protected:
+	wxArrayString mTypes;
+	wxArrayString mSpecialisation;
 
-		/**
-			Initialises all extern properties
-		*/
-		virtual void _initProperties(void);
+	/**
+		Initialises all extern properties
+	*/
+	virtual void _initProperties();
 };
 
-#endif
-
+#endif /* __PUED_EXTERNPROPERTYWINDOW_H__ */

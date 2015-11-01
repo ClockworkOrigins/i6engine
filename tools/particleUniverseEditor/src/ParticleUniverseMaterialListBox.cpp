@@ -27,43 +27,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/ogre/utils.h"
 
-//-----------------------------------------------------------------------
-MaterialListBox::MaterialListBox(MaterialTab* materialTab,
-	wxWindow* parent, 
-	wxWindowID id,
-	const wxPoint& pos,
-	const wxSize& size)	: 
-	wxListBox(parent, id, pos, size, 0, wxLB_SORT),
-	mMaterialTab(materialTab)
-{
+#include "OGRE/OgreMaterialManager.h"
 
+MaterialListBox::MaterialListBox(MaterialTab * materialTab, wxWindow * parent, wxWindowID id, const wxPoint & pos, const wxSize & size) : wxListBox(parent, id, pos, size, 0, nullptr, wxLB_SORT), mMaterialTab(materialTab) {
 	Connect(wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler(MaterialListBox::OnMaterialsClick));
 }
-//-----------------------------------------------------------------------
-MaterialListBox::~MaterialListBox(void)
-{
+
+MaterialListBox::~MaterialListBox() {
 }
-//-----------------------------------------------------------------------
-void MaterialListBox::loadMaterials(void)
-{
+
+void MaterialListBox::loadMaterials() {
 	Clear();
 	Ogre::ResourceManager::ResourceMapIterator materialIterator = Ogre::MaterialManager::getSingleton().getResourceIterator();
-	while (materialIterator.hasMoreElements())
-	{
-		Ogre::String s = (materialIterator.peekNextValue().staticCast<Ogre::Material>())->getName();
+	while (materialIterator.hasMoreElements()) {
+		Ogre::String s = materialIterator.peekNextValue().staticCast<Ogre::Material>()->getName();
 		Append(ogre2wx(s));
 		materialIterator.moveNext();
 	}
 }
-//-----------------------------------------------------------------------
-void MaterialListBox::OnMaterialsClick(wxCommandEvent& event)
-{
+
+void MaterialListBox::OnMaterialsClick(wxCommandEvent & event) {
 	wxString param = GetStringSelection();
 	mMaterialTab->selectMaterial(param);
 }
-//-----------------------------------------------------------------------
-void MaterialListBox::addMaterialName(wxString& materialName)
-{
+
+void MaterialListBox::addMaterialName(wxString & materialName) {
 	Insert(materialName, 0);
 	Select(0);
 }

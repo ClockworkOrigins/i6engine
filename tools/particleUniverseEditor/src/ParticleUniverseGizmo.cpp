@@ -25,6 +25,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseGizmoManager.h"
 
+#include "OGRE/OgreViewport.h"
+
 const Ogre::Real Gizmo::SCALE_NODE_ZOOM_FACTOR = 0.000333f;
 const Ogre::Real Gizmo::SCALE_ACTION_FACTOR = 0.001f;
 const Ogre::Real Gizmo::SCALE_NODE_ORTHOZOOM_FACTOR = 0.384f;

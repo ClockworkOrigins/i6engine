@@ -25,6 +25,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseGizmoManager.h"
 
+#include "OGRE/OgreEntity.h"
+#include "OGRE/OgreSceneManager.h"
+
 const Ogre::Real GizmoRotation::SCALE_NODE_ROTATION_OUTER = 28.0f;
 const Ogre::Real GizmoRotation::SCALE_NODE_ROTATION = 25.0f;
 //-----------------------------------------------------------------------

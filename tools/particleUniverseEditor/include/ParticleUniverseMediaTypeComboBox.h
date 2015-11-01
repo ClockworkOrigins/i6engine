@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_MEDIATYPE_COMBOBOX_H__
-#define __PUED_MEDIATYPE_COMBOBOX_H__
+#ifndef __PUED_MEDIATYPECOMBOBOX_H__
+#define __PUED_MEDIATYPECOMBOBOX_H__
 
 #include "wx/ogre/prerequisites.h"
 
@@ -18,23 +18,18 @@ You can find a copy of the Commercial License in the Particle Universe package.
 */
 class ConfigDialog;
 
-class MediaTypeComboBox : public wxComboBox
-{
-	public:
-		// Constructor / Destructor
-		MediaTypeComboBox(wxWindow* parent,
-			ConfigDialog* dialog, 
-			wxWindowID id,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize);
-		~MediaTypeComboBox(void) {}
+class MediaTypeComboBox : public wxComboBox {
+public:
+	// Constructor / Destructor
+	MediaTypeComboBox(wxWindow * parent, ConfigDialog * dialog, wxWindowID id, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize);
+	~MediaTypeComboBox() {}
 
-		/**	Handle event
-		*/
-		void OnSelectEvent(wxCommandEvent& event);
+	/**	Handle event
+	*/
+	void OnSelectEvent(wxCommandEvent & event);
 
-	protected:
-		ConfigDialog* mDialog;
+protected:
+	ConfigDialog * mDialog;
 };
 
-#endif
+#endif /* __PUED_MEDIATYPECOMBOBOX_H__ */

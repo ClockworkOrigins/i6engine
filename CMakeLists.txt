@@ -114,13 +114,13 @@ ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
 	set (CMAKE_CXX_FLAGS_DEBUG		"${CMAKE_CXX_FLAGS_DEBUG} /MP")
 	set (CMAKE_CXX_FLAGS_MINSIZEREL	"${CMAKE_CXX_FLAGS_MINSIZEREL} /MP")
 	set (CMAKE_CXX_FLAGS_RELEASE		"${CMAKE_CXX_FLAGS_RELEASE} /MP")
-	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MP")
+	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MP /Qvec-report:1 /Qpar /Qpar-report:1")
 ELSE()
 	message (SEND_INFO "Unknown C++ compiler \"${CMAKE_CXX_COMPILER_ID}\". Only GNU, Clang and MSVC are completely supported.")
 ENDIF()
 
 #########################################################################
-#Global Directory Definitions
+# Global Directory Definitions
 #########################################################################
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules/" ${CMAKE_MODULE_PATH})
@@ -131,7 +131,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 
 #########################################################################
-#Library Section
+# Library Section
 #########################################################################
 
 #----------------------------------------------------
@@ -281,12 +281,14 @@ ENDIF(NOT WIN32)
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS)
 	SET(LIBNAME "WXWIDGETS")
-	SET(LIBHEADER "wx/wx.h")
 	SET(WXWIDGETS_ROOT ${ISIXE_DEP_DIR}/wxWidgets)
 	IF(WIN32)
-		find_package(EasyFind REQUIRED COMPONENTS wxbase28 wxbase28_net wxbase28_xml wxexpat wxjpeg wxmsw28_adv wxmsw28_aui wxmsw28_core wxmsw28_html wxmsw28_media wxmsw28_qa wxmsw28_richtext wxmsw28_xrc wxpng wxtiff wxzlib)
+		SET(LIBHEADER "wx/wx/wx.h")
+		find_package(EasyFind REQUIRED COMPONENTS wxbase30u wxbase30u_net wxbase30u_xml wxexpat wxjpeg wxmsw30u_adv wxmsw30u_aui wxmsw30u_core wxmsw30u_gl wxmsw30u_html wxmsw30u_media wxmsw30u_propgrid wxmsw30u_qa wxmsw30u_ribbon wxmsw30u_richtext wxmsw30u_stc wxmsw30u_webview wxmsw30u_xrc wxpng wxregexu wxscintilla wxtiff wxzlib)
+		include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR}/wx)
 	ELSEIF(UNIX)
-		find_package(EasyFind REQUIRED COMPONENTS wx_baseu-2.8 wx_baseu_net-2.8 wx_baseu_xml-2.8 wx_gtk2u_adv-2.8 wx_gtk2u_aui-2.8 wx_gtk2u_core-2.8 wx_gtk2u_html-2.8 wx_gtk2u_qa-2.8 wx_gtk2u_richtext-2.8 wx_gtk2u_xrc-2.8)
+		SET(LIBHEADER "wx/wx.h")
+		find_package(EasyFind REQUIRED COMPONENTS wx_baseu-3.0 wx_baseu_net-3.0 wx_baseu_xml-3.0 wx_gtk2u_adv-3.0 wx_gtk2u_aui-3.0 wx_gtk2u_core-3.0 wx_gtk2u_html-3.0 wx_gtk2u_qa-3.0 wx_gtk2u_propgrid-3.0 wx_gtk2u_richtext-3.0 wx_gtk2u_xrc-3.0)
 	ENDIF(WIN32)
 	include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR})
 ENDIF(ISIXE_WITH_TOOLS)
@@ -295,14 +297,11 @@ ENDIF(ISIXE_WITH_TOOLS)
 # GTK
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS AND UNIX)
-	include_directories(SYSTEM /usr/include/gtk-2.0)
-	include_directories(SYSTEM /usr/include/glib-2.0)
-	include_directories(SYSTEM /usr/lib/x86_64-linux-gnu/glib-2.0/include/)
-	include_directories(SYSTEM /usr/include/cairo/)
-	include_directories(SYSTEM /usr/include/pango-1.0/)
-	include_directories(SYSTEM /usr/lib/x86_64-linux-gnu/gtk-2.0/include/)
-	include_directories(SYSTEM /usr/include/gdk-pixbuf-2.0/)
-	include_directories(SYSTEM /usr/include/atk-1.0/)
+	find_package(GTK2 REQUIRED gtk)
+	INCLUDE_DIRECTORIES(SYSTEM ${GTK2_INCLUDE_DIRS})
+	find_package(PkgConfig REQUIRED)
+	pkg_check_modules(GLIB2 glib-2.0)
+	INCLUDE_DIRECTORIES(SYSTEM ${GLIB2_INCLUDE_DIRS})
 ENDIF(ISIXE_WITH_TOOLS AND UNIX)
 
 ###############################################################################
@@ -476,7 +475,7 @@ IF(WIN32)
 	endforeach()
 
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-archive.bat.in ${CMAKE_BINARY_DIR}/build-archive.bat @ONLY)
-	
+
 	add_custom_target(BuildReleaseSourceArchive COMMAND build-archive.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 	add_custom_target(BuildRevisionSourceArchive COMMAND build-archive.bat packageRevision WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 ENDIF(WIN32)

@@ -39,45 +39,7 @@ static wxString PRNL_COLOUR_OPERATION = wxT("");
 static wxString COP_SET = wxT("");
 static wxString COP_MULTIPLY = wxT("");
 
-/**	Class that creates a time with colour property. After clicking, a new time / colour combination is added
-*/
-class ParentPropertyTimeAndColour : public wxParentPropertyClass
-{
-	public:
-		ParentPropertyTimeAndColour(
-			const wxString& label, 
-			const wxString& name);
-		virtual ~ParentPropertyTimeAndColour(void) {}
-
-		/**	
-		*/
-		virtual bool OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event);
-
-		/**	Add the position
-		*/
-		//wxPGId* addTimeAndColour(wxPropertyGrid* propgrid, ParticleUniverse::Real time = 0.0f, wxColor colour = wxColour(255, 255, 255, 255));
-
-		/**	Return the number of time/colour entries.
-		*/
-		int getNumberOfTimeAndColourEntries(void);
-
-		/**	Returns the time value of the entry identified by index.
-		*/
-		//ParticleUniverse::Real getTime(wxPropertyGrid* propgrid, unsigned int index);
-
-		/**	Returns the colour value of the entry identified by index.
-		*/
-		//const wxColor& getColour(wxPropertyGrid* propgrid, unsigned int index, wxColor& colour);
-
-		/**	Removes all the child properties.
-		*/
-		void reset(void);
-
-	protected:
-		unsigned int mTimeAndColour;
-};
-
-/**	
+/**
 */
 class ColourAffectorPropertyWindow : public AffectorPropertyWindow
 {
@@ -106,7 +68,7 @@ class ColourAffectorPropertyWindow : public AffectorPropertyWindow
 			See AffectorPropertyWindow
 		*/
 		virtual void copyAttributeToAffector(wxPGProperty* prop, wxString propertyName);
-		
+
 		/**
 			See AffectorPropertyWindow
 		*/

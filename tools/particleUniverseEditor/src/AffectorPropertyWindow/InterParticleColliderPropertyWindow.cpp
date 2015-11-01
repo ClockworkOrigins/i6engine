@@ -82,7 +82,7 @@ void InterParticleColliderPropertyWindow::copyAttributesFromAffector(ParticleUni
 	doSetDouble(PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT, interParticleCollider->getAdjustment());
 
 	// Collision response: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_COLLISON_RESPONSE);
+	wxPGProperty* propTo = GetProperty(PRNL_COLLISON_RESPONSE);
 	ParticleUniverse::InterParticleCollider::InterParticleCollisionResponse collisionResponse = 
 		interParticleCollider->getInterParticleCollisionResponse();
 	wxString collisionResponseString = CR_AVERAGE_VELOCITY;
@@ -104,7 +104,7 @@ void InterParticleColliderPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("ColliderInterParticle.html");
 
 	// Adjustment: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT, 
+	Append(new wxFloatProperty(PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT, 
 		PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT, 
 		ParticleUniverse::InterParticleCollider::DEFAULT_ADJUSTMENT));
 	SetPropertyEditor(PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT, wxPG_EDITOR(SpinCtrl));
@@ -112,5 +112,5 @@ void InterParticleColliderPropertyWindow::_initProperties(void)
 	// Collision response: List
 	mCollisionResponse.Add(CR_AVERAGE_VELOCITY);
 	mCollisionResponse.Add(CR_ANGLE_BASED_VELOCITY);
-	Append(wxEnumProperty(PRNL_COLLISON_RESPONSE, PRNL_COLLISON_RESPONSE, mCollisionResponse));
+	Append(new wxEnumProperty(PRNL_COLLISON_RESPONSE, PRNL_COLLISON_RESPONSE, mCollisionResponse));
 }

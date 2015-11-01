@@ -80,7 +80,7 @@ void OnVelocityObserverPropertyWindow::copyAttributesFromObserver(ParticleUniver
 	ParticleUniverse::OnVelocityObserver* onVelocityObserver = static_cast<ParticleUniverse::OnVelocityObserver*>(observer);
 
 	// Velocity threshold - compare: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_ON_VELOCITY_COMPARE);
+	wxPGProperty* propTo = GetProperty(PRNL_ON_VELOCITY_COMPARE);
 	ParticleUniverse::ComparisionOperator compare = onVelocityObserver->getCompare();
 	wxString compareString = PRNL_COMPARE_LESS_THAN;
 	if (compare == ParticleUniverse::CO_GREATER_THAN)
@@ -112,9 +112,9 @@ void OnVelocityObserverPropertyWindow::_initProperties(void)
 	mCompare.Add(PRNL_COMPARE_LESS_THAN);
 	mCompare.Add(PRNL_COMPARE_GREATER_THAN);
 	mCompare.Add(PRNL_COMPARE_EQUALS);
-	Append(wxEnumProperty(PRNL_ON_VELOCITY_COMPARE, PRNL_ON_VELOCITY_COMPARE, mCompare));
+	Append(new wxEnumProperty(PRNL_ON_VELOCITY_COMPARE, PRNL_ON_VELOCITY_COMPARE, mCompare));
 
 	// Velocity threshold - value: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_ON_VELOCITY_THRESHOLD, PRNL_ON_VELOCITY_THRESHOLD, ParticleUniverse::OnVelocityObserver::DEFAULT_VELOCITY_THRESHOLD));
+	Append(new wxFloatProperty(PRNL_ON_VELOCITY_THRESHOLD, PRNL_ON_VELOCITY_THRESHOLD, ParticleUniverse::OnVelocityObserver::DEFAULT_VELOCITY_THRESHOLD));
 	SetPropertyEditor(PRNL_ON_VELOCITY_THRESHOLD, wxPG_EDITOR(SpinCtrl));
 }

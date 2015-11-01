@@ -85,7 +85,7 @@ void OnTimeObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::
 	ParticleUniverse::OnTimeObserver* onTimeObserver = static_cast<ParticleUniverse::OnTimeObserver*>(observer);
 
 	// Time Threshold - Compare: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_ON_TIME_COMPARE);
+	wxPGProperty* propTo = GetProperty(PRNL_ON_TIME_COMPARE);
 	ParticleUniverse::ComparisionOperator compare = onTimeObserver->getCompare();
 	wxString compareString = PRNL_COMPARE_LESS_THAN;
 	if (compare == ParticleUniverse::CO_GREATER_THAN)
@@ -121,12 +121,12 @@ void OnTimeObserverPropertyWindow::_initProperties(void)
 	mCompare.Add(PRNL_COMPARE_LESS_THAN);
 	mCompare.Add(PRNL_COMPARE_GREATER_THAN);
 	mCompare.Add(PRNL_COMPARE_EQUALS);
-	Append(wxEnumProperty(PRNL_ON_TIME_COMPARE, PRNL_ON_TIME_COMPARE, mCompare));
+	Append(new wxEnumProperty(PRNL_ON_TIME_COMPARE, PRNL_ON_TIME_COMPARE, mCompare));
 
 	// Time Threshold - Value: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_ON_TIME_THRESHOLD, PRNL_ON_TIME_THRESHOLD, ParticleUniverse::OnTimeObserver::DEFAULT_THRESHOLD));
+	Append(new wxFloatProperty(PRNL_ON_TIME_THRESHOLD, PRNL_ON_TIME_THRESHOLD, ParticleUniverse::OnTimeObserver::DEFAULT_THRESHOLD));
 	SetPropertyEditor(PRNL_ON_TIME_THRESHOLD, wxPG_EDITOR(SpinCtrl));
 
 	// Since Start System: bool
-	Append(wxBoolProperty(PRNL_SINCE_START_SYSTEM, PRNL_SINCE_START_SYSTEM, ParticleUniverse::OnTimeObserver::DEFAULT_SINCE_START_SYSTEM));
+	Append(new wxBoolProperty(PRNL_SINCE_START_SYSTEM, PRNL_SINCE_START_SYSTEM, ParticleUniverse::OnTimeObserver::DEFAULT_SINCE_START_SYSTEM));
 }

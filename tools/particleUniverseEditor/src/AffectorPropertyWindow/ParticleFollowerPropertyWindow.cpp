@@ -83,10 +83,10 @@ void ParticleFollowerPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorParticleFollower.html");
 
 	// Min distance: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_MIN_DISTANCE, PRNL_MIN_DISTANCE, ParticleUniverse::ParticleFollower::DEFAULT_MIN_DISTANCE));
+	Append(new wxFloatProperty(PRNL_MIN_DISTANCE, PRNL_MIN_DISTANCE, ParticleUniverse::ParticleFollower::DEFAULT_MIN_DISTANCE));
 	SetPropertyEditor(PRNL_MIN_DISTANCE, wxPG_EDITOR(SpinCtrl));
 
 	// Max distance: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_MAX_DISTANCE, PRNL_MAX_DISTANCE, ParticleUniverse::ParticleFollower::DEFAULT_MAX_DISTANCE));
+	Append(new wxFloatProperty(PRNL_MAX_DISTANCE, PRNL_MAX_DISTANCE, ParticleUniverse::ParticleFollower::DEFAULT_MAX_DISTANCE));
 	SetPropertyEditor(PRNL_MAX_DISTANCE, wxPG_EDITOR(SpinCtrl));
 }

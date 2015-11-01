@@ -39,135 +39,96 @@ class ControlPointControl;
 class ControlPointDialog;
 
 // Sliders to set scale
-class HorizontalSlider : public wxSlider
-{
-	public:
-		HorizontalSlider(
-		ControlPointDialog* parent,
-        wxWindowID id,
-        int value,
-        int minValue,
-        int maxValue,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize);
+class HorizontalSlider : public wxSlider {
+public:
+	HorizontalSlider(ControlPointDialog * parent, wxWindowID id, int value, int minValue, int maxValue, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize);
 
-		/**	Slider moves
-		*/
-		void OnScroll(wxScrollEvent& evt);
+	/**	Slider moves
+	*/
+	void OnScroll(wxScrollEvent & evt);
 
-	protected:
-		ControlPointDialog* mParent;
+protected:
+	ControlPointDialog * mParent;
 };
-//-----------------------------------------------------------------------
-class VerticalSlider : public wxSlider
-{
-	public:
-		VerticalSlider(
-		ControlPointDialog* parent,
-        wxWindowID id,
-        int value,
-        int minValue,
-        int maxValue,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize);
 
-		/**	Slider moves
-		*/
-		void OnScroll(wxScrollEvent& evt);
+class VerticalSlider : public wxSlider {
+public:
+	VerticalSlider(ControlPointDialog * parent, wxWindowID id, int value, int minValue, int maxValue, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize);
 
-	protected:
-		ControlPointDialog* mParent;
+	/**	Slider moves
+	*/
+	void OnScroll(wxScrollEvent & evt);
+
+protected:
+	ControlPointDialog * mParent;
 };
-//-----------------------------------------------------------------------
+
 // Scrollbars
-class HorizontalScrollBar : public wxScrollBar
-{
-	public:
-		HorizontalScrollBar(
-		ControlPointDialog* parent,
-        wxWindowID id,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize);
+class HorizontalScrollBar : public wxScrollBar {
+public:
+	HorizontalScrollBar(ControlPointDialog * parent, wxWindowID id, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize);
 
-		/**	Slider moves
-		*/
-		void OnScroll(wxScrollEvent& evt);
+	/**	Slider moves
+	*/
+	void OnScroll(wxScrollEvent & evt);
 
-	protected:
-		ControlPointDialog* mParent;
+protected:
+	ControlPointDialog * mParent;
 };
-//-----------------------------------------------------------------------
-class VerticalScrollBar : public wxScrollBar
-{
-	public:
-		VerticalScrollBar(
-		ControlPointDialog* parent,
-        wxWindowID id,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize);
 
-		/**	Slider moves
-		*/
-		void OnScroll(wxScrollEvent& evt);
+class VerticalScrollBar : public wxScrollBar {
+public:
+	VerticalScrollBar(ControlPointDialog * parent, wxWindowID id, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize);
 
-	protected:
-		ControlPointDialog* mParent;
+	/**	Slider moves
+	*/
+	void OnScroll(wxScrollEvent & evt);
+
+protected:
+	ControlPointDialog * mParent;
 };
-//-----------------------------------------------------------------------
-class InterpolationRadioBox : public wxRadioBox
-{
-	public:
-		InterpolationRadioBox(ControlPointDialog* parent, wxWindowID id, const wxArrayString& choices, int dim);
-		virtual ~InterpolationRadioBox(void){};
-		void OnInterpolationType(wxCommandEvent& event);
-		void setInterpolationType(ParticleUniverse::InterpolationType type);
 
-	protected:
-		ControlPointDialog* mParent;
+class InterpolationRadioBox : public wxRadioBox {
+public:
+	InterpolationRadioBox(ControlPointDialog * parent, wxWindowID id, const wxArrayString & choices, int dim);
+	virtual ~InterpolationRadioBox() {}
+	void OnInterpolationType(wxCommandEvent & event);
+	void setInterpolationType(ParticleUniverse::InterpolationType type);
+
+protected:
+	ControlPointDialog * mParent;
 };
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
+
 /**	Adding controlpoints
 */
-class ControlPointDialog : public wxDialog
-{
-	public:
-		// Constructor / Destructor
-		ControlPointDialog(
-			ParticleUniverse::InterpolationType interpolationType,
-			const ParticleUniverse::DynamicAttributeCurved::ControlPointList controlPointList,
-			wxWindow* parent, 
-			wxWindowID id, 
-			const wxString& title, 
-			const wxPoint& pos = wxDefaultPosition, 
-			const wxSize& size = wxDefaultSize, 
-			const wxString& name = wxT("ControlPointDialog"));
-		virtual ~ControlPointDialog(void){};
-		void OnReset(wxCommandEvent& event);
-		bool Destroy();
-		void setHorizontalScale(int horizontal);
-		void setVerticalScale(int vertical);
-		void setHorizontalScroll(int horizontal);
-		void setVerticalScroll(int vertical);
-		const ParticleUniverse::DynamicAttributeCurved::ControlPointList getControlPointList(void);
-		ParticleUniverse::InterpolationType getInterpolationType(void);
-		void setInterpolationType(ParticleUniverse::InterpolationType type);
+class ControlPointDialog : public wxDialog {
+public:
+	// Constructor / Destructor
+	ControlPointDialog(ParticleUniverse::InterpolationType interpolationType, const ParticleUniverse::DynamicAttributeCurved::ControlPointList controlPointList, wxWindow * parent, wxWindowID id, const wxString & title, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize, const wxString & name = wxT("ControlPointDialog"));
+	virtual ~ControlPointDialog() {}
+	void OnReset(wxCommandEvent & event);
+	bool Destroy();
+	void setHorizontalScale(int horizontal);
+	void setVerticalScale(int vertical);
+	void setHorizontalScroll(int horizontal);
+	void setVerticalScroll(int vertical);
+	const ParticleUniverse::DynamicAttributeCurved::ControlPointList getControlPointList();
+	ParticleUniverse::InterpolationType getInterpolationType();
+	void setInterpolationType(ParticleUniverse::InterpolationType type);
 
-
-	protected:
-		ControlPointControl* mControlPointControl; // The wxWidgets control with which control points can be editted
-		std::vector<ControlPoint*> mControlPoints; // The controlpoints of the wxWidgets control
-		ParticleUniverse::DynamicAttributeCurved::ControlPointList mControlPointsForPUCommunication; // The controlpoints received from the PU object
-		HorizontalSlider* mHorizontalSlider;
-		VerticalSlider* mVerticalSlider;
-		HorizontalScrollBar* mHorizontalScrollBar;
-		VerticalScrollBar* mVerticalScrollBar;
-		int mPreviousHorizontalScale;
-		int mPreviousVerticalScale;
-		int mPreviousHorizontalScroll;
-		int mPreviousVerticalScroll;
-		InterpolationRadioBox* mRadioBox;
+protected:
+	ControlPointControl * mControlPointControl; // The wxWidgets control with which control points can be editted
+	std::vector<ControlPoint *> mControlPoints; // The controlpoints of the wxWidgets control
+	ParticleUniverse::DynamicAttributeCurved::ControlPointList mControlPointsForPUCommunication; // The controlpoints received from the PU object
+	HorizontalSlider * mHorizontalSlider;
+	VerticalSlider * mVerticalSlider;
+	HorizontalScrollBar * mHorizontalScrollBar;
+	VerticalScrollBar * mVerticalScrollBar;
+	int mPreviousHorizontalScale;
+	int mPreviousVerticalScale;
+	int mPreviousHorizontalScroll;
+	int mPreviousVerticalScroll;
+	InterpolationRadioBox * mRadioBox;
 };
 
-#endif
+#endif /* __PUED_CONTROLPOINT_DIALOG_H__ */

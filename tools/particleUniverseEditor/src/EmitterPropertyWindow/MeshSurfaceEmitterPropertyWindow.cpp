@@ -47,12 +47,12 @@ void MeshSurfaceEmitterPropertyWindow::copyAttributeToEmitter(wxPGProperty* prop
 	if (propertyName == PRNL_MESH_SURFACE_EMITTER_NAME)
 	{
 		// Update emitter with Mesh name
-		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
-		Ogre::String meshName = meshProperty->getMeshName();
-		if (meshName != Ogre::StringUtil::BLANK)
-		{
-			meshSurfaceEmitter->setMeshName(meshName); // No explicit build needed, because the setMeshName() already rebuilds it.
-		}
+//		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
+//		Ogre::String meshName = meshProperty->getMeshName();
+//		if (meshName != Ogre::StringUtil::BLANK)
+//		{
+//			meshSurfaceEmitter->setMeshName(meshName); // No explicit build needed, because the setMeshName() already rebuilds it.
+//		}
 	}
 	else if (propertyName == PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION)
 	{
@@ -85,7 +85,7 @@ void MeshSurfaceEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUnivers
 	doSetString(PRNL_MESH_SURFACE_EMITTER_NAME, meshName);
 
 	// Distribution: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION);
+	wxPGProperty* propTo = GetProperty(PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION);
 	ParticleUniverse::MeshInfo::MeshSurfaceDistribution distribution = meshSurfaceEmitter->getDistribution();
 	wxString distributionString = PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_EDGE;
 	if (distribution == ParticleUniverse::MeshInfo::MSD_HETEROGENEOUS_1)
@@ -128,7 +128,7 @@ void MeshSurfaceEmitterPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("EmitterMeshSurface.html");
 
 	// Mesh name: Ogre::String
-	wxPGId pid = Append(new MeshProperty(PRNL_MESH_SURFACE_EMITTER_NAME, PRNL_MESH_SURFACE_EMITTER_NAME));
+	wxPGProperty * pid = Append(new wxStringProperty(PRNL_MESH_SURFACE_EMITTER_NAME, PRNL_MESH_SURFACE_EMITTER_NAME));
 	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Distribution: List
@@ -138,7 +138,7 @@ void MeshSurfaceEmitterPropertyWindow::_initProperties(void)
 	distribution.Add(PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HETRG_2);
 	distribution.Add(PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HOMOGENEUS);
 	distribution.Add(PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_VERTEX);
-	Append(wxEnumProperty(PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION, PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION, distribution));
+	Append(new wxEnumProperty(PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION, PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION, distribution));
 
 	// Scale: Ogre::Vector3
 	appendVector3(PRNL_MESH_SURFACE_EMITTER_SCALE, PRNL_MESH_SURFACE_EMITTER_SCALE, ParticleUniverse::MeshSurfaceEmitter::DEFAULT_SCALE);
@@ -147,7 +147,7 @@ void MeshSurfaceEmitterPropertyWindow::_initProperties(void)
 void MeshSurfaceEmitterPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 {
 	// Perform additional validations.
-	if (!_validatePropertyStringNoSpaces(event.GetPropertyPtr(), PRNL_MESH_SURFACE_EMITTER_NAME))
+	if (!_validatePropertyStringNoSpaces(event.GetProperty(), PRNL_MESH_SURFACE_EMITTER_NAME))
 		return;
 
 	EmitterPropertyWindow::onPropertyChanged(event);

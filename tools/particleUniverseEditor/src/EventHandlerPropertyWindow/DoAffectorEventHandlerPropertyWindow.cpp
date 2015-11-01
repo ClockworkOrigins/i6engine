@@ -75,5 +75,5 @@ void DoAffectorEventHandlerPropertyWindow::_initProperties(void)
 	// Affector component: Doesn't have a property, because this is established by means of a connection
 
 	// Pre/Post Processing: bool
-	Append(wxBoolProperty(PRNL_PRE_POST, PRNL_PRE_POST, ParticleUniverse::DoAffectorEventHandler::DEFAULT_PRE_POST));
+	Append(new wxBoolProperty(PRNL_PRE_POST, PRNL_PRE_POST, ParticleUniverse::DoAffectorEventHandler::DEFAULT_PRE_POST));
 }

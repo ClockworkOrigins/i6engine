@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2008 Martin Pieuchot 
+ * Copyright (C) 2007-2008 Martin Pieuchot
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,77 +17,63 @@
  * USA
  */
 
-#include "ParticleUniverseEditorPCH.h"
 #include "wx/ogre/resources.h"
 
-IMPLEMENT_OGRE_SINGLETON(wxOgreResources)
+#include "wx/ogre/utils.h"
 
-//------------------------------------------------------------------------------
-wxOgreResources::wxOgreResources()
-{
-    m_rmgr = Ogre::ResourceGroupManager::getSingletonPtr();
-}
-//------------------------------------------------------------------------------
-Ogre::StringVectorPtr wxOgreResources::GetResourcesList(const Ogre::String& g)
-{
-    return m_rmgr->listResourceNames(g);
-}
-//------------------------------------------------------------------------------
-Ogre::StringVectorPtr wxOgreResources::GetResourcesList(const Ogre::String& g,
-                                                        const Ogre::String& p)
-{
-    return m_rmgr->findResourceNames(g, p);
-}
-//------------------------------------------------------------------------------
-Ogre::StringVector wxOgreResources::GetResourcesGroups()
-{
-    return m_rmgr->getResourceGroups();
-}
-//------------------------------------------------------------------------------
-bool wxOgreResources::LoadResourceFile(const Ogre::String& file)
-{
-    Ogre::ConfigFile cf;
-    cf.load(file);
-    Ogre::ConfigFile::SectionIterator it = cf.getSectionIterator();
+#include "OGRE/OgreConfigFile.h"
 
-    Ogre::String location, type, group;
-    while (it.hasMoreElements()) {
-        group = it.peekNextKey();
-        Ogre::ConfigFile::SettingsMultiMap *settings = it.getNext();
-        Ogre::ConfigFile::SettingsMultiMap::iterator i;
-
-        for (i = settings->begin(); i != settings->end(); ++i) {
-            type = i->first;
-            location = i->second;
-
-            try {
-                m_rmgr->addResourceLocation(location, type, group);
-            } catch (Ogre::Exception& e) {
-                wxOgreExceptionBox(e);
-                return false;
-            }
-        }
-    }
-
-    return true;
+wxOgreResources::wxOgreResources() {
+	_resourceGroupManager = Ogre::ResourceGroupManager::getSingletonPtr();
 }
-//------------------------------------------------------------------------------
-void wxOgreResources::InitialiseAllResources()
-{
-    try {
-        m_rmgr->initialiseAllResourceGroups();
-    } catch (Ogre::Exception& e) {
-        wxOgreExceptionBox(e);
-    }
+Ogre::StringVectorPtr wxOgreResources::GetResourcesList(const Ogre::String & g) {
+	return _resourceGroupManager->listResourceNames(g);
 }
-//------------------------------------------------------------------------------
-void wxOgreResources::AddResource(const Ogre::String& p, const Ogre::String& t,
-                                  const Ogre::String& g)
-{
-    try {
-        m_rmgr->addResourceLocation(p, t, g);
-    } catch (Ogre::Exception& e) {
-        wxOgreExceptionBox(e);
-    }
+
+Ogre::StringVectorPtr wxOgreResources::GetResourcesList(const Ogre::String & g, const Ogre::String & p) {
+	return _resourceGroupManager->findResourceNames(g, p);
 }
-//------------------------------------------------------------------------------
+
+Ogre::StringVector wxOgreResources::GetResourcesGroups() {
+	return _resourceGroupManager->getResourceGroups();
+}
+
+bool wxOgreResources::LoadResourceFile(const Ogre::String & file) {
+	Ogre::ConfigFile cf;
+	cf.load(file);
+	Ogre::ConfigFile::SectionIterator it = cf.getSectionIterator();
+
+	while (it.hasMoreElements()) {
+		Ogre::String group = it.peekNextKey();
+		Ogre::ConfigFile::SettingsMultiMap * settings = it.getNext();
+
+		 for (Ogre::ConfigFile::SettingsMultiMap::iterator i = settings->begin(); i != settings->end(); ++i) {
+			Ogre::String type = i->first;
+			Ogre::String location = i->second;
+
+			try {
+				_resourceGroupManager->addResourceLocation(location, type, group);
+			} catch (Ogre::Exception & e) {
+				wxOgreExceptionBox(e);
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+void wxOgreResources::InitialiseAllResources() {
+	try {
+		_resourceGroupManager->initialiseAllResourceGroups();
+	} catch (Ogre::Exception & e) {
+		wxOgreExceptionBox(e);
+	}
+}
+
+void wxOgreResources::AddResource(const Ogre::String & p, const Ogre::String & t, const Ogre::String & g) {
+	try {
+		_resourceGroupManager->addResourceLocation(p, t, g);
+	} catch (Ogre::Exception & e) {
+		wxOgreExceptionBox(e);
+	}
+}

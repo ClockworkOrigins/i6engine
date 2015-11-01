@@ -38,11 +38,21 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "ParticleUniverseTextControl.h"
 #include "ParticleUniverseUtils.h"
 
+#include "wx/ogre/rendersystem.h"
+#include "wx/ogre/resources.h"
+
+#include "OGRE/OgreEntity.h"
+#include "OGRE/OgreMeshManager.h"
+#include "OGRE/OgreRenderWindow.h"
+
 #include "OGRE/Overlay/OgreFontManager.h"
 #include "OGRE/Overlay/OgreOverlaySystem.h"
 
 #include "wx/cmndata.h"
 #include "wx/colordlg.h"
+#include "wx/evtloop.h"
+#include "wx/splitter.h"
+#include "wx/propgrid/propgridiface.h"
 
 #ifdef PU_PHYSICS_PHYSX
 	#include "Externs/ParticleUniversePhysXBridge.h"
@@ -50,14 +60,13 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 IMPLEMENT_APP(ParticleUniverseEditorApp)
 
-//-----------------------------------------------------------------------
 BEGIN_EVENT_TABLE(ParticleUniverseEditorFrame, wxFrame)
-    EVT_MENU(wxID_NEW, ParticleUniverseEditorFrame::OnNewParticleSystem)
+	EVT_MENU(wxID_NEW, ParticleUniverseEditorFrame::OnNewParticleSystem)
 	EVT_MENU(wxID_FILE, ParticleUniverseEditorFrame::OnLoadFile)
 	EVT_MENU(wxID_OPEN, ParticleUniverseEditorFrame::OnLoadResourcePath)
-    EVT_MENU(wxID_SAVE, ParticleUniverseEditorFrame::OnSave)
-    EVT_MENU(wxID_SAVEAS, ParticleUniverseEditorFrame::OnSaveAs)
-    EVT_MENU(wxID_EXIT, ParticleUniverseEditorFrame::OnQuit)
+	EVT_MENU(wxID_SAVE, ParticleUniverseEditorFrame::OnSave)
+	EVT_MENU(wxID_SAVEAS, ParticleUniverseEditorFrame::OnSaveAs)
+	EVT_MENU(wxID_EXIT, ParticleUniverseEditorFrame::OnQuit)
 
 	EVT_MENU(wxID_REFRESH, ParticleUniverseEditorFrame::OnCompile)
 	EVT_MENU(ID_BACKGROUND_COLOUR, ParticleUniverseEditorFrame::OnBackgroundColour)
@@ -67,10 +76,10 @@ BEGIN_EVENT_TABLE(ParticleUniverseEditorFrame, wxFrame)
 	EVT_MENU(ID_RESET_TIME, ParticleUniverseEditorFrame::OnResetTime)
 	EVT_MENU(ID_TOGGLE_STATS, ParticleUniverseEditorFrame::OnToggleStats)
 	EVT_MENU(ID_TOGGLE_GRID_PLANE, ParticleUniverseEditorFrame::OnToggleGridPlane)
-	EVT_MENU(ID_GIZMO_MOVE, ParticleUniverseEditorFrame::OnGizmoMoveSelect)
-	EVT_MENU(ID_GIZMO_ROTATE, ParticleUniverseEditorFrame::OnGizmoRotateSelect)
-	EVT_MENU(ID_GIZMO_SCALE, ParticleUniverseEditorFrame::OnGizmoScaleSelect)
-	EVT_MENU(ID_TOGGLE_GIZMO, ParticleUniverseEditorFrame::OnToggleGizmo)
+//	EVT_MENU(ID_GIZMO_MOVE, ParticleUniverseEditorFrame::OnGizmoMoveSelect)
+//	EVT_MENU(ID_GIZMO_ROTATE, ParticleUniverseEditorFrame::OnGizmoRotateSelect)
+//	EVT_MENU(ID_GIZMO_SCALE, ParticleUniverseEditorFrame::OnGizmoScaleSelect)
+//	EVT_MENU(ID_TOGGLE_GIZMO, ParticleUniverseEditorFrame::OnToggleGizmo)
 	EVT_MENU(ID_WORLD_LOCAL_SPACE, ParticleUniverseEditorFrame::OnToggleWorldLocalSpace)
 	EVT_MENU(ID_CAMERA_RESET, ParticleUniverseEditorFrame::OnCameraReset)
 	EVT_MENU(ID_CENTRE_OBJECT, ParticleUniverseEditorFrame::OnCentreObject)
@@ -95,93 +104,41 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(ParticleUniverseEditorFrame, wxFrame)
 
 bool ParticleUniverseEditorFrame::mUsePhysX = false;
-//-----------------------------------------------------------------------
-// Use MAX_WIDTH to make it extremely wide. The width is corrected later, but it sizes the toolbar correctly.
-ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow* parent, wxWindowID id)
-: wxFrame(parent, 
 
-		  id, 
-		  wxT(""),
-		  wxDefaultPosition, 
-		  wxSize(MAX_WIDTH, MAX_HEIGHT)),
-	mUIMainToolbar(0),
-	mNotebook(0),
-	mListOfTemplates(0),
-	mLatestSelection(0),
-	mEditNotebookPage(0),
-	mMaterialNotebookPage(0),
-	mTextCtrl(0),
-	mCurrentParticleSystemForRenderer(0),
-	mControl(0),
-	mSceneManager(0),
-	mMainSceneNode(0),
-	mParticlerSystemSceneNode(0),
-	mMarkerSceneNode(0),
-	mMarker(0),
-	mMarkerBold(0),
-	mNewSystemCounter(1),
-	mCurrentParticleScript(ParticleUniverse::StringUtil::BLANK),
-	mAutoStartRender(true),
-	mPropertyWindow(0),
-	mMinMax(false),
-	mScriptChanged(false),
-	mTemplateSelected(false),
-	mSavedFile(WX_STRING_BLANK),
-	mConfigDialog(0),
-	mLastPositionGizmo(wxPoint(0, 0)),
-	mLastPositionAddEntity(wxPoint(0, 0)),
-	mLastPositionLight(wxPoint(0, 0)),
-	mRecorder(0),
-	mVideoPath("media/video"),
-	mImageWidth(640.0),
-	mImageHeight(480.0),
-	mFramesPerSecond(27),
-	mFileNameSuffix(".png"),
-	mStartTime(0.0f),
-	mEndTime(7200.0f),
-	mPauseTime(0.05f),
-	mAddEntitySceneNode(0),
-	mAddEntity(0),
-	mGridPlaneSceneNodeBottom(0),
-	mGridPlaneSceneNodeX(0),
-	mGridPlaneSceneNodeMinX(0),
-	mGridPlaneSceneNodeZ(0),
-	mGridPlaneSceneNodeMinZ(0),
-	mGridBottom(0),
-	mGridX(0),
-	mGridMinX(0),
-	mGridZ(0),
-	mGridMinZ(0),
-	mLightSceneNode(0),
-	mLightEntity(0),
-	mLight(0),
-	mPhysXNormal(Ogre::Vector3::ZERO),
-	mPhysXGravity(Ogre::Vector3::ZERO),
-	mPhysXDistance(-200.0f),
-	mDebugOverlay(0),
-	mOrthoCameraGizmoNode(0),
-	mAverageFPS(0),
-	mMaxNumberOfEmittedParticles(0),
-	mMaxNumberOfVisualParticles(0),
-	mTmenu(0),
-	mOgreControlSmall(0),
-	mControlPanelWithSmallRenderWindow(0),
-	mCheckFocusListOfTemplates(false),
-	mGizmoManager(0),
-	mAnimationWindow(0),
-	mStartCameraAnimation(false),
-	mStartCameraAnimationDelta(0.05f),
-	mTargetCameraAnimationPosition(Ogre::Vector3::ZERO),
-	mStartCameraAnimationPosition(Ogre::Vector3::ZERO),
-	mDiffCameraAnimationPosition(Ogre::Vector3::ZERO),
-	mPreviousPositionAddEntitySceneNode(Ogre::Vector3::ZERO),
-	m45DegreesOrtho(true),
-	mLanguage(wxLANGUAGE_DEFAULT)
-{
-	mDefaultCameraPosition = Ogre::Vector3(-1100, 0, -1100);
+bool ParticleUniverseEditorApp::OnInit() {
+	// Initialize Ogre render system
+	_renderSystem->LoadPlugin("RenderSystem_GL");
+	_renderSystem->SelectOgreRenderSystem("OpenGL Rendering Subsystem");
+	_renderSystem->LoadPlugin("Plugin_ParticleUniverse");
+	_renderSystem->Initialise();
+
+	m_Editor = new ParticleUniverseEditorFrame(nullptr, ID_EDITOR_WINDOW);
+	// Create the Toolbar
+	m_Editor->CreateToolbar();
+	// Create the explorer on the left
+	m_Editor->CreateParticleExplorer();
+	// Create the tabs on the right side
+	m_Editor->CreateTabs();
+
+	_resources->LoadResourceFile("resources.cfg");
+
+	m_Editor->Show();
+
+	// The SceneManager has been created, so start filling the list of templates
+	m_Editor->LoadParticleExplorer();
+
+	Yield();
+	m_Editor->AfterInit(_resources);
+	return true;
+}
+
+// Use MAX_WIDTH to make it extremely wide. The width is corrected later, but it sizes the toolbar correctly.
+ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow * parent, wxWindowID id) : wxFrame(parent, id, wxT(""), wxDefaultPosition, wxSize(MAX_WIDTH, MAX_HEIGHT)), mLocale(), mLanguage(wxLANGUAGE_DEFAULT), mScriptChanged(false), mTemplateSelected(false), mDefaultCameraPosition(Ogre::Vector3(-1100, 0, -1100)), mMainVSizer(nullptr), mEditSizer(nullptr), mLBAndPropSizer(nullptr), mSubHSizer(nullptr), mNotebook(nullptr), mParticleExplorer(nullptr), mLatestSelection(0), mControl(nullptr), mTextCtrl(nullptr), mStatusBar(nullptr), mSceneManager(nullptr), mMainSceneNode(nullptr), mParticlerSystemSceneNode(nullptr), mMarkerSceneNode(nullptr), mMarker(nullptr), mMarkerBold(nullptr), mGridPlaneSceneNodeBottom(nullptr), mGridPlaneSceneNodeX(nullptr), mGridPlaneSceneNodeMinX(nullptr), mGridPlaneSceneNodeZ(nullptr), mGridPlaneSceneNodeMinZ(nullptr), mGridBottom(nullptr), mGridX(nullptr), mGridMinX(nullptr), mGridZ(nullptr), mGridMinZ(nullptr), mAddEntitySceneNode(nullptr), mAddEntity(nullptr), mUIMainToolbar(nullptr), mLightEntity(nullptr), mLight(nullptr), mLightSceneNode(nullptr), mEditNotebookPage(nullptr), mMaterialNotebookPage(nullptr), mCurrentParticleSystemForRenderer(nullptr), mSystemListener(nullptr), mNewSystemCounter(1), mCurrentParticleScript(ParticleUniverse::StringUtil::BLANK), mAutoStartRender(true), mPropertyWindow(nullptr), mMinMax(false), mSavedFile(WX_STRING_BLANK), mConfigDialog(nullptr), mLastPositionGizmo(wxPoint(0, 0)), mLastPositionAddEntity(wxPoint(0, 0)), mLastPositionLight(wxPoint(0, 0)), mRecorder(nullptr), mVideoPath("media/video"), mImageWidth(640.0), mImageHeight(480.0), mFramesPerSecond(27), mFileNameSuffix(".png"), mStartTime(0.0), mEndTime(7200.0), mPauseTime(0.05), mBackgroundColour(), mPhysXNormal(Ogre::Vector3::ZERO), mPhysXGravity(Ogre::Vector3::ZERO), mPhysXDistance(-200.0), mMaxNumberOfEmittedParticles(0), mMaxNumberOfVisualParticles(0), mAnimationWindow(nullptr), mLogManager(nullptr), mLog(nullptr), mLogListener(nullptr), mDebugOverlay(nullptr), mTextPanel(nullptr), mAverageFPS(nullptr), mOrthoCameraGizmoNode(nullptr), mTmenu(nullptr), mControlPanelWithSmallRenderWindow(nullptr), mOgreControlSmall(nullptr), mCheckFocusParticleExplorer(false), mGizmoManager(nullptr), mPreviousPositionAddEntitySceneNode(Ogre::Vector3::ZERO), mStartCameraAnimation(false), mStartCameraAnimationDelta(0.05), mTargetCameraAnimationPosition(Ogre::Vector3::ZERO), mStartCameraAnimationPosition(Ogre::Vector3::ZERO), mDiffCameraAnimationPosition(Ogre::Vector3::ZERO), m45DegreesOrtho(true), mOrthoYaw(), mOrthoPitch(), _overlaySystem(nullptr) {
 	wxInitAllImageHandlers();
 	Maximize();
 	wxImage::AddHandler(new wxPNGHandler());
+
+	// Status bar
 	mStatusBar = CreateStatusBar();
 	mMainVSizer = new wxBoxSizer(wxVERTICAL); // Main sizer
 	mEditSizer = new wxBoxSizer(wxVERTICAL);
@@ -189,15 +146,19 @@ ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow* parent, wxWin
 	mSubHSizer = new wxBoxSizer(wxHORIZONTAL);
 	mSubHSizer->Add(mLBAndPropSizer, 0, wxGROW|wxALL, 0);
 	mMainVSizer->Add(mSubHSizer, 1, wxTOP | wxEXPAND, 28);
-	SetSizer(mMainVSizer);
+	SetSizer(mMainVSizer); // FIXME: (Michael) really needed?
 
 	mSystemListener = new SystemListener(this);
+
+	// Logging
 	mLogManager = Ogre::LogManager::getSingletonPtr();
 	mLog = mLogManager->createLog("pued.log", true, false, false);
 	mLogListener = new LogListener(this);
 	mLog->addListener(mLogListener);
+
 	SetAutoLayout(true);
-	mBackgroundColour = Ogre::ColourValue(0.3, 0.3, 0.3);
+
+	mBackgroundColour = Ogre::ColourValue(0.3f, 0.3f, 0.3f);
 
 	// Set the language
 	mConfigDialog = new ConfigDialog(this);
@@ -209,118 +170,94 @@ ParticleUniverseEditorFrame::ParticleUniverseEditorFrame(wxWindow* parent, wxWin
 	mConfigDialog->loadConfig();
 
 	// Set the name in the title
-	SetTitle(
-#ifdef PU_FULL_VERSION
-		  _("Particle Universe Editor V1.5.1")
-#else
-		  _("Particle Universe Editor - DEMO V1.5.1")
-#endif // PU_FULL_VERSION
-	);
+	SetTitle(_("Particle Universe Editor V1.5.1"));
 
-	// Create menu
+	// Create menu bar
 	SetMenu();
+
+	Connect(wxID_ANY, wxEVT_CLOSE_WINDOW, wxCloseEventHandler(ParticleUniverseEditorFrame::OnClose));
 }
-//-----------------------------------------------------------------------
-bool ParticleUniverseEditorFrame::Destroy()
-{
+
+bool ParticleUniverseEditorFrame::Destroy() {
 	// Delete the droptarget
 	delete GetDropTarget();
-	SetDropTarget(0);
+	SetDropTarget(nullptr);
 
 	// Remove the camera listeners
 	mGizmoManager->unInitialiseCameraListeners(_getCamera());
 
 	// Delete the gizmo's
 	OGRE_DELETE_T (mGizmoManager, GizmoManager, Ogre::MEMCATEGORY_SCENE_OBJECTS);
-	mGizmoManager = 0;
+	mGizmoManager = nullptr;
 
 	// Delete the animation window
 	mAnimationWindow->detachParticleSystemFromEntity(mAddEntity); // If mAddEntity is 0 or no particle system is attached doesn't mind
 	delete mAnimationWindow;
-	mAnimationWindow = 0;
+	mAnimationWindow = nullptr;
 
 	// Destroy overlay
 	Ogre::OverlayManager::getSingleton().destroyAll();
 
-	#ifdef PU_PHYSICS_PHYSX
-	if (mUsePhysX)
-	{
+#ifdef PU_PHYSICS_PHYSX
+	if (mUsePhysX) {
 		ParticleUniverse::PhysXBridge::getSingletonPtr()->exitNx();
 	}
-	#endif //PU_PHYSICS_PHYSX
-
-	ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(CURRENT_PS_NAME, mSceneManager);
-	ParticleUniverse::ParticleSystemManager::getSingletonPtr()->removeAndDestroyDanglingSceneNodes(mParticlerSystemSceneNode);
-
-	delete mRecorder;
-	mRecorder = 0;
-
-	mLog->removeListener(mLogListener);
-	delete mLogListener;
-	mLogListener = 0;
-	delete mSystemListener;
-	mSystemListener = 0;
-
-	if (mUIMainToolbar)
-		delete mUIMainToolbar;
+#endif //PU_PHYSICS_PHYSX
 
 	mEditNotebookPage->destroyDanglingPUComponents();
 
+	ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(CURRENT_PS_NAME, mSceneManager);
+	ParticleUniverse::ParticleSystemManager::getSingletonPtr()->removeAndDestroyDanglingSceneNodes(mParticlerSystemSceneNode);
+	mSceneManager->removeRenderQueueListener(_overlaySystem);
+	delete _overlaySystem;
+
+	delete mRecorder;
+	mRecorder = nullptr;
+
+	mLog->removeListener(mLogListener);
+	delete mLogListener;
+	mLogListener = nullptr;
+	delete mSystemListener;
+	mSystemListener = nullptr;
+
+	if (mUIMainToolbar) {
+		delete mUIMainToolbar;
+	}
+
 	return wxFrame::Destroy();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::CreateScene(void)
-{
+
+void ParticleUniverseEditorFrame::CreateScene() {
 	SetCursor(*wxHOURGLASS_CURSOR);
-
 	// Setup context menu
-    mSceneManager = mControl->CreateSceneManager(Ogre::ST_GENERIC);
-	mSceneManager->addRenderQueueListener(new Ogre::OverlaySystem());
-	_getCamera()->setNearClipDistance(0.1f);
-	_getCamera()->setFarClipDistance(99999.0f);
+	_overlaySystem = new Ogre::OverlaySystem();
+	mSceneManager = mControl->CreateSceneManager(Ogre::ST_GENERIC);
+	mSceneManager->addRenderQueueListener(_overlaySystem);
+	_getCamera()->setNearClipDistance(0.1);
+	_getCamera()->setFarClipDistance(99999.0);
+	mOgreControlSmall->SetCamera(_getCamera());
 
-	// Initialise Gizmo's
-	mGizmoManager = OGRE_NEW_T (GizmoManager, Ogre::MEMCATEGORY_SCENE_OBJECTS)(mSceneManager);
-	mGizmoManager->initialize(mSceneManager, mControl->GetRenderWindow(), mControl->GetViewport());
-	mGizmoManager->initialiseCameraListeners(_getCamera());
-
-	// Create the ortho camera gizmo
-	mGizmoManager->set45DegreesOrtho(m45DegreesOrtho);
 	_setCameraPosition(mDefaultCameraPosition);
-	initialiseOrthoCameraGizmo();
 
 	// Create the background
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingletonPtr()->getByName("ParticleUniverseEditor/BackgroundMaterial");
 	material->load();
-	material->getTechnique(0)->getPass(0)->setAmbient(Ogre::ColourValue(0.3, 0.3, 0.3));
-	material->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue(0.3, 0.3, 0.3));
-	material->getTechnique(0)->getPass(0)->setSpecular(Ogre::ColourValue(0.3, 0.3, 0.3));
+	material->getTechnique(0)->getPass(0)->setAmbient(Ogre::ColourValue(0.3f, 0.3f, 0.3f));
+	material->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue(0.3f, 0.3f, 0.3f));
+	material->getTechnique(0)->getPass(0)->setSpecular(Ogre::ColourValue(0.3f, 0.3f, 0.3f));
 	mSceneManager->setSkyBox(true, "ParticleUniverseEditor/BackgroundMaterial");
- 
+
 	// Create the nodes for the particle system and attach the marker
 	mMainSceneNode = mSceneManager->getRootSceneNode()->createChildSceneNode();
 	mMainSceneNode->showBoundingBox(false); // For testing
 	mParticlerSystemSceneNode = mMainSceneNode->createChildSceneNode();
 	mParticlerSystemSceneNode->setInheritScale(false); // Don't scale the particle system
 
-	mMarkerSceneNode = mMainSceneNode->createChildSceneNode();
-	mMarker = mSceneManager->createEntity("pu_marker_system", "pu_marker.mesh");
-	mMarkerBold = mSceneManager->createEntity("pu_bold_marker_system", "pu_bold_marker.mesh");
-	mMarker->setMaterialName("pu_marker_system");
-	mMarkerBold->setMaterialName("pu_marker_system");
-	mMarker->setQueryFlags(GizmoManager::OBJECT_FLAG);
-	mMarkerBold->setQueryFlags(GizmoManager::OBJECT_FLAG);
-	mMarkerSceneNode->attachObject(mMarker);
-	mMarkerSceneNode->attachObject(mMarkerBold);
-	mMarkerSceneNode->setScale(0.4, 0.4, 0.4);
-	Ogre::Vector3 mainSceneNodePosition = Ogre::Vector3::ZERO;
-	mMainSceneNode->_setDerivedPosition(mainSceneNodePosition);
-
 	// Create a scenenode for adding entity
 	mAddEntitySceneNode = mSceneManager->getRootSceneNode()->createChildSceneNode();
 	mAddEntitySceneNode->_setDerivedPosition(Ogre::Vector3::ZERO);
 
-    mControl->Refresh();
+	mControl->Refresh();
 	mNotebook->SetSelection(NOTEBOOK_RENDER);
 
 	// Increase the depthscale for soft particles
@@ -339,15 +276,11 @@ void ParticleUniverseEditorFrame::CreateScene(void)
 
 	// Check on PhysX installation (must be done before the config is read, so the PhysX tab can be created (or not))
 #ifdef PU_PHYSICS_PHYSX
-	if (mConfigDialog->isDisplayPhysXStartupDialog())
-	{
+	if (mConfigDialog->isDisplayPhysXStartupDialog()) {
 		wxString physXmessage;
-		if (isPhysXInstalled())
-		{
+		if (isPhysXInstalled()) {
 			physXmessage = _("It seems that PhysX is installed on this computer. Do you want to make use of the PhysX features?");
-		}
-		else
-		{
+		} else {
 			physXmessage = _("It seems that PhysX is NOT installed on this computer. Do you still want to try to use PhysX?");
 		}
 		mUsePhysX = (showMessage(physXmessage, wxOK | wxCANCEL) == wxID_OK);
@@ -355,8 +288,7 @@ void ParticleUniverseEditorFrame::CreateScene(void)
 		mConfigDialog->setUsePhysXIfNoStartupDialog(mUsePhysX);
 		mConfigDialog->saveConfig();
 	}
-	else
-	{
+	else {
 		mUsePhysX = mConfigDialog->isUsePhysXIfNoStartupDialog();
 	}
 #endif //PU_PHYSICS_PHYSX
@@ -370,12 +302,8 @@ void ParticleUniverseEditorFrame::CreateScene(void)
 
 	// Read resource locations
 	ParticleUniverse::StringVector vec = mConfigDialog->getResourceLocations();
-	if (!vec.empty())
-	{
-		ParticleUniverse::StringVector::iterator it;
-		ParticleUniverse::StringVector::iterator itEnd = vec.end();
-		for (it = vec.begin(); it != itEnd; ++it)
-		{
+	if (!vec.empty()) {
+		for (ParticleUniverse::StringVector::iterator it = vec.begin(); it != vec.end(); ++it) {
 			Ogre::ResourceGroupManager::getSingletonPtr()->addResourceLocation((*it), "FileSystem", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		}
 		Ogre::ResourceGroupManager::getSingletonPtr()->clearResourceGroup(Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
@@ -387,16 +315,13 @@ void ParticleUniverseEditorFrame::CreateScene(void)
 #ifdef PU_PHYSICS_PHYSX
 	// Start the PhysX engine ... wroooooom
 	applyPhysXConfigOptions();
-	if (mUsePhysX)
-	{
+	if (mUsePhysX) {
 		ParticleUniverse::PhysXBridge::getSingletonPtr()->initNx(-200); // Initialise with gravity y = -200
 		ParticleUniverse::PhysXBridge::getSingletonPtr()->createPlane(mPhysXNormal, mPhysXDistance);
 		ParticleUniverse::PhysXBridge::getSingletonPtr()->setGravity(mPhysXGravity); // Override gravity from config file
 		ParticleUniverse::PhysXBridge::getSingletonPtr()->getScene()->setActorGroupPairFlags(100, 100, NX_NOTIFY_ON_START_TOUCH);
 		ParticleUniverse::PhysXBridge::getSingletonPtr()->getScene()->setActorGroupPairFlags(100, 0, NX_NOTIFY_ON_START_TOUCH);
-	}
-	else
-	{
+	} else {
 		// Remove the PhysX factories to prevent new script to be parsed
 		ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(CURRENT_PS_NAME, mSceneManager);
 	}
@@ -408,43 +333,26 @@ void ParticleUniverseEditorFrame::CreateScene(void)
 	// Add some stuff to the scene
 	createGridPlane(mConfigDialog->getGridPlaneDistance());
 
-	if (!mConfigDialog->isGridPlane())
-	{
+	if (!mConfigDialog->isGridPlane()) {
 		showGridPlane(false);
 	}
 	createStatisticsOverlay();
-	if (!mConfigDialog->isStatistics())
-	{
+	if (!mConfigDialog->isStatistics()) {
 		showOverlay(false);
 	}
+
 	createLight();
-	if (!mConfigDialog->isLightCheck())
-	{
+	if (!mConfigDialog->isLightCheck()) {
 		showLight(false);
 	}
-
-	// Register nodes at GizmoManager
-	mGizmoManager->registerNode(mAddEntitySceneNode); // Gizmo's can be attached to mAddEntitySceneNode
-	mGizmoManager->registerNode(mLightSceneNode); // Gizmo's can be attached to mLightSceneNode
-	mGizmoManager->registerNode(mMainSceneNode); // Gizmo's can be attached to mMainSceneNode
-	mGizmoManager->registerHideWhenAttached(Gizmo::GIZMO_MOVE, mMarker); // Hide mMarker entity when the Move gizmo is attached
-	mGizmoManager->registerHideWhenAttached(Gizmo::GIZMO_SCALE, mMarker); // Hide mMarker entity when the Scale gizmo is attached (not used for now)
-	mGizmoManager->registerIgnoreGizmoWhenSelected(mLightSceneNode, Gizmo::GIZMO_ROTATE); // Do not allow rotation of the light, because it doesn't make sense
-	mGizmoManager->registerIgnoreGizmoWhenSelected(mLightSceneNode, Gizmo::GIZMO_SCALE); // Do not scaling of the light, because it doesn't make sense
-	mGizmoManager->registerIgnoreGizmoWhenSelected(mMainSceneNode, Gizmo::GIZMO_SCALE); // Do not allow scaling of the particle system
-	mGizmoManager->registerNodeForUpdatingScale(mMainSceneNode, Ogre::Vector3(2.0f, 2.0f, 2.0f)); // Scale the mMainSceneNode similar to the gizmo, while zooming and moving
-	mGizmoManager->registerNodeForUpdatingScale(mLightSceneNode, Ogre::Vector3(2.0f, 2.0f, 0.0f)); // Scale the light
-	mGizmoManager->registerNodeForFacingCamera(mLightSceneNode); // Align the light to the camera
-	mGizmoManager->registerNodeForMakingVisibleAfterDetach(mMarkerSceneNode); // This scenenode is the only one with entities that are partly visible
-	mGizmoManager->attachToNode(mMainSceneNode);
 
 	// Create the animation window
 	mAnimationWindow = new AnimationWindow(this, mSceneManager);
 
 	// Check keypresses
 	mControl->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ParticleUniverseEditorFrame::OnKeyPressed), NULL, this);
-	mListOfTemplates->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ParticleUniverseEditorFrame::OnKeyPressed), NULL, this);
-	Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ParticleUniverseEditorFrame::OnKeyPressed));
+//	mParticleExplorer->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ParticleUniverseEditorFrame::OnKeyPressed), NULL, this);
+//	Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ParticleUniverseEditorFrame::OnKeyPressed));
 
 	// Reset Gizmo
 	SetCursor(wxNullCursor);
@@ -457,23 +365,20 @@ void ParticleUniverseEditorFrame::CreateScene(void)
 //	meshSerializer.exportMesh(torusMeshPointer, "torus.mesh");
 	// TESTTESTTESTTESTTEST
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::SetLanguage(void)
-{
+
+void ParticleUniverseEditorFrame::SetLanguage() {
 	// Internationalization init
 	mLanguage = mConfigDialog->getLanguage();
 
 	// Check if the language is available
-	if (mLanguage != wxLANGUAGE_DEFAULT)
-	{
-        // Use English as locale, because somehow setting the actual language gives a problem (particle system templates are not created
-		// properly and the grid material is white). Therefore, the different directories with the .mo files are not used, but a 
+	if (mLanguage != wxLANGUAGE_DEFAULT) {
+		// Use English as locale, because somehow setting the actual language gives a problem (particle system templates are not created
+		// properly and the grid material is white). Therefore, the different directories with the .mo files are not used, but a
 		// catalog is added prefixes with the language code
-		if (mLocale.Init(wxLANGUAGE_ENGLISH, wxLOCALE_CONV_ENCODING))
-		{
+		if (mLocale.Init(wxLANGUAGE_ENGLISH_US)) {
 			// To be sure that if the exe is not at the root path, the proper location is searched
 			wxLocale::AddCatalogLookupPathPrefix(wxT("language"));
-		
+
 			// Initialize the catalogs
 			wxString lang = mConfigDialog->getLanguageAsString(mLanguage);
 			mLocale.AddCatalog(lang + wxT("_internat"));
@@ -481,28 +386,25 @@ void ParticleUniverseEditorFrame::SetLanguage(void)
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::CreateToolbar(void)
-{
+
+void ParticleUniverseEditorFrame::CreateToolbar() {
 	// Create the toolbar with icons
 	mUIMainToolbar = new UIMainToolbar(this);
 	SetInitialSize(wxSize(APP_WIDTH, APP_HEIGHT)); // Hack to reset the Frame again (needed for toolbar).
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::CreateListOfTemplates(void)
-{
-	mListOfTemplates = new SystemTreeControl(this, ID_LISTOF_TEMPLATES, wxPoint(0, TAB_POS_Y), wxSize(LB_TEMPLATES_WIDTH, LB_TEMPLATES_HEIGHT));
+
+void ParticleUniverseEditorFrame::CreateParticleExplorer() {
+	mParticleExplorer = new SystemTreeControl(this, ID_LISTOF_TEMPLATES, wxPoint(0, TAB_POS_Y), wxSize(LB_TEMPLATES_WIDTH, LB_TEMPLATES_HEIGHT));
 	resetLeftSideWindow(); // Fills the listbox at the left side.
 }
-//------------------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event)
-{
-	if (mStartCameraAnimation) // Only check on the ortho camera gizmo if camera animation is stopped
+
+void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event) {
+	if (mStartCameraAnimation) { // Only check on the ortho camera gizmo if camera animation is stopped
 		return;
+	}
 
 	// A mouse event is retrieved from the Ogre component, which performs a callback to the ParticleUniverseEditorFrame
-	if (event.GetEventType() == wxEVT_LEAVE_WINDOW)
-	{
+	if (event.GetEventType() == wxEVT_LEAVE_WINDOW) {
 		// Remove the context menu and return (no further actions)
 		doWindowLeave(event);
 		return;
@@ -510,32 +412,23 @@ void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event)
 
 	// V1.5
 	wxPoint position = event.GetPosition();
-	if (event.LeftIsDown())
-	{
-		if (event.Dragging())
-		{
+	if (event.LeftIsDown()) {
+		if (event.Dragging()) {
 			// Drag with the mouse while pressing the left mouse button.
 			// Depending on the Gizmo it is a rotation or movement
 			Ogre::Vector2 pos(position.x, position.y);
-			if (mGizmoManager)
-			{
-				mGizmoManager->action(pos, _getCamera());
-			}
-		}
-		else
-		{
+//			if (mGizmoManager) {
+//				mGizmoManager->action(pos, _getCamera());
+//			}
+		} else {
 			// Just pressing the left mouse button to select an object (gizmo, entity, light)
 			doMouseButtonPressed(event);
 		}
 		mLastPositionGizmo = position;
 		restoreFocus();
-	}
-	else if (event.RightIsDown())
-	{
-		if (event.Dragging())
-		{
-			if (_isCameraOrthographic())
-			{
+	} else if (event.RightIsDown()) {
+		if (event.Dragging()) {
+			if (_isCameraOrthographic()) {
 				// Don't allow dragging in ortho mode
 				return;
 			}
@@ -546,8 +439,8 @@ void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event)
 			Ogre::Real scaleFactor = 0.3f;
 			yawDiff *= scaleFactor; // Reduce speed yaw
 			Ogre::Real length = cameraPivotVector.length();
-			length = length < 0.0001f ? 0.0001f : length;
-			scaleFactor = 0.5f / length;
+			length = length < 0.0001 ? 0.0001 : length;
+			scaleFactor = 0.5 / length;
 			pitchDiff *= scaleFactor; // Reduce speed pitch
 			Ogre::Radian yaw = Ogre::Radian(Ogre::Degree(yawDiff));
 			Ogre::Radian pitch = Ogre::Radian(Ogre::Degree(pitchDiff));
@@ -561,240 +454,38 @@ void ParticleUniverseEditorFrame::OnMouseMoveCallback(wxMouseEvent& event)
 		}
 		mLastPositionGizmo = position;
 		restoreFocus();
-	}
-	else if (event.LeftUp())
-	{
-		mGizmoManager->getAttachedNode()->showBoundingBox(false); // Reset after scaling
-	}
-	else if (event.GetWheelRotation() > 0)
-	{
-		// Zoom out
-		zoom(1.05f);
-	}
-	else if (event.GetWheelRotation() < 0)
-	{
+	} else if (event.LeftUp()) {
+//		mGizmoManager->getAttachedNode()->showBoundingBox(false); // Reset after scaling
+	} else if (event.GetWheelRotation() > 0) {
 		// Zoom in
-		zoom(0.95f);
+		zoom(0.95);
+	} else if (event.GetWheelRotation() < 0) {
+		// Zoom out
+		zoom(1.05);
 	}
-	if (event.LeftDClick())
-	{
+	if (event.LeftDClick()) {
 		// Double click left. If an object is selected, select the material
-		if (mGizmoManager && mGizmoManager->isMovableObjectSelected(mAddEntity))
-		{
-			selectMaterialForAddedMesh();
-		}
+//		if (mGizmoManager && mGizmoManager->isMovableObjectSelected(mAddEntity)) {
+//			selectMaterialForAddedMesh();
+//		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::zoom(Ogre::Real zoomFactor)
-{
+
+void ParticleUniverseEditorFrame::zoom(Ogre::Real zoomFactor) {
 	Ogre::Vector3 cameraPosition = _getCameraPosition();
 	Ogre::Vector3 pivot = getCurrentPivot();
 	Ogre::Vector3 direction = cameraPosition - pivot;
-	if (_isCameraOrthographic())
-	{
+	if (_isCameraOrthographic()) {
 		// Adjust the ortho window size
 		_getCamera()->setOrthoWindowWidth(zoomFactor * cameraPosition.length());
 	}
 	_setCameraPosition(pivot + zoomFactor * direction);
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doMouseButtonPressed(wxMouseEvent& event)
-{
-	if (!mGizmoManager)
-		return;
 
-	// Determine which object in the scene was selected
-	wxPoint pos = event.GetPosition();
-	mGizmoManager->startSelect(mSceneManager, _getCamera(), Ogre::Vector2(pos.x + 0.002 * pos.x, pos.y + 0.002 * pos.y)); // Slightly offset
-
-	// Determine whether the camera is set to ortho mode and that the ortho camera gizmo was selected
-	if (mGizmoManager->isOrthoCameraGizmoSelected() && _isCameraOrthographic())
-	{
-		Ogre::Vector3 newCameraPosition = _getCameraPosition();
-		Ogre::Real l = newCameraPosition.length();
-		Ogre::Real sqrt0dot5 = sqrt(0.5);
-
-		// The ortho camera gizmo has been selected
-		switch (mGizmoManager->getOrthoCameraAxisSelection())
-		{
-			case Gizmo::AXIS_X:
-				{
-					if (m45DegreesOrtho)
-					{
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						Ogre::Quaternion q;
-						if (newCameraPosition.z > 0)
-						{
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, 0.3826834323650897f, 0.0f);
-						}
-						else
-						{
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, -0.3826834323650897f, 0.0f);
-						}
-						newCameraPosition = q * newCameraPosition;
-						if (newCameraPosition.x > -2.0f && newCameraPosition.x < 2.0f)
-							newCameraPosition.x = 0.0f;
-						if (newCameraPosition.z > -2.0f && newCameraPosition.z < 2.0f)
-							newCameraPosition.z = 0.0f;
-					}
-					else
-					{
-						// X-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_X);
-						newCameraPosition.x = -l;
-						newCameraPosition.y = 0;
-						newCameraPosition.z = 0;
-
-					}
-					startCameraAnimation(newCameraPosition);
-				}
-				break;
-
-			case Gizmo::AXIS_MIN_X:
-				{
-					if (m45DegreesOrtho)
-					{
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						Ogre::Quaternion q;
-						if (newCameraPosition.z < 0)
-						{
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, 0.3826834323650897f, 0.0f);
-						}
-						else
-						{
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, -0.3826834323650897f, 0.0f);
-						}
-						newCameraPosition = q * newCameraPosition;
-						if (newCameraPosition.x > -2.0f && newCameraPosition.x < 2.0f)
-							newCameraPosition.x = 0.0f;
-						if (newCameraPosition.z > -2.0f && newCameraPosition.z < 2.0f)
-							newCameraPosition.z = 0.0f;
-					}
-					else
-					{
-						// -X-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_MIN_X);
-						newCameraPosition.x = l;
-						newCameraPosition.y = 0;
-						newCameraPosition.z = 0;
-					}
-					startCameraAnimation(newCameraPosition);
-				}
-				break;
-
-			case Gizmo::AXIS_Y:
-				{
-					if (m45DegreesOrtho)
-					{
-						// Do nothing
-					}
-					else
-					{
-						// Y-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						newCameraPosition.x = 0;
-						newCameraPosition.y = l;
-						newCameraPosition.z = 0;
-						startCameraAnimation(newCameraPosition);
-					}
-				}
-				break;
-
-			case Gizmo::AXIS_Z:
-				{
-					if (m45DegreesOrtho)
-					{
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						Ogre::Quaternion q;
-						if (newCameraPosition.x < 0)
-						{
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, 0.3826834323650897f, 0.0f);
-						}
-						else
-						{
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, -0.3826834323650897f, 0.0f);
-						}
-						newCameraPosition = q * newCameraPosition;
-						if (newCameraPosition.x > -2.0f && newCameraPosition.x < 2.0f)
-							newCameraPosition.x = 0.0f;
-						if (newCameraPosition.z > -2.0f && newCameraPosition.z < 2.0f)
-							newCameraPosition.z = 0.0f;
-					}
-					else
-					{
-						// Z-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_Z);
-						newCameraPosition.x = 0;
-						newCameraPosition.y = 0;
-						newCameraPosition.z = -l;
-					}
-					startCameraAnimation(newCameraPosition);
-				}
-				break;
-
-			case Gizmo::AXIS_MIN_Z:
-				{
-					if (m45DegreesOrtho)
-					{
-						setOrthoGridVisible(true, Gizmo::AXIS_Y);
-						Ogre::Quaternion q;
-						if (newCameraPosition.x > 0)
-						{
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, 0.3826834323650897f, 0.0f);
-						}
-						else
-						{
-							q = Ogre::Quaternion(0.9238795325112867f, 0.0f, -0.3826834323650897f, 0.0f);
-						}
-						newCameraPosition = q * newCameraPosition;
-						if (newCameraPosition.x > -2.0f && newCameraPosition.x < 2.0f)
-							newCameraPosition.x = 0.0f;
-						if (newCameraPosition.z > -2.0f && newCameraPosition.z < 2.0f)
-							newCameraPosition.z = 0.0f;
-					}
-					else
-					{
-						// -Z-axis view
-						setOrthoGridVisible(true, Gizmo::AXIS_MIN_Z);
-						newCameraPosition.x = 0;
-						newCameraPosition.y = 0;
-						newCameraPosition.z = l;
-					}
-					startCameraAnimation(newCameraPosition);
-				}
-				break;
-		}
-	}
-	else if (!mGizmoManager->isGizmoSelected())
-	{
-		// No gizmo selected. Validate if it was something else
-		if (mGizmoManager->isMovableObjectSelected(mMarker))
-		{
-			mGizmoManager->attachToNode(mMainSceneNode);
-			_cameraLookAt(mMainSceneNode->_getDerivedPosition());
-		}
-		else if (mGizmoManager->isMovableObjectSelected(mMarkerBold))
-		{
-			mGizmoManager->attachToNode(mMainSceneNode);
-			_cameraLookAt(mMainSceneNode->_getDerivedPosition());
-		}
-		else if (mGizmoManager->isMovableObjectSelected(mAddEntity))
-		{
-			mGizmoManager->attachToNode(mAddEntitySceneNode);
-			_cameraLookAt(mAddEntitySceneNode->_getDerivedPosition());
-		}
-		else if (mGizmoManager->isMovableObjectSelected(mLightEntity))
-		{
-			mGizmoManager->attachToNode(mLightSceneNode);
-			_cameraLookAt(mLightSceneNode->_getDerivedPosition());
-		}
-	}
-	mGizmoManager->endSelect(mSceneManager);
+void ParticleUniverseEditorFrame::doMouseButtonPressed(wxMouseEvent & event) {
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::startCameraAnimation(const Ogre::Vector3& targetPosition)
-{
+
+void ParticleUniverseEditorFrame::startCameraAnimation(const Ogre::Vector3 & targetPosition) {
 	mStartCameraAnimation = true;
 	mStartCameraAnimationPosition = _getCameraPosition();
 	mTargetCameraAnimationPosition = targetPosition;
@@ -802,46 +493,38 @@ void ParticleUniverseEditorFrame::startCameraAnimation(const Ogre::Vector3& targ
 	Ogre::Vector3 delta = 0.001 * mDiffCameraAnimationPosition;
 	mStartCameraAnimationDelta = std::max(Ogre::Math::Abs(delta.x), Ogre::Math::Abs(delta.y));
 	mStartCameraAnimationDelta = std::max(mStartCameraAnimationDelta, Ogre::Math::Abs(delta.z));
-	mStartCameraAnimationDelta += 0.03f; // May never be 0
+	mStartCameraAnimationDelta += 0.03; // May never be 0
 	mCameraAnimationTimer.reset();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnAddMesh(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnAddMesh(wxCommandEvent & event) {
 	doAddMesh();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doAddMesh(void)
-{
+
+void ParticleUniverseEditorFrame::doAddMesh() {
 	// Open dialog for mesh selection
 	MeshDialog meshDialog;
-	if (meshDialog.openDialog(this) != ParticleUniverse::StringUtil::BLANK)
-	{
+	if (meshDialog.openDialog(this) != ParticleUniverse::StringUtil::BLANK) {
 		doAddMesh(meshDialog.getMeshName());
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doAddMesh(const Ogre::String& meshName)
-{
-	if (mAddEntitySceneNode && mSceneManager)
-	{
-		if (mAddEntity)
-		{
+
+void ParticleUniverseEditorFrame::doAddMesh(const Ogre::String & meshName) {
+	if (mAddEntitySceneNode && mSceneManager) {
+		if (mAddEntity) {
 			// First delete the existing entity
-			if (mAnimationWindow)
-			{
+			if (mAnimationWindow) {
 				mAnimationWindow->notifyMeshDeleted(mAddEntity);
 			}
 			mAddEntitySceneNode->detachAllObjects();
 			mSceneManager->destroyEntity(mAddEntity);
-			mAddEntity = 0;
+			mAddEntity = nullptr;
 		}
 
 		// Add the new entity
 		mAddEntity = mSceneManager->createEntity("pu_add_entity", meshName);
 		mAddEntity->setQueryFlags(GizmoManager::OBJECT_FLAG);
-		if (mAnimationWindow)
-		{
+		if (mAnimationWindow) {
 			mAnimationWindow->loadAnimationNames(mAddEntity); // Always call, because this also clears the list
 			mAnimationWindow->loadBoneNames(mAddEntity); // Displays bone names, if available
 			mAnimationWindow->displayMeshInfo(mAddEntity); // Displays additional info
@@ -849,83 +532,57 @@ void ParticleUniverseEditorFrame::doAddMesh(const Ogre::String& meshName)
 		mAddEntitySceneNode->attachObject(mAddEntity);
 		mAddEntitySceneNode->_setDerivedOrientation(Ogre::Quaternion::IDENTITY);
 		mAddEntitySceneNode->setScale(Ogre::Vector3::UNIT_SCALE);
-		if (mUIMainToolbar)
-		{
+		if (mUIMainToolbar) {
 			mUIMainToolbar->getMiscIcons()->enableRemoveEntity(true);
-		}
-		if (mGizmoManager)
-		{
-			// Reset the Gizmo orientation to the orientation of the node to which the entity is attached
-			mGizmoManager->setOrientation(mAddEntitySceneNode->getOrientation());
-			mGizmoManager->setScale(Ogre::Vector3::UNIT_SCALE);
 		}
 		setLeftSideWindow(mAnimationWindow);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnToggleLight(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnToggleLight(wxCommandEvent & event) {
 	doToggleLight();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doToggleLight(void)
-{
-	if (mLightEntity)
-	{
-		if (mLightEntity->isVisible())
-		{
-			mLightEntity->setQueryFlags(0);
-			if (mGizmoManager->isAttachedToNode(mLightSceneNode))
-			{
 
+void ParticleUniverseEditorFrame::doToggleLight() {
+	if (mLightEntity) {
+		if (mLightEntity->isVisible()) {
+			mLightEntity->setQueryFlags(0);
+			if (mGizmoManager->isAttachedToNode(mLightSceneNode)) {
 				// Attach the gizmo to the particle system, because the light becomes invisible
 				mGizmoManager->attachToNode(mMainSceneNode);
 				_cameraLookAt(mMainSceneNode->_getDerivedPosition());
-			}
-			else
-			{
+			} else {
 				_cameraLookAt(mLightSceneNode->_getDerivedPosition());
 			}
-		}
-		else
-		{
+		} else {
 			// The light is visible again, so set the flag
 			mLightEntity->setQueryFlags(GizmoManager::OBJECT_FLAG);
 		}
 		showLight(!mLightEntity->isVisible());
-	}
-	else
-	{
+	} else {
 		createLight();
 		showLight(true);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnRemoveMesh(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnRemoveMesh(wxCommandEvent & event) {
 	doRemoveMesh();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doRemoveMesh(void)
-{
-	if (mAddEntitySceneNode && mAddEntity && mSceneManager)
-	{
+
+void ParticleUniverseEditorFrame::doRemoveMesh() {
+	if (mAddEntitySceneNode && mAddEntity && mSceneManager) {
 		// Remove the animation window
 		mAnimationWindow->notifyMeshDeleted(mAddEntity);
 		resetLeftSideWindow();
 
 		// Attach the gizmo to the particle system, because the mesh is removed
-		if (mGizmoManager->isAttachedToNode(mAddEntitySceneNode))
-		{
-			if (mGizmoManager->getGizmoType() == Gizmo::GIZMO_SCALE)
-			{
+		if (mGizmoManager->isAttachedToNode(mAddEntitySceneNode)) {
+			if (mGizmoManager->getGizmoType() == Gizmo::GIZMO_SCALE) {
 				// Set the type to move, because scaling the particle system is not possible
 				mGizmoManager->setGizmoType(Gizmo::GIZMO_MOVE);
 				mGizmoManager->attachToNode(mMainSceneNode);
 				_cameraLookAt(mMainSceneNode->_getDerivedPosition());
-			}
-			else
-			{
+			} else {
 				// Just add to the main scenenode
 				mGizmoManager->attachToNode(mMainSceneNode);
 				_cameraLookAt(mMainSceneNode->_getDerivedPosition());
@@ -935,52 +592,47 @@ void ParticleUniverseEditorFrame::doRemoveMesh(void)
 		// First delete the existing entity
 		mAddEntitySceneNode->detachAllObjects();
 		mSceneManager->destroyEntity(mAddEntity);
-		mAddEntity = 0;
-		if (mUIMainToolbar)
-		{
+		mAddEntity = nullptr;
+		if (mUIMainToolbar) {
 			mUIMainToolbar->getMiscIcons()->enableRemoveEntity(false);
 		}
 
 		// Clear the animation info
-		mAnimationWindow->displayMeshInfo(0);
+		mAnimationWindow->displayMeshInfo(nullptr);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::selectMaterialForAddedMesh(void)
-{
+
+void ParticleUniverseEditorFrame::selectMaterialForAddedMesh() {
 	// Open dialog for material selection
 	MaterialDialog materialDialog;
-	if (materialDialog.openDialog(this) != ParticleUniverse::StringUtil::BLANK)
-	{
+	if (materialDialog.openDialog(this) != ParticleUniverse::StringUtil::BLANK) {
 		// Material selected
-		if (mAddEntity)
-		{
+		if (mAddEntity) {
 			// Set the material
 			mAddEntity->setMaterialName(materialDialog.getMaterialName());
 			mAnimationWindow->displayMeshInfo(mAddEntity);
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::setPropertyWindow(PropertyWindow* propertyWindow)
-{
-	if (!propertyWindow)
-		return;
 
-	if (IsBeingDeleted())
-	{
+void ParticleUniverseEditorFrame::setPropertyWindow(PropertyWindow * propertyWindow) {
+	if (!propertyWindow) {
+		return;
+	}
+
+	if (IsBeingDeleted()) {
 		return;
 	}
 
 	// Hide it by default
 	propertyWindow->Hide();
 
-	if (mPropertyWindow)
-	{
-		// Remove the old one
-		mLBAndPropSizer->Clear();
-		mLBAndPropSizer->Add(mListOfTemplates, 2, wxTOP);
-		mLBAndPropSizer->AddSpacer(4);
+	// Remove the old one
+	mLBAndPropSizer->Clear();
+	mLBAndPropSizer->Add(mParticleExplorer, 2, wxTOP);
+	mLBAndPropSizer->AddSpacer(4);
+
+	if (mPropertyWindow) {
 		mPropertyWindow->Hide();
 	}
 
@@ -988,25 +640,22 @@ void ParticleUniverseEditorFrame::setPropertyWindow(PropertyWindow* propertyWind
 	propertyWindow->ClearSelection(); // To force update of the last selected property
 	mPropertyWindow = propertyWindow; // Assign the passed property window
 
-	/** Only in case the edittab is displayed, show the property window and also only in case there is no check on the focus of mListOfTemplates.
-		The check on mCheckFocusListOfTemplates is added, because after a particle system has been selected, new edit components are created.
+	/** Only in case the edittab is displayed, show the property window and also only in case there is no check on the focus of mParticleExplorer.
+		The check on mCheckFocusParticleExplorer is added, because after a particle system has been selected, new edit components are created.
 		Every creation of an edit component results in creation of a property window, which is displayed, causing a flashing effect. As long as
-		mCheckFocusListOfTemplates is true, the property windows should not be displayed.
+		mCheckFocusParticleExplorer is true, the property windows should not be displayed.
 	*/
-	if (mNotebook && mNotebook->GetSelection() == NOTEBOOK_EDIT && !mCheckFocusListOfTemplates)
-	{
+	if (mNotebook && mNotebook->GetSelection() == NOTEBOOK_EDIT && !mCheckFocusParticleExplorer) {
 		propertyWindow->Show();
 	}
 	mLBAndPropSizer->Layout();
 	Layout(); // Aligns the property window correct
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::setPropertyWindow(void)
-{
-	if (mPropertyWindow)
-	{
+
+void ParticleUniverseEditorFrame::setPropertyWindow() {
+	if (mPropertyWindow) {
 		mLBAndPropSizer->Clear();
-		mLBAndPropSizer->Add(mListOfTemplates, 2, wxTOP);
+		mLBAndPropSizer->Add(mParticleExplorer, 2, wxTOP);
 		mLBAndPropSizer->AddSpacer(4);
 		mLBAndPropSizer->Add(mPropertyWindow, 2, wxEXPAND | wxRESERVE_SPACE_EVEN_IF_HIDDEN);
 		mPropertyWindow->Show();
@@ -1015,95 +664,86 @@ void ParticleUniverseEditorFrame::setPropertyWindow(void)
 		Layout();
 	}
 }
-//-----------------------------------------------------------------------
-PropertyWindow* ParticleUniverseEditorFrame::getPropertyWindow(void)
-{
+
+PropertyWindow * ParticleUniverseEditorFrame::getPropertyWindow() {
 	return mPropertyWindow;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::hidePropertyWindow(void)
-{
-	if (mPropertyWindow)
-	{
+
+void ParticleUniverseEditorFrame::hidePropertyWindow() {
+	if (mPropertyWindow) {
 		mPropertyWindow->Hide();
 		mLBAndPropSizer->Layout();
 		Layout();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::removePropertyWindow(wxPropertyGrid* propertyWindow)
-{
-	if (IsBeingDeleted())
-		return;
 
-	if (!propertyWindow)
+void ParticleUniverseEditorFrame::removePropertyWindow(wxPropertyGrid * propertyWindow) {
+	if (IsBeingDeleted()) {
 		return;
+	}
 
-	if (mPropertyWindow)
-	{
+	if (!propertyWindow) {
+		return;
+	}
+
+	if (mPropertyWindow) {
 		propertyWindow->Hide();
 		mLBAndPropSizer->Clear();
-		mLBAndPropSizer->Add(mListOfTemplates, 2, wxTOP);
+		mLBAndPropSizer->Add(mParticleExplorer, 2, wxTOP);
 		mLBAndPropSizer->AddSpacer(4);
-		mPropertyWindow = 0;
+		mPropertyWindow = nullptr;
 		mLBAndPropSizer->Layout();
 		Layout();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::setLeftSideWindow(wxWindow* window)
-{
-	if (window)
-	{
+
+void ParticleUniverseEditorFrame::setLeftSideWindow(wxWindow * window) {
+	if (window) {
 		mLBAndPropSizer->Clear();
-		mLBAndPropSizer->Add(mListOfTemplates, 2, wxTOP);
+		mLBAndPropSizer->Add(mParticleExplorer, 2, wxTOP);
 		mLBAndPropSizer->AddSpacer(4);
 		mLBAndPropSizer->Add(window, 2, wxEXPAND | wxRESERVE_SPACE_EVEN_IF_HIDDEN);
 		window->Show();
-		mListOfTemplates->Fit();
+		mParticleExplorer->Fit();
 		window->Fit();
 		mLBAndPropSizer->Layout();
 		Layout();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::removeLeftSideWindow(wxWindow* window)
-{
-	if (window)
-	{
+
+void ParticleUniverseEditorFrame::removeLeftSideWindow(wxWindow * window) {
+	if (window) {
 		window->Hide();
 		mLBAndPropSizer->Clear();
-		mLBAndPropSizer->Add(mListOfTemplates, 2, wxTOP);
+		mLBAndPropSizer->Add(mParticleExplorer, 2, wxTOP);
 		mLBAndPropSizer->AddSpacer(4);
-		mListOfTemplates->Fit();
+		mParticleExplorer->Fit();
 		mLBAndPropSizer->Layout();
 		Layout();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::resetLeftSideWindow()
-{
-	if (mAnimationWindow)
-	{
+
+void ParticleUniverseEditorFrame::resetLeftSideWindow() {
+	if (!mNotebook) {
+		return; // TODO: no idea why, but this line is needed to make the renderview show stuff
+	}
+	if (mAnimationWindow) {
 		mAnimationWindow->Hide();
 	}
-	if (mPropertyWindow)
-	{
+	if (mPropertyWindow) {
 		mPropertyWindow->Hide();
 	}
 	mLBAndPropSizer->Clear();
-	mLBAndPropSizer->Add(mListOfTemplates, 2, wxTOP);
+	mLBAndPropSizer->Add(mParticleExplorer, 2, wxTOP);
 	mLBAndPropSizer->AddSpacer(4);
 	mLBAndPropSizer->AddStretchSpacer(2);
-	mListOfTemplates->Fit();
+	mParticleExplorer->Fit();
 	mLBAndPropSizer->Layout();
 	Layout();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnHelp(void)
-{
-	if (mPropertyWindow)
-	{
+
+void ParticleUniverseEditorFrame::OnHelp() {
+	if (mPropertyWindow) {
 		// Start the browser
 		wxString url = CURRENT_DIR + SCRIPT_DIR + mPropertyWindow->getHelpHtml();
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
@@ -1113,107 +753,110 @@ void ParticleUniverseEditorFrame::OnHelp(void)
 		std::string s(ws.begin(), ws.end());
 		system(s.c_str());
 #endif
-		mEditNotebookPage->getEditCanvas()->SetFocus(); // Needed to prevent exception
+		mEditNotebookPage->getEditCanvas()->SetFocus(); // Needed to prevent exception. TODO: wtf? if we can eleminate this, we can kick the canvas include
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::LoadListOfTemplates()
-{
+
+void ParticleUniverseEditorFrame::LoadParticleExplorer() {
 	// Fill the treestructure with particle system template names
-	mListOfTemplates->Freeze();
-	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+	mParticleExplorer->Freeze();
+	ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	ParticleUniverse::vector<ParticleUniverse::String> names;
 	particleSystemManager->particleSystemTemplateNames(names);
-	ParticleUniverse::vector<ParticleUniverse::String>::iterator it;
-	ParticleUniverse::vector<ParticleUniverse::String>::iterator itEnd = names.end();
-	mListOfTemplates->DeleteAllItems(); // Clear the tree
+	mParticleExplorer->DeleteAllItems(); // Clear the tree
 	ROOT_NODE_NAME = _("Particle Systems");
 	DEFAULT_CATEGORY_NAME = _("General");
-	wxTreeItemId rootNode = mListOfTemplates->AddRoot(ROOT_NODE_NAME, 0);
-	wxTreeItemId generalCategoryNode = mListOfTemplates->AppendItem(rootNode, DEFAULT_CATEGORY_NAME, 1); // Add the general node by default
-	for (it = names.begin(); it != itEnd; ++it)
-	{
+	wxTreeItemId rootNode = mParticleExplorer->AddRoot(ROOT_NODE_NAME, 0);
+	mParticleExplorer->AppendItem(rootNode, DEFAULT_CATEGORY_NAME, 1); // Add the general node by default
+
+	for (ParticleUniverse::String & str : names) {
 		bool append = true;
 
 		// Check on particle systems with a PhysX type and don't append them to the list
 		// This must always be done, even if PU_PHYSICS_PHYSX is not defined.
-		ParticleUniverse::ParticleSystem* pSys = particleSystemManager->getParticleSystemTemplate(*it);
-		if (!mUsePhysX)
-		{
+		ParticleUniverse::ParticleSystem * pSys = particleSystemManager->getParticleSystemTemplate(str);
+		if (!mUsePhysX) {
 			append = !(pSys && (pSys->hasExternType("PhysXActor") || pSys->hasExternType("PhysXFluid")));
 		}
 
-		if (append)
-		{
+		if (append) {
 			//	Get category from the template.
 			wxString categoryName;
-			if (pSys)
-			{
+			if (pSys) {
 				categoryName = ogre2wx(pSys->getCategory());
 			}
-			wxString particleSystem = ogre2wx(*it);
-			mListOfTemplates->addItem(categoryName, particleSystem, false);
+			wxString particleSystem = ogre2wx(str);
+			mParticleExplorer->addItem(categoryName, particleSystem, false);
 		}
 	}
-	
-	mListOfTemplates->sortAll();
 
-	mUIMainToolbar->getFileIcons()->reset(mListOfTemplates->GetCount());
+	mParticleExplorer->sortAll();
+
+	mUIMainToolbar->getFileIcons()->reset(mParticleExplorer->GetCount());
 	mUIMainToolbar->getCompileIcons()->disableAll();
 	resetPlayIcons();
-	mListOfTemplates->expandRootOnly();
-	wxTreeItemId item = mListOfTemplates->setToFirstParticleSystem();
-	if (item.IsOk())
-	{
+	mParticleExplorer->expandRootOnly();
+	wxTreeItemId item = mParticleExplorer->setToFirstParticleSystem();
+	if (item.IsOk()) {
 		mLatestSelection = item;
-	}
-	else
-	{
+	} else {
 		// There is no item, so return to the root
-		mLatestSelection = mListOfTemplates->GetRootItem();
-		mListOfTemplates->SelectItem(mLatestSelection);
+		mLatestSelection = mParticleExplorer->GetRootItem();
+		mParticleExplorer->SelectItem(mLatestSelection);
 	}
 	wxCommandEvent command;
 	OnTemplatesClick(command);
 	applyTextConfigOptions();
-	mListOfTemplates->Thaw();
+	mParticleExplorer->Thaw();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::CreateTabs()
-{
+
+void ParticleUniverseEditorFrame::CreateTabs() {
 	// Set to max values to be able to size
 	mNotebook = new wxNotebook(this, wxID_ANY, wxPoint(TAB_POS_X, TAB_POS_Y));
 
 	// Set the drop target
 	mNotebook->SetDropTarget(new FileDropTarget(this));
-
-	// Render page (beware that the order of creating the tabs in the notebook in important)
-    mControl = new wxOgreControl(mNotebook, ID_TAB_RENDER);
+	// ----------
+	// Render page
+	// ----------
+	wxPanel * p1 = new wxPanel(mNotebook);
+	mControl = new wxOgreControl(p1, ID_TAB_RENDER);
 	mControl->setCallbackFrame(this);
-    mNotebook->AddPage(mControl, _("Render"), false);
+	mNotebook->AddPage(p1, _("Render"), false);
 
+	// ----------
 	// Edit page
-	wxBoxSizer* split = new wxBoxSizer(wxHORIZONTAL); // Main sizer
-	mEditNotebookPage = new EditTab(mNotebook, this);
-	mNotebook->AddPage(mEditNotebookPage, _("Edit"), true);
-	mControlPanelWithSmallRenderWindow = new wxPanel(this);
-	wxPanel* ogreControlSmallPanel = new wxPanel(mControlPanelWithSmallRenderWindow);
-	mOgreControlSmall = new OgreControlComponent(ogreControlSmallPanel);
-	wxPanel* dividerPanel = new wxPanel(mControlPanelWithSmallRenderWindow);
-	split->Add(ogreControlSmallPanel, 2, wxEXPAND);
-	split->Add(dividerPanel, 1, wxEXPAND);
-	mControlPanelWithSmallRenderWindow->SetSizer(split);
+	// ----------
+	wxPanel * editPanel = new wxPanel(mNotebook);
+	wxBoxSizer * wbs = new wxBoxSizer(wxVERTICAL);
+	wxSplitterWindow * splitWin = new wxSplitterWindow(editPanel, wxID_ANY);
+	wbs->Add(splitWin, 1, wxEXPAND);
+	wbs->Layout();
+	editPanel->SetSizer(wbs);
+	splitWin->SetSashGravity(0.5);
+	mEditNotebookPage = new EditTab(splitWin, this);
+	mNotebook->AddPage(editPanel, _("Edit"), true);
+	editPanel->FitInside();
+	splitWin->FitInside();
 
-	Ogre::Real editProportion = 0.5f;
-	if (mConfigDialog)
-	{
-		editProportion = mConfigDialog->getEditProportion();
-	}
-	editProportion *= 100;
-	mEditSizer->Add(mNotebook, (int)editProportion, wxEXPAND);
-	mEditSizer->Add(mControlPanelWithSmallRenderWindow, (int)(100 - editProportion), wxEXPAND);
-	mEditSizer->Layout();
-	mSubHSizer->Add(mEditSizer, 1, wxEXPAND);
+	mControlPanelWithSmallRenderWindow = new wxPanel(splitWin);
+	mOgreControlSmall = new wxOgreControl(mControlPanelWithSmallRenderWindow, wxID_ANY);
+	splitWin->SplitHorizontally(mEditNotebookPage, mControlPanelWithSmallRenderWindow);
+
+	mSubHSizer->Add(mNotebook, 1, wxEXPAND);
+
+	// ----------
+	// Script page
+	// ----------
+	mTextCtrl = new TextControl(this, mNotebook, ID_TAB_SCRIPT, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxHSCROLL | wxTE_RICH);
+	mNotebook->AddPage(mTextCtrl, _("Script"), false);
+	mTextCtrl->SetFont(wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+
+	// ----------
+	// Materials page
+	// ----------
+	mMaterialNotebookPage = new MaterialTab(mNotebook, this);
+	mNotebook->AddPage(mMaterialNotebookPage, _("Material"), false);
 
 	Connect(wxEVT_MOVING, wxMoveEventHandler(ParticleUniverseEditorFrame::OnMoveAndSize));
 	Connect(wxEVT_MOVE, wxMoveEventHandler(ParticleUniverseEditorFrame::OnMoveAndSize));
@@ -1222,75 +865,52 @@ void ParticleUniverseEditorFrame::CreateTabs()
 	Connect(wxEVT_ICONIZE, wxSizeEventHandler(ParticleUniverseEditorFrame::OnMinMax));
 	Connect(wxEVT_IDLE, wxIdleEventHandler(ParticleUniverseEditorFrame::OnIdle));
 
-	// Script page
-//#ifdef PU_FULL_VERSION
-	mTextCtrl = new TextControl(this, mNotebook, ID_TAB_SCRIPT, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxHSCROLL | wxTE_RICH);
-	mNotebook->AddPage(mTextCtrl, _("Script"), false);
-	mTextCtrl->SetFont(wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
-//#endif // PU_FULL_VERSION
-
-	// Implement Materials page
-	mMaterialNotebookPage = new MaterialTab(mNotebook, this);
-	mNotebook->AddPage(mMaterialNotebookPage, _("Material"), false);
-
 	Connect(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxCommandEventHandler(ParticleUniverseEditorFrame::OnTabChanging));
 	Connect(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxCommandEventHandler(ParticleUniverseEditorFrame::OnTabChanged));
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::LoadTextControl(wxString text)
-{
-	if (mTextCtrl)
-	{
+
+void ParticleUniverseEditorFrame::LoadTextControl(wxString text) {
+	if (mTextCtrl) {
 		mTextCtrl->Clear();
 		mTextCtrl->AppendText(text);
 		mTextCtrl->SetInsertionPoint(0);
 		mScriptChanged = false;
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnNewParticleSystem(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnNewParticleSystem(wxCommandEvent & event) {
 	doNewParticleSystem();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doNewParticleSystem(void)
-{
+
+void ParticleUniverseEditorFrame::doNewParticleSystem() {
 	wxString templateName = wxT("ParticleSystem") + ogre2wx(ParticleUniverse::StringConverter::toString(mNewSystemCounter));
-	wxTreeItemId category = mListOfTemplates->getCurrentCategory();
-	if (category.IsOk())
-	{
-		wxTreeItemId newItem = mListOfTemplates->PrependItem(category, templateName);
-		if (newItem.IsOk())
-		{
+	wxTreeItemId category = mParticleExplorer->getCurrentCategory();
+	if (category.IsOk()) {
+		wxTreeItemId newItem = mParticleExplorer->PrependItem(category, templateName);
+		if (newItem.IsOk()) {
 			mNewSystemCounter++;
-	
+
 			// Create new particle system template. If the name is changed in the (script) editor, the template name is updated.
-			ParticleUniverse::ParticleSystem* pSys = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystemTemplate(
-				wx2ogre(templateName), 
-				Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-	
+			ParticleUniverse::ParticleSystem * pSys = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystemTemplate(wx2ogre(templateName), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
 			// Set a default technique with renderer and emitter
-			if (pSys)
-			{
-				ParticleUniverse::ParticleTechnique* technique = pSys->createTechnique();
-				if (technique)
-				{
-					ParticleUniverse::ParticleEmitter* emitter = technique->createEmitter("Point");
+			if (pSys) {
+				ParticleUniverse::ParticleTechnique * technique = pSys->createTechnique();
+				if (technique) {
+					ParticleUniverse::ParticleEmitter * emitter = technique->createEmitter("Point");
 					technique->setRenderer("Billboard");
 
 					// Change some default settings (width, height, depth, velocity) based on the camera distance
-					if (_getCamera())
-					{
+					if (_getCamera()) {
 						Ogre::Real distance = (mMainSceneNode->_getDerivedPosition() - _getCameraPosition()).length();
-						Ogre::Real dimension = 50.0f * distance / 1500.0f; // the camera distance in versions < 1.5 was about 1500; the default value was set accordingly
+						Ogre::Real dimension = 50.0 * distance / 1500.0; // the camera distance in versions < 1.5 was about 1500; the default value was set accordingly
 						technique->setDefaultWidth(dimension);
 						technique->setDefaultHeight(dimension);
 						technique->setDefaultDepth(dimension);
 
-						if (emitter)
-						{
-							ParticleUniverse::DynamicAttributeFixed* dynamicAttributeFixed = PU_NEW_T(ParticleUniverse::DynamicAttributeFixed, ParticleUniverse::MEMCATEGORY_SCENE_OBJECTS)();
-							Ogre::Real velocity = 100.0f * distance / 1500.0f; // the camera distance in versions < 1.5 was about 1500; the default value was set accordingly
+						if (emitter) {
+							ParticleUniverse::DynamicAttributeFixed * dynamicAttributeFixed = PU_NEW_T(ParticleUniverse::DynamicAttributeFixed, ParticleUniverse::MEMCATEGORY_SCENE_OBJECTS)();
+							Ogre::Real velocity = 100.0 * distance / 1500.0; // the camera distance in versions < 1.5 was about 1500; the default value was set accordingly
 							dynamicAttributeFixed->setValue(velocity);
 							emitter->setDynVelocity(dynamicAttributeFixed);
 						}
@@ -1298,45 +918,29 @@ void ParticleUniverseEditorFrame::doNewParticleSystem(void)
 				}
 			}
 
-			mListOfTemplates->SelectItem(newItem);
+			mParticleExplorer->SelectItem(newItem);
 			wxCommandEvent command;
 			OnTemplatesClick(command);
 			resetPlayIcons();
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnLoadFile(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnLoadFile(wxCommandEvent & event) {
 	doLoadFile();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doLoadFile(void)
-{
+
+void ParticleUniverseEditorFrame::doLoadFile() {
 	// Add a new directory and parse all resources in that directory
-	wxFileDialog loadDialog(this, 
-		_("Load a scriptfile"), 
-		wxT(""), 
-		wxT(""),
-		_("Particle and Alias scripts (*.pu;*.pua)|*.pu;*.pua"),
-		wxFD_OPEN, 
-		wxDefaultPosition, 
-		wxDefaultSize, _("Load"));
-	if (loadDialog.ShowModal() == wxID_OK)
-	{
+	wxFileDialog loadDialog(this, _("Load a scriptfile"), wxT(""), wxT(""), _("Particle and Alias scripts (*.pu;*.pua)|*.pu;*.pua"), wxFD_OPEN, wxDefaultPosition, wxDefaultSize, _("Load"));
+	if (loadDialog.ShowModal() == wxID_OK) {
 		// User has pressed ok, so load the content
 		ParticleUniverse::String inputLine;
 		ParticleUniverse::String script;
 		std::ifstream fpIn;
-#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
-		fpIn.open(loadDialog.GetPath());
-#else
 		fpIn.open(loadDialog.GetPath().mb_str());
-#endif
-		if (fpIn)
-		{
-			while (!fpIn.eof())
-			{
+		if (fpIn) {
+			while (!fpIn.eof()) {
 				getline(fpIn, inputLine);
 				script.append(inputLine + "\n");
 			}
@@ -1345,86 +949,66 @@ void ParticleUniverseEditorFrame::doLoadFile(void)
 			// Parse the script
 			mLogListener->suppressLogging(false); // Make logging available
 			parseScript(script);
-			if (!mLogListener->errorsLogged())
-			{
+			if (!mLogListener->errorsLogged()) {
 				showMessage(_("Compilation OK"), wxOK | wxICON_INFORMATION);
 			}
 			mLogListener->suppressLogging(true);
 
 			// Update list with templates
-			LoadListOfTemplates();
-			ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			LoadParticleExplorer();
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 			ParticleUniverse::String name = particleSystemManager->getLastCreatedParticleSystemTemplateName();
-			wxTreeItemId item = mListOfTemplates->findParticleSystem(ogre2wx(name));
-			if (item.IsOk())
-			{
-				mListOfTemplates->SelectItem(item);
+			wxTreeItemId item = mParticleExplorer->findParticleSystem(ogre2wx(name));
+			if (item.IsOk()) {
+				mParticleExplorer->SelectItem(item);
 			}
 			wxCommandEvent command;
 			OnTemplatesClick(command);
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnLoadResourcePath(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnLoadResourcePath(wxCommandEvent & event) {
 	doLoadResourcePath();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doLoadResourcePath(void)
-{
+
+void ParticleUniverseEditorFrame::doLoadResourcePath() {
 	// Add a resource location which contains particle universe scripts
 	wxString dir = wxDirSelector(_("Select a directory that contains *.pu and .pua scripts"));
-	if (!dir.empty())
-	{
+	if (!dir.empty()) {
 		SetCursor(*wxHOURGLASS_CURSOR);
 
 		Ogre::ResourceGroupManager::getSingletonPtr()->addResourceLocation(wx2ogre(dir), "FileSystem", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		Ogre::ResourceGroupManager::getSingletonPtr()->clearResourceGroup(Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyAllParticleSystemTemplates();
 		Ogre::ResourceGroupManager::getSingletonPtr()->initialiseResourceGroup(Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-		LoadListOfTemplates();
+		LoadParticleExplorer();
 		addResourcePathToConfig(dir);
 		SetCursor(wxNullCursor);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::addResourcePathToConfig(wxString& resourcePath)
-{
-	if (mConfigDialog)
-	{
+
+void ParticleUniverseEditorFrame::addResourcePathToConfig(wxString & resourcePath) {
+	if (mConfigDialog) {
 		ParticleUniverse::String dir = wx2ogre(resourcePath);
 		mConfigDialog->addToDirList(dir);
 		mConfigDialog->saveConfig();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnSave(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnSave(wxCommandEvent & event) {
 	doSave();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doSave(void)
-{
-#ifdef PU_FULL_VERSION
-	// Save the current particle system as a .pu file
 
+void ParticleUniverseEditorFrame::doSave() {
+	// Save the current particle system as a .pu file
 	// First synchronise everything
 	synchroniseScriptWithEditTab();
 
-	if (mSavedFile == WX_STRING_BLANK)
-	{
-		wxString filename = mListOfTemplates->GetItemText(mListOfTemplates->GetSelection());
-		wxFileDialog saveDialog(this, 
-			_("Save the script"), 
-			wxT(""), 
-			filename,
-			_("Particle and Alias scripts (*.pu;*.pua)|*.pu;*.pua"),
-			wxFD_SAVE | wxFD_OVERWRITE_PROMPT, 
-			wxDefaultPosition, 
-			wxDefaultSize, _("Save"));
-		if (saveDialog.ShowModal() == wxID_OK)
-		{
+	if (mSavedFile == WX_STRING_BLANK) {
+		wxString filename = mParticleExplorer->GetItemText(mParticleExplorer->GetSelection());
+		wxFileDialog saveDialog(this, _("Save the script"), wxT(""), filename, _("Particle and Alias scripts (*.pu;*.pua)|*.pu;*.pua"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition, wxDefaultSize, _("Save"));
+		if (saveDialog.ShowModal() == wxID_OK) {
 			// User has pressed ok, so save the content of mTextCtrl
 			mSavedFile = saveDialog.GetPath();
 		}
@@ -1433,65 +1017,45 @@ void ParticleUniverseEditorFrame::doSave(void)
 	mTextCtrl->SaveFile(mSavedFile);
 	mScriptChanged = false;
 	mEditNotebookPage->setSystemUpdatedByEditPage(false);
-
-#endif // PU_FULL_VERSION
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnSaveAs(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnSaveAs(wxCommandEvent & event) {
 	doSaveAs();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doSaveAs(void)
-{
-#ifdef PU_FULL_VERSION
 
+void ParticleUniverseEditorFrame::doSaveAs() {
 	// First synchronise everything
 	synchroniseScriptWithEditTab();
 
 	// Save the current particle system as a .pu file
-	wxFileDialog saveDialog(this, 
-		_("Save the script as"), 
-		wxT(""), 
-		wxT(""),
-		_("Particle and Alias scripts (*.pu;*.pua)|*.pu;*.pua"),
-		wxFD_SAVE | wxFD_OVERWRITE_PROMPT, 
-		wxDefaultPosition, 
-		wxDefaultSize, _("Save As"));
-	if (saveDialog.ShowModal() == wxID_OK)
-	{
+	wxFileDialog saveDialog(this, _("Save the script as"), wxT(""), wxT(""), _("Particle and Alias scripts (*.pu;*.pua)|*.pu;*.pua"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition, wxDefaultSize, _("Save As"));
+	if (saveDialog.ShowModal() == wxID_OK) {
 		// User has pressed ok, so save the content of mTextCtrl
 		mTextCtrl->SaveFile(saveDialog.GetPath());
 		mScriptChanged = false;
 		mEditNotebookPage->setSystemUpdatedByEditPage(false);
 	}
-#endif // PU_FULL_VERSION
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnMoveAndSize(wxMoveEvent& event)
-{
-	if (IsBeingDeleted())
-	{
+
+void ParticleUniverseEditorFrame::OnMoveAndSize(wxMoveEvent & event) {
+	if (IsBeingDeleted()) {
 		return;
 	}
 
 	// Also move the MDI parent
-	if (mEditNotebookPage && mNotebook->GetSelection() == NOTEBOOK_EDIT)
-	{
+	if (mEditNotebookPage && mNotebook->GetSelection() == NOTEBOOK_EDIT) {
 		Layout();
 		mEditNotebookPage->Freeze(); // To prevent flickering
 		mEditNotebookPage->adjustPosition();
-		mEditNotebookPage->ActivateNext(); // Needed to set the focus on the MDI window and be able to select an MDI child
+		//mEditNotebookPage->ActivateNext(); // Needed to set the focus on the MDI window and be able to select an MDI child
 		mEditNotebookPage->Thaw();
 		mMinMax = true; // Only for restoring the frame; this causes the MDI window to reposition after a restore
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnMinMax(wxSizeEvent& event)
-{
-	if (IsBeingDeleted())
-	{
-		/** This was done in case a wxEVT_ACTIVATE was generated, which is also generated if the window is closed. This would cause a runtime error. 
+
+void ParticleUniverseEditorFrame::OnMinMax(wxSizeEvent & event) {
+	if (IsBeingDeleted()) {
+		/** This was done in case a wxEVT_ACTIVATE was generated, which is also generated if the window is closed. This would cause a runtime error.
 			The underlying windows were already deleted and mEditNotebookPage became an invalid (bad) pointer.
 			Later on, the connection with wxEVT_ACTIVATE was removed, because setting focus on the property window was not possible.
 			This code stays in just in case.
@@ -1499,64 +1063,49 @@ void ParticleUniverseEditorFrame::OnMinMax(wxSizeEvent& event)
 		return;
 	}
 
-	if (mEditNotebookPage && mNotebook->GetSelection() == NOTEBOOK_EDIT)
-	{
+	if (mEditNotebookPage && mNotebook->GetSelection() == NOTEBOOK_EDIT) {
 		/** This is a two-step situation. The mEditNotebookPage position cannot be updated here, because of some strange ordering (positions are 0, 0).
 			So the OnIdle function will reset the mEditNotebookPage after the application has been minimized / maximized.
 		*/
 		mMinMax = true;
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnIdle(wxIdleEvent& event)
-{
-	if (IsBeingDeleted())
-	{
+
+void ParticleUniverseEditorFrame::OnIdle(wxIdleEvent & event) {
+	if (IsBeingDeleted()) {
 		return;
 	}
 
 	// Update the animation of the mesh
-	if (mAnimationWindow)
-	{
+	if (mAnimationWindow) {
 		// Update the animation (if running)
 		mAnimationWindow->updateAnimation();
 
-		if (mAnimationWindow->isParticleSystemAttachedToEntity())
-		{
+		if (mAnimationWindow->isParticleSystemAttachedToEntity()) {
 			/** Either the Gizmo follows the orientation of the tagpoint to which the particle system is attached, or the tagpoint follows
 				the Gimzo's orientation if a user manipulated the Gizmo
 			*/
-			if (mGizmoManager)
-			{
+			if (mGizmoManager) {
 				mMainSceneNode->setPosition(mAnimationWindow->_getDerivedPositionTagPoint());
-				if (mGizmoManager->getAttachedNode() == mMainSceneNode)
-				{
-					if (mAnimationWindow->isAnimationRunning())
-					{
+				if (mGizmoManager->getAttachedNode() == mMainSceneNode) {
+					if (mAnimationWindow->isAnimationRunning()) {
 						// The Gizmo must follow the tagpoint
 						mGizmoManager->setOrientation(mAnimationWindow->_getDerivedOrientationTagPoint());
-					}
-					else
-					{
+					} else {
 						/** If a user has manually taken the action to rotate the Gizmo, the Gizmo must not follow the tagPoint of the Particle
 							System, but the other way around; the tagpoint must be re-oriented according to the rotation of the Gizmo
 						*/
-						if (mAnimationWindow->isOrientationInheritedFromBone())
-						{
+						if (mAnimationWindow->isOrientationInheritedFromBone()) {
 							// Particle System inherits orientation from the bone to which it is attached
 							mAnimationWindow->_setDerivedOrientationTagPoint(mAddEntitySceneNode->getOrientation().Inverse() * mMainSceneNode->getOrientation());
-						}
-						else
-						{
+						} else {
 							// Particle System does not inherit orientation from the bone to which it is attached
-//							mAnimationWindow->_setDerivedOrientationTagPoint((mAddEntitySceneNode->getOrientation() * 
+//							mAnimationWindow->_setDerivedOrientationTagPoint((mAddEntitySceneNode->getOrientation() *
 //								mAnimationWindow->_getDerivedOrientationTagPointParent()).Inverse() * mMainSceneNode->getOrientation());
 							mAnimationWindow->setOrientationTagPoint(mAddEntitySceneNode->getOrientation().Inverse() * mMainSceneNode->getOrientation());
 						}
 					}
-				}
-				else
-				{
+				} else {
 					// Set the orientation of the main scene node and not the gizmo (because the Gizmo is attached to something else)
 					mMainSceneNode->setOrientation(mAnimationWindow->_getDerivedOrientationTagPoint());
 				}
@@ -1566,15 +1115,13 @@ void ParticleUniverseEditorFrame::OnIdle(wxIdleEvent& event)
 
 	// Check whether another item from the tree control has been selected,
 	// because no event can be catched after a change of selection.
-	if (mLatestSelection != mListOfTemplates->GetSelection())
-	{
+	if (mLatestSelection != mParticleExplorer->GetSelection()) {
 		wxCommandEvent command;
 		OnTemplatesClick(command);
 	}
 
 	// If resized, update the position
-	if (mMinMax)
-	{
+	if (mMinMax) {
 		mEditNotebookPage->adjustPosition();
 		mMinMax = false;
 	}
@@ -1582,34 +1129,25 @@ void ParticleUniverseEditorFrame::OnIdle(wxIdleEvent& event)
 	// Update the overlay
 	updateOverlay();
 
-	// Determine whether the focus is on mListOfTemplates. If is isn't, set the focus.
-	if (mCheckFocusListOfTemplates)
-	{
-		wxWindow* win = FindFocus();
-		if (win == mListOfTemplates)
-		{
-			mCheckFocusListOfTemplates = false;
-		}
-		else
-		{
-			if (mListOfTemplates)
-			{
-				mListOfTemplates->SetFocus();
+	// Determine whether the focus is on mParticleExplorer. If is isn't, set the focus.
+	if (mCheckFocusParticleExplorer) {
+		wxWindow * win = FindFocus();
+		if (win == mParticleExplorer) {
+			mCheckFocusParticleExplorer = false;
+		} else {
+			if (mParticleExplorer) {
+				mParticleExplorer->SetFocus();
 			}
 		}
 	}
-	
-	if (mStartCameraAnimation && _isCameraOrthographic())
-	{
-		Ogre::Real timeScale = 2.0f;
+
+	if (mStartCameraAnimation && _isCameraOrthographic()) {
+		Ogre::Real timeScale = 2.0;
 		Ogre::Real timer = mCameraAnimationTimer.getMilliseconds();
 		Ogre::Real deltaTime = 0.001 * timeScale * timer; // In seconds
-		if (deltaTime >= 1.0f)
-		{
+		if (deltaTime >= 1.0) {
 			mStartCameraAnimation = false;
-		}
-		else
-		{
+		} else {
 			Ogre::Quaternion fromOrientation;
 			Ogre::Quaternion toOrientation = mStartCameraAnimationPosition.getRotationTo(mTargetCameraAnimationPosition);
 			Ogre::Quaternion newOrientation = Ogre::Quaternion::Slerp(deltaTime, fromOrientation, toOrientation, true);
@@ -1618,59 +1156,63 @@ void ParticleUniverseEditorFrame::OnIdle(wxIdleEvent& event)
 		_cameraLookAt(Ogre::Vector3::ZERO);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnQuit(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnQuit(wxCommandEvent & event) {
 	doQuit();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doQuit(void)
-{
-    Close(true);
+
+void ParticleUniverseEditorFrame::AfterInit(wxOgreResources * ogreResMan) {
+	mControl->CreateRenderWindow("OgreControl1");
+	mOgreControlSmall->CreateRenderWindow("OgreControl2");
+	wxGetApp().Yield();
+	ogreResMan->InitialiseAllResources();
+	wxGetApp().Yield();
+	CreateScene();
+	LoadParticleExplorer();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnCompile(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::doQuit() {
+	Close(true);
+	wxEventLoopBase::GetActive()->Exit(0);
+}
+
+void ParticleUniverseEditorFrame::OnCompile(wxCommandEvent & event) {
 	doCompile();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doCompile(void)
-{
-	// Check which page is active
-	switch (mNotebook->GetSelection())
-	{
-		case NOTEBOOK_SCRIPT:
-		{
-			// This is the script page.
-			mLogListener->suppressLogging(false); // Make logging available
-			validateAndReparse();
 
-			if (!mLogListener->errorsLogged())
-			{
-				showMessage(_("Compilation OK"), wxOK | wxICON_INFORMATION);
-			}
-			mLogListener->suppressLogging(true);
+void ParticleUniverseEditorFrame::doCompile() {
+	// Check which page is active
+	switch (mNotebook->GetSelection()) {
+	case NOTEBOOK_SCRIPT: {
+		// This is the script page.
+		mLogListener->suppressLogging(false); // Make logging available
+		validateAndReparse();
+
+		if (!mLogListener->errorsLogged()) {
+			showMessage(_("Compilation OK"), wxOK | wxICON_INFORMATION);
 		}
+		mLogListener->suppressLogging(true);
 		break;
 	}
+	default: {
+		break;
+	}
+	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnBackgroundColour(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnBackgroundColour(wxCommandEvent & event) {
 	doBackgroundColour();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doBackgroundColour(void)
-{
+
+void ParticleUniverseEditorFrame::doBackgroundColour() {
 	wxColourDialog colourDialog(this);
-	if (colourDialog.ShowModal() == wxID_OK)
-	{
+	if (colourDialog.ShowModal() == wxID_OK) {
 		wxColourData colourData = colourDialog.GetColourData();
 		wxColour c = colourData.GetColour();
-		mBackgroundColour.r = ((ParticleUniverse::Real)c.Red())/255.0f;
-		mBackgroundColour.g = ((ParticleUniverse::Real)c.Green())/255.0f;
-		mBackgroundColour.b = ((ParticleUniverse::Real)c.Blue())/255.0f;
-		mBackgroundColour.a = ((ParticleUniverse::Real)c.Alpha())/255.0f;
+		mBackgroundColour.r = ParticleUniverse::Real(c.Red()) / 255.0;
+		mBackgroundColour.g = ParticleUniverse::Real(c.Green()) / 255.0;
+		mBackgroundColour.b = ParticleUniverse::Real(c.Blue()) / 255.0;
+		mBackgroundColour.a = ParticleUniverse::Real(c.Alpha()) / 255.0;
 
 		// Change the light
 		Ogre::MaterialPtr material = Ogre::MaterialManager::getSingletonPtr()->getByName("ParticleUniverseEditor/BackgroundMaterial");
@@ -1681,66 +1223,55 @@ void ParticleUniverseEditorFrame::doBackgroundColour(void)
 		mRecorder->setBackgroundColour(mBackgroundColour);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnCameraReset(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnCameraReset(wxCommandEvent & event) {
 	doCameraReset();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doCameraReset(void)
-{
+
+void ParticleUniverseEditorFrame::doCameraReset() {
 	// Only if the camera is in persective mode it can be reset
 	_setCameraPosition(mDefaultCameraPosition);
 	_cameraLookAt(Ogre::Vector3::ZERO);
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnCentreObject(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnCentreObject(wxCommandEvent & event) {
 	doCentreObject();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doCentreObject(void)
-{
-	if (mGizmoManager && mGizmoManager->getAttachedNode())
-	{
+
+void ParticleUniverseEditorFrame::doCentreObject() {
+	if (mGizmoManager && mGizmoManager->getAttachedNode()) {
 		mGizmoManager->getAttachedNode()->setPosition(Ogre::Vector3::ZERO);
 		_cameraLookAt(Ogre::Vector3::ZERO);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnSaveCamera(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnSaveCamera(wxCommandEvent & event) {
 	doSaveCamera();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doSaveCamera(void)
-{
+
+void ParticleUniverseEditorFrame::doSaveCamera() {
 	// Save the option settings, including the camera position. Make this the new default camera setting
 	mDefaultCameraPosition = _getCameraPosition();
 	mConfigDialog->setCameraPosition(mDefaultCameraPosition);
 	mConfigDialog->saveConfig();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnCameraProjection(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnCameraProjection(wxCommandEvent & event) {
 	bool perspective = mUIMainToolbar->getMiscIcons()->doToggleCameraProjectionType();
 	mGizmoManager->setVisibleOrthoCameraGizmo(!perspective); // If true => perspective; if false => orthographic
-	Ogre::Vector3 d = _getCameraPosition(); // Distance from 0, 0, 0 
+	Ogre::Vector3 d = _getCameraPosition(); // Distance from 0, 0, 0
 	Ogre::Real l = d.length();
-	if (perspective)
-	{
+	if (perspective) {
 		// Perspective camera
 		mUIMainToolbar->getMiscIcons()->enableOrthoCameraSelected(true);
 		setOrthoGridVisible(false);
 		showGridPlane(true);
 		_getCamera()->setProjectionType(Ogre::PT_PERSPECTIVE);
-		_getCamera()->setFOVy(Ogre::Radian(0.78539819f));
+		_getCamera()->setFOVy(Ogre::Radian(0.78539819));
 		mStartCameraAnimation = false;
 		mAddEntitySceneNode->_setDerivedPosition(mPreviousPositionAddEntitySceneNode);
 		doCameraReset();
-	}
-	else
-	{
+	} else {
 		// Orthographic camera
 		mPreviousPositionAddEntitySceneNode = mAddEntitySceneNode->_getDerivedPosition();
 		mAddEntitySceneNode->_setDerivedPosition(Ogre::Vector3::ZERO); // Temporay set the mesh in the centre
@@ -1748,197 +1279,130 @@ void ParticleUniverseEditorFrame::OnCameraProjection(wxCommandEvent& event)
 		_getCamera()->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
 		_getCamera()->setFOVy(Ogre::Radian(1.0f));
 		Ogre::Vector3 cameraPosition = _getCameraPosition();
-		if (m45DegreesOrtho)
-		{
+		if (m45DegreesOrtho) {
 			setOrthoGridVisible(true, Gizmo::AXIS_Y);
-			Ogre::Quaternion q(0.3535533905932738f, 0.35355339059327373f, 0.14644660940672627f, 0.8535533905932738f); // 135 pitch (x) and 45 yaw (y)
+			Ogre::Quaternion q(0.3535533905932738, 0.35355339059327373, 0.14644660940672627, 0.8535533905932738); // 135 pitch (x) and 45 yaw (y)
 			cameraPosition = Ogre::Vector3(0, -l, 0);
 			cameraPosition = q * cameraPosition;
-		}
-		else
-		{
+		} else {
 			setOrthoGridVisible(true, Gizmo::AXIS_Z);
 			cameraPosition = l * Ogre::Vector3(0, 0, -1);
-
 		}
 		_setCameraPosition(cameraPosition);
 		_getCamera()->setOrthoWindowWidth(cameraPosition.length());
 		_cameraLookAt(Ogre::Vector3::ZERO);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnCameraAngle(wxCommandEvent& event)
-{
-	if (!_isCameraOrthographic())
+
+void ParticleUniverseEditorFrame::OnCameraAngle(wxCommandEvent & event) {
+	if (!_isCameraOrthographic()) {
 		return;
+	}
 
 	m45DegreesOrtho = mUIMainToolbar->getMiscIcons()->doToggleCameraAngle();
 	Ogre::Vector3 cameraPosition = _getCameraPosition();
 	Ogre::Real l = cameraPosition.length();
-	if (m45DegreesOrtho)
-	{
+	if (m45DegreesOrtho) {
 		// 45 degree angle camera
 		setOrthoGridVisible(true, Gizmo::AXIS_Y);
-		Ogre::Quaternion q(0.3535533905932738f, 0.35355339059327373f, 0.14644660940672627f, 0.8535533905932738f); // 135 pitch (x) and 45 yaw (y)
+		Ogre::Quaternion q(0.3535533905932738, 0.35355339059327373, 0.14644660940672627, 0.8535533905932738); // 135 pitch (x) and 45 yaw (y)
 		cameraPosition = Ogre::Vector3(0, -l, 0);
 		cameraPosition = q * cameraPosition;
-	}
-	else
-	{
+	} else {
 		// Perpendicular camera
 		setOrthoGridVisible(true, Gizmo::AXIS_Z);
 		cameraPosition = l * Ogre::Vector3(0, 0, -1);
 	}
-	if (mGizmoManager)
-	{
+	if (mGizmoManager) {
 		mGizmoManager->set45DegreesOrtho(m45DegreesOrtho);
 	}
 	startCameraAnimation(cameraPosition);
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnResetTime(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnResetTime(wxCommandEvent & event) {
 	doResetTime();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doResetTime(void)
-{
-	if (mUIMainToolbar)
-	{
+
+void ParticleUniverseEditorFrame::doResetTime() {
+	if (mUIMainToolbar) {
 		mUIMainToolbar->resetTimeScale();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnToggleGizmo(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnToggleGizmo(wxCommandEvent & event) {
 	doToggleGizmo();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doToggleGizmo(void)
-{
-	if (mGizmoManager)
-	{
-		bool visible = !mGizmoManager->isVisible();
-		mGizmoManager->setVisible(visible);
-		mMarker->setVisible(visible);
-		mMarkerBold->setVisible(visible);
-	}
+
+void ParticleUniverseEditorFrame::doToggleGizmo() {
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnToggleWorldLocalSpace(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnToggleWorldLocalSpace(wxCommandEvent & event) {
 	bool worldspace = mUIMainToolbar->getMiscIcons()->doToggleWorldLocalSpace();
 
 	mGizmoManager->setWorldspace(worldspace); // If true => worldspace; if false => localspace
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnToggleStats(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnToggleStats(wxCommandEvent & event) {
 	doToggleStats();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doToggleStats(void)
-{
-	if (mDebugOverlay)
-	{
+
+void ParticleUniverseEditorFrame::doToggleStats() {
+	if (mDebugOverlay) {
 		showOverlay(!mDebugOverlay->isVisible());
-	}
-	else
-	{
+	} else {
 		createStatisticsOverlay();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnToggleGridPlane(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnToggleGridPlane(wxCommandEvent & event) {
 	doToggleGridPlane();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doToggleGridPlane(void)
-{
+
+void ParticleUniverseEditorFrame::doToggleGridPlane() {
 	showGridPlane(!mGridBottom->isVisible());
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnGizmoMoveSelect(wxCommandEvent& event)
-{
-	if (mGizmoManager)
-	{
-		mGizmoManager->setGizmoType(Gizmo::GIZMO_MOVE);
-		mGizmoManager->setVisible(true);
-		if (mGizmoManager->getAttachedNode() != mMainSceneNode)
-		{
-			mMarker->setVisible(true);
-		}
-		mMarkerBold->setVisible(true);
-	}
+
+void ParticleUniverseEditorFrame::OnGizmoMoveSelect(wxCommandEvent & event) {
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnGizmoRotateSelect(wxCommandEvent& event)
-{
-	if (mGizmoManager)
-	{
-		mGizmoManager->setGizmoType(Gizmo::GIZMO_ROTATE);
-		mGizmoManager->setVisible(true);
-		mMarker->setVisible(true);
-		mMarkerBold->setVisible(true);
-	}
+
+void ParticleUniverseEditorFrame::OnGizmoRotateSelect(wxCommandEvent & event) {
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnGizmoScaleSelect(wxCommandEvent& event)
-{
-	if (mGizmoManager)
-	{
-		mGizmoManager->setGizmoType(Gizmo::GIZMO_SCALE);
-		mGizmoManager->setVisible(true);
-		mMarker->setVisible(true);
-		mMarkerBold->setVisible(true);
-	}
+
+void ParticleUniverseEditorFrame::OnGizmoScaleSelect(wxCommandEvent & event) {
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnOptions(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnOptions(wxCommandEvent & event) {
 	doOptions();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doOptions(void)
-{
-#ifdef PU_FULL_VERSION
+
+void ParticleUniverseEditorFrame::doOptions() {
 	mConfigDialog->rebuildDirectoriesPanel();
-	if (mConfigDialog->ShowModal() == wxID_OK)
-	{
+	if (mConfigDialog->ShowModal() == wxID_OK) {
 		SetCursor(*wxHOURGLASS_CURSOR);
 		applyGeneralConfigOptions();
 		applyPhysXConfigOptions();
 		applyTextConfigOptions();
 
-		if (mConfigDialog->getExcludeDirList().size() > 0)
-		{
+		if (mConfigDialog->getExcludeDirList().size() > 0) {
 			// Dirlist has been changed, get the excluded ones
 			ParticleUniverse::StringVector vec = mConfigDialog->getExcludeDirList();
-			ParticleUniverse::StringVector::iterator it;
-			ParticleUniverse::StringVector::iterator itEnd = vec.end();
-			for (it = vec.begin(); it != itEnd; ++it)
-			{
+			for (ParticleUniverse::StringVector::iterator it = vec.begin(); it != vec.end(); ++it) {
 				// Remove each directory
 				Ogre::ResourceGroupManager::getSingletonPtr()->removeResourceLocation(*it, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 			}
 			Ogre::ResourceGroupManager::getSingletonPtr()->clearResourceGroup(Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyAllParticleSystemTemplates();
 			Ogre::ResourceGroupManager::getSingletonPtr()->initialiseResourceGroup(Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-			LoadListOfTemplates();
+			LoadParticleExplorer();
 		}
 		mConfigDialog->saveConfig();
 		SetCursor(wxNullCursor);
-	}
-	else
-	{
+	} else {
 		mConfigDialog->loadConfig();
 	}
-#endif // PU_FULL_VERSION
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::applyGeneralConfigOptions(void)
-{
+
+void ParticleUniverseEditorFrame::applyGeneralConfigOptions() {
 	mDefaultCameraPosition = mConfigDialog->getCameraPosition();
 	mAutoStartRender = mConfigDialog->isAutoStart();
 	wxString videoPath = mConfigDialog->getVideoPath();
@@ -1946,15 +1410,13 @@ void ParticleUniverseEditorFrame::applyGeneralConfigOptions(void)
 	Recorder::ImageFilter filter = mConfigDialog->getFilter();
 	ParticleUniverse::Real framePerSeconds = mConfigDialog->getFPS();
 	ParticleUniverse::Real pauseTime = mConfigDialog->getPauseTime();
-	if (mConfigDialog->isVideoSelected())
-	{
+	if (mConfigDialog->isVideoSelected()) {
 		// Force propagation from the video size to the image size
 		mConfigDialog->getVideoSize(true);
 	}
 	ParticleUniverse::uint width = mConfigDialog->getImageWidth();
 	ParticleUniverse::uint height = mConfigDialog->getImageHeight();
-	if (mRecorder)
-	{
+	if (mRecorder) {
 		mRecorder->setVideoDirectory(wx2ogre(videoPath));
 		mRecorder->setFileNameSuffix(wx2ogre(suffix));
 		mRecorder->setPauseTime(pauseTime);
@@ -1969,218 +1431,183 @@ void ParticleUniverseEditorFrame::applyGeneralConfigOptions(void)
 	showOverlay(mConfigDialog->isStatistics());
 	showLight(mConfigDialog->isLightCheck());
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::applyPhysXConfigOptions(void)
-{
-	#ifdef PU_PHYSICS_PHYSX
-	if (mUsePhysX)
-	{
+
+void ParticleUniverseEditorFrame::applyPhysXConfigOptions() {
+#ifdef PU_PHYSICS_PHYSX
+	if (mUsePhysX) {
 		mPhysXNormal = mConfigDialog->getPhysXPlaneNormal();
 		mPhysXDistance = mConfigDialog->getPhysXPlaneDistance();
 		ParticleUniverse::PhysXBridge::getSingletonPtr()->createPlane(mPhysXNormal, mPhysXDistance);
 		mPhysXGravity = mConfigDialog->getPhysXGravity();
 		ParticleUniverse::PhysXBridge::getSingletonPtr()->setGravity(mPhysXGravity);
 	}
-	#endif //PU_PHYSICS_PHYSX
+#endif //PU_PHYSICS_PHYSX
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::applyTextConfigOptions(void)
-{
-	if (mTextCtrl)
-	{
+
+void ParticleUniverseEditorFrame::applyTextConfigOptions() {
+	if (mTextCtrl) {
 		mTextCtrl->setHighlightKeywords(mConfigDialog->isHighlight());
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnAbout(wxCommandEvent& event)
-{
-    doAbout();
+
+void ParticleUniverseEditorFrame::OnAbout(wxCommandEvent & event) {
+	doAbout();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doAbout(void)
-{
-#ifdef PU_FULL_VERSION
-	wxMessageBox(_("Particle Universe Editor V1.5.1\nCopyright (c) 2012 Henry van Merode\n\nThe lightbulb image is royalty free from FreeDigitalPhotos.net\n\n"),
-				_("About"), wxICON_INFORMATION);
-#else
-	wxMessageBox(_("Particle Universe Editor DEMO V1.5.1\nCopyright (c) 2012 Henry van Merode\n\nThe lightbulb image is royalty free from FreeDigitalPhotos.net\n\n"),
-				_("About"), wxICON_INFORMATION);
-#endif // PU_FULL_VERSION
+
+void ParticleUniverseEditorFrame::doAbout() {
+	wxMessageBox(_("Particle Universe Editor V1.5.1\nCopyright (c) 2012 Henry van Merode\n\nThe lightbulb image is royalty free from FreeDigitalPhotos.net\n\n"), _("About"), wxICON_INFORMATION);
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnTabChanging(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnTabChanging(wxCommandEvent & event) {
 	// Check which page is active
-	switch (mNotebook->GetSelection())
-	{
-		case NOTEBOOK_RENDER:
-		{
-			synchronizeSmallOgreControlWithRenderTab();
-			mUIMainToolbar->getMiscIcons()->disableAll();
-			resetLeftSideWindow();
-		}
+	switch (mNotebook->GetSelection()) {
+	case NOTEBOOK_RENDER: {
+		synchronizeSmallOgreControlWithRenderTab();
+		mUIMainToolbar->getMiscIcons()->disableAll();
+		resetLeftSideWindow();
 		break;
-		case NOTEBOOK_EDIT:
-		{
-			// Synchronize the particle system of the render and update the script, based on the components of the edit page
-			mEditNotebookPage->Freeze();
-			synchroniseScriptWithEditTab();
-			resetLeftSideWindow();
-		}
+	}
+	case NOTEBOOK_EDIT: {
+		// Synchronize the particle system of the render and update the script, based on the components of the edit page
+		// mEditNotebookPage->Freeze(); // TODO: organize freezing correctly
+		synchroniseScriptWithEditTab();
+		resetLeftSideWindow();
 		break;
-		case NOTEBOOK_SCRIPT:
-		{
-			// Parse the script and update both particle systems of the render-tab and the edit-tab
-			validateAndReparse();
-			mUIMainToolbar->getCompileIcons()->disableAll();
-		}
+	}
+	case NOTEBOOK_SCRIPT: {
+		// Parse the script and update both particle systems of the render-tab and the edit-tab
+		validateAndReparse();
+		mUIMainToolbar->getCompileIcons()->disableAll();
 		break;
-		case NOTEBOOK_MATERIAL:
-		{
-			if (mMaterialNotebookPage)
-			{
-				mMaterialNotebookPage->saveSelectedMaterialName();
-			}
+	}
+	case NOTEBOOK_MATERIAL: {
+		if (mMaterialNotebookPage) {
+			mMaterialNotebookPage->saveSelectedMaterialName();
 		}
 		break;
 	}
+	default: {
+		// TODO:
+		break;
+	}
+	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnTabChanged(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnTabChanged(wxCommandEvent & event) {
 	wxCommandEvent command;
 	OnStop(command);
 
 	// Check which page is active
-	switch (mNotebook->GetSelection())
-	{
-		case NOTEBOOK_RENDER:
-		{
-			if (mControlPanelWithSmallRenderWindow)
-			{
-				// Hide the small render window and reset the icons
-				mControlPanelWithSmallRenderWindow->Hide();
-				mEditSizer->Layout();
-				mUIMainToolbar->getMiscIcons()->reset();
-				if (mAddEntitySceneNode->numAttachedObjects() == 0)
-				{
-					mUIMainToolbar->getMiscIcons()->enableRemoveEntity(false);
-				}
-				if (mAddEntitySceneNode->numAttachedObjects() > 0)
-				{
-					setLeftSideWindow(mAnimationWindow);
-				}
+	switch (mNotebook->GetSelection()) {
+	case NOTEBOOK_RENDER: {
+		int width, height;
+		mControl->GetSize(&width, &height);
+		mControl->GetCamera()->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
+		if (mControlPanelWithSmallRenderWindow) {
+			// Hide the small render window and reset the icons
+			mControlPanelWithSmallRenderWindow->Hide();
+			mEditSizer->Layout();
+			mUIMainToolbar->getMiscIcons()->reset();
+			if (mAddEntitySceneNode->numAttachedObjects() == 0) {
+				mUIMainToolbar->getMiscIcons()->enableRemoveEntity(false);
 			}
-			mEditNotebookPage->enableTools(false);
-			if (mAutoStartRender)
-			{
-				wxCommandEvent command;
-				OnPlay(command);
-			}
-			restoreFocus();
-		}
-		break;
-
-		case NOTEBOOK_EDIT:
-		{
-			if (mControlPanelWithSmallRenderWindow)
-			{
-				// Show the small render window again
-				mControlPanelWithSmallRenderWindow->Show();
-				mEditSizer->Layout();
-			}
-			mEditNotebookPage->enableTools(false);
-			setLeftSideWindow(mPropertyWindow);
-			if (mAutoStartRender && mOgreControlSmall)
-			{
-				wxCommandEvent command;
-				OnPlay(command);
-			}
-			if (mEditNotebookPage)
-			{
-				mEditNotebookPage->enableTools(true);
-				mEditNotebookPage->Thaw();
-				mEditNotebookPage->adjustPosition();
+			if (mAddEntitySceneNode->numAttachedObjects() > 0) {
+				setLeftSideWindow(mAnimationWindow);
 			}
 		}
-		break;
-
-		case NOTEBOOK_SCRIPT:
-		{
-			if (mControlPanelWithSmallRenderWindow)
-			{
-				// Hide the small render window
-				mControlPanelWithSmallRenderWindow->Hide();
-				mEditSizer->Layout();
-			}
-			mEditNotebookPage->enableTools(false);
-			mUIMainToolbar->getCompileIcons()->reset(mListOfTemplates->GetCount());
+		mEditNotebookPage->enableTools(false);
+		if (mAutoStartRender) {
+			wxCommandEvent command2;
+			OnPlay(command2);
 		}
+		restoreFocus();
 		break;
-
-		case NOTEBOOK_MATERIAL:
-		{
-			if (mControlPanelWithSmallRenderWindow)
-			{
-				// Hide the small render window
-				mControlPanelWithSmallRenderWindow->Hide();
-				mEditSizer->Layout();
-			}
-			mEditNotebookPage->enableTools(false);
-			if (mMaterialNotebookPage)
-			{
-				mMaterialNotebookPage->Freeze();
-				mMaterialNotebookPage->fillMaterials();
-				mMaterialNotebookPage->Thaw();
-			}
+	}
+	case NOTEBOOK_EDIT: {
+		if (mControlPanelWithSmallRenderWindow) {
+			// Show the small render window again
+			mControlPanelWithSmallRenderWindow->Show();
+			int width, height;
+			mOgreControlSmall->GetSize(&width, &height);
+			mOgreControlSmall->GetCamera()->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
+			mNotebook->InvalidateBestSize();
+			mEditSizer->Layout();
+		}
+		mEditNotebookPage->enableTools(false);
+		setLeftSideWindow(mPropertyWindow);
+		if (mAutoStartRender && mOgreControlSmall) {
+			wxCommandEvent command2;
+			OnPlay(command2);
+		}
+		if (mEditNotebookPage) {
+			mEditNotebookPage->enableTools(true);
+			//mEditNotebookPage->Thaw();
+			mEditNotebookPage->adjustPosition();
 		}
 		break;
 	}
+	case NOTEBOOK_SCRIPT: {
+		if (mControlPanelWithSmallRenderWindow) {
+			// Hide the small render window
+			mControlPanelWithSmallRenderWindow->Hide();
+			mEditSizer->Layout();
+		}
+		mEditNotebookPage->enableTools(false);
+		mUIMainToolbar->getCompileIcons()->reset(mParticleExplorer->GetCount());
+		break;
+	}
+	case NOTEBOOK_MATERIAL: {
+		if (mControlPanelWithSmallRenderWindow) {
+			// Hide the small render window
+			mControlPanelWithSmallRenderWindow->Hide();
+			mEditSizer->Layout();
+		}
+		mEditNotebookPage->enableTools(false);
+		if (mMaterialNotebookPage) {
+			mMaterialNotebookPage->Freeze();
+			mMaterialNotebookPage->fillMaterials();
+			mMaterialNotebookPage->Thaw();
+		}
+		break;
+	}
+	default: {
+		// TODO: unknown tab
+		break;
+	}
+	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnRewind(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnRewind(wxCommandEvent & event) {
 	// Set play icons if 'rewind' has been pressed
-	mListOfTemplates->Freeze();
+	mParticleExplorer->Freeze();
 	resetPlayIcons();
-	wxTreeItemId prev = mListOfTemplates->getPreviousItem();
-	if (prev.IsOk())
-	{
-		mListOfTemplates->SelectItem(prev);
+	wxTreeItemId prev = mParticleExplorer->getPreviousItem();
+	if (prev.IsOk()) {
+		mParticleExplorer->SelectItem(prev);
 		wxCommandEvent command;
 		OnTemplatesClick(command);
 	}
-	mListOfTemplates->Thaw();
+	mParticleExplorer->Thaw();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnPlay(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnPlay(wxCommandEvent & event) {
 	doPlay();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doPlay(void)
-{
-	switch (mNotebook->GetSelection())
-	{
-		case NOTEBOOK_RENDER:
-		{
+
+void ParticleUniverseEditorFrame::doPlay() {
+//	switch (mNotebook->GetSelection()) {
+//		case NOTEBOOK_RENDER: {
 			// Start/resume the particle system and set play icons if 'play' has been pressed
 			mUIMainToolbar->getPlayIcons()->play();
-			mListOfTemplates->setPlayInContextMenuEnabled(false);
+			mParticleExplorer->setPlayInContextMenuEnabled(false);
 
-			if (mCurrentParticleSystemForRenderer)
-			{
-				if (mCurrentParticleSystemForRenderer->getState() == ParticleUniverse::ParticleSystem::PSS_PAUSED)
-				{
+			if (mCurrentParticleSystemForRenderer) {
+				if (mCurrentParticleSystemForRenderer->getState() == ParticleUniverse::ParticleSystem::PSS_PAUSED) {
 					mCurrentParticleSystemForRenderer->resume();
-				}
-				else
-				{
-					if (mParticlerSystemSceneNode->numAttachedObjects() == 0)
-					{
+				} else {
+					if (mParticlerSystemSceneNode->numAttachedObjects() == 0) {
 						// If the particle system is not attached at all, attach it to the mParticlerSystemSceneNode
-						if (mAnimationWindow && !mAnimationWindow->isParticleSystemAttachedToEntity())
-						{
+						if (mAnimationWindow && !mAnimationWindow->isParticleSystemAttachedToEntity()) {
 							mParticlerSystemSceneNode->attachObject(mCurrentParticleSystemForRenderer);
 						}
 					}
@@ -2188,167 +1615,133 @@ void ParticleUniverseEditorFrame::doPlay(void)
 					mCurrentParticleSystemForRenderer->start();
 				}
 			}
-		}
-		break;
+	//	}
+//		break;
 
-		case NOTEBOOK_EDIT:
-		{
+/*		case NOTEBOOK_EDIT: {
 			// Start/resume the particle system and set play icons if 'play' has been pressed
-			if (mEditNotebookPage)
-			{
+			if (mEditNotebookPage) {
 				mUIMainToolbar->getPlayIcons()->play();
-				mListOfTemplates->setPlayInContextMenuEnabled(false);
-				if (mOgreControlSmall)
-				{
-					mOgreControlSmall->notifyPlay();
+				mParticleExplorer->setPlayInContextMenuEnabled(false);
+				if (mOgreControlSmall) {
+//					mOgreControlSmall->notifyPlay();
 				}
+				mCurrentParticleSystemForRenderer->start();
 			}
 		}
 		break;
-	}
+
+		default: {
+			// do nothing
+		}
+		break;
+	}*/
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnRecord(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnRecord(wxCommandEvent & event) {
 	doRecord();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doRecord(void)
-{
-#ifdef PU_FULL_VERSION
+
+void ParticleUniverseEditorFrame::doRecord() {
 	// Record the particle system and set play icons if 'record' has been pressed
 	mUIMainToolbar->getPlayIcons()->record();
-	mGizmoManager->setVisible(false);
-	mMarker->setVisible(false);
-	mMarkerBold->setVisible(false);
 	doPlay();
-	if (mRecorder)
-	{
+	if (mRecorder) {
 		ParticleUniverse::String delFrames = "del " + wx2ogre(mConfigDialog->getVideoPath()) + "\\Frame*.*";
 		system(delFrames.c_str());
 		mRecorder->record(mStartTime, mEndTime); // Endtime is set to 2 hours by default
 	}
-#endif // PU_FULL_VERSION
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnPause(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnPause(wxCommandEvent & event) {
 	doPause();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doPause(void)
-{
+
+void ParticleUniverseEditorFrame::doPause() {
 	// Pause the particle system and set play icons if 'pause' has been pressed
 	mUIMainToolbar->getPlayIcons()->pause();
-	mListOfTemplates->setPlayInContextMenuEnabled(true);
-	if (mCurrentParticleSystemForRenderer)
-	{
+	mParticleExplorer->setPlayInContextMenuEnabled(true);
+	if (mCurrentParticleSystemForRenderer) {
 		mCurrentParticleSystemForRenderer->pause();
 	}
-	if (mOgreControlSmall)
-	{
-		mOgreControlSmall->notifyPause();
+	if (mOgreControlSmall) {
+//		mOgreControlSmall->notifyPause();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnStop(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnStop(wxCommandEvent & event) {
 	doStop();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doStop(void)
-{
+
+void ParticleUniverseEditorFrame::doStop() {
 	// Stop the particle system and set play icons if 'stop' has been pressed
 	resetPlayIcons();
-	mListOfTemplates->setPlayInContextMenuEnabled(true);
-	if (mGizmoManager)
-	{
-		mGizmoManager->setVisible(true);
-		mMarkerBold->setVisible(true);
-		if (mGizmoManager->getAttachedNode() != mMainSceneNode)
-		{
-			mMarker->setVisible(true);
-		}
-	}
+	mParticleExplorer->setPlayInContextMenuEnabled(true);
 
-	if (mRecorder && mRecorder->isRecording())
-	{
+	if (mRecorder && mRecorder->isRecording()) {
 		bool recording = mRecorder->isRecording();
 		mRecorder->stop();
 		_generateVideoIfNeeded(recording);
 	}
-	if (mCurrentParticleSystemForRenderer)
-	{
+	if (mCurrentParticleSystemForRenderer) {
 		mCurrentParticleSystemForRenderer->stop();
 	}
-	if (mOgreControlSmall)
-	{
-		mOgreControlSmall->notifyStop();
+	if (mOgreControlSmall) {
+//		mOgreControlSmall->notifyStop();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnWind(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnWind(wxCommandEvent & event) {
 	// Set play icons if 'wind' has been pressed
-	mListOfTemplates->Freeze();
+	mParticleExplorer->Freeze();
 	resetPlayIcons();
-	wxTreeItemId next = mListOfTemplates->getNextItem();
-	if (next.IsOk())
-	{
-		mListOfTemplates->SelectItem(next);
+	wxTreeItemId next = mParticleExplorer->getNextItem();
+	if (next.IsOk()) {
+		mParticleExplorer->SelectItem(next);
 		wxCommandEvent command;
 		OnTemplatesClick(command);
 	}
-	mListOfTemplates->Thaw();
+	mParticleExplorer->Thaw();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnClone(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnClone(wxCommandEvent & event) {
 	doClone();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doClone(void)
-{
-	wxTreeItemId selected = mListOfTemplates->GetSelection();
-	wxString templateName = mListOfTemplates->GetItemText(selected);
-	if (!mListOfTemplates->isCategoryName(templateName))
-	{
+
+void ParticleUniverseEditorFrame::doClone() {
+	wxTreeItemId selected = mParticleExplorer->GetSelection();
+	wxString templateName = mParticleExplorer->GetItemText(selected);
+	if (!mParticleExplorer->isCategoryName(templateName)) {
 		// It is no category
 		templateName = wxT("CopyOf") + templateName;
-		wxTreeItemId category = mListOfTemplates->getCurrentCategory();
-		if (category.IsOk())
-		{
-			wxTreeItemId newItem = mListOfTemplates->PrependItem(category, templateName);
-		
-			// Create new particle system template.
-			ParticleUniverse::ParticleSystem* templateSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystemTemplate(
-				wx2ogre(templateName), 
-				Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-				*templateSystem = *mCurrentParticleSystemForRenderer;
-				mCurrentParticleSystemForRenderer->copyAttributesTo(templateSystem);
+		wxTreeItemId category = mParticleExplorer->getCurrentCategory();
+		if (category.IsOk()) {
+			wxTreeItemId newItem = mParticleExplorer->PrependItem(category, templateName);
 
-			mListOfTemplates->SelectItem(newItem);
+			// Create new particle system template.
+			ParticleUniverse::ParticleSystem * templateSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystemTemplate(wx2ogre(templateName), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+			*templateSystem = *mCurrentParticleSystemForRenderer;
+			mCurrentParticleSystemForRenderer->copyAttributesTo(templateSystem);
+
+			mParticleExplorer->SelectItem(newItem);
 			wxCommandEvent command;
 			OnTemplatesClick(command);
 			resetPlayIcons();
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnRemove(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnRemove(wxCommandEvent & event) {
 	doRemove();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doRemove(void)
-{
-	wxTreeItemId selected = mListOfTemplates->GetSelection();
-	wxString templateName = mListOfTemplates->GetItemText(selected);
-	if (!mListOfTemplates->isCategoryName(templateName))
-	{
+
+void ParticleUniverseEditorFrame::doRemove() {
+	wxTreeItemId selected = mParticleExplorer->GetSelection();
+	wxString templateName = mParticleExplorer->GetItemText(selected);
+	if (!mParticleExplorer->isCategoryName(templateName)) {
 		// It is no category
-		mListOfTemplates->Delete(selected);
-		ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		mParticleExplorer->Delete(selected);
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 		ParticleUniverse::String s = wx2ogre(templateName);
 		particleSystemManager->destroyParticleSystemTemplate(s);
 		wxCommandEvent command;
@@ -2356,48 +1749,39 @@ void ParticleUniverseEditorFrame::doRemove(void)
 		resetPlayIcons();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnTemplatesClick(wxCommandEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnTemplatesClick(wxCommandEvent & event) {
 	mControl->Freeze();
 	mEditNotebookPage->Freeze();
 	mTextCtrl->Freeze();
-	mListOfTemplates->Freeze();
+	mParticleExplorer->Freeze();
 
-	mCheckFocusListOfTemplates = true;
-	mListOfTemplates->resetContextMenu();
-	mListOfTemplates->setPlayInContextMenuEnabled(true);
+	mCheckFocusParticleExplorer = true;
+	mParticleExplorer->resetContextMenu();
+	mParticleExplorer->setPlayInContextMenuEnabled(true);
 	resetOverlay();
 	mTemplateSelected = true;
-	wxTreeItemId sel = mListOfTemplates->GetSelection();
-	if (sel.IsOk())
-	{
+	wxTreeItemId sel = mParticleExplorer->GetSelection();
+	if (sel.IsOk()) {
 		// Make the selected item visible
-//		mListOfTemplates->ScrollTo(sel); // TODO: The effect is terrible. Commented!
+//		mParticleExplorer->ScrollTo(sel); // TODO: The effect is terrible. Commented!
 
 		// Add check that determines whether the mCurrentParticleSystemForRenderer has been changed since the last save.
-		wxString selection = mListOfTemplates->GetItemText(sel);
+		wxString selection = mParticleExplorer->GetItemText(sel);
 
 		// The selection must be a templatename
-		if (!mListOfTemplates->isCategoryName(selection))
-		{
-#ifdef PU_FULL_VERSION
-			if (mCurrentParticleSystemForRenderer && 
-				(mScriptChanged || mEditNotebookPage->isSystemUpdatedByEditPage()) &&
-				selection != ogre2wx(mCurrentParticleSystemForRenderer->getTemplateName()))
-			{
+		if (!mParticleExplorer->isCategoryName(selection)) {
+			if (mCurrentParticleSystemForRenderer && (mScriptChanged || mEditNotebookPage->isSystemUpdatedByEditPage()) && selection != ogre2wx(mCurrentParticleSystemForRenderer->getTemplateName())) {
 				validateAndReparse();
-	
+
 				// Show warning
 				wxString warn = _("You have selected a different Particle System. Do you want to save ");
-				if (showMessage(warn + ogre2wx(mCurrentParticleSystemForRenderer->getTemplateName()) + wxT("?"), wxOK | wxCANCEL) == wxID_OK)
-				{
+				if (showMessage(warn + ogre2wx(mCurrentParticleSystemForRenderer->getTemplateName()) + wxT("?"), wxOK | wxCANCEL) == wxID_OK) {
 					// Save it
 					wxCommandEvent command;
 					OnSave(command);
 				}
 			}
-#endif // PU_FULL_VERSION
 
 			createNewSystem(wx2ogre(selection));
 		}
@@ -2407,47 +1791,45 @@ void ParticleUniverseEditorFrame::OnTemplatesClick(wxCommandEvent& event)
 		mLatestSelection = sel;
 	}
 
-	mListOfTemplates->Thaw();
+	mParticleExplorer->Thaw();
 	mTextCtrl->Thaw();
 	mEditNotebookPage->Thaw();
 	mControl->Thaw();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::notifyScriptChanged(void)
-{
+
+void ParticleUniverseEditorFrame::OnClose(wxCloseEvent & event) {
+	event.Skip(true);
+	wxEventLoopBase::GetActive()->Exit(0);
+}
+
+void ParticleUniverseEditorFrame::notifyScriptChanged() {
 	mScriptChanged = true;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::resetPlayIcons(void)
-{
-	if (mNotebook->GetSelection() == NOTEBOOK_SCRIPT || mNotebook->GetSelection() == NOTEBOOK_MATERIAL)
-	{
+
+void ParticleUniverseEditorFrame::resetPlayIcons() {
+	if (mNotebook->GetSelection() == NOTEBOOK_SCRIPT || mNotebook->GetSelection() == NOTEBOOK_MATERIAL) {
 		// Disable the icons if no renderer is on screen
-		mUIMainToolbar->getPlayIcons()->disable(mListOfTemplates->GetCount());
-	}
-	else
-	{
-		mUIMainToolbar->getPlayIcons()->reset(mListOfTemplates->GetCount());
+		mUIMainToolbar->getPlayIcons()->disable(mParticleExplorer->GetCount());
+	} else {
+		mUIMainToolbar->getPlayIcons()->reset(mParticleExplorer->GetCount());
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::particleSystemStopped(void)
-{
+
+void ParticleUniverseEditorFrame::particleSystemStopped() {
 	// Reset the toolbar icons
-	if (mRecorder)
-	{
+	if (mRecorder) {
 		bool recording = mRecorder->isRecording();
 		mRecorder->stop();
 		_generateVideoIfNeeded(recording);
 	}
 	resetPlayIcons();
-	mListOfTemplates->setPlayInContextMenuEnabled(true);
+	mParticleExplorer->setPlayInContextMenuEnabled(true);
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::_generateVideoIfNeeded(bool recording)
-{
-	if (!recording || !mConfigDialog || !mConfigDialog->isVideoSelected())
+
+void ParticleUniverseEditorFrame::_generateVideoIfNeeded(bool recording) {
+	if (!recording || !mConfigDialog || !mConfigDialog->isVideoSelected()) {
 		return;
+	}
 
 	// 1. Delete video file in target directory
 	ParticleUniverse::String videoFileName = wx2ogre(mConfigDialog->getVideoPath()) + "\\PUVideo" + wx2ogre(mConfigDialog->getFileNameSuffix());
@@ -2463,7 +1845,7 @@ void ParticleUniverseEditorFrame::_generateVideoIfNeeded(bool recording)
 	//showMessage(args, wxOK | wxICON_INFORMATION); // For debug
 
 #ifdef WIN32
-	SHELLEXECUTEINFO sei = {0};
+	SHELLEXECUTEINFO sei = { 0 };
 	sei.cbSize = sizeof(sei);
 	sei.fMask = SEE_MASK_NOCLOSEPROCESS;
 	sei.lpVerb = wxT("open");
@@ -2472,9 +1854,8 @@ void ParticleUniverseEditorFrame::_generateVideoIfNeeded(bool recording)
 	sei.lpParameters = wxArgs;
 	sei.nShow = SW_HIDE;
 	BOOL bOK = ShellExecuteEx(&sei);
-	if (bOK)
-	{
-		WaitForSingleObject(sei.hProcess, INFINITE); 
+	if (bOK) {
+		WaitForSingleObject(sei.hProcess, INFINITE);
 		CloseHandle(sei.hProcess);
 	}
 
@@ -2485,19 +1866,18 @@ void ParticleUniverseEditorFrame::_generateVideoIfNeeded(bool recording)
 	SetCursor(wxNullCursor);
 #endif
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::SetMenu()
-{
-    wxMenu* fmenu = new wxMenu();
+
+void ParticleUniverseEditorFrame::SetMenu() {
+	wxMenu * fmenu = new wxMenu();
 	fmenu->Append(wxID_NEW, _("&New\tCtrl+N"), _("New particle system"));
 	fmenu->Append(wxID_FILE, _("&Load file\tCtrl+L"), _("Load a *.pu or *.pua file"));
 	fmenu->Append(wxID_OPEN, _("Add &resource location\tCtrl+R"), _("Load all resources from a directory"));
 	fmenu->Append(wxID_SAVE, _("&Save\tCtrl+S"), _("Save a *.pu or *.pua file"));
 	fmenu->Append(wxID_SAVEAS, _("Save As\tCtrl+Shift+S"), _("Save As"));
-    fmenu->AppendSeparator();
-    fmenu->Append(wxID_EXIT, _("&Quit\tCtrl+Q"), _("Quit"));
+	fmenu->AppendSeparator();
+	fmenu->Append(wxID_EXIT, _("&Quit\tCtrl+Q"), _("Quit"));
 
-    wxMenu* imenu = new wxMenu();
+	wxMenu * imenu = new wxMenu();
 	imenu->Append(ID_PLAY, _("Play\tF6"), _("Play"));
 	imenu->Append(ID_RECORD, _("Record\tF7"), _("Record"));
 	imenu->Append(ID_PAUSE, _("Pause\tF8"), _("Pause"));
@@ -2506,23 +1886,23 @@ void ParticleUniverseEditorFrame::SetMenu()
 	imenu->Append(ID_REMOVE, _("Remove"), _("Remove"));
 	imenu->Append(ID_CLONE, _("Clone"), _("Clone"));
 
-    wxMenu* bmenu = new wxMenu();
+	wxMenu * bmenu = new wxMenu();
 	bmenu->Append(wxID_REFRESH, _("Compile\tF5"), _("Compile"));
 
-    wxMenu* gmenu = new wxMenu();
+	wxMenu * gmenu = new wxMenu();
 	gmenu->Append(ID_GIZMO_MOVE, _("Gizmo move\tShift+M"), _("Gizmo move"));
 	gmenu->Append(ID_GIZMO_ROTATE, _("Gizmo rotate\tShift+R"), _("Gizmo rotate"));
 	gmenu->Append(ID_GIZMO_SCALE, _("Gizmo scale\tShift+S"), _("Gizmo scale"));
 	gmenu->Append(ID_TOGGLE_GIZMO, _("Gizmo on/off\tCtrl+G"), _("Gizmo on/off"));
 	gmenu->Append(ID_WORLD_LOCAL_SPACE, _("Gizmo in world/object space\tCtrl+P"), _("Gizmo in world/object space"));
 
-	wxMenu* cmenu = new wxMenu();
+	wxMenu * cmenu = new wxMenu();
 	cmenu->Append(ID_CAMERA_RESET, _("Reset camera\tCtrl+Z"), _("Reset camera"));
 	cmenu->Append(ID_CAMERA_SAVE, _("Save camera\tShift+C"), _("Save camera"));
 	cmenu->Append(ID_TOGGLE_CAMERA_PROJECTION, _("Toggle camera projection\tShift+P"), _("Toggle camera projection"));
 	cmenu->Append(ID_TOGGLE_CAMERA_ANGLE, _("Toggle camera angle\tCtrl+A"), _("Toggle camera angle"));
 
-    mTmenu = new wxMenu(); // Keep pointer to the menu
+	mTmenu = new wxMenu(); // Keep pointer to the menu
 	mTmenu->Append(ID_CENTRE_OBJECT, _("Centre object\tCtrl+C"), _("Centre object"));
 	mTmenu->Append(ID_BACKGROUND_COLOUR, _("Background colour\tCtrl+B"), _("Background colour"));
 	mTmenu->Append(ID_TOGGLE_STATS, _("Toggle statistics\tCtrl+I"), _("Toggle statistics"));
@@ -2534,17 +1914,17 @@ void ParticleUniverseEditorFrame::SetMenu()
 	mTmenu->AppendSeparator();
 	mTmenu->Append(ID_OPTIONS, _("Options\tCtrl+O"), _("Options"));
 
-	wxMenu* hmenu = new wxMenu();
-    hmenu->Append(wxID_ABOUT, _("About\tF1"), _("About"));
+	wxMenu * hmenu = new wxMenu();
+	hmenu->Append(wxID_ABOUT, _("About\tF1"), _("About"));
 
-    wxMenuBar* menubar = new wxMenuBar();
-    menubar->Append(fmenu, _("&File"));
-    menubar->Append(imenu, _("List &items"));
-    menubar->Append(bmenu, _("&Build"));
-    menubar->Append(gmenu, _("&Gizmo"));
+	wxMenuBar * menubar = new wxMenuBar();
+	menubar->Append(fmenu, _("&File"));
+	menubar->Append(imenu, _("List &items"));
+	menubar->Append(bmenu, _("&Build"));
+	menubar->Append(gmenu, _("&Gizmo"));
 	menubar->Append(cmenu, _("&Camera"));
 	menubar->Append(mTmenu, _("&Tools"));
-    menubar->Append(hmenu, _("&Help"));
+	menubar->Append(hmenu, _("&Help"));
 
 // If not a full version, then disable the menu items
 #ifndef PU_FULL_VERSION
@@ -2557,96 +1937,77 @@ void ParticleUniverseEditorFrame::SetMenu()
 
 	SetMenuBar(menubar);
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::validateAndReparse(void)
-{
-	// Check whether the particle system was changed by means of the script or the editor. If that is the case, update the template list and 
-	// recreate the current particle system.
-	if (!mCurrentParticleSystemForRenderer)
-		return;
 
-	if (mTextCtrl)
-	{
-		if (!(mTextCtrl->IsEmpty() || mCurrentParticleScript.empty()))
-		{
-			if (mCurrentParticleScript != wx2ogre(mTextCtrl->GetValue()))
-			{
+void ParticleUniverseEditorFrame::validateAndReparse() {
+	// Check whether the particle system was changed by means of the script or the editor. If that is the case, update the template list and
+	// recreate the current particle system.
+	if (!mCurrentParticleSystemForRenderer) {
+		return;
+	}
+
+	if (mTextCtrl) {
+		if (!(mTextCtrl->IsEmpty() || mCurrentParticleScript.empty())) {
+			if (mCurrentParticleScript != wx2ogre(mTextCtrl->GetValue())) {
 				// Script has changed. Reparse and update the templates
 				Ogre::String oldTemplateName = mCurrentParticleSystemForRenderer->getTemplateName();
-				ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+				ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 				particleSystemManager->destroyParticleSystemTemplate(oldTemplateName); // Delete the old template
 				parseScript(wx2ogre(mTextCtrl->GetValue()));
-	
+
 				// Replace the old particle system with a new one, of which the name can also be changed.
 				Ogre::String newTemplateName = particleSystemManager->getLastCreatedParticleSystemTemplateName();
 				createNewSystem(newTemplateName);
 
 				// Find the old name and remove it from the tree
-				wxTreeItemId item = mListOfTemplates->findParticleSystem(ogre2wx(oldTemplateName));
-				if (item)
-				{
-					mListOfTemplates->Delete(item);
+				wxTreeItemId item = mParticleExplorer->findParticleSystem(ogre2wx(oldTemplateName));
+				if (item) {
+					mParticleExplorer->Delete(item);
 				}
 
 				// Insert the new name in the tree
-				if (mCurrentParticleSystemForRenderer)
-				{
+				if (mCurrentParticleSystemForRenderer) {
 					ParticleUniverse::String categoryName = mCurrentParticleSystemForRenderer->getCategory();
 					wxString cn = ogre2wx(categoryName);
 					wxString ntn = ogre2wx(newTemplateName);
-					mListOfTemplates->addItem(cn, ntn);
+					mParticleExplorer->addItem(cn, ntn);
 				}
 			}
 		}
 	}
 }
-//-----------------------------------------------------------------------
-//void ParticleUniverseEditorFrame::validateScript(void)
-//{
-//	// Only validate script
-//	if (mTextCtrl && !(mTextCtrl->IsEmpty()))
-//	{
-//		parseScript(wx2ogre(mTextCtrl->GetValue()));
-//	}
-//}
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::replaceTemplateName(const ParticleUniverse::String& templateName)
-{
+
+void ParticleUniverseEditorFrame::replaceTemplateName(const ParticleUniverse::String & templateName) {
 	// Set the new template name in the particle systems (both renderer + small panel for edittab)
-	wxString wxOldTemplateName = mListOfTemplates->GetItemText(mListOfTemplates->GetSelection());
+	wxString wxOldTemplateName = mParticleExplorer->GetItemText(mParticleExplorer->GetSelection());
 	ParticleUniverse::String oldTemplateName = wx2ogre(wxOldTemplateName);
 	ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 	wxString wxTemplateName = ogre2wx(templateName);
-	if (mCurrentParticleSystemForRenderer)
-	{
+	if (mCurrentParticleSystemForRenderer) {
 		mCurrentParticleSystemForRenderer->setTemplateName(templateName);
-	}
-	if (mOgreControlSmall && mOgreControlSmall->getParticleSystem())
-	{
-		mOgreControlSmall->getParticleSystem()->setTemplateName(templateName);
-	}
+	}/*
+	if (mOgreControlSmall && static_cast<OgreControlComponent*>(mOgreControlSmall)->getParticleSystem()) {
+		static_cast<OgreControlComponent*>(mOgreControlSmall)->getParticleSystem()->setTemplateName(templateName);
+	}*/
 	particleSystemManager->destroyParticleSystemTemplate(oldTemplateName);
 
 	// Find the old name in the tree and remove it
-	wxTreeItemId item = mListOfTemplates->findParticleSystem(wxOldTemplateName);
-	if (item)
-	{
-		mListOfTemplates->Delete(item);
+	wxTreeItemId item = mParticleExplorer->findParticleSystem(wxOldTemplateName);
+	if (item) {
+		mParticleExplorer->Delete(item);
 	}
 
 	// Insert the new name in the tree
-	if (mCurrentParticleSystemForRenderer)
-	{
+	if (mCurrentParticleSystemForRenderer) {
 		ParticleUniverse::String categoryName = mCurrentParticleSystemForRenderer->getCategory();
 		wxString cn = ogre2wx(categoryName);
-		mListOfTemplates->addItem(cn, wxTemplateName);
+		mParticleExplorer->addItem(cn, wxTemplateName);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::notifyCategoryChanged(ParticleUniverse::ParticleSystem* pSys)
-{
-	if (!pSys)
+
+void ParticleUniverseEditorFrame::notifyCategoryChanged(ParticleUniverse::ParticleSystem * pSys) {
+	if (!pSys) {
 		return;
+	}
 
 	// Synchronize everything, because moving the item to a different category triggers OnTamplatesClick.
 	synchroniseScriptWithEditTab();
@@ -2656,46 +2017,39 @@ void ParticleUniverseEditorFrame::notifyCategoryChanged(ParticleUniverse::Partic
 	wxString category = ogre2wx(pSys->getCategory());
 
 	// Find the name in the tree and remove it
-	wxTreeItemId item = mListOfTemplates->findParticleSystem(name);
-	if (item)
-	{
-		mListOfTemplates->Delete(item);
+	wxTreeItemId item = mParticleExplorer->findParticleSystem(name);
+	if (item) {
+		mParticleExplorer->Delete(item);
 	}
 
 	// Insert it again in the tree
-	mListOfTemplates->addItem(category, name);
+	mParticleExplorer->addItem(category, name);
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::parseScript(const ParticleUniverse::String& script)
-{
-	Ogre::ScriptCompilerManager* scriptCompilerManager = Ogre::ScriptCompilerManager::getSingletonPtr();
-	char* buffer = new char[script.length() + 1];
+
+void ParticleUniverseEditorFrame::parseScript(const ParticleUniverse::String & script) {
+	Ogre::ScriptCompilerManager * scriptCompilerManager = Ogre::ScriptCompilerManager::getSingletonPtr();
+	char * buffer = new char[script.length() + 1];
 	strcpy(buffer, script.c_str());
-	Ogre::DataStreamPtr* datastream = new Ogre::DataStreamPtr(new Ogre::MemoryDataStream(buffer, strlen(buffer)));
+	Ogre::DataStreamPtr * datastream = new Ogre::DataStreamPtr(new Ogre::MemoryDataStream(buffer, strlen(buffer)));
 	scriptCompilerManager->parseScript(*datastream, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 	delete datastream;
-	delete [] buffer;
+	delete[] buffer;
 }
-//-----------------------------------------------------------------------
-bool ParticleUniverseEditorFrame::createNewSystem(const ParticleUniverse::String& templateName, bool forcedByEditTab)
-{
+
+bool ParticleUniverseEditorFrame::createNewSystem(const ParticleUniverse::String & templateName, bool forcedByEditTab) {
 	bool particleSystemWasAttachedToEntity = false;
 	Ogre::String boneName = Ogre::StringUtil::BLANK;
-	if (mCurrentParticleSystemForRenderer)
-	{
+	if (mCurrentParticleSystemForRenderer) {
 		// 1. Get state in case the particle system was attached to the entity
-		if (mAnimationWindow)
-		{
+		if (mAnimationWindow) {
 			/** Notify the animation window that a new particle system is created. This is needed in case the particle system
 				is attached to the entity.
 			*/
-			if (mCurrentParticleSystemForRenderer->getTemplateName() == templateName)
-			{
+			if (mCurrentParticleSystemForRenderer->getTemplateName() == templateName) {
 				/** Only if the name of the old particle system is equal to the new name and the particle system is attached to
 					an entity, the newly created particle system should be reattached
 				*/
-				if (mAnimationWindow->isParticleSystemAttachedToEntity())
-				{
+				if (mAnimationWindow->isParticleSystemAttachedToEntity()) {
 					particleSystemWasAttachedToEntity = true;
 					boneName = mAnimationWindow->getBoneNameToWhichParticleSystemIsAttached();
 				}
@@ -2708,115 +2062,88 @@ bool ParticleUniverseEditorFrame::createNewSystem(const ParticleUniverse::String
 		mCurrentParticleSystemForRenderer->detachFromParent();
 	}
 
-	try
-	{
+	try {
 		// 3. Create the new particle system
 		ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(CURRENT_PS_NAME, mSceneManager); // Always force a destroy
 		ParticleUniverse::ParticleSystemManager::getSingletonPtr()->removeAndDestroyDanglingSceneNodes(mParticlerSystemSceneNode);
-		mCurrentParticleSystemForRenderer = 0;
-		mCurrentParticleSystemForRenderer = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(
-			CURRENT_PS_NAME, templateName, mSceneManager);
+		mCurrentParticleSystemForRenderer = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(CURRENT_PS_NAME, templateName, mSceneManager);
 		doResetTime();
 
-		if (mCurrentParticleSystemForRenderer)
-		{
+		if (mCurrentParticleSystemForRenderer) {
 			// Only continue if the particle system was created
 			mCurrentParticleSystemForRenderer->addParticleSystemListener(mSystemListener);
 			ParticleUniverse::String script = ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(mCurrentParticleSystemForRenderer);
-			if (mRecorder)
-			{
+			if (mRecorder) {
 				mRecorder->setParticleSystem(mCurrentParticleSystemForRenderer);
 			}
-			if (!forcedByEditTab && mEditNotebookPage)
-			{
-				// 5. Also create a copy for the edit page (including all components)
-				createParticleSystemCopyForEditPage(templateName);
+			// 5. Also create a copy for the edit page (including all components)
+			if (!forcedByEditTab && mEditNotebookPage) {
+				createParticleSystemCopyForEditPage(templateName, mCurrentParticleSystemForRenderer);
 			}
-#ifdef PU_FULL_VERSION
-			if (script != mCurrentParticleScript)
-			{
-				// 6. Load the script in the script tab
+			// 6. Load the script in the script tab
+			if (script != mCurrentParticleScript) {
 				mCurrentParticleScript = script;
 				LoadTextControl(ogre2wx(mCurrentParticleScript));
 			}
-#endif // PU_FULL_VERSION
-
 
 			// 7. If the particle systen was detached from the entity, it must be reattached in case particleSystemWasAttachedToEntity is true
-			if (mAnimationWindow && particleSystemWasAttachedToEntity)
-			{
+			if (mAnimationWindow && particleSystemWasAttachedToEntity) {
 				mAnimationWindow->attachParticleSystemToEntity(boneName, mAddEntity);
 			}
 
 			return true;
 		}
-	}
-
-	catch (Ogre::Exception)
-	{
+	} catch (Ogre::Exception) {
 		showMessage(_("This particle system template is in an incorrect state and cannot be used anymore"), wxOK | wxICON_ERROR);
-		mListOfTemplates->Delete(mListOfTemplates->GetSelection());
-		if (mCurrentParticleSystemForRenderer)
-		{
+		mParticleExplorer->Delete(mParticleExplorer->GetSelection());
+		if (mCurrentParticleSystemForRenderer) {
 			// Clean up the garbage (cannot be done by means of the ParticleSystemManager; apparently is doesn't exist in the ParticleSystemManager)
 			delete mCurrentParticleSystemForRenderer;
-			mCurrentParticleSystemForRenderer = 0;
+			mCurrentParticleSystemForRenderer = nullptr;
 		}
 	}
 
 	return false;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::createParticleSystemCopyForEditPage(const ParticleUniverse::String& templateName)
-{
+
+void ParticleUniverseEditorFrame::createParticleSystemCopyForEditPage(const ParticleUniverse::String & templateName, ParticleUniverse::ParticleSystem * partSystem) {
 	mEditNotebookPage->Freeze();
 	mEditNotebookPage->destroyDanglingPUComponents();
 	mEditNotebookPage->deleteParticleSystemComponents();
-	if (mOgreControlSmall)
-	{
-		ParticleUniverse::ParticleSystem* particleSystem = mOgreControlSmall->notifyCreateNewSystem(templateName);
-		EditComponent* particleSystemEditComponent = mEditNotebookPage->forceCreateParticleSystemEditComponent(); // 'Guarantees' a valid particleSystemEditComponent
-		if (mEditNotebookPage->copyParticleSystemPropertiesToPropertyWindow(particleSystemEditComponent, particleSystem))
-		{
-			mEditNotebookPage->createParticleSystemComponents(particleSystemEditComponent, particleSystem);
+	if (mOgreControlSmall) {
+		EditComponent * particleSystemEditComponent = mEditNotebookPage->forceCreateParticleSystemEditComponent(); // 'Guarantees' a valid particleSystemEditComponent
+		if (mEditNotebookPage->copyParticleSystemPropertiesToPropertyWindow(particleSystemEditComponent, partSystem)) {
+			mEditNotebookPage->createParticleSystemComponents(particleSystemEditComponent, partSystem);
 		}
 	}
 	mEditNotebookPage->Thaw();
 }
-//-----------------------------------------------------------------------
-int ParticleUniverseEditorFrame::showMessage(const wxString& message, long style)
-{
+
+int ParticleUniverseEditorFrame::showMessage(const wxString & message, long style) {
 	wxMessageDialog m(this, message, _("Message"), style);
 	return m.ShowModal();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::hideEditPage(void)
-{
-	if (mEditNotebookPage && mNotebook->GetSelection() == NOTEBOOK_EDIT)
-	{
+
+void ParticleUniverseEditorFrame::hideEditPage() {
+	if (mEditNotebookPage && mNotebook->GetSelection() == NOTEBOOK_EDIT) {
 		mEditNotebookPage->Hide();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::showEditPage(void)
-{
-	if (mEditNotebookPage && mNotebook->GetSelection() == NOTEBOOK_EDIT)
-	{
+
+void ParticleUniverseEditorFrame::showEditPage() {
+	if (mEditNotebookPage && mNotebook->GetSelection() == NOTEBOOK_EDIT) {
 		mEditNotebookPage->Show();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::synchroniseScriptWithEditTab(void)
-{
-	if (mEditNotebookPage->isSystemUpdatedByEditPage())
-	{
-		ParticleUniverse::ParticleSystem* system = mEditNotebookPage->getParticleSystemFromSystemComponent();
-		if (system)
-		{
+
+void ParticleUniverseEditorFrame::synchroniseScriptWithEditTab() {
+	if (mEditNotebookPage->isSystemUpdatedByEditPage()) {
+		ParticleUniverse::ParticleSystem * system = mEditNotebookPage->getParticleSystemFromSystemComponent();
+		if (system) {
 			ParticleUniverse::String templateName = system->getTemplateName();
-			
+
 			// 1. Clone the current template from 'system'
-			ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 			particleSystemManager->replaceParticleSystemTemplate(templateName, system);
 
 			// 2. Delete mCurrentParticleSystemForRenderer
@@ -2828,67 +2155,58 @@ void ParticleUniverseEditorFrame::synchroniseScriptWithEditTab(void)
 		}
 	}
 }
-//-----------------------------------------------------------------------
-bool ParticleUniverseEditorFrame::isPhysXInstalled(void)
-{
+
+bool ParticleUniverseEditorFrame::isPhysXInstalled() {
 //	HKEY hKey = 0;
 //	char buf[255] = {0};
 //	DWORD dwBufSize = sizeof(buf);
 	//const char* subkey = "SOFTWARE\\AGEIA Technologies\\PhysX_A32_Engines";
 	/*const LPCWSTR subkey = wxT("SOFTWARE\\AGEIA Technologies\\PhysX_A32_Engines");
 
-    if(RegOpenKey(HKEY_LOCAL_MACHINE, subkey, &hKey) == ERROR_SUCCESS)
-    {
-        RegCloseKey(hKey);
-		return true;
-    }
-    else
+	if(RegOpenKey(HKEY_LOCAL_MACHINE, subkey, &hKey) == ERROR_SUCCESS)
 	{
+		RegCloseKey(hKey);
+		return true;
+	}
+	else {
 		return false;
 	}*/
 	return false;
 }
-//-----------------------------------------------------------------------
-bool ParticleUniverseEditorFrame::isPhysXUsed(void)
-{
+
+bool ParticleUniverseEditorFrame::isPhysXUsed() {
 	return mUsePhysX;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::notifyTimeRescaled(ParticleUniverse::Real scale)
-{
-	if (mCurrentParticleSystemForRenderer)
-	{
+
+void ParticleUniverseEditorFrame::notifyTimeRescaled(ParticleUniverse::Real scale) {
+	if (mCurrentParticleSystemForRenderer) {
 		mCurrentParticleSystemForRenderer->setScaleTime(scale);
 	}
-	if (mAnimationWindow)
-	{
+	if (mAnimationWindow) {
 		// Notify animation window, so the animation is slowed down or speeded up
 		mAnimationWindow->notifyTimeRescaled(scale);
 	}
 
 	// scale time of the particle system of the small rendering window
-	if (mOgreControlSmall)
-	{
-		mOgreControlSmall->notifyTimeRescaled(scale);
+	if (mOgreControlSmall) {
+//		mOgreControlSmall->notifyTimeRescaled(scale);
 	}
 
-	if (mControl)
-	{
+	if (mControl) {
 		mControl->SetFocus();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::createStatisticsOverlay(void)
-{
-	Ogre::FontManager* fontManager = Ogre::FontManager::getSingletonPtr();
+
+void ParticleUniverseEditorFrame::createStatisticsOverlay() {
+	Ogre::FontManager * fontManager = Ogre::FontManager::getSingletonPtr();
 	Ogre::ResourcePtr font = fontManager->create("MyFont", "General");
 	font->setParameter("type", "truetype");
 	font->setParameter("source", "bluehigh.ttf");
 	font->setParameter("size", "32");
 	font->load();
 
-	mTextPanel = (Ogre::OverlayContainer*)(Ogre::OverlayManager::getSingleton().createOverlayElement("Panel", "ParticleUniverseText"));
-	mAverageFPS = (Ogre::TextAreaOverlayElement*)(Ogre::OverlayManager::getSingleton().createOverlayElement("TextArea", "ParticleUniverseStats"));
+	mTextPanel = static_cast<Ogre::OverlayContainer *>(Ogre::OverlayManager::getSingleton().createOverlayElement("Panel", "ParticleUniverseText"));
+	mAverageFPS = static_cast<Ogre::TextAreaOverlayElement *>(Ogre::OverlayManager::getSingleton().createOverlayElement("TextArea", "ParticleUniverseStats"));
 	mAverageFPS->_setPosition(0.0, 0.02);
 	mAverageFPS->_setDimensions(0.3, 0.4);
 	mAverageFPS->setColour(Ogre::ColourValue::White);
@@ -2900,43 +2218,38 @@ void ParticleUniverseEditorFrame::createStatisticsOverlay(void)
 	mDebugOverlay->add2D(mTextPanel);
 	mDebugOverlay->show();
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::initialiseOrthoCameraGizmo(void)
-{
+
+void ParticleUniverseEditorFrame::initialiseOrthoCameraGizmo() {
 	mOrthoCameraGizmoNode = mSceneManager->getRootSceneNode()->createChildSceneNode();
 	_getCamera()->setProjectionType(Ogre::PT_PERSPECTIVE);
-	_getCamera()->setFOVy(Ogre::Radian(0.78539819f));
+	_getCamera()->setFOVy(Ogre::Radian(0.78539819));
 
-	if (mGizmoManager)
-	{
+	if (mGizmoManager) {
 		mGizmoManager->attachOrthoCameraGizmo(mOrthoCameraGizmoNode);
 		mGizmoManager->setVisibleOrthoCameraGizmo(false); // By default, a perspecive camera is used, so set this gizmo invisible
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::updateOverlay(void)
-{
-	if (!mDebugOverlay->isVisible())
+
+void ParticleUniverseEditorFrame::updateOverlay() {
+	if (!mDebugOverlay || !mDebugOverlay->isVisible()) {
 		return;
+	}
 
 	// Camera projection
 	ParticleUniverse::String cameraProjectionType = "Perspective";
-	if (_isCameraOrthographic())
-	{
+	if (_isCameraOrthographic()) {
 		cameraProjectionType = "Orthographic";
 	}
 	ParticleUniverse::String cameraProjection = " Camera projection: " + cameraProjectionType + "\n";
 	ParticleUniverse::String caption = cameraProjection;
 
 	// Average FPS
-	const Ogre::RenderTarget::FrameStats& stats = mControl->GetRenderWindow()->getStatistics();
+	const Ogre::RenderTarget::FrameStats & stats = mControl->GetRenderWindow()->getStatistics();
 	ParticleUniverse::String averageFPSString = " Average FPS: " + ParticleUniverse::StringConverter::toString(stats.avgFPS) + "\n";
 
 	// Position of the selected node
 	Ogre::Vector3 pivot = getCurrentPivot();
-	ParticleUniverse::String positionString = " Position: " + ParticleUniverse::StringConverter::toString(pivot.x) + " " +
-		ParticleUniverse::StringConverter::toString(pivot.y) + " " +
-		ParticleUniverse::StringConverter::toString(pivot.z) + "\n";
+	ParticleUniverse::String positionString = " Position: " + ParticleUniverse::StringConverter::toString(pivot.x) + " " + ParticleUniverse::StringConverter::toString(pivot.y) + " " + ParticleUniverse::StringConverter::toString(pivot.z) + "\n";
 	caption = caption + averageFPSString + positionString;
 
 	// Distance of the selected node
@@ -2946,89 +2259,56 @@ void ParticleUniverseEditorFrame::updateOverlay(void)
 	caption = caption + distanceString;
 
 	// Orientation of the selected node
-	Ogre::SceneNode* node = mMainSceneNode;
-	if (mGizmoManager && mGizmoManager->getAttachedNode())
-	{
+	Ogre::SceneNode * node = mMainSceneNode;
+	if (mGizmoManager && mGizmoManager->getAttachedNode()) {
 		node = mGizmoManager->getAttachedNode();
 	}	ParticleUniverse::String orientationString;
-	orientationString = " Orientation (wxyz): \n    " +
-		ParticleUniverse::StringConverter::toString(node->_getDerivedOrientation().w) + " " +
-		ParticleUniverse::StringConverter::toString(node->_getDerivedOrientation().z) + " " +
-		ParticleUniverse::StringConverter::toString(node->_getDerivedOrientation().y) + " " +
-		ParticleUniverse::StringConverter::toString(node->_getDerivedOrientation().z) + "\n";
+	orientationString = " Orientation (wxyz): \n	" + ParticleUniverse::StringConverter::toString(node->_getDerivedOrientation().w) + " " + ParticleUniverse::StringConverter::toString(node->_getDerivedOrientation().z) + " " + ParticleUniverse::StringConverter::toString(node->_getDerivedOrientation().y) + " " + ParticleUniverse::StringConverter::toString(node->_getDerivedOrientation().z) + "\n";
 	caption = caption + orientationString;
 
-	if (mCurrentParticleSystemForRenderer)
-	{
+	if (mCurrentParticleSystemForRenderer) {
 		// Number of emitted visual particles
 		size_t numberOfVisualParticles = mCurrentParticleSystemForRenderer->getNumberOfEmittedParticles(ParticleUniverse::Particle::PT_VISUAL);
 		mMaxNumberOfVisualParticles = std::max(mMaxNumberOfVisualParticles, numberOfVisualParticles);
-		ParticleUniverse::String numberOfVisualParticlesString = " Total visual particles: " + 
-			ParticleUniverse::StringConverter::toString(numberOfVisualParticles) +
-			"\n";
+		ParticleUniverse::String numberOfVisualParticlesString = " Total visual particles: " + ParticleUniverse::StringConverter::toString(numberOfVisualParticles) + "\n";
 		caption = caption + numberOfVisualParticlesString;
-		ParticleUniverse::String maxNumberOfVisualParticlesString = " Max visual particles: " + 
-			ParticleUniverse::StringConverter::toString(mMaxNumberOfVisualParticles) +
-			"\n";
+		ParticleUniverse::String maxNumberOfVisualParticlesString = " Max visual particles: " + ParticleUniverse::StringConverter::toString(mMaxNumberOfVisualParticles) + "\n";
 		caption = caption + maxNumberOfVisualParticlesString;
 
 		// Number of emitted non-visual particles
-		size_t numberOfEmittedParticles = mCurrentParticleSystemForRenderer->getNumberOfEmittedParticles() - 
-			mCurrentParticleSystemForRenderer->getNumberOfEmittedParticles(ParticleUniverse::Particle::PT_VISUAL);
+		size_t numberOfEmittedParticles = mCurrentParticleSystemForRenderer->getNumberOfEmittedParticles() - mCurrentParticleSystemForRenderer->getNumberOfEmittedParticles(ParticleUniverse::Particle::PT_VISUAL);
 		mMaxNumberOfEmittedParticles = std::max(mMaxNumberOfEmittedParticles, numberOfEmittedParticles);
-		ParticleUniverse::String numberOfNonVisualParticlesString = " Total non-visual particles: " + 
-			ParticleUniverse::StringConverter::toString(numberOfEmittedParticles) +
-			"\n";
+		ParticleUniverse::String numberOfNonVisualParticlesString = " Total non-visual particles: " + ParticleUniverse::StringConverter::toString(numberOfEmittedParticles) + "\n";
 		caption = caption + numberOfNonVisualParticlesString;
-		ParticleUniverse::String maxNumberOfNonVisualParticlesString = " Max non-visual particles: " + 
-			ParticleUniverse::StringConverter::toString(mMaxNumberOfEmittedParticles) +
-			"\n";
+		ParticleUniverse::String maxNumberOfNonVisualParticlesString = " Max non-visual particles: " + ParticleUniverse::StringConverter::toString(mMaxNumberOfEmittedParticles) + "\n";
 		caption = caption + maxNumberOfNonVisualParticlesString;
 	}
 
 	mAverageFPS->setCaption(caption);
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::showOverlay(bool show)
-{
-	if (!mDebugOverlay)
-		return;
 
-	if (show)
-	{
-		mDebugOverlay->show();
+void ParticleUniverseEditorFrame::showOverlay(bool show) {
+	if (!mDebugOverlay) {
+		return;
 	}
-	else
-	{
+
+	if (show) {
+		mDebugOverlay->show();
+	} else {
 		mDebugOverlay->hide();
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::resetOverlay(void)
-{
+
+void ParticleUniverseEditorFrame::resetOverlay() {
 	mMaxNumberOfEmittedParticles = 0;
 	mMaxNumberOfVisualParticles = 0;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::createGridPlane(ParticleUniverse::Real distance)
-{
+
+void ParticleUniverseEditorFrame::createGridPlane(ParticleUniverse::Real distance) {
 	distance = Ogre::Math::Abs(distance);
-	ParticleUniverse::Real uTile = 1.0f;
-	ParticleUniverse::Real vTile = 1.0f;
 
 	// Create the mesh (called "grid")
-	Ogre::MeshManager::getSingleton().createPlane("gridplane", 
-		Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-		Ogre::Plane(Ogre::Vector3::UNIT_Y, 0),
-		5000, 
-		5000, 
-		8, 
-		8, 
-		true, 
-		1, 
-		1, 
-		1, 
-		Ogre::Vector3::UNIT_Z);
+	Ogre::MeshManager::getSingleton().createPlane("gridplane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, Ogre::Plane(Ogre::Vector3::UNIT_Y, 0), 5000, 5000, 8, 8, true, 1, 1, 1, Ogre::Vector3::UNIT_Z);
 
 	// Create the grid entity
 	mGridPlaneSceneNodeBottom = mSceneManager->getRootSceneNode()->createChildSceneNode();
@@ -3071,128 +2351,117 @@ void ParticleUniverseEditorFrame::createGridPlane(ParticleUniverse::Real distanc
 	// Set orientation
 	Ogre::Real sqrt0dot5 = sqrt(0.5);
 	mGridPlaneSceneNodeBottom->_setDerivedOrientation(Ogre::Quaternion::IDENTITY);
-	mGridPlaneSceneNodeX->_setDerivedOrientation(Ogre::Quaternion (sqrt0dot5, 0, 0, sqrt0dot5));
-	mGridPlaneSceneNodeMinX->_setDerivedOrientation(Ogre::Quaternion (-sqrt0dot5, 0, 0, sqrt0dot5));
-	mGridPlaneSceneNodeZ->_setDerivedOrientation(Ogre::Quaternion (-sqrt0dot5, sqrt0dot5, 0, 0));
-	mGridPlaneSceneNodeMinZ->_setDerivedOrientation(Ogre::Quaternion (sqrt0dot5, sqrt0dot5, 0, 0));
+	mGridPlaneSceneNodeX->_setDerivedOrientation(Ogre::Quaternion(sqrt0dot5, 0, 0, sqrt0dot5));
+	mGridPlaneSceneNodeMinX->_setDerivedOrientation(Ogre::Quaternion(-sqrt0dot5, 0, 0, sqrt0dot5));
+	mGridPlaneSceneNodeZ->_setDerivedOrientation(Ogre::Quaternion(-sqrt0dot5, sqrt0dot5, 0, 0));
+	mGridPlaneSceneNodeMinZ->_setDerivedOrientation(Ogre::Quaternion(sqrt0dot5, sqrt0dot5, 0, 0));
 
 	// Set to invisible, but show the bottom plane
 	setOrthoGridVisible(false);
 	showGridPlane(true);
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::showGridPlane(bool visible)
-{
-	if (mGridBottom)
-	{
+
+void ParticleUniverseEditorFrame::showGridPlane(bool visible) {
+	if (mGridBottom) {
 		mGridBottom->setVisible(visible);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::setOrthoGridVisible(bool visible, Gizmo::Axis axis)
-{
-	if (!mGridBottom || !mGridX || !mGridMinX || !mGridZ || !mGridMinZ)
+
+void ParticleUniverseEditorFrame::setOrthoGridVisible(bool visible, Gizmo::Axis axis) {
+	if (!mGridBottom || !mGridX || !mGridMinX || !mGridZ || !mGridMinZ) {
 		return;
+	}
 
-	switch(axis)
-	{
-		case Gizmo::AXIS_ALL:
-		{
-			mGridBottom->setVisible(visible);
-			mGridX->setVisible(visible);
-			mGridMinX->setVisible(visible);
-			mGridZ->setVisible(visible);
-			mGridMinZ->setVisible(visible);
-		}
-		break;
-
-		case Gizmo::AXIS_X:
-		{
-			mGridBottom->setVisible(!visible);
-			mGridX->setVisible(visible);
-			mGridMinX->setVisible(!visible);
-			mGridZ->setVisible(!visible);
-			mGridMinZ->setVisible(!visible);
-		}
-		break;
-
-		case Gizmo::AXIS_MIN_X:
-		{
-			mGridBottom->setVisible(!visible);
-			mGridX->setVisible(!visible);
-			mGridMinX->setVisible(visible);
-			mGridZ->setVisible(!visible);
-			mGridMinZ->setVisible(!visible);
-		}
-		break;
-
-		case Gizmo::AXIS_Y:
-		{
-			mGridBottom->setVisible(visible);
-			mGridX->setVisible(!visible);
-			mGridMinX->setVisible(!visible);
-			mGridZ->setVisible(!visible);
-			mGridMinZ->setVisible(!visible);
-		}
-		break;
-
-		case Gizmo::AXIS_Z:
-		{
-			mGridBottom->setVisible(!visible);
-			mGridX->setVisible(!visible);
-			mGridMinX->setVisible(!visible);
-			mGridZ->setVisible(visible);
-			mGridMinZ->setVisible(!visible);
-		}
-		break;
-
-		case Gizmo::AXIS_MIN_Z:
-		{
-			mGridBottom->setVisible(!visible);
-			mGridX->setVisible(!visible);
-
-			mGridMinX->setVisible(!visible);
-			mGridZ->setVisible(!visible);
-			mGridMinZ->setVisible(visible);
-		}
+	switch(axis) {
+	case Gizmo::AXIS_ALL: {
+		mGridBottom->setVisible(visible);
+		mGridX->setVisible(visible);
+		mGridMinX->setVisible(visible);
+		mGridZ->setVisible(visible);
+		mGridMinZ->setVisible(visible);
 		break;
 	}
+	case Gizmo::AXIS_X: {
+		mGridBottom->setVisible(!visible);
+		mGridX->setVisible(visible);
+		mGridMinX->setVisible(!visible);
+		mGridZ->setVisible(!visible);
+		mGridMinZ->setVisible(!visible);
+		break;
+	}
+	case Gizmo::AXIS_MIN_X: {
+		mGridBottom->setVisible(!visible);
+		mGridX->setVisible(!visible);
+		mGridMinX->setVisible(visible);
+		mGridZ->setVisible(!visible);
+		mGridMinZ->setVisible(!visible);
+		break;
+	}
+	case Gizmo::AXIS_Y: {
+		mGridBottom->setVisible(visible);
+		mGridX->setVisible(!visible);
+		mGridMinX->setVisible(!visible);
+		mGridZ->setVisible(!visible);
+		mGridMinZ->setVisible(!visible);
+		break;
+	}
+	case Gizmo::AXIS_Z: {
+		mGridBottom->setVisible(!visible);
+		mGridX->setVisible(!visible);
+		mGridMinX->setVisible(!visible);
+		mGridZ->setVisible(visible);
+		mGridMinZ->setVisible(!visible);
+		break;
+	}
+	case Gizmo::AXIS_MIN_Z: {
+		mGridBottom->setVisible(!visible);
+		mGridX->setVisible(!visible);
+
+		mGridMinX->setVisible(!visible);
+		mGridZ->setVisible(!visible);
+		mGridMinZ->setVisible(visible);
+		break;
+	}
+	case Gizmo::AXIS_OUTER: {
+		throw "EditorFrame::setOrthoGridVisible";
+		break;
+	}
+	case Gizmo::AXIS_NONE: {
+		throw "EditorFrame::setOrthoGridVisible";
+		break;
+	}
+	default: {
+		throw "EditorFrame::setOrthoGridVisible";
+		break;
+	}
+	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::setDistanceGridPlane(ParticleUniverse::Real distance)
-{
-	if (mGridPlaneSceneNodeBottom)
-	{
+
+void ParticleUniverseEditorFrame::setDistanceGridPlane(ParticleUniverse::Real distance) {
+	if (mGridPlaneSceneNodeBottom) {
 		mGridPlaneSceneNodeBottom->_setDerivedPosition(Ogre::Vector3(0, distance, 0));
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::setScaleGridPlane(ParticleUniverse::Real scale)
-{
-	Ogre::MaterialPtr mat = static_cast<Ogre::MaterialPtr>(Ogre::MaterialManager::getSingleton().getByName("ParticleUniverseEditor/GridMaterial"));
-	if (!mat.isNull())
-	{
-		Ogre::Technique* tec = (mat)->getTechnique(0);
-		if (tec)
-		{
-			Ogre::Pass* pass = tec->getPass(0);
-			if (pass)
-			{
-				Ogre::TextureUnitState* tus = pass->getTextureUnitState(0);
 
-				if (tus)
-				{
+void ParticleUniverseEditorFrame::setScaleGridPlane(ParticleUniverse::Real scale) {
+	Ogre::MaterialPtr mat = static_cast<Ogre::MaterialPtr>(Ogre::MaterialManager::getSingleton().getByName("ParticleUniverseEditor/GridMaterial"));
+	if (!mat.isNull()) {
+		Ogre::Technique * tec = (mat)->getTechnique(0);
+		if (tec) {
+			Ogre::Pass * pass = tec->getPass(0);
+			if (pass) {
+				Ogre::TextureUnitState * tus = pass->getTextureUnitState(0);
+
+				if (tus) {
 					tus->setTextureScale(scale, scale);
 				}
 			}
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::createLight(void)
-{
-	if (!mLightEntity)
-	{
+
+void ParticleUniverseEditorFrame::createLight() {
+	if (!mLightEntity) {
 		mLightEntity = mSceneManager->createEntity("pu_light_entity", "pu_light.mesh");
 		mLightEntity->setMaterialName("ParticleUniverseEditor/LightMaterial");
 		mLightEntity->setQueryFlags(GizmoManager::OBJECT_FLAG);
@@ -3201,152 +2470,117 @@ void ParticleUniverseEditorFrame::createLight(void)
 		mLightSceneNode->_setDerivedPosition(Ogre::Vector3(0, 100, 0));
 		mLightSceneNode->attachObject(mLightEntity);
 		mLightSceneNode->attachObject(mLight);
-		mLightSceneNode->setScale(0.7f, 0.7f, 0.0f);
+		mLightSceneNode->setScale(0.7, 0.7, 0.0);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::showLight(bool show)
-{
-	if (mLightEntity && mLight)
-	{
+
+void ParticleUniverseEditorFrame::showLight(bool show) {
+	if (mLightEntity && mLight) {
 		mLightEntity->setVisible(show);
 		mLight->setVisible(show);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::selectLightColour(wxPoint position)
-{
+
+void ParticleUniverseEditorFrame::selectLightColour(wxPoint position) {
 	wxColourDialog colourDialog(this);
 	colourDialog.SetPosition(mNotebook->GetScreenPosition() + position);
-	if (colourDialog.ShowModal() == wxID_OK)
-	{
+	if (colourDialog.ShowModal() == wxID_OK) {
 		wxColourData colourData = colourDialog.GetColourData();
 		Ogre::ColourValue colour;
 		wxColour c = colourData.GetColour();
-		colour.r = ((ParticleUniverse::Real)c.Red())/255.0f;
-		colour.g = ((ParticleUniverse::Real)c.Green())/255.0f;
-		colour.b = ((ParticleUniverse::Real)c.Blue())/255.0f;
-		colour.a = ((ParticleUniverse::Real)c.Alpha())/255.0f;
+		colour.r = static_cast<ParticleUniverse::Real>(c.Red()) / 255.0;
+		colour.g = static_cast<ParticleUniverse::Real>(c.Green()) / 255.0;
+		colour.b = static_cast<ParticleUniverse::Real>(c.Blue()) / 255.0;
+		colour.a = static_cast<ParticleUniverse::Real>(c.Alpha()) / 255.0;
 
-		if (mLight)
-		{
+		if (mLight) {
 			mLight->setDiffuseColour(colour);
 		}
 	}
 }
-//------------------------------------------------------------------------------
-void ParticleUniverseEditorFrame::doWindowLeave(wxMouseEvent& event)
-{
+
+void ParticleUniverseEditorFrame::doWindowLeave(wxMouseEvent & event) {
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::activateQueryFlags(bool active)
-{
-	if (active)
-	{
-		mMarker->setQueryFlags(GizmoManager::OBJECT_FLAG);
-		mMarkerBold->setQueryFlags(GizmoManager::OBJECT_FLAG);
-		if (mAddEntity)
-		{
+
+void ParticleUniverseEditorFrame::activateQueryFlags(bool active) {
+	if (active) {
+		if (mAddEntity) {
 			mAddEntity->setQueryFlags(GizmoManager::OBJECT_FLAG);
 		}
-		if (mLightEntity)
-		{
+		if (mLightEntity) {
 			mLightEntity->setQueryFlags(GizmoManager::OBJECT_FLAG);
 		}
-	}
-	else
-	{
-		mMarker->setQueryFlags(0);
-		mMarkerBold->setQueryFlags(0);
-		if (mAddEntity)
-		{
+	} else {
+		if (mAddEntity) {
 			mAddEntity->setQueryFlags(0);
 		}
-		if (mLightEntity)
-		{
+		if (mLightEntity) {
 			mLightEntity->setQueryFlags(0);
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::synchronizeSmallOgreControlWithRenderTab(void)
-{
+
+void ParticleUniverseEditorFrame::synchronizeSmallOgreControlWithRenderTab() {
 	// Synchronize positions, orientations and scale of the camera and particle system
-	Ogre::Camera* cameraRenderTab = _getCamera();
-	Ogre::Camera* cameraEditTab = mOgreControlSmall->GetCamera();
-	if (cameraRenderTab && cameraEditTab)
-	{
+	if (!mOgreControlSmall) {
+		return;
+	}
+	return;
+	Ogre::Camera * cameraRenderTab = _getCamera();
+	Ogre::Camera * cameraEditTab = mOgreControlSmall->GetCamera();
+	if (cameraRenderTab && cameraEditTab) {
 		cameraEditTab->setPosition(cameraRenderTab->getPosition());
 		cameraEditTab->setOrientation(cameraRenderTab->getOrientation());
 		cameraEditTab->setDirection(cameraRenderTab->getDirection());
 	}
-	if (mCurrentParticleSystemForRenderer)
-	{
-		Ogre::Node* pSysNode = mCurrentParticleSystemForRenderer->getParentNode(); // This is either mMainSceneNode or a Bone (TagPoint)
-		if (pSysNode)
-		{
-			Ogre::SceneNode* nodeEditTab = mOgreControlSmall->getMainSceneNode();
-			nodeEditTab->setPosition(pSysNode->_getDerivedPosition());
-			nodeEditTab->setOrientation(pSysNode->_getDerivedOrientation());
+	if (mCurrentParticleSystemForRenderer) {
+		Ogre::Node * pSysNode = mCurrentParticleSystemForRenderer->getParentNode(); // This is either mMainSceneNode or a Bone (TagPoint)
+		if (pSysNode) {
+//			Ogre::SceneNode* nodeEditTab = mOgreControlSmall->getMainSceneNode();
+//			nodeEditTab->setPosition(pSysNode->_getDerivedPosition());
+//			nodeEditTab->setOrientation(pSysNode->_getDerivedOrientation());
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::OnKeyPressed(wxKeyEvent& event)
-{
+
+void ParticleUniverseEditorFrame::OnKeyPressed(wxKeyEvent & event) {
 	// Check on TAB, q and Q
-	if (event.GetKeyCode() == WXK_TAB || event.GetKeyCode() == 113 || event.GetKeyCode() == 81)
-	{
-		if (mGizmoManager->getAttachedNode() == mMainSceneNode)
-		{
+	if (event.GetKeyCode() == WXK_TAB || event.GetKeyCode() == 113 || event.GetKeyCode() == 81) {
+		if (mGizmoManager->getAttachedNode() == mMainSceneNode) {
 			// Attach to the entity node, otherwise attach to the light node
-			if (mAddEntitySceneNode->numAttachedObjects() > 0)
-			{
+			if (mAddEntitySceneNode->numAttachedObjects() > 0) {
 				mGizmoManager->attachToNode(mAddEntitySceneNode);
 				_cameraLookAt(mAddEntitySceneNode->_getDerivedPosition());
-			}
-			else if (mLightSceneNode->numAttachedObjects() > 0 && mLightSceneNode->getAttachedObject(1)->isVisible())
-			{
+			} else if (mLightSceneNode->numAttachedObjects() > 0 && mLightSceneNode->getAttachedObject(1)->isVisible()) {
 				mGizmoManager->attachToNode(mLightSceneNode);
 				_cameraLookAt(mLightSceneNode->_getDerivedPosition());
 			}
-		}
-		else if (mGizmoManager->getAttachedNode() == mAddEntitySceneNode)
-		{
+		} else if (mGizmoManager->getAttachedNode() == mAddEntitySceneNode) {
 			// Attach to the light node, otherwise attach to the main node
-			if (mLightSceneNode->numAttachedObjects() > 0 && mLightSceneNode->getAttachedObject(1)->isVisible())
-			{
-				if (!mGizmoManager->attachToNode(mLightSceneNode))
-				{
+			if (mLightSceneNode->numAttachedObjects() > 0 && mLightSceneNode->getAttachedObject(1)->isVisible()) {
+				if (!mGizmoManager->attachToNode(mLightSceneNode)) {
 					// Apparently, the gizmo cannot be attached to the light, so attach it to the main node instead
 					mGizmoManager->attachToNode(mMainSceneNode);
 					_cameraLookAt(mMainSceneNode->_getDerivedPosition());
-				}
-				else
-				{
+				} else {
 					_cameraLookAt(mLightSceneNode->_getDerivedPosition());
 				}
-			}
-			else
-			{
+			} else {
 				mGizmoManager->attachToNode(mMainSceneNode);
 				_cameraLookAt(mMainSceneNode->_getDerivedPosition());
 			}
-		}
-		else if (mGizmoManager->getAttachedNode() == mLightSceneNode)
-		{
+		} else if (mGizmoManager->getAttachedNode() == mLightSceneNode) {
 			// Attach to the main node
 			mGizmoManager->attachToNode(mMainSceneNode);
 			_cameraLookAt(mMainSceneNode->_getDerivedPosition());
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::callbackSpinCtrlXYZ(Ogre::Real angleX, Ogre::Real angleY, Ogre::Real angleZ, const Ogre::String& order)
-{
-	Ogre::SceneNode* parentNode = mSceneManager->getRootSceneNode()->createChildSceneNode();
-	Ogre::SceneNode* childNode = parentNode->createChildSceneNode();
-	Ogre::SceneNode* grandChildNode = childNode->createChildSceneNode();
+
+void ParticleUniverseEditorFrame::callbackSpinCtrlXYZ(Ogre::Real angleX, Ogre::Real angleY, Ogre::Real angleZ, const Ogre::String & order) {
+	Ogre::SceneNode * parentNode = mSceneManager->getRootSceneNode()->createChildSceneNode();
+	Ogre::SceneNode * childNode = parentNode->createChildSceneNode();
+	Ogre::SceneNode * grandChildNode = childNode->createChildSceneNode();
 	mGizmoManager->setOrientation(Ogre::Quaternion::IDENTITY);
 	Ogre::Quaternion orientationX = Ogre::Quaternion::IDENTITY;
 	Ogre::Quaternion orientationY = Ogre::Quaternion::IDENTITY;
@@ -3355,20 +2589,15 @@ void ParticleUniverseEditorFrame::callbackSpinCtrlXYZ(Ogre::Real angleX, Ogre::R
 	orientationY.FromAngleAxis(Ogre::Radian(Ogre::Degree(angleY)), Ogre::Vector3::UNIT_Y);
 	orientationZ.FromAngleAxis(Ogre::Radian(Ogre::Degree(angleZ)), Ogre::Vector3::UNIT_Z);
 
-	if (order == "XYZ")
-	{
+	if (order == "XYZ") {
 		grandChildNode->setOrientation(orientationZ);
 		childNode->setOrientation(orientationY);
 		parentNode->setOrientation(orientationX);
-	}
-	else if (order == "YXZ")
-	{
+	} else if (order == "YXZ") {
 		grandChildNode->setOrientation(orientationZ);
 		childNode->setOrientation(orientationX);
 		parentNode->setOrientation(orientationY);
-	}
-	else if (order == "ZXY")
-	{
+	} else if (order == "ZXY") {
 		grandChildNode->setOrientation(orientationY);
 		childNode->setOrientation(orientationX);
 		parentNode->setOrientation(orientationZ);
@@ -3378,167 +2607,131 @@ void ParticleUniverseEditorFrame::callbackSpinCtrlXYZ(Ogre::Real angleX, Ogre::R
 
 	mGizmoManager->applyWorldLocalSpaceSetting(); // Apply the current worldspace settings to the Gizmo
 }
-//-----------------------------------------------------------------------
-Ogre::SceneNode* ParticleUniverseEditorFrame::getAddEntitySceneNode(void)
-{
+
+Ogre::SceneNode * ParticleUniverseEditorFrame::getAddEntitySceneNode() {
 	return mAddEntitySceneNode;
 }
-//-----------------------------------------------------------------------
-Ogre::Entity* ParticleUniverseEditorFrame::getAddEntity(void)
-{
+
+Ogre::Entity * ParticleUniverseEditorFrame::getAddEntity() {
 	return mAddEntity;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::restoreFocus(void)
-{
-	if (mListOfTemplates)
-	{
+
+void ParticleUniverseEditorFrame::restoreFocus() {
+	if (mParticleExplorer) {
 		// Also to be able to zoom with the mouse on the render window
-		mListOfTemplates->SetFocus();
+		mParticleExplorer->SetFocus();
 	}
 }
-//-----------------------------------------------------------------------
-Ogre::Quaternion ParticleUniverseEditorFrame::getOrientationMainSceneNode(void)
-{
-	if (mMainSceneNode)
-	{
+
+Ogre::Quaternion ParticleUniverseEditorFrame::getOrientationMainSceneNode() {
+	if (mMainSceneNode) {
 		return mMainSceneNode->getOrientation();
 	}
 	return Ogre::Quaternion::IDENTITY;
 }
-//-----------------------------------------------------------------------
-ParticleUniverse::ParticleSystem* ParticleUniverseEditorFrame::getCurrentParticleSystemForRenderer(void)
-{
+
+ParticleUniverse::ParticleSystem * ParticleUniverseEditorFrame::getCurrentParticleSystemForRenderer() {
 	return mCurrentParticleSystemForRenderer;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::notifyParticleSystemAttachToEntity(void)
-{
+
+void ParticleUniverseEditorFrame::notifyParticleSystemAttachToEntity() {
 	// Called when the particle system is going to be attached to an entity
-	if (mParticlerSystemSceneNode->numAttachedObjects() > 0)
-	{
+	if (mParticlerSystemSceneNode->numAttachedObjects() > 0) {
 		// Assume only the particle system is attached to mParticlerSystemSceneNode
 		mParticlerSystemSceneNode->detachObject(mCurrentParticleSystemForRenderer);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::notifyParticleSystemDetachedFromEntity(void)
-{
+
+void ParticleUniverseEditorFrame::notifyParticleSystemDetachedFromEntity() {
 	// Called after the particle system is detached from an entity
 	mParticlerSystemSceneNode->attachObject(mCurrentParticleSystemForRenderer);
-	if (mGizmoManager && mGizmoManager->getAttachedNode() == mMainSceneNode)
-	{
+	if (mGizmoManager && mGizmoManager->getAttachedNode() == mMainSceneNode) {
 		mGizmoManager->applyWorldLocalSpaceSetting();
 	}
 }
-//-----------------------------------------------------------------------
-GizmoManager* ParticleUniverseEditorFrame::getGizmoManager(void)
-{
+
+GizmoManager * ParticleUniverseEditorFrame::getGizmoManager() {
 	return mGizmoManager;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::notifyAnimationStarted(void)
-{
+
+void ParticleUniverseEditorFrame::notifyAnimationStarted() {
 	// Nothing yet
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::notifyAnimationStopped(void)
-{
+
+void ParticleUniverseEditorFrame::notifyAnimationStopped() {
 	// Reset the Gizmo orientation if it was attached to the tagpoint
-	if (mGizmoManager && mGizmoManager->getAttachedNode() == mMainSceneNode)
-	{
+	if (mGizmoManager && mGizmoManager->getAttachedNode() == mMainSceneNode) {
 		mGizmoManager->setOrientation(mAnimationWindow->_getDerivedBaseOrientation());
 	}
 }
-//-----------------------------------------------------------------------
-const Ogre::Vector3& ParticleUniverseEditorFrame::_getCameraPosition(void)
-{
-	if (_getCamera())
-	{
+
+const Ogre::Vector3 & ParticleUniverseEditorFrame::_getCameraPosition() {
+	if (_getCamera()) {
 		return _getCamera()->getPosition();
 	}
 	return Ogre::Vector3::ZERO;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::_setCameraPosition(const Ogre::Vector3& position)
-{
-	if (_getCamera())
-	{
+
+void ParticleUniverseEditorFrame::_setCameraPosition(const Ogre::Vector3 & position) {
+	if (_getCamera()) {
 		_getCamera()->setPosition(position);
 	}
 }
-//-----------------------------------------------------------------------
-const Ogre::Quaternion& ParticleUniverseEditorFrame::_getCameraOrientation(void)
-{
-	if (_getCamera())
-	{
+
+const Ogre::Quaternion & ParticleUniverseEditorFrame::_getCameraOrientation() {
+	if (_getCamera()) {
 		return _getCamera()->getOrientation();
 	}
 	return Ogre::Quaternion::IDENTITY;
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::_setCameraOrientation(const Ogre::Quaternion& orientation)
-{
-	if (_getCamera())
-	{
+
+void ParticleUniverseEditorFrame::_setCameraOrientation(const Ogre::Quaternion & orientation) {
+	if (_getCamera()) {
 		return _getCamera()->setOrientation(orientation);
 	}
 }
-//-----------------------------------------------------------------------
-void ParticleUniverseEditorFrame::_cameraLookAt(const Ogre::Vector3& direction)
-{
+
+void ParticleUniverseEditorFrame::_cameraLookAt(const Ogre::Vector3 & direction) {
 	// The orthographic camera always looks at the centre for convenience
-	if (_getProjectionType() == Ogre::PT_ORTHOGRAPHIC)
-	{
+	if (_getProjectionType() == Ogre::PT_ORTHOGRAPHIC) {
 		return _getCamera()->lookAt(Ogre::Vector3::ZERO);
 	}
 
-	if (_getCamera())
-	{
+	if (_getCamera()) {
 		return _getCamera()->lookAt(direction);
 	}
 }
-//-----------------------------------------------------------------------
-Ogre::ProjectionType ParticleUniverseEditorFrame::_getProjectionType(void)
-{
-	if (_getCamera())
-	{
+
+Ogre::ProjectionType ParticleUniverseEditorFrame::_getProjectionType() {
+	if (_getCamera()) {
 		return _getCamera()->getProjectionType();
 	}
 
 	return Ogre::PT_PERSPECTIVE;
 }
-//-----------------------------------------------------------------------
-bool ParticleUniverseEditorFrame::_isCameraOrthographic(void)
-{
-	if (_getCamera())
-	{
+
+bool ParticleUniverseEditorFrame::_isCameraOrthographic() {
+	if (_getCamera()) {
 		return _getCamera()->getProjectionType() == Ogre::PT_ORTHOGRAPHIC;
 	}
 
 	return false;
 }
-//-----------------------------------------------------------------------
-const Ogre::Vector3& ParticleUniverseEditorFrame::getCurrentPivot(void)
-{
-	Ogre::SceneNode* node = 0;
-	if (mGizmoManager && mGizmoManager->getAttachedNode())
-	{
+
+const Ogre::Vector3 & ParticleUniverseEditorFrame::getCurrentPivot() {
+	Ogre::SceneNode * node = nullptr;
+	if (mGizmoManager && mGizmoManager->getAttachedNode()) {
 		node = mGizmoManager->getAttachedNode();
-	}
-	else
-	{
+	} else {
 		node = mMainSceneNode;
 	}
-	if (node)
-	{
+	if (node) {
 		return node->_getDerivedPosition();
 	}
 
 	return Ogre::Vector3::ZERO;
 }
-//-----------------------------------------------------------------------
-Ogre::Camera* ParticleUniverseEditorFrame::_getCamera(void)
-{
+
+Ogre::Camera * ParticleUniverseEditorFrame::_getCamera() {
 	return mControl->GetCamera();
 }

@@ -23,79 +23,65 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseExternPropertyWindow.h"
 
-#include "ParticleUniverseSystemManager.h"
-
 #include "ParticleUniverseEditor.h"
 #include "ParticleUniverseEditComponent.h"
+#include "ParticleUniverseSystemManager.h"
 
 #include "wx/ogre/utils.h"
 
-//-----------------------------------------------------------------------
-ExternPropertyWindow::ExternPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name) : PropertyWindow(parent, owner, name)
-{
+ExternPropertyWindow::ExternPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name) : PropertyWindow(parent, owner, name) {
 	_initProperties();
 }
-//-----------------------------------------------------------------------
-ExternPropertyWindow::ExternPropertyWindow(ExternPropertyWindow* externPropertyWindow) : PropertyWindow(
-	externPropertyWindow->GetParent(), 
-	externPropertyWindow->getOwner(), 
-	externPropertyWindow->getComponentName())
-{
+
+ExternPropertyWindow::ExternPropertyWindow(ExternPropertyWindow * externPropertyWindow) : PropertyWindow(externPropertyWindow->GetParent(), externPropertyWindow->getOwner(), externPropertyWindow->getComponentName()) {
 	_initProperties();
 	copyAttributesFromPropertyWindow(externPropertyWindow);
 }
-//-----------------------------------------------------------------------
-void ExternPropertyWindow::copyAttributesFromPropertyWindow(ExternPropertyWindow* externPropertyWindow)
-{
+
+void ExternPropertyWindow::copyAttributesFromPropertyWindow(ExternPropertyWindow * externPropertyWindow) {
 	// Name: String
 	doSetString(PRNL_NAME, externPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_EXTERN_TYPE);
-	wxPGProperty* propFrom = externPropertyWindow->GetPropertyPtr(PRNL_EXTERN_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	wxPGProperty * propTo = GetProperty(PRNL_EXTERN_TYPE);
+	wxPGProperty * propFrom = externPropertyWindow->GetProperty(PRNL_EXTERN_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 }
-//-----------------------------------------------------------------------
-void ExternPropertyWindow::copyAttributeToExtern(wxPGProperty* prop, wxString propertyName)
-{
-	if (!prop)
-		return;
 
-	ParticleUniverse::Extern* externObject = static_cast<ParticleUniverse::Extern*>(mOwner->getPUElement());
-	if (!externObject)
+void ExternPropertyWindow::copyAttributeToExtern(wxPGProperty * prop, wxString propertyName) {
+	if (!prop) {
 		return;
+	}
 
-	if (propertyName == PRNL_NAME)
-	{
+	ParticleUniverse::Extern * externObject = static_cast<ParticleUniverse::Extern *>(mOwner->getPUElement());
+	if (!externObject) {
+		return;
+	}
+
+	if (propertyName == PRNL_NAME) {
 		// Name: String
 		Ogre::String name = wx2ogre(prop->GetValueAsString());
 		externObject->setName(name);
-	}
-	else if (propertyName == PRNL_EXTERN_TYPE)
-	{
+	} else if (propertyName == PRNL_EXTERN_TYPE) {
 		// Type: List of types
 		// This requires the extern to be replaced.
 		replaceExternType(prop);
-	}
-	else
-	{
+	} else {
 		PropertyWindow::copyAttributeToComponent(prop, propertyName);
 	}
 }
-//-----------------------------------------------------------------------
-void ExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse::Extern* externObject)
-{
+
+void ExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse::Extern * externObject) {
 	// Name: Ogre::String
 	doSetString(PRNL_NAME, ogre2wx(externObject->getName()));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_EXTERN_TYPE);
+	wxPGProperty * propTo = GetProperty(PRNL_EXTERN_TYPE);
 	wxString type = ogre2wxTranslate(externObject->getExternType());
 	propTo->SetValueFromString(type);
 }
-//-----------------------------------------------------------------------
-void ExternPropertyWindow::_initProperties(void)
-{
+
+void ExternPropertyWindow::_initProperties() {
 	// Set the (internationalized) property names
 	CST_EXTERN_BOX_COLLIDER = ogre2wxTranslate(EXTERN_BOX_COLLIDER);
 	CST_EXTERN_SPHERE_COLLIDER = ogre2wxTranslate(EXTERN_SPHERE_COLLIDER);
@@ -116,113 +102,108 @@ void ExternPropertyWindow::_initProperties(void)
 	mTypes.Add(CST_EXTERN_SPHERE_COLLIDER);
 	mTypes.Add(CST_EXTERN_VORTEX);
 #ifdef PU_PHYSICS_PHYSX
-	if (ParticleUniverseEditorFrame::isPhysXUsed())
-	{
+	if (ParticleUniverseEditorFrame::isPhysXUsed()) {
 		mTypes.Add(CST_EXTERN_PHYSX_ACTOR);
 		mTypes.Add(CST_EXTERN_PHYSX_FLUID);
 	}
 #endif //PU_PHYSICS_PHYSX
-	wxPGId pid = Append(wxEnumProperty(PRNL_EXTERN_TYPE, PRNL_EXTERN_TYPE, mTypes));
+	Append(new wxEnumProperty(PRNL_EXTERN_TYPE, PRNL_EXTERN_TYPE, mTypes));
 }
-//-----------------------------------------------------------------------
-void ExternPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
-{
+
+void ExternPropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty * prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToExtern(prop, propertyName);
 	notifyPropertyChanged();
 }
-//-----------------------------------------------------------------------
-void ExternPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
-{
+
+void ExternPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent & event) {
 	wxString propertyName = event.GetPropertyName();
 	PropertyWindow::onPropertyChanged(event);
 
-	if (propertyName == PRNL_EXTERN_TYPE)
-	{
+	if (propertyName == PRNL_EXTERN_TYPE) {
 		// Replace this window by another one
-		wxString subType = event.GetPropertyValueAsString();
+		wxString subType = event.GetProperty()->GetValueAsString();
 		mOwner->createPropertyWindow(subType, this);
 		mOwner->setCaption();
 		getOwner()->refreshCanvas();
 	}
 	notifyPropertyChanged();
 }
-//-----------------------------------------------------------------------
-void ExternPropertyWindow::replaceExternType(wxPGProperty* prop)
-{
+
+void ExternPropertyWindow::replaceExternType(wxPGProperty * prop) {
 	// Type: List of types
 	Ogre::String type = getExternTypeByProperty(prop);
-	if (type == Ogre::StringUtil::BLANK)
+	if (type == Ogre::StringUtil::BLANK) {
 		return;
+	}
 
-	ParticleUniverse::Extern* oldExtern = static_cast<ParticleUniverse::Extern*>(mOwner->getPUElement());
-	if (oldExtern)
-	{
-		ParticleUniverse::ParticleTechnique* technique = oldExtern->getParentTechnique();
-		if (technique)
-		{
-			ParticleUniverse::Extern* newExtern = technique->createExtern(type);
+	ParticleUniverse::Extern * oldExtern = static_cast<ParticleUniverse::Extern *>(mOwner->getPUElement());
+	if (oldExtern) {
+		ParticleUniverse::ParticleTechnique * technique = oldExtern->getParentTechnique();
+		if (technique) {
+			ParticleUniverse::Extern * newExtern = technique->createExtern(type);
 			oldExtern->copyParentAttributesTo(newExtern);
 			bool wasStarted = false;
-			ParticleUniverse::ParticleSystem* system = technique->getParentSystem();
-			if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED)
-			{
+			ParticleUniverse::ParticleSystem * system = technique->getParentSystem();
+			if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
 				wasStarted = true;
 				system->stop();
 			}
 			technique->destroyExtern(oldExtern);
 			mOwner->setPUElement(newExtern);
-			if (wasStarted)
-			{
+			if (wasStarted) {
 				system->start();
 			}
-		}
-		else
-		{
+		} else {
 			/** The old extern didn't have a technique, so create a new extern by means of the ParticleSystemManager itself and also delete
 				the old extern by means of the ParticleSystemManager
 			*/
-			ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
-			ParticleUniverse::Extern* newExtern = particleSystemManager->createExtern(type);
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::Extern * newExtern = particleSystemManager->createExtern(type);
 			oldExtern->copyParentAttributesTo(newExtern);
 			particleSystemManager->destroyExtern(oldExtern);
 			mOwner->setPUElement(newExtern);
 		}
-	}
-	else
-	{
+	} else {
 		// There is no old extern. Create a new extern by means of the ParticleSystemManager
-		ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
-		ParticleUniverse::Extern* newExtern = particleSystemManager->createExtern(type);
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::Extern * newExtern = particleSystemManager->createExtern(type);
 		mOwner->setPUElement(newExtern);
 	}
 }
-//-----------------------------------------------------------------------
-const Ogre::String& ExternPropertyWindow::getExternTypeByProperty(wxPGProperty* prop)
-{
+
+const Ogre::String & ExternPropertyWindow::getExternTypeByProperty(wxPGProperty * prop) {
 	int type = prop->DoGetValue().GetLong(); // The property must be a list (PRNL_EXTERN_TYPE)
-	switch (type)
-	{
-		case 0:
-			return EXTERN_BOX_COLLIDER;
+	switch (type) {
+	case 0: {
+		return EXTERN_BOX_COLLIDER;
 		break;
-		case 1:
-			return EXTERN_GRAVITY;
+	}
+	case 1: {
+		return EXTERN_GRAVITY;
 		break;
-		case 2:
-			return EXTERN_SPHERE_COLLIDER;
+	}
+	case 2: {
+		return EXTERN_SPHERE_COLLIDER;
 		break;
-		case 3:
-			return EXTERN_VORTEX;
+	}
+	case 3: {
+		return EXTERN_VORTEX;
 		break;
-		case 4:
-			return EXTERN_PHYSX_ACTOR;
+	}
+	case 4: {
+		return EXTERN_PHYSX_ACTOR;
 		break;
-		case 5:
-			return EXTERN_PHYSX_FLUID;
+	}
+	case 5: {
+		return EXTERN_PHYSX_FLUID;
 		break;
+	}
+	default: {
+		break;
+	}
 	}
 
 	return Ogre::StringUtil::BLANK;

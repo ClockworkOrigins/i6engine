@@ -28,57 +28,56 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/ogre/prerequisites.h"
 
+#include "OGRE/OgreLog.h"
+
 /**	
 */
 class ParticleUniverseEditorFrame;
 
-class SystemListener : public ParticleUniverse::ParticleSystemListener
-{
-	public:
-		// Constructor / Destructor
-		SystemListener(ParticleUniverseEditorFrame* frame);
-		~SystemListener(void);
+class SystemListener : public ParticleUniverse::ParticleSystemListener {
+public:
+	// Constructor / Destructor
+	SystemListener(ParticleUniverseEditorFrame * frame);
+	~SystemListener();
 
-		/*  See ParticleSystemListener
-		*/
-		virtual void handleParticleSystemEvent(ParticleUniverse::ParticleSystem* particleSystem, 
-			ParticleUniverse::ParticleUniverseEvent& particleUniverseEvent);
+	/*  See ParticleSystemListener
+	*/
+	virtual void handleParticleSystemEvent(ParticleUniverse::ParticleSystem * particleSystem, ParticleUniverse::ParticleUniverseEvent & particleUniverseEvent);
 
-	protected:
-		ParticleUniverseEditorFrame* mFrame;
+protected:
+	ParticleUniverseEditorFrame * mFrame;
 
-	private:
-		SystemListener(void) {}
+private:
+	SystemListener() {}
 };
 
 /**	
 */
-class LogListener : public Ogre::LogListener
-{
-	public:
-		// Constructor / Destructor
-		LogListener(ParticleUniverseEditorFrame* frame);
-		~LogListener(void) {}
+class LogListener : public Ogre::LogListener {
+public:
+	// Constructor / Destructor
+	LogListener(ParticleUniverseEditorFrame * frame);
+	~LogListener() {}
 
-		/* 
-		*/
-		void suppressLogging(bool suppress);
+	/* 
+	*/
+	void suppressLogging(bool suppress);
 
-		/* 
-		*/
-		bool errorsLogged(void);
+	/* 
+	*/
+	bool errorsLogged();
 
-		/*  See Ogre::LogListener
-		*/
-		virtual void messageLogged (const Ogre::String& message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String& logName, bool& skipThisMessage);
+	/*  See Ogre::LogListener
+	*/
+	virtual void messageLogged (const Ogre::String & message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String & logName, bool & skipThisMessage);
 
-	protected:
-		bool mSuppressLogging;
-		bool mErrorsLogged;
-		ParticleUniverseEditorFrame* mFrame;
+protected:
+	bool mSuppressLogging;
+	bool mErrorsLogged;
+	ParticleUniverseEditorFrame * mFrame;
 
-	private:
-		LogListener(void) {}
+private:
+	LogListener() {}
 };
 
-#endif
+#endif /* __PUED_LISTENER_H__ */

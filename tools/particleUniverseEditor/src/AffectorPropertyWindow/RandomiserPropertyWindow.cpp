@@ -106,9 +106,9 @@ void RandomiserPropertyWindow::_initProperties(void)
 	appendVector3(PRNL_MAX_DEVIATION, PRNL_MAX_DEVIATION, ParticleUniverse::Randomiser::DEFAULT_MAX_DEVIATION);
 
 	// Random direction: bool
-	Append(wxBoolProperty(PRNL_RANDOM_DIRECTION, PRNL_RANDOM_DIRECTION, ParticleUniverse::Randomiser::DEFAULT_RANDOM_DIRECTION));
+	Append(new wxBoolProperty(PRNL_RANDOM_DIRECTION, PRNL_RANDOM_DIRECTION, ParticleUniverse::Randomiser::DEFAULT_RANDOM_DIRECTION));
 
 	// Timestep: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TIME_STEP, PRNL_TIME_STEP, ParticleUniverse::Randomiser::DEFAULT_TIME_STEP));
+	Append(new wxFloatProperty(PRNL_TIME_STEP, PRNL_TIME_STEP, ParticleUniverse::Randomiser::DEFAULT_TIME_STEP));
 	SetPropertyEditor(PRNL_TIME_STEP, wxPG_EDITOR(SpinCtrl));
 }

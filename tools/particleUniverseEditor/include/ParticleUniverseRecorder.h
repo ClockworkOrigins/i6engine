@@ -20,123 +20,119 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 namespace ParticleUniverse {
 	class ParticleSystem;
-}
+} /* namespace ParticleUniverse */
 
 /** Extension of the Image class.
 */
-class ImageX : public Ogre::Image
-{
-	public:
-		ImageX() : Ogre::Image() {}
+class ImageX : public Ogre::Image {
+public:
+	ImageX() : Ogre::Image() {}
 
-		/** Filter functions
-		*/
-		void filterAlphaFromLuminance();
-		void filterAlphaFromBackgroundColour(const Ogre::ColourValue& colour);
+	/** Filter functions
+	*/
+	void filterAlphaFromLuminance();
+	void filterAlphaFromBackgroundColour(const Ogre::ColourValue & colour);
 };
 
 /** the Recorder is used to record a ParticleSystem in action. Its output is a range of images.
 */
-class Recorder : public Ogre::FrameListener
-{
-	public:
+class Recorder : public Ogre::FrameListener {
+public:
+	enum ImageFilter {
+		IF_NONE,
+		IF_ALPHA_FROM_LUMINANCE,
+		IF_ALPHA_FROM_BACKGROUND_COLOUR
+	};
 
-		enum ImageFilter
-		{
-			IF_NONE,
-			IF_ALPHA_FROM_LUMINANCE,
-			IF_ALPHA_FROM_BACKGROUND_COLOUR
-		};
+	Recorder(Ogre::Camera * camera);
+	virtual ~Recorder();
 
-		Recorder(Ogre::Camera* camera);
-		virtual ~Recorder(void);
+	/** 
+	*/
+	void setPauseTime(const ParticleUniverse::Real pauseTime);
 
-		/** 
-		*/
-		void setPauseTime (const ParticleUniverse::Real pauseTime);
-
-		/** 
-		*/
-		void setFramesPerSecond (const size_t framesPerSecond);
+	/** 
+	*/
+	void setFramesPerSecond(const size_t framesPerSecond);
 			
-		/** 
-		*/
-		void setFileNameSuffix (const Ogre::String& fileNameSuffix);
+	/** 
+	*/
+	void setFileNameSuffix(const Ogre::String & fileNameSuffix);
 			
-		/** 
-		*/
-		void setVideoDirectory (const Ogre::String& videoDirectory);
+	/** 
+	*/
+	void setVideoDirectory(const Ogre::String & videoDirectory);
 
-		/** 
-		*/
-		void setImageWidth (const ParticleUniverse::Real imageWidth, bool realloc = true);
+	/** 
+	*/
+	void setImageWidth(const ParticleUniverse::Real imageWidth, bool realloc = true);
 
-		/** 
-		*/
-		void setImageHeight (const ParticleUniverse::Real imageHeight, bool realloc = true);
+	/** 
+	*/
+	void setImageHeight(const ParticleUniverse::Real imageHeight, bool realloc = true);
 
-		/** 
-		*/
-		void setBackgroundColour(const Ogre::ColourValue& backgroundColour);
+	/** 
+	*/
+	void setBackgroundColour(const Ogre::ColourValue & backgroundColour);
 
-		/** 
-		*/
-		void setFilter(const ImageFilter& filter);
+	/** 
+	*/
+	void setFilter(const ImageFilter & filter);
 
-		/** 
-		*/
-		void setParticleSystem (ParticleUniverse::ParticleSystem* particleSystem);
+	/** 
+	*/
+	void setParticleSystem (ParticleUniverse::ParticleSystem * particleSystem);
 
-		/** 
-		*/
-		void record (ParticleUniverse::Real start = 0.0f, ParticleUniverse::Real end = 3.0f);
+	/** 
+	*/
+	void record (ParticleUniverse::Real start = 0.0, ParticleUniverse::Real end = 3.0);
 
-		/** 
-		*/
-		void stop (void);
+	/** 
+	*/
+	void stop ();
 
-		/** 
-		*/
-		bool isRecording (void);
+	/** 
+	*/
+	bool isRecording ();
 
-		/** 
-		*/
-		bool frameEnded(const Ogre::FrameEvent& evt);
+	/** 
+	*/
+	bool frameEnded(const Ogre::FrameEvent & evt);
 
-	protected:
+protected:
 
-		/** Reallocate memory for the images
-		*/
-		void _reallocImageMemory(void);
+	/** Reallocate memory for the images
+	*/
+	void _reallocImageMemory();
 
-		/** Allocate memory for the images
-		*/
-		void _allocImageMemoryIfNeeded(void);
+	/** Allocate memory for the images
+	*/
+	void _allocImageMemoryIfNeeded();
 
-		size_t mFramesPerSecond;
-		ParticleUniverse::Real mFrameLength;
-		ParticleUniverse::Real mTimeElapsed;
-		ParticleUniverse::Real mTimeElapsedFrame;
-		ParticleUniverse::Real mStart;
-		ParticleUniverse::Real mEnd;
-		Ogre::String mVideoDirectory;
-		Ogre::String mFileNameSuffix;
-		ParticleUniverse::uint mImageWidth;
-		ParticleUniverse::uint mImageHeight;
-		ParticleUniverse::ParticleSystem* mParticleSystem;
-		Ogre::Camera* mCamera;
-		bool mRecording;
-		ParticleUniverse::Real mPauseTime;
-		Ogre::RenderTexture* mRenderTexture;
-		size_t mFrameCounter;
-		bool mInitialised;
-		ImageX* mImage;
-		Ogre::uchar* mImageData;
-		Ogre::PixelBox* mPixelBox;
-		ImageFilter mFilter;
-		Ogre::PixelFormat mPixelFormat;
-		Ogre::ColourValue mBackgroundColour;
-		Ogre::Viewport* mOldViewport;
+	size_t mFramesPerSecond;
+	ParticleUniverse::Real mFrameLength;
+	ParticleUniverse::Real mTimeElapsed;
+	ParticleUniverse::Real mTimeElapsedFrame;
+	ParticleUniverse::Real mStart;
+	ParticleUniverse::Real mEnd;
+	Ogre::String mVideoDirectory;
+	Ogre::String mFileNameSuffix;
+	ParticleUniverse::uint mImageWidth;
+	ParticleUniverse::uint mImageHeight;
+	ParticleUniverse::ParticleSystem * mParticleSystem;
+	Ogre::Camera * mCamera;
+	bool mRecording;
+	ParticleUniverse::Real mPauseTime;
+	Ogre::RenderTexture * mRenderTexture;
+	size_t mFrameCounter;
+	bool mInitialised;
+	ImageX * mImage;
+	Ogre::uchar * mImageData;
+	Ogre::PixelBox * mPixelBox;
+	ImageFilter mFilter;
+	Ogre::PixelFormat mPixelFormat;
+	Ogre::ColourValue mBackgroundColour;
+	Ogre::Viewport * mOldViewport;
 };
 
-#endif
+#endif /* __PU_RECORDER_H__ */

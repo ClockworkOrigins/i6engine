@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_MATERIAL_LISTBOX_H__
-#define __PUED_MATERIAL_LISTBOX_H__
+#ifndef __PUED_MATERIALLISTBOX_H__
+#define __PUED_MATERIALLISTBOX_H__
 
 #include "wx/ogre/prerequisites.h"
 
@@ -18,32 +18,26 @@ class MaterialTab;
 
 /**	Material Listbox: Listbox with material names, used in the Material Tab
 */
-class MaterialListBox : public wxListBox
-{
-	public:
+class MaterialListBox : public wxListBox {
+public:
+	// Constructor / Destructor
+	MaterialListBox(MaterialTab * materialTab, wxWindow * parent, wxWindowID id, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize);
+	~MaterialListBox();
 
-		// Constructor / Destructor
-		MaterialListBox(MaterialTab* materialTab,
-			wxWindow* parent, 
-			wxWindowID id,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize);
-		~MaterialListBox(void);
+	/**	Fill listbox with all material names
+	*/
+	void loadMaterials();
 
-		/**	Fill listbox with all material names
-		*/
-		void loadMaterials(void);
+	/**	Select a material
+	*/
+	void OnMaterialsClick(wxCommandEvent & event);
 
-		/**	Select a material
-		*/
-		void OnMaterialsClick(wxCommandEvent& event);
+	/**	Add a material name
+	*/
+	void addMaterialName(wxString & materialName);
 
-		/**	Add a material name
-		*/
-		void addMaterialName(wxString& materialName);
-
-	protected:
-		MaterialTab* mMaterialTab;
+protected:
+	MaterialTab * mMaterialTab;
 };
 
-#endif
+#endif /* __PUED_MATERIALLISTBOX_H__ */

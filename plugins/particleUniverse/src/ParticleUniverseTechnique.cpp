@@ -39,7 +39,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace ParticleUniverse
 {
-	RadixSort<Pool<VisualParticle>::PoolList, Particle*, float> ParticleTechnique::mRadixSorter;
+	RadixSort<Pool<VisualParticle>::PoolList, Particle *, float> ParticleTechnique::mRadixSorter;
 	
 	// Constants
 	const bool ParticleTechnique::DEFAULT_ENABLED = true;
@@ -61,11 +61,11 @@ namespace ParticleUniverse
 	const Real ParticleTechnique::DEFAULT_MAX_VELOCITY = 9999.0f;
 
 	//-----------------------------------------------------------------------
-	ParticleTechnique::ParticleTechnique(void) : 
+	ParticleTechnique::ParticleTechnique() : 
 		Particle(),
 		IAlias(),
 		IElement(),
-		mParentSystem(0),
+		mParentSystem(nullptr),
 		mName(BLANK_STRING),
 		mVisualParticlePoolIncreased(false),
 		mParticleEmitterPoolIncreased(false),
@@ -77,7 +77,7 @@ namespace ParticleUniverse
 		mEmittedTechniqueQuota(DEFAULT_EMITTED_TECHNIQUE_QUOTA),
 		mEmittedAffectorQuota(DEFAULT_EMITTED_AFFECTOR_QUOTA),
 		mEmittedSystemQuota(DEFAULT_EMITTED_SYSTEM_QUOTA),
-		mRenderer(0),
+		mRenderer(nullptr),
 		mSuppressNotifyEmissionChange(true),
 		mMaterialName(BLANK_STRING),
 		mDefaultWidth(DEFAULT_WIDTH),
@@ -126,7 +126,7 @@ namespace ParticleUniverse
 		mPool.setParentTechnique(this);
 	}
 	//-----------------------------------------------------------------------
-	ParticleTechnique::~ParticleTechnique(void)
+	ParticleTechnique::~ParticleTechnique()
 	{
 		// Bugfix V1.5: Cleanup
 		_unprepare();
@@ -173,7 +173,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_initForEmission(void)
+	void ParticleTechnique::_initForEmission()
 	{
 		// The technique itself is emitted.
 		Particle::_initForEmission();
@@ -196,7 +196,7 @@ namespace ParticleUniverse
 		_notifyStop();
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_markForEmission(void)
+	void ParticleTechnique::_markForEmission()
 	{
 		// Set all indications to false.
 		_resetMarkForEmission();
@@ -208,6 +208,7 @@ namespace ParticleUniverse
 		for (emitterIt = mEmitters.begin(); emitterIt != emitterItEnd; ++emitterIt)
 		{
 			_markForEmission(*emitterIt);
+
 		}
 	}
 	//-----------------------------------------------------------------------
@@ -248,7 +249,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_resetMarkForEmission(void)
+	void ParticleTechnique::_resetMarkForEmission()
 	{
 		// Run through all emitters and set MarkedForEmission to false.
 		ParticleEmitterList::iterator emitterIt;
@@ -372,7 +373,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getVisualParticleQuota(void) const 
+	size_t ParticleTechnique::getVisualParticleQuota() const 
 	{
 		return mVisualParticleQuota;
 	}
@@ -383,7 +384,7 @@ namespace ParticleUniverse
 		mVisualParticlePoolIncreased = false; // Triggers function to increase the number of visual particles
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getEmittedEmitterQuota(void) const
+	size_t ParticleTechnique::getEmittedEmitterQuota() const
 	{
 		return mEmittedEmitterQuota;
 	}
@@ -394,7 +395,7 @@ namespace ParticleUniverse
 		mParticleEmitterPoolIncreased = false; // Triggers function to increase the number of emitter particles
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getEmittedTechniqueQuota(void) const
+	size_t ParticleTechnique::getEmittedTechniqueQuota() const
 	{
 		return mEmittedTechniqueQuota;
 	}
@@ -405,7 +406,7 @@ namespace ParticleUniverse
 		mParticleTechniquePoolIncreased = false; // Triggers function to increase the number of technique particles
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getEmittedAffectorQuota(void) const
+	size_t ParticleTechnique::getEmittedAffectorQuota() const
 	{
 		return mEmittedAffectorQuota;
 	}
@@ -416,7 +417,7 @@ namespace ParticleUniverse
 		mParticleAffectorPoolIncreased = false; // Triggers function to increase the number of affector particles
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getEmittedSystemQuota(void) const
+	size_t ParticleTechnique::getEmittedSystemQuota() const
 	{
 		return mEmittedSystemQuota;
 	}
@@ -427,7 +428,7 @@ namespace ParticleUniverse
 		mParticleSystemPoolIncreased = false; // Triggers function to increase the number of particle system particles
 	}
 	//-----------------------------------------------------------------------
-	Real ParticleTechnique::getDefaultWidth(void) const
+	Real ParticleTechnique::getDefaultWidth() const
 	{
 		return mDefaultWidth;
 	}
@@ -443,7 +444,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	Real ParticleTechnique::getDefaultHeight(void) const
+	Real ParticleTechnique::getDefaultHeight() const
 	{
 		return mDefaultHeight;
 	}
@@ -459,7 +460,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	Real ParticleTechnique::getDefaultDepth(void) const
+	Real ParticleTechnique::getDefaultDepth() const
 	{
 		return mDefaultDepth;
 	}
@@ -480,12 +481,12 @@ namespace ParticleUniverse
 		mSuppressNotifyEmissionChange = suppress;
 	}
 	//-----------------------------------------------------------------------
-	const String& ParticleTechnique::getMaterialName(void) const
+	const String& ParticleTechnique::getMaterialName() const
 	{
 		return mMaterialName;
 	}
 	//-----------------------------------------------------------------------
-	const Ogre::MaterialPtr ParticleTechnique::getMaterial(void) const
+	const Ogre::MaterialPtr ParticleTechnique::getMaterial() const
 	{
 		String resourceGroupName = mParentSystem ? mParentSystem->getResourceGroupName() : Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME;
 		#if OGRE_VERSION >= (1 << 16 | 9 << 8 | 0)
@@ -582,12 +583,12 @@ namespace ParticleUniverse
 		return 0;
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getNumEmitters (void) const
+	size_t ParticleTechnique::getNumEmitters () const
 	{
 		return mEmitters.size();
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getNumEmittedEmitters (void) const
+	size_t ParticleTechnique::getNumEmittedEmitters () const
 	{
 		ParticleEmitterIterator it;
 		ParticleEmitterIterator itEnd = mEmitters.end();
@@ -633,7 +634,7 @@ namespace ParticleUniverse
 		destroyEmitter(getEmitter(index));
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::destroyAllEmitters(void)
+	void ParticleTechnique::destroyAllEmitters()
 	{
 		ParticleEmitterList::iterator it;
 		ParticleEmitterList::iterator itEnd = mEmitters.end();
@@ -704,12 +705,12 @@ namespace ParticleUniverse
 		return 0;
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getNumAffectors (void) const
+	size_t ParticleTechnique::getNumAffectors () const
 	{
 		return mAffectors.size();
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getNumEmittedAffectors (void) const
+	size_t ParticleTechnique::getNumEmittedAffectors () const
 	{
 		ParticleAffectorIterator it;
 		ParticleAffectorIterator itEnd = mAffectors.end();
@@ -747,7 +748,7 @@ namespace ParticleUniverse
 		destroyAffector(getAffector(index));
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::destroyAllAffectors(void)
+	void ParticleTechnique::destroyAllAffectors()
 	{
 		ParticleAffectorIterator it;
 		ParticleAffectorIterator itEnd = mAffectors.end();
@@ -818,7 +819,7 @@ namespace ParticleUniverse
 		return 0;
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getNumObservers (void) const
+	size_t ParticleTechnique::getNumObservers () const
 	{
 		return mObservers.size();
 	}
@@ -845,7 +846,7 @@ namespace ParticleUniverse
 		destroyObserver(getObserver(index));
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::destroyAllObservers(void)
+	void ParticleTechnique::destroyAllObservers()
 	{
 		ParticleObserverIterator it;
 		ParticleObserverIterator itEnd = mObservers.end();
@@ -856,7 +857,7 @@ namespace ParticleUniverse
 		mObservers.clear();
 	}
 	//-----------------------------------------------------------------------
-	ParticleRenderer* ParticleTechnique::getRenderer(void) const
+	ParticleRenderer* ParticleTechnique::getRenderer() const
 	{
 		return mRenderer;
 	}
@@ -899,7 +900,7 @@ namespace ParticleUniverse
 		renderer->setParentTechnique(0);
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::destroyRenderer(void)
+	void ParticleTechnique::destroyRenderer()
 	{
 		if (mRenderer)
 		{
@@ -960,7 +961,7 @@ namespace ParticleUniverse
 		return 0;
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::_getNumBehaviourTemplates (void) const
+	size_t ParticleTechnique::_getNumBehaviourTemplates () const
 	{
 		return mBehaviourTemplates.size();
 	}
@@ -982,7 +983,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_destroyAllBehaviourTemplates (void)
+	void ParticleTechnique::_destroyAllBehaviourTemplates ()
 	{
 		ParticleBehaviourIterator it;
 		ParticleBehaviourIterator itEnd = mBehaviourTemplates.end();
@@ -1071,7 +1072,7 @@ namespace ParticleUniverse
 		return 0;
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getNumExterns (void) const
+	size_t ParticleTechnique::getNumExterns () const
 	{
 		return mExterns.size();
 	}
@@ -1098,7 +1099,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::destroyAllExterns (void)
+	void ParticleTechnique::destroyAllExterns ()
 	{
 		ExternIterator it;
 		ExternIterator itEnd = mExterns.end();
@@ -1154,7 +1155,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_unprepare(void)
+	void ParticleTechnique::_unprepare()
 	{
 		_unprepareVisualParticles();
 		_unprepareSystem();
@@ -1166,7 +1167,7 @@ namespace ParticleUniverse
 		_unprepareExterns();
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_prepare(void)
+	void ParticleTechnique::_prepare()
 	{
 		/** Prepare all externs.
 		*/
@@ -1209,7 +1210,7 @@ namespace ParticleUniverse
 		_notifyVelocityRescaled(_mParticleSystemScaleVelocity);
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_prepareSystem(void)
+	void ParticleTechnique::_prepareSystem()
 	{
 		// Create new particle system particles if the quota has been increased
 		if (!mParticleSystemPoolIncreased)
@@ -1220,14 +1221,14 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_unprepareSystem(void)
+	void ParticleTechnique::_unprepareSystem()
 	{
 		// Destroy the emitted systems in the pool
 		mPool.destroyParticles(Particle::PT_SYSTEM);
 		mParticleSystemPoolIncreased = false;
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_prepareTechnique(void)
+	void ParticleTechnique::_prepareTechnique()
 	{
 		// Create new technique particles if the quota has been increased
 		if (!mParticleTechniquePoolIncreased)
@@ -1261,14 +1262,14 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_unprepareTechnique(void)
+	void ParticleTechnique::_unprepareTechnique()
 	{
 		// Destroy the emitted techniques in the pool
 		mPool.destroyParticles(Particle::PT_TECHNIQUE);
 		mParticleTechniquePoolIncreased = false;
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_prepareVisualParticles(void)
+	void ParticleTechnique::_prepareVisualParticles()
 	{
 		if (!mVisualParticlePoolIncreased)
 		{
@@ -1278,14 +1279,14 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_unprepareVisualParticles(void)
+	void ParticleTechnique::_unprepareVisualParticles()
 	{
 		// Destroy the visual particles in the pool
 		mPool.destroyParticles(Particle::PT_VISUAL);
 		mVisualParticlePoolIncreased = false;
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_prepareRenderer(void)
+	void ParticleTechnique::_prepareRenderer()
 	{
 		if (mRenderer && !mRenderer->isRendererInitialised())
 		{
@@ -1294,7 +1295,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_unprepareRenderer(void)
+	void ParticleTechnique::_unprepareRenderer()
 	{
 		if (mRenderer && mRenderer->isRendererInitialised())
 		{
@@ -1303,7 +1304,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_prepareEmitters(void)
+	void ParticleTechnique::_prepareEmitters()
 	{
 		if (mPrepareEmitter && !mEmitters.empty())
 		{
@@ -1320,7 +1321,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_unprepareEmitters(void)
+	void ParticleTechnique::_unprepareEmitters()
 	{
 		if (!mEmitters.empty())
 		{
@@ -1333,7 +1334,7 @@ namespace ParticleUniverse
 		mParticleEmitterPoolIncreased = false;
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_prepareAffectors(void)
+	void ParticleTechnique::_prepareAffectors()
 	{
 		if (mPrepareAffector && !mAffectors.empty())
 		{
@@ -1350,7 +1351,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_unprepareAffectors(void)
+	void ParticleTechnique::_unprepareAffectors()
 	{
 		// Unprepare individual affectors
 		if (!mAffectors.empty())
@@ -1365,7 +1366,7 @@ namespace ParticleUniverse
 		mCopyOfPooledAffectors.clear(); // Don't forget to cleanup this one.
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_prepareBehaviours(void)
+	void ParticleTechnique::_prepareBehaviours()
 	{
 		/*
 		@remarks
@@ -1389,7 +1390,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_unprepareBehaviours(void)
+	void ParticleTechnique::_unprepareBehaviours()
 	{
 		if (!mBehaviourTemplates.empty())
 		{
@@ -1398,7 +1399,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_prepareExterns(void)
+	void ParticleTechnique::_prepareExterns()
 	{
 		// Prepare the Extern objects
 		if (mPrepareExtern && !mExterns.empty())
@@ -1413,7 +1414,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_unprepareExterns(void)
+	void ParticleTechnique::_unprepareExterns()
 	{
 		if (mPrepareExtern && !mExterns.empty())
 		{
@@ -1466,7 +1467,7 @@ namespace ParticleUniverse
 		latestPosition = getDerivedPosition();
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyEmissionChange(void)
+	void ParticleTechnique::_notifyEmissionChange()
 	{
 		if (mSuppressNotifyEmissionChange)
 			return;
@@ -1584,7 +1585,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyParticleResized(void)
+	void ParticleTechnique::_notifyParticleResized()
 	{
 		if (mRenderer)
 		{
@@ -1592,7 +1593,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyStart (void)
+	void ParticleTechnique::_notifyStart ()
 	{
 #ifdef PU_LOG_DEBUG
 		mMaxNumVisualParticles = 0;
@@ -1658,7 +1659,7 @@ namespace ParticleUniverse
 		setEnabled(mOriginalEnabled);
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyStartPooledComponents(void)
+	void ParticleTechnique::_notifyStartPooledComponents()
 	{
 		if (mPool.isEmpty())
 			return;
@@ -1701,7 +1702,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyStop (void)
+	void ParticleTechnique::_notifyStop ()
 	{
 		// Notify the registered objects that the ParticleSystem/ParticleTechnique stops.
 		if (mRenderer)
@@ -1764,7 +1765,7 @@ namespace ParticleUniverse
 #endif // PU_LOG_DEBUG
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyStopPooledComponents(void)
+	void ParticleTechnique::_notifyStopPooledComponents()
 	{
 		if (mPool.isEmpty())
 			return;
@@ -1807,7 +1808,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyPause (void)
+	void ParticleTechnique::_notifyPause ()
 	{
 		/** The renderer, Externs and Observers aren't notified. There is no specific reasons for that.
 			If it is needed in the future, it can be added.
@@ -1841,7 +1842,7 @@ namespace ParticleUniverse
 		_notifyPausePooledComponents();
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyPausePooledComponents(void)
+	void ParticleTechnique::_notifyPausePooledComponents()
 	{
 		if (mPool.isEmpty())
 			return;
@@ -1884,7 +1885,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyResume (void)
+	void ParticleTechnique::_notifyResume ()
 	{
 		/** The renderer, Externs and Observers aren't notified. There is no specific reasons for that.
 			If it is needed in the future, it can be added.
@@ -1918,7 +1919,7 @@ namespace ParticleUniverse
 		_notifyResumePooledComponents();
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_notifyResumePooledComponents(void)
+	void ParticleTechnique::_notifyResumePooledComponents()
 	{
 		if (mPool.isEmpty())
 			return;
@@ -1961,7 +1962,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	bool ParticleTechnique::isStopFade(void)
+	bool ParticleTechnique::isStopFade()
 	{
 		if (mParentSystem)
 		{
@@ -2074,7 +2075,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_processDependencies(void)
+	void ParticleTechnique::_processDependencies()
 	{
 		// Fast rejection
 		if (!(mWidthCameraDependency || mHeightCameraDependency || mDepthCameraDependency))
@@ -2108,7 +2109,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_extractPooledAffectors(void)
+	void ParticleTechnique::_extractPooledAffectors()
 	{
 		// Copy all pooled affectors to separate list.
 		if (mPool.isEmpty(Particle::PT_AFFECTOR))
@@ -2332,7 +2333,7 @@ namespace ParticleUniverse
 #endif // PU_LOG_DEBUG
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_postProcessSpatialHashing(void)
+	void ParticleTechnique::_postProcessSpatialHashing()
 	{
 		/** Cycle tables.
 		*/ 
@@ -2577,7 +2578,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	const Vector3& ParticleTechnique::getDerivedPosition(void)
+	const Vector3& ParticleTechnique::getDerivedPosition()
 	{
 		if (mMarkedForEmission)
 		{
@@ -2668,7 +2669,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	CameraDependency* ParticleTechnique::getWidthCameraDependency(void) const
+	CameraDependency* ParticleTechnique::getWidthCameraDependency() const
 	{
 		return mWidthCameraDependency;
 	}
@@ -2694,7 +2695,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	CameraDependency* ParticleTechnique::getHeightCameraDependency(void) const
+	CameraDependency* ParticleTechnique::getHeightCameraDependency() const
 	{
 		return mHeightCameraDependency;
 	}
@@ -2720,12 +2721,12 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	CameraDependency* ParticleTechnique::getDepthCameraDependency(void) const
+	CameraDependency* ParticleTechnique::getDepthCameraDependency() const
 	{
 		return mDepthCameraDependency;
 	}
 	//-----------------------------------------------------------------------
-	size_t ParticleTechnique::getNumberOfEmittedParticles(void)
+	size_t ParticleTechnique::getNumberOfEmittedParticles()
 	{
 		// Get number from the pool
 		size_t total = mPool.getSize();
@@ -2775,7 +2776,7 @@ namespace ParticleUniverse
 		return total;
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::_initAllParticlesForExpiration(void)
+	void ParticleTechnique::_initAllParticlesForExpiration()
 	{
 		if (!mPool.isEmpty())
 		{
@@ -2794,12 +2795,12 @@ namespace ParticleUniverse
 		mPool.lockAllParticles();
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::lockAllParticles(void)
+	void ParticleTechnique::lockAllParticles()
 	{
 		mPool.lockAllParticles();
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::initVisualDataInPool(void)
+	void ParticleTechnique::initVisualDataInPool()
 	{
 		mPool.releaseAllParticles();
 		Particle* particle = static_cast<Particle*>(mPool.getFirst());
@@ -2814,12 +2815,12 @@ namespace ParticleUniverse
 		mPool.lockAllParticles();
 	}
 	//-----------------------------------------------------------------------
-	ParticlePool* ParticleTechnique::_getParticlePool(void)
+	ParticlePool* ParticleTechnique::_getParticlePool()
 	{
 		return &mPool;
 	}
 	//-----------------------------------------------------------------------
-	bool ParticleTechnique::isKeepLocal(void) const
+	bool ParticleTechnique::isKeepLocal() const
 	{
 		return mKeepLocal;
 	}
@@ -2842,12 +2843,12 @@ namespace ParticleUniverse
 		return true;
 	}
 	//-----------------------------------------------------------------------
-	SpatialHashTable<Particle*>* ParticleTechnique::getSpatialHashTable(void) const
+	SpatialHashTable<Particle*>* ParticleTechnique::getSpatialHashTable() const
 	{
 		return mCurrentSpatialHashTable;
 	}
 	//-----------------------------------------------------------------------
-	bool ParticleTechnique::isSpatialHashingUsed(void) const
+	bool ParticleTechnique::isSpatialHashingUsed() const
 	{
 		return mIsSpatialHashingUsed;
 	}
@@ -2857,7 +2858,7 @@ namespace ParticleUniverse
 		mIsSpatialHashingUsed = spatialHashingUsed;
 	}
 	//-----------------------------------------------------------------------
-	unsigned short ParticleTechnique::getSpatialHashingCellDimension(void) const
+	unsigned short ParticleTechnique::getSpatialHashingCellDimension() const
 	{
 		return mSpatialHashingCellDimension;
 	}
@@ -2867,7 +2868,7 @@ namespace ParticleUniverse
 		mSpatialHashingCellDimension = spatialHashingCellDimension;
 	}
 	//-----------------------------------------------------------------------
-	unsigned short ParticleTechnique::getSpatialHashingCellOverlap(void) const
+	unsigned short ParticleTechnique::getSpatialHashingCellOverlap() const
 	{
 		return mSpatialHashingCellOverlap;
 	}
@@ -2877,7 +2878,7 @@ namespace ParticleUniverse
 		mSpatialHashingCellOverlap = spatialHashingCellOverlap;
 	}
 	//-----------------------------------------------------------------------
-	unsigned int ParticleTechnique::getSpatialHashTableSize(void) const
+	unsigned int ParticleTechnique::getSpatialHashTableSize() const
 	{
 		return mSpatialHashTableSize;
 	}
@@ -2887,7 +2888,7 @@ namespace ParticleUniverse
 		mSpatialHashTableSize = spatialHashTableSize;
 	}
 	//-----------------------------------------------------------------------
-	Real ParticleTechnique::getSpatialHashingInterval(void) const
+	Real ParticleTechnique::getSpatialHashingInterval() const
 	{
 		return mSpatialHashingInterval;
 	}
@@ -2898,7 +2899,7 @@ namespace ParticleUniverse
 		mSpatialHashingIntervalSet = true;
 	}
 	//-----------------------------------------------------------------------
-	Real ParticleTechnique::getMaxVelocity(void) const
+	Real ParticleTechnique::getMaxVelocity() const
 	{
 		return mMaxVelocity;
 	}
@@ -2930,7 +2931,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	void ParticleTechnique::logDebug(void)
+	void ParticleTechnique::logDebug()
 	{
 		LogManager::getSingleton().logMessage("\n");
 		if (!mParentSystem->getName().empty())
@@ -2974,7 +2975,7 @@ namespace ParticleUniverse
 		}
 	}
 	//-----------------------------------------------------------------------
-	Real ParticleTechnique::getParticleSystemScaleVelocity(void) const
+	Real ParticleTechnique::getParticleSystemScaleVelocity() const
 	{
 		return _mParticleSystemScaleVelocity;
 	}

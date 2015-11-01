@@ -23,19 +23,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseRecorder.h"
 
+#include <cfloat>
+
 #include "ParticleUniverseSystem.h"
 
 #include "OgreHardwarePixelBuffer.h"
 #include "OgreMaterialManager.h"
 #include "OgreRoot.h"
 
-//-----------------------------------------------------------------------
-void ImageX::filterAlphaFromLuminance(void)
-{
+void ImageX::filterAlphaFromLuminance() {
 	size_t numPixels = mWidth * mHeight;
 	size_t pointer = 0;
-	for (size_t i = 0; i < numPixels; ++i)
-	{
+	for (size_t i = 0; i < numPixels; ++i) {
 		Ogre::ColourValue colour;
 		Ogre::PixelUtil::unpackColour(&colour, mFormat, (mBuffer + pointer));
 		colour.a = (colour.r + colour.g + colour.b)/3;
@@ -43,51 +42,22 @@ void ImageX::filterAlphaFromLuminance(void)
 		pointer += Ogre::PixelUtil::getNumElemBytes(mFormat);
 	}
 }
-//-----------------------------------------------------------------------
-void ImageX::filterAlphaFromBackgroundColour(const Ogre::ColourValue& backgroundColour)
-{
+
+void ImageX::filterAlphaFromBackgroundColour(const Ogre::ColourValue & backgroundColour) {
 	size_t numPixels = mWidth * mHeight;
 	size_t pointer = 0;
-	for (size_t i = 0; i < numPixels; ++i)
-	{
+	for (size_t i = 0; i < numPixels; ++i) {
 		Ogre::ColourValue colour;
 		Ogre::PixelUtil::unpackColour(&colour, mFormat, (mBuffer + pointer));
-		if (colour.r == backgroundColour.r && colour.g == backgroundColour.g && colour.b == backgroundColour.b)
-		{
+		if (std::abs(colour.r - backgroundColour.r) < DBL_EPSILON && std::abs(colour.g - backgroundColour.g) < DBL_EPSILON && std::abs(colour.b - backgroundColour.b) < DBL_EPSILON) {
 			colour.a = 0.0f;
 		}
 		Ogre::PixelUtil::packColour(colour, mFormat, (mBuffer + pointer));
 		pointer += Ogre::PixelUtil::getNumElemBytes(mFormat);
 	}
 }
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-Recorder::Recorder(Ogre::Camera* camera) :
-	FrameListener(),
-	mCamera(camera),
-	mFramesPerSecond(27),
-	mFrameLength(0.037f),
-	mVideoDirectory(Ogre::StringUtil::BLANK),
-	mFileNameSuffix(".png"),
-	mParticleSystem(0),
-	mTimeElapsed(0.0f),
-	mTimeElapsedFrame(0.0f),
-	mStart(0.0f),
-	mEnd(0.0f),
-	mImageWidth(640),
-	mImageHeight(480),
-	mRecording(false),
-	mPauseTime(0.2f),
-	mRenderTexture(0),
-	mFrameCounter(0),
-	mImageData(0),
-	mPixelBox(),
-	mFilter(IF_NONE),
-	mBackgroundColour(Ogre::ColourValue::Black),
-	mInitialised(false),
-	mOldViewport(0)
-{
+
+Recorder::Recorder(Ogre::Camera * camera) : FrameListener(), mFramesPerSecond(27), mFrameLength(0.037), mTimeElapsed(0.0), mTimeElapsedFrame(0.0), mStart(0.0), mEnd(0.0), mVideoDirectory(Ogre::StringUtil::BLANK), mFileNameSuffix(".png"), mImageWidth(640), mImageHeight(480), mParticleSystem(nullptr), mCamera(camera), mRecording(false), mPauseTime(0.2), mRenderTexture(nullptr), mFrameCounter(0), mInitialised(false), mImageData(nullptr), mPixelBox(nullptr), mFilter(IF_NONE), mBackgroundColour(Ogre::ColourValue::Black), mOldViewport(nullptr) {
 	// Create an image
 	mImage = new ImageX();
 	mPixelFormat = Ogre::PF_R8G8B8A8;
@@ -98,18 +68,14 @@ Recorder::Recorder(Ogre::Camera* camera) :
 	// Store the original viewport
 	mOldViewport = camera->getViewport();
 }
-//-----------------------------------------------------------------------
-Recorder::~Recorder(void)
-{
+
+Recorder::~Recorder() {
 	// Delete image
-	if (mImage)
-	{
-		delete mImage;
-	}
+	delete mImage;
+	delete mPixelBox;
 
 	// Delete image memory
-	if (mImageData)
-	{
+	if (mImageData) {
 		OGRE_FREE(mImageData, Ogre::MEMCATEGORY_RENDERSYS);
 	}
 
@@ -122,84 +88,59 @@ Recorder::~Recorder(void)
 	// Delete texture
 	Ogre::TextureManager::getSingleton().remove("PURecorderTexture");
 }
-//-----------------------------------------------------------------------
-void Recorder::setPauseTime (const ParticleUniverse::Real pauseTime)
-{
+
+void Recorder::setPauseTime(const ParticleUniverse::Real pauseTime) {
 	mPauseTime = pauseTime;
 }
-//-----------------------------------------------------------------------
-void Recorder::setFramesPerSecond (const size_t framesPerSecond)
-{
+
+void Recorder::setFramesPerSecond(const size_t framesPerSecond) {
 	mFramesPerSecond = framesPerSecond;
-	mFrameLength = 1.0f / (ParticleUniverse::Real)framesPerSecond;
+	mFrameLength = 1.0 / ParticleUniverse::Real(framesPerSecond);
 }
-//-----------------------------------------------------------------------
-void Recorder::setFileNameSuffix (const Ogre::String& fileNameSuffix)
-{
-	if (fileNameSuffix == ".png" ||
-		fileNameSuffix == ".jpg" ||
-		fileNameSuffix == ".tiff")
-	{
+
+void Recorder::setFileNameSuffix(const Ogre::String & fileNameSuffix) {
+	if (fileNameSuffix == ".png" || fileNameSuffix == ".jpg" || fileNameSuffix == ".tiff") {
 		mFileNameSuffix = fileNameSuffix;
-	}
-	else
-	{
+	} else {
 		// The suffix in unknown, so choose a png format
 		mFileNameSuffix = ".png";
 	}
 }
-//-----------------------------------------------------------------------
-void Recorder::setVideoDirectory (const Ogre::String& videoDirectory)
-{
+
+void Recorder::setVideoDirectory(const Ogre::String & videoDirectory) {
 	mVideoDirectory = videoDirectory;
 }
-//-----------------------------------------------------------------------
-void Recorder::setImageWidth (const ParticleUniverse::Real imageWidth, bool realloc)
-{
-	mImageWidth = imageWidth;
-	if (realloc)
-	{
+
+void Recorder::setImageWidth(const ParticleUniverse::Real imageWidth, bool realloc) {
+	mImageWidth = ParticleUniverse::uint(imageWidth);
+	if (realloc) {
 		_reallocImageMemory();
 	}
 }
-//-----------------------------------------------------------------------
-void Recorder::setImageHeight (const ParticleUniverse::Real imageHeight, bool realloc)
-{
-	mImageHeight = imageHeight;
-	if (realloc)
-	{
+
+void Recorder::setImageHeight(const ParticleUniverse::Real imageHeight, bool realloc) {
+	mImageHeight = ParticleUniverse::uint(imageHeight);
+	if (realloc) {
 		_reallocImageMemory();
 	}
 }
-//-----------------------------------------------------------------------
-void Recorder::setBackgroundColour(const Ogre::ColourValue& backgroundColour)
-{
+
+void Recorder::setBackgroundColour(const Ogre::ColourValue & backgroundColour) {
 	mBackgroundColour = backgroundColour;
 }
-//-----------------------------------------------------------------------
-void Recorder::setFilter(const ImageFilter& filter)
-{
+
+void Recorder::setFilter(const ImageFilter & filter) {
 	mFilter = filter;	
 }
-//-----------------------------------------------------------------------
-void Recorder::setParticleSystem (ParticleUniverse::ParticleSystem* particleSystem)
-{
+
+void Recorder::setParticleSystem (ParticleUniverse::ParticleSystem * particleSystem) {
 	mParticleSystem = particleSystem;
 }
-//-----------------------------------------------------------------------
-void Recorder::record (ParticleUniverse::Real start, ParticleUniverse::Real end)
-{
-	if (!mInitialised && mCamera)
-	{
+
+void Recorder::record (ParticleUniverse::Real start, ParticleUniverse::Real end) {
+	if (!mInitialised && mCamera) {
 		// Create render tot texture
-		Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual("PURecorderTexture", 
-			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, 
-			Ogre::TEX_TYPE_2D, 
-			mImageWidth,
-			mImageHeight,
-			0, 
-			Ogre::PF_R8G8B8, 
-			Ogre::TU_RENDERTARGET);
+		Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual("PURecorderTexture", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, Ogre::TEX_TYPE_2D, mImageWidth, mImageHeight, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
 		mRenderTexture = texture->getBuffer()->getRenderTarget();
 		mRenderTexture->addViewport(mCamera);
 
@@ -214,55 +155,43 @@ void Recorder::record (ParticleUniverse::Real start, ParticleUniverse::Real end)
 		mInitialised = true;
 	}
 
-	if (!mRecording)
-	{
+	if (!mRecording) {
 		mRecording = true;
-		mTimeElapsed = 0.0f;
-		mTimeElapsedFrame = 0.0f;
+		mTimeElapsed = 0.0;
+		mTimeElapsedFrame = 0.0;
 		mFrameCounter = 0;
 		mStart = start;
 		mEnd = end;
 	}
 }
-//-----------------------------------------------------------------------
-void Recorder::stop (void)
-{
-	mRecording = false;
-	mEnd = 0.0f;
 
-	if (mCamera)
-	{
+void Recorder::stop() {
+	mRecording = false;
+	mEnd = 0.0;
+
+	if (mCamera) {
 		mCamera->_notifyViewport(mOldViewport); // Camera must use its original viewport
 	}
 }
-//-----------------------------------------------------------------------
-bool Recorder::isRecording (void)
-{
+
+bool Recorder::isRecording() {
 	return mRecording;
 }
-//-----------------------------------------------------------------------
-bool Recorder::frameEnded (const Ogre::FrameEvent& evt)
-{
-	if (mRecording)
-	{
-		if (!mParticleSystem || mParticleSystem->getState() == ParticleUniverse::ParticleSystem::PSS_PAUSED)
-		{
+
+bool Recorder::frameEnded(const Ogre::FrameEvent & evt) {
+	if (mRecording) {
+		if (!mParticleSystem || mParticleSystem->getState() == ParticleUniverse::ParticleSystem::PSS_PAUSED) {
 			return true;
 		}
 
 		mTimeElapsedFrame += evt.timeSinceLastFrame;
 		mTimeElapsed += evt.timeSinceLastFrame;
-		if (mTimeElapsed > mEnd)
-		{
+		if (mTimeElapsed > mEnd) {
 			// Not recording
 			mRecording = false;
-		}
-		else
-		{
-			if (mTimeElapsed >= mStart)
-			{
-				if (mTimeElapsedFrame > mFrameLength)
-				{
+		} else {
+			if (mTimeElapsed >= mStart) {
+				if (mTimeElapsedFrame > mFrameLength) {
 					/** Pause the particle system for a specific time to prevent spikes in case saving to disk takes a long time.
 						Do this only for a running particle script!
 					*/
@@ -270,43 +199,39 @@ bool Recorder::frameEnded (const Ogre::FrameEvent& evt)
 
 					// Update and save render texture to disk
 					mRenderTexture->update();
-					Ogre::String fileName = "Frame_" + 
-						Ogre::StringConverter::toString(mFrameCounter) + 
-						mFileNameSuffix;
+					Ogre::String fileName = "Frame_" + Ogre::StringConverter::toString(mFrameCounter) + mFileNameSuffix;
 					Ogre::String fullName;
-					if (mVideoDirectory != Ogre::StringUtil::BLANK)
-					{
+					if (mVideoDirectory != Ogre::StringUtil::BLANK) {
 						fullName = mVideoDirectory + "/" + fileName;
-					}
-					else
-					{
+					} else {
 						fullName = fileName;
 					}
-					if (mFilter == IF_NONE)
-					{
+					if (mFilter == IF_NONE) {
 						// No filtering, so do it directly
 						mRenderTexture->writeContentsToFile(fullName);
-					}
-					else
-					{
+					} else {
 						// Filtering reguired, so introduce the ImageX
 						_allocImageMemoryIfNeeded();
 						mRenderTexture->copyContentsToMemory(*mPixelBox, Ogre::RenderTarget::FB_AUTO);
 						mImage->loadDynamicImage(mImageData, mImageWidth, mImageHeight, 1, mPixelFormat, false, 1, 0);
 						switch(mFilter)
 						{
-							case IF_ALPHA_FROM_LUMINANCE:
-								mImage->filterAlphaFromLuminance();
+						case IF_ALPHA_FROM_LUMINANCE: {
+							mImage->filterAlphaFromLuminance();
 							break;
-
-							case IF_ALPHA_FROM_BACKGROUND_COLOUR:
-								mImage->filterAlphaFromBackgroundColour(mBackgroundColour);
+						}
+						case IF_ALPHA_FROM_BACKGROUND_COLOUR: {
+							mImage->filterAlphaFromBackgroundColour(mBackgroundColour);
 							break;
+						}
+						default: {
+							break;
+						}
 						}
 						mImage->save(fullName);
 					}
 					mFrameCounter++;
-					mTimeElapsedFrame =- mFrameLength;
+					mTimeElapsedFrame -= mFrameLength;
 				}
 			}
 		}
@@ -314,21 +239,21 @@ bool Recorder::frameEnded (const Ogre::FrameEvent& evt)
 
 	return true;
 }
-//-----------------------------------------------------------------------
-void Recorder::_reallocImageMemory(void)
-{
-	if (mImageData)
-	{
+
+void Recorder::_reallocImageMemory() {
+	if (mImageData) {
 		OGRE_FREE(mImageData, Ogre::MEMCATEGORY_RENDERSYS);
-		mImageData = 0;
+		mImageData = nullptr;
+	}
+	if (mPixelBox) {
+		delete mPixelBox;
+		mPixelBox = nullptr;
 	}
 	_allocImageMemoryIfNeeded();
 }
-//-----------------------------------------------------------------------
-void Recorder::_allocImageMemoryIfNeeded(void)
-{
-	if (!mImageData)
-	{
+
+void Recorder::_allocImageMemoryIfNeeded() {
+	if (!mImageData) {
 		mImageData = OGRE_ALLOC_T(Ogre::uchar, mImageWidth * mImageHeight * Ogre::PixelUtil::getNumElemBytes(mPixelFormat), Ogre::MEMCATEGORY_RENDERSYS);
 		mPixelBox = new Ogre::PixelBox(mImageWidth, mImageHeight, 1, mPixelFormat, mImageData);
 	}

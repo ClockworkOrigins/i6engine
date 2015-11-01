@@ -21,62 +21,59 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_CONTROLPOINT_
-#define __PUED_CONTROLPOINT_
+#ifndef __PUED_CONTROLPOINT_H__
+#define __PUED_CONTROLPOINT_H__
 
-#include "wx/bitmap.h"
 #include "wx/colour.h"
 #include "wx/dcclient.h"
 
 /**	function to format a string (used for control points and control point grid only
 */
-void trunc (float value, std::string& s, int maxDecimals);
+void trunc(float value, std::string & s, int maxDecimals);
 
 /**	Component that represents a controlpoint, needed in the ControlPointColourControl
 */
 static const int CONTROL_POINT_RECT_SIZE = 16;
 static const int CONTROL_POINT_BORDER_SIZE = 1;
 static const int CONTROL_POINT_BORDER_SIZE_BOLD = 4;
-class ControlPoint
-{
-	public:
-		enum CTRL_POINT_TYPE
-		{
-			CTRL_POINT_TYPE_SOLID,
-			CTRL_POINT_TYPE_GRID,
-		};
-		ControlPoint(CTRL_POINT_TYPE type, const wxPoint& pos, const bool movable = true, float width = 1.0f, float min = 0.0f, float max = 1.0f);
-		virtual ~ControlPoint(void);
-		void paint(wxPaintDC& dc);
-		const wxPoint& getPosition(void) const;
-		void setPosition(const wxPoint& pos);
-		const wxColour& getColour(void) const;
-		void setColour(const wxColour& col);
-		bool isMovable(void) const;
-		bool isMoving(void) const;
-		void setMoving(bool moving);
-		float getXval(void) const;
-		void setXval(float xval);
-		float getYval(void) const;
-		void setYval(float yval);
-		void setXCenterVal(float xCenterVal);
-		void setYCenterVal(float yCenterVal);
 
+class ControlPoint {
+public:
+	enum CTRL_POINT_TYPE {
+		CTRL_POINT_TYPE_SOLID,
+		CTRL_POINT_TYPE_GRID,
+	};
+	ControlPoint(CTRL_POINT_TYPE type, const wxPoint & pos, const bool movable = true, float width = 1.0f, float min = 0.0f, float max = 1.0f);
+	virtual ~ControlPoint();
+	void paint(wxPaintDC & dc);
+	const wxPoint & getPosition() const;
+	void setPosition(const wxPoint & pos);
+	const wxColour & getColour() const;
+	void setColour(const wxColour& col);
+	bool isMovable() const;
+	bool isMoving() const;
+	void setMoving(bool moving);
+	float getXval() const;
+	void setXval(float xval);
+	float getYval() const;
+	void setYval(float yval);
+	void setXCenterVal(float xCenterVal);
+	void setYCenterVal(float yCenterVal);
 
-	protected:
-		CTRL_POINT_TYPE mCtrlPointType;
-		wxPoint mPos;
-		bool mMovable;
-		wxBitmap* mBitmapArrow;
-		wxBitmap* mBitmapClose;
-		wxColour mColour;
-		bool mMoving;
-		float mDiff;
-		float mWidth;
-		float mXval;
-		float mYval;
-		float mXCenterVal;
-		float mYCenterVal;
+protected:
+	CTRL_POINT_TYPE mCtrlPointType;
+	wxPoint mPos;
+	bool mMovable;
+	wxBitmap * mBitmapArrow;
+	wxBitmap * mBitmapClose;
+	wxColour mColour;
+	bool mMoving;
+	float mDiff;
+	float mWidth;
+	float mXval;
+	float mYval;
+	float mXCenterVal;
+	float mYCenterVal;
 };
 
-#endif
+#endif /* __PUED_CONTROLPOINT_H__ */

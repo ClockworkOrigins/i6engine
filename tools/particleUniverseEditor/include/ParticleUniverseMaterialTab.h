@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_MATERIAL_TAB_H__
-#define __PUED_MATERIAL_TAB_H__
+#ifndef __PUED_MATERIALTAB_H__
+#define __PUED_MATERIALTAB_H__
 
 #include "wx/ogre/prerequisites.h"
 
@@ -34,135 +34,133 @@ class MaterialListBox;
 
 /**	Material Tab: Class that defines the actual material tab.
 */
-class MaterialTab : public wxPanel
-{
-	public:
+class MaterialTab : public wxPanel {
+public:
+	// Constructor / Destructor
+	MaterialTab(wxWindow * parent, wxWindow * rootParent);
+	~MaterialTab();
 
-		// Constructor / Destructor
-		MaterialTab(wxWindow* parent, wxWindow* rootParent);
-		~MaterialTab(void);
+	/**	Reload listbox and fill with materials (names)
+	*/
+	void fillMaterials();
 
-		/**	Reload listbox and fill with materials (names)
-		*/
-		void fillMaterials(void);
+	/**	A material has been selected. Fill the properties.
+	*/
+	void selectMaterial(wxString & materialName);
 
-		/**	A material has been selected. Fill the properties.
-		*/
-		void selectMaterial(wxString& materialName);
+	/**	Display the image associated with the TextureUnitState
+	*/
+	void viewTexture(Ogre::TextureUnitState * textureUnitState);
 
-		/**	Display the image associated with the TextureUnitState
-		*/
-		void viewTexture(Ogre::TextureUnitState* textureUnitState);
+	/**	Select the material that was previously selected.
+	*/
+	//void setLastSelectedMaterial();
 
-		/**	Select the material that was previously selected.
-		*/
-		//void setLastSelectedMaterial(void);
+	/**	Store the name of the material that is currently selected.
+	*/
+	void saveSelectedMaterialName();
 
-		/**	Store the name of the material that is currently selected.
-		*/
-		void saveSelectedMaterialName(void);
+	/**	Restore the name of the saved material name.
+	*/
+	void restoreSelectedMaterialName();
 
-		/**	Restore the name of the saved material name.
-		*/
-		void restoreSelectedMaterialName(void);
+	/**	Convenient functions to return pass and texture.
+	*/
+	Ogre::Pass * getFirstPass();
+	Ogre::TextureUnitState * getFirstTexture();
+	Ogre::TextureUnitState * getFirstTexture(Ogre::Pass * pass);
+	Ogre::TextureUnitState * forceCreateFirstTexture(const Ogre::String textureName);
 
-		/**	Convenient functions to return pass and texture.
-		*/
-		Ogre::Pass* getFirstPass(void);
-		Ogre::TextureUnitState* getFirstTexture(void);
-		Ogre::TextureUnitState* getFirstTexture(Ogre::Pass* pass);
-		Ogre::TextureUnitState* forceCreateFirstTexture(const Ogre::String textureName);
+protected:
+	wxWindow * mRootParent;
+	MaterialListBox * mMaterialListBox;
+	wxTextCtrl * mTxtMaterialName;
+	wxCheckBox * mCheckLighting;
+	wxCheckBox * mCheckDepthCheck;
+	wxCheckBox * mCheckDepthWrite;
+	wxComboBox * mSceneBlendList;
+	wxComboBox * mAddressingModeList;
+	wxButton * mNewButton;
+	wxButton * mSaveButton;
+	wxButton * mLoadButton;
+	wxTextCtrl * mTxtTextureLoad;
+	wxButton * mAmbientButton;
+	wxButton * mDiffuseButton;
+	wxButton * mSpecularButton;
+	wxButton * mEmissiveButton;
+	wxPanel * mTexturePanel;
 
-	protected:
-		wxWindow* mRootParent;
-		MaterialListBox* mMaterialListBox;
-		wxTextCtrl* mTxtMaterialName;
-		wxCheckBox* mCheckLighting;
-		wxCheckBox* mCheckDepthCheck;
-		wxCheckBox* mCheckDepthWrite;
-		wxComboBox* mSceneBlendList;
-		wxComboBox* mAddressingModeList;
-		wxButton* mNewButton;
-		wxButton* mSaveButton;
-		wxButton* mLoadButton;
-		wxTextCtrl* mTxtTextureLoad;
-		wxButton* mAmbientButton;
-		wxButton* mDiffuseButton;
-		wxButton* mSpecularButton;
-		wxButton* mEmissiveButton;
-		wxPanel* mTexturePanel;
+	unsigned int mNewMaterialCounter;
+	wxString mLastSelectedMaterial;
+	wxString mResourceLocationTexture;
+	wxString mResourceLocationMaterial;
+	Ogre::String mCurrentTextureFileName;
+	wxBitmap * mCurrentTextureBitmap;
+	wxImage * mCurrentTextureImage;
 
-		unsigned int mNewMaterialCounter;
-		wxString mLastSelectedMaterial;
-		wxString mResourceLocationTexture;
-		wxString mResourceLocationMaterial;
-		Ogre::String mCurrentTextureFileName;
-		wxBitmap* mCurrentTextureBitmap;
-		wxImage* mCurrentTextureImage;
+	/**	Returns the sceneblending type as a string.
+	*/
+	const wxString & getSceneBlending(const Ogre::Pass * pass);
 
-		/**	Returns the sceneblending type as a string.
-		*/
-		const wxString& getSceneBlending(const Ogre::Pass* pass);
+	/**	Returns the texture addressing mode as a string.
+	*/
+	const wxString & getTextureAddressingMode(const Ogre::TextureUnitState * texture);
 
-		/**	Returns the texture addressing mode as a string.
-		*/
-		const wxString& getTextureAddressingMode(const Ogre::TextureUnitState* texture);
+	/**	New material button pressed.
+	*/
+	void OnNewMaterial(wxCommandEvent & event);
 
-		/**	New material button pressed.
-		*/
-		void OnNewMaterial(wxCommandEvent& event);
+	/**	Name of the material changed.
+	*/
+	void OnChangeName(wxCommandEvent & event);
 
-		/**	Name of the material changed.
-		*/
-		void OnChangeName(wxCommandEvent& event);
+	/**	Checkbox Lighting event
+	*/
+	void OnCheckLighting(wxCommandEvent & event);
 
-		/**	Checkbox Lighting event
-		*/
-		void OnCheckLighting(wxCommandEvent& event);
+	/**	Ambient button event
+	*/
+	void OnAmbient(wxCommandEvent & event);
 
-		/**	Ambient button event
-		*/
-		void OnAmbient(wxCommandEvent& event);
+	/**	Diffuse button event
+	*/
+	void OnDiffuse(wxCommandEvent & event);
 
-		/**	Diffuse button event
-		*/
-		void OnDiffuse(wxCommandEvent& event);
+	/**	Specular button event
+	*/
+	void OnSpecular(wxCommandEvent & event);
 
-		/**	Specular button event
-		*/
-		void OnSpecular(wxCommandEvent& event);
+	/**	Emissive button event
+	*/
+	void OnEmissive(wxCommandEvent & event);
 
-		/**	Emissive button event
-		*/
-		void OnEmissive(wxCommandEvent& event);
+	/**	Checkbox DepthCheck event
+	*/
+	void OnCheckDepthCheck(wxCommandEvent & event);
 
-		/**	Checkbox DepthCheck event
-		*/
-		void OnCheckDepthCheck(wxCommandEvent& event);
+	/**	Checkbox DepthWrite event
+	*/
+	void OnCheckDepthWrite(wxCommandEvent & event);
 
-		/**	Checkbox DepthWrite event
-		*/
-		void OnCheckDepthWrite(wxCommandEvent& event);
+	/**	Combobox SceneBlend event
+	*/
+	void OnSceneBlendSelected(wxCommandEvent & event);
 
-		/**	Combobox SceneBlend event
-		*/
-		void OnSceneBlendSelected(wxCommandEvent& event);
+	/**	Save the currently selected material
+	*/
+	void OnSaveMaterial(wxCommandEvent & event);
 
-		/**	Save the currently selected material
-		*/
-		void OnSaveMaterial(wxCommandEvent& event);
+	/**	Load a texture
+	*/
+	void OnLoadTexture(wxCommandEvent & event);
 
-		/**	Load a texture
-		*/
-		void OnLoadTexture(wxCommandEvent& event);
+	/**	Determine whether the selected material is already used by one of the particle systems.
+	*/
+	bool isSelectedMaterialInUse();
 
-		/**	Determine whether the selected material is already used by one of the particle systems.
-		*/
-		bool isSelectedMaterialInUse();
-
-		/**	Display the texture.
-		*/
-		void OnPaint(wxPaintEvent& event);
+	/**	Display the texture.
+	*/
+	void OnPaint(wxPaintEvent & event);
 };
 
-#endif
+#endif /* __PUED_MATERIALTAB_H__ */

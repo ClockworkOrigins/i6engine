@@ -25,13 +25,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
+#include "OGRE/OgreCamera.h"
+
 wxString Utils::CURRENT_DIR_ATTR = wxT("");
 wxString Utils::SCRIPT_DIR_ATTR = wxT("/manual/script/");
-//-----------------------------------------------------------------------
-const wxString& Utils::getCurrentDirectory(void)
-{
-	if (CURRENT_DIR_ATTR.empty())
-	{
+
+const wxString & Utils::getCurrentDirectory() {
+	if (CURRENT_DIR_ATTR.empty()) {
 	    //size_t size = 1024;
 		//char* path = new char[size];
 	    //path = getcwd(path, size);
@@ -39,12 +39,12 @@ const wxString& Utils::getCurrentDirectory(void)
 		//delete [] path;
 		size_t size = 2048;
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
-		wchar_t* path = new wchar_t[size];
+		wchar_t * path = new wchar_t[size];
 		path = _wgetcwd(path, size);
 		CURRENT_DIR_ATTR = wxString(path);
 #else
 		char * path = new char[size];
-	    	path = getcwd(path, size);
+	    path = getcwd(path, size);
 		std::string s(path);
 		std::wstring ws(s.begin(), s.end());
 		CURRENT_DIR_ATTR = wxString(ws.c_str());
@@ -53,22 +53,16 @@ const wxString& Utils::getCurrentDirectory(void)
 	}
 	return CURRENT_DIR_ATTR;
 }
-//-----------------------------------------------------------------------
-const wxString& Utils::getManualScriptDirectory(void)
-{
+
+const wxString & Utils::getManualScriptDirectory() {
 	return SCRIPT_DIR_ATTR;
 }
-//-----------------------------------------------------------------------
-Ogre::Vector3 Utils::convertLocalToWorldPosition (const Ogre::Quaternion& worldOrientation, 
-												  const Ogre::Vector3& localPosition, 
-												  const Ogre::Vector3& worldPosition,
-												  const Ogre::Vector3& worldScale)
-{
+
+Ogre::Vector3 Utils::convertLocalToWorldPosition(const Ogre::Quaternion & worldOrientation, const Ogre::Vector3 & localPosition, const Ogre::Vector3 & worldPosition, const Ogre::Vector3 & worldScale) {
 	return (worldOrientation * localPosition * worldScale) + worldPosition;
 }
-//-----------------------------------------------------------------------
-Ogre::Vector2 Utils::convertWorldToScreenPosition(const Ogre::Vector3& worldPosition, Ogre::Camera* camera)
-{
+
+Ogre::Vector2 Utils::convertWorldToScreenPosition(const Ogre::Vector3 & worldPosition, Ogre::Camera * camera) {
     Ogre::Vector3 screenPosition = camera->getProjectionMatrix() * camera->getViewMatrix() * worldPosition;
-    return Ogre::Vector2(0.5f + 0.5f * screenPosition.x, 0.5f - 0.5f * screenPosition.y);
+    return Ogre::Vector2(0.5 + 0.5 * screenPosition.x, 0.5 - 0.5 * screenPosition.y);
 }

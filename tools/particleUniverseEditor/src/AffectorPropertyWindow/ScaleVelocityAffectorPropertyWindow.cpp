@@ -11,6 +11,9 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseEditorPCH.h"
 #include "AffectorPropertyWindow/ScaleVelocityAffectorPropertyWindow.h"
+
+#include <cfloat>
+
 #include "ParticleUniverseSystemManager.h"
 #include "ParticleUniverseEditComponent.h"
 
@@ -52,7 +55,7 @@ void ScaleVelocityAffectorPropertyWindow::copyAttributeToAffector(wxPGProperty* 
 			affector->setDynScaleVelocity(dynAttr);
 		}
 		dynAttr = affector->getDynScaleVelocity();
-		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && dynAttr->getValue() == ParticleUniverse::ScaleVelocityAffector::DEFAULT_VELOCITY_SCALE)
+		if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && std::abs(dynAttr->getValue() - ParticleUniverse::ScaleVelocityAffector::DEFAULT_VELOCITY_SCALE) < DBL_EPSILON)
 		{
 			// Force default state
 			affector->resetDynScaleVelocity(true);
@@ -112,8 +115,8 @@ void ScaleVelocityAffectorPropertyWindow::_initProperties(void)
 	appendDynamicAttribute(PRNL_VELOCITY_SCALE, PRNL_VELOCITY_SCALE, dynAttr);
 
 	// Since Start System: bool
-	Append(wxBoolProperty(PRNL_SINCE_START_SYSTEM, PRNL_SINCE_START_SYSTEM, false));
+	Append(new wxBoolProperty(PRNL_SINCE_START_SYSTEM, PRNL_SINCE_START_SYSTEM, false));
 
 	// Stop at flip: bool
-	Append(wxBoolProperty(PRNL_STOP_AT_FLIP, PRNL_STOP_AT_FLIP, false));
+	Append(new wxBoolProperty(PRNL_STOP_AT_FLIP, PRNL_STOP_AT_FLIP, false));
 }
