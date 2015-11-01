@@ -34,6 +34,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace Ogre {
 	class Overlay;
 	class OverlayContainer;
+	class OverlaySystem;
 	class TextAreaOverlayElement;
 } /* namespace Ogre */
 
@@ -329,6 +330,7 @@ private:
 	bool m45DegreesOrtho;
 	Ogre::Radian mOrthoYaw;
 	Ogre::Radian mOrthoPitch;
+	Ogre::OverlaySystem * _overlaySystem;
 };
 
 

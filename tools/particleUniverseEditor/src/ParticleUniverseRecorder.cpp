@@ -244,6 +244,10 @@ void Recorder::_reallocImageMemory() {
 		OGRE_FREE(mImageData, Ogre::MEMCATEGORY_RENDERSYS);
 		mImageData = nullptr;
 	}
+	if (mPixelBox) {
+		delete mPixelBox;
+		mPixelBox = nullptr;
+	}
 	_allocImageMemoryIfNeeded();
 }
 
