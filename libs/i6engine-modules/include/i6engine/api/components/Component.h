@@ -290,17 +290,17 @@ namespace api {
 		}
 
 		template<typename T>
-		typename std::enable_if<std::is_enum<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+		typename std::enable_if<std::is_enum<T>::value && !std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
 			value = T(std::stoul(it->second));
 		}
 
 		template<typename T>
-		typename std::enable_if<std::is_same<T, Vec3>::value || std::is_same<T, Vec4>::value || std::is_same<T, Quaternion>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+		typename std::enable_if<!std::is_enum<T>::value && !std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
 			value = T(it->second);
 		}
 
 		template<typename T>
-		typename std::enable_if<!std::is_enum<T>::value && !std::is_same<T, Vec3>::value && !std::is_same<T, Vec4>::value && !std::is_same<T, Quaternion>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+		typename std::enable_if<!std::is_enum<T>::value && std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
 			value = boost::lexical_cast<T>(it->second);
 		}
 

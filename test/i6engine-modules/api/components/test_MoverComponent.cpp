@@ -57,8 +57,9 @@ TEST(MoverComponent, absolute) {
 		Quaternion q(1, 2, 3, 4);
 		q.insertInMap("rot", phyMap);
 		phyMap["shapeType"] = "0";
-		phyMap["collisionGroup"] = "0";
+		phyMap["collisionGroup"] = "0 0 0";
 		phyMap["shatterInterest"] = "0";
+		phyMap["compound"] = "0";
 
 		i6engine::utils::sharedPtr<MoverCircleComponent, Component> mover = i6engine::utils::dynamic_pointer_cast<MoverCircleComponent>(Component::createC<MoverCircleComponent>(0, aMap));
 		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(1, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", func);

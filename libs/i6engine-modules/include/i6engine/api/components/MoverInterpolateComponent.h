@@ -167,7 +167,7 @@ namespace api {
 		/**
 		 * \brief loads all parameters from a message
 		 */
-		void loadParams(const attributeMap & params);
+		void loadParams(const attributeMap & params) override;
 
 		MoverInterpolateComponent(const MoverInterpolateComponent &) = delete;
 

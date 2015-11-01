@@ -104,7 +104,6 @@ namespace api {
 			attributeMap am = static_cast<components::Component_MoverResync_Update *>(msg->getContent())->attMap;
 			stop();
 
-			MoverComponent::loadParams(am);
 			loadParams(am);
 			Vec3 x(am, "realCenterPos");
 			start(x);
@@ -114,6 +113,8 @@ namespace api {
 	}
 
 	void MoverCircleComponent::loadParams(const attributeMap & params) {
+		MoverComponent::loadParams(params);
+
 		parseAttribute<true>(params, "pos", _circleCenter);
 		parseAttribute<true>(params, "axis", _circleAxis);
 		parseAttribute<true>(params, "radius", _circleRadius);

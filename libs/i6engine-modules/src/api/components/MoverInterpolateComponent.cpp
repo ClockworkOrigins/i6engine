@@ -248,7 +248,6 @@ namespace api {
 				_keyFrames.clear();
 			}
 
-			MoverComponent::loadParams(am);
 			loadParams(am);
 			Vec3 x(am, "realCenterPos");
 			start(x);
@@ -258,6 +257,8 @@ namespace api {
 	}
 
 	void MoverInterpolateComponent::loadParams(const attributeMap & params) {
+		MoverComponent::loadParams(params);
+
 		parseAttribute<true>(params, "mode", _mode);
 		parseAttribute<true>(params, "way", _way);
 		parseAttribute<true>(params, "direction", _direction);
