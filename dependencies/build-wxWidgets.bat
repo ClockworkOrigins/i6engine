@@ -1,3 +1,14 @@
+SET ARCH=Win32
+SET WXPATH=vc_dll
+IF [%1] == [64] (
+	SET ARCH=x64
+	SET WXPATH=vc_x64_dll
+)
+IF [%1] == [32] (
+	SET ARCH=Win32
+	SET WXPATH=vc_dll
+)
+
 call build-common.bat
 
 Set ARCHIVE=wxWidgets-3.0.2.tar.bz2
@@ -11,7 +22,7 @@ call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 echo "Building wxWidgets"
 cd %BUILD_DIR%\build\msw
 
-MSBuild.exe wx_vc12.sln /p:Configuration="DLL Release" > NUL
+MSBuild.exe wx_vc12.sln /p:Configuration="DLL Release" /p:Platform="%ARCH%" > NUL
 
 echo "Installing wxWidgets"
 mkdir "%PREFIX%"
@@ -19,14 +30,14 @@ mkdir "%PREFIX%/include"
 mkdir "%PREFIX%/bin"
 mkdir "%PREFIX%/lib"
 mkdir "%PREFIX%/include/wx"
-mkdir "%PREFIX%/lib/vc_dll"
-mkdir "%PREFIX%/lib/vc_dll/mswu"
+mkdir "%PREFIX%/lib/%WXPATH%"
+mkdir "%PREFIX%/lib/%WXPATH%/mswu"
 xcopy /S /Y "%BUILD_DIR%\include" "%PREFIX%\include\wx" > NUL
 xcopy /S /Y "%BUILD_DIR%\include\msvc" "%PREFIX%/include\wx" > NUL
 
-xcopy /S /Y "%BUILD_DIR%\lib\vc_dll\*.dll" "%PREFIX%\bin\" > NUL
-xcopy /S /Y "%BUILD_DIR%\lib\vc_dll\*.lib" "%PREFIX%\lib\" > NUL
-xcopy /S /Y "%BUILD_DIR%\lib\vc_dll\mswu" "%PREFIX%\lib\vc_dll\mswu" > NUL
+xcopy /S /Y "%BUILD_DIR%\lib\%WXPATH%\*.dll" "%PREFIX%\bin\" > NUL
+xcopy /S /Y "%BUILD_DIR%\lib\%WXPATH%\*.lib" "%PREFIX%\lib\" > NUL
+xcopy /S /Y "%BUILD_DIR%\lib\%WXPATH%\mswu" "%PREFIX%\lib\%WXPATH%\mswu" > NUL
 
 echo "Cleaning up"
 cd %DEP_DIR%
