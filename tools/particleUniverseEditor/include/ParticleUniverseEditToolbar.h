@@ -33,61 +33,59 @@ class UIEditIcons2;
 
 /**	Edit toolbar with all icons
 */
-class UIEditToolbar
-{
-	public:
-		// Constructor / Destructor
-		UIEditToolbar(wxWindow* parent);
-		~UIEditToolbar(void);
-		UIEditIcons1* getEditIcons1(void) const;
-		UIEditIcons2* getEditIcons2(void) const;
+class UIEditToolbar {
+public:
+	// Constructor / Destructor
+	UIEditToolbar(wxWindow * parent);
+	~UIEditToolbar();
+	UIEditIcons1 * getEditIcons1() const;
+	UIEditIcons2 * getEditIcons2() const;
 		
-	protected:
-		wxToolBar *mWxToolBar1;
-		wxToolBar *mWxToolBar2;
-		UIEditIcons1* mUIEditIcons1;
-		UIEditIcons2* mUIEditIcons2;
+protected:
+	wxToolBar * mWxToolBar1;
+	wxToolBar * mWxToolBar2;
+	UIEditIcons1 * mUIEditIcons1;
+	UIEditIcons2 * mUIEditIcons2;
 
-	private:
-		UIEditToolbar(void) {}
+private:
+	UIEditToolbar() {}
 };
 
 /**	Edit icons
 */
-class UIEditIcons1
-{
-	public:
-		// Constructor / Destructor
-		UIEditIcons1(wxToolBar* toolbar);
-		~UIEditIcons1(void) {}
+class UIEditIcons1 {
+public:
+	// Constructor / Destructor
+	UIEditIcons1(wxToolBar * toolbar);
+	~UIEditIcons1() {}
 
-		// Actions
-		void reset(void);
+	// Actions
+	void reset();
 
-	protected:
-		wxToolBar* mToolbar;
+protected:
+	wxToolBar * mToolbar;
 	
-	private:
-		UIEditIcons1(void) {}
+private:
+	UIEditIcons1() {}
 };
 
 /**	Edit icons
 */
 class UIEditIcons2
 {
-	public:
-		// Constructor / Destructor
-		UIEditIcons2(wxToolBar* toolbar);
-		~UIEditIcons2(void) {}
+public:
+	// Constructor / Destructor
+	UIEditIcons2(wxToolBar * toolbar);
+	~UIEditIcons2() {}
 
-		// Actions
-		void reset(unsigned int numberOfListItems, unsigned int numberOfConnections = 0);
+	// Actions
+	void reset(unsigned int numberOfListItems, unsigned int numberOfConnections = 0);
 
-	protected:
-		wxToolBar* mToolbar;
+protected:
+	wxToolBar * mToolbar;
 	
-	private:
-		UIEditIcons2(void) {}
+private:
+	UIEditIcons2() {}
 };
 
-#endif
+#endif /* __PUED_EDIT_TOOLBAR_H__ */

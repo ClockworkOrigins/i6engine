@@ -167,38 +167,38 @@ void DoPlacementParticleEventHandlerPropertyWindow::_initProperties(void)
 	// Force Emitter: Is established by means of a connection
 
 	// Number of Particles: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_NUMBER_OF_PARTICLES, 
+	Append(new wxFloatProperty(PRNL_NUMBER_OF_PARTICLES, 
 		PRNL_NUMBER_OF_PARTICLES, 
 		ParticleUniverse::DoPlacementParticleEventHandler::DEFAULT_NUMBER_OF_PARTICLES));
 	SetPropertyEditor(PRNL_NUMBER_OF_PARTICLES, wxPG_EDITOR(SpinCtrl));
 
 	// Inherit Position: bool
-	Append(wxBoolProperty(PRNL_INHERIT_POSITION, PRNL_INHERIT_POSITION, true));
+	Append(new wxBoolProperty(PRNL_INHERIT_POSITION, PRNL_INHERIT_POSITION, true));
 
 	// Inherit Direction: bool
-	Append(wxBoolProperty(PRNL_INHERIT_DIRECTION, PRNL_INHERIT_DIRECTION, false));
+	Append(new wxBoolProperty(PRNL_INHERIT_DIRECTION, PRNL_INHERIT_DIRECTION, false));
 	
 	// Inherit Orientation: bool
-	Append(wxBoolProperty(PRNL_INHERIT_ORIENTATION, PRNL_INHERIT_ORIENTATION, false));
+	Append(new wxBoolProperty(PRNL_INHERIT_ORIENTATION, PRNL_INHERIT_ORIENTATION, false));
 	
 	// Inherit Time to live: bool
-	Append(wxBoolProperty(PRNL_INHERIT_TIME_TO_LIVE, PRNL_INHERIT_TIME_TO_LIVE, false));
+	Append(new wxBoolProperty(PRNL_INHERIT_TIME_TO_LIVE, PRNL_INHERIT_TIME_TO_LIVE, false));
 	
 	// Inherit Mass: bool
-	Append(wxBoolProperty(PRNL_INHERIT_MASS, PRNL_INHERIT_MASS, false));
+	Append(new wxBoolProperty(PRNL_INHERIT_MASS, PRNL_INHERIT_MASS, false));
 	
 	// Inherit Texture Coord: bool
-	Append(wxBoolProperty(PRNL_INHERIT_TEXTURE_COORDINATE, PRNL_INHERIT_TEXTURE_COORDINATE, false));
+	Append(new wxBoolProperty(PRNL_INHERIT_TEXTURE_COORDINATE, PRNL_INHERIT_TEXTURE_COORDINATE, false));
 	
 	// Inherit Colour: bool
-	Append(wxBoolProperty(PRNL_INHERIT_COLOUR, PRNL_INHERIT_COLOUR, false));
+	Append(new wxBoolProperty(PRNL_INHERIT_COLOUR, PRNL_INHERIT_COLOUR, false));
 	
 	// Inherit Particle width: bool
-	Append(wxBoolProperty(PRNL_INHERIT_PARTICLE_WIDTH, PRNL_INHERIT_PARTICLE_WIDTH, false));
+	Append(new wxBoolProperty(PRNL_INHERIT_PARTICLE_WIDTH, PRNL_INHERIT_PARTICLE_WIDTH, false));
 	
 	// Inherit Particle height: bool
-	Append(wxBoolProperty(PRNL_INHERIT_PARTICLE_HEIGHT, PRNL_INHERIT_PARTICLE_HEIGHT, false));
+	Append(new wxBoolProperty(PRNL_INHERIT_PARTICLE_HEIGHT, PRNL_INHERIT_PARTICLE_HEIGHT, false));
 	
 	// Inherit Particle Depth: bool
-	Append(wxBoolProperty(PRNL_INHERIT_PARTICLE_DEPTH, PRNL_INHERIT_PARTICLE_DEPTH, false));
+	Append(new wxBoolProperty(PRNL_INHERIT_PARTICLE_DEPTH, PRNL_INHERIT_PARTICLE_DEPTH, false));
 }

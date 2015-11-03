@@ -17,56 +17,33 @@
  * USA
  */
 
-#ifndef _WX_OGRE_UTILS_H_
-#define _WX_OGRE_UTILS_H_
+#ifndef __WX_OGRE_UTILS_H__
+#define __WX_OGRE_UTILS_H__
 
 #include "OGRE/OgreException.h"
-#include "OGRE/OgreSingleton.h"
 
 #include "wx/wx.h"
 
-#define IMPLEMENT_OGRE_SINGLETON(CLASS)                         \
-                                                                \
-    template<> CLASS* Ogre::Singleton<CLASS>::msSingleton = 0; \
-                                                                \
-    CLASS& CLASS::getSingleton()                                \
-    {                                                           \
-        assert(msSingleton);                                   \
-        return *msSingleton;                                   \
-    }                                                           \
-                                                                \
-    CLASS* CLASS::getSingletonPtr()                             \
-    {                                                           \
-        return msSingleton;                                    \
-    }                                                           \
-
-#define DECLARE_OGRE_SINGLETON(CLASS)                           \
-public:                                                         \
-                                                                \
-    static CLASS& getSingleton();                               \
-                                                                \
-    static CLASS* getSingletonPtr();
-
-void wxOgreExceptionBox(Ogre::Exception& e);
+void wxOgreExceptionBox(Ogre::Exception & e);
 
 /** Convert a wxWidget string to a standard C++ string. */
-std::string wx2std(const wxString& s);
+std::string wx2std(const wxString & s);
 
 /** Convert a standard C++ string to a wxWidget string. */
-wxString std2wx(const std::string& s);
+wxString std2wx(const std::string & s);
 
 /** Convert an Ogre String to a wxWidget string. */
-wxString ogre2wx(const Ogre::String& s);
+wxString ogre2wx(const Ogre::String & s);
 
 /** Convert an Ogre String to a wxWidget string and translate it. */
-wxString ogre2wxTranslate(const Ogre::String& s);
+wxString ogre2wxTranslate(const Ogre::String & s);
 
 /** Convert an Ogre String to a wxWidget string. */
-Ogre::String wx2ogre(const wxString& s);
+Ogre::String wx2ogre(const wxString & s);
 
 /** Get the extension from a string. */
-std::string getExtension(const std::string& s);
+std::string getExtension(const std::string & s);
 
 #define all2std(x) Ogre::StringConverter::toString((x))
 
-#endif
+#endif /* __WX_OGRE_UTILS_H__ */

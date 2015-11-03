@@ -2,8 +2,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 
 . ./build-common.sh
 
-ARCHIVE="clockUtils-0.3-rev128.zip"
-BUILD_DIR="${BUILD_ROOT}/clockUtils-0.3-rev128"
+ARCHIVE="clockutils-0.4.0-src.zip"
+BUILD_DIR="${BUILD_ROOT}/clockutils-0.4.0-src"
 
 PREFIX="${DEP_DIR}/clockUtils"
 DEBUG_FLAG="DEBUG"
@@ -26,7 +26,7 @@ fi
 
 rm -rf "${PREFIX}"
 
-./download-dependency.sh ${ARCHIVE}
+./download-dependency.sh ${ARCHIVE} http://clockwork-origins.de/clockUtils/downloads/
 
 
 cd "${BUILD_ROOT}"
@@ -43,9 +43,10 @@ cmake -G 'Unix Makefiles'\
  -DCMAKE_BUILD_TYPE="${BUILD_TYPE}"\
  -DCMAKE_INSTALL_PREFIX="${PREFIX}"\
  -DWITH_TESTING=OFF\
+ -DWITH_LIBRARY_COMPRESSION=ON\
  -DWITH_LIBRARY_SOCKETS=ON\
  -DWITH_LIBRARY_INIPARSER=ON\
- -DWITH_LIBRARY_ARGPARSER=ON\
+ -DWITH_LIBRARY_ARGPARSER=OFF\
  -DCMAKE_CXX_COMPILER=g++\
  .
 

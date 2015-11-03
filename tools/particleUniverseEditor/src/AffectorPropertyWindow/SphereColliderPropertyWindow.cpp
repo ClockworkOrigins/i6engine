@@ -120,7 +120,7 @@ void SphereColliderPropertyWindow::copyAttributesFromAffector(ParticleUniverse::
 	doSetDouble(PRNL_COLLIDER_BOUNCYNESS, sphereCollider->getBouncyness());
 
 	// Intersection type: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_INTERSECTION_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_INTERSECTION_TYPE);
 	ParticleUniverse::BaseCollider::IntersectionType intersectionType = sphereCollider->getIntersectionType();
 	wxString intersectionTypeString = IST_POINT;
 	if (intersectionType == ParticleUniverse::BaseCollider::IT_BOX)
@@ -130,7 +130,7 @@ void SphereColliderPropertyWindow::copyAttributesFromAffector(ParticleUniverse::
 	propTo->SetValueFromString(intersectionTypeString);
 
 	// Collision type: List
-	propTo = GetPropertyPtr(PRNL_COLLISION_TYPE);
+	propTo = GetProperty(PRNL_COLLISION_TYPE);
 	ParticleUniverse::BaseCollider::CollisionType collisionType = sphereCollider->getCollisionType();
 	wxString collisionTypeString = COLLT_NONE;
 	if (collisionType == ParticleUniverse::BaseCollider::CT_BOUNCE)
@@ -162,28 +162,28 @@ void SphereColliderPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("ColliderSphere.html");
 
 	// Radius: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_SPHERE_COLLIDER_RADIUS, PRNL_SPHERE_COLLIDER_RADIUS, ParticleUniverse::SphereCollider::DEFAULT_RADIUS));
+	Append(new wxFloatProperty(PRNL_SPHERE_COLLIDER_RADIUS, PRNL_SPHERE_COLLIDER_RADIUS, ParticleUniverse::SphereCollider::DEFAULT_RADIUS));
 	SetPropertyEditor(PRNL_SPHERE_COLLIDER_RADIUS, wxPG_EDITOR(SpinCtrl));
 
 	// Inner Collision: bool
-	Append(wxBoolProperty(PRNL_SPHERE_COLLIDER_INNER, PRNL_SPHERE_COLLIDER_INNER, false));
+	Append(new wxBoolProperty(PRNL_SPHERE_COLLIDER_INNER, PRNL_SPHERE_COLLIDER_INNER, false));
 
 	// Friction: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_COLLIDER_FRICTION, PRNL_COLLIDER_FRICTION, ParticleUniverse::SphereCollider::DEFAULT_FRICTION));
+	Append(new wxFloatProperty(PRNL_COLLIDER_FRICTION, PRNL_COLLIDER_FRICTION, ParticleUniverse::SphereCollider::DEFAULT_FRICTION));
 	SetPropertyEditor(PRNL_COLLIDER_FRICTION, wxPG_EDITOR(SpinCtrl));
 
 	// Bouncyness: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_COLLIDER_BOUNCYNESS, PRNL_COLLIDER_BOUNCYNESS, ParticleUniverse::SphereCollider::DEFAULT_BOUNCYNESS));
+	Append(new wxFloatProperty(PRNL_COLLIDER_BOUNCYNESS, PRNL_COLLIDER_BOUNCYNESS, ParticleUniverse::SphereCollider::DEFAULT_BOUNCYNESS));
 	SetPropertyEditor(PRNL_COLLIDER_BOUNCYNESS, wxPG_EDITOR(SpinCtrl));
 
 	// Intersection type: List
 	mIntersectionTypes.Add(IST_POINT);
 	mIntersectionTypes.Add(IST_BOX);
-	Append(wxEnumProperty(PRNL_INTERSECTION_TYPE, PRNL_INTERSECTION_TYPE, mIntersectionTypes));
+	Append(new wxEnumProperty(PRNL_INTERSECTION_TYPE, PRNL_INTERSECTION_TYPE, mIntersectionTypes));
 
 	// Collision type: List
 	mCollisionTypes.Add(COLLT_NONE);
 	mCollisionTypes.Add(COLLT_BOUNCE);
 	mCollisionTypes.Add(COLLT_FLOW);
-	Append(wxEnumProperty(PRNL_COLLISION_TYPE, PRNL_COLLISION_TYPE, mCollisionTypes));
+	Append(new wxEnumProperty(PRNL_COLLISION_TYPE, PRNL_COLLISION_TYPE, mCollisionTypes));
 }

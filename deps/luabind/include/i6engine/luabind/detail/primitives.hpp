@@ -21,8 +21,8 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-#ifndef __LUABIND_DETAIL_PRIMITIVES_HPP__
-#define __LUABIND_DETAIL_PRIMITIVES_HPP__
+#ifndef LUABIND_PRIMITIVES_HPP_INCLUDED
+#define LUABIND_PRIMITIVES_HPP_INCLUDED
 
 #include <algorithm>
 #include <cstring>
@@ -30,11 +30,11 @@
 #include "i6engine/luabind/config.hpp"
 #include "i6engine/luabind/detail/yes_no.hpp"
 
-namespace luabind {
-namespace detail {
-
+namespace luabind { namespace detail
+{
 	template<class T>
-	struct identity {
+	struct identity
+	{
 		typedef T type;
 	};
 
@@ -42,6 +42,9 @@ namespace detail {
     struct type_ {};
 
 	struct null_type {};
+
+/*	typedef char yes_t;
+	typedef double no_t;*/
 
 	struct lua_to_cpp {};
 	struct cpp_to_lua {};
@@ -54,28 +57,29 @@ namespace detail {
 
 	struct converter_policy_tag {};
 
-	struct ltstr {
-		bool operator()(const char * s1, const char * s2) const {
-			return std::strcmp(s1, s2) < 0;
-		}
+	struct ltstr
+	{
+		bool operator()(const char* s1, const char* s2) const { return std::strcmp(s1, s2) < 0; }
 	};
 
 	template<int N>
-	struct aligned {
+	struct aligned 
+	{
 		char storage[N];
 	};
 
 	// returns the offset added to a Derived* when cast to a Base*
 	// TODO: return ptrdiff
 	template<class Derived, class Base>
-	int ptr_offset(type_<Derived>, type_<Base>) {
+	int ptr_offset(type_<Derived>, type_<Base>)
+	{
 		aligned<sizeof(Derived)> obj;
-		Derived * ptr = reinterpret_cast<Derived *>(&obj);
+		Derived* ptr = reinterpret_cast<Derived*>(&obj);
 
-		return int(static_cast<char *>(static_cast<void *>(static_cast<Base *>(ptr))) - static_cast<char *>(static_cast<void *>(ptr)));
+		return int(static_cast<char*>(static_cast<void*>(static_cast<Base*>(ptr)))
+		- static_cast<char*>(static_cast<void*>(ptr)));
 	}
 
-} /* namespace detail */
-} /* namespace luabind */
+}}
 
-#endif /* __LUABIND_DETAIL_PRIMITIVES_HPP__ */
+#endif // LUABIND_PRIMITIVES_HPP_INCLUDED

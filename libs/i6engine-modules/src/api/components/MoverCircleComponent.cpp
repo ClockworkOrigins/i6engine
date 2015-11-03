@@ -42,10 +42,6 @@ namespace api {
 	MoverCircleComponent::~MoverCircleComponent() {
 	}
 
-	ComPtr MoverCircleComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<MoverCircleComponent, Component>(id, params);
-	}
-
 	void MoverCircleComponent::start(Vec3 & startPos) {
 		addTicker();
 
@@ -108,7 +104,6 @@ namespace api {
 			attributeMap am = static_cast<components::Component_MoverResync_Update *>(msg->getContent())->attMap;
 			stop();
 
-			MoverComponent::loadParams(am);
 			loadParams(am);
 			Vec3 x(am, "realCenterPos");
 			start(x);
@@ -118,6 +113,8 @@ namespace api {
 	}
 
 	void MoverCircleComponent::loadParams(const attributeMap & params) {
+		MoverComponent::loadParams(params);
+
 		parseAttribute<true>(params, "pos", _circleCenter);
 		parseAttribute<true>(params, "axis", _circleAxis);
 		parseAttribute<true>(params, "radius", _circleRadius);

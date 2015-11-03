@@ -77,7 +77,7 @@ namespace tools {
 			numfaces = int(index_data->indexCount) / 3;
 			indexstride = int(ibuf->getIndexSize()) * 3;
 		} else if (submesh->operationType == Ogre::RenderOperation::OT_TRIANGLE_STRIP) {
-			numfaces = int(index_data->indexCount) -2;
+			numfaces = int(index_data->indexCount) - 2;
 			indexstride = int(ibuf->getIndexSize());
 		}
 

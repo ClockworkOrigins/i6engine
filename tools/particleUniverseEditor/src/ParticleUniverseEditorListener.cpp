@@ -15,54 +15,38 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "ParticleUniverseEditor.h"
 
-//-----------------------------------------------------------------------
-SystemListener::SystemListener(ParticleUniverseEditorFrame* frame) : 
-	ParticleSystemListener(),
-	mFrame(frame)
-{
+SystemListener::SystemListener(ParticleUniverseEditorFrame * frame) : ParticleSystemListener(), mFrame(frame) {
 }
-//-----------------------------------------------------------------------
-SystemListener::~SystemListener(void)
-{
+
+SystemListener::~SystemListener() {
 }
-//-----------------------------------------------------------------------
-void SystemListener::handleParticleSystemEvent(ParticleUniverse::ParticleSystem* particleSystem, 
-	ParticleUniverse::ParticleUniverseEvent& particleUniverseEvent)
-{
-	if (particleUniverseEvent.eventType == ParticleUniverse::PU_EVT_SYSTEM_STOPPED)
-	{
+
+void SystemListener::handleParticleSystemEvent(ParticleUniverse::ParticleSystem * particleSystem, ParticleUniverse::ParticleUniverseEvent & particleUniverseEvent) {
+	if (particleUniverseEvent.eventType == ParticleUniverse::PU_EVT_SYSTEM_STOPPED) {
 		// Info the frame that the particle system was stopped
 		mFrame->particleSystemStopped();
 	}
 }
-//-----------------------------------------------------------------------
-LogListener::LogListener(ParticleUniverseEditorFrame* frame) : 
-	Ogre::LogListener(),
-	mSuppressLogging(true),
-	mErrorsLogged(false),
-	mFrame(frame)
-{
+
+LogListener::LogListener(ParticleUniverseEditorFrame * frame) : Ogre::LogListener(), mSuppressLogging(true), mErrorsLogged(false), mFrame(frame) {
 }
-//-----------------------------------------------------------------------
-void LogListener::suppressLogging(bool suppress)
-{
+
+void LogListener::suppressLogging(bool suppress) {
 	mSuppressLogging = suppress;
 	mErrorsLogged = false;
 }
-//-----------------------------------------------------------------------
-bool LogListener::errorsLogged(void)
-{
+
+bool LogListener::errorsLogged() {
 	return mErrorsLogged;
 }
-//-----------------------------------------------------------------------
-void LogListener::messageLogged (const Ogre::String& message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String& logName, bool& skipThisMessage)
-{
-	if (mSuppressLogging)
+
+void LogListener::messageLogged (const Ogre::String & message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String & logName, bool & skipThisMessage) {
+	if (mSuppressLogging) {
 		return;
+	}
 
 	// Every logmessage is routed to this callback function. Scan it for compiler errors!
-	if (message.find("PU Compiler") != Ogre::String::npos || message.find("error") != Ogre::String::npos)
-	{
+	if (message.find("PU Compiler") != Ogre::String::npos || message.find("error") != Ogre::String::npos) {
 		wxString wxMessage = ogre2wxTranslate(message);
 		mFrame->showMessage(wxMessage, wxOK | wxICON_ERROR);
 		mErrorsLogged = true;

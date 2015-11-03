@@ -33,10 +33,6 @@ namespace api {
 		parseAttribute<true>(params, "lifetime", _lifetime);
 	}
 
-	ComPtr LifetimeComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<LifetimeComponent, Component>(id, params);
-	}
-
 	LifetimeComponent::~LifetimeComponent() {
 	}
 

@@ -56,7 +56,7 @@ void RibbonTrailRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* pr
 	else if (propertyName == PRNL_MAX_ELEMENTS)
 	{
 		// Max Chain Elements: unsigned int
-		renderer->setMaxChainElements(prop->DoGetValue().GetLong());
+		renderer->setMaxChainElements(size_t(prop->DoGetValue().GetLong()));
 		ParticleUniverse::ParticleTechnique* technique = renderer->getParentTechnique();
 		if (technique)
 		{
@@ -100,7 +100,7 @@ void RibbonTrailRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* pr
 		wxString name = prop->GetParent()->GetName();
 		wxColor c;
 		c = doGetColourWithAlpha(name, c);
-		Ogre::ColourValue colour(((ParticleUniverse::Real)c.Red())/255.0f, ((ParticleUniverse::Real)c.Green())/255.0f, ((ParticleUniverse::Real)c.Blue())/255.0f, ((ParticleUniverse::Real)c.Alpha())/255.0f);
+		Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, ParticleUniverse::Real(c.Green()) / 255.0f, ParticleUniverse::Real(c.Blue()) / 255.0f, ParticleUniverse::Real(c.Alpha()) / 255.0f);
 		renderer->setInitialColour(colour);
 		ParticleUniverse::ParticleTechnique* technique = renderer->getParentTechnique();
 		if (technique)
@@ -115,7 +115,7 @@ void RibbonTrailRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* pr
 		wxString name = prop->GetParent()->GetName();
 		wxColor c;
 		c = doGetColourWithAlpha(name, c);
-		Ogre::ColourValue colour(((ParticleUniverse::Real)c.Red())/255.0f, ((ParticleUniverse::Real)c.Green())/255.0f, ((ParticleUniverse::Real)c.Blue())/255.0f, ((ParticleUniverse::Real)c.Alpha())/255.0f);
+		Ogre::ColourValue colour(ParticleUniverse::Real(c.Red()) / 255.0f, ParticleUniverse::Real(c.Green()) / 255.0f, ParticleUniverse::Real(c.Blue()) / 255.0f, ParticleUniverse::Real(c.Alpha()) / 255.0f);
 		renderer->setColourChange(colour);
 		ParticleUniverse::ParticleTechnique* technique = renderer->getParentTechnique();
 		if (technique)
@@ -184,26 +184,26 @@ void RibbonTrailRendererPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("RendererRibbonTrail.html");
 
 	// Use Vertex Colours: bool
-	Append(wxBoolProperty(PRNL_USE_VERTEX_COLOURS, 
+	Append(new wxBoolProperty(PRNL_USE_VERTEX_COLOURS, 
 		PRNL_USE_VERTEX_COLOURS, 
 		ParticleUniverse::RibbonTrailRenderer::DEFAULT_USE_VERTEX_COLOURS));
 
 	// Max Chain Elements: unsigned int
-	Append(wxUIntProperty(PRNL_MAX_ELEMENTS, 
+	Append(new wxUIntProperty(PRNL_MAX_ELEMENTS, 
 		PRNL_MAX_ELEMENTS, 
 		ParticleUniverse::RibbonTrailRenderer::DEFAULT_MAX_ELEMENTS));
 	SetPropertyEditor(PRNL_MAX_ELEMENTS, wxPG_EDITOR(SpinCtrl));
 
 	// Trail Length: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TRAIL_LENGTH, PRNL_TRAIL_LENGTH, ParticleUniverse::RibbonTrailRenderer::DEFAULT_LENGTH));
+	Append(new wxFloatProperty(PRNL_TRAIL_LENGTH, PRNL_TRAIL_LENGTH, ParticleUniverse::RibbonTrailRenderer::DEFAULT_LENGTH));
 	SetPropertyEditor(PRNL_TRAIL_LENGTH, wxPG_EDITOR(SpinCtrl));
 
 	// Trail Width: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TRAIL_WIDTH, PRNL_TRAIL_WIDTH, ParticleUniverse::RibbonTrailRenderer::DEFAULT_WIDTH));
+	Append(new wxFloatProperty(PRNL_TRAIL_WIDTH, PRNL_TRAIL_WIDTH, ParticleUniverse::RibbonTrailRenderer::DEFAULT_WIDTH));
 	SetPropertyEditor(PRNL_TRAIL_WIDTH, wxPG_EDITOR(SpinCtrl));
 
 	// Random Initial Colour: bool
-	Append(wxBoolProperty(PRNL_RANDOM_INITIAL_COLOUR, 
+	Append(new wxBoolProperty(PRNL_RANDOM_INITIAL_COLOUR, 
 		PRNL_RANDOM_INITIAL_COLOUR, 
 		ParticleUniverse::RibbonTrailRenderer::DEFAULT_RANDOM_INITIAL_COLOUR));
 

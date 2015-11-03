@@ -41,10 +41,6 @@ namespace api {
 	SoundListenerComponent::~SoundListenerComponent() {
 	}
 
-	ComPtr SoundListenerComponent::createC(int64_t id, const attributeMap & params) {
-		return utils::make_shared<SoundListenerComponent, Component>(id, params);
-	}
-
 	void SoundListenerComponent::Init() {
 		addTicker();
 

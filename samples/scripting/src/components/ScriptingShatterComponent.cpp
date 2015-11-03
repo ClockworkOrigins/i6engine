@@ -39,6 +39,8 @@ namespace components {
 		ShatterComponent::Init();
 
 		addTicker();
+
+		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>("MoveScript", "init", _objOwnerID);
 	}
 
 	void ScriptingShatterComponent::Finalize() {

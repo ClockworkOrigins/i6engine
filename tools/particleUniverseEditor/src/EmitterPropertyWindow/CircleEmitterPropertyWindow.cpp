@@ -115,19 +115,19 @@ void CircleEmitterPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("EmitterCircle.html");
 
 	// Radius: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_CIRCLE_EMITTER_RADIUS, PRNL_CIRCLE_EMITTER_RADIUS, ParticleUniverse::CircleEmitter::DEFAULT_RADIUS));
+	Append(new wxFloatProperty(PRNL_CIRCLE_EMITTER_RADIUS, PRNL_CIRCLE_EMITTER_RADIUS, ParticleUniverse::CircleEmitter::DEFAULT_RADIUS));
 	SetPropertyEditor(PRNL_CIRCLE_EMITTER_RADIUS, wxPG_EDITOR(SpinCtrl));
 
 	// Step: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_CIRCLE_EMITTER_STEP, PRNL_CIRCLE_EMITTER_STEP, ParticleUniverse::CircleEmitter::DEFAULT_STEP));
+	Append(new wxFloatProperty(PRNL_CIRCLE_EMITTER_STEP, PRNL_CIRCLE_EMITTER_STEP, ParticleUniverse::CircleEmitter::DEFAULT_STEP));
 	SetPropertyEditor(PRNL_CIRCLE_EMITTER_STEP, wxPG_EDITOR(SpinCtrl));
 
 	// Angle: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_CIRCLE_EMITTER_ANGLE, PRNL_CIRCLE_EMITTER_ANGLE, ParticleUniverse::CircleEmitter::DEFAULT_ANGLE));
+	Append(new wxFloatProperty(PRNL_CIRCLE_EMITTER_ANGLE, PRNL_CIRCLE_EMITTER_ANGLE, ParticleUniverse::CircleEmitter::DEFAULT_ANGLE));
 	SetPropertyEditor(PRNL_CIRCLE_EMITTER_ANGLE, wxPG_EDITOR(SpinCtrl));
 
 	// Random: bool
-	Append(wxBoolProperty(PRNL_CIRCLE_EMITTER_RANDOM, PRNL_CIRCLE_EMITTER_RANDOM, ParticleUniverse::CircleEmitter::DEFAULT_RANDOM));
+	Append(new wxBoolProperty(PRNL_CIRCLE_EMITTER_RANDOM, PRNL_CIRCLE_EMITTER_RANDOM, ParticleUniverse::CircleEmitter::DEFAULT_RANDOM));
 
 	// Normal: Vector3
 	appendVector3(PRNL_CIRCLE_EMITTER_NORMAL, PRNL_CIRCLE_EMITTER_NORMAL, ParticleUniverse::CircleEmitter::DEFAULT_NORMAL);

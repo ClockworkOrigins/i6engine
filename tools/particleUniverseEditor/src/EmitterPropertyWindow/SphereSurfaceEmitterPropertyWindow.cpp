@@ -74,7 +74,7 @@ void SphereSurfaceEmitterPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("EmitterSphereSurface.html");
 
 	// Radius: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_SPHERE_SURFACE_EMITTER_RADIUS, PRNL_SPHERE_SURFACE_EMITTER_RADIUS, ParticleUniverse::SphereSurfaceEmitter::DEFAULT_RADIUS));
+	Append(new wxFloatProperty(PRNL_SPHERE_SURFACE_EMITTER_RADIUS, PRNL_SPHERE_SURFACE_EMITTER_RADIUS, ParticleUniverse::SphereSurfaceEmitter::DEFAULT_RADIUS));
 	SetPropertyEditor(PRNL_SPHERE_SURFACE_EMITTER_RADIUS, wxPG_EDITOR(SpinCtrl));
 }
 //-----------------------------------------------------------------------

@@ -50,6 +50,7 @@ set(i6components
 	${srcdir}/api/components/StaticStateComponent.cpp
 	${srcdir}/api/components/TerrainAppearanceComponent.cpp
 	${srcdir}/api/components/ToggleWaynetComponent.cpp
+	${srcdir}/api/components/VelocityComponent.cpp
 	${srcdir}/api/components/WaynetNavigationComponent.cpp
 	${srcdir}/api/components/WaypointComponent.cpp
 )
@@ -64,10 +65,10 @@ FOREACH(comp ${i6components})
 	STRING(REGEX MATCH ".*/([a-zA-Z0-9_]+)Component.cpp" compName ${comp})
 	FILE(APPEND ${CMAKE_BINARY_DIR}/include/i6engine/i6eComponentRegister.h "#include \"i6engine/api/components/${CMAKE_MATCH_1}Component.h\"\n")
 	IF(${firstIt})
-		SET(componentListNamespace "${componentListNamespace}\t\t{\"${CMAKE_MATCH_1}\", boost::bind(&${CMAKE_MATCH_1}Component::createC, _1, _2)}")
+		SET(componentListNamespace "${componentListNamespace}\t\t{ \"${CMAKE_MATCH_1}\", boost::bind(&Component::createC<${CMAKE_MATCH_1}Component>, _1, _2) }")
 		SET(firstIt FALSE)
 	ELSE()
-		SET(componentListNamespace "${componentListNamespace},\n\t\t{\"${CMAKE_MATCH_1}\", boost::bind(&${CMAKE_MATCH_1}Component::createC, _1, _2)}")
+		SET(componentListNamespace "${componentListNamespace},\n\t\t{ \"${CMAKE_MATCH_1}\", boost::bind(&Component::createC<${CMAKE_MATCH_1}Component>, _1, _2) }")
 	ENDIF()
 ENDFOREACH()
 FILE(APPEND ${CMAKE_BINARY_DIR}/include/i6engine/i6eComponentRegister.h "\n${componentListNamespace}\n\t};\n\n} /* namespace api */\n} /* namespace i6engine */\n\n#endif /* __I6ENGINE_API_COMPONENTREGISTER_H__ */\n")
@@ -167,12 +168,16 @@ set(i6modulesSrc
 	${srcdir}/modules/physics/PhysicsMailbox.cpp
 	${srcdir}/modules/physics/PhysicsManager.cpp
 	${srcdir}/modules/physics/PhysicsNode.cpp
+	${srcdir}/modules/physics/PhysicsVelocityComponent.cpp
+	${srcdir}/modules/physics/collisionShapes/CollisionShape.cpp
+	${srcdir}/modules/physics/collisionShapes/HeightmapCollisionShape.cpp
+	${srcdir}/modules/physics/collisionShapes/MeshStriderCollisionShape.cpp
 )
 
 IF(ISIXE_WITH_AUDIO)
 	set(i6modulesSrc
 		${i6modulesSrc}
-
+		
 		${srcdir}/modules/audio/AudioController.cpp
 		${srcdir}/modules/audio/AudioMailbox.cpp
 		${srcdir}/modules/audio/AudioManager.cpp
@@ -233,6 +238,7 @@ source_group(modules\\input /modules/input/*)
 source_group(modules\\network /modules/network/*)
 source_group(modules\\object /modules/object/*)
 source_group(modules\\physics /modules/physics/*)
+source_group(modules\\physics\\collisionShapes /modules/physics/collisionShapes/*)
 source_group(modules\\luascripting /modules/luascripting/*)
 source_group(modules\\pythonscripting /modules/pythonscripting/*)
 

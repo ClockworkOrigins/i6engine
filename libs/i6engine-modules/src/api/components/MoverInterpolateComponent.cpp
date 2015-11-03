@@ -46,10 +46,6 @@ namespace api {
 	MoverInterpolateComponent::~MoverInterpolateComponent() {
 	}
 
-	ComPtr MoverInterpolateComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<MoverInterpolateComponent, Component>(id, params);
-	}
-
 	void MoverInterpolateComponent::addKeyFrame(const Vec3 & position, const Quaternion & rotation) {
 		boost::mutex::scoped_lock l(_lock);
 		_keyFrames.push_back(keyFrame(position, rotation));
@@ -223,7 +219,7 @@ namespace api {
 		}
 		case Way::BEZIER: {
 			double fak1 = 1, fak2 = 1;
-			uint32_t n = _keyFrames.size();
+			uint32_t n = uint32_t(_keyFrames.size());
 			for (uint32_t i = 0; i < n; i++) {
 				fak1 *= (1 - tt);
 			}
@@ -252,7 +248,6 @@ namespace api {
 				_keyFrames.clear();
 			}
 
-			MoverComponent::loadParams(am);
 			loadParams(am);
 			Vec3 x(am, "realCenterPos");
 			start(x);
@@ -262,6 +257,8 @@ namespace api {
 	}
 
 	void MoverInterpolateComponent::loadParams(const attributeMap & params) {
+		MoverComponent::loadParams(params);
+
 		parseAttribute<true>(params, "mode", _mode);
 		parseAttribute<true>(params, "way", _way);
 		parseAttribute<true>(params, "direction", _direction);

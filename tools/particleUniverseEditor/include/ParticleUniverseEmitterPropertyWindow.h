@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_EMITTER_PROPERTY_WINDOW_H__
-#define __PUED_EMITTER_PROPERTY_WINDOW_H__
+#ifndef __PUED_EMITTERPROPERTYWINDOW_H__
+#define __PUED_EMITTERPROPERTYWINDOW_H__
 
 #include "ParticleUniversePropertyWindow.h"
 
@@ -59,89 +59,87 @@ static wxString PRNL_EMITTER_FORCE_EMISSION = wxT("");
 
 /**	
 */
-class EmitterPropertyWindow : public PropertyWindow
-{
-	public:
-		EmitterPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		EmitterPropertyWindow(EmitterPropertyWindow* emitterPropertyWindow);
-		~EmitterPropertyWindow(void) {}
+class EmitterPropertyWindow : public PropertyWindow {
+public:
+	EmitterPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name);
+	EmitterPropertyWindow(EmitterPropertyWindow * emitterPropertyWindow);
+	~EmitterPropertyWindow() {}
 
-		/**
-			Copy basic emitter properties from a window to an emitter
-		*/
-		virtual void copyAttributeToEmitter(wxPGProperty* prop, wxString propertyName);
+	/**
+		Copy basic emitter properties from a window to an emitter
+	*/
+	virtual void copyAttributeToEmitter(wxPGProperty * prop, wxString propertyName);
 
-		/**
-			Copy basic emitter properties from an emitter to a window
-		*/
-		virtual void copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter* emitter);
+	/**
+		Copy basic emitter properties from an emitter to a window
+	*/
+	virtual void copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter);
 
-		/**
-			Copy basic emitter properties from another emitter property window
-		*/
-		virtual void copyAttributesFromPropertyWindow(EmitterPropertyWindow* emitterPropertyWindow);
+	/**
+		Copy basic emitter properties from another emitter property window
+	*/
+	virtual void copyAttributesFromPropertyWindow(EmitterPropertyWindow * emitterPropertyWindow);
 
-		/**
-			See PropertyWindow
-		*/
-		virtual void onPropertyChanged(wxPropertyGridEvent& event);
-		void onParentPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		See PropertyWindow
+	*/
+	virtual void onPropertyChanged(wxPropertyGridEvent & event);
+	void onParentPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Validates the value of an entered texture coordinate.
-		*/
-		bool validateTextureCoord(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
+	/**
+		Validates the value of an entered texture coordinate.
+	*/
+	bool validateTextureCoord(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
 
-		/**
-			Updating functions
-		*/
-		void replaceEmitterType(wxPGProperty* prop);
-		void copyEnabledToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyPositionToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyKeepLocalToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyDirectionToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyOrientationToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyOrientationRangeStartToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyOrientationRangeEndToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyVelocityToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyDurationToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyRepeatDelayToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyAngleToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyEmissionRateToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyTimeToLiveToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyMassToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyTextureCoordinateToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyTextureCoordinateStartToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyTextureCoordinateEndToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyColourToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyColourRangeStartToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyColourRangeEndToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyAllParticleDimensionsToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyParticleWidthToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyParticleHeightToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyParticleDepthToEmitter(wxString propertyName, wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyAutoDirectionToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
-		void copyForceEmissionToEmitter(wxPGProperty* prop, ParticleUniverse::ParticleEmitter* emitter);
+	/**
+		Updating functions
+	*/
+	void replaceEmitterType(wxPGProperty * prop);
+	void copyEnabledToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyPositionToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyKeepLocalToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyDirectionToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyOrientationToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyOrientationRangeStartToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyOrientationRangeEndToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyVelocityToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyDurationToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyRepeatDelayToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyAngleToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyEmissionRateToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyTimeToLiveToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyMassToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyTextureCoordinateToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyTextureCoordinateStartToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyTextureCoordinateEndToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyColourToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyColourRangeStartToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyColourRangeEndToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyAllParticleDimensionsToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyParticleWidthToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyParticleHeightToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyParticleDepthToEmitter(wxString propertyName, wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyAutoDirectionToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
+	void copyForceEmissionToEmitter(wxPGProperty * prop, ParticleUniverse::ParticleEmitter * emitter);
 
-		/**
-			Determine selected emitter type (take internationalisation into account)
-		*/
-		const Ogre::String& getEmitterTypeByProperty(wxPGProperty* prop);
+	/**
+		Determine selected emitter type (take internationalisation into account)
+	*/
+	const Ogre::String & getEmitterTypeByProperty(wxPGProperty * prop);
 
-	protected:
-		wxArrayString mTypes;
-		wxArrayString mEmitsParticleTypes;
+protected:
+	wxArrayString mTypes;
+	wxArrayString mEmitsParticleTypes;
 
-		/**
-			Initialises all emitter properties
-		*/
-		virtual void _initProperties(void);
+	/**
+		Initialises all emitter properties
+	*/
+	virtual void _initProperties();
 
-		/**
-			Destroy connections that are not needed in case of a type-switch
-		*/
-		void notifyDestroyUnnecessaryConnections(void);
+	/**
+		Destroy connections that are not needed in case of a type-switch
+	*/
+	void notifyDestroyUnnecessaryConnections();
 };
 
-#endif
-
+#endif /* __PUED_EMITTERPROPERTYWINDOW_H__ */

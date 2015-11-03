@@ -20,17 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
-#ifndef __LUABIND_LUA_INCLUDE_HPP__
-#define __LUABIND_LUA_INCLUDE_HPP__
+#ifndef LUA_INCLUDE_HPP_INCLUDED
+#define LUA_INCLUDE_HPP_INCLUDED
 
 #ifndef LUABIND_CPLUSPLUS_LUA
 extern "C"
 {
 #endif
+
 	#include "i6engine/lua/lua.h"
 	#include "i6engine/lua/lauxlib.h"
+
 #ifndef LUABIND_CPLUSPLUS_LUA
 }
-#endif /* LUABIND_CPLUSPLUS_LUA */
+#endif
 
-#endif /* __LUABIND_LUA_INCLUDE_HPP__ */
+#endif
+

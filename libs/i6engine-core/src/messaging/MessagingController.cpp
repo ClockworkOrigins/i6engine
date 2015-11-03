@@ -29,18 +29,16 @@
 namespace i6engine {
 namespace core {
 
-	MessagingController::MessagingController() : _objMessageTypeDictionary(), _objDictionaryMutex(), _deliverThread(nullptr), _objCondExecutable(), _objCondMut(), _objCondUniqLock(_objCondMut), _running(true) {
+	MessagingController::MessagingController() : _objMessageTypeDictionary(), _objDictionaryMutex(), _deliverThread(nullptr), _condVar(), _condMutex(), _running(true) {
 		_deliverThread = new boost::thread(boost::bind(&MessagingController::deliverMessages, this));
 	}
 
 	MessagingController::~MessagingController() {
 		_running = false;
-		if (_deliverThread != nullptr) {
-			_objCondExecutable.notify_all();
-			_deliverThread->interrupt();
-			_deliverThread->join();
-			delete _deliverThread;
-		}
+		_condVar.notify_all();
+		_deliverThread->interrupt();
+		_deliverThread->join();
+		delete _deliverThread;
 	}
 
 	// Deliver all messages that are stored in the queue.
@@ -51,7 +49,8 @@ namespace core {
 			while (!_msgQueue.empty()) {
 				deliverMessageToSubscribers(_msgQueue.poll());
 			}
-			_objCondExecutable.wait(_objCondUniqLock);
+			std::unique_lock<std::mutex> ul(_condMutex);
+			_condVar.wait(ul);
 		}
 	}
 
@@ -123,7 +122,7 @@ namespace core {
 		// save Message
 		_msgQueue.push(msg);
 		// and than notify poll thread that there are new messages
-		_objCondExecutable.notify_all();
+		_condVar.notify_all();
 	}
 
 } /* namespace core */

@@ -91,57 +91,57 @@ namespace ParticleUniverse
 			typedef vector<TechniqueListener*> TechniqueListenerList;
 			typedef TechniqueListenerList::const_iterator TechniqueListenerIterator;
 
-			ParticleTechnique(void);
-	        virtual ~ParticleTechnique(void);
+			ParticleTechnique();
+	        virtual ~ParticleTechnique();
 
 			/** 
 	        */
-			inline ParticleSystem* getParentSystem(void) const {return mParentSystem;}
-			void setParentSystem(ParticleSystem* parentSystem) {mParentSystem = parentSystem;}
+			inline ParticleSystem * getParentSystem() const { return mParentSystem; }
+			void setParentSystem(ParticleSystem * parentSystem) { mParentSystem = parentSystem; }
 
 			/** 
 	        */
-			inline const String& getName(void) const {return mName;}
+			inline const String& getName() const {return mName;}
 			void setName(const String& name) {mName = name;}
 
 			/** 
 	        */
-			size_t getVisualParticleQuota(void) const;
+			size_t getVisualParticleQuota() const;
 			void setVisualParticleQuota(size_t quota);
 
 			/** 
 	        */
-			size_t getEmittedEmitterQuota(void) const;
+			size_t getEmittedEmitterQuota() const;
 			void setEmittedEmitterQuota(size_t quota);
 
 			/** 
 	        */
-			size_t getEmittedTechniqueQuota(void) const;
+			size_t getEmittedTechniqueQuota() const;
 			void setEmittedTechniqueQuota(size_t quota);
 
 			/** 
 	        */
-			size_t getEmittedAffectorQuota(void) const;
+			size_t getEmittedAffectorQuota() const;
 			void setEmittedAffectorQuota(size_t quota);
 
 			/** 
 	        */
-			size_t getEmittedSystemQuota(void) const;
+			size_t getEmittedSystemQuota() const;
 			void setEmittedSystemQuota(size_t quota);
 
 			/** 
 	        */
-			Real getDefaultWidth(void) const;
+			Real getDefaultWidth() const;
 			void setDefaultWidth(const Real width);
 
 			/** 
 	        */
-			Real getDefaultHeight(void) const;
+			Real getDefaultHeight() const;
 			void setDefaultHeight(const Real height);
 
 			/** 
 	        */
-			Real getDefaultDepth(void) const;
+			Real getDefaultDepth() const;
 			void setDefaultDepth(const Real depth);
 
 			/** Returns the derived position of the technique.
@@ -150,11 +150,11 @@ namespace ParticleUniverse
 				emitted, its position is automatically transformed. This function always returns the 
 				derived position.
 	        */
-			const Vector3& getDerivedPosition(void);
+			const Vector3 & getDerivedPosition();
 
 			/** Get/Set the squared distance between camera and ParticleTechnique.
 	        */
-			inline Real getCameraSquareDistance(void) const {return mCameraSquareDistance;}
+			inline Real getCameraSquareDistance() const {return mCameraSquareDistance;}
 			void setCameraSquareDistance(Real cameraSquareDistance){mCameraSquareDistance = cameraSquareDistance;}
 
 			/** Function to suppress notification of an emission change.
@@ -165,11 +165,11 @@ namespace ParticleUniverse
 
 			/** Set the name of the material used by the renderer.
 	        */
-			const String& getMaterialName(void) const;
+			const String& getMaterialName() const;
 
 			/** Get the material pointer.
 	        */
-			const Ogre::MaterialPtr getMaterial(void) const;
+			const Ogre::MaterialPtr getMaterial() const;
 
 			/** Set the name of the material used by the renderer.
 	        */
@@ -207,7 +207,7 @@ namespace ParticleUniverse
 
 			/** Get the number of ParticleEmitters added to this ParticleTechnique.
 	        */
-			size_t getNumEmitters (void) const;
+			size_t getNumEmitters () const;
 
 			/** Delete a ParticleEmitter that is part of this ParticleTechnique. Search by index.
 	        */
@@ -219,14 +219,14 @@ namespace ParticleUniverse
 
 			/** Delete all ParticleEmitters of this ParticleTechnique.
 	        */
-			void destroyAllEmitters (void);
+			void destroyAllEmitters ();
 
 			/** Get the number of emitted ParticleEmitters.
 			@remarks
 				This doesn't return the real number of emitted emitters, but the number of emitters that are
 				marked for emission.
 	        */
-			size_t getNumEmittedEmitters (void) const;
+			size_t getNumEmittedEmitters () const;
 
 			//-------------------------------------- Affector --------------------------------------
 			/** Create a ParticleAffector and add it to this ParticleTechnique.
@@ -255,7 +255,7 @@ namespace ParticleUniverse
 
 			/** Get the number of ParticleAffectors added to this ParticleTechnique.
 	        */
-			size_t getNumAffectors (void) const;
+			size_t getNumAffectors () const;
 
 			/** Delete a ParticleAffector that is part of this ParticleTechnique. Search by index.
 	        */
@@ -267,14 +267,14 @@ namespace ParticleUniverse
 
 			/** Delete all ParticleAffectors of this ParticleTechnique.
 	        */
-			void destroyAllAffectors (void);
+			void destroyAllAffectors ();
 
 			/** Get the number of emitted ParticleAffectors.
 			@remarks
 				This doesn't return the real number of emitted affectors, but the number of affectors that are
 				marked for emission.
 	        */
-			size_t getNumEmittedAffectors (void) const;
+			size_t getNumEmittedAffectors () const;
 
 			//-------------------------------------- Observer --------------------------------------
 			/** Create a ParticleObserver and add it to this ParticleTechnique.
@@ -303,7 +303,7 @@ namespace ParticleUniverse
 
 			/** Get the number of ParticleObservers added to this ParticleTechnique.
 	        */
-			size_t getNumObservers (void) const;
+			size_t getNumObservers () const;
 
 			/** Delete a ParticleObserver that is part of this ParticleTechnique. Search by index.
 	        */
@@ -315,12 +315,12 @@ namespace ParticleUniverse
 
 			/** Delete all ParticleObservers of this ParticleTechnique.
 	        */
-			void destroyAllObservers (void);
+			void destroyAllObservers ();
 
 			//-------------------------------------- Renderer --------------------------------------
 			/** Returns the pointer to the renderer.
 			*/
-			ParticleRenderer* getRenderer(void) const;
+			ParticleRenderer* getRenderer() const;
 
 			/** Set a renderer by means of the type of renderer.
 	        */
@@ -336,7 +336,7 @@ namespace ParticleUniverse
 
 			/** Delete the renderer of this ParticleTechnique.
 	        */
-			void destroyRenderer(void);
+			void destroyRenderer();
 
 			//-------------------------------------- Behaviour --------------------------------------
 			/** Add a ParticleBehaviour template to this ParticleTechnique.
@@ -362,7 +362,7 @@ namespace ParticleUniverse
 
 			/** Get the number of ParticleBehaviour templates added to this ParticleTechnique.
 	        */
-			size_t _getNumBehaviourTemplates (void) const;
+			size_t _getNumBehaviourTemplates () const;
 
 			/** Delete a ParticleBehaviour template that is part of this ParticleTechnique.
 	        */
@@ -370,7 +370,7 @@ namespace ParticleUniverse
 
 			/** Delete all ParticleBehaviour templates of this ParticleTechnique.
 	        */
-			void _destroyAllBehaviourTemplates (void);
+			void _destroyAllBehaviourTemplates ();
 
 			//-------------------------------------- Extern --------------------------------------
 			/** Create an Extern and add it to this ParticleTechnique.
@@ -403,7 +403,7 @@ namespace ParticleUniverse
 
 			/** Get the number of Externs added to this ParticleTechnique.
 	        */
-			size_t getNumExterns (void) const;
+			size_t getNumExterns () const;
 
 			/** Delete an Extern that is part of this ParticleTechnique. Search by index.
 	        */
@@ -415,7 +415,7 @@ namespace ParticleUniverse
 
 			/** Delete all Externs of this ParticleTechnique.
 	        */
-			void destroyAllExterns (void);
+			void destroyAllExterns ();
 
 			//-------------------------------------- Rest --------------------------------------
 			/** Update the renderqueue.
@@ -435,51 +435,51 @@ namespace ParticleUniverse
 				To reduce initialisation activities as soon as the particle system is started, these activities 
 				can also be performed in front.
 	        */
-			void _prepare(void);
+			void _prepare();
 
 			/** V1.5: Perform some cleanup activities.
 	        */
-			void _unprepare(void);
+			void _unprepare();
 
 			/** Perform (un)initialisation activities of system elements.
 	        */
-			void _prepareSystem(void);
-			void _unprepareSystem(void);
+			void _prepareSystem();
+			void _unprepareSystem();
 
 			/** Perform (un)initialisation activities of the technique itself.
 	        */
-			void _prepareTechnique(void);
-			void _unprepareTechnique(void);
+			void _prepareTechnique();
+			void _unprepareTechnique();
 
 			/** (Un)initialise visual particles if needed.
 	        */
-			void _prepareVisualParticles(void);
-			void _unprepareVisualParticles(void);
+			void _prepareVisualParticles();
+			void _unprepareVisualParticles();
 
 			/** Perform (un)initialisation activities of the renderer.
 	        */
-			void _prepareRenderer(void);
-			void _unprepareRenderer(void);
+			void _prepareRenderer();
+			void _unprepareRenderer();
 
 			/** Perform (un)initialisation activities of emitters.
 	        */
-			void _prepareEmitters(void);
-			void _unprepareEmitters(void);
+			void _prepareEmitters();
+			void _unprepareEmitters();
 
 			/** Perform (un)initialisation activities of affectors.
 	        */
-			void _prepareAffectors(void);
-			void _unprepareAffectors(void);
+			void _prepareAffectors();
+			void _unprepareAffectors();
 
 			/** Perform (un)initialisation activities of behaviours.
 	        */
-			void _prepareBehaviours(void);
-			void _unprepareBehaviours(void);
+			void _prepareBehaviours();
+			void _unprepareBehaviours();
 
 			/** Perform (un)initialisation activities of externs.
 	        */
-			void _prepareExterns(void);
-			void _unprepareExterns(void);
+			void _prepareExterns();
+			void _unprepareExterns();
 
 			/** Update this ParticleTechnique.
 			@remarks
@@ -506,7 +506,7 @@ namespace ParticleUniverse
 				instantly noticable. Emitted emitters are part of the particle pool and are NOT deleted if the base
 				emitter (from which the pooled emitters are cloned) is deleted.
 			*/
-			void _notifyEmissionChange(void);
+			void _notifyEmissionChange();
 
 			/** Implementation of the _notifyAttached, needed for each technique that is part of a 
 				particle system.
@@ -539,7 +539,7 @@ namespace ParticleUniverse
 			@remarks
 				Delegates to the renderer.
 			*/
-			void _notifyParticleResized(void);
+			void _notifyParticleResized();
 
 			/** Perform activities when a ParticleTechnique is started.
 			@remarks
@@ -547,23 +547,23 @@ namespace ParticleUniverse
 				Note, that one cannot assume that the _prepare() function has been called, so don´t perform 
 				initialisation activities on objects that are not created yet (for instance the renderer).
 			*/
-			void _notifyStart (void);
+			void _notifyStart ();
 
 			/** Perform activities when a ParticleTechnique is stopped.
 			*/
-			void _notifyStop (void);
+			void _notifyStop ();
 
 			/** if stopFade is set, emitter must not emit new particles anymore
 			*/
-			bool isStopFade(void);
+			bool isStopFade();
 
 			/** Perform activities when a ParticleTechnique is paused.
 			*/
-			void _notifyPause (void);
+			void _notifyPause ();
 
 			/** Perform activities when a ParticleTechnique is resumed.
 			*/
-			void _notifyResume (void);
+			void _notifyResume ();
 
 			/** Validate whether a particle is expired.
 			*/
@@ -588,7 +588,7 @@ namespace ParticleUniverse
 				The Lod index determines at which distance this ParticleTechnique is active. This has only effect
 				if the Lod distances of the ParticleSystem to which this ParticleTechnique belongs have been defined.
 			*/
-			inline unsigned short getLodIndex(void) const {return mLodIndex;}
+			inline unsigned short getLodIndex() const {return mLodIndex;}
 
 			/** Set the Lod index.
 			*/
@@ -600,7 +600,7 @@ namespace ParticleUniverse
 				runs through all ParticleEmitters and if the ParticleEmitter emits objects other than visual particles,
 				these objects are marked.
 	        */
-			void _markForEmission(void);
+			void _markForEmission();
 
 			/** Determines which techniques, affectors, emitters will be emitted (or not) by the given emitter.
 	        */
@@ -610,11 +610,11 @@ namespace ParticleUniverse
 			@remarks
 				The Particle System calls this function to make the ParticleTechnique calculating its mWorldAABB.
 	        */
-			void _notifyUpdateBounds(void);
+			void _notifyUpdateBounds();
 
 			/** Reset the bounds.
 	        */
-			void _resetBounds(void);
+			void _resetBounds();
 
 			/** Notify that the Particle System is rescaled.
 	        */
@@ -626,7 +626,7 @@ namespace ParticleUniverse
 
 			/** Returns the world aabb.
 			*/
-			inline const AxisAlignedBox& getWorldBoundingBox(void) const {return mWorldAABB;}
+			inline const AxisAlignedBox& getWorldBoundingBox() const {return mWorldAABB;}
 
 			/** Sort the visual particles.
 			@remarks
@@ -641,7 +641,7 @@ namespace ParticleUniverse
 
 			/** 
 			*/
-			CameraDependency* getWidthCameraDependency(void) const;
+			CameraDependency* getWidthCameraDependency() const;
 
 			/** 
 			*/
@@ -650,7 +650,7 @@ namespace ParticleUniverse
 
 			/** 
 			*/
-			CameraDependency* getHeightCameraDependency(void) const;
+			CameraDependency* getHeightCameraDependency() const;
 
 			/** 
 			*/
@@ -659,11 +659,11 @@ namespace ParticleUniverse
 
 			/** 
 			*/
-			CameraDependency* getDepthCameraDependency(void) const;
+			CameraDependency* getDepthCameraDependency() const;
 
 			/** 
 			*/
-			size_t getNumberOfEmittedParticles(void);
+			size_t getNumberOfEmittedParticles();
 
 			/** 
 			*/
@@ -671,29 +671,30 @@ namespace ParticleUniverse
 
 			/** Expire all active (emitted) particles and put them back into the pool.
 			*/
-			void _initAllParticlesForExpiration(void);
+			void _initAllParticlesForExpiration();
 
 			/** Put all emitted particles back into the pool.
 			*/
-			void lockAllParticles(void);
+			void lockAllParticles();
 
 			/** Reset the visual data in the pool.
+
 			@remarks
 				Visual particles may keep some additional visual data that needs to be reset in some cases.
 				This function puts all particles back into the pool.
 			*/
-			void initVisualDataInPool(void);
+			void initVisualDataInPool();
 
 			/** Returns a pointer to the particle pool.
 			@remarks
 				Caution: Only use this function if you know what you are doing.  If this function is called from a function that
 				is already iterating over the pool, unexpected behaviour can occur.
 			*/
-			ParticlePool* _getParticlePool(void);
+			ParticlePool* _getParticlePool();
 
 			/** 
 			*/
-			bool isKeepLocal(void) const;
+			bool isKeepLocal() const;
 
 			/** If this attribute is set to 'true', the particles are emitted relative to the technique 
 			*/
@@ -705,11 +706,11 @@ namespace ParticleUniverse
 
 			/** Returns the Spatial Hashtable.
 			*/
-			SpatialHashTable<Particle*>* getSpatialHashTable(void) const;
+			SpatialHashTable<Particle*>* getSpatialHashTable() const;
 
 			/** Returns true if spatial hashing is used.
 			*/
-			bool isSpatialHashingUsed(void) const;
+			bool isSpatialHashingUsed() const;
 
 			/** Defines whether spatial hashing is used.
 			*/
@@ -717,7 +718,7 @@ namespace ParticleUniverse
 
 			/** Returns the celsize used in spatial hashing.
 			*/
-			unsigned short getSpatialHashingCellDimension(void) const;
+			unsigned short getSpatialHashingCellDimension() const;
 
 			/** Set the celsize used in spatial hashing. A cel represents a small part of the 3d space in which 
 				particles may exist. The size of the cel is the same for both x, y and z dimension.
@@ -726,7 +727,7 @@ namespace ParticleUniverse
 			
 			/** Return the size of the overlap.
 			*/
-			unsigned short getSpatialHashingCellOverlap(void) const;
+			unsigned short getSpatialHashingCellOverlap() const;
 
 			/** Set the size of the overlap.
 			@remarks
@@ -746,7 +747,7 @@ namespace ParticleUniverse
 
 			/** Returns the size of the hashtable used in spatial hashing.
 			*/
-			unsigned int getSpatialHashTableSize(void) const;
+			unsigned int getSpatialHashTableSize() const;
 
 			/** Sets the size of the hashtable used in spatial hashing.
 			*/
@@ -754,7 +755,7 @@ namespace ParticleUniverse
 
 			/** Return the interval when the spatial hashtable is updated.
 			*/
-			Real getSpatialHashingInterval(void) const;
+			Real getSpatialHashingInterval() const;
 
 			/** Set the interval when the spatial hashtable is updated.
 			*/
@@ -763,7 +764,7 @@ namespace ParticleUniverse
 			/** Return the indication whether to use only the particle position (false) or take the particle size
 				into account (true).
 			*/
-			bool isSpatialHashingParticleSizeUsed(void) const;
+			bool isSpatialHashingParticleSizeUsed() const;
 
 			/** Set the indication whether to use only the particle position (false) or take the particle size
 				into account (true).
@@ -773,7 +774,7 @@ namespace ParticleUniverse
 			/** Return the maximum velocity a particle can have, even if the velocity of the particle has been set higher (either by 
 			    initialisation of the particle or by means of an affector).
 			*/
-			Real getMaxVelocity(void) const;
+			Real getMaxVelocity() const;
 
 			/** Set the maximum velocity a particle can have.
 			*/
@@ -789,18 +790,17 @@ namespace ParticleUniverse
 
 			/** Generates debug information, such as max. used particles in a technique.
 			*/
-			void logDebug(void);
+			void logDebug();
 
 			/** Returns the velocity scale, defined in the particle system, but passed to the technique for convenience.
 	        */
-			Real getParticleSystemScaleVelocity(void) const;
+			Real getParticleSystemScaleVelocity() const;
 
 			/** Forwards an event to the parent particle system.
 	        */
 			void pushEvent(ParticleUniverseEvent& particleUniverseEvent);
 
 		protected:
-
 			/** Convenient function to push an event.
 			*/
 			void _pushTechniqueEvent(EventType eventType);
@@ -835,7 +835,7 @@ namespace ParticleUniverse
 
 			/** Initialise the ParticleTechnique before it is emitted itself.
 	        */
-			virtual void _initForEmission(void);
+			virtual void _initForEmission();
 
 			/** Initialise the ParticleTechnique before it is expired itself.
 	        */
@@ -852,7 +852,7 @@ namespace ParticleUniverse
 
 			/** Reset all MarkForEmission values (to false) for all techniques, affectors and emitters.
 	        */
-			void _resetMarkForEmission(void);
+			void _resetMarkForEmission();
 
 			/** Apply actions on the emitted particles (expire, affect, observe, ...).
 			*/
@@ -860,7 +860,7 @@ namespace ParticleUniverse
 
 			/** Determine the dependencies and process them.
 			*/
-			void _processDependencies(void);
+			void _processDependencies();
 
 			/** Copies the pooled affectors from the pool to a separate list.
 			@remarks
@@ -868,7 +868,7 @@ namespace ParticleUniverse
 				iteration of both particles and affectors, so the pooled affectors are stored in a temporary list.
 				The benefit of a separate affector list is that it allows fast traversing once it has been created.
 			*/
-			void _extractPooledAffectors(void);
+			void _extractPooledAffectors();
 
 			/** If spatial hashing is required, the particle will be put in a hashtable.
 			*/
@@ -889,7 +889,7 @@ namespace ParticleUniverse
 			/** A Spatial Hash table is used if particles approach each other and the mutual distance is important.
 			    This function is called for each particle if the use of a Spatial Hash table is set to true.
 			*/
-			void _postProcessSpatialHashing(void);
+			void _postProcessSpatialHashing();
 
 			/** Function that uses an external source - outside the partice technique - to affect the particle.
 			*/
@@ -929,7 +929,7 @@ namespace ParticleUniverse
 
 			/** Parent Particle System of this technique.
 	        */
-			ParticleSystem* mParentSystem;
+			ParticleSystem * mParentSystem;
 
 			/** Name of the technique (optional).
 	        */
@@ -1001,7 +1001,7 @@ namespace ParticleUniverse
 
 			/** Particle Renderer.
 	        */
-			ParticleRenderer* mRenderer;
+			ParticleRenderer * mRenderer;
 
 			/** Indication whether _notifyEmissionChange() must be suppressed or not.
 			@remarks
@@ -1102,19 +1102,19 @@ namespace ParticleUniverse
 
 			/** Similar as _notifyStart(), but now for the pooled components.
 			*/
-			void _notifyStartPooledComponents(void);
+			void _notifyStartPooledComponents();
 
 			/** Similar as _notifyStop(), but now for the pooled components.
 			*/
-			void _notifyStopPooledComponents(void);
+			void _notifyStopPooledComponents();
 
 			/** Similar as _notifyPause(), but now for the pooled components.
 			*/
-			void _notifyPausePooledComponents(void);
+			void _notifyPausePooledComponents();
 
 			/** Similar as _notifyResume(), but now for the pooled components.
 			*/
-			void _notifyResumePooledComponents(void);
+			void _notifyResumePooledComponents();
 
 			/** Although the scale is on a Particle System level, it is stored here also, because this value is often 
 				used. It is a derived value, so it has not get a get and set function.

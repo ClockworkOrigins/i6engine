@@ -35,8 +35,6 @@ namespace api {
 
 	MoverComponent::MoverComponent(const int64_t id, const attributeMap & params) : ShatterComponent(id, params), _duration(0), _positioning(), _psc(), _startTime(), _lastPos(), _realStartPos(), _lastRot(), _moving(false), _initial(true), _started(false), _linkable(false), _linked() {
 		_objFamilyID = components::MoverComponent;
-
-		loadParams(params);
 	}
 
 	MoverComponent::~MoverComponent() {

@@ -84,10 +84,10 @@ void GravityExternPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("ExternGravity.html");
 
 	// Distance Threshold: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_EXTERN_THRESHOLD, PRNL_EXTERN_THRESHOLD, std::numeric_limits<float>::max()));
+	Append(new wxFloatProperty(PRNL_EXTERN_THRESHOLD, PRNL_EXTERN_THRESHOLD, std::numeric_limits<float>::max()));
 	SetPropertyEditor(PRNL_EXTERN_THRESHOLD, wxPG_EDITOR(SpinCtrl));
 
 	// Gravity: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_GRAVITY, PRNL_GRAVITY, ParticleUniverse::GravityAffector::DEFAULT_GRAVITY));
+	Append(new wxFloatProperty(PRNL_GRAVITY, PRNL_GRAVITY, ParticleUniverse::GravityAffector::DEFAULT_GRAVITY));
 	SetPropertyEditor(PRNL_GRAVITY, wxPG_EDITOR(SpinCtrl));
 }

@@ -42,10 +42,6 @@ namespace api {
 	StaticStateComponent::~StaticStateComponent() {
 	}
 
-	ComPtr StaticStateComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<StaticStateComponent, Component>(id, params);
-	}
-
 	void StaticStateComponent::Init() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Create, new graphics::Graphics_Node_Create(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object);
 

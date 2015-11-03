@@ -221,11 +221,6 @@ namespace api {
 		~PhysicalStateComponent();
 
 		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief Returns the position of the object.
 		 * \return Position of the object
 		 */

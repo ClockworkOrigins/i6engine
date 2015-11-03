@@ -109,6 +109,11 @@ namespace api {
 		 */
 		virtual ~Component();
 
+		template<typename T>
+		static ComPtr createC(const int64_t id, const attributeMap & params) {
+			return utils::make_shared<T, Component>(id, params);
+		}
+
 		/**
 		 * \brief Sets the GameObject that owns this Component
 		 * \param[in] objGO type of GameObject*
@@ -285,27 +290,17 @@ namespace api {
 		}
 
 		template<typename T>
-		typename std::enable_if<std::is_enum<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+		typename std::enable_if<std::is_enum<T>::value && !std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
 			value = T(std::stoul(it->second));
 		}
 
 		template<typename T>
-		typename std::enable_if<std::is_same<T, Vec3>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
-			value = Vec3(it->second);
+		typename std::enable_if<!std::is_enum<T>::value && !std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+			value = T(it->second);
 		}
 
 		template<typename T>
-		typename std::enable_if<std::is_same<T, Vec4>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
-			value = Vec4(it->second);
-		}
-
-		template<typename T>
-		typename std::enable_if<std::is_same<T, Quaternion>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
-			value = Quaternion(it->second);
-		}
-
-		template<typename T>
-		typename std::enable_if<!std::is_enum<T>::value && !std::is_same<T, Vec3>::value && !std::is_same<T, Vec4>::value && !std::is_same<T, Quaternion>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
+		typename std::enable_if<!std::is_enum<T>::value && std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
 			value = boost::lexical_cast<T>(it->second);
 		}
 

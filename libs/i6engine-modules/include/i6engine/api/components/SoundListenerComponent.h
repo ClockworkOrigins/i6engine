@@ -48,8 +48,6 @@ namespace api {
 		 */
 		~SoundListenerComponent();
 
-		static ComPtr createC(int64_t id, const attributeMap & params);
-
 		/**
 		 * \brief synchronizes the Components state
 		 */

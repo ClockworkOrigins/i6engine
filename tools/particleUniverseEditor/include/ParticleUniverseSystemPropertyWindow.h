@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_SYSTEM_PROPERTY_WINDOW_H__
-#define __PUED_SYSTEM_PROPERTY_WINDOW_H__
+#ifndef __PUED_SYSTEMPROPERTYWINDOW_H__
+#define __PUED_SYSTEMPROPERTYWINDOW_H__
 
 #include "ParticleUniversePropertyWindow.h"
 
@@ -37,43 +37,42 @@ class ParticleUniverseEditorFrame;
 
 /**	
 */
-class SystemPropertyWindow : public PropertyWindow
-{
-	public:
-		SystemPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		~SystemPropertyWindow(void) {}
+class SystemPropertyWindow : public PropertyWindow {
+public:
+	SystemPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name);
+	~SystemPropertyWindow() {}
 
-		/**
-			Copy basic system properties from a window to a system
-		*/
-		virtual void copyAttributeToSystem(wxPGProperty* prop, wxString propertyName);
+	/**
+		Copy basic system properties from a window to a system
+	*/
+	virtual void copyAttributeToSystem(wxPGProperty * prop, wxString propertyName);
 
-		/**
-			Copy system properties from a particle system to a window
-		*/
-		virtual void copyAttributesFromSystem(const ParticleUniverse::ParticleSystem* system);
+	/**
+		Copy system properties from a particle system to a window
+	*/
+	virtual void copyAttributesFromSystem(const ParticleUniverse::ParticleSystem * system);
 
-		/**
-			See PropertyWindow
-		*/
-		virtual void onPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		See PropertyWindow
+	*/
+	virtual void onPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Get/Set root frame
-		*/
-		ParticleUniverseEditorFrame* getRootFrame(void);
-		void setRootFrame(ParticleUniverseEditorFrame* rootFrame);
+	/**
+		Get/Set root frame
+	*/
+	ParticleUniverseEditorFrame * getRootFrame();
+	void setRootFrame(ParticleUniverseEditorFrame * rootFrame);
 
-	protected:
-		/**
-			Initialises all system properties
-		*/
-		virtual void _initProperties(void);
+protected:
+	/**
+		Keep pointer to the root frame
+	*/
+	ParticleUniverseEditorFrame * mRootFrame;
 
-		/**
-			Keep pointer to the root frame
-		*/
-		ParticleUniverseEditorFrame* mRootFrame;
+	/**
+		Initialises all system properties
+	*/
+	virtual void _initProperties();
 };
 
-#endif
+#endif /* __PUED_SYSTEMPROPERTYWINDOW_H__ */

@@ -25,19 +25,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseConfigDialog.h"
 
-//-----------------------------------------------------------------------
-MediaTypeComboBox::MediaTypeComboBox(wxWindow* parent,
-	ConfigDialog* dialog, 
-	wxWindowID id,
-	const wxPoint& pos,
-	const wxSize& size)	: 
-	wxComboBox(parent, id, wxT(""), pos, size),
-	mDialog(dialog)
-{
+MediaTypeComboBox::MediaTypeComboBox(wxWindow * parent, ConfigDialog * dialog, wxWindowID id, const wxPoint & pos, const wxSize & size) : wxComboBox(parent, id, wxT(""), pos, size), mDialog(dialog) {
 	Connect(wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler(MediaTypeComboBox::OnSelectEvent));
 }
-//-----------------------------------------------------------------------
-void MediaTypeComboBox::OnSelectEvent(wxCommandEvent& event)
-{
+
+void MediaTypeComboBox::OnSelectEvent(wxCommandEvent & event) {
 	mDialog->OnFileNameSuffixChanged(event);
 }

@@ -21,15 +21,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_EDIT_TAB_H__
-#define __PUED_EDIT_TAB_H__
-
-#include "ParticleUniverseOgreControlComponent.h"
-#include "ParticleUniverseSystemPropertyWindow.h"
+#ifndef __PUED_EDITTAB_H__
+#define __PUED_EDITTAB_H__
 
 #include "wx/ogre/prerequisites.h"
-
-#include "wx/notebook.h"
+#include "wx/dnd.h"
 
 // Enums: Component + Relation Descriptions
 static ComponentType CT_SYSTEM = wxT("");
@@ -69,428 +65,394 @@ static wxString CRD_PLACED_BY = wxT("");
 static wxString CRD_UNKNOWN = wxT("");
 
 namespace ParticleUniverse {
+	class IElement;
+	class ParticleBehaviour;
 	class ParticleEventHandler;
 	class ParticleRenderer;
 } /* namespace ParticleUniverse */
 
 class EditCanvas;
+class EditComponent;
 class EditTools;
+class PropertyWindow;
 class UIEditToolbar;
 
-/**	Client Window
-*/
-class ClientWindow : public wxMDIClientWindow
-{
-	public:
-		// Constructor / Destructor
-		ClientWindow(wxMDIParentFrame* parent);
-		~ClientWindow(void) {}
-
-	protected:
-
-	private:
-		ClientWindow(void) {}
-};
-
+class wxPropertyGrid;
 
 /**	Edit Tab: Class that defines the actual notebook tab.
 */
-class EditTab : public wxMDIParentFrame
-{
-	public:
-		enum ConnectionMode
-		{
-			CM_CONNECT_NONE,
-			CM_CONNECT_STARTING,
-			CM_CONNECT_ENDING,
-			CM_DISCONNECT
-		};
+class EditTab : public wxPanel {
+public:
+	enum ConnectionMode {
+		CM_CONNECT_NONE,
+		CM_CONNECT_STARTING,
+		CM_CONNECT_ENDING,
+		CM_DISCONNECT
+	};
 
-		// Enum used to trigger some kind of action
-		enum SimpleEvent
-		{
-			SE_CLOSE,
-			SE_NAME_CHANGED
-		};
+	// Enum used to trigger some kind of action
+	enum SimpleEvent {
+		SE_CLOSE,
+		SE_NAME_CHANGED
+	};
 
-		// Constructor / Destructor
-		EditTab(wxWindow* parentNotebook, wxWindow* rootParent);
-		~EditTab(void);
+	// Constructor / Destructor
+	EditTab(wxWindow * parentNotebook, wxWindow * rootParent);
+	~EditTab();
 
-		/**	Reposition the MDI frame according to its parent
-		*/
-		void adjustPosition(void);
+	/**	Reposition the MDI frame according to its parent
+	*/
+	void adjustPosition();
 
-		/**	Returns the number of systems on the edit canvas
-		*/
-		unsigned int getNumberOfSystems() const;
-		
-		/**	Returns the number of components on the edit canvas
-		*/
-		unsigned int getNumberOfComponents() const;
+	/**	Returns the number of systems on the edit canvas
+	*/
+	unsigned int getNumberOfSystems() const;
 
-		/**	Push a component to the stack
-		*/
-		void pushSystem(EditComponent* system);
+	/**	Returns the number of components on the edit canvas
+	*/
+	unsigned int getNumberOfComponents() const;
 
-		/**	Push a component on the stack
-		*/
-		void pushComponent(EditComponent* component);
+	/**	Push a component to the stack
+	*/
+	void pushSystem(EditComponent * system);
 
-		/**	Pop a component from the stack
-		*/
-		void popComponent(EditComponent* component);
+	/**	Push a component on the stack
+	*/
+	void pushComponent(EditComponent * component);
 
-		/**	Update if the MDI Child windows have been changed
-		*/
-		void refreshCanvas(void);
+	/**	Pop a component from the stack
+	*/
+	void popComponent(EditComponent * component);
 
-		/**	Set the focus to the canvas again to be able to select the MDI Childs
-		*/
-		void notifyFocusLeft(void);
+	/**	Update if the MDI Child windows have been changed
+	*/
+	void refreshCanvas();
 
-		/**	Perform actions (if needed) if one of the components is activated
-		*/
-		void notifyComponentActivated(EditComponent* component);
+	/**	Set the focus to the canvas again to be able to select the MDI Childs
+	*/
+	void notifyFocusLeft();
 
-		/**	Remove an MDI Child component, so update the canvas
-		*/
-		void notifyComponentRemoved(EditComponent* component);
+	/**	Perform actions (if needed) if one of the components is activated
+	*/
+	void notifyComponentActivated(EditComponent * component);
 
-		/**	Something has probably changed regarding the connections.
-		*/
-		void notifyConnectionsChanged();
+	/**	Remove an MDI Child component, so update the canvas
+	*/
+	void notifyComponentRemoved(EditComponent * component);
 
-		/**	If an event occurs on the EditComponent, some kind of action can be performed.
-		@remarks
-			This function is used for other EditComponents to act on a situation one the EditComponent that is passed as an argument.
-		*/
-		void notifyReferers(EditComponent* component, SimpleEvent simpleEvent);
+	/**	Something has probably changed regarding the connections.
+	*/
+	void notifyConnectionsChanged();
 
-		/**	Connection between 2 components is interrupted
-		*/
-		void resetConnectionMode(void);
+	/**	If an event occurs on the EditComponent, some kind of action can be performed.
+	@remarks
+		This function is used for other EditComponents to act on a situation one the EditComponent that is passed as an argument.
+	*/
+	void notifyReferers(EditComponent * component, SimpleEvent simpleEvent);
 
-		/**	A connection between 2 components is removed
-		*/
-		void notifyConnectionRemoved(EditComponent* node1, 
-			EditComponent* node2, 
-			ComponentRelation relation,
-			ComponentRelationDirection relationDirection);
+	/**	Connection between 2 components is interrupted
+	*/
+	void resetConnectionMode();
 
-		/**	A connection between 2 components is established
-		*/
-		void notifyConnectionAdded(EditComponent* node1, 
-			EditComponent* node2, 
-			ComponentRelation relation,
-			ComponentRelationDirection relationDirection);
+	/**	A connection between 2 components is removed
+	*/
+	void notifyConnectionRemoved(EditComponent * node1, EditComponent * node2, ComponentRelation relation, ComponentRelationDirection relationDirection);
 
-		/**	Returns a pointer to the canvas
-		*/
-		EditCanvas* getEditCanvas(void) const;
+	/**	A connection between 2 components is established
+	*/
+	void notifyConnectionAdded(EditComponent * node1, EditComponent * node2, ComponentRelation relation, ComponentRelationDirection relationDirection);
 
-		/**	Get and Set the connectionmode. This is used for connecting components
-		*/
-		ConnectionMode getConnectionMode(void) const;
-		void setConnectionMode(ConnectionMode connectionMode);
+	/**	Returns a pointer to the canvas
+	*/
+	EditCanvas * getEditCanvas() const;
 
-		/**	Return the list with all components
-		*/
-		std::vector<EditComponent*>& getComponents(void);
+	/**	Get and Set the connectionmode. This is used for connecting components
+	*/
+	ConnectionMode getConnectionMode() const;
+	void setConnectionMode(ConnectionMode connectionMode);
 
-		/**	The mouse has moved in the component. This is important for the canvas.
-		*/
-		void notifyMouseMovedInComponent(const EditComponent* component, const wxPoint& mousePosition);
+	/**	Return the list with all components
+	*/
+	std::vector<EditComponent *> & getComponents();
 
-		/**	Checks whether a component can be connected to the component that is already connected to the mouse
-		*/
-		bool isConnectionPossible(EditComponent* component);
+	/**	The mouse has moved in the component. This is important for the canvas.
+	*/
+	void notifyMouseMovedInComponent(const EditComponent * component, const wxPoint& mousePosition);
 
-		/**	Returns the start connector (used when connecting with the mouse)
-		*/
-		EditComponent* getStartConnector(void);
+	/**	Checks whether a component can be connected to the component that is already connected to the mouse
+	*/
+	bool isConnectionPossible(EditComponent * component);
 
-		/**	Set a property window
-		*/
-		void setPropertyWindow(PropertyWindow* propertyWindow);
+	/**	Returns the start connector (used when connecting with the mouse)
+	*/
+	EditComponent * getStartConnector();
 
-		/**	Removes a property window
-		*/
-		void removePropertyWindow(wxPropertyGrid* propertyWindow);
+	/**	Set a property window
+	*/
+	void setPropertyWindow(PropertyWindow * propertyWindow);
 
-		/**	Set of functions to create one particle universe component (of a specific type).
-		@remarks
-			These functions are used to create a default particle universe component and sets it in the EditComponent.
-		*/
-		void createTechniqueForComponent(EditComponent* component);
-		void createRendererForComponent(const Ogre::String& type, EditComponent* component);
-		void createEmitterForComponent(const Ogre::String& type, EditComponent* component);
-		void createAffectorForComponent(const Ogre::String& type, EditComponent* component);
-		void createObserverForComponent(const Ogre::String& type, EditComponent* component);
-		void createHandlerForComponent(const Ogre::String& type, EditComponent* component);
-		void createBehaviourForComponent(const Ogre::String& type, EditComponent* component);
-		void createExternForComponent(const Ogre::String& type, EditComponent* component);
+	/**	Removes a property window
+	*/
+	void removePropertyWindow(wxPropertyGrid * propertyWindow);
 
-		/**	Set of functions to destroy one particle universe component (of a specific type).
-		@remarks
-			These functions are used to destroy a particle universe component, remove it from the EditComponent and update the ParticleSystem 
-			structure is needed.
-		*/
-		void destroyTechniqueFromComponent(EditComponent* component);
-		void destroyRendererFromComponent(EditComponent* component);
-		void destroyEmitterFromComponent(EditComponent* component);
-		void destroyAffectorFromComponent(EditComponent* component);
-		void destroyObserverFromComponent(EditComponent* component);
-		void destroyHandlerFromComponent(EditComponent* component);
-		void destroyBehaviourFromComponent(EditComponent* component);
-		void destroyExternFromComponent(EditComponent* component);
+	/**	Set of functions to create one particle universe component (of a specific type).
+	@remarks
+		These functions are used to create a default particle universe component and sets it in the EditComponent.
+	*/
+	void createTechniqueForComponent(EditComponent * component);
+	void createRendererForComponent(const Ogre::String & type, EditComponent * component);
+	void createEmitterForComponent(const Ogre::String & type, EditComponent * component);
+	void createAffectorForComponent(const Ogre::String & type, EditComponent * component);
+	void createObserverForComponent(const Ogre::String & type, EditComponent * component);
+	void createHandlerForComponent(const Ogre::String & type, EditComponent * component);
+	void createBehaviourForComponent(const Ogre::String & type, EditComponent * component);
+	void createExternForComponent(const Ogre::String & type, EditComponent * component);
 
-		/**	Set of functions to create one edit component of a specific type.
-		@remarks
-			The default ones are the first one of the list. If the order of the list changes, make sure the defaults below also change.
-		*/
-		EditComponent* createParticleSystemEditComponent(void);
-		EditComponent* createTechniqueEditComponent();
-		EditComponent* createRendererEditComponent(const wxString& type);
-		EditComponent* createEmitterEditComponent(const wxString& type);
-		EditComponent* createAffectorEditComponent(const wxString& type);
-		EditComponent* createObserverEditComponent(const wxString& type);
-		EditComponent* createHandlerEditComponent(const wxString& type);
-		EditComponent* createBehaviourEditComponent(const wxString& type);
-		EditComponent* createExternEditComponent(const wxString& type);
+	/**	Set of functions to destroy one particle universe component (of a specific type).
+	@remarks
+		These functions are used to destroy a particle universe component, remove it from the EditComponent and update the ParticleSystem
+		structure is needed.
+	*/
+	void destroyTechniqueFromComponent(EditComponent * component);
+	void destroyRendererFromComponent(EditComponent * component);
+	void destroyEmitterFromComponent(EditComponent * component);
+	void destroyAffectorFromComponent(EditComponent * component);
+	void destroyObserverFromComponent(EditComponent * component);
+	void destroyHandlerFromComponent(EditComponent * component);
+	void destroyBehaviourFromComponent(EditComponent * component);
+	void destroyExternFromComponent(EditComponent * component);
 
-		/**	Delete and Create all edit components, including property windows for the edit page at once, based on a template name.
-			These functions are typically called when another template script is selected or when a new template script is 
-			created.
-		*/
-		void deleteParticleSystemComponents(void);
-		EditComponent* forceCreateParticleSystemEditComponent(void);
-		bool copyParticleSystemPropertiesToPropertyWindow(EditComponent* particleSystemEditComponent, ParticleUniverse::ParticleSystem* particleSystem);
-		bool createParticleSystemComponents(EditComponent* particleSystemEditComponent, ParticleUniverse::ParticleSystem* particleSystem);
+	/**	Set of functions to create one edit component of a specific type.
+	@remarks
+		The default ones are the first one of the list. If the order of the list changes, make sure the defaults below also change.
+	*/
+	EditComponent * createParticleSystemEditComponent();
+	EditComponent * createTechniqueEditComponent();
+	EditComponent * createRendererEditComponent(const wxString & type);
+	EditComponent * createEmitterEditComponent(const wxString & type);
+	EditComponent * createAffectorEditComponent(const wxString & type);
+	EditComponent * createObserverEditComponent(const wxString & type);
+	EditComponent * createHandlerEditComponent(const wxString & type);
+	EditComponent * createBehaviourEditComponent(const wxString & type);
+	EditComponent * createExternEditComponent(const wxString & type);
 
-		/**	Clear all particle universe components that are not part of a particle system.
-		*/
-		void destroyDanglingPUComponents(void);
+	/**	Delete and Create all edit components, including property windows for the edit page at once, based on a template name.
+		These functions are typically called when another template script is selected or when a new template script is
+		created.
+	*/
+	void deleteParticleSystemComponents();
+	EditComponent * forceCreateParticleSystemEditComponent();
+	bool copyParticleSystemPropertiesToPropertyWindow(EditComponent * particleSystemEditComponent, ParticleUniverse::ParticleSystem * particleSystem);
+	bool createParticleSystemComponents(EditComponent * particleSystemEditComponent, ParticleUniverse::ParticleSystem * particleSystem);
 
-		/**	Create all edit components, including property windows for the edit page at once, based on a template name.
-			This function is typically called when another template script is selected or when a new template script is 
-			created.
-		*/
-		wxPoint createComponentsFromTechnique(EditComponent* systemEditComponent, 
-			ParticleUniverse::ParticleTechnique* technique,
-			wxPoint position);
+	/**	Clear all particle universe components that are not part of a particle system.
+	*/
+	void destroyDanglingPUComponents();
 
-		/**	Create renderer edit component from a certain renderer.
-		*/
-		void createComponentFromRenderer(EditComponent* techniqueEditComponent, 
-			ParticleUniverse::ParticleRenderer* renderer,
-			wxPoint position);
+	/**	Create all edit components, including property windows for the edit page at once, based on a template name.
+		This function is typically called when another template script is selected or when a new template script is
+		created.
+	*/
+	wxPoint createComponentsFromTechnique(EditComponent * systemEditComponent, ParticleUniverse::ParticleTechnique * technique, wxPoint position);
 
-		/**	Create emitter edit component from a certain emitter.
-		*/
-		void createComponentFromEmitter(EditComponent* techniqueEditComponent, 
-			ParticleUniverse::ParticleEmitter* emitter,
-			wxPoint position);
+	/**	Create renderer edit component from a certain renderer.
+	*/
+	void createComponentFromRenderer(EditComponent * techniqueEditComponent, ParticleUniverse::ParticleRenderer* renderer, wxPoint position);
 
-		/**	Create affector edit component from a certain emitter.
-		*/
-		void createComponentFromAffector(EditComponent* techniqueEditComponent, 
-			ParticleUniverse::ParticleAffector* affector,
-			wxPoint position);
+	/**	Create emitter edit component from a certain emitter.
+	*/
+	void createComponentFromEmitter(EditComponent * techniqueEditComponent, ParticleUniverse::ParticleEmitter * emitter, wxPoint position);
 
-		/**	Create observer edit component from a certain observer.
-		*/
-		int createComponentFromObserver(EditComponent* techniqueEditComponent, 
-			ParticleUniverse::ParticleObserver* observer,
-			wxPoint position,
-			int latestHandlerY);
-		
-		/**	Create event handler edit component from a certain event handler.
-		*/
-		void createComponentFromEventHandler(EditComponent* observerEditComponent, 
-			ParticleUniverse::ParticleEventHandler* eventHandler,
-			wxPoint position);
+	/**	Create affector edit component from a certain emitter.
+	*/
+	void createComponentFromAffector(EditComponent * techniqueEditComponent, ParticleUniverse::ParticleAffector * affector, wxPoint position);
 
-		/**	Create behaviour edit component from a certain behaviour.
-		*/
-		void createComponentFromBehaviour(EditComponent* techniqueEditComponent, 
-			ParticleUniverse::ParticleBehaviour* behaviour,
-			wxPoint position);
-	
-		/**	Create extern edit component from a certain extern object.
-		*/
-		void createComponentFromExtern(EditComponent* techniqueEditComponent, 
-			ParticleUniverse::Extern* externObject,
-			wxPoint position);
-	
-		/**	Establish all connections other than CR_INCLUDE
-		*/
-		void createOtherConnections(const ParticleUniverse::ParticleTechnique* technique);
+	/**	Create observer edit component from a certain observer.
+	*/
+	int createComponentFromObserver(EditComponent * techniqueEditComponent, ParticleUniverse::ParticleObserver * observer, wxPoint position, int latestHandlerY);
 
-		/**	Establish a connection between 2 edit components
-		*/
-		void createConnection(EditComponent* componentPrimary, 
-			EditComponent* componentSecundairy, 
-			ComponentRelation relation, 
-			ComponentRelationDirection direction);
+	/**	Create event handler edit component from a certain event handler.
+	*/
+	void createComponentFromEventHandler(EditComponent * observerEditComponent, ParticleUniverse::ParticleEventHandler * eventHandler, wxPoint position);
 
-		/**	Search for a component
-		*/
-		EditComponent* getParticleSystemEditComponent(void);
-		EditComponent* findEditComponent(const wxString& name, const ComponentType& type, EditComponent* skip = 0);
-		EditComponent* findEditComponent(const ParticleUniverse::IElement* puElement);
-		EditComponent* findEditComponentForTechnique(const wxString& name, const wxString& techniqueName);
+	/**	Create behaviour edit component from a certain behaviour.
+	*/
+	void createComponentFromBehaviour(EditComponent * techniqueEditComponent, ParticleUniverse::ParticleBehaviour * behaviour, wxPoint position);
 
-		/**	Scale all components.
-		*/
-		void scaleEditComponents(ParticleUniverse::Real scaleFactor);
+	/**	Create extern edit component from a certain extern object.
+	*/
+	void createComponentFromExtern(EditComponent * techniqueEditComponent, ParticleUniverse::Extern * externObject, wxPoint position);
 
-		/**	Event handler for scaling.
-		*/
-		void OnMouseWheel(wxMouseEvent& event);
-		void OnKeyPressed(wxKeyEvent& event);
+	/**	Establish all connections other than CR_INCLUDE
+	*/
+	void createOtherConnections(const ParticleUniverse::ParticleTechnique * technique);
 
-		/**	If the particle system was updated because of some change on the edit tab, this function returns true.
-		*/
-		bool isSystemUpdatedByEditPage(void);
+	/**	Establish a connection between 2 edit components
+	*/
+	void createConnection(EditComponent * componentPrimary, EditComponent * componentSecundairy, ComponentRelation relation, ComponentRelationDirection direction);
 
-		/**	Set the mEditChanged attribute.
-		*/
-		void setSystemUpdatedByEditPage(bool updated = true) {mEditChanged = updated;};
+	/**	Search for a component
+	*/
+	EditComponent * getParticleSystemEditComponent();
+	EditComponent * findEditComponent(const wxString & name, const ComponentType & type, EditComponent * skip = nullptr);
+	EditComponent * findEditComponent(const ParticleUniverse::IElement * puElement);
+	EditComponent * findEditComponentForTechnique(const wxString & name, const wxString & techniqueName);
+	EditComponent * findEditComponent(const wxWindowID & id);
 
-		/**	Returns the created Particle System (or 0).
-		*/
-		ParticleUniverse::ParticleSystem* getParticleSystemFromSystemComponent(void);
+	/**	Scale all components.
+	*/
+	void scaleEditComponents(ParticleUniverse::Real scaleFactor);
 
-		/**	Returns the SceneManager with which the CurrentParticleSystemForEditComponent was created.
-		*/
-//		Ogre::SceneManager* getSceneManager(void);
+	/**	Event handler for scaling.
+	*/
+	void OnMouseWheel(wxMouseEvent & event);
+	void OnKeyPressed(wxKeyEvent & event);
 
-		/** Functions to stop and restart the particle system if needed
-		*/
-		bool _mustStopParticleSystem(void);
-		void _mustRestartParticleSystem(bool wasStarted);
+	/**	If the particle system was updated because of some change on the edit tab, this function returns true.
+	*/
+	bool isSystemUpdatedByEditPage();
 
-		/**
-			Generate a name and set it in the PUElemen, the EditComponent and the Propertywindow
-		*/
-		void _generateNameForComponentAndPUElement(EditComponent* component, ComponentType type);
+	/**	Set the mEditChanged attribute.
+	*/
+	void setSystemUpdatedByEditPage(bool updated = true) { mEditChanged = updated; }
 
-		/**
-			If a name has been changed, the references of all particle system components must change also
-		*/
-		void adjustNames(const Ogre::String& oldName, const Ogre::String& newName, ComponentType type);
+	/**	Returns the created Particle System (or 0).
+	*/
+	ParticleUniverse::ParticleSystem * getParticleSystemFromSystemComponent();
 
-		/**
-			Enable and disable tools
-		*/
-		void enableTools(bool enable);
+	/**	Returns the SceneManager with which the CurrentParticleSystemForEditComponent was created.
+	*/
+//		Ogre::SceneManager* getSceneManager();
 
-		void FreezeClientWindow();
-		void ThawClientWindow();
+	/** Functions to stop and restart the particle system if needed
+	*/
+	bool _mustStopParticleSystem();
+	void _mustRestartParticleSystem(bool wasStarted);
 
-	protected:
-		unsigned int mSystemCounter;
-		unsigned int mTechniqueCounter;
-		unsigned int mEmitterCounter;
-		unsigned int mRendererCounter;
-		unsigned int mAffectorCounter;
-		unsigned int mObserverCounter;
-		unsigned int mHandlerCounter;
-		unsigned int mBehaviourCounter;
-		unsigned int mExternCounter;
-		int mOffsetX; // Used to dynamically arrange the edit components after loading a new particle system
-		int mOffsetY; // ,,
-		ParticleUniverse::Real mOffsetFraction;
-		ParticleUniverse::Real mScale;
+	/**
+		Generate a name and set it in the PUElemen, the EditComponent and the Propertywindow
+	*/
+	void _generateNameForComponentAndPUElement(EditComponent * component, ComponentType type);
 
-		wxWindow* mRootParent;
-		ClientWindow* mClientWindow;
-		EditTools* mEditTools;
-		std::vector<EditComponent*> mComponents;
-		unsigned int mNumberOfSystems;
-		EditCanvas* mCanvas;
-		ConnectionMode mConnectionMode;
-		EditComponent* mStartConnector;
-		EditComponent* mEndConnector;
-		bool mEditChanged; // Determines whether the particle system was changed in the edit tab.
+	/**
+		If a name has been changed, the references of all particle system components must change also
+	*/
+	void adjustNames(const Ogre::String & oldName, const Ogre::String & newName, ComponentType type);
 
-		/**	Remove all components, but don't destroy them.
-		*/
-		void _removeComponentsFromTechnique(ParticleUniverse::ParticleTechnique* technique);
+	/**
+		Enable and disable tools
+	*/
+	void enableTools(bool enable);
 
-		/**	Functions used when a certain connection has been established.
-		*/
-		bool _processIncludeAdded(EditComponent* node1, EditComponent* node2);
-		bool _processExcludeAdded(EditComponent* node1, EditComponent* node2);
-		bool _processEmitAdded(EditComponent* node1, EditComponent* node2, ComponentRelationDirection relationDirection);
-		bool _processInterfaceAdded(EditComponent* node1, EditComponent* node2);
-		bool _processSlaveAdded(EditComponent* node1, EditComponent* node2);
-		bool _processEnableAdded(EditComponent* node1, EditComponent* node2);
-		bool _processForceAdded(EditComponent* node1, EditComponent* node2);
-		bool _processPlaceAdded(EditComponent* node1, EditComponent* node2);
+	void FreezeClientWindow();
+	void ThawClientWindow();
 
-		/**	Functions used when a certain connection has been deleted.
-		*/
-		bool _processIncludeRemoved(EditComponent* node1, EditComponent* node2);
-		bool _processExcludeRemoved(EditComponent* node1, EditComponent* node2);
-		bool _processEmitRemoved(EditComponent* node1, EditComponent* node2);
-		bool _processInterfaceRemoved(EditComponent* node1, EditComponent* node2);
-		bool _processSlaveRemoved(EditComponent* node1, EditComponent* node2);
-		bool _processEnableRemoved(EditComponent* node1, EditComponent* node2);
-		bool _processForceRemoved(EditComponent* node1, EditComponent* node2);
-		bool _processPlaceRemoved(EditComponent* node1, EditComponent* node2);
+	virtual bool OnDropText(wxCoord x, wxCoord y, const wxString & text);
+	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult defResult);
 
-	private:
-		EditTab(void) {}
+	wxPoint _dragOffset;
+	EditComponent * _currentDrag;
+
+protected:
+	unsigned int mSystemCounter;
+	unsigned int mTechniqueCounter;
+	unsigned int mEmitterCounter;
+	unsigned int mRendererCounter;
+	unsigned int mAffectorCounter;
+	unsigned int mObserverCounter;
+	unsigned int mHandlerCounter;
+	unsigned int mBehaviourCounter;
+	unsigned int mExternCounter;
+	int mOffsetX; // Used to dynamically arrange the edit components after loading a new particle system
+	int mOffsetY; // ,,
+	ParticleUniverse::Real mOffsetFraction;
+	ParticleUniverse::Real mScale;
+
+	wxWindow * mRootParent;
+	EditTools * mEditTools;
+	std::vector<EditComponent *> mComponents;
+	unsigned int mNumberOfSystems;
+	EditCanvas * mCanvas;
+	ConnectionMode mConnectionMode;
+	EditComponent * mStartConnector;
+	EditComponent * mEndConnector;
+	bool mEditChanged; // Determines whether the particle system was changed in the edit tab.
+
+	/**	Remove all components, but don't destroy them.
+	*/
+	void _removeComponentsFromTechnique(ParticleUniverse::ParticleTechnique * technique);
+
+	/**	Functions used when a certain connection has been established.
+	*/
+	bool _processIncludeAdded(EditComponent * node1, EditComponent * node2);
+	bool _processExcludeAdded(EditComponent * node1, EditComponent * node2);
+	bool _processEmitAdded(EditComponent * node1, EditComponent * node2, ComponentRelationDirection relationDirection);
+	bool _processInterfaceAdded(EditComponent * node1, EditComponent * node2);
+	bool _processSlaveAdded(EditComponent * node1, EditComponent * node2);
+	bool _processEnableAdded(EditComponent * node1, EditComponent * node2);
+	bool _processForceAdded(EditComponent * node1, EditComponent * node2);
+	bool _processPlaceAdded(EditComponent * node1, EditComponent * node2);
+
+	/**	Functions used when a certain connection has been deleted.
+	*/
+	bool _processIncludeRemoved(EditComponent * node1, EditComponent * node2);
+	bool _processExcludeRemoved(EditComponent * node1, EditComponent * node2);
+	bool _processEmitRemoved(EditComponent * node1, EditComponent * node2);
+	bool _processInterfaceRemoved(EditComponent * node1, EditComponent * node2);
+	bool _processSlaveRemoved(EditComponent * node1, EditComponent * node2);
+	bool _processEnableRemoved(EditComponent * node1, EditComponent * node2);
+	bool _processForceRemoved(EditComponent * node1, EditComponent * node2);
+	bool _processPlaceRemoved(EditComponent * node1, EditComponent * node2);
+
+private:
+	EditTab() {}
 };
 
 /**	Edit Tools: The toolbar on the edit window.
 */
-class EditTools : public wxDialog
-{
-	public:
-		// Constructor / Destructor
-		EditTools(EditTab* parent);
-		~EditTools(void) {}
+class EditTools : public wxDialog {
+public:
+	// Constructor / Destructor
+	EditTools(EditTab * parent);
+	~EditTools() {}
 
-		/**	Event Handlers
-		*/
-		//void OnNewSystem(wxCommandEvent& event);
-		void OnNewTechnique(wxCommandEvent& event);
-		void OnNewRenderer(wxCommandEvent& event);
-		void OnNewEmitter(wxCommandEvent& event);
-		void OnNewAffector(wxCommandEvent& event);
-		void OnNewObserver(wxCommandEvent& event);
-		void OnNewHandler(wxCommandEvent& event);
-		void OnNewBehaviour(wxCommandEvent& event);
-		void OnNewExtern(wxCommandEvent& event);
-		void notifyDeleteSystem(void);
-		void notifyDeleteTechnique(void);
-		void notifyDeleteRenderer(void);
-		void notifyDeleteEmitter(void);
-		void notifyDeleteAffector(void);
-		void notifyDeleteObserver(void);
-		void notifyDeleteHandler(void);
-		void notifyDeleteBehaviour(void);
-		void notifyDeleteExtern(void);
-		void OnConnect(wxCommandEvent& event);
-		void OnDisconnect(wxCommandEvent& event);
-		void OnHelp(wxCommandEvent& event);
-		void OnCursor(wxCommandEvent& event);
-		void notifyConnectionsChanged(void);
+	/**	Event Handlers
+	*/
+	//void OnNewSystem(wxCommandEvent & event);
+	void OnNewTechnique(wxCommandEvent & event);
+	void OnNewRenderer(wxCommandEvent & event);
+	void OnNewEmitter(wxCommandEvent & event);
+	void OnNewAffector(wxCommandEvent & event);
+	void OnNewObserver(wxCommandEvent & event);
+	void OnNewHandler(wxCommandEvent & event);
+	void OnNewBehaviour(wxCommandEvent & event);
+	void OnNewExtern(wxCommandEvent & event);
+	void notifyDeleteSystem();
+	void notifyDeleteTechnique();
+	void notifyDeleteRenderer();
+	void notifyDeleteEmitter();
+	void notifyDeleteAffector();
+	void notifyDeleteObserver();
+	void notifyDeleteHandler();
+	void notifyDeleteBehaviour();
+	void notifyDeleteExtern();
+	void OnConnect(wxCommandEvent & event);
+	void OnDisconnect(wxCommandEvent & event);
+	void OnHelp(wxCommandEvent & event);
+	void OnCursor(wxCommandEvent & event);
+	void notifyConnectionsChanged();
 
-	protected:
-		UIEditToolbar* mEditToolbar;
-		EditTab* mParent;
+protected:
+	UIEditToolbar * mEditToolbar;
+	EditTab * mParent;
 
-		/**	Set the icons based on the current situation
-		*/
-		void resetIcons(void);
+	/**	Set the icons based on the current situation
+	*/
+	void resetIcons();
 
-	private:
-		EditTools(void) {}
-		virtual bool Destroy();
+private:
+	EditTools() {}
+	virtual bool Destroy();
 };
 
-#endif
+#endif /* __PUED_EDITTAB_H__ */

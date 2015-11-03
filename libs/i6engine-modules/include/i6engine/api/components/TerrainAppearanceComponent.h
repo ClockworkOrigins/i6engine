@@ -36,6 +36,7 @@ namespace api {
 	 * | heightmap | yes | std::string | heightmap used for this terrain | yes |
 	 * | size | yes | double | expansion of the terrain | yes |
 	 * | inputScale | yes | double | scale factor for the terrain heights, highest point of heightmap gets this height | yes |
+	 * | vertices | yes | uint32_t | vertices along an edge, must be 2^n + 1 | yes |
 	 * | layers | yes | uint32_t | amount of layers on the terrain | yes |
 	 * | minX | yes | int64_t | minimum X for duplicates of the terrain | yes |
 	 * | maxX | yes | int64_t | maximum X for duplicates of the terrain | yes |
@@ -53,11 +54,6 @@ namespace api {
 		~TerrainAppearanceComponent();
 
 		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief Gets the GameObject's heightmap.
 		 */
 		inline std::string getHeightmap() const { return _heightmap; }
@@ -66,6 +62,12 @@ namespace api {
 		 * \brief Gets the GameObject's size.
 		 */
 		inline double getSize() const { return _size; }
+
+		/**
+		 * \brief saves collision shape as bullet collisionshape to given file
+		 * calls callback after collision shape was exported
+		 */
+		void saveCollisionShape(const std::string & outFile, const std::function<void(void)> & cb);
 
 		/**
 		 * \brief synchronizes the Components state
@@ -82,6 +84,7 @@ namespace api {
 		std::string _heightmap;
 		double _size;
 		double _inputScale;
+		uint32_t _vertices;
 		std::vector<std::tuple<double, std::string, std::string, double, double>> _layers;
 		int64_t _minX;
 		int64_t _maxX;

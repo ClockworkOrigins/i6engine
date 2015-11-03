@@ -19,10 +19,6 @@ namespace api {
 	MoveComponent::~MoveComponent() {
 	}
 
-	ComPtr MoveComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<MoveComponent, Component>(id, params);
-	}
-
 	void MoveComponent::Init() {
 		addTicker();
 		_mc = getOwnerGO()->getGOC<MovementComponent>(components::ComponentTypes::MovementComponent);

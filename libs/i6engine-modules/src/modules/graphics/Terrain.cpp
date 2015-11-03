@@ -20,17 +20,19 @@
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
 
+#include "i6engine/modules/physics/collisionShapes/HeightmapCollisionShape.h"
+
 #include "OGRE/OgreImage.h"
 #include "OGRE/Terrain/OgreTerrainGroup.h"
 
 namespace i6engine {
 namespace modules {
 
-	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _layers(layers) {
+	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _vertices(vertices), _layers(layers), _minX(minX), _maxX(maxX), _minY(minY), _maxY(maxY) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		_mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-		_mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(_manager->getSceneManager(), Ogre::Terrain::ALIGN_X_Z, 513, _size);
+		_mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(_manager->getSceneManager(), Ogre::Terrain::ALIGN_X_Z, _vertices, _size);
 		_mTerrainGroup->setFilenameConvention(Ogre::String("i6engineTerrain"), Ogre::String("dat"));
 		_mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
@@ -74,10 +76,10 @@ namespace modules {
 		_mTerrainGlobals->setCompositeMapAmbient(_manager->getSceneManager()->getAmbientLight());
 		// _mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
 		Ogre::Terrain::ImportData & defaultimp = _mTerrainGroup->getDefaultImportSettings();
-		defaultimp.terrainSize = 513;
+		defaultimp.terrainSize = _vertices;
 		defaultimp.worldSize = _size;
 		defaultimp.inputScale = _inputScale;
-		defaultimp.minBatchSize = 33;
+		defaultimp.minBatchSize = 3;
 		defaultimp.maxBatchSize = 65;
 
 		defaultimp.layerList.resize(_layers.size());
@@ -123,7 +125,7 @@ namespace modules {
 			Ogre::Real minHeight = std::get<3>(_layers[i]);
 			Ogre::Real fadeDist = std::get<4>(_layers[i]);
 
-			Ogre::TerrainLayerBlendMap * blendMap0 = terrain->getLayerBlendMap(i);
+			Ogre::TerrainLayerBlendMap * blendMap0 = terrain->getLayerBlendMap(Ogre::uint8(i));
 
 			float * pBlend0 = blendMap0->getBlendPointer();
 
@@ -142,6 +144,37 @@ namespace modules {
 			blendMap0->dirty();
 			blendMap0->update();
 		}
+	}
+
+	void Terrain::saveCollisionShape(const std::string & outFile) {
+		Ogre::Terrain * pTerrain = _mTerrainGroup->getTerrain(0, 0);
+		int terrainPageSize = pTerrain->getSize(); // Number of vertices along x/z axe
+
+		std::vector<double> pTerrainHeightDataConvert((terrainPageSize * (std::abs(_maxX - _minX) + 1) - (std::abs(_maxX - _minX))) * (terrainPageSize * (std::abs(_maxY - _minY) + 1) - (std::abs(_maxY - _minY))), 0.0);
+		int64_t singleRowLength = terrainPageSize * (std::abs(_maxY - _minY) + 1) - (std::abs(_maxY - _minY));
+		for (int64_t i = _minX; i <= _maxX; i++) {
+			for (int64_t j = _minY; j <= _maxY; j++) {
+				float * pTerrainHeightData = _mTerrainGroup->getTerrain(long(j), long(i))->getHeightData();
+				for (int x = (i == _minX) ? 0 : 1; x < terrainPageSize; x++) {
+					for (int z = (j == _minY) ? 0 : 1; z < terrainPageSize; z++) {
+						int64_t blockRow = (terrainPageSize * (i - _minX) - (i - _minX) + x) * singleRowLength;
+						int64_t columnOffset = (j - _minY) * terrainPageSize - (j - _minY) + z;
+						pTerrainHeightDataConvert[singleRowLength * ((std::abs(_maxX - _minX) + 1) * terrainPageSize - (std::abs(_maxX - _minX)) - 1) - blockRow + columnOffset] = double(pTerrainHeightData[x * terrainPageSize + z]);
+					}
+				}
+			}
+		}
+
+		double unitsBetweenVertices = pTerrain->getWorldSize() / (terrainPageSize - 1);
+		Vec3 scaling(unitsBetweenVertices, 1, unitsBetweenVertices);
+		HeightmapCollisionShapeData * hcsd = new HeightmapCollisionShapeData(uint32_t(terrainPageSize * (std::abs(_maxX - _minX) + 1) - (std::abs(_maxX - _minX))), uint32_t(terrainPageSize * (std::abs(_maxY - _minY) + 1) - (std::abs(_maxY - _minY))), pTerrainHeightDataConvert, pTerrain->getMinHeight(), pTerrain->getMaxHeight(), scaling);
+		std::string serialized = hcsd->Serialize();
+
+		delete hcsd;
+
+		std::ofstream fs(outFile.c_str(), std::ios_base::binary);
+		fs << serialized;
+		fs.close();
 	}
 
 } /* namespace modules */

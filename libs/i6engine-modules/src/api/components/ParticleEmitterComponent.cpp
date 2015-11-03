@@ -47,10 +47,6 @@ namespace api {
 	ParticleEmitterComponent::~ParticleEmitterComponent() {
 	}
 
-	ComPtr ParticleEmitterComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<ParticleEmitterComponent, Component>(id, params);
-	}
-
 	void ParticleEmitterComponent::Init() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Create, new graphics::Graphics_Particle_Create(_objOwnerID, getID(), _emitterName, _pos), core::Subsystem::Object);
 

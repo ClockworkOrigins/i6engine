@@ -22,7 +22,10 @@
 
 #include "i6engine/modules/graphics/ResourceManager.h"
 
+#include "i6engine/modules/physics/collisionShapes/MeshStriderCollisionShape.h"
+
 #include "btBulletDynamicsCommon.h"
+#include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 
 #include "clockUtils/iniParser/iniParser.h"
@@ -60,16 +63,36 @@ int main(int argc, char ** argv) {
 		Ogre::Mesh * mp = meshPtr.get();
 
 		std::cout << "Creating collision shape" << std::endl;
-		btCollisionShape * fallShape = new btBvhTriangleMeshShape(new i6engine::tools::MeshStrider(mp), true);
+		btBvhTriangleMeshShape * fallShape = new btBvhTriangleMeshShape(new i6engine::tools::MeshStrider(mp), true);
+		btConvexTriangleMeshShape * ctms = new btConvexTriangleMeshShape(fallShape->getMeshInterface());
+		ctms->initializePolyhedralFeatures();
+		btShapeHull * sh = new btShapeHull(ctms);
+		sh->buildHull(0.0);
+		btConvexHullShape * chs = new btConvexHullShape();
+		for (int i = 0; i < sh->numVertices(); i++) {
+			chs->addPoint(sh->getVertexPointer()[i]);
+		}
 
 		btDefaultSerializer * serializer = new btDefaultSerializer();
 		serializer->startSerialization();
-		fallShape->serializeSingleShape(serializer);
+		chs->serializeSingleShape(serializer);
 		serializer->finishSerialization();
 
-		FILE * file = fopen((bullet).c_str(), "wb");
-		fwrite(serializer->getBufferPointer(), size_t(serializer->getCurrentBufferSize()), 1, file);
-		fclose(file);
+		std::vector<char> data(serializer->getCurrentBufferSize());
+
+		for (size_t i = 0; i < data.size(); i++) {
+			data[i] = serializer->getBufferPointer()[i];
+		}
+
+		i6engine::modules::MeshStriderCollisionShapeData * mscsd = new i6engine::modules::MeshStriderCollisionShapeData(data);
+
+		std::string serialized = mscsd->Serialize();
+
+		delete mscsd;
+
+		std::ofstream fs(bullet.c_str(), std::ios_base::binary);
+		fs << serialized;
+		fs.close();
 		std::cout << "Exported '" << bullet << "'" << std::endl;
 		
 		delete serializer;

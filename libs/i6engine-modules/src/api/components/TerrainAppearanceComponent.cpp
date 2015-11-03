@@ -29,13 +29,14 @@
 namespace i6engine {
 namespace api {
 
-	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _heightmap(), _size(), _inputScale(), _layers() {
+	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _heightmap(), _size(), _inputScale(), _vertices(), _layers(), _minX(), _maxX(), _minY(), _maxY() {
 		Component::_objFamilyID = components::TerrainAppearanceComponent;
 		Component::_objComponentID = components::TerrainAppearanceComponent;
 
 		parseAttribute<true>(params, "heightmap", _heightmap);
 		parseAttribute<true>(params, "size", _size);
 		parseAttribute<true>(params, "inputScale", _inputScale);
+		parseAttribute<true>(params, "vertices", _vertices);
 
 		uint32_t size;
 
@@ -71,20 +72,20 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	ComPtr TerrainAppearanceComponent::createC(const int64_t id, const api::attributeMap & params) {
-		return utils::make_shared<TerrainAppearanceComponent, Component>(id, params);
-	}
-
 	void TerrainAppearanceComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void TerrainAppearanceComponent::sendUpdateMessage() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Update, new graphics::Graphics_Terrain_Update(getID(), _heightmap, _size, _inputScale, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Update, new graphics::Graphics_Terrain_Update(getID(), _heightmap, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void TerrainAppearanceComponent::saveCollisionShape(const std::string & outFile, const std::function<void(void)> & cb) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraSaveTerrainShape, core::Method::Create, new graphics::Graphics_SaveTerrainShape_Create(getID(), outFile, cb), core::Subsystem::Object));
 	}
 
 	attributeMap TerrainAppearanceComponent::synchronize() const {
@@ -93,6 +94,7 @@ namespace api {
 		params["heightmap"] = _heightmap;
 		params["size"] = boost::lexical_cast<std::string>(_size);
 		params["inputScale"] = std::to_string(_inputScale);
+		params["vertices"] = std::to_string(_vertices);
 		params["layers"] = std::to_string(_layers.size());
 		params["minX"] = std::to_string(_minX);
 		params["minY"] = std::to_string(_minY);
@@ -121,14 +123,21 @@ namespace api {
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Size", [this]() {
 			return boost::lexical_cast<std::string>(_size);
 		}, [this](std::string s) {
-			_size = boost::lexical_cast<double>(s);
+			_size = std::stod(s);
 			sendUpdateMessage();
 			return true;
 		}));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Input Scale", [this]() {
 			return std::to_string(_inputScale);
 		}, [this](std::string s) {
-			_inputScale = boost::lexical_cast<double>(s);
+			_inputScale = std::stod(s);
+			sendUpdateMessage();
+			return true;
+		}));
+		result.push_back(std::make_tuple(AccessState::READWRITE, "Vertices", [this]() {
+			return std::to_string(_vertices);
+		}, [this](std::string s) {
+			_vertices = std::stoul(s);
 			sendUpdateMessage();
 			return true;
 		}));

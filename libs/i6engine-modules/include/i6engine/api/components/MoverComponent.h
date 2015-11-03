@@ -183,7 +183,7 @@ namespace api {
 		/**
 		 * \brief loads all parameters from a message
 		 */
-		void loadParams(const attributeMap & params);
+		virtual void loadParams(const attributeMap & params);
 
 		/**
 		 * \brief retrieves the new postion/rotation values

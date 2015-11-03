@@ -129,7 +129,7 @@ namespace core {
 		 * \brief This method returns the amount of subsystems.
 		 * \return Count of subsystems.
 		 */
-		inline int GetSubSystemAmount() const { return _objQueuedSubSystems.size(); }
+		inline size_t GetSubSystemAmount() const { return _objQueuedSubSystems.size(); }
 
 		/**
 		 * \brief returns true, if all registered subsystems shut down or false, if not

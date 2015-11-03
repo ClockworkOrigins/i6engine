@@ -66,11 +66,6 @@ namespace api {
 		~MeshAppearanceComponent();
 
 		/**
-		* \brief creates the Component with given attributeMap
-		*/
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief returns the position of the mesh
 		 */
 		Vec3 getPosition() const {

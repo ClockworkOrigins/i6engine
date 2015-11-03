@@ -29,9 +29,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleAffectors/ParticleUniverseGeometryRotator.h"
 
 // Property names
-static wxString PRNL_USE_OWN_ROTATION = wxT("");;
+static wxString PRNL_USE_OWN_ROTATION = wxT("");
 
-/**	
+/**
 */
 class GeometryRotatorPropertyWindow : public AffectorPropertyWindow
 {
@@ -60,7 +60,7 @@ class GeometryRotatorPropertyWindow : public AffectorPropertyWindow
 			See AffectorPropertyWindow
 		*/
 		virtual void copyAttributeToAffector(wxPGProperty* prop, wxString propertyName);
-		
+
 		/**
 			See AffectorPropertyWindow
 		*/
@@ -75,4 +75,3 @@ class GeometryRotatorPropertyWindow : public AffectorPropertyWindow
 };
 
 #endif
-

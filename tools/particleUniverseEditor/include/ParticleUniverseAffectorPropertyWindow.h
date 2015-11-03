@@ -40,62 +40,60 @@ static wxString PRNL_AFFECTOR_SPEC_TT_DECREASE = wxT("");
 
 /**	
 */
-class AffectorPropertyWindow : public PropertyWindow
-{
-	public:
-		AffectorPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		AffectorPropertyWindow(AffectorPropertyWindow* affectorPropertyWindow);
-		~AffectorPropertyWindow(void){}
+class AffectorPropertyWindow : public PropertyWindow {
+public:
+	AffectorPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name);
+	AffectorPropertyWindow(AffectorPropertyWindow * affectorPropertyWindow);
+	~AffectorPropertyWindow() {}
 
-		/**
-			Copy basic affector properties from a window to an affector
-		*/
-		virtual void copyAttributeToAffector(wxPGProperty* prop, wxString propertyName);
+	/**
+		Copy basic affector properties from a window to an affector
+	*/
+	virtual void copyAttributeToAffector(wxPGProperty * prop, wxString propertyName);
 
-		/**
-			Copy basic affector properties from an affector to a window
-		*/
-		virtual void copyAttributesFromAffector(ParticleUniverse::ParticleAffector* affector);
+	/**
+		Copy basic affector properties from an affector to a window
+	*/
+	virtual void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector);
 
-		/**
-			Copy basic affector properties from another affector property window
-		*/
-		virtual void copyAttributesFromPropertyWindow(AffectorPropertyWindow* affectorPropertyWindow);
+	/**
+		Copy basic affector properties from another affector property window
+	*/
+	virtual void copyAttributesFromPropertyWindow(AffectorPropertyWindow * affectorPropertyWindow);
 
-		/**
-			See PropertyWindow
-		*/
-		virtual void onPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		See PropertyWindow
+	*/
+	virtual void onPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Only handle parent properties if they are changed.
-		*/
-		void onParentPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		Only handle parent properties if they are changed.
+	*/
+	void onParentPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Updating function
-		*/
-		void replaceAffectorType(wxPGProperty* prop);
+	/**
+		Updating function
+	*/
+	void replaceAffectorType(wxPGProperty * prop);
 
-		/**
-			Determine selected affector type (take internationalisation into account)
-		*/
-		const Ogre::String& getAffectorTypeByProperty(wxPGProperty* prop);
+	/**
+		Determine selected affector type (take internationalisation into account)
+	*/
+	const Ogre::String & getAffectorTypeByProperty(wxPGProperty * prop);
 
-	protected:
-		wxArrayString mTypes;
-		wxArrayString mSpecialisation;
+protected:
+	wxArrayString mTypes;
+	wxArrayString mSpecialisation;
 
-		/**
-			Initialises all affector properties
-		*/
-		virtual void _initProperties(void);
+	/**
+		Initialises all affector properties
+	*/
+	virtual void _initProperties();
 
-		/**
-			Validation
-		*/
-		bool validateTextureCoord(wxPGProperty* prop, ParticleUniverse::ParticleAffector* affector);
+	/**
+		Validation
+	*/
+	bool validateTextureCoord(wxPGProperty * prop, ParticleUniverse::ParticleAffector * affector);
 };
 
-#endif
-
+#endif /* __PUED_AFFECTOR_PROPERTY_WINDOW_H__ */

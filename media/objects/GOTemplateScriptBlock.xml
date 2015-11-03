@@ -28,4 +28,8 @@
 	</Component>
 	<Component template="ScriptingShatter" owner="true">
 	</Component>
+	<Component template="Velocity" owner="true">
+		<Attribute name="acceleration">0.0 0.0 -15.0</Attribute>
+		<Attribute name="maxSpeed">100.0</Attribute>
+	</Component>
 </GOTemplate>

@@ -25,61 +25,40 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseMainToolbar.h"
 
-//-----------------------------------------------------------------------
-SpinCtrlXYZ::SpinCtrlXYZ (UIMiscIcons* icons, 
-	wxWindow* parent,
-	wxWindowID id, 
-	const wxString& value, 
-	const wxPoint& pos, 
-	const wxSize& size, 
-	long style, 
-	int min, 
-	int max, 
-	int initial,
-	const wxString& name,
-	SpinCtrlXYZ* nextSpinCtrl) : 
-	wxSpinCtrl(parent, id, value, pos, size, style, min, max, initial, name), 
-	mUIMiscIcons(icons),
-	mNextSpinCtrl(nextSpinCtrl)
-{
+SpinCtrlXYZ::SpinCtrlXYZ (UIMiscIcons * icons, wxWindow * parent, wxWindowID id, const wxString & value, const wxPoint & pos, const wxSize & size, long style, int min, int max, int initial, const wxString & name, SpinCtrlXYZ * nextSpinCtrl) : wxSpinCtrl(parent, id, value, pos, size, style, min, max, initial, name), mUIMiscIcons(icons), mNextSpinCtrl(nextSpinCtrl) {
 	Connect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxCommandEventHandler(SpinCtrlXYZ::OnSpinUpdate));
 	Connect(wxEVT_COMMAND_TEXT_ENTER, wxKeyEventHandler(SpinCtrlXYZ::OnChar));
 	Connect(wxEVT_CHAR, wxKeyEventHandler(SpinCtrlXYZ::OnChar));
 }
-//-----------------------------------------------------------------------
-void SpinCtrlXYZ::setNextSpinCtrl(SpinCtrlXYZ* nextSpinCtrl)
-{
+
+void SpinCtrlXYZ::setNextSpinCtrl(SpinCtrlXYZ * nextSpinCtrl) {
 	mNextSpinCtrl = nextSpinCtrl;
 }
-//-----------------------------------------------------------------------
-void SpinCtrlXYZ::OnSpinUpdate(wxCommandEvent& event)
-{
+
+void SpinCtrlXYZ::OnSpinUpdate(wxCommandEvent & event) {
 	mUIMiscIcons->callbackSpinCtrlXYZ(this);
 }
-//-----------------------------------------------------------------------
-void SpinCtrlXYZ::OnChar(wxKeyEvent& event)
-{
-    switch ( event.GetKeyCode() )
-    {
-		case WXK_RETURN:
-		{
-			mUIMiscIcons->callbackSpinCtrlXYZ(this);
-			if (mNextSpinCtrl)
-			{
-				mNextSpinCtrl->SetFocus();
-				mNextSpinCtrl->SetSelection(0, 3);
-			}
-		}
 
-        case WXK_TAB:
-		{
-			mUIMiscIcons->callbackSpinCtrlXYZ(this);
-			if (mNextSpinCtrl)
-			{
-				mNextSpinCtrl->SetFocus();
-				mNextSpinCtrl->SetSelection(0, 3);
-			}
+void SpinCtrlXYZ::OnChar(wxKeyEvent & event) {
+	switch (event.GetKeyCode()) {
+	case WXK_RETURN: {
+		mUIMiscIcons->callbackSpinCtrlXYZ(this);
+		if (mNextSpinCtrl) {
+			mNextSpinCtrl->SetFocus();
+			mNextSpinCtrl->SetSelection(0, 3);
 		}
 		break;
+	}
+	case WXK_TAB: {
+		mUIMiscIcons->callbackSpinCtrlXYZ(this);
+		if (mNextSpinCtrl) {
+			mNextSpinCtrl->SetFocus();
+			mNextSpinCtrl->SetSelection(0, 3);
+		}
+		break;
+	}
+	default: {
+		break;
+	}
     }
 }

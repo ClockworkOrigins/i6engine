@@ -135,7 +135,7 @@ namespace sample {
 				if (_eventMap.find(key) != _eventMap.end()) {
 					_eventMap[key].second = iku->pressed != i6engine::api::KeyState::KEY_RELEASED;
 				} else {
-					if (iku->code == i6engine::api::KeyCode::KC_MBLeft && !i6engine::api::EngineController::GetSingleton().getGUIFacade()->getOnWindow() && iku->pressed == i6engine::api::KeyState::KEY_PRESSED) {
+					if (iku->code == i6engine::api::KeyCode::KC_MBLeft && !i6engine::api::EngineController::GetSingleton().getGUIFacade()->getOnWindow() && iku->pressed == i6engine::api::KeyState::KEY_PRESSED && _shootBall) {
 						i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 						Vec3 pos = ssc->getPosition();
 

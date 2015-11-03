@@ -20,12 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
-#ifndef __LUABIND_HPP__
-#define __LUABIND_HPP__
 
-#include "i6engine/luabind/class.hpp"
+#ifndef LUABIND_BIND_HPP_INCLUDED
+#define LUABIND_BIND_HPP_INCLUDED
+
 #include "i6engine/luabind/config.hpp"
+#include "i6engine/luabind/class.hpp"
 #include "i6engine/luabind/function.hpp"
 #include "i6engine/luabind/open.hpp"
 
-#endif /* __LUABIND_HPP__ */
+#endif // LUABIND_BIND_HPP_INCLUDED

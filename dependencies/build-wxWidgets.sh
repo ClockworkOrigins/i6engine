@@ -21,8 +21,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 . ./build-common.sh
 
 # OIS
-ARCHIVE="wxWidgets-2.8.12.zip"
-BUILD_DIR="${BUILD_ROOT}/wxWidgets-2.8.12"
+ARCHIVE="wxWidgets-3.0.2.tar.bz2"
+BUILD_DIR="${BUILD_ROOT}/wxWidgets-3.0.2"
 
 if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
@@ -46,7 +46,7 @@ rm -rf "${PREFIX}"
 status "Extracting wxWidgets"
 
 cd "${BUILD_ROOT}"
-unzip "${ARCHIVE}" >/dev/null
+tar xfj "${ARCHIVE}" >/dev/null
 
 status "Configuring wxWidgets"
 cd "${BUILD_DIR}"
@@ -54,21 +54,21 @@ chmod 700 ./*
 ./configure \
 	--prefix="${PREFIX}"\
 	--enable-unicode\
+	--disable-compat26\
+	--disable-compat28\
 	>/dev/null
 
 status "Building wxWidgets"
-make -j 8 >/dev/null
+make -j 6 >/dev/null
 
 status "Installing wxWidgets"
-make -j 8 install >/dev/null
+make -j 6 install >/dev/null
 
 status "Cleaning up"
 cd "${DEP_DIR}"
 rm -rf "${BUILD_ROOT}" >/dev/null
 
-mv "${PREFIX}/include/wx-2.8/wx" "${PREFIX}/include/wx"
-rm -rf "${PREFIX}/include/wx-2.8"
-cp -rf "${PREFIX}/lib/wx/include/gtk2-unicode-release-2.8/wx" "${PREFIX}/include"
+mv "${PREFIX}/include/wx-3.0/wx" "${PREFIX}/include/wx"
+cp -rf "${PREFIX}/lib/wx/include/gtk2-unicode-3.0/wx" "${PREFIX}/include"
 
 touch "${PREFIX}"
-

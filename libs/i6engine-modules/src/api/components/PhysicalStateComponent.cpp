@@ -47,20 +47,19 @@ namespace api {
 
 		_shapeParams.erase("identifier");
 
+		bool compound;
+		parseAttribute<true>(params, "collisionGroup", _collisionGroup);
 		parseAttribute<true>(params, "pos", _position);
 		parseAttribute<true>(params, "rot", _rotation);
 		parseAttribute<true>(params, "scale", _scale);
 		parseAttribute<true>(params, "shapeType", _shapeType);
 		parseAttribute<true>(params, "shatterInterest", _shatterInterest);
+		parseAttribute<true>(params, "compound", compound);
 		parseAttribute<false>(params, "syncPrio", _syncPrio);
 		parseAttribute<false>(params, "gravity", _gravity);
 	}
 
 	PhysicalStateComponent::~PhysicalStateComponent() {
-	}
-
-	ComPtr PhysicalStateComponent::createC(const int64_t id, const api::attributeMap & params) {
-		return utils::make_shared<PhysicalStateComponent, Component>(id, params);
 	}
 
 	void PhysicalStateComponent::Init() {

@@ -30,10 +30,6 @@ namespace api {
 	WaynetNavigationComponent::~WaynetNavigationComponent() {
 	}
 	
-	ComPtr WaynetNavigationComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<WaynetNavigationComponent, Component>(id, params);
-	}
-
 	std::vector<Vec3> WaynetNavigationComponent::getPath(const Vec3 & from, const Vec3 & to) const {
 		return EngineController::GetSingleton().getWaynetManager()->getShortestPath(from, EngineController::GetSingleton().getWaynetManager()->getNearestWaypoint(to));
 	}
