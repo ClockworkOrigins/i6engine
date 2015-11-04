@@ -1,8 +1,8 @@
-call build-common.bat
+call build-common.bat %1 %2
 
 Set ARCHIVE=gperftools-2.4.tar.gz
 Set BUILD_DIR=%TMP_DIR%/gperftools-2.4
-Set PREFIX=%DEP_DIR%/gperftools
+Set PREFIX=%DEP_DIR%/%ARCH_DIR%/gperftools
 
 echo "Compile GPerfTools"
 
@@ -10,11 +10,7 @@ call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
 cd %DEP_DIR%
 
-call download-dependency.bat gperftools_2_4_patch_sln.zip
-
-cd %TMP_DIR%
-
-winrar.exe x gperftools_2_4_patch_sln.zip
+call build-common.bat downloadAndUnpack gperftools_2_4_patch_sln.zip %TMP_DIR%
 
 echo "Building GPerfTools"
 cd %BUILD_DIR%

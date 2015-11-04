@@ -12,3 +12,4 @@ dependencies/ogre
 dependencies/ois
 dependencies/tinyxml2
 dependencies/wxWidgets
+dependencies/msvc*

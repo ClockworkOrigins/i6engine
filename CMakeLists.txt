@@ -44,7 +44,25 @@ option(ISIXE_WITH_TUTORIALS "build tutorials for i6engine" ON)
 # * "lua"
 set(ISIXE_WITH_SCRIPTING "python" CACHE STRING "specifies the scripting system to use" )
 
-set(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies" CACHE STRING "path to dependencies for i6engine")
+IF(WIN32)
+	IF(CMAKE_GENERATOR MATCHES "Visual Studio 12")
+		SET(DEP_DIR_BUILD "msvc12_")
+	ELSEIF(CMAKE_GENERATOR MATCHES "Visual Studio 14")
+		SET(DEP_DIR_BUILD "msvc14_")
+	ELSE()
+		MESSAGE([WARNING] "Toolchain not supported yet!")
+	ENDIF()
+
+	IF(CMAKE_GENERATOR MATCHES "Win64")
+		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}x64")
+	ELSEIF(CMAKE_GENERATOR MATCHES "ARM")
+		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}arm")
+	ELSE()
+		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}x86")
+	ENDIF()
+ENDIF()
+
+SET(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies/${DEP_DIR_BUILD}" CACHE STRING "path to dependencies for i6engine")
 
 IF(ISIXE_WITH_TESTING AND NOT WIN32)
 	# static for gmock
@@ -317,25 +335,29 @@ install(FILES ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h DESTI
 IF(ISIXE_WITH_NETWORK)
 	# Build m2etis
 	IF(WIN32)
+		IF(CMAKE_GENERATOR MATCHES "Visual Studio 12")
+			SET(METIS_TOOLCHAIN msvc12)
+		ELSE()
+			MESSAGE([ERROR] "Generator not supported yet!")
+		ENDIF()
 		IF(CMAKE_GENERATOR MATCHES "Win64")
-			execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.bat 64 "${ISIXE_DEP_DIR}" "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${ISIXE_DEP_DIR})
+			SET(METIS_ARCH 64)
 		ELSE(CMAKE_GENERATOR MATCHES "Win64")
-			execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.bat 32 "${ISIXE_DEP_DIR}" "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${ISIXE_DEP_DIR})
+			SET(METIS_ARCH 32)
 		ENDIF(CMAKE_GENERATOR MATCHES "Win64")
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.bat ${METIS_TOOLCHAIN} ${METIS_ARCH} "${ISIXE_DEP_DIR}/.." "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
 	ELSE(WIN32)
-		execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.sh "${CMAKE_BINARY_DIR}/include/i6engine" "${CMAKE_BUILD_TYPE}")
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.sh "${CMAKE_BINARY_DIR}/include/i6engine" "${CMAKE_BUILD_TYPE}")
 	ENDIF(WIN32)
 
 	#----------------------------------------------------
 	# I6M2ETIS
 	#----------------------------------------------------
-	IF(ISIXE_WITH_NETWORK)
-		SET(LIBNAME "M2etis")
-		SET(LIBHEADER "m2etis/pubsub/PubSubSystem.h")
-		SET(M2etis_ROOT ${ISIXE_DEP_DIR}/m2etis)
-		find_package(EasyFind REQUIRED COMPONENTS m2etis)
-		include_directories(SYSTEM ${M2etis_INCLUDE_DIR})
-	ENDIF(ISIXE_WITH_NETWORK)
+	SET(LIBNAME "M2etis")
+	SET(LIBHEADER "m2etis/pubsub/PubSubSystem.h")
+	SET(M2etis_ROOT ${ISIXE_DEP_DIR}/m2etis)
+	find_package(EasyFind REQUIRED COMPONENTS m2etis)
+	include_directories(SYSTEM ${M2etis_INCLUDE_DIR})
 ENDIF(ISIXE_WITH_NETWORK)
 
 ####################################################################################

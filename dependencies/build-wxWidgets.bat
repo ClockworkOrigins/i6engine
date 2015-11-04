@@ -1,19 +1,19 @@
 SET ARCH=Win32
 SET WXPATH=vc_dll
-IF [%1] == [64] (
+IF [%2] == [64] (
 	SET ARCH=x64
 	SET WXPATH=vc_x64_dll
 )
-IF [%1] == [32] (
+IF [%2] == [32] (
 	SET ARCH=Win32
 	SET WXPATH=vc_dll
 )
 
-call build-common.bat
+call build-common.bat %1 %2
 
 Set ARCHIVE=wxWidgets-3.0.2.tar.bz2
 Set BUILD_DIR=%TMP_DIR%\wxWidgets-3.0.2
-Set PREFIX=%DEP_DIR%\wxWidgets
+Set PREFIX=%DEP_DIR%/%ARCH_DIR%/wxWidgets
 
 echo "Compile wxWidgets"
 

@@ -1,16 +1,8 @@
-SET ARCH=Visual Studio 12
-IF [%1] == [64] (
-	SET ARCH=Visual Studio 12 Win64
-)
-IF [%1] == [32] (
-	SET ARCH=Visual Studio 12
-)
-
-call build-common.bat
+call build-common.bat %1 %2
 
 Set ARCHIVE=gmock-1.7.0.zip
 Set BUILD_DIR=%TMP_DIR%/gmock-1.7.0
-Set PREFIX=%DEP_DIR%/gmock
+Set PREFIX=%DEP_DIR%/%ARCH_DIR%/gmock
 
 echo "Compile GoogleMock with GoogleTest"
 
@@ -18,7 +10,7 @@ call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
 echo "Configuring GoogleMock with GoogleTest"
 cd %BUILD_DIR%
-cmake . -DCMAKE_INSTALL_PREFIX=%PREFIX% -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DGTEST_CREATE_SHARED_LIBRARY=1 -G "%ARCH%" .
+cmake -DCMAKE_INSTALL_PREFIX=%PREFIX% -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DGTEST_CREATE_SHARED_LIBRARY=1 -G "%VSCOMPILER%%VSARCH%" .
 
 echo "Building GoogleMock with GoogleTest"
 MSBuild.exe gmock.sln /p:Configuration=Release > NUL
