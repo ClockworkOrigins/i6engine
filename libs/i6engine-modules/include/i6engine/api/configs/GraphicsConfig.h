@@ -112,8 +112,9 @@ namespace graphics {
 		Vec3 pos;
 		Quaternion rot;
 		Vec3 scale;
+		int64_t coid;
 		Graphics_Node_Create();
-		Graphics_Node_Create(const int64_t, const int64_t i, const Vec3 & p, const Quaternion & r, const Vec3 & s);
+		Graphics_Node_Create(const int64_t id, int64_t cid, const Vec3 & p, const Quaternion & r, const Vec3 & s);
 		Graphics_Node_Create * copy() { return new Graphics_Node_Create(*this); }
 	} Graphics_Node_Create;
 
