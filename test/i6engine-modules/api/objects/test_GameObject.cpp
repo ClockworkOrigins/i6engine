@@ -480,39 +480,5 @@ namespace config {
 		EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>(config::ComponentTypes::AddComponent));
 		EXPECT_NE(nullptr, owner->getGOC<AddComponent>());
 		EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>());
-
-		const uint32_t COUNTER = 1000000;
-
-		uint64_t startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-		for (uint32_t i = 0; i < COUNTER; i++) {
-			EXPECT_NE(nullptr, owner->getGOC(config::ComponentTypes::AddComponent));
-			EXPECT_EQ(nullptr, owner->getGOC(config::ComponentTypes::Replace0Component));
-		}
-		uint64_t endTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-		std::cout << "Test 1: " << endTime - startTime << std::endl;
-
-		startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-		for (uint32_t i = 0; i < COUNTER; i++) {
-			EXPECT_NE(nullptr, i6engine::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)));
-			EXPECT_EQ(nullptr, i6engine::utils::dynamic_pointer_cast<Replace0Component>(owner->getGOC(config::ComponentTypes::AddComponent)));
-		}
-		endTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-		std::cout << "Test 2: " << endTime - startTime << std::endl;
-
-		startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-		for (uint32_t i = 0; i < COUNTER; i++) {
-			EXPECT_NE(nullptr, owner->getGOC<AddComponent>(config::ComponentTypes::AddComponent));
-			EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>(config::ComponentTypes::AddComponent));
-		}
-		endTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-		std::cout << "Test 3: " << endTime - startTime << std::endl;
-
-		startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-		for (uint32_t i = 0; i < COUNTER; i++) {
-			EXPECT_NE(nullptr, owner->getGOC<AddComponent>());
-			EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>());
-		}
-		endTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-		std::cout << "Test 4: " << endTime - startTime << std::endl;
 	}
 }

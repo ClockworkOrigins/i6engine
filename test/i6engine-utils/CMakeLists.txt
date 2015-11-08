@@ -22,7 +22,6 @@ include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 
 SET(testSrc
 	test_AutoUpdater.cpp
-	test_BoostVSSTL.cpp
 	test_Clock.cpp
 	test_DoubleBufferQueue.cpp
 	test_Future.cpp
