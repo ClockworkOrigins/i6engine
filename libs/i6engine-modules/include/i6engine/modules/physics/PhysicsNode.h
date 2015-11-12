@@ -281,6 +281,8 @@ namespace modules {
 
 		double _mass;
 
+		utils::weakPtr<api::PhysicalStateComponent, api::Component> _weakPSCPtr;
+
 		/**
 		 * \brief Adds the component's RigidBody to Bullet's world.
 		 */

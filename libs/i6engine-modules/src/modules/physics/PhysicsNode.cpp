@@ -38,10 +38,14 @@
 namespace i6engine {
 namespace modules {
 
-	PhysicsNode::PhysicsNode(const int64_t id, const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::attributeMap & params, api::ShatterInterest shatterInterest, PhysicsManager * pm) : _manager(pm), _id(id), _compId(compId), _collisionGroup(cg), _position(position), _rotation(rotation), _scale(scale), _transform(rotation.toBullet(), position.toBullet()), _rigidBody(), _linearVelocity(), _centralForce(), _shatterInterest(shatterInterest), _parentShape(nullptr), _childShapes(), _velocityComponent(nullptr), _tickCount(0), _mass(0.0) {
+	PhysicsNode::PhysicsNode(const int64_t id, const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::attributeMap & params, api::ShatterInterest shatterInterest, PhysicsManager * pm) : _manager(pm), _id(id), _compId(compId), _collisionGroup(cg), _position(position), _rotation(rotation), _scale(scale), _transform(rotation.toBullet(), position.toBullet()), _rigidBody(), _linearVelocity(), _centralForce(), _shatterInterest(shatterInterest), _parentShape(nullptr), _childShapes(), _velocityComponent(nullptr), _tickCount(0), _mass(0.0), _weakPSCPtr() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		if (std::stoi(params.find("compound")->second)) {
 			_parentShape = _manager->createCompound();
+		}
+		auto go = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(_id);
+		if (go != nullptr) {
+			_weakPSCPtr = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
 		}
 	}
 
@@ -312,21 +316,14 @@ namespace modules {
 
 		_transform = worldTrans;
 
-		api::GOPtr go = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(_id);
+		utils::sharedPtr<api::PhysicalStateComponent, api::Component> pC = _weakPSCPtr.get();
 
-		if (go == nullptr) {
+		if (pC == nullptr) {
 			return;
 		}
 
-		utils::sharedPtr<api::PhysicalStateComponent, api::Component> pC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
-
 		if (_rigidBody && !_rigidBody->isKinematicObject()) {
 			_rigidBody->proceedToTransform(_transform);
-
-			if (pC == nullptr) {
-				ISIXE_LOG_WARN("PhysicsNode", "GameObject doesn't exist any more");
-				return;
-			}
 			pC->setLinearVelocity(Vec3(_rigidBody->getLinearVelocity()), 1);
 		}
 

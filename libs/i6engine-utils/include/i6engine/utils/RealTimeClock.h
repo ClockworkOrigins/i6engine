@@ -23,6 +23,7 @@
 #define __I6ENGINE_UTILS_REALTIMECLOCK_H__
 
 #include <atomic>
+#include <chrono>
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
@@ -60,7 +61,7 @@ namespace utils {
 		void Stop();
 
 	private:
-		boost::posix_time::ptime _startTime;
+		std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
 
 		uint64_t _offset;
 
