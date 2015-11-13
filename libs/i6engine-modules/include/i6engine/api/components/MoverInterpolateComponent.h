@@ -61,11 +61,6 @@ namespace api {
 		~MoverInterpolateComponent();
 
 		/**
-		 * \brief creates the Component with given attributeMap
-		 */
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
-		/**
 		 * \brief add a new keyframe at the end of the current path
 		 */
 		void addKeyFrame(const Vec3 & position, const Quaternion & rotation);
@@ -153,7 +148,7 @@ namespace api {
 		/**
 		 * \brief current Frame for LINEAR
 		 */
-		uint32_t _currentFrame;
+		size_t _currentFrame;
 
 		/**
 		 * \brief direction of the Mover (default is forward = true)
@@ -172,7 +167,7 @@ namespace api {
 		/**
 		 * \brief loads all parameters from a message
 		 */
-		void loadParams(const attributeMap & params);
+		void loadParams(const attributeMap & params) override;
 
 		MoverInterpolateComponent(const MoverInterpolateComponent &) = delete;
 

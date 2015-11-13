@@ -17,12 +17,18 @@
  * USA
  */
 
-#ifndef _WX_OGRE_PREREQUISITES_H_
-#define _WX_OGRE_PREREQUISITES_H_
+#ifndef __WX_OGRE_PREREQUISITES_H__
+#define __WX_OGRE_PREREQUISITES_H__
+
+#include "i6engine/utils/i6eSystemParameters.h"
 
 #include "ParticleUniversePrerequisites.h"
 
-#include "OGRE/Ogre.h"
+#include "OGRE/OgreString.h"
+
+#ifdef __WXMSW__
+#   include "wx/msw/winundef.h"
+#endif
 
 #include "wx/wx.h"
 
@@ -73,10 +79,18 @@ static const int LB_TEMPLATES_WIDTH = (1.0 - APP_WIDTH_FRACTION) * APP_WIDTH;
 static const int LB_TEMPLATES_HEIGHT =  (1.0 - APP_HEIGHT_FRACTION) * APP_HEIGHT - TAB_POS_Y - 24;
 static const int PROPERTIES_WIDTH = LB_TEMPLATES_WIDTH;
 static const int PROPERTIES_HEIGHT =  APP_HEIGHT_FRACTION * APP_HEIGHT - TAB_POS_Y - 24;
-static const int TOOLS_EDIT_WIDTH = 48;
-static const int TOOLS_EDIT_HEIGHT = 240;
-static const int TOOLBAR_EDIT_WIDTH = 24;
-static const int TOOLBAR_EDIT_HEIGHT = 240;
+
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+	static const int TOOLS_EDIT_WIDTH = 64;
+	static const int TOOLS_EDIT_HEIGHT = 240;
+	static const int TOOLBAR_EDIT_WIDTH = 24;
+	static const int TOOLBAR_EDIT_HEIGHT = 240;
+#else
+	static const int TOOLS_EDIT_WIDTH = 90;
+	static const int TOOLS_EDIT_HEIGHT = 240;
+	static const int TOOLBAR_EDIT_WIDTH = 40;
+	static const int TOOLBAR_EDIT_HEIGHT = 240;
+#endif
 
 // Notebook constants
 static const int NOTEBOOK_RENDER = 0;
@@ -167,8 +181,7 @@ typedef wxString ComponentType;
 typedef wxString ComponentSubType;
 
 // Enum: Component Relation
-enum ComponentRelation
-{
+enum ComponentRelation {
 	CR_INCLUDE,
 	CR_EXCLUDE,
 	CR_HANDLE,
@@ -186,22 +199,17 @@ enum ComponentRelation
 };
 
 // Enum: Component Relation
-enum ComponentRelationDirection
-{
+enum ComponentRelationDirection {
 	CRDIR_PRIMARY,
 	CRDIR_SECUNDAIRY,
 	CRDIR_EQUAL
 };
 
 // Function to return the opposite relation direction
-inline ComponentRelationDirection getOppositeRelationDirection(ComponentRelationDirection relationDirection)
-{
-	if (relationDirection == CRDIR_PRIMARY)
-	{
+inline ComponentRelationDirection getOppositeRelationDirection(ComponentRelationDirection relationDirection) {
+	if (relationDirection == CRDIR_PRIMARY) {
 		return CRDIR_SECUNDAIRY;
-	}
-	else if (relationDirection == CRDIR_SECUNDAIRY)
-	{
+	} else if (relationDirection == CRDIR_SECUNDAIRY) {
 		return CRDIR_PRIMARY;
 	}
 	return CRDIR_EQUAL;
@@ -209,5 +217,4 @@ inline ComponentRelationDirection getOppositeRelationDirection(ComponentRelation
 
 static const ComponentSubType CST_UNDEFINED = wxT("<undefined>");
 
-
-#endif
+#endif /* __WX_OGRE_PREREQUISITES_H__ */

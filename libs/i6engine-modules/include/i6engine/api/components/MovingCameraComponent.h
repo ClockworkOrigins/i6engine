@@ -37,8 +37,6 @@ namespace api {
 		MovingCameraComponent(const int64_t id, const attributeMap & params);
 		~MovingCameraComponent();
 
-		static ComPtr createC(const int64_t id, const attributeMap & params);
-
 		std::string getTemplateName() const override {
 			return "MovingCamera";
 		}

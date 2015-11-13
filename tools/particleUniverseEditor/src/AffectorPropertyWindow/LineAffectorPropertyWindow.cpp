@@ -112,14 +112,14 @@ void LineAffectorPropertyWindow::_initProperties(void)
 	appendVector3(PRNL_END, PRNL_END, ParticleUniverse::LineAffector::DEFAULT_END);
 
 	// Maximum Deviation: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_MAX_DEVIATION, PRNL_MAX_DEVIATION, ParticleUniverse::LineAffector::DEFAULT_MAX_DEVIATION));
+	Append(new wxFloatProperty(PRNL_MAX_DEVIATION, PRNL_MAX_DEVIATION, ParticleUniverse::LineAffector::DEFAULT_MAX_DEVIATION));
 	SetPropertyEditor(PRNL_MAX_DEVIATION, wxPG_EDITOR(SpinCtrl));
 
 	// Time Step: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TIME_STEP, PRNL_TIME_STEP, ParticleUniverse::LineAffector::DEFAULT_TIME_STEP));
+	Append(new wxFloatProperty(PRNL_TIME_STEP, PRNL_TIME_STEP, ParticleUniverse::LineAffector::DEFAULT_TIME_STEP));
 	SetPropertyEditor(PRNL_TIME_STEP, wxPG_EDITOR(SpinCtrl));
 
 	// Drift: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_DRIFT, PRNL_DRIFT, ParticleUniverse::LineAffector::DEFAULT_DRIFT));
+	Append(new wxFloatProperty(PRNL_DRIFT, PRNL_DRIFT, ParticleUniverse::LineAffector::DEFAULT_DRIFT));
 	SetPropertyEditor(PRNL_DRIFT, wxPG_EDITOR(SpinCtrl));
 }

@@ -1,8 +1,8 @@
-call build-common.bat
+call build-common.bat %1 %2
 
 Set ARCHIVE=tinyxml2.zip
 Set BUILD_DIR=%TMP_DIR%/tinyxml2
-Set PREFIX=%DEP_DIR%/tinyxml2/
+Set PREFIX=%DEP_DIR%/%ARCH_DIR%/tinyxml2/
 
 echo "Compile TinyXML"
 

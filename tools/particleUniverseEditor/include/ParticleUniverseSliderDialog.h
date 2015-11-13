@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_SLIDER_DIALOG_H__
-#define __PUED_SLIDER_DIALOG_H__
+#ifndef __PUED_SLIDERDIALOG_H__
+#define __PUED_SLIDERDIALOG_H__
 
 #include "wx/dialog.h"
 
@@ -20,30 +20,20 @@ You can find a copy of the Commercial License in the Particle Universe package.
 class wxTextCtrl;
 class wxSlider;
 
-class SliderDialog : public wxDialog
-{
-	public:
-		// Constructor / Destructor
-		SliderDialog(wxWindow* parent, 
-			wxWindowID id, 
-			const wxString& title, 
-			const wxPoint& pos = wxDefaultPosition, 
-			const wxSize& size = wxDefaultSize, 
-			const wxString& name = wxT("SliderDialog"),
-			float value = 0.0f,
-			float min = 0.0f,
-			float max = 255.0f,
-			float divider = 255.0f);
-		~SliderDialog(void) {}
-		void OnTextUpdated(wxCommandEvent& evt);
-		void OnScroll(wxScrollEvent& evt);
-		float getValue(void) const;
+class SliderDialog : public wxDialog {
+public:
+	// Constructor / Destructor
+	SliderDialog(wxWindow * parent, wxWindowID id, const wxString & title, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxDefaultSize, const wxString & name = wxT("SliderDialog"), float value = 0.0f, float min = 0.0f, float max = 255.0f, float divider = 255.0f);
+	~SliderDialog() {}
+	void OnTextUpdated(wxCommandEvent & evt);
+	void OnScroll(wxScrollEvent & evt);
+	float getValue() const;
 
-	protected:
-		float mDivider;
-		wxTextCtrl* mValueCtrl;
-		wxSlider* mSlider;
-		float mValue;
+protected:
+	float mDivider;
+	wxTextCtrl * mValueCtrl;
+	wxSlider * mSlider;
+	float mValue;
 };
 
-#endif
+#endif /* __PUED_SLIDERDIALOG_H__ */

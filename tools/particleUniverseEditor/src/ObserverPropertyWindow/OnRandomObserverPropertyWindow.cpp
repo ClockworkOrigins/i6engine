@@ -74,6 +74,6 @@ void OnRandomObserverPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("ObserverOnRandom.html");
 
 	// Random Threshold: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_ON_RANDOM_VALUE, PRNL_ON_RANDOM_VALUE, ParticleUniverse::OnRandomObserver::DEFAULT_THRESHOLD));
+	Append(new wxFloatProperty(PRNL_ON_RANDOM_VALUE, PRNL_ON_RANDOM_VALUE, ParticleUniverse::OnRandomObserver::DEFAULT_THRESHOLD));
 	SetPropertyEditor(PRNL_ON_RANDOM_VALUE, wxPG_EDITOR(SpinCtrl));
 }

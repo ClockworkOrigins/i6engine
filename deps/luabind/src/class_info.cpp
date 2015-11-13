@@ -22,19 +22,23 @@
 
 #define LUABIND_BUILDING
 
-#include "i6engine/luabind/class_info.hpp"
+#include "i6engine/luabind/lua_include.hpp"
 
+#include "i6engine/luabind/luabind.hpp"
+#include "i6engine/luabind/class_info.hpp"
 #include "i6engine/luabind/detail/class_registry.hpp"
 
-namespace luabind {
-
-	LUABIND_API class_info get_class_info(argument const & o) {
-		lua_State * L = o.interpreter();
+namespace luabind
+{
+	LUABIND_API class_info get_class_info(argument const& o)
+	{
+		lua_State* L = o.interpreter();
 	
 		o.push(L);
-        detail::object_rep * obj = detail::get_instance(L, -1);
+        detail::object_rep* obj = detail::get_instance(L, -1);
 
-        if (!obj) {
+        if (!obj)
+        {
             class_info res;
             res.name = lua_typename(L, lua_type(L, -1));
             lua_pop(L, 1);
@@ -56,11 +60,10 @@ namespace luabind {
 
         std::size_t index = 1;
 
-        for (iterator i(table), e; i != e; ++i) {
-			if (type(*i) != LUA_TFUNCTION) {
-				continue;
-			}
-
+        for (iterator i(table), e; i != e; ++i)
+        {
+            if (type(*i) != LUA_TFUNCTION)
+                continue;
 
             // We have to create a temporary `object` here, otherwise the proxy
             // returned by operator->() will mess up the stack. This is a known
@@ -69,9 +72,12 @@ namespace luabind {
             member.push(L);
             detail::stack_pop pop(L, 1);
 
-            if (lua_tocfunction(L, -1) == &detail::property_tag) {
+            if (lua_tocfunction(L, -1) == &detail::property_tag)
+            {
                 res.attributes[index++] = i.key();
-            } else {
+            }
+            else
+            {
                 res.methods[i.key()] = *i;
             }
         }
@@ -79,22 +85,26 @@ namespace luabind {
         return res;
 	}
 
-    LUABIND_API object get_class_names(lua_State * L) {
-        detail::class_registry * reg = detail::class_registry::get_registry(L);
+    LUABIND_API object get_class_names(lua_State* L)
+    {
+        detail::class_registry* reg = detail::class_registry::get_registry(L);
 
-        std::map<type_id, detail::class_rep *> const & classes = reg->get_classes();
+        std::map<type_id, detail::class_rep*> const& classes = reg->get_classes();
 
         object res = newtable(L);
         std::size_t index = 1;
 
-        for (std::map<type_id, detail::class_rep *>::const_iterator iter = classes.begin(); iter != classes.end(); ++iter) {
+        for (std::map<type_id, detail::class_rep*>::const_iterator iter = classes.begin();
+            iter != classes.end(); ++iter)
+        {
             res[index++] = iter->second->name();
         }
 
         return res;
     }
 
-	LUABIND_API void bind_class_info(lua_State * L) {
+	LUABIND_API void bind_class_info(lua_State* L)
+	{
 		module(L)
 		[
 			class_<class_info>("class_info_data")
@@ -106,5 +116,5 @@ namespace luabind {
             def("class_names", &get_class_names)
 		];
 	}
+}
 
-} /* namespace luabind */

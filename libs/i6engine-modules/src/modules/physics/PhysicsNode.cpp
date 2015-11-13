@@ -27,6 +27,7 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/modules/physics/PhysicsManager.h"
+#include "i6engine/modules/physics/PhysicsVelocityComponent.h"
 
 #include "BulletCollision/CollisionShapes/btCollisionShape.h"
 #include "BulletCollision/CollisionShapes/btCompoundShape.h"
@@ -37,17 +38,22 @@
 namespace i6engine {
 namespace modules {
 
-	PhysicsNode::PhysicsNode(const int64_t id, const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::attributeMap & params, api::ShatterInterest shatterInterest, PhysicsManager * pm) : _manager(pm), _id(id), _compId(compId), _collisionGroup(cg), _position(position), _rotation(rotation), _scale(scale), _transform(rotation.toBullet(), position.toBullet()), _rigidBody(), _linearVelocity(), _centralForce(), _shatterInterest(shatterInterest), _parentShape(nullptr), _childShapes() {
+	PhysicsNode::PhysicsNode(const int64_t id, const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::attributeMap & params, api::ShatterInterest shatterInterest, PhysicsManager * pm) : _manager(pm), _id(id), _compId(compId), _collisionGroup(cg), _position(position), _rotation(rotation), _scale(scale), _transform(rotation.toBullet(), position.toBullet()), _rigidBody(), _linearVelocity(), _centralForce(), _shatterInterest(shatterInterest), _parentShape(nullptr), _childShapes(), _velocityComponent(nullptr), _tickCount(0), _mass(0.0), _weakPSCPtr() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-
 		if (std::stoi(params.find("compound")->second)) {
 			_parentShape = _manager->createCompound();
+		}
+		auto go = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(_id);
+		if (go != nullptr) {
+			_weakPSCPtr = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
 		}
 	}
 
 	PhysicsNode::~PhysicsNode() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		stopSimulatingBody();
+
+		delete _velocityComponent;
 
 		assert(_rigidBody != nullptr);
 
@@ -65,7 +71,7 @@ namespace modules {
 	}
 
 	bool PhysicsNode::addChild(const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::PhysicalStateComponent::ShapeType shapeType, const attributeMap & shapeParams) {
-		ASSERT_THREAD_SAFETY_CONSTRUCTOR
+		ASSERT_THREAD_SAFETY_FUNCTION
 		btCollisionShape * newShape = nullptr;
 		switch (shapeType) {
 		case api::PhysicalStateComponent::ShapeType::PLANE: {
@@ -141,6 +147,7 @@ namespace modules {
 				angularDamping = std::stod(shapeParams.find("angularDamping")->second);
 			}
 
+			_mass = mass;
 			_transform = btTransform(rotation.toBullet(), position.toBullet());
 
 			if (_parentShape != nullptr) {
@@ -309,21 +316,14 @@ namespace modules {
 
 		_transform = worldTrans;
 
-		api::GOPtr go = api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(_id);
+		utils::sharedPtr<api::PhysicalStateComponent, api::Component> pC = _weakPSCPtr.get();
 
-		if (go == nullptr) {
+		if (pC == nullptr) {
 			return;
 		}
 
-		utils::sharedPtr<api::PhysicalStateComponent, api::Component> pC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
-
 		if (_rigidBody && !_rigidBody->isKinematicObject()) {
 			_rigidBody->proceedToTransform(_transform);
-
-			if (pC == nullptr) {
-				ISIXE_LOG_WARN("PhysicsNode", "GameObject doesn't exist any more");
-				return;
-			}
 			pC->setLinearVelocity(Vec3(_rigidBody->getLinearVelocity()), 1);
 		}
 
@@ -345,6 +345,15 @@ namespace modules {
 				pC->setRotation(rotation, 1);
 			}
 		}
+	}
+
+	void PhysicsNode::createVelocityComponent(double maxSpeed, double resistanceCoefficient, double windage) {
+		_velocityComponent = new PhysicsVelocityComponent(this, _mass, maxSpeed, resistanceCoefficient, windage);
+	}
+
+	void PhysicsNode::deleteVelocityComponent() {
+		delete _velocityComponent;
+		_velocityComponent = nullptr;
 	}
 
 	void PhysicsNode::startSimulatingBody() {
@@ -467,6 +476,18 @@ namespace modules {
 
 					api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(pru->message);
 				}
+			} else if (msg->getSubtype() == api::physics::PhyAccelerate) {
+				api::physics::Physics_Accelerate_Update * pau = dynamic_cast<api::physics::Physics_Accelerate_Update *>(msg->getContent());
+				_velocityComponent->accelerate(pau->acceleration, pau->handling, pau->callback);
+			} else if (msg->getSubtype() == api::physics::PhyDecelerate) {
+				api::physics::Physics_Decelerate_Update * pdu = dynamic_cast<api::physics::Physics_Decelerate_Update *>(msg->getContent());
+				_velocityComponent->decelerate(pdu->deceleration, pdu->callback);
+			} else if (msg->getSubtype() == api::physics::PhyMaxSpeed) {
+				_velocityComponent->setMaxSpeed(dynamic_cast<api::physics::Physics_SetMaxSpeed_Update *>(msg->getContent())->maxSpeed);
+			} else if (msg->getSubtype() == api::physics::PhyResistanceCoefficient) {
+				_velocityComponent->setResistanceCoefficient(dynamic_cast<api::physics::Physics_SetResistanceCoefficient_Update *>(msg->getContent())->resistanceCoefficient);
+			} else if (msg->getSubtype() == api::physics::PhyWindage) {
+				_velocityComponent->setWindage(dynamic_cast<api::physics::Physics_SetWindage_Update *>(msg->getContent())->windage);
 			} else {
 				ISIXE_THROW_MESSAGE("PhysicsNode", "Unknown message received: " << msg->getMessageInfo());
 			}
@@ -474,6 +495,7 @@ namespace modules {
 	}
 
 	void PhysicsNode::Tick() {
+		ASSERT_THREAD_SAFETY_FUNCTION
 		for (PeriodicRaytest * pr : _rayTests) {
 			api::RayTestResult rtr = HitTest(pr->from, pr->to);
 
@@ -509,14 +531,41 @@ namespace modules {
 
 			pr->lastResult = rtr;
 		}
+		if (_velocityComponent) {
+			_velocityComponent->Tick();
+		}
 	}
 
 	void PhysicsNode::addTicker() {
-		_manager->addTicker(this);
+		ASSERT_THREAD_SAFETY_FUNCTION
+		if (_tickCount == 0) {
+			_manager->addTicker(this);
+		}
+		_tickCount++;
 	}
 
 	void PhysicsNode::removeTicker() {
-		_manager->removeTicker(this);
+		ASSERT_THREAD_SAFETY_FUNCTION
+		if (_tickCount > 0) {
+			_tickCount--;
+			if (_tickCount == 0) {
+				_manager->removeTicker(this);
+			}
+		}
+	}
+
+	Vec3 PhysicsNode::getVelocity() const {
+		return Vec3(_rigidBody->getLinearVelocity());
+	}
+
+	void PhysicsNode::applyForce(const Vec3 & force, const Vec3 & offset, bool local) {
+		btVector3 f = force.toBullet();
+		if (local) {
+			f = (_rigidBody->getOrientation() * f * _rigidBody->getOrientation().inverse()).getAxis();
+		}
+		btVector3 o = offset.toBullet();
+		o = (_rigidBody->getOrientation() * o * _rigidBody->getOrientation().inverse()).getAxis();
+		_rigidBody->applyForce(f, o);
 	}
 
 } /* namespace modules */

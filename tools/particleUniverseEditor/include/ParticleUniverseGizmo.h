@@ -26,6 +26,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/ogre/prerequisites.h"
 
+#include "OGRE/OgreColourValue.h"
+#include "OGRE/OgreSceneQuery.h"
+
 /**	Gizmo class
 */
 class GizmoManager;
@@ -47,7 +50,7 @@ class Gizmo
 		virtual void attachToNode(Ogre::SceneNode* node) = 0;
 		virtual Ogre::SceneNode* detachFromNode(void) = 0;
 		virtual void startSelect(const Ogre::Vector2& screenPosition) = 0;
-		virtual bool select(const Ogre::RaySceneQueryResult& queryResult, const Ogre::ColourValue& pixelColour = Ogre::ColourValue::Black) = 0;
+		virtual bool select(const Ogre::RaySceneQueryResult & queryResult, const Ogre::ColourValue & pixelColour = Ogre::ColourValue::Black) = 0;
 		virtual void endSelect(void) = 0;
 		virtual bool isVisible(void) const = 0;
 		virtual void setVisible(bool visible) = 0;

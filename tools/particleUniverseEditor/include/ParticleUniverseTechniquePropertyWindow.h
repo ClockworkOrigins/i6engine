@@ -9,8 +9,8 @@ You can find a copy of the Commercial License in the Particle Universe package.
 -----------------------------------------------------------------------------------------------
 */
 
-#ifndef __PUED_TECHNIQUE_PROPERTY_WINDOW_H__
-#define __PUED_TECHNIQUE_PROPERTY_WINDOW_H__
+#ifndef __PUED_TECHNIQUEPROPERTYWINDOW_H__
+#define __PUED_TECHNIQUEPROPERTYWINDOW_H__
 
 #include "ParticleUniversePropertyWindow.h"
 
@@ -38,45 +38,44 @@ static wxString PRNL_TECHNIQUE_MAX_VELOCITY = wxT("");
 
 /**	
 */
-class TechniquePropertyWindow : public PropertyWindow
-{
-	public:
-		TechniquePropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name);
-		~TechniquePropertyWindow(void) {}
+class TechniquePropertyWindow : public PropertyWindow {
+public:
+	TechniquePropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name);
+	~TechniquePropertyWindow() {}
 
-		/**
-			Copy technique properties from a particle technique to a window
-		*/
-		virtual void copyAttributesFromTechnique(const ParticleUniverse::ParticleTechnique* technique);
+	/**
+		Copy technique properties from a particle technique to a window
+	*/
+	virtual void copyAttributesFromTechnique(const ParticleUniverse::ParticleTechnique * technique);
 
-		/**
-			Copy technique properties from a window to a technique
-		*/
-		virtual void copyAttributeToTechnique(wxPGProperty* prop, wxString propertyName);
+	/**
+		Copy technique properties from a window to a technique
+	*/
+	virtual void copyAttributeToTechnique(wxPGProperty * prop, wxString propertyName);
 
-		/**
-			See PropertyWindow
-		*/
-		virtual void onPropertyChanged(wxPropertyGridEvent& event);
-		void onParentPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		See PropertyWindow
+	*/
+	virtual void onPropertyChanged(wxPropertyGridEvent & event);
+	void onParentPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Updating functions
-		*/
-		void copyEnabledToTechnique(wxPGProperty* prop, ParticleUniverse::ParticleTechnique* technique);
-		void copyPositionToTechnique(wxPGProperty* prop, ParticleUniverse::ParticleTechnique* technique);
-		void copyKeepLocalToTechnique(wxPGProperty* prop, ParticleUniverse::ParticleTechnique* technique);
-		void copyVisualParticleQuotaToTechnique(wxPGProperty* prop, ParticleUniverse::ParticleTechnique* technique);
-		void copyEmittedEmitterQuotaToTechnique(wxPGProperty* prop, ParticleUniverse::ParticleTechnique* technique);
-		void copyEmittedAffectorQuotaToTechnique(wxPGProperty* prop, ParticleUniverse::ParticleTechnique* technique);
-		void copyEmittedTechniqueQuotaToTechnique(wxPGProperty* prop, ParticleUniverse::ParticleTechnique* technique);
-		void copyEmittedSystemQuotaToTechnique(wxPGProperty* prop, ParticleUniverse::ParticleTechnique* technique);
+	/**
+		Updating functions
+	*/
+	void copyEnabledToTechnique(wxPGProperty * prop, ParticleUniverse::ParticleTechnique * technique);
+	void copyPositionToTechnique(wxPGProperty * prop, ParticleUniverse::ParticleTechnique * technique);
+	void copyKeepLocalToTechnique(wxPGProperty * prop, ParticleUniverse::ParticleTechnique * technique);
+	void copyVisualParticleQuotaToTechnique(wxPGProperty * prop, ParticleUniverse::ParticleTechnique * technique);
+	void copyEmittedEmitterQuotaToTechnique(wxPGProperty * prop, ParticleUniverse::ParticleTechnique * technique);
+	void copyEmittedAffectorQuotaToTechnique(wxPGProperty * prop, ParticleUniverse::ParticleTechnique * technique);
+	void copyEmittedTechniqueQuotaToTechnique(wxPGProperty * prop, ParticleUniverse::ParticleTechnique * technique);
+	void copyEmittedSystemQuotaToTechnique(wxPGProperty * prop, ParticleUniverse::ParticleTechnique * technique);
 
-	protected:
-		/**
-			Initialises all technique properties
-		*/
-		virtual void _initProperties(void);
+protected:
+	/**
+		Initialises all technique properties
+	*/
+	virtual void _initProperties();
 };
 
-#endif
+#endif /* __PUED_TECHNIQUEPROPERTYWINDOW_H__ */

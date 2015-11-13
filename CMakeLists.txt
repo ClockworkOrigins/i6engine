@@ -44,7 +44,25 @@ option(ISIXE_WITH_TUTORIALS "build tutorials for i6engine" ON)
 # * "lua"
 set(ISIXE_WITH_SCRIPTING "python" CACHE STRING "specifies the scripting system to use" )
 
-set(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies" CACHE STRING "path to dependencies for i6engine")
+IF(WIN32)
+	IF(CMAKE_GENERATOR MATCHES "Visual Studio 12")
+		SET(DEP_DIR_BUILD "msvc12_")
+	ELSEIF(CMAKE_GENERATOR MATCHES "Visual Studio 14")
+		SET(DEP_DIR_BUILD "msvc14_")
+	ELSE()
+		MESSAGE([WARNING] "Toolchain not supported yet!")
+	ENDIF()
+
+	IF(CMAKE_GENERATOR MATCHES "Win64")
+		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}x64")
+	ELSEIF(CMAKE_GENERATOR MATCHES "ARM")
+		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}arm")
+	ELSE()
+		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}x86")
+	ENDIF()
+ENDIF()
+
+SET(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies/${DEP_DIR_BUILD}" CACHE STRING "path to dependencies for i6engine")
 
 IF(ISIXE_WITH_TESTING AND NOT WIN32)
 	# static for gmock
@@ -77,12 +95,12 @@ ENDIF()
 
 # Setting last version
 SET(LAST_VERSION_MAJOR 0)
-SET(LAST_VERSION_MINOR 8)
+SET(LAST_VERSION_MINOR 9)
 SET(LAST_VERSION_PATCH 0)
 
 # Setting current version
-SET(VERSION_MAJOR 0)
-SET(VERSION_MINOR 9)
+SET(VERSION_MAJOR 1)
+SET(VERSION_MINOR 0)
 SET(VERSION_PATCH 0)
 
 #########################################################################
@@ -111,14 +129,16 @@ ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
 	set (CMAKE_CXX_FLAGS_RELEASE		"${CXX_FLAGS} -O3 -DNDEBUG")
 	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CXX_FLAGS} -O2 -g")
 ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+	set (CMAKE_CXX_FLAGS_DEBUG		"${CMAKE_CXX_FLAGS_DEBUG} /MP")
+	set (CMAKE_CXX_FLAGS_MINSIZEREL	"${CMAKE_CXX_FLAGS_MINSIZEREL} /MP")
 	set (CMAKE_CXX_FLAGS_RELEASE		"${CMAKE_CXX_FLAGS_RELEASE} /MP")
-	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MP")
+	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MP /Qvec-report:1 /Qpar /Qpar-report:1")
 ELSE()
 	message (SEND_INFO "Unknown C++ compiler \"${CMAKE_CXX_COMPILER_ID}\". Only GNU, Clang and MSVC are completely supported.")
 ENDIF()
 
 #########################################################################
-#Global Directory Definitions
+# Global Directory Definitions
 #########################################################################
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules/" ${CMAKE_MODULE_PATH})
@@ -129,7 +149,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 
 #########################################################################
-#Library Section
+# Library Section
 #########################################################################
 
 #----------------------------------------------------
@@ -185,7 +205,7 @@ ENDIF()
 #----------------------------------------------------
 	SET(LIBNAME "OIS")
 	SET(LIBHEADER "OIS/OIS.h")
-	SET(OIS_ROOT ${ISIXE_DEP_DIR}/ois)
+	SET(OIS_ROOT ${ISIXE_DEP_DIR}/misc)
 	find_package(EasyFind REQUIRED COMPONENTS OIS)
 	include_directories(SYSTEM ${OIS_INCLUDE_DIR})
 
@@ -279,12 +299,14 @@ ENDIF(NOT WIN32)
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS)
 	SET(LIBNAME "WXWIDGETS")
-	SET(LIBHEADER "wx/wx.h")
 	SET(WXWIDGETS_ROOT ${ISIXE_DEP_DIR}/wxWidgets)
 	IF(WIN32)
-		find_package(EasyFind REQUIRED COMPONENTS wxbase28 wxbase28_net wxbase28_xml wxexpat wxjpeg wxmsw28_adv wxmsw28_aui wxmsw28_core wxmsw28_html wxmsw28_media wxmsw28_qa wxmsw28_richtext wxmsw28_xrc wxpng wxtiff wxzlib)
+		SET(LIBHEADER "wx/wx/wx.h")
+		find_package(EasyFind REQUIRED COMPONENTS wxbase30u wxbase30u_net wxbase30u_xml wxexpat wxjpeg wxmsw30u_adv wxmsw30u_aui wxmsw30u_core wxmsw30u_gl wxmsw30u_html wxmsw30u_media wxmsw30u_propgrid wxmsw30u_qa wxmsw30u_ribbon wxmsw30u_richtext wxmsw30u_stc wxmsw30u_webview wxmsw30u_xrc wxpng wxregexu wxscintilla wxtiff wxzlib)
+		include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR}/wx)
 	ELSEIF(UNIX)
-		find_package(EasyFind REQUIRED COMPONENTS wx_baseu-2.8 wx_baseu_net-2.8 wx_baseu_xml-2.8 wx_gtk2u_adv-2.8 wx_gtk2u_aui-2.8 wx_gtk2u_core-2.8 wx_gtk2u_html-2.8 wx_gtk2u_qa-2.8 wx_gtk2u_richtext-2.8 wx_gtk2u_xrc-2.8)
+		SET(LIBHEADER "wx/wx.h")
+		find_package(EasyFind REQUIRED COMPONENTS wx_baseu-3.0 wx_baseu_net-3.0 wx_baseu_xml-3.0 wx_gtk2u_adv-3.0 wx_gtk2u_aui-3.0 wx_gtk2u_core-3.0 wx_gtk2u_html-3.0 wx_gtk2u_qa-3.0 wx_gtk2u_propgrid-3.0 wx_gtk2u_richtext-3.0 wx_gtk2u_xrc-3.0)
 	ENDIF(WIN32)
 	include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR})
 ENDIF(ISIXE_WITH_TOOLS)
@@ -293,14 +315,11 @@ ENDIF(ISIXE_WITH_TOOLS)
 # GTK
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS AND UNIX)
-	include_directories(SYSTEM /usr/include/gtk-2.0)
-	include_directories(SYSTEM /usr/include/glib-2.0)
-	include_directories(SYSTEM /usr/lib/x86_64-linux-gnu/glib-2.0/include/)
-	include_directories(SYSTEM /usr/include/cairo/)
-	include_directories(SYSTEM /usr/include/pango-1.0/)
-	include_directories(SYSTEM /usr/lib/x86_64-linux-gnu/gtk-2.0/include/)
-	include_directories(SYSTEM /usr/include/gdk-pixbuf-2.0/)
-	include_directories(SYSTEM /usr/include/atk-1.0/)
+	find_package(GTK2 REQUIRED gtk)
+	INCLUDE_DIRECTORIES(SYSTEM ${GTK2_INCLUDE_DIRS})
+	find_package(PkgConfig REQUIRED)
+	pkg_check_modules(GLIB2 glib-2.0)
+	INCLUDE_DIRECTORIES(SYSTEM ${GLIB2_INCLUDE_DIRS})
 ENDIF(ISIXE_WITH_TOOLS AND UNIX)
 
 ###############################################################################
@@ -316,21 +335,29 @@ install(FILES ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h DESTI
 IF(ISIXE_WITH_NETWORK)
 	# Build m2etis
 	IF(WIN32)
-		execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.bat "${ISIXE_DEP_DIR}" "${CMAKE_BINARY_DIR}/include")
+		IF(CMAKE_GENERATOR MATCHES "Visual Studio 12")
+			SET(METIS_TOOLCHAIN msvc12)
+		ELSE()
+			MESSAGE([ERROR] "Generator not supported yet!")
+		ENDIF()
+		IF(CMAKE_GENERATOR MATCHES "Win64")
+			SET(METIS_ARCH 64)
+		ELSE(CMAKE_GENERATOR MATCHES "Win64")
+			SET(METIS_ARCH 32)
+		ENDIF(CMAKE_GENERATOR MATCHES "Win64")
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.bat ${METIS_TOOLCHAIN} ${METIS_ARCH} "${ISIXE_DEP_DIR}/.." "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
 	ELSE(WIN32)
-		execute_process(COMMAND ${ISIXE_DEP_DIR}/build-m2etis.sh "${CMAKE_BINARY_DIR}/include/i6engine" "${CMAKE_BUILD_TYPE}")
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.sh "${CMAKE_BINARY_DIR}/include/i6engine" "${CMAKE_BUILD_TYPE}")
 	ENDIF(WIN32)
 
 	#----------------------------------------------------
 	# I6M2ETIS
 	#----------------------------------------------------
-	IF(ISIXE_WITH_NETWORK)
-		SET(LIBNAME "M2etis")
-		SET(LIBHEADER "m2etis/pubsub/PubSubSystem.h")
-		SET(M2etis_ROOT ${ISIXE_DEP_DIR}/m2etis)
-		find_package(EasyFind REQUIRED COMPONENTS m2etis)
-		include_directories(SYSTEM ${M2etis_INCLUDE_DIR})
-	ENDIF(ISIXE_WITH_NETWORK)
+	SET(LIBNAME "M2etis")
+	SET(LIBHEADER "m2etis/pubsub/PubSubSystem.h")
+	SET(M2etis_ROOT ${ISIXE_DEP_DIR}/m2etis)
+	find_package(EasyFind REQUIRED COMPONENTS m2etis)
+	include_directories(SYSTEM ${M2etis_INCLUDE_DIR})
 ENDIF(ISIXE_WITH_NETWORK)
 
 ####################################################################################
@@ -478,7 +505,7 @@ IF(WIN32)
 	
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-archive.bat.in ${CMAKE_BINARY_DIR}/build-archive.bat @ONLY)
 	configure_file(${CMAKE_SOURCE_DIR}/config/test-buildconfigurations.bat.in ${CMAKE_BINARY_DIR}/test-buildconfigurations.bat @ONLY)
-	
+
 	add_custom_target(BuildReleaseSourceArchive COMMAND build-archive.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 	add_custom_target(BuildRevisionSourceArchive COMMAND build-archive.bat packageRevision WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 	add_custom_target(TestConfigurations COMMAND test-buildconfigurations.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})

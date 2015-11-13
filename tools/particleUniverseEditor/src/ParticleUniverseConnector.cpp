@@ -16,39 +16,13 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include "wx/ogre/utils.h"
 
-//-----------------------------------------------------------------------
-DrawConnector::DrawConnector(wxWindow* node1,
-							 wxWindow* node2,
-							 ComponentRelation relation,
-							 const Ogre::String& colourCode,
-							 int lineStyle) : 
-	mNode1(node1), 
-	mNode2(node2), 
-	mPosition(wxPoint(0, 0)),
-	usePosition(false), 
-	mColourCode(colourCode),
-	mLineStyle(lineStyle),
-	mRelation(relation),
-	xOffsetMin(24)
-{
+DrawConnector::DrawConnector(wxWindow * node1, wxWindow * node2, ComponentRelation relation, const Ogre::String & colourCode, int lineStyle) : mNode1(node1), mNode2(node2), mPosition(wxPoint(0, 0)), usePosition(false), mColourCode(colourCode), mLineStyle(lineStyle), mRelation(relation), xOffsetMin(24) {
 }
-//-----------------------------------------------------------------------
-DrawConnector::DrawConnector(wxWindow* node, 
-							 wxPoint& position,
-							 const Ogre::String& colourCode,
-							 int lineStyle) : 
-	mNode1(node), 
-	mNode2(0), 
-	mPosition(position),
-	usePosition(true), 
-	mColourCode(colourCode),
-	mLineStyle(lineStyle),
-	xOffsetMin(24)
-{
+
+DrawConnector::DrawConnector(wxWindow * node, wxPoint & position, const Ogre::String & colourCode, int lineStyle) : mNode1(node), mNode2(nullptr), mPosition(position), usePosition(true), mColourCode(colourCode), mLineStyle(lineStyle), xOffsetMin(24) {
 }
-//-----------------------------------------------------------------------
-void DrawConnector::drawLine(wxWindow* canvas, wxPaintDC* dc)
-{
+
+void DrawConnector::drawLine(wxWindow * canvas, wxPaintDC * dc) {
 	/** The canvas is also an MDI Child and if the parent frame scrolls, the canvas' position
 		moves at the same rate as the nodes. Because the 'startposition' of the canvas is (0, 0),
 		the canvas position that is used here is an offset/relative position in relation to the scrollbars.
@@ -57,8 +31,7 @@ void DrawConnector::drawLine(wxWindow* canvas, wxPaintDC* dc)
 	col.Set(ogre2wx(mColourCode));
 	dc->SetPen(wxPen(col, 2, mLineStyle));
 
-	if (usePosition)
-	{
+	if (usePosition) {
 		wxPoint points[3];
 		int x1 = mNode1->GetPosition().x - canvas->GetPosition().x;
 		int y1 = mNode1->GetPosition().y - canvas->GetPosition().y + 0.5 * mNode1->GetSize().GetHeight();
@@ -68,8 +41,7 @@ void DrawConnector::drawLine(wxWindow* canvas, wxPaintDC* dc)
 		int x3 = x1 - xOffset;
 		int y3 = y1;
 
-		if (x2 > x1)
-		{
+		if (x2 > x1) {
 			x1 += mNode1->GetSize().GetWidth();
 			x3 = x1 + xOffset;
 		}
@@ -77,9 +49,7 @@ void DrawConnector::drawLine(wxWindow* canvas, wxPaintDC* dc)
 		points[1] = wxPoint(x3, y3);
 		points[2] = wxPoint(x2, y2);
 		dc->DrawSpline(3, points);
-	}
-	else
-	{
+	} else {
 		wxPoint points[4];
 		int x1 = mNode1->GetPosition().x - canvas->GetPosition().x;
 		int y1 = mNode1->GetPosition().y - canvas->GetPosition().y; 
@@ -98,8 +68,7 @@ void DrawConnector::drawLine(wxWindow* canvas, wxPaintDC* dc)
 		y4 = y2;
 
 		// Determine widest rectangle
-		if (width2 > width1)
-		{
+		if (width2 > width1) {
 			// Swap
 			x1 += x2; // = x1 + x2
 			x2 = x1 - x2; // = x1 + x2 - x2 = x1
@@ -125,8 +94,7 @@ void DrawConnector::drawLine(wxWindow* canvas, wxPaintDC* dc)
 		// Calculate the 4 control points
 		int xOffset = 0.25 * Ogre::Math::Abs(x1 - x2);
 		xOffset = std::max(xOffset, xOffsetMin);
-		if (x1 + width1 > x2 + width2)
-		{
+		if (x1 + width1 > x2 + width2) {
 			x3 = x1 - xOffset;
 			x4 = x2 - xOffset;
 			if (x1 > x2 + width2)
@@ -134,14 +102,11 @@ void DrawConnector::drawLine(wxWindow* canvas, wxPaintDC* dc)
 				x2 += width2;
 				x4 = x2 + xOffset;
 			}
-		}
-		else
-		{
+		} else {
 			x1 += width1;
 			x3 = x1 + xOffset;
 			x4 = x2 - xOffset;
-			if (x1 > x2)
-			{
+			if (x1 > x2) {
 				x2 += width2;
 				x4 = x2 + xOffset;
 			}
@@ -154,203 +119,138 @@ void DrawConnector::drawLine(wxWindow* canvas, wxPaintDC* dc)
 		dc->DrawSpline(4, points);
 	}
 }
-//-----------------------------------------------------------------------
-bool DrawConnector::hasNode(wxWindow* node)
-{
+
+bool DrawConnector::hasNode(wxWindow * node) {
 	return (node == mNode1 || node == mNode2);
 }
-//-----------------------------------------------------------------------
-bool DrawConnector::hasNodesAndRelation(wxWindow* node1, wxWindow* node2, ComponentRelation relation)
-{
+
+bool DrawConnector::hasNodesAndRelation(wxWindow * node1, wxWindow * node2, ComponentRelation relation) {
 	bool result;
 	result = (node1 == mNode1 || node1 == mNode2);
 	result = result && (node2 == mNode1 || node2 == mNode2);
 	result = result && (relation == mRelation);
 	return result;
 }
-//-----------------------------------------------------------------------
-void DrawConnector::setPosition(wxPoint& position)
-{
+
+void DrawConnector::setPosition(wxPoint & position) {
 	mPosition = position;
 }
-//-----------------------------------------------------------------------
-wxWindow* DrawConnector::getNode1 (void)
-{
+
+wxWindow * DrawConnector::getNode1() {
 	return mNode1;
 }
-//-----------------------------------------------------------------------
-wxWindow* DrawConnector::getNode2 (void)
-{
+
+wxWindow * DrawConnector::getNode2() {
 	return mNode2;
 }
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-ComponentRelation ConnectionPolicy::getRelation(void) const
-{
+
+ComponentRelation ConnectionPolicy::getRelation() const {
 	return mRelation;
 }
-//-----------------------------------------------------------------------
-ComponentRelationDirection ConnectionPolicy::getRelationDirection(void) const
-{
+
+ComponentRelationDirection ConnectionPolicy::getRelationDirection() const {
 	return mRelationDirection;
 }
-//-----------------------------------------------------------------------
-const wxString& ConnectionPolicy::getRelationDescription(ComponentRelation relation, 
-	ComponentRelationDirection relationDirection, 
-	const wxString& typeToBeConnectedWith, 
-	const wxString& subTypeToBeConnectedWith) const
-{
-	if (relation == mRelation && relationDirection == mRelationDirection && typeToBeConnectedWith == mTypeToBeConnectedWith)
-	{
-		if (mIgnoreSubType)
-		{
+
+const wxString & ConnectionPolicy::getRelationDescription(ComponentRelation relation, ComponentRelationDirection relationDirection, const wxString & typeToBeConnectedWith, const wxString & subTypeToBeConnectedWith) const {
+	if (relation == mRelation && relationDirection == mRelationDirection && typeToBeConnectedWith == mTypeToBeConnectedWith) {
+		if (mIgnoreSubType) {
 			return mRelationDescription;
-		}
-		else
-		{
-			if (subTypeToBeConnectedWith == mSubTypeToBeConnectedWith && subTypeToBeConnectedWith != CST_UNDEFINED)
-			{
+		} else {
+			if (subTypeToBeConnectedWith == mSubTypeToBeConnectedWith && subTypeToBeConnectedWith != CST_UNDEFINED) {
 				return mRelationDescription;
 			}
 		}
 	}
 	return CRD_UNKNOWN;
 }
-//-----------------------------------------------------------------------
-ComponentType ConnectionPolicy::getTypeToBeConnectedWith(void) const
-{
+
+ComponentType ConnectionPolicy::getTypeToBeConnectedWith() const {
 	return mTypeToBeConnectedWith;
 }
-//-----------------------------------------------------------------------
-ComponentSubType ConnectionPolicy::getSubTypeToBeConnectedWith(void) const
-{
+
+ComponentSubType ConnectionPolicy::getSubTypeToBeConnectedWith() const {
 	return mSubTypeToBeConnectedWith;
 }
-//-----------------------------------------------------------------------
-const Ogre::String& ConnectionPolicy::getColourCode(void) const
-{
+
+const Ogre::String & ConnectionPolicy::getColourCode() const {
 	return mColourCode;
 }
-//-----------------------------------------------------------------------
-int ConnectionPolicy::getLineStyle(void) const
-{
+
+int ConnectionPolicy::getLineStyle() const {
 	return mLineStyle;
 }
-//-----------------------------------------------------------------------
-bool ConnectionPolicy::isPolicyLocked(void) const
-{
+
+bool ConnectionPolicy::isPolicyLocked() const {
 	return mPolicyLocked;
 }
-//-----------------------------------------------------------------------
-bool ConnectionPolicy::areMultipleConnectionsPossible(void) const
-{
+
+bool ConnectionPolicy::areMultipleConnectionsPossible() const {
 	return mMultipleConnectionsPossible;
 }
-//-----------------------------------------------------------------------
-bool ConnectionPolicy::ignoreSubType(void) const
-{
+
+bool ConnectionPolicy::ignoreSubType() const {
 	return mIgnoreSubType;
 }
-//-----------------------------------------------------------------------
-const wxString& ConnectionPolicy::getRelationDescription(void) const
-{
+
+const wxString & ConnectionPolicy::getRelationDescription() const {
 	return mRelationDescription;
 }
-//-----------------------------------------------------------------------
-void ConnectionPolicy::validateAndLock(ComponentRelation relation, 
-	ComponentRelationDirection relationDirection,
-	ComponentType componentType, 
-	ComponentSubType componentSubType, 
-	bool lock)
-{
-	if (mMultipleConnectionsPossible)
-		return;
 
-	if (componentType == mTypeToBeConnectedWith && relation == mRelation  && relationDirection == mRelationDirection)
-	{
-		if (mIgnoreSubType)
-		{
+void ConnectionPolicy::validateAndLock(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType componentType, ComponentSubType componentSubType, bool lock) {
+	if (mMultipleConnectionsPossible) {
+		return;
+	}
+
+	if (componentType == mTypeToBeConnectedWith && relation == mRelation  && relationDirection == mRelationDirection) {
+		if (mIgnoreSubType) {
 			mPolicyLocked = lock;
-		}
-		else
-		{
-			if (componentSubType == mSubTypeToBeConnectedWith && componentSubType != CST_UNDEFINED)
-			{
+		} else {
+			if (componentSubType == mSubTypeToBeConnectedWith && componentSubType != CST_UNDEFINED) {
 				mPolicyLocked = lock;
 			}
 		}
 	}
 }
-//-----------------------------------------------------------------------
-void ConnectionPolicy::validateAndLock(ComponentRelation relation, 
-	ComponentRelationDirection relationDirection,
-	bool lock)
-{
-	if (relation == mRelation  && relationDirection == mRelationDirection)
-	{
+
+void ConnectionPolicy::validateAndLock(ComponentRelation relation, ComponentRelationDirection relationDirection, bool lock) {
+	if (relation == mRelation  && relationDirection == mRelationDirection) {
 		mPolicyLocked = lock;
 	}
 }
-//-----------------------------------------------------------------------
-bool ConnectionPolicy::isConnectionPossible(
-			ComponentType typeToBeConnectedWith, 
-			ComponentSubType subTypeToBeConnectedWith)
-{
-	if (mIgnoreSubType)
-	{
-		return (typeToBeConnectedWith == mTypeToBeConnectedWith &&
-			!mPolicyLocked);
-	}
-	else
-	{
-		if (typeToBeConnectedWith == mTypeToBeConnectedWith && !mPolicyLocked)
-		{
-			if (subTypeToBeConnectedWith == mSubTypeToBeConnectedWith && subTypeToBeConnectedWith != CST_UNDEFINED)
-			{
+
+bool ConnectionPolicy::isConnectionPossible(ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith) {
+	if (mIgnoreSubType) {
+		return (typeToBeConnectedWith == mTypeToBeConnectedWith && !mPolicyLocked);
+	} else {
+		if (typeToBeConnectedWith == mTypeToBeConnectedWith && !mPolicyLocked) {
+			if (subTypeToBeConnectedWith == mSubTypeToBeConnectedWith && subTypeToBeConnectedWith != CST_UNDEFINED) {
 				return true;
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
 }
-//-----------------------------------------------------------------------
-bool ConnectionPolicy::isConnectionPossible(
-			ComponentRelation relation,
-			ComponentRelationDirection relationDirection,
-			ComponentType typeToBeConnectedWith, 
-			ComponentSubType subTypeToBeConnectedWith)
-{
+
+bool ConnectionPolicy::isConnectionPossible(ComponentRelation relation, ComponentRelationDirection relationDirection, ComponentType typeToBeConnectedWith, ComponentSubType subTypeToBeConnectedWith) {
 	return (isConnectionPossible(typeToBeConnectedWith, subTypeToBeConnectedWith) && relation == mRelation && relationDirection == mRelationDirection);
 }
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-ComponentRelation Connection::getRelation(void) const
-{
+
+ComponentRelation Connection::getRelation() const {
 	return mRelation;
 }
-//-----------------------------------------------------------------------
-ComponentRelationDirection Connection::getRelationDirection(void) const
-{
+
+ComponentRelationDirection Connection::getRelationDirection() const {
 	return mRelationDirection;
 }
-//-----------------------------------------------------------------------
-EditComponent* Connection::getComponentToBeConnectedWith(void)
-{
+
+EditComponent * Connection::getComponentToBeConnectedWith() {
 	return mComponentToBeConnectedWith;
 }
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-bool UniqueRelation::isRelationUnique(ComponentRelation relation, ComponentRelationDirection relationDirection)
-{
+
+bool UniqueRelation::isRelationUnique(ComponentRelation relation, ComponentRelationDirection relationDirection) {
 	return (relation == mRelation && relationDirection == mRelationDirection);
 }

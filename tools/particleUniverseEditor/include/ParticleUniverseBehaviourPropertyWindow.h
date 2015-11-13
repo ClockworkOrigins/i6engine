@@ -31,56 +31,54 @@ static wxString PRNL_BEHAVIOUR_TYPE = wxT("");
 
 /**	
 */
-class BehaviourPropertyWindow : public PropertyWindow
-{
-	public:
-		BehaviourPropertyWindow(wxWindow* parent, EditComponent* owner);
-		BehaviourPropertyWindow(BehaviourPropertyWindow* behaviourPropertyWindow);
-		~BehaviourPropertyWindow(void){}
+class BehaviourPropertyWindow : public PropertyWindow {
+public:
+	BehaviourPropertyWindow(wxWindow * parent, EditComponent * owner);
+	BehaviourPropertyWindow(BehaviourPropertyWindow * behaviourPropertyWindow);
+	~BehaviourPropertyWindow() {}
 
-		/**
-			Copy basic behaviour properties from a window to an behaviour
-		*/
-		virtual void copyAttributeToBehaviour(wxPGProperty* prop, wxString propertyName);
+	/**
+		Copy basic behaviour properties from a window to an behaviour
+	*/
+	virtual void copyAttributeToBehaviour(wxPGProperty * prop, wxString propertyName);
 
-		/**
-			Copy basic behaviour properties from an behaviour to a window
-		*/
-		virtual void copyAttributesFromBehaviour(const ParticleUniverse::ParticleBehaviour* behaviour);
+	/**
+		Copy basic behaviour properties from an behaviour to a window
+	*/
+	virtual void copyAttributesFromBehaviour(const ParticleUniverse::ParticleBehaviour * behaviour);
 
-		/**
-			Copy basic behaviour properties from another behaviour property window
-		*/
-		virtual void copyAttributesFromPropertyWindow(BehaviourPropertyWindow* behaviourPropertyWindow);
+	/**
+		Copy basic behaviour properties from another behaviour property window
+	*/
+	virtual void copyAttributesFromPropertyWindow(BehaviourPropertyWindow * behaviourPropertyWindow);
 
-		/**
-			Only handle parent properties if they are changed.
-		*/
-		void onParentPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		Only handle parent properties if they are changed.
+	*/
+	void onParentPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			See PropertyWindow
-		*/
-		virtual void onPropertyChanged(wxPropertyGridEvent& event);
+	/**
+		See PropertyWindow
+	*/
+	virtual void onPropertyChanged(wxPropertyGridEvent & event);
 
-		/**
-			Updating function
-		*/
-		void replaceBehaviourType(wxPGProperty* prop);
+	/**
+		Updating function
+	*/
+	void replaceBehaviourType(wxPGProperty * prop);
 
-		/**
-			Determine selected behaviour type (take internationalisation into account)
-		*/
-		const Ogre::String& getBehaviourTypeByProperty(wxPGProperty* prop);
+	/**
+		Determine selected behaviour type (take internationalisation into account)
+	*/
+	const Ogre::String & getBehaviourTypeByProperty(wxPGProperty * prop);
 
-	protected:
-		wxArrayString mTypes;
+protected:
+	wxArrayString mTypes;
 
-		/**
-			Initialises all behaviour properties
-		*/
-		virtual void _initProperties(void);
+	/**
+		Initialises all behaviour properties
+	*/
+	virtual void _initProperties();
 };
 
-#endif
-
+#endif /* __PUED_BEHAVIOUR_PROPERTY_WINDOW_H__ */

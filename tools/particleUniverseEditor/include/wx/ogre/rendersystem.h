@@ -17,10 +17,10 @@
  * USA
  */
 
-#ifndef _WX_OGRE_RENDERSYSTEM_H_
-#define _WX_OGRE_RENDERSYSTEM_H_
+#ifndef __WX_OGRE_RENDERSYSTEM_H__
+#define __WX_OGRE_RENDERSYSTEM_H__
 
-#include "wx/ogre/utils.h"
+#include "i6engine/utils/Singleton.h"
 
 #include "OGRE/OgreRenderSystemCapabilities.h"
 
@@ -28,10 +28,8 @@
  *
  * @author Martin Pieuchot
  */
-class wxOgreRenderSystem : public Ogre::Singleton<wxOgreRenderSystem>
-{
+class wxOgreRenderSystem : public i6engine::utils::Singleton<wxOgreRenderSystem> {
 public:
-
     /** Creates the Ogre's root. */
     wxOgreRenderSystem();
 
@@ -39,8 +37,7 @@ public:
      *
      * @see Ogre::Root
      */
-    wxOgreRenderSystem(const Ogre::String& plugins, const Ogre::String& config,
-                       const Ogre::String& log = "boot.log");
+    wxOgreRenderSystem(const Ogre::String & plugins, const Ogre::String & config, const Ogre::String & log = "boot.log");
 
     /** Clean Ogre instance. */
     virtual ~wxOgreRenderSystem();
@@ -49,7 +46,7 @@ public:
      *
      * @see Ogre::Root::loadPlugin
      */
-    void LoadPlugin(const Ogre::String& plugin);
+    void LoadPlugin(const Ogre::String & plugin);
 
     /** Check through all available renderers if, the one the string 
      * is "render" exist, if so, it is selected.
@@ -57,23 +54,19 @@ public:
      * @param render that contains the name of the Render System 
      *        selected (e.g. Direct3D, OpenGL)
      */
-    void SelectOgreRenderSystem(const Ogre::String& render);
-
+    void SelectOgreRenderSystem(const Ogre::String & render);
 
     /** Checks for a capability.
      *
      * @see Ogre::RenderSystemCapabilities::hasCapability
      */
-    bool HasCapability(const Ogre::Capabilities& c);
+    bool HasCapability(const Ogre::Capabilities & c);
 
     /** Initialises the Ogre's renderer. */
     void Initialise();
 
 private:
-
-    Ogre::Root* m_root;
-
-    DECLARE_OGRE_SINGLETON(wxOgreRenderSystem)
+    Ogre::Root * _root;
 };
 
-#endif
+#endif /* __WX_OGRE_RENDERSYSTEM_H__ */

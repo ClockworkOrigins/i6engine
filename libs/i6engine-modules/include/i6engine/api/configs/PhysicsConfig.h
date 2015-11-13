@@ -24,10 +24,12 @@
 
 #include "i6engine/api/GameMessageStruct.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
+#include "i6engine/api/components/VelocityComponent.h"
 
 namespace i6engine {
 namespace api {
 namespace physics {
+
 	enum PhysicsMessageTypes {
 		PhyReset,
 		PhyCollision,
@@ -46,7 +48,13 @@ namespace physics {
 		PhyAddPosition,
 		PhyP2PConstraint,
 		PhyConstraint,
-		PhyConstraintBreakImpulse
+		PhyConstraintBreakImpulse,
+		PhyVelocityComponent,
+		PhyAccelerate,
+		PhyDecelerate,
+		PhyMaxSpeed,
+		PhyResistanceCoefficient,
+		PhyWindage
 	};
 
 	/**
@@ -259,6 +267,94 @@ namespace physics {
 			return new Physics_Constraint_Delete(*this);
 		}
 	} Physics_Constraint_Delete;
+
+	/**
+	 * \brief message for creation of a VelocityComponent in Physics
+	 */
+	typedef struct Physics_VelocityComponent_Create : GameMessageStruct {
+		double maxSpeed;
+		double resistanceCoefficient;
+		double windage;
+		Physics_VelocityComponent_Create(const int64_t coid, const int64_t goid, double ms, double rc, double w) : GameMessageStruct(coid, goid), maxSpeed(ms), resistanceCoefficient(rc), windage(w) {
+		}
+		Physics_VelocityComponent_Create * copy() {
+			return new Physics_VelocityComponent_Create(*this);
+		}
+	} Physics_VelocityComponent_Create;
+
+	/**
+	 * \brief message for deletion of a VelocityComponent in Physics
+	 */
+	typedef struct Physics_VelocityComponent_Delete : GameMessageStruct {
+		Physics_VelocityComponent_Delete(const int64_t coid, const int64_t goid) : GameMessageStruct(coid, goid) {
+		}
+		Physics_VelocityComponent_Delete * copy() {
+			return new Physics_VelocityComponent_Delete(*this);
+		}
+	} Physics_VelocityComponent_Delete;
+
+	/**
+	 * \brief message for acceleration of VelocityComponent
+	 */
+	typedef struct Physics_Accelerate_Update : GameMessageStruct {
+		Vec3 acceleration;
+		VelocityComponent::MaxSpeedHandling handling;
+		std::function<void(void)> callback;
+		Physics_Accelerate_Update(const int64_t coid, const int64_t goid, const Vec3 & a, VelocityComponent::MaxSpeedHandling h, const std::function<void(void)> & cb) : GameMessageStruct(coid, goid), acceleration(a), handling(h), callback(cb) {
+		}
+		Physics_Accelerate_Update * copy() {
+			return new Physics_Accelerate_Update(*this);
+		}
+	} Physics_Accelerate_Update;
+
+	/**
+	 * \brief message for deceleration of VelocityComponent
+	 */
+	typedef struct Physics_Decelerate_Update : GameMessageStruct {
+		Vec3 deceleration;
+		std::function<void(void)> callback;
+		Physics_Decelerate_Update(const int64_t coid, const int64_t goid, const Vec3 & d, const std::function<void(void)> & cb) : GameMessageStruct(coid, goid), deceleration(d), callback(cb) {
+		}
+		Physics_Decelerate_Update * copy() {
+			return new Physics_Decelerate_Update(*this);
+		}
+	} Physics_Decelerate_Update;
+
+	/**
+	 * \brief message for setting maxSpeed of a VelocityComponent
+	 */
+	typedef struct Physics_SetMaxSpeed_Update : GameMessageStruct {
+		double maxSpeed;
+		Physics_SetMaxSpeed_Update(const int64_t coid, const int64_t goid, double ms) : GameMessageStruct(coid, goid), maxSpeed(ms) {
+		}
+		Physics_SetMaxSpeed_Update * copy() {
+			return new Physics_SetMaxSpeed_Update(*this);
+		}
+	} Physics_SetMaxSpeed_Update;
+
+	/**
+	 * \brief message for creation of a VelocityComponent in Physics
+	 */
+	typedef struct Physics_SetResistanceCoefficient_Update : GameMessageStruct {
+		double resistanceCoefficient;
+		Physics_SetResistanceCoefficient_Update(const int64_t coid, const int64_t goid, double rc) : GameMessageStruct(coid, goid), resistanceCoefficient(rc) {
+		}
+		Physics_SetResistanceCoefficient_Update * copy() {
+			return new Physics_SetResistanceCoefficient_Update(*this);
+		}
+	} Physics_SetResistanceCoefficient_Update;
+
+	/**
+	 * \brief message for creation of a VelocityComponent in Physics
+	 */
+	typedef struct Physics_SetWindage_Update : GameMessageStruct {
+		double windage;
+		Physics_SetWindage_Update(const int64_t coid, const int64_t goid, double w) : GameMessageStruct(coid, goid), windage(w) {
+		}
+		Physics_SetWindage_Update * copy() {
+			return new Physics_SetWindage_Update(*this);
+		}
+	} Physics_SetWindage_Update;
 
 } /* namespace physics */
 } /* namespace api */

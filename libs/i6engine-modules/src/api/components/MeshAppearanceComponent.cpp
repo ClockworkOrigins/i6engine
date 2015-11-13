@@ -53,10 +53,6 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	ComPtr MeshAppearanceComponent::createC(const int64_t id, const attributeMap & params) {
-		return utils::make_shared<MeshAppearanceComponent, Component>(id, params);
-	}
-
 	void MeshAppearanceComponent::Init() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Create, new graphics::Graphics_Mesh_Create(_objOwnerID, getID(), _meshName, _isVisible, _position, _rotation, _scale), core::Subsystem::Object);
 

@@ -22,6 +22,8 @@
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/ScriptingFacade.h"
 
+#include "boost/bind.hpp"
+
 namespace i6engine {
 namespace rpg {
 namespace npc {

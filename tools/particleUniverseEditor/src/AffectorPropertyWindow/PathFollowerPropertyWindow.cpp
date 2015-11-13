@@ -52,15 +52,16 @@ void PathFollowerPropertyWindow::copyAttributeToAffector(wxPGProperty* prop, wxS
 		{
 			prop = prop->GetParent()->GetParent();
 		}
-		ParentPropertyWithButtonAndPositions* parentPropertyWithButtonAndPositions = static_cast<ParentPropertyWithButtonAndPositions*>(prop);
-		unsigned int size = parentPropertyWithButtonAndPositions->getNumberOfPositions();
-		affector->clearPoints();
-		for (unsigned int i = 0; i < size; ++i)
-		{
-			Ogre::Vector3 vec = Ogre::Vector3::ZERO;
-			vec = parentPropertyWithButtonAndPositions->getPosition(this, i, vec);
-			affector->addPoint(vec);
-		}
+		// TODO
+		//ParentPropertyWithButtonAndPositions* parentPropertyWithButtonAndPositions = static_cast<ParentPropertyWithButtonAndPositions*>(prop);
+		//unsigned int size = parentPropertyWithButtonAndPositions->getNumberOfPositions();
+		//affector->clearPoints();
+		//for (unsigned int i = 0; i < size; ++i)
+		//{
+		//	Ogre::Vector3 vec = Ogre::Vector3::ZERO;
+			//vec = parentPropertyWithButtonAndPositions->getPosition(this, i, vec);
+		//	affector->addPoint(vec);
+		//}
 	}
 	else
 	{
@@ -74,10 +75,10 @@ void PathFollowerPropertyWindow::copyAttributesFromAffector(ParticleUniverse::Pa
 	AffectorPropertyWindow::copyAttributesFromAffector(affector);
 
 	// Copy properties from affector to property window
-	ParticleUniverse::PathFollower* pathFollower = static_cast<ParticleUniverse::PathFollower*>(affector);
-	
+	//ParticleUniverse::PathFollower * pathFollower = static_cast<ParticleUniverse::PathFollower*>(affector);
+
 	// Positions: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_PATHFOLLOWER_POSITION);
+	/* TODO wxPGProperty* propTo = GetProperty(PRNL_PATHFOLLOWER_POSITION);
 	ParentPropertyWithButtonAndPositions* parentPropertyWithButtonAndPositions = static_cast<ParentPropertyWithButtonAndPositions*>(propTo);
 	unsigned short numPositions = pathFollower->getNumPoints();
 	parentPropertyWithButtonAndPositions->reset();
@@ -85,7 +86,7 @@ void PathFollowerPropertyWindow::copyAttributesFromAffector(ParticleUniverse::Pa
 	{
 		Ogre::Vector3 position = pathFollower->getPoint(i);
 		parentPropertyWithButtonAndPositions->addPosition(this, position);
-	}
+	}*/
 }
 //-----------------------------------------------------------------------
 void PathFollowerPropertyWindow::_initProperties(void)
@@ -100,6 +101,6 @@ void PathFollowerPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("PathFollower.html");
 
 	// Positions
-	wxPGId pid = Append(new ParentPropertyWithButtonAndPositions(PRNL_PATHFOLLOWER_POSITION, PRNL_PATHFOLLOWER_POSITION));
-	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+//	wxPGProperty* pid = Append(new ParentPropertyWithButtonAndPositions(PRNL_PATHFOLLOWER_POSITION, PRNL_PATHFOLLOWER_POSITION));
+//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 }

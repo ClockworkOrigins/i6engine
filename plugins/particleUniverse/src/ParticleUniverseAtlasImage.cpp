@@ -134,29 +134,20 @@ namespace ParticleUniverse
 
 		// 3. Add the buffers of all images to the atlas buffer
 		ImageList::iterator it = mImageList.begin();
-		Ogre::Image* image = *it;
-		size_t imageColum = 0;
-		size_t imageRow = 0;
-		size_t pixelLine = 0;
+		Ogre::Image * image = *it;
 		size_t atlasPointer = 0;
-		for(imageRow = 0; imageRow < imageRows; ++imageRow)
-		{
+		for (size_t imageRow = 0; imageRow < imageRows; ++imageRow) {
 			atlasPointer = imageRow * mIndividualImageHeight * mAtlas->getRowSpan();
-			for(imageColum = 0; imageColum < imageColums; ++imageColum)
-			{
+			for (size_t imageColum = 0; imageColum < imageColums; ++imageColum) {
 				atlasPointer = (imageRow * mIndividualImageHeight * mAtlas->getRowSpan()) + (imageColum * mIndividualImageRowSpan);
-				for(pixelLine = 0; pixelLine < mIndividualImageHeight; ++pixelLine)
-				{
+				for (size_t pixelLine = 0; pixelLine < mIndividualImageHeight; ++pixelLine) {
 					memcpy(data + atlasPointer, image->getData() + pixelLine * mIndividualImageRowSpan, mIndividualImageRowSpan);	
 					atlasPointer += mAtlas->getRowSpan();
 				}
 				it++;
-				if (it != mImageList.end())
-				{
+				if (it != mImageList.end()) {
 					image = *it;
-				}
-				else
-				{
+				} else {
 					return;
 				}
 			}

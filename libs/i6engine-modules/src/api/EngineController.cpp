@@ -164,7 +164,7 @@ namespace api {
 				FD_ZERO(&readset);
 				FD_SET(0, &readset);
 				tv.tv_sec = 0;
-				tv.tv_usec = 10000;
+				tv.tv_usec = 50000;
 				int result = select(1, &readset, NULL, NULL, &tv);
 				if (result > 0 && FD_ISSET(0, &readset)) {
 					if (std::cin.peek() != -1) {

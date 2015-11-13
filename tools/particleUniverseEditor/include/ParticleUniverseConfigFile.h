@@ -26,36 +26,37 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/ogre/prerequisites.h"
 
+#include "OGRE/OgreConfigFile.h"
+
 /**	This is an extension of the ConfigFile class, with additional functions to save a configfile
 */
-class ConfigFile : public Ogre::ConfigFile
-{
-	// No sections are allowed.
-	typedef std::map<Ogre::String, Ogre::String> SaveBuffer;
+class ConfigFile : public Ogre::ConfigFile {
+// No sections are allowed.
+typedef std::map<Ogre::String, Ogre::String> SaveBuffer;
 
-	public:
-		// Constructor / Destructor
-		ConfigFile(void);
-		~ConfigFile(void) {}
+public:
+	// Constructor / Destructor
+	ConfigFile();
+	~ConfigFile() {}
 
-		/**	Write key/value pairs to an internal buffer.
-		@remarks
-			Don't use a section.
-		*/
-		void setSetting(const Ogre::String& key, const Ogre::String& value);
+	/**	Write key/value pairs to an internal buffer.
+	@remarks
+		Don't use a section.
+	*/
+	void setSetting(const Ogre::String & key, const Ogre::String & value);
 
-		/**	Write key with multiple values to an internal buffer.
-		@remarks
-			Don't use a section.
-		*/
-		void setConcatSetting(const Ogre::String& key, const Ogre::StringVector& value);
+	/**	Write key with multiple values to an internal buffer.
+	@remarks
+		Don't use a section.
+	*/
+	void setConcatSetting(const Ogre::String & key, const Ogre::StringVector & value);
 		
-		/**	Save the internal buffer
-		*/
-		void save(const Ogre::String& filename);
+	/**	Save the internal buffer
+	*/
+	void save(const Ogre::String & filename);
 
-	protected:
-		SaveBuffer mSaveBuffer;
+protected:
+	SaveBuffer mSaveBuffer;
 };
 
-#endif
+#endif /* __PUED_CONFIG_FILE_H__ */

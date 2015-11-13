@@ -42,7 +42,7 @@ void PositionEmitterPropertyWindow::copyAttributeToEmitter(wxPGProperty* prop, w
 	if (!positionEmitter)
 		return;
 
-	if (propertyName == PRNL_POSITION_EMITTER_POSITION || 
+	if (propertyName == PRNL_POSITION_EMITTER_POSITION ||
 		(propertyName.StartsWith(PRNL_POSITION) && propertyName.EndsWith(PRNL_POSITION_X)) ||
 		(propertyName.StartsWith(PRNL_POSITION) && propertyName.EndsWith(PRNL_POSITION_Y)) ||
 		(propertyName.StartsWith(PRNL_POSITION) && propertyName.EndsWith(PRNL_POSITION_Z)))
@@ -75,8 +75,8 @@ void PositionEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::
 	ParticleUniverse::PositionEmitter* positionEmitter = static_cast<ParticleUniverse::PositionEmitter*>(emitter);
 
 	// Positions: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_POSITION_EMITTER_POSITION);
-	ParentPropertyWithButtonAndPositions* parentPropertyWithButtonAndPositions = static_cast<ParentPropertyWithButtonAndPositions*>(propTo);
+	//wxPGProperty* propTo = GetProperty(PRNL_POSITION_EMITTER_POSITION);
+/*	ParentPropertyWithButtonAndPositions* parentPropertyWithButtonAndPositions = static_cast<ParentPropertyWithButtonAndPositions*>(propTo);
 	ParticleUniverse::vector<Ogre::Vector3> positions = positionEmitter->getPositions();
 	ParticleUniverse::vector<Ogre::Vector3>::iterator it;
 	ParticleUniverse::vector<Ogre::Vector3>::iterator itEnd = positions.end();
@@ -85,7 +85,7 @@ void PositionEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::
 	{
 		Ogre::Vector3 position = *it;
 		parentPropertyWithButtonAndPositions->addPosition(this, position);
-	}
+	}*/
 
 	// Randomize: bool
 	doSetBool(PRNL_POSITION_EMITTER_RANDOMIZE, positionEmitter->isRandomized());
@@ -105,16 +105,16 @@ void PositionEmitterPropertyWindow::_initProperties(void)
 
 	// Add Position: Button, with wich new positions can be added
 	// Todo: Is the memory cleaned up by wxWidgets?
-	wxPGId pid = Append(new ParentPropertyWithButtonAndPositions(PRNL_POSITION_EMITTER_POSITION, PRNL_POSITION_EMITTER_POSITION));
-	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+//	wxPGProperty* pid = Append(new ParentPropertyWithButtonAndPositions(PRNL_POSITION_EMITTER_POSITION, PRNL_POSITION_EMITTER_POSITION));
+//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Randomize: bool
-	Append(wxBoolProperty(PRNL_POSITION_EMITTER_RANDOMIZE, PRNL_POSITION_EMITTER_RANDOMIZE, ParticleUniverse::PositionEmitter::DEFAULT_RANDOMIZE));
+	Append(new wxBoolProperty(PRNL_POSITION_EMITTER_RANDOMIZE, PRNL_POSITION_EMITTER_RANDOMIZE, ParticleUniverse::PositionEmitter::DEFAULT_RANDOMIZE));
 }
 //-----------------------------------------------------------------------
 void PositionEmitterPropertyWindow::copyPositionsToPositionEmitter(wxPGProperty* prop, ParticleUniverse::PositionEmitter* positionEmitter)
 {
-	ParentPropertyWithButtonAndPositions* parentPropertyWithButtonAndPositions = static_cast<ParentPropertyWithButtonAndPositions*>(prop);
+/*	ParentPropertyWithButtonAndPositions* parentPropertyWithButtonAndPositions = static_cast<ParentPropertyWithButtonAndPositions*>(prop);
 	unsigned int size = parentPropertyWithButtonAndPositions->getNumberOfPositions();
 	positionEmitter->removeAllPositions();
 	for (unsigned int i = 0; i < size; ++i)
@@ -122,7 +122,7 @@ void PositionEmitterPropertyWindow::copyPositionsToPositionEmitter(wxPGProperty*
 		Ogre::Vector3 vec = Ogre::Vector3::ZERO;
 		vec = parentPropertyWithButtonAndPositions->getPosition(this, i, vec);
 		positionEmitter->addPosition(vec);
-	}
+	}*/
 }
 //-----------------------------------------------------------------------
 void PositionEmitterPropertyWindow::copyRandomizeToPositionEmitter(wxPGProperty* prop, ParticleUniverse::PositionEmitter* positionEmitter)

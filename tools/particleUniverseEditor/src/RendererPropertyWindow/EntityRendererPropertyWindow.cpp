@@ -64,10 +64,10 @@ void EntityRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* prop, w
 	else if (propertyName == PRNL_MESH_NAME)
 	{
 		// Mesh Name: Ogre::String
-		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
+/*		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
 		wxString name = ogre2wx(meshProperty->getMeshName());
 		Ogre::String meshName = wx2ogre(name);
-		replaceRendererType(GetPropertyPtr(PRNL_RENDERER_TYPE));
+		replaceRendererType(GetProperty(PRNL_RENDERER_TYPE));
 
 		// A bit heavy solution to re-create the renderer, but only changing the meshname is not sufficient
 		renderer = static_cast<ParticleUniverse::EntityRenderer*>(mOwner->getPUElement());
@@ -75,7 +75,7 @@ void EntityRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* prop, w
 			return;
 
 		renderer->setMeshName(meshName);
-		meshProperty->SetValueFromString(name);
+		meshProperty->SetValueFromString(name);*/
 	}
 	else
 	{
@@ -96,7 +96,7 @@ void EntityRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::
 	doSetString(PRNL_MESH_NAME, meshName);
 
 	// Orientation Type: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_ORIENTATION_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_ORIENTATION_TYPE);
 	ParticleUniverse::EntityRenderer::EntityOrientationType orientationType = entityRenderer->getEntityOrientationType();
 	wxString orientationTypeString = OTT_ORIENTED_SELF;
 	if (orientationType == ParticleUniverse::EntityRenderer::ENT_ORIENTED_SELF_MIRRORED)
@@ -123,14 +123,14 @@ void EntityRendererPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("RendererEntity.html");
 
 	// Mesh Name: Ogre::String
-	wxPGId pid = Append(new MeshProperty(PRNL_MESH_NAME, PRNL_MESH_NAME));
+	wxPGProperty * pid = Append(new wxStringProperty(PRNL_MESH_NAME, PRNL_MESH_NAME));
 	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Orientation Type: List
 	mOrientationTypes.Add(OTT_ORIENTED_SELF);
 	mOrientationTypes.Add(OTT_ORIENTED_SELF_MIRRORED);
 	mOrientationTypes.Add(OTT_ORIENTED_SHAPE);
-	pid = Append(wxEnumProperty(PRNL_ORIENTATION_TYPE, PRNL_ORIENTATION_TYPE, mOrientationTypes));
+	pid = Append(new wxEnumProperty(PRNL_ORIENTATION_TYPE, PRNL_ORIENTATION_TYPE, mOrientationTypes));
 }
 //-----------------------------------------------------------------------
 void EntityRendererPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
@@ -138,13 +138,13 @@ void EntityRendererPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
 	// Perform additional validations.
 
 	// V1.5: Bug when selecting an entity
-//	wxPGProperty* prop = event.GetPropertyPtr();
+//	wxPGProperty* prop = event.GetProperty();
 //	if (prop->GetName() == PRNL_MESH_NAME)
 //	{
-//		replaceRendererType(GetPropertyPtr(PRNL_RENDERER_TYPE));
+//		replaceRendererType(GetProperty(PRNL_RENDERER_TYPE));
 //	} // V1.5
 
-	if (!_validatePropertyStringNoSpaces(event.GetPropertyPtr(), PRNL_MESH_NAME))
+	if (!_validatePropertyStringNoSpaces(event.GetProperty(), PRNL_MESH_NAME))
 		return;
 
 	RendererPropertyWindow::onPropertyChanged(event);

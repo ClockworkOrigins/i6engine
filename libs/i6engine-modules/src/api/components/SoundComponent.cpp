@@ -50,10 +50,6 @@ namespace api {
 	SoundComponent::~SoundComponent() {
 	}
 
-	ComPtr SoundComponent::createC(int64_t id, const attributeMap & params) {
-		return utils::make_shared<SoundComponent, Component>(id, params);
-	}
-
 	void SoundComponent::Init() {
 		addTicker();
 

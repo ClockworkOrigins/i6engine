@@ -144,9 +144,8 @@ namespace core {
 
 		boost::thread * _deliverThread;
 
-		boost::condition_variable _objCondExecutable;
-		boost::mutex _objCondMut;
-		boost::unique_lock<boost::mutex> _objCondUniqLock;
+		std::condition_variable _condVar;
+		std::mutex _condMutex;
 
 		bool _running;
 

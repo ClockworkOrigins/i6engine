@@ -14,43 +14,26 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "wx/ogre/prerequisites.h"
 #include "wx/ogre/utils.h"
 
-//-----------------------------------------------------------------------
-ControlPoint::ControlPoint(CTRL_POINT_TYPE type, const wxPoint& pos, const bool movable, float width, float min, float max) : 
-	mCtrlPointType(type),
-	mPos(pos),
-	mMovable(movable),
-	mColour(wxColor(*wxWHITE)),
-	mMoving(false),
-	mWidth(width),
-	mXval(0.0f),
-	mYval(0.0f),
-	mXCenterVal(0.0f),
-	mYCenterVal(0.0f)
-{
+ControlPoint::ControlPoint(CTRL_POINT_TYPE type, const wxPoint & pos, const bool movable, float width, float min, float max) : mCtrlPointType(type), mPos(pos), mMovable(movable), mColour(wxColor(*wxWHITE)), mMoving(false), mWidth(width), mXval(0.0f), mYval(0.0f), mXCenterVal(0.0f), mYCenterVal(0.0f) {
 	mBitmapArrow = new wxBitmap(ICONS_DIR + wxT("arrow_up.png"), wxBITMAP_TYPE_PNG);
 	mBitmapClose = new wxBitmap(ICONS_DIR + wxT("close.png"), wxBITMAP_TYPE_PNG);
 	mDiff = (max - min) / width;
 }
-//-----------------------------------------------------------------------
-ControlPoint::~ControlPoint(void)
-{
+
+ControlPoint::~ControlPoint() {
 	delete mBitmapArrow;
 	delete mBitmapClose;
 }
-//-----------------------------------------------------------------------
-void ControlPoint::paint(wxPaintDC& dc)
-{
+
+void ControlPoint::paint(wxPaintDC & dc) {
 	wxColour col;
-	if (mCtrlPointType == CTRL_POINT_TYPE_SOLID)
-	{
+	if (mCtrlPointType == CTRL_POINT_TYPE_SOLID) {
 		col.Set(wxT("#000000"));
 		dc.SetPen(wxPen(col, CONTROL_POINT_BORDER_SIZE, wxSOLID));
 		dc.DrawBitmap(*mBitmapArrow, wxPoint(mPos.x, mPos.y - 0.5 * CONTROL_POINT_RECT_SIZE));
 		dc.SetBrush(wxBrush(mColour, wxSOLID));
 		dc.DrawRectangle(mPos.x, mPos.y, CONTROL_POINT_RECT_SIZE, CONTROL_POINT_RECT_SIZE);
-	}
-	else
-	{
+	} else {
 		// Assume it is CTRL_POINT_TYPE_GRID
 		col.Set(wxT("#000000"));
 		dc.SetPen(wxPen(col, 2, wxSOLID));
@@ -58,32 +41,24 @@ void ControlPoint::paint(wxPaintDC& dc)
 		int r =  + 0.5 * CONTROL_POINT_RECT_SIZE;
 		dc.DrawCircle(mPos.x + r, mPos.y + r,  r);
 	}
-	if (mMovable)
-	{
+	if (mMovable) {
 		col.Set(wxT("#000000"));
 		dc.DrawBitmap(*mBitmapClose, wxPoint(mPos.x, mPos.y + CONTROL_POINT_RECT_SIZE));
-		if (mMoving)
-		{
-			if (mCtrlPointType == CTRL_POINT_TYPE_SOLID)
-			{
+		if (mMoving) {
+			if (mCtrlPointType == CTRL_POINT_TYPE_SOLID) {
 				float value = (mPos.x + mPos.x * float(CONTROL_POINT_RECT_SIZE) / mWidth) * mDiff; // Value must be within 0 to 1 and not 0 to 0.96
 				//Ogre::String s = Ogre::StringConverter::toString(value, 2);
 				Ogre::String s;
 				trunc (value, s, 2);
 				wxPoint textPos;
 				textPos.y = mPos.y + CONTROL_POINT_RECT_SIZE;
-				if (mPos.x > mWidth - 3 * CONTROL_POINT_RECT_SIZE)
-				{
+				if (mPos.x > mWidth - 3 * CONTROL_POINT_RECT_SIZE) {
 					textPos.x = mPos.x - CONTROL_POINT_RECT_SIZE;
-				}
-				else
-				{
+				} else {
 					textPos.x = mPos.x + CONTROL_POINT_RECT_SIZE;
 				}
 				dc.DrawRotatedText(ogre2wx(s), textPos, 90);
-			}
-			else
-			{
+			} else {
 				// Assume it is CTRL_POINT_TYPE_GRID
 				float xValue = mXval;
 				Ogre::String sX;
@@ -95,21 +70,15 @@ void ControlPoint::paint(wxPaintDC& dc)
 
 				Ogre::String s = sX + ", " + sY;
 				wxPoint textPos;
-				textPos.x = mPos.x - 2 * s.length();
-				if (mXval > mXCenterVal)
-				{
-					textPos.x = mPos.x - 4 * s.length();
-				}
-				else
-				{
+				textPos.x = mPos.x - int(2 * s.length());
+				if (mXval > mXCenterVal) {
+					textPos.x = mPos.x - int(4 * s.length());
+				} else {
 					textPos.x = mPos.x + 0.5 * CONTROL_POINT_RECT_SIZE;
 				}
-				if (mYval > mYCenterVal)
-				{
+				if (mYval > mYCenterVal) {
 					textPos.y = mPos.y + 2 * CONTROL_POINT_RECT_SIZE;
-				}
-				else
-				{
+				} else {
 					textPos.y = mPos.y - CONTROL_POINT_RECT_SIZE;
 				}
 				dc.DrawRotatedText(ogre2wx(s), textPos, 0);
@@ -117,86 +86,67 @@ void ControlPoint::paint(wxPaintDC& dc)
 		}
 	}
 }
-//-----------------------------------------------------------------------
-const wxPoint& ControlPoint::getPosition(void) const
-{
+
+const wxPoint & ControlPoint::getPosition() const {
 	return mPos;
 }
-//-----------------------------------------------------------------------
-void ControlPoint::setPosition(const wxPoint& pos)
-{
+
+void ControlPoint::setPosition(const wxPoint & pos) {
 	mPos = pos;
 }
-//-----------------------------------------------------------------------
-const wxColour& ControlPoint::getColour(void) const
-{
+
+const wxColour & ControlPoint::getColour() const {
 	return mColour;
 }
-//-----------------------------------------------------------------------
-void ControlPoint::setColour(const wxColour& col)
-{
+
+void ControlPoint::setColour(const wxColour & col) {
 	mColour = col;
 }
-//-----------------------------------------------------------------------
-bool ControlPoint::isMovable(void) const
-{
+
+bool ControlPoint::isMovable() const {
 	return mMovable;
 }
-//-----------------------------------------------------------------------
-bool ControlPoint::isMoving(void) const
-{
+
+bool ControlPoint::isMoving() const {
 	return mMoving;
 }
-//-----------------------------------------------------------------------
-void ControlPoint::setMoving(bool moving)
-{
+
+void ControlPoint::setMoving(bool moving) {
 	mMoving = moving;
 }
-//-----------------------------------------------------------------------
-float ControlPoint::getXval(void) const
-{
+
+float ControlPoint::getXval() const {
 	return mXval;
 }
-//-----------------------------------------------------------------------
-void ControlPoint::setXval(float xval)
-{
+
+void ControlPoint::setXval(float xval) {
 	mXval = xval;
 }
-//-----------------------------------------------------------------------
-float ControlPoint::getYval(void) const
-{
+
+float ControlPoint::getYval() const {
 	return mYval;
 }
-//-----------------------------------------------------------------------
-void ControlPoint::setYval(float yval)
-{
+
+void ControlPoint::setYval(float yval) {
 	mYval = yval;
 }
-//-----------------------------------------------------------------------
-void ControlPoint::setXCenterVal(float xCenterVal)
-{
+
+void ControlPoint::setXCenterVal(float xCenterVal) {
 	mXCenterVal = xCenterVal;
 }
-//-----------------------------------------------------------------------
-void ControlPoint::setYCenterVal(float yCenterVal)
-{
+
+void ControlPoint::setYCenterVal(float yCenterVal) {
 	mYCenterVal = yCenterVal;
 }
-//-----------------------------------------------------------------------
-void trunc (float value, std::string& s, int maxDecimals)
-{
-	if (value > -0.0001 && value < 0.0001)
-	{
+
+void trunc(float value, std::string & s, int maxDecimals) {
+	if (value > -0.0001 && value < 0.0001) {
 		value = 0.00f;
 	}
-
 	std::stringstream ss;
-	if (value > -10.0f && value < 10.0f)
-	{
+	if (value > -10.0f && value < 10.0f) {
 		ss << setiosflags(std::ios::fixed) << std::setprecision(maxDecimals) << value;
-	}
-	else
-	{
+	} else {
 		--maxDecimals;
 		ss << setiosflags(std::ios::fixed) << std::setprecision(maxDecimals) << value;
 	}

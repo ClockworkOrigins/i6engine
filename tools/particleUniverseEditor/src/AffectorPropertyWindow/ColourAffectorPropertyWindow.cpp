@@ -19,10 +19,10 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "wx/ogre/utils.h"
 #include "wx/propgrid/advprops.h"
 
-ParentPropertyTimeAndColour::ParentPropertyTimeAndColour(
-	const wxString& label, 
+/*ParentPropertyTimeAndColour::ParentPropertyTimeAndColour(
+	const wxString& label,
 	const wxString& name) :
-	wxParentPropertyClass(label, name),
+	wxStringProperty(label, name),
 	mTimeAndColour(0)
 {
 }
@@ -45,10 +45,10 @@ bool ParentPropertyTimeAndColour::OnEvent (wxPropertyGrid* propgrid, wxWindow* w
 		if (dlg.ShowModal() == wxID_OK)
 		{
 			affector->clearColourMap();
-			ParticleUniverse::ColourAffector::ColourMap& map = dlg.getColourMap();
+			ParticleUniverse::ColourAffector::ColourMap& map2 = dlg.getColourMap();
 			ParticleUniverse::ColourAffector::ColourMap::iterator it;
-			ParticleUniverse::ColourAffector::ColourMap::iterator itEnd = map.end();
-			for (it = map.begin(); it != itEnd; ++it)
+			ParticleUniverse::ColourAffector::ColourMap::iterator itEnd = map2.end();
+			for (it = map2.begin(); it != itEnd; ++it)
 			{
 				// Add to affector
 				affector->addColour(it->first, it->second);
@@ -61,14 +61,14 @@ bool ParentPropertyTimeAndColour::OnEvent (wxPropertyGrid* propgrid, wxWindow* w
 //-----------------------------------------------------------------------
 int ParentPropertyTimeAndColour::getNumberOfTimeAndColourEntries(void)
 {
-	return mTimeAndColour;
+	return int(mTimeAndColour);
 }
 //-----------------------------------------------------------------------
 void ParentPropertyTimeAndColour::reset(void)
 {
 	mTimeAndColour = 0;
 	this->Empty();
-}
+}*/
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -127,7 +127,7 @@ void ColourAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::
 	ParticleUniverse::ColourAffector* colourAffector = static_cast<ParticleUniverse::ColourAffector*>(affector);
 
 	// Colour Operation: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_COLOUR_OPERATION);
+	wxPGProperty* propTo = GetProperty(PRNL_COLOUR_OPERATION);
 	ParticleUniverse::ColourAffector::ColourOperation colourOperation = colourAffector->getColourOperation();
 	wxString colourOperationString = COP_SET;
 	if (colourOperation == ParticleUniverse::ColourAffector::CAO_MULTIPLY)
@@ -151,11 +151,11 @@ void ColourAffectorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorColour.html");
 
 	// Time and Colour: List
-	wxPGId pid = Append(new ParentPropertyTimeAndColour(PRNL_TIME_AND_COLOUR, PRNL_TIME_AND_COLOUR));
-	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+//	wxPGProperty * pid = Append(new ParentPropertyTimeAndColour(PRNL_TIME_AND_COLOUR, PRNL_TIME_AND_COLOUR));
+//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Colour Operation: List of types
 	mColourOperation.Add(COP_SET);
 	mColourOperation.Add(COP_MULTIPLY);
-	Append(wxEnumProperty(PRNL_COLOUR_OPERATION, PRNL_COLOUR_OPERATION, mColourOperation));
+	Append(new wxEnumProperty(PRNL_COLOUR_OPERATION, PRNL_COLOUR_OPERATION, mColourOperation));
 }

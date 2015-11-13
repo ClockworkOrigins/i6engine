@@ -29,72 +29,59 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "wx/ogre/utils.h"
 
-//-----------------------------------------------------------------------
-EventHandlerPropertyWindow::EventHandlerPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name) : PropertyWindow(parent, owner, name)
-{
+EventHandlerPropertyWindow::EventHandlerPropertyWindow(wxWindow* parent, EditComponent * owner, const Ogre::String & name) : PropertyWindow(parent, owner, name) {
 	_initProperties();
 }
-//-----------------------------------------------------------------------
-EventHandlerPropertyWindow::EventHandlerPropertyWindow(EventHandlerPropertyWindow* eventHandlerPropertyWindow) : PropertyWindow(
-	eventHandlerPropertyWindow->GetParent(), 
-	eventHandlerPropertyWindow->getOwner(), 
-	eventHandlerPropertyWindow->getComponentName())
-{
+
+EventHandlerPropertyWindow::EventHandlerPropertyWindow(EventHandlerPropertyWindow * eventHandlerPropertyWindow) : PropertyWindow(eventHandlerPropertyWindow->GetParent(), eventHandlerPropertyWindow->getOwner(), eventHandlerPropertyWindow->getComponentName()) {
 	_initProperties();
 	copyAttributesFromPropertyWindow(eventHandlerPropertyWindow);
 }
-//-----------------------------------------------------------------------
-void EventHandlerPropertyWindow::copyAttributesFromPropertyWindow(EventHandlerPropertyWindow* eventHandlerPropertyWindow)
-{
+
+void EventHandlerPropertyWindow::copyAttributesFromPropertyWindow(EventHandlerPropertyWindow * eventHandlerPropertyWindow) {
 	// Name: String
 	doSetString(PRNL_NAME, eventHandlerPropertyWindow->doGetString(PRNL_NAME));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_HANDLER_TYPE);
-	wxPGProperty* propFrom = eventHandlerPropertyWindow->GetPropertyPtr(PRNL_HANDLER_TYPE);
-	propTo->DoSetValue(propFrom->DoGetValue());
+	wxPGProperty * propTo = GetProperty(PRNL_HANDLER_TYPE);
+	wxPGProperty * propFrom = eventHandlerPropertyWindow->GetProperty(PRNL_HANDLER_TYPE);
+	propTo->SetValue(propFrom->DoGetValue());
 }
-//-----------------------------------------------------------------------
-void EventHandlerPropertyWindow::copyAttributeToEventHandler(wxPGProperty* prop, wxString propertyName)
-{
-	if (!prop)
-		return;
 
-	ParticleUniverse::ParticleEventHandler* handler = static_cast<ParticleUniverse::ParticleEventHandler*>(mOwner->getPUElement());
-	if (!handler)
+void EventHandlerPropertyWindow::copyAttributeToEventHandler(wxPGProperty * prop, wxString propertyName) {
+	if (!prop) {
 		return;
+	}
 
-	if (propertyName == PRNL_NAME)
-	{
+	ParticleUniverse::ParticleEventHandler * handler = static_cast<ParticleUniverse::ParticleEventHandler *>(mOwner->getPUElement());
+	if (!handler) {
+		return;
+	}
+
+	if (propertyName == PRNL_NAME) {
 		// Name: String
 		Ogre::String name = wx2ogre(prop->GetValueAsString());
 		handler->setName(name);
-	}
-	else if (propertyName == PRNL_HANDLER_TYPE)
-	{
+	} else if (propertyName == PRNL_HANDLER_TYPE) {
 		// Type: List of types
 		// This requires the handler to be replaced.
 		replaceHandlerType(prop);
-	}
-	else
-	{
+	} else {
 		PropertyWindow::copyAttributeToComponent(prop, propertyName);
 	}
 }
-//-----------------------------------------------------------------------
-void EventHandlerPropertyWindow::copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler* eventHandler)
-{
+
+void EventHandlerPropertyWindow::copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler) {
 	// Name: Ogre::String
 	doSetString(PRNL_NAME, ogre2wx(eventHandler->getName()));
 
 	// Type: List of types
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_HANDLER_TYPE);
+	wxPGProperty * propTo = GetProperty(PRNL_HANDLER_TYPE);
 	wxString type = ogre2wxTranslate(eventHandler->getEventHandlerType());
 	propTo->SetValueFromString(type);
 }
-//-----------------------------------------------------------------------
-void EventHandlerPropertyWindow::_initProperties(void)
-{
+
+void EventHandlerPropertyWindow::_initProperties() {
 	// Set the (internationalized) property names
 	CST_HANDLER_DO_AFFECTOR = ogre2wxTranslate(HANDLER_DO_AFFECTOR);
 	CST_HANDLER_DO_ENABLE_COMPONENT = ogre2wxTranslate(HANDLER_DO_ENABLE_COMPONENT);
@@ -117,124 +104,119 @@ void EventHandlerPropertyWindow::_initProperties(void)
 	mTypes.Add(CST_HANDLER_DO_PLACEMENT_PARTICLE);
 	mTypes.Add(CST_HANDLER_DO_SCALE);
 	mTypes.Add(CST_HANDLER_DO_STOP_SYSTEM);
-	wxPGId pid = Append(wxEnumProperty(PRNL_HANDLER_TYPE, PRNL_HANDLER_TYPE, mTypes));
+	Append(new wxEnumProperty(PRNL_HANDLER_TYPE, PRNL_HANDLER_TYPE, mTypes));
 }
-//-----------------------------------------------------------------------
-void EventHandlerPropertyWindow::onPropertyChanged(wxPropertyGridEvent& event)
-{
+
+void EventHandlerPropertyWindow::onPropertyChanged(wxPropertyGridEvent & event) {
 	wxString propertyName = event.GetPropertyName();
-	wxPGProperty* prop = event.GetPropertyPtr();
+	wxPGProperty * prop = event.GetProperty();
 	onParentPropertyChanged(event);
 	copyAttributeToEventHandler(prop, propertyName);
 	notifyPropertyChanged();
 }
-//-----------------------------------------------------------------------
-void EventHandlerPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent& event)
-{
+
+void EventHandlerPropertyWindow::onParentPropertyChanged(wxPropertyGridEvent & event) {
 	wxString propertyName = event.GetPropertyName();
 	PropertyWindow::onPropertyChanged(event);
 
-	if (propertyName == PRNL_HANDLER_TYPE)
-	{
+	if (propertyName == PRNL_HANDLER_TYPE) {
 		// Replace this window by another one
 		notifyDestroyUnnecessaryConnections();
-		wxString subType = event.GetPropertyValueAsString();
+		wxString subType = event.GetProperty()->GetValueAsString();
 		mOwner->createPropertyWindow(subType, this);
 		mOwner->setCaption();
 		getOwner()->refreshCanvas();
 	}
 	notifyPropertyChanged();
 }
-//-----------------------------------------------------------------------
-void EventHandlerPropertyWindow::notifyDestroyUnnecessaryConnections(void)
-{
+
+void EventHandlerPropertyWindow::notifyDestroyUnnecessaryConnections() {
 	// Delete unnecessary connections
 	getOwner()->deleteConnection(CR_ENABLE, CRDIR_PRIMARY);
 	getOwner()->deleteConnection(CR_FORCE, CRDIR_PRIMARY);
 	getOwner()->deleteConnection(CR_PLACE, CRDIR_PRIMARY);
 }
-//-----------------------------------------------------------------------
-void EventHandlerPropertyWindow::replaceHandlerType(wxPGProperty* prop)
-{
+
+void EventHandlerPropertyWindow::replaceHandlerType(wxPGProperty * prop) {
 	// Type: List of types
 	Ogre::String type = getHandlerTypeByProperty(prop);
-	if (type == Ogre::StringUtil::BLANK)
+	if (type == Ogre::StringUtil::BLANK) {
 		return;
+	}
 
-	ParticleUniverse::ParticleEventHandler* oldHandler = static_cast<ParticleUniverse::ParticleEventHandler*>(mOwner->getPUElement());
-	if (oldHandler)
-	{
-		ParticleUniverse::ParticleObserver* observer = oldHandler->getParentObserver();
-		if (observer)
-		{
-			ParticleUniverse::ParticleEventHandler* newHandler = observer->createEventHandler(type);
+	ParticleUniverse::ParticleEventHandler * oldHandler = static_cast<ParticleUniverse::ParticleEventHandler *>(mOwner->getPUElement());
+	if (oldHandler) {
+		ParticleUniverse::ParticleObserver * observer = oldHandler->getParentObserver();
+		if (observer) {
+			ParticleUniverse::ParticleEventHandler * newHandler = observer->createEventHandler(type);
 			oldHandler->copyParentAttributesTo(newHandler);
 			bool wasStarted = false;
-			ParticleUniverse::ParticleTechnique* technique = observer->getParentTechnique();
-			ParticleUniverse::ParticleSystem* system = 0;
-			if (technique)
-			{
+			ParticleUniverse::ParticleTechnique * technique = observer->getParentTechnique();
+			ParticleUniverse::ParticleSystem * system = nullptr;
+			if (technique) {
 				system = technique->getParentSystem();
-				if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED)
-				{
+				if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
 					wasStarted = true;
 					system->stop();
 				}
 			}
 			observer->destroyEventHandler(oldHandler);
 			mOwner->setPUElement(newHandler);
-			if (wasStarted)
-			{
+			if (wasStarted) {
 				system->start();
 			}
-		}
-		else
-		{
-			/** The old handler didn't have an observer, so create a new handler by means of the ParticleSystemManager itself and also 
+		} else {
+			/** The old handler didn't have an observer, so create a new handler by means of the ParticleSystemManager itself and also
 				delete the old handler by means of the ParticleSystemManager
 			*/
-			ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
-			ParticleUniverse::ParticleEventHandler* newHandler = particleSystemManager->createEventHandler(type);
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::ParticleEventHandler * newHandler = particleSystemManager->createEventHandler(type);
 			oldHandler->copyParentAttributesTo(newHandler);
 			particleSystemManager->destroyEventHandler(oldHandler);
 			mOwner->setPUElement(newHandler);
 		}
-	}
-	else
-	{
+	} else {
 		// There is no old handler. Create a new handler by means of the ParticleSystemManager
-		ParticleUniverse::ParticleSystemManager* particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
-		ParticleUniverse::ParticleEventHandler* newHandler = particleSystemManager->createEventHandler(type);
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::ParticleEventHandler * newHandler = particleSystemManager->createEventHandler(type);
 		mOwner->setPUElement(newHandler);
 	}
 }
-//-----------------------------------------------------------------------
-const Ogre::String& EventHandlerPropertyWindow::getHandlerTypeByProperty(wxPGProperty* prop)
-{
+
+const Ogre::String & EventHandlerPropertyWindow::getHandlerTypeByProperty(wxPGProperty * prop) {
 	int type = prop->DoGetValue().GetLong(); // The property must be a list (PRNL_EVENT_HANDLER_TYPE)
-	switch (type)
-	{
-		case 0:
-			return HANDLER_DO_AFFECTOR;
+	switch (type) {
+	case 0: {
+		return HANDLER_DO_AFFECTOR;
 		break;
-		case 1:
-			return HANDLER_DO_ENABLE_COMPONENT;
+	}
+	case 1: {
+		return HANDLER_DO_ENABLE_COMPONENT;
 		break;
-		case 2:
-			return HANDLER_DO_EXPIRE;
+	}
+	case 2: {
+		return HANDLER_DO_EXPIRE;
 		break;
-		case 3:
-			return HANDLER_DO_FREEZE;
+	}
+	case 3: {
+		return HANDLER_DO_FREEZE;
 		break;
-		case 4:
-			return HANDLER_DO_PLACEMENT_PARTICLE;
+	}
+	case 4: {
+		return HANDLER_DO_PLACEMENT_PARTICLE;
 		break;
-		case 5:
-			return HANDLER_DO_SCALE;
+	}
+	case 5: {
+		return HANDLER_DO_SCALE;
 		break;
-		case 6:
-			return HANDLER_DO_STOP_SYSTEM;
+	}
+	case 6: {
+		return HANDLER_DO_STOP_SYSTEM;
 		break;
+	}
+	default: {
+		break;
+	}
 	}
 
 	return Ogre::StringUtil::BLANK;

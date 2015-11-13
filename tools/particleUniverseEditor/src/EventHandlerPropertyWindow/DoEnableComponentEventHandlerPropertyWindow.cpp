@@ -76,5 +76,5 @@ void DoEnableComponentEventHandlerPropertyWindow::_initProperties(void)
 	// Component to enable/disable: Realised by means of a connection
 	
 	// Enable/Disable: bool
-	Append(wxBoolProperty(PRNL_ENABLE_COMPONENT_TRUE_FALSE, PRNL_ENABLE_COMPONENT_TRUE_FALSE, true));
+	Append(new wxBoolProperty(PRNL_ENABLE_COMPONENT_TRUE_FALSE, PRNL_ENABLE_COMPONENT_TRUE_FALSE, true));
 }

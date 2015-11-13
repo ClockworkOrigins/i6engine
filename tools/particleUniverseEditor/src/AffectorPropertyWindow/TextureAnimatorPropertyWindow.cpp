@@ -104,7 +104,7 @@ void TextureAnimatorPropertyWindow::copyAttributesFromAffector(ParticleUniverse:
 	doSetDouble(PRNL_TIME_STEP, textureAnimator->getAnimationTimeStep());
 
 	// Animation Type: List
-	wxPGProperty* propTo = GetPropertyPtr(PRNL_ANIMATION_TYPE);
+	wxPGProperty* propTo = GetProperty(PRNL_ANIMATION_TYPE);
 	ParticleUniverse::TextureAnimator::TextureAnimationType animationType = textureAnimator->getTextureAnimationType();
 	wxString animationTypeString = TAT_LOOP;
 	if (animationType == ParticleUniverse::TextureAnimator::TAT_UP_DOWN)
@@ -142,23 +142,23 @@ void TextureAnimatorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorTextureAnimator.html");
 
 	// Time Step Animation: ParticleUniverse::Real
-	Append(wxFloatProperty(PRNL_TIME_STEP, PRNL_TIME_STEP, ParticleUniverse::TextureAnimator::DEFAULT_TIME_STEP));
+	Append(new wxFloatProperty(PRNL_TIME_STEP, PRNL_TIME_STEP, ParticleUniverse::TextureAnimator::DEFAULT_TIME_STEP));
 	SetPropertyEditor(PRNL_TIME_STEP, wxPG_EDITOR(SpinCtrl));
 
 	// Animation Type: List
 	mAnimationTypes.Add(TAT_LOOP);
 	mAnimationTypes.Add(TAT_UP_DOWN);
 	mAnimationTypes.Add(TAT_RANDOM);
-	wxPGId pid = Append(wxEnumProperty(PRNL_ANIMATION_TYPE, PRNL_ANIMATION_TYPE, mAnimationTypes));
+	Append(new wxEnumProperty(PRNL_ANIMATION_TYPE, PRNL_ANIMATION_TYPE, mAnimationTypes));
 
 	// Start Texture Coordinates: ParticleUniverse::uint16
-	Append(wxUIntProperty(PRNL_TEXCOORDS_START, PRNL_TEXCOORDS_START, ParticleUniverse::TextureAnimator::DEFAULT_TEXCOORDS_START));
+	Append(new wxUIntProperty(PRNL_TEXCOORDS_START, PRNL_TEXCOORDS_START, ParticleUniverse::TextureAnimator::DEFAULT_TEXCOORDS_START));
 	SetPropertyEditor(PRNL_TEXCOORDS_START, wxPG_EDITOR(SpinCtrl));
 
 	// End Texture Coordinates: ParticleUniverse::uint16
-	Append(wxUIntProperty(PRNL_TEXCOORDS_END, PRNL_TEXCOORDS_END, ParticleUniverse::TextureAnimator::DEFAULT_TEXCOORDS_END));
+	Append(new wxUIntProperty(PRNL_TEXCOORDS_END, PRNL_TEXCOORDS_END, ParticleUniverse::TextureAnimator::DEFAULT_TEXCOORDS_END));
 	SetPropertyEditor(PRNL_TEXCOORDS_END, wxPG_EDITOR(SpinCtrl));
 
 	// Random Start: bool
-	Append(wxBoolProperty(PRNL_START_RANDOM, PRNL_START_RANDOM, ParticleUniverse::TextureAnimator::DEFAULT_START_RANDOM));
+	Append(new wxBoolProperty(PRNL_START_RANDOM, PRNL_START_RANDOM, ParticleUniverse::TextureAnimator::DEFAULT_START_RANDOM));
 }

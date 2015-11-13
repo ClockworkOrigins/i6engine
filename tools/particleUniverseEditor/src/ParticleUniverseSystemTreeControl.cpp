@@ -28,18 +28,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "wx/imaglist.h"
 
 #ifdef WIN32
-#include "uxtheme.h"
+	#include "uxtheme.h"
 #endif
 
-//-----------------------------------------------------------------------
-SystemTreeControl::SystemTreeControl(ParticleUniverseEditorFrame* parentFrame, 
-	wxWindowID id,
-	const wxPoint& pos,
-	const wxSize& size)	: 
-	wxTreeCtrl(parentFrame, id, pos, size, wxTR_HAS_BUTTONS | wxTR_SINGLE),
-	mParentFrame(parentFrame),
-	mContextMenu(0)
-{
+SystemTreeControl::SystemTreeControl(ParticleUniverseEditorFrame * parentFrame, wxWindowID id, const wxPoint & pos, const wxSize & size) : wxTreeCtrl(parentFrame, id, pos, size, wxTR_HAS_BUTTONS | wxTR_SINGLE), mParentFrame(parentFrame), mContextMenu(nullptr) {
 // To set the explorer look. See also http://weseetips.com/tag/setwindowtheme/
 //#ifdef __WXMSW__ 
         //SetWindowTheme((HWND)GetHWND(), L"Explorer", NULL); 
@@ -50,171 +42,141 @@ SystemTreeControl::SystemTreeControl(ParticleUniverseEditorFrame* parentFrame,
 	DEFAULT_CATEGORY_NAME = _("General");
 
 	// Assign images to this tree	
-	wxImageList* images = new wxImageList(16, 16, true);
+	wxImageList * images = new wxImageList(16, 16, true);
 	images->Add(wxBitmap(ICONS_DIR + wxT("pu_logo.png"), wxBITMAP_TYPE_PNG));
 	images->Add(wxBitmap(ICONS_DIR + wxT("folder.png"), wxBITMAP_TYPE_PNG));
 	AssignImageList(images);
 
 	mContextMenu = new ContextMenu(this, this, wxDefaultPosition, wxSize(100, 100));
-	mContextMenu->addMenuElement(ID_PLAY, 
-		_("        Play"), 
-		wxT("control_play_blue.png"),
-		wxT("control_play.png"),
-		wxSize(200, 16));
-	mContextMenu->addMenuElement(ID_CLONE, 
-		_("        Clone item"), 
-		wxT("clone.png"),
-		wxT("clone.png"),
-		wxSize(200, 16));
-	mContextMenu->addMenuElement(ID_REMOVE, 
-		_("        Remove from list"), 
-		wxT("remove.png"),
-		wxT("remove.png"),
-		wxSize(200, 16));
+	mContextMenu->addMenuElement(ID_PLAY, _("        Play"), wxT("control_play_blue.png"), wxT("control_play.png"), wxSize(200, 16));
+	mContextMenu->addMenuElement(ID_CLONE, _("        Clone item"), wxT("clone.png"), wxT("clone.png"), wxSize(200, 16));
+	mContextMenu->addMenuElement(ID_REMOVE, _("        Remove from list"), wxT("remove.png"), wxT("remove.png"), wxSize(200, 16));
 	mContextMenu->initialise();
 
 	Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(SystemTreeControl::OnMouseEvent));
 	Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(SystemTreeControl::OnMouseRButtonPressed));
 	Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(SystemTreeControl::OnWindowLeave));
 }
-//-----------------------------------------------------------------------
-bool SystemTreeControl::Destroy(void)
-{
+
+bool SystemTreeControl::Destroy() {
 	delete mContextMenu;
 	return wxTreeCtrl::Destroy();
 }
-//-----------------------------------------------------------------------
-void SystemTreeControl::OnMouseEvent(wxMouseEvent& event)
-{
+
+void SystemTreeControl::OnMouseEvent(wxMouseEvent & event) {
 	mParentFrame->OnMouseMoveCallback(event);
 }
-//------------------------------------------------------------------------------
-void SystemTreeControl::OnMouseRButtonPressed(wxMouseEvent& event)
-{
+
+void SystemTreeControl::OnMouseRButtonPressed(wxMouseEvent & event) {
 	// Open submenu
 	wxPoint pos = GetParent()->GetPosition() + event.GetPosition();
 	mContextMenu->showContextMenu(pos);
 }
-//------------------------------------------------------------------------------
-void SystemTreeControl::resetContextMenu(void)
-{
+
+void SystemTreeControl::resetContextMenu() {
 	mContextMenu->hideIfNeeded();
 }
-//------------------------------------------------------------------------------
-void SystemTreeControl::OnWindowLeave(wxMouseEvent& event)
-{
+
+void SystemTreeControl::OnWindowLeave(wxMouseEvent & event) {
 	resetContextMenu();
 }
-//------------------------------------------------------------------------------
-void SystemTreeControl::setPlayInContextMenuEnabled(bool enabled)
-{
+
+void SystemTreeControl::setPlayInContextMenuEnabled(bool enabled) {
 	// This function is called from the parent frame
 	mContextMenu->enableMenuElement(ID_PLAY, enabled);
 }
-//-----------------------------------------------------------------------
-void SystemTreeControl::callbackContextMenu(wxWindowID id, wxWindow* window)
-{
-	switch (id)
-	{
-		case ID_PLAY:
-			mParentFrame->doPlay();
-		break;
 
-		case ID_CLONE:
-			mParentFrame->doClone();
-		break;
-
-		case ID_REMOVE:
-			mParentFrame->doRemove();
+void SystemTreeControl::callbackContextMenu(wxWindowID id, wxWindow * window) {
+	switch (id) {
+	case ID_PLAY: {
+		mParentFrame->doPlay();
 		break;
 	}
+	case ID_CLONE: {
+		mParentFrame->doClone();
+		break;
+	}
+	case ID_REMOVE: {
+		mParentFrame->doRemove();
+		break;
+	}
+	default: {
+		break;
+	}
+	}
 }
-//-----------------------------------------------------------------------
-void SystemTreeControl::expandRootOnly(void)
-{
+
+void SystemTreeControl::expandRootOnly() {
 	wxTreeItemIdValue handle;
 	wxTreeItemId item = GetFirstChild(GetRootItem(), handle);
-	while(item.IsOk())
-	{
+	while (item.IsOk()) {
 		Collapse(item);
 		item = GetNextChild(GetRootItem(), handle);
 	}
 	Expand(GetRootItem());
 }
-//-----------------------------------------------------------------------
-bool SystemTreeControl::isCategoryName(const wxString& name)
-{
-	if (name == ROOT_NODE_NAME)
+
+bool SystemTreeControl::isCategoryName(const wxString & name) {
+	if (name == ROOT_NODE_NAME) {
 		return true;
+	}
 
 	wxTreeItemIdValue handle;
 	wxTreeItemId item = GetFirstChild(GetRootItem(), handle);
-	while(item.IsOk())
-	{
-		if (name == GetItemText(item))
-		{
+	while (item.IsOk()) {
+		if (name == GetItemText(item)) {
 			return true;
 		}
 		item = GetNextChild(GetRootItem(), handle);
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
-bool SystemTreeControl::isSelectedItemCategory(void)
-{
+
+bool SystemTreeControl::isSelectedItemCategory() {
 	wxTreeItemId selected = GetSelection();
 	wxString name = GetItemText(selected);
 
-	if (name == ROOT_NODE_NAME)
+	if (name == ROOT_NODE_NAME) {
 		return true;
+	}
 
 	wxTreeItemIdValue handle;
 	wxTreeItemId item = GetFirstChild(GetRootItem(), handle);
-	while(item.IsOk())
-	{
-		if (name == GetItemText(item))
-		{
+	while (item.IsOk()) {
+		if (name == GetItemText(item)) {
 			return true;
 		}
 		item = GetNextChild(GetRootItem(), handle);
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
-wxTreeItemId SystemTreeControl::findCategory(const wxString& name)
-{
+
+wxTreeItemId SystemTreeControl::findCategory(const wxString & name) {
 	wxString category = name;
-	if (name == ROOT_NODE_NAME)
-	{
+	if (name == ROOT_NODE_NAME) {
 		// Change the category into the default category
 		category = DEFAULT_CATEGORY_NAME;
 	}
 
 	wxTreeItemIdValue handle;
 	wxTreeItemId item = GetFirstChild(GetRootItem(), handle);
-	while(item.IsOk())
-	{
-		if (category == GetItemText(item))
-		{
+	while (item.IsOk()) {
+		if (category == GetItemText(item)) {
 			return item;
 		}
 		item = GetNextChild(GetRootItem(), handle);
 	}
 	return 0;
 }
-//-----------------------------------------------------------------------
-wxTreeItemId SystemTreeControl::findParticleSystem(const wxString& name)
-{
+
+wxTreeItemId SystemTreeControl::findParticleSystem(const wxString & name) {
 	wxTreeItemIdValue handleRoot;
 	wxTreeItemId category = GetFirstChild(GetRootItem(), handleRoot);
-	while(category.IsOk())
-	{
+	while (category.IsOk()) {
 		wxTreeItemIdValue handleChild;
 		wxTreeItemId item = GetFirstChild(category, handleChild);
-		while(item.IsOk())
-		{
-			if (name == GetItemText(item))
-			{
+		while (item.IsOk()) {
+			if (name == GetItemText(item)) {
 				return item;
 			}
 			item = GetNextChild(category, handleChild);
@@ -225,19 +187,16 @@ wxTreeItemId SystemTreeControl::findParticleSystem(const wxString& name)
 
 	return 0;
 }
-//-----------------------------------------------------------------------
-wxTreeItemId SystemTreeControl::getCurrentCategory(void)
-{
+
+wxTreeItemId SystemTreeControl::getCurrentCategory() {
 	wxTreeItemId selected = GetSelection();
 	wxString name = GetItemText(selected);
-	if (name == ROOT_NODE_NAME)
-	{
+	if (name == ROOT_NODE_NAME) {
 		name = DEFAULT_CATEGORY_NAME;
 		selected = findCategory(DEFAULT_CATEGORY_NAME);
 	}
 
-	if (isCategoryName(name))
-	{
+	if (isCategoryName(name)) {
 		// It is a category
 		return selected;
 	}
@@ -245,69 +204,55 @@ wxTreeItemId SystemTreeControl::getCurrentCategory(void)
 	// It is a particle system, so get its parent
 	return GetItemParent(selected);
 }
-//-----------------------------------------------------------------------
-bool SystemTreeControl::isSelectedItemLast(void)
-{
+
+bool SystemTreeControl::isSelectedItemLast() {
 	// Get the current category (assuming the selected item is a Particle System)
 	wxTreeItemId category = getCurrentCategory();
-	if (category.IsOk())
-	{
+	if (category.IsOk()) {
 		wxTreeItemId lastItem = GetLastChild(category);
 		return (lastItem == GetSelection());
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
-bool SystemTreeControl::isSelectedItemFirst(void)
-{
+
+bool SystemTreeControl::isSelectedItemFirst() {
 	// Get the current category (assuming the selected item is a Particle System)
 	wxTreeItemId category = getCurrentCategory();
-	if (category.IsOk())
-	{
+	if (category.IsOk()) {
 		wxTreeItemIdValue cookie;
 		wxTreeItemId firstItem = GetFirstChild(category, cookie);
 		return (firstItem == GetSelection());
 	}
 	return false;
 }
-//-----------------------------------------------------------------------
-wxTreeItemId SystemTreeControl::getNextItem(void)
-{
+
+wxTreeItemId SystemTreeControl::getNextItem() {
 	wxTreeItemId selected = GetSelection();
 	wxString name = GetItemText(selected);
 	wxTreeItemIdValue cookie;
-	if (isCategoryName(name))
-	{
+	if (isCategoryName(name)) {
 		// It is a category, so set it to the first item.
-		if (selected == GetRootItem())
-		{
+		if (selected == GetRootItem()) {
 			wxTreeItemId category = GetFirstChild(selected, cookie);
-			if (category.IsOk())
-			{
+			if (category.IsOk()) {
 				// Return the first child of the first category
 				return GetFirstChild(category, cookie);
 			}
-		}
-		else
-		{
+		} else {
 			// Return the first child of the selected category
 			return GetFirstChild(selected, cookie);
 		}
 	}
 
 	// It is no category, so it is a Particle System
-	if (isSelectedItemLast())
-	{
+	if (isSelectedItemLast()) {
 		// This is the last one in the category, so skip to the next category
 		wxTreeItemId category = getCurrentCategory();
 		wxTreeItemId sibling = GetNextSibling(category);
-		if (sibling.IsOk())
-		{
+		if (sibling.IsOk()) {
 			return GetFirstChild(sibling, cookie);
 		}
-	}
-	else
-	{
+	} else {
 		// Skip to the second one in the same category
 		//return GetNextVisible(selected);
 		return GetNextSibling(selected);
@@ -315,44 +260,34 @@ wxTreeItemId SystemTreeControl::getNextItem(void)
 	
 	return 0;
 }
-//-----------------------------------------------------------------------
-wxTreeItemId SystemTreeControl::getPreviousItem(void)
-{
+
+wxTreeItemId SystemTreeControl::getPreviousItem() {
 	wxTreeItemId selected = GetSelection();
 	wxString name = GetItemText(selected);
-	if (isCategoryName(name))
-	{
+	if (isCategoryName(name)) {
 		// It is a category, so set it to the first item.
-		if (selected == GetRootItem() || name == DEFAULT_CATEGORY_NAME)
-		{
+		if (selected == GetRootItem() || name == DEFAULT_CATEGORY_NAME) {
 			// Higher than this is not possible
 			return 0;
-		}
-		else
-		{
+		} else {
 			// Go to the previous category and select the lastr child
 			wxTreeItemId category = getCurrentCategory();
 			wxTreeItemId sibling = GetPrevSibling(category);
-			if (sibling.IsOk())
-			{
+			if (sibling.IsOk()) {
 				return GetLastChild(sibling);
 			}
 		}
 	}
 
 	// It is no category, so it is a Particle System
-	if (isSelectedItemFirst())
-	{
+	if (isSelectedItemFirst()) {
 		// This is the first one in the category, so skip to the previous category
 		wxTreeItemId category = getCurrentCategory();
 		wxTreeItemId sibling = GetPrevSibling(category);
-		if (sibling.IsOk())
-		{
+		if (sibling.IsOk()) {
 			return GetLastChild(sibling);
 		}
-	}
-	else
-	{
+	} else {
 		// Skip to the second one in the same category
 		//return GetPrevVisible(selected);
 		return GetPrevSibling(selected);
@@ -360,66 +295,54 @@ wxTreeItemId SystemTreeControl::getPreviousItem(void)
 	
 	return 0;
 }
-//-----------------------------------------------------------------------
-wxTreeItemId SystemTreeControl::addItem(wxString& categoryName, wxString& particleSystemName, bool sortParent)
-{
+
+wxTreeItemId SystemTreeControl::addItem(wxString & categoryName, wxString & particleSystemName, bool sortParent) {
 	wxTreeItemId newItem = 0;
-	if (categoryName == wxT("") || categoryName == ROOT_NODE_NAME)
-	{
+	if (categoryName == wxT("") || categoryName == ROOT_NODE_NAME) {
 		// Make it the default category
 		categoryName = DEFAULT_CATEGORY_NAME;
 	}
 
 	// Insert the new name
 	wxTreeItemId category = findCategory(categoryName);
-	if (!category.IsOk())
-	{
+	if (!category.IsOk()) {
 		// Category does not exist, create a new one
 		category = AppendItem(GetRootItem(), categoryName, 1);
 	}
 
-	if (category.IsOk())
-	{
+	if (category.IsOk()) {
 		// Add the new name
 		newItem = PrependItem(category, particleSystemName);
-		if (newItem.IsOk())
-		{
+		if (newItem.IsOk()) {
 			SelectItem(newItem);
 		}
 
-		if (sortParent)
-		{
+		if (sortParent) {
 			SortChildren(category);
 		}
 	}
 
 	return newItem;
 }
-//-----------------------------------------------------------------------
-void SystemTreeControl::sortAll(void)
-{
+
+void SystemTreeControl::sortAll() {
 	wxTreeItemIdValue handleRoot;
 	wxTreeItemId category = GetFirstChild(GetRootItem(), handleRoot);
-	while(category.IsOk())
-	{
+	while (category.IsOk()) {
 		SortChildren(category);
 		category = GetNextChild(GetRootItem(), handleRoot);
 	}
 }
-//-----------------------------------------------------------------------
-wxTreeItemId SystemTreeControl::setToFirstParticleSystem(void)
-{
+
+wxTreeItemId SystemTreeControl::setToFirstParticleSystem() {
 	wxTreeItemId item;
 	wxTreeItemIdValue handleRoot;
 	wxTreeItemId category = GetFirstChild(GetRootItem(), handleRoot);
-	while(category.IsOk())
-	{
-		if (GetChildrenCount(category) > 0)
-		{
+	while (category.IsOk()) {
+		if (GetChildrenCount(category) > 0) {
 			wxTreeItemIdValue cookie;
 			item = GetFirstChild(category, cookie);
-			if (item.IsOk())
-			{
+			if (item.IsOk()) {
 				SelectItem(item);
 				return item;
 			}

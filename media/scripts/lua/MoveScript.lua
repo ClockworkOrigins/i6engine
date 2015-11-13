@@ -1,11 +1,14 @@
-﻿function tick(id)
+﻿function init(id)
 	local go = getObject(id)
 	if (go ~= nil) then
-		local psc = go:getPhysicalStateComponent()
-		if (psc ~= nil) then
-			psc:applyCentralForce(Vec3(0.0, 0.0, -50.0), true)
+		local vc = go:getVelocityComponent()
+		if (vc ~= nil) then
+			vc:accelerate("")
 		end
 	end
+end
+
+function tick(id)
 end
 
 function shatter(selfID, otherID)

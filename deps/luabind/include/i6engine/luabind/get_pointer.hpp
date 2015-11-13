@@ -20,19 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
-#ifndef __LUABIND_DETAIL_GET_POINTER_HPP__
-#define __LUABIND_DETAIL_GET_POINTER_HPP__
+#ifndef LUABIND_GET_POINTER_051023_HPP
+# define LUABIND_GET_POINTER_051023_HPP
 
 //
 // We need these overloads in the luabind namespace.
 //
 
-#include "boost/get_pointer.hpp"
+# include <boost/get_pointer.hpp>
 
 namespace luabind {
 
-	using boost::get_pointer;
+using boost::get_pointer;
 
-} /* namespace luabind */
+} // namespace luabind
 
-#endif /* __LUABIND_DETAIL_GET_POINTER_HPP__ */
+#endif // LUABIND_GET_POINTER_051023_HPP
+

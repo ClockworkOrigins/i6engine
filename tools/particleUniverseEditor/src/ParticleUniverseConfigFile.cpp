@@ -13,45 +13,36 @@ You can find a copy of the Commercial License in the Particle Universe package.
 
 #include <fstream>
 
-//-----------------------------------------------------------------------
-ConfigFile::ConfigFile(void) : 
-	Ogre::ConfigFile()
-{
+ConfigFile::ConfigFile() : Ogre::ConfigFile() {
 }
-//-----------------------------------------------------------------------
-void ConfigFile::setSetting(const Ogre::String& key, const Ogre::String& value)
-{
-	mSaveBuffer[key]=value;
+
+void ConfigFile::setSetting(const Ogre::String & key, const Ogre::String & value) {
+	mSaveBuffer[key] = value;
 }
-//-----------------------------------------------------------------------
-void ConfigFile::setConcatSetting(const Ogre::String& key, const Ogre::StringVector& value)
-{
+
+void ConfigFile::setConcatSetting(const Ogre::String & key, const Ogre::StringVector & value) {
 	Ogre::String concat;
 	Ogre::StringVector::const_iterator it = value.begin();
 	Ogre::StringVector::const_iterator itEnd = value.end();
-	if (!value.empty())
-	{
+	if (!value.empty()) {
 		concat = *it;
 		it++;
-		while (it != itEnd)
-		{
+		while (it != itEnd) {
 			concat = concat + "; " + *it;
 			it++;
 		}
-		mSaveBuffer[key]=concat;
+		mSaveBuffer[key] = concat;
 	}
 }
-//-----------------------------------------------------------------------
-void ConfigFile::save(const Ogre::String& filename)
-{
+
+void ConfigFile::save(const Ogre::String & filename) {
 	// Run through the mSaveBuffer
 	SaveBuffer::iterator it;
 	SaveBuffer::iterator itEnd = mSaveBuffer.end();
 	std::ofstream file;
 	Ogre::String f = filename;
 	file.open(f.c_str());
-	for (it = mSaveBuffer.begin(); it != itEnd; ++it)
-	{
+	for (it = mSaveBuffer.begin(); it != itEnd; ++it) {
 		file << it->first << "=" << it->second << "\n";
 	}
 	file.close();

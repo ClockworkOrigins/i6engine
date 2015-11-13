@@ -19,7 +19,7 @@
 namespace i6engine {
 namespace utils {
 
-	RealTimeClock::RealTimeClock(const boost::function<void(void)> & f) : _startTime(boost::posix_time::microsec_clock::universal_time()), _offset(0), _update(f), _running(true), _thread(boost::bind(&RealTimeClock::clockUpdater, this)) {
+	RealTimeClock::RealTimeClock(const boost::function<void(void)> & f) : _startTime(std::chrono::high_resolution_clock::now()), _offset(0), _update(f), _running(true), _thread(boost::bind(&RealTimeClock::clockUpdater, this)) {
 	}
 
 	RealTimeClock::~RealTimeClock() {
@@ -27,12 +27,12 @@ namespace utils {
 	}
 
 	uint64_t RealTimeClock::getCurrentTime(uint64_t oldTime) const {
-		return uint64_t(boost::posix_time::time_period(_startTime, boost::posix_time::microsec_clock::universal_time()).length().total_microseconds()) + _offset;
+		return uint64_t(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - _startTime).count()) + _offset;
 	}
 
 	void RealTimeClock::setCurrentTime(uint64_t time) {
 		_offset = time;
-		_startTime = boost::posix_time::microsec_clock::universal_time();
+		_startTime = std::chrono::high_resolution_clock::now();
 	}
 
 	void RealTimeClock::Stop() {

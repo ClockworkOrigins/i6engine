@@ -2,103 +2,130 @@
 // subject to the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef __LUABIND_DETAIL_INSTANCE_HOLDER_HPP__
-#define __LUABIND_DETAIL_INSTANCE_HOLDER_HPP__
+#ifndef LUABIND_INSTANCE_HOLDER_081024_HPP
+# define LUABIND_INSTANCE_HOLDER_081024_HPP
 
-#include <stdexcept>
+# include "i6engine/luabind/detail/inheritance.hpp"
+# include "i6engine/luabind/detail/class_rep.hpp" // TODO
+# include "i6engine/luabind/get_pointer.hpp"
+# include "i6engine/luabind/typeid.hpp"
+# include "boost/type_traits/is_polymorphic.hpp"
+# include <stdexcept>
 
-#include "i6engine/luabind/get_pointer.hpp"
-#include "i6engine/luabind/detail/class_rep.hpp" // TODO
-#include "i6engine/luabind/detail/inheritance.hpp"
+namespace luabind { namespace detail {
 
-#include "boost/type_traits/is_polymorphic.hpp"
+class instance_holder
+{
+public:
+    instance_holder(class_rep* cls, bool pc)
+      : m_cls(cls)
+      , m_pointee_const(pc)
+    {}
 
-namespace luabind {
-namespace detail {
+    virtual ~instance_holder()
+    {}
 
-	class instance_holder {
-	public:
-		instance_holder(class_rep * cls, bool pc) : m_cls(cls), m_pointee_const(pc) {}
+    virtual std::pair<void*, int> get(class_id target) const = 0;
 
-		virtual ~instance_holder() {}
+    virtual void release() = 0;
 
-		virtual std::pair<void *, int> get(class_id target) const = 0;
+    class_rep* get_class() const
+    {
+        return m_cls;
+    }
 
-		virtual void release() = 0;
+    bool pointee_const() const
+    {
+        return m_pointee_const;
+    }
 
-		class_rep * get_class() const {
-			return m_cls;
-		}
+private:
+    class_rep* m_cls;
+    bool m_pointee_const;
+};
 
-		bool pointee_const() const {
-			return m_pointee_const;
-		}
+namespace mpl = boost::mpl;
 
-	private:
-		class_rep * m_cls;
-		bool m_pointee_const;
-	};
+inline mpl::false_ check_const_pointer(void*)
+{
+    return mpl::false_();
+}
 
-	namespace mpl = boost::mpl;
+inline mpl::true_ check_const_pointer(void const*)
+{
+    return mpl::true_();
+}
 
-	inline mpl::false_ check_const_pointer(void *) {
-		return mpl::false_();
-	}
+template <class T>
+void release_ownership(std::unique_ptr<T>& p)
+{
+    p.release();
+}
 
-	inline mpl::true_ check_const_pointer(void const *) {
-		return mpl::true_();
-	}
+template <class P>
+void release_ownership(P const&)
+{
+    throw std::runtime_error(
+        "luabind: smart pointer does not allow ownership transfer");
+}
 
-	template<class T>
-	void release_ownership(std::unique_ptr<T> & p) {
-		p.release();
-	}
+template <class T>
+class_id static_class_id(T*)
+{
+    return registered_class<T>::id;
+}
 
-	template<class P>
-	void release_ownership(P const &) {
-		throw std::runtime_error("luabind: smart pointer does not allow ownership transfer");
-	}
+template <class P, class Pointee = void const>
+class pointer_holder : public instance_holder
+{
+public:
+    pointer_holder(
+        P p_param, class_id dynamic_i, void* dynamic_p, class_rep* cls
+    )
+      : instance_holder(cls, check_const_pointer(false ? get_pointer(p_param) : 0))
+      , p(std::move(p_param))
+      , weak(0)
+      , dynamic_id(dynamic_i)
+      , dynamic_ptr(dynamic_p)
+    {}
 
-	template<class T>
-	class_id static_class_id(T *) {
-		return registered_class<T>::id;
-	}
+    std::pair<void*, int> get(class_id target) const
+    {
+        if (target == registered_class<P>::id)
+            return std::pair<void*, int>(&this->p, 0);
 
-	template<class P, class Pointee = void const>
-	class pointer_holder : public instance_holder {
-	public:
-		pointer_holder(P p_param, class_id dynamic_i, void * dynamic_p, class_rep * cls) : instance_holder(cls, check_const_pointer(false ? get_pointer(p_param) : 0)), p(std::move(p_param)), weak(0), dynamic_id(dynamic_i), dynamic_ptr(dynamic_p) {}
+        void* naked_ptr = const_cast<void*>(static_cast<void const*>(
+            weak ? weak : get_pointer(p)));
 
-		std::pair<void *, int> get(class_id target) const {
-			if (target == registered_class<P>::id) {
-				return std::pair<void *, int>(&this->p, 0);
-			}
+        if (!naked_ptr)
+            return std::pair<void*, int>(nullptr, 0);
 
-			void * naked_ptr = const_cast<void *>(static_cast<void const *>(weak ? weak : get_pointer(p)));
+        return get_class()->casts().cast(
+            naked_ptr
+          , static_class_id(false ? get_pointer(p) : 0)
+          , target
+          , dynamic_id
+          , dynamic_ptr
+        );
+    }
 
-			if (!naked_ptr) {
-				return std::pair<void *, int>(nullptr, 0);
-			}
+    void release()
+    {
+        weak = const_cast<void*>(static_cast<void const*>(
+            get_pointer(p)));
+        release_ownership(p);
+    }
 
-			return get_class()->casts().cast(naked_ptr, static_class_id(false ? get_pointer(p) : 0), target, dynamic_id, dynamic_ptr);
-		}
+private:
+    mutable P p;
+    // weak will hold a possibly stale pointer to the object owned
+    // by p once p has released it's owership. This is a workaround
+    // to make adopt() work with virtual function wrapper classes.
+    void* weak;
+    class_id dynamic_id;
+    void* dynamic_ptr;
+};
 
-		void release() {
-			weak = const_cast<void *>(static_cast<void const *>(get_pointer(p)));
-			release_ownership(p);
-		}
+}} // namespace luabind::detail
 
-	private:
-		mutable P p;
-		// weak will hold a possibly stale pointer to the object owned
-		// by p once p has released it's owership. This is a workaround
-		// to make adopt() work with virtual function wrapper classes.
-		void * weak;
-		class_id dynamic_id;
-		void * dynamic_ptr;
-	};
-
-} /* namespace detail */
-} /* namespace luabind */
-
-#endif /* __LUABIND_DETAIL_INSTANCE_HOLDER_HPP__ */
+#endif // LUABIND_INSTANCE_HOLDER_081024_HPP
