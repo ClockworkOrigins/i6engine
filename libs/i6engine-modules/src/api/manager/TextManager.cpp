@@ -11,10 +11,11 @@
 namespace i6engine {
 namespace api {
 
-	TextManager::TextManager() : _language("Deutsch"), _texts() {
+	TextManager::TextManager() : _language("Deutsch"), _texts(), _textDir() {
 	}
 
 	void TextManager::initialize(const std::string & textDir) {
+		_textDir = textDir;
 		std::queue<std::string> directories;
 		directories.push(textDir);
 
@@ -34,7 +35,7 @@ namespace api {
 					iter++;
 				}
 			} catch (boost::filesystem::filesystem_error & e) {
-				ISIXE_THROW_FAILURE("DialogParser", e.what());
+				ISIXE_THROW_FAILURE("TextManager", e.what());
 			}
 		}
 	}
@@ -53,6 +54,9 @@ namespace api {
 			std::string key = node->Attribute("key");
 
 			for (tinyxml2::XMLElement * language = node->FirstChildElement("Language"); language != nullptr; language = language->NextSiblingElement("Language")) {
+				if (_language != language->Attribute("name")) {
+					continue;
+				}
 				std::string text = language->GetText();
 
 				std::string addText = "";
@@ -82,25 +86,19 @@ namespace api {
 					}
 				}
 
-				_texts[language->Attribute("name")].insert(std::make_pair(key, addText));
+				_texts.insert(std::make_pair(key, addText));
 			}
 		}
 	}
 
 	std::string TextManager::getText(const std::string & key) const {
-		auto it = _texts.find(_language);
+		auto it = _texts.find(key);
 
 		if (it == _texts.end()) {
-			ISIXE_THROW_API("TextManager", "Language '" << _language << "' not found");
-		}
-
-		auto it2 = it->second.find(key);
-
-		if (it2 == it->second.end()) {
 			ISIXE_THROW_API("TextManager", "No text for key '" << key << "' with language '" << _language << "'");
 		}
 
-		return it2->second;
+		return it->second;
 	}
 
 } /* namespace api */
