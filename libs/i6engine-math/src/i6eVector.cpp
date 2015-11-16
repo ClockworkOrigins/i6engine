@@ -18,8 +18,6 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-#include "boost/lexical_cast.hpp"
-
 #include "LinearMath/btVector3.h"
 
 #include "OGRE/OgreVector2.h"
@@ -40,11 +38,7 @@ namespace math {
 
 	i6eVector::i6eVector(const std::string & s) : _x(), _y(), _z(), _valid(true) {
 		std::stringstream stream(s);
-		double dx, dy, dz;
-		stream >> dx >> dy >> dz;
-		_x = dx;
-		_y = dy;
-		_z = dz;
+		stream >> _x >> _y >> _z;
 	}
 
 	i6eVector::i6eVector(const std::map<std::string, std::string> & params, const std::string & prefix) : _x(), _y(), _z(), _valid(true) {
