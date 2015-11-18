@@ -33,7 +33,6 @@ namespace Ogre {
 	class BillboardSet;
 	class Camera;
 	class Entity;
-	class Light;
 	class ManualObject;
 	class ParticleSystem;
 	class SceneNode;
@@ -48,6 +47,7 @@ namespace graphics {
 namespace modules {
 
 	class GraphicsManager;
+	class LuminousComponent;
 	class MovableText;
 
 	/**
@@ -58,6 +58,17 @@ namespace modules {
 	 */
 	class GraphicsNode {
 		friend class GraphicsManager;
+
+	public:
+		/**
+		 * \brief Gets SceneNode of the object
+		 *
+		 * Gets SceneNode of the object
+		 * \return SceneNode of the object
+		 */
+		inline Ogre::SceneNode * getSceneNode() const {
+			return _sceneNode;
+		}
 
 	private:
 		/**
@@ -83,7 +94,6 @@ namespace modules {
 		 * Gets SceneNode of the object
 		 * \return SceneNode of the object
 		 */
-		inline Ogre::SceneNode * getSceneNode() const { return _sceneNode; }
 		Ogre::SceneNode * getOrCreateSceneNode(const int64_t coid, const Vec3 & pos, const Quaternion & rot, const Vec3 & scale);
 
 		/**
@@ -310,7 +320,7 @@ namespace modules {
 		/**
 		 * Lights of the object
 		 */
-		std::map<int64_t, Ogre::SceneNode *> _lights;
+		std::map<int64_t, LuminousComponent *> _lights;
 
 		/**
 		 * ParticleSystems of the object

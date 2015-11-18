@@ -26,6 +26,7 @@
 #include "i6engine/api/configs/GraphicsConfig.h"
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
+#include "i6engine/modules/graphics/components/LuminousComponent.h"
 #include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
 #include "ParticleUniverseSystem.h"
@@ -35,7 +36,6 @@
 #include "OGRE/OgreBillboardSet.h"
 #include "OGRE/OgreCamera.h"
 #include "OGRE/OgreEntity.h"
-#include "OGRE/OgreLight.h"
 #include "OGRE/OgreParticleSystem.h"
 #include "OGRE/OgreRenderWindow.h"
 #include "OGRE/OgreRoot.h"
@@ -79,9 +79,10 @@ namespace modules {
 		for (const std::pair<int64_t, Ogre::SceneNode *> & sns : _sceneNodes) {
 			deleteMeshComponent(sns.first);
 		}
-		for (const std::pair<int64_t, Ogre::SceneNode *> & light : _lights) {
-			deleteLuminousComponent(light.first);
+		for (const std::pair<int64_t, LuminousComponent *> & light : _lights) {
+			delete light.second;
 		}
+		_lights.clear();
 		for (const std::pair<int64_t, Ogre::SceneNode *> & part : _particles) {
 			deleteParticleComponent(part.first);
 		}
@@ -297,41 +298,21 @@ namespace modules {
 
 	void GraphicsNode::createLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-
-		std::stringstream name;
-		name << "SN_" << _gameObjectID << "_" << coid;
-
-		Ogre::SceneNode * newNode = _sceneNode->createChildSceneNode(name.str(), position.toOgre()); // TODO: (Michael) we don't need an additional scene node
-		Ogre::Light * light = sm->createLight(name.str());
-		newNode->attachObject(light);
-
-		light->setType(Ogre::Light::LightTypes(type));
-		light->setDiffuseColour(diffuse.getX(), diffuse.getY(), diffuse.getZ());
-		light->setSpecularColour(specular.getX(), specular.getY(), specular.getZ());
-		light->setAttenuation(attenuation.getW(), attenuation.getX(), attenuation.getY(), attenuation.getZ());
-		light->setDirection(direction.toOgre());
-		light->setSpotlightInnerAngle(Ogre::Radian(spotLightRangeInner));
-		light->setSpotlightOuterAngle(Ogre::Radian(spotLightRangeOuter));
-		_lights[coid] = newNode;
+		LuminousComponent * lc = new LuminousComponent(_manager, this, _gameObjectID, coid, type, diffuse, specular, attenuation, direction, position, spotLightRangeInner, spotLightRangeOuter);
+		_lights.insert(std::make_pair(coid, lc));
 	}
 
 	void GraphicsNode::updateLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		LuminousComponent * lc = _lights[coid];
+		lc->updateLuminousComponent(type, diffuse, specular, attenuation, direction, position, spotLightRangeInner, spotLightRangeOuter);
+	}
 
-		Ogre::SceneNode * sn = _lights[coid];
-		Ogre::Light * light = dynamic_cast<Ogre::Light *>(sn->getAttachedObject(0));
-
-		sn->setPosition(position.toOgre());
-
-		light->setType(Ogre::Light::LightTypes(type));
-		light->setDiffuseColour(diffuse.getX(), diffuse.getY(), diffuse.getZ());
-		light->setSpecularColour(specular.getX(), specular.getY(), specular.getZ());
-		light->setAttenuation(attenuation.getW(), attenuation.getX(), attenuation.getY(), attenuation.getZ());
-		light->setDirection(direction.toOgre());
-		light->setSpotlightInnerAngle(Ogre::Radian(spotLightRangeInner * PI / 180));
-		light->setSpotlightOuterAngle(Ogre::Radian(spotLightRangeOuter * PI / 180));
+	void GraphicsNode::deleteLuminousComponent(const int64_t coid) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		LuminousComponent * lc = _lights[coid];
+		_lights.erase(coid);
+		delete lc;
 	}
 
 	void GraphicsNode::createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos) {
@@ -394,23 +375,6 @@ namespace modules {
 		_sceneNode->removeAndDestroyChild(sn->getName());
 
 		_cameras.erase(coid);
-	}
-
-
-	void GraphicsNode::deleteLuminousComponent(const int64_t coid) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-
-		Ogre::SceneNode * sn = _lights[coid];
-		Ogre::Light * light = dynamic_cast<Ogre::Light *>(sn->getAttachedObject(0));
-
-		sn->detachObject(light);
-		sm->destroyLight(light);
-
-		_sceneNode->removeAndDestroyChild(sn->getName());
-
-		_lights.erase(coid);
 	}
 
 	void GraphicsNode::deleteMeshComponent(const int64_t coid) {

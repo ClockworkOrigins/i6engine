@@ -125,6 +125,7 @@ set(i6modulesSrc
 	${srcdir}/modules/graphics/GraphicsNode.cpp
 	${srcdir}/modules/graphics/ResourceManager.cpp
 	${srcdir}/modules/graphics/Terrain.cpp
+	${srcdir}/modules/graphics/components/LuminousComponent.cpp
 	${srcdir}/modules/graphics/compositors/GaussianBlurListener.cpp
 	${srcdir}/modules/graphics/compositors/GaussianBlurLogic.cpp
 	${srcdir}/modules/graphics/compositors/HeatVisionListener.cpp
@@ -230,6 +231,7 @@ source_group(api\\objects /api/objects/*)
 source_group(api /api/*)
 source_group(modules\\audio /modules/audio/*)
 source_group(modules\\graphics /modules/graphics/*)
+source_group(modules\\graphics\\components /modules/graphics/components/*)
 source_group(modules\\graphics\\compositors /modules/graphics/compositors/*)
 source_group(modules\\graphics\\widgets /modules/graphics/graphicswidgets/*)
 source_group(modules\\gui /modules/gui/*)
