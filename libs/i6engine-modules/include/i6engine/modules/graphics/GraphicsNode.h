@@ -34,7 +34,6 @@ namespace Ogre {
 	class Camera;
 	class Entity;
 	class ManualObject;
-	class ParticleSystem;
 	class SceneNode;
 } /* namespace Ogre */
 
@@ -49,6 +48,7 @@ namespace modules {
 	class GraphicsManager;
 	class LuminousComponent;
 	class MovableText;
+	class ParticleComponent;
 
 	/**
 	 * \ingroup Graphic
@@ -152,11 +152,8 @@ namespace modules {
 		void createOrUpdateViewport(const int64_t coid, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha);
 
 		/**
-		 * \brief Creates new light or updates it
-		 *
-		 *     Creates a new light using Ogre's createLight constructor and configures it
-		 *
-		 *			Creates new light if _light is NULL. Then it updates attributes of the light
+		 * \brief Creates new light
+		 * Creates a new LuminousComponent
 		 * \param[in] type LightType (LT_SPOT, LT_POINT etc.)
 		 * \param[in] diffuse Diffuse colour of the light
 		 * \param[in] specular Specular colour of the light
@@ -164,7 +161,22 @@ namespace modules {
 		 * \param[in] direction Direction of the light
 		 */
 		void createLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter);
+		
+		/**
+		 * \brief Updates a light
+		 * Updates attributes of a LuminousComponent
+		 * \param[in] type LightType (LT_SPOT, LT_POINT etc.)
+		 * \param[in] diffuse Diffuse colour of the light
+		 * \param[in] specular Specular colour of the light
+		 * \param[in] attenuation Attenuation of den light
+		 * \param[in] direction Direction of the light
+		 */
 		void updateLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter);
+
+		/**
+		 * \brief Deletes the LuminousComponent of the Node
+		 */
+		void deleteLuminousComponent(const int64_t coid);
 
 		/**
 		 * \brief Updates the camera frustum
@@ -185,6 +197,11 @@ namespace modules {
 		void particleFadeOut(int64_t coid);
 
 		/**
+		 * \brief deletes the ParticleEmitter of this Node
+		 */
+		void deleteParticleComponent(const int64_t coid);
+
+		/**
 		 * \brief Deletes the MeshComponent of the Node
 		 *
 		 *     Deletes an Ogre Entity by calling sm->destroyEntity
@@ -192,23 +209,11 @@ namespace modules {
 		void deleteMeshComponent(const int64_t coid);
 
 		/**
-		 * \brief Deletes the LuminousComponent of the Node
-		 *
-		 *     Deletes an Ogre lighting object by calling sm->destroyLight
-		 */
-		void deleteLuminousComponent(const int64_t coid);
-
-		/**
 		 * \brief Deletes CameraComponent of the Node
 		 *
 		 *     Deletes an Ogre Camera by calling sm->destroyCamera
 		 */
 		void deleteCameraComponent(const int64_t coid);
-
-		/**
-		 * \brief deletes the ParticleEmitter of this Node
-		 */
-		void deleteParticleComponent(const int64_t coid);
 
 		/**
 		 * \brief plays an animation
@@ -325,7 +330,7 @@ namespace modules {
 		/**
 		 * ParticleSystems of the object
 		 */
-		std::map<int64_t, Ogre::SceneNode *> _particles;
+		std::map<int64_t, ParticleComponent *> _particles;
 
 		/**
 		 * \brief list of all subSceneNodes
