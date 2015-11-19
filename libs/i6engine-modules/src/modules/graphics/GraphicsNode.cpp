@@ -27,14 +27,12 @@
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
 #include "i6engine/modules/graphics/components/BillboardComponent.h"
+#include "i6engine/modules/graphics/components/CameraComponent.h"
 #include "i6engine/modules/graphics/components/LuminousComponent.h"
 #include "i6engine/modules/graphics/components/ParticleComponent.h"
 #include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
-#include "OGRE/OgreCamera.h"
 #include "OGRE/OgreEntity.h"
-#include "OGRE/OgreRenderWindow.h"
-#include "OGRE/OgreRoot.h"
 #include "OGRE/OgreSceneManager.h"
 #include "OGRE/OgreSubEntity.h"
 
@@ -66,9 +64,10 @@ namespace modules {
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
 		Ogre::SceneNode * root = sm->getRootSceneNode();
-		for (const std::pair<int64_t, Ogre::SceneNode *> & cam : _cameras) {
-			deleteCameraComponent(cam.first);
+		for (const std::pair<int64_t, CameraComponent *> & cam : _cameras) {
+			delete cam.second;
 		}
+		_cameras.clear();
 		for (const std::pair<int64_t, Ogre::SceneNode *> & sns : _sceneNodes) {
 			deleteMeshComponent(sns.first);
 		}
@@ -92,10 +91,7 @@ namespace modules {
 		}
 
 		root->removeChild(_sceneNode);
-
-		if (_sceneNode != nullptr) {
-			sm->destroySceneNode(_sceneNode->getName());
-		}
+		sm->destroySceneNode(_sceneNode->getName());
 	}
 
 	Ogre::SceneNode * GraphicsNode::getOrCreateSceneNode(const int64_t coid, const Vec3 & pos, const Quaternion & rot, const Vec3 & scale) {
@@ -170,89 +166,51 @@ namespace modules {
 
 	void GraphicsNode::createCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-
-		std::stringstream name;
-		name << "SN_" << _gameObjectID << "_" << coid;
-
-		Ogre::SceneNode * cameraNode = _sceneNode->createChildSceneNode(name.str());
-		std::stringstream name2;
-		name2 << "camera" << _gameObjectID;
-
-		Ogre::Camera * camera = sm->createCamera(name2.str());
-		cameraNode->attachObject(camera);
-
-		camera->setPosition(position.toOgre());
-		camera->lookAt(lookAt.toOgre());
-		camera->setNearClipDistance(nC);
-		camera->setFOVy(Ogre::Radian(fov));
-
-		_cameras[coid] = cameraNode;
+		assert(_cameras.find(coid) == _cameras.end());
+		CameraComponent * cc = new CameraComponent(_manager, this, _gameObjectID, coid, position, lookAt, nC, fov);
+		_cameras.insert(std::make_pair(coid, cc));
+		assert(_cameras.find(coid) != _cameras.end());
 	}
 
 	void GraphicsNode::updateCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		Ogre::SceneNode * sn = _cameras[coid];
-		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(sn->getAttachedObject(0));
-
-		camera->setPosition(position.toOgre());
-		camera->lookAt(lookAt.toOgre());
-		camera->setNearClipDistance(nC);
-		camera->setFOVy(Ogre::Radian(fov));
+		assert(_cameras.find(coid) != _cameras.end());
+		CameraComponent * cc = _cameras[coid];
+		cc->updateCameraComponent(position, lookAt, nC, fov);
 	}
 
 	void GraphicsNode::updateCameraFrustumComponent(const int64_t coid, const double left, const double right, const double top, const double bottom) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_cameras.find(coid) != _cameras.end());
+		CameraComponent * cc = _cameras[coid];
+		cc->updateCameraFrustumComponent(left, right, top, bottom);
+	}
 
-		Ogre::SceneNode * sn = _cameras[coid];
-		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(sn->getAttachedObject(0));
-		camera->setFrustumExtents(left, right, top, bottom);
+	void GraphicsNode::enableCompositor(int64_t coid, const std::string & compositor, bool enabled) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_cameras.find(coid) != _cameras.end());
+		CameraComponent * cc = _cameras[coid];
+		cc->enableCompositor(compositor, enabled);
 	}
 
 	void GraphicsNode::createOrUpdateViewport(const int64_t coid, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_cameras.find(coid) != _cameras.end());
+		CameraComponent * cc = _cameras[coid];
+		cc->createOrUpdateViewport(left, top, width, height, red, green, blue, alpha);
+	}
 
-		Ogre::Viewport * vp;
-
-		Ogre::SceneNode * sn = _cameras[coid];
-		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(sn->getAttachedObject(0));
-		if (camera->getViewport() == nullptr) {
-			vp = _manager->getRoot()->getAutoCreatedWindow()->addViewport(camera, int(coid), float(left), float(top), float(width), float(height));
-		} else {
-			vp = camera->getViewport();
-
-			vp->setDimensions(left, top, width, height);
-		}
-
-		vp->setBackgroundColour(Ogre::ColourValue(float(red), float(green), float(blue), float(alpha)));
-
-		Ogre::CompositorManager::ResourceMapIterator resourceIterator = Ogre::CompositorManager::getSingleton().getResourceIterator();
-
-		// add all compositor resources to the view container
-		while (resourceIterator.hasMoreElements()) {
-			Ogre::ResourcePtr resource = resourceIterator.getNext();
-			const Ogre::String & compositorName = resource->getName();
-
-			int addPosition = -1;
-			if (compositorName == "HDR") {
-				// HDR must be first in the chain
-				addPosition = 0;
-			}
-			try {
-				Ogre::CompositorManager::getSingleton().addCompositor(vp, compositorName, addPosition);
-				Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, compositorName, false);
-			} catch (...) {
-				/// Warn user
-				Ogre::LogManager::getSingleton().logMessage("Could not load compositor " + compositorName);
-			}
-		}
+	void GraphicsNode::deleteCameraComponent(const int64_t coid) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_cameras.find(coid) != _cameras.end());
+		CameraComponent * cc = _cameras[coid];
+		_cameras.erase(coid);
+		delete cc;
+		assert(_cameras.find(coid) == _cameras.end());
 	}
 
 	void GraphicsNode::setMaterial(const int64_t coid, const std::string & materialName) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		Ogre::SceneNode * sn = _sceneNodes[coid];
 		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(sn->getAttachedObject(0));
 		entity->setMaterialName(materialName);
@@ -316,39 +274,6 @@ namespace modules {
 		_particles.erase(coid);
 		delete pc;
 		assert(_particles.find(coid) == _particles.end());
-	}
-
-	void GraphicsNode::deleteCameraComponent(const int64_t coid) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-		Ogre::SceneNode * sn = _cameras[coid];
-		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(sn->getAttachedObject(0));
-		Ogre::Viewport * vp = camera->getViewport();
-
-		Ogre::CompositorManager::ResourceMapIterator resourceIterator = Ogre::CompositorManager::getSingleton().getResourceIterator();
-
-		// add all compositor resources to the view container
-		while (resourceIterator.hasMoreElements()) {
-			Ogre::ResourcePtr resource = resourceIterator.getNext();
-			const Ogre::String & compositorName = resource->getName();
-			try {
-				Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, compositorName, false);
-				Ogre::CompositorManager::getSingleton().removeCompositor(vp, compositorName);
-			} catch (...) {
-				/// Warn user
-				Ogre::LogManager::getSingleton().logMessage("Could not load compositor " + compositorName);
-			}
-		}
-
-		_manager->getRoot()->getAutoCreatedWindow()->removeViewport(int(coid));		
-
-		sn->detachObject(camera);
-		sm->destroyCamera(camera);
-
-		_sceneNode->removeAndDestroyChild(sn->getName());
-
-		_cameras.erase(coid);
 	}
 
 	void GraphicsNode::deleteMeshComponent(const int64_t coid) {
@@ -477,13 +402,6 @@ namespace modules {
 		_manager->removeTicker(this);
 		delete _movableTexts[coid];
 		_movableTexts.erase(coid);
-	}
-
-	void GraphicsNode::enableCompositor(int64_t coid, const std::string & compositor, bool enabled) {
-		Ogre::SceneNode * sn = _cameras[coid];
-		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(sn->getAttachedObject(0));
-		Ogre::Viewport * vp = camera->getViewport();
-		Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, compositor, enabled);
 	}
 
 	void GraphicsNode::drawBoundingBox(int64_t coid, const Vec3 & colour) {

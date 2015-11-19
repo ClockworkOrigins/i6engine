@@ -29,7 +29,6 @@
 
 namespace Ogre {
 	class AnimationState;
-	class Camera;
 	class Entity;
 	class ManualObject;
 	class SceneNode;
@@ -44,6 +43,7 @@ namespace graphics {
 namespace modules {
 
 	class BillboardComponent;
+	class CameraComponent;
 	class GraphicsManager;
 	class LuminousComponent;
 	class MovableText;
@@ -137,11 +137,28 @@ namespace modules {
 		void updateCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov);
 
 		/**
+		 * \brief Updates the camera frustum
+		 */
+		void updateCameraFrustumComponent(const int64_t coid, const double left, const double right, const double top, const double bottom);
+
+		/**
+		 * \brief enables or disables a compositor
+		 */
+		void enableCompositor(int64_t coid, const std::string & compositor, bool enabled);
+
+		/**
 		 * \brief Creates or updates a viewport
 		 *
 		 *     creates a new Ogre viewport by calling Ogre's addViewport, then sets its dimensions
 		 */
 		void createOrUpdateViewport(const int64_t coid, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha);
+
+		/**
+		 * \brief Deletes CameraComponent of the Node
+		 *
+		 *     Deletes an Ogre Camera by calling sm->destroyCamera
+		 */
+		void deleteCameraComponent(const int64_t coid);
 
 		/**
 		 * \brief Creates new light
@@ -171,11 +188,6 @@ namespace modules {
 		void deleteLuminousComponent(const int64_t coid);
 
 		/**
-		 * \brief Updates the camera frustum
-		 */
-		void updateCameraFrustumComponent(const int64_t coid, const double left, const double right, const double top, const double bottom);
-
-		/**
 		 * \brief Creates a new ParticleEmitter
 		 *
 		 * \param emitterName Script file for this emitter
@@ -199,13 +211,6 @@ namespace modules {
 		 *     Deletes an Ogre Entity by calling sm->destroyEntity
 		 */
 		void deleteMeshComponent(const int64_t coid);
-
-		/**
-		 * \brief Deletes CameraComponent of the Node
-		 *
-		 *     Deletes an Ogre Camera by calling sm->destroyCamera
-		 */
-		void deleteCameraComponent(const int64_t coid);
 
 		/**
 		 * \brief plays an animation
@@ -265,11 +270,6 @@ namespace modules {
 		void deleteMovableText(int64_t coid);
 
 		/**
-		 * \brief enables or disables a compositor
-		 */
-		void enableCompositor(int64_t coid, const std::string & compositor, bool enabled);
-
-		/**
 		 * \brief draws the surrounding bounding box of the mesh with given colour
 		 */
 		void drawBoundingBox(int64_t coid, const Vec3 & colour);
@@ -307,7 +307,7 @@ namespace modules {
 		/**
 		 * Cameras node of the object
 		 */
-		std::map<int64_t, Ogre::SceneNode *> _cameras;
+		std::map<int64_t, CameraComponent *> _cameras;
 
 		/**
 		 * Lights of the object
