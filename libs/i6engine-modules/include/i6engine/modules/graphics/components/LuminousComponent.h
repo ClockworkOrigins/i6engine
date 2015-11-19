@@ -53,11 +53,6 @@ namespace modules {
 		GraphicsManager * _manager;
 
 		/**
-		 * ID of the object
-		 */
-		int64_t _gameObjectID;
-
-		/**
 		 * parent of this Component
 		 */
 		GraphicsNode * _parent;

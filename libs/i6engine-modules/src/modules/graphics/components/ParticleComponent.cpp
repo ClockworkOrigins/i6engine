@@ -27,7 +27,7 @@
 namespace i6engine {
 namespace modules {
 
-	ParticleComponent::ParticleComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & emitterName, const Vec3 & pos) : _manager(manager), _gameObjectID(goid), _parent(parent), _sceneNode(nullptr) {
+	ParticleComponent::ParticleComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & emitterName, const Vec3 & pos) : _manager(manager), _parent(parent), _sceneNode(nullptr) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 

@@ -26,12 +26,11 @@
 #include "i6engine/api/configs/GraphicsConfig.h"
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
+#include "i6engine/modules/graphics/components/BillboardComponent.h"
 #include "i6engine/modules/graphics/components/LuminousComponent.h"
 #include "i6engine/modules/graphics/components/ParticleComponent.h"
 #include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
-#include "OGRE/OgreBillboard.h"
-#include "OGRE/OgreBillboardSet.h"
 #include "OGRE/OgreCamera.h"
 #include "OGRE/OgreEntity.h"
 #include "OGRE/OgreRenderWindow.h"
@@ -42,7 +41,7 @@
 namespace i6engine {
 namespace modules {
 
-	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _parentNode(nullptr), _cameras(), _lights(), _particles(), _sceneNodes(), _animationState(), _animationSpeed(1.0), _lastTime(), _billboardSets(), _movableTexts(), _observer(), _boundingBox() {
+	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _cameras(), _lights(), _particles(), _sceneNodes(), _animationState(), _animationSpeed(1.0), _lastTime(), _billboardSets(), _movableTexts(), _observer(), _boundingBox() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		Ogre::SceneManager * sm = _manager->getSceneManager();
@@ -67,9 +66,6 @@ namespace modules {
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
 		Ogre::SceneNode * root = sm->getRootSceneNode();
-		if (_parentNode != nullptr) {
-			delete _parentNode;
-		}
 		for (const std::pair<int64_t, Ogre::SceneNode *> & cam : _cameras) {
 			deleteCameraComponent(cam.first);
 		}
@@ -84,6 +80,10 @@ namespace modules {
 			delete part.second;
 		}
 		_particles.clear();
+		for (const std::pair<int64_t, BillboardComponent *> & bill : _billboardSets) {
+			delete bill.second;
+		}
+		_billboardSets.clear();
 		for (const std::pair<int64_t, MovableText *> & text : _movableTexts) {
 			deleteMovableText(text.first);
 		}
@@ -95,29 +95,6 @@ namespace modules {
 
 		if (_sceneNode != nullptr) {
 			sm->destroySceneNode(_sceneNode->getName());
-		}
-	}
-
-	// to be reviewed
-	void GraphicsNode::setParent(GraphicsNode * newParent) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-
-		// Remove
-		if (_parentNode == nullptr) {
-			Ogre::SceneManager * sm = _manager->getSceneManager();
-			sm->getRootSceneNode()->removeChild(_sceneNode);
-		} else {
-			_parentNode->getSceneNode()->removeChild(_sceneNode);
-		}
-
-		// Add
-		if (newParent != nullptr) {
-			newParent->getSceneNode()->addChild(_sceneNode);
-			_parentNode = newParent;
-		} else {
-			// If nullptr, attach to root node.
-			Ogre::SceneManager * sm = _manager->getSceneManager();
-			sm->getRootSceneNode()->addChild(_sceneNode);
 		}
 	}
 
@@ -441,53 +418,34 @@ namespace modules {
 	}
 
 	void GraphicsNode::createBilldboardSetComponent(int64_t coid, const std::string & material, double width, double height, api::graphics::BillboardOrigin bo) {
-		Ogre::BillboardSet * billboardSet = _manager->getSceneManager()->createBillboardSet("SN_" + std::to_string(_gameObjectID) + "_" + std::to_string(coid));
-		billboardSet->setMaterialName(material);
-		billboardSet->setBillboardType(Ogre::BillboardType::BBT_POINT);
-		billboardSet->setDefaultDimensions(width, height);
-		switch (bo) {
-		case api::graphics::BillboardOrigin::CenterLeft: {
-			billboardSet->setBillboardOrigin(Ogre::BillboardOrigin::BBO_CENTER_LEFT);
-			break;
-		}
-		default: {
-			ISIXE_THROW_FAILURE("GraphicsNode", "Billboard origin not correct!");
-		}
-		}
-		_sceneNode->attachObject(billboardSet);
-
-		_billboardSets.insert(std::make_pair(coid, std::make_pair(billboardSet, std::map<std::string, Ogre::Billboard *>())));
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_billboardSets.find(coid) == _billboardSets.end());
+		BillboardComponent * bc = new BillboardComponent(_manager, this, _gameObjectID, coid, material, width, height, bo);
+		_billboardSets.insert(std::make_pair(coid, bc));
+		assert(_billboardSets.find(coid) != _billboardSets.end());
 	}
 
 	void GraphicsNode::createOrUpdateBillboard(int64_t coid, const std::string & identifier, const Vec3 & offset, double width, double height, double u0, double v0, double u1, double v1) {
-		Ogre::Billboard * bb = nullptr;
-		if (_billboardSets.find(coid) == _billboardSets.end()) {
-			return;
-		}
-		if (_billboardSets[coid].second.find(identifier) == _billboardSets[coid].second.end()) {
-			bb = _billboardSets[coid].first->createBillboard(offset.toOgre(), Ogre::ColourValue::White);
-			_billboardSets[coid].second.insert(std::make_pair(identifier, bb));
-		} else {
-			bb = _billboardSets[coid].second[identifier];
-		}
-		bb->setDimensions(width, height);
-		bb->setTexcoordRect(u0, v0, u1, v1);
-		bb->setPosition(offset.toOgre());
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_billboardSets.find(coid) != _billboardSets.end());
+		BillboardComponent * bc = _billboardSets[coid];
+		bc->createOrUpdateBillboard(identifier, offset, width, height, u0, v0, u1, v1);
 	}
 
 	void GraphicsNode::deleteBillboard(int64_t coid, const std::string & identifier) {
-		Ogre::Billboard * bb = _billboardSets[coid].second[identifier];
-		_billboardSets[coid].first->removeBillboard(bb);
-		_billboardSets[coid].second.erase(identifier);
-		delete bb;
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_billboardSets.find(coid) != _billboardSets.end());
+		BillboardComponent * bc = _billboardSets[coid];
+		bc->deleteBillboard(identifier);
 	}
 
 	void GraphicsNode::deleteBillboardSetComponent(int64_t coid) {
-		Ogre::BillboardSet * bs = _billboardSets[coid].first;
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_billboardSets.find(coid) != _billboardSets.end());
+		BillboardComponent * bc = _billboardSets[coid];
 		_billboardSets.erase(coid);
-
-		_sceneNode->detachObject(bs);
-		_manager->getSceneManager()->destroyBillboardSet(bs);
+		delete bc;
+		assert(_billboardSets.find(coid) == _billboardSets.end());
 	}
 
 	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {

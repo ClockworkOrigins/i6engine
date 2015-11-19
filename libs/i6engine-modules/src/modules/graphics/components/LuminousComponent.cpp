@@ -27,7 +27,7 @@
 namespace i6engine {
 namespace modules {
 
-	LuminousComponent::LuminousComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) : _manager(manager), _gameObjectID(goid), _parent(parent), _sceneNode(nullptr) {
+	LuminousComponent::LuminousComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) : _manager(manager), _parent(parent), _sceneNode(nullptr) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 

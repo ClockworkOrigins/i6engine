@@ -19,8 +19,8 @@
  * @{
  */
 
-#ifndef __I6ENGINE_MODULES_COMPONENTS_PARTICLECOMPONENT_H__
-#define __I6ENGINE_MODULES_COMPONENTS_PARTICLECOMPONENT_H__
+#ifndef __I6ENGINE_MODULES_COMPONENTS_BILLBOARDCOMPONENT_H__
+#define __I6ENGINE_MODULES_COMPONENTS_BILLBOARDCOMPONENT_H__
 
 #include <cstdint>
 
@@ -29,10 +29,16 @@
 #include "i6engine/math/i6eVector.h"
 
 namespace Ogre {
-	class SceneNode;
+	class Billboard;
+	class BillboardSet;
 } /* namespace Ogre */
 
 namespace i6engine {
+namespace api {
+namespace graphics {
+	enum class BillboardOrigin;
+} /* namespace graphics */
+} /* namespace api */
 namespace modules {
 
 	class GraphicsManager;
@@ -41,10 +47,10 @@ namespace modules {
 	/**
 	 * \ingroup Graphic
 	 *
-	 * \class ParticleComponent
+	 * \class BillboardComponent
 	 * \brief Handles all light related functionality
 	 */
-	class ParticleComponent {
+	class BillboardComponent {
 		friend class GraphicsNode;
 
 	private:
@@ -58,35 +64,38 @@ namespace modules {
 		 */
 		GraphicsNode * _parent;
 
-		/**
-		 * SceneNode of the object
-		 */
-		Ogre::SceneNode * _sceneNode;
+		Ogre::BillboardSet * _billboardSet;
+		std::map<std::string, Ogre::Billboard *> _billboards;
 
 		/**
-		 * \brief Create a new ParticleComponent
+		 * \brief Create a new BillboardComponent
 		 */
-		ParticleComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & emitterName, const Vec3 & pos);
+		BillboardComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & material, double width, double height, api::graphics::BillboardOrigin bo);
 
 		/**
-		 * \brief ~ParticleComponent
+		 * \brief ~BillboardComponent
 		 */
-		~ParticleComponent();
+		~BillboardComponent();
 
 		/**
-		 * \brief lets a particle fade out
+		 * \brief creates a billboard on the billboard set
 		 */
-		void particleFadeOut();
+		void createOrUpdateBillboard(const std::string & identifier, const Vec3 & offset, double width, double height, double u0, double v0, double u1, double v1);
+
+		/**
+		 * \brief deletes the billboard
+		 */
+		void deleteBillboard(const std::string & identifier);
 
 		/**
 		 * \brief forbidden
 		 */
-		ParticleComponent(const ParticleComponent &) = delete;
+		BillboardComponent(const BillboardComponent &) = delete;
 
 		/**
 		 * \brief forbidden
 		 */
-		const ParticleComponent & operator=(const ParticleComponent &) = delete;
+		const BillboardComponent & operator=(const BillboardComponent &) = delete;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};
@@ -94,7 +103,7 @@ namespace modules {
 } /* namespace modules */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_MODULES_COMPONENTS_PARTICLECOMPONENT_H__ */
+#endif /* __I6ENGINE_MODULES_COMPONENTS_BILLBOARDCOMPONENT_H__ */
 
 /**
  * @}

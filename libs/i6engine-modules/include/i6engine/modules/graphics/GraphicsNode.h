@@ -29,8 +29,6 @@
 
 namespace Ogre {
 	class AnimationState;
-	class Billboard;
-	class BillboardSet;
 	class Camera;
 	class Entity;
 	class ManualObject;
@@ -45,6 +43,7 @@ namespace graphics {
 } /* namespace api */
 namespace modules {
 
+	class BillboardComponent;
 	class GraphicsManager;
 	class LuminousComponent;
 	class MovableText;
@@ -97,13 +96,6 @@ namespace modules {
 		Ogre::SceneNode * getOrCreateSceneNode(const int64_t coid, const Vec3 & pos, const Quaternion & rot, const Vec3 & scale);
 
 		/**
-		 * \brief Sets the node's parent node
-		 *
-		 *     Sets the Node's parent node. If newParent is NULL, the node is attached to the scenegraph's root node.
-		 */
-		void setParent(GraphicsNode * newParent);
-
-		 /**
 		 * \brief Creates or updates a material component
 		 *
 		 *     sets material name
@@ -313,11 +305,6 @@ namespace modules {
 		Ogre::SceneNode * _sceneNode;
 
 		/**
-		 * Parent node of the object
-		 */
-		GraphicsNode * _parentNode;
-
-		/**
 		 * Cameras node of the object
 		 */
 		std::map<int64_t, Ogre::SceneNode *> _cameras;
@@ -347,7 +334,7 @@ namespace modules {
 
 		uint64_t _lastTime;
 
-		std::map<int64_t, std::pair<Ogre::BillboardSet *, std::map<std::string, Ogre::Billboard *>>> _billboardSets;
+		std::map<int64_t, BillboardComponent *> _billboardSets;
 
 		std::map<int64_t, MovableText *> _movableTexts;
 
