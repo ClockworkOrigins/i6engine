@@ -24,9 +24,6 @@
 #include "OGRE/OgreRoot.h"
 #include "OGRE/OgreSceneManager.h"
 
-#include "ParticleUniverseSystem.h"
-#include "ParticleUniverseSystemManager.h"
-
 namespace i6engine {
 namespace modules {
 

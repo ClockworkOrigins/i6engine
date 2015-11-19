@@ -16,32 +16,62 @@
 
 #include "i6engine/modules/graphics/GraphicsNode.h"
 
-#include <algorithm>
-
-#include "i6engine/utils/Exceptions.h"
-
-#include "i6engine/math/i6eMath.h"
-
-#include "i6engine/api/EngineController.h"
-#include "i6engine/api/configs/GraphicsConfig.h"
-
 #include "i6engine/modules/graphics/GraphicsManager.h"
 #include "i6engine/modules/graphics/components/BillboardComponent.h"
+#include "i6engine/modules/graphics/components/BoundingBoxComponent.h"
 #include "i6engine/modules/graphics/components/CameraComponent.h"
 #include "i6engine/modules/graphics/components/LuminousComponent.h"
+#include "i6engine/modules/graphics/components/MeshComponent.h"
+#include "i6engine/modules/graphics/components/MovableTextComponent.h"
 #include "i6engine/modules/graphics/components/ParticleComponent.h"
-#include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
-#include "OGRE/OgreEntity.h"
 #include "OGRE/OgreSceneManager.h"
-#include "OGRE/OgreSubEntity.h"
 
 namespace i6engine {
 namespace modules {
 
-	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _cameras(), _lights(), _particles(), _sceneNodes(), _animationState(), _animationSpeed(1.0), _lastTime(), _billboardSets(), _movableTexts(), _observer(), _boundingBox() {
-		ASSERT_THREAD_SAFETY_CONSTRUCTOR
+	void GraphicsNode::addTicker(MeshComponent * mesh) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_tickingMeshes.push_back(mesh);
+		if (!_ticking) {
+			_manager->addTicker(this);
+			_ticking = true;
+		}
+	}
 
+	void GraphicsNode::removeTicker(MeshComponent * mesh) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		for (size_t i = 0; i < _tickingMeshes.size(); i++) {
+			if (_tickingMeshes[i] == mesh) {
+				_tickingMeshes.erase(_tickingMeshes.begin() + int(i));
+				break;
+			}
+		}
+		_ticking = !_tickingMeshes.empty() && !_tickingMovableTexts.empty();
+	}
+
+	void GraphicsNode::addTicker(MovableTextComponent * movableText) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_tickingMovableTexts.push_back(movableText);
+		if (!_ticking) {
+			_manager->addTicker(this);
+			_ticking = true;
+		}
+	}
+
+	void GraphicsNode::removeTicker(MovableTextComponent * movableText) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		for (size_t i = 0; i < _tickingMovableTexts.size(); i++) {
+			if (_tickingMovableTexts[i] == movableText) {
+				_tickingMovableTexts.erase(_tickingMovableTexts.begin() + int(i));
+				break;
+			}
+		}
+		_ticking = !_tickingMeshes.empty() && !_tickingMovableTexts.empty();
+	}
+
+	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _cameras(), _lights(), _particles(), _meshes(), _billboardSets(), _movableTexts(), _boundingBoxes(), _ticking(false), _tickingMeshes(), _tickingMovableTexts() {
+		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
 		Ogre::SceneNode * root = sm->getRootSceneNode();
@@ -56,8 +86,7 @@ namespace modules {
 
 	GraphicsNode::~GraphicsNode() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		if (_animationState) {
+		if (_ticking) {
 			_manager->removeTicker(this);
 		}
 
@@ -68,9 +97,10 @@ namespace modules {
 			delete cam.second;
 		}
 		_cameras.clear();
-		for (const std::pair<int64_t, Ogre::SceneNode *> & sns : _sceneNodes) {
-			deleteMeshComponent(sns.first);
+		for (const std::pair<int64_t, MeshComponent *> & mesh : _meshes) {
+			delete mesh.second;
 		}
+		_meshes.clear();
 		for (const std::pair<int64_t, LuminousComponent *> & light : _lights) {
 			delete light.second;
 		}
@@ -83,85 +113,70 @@ namespace modules {
 			delete bill.second;
 		}
 		_billboardSets.clear();
-		for (const std::pair<int64_t, MovableText *> & text : _movableTexts) {
-			deleteMovableText(text.first);
-		}
-		if (_boundingBox) {
-			removeBoundingBox();
-		}
 
 		root->removeChild(_sceneNode);
 		sm->destroySceneNode(_sceneNode->getName());
 	}
 
-	Ogre::SceneNode * GraphicsNode::getOrCreateSceneNode(const int64_t coid, const Vec3 & pos, const Quaternion & rot, const Vec3 & scale) {
-		if (_sceneNodes.find(coid) == _sceneNodes.end()) {
-			Ogre::SceneNode * newNode = _sceneNode->createChildSceneNode("SN_" + std::to_string(_gameObjectID)  + "_" + std::to_string(coid), pos.toOgre());
-			newNode->setOrientation(rot.toOgre());
-			newNode->setScale(scale.toOgre());
-			_sceneNodes[coid] = newNode;
-			return newNode;
-		}
-		return _sceneNodes[coid];
-	}
-
-	// to be reviewed
-	void GraphicsNode::createMeshComponent(const int64_t coid, const std::string & meshName, const bool isVisible) {
+	void GraphicsNode::createMeshComponent(const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-		std::stringstream s;
-		s << "mesh" << _gameObjectID << "_" << coid;
-
-		// create subnode
-		Ogre::Entity * meshEntity = sm->createEntity(s.str(), meshName);
-		meshEntity->setVisible(isVisible);
-		meshEntity->setCastShadows(true);
-		_sceneNodes[coid]->attachObject(meshEntity);
-
-		meshEntity->getMesh()->buildEdgeList();
-
-		try {
-			unsigned short src, dest;
-			if (!meshEntity->getMesh()->suggestTangentVectorBuildParams(Ogre::VertexElementSemantic::VES_TANGENT, src, dest)) {
-				meshEntity->getMesh()->buildTangentVectors(Ogre::VertexElementSemantic::VES_TANGENT, src, dest);
-			}
-		} catch (const Ogre::Exception & e) {
-			ISIXE_LOG_WARN("GraphicsNode", e.what());
-		}
-
-		if (api::EngineController::GetSingletonPtr()->getDebugdrawer() == 3 || api::EngineController::GetSingletonPtr()->getDebugdrawer() == 4) {
-			_sceneNodes[coid]->showBoundingBox(true);
-		}
+		assert(_meshes.find(coid) == _meshes.end());
+		MeshComponent * mc = new MeshComponent(_manager, this, _gameObjectID, coid, meshName, visible, position, rotation, scale);
+		_meshes.insert(std::make_pair(coid, mc));
+		assert(_meshes.find(coid) != _meshes.end());
 	}
 
-	// to be reviewed
 	void GraphicsNode::updateMeshComponent(const int64_t coid, const std::string & meshName, const bool isVisible) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->updateMeshComponent(meshName, isVisible);
+	}
 
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-		Ogre::SceneNode * sn = _sceneNodes[coid];
-		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(sn->getAttachedObject(0));
+	void GraphicsNode::setMaterial(const int64_t coid, const std::string & materialName) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->setMaterial(materialName);
+	}
 
-		sn->detachObject(entity);
-		sm->destroyEntity(entity);
-
-		std::stringstream s;
-		s << "mesh" << _gameObjectID << "_" << coid;
-
-		// create subnode
-		entity = sm->createEntity(s.str(), meshName);
-		sn->attachObject(entity);
-		entity->setVisible(isVisible);
-
-		unsigned short src, dest;
-		if (!entity->getMesh()->suggestTangentVectorBuildParams(Ogre::VertexElementSemantic::VES_TANGENT, src, dest)) {
-			entity->getMesh()->buildTangentVectors(Ogre::VertexElementSemantic::VES_TANGENT, src, dest);
+	void GraphicsNode::setCustomParameter(unsigned int num, const Vec4 & value) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		for (const std::pair<int64_t, MeshComponent *> & mesh : _meshes) { // FIXME: (Michael) custom parameter is currently applied to all subentities(ogre) in every submesh(engine)
+			mesh.second->setCustomParameter(num, value);
 		}
+	}
 
-		if (api::EngineController::GetSingletonPtr()->getDebugdrawer() == 3 || api::EngineController::GetSingletonPtr()->getDebugdrawer() == 4) {
-			_sceneNodes[coid]->showBoundingBox(true);
-		}
+	void GraphicsNode::playAnimation(int64_t coid, const std::string & anim, bool looping, double offsetPercent) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->playAnimation(anim, looping, offsetPercent);
+		assert(_ticking);
+		assert(!_tickingMeshes.empty());
+	}
+
+	void GraphicsNode::setAnimationSpeed(int64_t coid, double animationSpeed) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->setAnimationSpeed(animationSpeed);
+	}
+
+	void GraphicsNode::stopAnimation(int64_t coid) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->stopAnimation();
+	}
+
+	void GraphicsNode::deleteMeshComponent(const int64_t coid) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		_meshes.erase(coid);
+		delete mc;
+		assert(_meshes.find(coid) == _meshes.end());
 	}
 
 	void GraphicsNode::createCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov) {
@@ -207,26 +222,6 @@ namespace modules {
 		_cameras.erase(coid);
 		delete cc;
 		assert(_cameras.find(coid) == _cameras.end());
-	}
-
-	void GraphicsNode::setMaterial(const int64_t coid, const std::string & materialName) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		Ogre::SceneNode * sn = _sceneNodes[coid];
-		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(sn->getAttachedObject(0));
-		entity->setMaterialName(materialName);
-	}
-
-	void GraphicsNode::setCustomParameter(unsigned int num, const Vec4 & value) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-
-		for (const std::pair<int64_t, Ogre::SceneNode *> & sn : _sceneNodes) { // FIXME: (Michael) custom parameter is currently applied to all subentities(ogre) in every submesh(engine)
-			Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(sn.second->getAttachedObject(0));
-			unsigned int n = entity->getNumSubEntities();
-			for (unsigned int i = 0; i < n; ++i) {
-				Ogre::SubEntity* pSub = entity->getSubEntity(i);
-				pSub->setCustomParameter(num, value.toOgre()); // RGBA
-			}
-		}
 	}
 
 	void GraphicsNode::createLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) {
@@ -276,72 +271,6 @@ namespace modules {
 		assert(_particles.find(coid) == _particles.end());
 	}
 
-	void GraphicsNode::deleteMeshComponent(const int64_t coid) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-
-		if (_sceneNodes.find(coid) == _sceneNodes.end()) { // TODO: (Daniel) fix this, how can this happen? Had a coid with a negative large number
-			return;
-		}
-
-		auto it = _observer.find(coid);
-		if (it != _observer.end()) {
-			for (auto & i : it->second) {
-				deleteMovableText(i);
-			}
-			_observer.erase(it);
-		}
-
-		Ogre::SceneNode * sn = _sceneNodes[coid];
-		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(sn->getAttachedObject(0));
-
-		sn->detachObject(entity);
-		sm->destroyEntity(entity);
-
-		_sceneNode->removeAndDestroyChild(sn->getName());
-
-		_sceneNodes.erase(coid);
-	}
-
-	void GraphicsNode::playAnimation(int64_t coid, const std::string & anim, bool looping, double offsetPercent) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-
-		Ogre::SceneNode * sn = _sceneNodes[coid];
-		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(sn->getAttachedObject(0));
-
-		if (_animationState == nullptr) {
-			_manager->addTicker(this);
-		} else {
-			_animationState->setEnabled(false);
-		}
-
-		_animationState = entity->getAnimationState(anim);
-		_animationState->setEnabled(true);
-		_animationState->setLoop(looping);
-		_animationState->setTimePosition(offsetPercent * _animationState->getLength());
-		_animationSpeed = 1.0;
-
-		_lastTime = api::EngineController::GetSingleton().getCurrentTime();
-	}
-
-	void GraphicsNode::Tick() {
-		if (_animationState) {
-			uint64_t cT = api::EngineController::GetSingleton().getCurrentTime();
-			_animationState->addTime(_animationSpeed * (cT - _lastTime) / 1000000.0);
-			_lastTime = cT;
-		}
-		for (auto & p : _movableTexts) {
-			p.second->update();
-		}
-	}
-
-	void GraphicsNode::stopAnimation() {
-		_animationState->setEnabled(false);
-		_animationState = nullptr;
-		_manager->removeTicker(this);
-	}
-
 	void GraphicsNode::createBilldboardSetComponent(int64_t coid, const std::string & material, double width, double height, api::graphics::BillboardOrigin bo) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_billboardSets.find(coid) == _billboardSets.end());
@@ -374,91 +303,56 @@ namespace modules {
 	}
 
 	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
-		if (_movableTexts.find(coid) != _movableTexts.end()) {
-			return;
-		}
-		try {
-			MovableText * movableText = new MovableText(_sceneNodes[targetID]->getAttachedObject(0), _manager->getSceneManager(), font);
-			movableText->setText(text);
-			movableText->setSize(size);
-			movableText->setColour(colour);
-			movableText->enable(true);
-			_movableTexts.insert(std::make_pair(coid, movableText));
-			_manager->addTicker(this);
-			_observer[targetID].push_back(coid);
-		} catch (Ogre::Exception & e) {
-			std::cout << e.what() << std::endl;
-		}
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_movableTexts.find(coid) != _movableTexts.end());
+		assert(_meshes.find(targetID) != _meshes.end());
+		MovableTextComponent * mtc = new MovableTextComponent(_manager, this, _gameObjectID, coid, _meshes[targetID], font, text, size, colour);
+		_movableTexts.insert(std::make_pair(coid, mtc));
+		assert(_movableTexts.find(coid) == _movableTexts.end());
 	}
 
 	void GraphicsNode::updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
-		MovableText * movableText = _movableTexts[coid];
-		movableText->setText(text);
-		movableText->setSize(size);
-		movableText->setColour(colour);
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_movableTexts.find(coid) != _movableTexts.end());
+		MovableTextComponent * mtc = _movableTexts[coid];
+		mtc->updateMovableText(font, text, size, colour);
 	}
 
 	void GraphicsNode::deleteMovableText(int64_t coid) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_movableTexts.find(coid) != _movableTexts.end());
 		_manager->removeTicker(this);
 		delete _movableTexts[coid];
 		_movableTexts.erase(coid);
+		assert(_movableTexts.find(coid) == _movableTexts.end());
 	}
 
 	void GraphicsNode::drawBoundingBox(int64_t coid, const Vec3 & colour) {
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-		_boundingBox = sm->createManualObject("MO_" + std::to_string(_gameObjectID));
-
-		// NOTE: The second parameter to the create method is the resource group the material will be added to.
-		// If the group you name does not exist (in your resources.cfg file) the library will assert() and your program will crash
-		Ogre::MaterialPtr myManualObjectMaterial = Ogre::MaterialManager::getSingleton().create("MO_" + std::to_string(_gameObjectID) + "_Material", "General");
-		myManualObjectMaterial->setReceiveShadows(false);
-		myManualObjectMaterial->getTechnique(0)->setLightingEnabled(true);
-		myManualObjectMaterial->getTechnique(0)->getPass(0)->setDiffuse(colour.getX(), colour.getY(), colour.getZ(), 0);
-		myManualObjectMaterial->getTechnique(0)->getPass(0)->setAmbient(colour.getX(), colour.getY(), colour.getZ());
-		myManualObjectMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(colour.getX(), colour.getY(), colour.getZ());
-
-
-		_boundingBox->begin("MO_" + std::to_string(_gameObjectID) + "_Material", Ogre::RenderOperation::OT_LINE_LIST);
-
-		Ogre::MovableObject * meshEntity = _sceneNodes[coid]->getAttachedObject(0);
-
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_BOTTOM));
-
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_TOP));
-
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_LEFT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::FAR_RIGHT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_LEFT_TOP));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_BOTTOM));
-		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_TOP));
-
-		_boundingBox->end();
-
-		_sceneNode->attachObject(_boundingBox);
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_boundingBoxes.find(coid) == _boundingBoxes.end());
+		assert(_meshes.find(coid) != _meshes.end());
+		BoundingBoxComponent * bbc = new BoundingBoxComponent(_manager, this, _gameObjectID, coid, _meshes[coid], colour);
+		_boundingBoxes.insert(std::make_pair(coid, bbc));
+		assert(_boundingBoxes.find(coid) != _boundingBoxes.end());
 	}
 
-	void GraphicsNode::removeBoundingBox() {
-		_sceneNode->detachObject(_boundingBox);
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-		sm->destroyManualObject(_boundingBox);
-		_boundingBox = nullptr;
+	void GraphicsNode::removeBoundingBox(int64_t coid) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_boundingBoxes.find(coid) != _boundingBoxes.end());
+		BoundingBoxComponent * bbc = _boundingBoxes[coid];
+		_boundingBoxes.erase(coid);
+		delete bbc;
+		assert(_boundingBoxes.find(coid) == _boundingBoxes.end());
+	}
+
+	void GraphicsNode::Tick() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		for (MeshComponent * mc : _tickingMeshes) {
+			mc->Tick();
+		}
+		for (MovableTextComponent * mtc : _tickingMovableTexts) {
+			mtc->Tick();
+		}
 	}
 
 } /* namespace modules */

@@ -28,9 +28,6 @@
 #include "i6engine/api/components/LuminousAppearanceComponent.h"
 
 namespace Ogre {
-	class AnimationState;
-	class Entity;
-	class ManualObject;
 	class SceneNode;
 } /* namespace Ogre */
 
@@ -43,10 +40,12 @@ namespace graphics {
 namespace modules {
 
 	class BillboardComponent;
+	class BoundingBoxComponent;
 	class CameraComponent;
 	class GraphicsManager;
 	class LuminousComponent;
-	class MovableText;
+	class MeshComponent;
+	class MovableTextComponent;
 	class ParticleComponent;
 
 	/**
@@ -57,6 +56,7 @@ namespace modules {
 	 */
 	class GraphicsNode {
 		friend class GraphicsManager;
+		friend class MeshComponent;
 
 	public:
 		/**
@@ -68,6 +68,14 @@ namespace modules {
 		inline Ogre::SceneNode * getSceneNode() const {
 			return _sceneNode;
 		}
+
+		void addTicker(MeshComponent * mesh);
+
+		void removeTicker(MeshComponent * mesh);
+
+		void addTicker(MovableTextComponent * mesh);
+
+		void removeTicker(MovableTextComponent * mesh);
 
 	private:
 		/**
@@ -88,12 +96,15 @@ namespace modules {
 		~GraphicsNode();
 
 		/**
-		 * \brief Gets SceneNode of the object
+		 * \brief Creates or updates a mesh component
 		 *
-		 * Gets SceneNode of the object
-		 * \return SceneNode of the object
+		 *     creates a new Ogre Entity by calling Ogre's createEntity, then configures it
+		 *
+		 *			Creates or updates a mesh component for the object with given meshFile and visibility-state
+		 * \param[in] coid ComponentID to identifiy the subentity
 		 */
-		Ogre::SceneNode * getOrCreateSceneNode(const int64_t coid, const Vec3 & pos, const Quaternion & rot, const Vec3 & scale);
+		void createMeshComponent(const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale);
+		void updateMeshComponent(const int64_t coid, const std::string & meshName, const bool visible);
 
 		/**
 		 * \brief Creates or updates a material component
@@ -116,15 +127,26 @@ namespace modules {
 		void setCustomParameter(uint32_t num, const Vec4 & value);
 
 		/**
-		 * \brief Creates or updates a mesh component
-		 *
-		 *     creates a new Ogre Entity by calling Ogre's createEntity, then configures it
-		 *
-		 *			Creates or updates a mesh component for the object with given meshFile and visibility-state
-		 * \param[in] coid ComponentID to identifiy the subentity
+		 * \brief plays an animation
 		 */
-		void createMeshComponent(const int64_t coid, const std::string & meshName, const bool visible);
-		void updateMeshComponent(const int64_t coid, const std::string & meshName, const bool visible);
+		void playAnimation(const int64_t coid, const std::string & anim, bool looping, double offsetPercent);
+
+		/**
+		 * \brief sets animation speed
+		 */
+		void setAnimationSpeed(int64_t coid, double animationSpeed);
+
+		/**
+		 * \brief stops an animation
+		 */
+		void stopAnimation(int64_t coid);
+
+		/**
+		 * \brief Deletes the MeshComponent of the Node
+		 *
+		 *     Deletes an Ogre Entity by calling sm->destroyEntity
+		 */
+		void deleteMeshComponent(const int64_t coid);
 
 		/**
 		 * \brief Creates or updates camera position
@@ -206,35 +228,6 @@ namespace modules {
 		void deleteParticleComponent(const int64_t coid);
 
 		/**
-		 * \brief Deletes the MeshComponent of the Node
-		 *
-		 *     Deletes an Ogre Entity by calling sm->destroyEntity
-		 */
-		void deleteMeshComponent(const int64_t coid);
-
-		/**
-		 * \brief plays an animation
-		 */
-		void playAnimation(const int64_t coid, const std::string & anim, bool looping, double offsetPercent);
-
-		/**
-		 * \brief ticking the GraphicsNode
-		 */
-		void Tick();
-
-		/**
-		 * \brief stops an animation
-		 */
-		void stopAnimation();
-
-		/**
-		 * \brief sets animation speed
-		 */
-		void setAnimationSpeed(double animationSpeed) {
-			_animationSpeed = animationSpeed;
-		}
-
-		/**
 		 * \brief creates a billboard set
 		 */
 		void createBilldboardSetComponent(int64_t coid, const std::string & material, double width, double height, api::graphics::BillboardOrigin bo);
@@ -277,7 +270,12 @@ namespace modules {
 		/**
 		 * \brief removes the bounding box
 		 */
-		void removeBoundingBox();
+		void removeBoundingBox(int64_t coid);
+
+		/**
+		 * \brief ticking the GraphicsNode
+		 */
+		void Tick();
 
 		/**
 		 * \brief forbidden
@@ -320,33 +318,20 @@ namespace modules {
 		std::map<int64_t, ParticleComponent *> _particles;
 
 		/**
-		 * \brief list of all subSceneNodes
-		 * currently used only for meshes
+		 * \brief list of all meshes
 		 */
-		std::map<int64_t, Ogre::SceneNode *> _sceneNodes;
-
-		/**
-		 * \brief current animation state
-		 */
-		Ogre::AnimationState * _animationState;
-
-		double _animationSpeed;
-
-		uint64_t _lastTime;
+		std::map<int64_t, MeshComponent *> _meshes;
 
 		std::map<int64_t, BillboardComponent *> _billboardSets;
 
-		std::map<int64_t, MovableText *> _movableTexts;
+		std::map<int64_t, MovableTextComponent *> _movableTexts;
 
-		/**
-		 * \brief list of all MovableTexts depending on a mesh. Key is mesh
-		 */
-		std::map<int64_t, std::vector<int64_t>> _observer;
+		std::map<int64_t, BoundingBoxComponent *> _boundingBoxes;
 
-		/**
-		 * \brief bounding box of this object
-		 */
-		Ogre::ManualObject * _boundingBox;
+		bool _ticking;
+
+		std::vector<MeshComponent *> _tickingMeshes;
+		std::vector<MovableTextComponent *> _tickingMovableTexts;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

@@ -126,8 +126,11 @@ set(i6modulesSrc
 	${srcdir}/modules/graphics/ResourceManager.cpp
 	${srcdir}/modules/graphics/Terrain.cpp
 	${srcdir}/modules/graphics/components/BillboardComponent.cpp
+	${srcdir}/modules/graphics/components/BoundingBoxComponent.cpp
 	${srcdir}/modules/graphics/components/CameraComponent.cpp
 	${srcdir}/modules/graphics/components/LuminousComponent.cpp
+	${srcdir}/modules/graphics/components/MeshComponent.cpp
+	${srcdir}/modules/graphics/components/MovableTextComponent.cpp
 	${srcdir}/modules/graphics/components/ParticleComponent.cpp
 	${srcdir}/modules/graphics/compositors/GaussianBlurListener.cpp
 	${srcdir}/modules/graphics/compositors/GaussianBlurLogic.cpp
