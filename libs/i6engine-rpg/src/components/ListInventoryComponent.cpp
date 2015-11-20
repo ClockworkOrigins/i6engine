@@ -186,6 +186,10 @@ namespace components {
 					if (std::get<ItemEntry::Amount>(p2.second) == 1) {
 						gf->setVisibility(namePrefix + "Amount", false);
 					}
+					gf->subscribeEvent(namePrefix + "Image", "Clicked", std::bind(&ListInventoryComponent::useItem, this, p.first, p2.first, [this]() {
+						hide();
+						show();
+					}));
 					_widgets.push_back(namePrefix + "Image");
 					_widgets.push_back(namePrefix + "Amount");
 					placed++;
@@ -325,6 +329,22 @@ namespace components {
 						_multiplier = 1.0;
 					}
 				}
+			} else if (msg->getSubtype() == api::mouse::MouseMessageTypes::MouWheel) {
+				api::input::Input_MouseWheel_Update * imwu = dynamic_cast<api::input::Input_MouseWheel_Update *>(msg->getContent());
+				for (int32_t i = 0; i < imwu->diff && _active && _currentIndex + _columns < _itemTypeCount; i++) {
+					_currentIndex += _columns;
+					if (_currentIndex / _columns > _maxSlot) {
+						_maxSlot++;
+					}
+				}
+				for (int32_t i = imwu->diff; i < 0 && _active && _currentIndex >= _columns; i++) {
+					_currentIndex -= _columns;
+					if (_currentIndex / _columns < _maxSlot - _slotCount / _columns) {
+						_maxSlot--;
+					}
+				}
+				hide();
+				show();
 			}
 		}
 	}
