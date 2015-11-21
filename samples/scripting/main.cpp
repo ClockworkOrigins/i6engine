@@ -31,8 +31,24 @@
 	#include "i6engine/modules/pythonscripting/PythonScriptingController.h"
 #endif
 
+#ifdef ISIXE_WITH_CONSOLE
 int main(int argc, char ** argv) {
+#else
+int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+#endif
+	sample::ScriptingApplication app;
+
+	app.setName("Scripting Sample");
+
+	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
+
+#ifdef ISIXE_WITH_CONSOLE
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), { i6engine::core::Subsystem::Object });
+#else
+	HWND hWnd = i6engine::api::EngineController::GetSingletonPtr()->createWindow(hInstance);
+
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(hWnd), { i6engine::core::Subsystem::Object });
+#endif
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6engine::modules::ObjectController(), { i6engine::core::Subsystem::Physic });
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6engine::modules::InputController(), LNG_INPUT_FRAME_TIME);
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new i6engine::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
@@ -41,12 +57,6 @@ int main(int argc, char ** argv) {
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Scripting", new i6engine::modules::PythonScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
-
-	sample::ScriptingApplication app;
-
-	app.setName("Scripting Sample");
-
-	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
 
 	i6engine::api::EngineController::GetSingletonPtr()->start();
 

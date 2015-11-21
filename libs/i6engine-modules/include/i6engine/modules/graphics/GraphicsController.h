@@ -43,7 +43,9 @@ namespace modules {
 		 *
 		 * This method has nothing to to do yet
 		 */
-		GraphicsController();
+		GraphicsController() : GraphicsController(nullptr) {
+		}
+		GraphicsController(HWND hWnd);
 
 		/**
 		 * \brief Nothing to do yet
@@ -62,6 +64,8 @@ namespace modules {
 		 * \brief
 		 */
 		GraphicsMailbox * _mailbox;
+
+		HWND _hWnd;
 
 		/**
 		 * \brief starts GraphicsManager

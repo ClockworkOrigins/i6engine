@@ -30,7 +30,7 @@
 namespace i6engine {
 namespace modules {
 
-	GraphicsController::GraphicsController() : core::ModuleController(core::Subsystem::Graphic), _manager(nullptr), _mailbox(nullptr) {
+	GraphicsController::GraphicsController(HWND hWnd) : core::ModuleController(core::Subsystem::Graphic), _manager(nullptr), _mailbox(nullptr), _hWnd(hWnd) {
 	}
 
 	GraphicsController::~GraphicsController() {
@@ -41,7 +41,7 @@ namespace modules {
 
 		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
 
-		_manager = new GraphicsManager(this);
+		_manager = new GraphicsManager(this, _hWnd);
 		_mailbox = new GraphicsMailbox(_manager);
 
 		ISIXE_REGISTERMESSAGETYPE(api::messages::GraphicsMessageType, GraphicsMailbox::News, _mailbox);

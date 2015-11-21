@@ -65,7 +65,7 @@
 namespace i6engine {
 namespace modules {
 
-	GraphicsManager::GraphicsManager(GraphicsController * ctrl) : _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false) {
+	GraphicsManager::GraphicsManager(GraphicsController * ctrl, HWND hWnd) : _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		try {
@@ -84,7 +84,26 @@ namespace modules {
 
 			_objRoot->restoreConfig();
 
-			_rWindow = _objRoot->initialise(true, api::EngineController::GetSingletonPtr()->getAppl()->getName());
+			if (hWnd) {
+				_objRoot->initialise(false, api::EngineController::GetSingletonPtr()->getAppl()->getName());
+				api::graphics::Resolution res = api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution();
+				Ogre::ConfigOptionMap & CurrentRendererOptions = _objRoot->getRenderSystem()->getConfigOptions();
+				Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
+				bool fullscreen = false;
+				while (configItr != CurrentRendererOptions.end()) {
+					if (configItr->first == "Full Screen") {
+						// Store Available Resolutions
+						fullscreen = configItr->second.currentValue == "Yes";
+						break;
+					}
+					configItr++;
+				}
+				Ogre::NameValuePairList misc;
+				misc["externalWindowHandle"] = Ogre::StringConverter::toString((size_t) hWnd);
+				_rWindow = _objRoot->createRenderWindow(api::EngineController::GetSingletonPtr()->getAppl()->getName(), res.width, res.height, fullscreen, &misc);
+			} else {
+				_rWindow = _objRoot->initialise(true, api::EngineController::GetSingletonPtr()->getAppl()->getName());
+			}
 		} catch (Ogre::Exception & e) {
 			ISIXE_LOG_ERROR("Graphics", "An exception has occurred: " << e.what());
 			std::cout << "An exception has occurred: " << e.what() << std::endl;
