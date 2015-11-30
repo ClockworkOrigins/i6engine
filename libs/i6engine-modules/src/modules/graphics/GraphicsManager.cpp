@@ -873,7 +873,6 @@ namespace modules {
 			assert(node);
 			node->deleteMeshComponent(coid);
 		} else if (msg->getSubtype() == api::graphics::GraNode) {
-			std::cout << "Delete Node " << coid << std::endl;
 			deleteGraphicsNode(coid);
 		} else if (msg->getSubtype() == api::graphics::GraParticle) {
 			GraphicsNode * node = getGraphicsNode(goid);
@@ -884,7 +883,6 @@ namespace modules {
 			assert(node);
 			node->deleteBillboardSetComponent(coid);
 		} else if (msg->getSubtype() == api::graphics::GraMovableText) {
-			std::cout << "Delete Movable Text " << goid << std::endl;
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->deleteMovableText(coid);
