@@ -83,7 +83,7 @@ namespace graphics {
 	}
 
 	Graphics_Node_Create::Graphics_Node_Create() : GameMessageStruct() {}
-	Graphics_Node_Create::Graphics_Node_Create(const int64_t goID, const int64_t coID, const Vec3 & p, const Quaternion & r, const Vec3 & s) : GameMessageStruct(coID, goID), pos(p), rot(r), scale(s) {
+	Graphics_Node_Create::Graphics_Node_Create(const int64_t goID, int64_t cid, const Vec3 & p, const Quaternion & r, const Vec3 & s) : GameMessageStruct(goID, -1), pos(p), rot(r), scale(s), coid(cid) {
 	}
 
 	// Material

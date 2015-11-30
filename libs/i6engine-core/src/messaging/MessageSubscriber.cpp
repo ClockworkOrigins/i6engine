@@ -87,9 +87,6 @@ namespace core {
 			if (!idEx) {
 				if (method == Method::Delete) {
 					if (statusID == IDStatus::DELETED) {
-						deliverMessageInternal(msg); // if several delete messages are used for one ID // FIXME: (Michael) is this still possible? Can we change it?
-						// skip to avoid double delivery. Only possible because code at the end is
-						// method==Method::Create and here ist method==Method::Delete
 						return;
 					} else {
 						msg->waitingFor.insert(id);
@@ -102,9 +99,7 @@ namespace core {
 			}
 			if (!waitIdEx) {
 				if (method == Method::Delete && statusWaitID == IDStatus::DELETED) {
-					deliverMessageInternal(msg); // if several delete messages are used for one ID
-					// skip to avoid double delivery. Only possible because code at the end is
-					// method==Method::Create and here ist method==Method::Delete
+					_existingObjects[id] = IDStatus::DELETED;
 					return;
 				} else {
 					msg->waitingFor.insert(waitForId);

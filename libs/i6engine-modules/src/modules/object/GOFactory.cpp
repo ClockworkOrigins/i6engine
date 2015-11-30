@@ -200,7 +200,6 @@ namespace modules {
 		_manager->insertObject(go);
 
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(go->getID());
-		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->notifyNewID(go->getID());
 		api::EngineController::GetSingletonPtr()->getPhysicsFacade()->notifyNewID(go->getID());
 
 		return go;

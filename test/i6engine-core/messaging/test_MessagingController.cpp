@@ -184,7 +184,7 @@ TEST(MessagingController, specialCases) {
 	// create and delete obj 2
 	Message::Ptr msg3(new Message(0, 0, Method::Create, new MessageStruct(2, -1), i6engine::core::Subsystem::Unknown));
 	Message::Ptr msg4(new Message(0, 0, Method::Delete, new MessageStruct(2, -1), i6engine::core::Subsystem::Unknown));
-	// This message will be delivered twice
+	// This message mustn't be delivered because parent (2) is already deleted
 	Message::Ptr msg5(new Message(0, 0, Method::Delete, new MessageStruct(1, 2), i6engine::core::Subsystem::Unknown));
 
 	{
@@ -193,6 +193,53 @@ TEST(MessagingController, specialCases) {
 		EXPECT_CALL(ms, _receiveMessage(&(*msg1)));
 		EXPECT_CALL(ms, _receiveMessage(&(*msg3)));
 		EXPECT_CALL(ms, _receiveMessage(&(*msg2)));
+		EXPECT_CALL(ms, _receiveMessage(&(*msg4)));
+	}
+
+	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+
+	mc->deliverMessage(msg1);
+	mc->deliverMessage(msg2);
+	mc->deliverMessage(msg3);
+	mc->deliverMessage(msg4);
+
+	// wait for messages to be delivered and processed
+	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+	ms.processMessages();
+
+	// now comes a delete
+	mc->deliverMessage(msg5);
+
+	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+
+	ms.processMessages();
+
+	mc->unregisterMessageType(0, &ms);
+
+	delete mc;
+}
+
+TEST(MessagingController, updateAfterDelete) {
+	Mock_MessagingController * mc = new Mock_MessagingController();
+	Mock_SubSystem ms;
+
+	mc->registerMessageType(0, &ms);
+	ms._mc = mc;
+
+	Message::Ptr msg1(new Message(0, 0, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg2(new Message(0, 0, Method::Create, new MessageStruct(2, 1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg3(new Message(0, 0, Method::Update, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg4(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg5(new Message(0, 0, Method::Delete, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg6(new Message(0, 0, Method::Delete, new MessageStruct(2, 1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg7(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6engine::core::Subsystem::Unknown));
+
+	{
+		::testing::InSequence dummy;
+
+		EXPECT_CALL(ms, _receiveMessage(&(*msg1)));
+		EXPECT_CALL(ms, _receiveMessage(&(*msg2)));
+		EXPECT_CALL(ms, _receiveMessage(&(*msg3)));
 		EXPECT_CALL(ms, _receiveMessage(&(*msg4)));
 		EXPECT_CALL(ms, _receiveMessage(&(*msg5)));
 	}
@@ -210,6 +257,8 @@ TEST(MessagingController, specialCases) {
 
 	// now comes a delete
 	mc->deliverMessage(msg5);
+	mc->deliverMessage(msg6);
+	mc->deliverMessage(msg7);
 
 	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 

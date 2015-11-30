@@ -621,7 +621,8 @@ namespace modules {
 
 		if (msg->getSubtype() == api::graphics::GraCamera) {
 			api::graphics::Graphics_Camera_Create * m = static_cast<api::graphics::Graphics_Camera_Create *>(msg->getContent());
-			GraphicsNode * node = getOrCreateGraphicsNode(goid);
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->createCameraComponent(coid, m->pos, m->look, m->nearClip, m->fov);
 		} else if (msg->getSubtype() == api::graphics::GraLuminous) {
 			uint16_t t = static_cast<api::graphics::Graphics_Luminous_Update *>(msg->getContent())->lightType;
@@ -636,7 +637,8 @@ namespace modules {
 			double spotLightRangeOuter = static_cast<api::graphics::Graphics_Luminous_Update *>(msg->getContent())->spotLightRangeOuter;
 			Vec3 position = static_cast<api::graphics::Graphics_Luminous_Update *>(msg->getContent())->position;
 
-			GraphicsNode * node = getOrCreateGraphicsNode(goid);
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->createLuminousComponent(coid, lightType, diffuse, specular, attenuation, direction, position, spotLightRangeInner, spotLightRangeOuter);
 		} else if (msg->getSubtype() == api::graphics::GraMesh) {
 			std::string meshName = static_cast<api::graphics::Graphics_Mesh_Create *>(msg->getContent())->mesh;
@@ -647,55 +649,61 @@ namespace modules {
 			Quaternion r = static_cast<api::graphics::Graphics_Mesh_Create *>(msg->getContent())->rot;
 			Vec3 s = static_cast<api::graphics::Graphics_Mesh_Create *>(msg->getContent())->scale;
 
-			GraphicsNode * node = getOrCreateGraphicsNode(goid);
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->getOrCreateSceneNode(coid, p, r, s);
 			node->createMeshComponent(coid, meshName, isVisible);
 		} else if (msg->getSubtype() == api::graphics::GraViewport) {
-			double left = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->left;
-			double top = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->top;
-			double width = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->width;
-			double height = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->height;
-			double red = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->red;
-			double green = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->green;
-			double blue = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->blue;
-			double alpha = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->alpha;
+			double left = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->left;
+			double top = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->top;
+			double width = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->width;
+			double height = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->height;
+			double red = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->red;
+			double green = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->green;
+			double blue = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->blue;
+			double alpha = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->alpha;
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			node->createOrUpdateViewport(coid, left, top, width, height, red, green, blue, alpha);
 		} else if (msg->getSubtype() == api::graphics::GraNode) {
-			GraphicsNode * node = getOrCreateGraphicsNode(goid);
+			GraphicsNode * node = getOrCreateGraphicsNode(msg->getContent()->getID());
 
 			Ogre::SceneNode * sceneNode = node->getSceneNode();
 
-			Vec3 p = static_cast<api::graphics::Graphics_Node_Update *>(msg->getContent())->pos;
+			Vec3 p = static_cast<api::graphics::Graphics_Node_Create *>(msg->getContent())->pos;
 
 			sceneNode->setPosition(p.toOgre());
 			// rotation
-			Quaternion r = static_cast<api::graphics::Graphics_Node_Update *>(msg->getContent())->rot;
+			Quaternion r = static_cast<api::graphics::Graphics_Node_Create *>(msg->getContent())->rot;
 
 			sceneNode->setOrientation(r.toOgre());
 
 			// Scale
-			Vec3 s = static_cast<api::graphics::Graphics_Node_Update *>(msg->getContent())->scale;
+			Vec3 s = static_cast<api::graphics::Graphics_Node_Create *>(msg->getContent())->scale;
 
 			sceneNode->setScale(s.toOgre());
+
+			api::EngineController::GetSingleton().getGraphicsFacade()->notifyNewID(static_cast<api::graphics::Graphics_Node_Create *>(msg->getContent())->coid);
 		} else if (msg->getSubtype() == api::graphics::GraParticle) {
 			api::graphics::Graphics_Particle_Create * g = static_cast<api::graphics::Graphics_Particle_Create *>(msg->getContent());
 
 			std::string emitterName = g->emitterName;
 			Vec3 pos = g->pos;
 
-			GraphicsNode * node = getOrCreateGraphicsNode(goid, pos);
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->createParticleComponent(coid, emitterName, pos);
 		} else if (msg->getSubtype() == api::graphics::GraBillboardSet) {
 			api::graphics::Graphics_BillboardSet_Create * gbc = static_cast<api::graphics::Graphics_BillboardSet_Create *>(msg->getContent());
 
-			GraphicsNode * node = getOrCreateGraphicsNode(goid, Vec3());
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->createBilldboardSetComponent(coid, gbc->material, gbc->width, gbc->height, gbc->origin);
 		} else if (msg->getSubtype() == api::graphics::GraMovableText) {
 			api::graphics::Graphics_MovableText_Create * gmtc = static_cast<api::graphics::Graphics_MovableText_Create *>(msg->getContent());
 
 			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->createMovableText(coid, gmtc->targetID, gmtc->font, gmtc->text, gmtc->size, gmtc->colour);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
@@ -711,12 +719,11 @@ namespace modules {
 		if (msg->getSubtype() == api::graphics::GraCamera) { // TODO: (Michael) rewrite to switch?
 			api::graphics::Graphics_Camera_Update * m = static_cast<api::graphics::Graphics_Camera_Update *>(msg->getContent());
 			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->updateCameraComponent(coid, m->pos, m->look, m->nearClip, m->fov);
 		} else if (msg->getSubtype() == api::graphics::GraFrustum) {
 			GraphicsNode * node = getGraphicsNode(goid);
-			if (node == nullptr) {
-				ISIXE_THROW_FAILURE("GraphicsManager", "Frustum message for invalid GameObject");
-			}
+			assert(node);
 			api::graphics::Graphics_CameraFrustum_Update * m = static_cast<api::graphics::Graphics_CameraFrustum_Update *>(msg->getContent());
 			node->updateCameraFrustumComponent(coid, m->left, m->right, m->top, m->bottom);
 		} else if (msg->getSubtype() == api::graphics::GraLuminous) {
@@ -733,27 +740,20 @@ namespace modules {
 			Vec3 position = static_cast<api::graphics::Graphics_Luminous_Update *>(msg->getContent())->position;
 
 			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->updateLuminousComponent(coid, lightType, diffuse, specular, attenuation, direction, position, spotLightRangeInner, spotLightRangeOuter);
 		} else if (msg->getSubtype() == api::graphics::GraMaterial) {
 			std::string materialName = static_cast<api::graphics::Graphics_Material_Update *>(msg->getContent())->material;
 
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node == nullptr) {
-				return;
-				ISIXE_THROW_MESSAGE("GraphicsManager", "No GraphicsNode to set material for");
-			}
+			assert(node);
 
 			node->setMaterial(coid, materialName);
 		} else if (msg->getSubtype() == api::graphics::GraCusParam) {
 			api::graphics::Graphics_CusParam_Update * m = static_cast<api::graphics::Graphics_CusParam_Update *>(msg->getContent());
 
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node == nullptr) {
-				return;
-				ISIXE_THROW_MESSAGE("GraphicsManager", "No GraphicsNode to set custom paramete for");
-			}
+			assert(node);
 
 			node->setCustomParameter(m->num, m->value);
 		} else if (msg->getSubtype() == api::graphics::GraMesh) {
@@ -762,6 +762,7 @@ namespace modules {
 			bool isVisible = static_cast<api::graphics::Graphics_Mesh_Create *>(msg->getContent())->visible;
 
 			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->updateMeshComponent(coid, meshName, isVisible);
 		} else if (msg->getSubtype() == api::graphics::GraViewport) {
 			double left = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->left;
@@ -774,13 +775,11 @@ namespace modules {
 			double alpha = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->alpha;
 
 			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->createOrUpdateViewport(coid, left, top, width, height, red, green, blue, alpha);
 		} else if (msg->getSubtype() == api::graphics::GraNode) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node == nullptr) {
-				return; // FIXME: (Daniel) happened after adding animations, but this musn't happen because of messaging system
-			}
+			assert(node);
 
 			Ogre::SceneNode * sceneNode = node->getSceneNode();
 
@@ -798,73 +797,58 @@ namespace modules {
 			sceneNode->setScale(s.toOgre());
 		} else if (msg->getSubtype() == api::graphics::GraPlayAnimation) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node == nullptr) {
-				return; // FIXME: (Daniel) musn't happen
-			}
+			assert(node);
 
 			api::graphics::Graphics_PlayAnimation_Update * gpu = dynamic_cast<api::graphics::Graphics_PlayAnimation_Update *>(msg->getContent());
 
 			node->playAnimation(coid, gpu->anim, gpu->looping, gpu->offsetPercent);
 		} else if (msg->getSubtype() == api::graphics::GraSetAnimationSpeed) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node == nullptr) {
-				return; // FIXME: (Daniel) happened after adding animations, but this mustn't happen because of messaging system
-			}
+			assert(node);
 
 			api::graphics::Graphics_SetAnimationSpeed_Update * gsu = dynamic_cast<api::graphics::Graphics_SetAnimationSpeed_Update *>(msg->getContent());
 
 			node->setAnimationSpeed(gsu->speed);
 		} else if (msg->getSubtype() == api::graphics::GraStopAnimation) {
 			GraphicsNode * node = getGraphicsNode(goid);
-			if (node == nullptr) {
-				return;
-			}
+			assert(node);
 			node->stopAnimation();
 		} else if (msg->getSubtype() == api::graphics::GraBillboard) {
 			api::graphics::Graphics_Billboard_Update * gbu = static_cast<api::graphics::Graphics_Billboard_Update *>(msg->getContent());
 
 			GraphicsNode * node = getGraphicsNode(goid);
-			if (node == nullptr) {
-				return;
-			}
+			assert(node);
 			node->createOrUpdateBillboard(coid, gbu->identifier, gbu->offset, gbu->width, gbu->height, gbu->u0, gbu->v0, gbu->u1, gbu->v1);
 		} else if (msg->getSubtype() == api::graphics::GraBillboardRemove) {
 			api::graphics::Graphics_BillboardRemove_Update * gbu = static_cast<api::graphics::Graphics_BillboardRemove_Update *>(msg->getContent());
 
 			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->deleteBillboard(coid, gbu->identifier);
 		} else if (msg->getSubtype() == api::graphics::GraMovableText) {
 			api::graphics::Graphics_MovableText_Update * gmtu = static_cast<api::graphics::Graphics_MovableText_Update *>(msg->getContent());
 
 			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->updateMovableText(coid, gmtu->font, gmtu->text, gmtu->size, gmtu->colour);
 		} else if (msg->getSubtype() == api::graphics::GraCompositor) {
 			api::graphics::Graphics_Compositor_Update * gcu = dynamic_cast<api::graphics::Graphics_Compositor_Update *>(msg->getContent());
 
 			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
 			node->enableCompositor(coid, gcu->compositor, gcu->enabled);
 		} else if (msg->getSubtype() == api::graphics::GraParticleFadeOut) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node == nullptr) {
-				return;
-			}
-
+			assert(node);
 			node->particleFadeOut(coid);
 		} else if (msg->getSubtype() == api::graphics::GraDrawBB) {
 			api::graphics::Graphics_DrawBB_Update * gdu = dynamic_cast<api::graphics::Graphics_DrawBB_Update *>(msg->getContent());
 			GraphicsNode * node = getGraphicsNode(goid);
-			if (node == nullptr) {
-				return;
-			}
+			assert(node);
 			node->drawBoundingBox(coid, gdu->colour);
 		} else if (msg->getSubtype() == api::graphics::GraRemoveBB) {
 			GraphicsNode * node = getGraphicsNode(goid);
-			if (node == nullptr) {
-				return;
-			}
+			assert(node);
 			node->removeBoundingBox();
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
@@ -873,49 +857,36 @@ namespace modules {
 
 	void GraphicsManager::NewsNodeDelete(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		int64_t goid = msg->getContent()->getWaitID();
 		int64_t coid = msg->getContent()->getID();
 
 		if (msg->getSubtype() == api::graphics::GraCamera) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node != nullptr) {
-				node->deleteCameraComponent(coid);
-			}
+			assert(node);
+			node->deleteCameraComponent(coid);
 		} else if (msg->getSubtype() == api::graphics::GraLuminous) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node != nullptr) {
-				node->deleteLuminousComponent(coid);
-			}
+			assert(node);
+			node->deleteLuminousComponent(coid);
 		} else if (msg->getSubtype() == api::graphics::GraMesh) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node != nullptr) {
-				node->deleteMeshComponent(coid);
-			}
+			assert(node);
+			node->deleteMeshComponent(coid);
 		} else if (msg->getSubtype() == api::graphics::GraNode) {
+			std::cout << "Delete Node " << coid << std::endl;
 			deleteGraphicsNode(coid);
 		} else if (msg->getSubtype() == api::graphics::GraParticle) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node != nullptr) {
-				node->deleteParticleComponent(coid);
-			}
+			assert(node);
+			node->deleteParticleComponent(coid);
 		} else if (msg->getSubtype() == api::graphics::GraBillboardSet) {
 			GraphicsNode * node = getGraphicsNode(goid);
-
-			if (node == nullptr) {
-				return;
-			}
-
+			assert(node);
 			node->deleteBillboardSetComponent(coid);
 		} else if (msg->getSubtype() == api::graphics::GraMovableText) {
+			std::cout << "Delete Movable Text " << goid << std::endl;
 			GraphicsNode * node = getGraphicsNode(goid);
-			if (node == nullptr) {
-				return;
-			}
+			assert(node);
 			node->deleteMovableText(coid);
 		}
 	}
