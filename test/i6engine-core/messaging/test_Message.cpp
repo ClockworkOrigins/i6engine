@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2012 FAU (Friedrich Alexander University of Erlangen-Nuremberg)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#include <boost/shared_ptr.hpp>
-
 #include "i6engine/core/configs/SubsystemConfig.h"
 #include "i6engine/core/messaging/IPKey.h"
 #include "i6engine/core/messaging/Message.h"
 #include "i6engine/core/messaging/MessageStruct.h"
+
+#include "boost/shared_ptr.hpp"
 
 #include "gtest/gtest.h"
 
@@ -63,8 +63,7 @@ TEST(Message, setMessageType) {
 TEST(Message, Serialize) {
 	i6engine::core::Message::Ptr msg(new i6engine::core::Message(0, 0, i6engine::core::Method::Create, new i6engine::core::MessageStruct(), i6engine::core::Subsystem::Unknown));
 
-	std::cout << msg->Serialize().size() << std::endl;
-	std::cout << msg->Serialize() << std::endl;
+	msg->Serialize();
 
-	EXPECT_LT(msg->Serialize().size(), 20);
+	EXPECT_FALSE(msg->Serialize().empty());
 }
