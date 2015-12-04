@@ -651,8 +651,7 @@ namespace modules {
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
-			node->getOrCreateSceneNode(coid, p, r, s);
-			node->createMeshComponent(coid, meshName, isVisible);
+			node->createMeshComponent(coid, meshName, isVisible, p, r, s);
 		} else if (msg->getSubtype() == api::graphics::GraViewport) {
 			double left = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->left;
 			double top = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->top;
@@ -713,10 +712,10 @@ namespace modules {
 	void GraphicsManager::NewsNodeUpdate(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		int64_t goid = msg->getContent()->getWaitID(); // FIXME: Achtung was goid und was wid ist :D
+		int64_t goid = msg->getContent()->getWaitID();
 		int64_t coid = msg->getContent()->getID();
 
-		if (msg->getSubtype() == api::graphics::GraCamera) { // TODO: (Michael) rewrite to switch?
+		if (msg->getSubtype() == api::graphics::GraCamera) {
 			api::graphics::Graphics_Camera_Update * m = static_cast<api::graphics::Graphics_Camera_Update *>(msg->getContent());
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
@@ -808,11 +807,11 @@ namespace modules {
 
 			api::graphics::Graphics_SetAnimationSpeed_Update * gsu = dynamic_cast<api::graphics::Graphics_SetAnimationSpeed_Update *>(msg->getContent());
 
-			node->setAnimationSpeed(gsu->speed);
+			node->setAnimationSpeed(coid, gsu->speed);
 		} else if (msg->getSubtype() == api::graphics::GraStopAnimation) {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
-			node->stopAnimation();
+			node->stopAnimation(coid);
 		} else if (msg->getSubtype() == api::graphics::GraBillboard) {
 			api::graphics::Graphics_Billboard_Update * gbu = static_cast<api::graphics::Graphics_Billboard_Update *>(msg->getContent());
 
@@ -849,7 +848,7 @@ namespace modules {
 		} else if (msg->getSubtype() == api::graphics::GraRemoveBB) {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
-			node->removeBoundingBox();
+			node->removeBoundingBox(coid);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

@@ -26,21 +26,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OGRE/OgreRoot.h"
 
-namespace ParticleUniverse
-{
-	ParticleUniversePlugin* plugin;
-	//-----------------------------------------------------------------------
-	extern "C" void _ParticleUniverseExport dllStartPlugin(void) throw()
-	{
+namespace ParticleUniverse {
+
+	ParticleUniversePlugin * plugin;
+
+	extern "C" void _ParticleUniverseExport dllStartPlugin() throw() {
 		plugin = PU_NEW ParticleUniversePlugin();
 		Ogre::Root::getSingleton().installPlugin(plugin);
 	}
 
-	//-----------------------------------------------------------------------
-	extern "C" void _ParticleUniverseExport dllStopPlugin(void)
-	{
+	extern "C" void _ParticleUniverseExport dllStopPlugin() {
 		Ogre::Root::getSingleton().uninstallPlugin(plugin);
 		PU_DELETE plugin;
 	}
 
-}
+} /* namespace ParticleUniverse */
