@@ -40,6 +40,112 @@ bool EnumPropertyWithButton::OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_p
 	return true;
 }
 
+ParentPropertyWithButtonAndPositions::ParentPropertyWithButtonAndPositions(const wxString & label, const wxString & name) : wxStringProperty(label, name), mPosition(0) {
+}
+
+bool ParentPropertyWithButtonAndPositions::OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_primary, wxEvent & event) {
+	if (event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED) {
+		// Insert a position
+		addPosition(propgrid);
+	}
+	return true;
+}
+
+wxPGProperty * ParentPropertyWithButtonAndPositions::addPosition(wxPropertyGrid * propgrid, Ogre::Vector3 vec3) {
+	// Insert a position
+	wxString postFix = ogre2wx(Ogre::StringConverter::toString(mPosition));
+	wxString name = PRNL_POSITION + postFix;
+	wxPGProperty * pid = propgrid->AppendIn(this, new wxStringProperty(PRNL_POSITION, name));
+	wxPGProperty * xid = propgrid->AppendIn(pid, new wxFloatProperty(PRNL_POSITION + PRNL_POSITION_X, name + PRNL_POSITION_X, vec3.x));
+	propgrid->SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
+	wxPGProperty * yid = propgrid->AppendIn(pid, new wxFloatProperty(PRNL_POSITION + PRNL_POSITION_Y, name + PRNL_POSITION_Y, vec3.y));
+	propgrid->SetPropertyEditor(yid, wxPG_EDITOR(SpinCtrl));
+	wxPGProperty * zid = propgrid->AppendIn(pid, new wxFloatProperty(PRNL_POSITION + PRNL_POSITION_Z, name + PRNL_POSITION_Z, vec3.z));
+	propgrid->SetPropertyEditor(zid, wxPG_EDITOR(SpinCtrl));
+	mPosition++;
+	//propgrid->GetPrevProperty(xid);
+	return xid;
+}
+
+unsigned int ParentPropertyWithButtonAndPositions::getNumberOfPositions() {
+	return mPosition;
+}
+
+const Ogre::Vector3 & ParentPropertyWithButtonAndPositions::getPosition(wxPropertyGrid * propgrid, unsigned int index, Ogre::Vector3 & vector) {
+	if (index >= mPosition) {
+		return vector;
+	}
+
+	// Use 'parent.child1.child2' construction, where child 1 is the parent of child 2
+	wxString postFix = ogre2wx(Ogre::StringConverter::toString(index));
+	wxString name = GetName() + wxT(".") + PRNL_POSITION + postFix + wxT(".") + PRNL_POSITION + postFix + PRNL_POSITION_X;
+	wxPGProperty * prop = propgrid->GetProperty(name);
+	if (prop) {
+		vector.x = prop->DoGetValue().GetDouble();
+	}
+	name = GetName() + wxT(".") + PRNL_POSITION + postFix + wxT(".") + PRNL_POSITION + postFix + PRNL_POSITION_Y;
+	prop = propgrid->GetProperty(name);
+	if (prop) {
+		vector.y = prop->DoGetValue().GetDouble();
+	}
+	name = GetName() + wxT(".") + PRNL_POSITION + postFix + wxT(".") + PRNL_POSITION + postFix + PRNL_POSITION_Z;
+	prop = propgrid->GetProperty(name);
+	if (prop) {
+		vector.z = prop->DoGetValue().GetDouble();
+	}
+	return vector;
+}
+
+void ParentPropertyWithButtonAndPositions::reset() {
+	mPosition = 0;
+	this->Empty();
+}
+
+ParentPropertyWithButtonAndFloats::ParentPropertyWithButtonAndFloats(const wxString & label, const wxString & name) : wxStringProperty(label, name), mFloat(0) {
+}
+
+bool ParentPropertyWithButtonAndFloats::OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_primary, wxEvent & event) {
+	if (event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED) {
+		// Insert a float
+		addFloat(propgrid);
+	}
+	return true;
+}
+
+wxPGProperty * ParentPropertyWithButtonAndFloats::addFloat(wxPropertyGrid * propgrid, float value) {
+	// Insert a float
+	wxString postFix = ogre2wx(Ogre::StringConverter::toString(mFloat));
+	wxString name = PRNL_FLOAT + postFix;
+	wxPGProperty * xid = propgrid->AppendIn(this, new wxFloatProperty(PRNL_FLOAT, name, value));
+	propgrid->SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
+	mFloat++;
+	return xid;
+}
+
+unsigned int ParentPropertyWithButtonAndFloats::getNumberOfFloats() {
+	return mFloat;
+}
+
+ParticleUniverse::Real ParentPropertyWithButtonAndFloats::getFloat(wxPropertyGrid * propgrid, unsigned int index) {
+	if (index >= mFloat) {
+		return 0;
+	}
+
+	wxString postFix = ogre2wx(Ogre::StringConverter::toString(index));
+	wxString name = this->GetName() + wxT(".") + PRNL_FLOAT + postFix;
+	wxPGProperty * prop = propgrid->GetProperty(name);
+	if (prop) {
+		return prop->DoGetValue().GetDouble();
+	}
+
+	return 0;
+}
+
+void ParentPropertyWithButtonAndFloats::reset() {
+	mFloat = 0;
+	this->Empty();
+}
+
 PropertyWindow::PropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name) : wxPropertyGrid(parent, wxID_ANY, wxPoint(0, 99999), wxSize(PROPERTIES_WIDTH, PROPERTIES_HEIGHT), wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE, wxT("")), mOwner(owner), mName(name), _types() {
 	/* Fix Version 1.3.1: Set y-coord by default to infinite (99999) to prevent that it is displayed over the listbox with templates. This prevents
 	   jittering of the listbox (= wxTreeCtrl from  version 1.4).
@@ -199,14 +305,14 @@ const wxString & PropertyWindow::doGetString(const wxString & name) {
 void PropertyWindow::appendColourWithAlphaProperty(const wxString & label, const wxString & name, const wxColour & colour) {
 	wxPGProperty * pid = Append(new wxStringProperty(label, name));
 	AppendIn(pid, new wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
-	wxPGProperty * aid = AppendIn(pid, new wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
+	wxPGProperty * aid = AppendIn(pid, new wxColourProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
 	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
 }
 
 void PropertyWindow::appendInColourWithAlphaProperty(wxPGProperty * id, const wxString & label, const wxString & name, const wxColour & colour) {
 	wxPGProperty * pid = AppendIn(id, new wxStringProperty(label, name));
 	AppendIn(pid, new wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
-	wxPGProperty * aid = AppendIn(pid, new wxIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
+	wxPGProperty * aid = AppendIn(pid, new wxColourProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
 	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
 }
 
@@ -253,12 +359,18 @@ const wxColour & PropertyWindow::doGetColourWithAlpha(const wxString & name, wxC
 		return colour;
 	}
 	unsigned char alpha = prop->DoGetValue().GetLong();
-	colour = wxColor(colour.Red(), colour.Green(), colour.Blue(), alpha);
+	colour = wxColour(colour.Red(), colour.Green(), colour.Blue(), alpha);
 	return colour;
 }
 
 void PropertyWindow::appendVector3(const wxString & label, const wxString & name, const Ogre::Vector3 & vector3) {
-	// TODO
+	wxPGProperty * pid = Append(new wxStringProperty(label, name));
+	wxPGProperty * xid = AppendIn(pid, new wxFloatProperty(name + PRNL_X, name + PRNL_X, vector3.x));
+	SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
+	wxPGProperty * yid = AppendIn(pid, new wxFloatProperty(name + PRNL_Y, name + PRNL_Y, vector3.y));
+	SetPropertyEditor(yid, wxPG_EDITOR(SpinCtrl));
+	wxPGProperty * zid = AppendIn(pid, new wxFloatProperty(name + PRNL_Z, name + PRNL_Z, vector3.z));
+	SetPropertyEditor(zid, wxPG_EDITOR(SpinCtrl));
 }
 
 void PropertyWindow::doSetVector3(const wxString & name, const Ogre::Vector3 & vector3) {
@@ -303,15 +415,15 @@ const Ogre::Vector3 & PropertyWindow::doGetVector3(const wxString & name, Ogre::
 }
 
 void PropertyWindow::appendVector4(const wxString & label, const wxString & name, const Ogre::Vector4 & vector4) {
-/*	wxPGProperty * pid = Append(new wxParentProperty(label, name));
-	wxPGProperty * xid = AppendIn(pid, wxFloatProperty(name + PRNL_X, name + PRNL_X, vector4.x));
+	wxPGProperty * pid = Append(new wxStringProperty(label, name));
+	wxPGProperty * xid = AppendIn(pid, new wxFloatProperty(name + PRNL_X, name + PRNL_X, vector4.x));
 	SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
-	wxPGProperty * yid = AppendIn(pid, wxFloatProperty(name + PRNL_Y, name + PRNL_Y, vector4.y));
+	wxPGProperty * yid = AppendIn(pid, new wxFloatProperty(name + PRNL_Y, name + PRNL_Y, vector4.y));
 	SetPropertyEditor(yid, wxPG_EDITOR(SpinCtrl));
-	wxPGProperty * zid = AppendIn(pid, wxFloatProperty(name + PRNL_Z, name + PRNL_Z, vector4.z));
+	wxPGProperty * zid = AppendIn(pid, new wxFloatProperty(name + PRNL_Z, name + PRNL_Z, vector4.z));
 	SetPropertyEditor(zid, wxPG_EDITOR(SpinCtrl));
-	wxPGProperty * wid = AppendIn(pid, wxFloatProperty(name + PRNL_W, name + PRNL_W, vector4.w));
-	SetPropertyEditor(wid, wxPG_EDITOR(SpinCtrl));*/
+	wxPGProperty * wid = AppendIn(pid, new wxFloatProperty(name + PRNL_W, name + PRNL_W, vector4.w));
+	SetPropertyEditor(wid, wxPG_EDITOR(SpinCtrl));
 }
 
 void PropertyWindow::doSetVector4(const wxString & name, const Ogre::Vector4 & vector4) {
@@ -369,15 +481,15 @@ const Ogre::Vector4 & PropertyWindow::doGetVector4(const wxString & name, Ogre::
 }
 
 void PropertyWindow::appendQuaternion(const wxString & label, const wxString & name, const Ogre::Quaternion & quaternion) {
-/*	wxPGProperty * pid = Append(new wxParentProperty(label, name));
-	wxPGProperty * wid = AppendIn(pid, wxFloatProperty(name + PRNL_W, name + PRNL_W, quaternion.w));
+	wxPGProperty * pid = Append(new wxStringProperty(label, name));
+	wxPGProperty * wid = AppendIn(pid, new wxFloatProperty(name + PRNL_W, name + PRNL_W, quaternion.w));
 	SetPropertyEditor(wid, wxPG_EDITOR(SpinCtrl));
-	wxPGProperty * xid = AppendIn(pid, wxFloatProperty(name + PRNL_X, name + PRNL_X, quaternion.x));
+	wxPGProperty * xid = AppendIn(pid, new wxFloatProperty(name + PRNL_X, name + PRNL_X, quaternion.x));
 	SetPropertyEditor(xid, wxPG_EDITOR(SpinCtrl));
-	wxPGProperty * yid = AppendIn(pid, wxFloatProperty(name + PRNL_Y, name + PRNL_Y, quaternion.y));
+	wxPGProperty * yid = AppendIn(pid, new wxFloatProperty(name + PRNL_Y, name + PRNL_Y, quaternion.y));
 	SetPropertyEditor(yid, wxPG_EDITOR(SpinCtrl));
-	wxPGProperty * zid = AppendIn(pid, wxFloatProperty(name + PRNL_Z, name + PRNL_Z, quaternion.z));
-	SetPropertyEditor(zid, wxPG_EDITOR(SpinCtrl));*/
+	wxPGProperty * zid = AppendIn(pid, new wxFloatProperty(name + PRNL_Z, name + PRNL_Z, quaternion.z));
+	SetPropertyEditor(zid, wxPG_EDITOR(SpinCtrl));
 }
 
 void PropertyWindow::doSetQuaternion(const wxString & name, const Ogre::Quaternion & quaternion) {
@@ -832,7 +944,7 @@ bool PropertyWindow::_validatePropertyDynamicAttribute(wxPGProperty * prop, cons
 bool PropertyWindow::_setPropertyError(wxPGProperty * prop, const wxString & message) {
 	_showMessage(_("'") + prop->GetValueAsString() + _("': ") + message);
 	prop->SetValueToUnspecified();
-//	SelectProperty(prop->GetId(), true); TODO: (Michael) uncomment
+	SelectProperty(prop->GetIndexInParent(), true);
 	return false;
 }
 
