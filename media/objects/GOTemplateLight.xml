@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GOTemplate type="Light">
+	<Component template="StaticState">
+		<Attribute name="pos">0.0 0.0 0.0</Attribute>
+		<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+		<Attribute name="scale">1.0 1.0 1.0</Attribute>
+	</Component>
 	<Component template="LuminousAppearance">
 		<Attribute name="lightType">1</Attribute>
 		<Attribute name="diffuseColor">1.0 1.0 1.0</Attribute>
