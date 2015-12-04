@@ -305,14 +305,14 @@ const wxString & PropertyWindow::doGetString(const wxString & name) {
 void PropertyWindow::appendColourWithAlphaProperty(const wxString & label, const wxString & name, const wxColour & colour) {
 	wxPGProperty * pid = Append(new wxStringProperty(label, name));
 	AppendIn(pid, new wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
-	wxPGProperty * aid = AppendIn(pid, new wxColourProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
+	wxPGProperty * aid = AppendIn(pid, new wxUIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
 	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
 }
 
 void PropertyWindow::appendInColourWithAlphaProperty(wxPGProperty * id, const wxString & label, const wxString & name, const wxColour & colour) {
 	wxPGProperty * pid = AppendIn(id, new wxStringProperty(label, name));
 	AppendIn(pid, new wxColourProperty(name + PRNL_POST_RGB, name + PRNL_POST_RGB, colour));
-	wxPGProperty * aid = AppendIn(pid, new wxColourProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
+	wxPGProperty * aid = AppendIn(pid, new wxUIntProperty(name + PRNL_POST_ALPHA, name + PRNL_POST_ALPHA, colour.Alpha()));
 	SetPropertyEditor(aid, wxPG_EDITOR(SpinCtrl));
 }
 
@@ -328,7 +328,6 @@ void PropertyWindow::doSetColourWithAlpha(const wxString & name, const wxColour 
 	if (!prop) {
 		return;
 	}
-	prop->SetValue(wxAny(colour));
 
 	prop = GetPropertyByName(baseName + PRNL_POST_ALPHA);
 	if (!prop) {
@@ -350,9 +349,8 @@ const wxColour & PropertyWindow::doGetColourWithAlpha(const wxString & name, wxC
 	if (!prop) {
 		return colour;
 	}
-	wxVariant value = prop->GetValue();
-	wxColour * txcol = wxGetVariantCast(value, wxColour);
-	colour = wxColour(txcol->Red(), txcol->Green(), txcol->Blue());
+	wxColour txcol = dynamic_cast<wxColourProperty *>(prop)->GetColour(0);
+	colour = wxColour(txcol.Red(), txcol.Green(), txcol.Blue());
 
 	prop = GetPropertyByName(baseName + PRNL_POST_ALPHA);
 	if (!prop) {
