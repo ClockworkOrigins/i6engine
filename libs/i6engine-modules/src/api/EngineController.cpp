@@ -284,7 +284,7 @@ namespace api {
 		_coreController->setCurrentTime(time);
 	}
 
-	uint32_t EngineController::getNewUUID() const {
+	uint64_t EngineController::getNewUUID() const {
 		boost::hash<boost::uuids::uuid> uuid_hasher;
 		return uuid_hasher(boost::uuids::random_generator()());
 	}

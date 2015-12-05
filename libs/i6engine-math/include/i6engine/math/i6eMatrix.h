@@ -392,7 +392,7 @@ namespace math {
 				ISIXE_THROW_API("i6eMatrix", "only nxn matrices have an inverse");
 			}
 
-			T det = other.calculateDeterminant();
+			T det = T(other.calculateDeterminant());
 
 			assert(std::fabs(det) > 1e-15);
 

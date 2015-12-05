@@ -31,7 +31,7 @@ namespace gui {
 
 	void MessageBoxWidget::setText(const std::string & text) {
 		CEGUI::Listbox * lb = dynamic_cast<CEGUI::Listbox *>(_window->getChild("Text"));
-		int count = lb->getItemCount();
+		size_t count = lb->getItemCount();
 		if (count == 0) {
 			lb->addItem(new CEGUI::ListboxTextItem(text, 0, 0, false, false));
 		} else {

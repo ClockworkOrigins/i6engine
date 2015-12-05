@@ -170,7 +170,7 @@ namespace components {
 	}
 
 	void QuickslotComponent::updateItem(uint32_t item, const std::string & name, uint32_t amount) {
-		uint32_t slot = UINT32_MAX;
+		size_t slot = SIZE_MAX;
 		for (size_t i = 0; i < _slots.size(); i++) {
 			if (_slots[i].first == item && _slots[i].second == name) {
 				slot = i;

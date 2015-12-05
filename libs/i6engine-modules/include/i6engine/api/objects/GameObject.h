@@ -74,7 +74,7 @@ namespace api {
 		 */
 		GameObject() {
 		}
-		GameObject(const int64_t goid, const core::IPKey & ownerNode, uint32_t uuid, const std::string & tpl, const boost::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f);
+		GameObject(const int64_t goid, const core::IPKey & ownerNode, uint64_t uuid, const std::string & tpl, const boost::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f);
 
 		/**
 		 * \brief Remove all GOCs held by the component table.
@@ -208,7 +208,7 @@ namespace api {
 		/**
 		 * \brief returns the uuid of this GO
 		 */
-		uint32_t getUUID() const {
+		uint64_t getUUID() const {
 			return _uuid;
 		}
 
@@ -260,7 +260,7 @@ namespace api {
 
 		core::IPKey _owner;
 
-		uint32_t _uuid;
+		uint64_t _uuid;
 
 		/**
 		 * \brief callback for creation of Components
