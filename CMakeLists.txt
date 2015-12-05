@@ -322,6 +322,20 @@ IF(ISIXE_WITH_TOOLS AND UNIX)
 	INCLUDE_DIRECTORIES(SYSTEM ${GLIB2_INCLUDE_DIRS})
 ENDIF(ISIXE_WITH_TOOLS AND UNIX)
 
+#----------------------------------------------------
+# Qt
+#----------------------------------------------------
+IF(ISIXE_WITH_TOOLS)
+	FIND_PACKAGE(Qt5 REQUIRED Widgets Core Gui)
+	INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
+
+	IF(ISIXE_WITH_TESTING)
+		SET(QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
+	ELSE(ISIXE_WITH_TESTING)
+		SET(QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} Qt5::WinMain)
+	ENDIF(ISIXE_WITH_TESTING)
+ENDIF(ISIXE_WITH_TOOLS)
+
 ###############################################################################
 # Configure Build Settings (has to be before building m2etis because m2etis needs i6engineBuildSettings)
 ###############################################################################
