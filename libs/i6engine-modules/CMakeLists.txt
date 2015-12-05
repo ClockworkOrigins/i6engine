@@ -34,6 +34,7 @@ set(i6components
 	${srcdir}/api/components/CameraComponent.cpp
 	${srcdir}/api/components/FollowComponent.cpp
 	${srcdir}/api/components/LifetimeComponent.cpp
+	${srcdir}/api/components/LineComponent.cpp
 	${srcdir}/api/components/LuminousAppearanceComponent.cpp
 	${srcdir}/api/components/MeshAppearanceComponent.cpp
 	${srcdir}/api/components/MovableTextComponent.cpp

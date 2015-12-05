@@ -19,8 +19,8 @@
  * @{
  */
 
-#ifndef __I6ENGINE_MODULES_COMPONENTS_PARTICLECOMPONENT_H__
-#define __I6ENGINE_MODULES_COMPONENTS_PARTICLECOMPONENT_H__
+#ifndef __I6ENGINE_MODULES_COMPONENTS_LINECOMPONENT_H__
+#define __I6ENGINE_MODULES_COMPONENTS_LINECOMPONENT_H__
 
 #include <cstdint>
 
@@ -102,7 +102,7 @@ namespace modules {
 } /* namespace modules */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_MODULES_COMPONENTS_PARTICLECOMPONENT_H__ */
+#endif /* __I6ENGINE_MODULES_COMPONENTS_LINECOMPONENT_H__ */
 
 /**
  * @}

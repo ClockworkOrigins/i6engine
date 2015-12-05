@@ -20,9 +20,14 @@ namespace i6engine {
 namespace api {
 namespace graphics {
 
-	// DebugDrawer
+	// Line
 	Graphics_Line_Create::Graphics_Line_Create() : GameMessageStruct() {}
-	Graphics_Line_Create::Graphics_Line_Create(const Vec3 & f, const Vec3 & t) : GameMessageStruct(), from(f), to(t) {}
+	Graphics_Line_Create::Graphics_Line_Create(const Vec3 & f, const Vec3 & t, const Vec3 & c) : GameMessageStruct(), from(f), to(t), colour(c) {
+	}
+	Graphics_Line_Create::Graphics_Line_Create(uint64_t goid, uint64_t coid, const Vec3 & f, const Vec3 & t, const Vec3 & c) : GameMessageStruct(coid, goid), from(f), to(t), colour(c) {
+	}
+	Graphics_Line_Delete::Graphics_Line_Delete(uint64_t goid, uint64_t coid) : GameMessageStruct(coid, goid) {
+	}
 
 	// Graphics
 	Graphics_Node_Delete::Graphics_Node_Delete() : GameMessageStruct() {}
