@@ -25,6 +25,11 @@
 #include <map>
 #include <set>
 
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+	#include <tchar.h>
+	#include <Windows.h>
+#endif
+
 #include "i6engine/utils/ExceptionQueue.h"
 #include "i6engine/utils/Logger.h"
 
@@ -33,6 +38,10 @@
 #include "boost/function.hpp"
 
 #include "clockUtils/iniParser/iniParser.h"
+
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	typedef void * HWND;
+#endif
 
 namespace i6engine {
 namespace core {
@@ -187,7 +196,14 @@ namespace api {
 		/**
 		 * \brief registers a basic default configuration
 		 */
-		void registerDefault(const bool ds);
+		void registerDefault(const bool ds) {
+			registerDefault(ds, nullptr);
+		}
+
+		/**
+		 * \brief registers a basic default configuration with a window handle
+		 */
+		void registerDefault(const bool ds, HWND hWnd);
 
 		/**
 		 * \brief call this method to shutdown everything
@@ -257,6 +273,13 @@ namespace api {
 		GameType getType() const {
 			return _type;
 		}
+
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+		/**
+		 * \brief creates a new Window
+		 */
+		HWND createWindow(HINSTANCE hInstance);
+#endif
 
 	private:
 		std::map<std::string, std::pair<core::ModuleController *, uint32_t>> _queuedModules;

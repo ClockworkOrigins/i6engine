@@ -20,7 +20,7 @@
 #include <thread>
 
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
-	#include <WinSock2.h>
+	//#include <WinSock2.h>
 #endif
 
 #include "i6engine/core/configs/SubsystemConfig.h"
@@ -224,12 +224,12 @@ namespace api {
 		_appl->setController(_subsystemController, _coreController, _messagingController);
 	}
 
-	void EngineController::registerDefault(const bool ds) {
+	void EngineController::registerDefault(const bool ds, HWND hWnd) {
 		if (!ds) {
 #ifdef ISIXE_WITH_NETWORK
 			registerSubSystem("Network", new modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 #endif
-			registerSubSystem("Graphics", new modules::GraphicsController(), { core::Subsystem::Object });
+			registerSubSystem("Graphics", new modules::GraphicsController(hWnd), { core::Subsystem::Object });
 			registerSubSystem("Object", new modules::ObjectController(), { core::Subsystem::Physic });
 			registerSubSystem("Input", new modules::InputController(), LNG_INPUT_FRAME_TIME);
 			registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
@@ -288,6 +288,15 @@ namespace api {
 		boost::hash<boost::uuids::uuid> uuid_hasher;
 		return uuid_hasher(boost::uuids::random_generator()());
 	}
+
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
+	HWND EngineController::createWindow(HINSTANCE hInstance) {
+		HWND hWnd = CreateWindow(getAppl()->getName().c_str(), getAppl()->getName().c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+		ShowWindow(hWnd, 10);
+		UpdateWindow(hWnd);
+		return hWnd;
+	}
+#endif
 
 } /* namespace api */
 } /* namespace i6engine */

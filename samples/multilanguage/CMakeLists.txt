@@ -30,7 +30,7 @@ set(SampleMultilanguageSrc
 	src/MultilanguageApplication.cpp
 )
 
-add_executable(SampleMultilanguage ${SampleMultilanguageSrc})
+add_executable(SampleMultilanguage ${GUI_TYPE} ${SampleMultilanguageSrc})
 set_target_properties(SampleMultilanguage PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleMultilanguage i6engine-modules)

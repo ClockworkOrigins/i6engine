@@ -30,7 +30,7 @@ set(SampleCanvasSrc
 	src/CanvasApplication.cpp
 )
 
-add_executable(SampleCanvas ${SampleCanvasSrc})
+add_executable(SampleCanvas ${GUI_TYPE} ${SampleCanvasSrc})
 set_target_properties(SampleCanvas PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleCanvas i6engine-modules)

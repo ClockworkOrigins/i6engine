@@ -18,14 +18,24 @@
 
 #include "i6engine/api/EngineController.h"
 
+#ifdef ISIXE_WITH_CONSOLE
 int main(int argc, char ** argv) {
-	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false);
-
+#else
+int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+#endif
 	sample::LeveleditorApplication app;
 
 	app.setName("Leveleditor Sample");
 
 	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
+
+#ifdef ISIXE_WITH_CONSOLE
+	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false);
+#else
+	HWND hWnd = i6engine::api::EngineController::GetSingletonPtr()->createWindow(hInstance);
+
+	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false, hWnd);
+#endif
 
 	i6engine::api::EngineController::GetSingletonPtr()->start();
 
