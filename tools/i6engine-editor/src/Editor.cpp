@@ -49,18 +49,8 @@
 #include "i6engine/api/manager/WaynetManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "i6engine/modules/audio/AudioController.h"
-#include "i6engine/modules/graphics/GraphicsController.h"
-#include "i6engine/modules/input/InputController.h"
-#include "i6engine/modules/object/ObjectController.h"
-#include "i6engine/modules/physics/PhysicsController.h"
-
 #include "i6engine/editor/EditorMessageTypes.h"
-#include "i6engine/editor/gui/FileDialogWidget.h"
-#include "i6engine/editor/gui/ListboxWidget.h"
-#include "i6engine/editor/gui/MenuBarWidget.h"
 #include "i6engine/editor/gui/MessageBoxWidget.h"
-#include "i6engine/editor/gui/ObjectInfoWidget.h"
 
 #include "boost/functional/factory.hpp"
 
@@ -69,9 +59,7 @@
 namespace i6engine {
 namespace editor {
 
-	Editor::Editor(const std::string & name) : Application(), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints(), _removeBox(false) {
-		setName(name);
-
+	Editor::Editor() : Application(), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints(), _removeBox(false) {
 		_eventMap["forward"] = std::make_pair(boost::bind(&Editor::Forward, this), false);
 		_eventMap["backward"] = std::make_pair(boost::bind(&Editor::Backward, this), false);
 		_eventMap["left"] = std::make_pair(boost::bind(&Editor::Left, this), false);
@@ -97,19 +85,6 @@ namespace editor {
 	Editor::~Editor() {
 	}
 
-	void Editor::start() {
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new modules::GraphicsController(), { core::Subsystem::Object });
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new modules::ObjectController(), LNG_OBJECT_FRAME_TIME);
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new modules::InputController(), LNG_INPUT_FRAME_TIME);
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
-#ifdef ISIXE_WITH_AUDIO
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
-#endif
-		api::EngineController::GetSingletonPtr()->registerApplication(*this);
-
-		api::EngineController::GetSingletonPtr()->start();
-	}
-
 	void Editor::Initialize() {
 		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, Editor::InputMailbox, this);
 	}
@@ -118,23 +93,10 @@ namespace editor {
 		api::GUIFacade * gf = api::EngineController::GetSingletonPtr()->getGUIFacade();
 
 		// register GUIWidgets
-		gf->registerWidgetTemplate("FileDialog", boost::factory<gui::FileDialogWidget *>());
-		gf->registerWidgetTemplate("Listbox", boost::factory<gui::ListboxWidget *>());
-		gf->registerWidgetTemplate("MenuBar", boost::factory<gui::MenuBarWidget *>());
 		gf->registerWidgetTemplate("MessageBox", boost::factory<gui::MessageBoxWidget *>());
-		gf->registerWidgetTemplate("ObjectInfo", boost::factory<gui::ObjectInfoWidget *>());
 
 		// initialize GUI
 		gf->startGUI("Editor.scheme", "", "", "Editor", "MouseArrow");
-
-		// add menu bar
-		gf->createWidget("MenuBar", "MenuBar", "");
-		gf->setVisibility("MenuBar", true);
-
-		// register submenus
-		registerMenu("File", "Load Level", boost::bind(&Editor::chooseLoadLevel, this));
-		registerMenu("File", "Save Level", boost::bind(&Editor::chooseSaveLevel, this));
-		registerMenu("File", "Exit", boost::bind(&api::EngineController::stop, api::EngineController::GetSingletonPtr()));
 
 		api::InputFacade * inputFacade = api::EngineController::GetSingleton().getInputFacade();
 
@@ -173,6 +135,9 @@ namespace editor {
 	}
 
 	void Editor::Tick() {
+		if (!_inLevel || _camera.get() == nullptr) {
+			return;
+		}
 		for (auto & p : _eventMap) {
 			if (p.second.second) {
 				p.second.first();
@@ -180,53 +145,14 @@ namespace editor {
 		}
 	}
 
-	void Editor::registerMenu(const std::string & menu, const std::string & submenu, const boost::function<void(void)> & func) {
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddMenuBarEntry, core::Method::Update, new messages::GUI_MenuBarEntry("MenuBar", menu, submenu, func), i6engine::core::Subsystem::Unknown));
-	}
-
-	void Editor::chooseLoadLevel() {
-		api::GUIFacade * gf = api::EngineController::GetSingletonPtr()->getGUIFacade();
-
-		gf->createWidget("FileDialog", "FileDialog", "");
-		gf->setPosition("FileDialog", 0.2, 0.2);
-		gf->setSize("FileDialog", 0.6, 0.6);
-		gf->setText("FileDialog", "Load File");
-
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::SetFileDialogBaseDir, core::Method::Update, new messages::GUI_SetFileDialogBaseDir("FileDialog", getBasePath()), i6engine::core::Subsystem::Unknown));
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddStringCallback, core::Method::Update, new messages::GUI_AddStringCallback("FileDialog", [this](std::string s) {
-			loadLevel(s);
-		}), i6engine::core::Subsystem::Unknown));
-	}
-
-	void Editor::chooseSaveLevel() {
-		api::GUIFacade * gf = api::EngineController::GetSingletonPtr()->getGUIFacade();
-
-		gf->createWidget("FileDialog", "FileDialog", "");
-		gf->setPosition("FileDialog", 0.2, 0.2);
-		gf->setSize("FileDialog", 0.6, 0.6);
-		gf->setText("FileDialog", "Save File");
-
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::SetFileDialogBaseDir, core::Method::Update, new messages::GUI_SetFileDialogBaseDir("FileDialog", getBasePath()), i6engine::core::Subsystem::Unknown));
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddStringCallback, core::Method::Update, new messages::GUI_AddStringCallback("FileDialog", [this](std::string s) {
-			saveLevel(s);
-		}), i6engine::core::Subsystem::Unknown));
-	}
-
 	void Editor::loadLevel(const std::string & file) {
 		_camera = api::GOPtr();
 
+		for (auto & p : _eventMap) {
+			p.second.second = false;
+		}
+
 		std::thread([this, file]() {
-			api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FileDialog");
-
-			if (_inLevel) {
-				api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("ObjectList");
-			}
-
-			if (_selectedObjectID != -1) {
-				api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::RemoveEntries, core::Method::Update, new messages::GUI_RemoveEntries("ObjectList"), i6engine::core::Subsystem::Unknown));
-				_selectedObjectID = -1;
-			}
-
 			api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -264,46 +190,13 @@ namespace editor {
 
 			_inLevel = true;
 
-			api::EngineController::GetSingleton().getGUIFacade()->createWidget("ObjectList", "Listbox", "");
-			api::EngineController::GetSingleton().getGUIFacade()->setPosition("ObjectList", 0.85, 0.0);
-			api::EngineController::GetSingleton().getGUIFacade()->setSize("ObjectList", 0.15, 0.5);
-			api::EngineController::GetSingleton().getGUIFacade()->setVisibility("ObjectList", true);
-
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 			updateObjectList();
-
-			// show TemplateList
-			api::EngineController::GetSingleton().getGUIFacade()->addStatusList("TemplateList", "Editor/Listbox", 0.0, 0.04, -1);
-			api::EngineController::GetSingleton().getGUIFacade()->setSize("TemplateList", 0.2, 0.9);
-
-			for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOTemplates()) {
-				api::EngineController::GetSingleton().getGUIFacade()->addTextToWidget("TemplateList", p.first);
-			}
-
-			api::EngineController::GetSingleton().getGUIFacade()->setSelectedStringCallback("TemplateList", [this](std::string tpl) {
-				auto tmpl = api::EngineController::GetSingleton().getObjectFacade()->getGOTemplates()[tpl];
-
-				for (auto & c : tmpl._components) {
-					if (c._template == "PhysicalState" || c._template == "StaticState") {
-						utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-						Vec3 newPos = ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 5.0), ssc->getRotation());
-						newPos.insertInMap("pos", c._params);
-					}
-				}
-
-				api::EngineController::GetSingleton().getObjectFacade()->createObject(tpl, tmpl, api::EngineController::GetSingleton().getUUID(), false);
-
-				std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-				updateObjectList();
-			});
 		}).detach();
 	}
 
 	void Editor::saveLevel(const std::string & level) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FileDialog");
-
 		tinyxml2::XMLDocument doc;
 		tinyxml2::XMLDeclaration * decl = doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
 		doc.InsertFirstChild(decl);
@@ -493,78 +386,6 @@ namespace editor {
 				_lastX = imu->intNewX;
 				_lastY = imu->intNewY;
 			}
-		}
-	}
-
-	void Editor::updateObjectList() {
-		api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::RemoveEntries, core::Method::Update, new messages::GUI_RemoveEntries("ObjectList"), i6engine::core::Subsystem::Unknown));
-
-		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
-			if (go->getType() != "EditorCam") {
-				api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddEntry, core::Method::Update, new messages::GUI_AddEntry("ObjectList", go->getType(), boost::bind(&Editor::selectObject, this, go->getID())), i6engine::core::Subsystem::Unknown));
-			}
-		}
-	}
-
-	void Editor::selectObject(int64_t id) {
-		if (_selectedObjectID != -1) {
-			api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("ObjectInfo");
-			auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
-			if (go != nullptr) {
-				auto mc = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
-				if (mc != nullptr) {
-					mc->removeBoundingBox();
-				}
-			}
-		}
-		_selectedObjectID = id;
-
-		if (_selectedObjectID == -1) {
-			return;
-		}
-
-		api::EngineController::GetSingleton().getGUIFacade()->setSize("ObjectList", 0.15, 0.5);
-
-		api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(id);
-		api::WeakGOPtr wgo = go;
-
-		api::EngineController::GetSingleton().getGUIFacade()->createWidget("ObjectInfo", "ObjectInfo", "");
-		api::EngineController::GetSingleton().getGUIFacade()->setPosition("ObjectInfo", 0.75, 0.5);
-		api::EngineController::GetSingleton().getGUIFacade()->setSize("ObjectInfo", 0.25, 0.5);
-		api::EngineController::GetSingleton().getGUIFacade()->setVisibility("ObjectInfo", true);
-		api::EngineController::GetSingleton().getGUIFacade()->setText("ObjectInfo", go->getType());
-		api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponentOption, core::Method::Update, new messages::GUI_AddComponentOption("ObjectInfo", true, "Flags", [wgo]() {
-			auto gobj = wgo.get();
-			std::vector<std::string> flags = gobj->getFlags();
-			std::string flagString;
-			for (size_t i = 0; i < flags.size(); i++) {
-				flagString += flags[i];
-
-				if (i < flags.size() - 1) {
-					flagString += "|";
-				}
-			}
-			return flagString;
-		}, [wgo](std::string s) {
-			auto gobj = wgo.get();
-			gobj->setFlags(utils::split(s, "|"));
-			return true;
-		}), i6engine::core::Subsystem::Unknown));
-
-		for (auto c : go->getGOCList()) {
-			if (go->getType() == "Waypoint" && (c->getTemplateName() == "MeshAppearance" || c->getTemplateName() == "MovableText")) {
-				continue;
-			}
-			api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponent, core::Method::Update, new messages::GUI_AddComponent("ObjectInfo", c->getTemplateName(), c->getIdentifier()), i6engine::core::Subsystem::Unknown));
-
-			for (auto option : c->getComponentOptions()) {
-				api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, messages::GUIMessageTypes::AddComponentOption, core::Method::Update, new messages::GUI_AddComponentOption("ObjectInfo", std::get<api::ComponentOptionsParameter::ACCESSSTATE>(option) == api::AccessState::READWRITE, std::get<api::ComponentOptionsParameter::NAME>(option), std::get<api::ComponentOptionsParameter::READFUNC>(option), std::get<api::ComponentOptionsParameter::WRITEFUNC>(option)), i6engine::core::Subsystem::Unknown));
-			}
-		}
-
-		auto mc = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
-		if (mc != nullptr) {
-			mc->drawBoundingBox(Vec3(1.0, 0.0, 0.0));
 		}
 	}
 

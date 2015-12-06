@@ -170,6 +170,10 @@ namespace modules {
 		 */
 		void removeTicker(GraphicsNode * gn);
 
+		Ogre::RenderWindow * getRenderWindow() const {
+			return _rWindow;
+		}
+
 	private:
 		/**
 		 * Render window

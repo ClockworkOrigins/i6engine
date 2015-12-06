@@ -76,7 +76,6 @@ namespace modules {
 
 	void InputManager::registerKeyboardListener() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		_objOisKeyboard = static_cast<OIS::Keyboard *>(_objOisInputManager->createInputObject(OIS::OISKeyboard, true));
 		_keyboardListener = new KeyboardListener();
 		_objOisKeyboard->setEventCallback(_keyboardListener);
@@ -84,7 +83,6 @@ namespace modules {
 
 	void InputManager::registerMouseListener() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		_objOisMouse = static_cast<OIS::Mouse *>(_objOisInputManager->createInputObject(OIS::OISMouse, true));
 		unsigned int intWidth, intHeight, intDepth;
 		int intTop, intLeft;
@@ -113,20 +111,16 @@ namespace modules {
 		delete _mouseListener;
 	}
 
-	void InputManager::initializeInput(Ogre::Root * root) {
+	void InputManager::initializeInput(Ogre::RenderWindow * window) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		_objRenderWindow = root->getAutoCreatedWindow();
+		_objRenderWindow = window;
 
 		OIS::ParamList objPl;
 		size_t objWindowHnd = 0;
 		std::ostringstream objWindowHndStr;
 
 	#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-		/*
-		 * TODO wenn das ganze unter windows wieder laeuft muss der mousezeiger versteckt werden. hat vermutlich mit
-		 * foreground und/oder nonexclusive zu tun
-		 */
 		if (!_objRenderWindow->isFullScreen()) {
 			objPl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND")));
 			objPl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
@@ -156,9 +150,8 @@ namespace modules {
 
 	void InputManager::NewsCreate(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		if (msg->getSubtype() == api::input::InputWindow) {
-			initializeInput(reinterpret_cast<Ogre::Root *>(static_cast<api::input::Input_Window_Create *>(msg->getContent())->window));
+			initializeInput(reinterpret_cast<Ogre::RenderWindow *>(static_cast<api::input::Input_Window_Create *>(msg->getContent())->window));
 		} else if (msg->getSubtype() == api::input::InputSubscribeKeyEvent) {
 			_keyboardListener->setKeyFunction(static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->code, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->type, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->func);
 		}
@@ -176,7 +169,6 @@ namespace modules {
 
 	void InputManager::NewsDelete(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		if (msg->getSubtype() == api::input::InputSubscribeKeyEvent) {
 			_keyboardListener->removeKeyFunction(static_cast<api::input::Input_SubscribeKeyEvent_Delete *>(msg->getContent())->code, static_cast<api::input::Input_SubscribeKeyEvent_Delete *>(msg->getContent())->type);
 		}

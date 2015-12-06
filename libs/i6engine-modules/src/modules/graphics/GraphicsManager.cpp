@@ -67,7 +67,6 @@ namespace modules {
 
 	GraphicsManager::GraphicsManager(GraphicsController * ctrl, HWND hWnd) : _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-
 		try {
 			std::string ogrePath;
 			if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue<std::string>("GRAPHIC", "ogreConfigsPath", ogrePath)) {
@@ -100,6 +99,7 @@ namespace modules {
 				}
 				Ogre::NameValuePairList misc;
 				misc["externalWindowHandle"] = Ogre::StringConverter::toString((size_t) hWnd);
+				misc["parentWindowHandle"] = Ogre::StringConverter::toString((size_t) hWnd);
 				_rWindow = _objRoot->createRenderWindow(api::EngineController::GetSingletonPtr()->getAppl()->getName(), res.width, res.height, fullscreen, &misc);
 			} else {
 				_rWindow = _objRoot->initialise(true, api::EngineController::GetSingletonPtr()->getAppl()->getName());
@@ -280,7 +280,7 @@ namespace modules {
 		// Attention: The gui subsystem MUST be started after the renderer because it needs a valid window handle!
 		_guiController->OnThreadStart();
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_objRoot)), core::Subsystem::Graphic);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_rWindow)), core::Subsystem::Graphic);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -316,7 +316,7 @@ namespace modules {
 
 		delete _resourceManager;
 		if (_objRoot != nullptr) {
-			_objRoot->getAutoCreatedWindow()->destroy();
+			_rWindow->destroy();
 			_objRoot->shutdown();
 			delete _objRoot;
 		}

@@ -23,22 +23,21 @@
 namespace i6engine {
 namespace editor {
 
-	class ISIXE_EDITOR_API Editor : public i6engine::api::Application {
+	class Editor : public i6engine::api::Application {
 	public:
 		/**
 		 * \brief creates Editor with given window name
 		 */
-		Editor(const std::string & name);
+		Editor();
 
 		/**
 		 * \brief destructor
 		 */
 		virtual ~Editor();
 
-		/**
-		 * \brief starts the Editor, registering subsystems and starting engine
-		 */
-		void start();
+		api::GOPtr getCamera() const {
+			return _camera;
+		}
 
 	protected:
 		/**
@@ -66,21 +65,6 @@ namespace editor {
 		 * \brief called during each tick of the editor
 		 */
 		void Tick() override;
-
-		/**
-		 * \brief enters an submenu entry to the window titlebar with a callback function
-		 */
-		void registerMenu(const std::string & menu, const std::string & submenu, const boost::function<void(void)> & func);
-
-		/**
-		 * \brief opens file dialog for choosing a level to load
-		 */
-		void chooseLoadLevel();
-
-		/**
-		 * \brief opens file dialog for choosing a file to save
-		 */
-		void chooseSaveLevel();
 
 		/**
 		 * \brief loads given level file
@@ -157,12 +141,12 @@ namespace editor {
 		/**
 		 * \brief removes all entries from ObjectList and adds current list
 		 */
-		void updateObjectList();
+		virtual void updateObjectList() = 0;
 
 		/**
 		 * \brief called when an object from the object list is selected
 		 */
-		void selectObject(int64_t id);
+		virtual void selectObject(int64_t id) = 0;
 
 		void Forward();
 		void Backward();

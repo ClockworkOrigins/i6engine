@@ -17,7 +17,7 @@
 # CMake main configfile i6engine project
 #
 
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 2.8.12)
 
 #########################################################################
 #########################################################################
@@ -37,7 +37,7 @@ option(ISIXE_WITH_TOOLS "build some tools for i6engine" ON)
 option(ISIXE_WITH_RPG "build rpg module for i6engine" ON)
 option(ISIXE_WITH_DOCU "build documentation for i6engine" ON)
 option(ISIXE_WITH_TUTORIALS "build tutorials for i6engine" ON)
-OPTION(ISIXE_WITH_CONSOLE "build samples with console output (off affects only Windows build)" ON)
+OPTION(ISIXE_WITH_CONSOLE "build samples and tools with console output" ON)
 
 IF(NOT ISIXE_WITH_CONSOLE AND WIN32)
 	SET(GUI_TYPE WIN32)
@@ -334,11 +334,11 @@ IF(ISIXE_WITH_TOOLS)
 	FIND_PACKAGE(Qt5 REQUIRED Widgets Core Gui)
 	INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
 
-	IF(ISIXE_WITH_TESTING)
-		SET(QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
-	ELSE(ISIXE_WITH_TESTING)
-		SET(QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} Qt5::WinMain)
-	ENDIF(ISIXE_WITH_TESTING)
+	SET(QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
+
+	IF(ISIXE_WITH_CONSOLE AND WIN32)
+		SET(QT_LIBRARIES ${QT_LIBRARIES} Qt5::WinMain)
+	ENDIF(ISIXE_WITH_CONSOLE AND WIN32)
 ENDIF(ISIXE_WITH_TOOLS)
 
 ###############################################################################
@@ -515,6 +515,11 @@ ENDIF(UNIX)
 
 IF(WIN32)
 	file(GLOB_RECURSE files "${ISIXE_DEP_DIR}/*.dll")
+	foreach(filename ${files})
+		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin)
+	endforeach()
+
+	FILE(GLOB files "$ENV{Qt5_DIR}/bin/*.dll")
 	foreach(filename ${files})
 		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin)
 	endforeach()

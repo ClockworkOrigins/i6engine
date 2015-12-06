@@ -31,7 +31,6 @@
 
 namespace OGRE {
 	class RenderWindow;
-	class Root;
 } /* namespace OGRE */
 
 namespace OIS {
@@ -118,7 +117,7 @@ namespace modules {
 		/**
 		 * \brief initialized all internal input stuff
 		 */
-		void initializeInput(Ogre::Root * root);
+		void initializeInput(Ogre::RenderWindow * root);
 
 		/**
 		 * \brief handles create messages for Input Subsystem

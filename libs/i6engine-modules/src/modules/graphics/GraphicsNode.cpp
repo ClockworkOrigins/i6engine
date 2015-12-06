@@ -243,7 +243,7 @@ namespace modules {
 		Ogre::SceneNode * sn = _cameras[coid];
 		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(sn->getAttachedObject(0));
 		if (camera->getViewport() == nullptr) {
-			vp = _manager->getRoot()->getAutoCreatedWindow()->addViewport(camera, int(coid), float(left), float(top), float(width), float(height));
+			vp = _manager->getRenderWindow()->addViewport(camera, int(coid), float(left), float(top), float(width), float(height));
 		} else {
 			vp = camera->getViewport();
 
@@ -386,7 +386,7 @@ namespace modules {
 			}
 		}
 
-		_manager->getRoot()->getAutoCreatedWindow()->removeViewport(int(coid));		
+		_manager->getRenderWindow()->removeViewport(int(coid));		
 
 		sn->detachObject(camera);
 		sm->destroyCamera(camera);

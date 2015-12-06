@@ -45,7 +45,7 @@ namespace input {
 	/**
 	 * \brief notifies state of a key
 	 */
-	typedef struct Input_Keyboard_Update : GameMessageStruct {
+	typedef struct ISIXE_MODULES_API Input_Keyboard_Update : GameMessageStruct {
 		KeyState pressed;
 		KeyCode code;
 		uint32_t text;
@@ -57,7 +57,7 @@ namespace input {
 	/**
 	 * \brief updates mouse position
 	 */
-	typedef struct Input_Mouse_Update : GameMessageStruct {
+	typedef struct ISIXE_MODULES_API Input_Mouse_Update : GameMessageStruct{
 		int32_t intNewX;
 		int32_t intNewY;
 		Input_Mouse_Update() {}
@@ -68,7 +68,7 @@ namespace input {
 	/**
 	 * \brief mouse wheel
 	 */
-	typedef struct Input_MouseWheel_Update : GameMessageStruct {
+	typedef struct ISIXE_MODULES_API Input_MouseWheel_Update : GameMessageStruct {
 		int32_t diff;
 		Input_MouseWheel_Update() {
 		}

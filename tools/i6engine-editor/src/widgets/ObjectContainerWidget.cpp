@@ -1,0 +1,24 @@
+#include "i6engine/editor/widgets/ObjectContainerWidget.h"
+
+#include "i6engine/editor/widgets/ObjectInfoWidget.h"
+#include "i6engine/editor/widgets/ObjectListWidget.h"
+
+namespace i6engine {
+namespace editor {
+namespace widgets {
+
+	ObjectContainerWidget::ObjectContainerWidget(QWidget * par) : QWidget(par), objectListWidget(new ObjectListWidget(this, par)), objectInfoWidget(new ObjectInfoWidget(this)) {
+		setupUi(this);
+
+		gridLayout->addWidget(objectListWidget, 0, 0);
+		gridLayout->addWidget(objectInfoWidget, 1, 0);
+
+		connect(objectListWidget, SIGNAL(selectObject(int64_t)), objectInfoWidget, SLOT(doSelectObject(int64_t)));
+	}
+
+	ObjectContainerWidget::~ObjectContainerWidget() {
+	}
+
+} /* namespace widgets */
+} /* namespace editor */
+} /* namespace i6engine */

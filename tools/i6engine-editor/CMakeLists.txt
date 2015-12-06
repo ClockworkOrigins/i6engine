@@ -23,33 +23,56 @@ include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
 
 set(srcdir ./src)
+SET(includedir ./include/i6engine/editor)
 
 set(editorSrc
+	${srcdir}/main.cpp
+
 	${srcdir}/Editor.cpp
 	
-	${srcdir}/gui/FileDialogWidget.cpp
-	${srcdir}/gui/ListboxWidget.cpp
-	${srcdir}/gui/MenuBarWidget.cpp
 	${srcdir}/gui/MessageBoxWidget.cpp
-	${srcdir}/gui/ObjectInfoWidget.cpp
+	
+	${srcdir}/widgets/MainWindow.cpp
+	${srcdir}/widgets/ObjectContainerWidget.cpp
+	${srcdir}/widgets/ObjectInfoWidget.cpp
+	${srcdir}/widgets/ObjectListWidget.cpp
+	${srcdir}/widgets/RenderWidget.cpp
+	${srcdir}/widgets/TemplateListWidget.cpp
+)
+
+QT5_WRAP_UI(editorUI
+	gui/widgetObjectContainer.ui
+	gui/widgetObjectInfo.ui
+	gui/widgetObjectList.ui
+	gui/widgetRender.ui
+	gui/widgetTemplateList.ui
+	gui/wndMainWindow.ui
+)
+
+QT5_WRAP_CPP(editorGuiHeader
+	${includedir}/widgets/MainWindow.h
+	${includedir}/widgets/ObjectContainerWidget.h
+	${includedir}/widgets/ObjectInfoWidget.h
+	${includedir}/widgets/ObjectListWidget.h
+	${includedir}/widgets/RenderWidget.h
+	${includedir}/widgets/TemplateListWidget.h
 )
 
 source_group(components /components/*)
 source_group(gui /gui/*)
 source_group(misc /misc/*)
+source_group(widgets /widgets/*)
+SOURCE_GROUP(moc /moc_*)
 
-IF(ISIXE_BUILD_SHARED)
-	add_library(i6engine-editor SHARED ${editorSrc})
-ELSE(ISIXE_BUILD_SHARED)
-	add_library(i6engine-editor STATIC ${editorSrc})
-ENDIF(ISIXE_BUILD_SHARED)
+ADD_EXECUTABLE(i6engine-editor ${GUI_TYPE} ${editorSrc} ${editorUI} ${editorGuiHeader})
 
-target_link_libraries(i6engine-editor i6engine-modules)
+target_link_libraries(i6engine-editor i6engine-modules ${QT_LIBRARIES})
 
 IF(WIN32 AND ISIXE_BUILD_SHARED)
-	add_custom_command(TARGET i6engine-editor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-editor.dll ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET i6engine-editor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-editor.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32 AND ISIXE_BUILD_SHARED)
 
 install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX})
