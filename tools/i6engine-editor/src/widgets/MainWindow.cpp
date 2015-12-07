@@ -18,6 +18,8 @@
 #include "i6engine/modules/object/ObjectController.h"
 #include "i6engine/modules/physics/PhysicsController.h"
 
+#include "i6engine/editor/plugins/InitializationPluginInterface.h"
+
 #include "i6engine/editor/widgets/ObjectContainerWidget.h"
 #include "i6engine/editor/widgets/ObjectInfoWidget.h"
 #include "i6engine/editor/widgets/ObjectListWidget.h"
@@ -27,13 +29,15 @@
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QKeyEvent>
+#include <QMessageBox>
+#include <QPluginLoader>
 #include <QTimer>
 
 namespace i6engine {
 namespace editor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level() {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins() {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -49,6 +53,8 @@ namespace widgets {
 		gridLayout->setColumnStretch(0, 1);
 		gridLayout->setColumnStretch(1, 9);
 		gridLayout->setColumnStretch(2, 2);
+
+		loadPlugins();
 
 		api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new modules::GraphicsController(reinterpret_cast<HWND>(_renderWidget->winId())), { core::Subsystem::Object });
 		api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new modules::ObjectController(), LNG_OBJECT_FRAME_TIME);
@@ -95,6 +101,10 @@ namespace widgets {
 
 	void MainWindow::AfterInitialize() {
 		Editor::AfterInitialize();
+
+		for (plugins::InitializationPluginInterface * ipi : _initializationPlugins) {
+			ipi->initialize();
+		}
 
 		api::EngineController::GetSingleton().getGUIFacade()->setMouseVisibility(false);
 
@@ -187,6 +197,30 @@ namespace widgets {
 		}
 		}
 		return QWidget::eventFilter(obj, evt);
+	}
+
+	void MainWindow::loadPlugins() {
+		loadInitializationPlugins();
+	}
+
+	void MainWindow::loadInitializationPlugins() {
+		QDir pluginsDir = QDir(qApp->applicationDirPath());
+		pluginsDir.cd("plugins/editor/initialization");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_initializationPlugins.push_back(qobject_cast<plugins::InitializationPluginInterface *>(plugin));
+				std::cout << "Successfully loaded plugin " << fileName.toStdString() << std::endl;
+			} else {
+				QMessageBox box;
+				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setInformativeText(loader.errorString());
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+			}
+		}
+
 	}
 
 	api::KeyCode MainWindow::convertQtToEngine(int key) {

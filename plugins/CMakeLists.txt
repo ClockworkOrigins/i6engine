@@ -18,4 +18,7 @@
 # ParticleUniverse
 #####################################################################################
 
+IF(ISIXE_WITH_TOOLS AND ISIXE_WITH_EDITOR AND ISIXE_WITH_RPG)
+	ADD_SUBDIRECTORY(editorRPGInitialization)
+ENDIF()
 add_subdirectory(particleUniverse)

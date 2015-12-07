@@ -9,6 +9,11 @@
 
 namespace i6engine {
 namespace editor {
+namespace plugins {
+
+	class InitializationPluginInterface;
+
+} /* namespace plugins */
 namespace widgets {
 
 	class ObjectContainerWidget;
@@ -35,6 +40,7 @@ namespace widgets {
 		ObjectContainerWidget * _objectContainerWidget;
 		TemplateListWidget * _templateListWidget;
 		QString _level;
+		std::vector<plugins::InitializationPluginInterface *> _initializationPlugins;
 
 		std::string getBasePath() const override {
 			return "../media/maps";
@@ -55,6 +61,9 @@ namespace widgets {
 		void mousePressEvent(QMouseEvent * evt) override;
 		void mouseReleaseEvent(QMouseEvent * evt) override;
 		bool eventFilter(QObject * obj, QEvent * evt);
+
+		void loadPlugins();
+		void loadInitializationPlugins();
 
 		static api::KeyCode convertQtToEngine(int key);
 	};
