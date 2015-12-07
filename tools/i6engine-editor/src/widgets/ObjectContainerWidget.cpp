@@ -14,6 +14,7 @@ namespace widgets {
 		gridLayout->addWidget(objectInfoWidget, 1, 0);
 
 		connect(objectListWidget, SIGNAL(selectObject(int64_t)), objectInfoWidget, SLOT(doSelectObject(int64_t)));
+		connect(objectInfoWidget, SIGNAL(updateObjectList()), objectListWidget, SLOT(doUpdateObjectList()));
 	}
 
 	ObjectContainerWidget::~ObjectContainerWidget() {

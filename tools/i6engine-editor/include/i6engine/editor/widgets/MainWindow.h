@@ -3,6 +3,8 @@
 
 #include "ui_wndMainWindow.h"
 
+#include "i6engine/api/facades/InputFacade.h"
+
 #include "i6engine/editor/Editor.h"
 
 namespace i6engine {
@@ -45,6 +47,7 @@ namespace widgets {
 		void AfterInitialize() override;
 		void Finalize() override;
 		void selectObject(int64_t id) override;
+		void removeObject() override;
 		void closeEvent(QCloseEvent * evt) override;
 		void keyPressEvent(QKeyEvent * evt) override;
 		void keyReleaseEvent(QKeyEvent * evt) override;
@@ -52,6 +55,8 @@ namespace widgets {
 		void mousePressEvent(QMouseEvent * evt) override;
 		void mouseReleaseEvent(QMouseEvent * evt) override;
 		bool eventFilter(QObject * obj, QEvent * evt);
+
+		static api::KeyCode convertQtToEngine(int key);
 	};
 
 } /* namespace widgets */

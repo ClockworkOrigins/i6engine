@@ -33,8 +33,6 @@ set(editorSrc
 
 	${srcdir}/Editor.cpp
 	
-	${srcdir}/gui/MessageBoxWidget.cpp
-	
 	${srcdir}/widgets/MainWindow.cpp
 	${srcdir}/widgets/ObjectContainerWidget.cpp
 	${srcdir}/widgets/ObjectInfoWidget.cpp

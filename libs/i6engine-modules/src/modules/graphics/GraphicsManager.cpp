@@ -344,7 +344,6 @@ namespace modules {
 
 			// Get results
 			for (itr = result.begin(); itr != result.end(); itr++) {
-				//std::cout << "Object: " << itr->movable->getParentSceneNode()->getName() << std::endl;
 				auto split = utils::split(itr->movable->getParentSceneNode()->getName(), "_");
 				if (split.front() == "unnamed" || split.front() == "debug") {
 					if (itr->worldFragment) {

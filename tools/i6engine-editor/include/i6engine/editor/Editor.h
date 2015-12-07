@@ -148,6 +148,8 @@ namespace editor {
 		 */
 		virtual void selectObject(int64_t id) = 0;
 
+		virtual void removeObject() = 0;
+
 		void Forward();
 		void Backward();
 		void Left();

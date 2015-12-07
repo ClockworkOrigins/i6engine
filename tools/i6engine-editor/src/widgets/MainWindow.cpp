@@ -11,7 +11,6 @@
 #include "i6engine/api/GameMessage.h"
 #include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/GUIFacade.h"
-#include "i6engine/api/facades/InputFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
 #include "i6engine/modules/audio/AudioController.h"
@@ -118,6 +117,10 @@ namespace widgets {
 		emit _objectContainerWidget->objectInfoWidget->selectObject(id);
 	}
 
+	void MainWindow::removeObject() {
+		emit _objectContainerWidget->objectInfoWidget->removeObject();
+	}
+
 	void MainWindow::closeEvent(QCloseEvent * evt) {
 		closeEditor();
 		evt->ignore();
@@ -125,7 +128,7 @@ namespace widgets {
 
 	void MainWindow::keyPressEvent(QKeyEvent * evt) {
 		if (_renderWidget->isActiveWindow()) {
-			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, api::KeyCode(evt->nativeScanCode()), evt->text().toUInt()), core::Subsystem::Input));
+			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, convertQtToEngine(evt->key()), evt->text().toUInt()), core::Subsystem::Input));
 			evt->accept();
 		}
 		evt->ignore();
@@ -133,7 +136,7 @@ namespace widgets {
 
 	void MainWindow::keyReleaseEvent(QKeyEvent * evt) {
 		if (_renderWidget->isActiveWindow()) {
-			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, api::KeyCode(evt->nativeScanCode()), evt->text().toUInt()), core::Subsystem::Input));
+			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, convertQtToEngine(evt->key()), evt->text().toUInt()), core::Subsystem::Input));
 			evt->accept();
 		}
 		evt->ignore();
@@ -145,37 +148,31 @@ namespace widgets {
 	}
 
 	void MainWindow::mousePressEvent(QMouseEvent * evt) {
-		if (_renderWidget->isActiveWindow()) {
-			Qt::MouseButton button = evt->button();
-			api::KeyCode kc = api::KeyCode::MOUSEBUTTONS;
-			if (button == Qt::MouseButton::LeftButton) {
-				kc = api::KeyCode::KC_MBLeft;
-			} else if (button == Qt::MouseButton::MiddleButton) {
-				kc = api::KeyCode::KC_MBMiddle;
-			} else if (button == Qt::MouseButton::RightButton) {
-				kc = api::KeyCode::KC_MBRight;
-			}
-			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, kc, 0), core::Subsystem::Input));
-			evt->accept();
+		Qt::MouseButton button = evt->button();
+		api::KeyCode kc = api::KeyCode::MOUSEBUTTONS;
+		if (button == Qt::MouseButton::LeftButton) {
+			kc = api::KeyCode::KC_MBLeft;
+		} else if (button == Qt::MouseButton::MiddleButton) {
+			kc = api::KeyCode::KC_MBMiddle;
+		} else if (button == Qt::MouseButton::RightButton) {
+			kc = api::KeyCode::KC_MBRight;
 		}
-		evt->ignore();
+		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, kc, 0), core::Subsystem::Input));
+		evt->accept();
 	}
 
 	void MainWindow::mouseReleaseEvent(QMouseEvent * evt) {
-		if (_renderWidget->isActiveWindow()) {
-			Qt::MouseButton button = evt->button();
-			api::KeyCode kc = api::KeyCode::MOUSEBUTTONS;
-			if (button == Qt::MouseButton::LeftButton) {
-				kc = api::KeyCode::KC_MBLeft;
-			} else if (button == Qt::MouseButton::MiddleButton) {
-				kc = api::KeyCode::KC_MBMiddle;
-			} else if (button == Qt::MouseButton::RightButton) {
-				kc = api::KeyCode::KC_MBRight;
-			}
-			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, kc, 0), core::Subsystem::Input));
-			evt->accept();
+		Qt::MouseButton button = evt->button();
+		api::KeyCode kc = api::KeyCode::MOUSEBUTTONS;
+		if (button == Qt::MouseButton::LeftButton) {
+			kc = api::KeyCode::KC_MBLeft;
+		} else if (button == Qt::MouseButton::MiddleButton) {
+			kc = api::KeyCode::KC_MBMiddle;
+		} else if (button == Qt::MouseButton::RightButton) {
+			kc = api::KeyCode::KC_MBRight;
 		}
-		evt->ignore();
+		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, kc, 0), core::Subsystem::Input));
+		evt->accept();
 	}
 
 	bool MainWindow::eventFilter(QObject * obj, QEvent * evt) {
@@ -190,6 +187,109 @@ namespace widgets {
 		}
 		}
 		return QWidget::eventFilter(obj, evt);
+	}
+
+	api::KeyCode MainWindow::convertQtToEngine(int key) {
+		api::KeyCode kc = api::KeyCode::KC_ESCAPE;
+		switch (key) {
+		case Qt::Key::Key_W: {
+			kc = api::KeyCode::KC_W;
+			break;
+		}
+		case Qt::Key::Key_S: {
+			kc = api::KeyCode::KC_S;
+			break;
+		}
+		case Qt::Key::Key_A: {
+			kc = api::KeyCode::KC_A;
+			break;
+		}
+		case Qt::Key::Key_D: {
+			kc = api::KeyCode::KC_D;
+			break;
+		}
+		case Qt::Key::Key_Control: {
+			kc = api::KeyCode::KC_LCONTROL;
+			break;
+		}
+		case Qt::Key::Key_Space: {
+			kc = api::KeyCode::KC_SPACE;
+			break;
+		}
+		case Qt::Key::Key_Delete: {
+			kc = api::KeyCode::KC_DELETE;
+			break;
+		}
+		case Qt::Key::Key_Insert: {
+			kc = api::KeyCode::KC_INSERT;
+			break;
+		}
+		case Qt::Key::Key_Home: {
+			kc = api::KeyCode::KC_HOME;
+			break;
+		}
+		case Qt::Key::Key_End: {
+			kc = api::KeyCode::KC_END;
+			break;
+		}
+		case Qt::Key::Key_PageUp: {
+			kc = api::KeyCode::KC_PGUP;
+			break;
+		}
+		case Qt::Key::Key_PageDown: {
+			kc = api::KeyCode::KC_PGDOWN;
+			break;
+		}
+		case Qt::Key::Key_Plus: {
+			kc = api::KeyCode::KC_ADD;
+			break;
+		}
+		case Qt::Key::Key_Minus: {
+			kc = api::KeyCode::KC_SUBTRACT;
+			break;
+		}
+		case Qt::Key::Key_1: {
+			kc = api::KeyCode::KC_NUMPAD1;
+			break;
+		}
+		case Qt::Key::Key_2: {
+			kc = api::KeyCode::KC_NUMPAD2;
+			break;
+		}
+		case Qt::Key::Key_4: {
+			kc = api::KeyCode::KC_NUMPAD4;
+			break;
+		}
+		case Qt::Key::Key_5: {
+			kc = api::KeyCode::KC_NUMPAD5;
+			break;
+		}
+		case Qt::Key::Key_7: {
+			kc = api::KeyCode::KC_NUMPAD7;
+			break;
+		}
+		case Qt::Key::Key_8: {
+			kc = api::KeyCode::KC_NUMPAD8;
+			break;
+		}
+		case Qt::Key::Key_F3: {
+			kc = api::KeyCode::KC_F3;
+			break;
+		}
+		case Qt::Key::Key_M: {
+			kc = api::KeyCode::KC_M;
+			break;
+		}
+		case Qt::Key::Key_F4: {
+			kc = api::KeyCode::KC_F4;
+			break;
+		}
+		default: {
+			kc = api::KeyCode::KC_ESCAPE;
+			break;
+		}
+		}
+		return kc;
 	}
 
 } /* namespace widgets */

@@ -50,7 +50,6 @@
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/editor/EditorMessageTypes.h"
-#include "i6engine/editor/gui/MessageBoxWidget.h"
 
 #include "boost/functional/factory.hpp"
 
@@ -91,9 +90,6 @@ namespace editor {
 
 	void Editor::AfterInitialize() {
 		api::GUIFacade * gf = api::EngineController::GetSingletonPtr()->getGUIFacade();
-
-		// register GUIWidgets
-		gf->registerWidgetTemplate("MessageBox", boost::factory<gui::MessageBoxWidget *>());
 
 		// initialize GUI
 		gf->startGUI("Editor.scheme", "", "", "Editor", "MouseArrow");
@@ -296,38 +292,10 @@ namespace editor {
 					}
 				} else if (key == "removeObject") {
 					if (iku->pressed == api::KeyState::KEY_PRESSED) {
-						if (_selectedObjectID != -1) {
-							api::EngineController::GetSingleton().getGUIFacade()->createWidget("RemoveObjectMessageBox", "MessageBox", "");
-							api::EngineController::GetSingleton().getGUIFacade()->setPosition("RemoveObjectMessageBox", 0.3, 0.35);
-							api::EngineController::GetSingleton().getGUIFacade()->setSize("RemoveObjectMessageBox", 0.4, 0.3);
-							api::EngineController::GetSingleton().getGUIFacade()->setText("RemoveObjectMessageBox", "Really delete object?");
-							api::EngineController::GetSingleton().getGUIFacade()->subscribeEvent("RemoveObjectMessageBoxYes", "Clicked", [this]() {
-								bool waypoint = false;
-								{
-									auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
-									waypoint = go->getType() == "Waypoint";
-									selectObject(-1);
-									go->setDie();
-								}
-								std::this_thread::sleep_for(std::chrono::milliseconds(100));
-								if (waypoint) {
-									api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
-								}
-								updateObjectList();
-								api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
-								_removeBox = false;
-							});
-							api::EngineController::GetSingleton().getGUIFacade()->subscribeEvent("RemoveObjectMessageBoxNo", "Clicked", [this]() {
-								api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
-								_removeBox = false;
-							});
-
-							_removeBox = true;
-						}
+						removeObject();
 					}
 				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBLeft && !api::EngineController::GetSingleton().getGUIFacade()->getOnWindow()) {
 					auto targetList = api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
-
 					for (auto & p : targetList) {
 						auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(p.first);
 						if (go != nullptr && go->getType() != "EditorCam") {
@@ -361,10 +329,6 @@ namespace editor {
 					}
 				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBRight) {
 					selectObject(-1);
-					if (_removeBox) {
-						api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("RemoveObjectMessageBox");
-						_removeBox = false;
-					}
 				}
 			}
 		} else if (msg->getSubtype() == api::mouse::MouMouse) {

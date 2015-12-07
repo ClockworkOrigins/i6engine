@@ -1,16 +1,20 @@
 #include "i6engine/editor/widgets/ObjectInfoWidget.h"
 
+#include <thread>
+
 #include "i6engine/utils/i6eString.h"
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/components/MeshAppearanceComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/manager/WaynetManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
+#include <QMessageBox>
 #include <QPushButton>
 
 namespace i6engine {
@@ -21,6 +25,7 @@ namespace widgets {
 		setupUi(this);
 
 		connect(this, SIGNAL(selectObject(int64_t)), this, SLOT(doSelectObject(int64_t)));
+		connect(this, SIGNAL(removeObject()), this, SLOT(doRemoveObject()));
 
 		hide();
 	}
@@ -116,6 +121,29 @@ namespace widgets {
 			hide();
 		} else {
 			show();
+		}
+	}
+
+	void ObjectInfoWidget::doRemoveObject() {
+		if (_selectedObjectID != -1) {
+			QMessageBox box;
+			box.setText(QString("Really delete object?"));
+			box.setStandardButtons(QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No);
+			if (box.exec() == QMessageBox::StandardButton::Yes) {
+				bool waypoint = false;
+				{
+					// Daniel: scope to remove reference to sharedPtr before waiting!
+					auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+					waypoint = go->getType() == "Waypoint";
+					emit selectObject(-1);
+					go->setDie();
+				}
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				if (waypoint) {
+					api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+				}
+				emit updateObjectList();
+			}
 		}
 	}
 

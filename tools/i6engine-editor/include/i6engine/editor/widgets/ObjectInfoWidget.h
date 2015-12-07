@@ -27,9 +27,12 @@ namespace widgets {
 
 	signals:
 		void selectObject(int64_t id);
+		void removeObject();
+		void updateObjectList();
 
 	private slots:
 		void doSelectObject(int64_t id);
+		void doRemoveObject();
 		void applyChanges();
 
 	private:
