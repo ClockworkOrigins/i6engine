@@ -63,6 +63,8 @@ namespace sample {
 			}
 			_showFPS = !_showFPS;
 		});
+
+		loadLevel("../media/maps/RPGLevel.xml");
 	}
 
 } /* namespace sample */

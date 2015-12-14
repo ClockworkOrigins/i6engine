@@ -49,6 +49,8 @@ namespace rpg {
 		 */
 		virtual void AfterInitialize();
 
+		void loadLevel(const std::string & level) const;
+
 		virtual void Tick();
 
 		virtual bool ShutdownRequest();

@@ -152,14 +152,6 @@ namespace rpg {
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));
 		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&i6engine::rpg::components::WeightInventoryComponent::createC, _1, _2));
 
-		// loads the RPG demo level
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/RPGLevel.xml", "Singleplayer");
-
-		// call Startup in script
-#if ISIXE_SCRIPTING != SCRIPTING_NONE
-		i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>("Startup");
-#endif
-
 		// register keys
 		uint16_t key;
 		// action key, default: E
@@ -216,6 +208,16 @@ namespace rpg {
 		bool dialogNumbers;
 		_iniParser.getValue("GAME", "dialogNumbers", dialogNumbers);
 		dialog::DialogManager::GetSingleton().setDialogNumbersEnabled(dialogNumbers);
+	}
+
+	void RPGApplication::loadLevel(const std::string & level) const {
+		// loads the RPG demo level
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(level, "Singleplayer");
+
+		// call Startup in script
+#if ISIXE_SCRIPTING != SCRIPTING_NONE
+		i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>("Startup");
+#endif
 	}
 
 	void RPGApplication::Tick() {
