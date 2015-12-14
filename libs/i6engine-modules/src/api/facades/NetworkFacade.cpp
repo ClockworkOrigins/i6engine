@@ -77,35 +77,35 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void NetworkFacade::subscribe(uint32_t channel) {
+	void NetworkFacade::subscribe(uint16_t channel) {
 		if (_subscribeInit && _connected) {
 			_subscribe(channel);
 		}
 	}
 
-	void NetworkFacade::unsubscribe(uint32_t channel) {
+	void NetworkFacade::unsubscribe(uint16_t channel) {
 		if (_unsubscribeInit && _connected) {
 			_unsubscribe(channel);
 		}
 	}
 
-	void NetworkFacade::publish(uint32_t channel, const GameMessage::Ptr & msg) {
+	void NetworkFacade::publish(uint16_t channel, const GameMessage::Ptr & msg) {
 		if (_publishInit && _connected) {
 			_publish(channel, msg);
 		}
 	}
 
-	void NetworkFacade::registerSubscribeCallback(const boost::function<void(uint32_t)> & f) {
+	void NetworkFacade::registerSubscribeCallback(const boost::function<void(uint16_t)> & f) {
 		_subscribe = f;
 		_subscribeInit = true;
 	}
 
-	void NetworkFacade::registerUnsubscribeCallback(const boost::function<void(uint32_t)> & f) {
+	void NetworkFacade::registerUnsubscribeCallback(const boost::function<void(uint16_t)> & f) {
 		_unsubscribe = f;
 		_unsubscribeInit = true;
 	}
 
-	void NetworkFacade::registerPublishCallback(const boost::function<void(uint32_t, const GameMessage::Ptr &)> & f) {
+	void NetworkFacade::registerPublishCallback(const boost::function<void(uint16_t, const GameMessage::Ptr &)> & f) {
 		_publish = f;
 		_publishInit = true;
 	}

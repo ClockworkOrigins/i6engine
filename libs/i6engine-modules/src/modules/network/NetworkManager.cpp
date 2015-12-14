@@ -58,7 +58,7 @@ namespace modules {
 		}
 	}
 
-	void NetworkManager::subscribe(uint32_t channel) {
+	void NetworkManager::subscribe(uint16_t channel) {
 		boost::mutex::scoped_lock sl(_pubSubLock);
 		if (_pubsub == nullptr) {
 			ISIXE_THROW_FAILURE("NetworkManager", "Tried to subscribe without having connected before");
@@ -70,7 +70,7 @@ namespace modules {
 		_usedChannels[channel]++;
 	}
 
-	void NetworkManager::unsubscribe(uint32_t channel) {
+	void NetworkManager::unsubscribe(uint16_t channel) {
 		boost::mutex::scoped_lock sl(_pubSubLock);
 		if (_pubsub == nullptr) {
 			ISIXE_THROW_FAILURE("NetworkManager", "Tried to unsubscribe without having connected before");
@@ -85,7 +85,7 @@ namespace modules {
 		}
 	}
 
-	void NetworkManager::publish(uint32_t channel, const api::GameMessage::Ptr & msg) {
+	void NetworkManager::publish(uint16_t channel, const api::GameMessage::Ptr & msg) {
 		boost::mutex::scoped_lock sl(_pubSubLock);
 		if (_pubsub == nullptr) {
 			ISIXE_LOG_WARN("NetworkManager", "Tried to publish without having connected before");
