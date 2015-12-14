@@ -2,7 +2,7 @@
 Set ROOT_DIR=%3
 Set COPY_DIR=%4
 
-call "%ROOT_DIR%\build-common.bat" %1 %2
+call build-common.bat %1 %2
 
 SET DEP_DIR=%cd%
 Set ARCHIVE=m2etis-0.3-rev26.zip
