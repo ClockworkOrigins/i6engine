@@ -19,37 +19,28 @@ You can find a copy of the Commercial License in the Particle Universe package.
 #include "wx/ogre/utils.h"
 #include "wx/propgrid/advprops.h"
 
-/*ParentPropertyTimeAndColour::ParentPropertyTimeAndColour(
-	const wxString& label,
-	const wxString& name) :
-	wxStringProperty(label, name),
-	mTimeAndColour(0)
-{
+ParentPropertyTimeAndColour::ParentPropertyTimeAndColour(const wxString & label, const wxString & name) : wxStringProperty(label, name), mTimeAndColour(0) {
 }
-//-----------------------------------------------------------------------
-bool ParentPropertyTimeAndColour::OnEvent (wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event)
-{
-	if (event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED)
-	{
-		// Show dialog
-		AffectorPropertyWindow* affectorPropertyWindow	= static_cast<AffectorPropertyWindow*>(propgrid);
-		if (!affectorPropertyWindow)
-			return true;
 
-		ParticleUniverse::ColourAffector* affector = static_cast<ParticleUniverse::ColourAffector*>(affectorPropertyWindow->getOwner()->getPUElement());
-		if (!affector)
+bool ParentPropertyTimeAndColour::OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_primary, wxEvent & event) {
+	if (event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED) {
+		// Show dialog
+		AffectorPropertyWindow * affectorPropertyWindow	= static_cast<AffectorPropertyWindow *>(propgrid);
+		if (!affectorPropertyWindow) {
 			return true;
+		}
+
+		ParticleUniverse::ColourAffector * affector = static_cast<ParticleUniverse::ColourAffector *>(affectorPropertyWindow->getOwner()->getPUElement());
+		if (!affector) {
+			return true;
+		}
 
 		ParticleUniverse::ColourAffector::ColourMap map = affector->getTimeAndColour();
 		ColourAffectorDialog dlg(map, propgrid, wxID_ANY, wxT("Colour Affector"), wxDefaultPosition, wxSize(580, 220));
-		if (dlg.ShowModal() == wxID_OK)
-		{
+		if (dlg.ShowModal() == wxID_OK) {
 			affector->clearColourMap();
-			ParticleUniverse::ColourAffector::ColourMap& map2 = dlg.getColourMap();
-			ParticleUniverse::ColourAffector::ColourMap::iterator it;
-			ParticleUniverse::ColourAffector::ColourMap::iterator itEnd = map2.end();
-			for (it = map2.begin(); it != itEnd; ++it)
-			{
+			ParticleUniverse::ColourAffector::ColourMap & map2 = dlg.getColourMap();
+			for (ParticleUniverse::ColourAffector::ColourMap::iterator it = map2.begin(); it != map2.end(); ++it) {
 				// Add to affector
 				affector->addColour(it->first, it->second);
 			}
@@ -58,87 +49,69 @@ bool ParentPropertyTimeAndColour::OnEvent (wxPropertyGrid* propgrid, wxWindow* w
 
 	return true;
 }
-//-----------------------------------------------------------------------
-int ParentPropertyTimeAndColour::getNumberOfTimeAndColourEntries(void)
-{
+
+int ParentPropertyTimeAndColour::getNumberOfTimeAndColourEntries() {
 	return int(mTimeAndColour);
 }
-//-----------------------------------------------------------------------
-void ParentPropertyTimeAndColour::reset(void)
-{
+
+void ParentPropertyTimeAndColour::reset() {
 	mTimeAndColour = 0;
 	this->Empty();
-}*/
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-ColourAffectorPropertyWindow::ColourAffectorPropertyWindow(wxWindow* parent, EditComponent* owner, const Ogre::String& name) :
-	AffectorPropertyWindow(parent, owner, name)
-{
+}
+
+ColourAffectorPropertyWindow::ColourAffectorPropertyWindow(wxWindow * parent, EditComponent * owner, const Ogre::String & name) : AffectorPropertyWindow(parent, owner, name) {
 	_initProperties();
 }
-//-----------------------------------------------------------------------
-ColourAffectorPropertyWindow::ColourAffectorPropertyWindow(AffectorPropertyWindow* affectorPropertyWindow) :
-	AffectorPropertyWindow(affectorPropertyWindow)
-{
+
+ColourAffectorPropertyWindow::ColourAffectorPropertyWindow(AffectorPropertyWindow * affectorPropertyWindow) : AffectorPropertyWindow(affectorPropertyWindow) {
 	_initProperties();
 }
-//-----------------------------------------------------------------------
-ColourAffectorPropertyWindow::ColourAffectorPropertyWindow(wxWindow* parent, EditComponent* owner, ParticleUniverse::ColourAffector* affector) :
-	AffectorPropertyWindow(parent, owner, affector->getName())
-{
+
+ColourAffectorPropertyWindow::ColourAffectorPropertyWindow(wxWindow * parent, EditComponent * owner, ParticleUniverse::ColourAffector * affector) : AffectorPropertyWindow(parent, owner, affector->getName()) {
 	copyAttributesFromAffector(affector);
 }
-//-----------------------------------------------------------------------
-void ColourAffectorPropertyWindow::copyAttributeToAffector(wxPGProperty* prop, wxString propertyName)
-{
-	if (!prop)
-		return;
 
-	ParticleUniverse::ColourAffector* affector = static_cast<ParticleUniverse::ColourAffector*>(mOwner->getPUElement());
-	if (!affector)
+void ColourAffectorPropertyWindow::copyAttributeToAffector(wxPGProperty * prop, wxString propertyName) {
+	if (!prop) {
 		return;
+	}
 
-	if (propertyName == PRNL_COLOUR_OPERATION)
-	{
+	ParticleUniverse::ColourAffector * affector = static_cast<ParticleUniverse::ColourAffector *>(mOwner->getPUElement());
+	if (!affector) {
+		return;
+	}
+
+	if (propertyName == PRNL_COLOUR_OPERATION) {
 		// Colour Operation: List of types
 		wxString operation = prop->GetValueAsString();
-		if (operation == COP_SET)
-		{
+		if (operation == COP_SET) {
 			affector->setColourOperation(ParticleUniverse::ColourAffector::CAO_SET);
-		}
-		else if (operation == COP_MULTIPLY)
-		{
+		} else if (operation == COP_MULTIPLY) {
 			affector->setColourOperation(ParticleUniverse::ColourAffector::CAO_MULTIPLY);
 		}
-	}
-	else
-	{
+	} else {
 		// Update affector with another attribute
 		AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
 	}
 }
-//-----------------------------------------------------------------------
-void ColourAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector* affector)
-{
+
+void ColourAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
 	AffectorPropertyWindow::copyAttributesFromAffector(affector);
 
 	// Copy properties from affector to property window
-	ParticleUniverse::ColourAffector* colourAffector = static_cast<ParticleUniverse::ColourAffector*>(affector);
+	ParticleUniverse::ColourAffector * colourAffector = static_cast<ParticleUniverse::ColourAffector *>(affector);
 
 	// Colour Operation: List of types
-	wxPGProperty* propTo = GetProperty(PRNL_COLOUR_OPERATION);
+	wxPGProperty * propTo = GetProperty(PRNL_COLOUR_OPERATION);
 	ParticleUniverse::ColourAffector::ColourOperation colourOperation = colourAffector->getColourOperation();
 	wxString colourOperationString = COP_SET;
-	if (colourOperation == ParticleUniverse::ColourAffector::CAO_MULTIPLY)
-	{
+	if (colourOperation == ParticleUniverse::ColourAffector::CAO_MULTIPLY) {
 		colourOperationString = COP_MULTIPLY;
 	}
 	propTo->SetValueFromString(colourOperationString);
 }
-//-----------------------------------------------------------------------
-void ColourAffectorPropertyWindow::_initProperties(void)
-{
+
+void ColourAffectorPropertyWindow::_initProperties() {
 	// Set the (internationalized) property names
 	PRNL_TIME_AND_COLOUR = _("Time and Colour");
 	PRNL_TIME_AND_COLOUR_PARENT = _("Time/Colour");
@@ -151,8 +124,8 @@ void ColourAffectorPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("AffectorColour.html");
 
 	// Time and Colour: List
-//	wxPGProperty * pid = Append(new ParentPropertyTimeAndColour(PRNL_TIME_AND_COLOUR, PRNL_TIME_AND_COLOUR));
-//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+	wxPGProperty * pid = Append(new ParentPropertyTimeAndColour(PRNL_TIME_AND_COLOUR, PRNL_TIME_AND_COLOUR));
+	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Colour Operation: List of types
 	mColourOperation.Add(COP_SET);

@@ -59,18 +59,16 @@ void SystemPropertyWindow::copyAttributesFromSystem(const ParticleUniverse::Part
 
 	// Lod distances: List of ParticleUniverse::Real
 	wxPGProperty * prop = GetPropertyByName(PRNL_SYSTEM_LOD_DISTANCES);
-/*	if (prop) TODO
-	{
-		ParentPropertyWithButtonAndFloats* propLodDistances = static_cast<ParentPropertyWithButtonAndFloats*>(prop);
+	if (prop) {
+		ParentPropertyWithButtonAndFloats * propLodDistances = static_cast<ParentPropertyWithButtonAndFloats *>(prop);
 		propLodDistances->reset();
 		ParticleUniverse::ParticleSystem::LodDistanceList list = system->getLodDistances();
 		ParticleUniverse::ParticleSystem::LodDistanceIterator it;
 		ParticleUniverse::ParticleSystem::LodDistanceIterator itEnd = list.end();
-		for (it = list.begin(); it != itEnd; ++it)
-		{
+		for (it = list.begin(); it != itEnd; ++it) {
 			propLodDistances->addFloat(this, Ogre::Math::Sqrt(*it));
 		}
-	}*/
+	}
 
 	// Smooth lod: bool
 	doSetBool(PRNL_SYSTEM_SMOOTH_LOD, system->isSmoothLod());
@@ -147,7 +145,7 @@ void SystemPropertyWindow::copyAttributeToSystem(wxPGProperty * prop, wxString p
 	} else if (propertyName == PRNL_SYSTEM_LOD_DISTANCES || propertyName.StartsWith(PRNL_FLOAT)) {
 		// Lod distances: List of ParticleUniverse::Real
 		// Todo: Checking on PRNL_FLOAT only is not sufficient if more lists of floats are added to this propertygrid.
-/*	TODO	ParentPropertyWithButtonAndFloats * parentPropertyWithButtonAndFloats = nullptr;
+		ParentPropertyWithButtonAndFloats * parentPropertyWithButtonAndFloats = nullptr;
 		if (propertyName == PRNL_SYSTEM_LOD_DISTANCES) {
 			parentPropertyWithButtonAndFloats = static_cast<ParentPropertyWithButtonAndFloats*>(prop);
 		}
@@ -162,7 +160,7 @@ void SystemPropertyWindow::copyAttributeToSystem(wxPGProperty * prop, wxString p
 		{
 			ParticleUniverse::Real f = parentPropertyWithButtonAndFloats->getFloat(this, i);
 			system->addLodDistance(f);
-		}*/
+		}
 	} else if (propertyName == PRNL_SYSTEM_SMOOTH_LOD) {
 		// Smooth lod: bool
 		system->setSmoothLod(prop->DoGetValue().GetBool());
@@ -252,14 +250,14 @@ void SystemPropertyWindow::_initProperties() {
 	SetPropertyEditor(PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, wxPG_EDITOR(SpinCtrl));
 
 	// Lod distances: List of ParticleUniverse::Real
-//	wxPGProperty * pid = Append(new ParentPropertyWithButtonAndFloats(PRNL_SYSTEM_LOD_DISTANCES, PRNL_SYSTEM_LOD_DISTANCES));
-//	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
+	wxPGProperty * pid = Append(new ParentPropertyWithButtonAndFloats(PRNL_SYSTEM_LOD_DISTANCES, PRNL_SYSTEM_LOD_DISTANCES));
+	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Smooth lod: bool
 	Append(new wxBoolProperty(PRNL_SYSTEM_SMOOTH_LOD, PRNL_SYSTEM_SMOOTH_LOD, ParticleUniverse::ParticleSystem::DEFAULT_SMOOTH_LOD));
 
 	// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
-	wxPGProperty * pid = Append(new wxStringProperty(PRNL_SYSTEM_FAST_FORWARD, PRNL_SYSTEM_FAST_FORWARD));
+	pid = Append(new wxStringProperty(PRNL_SYSTEM_FAST_FORWARD, PRNL_SYSTEM_FAST_FORWARD));
 	AppendIn(pid, new wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_TIME, PRNL_SYSTEM_FAST_FORWARD_TIME, ParticleUniverse::ParticleSystem::DEFAULT_FAST_FORWARD_TIME));
 	AppendIn(pid, new wxFloatProperty(PRNL_SYSTEM_FAST_FORWARD_INTERVAL, PRNL_SYSTEM_FAST_FORWARD_INTERVAL, 0.0f));
 	SetPropertyEditor(PRNL_SYSTEM_FAST_FORWARD + wxT(".") + PRNL_SYSTEM_FAST_FORWARD_TIME, wxPG_EDITOR(SpinCtrl));

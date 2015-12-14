@@ -269,6 +269,70 @@ public:
 	virtual bool OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_primary, wxEvent & event);
 };
 
+/**	Class that creates a button property. After clicking, new vector3 entries are added
+ */
+class ParentPropertyWithButtonAndPositions : public wxStringProperty {
+public:
+	ParentPropertyWithButtonAndPositions(const wxString & label, const wxString & name);
+	virtual ~ParentPropertyWithButtonAndPositions() {
+	}
+
+	/**
+	 */
+	virtual bool OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_primary, wxEvent & event);
+
+	/**	Add the position
+	 */
+	wxPGProperty * addPosition(wxPropertyGrid * propgrid, Ogre::Vector3 vec3 = Ogre::Vector3::ZERO);
+
+	/**	Returns the number of positions
+	 */
+	unsigned int getNumberOfPositions();
+
+	/**	Returns the position of index
+	 */
+	const Ogre::Vector3 & getPosition(wxPropertyGrid * propgrid, unsigned int index, Ogre::Vector3 & vector);
+
+	/**	Removes all the child properties
+	 */
+	void reset();
+
+protected:
+	unsigned int mPosition;
+};
+
+/**	Class that creates a button property. After clicking, new float entries are added
+ */
+class ParentPropertyWithButtonAndFloats : public wxStringProperty {
+public:
+	ParentPropertyWithButtonAndFloats(const wxString & label, const wxString & name);
+	virtual ~ParentPropertyWithButtonAndFloats() {
+	}
+
+	/**
+	 */
+	virtual bool OnEvent(wxPropertyGrid * propgrid, wxWindow * wnd_primary, wxEvent & event);
+
+	/**	Add a float
+	 */
+	wxPGProperty * addFloat(wxPropertyGrid * propgrid, float value = 0.0f);
+
+	/**	Get number of floats
+	 */
+	unsigned int getNumberOfFloats();
+
+	/**	Returns a float by index
+	 */
+	ParticleUniverse::Real getFloat(wxPropertyGrid * propgrid, unsigned int index);
+
+	/**	Removes all the child properties
+	 */
+	void reset();
+
+protected:
+	unsigned int mFloat;
+};
+
 /**
 */
 class PropertyWindow : public wxPropertyGrid {
