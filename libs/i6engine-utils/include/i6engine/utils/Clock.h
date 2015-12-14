@@ -40,6 +40,7 @@ namespace utils {
 		 * \brief default constructor
 		 */
 		Clock() : Updater(boost::bind(&Clock::Update, this)), _timer(), _lock(), _systemTime(0), _running(true) {
+			Updater::Init();
 		}
 
 		/**
