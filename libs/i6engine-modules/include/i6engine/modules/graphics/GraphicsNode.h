@@ -28,14 +28,6 @@
 #include "i6engine/api/components/LuminousAppearanceComponent.h"
 
 namespace Ogre {
-	class AnimationState;
-	class Billboard;
-	class BillboardSet;
-	class Camera;
-	class Entity;
-	class Light;
-	class ManualObject;
-	class ParticleSystem;
 	class SceneNode;
 } /* namespace Ogre */
 
@@ -47,8 +39,14 @@ namespace graphics {
 } /* namespace api */
 namespace modules {
 
+	class BillboardComponent;
+	class BoundingBoxComponent;
+	class CameraComponent;
 	class GraphicsManager;
-	class MovableText;
+	class LuminousComponent;
+	class MeshComponent;
+	class MovableTextComponent;
+	class ParticleComponent;
 
 	/**
 	 * \ingroup Graphic
@@ -58,6 +56,26 @@ namespace modules {
 	 */
 	class GraphicsNode {
 		friend class GraphicsManager;
+		friend class MeshComponent;
+
+	public:
+		/**
+		 * \brief Gets SceneNode of the object
+		 *
+		 * Gets SceneNode of the object
+		 * \return SceneNode of the object
+		 */
+		inline Ogre::SceneNode * getSceneNode() const {
+			return _sceneNode;
+		}
+
+		void addTicker(MeshComponent * mesh);
+
+		void removeTicker(MeshComponent * mesh);
+
+		void addTicker(MovableTextComponent * mesh);
+
+		void removeTicker(MovableTextComponent * mesh);
 
 	private:
 		/**
@@ -78,22 +96,17 @@ namespace modules {
 		~GraphicsNode();
 
 		/**
-		 * \brief Gets SceneNode of the object
+		 * \brief Creates or updates a mesh component
 		 *
-		 * Gets SceneNode of the object
-		 * \return SceneNode of the object
+		 *     creates a new Ogre Entity by calling Ogre's createEntity, then configures it
+		 *
+		 *			Creates or updates a mesh component for the object with given meshFile and visibility-state
+		 * \param[in] coid ComponentID to identifiy the subentity
 		 */
-		inline Ogre::SceneNode * getSceneNode() const { return _sceneNode; }
-		Ogre::SceneNode * getOrCreateSceneNode(const int64_t coid, const Vec3 & pos, const Quaternion & rot, const Vec3 & scale);
+		void createMeshComponent(const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale);
+		void updateMeshComponent(const int64_t coid, const std::string & meshName, const bool visible);
 
 		/**
-		 * \brief Sets the node's parent node
-		 *
-		 *     Sets the Node's parent node. If newParent is NULL, the node is attached to the scenegraph's root node.
-		 */
-		void setParent(GraphicsNode * newParent);
-
-		 /**
 		 * \brief Creates or updates a material component
 		 *
 		 *     sets material name
@@ -114,15 +127,26 @@ namespace modules {
 		void setCustomParameter(uint32_t num, const Vec4 & value);
 
 		/**
-		 * \brief Creates or updates a mesh component
-		 *
-		 *     creates a new Ogre Entity by calling Ogre's createEntity, then configures it
-		 *
-		 *			Creates or updates a mesh component for the object with given meshFile and visibility-state
-		 * \param[in] coid ComponentID to identifiy the subentity
+		 * \brief plays an animation
 		 */
-		void createMeshComponent(const int64_t coid, const std::string & meshName, const bool visible);
-		void updateMeshComponent(const int64_t coid, const std::string & meshName, const bool visible);
+		void playAnimation(const int64_t coid, const std::string & anim, bool looping, double offsetPercent);
+
+		/**
+		 * \brief sets animation speed
+		 */
+		void setAnimationSpeed(int64_t coid, double animationSpeed);
+
+		/**
+		 * \brief stops an animation
+		 */
+		void stopAnimation(int64_t coid);
+
+		/**
+		 * \brief Deletes the MeshComponent of the Node
+		 *
+		 *     Deletes an Ogre Entity by calling sm->destroyEntity
+		 */
+		void deleteMeshComponent(const int64_t coid);
 
 		/**
 		 * \brief Creates or updates camera position
@@ -135,6 +159,16 @@ namespace modules {
 		void updateCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov);
 
 		/**
+		 * \brief Updates the camera frustum
+		 */
+		void updateCameraFrustumComponent(const int64_t coid, const double left, const double right, const double top, const double bottom);
+
+		/**
+		 * \brief enables or disables a compositor
+		 */
+		void enableCompositor(int64_t coid, const std::string & compositor, bool enabled);
+
+		/**
 		 * \brief Creates or updates a viewport
 		 *
 		 *     creates a new Ogre viewport by calling Ogre's addViewport, then sets its dimensions
@@ -142,11 +176,15 @@ namespace modules {
 		void createOrUpdateViewport(const int64_t coid, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha);
 
 		/**
-		 * \brief Creates new light or updates it
+		 * \brief Deletes CameraComponent of the Node
 		 *
-		 *     Creates a new light using Ogre's createLight constructor and configures it
-		 *
-		 *			Creates new light if _light is NULL. Then it updates attributes of the light
+		 *     Deletes an Ogre Camera by calling sm->destroyCamera
+		 */
+		void deleteCameraComponent(const int64_t coid);
+
+		/**
+		 * \brief Creates new light
+		 * Creates a new LuminousComponent
 		 * \param[in] type LightType (LT_SPOT, LT_POINT etc.)
 		 * \param[in] diffuse Diffuse colour of the light
 		 * \param[in] specular Specular colour of the light
@@ -154,12 +192,22 @@ namespace modules {
 		 * \param[in] direction Direction of the light
 		 */
 		void createLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter);
+		
+		/**
+		 * \brief Updates a light
+		 * Updates attributes of a LuminousComponent
+		 * \param[in] type LightType (LT_SPOT, LT_POINT etc.)
+		 * \param[in] diffuse Diffuse colour of the light
+		 * \param[in] specular Specular colour of the light
+		 * \param[in] attenuation Attenuation of den light
+		 * \param[in] direction Direction of the light
+		 */
 		void updateLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter);
 
 		/**
-		 * \brief Updates the camera frustum
+		 * \brief Deletes the LuminousComponent of the Node
 		 */
-		void updateCameraFrustumComponent(const int64_t coid, const double left, const double right, const double top, const double bottom);
+		void deleteLuminousComponent(const int64_t coid);
 
 		/**
 		 * \brief Creates a new ParticleEmitter
@@ -175,52 +223,9 @@ namespace modules {
 		void particleFadeOut(int64_t coid);
 
 		/**
-		 * \brief Deletes the MeshComponent of the Node
-		 *
-		 *     Deletes an Ogre Entity by calling sm->destroyEntity
-		 */
-		void deleteMeshComponent(const int64_t coid);
-
-		/**
-		 * \brief Deletes the LuminousComponent of the Node
-		 *
-		 *     Deletes an Ogre lighting object by calling sm->destroyLight
-		 */
-		void deleteLuminousComponent(const int64_t coid);
-
-		/**
-		 * \brief Deletes CameraComponent of the Node
-		 *
-		 *     Deletes an Ogre Camera by calling sm->destroyCamera
-		 */
-		void deleteCameraComponent(const int64_t coid);
-
-		/**
 		 * \brief deletes the ParticleEmitter of this Node
 		 */
 		void deleteParticleComponent(const int64_t coid);
-
-		/**
-		 * \brief plays an animation
-		 */
-		void playAnimation(const int64_t coid, const std::string & anim, bool looping, double offsetPercent);
-
-		/**
-		 * \brief ticking the GraphicsNode
-		 */
-		void Tick();
-
-		/**
-		 * \brief stops an animation
-		 */
-		void stopAnimation();
-
-		/**
-		 * \brief sets animation speed
-		 */
-		void setAnimationSpeed(double animationSpeed) {
-			_animationSpeed = animationSpeed;
-		}
 
 		/**
 		 * \brief creates a billboard set
@@ -258,11 +263,6 @@ namespace modules {
 		void deleteMovableText(int64_t coid);
 
 		/**
-		 * \brief enables or disables a compositor
-		 */
-		void enableCompositor(int64_t coid, const std::string & compositor, bool enabled);
-
-		/**
 		 * \brief draws the surrounding bounding box of the mesh with given colour
 		 */
 		void drawBoundingBox(int64_t coid, const Vec3 & colour);
@@ -270,7 +270,12 @@ namespace modules {
 		/**
 		 * \brief removes the bounding box
 		 */
-		void removeBoundingBox();
+		void removeBoundingBox(int64_t coid);
+
+		/**
+		 * \brief ticking the GraphicsNode
+		 */
+		void Tick();
 
 		/**
 		 * \brief forbidden
@@ -298,53 +303,35 @@ namespace modules {
 		Ogre::SceneNode * _sceneNode;
 
 		/**
-		 * Parent node of the object
-		 */
-		GraphicsNode * _parentNode;
-
-		/**
 		 * Cameras node of the object
 		 */
-		std::map<int64_t, Ogre::SceneNode *> _cameras;
+		std::map<int64_t, CameraComponent *> _cameras;
 
 		/**
 		 * Lights of the object
 		 */
-		std::map<int64_t, Ogre::SceneNode *> _lights;
+		std::map<int64_t, LuminousComponent *> _lights;
 
 		/**
 		 * ParticleSystems of the object
 		 */
-		std::map<int64_t, Ogre::SceneNode *> _particles;
+		std::map<int64_t, ParticleComponent *> _particles;
 
 		/**
-		 * \brief list of all subSceneNodes
-		 * currently used only for meshes
+		 * \brief list of all meshes
 		 */
-		std::map<int64_t, Ogre::SceneNode *> _sceneNodes;
+		std::map<int64_t, MeshComponent *> _meshes;
 
-		/**
-		 * \brief current animation state
-		 */
-		Ogre::AnimationState * _animationState;
+		std::map<int64_t, BillboardComponent *> _billboardSets;
 
-		double _animationSpeed;
+		std::map<int64_t, MovableTextComponent *> _movableTexts;
 
-		uint64_t _lastTime;
+		std::map<int64_t, BoundingBoxComponent *> _boundingBoxes;
 
-		std::map<int64_t, std::pair<Ogre::BillboardSet *, std::map<std::string, Ogre::Billboard *>>> _billboardSets;
+		bool _ticking;
 
-		std::map<int64_t, MovableText *> _movableTexts;
-
-		/**
-		 * \brief list of all MovableTexts depending on a mesh. Key is mesh
-		 */
-		std::map<int64_t, std::vector<int64_t>> _observer;
-
-		/**
-		 * \brief bounding box of this object
-		 */
-		Ogre::ManualObject * _boundingBox;
+		std::vector<MeshComponent *> _tickingMeshes;
+		std::vector<MovableTextComponent *> _tickingMovableTexts;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};
