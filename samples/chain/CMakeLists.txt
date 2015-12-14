@@ -30,7 +30,7 @@ set(SampleChainSrc
 	src/ChainApplication.cpp
 )
 
-add_executable(SampleChain ${SampleChainSrc})
+add_executable(SampleChain ${GUI_TYPE} ${SampleChainSrc})
 set_target_properties(SampleChain PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleChain SampleCommon)

@@ -30,7 +30,7 @@ set(SampleShadowSrc
 	src/ShadowApplication.cpp
 )
 
-add_executable(SampleShadow ${SampleShadowSrc})
+add_executable(SampleShadow ${GUI_TYPE} ${SampleShadowSrc})
 set_target_properties(SampleShadow PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleShadow SampleCommon)

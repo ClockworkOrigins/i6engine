@@ -36,12 +36,12 @@ set(SampleChatHostSrc
 	src/ChatApplication.cpp
 )
 
-add_executable(SampleChatClient ${SampleChatClientSrc})
+add_executable(SampleChatClient ${GUI_TYPE} ${SampleChatClientSrc})
 set_target_properties(SampleChatClient PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleChatClient i6engine-modules)
 
-add_executable(SampleChatHost ${SampleChatHostSrc})
+add_executable(SampleChatHost ${GUI_TYPE} ${SampleChatHostSrc})
 set_target_properties(SampleChatHost PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleChatHost i6engine-modules)

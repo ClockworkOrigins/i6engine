@@ -31,7 +31,7 @@ set(SampleWaynetSrc
 	src/WaynetApplication.cpp
 )
 
-add_executable(SampleWaynet ${SampleWaynetSrc})
+add_executable(SampleWaynet ${GUI_TYPE} ${SampleWaynetSrc})
 set_target_properties(SampleWaynet PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleWaynet i6engine-rpg SampleCommon)

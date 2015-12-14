@@ -30,7 +30,7 @@ set(SampleCompositorSrc
 	src/CompositorApplication.cpp
 )
 
-add_executable(SampleCompositor ${SampleCompositorSrc})
+add_executable(SampleCompositor ${GUI_TYPE} ${SampleCompositorSrc})
 set_target_properties(SampleCompositor PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleCompositor SampleCommon)

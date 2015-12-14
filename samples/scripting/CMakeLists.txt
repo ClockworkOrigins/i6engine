@@ -37,7 +37,7 @@ set(SampleScriptingSrc
 	src/components/ScriptingShatterComponent.cpp
 )
 
-add_executable(SampleScripting ${SampleScriptingSrc})
+add_executable(SampleScripting ${GUI_TYPE} ${SampleScriptingSrc})
 set_target_properties(SampleScripting PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleScripting SampleCommon)

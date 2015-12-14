@@ -32,7 +32,7 @@ set(SampleLeveleditorSrc
 	src/LeveleditorApplication.cpp
 )
 
-add_executable(SampleLeveleditor ${SampleLeveleditorSrc})
+add_executable(SampleLeveleditor ${GUI_TYPE} ${SampleLeveleditorSrc})
 set_target_properties(SampleLeveleditor PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleLeveleditor i6engine-editor)

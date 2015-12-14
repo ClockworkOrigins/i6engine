@@ -30,7 +30,7 @@ set(SampleFloatingSrc
 	src/FloatingApplication.cpp
 )
 
-add_executable(SampleFloating ${SampleFloatingSrc})
+add_executable(SampleFloating ${GUI_TYPE} ${SampleFloatingSrc})
 set_target_properties(SampleFloating PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleFloating SampleCommon)

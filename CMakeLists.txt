@@ -37,6 +37,11 @@ option(ISIXE_WITH_TOOLS "build some tools for i6engine" ON)
 option(ISIXE_WITH_RPG "build rpg module for i6engine" ON)
 option(ISIXE_WITH_DOCU "build documentation for i6engine" ON)
 option(ISIXE_WITH_TUTORIALS "build tutorials for i6engine" ON)
+OPTION(ISIXE_WITH_CONSOLE "build samples with console output (off affects only Windows build)" ON)
+
+IF(NOT ISIXE_WITH_CONSOLE AND WIN32)
+	SET(GUI_TYPE WIN32)
+ENDIF(NOT ISIXE_WITH_CONSOLE AND WIN32)
 
 # options are
 # * ""

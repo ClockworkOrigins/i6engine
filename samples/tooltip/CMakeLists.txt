@@ -30,7 +30,7 @@ set(SampleTooltipSrc
 	src/TooltipApplication.cpp
 )
 
-add_executable(SampleTooltip ${SampleTooltipSrc})
+add_executable(SampleTooltip ${GUI_TYPE} ${SampleTooltipSrc})
 set_target_properties(SampleTooltip PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleTooltip i6engine-modules)

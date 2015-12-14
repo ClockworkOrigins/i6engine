@@ -24,6 +24,7 @@
 #cmakedefine ISIXE_WITH_NETWORK
 #cmakedefine ISIXE_WITH_PROFILING
 #cmakedefine ISIXE_WITH_RPG
+#cmakedefine ISIXE_WITH_CONSOLE
 
 // Enum
 #define SCRIPTING_NONE 0

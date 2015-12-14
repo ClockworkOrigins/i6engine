@@ -30,7 +30,7 @@ set(SampleTerrainSrc
 	src/TerrainApplication.cpp
 )
 
-add_executable(SampleTerrain ${SampleTerrainSrc})
+add_executable(SampleTerrain ${GUI_TYPE} ${SampleTerrainSrc})
 set_target_properties(SampleTerrain PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleTerrain SampleCommon)

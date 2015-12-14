@@ -30,7 +30,7 @@ set(SampleJengaSrc
 	src/JengaApplication.cpp
 )
 
-add_executable(SampleJenga ${SampleJengaSrc})
+add_executable(SampleJenga ${GUI_TYPE} ${SampleJengaSrc})
 set_target_properties(SampleJenga PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleJenga SampleCommon)

@@ -53,7 +53,7 @@ namespace modules {
 		/**
 		 * \brief initializes Ogre graphics
 		 */
-		GraphicsManager(GraphicsController * ctrl);
+		GraphicsManager(GraphicsController * ctrl, HWND hWnd);
 
 		/**
 		 * \brief deletes all Ogre stuff

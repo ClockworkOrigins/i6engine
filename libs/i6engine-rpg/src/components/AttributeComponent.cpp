@@ -28,8 +28,8 @@ namespace components {
 		_objFamilyID = config::ComponentTypes::AttributeComponent;
 		_objComponentID = config::ComponentTypes::AttributeComponent;
 
-		_attributes[0] = std::stoi(params.find("attribute_0")->second.c_str());
-		_attributes[1] = std::stoi(params.find("attribute_1")->second.c_str());
+		_attributes[0] = std::stoi(params.find("attribute_0")->second);
+		_attributes[1] = std::stoi(params.find("attribute_1")->second);
 	}
 
 	api::ComPtr AttributeComponent::createC(int64_t id, const api::attributeMap & params) {

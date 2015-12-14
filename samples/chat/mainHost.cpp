@@ -26,16 +26,26 @@
 #include "i6engine/modules/input/InputController.h"
 #include "i6engine/modules/network/NetworkController.h"
 
+#ifdef ISIXE_WITH_CONSOLE
 int main(int argc, char ** argv) {
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), LNG_GRAPHICS_FRAME_TIME);
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6engine::modules::InputController(), LNG_INPUT_FRAME_TIME);
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Network", new i6engine::modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
-
+#else
+int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+#endif
 	sample::ChatApplication app("127.0.0.1", 12345, 12345);
 
 	app.setName("Chat Host Sample");
 
 	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
+
+#ifdef ISIXE_WITH_CONSOLE
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), LNG_GRAPHICS_FRAME_TIME);
+#else
+	HWND hWnd = i6engine::api::EngineController::GetSingletonPtr()->createWindow(hInstance);
+
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(hWnd), LNG_GRAPHICS_FRAME_TIME);
+#endif
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6engine::modules::InputController(), LNG_INPUT_FRAME_TIME);
+	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Network", new i6engine::modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 
 	i6engine::api::EngineController::GetSingletonPtr()->start();
 
