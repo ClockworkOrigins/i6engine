@@ -146,7 +146,7 @@ namespace api {
 			return std::to_string(_isVisible);
 		}, [this](std::string s) {
 			try {
-				_isVisible = bool(std::stoi(s));
+				_isVisible = std::stoi(s) == 1;
 			} catch (boost::bad_lexical_cast &) {
 				return false;
 			}
