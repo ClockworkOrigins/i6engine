@@ -27,14 +27,14 @@
 namespace i6engine {
 namespace modules {
 
-	CameraComponent::CameraComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov) : _manager(manager), _parent(parent), _sceneNode(nullptr) {
+	CameraComponent::CameraComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov) : _manager(manager), _parent(parent), _sceneNode(nullptr), _zOrder(INT_MAX) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
 		std::string name = "SN_" + std::to_string(goid) + "_" + std::to_string(coid);
 
 		_sceneNode = _parent->getSceneNode()->createChildSceneNode(name, position.toOgre());
-		Ogre::Camera * camera = sm->createCamera("camera" + std::to_string(goid));
+		Ogre::Camera * camera = sm->createCamera("camera" + std::to_string(goid) + "_" + std::to_string(coid));
 		_sceneNode->attachObject(camera);
 		camera->setPosition(position.toOgre());
 		camera->lookAt(lookAt.toOgre());
@@ -63,7 +63,9 @@ namespace modules {
 			}
 		}
 
-		_manager->getRoot()->getAutoCreatedWindow()->removeViewport(0);
+		if (_zOrder != INT_MAX) {
+			_manager->getRoot()->getAutoCreatedWindow()->removeViewport(_zOrder);
+		}
 
 		_sceneNode->detachObject(camera);
 		sm->destroyCamera(camera);
@@ -93,12 +95,13 @@ namespace modules {
 		Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, compositor, enabled);
 	}
 
-	void CameraComponent::createOrUpdateViewport(const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha) {
+	void CameraComponent::createOrUpdateViewport(int zOrder, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Ogre::Viewport * vp = nullptr;
 		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(_sceneNode->getAttachedObject(0));
 		if (camera->getViewport() == nullptr) {
-			vp = _manager->getRoot()->getAutoCreatedWindow()->addViewport(camera, 0, float(left), float(top), float(width), float(height));
+			_zOrder = zOrder;
+			vp = _manager->getRoot()->getAutoCreatedWindow()->addViewport(camera, zOrder, float(left), float(top), float(width), float(height));
 		} else {
 			vp = camera->getViewport();
 			vp->setDimensions(left, top, width, height);

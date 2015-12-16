@@ -11,6 +11,7 @@
 		<Attribute name="nearclip">1</Attribute>
 		<Attribute name="aspect">0.5235987755982988</Attribute>
 		<Attribute name="viewport">1</Attribute>
+		<Attribute name="zOrder">0</Attribute>
 		<Attribute name="vp_left">0.0</Attribute>
 		<Attribute name="vp_top">0.0</Attribute>
 		<Attribute name="vp_width">1.0</Attribute>

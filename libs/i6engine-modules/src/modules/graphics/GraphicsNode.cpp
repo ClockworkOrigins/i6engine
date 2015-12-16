@@ -208,11 +208,11 @@ namespace modules {
 		cc->enableCompositor(compositor, enabled);
 	}
 
-	void GraphicsNode::createOrUpdateViewport(const int64_t coid, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha) {
+	void GraphicsNode::createOrUpdateViewport(const int64_t coid, int zOrder, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_cameras.find(coid) != _cameras.end());
 		CameraComponent * cc = _cameras[coid];
-		cc->createOrUpdateViewport(left, top, width, height, red, green, blue, alpha);
+		cc->createOrUpdateViewport(zOrder, left, top, width, height, red, green, blue, alpha);
 	}
 
 	void GraphicsNode::deleteCameraComponent(const int64_t coid) {

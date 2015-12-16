@@ -103,13 +103,8 @@ namespace graphics {
 	}
 
 	// Viewport
-	Graphics_Viewport_Create::Graphics_Viewport_Create() : GameMessageStruct() {}
-	Graphics_Viewport_Create::Graphics_Viewport_Create(const int64_t goID, const int64_t coID, const double l, const double t, const double w, const double h, const double re, const double gr, const double bl, const double al) : GameMessageStruct(coID, goID), left(l), top(t), width(w), height(h), red(re), green(gr), blue(bl), alpha(al) {
-	}
-
-	// Viewport
 	Graphics_Viewport_Update::Graphics_Viewport_Update() : GameMessageStruct() {}
-	Graphics_Viewport_Update::Graphics_Viewport_Update(const int64_t goID, const int64_t coID, const double l, const double t, const double w, const double h, const double re, const double gr, const double bl, const double al) : GameMessageStruct(coID, goID), left(l), top(t), width(w), height(h), red(re), green(gr), blue(bl), alpha(al) {
+	Graphics_Viewport_Update::Graphics_Viewport_Update(const int64_t goID, const int64_t coID, int z, const double l, const double t, const double w, const double h, const double re, const double gr, const double bl, const double al) : GameMessageStruct(coID, goID), zOrder(z), left(l), top(t), width(w), height(h), red(re), green(gr), blue(bl), alpha(al) {
 	}
 
 	// Particle

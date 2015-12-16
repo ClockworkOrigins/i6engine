@@ -48,7 +48,7 @@ TEST(Component, Synchronize) {
 		Component::createC<BillboardComponent>(0, newMap);
 	}
 	{
-		attributeMap paramsCamera = { { "pos", "0.0 0.0 0.0" }, { "lookAt", "0.0 0.0 0.0" }, { "nearclip", "1" }, { "aspect", "1.0" }, { "viewport", "1" }, { "vp_left", "1.0" }, { "vp_top", "1.0" }, { "vp_width", "1.0" }, { "vp_height", "1.0" }, { "vp_red", "1.0" }, { "vp_green", "1.0" }, { "vp_blue", "1.0" }, { "vp_alpha", "1.0" } };
+		attributeMap paramsCamera = { { "pos", "0.0 0.0 0.0" }, { "lookAt", "0.0 0.0 0.0" }, { "nearclip", "1" }, { "aspect", "1.0" }, { "viewport", "1" }, { "zOrder", "1" }, { "vp_left", "1.0" }, { "vp_top", "1.0" }, { "vp_width", "1.0" }, { "vp_height", "1.0" }, { "vp_red", "1.0" }, { "vp_green", "1.0" }, { "vp_blue", "1.0" }, { "vp_alpha", "1.0" } };
 		auto cc = Component::createC<CameraComponent>(0, paramsCamera);
 		auto newMap = cc->synchronize();
 		Component::createC<CameraComponent>(0, newMap);
@@ -108,7 +108,7 @@ TEST(Component, Synchronize) {
 		Component::createC<MoverInterpolateComponent>(0, newMap);
 	}
 	{
-		attributeMap paramsMovingCamera = { { "pos", "0.0 0.0 0.0" }, { "lookAt", "0.0 0.0 0.0" }, { "nearclip", "1" }, { "aspect", "1.0" }, { "viewport", "1" }, { "vp_left", "1.0" }, { "vp_top", "1.0" }, { "vp_width", "1.0" }, { "vp_height", "1.0" }, { "vp_red", "1.0" }, { "vp_green", "1.0" }, { "vp_blue", "1.0" }, { "vp_alpha", "1.0" } };
+		attributeMap paramsMovingCamera = { { "pos", "0.0 0.0 0.0" }, { "lookAt", "0.0 0.0 0.0" }, { "nearclip", "1" }, { "aspect", "1.0" }, { "viewport", "1" }, { "zOrder", "1" }, { "vp_left", "1.0" }, { "vp_top", "1.0" }, { "vp_width", "1.0" }, { "vp_height", "1.0" }, { "vp_red", "1.0" }, { "vp_green", "1.0" }, { "vp_blue", "1.0" }, { "vp_alpha", "1.0" } };
 		auto mc = Component::createC<MovingCameraComponent>(0, paramsMovingCamera);
 		auto newMap = mc->synchronize();
 		Component::createC<MovingCameraComponent>(0, newMap);

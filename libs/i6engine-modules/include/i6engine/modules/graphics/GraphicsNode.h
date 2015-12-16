@@ -173,7 +173,7 @@ namespace modules {
 		 *
 		 *     creates a new Ogre viewport by calling Ogre's addViewport, then sets its dimensions
 		 */
-		void createOrUpdateViewport(const int64_t coid, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha);
+		void createOrUpdateViewport(const int64_t coid, int zOrder, const double left, const double top, const double width, const double height, const double red, const double green, const double blue, const double alpha);
 
 		/**
 		 * \brief Deletes CameraComponent of the Node

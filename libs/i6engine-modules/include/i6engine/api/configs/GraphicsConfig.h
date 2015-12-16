@@ -345,24 +345,14 @@ namespace graphics {
 	} Graphics_Terrain_Delete;
 
 	/**
-	 * \brief creates a viewport
-	 */
-	typedef struct Graphics_Viewport_Create : GameMessageStruct {
-		double left, top, width, height;
-		double red, green, blue, alpha;
-		Graphics_Viewport_Create();
-		Graphics_Viewport_Create(const int64_t i, const int64_t, const double l, const double t, const double w, const double h, const double re, const double gr, const double bl, const double al);
-		Graphics_Viewport_Create * copy() { return new Graphics_Viewport_Create(*this); }
-	} Graphics_Viewport_Create;
-
-	/**
 	 * \brief updates dimensions and color of a viewport
 	 */
 	typedef struct Graphics_Viewport_Update : GameMessageStruct {
+		int zOrder;
 		double left, top, width, height;
 		double red, green, blue, alpha;
 		Graphics_Viewport_Update();
-		Graphics_Viewport_Update(const int64_t i, const int64_t, const double l, const double t, const double w, const double h, const double re, const double gr, const double bl, const double al);
+		Graphics_Viewport_Update(const int64_t i, const int64_t, int z, const double l, const double t, const double w, const double h, const double re, const double gr, const double bl, const double al);
 		Graphics_Viewport_Update * copy() { return new Graphics_Viewport_Update(*this); }
 	} Graphics_Viewport_Update;
 

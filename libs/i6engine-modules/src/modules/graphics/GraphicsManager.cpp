@@ -671,18 +671,6 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->createMeshComponent(coid, meshName, isVisible, p, r, s);
-		} else if (msg->getSubtype() == api::graphics::GraViewport) {
-			double left = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->left;
-			double top = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->top;
-			double width = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->width;
-			double height = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->height;
-			double red = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->red;
-			double green = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->green;
-			double blue = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->blue;
-			double alpha = static_cast<api::graphics::Graphics_Viewport_Create *>(msg->getContent())->alpha;
-
-			GraphicsNode * node = getGraphicsNode(goid);
-			node->createOrUpdateViewport(coid, left, top, width, height, red, green, blue, alpha);
 		} else if (msg->getSubtype() == api::graphics::GraNode) {
 			GraphicsNode * node = getOrCreateGraphicsNode(msg->getContent()->getID());
 
@@ -783,6 +771,7 @@ namespace modules {
 			assert(node);
 			node->updateMeshComponent(coid, meshName, isVisible);
 		} else if (msg->getSubtype() == api::graphics::GraViewport) {
+			int zOrder = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->zOrder;
 			double left = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->left;
 			double top = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->top;
 			double width = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->width;
@@ -794,7 +783,7 @@ namespace modules {
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
-			node->createOrUpdateViewport(coid, left, top, width, height, red, green, blue, alpha);
+			node->createOrUpdateViewport(coid, zOrder, left, top, width, height, red, green, blue, alpha);
 		} else if (msg->getSubtype() == api::graphics::GraNode) {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
