@@ -980,7 +980,11 @@ scope registerObject() {
 			.def("setMaterial", &i6engine::api::MeshAppearanceComponent::setMaterial)
 			.def("playAnimation", &i6engine::api::MeshAppearanceComponent::playAnimation)
 			.def("setAnimationSpeed", &i6engine::api::MeshAppearanceComponent::setAnimationSpeed)
-			.def("stopAnimation", &i6engine::api::MeshAppearanceComponent::stopAnimation),
+			.def("stopAnimation", &i6engine::api::MeshAppearanceComponent::stopAnimation)
+			.def("drawBoundingBox", &i6engine::api::MeshAppearanceComponent::drawBoundingBox)
+			.def("removeBoundingBox", &i6engine::api::MeshAppearanceComponent::removeBoundingBox)
+			.def("attachGameObjectToBone", &i6engine::api::MeshAppearanceComponent::attachGameObjectToBone)
+			.def("detachGameObjectFromBone", &i6engine::api::MeshAppearanceComponent::detachGameObjectFromBone),
 
 		class_<i6engine::api::MovableTextComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>>("MovableTextComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())

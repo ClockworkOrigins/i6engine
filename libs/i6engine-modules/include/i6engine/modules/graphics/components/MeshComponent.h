@@ -84,6 +84,8 @@ namespace modules {
 		std::vector<int64_t> _movableTextObservers;
 		std::vector<int64_t> _boundingBoxObservers;
 
+		std::map<GraphicsNode *, std::string> _attachedNodes;
+
 		/**
 		 * \brief Create a new MeshComponent
 		 */
@@ -148,6 +150,10 @@ namespace modules {
 		void removeBoundingBoxObserver(int64_t coid);
 
 		Ogre::Entity * getEntity() const;
+
+		void attachToBone(GraphicsNode * otherNode, const std::string & boneName);
+
+		void detachFromBone(GraphicsNode * otherNode);
 
 		/**
 		 * \brief forbidden

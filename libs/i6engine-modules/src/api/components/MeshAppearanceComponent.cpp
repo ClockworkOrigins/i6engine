@@ -29,8 +29,6 @@
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace api {
 
@@ -122,7 +120,7 @@ namespace api {
 		_scale.insertInMap("scale", params);
 
 		params["mesh"] = _meshName;
-		params["visibility"] = boost::lexical_cast<std::string>(_isVisible);
+		params["visibility"] = std::to_string(_isVisible);
 
 		if (!_material.empty()) {
 			params["material"] = _material;
@@ -145,10 +143,10 @@ namespace api {
 			return true;
 		}));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Visibility", [this]() {
-			return boost::lexical_cast<std::string>(_isVisible);
+			return std::to_string(_isVisible);
 		}, [this](std::string s) {
 			try {
-				_isVisible = boost::lexical_cast<bool>(s);
+				_isVisible = bool(std::stoi(s));
 			} catch (boost::bad_lexical_cast &) {
 				return false;
 			}
@@ -206,6 +204,17 @@ namespace api {
 
 	void MeshAppearanceComponent::removeBoundingBox() const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraRemoveBB, core::Method::Update, new graphics::Graphics_RemoveBB_Update(getID(), _objOwnerID), core::Subsystem::Object));
+	}
+
+	void MeshAppearanceComponent::attachGameObjectToBone(const api::GOPtr & go, const std::string & boneName) {
+		if (go->getID() == _objOwnerID) {
+			ISIXE_THROW_API("MeshAppearanceComponent", "Can't attach GameObject to itself!");
+		}
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraAttachToBone, core::Method::Update, new graphics::Graphics_AttachToBone_Update(getID(), _objOwnerID, go->getID(), boneName), core::Subsystem::Object));
+	}
+
+	void MeshAppearanceComponent::detachGameObjectFromBone(const api::GOPtr & go, const std::string & boneName) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraDetachFromBone, core::Method::Update, new graphics::Graphics_DetachFromBone_Update(getID(), _objOwnerID, go->getID(), boneName), core::Subsystem::Object));
 	}
 
 } /* namespace api */

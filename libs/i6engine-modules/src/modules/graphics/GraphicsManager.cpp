@@ -857,6 +857,22 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->removeBoundingBox(coid);
+		} else if (msg->getSubtype() == api::graphics::GraAttachToBone) {
+			api::graphics::Graphics_AttachToBone_Update * gatbu = dynamic_cast<api::graphics::Graphics_AttachToBone_Update *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			GraphicsNode * otherNode = getGraphicsNode(gatbu->otherGoid);
+			assert(otherNode);
+			node->attachToBone(coid, otherNode, gatbu->boneName);
+			otherNode->listenAttachment(node, coid, gatbu->boneName);
+		} else if (msg->getSubtype() == api::graphics::GraDetachFromBone) {
+			api::graphics::Graphics_DetachFromBone_Update * gdfbu = dynamic_cast<api::graphics::Graphics_DetachFromBone_Update *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			GraphicsNode * otherNode = getGraphicsNode(gdfbu->otherGoid);
+			assert(otherNode);
+			node->detachFromBone(coid, otherNode, gdfbu->boneName);
+			otherNode->stopListenAttachment();
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
