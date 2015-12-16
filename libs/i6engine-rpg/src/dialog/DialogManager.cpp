@@ -426,6 +426,7 @@ namespace dialog {
 		npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
 		npc::NPC * nt = npc::NPCManager::GetSingleton().getNPC(*it->second->participants.begin());
 		p->turnToNPC(nt);
+		_activeNPCs.push_back(npc);
 		for (std::string npcIdentifier : it->second->participants) {
 			npc::NPC * n = npc::NPCManager::GetSingleton().getNPC(npcIdentifier);
 			if (n == nullptr) {
@@ -454,7 +455,6 @@ namespace dialog {
 		if (msg->getMessageType() == api::messages::InputMessageType) {
 			if (msg->getSubtype() == api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
 				api::input::Input_Keyboard_Update * iku = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent());
-
 				if (iku->pressed == api::KeyState::KEY_PRESSED) {
 					if (iku->code == api::KeyCode::KC_1 && _dialogNumberVector.size() >= 1) {
 						runDialog(_activeNPCs[0], _dialogNumberVector[0]);
