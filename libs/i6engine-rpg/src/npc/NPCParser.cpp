@@ -28,13 +28,15 @@ namespace i6engine {
 namespace rpg {
 namespace npc {
 
-	NPCParser::NPCParser() : _npcs() {
+	NPCParser::NPCParser() : utils::Singleton<NPCParser>(), _npcs(), _npcFiles() {
 	}
 
 	NPCParser::~NPCParser() {
 	}
 
 	void NPCParser::loadNPCs(const std::string & directory) {
+		_npcs.clear();
+		_npcFiles.clear();
 		std::queue<std::string> directories;
 		directories.push(directory);
 
@@ -124,6 +126,7 @@ namespace npc {
 			}
 
 			_npcs.insert(std::make_pair(identifier, tpl));
+			_npcFiles.push_back(std::make_pair(identifier, file));
 		}
 	}
 
