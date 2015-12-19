@@ -39,7 +39,7 @@
 
 namespace m2etis {
 namespace pubsub {
-	enum ChannelName : unsigned int;
+	enum ChannelName : uint16_t;
 	class PubSubSystem;
 } /* namespace pubsub */
 } /* namespace m2etis */
@@ -73,7 +73,7 @@ namespace modules {
 
 		volatile bool _connectionFailed;
 
-		std::map<uint32_t, uint32_t> _usedChannels;
+		std::map<uint16_t, uint32_t> _usedChannels;
 
 		boost::mutex _pubSubLock;
 
@@ -90,17 +90,17 @@ namespace modules {
 		/**
 		 * \brief subscribes on given channel
 		 */
-		void subscribe(uint32_t channel); // TODO: (Daniel) add second subscribe method registering a filter predicate too
+		void subscribe(uint16_t channel); // TODO: (Daniel) add second subscribe method registering a filter predicate too
 
 		/**
 		 * \brief unsubscribes from given channel
 		 */
-		void unsubscribe(uint32_t channel); // TODO: (Daniel) add second unsubscribe method registering a filter predicate too
+		void unsubscribe(uint16_t channel); // TODO: (Daniel) add second unsubscribe method registering a filter predicate too
 
 		/**
 		 * \brief publishes on given channel
 		 */
-		void publish(uint32_t channel, const api::GameMessage::Ptr & msg);
+		void publish(uint16_t channel, const api::GameMessage::Ptr & msg);
 
 		/**
 		 * \brief connects with given local port to the remote IP and the remote port

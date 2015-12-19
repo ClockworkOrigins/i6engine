@@ -184,6 +184,20 @@ namespace components {
 						gf->addPrint("WeightInventory_Item_" + std::to_string(p.first) + "_" + p2.first, "RPG/Blanko", 0.05, 0.1 + 0.05 * (_maxShowIndex - _slotsPerView), api::EngineController::GetSingleton().getTextManager()->getText(p2.first) + ((std::get<ItemEntry::Amount>(p2.second) > 1) ? (" (" + std::to_string(std::get<ItemEntry::Amount>(p2.second)) + ")") : ""), api::gui::Alignment::Left, -1);
 						gf->setSize("WeightInventory_Item_" + std::to_string(p.first) + "_" + p2.first, 0.3, 0.05);
 						gf->setFont("WeightInventory_Item_" + std::to_string(p.first) + "_" + p2.first, "DejaVuSansBig");
+						uint32_t first = p.first;
+						std::string second = p2.first;
+						gf->subscribeEvent("WeightInventory_Item_" + std::to_string(p.first) + "_" + p2.first, "Clicked", [this, counter, first, second]() {
+							if (_currentIndex == counter) {
+								useItem(first, second, [this]() {
+									hide();
+									show();
+								});
+							} else {
+								_currentIndex = counter;
+								hide();
+								show();
+							}
+						});
 						_widgetList.push_back("WeightInventory_Item_" + std::to_string(p.first) + "_" + p2.first);
 
 						// current selection
@@ -327,6 +341,30 @@ namespace components {
 						_multiplier = 1.0;
 					}
 				}
+			} else if (msg->getSubtype() == api::mouse::MouseMessageTypes::MouWheel) {
+				api::input::Input_MouseWheel_Update * imwu = dynamic_cast<api::input::Input_MouseWheel_Update *>(msg->getContent());
+				uint32_t maxIndex = 0;
+				for (auto & p : _items) {
+					for (auto & p2 : p.second) {
+						if (_currentFilter == "NONE" || _currentFilter == std::get<ItemEntry::Template>(p2.second)) {
+							maxIndex++;
+						}
+					}
+				}
+				for (int32_t i = 0; i < imwu->diff && _currentIndex < maxIndex - 1; i++) {
+					_currentIndex++;
+					if (_currentIndex > _maxShowIndex) {
+						_maxShowIndex++;
+					}
+				}
+				for (int32_t i = imwu->diff; i < 0 && _currentIndex > 0; i++) {
+					_currentIndex--;
+					if (_maxShowIndex - _currentIndex >= _slotsPerView) {
+						_maxShowIndex--;
+					}
+				}
+				hide();
+				show();
 			}
 		}
 	}

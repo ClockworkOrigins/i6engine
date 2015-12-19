@@ -19,9 +19,9 @@
 namespace m2etis {
     namespace pubsub {
 
-        const static int CHANNEL_COUNT = 1;
+        const static uint16_t CHANNEL_COUNT = 1;
 #define M2ETIS_CHANNELLIST I6ENGINE_Direct_Null_Null_Null_Null_Null_DirectBroadcast_Null_GameMessage_TCP
-        enum ChannelName : unsigned int {
+		enum ChannelName : uint16_t {
         	I6ENGINE_Direct_Null_Null_Null_Null_Null_DirectBroadcast_Null_GameMessage_TCP	// Position, Ping, PingAnswer, PlayerUpdate, Round
         };
 

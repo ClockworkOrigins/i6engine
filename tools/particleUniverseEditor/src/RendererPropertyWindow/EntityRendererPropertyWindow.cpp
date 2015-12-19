@@ -64,7 +64,7 @@ void EntityRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* prop, w
 	else if (propertyName == PRNL_MESH_NAME)
 	{
 		// Mesh Name: Ogre::String
-/*		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
+		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
 		wxString name = ogre2wx(meshProperty->getMeshName());
 		Ogre::String meshName = wx2ogre(name);
 		replaceRendererType(GetProperty(PRNL_RENDERER_TYPE));
@@ -75,7 +75,7 @@ void EntityRendererPropertyWindow::copyAttributeToRenderer(wxPGProperty* prop, w
 			return;
 
 		renderer->setMeshName(meshName);
-		meshProperty->SetValueFromString(name);*/
+		meshProperty->SetValueFromString(name);
 	}
 	else
 	{
@@ -123,7 +123,7 @@ void EntityRendererPropertyWindow::_initProperties(void)
 	mHelpHtml = wxT("RendererEntity.html");
 
 	// Mesh Name: Ogre::String
-	wxPGProperty * pid = Append(new wxStringProperty(PRNL_MESH_NAME, PRNL_MESH_NAME));
+	wxPGProperty * pid = Append(new MeshProperty(PRNL_MESH_NAME, PRNL_MESH_NAME));
 	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 
 	// Orientation Type: List

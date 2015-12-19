@@ -63,12 +63,12 @@ void VertexEmitterPropertyWindow::copyAttributeToEmitter(wxPGProperty* prop, wxS
 	else if (propertyName == PRNL_VERTEX_EMITTER_MESH_NAME)
 	{
 		// Update emitter with Mesh name
-/*		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
+		MeshProperty* meshProperty = static_cast<MeshProperty*>(prop);
 		Ogre::String meshName = meshProperty->getMeshName();
 		if (meshName != Ogre::StringUtil::BLANK)
 		{
 			vertexEmitter->setMeshName(meshName);
-		}*/
+		}
 	}
 	else
 	{
@@ -121,7 +121,7 @@ void VertexEmitterPropertyWindow::_initProperties(void)
 	SetPropertyEditor(PRNL_VERTEX_EMITTER_ITERATION, wxPG_EDITOR(SpinCtrl));
 
 	// Step: Ogre::String
-	wxPGProperty * pid = Append(new wxStringProperty(PRNL_VERTEX_EMITTER_MESH_NAME, PRNL_VERTEX_EMITTER_MESH_NAME));
+	wxPGProperty * pid = Append(new MeshProperty(PRNL_VERTEX_EMITTER_MESH_NAME, PRNL_VERTEX_EMITTER_MESH_NAME));
 	SetPropertyEditor(pid, wxPG_EDITOR(TextCtrlAndButton)); // Add a button
 }
 //-----------------------------------------------------------------------

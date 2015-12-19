@@ -34,7 +34,7 @@
 namespace i6engine {
 namespace api {
 
-	CameraComponent::CameraComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _lookAt(), _nearClip(1), _aspect(), _viewport(false), _left(), _top(), _width(), _height(), _red(0), _green(0), _blue(0), _alpha(1.0), _fov(45.0 / 180.0 * PI) {
+	CameraComponent::CameraComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _lookAt(), _nearClip(1), _aspect(), _zOrder(), _viewport(false), _left(), _top(), _width(), _height(), _red(0), _green(0), _blue(0), _alpha(1.0), _fov(45.0 / 180.0 * PI) {
 		Component::_objFamilyID = components::CameraComponent;
 		Component::_objComponentID = components::CameraComponent;
 
@@ -44,6 +44,7 @@ namespace api {
 		parseAttribute<true>(params, "aspect", _aspect);
 
 		if (params.find("viewport") != params.end()) {
+			parseAttribute<true>(params, "zOrder", _zOrder);
 			parseAttribute<true>(params, "viewport", _viewport);
 			parseAttribute<true>(params, "vp_left", _left);
 			parseAttribute<true>(params, "vp_top", _top);
@@ -148,7 +149,7 @@ namespace api {
 			return;
 		}
 
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraViewport, core::Method::Update, new graphics::Graphics_Viewport_Update(_objOwnerID, getID(), _left, _top, _width, _height, _red, _green, _blue, _alpha), core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraViewport, core::Method::Update, new graphics::Graphics_Viewport_Update(_objOwnerID, getID(), _zOrder, _left, _top, _width, _height, _red, _green, _blue, _alpha), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -170,6 +171,7 @@ namespace api {
 		params.insert(std::make_pair("nearclip", std::to_string(_nearClip)));
 		params.insert(std::make_pair("aspect", std::to_string(_aspect)));
 		params.insert(std::make_pair("viewport", std::to_string(_viewport)));
+		params.insert(std::make_pair("zOrder", std::to_string(_zOrder)));
 		params.insert(std::make_pair("vp_left", std::to_string(_left)));
 		params.insert(std::make_pair("vp_top", std::to_string(_top)));
 		params.insert(std::make_pair("vp_width", std::to_string(_width)));

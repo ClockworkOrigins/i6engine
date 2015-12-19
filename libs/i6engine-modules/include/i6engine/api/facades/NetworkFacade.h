@@ -66,32 +66,32 @@ namespace api {
 		/**
 		 * \brief subscribes on given channel
 		 */
-		void subscribe(uint32_t channel); // TODO: (Daniel) add second subscribe method registering a filter predicate too
+		void subscribe(uint16_t channel); // TODO: (Daniel) add second subscribe method registering a filter predicate too
 
 		/**
 		 * \brief unsubscribes from given channel
 		 */
-		void unsubscribe(uint32_t channel); // TODO: (Daniel) add second unsubscribe method registering a filter predicate too
+		void unsubscribe(uint16_t channel); // TODO: (Daniel) add second unsubscribe method registering a filter predicate too
 
 		/**
 		 * \brief publishes on given channel
 		 */
-		void publish(uint32_t channel, const GameMessage::Ptr & msg);
+		void publish(uint16_t channel, const GameMessage::Ptr & msg);
 
 		/**
 		 * \brief registers a callback for subscribe, call only by networking subsystem
 		 */
-		void registerSubscribeCallback(const boost::function<void(uint32_t)> & f);
+		void registerSubscribeCallback(const boost::function<void(uint16_t)> & f);
 
 		/**
 		 * \brief registers a callback for unsubscribe, call only by networking subsystem
 		 */
-		void registerUnsubscribeCallback(const boost::function<void(uint32_t)> & f);
+		void registerUnsubscribeCallback(const boost::function<void(uint16_t)> & f);
 
 		/**
 		 * \brief registers a callback for publish, call only by networking subsystem
 		 */
-		void registerPublishCallback(const boost::function<void(uint32_t, const GameMessage::Ptr &)> & f);
+		void registerPublishCallback(const boost::function<void(uint16_t, const GameMessage::Ptr &)> & f);
 
 		/**
 		 * \brief registers a callback for connect, call only by networking subsystem
@@ -132,17 +132,17 @@ namespace api {
 		/**
 		 * \brief callback for subscribe
 		 */
-		boost::function<void(uint32_t)> _subscribe;
+		boost::function<void(uint16_t)> _subscribe;
 
 		/**
 		 * \brief callback for subscribe
 		 */
-		boost::function<void(uint32_t)> _unsubscribe;
+		boost::function<void(uint16_t)> _unsubscribe;
 
 		/**
 		 * \brief callback for subscribe
 		 */
-		boost::function<void(uint32_t, const GameMessage::Ptr &)> _publish;
+		boost::function<void(uint16_t, const GameMessage::Ptr &)> _publish;
 
 		/**
 		 * \brief holds state whether a connect callback is set or not

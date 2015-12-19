@@ -202,17 +202,10 @@ namespace modules {
 
 	PhysicsManager::~PhysicsManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		_nodes.clear();
-		// remove the rigidbodies from the dynamics world and delete them (including motionStates)
-		for (int i = _dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; --i) {
-			btCollisionObject * obj = _dynamicsWorld->getCollisionObjectArray()[i];
-			btRigidBody * body = btRigidBody::upcast(obj);
-
-			if (body && body->getMotionState()) {
-				delete body->getMotionState();
-			}
-			_dynamicsWorld->removeCollisionObject(obj);
+		for (auto & p : _nodes) {
+			delete p.second;
 		}
+		_nodes.clear();
 
 		delete _dynamicsWorld->getDebugDrawer();
 		delete _dynamicsWorld;

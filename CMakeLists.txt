@@ -366,7 +366,7 @@ IF(ISIXE_WITH_NETWORK)
 		ENDIF(CMAKE_GENERATOR MATCHES "Win64")
 		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.bat ${METIS_TOOLCHAIN} ${METIS_ARCH} "${ISIXE_DEP_DIR}/.." "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
 	ELSE(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.sh "${CMAKE_BINARY_DIR}/include/i6engine" "${CMAKE_BUILD_TYPE}")
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.sh "${CMAKE_BINARY_DIR}/include/i6engine" "${CMAKE_BUILD_TYPE}" "${ISIXE_DEP_DIR}" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
 	ENDIF(WIN32)
 
 	#----------------------------------------------------
@@ -511,6 +511,9 @@ IF(UNIX)
 		get_filename_component(filename_pure ${filename} NAME)
 		execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${filename} ${CMAKE_BINARY_DIR}/bin/${filename_pure})
 	endforeach()
+
+	configure_file(${CMAKE_SOURCE_DIR}/config/test-buildconfigurations.sh.in ${CMAKE_BINARY_DIR}/test-buildconfigurations.sh @ONLY)
+	add_custom_target(TestConfigurations COMMAND ./test-buildconfigurations.sh WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 ENDIF(UNIX)
 
 IF(WIN32)
@@ -525,9 +528,11 @@ IF(WIN32)
 	endforeach()
 
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-archive.bat.in ${CMAKE_BINARY_DIR}/build-archive.bat @ONLY)
+	configure_file(${CMAKE_SOURCE_DIR}/config/test-buildconfigurations.bat.in ${CMAKE_BINARY_DIR}/test-buildconfigurations.bat @ONLY)
 
 	add_custom_target(BuildReleaseSourceArchive COMMAND build-archive.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 	add_custom_target(BuildRevisionSourceArchive COMMAND build-archive.bat packageRevision WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+	add_custom_target(TestConfigurations COMMAND test-buildconfigurations.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 ENDIF(WIN32)
 
 # set symlinks if it is an out-of-source-build

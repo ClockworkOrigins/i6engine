@@ -51,6 +51,10 @@ public:
 		_currentTime += timePassed;
 	}
 
+protected:
+	void Init() {
+	}
+
 private:
 	uint64_t _startTime;
 	uint64_t _currentTime;

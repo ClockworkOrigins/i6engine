@@ -19,11 +19,15 @@
 namespace i6engine {
 namespace utils {
 
-	RealTimeClock::RealTimeClock(const boost::function<void(void)> & f) : _startTime(std::chrono::high_resolution_clock::now()), _offset(0), _update(f), _running(true), _thread(boost::bind(&RealTimeClock::clockUpdater, this)) {
+	RealTimeClock::RealTimeClock(const boost::function<void(void)> & f) : _startTime(std::chrono::high_resolution_clock::now()), _offset(0), _update(f), _running(true), _thread() {
 	}
 
 	RealTimeClock::~RealTimeClock() {
 		Stop();
+	}
+
+	void RealTimeClock::Init() {
+		_thread = boost::thread(boost::bind(&RealTimeClock::clockUpdater, this));
 	}
 
 	uint64_t RealTimeClock::getCurrentTime(uint64_t oldTime) const {
@@ -41,9 +45,6 @@ namespace utils {
 	}
 
 	void RealTimeClock::clockUpdater() {
-		// need a bit of sleep until the clock is created completely
-		// FIXME: (Michael) this is REALLY stupid
-		boost::this_thread::sleep(boost::posix_time::microseconds(500));
 		while (_running) {
 			_update();
 			boost::this_thread::sleep(boost::posix_time::microseconds(500));

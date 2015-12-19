@@ -1,0 +1,72 @@
+@echo OFF
+
+SET testDir=%TEMP%\i6engineTest
+SET currentDir=%cd%
+
+%testDir:~0,2%
+mkdir %testDir%
+
+cd %testDir%
+
+echo "Running First Configuration: All Flags ON, Python Scripting"
+
+cmake -DISIXE_WITH_LOGGING=ON -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=ON -DISIXE_WITH_TESTING=ON -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=ON -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=ON -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING="python" @CMAKE_SOURCE_DIR@ > build-log.txt
+
+MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
+
+IF [%ERRORLEVEL%] == [0] (echo "First Configuration ran successful")
+IF NOT [%ERRORLEVEL%] == [0] (
+	echo "First Configuration ran not successful"
+	type build-log.txt
+)
+
+RD /S /Q .
+
+echo "Running Second Configuration: All Flags ON, Lua Scripting"
+
+cmake -DISIXE_WITH_LOGGING=ON -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=ON -DISIXE_WITH_TESTING=ON -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=ON -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=ON -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING="lua" @CMAKE_SOURCE_DIR@ > build-log.txt
+
+MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
+
+IF [%ERRORLEVEL%] == [0] (echo "Second Configuration ran successful")
+IF NOT [%ERRORLEVEL%] == [0] (
+	echo "Second Configuration ran not successful"
+	type build-log.txt
+)
+
+RD /S /Q .
+
+echo "Running Third Configuration: All Flags OFF"
+
+cmake -DISIXE_WITH_LOGGING=OFF -DISIXE_WITH_NETWORK=OFF -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=OFF -DISIXE_WITH_EDITOR=OFF -DISIXE_WITH_SAMPLES=OFF -DISIXE_WITH_TOOLS=OFF -DISIXE_WITH_RPG=OFF -DISIXE_WITH_SCRIPTING="" @CMAKE_SOURCE_DIR@ > build-log.txt
+
+MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
+
+IF [%ERRORLEVEL%] == [0] (echo "Third Configuration ran successful")
+IF NOT [%ERRORLEVEL%] == [0] (
+	echo "Third Configuration ran not successful"
+	type build-log.txt
+)
+
+RD /S /Q .
+
+echo "Running Fourth Configuration: All Flags OFF, Network ON"
+
+cmake -DISIXE_WITH_LOGGING=OFF -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=OFF -DISIXE_WITH_EDITOR=OFF -DISIXE_WITH_SAMPLES=OFF -DISIXE_WITH_TOOLS=OFF -DISIXE_WITH_RPG=OFF -DISIXE_WITH_SCRIPTING="" @CMAKE_SOURCE_DIR@ > build-log.txt
+
+MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
+
+IF [%ERRORLEVEL%] == [0] (echo "Fourth Configuration ran successful")
+IF NOT [%ERRORLEVEL%] == [0] (
+	echo "Fourth Configuration ran not successful"
+	type build-log.txt
+)
+
+RD /S /Q .
+
+cd ..
+
+RD /S /Q %testDir%
+
+%currentDir:~0,2%
+cd %currentDir%
