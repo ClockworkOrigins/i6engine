@@ -613,7 +613,7 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		if (msg->getSubtype() == api::graphics::GraViewports) {
-			_objRoot->getAutoCreatedWindow()->removeAllViewports();
+			_rWindow->removeAllViewports();
 		} else if (msg->getSubtype() == api::graphics::GraTerrain) {
 			removeTerrain(static_cast<api::graphics::Graphics_Terrain_Delete *>(msg->getContent())->comp);
 		} else if (msg->getSubtype() == api::graphics::GraReset) {
@@ -934,7 +934,7 @@ namespace modules {
 		Ogre::SceneNode * sn = _sceneManager->getRootSceneNode()->createChildSceneNode("PreLoadSceneNode_0_0", Ogre::Vector3::ZERO);
 		Ogre::Camera * camera = _sceneManager->createCamera("PreLoadSceneCamera_0_0");
 		sn->attachObject(camera);
-		_objRoot->getAutoCreatedWindow()->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
+		_rWindow->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
 
 		for (std::string m : meshes) {
 			Ogre::Entity * meshEntity = _sceneManager->createEntity("PreLoadSceneMesh_0_0", m);
@@ -956,7 +956,7 @@ namespace modules {
 			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(particleSystem, _sceneManager);
 		}
 
-		_objRoot->getAutoCreatedWindow()->removeViewport(0);
+		_rWindow->removeViewport(0);
 		sn->detachObject(camera);
 		_sceneManager->destroyCamera(camera);
 		_sceneManager->getRootSceneNode()->removeChild(sn);

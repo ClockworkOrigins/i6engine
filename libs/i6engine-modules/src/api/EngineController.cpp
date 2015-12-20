@@ -20,7 +20,7 @@
 #include <thread>
 
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
-	//#include <WinSock2.h>
+	#include <WinSock2.h>
 #endif
 
 #include "i6engine/core/configs/SubsystemConfig.h"
