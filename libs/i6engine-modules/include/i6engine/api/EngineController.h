@@ -25,6 +25,8 @@
 #include <map>
 #include <set>
 
+#include "i6engine/utils/i6eSystemParameters.h"
+
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 	#include <tchar.h>
 	#include <Windows.h>
@@ -38,10 +40,6 @@
 #include "boost/function.hpp"
 
 #include "clockUtils/iniParser/iniParser.h"
-
-#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
-	typedef void * HWND;
-#endif
 
 namespace i6engine {
 namespace core {

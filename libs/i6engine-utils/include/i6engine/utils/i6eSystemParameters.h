@@ -147,6 +147,13 @@
 	#pragma warning(disable : 4251) // dll interface to be used by clients...
 #endif
 
+#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
+	/**
+	 * necessary to use same API for using window handles
+	 */
+	typedef void * HWND;
+#endif
+
 /**
  * @}
  */

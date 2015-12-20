@@ -64,7 +64,7 @@ namespace modules {
 		}
 
 		if (_zOrder != INT_MAX) {
-			_manager->getRoot()->getAutoCreatedWindow()->removeViewport(_zOrder);
+			_manager->getRenderWindow()->removeViewport(_zOrder);
 		}
 
 		_sceneNode->detachObject(camera);
@@ -101,7 +101,7 @@ namespace modules {
 		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(_sceneNode->getAttachedObject(0));
 		if (camera->getViewport() == nullptr) {
 			_zOrder = zOrder;
-			vp = _manager->getRoot()->getAutoCreatedWindow()->addViewport(camera, zOrder, float(left), float(top), float(width), float(height));
+			vp = _manager->getRenderWindow()->addViewport(camera, zOrder, float(left), float(top), float(width), float(height));
 		} else {
 			vp = camera->getViewport();
 			vp->setDimensions(left, top, width, height);

@@ -226,26 +226,26 @@ namespace modules {
 
 	void GraphicsNode::createLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_lights.find(coid) == _particles.end());
+		assert(_lights.find(coid) == _lights.end());
 		LuminousComponent * lc = new LuminousComponent(_manager, this, _gameObjectID, coid, type, diffuse, specular, attenuation, direction, position, spotLightRangeInner, spotLightRangeOuter);
 		_lights.insert(std::make_pair(coid, lc));
-		assert(_lights.find(coid) != _particles.end());
+		assert(_lights.find(coid) != _lights.end());
 	}
 
 	void GraphicsNode::updateLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_lights.find(coid) != _particles.end());
+		assert(_lights.find(coid) != _lights.end());
 		LuminousComponent * lc = _lights[coid];
 		lc->updateLuminousComponent(type, diffuse, specular, attenuation, direction, position, spotLightRangeInner, spotLightRangeOuter);
 	}
 
 	void GraphicsNode::deleteLuminousComponent(const int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_lights.find(coid) != _particles.end());
+		assert(_lights.find(coid) != _lights.end());
 		LuminousComponent * lc = _lights[coid];
 		_lights.erase(coid);
 		delete lc;
-		assert(_lights.find(coid) == _particles.end());
+		assert(_lights.find(coid) == _lights.end());
 	}
 
 	void GraphicsNode::createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos) {
@@ -304,11 +304,11 @@ namespace modules {
 
 	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_movableTexts.find(coid) != _movableTexts.end());
+		assert(_movableTexts.find(coid) == _movableTexts.end());
 		assert(_meshes.find(targetID) != _meshes.end());
 		MovableTextComponent * mtc = new MovableTextComponent(_manager, this, _gameObjectID, coid, _meshes[targetID], font, text, size, colour);
 		_movableTexts.insert(std::make_pair(coid, mtc));
-		assert(_movableTexts.find(coid) == _movableTexts.end());
+		assert(_movableTexts.find(coid) != _movableTexts.end());
 	}
 
 	void GraphicsNode::updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {

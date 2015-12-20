@@ -50,6 +50,7 @@ add_custom_command(TARGET Plugin_EditorRPGInitialization PRE_BUILD COMMAND ${CMA
 IF(WIN32)
 	add_custom_command(TARGET Plugin_EditorRPGInitialization POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Plugin_EditorRPGInitialization.dll ${CMAKE_BINARY_DIR}/bin/plugins/editor/initialization)
 ELSEIF(UNIX)
+	set_target_properties(Plugin_EditorRPGInitialization PROPERTIES PREFIX "")
 	add_custom_command(TARGET Plugin_EditorRPGInitialization POST_BUILD COMMAND ${CMAKE_COMMAND} -E create_symlink Plugin_EditorRPGInitialization.so ${CMAKE_BINARY_DIR}/bin/plugins/editor/initialization/Plugin_EditorRPGInitialization.so)
 ENDIF(WIN32)
 
