@@ -38,10 +38,5 @@ TEST(GameMessage, Position_Serialize) {
 	msg2->getContent()->_sender = i6engine::core::IPKey("127.123.123.1:12345");
 
 	EXPECT_FALSE(msg1->Serialize().empty());
-
-	std::cout << "-----------------------------" << std::endl;
-	std::cout << msg2->Serialize().size() << std::endl;
-	std::cout << msg2->Serialize() << std::endl;
-
 	EXPECT_FALSE(msg2->Serialize().empty());
 }

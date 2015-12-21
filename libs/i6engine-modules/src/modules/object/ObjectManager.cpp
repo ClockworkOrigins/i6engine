@@ -46,7 +46,7 @@
 namespace i6engine {
 namespace modules {
 
-	ObjectManager::ObjectManager() : _GOList(), _tickList(), _componentFactory(), _goFactory(this, &_componentFactory), _paused(false) {
+	ObjectManager::ObjectManager() : _GOMap(), _tickList(), _componentFactory(), _goFactory(this, &_componentFactory), _paused(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback(boost::bind(&ObjectManager::addTicker, this, _1));
@@ -60,8 +60,7 @@ namespace modules {
 	ObjectManager::~ObjectManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_tickList.clear();
-
-		_GOList.clear();
+		_GOMap.clear();
 		GOPtr::clear();
 		api::ComPtr::clear();
 	}
@@ -188,8 +187,8 @@ namespace modules {
 
 				deleteAllObjectsOfType(objtype);
 			} else if (type == api::objects::ObjClean) {
-				_GOList.clear();
-				api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOList(_GOList);
+				_GOMap.clear();
+				api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOMap(_GOMap);
 				_tickList.clear();
 				GOPtr::clear();
 				api::ComPtr::clear();
@@ -232,10 +231,9 @@ namespace modules {
 
 		std::vector<api::GameMessage::Ptr> v;
 
-		for (std::list<GOPtr>::const_iterator it = _GOList.begin(); it != _GOList.end(); ++it) {
-			assert(*it != nullptr);
-
-			(*it)->synchronize(v, false);
+		for (std::unordered_map<int64_t, GOPtr>::const_iterator it = _GOMap.begin(); it != _GOMap.end(); ++it) {
+			assert(it->second != nullptr);
+			it->second->synchronize(v, false);
 		}
 
 		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::AdministrationMessageType, api::network::NetGameState, core::Method::Create, new api::network::Administration_GameState_Create(receiver, v), core::Subsystem::Object);
@@ -245,78 +243,67 @@ namespace modules {
 
 	void ObjectManager::deleteObject(int64_t id) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
-		for (std::list<GOPtr>::iterator iter = _GOList.begin(); iter != _GOList.end(); ++iter) {
-			if ((*iter)->getID() == id) {
-				_GOList.erase(iter);
-				break;
-			}
-		}
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOList(_GOList);
+		_GOMap.erase(id);
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOMap(_GOMap);
 		GOPtr::clear();
 		api::ComPtr::clear();
 	}
 
 	void ObjectManager::insertObject(const GOPtr & go) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		_GOList.push_back(go);
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOList(_GOList);
+		_GOMap.insert(std::make_pair(go->getID(), go));
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOMap(_GOMap);
 	}
 
 	void ObjectManager::deleteAllObjectsOfType(const std::string & type) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		for (std::list<GOPtr>::iterator iter = _GOList.begin(); iter != _GOList.end(); ) {
-			if ((*iter)->getType() == type) {
-				std::list<GOPtr>::iterator iterBack = iter;
-				iter++;
-				_GOList.erase(iterBack);
+		for (std::unordered_map<int64_t, GOPtr>::iterator it = _GOMap.begin(); it != _GOMap.end();) {
+			if (it->second->getType() == type) {
+				std::unordered_map<int64_t, GOPtr>::iterator itBack = it;
+				it++;
+				_GOMap.erase(itBack);
 			} else {
-				iter++;
+				it++;
 			}
 		}
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOList(_GOList);
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOMap(_GOMap);
 		GOPtr::clear();
 		api::ComPtr::clear();
 	}
 
 	GOPtr ObjectManager::getObject(const int64_t goid) const {
-		// Iterate through _GOList
-		for (std::list<GOPtr>::const_iterator it = _GOList.begin(); it != _GOList.end(); ++it) {
-			// Wanted GameObject found
-			if ((*it)->getID() == goid) {
-				// Return a pointer to the wanted GameObject
-				return *it;
-			}
+		auto it = _GOMap.find(goid);
+		if (it != _GOMap.end()) {
+			return it->second;
 		}
-
 		// Not found, return nullptr
 		return GOPtr();
 	}
 
 	void ObjectManager::sendConditionalMessage(const api::objects::Object_ConditionalMessage_Update & m) {
-		for (std::list<GOPtr>::iterator it = _GOList.begin(); it != _GOList.end(); ++it) {
-			if (m.func(*it)) {
+		for (std::unordered_map<int64_t, GOPtr>::iterator it = _GOMap.begin(); it != _GOMap.end(); ++it) {
+			if (m.func(it->second)) {
 				api::GameMessage::Ptr msg = m.msg;
 				if (m.sync || m.comFamID != UINT32_MAX) {
 					msg = boost::make_shared<api::GameMessage>(*msg);
 				}
 
 				if (m.comFamID != UINT32_MAX) {
-					api::ComPtr com = (*it)->getGOC(m.comFamID);
+					api::ComPtr com = it->second->getGOC(m.comFamID);
 					if (com != nullptr) {
 						msg->getContent()->_id = com->getID();
-						msg->getContent()->_waitForId = (*it)->getID();
+						msg->getContent()->_waitForId = it->first;
 					} else {
 						continue;
 					}
 				}
 
 				if (m.sync) {
-					msg->getContent()->_waitForId = (*it)->getID();
+					msg->getContent()->_waitForId = it->first;
 					api::EngineController::GetSingletonPtr()->getNetworkFacade()->publish(OBJECT_CHANNEL, msg);
 				}
-				(*it)->News(msg);
+				it->second->News(msg);
 			}
 		}
 	}

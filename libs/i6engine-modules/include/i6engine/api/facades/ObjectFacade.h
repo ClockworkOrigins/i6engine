@@ -26,6 +26,7 @@
 #include <list>
 #include <map>
 #include <mutex>
+#include <unordered_map>
 
 #include "i6engine/utils/weakPtr.h"
 
@@ -68,21 +69,21 @@ namespace api {
 		 * is highly thread unsafe..
 		 * \return _GOList
 		 */
-		std::list<GOPtr> getGOList() const;
+		std::unordered_map<int64_t, GOPtr> getGOMap() const;
 
 		/**
 		 * \brief returns a vector with all GameObjects of the given type
 		 * \param[in] type the list of types given in one string, using ; as delimiter
 		 * \returns list
 		 */
-		std::list<GOPtr> getAllObjectsOfType(const std::string & types) const;
+		std::vector<GOPtr> getAllObjectsOfType(const std::string & types) const;
 
 		/**
 		 * \brief returns a vector with all GameObjects of the given type
 		 * \param[in] type the list of types given as a vector
 		 * \returns list
 		 */
-		std::list<GOPtr> getAllObjectsOfType(const std::vector<std::string> & types) const;
+		std::vector<GOPtr> getAllObjectsOfType(const std::vector<std::string> & types) const;
 
 		/**
 		 * \brief deletes all Objects of a given type
@@ -159,10 +160,10 @@ namespace api {
 		void createComponent(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params) const;
 
 		/**
-		 * \brief updates the GOList with current state in ObjectSubsystem
+		 * \brief updates the GOMap with current state in ObjectSubsystem
 		 * \note only call from within object subsystem
 		 */
-		void updateGOList(const std::list<GOPtr> & GOList);
+		void updateGOMap(const std::unordered_map<int64_t, GOPtr> & GOMap);
 
 		/**
 		 * \brief sets the frametime for this subsystem in the facade, so you can see it from outside the subsystem
@@ -232,7 +233,7 @@ namespace api {
 		/**
 		 * \brief List with all current GameObjects.
 		 */
-		std::list<GOPtr> _GOList;
+		std::unordered_map<int64_t, GOPtr> _GOMap;
 
 		/**
 		 * \brief for locking the _GOList

@@ -85,7 +85,7 @@ namespace modules {
 		/**
 		 * \brief List with all current GameObjects.
 		 */
-		std::list<GOPtr> _GOList;
+		std::unordered_map<int64_t, GOPtr> _GOMap;
 
 		utils::sequence_map<int64_t, api::WeakComPtr> _tickList;
 

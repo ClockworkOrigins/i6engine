@@ -64,9 +64,9 @@ namespace components {
 		int64_t highlightTargetID = -1;
 		if (!dialog::DialogManager::GetSingleton().isDialogRunning()) {
 			double distance = DBL_MAX;
-			for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
-				if (go->getType() != "Player" && go->getGOC(config::NameComponent) != nullptr) {
-					Vec3 point = (go->getGOC(api::components::PhysicalStateComponent) != nullptr) ? go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent)->getPosition() : go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition();
+			for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOMap()) {
+				if (p.second->getType() != "Player" && p.second->getGOC(config::NameComponent) != nullptr) {
+					Vec3 point = (p.second->getGOC(api::components::PhysicalStateComponent) != nullptr) ? p.second->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent)->getPosition() : p.second->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent)->getPosition();
 					Vec3 offset = _psc.get()->getPosition();
 					Vec3 direction = math::rotateVector(Vec3(0.0, 0.0, 8.0), _psc.get()->getRotation());
 					double currentDistance = (point - offset).length();
@@ -74,8 +74,8 @@ namespace components {
 					if (currentDistance <= 8.0 && currentDistanceFromLine <= 2.0 && (point - (offset + direction)).length() > (point - (offset - direction)).length()) {
 						if (currentDistance + currentDistanceFromLine < distance) {
 							distance = currentDistance + currentDistanceFromLine;
-							highlightTargetID = go->getID();
-							targetGO = go;
+							highlightTargetID = p.first;
+							targetGO = p.second;
 						}
 					}
 				}
