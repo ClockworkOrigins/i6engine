@@ -177,9 +177,11 @@ namespace editor {
 
 			api::EngineController::GetSingletonPtr()->getGraphicsFacade()->getHighestCoordinate(Vec3::ZERO, [this](Vec3 pos) {
 				i6engine::api::objects::GOTemplate tmpl;
+				i6engine::api::attributeMap paramsSSC;
+				(pos + Vec3(0.0, 2.0, 0.0)).insertInMap("pos", paramsSSC);
 				i6engine::api::attributeMap paramsCamera;
-				(pos + Vec3(0.0, 2.0, 0.0)).insertInMap("pos", paramsCamera);
 				(pos + Vec3(0.0, 2.0, 1.0)).insertInMap("lookAt", paramsCamera);
+				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
 				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Camera", paramsCamera, "", false, false));
 				api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO("EditorCam", tmpl, api::EngineController::GetSingleton().getUUID(), false, boost::bind(&Editor::setCamera, this, _1));
 			});
