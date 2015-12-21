@@ -57,6 +57,15 @@
 	}\
 }
 
+/**
+ * \brief use this to suggest an information how to resolve the exception
+ */
+#define ISIXE_THROW_API_INFO(module, message, info) {\
+	std::stringstream logMessageString;\
+	logMessageString << message << "\nPossible solutin: " << info;\
+	throw i6engine::utils::exceptions::ApiException(module, logMessageString.str(), __FILE__, __LINE__);\
+}
+
 namespace i6engine {
 namespace utils {
 namespace exceptions {
