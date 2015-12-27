@@ -34,7 +34,7 @@
 namespace i6engine {
 namespace api {
 
-	GameObject::GameObject(const int64_t goid, const core::IPKey & owner, uint32_t uuid, const std::string & tpl, const boost::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f) : _type(), _objGoid(goid), _objComponents(), _template(tpl), _messages(), _owner(owner), _uuid(uuid), _componentFunc(f), _self(), _flags(), _send(false) {
+	GameObject::GameObject(const int64_t goid, const core::IPKey & owner, uint64_t uuid, const std::string & tpl, const boost::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f) : _type(), _objGoid(goid), _objComponents(), _template(tpl), _messages(), _owner(owner), _uuid(uuid), _componentFunc(f), _self(), _flags(), _send(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		if (_objGoid == -1) {
 			_objGoid = EngineController::GetSingletonPtr()->getIDManager()->getID();

@@ -507,7 +507,7 @@ namespace modules {
 				data[i] = mscsd->data[i];
 			}
 			btBulletWorldImporter * fileLoader = new btBulletWorldImporter(_dynamicsWorld);
-			fileLoader->loadFileFromMemory(data, mscsd->data.size());
+			fileLoader->loadFileFromMemory(data, int(mscsd->data.size()));
 			shape = fileLoader->getCollisionShapeByIndex(int(shapeIndex));
 			delete fileLoader;
 			delete[] data;

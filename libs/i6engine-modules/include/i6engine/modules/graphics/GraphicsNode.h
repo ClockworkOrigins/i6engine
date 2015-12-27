@@ -43,6 +43,7 @@ namespace modules {
 	class BoundingBoxComponent;
 	class CameraComponent;
 	class GraphicsManager;
+	class LineComponent;
 	class LuminousComponent;
 	class MeshComponent;
 	class MovableTextComponent;
@@ -273,6 +274,16 @@ namespace modules {
 		void removeBoundingBox(int64_t coid);
 
 		/**
+		 * \brief creates a line with given colour
+		 */
+		void createLine(int64_t coid, const Vec3 & from, const Vec3 & to, const Vec3 & colour);
+
+		/**
+		 * \brief removes a line
+		 */
+		void removeLine(int64_t coid);
+
+		/**
 		 * \brief ticking the GraphicsNode
 		 */
 		void Tick();
@@ -327,6 +338,8 @@ namespace modules {
 		std::map<int64_t, MovableTextComponent *> _movableTexts;
 
 		std::map<int64_t, BoundingBoxComponent *> _boundingBoxes;
+
+		std::map<int64_t, LineComponent *> _lines;
 
 		bool _ticking;
 

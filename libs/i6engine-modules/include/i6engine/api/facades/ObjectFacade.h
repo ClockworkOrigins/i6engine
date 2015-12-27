@@ -95,7 +95,7 @@ namespace api {
 		 * \param[in] params parameter map
 		 * \param[in] sender whether this GameObject should have a NetworkSenderComponent
 		 */
-		void createObject(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint32_t uuid, const bool sender) const;
+		void createObject(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint64_t uuid, const bool sender) const;
 
 		/**
 		 * \brief This method will be called when shutting down ObjectController.
@@ -147,7 +147,7 @@ namespace api {
 		 * param[in] func callback to be called with the new GameObject
 		 * param[in] sender true if this GameObject should be synchronized in multiplayer games
 		 */
-		void createGO(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint32_t uuid, const bool sender, const boost::function<void(GOPtr)> & func) const;
+		void createGO(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint64_t uuid, const bool sender, const boost::function<void(GOPtr)> & func) const;
 
 		/**
 		 * \brief creates a new Component for given GameObject

@@ -19,8 +19,8 @@
  * @{
  */
 
-#ifndef __I6ENGINE_API_PARTICLEEMITTERCOMPONENT_H__
-#define __I6ENGINE_API_PARTICLEEMITTERCOMPONENT_H__
+#ifndef __I6ENGINE_API_LINECOMPONENT_H__
+#define __I6ENGINE_API_LINECOMPONENT_H__
 
 #include "i6engine/math/i6eVector.h"
 
@@ -30,31 +30,30 @@ namespace i6engine {
 namespace api {
 
 	/**
-	 * \class ParticleEmitterComponent
-	 * \brief Emits Particles
-	 * For creating a ParticleEmitterComponent, these keys are possible:
+	 * \class LineComponent
+	 * \brief creates a line in a given colour
+	 * For creating a LineComponent, these keys are possible:
 	 * | Name | Required | Type | Description | Public |
 	 * |------|----------|------| ----------- | ------------ |
-	 * | particleEmitter | yes | std::string | The emitter for the particle | yes |
-	 * | pos | no | Vec3 | relative position to SceneNode | yes |
-	 * | fadeOut | no | bool | if set to true, the particle isn't removed immediately but emitters are stopped and so the particle fades out | yes |
-	 * | fadeOutCooldown | *) | uint64_t | time after stopping emitters until particle will be destroyed, *) required if fadeOut is set | yes |
+	 * | startPos | yes | Vec3 | start position of the line | yes |
+	 * | endPos | yes | Vec3 | end position of the line | yes |
+	 * | colour | yes | Vec3 | colour of the line | yes |
 	 */
-	class ISIXE_MODULES_API ParticleEmitterComponent : public Component {
+	class ISIXE_MODULES_API LineComponent : public Component {
 	public:
 		/**
 		 * \brief Constructor of the component
 		 *
 		 * Sets visibility and ID
 		 */
-		ParticleEmitterComponent(const int64_t id, const attributeMap & params);
+		LineComponent(const int64_t id, const attributeMap & params);
 
 		/**
 		 * \brief Empty
 		 *
 		 * Hasn't to do anything right now
 		 */
-		~ParticleEmitterComponent();
+		~LineComponent();
 
 		/**
 		 * \brief synchronizes the Components state
@@ -62,16 +61,15 @@ namespace api {
 		attributeMap synchronize() const override;
 
 		std::string getTemplateName() const override {
-			return "ParticleEmitter";
+			return "Line";
 		}
 
 		std::vector<componentOptions> getComponentOptions() override;
 
 	private:
-		std::string _emitterName;
-		Vec3 _pos;
-		bool _fadeOut;
-		uint32_t _fadeOutCooldown;
+		Vec3 _startPos;
+		Vec3 _endPos;
+		Vec3 _colour;
 
 		void Init() override;
 
@@ -83,7 +81,7 @@ namespace api {
 } /* namespace api */
 } /* namespace i6engine */
 
-#endif /* __I6ENGINE_API_PARTICLEEMITTERCOMPONENT_H__ */
+#endif /* __I6ENGINE_API_LINECOMPONENT_H__ */
 
 /**
  * @}

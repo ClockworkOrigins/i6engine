@@ -249,14 +249,14 @@ namespace api {
 		/**
 		 * \brief returns the uuid of this node
 		 */
-		inline uint32_t getUUID() const {
+		inline uint64_t getUUID() const {
 			return _uuid;
 		}
 
 		/**
 		 * \brief returns a new uuid
 		 */
-		uint32_t getNewUUID() const;
+		uint64_t getNewUUID() const;
 
 		/**
 		 * \brief returns the iniParser that parsed the i6engine config file
@@ -303,7 +303,7 @@ namespace api {
 
 		core::MessagingController * _messagingController;
 
-		uint32_t _uuid;
+		uint64_t _uuid;
 
 		/**
 		 * \brief ini parser to load config file

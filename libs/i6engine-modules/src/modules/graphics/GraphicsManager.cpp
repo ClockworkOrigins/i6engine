@@ -449,10 +449,8 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		if (msg->getSubtype() == api::graphics::GraLine) {
-			Vec3 from = static_cast<api::graphics::Graphics_Line_Create *>(msg->getContent())->from;
-			Vec3 to = static_cast<api::graphics::Graphics_Line_Create *>(msg->getContent())->to;
-
-			Debug::getSingleton().drawLine(from.toOgre(), to.toOgre(), Ogre::ColourValue::Red);
+			api::graphics::Graphics_Line_Create * glc = dynamic_cast<api::graphics::Graphics_Line_Create *>(msg->getContent());
+			Debug::getSingleton().drawLine(glc->from.toOgre(), glc->to.toOgre(), Ogre::ColourValue(glc->colour.getX(), glc->colour.getY(), glc->colour.getZ()));
 		} else if (msg->getSubtype() == api::graphics::GraTerrain) {
 			std::string heightmap = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->heightmap;
 			double size = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->size;
@@ -710,6 +708,11 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->createMovableText(coid, gmtc->targetID, gmtc->font, gmtc->text, gmtc->size, gmtc->colour);
+		} else if (msg->getSubtype() == api::graphics::GraLine) {
+			api::graphics::Graphics_Line_Create * glc = static_cast<api::graphics::Graphics_Line_Create *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			node->createLine(coid, glc->from, glc->to, glc->colour);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -856,6 +859,10 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->removeBoundingBox(coid);
+		} else if (msg->getSubtype() == api::graphics::GraLine) {
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			node->removeLine(coid);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
@@ -892,6 +899,8 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->deleteMovableText(coid);
+		} else {
+			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}
 	}
 

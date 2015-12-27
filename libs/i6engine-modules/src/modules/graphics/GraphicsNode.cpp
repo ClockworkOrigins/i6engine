@@ -20,6 +20,7 @@
 #include "i6engine/modules/graphics/components/BillboardComponent.h"
 #include "i6engine/modules/graphics/components/BoundingBoxComponent.h"
 #include "i6engine/modules/graphics/components/CameraComponent.h"
+#include "i6engine/modules/graphics/components/LineComponent.h"
 #include "i6engine/modules/graphics/components/LuminousComponent.h"
 #include "i6engine/modules/graphics/components/MeshComponent.h"
 #include "i6engine/modules/graphics/components/MovableTextComponent.h"
@@ -343,6 +344,23 @@ namespace modules {
 		_boundingBoxes.erase(coid);
 		delete bbc;
 		assert(_boundingBoxes.find(coid) == _boundingBoxes.end());
+	}
+
+	void GraphicsNode::createLine(int64_t coid, const Vec3 & from, const Vec3 & to, const Vec3 & colour) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_lines.find(coid) == _lines.end());
+		LineComponent * lc = new LineComponent(_manager, this, _gameObjectID, coid, from, to, colour);
+		_lines.insert(std::make_pair(coid, lc));
+		assert(_lines.find(coid) != _lines.end());
+	}
+
+	void GraphicsNode::removeLine(int64_t coid) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_lines.find(coid) != _lines.end());
+		LineComponent * lc = _lines[coid];
+		_lines.erase(coid);
+		delete lc;
+		assert(_lines.find(coid) == _lines.end());
 	}
 
 	void GraphicsNode::Tick() {

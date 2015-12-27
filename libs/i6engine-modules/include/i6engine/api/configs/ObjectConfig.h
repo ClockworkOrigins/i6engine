@@ -112,11 +112,11 @@ namespace objects {
 	typedef struct ISIXE_MODULES_API Object_Create_Create : GameMessageStruct {
 		std::string tpl;
 		core::IPKey owner;
-		uint32_t uuid;
+		uint64_t uuid;
 		GOTemplate tmpl;
 		bool send;
 		Object_Create_Create();
-		Object_Create_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint32_t u, const GOTemplate & g, const bool b);
+		Object_Create_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint64_t u, const GOTemplate & g, const bool b);
 		template<class Archive>
 		void serialize(Archive & ar, const unsigned int version) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
@@ -207,12 +207,12 @@ namespace objects {
 	typedef struct ISIXE_MODULES_API Object_CreateAndCall_Create : GameMessageStruct {
 		std::string tpl;
 		core::IPKey owner;
-		uint32_t uuid;
+		uint64_t uuid;
 		GOTemplate tmpl;
 		bool send;
 		boost::function<void(const GOPtr &)> func;
 		Object_CreateAndCall_Create();
-		Object_CreateAndCall_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint32_t u, const GOTemplate & g, const bool b, const boost::function<void(const GOPtr &)> & f);
+		Object_CreateAndCall_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint64_t u, const GOTemplate & g, const bool b, const boost::function<void(const GOPtr &)> & f);
 		Object_CreateAndCall_Create * copy() { return new Object_CreateAndCall_Create(*this); }
 	} Object_CreateAndCall_Create;
 
