@@ -80,7 +80,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->stop();
 	}
 
-	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _languageManager(new LanguageManager()), _textManager(new TextManager()), _waynetManager(new WaynetManager()), _appl(), _debugdrawer(0), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER) {
+	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _languageManager(new LanguageManager()), _textManager(new TextManager()), _waynetManager(new WaynetManager()), _appl(), _debugdrawer(0), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER), _running(true), _commandLineReadThread() {
 		// WORKAROUND: Install signal handlers to overcome OIS's limitation to handle X11 key repeat rate properly when crashing.
 		signal(SIGINT, forceCleanup);
 		// TODO: kA
@@ -139,6 +139,11 @@ namespace api {
 		delete _scriptingFacade;
 
 		delete _messagingController;
+
+		_running = false;
+		if (_commandLineReadThread.joinable()) {
+			_commandLineReadThread.join();
+		}
 	}
 
 	void EngineController::runEngine() {
@@ -151,34 +156,7 @@ namespace api {
 
 		_subsystemController->QueueSubSystemStart(_appl, LNG_GAME_FRAME_TIME);
 
-		volatile bool run = true;
-
-		// need 'this' captured to compile with gcc 4.7...
-		std::thread thrd([this, &run]() {
-			// read stdin
-			std::string str;
-			struct timeval tv;
-
-			while (run) {
-				fd_set readset;
-				FD_ZERO(&readset);
-				FD_SET(0, &readset);
-				tv.tv_sec = 0;
-				tv.tv_usec = 50000;
-				int result = select(1, &readset, NULL, NULL, &tv);
-				if (result > 0 && FD_ISSET(0, &readset)) {
-					if (std::cin.peek() != -1) {
-						std::getline(std::cin, str);
-						GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GameMessageType, input::InputConsoleRead, core::Method::Create, new input::Input_ConsoleRead_Create(str), core::Subsystem::Unknown);
-						EngineController::getMessagingFacade()->deliverMessage(msg);
-					}
-				}
-			}
-		});
-
 		_coreController->RunEngine();
-		run = false;
-		thrd.join();
 	}
 
 	void EngineController::registerSubSystem(const std::string & name, core::ModuleController * module, uint32_t frameTime) {
@@ -297,6 +275,30 @@ namespace api {
 		return hWnd;
 	}
 #endif
+
+	void EngineController::enableCommandLineReader() {
+		_commandLineReadThread = std::thread([this]() {
+			// read stdin
+			std::string str;
+			struct timeval tv;
+
+			while (_running) {
+				fd_set readset;
+				FD_ZERO(&readset);
+				FD_SET(0, &readset);
+				tv.tv_sec = 0;
+				tv.tv_usec = 50000;
+				int result = select(1, &readset, NULL, NULL, &tv);
+				if (result > 0 && FD_ISSET(0, &readset)) {
+					if (std::cin.peek() != -1) {
+						std::getline(std::cin, str);
+						GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GameMessageType, input::InputConsoleRead, core::Method::Create, new input::Input_ConsoleRead_Create(str), core::Subsystem::Unknown);
+						EngineController::getMessagingFacade()->deliverMessage(msg);
+					}
+				}
+			}
+		});
+	}
 
 } /* namespace api */
 } /* namespace i6engine */

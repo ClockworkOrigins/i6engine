@@ -24,6 +24,7 @@
 
 #include <map>
 #include <set>
+#include <thread>
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
@@ -279,6 +280,11 @@ namespace api {
 		HWND createWindow(HINSTANCE hInstance);
 #endif
 
+		/**
+		 * \brief starts a thread reading console input and sending lines as input message
+		 */
+		void enableCommandLineReader();
+
 	private:
 		std::map<std::string, std::pair<core::ModuleController *, uint32_t>> _queuedModules;
 		std::map<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> _queuedModulesWaiting;
@@ -311,6 +317,9 @@ namespace api {
 		clockUtils::iniParser::IniParser _iParser;
 
 		GameType _type;
+
+		bool _running;
+		std::thread _commandLineReadThread;
 
 		/**
 		 * \brief Contructor
