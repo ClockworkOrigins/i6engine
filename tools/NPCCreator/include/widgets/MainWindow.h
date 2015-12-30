@@ -3,6 +3,8 @@
 
 #include "ui_wndMainWindow.h"
 
+#include "i6engine/rpg/RPGApplication.h"
+
 namespace i6engine {
 namespace tools {
 namespace npcCreator {
@@ -10,8 +12,9 @@ namespace widgets {
 
 	class NPCEditWidget;
 	class NPCListWidget;
+	class NPCRenderWidget;
 
-	class MainWindow : public QMainWindow, public Ui::wndMainWindow {
+	class MainWindow : public QMainWindow, public Ui::wndMainWindow, public rpg::RPGApplication {
 		Q_OBJECT
 
 	public:
@@ -24,6 +27,13 @@ namespace widgets {
 	private:
 		NPCListWidget * _npcListWidget;
 		NPCEditWidget * _npcEditWidget;
+		NPCRenderWidget * _npcRenderWidget;
+
+		void closeEvent(QCloseEvent * evt) override;
+
+		void AfterInitialize() override;
+
+		void Finalize() override;
 	};
 
 } /* namespace widgets */
