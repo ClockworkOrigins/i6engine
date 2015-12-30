@@ -180,19 +180,19 @@ namespace modules {
 		assert(_meshes.find(coid) == _meshes.end());
 	}
 
-	void GraphicsNode::createCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov) {
+	void GraphicsNode::createCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, double aspect, const double fov) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_cameras.find(coid) == _cameras.end());
-		CameraComponent * cc = new CameraComponent(_manager, this, _gameObjectID, coid, position, lookAt, nC, fov);
+		CameraComponent * cc = new CameraComponent(_manager, this, _gameObjectID, coid, position, lookAt, nC, aspect, fov);
 		_cameras.insert(std::make_pair(coid, cc));
 		assert(_cameras.find(coid) != _cameras.end());
 	}
 
-	void GraphicsNode::updateCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov) {
+	void GraphicsNode::updateCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, double aspect, const double fov) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_cameras.find(coid) != _cameras.end());
 		CameraComponent * cc = _cameras[coid];
-		cc->updateCameraComponent(position, lookAt, nC, fov);
+		cc->updateCameraComponent(position, lookAt, nC, aspect, fov);
 	}
 
 	void GraphicsNode::updateCameraFrustumComponent(const int64_t coid, const double left, const double right, const double top, const double bottom) {

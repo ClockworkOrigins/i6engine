@@ -156,8 +156,8 @@ namespace modules {
 		 *
 		 *			Creates a new camera if _camera is NULL, otherwise it changes position to parameter
 		 */
-		void createCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov);
-		void updateCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov);
+		void createCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, double aspect, const double fov);
+		void updateCameraComponent(const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, double aspect, const double fov);
 
 		/**
 		 * \brief Updates the camera frustum

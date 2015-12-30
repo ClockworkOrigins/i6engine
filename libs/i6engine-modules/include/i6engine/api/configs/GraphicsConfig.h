@@ -191,10 +191,11 @@ namespace graphics {
 		Vec3 pos;
 		Vec3 look;
 		double nearClip;
+		double aspect;
 		double fov;
 		Graphics_Camera_Create();
 		Graphics_Camera_Create(const int64_t i);
-		Graphics_Camera_Create(const int64_t i, const int64_t, const Vec3 & p, const Vec3 & l, const double nc, double fo);
+		Graphics_Camera_Create(const int64_t i, const int64_t, const Vec3 & p, const Vec3 & l, const double nc, double a, double fo);
 		Graphics_Camera_Create * copy() { return new Graphics_Camera_Create(*this); }
 	} Graphics_Camera_Create;
 
@@ -205,9 +206,10 @@ namespace graphics {
 		Vec3 pos;
 		Vec3 look;
 		double nearClip;
+		double aspect;
 		double fov;
 		Graphics_Camera_Update();
-		Graphics_Camera_Update(const int64_t goid, const int64_t cid, const Vec3 & p, const Vec3 & l, const double nc, const double fo);
+		Graphics_Camera_Update(const int64_t goid, const int64_t cid, const Vec3 & p, const Vec3 & l, const double nc, double a, const double fo);
 		Graphics_Camera_Update * copy() { return new Graphics_Camera_Update(*this); }
 	} Graphics_Camera_Update;
 

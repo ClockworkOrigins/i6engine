@@ -34,14 +34,15 @@
 namespace i6engine {
 namespace api {
 
-	CameraComponent::CameraComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _lookAt(), _nearClip(1), _aspect(), _zOrder(), _viewport(false), _left(), _top(), _width(), _height(), _red(0), _green(0), _blue(0), _alpha(1.0), _fov(45.0 / 180.0 * PI) {
+	CameraComponent::CameraComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _lookAt(), _nearClip(1), _aspect(1.33333333333333), _zOrder(), _viewport(false), _left(), _top(), _width(), _height(), _red(0), _green(0), _blue(0), _alpha(1.0), _fov(45.0 / 180.0 * PI) {
 		Component::_objFamilyID = components::CameraComponent;
 		Component::_objComponentID = components::CameraComponent;
 
 		parseAttribute<true>(params, "pos", _position);
 		parseAttribute<true>(params, "lookAt", _lookAt);
 		parseAttribute<true>(params, "nearclip", _nearClip);
-		parseAttribute<true>(params, "aspect", _aspect);
+		parseAttribute<false>(params, "aspect", _aspect);
+		parseAttribute<false>(params, "fov", _fov);
 
 		if (params.find("viewport") != params.end()) {
 			parseAttribute<true>(params, "zOrder", _zOrder);
@@ -64,7 +65,7 @@ namespace api {
 	}
 
 	void CameraComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Create, new graphics::Graphics_Camera_Create(_objOwnerID, getID(), _position, _lookAt, _nearClip, _fov), core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Create, new graphics::Graphics_Camera_Create(_objOwnerID, getID(), _position, _lookAt, _nearClip, _aspect, _fov), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -139,7 +140,7 @@ namespace api {
 			return;
 		}
 
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, _position, _lookAt, _nearClip, _fov), core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraCamera, core::Method::Update, new graphics::Graphics_Camera_Update(_objOwnerID, _id, _position, _lookAt, _nearClip, _aspect, _fov), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}

@@ -639,7 +639,7 @@ namespace modules {
 			api::graphics::Graphics_Camera_Create * m = static_cast<api::graphics::Graphics_Camera_Create *>(msg->getContent());
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
-			node->createCameraComponent(coid, m->pos, m->look, m->nearClip, m->fov);
+			node->createCameraComponent(coid, m->pos, m->look, m->nearClip, m->aspect, m->fov);
 		} else if (msg->getSubtype() == api::graphics::GraLuminous) {
 			uint16_t t = static_cast<api::graphics::Graphics_Luminous_Update *>(msg->getContent())->lightType;
 
@@ -728,7 +728,7 @@ namespace modules {
 			api::graphics::Graphics_Camera_Update * m = static_cast<api::graphics::Graphics_Camera_Update *>(msg->getContent());
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
-			node->updateCameraComponent(coid, m->pos, m->look, m->nearClip, m->fov);
+			node->updateCameraComponent(coid, m->pos, m->look, m->nearClip, m->aspect, m->fov);
 		} else if (msg->getSubtype() == api::graphics::GraFrustum) {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);

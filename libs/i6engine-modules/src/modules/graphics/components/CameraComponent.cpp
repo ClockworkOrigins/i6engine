@@ -27,7 +27,7 @@
 namespace i6engine {
 namespace modules {
 
-	CameraComponent::CameraComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov) : _manager(manager), _parent(parent), _sceneNode(nullptr), _zOrder(INT_MAX) {
+	CameraComponent::CameraComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, double aspect, const double fov) : _manager(manager), _parent(parent), _sceneNode(nullptr), _zOrder(INT_MAX) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
@@ -40,6 +40,7 @@ namespace modules {
 		camera->lookAt(lookAt.toOgre());
 		camera->setNearClipDistance(nC);
 		camera->setFOVy(Ogre::Radian(fov));
+		camera->setAspectRatio(aspect);
 	}
 
 	CameraComponent::~CameraComponent() {
@@ -73,13 +74,14 @@ namespace modules {
 		_parent->getSceneNode()->removeAndDestroyChild(_sceneNode->getName());
 	}
 
-	void CameraComponent::updateCameraComponent(const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov) {
+	void CameraComponent::updateCameraComponent(const Vec3 & position, const Vec3 & lookAt, const double nC, double aspect, const double fov) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(_sceneNode->getAttachedObject(0));
 		camera->setPosition(position.toOgre());
 		camera->lookAt(lookAt.toOgre());
 		camera->setNearClipDistance(nC);
 		camera->setFOVy(Ogre::Radian(fov));
+		camera->setAspectRatio(aspect);
 	}
 
 	void CameraComponent::updateCameraFrustumComponent(const double left, const double right, const double top, const double bottom) {

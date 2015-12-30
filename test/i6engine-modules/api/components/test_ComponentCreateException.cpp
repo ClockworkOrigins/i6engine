@@ -53,7 +53,7 @@ TEST(Component, CreateException) {
 		}
 	}
 	{
-		attributeMap paramsCamera = { { "pos", "0.0 0.0 0.0" }, { "lookAt", "0.0 0.0 0.0" }, { "nearclip", "1" }, { "aspect", "1.0" } };
+		attributeMap paramsCamera = { { "pos", "0.0 0.0 0.0" }, { "lookAt", "0.0 0.0 0.0" }, { "nearclip", "1" } };
 		Component::createC<CameraComponent>(0, paramsCamera);
 		for (auto it = paramsCamera.begin(); it != paramsCamera.end(); it++) {
 			auto newMap = paramsCamera;
@@ -143,7 +143,7 @@ TEST(Component, CreateException) {
 		}
 	}
 	{
-		attributeMap paramsMovingCamera = { { "pos", "0.0 0.0 0.0" }, { "lookAt", "0.0 0.0 0.0" }, { "nearclip", "1" }, { "aspect", "1.0" } };
+		attributeMap paramsMovingCamera = { { "pos", "0.0 0.0 0.0" }, { "lookAt", "0.0 0.0 0.0" }, { "nearclip", "1" } };
 		Component::createC<MovingCameraComponent>(0, paramsMovingCamera);
 		for (auto it = paramsMovingCamera.begin(); it != paramsMovingCamera.end(); it++) {
 			auto newMap = paramsMovingCamera;
