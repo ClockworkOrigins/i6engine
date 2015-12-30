@@ -92,7 +92,7 @@ namespace components {
 						// enough place, so reserve those slots and store item
 						for (size_t k = i; k < _rows && k - i < sc->getHeight(); k++) {
 							for (size_t l = j; l < _columns && l - j < sc->getWidth(); l++) {
-								_slots[k][l] = _items.size();
+								_slots[k][l] = uint16_t(_items.size());
 							}
 						}
 						std::vector<api::GameMessage::Ptr> msgs;
@@ -327,7 +327,7 @@ namespace components {
 	void SlotInventoryComponent::useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback) {
 		for (size_t i = 0; i < _items.size(); i++) {
 			if (std::get<ItemEntry::Type>(_items[i]) == item && std::get<ItemEntry::Name>(_items[i]) == name) {
-				useItem(item, name, callback, i);
+				useItem(item, name, callback, uint16_t(i));
 				return;
 			}
 		}

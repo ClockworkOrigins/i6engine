@@ -119,11 +119,11 @@ namespace api {
 		i6engine::api::EngineController::GetSingleton().setCurrentTime(time);
 	}
 
-	uint32_t getUUID() {
+	uint64_t getUUID() {
 		return i6engine::api::EngineController::GetSingleton().getUUID();
 	}
 
-	uint32_t getNewUUID() {
+	uint64_t getNewUUID() {
 		return i6engine::api::EngineController::GetSingleton().getNewUUID();
 	}
 

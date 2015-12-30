@@ -24,6 +24,9 @@
 
 #include <map>
 #include <set>
+#include <thread>
+
+#include "i6engine/utils/i6eSystemParameters.h"
 
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
 	#include <tchar.h>
@@ -38,10 +41,6 @@
 #include "boost/function.hpp"
 
 #include "clockUtils/iniParser/iniParser.h"
-
-#if ISIXE_MPLATFORM == ISIXE_MPLATFORM_LINUX
-	typedef void * HWND;
-#endif
 
 namespace i6engine {
 namespace core {
@@ -251,14 +250,14 @@ namespace api {
 		/**
 		 * \brief returns the uuid of this node
 		 */
-		inline uint32_t getUUID() const {
+		inline uint64_t getUUID() const {
 			return _uuid;
 		}
 
 		/**
 		 * \brief returns a new uuid
 		 */
-		uint32_t getNewUUID() const;
+		uint64_t getNewUUID() const;
 
 		/**
 		 * \brief returns the iniParser that parsed the i6engine config file
@@ -280,6 +279,11 @@ namespace api {
 		 */
 		HWND createWindow(HINSTANCE hInstance);
 #endif
+
+		/**
+		 * \brief starts a thread reading console input and sending lines as input message
+		 */
+		void enableCommandLineReader();
 
 	private:
 		std::map<std::string, std::pair<core::ModuleController *, uint32_t>> _queuedModules;
@@ -305,7 +309,7 @@ namespace api {
 
 		core::MessagingController * _messagingController;
 
-		uint32_t _uuid;
+		uint64_t _uuid;
 
 		/**
 		 * \brief ini parser to load config file
@@ -313,6 +317,9 @@ namespace api {
 		clockUtils::iniParser::IniParser _iParser;
 
 		GameType _type;
+
+		bool _running;
+		std::thread _commandLineReadThread;
 
 		/**
 		 * \brief Contructor

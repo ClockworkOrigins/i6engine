@@ -17,7 +17,7 @@
 #ifndef __I6ENGINE_EDITOR_PLUGINS_INITIALIZATIONPLUGININTERFACE_H__
 #define __I6ENGINE_EDITOR_PLUGINS_INITIALIZATIONPLUGININTERFACE_H__
 
-#include <QPlugin.h>
+#include <qplugin.h>
 
 namespace i6engine {
 namespace editor {

@@ -21,7 +21,7 @@ namespace api {
 namespace objects {
 
 	Object_Create_Create::Object_Create_Create() {}
-	Object_Create_Create::Object_Create_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint32_t u, const GOTemplate & g, const bool b) : GameMessageStruct(i, -1), tpl(t), owner(own), uuid(u), tmpl(g), send(b) {
+	Object_Create_Create::Object_Create_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint64_t u, const GOTemplate & g, const bool b) : GameMessageStruct(i, -1), tpl(t), owner(own), uuid(u), tmpl(g), send(b) {
 	}
 
 	Object_Create_Delete::Object_Create_Delete() {}
@@ -43,7 +43,7 @@ namespace objects {
 	}
 
 	Object_CreateAndCall_Create::Object_CreateAndCall_Create() {}
-	Object_CreateAndCall_Create::Object_CreateAndCall_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint32_t u, const GOTemplate & g, const bool b, const boost::function<void(const GOPtr &)> & f) : GameMessageStruct(i, -1), tpl(t), owner(own), uuid(u), tmpl(g), send(b), func(f) {
+	Object_CreateAndCall_Create::Object_CreateAndCall_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint64_t u, const GOTemplate & g, const bool b, const boost::function<void(const GOPtr &)> & f) : GameMessageStruct(i, -1), tpl(t), owner(own), uuid(u), tmpl(g), send(b), func(f) {
 	}
 
 	Object_ConditionalMessage_Update::Object_ConditionalMessage_Update() {}

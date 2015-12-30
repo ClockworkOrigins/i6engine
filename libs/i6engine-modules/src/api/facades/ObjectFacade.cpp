@@ -98,7 +98,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void ObjectFacade::createObject(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint32_t uuid, const bool sender) const {
+	void ObjectFacade::createObject(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint64_t uuid, const bool sender) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectMessageType, objects::ObjCreate, core::Method::Create, new objects::Object_Create_Create(-1, gTemplate, EngineController::GetSingletonPtr()->getNetworkFacade()->getIP(), uuid, tmpl, sender), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
@@ -135,7 +135,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void ObjectFacade::createGO(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint32_t uuid, const bool sender, const boost::function<void(GOPtr)> & func) const {
+	void ObjectFacade::createGO(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint64_t uuid, const bool sender, const boost::function<void(GOPtr)> & func) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectMessageType, objects::ObjCreateAndCall, core::Method::Create, new objects::Object_CreateAndCall_Create(-1, gTemplate, EngineController::GetSingletonPtr()->getNetworkFacade()->getIP(), uuid, tmpl, sender, func), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);

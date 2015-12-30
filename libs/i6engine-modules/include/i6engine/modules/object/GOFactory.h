@@ -74,8 +74,8 @@ namespace modules {
 		 * \param[in] sender true if this GameObject should be synchronized in multiplayer games
 		 * \return pointer to a new created GameObject or NULL if no template with that name is registered.
 		 */
-		GOPtr createGO(const int64_t goid, const core::IPKey & owner, uint32_t uuid, const std::string & tpl, const api::objects::GOTemplate & templ, const bool sender);
-		GOPtr createGO(const std::string & tmpl, int64_t goid, const core::IPKey & owner, uint32_t uuid, const api::objects::GOTemplate & templ, const bool sender);
+		GOPtr createGO(const int64_t goid, const core::IPKey & owner, uint64_t uuid, const std::string & tpl, const api::objects::GOTemplate & templ, const bool sender);
+		GOPtr createGO(const std::string & tmpl, int64_t goid, const core::IPKey & owner, uint64_t uuid, const api::objects::GOTemplate & templ, const bool sender);
 
 		/**
 		 * \brief loads a level out of the given file with the given flags

@@ -96,14 +96,25 @@ namespace graphics {
 	};
 
 	/**
-	 * \brief creates a line between to given points, used by DebugDrawer for bounding boxes
+	 * \brief creates a line between to given points, used e.g. by DebugDrawer for bounding boxes
 	 */
 	typedef struct ISIXE_MODULES_API Graphics_Line_Create : GameMessageStruct {
-		Vec3 from, to;
+		Vec3 from, to, colour;
 		Graphics_Line_Create();
-		Graphics_Line_Create(const Vec3 & f, const Vec3 & t);
+		Graphics_Line_Create(const Vec3 & f, const Vec3 & t, const Vec3 & colour);
+		Graphics_Line_Create(uint64_t goid, uint64_t coid, const Vec3 & f, const Vec3 & t, const Vec3 & colour);
 		Graphics_Line_Create * copy() { return new Graphics_Line_Create(*this); }
 	} Graphics_Line_Create;
+
+	/**
+	 * \brief deletes a line between two points
+	 */
+	typedef struct ISIXE_MODULES_API Graphics_Line_Delete : GameMessageStruct {
+		Graphics_Line_Delete(uint64_t goid, uint64_t coid);
+		Graphics_Line_Delete * copy() {
+			return new Graphics_Line_Delete(*this);
+		}
+	} Graphics_Line_Delete;
 
 	/**
 	 * \brief creates a node in Graphics subsystem, used by PhysicsNode and MeshAppearanceComponent

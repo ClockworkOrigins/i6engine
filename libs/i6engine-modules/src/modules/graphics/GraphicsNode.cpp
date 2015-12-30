@@ -20,6 +20,7 @@
 #include "i6engine/modules/graphics/components/BillboardComponent.h"
 #include "i6engine/modules/graphics/components/BoundingBoxComponent.h"
 #include "i6engine/modules/graphics/components/CameraComponent.h"
+#include "i6engine/modules/graphics/components/LineComponent.h"
 #include "i6engine/modules/graphics/components/LuminousComponent.h"
 #include "i6engine/modules/graphics/components/MeshComponent.h"
 #include "i6engine/modules/graphics/components/MovableTextComponent.h"
@@ -226,26 +227,26 @@ namespace modules {
 
 	void GraphicsNode::createLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_lights.find(coid) == _particles.end());
+		assert(_lights.find(coid) == _lights.end());
 		LuminousComponent * lc = new LuminousComponent(_manager, this, _gameObjectID, coid, type, diffuse, specular, attenuation, direction, position, spotLightRangeInner, spotLightRangeOuter);
 		_lights.insert(std::make_pair(coid, lc));
-		assert(_lights.find(coid) != _particles.end());
+		assert(_lights.find(coid) != _lights.end());
 	}
 
 	void GraphicsNode::updateLuminousComponent(const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_lights.find(coid) != _particles.end());
+		assert(_lights.find(coid) != _lights.end());
 		LuminousComponent * lc = _lights[coid];
 		lc->updateLuminousComponent(type, diffuse, specular, attenuation, direction, position, spotLightRangeInner, spotLightRangeOuter);
 	}
 
 	void GraphicsNode::deleteLuminousComponent(const int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_lights.find(coid) != _particles.end());
+		assert(_lights.find(coid) != _lights.end());
 		LuminousComponent * lc = _lights[coid];
 		_lights.erase(coid);
 		delete lc;
-		assert(_lights.find(coid) == _particles.end());
+		assert(_lights.find(coid) == _lights.end());
 	}
 
 	void GraphicsNode::createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos) {
@@ -304,11 +305,11 @@ namespace modules {
 
 	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_movableTexts.find(coid) != _movableTexts.end());
+		assert(_movableTexts.find(coid) == _movableTexts.end());
 		assert(_meshes.find(targetID) != _meshes.end());
 		MovableTextComponent * mtc = new MovableTextComponent(_manager, this, _gameObjectID, coid, _meshes[targetID], font, text, size, colour);
 		_movableTexts.insert(std::make_pair(coid, mtc));
-		assert(_movableTexts.find(coid) == _movableTexts.end());
+		assert(_movableTexts.find(coid) != _movableTexts.end());
 	}
 
 	void GraphicsNode::updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
@@ -343,6 +344,23 @@ namespace modules {
 		_boundingBoxes.erase(coid);
 		delete bbc;
 		assert(_boundingBoxes.find(coid) == _boundingBoxes.end());
+	}
+
+	void GraphicsNode::createLine(int64_t coid, const Vec3 & from, const Vec3 & to, const Vec3 & colour) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_lines.find(coid) == _lines.end());
+		LineComponent * lc = new LineComponent(_manager, this, _gameObjectID, coid, from, to, colour);
+		_lines.insert(std::make_pair(coid, lc));
+		assert(_lines.find(coid) != _lines.end());
+	}
+
+	void GraphicsNode::removeLine(int64_t coid) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_lines.find(coid) != _lines.end());
+		LineComponent * lc = _lines[coid];
+		_lines.erase(coid);
+		delete lc;
+		assert(_lines.find(coid) == _lines.end());
 	}
 
 	void GraphicsNode::Tick() {

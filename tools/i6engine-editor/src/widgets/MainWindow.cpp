@@ -211,7 +211,6 @@ namespace widgets {
 			QObject * plugin = loader.instance();
 			if (plugin) {
 				_initializationPlugins.push_back(qobject_cast<plugins::InitializationPluginInterface *>(plugin));
-				std::cout << "Successfully loaded plugin " << fileName.toStdString() << std::endl;
 			} else {
 				QMessageBox box;
 				box.setWindowTitle(QString("Error loading plugin!"));

@@ -122,7 +122,7 @@ namespace modules {
 		_templateList[tmp._type] = tmp;
 	}
 
-	GOPtr GOFactory::createGO(const std::string & tmpl, const int64_t goid, const core::IPKey & owner, uint32_t uuid, const api::objects::GOTemplate & templ, const bool sender) {
+	GOPtr GOFactory::createGO(const std::string & tmpl, const int64_t goid, const core::IPKey & owner, uint64_t uuid, const api::objects::GOTemplate & templ, const bool sender) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		if (owner == api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP()) {
 			if (_templateList.find(tmpl) == _templateList.end()) {
@@ -161,7 +161,7 @@ namespace modules {
 		}
 	}
 
-	GOPtr GOFactory::createGO(const int64_t goid, const core::IPKey & owner, uint32_t uuid, const std::string & tpl, const api::objects::GOTemplate & templ, const bool sender) {
+	GOPtr GOFactory::createGO(const int64_t goid, const core::IPKey & owner, uint64_t uuid, const std::string & tpl, const api::objects::GOTemplate & templ, const bool sender) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		GOPtr go = utils::make_shared<api::GameObject, api::GameObject>(goid, owner, uuid, tpl, boost::bind(&ComponentFactory::createGOC, _compFactory, _1, _2, _3, _4));
 
