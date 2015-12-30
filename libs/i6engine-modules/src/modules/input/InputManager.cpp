@@ -153,6 +153,9 @@ namespace modules {
 		if (msg->getSubtype() == api::input::InputWindow) {
 			initializeInput(reinterpret_cast<Ogre::RenderWindow *>(static_cast<api::input::Input_Window_Create *>(msg->getContent())->window));
 		} else if (msg->getSubtype() == api::input::InputSubscribeKeyEvent) {
+			if (_keyboardListener == nullptr) {
+				ISIXE_THROW_API("InputManager", "No KeyBoardListener available. Have you registered GraphicsSubSystem?")
+			}
 			_keyboardListener->setKeyFunction(static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->code, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->type, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->func);
 		}
 	}

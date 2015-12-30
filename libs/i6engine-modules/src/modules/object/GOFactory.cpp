@@ -69,14 +69,14 @@ namespace modules {
 		tinyxml2::XMLDocument doc;
 
 		if (doc.LoadFile(file.c_str())) {
-			ISIXE_LOG_ERROR("GOFactory", "Couldn't open template file (" << file << ")");
+			ISIXE_THROW_FAILURE("GOFactory", "Couldn't open template file (" << file << ")");
 			return;
 		}
 
 		tinyxml2::XMLElement * root = doc.FirstChildElement("GOTemplate");
 
 		if (root->Attribute("type") == nullptr) {
-			ISIXE_LOG_ERROR("GOFactory", "No type set for template " << file);
+			ISIXE_THROW_FAILURE("GOFactory", "No type set for template " << file);
 			return;
 		}
 
@@ -91,7 +91,7 @@ namespace modules {
 			api::attributeMap params;
 
 			if (component->Attribute("template") == nullptr) {
-				ISIXE_LOG_ERROR("GOFactory", "Component has no template in template " << file);
+				ISIXE_THROW_FAILURE("GOFactory", "Component has no template in template " << file);
 				return;
 			}
 
@@ -103,7 +103,7 @@ namespace modules {
 
 			for (tinyxml2::XMLElement * attribute = component->FirstChildElement("Attribute"); attribute != nullptr; attribute = attribute->NextSiblingElement("Attribute")) {
 				if (attribute->Attribute("name") == nullptr) {
-					ISIXE_LOG_ERROR("GOFactory", "Attribute has no name in template " << file << " for component " << component->Attribute("template"));
+					ISIXE_THROW_FAILURE("GOFactory", "Attribute has no name in template " << file << " for component " << component->Attribute("template"));
 					return;
 				}
 
