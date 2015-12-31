@@ -93,6 +93,7 @@ namespace editor {
 		clockUtils::iniParser::IniParser _iniParser;
 
 		double _movementSpeed;
+		double _rotationSpeed;
 
 	private:
 		api::GOPtr _camera;
