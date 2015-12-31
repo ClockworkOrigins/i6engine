@@ -131,6 +131,7 @@ namespace editor {
 		 */
 		inline void setCamera(const api::GOPtr & go) {
 			_camera = go;
+			updateWaypointNames();
 		}
 
 		/**
