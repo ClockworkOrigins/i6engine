@@ -54,7 +54,7 @@
 namespace i6engine {
 namespace editor {
 
-	Editor::Editor() : Application(), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints(), _removeBox(false) {
+	Editor::Editor() : Application(), _iniParser(), _movementSpeed(1.0), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints(), _removeBox(false) {
 		_eventMap["forward"] = std::make_pair(boost::bind(&Editor::Forward, this), false);
 		_eventMap["backward"] = std::make_pair(boost::bind(&Editor::Backward, this), false);
 		_eventMap["left"] = std::make_pair(boost::bind(&Editor::Left, this), false);
@@ -75,9 +75,22 @@ namespace editor {
 		_eventMap["scaleYDown"] = std::make_pair(boost::bind(&Editor::ScaleYDown, this), false);
 		_eventMap["scaleZUp"] = std::make_pair(boost::bind(&Editor::ScaleZUp, this), false);
 		_eventMap["scaleZDown"] = std::make_pair(boost::bind(&Editor::ScaleZDown, this), false);
+
+		if (clockUtils::ClockError::SUCCESS != _iniParser.load("i6engine-editor.ini")) {
+			ISIXE_THROW_FAILURE("Editor", "i6engine-editor.ini not found!");
+		}
+
+		if (clockUtils::ClockError::SUCCESS != _iniParser.getValue("GENERAL", "movementSpeed", _movementSpeed)) {
+			ISIXE_THROW_FAILURE("Editor", "Entry for movement speed does not exist or is corrupted!");
+		}
 	}
 
 	Editor::~Editor() {
+		_iniParser.setValue("GENERAL", "movementSpeed", _movementSpeed);
+
+		if (clockUtils::ClockError::SUCCESS != _iniParser.save("i6engine-editor.ini")) {
+			ISIXE_THROW_FAILURE("Editor", "i6engine-editor.ini couldn't be saved!");
+		}
 	}
 
 	void Editor::Initialize() {
@@ -349,17 +362,17 @@ namespace editor {
 	void Editor::Forward() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
-			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 1.0), ssc->getRotation()));
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, _movementSpeed), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
 			if (objPSC != nullptr) {
-				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 1.0), ssc->getRotation()), 2);
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, _movementSpeed), ssc->getRotation()), 2);
 			} else {
 				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 				if (objSSC != nullptr) {
-					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, 1.0), ssc->getRotation()));
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, _movementSpeed), ssc->getRotation()));
 				}
 			}
 			selectObject(_selectedObjectID);
@@ -372,17 +385,17 @@ namespace editor {
 	void Editor::Backward() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
-			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -1.0), ssc->getRotation()));
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -_movementSpeed), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
 			if (objPSC != nullptr) {
-				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -1.0), ssc->getRotation()), 2);
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -_movementSpeed), ssc->getRotation()), 2);
 			} else {
 				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 				if (objSSC != nullptr) {
-					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -1.0), ssc->getRotation()));
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -_movementSpeed), ssc->getRotation()));
 				}
 			}
 			selectObject(_selectedObjectID);
@@ -395,17 +408,17 @@ namespace editor {
 	void Editor::Left() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
-			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(1.0, 0.0, 0.0), ssc->getRotation()));
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(_movementSpeed, 0.0, 0.0), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
 			if (objPSC != nullptr) {
-				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(1.0, 0.0, 0.0), ssc->getRotation()), 2);
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(_movementSpeed, 0.0, 0.0), ssc->getRotation()), 2);
 			} else {
 				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 				if (objSSC != nullptr) {
-					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(1.0, 0.0, 0.0), ssc->getRotation()));
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(_movementSpeed, 0.0, 0.0), ssc->getRotation()));
 				}
 			}
 			selectObject(_selectedObjectID);
@@ -418,17 +431,17 @@ namespace editor {
 	void Editor::Right() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
-			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(-1.0, 0.0, 0.0), ssc->getRotation()));
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(-_movementSpeed, 0.0, 0.0), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
 			if (objPSC != nullptr) {
-				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(-1.0, 0.0, 0.0), ssc->getRotation()), 2);
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(-_movementSpeed, 0.0, 0.0), ssc->getRotation()), 2);
 			} else {
 				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 				if (objSSC != nullptr) {
-					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(-1.0, 0.0, 0.0), ssc->getRotation()));
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(-_movementSpeed, 0.0, 0.0), ssc->getRotation()));
 				}
 			}
 			selectObject(_selectedObjectID);
@@ -441,17 +454,17 @@ namespace editor {
 	void Editor::Down() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
-			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, -1.0, 0.0), ssc->getRotation()));
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, -_movementSpeed, 0.0), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
 			if (objPSC != nullptr) {
-				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, -1.0, 0.0), ssc->getRotation()), 2);
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, -_movementSpeed, 0.0), ssc->getRotation()), 2);
 			} else {
 				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 				if (objSSC != nullptr) {
-					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, -1.0, 0.0), ssc->getRotation()));
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, -_movementSpeed, 0.0), ssc->getRotation()));
 				}
 			}
 			selectObject(_selectedObjectID);
@@ -464,17 +477,17 @@ namespace editor {
 	void Editor::Up() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 		if (!_moveObject) {
-			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 1.0, 0.0), ssc->getRotation()));
+			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, _movementSpeed, 0.0), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
 			auto objPSC = go->getGOC<api::PhysicalStateComponent>(api::components::PhysicalStateComponent);
 			if (objPSC != nullptr) {
-				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, 1.0, 0.0), ssc->getRotation()), 2);
+				objPSC->setPosition(objPSC->getPosition() + math::rotateVector(Vec3(0.0, _movementSpeed, 0.0), ssc->getRotation()), 2);
 			} else {
 				auto objSSC = go->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
 				if (objSSC != nullptr) {
-					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, 1.0, 0.0), ssc->getRotation()));
+					objSSC->setPosition(objSSC->getPosition() + math::rotateVector(Vec3(0.0, _movementSpeed, 0.0), ssc->getRotation()));
 				}
 			}
 			selectObject(_selectedObjectID);

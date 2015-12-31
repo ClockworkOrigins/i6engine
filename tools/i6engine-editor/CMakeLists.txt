@@ -83,3 +83,7 @@ install(TARGETS i6engine-editor
 	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 )
+
+install(FILES ${CMAKE_SOURCE_DIR}/config/i6engine-editor.ini DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
+
+configure_file(${CMAKE_SOURCE_DIR}/config/i6engine-editor.ini ${CMAKE_BINARY_DIR}/bin/i6engine-editor.ini COPYONLY)

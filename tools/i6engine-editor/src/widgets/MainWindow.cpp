@@ -102,8 +102,9 @@ namespace widgets {
 
 	void MainWindow::openOptions() {
 		ConfigDialog dlg;
+		dlg.movementSpeedSlider->setValue(int(_movementSpeed * 20));
 		if (dlg.exec() == QDialog::Accepted) {
-			// handle set values
+			_movementSpeed = dlg.movementSpeedSlider->value() / 20.0;
 		}
 	}
 

@@ -20,6 +20,8 @@
 #include "i6engine/api/Application.h"
 #include "i6engine/api/configs/ObjectConfig.h"
 
+#include "clockUtils/iniParser/iniParser.h"
+
 namespace i6engine {
 namespace editor {
 
@@ -86,6 +88,11 @@ namespace editor {
 		 * \brief returns a vector containing all available level filter flags
 		 */
 		virtual std::vector<std::string> getLevelFlags() const = 0;
+
+	protected:
+		clockUtils::iniParser::IniParser _iniParser;
+
+		double _movementSpeed;
 
 	private:
 		api::GOPtr _camera;
