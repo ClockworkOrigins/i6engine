@@ -34,6 +34,7 @@ namespace widgets {
 		void chooseSaveLevel();
 		void chooseSaveLevelAs();
 		void closeEditor();
+		void openOptions();
 
 	private:
 		RenderWidget * _renderWidget;

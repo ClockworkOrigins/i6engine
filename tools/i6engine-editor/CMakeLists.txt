@@ -33,6 +33,7 @@ set(editorSrc
 
 	${srcdir}/Editor.cpp
 	
+	${srcdir}/widgets/ConfigDialog.cpp
 	${srcdir}/widgets/MainWindow.cpp
 	${srcdir}/widgets/ObjectContainerWidget.cpp
 	${srcdir}/widgets/ObjectInfoWidget.cpp
@@ -42,6 +43,7 @@ set(editorSrc
 )
 
 QT5_WRAP_UI(editorUI
+	gui/dialogConfig.ui
 	gui/widgetObjectContainer.ui
 	gui/widgetObjectInfo.ui
 	gui/widgetObjectList.ui
@@ -51,6 +53,7 @@ QT5_WRAP_UI(editorUI
 )
 
 QT5_WRAP_CPP(editorGuiHeader
+	${includedir}/widgets/ConfigDialog.h
 	${includedir}/widgets/MainWindow.h
 	${includedir}/widgets/ObjectContainerWidget.h
 	${includedir}/widgets/ObjectInfoWidget.h

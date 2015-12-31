@@ -20,6 +20,7 @@
 
 #include "i6engine/editor/plugins/InitializationPluginInterface.h"
 
+#include "i6engine/editor/widgets/ConfigDialog.h"
 #include "i6engine/editor/widgets/ObjectContainerWidget.h"
 #include "i6engine/editor/widgets/ObjectInfoWidget.h"
 #include "i6engine/editor/widgets/ObjectListWidget.h"
@@ -97,6 +98,13 @@ namespace widgets {
 
 	void MainWindow::closeEditor() {
 		api::EngineController::GetSingleton().stop();
+	}
+
+	void MainWindow::openOptions() {
+		ConfigDialog dlg;
+		if (dlg.exec() == QDialog::Accepted) {
+			// handle set values
+		}
 	}
 
 	void MainWindow::AfterInitialize() {
