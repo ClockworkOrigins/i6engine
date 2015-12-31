@@ -49,10 +49,6 @@
 #include "i6engine/api/manager/WaynetManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "i6engine/editor/EditorMessageTypes.h"
-
-#include "boost/functional/factory.hpp"
-
 #include "tinyxml2.h"
 
 namespace i6engine {
@@ -89,11 +85,6 @@ namespace editor {
 	}
 
 	void Editor::AfterInitialize() {
-		api::GUIFacade * gf = api::EngineController::GetSingletonPtr()->getGUIFacade();
-
-		// initialize GUI
-		gf->startGUI("Editor.scheme", "", "", "Editor", "MouseArrow");
-
 		api::InputFacade * inputFacade = api::EngineController::GetSingleton().getInputFacade();
 
 		inputFacade->setKeyMapping(api::KeyCode::KC_W, "forward");
