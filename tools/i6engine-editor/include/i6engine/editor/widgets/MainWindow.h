@@ -11,6 +11,7 @@ namespace i6engine {
 namespace editor {
 namespace plugins {
 
+	class FlagPluginInterface;
 	class InitializationPluginInterface;
 
 } /* namespace plugins */
@@ -41,14 +42,13 @@ namespace widgets {
 		TemplateListWidget * _templateListWidget;
 		QString _level;
 		std::vector<plugins::InitializationPluginInterface *> _initializationPlugins;
+		std::vector<plugins::FlagPluginInterface *> _flagPlugins;
 
 		std::string getBasePath() const override {
 			return "../media/maps";
 		}
 
-		std::vector<std::string> getLevelFlags() const override {
-			return { "Singleplayer" };
-		}
+		std::vector<std::string> getLevelFlags() const override;
 
 		void AfterInitialize() override;
 		void Finalize() override;
@@ -64,6 +64,7 @@ namespace widgets {
 
 		void loadPlugins();
 		void loadInitializationPlugins();
+		void loadFlagPlugins();
 
 		static api::KeyCode convertQtToEngine(int key);
 	};

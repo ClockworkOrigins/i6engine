@@ -18,6 +18,7 @@
 #include "i6engine/modules/object/ObjectController.h"
 #include "i6engine/modules/physics/PhysicsController.h"
 
+#include "i6engine/editor/plugins/FlagPluginInterface.h"
 #include "i6engine/editor/plugins/InitializationPluginInterface.h"
 
 #include "i6engine/editor/widgets/ObjectContainerWidget.h"
@@ -37,7 +38,7 @@ namespace i6engine {
 namespace editor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins() {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _flagPlugins() {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -97,6 +98,16 @@ namespace widgets {
 
 	void MainWindow::closeEditor() {
 		api::EngineController::GetSingleton().stop();
+	}
+
+	std::vector<std::string> MainWindow::getLevelFlags() const {
+		std::vector<std::string> vec = { "Singleplayer" };
+		for (plugins::FlagPluginInterface * fpi : _flagPlugins) {
+			for (std::string s : fpi->getFlags()) {
+				vec.push_back(s);
+			}
+		}
+		return vec;
 	}
 
 	void MainWindow::AfterInitialize() {
@@ -201,11 +212,11 @@ namespace widgets {
 
 	void MainWindow::loadPlugins() {
 		loadInitializationPlugins();
+		loadFlagPlugins();
 	}
 
 	void MainWindow::loadInitializationPlugins() {
-		QDir pluginsDir = QDir(qApp->applicationDirPath());
-		pluginsDir.cd("plugins/editor/initialization");
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/initialization");
 		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
 			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
 			QObject * plugin = loader.instance();
@@ -219,7 +230,23 @@ namespace widgets {
 				box.exec();
 			}
 		}
+	}
 
+	void MainWindow::loadFlagPlugins() {
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/flags");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_flagPlugins.push_back(qobject_cast<plugins::FlagPluginInterface *>(plugin));
+			} else {
+				QMessageBox box;
+				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setInformativeText(loader.errorString());
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+			}
+		}
 	}
 
 	api::KeyCode MainWindow::convertQtToEngine(int key) {
