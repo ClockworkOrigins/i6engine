@@ -108,6 +108,8 @@ namespace api {
 		}
 		_languageManager->addCallback(std::bind(&TextManager::setLanguage, _textManager, std::placeholders::_1));
 		_languageManager->setLanguage(language);
+
+		_languageManager->addCallback(std::bind(&clockUtils::iniParser::IniParser::setValue<std::string>, &_iParser, "GENERAL", "language", std::placeholders::_1));
 	}
 
 	EngineController::~EngineController() {
@@ -139,6 +141,8 @@ namespace api {
 		delete _scriptingFacade;
 
 		delete _messagingController;
+
+		_iParser.save("i6engine.ini");
 
 		_running = false;
 		if (_commandLineReadThread.joinable()) {
