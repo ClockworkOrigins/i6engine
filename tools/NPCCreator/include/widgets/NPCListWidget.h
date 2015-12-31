@@ -27,10 +27,13 @@ namespace widgets {
 
 	private slots:
 		void selectIndex(QModelIndex index);
+		void changedFilter(QString filter);
 
 	private:
 		clockUtils::iniParser::IniParser _iniParser;
 		std::vector<std::pair<std::string, std::string>> _npcFileList;
+		std::vector<std::pair<std::string, std::string>> _filteredNpcFileList;
+		QString _filter;
 		NPCEditWidget * _npcEditWidget;
 	};
 
