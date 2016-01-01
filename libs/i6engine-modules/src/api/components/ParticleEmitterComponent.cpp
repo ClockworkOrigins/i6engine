@@ -93,26 +93,26 @@ namespace api {
 			_emitterName = s;
 			// TODO: (Daniel) send Update
 			return true;
-		}));
+		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Position", [this]() {
 			return _pos.toString();
 		}, [this](std::string s) {
 			_pos = Vec3(s);
 			// TODO: (Daniel) send Update
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "FadeOut", [this]() {
 			return std::to_string(_fadeOut);
 		}, [this](std::string s) {
 			_fadeOut = s == "1";
 			return true;
-		}));
+		}, "Bool"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "FadeOut Cooldown", [this]() {
 			return std::to_string(_fadeOutCooldown);
 		}, [this](std::string s) {
 			_fadeOutCooldown = std::stoul(s);
 			return true;
-		}));
+		}, "Integer"));
 
 		return result;
 	}

@@ -150,7 +150,7 @@ namespace api {
 				return false;
 			}
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Circle Axis", [this]() {
 			return _circleAxis.toString();
 		}, [this](std::string s) {
@@ -160,13 +160,13 @@ namespace api {
 				return false;
 			}
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Radius", [this]() {
 			return boost::lexical_cast<std::string>(_circleRadius);
 		}, [this](std::string s) {
 			_circleRadius = boost::lexical_cast<double>(s);
 			return true;
-		}));
+		}, "Double"));
 
 		return result;
 	}

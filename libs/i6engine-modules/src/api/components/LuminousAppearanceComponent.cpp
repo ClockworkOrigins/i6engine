@@ -126,21 +126,21 @@ namespace api {
 		}, [this](std::string s) {
 			setLightType(LightType(boost::lexical_cast<int>(s)));
 			return true;
-		}));
+		}, "LightType"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Inner Spotlight Range", [this]() {
 			return boost::lexical_cast<std::string>(_spotlightRangeInner);
 		}, [this](std::string s) {
 			_spotlightRangeInner = std::stod(s);
 			sendUpdateMessage();
 			return true;
-		}));
+		}, "Angle"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Outer Spotlight Range", [this]() {
 			return boost::lexical_cast<std::string>(_spotlightRangeOuter);
 		}, [this](std::string s) {
 			_spotlightRangeOuter = std::stod(s);
 			sendUpdateMessage();
 			return true;
-		}));
+		}, "Angle"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Position", [this]() {
 			return _position.toString();
 		}, [this](std::string s) {
@@ -151,7 +151,7 @@ namespace api {
 			}
 			sendUpdateMessage();
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Diffuse Color", [this]() {
 			return _diffuseColor.toString();
 		}, [this](std::string s) {
@@ -162,7 +162,7 @@ namespace api {
 			}
 			setDiffuseColor(_diffuseColor);
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Specular Color", [this]() {
 			return _specularColor.toString();
 		}, [this](std::string s) {
@@ -173,7 +173,7 @@ namespace api {
 			}
 			setSpecularColor(_specularColor);
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Attenuation", [this]() {
 			return _attenuation.toString();
 		}, [this](std::string s) {
@@ -184,7 +184,7 @@ namespace api {
 			}
 			setAttenuation(_attenuation);
 			return true;
-		}));
+		}, "Vec4"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Direction", [this]() {
 			return _direction.toString();
 		}, [this](std::string s) {
@@ -195,7 +195,7 @@ namespace api {
 			}
 			setDirection(_direction);
 			return true;
-		}));
+		}, "Vec3"));
 
 		return result;
 	}

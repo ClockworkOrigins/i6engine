@@ -200,7 +200,7 @@ namespace api {
 			}
 			setPosition(_position);
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Look At", [this]() {
 			return _lookAt.toString();
 		}, [this](std::string s) {
@@ -211,7 +211,7 @@ namespace api {
 			}
 			setLookAt(_lookAt);
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Near Clip", [this]() {
 			return boost::lexical_cast<std::string>(_nearClip);
 		}, [this](std::string s) {
@@ -222,7 +222,7 @@ namespace api {
 			}
 			setNearClip(_nearClip);
 			return true;
-		}));
+		}, "Integer"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Aspect Ratio", [this]() {
 			return boost::lexical_cast<std::string>(_aspect);
 		}, [this](std::string s) {
@@ -233,7 +233,7 @@ namespace api {
 			}
 			setAspectRatio(_aspect);
 			return true;
-		}));
+		}, "Double"));
 
 		return result;
 	}
