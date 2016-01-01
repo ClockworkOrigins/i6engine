@@ -220,3 +220,19 @@ TEST(i6eQuaternion, normalize) {
 	EXPECT_DOUBLE_EQ(1.0, q7.length());
 	EXPECT_DOUBLE_EQ(1.0, q8.length());
 }
+
+TEST(i6eQuaternion, toAxisAngle) {
+	Quaternion q1(1.0, 0.0, 0.0, 0.0);
+	Quaternion q2(Vec3(1.0, 0.0, 0.0), 180.0 / 90.0 * PI);
+
+	Vec3 v1, v2;
+	double a1, a2;
+
+	q1.toAxisAngle(v1, a1);
+	q2.toAxisAngle(v2, a2);
+
+	EXPECT_DOUBLE_EQ(0.0, a1);
+	EXPECT_DOUBLE_EQ(180.0 / 90.0 * PI, a2);
+	EXPECT_EQ(Vec3(0.0, 1.0, 0.0), v1);
+	EXPECT_EQ(Vec3(1.0, 0.0, 0.0), v2);
+}

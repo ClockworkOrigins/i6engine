@@ -57,11 +57,10 @@ namespace math {
 	void i6eQuaternion::toAxisAngle(i6eVector & axis, double & angle) const {
 		normalize();
 		angle = 2 * std::acos(_w);
-		double s = std::sqrt(length());
-		if (std::fabs(s) < i6eQuaternion::EPSILON) {
-			axis = i6eVector(0, 0, 0);
+		if (std::abs(angle) < DBL_EPSILON) {
+			axis = i6eVector(0.0, 1.0, 0.0);
 		} else {
-			axis = i6eVector(_x / s, _y / s, _z / s);
+			axis = i6eVector(_x / sin(angle / 2.0), _y / sin(angle / 2.0), _z / sin(angle / 2.0));
 		}
 	}
 
