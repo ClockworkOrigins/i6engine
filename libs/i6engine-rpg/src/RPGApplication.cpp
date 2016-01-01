@@ -63,7 +63,7 @@
 namespace i6engine {
 namespace rpg {
 
-	RPGApplication::RPGApplication() : i6engine::api::Application(), _iniParser() {
+	RPGApplication::RPGApplication() : api::Application(), _iniParser() {
 		_iniParser.load("RPG.ini");
 	}
 
@@ -75,43 +75,43 @@ namespace rpg {
 		if (_iniParser.getValue("SCRIPT", "externalConstants", externalConstantsFile) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'externalConstants' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		i6engine::rpg::config::parseExternalConstants(externalConstantsFile);
+		config::parseExternalConstants(externalConstantsFile);
 
-		i6engine::rpg::item::ItemManager::GetSingletonPtr()->addItemAttributes("UsableItem", { { "HP", "attribute_0" }, { "HP_MAX", "attribute_1" } });
+		item::ItemManager::GetSingletonPtr()->addItemAttributes("UsableItem", { { "HP", "attribute_0" }, { "HP_MAX", "attribute_1" } });
 
 		std::string ItemDirectory;
 		if (_iniParser.getValue("SCRIPT", "itemDirectory", ItemDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'itemDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		i6engine::rpg::item::ItemManager::GetSingletonPtr()->loadItems(ItemDirectory);
+		item::ItemManager::GetSingletonPtr()->loadItems(ItemDirectory);
 
 		std::string NPCDirectory;
 		if (_iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'npcDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		i6engine::rpg::npc::NPCParser::GetSingletonPtr()->loadNPCs(NPCDirectory);
+		npc::NPCParser::GetSingletonPtr()->loadNPCs(NPCDirectory);
 
 		// Load Dialogs after NPCs because they require them
 		std::string DialogDirectory;
 		if (_iniParser.getValue("SCRIPT", "dialogDirectory", DialogDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'dialogDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->loadDialogs(DialogDirectory);
+		dialog::DialogManager::GetSingletonPtr()->loadDialogs(DialogDirectory);
 
 		// Load Quests
 		std::string QuestDirectory;
 		if (_iniParser.getValue("SCRIPT", "questDirectory", QuestDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'questDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		i6engine::rpg::quest::QuestLog::GetSingletonPtr()->loadQuests(QuestDirectory);
+		quest::QuestLog::GetSingletonPtr()->loadQuests(QuestDirectory);
 	}
 
 	void RPGApplication::AfterInitialize() {
 		// load all scripts in LUAScriptDir, so all function calls can be done without a file
-		i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->loadAllScripts();
+		api::EngineController::GetSingletonPtr()->getScriptingFacade()->loadAllScripts();
 
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
-		gf->registerWidgetTemplate("Subtitle", boost::factory<i6engine::rpg::gui::SubtitleWidget *>());
+		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+		gf->registerWidgetTemplate("Subtitle", boost::factory<gui::SubtitleWidget *>());
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
@@ -119,65 +119,65 @@ namespace rpg {
 		// sets gravity for the game... here like on earth
 		std::string gravityString;
 		_iniParser.getValue("PHYSIC", "gravity", gravityString);
-		i6engine::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(gravityString));
+		api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(gravityString));
 
 		// ambient light for the scene
 		std::string ambientLightString;
 		_iniParser.getValue("GRAPHIC", "ambientLight", ambientLightString);
-		auto vec = i6engine::utils::split(ambientLightString, " ");
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(std::stod(vec[0]), std::stod(vec[1]), std::stod(vec[2]));
+		auto vec = utils::split(ambientLightString, " ");
+		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(std::stod(vec[0]), std::stod(vec[1]), std::stod(vec[2]));
 
 		// setting shadow technique... currently only additive stencil possible
 		uint16_t shadowTechnique;
 		_iniParser.getValue("GRAPHIC", "shadowTechnique", shadowTechnique);
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique(shadowTechnique));
+		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(api::graphics::ShadowTechnique(shadowTechnique));
 
 		// setting distance fog
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setExponentialFog(Vec3(0.9, 0.9, 0.9), 0.005);
+		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setExponentialFog(Vec3(0.9, 0.9, 0.9), 0.005);
 
 		// register rpg components we want to use
 		// do this befor loading the level
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6engine::rpg::components::AttributeComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&i6engine::rpg::components::DialogCheckerComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(&i6engine::rpg::components::ExperienceComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&i6engine::rpg::components::HealthbarComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&i6engine::rpg::components::HumanMovementComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&i6engine::rpg::components::ListInventoryComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&i6engine::rpg::components::MiscItemComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&i6engine::rpg::components::NameComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&i6engine::rpg::components::QuickslotComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&i6engine::rpg::components::SlotComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(&i6engine::rpg::components::SlotInventoryComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&i6engine::rpg::components::ThirdPersonControlComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&i6engine::rpg::components::WeightInventoryComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&components::AttributeComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&components::DialogCheckerComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(&components::ExperienceComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&components::HealthbarComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&components::HumanMovementComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&components::ListInventoryComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&components::MiscItemComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&components::NameComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&components::QuickslotComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&components::SlotComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(&components::SlotInventoryComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&components::ThirdPersonControlComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&components::UsableItemComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&components::WeightInventoryComponent::createC, _1, _2));
 
 		// register keys
 		uint16_t key;
 		// action key, default: E
 		_iniParser.getValue("INPUT", "action", key);
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "action");
+		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode(key), "action");
 		_iniParser.getValue("INPUT", "action2", key);
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "action");
+		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode(key), "action");
 		// inventory key, default: TAB
 		_iniParser.getValue("INPUT", "inventory", key);
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "inventory");
+		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode(key), "inventory");
 		// questLog key, default: J
 		_iniParser.getValue("INPUT", "questLog", key);
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "questLog");
+		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode(key), "questLog");
 
 		// forward key, default: W
 		_iniParser.getValue("INPUT", "forward", key);
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "forward");
+		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode(key), "forward");
 		// backward key, default: S
 		_iniParser.getValue("INPUT", "backward", key);
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "backward");
+		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode(key), "backward");
 		// left key, default: A
 		_iniParser.getValue("INPUT", "left", key);
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "left");
+		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode(key), "left");
 		// right key, default: D
 		_iniParser.getValue("INPUT", "right", key);
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(i6engine::api::KeyCode(key), "right");
+		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode(key), "right");
 
 		// game config
 		// subtitles
@@ -212,11 +212,11 @@ namespace rpg {
 
 	void RPGApplication::loadLevel(const std::string & level) const {
 		// loads the RPG demo level
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(level, "Singleplayer");
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(level, "Singleplayer");
 
 		// call Startup in script
 #if ISIXE_SCRIPTING != SCRIPTING_NONE
-		i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>("Startup");
+		api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>("Startup");
 #endif
 	}
 

@@ -3,6 +3,8 @@
 
 #include "ui_wndMainWindow.h"
 
+#include <thread>
+
 #include "i6engine/api/facades/InputFacade.h"
 
 #include "i6engine/editor/Editor.h"
@@ -12,13 +14,31 @@ namespace editor {
 namespace plugins {
 
 	class InitializationPluginInterface;
+	class RunGamePluginInterface;
 
 } /* namespace plugins */
 namespace widgets {
 
+	class MainWindow;
 	class ObjectContainerWidget;
 	class RenderWidget;
 	class TemplateListWidget;
+
+	class GameActionHelper : public QObject {
+		Q_OBJECT
+
+	public:
+		GameActionHelper(QWidget * par, size_t index);
+
+	signals:
+		void triggerGameAction(int);
+
+	public slots:
+		void triggered();
+
+	private:
+		size_t _index;
+	};
 
 	class MainWindow : public QMainWindow, public Ui::wndMainWindow, public Editor {
 		Q_OBJECT
@@ -29,18 +49,33 @@ namespace widgets {
 
 		void updateObjectList() override;
 
+	signals:
+		void initializeEngine();
+		void initializeGame();
+		void stopApp();
+
 	private slots:
 		void chooseLoadLevel();
 		void chooseSaveLevel();
 		void chooseSaveLevelAs();
 		void closeEditor();
+		void triggeredGameAction(int index);
+		void doInitializeEngine();
+		void doInitializeGame();
+		void doStopApp();
 
 	private:
 		RenderWidget * _renderWidget;
 		ObjectContainerWidget * _objectContainerWidget;
 		TemplateListWidget * _templateListWidget;
+		std::thread _engineThread;
 		QString _level;
 		std::vector<plugins::InitializationPluginInterface *> _initializationPlugins;
+		std::vector<plugins::RunGamePluginInterface *> _runGamePlugins;
+		std::vector<GameActionHelper *> _gameActionHelperList;
+		bool _resetEngineController;
+		int _startGame;
+		bool _inGame;
 
 		std::string getBasePath() const override {
 			return "../media/maps";
@@ -64,6 +99,7 @@ namespace widgets {
 
 		void loadPlugins();
 		void loadInitializationPlugins();
+		void loadRunGamePlugins();
 
 		static api::KeyCode convertQtToEngine(int key);
 	};

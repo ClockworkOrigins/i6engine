@@ -61,6 +61,8 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_tickList.clear();
 
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOList({});
+
 		_GOList.clear();
 		GOPtr::clear();
 		api::ComPtr::clear();

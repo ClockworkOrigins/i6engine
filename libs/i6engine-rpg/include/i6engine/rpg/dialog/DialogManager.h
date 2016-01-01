@@ -132,6 +132,11 @@ namespace dialog {
 		*/
 		void setSubtitleFont(const std::string & font);
 
+		/**
+		 * \brief resets DialogManager
+		 */
+		void reset();
+
 	private:
 		DialogParser _parser;
 		std::map<std::string, std::vector<Dialog *>> _npcDialogs;

@@ -58,6 +58,7 @@ namespace dialog {
 	}
 
 	void DialogManager::loadDialogs(const std::string & directory) {
+		_npcDialogs.clear();
 		_parser.loadDialogs(directory);
 
 		for (auto & p : _parser._dialogs) {
@@ -238,6 +239,10 @@ namespace dialog {
 			api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 			gf->setFont("SubtitleWidget", _subtitleFont);
 		}
+	}
+
+	void DialogManager::reset() {
+		_guiInitialized = false;
 	}
 
 	bool DialogManager::checkDialogsLoop() {

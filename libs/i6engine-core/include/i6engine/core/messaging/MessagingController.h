@@ -115,6 +115,11 @@ namespace core {
 		 */
 		void deliverMessage(const Message::Ptr & msg);
 
+		/**
+		 * \brief removes all messages in buffer
+		 */
+		void clear();
+
 	private:
 		/**
 		 * \brief This method delivers the messages.

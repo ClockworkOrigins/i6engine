@@ -60,7 +60,13 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuGame">
+    <property name="title">
+     <string>Game</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuGame"/>
   </widget>
   <action name="actionLoad_Level">
    <property name="text">

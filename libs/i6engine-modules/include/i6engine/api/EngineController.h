@@ -209,6 +209,11 @@ namespace api {
 		 */
 		void stop();
 
+		/**
+		 * \brief removes all subsystems and application
+		 */
+		void reset();
+
 		inline core::EngineCoreController * getController() const {
 			return _coreController;
 		}

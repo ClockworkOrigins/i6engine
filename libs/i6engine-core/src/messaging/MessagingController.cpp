@@ -54,6 +54,10 @@ namespace core {
 		}
 	}
 
+	void MessagingController::clear() {
+		_msgQueue.clear();
+	}
+
 	void MessagingController::deliverMessageToSubscribers(const Message::Ptr & msg) const {
 #ifdef ISIXE_WITH_PROFILING
 		msg->insertTimestamp("MessagingController deliverMessageToSubscribers");
