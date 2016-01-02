@@ -31,6 +31,8 @@ namespace widgets {
 		gridLayout->setColumnStretch(0, 1);
 		gridLayout->setColumnStretch(1, 2);
 
+		_dialogHeaderWidget->setDialogDirectory(_dialogListWidget->getDialogDirectory());
+
 		connect(_dialogListWidget, SIGNAL(selectDialog(QString)), _dialogHeaderWidget, SLOT(showDialog(QString)));
 		connect(_npcListWidget, SIGNAL(selectDialog(QString)), _dialogHeaderWidget, SLOT(showDialog(QString)));
 	}

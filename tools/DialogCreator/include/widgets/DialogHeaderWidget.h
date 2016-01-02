@@ -14,14 +14,24 @@ namespace widgets {
 		DialogHeaderWidget(QWidget * par = nullptr);
 		~DialogHeaderWidget();
 
+		void setDialogDirectory(const std::string & dialogDirectory) {
+			_dialogDirectory = dialogDirectory;
+		}
+
+	signals:
+		void refreshLists();
+
 	public slots:
 		void showDialog(QString identifier);
 
 	private slots:
 		void updatedParticipants();
+		void saveChanges();
+		void saveNewDialog();
 
 	private:
 		std::vector<QLineEdit *> _participants;
+		std::string _dialogDirectory;
 	};
 
 } /* namespace widgets */

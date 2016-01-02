@@ -9,13 +9,20 @@ namespace i6engine {
 namespace dialogCreator {
 namespace widgets {
 
-	DialogListWidget::DialogListWidget(QWidget * par) : QWidget(par), _iniParser(), _dialogItems() {
+	DialogListWidget::DialogListWidget(QWidget * par) : QWidget(par), _iniParser(), _dialogItems(), _dialogDirectory() {
 		setupUi(this);
 
 		if (clockUtils::ClockError::SUCCESS != _iniParser.load("RPG.ini")) {
 			QMessageBox box;
 			box.setWindowTitle(QString("Error during startup!"));
 			box.setInformativeText("RPG.ini not found!");
+			box.setStandardButtons(QMessageBox::StandardButton::Ok);
+			box.exec();
+		}
+		if (_iniParser.getValue("SCRIPT", "dialogDirectory", _dialogDirectory) != clockUtils::ClockError::SUCCESS) {
+			QMessageBox box;
+			box.setWindowTitle(QString("Error during startup!"));
+			box.setInformativeText("'dialogDirectory' in section 'SCRIPT' in RPG.ini not found!");
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 		}
@@ -27,15 +34,7 @@ namespace widgets {
 	}
 
 	void DialogListWidget::refreshDialogList() {
-		std::string DialogDirectory;
-		if (_iniParser.getValue("SCRIPT", "dialogDirectory", DialogDirectory) != clockUtils::ClockError::SUCCESS) {
-			QMessageBox box;
-			box.setWindowTitle(QString("Error during startup!"));
-			box.setInformativeText("'dialogDirectory' in section 'SCRIPT' in RPG.ini not found!");
-			box.setStandardButtons(QMessageBox::StandardButton::Ok);
-			box.exec();
-		}
-		rpg::dialog::DialogManager::GetSingletonPtr()->loadDialogs(DialogDirectory);
+		rpg::dialog::DialogManager::GetSingletonPtr()->loadDialogs(_dialogDirectory);
 
 		treeWidget->clear();
 		_dialogItems.clear();

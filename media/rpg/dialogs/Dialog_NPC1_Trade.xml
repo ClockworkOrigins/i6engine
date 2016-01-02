@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog identifier="Dialog_NPC1_Trade">
+    <Participants>NPC01;</Participants>
+    <Nr>999</Nr>
+    <Permanent>True</Permanent>
+    <Description>Dialog_NPC1_Trade_Description</Description>
+    <Info>Dialog_NPC1_Trade_Info</Info>
+</Dialog>

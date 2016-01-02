@@ -18,6 +18,10 @@ namespace widgets {
 		DialogListWidget(QWidget * par = nullptr);
 		~DialogListWidget();
 
+		std::string getDialogDirectory() const {
+			return _dialogDirectory;
+		}
+
 	signals:
 		void selectDialog(QString identifier);
 
@@ -27,6 +31,7 @@ namespace widgets {
 	private:
 		clockUtils::iniParser::IniParser _iniParser;
 		std::set<QTreeWidgetItem *> _dialogItems;
+		std::string _dialogDirectory;
 
 		void refreshDialogList();
 	};
