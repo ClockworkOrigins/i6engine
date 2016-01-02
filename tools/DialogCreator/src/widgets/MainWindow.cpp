@@ -35,6 +35,9 @@ namespace widgets {
 
 		connect(_dialogListWidget, SIGNAL(selectDialog(QString)), _dialogHeaderWidget, SLOT(showDialog(QString)));
 		connect(_npcListWidget, SIGNAL(selectDialog(QString)), _dialogHeaderWidget, SLOT(showDialog(QString)));
+
+		connect(_dialogHeaderWidget, SIGNAL(refreshLists()), _dialogListWidget, SLOT(refreshLists()));
+		connect(_dialogHeaderWidget, SIGNAL(refreshLists()), _npcListWidget, SLOT(refreshLists()));
 	}
 
 	MainWindow::~MainWindow() {

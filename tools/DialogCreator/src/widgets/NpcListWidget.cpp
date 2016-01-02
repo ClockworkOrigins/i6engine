@@ -18,6 +18,17 @@ namespace widgets {
 	NpcListWidget::~NpcListWidget() {
 	}
 
+	void NpcListWidget::refreshLists() {
+		refreshNpcList();
+	}
+
+	void NpcListWidget::selectedDialog(QTreeWidgetItem * item) {
+		auto it = _dialogItems.find(item);
+		if (it != _dialogItems.end()) {
+			emit selectDialog(item->text(0));
+		}
+	}
+
 	void NpcListWidget::refreshNpcList() {
 		treeWidget->clear();
 		_dialogItems.clear();
@@ -38,13 +49,6 @@ namespace widgets {
 			}
 		}
 		connect(treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(selectedDialog(QTreeWidgetItem *)));
-	}
-
-	void NpcListWidget::selectedDialog(QTreeWidgetItem * item) {
-		auto it = _dialogItems.find(item);
-		if (it != _dialogItems.end()) {
-			emit selectDialog(item->text(0));
-		}
 	}
 
 } /* namespace widgets */

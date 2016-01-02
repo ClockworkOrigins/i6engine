@@ -33,6 +33,17 @@ namespace widgets {
 	DialogListWidget::~DialogListWidget() {
 	}
 
+	void DialogListWidget::refreshLists() {
+		refreshDialogList();
+	}
+
+	void DialogListWidget::selectedDialog(QTreeWidgetItem * item) {
+		auto it = _dialogItems.find(item);
+		if (it != _dialogItems.end()) {
+			emit selectDialog(item->text(0));
+		}
+	}
+
 	void DialogListWidget::refreshDialogList() {
 		rpg::dialog::DialogManager::GetSingletonPtr()->loadDialogs(_dialogDirectory);
 
@@ -51,13 +62,6 @@ namespace widgets {
 			}
 		}
 		connect(treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(selectedDialog(QTreeWidgetItem *)));
-	}
-
-	void DialogListWidget::selectedDialog(QTreeWidgetItem * item) {
-		auto it = _dialogItems.find(item);
-		if (it != _dialogItems.end()) {
-			emit selectDialog(item->text(0));
-		}
 	}
 
 } /* namespace widgets */

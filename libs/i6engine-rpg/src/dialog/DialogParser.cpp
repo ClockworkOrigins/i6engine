@@ -43,6 +43,10 @@ namespace dialog {
 	}
 
 	void DialogParser::loadDialogs(const std::string & directory) {
+		for (std::pair<std::string, Dialog *> p : _dialogs) {
+			delete p.second;
+		}
+		_dialogs.clear();
 		std::queue<std::string> directories;
 		directories.push(directory);
 

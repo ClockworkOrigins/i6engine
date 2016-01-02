@@ -19,6 +19,9 @@ namespace widgets {
 	signals:
 		void selectDialog(QString identifier);
 
+	public slots:
+		void refreshLists();
+
 	private slots:
 		void selectedDialog(QTreeWidgetItem * item);
 
