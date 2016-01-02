@@ -63,6 +63,10 @@ IF(WIN32)
 	add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/DialogCreator.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
+configure_file(${CMAKE_SOURCE_DIR}/config/DialogCreator.ini ${CMAKE_BINARY_DIR}/bin/DialogCreator.ini COPYONLY)
+
+install(FILES ${CMAKE_SOURCE_DIR}/config/DialogCreator.ini DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
+
 install(TARGETS DialogCreator
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 )

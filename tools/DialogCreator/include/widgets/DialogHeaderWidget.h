@@ -23,6 +23,8 @@ namespace widgets {
 
 	public slots:
 		void showDialog(QString identifier);
+		void updateConditionEntry();
+		void updateInfoEntry();
 
 	private slots:
 		void updatedParticipants();
@@ -32,6 +34,8 @@ namespace widgets {
 	private:
 		std::vector<QLineEdit *> _participants;
 		std::string _dialogDirectory;
+		std::string _pythonScriptsPath;
+		std::string _luaScriptsPath;
 	};
 
 } /* namespace widgets */
