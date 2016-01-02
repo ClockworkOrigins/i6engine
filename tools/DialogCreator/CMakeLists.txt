@@ -34,16 +34,19 @@ set(dialogCreatorSrc
 	
 	${srcdir}/widgets/DialogListWidget.cpp
 	${srcdir}/widgets/MainWindow.cpp
+	${srcdir}/widgets/NpcListWidget.cpp
 )
 
 QT5_WRAP_UI(dialogCreatorUI
 	gui/widgetDialogList.ui
+	gui/widgetNpcList.ui
 	gui/wndMainWindow.ui
 )
 
 QT5_WRAP_CPP(dialogCreatorGuiHeader
 	${includedir}/widgets/DialogListWidget.h
 	${includedir}/widgets/MainWindow.h
+	${includedir}/widgets/NpcListWidget.h
 )
 
 source_group(widgets /widgets/*)

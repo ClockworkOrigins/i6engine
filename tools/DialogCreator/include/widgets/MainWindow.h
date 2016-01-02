@@ -8,6 +8,7 @@ namespace dialogCreator {
 namespace widgets {
 
 	class DialogListWidget;
+	class NpcListWidget;
 
 	class MainWindow : public QMainWindow, public Ui::wndMainWindow {
 		Q_OBJECT
@@ -21,6 +22,7 @@ namespace widgets {
 
 	private:
 		DialogListWidget * _dialogListWidget;
+		NpcListWidget * _npcListWidget;
 
 		void closeEvent(QCloseEvent * evt) override;
 	};

@@ -139,6 +139,13 @@ namespace dialog {
 			return _parser._dialogs;
 		}
 
+		/**
+		 * \brief gets all dialogs with their npcs
+		 */
+		std::map<std::string, std::vector<Dialog *>> getNpcDialogs() const {
+			return _npcDialogs;
+		}
+
 	private:
 		DialogParser _parser;
 		std::map<std::string, std::vector<Dialog *>> _npcDialogs;
