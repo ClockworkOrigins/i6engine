@@ -3,6 +3,8 @@
 
 #include "ui_widgetDialogList.h"
 
+#include <set>
+
 #include "clockUtils/iniParser/iniParser.h"
 
 namespace i6engine {
@@ -16,8 +18,15 @@ namespace widgets {
 		DialogListWidget(QWidget * par = nullptr);
 		~DialogListWidget();
 
+	signals:
+		void selectDialog(QString identifier);
+
+	private slots:
+		void selectedDialog(QTreeWidgetItem * item);
+
 	private:
 		clockUtils::iniParser::IniParser _iniParser;
+		std::set<QTreeWidgetItem *> _dialogItems;
 
 		void refreshDialogList();
 	};

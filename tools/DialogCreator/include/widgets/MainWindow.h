@@ -7,6 +7,7 @@ namespace i6engine {
 namespace dialogCreator {
 namespace widgets {
 
+	class DialogHeaderWidget;
 	class DialogListWidget;
 	class NpcListWidget;
 
@@ -23,6 +24,7 @@ namespace widgets {
 	private:
 		DialogListWidget * _dialogListWidget;
 		NpcListWidget * _npcListWidget;
+		DialogHeaderWidget * _dialogHeaderWidget;
 
 		void closeEvent(QCloseEvent * evt) override;
 	};

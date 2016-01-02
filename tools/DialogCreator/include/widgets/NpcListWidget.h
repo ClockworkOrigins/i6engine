@@ -3,6 +3,8 @@
 
 #include "ui_widgetNpcList.h"
 
+#include <set>
+
 namespace i6engine {
 namespace dialogCreator {
 namespace widgets {
@@ -14,7 +16,15 @@ namespace widgets {
 		NpcListWidget(QWidget * par = nullptr);
 		~NpcListWidget();
 
+	signals:
+		void selectDialog(QString identifier);
+
+	private slots:
+		void selectedDialog(QTreeWidgetItem * item);
+
 	private:
+		std::set<QTreeWidgetItem *> _dialogItems;
+
 		void refreshNpcList();
 	};
 

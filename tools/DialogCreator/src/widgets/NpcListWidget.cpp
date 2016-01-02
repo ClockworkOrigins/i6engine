@@ -9,7 +9,7 @@ namespace i6engine {
 namespace dialogCreator {
 namespace widgets {
 
-	NpcListWidget::NpcListWidget(QWidget * par) : QWidget(par) {
+	NpcListWidget::NpcListWidget(QWidget * par) : QWidget(par), _dialogItems() {
 		setupUi(this);
 
 		refreshNpcList();
@@ -20,6 +20,7 @@ namespace widgets {
 
 	void NpcListWidget::refreshNpcList() {
 		treeWidget->clear();
+		_dialogItems.clear();
 
 		std::map<std::string, std::vector<rpg::dialog::Dialog *>> npcDialogs = rpg::dialog::DialogManager::GetSingletonPtr()->getNpcDialogs();
 
@@ -31,8 +32,18 @@ namespace widgets {
 				return a->nr < b->nr;
 			});
 			for (rpg::dialog::Dialog * d : dialogs) {
-				twi->addChild(new QTreeWidgetItem(twi, { QString::fromStdString(d->identifier) }));
+				QTreeWidgetItem * twi2 = new QTreeWidgetItem(twi, { QString::fromStdString(d->identifier) });
+				twi->addChild(twi2);
+				_dialogItems.insert(twi2);
 			}
+		}
+		connect(treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(selectedDialog(QTreeWidgetItem *)));
+	}
+
+	void NpcListWidget::selectedDialog(QTreeWidgetItem * item) {
+		auto it = _dialogItems.find(item);
+		if (it != _dialogItems.end()) {
+			emit selectDialog(item->text(0));
 		}
 	}
 

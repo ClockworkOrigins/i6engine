@@ -9,7 +9,7 @@ namespace i6engine {
 namespace dialogCreator {
 namespace widgets {
 
-	DialogListWidget::DialogListWidget(QWidget * par) : QWidget(par), _iniParser() {
+	DialogListWidget::DialogListWidget(QWidget * par) : QWidget(par), _iniParser(), _dialogItems() {
 		setupUi(this);
 
 		if (clockUtils::ClockError::SUCCESS != _iniParser.load("RPG.ini")) {
@@ -38,16 +38,26 @@ namespace widgets {
 		rpg::dialog::DialogManager::GetSingletonPtr()->loadDialogs(DialogDirectory);
 
 		treeWidget->clear();
+		_dialogItems.clear();
 
 		std::map<std::string, rpg::dialog::Dialog *> dialogs = rpg::dialog::DialogManager::GetSingletonPtr()->getDialogs();
 
 		for (const auto & p : dialogs) {
 			QTreeWidgetItem * twi = new QTreeWidgetItem(treeWidget, { QString::fromStdString(p.first) });
 			treeWidget->addTopLevelItem(twi);
+			_dialogItems.insert(twi);
 
 			for (std::string participant : p.second->participants) {
 				twi->addChild(new QTreeWidgetItem(twi, { QString::fromStdString(participant) }));
 			}
+		}
+		connect(treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(selectedDialog(QTreeWidgetItem *)));
+	}
+
+	void DialogListWidget::selectedDialog(QTreeWidgetItem * item) {
+		auto it = _dialogItems.find(item);
+		if (it != _dialogItems.end()) {
+			emit selectDialog(item->text(0));
 		}
 	}
 
