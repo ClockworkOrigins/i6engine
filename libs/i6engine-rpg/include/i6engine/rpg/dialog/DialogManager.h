@@ -128,9 +128,16 @@ namespace dialog {
 		void setSubtitleSize(const Vec2 & size);
 
 		/**
-		* \brief sets font of subtitle box
-		*/
+		 * \brief sets font of subtitle box
+		 */
 		void setSubtitleFont(const std::string & font);
+
+		/**
+		 * \brief gets all dialogs
+		 */
+		std::map<std::string, Dialog *> getDialogs() const {
+			return _parser._dialogs;
+		}
 
 	private:
 		DialogParser _parser;

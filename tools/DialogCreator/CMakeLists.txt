@@ -15,7 +15,7 @@
 ##
 
 ################################
-# i6engine-editor cmake
+# DialogCreator cmake
 ################################
 
 include_directories("include")
@@ -23,58 +23,40 @@ include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
+include_directories(${I6ENGINE_RPG_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
 
 set(srcdir ./src)
-SET(includedir ./include/i6engine/editor)
+SET(includedir ./include)
 
-set(editorSrc
+set(dialogCreatorSrc
 	${srcdir}/main.cpp
-
-	${srcdir}/Editor.cpp
 	
+	${srcdir}/widgets/DialogListWidget.cpp
 	${srcdir}/widgets/MainWindow.cpp
-	${srcdir}/widgets/ObjectContainerWidget.cpp
-	${srcdir}/widgets/ObjectInfoWidget.cpp
-	${srcdir}/widgets/ObjectListWidget.cpp
-	${srcdir}/widgets/RenderWidget.cpp
-	${srcdir}/widgets/TemplateListWidget.cpp
 )
 
-QT5_WRAP_UI(editorUI
-	gui/widgetObjectContainer.ui
-	gui/widgetObjectInfo.ui
-	gui/widgetObjectList.ui
-	gui/widgetRender.ui
-	gui/widgetTemplateList.ui
+QT5_WRAP_UI(dialogCreatorUI
+	gui/widgetDialogList.ui
 	gui/wndMainWindow.ui
 )
 
-QT5_WRAP_CPP(editorGuiHeader
+QT5_WRAP_CPP(dialogCreatorGuiHeader
+	${includedir}/widgets/DialogListWidget.h
 	${includedir}/widgets/MainWindow.h
-	${includedir}/widgets/ObjectContainerWidget.h
-	${includedir}/widgets/ObjectInfoWidget.h
-	${includedir}/widgets/ObjectListWidget.h
-	${includedir}/widgets/RenderWidget.h
-	${includedir}/widgets/TemplateListWidget.h
 )
 
-source_group(components /components/*)
-source_group(gui /gui/*)
-source_group(misc /misc/*)
 source_group(widgets /widgets/*)
 SOURCE_GROUP(moc /moc_*)
 
-ADD_EXECUTABLE(i6engine-editor ${GUI_TYPE} ${editorSrc} ${editorUI} ${editorGuiHeader})
+ADD_EXECUTABLE(DialogCreator ${GUI_TYPE} ${dialogCreatorSrc} ${dialogCreatorUI} ${dialogCreatorGuiHeader})
 
-target_link_libraries(i6engine-editor i6engine-modules ${QT_LIBRARIES})
+target_link_libraries(DialogCreator i6engine-rpg ${QT_LIBRARIES})
 
 IF(WIN32)
-	add_custom_command(TARGET i6engine-editor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-editor.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/DialogCreator.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX})
-
-install(TARGETS i6engine-editor
+install(TARGETS DialogCreator
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 )
