@@ -35,6 +35,12 @@ namespace api {
 		 */
 		void setLanguage(const std::string & language);
 
+		/**
+		 * \brief updates all subscribers
+		 * might be necessary if your system depends on setting the value through language manager but is initialized afterwards as most things will be
+		 */
+		void updateSubscribers();
+
 	private:
 		std::string _language;
 		std::vector<std::function<void(const std::string &)>> _callbacks;

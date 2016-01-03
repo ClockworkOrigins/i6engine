@@ -16,5 +16,11 @@ namespace api {
 		}
 	}
 
+	void LanguageManager::updateSubscribers() {
+		for (auto & cb : _callbacks) {
+			cb(_language);
+		}
+	}
+
 } /* namespace api */
 } /* namespace i6engine */
