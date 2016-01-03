@@ -18,8 +18,9 @@ namespace widgets {
 	void WidgetParticleList::refreshParticleList() {
 		ParticleUniverse::vector<ParticleUniverse::String> names;
 		ParticleUniverse::ParticleSystemManager::getSingletonPtr()->particleSystemTemplateNames(names);
-		treeView->clear();
+		treeWidget->clear();
 		for (ParticleUniverse::String s : names) {
+			QTreeWidgetItem * twi = new QTreeWidgetItem(treeWidget, { QString::fromStdString(s) });
 		}
 	}
 
