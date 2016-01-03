@@ -131,6 +131,9 @@ void wxOgreControl::OnSize(wxSizeEvent & WXUNUSED(event)) {
 		GetSize(&width, &height);
 		_renderWindow->resize(static_cast<unsigned int>(width), static_cast<unsigned int>(height));
 		_renderWindow->windowMovedOrResized();
+		if (_camera) {
+			_camera->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
+		}
 	}
 
 #ifdef __WXGTK20__
@@ -139,11 +142,6 @@ void wxOgreControl::OnSize(wxSizeEvent & WXUNUSED(event)) {
 		_viewport->_updateDimensions();
 	}
 #endif
-
-	// Let Ogre know the window has been resized;
-	// Set the aspect ratio for the new size;
-//	if (_camera)
-//		_camera->setAspectRatio(ParticleUniverse::Real(width) / ParticleUniverse::Real(height));
 }
 
 void wxOgreControl::OnIdle(wxIdleEvent & WXUNUSED(event)) {

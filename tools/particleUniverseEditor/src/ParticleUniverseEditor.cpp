@@ -816,13 +816,6 @@ void ParticleUniverseEditorFrame::CreateTabs() {
 
 	// Set the drop target
 	mNotebook->SetDropTarget(new FileDropTarget(this));
-	// ----------
-	// Render page
-	// ----------
-	wxPanel * p1 = new wxPanel(mNotebook);
-	mControl = new wxOgreControl(p1, ID_TAB_RENDER);
-	mControl->setCallbackFrame(this);
-	mNotebook->AddPage(p1, _("Render"), false);
 
 	// ----------
 	// Edit page
@@ -835,7 +828,6 @@ void ParticleUniverseEditorFrame::CreateTabs() {
 	editPanel->SetSizer(wbs);
 	splitWin->SetSashGravity(0.5);
 	mEditNotebookPage = new EditTab(splitWin, this);
-	mNotebook->AddPage(editPanel, _("Edit"), true);
 	editPanel->FitInside();
 	splitWin->FitInside();
 
@@ -844,6 +836,16 @@ void ParticleUniverseEditorFrame::CreateTabs() {
 	splitWin->SplitHorizontally(mEditNotebookPage, mControlPanelWithSmallRenderWindow);
 
 	mSubHSizer->Add(mNotebook, 1, wxEXPAND);
+
+	// ----------
+	// Render page
+	// ----------
+	wxPanel * p1 = new wxPanel(mNotebook);
+	mControl = new wxOgreControl(p1, ID_TAB_RENDER);
+	mControl->setCallbackFrame(this);
+	mNotebook->AddPage(p1, _("Render"), false);
+
+	mNotebook->AddPage(editPanel, _("Edit"), true);
 
 	// ----------
 	// Script page
