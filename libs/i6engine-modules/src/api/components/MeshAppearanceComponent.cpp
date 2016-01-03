@@ -208,5 +208,9 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraRemoveBB, core::Method::Update, new graphics::Graphics_RemoveBB_Update(getID(), _objOwnerID), core::Subsystem::Object));
 	}
 
+	void MeshAppearanceComponent::addAnimationFrameEvent(uint64_t frameTime, const std::function<void(void)> & func) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraAnimationFrameEvent, core::Method::Update, new graphics::Graphics_AnimationFrameEvent_Update(getID(), _objOwnerID, frameTime, func), core::Subsystem::Object));
+	}
+
 } /* namespace api */
 } /* namespace i6engine */

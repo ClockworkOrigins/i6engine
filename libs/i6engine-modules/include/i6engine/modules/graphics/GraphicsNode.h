@@ -143,6 +143,12 @@ namespace modules {
 		void stopAnimation(int64_t coid);
 
 		/**
+		 * \brief adds an event being triggered, when a specified frame time of the animation is reached
+		 * note that all events are removed when another animation is played!
+		 */
+		void addAnimationFrameEvent(int64_t coid, uint64_t frame, const std::function<void(void)> & func);
+
+		/**
 		 * \brief Deletes the MeshComponent of the Node
 		 *
 		 *     Deletes an Ogre Entity by calling sm->destroyEntity

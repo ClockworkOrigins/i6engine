@@ -159,6 +159,12 @@ namespace api {
 		 */
 		void removeBoundingBox() const;
 
+		/**
+		 * \brief adds an event being triggered, when a specified frame time of the animation is reached
+		 * note that all events are removed when another animation is played!
+		 */
+		void addAnimationFrameEvent(uint64_t frameTime, const std::function<void(void)> & func) const;
+
 	private:
 		/**
 		 * Name of the mesh file of the component
