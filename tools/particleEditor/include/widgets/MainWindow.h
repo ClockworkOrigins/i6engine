@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	class WidgetParticleList;
+	class WidgetRender;
+
 	class MainWindow : public QMainWindow, public Ui::wndMainWindow {
 		Q_OBJECT
 
@@ -16,6 +19,10 @@ namespace widgets {
 
 	private slots:
 		void closeEditor();
+
+	private:
+		WidgetRender * _renderWidget;
+		WidgetParticleList * _particleListWidget;
 	};
 
 } /* namespace widgets */

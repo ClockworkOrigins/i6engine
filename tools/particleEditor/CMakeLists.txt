@@ -18,12 +18,13 @@
 # ParticleEditor cmake
 ################################
 
-include_directories("include")
-include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
-include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
-include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
-include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
+INCLUDE_DIRECTORIES("include")
+INCLUDE_DIRECTORIES(${I6ENGINE_UTILS_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${I6ENGINE_MATH_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${I6ENGINE_CORE_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${I6ENGINE_MODULES_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/plugins/particleUniverse/include)
 
 set(srcdir ./src)
 SET(includedir ./include)
@@ -32,14 +33,20 @@ set(particleEditorSrc
 	${srcdir}/main.cpp
 	
 	${srcdir}/widgets/MainWindow.cpp
+	${srcdir}/widgets/WidgetParticleList.cpp
+	${srcdir}/widgets/WidgetRender.cpp
 )
 
 QT5_WRAP_UI(particleEditorUI
+	gui/widgetParticleList.ui
+	gui/widgetRender.ui
 	gui/wndMainWindow.ui
 )
 
 QT5_WRAP_CPP(particleEditorGuiHeader
 	${includedir}/widgets/MainWindow.h
+	${includedir}/widgets/WidgetParticleList.h
+	${includedir}/widgets/WidgetRender.h
 )
 
 source_group(widgets /widgets/*)
