@@ -3,12 +3,15 @@
 
 #include "ui_widgetRender.h"
 
-#include <thread>
-
 namespace Ogre {
+	class Camera;
+	class Overlay;
+	class OverlayContainer;
 	class RenderWindow;
 	class Root;
 	class SceneManager;
+	class TextAreaOverlayElement;
+	class Viewport;
 } /* namespace Ogre */
 
 namespace i6engine {
@@ -32,13 +35,25 @@ namespace widgets {
 		 */
 		~WidgetRender();
 
+	signals:
+		void triggerRender();
+
+	private slots:
+		void render();
+
 	private:
 		Ogre::Root * _root;
 		modules::ResourceManager * _resourceManager;
 		Ogre::RenderWindow * _rWindow;
 		Ogre::SceneManager * _sceneManager;
-		bool _running;
-		std::thread _renderThread;
+		Ogre::Overlay * _overlay;
+		Ogre::OverlayContainer * _textPanel;
+		Ogre::TextAreaOverlayElement * _averageFPS;
+		Ogre::Camera * _camera;
+		Ogre::Viewport * _viewport;
+
+		void updateOverlay();
+		void resizeEvent(QResizeEvent * evt) override;
 	};
 
 } /* namespace widgets */
