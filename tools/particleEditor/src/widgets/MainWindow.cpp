@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _tabWidget(new QTabWidget(this)) {
 		setupUi(this);
 
 		showMaximized();
@@ -17,7 +17,9 @@ namespace widgets {
 		setWindowTitle(QString("ParticleEditor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
 
 		gridLayout->addWidget(_particleListWidget, 0, 0);
-		gridLayout->addWidget(_renderWidget, 0, 1);
+		gridLayout->addWidget(_tabWidget, 0, 1);
+
+		_tabWidget->addTab(_renderWidget, "Render");
 
 		gridLayout->setColumnStretch(0, 1);
 		gridLayout->setColumnStretch(1, 3);

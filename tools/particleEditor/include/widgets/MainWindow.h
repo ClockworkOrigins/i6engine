@@ -23,6 +23,7 @@ namespace widgets {
 	private:
 		WidgetRender * _renderWidget;
 		WidgetParticleList * _particleListWidget;
+		QTabWidget * _tabWidget;
 	};
 
 } /* namespace widgets */
