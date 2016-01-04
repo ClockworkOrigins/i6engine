@@ -29,6 +29,10 @@ namespace widgets {
 			return _currentParticleTemplate;
 		}
 
+		bool existsTemplateName(QString templateName) const {
+			return _templateMap.find(templateName) != _templateMap.end();
+		}
+
 	signals:
 		void createNewSystem(const QString & templateName);
 

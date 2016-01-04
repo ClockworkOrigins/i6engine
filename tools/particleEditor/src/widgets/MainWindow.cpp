@@ -7,7 +7,9 @@
 #include "widgets/WidgetRender.h"
 #include "widgets/WidgetScript.h"
 
+#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 #include <QToolBar>
 
@@ -15,7 +17,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render), _particleSystemCounter(0) {
 		setupUi(this);
 
 		showMaximized();
@@ -23,9 +25,13 @@ namespace widgets {
 		setWindowTitle(QString("ParticleEditor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
 
 		QToolBar * tb = new QToolBar(this);
+		QAction * newAction = tb->addAction(QIcon("../media/textures/new.png"), "New Particle");
+		tb->addSeparator();
 		QAction * playAction = tb->addAction(QIcon("../media/textures/control_play.png"), "Play");
 		QAction * pauseAction = tb->addAction(QIcon("../media/textures/control_pause.png"), "Pause");
 		QAction * stopAction = tb->addAction(QIcon("../media/textures/control_stop.png"), "Stop");
+
+		connect(newAction, SIGNAL(triggered()), this, SLOT(handleNewAction()));
 
 		connect(playAction, SIGNAL(triggered()), this, SLOT(handlePlayAction()));
 		connect(this, SIGNAL(triggerPlay()), _renderWidget, SLOT(play()));
@@ -71,6 +77,29 @@ namespace widgets {
 
 	void MainWindow::closeEditor() {
 		qApp->exit();
+	}
+
+	void MainWindow::handleNewAction() {
+		QString templateName;
+		
+		do {
+			templateName = "ParticleSystem" + QString::number(_particleSystemCounter++);
+		} while (_particleListWidget->existsTemplateName(templateName));
+
+		// Create new particle system template. If the name is changed in the (script) editor, the template name is updated.
+		ParticleUniverse::ParticleSystem * pSys = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystemTemplate(templateName.toStdString(), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
+		// Set a default technique with renderer and emitter
+		if (pSys) {
+			ParticleUniverse::ParticleTechnique * technique = pSys->createTechnique();
+			if (technique) {
+				ParticleUniverse::ParticleEmitter * emitter = technique->createEmitter("Point");
+				technique->setRenderer("Billboard");
+			}
+		}
+
+		_particleListWidget->refreshParticleList();
+		_particleListWidget->selectParticle(templateName);
 	}
 
 	void MainWindow::handlePlayAction() {

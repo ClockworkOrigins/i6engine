@@ -3,6 +3,8 @@
 
 #include "ui_wndMainWindow.h"
 
+#include <cstdint>
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -27,6 +29,7 @@ namespace widgets {
 
 	private slots:
 		void closeEditor();
+		void handleNewAction();
 		void handlePlayAction();
 		void handlePauseAction();
 		void handleStopAction();
@@ -49,6 +52,7 @@ namespace widgets {
 		std::map<QString, QAction *> _toolbarActions;
 		QString _currentParticleTemplate;
 		CurrentTab _currentTab;
+		uint32_t _particleSystemCounter;
 	};
 
 } /* namespace widgets */
