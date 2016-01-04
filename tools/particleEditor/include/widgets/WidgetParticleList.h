@@ -21,7 +21,15 @@ namespace widgets {
 		 */
 		~WidgetParticleList();
 
+	signals:
+		void createNewSystem(const QString & templateName);
+
+	private slots:
+		void selectParticle(QTreeWidgetItem * item);
+
 	private:
+		QString _currentParticleTemplate;
+
 		void refreshParticleList();
 	};
 

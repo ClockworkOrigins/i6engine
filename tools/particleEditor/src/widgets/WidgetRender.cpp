@@ -2,6 +2,7 @@
 
 #include "i6engine/modules/graphics/ResourceManager.h"
 
+#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseSystemManager.h"
 
 #include "clockUtils/iniParser/iniParser.h"
@@ -15,11 +16,15 @@
 #include <QMessageBox>
 #include <QResizeEvent>
 
+#undef max
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	WidgetRender::WidgetRender(QWidget * par) : QWidget(par), _root(nullptr), _resourceManager(nullptr), _rWindow(nullptr), _sceneManager(nullptr), _overlay(nullptr), _textPanel(nullptr), _averageFPS(nullptr), _camera(nullptr), _viewport(nullptr) {
+	std::string CURRENT_PS_NAME = "currentParticleSystemName";
+
+	WidgetRender::WidgetRender(QWidget * par) : QWidget(par), _root(nullptr), _resourceManager(nullptr), _rWindow(nullptr), _sceneManager(nullptr), _overlay(nullptr), _textPanel(nullptr), _averageFPS(nullptr), _cameraNode(nullptr), _camera(nullptr), _viewport(nullptr), _particleNode(nullptr), _currentParticleSystemForRenderer(nullptr), _maxNumberOfVisualParticles(0), _maxNumberOfEmittedParticles(0) {
 		setupUi(this);
 
 		clockUtils::iniParser::IniParser iniParser;
@@ -63,9 +68,15 @@ namespace widgets {
 
 		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
+		_cameraNode = _sceneManager->getRootSceneNode()->createChildSceneNode("CameraNode");
+		_particleNode = _sceneManager->getRootSceneNode()->createChildSceneNode("ParticleNode");
+
 		_camera = _sceneManager->createCamera("MainCamera");
-		_camera->setAutoAspectRatio(true);
-		_camera->setPosition(Ogre::Vector3(0.0, 0.0, -10.0));
+		_camera->setPosition(Ogre::Vector3(0.0, 0.0, 30.0));
+		_camera->setNearClipDistance(0.1);
+		_camera->setFarClipDistance(99999.0);
+
+		_cameraNode->attachObject(_camera);
 
 		_viewport = _rWindow->addViewport(_camera, 0, 0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -101,6 +112,39 @@ namespace widgets {
 		delete _root;
 	}
 
+	void WidgetRender::play() {
+		if (_currentParticleSystemForRenderer) {
+			if (_currentParticleSystemForRenderer->getState() == ParticleUniverse::ParticleSystem::PSS_PAUSED) {
+				_currentParticleSystemForRenderer->resume();
+			} else {
+				_maxNumberOfVisualParticles = 0;
+				_maxNumberOfEmittedParticles = 0;
+				_currentParticleSystemForRenderer->start();
+			}
+		}
+	}
+
+	void WidgetRender::pause() {
+		if (_currentParticleSystemForRenderer) {
+			_currentParticleSystemForRenderer->pause();
+		}
+	}
+
+	void WidgetRender::stop() {
+		if (_currentParticleSystemForRenderer) {
+			_currentParticleSystemForRenderer->stop();
+		}
+	}
+
+	void WidgetRender::createNewSystem(const QString & particle) {
+		if (_currentParticleSystemForRenderer) {
+			_particleNode->detachObject(_currentParticleSystemForRenderer);
+			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(CURRENT_PS_NAME, _sceneManager); // Always force a destroy
+		}
+		_currentParticleSystemForRenderer = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(CURRENT_PS_NAME, particle.toStdString(), _sceneManager);
+		_particleNode->attachObject(_currentParticleSystemForRenderer);
+	}
+
 	void WidgetRender::render() {
 		_root->renderOneFrame();
 		updateOverlay();
@@ -127,23 +171,23 @@ namespace widgets {
 		ParticleUniverse::String distanceString = " Camera distance: " + ParticleUniverse::StringConverter::toString(l) + "\n";
 		caption = caption + distanceString;
 
-		/*if (mCurrentParticleSystemForRenderer) {
+		if (_currentParticleSystemForRenderer) {
 			// Number of emitted visual particles
-			size_t numberOfVisualParticles = mCurrentParticleSystemForRenderer->getNumberOfEmittedParticles(ParticleUniverse::Particle::PT_VISUAL);
-			mMaxNumberOfVisualParticles = std::max(mMaxNumberOfVisualParticles, numberOfVisualParticles);
-			ParticleUniverse::String numberOfVisualParticlesString = " Total visual particles: " + ParticleUniverse::StringConverter::toString(numberOfVisualParticles) + "\n";
+			size_t numberOfVisualParticles = _currentParticleSystemForRenderer->getNumberOfEmittedParticles(ParticleUniverse::Particle::PT_VISUAL);
+			_maxNumberOfVisualParticles = std::max(_maxNumberOfVisualParticles, numberOfVisualParticles);
+			ParticleUniverse::String numberOfVisualParticlesString = "\n Total visual particles: " + ParticleUniverse::StringConverter::toString(numberOfVisualParticles) + "\n";
 			caption = caption + numberOfVisualParticlesString;
-			ParticleUniverse::String maxNumberOfVisualParticlesString = " Max visual particles: " + ParticleUniverse::StringConverter::toString(mMaxNumberOfVisualParticles) + "\n";
+			ParticleUniverse::String maxNumberOfVisualParticlesString = " Max visual particles: " + ParticleUniverse::StringConverter::toString(_maxNumberOfVisualParticles) + "\n";
 			caption = caption + maxNumberOfVisualParticlesString;
 
 			// Number of emitted non-visual particles
-			size_t numberOfEmittedParticles = mCurrentParticleSystemForRenderer->getNumberOfEmittedParticles() - mCurrentParticleSystemForRenderer->getNumberOfEmittedParticles(ParticleUniverse::Particle::PT_VISUAL);
-			mMaxNumberOfEmittedParticles = std::max(mMaxNumberOfEmittedParticles, numberOfEmittedParticles);
+			size_t numberOfEmittedParticles = _currentParticleSystemForRenderer->getNumberOfEmittedParticles() - _currentParticleSystemForRenderer->getNumberOfEmittedParticles(ParticleUniverse::Particle::PT_VISUAL);
+			_maxNumberOfEmittedParticles = std::max(_maxNumberOfEmittedParticles, numberOfEmittedParticles);
 			ParticleUniverse::String numberOfNonVisualParticlesString = " Total non-visual particles: " + ParticleUniverse::StringConverter::toString(numberOfEmittedParticles) + "\n";
 			caption = caption + numberOfNonVisualParticlesString;
-			ParticleUniverse::String maxNumberOfNonVisualParticlesString = " Max non-visual particles: " + ParticleUniverse::StringConverter::toString(mMaxNumberOfEmittedParticles) + "\n";
+			ParticleUniverse::String maxNumberOfNonVisualParticlesString = " Max non-visual particles: " + ParticleUniverse::StringConverter::toString(_maxNumberOfEmittedParticles) + "\n";
 			caption = caption + maxNumberOfNonVisualParticlesString;
-		}*/
+		}
 
 		_averageFPS->setCaption(caption);
 	}
@@ -151,6 +195,7 @@ namespace widgets {
 	void WidgetRender::resizeEvent(QResizeEvent * evt) {
 		_rWindow->resize(static_cast<unsigned int>(evt->size().width()), static_cast<unsigned int>(evt->size().height()));
 		_rWindow->windowMovedOrResized();
+		_camera->setAspectRatio(double(evt->size().width()) / double(evt->size().height()));
 		evt->ignore();
 	}
 

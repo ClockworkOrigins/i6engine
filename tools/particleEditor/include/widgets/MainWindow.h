@@ -17,13 +17,26 @@ namespace widgets {
 		MainWindow(QMainWindow * par = nullptr);
 		~MainWindow();
 
+	signals:
+		void triggerPlay();
+		void triggerPause();
+		void triggerStop();
+		void triggerCreateNewSystem(const QString & particle);
+
 	private slots:
 		void closeEditor();
+		void handlePlayAction();
+		void handlePauseAction();
+		void handleStopAction();
+		void createNewSystem(const QString & particle);
 
 	private:
 		WidgetRender * _renderWidget;
 		WidgetParticleList * _particleListWidget;
 		QTabWidget * _tabWidget;
+		bool _playing;
+		std::map<QString, QAction *> _toolbarActions;
+		QString _currentParticleTemplate;
 	};
 
 } /* namespace widgets */

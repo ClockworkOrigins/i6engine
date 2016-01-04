@@ -6,13 +6,22 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	WidgetParticleList::WidgetParticleList(QWidget * par) : QWidget(par) {
+	WidgetParticleList::WidgetParticleList(QWidget * par) : QWidget(par), _currentParticleTemplate() {
 		setupUi(this);
 
 		refreshParticleList();
+
+		connect(treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(selectParticle(QTreeWidgetItem *)));
 	}
 
 	WidgetParticleList::~WidgetParticleList() {
+	}
+
+	void WidgetParticleList::selectParticle(QTreeWidgetItem * item) {
+		if (_currentParticleTemplate != item->text(0)) {
+			_currentParticleTemplate = item->text(0);
+			emit createNewSystem(item->text(0));
+		}
 	}
 
 	void WidgetParticleList::refreshParticleList() {

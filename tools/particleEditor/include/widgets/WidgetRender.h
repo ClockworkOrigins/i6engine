@@ -10,9 +10,14 @@ namespace Ogre {
 	class RenderWindow;
 	class Root;
 	class SceneManager;
+	class SceneNode;
 	class TextAreaOverlayElement;
 	class Viewport;
 } /* namespace Ogre */
+
+namespace ParticleUniverse {
+	class ParticleSystem;
+} /* namespace ParticleUniverse */
 
 namespace i6engine {
 namespace modules {
@@ -35,6 +40,12 @@ namespace widgets {
 		 */
 		~WidgetRender();
 
+	public slots:
+		void play();
+		void pause();
+		void stop();
+		void createNewSystem(const QString & particle);
+
 	signals:
 		void triggerRender();
 
@@ -49,8 +60,13 @@ namespace widgets {
 		Ogre::Overlay * _overlay;
 		Ogre::OverlayContainer * _textPanel;
 		Ogre::TextAreaOverlayElement * _averageFPS;
+		Ogre::SceneNode * _cameraNode;
 		Ogre::Camera * _camera;
 		Ogre::Viewport * _viewport;
+		Ogre::SceneNode * _particleNode;
+		ParticleUniverse::ParticleSystem * _currentParticleSystemForRenderer;
+		size_t _maxNumberOfVisualParticles;
+		size_t _maxNumberOfEmittedParticles;
 
 		void updateOverlay();
 		void resizeEvent(QResizeEvent * evt) override;
