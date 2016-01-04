@@ -172,8 +172,16 @@ namespace ParticleUniverse
 	{
 		if (indentation > 0)
 		{
-			// Append gives garbage, so use for-loop instead
-			for (short i = 0; i < indentation; ++i) base += " ";
+			// Append gives garbage, so use for-loop insteads
+			if (indentation % 4 == 0) {
+				for (short i = 0; i < indentation / 4; ++i) {
+					base += "\t";
+				}
+			} else {
+				for (short i = 0; i < indentation; ++i) {
+					base += " ";
+				}
+			}
 		}
 		else if (indentation < 0)
 		{
