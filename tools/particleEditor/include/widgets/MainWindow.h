@@ -30,6 +30,7 @@ namespace widgets {
 		void handlePauseAction();
 		void handleStopAction();
 		void createNewSystem(const QString & particle);
+		void tabChanged(int index);
 
 	private:
 		WidgetRender * _renderWidget;

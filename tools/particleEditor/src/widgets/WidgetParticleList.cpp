@@ -6,7 +6,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	WidgetParticleList::WidgetParticleList(QWidget * par) : QWidget(par), _currentParticleTemplate() {
+	WidgetParticleList::WidgetParticleList(QWidget * par) : QWidget(par), _currentParticleTemplate(), _templateMap() {
 		setupUi(this);
 
 		refreshParticleList();
@@ -24,12 +24,19 @@ namespace widgets {
 		}
 	}
 
+	void WidgetParticleList::selectParticle(QString templateName) {
+		selectParticle(_templateMap[templateName]);
+	}
+
 	void WidgetParticleList::refreshParticleList() {
+		_currentParticleTemplate = "";
+		_templateMap.clear();
 		ParticleUniverse::vector<ParticleUniverse::String> names;
 		ParticleUniverse::ParticleSystemManager::getSingletonPtr()->particleSystemTemplateNames(names);
 		treeWidget->clear();
 		for (ParticleUniverse::String s : names) {
 			QTreeWidgetItem * twi = new QTreeWidgetItem(treeWidget, { QString::fromStdString(s) });
+			_templateMap.insert(std::make_pair(QString::fromStdString(s), twi));
 		}
 	}
 

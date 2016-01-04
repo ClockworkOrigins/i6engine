@@ -25,6 +25,10 @@ namespace widgets {
 		 */
 		~WidgetScript();
 
+		QString getScript() const;
+
+		void parseScript();
+
 	public slots:
 		void loadScript(ParticleUniverse::ParticleSystem * system);
 	};

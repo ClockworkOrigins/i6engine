@@ -7,8 +7,12 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	class MainWindow;
+
 	class WidgetParticleList : public QWidget, public Ui::particleListWidget {
 		Q_OBJECT
+
+		friend class MainWindow;
 
 	public:
 		/**
@@ -21,14 +25,20 @@ namespace widgets {
 		 */
 		~WidgetParticleList();
 
+		QString getTemplateName() const {
+			return _currentParticleTemplate;
+		}
+
 	signals:
 		void createNewSystem(const QString & templateName);
 
 	private slots:
 		void selectParticle(QTreeWidgetItem * item);
+		void selectParticle(QString templateName);
 
 	private:
 		QString _currentParticleTemplate;
+		std::map<QString, QTreeWidgetItem *> _templateMap;
 
 		void refreshParticleList();
 	};

@@ -40,6 +40,10 @@ namespace widgets {
 		 */
 		~WidgetRender();
 
+		ParticleUniverse::ParticleSystem * getParticleSystem() const {
+			return _currentParticleSystemForRenderer;
+		}
+
 	public slots:
 		void play();
 		void pause();

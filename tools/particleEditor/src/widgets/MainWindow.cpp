@@ -6,6 +6,8 @@
 #include "widgets/WidgetRender.h"
 #include "widgets/WidgetScript.h"
 
+#include "ParticleUniverseSystemManager.h"
+
 #include <QToolBar>
 
 namespace i6engine {
@@ -34,6 +36,7 @@ namespace widgets {
 		connect(_particleListWidget, SIGNAL(createNewSystem(const QString &)), this, SLOT(createNewSystem(const QString &)));
 		connect(this, SIGNAL(triggerCreateNewSystem(const QString &)), _renderWidget, SLOT(createNewSystem(const QString &)));
 		connect(_renderWidget, SIGNAL(loadScript(ParticleUniverse::ParticleSystem *)), _scriptWidget, SLOT(loadScript(ParticleUniverse::ParticleSystem *)));
+		connect(_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
 		gridLayout->addWidget(tb, 0, 0);
 
@@ -104,6 +107,26 @@ namespace widgets {
 		emit triggerCreateNewSystem(particle);
 		if (_playing) {
 			emit triggerPlay();
+		}
+	}
+
+	void MainWindow::tabChanged(int index) {
+		if (index == 0) {
+			if (!_scriptWidget->getScript().isEmpty()) {
+				if (ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_renderWidget->getParticleSystem()) != _scriptWidget->getScript().toStdString()) {
+					// Script has changed. Reparse and update the templates
+					Ogre::String oldTemplateName = _particleListWidget->getTemplateName().toStdString();
+					ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+					particleSystemManager->destroyParticleSystemTemplate(oldTemplateName); // Delete the old template
+					_scriptWidget->parseScript();
+
+					// Replace the old particle system with a new one, of which the name can also be changed.
+					QString newTemplateName = QString::fromStdString(particleSystemManager->getLastCreatedParticleSystemTemplateName());
+
+					_particleListWidget->refreshParticleList();
+					_particleListWidget->selectParticle(newTemplateName);
+				}
+			}
 		}
 	}
 
