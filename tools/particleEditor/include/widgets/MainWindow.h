@@ -7,6 +7,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	class WidgetEdit;
 	class WidgetParticleList;
 	class WidgetRender;
 	class WidgetScript;
@@ -33,13 +34,21 @@ namespace widgets {
 		void tabChanged(int index);
 
 	private:
+		enum class CurrentTab {
+			Render,
+			Edit,
+			Script
+		};
+		QWidget * _renderWrapper;
 		WidgetRender * _renderWidget;
 		WidgetParticleList * _particleListWidget;
+		WidgetEdit * _editWidget;
 		WidgetScript * _scriptWidget;
 		QTabWidget * _tabWidget;
 		bool _playing;
 		std::map<QString, QAction *> _toolbarActions;
 		QString _currentParticleTemplate;
+		CurrentTab _currentTab;
 	};
 
 } /* namespace widgets */

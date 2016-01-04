@@ -2,6 +2,7 @@
 
 #include "i6engine/i6engineBuildSettings.h"
 
+#include "widgets/WidgetEdit.h"
 #include "widgets/WidgetParticleList.h"
 #include "widgets/WidgetRender.h"
 #include "widgets/WidgetScript.h"
@@ -14,7 +15,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _playing(false), _toolbarActions() {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render) {
 		setupUi(this);
 
 		showMaximized();
@@ -48,7 +49,13 @@ namespace widgets {
 		hLayout->addWidget(_particleListWidget);
 		hLayout->addWidget(_tabWidget);
 
-		_tabWidget->addTab(_renderWidget, "Render");
+		QVBoxLayout * vLayout = new QVBoxLayout(_renderWrapper);
+
+		_renderWrapper->setLayout(vLayout);
+		vLayout->addWidget(_renderWidget);
+
+		_tabWidget->addTab(_renderWrapper, "Render");
+		_tabWidget->addTab(_editWidget, "Edit");
 		_tabWidget->addTab(_scriptWidget, "Script");
 
 		hLayout->setStretch(0, 1);
@@ -111,7 +118,7 @@ namespace widgets {
 	}
 
 	void MainWindow::tabChanged(int index) {
-		if (index == 0) {
+		if (_currentTab == CurrentTab::Script && CurrentTab(index) == CurrentTab::Render) {
 			if (!_scriptWidget->getScript().isEmpty()) {
 				if (ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_renderWidget->getParticleSystem()) != _scriptWidget->getScript().toStdString()) {
 					// Script has changed. Reparse and update the templates
@@ -127,7 +134,27 @@ namespace widgets {
 					_particleListWidget->selectParticle(newTemplateName);
 				}
 			}
+		} else if (_currentTab == CurrentTab::Edit && CurrentTab(index) == CurrentTab::Render) {
+			_renderWrapper->layout()->addWidget(_renderWidget);
+			_editWidget->verticalLayout->removeWidget(_renderWidget);
+		} else if (_currentTab == CurrentTab::Edit && CurrentTab(index) == CurrentTab::Script) {
+			_renderWrapper->layout()->addWidget(_renderWidget);
+			_editWidget->verticalLayout->removeWidget(_renderWidget);
+		} else if (_currentTab == CurrentTab::Render && CurrentTab(index) == CurrentTab::Edit) {
+			_renderWrapper->layout()->removeWidget(_renderWidget);
+			_editWidget->verticalLayout->addWidget(_renderWidget);
+
+			_editWidget->verticalLayout->setStretch(0, 1);
+			_editWidget->verticalLayout->setStretch(1, 1);
+		} else if (_currentTab == CurrentTab::Script && CurrentTab(index) == CurrentTab::Edit) {
+			_renderWrapper->layout()->removeWidget(_renderWidget);
+			_editWidget->verticalLayout->addWidget(_renderWidget);
+
+			_editWidget->verticalLayout->setStretch(0, 1);
+			_editWidget->verticalLayout->setStretch(1, 1);
 		}
+
+		_currentTab = CurrentTab(index);
 	}
 
 } /* namespace widgets */
