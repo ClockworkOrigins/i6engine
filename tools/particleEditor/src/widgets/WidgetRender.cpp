@@ -139,10 +139,12 @@ namespace widgets {
 	void WidgetRender::createNewSystem(const QString & particle) {
 		if (_currentParticleSystemForRenderer) {
 			_particleNode->detachObject(_currentParticleSystemForRenderer);
-			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(CURRENT_PS_NAME, _sceneManager); // Always force a destroy
+			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(CURRENT_PS_NAME, _sceneManager);
 		}
 		_currentParticleSystemForRenderer = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(CURRENT_PS_NAME, particle.toStdString(), _sceneManager);
 		_particleNode->attachObject(_currentParticleSystemForRenderer);
+
+		emit loadScript(_currentParticleSystemForRenderer);
 	}
 
 	void WidgetRender::render() {

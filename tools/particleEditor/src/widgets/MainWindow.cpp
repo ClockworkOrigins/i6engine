@@ -4,6 +4,7 @@
 
 #include "widgets/WidgetParticleList.h"
 #include "widgets/WidgetRender.h"
+#include "widgets/WidgetScript.h"
 
 #include <QToolBar>
 
@@ -11,7 +12,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _tabWidget(new QTabWidget(this)), _playing(false), _toolbarActions() {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _playing(false), _toolbarActions() {
 		setupUi(this);
 
 		showMaximized();
@@ -32,6 +33,7 @@ namespace widgets {
 
 		connect(_particleListWidget, SIGNAL(createNewSystem(const QString &)), this, SLOT(createNewSystem(const QString &)));
 		connect(this, SIGNAL(triggerCreateNewSystem(const QString &)), _renderWidget, SLOT(createNewSystem(const QString &)));
+		connect(_renderWidget, SIGNAL(loadScript(ParticleUniverse::ParticleSystem *)), _scriptWidget, SLOT(loadScript(ParticleUniverse::ParticleSystem *)));
 
 		gridLayout->addWidget(tb, 0, 0);
 
@@ -44,6 +46,7 @@ namespace widgets {
 		hLayout->addWidget(_tabWidget);
 
 		_tabWidget->addTab(_renderWidget, "Render");
+		_tabWidget->addTab(_scriptWidget, "Script");
 
 		hLayout->setStretch(0, 1);
 		hLayout->setStretch(1, 3);

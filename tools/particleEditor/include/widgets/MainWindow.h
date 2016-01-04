@@ -9,6 +9,7 @@ namespace widgets {
 
 	class WidgetParticleList;
 	class WidgetRender;
+	class WidgetScript;
 
 	class MainWindow : public QMainWindow, public Ui::wndMainWindow {
 		Q_OBJECT
@@ -33,6 +34,7 @@ namespace widgets {
 	private:
 		WidgetRender * _renderWidget;
 		WidgetParticleList * _particleListWidget;
+		WidgetScript * _scriptWidget;
 		QTabWidget * _tabWidget;
 		bool _playing;
 		std::map<QString, QAction *> _toolbarActions;
