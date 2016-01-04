@@ -34,6 +34,7 @@ set(particleEditorSrc
 	
 	${srcdir}/widgets/MainWindow.cpp
 	${srcdir}/widgets/WidgetEdit.cpp
+	${srcdir}/widgets/WidgetEditComponent.cpp
 	${srcdir}/widgets/WidgetParticleList.cpp
 	${srcdir}/widgets/WidgetRender.cpp
 	${srcdir}/widgets/WidgetScript.cpp
@@ -41,6 +42,7 @@ set(particleEditorSrc
 
 QT5_WRAP_UI(particleEditorUI
 	gui/widgetEdit.ui
+	gui/widgetEditComponent.ui
 	gui/widgetParticleList.ui
 	gui/widgetRender.ui
 	gui/widgetScript.ui
@@ -50,6 +52,7 @@ QT5_WRAP_UI(particleEditorUI
 QT5_WRAP_CPP(particleEditorGuiHeader
 	${includedir}/widgets/MainWindow.h
 	${includedir}/widgets/WidgetEdit.h
+	${includedir}/widgets/WidgetEditComponent.h
 	${includedir}/widgets/WidgetParticleList.h
 	${includedir}/widgets/WidgetRender.h
 	${includedir}/widgets/WidgetScript.h

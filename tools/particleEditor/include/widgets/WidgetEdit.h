@@ -3,6 +3,7 @@
 
 #include "ui_widgetEdit.h"
 
+class QGraphicsScene;
 class QGraphicsView;
 
 namespace i6engine {
@@ -24,6 +25,7 @@ namespace widgets {
 		~WidgetEdit();
 
 	private:
+		QGraphicsScene * _graphicsScene;
 		QGraphicsView * _graphicsView;
 	};
 

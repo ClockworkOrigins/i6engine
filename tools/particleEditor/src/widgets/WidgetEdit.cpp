@@ -1,12 +1,15 @@
 #include "widgets/WidgetEdit.h"
 
+#include "widgets/WidgetEditComponent.h"
+
+#include <QGraphicsScene>
 #include <QGraphicsView>
 
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsView(new QGraphicsView(this)) {
+	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsScene(new QGraphicsScene(this)), _graphicsView(new QGraphicsView(_graphicsScene)) {
 		setupUi(this);
 
 		verticalLayout->addWidget(_graphicsView);
