@@ -26,12 +26,14 @@ namespace widgets {
 
 		QToolBar * tb = new QToolBar(this);
 		QAction * newAction = tb->addAction(QIcon("../media/textures/new.png"), "New Particle");
+		QAction * cloneAction = tb->addAction(QIcon("../media/textures/clone.png"), "Clone Particle");
 		tb->addSeparator();
 		QAction * playAction = tb->addAction(QIcon("../media/textures/control_play.png"), "Play");
 		QAction * pauseAction = tb->addAction(QIcon("../media/textures/control_pause.png"), "Pause");
 		QAction * stopAction = tb->addAction(QIcon("../media/textures/control_stop.png"), "Stop");
 
 		connect(newAction, SIGNAL(triggered()), this, SLOT(handleNewAction()));
+		connect(cloneAction, SIGNAL(triggered()), this, SLOT(handleCloneAction()));
 
 		connect(playAction, SIGNAL(triggered()), this, SLOT(handlePlayAction()));
 		connect(this, SIGNAL(triggerPlay()), _renderWidget, SLOT(play()));
@@ -67,6 +69,8 @@ namespace widgets {
 		hLayout->setStretch(0, 1);
 		hLayout->setStretch(1, 3);
 
+		_toolbarActions.insert(std::make_pair("New", newAction));
+		_toolbarActions.insert(std::make_pair("Clone", cloneAction));
 		_toolbarActions.insert(std::make_pair("Play", playAction));
 		_toolbarActions.insert(std::make_pair("Pause", pauseAction));
 		_toolbarActions.insert(std::make_pair("Stop", stopAction));
@@ -100,6 +104,26 @@ namespace widgets {
 
 		_particleListWidget->refreshParticleList();
 		_particleListWidget->selectParticle(templateName);
+	}
+
+	void MainWindow::handleCloneAction() {
+		QString templateName = _particleListWidget->getTemplateName();
+		if (!templateName.isEmpty()) {
+			// It is no category
+			templateName = "CopyOf" + templateName;
+			QString backup = templateName;
+			int i = 0;
+			while (_particleListWidget->existsTemplateName(templateName)) {
+				templateName = backup + QString::number(++i);
+			}
+			// Create new particle system template.
+			ParticleUniverse::ParticleSystem * templateSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystemTemplate(templateName.toStdString(), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+			*templateSystem = *_renderWidget->getParticleSystem();
+			_renderWidget->getParticleSystem()->copyAttributesTo(templateSystem);
+
+			_particleListWidget->refreshParticleList();
+			_particleListWidget->selectParticle(templateName);
+		}
 	}
 
 	void MainWindow::handlePlayAction() {

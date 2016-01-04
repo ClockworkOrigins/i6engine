@@ -30,6 +30,7 @@ namespace widgets {
 	private slots:
 		void closeEditor();
 		void handleNewAction();
+		void handleCloneAction();
 		void handlePlayAction();
 		void handlePauseAction();
 		void handleStopAction();
