@@ -54,6 +54,8 @@ namespace widgets {
 
 		void updateOverlay();
 		void resizeEvent(QResizeEvent * evt) override;
+		void wheelEvent(QWheelEvent * evt) override;
+		void zoom(double zoomFactor);
 	};
 
 } /* namespace widgets */

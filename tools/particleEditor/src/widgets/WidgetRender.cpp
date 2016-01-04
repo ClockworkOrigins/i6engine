@@ -65,6 +65,7 @@ namespace widgets {
 
 		_camera = _sceneManager->createCamera("MainCamera");
 		_camera->setAutoAspectRatio(true);
+		_camera->setPosition(Ogre::Vector3(0.0, 0.0, -10.0));
 
 		_viewport = _rWindow->addViewport(_camera, 0, 0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -151,6 +152,24 @@ namespace widgets {
 		_rWindow->resize(static_cast<unsigned int>(evt->size().width()), static_cast<unsigned int>(evt->size().height()));
 		_rWindow->windowMovedOrResized();
 		evt->ignore();
+	}
+
+	void WidgetRender::wheelEvent(QWheelEvent * evt) {
+		if (evt->delta() > 0) {
+			// Zoom in
+			zoom(0.95);
+		} else if (evt->delta() < 0) {
+			// Zoom out
+			zoom(1.05);
+		}
+		evt->accept();
+	}
+
+	void WidgetRender::zoom(double zoomFactor) {
+		Ogre::Vector3 cameraPosition = _camera->getPosition();
+		Ogre::Vector3 pivot = Ogre::Vector3::ZERO;
+		Ogre::Vector3 direction = cameraPosition - pivot;
+		_camera->setPosition(pivot + zoomFactor * direction);
 	}
 
 } /* namespace widgets */
