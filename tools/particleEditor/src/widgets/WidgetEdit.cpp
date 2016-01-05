@@ -10,6 +10,7 @@
 #include "ParticleUniverseObserver.h"
 #include "ParticleUniverseRenderer.h"
 #include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
 #include "ParticleUniverseTechnique.h"
 
 #include <QGraphicsScene>
@@ -44,6 +45,92 @@ namespace widgets {
 		if (copyParticleSystemPropertiesToPropertyWindow(particleSystemEditComponent, newParticleSystem)) {
 			createParticleSystemComponents(particleSystemEditComponent, newParticleSystem);
 		}
+	}
+
+	void WidgetEdit::addNewTechnique() {
+		createTechniqueForComponent(createTechniqueEditComponent());
+	}
+
+	void WidgetEdit::addNewRenderer() {
+		createRendererForComponent(RENDERER_BILLBOARD, createRendererEditComponent(CST_RENDERER_BILLBOARD));
+	}
+
+	void WidgetEdit::addNewEmitter() {
+		createEmitterForComponent(EMITTER_BOX, createEmitterEditComponent(CST_EMITTER_BOX));
+	}
+
+	void WidgetEdit::addNewAffector() {
+		createAffectorForComponent(AFFECTOR_ALIGN, createAffectorEditComponent(CST_AFFECTOR_ALIGN));
+	}
+
+	void WidgetEdit::addNewObserver() {
+		createObserverForComponent(OBSERVER_ON_CLEAR, createObserverEditComponent(CST_OBSERVER_ON_CLEAR));
+	}
+
+	void WidgetEdit::addNewHandler() {
+		createHandlerForComponent(HANDLER_DO_AFFECTOR, createHandlerEditComponent(CST_HANDLER_DO_AFFECTOR));
+	}
+
+	void WidgetEdit::addNewBehaviour() {
+		createBehaviourForComponent(BEHAVIOUR_SLAVE, createBehaviourEditComponent(CST_BEHAVIOUR_SLAVE));
+	}
+
+	void WidgetEdit::addNewExtern() {
+		createExternForComponent(EXTERN_BOX_COLLIDER, createExternEditComponent(CST_EXTERN_BOX_COLLIDER));
+	}
+
+	void WidgetEdit::createTechniqueForComponent(WidgetEditComponent * component) {
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::ParticleTechnique * newTechnique = particleSystemManager->createTechnique();
+		//newTechnique->setName(component->getPropertyWindow()->getComponentName());
+		component->setPUElement(newTechnique);
+	}
+
+	void WidgetEdit::createRendererForComponent(const QString & type, WidgetEditComponent * component) {
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::ParticleRenderer * newRenderer = particleSystemManager->createRenderer(type.toStdString());
+		component->setPUElement(newRenderer);
+	}
+
+	void WidgetEdit::createEmitterForComponent(const QString & type, WidgetEditComponent * component) {
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::ParticleEmitter * newEmitter = particleSystemManager->createEmitter(type.toStdString());
+		//newEmitter->setName(component->getPropertyWindow()->getComponentName());
+		component->setPUElement(newEmitter);
+	}
+
+	void WidgetEdit::createAffectorForComponent(const QString & type, WidgetEditComponent * component) {
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::ParticleAffector * newAffector = particleSystemManager->createAffector(type.toStdString());
+		//newAffector->setName(component->getPropertyWindow()->getComponentName());
+		component->setPUElement(newAffector);
+	}
+
+	void WidgetEdit::createObserverForComponent(const QString & type, WidgetEditComponent * component) {
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::ParticleObserver * newObserver = particleSystemManager->createObserver(type.toStdString());
+		//newObserver->setName(component->getPropertyWindow()->getComponentName());
+		component->setPUElement(newObserver);
+	}
+
+	void WidgetEdit::createHandlerForComponent(const QString & type, WidgetEditComponent * component) {
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::ParticleEventHandler * newHandler = particleSystemManager->createEventHandler(type.toStdString());
+		//newHandler->setName(component->getPropertyWindow()->getComponentName());
+		component->setPUElement(newHandler);
+	}
+
+	void WidgetEdit::createBehaviourForComponent(const QString & type, WidgetEditComponent * component) {
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::ParticleBehaviour * newBehaviour = particleSystemManager->createBehaviour(type.toStdString());
+		component->setPUElement(newBehaviour);
+	}
+
+	void WidgetEdit::createExternForComponent(const QString & type, WidgetEditComponent * component) {
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		ParticleUniverse::Extern * newExtern = particleSystemManager->createExtern(type.toStdString());
+		//newExtern->setName(component->getPropertyWindow()->getComponentName());
+		component->setPUElement(newExtern);
 	}
 
 	WidgetEditComponent * WidgetEdit::forceCreateParticleSystemEditComponent() {

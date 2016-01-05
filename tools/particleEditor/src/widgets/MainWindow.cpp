@@ -17,14 +17,17 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render), _particleSystemCounter(0) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _toolBarEdit(nullptr), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render), _particleSystemCounter(0) {
 		setupUi(this);
 
 		showMaximized();
 
 		setWindowTitle(QString("ParticleEditor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
 
-		QToolBar * tb = new QToolBar(this);
+		QWidget * toolBarWrapper = new QWidget(this);
+		QHBoxLayout * toolBarLayout = new QHBoxLayout(toolBarWrapper);
+		toolBarWrapper->setLayout(toolBarLayout);
+		QToolBar * tb = new QToolBar(toolBarWrapper);
 		QAction * newAction = tb->addAction(QIcon("../media/textures/new.png"), "New Particle");
 		QAction * cloneAction = tb->addAction(QIcon("../media/textures/clone.png"), "Clone Particle");
 		tb->addSeparator();
@@ -47,8 +50,8 @@ namespace widgets {
 		connect(_renderWidget, SIGNAL(setNewParticleSystem(ParticleUniverse::ParticleSystem *)), _editWidget, SLOT(setNewParticleSystem(ParticleUniverse::ParticleSystem *)));
 		connect(_renderWidget, SIGNAL(loadScript(ParticleUniverse::ParticleSystem *)), _scriptWidget, SLOT(loadScript(ParticleUniverse::ParticleSystem *)));
 		connect(_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
-
-		gridLayout->addWidget(tb, 0, 0);
+		
+		gridLayout->addWidget(toolBarWrapper, 0, 0);
 
 		QWidget * hWidget = new QWidget(this);
 		QHBoxLayout * hLayout = new QHBoxLayout(hWidget);
@@ -75,6 +78,30 @@ namespace widgets {
 		_toolbarActions.insert(std::make_pair("Play", playAction));
 		_toolbarActions.insert(std::make_pair("Pause", pauseAction));
 		_toolbarActions.insert(std::make_pair("Stop", stopAction));
+
+		_toolBarEdit = new QToolBar(_editWidget);
+		QAction * tbEditTechniqueAction = _toolBarEdit->addAction(QIcon("../media/textures/technique.png"), "Add a new technique");
+		QAction * tbEditRendererAction = _toolBarEdit->addAction(QIcon("../media/textures/renderer.png"), "Add a new renderer");
+		QAction * tbEditEmitterAction = _toolBarEdit->addAction(QIcon("../media/textures/emitter.png"), "Add a new emitter");
+		QAction * tbEditAffectorAction = _toolBarEdit->addAction(QIcon("../media/textures/affector.png"), "Add a new affector");
+		QAction * tbEditObserverAction = _toolBarEdit->addAction(QIcon("../media/textures/observer.png"), "Add a new observer");
+		QAction * tbEditHandlerAction = _toolBarEdit->addAction(QIcon("../media/textures/handler.png"), "Add a new handler");
+		QAction * tbEditBehaviourAction = _toolBarEdit->addAction(QIcon("../media/textures/behaviour.png"), "Add a new behaviour");
+		QAction * tbEditExternAction = _toolBarEdit->addAction(QIcon("../media/textures/extern.png"), "Add a new extern");
+
+		connect(tbEditAffectorAction, SIGNAL(triggered()), _editWidget, SLOT(addNewAffector()));
+		connect(tbEditTechniqueAction, SIGNAL(triggered()), _editWidget, SLOT(addNewTechnique()));
+		connect(tbEditRendererAction, SIGNAL(triggered()), _editWidget, SLOT(addNewRenderer()));
+		connect(tbEditEmitterAction, SIGNAL(triggered()), _editWidget, SLOT(addNewEmitter()));
+		connect(tbEditObserverAction, SIGNAL(triggered()), _editWidget, SLOT(addNewObserver()));
+		connect(tbEditHandlerAction, SIGNAL(triggered()), _editWidget, SLOT(addNewHandler()));
+		connect(tbEditBehaviourAction, SIGNAL(triggered()), _editWidget, SLOT(addNewBehaviour()));
+		connect(tbEditExternAction, SIGNAL(triggered()), _editWidget, SLOT(addNewExtern()));
+
+		toolBarLayout->addWidget(tb);
+		toolBarLayout->addWidget(_toolBarEdit);
+
+		_toolBarEdit->hide();
 	}
 
 	MainWindow::~MainWindow() {
@@ -191,21 +218,25 @@ namespace widgets {
 		} else if (_currentTab == CurrentTab::Edit && CurrentTab(index) == CurrentTab::Render) {
 			_renderWrapper->layout()->addWidget(_renderWidget);
 			_editWidget->verticalLayout->removeWidget(_renderWidget);
+			_toolBarEdit->hide();
 		} else if (_currentTab == CurrentTab::Edit && CurrentTab(index) == CurrentTab::Script) {
 			_renderWrapper->layout()->addWidget(_renderWidget);
 			_editWidget->verticalLayout->removeWidget(_renderWidget);
+			_toolBarEdit->hide();
 		} else if (_currentTab == CurrentTab::Render && CurrentTab(index) == CurrentTab::Edit) {
 			_renderWrapper->layout()->removeWidget(_renderWidget);
 			_editWidget->verticalLayout->addWidget(_renderWidget);
 
 			_editWidget->verticalLayout->setStretch(0, 1);
 			_editWidget->verticalLayout->setStretch(1, 1);
+			_toolBarEdit->show();
 		} else if (_currentTab == CurrentTab::Script && CurrentTab(index) == CurrentTab::Edit) {
 			_renderWrapper->layout()->removeWidget(_renderWidget);
 			_editWidget->verticalLayout->addWidget(_renderWidget);
 
 			_editWidget->verticalLayout->setStretch(0, 1);
 			_editWidget->verticalLayout->setStretch(1, 1);
+			_toolBarEdit->show();
 		}
 
 		_currentTab = CurrentTab(index);

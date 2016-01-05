@@ -40,6 +40,14 @@ namespace widgets {
 
 	private slots:
 		void setNewParticleSystem(ParticleUniverse::ParticleSystem * newParticleSystem);
+		void addNewTechnique();
+		void addNewRenderer();
+		void addNewEmitter();
+		void addNewAffector();
+		void addNewObserver();
+		void addNewHandler();
+		void addNewBehaviour();
+		void addNewExtern();
 
 	private:
 		QGraphicsScene * _graphicsScene;
@@ -56,6 +64,14 @@ namespace widgets {
 		int _behaviourCounter;
 		int _externCounter;
 
+		void createTechniqueForComponent(WidgetEditComponent * component);
+		void createRendererForComponent(const QString & type, WidgetEditComponent * component);
+		void createEmitterForComponent(const QString & type, WidgetEditComponent * component);
+		void createAffectorForComponent(const QString & type, WidgetEditComponent * component);
+		void createObserverForComponent(const QString & type, WidgetEditComponent * component);
+		void createHandlerForComponent(const QString & type, WidgetEditComponent * component);
+		void createBehaviourForComponent(const QString & type, WidgetEditComponent * component); 
+		void createExternForComponent(const QString & type, WidgetEditComponent * component);
 		WidgetEditComponent * forceCreateParticleSystemEditComponent();
 		WidgetEditComponent * createParticleSystemEditComponent();
 		WidgetEditComponent * createTechniqueEditComponent();

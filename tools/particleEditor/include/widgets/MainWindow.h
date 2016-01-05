@@ -49,6 +49,7 @@ namespace widgets {
 		WidgetEdit * _editWidget;
 		WidgetScript * _scriptWidget;
 		QTabWidget * _tabWidget;
+		QToolBar * _toolBarEdit;
 		bool _playing;
 		std::map<QString, QAction *> _toolbarActions;
 		QString _currentParticleTemplate;
