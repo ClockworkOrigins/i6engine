@@ -52,6 +52,7 @@ namespace widgets {
 
 	signals:
 		void triggerRender();
+		void setNewParticleSystem(ParticleUniverse::ParticleSystem *);
 		void loadScript(ParticleUniverse::ParticleSystem *);
 
 	private slots:

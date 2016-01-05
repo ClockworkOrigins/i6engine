@@ -44,6 +44,7 @@ namespace widgets {
 
 		connect(_particleListWidget, SIGNAL(createNewSystem(const QString &)), this, SLOT(createNewSystem(const QString &)));
 		connect(this, SIGNAL(triggerCreateNewSystem(const QString &)), _renderWidget, SLOT(createNewSystem(const QString &)));
+		connect(_renderWidget, SIGNAL(setNewParticleSystem(ParticleUniverse::ParticleSystem *)), _editWidget, SLOT(setNewParticleSystem(ParticleUniverse::ParticleSystem *)));
 		connect(_renderWidget, SIGNAL(loadScript(ParticleUniverse::ParticleSystem *)), _scriptWidget, SLOT(loadScript(ParticleUniverse::ParticleSystem *)));
 		connect(_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 

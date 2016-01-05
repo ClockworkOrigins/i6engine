@@ -42,7 +42,6 @@ set(particleEditorSrc
 
 QT5_WRAP_UI(particleEditorUI
 	gui/widgetEdit.ui
-	gui/widgetEditComponent.ui
 	gui/widgetParticleList.ui
 	gui/widgetRender.ui
 	gui/widgetScript.ui

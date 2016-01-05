@@ -144,6 +144,7 @@ namespace widgets {
 		_currentParticleSystemForRenderer = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(CURRENT_PS_NAME, particle.toStdString(), _sceneManager);
 		_particleNode->attachObject(_currentParticleSystemForRenderer);
 
+		emit setNewParticleSystem(_currentParticleSystemForRenderer);
 		emit loadScript(_currentParticleSystemForRenderer);
 	}
 
