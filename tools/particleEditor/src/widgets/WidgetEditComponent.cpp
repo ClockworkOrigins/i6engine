@@ -156,6 +156,8 @@ namespace widgets {
 				return;
 			}
 			_parent->notifyComponentActivated(this);
+		} else if (evt->button() == Qt::MouseButton::RightButton) {
+			_parent->resetConnectionMode();
 		}
 	}
 

@@ -138,13 +138,12 @@ namespace widgets {
 		// Stop the system if needed
 		bool wasStarted = _mustStopParticleSystem();
 
-		// relationDirection is not used, but past as an argument anyway
-		_graphicsScene->removeItem(_connections[std::make_pair(node1, node2)]);
-		_graphicsScene->removeItem(_connections[std::make_pair(node2, node1)]);
+		std::pair<WidgetEditComponent *, WidgetEditComponent *> p = std::make_pair(node1, node2);
+		_graphicsScene->removeItem(_connections[p]);
 
-		delete _connections[std::make_pair(node1, node2)];
-		_connections.erase(std::make_pair(node1, node2));
-		_connections.erase(std::make_pair(node2, node1));
+		delete _connections[p];
+		_connections.erase(p);
+		_connections.erase(p);
 
 		// Deleting connections also means removing (not deleting) them from the ParticleSystem or its related components.
 		if (relation == CR_INCLUDE) {
@@ -190,6 +189,12 @@ namespace widgets {
 		}
 
 		_mustRestartParticleSystem(wasStarted);
+	}
+
+	void WidgetEdit::resetConnectionMode() {
+		_startConnector = nullptr;
+		_endConnector = nullptr;
+		setConnectionMode(CM_CONNECT_NONE);
 	}
 
 	void WidgetEdit::setNewParticleSystem(ParticleUniverse::ParticleSystem * newParticleSystem) {
@@ -242,6 +247,10 @@ namespace widgets {
 
 	void WidgetEdit::removeConnection() {
 		setConnectionMode(CM_DISCONNECT);
+	}
+
+	void WidgetEdit::triggerResetConnectionMode() {
+		resetConnectionMode();
 	}
 
 	void WidgetEdit::createTechniqueForComponent(WidgetEditComponent * component) {
@@ -1549,6 +1558,12 @@ namespace widgets {
 		}
 
 		return false;
+	}
+
+	void WidgetEdit::mousePressEvent(QMouseEvent * evt) {
+		if (evt->button() == Qt::MouseButton::RightButton) {
+			resetConnectionMode();
+		}
 	}
 
 } /* namespace widgets */

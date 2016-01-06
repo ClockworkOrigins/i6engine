@@ -91,6 +91,7 @@ namespace widgets {
 		_toolBarEdit->addSeparator();
 		QAction * tbEditConnectAction = _toolBarEdit->addAction(QIcon("../media/textures/connect.png"), "Make connection between two components");
 		QAction * tbEditDisconnectAction = _toolBarEdit->addAction(QIcon("../media/textures/disconnect.png"), "Delete a connection between two components");
+		QAction * tbEditCursorAction = _toolBarEdit->addAction(QIcon("../media/textures/cursor.png"), "Reset to default cursor");
 
 		connect(tbEditAffectorAction, SIGNAL(triggered()), _editWidget, SLOT(addNewAffector()));
 		connect(tbEditTechniqueAction, SIGNAL(triggered()), _editWidget, SLOT(addNewTechnique()));
@@ -102,6 +103,7 @@ namespace widgets {
 		connect(tbEditExternAction, SIGNAL(triggered()), _editWidget, SLOT(addNewExtern()));
 		connect(tbEditConnectAction, SIGNAL(triggered()), _editWidget, SLOT(addConnection()));
 		connect(tbEditDisconnectAction, SIGNAL(triggered()), _editWidget, SLOT(removeConnection()));
+		connect(tbEditCursorAction, SIGNAL(triggered()), _editWidget, SLOT(triggerResetConnectionMode()));
 
 		toolBarLayout->addWidget(tb);
 		toolBarLayout->addWidget(_toolBarEdit);

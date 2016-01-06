@@ -65,6 +65,8 @@ namespace widgets {
 			return _startConnector;
 		}
 
+		void resetConnectionMode();
+
 	private slots:
 		void setNewParticleSystem(ParticleUniverse::ParticleSystem * newParticleSystem);
 		void addNewTechnique();
@@ -77,6 +79,7 @@ namespace widgets {
 		void addNewExtern();
 		void addConnection();
 		void removeConnection();
+		void triggerResetConnectionMode();
 
 	private:
 		QGraphicsScene * _graphicsScene;
@@ -152,6 +155,8 @@ namespace widgets {
 		bool _processEnableRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
 		bool _processForceRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
 		bool _processPlaceRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
+
+		void mousePressEvent(QMouseEvent * evt) override;
 	};
 
 } /* namespace widgets */
