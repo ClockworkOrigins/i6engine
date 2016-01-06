@@ -329,6 +329,9 @@ namespace widgets {
 		bool isConnectionPossible() const;
 		bool isConnectionPossible(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith) const;
 		const QString & getRelationDescription(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith) const;
+		void deleteConnection(connections::Connection * connection);
+		void deleteConnection(WidgetEditComponent * componentConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection);
+		void unlockPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith);
 	};
 
 } /* namespace widgets */

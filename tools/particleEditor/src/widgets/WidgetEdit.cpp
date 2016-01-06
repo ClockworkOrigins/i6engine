@@ -26,12 +26,12 @@
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
-
+	
 	const QColor DRAW_DEFAULT_COLOURCODE = QColor(0, 0, 0);
 	const QColor DRAW_EMITTED_COLOURCODE = QColor(255, 0, 0);
 	const QColor DRAW_SPECIAL_CASE_COLOURCODE = QColor(56, 124, 68);
 
-	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsScene(new QGraphicsScene(this)), _graphicsView(new QGraphicsView(_graphicsScene)), _components(), _offsetX(48), _offsetY(8), _techniqueCounter(1), _rendererCounter(1), _emitterCounter(1), _affectorCounter(1), _observerCounter(1), _handlerCounter(1), _behaviourCounter(1), _externCounter(1), _connectionMode(CM_CONNECT_NONE), _startConnector(nullptr), _endConnector(nullptr) {
+	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsScene(new QGraphicsScene(this)), _graphicsView(new QGraphicsView(_graphicsScene)), _components(), _offsetX(48), _offsetY(8), _techniqueCounter(1), _rendererCounter(1), _emitterCounter(1), _affectorCounter(1), _observerCounter(1), _handlerCounter(1), _behaviourCounter(1), _externCounter(1), _connectionMode(CM_CONNECT_NONE), _startConnector(nullptr), _endConnector(nullptr), _connections() {
 		setupUi(this);
 
 		verticalLayout->addWidget(_graphicsView);
@@ -64,7 +64,10 @@ namespace widgets {
 					return;
 				}
 
-				_graphicsScene->addItem(new connections::LineConnector(_startConnector, _endConnector, policyEnd->getColour(), policyEnd->getLineStyle()));
+				connections::LineConnector * lc = new connections::LineConnector(_startConnector, _endConnector, policyEnd->getColour(), policyEnd->getLineStyle());
+				_connections.insert(std::make_pair(std::make_pair(_startConnector, _endConnector), lc));
+				_connections.insert(std::make_pair(std::make_pair(_endConnector, _startConnector), lc));
+				_graphicsScene->addItem(lc);
 				_endConnector->addConnection(_startConnector, policyEnd->getRelation(), policyEnd->getRelationDirection());
 
 				// Use the relation of the policyEnd, because this is the same for Start and End
@@ -125,6 +128,64 @@ namespace widgets {
 			if (!_processPlaceAdded(node1, node2)) {
 				// Switch
 				_processPlaceAdded(node2, node1);
+			}
+		}
+
+		_mustRestartParticleSystem(wasStarted);
+	}
+
+	void WidgetEdit::notifyConnectionRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2, ComponentRelation relation, ComponentRelationDirection relationDirection) {
+		// Stop the system if needed
+		bool wasStarted = _mustStopParticleSystem();
+
+		// relationDirection is not used, but past as an argument anyway
+		_graphicsScene->removeItem(_connections[std::make_pair(node1, node2)]);
+		_graphicsScene->removeItem(_connections[std::make_pair(node2, node1)]);
+
+		delete _connections[std::make_pair(node1, node2)];
+		_connections.erase(std::make_pair(node1, node2));
+		_connections.erase(std::make_pair(node2, node1));
+
+		// Deleting connections also means removing (not deleting) them from the ParticleSystem or its related components.
+		if (relation == CR_INCLUDE) {
+			if (!_processIncludeRemoved(node1, node2)) {
+				// Switch
+				_processIncludeRemoved(node2, node1);
+			}
+		} else if (relation == CR_EXCLUDE) {
+			if (!_processExcludeRemoved(node1, node2)) {
+				// Switch
+				_processExcludeRemoved(node2, node1);
+			}
+		} else if (relation == CR_EMIT) {
+			if (!_processEmitRemoved(node1, node2)) {
+				// Switch
+				_processEmitRemoved(node2, node1);
+			}
+		} else if (relation == CR_INTERFACE) {
+			if (!_processInterfaceRemoved(node1, node2)) {
+				// Switch
+				_processInterfaceRemoved(node2, node1);
+			}
+		} else if (relation == CR_SLAVE) {
+			if (!_processSlaveRemoved(node1, node2)) {
+				// Switch
+				_processSlaveRemoved(node2, node1);
+			}
+		} else if (relation == CR_ENABLE) {
+			if (!_processEnableRemoved(node1, node2)) {
+				// Switch
+				_processEnableRemoved(node2, node1);
+			}
+		} else if (relation == CR_FORCE) {
+			if (!_processForceRemoved(node1, node2)) {
+				// Switch
+				_processForceRemoved(node2, node1);
+			}
+		} else if (relation == CR_PLACE) {
+			if (!_processPlaceRemoved(node1, node2)) {
+				// Switch
+				_processPlaceRemoved(node2, node1);
 			}
 		}
 
@@ -704,13 +765,16 @@ namespace widgets {
 		}
 	}
 
-	void WidgetEdit::createConnection(WidgetEditComponent * componentPrimary, WidgetEditComponent * componentSecundary, ComponentRelation relation, ComponentRelationDirection direction) {
+	void WidgetEdit::createConnection(WidgetEditComponent * componentPrimary, WidgetEditComponent * componentSecondary, ComponentRelation relation, ComponentRelationDirection direction) {
 		// Establish the connection between the two
-		connections::ConnectionPolicy * policy = componentPrimary->getPolicy(relation, direction, componentSecundary->getComponentType());
-		//mCanvas->connect(componentPrimary, componentSecundary, relation, policy->getColour(), policy->getLineStyle());
-		_graphicsScene->addItem(new connections::LineConnector(componentPrimary, componentSecundary, policy->getColour(), policy->getLineStyle()));
-		componentPrimary->addConnection(componentSecundary, relation, direction);
-		componentSecundary->addConnection(componentPrimary, relation, getOppositeRelationDirection(direction));
+		connections::ConnectionPolicy * policy = componentPrimary->getPolicy(relation, direction, componentSecondary->getComponentType());
+		//mCanvas->connect(componentPrimary, componentSecondary, relation, policy->getColour(), policy->getLineStyle());
+		connections::LineConnector * lc = new connections::LineConnector(componentPrimary, componentSecondary, policy->getColour(), policy->getLineStyle());
+		_connections.insert(std::make_pair(std::make_pair(componentPrimary, componentSecondary), lc));
+		_connections.insert(std::make_pair(std::make_pair(componentSecondary, componentPrimary), lc));
+		_graphicsScene->addItem(lc);
+		componentPrimary->addConnection(componentSecondary, relation, direction);
+		componentSecondary->addConnection(componentPrimary, relation, getOppositeRelationDirection(direction));
 	}
 
 	WidgetEditComponent * WidgetEdit::findEditComponent(const ParticleUniverse::IElement * puElement) const {
@@ -1212,6 +1276,276 @@ namespace widgets {
 				handler->setForceEmitterName(emitter->getName());
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processIncludeRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		// If element is not set, ignore removing it.
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_SYSTEM) {
+			// Remove the technique from the system
+			ParticleUniverse::ParticleTechnique * technique = static_cast<ParticleUniverse::ParticleTechnique *>(element2);
+			if (technique->getParentSystem()) {
+				technique->getParentSystem()->removeTechnique(technique);
+			}
+			return true;
+		} else if (node1->getComponentType() == CT_TECHNIQUE) {
+			if (node2->getComponentType() == CT_RENDERER) {
+				// Remove renderer from the technique
+				ParticleUniverse::ParticleRenderer * renderer = static_cast<ParticleUniverse::ParticleRenderer *>(element2);
+				if (renderer->getParentTechnique()) {
+					renderer->getParentTechnique()->removeRenderer(renderer);
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_EMITTER) {
+				// Remove the emitter from the technique
+				ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
+				if (emitter->getParentTechnique()) {
+					if (emitter->_isMarkedForEmission()) {
+						emitter->getParentTechnique()->_unprepareEmitters(); // Destroy pool of emitted emitters
+					}
+					emitter->getParentTechnique()->removeEmitter(emitter);
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_AFFECTOR) {
+				// Remove the affector from the technique
+				ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(element2);
+				if (affector->getParentTechnique()) {
+					if (affector->_isMarkedForEmission()) {
+						affector->getParentTechnique()->_unprepareAffectors(); // Destroy pool of emitted affectors
+					}
+					affector->getParentTechnique()->removeAffector(affector);
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_OBSERVER) {
+				// Remove the observer from the technique
+				ParticleUniverse::ParticleObserver * observer = static_cast<ParticleUniverse::ParticleObserver *>(element2);
+				if (observer->getParentTechnique()) {
+					observer->getParentTechnique()->removeObserver(observer);
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_BEHAVIOUR) {
+				// Remove the behaviour from the technique
+				ParticleUniverse::ParticleBehaviour * behaviour = static_cast<ParticleUniverse::ParticleBehaviour *>(element2);
+				if (behaviour->getParentTechnique()) {
+					behaviour->getParentTechnique()->_removeBehaviourTemplate(behaviour);
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_EXTERN) {
+				// Remove the extern from the technique
+				ParticleUniverse::Extern * externObject = static_cast<ParticleUniverse::Extern *>(element2);
+				if (externObject->getParentTechnique()) {
+					externObject->getParentTechnique()->removeExtern(externObject);
+				}
+				return true;
+			}
+		} else if (node1->getComponentType() == CT_OBSERVER) {
+			if (node2->getComponentType() == CT_HANDLER) {
+				// Remove the handler from the observer
+				ParticleUniverse::ParticleEventHandler * handler = static_cast<ParticleUniverse::ParticleEventHandler *>(element2);
+				if (handler->getParentObserver()) {
+					handler->getParentObserver()->removeEventHandler(handler);
+				}
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processExcludeRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_AFFECTOR) {
+			if (node2->getComponentType() == CT_EMITTER) {
+				// Remove the emittername from the excluded names
+				ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(element1);
+				ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
+				affector->removeEmitterToExclude(emitter->getName());
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processEmitRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (node1->getComponentType() == CT_EMITTER) {
+			// Check what type of particle is emitted.
+			ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element1);
+			ParticleUniverse::ParticleTechnique * technique = nullptr;
+			if (element2) {
+				// Use the technique from the emitted component; this is preferred, because the technique from the emitter might be 0
+				// (if the emitter component was closed, the CR_INCLUDE connection is deleted first and removes the emitter from its
+				// parent technique).
+				ParticleUniverse::ParticleEmitter * emittedEmitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
+				technique = emittedEmitter->getParentTechnique();
+			}
+			if (!technique) {
+				// Use this one instead.
+				technique = emitter->getParentTechnique();
+			}
+
+			switch (emitter->getEmitsType()) {
+			case ParticleUniverse::Particle::PT_EMITTER: {
+				if (technique) {
+					technique->_unprepareEmitters();
+					technique->_markForEmission(emitter, false); // Unmarks the emitted component
+				}
+				emitter->setEmitsType(ParticleUniverse::ParticleEmitter::DEFAULT_EMITS);
+				emitter->setEmitsName(Ogre::StringUtil::BLANK);
+				return true;
+				break;
+			}
+			case ParticleUniverse::Particle::PT_TECHNIQUE: {
+				technique = emitter->getParentTechnique();
+				if (technique) {
+					technique->_unprepareTechnique();
+					technique->_markForEmission(emitter, false); // Unmarks the emitted component
+				}
+				emitter->setEmitsType(ParticleUniverse::ParticleEmitter::DEFAULT_EMITS);
+				emitter->setEmitsName(Ogre::StringUtil::BLANK);
+				return true;
+				break;
+			}
+			case ParticleUniverse::Particle::PT_AFFECTOR: {
+				if (technique) {
+					technique->_unprepareAffectors();
+					technique->_markForEmission(emitter, false); // Unmarks the emitted component
+				}
+				emitter->setEmitsType(ParticleUniverse::ParticleEmitter::DEFAULT_EMITS);
+				emitter->setEmitsName(Ogre::StringUtil::BLANK);
+				return true;
+				break;
+			}
+			case ParticleUniverse::Particle::PT_SYSTEM: {
+				if (technique) {
+					technique->_unprepareSystem();
+					technique->_markForEmission(emitter, false); // Unmarks the emitted component
+				}
+				emitter->setEmitsType(ParticleUniverse::ParticleEmitter::DEFAULT_EMITS);
+				emitter->setEmitsName(Ogre::StringUtil::BLANK);
+				return true;
+				break;
+			}
+			default: {
+				break;
+			}
+			}
+		}
+		return false;
+	}
+
+	bool WidgetEdit::_processInterfaceRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_OBSERVER) {
+			if (node2->getComponentType() == CT_HANDLER) {
+				// Remove the handler from the observer
+				ParticleUniverse::ParticleObserver * observer = static_cast<ParticleUniverse::ParticleObserver *>(element1);
+				ParticleUniverse::ParticleEventHandler * handler = static_cast<ParticleUniverse::ParticleEventHandler *>(element2);
+				observer->removeEventHandler(handler);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processSlaveRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_EMITTER && node1->getComponentSubType() == CST_EMITTER_SLAVE) {
+			ParticleUniverse::SlaveEmitter * emitter = static_cast<ParticleUniverse::SlaveEmitter *>(element1);
+			if (emitter->getParentTechnique()) {
+				emitter->_unprepare(emitter->getParentTechnique());
+			}
+			emitter->setMasterTechniqueName(Ogre::StringUtil::BLANK);
+			emitter->setMasterEmitterName(Ogre::StringUtil::BLANK);
+			if (emitter->getParentTechnique()) {
+				emitter->_prepare(emitter->getParentTechnique());
+			}
+			return true;
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processEnableRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_HANDLER && node1->getComponentSubType() == CST_HANDLER_DO_ENABLE_COMPONENT) {
+			ParticleUniverse::DoEnableComponentEventHandler * handler = static_cast<ParticleUniverse::DoEnableComponentEventHandler *>(element1);
+			handler->setComponentEnabled(true);
+			handler->setComponentName(Ogre::StringUtil::BLANK);
+			handler->setComponentType(ParticleUniverse::CT_EMITTER);
+			return true;
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processForceRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_HANDLER && node1->getComponentSubType() == CST_HANDLER_DO_AFFECTOR) {
+			ParticleUniverse::DoAffectorEventHandler * handler = static_cast<ParticleUniverse::DoAffectorEventHandler *>(element1);
+			handler->setAffectorName(Ogre::StringUtil::BLANK);
+			handler->setPrePost(ParticleUniverse::DoAffectorEventHandler::DEFAULT_PRE_POST);
+			return true;
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processPlaceRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_HANDLER && node1->getComponentSubType() == CST_HANDLER_DO_PLACEMENT_PARTICLE) {
+			ParticleUniverse::DoPlacementParticleEventHandler * handler = static_cast<ParticleUniverse::DoPlacementParticleEventHandler *>(element1);
+			handler->removeAsListener();
+			handler->setForceEmitterName(Ogre::StringUtil::BLANK);
+			return true;
 		}
 
 		return false;

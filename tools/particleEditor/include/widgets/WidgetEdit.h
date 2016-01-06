@@ -21,6 +21,9 @@ namespace ParticleUniverse {
 
 namespace i6engine {
 namespace particleEditor {
+namespace connections {
+	class LineConnector;
+} /* namespace connections */
 namespace widgets {
 
 	class WidgetEditComponent;
@@ -52,6 +55,7 @@ namespace widgets {
 		void notifyComponentActivated(WidgetEditComponent * component);
 		void notifyConnectionsChanged();
 		void notifyConnectionAdded(WidgetEditComponent * node1, WidgetEditComponent * node2, ComponentRelation relation, ComponentRelationDirection relationDirection);
+		void notifyConnectionRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2, ComponentRelation relation, ComponentRelationDirection relationDirection);
 
 		ConnectionMode getConnectionMode() const {
 			return _connectionMode;
@@ -91,6 +95,7 @@ namespace widgets {
 		ConnectionMode _connectionMode;
 		WidgetEditComponent * _startConnector;
 		WidgetEditComponent * _endConnector;
+		std::map<std::pair<WidgetEditComponent *, WidgetEditComponent *>, connections::LineConnector *> _connections;
 
 		void createTechniqueForComponent(WidgetEditComponent * component);
 		void createRendererForComponent(const QString & type, WidgetEditComponent * component);
@@ -139,6 +144,14 @@ namespace widgets {
 		bool _processEnableAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
 		bool _processForceAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
 		bool _processPlaceAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processIncludeRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processExcludeRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processEmitRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processInterfaceRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processSlaveRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processEnableRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processForceRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processPlaceRemoved(WidgetEditComponent * node1, WidgetEditComponent * node2);
 	};
 
 } /* namespace widgets */

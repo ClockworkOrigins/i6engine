@@ -201,14 +201,15 @@ namespace widgets {
 			GetParent()->GetParent()->SetFocus();*/
 		} else {
 			if (count > 0) {
-				/*GetParent()->GetParent()->Enable(false); // Disables input from the parent
-				wxSingleChoiceDialog choiceWindow(this, _("Select a connection to be deleted"), _("Delete a connection"), count, choices);
-				choiceWindow.SetSize(320, 200);
-				if (choiceWindow.ShowModal() == wxID_OK) {
-					deleteConnection(connectionsAsArray[choiceWindow.GetSelection()]);
+				DialogChooseConnectionType dcct;
+				dcct.label->setText("Select a connection to be deleted");
+				for (int i = 0; i < count; i++) {
+					dcct.comboBox->addItem(choices[i]);
 				}
-				GetParent()->GetParent()->Enable(true); // Enable input from the parent
-				GetParent()->GetParent()->SetFocus();*/
+				int res = dcct.exec();
+				if (res == QDialog::DialogCode::Accepted) {
+					deleteConnection(connectionsAsArray[dcct.comboBox->currentIndex()]);
+				}
 			}
 		}
 	}
@@ -254,6 +255,7 @@ namespace widgets {
 
 		if (count > 1) {// TODO: (Michael) check the GetParent() calls here
 			DialogChooseConnectionType dcct;
+			dcct.label->setText("Select a connection type");
 			for (int i = 0; i < count; i++) {
 				dcct.comboBox->addItem(choices[i]);
 			}
@@ -298,6 +300,45 @@ namespace widgets {
 			}
 		}
 		return CRD_UNKNOWN;
+	}
+
+	void WidgetEditComponent::deleteConnection(connections::Connection * connection) {
+		if (!connection) {
+			return;
+		}
+
+		for (std::vector<connections::Connection *>::iterator it = _connections.begin(); it != _connections.end(); ++it) {
+			connections::Connection * connectionFromList = *it;
+			if (connection == connectionFromList) {
+				connection->getComponentToBeConnectedWith()->deleteConnection(this, connection->getRelation(), getOppositeRelationDirection(connection->getRelationDirection()));
+				unlockPolicy(connection->getRelation(), connection->getRelationDirection(), connection->getComponentToBeConnectedWith()->getComponentType(), connection->getComponentToBeConnectedWith()->getComponentSubType());
+				delete *it;
+				_connections.erase(it);
+				return;
+			}
+		}
+	}
+
+	void WidgetEditComponent::deleteConnection(WidgetEditComponent * componentConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection) {
+		for (std::vector<connections::Connection *>::iterator it = _connections.begin(); it != _connections.end(); ++it) {
+			if (componentConnectedWith == (*it)->getComponentToBeConnectedWith() && relation == (*it)->getRelation() && relationDirection == (*it)->getRelationDirection()) {
+				_parent->notifyConnectionRemoved(this, componentConnectedWith, relation, relationDirection);
+				unlockPolicy(relation, relationDirection, componentConnectedWith->getComponentType(), componentConnectedWith->getComponentSubType());
+				delete *it;
+				_connections.erase(it);
+				return;
+			}
+		}
+	}
+
+	void WidgetEditComponent::unlockPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith) {
+		for (std::vector<connections::ConnectionPolicy *>::iterator it = _policies.begin(); it != _policies.end(); ++it) {
+			if (isRelationUnique(relation, relationDirection)) {
+				(*it)->validateAndLock(relation, relationDirection, false);
+			} else {
+				(*it)->validateAndLock(relation, relationDirection, typeToBeConnectedWith, subTypeToBeConnectedWith, false);
+			}
+		}
 	}
 
 } /* namespace widgets */
