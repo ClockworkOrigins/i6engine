@@ -88,6 +88,9 @@ namespace widgets {
 		QAction * tbEditHandlerAction = _toolBarEdit->addAction(QIcon("../media/textures/handler.png"), "Add a new handler");
 		QAction * tbEditBehaviourAction = _toolBarEdit->addAction(QIcon("../media/textures/behaviour.png"), "Add a new behaviour");
 		QAction * tbEditExternAction = _toolBarEdit->addAction(QIcon("../media/textures/extern.png"), "Add a new extern");
+		_toolBarEdit->addSeparator();
+		QAction * tbEditConnectAction = _toolBarEdit->addAction(QIcon("../media/textures/connect.png"), "Make connection between two components");
+		QAction * tbEditDisconnectAction = _toolBarEdit->addAction(QIcon("../media/textures/disconnect.png"), "Delete a connection between two components");
 
 		connect(tbEditAffectorAction, SIGNAL(triggered()), _editWidget, SLOT(addNewAffector()));
 		connect(tbEditTechniqueAction, SIGNAL(triggered()), _editWidget, SLOT(addNewTechnique()));
@@ -97,6 +100,8 @@ namespace widgets {
 		connect(tbEditHandlerAction, SIGNAL(triggered()), _editWidget, SLOT(addNewHandler()));
 		connect(tbEditBehaviourAction, SIGNAL(triggered()), _editWidget, SLOT(addNewBehaviour()));
 		connect(tbEditExternAction, SIGNAL(triggered()), _editWidget, SLOT(addNewExtern()));
+		connect(tbEditConnectAction, SIGNAL(triggered()), _editWidget, SLOT(addConnection()));
+		connect(tbEditDisconnectAction, SIGNAL(triggered()), _editWidget, SLOT(removeConnection()));
 
 		toolBarLayout->addWidget(tb);
 		toolBarLayout->addWidget(_toolBarEdit);

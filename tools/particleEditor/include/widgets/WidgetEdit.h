@@ -32,6 +32,13 @@ namespace widgets {
 		Q_OBJECT
 
 	public:
+		enum ConnectionMode {
+			CM_CONNECT_NONE,
+			CM_CONNECT_STARTING,
+			CM_CONNECT_ENDING,
+			CM_DISCONNECT
+		};
+
 		/**
 		 * \brief constructor
 		 */
@@ -41,6 +48,18 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~WidgetEdit();
+
+		void notifyComponentActivated(WidgetEditComponent * component);
+		void notifyConnectionsChanged();
+		void notifyConnectionAdded(WidgetEditComponent * node1, WidgetEditComponent * node2, ComponentRelation relation, ComponentRelationDirection relationDirection);
+
+		ConnectionMode getConnectionMode() const {
+			return _connectionMode;
+		}
+
+		WidgetEditComponent * getStartConnector() const {
+			return _startConnector;
+		}
 
 	private slots:
 		void setNewParticleSystem(ParticleUniverse::ParticleSystem * newParticleSystem);
@@ -52,6 +71,8 @@ namespace widgets {
 		void addNewHandler();
 		void addNewBehaviour();
 		void addNewExtern();
+		void addConnection();
+		void removeConnection();
 
 	private:
 		QGraphicsScene * _graphicsScene;
@@ -67,6 +88,9 @@ namespace widgets {
 		int _handlerCounter;
 		int _behaviourCounter;
 		int _externCounter;
+		ConnectionMode _connectionMode;
+		WidgetEditComponent * _startConnector;
+		WidgetEditComponent * _endConnector;
 
 		void createTechniqueForComponent(WidgetEditComponent * component);
 		void createRendererForComponent(const QString & type, WidgetEditComponent * component);
@@ -101,6 +125,20 @@ namespace widgets {
 		WidgetEditComponent * findEditComponent(const ParticleUniverse::IElement * puElement) const;
 		WidgetEditComponent * findEditComponent(const QString & name, const QString & type, WidgetEditComponent * skip = nullptr) const;
 		WidgetEditComponent * findEditComponentForTechnique(const QString & name, const QString & techniqueName) const;
+		void setConnectionMode(ConnectionMode connectionMode);
+		bool isConnectionPossible(WidgetEditComponent * component) const;
+		bool _mustStopParticleSystem();
+		void _mustRestartParticleSystem(bool wasStarted);
+		void _generateNameForComponentAndPUElement(WidgetEditComponent * component, QString type);
+		WidgetEditComponent * getParticleSystemEditComponent() const;
+		bool _processIncludeAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processExcludeAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processEmitAdded(WidgetEditComponent * node1, WidgetEditComponent * node2, ComponentRelationDirection relationDirection);
+		bool _processInterfaceAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processSlaveAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processEnableAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processForceAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
+		bool _processPlaceAdded(WidgetEditComponent * node1, WidgetEditComponent * node2);
 	};
 
 } /* namespace widgets */

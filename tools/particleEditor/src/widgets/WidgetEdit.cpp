@@ -31,7 +31,7 @@ namespace widgets {
 	const QColor DRAW_EMITTED_COLOURCODE = QColor(255, 0, 0);
 	const QColor DRAW_SPECIAL_CASE_COLOURCODE = QColor(56, 124, 68);
 
-	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsScene(new QGraphicsScene(this)), _graphicsView(new QGraphicsView(_graphicsScene)), _components(), _offsetX(48), _offsetY(8), _techniqueCounter(1), _rendererCounter(1), _emitterCounter(1), _affectorCounter(1), _observerCounter(1), _handlerCounter(1), _behaviourCounter(1), _externCounter(1) {
+	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsScene(new QGraphicsScene(this)), _graphicsView(new QGraphicsView(_graphicsScene)), _components(), _offsetX(48), _offsetY(8), _techniqueCounter(1), _rendererCounter(1), _emitterCounter(1), _affectorCounter(1), _observerCounter(1), _handlerCounter(1), _behaviourCounter(1), _externCounter(1), _connectionMode(CM_CONNECT_NONE), _startConnector(nullptr), _endConnector(nullptr) {
 		setupUi(this);
 
 		verticalLayout->addWidget(_graphicsView);
@@ -44,6 +44,91 @@ namespace widgets {
 	}
 
 	WidgetEdit::~WidgetEdit() {
+	}
+
+	void WidgetEdit::notifyComponentActivated(WidgetEditComponent * component) {
+		// A component is activated, check the mode
+		if (_connectionMode == CM_CONNECT_STARTING) {
+			// Start connecting
+			//mCanvas->createMouseConnector(component);
+			_startConnector = component;
+			setConnectionMode(CM_CONNECT_ENDING);
+		} else if (_connectionMode == CM_CONNECT_ENDING && component != _startConnector) {
+			if (isConnectionPossible(component)) {
+				// A policy has already been selected
+				setConnectionMode(CM_CONNECT_STARTING);
+				_endConnector = component;
+				//mCanvas->destroyMouseConnector();
+				connections::ConnectionPolicy * policyEnd = _endConnector->getSelectedPolicy();
+				if (!policyEnd) {
+					return;
+				}
+
+				_graphicsScene->addItem(new connections::LineConnector(_startConnector, _endConnector, policyEnd->getColour(), policyEnd->getLineStyle()));
+				_endConnector->addConnection(_startConnector, policyEnd->getRelation(), policyEnd->getRelationDirection());
+
+				// Use the relation of the policyEnd, because this is the same for Start and End
+				_startConnector->addConnection(_endConnector, policyEnd->getRelation(), getOppositeRelationDirection(policyEnd->getRelationDirection()));
+				notifyConnectionAdded(_startConnector, _endConnector, policyEnd->getRelation(), policyEnd->getRelationDirection());
+				notifyConnectionsChanged();
+				_startConnector = nullptr;
+				_endConnector = nullptr;
+			}
+		}
+	}
+
+	void WidgetEdit::notifyConnectionsChanged() {
+		//mEditTools->notifyConnectionsChanged();
+		//mEditChanged = true; // If a connection is made or removed, the flag must be set.
+	}
+
+	void WidgetEdit::notifyConnectionAdded(WidgetEditComponent * node1, WidgetEditComponent * node2, ComponentRelation relation, ComponentRelationDirection relationDirection) {
+		// Stop the system if needed
+		bool wasStarted = _mustStopParticleSystem();
+
+		if (relation == CR_INCLUDE) {
+			if (!_processIncludeAdded(node1, node2)) {
+				// Switch
+				_processIncludeAdded(node2, node1);
+			}
+		} else if (relation == CR_EXCLUDE) {
+			if (!_processExcludeAdded(node1, node2)) {
+				// Switch
+				_processExcludeAdded(node2, node1);
+			}
+		} else if (relation == CR_EMIT) {
+			if (!_processEmitAdded(node1, node2, relationDirection)) {
+				// Switch
+				_processEmitAdded(node2, node1, getOppositeRelationDirection(relationDirection));
+			}
+		} else if (relation == CR_INTERFACE) {
+			if (!_processInterfaceAdded(node1, node2)) {
+				// Switch
+				_processInterfaceAdded(node2, node1);
+			}
+		} else if (relation == CR_SLAVE) {
+			if (!_processSlaveAdded(node1, node2)) {
+				// Switch
+				_processSlaveAdded(node2, node1);
+			}
+		} else if (relation == CR_ENABLE) {
+			if (!_processEnableAdded(node1, node2)) {
+				// Switch
+				_processEnableAdded(node2, node1);
+			}
+		} else if (relation == CR_FORCE) {
+			if (!_processForceAdded(node1, node2)) {
+				// Switch
+				_processForceAdded(node2, node1);
+			}
+		} else if (relation == CR_PLACE) {
+			if (!_processPlaceAdded(node1, node2)) {
+				// Switch
+				_processPlaceAdded(node2, node1);
+			}
+		}
+
+		_mustRestartParticleSystem(wasStarted);
 	}
 
 	void WidgetEdit::setNewParticleSystem(ParticleUniverse::ParticleSystem * newParticleSystem) {
@@ -88,6 +173,14 @@ namespace widgets {
 
 	void WidgetEdit::addNewExtern() {
 		createExternForComponent(EXTERN_BOX_COLLIDER, createExternEditComponent(CST_EXTERN_BOX_COLLIDER));
+	}
+
+	void WidgetEdit::addConnection() {
+		setConnectionMode(CM_CONNECT_STARTING);
+	}
+
+	void WidgetEdit::removeConnection() {
+		setConnectionMode(CM_DISCONNECT);
 	}
 
 	void WidgetEdit::createTechniqueForComponent(WidgetEditComponent * component) {
@@ -161,7 +254,7 @@ namespace widgets {
 	}
 
 	WidgetEditComponent * WidgetEdit::createParticleSystemEditComponent() {
-		WidgetEditComponent * systemComponent = new WidgetEditComponent(_graphicsScene, "mySystem", CT_SYSTEM, CST_UNDEFINED);
+		WidgetEditComponent * systemComponent = new WidgetEditComponent(this, _graphicsScene, "mySystem", CT_SYSTEM, CST_UNDEFINED);
 		
 		//systemComponent->createPropertyWindow(CST_UNDEFINED); // Recreate it, so it contains the root frame
 
@@ -175,7 +268,7 @@ namespace widgets {
 
 	WidgetEditComponent * WidgetEdit::createTechniqueEditComponent() {
 		QString name = "Technique" + QString::number(_techniqueCounter++);
-		WidgetEditComponent * technique = new WidgetEditComponent(_graphicsScene, name, CT_TECHNIQUE, CST_UNDEFINED);
+		WidgetEditComponent * technique = new WidgetEditComponent(this, _graphicsScene, name, CT_TECHNIQUE, CST_UNDEFINED);
 		technique->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_SYSTEM, CST_UNDEFINED, false);
 		technique->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_RENDERER, CST_UNDEFINED, false);
 		technique->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_EMITTER, CST_UNDEFINED);
@@ -192,7 +285,7 @@ namespace widgets {
 
 	WidgetEditComponent * WidgetEdit::createRendererEditComponent(const QString & type) {
 		QString name = "Renderer" + QString::number(_rendererCounter++);
-		WidgetEditComponent * rendererComponent = new WidgetEditComponent(_graphicsScene, name, CT_RENDERER, type);
+		WidgetEditComponent * rendererComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_RENDERER, type);
 		rendererComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		_graphicsScene->addItem(rendererComponent);
 		_components.push_back(rendererComponent);
@@ -201,7 +294,7 @@ namespace widgets {
 
 	WidgetEditComponent * WidgetEdit::createEmitterEditComponent(const QString & type) {
 		QString name = "Emitter" + QString::number(_emitterCounter++);
-		WidgetEditComponent * emitterComponent = new WidgetEditComponent(_graphicsScene, name, CT_EMITTER, type);
+		WidgetEditComponent * emitterComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_EMITTER, type);
 
 		// Altough it is possible to emit a particle system, the connection to the system is not defined (there can only be one system on the canvas)
 		emitterComponent->addUniqueRelation(CR_EMIT, CRDIR_PRIMARY); // Only emission of one type is allowed
@@ -222,7 +315,7 @@ namespace widgets {
 
 	WidgetEditComponent * WidgetEdit::createAffectorEditComponent(const QString & type) {
 		QString name = "Affector" + QString::number(_affectorCounter++);
-		WidgetEditComponent * affectorComponent = new WidgetEditComponent(_graphicsScene, name, CT_AFFECTOR, type);
+		WidgetEditComponent * affectorComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_AFFECTOR, type);
 		affectorComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		affectorComponent->addPolicy(CR_EMIT, CRDIR_SECUNDAIRY, CRD_EMITTED_BY, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_EMITTED_COLOURCODE);
 		affectorComponent->addPolicy(CR_EXCLUDE, CRDIR_PRIMARY, CRD_EXCLUDES, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_DEFAULT_COLOURCODE, Qt::DashLine);
@@ -235,7 +328,7 @@ namespace widgets {
 
 	WidgetEditComponent * WidgetEdit::createObserverEditComponent(const QString & type) {
 		QString name = "Observer" + QString::number(_observerCounter++);
-		WidgetEditComponent * observerComponent = new WidgetEditComponent(_graphicsScene, name, CT_OBSERVER, type);
+		WidgetEditComponent * observerComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_OBSERVER, type);
 		observerComponent->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_HANDLER, CST_UNDEFINED, true);
 		observerComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		observerComponent->addPolicy(CR_ENABLE, CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
@@ -246,7 +339,7 @@ namespace widgets {
 
 	WidgetEditComponent * WidgetEdit::createHandlerEditComponent(const QString & type) {
 		QString name = "Handler" + QString::number(_handlerCounter++);
-		WidgetEditComponent * handler = new WidgetEditComponent(_graphicsScene, name, CT_HANDLER, type);
+		WidgetEditComponent * handler = new WidgetEditComponent(this, _graphicsScene, name, CT_HANDLER, type);
 		handler->addUniqueRelation(CR_ENABLE, CRDIR_PRIMARY); // Only enabling of one type is allowed
 		handler->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_OBSERVER, CST_UNDEFINED, false);
 		handler->addPolicy(CR_ENABLE, CRDIR_PRIMARY, CRD_ENABLES, CT_TECHNIQUE, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
@@ -262,7 +355,7 @@ namespace widgets {
 
 	WidgetEditComponent * WidgetEdit::createBehaviourEditComponent(const QString & type) {
 		QString name = "Behaviour" + QString::number(_behaviourCounter++);
-		WidgetEditComponent * behaviourComponent = new WidgetEditComponent(_graphicsScene, name, CT_BEHAVIOUR, type);
+		WidgetEditComponent * behaviourComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_BEHAVIOUR, type);
 		behaviourComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		_graphicsScene->addItem(behaviourComponent);
 		_components.push_back(behaviourComponent);
@@ -271,7 +364,7 @@ namespace widgets {
 
 	WidgetEditComponent * WidgetEdit::createExternEditComponent(const QString & type) {
 		QString name = "Extern" + QString::number(_externCounter++);
-		WidgetEditComponent * externObjectComponent = new WidgetEditComponent(_graphicsScene, name, CT_EXTERN, type);
+		WidgetEditComponent * externObjectComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_EXTERN, type);
 		externObjectComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		_graphicsScene->addItem(externObjectComponent);
 		_components.push_back(externObjectComponent);
@@ -283,10 +376,10 @@ namespace widgets {
 			return false;
 		}
 
-		/*SystemPropertyWindow * systemPropertyWindow = static_cast<SystemPropertyWindow *>(particleSystemEditComponent->getPropertyWindow());
-		particleSystemEditComponent->setComponentName(particleSystem->getTemplateName());
+		//SystemPropertyWindow * systemPropertyWindow = static_cast<SystemPropertyWindow *>(particleSystemEditComponent->getPropertyWindow());
+		particleSystemEditComponent->setName(QString::fromStdString(particleSystem->getTemplateName()));
 		particleSystemEditComponent->setCaption();
-		systemPropertyWindow->copyAttributesFromSystem(particleSystem);
+		/*systemPropertyWindow->copyAttributesFromSystem(particleSystem);
 		particleSystemEditComponent->SetFocus(); // Causes the property window to refresh
 		*/
 		return true;
@@ -324,8 +417,8 @@ namespace widgets {
 	QPoint WidgetEdit::createComponentsFromTechnique(WidgetEditComponent * systemEditComponent, ParticleUniverse::ParticleTechnique * technique, QPoint position) {
 		// First create the component of the technique itself
 		WidgetEditComponent * techniqueEditComponent = createTechniqueEditComponent();
-		/*techniqueEditComponent->setComponentName(technique->getName());
-		techniqueEditComponent->setCaption();*/
+		techniqueEditComponent->setName(QString::fromStdString(technique->getName()));
+		techniqueEditComponent->setCaption();
 		techniqueEditComponent->setPos(position);
 		techniqueEditComponent->setPUElement(technique);
 		int componentWidth = techniqueEditComponent->size().width();
@@ -407,8 +500,8 @@ namespace widgets {
 	void WidgetEdit::createComponentFromRenderer(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleRenderer * renderer, QPoint position) {
 		// First create the component of the renderer itself
 		WidgetEditComponent * rendererEditComponent = createRendererEditComponent(QString::fromStdString(renderer->getRendererType()));
-		//rendererEditComponent->setComponentName(QStringUtil::BLANK);
-		//rendererEditComponent->setCaption();
+		rendererEditComponent->setName("");
+		rendererEditComponent->setCaption();
 		rendererEditComponent->setPos(position);
 		rendererEditComponent->setPUElement(renderer);
 		//static_cast<RendererPropertyWindow *>(rendererEditComponent->getPropertyWindow())->copyAttributesFromRenderer(renderer);
@@ -418,8 +511,8 @@ namespace widgets {
 	void WidgetEdit::createComponentFromEmitter(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleEmitter * emitter, QPoint position) {
 		// First create the component of the emitter itself
 		WidgetEditComponent * emitterEditComponent = createEmitterEditComponent(QString::fromStdString(emitter->getEmitterType()));
-		//emitterEditComponent->setComponentName(emitter->getName());
-		//emitterEditComponent->setCaption();
+		emitterEditComponent->setName(QString::fromStdString(emitter->getName()));
+		emitterEditComponent->setCaption();
 		emitterEditComponent->setPos(position);
 		emitterEditComponent->setPUElement(emitter);
 		//static_cast<EmitterPropertyWindow *>(emitterEditComponent->getPropertyWindow())->copyAttributesFromEmitter(emitter);
@@ -429,8 +522,8 @@ namespace widgets {
 	void WidgetEdit::createComponentFromAffector(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleAffector * affector, QPoint position) {
 		// First create the component of the affector itself
 		WidgetEditComponent * affectorEditComponent = createAffectorEditComponent(QString::fromStdString(affector->getAffectorType()));
-		//affectorEditComponent->setComponentName(affector->getName());
-		//affectorEditComponent->setCaption();
+		affectorEditComponent->setName(QString::fromStdString(affector->getName()));
+		affectorEditComponent->setCaption();
 		affectorEditComponent->setPos(position);
 		affectorEditComponent->setPUElement(affector);
 		//static_cast<AffectorPropertyWindow *>(affectorEditComponent->getPropertyWindow())->copyAttributesFromAffector(affector);
@@ -440,8 +533,8 @@ namespace widgets {
 	int WidgetEdit::createComponentFromObserver(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleObserver * observer, QPoint position, int latestHandlerY) {
 		// First create the component of the observer itself
 		WidgetEditComponent * observerEditComponent = createObserverEditComponent(QString::fromStdString(observer->getObserverType()));
-		//observerEditComponent->setComponentName(observer->getName());
-		//observerEditComponent->setCaption();
+		observerEditComponent->setName(QString::fromStdString(observer->getName()));
+		observerEditComponent->setCaption();
 		observerEditComponent->setPos(position);
 		observerEditComponent->setPUElement(observer);
 		//static_cast<ObserverPropertyWindow *>(observerEditComponent->getPropertyWindow())->copyAttributesFromObserver(observer);
@@ -464,8 +557,8 @@ namespace widgets {
 
 	void WidgetEdit::createComponentFromEventHandler(WidgetEditComponent * observerEditComponent, ParticleUniverse::ParticleEventHandler * eventHandler, QPoint position) {
 		WidgetEditComponent * handlerEditComponent = createHandlerEditComponent(QString::fromStdString(eventHandler->getEventHandlerType()));
-		//handlerEditComponent->setComponentName(eventHandler->getName());
-		//handlerEditComponent->setCaption();
+		handlerEditComponent->setName(QString::fromStdString(eventHandler->getName()));
+		handlerEditComponent->setCaption();
 		handlerEditComponent->setPos(position);
 		handlerEditComponent->setPUElement(eventHandler);
 		//static_cast<EventHandlerPropertyWindow *>(handlerEditComponent->getPropertyWindow())->copyAttributesFromEventHandler(eventHandler);
@@ -475,8 +568,8 @@ namespace widgets {
 	void WidgetEdit::createComponentFromBehaviour(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleBehaviour * behaviour, QPoint position) {
 		// First create the component of the behaviour itself
 		WidgetEditComponent * behaviourEditComponent = createBehaviourEditComponent(QString::fromStdString(behaviour->getBehaviourType()));
-		//behaviourEditComponent->setComponentName(QStringUtil::BLANK);
-		//behaviourEditComponent->setCaption();
+		behaviourEditComponent->setName("");
+		behaviourEditComponent->setCaption();
 		behaviourEditComponent->setPos(position);
 		behaviourEditComponent->setPUElement(behaviour);
 		//static_cast<BehaviourPropertyWindow *>(behaviourEditComponent->getPropertyWindow())->copyAttributesFromBehaviour(behaviour);
@@ -486,8 +579,8 @@ namespace widgets {
 	void WidgetEdit::createComponentFromExtern(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::Extern * externObject, QPoint position) {
 		// First create the component of the extern itself
 		WidgetEditComponent * externEditComponent = createExternEditComponent(QString::fromStdString(externObject->getExternType()));
-		//externEditComponent->setComponentName(externObject->getName());
-		//externEditComponent->setCaption();
+		externEditComponent->setName(QString::fromStdString(externObject->getName()));
+		externEditComponent->setCaption();
 		externEditComponent->setPos(position);
 		externEditComponent->setPUElement(externObject);
 		//static_cast<ExternPropertyWindow *>(externEditComponent->getPropertyWindow())->copyAttributesFromExtern(externObject);
@@ -659,6 +752,469 @@ namespace widgets {
 			}
 		}
 		return editComponent;
+	}
+
+	void WidgetEdit::setConnectionMode(ConnectionMode connectionMode) {
+		_connectionMode = connectionMode;
+		QCursor connectCursor = QCursor();
+
+		if (connectionMode == CM_CONNECT_STARTING || connectionMode == CM_CONNECT_ENDING) {
+			// Change the cursor
+			connectCursor = QCursor(QPixmap("../media/textures/connect.png"));
+		} else if (connectionMode == CM_DISCONNECT) {
+			// Change the cursor
+			connectCursor = QCursor(QPixmap("../media/textures/disconnect.png"));
+		}
+
+		_graphicsView->setCursor(connectCursor);
+		for (QGraphicsItem * gi : _graphicsScene->items()) {
+			gi->setCursor(connectCursor);
+			for (QGraphicsItem * gi2 : gi->childItems()) {
+				gi2->setCursor(connectCursor);
+			}
+		}
+		for (std::vector<WidgetEditComponent *>::iterator it = _components.begin(); it != _components.end(); ++it) {
+			(*it)->setCursor(connectCursor);
+		}
+	}
+
+	bool WidgetEdit::isConnectionPossible(WidgetEditComponent * component) const {
+		// Check both sides
+		return _startConnector && component->isConnectionPossible(_startConnector) && _startConnector->isConnectionPossible(component);
+	}
+
+	bool WidgetEdit::_mustStopParticleSystem() {
+		// Get the Particle System Edit Component, because it is associated with the Particle System
+		WidgetEditComponent * component = getParticleSystemEditComponent();
+		if (!component) {
+			return false;
+		}
+
+		// Set it to stop
+		ParticleUniverse::ParticleSystem * particleSystem = static_cast<ParticleUniverse::ParticleSystem *>(component->getPUElement());
+		bool wasStarted = false;
+		if (particleSystem && particleSystem->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
+			wasStarted = true;
+			particleSystem->stop();
+		}
+		return wasStarted;
+	}
+
+	void WidgetEdit::_mustRestartParticleSystem(bool wasStarted) {
+		// Start the system if needed
+		if (wasStarted) {
+			// Get the Particle System Edit Component, because it is associated with the Particle System
+			WidgetEditComponent * component = getParticleSystemEditComponent();
+			if (component) {
+				ParticleUniverse::ParticleSystem * particleSystem = dynamic_cast<ParticleUniverse::ParticleSystem *>(component->getPUElement());
+				if (particleSystem) {
+					particleSystem->start();
+				}
+			}
+		}
+	}
+
+	void WidgetEdit::_generateNameForComponentAndPUElement(WidgetEditComponent * component, QString type) {
+		if (!component) {
+			return;
+		}
+		if (!component->getPUElement()) {
+			return;
+		}
+		Ogre::String name;
+		if (type == CT_TECHNIQUE) {
+			name = "Technique" + Ogre::StringConverter::toString(_techniqueCounter++);
+			static_cast<ParticleUniverse::ParticleTechnique *>(component->getPUElement())->setName(name);
+		} else if (type == CT_EMITTER) {
+			name = "Emitter" + Ogre::StringConverter::toString(_emitterCounter++);
+			static_cast<ParticleUniverse::ParticleEmitter *>(component->getPUElement())->setName(name);
+		} else if (type == CT_AFFECTOR) {
+			name = "Affector" + Ogre::StringConverter::toString(_affectorCounter++);
+			static_cast<ParticleUniverse::ParticleAffector *>(component->getPUElement())->setName(name);
+		} else if (type == CT_OBSERVER) {
+			name = "Observer" + Ogre::StringConverter::toString(_observerCounter++);
+			static_cast<ParticleUniverse::ParticleObserver *>(component->getPUElement())->setName(name);
+		}
+
+		/*if (component->getPropertyWindow()) {
+			component->getPropertyWindow()->setComponentName(name);
+		}*/
+		component->setName(QString::fromStdString(name));
+		component->setCaption();
+	}
+	
+	WidgetEditComponent * WidgetEdit::getParticleSystemEditComponent() const {
+		WidgetEditComponent * component = nullptr;
+		for (std::vector<WidgetEditComponent *>::const_iterator it = _components.begin(); it != _components.end(); ++it) {
+			component = *it;
+			if (component->getComponentType() == CT_SYSTEM) {
+				// There is only one!
+				break;
+			}
+		}
+		return component;
+	}
+
+	bool WidgetEdit::_processIncludeAdded(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		// If element is not set, ignore removing it.
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_SYSTEM) {
+			// Add the technique to the system
+			ParticleUniverse::ParticleSystem * system = static_cast<ParticleUniverse::ParticleSystem *>(element1);
+			ParticleUniverse::ParticleTechnique * technique = static_cast<ParticleUniverse::ParticleTechnique *>(element2);
+			if (system) {
+				system->addTechnique(technique);
+			}
+			return true;
+		} else if (node1->getComponentType() == CT_TECHNIQUE) {
+			ParticleUniverse::ParticleTechnique * technique = static_cast<ParticleUniverse::ParticleTechnique *>(element1);
+			if (node2->getComponentType() == CT_RENDERER) {
+				// Set the renderer in the technique
+				ParticleUniverse::ParticleRenderer * renderer = static_cast<ParticleUniverse::ParticleRenderer *>(element2);
+				if (technique) {
+					technique->setRenderer(renderer);
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_EMITTER) {
+				// Add the emitter to the technique
+				ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
+				if (technique) {
+					technique->addEmitter(emitter);
+					if (emitter->_isMarkedForEmission()) {
+						technique->_unprepareEmitters(); // Destroy pool of emitted emitters
+					}
+				}
+
+				return true;
+			} else if (node2->getComponentType() == CT_AFFECTOR) {
+				// Add the affector to the technique
+				ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(element2);
+				if (technique) {
+					technique->addAffector(affector);
+					if (affector->_isMarkedForEmission()) {
+						technique->_unprepareAffectors(); // Destroy pool of emitted affectors
+					}
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_OBSERVER) {
+				// Add the observer to the technique
+				ParticleUniverse::ParticleObserver * observer = static_cast<ParticleUniverse::ParticleObserver *>(element2);
+				if (technique) {
+					technique->addObserver(observer);
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_BEHAVIOUR) {
+				// Add the behaviour to the technique
+				ParticleUniverse::ParticleBehaviour * behaviour = static_cast<ParticleUniverse::ParticleBehaviour *>(element2);
+				if (technique) {
+					technique->_addBehaviourTemplate(behaviour);
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_EXTERN) {
+				// Add the extern to the technique
+				ParticleUniverse::Extern * externObject = static_cast<ParticleUniverse::Extern *>(element2);
+				if (technique) {
+					technique->addExtern(externObject);
+				}
+				return true;
+			}
+		} else if (node1->getComponentType() == CT_OBSERVER) {
+			ParticleUniverse::ParticleObserver * observer = static_cast<ParticleUniverse::ParticleObserver *>(element1);
+			if (node2->getComponentType() == CT_HANDLER) {
+				// Add the handler to the observer
+				ParticleUniverse::ParticleEventHandler * handler = static_cast<ParticleUniverse::ParticleEventHandler *>(element2);
+				if (observer) {
+					observer->addEventHandler(handler);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool WidgetEdit::_processExcludeAdded(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_AFFECTOR) {
+			if (node2->getComponentType() == CT_EMITTER) {
+				// Add the emittername to the excluded names
+				ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(element1);
+				ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
+				if (emitter->getName() == Ogre::StringUtil::BLANK) {
+					// The emitter doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_EMITTER);
+				}
+				affector->addEmitterToExclude(emitter->getName());
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processEmitAdded(WidgetEditComponent * node1, WidgetEditComponent * node2, ComponentRelationDirection relationDirection) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_EMITTER) {
+			// Check what type of particle is emitted.
+			ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element1);
+
+			// CRDIR_SECUNDAIRY is the relation of node2 towards node1
+			if (node2->getComponentType() == CT_EMITTER && relationDirection == CRDIR_SECUNDAIRY) {
+				ParticleUniverse::ParticleEmitter * emittedEmitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
+				emitter->setEmitsType(ParticleUniverse::Particle::PT_EMITTER);
+				if (emittedEmitter->getName() == Ogre::StringUtil::BLANK) {
+					// The emitter doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_EMITTER);
+				}
+				emitter->setEmitsName(emittedEmitter->getName());
+				if (emitter->getParentTechnique()) {
+					// Force creation of emitted emitters
+					emitter->getParentTechnique()->_unprepareEmitters();
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_TECHNIQUE) {
+				ParticleUniverse::ParticleTechnique * emittedTechnique = static_cast<ParticleUniverse::ParticleTechnique *>(element2);
+				emitter->setEmitsType(ParticleUniverse::Particle::PT_TECHNIQUE);
+				if (emittedTechnique->getName() == Ogre::StringUtil::BLANK) {
+					// The emittedTechnique doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_TECHNIQUE);
+				}
+				emitter->setEmitsName(emittedTechnique->getName());
+				if (emitter->getParentTechnique()) {
+					// Force creation of emitted techniques
+					emitter->getParentTechnique()->_unprepareTechnique();
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_AFFECTOR) {
+				ParticleUniverse::ParticleAffector * emittedAffector = static_cast<ParticleUniverse::ParticleAffector *>(element2);
+				emitter->setEmitsType(ParticleUniverse::Particle::PT_AFFECTOR);
+				if (emittedAffector->getName() == Ogre::StringUtil::BLANK) {
+					// The emittedAffector doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_AFFECTOR);
+				}
+				emitter->setEmitsName(emittedAffector->getName());
+				if (emitter->getParentTechnique()) {
+					// Force creation of emitted affectors
+					emitter->getParentTechnique()->_unprepareAffectors();
+				}
+				return true;
+			} else if (node2->getComponentType() == CT_SYSTEM) {
+				ParticleUniverse::ParticleSystem * emittedSystem = static_cast<ParticleUniverse::ParticleSystem *>(element2);
+				emitter->setEmitsType(ParticleUniverse::Particle::PT_SYSTEM);
+				emitter->setEmitsName(emittedSystem->getName());
+				if (emitter->getParentTechnique()) {
+					// Force creation of emitted systems
+					emitter->getParentTechnique()->_unprepareSystem();
+				}
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processInterfaceAdded(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_OBSERVER) {
+			if (node2->getComponentType() == CT_HANDLER) {
+				// Add the handler to the observer
+				ParticleUniverse::ParticleObserver * observer = static_cast<ParticleUniverse::ParticleObserver *>(element1);
+				ParticleUniverse::ParticleEventHandler * handler = static_cast<ParticleUniverse::ParticleEventHandler *>(element2);
+				observer->addEventHandler(handler);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processSlaveAdded(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_EMITTER && node1->getComponentSubType() == CST_EMITTER_SLAVE) {
+			ParticleUniverse::SlaveEmitter * emitter1 = static_cast<ParticleUniverse::SlaveEmitter *>(element1);
+			if (node2->getComponentType() == CT_EMITTER) {
+				ParticleUniverse::ParticleEmitter * emitter2 = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
+				if (emitter1->getParentTechnique()) {
+					emitter1->_unprepare(emitter1->getParentTechnique());
+				}
+				if (emitter2->getName() == Ogre::StringUtil::BLANK) {
+					// The emitter2 doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_EMITTER);
+				}
+				emitter1->setMasterEmitterName(emitter2->getName());
+				ParticleUniverse::ParticleTechnique * technique = emitter2->getParentTechnique();
+				if (technique) {
+					if (technique->getName() == Ogre::StringUtil::BLANK) {
+						// The technique doesn't have a name, so assign a name to it
+						Ogre::String name = "Technique" + Ogre::StringConverter::toString(_techniqueCounter++);
+						technique->setName(name);
+
+						// Todo: Update the technique component
+					}
+					emitter1->setMasterTechniqueName(technique->getName());
+				}
+				if (emitter1->getParentTechnique()) {
+					emitter1->_prepare(emitter1->getParentTechnique());
+				}
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processEnableAdded(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_HANDLER && node1->getComponentSubType() == CST_HANDLER_DO_ENABLE_COMPONENT) {
+			ParticleUniverse::DoEnableComponentEventHandler * handler = static_cast<ParticleUniverse::DoEnableComponentEventHandler *>(element1);
+			if (node2->getComponentType() == CT_TECHNIQUE) {
+				ParticleUniverse::ParticleTechnique * technique = static_cast<ParticleUniverse::ParticleTechnique *>(element2);
+				if (technique->getName() == Ogre::StringUtil::BLANK) {
+					// The technique doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_TECHNIQUE);
+				}
+				handler->setComponentName(technique->getName());
+				handler->setComponentType(ParticleUniverse::CT_TECHNIQUE);
+				return true;
+			} else if (node2->getComponentType() == CT_EMITTER) {
+				ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
+				if (emitter->getName() == Ogre::StringUtil::BLANK) {
+					// The emitter doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_EMITTER);
+				}
+				handler->setComponentName(emitter->getName());
+				handler->setComponentType(ParticleUniverse::CT_EMITTER);
+				return true;
+			} else if (node2->getComponentType() == CT_AFFECTOR) {
+				ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(element2);
+				if (affector->getName() == Ogre::StringUtil::BLANK) {
+					// The affector doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_AFFECTOR);
+				}
+				handler->setComponentName(affector->getName());
+				handler->setComponentType(ParticleUniverse::CT_AFFECTOR);
+				return true;
+			} else if (node2->getComponentType() == CT_OBSERVER) {
+				ParticleUniverse::ParticleObserver * observer = static_cast<ParticleUniverse::ParticleObserver *>(element2);
+				if (observer->getName() == Ogre::StringUtil::BLANK) {
+					// The observer doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_OBSERVER);
+				}
+				handler->setComponentName(observer->getName());
+				handler->setComponentType(ParticleUniverse::CT_OBSERVER);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processForceAdded(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_HANDLER && node1->getComponentSubType() == CST_HANDLER_DO_AFFECTOR) {
+			if (node2->getComponentType() == CT_AFFECTOR) {
+				ParticleUniverse::DoAffectorEventHandler * handler = static_cast<ParticleUniverse::DoAffectorEventHandler *>(element1);
+				ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(element2);
+				if (affector->getName() == Ogre::StringUtil::BLANK) {
+					// The affector doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_AFFECTOR);
+				}
+				handler->setAffectorName(affector->getName());
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool WidgetEdit::_processPlaceAdded(WidgetEditComponent * node1, WidgetEditComponent * node2) {
+		ParticleUniverse::IElement * element1 = node1->getPUElement();
+		if (!element1) {
+			return false;
+		}
+
+		ParticleUniverse::IElement * element2 = node2->getPUElement();
+		if (!element2) {
+			return false;
+		}
+
+		if (node1->getComponentType() == CT_HANDLER && node1->getComponentSubType() == CST_HANDLER_DO_PLACEMENT_PARTICLE) {
+			if (node2->getComponentType() == CT_EMITTER) {
+				ParticleUniverse::DoPlacementParticleEventHandler * handler = static_cast<ParticleUniverse::DoPlacementParticleEventHandler *>(element1);
+				ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
+				handler->removeAsListener();
+				if (emitter->getName() == Ogre::StringUtil::BLANK) {
+					// The emitter doesn't have a name, so assign a name to it
+					_generateNameForComponentAndPUElement(node2, CT_EMITTER);
+				}
+				handler->setForceEmitterName(emitter->getName());
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 } /* namespace widgets */

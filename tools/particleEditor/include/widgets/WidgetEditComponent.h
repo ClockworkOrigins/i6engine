@@ -2,6 +2,7 @@
 #define __I6ENGINE_PARTICLEEDITOR_WIDGETS_WIDGETEDITCOMPONENT_H__
 
 #include <QGraphicsWidget>
+#include <QLabel>
 
 namespace ParticleUniverse {
 	class IElement;
@@ -15,6 +16,8 @@ namespace connections {
 	class UniqueRelation;
 } /* namespace connections */
 namespace widgets {
+
+	class WidgetEdit;
 
 	static QString CT_SYSTEM = "System";
 	static QString CT_TECHNIQUE = "Technique";
@@ -257,12 +260,16 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		WidgetEditComponent(QGraphicsScene * scene, QString name, QString type, QString subType);
+		WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType);
 
 		/**
 		 * \brief destructor
 		 */
 		~WidgetEditComponent();
+
+		void setName(QString name) {
+			_name = name;
+		}
 
 		QString getName() const {
 			return _name;
@@ -284,6 +291,10 @@ namespace widgets {
 			return _element;
 		}
 
+		connections::ConnectionPolicy * getSelectedPolicy() const {
+			return _selectedPolicy;
+		}
+
 		void addPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, const QString & relationDescription, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith = CST_UNDEFINED, bool multipleConnectionsPossible = true, bool ignoreSubType = true, const QColor & colour = QColor(0, 0, 0), Qt::PenStyle lineStyle = Qt::SolidLine);
 		
 		void addUniqueRelation(ComponentRelation relation, ComponentRelationDirection relationDirection);
@@ -296,7 +307,13 @@ namespace widgets {
 
 		connections::ConnectionPolicy * getPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith = CST_UNDEFINED) const;
 
+		bool isConnectionPossible(WidgetEditComponent * component) const;
+
+		void setCaption();
+
 	private:
+		WidgetEdit * _parent;
+		QLabel * _label;
 		QString _name;
 		QString _type;
 		QString _subType;
@@ -304,6 +321,14 @@ namespace widgets {
 		std::vector<connections::ConnectionPolicy *> _policies;
 		std::vector<connections::UniqueRelation *> _uniqueRelations;
 		std::vector<connections::Connection *> _connections;
+		connections::ConnectionPolicy * _selectedPolicy;
+
+		void mousePressEvent(QGraphicsSceneMouseEvent * evt) override;
+		void selectConnection(bool viewOnly);
+		connections::ConnectionPolicy * selectPolicy(WidgetEditComponent * componentToBeConnectedWith);
+		bool isConnectionPossible() const;
+		bool isConnectionPossible(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith) const;
+		const QString & getRelationDescription(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith) const;
 	};
 
 } /* namespace widgets */

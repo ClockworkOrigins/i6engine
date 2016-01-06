@@ -2,9 +2,13 @@
 
 #include "connections/Connection.h"
 
+#include "widgets/DialogChooseConnectionType.h"
+#include "widgets/WidgetEdit.h"
+
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
 #include <QHBoxLayout>
 #include <QLabel>
 
@@ -12,24 +16,26 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	WidgetEditComponent::WidgetEditComponent(QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections() {
+	const int MAX_NUMBER_OF_CONNECTIONS = 20;
+
+	WidgetEditComponent::WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _parent(parent), _label(nullptr), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections(), _selectedPolicy(nullptr) {
 		QString labelText = type + " (" + subType + ")";
 		QWidget * widget = new QWidget();
 		QHBoxLayout * hLayout = new QHBoxLayout(widget);
 		widget->setLayout(hLayout);
-		QLabel * label = new QLabel(widget);
-		hLayout->addWidget(label);
+		_label = new QLabel(widget);
+		hLayout->addWidget(_label);
 		QGraphicsLinearLayout * layout = new QGraphicsLinearLayout(this);
 		setLayout(layout);
 		layout->addItem(scene->addWidget(widget));
 		if (!name.isEmpty()) {
 			labelText += " - " + name;
 		}
-		label->setText(labelText);
+		_label->setText(labelText);
 
 		if (type == CT_SYSTEM) {
 			widget->setStyleSheet("background: black");
-			label->setStyleSheet("color: white");
+			_label->setStyleSheet("color: white");
 		} else if (type == CT_TECHNIQUE) {
 			widget->setStyleSheet("background: " + QVariant(QColor(102, 152, 255)).toString() + ";");
 		} else if (type == CT_RENDERER) {
@@ -109,6 +115,189 @@ namespace widgets {
 			}
 		}
 		return policy;
+	}
+
+	bool WidgetEditComponent::isConnectionPossible(WidgetEditComponent * component) const {
+		if (component) {
+			for (std::vector<connections::ConnectionPolicy *>::const_iterator it = _policies.begin(); it != _policies.end(); ++it) {
+				// The policy of 'this' component cannot be checked against a relation and relation direction (because there isn't one)
+				connections::ConnectionPolicy * connectionPolicy = *it;
+				if ((*it)->isConnectionPossible(component->getComponentType(), component->getComponentSubType())) {
+					// The second one (the component) can be checked against all four attributes
+					if (component->isConnectionPossible(connectionPolicy->getRelation(), getOppositeRelationDirection(connectionPolicy->getRelationDirection()), _type, _subType)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	void WidgetEditComponent::setCaption() {
+		QString caption = _type;
+		if (_subType != CST_UNDEFINED) {
+			caption = caption + " (" + _subType + ") ";
+		}
+		if (!_name.isEmpty()) {
+			caption = caption + " - " + _name;
+		}
+		_label->setText(caption);
+	}
+
+	void WidgetEditComponent::mousePressEvent(QGraphicsSceneMouseEvent * evt) {
+		if (evt->button() == Qt::MouseButton::LeftButton) {
+			if (_parent->getConnectionMode() == WidgetEdit::CM_CONNECT_ENDING && this != _parent->getStartConnector()) {
+				// First make a selection of available policies
+				selectPolicy(_parent->getStartConnector());
+			} else if (_parent->getConnectionMode() == WidgetEdit::CM_DISCONNECT) {
+				// Make a selection of available connections (to be deleted)
+				selectConnection(false);
+				_parent->notifyConnectionsChanged();
+				return;
+			}
+			_parent->notifyComponentActivated(this);
+		}
+	}
+
+	void WidgetEditComponent::selectConnection(bool viewOnly) {
+		//	Display connections. These are actual connections this component has with other components
+		QString choices[MAX_NUMBER_OF_CONNECTIONS];
+		connections::Connection * connectionsAsArray[MAX_NUMBER_OF_CONNECTIONS];
+		int count = 0;
+		connections::Connection * connection = nullptr;
+		for (std::vector<connections::Connection *>::iterator it = _connections.begin(); it != _connections.end(); ++it) {
+			connection = *it;
+			connectionsAsArray[count] = connection;
+			if (!getName().isEmpty()) {
+				choices[count] = getName();
+			} else {
+				choices[count] = getComponentType();
+				if (!getComponentSubType().isEmpty()) {
+					if (getComponentSubType() != CST_UNDEFINED) {
+						choices[count] += " " + getComponentSubType();
+					}
+				}
+			}
+			choices[count] += " " + getRelationDescription(connection->getRelation(), connection->getRelationDirection(), connection->getComponentToBeConnectedWith()->getComponentType(), connection->getComponentToBeConnectedWith()->getComponentSubType()) + " ";
+			if (!connection->getComponentToBeConnectedWith()->getName().isEmpty()) {
+				choices[count] += connection->getComponentToBeConnectedWith()->getName();
+			} else {
+				choices[count] += connection->getComponentToBeConnectedWith()->getComponentType();
+				if (!connection->getComponentToBeConnectedWith()->getComponentSubType().isEmpty()) {
+					if (connection->getComponentToBeConnectedWith()->getComponentSubType() != CST_UNDEFINED) {
+						choices[count] += " " + connection->getComponentToBeConnectedWith()->getComponentSubType();
+					}
+				}
+			}
+			count++;
+		}
+
+		if (viewOnly) { // TODO: (Michael) check the GetParent() calls here
+			/*GetParent()->GetParent()->Enable(false); // Disables input from the parent
+			wxSingleChoiceDialog choiceWindow(this, _("overview of existing connections"), _("Existing connections"), count, choices, reinterpret_cast<void **>(0), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCENTRE);
+			choiceWindow.SetSize(320, 200);
+			choiceWindow.ShowModal();
+			GetParent()->GetParent()->Enable(true); // Enable input from the parent
+			GetParent()->GetParent()->SetFocus();*/
+		} else {
+			if (count > 0) {
+				/*GetParent()->GetParent()->Enable(false); // Disables input from the parent
+				wxSingleChoiceDialog choiceWindow(this, _("Select a connection to be deleted"), _("Delete a connection"), count, choices);
+				choiceWindow.SetSize(320, 200);
+				if (choiceWindow.ShowModal() == wxID_OK) {
+					deleteConnection(connectionsAsArray[choiceWindow.GetSelection()]);
+				}
+				GetParent()->GetParent()->Enable(true); // Enable input from the parent
+				GetParent()->GetParent()->SetFocus();*/
+			}
+		}
+	}
+
+	connections::ConnectionPolicy * WidgetEditComponent::selectPolicy(WidgetEditComponent * componentToBeConnectedWith) {
+		QString choices[MAX_NUMBER_OF_CONNECTIONS];
+		connections::ConnectionPolicy * policiesAsArray[MAX_NUMBER_OF_CONNECTIONS];
+		int count = 0;
+		connections::ConnectionPolicy * policy = nullptr;
+		for (std::vector<connections::ConnectionPolicy *>::iterator it = _policies.begin(); it != _policies.end(); ++it) {
+			policy = *it;
+
+			/*	Display only available connections. These are connections where the policy of this component allows it to connect
+			and if the other component (componentToBeConnectedWith) can also make the same connection.
+			**/
+			if (componentToBeConnectedWith->isConnectionPossible(policy->getRelation(), getOppositeRelationDirection(policy->getRelationDirection()), _type, _subType) && policy->isConnectionPossible(componentToBeConnectedWith->getComponentType(), componentToBeConnectedWith->getComponentSubType())) {
+				policiesAsArray[count] = policy;
+				choices[count] = getComponentType() + " ";
+				if (!getName().isEmpty()) {
+					choices[count] = getName();
+				} else {
+					choices[count] = getComponentType();
+					if (!getComponentSubType().isEmpty()) {
+						if (getComponentSubType() != CST_UNDEFINED) {
+							choices[count] += " " + getComponentSubType();
+						}
+					}
+				}
+				choices[count] += " " + policy->getRelationDescription() + " ";
+				if (!componentToBeConnectedWith->getName().isEmpty()) {
+					choices[count] += componentToBeConnectedWith->getName();
+				} else {
+					choices[count] += componentToBeConnectedWith->getComponentType();
+					if (!componentToBeConnectedWith->getComponentSubType().isEmpty()) {
+						if (componentToBeConnectedWith->getComponentSubType() != CST_UNDEFINED) {
+							choices[count] += " " + componentToBeConnectedWith->getComponentSubType();
+						}
+					}
+				}
+				count++;
+			}
+		}
+
+		if (count > 1) {// TODO: (Michael) check the GetParent() calls here
+			DialogChooseConnectionType dcct;
+			for (int i = 0; i < count; i++) {
+				dcct.comboBox->addItem(choices[i]);
+			}
+			int res = dcct.exec();
+			if (res == QDialog::DialogCode::Rejected) {
+				_selectedPolicy = nullptr;
+			} else {
+				_selectedPolicy = policiesAsArray[dcct.comboBox->currentIndex()];
+			}
+		} else if (count == 1) {
+			_selectedPolicy = policiesAsArray[0];
+		} else {
+			_selectedPolicy = nullptr;
+		}
+
+		return _selectedPolicy;
+	}
+
+	bool WidgetEditComponent::isConnectionPossible() const {
+		for (std::vector<connections::ConnectionPolicy *>::const_iterator it = _policies.begin(); it != _policies.end(); ++it) {
+			if (!(*it)->isPolicyLocked()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool WidgetEditComponent::isConnectionPossible(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith) const {
+		for (std::vector<connections::ConnectionPolicy *>::const_iterator it = _policies.begin(); it != _policies.end(); ++it) {
+			if ((*it)->isConnectionPossible(relation, relationDirection, typeToBeConnectedWith, subTypeToBeConnectedWith)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	const QString & WidgetEditComponent::getRelationDescription(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith) const {
+		for (std::vector<connections::ConnectionPolicy *>::const_iterator it = _policies.begin(); it != _policies.end(); ++it) {
+			QString description = (*it)->getRelationDescription(relation, relationDirection, typeToBeConnectedWith, subTypeToBeConnectedWith);
+			if (description != CRD_UNKNOWN) {
+				return (*it)->getRelationDescription(relation, relationDirection, typeToBeConnectedWith, subTypeToBeConnectedWith);
+			}
+		}
+		return CRD_UNKNOWN;
 	}
 
 } /* namespace widgets */
