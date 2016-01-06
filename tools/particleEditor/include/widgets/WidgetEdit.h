@@ -8,6 +8,7 @@ class QGraphicsView;
 
 namespace ParticleUniverse {
 	class Extern;
+	class IElement;
 	class ParticleAffector;
 	class ParticleBehaviour;
 	class ParticleEmitter;
@@ -23,6 +24,9 @@ namespace particleEditor {
 namespace widgets {
 
 	class WidgetEditComponent;
+
+	enum ComponentRelation;
+	enum ComponentRelationDirection;
 
 	class WidgetEdit : public QWidget, public Ui::editWidget {
 		Q_OBJECT
@@ -92,6 +96,11 @@ namespace widgets {
 		void createComponentFromEventHandler(WidgetEditComponent * observerEditComponent, ParticleUniverse::ParticleEventHandler * eventHandler, QPoint position);
 		void createComponentFromBehaviour(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleBehaviour * behaviour, QPoint position);
 		void createComponentFromExtern(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::Extern * externObject, QPoint position);
+		void createOtherConnections(const ParticleUniverse::ParticleTechnique * technique);
+		void createConnection(WidgetEditComponent * componentPrimary, WidgetEditComponent * componentSecundary, ComponentRelation relation, ComponentRelationDirection direction);
+		WidgetEditComponent * findEditComponent(const ParticleUniverse::IElement * puElement) const;
+		WidgetEditComponent * findEditComponent(const QString & name, const QString & type, WidgetEditComponent * skip = nullptr) const;
+		WidgetEditComponent * findEditComponentForTechnique(const QString & name, const QString & techniqueName) const;
 	};
 
 } /* namespace widgets */

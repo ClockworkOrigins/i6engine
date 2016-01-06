@@ -32,6 +32,9 @@ SET(includedir ./include)
 set(particleEditorSrc
 	${srcdir}/main.cpp
 	
+	${srcdir}/connections/Connection.cpp
+	${srcdir}/connections/LineConnector.cpp
+	
 	${srcdir}/widgets/MainWindow.cpp
 	${srcdir}/widgets/WidgetEdit.cpp
 	${srcdir}/widgets/WidgetEditComponent.cpp
@@ -49,6 +52,8 @@ QT5_WRAP_UI(particleEditorUI
 )
 
 QT5_WRAP_CPP(particleEditorGuiHeader
+	${includedir}/connections/LineConnector.h
+
 	${includedir}/widgets/MainWindow.h
 	${includedir}/widgets/WidgetEdit.h
 	${includedir}/widgets/WidgetEditComponent.h
@@ -57,6 +62,7 @@ QT5_WRAP_CPP(particleEditorGuiHeader
 	${includedir}/widgets/WidgetScript.h
 )
 
+source_group(connections /connections/*)
 source_group(widgets /widgets/*)
 SOURCE_GROUP(moc /moc_*)
 

@@ -9,7 +9,48 @@ namespace ParticleUniverse {
 
 namespace i6engine {
 namespace particleEditor {
+namespace connections {
+	class Connection;
+	class ConnectionPolicy;
+	class UniqueRelation;
+} /* namespace connections */
 namespace widgets {
+
+	static QString CT_SYSTEM = "System";
+	static QString CT_TECHNIQUE = "Technique";
+	static QString CT_RENDERER = "Renderer";
+	static QString CT_EMITTER = "Emitter";
+	static QString CT_AFFECTOR = "Affector";
+	static QString CT_OBSERVER = "Observer";
+	static QString CT_HANDLER = "Handler";
+	static QString CT_BEHAVIOUR = "Behaviour";
+	static QString CT_EXTERN = "Extern";
+	static QString CT_VISUAL = "Visual";
+
+	static QString CRD_INCLUDES = "";
+	static QString CRD_INCLUDED_BY = "";
+	static QString CRD_EXCLUDES = "";
+	static QString CRD_EXCLUDED_BY = "";
+	static QString CRD_HANDLES = "";
+	static QString CRD_HANDLED_BY = "";
+	static QString CRD_EMITS = "";
+	static QString CRD_EMITTED_BY = "";
+	static QString CRD_AFFECTS = "";
+	static QString CRD_AFFECTED_BY = "";
+	static QString CRD_OBSERVES = "";
+	static QString CRD_OBSERVED_BY = "";
+	static QString CRD_INTERFACES = "";
+	static QString CRD_INTERFACED_BY = "";
+	static QString CRD_SLAVES = "";
+	static QString CRD_SLAVE_OF = "";
+	static QString CRD_MASTER = "";
+	static QString CRD_ENABLES = "";
+	static QString CRD_ENABLED_BY = "";
+	static QString CRD_FORCES = "";
+	static QString CRD_FORCED_BY = "";
+	static QString CRD_PLACES = "";
+	static QString CRD_PLACED_BY = "";
+	static QString CRD_UNKNOWN = "";
 
 	// 'Enums: Component SubType'
 
@@ -92,6 +133,8 @@ namespace widgets {
 	static QString CST_EXTERN_PHYSX_FLUID;
 	static QString CST_EXTERN_VORTEX;
 
+	static const QString CST_UNDEFINED = "<undefined>";
+
 	// Particle Universe Renderer names (must not be internationalized)
 	static const QString RENDERER_BEAM = "Beam";
 	static const QString RENDERER_BILLBOARD = "Billboard";
@@ -171,22 +214,46 @@ namespace widgets {
 	static const QString EXTERN_PHYSX_FLUID = "PhysXFluid";
 	static const QString EXTERN_VORTEX = "Vortex";
 
+	// Enum: Component Relation
+	enum ComponentRelation {
+		CR_INCLUDE,
+		CR_EXCLUDE,
+		CR_HANDLE,
+		CR_EMIT,
+		CR_EMIT_SAME_TYPE,
+		CR_AFFECT,
+		CR_OBSERVE,
+		CR_INTERFACE,
+		CR_SLAVE,
+		CR_MASTER,
+		CR_ENABLE,
+		CR_FORCE,
+		CR_PLACE,
+		CR_UNKNOWN
+	};
+
+	// Enum: Component Relation
+	enum ComponentRelationDirection {
+		CRDIR_PRIMARY,
+		CRDIR_SECUNDAIRY,
+		CRDIR_EQUAL
+	};
+
+	// Function to return the opposite relation direction
+	inline ComponentRelationDirection getOppositeRelationDirection(ComponentRelationDirection relationDirection) {
+		if (relationDirection == CRDIR_PRIMARY) {
+			return CRDIR_SECUNDAIRY;
+		} else if (relationDirection == CRDIR_SECUNDAIRY) {
+			return CRDIR_PRIMARY;
+		}
+		return CRDIR_EQUAL;
+	}
+
 	class WidgetEditComponent : public QGraphicsWidget {
 		Q_OBJECT
 		Q_INTERFACES(QGraphicsItem)
 
 	public:
-		static QString EC_SYSTEM;
-		static QString EC_RENDERER;
-		static QString EC_TECHNIQUE;
-		static QString EC_EMITTER;
-		static QString EC_AFFECTOR;
-		static QString EC_OBSERVER;
-		static QString EC_HANDLER;
-		static QString EC_BEHAVIOUR;
-		static QString EC_EXTERN;
-		static QString CST_UNDEFINED;
-
 		/**
 		 * \brief constructor
 		 */
@@ -197,21 +264,46 @@ namespace widgets {
 		 */
 		~WidgetEditComponent();
 
-		QString getType() const {
+		QString getName() const {
+			return _name;
+		}
+
+		QString getComponentType() const {
 			return _type;
+		}
+
+		QString getComponentSubType() const {
+			return _subType;
 		}
 
 		void setPUElement(ParticleUniverse::IElement * element) {
 			_element = element;
 		}
 
+		ParticleUniverse::IElement * getPUElement() const {
+			return _element;
+		}
+
+		void addPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, const QString & relationDescription, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith = CST_UNDEFINED, bool multipleConnectionsPossible = true, bool ignoreSubType = true, const QColor & colour = QColor(0, 0, 0), Qt::PenStyle lineStyle = Qt::SolidLine);
+		
+		void addUniqueRelation(ComponentRelation relation, ComponentRelationDirection relationDirection);
+
+		void addConnection(WidgetEditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection);
+
+		bool isRelationUnique(ComponentRelation relation, ComponentRelationDirection relationDirection) const;
+
+		bool isConnected(WidgetEditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection) const;
+
+		connections::ConnectionPolicy * getPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith = CST_UNDEFINED) const;
+
 	private:
+		QString _name;
 		QString _type;
+		QString _subType;
 		ParticleUniverse::IElement * _element;
-
-		/*QRectF boundingRect() const override;
-
-		void paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *) override;*/
+		std::vector<connections::ConnectionPolicy *> _policies;
+		std::vector<connections::UniqueRelation *> _uniqueRelations;
+		std::vector<connections::Connection *> _connections;
 	};
 
 } /* namespace widgets */
