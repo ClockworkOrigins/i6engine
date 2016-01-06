@@ -324,6 +324,7 @@ namespace widgets {
 		connections::ConnectionPolicy * _selectedPolicy;
 
 		void mousePressEvent(QGraphicsSceneMouseEvent * evt) override;
+
 		void selectConnection(bool viewOnly);
 		connections::ConnectionPolicy * selectPolicy(WidgetEditComponent * componentToBeConnectedWith);
 		bool isConnectionPossible() const;

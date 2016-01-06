@@ -3,7 +3,6 @@
 
 #include "ui_widgetEdit.h"
 
-class QGraphicsScene;
 class QGraphicsView;
 
 namespace ParticleUniverse {
@@ -26,6 +25,7 @@ namespace connections {
 } /* namespace connections */
 namespace widgets {
 
+	class GraphicsScene;
 	class WidgetEditComponent;
 
 	enum ComponentRelation;
@@ -82,7 +82,7 @@ namespace widgets {
 		void triggerResetConnectionMode();
 
 	private:
-		QGraphicsScene * _graphicsScene;
+		GraphicsScene * _graphicsScene;
 		QGraphicsView * _graphicsView;
 		std::vector<WidgetEditComponent *> _components;
 		int _offsetX;

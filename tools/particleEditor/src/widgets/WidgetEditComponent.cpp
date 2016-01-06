@@ -5,12 +5,17 @@
 #include "widgets/DialogChooseConnectionType.h"
 #include "widgets/WidgetEdit.h"
 
+#include <QDataStream>
+#include <QDrag>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMimeData>
+
+#include <iostream>
 
 namespace i6engine {
 namespace particleEditor {
@@ -154,6 +159,17 @@ namespace widgets {
 				selectConnection(false);
 				_parent->notifyConnectionsChanged();
 				return;
+			} else if (_parent->getConnectionMode() == WidgetEdit::CM_CONNECT_NONE) {
+				QDrag drag(this);
+				QMimeData * mimeData = new QMimeData();
+				QByteArray ba;
+				QDataStream ds(&ba, QIODevice::ReadWrite);
+				QPointF offset(pos() - evt->scenePos());
+				int i = int(this);
+				ds << i << offset;
+				mimeData->setData("widget", ba);
+				drag.setMimeData(mimeData);
+				drag.exec(Qt::MoveAction);
 			}
 			_parent->notifyComponentActivated(this);
 		} else if (evt->button() == Qt::MouseButton::RightButton) {

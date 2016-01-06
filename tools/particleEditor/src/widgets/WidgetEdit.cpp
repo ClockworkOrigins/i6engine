@@ -3,6 +3,7 @@
 #include "connections/Connection.h"
 #include "connections/LineConnector.h"
 
+#include "widgets/GraphicsScene.h"
 #include "widgets/WidgetEditComponent.h"
 
 #include "ParticleUniverseAffector.h"
@@ -20,7 +21,6 @@
 #include "ParticleEventHandlers/ParticleUniverseDoAffectorEventHandler.h"
 #include "ParticleEventHandlers/ParticleUniverseDoPlacementParticleEventHandler.h"
 
-#include <QGraphicsScene>
 #include <QGraphicsView>
 
 namespace i6engine {
@@ -31,7 +31,7 @@ namespace widgets {
 	const QColor DRAW_EMITTED_COLOURCODE = QColor(255, 0, 0);
 	const QColor DRAW_SPECIAL_CASE_COLOURCODE = QColor(56, 124, 68);
 
-	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsScene(new QGraphicsScene(this)), _graphicsView(new QGraphicsView(_graphicsScene)), _components(), _offsetX(48), _offsetY(8), _techniqueCounter(1), _rendererCounter(1), _emitterCounter(1), _affectorCounter(1), _observerCounter(1), _handlerCounter(1), _behaviourCounter(1), _externCounter(1), _connectionMode(CM_CONNECT_NONE), _startConnector(nullptr), _endConnector(nullptr), _connections() {
+	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsScene(new GraphicsScene(this)), _graphicsView(new QGraphicsView(_graphicsScene)), _components(), _offsetX(48), _offsetY(8), _techniqueCounter(1), _rendererCounter(1), _emitterCounter(1), _affectorCounter(1), _observerCounter(1), _handlerCounter(1), _behaviourCounter(1), _externCounter(1), _connectionMode(CM_CONNECT_NONE), _startConnector(nullptr), _endConnector(nullptr), _connections() {
 		setupUi(this);
 
 		verticalLayout->addWidget(_graphicsView);
@@ -41,6 +41,7 @@ namespace widgets {
 		verticalLayout->setStretch(1, 1);
 
 		_graphicsView->show();
+		_graphicsView->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
 	}
 
 	WidgetEdit::~WidgetEdit() {

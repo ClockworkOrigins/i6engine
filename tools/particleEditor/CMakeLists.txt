@@ -36,6 +36,7 @@ set(particleEditorSrc
 	${srcdir}/connections/LineConnector.cpp
 	
 	${srcdir}/widgets/DialogChooseConnectionType.cpp
+	${srcdir}/widgets/GraphicsScene.cpp
 	${srcdir}/widgets/MainWindow.cpp
 	${srcdir}/widgets/WidgetEdit.cpp
 	${srcdir}/widgets/WidgetEditComponent.cpp
@@ -57,6 +58,7 @@ QT5_WRAP_CPP(particleEditorGuiHeader
 	${includedir}/connections/LineConnector.h
 	
 	${includedir}/widgets/DialogChooseConnectionType.h
+	${includedir}/widgets/GraphicsScene.h
 	${includedir}/widgets/MainWindow.h
 	${includedir}/widgets/WidgetEdit.h
 	${includedir}/widgets/WidgetEditComponent.h
