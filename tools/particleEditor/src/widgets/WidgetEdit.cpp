@@ -3,7 +3,16 @@
 #include "connections/Connection.h"
 #include "connections/LineConnector.h"
 
+#include "widgets/AffectorPropertyWindow.h"
+#include "widgets/BehaviourPropertyWindow.h"
+#include "widgets/EmitterPropertyWindow.h"
+#include "widgets/EventHandlerPropertyWindow.h"
+#include "widgets/ExternPropertyWindow.h"
 #include "widgets/GraphicsScene.h"
+#include "widgets/ObserverPropertyWindow.h"
+#include "widgets/RendererPropertyWindow.h"
+#include "widgets/SystemPropertyWindow.h"
+#include "widgets/TechniquePropertyWindow.h"
 #include "widgets/WidgetEditComponent.h"
 
 #include "ParticleUniverseAffector.h"
@@ -78,6 +87,8 @@ namespace widgets {
 				_startConnector = nullptr;
 				_endConnector = nullptr;
 			}
+		} else {
+			emit setPropertyWindow(component->getPropertyWindow());
 		}
 	}
 
@@ -257,7 +268,7 @@ namespace widgets {
 	void WidgetEdit::createTechniqueForComponent(WidgetEditComponent * component) {
 		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 		ParticleUniverse::ParticleTechnique * newTechnique = particleSystemManager->createTechnique();
-		//newTechnique->setName(component->getPropertyWindow()->getComponentName());
+		newTechnique->setName(component->getPropertyWindow()->getComponentName().toStdString());
 		component->setPUElement(newTechnique);
 	}
 
@@ -270,28 +281,28 @@ namespace widgets {
 	void WidgetEdit::createEmitterForComponent(const QString & type, WidgetEditComponent * component) {
 		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 		ParticleUniverse::ParticleEmitter * newEmitter = particleSystemManager->createEmitter(type.toStdString());
-		//newEmitter->setName(component->getPropertyWindow()->getComponentName());
+		newEmitter->setName(component->getPropertyWindow()->getComponentName().toStdString());
 		component->setPUElement(newEmitter);
 	}
 
 	void WidgetEdit::createAffectorForComponent(const QString & type, WidgetEditComponent * component) {
 		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 		ParticleUniverse::ParticleAffector * newAffector = particleSystemManager->createAffector(type.toStdString());
-		//newAffector->setName(component->getPropertyWindow()->getComponentName());
+		newAffector->setName(component->getPropertyWindow()->getComponentName().toStdString());
 		component->setPUElement(newAffector);
 	}
 
 	void WidgetEdit::createObserverForComponent(const QString & type, WidgetEditComponent * component) {
 		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 		ParticleUniverse::ParticleObserver * newObserver = particleSystemManager->createObserver(type.toStdString());
-		//newObserver->setName(component->getPropertyWindow()->getComponentName());
+		newObserver->setName(component->getPropertyWindow()->getComponentName().toStdString());
 		component->setPUElement(newObserver);
 	}
 
 	void WidgetEdit::createHandlerForComponent(const QString & type, WidgetEditComponent * component) {
 		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 		ParticleUniverse::ParticleEventHandler * newHandler = particleSystemManager->createEventHandler(type.toStdString());
-		//newHandler->setName(component->getPropertyWindow()->getComponentName());
+		newHandler->setName(component->getPropertyWindow()->getComponentName().toStdString());
 		component->setPUElement(newHandler);
 	}
 
@@ -304,7 +315,7 @@ namespace widgets {
 	void WidgetEdit::createExternForComponent(const QString & type, WidgetEditComponent * component) {
 		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 		ParticleUniverse::Extern * newExtern = particleSystemManager->createExtern(type.toStdString());
-		//newExtern->setName(component->getPropertyWindow()->getComponentName());
+		newExtern->setName(component->getPropertyWindow()->getComponentName().toStdString());
 		component->setPUElement(newExtern);
 	}
 
@@ -327,7 +338,7 @@ namespace widgets {
 	WidgetEditComponent * WidgetEdit::createParticleSystemEditComponent() {
 		WidgetEditComponent * systemComponent = new WidgetEditComponent(this, _graphicsScene, "mySystem", CT_SYSTEM, CST_UNDEFINED);
 		
-		//systemComponent->createPropertyWindow(CST_UNDEFINED); // Recreate it, so it contains the root frame
+		systemComponent->createPropertyWindow(CST_UNDEFINED); // Recreate it, so it contains the root frame
 
 		// Altough it is possible that a particle system itself is emitted, the connection to the emitter is not defined (there can only be one system on the canvas)
 		systemComponent->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_TECHNIQUE, CST_UNDEFINED);
@@ -447,12 +458,10 @@ namespace widgets {
 			return false;
 		}
 
-		//SystemPropertyWindow * systemPropertyWindow = static_cast<SystemPropertyWindow *>(particleSystemEditComponent->getPropertyWindow());
+		SystemPropertyWindow * systemPropertyWindow = static_cast<SystemPropertyWindow *>(particleSystemEditComponent->getPropertyWindow());
 		particleSystemEditComponent->setName(QString::fromStdString(particleSystem->getTemplateName()));
 		particleSystemEditComponent->setCaption();
-		/*systemPropertyWindow->copyAttributesFromSystem(particleSystem);
-		particleSystemEditComponent->SetFocus(); // Causes the property window to refresh
-		*/
+		//systemPropertyWindow->copyAttributesFromSystem(particleSystem);
 		return true;
 	}
 
@@ -778,7 +787,6 @@ namespace widgets {
 	void WidgetEdit::createConnection(WidgetEditComponent * componentPrimary, WidgetEditComponent * componentSecondary, ComponentRelation relation, ComponentRelationDirection direction) {
 		// Establish the connection between the two
 		connections::ConnectionPolicy * policy = componentPrimary->getPolicy(relation, direction, componentSecondary->getComponentType());
-		//mCanvas->connect(componentPrimary, componentSecondary, relation, policy->getColour(), policy->getLineStyle());
 		connections::LineConnector * lc = new connections::LineConnector(componentPrimary, componentSecondary, policy->getColour(), policy->getLineStyle());
 		_connections.insert(std::make_pair(std::make_pair(componentPrimary, componentSecondary), lc));
 		_connections.insert(std::make_pair(std::make_pair(componentSecondary, componentPrimary), lc));
@@ -910,9 +918,9 @@ namespace widgets {
 			static_cast<ParticleUniverse::ParticleObserver *>(component->getPUElement())->setName(name);
 		}
 
-		/*if (component->getPropertyWindow()) {
-			component->getPropertyWindow()->setComponentName(name);
-		}*/
+		if (component->getPropertyWindow()) {
+			component->getPropertyWindow()->setComponentName(QString::fromStdString(name));
+		}
 		component->setName(QString::fromStdString(name));
 		component->setCaption();
 	}

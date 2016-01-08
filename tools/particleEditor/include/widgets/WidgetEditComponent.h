@@ -17,6 +17,7 @@ namespace connections {
 } /* namespace connections */
 namespace widgets {
 
+	class PropertyWindow;
 	class WidgetEdit;
 
 	static QString CT_SYSTEM = "System";
@@ -54,87 +55,6 @@ namespace widgets {
 	static QString CRD_PLACES = "";
 	static QString CRD_PLACED_BY = "";
 	static QString CRD_UNKNOWN = "";
-
-	// 'Enums: Component SubType'
-
-	// Renderers
-	static QString CST_RENDERER_BEAM;
-	static QString CST_RENDERER_BILLBOARD;
-	static QString CST_RENDERER_SPHERE;
-	static QString CST_RENDERER_BOX;
-	static QString CST_RENDERER_ENTITY;
-	static QString CST_RENDERER_LIGHT;
-	static QString CST_RENDERER_RIBBONTRAIL;
-
-	// Emitters
-	static QString CST_EMITTER_BOX;
-	static QString CST_EMITTER_CIRCLE;
-	static QString CST_EMITTER_LINE;
-	static QString CST_EMITTER_MESH_SURFACE;
-	static QString CST_EMITTER_POINT;
-	static QString CST_EMITTER_POSITION;
-	static QString CST_EMITTER_SLAVE;
-	static QString CST_EMITTER_SPHERE;
-	static QString CST_EMITTER_VERTEX;
-
-	// Affector
-	static QString CST_AFFECTOR_ALIGN;
-	static QString CST_AFFECTOR_BOX_COLLIDER;
-	static QString CST_AFFECTOR_COLLISION_AVOIDANCE;
-	static QString CST_AFFECTOR_COLOUR;
-	static QString CST_AFFECTOR_FLOCK_CENTERING;
-	static QString CST_AFFECTOR_FORCEFIELD;
-	static QString CST_AFFECTOR_GEOMETRY_ROTATOR;
-	static QString CST_AFFECTOR_GRAVITY;
-	static QString CST_AFFECTOR_INTER_PARTICLE_COLLIDER;
-	static QString CST_AFFECTOR_JET;
-	static QString CST_AFFECTOR_LINE;
-	static QString CST_AFFECTOR_LINEAR_FORCE;
-	static QString CST_AFFECTOR_PARTICLE_FOLLOWER;
-	static QString CST_AFFECTOR_PATH_FOLLOWER;
-	static QString CST_AFFECTOR_PLANE_COLLIDER;
-	static QString CST_AFFECTOR_RANDOMISER;
-	static QString CST_AFFECTOR_SCALE;
-	static QString CST_AFFECTOR_SCALE_VELOCITY;
-	static QString CST_AFFECTOR_SINE_FORCE;
-	static QString CST_AFFECTOR_SPHERE_COLLIDER;
-	static QString CST_AFFECTOR_TEXTURE_ANIMATOR;
-	static QString CST_AFFECTOR_TEXTURE_ROTATOR;
-	static QString CST_AFFECTOR_VELOCITY_MATCHING;
-	static QString CST_AFFECTOR_VORTEX;
-
-	// Observers
-	static QString CST_OBSERVER_ON_CLEAR;
-	static QString CST_OBSERVER_ON_COLLISION;
-	static QString CST_OBSERVER_ON_COUNT;
-	static QString CST_OBSERVER_ON_EMISSION;
-	static QString CST_OBSERVER_ON_EVENTFLAG;
-	static QString CST_OBSERVER_ON_EXPIRE;
-	static QString CST_OBSERVER_ON_POSITION;
-	static QString CST_OBSERVER_ON_QUOTA;
-	static QString CST_OBSERVER_ON_RANDOM;
-	static QString CST_OBSERVER_ON_TIME;
-	static QString CST_OBSERVER_ON_VELOCITY;
-
-	// Event Handlers
-	static QString CST_HANDLER_DO_AFFECTOR;
-	static QString CST_HANDLER_DO_ENABLE_COMPONENT;
-	static QString CST_HANDLER_DO_EXPIRE;
-	static QString CST_HANDLER_DO_FREEZE;
-	static QString CST_HANDLER_DO_PLACEMENT_PARTICLE;
-	static QString CST_HANDLER_DO_SCALE;
-	static QString CST_HANDLER_DO_STOP_SYSTEM;
-
-	// Behaviour
-	static QString CST_BEHAVIOUR_SLAVE;
-
-	// Extern
-	static QString CST_EXTERN_BOX_COLLIDER;
-	static QString CST_EXTERN_SPHERE_COLLIDER;
-	static QString CST_EXTERN_GRAVITY;
-	static QString CST_EXTERN_PHYSX_ACTOR;
-	static QString CST_EXTERN_PHYSX_FLUID;
-	static QString CST_EXTERN_VORTEX;
 
 	static const QString CST_UNDEFINED = "<undefined>";
 
@@ -216,6 +136,87 @@ namespace widgets {
 	static const QString EXTERN_PHYSX_ACTOR = "PhysXActor";
 	static const QString EXTERN_PHYSX_FLUID = "PhysXFluid";
 	static const QString EXTERN_VORTEX = "Vortex";
+
+	// 'Enums: Component SubType'
+
+	// Renderers
+	static QString CST_RENDERER_BEAM = RENDERER_BEAM;
+	static QString CST_RENDERER_BILLBOARD = RENDERER_BILLBOARD;
+	static QString CST_RENDERER_SPHERE = RENDERER_SPHERE;
+	static QString CST_RENDERER_BOX = RENDERER_BOX;
+	static QString CST_RENDERER_ENTITY = RENDERER_ENTITY;
+	static QString CST_RENDERER_LIGHT = RENDERER_LIGHT;
+	static QString CST_RENDERER_RIBBONTRAIL = RENDERER_RIBBONTRAIL;
+
+	// Emitters
+	static QString CST_EMITTER_BOX = EMITTER_BOX;
+	static QString CST_EMITTER_CIRCLE = EMITTER_CIRCLE;
+	static QString CST_EMITTER_LINE = EMITTER_LINE;
+	static QString CST_EMITTER_MESH_SURFACE = EMITTER_MESH_SURFACE;
+	static QString CST_EMITTER_POINT = EMITTER_POINT;
+	static QString CST_EMITTER_POSITION = EMITTER_POSITION;
+	static QString CST_EMITTER_SLAVE = EMITTER_SLAVE;
+	static QString CST_EMITTER_SPHERE = EMITTER_SPHERE;
+	static QString CST_EMITTER_VERTEX = EMITTER_VERTEX;
+
+	// Affector
+	static QString CST_AFFECTOR_ALIGN = AFFECTOR_ALIGN;
+	static QString CST_AFFECTOR_BOX_COLLIDER = AFFECTOR_BOX_COLLIDER;
+	static QString CST_AFFECTOR_COLLISION_AVOIDANCE = AFFECTOR_COLLISION_AVOIDANCE;
+	static QString CST_AFFECTOR_COLOUR = AFFECTOR_COLOUR;
+	static QString CST_AFFECTOR_FLOCK_CENTERING = AFFECTOR_FLOCK_CENTERING;
+	static QString CST_AFFECTOR_FORCEFIELD = AFFECTOR_FORCEFIELD;
+	static QString CST_AFFECTOR_GEOMETRY_ROTATOR = AFFECTOR_GEOMETRY_ROTATOR;
+	static QString CST_AFFECTOR_GRAVITY = AFFECTOR_GRAVITY;
+	static QString CST_AFFECTOR_INTER_PARTICLE_COLLIDER = AFFECTOR_INTER_PARTICLE_COLLIDER;
+	static QString CST_AFFECTOR_JET = AFFECTOR_JET;
+	static QString CST_AFFECTOR_LINE = AFFECTOR_LINE;
+	static QString CST_AFFECTOR_LINEAR_FORCE = AFFECTOR_LINEAR_FORCE;
+	static QString CST_AFFECTOR_PARTICLE_FOLLOWER = AFFECTOR_PARTICLE_FOLLOWER;
+	static QString CST_AFFECTOR_PATH_FOLLOWER = AFFECTOR_PATH_FOLLOWER;
+	static QString CST_AFFECTOR_PLANE_COLLIDER = AFFECTOR_PLANE_COLLIDER;
+	static QString CST_AFFECTOR_RANDOMISER = AFFECTOR_RANDOMISER;
+	static QString CST_AFFECTOR_SCALE = AFFECTOR_SCALE;
+	static QString CST_AFFECTOR_SCALE_VELOCITY = AFFECTOR_SCALE_VELOCITY;
+	static QString CST_AFFECTOR_SINE_FORCE = AFFECTOR_SINE_FORCE;
+	static QString CST_AFFECTOR_SPHERE_COLLIDER = AFFECTOR_SPHERE_COLLIDER;
+	static QString CST_AFFECTOR_TEXTURE_ANIMATOR = AFFECTOR_TEXTURE_ANIMATOR;
+	static QString CST_AFFECTOR_TEXTURE_ROTATOR = AFFECTOR_TEXTURE_ROTATOR;
+	static QString CST_AFFECTOR_VELOCITY_MATCHING = AFFECTOR_VELOCITY_MATCHING;
+	static QString CST_AFFECTOR_VORTEX = AFFECTOR_VORTEX;
+
+	// Observers
+	static QString CST_OBSERVER_ON_CLEAR = OBSERVER_ON_CLEAR;
+	static QString CST_OBSERVER_ON_COLLISION = OBSERVER_ON_COLLISION;
+	static QString CST_OBSERVER_ON_COUNT = OBSERVER_ON_COUNT;
+	static QString CST_OBSERVER_ON_EMISSION = OBSERVER_ON_EMISSION;
+	static QString CST_OBSERVER_ON_EVENTFLAG = OBSERVER_ON_EVENTFLAG;
+	static QString CST_OBSERVER_ON_EXPIRE = OBSERVER_ON_EXPIRE;
+	static QString CST_OBSERVER_ON_POSITION = OBSERVER_ON_POSITION;
+	static QString CST_OBSERVER_ON_QUOTA = OBSERVER_ON_QUOTA;
+	static QString CST_OBSERVER_ON_RANDOM = OBSERVER_ON_RANDOM;
+	static QString CST_OBSERVER_ON_TIME = OBSERVER_ON_TIME;
+	static QString CST_OBSERVER_ON_VELOCITY = OBSERVER_ON_VELOCITY;
+
+	// Event Handlers
+	static QString CST_HANDLER_DO_AFFECTOR = HANDLER_DO_AFFECTOR;
+	static QString CST_HANDLER_DO_ENABLE_COMPONENT = HANDLER_DO_ENABLE_COMPONENT;
+	static QString CST_HANDLER_DO_EXPIRE = HANDLER_DO_EXPIRE;
+	static QString CST_HANDLER_DO_FREEZE = HANDLER_DO_FREEZE;
+	static QString CST_HANDLER_DO_PLACEMENT_PARTICLE = HANDLER_DO_PLACEMENT_PARTICLE;
+	static QString CST_HANDLER_DO_SCALE = HANDLER_DO_SCALE;
+	static QString CST_HANDLER_DO_STOP_SYSTEM = HANDLER_DO_STOP_SYSTEM;
+
+	// Behaviour
+	static QString CST_BEHAVIOUR_SLAVE = BEHAVIOUR_SLAVE;
+
+	// Extern
+	static QString CST_EXTERN_BOX_COLLIDER = EXTERN_BOX_COLLIDER;
+	static QString CST_EXTERN_SPHERE_COLLIDER = EXTERN_SPHERE_COLLIDER;
+	static QString CST_EXTERN_GRAVITY = EXTERN_GRAVITY;
+	static QString CST_EXTERN_PHYSX_ACTOR = EXTERN_PHYSX_ACTOR;
+	static QString CST_EXTERN_PHYSX_FLUID = EXTERN_PHYSX_FLUID;
+	static QString CST_EXTERN_VORTEX = EXTERN_VORTEX;
 
 	// Enum: Component Relation
 	enum ComponentRelation {
@@ -311,6 +312,12 @@ namespace widgets {
 
 		void setCaption();
 
+		PropertyWindow * createPropertyWindow(QString subType, const PropertyWindow * propertyWindow = nullptr);
+
+		PropertyWindow * getPropertyWindow() const {
+			return _propertyWindow;
+		}
+
 	private:
 		WidgetEdit * _parent;
 		QLabel * _label;
@@ -322,6 +329,8 @@ namespace widgets {
 		std::vector<connections::UniqueRelation *> _uniqueRelations;
 		std::vector<connections::Connection *> _connections;
 		connections::ConnectionPolicy * _selectedPolicy;
+		PropertyWindow * _propertyWindow;
+		PropertyWindow * _oldPropertyWindow;
 
 		void mousePressEvent(QGraphicsSceneMouseEvent * evt) override;
 

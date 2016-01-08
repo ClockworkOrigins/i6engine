@@ -2,6 +2,7 @@
 
 #include "i6engine/i6engineBuildSettings.h"
 
+#include "widgets/PropertyWindow.h"
 #include "widgets/WidgetEdit.h"
 #include "widgets/WidgetParticleList.h"
 #include "widgets/WidgetRender.h"
@@ -17,7 +18,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _toolBarEdit(nullptr), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render), _particleSystemCounter(0) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _toolBarEdit(nullptr), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render), _particleSystemCounter(0), _leftLayout(nullptr), _currentPropertyWindow(nullptr) {
 		setupUi(this);
 
 		showMaximized();
@@ -58,7 +59,12 @@ namespace widgets {
 
 		gridLayout->addWidget(hWidget, 1, 0);
 
-		hLayout->addWidget(_particleListWidget);
+		QWidget * leftWidget = new QWidget(this);
+		_leftLayout = new QVBoxLayout(leftWidget);
+		leftWidget->setLayout(_leftLayout);
+		_leftLayout->addWidget(_particleListWidget);
+
+		hLayout->addWidget(leftWidget);
 		hLayout->addWidget(_tabWidget);
 
 		QVBoxLayout * vLayout = new QVBoxLayout(_renderWrapper);
@@ -109,6 +115,8 @@ namespace widgets {
 		toolBarLayout->addWidget(_toolBarEdit);
 
 		_toolBarEdit->hide();
+
+		connect(_editWidget, SIGNAL(setPropertyWindow(PropertyWindow *)), this, SLOT(setPropertyWindow(PropertyWindow *)));
 	}
 
 	MainWindow::~MainWindow() {
@@ -226,10 +234,16 @@ namespace widgets {
 			_renderWrapper->layout()->addWidget(_renderWidget);
 			_editWidget->verticalLayout->removeWidget(_renderWidget);
 			_toolBarEdit->hide();
+			if (_currentPropertyWindow) {
+				_currentPropertyWindow->hide();
+			}
 		} else if (_currentTab == CurrentTab::Edit && CurrentTab(index) == CurrentTab::Script) {
 			_renderWrapper->layout()->addWidget(_renderWidget);
 			_editWidget->verticalLayout->removeWidget(_renderWidget);
 			_toolBarEdit->hide();
+			if (_currentPropertyWindow) {
+				_currentPropertyWindow->hide();
+			}
 		} else if (_currentTab == CurrentTab::Render && CurrentTab(index) == CurrentTab::Edit) {
 			_renderWrapper->layout()->removeWidget(_renderWidget);
 			_editWidget->verticalLayout->addWidget(_renderWidget);
@@ -237,6 +251,9 @@ namespace widgets {
 			_editWidget->verticalLayout->setStretch(0, 1);
 			_editWidget->verticalLayout->setStretch(1, 1);
 			_toolBarEdit->show();
+			if (_currentPropertyWindow) {
+				_currentPropertyWindow->show();
+			}
 		} else if (_currentTab == CurrentTab::Script && CurrentTab(index) == CurrentTab::Edit) {
 			_renderWrapper->layout()->removeWidget(_renderWidget);
 			_editWidget->verticalLayout->addWidget(_renderWidget);
@@ -244,9 +261,24 @@ namespace widgets {
 			_editWidget->verticalLayout->setStretch(0, 1);
 			_editWidget->verticalLayout->setStretch(1, 1);
 			_toolBarEdit->show();
+			if (_currentPropertyWindow) {
+				_currentPropertyWindow->show();
+			}
 		}
 
 		_currentTab = CurrentTab(index);
+	}
+
+	void MainWindow::setPropertyWindow(PropertyWindow * propertyWindow) {
+		if (_currentPropertyWindow) {
+			_leftLayout->removeWidget(_currentPropertyWindow);
+		}
+		if (propertyWindow) {
+			_leftLayout->addWidget(propertyWindow);
+			_leftLayout->setStretch(0, 1);
+			_leftLayout->setStretch(1, 1);
+		}
+		_currentPropertyWindow = propertyWindow;
 	}
 
 } /* namespace widgets */

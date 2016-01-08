@@ -9,6 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	class PropertyWindow;
 	class WidgetEdit;
 	class WidgetParticleList;
 	class WidgetRender;
@@ -36,6 +37,7 @@ namespace widgets {
 		void handleStopAction();
 		void createNewSystem(const QString & particle);
 		void tabChanged(int index);
+		void setPropertyWindow(PropertyWindow * propertyWindow);
 
 	private:
 		enum class CurrentTab {
@@ -55,6 +57,8 @@ namespace widgets {
 		QString _currentParticleTemplate;
 		CurrentTab _currentTab;
 		uint32_t _particleSystemCounter;
+		QVBoxLayout * _leftLayout;
+		QWidget * _currentPropertyWindow;
 	};
 
 } /* namespace widgets */

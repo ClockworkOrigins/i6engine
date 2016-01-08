@@ -26,6 +26,7 @@ namespace connections {
 namespace widgets {
 
 	class GraphicsScene;
+	class PropertyWindow;
 	class WidgetEditComponent;
 
 	enum ComponentRelation;
@@ -66,6 +67,9 @@ namespace widgets {
 		}
 
 		void resetConnectionMode();
+
+	signals:
+		void setPropertyWindow(PropertyWindow *);
 
 	private slots:
 		void setNewParticleSystem(ParticleUniverse::ParticleSystem * newParticleSystem);

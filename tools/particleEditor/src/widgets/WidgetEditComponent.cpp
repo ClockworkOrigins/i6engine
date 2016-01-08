@@ -2,7 +2,24 @@
 
 #include "connections/Connection.h"
 
+#include "factories/AffectorPropertyWindowFactory.h"
+#include "factories/BehaviourPropertyWindowFactory.h"
+#include "factories/EmitterPropertyWindowFactory.h"
+#include "factories/EventHandlerPropertyWindowFactory.h"
+#include "factories/ExternPropertyWindowFactory.h"
+#include "factories/ObserverPropertyWindowFactory.h"
+#include "factories/RendererPropertyWindowFactory.h"
+
+#include "widgets/AffectorPropertyWindow.h"
+#include "widgets/BehaviourPropertyWindow.h"
 #include "widgets/DialogChooseConnectionType.h"
+#include "widgets/EmitterPropertyWindow.h"
+#include "widgets/EventHandlerPropertyWindow.h"
+#include "widgets/ExternPropertyWindow.h"
+#include "widgets/ObserverPropertyWindow.h"
+#include "widgets/RendererPropertyWindow.h"
+#include "widgets/SystemPropertyWindow.h"
+#include "widgets/TechniquePropertyWindow.h"
 #include "widgets/WidgetEdit.h"
 
 #include <QDataStream>
@@ -23,7 +40,7 @@ namespace widgets {
 
 	const int MAX_NUMBER_OF_CONNECTIONS = 20;
 
-	WidgetEditComponent::WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _parent(parent), _label(nullptr), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections(), _selectedPolicy(nullptr) {
+	WidgetEditComponent::WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _parent(parent), _label(nullptr), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections(), _selectedPolicy(nullptr), _propertyWindow(nullptr), _oldPropertyWindow(nullptr) {
 		QString labelText = type + " (" + subType + ")";
 		QWidget * widget = new QWidget();
 		QHBoxLayout * hLayout = new QHBoxLayout(widget);
@@ -60,6 +77,8 @@ namespace widgets {
 		}
 
 		resize(200, 80);
+
+		_propertyWindow = createPropertyWindow(_subType);
 	}
 
 	WidgetEditComponent::~WidgetEditComponent() {
@@ -147,6 +166,64 @@ namespace widgets {
 			caption = caption + " - " + _name;
 		}
 		_label->setText(caption);
+	}
+
+	PropertyWindow * WidgetEditComponent::createPropertyWindow(QString subType, const PropertyWindow * propertyWindow) {
+		// Create new propertyWindow and propagate the attributes of the old one.
+		// Don't delete the existing one, because it is deleting itself.
+
+		_subType = subType;
+		_oldPropertyWindow = _propertyWindow;
+
+		if (_type == CT_SYSTEM) {
+			SystemPropertyWindow * pWin = new SystemPropertyWindow(_parent, _name);
+			_propertyWindow = pWin;
+		} else if (_type == CT_TECHNIQUE) {
+			_propertyWindow = new TechniquePropertyWindow(_parent, _name);
+		} else if (_type == CT_RENDERER) {
+			if (propertyWindow) {
+				_propertyWindow = factories::RendererPropertyWindowFactory::createRendererPropertyWindow(_subType, static_cast<RendererPropertyWindow *>(_propertyWindow));
+			} else {
+				_propertyWindow = factories::RendererPropertyWindowFactory::createRendererPropertyWindow(_parent, _name, _subType);
+			}
+		} else if (_type == CT_EMITTER) {
+			if (propertyWindow) {
+				_propertyWindow = factories::EmitterPropertyWindowFactory::createEmitterPropertyWindow(_subType, static_cast<EmitterPropertyWindow *>(_propertyWindow));
+			} else {
+				_propertyWindow = factories::EmitterPropertyWindowFactory::createEmitterPropertyWindow(_parent, _name, _subType);
+			}
+		} else if (_type == CT_AFFECTOR) {
+			if (propertyWindow) {
+				_propertyWindow = factories::AffectorPropertyWindowFactory::createAffectorPropertyWindow(_subType, static_cast<AffectorPropertyWindow *>(_propertyWindow));
+			} else {
+				_propertyWindow = factories::AffectorPropertyWindowFactory::createAffectorPropertyWindow(_parent, _name, _subType);
+			}
+		} else if (_type == CT_OBSERVER) {
+			if (propertyWindow) {
+				_propertyWindow = factories::ObserverPropertyWindowFactory::createObserverPropertyWindow(_subType, static_cast<ObserverPropertyWindow *>(_propertyWindow));
+			} else {
+				_propertyWindow = factories::ObserverPropertyWindowFactory::createObserverPropertyWindow(_parent, _name, _subType);
+			}
+		} else if (_type == CT_HANDLER) {
+			if (propertyWindow) {
+				_propertyWindow = factories::EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(_subType, static_cast<EventHandlerPropertyWindow *>(_propertyWindow));
+			} else {
+				_propertyWindow = factories::EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(_parent, _name, _subType);
+			}
+		} else if (_type == CT_BEHAVIOUR) {
+			if (propertyWindow) {
+				_propertyWindow = factories::BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(_subType, static_cast<BehaviourPropertyWindow *>(_propertyWindow));
+			} else {
+				_propertyWindow = factories::BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(_parent, _name, _subType);
+			}
+		} else if (_type == CT_EXTERN) {
+			if (propertyWindow) {
+				_propertyWindow = factories::ExternPropertyWindowFactory::createExternPropertyWindow(_subType, static_cast<ExternPropertyWindow *>(_propertyWindow));
+			} else {
+				_propertyWindow = factories::ExternPropertyWindowFactory::createExternPropertyWindow(_parent, _name, _subType);
+			}
+		}
+		return _propertyWindow;
 	}
 
 	void WidgetEditComponent::mousePressEvent(QGraphicsSceneMouseEvent * evt) {

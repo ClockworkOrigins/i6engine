@@ -1,0 +1,29 @@
+#ifndef __I6ENGINE_PARTICLEEDITOR_WIDGETS_DOSCALEEVENTHANDLERPROPERTYWINDOW_H__
+#define __I6ENGINE_PARTICLEEDITOR_WIDGETS_DOSCALEEVENTHANDLERPROPERTYWINDOW_H__
+
+#include "widgets/EventHandlerPropertyWindow.h"
+
+namespace i6engine {
+namespace particleEditor {
+namespace widgets {
+
+	class DoScaleEventHandlerPropertyWindow : public EventHandlerPropertyWindow {
+		Q_OBJECT
+
+	public:
+		/**
+		 * \brief constructor
+		 */
+		DoScaleEventHandlerPropertyWindow(QWidget * par, QString name = "");
+
+		/**
+		 * \brief destructor
+		 */
+		~DoScaleEventHandlerPropertyWindow();
+	};
+
+} /* namespace widgets */
+} /* namespace particleEditor */
+} /* namespace i6engine */
+
+#endif /* __I6ENGINE_PARTICLEEDITOR_WIDGETS_DOSCALEEVENTHANDLERPROPERTYWINDOW_H__ */
