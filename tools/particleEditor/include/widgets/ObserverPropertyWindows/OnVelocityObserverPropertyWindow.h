@@ -7,6 +7,10 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_ON_VELOCITY_COMPARE = "";
+	static QString PRNL_ON_VELOCITY_THRESHOLD = "";
+
 	class OnVelocityObserverPropertyWindow : public ObserverPropertyWindow {
 		Q_OBJECT
 

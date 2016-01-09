@@ -7,6 +7,10 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_VELOCITY_SCALE = "";
+	static QString PRNL_STOP_AT_FLIP = "";
+
 	class ScaleVelocityAffectorPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

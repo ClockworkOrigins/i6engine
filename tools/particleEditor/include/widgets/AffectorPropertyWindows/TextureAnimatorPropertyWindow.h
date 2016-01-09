@@ -7,6 +7,15 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_ANIMATION_TYPE = "";
+	static QString TAT_LOOP = "";
+	static QString TAT_UP_DOWN = "";
+	static QString TAT_RANDOM = "";
+	static QString PRNL_TEXCOORDS_START = "";
+	static QString PRNL_TEXCOORDS_END = "";
+	static QString PRNL_START_RANDOM = "";
+
 	class TextureAnimatorPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

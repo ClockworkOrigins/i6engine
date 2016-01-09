@@ -7,6 +7,12 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_VERTEX_EMITTER_STEP = "";
+	static QString PRNL_VERTEX_EMITTER_SEGMENTS = "";
+	static QString PRNL_VERTEX_EMITTER_ITERATION = "";
+	static QString PRNL_VERTEX_EMITTER_MESH_NAME = "";
+
 	class VertexEmitterPropertyWindow : public EmitterPropertyWindow {
 		Q_OBJECT
 

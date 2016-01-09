@@ -7,6 +7,10 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_FREQ_MIN = "";
+	static QString PRNL_FREQ_MAX = "";
+
 	class SineForceAffectorPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

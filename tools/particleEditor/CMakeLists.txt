@@ -43,6 +43,18 @@ set(particleEditorSrc
 	${srcdir}/factories/ObserverPropertyWindowFactory.cpp
 	${srcdir}/factories/RendererPropertyWindowFactory.cpp
 	
+	${srcdir}/properties/Property.cpp
+	${srcdir}/properties/BoolProperty.cpp
+	${srcdir}/properties/ColourWithAlphaProperty.cpp
+	${srcdir}/properties/DoubleProperty.cpp
+	${srcdir}/properties/DynamicAttributeProperty.cpp
+	${srcdir}/properties/EnumProperty.cpp
+	${srcdir}/properties/QuaternionProperty.cpp
+	${srcdir}/properties/StringProperty.cpp
+	${srcdir}/properties/UIntProperty.cpp
+	${srcdir}/properties/Vec3ListProperty.cpp
+	${srcdir}/properties/Vec3Property.cpp
+	
 	${srcdir}/widgets/AffectorPropertyWindow.cpp
 	${srcdir}/widgets/BehaviourPropertyWindow.cpp
 	${srcdir}/widgets/DialogChooseConnectionType.cpp
@@ -137,6 +149,8 @@ QT5_WRAP_UI(particleEditorUI
 	gui/dialogChooseConnectionType.ui
 	gui/widgetEdit.ui
 	gui/widgetParticleList.ui
+	gui/widgetProperty.ui
+	gui/widgetPropertyWindow.ui
 	gui/widgetRender.ui
 	gui/widgetScript.ui
 	gui/wndMainWindow.ui
@@ -144,6 +158,18 @@ QT5_WRAP_UI(particleEditorUI
 
 QT5_WRAP_CPP(particleEditorGuiHeader
 	${includedir}/connections/LineConnector.h
+	
+	${includedir}/properties/Property.h
+	${includedir}/properties/BoolProperty.h
+	${includedir}/properties/ColourWithAlphaProperty.h
+	${includedir}/properties/DoubleProperty.h
+	${includedir}/properties/DynamicAttributeProperty.h
+	${includedir}/properties/EnumProperty.h
+	${includedir}/properties/QuaternionProperty.h
+	${includedir}/properties/StringProperty.h
+	${includedir}/properties/UIntProperty.h
+	${includedir}/properties/Vec3ListProperty.h
+	${includedir}/properties/Vec3Property.h
 	
 	${includedir}/widgets/AffectorPropertyWindow.h
 	${includedir}/widgets/BehaviourPropertyWindow.h
@@ -237,6 +263,7 @@ QT5_WRAP_CPP(particleEditorGuiHeader
 
 source_group(connections /connections/*)
 source_group(factories /factories/*)
+source_group(properties /properties/*)
 source_group(widgets /widgets/*)
 source_group(widgets\\AffectorPropertyWindows /widgets/AffectorPropertyWindows/*)
 source_group(widgets\\BehaviourPropertyWindows /widgets/BehaviourPropertyWindows/*)

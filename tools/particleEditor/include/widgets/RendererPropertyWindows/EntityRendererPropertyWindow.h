@@ -7,6 +7,12 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_ORIENTATION_TYPE;
+	static QString OTT_ORIENTED_SELF;
+	static QString OTT_ORIENTED_SELF_MIRRORED;
+	static QString OTT_ORIENTED_SHAPE;
+
 	class EntityRendererPropertyWindow : public RendererPropertyWindow {
 		Q_OBJECT
 

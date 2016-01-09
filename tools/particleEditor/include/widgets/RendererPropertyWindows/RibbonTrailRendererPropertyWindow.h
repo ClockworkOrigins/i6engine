@@ -7,6 +7,13 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_TRAIL_LENGTH;
+	static QString PRNL_TRAIL_WIDTH;
+	static QString PRNL_RANDOM_INITIAL_COLOUR;
+	static QString PRNL_INITIAL_COLOUR;
+	static QString PRNL_COLOUR_CHANGE;
+
 	class RibbonTrailRendererPropertyWindow : public RendererPropertyWindow {
 		Q_OBJECT
 

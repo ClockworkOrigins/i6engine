@@ -6,6 +6,15 @@
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
+	
+	static QString PRNL_AFFECTOR_TYPE = "";
+	static QString PRNL_AFFECTOR_ENABLED = "";
+	static QString PRNL_AFFECTOR_POSITION = "";
+	static QString PRNL_AFFECTOR_MASS = "";
+	static QString PRNL_AFFECTOR_SPECIALISATION = "";
+	static QString PRNL_AFFECTOR_SPEC_DEFAULT = "";
+	static QString PRNL_AFFECTOR_SPEC_TT_INCREASE = "";
+	static QString PRNL_AFFECTOR_SPEC_TT_DECREASE = "";
 
 	class AffectorPropertyWindow : public PropertyWindow {
 		Q_OBJECT

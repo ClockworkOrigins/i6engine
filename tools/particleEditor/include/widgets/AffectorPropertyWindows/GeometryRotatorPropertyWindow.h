@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_USE_OWN_ROTATION = "";
+
 	class GeometryRotatorPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

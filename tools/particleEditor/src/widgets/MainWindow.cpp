@@ -272,9 +272,11 @@ namespace widgets {
 	void MainWindow::setPropertyWindow(PropertyWindow * propertyWindow) {
 		if (_currentPropertyWindow) {
 			_leftLayout->removeWidget(_currentPropertyWindow);
+			_currentPropertyWindow->hide();
 		}
 		if (propertyWindow) {
 			_leftLayout->addWidget(propertyWindow);
+			propertyWindow->show();
 			_leftLayout->setStretch(0, 1);
 			_leftLayout->setStretch(1, 1);
 		}

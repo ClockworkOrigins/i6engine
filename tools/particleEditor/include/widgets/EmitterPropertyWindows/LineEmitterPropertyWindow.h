@@ -7,6 +7,12 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_LINE_END = "";
+	static QString PRNL_LINE_MAX_INCREMENT = "";
+	static QString PRNL_LINE_MIN_INCREMENT = "";
+	static QString PRNL_LINE_DEVIATION = "";
+
 	class LineEmitterPropertyWindow : public EmitterPropertyWindow {
 		Q_OBJECT
 

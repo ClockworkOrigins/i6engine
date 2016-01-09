@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_ON_EVENTFLAG_FLAG = "";
+
 	class OnEventFlagObserverPropertyWindow : public ObserverPropertyWindow {
 		Q_OBJECT
 

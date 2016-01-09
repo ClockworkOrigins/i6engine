@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_ENABLE_COMPONENT_TRUE_FALSE = "";
+
 	class DoEnableComponentEventHandlerPropertyWindow : public EventHandlerPropertyWindow {
 		Q_OBJECT
 

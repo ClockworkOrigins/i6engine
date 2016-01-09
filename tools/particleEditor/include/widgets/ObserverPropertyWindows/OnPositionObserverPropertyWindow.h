@@ -7,6 +7,14 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_ON_POSITION_X_COMPARE = "";
+	static QString PRNL_ON_POSITION_Y_COMPARE = "";
+	static QString PRNL_ON_POSITION_Z_COMPARE = "";
+	static QString PRNL_ON_POSITION_X = "";
+	static QString PRNL_ON_POSITION_Y = "";
+	static QString PRNL_ON_POSITION_Z = "";
+
 	class OnPositionObserverPropertyWindow : public ObserverPropertyWindow {
 		Q_OBJECT
 

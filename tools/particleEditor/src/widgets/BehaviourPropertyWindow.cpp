@@ -1,10 +1,23 @@
 #include "widgets/BehaviourPropertyWindow.h"
 
+#include "properties/EnumProperty.h"
+
+#include "widgets/WidgetEditComponent.h"
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
 	BehaviourPropertyWindow::BehaviourPropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+		// Set the (internationalized) property names
+		CST_BEHAVIOUR_SLAVE = BEHAVIOUR_SLAVE;
+		PRNL_BEHAVIOUR_TYPE = "Behaviour type";
+		PRNL_NAME = "Name";
+
+		// Type
+		QStringList types;
+		types.append(CST_BEHAVIOUR_SLAVE);
+		append(new properties::EnumProperty(this, PRNL_BEHAVIOUR_TYPE, PRNL_BEHAVIOUR_TYPE, types));
 	}
 
 	BehaviourPropertyWindow::~BehaviourPropertyWindow() {

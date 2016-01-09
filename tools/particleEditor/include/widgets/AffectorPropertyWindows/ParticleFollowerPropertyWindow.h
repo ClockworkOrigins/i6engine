@@ -7,6 +7,10 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_MIN_DISTANCE = "";
+	static QString PRNL_MAX_DISTANCE = "";
+
 	class ParticleFollowerPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

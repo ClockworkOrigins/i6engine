@@ -7,6 +7,12 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_BOX_COLLIDER_WIDTH = "";
+	static QString PRNL_BOX_COLLIDER_HEIGHT = "";
+	static QString PRNL_BOX_COLLIDER_DEPTH = "";
+	static QString PRNL_BOX_COLLIDER_INNER = "";
+
 	class BoxColliderPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

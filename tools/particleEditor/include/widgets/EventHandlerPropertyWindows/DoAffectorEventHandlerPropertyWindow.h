@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_PRE_POST = "";
+
 	class DoAffectorEventHandlerPropertyWindow : public EventHandlerPropertyWindow {
 		Q_OBJECT
 

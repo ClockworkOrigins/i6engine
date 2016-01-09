@@ -7,6 +7,12 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_SCALE_FRACTION = "";
+	static QString PRNL_SCALE_TYPE = "";
+	static QString SC_TIME_TO_LIVE = "";
+	static QString SC_VELOCITY = "";
+
 	class DoScaleEventHandlerPropertyWindow : public EventHandlerPropertyWindow {
 		Q_OBJECT
 

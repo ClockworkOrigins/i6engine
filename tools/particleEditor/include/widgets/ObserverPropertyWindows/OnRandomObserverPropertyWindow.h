@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_ON_RANDOM_VALUE = "";
+
 	class OnRandomObserverPropertyWindow : public ObserverPropertyWindow {
 		Q_OBJECT
 

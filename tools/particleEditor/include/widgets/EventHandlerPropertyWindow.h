@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_HANDLER_TYPE = "";
+
 	class EventHandlerPropertyWindow : public PropertyWindow {
 		Q_OBJECT
 

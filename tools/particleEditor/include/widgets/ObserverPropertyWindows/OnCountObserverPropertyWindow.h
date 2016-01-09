@@ -7,6 +7,10 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_ON_COUNT_COMPARE = "";
+	static QString PRNL_ON_COUNT_THRESHOLD = "";
+
 	class OnCountObserverPropertyWindow : public ObserverPropertyWindow {
 		Q_OBJECT
 

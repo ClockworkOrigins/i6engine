@@ -7,6 +7,11 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_BOX_EMITTER_WIDTH = "";
+	static QString PRNL_BOX_EMITTER_HEIGHT = "";
+	static QString PRNL_BOX_EMITTER_DEPTH = "";
+
 	class BoxEmitterPropertyWindow : public EmitterPropertyWindow {
 		Q_OBJECT
 

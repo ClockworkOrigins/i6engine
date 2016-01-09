@@ -7,6 +7,12 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_OBSERVER_TYPE = "";
+	static QString PRNL_OBSERVER_ENABLED = "";
+	static QString PRNL_UNTIL_EVENT = "";
+	static QString PRNL_OBSERVE_INTERVAL = "";
+
 	class ObserverPropertyWindow : public PropertyWindow {
 		Q_OBJECT
 

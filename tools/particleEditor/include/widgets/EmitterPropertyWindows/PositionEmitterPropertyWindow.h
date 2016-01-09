@@ -7,6 +7,10 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_POSITION_EMITTER_POSITION = "";
+	static QString PRNL_POSITION_EMITTER_RANDOMIZE = "";
+
 	class PositionEmitterPropertyWindow : public EmitterPropertyWindow {
 		Q_OBJECT
 

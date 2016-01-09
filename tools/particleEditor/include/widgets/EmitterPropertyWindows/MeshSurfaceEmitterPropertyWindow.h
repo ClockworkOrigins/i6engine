@@ -7,6 +7,16 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_MESH_SURFACE_EMITTER_NAME = "";
+	static QString PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION = "";
+	static QString PRNL_MESH_SURFACE_EMITTER_SCALE = "";
+	static QString PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_EDGE = "";
+	static QString PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HETRG_1 = "";
+	static QString PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HETRG_2 = "";
+	static QString PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HOMOGENEUS = "";
+	static QString PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_VERTEX = "";
+
 	class MeshSurfaceEmitterPropertyWindow : public EmitterPropertyWindow {
 		Q_OBJECT
 

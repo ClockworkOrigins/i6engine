@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_PLANE_COLLIDER_NORMAL = "";
+
 	class PlaneColliderPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

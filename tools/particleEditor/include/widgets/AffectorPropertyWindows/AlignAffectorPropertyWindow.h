@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_AFFECTOR_ALIGN_RESIZE = "";
+
 	class AlignAffectorPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

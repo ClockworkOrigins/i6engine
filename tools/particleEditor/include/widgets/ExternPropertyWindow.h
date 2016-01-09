@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_EXTERN_TYPE = "";
+
 	class ExternPropertyWindow : public PropertyWindow {
 		Q_OBJECT
 

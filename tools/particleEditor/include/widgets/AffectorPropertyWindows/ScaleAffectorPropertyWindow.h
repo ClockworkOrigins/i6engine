@@ -7,6 +7,12 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_XYZ_SCALE = "";
+	static QString PRNL_X_SCALE = "";
+	static QString PRNL_Y_SCALE = "";
+	static QString PRNL_Z_SCALE = "";
+
 	class ScaleAffectorPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

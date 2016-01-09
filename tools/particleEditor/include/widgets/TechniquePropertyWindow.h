@@ -7,6 +7,26 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_TECHNIQUE_ENABLED = "";
+	static QString PRNL_TECHNIQUE_POSITION = "";
+	static QString PRNL_TECHNIQUE_KEEP_LOCAL = "";
+	static QString PRNL_TECHNIQUE_VISUAL_PARTICLE_QUOTA = "";
+	static QString PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA = "";
+	static QString PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA = "";
+	static QString PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA = "";
+	static QString PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA = "";
+	static QString PRNL_TECHNIQUE_MATERIAL = "";
+	static QString PRNL_TECHNIQUE_LOD_INDEX = "";
+	static QString PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH = "";
+	static QString PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT = "";
+	static QString PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH = "";
+	static QString PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION = "";
+	static QString PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP = "";
+	static QString PRNL_TECHNIQUE_SPHASHING_SIZE = "";
+	static QString PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL = "";
+	static QString PRNL_TECHNIQUE_MAX_VELOCITY = "";
+
 	class TechniquePropertyWindow : public PropertyWindow {
 		Q_OBJECT
 

@@ -7,6 +7,13 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_CIRCLE_EMITTER_RADIUS = "";
+	static QString PRNL_CIRCLE_EMITTER_STEP = "";
+	static QString PRNL_CIRCLE_EMITTER_ANGLE = "";
+	static QString PRNL_CIRCLE_EMITTER_RANDOM = "";
+	static QString PRNL_CIRCLE_EMITTER_NORMAL = "";
+
 	class CircleEmitterPropertyWindow : public EmitterPropertyWindow {
 		Q_OBJECT
 

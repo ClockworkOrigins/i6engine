@@ -7,6 +7,10 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_END = "";
+	static QString PRNL_DRIFT = "";
+
 	class LineAffectorPropertyWindow : public AffectorPropertyWindow {
 		Q_OBJECT
 

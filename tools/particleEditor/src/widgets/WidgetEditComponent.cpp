@@ -32,8 +32,6 @@
 #include <QLabel>
 #include <QMimeData>
 
-#include <iostream>
-
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -173,7 +171,8 @@ namespace widgets {
 		// Don't delete the existing one, because it is deleting itself.
 
 		_subType = subType;
-		_oldPropertyWindow = _propertyWindow;
+		delete _propertyWindow;
+		_propertyWindow = nullptr;
 
 		if (_type == CT_SYSTEM) {
 			SystemPropertyWindow * pWin = new SystemPropertyWindow(_parent, _name);

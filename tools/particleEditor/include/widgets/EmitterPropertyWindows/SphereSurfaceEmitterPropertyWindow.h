@@ -7,6 +7,9 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
+	// Property names
+	static QString PRNL_SPHERE_SURFACE_EMITTER_RADIUS = "";
+
 	class SphereSurfaceEmitterPropertyWindow : public EmitterPropertyWindow {
 		Q_OBJECT
 
