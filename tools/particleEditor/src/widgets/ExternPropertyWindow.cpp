@@ -4,6 +4,8 @@
 
 #include "widgets/WidgetEditComponent.h"
 
+#include "ParticleUniverseExtern.h"
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -30,6 +32,14 @@ namespace widgets {
 	}
 
 	ExternPropertyWindow::~ExternPropertyWindow() {
+	}
+
+	void ExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse::Extern * externObject) {
+		// Name: Ogre::String
+		setString(PRNL_NAME, QString::fromStdString(externObject->getName()));
+
+		// Type: List of types
+		setEnumString(PRNL_EXTERN_TYPE, QString::fromStdString(externObject->getExternType()));
 	}
 
 } /* namespace widgets */

@@ -95,6 +95,65 @@ namespace widgets {
 	TechniquePropertyWindow::~TechniquePropertyWindow() {
 	}
 
+	void TechniquePropertyWindow::copyAttributesFromTechnique(ParticleUniverse::ParticleTechnique * technique) {
+		// Name: Ogre::String
+		setString(PRNL_NAME, QString::fromStdString(technique->getName()));
+
+		// Enabled: bool
+		setBool(PRNL_TECHNIQUE_ENABLED, technique->isEnabled());
+
+		// Position: Vector3
+		setVector3(PRNL_TECHNIQUE_POSITION, technique->position);
+
+		// Keep local: bool
+		setBool(PRNL_TECHNIQUE_KEEP_LOCAL, technique->isKeepLocal());
+
+		// Visual particle quota: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_VISUAL_PARTICLE_QUOTA, technique->getVisualParticleQuota());
+
+		// Emitted emitter quota: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA, technique->getEmittedEmitterQuota());
+
+		// Emitted affector quota: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA, technique->getEmittedAffectorQuota());
+
+		// Emitted technique quota: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA, technique->getEmittedTechniqueQuota());
+
+		// Emitted system quota: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA, technique->getEmittedSystemQuota());
+
+		// Material: Ogre::String
+		setString(PRNL_TECHNIQUE_MATERIAL, QString::fromStdString(technique->getMaterialName()));
+
+		// Lod index: unsigned short
+		setUint16(PRNL_TECHNIQUE_LOD_INDEX, technique->getLodIndex());
+
+		// Default particle width: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH, technique->getDefaultWidth());
+
+		// Default particle height: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT, technique->getDefaultHeight());
+
+		// Default particle depth: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH, technique->getDefaultDepth());
+
+		// Spatial hashing cell dimension: ParticleUniverse::ushort
+		setUint16(PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION, technique->getSpatialHashingCellDimension());
+
+		// Spatial hashing cell overlap: ParticleUniverse::ushort
+		setUint16(PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP, technique->getSpatialHashingCellOverlap());
+
+		// Spatial hashtable size: unsigned int
+		setUint16(PRNL_TECHNIQUE_SPHASHING_SIZE, technique->getSpatialHashTableSize());
+
+		// Spatial hashing update interval: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL, technique->getSpatialHashingInterval());
+
+		// Maximum velocity: ParticleUniverse::Real
+		setDouble(PRNL_TECHNIQUE_MAX_VELOCITY, technique->getMaxVelocity());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

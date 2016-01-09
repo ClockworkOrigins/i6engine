@@ -5,6 +5,8 @@
 
 #include "i6engine/math/i6eVector4.h"
 
+class QSpinBox;
+
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
@@ -23,9 +25,15 @@ namespace properties {
 		 */
 		~ColourWithAlphaProperty();
 
+		void setColourWithAlpha(Vec4 value) override;
+
 	protected:
 		QGridLayout * _layout;
 		Vec4 _value;
+		QSpinBox * _spinBoxR;
+		QSpinBox * _spinBoxG;
+		QSpinBox * _spinBoxB;
+		QSpinBox * _spinBoxA;
 	};
 
 } /* namespace properties */

@@ -4,6 +4,8 @@
 
 #include "widgets/WidgetEditComponent.h"
 
+#include "ParticleUniverseBehaviour.h"
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -21,6 +23,11 @@ namespace widgets {
 	}
 
 	BehaviourPropertyWindow::~BehaviourPropertyWindow() {
+	}
+
+	void BehaviourPropertyWindow::copyAttributesFromBehaviour(ParticleUniverse::ParticleBehaviour * behaviour) {
+		// Type: List of types
+		setEnumString(PRNL_BEHAVIOUR_TYPE, QString::fromStdString(behaviour->getBehaviourType()));
 	}
 
 } /* namespace widgets */

@@ -3,6 +3,10 @@
 
 #include "widgets/PropertyWindow.h"
 
+namespace ParticleUniverse {
+	class ParticleBehaviour;
+} /* namespace ParticleUniverse */
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -22,7 +26,9 @@ namespace widgets {
 		/**
 		 * \brief destructor
 		 */
-		~BehaviourPropertyWindow();
+		virtual ~BehaviourPropertyWindow();
+
+		virtual void copyAttributesFromBehaviour(ParticleUniverse::ParticleBehaviour * behaviour);
 	};
 
 } /* namespace widgets */

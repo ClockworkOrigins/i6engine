@@ -3,6 +3,10 @@
 
 #include "widgets/PropertyWindow.h"
 
+namespace ParticleUniverse {
+	class ParticleTechnique;
+} /* namespace ParticleUniverse */
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -40,6 +44,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~TechniquePropertyWindow();
+
+		virtual void copyAttributesFromTechnique(ParticleUniverse::ParticleTechnique * technique);
 	};
 
 } /* namespace widgets */

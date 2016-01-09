@@ -7,30 +7,40 @@ namespace i6engine {
 namespace particleEditor {
 namespace properties {
 
-	Vec3Property::Vec3Property(QWidget * par, QString label, QString name, ParticleUniverse::Vector3 value) : Property(par, label, name), _value(value) {
+	Vec3Property::Vec3Property(QWidget * par, QString label, QString name, ParticleUniverse::Vector3 value) : Property(par, label, name), _value(value), _doubleSpinBoxX(nullptr), _doubleSpinBoxY(nullptr), _doubleSpinBoxZ(nullptr) {
 		QLabel * l = new QLabel("X", this);
 		horizontalLayout->addWidget(l);
-		QDoubleSpinBox * dsb = new QDoubleSpinBox(this);
-		dsb->setMaximum(100000);
-		dsb->setValue(value.x);
-		horizontalLayout->addWidget(dsb);
+		_doubleSpinBoxX = new QDoubleSpinBox(this);
+		_doubleSpinBoxX->setMaximum(DBL_MAX);
+		_doubleSpinBoxX->setValue(value.x);
+		horizontalLayout->addWidget(_doubleSpinBoxX);
+		_doubleSpinBoxX->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
 
 		l = new QLabel("Y", this);
 		horizontalLayout->addWidget(l);
-		dsb = new QDoubleSpinBox(this);
-		dsb->setMaximum(100000);
-		dsb->setValue(value.y);
-		horizontalLayout->addWidget(dsb);
+		_doubleSpinBoxY = new QDoubleSpinBox(this);
+		_doubleSpinBoxY->setMaximum(DBL_MAX);
+		_doubleSpinBoxY->setValue(value.y);
+		horizontalLayout->addWidget(_doubleSpinBoxY);
+		_doubleSpinBoxY->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
 
 		l = new QLabel("Z", this);
 		horizontalLayout->addWidget(l);
-		dsb = new QDoubleSpinBox(this);
-		dsb->setMaximum(100000);
-		dsb->setValue(value.z);
-		horizontalLayout->addWidget(dsb);
+		_doubleSpinBoxZ = new QDoubleSpinBox(this);
+		_doubleSpinBoxZ->setMaximum(DBL_MAX);
+		_doubleSpinBoxZ->setValue(value.z);
+		horizontalLayout->addWidget(_doubleSpinBoxZ);
+		_doubleSpinBoxZ->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
 	}
 
 	Vec3Property::~Vec3Property() {
+	}
+
+	void Vec3Property::setVector3(ParticleUniverse::Vector3 value) {
+		_value = value;
+		_doubleSpinBoxX->setValue(value.x);
+		_doubleSpinBoxY->setValue(value.y);
+		_doubleSpinBoxZ->setValue(value.z);
 	}
 
 } /* namespace properties */

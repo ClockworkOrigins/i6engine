@@ -3,6 +3,8 @@
 
 #include "properties/Property.h"
 
+class QDoubleSpinBox;
+
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
@@ -21,8 +23,11 @@ namespace properties {
 		 */
 		~DoubleProperty();
 
+		void setDouble(double value) override;
+
 	protected:
 		double _value;
+		QDoubleSpinBox * _doubleSpinBox;
 	};
 
 } /* namespace properties */

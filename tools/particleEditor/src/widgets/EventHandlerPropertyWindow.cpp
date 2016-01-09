@@ -4,6 +4,8 @@
 
 #include "widgets/WidgetEditComponent.h"
 
+#include "ParticleUniverseEventHandler.h"
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -34,6 +36,14 @@ namespace widgets {
 	}
 
 	EventHandlerPropertyWindow::~EventHandlerPropertyWindow() {
+	}
+
+	void EventHandlerPropertyWindow::copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler) {
+		// Name: Ogre::String
+		setString(PRNL_NAME, QString::fromStdString(eventHandler->getName()));
+
+		// Type: List of types
+		setEnumString(PRNL_HANDLER_TYPE, QString::fromStdString(eventHandler->getEventHandlerType()));
 	}
 
 } /* namespace widgets */

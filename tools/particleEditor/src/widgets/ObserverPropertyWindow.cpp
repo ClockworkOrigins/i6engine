@@ -77,6 +77,57 @@ namespace widgets {
 	ObserverPropertyWindow::~ObserverPropertyWindow() {
 	}
 
+	void ObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) {
+		// Name: Ogre::String
+		setString(PRNL_NAME, QString::fromStdString(observer->getName()));
+
+		// Type: List of types
+		setEnumString(PRNL_OBSERVER_TYPE, QString::fromStdString(observer->getObserverType()));
+
+		// Enabled: bool
+		setBool(PRNL_OBSERVER_ENABLED, observer->isEnabled());
+
+		// Observe Particle Type: List
+		QString pType = "";
+		if (observer->isParticleTypeToObserveSet()) {
+			ParticleUniverse::Particle::ParticleType particleType = observer->getParticleTypeToObserve();
+			switch (particleType) {
+			case ParticleUniverse::Particle::PT_VISUAL: {
+				pType = PT_VISUAL;
+				break;
+			}
+			case ParticleUniverse::Particle::PT_EMITTER: {
+				pType = PT_EMITTER;
+				break;
+			}
+			case ParticleUniverse::Particle::PT_AFFECTOR: {
+				pType = PT_AFFECTOR;
+				break;
+			}
+			case ParticleUniverse::Particle::PT_TECHNIQUE: {
+				pType = PT_TECHNIQUE;
+				break;
+			}
+			case ParticleUniverse::Particle::PT_SYSTEM: {
+				pType = PT_SYSTEM;
+				break;
+			}
+			default: {
+				break;
+			}
+			}
+		} else {
+			pType = PT_ALL;
+		}
+		setEnumString(PRNL_PARTICLE_TYPE, pType);
+
+		// Observe Interval: ParticleUniverse::Real
+		setDouble(PRNL_OBSERVE_INTERVAL, observer->getObserverInterval());
+
+		// Observe Until Event: bool
+		setBool(PRNL_UNTIL_EVENT, observer->getObserveUntilEvent());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

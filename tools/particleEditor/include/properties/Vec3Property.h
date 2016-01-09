@@ -5,6 +5,8 @@
 
 #include "ParticleUniversePrerequisites.h"
 
+class QDoubleSpinBox;
+
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
@@ -23,8 +25,13 @@ namespace properties {
 		 */
 		~Vec3Property();
 
+		void setVector3(ParticleUniverse::Vector3 value) override;
+
 	protected:
 		ParticleUniverse::Vector3 _value;
+		QDoubleSpinBox * _doubleSpinBoxX;
+		QDoubleSpinBox * _doubleSpinBoxY;
+		QDoubleSpinBox * _doubleSpinBoxZ;
 	};
 
 } /* namespace properties */

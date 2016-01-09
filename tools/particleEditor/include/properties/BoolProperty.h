@@ -3,6 +3,8 @@
 
 #include "properties/Property.h"
 
+class QCheckBox;
+
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
@@ -21,8 +23,11 @@ namespace properties {
 		 */
 		~BoolProperty();
 
+		void setBool(bool value) override;
+
 	protected:
 		bool _value;
+		QCheckBox * _checkBox;
 	};
 
 } /* namespace properties */

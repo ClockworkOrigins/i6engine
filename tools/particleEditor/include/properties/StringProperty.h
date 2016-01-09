@@ -21,8 +21,11 @@ namespace properties {
 		 */
 		~StringProperty();
 
+		void setString(QString value) override;
+
 	protected:
 		QString _value;
+		QLineEdit * _lineEdit;
 	};
 
 } /* namespace properties */

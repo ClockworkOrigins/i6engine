@@ -71,6 +71,26 @@ namespace widgets {
 	RendererPropertyWindow::~RendererPropertyWindow() {
 	}
 
+	void RendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) {
+		// Type: List of types
+		setEnumString(PRNL_RENDERER_TYPE, QString::fromStdString(renderer->getRendererType()));
+
+		// Render queue group: ParticleUniverse::uint8
+		setUint16(PRNL_RENDERER_RENDER_Q_GROUP, renderer->getRenderQueueGroup());
+
+		// Sorting: Bool
+		setBool(PRNL_RENDERER_SORTING, renderer->isSorted());
+
+		// Texture coords set: List of 4 x ParticleUniverse::Real
+		// TODO
+
+		// Texture coords rows: uchar
+		setUint16(PRNL_RENDERER_TEXCOORDS_ROWS, renderer->getTextureCoordsRows());
+
+		// Texture coords columns: uchar
+		setUint16(PRNL_RENDERER_TEXCOORDS_COLUMNS, renderer->getTextureCoordsColumns());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

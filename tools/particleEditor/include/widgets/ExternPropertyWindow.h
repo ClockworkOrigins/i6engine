@@ -3,6 +3,10 @@
 
 #include "widgets/PropertyWindow.h"
 
+namespace ParticleUniverse {
+	class Extern;
+} /* namespace ParticleUniverse */
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -23,6 +27,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		virtual ~ExternPropertyWindow();
+
+		virtual void copyAttributesFromExtern(ParticleUniverse::Extern * externObject);
 	};
 
 } /* namespace widgets */

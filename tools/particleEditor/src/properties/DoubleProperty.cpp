@@ -6,14 +6,20 @@ namespace i6engine {
 namespace particleEditor {
 namespace properties {
 
-	DoubleProperty::DoubleProperty(QWidget * par, QString label, QString name, double value) : Property(par, label, name), _value(value) {
-		QDoubleSpinBox * dsb = new QDoubleSpinBox(this);
-		dsb->setMaximum(1000000);
-		dsb->setValue(value);
-		horizontalLayout->addWidget(dsb);
+	DoubleProperty::DoubleProperty(QWidget * par, QString label, QString name, double value) : Property(par, label, name), _value(value), _doubleSpinBox(nullptr) {
+		_doubleSpinBox = new QDoubleSpinBox(this);
+		_doubleSpinBox->setMaximum(DBL_MAX);
+		_doubleSpinBox->setValue(value);
+		horizontalLayout->addWidget(_doubleSpinBox);
+		_doubleSpinBox->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
 	}
 
 	DoubleProperty::~DoubleProperty() {
+	}
+
+	void DoubleProperty::setDouble(double value) {
+		_value = value;
+		_doubleSpinBox->setValue(value);
 	}
 
 } /* namespace properties */

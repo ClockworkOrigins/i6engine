@@ -461,7 +461,7 @@ namespace widgets {
 		SystemPropertyWindow * systemPropertyWindow = static_cast<SystemPropertyWindow *>(particleSystemEditComponent->getPropertyWindow());
 		particleSystemEditComponent->setName(QString::fromStdString(particleSystem->getTemplateName()));
 		particleSystemEditComponent->setCaption();
-		//systemPropertyWindow->copyAttributesFromSystem(particleSystem);
+		systemPropertyWindow->copyAttributesFromSystem(particleSystem);
 		return true;
 	}
 
@@ -503,7 +503,7 @@ namespace widgets {
 		techniqueEditComponent->setPUElement(technique);
 		int componentWidth = techniqueEditComponent->size().width();
 		int componentHeight = techniqueEditComponent->size().height();
-		//static_cast<TechniquePropertyWindow *>(techniqueEditComponent->getPropertyWindow())->copyAttributesFromTechnique(technique);
+		static_cast<TechniquePropertyWindow *>(techniqueEditComponent->getPropertyWindow())->copyAttributesFromTechnique(technique);
 		createConnection(systemEditComponent, techniqueEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 		int highestY = position.y() + componentHeight + _offsetY;
 
@@ -584,7 +584,7 @@ namespace widgets {
 		rendererEditComponent->setCaption();
 		rendererEditComponent->setPos(position);
 		rendererEditComponent->setPUElement(renderer);
-		//static_cast<RendererPropertyWindow *>(rendererEditComponent->getPropertyWindow())->copyAttributesFromRenderer(renderer);
+		static_cast<RendererPropertyWindow *>(rendererEditComponent->getPropertyWindow())->copyAttributesFromRenderer(renderer);
 		createConnection(techniqueEditComponent, rendererEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 	}
 
@@ -595,7 +595,7 @@ namespace widgets {
 		emitterEditComponent->setCaption();
 		emitterEditComponent->setPos(position);
 		emitterEditComponent->setPUElement(emitter);
-		//static_cast<EmitterPropertyWindow *>(emitterEditComponent->getPropertyWindow())->copyAttributesFromEmitter(emitter);
+		static_cast<EmitterPropertyWindow *>(emitterEditComponent->getPropertyWindow())->copyAttributesFromEmitter(emitter);
 		createConnection(techniqueEditComponent, emitterEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 	}
 
@@ -606,7 +606,7 @@ namespace widgets {
 		affectorEditComponent->setCaption();
 		affectorEditComponent->setPos(position);
 		affectorEditComponent->setPUElement(affector);
-		//static_cast<AffectorPropertyWindow *>(affectorEditComponent->getPropertyWindow())->copyAttributesFromAffector(affector);
+		static_cast<AffectorPropertyWindow *>(affectorEditComponent->getPropertyWindow())->copyAttributesFromAffector(affector);
 		createConnection(techniqueEditComponent, affectorEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 	}
 
@@ -617,7 +617,7 @@ namespace widgets {
 		observerEditComponent->setCaption();
 		observerEditComponent->setPos(position);
 		observerEditComponent->setPUElement(observer);
-		//static_cast<ObserverPropertyWindow *>(observerEditComponent->getPropertyWindow())->copyAttributesFromObserver(observer);
+		static_cast<ObserverPropertyWindow *>(observerEditComponent->getPropertyWindow())->copyAttributesFromObserver(observer);
 		createConnection(techniqueEditComponent, observerEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 
 		// Create all handlers
@@ -641,7 +641,7 @@ namespace widgets {
 		handlerEditComponent->setCaption();
 		handlerEditComponent->setPos(position);
 		handlerEditComponent->setPUElement(eventHandler);
-		//static_cast<EventHandlerPropertyWindow *>(handlerEditComponent->getPropertyWindow())->copyAttributesFromEventHandler(eventHandler);
+		static_cast<EventHandlerPropertyWindow *>(handlerEditComponent->getPropertyWindow())->copyAttributesFromEventHandler(eventHandler);
 		createConnection(observerEditComponent, handlerEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 	}
 
@@ -652,7 +652,7 @@ namespace widgets {
 		behaviourEditComponent->setCaption();
 		behaviourEditComponent->setPos(position);
 		behaviourEditComponent->setPUElement(behaviour);
-		//static_cast<BehaviourPropertyWindow *>(behaviourEditComponent->getPropertyWindow())->copyAttributesFromBehaviour(behaviour);
+		static_cast<BehaviourPropertyWindow *>(behaviourEditComponent->getPropertyWindow())->copyAttributesFromBehaviour(behaviour);
 		createConnection(techniqueEditComponent, behaviourEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 	}
 
@@ -663,7 +663,7 @@ namespace widgets {
 		externEditComponent->setCaption();
 		externEditComponent->setPos(position);
 		externEditComponent->setPUElement(externObject);
-		//static_cast<ExternPropertyWindow *>(externEditComponent->getPropertyWindow())->copyAttributesFromExtern(externObject);
+		static_cast<ExternPropertyWindow *>(externEditComponent->getPropertyWindow())->copyAttributesFromExtern(externObject);
 		createConnection(techniqueEditComponent, externEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
 	}
 

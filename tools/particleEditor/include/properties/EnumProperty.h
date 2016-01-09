@@ -3,6 +3,8 @@
 
 #include "properties/Property.h"
 
+class QComboBox;
+
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
@@ -23,8 +25,11 @@ namespace properties {
 
 		void setCurrentIndex(int index);
 
+		void setEnumString(QString value) override;
+
 	protected:
 		QStringList _value;
+		QComboBox * _comboBox;
 	};
 
 } /* namespace properties */

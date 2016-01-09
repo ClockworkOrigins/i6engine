@@ -94,6 +94,23 @@ namespace widgets {
 	AffectorPropertyWindow::~AffectorPropertyWindow() {
 	}
 
+	void AffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		// Name: Ogre::String
+		setString(PRNL_NAME, QString::fromStdString(affector->getName()));
+
+		// Type: List of types
+		setEnumString(PRNL_AFFECTOR_TYPE, QString::fromStdString(affector->getAffectorType()));
+
+		// Enabled: Bool
+		setBool(PRNL_AFFECTOR_ENABLED, affector->isEnabled());
+
+		// Position: Ogre::Vector3
+		setVector3(PRNL_AFFECTOR_POSITION, affector->position);
+
+		// Mass: ParticleUniverse::Real
+		setDouble(PRNL_AFFECTOR_MASS, affector->mass);
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

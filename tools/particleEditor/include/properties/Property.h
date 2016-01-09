@@ -3,6 +3,15 @@
 
 #include "ui_widgetProperty.h"
 
+#include "i6engine/math/i6eQuaternion.h"
+#include "i6engine/math/i6eVector4.h"
+
+#include "ParticleUniversePrerequisites.h"
+
+namespace ParticleUniverse {
+	class DynamicAttribute;
+} /* namespace ParticleUniverse */
+
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
@@ -20,6 +29,38 @@ namespace properties {
 		 * \brief destructor
 		 */
 		virtual ~Property();
+
+		QString getName() const {
+			return _name;
+		}
+
+		virtual void setBool(bool value) {
+			assert(false);
+		}
+		virtual void setColourWithAlpha(Vec4 value) {
+			assert(false);
+		}
+		virtual void setDouble(double value) {
+			assert(false);
+		}
+		virtual void setDynamicAttribute(ParticleUniverse::DynamicAttribute * value) {
+			assert(false);
+		}
+		virtual void setEnumString(QString value) {
+			assert(false);
+		}
+		virtual void setQuaternion(Quaternion value) {
+			assert(false);
+		}
+		virtual void setString(QString value) {
+			assert(false);
+		}
+		virtual void setUInt(unsigned int value) {
+			assert(false);
+		}
+		virtual void setVector3(ParticleUniverse::Vector3 value) {
+			assert(false);
+		}
 
 	protected:
 		QString _label;

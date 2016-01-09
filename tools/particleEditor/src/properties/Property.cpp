@@ -9,8 +9,6 @@ namespace properties {
 	Property::Property(QWidget * par, QString label, QString name) : QWidget(par), _label(label), _name(name) {
 		setupUi(this);
 		horizontalLayout->addWidget(new QLabel(label, this));
-		horizontalLayout->setStretch(0, 1);
-		horizontalLayout->setStretch(1, 1);
 	}
 
 	Property::~Property() {

@@ -3,10 +3,6 @@
 
 #include "properties/Property.h"
 
-namespace ParticleUniverse {
-	class DynamicAttribute;
-} /* namespace ParticleUniverse */
-
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
@@ -25,9 +21,16 @@ namespace properties {
 		 */
 		~DynamicAttributeProperty();
 
+		void setDynamicAttribute(ParticleUniverse::DynamicAttribute * value) override;
+
 	protected:
+		QWidget * _widget;
 		QGridLayout * _layout;
 		ParticleUniverse::DynamicAttribute * _value;
+		std::vector<QWidget *> _widgets;
+
+	private:
+		void createGUI();
 	};
 
 } /* namespace properties */

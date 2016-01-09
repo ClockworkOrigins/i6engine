@@ -58,7 +58,7 @@ namespace widgets {
 		// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
 		append(new properties::StringProperty(this, PRNL_SYSTEM_FAST_FORWARD, PRNL_SYSTEM_FAST_FORWARD, ""));
 		append(new properties::DoubleProperty(this, PRNL_SYSTEM_FAST_FORWARD_TIME, PRNL_SYSTEM_FAST_FORWARD_TIME, ParticleUniverse::ParticleSystem::DEFAULT_FAST_FORWARD_TIME));
-		append(new properties::DoubleProperty(this, PRNL_SYSTEM_FAST_FORWARD_INTERVAL, PRNL_SYSTEM_FAST_FORWARD_INTERVAL, 0.0f));
+		append(new properties::DoubleProperty(this, PRNL_SYSTEM_FAST_FORWARD_INTERVAL, PRNL_SYSTEM_FAST_FORWARD_INTERVAL, 0.0));
 
 		// Main camera name: Ogre::String
 		append(new properties::StringProperty(this, PRNL_SYSTEM_MAIN_CAMERA_NAME, PRNL_SYSTEM_MAIN_CAMERA_NAME, ""));
@@ -77,6 +77,60 @@ namespace widgets {
 	}
 
 	SystemPropertyWindow::~SystemPropertyWindow() {
+	}
+
+	void SystemPropertyWindow::copyAttributesFromSystem(ParticleUniverse::ParticleSystem * system) {
+		// Name: Ogre::String
+		QString templateName = QString::fromStdString(system->getTemplateName());
+		setString(PRNL_NAME, templateName);
+
+		// Keep local: Bool
+		setBool(PRNL_SYSTEM_KEEP_LOCAL, system->isKeepLocal());
+
+		// Iteration interval: ParticleUniverse::Real
+		setDouble(PRNL_SYSTEM_ITERATION_INTERVAL, system->getIterationInterval());
+
+		// Fixed timeout: ParticleUniverse::Real
+		setDouble(PRNL_SYSTEM_FIXED_TIMEOUT, system->getFixedTimeout());
+
+		// Non-visible update timeout: ParticleUniverse::Real
+		setDouble(PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT, system->getNonVisibleUpdateTimeout());
+
+		// Lod distances: List of ParticleUniverse::Real
+		/*wxPGProperty * prop = GetPropertyByName(PRNL_SYSTEM_LOD_DISTANCES);
+		if (prop) {
+			ParentPropertyWithButtonAndFloats * propLodDistances = static_cast<ParentPropertyWithButtonAndFloats *>(prop);
+			propLodDistances->reset();
+			ParticleUniverse::ParticleSystem::LodDistanceList list = system->getLodDistances();
+			ParticleUniverse::ParticleSystem::LodDistanceIterator it;
+			ParticleUniverse::ParticleSystem::LodDistanceIterator itEnd = list.end();
+			for (it = list.begin(); it != itEnd; ++it) {
+				propLodDistances->addFloat(this, Ogre::Math::Sqrt(*it));
+			}
+		}*/
+
+		// Smooth lod: bool
+		setBool(PRNL_SYSTEM_SMOOTH_LOD, system->isSmoothLod());
+
+		// Fast forward: ParticleUniverse::Real (time) + ParticleUniverse::Real (interval)
+		setDouble(PRNL_SYSTEM_FAST_FORWARD_TIME, system->getFastForwardTime());
+		setDouble(PRNL_SYSTEM_FAST_FORWARD_INTERVAL, system->getFastForwardInterval());
+
+		// Main camera name: Ogre::String
+		QString cameraName = QString::fromStdString(system->getMainCameraName());
+		setString(PRNL_SYSTEM_MAIN_CAMERA_NAME, cameraName);
+
+		// Scale velocity: ParticleUniverse::Real
+		setDouble(PRNL_SYSTEM_SCALE_VELOCITY, system->getScaleVelocity());
+
+		// Scale time: ParticleUniverse::Real
+		setDouble(PRNL_SYSTEM_SCALE_TIME, system->getScaleTime());
+
+		// Scale dimensions: Ogre::Vector3
+		setVector3(PRNL_SYSTEM_SCALE, system->getScale());
+
+		// Use tight bounding box: bool
+		setBool(PRNL_SYSTEM_TIGHT_BOUNDING_BOX, system->hasTightBoundingBox());
 	}
 
 } /* namespace widgets */

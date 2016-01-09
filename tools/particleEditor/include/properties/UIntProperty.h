@@ -3,6 +3,8 @@
 
 #include "properties/Property.h"
 
+class QSpinBox;
+
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
@@ -21,8 +23,11 @@ namespace properties {
 		 */
 		~UIntProperty();
 
+		void setUInt(unsigned int value) override;
+
 	protected:
 		unsigned int _value;
+		QSpinBox * _spinBox;
 	};
 
 } /* namespace properties */

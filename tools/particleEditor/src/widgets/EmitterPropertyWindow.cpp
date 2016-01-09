@@ -184,6 +184,94 @@ namespace widgets {
 	EmitterPropertyWindow::~EmitterPropertyWindow() {
 	}
 
+	void EmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) {
+		// Name: Ogre::String
+		setString(PRNL_NAME, QString::fromStdString(emitter->getName()));
+
+		// Type: List of types
+		setEnumString(PRNL_EMITTER_TYPE, QString::fromStdString(emitter->getEmitterType()));
+
+		// Enabled: Bool
+		setBool(PRNL_EMITTER_ENABLED, emitter->isEnabled());
+
+		// Position: Vector3
+		setVector3(PRNL_EMITTER_POSITION, emitter->position);
+
+		// Keep local: Bool
+		setBool(PRNL_EMITTER_KEEP_LOCAL, emitter->isKeepLocal());
+
+		// Direction: Vector3
+		setVector3(PRNL_EMITTER_DIRECTION, emitter->getOriginalParticleDirection());
+
+		// Orientation: Quaternion
+		setQuaternion(PRNL_EMITTER_ORIENTATION, Quaternion(emitter->getParticleOrientation()));
+
+		// Orientation range start: Quaternion
+		setQuaternion(PRNL_EMITTER_ORIENTATION_START, Quaternion(emitter->getParticleOrientationRangeStart()));
+
+		// Orientation range end: Quaternion
+		setQuaternion(PRNL_EMITTER_ORIENTATION_END, Quaternion(emitter->getParticleOrientationRangeEnd()));
+
+		// Velocity: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_VELOCITY, emitter->getDynVelocity());
+
+		// Duration: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_DURATION, emitter->getDynDuration());
+
+		// Repeat - Delay: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_REPEAT_DELAY, emitter->getDynRepeatDelay());
+
+		// Emits: Is no property, because this is done by means of connections
+
+		// Angle: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_ANGLE, emitter->getDynAngle());
+
+		// Emission rate: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_EMISSION_RATE, emitter->getDynEmissionRate());
+
+		// Time to live: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_TIME_TO_LIVE, emitter->getDynTotalTimeToLive());
+
+		// Mass: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_MASS, emitter->getDynParticleMass());
+
+		// Texture coordinate: Uint16
+		setUint16(PRNL_EMITTER_TEXTURE_COORD, emitter->getParticleTextureCoords());
+
+		// Texture coordinate Start: Uint16
+		setUint16(PRNL_EMITTER_TEXTURE_COORD_START, emitter->getParticleTextureCoordsRangeStart());
+
+		// Texture coordinate End: Uint16
+		setUint16(PRNL_EMITTER_TEXTURE_COORD_END, emitter->getParticleTextureCoordsRangeEnd());
+
+		// Colour: Colour attibute with alpha
+		setColourWithAlpha(PRNL_EMITTER_COLOUR, Vec4(255 * emitter->getParticleColour().a, 255 * emitter->getParticleColour().r, 255 * emitter->getParticleColour().g, 255 * emitter->getParticleColour().b));
+
+		// Colour range start: Colour attibute with alpha
+		setColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_START, Vec4(255 * emitter->getParticleColourRangeStart().a, 255 * emitter->getParticleColourRangeStart().r, 255 * emitter->getParticleColourRangeStart().g, 255 * emitter->getParticleColourRangeStart().b));
+
+		// Colour range end: Colour attibute with alpha
+		setColourWithAlpha(PRNL_EMITTER_COLOUR_RANGE_END, Vec4(255 * emitter->getParticleColourRangeEnd().a, 255 * emitter->getParticleColourRangeEnd().r, 255 * emitter->getParticleColourRangeEnd().g, 255 * emitter->getParticleColourRangeEnd().b));
+
+		// All particle dimensions: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_ALL_PARTICLE_DIM, emitter->getDynParticleAllDimensions());
+
+		// Particle width: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_PARTICLE_WIDTH, emitter->getDynParticleWidth());
+
+		// Particle height: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_PARTICLE_HEIGHT, emitter->getDynParticleHeight());
+
+		// Particle depth: Dynamic attibute
+		setDynamicAttribute(PRNL_EMITTER_PARTICLE_DEPTH, emitter->getDynParticleDepth());
+
+		// Auto direction: Bool
+		setBool(PRNL_EMITTER_AUTO_DIRECTION, emitter->isAutoDirection());
+
+		// Force emission: Bool
+		setBool(PRNL_EMITTER_FORCE_EMISSION, emitter->isForceEmission());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

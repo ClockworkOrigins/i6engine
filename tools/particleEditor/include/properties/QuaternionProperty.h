@@ -5,9 +5,13 @@
 
 #include "i6engine/math/i6eQuaternion.h"
 
+class QDoubleSpinBox;
+
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
+
+	class Vec3Property;
 
 	class QuaternionProperty : public Property {
 		Q_OBJECT
@@ -23,9 +27,13 @@ namespace properties {
 		 */
 		~QuaternionProperty();
 
+		void setQuaternion(Quaternion value) override;
+
 	protected:
 		QGridLayout * _layout;
 		Quaternion _value;
+		Vec3Property * _vec3Property;
+		QDoubleSpinBox * _doubleSpinBox;
 	};
 
 } /* namespace properties */

@@ -6,7 +6,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	PropertyWindow::PropertyWindow(QWidget * par, QString name) : QWidget(par), _name(name), _types() {
+	PropertyWindow::PropertyWindow(QWidget * par, QString name) : QWidget(par), _name(name), _types(), _properties() {
 		setupUi(this);
 
 		PRNL_NAME = "Name";
@@ -66,6 +66,43 @@ namespace widgets {
 
 	void PropertyWindow::append(properties::Property * prop) {
 		verticalLayout->addWidget(prop);
+		_properties.insert(std::make_pair(prop->getName(), prop));
+	}
+
+	void PropertyWindow::setBool(QString name, bool value) {
+		_properties[name]->setBool(value);
+	}
+
+	void PropertyWindow::setColourWithAlpha(QString name, Vec4 value) {
+		_properties[name]->setColourWithAlpha(value);
+	}
+
+	void PropertyWindow::setDouble(QString name, double value) {
+		_properties[name]->setDouble(value);
+	}
+
+	void PropertyWindow::setDynamicAttribute(QString name, ParticleUniverse::DynamicAttribute * value) {
+		_properties[name]->setDynamicAttribute(value);
+	}
+
+	void PropertyWindow::setEnumString(QString name, QString value) {
+		_properties[name]->setEnumString(value);
+	}
+
+	void PropertyWindow::setQuaternion(QString name, Quaternion value) {
+		_properties[name]->setQuaternion(value);
+	}
+
+	void PropertyWindow::setString(QString name, QString value) {
+		_properties[name]->setString(value);
+	}
+
+	void PropertyWindow::setUint16(QString name, uint16_t value) {
+		_properties[name]->setUInt(value);
+	}
+
+	void PropertyWindow::setVector3(QString name, ParticleUniverse::Vector3 value) {
+		_properties[name]->setVector3(value);
 	}
 
 } /* namespace widgets */

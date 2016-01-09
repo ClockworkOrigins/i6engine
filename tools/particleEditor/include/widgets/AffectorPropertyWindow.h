@@ -3,6 +3,10 @@
 
 #include "widgets/PropertyWindow.h"
 
+namespace ParticleUniverse {
+	class ParticleAffector;
+} /* namespace ParticleUniverse */
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -29,6 +33,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		virtual ~AffectorPropertyWindow();
+
+		virtual void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector);
 	};
 
 } /* namespace widgets */

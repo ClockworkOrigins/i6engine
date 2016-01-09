@@ -3,7 +3,16 @@
 
 #include "ui_widgetPropertyWindow.h"
 
+#include "i6engine/math/i6eQuaternion.h"
+#include "i6engine/math/i6eVector4.h"
+
+#include "ParticleUniversePrerequisites.h"
+
 #include <QStringList>
+
+namespace ParticleUniverse {
+	class DynamicAttribute;
+} /* namespace ParticleUniverse */
 
 namespace i6engine {
 namespace particleEditor {
@@ -109,9 +118,20 @@ namespace widgets {
 	protected:
 		void append(properties::Property * prop);
 
+		void setBool(QString name, bool value);
+		void setColourWithAlpha(QString name, Vec4 value);
+		void setDouble(QString name, double value);
+		void setDynamicAttribute(QString name, ParticleUniverse::DynamicAttribute * value);
+		void setEnumString(QString name, QString value);
+		void setQuaternion(QString name, Quaternion value);
+		void setString(QString name, QString value);
+		void setUint16(QString name, uint16_t value);
+		void setVector3(QString name, ParticleUniverse::Vector3 value);
+
 	private:
 		QString _name;
 		QStringList _types;
+		std::map<QString, properties::Property *> _properties;
 	};
 
 } /* namespace widgets */
