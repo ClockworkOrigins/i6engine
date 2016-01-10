@@ -121,6 +121,7 @@ namespace widgets {
 
 	signals:
 		void replacePropertyWindow(QString);
+		void renameParticleSystem(QString, QString);
 
 	protected:
 		WidgetEditComponent * _owner;

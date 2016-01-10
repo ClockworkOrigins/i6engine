@@ -288,6 +288,10 @@ namespace widgets {
 		resetConnectionMode();
 	}
 
+	void WidgetEdit::triggerRenameParticleSystem(QString oldName, QString newName) {
+		emit renameParticleSystem(oldName, newName);
+	}
+
 	void WidgetEdit::createTechniqueForComponent(WidgetEditComponent * component) {
 		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 		ParticleUniverse::ParticleTechnique * newTechnique = particleSystemManager->createTechnique();
@@ -368,6 +372,7 @@ namespace widgets {
 
 		_graphicsScene->addItem(systemComponent);
 		_components.push_back(systemComponent);
+		connect(systemComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return systemComponent;
 	}
 
@@ -385,6 +390,7 @@ namespace widgets {
 		technique->addPolicy(CR_ENABLE, CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
 		_graphicsScene->addItem(technique);
 		_components.push_back(technique);
+		connect(technique, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return technique;
 	}
 
@@ -394,6 +400,7 @@ namespace widgets {
 		rendererComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		_graphicsScene->addItem(rendererComponent);
 		_components.push_back(rendererComponent);
+		connect(rendererComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return rendererComponent;
 	}
 
@@ -415,6 +422,7 @@ namespace widgets {
 		emitterComponent->addPolicy(CR_PLACE, CRDIR_SECUNDAIRY, CRD_PLACED_BY, CT_HANDLER, CST_HANDLER_DO_PLACEMENT_PARTICLE, true, false, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
 		_graphicsScene->addItem(emitterComponent);
 		_components.push_back(emitterComponent);
+		connect(emitterComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return emitterComponent;
 	}
 
@@ -428,6 +436,7 @@ namespace widgets {
 		affectorComponent->addPolicy(CR_FORCE, CRDIR_SECUNDAIRY, CRD_FORCED_BY, CT_HANDLER, CST_HANDLER_DO_AFFECTOR, true, false, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
 		_graphicsScene->addItem(affectorComponent);
 		_components.push_back(affectorComponent);
+		connect(affectorComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return affectorComponent;
 	}
 
@@ -439,6 +448,7 @@ namespace widgets {
 		observerComponent->addPolicy(CR_ENABLE, CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
 		_graphicsScene->addItem(observerComponent);
 		_components.push_back(observerComponent);
+		connect(observerComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return observerComponent;
 	}
 
@@ -455,6 +465,7 @@ namespace widgets {
 		handler->addPolicy(CR_FORCE, CRDIR_PRIMARY, CRD_FORCES, CT_AFFECTOR, CST_UNDEFINED, false, true, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
 		_graphicsScene->addItem(handler);
 		_components.push_back(handler);
+		connect(handler, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return handler;
 	}
 
@@ -464,6 +475,7 @@ namespace widgets {
 		behaviourComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		_graphicsScene->addItem(behaviourComponent);
 		_components.push_back(behaviourComponent);
+		connect(behaviourComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return behaviourComponent;
 	}
 
@@ -473,6 +485,7 @@ namespace widgets {
 		externObjectComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		_graphicsScene->addItem(externObjectComponent);
 		_components.push_back(externObjectComponent);
+		connect(externObjectComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return externObjectComponent;
 	}
 

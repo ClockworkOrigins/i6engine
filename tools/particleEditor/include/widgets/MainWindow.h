@@ -38,6 +38,7 @@ namespace widgets {
 		void createNewSystem(const QString & particle);
 		void tabChanged(int index);
 		void setPropertyWindow(PropertyWindow * propertyWindow);
+		void renameParticleSystem(QString oldName, QString newName);
 
 	private:
 		enum class CurrentTab {

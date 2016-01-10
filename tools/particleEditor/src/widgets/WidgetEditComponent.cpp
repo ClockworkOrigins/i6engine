@@ -243,6 +243,7 @@ namespace widgets {
 			}
 		}
 		connect(_propertyWindow, SIGNAL(replacePropertyWindow(QString)), this, SLOT(replacePropertyWindow(QString)), Qt::QueuedConnection);
+		connect(_propertyWindow, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
 		return _propertyWindow;
 	}
 
@@ -272,6 +273,10 @@ namespace widgets {
 			dynamic_cast<ExternPropertyWindow *>(_propertyWindow)->copyAttributesFromExtern(dynamic_cast<ParticleUniverse::Extern *>(_element));
 		}
 		_parent->notifyComponentActivated(this);
+	}
+
+	void WidgetEditComponent::triggerRenameParticleSystem(QString oldName, QString newName) {
+		emit renameParticleSystem(oldName, newName);
 	}
 
 	void WidgetEditComponent::mousePressEvent(QGraphicsSceneMouseEvent * evt) {

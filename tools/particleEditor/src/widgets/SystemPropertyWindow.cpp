@@ -8,6 +8,7 @@
 #include "widgets/WidgetEditComponent.h"
 
 #include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
 
 namespace i6engine {
 namespace particleEditor {
@@ -157,16 +158,18 @@ namespace widgets {
 
 		if (propertyName == PRNL_NAME) {
 			// Name: String
+			QString oldName = QString::fromStdString(system->getTemplateName());
+			if (prop->getString() == oldName) {
+				return;
+			}
 			_owner->setName(prop->getString());
 			_owner->setCaption();
 			system->setTemplateName(prop->getString().toStdString());
 
 			// Update everything
-			/*if (mRootFrame) {
-				ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
-				particleSystemManager->createParticleSystemTemplate(name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-				mRootFrame->replaceTemplateName(name);
-			}*/
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			particleSystemManager->addParticleSystemTemplate(prop->getString().toStdString(), system);
+			emit renameParticleSystem(oldName, prop->getString()); // change name only when saving and reload all scripts then to be able to use!
 		} else if (propertyName == PRNL_SYSTEM_CATEGORY) {
 		} else if (propertyName == PRNL_SYSTEM_KEEP_LOCAL) {
 			// Keep local: Bool

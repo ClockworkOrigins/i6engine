@@ -117,6 +117,7 @@ namespace widgets {
 		_toolBarEdit->hide();
 
 		connect(_editWidget, SIGNAL(setPropertyWindow(PropertyWindow *)), this, SLOT(setPropertyWindow(PropertyWindow *)));
+		connect(_editWidget, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(renameParticleSystem(QString, QString)));
 	}
 
 	MainWindow::~MainWindow() {
@@ -272,7 +273,6 @@ namespace widgets {
 	void MainWindow::setPropertyWindow(PropertyWindow * propertyWindow) {
 		if (_currentTab != CurrentTab::Edit) {
 			if (_currentPropertyWindow) {
-				std::cout << "Removing Window" << std::endl;
 				_leftLayout->removeWidget(_currentPropertyWindow);
 				_currentPropertyWindow->hide();
 				_currentPropertyWindow = nullptr;
@@ -280,18 +280,25 @@ namespace widgets {
 			return;
 		}
 		if (_currentPropertyWindow) {
-			std::cout << "Removing Window" << std::endl;
 			_leftLayout->removeWidget(_currentPropertyWindow);
 			_currentPropertyWindow->hide();
 		}
 		if (propertyWindow) {
-			std::cout << "Adding Window" << std::endl;
 			_leftLayout->addWidget(propertyWindow);
 			propertyWindow->show();
 			_leftLayout->setStretch(0, 1);
 			_leftLayout->setStretch(1, 1);
 		}
 		_currentPropertyWindow = propertyWindow;
+	}
+
+	void MainWindow::renameParticleSystem(QString oldName, QString newName) {
+		// Script has changed. Reparse and update the templates
+		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		particleSystemManager->destroyParticleSystemTemplate(oldName.toStdString()); // Delete the old template
+
+		_particleListWidget->refreshParticleList();
+		_particleListWidget->selectParticle(newName);
 	}
 
 } /* namespace widgets */
