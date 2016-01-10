@@ -65,6 +65,47 @@ namespace properties {
 			assert(false);
 		}
 
+		virtual bool getBool() const {
+			assert(false);
+			return false;
+		}
+		virtual Vec4 getColourWithAlpha() const {
+			assert(false);
+			return Vec4();
+		}
+		virtual double getDouble() const {
+			assert(false);
+			return 0.0;
+		}
+		virtual ParticleUniverse::DynamicAttribute * getDynamicAttribute() const {
+			assert(false);
+			return nullptr;
+		}
+		virtual int getCurrentIndex() const {
+			assert(false);
+			return 0;
+		}
+		virtual Quaternion getQuaternion() const {
+			assert(false);
+			return Quaternion();
+		}
+		virtual QString getString() const {
+			assert(false);
+			return QString();
+		}
+		virtual unsigned int getUInt() const {
+			assert(false);
+			return 0;
+		}
+		virtual ParticleUniverse::Vector3 getVector3() const {
+			assert(false);
+			return ParticleUniverse::Vector3();
+		}
+		virtual std::vector<ParticleUniverse::Vector3> getVector3List() const {
+			assert(false);
+			return std::vector<ParticleUniverse::Vector3>();
+		}
+
 	signals:
 		void changed(QString);
 

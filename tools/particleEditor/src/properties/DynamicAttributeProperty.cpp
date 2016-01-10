@@ -117,11 +117,37 @@ namespace properties {
 			break;
 		}
 		default: {
-			_value = nullptr;
 			break;
 		}
 		}
 		triggerChangedSignal();
+	}
+
+	ParticleUniverse::DynamicAttribute * DynamicAttributeProperty::getDynamicAttribute() const {
+		ParticleUniverse::DynamicAttribute * value = nullptr;
+		switch (_value->getType()) {
+		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_FIXED: {
+			value = new ParticleUniverse::DynamicAttributeFixed();
+			break;
+		}
+		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_RANDOM: {
+			value = new ParticleUniverse::DynamicAttributeRandom();
+			break;
+		}
+		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_CURVED: {
+			value = new ParticleUniverse::DynamicAttributeCurved();
+			break;
+		}
+		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_OSCILLATE: {
+			value = new ParticleUniverse::DynamicAttributeOscillate();
+			break;
+		}
+		default: {
+			break;
+		}
+		}
+		_value->copyAttributesTo(value);
+		return value;
 	}
 
 	void DynamicAttributeProperty::createGUI() {

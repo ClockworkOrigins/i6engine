@@ -25,6 +25,10 @@ namespace properties {
 
 		void setUInt(unsigned int value) override;
 
+		unsigned int getUInt() const override {
+			return _value;
+		}
+
 	private slots:
 		void changedValue();
 

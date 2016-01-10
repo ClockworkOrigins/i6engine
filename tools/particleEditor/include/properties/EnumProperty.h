@@ -27,6 +27,8 @@ namespace properties {
 
 		void setEnumString(QString value) override;
 
+		int getCurrentIndex() const override;
+
 	private slots:
 		void changedValue();
 

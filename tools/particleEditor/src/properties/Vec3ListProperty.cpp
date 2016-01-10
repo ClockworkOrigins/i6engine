@@ -40,6 +40,14 @@ namespace properties {
 		}
 	}
 
+	std::vector<ParticleUniverse::Vector3> Vec3ListProperty::getVector3List() const {
+		std::vector<ParticleUniverse::Vector3> value;
+		for (Vec3Property * v3p : _positions) {
+			value.push_back(v3p->getVector3());
+		}
+		return value;
+	}
+
 	void Vec3ListProperty::addPosition() {
 		Vec3Property * v3p = new Vec3Property(this, widgets::PRNL_POSITION, widgets::PRNL_POSITION, ParticleUniverse::Vector3::ZERO);
 		_layout->addWidget(v3p);

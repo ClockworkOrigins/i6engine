@@ -2,6 +2,13 @@
 
 #include "properties/StringProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
+#include "ParticleUniverseAffector.h"
+#include "ParticleUniverseEmitter.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -111,10 +118,100 @@ namespace widgets {
 	}
 
 	void PropertyWindow::changedProperty(properties::Property * prop, QString name) {
+		if (name == PRNL_NAME) {
+			_owner->setName(prop->getString());
+			_owner->setCaption();
+		}
+	}
+
+	void PropertyWindow::restartParticle(ParticleUniverse::IElement * element, ParticleUniverse::Particle::ParticleType elementType, ParticleUniverse::Particle::ParticleType unprepareType) {
+		if (!element) {
+			return;
+		}
+
+		ParticleUniverse::ParticleTechnique * technique = nullptr;
+		switch (elementType) {
+		case ParticleUniverse::Particle::PT_TECHNIQUE: {
+			technique = static_cast<ParticleUniverse::ParticleTechnique *>(element);
+			break;
+		}
+		case ParticleUniverse::Particle::PT_EMITTER: {
+			ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element);
+			technique = emitter->getParentTechnique();
+			break;
+		}
+		case ParticleUniverse::Particle::PT_AFFECTOR: {
+			ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(element);
+			technique = affector->getParentTechnique();
+			break;
+		}
+		default: {
+			break;
+		}
+		}
+
+		if (!technique) {
+			return;
+		}
+
+		ParticleUniverse::ParticleSystem * system = technique->getParentSystem();
+		bool wasStarted = mustStopParticleSystem(system);
+		switch (unprepareType) {
+		case  ParticleUniverse::Particle::PT_SYSTEM: {
+			technique->_unprepareSystem();
+			// TODO: (Daniel) no break here, is this correct?
+		}
+		case  ParticleUniverse::Particle::PT_TECHNIQUE: {
+			technique->_unprepareTechnique();
+			break;
+		}
+		case  ParticleUniverse::Particle::PT_EMITTER: {
+			technique->_unprepareEmitters();
+			break;
+		}
+		case  ParticleUniverse::Particle::PT_AFFECTOR: {
+			technique->_unprepareAffectors();
+			break;
+		}
+		case  ParticleUniverse::Particle::PT_VISUAL: {
+			technique->_unprepareVisualParticles();
+			break;
+		}
+		default: {
+			break;
+		}
+		}
+		mustRestartParticleSystem(system, wasStarted);
 	}
 
 	void PropertyWindow::changedProperty(QString name) {
 		changedProperty(_properties[name], name);
+	}
+
+	bool PropertyWindow::mustStopParticleSystem(ParticleUniverse::ParticleSystem * system) {
+		if (!system) {
+			return false;
+		}
+
+		bool wasStarted = false;
+		if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
+			wasStarted = true;
+			system->stop();
+		}
+		return wasStarted;
+	}
+
+	void PropertyWindow::mustRestartParticleSystem(ParticleUniverse::ParticleSystem * system, bool wasStarted) {
+		if (!system) {
+			return;
+		}
+
+		// Start the system if needed
+		if (wasStarted) {
+			if (system) {
+				system->start();
+			}
+		}
 	}
 
 } /* namespace widgets */

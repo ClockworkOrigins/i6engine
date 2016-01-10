@@ -24,6 +24,10 @@ namespace properties {
 		_comboBox->setCurrentText(value);
 	}
 
+	int EnumProperty::getCurrentIndex() const {
+		return _comboBox->currentIndex();
+	}
+
 	void EnumProperty::changedValue() {
 		triggerChangedSignal();
 	}

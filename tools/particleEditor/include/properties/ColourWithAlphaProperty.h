@@ -27,6 +27,10 @@ namespace properties {
 
 		void setColourWithAlpha(Vec4 value) override;
 
+		Vec4 getColourWithAlpha() const override {
+			return _value;
+		}
+
 	private slots:
 		void valueChanged();
 

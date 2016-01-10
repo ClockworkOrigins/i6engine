@@ -29,6 +29,10 @@ namespace properties {
 
 		void setQuaternion(Quaternion value) override;
 
+		Quaternion getQuaternion() const override {
+			return _value;
+		}
+
 	private slots:
 		void changedValue();
 

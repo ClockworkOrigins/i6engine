@@ -25,6 +25,10 @@ namespace properties {
 
 		void setBool(bool value) override;
 
+		bool getBool() const override {
+			return _value;
+		}
+
 	private slots:
 		void boolChanged();
 

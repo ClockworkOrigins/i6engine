@@ -23,6 +23,10 @@ namespace properties {
 
 		void setString(QString value) override;
 
+		QString getString() const override {
+			return _value;
+		}
+
 	private slots:
 		void stringChanged(QString value);
 

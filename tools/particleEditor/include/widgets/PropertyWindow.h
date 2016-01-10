@@ -6,12 +6,14 @@
 #include "i6engine/math/i6eQuaternion.h"
 #include "i6engine/math/i6eVector4.h"
 
+#include "ParticleUniverseParticle.h"
 #include "ParticleUniversePrerequisites.h"
 
 #include <QStringList>
 
 namespace ParticleUniverse {
 	class DynamicAttribute;
+	class IElement;
 } /* namespace ParticleUniverse */
 
 namespace i6engine {
@@ -133,6 +135,8 @@ namespace widgets {
 
 		virtual void changedProperty(properties::Property * prop, QString name);
 
+		void restartParticle(ParticleUniverse::IElement * element, ParticleUniverse::Particle::ParticleType elementType, ParticleUniverse::Particle::ParticleType unprepareType);
+
 	private slots:
 		void changedProperty(QString name);
 
@@ -141,6 +145,9 @@ namespace widgets {
 		QString _name;
 		QStringList _types;
 		std::map<QString, properties::Property *> _properties;
+
+		bool mustStopParticleSystem(ParticleUniverse::ParticleSystem * system);
+		void mustRestartParticleSystem(ParticleUniverse::ParticleSystem * system, bool wasStarted);
 	};
 
 } /* namespace widgets */

@@ -25,6 +25,10 @@ namespace properties {
 
 		void setDouble(double value) override;
 
+		double getDouble() const override {
+			return _value;
+		}
+
 	private slots:
 		void valueChanged();
 

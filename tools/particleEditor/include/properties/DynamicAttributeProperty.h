@@ -26,6 +26,8 @@ namespace properties {
 
 		void setDynamicAttribute(ParticleUniverse::DynamicAttribute * value) override;
 
+		ParticleUniverse::DynamicAttribute * getDynamicAttribute() const override;
+
 	private slots:
 		void changedDynamicType();
 		void changedValue();
