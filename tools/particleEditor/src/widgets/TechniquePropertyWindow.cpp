@@ -183,7 +183,7 @@ namespace widgets {
 				}
 			}
 		}
-		//notifyPropertyChanged();
+		emit notifyChanged();
 	}
 
 	void TechniquePropertyWindow::copyAttributeToTechnique(properties::Property * prop, QString propertyName) {

@@ -320,10 +320,12 @@ namespace widgets {
 
 	signals:
 		void renameParticleSystem(QString, QString);
+		void notifyChanged();
 
 	private slots:
 		void replacePropertyWindow(QString subType);
 		void triggerRenameParticleSystem(QString oldName, QString newName);
+		void triggerNotifyChanged();
 
 	private:
 		WidgetEdit * _parent;

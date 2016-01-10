@@ -98,7 +98,7 @@ namespace widgets {
 	void RendererPropertyWindow::changedProperty(properties::Property * prop, QString name) {
 		PropertyWindow::changedProperty(prop, name);
 		copyAttributeToRenderer(prop, name);
-		//notifyPropertyChanged();
+		emit notifyChanged();
 	}
 
 	void RendererPropertyWindow::copyAttributeToRenderer(properties::Property * prop, QString propertyName) {

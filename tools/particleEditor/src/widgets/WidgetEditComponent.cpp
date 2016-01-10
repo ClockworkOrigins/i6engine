@@ -244,6 +244,7 @@ namespace widgets {
 		}
 		connect(_propertyWindow, SIGNAL(replacePropertyWindow(QString)), this, SLOT(replacePropertyWindow(QString)), Qt::QueuedConnection);
 		connect(_propertyWindow, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(_propertyWindow, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()));
 		return _propertyWindow;
 	}
 
@@ -277,6 +278,10 @@ namespace widgets {
 
 	void WidgetEditComponent::triggerRenameParticleSystem(QString oldName, QString newName) {
 		emit renameParticleSystem(oldName, newName);
+	}
+
+	void WidgetEditComponent::triggerNotifyChanged() {
+		emit notifyChanged();
 	}
 
 	void WidgetEditComponent::mousePressEvent(QGraphicsSceneMouseEvent * evt) {

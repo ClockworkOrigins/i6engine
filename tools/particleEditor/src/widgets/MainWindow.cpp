@@ -31,6 +31,7 @@ namespace widgets {
 		QToolBar * tb = new QToolBar(toolBarWrapper);
 		QAction * newAction = tb->addAction(QIcon("../media/textures/new.png"), "New Particle");
 		QAction * cloneAction = tb->addAction(QIcon("../media/textures/clone.png"), "Clone Particle");
+		QAction * saveAction = tb->addAction(QIcon("../media/textures/save.png"), "Save Particle");
 		tb->addSeparator();
 		QAction * playAction = tb->addAction(QIcon("../media/textures/control_play.png"), "Play");
 		QAction * pauseAction = tb->addAction(QIcon("../media/textures/control_pause.png"), "Pause");
@@ -38,6 +39,7 @@ namespace widgets {
 
 		connect(newAction, SIGNAL(triggered()), this, SLOT(handleNewAction()));
 		connect(cloneAction, SIGNAL(triggered()), this, SLOT(handleCloneAction()));
+		connect(saveAction, SIGNAL(triggered()), _particleListWidget, SLOT(saveParticle()));
 
 		connect(playAction, SIGNAL(triggered()), this, SLOT(handlePlayAction()));
 		connect(this, SIGNAL(triggerPlay()), _renderWidget, SLOT(play()));
@@ -49,6 +51,7 @@ namespace widgets {
 		connect(_particleListWidget, SIGNAL(createNewSystem(const QString &)), this, SLOT(createNewSystem(const QString &)));
 		connect(this, SIGNAL(triggerCreateNewSystem(const QString &)), _renderWidget, SLOT(createNewSystem(const QString &)));
 		connect(_renderWidget, SIGNAL(setNewParticleSystem(ParticleUniverse::ParticleSystem *)), _editWidget, SLOT(setNewParticleSystem(ParticleUniverse::ParticleSystem *)));
+		connect(_renderWidget, SIGNAL(setNewParticleSystem(ParticleUniverse::ParticleSystem *)), _particleListWidget, SLOT(setNewParticleSystem(ParticleUniverse::ParticleSystem *)));
 		connect(_renderWidget, SIGNAL(loadScript(ParticleUniverse::ParticleSystem *)), _scriptWidget, SLOT(loadScript(ParticleUniverse::ParticleSystem *)));
 		connect(this, SIGNAL(updateScript(ParticleUniverse::ParticleSystem *)), _scriptWidget, SLOT(loadScript(ParticleUniverse::ParticleSystem *)));
 		connect(_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
@@ -119,6 +122,7 @@ namespace widgets {
 
 		connect(_editWidget, SIGNAL(setPropertyWindow(PropertyWindow *)), this, SLOT(setPropertyWindow(PropertyWindow *)));
 		connect(_editWidget, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(renameParticleSystem(QString, QString)));
+		connect(_editWidget, SIGNAL(notifyChanged()), _particleListWidget, SLOT(notifyChanged()));
 	}
 
 	MainWindow::~MainWindow() {

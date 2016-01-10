@@ -106,8 +106,7 @@ namespace widgets {
 	}
 
 	void WidgetEdit::notifyConnectionsChanged() {
-		//mEditTools->notifyConnectionsChanged();
-		//mEditChanged = true; // If a connection is made or removed, the flag must be set.
+		emit notifyChanged();
 	}
 
 	void WidgetEdit::notifyConnectionAdded(WidgetEditComponent * node1, WidgetEditComponent * node2, ComponentRelation relation, ComponentRelationDirection relationDirection) {
@@ -292,6 +291,10 @@ namespace widgets {
 		emit renameParticleSystem(oldName, newName);
 	}
 
+	void WidgetEdit::triggerNotifyChanged() {
+		emit notifyChanged();
+	}
+
 	void WidgetEdit::createTechniqueForComponent(WidgetEditComponent * component) {
 		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 		ParticleUniverse::ParticleTechnique * newTechnique = particleSystemManager->createTechnique();
@@ -373,6 +376,7 @@ namespace widgets {
 		_graphicsScene->addItem(systemComponent);
 		_components.push_back(systemComponent);
 		connect(systemComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(systemComponent, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()), Qt::QueuedConnection);
 		return systemComponent;
 	}
 
@@ -391,6 +395,7 @@ namespace widgets {
 		_graphicsScene->addItem(technique);
 		_components.push_back(technique);
 		connect(technique, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(technique, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()), Qt::QueuedConnection);
 		return technique;
 	}
 
@@ -401,6 +406,7 @@ namespace widgets {
 		_graphicsScene->addItem(rendererComponent);
 		_components.push_back(rendererComponent);
 		connect(rendererComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(rendererComponent, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()), Qt::QueuedConnection);
 		return rendererComponent;
 	}
 
@@ -423,6 +429,7 @@ namespace widgets {
 		_graphicsScene->addItem(emitterComponent);
 		_components.push_back(emitterComponent);
 		connect(emitterComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(emitterComponent, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()), Qt::QueuedConnection);
 		return emitterComponent;
 	}
 
@@ -437,6 +444,7 @@ namespace widgets {
 		_graphicsScene->addItem(affectorComponent);
 		_components.push_back(affectorComponent);
 		connect(affectorComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(affectorComponent, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()), Qt::QueuedConnection);
 		return affectorComponent;
 	}
 
@@ -449,6 +457,7 @@ namespace widgets {
 		_graphicsScene->addItem(observerComponent);
 		_components.push_back(observerComponent);
 		connect(observerComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(observerComponent, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()), Qt::QueuedConnection);
 		return observerComponent;
 	}
 
@@ -466,6 +475,7 @@ namespace widgets {
 		_graphicsScene->addItem(handler);
 		_components.push_back(handler);
 		connect(handler, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(handler, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()), Qt::QueuedConnection);
 		return handler;
 	}
 
@@ -476,6 +486,7 @@ namespace widgets {
 		_graphicsScene->addItem(behaviourComponent);
 		_components.push_back(behaviourComponent);
 		connect(behaviourComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(behaviourComponent, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()), Qt::QueuedConnection);
 		return behaviourComponent;
 	}
 
@@ -486,6 +497,7 @@ namespace widgets {
 		_graphicsScene->addItem(externObjectComponent);
 		_components.push_back(externObjectComponent);
 		connect(externObjectComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
+		connect(externObjectComponent, SIGNAL(notifyChanged()), this, SLOT(triggerNotifyChanged()), Qt::QueuedConnection);
 		return externObjectComponent;
 	}
 

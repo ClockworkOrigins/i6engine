@@ -284,7 +284,7 @@ namespace widgets {
 			//restartParticleEmitters(emitter);
 			restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
 		}
-		//notifyPropertyChanged();
+		emit notifyChanged();
 	}
 
 	void EmitterPropertyWindow::copyAttributeToEmitter(properties::Property * prop, QString propertyName) {

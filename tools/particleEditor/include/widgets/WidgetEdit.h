@@ -71,6 +71,7 @@ namespace widgets {
 	signals:
 		void setPropertyWindow(PropertyWindow *);
 		void renameParticleSystem(QString, QString);
+		void notifyChanged();
 
 	private slots:
 		void setNewParticleSystem(ParticleUniverse::ParticleSystem * newParticleSystem);
@@ -86,6 +87,7 @@ namespace widgets {
 		void removeConnection();
 		void triggerResetConnectionMode();
 		void triggerRenameParticleSystem(QString oldName, QString newName);
+		void triggerNotifyChanged();
 
 	private:
 		GraphicsScene * _graphicsScene;

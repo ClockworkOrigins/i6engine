@@ -53,7 +53,7 @@ namespace widgets {
 	void EventHandlerPropertyWindow::changedProperty(properties::Property * prop, QString name) {
 		PropertyWindow::changedProperty(prop, name);
 		copyAttributeToEventHandler(prop, name);
-		//notifyPropertyChanged();
+		emit notifyChanged();
 	}
 
 	void EventHandlerPropertyWindow::copyAttributeToEventHandler(properties::Property * prop, QString propertyName) {

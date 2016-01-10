@@ -122,7 +122,7 @@ namespace widgets {
 			// Unprepare, to change a property of an emitted affector
 			restartParticle(affector, ParticleUniverse::Particle::PT_AFFECTOR, ParticleUniverse::Particle::PT_AFFECTOR);
 		}
-		//notifyPropertyChanged();
+		emit notifyChanged();
 	}
 
 	void AffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {

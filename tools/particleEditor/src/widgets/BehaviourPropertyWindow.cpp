@@ -36,7 +36,7 @@ namespace widgets {
 	void BehaviourPropertyWindow::changedProperty(properties::Property * prop, QString name) {
 		PropertyWindow::changedProperty(prop, name);
 		copyAttributeToBehaviour(prop, name);
-		//notifyPropertyChanged();
+		emit notifyChanged();
 	}
 
 	void BehaviourPropertyWindow::copyAttributeToBehaviour(properties::Property * prop, QString propertyName) {

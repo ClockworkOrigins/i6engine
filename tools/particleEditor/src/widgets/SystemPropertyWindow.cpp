@@ -143,7 +143,7 @@ namespace widgets {
 			// Force recreation of new emitted systems
 			// Todo: Implement later, because this version of the editor doesn't support emitted particle systems.
 		}
-		//notifyPropertyChanged();
+		emit notifyChanged();
 	}
 
 	void SystemPropertyWindow::copyAttributeToSystem(properties::Property * prop, QString propertyName) {

@@ -48,7 +48,7 @@ namespace widgets {
 	void ExternPropertyWindow::changedProperty(properties::Property * prop, QString name) {
 		PropertyWindow::changedProperty(prop, name);
 		copyAttributeToExtern(prop, name);
-		//notifyPropertyChanged();
+		emit notifyChanged();
 	}
 
 	void ExternPropertyWindow::copyAttributeToExtern(properties::Property * prop, QString propertyName) {

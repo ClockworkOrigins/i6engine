@@ -3,6 +3,10 @@
 
 #include "ui_widgetParticleList.h"
 
+namespace ParticleUniverse {
+	class ParticleSystem;
+} /* namespace ParticleUniverse */
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -39,10 +43,16 @@ namespace widgets {
 	private slots:
 		void selectParticle(QTreeWidgetItem * item);
 		void selectParticle(QString templateName);
+		void setNewParticleSystem(ParticleUniverse::ParticleSystem * system);
+		void notifyChanged();
+		void saveParticle();
 
 	private:
 		QString _currentParticleTemplate;
 		std::map<QString, QTreeWidgetItem *> _templateMap;
+		ParticleUniverse::ParticleSystem * _system;
+		bool _dirty;
+		QString _script;
 
 		void refreshParticleList();
 	};

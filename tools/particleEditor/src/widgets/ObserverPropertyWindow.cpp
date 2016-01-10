@@ -134,7 +134,7 @@ namespace widgets {
 	void ObserverPropertyWindow::changedProperty(properties::Property * prop, QString name) {
 		PropertyWindow::changedProperty(prop, name);
 		copyAttributeToObserver(prop, name);
-		//notifyPropertyChanged();
+		emit notifyChanged();
 	}
 
 	void ObserverPropertyWindow::copyAttributeToObserver(properties::Property * prop, QString propertyName) {
