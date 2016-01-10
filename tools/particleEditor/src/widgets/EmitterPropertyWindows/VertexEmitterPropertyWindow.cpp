@@ -32,6 +32,25 @@ namespace widgets {
 	VertexEmitterPropertyWindow::~VertexEmitterPropertyWindow() {
 	}
 
+	void VertexEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) {
+		EmitterPropertyWindow::copyAttributesFromEmitter(emitter);
+
+		// Copy properties from emitter to property window
+		ParticleUniverse::VertexEmitter * vertexEmitter = static_cast<ParticleUniverse::VertexEmitter *>(emitter);
+
+		// Step: ParticleUniverse::uint
+		setUint16(PRNL_VERTEX_EMITTER_STEP, vertexEmitter->getStep());
+
+		// Segments: ParticleUniverse::uint
+		setUint16(PRNL_VERTEX_EMITTER_SEGMENTS, vertexEmitter->getSegments());
+
+		// Iterations: ParticleUniverse::uint
+		setUint16(PRNL_VERTEX_EMITTER_ITERATION, vertexEmitter->getIterations());
+
+		// Step: Ogre::String
+		setString(PRNL_VERTEX_EMITTER_MESH_NAME, QString::fromStdString(vertexEmitter->getMeshName()));
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

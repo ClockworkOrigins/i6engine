@@ -32,6 +32,22 @@ namespace widgets {
 	TextureRotatorPropertyWindow::~TextureRotatorPropertyWindow() {
 	}
 
+	void TextureRotatorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::TextureRotator * textureRotator = static_cast<ParticleUniverse::TextureRotator *>(affector);
+
+		// Use Own Rotation speed
+		setBool(PRNL_USE_OWN_SPEED, textureRotator->useOwnRotationSpeed());
+
+		// Rotation: Dynamic Attribute
+		setDynamicAttribute(PRNL_ROTATION, textureRotator->getRotation());
+
+		// Rotation Speed: Dynamic Attribute
+		setDynamicAttribute(PRNL_ROTATION_SPEED, textureRotator->getRotationSpeed());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

@@ -30,6 +30,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~MeshSurfaceEmitterPropertyWindow();
+
+		void copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) override;
 	};
 
 } /* namespace widgets */

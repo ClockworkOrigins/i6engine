@@ -127,6 +127,7 @@ namespace widgets {
 		void setString(QString name, QString value);
 		void setUint16(QString name, uint16_t value);
 		void setVector3(QString name, ParticleUniverse::Vector3 value);
+		void setVector3List(QString name, std::vector<ParticleUniverse::Vector3> value);
 
 	private:
 		QString _name;

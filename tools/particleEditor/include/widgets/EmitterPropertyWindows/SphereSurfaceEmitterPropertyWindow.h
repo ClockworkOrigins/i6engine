@@ -23,6 +23,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~SphereSurfaceEmitterPropertyWindow();
+
+		void copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) override;
 	};
 
 } /* namespace widgets */

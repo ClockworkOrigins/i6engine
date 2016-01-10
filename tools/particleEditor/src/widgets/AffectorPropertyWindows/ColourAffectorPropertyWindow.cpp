@@ -2,6 +2,8 @@
 
 #include "properties/EnumProperty.h"
 
+#include "ParticleAffectors/ParticleUniverseColourAffector.h"
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -28,6 +30,21 @@ namespace widgets {
 	}
 
 	ColourAffectorPropertyWindow::~ColourAffectorPropertyWindow() {
+	}
+
+	void ColourAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::ColourAffector * colourAffector = static_cast<ParticleUniverse::ColourAffector *>(affector);
+
+		// Colour Operation: List of types
+		ParticleUniverse::ColourAffector::ColourOperation colourOperation = colourAffector->getColourOperation();
+		QString colourOperationString = COP_SET;
+		if (colourOperation == ParticleUniverse::ColourAffector::CAO_MULTIPLY) {
+			colourOperationString = COP_MULTIPLY;
+		}
+		setEnumString(PRNL_COLOUR_OPERATION, colourOperationString);
 	}
 
 } /* namespace widgets */

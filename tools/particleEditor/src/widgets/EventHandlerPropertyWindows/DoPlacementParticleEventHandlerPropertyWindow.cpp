@@ -62,6 +62,46 @@ namespace widgets {
 	DoPlacementParticleEventHandlerPropertyWindow::~DoPlacementParticleEventHandlerPropertyWindow() {
 	}
 
+	void DoPlacementParticleEventHandlerPropertyWindow::copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler) {
+		EventHandlerPropertyWindow::copyAttributesFromEventHandler(eventHandler);
+
+		// Copy properties from eventHandler to property window
+		ParticleUniverse::DoPlacementParticleEventHandler * doPlacementParticleEventHandler = static_cast<ParticleUniverse::DoPlacementParticleEventHandler *>(eventHandler);
+
+		// Number of Particles: ParticleUniverse::Real
+		setDouble(PRNL_NUMBER_OF_PARTICLES, doPlacementParticleEventHandler->getNumberOfParticles());
+
+		// Inherit Position: bool
+		setBool(PRNL_INHERIT_POSITION, doPlacementParticleEventHandler->isInheritPosition());
+
+		// Inherit Direction: bool
+		setBool(PRNL_INHERIT_DIRECTION, doPlacementParticleEventHandler->isInheritDirection());
+
+		// Inherit Orientation: bool
+		setBool(PRNL_INHERIT_ORIENTATION, doPlacementParticleEventHandler->isInheritOrientation());
+
+		// Inherit Time to live: bool
+		setBool(PRNL_INHERIT_TIME_TO_LIVE, doPlacementParticleEventHandler->isInheritTimeToLive());
+
+		// Inherit Mass: bool
+		setBool(PRNL_INHERIT_MASS, doPlacementParticleEventHandler->isInheritMass());
+
+		// Inherit Texture Coord: bool
+		setBool(PRNL_INHERIT_TEXTURE_COORDINATE, doPlacementParticleEventHandler->isInheritTextureCoordinate());
+
+		// Inherit Colour: bool
+		setBool(PRNL_INHERIT_COLOUR, doPlacementParticleEventHandler->isInheritColour());
+
+		// Inherit Particle width: bool
+		setBool(PRNL_INHERIT_PARTICLE_WIDTH, doPlacementParticleEventHandler->isInheritParticleWidth());
+
+		// Inherit Particle height: bool
+		setBool(PRNL_INHERIT_PARTICLE_HEIGHT, doPlacementParticleEventHandler->isInheritParticleHeight());
+
+		// Inherit Particle Depth: bool
+		setBool(PRNL_INHERIT_PARTICLE_DEPTH, doPlacementParticleEventHandler->isInheritParticleDepth());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

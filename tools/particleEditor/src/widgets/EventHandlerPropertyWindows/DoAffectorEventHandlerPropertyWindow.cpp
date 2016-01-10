@@ -21,6 +21,16 @@ namespace widgets {
 	DoAffectorEventHandlerPropertyWindow::~DoAffectorEventHandlerPropertyWindow() {
 	}
 
+	void DoAffectorEventHandlerPropertyWindow::copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler) {
+		EventHandlerPropertyWindow::copyAttributesFromEventHandler(eventHandler);
+
+		// Copy properties from eventHandler to property window
+		ParticleUniverse::DoAffectorEventHandler * doAffectorEventHandler = static_cast<ParticleUniverse::DoAffectorEventHandler *>(eventHandler);
+
+		// Pre/Post Processing: bool
+		setBool(PRNL_PRE_POST, doAffectorEventHandler->getPrePost());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

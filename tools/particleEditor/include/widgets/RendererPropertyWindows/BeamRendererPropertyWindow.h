@@ -28,7 +28,9 @@ namespace widgets {
 		/**
 		 * \brief destructor
 		 */
-		virtual ~BeamRendererPropertyWindow();
+		~BeamRendererPropertyWindow();
+
+		void BeamRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) override;
 	};
 
 } /* namespace widgets */

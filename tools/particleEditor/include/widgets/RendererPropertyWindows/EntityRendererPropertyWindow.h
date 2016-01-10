@@ -26,6 +26,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~EntityRendererPropertyWindow();
+
+		void copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) override;
 	};
 
 } /* namespace widgets */

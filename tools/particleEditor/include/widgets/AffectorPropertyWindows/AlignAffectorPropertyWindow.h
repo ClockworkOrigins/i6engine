@@ -23,6 +23,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~AlignAffectorPropertyWindow();
+
+		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
 	};
 
 } /* namespace widgets */

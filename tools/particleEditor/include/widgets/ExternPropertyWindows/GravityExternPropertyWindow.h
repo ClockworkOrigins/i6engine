@@ -20,6 +20,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~GravityExternPropertyWindow();
+
+		void copyAttributesFromExtern(ParticleUniverse::Extern * externObject) override;
 	};
 
 } /* namespace widgets */

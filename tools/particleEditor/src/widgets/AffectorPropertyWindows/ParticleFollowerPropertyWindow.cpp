@@ -23,6 +23,19 @@ namespace widgets {
 	ParticleFollowerPropertyWindow::~ParticleFollowerPropertyWindow() {
 	}
 
+	void ParticleFollowerPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::ParticleFollower * particleFollower = static_cast<ParticleUniverse::ParticleFollower *>(affector);
+
+		// Min distance: ParticleUniverse::Real
+		setDouble(PRNL_MIN_DISTANCE, particleFollower->getMinDistance());
+
+		// Max distance: ParticleUniverse::Real
+		setDouble(PRNL_MAX_DISTANCE, particleFollower->getMaxDistance());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

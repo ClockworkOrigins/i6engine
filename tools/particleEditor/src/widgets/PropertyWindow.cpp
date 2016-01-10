@@ -105,6 +105,10 @@ namespace widgets {
 		_properties[name]->setVector3(value);
 	}
 
+	void PropertyWindow::setVector3List(QString name, std::vector<ParticleUniverse::Vector3> value) {
+		_properties[name]->setVector3List(value);
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

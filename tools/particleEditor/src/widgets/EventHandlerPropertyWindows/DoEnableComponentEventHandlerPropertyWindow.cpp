@@ -21,6 +21,16 @@ namespace widgets {
 	DoEnableComponentEventHandlerPropertyWindow::~DoEnableComponentEventHandlerPropertyWindow() {
 	}
 
+	void DoEnableComponentEventHandlerPropertyWindow::copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler) {
+		EventHandlerPropertyWindow::copyAttributesFromEventHandler(eventHandler);
+
+		// Copy properties from eventHandler to property window
+		ParticleUniverse::DoEnableComponentEventHandler * doEnableComponentEventHandler = static_cast<ParticleUniverse::DoEnableComponentEventHandler *>(eventHandler);
+
+		// Enable/Disable: bool
+		setBool(PRNL_ENABLE_COMPONENT_TRUE_FALSE, doEnableComponentEventHandler->isComponentEnabled());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

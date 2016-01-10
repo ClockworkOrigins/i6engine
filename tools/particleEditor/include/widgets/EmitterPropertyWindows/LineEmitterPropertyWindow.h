@@ -26,6 +26,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~LineEmitterPropertyWindow();
+
+		void copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) override;
 	};
 
 } /* namespace widgets */

@@ -54,7 +54,7 @@ namespace widgets {
 		 */
 		virtual ~EmitterPropertyWindow();
 
-		void copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter);
+		virtual void copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter);
 	};
 
 } /* namespace widgets */

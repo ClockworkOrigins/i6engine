@@ -24,6 +24,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~OnCountObserverPropertyWindow();
+
+		void copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) override;
 	};
 
 } /* namespace widgets */

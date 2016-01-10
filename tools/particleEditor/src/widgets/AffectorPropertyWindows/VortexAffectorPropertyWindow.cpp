@@ -30,6 +30,19 @@ namespace widgets {
 	VortexAffectorPropertyWindow::~VortexAffectorPropertyWindow() {
 	}
 
+	void VortexAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::VortexAffector * vortexAffector = static_cast<ParticleUniverse::VortexAffector *>(affector);
+
+		// Rotation Vector: Ogre::Vector3
+		setVector3(PRNL_ROTATION_AXIS, vortexAffector->getRotationVector());
+
+		// Rotation Speed: Dynamic Attribute
+		setDynamicAttribute(PRNL_ROTATION_SPEED, vortexAffector->getRotationSpeed());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

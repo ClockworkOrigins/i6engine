@@ -24,6 +24,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~OnVelocityObserverPropertyWindow();
+
+		void copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) override;
 	};
 
 } /* namespace widgets */

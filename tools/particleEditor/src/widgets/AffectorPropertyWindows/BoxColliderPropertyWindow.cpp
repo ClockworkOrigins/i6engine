@@ -61,6 +61,49 @@ namespace widgets {
 	BoxColliderPropertyWindow::~BoxColliderPropertyWindow() {
 	}
 
+	void BoxColliderPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::BoxCollider * boxCollider = static_cast<ParticleUniverse::BoxCollider *>(affector);
+
+		// Width: ParticleUniverse::Real
+		setDouble(PRNL_BOX_COLLIDER_WIDTH, boxCollider->getWidth());
+
+		// Height: ParticleUniverse::Real
+		setDouble(PRNL_BOX_COLLIDER_HEIGHT, boxCollider->getHeight());
+
+		// Depth: ParticleUniverse::Real
+		setDouble(PRNL_BOX_COLLIDER_DEPTH, boxCollider->getDepth());
+
+		// Inner Collision: bool
+		setBool(PRNL_BOX_COLLIDER_INNER, boxCollider->isInnerCollision());
+
+		// Friction: ParticleUniverse::Real
+		setDouble(PRNL_COLLIDER_FRICTION, boxCollider->getFriction());
+
+		// Bouncyness: ParticleUniverse::Real
+		setDouble(PRNL_COLLIDER_BOUNCYNESS, boxCollider->getBouncyness());
+
+		// Intersection type: List
+		ParticleUniverse::BaseCollider::IntersectionType intersectionType = boxCollider->getIntersectionType();
+		QString intersectionTypeString = IST_POINT;
+		if (intersectionType == ParticleUniverse::BaseCollider::IT_BOX) {
+			intersectionTypeString = IST_BOX;
+		}
+		setEnumString(PRNL_INTERSECTION_TYPE, intersectionTypeString);
+
+		// Collision type: List
+		ParticleUniverse::BaseCollider::CollisionType collisionType = boxCollider->getCollisionType();
+		QString collisionTypeString = COLLT_NONE;
+		if (collisionType == ParticleUniverse::BaseCollider::CT_BOUNCE) {
+			collisionTypeString = COLLT_BOUNCE;
+		} else if (collisionType == ParticleUniverse::BaseCollider::CT_FLOW) {
+			collisionTypeString = COLLT_FLOW;
+		}
+		setEnumString(PRNL_COLLISION_TYPE, collisionTypeString);
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

@@ -18,6 +18,16 @@ namespace widgets {
 	AlignAffectorPropertyWindow::~AlignAffectorPropertyWindow() {
 	}
 
+	void AlignAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::AlignAffector * alignAffector = static_cast<ParticleUniverse::AlignAffector *>(affector);
+
+		// Resize: bool
+		setBool(PRNL_AFFECTOR_ALIGN_RESIZE, alignAffector->isResize());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

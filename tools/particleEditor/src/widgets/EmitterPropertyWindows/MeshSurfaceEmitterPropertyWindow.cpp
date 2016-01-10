@@ -43,6 +43,33 @@ namespace widgets {
 	MeshSurfaceEmitterPropertyWindow::~MeshSurfaceEmitterPropertyWindow() {
 	}
 
+	void MeshSurfaceEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) {
+		EmitterPropertyWindow::copyAttributesFromEmitter(emitter);
+
+		// Copy properties from emitter to property window
+		ParticleUniverse::MeshSurfaceEmitter * meshSurfaceEmitter = static_cast<ParticleUniverse::MeshSurfaceEmitter *>(emitter);
+
+		// Mesh name: Ogre::String
+		setString(PRNL_MESH_SURFACE_EMITTER_NAME, QString::fromStdString(meshSurfaceEmitter->getMeshName()));
+
+		// Distribution: List
+		ParticleUniverse::MeshInfo::MeshSurfaceDistribution distribution = meshSurfaceEmitter->getDistribution();
+		QString distributionString = PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_EDGE;
+		if (distribution == ParticleUniverse::MeshInfo::MSD_HETEROGENEOUS_1) {
+			distributionString = PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HETRG_1;
+		} else if (distribution == ParticleUniverse::MeshInfo::MSD_HETEROGENEOUS_2) {
+			distributionString = PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HETRG_2;
+		} else if (distribution == ParticleUniverse::MeshInfo::MSD_HOMOGENEOUS) {
+			distributionString = PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HOMOGENEUS;
+		} else if (distribution == ParticleUniverse::MeshInfo::MSD_VERTEX) {
+			distributionString = PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_VERTEX;
+		}
+		setEnumString(PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION, distributionString);
+
+		// Scale: Ogre::Vector3
+		setVector3(PRNL_MESH_SURFACE_EMITTER_SCALE, meshSurfaceEmitter->getScale());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

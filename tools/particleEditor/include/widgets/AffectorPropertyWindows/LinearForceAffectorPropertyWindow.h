@@ -20,6 +20,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~LinearForceAffectorPropertyWindow();
+
+		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
 	};
 
 } /* namespace widgets */

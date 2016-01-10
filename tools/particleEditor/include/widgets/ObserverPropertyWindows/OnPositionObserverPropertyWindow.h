@@ -28,6 +28,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~OnPositionObserverPropertyWindow();
+
+		void copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) override;
 	};
 
 } /* namespace widgets */

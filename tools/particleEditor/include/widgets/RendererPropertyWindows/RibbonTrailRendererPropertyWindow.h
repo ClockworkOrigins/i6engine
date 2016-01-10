@@ -27,6 +27,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~RibbonTrailRendererPropertyWindow();
+
+		void copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) override;
 	};
 
 } /* namespace widgets */

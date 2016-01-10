@@ -28,6 +28,20 @@ namespace widgets {
 	PositionEmitterPropertyWindow::~PositionEmitterPropertyWindow() {
 	}
 
+	void PositionEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) {
+		EmitterPropertyWindow::copyAttributesFromEmitter(emitter);
+
+		// Copy properties from emitter to property window
+		ParticleUniverse::PositionEmitter * positionEmitter = static_cast<ParticleUniverse::PositionEmitter *>(emitter);
+
+		// Positions: List
+		std::vector<Ogre::Vector3> positions(positionEmitter->getPositions().begin(), positionEmitter->getPositions().end());
+		setVector3List(PRNL_POSITION_EMITTER_POSITION, positions);
+
+		// Randomize: bool
+		setBool(PRNL_POSITION_EMITTER_RANDOMIZE, positionEmitter->isRandomized());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

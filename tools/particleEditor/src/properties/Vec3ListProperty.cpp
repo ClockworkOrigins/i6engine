@@ -26,6 +26,19 @@ namespace properties {
 	Vec3ListProperty::~Vec3ListProperty() {
 	}
 
+	void Vec3ListProperty::setVector3List(std::vector<ParticleUniverse::Vector3> value) {
+		for (Vec3Property * v3p : _positions) {
+			_layout->removeWidget(v3p);
+			delete v3p;
+		}
+		_positions.clear();
+		for (ParticleUniverse::Vector3 & v3 : value) {
+			Vec3Property * v3p = new Vec3Property(this, widgets::PRNL_POSITION, widgets::PRNL_POSITION, v3);
+			_layout->addWidget(v3p);
+			_positions.push_back(v3p);
+		}
+	}
+
 	void Vec3ListProperty::addPosition() {
 		Vec3Property * v3p = new Vec3Property(this, widgets::PRNL_POSITION, widgets::PRNL_POSITION, ParticleUniverse::Vector3::ZERO);
 		_layout->addWidget(v3p);

@@ -54,6 +54,19 @@ namespace widgets {
 	}
 
 	WidgetEdit::~WidgetEdit() {
+		while (!_connections.empty()) {
+			auto it = _connections.begin();
+			_graphicsScene->removeItem(it->second);
+			delete it->second;
+			auto first = it->first.first;
+			auto second = it->first.second;
+			_connections.erase(std::make_pair(first, second));
+			_connections.erase(std::make_pair(second, first));
+		}
+		for (WidgetEditComponent * wec : _components) {
+			_graphicsScene->removeItem(wec);
+			wec->deleteLater();
+		}
 	}
 
 	void WidgetEdit::notifyComponentActivated(WidgetEditComponent * component) {
@@ -210,9 +223,19 @@ namespace widgets {
 	}
 
 	void WidgetEdit::setNewParticleSystem(ParticleUniverse::ParticleSystem * newParticleSystem) {
+		while (!_connections.empty()) {
+			auto it = _connections.begin();
+			_graphicsScene->removeItem(it->second);
+			delete it->second;
+			auto first = it->first.first;
+			auto second = it->first.second;
+			_connections.erase(std::make_pair(first, second));
+			_connections.erase(std::make_pair(second, first));
+		}
+		emit setPropertyWindow(nullptr);
 		for (WidgetEditComponent * wec : _components) {
 			_graphicsScene->removeItem(wec);
-			delete wec;
+			wec->deleteLater();
 		}
 		_components.clear();
 		WidgetEditComponent * particleSystemEditComponent = forceCreateParticleSystemEditComponent(); // 'Guarantees' a valid particleSystemEditComponent

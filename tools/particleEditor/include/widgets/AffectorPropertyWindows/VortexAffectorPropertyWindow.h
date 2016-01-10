@@ -20,6 +20,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~VortexAffectorPropertyWindow();
+
+		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
 	};
 
 } /* namespace widgets */

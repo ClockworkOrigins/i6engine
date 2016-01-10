@@ -21,6 +21,16 @@ namespace widgets {
 	JetAffectorPropertyWindow::~JetAffectorPropertyWindow() {
 	}
 
+	void JetAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::JetAffector * jetAffector = static_cast<ParticleUniverse::JetAffector *>(affector);
+
+		// Acceleration: DynamicAttribute
+		setDynamicAttribute(PRNL_ACCELERATION, jetAffector->getDynAcceleration());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

@@ -19,6 +19,16 @@ namespace widgets {
 	SphereSurfaceEmitterPropertyWindow::~SphereSurfaceEmitterPropertyWindow() {
 	}
 
+	void SphereSurfaceEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) {
+		EmitterPropertyWindow::copyAttributesFromEmitter(emitter);
+
+		// Copy properties from emitter to property window
+		ParticleUniverse::SphereSurfaceEmitter * sphereSurfaceEmitter = static_cast<ParticleUniverse::SphereSurfaceEmitter *>(emitter);
+
+		// Radius: ParticleUniverse::Real
+		setDouble(PRNL_SPHERE_SURFACE_EMITTER_RADIUS, sphereSurfaceEmitter->getRadius());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

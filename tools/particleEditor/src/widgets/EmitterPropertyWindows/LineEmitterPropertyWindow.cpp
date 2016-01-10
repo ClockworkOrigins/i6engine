@@ -35,6 +35,25 @@ namespace widgets {
 	LineEmitterPropertyWindow::~LineEmitterPropertyWindow() {
 	}
 
+	void LineEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) {
+		EmitterPropertyWindow::copyAttributesFromEmitter(emitter);
+
+		// Copy properties from emitter to property window
+		ParticleUniverse::LineEmitter * lineEmitter = static_cast<ParticleUniverse::LineEmitter *>(emitter);
+
+		// End: Ogre::Vector3
+		setVector3(PRNL_LINE_END, lineEmitter->getEnd());
+
+		// Max increment: ParticleUniverse::Real
+		setDouble(PRNL_LINE_MAX_INCREMENT, lineEmitter->getMaxIncrement());
+
+		// Min increment: ParticleUniverse::Real
+		setDouble(PRNL_LINE_MIN_INCREMENT, lineEmitter->getMinIncrement());
+
+		// Deviation: ParticleUniverse::Real
+		setDouble(PRNL_LINE_DEVIATION, lineEmitter->getMaxDeviation());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

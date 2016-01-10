@@ -60,6 +60,49 @@ namespace widgets {
 	BoxColliderExternPropertyWindow::~BoxColliderExternPropertyWindow() {
 	}
 
+	void BoxColliderExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse::Extern * externObject) {
+		ExternPropertyWindow::copyAttributesFromExtern(externObject);
+
+		// Copy properties from Extern to property window
+		ParticleUniverse::BoxColliderExtern * boxColliderExtern = static_cast<ParticleUniverse::BoxColliderExtern *>(externObject);
+
+		// Distance Threshold: ParticleUniverse::Real
+		setDouble(PRNL_EXTERN_THRESHOLD, boxColliderExtern->getDistanceThreshold());
+
+		// Width: ParticleUniverse::Real
+		setDouble(PRNL_BOX_COLLIDER_WIDTH, boxColliderExtern->getWidth());
+
+		// Height: ParticleUniverse::Real
+		setDouble(PRNL_BOX_COLLIDER_HEIGHT, boxColliderExtern->getHeight());
+
+		// Depth: ParticleUniverse::Real
+		setDouble(PRNL_BOX_COLLIDER_DEPTH, boxColliderExtern->getDepth());
+
+		// Friction: ParticleUniverse::Real
+		setDouble(PRNL_COLLIDER_FRICTION, boxColliderExtern->getFriction());
+
+		// Bouncyness: ParticleUniverse::Real
+		setDouble(PRNL_COLLIDER_BOUNCYNESS, boxColliderExtern->getBouncyness());
+
+		// Intersection type: List
+		ParticleUniverse::BaseCollider::IntersectionType intersectionType = boxColliderExtern->getIntersectionType();
+		QString intersectionTypeString = IST_POINT;
+		if (intersectionType == ParticleUniverse::BaseCollider::IT_BOX) {
+			intersectionTypeString = IST_BOX;
+		}
+		setEnumString(PRNL_INTERSECTION_TYPE, intersectionTypeString);
+
+		// Collision type: List
+		ParticleUniverse::BaseCollider::CollisionType collisionType = boxColliderExtern->getCollisionType();
+		QString collisionTypeString = COLLT_NONE;
+		if (collisionType == ParticleUniverse::BaseCollider::CT_BOUNCE) {
+			collisionTypeString = COLLT_BOUNCE;
+		} else if (collisionType == ParticleUniverse::BaseCollider::CT_FLOW) {
+			collisionTypeString = COLLT_FLOW;
+		}
+		setEnumString(PRNL_COLLISION_TYPE, collisionTypeString);
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

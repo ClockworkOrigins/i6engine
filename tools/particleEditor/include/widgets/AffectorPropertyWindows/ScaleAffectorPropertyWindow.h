@@ -26,6 +26,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~ScaleAffectorPropertyWindow();
+
+		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
 	};
 
 } /* namespace widgets */

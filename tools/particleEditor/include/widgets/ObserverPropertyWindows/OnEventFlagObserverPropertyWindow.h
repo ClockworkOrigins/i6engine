@@ -23,6 +23,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~OnEventFlagObserverPropertyWindow();
+
+		void copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) override;
 	};
 
 } /* namespace widgets */

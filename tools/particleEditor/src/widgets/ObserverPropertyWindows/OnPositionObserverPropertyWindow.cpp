@@ -59,6 +59,64 @@ namespace widgets {
 	OnPositionObserverPropertyWindow::~OnPositionObserverPropertyWindow() {
 	}
 
+	void OnPositionObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) {
+		ObserverPropertyWindow::copyAttributesFromObserver(observer);
+
+		// Copy properties from observer to property window
+		ParticleUniverse::OnPositionObserver * onPositionObserver = static_cast<ParticleUniverse::OnPositionObserver *>(observer);
+
+		// Compare X
+		ParticleUniverse::ComparisionOperator compare = onPositionObserver->getComparePositionX();
+		QString compareString = PRNL_COMPARE_NOT_USED;
+		if (onPositionObserver->isPositionXThresholdSet()) {
+			if (compare == ParticleUniverse::CO_LESS_THAN) {
+				compareString = PRNL_COMPARE_LESS_THAN;
+			} else if (compare == ParticleUniverse::CO_GREATER_THAN) {
+				compareString = PRNL_COMPARE_GREATER_THAN;
+			} else if (compare == ParticleUniverse::CO_EQUALS) {
+				compareString = PRNL_COMPARE_EQUALS;
+			}
+		}
+		setEnumString(PRNL_ON_POSITION_X_COMPARE, compareString);
+
+		// Position X
+		setDouble(PRNL_ON_POSITION_X, onPositionObserver->getPositionXThreshold());
+
+		// Compare Y
+		compare = onPositionObserver->getComparePositionY();
+		compareString = PRNL_COMPARE_NOT_USED;
+		if (onPositionObserver->isPositionYThresholdSet()) {
+			if (compare == ParticleUniverse::CO_LESS_THAN) {
+				compareString = PRNL_COMPARE_LESS_THAN;
+			} else if (compare == ParticleUniverse::CO_GREATER_THAN) {
+				compareString = PRNL_COMPARE_GREATER_THAN;
+			} else if (compare == ParticleUniverse::CO_EQUALS) {
+				compareString = PRNL_COMPARE_EQUALS;
+			}
+		}
+		setEnumString(PRNL_ON_POSITION_Y_COMPARE, compareString);
+
+		// Position Y
+		setDouble(PRNL_ON_POSITION_Y, onPositionObserver->getPositionYThreshold());
+
+		// Compare Z
+		compare = onPositionObserver->getComparePositionZ();
+		compareString = PRNL_COMPARE_NOT_USED;
+		if (onPositionObserver->isPositionZThresholdSet()) {
+			if (compare == ParticleUniverse::CO_LESS_THAN) {
+				compareString = PRNL_COMPARE_LESS_THAN;
+			} else if (compare == ParticleUniverse::CO_GREATER_THAN) {
+				compareString = PRNL_COMPARE_GREATER_THAN;
+			} else if (compare == ParticleUniverse::CO_EQUALS) {
+				compareString = PRNL_COMPARE_EQUALS;
+			}
+		}
+		setEnumString(PRNL_ON_POSITION_Z_COMPARE, compareString);
+
+		// Position Z
+		setDouble(PRNL_ON_POSITION_Z, onPositionObserver->getPositionZThreshold());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

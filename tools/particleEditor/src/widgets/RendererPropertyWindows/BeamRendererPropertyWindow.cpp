@@ -54,6 +54,38 @@ namespace widgets {
 	BeamRendererPropertyWindow::~BeamRendererPropertyWindow() {
 	}
 
+	void BeamRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) {
+		RendererPropertyWindow::copyAttributesFromRenderer(renderer);
+
+		// Copy properties from renderer to property window
+		ParticleUniverse::BeamRenderer * beamRenderer = static_cast<ParticleUniverse::BeamRenderer *>(renderer);
+
+		// Use Vertex Colours: bool
+		setBool(PRNL_USE_VERTEX_COLOURS, beamRenderer->isUseVertexColours());
+
+		// Max Elements: size_t
+		setUint16(PRNL_MAX_ELEMENTS, int64_t(beamRenderer->getMaxChainElements()));
+
+		// Update Interval: ParticleUniverse::Real
+		setDouble(PRNL_UPDATE_INTERVAL, beamRenderer->getUpdateInterval());
+
+		// Deviation: ParticleUniverse::Real
+		setDouble(PRNL_DEVIATION, beamRenderer->getDeviation());
+
+		// Number Of Segments: size_t
+		setUint16(PRNL_NUMBER_OF_SEGMENTS, int64_t(beamRenderer->getNumberOfSegments()));
+
+		// Number Of Segments: size_t
+		setBool(PRNL_JUMP, beamRenderer->isJump());
+
+		// Accurate Facing: List
+		QString textureDirection = TEXTURE_DIRECTION_U;
+		if (beamRenderer->getTexCoordDirection() == Ogre::BillboardChain::TCD_V) {
+			textureDirection = TEXTURE_DIRECTION_V;
+		}
+		setEnumString(PRNL_TEXTURE_DIRECTION, textureDirection);
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

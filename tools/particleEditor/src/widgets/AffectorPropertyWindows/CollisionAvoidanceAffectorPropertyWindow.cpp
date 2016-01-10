@@ -19,6 +19,16 @@ namespace widgets {
 	CollisionAvoidanceAffectorPropertyWindow::~CollisionAvoidanceAffectorPropertyWindow() {
 	}
 
+	void CollisionAvoidanceAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::CollisionAvoidanceAffector * collisionAvoidanceAffector = static_cast<ParticleUniverse::CollisionAvoidanceAffector *>(affector);
+
+		// Avoidance Radius: ParticleUniverse::Real
+		setDouble(PRNL_COLLISON_AVOIDANCE_RADIUS, collisionAvoidanceAffector->getRadius());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

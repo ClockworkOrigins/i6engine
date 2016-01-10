@@ -24,6 +24,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~LineAffectorPropertyWindow();
+
+		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
 	};
 
 } /* namespace widgets */

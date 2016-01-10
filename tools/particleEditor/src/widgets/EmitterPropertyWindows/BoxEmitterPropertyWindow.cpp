@@ -27,6 +27,22 @@ namespace widgets {
 	BoxEmitterPropertyWindow::~BoxEmitterPropertyWindow() {
 	}
 
+	void BoxEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) {
+		EmitterPropertyWindow::copyAttributesFromEmitter(emitter);
+
+		// Copy properties from emitter to property window
+		ParticleUniverse::BoxEmitter * boxEmitter = static_cast<ParticleUniverse::BoxEmitter *>(emitter);
+
+		// Width: ParticleUniverse::Real
+		setDouble(PRNL_BOX_EMITTER_WIDTH, boxEmitter->getWidth());
+
+		// Height: ParticleUniverse::Real
+		setDouble(PRNL_BOX_EMITTER_HEIGHT, boxEmitter->getHeight());
+
+		// Depth: ParticleUniverse::Real
+		setDouble(PRNL_BOX_EMITTER_DEPTH, boxEmitter->getDepth());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

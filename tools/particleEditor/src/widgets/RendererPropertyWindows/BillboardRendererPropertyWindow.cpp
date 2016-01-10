@@ -112,6 +112,87 @@ namespace widgets {
 	BillboardRendererPropertyWindow::~BillboardRendererPropertyWindow() {
 	}
 
+	void BillboardRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) {
+		RendererPropertyWindow::copyAttributesFromRenderer(renderer);
+
+		// Copy properties from renderer to property window
+		ParticleUniverse::BillboardRenderer * billboardRenderer = static_cast<ParticleUniverse::BillboardRenderer *>(renderer);
+
+		// Billboard Type: List
+		ParticleUniverse::BillboardRenderer::BillboardType billboardType = billboardRenderer->getBillboardType();
+		QString billboardTypeString = BBT_POINT;
+		if (billboardType == ParticleUniverse::BillboardRenderer::BBT_ORIENTED_COMMON) {
+			billboardTypeString = BBT_ORIENTED_COMMON;
+		} else if (billboardType == ParticleUniverse::BillboardRenderer::BBT_ORIENTED_SELF) {
+			billboardTypeString = BBT_ORIENTED_SELF;
+		} else if (billboardType == ParticleUniverse::BillboardRenderer::BBT_PERPENDICULAR_COMMON) {
+			billboardTypeString = BBT_PERPENDICULAR_COMMON;
+		} else if (billboardType == ParticleUniverse::BillboardRenderer::BBT_PERPENDICULAR_SELF) {
+			billboardTypeString = BBT_PERPENDICULAR_SELF;
+		} else if (billboardType == ParticleUniverse::BillboardRenderer::BBT_ORIENTED_SHAPE) {
+			billboardTypeString = BBT_ORIENTED_SHAPE;
+		}
+		setEnumString(PRNL_BILLBOARD_TYPE, billboardTypeString);
+
+		// Origin: List
+		Ogre::BillboardOrigin origin = billboardRenderer->getBillboardOrigin();
+		QString originString = ORG_CENTER;
+		if (origin == Ogre::BBO_BOTTOM_CENTER) {
+			originString = ORG_BOTTOM_CENTER;
+		} else if (origin == Ogre::BBO_BOTTOM_LEFT) {
+			originString = ORG_BOTTOM_LEFT;
+		} else if (origin == Ogre::BBO_BOTTOM_RIGHT) {
+			originString = ORG_BOTTOM_RIGHT;
+		} else if (origin == Ogre::BBO_CENTER_LEFT) {
+			originString = ORG_CENTER_LEFT;
+		} else if (origin == Ogre::BBO_CENTER_RIGHT) {
+			originString = ORG_CENTER_RIGHT;
+		} else if (origin == Ogre::BBO_TOP_CENTER) {
+			originString = ORG_TOP_CENTER;
+		} else if (origin == Ogre::BBO_TOP_LEFT) {
+			originString = ORG_TOP_LEFT;
+		} else if (origin == Ogre::BBO_TOP_RIGHT) {
+			originString = ORG_TOP_RIGHT;
+		}
+		setEnumString(PRNL_ORIGIN, originString);
+
+		// Rotation Type: List
+		Ogre::BillboardRotationType rotationType = billboardRenderer->getBillboardRotationType();
+		QString rotationTypeString = RT_VERTEX;
+		if (rotationType == Ogre::BBR_TEXCOORD) {
+			rotationTypeString = RT_TEXTURE_COORDINATES;
+		}
+		setEnumString(PRNL_ROTATION_TYPE, rotationTypeString);
+
+		// Common Direction: Ogre::Vector3
+		setVector3(PRNL_COMMON_DIRECTION, billboardRenderer->getCommonDirection());
+
+		// Common Up Vector: Ogre::Vector3
+		setVector3(PRNL_UP_VECTOR, billboardRenderer->getCommonUpVector());
+
+		// Point Rendering: bool
+		setBool(PRNL_POINT_RENDERING, billboardRenderer->isPointRenderingEnabled());
+
+		// Accurate Facing: List
+		QString accurateFacingString = ACF_OFF;
+		if (billboardRenderer->isUseAccurateFacing()) {
+			accurateFacingString = ACF_ON;
+		}
+		setEnumString(PRNL_ACCURATE_FACING, accurateFacingString);
+
+		// Use soft particles: Bool
+		setBool(PRNL_RENDERER_USE_SOFT_PARTICLES, renderer->getUseSoftParticles());
+
+		// Soft particles contrast power: ParticleUniverse::Real
+		setDouble(PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER, renderer->getSoftParticlesContrastPower());
+
+		// Soft particles scale: ParticleUniverse::Real
+		setDouble(PRNL_RENDERER_SOFT_PARTICLES_SCALE, renderer->getSoftParticlesScale());
+
+		// Soft particles delta: ParticleUniverse::Real
+		setDouble(PRNL_RENDERER_SOFT_PARTICLES_DELTA, renderer->getSoftParticlesDelta());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

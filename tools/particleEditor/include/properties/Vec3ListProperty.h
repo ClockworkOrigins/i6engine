@@ -23,6 +23,8 @@ namespace properties {
 		 */
 		~Vec3ListProperty();
 
+		void setVector3List(std::vector<ParticleUniverse::Vector3> value) override;
+
 	private slots:
 		void addPosition();
 

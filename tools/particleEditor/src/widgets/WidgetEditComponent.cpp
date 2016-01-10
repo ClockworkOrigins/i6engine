@@ -80,6 +80,16 @@ namespace widgets {
 	}
 
 	WidgetEditComponent::~WidgetEditComponent() {
+		delete _propertyWindow;
+		for (connections::ConnectionPolicy * cp : _policies) {
+			delete cp;
+		}
+		for (connections::UniqueRelation * ur : _uniqueRelations) {
+			delete ur;
+		}
+		for (connections::Connection * c : _connections) {
+			delete c;
+		}
 	}
 
 	void WidgetEditComponent::addPolicy(ComponentRelation relation, ComponentRelationDirection relationDirection, const QString & relationDescription, QString typeToBeConnectedWith, QString subTypeToBeConnectedWith, bool multipleConnectionsPossible, bool ignoreSubType, const QColor & colour, Qt::PenStyle lineStyle) {

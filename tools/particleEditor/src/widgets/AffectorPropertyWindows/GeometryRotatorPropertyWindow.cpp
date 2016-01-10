@@ -34,6 +34,22 @@ namespace widgets {
 	GeometryRotatorPropertyWindow::~GeometryRotatorPropertyWindow() {
 	}
 
+	void GeometryRotatorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::GeometryRotator * geometryRotator = static_cast<ParticleUniverse::GeometryRotator *>(affector);
+
+		// Use own rotation speed: bool
+		setBool(PRNL_USE_OWN_ROTATION, geometryRotator->useOwnRotationSpeed());
+
+		// Rotation speed: DynamicAttribute
+		setDynamicAttribute(PRNL_ROTATION_SPEED, geometryRotator->getRotationSpeed());
+
+		// Rotation axis: Ogre::Vector3
+		setVector3(PRNL_ROTATION_AXIS, geometryRotator->getRotationAxis());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

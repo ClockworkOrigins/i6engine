@@ -29,6 +29,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~TextureAnimatorPropertyWindow();
+
+		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
 	};
 
 } /* namespace widgets */

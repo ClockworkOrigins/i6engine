@@ -30,6 +30,22 @@ namespace widgets {
 	ScaleVelocityAffectorPropertyWindow::~ScaleVelocityAffectorPropertyWindow() {
 	}
 
+	void ScaleVelocityAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::ScaleVelocityAffector * scaleVelocityAffector = static_cast<ParticleUniverse::ScaleVelocityAffector *>(affector);
+
+		// ScaleVelocity: DynamicAttribute
+		setDynamicAttribute(PRNL_VELOCITY_SCALE, scaleVelocityAffector->getDynScaleVelocity());
+
+		// Since Start System: bool
+		setBool(PRNL_SINCE_START_SYSTEM, scaleVelocityAffector->isSinceStartSystem());
+
+		// Stop at flip: bool
+		setBool(PRNL_STOP_AT_FLIP, scaleVelocityAffector->isStopAtFlip());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

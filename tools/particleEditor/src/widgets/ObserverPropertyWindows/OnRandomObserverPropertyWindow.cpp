@@ -19,6 +19,16 @@ namespace widgets {
 	OnRandomObserverPropertyWindow::~OnRandomObserverPropertyWindow() {
 	}
 
+	void OnRandomObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) {
+		ObserverPropertyWindow::copyAttributesFromObserver(observer);
+
+		// Copy properties from observer to property window
+		ParticleUniverse::OnRandomObserver * onRandomObserver = static_cast<ParticleUniverse::OnRandomObserver *>(observer);
+
+		// Random Threshold
+		setDouble(PRNL_ON_RANDOM_VALUE, onRandomObserver->getThreshold());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

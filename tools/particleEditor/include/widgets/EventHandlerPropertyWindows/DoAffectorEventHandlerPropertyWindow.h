@@ -23,6 +23,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~DoAffectorEventHandlerPropertyWindow();
+
+		void copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler) override;
 	};
 
 } /* namespace widgets */

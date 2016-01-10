@@ -26,6 +26,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~InterParticleColliderPropertyWindow();
+
+		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
 	};
 
 } /* namespace widgets */

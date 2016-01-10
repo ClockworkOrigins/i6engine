@@ -61,6 +61,9 @@ namespace properties {
 		virtual void setVector3(ParticleUniverse::Vector3 value) {
 			assert(false);
 		}
+		virtual void setVector3List(std::vector<ParticleUniverse::Vector3> value) {
+			assert(false);
+		}
 
 	protected:
 		QString _label;

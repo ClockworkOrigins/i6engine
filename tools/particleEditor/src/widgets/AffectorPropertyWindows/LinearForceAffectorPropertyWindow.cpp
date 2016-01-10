@@ -32,6 +32,24 @@ namespace widgets {
 	LinearForceAffectorPropertyWindow::~LinearForceAffectorPropertyWindow() {
 	}
 
+	void LinearForceAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::LinearForceAffector * linearForceAffector = static_cast<ParticleUniverse::LinearForceAffector *>(affector);
+
+		// Force vector: Ogre::Vector3
+		setVector3(PRNL_FORCE_VECTOR, linearForceAffector->getForceVector());
+
+		// Force Application: List
+		ParticleUniverse::BaseForceAffector::ForceApplication application = linearForceAffector->getForceApplication();
+		QString applicationString = APP_ADD;
+		if (application == ParticleUniverse::BaseForceAffector::FA_AVERAGE) {
+			applicationString = APP_AVG;
+		}
+		setEnumString(PRNL_LINEAR_FORCE_APPLICATION, applicationString);
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

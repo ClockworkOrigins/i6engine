@@ -41,6 +41,30 @@ namespace widgets {
 	SineForceAffectorPropertyWindow::~SineForceAffectorPropertyWindow() {
 	}
 
+	void SineForceAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::SineForceAffector * sineForceAffector = static_cast<ParticleUniverse::SineForceAffector *>(affector);
+
+		// Force vector: Ogre::Vector3
+		setVector3(PRNL_FORCE_VECTOR, sineForceAffector->getForceVector());
+
+		// Force Application: List
+		ParticleUniverse::BaseForceAffector::ForceApplication application = sineForceAffector->getForceApplication();
+		QString applicationString = APP_ADD;
+		if (application == ParticleUniverse::BaseForceAffector::FA_AVERAGE) {
+			applicationString = APP_AVG;
+		}
+		setEnumString(PRNL_LINEAR_FORCE_APPLICATION, applicationString);
+
+		// Minimum Frequency: ParticleUniverse::Real
+		setDouble(PRNL_FREQ_MIN, sineForceAffector->getFrequencyMin());
+
+		// Maximum Frequency: ParticleUniverse::Real
+		setDouble(PRNL_FREQ_MAX, sineForceAffector->getFrequencyMax());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

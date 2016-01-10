@@ -31,6 +31,26 @@ namespace widgets {
 	OnCountObserverPropertyWindow::~OnCountObserverPropertyWindow() {
 	}
 
+	void OnCountObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) {
+		ObserverPropertyWindow::copyAttributesFromObserver(observer);
+
+		// Copy properties from observer to property window
+		ParticleUniverse::OnCountObserver * onCountObserver = static_cast<ParticleUniverse::OnCountObserver *>(observer);
+
+		// Count Threshold Compare: List
+		ParticleUniverse::ComparisionOperator compare = onCountObserver->getCompare();
+		QString compareString = PRNL_COMPARE_LESS_THAN;
+		if (compare == ParticleUniverse::CO_GREATER_THAN) {
+			compareString = PRNL_COMPARE_GREATER_THAN;
+		} else if (compare == ParticleUniverse::CO_EQUALS) {
+			compareString = PRNL_COMPARE_EQUALS;
+		}
+		setEnumString(PRNL_ON_COUNT_COMPARE, compareString);
+
+		// Count Threshold Value: ParticleUniverse::uint
+		setUint16(PRNL_ON_COUNT_THRESHOLD, onCountObserver->getThreshold());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

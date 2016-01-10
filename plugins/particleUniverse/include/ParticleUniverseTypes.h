@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_TYPES_H__
 #define __PU_TYPES_H__
 
+#include "OGRE/OgreColourValue.h"
 #include "OgrePlatform.h"
 #include "OgrePrerequisites.h"
 #include "OgreString.h"

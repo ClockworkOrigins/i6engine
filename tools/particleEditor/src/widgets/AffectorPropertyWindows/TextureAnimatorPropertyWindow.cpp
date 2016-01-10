@@ -45,6 +45,35 @@ namespace widgets {
 	TextureAnimatorPropertyWindow::~TextureAnimatorPropertyWindow() {
 	}
 
+	void TextureAnimatorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::TextureAnimator * textureAnimator = static_cast<ParticleUniverse::TextureAnimator *>(affector);
+
+		// Time Step Animation: ParticleUniverse::Real
+		setDouble(PRNL_TIME_STEP, textureAnimator->getAnimationTimeStep());
+
+		// Animation Type: List
+		ParticleUniverse::TextureAnimator::TextureAnimationType animationType = textureAnimator->getTextureAnimationType();
+		QString animationTypeString = TAT_LOOP;
+		if (animationType == ParticleUniverse::TextureAnimator::TAT_UP_DOWN) {
+			animationTypeString = TAT_UP_DOWN;
+		} else if (animationType == ParticleUniverse::TextureAnimator::TAT_RANDOM) {
+			animationTypeString = TAT_RANDOM;
+		}
+		setEnumString(PRNL_ANIMATION_TYPE, animationTypeString);
+
+		// Start Texture Coordinates: ParticleUniverse::uint16
+		setUint16(PRNL_TEXCOORDS_START, textureAnimator->getTextureCoordsStart());
+
+		// End Texture Coordinates: ParticleUniverse::uint16
+		setUint16(PRNL_TEXCOORDS_END, textureAnimator->getTextureCoordsEnd());
+
+		// Random Start: bool
+		setBool(PRNL_START_RANDOM, textureAnimator->isStartRandom());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

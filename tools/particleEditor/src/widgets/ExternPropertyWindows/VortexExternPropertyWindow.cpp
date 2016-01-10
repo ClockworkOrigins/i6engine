@@ -4,7 +4,7 @@
 #include "properties/DynamicAttributeProperty.h"
 #include "properties/Vec3Property.h"
 
-#include "ParticleAffectors/ParticleUniverseVortexAffector.h"
+#include "Externs/ParticleUniverseVortexExtern.h"
 
 namespace i6engine {
 namespace particleEditor {
@@ -33,6 +33,22 @@ namespace widgets {
 	}
 
 	VortexExternPropertyWindow::~VortexExternPropertyWindow() {
+	}
+
+	void VortexExternPropertyWindow::copyAttributesFromExtern(ParticleUniverse::Extern * externObject) {
+		ExternPropertyWindow::copyAttributesFromExtern(externObject);
+
+		// Copy properties from Extern to property window
+		ParticleUniverse::VortexExtern * vortexExtern = static_cast<ParticleUniverse::VortexExtern *>(externObject);
+
+		// Distance Threshold: ParticleUniverse::Real
+		setDouble(PRNL_EXTERN_THRESHOLD, vortexExtern->getDistanceThreshold());
+
+		// Rotation Vector: Ogre::Vector3
+		setVector3(PRNL_ROTATION_AXIS, vortexExtern->getRotationVector());
+
+		// Rotation Speed: Dynamic Attribute
+		setDynamicAttribute(PRNL_ROTATION_SPEED, vortexExtern->getRotationSpeed());
 	}
 
 } /* namespace widgets */

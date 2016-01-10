@@ -83,6 +83,60 @@ namespace widgets {
 	ForceFieldAffectorPropertyWindow::~ForceFieldAffectorPropertyWindow() {
 	}
 
+	void ForceFieldAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::ForceFieldAffector * forceFieldAffector = static_cast<ParticleUniverse::ForceFieldAffector *>(affector);
+
+		// forcefield_type: List
+		ParticleUniverse::ForceField::ForceFieldType type = forceFieldAffector->getForceFieldType();
+		QString typeString = FORCEFIELD_REALTIME;
+		if (type == ParticleUniverse::ForceField::FF_MATRIX_CALC) {
+			typeString = FORCEFIELD_MATRIX;
+		}
+		setEnumString(PRNL_AFFECTOR_FORCEFIELD_FF_TYPE, typeString);
+
+		// delta: Real
+		setDouble(PRNL_AFFECTOR_FORCEFIELD_DELTA, forceFieldAffector->getDelta());
+
+		// force: Real
+		setDouble(PRNL_AFFECTOR_FORCEFIELD_FORCE, forceFieldAffector->getScaleForce());
+
+		// octaves: uint
+		setUint16(PRNL_AFFECTOR_FORCEFIELD_OCTAVES, forceFieldAffector->getOctaves());
+
+		// frequency: Real
+		setDouble(PRNL_AFFECTOR_FORCEFIELD_FREQUENCY, forceFieldAffector->getFrequency());
+
+		// amplitude: Real
+		setDouble(PRNL_AFFECTOR_FORCEFIELD_AMPLITUDE, forceFieldAffector->getAmplitude());
+
+		// persistence: Real
+		setDouble(PRNL_AFFECTOR_FORCEFIELD_PERSISTENCE, forceFieldAffector->getPersistence());
+
+		// forcefield_size: uint
+		setUint16(PRNL_AFFECTOR_FORCEFIELD_FF_SIZE, forceFieldAffector->getForceFieldSize());
+
+		// worldsize: Vector3
+		setVector3(PRNL_AFFECTOR_FORCEFIELD_WORLDSIZE, forceFieldAffector->getWorldSize());
+
+		// ignore_negative_x: bool
+		setBool(PRNL_AFFECTOR_FORCEFIELD_IGNORE_X, forceFieldAffector->getIgnoreNegativeX());
+
+		// ignore_negative_y: bool
+		setBool(PRNL_AFFECTOR_FORCEFIELD_IGNORE_Y, forceFieldAffector->getIgnoreNegativeY());
+
+		// ignore_negative_z: bool
+		setBool(PRNL_AFFECTOR_FORCEFIELD_IGNORE_Z, forceFieldAffector->getIgnoreNegativeZ());
+
+		// movement: Vector3
+		setVector3(PRNL_AFFECTOR_FORCEFIELD_MOVEMENT, forceFieldAffector->getMovement());
+
+		// movement_frequency: Real
+		setDouble(PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY, forceFieldAffector->getMovementFrequency());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

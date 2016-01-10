@@ -19,6 +19,16 @@ namespace widgets {
 	OnEventFlagObserverPropertyWindow::~OnEventFlagObserverPropertyWindow() {
 	}
 
+	void OnEventFlagObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) {
+		ObserverPropertyWindow::copyAttributesFromObserver(observer);
+
+		// Copy properties from observer to property window
+		ParticleUniverse::OnEventFlagObserver * onEventFlagObserver = static_cast<ParticleUniverse::OnEventFlagObserver *>(observer);
+
+		// Event Flag: ParticleUniverse::uint32
+		setUint16(PRNL_ON_EVENTFLAG_FLAG, onEventFlagObserver->getEventFlag());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

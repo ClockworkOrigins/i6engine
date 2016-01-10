@@ -78,6 +78,58 @@ namespace widgets {
 	LightRendererPropertyWindow::~LightRendererPropertyWindow() {
 	}
 
+	void LightRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) {
+		RendererPropertyWindow::copyAttributesFromRenderer(renderer);
+
+		// Copy properties from renderer to property window
+		ParticleUniverse::LightRenderer * lightRenderer = static_cast<ParticleUniverse::LightRenderer *>(renderer);
+
+		// Light Type: List
+		Ogre::Light::LightTypes lightType = lightRenderer->getLightType();
+		QString lightTypeString = LT_POINT;
+		if (lightType == Ogre::Light::LT_SPOTLIGHT) {
+			lightTypeString = LT_SPOT;
+		}
+		setEnumString(PRNL_LIGHT_TYPE, lightTypeString);
+
+		// Specular Colour: Ogre::Colour
+		Vec4 specularColour(255 * lightRenderer->getSpecularColour().r, 255 * lightRenderer->getSpecularColour().g, 255 * lightRenderer->getSpecularColour().b, 255 * lightRenderer->getSpecularColour().a);
+		setColourWithAlpha(PRNL_SPECULAR_COLOUR, specularColour);
+
+		// Attenuation Range: ParticleUniverse::Real
+		setDouble(PRNL_ATT_RANGE, lightRenderer->getAttenuationRange());
+
+		// Attenuation Constant: ParticleUniverse::Real
+		setDouble(PRNL_ATT_CONSTANT, lightRenderer->getAttenuationConstant());
+
+		// Attenuation Linear: ParticleUniverse::Real
+		setDouble(PRNL_ATT_LINEAR, lightRenderer->getAttenuationLinear());
+
+		// Attenuation Quadratic: ParticleUniverse::Real
+		setDouble(PRNL_ATT_QUADRATIC, lightRenderer->getAttenuationQuadratic());
+
+		// Spotlight Inner Angle: ParticleUniverse::Real
+		setDouble(PRNL_SPOT_INNER_ANGLE, lightRenderer->getSpotlightInnerAngle().valueDegrees());
+
+		// Spotlight Outer Angle: ParticleUniverse::Real
+		setDouble(PRNL_SPOT_OUTER_ANGLE, lightRenderer->getSpotlightOuterAngle().valueDegrees());
+
+		// Falloff: ParticleUniverse::Real
+		setDouble(PRNL_FALLOFF, lightRenderer->getSpotlightFalloff());
+
+		// Power Scale: ParticleUniverse::Real
+		setDouble(PRNL_POWER_SCALE, lightRenderer->getPowerScale());
+
+		// Flash Frequency: ParticleUniverse::Real
+		setDouble(PRNL_FLASH_FREQUENCY, lightRenderer->getFlashFrequency());
+
+		// Flash Length: ParticleUniverse::Real
+		setDouble(PRNL_FLASH_LENGTH, lightRenderer->getFlashLength());
+
+		// Flash Length: ParticleUniverse::Real
+		setBool(PRNL_FLASH_RANDOM, lightRenderer->isFlashRandom());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

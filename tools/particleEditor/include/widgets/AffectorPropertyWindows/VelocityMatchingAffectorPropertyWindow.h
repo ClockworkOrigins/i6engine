@@ -23,6 +23,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~VelocityMatchingAffectorPropertyWindow();
+
+		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
 	};
 
 } /* namespace widgets */

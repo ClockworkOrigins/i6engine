@@ -40,6 +40,28 @@ namespace widgets {
 	CircleEmitterPropertyWindow::~CircleEmitterPropertyWindow() {
 	}
 
+	void CircleEmitterPropertyWindow::copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) {
+		EmitterPropertyWindow::copyAttributesFromEmitter(emitter);
+
+		// Copy properties from emitter to property window
+		ParticleUniverse::CircleEmitter * circleEmitter = static_cast<ParticleUniverse::CircleEmitter *>(emitter);
+
+		// Radius: ParticleUniverse::Real
+		setDouble(PRNL_CIRCLE_EMITTER_RADIUS, circleEmitter->getRadius());
+
+		// Step: ParticleUniverse::Real
+		setDouble(PRNL_CIRCLE_EMITTER_STEP, circleEmitter->getStep());
+
+		// Angle: ParticleUniverse::Real
+		setDouble(PRNL_CIRCLE_EMITTER_ANGLE, circleEmitter->getCircleAngle());
+
+		// Random: bool
+		setBool(PRNL_CIRCLE_EMITTER_RANDOM, circleEmitter->isRandom());
+
+		// Normal: Vector3
+		setVector3(PRNL_CIRCLE_EMITTER_NORMAL, circleEmitter->getNormal());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

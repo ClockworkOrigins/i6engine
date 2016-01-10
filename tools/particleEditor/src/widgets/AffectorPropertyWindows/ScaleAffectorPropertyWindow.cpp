@@ -47,6 +47,28 @@ namespace widgets {
 	ScaleAffectorPropertyWindow::~ScaleAffectorPropertyWindow() {
 	}
 
+	void ScaleAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::ScaleAffector * scaleAffector = static_cast<ParticleUniverse::ScaleAffector *>(affector);
+
+		// ScaleXYZ: DynamicAttribute
+		setDynamicAttribute(PRNL_XYZ_SCALE, scaleAffector->getDynScaleXYZ());
+
+		// ScaleX: DynamicAttribute
+		setDynamicAttribute(PRNL_X_SCALE, scaleAffector->getDynScaleX());
+
+		// ScaleY: DynamicAttribute
+		setDynamicAttribute(PRNL_Y_SCALE, scaleAffector->getDynScaleY());
+
+		// ScaleZ: DynamicAttribute
+		setDynamicAttribute(PRNL_Z_SCALE, scaleAffector->getDynScaleZ());
+
+		// Since Start System: bool
+		setBool(PRNL_SINCE_START_SYSTEM, scaleAffector->isSinceStartSystem());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

@@ -48,6 +48,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~BillboardRendererPropertyWindow();
+
+		void copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) override;
 	};
 
 } /* namespace widgets */

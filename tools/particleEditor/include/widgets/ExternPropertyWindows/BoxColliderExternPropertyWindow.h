@@ -20,6 +20,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~BoxColliderExternPropertyWindow();
+
+		void copyAttributesFromExtern(ParticleUniverse::Extern * externObject) override;
 	};
 
 } /* namespace widgets */

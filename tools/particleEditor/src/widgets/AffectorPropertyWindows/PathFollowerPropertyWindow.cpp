@@ -2,6 +2,8 @@
 
 #include "properties/Vec3ListProperty.h"
 
+#include "ParticleAffectors/ParticleUniversePathFollower.h"
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -19,6 +21,21 @@ namespace widgets {
 	}
 
 	PathFollowerPropertyWindow::~PathFollowerPropertyWindow() {
+	}
+
+	void PathFollowerPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::PathFollower * pathFollower = static_cast<ParticleUniverse::PathFollower *>(affector);
+
+		// Positions: List
+		unsigned short numPositions = pathFollower->getNumPoints();
+		std::vector<Ogre::Vector3> positions;
+		for (unsigned short i = 0; i < numPositions; ++i) {
+			positions.push_back(pathFollower->getPoint(i));
+		}
+		setVector3List(PRNL_PATHFOLLOWER_POSITION, positions);
 	}
 
 } /* namespace widgets */

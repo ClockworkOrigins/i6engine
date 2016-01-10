@@ -38,6 +38,8 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~ForceFieldAffectorPropertyWindow();
+
+		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
 	};
 
 } /* namespace widgets */

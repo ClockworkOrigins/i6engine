@@ -35,6 +35,25 @@ namespace widgets {
 	LineAffectorPropertyWindow::~LineAffectorPropertyWindow() {
 	}
 
+	void LineAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::LineAffector * lineAffector = static_cast<ParticleUniverse::LineAffector *>(affector);
+
+		// Line end: Ogre::Vector3
+		setVector3(PRNL_END, lineAffector->getEnd());
+
+		// Maximum Deviation: ParticleUniverse::Real
+		setDouble(PRNL_MAX_DEVIATION, lineAffector->getMaxDeviation());
+
+		// Time Step: ParticleUniverse::Real
+		setDouble(PRNL_TIME_STEP, lineAffector->getTimeStep());
+
+		// Drift: ParticleUniverse::Real
+		setDouble(PRNL_DRIFT, lineAffector->getDrift());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

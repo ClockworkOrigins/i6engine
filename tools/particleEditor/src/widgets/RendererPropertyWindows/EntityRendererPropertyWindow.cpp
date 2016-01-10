@@ -3,6 +3,8 @@
 #include "properties/EnumProperty.h"
 #include "properties/StringProperty.h"
 
+#include "ParticleRenderers/ParticleUniverseEntityRenderer.h"
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -28,6 +30,26 @@ namespace widgets {
 	}
 
 	EntityRendererPropertyWindow::~EntityRendererPropertyWindow() {
+	}
+
+	void EntityRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) {
+		RendererPropertyWindow::copyAttributesFromRenderer(renderer);
+
+		// Copy properties from renderer to property window
+		ParticleUniverse::EntityRenderer * entityRenderer = static_cast<ParticleUniverse::EntityRenderer *>(renderer);
+
+		// Mesh Name: Ogre::String
+		setString(PRNL_MESH_NAME, QString::fromStdString(entityRenderer->getMeshName()));
+
+		// Orientation Type: List
+		ParticleUniverse::EntityRenderer::EntityOrientationType orientationType = entityRenderer->getEntityOrientationType();
+		QString orientationTypeString = OTT_ORIENTED_SELF;
+		if (orientationType == ParticleUniverse::EntityRenderer::ENT_ORIENTED_SELF_MIRRORED) {
+			orientationTypeString = OTT_ORIENTED_SELF_MIRRORED;
+		} else if (orientationType == ParticleUniverse::EntityRenderer::ENT_ORIENTED_SHAPE) {
+			orientationTypeString = OTT_ORIENTED_SHAPE;
+		}
+		setEnumString(PRNL_ORIENTATION_TYPE, orientationTypeString);
 	}
 
 } /* namespace widgets */

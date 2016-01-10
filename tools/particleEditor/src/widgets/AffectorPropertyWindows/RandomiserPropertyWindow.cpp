@@ -32,6 +32,22 @@ namespace widgets {
 	RandomiserPropertyWindow::~RandomiserPropertyWindow() {
 	}
 
+	void RandomiserPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::Randomiser * randomiser = static_cast<ParticleUniverse::Randomiser *>(affector);
+
+		// Max. deviation: Ogre::Vector3
+		setVector3(PRNL_MAX_DEVIATION, Ogre::Vector3(randomiser->getMaxDeviationX(), randomiser->getMaxDeviationY(), randomiser->getMaxDeviationZ()));
+
+		// Random direction: bool
+		setBool(PRNL_RANDOM_DIRECTION, randomiser->isRandomDirection());
+
+		// Timestep: ParticleUniverse::Real
+		setDouble(PRNL_TIME_STEP, randomiser->getTimeStep());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

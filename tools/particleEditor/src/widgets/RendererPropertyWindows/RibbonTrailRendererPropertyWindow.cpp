@@ -51,6 +51,36 @@ namespace widgets {
 	RibbonTrailRendererPropertyWindow::~RibbonTrailRendererPropertyWindow() {
 	}
 
+	void RibbonTrailRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) {
+		RendererPropertyWindow::copyAttributesFromRenderer(renderer);
+
+		// Copy properties from renderer to property window
+		ParticleUniverse::RibbonTrailRenderer * ribbonTrailRenderer = static_cast<ParticleUniverse::RibbonTrailRenderer *>(renderer);
+
+		// Use Vertex Colours: bool
+		setBool(PRNL_USE_VERTEX_COLOURS, ribbonTrailRenderer->isUseVertexColours());
+
+		// Max Chain Elements: unsigned int
+		setUint16(PRNL_MAX_ELEMENTS, ribbonTrailRenderer->getMaxChainElements());
+
+		// Trail Length: ParticleUniverse::Real
+		setDouble(PRNL_TRAIL_LENGTH, ribbonTrailRenderer->getTrailLength());
+
+		// Trail Width: ParticleUniverse::Real
+		setDouble(PRNL_TRAIL_WIDTH, ribbonTrailRenderer->getTrailWidth());
+
+		// Random Initial Colour: bool
+		setBool(PRNL_RANDOM_INITIAL_COLOUR, ribbonTrailRenderer->isRandomInitialColour());
+
+		// Initial Colour: Ogre::Colour
+		Vec4 initialColour(255 * ribbonTrailRenderer->getInitialColour().r, 255 * ribbonTrailRenderer->getInitialColour().g, 255 * ribbonTrailRenderer->getInitialColour().b, 255 * ribbonTrailRenderer->getInitialColour().a);
+		setColourWithAlpha(PRNL_INITIAL_COLOUR, initialColour);
+
+		// Colour Change: Ogre::Colour
+		Vec4 colourChange(255 * ribbonTrailRenderer->getColourChange().r, 255 * ribbonTrailRenderer->getColourChange().g, 255 * ribbonTrailRenderer->getColourChange().b, 255 * ribbonTrailRenderer->getColourChange().a);
+		setColourWithAlpha(PRNL_COLOUR_CHANGE, colourChange);
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

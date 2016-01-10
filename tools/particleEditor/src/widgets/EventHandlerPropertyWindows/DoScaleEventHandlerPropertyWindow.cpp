@@ -29,6 +29,24 @@ namespace widgets {
 	DoScaleEventHandlerPropertyWindow::~DoScaleEventHandlerPropertyWindow() {
 	}
 
+	void DoScaleEventHandlerPropertyWindow::copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler) {
+		EventHandlerPropertyWindow::copyAttributesFromEventHandler(eventHandler);
+
+		// Copy properties from eventHandler to property window
+		ParticleUniverse::DoScaleEventHandler * doScaleEventHandler = static_cast<ParticleUniverse::DoScaleEventHandler *>(eventHandler);
+
+		// Scale Fraction: Ogre:: Real
+		setDouble(PRNL_SCALE_FRACTION, doScaleEventHandler->getScaleFraction());
+
+		// Scale Type: List
+		ParticleUniverse::DoScaleEventHandler::ScaleType scaleType = doScaleEventHandler->getScaleType();
+		QString scaleTypeString = SC_TIME_TO_LIVE;
+		if (scaleType == ParticleUniverse::DoScaleEventHandler::ST_VELOCITY) {
+			scaleTypeString = SC_VELOCITY;
+		}
+		setEnumString(PRNL_SCALE_TYPE, scaleTypeString);
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

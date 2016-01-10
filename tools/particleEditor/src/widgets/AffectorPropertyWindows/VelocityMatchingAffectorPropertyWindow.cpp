@@ -19,6 +19,16 @@ namespace widgets {
 	VelocityMatchingAffectorPropertyWindow::~VelocityMatchingAffectorPropertyWindow() {
 	}
 
+	void VelocityMatchingAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::VelocityMatchingAffector * velocityMatchingAffector = static_cast<ParticleUniverse::VelocityMatchingAffector *>(affector);
+
+		// Radius: ParticleUniverse::Real
+		setDouble(PRNL_VELOCITY_MATCHING_RADIUS, velocityMatchingAffector->getRadius());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

@@ -36,6 +36,29 @@ namespace widgets {
 	OnTimeObserverPropertyWindow::~OnTimeObserverPropertyWindow() {
 	}
 
+	void OnTimeObserverPropertyWindow::copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) {
+		ObserverPropertyWindow::copyAttributesFromObserver(observer);
+
+		// Copy properties from observer to property window
+		ParticleUniverse::OnTimeObserver * onTimeObserver = static_cast<ParticleUniverse::OnTimeObserver *>(observer);
+
+		// Time Threshold - Compare: List
+		ParticleUniverse::ComparisionOperator compare = onTimeObserver->getCompare();
+		QString compareString = PRNL_COMPARE_LESS_THAN;
+		if (compare == ParticleUniverse::CO_GREATER_THAN) {
+			compareString = PRNL_COMPARE_GREATER_THAN;
+		} else if (compare == ParticleUniverse::CO_EQUALS) {
+			compareString = PRNL_COMPARE_EQUALS;
+		}
+		setEnumString(PRNL_ON_TIME_COMPARE, compareString);
+
+		// Time Threshold - Value: ParticleUniverse::Real
+		setDouble(PRNL_ON_TIME_THRESHOLD, onTimeObserver->getThreshold());
+
+		// Since Start System: bool
+		setBool(PRNL_SINCE_START_SYSTEM, onTimeObserver->isSinceStartSystem());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

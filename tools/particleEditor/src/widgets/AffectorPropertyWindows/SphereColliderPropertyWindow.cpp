@@ -53,6 +53,43 @@ namespace widgets {
 	SphereColliderPropertyWindow::~SphereColliderPropertyWindow() {
 	}
 
+	void SphereColliderPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::SphereCollider * sphereCollider = static_cast<ParticleUniverse::SphereCollider *>(affector);
+
+		// Radius: ParticleUniverse::Real
+		setDouble(PRNL_SPHERE_COLLIDER_RADIUS, sphereCollider->getRadius());
+
+		// Inner Collision: bool
+		setBool(PRNL_SPHERE_COLLIDER_INNER, sphereCollider->isInnerCollision());
+
+		// Friction: ParticleUniverse::Real
+		setDouble(PRNL_COLLIDER_FRICTION, sphereCollider->getFriction());
+
+		// Bouncyness: ParticleUniverse::Real
+		setDouble(PRNL_COLLIDER_BOUNCYNESS, sphereCollider->getBouncyness());
+
+		// Intersection type: List
+		ParticleUniverse::BaseCollider::IntersectionType intersectionType = sphereCollider->getIntersectionType();
+		QString intersectionTypeString = IST_POINT;
+		if (intersectionType == ParticleUniverse::BaseCollider::IT_BOX) {
+			intersectionTypeString = IST_BOX;
+		}
+		setEnumString(PRNL_INTERSECTION_TYPE, intersectionTypeString);
+
+		// Collision type: List
+		ParticleUniverse::BaseCollider::CollisionType collisionType = sphereCollider->getCollisionType();
+		QString collisionTypeString = COLLT_NONE;
+		if (collisionType == ParticleUniverse::BaseCollider::CT_BOUNCE) {
+			collisionTypeString = COLLT_BOUNCE;
+		} else if (collisionType == ParticleUniverse::BaseCollider::CT_FLOW) {
+			collisionTypeString = COLLT_FLOW;
+		}
+		setEnumString(PRNL_COLLISION_TYPE, collisionTypeString);
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

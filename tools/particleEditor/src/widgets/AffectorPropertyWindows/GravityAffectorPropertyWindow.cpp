@@ -19,6 +19,16 @@ namespace widgets {
 	GravityAffectorPropertyWindow::~GravityAffectorPropertyWindow() {
 	}
 
+	void GravityAffectorPropertyWindow::copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) {
+		AffectorPropertyWindow::copyAttributesFromAffector(affector);
+
+		// Copy properties from affector to property window
+		ParticleUniverse::GravityAffector * gravityAffector = static_cast<ParticleUniverse::GravityAffector *>(affector);
+
+		// Gravity: ParticleUniverse::Real
+		setDouble(PRNL_GRAVITY, gravityAffector->getGravity());
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */
