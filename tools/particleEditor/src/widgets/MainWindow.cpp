@@ -267,6 +267,22 @@ namespace widgets {
 			if (_currentPropertyWindow) {
 				_currentPropertyWindow->show();
 			}
+
+			if (!_scriptWidget->getScript().isEmpty()) {
+				if (ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_renderWidget->getParticleSystem()) != _scriptWidget->getScript().toStdString()) {
+					// Script has changed. Reparse and update the templates
+					Ogre::String oldTemplateName = _particleListWidget->getTemplateName().toStdString();
+					ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+					particleSystemManager->destroyParticleSystemTemplate(oldTemplateName); // Delete the old template
+					_scriptWidget->parseScript();
+
+					// Replace the old particle system with a new one, of which the name can also be changed.
+					QString newTemplateName = QString::fromStdString(particleSystemManager->getLastCreatedParticleSystemTemplateName());
+
+					_particleListWidget->refreshParticleList();
+					_particleListWidget->selectParticle(newTemplateName);
+				}
+			}
 		}
 
 		_currentTab = CurrentTab(index);
