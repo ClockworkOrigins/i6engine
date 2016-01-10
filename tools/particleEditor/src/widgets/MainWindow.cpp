@@ -50,6 +50,7 @@ namespace widgets {
 		connect(this, SIGNAL(triggerCreateNewSystem(const QString &)), _renderWidget, SLOT(createNewSystem(const QString &)));
 		connect(_renderWidget, SIGNAL(setNewParticleSystem(ParticleUniverse::ParticleSystem *)), _editWidget, SLOT(setNewParticleSystem(ParticleUniverse::ParticleSystem *)));
 		connect(_renderWidget, SIGNAL(loadScript(ParticleUniverse::ParticleSystem *)), _scriptWidget, SLOT(loadScript(ParticleUniverse::ParticleSystem *)));
+		connect(this, SIGNAL(updateScript(ParticleUniverse::ParticleSystem *)), _scriptWidget, SLOT(loadScript(ParticleUniverse::ParticleSystem *)));
 		connect(_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 		
 		gridLayout->addWidget(toolBarWrapper, 0, 0);
@@ -245,6 +246,7 @@ namespace widgets {
 			if (_currentPropertyWindow) {
 				_currentPropertyWindow->hide();
 			}
+			emit updateScript(_renderWidget->getParticleSystem());
 		} else if (_currentTab == CurrentTab::Render && CurrentTab(index) == CurrentTab::Edit) {
 			_renderWrapper->layout()->removeWidget(_renderWidget);
 			_editWidget->verticalLayout->addWidget(_renderWidget);

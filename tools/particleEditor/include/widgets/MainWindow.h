@@ -5,6 +5,10 @@
 
 #include <cstdint>
 
+namespace ParticleUniverse {
+	class ParticleSystem;
+} /* namespace ParticleUniverse */
+
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -27,6 +31,7 @@ namespace widgets {
 		void triggerPause();
 		void triggerStop();
 		void triggerCreateNewSystem(const QString & particle);
+		void updateScript(ParticleUniverse::ParticleSystem *);
 
 	private slots:
 		void closeEditor();

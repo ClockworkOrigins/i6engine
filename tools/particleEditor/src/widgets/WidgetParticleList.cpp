@@ -25,6 +25,7 @@ namespace widgets {
 	}
 
 	void WidgetParticleList::selectParticle(QString templateName) {
+		std::cout << "Selecting " << templateName.toStdString() << std::endl;
 		selectParticle(_templateMap[templateName]);
 	}
 
@@ -35,6 +36,7 @@ namespace widgets {
 		ParticleUniverse::ParticleSystemManager::getSingletonPtr()->particleSystemTemplateNames(names);
 		treeWidget->clear();
 		for (ParticleUniverse::String s : names) {
+			std::cout << s << std::endl;
 			QTreeWidgetItem * twi = new QTreeWidgetItem(treeWidget, { QString::fromStdString(s) });
 			_templateMap.insert(std::make_pair(QString::fromStdString(s), twi));
 		}
