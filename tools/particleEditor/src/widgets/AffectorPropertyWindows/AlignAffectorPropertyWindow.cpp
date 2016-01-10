@@ -2,6 +2,8 @@
 
 #include "properties/BoolProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseAlignAffector.h"
 
 namespace i6engine {
@@ -26,6 +28,24 @@ namespace widgets {
 
 		// Resize: bool
 		setBool(PRNL_AFFECTOR_ALIGN_RESIZE, alignAffector->isResize());
+	}
+
+	void AlignAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::AlignAffector * affector = static_cast<ParticleUniverse::AlignAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_AFFECTOR_ALIGN_RESIZE) {
+			affector->setResize(prop->getBool());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

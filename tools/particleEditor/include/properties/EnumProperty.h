@@ -29,6 +29,8 @@ namespace properties {
 
 		int getCurrentIndex() const override;
 
+		QString getEnumString() const override;
+
 	private slots:
 		void changedValue();
 

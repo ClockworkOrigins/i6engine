@@ -2,6 +2,8 @@
 
 #include "properties/DoubleProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleEmitters/ParticleUniverseBoxEmitter.h"
 
 namespace i6engine {
@@ -41,6 +43,31 @@ namespace widgets {
 
 		// Depth: ParticleUniverse::Real
 		setDouble(PRNL_BOX_EMITTER_DEPTH, boxEmitter->getDepth());
+	}
+
+	void BoxEmitterPropertyWindow::copyAttributeToEmitter(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::BoxEmitter * boxEmitter = static_cast<ParticleUniverse::BoxEmitter *>(_owner->getPUElement());
+		if (!boxEmitter) {
+			return;
+		}
+
+		if (propertyName == PRNL_BOX_EMITTER_WIDTH) {
+			// Update emitter with width
+			boxEmitter->setWidth(prop->getDouble());
+		} else if (propertyName == PRNL_BOX_EMITTER_HEIGHT) {
+			// Update emitter with height
+			boxEmitter->setHeight(prop->getDouble());
+		} else if (propertyName == PRNL_BOX_EMITTER_DEPTH) {
+			// Update emitter with depth
+			boxEmitter->setDepth(prop->getDouble());
+		} else {
+			// Update emitter with another attribute
+			EmitterPropertyWindow::copyAttributeToEmitter(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

@@ -32,6 +32,14 @@ namespace widgets {
 		virtual ~ObserverPropertyWindow();
 
 		virtual void copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer);
+
+	protected:
+		void changedProperty(properties::Property * prop, QString name) override;
+		virtual void copyAttributeToObserver(properties::Property * prop, QString propertyName);
+
+	private:
+		void replaceObserverType(properties::Property * prop);
+		void copyHandlersTo(ParticleUniverse::ParticleObserver * oldObserver, ParticleUniverse::ParticleObserver * newObserver);
 	};
 
 } /* namespace widgets */

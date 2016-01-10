@@ -2,6 +2,8 @@
 
 #include "properties/DoubleProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseVelocityMatchingAffector.h"
 
 namespace i6engine {
@@ -27,6 +29,25 @@ namespace widgets {
 
 		// Radius: ParticleUniverse::Real
 		setDouble(PRNL_VELOCITY_MATCHING_RADIUS, velocityMatchingAffector->getRadius());
+	}
+
+	void VelocityMatchingAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::VelocityMatchingAffector * affector = static_cast<ParticleUniverse::VelocityMatchingAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_VELOCITY_MATCHING_RADIUS) {
+			// Radius: ParticleUniverse::Real
+			affector->setRadius(prop->getDouble());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

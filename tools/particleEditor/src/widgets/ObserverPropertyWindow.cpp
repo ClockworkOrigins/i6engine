@@ -7,6 +7,9 @@
 #include "widgets/WidgetEditComponent.h"
 
 #include "ParticleUniverseObserver.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 namespace i6engine {
 namespace particleEditor {
@@ -126,6 +129,119 @@ namespace widgets {
 
 		// Observe Until Event: bool
 		setBool(PRNL_UNTIL_EVENT, observer->getObserveUntilEvent());
+	}
+
+	void ObserverPropertyWindow::changedProperty(properties::Property * prop, QString name) {
+		PropertyWindow::changedProperty(prop, name);
+		copyAttributeToObserver(prop, name);
+		//notifyPropertyChanged();
+	}
+
+	void ObserverPropertyWindow::copyAttributeToObserver(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::ParticleObserver * observer = static_cast<ParticleUniverse::ParticleObserver *>(_owner->getPUElement());
+		if (!observer) {
+			return;
+		}
+
+		if (propertyName == PRNL_NAME) {
+			// Name: String
+			_owner->setName(prop->getString());
+			_owner->setCaption();
+			observer->setName(prop->getString().toStdString());
+		} else if (propertyName == PRNL_OBSERVER_TYPE) {
+			// Type: List of types
+			// This requires the observer to be replaced.
+			replaceObserverType(prop);
+		} else if (propertyName == PRNL_PARTICLE_TYPE) {
+			// Observe Particle Type: List
+			QString observeType = prop->getEnumString();
+			if (observeType == PT_VISUAL) {
+				observer->setParticleTypeToObserve(ParticleUniverse::Particle::PT_VISUAL);
+			} else if (observeType == PT_EMITTER) {
+				observer->setParticleTypeToObserve(ParticleUniverse::Particle::PT_EMITTER);
+			} else if (observeType == PT_AFFECTOR) {
+				observer->setParticleTypeToObserve(ParticleUniverse::Particle::PT_AFFECTOR);
+			} else if (observeType == PT_TECHNIQUE) {
+				observer->setParticleTypeToObserve(ParticleUniverse::Particle::PT_TECHNIQUE);
+			} else if (observeType == PT_SYSTEM) {
+				observer->setParticleTypeToObserve(ParticleUniverse::Particle::PT_SYSTEM);
+			}
+		} else if (propertyName == PRNL_OBSERVER_ENABLED) {
+			// Enabled: Bool
+			observer->_resetEnabled();
+			observer->setEnabled(prop->getBool());
+		} else if (propertyName == PRNL_OBSERVE_INTERVAL) {
+			// Observe Interval: ParticleUniverse::Real
+			observer->setObserverInterval(prop->getDouble());
+		} else if (propertyName == PRNL_UNTIL_EVENT) {
+			// Observe Until Event: bool
+			observer->setObserveUntilEvent(prop->getBool());
+		}
+	}
+
+	void ObserverPropertyWindow::replaceObserverType(properties::Property * prop) {
+		// Type: List of types
+		Ogre::String type = prop->getEnumString().toStdString();
+		if (type == Ogre::StringUtil::BLANK) {
+			return;
+		}
+
+		ParticleUniverse::ParticleObserver * oldObserver = static_cast<ParticleUniverse::ParticleObserver *>(_owner->getPUElement());
+		if (type == oldObserver->getObserverType()) {
+			return;
+		}
+		if (oldObserver) {
+			ParticleUniverse::ParticleTechnique * technique = oldObserver->getParentTechnique();
+			if (technique) {
+				ParticleUniverse::ParticleObserver * newObserver = technique->createObserver(type);
+				oldObserver->copyParentAttributesTo(newObserver);
+				copyHandlersTo(oldObserver, newObserver);
+				bool wasStarted = false;
+				ParticleUniverse::ParticleSystem * system = technique->getParentSystem();
+				if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
+					wasStarted = true;
+					system->stop();
+				}
+				technique->destroyObserver(oldObserver);
+				_owner->setPUElement(newObserver);
+				if (wasStarted) {
+					system->start();
+				}
+			} else {
+				/** The old observer didn't have a technique, so create a new observer by means of the ParticleSystemManager itself and also delete
+				the old observer by means of the ParticleSystemManager
+				*/
+				ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+				ParticleUniverse::ParticleObserver * newObserver = particleSystemManager->createObserver(type);
+				oldObserver->copyParentAttributesTo(newObserver);
+				copyHandlersTo(oldObserver, newObserver);
+				particleSystemManager->destroyObserver(oldObserver);
+				_owner->setPUElement(newObserver);
+			}
+		} else {
+			// There is no old observer. Create a new observer by means of the ParticleSystemManager
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::ParticleObserver * newObserver = particleSystemManager->createObserver(type);
+			_owner->setPUElement(newObserver);
+		}
+		emit replacePropertyWindow(QString::fromStdString(type));
+	}
+
+	void ObserverPropertyWindow::copyHandlersTo(ParticleUniverse::ParticleObserver * oldObserver, ParticleUniverse::ParticleObserver * newObserver) {
+		// First delete all handlers that where created during the copy action
+		newObserver->destroyAllEventHandlers();
+
+		// Move the handlers from the old observer to the new one
+		ParticleUniverse::ParticleEventHandler * handler;
+		while (oldObserver->getNumEventHandlers() > 0) {
+			handler = oldObserver->getEventHandler(0);
+			oldObserver->removeEventHandler(handler);
+			newObserver->addEventHandler(handler);
+		}
 	}
 
 } /* namespace widgets */

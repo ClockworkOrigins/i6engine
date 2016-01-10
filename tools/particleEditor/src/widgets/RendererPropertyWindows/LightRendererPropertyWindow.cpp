@@ -5,6 +5,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/EnumProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleRenderers/ParticleUniverseLightRenderer.h"
 
 namespace i6engine {
@@ -128,6 +130,69 @@ namespace widgets {
 
 		// Flash Length: ParticleUniverse::Real
 		setBool(PRNL_FLASH_RANDOM, lightRenderer->isFlashRandom());
+	}
+
+
+	void LightRendererPropertyWindow::copyAttributeToRenderer(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::LightRenderer * renderer = static_cast<ParticleUniverse::LightRenderer *>(_owner->getPUElement());
+		if (!renderer) {
+			return;
+		}
+
+		if (propertyName == PRNL_LIGHT_TYPE) {
+			// Light Type: List
+			QString lightType = prop->getEnumString();
+			if (lightType == LT_POINT) {
+				renderer->setLightType(Ogre::Light::LT_POINT);
+			} else if (lightType == LT_SPOT) {
+				renderer->setLightType(Ogre::Light::LT_SPOTLIGHT);
+			}
+		} else if (propertyName == PRNL_SPECULAR_COLOUR) {
+			// Specular Colour: Ogre::Colour
+			Vec4 c = prop->getColourWithAlpha();
+			Ogre::ColourValue colour(ParticleUniverse::Real(c.getX()) / 255.0f, ParticleUniverse::Real(c.getY()) / 255.0f, ParticleUniverse::Real(c.getZ()) / 255.0f, ParticleUniverse::Real(c.getW()) / 255.0f);
+			renderer->setSpecularColour(colour);
+		} else if (propertyName == PRNL_ATT_RANGE) {
+			// Attenuation Range: ParticleUniverse::Real
+			renderer->setAttenuationRange(prop->getDouble());
+		} else if (propertyName == PRNL_ATT_CONSTANT) {
+			// Attenuation Constant: ParticleUniverse::Real
+			renderer->setAttenuationConstant(prop->getDouble());
+		} else if (propertyName == PRNL_ATT_LINEAR) {
+			// Attenuation Linear: ParticleUniverse::Real
+			renderer->setAttenuationLinear(prop->getDouble());
+		} else if (propertyName == PRNL_ATT_QUADRATIC) {
+			// Attenuation Quadratic: ParticleUniverse::Real
+			renderer->setAttenuationQuadratic(prop->getDouble());
+		} else if (propertyName == PRNL_SPOT_INNER_ANGLE) {
+			// Spotlight Inner Angle: ParticleUniverse::Real
+			renderer->setSpotlightInnerAngle(Ogre::Radian(Ogre::Degree(prop->getDouble())));
+		} else if (propertyName == PRNL_SPOT_OUTER_ANGLE) {
+			// Spotlight Outer Angle: ParticleUniverse::Real
+			renderer->setSpotlightOuterAngle(Ogre::Radian(Ogre::Degree(prop->getDouble())));
+		} else if (propertyName == PRNL_FALLOFF) {
+			// Falloff: ParticleUniverse::Real
+			renderer->setSpotlightFalloff(prop->getDouble());
+		} else if (propertyName == PRNL_POWER_SCALE) {
+			// Power Scale: ParticleUniverse::Real
+			renderer->setPowerScale(prop->getDouble());
+		} else if (propertyName == PRNL_FLASH_FREQUENCY) {
+			// Flash Frequency: ParticleUniverse::Real
+			renderer->setFlashFrequency(prop->getDouble());
+		} else if (propertyName == PRNL_FLASH_LENGTH) {
+			// Flash Length: ParticleUniverse::Real
+			renderer->setFlashLength(prop->getDouble());
+		} else if (propertyName == PRNL_FLASH_RANDOM) {
+			// Flash Random: bool
+			renderer->setFlashRandom(prop->getBool());
+		} else {
+			// Update renderer with another attribute
+			RendererPropertyWindow::copyAttributeToRenderer(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

@@ -3,6 +3,8 @@
 #include "properties/EnumProperty.h"
 #include "properties/UIntProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleObservers/ParticleUniverseOnCountObserver.h"
 
 namespace i6engine {
@@ -49,6 +51,35 @@ namespace widgets {
 
 		// Count Threshold Value: ParticleUniverse::uint
 		setUint16(PRNL_ON_COUNT_THRESHOLD, onCountObserver->getThreshold());
+	}
+
+	void OnCountObserverPropertyWindow::copyAttributeToObserver(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::OnCountObserver * observer = static_cast<ParticleUniverse::OnCountObserver *>(_owner->getPUElement());
+		if (!observer) {
+			return;
+		}
+
+		if (propertyName == PRNL_ON_COUNT_COMPARE) {
+			// Count Threshold Compare: List
+			QString compare = prop->getEnumString();
+			if (compare == PRNL_COMPARE_LESS_THAN) {
+				observer->setCompare(ParticleUniverse::CO_LESS_THAN);
+			} else if (compare == PRNL_COMPARE_GREATER_THAN) {
+				observer->setCompare(ParticleUniverse::CO_GREATER_THAN);
+			} else if (compare == PRNL_COMPARE_EQUALS) {
+				observer->setCompare(ParticleUniverse::CO_EQUALS);
+			}
+		} else if (propertyName == PRNL_ON_COUNT_THRESHOLD) {
+			// Count Threshold Value: ParticleUniverse::uint
+			observer->setThreshold(prop->getUInt());
+		} else {
+			// Update observer with another attribute
+			ObserverPropertyWindow::copyAttributeToObserver(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

@@ -2,6 +2,8 @@
 
 #include "properties/DynamicAttributeProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseJetAffector.h"
 
 namespace i6engine {
@@ -29,6 +31,26 @@ namespace widgets {
 
 		// Acceleration: DynamicAttribute
 		setDynamicAttribute(PRNL_ACCELERATION, jetAffector->getDynAcceleration());
+	}
+
+	void JetAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop)
+			return;
+
+		ParticleUniverse::JetAffector * affector = static_cast<ParticleUniverse::JetAffector *>(_owner->getPUElement());
+		if (!affector)
+			return;
+
+		if (propertyName == PRNL_ACCELERATION) {
+			// Acceleration: DynamicAttribute
+			affector->setDynAcceleration(prop->getDynamicAttribute());
+			if (affector->_isMarkedForEmission()) {
+				restartParticle(affector, ParticleUniverse::Particle::PT_AFFECTOR, ParticleUniverse::Particle::PT_AFFECTOR);
+			}
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

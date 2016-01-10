@@ -3,6 +3,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseLineAffector.h"
 
 namespace i6engine {
@@ -52,6 +54,32 @@ namespace widgets {
 
 		// Drift: ParticleUniverse::Real
 		setDouble(PRNL_DRIFT, lineAffector->getDrift());
+	}
+
+	void LineAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop)
+			return;
+
+		ParticleUniverse::LineAffector * affector = static_cast<ParticleUniverse::LineAffector *>(_owner->getPUElement());
+		if (!affector)
+			return;
+
+		if (propertyName == PRNL_END) {
+			// Line end: Ogre::Vector3
+			affector->setEnd(prop->getVector3());
+		} else if (propertyName == PRNL_MAX_DEVIATION) {
+			// Maximum Deviation: ParticleUniverse::Real
+			affector->setMaxDeviation(prop->getDouble());
+		} else if (propertyName == PRNL_TIME_STEP) {
+			// Time Step: ParticleUniverse::Real
+			affector->setTimeStep(prop->getDouble());
+		} else if (propertyName == PRNL_DRIFT) {
+			// Drift: ParticleUniverse::Real
+			affector->setDrift(prop->getDouble());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

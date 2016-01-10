@@ -28,6 +28,10 @@ namespace properties {
 		return _comboBox->currentIndex();
 	}
 
+	QString EnumProperty::getEnumString() const {
+		return _comboBox->currentText();
+	}
+
 	void EnumProperty::changedValue() {
 		triggerChangedSignal();
 	}

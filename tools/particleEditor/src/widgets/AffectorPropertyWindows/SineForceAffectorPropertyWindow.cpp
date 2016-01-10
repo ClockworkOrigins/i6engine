@@ -4,6 +4,8 @@
 #include "properties/EnumProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseSineForceAffector.h"
 
 namespace i6engine {
@@ -63,6 +65,39 @@ namespace widgets {
 
 		// Maximum Frequency: ParticleUniverse::Real
 		setDouble(PRNL_FREQ_MAX, sineForceAffector->getFrequencyMax());
+	}
+
+	void SineForceAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::SineForceAffector * affector = static_cast<ParticleUniverse::SineForceAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_FORCE_VECTOR) {
+			// Force vector: Ogre::Vector3
+			affector->setForceVector(prop->getVector3());
+		} else if (propertyName == PRNL_LINEAR_FORCE_APPLICATION) {
+			// Force Application: List
+			QString application = prop->getEnumString();
+			if (application == APP_ADD) {
+				affector->setForceApplication(ParticleUniverse::BaseForceAffector::FA_ADD);
+			} else if (application == APP_AVG) {
+				affector->setForceApplication(ParticleUniverse::BaseForceAffector::FA_AVERAGE);
+			}
+		} else if (propertyName == PRNL_FREQ_MIN) {
+			// Minimum Frequency: ParticleUniverse::Real
+			affector->setFrequencyMin(prop->getDouble());
+		} else if (propertyName == PRNL_FREQ_MAX) {
+			// Maximum Frequency: ParticleUniverse::Real
+			affector->setFrequencyMax(prop->getDouble());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

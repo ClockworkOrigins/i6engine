@@ -41,6 +41,11 @@ namespace widgets {
 		virtual ~RendererPropertyWindow();
 
 		virtual void copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer);
+
+	protected:
+		void changedProperty(properties::Property * prop, QString name) override;
+		virtual void copyAttributeToRenderer(properties::Property * prop, QString propertyName);
+		void replaceRendererType(properties::Property * prop);
 	};
 
 } /* namespace widgets */

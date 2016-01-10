@@ -5,6 +5,10 @@
 #include "widgets/WidgetEditComponent.h"
 
 #include "ParticleUniverseEventHandler.h"
+#include "ParticleUniverseObserver.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 namespace i6engine {
 namespace particleEditor {
@@ -44,6 +48,84 @@ namespace widgets {
 
 		// Type: List of types
 		setEnumString(PRNL_HANDLER_TYPE, QString::fromStdString(eventHandler->getEventHandlerType()));
+	}
+
+	void EventHandlerPropertyWindow::changedProperty(properties::Property * prop, QString name) {
+		PropertyWindow::changedProperty(prop, name);
+		copyAttributeToEventHandler(prop, name);
+		//notifyPropertyChanged();
+	}
+
+	void EventHandlerPropertyWindow::copyAttributeToEventHandler(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::ParticleEventHandler * handler = static_cast<ParticleUniverse::ParticleEventHandler *>(_owner->getPUElement());
+		if (!handler) {
+			return;
+		}
+
+		if (propertyName == PRNL_NAME) {
+			// Name: String
+			_owner->setName(prop->getString());
+			_owner->setCaption();
+			handler->setName(prop->getString().toStdString());
+		} else if (propertyName == PRNL_HANDLER_TYPE) {
+			// Type: List of types
+			// This requires the handler to be replaced.
+			replaceHandlerType(prop);
+		}
+	}
+
+	void EventHandlerPropertyWindow::replaceHandlerType(properties::Property * prop) {
+		// Type: List of types
+		Ogre::String type = prop->getEnumString().toStdString();
+		if (type == Ogre::StringUtil::BLANK) {
+			return;
+		}
+
+		ParticleUniverse::ParticleEventHandler * oldHandler = static_cast<ParticleUniverse::ParticleEventHandler *>(_owner->getPUElement());
+		if (type == oldHandler->getEventHandlerType()) {
+			return;
+		}
+		if (oldHandler) {
+			ParticleUniverse::ParticleObserver * observer = oldHandler->getParentObserver();
+			if (observer) {
+				ParticleUniverse::ParticleEventHandler * newHandler = observer->createEventHandler(type);
+				oldHandler->copyParentAttributesTo(newHandler);
+				bool wasStarted = false;
+				ParticleUniverse::ParticleTechnique * technique = observer->getParentTechnique();
+				ParticleUniverse::ParticleSystem * system = nullptr;
+				if (technique) {
+					system = technique->getParentSystem();
+					if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
+						wasStarted = true;
+						system->stop();
+					}
+				}
+				observer->destroyEventHandler(oldHandler);
+				_owner->setPUElement(newHandler);
+				if (wasStarted) {
+					system->start();
+				}
+			} else {
+				/** The old handler didn't have an observer, so create a new handler by means of the ParticleSystemManager itself and also
+				delete the old handler by means of the ParticleSystemManager
+				*/
+				ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+				ParticleUniverse::ParticleEventHandler * newHandler = particleSystemManager->createEventHandler(type);
+				oldHandler->copyParentAttributesTo(newHandler);
+				particleSystemManager->destroyEventHandler(oldHandler);
+				_owner->setPUElement(newHandler);
+			}
+		} else {
+			// There is no old handler. Create a new handler by means of the ParticleSystemManager
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::ParticleEventHandler * newHandler = particleSystemManager->createEventHandler(type);
+			_owner->setPUElement(newHandler);
+		}
+		emit replacePropertyWindow(QString::fromStdString(type));
 	}
 
 } /* namespace widgets */

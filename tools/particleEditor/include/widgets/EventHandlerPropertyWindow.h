@@ -29,6 +29,13 @@ namespace widgets {
 		virtual ~EventHandlerPropertyWindow();
 
 		virtual void copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler);
+
+	protected:
+		void changedProperty(properties::Property * prop, QString name) override;
+		virtual void copyAttributeToEventHandler(properties::Property * prop, QString propertyName);
+
+	private:
+		void replaceHandlerType(properties::Property * prop);
 	};
 
 } /* namespace widgets */

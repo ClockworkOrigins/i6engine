@@ -6,6 +6,8 @@
 #include "properties/UIntProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseForceFieldAffector.h"
 
 namespace i6engine {
@@ -135,6 +137,69 @@ namespace widgets {
 
 		// movement_frequency: Real
 		setDouble(PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY, forceFieldAffector->getMovementFrequency());
+	}
+
+	void ForceFieldAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::ForceFieldAffector * affector = static_cast<ParticleUniverse::ForceFieldAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_AFFECTOR_FORCEFIELD_FF_TYPE) {
+			// forcefield_type: List
+			QString type = prop->getEnumString();
+			if (type == FORCEFIELD_REALTIME) {
+				affector->setForceFieldType(ParticleUniverse::ForceField::FF_REALTIME_CALC);
+			} else if (type == FORCEFIELD_MATRIX) {
+				affector->setForceFieldType(ParticleUniverse::ForceField::FF_MATRIX_CALC);
+			}
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_DELTA) {
+			// delta: Real
+			affector->setDelta(prop->getDouble());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_FORCE) {
+			// force: Real
+			affector->setScaleForce(prop->getDouble());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_OCTAVES) {
+			// octaves: uint
+			affector->setOctaves(prop->getUInt());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_FREQUENCY) {
+			// frequency: Real
+			affector->setFrequency(prop->getDouble());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_AMPLITUDE) {
+			// amplitude: Real
+			affector->setAmplitude(prop->getDouble());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_PERSISTENCE) {
+			// persistence: Real
+			affector->setPersistence(prop->getDouble());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_FF_SIZE) {
+			// forcefield_size: uint
+			affector->setForceFieldSize(prop->getUInt());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_WORLDSIZE) {
+			// worldsize: Vector3
+			affector->setWorldSize(prop->getVector3());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_IGNORE_X) {
+			// ignore_negative_x: bool
+			affector->setIgnoreNegativeX(prop->getBool());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_IGNORE_Y) {
+			// ignore_negative_y: bool
+			affector->setIgnoreNegativeY(prop->getBool());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_IGNORE_Z) {
+			// ignore_negative_z: bool
+			affector->setIgnoreNegativeZ(prop->getBool());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_MOVEMENT) {
+			// movement: Vector3
+			affector->setMovement(prop->getVector3());
+		} else if (propertyName == PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY) {
+			// movement_frequency: Real
+			affector->setMovementFrequency(prop->getDouble());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

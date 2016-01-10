@@ -3,6 +3,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/EnumProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleObservers/ParticleUniverseOnVelocityObserver.h"
 
 namespace i6engine {
@@ -49,6 +51,35 @@ namespace widgets {
 
 		// Velocity threshold - value: ParticleUniverse::Real
 		setDouble(PRNL_ON_VELOCITY_THRESHOLD, onVelocityObserver->getThreshold());
+	}
+
+	void OnVelocityObserverPropertyWindow::copyAttributeToObserver(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::OnVelocityObserver * observer = static_cast<ParticleUniverse::OnVelocityObserver *>(_owner->getPUElement());
+		if (!observer) {
+			return;
+		}
+
+		if (propertyName == PRNL_ON_VELOCITY_COMPARE) {
+			// Velocity threshold - compare: List
+			QString compare = prop->getEnumString();
+			if (compare == PRNL_COMPARE_LESS_THAN) {
+				observer->setCompare(ParticleUniverse::CO_LESS_THAN);
+			} else if (compare == PRNL_COMPARE_GREATER_THAN) {
+				observer->setCompare(ParticleUniverse::CO_GREATER_THAN);
+			} else if (compare == PRNL_COMPARE_EQUALS) {
+				observer->setCompare(ParticleUniverse::CO_EQUALS);
+			}
+		} else if (propertyName == PRNL_ON_VELOCITY_THRESHOLD) {
+			// Velocity threshold - value: ParticleUniverse::Real
+			observer->setThreshold(prop->getDouble());
+		} else {
+			// Update observer with another attribute
+			ObserverPropertyWindow::copyAttributeToObserver(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

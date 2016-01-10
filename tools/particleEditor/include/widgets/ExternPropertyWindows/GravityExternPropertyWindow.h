@@ -22,6 +22,9 @@ namespace widgets {
 		~GravityExternPropertyWindow();
 
 		void copyAttributesFromExtern(ParticleUniverse::Extern * externObject) override;
+
+	private:
+		void copyAttributeToExtern(properties::Property * prop, QString propertyName) override;
 	};
 
 } /* namespace widgets */

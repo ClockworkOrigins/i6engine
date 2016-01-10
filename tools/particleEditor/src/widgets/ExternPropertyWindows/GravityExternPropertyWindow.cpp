@@ -2,6 +2,7 @@
 
 #include "properties/DoubleProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
 #include "widgets/AffectorPropertyWindows/GravityAffectorPropertyWindow.h"
 
 #include "Externs/ParticleUniverseGravityExtern.h"
@@ -35,6 +36,27 @@ namespace widgets {
 
 		// Gravity: ParticleUniverse::Real
 		setDouble(PRNL_GRAVITY, gravityExtern->getGravity());
+	}
+
+	void GravityExternPropertyWindow::copyAttributeToExtern(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::Extern * ext = static_cast<ParticleUniverse::Extern *>(_owner->getPUElement());
+		ParticleUniverse::GravityExtern * externObject = static_cast<ParticleUniverse::GravityExtern *>(ext);
+
+		if (propertyName == PRNL_EXTERN_THRESHOLD) {
+			// Distance Threshold: ParticleUniverse::Real
+			ParticleUniverse::Attachable * attachable = static_cast<ParticleUniverse::Attachable *>(_owner->getPUElement());
+			attachable->setDistanceThreshold(prop->getDouble());
+		} else if (propertyName == PRNL_GRAVITY) {
+			// Gravity: ParticleUniverse::Real
+			externObject->setGravity(prop->getDouble());
+		} else {
+			// Update extern with another attribute
+			ExternPropertyWindow::copyAttributeToExtern(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

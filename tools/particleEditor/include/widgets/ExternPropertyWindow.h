@@ -29,6 +29,13 @@ namespace widgets {
 		virtual ~ExternPropertyWindow();
 
 		virtual void copyAttributesFromExtern(ParticleUniverse::Extern * externObject);
+
+	protected:
+		void changedProperty(properties::Property * prop, QString name) override;
+		virtual void copyAttributeToExtern(properties::Property * prop, QString propertyName);
+
+	private:
+		void replaceExternType(properties::Property * prop);
 	};
 
 } /* namespace widgets */

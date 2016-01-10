@@ -3,6 +3,8 @@
 #include "properties/StringProperty.h"
 #include "properties/UIntProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleEmitters/ParticleUniverseVertexEmitter.h"
 
 namespace i6engine {
@@ -49,6 +51,37 @@ namespace widgets {
 
 		// Step: Ogre::String
 		setString(PRNL_VERTEX_EMITTER_MESH_NAME, QString::fromStdString(vertexEmitter->getMeshName()));
+	}
+
+	void VertexEmitterPropertyWindow::copyAttributeToEmitter(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::VertexEmitter * vertexEmitter = static_cast<ParticleUniverse::VertexEmitter *>(_owner->getPUElement());
+		if (!vertexEmitter) {
+			return;
+		}
+
+		if (propertyName == PRNL_VERTEX_EMITTER_STEP) {
+			// Update emitter with Step
+			vertexEmitter->setStep(prop->getUInt());
+		} else if (propertyName == PRNL_VERTEX_EMITTER_SEGMENTS) {
+			// Update emitter with Segments
+			vertexEmitter->setSegments(prop->getUInt());
+		} else if (propertyName == PRNL_VERTEX_EMITTER_ITERATION) {
+			// Update emitter with Iteration
+			vertexEmitter->setIterations(prop->getUInt());
+		} else if (propertyName == PRNL_VERTEX_EMITTER_MESH_NAME) {
+			// Update emitter with Mesh name
+			Ogre::String meshName = prop->getString().toStdString();
+			if (meshName != Ogre::StringUtil::BLANK) {
+				vertexEmitter->setMeshName(meshName);
+			}
+		} else {
+			// Update emitter with another attribute
+			EmitterPropertyWindow::copyAttributeToEmitter(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

@@ -2,6 +2,8 @@
 
 #include "properties/Vec3ListProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniversePathFollower.h"
 
 namespace i6engine {
@@ -36,6 +38,28 @@ namespace widgets {
 			positions.push_back(pathFollower->getPoint(i));
 		}
 		setVector3List(PRNL_PATHFOLLOWER_POSITION, positions);
+	}
+
+	void PathFollowerPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::PathFollower * affector = static_cast<ParticleUniverse::PathFollower *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_PATHFOLLOWER_POSITION) {
+			// Positions: List
+			affector->clearPoints();
+			for (ParticleUniverse::Vector3 vec : prop->getVector3List()) {
+				affector->addPoint(vec);
+			}
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

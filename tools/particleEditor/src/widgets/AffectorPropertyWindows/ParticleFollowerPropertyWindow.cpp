@@ -2,6 +2,8 @@
 
 #include "properties/DoubleProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseParticleFollower.h"
 
 namespace i6engine {
@@ -34,6 +36,28 @@ namespace widgets {
 
 		// Max distance: ParticleUniverse::Real
 		setDouble(PRNL_MAX_DISTANCE, particleFollower->getMaxDistance());
+	}
+
+	void ParticleFollowerPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::ParticleFollower * affector = static_cast<ParticleUniverse::ParticleFollower *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_MIN_DISTANCE) {
+			// Min distance: ParticleUniverse::Real
+			affector->setMinDistance(prop->getDouble());
+		} else if (propertyName == PRNL_MAX_DISTANCE) {
+			// Max distance: ParticleUniverse::Real
+			affector->setMaxDistance(prop->getDouble());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

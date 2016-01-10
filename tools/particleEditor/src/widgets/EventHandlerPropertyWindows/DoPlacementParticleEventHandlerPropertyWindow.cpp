@@ -3,6 +3,8 @@
 #include "properties/BoolProperty.h"
 #include "properties/DoubleProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleEventHandlers/ParticleUniverseDoPlacementParticleEventHandler.h"
 
 namespace i6engine {
@@ -100,6 +102,55 @@ namespace widgets {
 
 		// Inherit Particle Depth: bool
 		setBool(PRNL_INHERIT_PARTICLE_DEPTH, doPlacementParticleEventHandler->isInheritParticleDepth());
+	}
+
+	void DoPlacementParticleEventHandlerPropertyWindow::copyAttributeToEventHandler(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::DoPlacementParticleEventHandler * handler = static_cast<ParticleUniverse::DoPlacementParticleEventHandler *>(_owner->getPUElement());
+		if (!handler) {
+			return;
+		}
+
+		if (propertyName == PRNL_NUMBER_OF_PARTICLES) {
+			// Number of Particles: ParticleUniverse::Real
+			handler->setNumberOfParticles(prop->getDouble());
+		} else if (propertyName == PRNL_INHERIT_POSITION) {
+			// Inherit Position: bool
+			handler->setInheritPosition(prop->getBool());
+		} else if (propertyName == PRNL_INHERIT_DIRECTION) {
+			// Inherit Direction: bool
+			handler->setInheritDirection(prop->getBool());
+		} else if (propertyName == PRNL_INHERIT_ORIENTATION) {
+			// Inherit Orientation: bool
+			handler->setInheritOrientation(prop->getBool());
+		} else if (propertyName == PRNL_INHERIT_TIME_TO_LIVE) {
+			// Inherit Time to live: bool
+			handler->setInheritTimeToLive(prop->getBool());
+		} else if (propertyName == PRNL_INHERIT_MASS) {
+			// Inherit Mass: bool
+			handler->setInheritMass(prop->getBool());
+		} else if (propertyName == PRNL_INHERIT_TEXTURE_COORDINATE) {
+			// Inherit Texture Coord: bool
+			handler->setInheritTextureCoordinate(prop->getBool());
+		} else if (propertyName == PRNL_INHERIT_COLOUR) {
+			// Inherit Colour: bool
+			handler->setInheritColour(prop->getBool());
+		} else if (propertyName == PRNL_INHERIT_PARTICLE_WIDTH) {
+			// Inherit Particle width: bool
+			handler->setInheritParticleWidth(prop->getBool());
+		} else if (propertyName == PRNL_INHERIT_PARTICLE_HEIGHT) {
+			// Inherit Particle height: bool
+			handler->setInheritParticleHeight(prop->getBool());
+		} else if (propertyName == PRNL_INHERIT_PARTICLE_DEPTH) {
+			// Inherit Particle Depth: bool
+			handler->setInheritParticleDepth(prop->getBool());
+		} else {
+			// Update handler with another attribute
+			EventHandlerPropertyWindow::copyAttributeToEventHandler(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

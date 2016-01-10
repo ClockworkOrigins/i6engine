@@ -25,6 +25,9 @@ namespace widgets {
 		~OnEventFlagObserverPropertyWindow();
 
 		void copyAttributesFromObserver(ParticleUniverse::ParticleObserver * observer) override;
+
+	private:
+		void copyAttributeToObserver(properties::Property * prop, QString propertyName) override;
 	};
 
 } /* namespace widgets */

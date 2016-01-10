@@ -25,6 +25,9 @@ namespace widgets {
 		~GeometryRotatorPropertyWindow();
 
 		void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector) override;
+
+	private:
+		void copyAttributeToAffector(properties::Property * prop, QString propertyName) override;
 	};
 
 } /* namespace widgets */

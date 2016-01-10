@@ -35,6 +35,14 @@ namespace widgets {
 		virtual ~AffectorPropertyWindow();
 
 		virtual void copyAttributesFromAffector(ParticleUniverse::ParticleAffector * affector);
+
+		void changedProperty(properties::Property * prop, QString name) override;
+
+	protected:
+		virtual void copyAttributeToAffector(properties::Property * prop, QString propertyName);
+
+	private:
+		void replaceAffectorType(properties::Property * prop);
 	};
 
 } /* namespace widgets */

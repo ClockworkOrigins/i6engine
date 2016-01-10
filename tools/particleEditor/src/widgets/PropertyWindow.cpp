@@ -74,7 +74,7 @@ namespace widgets {
 	void PropertyWindow::append(properties::Property * prop) {
 		verticalLayout->addWidget(prop);
 		_properties.insert(std::make_pair(prop->getName(), prop));
-		connect(prop, SIGNAL(changed(QString)), this, SLOT(changedProperty(QString)));
+		connect(prop, SIGNAL(changed(QString)), this, SLOT(changedProperty(QString)), Qt::QueuedConnection);
 	}
 
 	void PropertyWindow::setBool(QString name, bool value) {

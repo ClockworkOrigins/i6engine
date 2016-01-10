@@ -2,6 +2,8 @@
 
 #include "properties/BoolProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleEventHandlers/ParticleUniverseDoAffectorEventHandler.h"
 
 namespace i6engine {
@@ -29,6 +31,25 @@ namespace widgets {
 
 		// Pre/Post Processing: bool
 		setBool(PRNL_PRE_POST, doAffectorEventHandler->getPrePost());
+	}
+
+	void DoAffectorEventHandlerPropertyWindow::copyAttributeToEventHandler(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::DoAffectorEventHandler * handler = static_cast<ParticleUniverse::DoAffectorEventHandler *>(_owner->getPUElement());
+		if (!handler) {
+			return;
+		}
+
+		if (propertyName == PRNL_PRE_POST) {
+			// Pre/Post Processing: bool
+			handler->setPrePost(prop->getBool());
+		} else {
+			// Update handler with another attribute
+			EventHandlerPropertyWindow::copyAttributeToEventHandler(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

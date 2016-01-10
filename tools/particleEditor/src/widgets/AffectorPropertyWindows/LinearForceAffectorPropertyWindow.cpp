@@ -3,6 +3,8 @@
 #include "properties/EnumProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseLinearForceAffector.h"
 
 namespace i6engine {
@@ -48,6 +50,33 @@ namespace widgets {
 			applicationString = APP_AVG;
 		}
 		setEnumString(PRNL_LINEAR_FORCE_APPLICATION, applicationString);
+	}
+
+	void LinearForceAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::LinearForceAffector * affector = static_cast<ParticleUniverse::LinearForceAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_FORCE_VECTOR) {
+			// Force vector: Ogre::Vector3
+			affector->setForceVector(prop->getVector3());
+		} else if (propertyName == PRNL_LINEAR_FORCE_APPLICATION) {
+			// Force Application: List
+			QString application = prop->getEnumString();
+			if (application == APP_ADD) {
+				affector->setForceApplication(ParticleUniverse::BaseForceAffector::FA_ADD);
+			} else if (application == APP_AVG) {
+				affector->setForceApplication(ParticleUniverse::BaseForceAffector::FA_AVERAGE);
+			}
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

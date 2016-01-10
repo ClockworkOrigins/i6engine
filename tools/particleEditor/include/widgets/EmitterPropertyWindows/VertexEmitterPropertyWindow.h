@@ -28,6 +28,9 @@ namespace widgets {
 		~VertexEmitterPropertyWindow();
 
 		void copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter) override;
+
+	private:
+		void copyAttributeToEmitter(properties::Property * prop, QString propertyName) override;
 	};
 
 } /* namespace widgets */

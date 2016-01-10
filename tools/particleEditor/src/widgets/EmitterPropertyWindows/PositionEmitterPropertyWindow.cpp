@@ -3,6 +3,8 @@
 #include "properties/BoolProperty.h"
 #include "properties/Vec3ListProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleEmitters/ParticleUniversePositionEmitter.h"
 
 namespace i6engine {
@@ -40,6 +42,31 @@ namespace widgets {
 
 		// Randomize: bool
 		setBool(PRNL_POSITION_EMITTER_RANDOMIZE, positionEmitter->isRandomized());
+	}
+
+	void PositionEmitterPropertyWindow::copyAttributeToEmitter(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::PositionEmitter * positionEmitter = static_cast<ParticleUniverse::PositionEmitter *>(_owner->getPUElement());
+		if (!positionEmitter) {
+			return;
+		}
+
+		if (propertyName == PRNL_POSITION_EMITTER_POSITION) {
+			// Update emitter with Positions
+			positionEmitter->removeAllPositions();
+			for (ParticleUniverse::Vector3 vec : prop->getVector3List()) {
+				positionEmitter->addPosition(vec);
+			}
+		} else if (propertyName == PRNL_POSITION_EMITTER_RANDOMIZE) {
+			// Update emitter with Randomize
+			positionEmitter->setRandomized(prop->getBool());
+		} else {
+			// Update emitter with another attribute
+			EmitterPropertyWindow::copyAttributeToEmitter(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

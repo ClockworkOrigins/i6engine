@@ -29,6 +29,14 @@ namespace widgets {
 		virtual ~BehaviourPropertyWindow();
 
 		virtual void copyAttributesFromBehaviour(ParticleUniverse::ParticleBehaviour * behaviour);
+
+		void changedProperty(properties::Property * prop, QString name) override;
+
+	protected:
+		virtual void copyAttributeToBehaviour(properties::Property * prop, QString propertyName);
+
+	private:
+		void replaceBehaviourType(properties::Property * prop);
 	};
 
 } /* namespace widgets */

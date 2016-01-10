@@ -3,6 +3,7 @@
 #include "properties/DoubleProperty.h"
 #include "properties/EnumProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
 #include "widgets/AffectorPropertyWindows/SphereColliderPropertyWindow.h"
 
 #include "ParticleAffectors/ParticleUniverseBaseCollider.h"
@@ -90,6 +91,51 @@ namespace widgets {
 			collisionTypeString = COLLT_FLOW;
 		}
 		setEnumString(PRNL_COLLISION_TYPE, collisionTypeString);
+	}
+
+	void SphereColliderExternPropertyWindow::copyAttributeToExtern(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::Extern * ext = static_cast<ParticleUniverse::Extern *>(_owner->getPUElement());
+		ParticleUniverse::SphereColliderExtern * externObject = static_cast<ParticleUniverse::SphereColliderExtern *>(ext);
+
+		if (propertyName == PRNL_EXTERN_THRESHOLD) {
+			// Distance Threshold: ParticleUniverse::Real
+			ParticleUniverse::Attachable * attachable = static_cast<ParticleUniverse::Attachable *>(_owner->getPUElement());
+			attachable->setDistanceThreshold(prop->getDouble());
+		} else if (propertyName == PRNL_SPHERE_COLLIDER_RADIUS) {
+			// Radius: ParticleUniverse::Real
+			externObject->setRadius(prop->getDouble());
+		} else if (propertyName == PRNL_COLLIDER_FRICTION) {
+			// Friction: ParticleUniverse::Real
+			externObject->setFriction(prop->getDouble());
+		} else if (propertyName == PRNL_COLLIDER_BOUNCYNESS) {
+			// Bouncyness: ParticleUniverse::Real
+			externObject->setBouncyness(prop->getDouble());
+		} else if (propertyName == PRNL_INTERSECTION_TYPE) {
+			// Intersection type: List
+			QString intersection = prop->getEnumString();
+			if (intersection == IST_POINT) {
+				externObject->setIntersectionType(ParticleUniverse::BaseCollider::IT_POINT);
+			} else if (intersection == IST_BOX) {
+				externObject->setIntersectionType(ParticleUniverse::BaseCollider::IT_BOX);
+			}
+		} else if (propertyName == PRNL_COLLISION_TYPE) {
+			// Collision type: List
+			QString collision = prop->getEnumString();
+			if (collision == COLLT_BOUNCE) {
+				externObject->setCollisionType(ParticleUniverse::BaseCollider::CT_BOUNCE);
+			} else if (collision == COLLT_FLOW) {
+				externObject->setCollisionType(ParticleUniverse::BaseCollider::CT_FLOW);
+			} else if (collision == COLLT_NONE) {
+				externObject->setCollisionType(ParticleUniverse::BaseCollider::CT_NONE);
+			}
+		} else {
+			// Update extern with another attribute
+			ExternPropertyWindow::copyAttributeToExtern(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

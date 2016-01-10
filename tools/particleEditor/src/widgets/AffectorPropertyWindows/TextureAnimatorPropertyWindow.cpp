@@ -5,6 +5,8 @@
 #include "properties/EnumProperty.h"
 #include "properties/UIntProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseTextureAnimator.h"
 
 namespace i6engine {
@@ -72,6 +74,44 @@ namespace widgets {
 
 		// Random Start: bool
 		setBool(PRNL_START_RANDOM, textureAnimator->isStartRandom());
+	}
+
+	void TextureAnimatorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::TextureAnimator * affector = static_cast<ParticleUniverse::TextureAnimator *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_TIME_STEP) {
+			// Time Step Animation: ParticleUniverse::Real
+			affector->setAnimationTimeStep(prop->getDouble());
+		} else if (propertyName == PRNL_ANIMATION_TYPE) {
+			// Animation Type: List
+			QString animation = prop->getEnumString();
+			if (animation == TAT_LOOP) {
+				affector->setTextureAnimationType(ParticleUniverse::TextureAnimator::TAT_LOOP);
+			} else if (animation == TAT_RANDOM) {
+				affector->setTextureAnimationType(ParticleUniverse::TextureAnimator::TAT_RANDOM);
+			} else if (animation == TAT_UP_DOWN) {
+				affector->setTextureAnimationType(ParticleUniverse::TextureAnimator::TAT_UP_DOWN);
+			}
+		} else if (propertyName == PRNL_TEXCOORDS_START) {
+			// Start Texture Coordinates: ParticleUniverse::uint16
+			affector->setTextureCoordsStart(prop->getUInt());
+		} else if (propertyName == PRNL_TEXCOORDS_END) {
+			// End Texture Coordinates: ParticleUniverse::uint16
+			affector->setTextureCoordsEnd(prop->getUInt());
+		} else if (propertyName == PRNL_START_RANDOM) {
+			// Random Start: bool
+			affector->setStartRandom(prop->getBool());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

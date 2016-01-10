@@ -3,6 +3,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/EnumProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleEventHandlers/ParticleUniverseDoScaleEventHandler.h"
 
 namespace i6engine {
@@ -45,6 +47,33 @@ namespace widgets {
 			scaleTypeString = SC_VELOCITY;
 		}
 		setEnumString(PRNL_SCALE_TYPE, scaleTypeString);
+	}
+
+	void DoScaleEventHandlerPropertyWindow::copyAttributeToEventHandler(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::DoScaleEventHandler * handler = static_cast<ParticleUniverse::DoScaleEventHandler *>(_owner->getPUElement());
+		if (!handler) {
+			return;
+		}
+
+		if (propertyName == PRNL_SCALE_FRACTION) {
+			// Scale Fraction: Ogre:: Real
+			handler->setScaleFraction(prop->getDouble());
+		} else if (propertyName == PRNL_SCALE_TYPE) {
+			// Scale Type: List
+			QString scaleType = prop->getEnumString();
+			if (scaleType == SC_TIME_TO_LIVE) {
+				handler->setScaleType(ParticleUniverse::DoScaleEventHandler::ST_TIME_TO_LIVE);
+			} else if (scaleType == SC_VELOCITY) {
+				handler->setScaleType(ParticleUniverse::DoScaleEventHandler::ST_VELOCITY);
+			}
+		} else {
+			// Update handler with another attribute
+			EventHandlerPropertyWindow::copyAttributeToEventHandler(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

@@ -3,6 +3,8 @@
 #include "properties/BoolProperty.h"
 #include "properties/DynamicAttributeProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseTextureRotator.h"
 
 namespace i6engine {
@@ -46,6 +48,45 @@ namespace widgets {
 
 		// Rotation Speed: Dynamic Attribute
 		setDynamicAttribute(PRNL_ROTATION_SPEED, textureRotator->getRotationSpeed());
+	}
+
+	void TextureRotatorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::TextureRotator * affector = static_cast<ParticleUniverse::TextureRotator *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_USE_OWN_SPEED) {
+			// Use own rotation speed: bool
+			affector->setUseOwnRotationSpeed(prop->getBool());
+		} else if (propertyName == PRNL_ROTATION_SPEED) {
+			// Rotation Speed: Dynamic Attribute (Must be put before PRNL_ROTATION)
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				affector->setRotationSpeed(dynAttr);
+			}
+
+			if (affector->_isMarkedForEmission()) {
+				restartParticle(affector, ParticleUniverse::Particle::PT_AFFECTOR, ParticleUniverse::Particle::PT_AFFECTOR);
+			}
+		} else if (propertyName == PRNL_ROTATION) {
+			// Rotation: Dynamic Attribute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				affector->setRotation(dynAttr);
+			}
+
+			if (affector->_isMarkedForEmission()) {
+				restartParticle(affector, ParticleUniverse::Particle::PT_AFFECTOR, ParticleUniverse::Particle::PT_AFFECTOR);
+			}
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

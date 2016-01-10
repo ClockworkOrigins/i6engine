@@ -119,7 +119,15 @@ namespace widgets {
 			return _name;
 		}
 
+	signals:
+		void replacePropertyWindow(QString);
+
 	protected:
+		WidgetEditComponent * _owner;
+		QString _name;
+		QStringList _types;
+		std::map<QString, properties::Property *> _properties;
+
 		void append(properties::Property * prop);
 
 		void setBool(QString name, bool value);
@@ -141,11 +149,6 @@ namespace widgets {
 		void changedProperty(QString name);
 
 	private:
-		WidgetEditComponent * _owner;
-		QString _name;
-		QStringList _types;
-		std::map<QString, properties::Property *> _properties;
-
 		bool mustStopParticleSystem(ParticleUniverse::ParticleSystem * system);
 		void mustRestartParticleSystem(ParticleUniverse::ParticleSystem * system, bool wasStarted);
 	};

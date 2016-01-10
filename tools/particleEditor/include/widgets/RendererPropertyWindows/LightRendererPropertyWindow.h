@@ -38,6 +38,9 @@ namespace widgets {
 		~LightRendererPropertyWindow();
 
 		void copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) override;
+
+	private:
+		void copyAttributeToRenderer(properties::Property * prop, QString propertyName) override;
 	};
 
 } /* namespace widgets */

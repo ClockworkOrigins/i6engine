@@ -2,6 +2,8 @@
 
 #include "properties/DoubleProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseCollisionAvoidanceAffector.h"
 
 namespace i6engine {
@@ -27,6 +29,25 @@ namespace widgets {
 
 		// Avoidance Radius: ParticleUniverse::Real
 		setDouble(PRNL_COLLISON_AVOIDANCE_RADIUS, collisionAvoidanceAffector->getRadius());
+	}
+
+	void CollisionAvoidanceAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::CollisionAvoidanceAffector * affector = static_cast<ParticleUniverse::CollisionAvoidanceAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_COLLISON_AVOIDANCE_RADIUS) {
+			// Avoidance Radius: ParticleUniverse::Real
+			affector->setRadius(prop->getDouble());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

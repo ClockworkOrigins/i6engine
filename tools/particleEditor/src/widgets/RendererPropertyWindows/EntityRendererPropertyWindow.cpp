@@ -3,6 +3,8 @@
 #include "properties/EnumProperty.h"
 #include "properties/StringProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleRenderers/ParticleUniverseEntityRenderer.h"
 
 namespace i6engine {
@@ -50,6 +52,44 @@ namespace widgets {
 			orientationTypeString = OTT_ORIENTED_SHAPE;
 		}
 		setEnumString(PRNL_ORIENTATION_TYPE, orientationTypeString);
+	}
+
+	void EntityRendererPropertyWindow::copyAttributeToRenderer(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::EntityRenderer * renderer = static_cast<ParticleUniverse::EntityRenderer *>(_owner->getPUElement());
+		if (!renderer) {
+			return;
+		}
+
+		if (propertyName == PRNL_ORIENTATION_TYPE) {
+			// Orientation Type: List
+			QString orientationType = prop->getEnumString();
+			if (orientationType == OTT_ORIENTED_SELF) {
+				renderer->setEntityOrientationType(ParticleUniverse::EntityRenderer::ENT_ORIENTED_SELF);
+			} else if (orientationType == OTT_ORIENTED_SELF_MIRRORED) {
+				renderer->setEntityOrientationType(ParticleUniverse::EntityRenderer::ENT_ORIENTED_SELF_MIRRORED);
+			} else if (orientationType == OTT_ORIENTED_SHAPE) {
+				renderer->setEntityOrientationType(ParticleUniverse::EntityRenderer::ENT_ORIENTED_SHAPE);
+			}
+		} else if (propertyName == PRNL_MESH_NAME) {
+			// Mesh Name: Ogre::String
+			Ogre::String meshName = prop->getString().toStdString();
+			replaceRendererType(_properties[PRNL_RENDERER_TYPE]);
+
+			// A bit heavy solution to re-create the renderer, but only changing the meshname is not sufficient
+			renderer = static_cast<ParticleUniverse::EntityRenderer *>(_owner->getPUElement());
+			if (!renderer)
+				return;
+
+			renderer->setMeshName(meshName);
+			prop->setString(QString::fromStdString(meshName));
+		} else {
+			// Update renderer with another attribute
+			RendererPropertyWindow::copyAttributeToRenderer(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

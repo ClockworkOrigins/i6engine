@@ -270,11 +270,22 @@ namespace widgets {
 	}
 
 	void MainWindow::setPropertyWindow(PropertyWindow * propertyWindow) {
+		if (_currentTab != CurrentTab::Edit) {
+			if (_currentPropertyWindow) {
+				std::cout << "Removing Window" << std::endl;
+				_leftLayout->removeWidget(_currentPropertyWindow);
+				_currentPropertyWindow->hide();
+				_currentPropertyWindow = nullptr;
+			}
+			return;
+		}
 		if (_currentPropertyWindow) {
+			std::cout << "Removing Window" << std::endl;
 			_leftLayout->removeWidget(_currentPropertyWindow);
 			_currentPropertyWindow->hide();
 		}
 		if (propertyWindow) {
+			std::cout << "Adding Window" << std::endl;
 			_leftLayout->addWidget(propertyWindow);
 			propertyWindow->show();
 			_leftLayout->setStretch(0, 1);

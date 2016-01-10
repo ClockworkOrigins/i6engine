@@ -85,6 +85,10 @@ namespace properties {
 			assert(false);
 			return 0;
 		}
+		virtual QString getEnumString() const {
+			assert(false);
+			return QString();
+		}
 		virtual Quaternion getQuaternion() const {
 			assert(false);
 			return Quaternion();

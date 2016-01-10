@@ -2,6 +2,8 @@
 
 #include "properties/UIntProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleObservers/ParticleUniverseOnEventFlagObserver.h"
 
 namespace i6engine {
@@ -27,6 +29,25 @@ namespace widgets {
 
 		// Event Flag: ParticleUniverse::uint32
 		setUint16(PRNL_ON_EVENTFLAG_FLAG, onEventFlagObserver->getEventFlag());
+	}
+
+	void OnEventFlagObserverPropertyWindow::copyAttributeToObserver(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::OnEventFlagObserver * observer = static_cast<ParticleUniverse::OnEventFlagObserver *>(_owner->getPUElement());
+		if (!observer) {
+			return;
+		}
+
+		if (propertyName == PRNL_ON_EVENTFLAG_FLAG) {
+			// Event Flag: ParticleUniverse::uint32
+			observer->setEventFlag(prop->getUInt());
+		} else {
+			// Update observer with another attribute
+			ObserverPropertyWindow::copyAttributeToObserver(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

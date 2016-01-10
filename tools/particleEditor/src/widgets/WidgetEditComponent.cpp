@@ -22,6 +22,16 @@
 #include "widgets/TechniquePropertyWindow.h"
 #include "widgets/WidgetEdit.h"
 
+#include "ParticleUniverseAffector.h"
+#include "ParticleUniverseBehaviour.h"
+#include "ParticleUniverseEmitter.h"
+#include "ParticleUniverseEventHandler.h"
+#include "ParticleUniverseExtern.h"
+#include "ParticleUniverseObserver.h"
+#include "ParticleUniverseRenderer.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
+
 #include <QDataStream>
 #include <QDrag>
 #include <QGraphicsLinearLayout>
@@ -232,7 +242,36 @@ namespace widgets {
 				_propertyWindow = factories::ExternPropertyWindowFactory::createExternPropertyWindow(_parent, this, _name, _subType);
 			}
 		}
+		connect(_propertyWindow, SIGNAL(replacePropertyWindow(QString)), this, SLOT(replacePropertyWindow(QString)), Qt::QueuedConnection);
 		return _propertyWindow;
+	}
+
+	void WidgetEditComponent::replacePropertyWindow(QString subType) {
+		PropertyWindow * tmp = _propertyWindow;
+		_propertyWindow = nullptr;
+		_parent->notifyComponentActivated(this);
+		delete tmp;
+		createPropertyWindow(subType);
+		if (_type == CT_SYSTEM) {
+			dynamic_cast<SystemPropertyWindow *>(_propertyWindow)->copyAttributesFromSystem(dynamic_cast<ParticleUniverse::ParticleSystem *>(_element));
+		} else if (_type == CT_TECHNIQUE) {
+			dynamic_cast<TechniquePropertyWindow *>(_propertyWindow)->copyAttributesFromTechnique(dynamic_cast<ParticleUniverse::ParticleTechnique *>(_element));
+		} else if (_type == CT_RENDERER) {
+			dynamic_cast<RendererPropertyWindow *>(_propertyWindow)->copyAttributesFromRenderer(dynamic_cast<ParticleUniverse::ParticleRenderer *>(_element));
+		} else if (_type == CT_EMITTER) {
+			dynamic_cast<EmitterPropertyWindow *>(_propertyWindow)->copyAttributesFromEmitter(dynamic_cast<ParticleUniverse::ParticleEmitter *>(_element));
+		} else if (_type == CT_AFFECTOR) {
+			dynamic_cast<AffectorPropertyWindow *>(_propertyWindow)->copyAttributesFromAffector(dynamic_cast<ParticleUniverse::ParticleAffector *>(_element));
+		} else if (_type == CT_OBSERVER) {
+			dynamic_cast<ObserverPropertyWindow *>(_propertyWindow)->copyAttributesFromObserver(dynamic_cast<ParticleUniverse::ParticleObserver *>(_element));
+		} else if (_type == CT_HANDLER) {
+			dynamic_cast<EventHandlerPropertyWindow *>(_propertyWindow)->copyAttributesFromEventHandler(dynamic_cast<ParticleUniverse::ParticleEventHandler *>(_element));
+		} else if (_type == CT_BEHAVIOUR) {
+			dynamic_cast<BehaviourPropertyWindow *>(_propertyWindow)->copyAttributesFromBehaviour(dynamic_cast<ParticleUniverse::ParticleBehaviour *>(_element));
+		} else if (_type == CT_EXTERN) {
+			dynamic_cast<ExternPropertyWindow *>(_propertyWindow)->copyAttributesFromExtern(dynamic_cast<ParticleUniverse::Extern *>(_element));
+		}
+		_parent->notifyComponentActivated(this);
 	}
 
 	void WidgetEditComponent::mousePressEvent(QGraphicsSceneMouseEvent * evt) {

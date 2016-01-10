@@ -3,6 +3,8 @@
 #include "properties/DynamicAttributeProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseVortexAffector.h"
 
 namespace i6engine {
@@ -41,6 +43,35 @@ namespace widgets {
 
 		// Rotation Speed: Dynamic Attribute
 		setDynamicAttribute(PRNL_ROTATION_SPEED, vortexAffector->getRotationSpeed());
+	}
+
+	void VortexAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::VortexAffector * affector = static_cast<ParticleUniverse::VortexAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_ROTATION_AXIS) {
+			// Rotation Vector: Ogre::Vector3
+			affector->setRotationVector(prop->getVector3());
+		} else if (propertyName == PRNL_ROTATION_SPEED) {
+			// Rotation speed: DynamicAttribute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				affector->setRotationSpeed(dynAttr);
+			}
+
+			if (affector->_isMarkedForEmission()) {
+				restartParticle(affector, ParticleUniverse::Particle::PT_AFFECTOR, ParticleUniverse::Particle::PT_AFFECTOR);
+			}
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

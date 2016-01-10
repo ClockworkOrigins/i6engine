@@ -43,6 +43,10 @@ namespace widgets {
 		~SystemPropertyWindow();
 
 		virtual void copyAttributesFromSystem(ParticleUniverse::ParticleSystem * system);
+
+	protected:
+		void changedProperty(properties::Property * prop, QString name) override;
+		void copyAttributeToSystem(properties::Property * prop, QString propertyName);
 	};
 
 } /* namespace widgets */

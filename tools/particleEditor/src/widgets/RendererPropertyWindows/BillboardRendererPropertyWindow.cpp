@@ -5,6 +5,8 @@
 #include "properties/EnumProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleRenderers/ParticleUniverseBillboardRenderer.h"
 
 namespace i6engine {
@@ -191,6 +193,97 @@ namespace widgets {
 
 		// Soft particles delta: ParticleUniverse::Real
 		setDouble(PRNL_RENDERER_SOFT_PARTICLES_DELTA, renderer->getSoftParticlesDelta());
+	}
+
+	void BillboardRendererPropertyWindow::copyAttributeToRenderer(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::BillboardRenderer * renderer = static_cast<ParticleUniverse::BillboardRenderer *>(_owner->getPUElement());
+		if (!renderer) {
+			return;
+		}
+
+		if (propertyName == PRNL_BILLBOARD_TYPE) {
+			// Billboard Type: List
+			QString bilboardType = prop->getEnumString();
+			if (bilboardType == BBT_ORIENTED_COMMON) {
+				renderer->setBillboardType(ParticleUniverse::BillboardRenderer::BBT_ORIENTED_COMMON);
+			} else if (bilboardType == BBT_ORIENTED_SELF) {
+				renderer->setBillboardType(ParticleUniverse::BillboardRenderer::BBT_ORIENTED_SELF);
+			} else if (bilboardType == BBT_ORIENTED_SHAPE) {
+				renderer->setBillboardType(ParticleUniverse::BillboardRenderer::BBT_ORIENTED_SHAPE);
+			} else if (bilboardType == BBT_PERPENDICULAR_COMMON) {
+				renderer->setBillboardType(ParticleUniverse::BillboardRenderer::BBT_PERPENDICULAR_COMMON);
+			} else if (bilboardType == BBT_PERPENDICULAR_SELF) {
+				renderer->setBillboardType(ParticleUniverse::BillboardRenderer::BBT_PERPENDICULAR_SELF);
+			} else if (bilboardType == BBT_POINT) {
+				renderer->setBillboardType(ParticleUniverse::BillboardRenderer::BBT_POINT);
+			}
+		} else if (propertyName == PRNL_ORIGIN) {
+			// Origin: List
+			QString origin = prop->getEnumString();
+			if (origin == ORG_BOTTOM_CENTER) {
+				renderer->setBillboardOrigin(Ogre::BBO_BOTTOM_CENTER);
+			} else if (origin == ORG_BOTTOM_LEFT) {
+				renderer->setBillboardOrigin(Ogre::BBO_BOTTOM_LEFT);
+			} else if (origin == ORG_BOTTOM_RIGHT) {
+				renderer->setBillboardOrigin(Ogre::BBO_BOTTOM_RIGHT);
+			} else if (origin == ORG_CENTER) {
+				renderer->setBillboardOrigin(Ogre::BBO_CENTER);
+			} else if (origin == ORG_CENTER_LEFT) {
+				renderer->setBillboardOrigin(Ogre::BBO_CENTER_LEFT);
+			} else if (origin == ORG_CENTER_RIGHT) {
+				renderer->setBillboardOrigin(Ogre::BBO_CENTER_RIGHT);
+			} else if (origin == ORG_TOP_CENTER) {
+				renderer->setBillboardOrigin(Ogre::BBO_TOP_CENTER);
+			} else if (origin == ORG_TOP_LEFT) {
+				renderer->setBillboardOrigin(Ogre::BBO_TOP_LEFT);
+			} else if (origin == ORG_TOP_RIGHT) {
+				renderer->setBillboardOrigin(Ogre::BBO_TOP_RIGHT);
+			}
+		} else if (propertyName == PRNL_ROTATION_TYPE) {
+			// Rotation Type: List
+			QString rotationType = prop->getEnumString();
+			if (rotationType == RT_VERTEX) {
+				renderer->setBillboardRotationType(Ogre::BBR_VERTEX);
+			} else if (rotationType == RT_TEXTURE_COORDINATES) {
+				renderer->setBillboardRotationType(Ogre::BBR_TEXCOORD);
+			}
+		} else if (propertyName == PRNL_COMMON_DIRECTION) {
+			// Common Direction: Ogre::Vector3
+			renderer->setCommonDirection(prop->getVector3());
+		} else if (propertyName == PRNL_UP_VECTOR) {
+			// Common Up Vector: Ogre::Vector3
+			renderer->setCommonUpVector(prop->getVector3());
+		} else if (propertyName == PRNL_POINT_RENDERING) {
+			// Point Rendering: bool
+			renderer->setPointRenderingEnabled(prop->getBool());
+		} else if (propertyName == PRNL_ACCURATE_FACING) {
+			// Accurate Facing: List
+			QString accurateFacing = prop->getEnumString();
+			if (accurateFacing == ACF_ON) {
+				renderer->setUseAccurateFacing(true);
+			} else if (accurateFacing == ACF_OFF) {
+				renderer->setUseAccurateFacing(false);
+			}
+		} else if (propertyName == PRNL_RENDERER_USE_SOFT_PARTICLES) {
+			// Use soft particles: Bool
+			renderer->setUseSoftParticles(prop->getBool());
+		} else if (propertyName == PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER) {
+			// Soft particles contrast power: ParticleUniverse::Real
+			renderer->setSoftParticlesContrastPower(prop->getDouble());
+		} else if (propertyName == PRNL_RENDERER_SOFT_PARTICLES_SCALE) {
+			// Soft particles scale: ParticleUniverse::Real
+			renderer->setSoftParticlesScale(prop->getDouble());
+		} else if (propertyName == PRNL_RENDERER_SOFT_PARTICLES_DELTA) {
+			// Soft particles delta: ParticleUniverse::Real
+			renderer->setSoftParticlesDelta(prop->getDouble());
+		} else {
+			// Update renderer with another attribute
+			RendererPropertyWindow::copyAttributeToRenderer(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

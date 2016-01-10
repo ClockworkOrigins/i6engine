@@ -5,6 +5,8 @@
 #include "properties/EnumProperty.h"
 #include "properties/UIntProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleRenderers/ParticleUniverseBeamRenderer.h"
 
 namespace i6engine {
@@ -84,6 +86,48 @@ namespace widgets {
 			textureDirection = TEXTURE_DIRECTION_V;
 		}
 		setEnumString(PRNL_TEXTURE_DIRECTION, textureDirection);
+	}
+
+	void BeamRendererPropertyWindow::copyAttributeToRenderer(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::BeamRenderer * renderer = static_cast<ParticleUniverse::BeamRenderer *>(_owner->getPUElement());
+		if (!renderer) {
+			return;
+		}
+
+		if (propertyName == PRNL_USE_VERTEX_COLOURS) {
+			// Use Vertex Colours: bool
+			renderer->setUseVertexColours(prop->getBool());
+		} else if (propertyName == PRNL_MAX_ELEMENTS) {
+			// Max Elements: size_t
+			renderer->setMaxChainElements(size_t(prop->getUInt()));
+		} else if (propertyName == PRNL_UPDATE_INTERVAL) {
+			// Update Interval: ParticleUniverse::Real
+			renderer->setUpdateInterval(prop->getDouble());
+		} else if (propertyName == PRNL_DEVIATION) {
+			// Deviation: ParticleUniverse::Real
+			renderer->setDeviation(prop->getDouble());
+		} else if (propertyName == PRNL_NUMBER_OF_SEGMENTS) {
+			// Number Of Segments: size_t
+			renderer->setNumberOfSegments(size_t(prop->getUInt()));
+		} else if (propertyName == PRNL_JUMP) {
+			// Jump: size_t
+			renderer->setJump(prop->getBool());
+		} else if (propertyName == PRNL_TEXTURE_DIRECTION) {
+			// Texture Direction: List
+			QString textureDirection = prop->getEnumString();
+			if (textureDirection == TEXTURE_DIRECTION_U) {
+				renderer->setTexCoordDirection(Ogre::BillboardChain::TCD_U);
+			} else if (textureDirection == TEXTURE_DIRECTION_V) {
+				renderer->setTexCoordDirection(Ogre::BillboardChain::TCD_V);
+			}
+		} else {
+			// Update renderer with another attribute
+			RendererPropertyWindow::copyAttributeToRenderer(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

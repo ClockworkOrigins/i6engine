@@ -25,6 +25,9 @@ namespace widgets {
 		~DoAffectorEventHandlerPropertyWindow();
 
 		void copyAttributesFromEventHandler(ParticleUniverse::ParticleEventHandler * eventHandler) override;
+
+	private:
+		void copyAttributeToEventHandler(properties::Property * prop, QString propertyName) override;
 	};
 
 } /* namespace widgets */

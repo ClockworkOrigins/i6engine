@@ -5,6 +5,9 @@
 #include "widgets/WidgetEditComponent.h"
 
 #include "ParticleUniverseExtern.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 namespace i6engine {
 namespace particleEditor {
@@ -40,6 +43,80 @@ namespace widgets {
 
 		// Type: List of types
 		setEnumString(PRNL_EXTERN_TYPE, QString::fromStdString(externObject->getExternType()));
+	}
+
+	void ExternPropertyWindow::changedProperty(properties::Property * prop, QString name) {
+		PropertyWindow::changedProperty(prop, name);
+		copyAttributeToExtern(prop, name);
+		//notifyPropertyChanged();
+	}
+
+	void ExternPropertyWindow::copyAttributeToExtern(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::Extern * externObject = static_cast<ParticleUniverse::Extern *>(_owner->getPUElement());
+		if (!externObject) {
+			return;
+		}
+
+		if (propertyName == PRNL_NAME) {
+			// Name: String
+			_owner->setName(prop->getString());
+			_owner->setCaption();
+			externObject->setName(prop->getString().toStdString());
+		} else if (propertyName == PRNL_EXTERN_TYPE) {
+			// Type: List of types
+			// This requires the extern to be replaced.
+			replaceExternType(prop);
+		}
+	}
+
+	void ExternPropertyWindow::replaceExternType(properties::Property * prop) {
+		// Type: List of types
+		Ogre::String type = prop->getEnumString().toStdString();
+		if (type == Ogre::StringUtil::BLANK) {
+			return;
+		}
+
+		ParticleUniverse::Extern * oldExtern = static_cast<ParticleUniverse::Extern *>(_owner->getPUElement());
+		if (type == oldExtern->getExternType()) {
+			return;
+		}
+		if (oldExtern) {
+			ParticleUniverse::ParticleTechnique * technique = oldExtern->getParentTechnique();
+			if (technique) {
+				ParticleUniverse::Extern * newExtern = technique->createExtern(type);
+				oldExtern->copyParentAttributesTo(newExtern);
+				bool wasStarted = false;
+				ParticleUniverse::ParticleSystem * system = technique->getParentSystem();
+				if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
+					wasStarted = true;
+					system->stop();
+				}
+				technique->destroyExtern(oldExtern);
+				_owner->setPUElement(newExtern);
+				if (wasStarted) {
+					system->start();
+				}
+			} else {
+				/** The old extern didn't have a technique, so create a new extern by means of the ParticleSystemManager itself and also delete
+				the old extern by means of the ParticleSystemManager
+				*/
+				ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+				ParticleUniverse::Extern * newExtern = particleSystemManager->createExtern(type);
+				oldExtern->copyParentAttributesTo(newExtern);
+				particleSystemManager->destroyExtern(oldExtern);
+				_owner->setPUElement(newExtern);
+			}
+		} else {
+			// There is no old extern. Create a new extern by means of the ParticleSystemManager
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::Extern * newExtern = particleSystemManager->createExtern(type);
+			_owner->setPUElement(newExtern);
+		}
+		emit replacePropertyWindow(QString::fromStdString(type));
 	}
 
 } /* namespace widgets */

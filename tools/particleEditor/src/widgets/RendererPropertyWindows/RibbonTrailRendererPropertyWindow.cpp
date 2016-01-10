@@ -5,6 +5,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/UIntProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleRenderers/ParticleUniverseRibbonTrailRenderer.h"
 
 namespace i6engine {
@@ -79,6 +81,75 @@ namespace widgets {
 		// Colour Change: Ogre::Colour
 		Vec4 colourChange(255 * ribbonTrailRenderer->getColourChange().r, 255 * ribbonTrailRenderer->getColourChange().g, 255 * ribbonTrailRenderer->getColourChange().b, 255 * ribbonTrailRenderer->getColourChange().a);
 		setColourWithAlpha(PRNL_COLOUR_CHANGE, colourChange);
+	}
+
+	void RibbonTrailRendererPropertyWindow::copyAttributeToRenderer(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::RibbonTrailRenderer * renderer = static_cast<ParticleUniverse::RibbonTrailRenderer *>(_owner->getPUElement());
+		if (!renderer) {
+			return;
+		}
+
+		if (propertyName == PRNL_USE_VERTEX_COLOURS) {
+			// Use Vertex Colours: bool
+			renderer->setUseVertexColours(prop->getBool());
+			ParticleUniverse::ParticleTechnique * technique = renderer->getParentTechnique();
+			if (technique) {
+				renderer->_unprepare(technique);
+			}
+		} else if (propertyName == PRNL_MAX_ELEMENTS) {
+			// Max Chain Elements: unsigned int
+			renderer->setMaxChainElements(size_t(prop->getUInt()));
+			ParticleUniverse::ParticleTechnique * technique = renderer->getParentTechnique();
+			if (technique) {
+				renderer->_unprepare(technique);
+			}
+		} else if (propertyName == PRNL_TRAIL_LENGTH) {
+			// Trail Length: ParticleUniverse::Real
+			renderer->setTrailLength(prop->getDouble());
+			ParticleUniverse::ParticleTechnique * technique = renderer->getParentTechnique();
+			if (technique) {
+				renderer->_unprepare(technique);
+			}
+		} else if (propertyName == PRNL_TRAIL_WIDTH) {
+			// Trail Width: ParticleUniverse::Real
+			renderer->setTrailWidth(prop->getDouble());
+			ParticleUniverse::ParticleTechnique * technique = renderer->getParentTechnique();
+			if (technique) {
+				renderer->_unprepare(technique);
+			}
+		} else if (propertyName == PRNL_RANDOM_INITIAL_COLOUR) {
+			// Random Initial Colour: bool
+			renderer->setRandomInitialColour(prop->getBool());
+			ParticleUniverse::ParticleTechnique * technique = renderer->getParentTechnique();
+			if (technique) {
+				renderer->_unprepare(technique);
+			}
+		} else if (propertyName == PRNL_INITIAL_COLOUR) {
+			// Initial Colour: Ogre::Colour
+			Vec4 c = prop->getColourWithAlpha();
+			Ogre::ColourValue colour(ParticleUniverse::Real(c.getX()) / 255.0f, ParticleUniverse::Real(c.getY()) / 255.0f, ParticleUniverse::Real(c.getZ()) / 255.0f, ParticleUniverse::Real(c.getW()) / 255.0f);
+			renderer->setInitialColour(colour);
+			ParticleUniverse::ParticleTechnique * technique = renderer->getParentTechnique();
+			if (technique) {
+				renderer->_unprepare(technique);
+			}
+		} else if (propertyName == PRNL_COLOUR_CHANGE) {
+			// Colour Change: Ogre::Colour
+			Vec4 c = prop->getColourWithAlpha();
+			Ogre::ColourValue colour(ParticleUniverse::Real(c.getX()) / 255.0f, ParticleUniverse::Real(c.getY()) / 255.0f, ParticleUniverse::Real(c.getZ()) / 255.0f, ParticleUniverse::Real(c.getW()) / 255.0f);
+			renderer->setColourChange(colour);
+			ParticleUniverse::ParticleTechnique * technique = renderer->getParentTechnique();
+			if (technique) {
+				renderer->_unprepare(technique);
+			}
+		} else {
+			// Update renderer with another attribute
+			RendererPropertyWindow::copyAttributeToRenderer(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

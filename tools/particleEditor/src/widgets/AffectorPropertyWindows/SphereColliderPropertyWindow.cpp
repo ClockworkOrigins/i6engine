@@ -4,6 +4,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/EnumProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseSphereCollider.h"
 
 namespace i6engine {
@@ -88,6 +90,52 @@ namespace widgets {
 			collisionTypeString = COLLT_FLOW;
 		}
 		setEnumString(PRNL_COLLISION_TYPE, collisionTypeString);
+	}
+
+	void SphereColliderPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::SphereCollider * affector = static_cast<ParticleUniverse::SphereCollider *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_SPHERE_COLLIDER_RADIUS) {
+			// Radius: ParticleUniverse::Real
+			affector->setRadius(prop->getDouble());
+		} else if (propertyName == PRNL_SPHERE_COLLIDER_INNER) {
+			// Inner Collision: bool
+			affector->setInnerCollision(prop->getBool());
+		} else if (propertyName == PRNL_COLLIDER_FRICTION) {
+			// Friction: ParticleUniverse::Real
+			affector->setFriction(prop->getDouble());
+		} else if (propertyName == PRNL_COLLIDER_BOUNCYNESS) {
+			// Bouncyness: ParticleUniverse::Real
+			affector->setBouncyness(prop->getDouble());
+		} else if (propertyName == PRNL_INTERSECTION_TYPE) {
+			// Intersection type: List
+			QString intersection = prop->getEnumString();
+			if (intersection == IST_POINT) {
+				affector->setIntersectionType(ParticleUniverse::BaseCollider::IT_POINT);
+			} else if (intersection == IST_BOX) {
+				affector->setIntersectionType(ParticleUniverse::BaseCollider::IT_BOX);
+			}
+		} else if (propertyName == PRNL_COLLISION_TYPE) {
+			// Collision type: List
+			QString collision = prop->getEnumString();
+			if (collision == COLLT_BOUNCE) {
+				affector->setCollisionType(ParticleUniverse::BaseCollider::CT_BOUNCE);
+			} else if (collision == COLLT_FLOW) {
+				affector->setCollisionType(ParticleUniverse::BaseCollider::CT_FLOW);
+			} else if (collision == COLLT_NONE) {
+				affector->setCollisionType(ParticleUniverse::BaseCollider::CT_NONE);
+			}
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

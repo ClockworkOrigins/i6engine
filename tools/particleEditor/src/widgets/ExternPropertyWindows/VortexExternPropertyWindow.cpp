@@ -4,6 +4,8 @@
 #include "properties/DynamicAttributeProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "Externs/ParticleUniverseVortexExtern.h"
 
 namespace i6engine {
@@ -49,6 +51,33 @@ namespace widgets {
 
 		// Rotation Speed: Dynamic Attribute
 		setDynamicAttribute(PRNL_ROTATION_SPEED, vortexExtern->getRotationSpeed());
+	}
+
+	void VortexExternPropertyWindow::copyAttributeToExtern(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::Extern * ext = static_cast<ParticleUniverse::Extern *>(_owner->getPUElement());
+		ParticleUniverse::VortexExtern * externObject = static_cast<ParticleUniverse::VortexExtern *>(ext);
+
+		if (propertyName == PRNL_EXTERN_THRESHOLD) {
+			// Distance Threshold: ParticleUniverse::Real
+			ParticleUniverse::Attachable * attachable = static_cast<ParticleUniverse::Attachable *>(_owner->getPUElement());
+			attachable->setDistanceThreshold(prop->getDouble());
+		} else if (propertyName == PRNL_ROTATION_AXIS) {
+			// Rotation Vector: Ogre::Vector3
+			externObject->setRotationVector(prop->getVector3());
+		} else if (propertyName == PRNL_ROTATION_SPEED) {
+			// Rotation speed: DynamicAttribute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				externObject->setRotationSpeed(dynAttr);
+			}
+		} else {
+			// Update extern with another attribute
+			ExternPropertyWindow::copyAttributeToExtern(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

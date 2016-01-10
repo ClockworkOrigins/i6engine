@@ -4,6 +4,8 @@
 #include "properties/DynamicAttributeProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseGeometryRotator.h"
 
 namespace i6engine {
@@ -48,6 +50,36 @@ namespace widgets {
 
 		// Rotation axis: Ogre::Vector3
 		setVector3(PRNL_ROTATION_AXIS, geometryRotator->getRotationAxis());
+	}
+
+	void GeometryRotatorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::GeometryRotator * affector = static_cast<ParticleUniverse::GeometryRotator *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_USE_OWN_ROTATION) {
+			// Use own rotation speed: bool
+			affector->setUseOwnRotationSpeed(prop->getBool());
+		} else if (propertyName == PRNL_ROTATION_SPEED) {
+			// Rotation speed: DynamicAttribute
+			affector->setRotationSpeed(prop->getDynamicAttribute());
+			restartParticle(affector, ParticleUniverse::Particle::PT_AFFECTOR, ParticleUniverse::Particle::PT_AFFECTOR);
+		} else if (propertyName == PRNL_ROTATION_AXIS) {
+			// Rotation axis: Ogre::Vector3
+			affector->setRotationAxis(prop->getVector3());
+			if (prop->getVector3() == Ogre::Vector3::ZERO) {
+				// Force to default state
+				affector->resetRotationAxis();
+			}
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

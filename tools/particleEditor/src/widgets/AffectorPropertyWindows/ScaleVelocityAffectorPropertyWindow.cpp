@@ -3,6 +3,8 @@
 #include "properties/BoolProperty.h"
 #include "properties/DynamicAttributeProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseScaleVelocityAffector.h"
 
 namespace i6engine {
@@ -44,6 +46,44 @@ namespace widgets {
 
 		// Stop at flip: bool
 		setBool(PRNL_STOP_AT_FLIP, scaleVelocityAffector->isStopAtFlip());
+	}
+
+	void ScaleVelocityAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::ScaleVelocityAffector * affector = static_cast<ParticleUniverse::ScaleVelocityAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_VELOCITY_SCALE) {
+			// ScaleVelocity: DynamicAttribute
+			affector->resetDynScaleVelocity(false);
+			ParticleUniverse::DynamicAttribute* dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				affector->setDynScaleVelocity(dynAttr);
+			}
+			dynAttr = affector->getDynScaleVelocity();
+			if (dynAttr->getType() == ParticleUniverse::DynamicAttribute::DAT_FIXED && std::abs(dynAttr->getValue() - ParticleUniverse::ScaleVelocityAffector::DEFAULT_VELOCITY_SCALE) < DBL_EPSILON) {
+				// Force default state
+				affector->resetDynScaleVelocity(true);
+			}
+
+			if (affector->_isMarkedForEmission()) {
+				restartParticle(affector, ParticleUniverse::Particle::PT_AFFECTOR, ParticleUniverse::Particle::PT_AFFECTOR);
+			}
+		} else if (propertyName == PRNL_SINCE_START_SYSTEM) {
+			// Since Start System: bool
+			affector->setSinceStartSystem(prop->getBool());
+		} else if (propertyName == PRNL_STOP_AT_FLIP) {
+			// Stop at flip: bool
+			affector->setStopAtFlip(prop->getBool());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

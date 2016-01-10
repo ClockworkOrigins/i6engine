@@ -4,6 +4,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleEmitters/ParticleUniverseCircleEmitter.h"
 
 namespace i6engine {
@@ -60,6 +62,37 @@ namespace widgets {
 
 		// Normal: Vector3
 		setVector3(PRNL_CIRCLE_EMITTER_NORMAL, circleEmitter->getNormal());
+	}
+
+	void CircleEmitterPropertyWindow::copyAttributeToEmitter(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::CircleEmitter * circleEmitter = static_cast<ParticleUniverse::CircleEmitter *>(_owner->getPUElement());
+		if (!circleEmitter) {
+			return;
+		}
+
+		if (propertyName == PRNL_CIRCLE_EMITTER_ANGLE) {
+			// Update emitter with angle
+			circleEmitter->setCircleAngle(prop->getDouble());
+		} else if (propertyName == PRNL_CIRCLE_EMITTER_NORMAL) {
+			// Update emitter with normal
+			circleEmitter->setNormal(prop->getVector3());
+		} else if (propertyName == PRNL_CIRCLE_EMITTER_RADIUS) {
+			// Update emitter with radius
+			circleEmitter->setRadius(prop->getDouble());
+		} else if (propertyName == PRNL_CIRCLE_EMITTER_RANDOM) {
+			// Update emitter with random
+			circleEmitter->setRandom(prop->getBool());
+		} else if (propertyName == PRNL_CIRCLE_EMITTER_STEP) {
+			// Update emitter with step
+			circleEmitter->setStep(prop->getDouble());
+		} else {
+			// Update emitter with another attribute
+			EmitterPropertyWindow::copyAttributeToEmitter(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

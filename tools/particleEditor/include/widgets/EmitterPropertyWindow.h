@@ -55,6 +55,14 @@ namespace widgets {
 		virtual ~EmitterPropertyWindow();
 
 		virtual void copyAttributesFromEmitter(ParticleUniverse::ParticleEmitter * emitter);
+
+		void changedProperty(properties::Property * prop, QString name) override;
+
+	protected:
+		virtual void copyAttributeToEmitter(properties::Property * prop, QString propertyName);
+
+	private:
+		void replaceEmitterType(properties::Property * prop);
 	};
 
 } /* namespace widgets */

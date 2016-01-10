@@ -3,6 +3,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleEmitters/ParticleUniverseLineEmitter.h"
 
 namespace i6engine {
@@ -52,6 +54,34 @@ namespace widgets {
 
 		// Deviation: ParticleUniverse::Real
 		setDouble(PRNL_LINE_DEVIATION, lineEmitter->getMaxDeviation());
+	}
+
+	void LineEmitterPropertyWindow::copyAttributeToEmitter(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::LineEmitter * lineEmitter = static_cast<ParticleUniverse::LineEmitter *>(_owner->getPUElement());
+		if (!lineEmitter) {
+			return;
+		}
+
+		if (propertyName == PRNL_LINE_END) {
+			// Update emitter with end
+			lineEmitter->setEnd(prop->getVector3());
+		} else if (propertyName == PRNL_LINE_MAX_INCREMENT) {
+			// Update emitter with Max increment
+			lineEmitter->setMaxIncrement(prop->getDouble());
+		} else if (propertyName == PRNL_LINE_MIN_INCREMENT) {
+			// Update emitter with Min increment
+			lineEmitter->setMinIncrement(prop->getDouble());
+		} else if (propertyName == PRNL_LINE_DEVIATION) {
+			// Update emitter with Deviation
+			lineEmitter->setMaxDeviation(prop->getDouble());
+		} else {
+			// Update emitter with another attribute
+			EmitterPropertyWindow::copyAttributeToEmitter(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

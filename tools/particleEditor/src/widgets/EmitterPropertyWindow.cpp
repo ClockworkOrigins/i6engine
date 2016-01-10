@@ -13,6 +13,9 @@
 #include "widgets/WidgetEditComponent.h"
 
 #include "ParticleUniverseEmitter.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 namespace i6engine {
 namespace particleEditor {
@@ -270,6 +273,261 @@ namespace widgets {
 
 		// Force emission: Bool
 		setBool(PRNL_EMITTER_FORCE_EMISSION, emitter->isForceEmission());
+	}
+
+	void EmitterPropertyWindow::changedProperty(properties::Property * prop, QString name) {
+		PropertyWindow::changedProperty(prop, name);
+		copyAttributeToEmitter(prop, name);
+		ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(_owner->getPUElement());
+		if (emitter && emitter->_isMarkedForEmission() && emitter->getParentTechnique()) {
+			// Unprepare, to change a property of an emitted emitter
+			//restartParticleEmitters(emitter);
+			restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+		}
+		//notifyPropertyChanged();
+	}
+
+	void EmitterPropertyWindow::copyAttributeToEmitter(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(_owner->getPUElement());
+		if (!emitter) {
+			return;
+		}
+
+		if (propertyName == PRNL_NAME) {
+			// Name: String
+			_owner->setName(prop->getString());
+			_owner->setCaption();
+			emitter->setName(prop->getString().toStdString());
+		} else if (propertyName == PRNL_EMITTER_TYPE) {
+			// Type: List of types
+			// This requires the emitter to be replaced.
+			replaceEmitterType(prop);
+		} else if (propertyName == PRNL_EMITTER_ENABLED) {
+			// Enabled: Bool
+			emitter->_setOriginalEnabled(prop->getBool());
+			emitter->setEnabled(prop->getBool());
+		} else if (propertyName == PRNL_EMITTER_POSITION + PRNL_X || propertyName == PRNL_EMITTER_POSITION + PRNL_Y || propertyName == PRNL_EMITTER_POSITION + PRNL_Z) {
+			// Position: Vector3
+			emitter->position = prop->getVector3();
+			emitter->originalPosition = prop->getVector3();
+		} else if (propertyName == PRNL_EMITTER_KEEP_LOCAL) {
+			// Keep local: Bool
+			emitter->setKeepLocal(prop->getBool());
+		} else if (propertyName == PRNL_EMITTER_DIRECTION) {
+			// Direction: Vector3
+			emitter->setParticleDirection(prop->getVector3());
+		} else if (propertyName == PRNL_EMITTER_ORIENTATION) {
+			// Orientation: Quaternion
+			emitter->setParticleOrientation(prop->getQuaternion().toOgre());
+		} else if (propertyName == PRNL_EMITTER_ORIENTATION_START) {
+			// Orientation range start: Quaternion
+			emitter->setParticleOrientationRangeStart(prop->getQuaternion().toOgre());
+		} else if (propertyName == PRNL_EMITTER_ORIENTATION_END) {
+			// Orientation range end: Quaternion
+			emitter->setParticleOrientationRangeEnd(prop->getQuaternion().toOgre());
+		} else if (propertyName == PRNL_EMITTER_VELOCITY) {
+			// Velocity type: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynVelocity(dynAttr);
+			}
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_DURATION) {
+			// Duration: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynDuration(dynAttr);
+			}
+			if (std::abs(emitter->getDynDuration()->getValue() - ParticleUniverse::ParticleEmitter::DEFAULT_DURATION) < DBL_EPSILON) {
+				emitter->setDynDurationSet(false); // Supressing writing this property the script and setting the emitter to the right state.
+			} else {
+				emitter->setDynDurationSet(true); // Force writing this property to the script and setting the emitter to the right state.
+			}
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_REPEAT_DELAY) {
+			// Repeat - Delay: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynRepeatDelay(dynAttr);
+			}
+			emitter->setDynRepeatDelaySet(true); // Force writing to the script
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_ANGLE) {
+			// Angle: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynAngle(dynAttr);
+			}
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_EMISSION_RATE) {
+			// Emission rate: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynEmissionRate(dynAttr);
+			}
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_TIME_TO_LIVE) {
+			// Time to live: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynTotalTimeToLive(dynAttr);
+			}
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_MASS) {
+			// Mass: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynParticleMass(dynAttr);
+			}
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_TEXTURE_COORD) {
+			// Texture coordinate: Uint16
+			emitter->setParticleTextureCoords(prop->getUInt());
+		} else if (propertyName == PRNL_EMITTER_TEXTURE_COORD_START) {
+			// Texture coordinate Start: Uint16
+			emitter->setParticleTextureCoordsRangeStart(prop->getUInt());
+		} else if (propertyName == PRNL_EMITTER_TEXTURE_COORD_END) {
+			// Texture coordinate End: Uint16
+			emitter->setParticleTextureCoordsRangeEnd(prop->getUInt());
+		} else if (propertyName == PRNL_EMITTER_COLOUR) {
+			// Colour: Colour attibute with alpha
+			Vec4 c = prop->getColourWithAlpha();
+			Ogre::ColourValue colour(ParticleUniverse::Real(c.getX()) / 255.0f, ParticleUniverse::Real(c.getY()) / 255.0f, ParticleUniverse::Real(c.getZ()) / 255.0f, ParticleUniverse::Real(c.getW()) / 255.0f);
+			emitter->setParticleColour(colour);
+		} else if (propertyName == PRNL_EMITTER_COLOUR_RANGE_START) {
+			// Colour range start: Colour attibute with alpha
+			Vec4 c = prop->getColourWithAlpha();
+			Ogre::ColourValue colour(ParticleUniverse::Real(c.getX()) / 255.0f, ParticleUniverse::Real(c.getY()) / 255.0f, ParticleUniverse::Real(c.getZ()) / 255.0f, ParticleUniverse::Real(c.getW()) / 255.0f);
+			emitter->setParticleColourRangeStart(colour);
+		} else if (propertyName == PRNL_EMITTER_COLOUR_RANGE_END) {
+			// Colour range end: Colour attibute with alpha
+			Vec4 c = prop->getColourWithAlpha();
+			Ogre::ColourValue colour(ParticleUniverse::Real(c.getX()) / 255.0f, ParticleUniverse::Real(c.getY()) / 255.0f, ParticleUniverse::Real(c.getZ()) / 255.0f, ParticleUniverse::Real(c.getW()) / 255.0f);
+			emitter->setParticleColourRangeEnd(colour);
+		} else if (propertyName == PRNL_EMITTER_ALL_PARTICLE_DIM) {
+			// All particle dimensions: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynParticleAllDimensions(dynAttr);
+			}
+			emitter->setDynParticleAllDimensionsSet(true); // Force writing to the script
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_PARTICLE_WIDTH) {
+			// Particle width: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynParticleWidth(dynAttr);
+			}
+			emitter->setDynParticleWidthSet(true); // Force writing to the script
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_PARTICLE_HEIGHT) {
+			// Particle height: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynParticleHeight(dynAttr);
+			}
+			emitter->setDynParticleHeightSet(true); // Force writing to the script
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_PARTICLE_DEPTH) {
+			// Particle depth: Dynamic attibute
+			ParticleUniverse::DynamicAttribute * dynAttr = prop->getDynamicAttribute();
+			if (dynAttr) {
+				emitter->setDynParticleDepth(dynAttr);
+			}
+			emitter->setDynParticleDepthSet(true); // Force writing to the script
+			if (emitter->_isMarkedForEmission()) {
+				//restartParticleEmitters(emitter);
+				restartParticle(emitter, ParticleUniverse::Particle::PT_EMITTER, ParticleUniverse::Particle::PT_EMITTER);
+			}
+		} else if (propertyName == PRNL_EMITTER_AUTO_DIRECTION) {
+			// Auto direction: Bool
+			emitter->setAutoDirection(prop->getBool());
+		} else if (propertyName == PRNL_EMITTER_FORCE_EMISSION) {
+			// Force emission: Bool
+			emitter->setForceEmission(prop->getBool());
+		}
+	}
+
+	void EmitterPropertyWindow::replaceEmitterType(properties::Property * prop) {
+		// Type: List of types
+		Ogre::String type = prop->getEnumString().toStdString();
+		if (type == Ogre::StringUtil::BLANK) {
+			return;
+		}
+
+		ParticleUniverse::ParticleEmitter * oldEmitter = static_cast<ParticleUniverse::ParticleEmitter *>(_owner->getPUElement());
+		if (type == oldEmitter->getEmitterType()) {
+			return;
+		}
+		if (oldEmitter) {
+			ParticleUniverse::ParticleTechnique * technique = oldEmitter->getParentTechnique();
+			if (technique) {
+				ParticleUniverse::ParticleEmitter * newEmitter = technique->createEmitter(type);
+				oldEmitter->copyParentAttributesTo(newEmitter);
+				bool wasStarted = false;
+				ParticleUniverse::ParticleSystem * system = technique->getParentSystem();
+				if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
+					wasStarted = true;
+					system->stop();
+				}
+				technique->destroyEmitter(oldEmitter);
+				_owner->setPUElement(newEmitter);
+				technique->_unprepareEmitters();
+				if (wasStarted) {
+					system->start();
+				}
+			} else {
+				/** The old emitter didn't have a technique, so create a new emitter by means of the ParticleSystemManager itself and also delete
+				the old emitter by means of the ParticleSystemManager
+				*/
+				ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+				ParticleUniverse::ParticleEmitter * newEmitter = particleSystemManager->createEmitter(type);
+				oldEmitter->copyParentAttributesTo(newEmitter);
+				particleSystemManager->destroyEmitter(oldEmitter);
+				_owner->setPUElement(newEmitter);
+			}
+		} else {
+			// There is no old emitter. Create a new emitter by means of the ParticleSystemManager
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::ParticleEmitter * newEmitter = particleSystemManager->createEmitter(type);
+			_owner->setPUElement(newEmitter);
+		}
+
+		emit replacePropertyWindow(QString::fromStdString(type));
 	}
 
 } /* namespace widgets */

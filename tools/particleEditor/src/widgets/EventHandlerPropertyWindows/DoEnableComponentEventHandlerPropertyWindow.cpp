@@ -2,6 +2,8 @@
 
 #include "properties/BoolProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleEventHandlers/ParticleUniverseDoEnableComponentEventHandler.h"
 
 namespace i6engine {
@@ -29,6 +31,25 @@ namespace widgets {
 
 		// Enable/Disable: bool
 		setBool(PRNL_ENABLE_COMPONENT_TRUE_FALSE, doEnableComponentEventHandler->isComponentEnabled());
+	}
+
+	void DoEnableComponentEventHandlerPropertyWindow::copyAttributeToEventHandler(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::DoEnableComponentEventHandler * handler = static_cast<ParticleUniverse::DoEnableComponentEventHandler *>(_owner->getPUElement());
+		if (!handler) {
+			return;
+		}
+
+		if (propertyName == PRNL_ENABLE_COMPONENT_TRUE_FALSE) {
+			// Enable/Disable: bool
+			handler->setComponentEnabled(prop->getBool());
+		} else {
+			// Update handler with another attribute
+			EventHandlerPropertyWindow::copyAttributeToEventHandler(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

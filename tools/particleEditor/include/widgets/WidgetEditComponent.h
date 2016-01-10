@@ -318,6 +318,9 @@ namespace widgets {
 			return _propertyWindow;
 		}
 
+	private slots:
+		void replacePropertyWindow(QString subType);
+
 	private:
 		WidgetEdit * _parent;
 		QLabel * _label;

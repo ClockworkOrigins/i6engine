@@ -7,6 +7,10 @@
 #include "widgets/WidgetEditComponent.h"
 
 #include "ParticleUniverseRenderer.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
+#include "ParticleRenderers/ParticleUniverseEntityRenderer.h"
 
 namespace i6engine {
 namespace particleEditor {
@@ -89,6 +93,104 @@ namespace widgets {
 
 		// Texture coords columns: uchar
 		setUint16(PRNL_RENDERER_TEXCOORDS_COLUMNS, renderer->getTextureCoordsColumns());
+	}
+
+	void RendererPropertyWindow::changedProperty(properties::Property * prop, QString name) {
+		PropertyWindow::changedProperty(prop, name);
+		copyAttributeToRenderer(prop, name);
+		//notifyPropertyChanged();
+	}
+
+	void RendererPropertyWindow::copyAttributeToRenderer(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::ParticleRenderer * renderer = static_cast<ParticleUniverse::ParticleRenderer *>(_owner->getPUElement());
+		if (!renderer) {
+			return;
+		}
+
+		if (propertyName == PRNL_RENDERER_TYPE) {
+			// Type: List of types
+			// This requires the renderer to be replaced.
+			replaceRendererType(prop);
+		} else if (propertyName == PRNL_RENDERER_RENDER_Q_GROUP) {
+			// Render queue group: ParticleUniverse::uint8
+			renderer->setRenderQueueGroup(prop->getUInt());
+		} else if (propertyName == PRNL_RENDERER_SORTING) {
+			// Sorting: Bool
+			renderer->setSorted(prop->getBool());
+		} else if (propertyName == PRNL_RENDERER_TEXCOORDS_ROWS) {
+			// Texture coords rows: uchar
+			renderer->setTextureCoordsRows(prop->getUInt());
+			renderer->_unprepare(renderer->getParentTechnique());
+			renderer->setRendererInitialised(false);
+		} else if (propertyName == PRNL_RENDERER_TEXCOORDS_COLUMNS) {
+			// Texture coords columns: uchar
+			renderer->setTextureCoordsColumns(prop->getUInt());
+			renderer->_unprepare(renderer->getParentTechnique());
+			renderer->setRendererInitialised(false);
+		}
+	}
+
+	void RendererPropertyWindow::replaceRendererType(properties::Property * prop) {
+		// Type: List of types
+		Ogre::String type = prop->getEnumString().toStdString();
+		if (type == Ogre::StringUtil::BLANK) {
+			return;
+		}
+
+		ParticleUniverse::ParticleRenderer * oldRenderer = static_cast<ParticleUniverse::ParticleRenderer *>(_owner->getPUElement());
+		if (type == oldRenderer->getRendererType()) {
+			return;
+		}
+		if (oldRenderer) {
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::ParticleRenderer * newRenderer = particleSystemManager->createRenderer(type);
+			oldRenderer->copyParentAttributesTo(newRenderer);
+			ParticleUniverse::ParticleTechnique * technique = oldRenderer->getParentTechnique();
+			if (technique) {
+				// V1.5: Bug: Crash when meshname of EntityRenderer is blank FIXME
+				if (newRenderer->getRendererType() == RENDERER_ENTITY.toStdString()) {
+					ParticleUniverse::EntityRenderer * entityRenderer = static_cast<ParticleUniverse::EntityRenderer *>(newRenderer);
+					ParticleUniverse::String s = entityRenderer->getMeshName();
+					if (entityRenderer->getMeshName() == Ogre::StringUtil::BLANK) {
+						ParticleUniverse::String s2 = "pu_bold_marker.mesh";
+						entityRenderer->setMeshName(s2);
+						properties::Property * p = _properties[PRNL_MESH_NAME];
+						if (p) {
+							p->setString(QString::fromStdString(s2));
+						}
+					}
+				}
+				// V1.5: Bug end
+
+				bool wasStarted = false;
+				ParticleUniverse::ParticleSystem * system = technique->getParentSystem();
+				if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
+					wasStarted = true;
+					system->stop();
+				}
+				technique->setRenderer(newRenderer);
+				_owner->setPUElement(newRenderer);
+				technique->_unprepareRenderer();
+				if (wasStarted) {
+					system->start();
+				}
+			} else {
+				/** The old renderer didn't have a technique.
+				*/
+				particleSystemManager->destroyRenderer(oldRenderer);
+				_owner->setPUElement(newRenderer);
+			}
+		} else {
+			// There is no old renderer. Create a new renderer by means of the ParticleSystemManager
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::ParticleRenderer * newRenderer = particleSystemManager->createRenderer(type);
+			_owner->setPUElement(newRenderer);
+		}
+		emit replacePropertyWindow(QString::fromStdString(type));
 	}
 
 } /* namespace widgets */

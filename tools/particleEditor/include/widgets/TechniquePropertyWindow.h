@@ -46,6 +46,10 @@ namespace widgets {
 		~TechniquePropertyWindow();
 
 		virtual void copyAttributesFromTechnique(ParticleUniverse::ParticleTechnique * technique);
+
+	protected:
+		void changedProperty(properties::Property * prop, QString name) override;
+		void copyAttributeToTechnique(properties::Property * prop, QString propertyName);
 	};
 
 } /* namespace widgets */

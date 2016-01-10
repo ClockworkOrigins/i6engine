@@ -2,6 +2,8 @@
 
 #include "properties/DoubleProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleObservers/ParticleUniverseOnRandomObserver.h"
 
 namespace i6engine {
@@ -27,6 +29,25 @@ namespace widgets {
 
 		// Random Threshold
 		setDouble(PRNL_ON_RANDOM_VALUE, onRandomObserver->getThreshold());
+	}
+
+	void OnRandomObserverPropertyWindow::copyAttributeToObserver(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::OnRandomObserver * observer = static_cast<ParticleUniverse::OnRandomObserver *>(_owner->getPUElement());
+		if (!observer) {
+			return;
+		}
+
+		if (propertyName == PRNL_ON_RANDOM_VALUE) {
+			// Random Threshold: ParticleUniverse::Real
+			observer->setThreshold(prop->getDouble());
+		} else {
+			// Update observer with another attribute
+			ObserverPropertyWindow::copyAttributeToObserver(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

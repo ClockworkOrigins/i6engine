@@ -8,6 +8,9 @@
 #include "widgets/WidgetEditComponent.h"
 
 #include "ParticleUniverseAffector.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 namespace i6engine {
 namespace particleEditor {
@@ -109,6 +112,97 @@ namespace widgets {
 
 		// Mass: ParticleUniverse::Real
 		setDouble(PRNL_AFFECTOR_MASS, affector->mass);
+	}
+
+	void AffectorPropertyWindow::changedProperty(properties::Property * prop, QString name) {
+		PropertyWindow::changedProperty(prop, name);
+		copyAttributeToAffector(prop, name);
+		ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(_owner->getPUElement());
+		if (affector && affector->_isMarkedForEmission() && affector->getParentTechnique()) {
+			// Unprepare, to change a property of an emitted affector
+			restartParticle(affector, ParticleUniverse::Particle::PT_AFFECTOR, ParticleUniverse::Particle::PT_AFFECTOR);
+		}
+		//notifyPropertyChanged();
+	}
+
+	void AffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::ParticleAffector * affector = static_cast<ParticleUniverse::ParticleAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_NAME) {
+			// Name: String
+			_owner->setName(prop->getString());
+			_owner->setCaption();
+			affector->setName(prop->getString().toStdString());
+		} else if (propertyName == PRNL_AFFECTOR_TYPE) {
+			// Type: List of types
+			// This requires the affector to be replaced.
+			replaceAffectorType(prop);
+		} else if (propertyName == PRNL_AFFECTOR_ENABLED) {
+			// Enabled: Bool
+			affector->_setOriginalEnabled(prop->getBool());
+			affector->setEnabled(prop->getBool());
+		} else if (propertyName == PRNL_AFFECTOR_POSITION) {
+			// Position: Ogre::Vector3
+			affector->position = prop->getVector3();
+			affector->originalPosition = prop->getVector3();
+		} else if (propertyName == PRNL_AFFECTOR_MASS) {
+			// Mass: ParticleUniverse::Real
+			affector->mass = prop->getDouble();
+		}
+	}
+
+	void AffectorPropertyWindow::replaceAffectorType(properties::Property * prop) {
+		// Type: List of types
+		QString type = prop->getEnumString();
+		if (type == "") {
+			return;
+		}
+
+		ParticleUniverse::ParticleAffector * oldAffector = static_cast<ParticleUniverse::ParticleAffector *>(_owner->getPUElement());
+		if (type.toStdString() == oldAffector->getAffectorType()) {
+			return;
+		}
+		if (oldAffector) {
+			ParticleUniverse::ParticleTechnique * technique = oldAffector->getParentTechnique();
+			if (technique) {
+				ParticleUniverse::ParticleAffector * newAffector = technique->createAffector(type.toStdString());
+				oldAffector->copyParentAttributesTo(newAffector);
+				bool wasStarted = false;
+				ParticleUniverse::ParticleSystem * system = technique->getParentSystem();
+				if (system && system->getState() == ParticleUniverse::ParticleSystem::PSS_STARTED) {
+					wasStarted = true;
+					system->stop();
+				}
+				technique->destroyAffector(oldAffector);
+				_owner->setPUElement(newAffector);
+				technique->_unprepareAffectors();
+				if (wasStarted) {
+					system->start();
+				}
+			} else {
+				/** The old affector didn't have a technique, so create a new affector by means of the ParticleSystemManager itself and also delete
+				the old affector by means of the ParticleSystemManager
+				*/
+				ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+				ParticleUniverse::ParticleAffector * newAffector = particleSystemManager->createAffector(type.toStdString());
+				oldAffector->copyParentAttributesTo(newAffector);
+				particleSystemManager->destroyAffector(oldAffector);
+				_owner->setPUElement(newAffector);
+			}
+		} else {
+			// There is no old affector. Create a new affector by means of the ParticleSystemManager
+			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+			ParticleUniverse::ParticleAffector * newAffector = particleSystemManager->createAffector(type.toStdString());
+			_owner->setPUElement(newAffector);
+		}
+		emit replacePropertyWindow(type);
 	}
 
 } /* namespace widgets */

@@ -2,6 +2,8 @@
 
 #include "properties/DoubleProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseGravityAffector.h"
 
 namespace i6engine {
@@ -27,6 +29,25 @@ namespace widgets {
 
 		// Gravity: ParticleUniverse::Real
 		setDouble(PRNL_GRAVITY, gravityAffector->getGravity());
+	}
+
+	void GravityAffectorPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::GravityAffector * affector = static_cast<ParticleUniverse::GravityAffector *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_GRAVITY) {
+			// Gravity: ParticleUniverse::Real
+			affector->setGravity(prop->getDouble());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

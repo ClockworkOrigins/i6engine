@@ -6,6 +6,10 @@
 #include "properties/UIntProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
+#include "ParticleUniverseEmitter.h"
+#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseTechnique.h"
 
 namespace i6engine {
@@ -152,6 +156,113 @@ namespace widgets {
 
 		// Maximum velocity: ParticleUniverse::Real
 		setDouble(PRNL_TECHNIQUE_MAX_VELOCITY, technique->getMaxVelocity());
+	}
+
+	void TechniquePropertyWindow::changedProperty(properties::Property * prop, QString name) {
+		PropertyWindow::changedProperty(prop, name);
+		copyAttributeToTechnique(prop, name);
+		ParticleUniverse::ParticleTechnique * technique = static_cast<ParticleUniverse::ParticleTechnique *>(_owner->getPUElement());
+		if (technique && technique->_isMarkedForEmission()) {
+			ParticleUniverse::ParticleSystem * system = technique->getParentSystem();
+			if (system) {
+				// Force recreation of new emitted techniques
+				// 1. Search emitter that is emitting this technique.
+				// 2. Find its parent technique.
+				// 3. call the other technique's restartParticleTechnique().
+				size_t numTechniques = system->getNumTechniques();
+				for (size_t i = 0; i < numTechniques; ++i) {
+					ParticleUniverse::ParticleTechnique * t = system->getTechnique(i);
+					size_t numEmitters = t->getNumEmittedEmitters();
+					for (size_t j = 0; j < numEmitters; ++j) {
+						ParticleUniverse::ParticleEmitter * emitter = t->getEmitter(j);
+						if (emitter->getEmitsType() == ParticleUniverse::Particle::PT_TECHNIQUE && emitter->getEmitsName() == technique->getName()) {
+							// Found it.
+							t->_unprepare();
+						}
+					}
+				}
+			}
+		}
+		//notifyPropertyChanged();
+	}
+
+	void TechniquePropertyWindow::copyAttributeToTechnique(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::ParticleTechnique * technique = static_cast<ParticleUniverse::ParticleTechnique *>(_owner->getPUElement());
+		if (!technique) {
+			return;
+		}
+
+		if (propertyName == PRNL_NAME) {
+			// Name: String
+			technique->setName(prop->getString().toStdString());
+			_owner->setName(prop->getString());
+			_owner->setCaption();
+		} else if (propertyName == PRNL_TECHNIQUE_ENABLED) {
+			// Enabled: Bool
+			technique->_setOriginalEnabled(prop->getBool());
+			technique->setEnabled(prop->getBool());
+		} else if (propertyName == PRNL_TECHNIQUE_POSITION + PRNL_X || propertyName == PRNL_TECHNIQUE_POSITION + PRNL_Y || propertyName == PRNL_TECHNIQUE_POSITION + PRNL_Z) {
+			// Position: Vector3
+			technique->position = prop->getVector3();
+			technique->originalPosition = prop->getVector3();
+		} else if (propertyName == PRNL_TECHNIQUE_KEEP_LOCAL) {
+			// Keep local: Bool
+			technique->setKeepLocal(prop->getBool());
+		} else if (propertyName == PRNL_TECHNIQUE_VISUAL_PARTICLE_QUOTA) {
+			// Visual particle quota: ParticleUniverse::Real
+			restartParticle(technique, ParticleUniverse::Particle::PT_TECHNIQUE, ParticleUniverse::Particle::PT_VISUAL);
+			technique->setVisualParticleQuota(prop->getDouble());
+		} else if (propertyName == PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA) {
+			// Emitted emitter quota: ParticleUniverse::Real
+			restartParticle(technique, ParticleUniverse::Particle::PT_TECHNIQUE, ParticleUniverse::Particle::PT_EMITTER);
+			technique->setEmittedEmitterQuota(prop->getDouble());
+		} else if (propertyName == PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA) {
+			// Emitted affector quota: ParticleUniverse::Real
+			restartParticle(technique, ParticleUniverse::Particle::PT_TECHNIQUE, ParticleUniverse::Particle::PT_AFFECTOR);
+			technique->setEmittedAffectorQuota(prop->getDouble());
+		} else if (propertyName == PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA) {
+			// Emitted technique quota: ParticleUniverse::Real
+			restartParticle(technique, ParticleUniverse::Particle::PT_TECHNIQUE, ParticleUniverse::Particle::PT_TECHNIQUE);
+			technique->setEmittedTechniqueQuota(prop->getDouble());
+		} else if (propertyName == PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA) {
+			// Emitted system quota: ParticleUniverse::Real
+			restartParticle(technique, ParticleUniverse::Particle::PT_TECHNIQUE, ParticleUniverse::Particle::PT_SYSTEM);
+			technique->setEmittedSystemQuota(prop->getDouble());
+		} else if (propertyName == PRNL_TECHNIQUE_MATERIAL) {
+			Ogre::String materialName = prop->getString().toStdString();
+			technique->setMaterialName(materialName);
+		} else if (propertyName == PRNL_TECHNIQUE_LOD_INDEX) {
+			// Lod index: unsigned short
+			technique->setLodIndex(prop->getUInt());
+		} else if (propertyName == PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH) {
+			// Default particle width: ParticleUniverse::Real
+			technique->setDefaultWidth(prop->getDouble());
+		} else if (propertyName == PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT) {
+			// Default particle height: ParticleUniverse::Real
+			technique->setDefaultHeight(prop->getDouble());
+		} else if (propertyName == PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH) {
+			// Default particle depth: ParticleUniverse::Real
+			technique->setDefaultDepth(prop->getDouble());
+		} else if (propertyName == PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION) {
+			// Spatial hashing cell dimension: ParticleUniverse::ushort
+			technique->setSpatialHashingCellDimension(prop->getUInt());
+		} else if (propertyName == PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP) {
+			// Spatial hashing cell overlap: ParticleUniverse::ushort
+			technique->setSpatialHashingCellOverlap(prop->getUInt());
+		} else if (propertyName == PRNL_TECHNIQUE_SPHASHING_SIZE) {
+			// Spatial hashtable size: unsigned int
+			technique->setSpatialHashTableSize(prop->getUInt());
+		} else if (propertyName == PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL) {
+			// Spatial hashing update interval: ParticleUniverse::Real
+			technique->setSpatialHashingInterval(prop->getDouble());
+		} else if (propertyName == PRNL_TECHNIQUE_MAX_VELOCITY) {
+			// Maximum velocity: ParticleUniverse::Real
+			technique->setMaxVelocity(prop->getDouble());
+		}
 	}
 
 } /* namespace widgets */

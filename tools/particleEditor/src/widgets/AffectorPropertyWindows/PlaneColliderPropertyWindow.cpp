@@ -4,6 +4,8 @@
 #include "properties/EnumProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniversePlaneCollider.h"
 
 namespace i6engine {
@@ -85,6 +87,57 @@ namespace widgets {
 			collisionTypeString = COLLT_FLOW;
 		}
 		setEnumString(PRNL_COLLISION_TYPE, collisionTypeString);
+	}
+
+	void PlaneColliderPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::PlaneCollider * affector = static_cast<ParticleUniverse::PlaneCollider *>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_PLANE_COLLIDER_NORMAL) {
+			// Normal: Ogre::Vector3
+			affector->setNormal(prop->getVector3());
+		} else if (propertyName == PRNL_AFFECTOR_POSITION) {
+			// Position: Ogre::Vector3
+			affector->position = prop->getVector3();
+			affector->originalPosition = prop->getVector3();
+
+			// To activate the new position, reset the plane normal
+			Ogre::Vector3 normal = affector->getNormal();
+			affector->setNormal(normal);
+		} else if (propertyName == PRNL_COLLIDER_FRICTION) {
+			// Friction: ParticleUniverse::Real
+			affector->setFriction(prop->getDouble());
+		} else if (propertyName == PRNL_COLLIDER_BOUNCYNESS) {
+			// Bouncyness: ParticleUniverse::Real
+			affector->setBouncyness(prop->getDouble());
+		} else if (propertyName == PRNL_INTERSECTION_TYPE) {
+			// Intersection type: List
+			QString intersection = prop->getEnumString();
+			if (intersection == IST_POINT) {
+				affector->setIntersectionType(ParticleUniverse::BaseCollider::IT_POINT);
+			} else if (intersection == IST_BOX) {
+				affector->setIntersectionType(ParticleUniverse::BaseCollider::IT_BOX);
+			}
+		} else if (propertyName == PRNL_COLLISION_TYPE) {
+			// Collision type: List
+			QString collision = prop->getEnumString();
+			if (collision == COLLT_BOUNCE) {
+				affector->setCollisionType(ParticleUniverse::BaseCollider::CT_BOUNCE);
+			} else if (collision == COLLT_FLOW) {
+				affector->setCollisionType(ParticleUniverse::BaseCollider::CT_FLOW);
+			} else if (collision == COLLT_NONE) {
+				affector->setCollisionType(ParticleUniverse::BaseCollider::CT_NONE);
+			}
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

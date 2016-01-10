@@ -4,6 +4,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/EnumProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleObservers/ParticleUniverseOnTimeObserver.h"
 
 namespace i6engine {
@@ -57,6 +59,38 @@ namespace widgets {
 
 		// Since Start System: bool
 		setBool(PRNL_SINCE_START_SYSTEM, onTimeObserver->isSinceStartSystem());
+	}
+
+	void OnTimeObserverPropertyWindow::copyAttributeToObserver(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::OnTimeObserver * observer = static_cast<ParticleUniverse::OnTimeObserver *>(_owner->getPUElement());
+		if (!observer) {
+			return;
+		}
+
+		if (propertyName == PRNL_ON_TIME_COMPARE) {
+			// Time Threshold - Compare: List
+			QString compare = prop->getEnumString();
+			if (compare == PRNL_COMPARE_LESS_THAN) {
+				observer->setCompare(ParticleUniverse::CO_LESS_THAN);
+			} else if (compare == PRNL_COMPARE_GREATER_THAN) {
+				observer->setCompare(ParticleUniverse::CO_GREATER_THAN);
+			} else if (compare == PRNL_COMPARE_EQUALS) {
+				observer->setCompare(ParticleUniverse::CO_EQUALS);
+			}
+		} else if (propertyName == PRNL_ON_TIME_THRESHOLD) {
+			// Time Threshold - Value: ParticleUniverse::Real
+			observer->setThreshold(prop->getDouble());
+		} else if (propertyName == PRNL_SINCE_START_SYSTEM) {
+			// Since Start System: bool
+			observer->setSinceStartSystem(prop->getBool());
+		} else {
+			// Update observer with another attribute
+			ObserverPropertyWindow::copyAttributeToObserver(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

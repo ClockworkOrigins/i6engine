@@ -3,6 +3,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/EnumProperty.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleObservers/ParticleUniverseOnPositionObserver.h"
 
 namespace i6engine {
@@ -115,6 +117,118 @@ namespace widgets {
 
 		// Position Z
 		setDouble(PRNL_ON_POSITION_Z, onPositionObserver->getPositionZThreshold());
+	}
+
+	void OnPositionObserverPropertyWindow::copyAttributeToObserver(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::OnPositionObserver * observer = static_cast<ParticleUniverse::OnPositionObserver *>(_owner->getPUElement());
+		if (!observer) {
+			return;
+		}
+
+		if (propertyName == PRNL_ON_POSITION_X_COMPARE) {
+			// Compare X: List
+			QString compare = prop->getEnumString();
+			if (compare == PRNL_COMPARE_NOT_USED) {
+				observer->setComparePositionX(ParticleUniverse::CO_LESS_THAN);
+				observer->setPositionXThreshold(ParticleUniverse::OnPositionObserver::DEFAULT_POSITION_THRESHOLD.x);
+				observer->resetPositionXThreshold();
+			} else if (compare == PRNL_COMPARE_LESS_THAN) {
+				observer->setComparePositionX(ParticleUniverse::CO_LESS_THAN);
+				observer->setPositionXThreshold(observer->getPositionXThreshold()); // Forces that compare is used
+			} else if (compare == PRNL_COMPARE_GREATER_THAN) {
+				observer->setComparePositionX(ParticleUniverse::CO_GREATER_THAN);
+				observer->setPositionXThreshold(observer->getPositionXThreshold()); // Forces that compare is used
+			} else if (compare == PRNL_COMPARE_EQUALS) {
+				observer->setComparePositionX(ParticleUniverse::CO_EQUALS);
+				observer->setPositionXThreshold(observer->getPositionXThreshold()); // Forces that compare is used
+			}
+		} else if (propertyName == PRNL_ON_POSITION_X) {
+			// Position X: ParticleUniverse::Real
+			observer->setPositionXThreshold(prop->getDouble());
+
+			// Adjust the compare operator
+			prop = _properties[PRNL_ON_POSITION_X_COMPARE];
+			if (prop) {
+				QString compareString = PRNL_COMPARE_LESS_THAN;
+				if (observer->getComparePositionX() == ParticleUniverse::CO_GREATER_THAN) {
+					compareString = PRNL_COMPARE_GREATER_THAN;
+				} else if (observer->getComparePositionX() == ParticleUniverse::CO_EQUALS) {
+					compareString = PRNL_COMPARE_EQUALS;
+				}
+				prop->setEnumString(compareString);
+			}
+		} else if (propertyName == PRNL_ON_POSITION_Y_COMPARE) {
+			// Compare Y: List
+			QString compare = prop->getEnumString();
+			if (compare == PRNL_COMPARE_NOT_USED) {
+				observer->setComparePositionY(ParticleUniverse::CO_LESS_THAN);
+				observer->setPositionYThreshold(ParticleUniverse::OnPositionObserver::DEFAULT_POSITION_THRESHOLD.y);
+				observer->resetPositionYThreshold();
+			} else if (compare == PRNL_COMPARE_LESS_THAN) {
+				observer->setComparePositionY(ParticleUniverse::CO_LESS_THAN);
+				observer->setPositionYThreshold(observer->getPositionYThreshold()); // Forces that compare is used
+			} else if (compare == PRNL_COMPARE_GREATER_THAN) {
+				observer->setComparePositionY(ParticleUniverse::CO_GREATER_THAN);
+				observer->setPositionYThreshold(observer->getPositionYThreshold()); // Forces that compare is used
+			} else if (compare == PRNL_COMPARE_EQUALS) {
+				observer->setComparePositionY(ParticleUniverse::CO_EQUALS);
+				observer->setPositionYThreshold(observer->getPositionYThreshold()); // Forces that compare is used
+			}
+		} else if (propertyName == PRNL_ON_POSITION_Y) {
+			// Position Y: ParticleUniverse::Real
+			observer->setPositionYThreshold(prop->getDouble());
+
+			// Adjust the compare operator
+			prop = _properties[PRNL_ON_POSITION_Y_COMPARE];
+			if (prop) {
+				QString compareString = PRNL_COMPARE_LESS_THAN;
+				if (observer->getComparePositionX() == ParticleUniverse::CO_GREATER_THAN) {
+					compareString = PRNL_COMPARE_GREATER_THAN;
+				} else if (observer->getComparePositionX() == ParticleUniverse::CO_EQUALS) {
+					compareString = PRNL_COMPARE_EQUALS;
+				}
+				prop->setEnumString(compareString);
+			}
+		} else if (propertyName == PRNL_ON_POSITION_Z_COMPARE) {
+			// Compare Z: List
+			QString compare = prop->getEnumString();
+			if (compare == PRNL_COMPARE_NOT_USED) {
+				observer->setComparePositionZ(ParticleUniverse::CO_LESS_THAN);
+				observer->setPositionZThreshold(ParticleUniverse::OnPositionObserver::DEFAULT_POSITION_THRESHOLD.z);
+				observer->resetPositionZThreshold();
+			} else if (compare == PRNL_COMPARE_LESS_THAN) {
+				observer->setComparePositionZ(ParticleUniverse::CO_LESS_THAN);
+				observer->setPositionZThreshold(observer->getPositionZThreshold()); // Forces that compare is used
+			} else if (compare == PRNL_COMPARE_GREATER_THAN) {
+				observer->setComparePositionZ(ParticleUniverse::CO_GREATER_THAN);
+				observer->setPositionZThreshold(observer->getPositionZThreshold()); // Forces that compare is used
+			} else if (compare == PRNL_COMPARE_EQUALS) {
+				observer->setComparePositionZ(ParticleUniverse::CO_EQUALS);
+				observer->setPositionZThreshold(observer->getPositionZThreshold()); // Forces that compare is used
+			}
+		} else if (propertyName == PRNL_ON_POSITION_Z) {
+			// Position Z: ParticleUniverse::Real
+			observer->setPositionZThreshold(prop->getDouble());
+
+			// Adjust the compare operator
+			prop = _properties[PRNL_ON_POSITION_Z_COMPARE];
+			if (prop) {
+				QString compareString = PRNL_COMPARE_LESS_THAN;
+				if (observer->getComparePositionX() == ParticleUniverse::CO_GREATER_THAN) {
+					compareString = PRNL_COMPARE_GREATER_THAN;
+				} else if (observer->getComparePositionX() == ParticleUniverse::CO_EQUALS) {
+					compareString = PRNL_COMPARE_EQUALS;
+				}
+				prop->setEnumString(compareString);
+			}
+		} else {
+			// Update observer with another attribute
+			ObserverPropertyWindow::copyAttributeToObserver(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */

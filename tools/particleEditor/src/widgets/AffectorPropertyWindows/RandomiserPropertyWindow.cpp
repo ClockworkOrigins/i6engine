@@ -4,6 +4,8 @@
 #include "properties/DoubleProperty.h"
 #include "properties/Vec3Property.h"
 
+#include "widgets/WidgetEditComponent.h"
+
 #include "ParticleAffectors/ParticleUniverseRandomiser.h"
 
 namespace i6engine {
@@ -46,6 +48,34 @@ namespace widgets {
 
 		// Timestep: ParticleUniverse::Real
 		setDouble(PRNL_TIME_STEP, randomiser->getTimeStep());
+	}
+
+	void RandomiserPropertyWindow::copyAttributeToAffector(properties::Property * prop, QString propertyName) {
+		if (!prop) {
+			return;
+		}
+
+		ParticleUniverse::Randomiser* affector = static_cast<ParticleUniverse::Randomiser*>(_owner->getPUElement());
+		if (!affector) {
+			return;
+		}
+
+		if (propertyName == PRNL_MAX_DEVIATION) {
+			// Max. deviation: Ogre::Vector3
+			Ogre::Vector3 v3 = prop->getVector3();
+			affector->setMaxDeviationX(v3.x);
+			affector->setMaxDeviationY(v3.y);
+			affector->setMaxDeviationZ(v3.z);
+		} else if (propertyName == PRNL_RANDOM_DIRECTION) {
+			// Random direction: bool
+			affector->setRandomDirection(prop->getBool());
+		} else if (propertyName == PRNL_TIME_STEP) {
+			// Timestep: ParticleUniverse::Real
+			affector->setTimeStep(prop->getDouble());
+		} else {
+			// Update affector with another attribute
+			AffectorPropertyWindow::copyAttributeToAffector(prop, propertyName);
+		}
 	}
 
 } /* namespace widgets */
