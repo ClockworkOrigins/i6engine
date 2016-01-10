@@ -12,6 +12,8 @@ namespace properties {
 		_doubleSpinBox->setValue(value);
 		horizontalLayout->addWidget(_doubleSpinBox);
 		_doubleSpinBox->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
+
+		connect(_doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(valueChanged()));
 	}
 
 	DoubleProperty::~DoubleProperty() {
@@ -20,6 +22,11 @@ namespace properties {
 	void DoubleProperty::setDouble(double value) {
 		_value = value;
 		_doubleSpinBox->setValue(value);
+	}
+
+	void DoubleProperty::valueChanged() {
+		_value = _doubleSpinBox->value();
+		triggerChangedSignal();
 	}
 
 } /* namespace properties */

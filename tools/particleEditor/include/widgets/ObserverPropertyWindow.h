@@ -24,7 +24,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		ObserverPropertyWindow(QWidget * par, QString name = "");
+		ObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

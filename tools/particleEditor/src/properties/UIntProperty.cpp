@@ -12,6 +12,7 @@ namespace properties {
 		_spinBox->setMaximum(INT_MAX);
 		_spinBox->setValue(value);
 		horizontalLayout->addWidget(_spinBox);
+		connect(_spinBox, SIGNAL(valueChanged(int)), this, SLOT(changedValue()));
 	}
 
 	UIntProperty::~UIntProperty() {
@@ -20,6 +21,11 @@ namespace properties {
 	void UIntProperty::setUInt(unsigned int value) {
 		_value = value;
 		_spinBox->setValue(value);
+	}
+
+	void UIntProperty::changedValue() {
+		_value = _spinBox->value();
+		triggerChangedSignal();
 	}
 
 } /* namespace properties */

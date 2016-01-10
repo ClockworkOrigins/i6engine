@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	PathFollowerPropertyWindow::PathFollowerPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	PathFollowerPropertyWindow::PathFollowerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_PATHFOLLOWER_POSITION = "Add Position";
 		PRNL_POSITION = "Position";

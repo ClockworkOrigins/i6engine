@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	PlaneColliderPropertyWindow::PlaneColliderPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	PlaneColliderPropertyWindow::PlaneColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_PLANE_COLLIDER_NORMAL = "Plane normal";
 		PRNL_COLLIDER_FRICTION = "Friction";

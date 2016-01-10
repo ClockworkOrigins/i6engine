@@ -30,7 +30,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		LightRendererPropertyWindow(QWidget * par, QString name = "");
+		LightRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

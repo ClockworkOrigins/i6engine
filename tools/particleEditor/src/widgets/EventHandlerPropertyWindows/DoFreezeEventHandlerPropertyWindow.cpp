@@ -4,7 +4,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	DoFreezeEventHandlerPropertyWindow::DoFreezeEventHandlerPropertyWindow(QWidget * par, QString name) : EventHandlerPropertyWindow(par, name) {
+	DoFreezeEventHandlerPropertyWindow::DoFreezeEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 	}
 
 	DoFreezeEventHandlerPropertyWindow::~DoFreezeEventHandlerPropertyWindow() {

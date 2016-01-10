@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	ScaleAffectorPropertyWindow::ScaleAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	ScaleAffectorPropertyWindow::ScaleAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_XYZ_SCALE = "Scale x, y and z";
 		PRNL_X_SCALE = "Scale x";

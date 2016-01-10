@@ -14,7 +14,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		LinearForceAffectorPropertyWindow(QWidget * par, QString name = "");
+		LinearForceAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

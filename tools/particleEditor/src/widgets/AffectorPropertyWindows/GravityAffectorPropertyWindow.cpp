@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	GravityAffectorPropertyWindow::GravityAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	GravityAffectorPropertyWindow::GravityAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_GRAVITY = "Gravity";
 

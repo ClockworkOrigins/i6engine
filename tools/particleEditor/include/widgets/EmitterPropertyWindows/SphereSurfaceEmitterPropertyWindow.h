@@ -17,7 +17,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		SphereSurfaceEmitterPropertyWindow(QWidget * par, QString name = "");
+		SphereSurfaceEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

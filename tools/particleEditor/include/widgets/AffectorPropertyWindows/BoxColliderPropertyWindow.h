@@ -20,7 +20,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		BoxColliderPropertyWindow(QWidget * par, QString name = "");
+		BoxColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

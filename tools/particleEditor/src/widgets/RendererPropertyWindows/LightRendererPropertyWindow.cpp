@@ -11,7 +11,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	LightRendererPropertyWindow::LightRendererPropertyWindow(QWidget * par, QString name) : RendererPropertyWindow(par, name) {
+	LightRendererPropertyWindow::LightRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : RendererPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_RENDERER_TYPE = "Renderer type";
 		PRNL_LIGHT_TYPE = "Light type";

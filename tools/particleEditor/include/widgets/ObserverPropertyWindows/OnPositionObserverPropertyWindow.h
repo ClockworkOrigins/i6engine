@@ -22,7 +22,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		OnPositionObserverPropertyWindow(QWidget * par, QString name = "");
+		OnPositionObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

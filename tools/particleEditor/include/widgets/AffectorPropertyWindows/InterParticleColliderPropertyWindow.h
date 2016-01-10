@@ -20,7 +20,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		InterParticleColliderPropertyWindow(QWidget * par, QString name = "");
+		InterParticleColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

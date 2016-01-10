@@ -21,7 +21,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		RibbonTrailRendererPropertyWindow(QWidget * par, QString name = "");
+		RibbonTrailRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

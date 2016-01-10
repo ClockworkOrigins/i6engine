@@ -15,6 +15,7 @@ namespace properties {
 		_doubleSpinBoxX->setValue(value.x);
 		horizontalLayout->addWidget(_doubleSpinBoxX);
 		_doubleSpinBoxX->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
+		connect(_doubleSpinBoxX, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));
 
 		l = new QLabel("Y", this);
 		horizontalLayout->addWidget(l);
@@ -23,6 +24,7 @@ namespace properties {
 		_doubleSpinBoxY->setValue(value.y);
 		horizontalLayout->addWidget(_doubleSpinBoxY);
 		_doubleSpinBoxY->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
+		connect(_doubleSpinBoxY, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));
 
 		l = new QLabel("Z", this);
 		horizontalLayout->addWidget(l);
@@ -31,6 +33,7 @@ namespace properties {
 		_doubleSpinBoxZ->setValue(value.z);
 		horizontalLayout->addWidget(_doubleSpinBoxZ);
 		_doubleSpinBoxZ->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
+		connect(_doubleSpinBoxZ, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));
 	}
 
 	Vec3Property::~Vec3Property() {
@@ -41,6 +44,13 @@ namespace properties {
 		_doubleSpinBoxX->setValue(value.x);
 		_doubleSpinBoxY->setValue(value.y);
 		_doubleSpinBoxZ->setValue(value.z);
+	}
+
+	void Vec3Property::changedValue() {
+		_value.x = _doubleSpinBoxX->value();
+		_value.y = _doubleSpinBoxY->value();
+		_value.z = _doubleSpinBoxZ->value();
+		triggerChangedSignal();
 	}
 
 } /* namespace properties */

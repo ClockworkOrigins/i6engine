@@ -21,7 +21,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		ExternPropertyWindow(QWidget * par, QString name = "");
+		ExternPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

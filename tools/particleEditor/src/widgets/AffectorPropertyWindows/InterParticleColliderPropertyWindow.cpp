@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	InterParticleColliderPropertyWindow::InterParticleColliderPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	InterParticleColliderPropertyWindow::InterParticleColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT = "Adjustment";
 		PRNL_COLLISON_RESPONSE = "Collision response";

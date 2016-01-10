@@ -24,7 +24,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		MeshSurfaceEmitterPropertyWindow(QWidget * par, QString name = "");
+		MeshSurfaceEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

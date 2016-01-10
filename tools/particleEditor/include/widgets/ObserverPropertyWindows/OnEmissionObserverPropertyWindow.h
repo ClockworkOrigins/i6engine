@@ -14,7 +14,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		OnEmissionObserverPropertyWindow(QWidget * par, QString name = "");
+		OnEmissionObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

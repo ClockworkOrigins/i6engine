@@ -18,7 +18,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		ParticleFollowerPropertyWindow(QWidget * par, QString name = "");
+		ParticleFollowerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

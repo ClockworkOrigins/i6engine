@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	OnVelocityObserverPropertyWindow::OnVelocityObserverPropertyWindow(QWidget * par, QString name) : ObserverPropertyWindow(par, name) {
+	OnVelocityObserverPropertyWindow::OnVelocityObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ON_VELOCITY_COMPARE = "Velocity compare";
 		PRNL_ON_VELOCITY_THRESHOLD = "Velocity threshold";

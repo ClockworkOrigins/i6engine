@@ -18,7 +18,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	EmitterPropertyWindow::EmitterPropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+	EmitterPropertyWindow::EmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		CST_EMITTER_BOX = EMITTER_BOX;
 		CST_EMITTER_CIRCLE = EMITTER_CIRCLE;

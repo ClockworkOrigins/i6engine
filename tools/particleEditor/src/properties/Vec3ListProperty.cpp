@@ -36,6 +36,7 @@ namespace properties {
 			Vec3Property * v3p = new Vec3Property(this, widgets::PRNL_POSITION, widgets::PRNL_POSITION, v3);
 			_layout->addWidget(v3p);
 			_positions.push_back(v3p);
+			connect(v3p, SIGNAL(changed(QString)), this, SLOT(changedValue()));
 		}
 	}
 
@@ -43,6 +44,11 @@ namespace properties {
 		Vec3Property * v3p = new Vec3Property(this, widgets::PRNL_POSITION, widgets::PRNL_POSITION, ParticleUniverse::Vector3::ZERO);
 		_layout->addWidget(v3p);
 		_positions.push_back(v3p);
+		connect(v3p, SIGNAL(changed(QString)), this, SLOT(changedValue()));
+	}
+
+	void Vec3ListProperty::changedValue() {
+		triggerChangedSignal();
 	}
 
 } /* namespace properties */

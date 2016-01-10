@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	BehaviourPropertyWindow::BehaviourPropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+	BehaviourPropertyWindow::BehaviourPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		CST_BEHAVIOUR_SLAVE = BEHAVIOUR_SLAVE;
 		PRNL_BEHAVIOUR_TYPE = "Behaviour type";

@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	DoScaleEventHandlerPropertyWindow::DoScaleEventHandlerPropertyWindow(QWidget * par, QString name) : EventHandlerPropertyWindow(par, name) {
+	DoScaleEventHandlerPropertyWindow::DoScaleEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_SCALE_FRACTION = "Scale fraction";
 		PRNL_SCALE_TYPE = "Scale type";

@@ -14,7 +14,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		SlaveBehaviourPropertyWindow(QWidget * par, QString name = "");
+		SlaveBehaviourPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

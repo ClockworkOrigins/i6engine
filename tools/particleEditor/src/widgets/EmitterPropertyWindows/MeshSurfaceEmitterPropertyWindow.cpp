@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	MeshSurfaceEmitterPropertyWindow::MeshSurfaceEmitterPropertyWindow(QWidget * par, QString name) : EmitterPropertyWindow(par, name) {
+	MeshSurfaceEmitterPropertyWindow::MeshSurfaceEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_X = ".x";
 		PRNL_Y = ".y";

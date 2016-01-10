@@ -17,25 +17,25 @@ namespace factories {
 	/**
 	Create a specific Renderer Property Window
 	*/
-	widgets::RendererPropertyWindow * RendererPropertyWindowFactory::createRendererPropertyWindow(QWidget * parent, const QString & name, QString subType) {
+	widgets::RendererPropertyWindow * RendererPropertyWindowFactory::createRendererPropertyWindow(QWidget * parent, widgets::WidgetEditComponent * owner, const QString & name, QString subType) {
 		if (subType == widgets::CST_UNDEFINED) {
-			return new widgets::RendererPropertyWindow(parent, name);
+			return new widgets::RendererPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_RENDERER_BILLBOARD) {
-			return new widgets::BillboardRendererPropertyWindow(parent, name);
+			return new widgets::BillboardRendererPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_RENDERER_BEAM) {
-			return new widgets::BeamRendererPropertyWindow(parent, name);
+			return new widgets::BeamRendererPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_RENDERER_BOX) {
-			return new widgets::BoxRendererPropertyWindow(parent, name);
+			return new widgets::BoxRendererPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_RENDERER_ENTITY) {
-			return new widgets::EntityRendererPropertyWindow(parent, name);
+			return new widgets::EntityRendererPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_RENDERER_LIGHT) {
-			return new widgets::LightRendererPropertyWindow(parent, name);
+			return new widgets::LightRendererPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_RENDERER_RIBBONTRAIL) {
-			return new widgets::RibbonTrailRendererPropertyWindow(parent, name);
+			return new widgets::RibbonTrailRendererPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_RENDERER_SPHERE) {
-			return new widgets::SphereRendererPropertyWindow(parent, name);
+			return new widgets::SphereRendererPropertyWindow(parent, owner, name);
 		} else {
-			return new widgets::RendererPropertyWindow(parent, name);
+			return new widgets::RendererPropertyWindow(parent, owner, name);
 		}
 		return nullptr;
 	}
@@ -43,25 +43,25 @@ namespace factories {
 	/**
 	Create a specific Renderer Property Window and propagate the attributes from the RendererPropertyWindow
 	*/
-	widgets::RendererPropertyWindow * RendererPropertyWindowFactory::createRendererPropertyWindow(QString subType, widgets::RendererPropertyWindow * rendererPropertyWindow) {
+	widgets::RendererPropertyWindow * RendererPropertyWindowFactory::createRendererPropertyWindow(QString subType, widgets::WidgetEditComponent * owner, widgets::RendererPropertyWindow * rendererPropertyWindow) {
 		if (subType == widgets::CST_UNDEFINED) {
-			return new widgets::RendererPropertyWindow(rendererPropertyWindow);
+			return new widgets::RendererPropertyWindow(rendererPropertyWindow, owner);
 		} else if (subType == widgets::CST_RENDERER_BILLBOARD) {
-			return new widgets::BillboardRendererPropertyWindow(rendererPropertyWindow);
+			return new widgets::BillboardRendererPropertyWindow(rendererPropertyWindow, owner);
 		} else if (subType == widgets::CST_RENDERER_BEAM) {
-			return new widgets::BeamRendererPropertyWindow(rendererPropertyWindow);
+			return new widgets::BeamRendererPropertyWindow(rendererPropertyWindow, owner);
 		} else if (subType == widgets::CST_RENDERER_BOX) {
-			return new widgets::BoxRendererPropertyWindow(rendererPropertyWindow);
+			return new widgets::BoxRendererPropertyWindow(rendererPropertyWindow, owner);
 		} else if (subType == widgets::CST_RENDERER_ENTITY) {
-			return new widgets::EntityRendererPropertyWindow(rendererPropertyWindow);
+			return new widgets::EntityRendererPropertyWindow(rendererPropertyWindow, owner);
 		} else if (subType == widgets::CST_RENDERER_LIGHT) {
-			return new widgets::LightRendererPropertyWindow(rendererPropertyWindow);
+			return new widgets::LightRendererPropertyWindow(rendererPropertyWindow, owner);
 		} else if (subType == widgets::CST_RENDERER_RIBBONTRAIL) {
-			return new widgets::RibbonTrailRendererPropertyWindow(rendererPropertyWindow);
+			return new widgets::RibbonTrailRendererPropertyWindow(rendererPropertyWindow, owner);
 		} else if (subType == widgets::CST_RENDERER_SPHERE) {
-			return new widgets::SphereRendererPropertyWindow(rendererPropertyWindow);
+			return new widgets::SphereRendererPropertyWindow(rendererPropertyWindow, owner);
 		} else {
-			return new widgets::RendererPropertyWindow(rendererPropertyWindow);
+			return new widgets::RendererPropertyWindow(rendererPropertyWindow, owner);
 		}
 		return nullptr;
 	}

@@ -6,7 +6,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	PropertyWindow::PropertyWindow(QWidget * par, QString name) : QWidget(par), _name(name), _types(), _properties() {
+	PropertyWindow::PropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : QWidget(par), _owner(owner), _name(name), _types(), _properties() {
 		setupUi(this);
 
 		PRNL_NAME = "Name";
@@ -67,6 +67,7 @@ namespace widgets {
 	void PropertyWindow::append(properties::Property * prop) {
 		verticalLayout->addWidget(prop);
 		_properties.insert(std::make_pair(prop->getName(), prop));
+		connect(prop, SIGNAL(changed(QString)), this, SLOT(changedProperty(QString)));
 	}
 
 	void PropertyWindow::setBool(QString name, bool value) {
@@ -107,6 +108,13 @@ namespace widgets {
 
 	void PropertyWindow::setVector3List(QString name, std::vector<ParticleUniverse::Vector3> value) {
 		_properties[name]->setVector3List(value);
+	}
+
+	void PropertyWindow::changedProperty(properties::Property * prop, QString name) {
+	}
+
+	void PropertyWindow::changedProperty(QString name) {
+		changedProperty(_properties[name], name);
 	}
 
 } /* namespace widgets */

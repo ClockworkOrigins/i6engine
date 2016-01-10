@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	ScaleVelocityAffectorPropertyWindow::ScaleVelocityAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	ScaleVelocityAffectorPropertyWindow::ScaleVelocityAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_VELOCITY_SCALE = "Scale velocity";
 		PRNL_STOP_AT_FLIP = "Stop at flip";

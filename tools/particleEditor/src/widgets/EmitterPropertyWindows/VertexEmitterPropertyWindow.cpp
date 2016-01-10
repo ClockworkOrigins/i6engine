@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	VertexEmitterPropertyWindow::VertexEmitterPropertyWindow(QWidget * par, QString name) : EmitterPropertyWindow(par, name) {
+	VertexEmitterPropertyWindow::VertexEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_VERTEX_EMITTER_STEP = "Vertex step";
 		PRNL_VERTEX_EMITTER_SEGMENTS = "Vertex segments";

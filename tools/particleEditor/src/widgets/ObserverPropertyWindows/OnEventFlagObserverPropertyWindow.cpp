@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	OnEventFlagObserverPropertyWindow::OnEventFlagObserverPropertyWindow(QWidget * par, QString name) : ObserverPropertyWindow(par, name) {
+	OnEventFlagObserverPropertyWindow::OnEventFlagObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ON_EVENTFLAG_FLAG = "Event Flag";
 

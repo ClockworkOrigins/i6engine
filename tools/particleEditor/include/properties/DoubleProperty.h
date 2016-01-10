@@ -25,6 +25,9 @@ namespace properties {
 
 		void setDouble(double value) override;
 
+	private slots:
+		void valueChanged();
+
 	protected:
 		double _value;
 		QDoubleSpinBox * _doubleSpinBox;

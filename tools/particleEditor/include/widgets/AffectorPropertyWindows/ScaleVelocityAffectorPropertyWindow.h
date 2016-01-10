@@ -18,7 +18,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		ScaleVelocityAffectorPropertyWindow(QWidget * par, QString name = "");
+		ScaleVelocityAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

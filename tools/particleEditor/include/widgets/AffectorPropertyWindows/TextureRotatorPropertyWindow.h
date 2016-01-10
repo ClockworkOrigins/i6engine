@@ -14,7 +14,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		TextureRotatorPropertyWindow(QWidget * par, QString name = "");
+		TextureRotatorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

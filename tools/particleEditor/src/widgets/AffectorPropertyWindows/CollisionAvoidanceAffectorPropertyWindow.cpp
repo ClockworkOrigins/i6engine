@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	CollisionAvoidanceAffectorPropertyWindow::CollisionAvoidanceAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	CollisionAvoidanceAffectorPropertyWindow::CollisionAvoidanceAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_COLLISON_AVOIDANCE_RADIUS = "Avoidance radius";
 

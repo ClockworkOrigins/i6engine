@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	RandomiserPropertyWindow::RandomiserPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	RandomiserPropertyWindow::RandomiserPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_RANDOM_DIRECTION = "Random direction";
 		PRNL_MAX_DEVIATION = "Maximum deviation";

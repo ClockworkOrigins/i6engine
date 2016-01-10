@@ -10,6 +10,7 @@ namespace properties {
 		_checkBox = new QCheckBox(this);
 		_checkBox->setChecked(value);
 		horizontalLayout->addWidget(_checkBox);
+		connect(_checkBox, SIGNAL(stateChanged(int)), this, SLOT(boolChanged()));
 	}
 
 	BoolProperty::~BoolProperty() {
@@ -18,6 +19,11 @@ namespace properties {
 	void BoolProperty::setBool(bool value) {
 		_value = value;
 		_checkBox->setChecked(value);
+	}
+
+	void BoolProperty::boolChanged() {
+		_value = _checkBox->isChecked();
+		triggerChangedSignal();
 	}
 
 } /* namespace properties */

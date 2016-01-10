@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	SineForceAffectorPropertyWindow::SineForceAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	SineForceAffectorPropertyWindow::SineForceAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_FREQ_MIN = "Minimum frequency";
 		PRNL_FREQ_MAX = "Maximum frequency";

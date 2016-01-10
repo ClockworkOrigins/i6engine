@@ -17,7 +17,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		RandomiserPropertyWindow(QWidget * par, QString name = "");
+		RandomiserPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

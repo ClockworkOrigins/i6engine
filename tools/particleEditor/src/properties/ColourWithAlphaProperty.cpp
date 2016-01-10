@@ -44,6 +44,11 @@ namespace properties {
 		_spinBoxA->setMaximum(255);
 		_spinBoxA->setValue(value.getW());
 		_layout->addWidget(_spinBoxA, 1, 2);
+
+		connect(_spinBoxR, SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
+		connect(_spinBoxG, SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
+		connect(_spinBoxB, SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
+		connect(_spinBoxA, SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
 	}
 
 	ColourWithAlphaProperty::~ColourWithAlphaProperty() {
@@ -55,6 +60,14 @@ namespace properties {
 		_spinBoxG->setValue(value.getY());
 		_spinBoxB->setValue(value.getZ());
 		_spinBoxA->setValue(value.getW());
+	}
+
+	void ColourWithAlphaProperty::valueChanged() {
+		_value.setW(_spinBoxA->value());
+		_value.setX(_spinBoxR->value());
+		_value.setY(_spinBoxG->value());
+		_value.setZ(_spinBoxB->value());
+		triggerChangedSignal();
 	}
 
 } /* namespace properties */

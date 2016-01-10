@@ -27,7 +27,10 @@ namespace properties {
 
 		void setColourWithAlpha(Vec4 value) override;
 
-	protected:
+	private slots:
+		void valueChanged();
+
+	private:
 		QGridLayout * _layout;
 		Vec4 _value;
 		QSpinBox * _spinBoxR;

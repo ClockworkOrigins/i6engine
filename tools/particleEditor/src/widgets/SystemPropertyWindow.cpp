@@ -11,7 +11,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	SystemPropertyWindow::SystemPropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+	SystemPropertyWindow::SystemPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_NAME = "Name";
 		PRNL_SYSTEM_CATEGORY = "Category";

@@ -20,7 +20,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		EntityRendererPropertyWindow(QWidget * par, QString name = "");
+		EntityRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

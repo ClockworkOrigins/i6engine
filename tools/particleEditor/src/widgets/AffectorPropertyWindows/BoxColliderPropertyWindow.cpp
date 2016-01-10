@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	BoxColliderPropertyWindow::BoxColliderPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	BoxColliderPropertyWindow::BoxColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_COLLIDER_FRICTION = "Friction";
 		PRNL_COLLIDER_BOUNCYNESS = "Bouncyness";

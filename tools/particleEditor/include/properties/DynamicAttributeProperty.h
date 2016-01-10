@@ -3,6 +3,9 @@
 
 #include "properties/Property.h"
 
+class QComboBox;
+class QDoubleSpinBox;
+
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
@@ -23,13 +26,23 @@ namespace properties {
 
 		void setDynamicAttribute(ParticleUniverse::DynamicAttribute * value) override;
 
-	protected:
+	private slots:
+		void changedDynamicType();
+		void changedValue();
+
+	private:
+		enum PropertyTypes {
+			Value,
+			MinValue,
+			MaxValue
+		};
 		QWidget * _widget;
 		QGridLayout * _layout;
 		ParticleUniverse::DynamicAttribute * _value;
 		std::vector<QWidget *> _widgets;
+		QComboBox * _comboBox;
+		std::map<PropertyTypes, QDoubleSpinBox *> _values;
 
-	private:
 		void createGUI();
 	};
 

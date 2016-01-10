@@ -4,7 +4,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	SlaveBehaviourPropertyWindow::SlaveBehaviourPropertyWindow(QWidget * par, QString name) : BehaviourPropertyWindow(par, name) {
+	SlaveBehaviourPropertyWindow::SlaveBehaviourPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : BehaviourPropertyWindow(par, owner, name) {
 	}
 
 	SlaveBehaviourPropertyWindow::~SlaveBehaviourPropertyWindow() {

@@ -185,51 +185,51 @@ namespace widgets {
 		_propertyWindow = nullptr;
 
 		if (_type == CT_SYSTEM) {
-			SystemPropertyWindow * pWin = new SystemPropertyWindow(_parent, _name);
+			SystemPropertyWindow * pWin = new SystemPropertyWindow(_parent, this, _name);
 			_propertyWindow = pWin;
 		} else if (_type == CT_TECHNIQUE) {
-			_propertyWindow = new TechniquePropertyWindow(_parent, _name);
+			_propertyWindow = new TechniquePropertyWindow(_parent, this, _name);
 		} else if (_type == CT_RENDERER) {
 			if (propertyWindow) {
-				_propertyWindow = factories::RendererPropertyWindowFactory::createRendererPropertyWindow(_subType, static_cast<RendererPropertyWindow *>(_propertyWindow));
+				_propertyWindow = factories::RendererPropertyWindowFactory::createRendererPropertyWindow(_subType, this, static_cast<RendererPropertyWindow *>(_propertyWindow));
 			} else {
-				_propertyWindow = factories::RendererPropertyWindowFactory::createRendererPropertyWindow(_parent, _name, _subType);
+				_propertyWindow = factories::RendererPropertyWindowFactory::createRendererPropertyWindow(_parent, this, _name, _subType);
 			}
 		} else if (_type == CT_EMITTER) {
 			if (propertyWindow) {
-				_propertyWindow = factories::EmitterPropertyWindowFactory::createEmitterPropertyWindow(_subType, static_cast<EmitterPropertyWindow *>(_propertyWindow));
+				_propertyWindow = factories::EmitterPropertyWindowFactory::createEmitterPropertyWindow(_subType, this, static_cast<EmitterPropertyWindow *>(_propertyWindow));
 			} else {
-				_propertyWindow = factories::EmitterPropertyWindowFactory::createEmitterPropertyWindow(_parent, _name, _subType);
+				_propertyWindow = factories::EmitterPropertyWindowFactory::createEmitterPropertyWindow(_parent, this, _name, _subType);
 			}
 		} else if (_type == CT_AFFECTOR) {
 			if (propertyWindow) {
-				_propertyWindow = factories::AffectorPropertyWindowFactory::createAffectorPropertyWindow(_subType, static_cast<AffectorPropertyWindow *>(_propertyWindow));
+				_propertyWindow = factories::AffectorPropertyWindowFactory::createAffectorPropertyWindow(_subType, this, static_cast<AffectorPropertyWindow *>(_propertyWindow));
 			} else {
-				_propertyWindow = factories::AffectorPropertyWindowFactory::createAffectorPropertyWindow(_parent, _name, _subType);
+				_propertyWindow = factories::AffectorPropertyWindowFactory::createAffectorPropertyWindow(_parent, this, _name, _subType);
 			}
 		} else if (_type == CT_OBSERVER) {
 			if (propertyWindow) {
-				_propertyWindow = factories::ObserverPropertyWindowFactory::createObserverPropertyWindow(_subType, static_cast<ObserverPropertyWindow *>(_propertyWindow));
+				_propertyWindow = factories::ObserverPropertyWindowFactory::createObserverPropertyWindow(_subType, this, static_cast<ObserverPropertyWindow *>(_propertyWindow));
 			} else {
-				_propertyWindow = factories::ObserverPropertyWindowFactory::createObserverPropertyWindow(_parent, _name, _subType);
+				_propertyWindow = factories::ObserverPropertyWindowFactory::createObserverPropertyWindow(_parent, this, _name, _subType);
 			}
 		} else if (_type == CT_HANDLER) {
 			if (propertyWindow) {
-				_propertyWindow = factories::EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(_subType, static_cast<EventHandlerPropertyWindow *>(_propertyWindow));
+				_propertyWindow = factories::EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(_subType, this, static_cast<EventHandlerPropertyWindow *>(_propertyWindow));
 			} else {
-				_propertyWindow = factories::EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(_parent, _name, _subType);
+				_propertyWindow = factories::EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(_parent, this, _name, _subType);
 			}
 		} else if (_type == CT_BEHAVIOUR) {
 			if (propertyWindow) {
-				_propertyWindow = factories::BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(_subType, static_cast<BehaviourPropertyWindow *>(_propertyWindow));
+				_propertyWindow = factories::BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(_subType, this, static_cast<BehaviourPropertyWindow *>(_propertyWindow));
 			} else {
-				_propertyWindow = factories::BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(_parent, _name, _subType);
+				_propertyWindow = factories::BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(_parent, this, _name, _subType);
 			}
 		} else if (_type == CT_EXTERN) {
 			if (propertyWindow) {
-				_propertyWindow = factories::ExternPropertyWindowFactory::createExternPropertyWindow(_subType, static_cast<ExternPropertyWindow *>(_propertyWindow));
+				_propertyWindow = factories::ExternPropertyWindowFactory::createExternPropertyWindow(_subType, this, static_cast<ExternPropertyWindow *>(_propertyWindow));
 			} else {
-				_propertyWindow = factories::ExternPropertyWindowFactory::createExternPropertyWindow(_parent, _name, _subType);
+				_propertyWindow = factories::ExternPropertyWindowFactory::createExternPropertyWindow(_parent, this, _name, _subType);
 			}
 		}
 		return _propertyWindow;

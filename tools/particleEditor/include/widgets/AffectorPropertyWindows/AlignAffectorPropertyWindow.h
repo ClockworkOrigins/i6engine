@@ -17,7 +17,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		AlignAffectorPropertyWindow(QWidget * par, QString name = "");
+		AlignAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

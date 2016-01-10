@@ -14,6 +14,10 @@ namespace properties {
 	Property::~Property() {
 	}
 
+	void Property::triggerChangedSignal() {
+		emit changed(_label);
+	}
+
 } /* namespace properties */
 } /* namespace particleEditor */
 } /* namespace i6engine */

@@ -4,7 +4,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	FlockCenteringAffectorPropertyWindow::FlockCenteringAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	FlockCenteringAffectorPropertyWindow::FlockCenteringAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 	}
 
 	FlockCenteringAffectorPropertyWindow::~FlockCenteringAffectorPropertyWindow() {

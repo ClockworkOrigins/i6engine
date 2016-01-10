@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	DoEnableComponentEventHandlerPropertyWindow::DoEnableComponentEventHandlerPropertyWindow(QWidget * par, QString name) : EventHandlerPropertyWindow(par, name) {
+	DoEnableComponentEventHandlerPropertyWindow::DoEnableComponentEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ENABLE_COMPONENT_TRUE_FALSE = "Enable component";
 

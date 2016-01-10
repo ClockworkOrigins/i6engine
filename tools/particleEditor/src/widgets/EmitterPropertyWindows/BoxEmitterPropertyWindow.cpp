@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	BoxEmitterPropertyWindow::BoxEmitterPropertyWindow(QWidget * par, QString name) : EmitterPropertyWindow(par, name) {
+	BoxEmitterPropertyWindow::BoxEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_BOX_EMITTER_WIDTH = "Box width";
 		PRNL_BOX_EMITTER_HEIGHT = "Box height";

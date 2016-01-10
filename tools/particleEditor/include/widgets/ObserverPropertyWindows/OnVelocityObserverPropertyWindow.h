@@ -18,7 +18,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		OnVelocityObserverPropertyWindow(QWidget * par, QString name = "");
+		OnVelocityObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

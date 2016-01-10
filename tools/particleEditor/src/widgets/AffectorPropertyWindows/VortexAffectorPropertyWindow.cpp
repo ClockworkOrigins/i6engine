@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	VortexAffectorPropertyWindow::VortexAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	VortexAffectorPropertyWindow::VortexAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_X = ".x";
 		PRNL_Y = ".y";

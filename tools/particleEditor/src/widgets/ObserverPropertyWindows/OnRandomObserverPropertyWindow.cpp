@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	OnRandomObserverPropertyWindow::OnRandomObserverPropertyWindow(QWidget * par, QString name) : ObserverPropertyWindow(par, name) {
+	OnRandomObserverPropertyWindow::OnRandomObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ON_RANDOM_VALUE = "Random threshold";
 

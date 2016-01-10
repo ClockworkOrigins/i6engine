@@ -65,9 +65,14 @@ namespace properties {
 			assert(false);
 		}
 
+	signals:
+		void changed(QString);
+
 	protected:
 		QString _label;
 		QString _name;
+
+		void triggerChangedSignal();
 	};
 
 } /* namespace properties */

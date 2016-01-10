@@ -4,7 +4,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	DoExpireEventHandlerPropertyWindow::DoExpireEventHandlerPropertyWindow(QWidget * par, QString name) : EventHandlerPropertyWindow(par, name) {
+	DoExpireEventHandlerPropertyWindow::DoExpireEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 	}
 
 	DoExpireEventHandlerPropertyWindow::~DoExpireEventHandlerPropertyWindow() {

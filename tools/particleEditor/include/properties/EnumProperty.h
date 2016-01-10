@@ -27,7 +27,10 @@ namespace properties {
 
 		void setEnumString(QString value) override;
 
-	protected:
+	private slots:
+		void changedValue();
+
+	private:
 		QStringList _value;
 		QComboBox * _comboBox;
 	};

@@ -11,7 +11,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	BoxColliderExternPropertyWindow::BoxColliderExternPropertyWindow(QWidget * par, QString name) : ExternPropertyWindow(par, name) {
+	BoxColliderExternPropertyWindow::BoxColliderExternPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ExternPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		// TODO
 		PRNL_COLLIDER_FRICTION = "Friction";

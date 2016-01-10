@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	SphereColliderPropertyWindow::SphereColliderPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	SphereColliderPropertyWindow::SphereColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_SPHERE_COLLIDER_RADIUS = "Sphere radius";
 		PRNL_SPHERE_COLLIDER_INNER = "Inner Collision";

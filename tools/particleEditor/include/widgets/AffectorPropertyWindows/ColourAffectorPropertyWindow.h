@@ -23,7 +23,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		ColourAffectorPropertyWindow(QWidget * par, QString name = "");
+		ColourAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

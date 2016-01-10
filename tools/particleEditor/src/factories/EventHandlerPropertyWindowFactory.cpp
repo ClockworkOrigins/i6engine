@@ -17,25 +17,25 @@ namespace factories {
 	/**
 	Create a specific EventHandler Property Window
 	*/
-	widgets::EventHandlerPropertyWindow * EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(QWidget * parent, const QString & name, QString subType) {
+	widgets::EventHandlerPropertyWindow * EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(QWidget * parent, widgets::WidgetEditComponent * owner, const QString & name, QString subType) {
 		if (subType == widgets::CST_UNDEFINED) {
-			return new widgets::EventHandlerPropertyWindow(parent, name);
+			return new widgets::EventHandlerPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_HANDLER_DO_AFFECTOR) {
-			return new widgets::DoAffectorEventHandlerPropertyWindow(parent, name);
+			return new widgets::DoAffectorEventHandlerPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_HANDLER_DO_ENABLE_COMPONENT) {
-			return new widgets::DoEnableComponentEventHandlerPropertyWindow(parent, name);
+			return new widgets::DoEnableComponentEventHandlerPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_HANDLER_DO_EXPIRE) {
-			return new widgets::DoExpireEventHandlerPropertyWindow(parent, name);
+			return new widgets::DoExpireEventHandlerPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_HANDLER_DO_FREEZE) {
-			return new widgets::DoFreezeEventHandlerPropertyWindow(parent, name);
+			return new widgets::DoFreezeEventHandlerPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_HANDLER_DO_PLACEMENT_PARTICLE) {
-			return new widgets::DoPlacementParticleEventHandlerPropertyWindow(parent, name);
+			return new widgets::DoPlacementParticleEventHandlerPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_HANDLER_DO_SCALE) {
-			return new widgets::DoScaleEventHandlerPropertyWindow(parent, name);
+			return new widgets::DoScaleEventHandlerPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_HANDLER_DO_STOP_SYSTEM) {
-			return new widgets::DoStopSystemEventHandlerPropertyWindow(parent, name);
+			return new widgets::DoStopSystemEventHandlerPropertyWindow(parent, owner, name);
 		} else {
-			return new widgets::EventHandlerPropertyWindow(parent, name);
+			return new widgets::EventHandlerPropertyWindow(parent, owner, name);
 		}
 		return nullptr;
 	}
@@ -43,25 +43,25 @@ namespace factories {
 	/**
 	Create a specific EventHandler Property Window and propagate the attributes from the EventHandlerPropertyWindow
 	*/
-	widgets::EventHandlerPropertyWindow * EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(QString subType, widgets::EventHandlerPropertyWindow * eventHandlerPropertyWindow) {
+	widgets::EventHandlerPropertyWindow * EventHandlerPropertyWindowFactory::createEventHandlerPropertyWindow(QString subType, widgets::WidgetEditComponent * owner, widgets::EventHandlerPropertyWindow * eventHandlerPropertyWindow) {
 		if (subType == widgets::CST_UNDEFINED) {
-			return new widgets::EventHandlerPropertyWindow(eventHandlerPropertyWindow);
+			return new widgets::EventHandlerPropertyWindow(eventHandlerPropertyWindow, owner);
 		} else if (subType == widgets::CST_HANDLER_DO_AFFECTOR) {
-			return new widgets::DoAffectorEventHandlerPropertyWindow(eventHandlerPropertyWindow);
+			return new widgets::DoAffectorEventHandlerPropertyWindow(eventHandlerPropertyWindow, owner);
 		} else if (subType == widgets::CST_HANDLER_DO_ENABLE_COMPONENT) {
-			return new widgets::DoEnableComponentEventHandlerPropertyWindow(eventHandlerPropertyWindow);
+			return new widgets::DoEnableComponentEventHandlerPropertyWindow(eventHandlerPropertyWindow, owner);
 		} else if (subType == widgets::CST_HANDLER_DO_EXPIRE) {
-			return new widgets::DoExpireEventHandlerPropertyWindow(eventHandlerPropertyWindow);
+			return new widgets::DoExpireEventHandlerPropertyWindow(eventHandlerPropertyWindow, owner);
 		} else if (subType == widgets::CST_HANDLER_DO_FREEZE) {
-			return new widgets::DoFreezeEventHandlerPropertyWindow(eventHandlerPropertyWindow);
+			return new widgets::DoFreezeEventHandlerPropertyWindow(eventHandlerPropertyWindow, owner);
 		} else if (subType == widgets::CST_HANDLER_DO_PLACEMENT_PARTICLE) {
-			return new widgets::DoPlacementParticleEventHandlerPropertyWindow(eventHandlerPropertyWindow);
+			return new widgets::DoPlacementParticleEventHandlerPropertyWindow(eventHandlerPropertyWindow, owner);
 		} else if (subType == widgets::CST_HANDLER_DO_SCALE) {
-			return new widgets::DoScaleEventHandlerPropertyWindow(eventHandlerPropertyWindow);
+			return new widgets::DoScaleEventHandlerPropertyWindow(eventHandlerPropertyWindow, owner);
 		} else if (subType == widgets::CST_HANDLER_DO_STOP_SYSTEM) {
-			return new widgets::DoStopSystemEventHandlerPropertyWindow(eventHandlerPropertyWindow);
+			return new widgets::DoStopSystemEventHandlerPropertyWindow(eventHandlerPropertyWindow, owner);
 		} else {
-			return new widgets::EventHandlerPropertyWindow(eventHandlerPropertyWindow);
+			return new widgets::EventHandlerPropertyWindow(eventHandlerPropertyWindow, owner);
 		}
 		return nullptr;
 	}

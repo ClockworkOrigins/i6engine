@@ -29,7 +29,10 @@ namespace properties {
 
 		void setQuaternion(Quaternion value) override;
 
-	protected:
+	private slots:
+		void changedValue();
+
+	private:
 		QGridLayout * _layout;
 		Quaternion _value;
 		Vec3Property * _vec3Property;

@@ -21,7 +21,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		CircleEmitterPropertyWindow(QWidget * par, QString name = "");
+		CircleEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

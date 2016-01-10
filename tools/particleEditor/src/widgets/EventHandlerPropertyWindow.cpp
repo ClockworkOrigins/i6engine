@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	EventHandlerPropertyWindow::EventHandlerPropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+	EventHandlerPropertyWindow::EventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		CST_HANDLER_DO_AFFECTOR = HANDLER_DO_AFFECTOR;
 		CST_HANDLER_DO_ENABLE_COMPONENT = HANDLER_DO_ENABLE_COMPONENT;

@@ -12,7 +12,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	ObserverPropertyWindow::ObserverPropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+	ObserverPropertyWindow::ObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		CST_OBSERVER_ON_CLEAR = OBSERVER_ON_CLEAR;
 		CST_OBSERVER_ON_COLLISION = OBSERVER_ON_COLLISION;

@@ -12,7 +12,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	RendererPropertyWindow::RendererPropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+	RendererPropertyWindow::RendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		// Renderers
 		CST_RENDERER_BEAM = RENDERER_BEAM;

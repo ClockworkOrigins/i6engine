@@ -27,7 +27,10 @@ namespace properties {
 
 		void setVector3(ParticleUniverse::Vector3 value) override;
 
-	protected:
+	private slots:
+		void changedValue();
+
+	private:
 		ParticleUniverse::Vector3 _value;
 		QDoubleSpinBox * _doubleSpinBoxX;
 		QDoubleSpinBox * _doubleSpinBoxY;

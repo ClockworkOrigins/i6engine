@@ -25,7 +25,10 @@ namespace properties {
 
 		void setUInt(unsigned int value) override;
 
-	protected:
+	private slots:
+		void changedValue();
+
+	private:
 		unsigned int _value;
 		QSpinBox * _spinBox;
 	};

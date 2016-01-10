@@ -13,7 +13,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	AffectorPropertyWindow::AffectorPropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+	AffectorPropertyWindow::AffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		CST_AFFECTOR_ALIGN = AFFECTOR_ALIGN;
 		CST_AFFECTOR_BOX_COLLIDER = AFFECTOR_BOX_COLLIDER;

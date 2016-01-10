@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	VortexExternPropertyWindow::VortexExternPropertyWindow(QWidget * par, QString name) : ExternPropertyWindow(par, name) {
+	VortexExternPropertyWindow::VortexExternPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ExternPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		// TODO
 		PRNL_ROTATION_SPEED = "Rotation speed";

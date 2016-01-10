@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	ParticleFollowerPropertyWindow::ParticleFollowerPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	ParticleFollowerPropertyWindow::ParticleFollowerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_MIN_DISTANCE = "Minimum distance";
 		PRNL_MAX_DISTANCE = "Maximum distance";

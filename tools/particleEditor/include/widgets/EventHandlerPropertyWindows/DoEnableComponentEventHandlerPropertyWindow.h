@@ -17,7 +17,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		DoEnableComponentEventHandlerPropertyWindow(QWidget * par, QString name = "");
+		DoEnableComponentEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

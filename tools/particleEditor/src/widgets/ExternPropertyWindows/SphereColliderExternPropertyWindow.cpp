@@ -12,7 +12,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	SphereColliderExternPropertyWindow::SphereColliderExternPropertyWindow(QWidget * par, QString name) : ExternPropertyWindow(par, name) {
+	SphereColliderExternPropertyWindow::SphereColliderExternPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ExternPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		// TODO
 		PRNL_COLLIDER_FRICTION = "Friction";

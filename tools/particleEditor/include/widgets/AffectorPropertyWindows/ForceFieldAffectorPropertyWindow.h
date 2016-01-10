@@ -32,7 +32,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		ForceFieldAffectorPropertyWindow(QWidget * par, QString name = "");
+		ForceFieldAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

@@ -23,7 +23,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		TextureAnimatorPropertyWindow(QWidget * par, QString name = "");
+		TextureAnimatorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

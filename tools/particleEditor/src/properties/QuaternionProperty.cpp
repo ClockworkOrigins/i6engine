@@ -23,6 +23,7 @@ namespace properties {
 		widget->setLayout(_layout);
 		_vec3Property = new Vec3Property(widget, "Axis", "Axis", axis.toOgre());
 		_layout->addWidget(_vec3Property, 0, 0);
+		connect(_vec3Property, SIGNAL(changed(QString)), this, SLOT(changedValue()));
 
 		QLabel * l = new QLabel("Angle", widget);
 		_layout->addWidget(l, 1, 0);
@@ -31,6 +32,7 @@ namespace properties {
 		_doubleSpinBox->setMaximum(360.0);
 		_doubleSpinBox->setValue(angle);
 		_layout->addWidget(_doubleSpinBox, 2, 0);
+		connect(_doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));
 
 		horizontalLayout->addWidget(widget);
 	}
@@ -45,6 +47,10 @@ namespace properties {
 		value.toAxisAngle(axis, angle);
 		_vec3Property->setVector3(axis.toOgre());
 		_doubleSpinBox->setValue(angle);
+	}
+
+	void QuaternionProperty::changedValue() {
+		triggerChangedSignal();
 	}
 
 } /* namespace properties */

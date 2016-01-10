@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	OnTimeObserverPropertyWindow::OnTimeObserverPropertyWindow(QWidget * par, QString name) : ObserverPropertyWindow(par, name) {
+	OnTimeObserverPropertyWindow::OnTimeObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ON_TIME_COMPARE = "On time compare";
 		PRNL_ON_TIME_THRESHOLD = "On time threshold";

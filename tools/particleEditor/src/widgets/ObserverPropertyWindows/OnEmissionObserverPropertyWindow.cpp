@@ -4,7 +4,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	OnEmissionObserverPropertyWindow::OnEmissionObserverPropertyWindow(QWidget * par, QString name) : ObserverPropertyWindow(par, name) {
+	OnEmissionObserverPropertyWindow::OnEmissionObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 	}
 
 	OnEmissionObserverPropertyWindow::~OnEmissionObserverPropertyWindow() {

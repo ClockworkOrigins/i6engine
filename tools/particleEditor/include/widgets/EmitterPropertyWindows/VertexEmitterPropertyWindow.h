@@ -20,7 +20,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		VertexEmitterPropertyWindow(QWidget * par, QString name = "");
+		VertexEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

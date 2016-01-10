@@ -18,7 +18,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		SphereColliderPropertyWindow(QWidget * par, QString name = "");
+		SphereColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	JetAffectorPropertyWindow::JetAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	JetAffectorPropertyWindow::JetAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ACCELERATION = "Acceleration";
 

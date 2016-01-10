@@ -4,7 +4,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	SphereRendererPropertyWindow::SphereRendererPropertyWindow(QWidget * par, QString name) : RendererPropertyWindow(par, name) {
+	SphereRendererPropertyWindow::SphereRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : RendererPropertyWindow(par, owner, name) {
 	}
 
 	SphereRendererPropertyWindow::~SphereRendererPropertyWindow() {

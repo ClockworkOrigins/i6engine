@@ -11,7 +11,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	TextureAnimatorPropertyWindow::TextureAnimatorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	TextureAnimatorPropertyWindow::TextureAnimatorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ANIMATION_TYPE = "Animation type";
 		TAT_LOOP = "Loop";

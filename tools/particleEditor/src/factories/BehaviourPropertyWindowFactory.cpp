@@ -11,13 +11,13 @@ namespace factories {
 	/**
 	Create a specific Behaviour Property Window
 	*/
-	widgets::BehaviourPropertyWindow * BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(QWidget * parent, const QString & name, QString subType) {
+	widgets::BehaviourPropertyWindow * BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(QWidget * parent, widgets::WidgetEditComponent * owner, const QString & name, QString subType) {
 		if (subType == widgets::CST_UNDEFINED) {
-			return new widgets::BehaviourPropertyWindow(parent, name);
+			return new widgets::BehaviourPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_BEHAVIOUR_SLAVE) {
-			return new widgets::SlaveBehaviourPropertyWindow(parent, name);
+			return new widgets::SlaveBehaviourPropertyWindow(parent, owner, name);
 		} else {
-			return new widgets::BehaviourPropertyWindow(parent, name);
+			return new widgets::BehaviourPropertyWindow(parent, owner, name);
 		}
 		return nullptr;
 	}
@@ -25,13 +25,13 @@ namespace factories {
 	/**
 	Create a specific Behaviour Property Window and propagate the attributes from the BehaviourPropertyWindow
 	*/
-	widgets::BehaviourPropertyWindow * BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(QString subType, widgets::BehaviourPropertyWindow * behaviourPropertyWindow) {
+	widgets::BehaviourPropertyWindow * BehaviourPropertyWindowFactory::createBehaviourPropertyWindow(QString subType, widgets::WidgetEditComponent * owner, widgets::BehaviourPropertyWindow * behaviourPropertyWindow) {
 		if (subType == widgets::CST_UNDEFINED) {
-			return new widgets::BehaviourPropertyWindow(behaviourPropertyWindow);
+			return new widgets::BehaviourPropertyWindow(behaviourPropertyWindow, owner);
 		} else if (subType == widgets::CST_BEHAVIOUR_SLAVE) {
-			return new widgets::SlaveBehaviourPropertyWindow(behaviourPropertyWindow);
+			return new widgets::SlaveBehaviourPropertyWindow(behaviourPropertyWindow, owner);
 		} else {
-			return new widgets::BehaviourPropertyWindow(behaviourPropertyWindow);
+			return new widgets::BehaviourPropertyWindow(behaviourPropertyWindow, owner);
 		}
 		return nullptr;
 	}

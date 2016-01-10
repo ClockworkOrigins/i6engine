@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	LinearForceAffectorPropertyWindow::LinearForceAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	LinearForceAffectorPropertyWindow::LinearForceAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_FORCE_VECTOR = "Force vector";
 		PRNL_LINEAR_FORCE_APPLICATION = "Application";

@@ -27,7 +27,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		DoPlacementParticleEventHandlerPropertyWindow(QWidget * par, QString name = "");
+		DoPlacementParticleEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

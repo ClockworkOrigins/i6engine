@@ -42,7 +42,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		BillboardRendererPropertyWindow(QWidget * par, QString name = "");
+		BillboardRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

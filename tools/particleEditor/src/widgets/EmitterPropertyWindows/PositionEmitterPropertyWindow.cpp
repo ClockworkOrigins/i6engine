@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	PositionEmitterPropertyWindow::PositionEmitterPropertyWindow(QWidget * par, QString name) : EmitterPropertyWindow(par, name) {
+	PositionEmitterPropertyWindow::PositionEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_POSITION_EMITTER_POSITION = "Add particle position";
 		PRNL_POSITION_EMITTER_RANDOMIZE = "Position randomize";

@@ -4,7 +4,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	BoxRendererPropertyWindow::BoxRendererPropertyWindow(QWidget * par, QString name) : RendererPropertyWindow(par, name) {
+	BoxRendererPropertyWindow::BoxRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : RendererPropertyWindow(par, owner, name) {
 	}
 
 	BoxRendererPropertyWindow::~BoxRendererPropertyWindow() {

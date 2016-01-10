@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	ExternPropertyWindow::ExternPropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+	ExternPropertyWindow::ExternPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		CST_EXTERN_BOX_COLLIDER = EXTERN_BOX_COLLIDER;
 		CST_EXTERN_SPHERE_COLLIDER = EXTERN_SPHERE_COLLIDER;

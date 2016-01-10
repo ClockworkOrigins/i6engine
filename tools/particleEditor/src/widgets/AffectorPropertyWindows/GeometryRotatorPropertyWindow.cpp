@@ -10,7 +10,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	GeometryRotatorPropertyWindow::GeometryRotatorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	GeometryRotatorPropertyWindow::GeometryRotatorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ROTATION_SPEED = "Rotation speed";
 		PRNL_ROTATION_AXIS = "Rotation axis";

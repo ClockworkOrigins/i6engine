@@ -20,7 +20,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		ScaleAffectorPropertyWindow(QWidget * par, QString name = "");
+		ScaleAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

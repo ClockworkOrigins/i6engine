@@ -38,7 +38,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		TechniquePropertyWindow(QWidget * par, QString name);
+		TechniquePropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name);
 
 		/**
 		 * \brief destructor

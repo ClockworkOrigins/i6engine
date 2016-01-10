@@ -12,7 +12,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	TechniquePropertyWindow::TechniquePropertyWindow(QWidget * par, QString name) : PropertyWindow(par, name) {
+	TechniquePropertyWindow::TechniquePropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_TECHNIQUE_ENABLED = "Enabled";
 		PRNL_TECHNIQUE_POSITION = "Position";

@@ -25,6 +25,9 @@ namespace properties {
 
 		void setBool(bool value) override;
 
+	private slots:
+		void boolChanged();
+
 	protected:
 		bool _value;
 		QCheckBox * _checkBox;

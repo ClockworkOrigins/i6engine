@@ -27,8 +27,9 @@ namespace properties {
 
 	private slots:
 		void addPosition();
+		void changedValue();
 
-	protected:
+	private:
 		QVBoxLayout * _layout;
 		std::vector<Vec3Property *> _positions;
 	};

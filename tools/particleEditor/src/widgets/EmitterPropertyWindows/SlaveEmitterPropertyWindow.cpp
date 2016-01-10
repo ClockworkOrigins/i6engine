@@ -4,7 +4,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	SlaveEmitterPropertyWindow::SlaveEmitterPropertyWindow(QWidget * par, QString name) : EmitterPropertyWindow(par, name) {
+	SlaveEmitterPropertyWindow::SlaveEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 	}
 
 	SlaveEmitterPropertyWindow::~SlaveEmitterPropertyWindow() {

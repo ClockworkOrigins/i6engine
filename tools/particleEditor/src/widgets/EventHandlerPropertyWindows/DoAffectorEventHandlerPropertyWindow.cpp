@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	DoAffectorEventHandlerPropertyWindow::DoAffectorEventHandlerPropertyWindow(QWidget * par, QString name) : EventHandlerPropertyWindow(par, name) {
+	DoAffectorEventHandlerPropertyWindow::DoAffectorEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_PRE_POST = "Perform pre/post processing";
 

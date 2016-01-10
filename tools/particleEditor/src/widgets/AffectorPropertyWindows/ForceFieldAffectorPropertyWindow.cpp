@@ -12,7 +12,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	ForceFieldAffectorPropertyWindow::ForceFieldAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	ForceFieldAffectorPropertyWindow::ForceFieldAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_AFFECTOR_FORCEFIELD_FF_TYPE = "Forcefield type";
 		FORCEFIELD_REALTIME = "Realtime";

@@ -23,6 +23,9 @@ namespace properties {
 
 		void setString(QString value) override;
 
+	private slots:
+		void stringChanged(QString value);
+
 	protected:
 		QString _value;
 		QLineEdit * _lineEdit;

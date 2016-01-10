@@ -11,7 +11,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	RibbonTrailRendererPropertyWindow::RibbonTrailRendererPropertyWindow(QWidget * par, QString name) : RendererPropertyWindow(par, name) {
+	RibbonTrailRendererPropertyWindow::RibbonTrailRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : RendererPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_RENDERER_TYPE = "Renderer type";
 		PRNL_USE_VERTEX_COLOURS = "Use vertex colours";

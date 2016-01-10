@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	ColourAffectorPropertyWindow::ColourAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	ColourAffectorPropertyWindow::ColourAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_TIME_AND_COLOUR = "Time and Colour";
 		PRNL_TIME_AND_COLOUR_PARENT = "Time/Colour";

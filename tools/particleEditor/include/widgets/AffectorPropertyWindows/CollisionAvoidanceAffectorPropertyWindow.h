@@ -17,7 +17,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		CollisionAvoidanceAffectorPropertyWindow(QWidget * par, QString name = "");
+		CollisionAvoidanceAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

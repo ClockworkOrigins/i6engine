@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	EntityRendererPropertyWindow::EntityRendererPropertyWindow(QWidget * par, QString name) : RendererPropertyWindow(par, name) {
+	EntityRendererPropertyWindow::EntityRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : RendererPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_RENDERER_TYPE = "Renderer type";
 		PRNL_ORIENTATION_TYPE = "Orientation type";

@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	DoPlacementParticleEventHandlerPropertyWindow::DoPlacementParticleEventHandlerPropertyWindow(QWidget * par, QString name) : EventHandlerPropertyWindow(par, name) {
+	DoPlacementParticleEventHandlerPropertyWindow::DoPlacementParticleEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_NUMBER_OF_PARTICLES = "Number of particles";
 		PRNL_INHERIT_POSITION = "Inherit position";

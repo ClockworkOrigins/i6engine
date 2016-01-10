@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	AlignAffectorPropertyWindow::AlignAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	AlignAffectorPropertyWindow::AlignAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		PRNL_AFFECTOR_ALIGN_RESIZE = "Resize";
 
 		// Resize: bool

@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	OnPositionObserverPropertyWindow::OnPositionObserverPropertyWindow(QWidget * par, QString name) : ObserverPropertyWindow(par, name) {
+	OnPositionObserverPropertyWindow::OnPositionObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ON_POSITION_X_COMPARE = "Position compare x";
 		PRNL_ON_POSITION_Y_COMPARE = "Position compare y";

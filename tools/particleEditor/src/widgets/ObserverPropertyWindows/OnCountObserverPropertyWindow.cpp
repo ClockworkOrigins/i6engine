@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	OnCountObserverPropertyWindow::OnCountObserverPropertyWindow(QWidget * par, QString name) : ObserverPropertyWindow(par, name) {
+	OnCountObserverPropertyWindow::OnCountObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_ON_COUNT_COMPARE = "On count compare";
 		PRNL_ON_COUNT_THRESHOLD = "On count threshold";

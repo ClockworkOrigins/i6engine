@@ -10,6 +10,7 @@ namespace properties {
 		_comboBox = new QComboBox(this);
 		horizontalLayout->addWidget(_comboBox);
 		_comboBox->addItems(_value);
+		connect(_comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changedValue()));
 	}
 
 	EnumProperty::~EnumProperty() {
@@ -21,6 +22,10 @@ namespace properties {
 
 	void EnumProperty::setEnumString(QString value) {
 		_comboBox->setCurrentText(value);
+	}
+
+	void EnumProperty::changedValue() {
+		triggerChangedSignal();
 	}
 
 } /* namespace properties */

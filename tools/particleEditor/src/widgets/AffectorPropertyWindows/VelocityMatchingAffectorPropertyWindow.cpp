@@ -8,7 +8,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	VelocityMatchingAffectorPropertyWindow::VelocityMatchingAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	VelocityMatchingAffectorPropertyWindow::VelocityMatchingAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_VELOCITY_MATCHING_RADIUS = "Velocity matching radius";
 

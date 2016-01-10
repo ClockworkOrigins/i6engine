@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	LineAffectorPropertyWindow::LineAffectorPropertyWindow(QWidget * par, QString name) : AffectorPropertyWindow(par, name) {
+	LineAffectorPropertyWindow::LineAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		PRNL_END = "End position";
 		PRNL_DRIFT = "Drift";

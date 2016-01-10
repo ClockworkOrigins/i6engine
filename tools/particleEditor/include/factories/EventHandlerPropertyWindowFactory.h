@@ -7,13 +7,14 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 	class EventHandlerPropertyWindow;
+	class WidgetEditComponent;
 } /* namespace widgets */
 namespace factories {
 
 	class EventHandlerPropertyWindowFactory {
 	public:
-		static widgets::EventHandlerPropertyWindow * createEventHandlerPropertyWindow(QWidget * parent, const QString & name, QString subType);
-		static widgets::EventHandlerPropertyWindow * createEventHandlerPropertyWindow(QString subType, widgets::EventHandlerPropertyWindow * rendererPropertyWindow);
+		static widgets::EventHandlerPropertyWindow * createEventHandlerPropertyWindow(QWidget * parent, widgets::WidgetEditComponent * owner, const QString & name, QString subType);
+		static widgets::EventHandlerPropertyWindow * createEventHandlerPropertyWindow(QString subType, widgets::WidgetEditComponent * owner, widgets::EventHandlerPropertyWindow * rendererPropertyWindow);
 	};
 
 } /* namespace factories */

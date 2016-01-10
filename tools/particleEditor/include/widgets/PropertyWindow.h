@@ -21,6 +21,8 @@ namespace properties {
 } /* namespace properties */
 namespace widgets {
 
+	class WidgetEditComponent;
+
 	// Dynamic Attributes
 	static QString DYN_FIXED = "";
 	static QString DYN_RANDOM = "";
@@ -100,7 +102,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		PropertyWindow(QWidget * par, QString name);
+		PropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name);
 
 		/**
 		 * \brief destructor
@@ -129,7 +131,13 @@ namespace widgets {
 		void setVector3(QString name, ParticleUniverse::Vector3 value);
 		void setVector3List(QString name, std::vector<ParticleUniverse::Vector3> value);
 
+		virtual void changedProperty(properties::Property * prop, QString name);
+
+	private slots:
+		void changedProperty(QString name);
+
 	private:
+		WidgetEditComponent * _owner;
 		QString _name;
 		QStringList _types;
 		std::map<QString, properties::Property *> _properties;

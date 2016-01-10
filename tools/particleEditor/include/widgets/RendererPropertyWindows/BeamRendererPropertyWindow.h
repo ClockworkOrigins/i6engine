@@ -23,7 +23,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		BeamRendererPropertyWindow(QWidget * par, QString name = "");
+		BeamRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor

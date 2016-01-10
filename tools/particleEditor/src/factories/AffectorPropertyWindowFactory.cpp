@@ -34,59 +34,59 @@ namespace factories {
 	/**
 	Create a specific Affector Property Window
 	*/
-	widgets::AffectorPropertyWindow * AffectorPropertyWindowFactory::createAffectorPropertyWindow(QWidget * parent, const QString & name, QString subType) {
+	widgets::AffectorPropertyWindow * AffectorPropertyWindowFactory::createAffectorPropertyWindow(QWidget * parent, widgets::WidgetEditComponent * owner, const QString & name, QString subType) {
 		if (subType == widgets::CST_UNDEFINED) {
-			return new widgets::AffectorPropertyWindow(parent, name);
+			return new widgets::AffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_ALIGN) {
-			return new widgets::AlignAffectorPropertyWindow(parent, name);
+			return new widgets::AlignAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_BOX_COLLIDER) {
-			return new widgets::BoxColliderPropertyWindow(parent, name);
+			return new widgets::BoxColliderPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_COLLISION_AVOIDANCE) {
-			return new widgets::CollisionAvoidanceAffectorPropertyWindow(parent, name);
+			return new widgets::CollisionAvoidanceAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_COLOUR) {
-			return new widgets::ColourAffectorPropertyWindow(parent, name);
+			return new widgets::ColourAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_FLOCK_CENTERING) {
-			return new widgets::FlockCenteringAffectorPropertyWindow(parent, name);
+			return new widgets::FlockCenteringAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_FORCEFIELD) {
-			return new widgets::ForceFieldAffectorPropertyWindow(parent, name);
+			return new widgets::ForceFieldAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_GEOMETRY_ROTATOR) {
-			return new widgets::GeometryRotatorPropertyWindow(parent, name);
+			return new widgets::GeometryRotatorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_GRAVITY) {
-			return new widgets::GravityAffectorPropertyWindow(parent, name);
+			return new widgets::GravityAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_INTER_PARTICLE_COLLIDER) {
-			return new widgets::InterParticleColliderPropertyWindow(parent, name);
+			return new widgets::InterParticleColliderPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_JET) {
-			return new widgets::JetAffectorPropertyWindow(parent, name);
+			return new widgets::JetAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_LINE) {
-			return new widgets::LineAffectorPropertyWindow(parent, name);
+			return new widgets::LineAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_LINEAR_FORCE) {
-			return new widgets::LinearForceAffectorPropertyWindow(parent, name);
+			return new widgets::LinearForceAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_PARTICLE_FOLLOWER) {
-			return new widgets::ParticleFollowerPropertyWindow(parent, name);
+			return new widgets::ParticleFollowerPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_PATH_FOLLOWER) {
-			return new widgets::PathFollowerPropertyWindow(parent, name);
+			return new widgets::PathFollowerPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_PLANE_COLLIDER) {
-			return new widgets::PlaneColliderPropertyWindow(parent, name);
+			return new widgets::PlaneColliderPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_RANDOMISER) {
-			return new widgets::RandomiserPropertyWindow(parent, name);
+			return new widgets::RandomiserPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_SCALE) {
-			return new widgets::ScaleAffectorPropertyWindow(parent, name);
+			return new widgets::ScaleAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_SCALE_VELOCITY) {
-			return new widgets::ScaleVelocityAffectorPropertyWindow(parent, name);
+			return new widgets::ScaleVelocityAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_SINE_FORCE) {
-			return new widgets::SineForceAffectorPropertyWindow(parent, name);
+			return new widgets::SineForceAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_SPHERE_COLLIDER) {
-			return new widgets::SphereColliderPropertyWindow(parent, name);
+			return new widgets::SphereColliderPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_TEXTURE_ANIMATOR) {
-			return new widgets::TextureAnimatorPropertyWindow(parent, name);
+			return new widgets::TextureAnimatorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_TEXTURE_ROTATOR) {
-			return new widgets::TextureRotatorPropertyWindow(parent, name);
+			return new widgets::TextureRotatorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_VELOCITY_MATCHING) {
-			return new widgets::VelocityMatchingAffectorPropertyWindow(parent, name);
+			return new widgets::VelocityMatchingAffectorPropertyWindow(parent, owner, name);
 		} else if (subType == widgets::CST_AFFECTOR_VORTEX) {
-			return new widgets::VortexAffectorPropertyWindow(parent, name);
+			return new widgets::VortexAffectorPropertyWindow(parent, owner, name);
 		} else {
-			return new widgets::AffectorPropertyWindow(parent, name);
+			return new widgets::AffectorPropertyWindow(parent, owner, name);
 		}
 		return nullptr;
 	};
@@ -94,59 +94,59 @@ namespace factories {
 	/**
 	Create a specific Affector Property Window and propagate the attributes from the AffectorPropertyWindow
 	*/
-	widgets::AffectorPropertyWindow * AffectorPropertyWindowFactory::createAffectorPropertyWindow(QString subType, widgets::AffectorPropertyWindow * affectorPropertyWindow) {
+	widgets::AffectorPropertyWindow * AffectorPropertyWindowFactory::createAffectorPropertyWindow(QString subType, widgets::WidgetEditComponent * owner, widgets::AffectorPropertyWindow * affectorPropertyWindow) {
 		if (subType == widgets::CST_UNDEFINED) {
-			return new widgets::AffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::AffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_ALIGN) {
-			return new widgets::AlignAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::AlignAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_BOX_COLLIDER) {
-			return new widgets::BoxColliderPropertyWindow(affectorPropertyWindow);
+			return new widgets::BoxColliderPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_COLLISION_AVOIDANCE) {
-			return new widgets::CollisionAvoidanceAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::CollisionAvoidanceAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_COLOUR) {
-			return new widgets::ColourAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::ColourAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_FLOCK_CENTERING) {
-			return new widgets::FlockCenteringAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::FlockCenteringAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_FORCEFIELD) {
-			return new widgets::ForceFieldAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::ForceFieldAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_GEOMETRY_ROTATOR) {
-			return new widgets::GeometryRotatorPropertyWindow(affectorPropertyWindow);
+			return new widgets::GeometryRotatorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_GRAVITY) {
-			return new widgets::GravityAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::GravityAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_INTER_PARTICLE_COLLIDER) {
-			return new widgets::InterParticleColliderPropertyWindow(affectorPropertyWindow);
+			return new widgets::InterParticleColliderPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_JET) {
-			return new widgets::JetAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::JetAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_LINE) {
-			return new widgets::LineAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::LineAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_LINEAR_FORCE) {
-			return new widgets::LinearForceAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::LinearForceAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_PARTICLE_FOLLOWER) {
-			return new widgets::ParticleFollowerPropertyWindow(affectorPropertyWindow);
+			return new widgets::ParticleFollowerPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_PATH_FOLLOWER) {
-			return new widgets::PathFollowerPropertyWindow(affectorPropertyWindow);
+			return new widgets::PathFollowerPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_PLANE_COLLIDER) {
-			return new widgets::PlaneColliderPropertyWindow(affectorPropertyWindow);
+			return new widgets::PlaneColliderPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_RANDOMISER) {
-			return new widgets::RandomiserPropertyWindow(affectorPropertyWindow);
+			return new widgets::RandomiserPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_SCALE) {
-			return new widgets::ScaleAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::ScaleAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_SCALE_VELOCITY) {
-			return new widgets::ScaleVelocityAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::ScaleVelocityAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_SINE_FORCE) {
-			return new widgets::SineForceAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::SineForceAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_SPHERE_COLLIDER) {
-			return new widgets::SphereColliderPropertyWindow(affectorPropertyWindow);
+			return new widgets::SphereColliderPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_TEXTURE_ANIMATOR) {
-			return new widgets::TextureAnimatorPropertyWindow(affectorPropertyWindow);
+			return new widgets::TextureAnimatorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_TEXTURE_ROTATOR) {
-			return new widgets::TextureRotatorPropertyWindow(affectorPropertyWindow);
+			return new widgets::TextureRotatorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_VELOCITY_MATCHING) {
-			return new widgets::VelocityMatchingAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::VelocityMatchingAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else if (subType == widgets::CST_AFFECTOR_VORTEX) {
-			return new widgets::VortexAffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::VortexAffectorPropertyWindow(affectorPropertyWindow, owner);
 		} else {
-			return new widgets::AffectorPropertyWindow(affectorPropertyWindow);
+			return new widgets::AffectorPropertyWindow(affectorPropertyWindow, owner);
 		}
 		return nullptr;
 	};

@@ -19,7 +19,7 @@ namespace widgets {
 		/**
 		 * \brief constructor
 		 */
-		BoxEmitterPropertyWindow(QWidget * par, QString name = "");
+		BoxEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name = "");
 
 		/**
 		 * \brief destructor
