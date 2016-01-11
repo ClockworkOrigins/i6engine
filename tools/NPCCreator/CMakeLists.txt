@@ -35,18 +35,21 @@ set(NPCCreatorSrc
 	${srcdir}/widgets/MainWindow.cpp
 	${srcdir}/widgets/NPCEditWidget.cpp
 	${srcdir}/widgets/NPCListWidget.cpp
+	${srcdir}/widgets/NPCRenderWidget.cpp
 )
 
 QT5_WRAP_UI(NPCCreatorUI
 	gui/wndMainWindow.ui
 	gui/widgetNPCEdit.ui
 	gui/widgetNPCList.ui
+	gui/widgetNPCRender.ui
 )
 
 QT5_WRAP_CPP(NPCCreatorGuiHeader
 	${includedir}/widgets/MainWindow.h
 	${includedir}/widgets/NPCEditWidget.h
 	${includedir}/widgets/NPCListWidget.h
+	${includedir}/widgets/NPCRenderWidget.h
 )
 
 SOURCE_GROUP(moc /moc_*)

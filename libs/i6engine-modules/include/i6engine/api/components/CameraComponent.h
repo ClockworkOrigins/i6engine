@@ -37,7 +37,7 @@ namespace api {
 	 * | pos | yes | Vec3 | relative position of camera to SceneNode | yes |
 	 * | lookAt | yes | Vec3 | absolute look at position in the world | yes |
 	 * | nearclip | yes | double | near clipping distance | yes |
-	 * | aspect | yes | double | aspect ration of the camera | yes |
+	 * | aspect | no | double | aspect ration of the camera | yes |
 	 * | viewport | no | bool | defines whether this camera has a viewport or not | yes |
 	 * | zOrder | *) | int | relative position on the screen depending on other viewports (has to be unique), *) required when viewport true | yes |
 	 * | vp_left | *) | double | left startpoint of the viewport, value between 0 and 1, *) required when viewport true | yes |

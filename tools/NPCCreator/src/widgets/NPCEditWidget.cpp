@@ -1,5 +1,10 @@
 #include "widgets/NPCEditWidget.h"
 
+#include "i6engine/api/EngineController.h"
+#include "i6engine/api/facades/ObjectFacade.h"
+
+#include "i6engine/rpg/npc/NPCManager.h"
+
 #include "widgets/MainWindow.h"
 #include "widgets/NPCListWidget.h"
 
@@ -84,6 +89,9 @@ namespace widgets {
 	}
 
 	void NPCEditWidget::parseNPC(const std::vector<std::pair<std::string, std::string>> & npcFileList, int index) {
+		// start with removing of old NPC, can be done in parallel to the rest
+		api::EngineController::GetSingleton().getObjectFacade()->deleteAllObjectsOfType("NPC");
+
 		std::string file = npcFileList[index].second;
 		tinyxml2::XMLDocument doc;
 		if (doc.LoadFile(file.c_str())) {
@@ -156,6 +164,9 @@ namespace widgets {
 		_currentIdentifier = QString::fromStdString(npcFileList[index].first);
 		_currentFile = file;
 		_npcFileList = npcFileList;
+
+		// load new NPC
+		rpg::npc::NPCManager::GetSingleton().createNPC(identifierLineEdit->text().toStdString(), Vec3::ZERO, Quaternion::IDENTITY, false);
 	}
 
 	void NPCEditWidget::saveToFile(const std::string & file) {

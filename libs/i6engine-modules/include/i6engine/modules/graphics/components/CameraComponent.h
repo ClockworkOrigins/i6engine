@@ -68,14 +68,14 @@ namespace modules {
 		/**
 		 * \brief Create a new CameraComponent
 		 */
-		CameraComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov);
+		CameraComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, double aspect, const double fov);
 
 		/**
 		 * \brief ~CameraComponent
 		 */
 		~CameraComponent();
 
-		void updateCameraComponent(const Vec3 & position, const Vec3 & lookAt, const double nC, const double fov);
+		void updateCameraComponent(const Vec3 & position, const Vec3 & lookAt, const double nC, double aspect, const double fov);
 
 		/**
 		 * \brief Updates the camera frustum

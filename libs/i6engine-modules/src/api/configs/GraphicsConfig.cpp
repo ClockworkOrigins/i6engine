@@ -50,11 +50,11 @@ namespace graphics {
 	Graphics_Camera_Create::Graphics_Camera_Create() : GameMessageStruct() {}
 	Graphics_Camera_Create::Graphics_Camera_Create(const int64_t i) : GameMessageStruct(i, -1) {
 	}
-	Graphics_Camera_Create::Graphics_Camera_Create(const int64_t goID, const int64_t coID, const Vec3 & p, const Vec3 & l, const double nc, double fo) : GameMessageStruct(coID, goID), pos(p), look(l), nearClip(nc), fov(fo) {
+	Graphics_Camera_Create::Graphics_Camera_Create(const int64_t goID, const int64_t coID, const Vec3 & p, const Vec3 & l, const double nc, double a, double fo) : GameMessageStruct(coID, goID), pos(p), look(l), nearClip(nc), aspect(a), fov(fo) {
 	}
 
 	Graphics_Camera_Update::Graphics_Camera_Update() : GameMessageStruct() {}
-	Graphics_Camera_Update::Graphics_Camera_Update(const int64_t goid, const int64_t cid, const Vec3 & p, const Vec3 & l, const double nc, const double fo) : GameMessageStruct(cid, goid), pos(p), look(l), nearClip(nc), fov(fo) {
+	Graphics_Camera_Update::Graphics_Camera_Update(const int64_t goid, const int64_t cid, const Vec3 & p, const Vec3 & l, const double nc, double a, const double fo) : GameMessageStruct(cid, goid), pos(p), look(l), nearClip(nc), aspect(a), fov(fo) {
 	}
 
 	Graphics_Camera_Delete::Graphics_Camera_Delete() : GameMessageStruct() {}
