@@ -541,6 +541,7 @@ ENDIF(WIN32)
 
 # set symlinks if it is an out-of-source-build
 IF(NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+	FILE(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/media/*)
 	execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/media ${CMAKE_BINARY_DIR}/media)
 ENDIF(NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 
