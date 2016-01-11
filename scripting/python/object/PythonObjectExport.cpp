@@ -61,8 +61,8 @@ namespace object {
 
 	boost::python::list getAllObjectsOfType(const std::string & types) {
 		boost::python::list l;
-		std::list<i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
-		for (std::list<i6engine::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
+		std::vector<i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
+		for (std::vector<i6engine::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
 			l.append(*it);
 		}
 		return l;
@@ -74,9 +74,9 @@ namespace object {
 
 	boost::python::list getGOList() {
 		boost::python::list l;
-		std::list<i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOList();
-		for (std::list<i6engine::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
-			l.append(*it);
+		std::unordered_map<int64_t, i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap();
+		for (std::unordered_map<int64_t, i6engine::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
+			l.append(it->second);
 		}
 		return l;
 	}

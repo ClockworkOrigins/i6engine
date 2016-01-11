@@ -33,11 +33,11 @@
 namespace i6engine {
 namespace api {
 
-	ObjectFacade::ObjectFacade() : _GOList(), _lock(), _notify(), _addTicker(), _removeTicker(), _loadLevelLock(), _loadLevelCondVar(), _templateList() {
+	ObjectFacade::ObjectFacade() : _GOMap(), _lock(), _notify(), _addTicker(), _removeTicker(), _loadLevelLock(), _loadLevelCondVar(), _templateList() {
 	}
 
 	ObjectFacade::~ObjectFacade() {
-		_GOList.clear();
+		_GOMap.clear();
 	}
 
 	void ObjectFacade::cleanUpAll() const {
@@ -47,38 +47,31 @@ namespace api {
 	}
 
 	GOPtr ObjectFacade::getObject(const int64_t goid) const {
-		_lock.lock();
-		auto copy = _GOList;
-		_lock.unlock();
-		// Iterate through _GOList
-		for (std::list<GOPtr>::const_iterator it = copy.begin(); it != copy.end(); ++it) {
-			// Wanted GameObject found
-			if ((*it)->getID() == goid) {
-				// Return a pointer to the wanted GameObject
-				return *it;
-			}
+		boost::mutex::scoped_lock sl(_lock);
+		auto it = _GOMap.find(goid);
+		if (it != _GOMap.end()) {
+			return it->second;
 		}
-
 		// Not found, return nullptr
 		return GOPtr();
 	}
 
-	std::list<GOPtr> ObjectFacade::getAllObjectsOfType(const std::string & types) const {
+	std::vector<GOPtr> ObjectFacade::getAllObjectsOfType(const std::string & types) const {
 		return getAllObjectsOfType(utils::split(types, ";"));
 	}
 
-	std::list<GOPtr> ObjectFacade::getAllObjectsOfType(const std::vector<std::string> & types) const {
-		std::list<GOPtr> all;
+	std::vector<GOPtr> ObjectFacade::getAllObjectsOfType(const std::vector<std::string> & types) const {
+		std::vector<GOPtr> all;
 
 		_lock.lock();
-		auto copy = _GOList;
+		auto copy = _GOMap;
 		_lock.unlock();
 		// Iterate through _GOList
-		for (std::list<GOPtr>::const_iterator it = copy.begin(); it != copy.end(); ++it) {
+		for (std::unordered_map<int64_t, GOPtr>::const_iterator it = copy.begin(); it != copy.end(); ++it) {
 			// Wanted GameObject found
 			for (const std::string & type : types) {
-				if ((*it)->getType() == type) {
-					all.push_back(*it);
+				if (it->second->getType() == type) {
+					all.push_back(it->second);
 					break;
 				}
 			}
@@ -87,9 +80,9 @@ namespace api {
 		return all;
 	}
 
-	std::list<GOPtr> ObjectFacade::getGOList() const {
+	std::unordered_map<int64_t, GOPtr> ObjectFacade::getGOMap() const {
 		boost::mutex::scoped_lock sl(_lock);
-		return _GOList;
+		return _GOMap;
 	}
 
 	void ObjectFacade::deleteAllObjectsOfType(const std::string & type) const {
@@ -145,9 +138,9 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComCreate, core::Method::Create, new components::Component_Create_Create(goid, coid, core::IPKey(), component, params), core::Subsystem::Unknown));
 	}
 
-	void ObjectFacade::updateGOList(const std::list<GOPtr> & GOList) {
+	void ObjectFacade::updateGOMap(const std::unordered_map<int64_t, GOPtr> & GOMap) {
 		boost::mutex::scoped_lock sl(_lock);
-		_GOList = GOList;
+		_GOMap = GOMap;
 	}
 
 	void ObjectFacade::sendConditionalMessage(const GameMessage::Ptr & m, const boost::function<bool(const GOPtr &)> & f, bool sync, uint32_t compFamID) const {

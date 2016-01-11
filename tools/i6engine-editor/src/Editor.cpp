@@ -195,16 +195,16 @@ namespace editor {
 
 		std::map<std::string, std::vector<api::GOPtr>> sectionMap;
 
-		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
-			if (go->getType() == "EditorCam") {
+		for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOMap()) {
+			if (p.second->getType() == "EditorCam") {
 				continue;
 			}
 			std::string flagString;
 
-			for (size_t i = 0; i < go->getFlags().size(); i++) {
-				flagString += go->getFlags()[i];
+			for (size_t i = 0; i < p.second->getFlags().size(); i++) {
+				flagString += p.second->getFlags()[i];
 
-				if (i < go->getFlags().size() - 1) {
+				if (i < p.second->getFlags().size() - 1) {
 					flagString += "|";
 				}
 			}
@@ -213,7 +213,7 @@ namespace editor {
 				sectionMap.insert(std::make_pair(flagString, std::vector<api::GOPtr>()));
 			}
 
-			sectionMap[flagString].push_back(go);
+			sectionMap[flagString].push_back(p.second);
 		}
 
 		for (auto & p : sectionMap) {

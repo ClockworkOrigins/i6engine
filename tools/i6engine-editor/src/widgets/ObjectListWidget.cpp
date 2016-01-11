@@ -23,9 +23,9 @@ namespace widgets {
 
 	void ObjectListWidget::doUpdateObjectList() {
 		QStringList list;
-		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getGOList()) {
-			if (go->getType() != "EditorCam") {
-				list.append(QString::fromStdString(go->getType()));
+		for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOMap()) {
+			if (p.second->getType() != "EditorCam") {
+				list.append(QString::fromStdString(p.second->getType()));
 			}
 		}
 		QStringListModel * model = new QStringListModel(listView);
@@ -34,11 +34,11 @@ namespace widgets {
 	}
 
 	void ObjectListWidget::selectIndex(QModelIndex index) {
-		auto goList = api::EngineController::GetSingleton().getObjectFacade()->getGOList();
+		auto goMap = api::EngineController::GetSingleton().getObjectFacade()->getGOMap();
 		int idx = index.row();
-		for (auto it = goList.begin(); it != goList.end(); it++) {
+		for (auto it = goMap.begin(); it != goMap.end(); it++) {
 			if (idx == 0) {
-				emit selectObject((*it)->getID());
+				emit selectObject(it->second->getID());
 				break;
 			}
 			idx--;

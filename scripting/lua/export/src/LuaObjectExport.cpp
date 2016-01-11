@@ -63,7 +63,7 @@ namespace i6engine {
 namespace lua {
 namespace object {
 
-	std::list<i6engine::api::GOPtr> getAllObjectsOfType(const std::string & types) {
+	std::vector<i6engine::api::GOPtr> getAllObjectsOfType(const std::string & types) {
 		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
 	}
 
@@ -71,8 +71,13 @@ namespace object {
 		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(id);
 	}
 
-	std::list<i6engine::api::GOPtr> getGOList() {
-		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOList();
+	std::vector<i6engine::api::GOPtr> getGOList() {
+		std::vector<i6engine::api::GOPtr> l;
+		std::unordered_map<int64_t, i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap();
+		for (std::unordered_map<int64_t, i6engine::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
+			l.push_back(it->second);
+		}
+		return l;
 	}
 
 	void deleteAllObjectsOfType(const std::string & types) {
