@@ -52,11 +52,11 @@ namespace widgets {
 			}
 		}
 
-		api::EngineController::GetSingleton().getObjectFacade()->createObject(listView->model()->data(index).toString().toStdString(), tmpl, api::EngineController::GetSingleton().getUUID(), false);
+		api::EngineController::GetSingleton().getObjectFacade()->createGO(listView->model()->data(index).toString().toStdString(), tmpl, api::EngineController::GetSingleton().getUUID(), false, [this](api::GOPtr) {
+			emit updateObjectList();
+		});
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-		dynamic_cast<MainWindow *>(_editor)->updateObjectList();
+		emit changedLevel();
 
 		dynamic_cast<MainWindow *>(_editor)->setFocus();
 	}

@@ -50,6 +50,7 @@ namespace widgets {
 			}
 		}
 		_selectedObjectID = id;
+		emit selectedObject(id);
 
 		if (_selectedObjectID != -1) {
 			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(id);
@@ -143,6 +144,7 @@ namespace widgets {
 					api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 				}
 				emit updateObjectList();
+				emit changedLevel();
 			}
 		}
 	}
@@ -151,6 +153,7 @@ namespace widgets {
 		for (auto & p : _entries) {
 			p.second(p.first->text().toStdString());
 		}
+		emit changedLevel();
 	}
 
 } /* namespace widgets */

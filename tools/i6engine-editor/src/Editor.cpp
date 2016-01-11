@@ -366,6 +366,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -389,6 +390,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -412,6 +414,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -435,6 +438,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -458,6 +462,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -481,6 +486,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -500,6 +506,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -519,6 +526,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -538,6 +546,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -557,6 +566,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -576,6 +586,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -595,6 +606,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -611,6 +623,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -627,6 +640,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -643,6 +657,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -659,6 +674,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -675,6 +691,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -691,6 +708,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -707,6 +725,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -723,6 +742,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 

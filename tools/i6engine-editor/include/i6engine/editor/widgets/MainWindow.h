@@ -29,11 +29,16 @@ namespace widgets {
 
 		void updateObjectList() override;
 
+	signals:
+		void doChangedLevel();
+
 	private slots:
 		void chooseLoadLevel();
 		void chooseSaveLevel();
 		void chooseSaveLevelAs();
 		void closeEditor();
+		void changedLevel();
+		void selectedObject(int64_t id);
 
 	private:
 		const QString WINDOWTITLE;
@@ -42,6 +47,8 @@ namespace widgets {
 		TemplateListWidget * _templateListWidget;
 		QString _level;
 		std::vector<plugins::InitializationPluginInterface *> _initializationPlugins;
+		bool _changed;
+		std::set<api::KeyCode> _keyStates;
 
 		std::string getBasePath() const override {
 			return "../media/maps";
@@ -55,6 +62,7 @@ namespace widgets {
 		void Finalize() override;
 		void selectObject(int64_t id) override;
 		void removeObject() override;
+		void triggerChangedLevel() override;
 		void closeEvent(QCloseEvent * evt) override;
 		void keyPressEvent(QKeyEvent * evt) override;
 		void keyReleaseEvent(QKeyEvent * evt) override;

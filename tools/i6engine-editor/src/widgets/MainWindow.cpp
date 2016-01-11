@@ -37,7 +37,7 @@ namespace i6engine {
 namespace editor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins() {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates() {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -68,6 +68,12 @@ namespace widgets {
 
 		setMouseTracking(true);
 		installEventFilter(this);
+
+		connect(_templateListWidget, SIGNAL(changedLevel()), this, SLOT(changedLevel()));
+		connect(_objectContainerWidget->objectInfoWidget, SIGNAL(changedLevel()), this, SLOT(changedLevel()));
+		connect(_templateListWidget, SIGNAL(updateObjectList()), _objectContainerWidget->objectListWidget, SLOT(doUpdateObjectList()));
+		connect(this, SIGNAL(doChangedLevel()), this, SLOT(changedLevel()));
+		connect(_objectContainerWidget->objectInfoWidget, SIGNAL(selectedObject(int64_t)), this, SLOT(selectedObject(int64_t)));
 	}
 
 	MainWindow::~MainWindow() {
@@ -84,7 +90,11 @@ namespace widgets {
 
 	void MainWindow::chooseSaveLevel() {
 		if (!_level.isEmpty()) {
-			saveLevel(_level.toStdString());
+			if (_changed) {
+				saveLevel(_level.toStdString());
+				setWindowTitle(WINDOWTITLE + " - " + _level);
+				_changed = false;
+			}
 		}
 	}
 
@@ -93,11 +103,22 @@ namespace widgets {
 		if (!file.isEmpty()) {
 			saveLevel(file.toStdString());
 			_level = file;
+			setWindowTitle(WINDOWTITLE + " - " + _level);
+			_changed = false;
 		}
 	}
 
 	void MainWindow::closeEditor() {
 		api::EngineController::GetSingleton().stop();
+	}
+
+	void MainWindow::changedLevel() {
+		setWindowTitle(WINDOWTITLE + " - " + _level + " *");
+		_changed = true;
+	}
+
+	void MainWindow::selectedObject(int64_t id) {
+		setSelectObject(id);
 	}
 
 	void MainWindow::AfterInitialize() {
@@ -132,6 +153,10 @@ namespace widgets {
 		emit _objectContainerWidget->objectInfoWidget->removeObject();
 	}
 
+	void MainWindow::triggerChangedLevel() {
+		emit doChangedLevel();
+	}
+
 	void MainWindow::closeEvent(QCloseEvent * evt) {
 		closeEditor();
 		evt->ignore();
@@ -139,7 +164,14 @@ namespace widgets {
 
 	void MainWindow::keyPressEvent(QKeyEvent * evt) {
 		if (_renderWidget->isActiveWindow()) {
-			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, convertQtToEngine(evt->key()), evt->text().toUInt()), core::Subsystem::Input));
+			api::KeyCode kc = convertQtToEngine(evt->key());
+			api::KeyState ks = api::KeyState::KEY_PRESSED;
+			if (_keyStates.find(kc) != _keyStates.end()) {
+				ks = api::KeyState::KEY_HOLD;
+			} else {
+				_keyStates.insert(kc);
+			}
+			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(ks, kc, evt->text().toUInt()), core::Subsystem::Input));
 			evt->accept();
 		}
 		evt->ignore();
@@ -147,7 +179,9 @@ namespace widgets {
 
 	void MainWindow::keyReleaseEvent(QKeyEvent * evt) {
 		if (_renderWidget->isActiveWindow()) {
-			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, convertQtToEngine(evt->key()), evt->text().toUInt()), core::Subsystem::Input));
+			api::KeyCode kc = convertQtToEngine(evt->key());
+			_keyStates.erase(kc);
+			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, kc, evt->text().toUInt()), core::Subsystem::Input));
 			evt->accept();
 		}
 		evt->ignore();
@@ -168,7 +202,13 @@ namespace widgets {
 		} else if (button == Qt::MouseButton::RightButton) {
 			kc = api::KeyCode::KC_MBRight;
 		}
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, kc, 0), core::Subsystem::Input));
+		api::KeyState ks = api::KeyState::KEY_PRESSED;
+		if (_keyStates.find(kc) != _keyStates.end()) {
+			ks = api::KeyState::KEY_HOLD;
+		} else {
+			_keyStates.insert(kc);
+		}
+		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(ks, kc, 0), core::Subsystem::Input));
 		evt->accept();
 	}
 
@@ -182,6 +222,7 @@ namespace widgets {
 		} else if (button == Qt::MouseButton::RightButton) {
 			kc = api::KeyCode::KC_MBRight;
 		}
+		_keyStates.erase(kc);
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, kc, 0), core::Subsystem::Input));
 		evt->accept();
 	}

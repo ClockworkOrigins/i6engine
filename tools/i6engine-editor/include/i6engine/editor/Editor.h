@@ -87,6 +87,12 @@ namespace editor {
 		 */
 		virtual std::vector<std::string> getLevelFlags() const = 0;
 
+		virtual void triggerChangedLevel() = 0;
+
+		void setSelectObject(int64_t id) {
+			_selectedObjectID = id;
+		}
+
 	private:
 		api::GOPtr _camera;
 

@@ -28,6 +28,8 @@ namespace widgets {
 
 	signals:
 		void loadTemplates();
+		void updateObjectList();
+		void changedLevel();
 
 	private slots:
 		void doLoadTemplates();
