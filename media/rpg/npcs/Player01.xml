@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<NPC identifier="Player01">
+	<Name>PlayerName</Name>
+	<XP>0</XP>
+	<NextXP>500</NextXP>
+	<Level>0</Level>
+</NPC>

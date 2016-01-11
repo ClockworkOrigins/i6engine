@@ -46,8 +46,13 @@ namespace npc {
 
 		api::objects::GOTemplate getTemplate(const std::string & identifier) const;
 
+		std::vector<std::pair<std::string, std::string>> getNPCList() const {
+			return _npcFiles;
+		}
+
 	private:
 		std::map<std::string, api::objects::GOTemplate> _npcs;
+		std::vector<std::pair<std::string, std::string>> _npcFiles;
 
 		NPCParser();
 
