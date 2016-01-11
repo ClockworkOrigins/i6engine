@@ -283,6 +283,26 @@ namespace modules {
 		 */
 		void removeLine(int64_t coid);
 
+		/*
+		 * \brief attaches an other GraphicsNode to a bone of a mesh of this GraphicsNode
+		 */
+		void attachToBone(int64_t coid, GraphicsNode * otherNode, const std::string & boneName);
+
+		/**
+		 * \brief detaches an other GraphicsNode from a bone of a mesh of this GraphicsNode
+		 */
+		void detachFromBone(int64_t coid, GraphicsNode * otherNode, const std::string & boneName);
+
+		/**
+		 * \brief registers that this node is attached to another node so it can detach on deletion
+		 */
+		void listenAttachment(GraphicsNode * otherNode, int64_t coid, const std::string & boneName);
+
+		/**
+		 * \brief unregisters attachment when connection is detached
+		 */
+		void stopListenAttachment();
+
 		/**
 		 * \brief ticking the GraphicsNode
 		 */
@@ -340,6 +360,11 @@ namespace modules {
 		std::map<int64_t, BoundingBoxComponent *> _boundingBoxes;
 
 		std::map<int64_t, LineComponent *> _lines;
+		GraphicsNode * _attachedTo;
+		int64_t _attachedCoid;
+		std::string _attachedBone;
+
+		api::WeakGOPtr _go;
 
 		bool _ticking;
 

@@ -16,6 +16,9 @@
 
 #include "i6engine/modules/graphics/GraphicsNode.h"
 
+#include "i6engine/api/EngineController.h"
+#include "i6engine/api/facades/ObjectFacade.h"
+
 #include "i6engine/modules/graphics/GraphicsManager.h"
 #include "i6engine/modules/graphics/components/BillboardComponent.h"
 #include "i6engine/modules/graphics/components/BoundingBoxComponent.h"
@@ -71,7 +74,7 @@ namespace modules {
 		_ticking = !_tickingMeshes.empty() && !_tickingMovableTexts.empty();
 	}
 
-	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _cameras(), _lights(), _particles(), _meshes(), _billboardSets(), _movableTexts(), _boundingBoxes(), _ticking(false), _tickingMeshes(), _tickingMovableTexts() {
+	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _cameras(), _lights(), _particles(), _meshes(), _billboardSets(), _movableTexts(), _boundingBoxes(), _lines(), _attachedTo(nullptr), _attachedCoid(), _attachedBone(), _go(), _ticking(false), _tickingMeshes(), _tickingMovableTexts() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
@@ -83,6 +86,12 @@ namespace modules {
 		_sceneNode = root->createChildSceneNode(name.str(), position.toOgre());
 		_sceneNode->setOrientation(rotation.toOgre());
 		_sceneNode->setScale(scale.toOgre());
+
+		auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(goid);
+
+		if (go != nullptr) {
+			_go = go;
+		}
 	}
 
 	GraphicsNode::~GraphicsNode() {
@@ -117,6 +126,11 @@ namespace modules {
 
 		root->removeChild(_sceneNode);
 		sm->destroySceneNode(_sceneNode->getName());
+
+		if (_attachedTo) {
+			_attachedTo->detachFromBone(_attachedCoid, this, _attachedBone);
+			_attachedTo = nullptr;
+		}
 	}
 
 	void GraphicsNode::createMeshComponent(const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) {
@@ -356,11 +370,37 @@ namespace modules {
 
 	void GraphicsNode::removeLine(int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_lines.find(coid) != _lines.end());
+			assert(_lines.find(coid) != _lines.end());
 		LineComponent * lc = _lines[coid];
 		_lines.erase(coid);
 		delete lc;
 		assert(_lines.find(coid) == _lines.end());
+	}
+
+	void GraphicsNode::attachToBone(int64_t coid, GraphicsNode * otherNode, const std::string & boneName) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->attachToBone(otherNode, boneName);
+	}
+
+	void GraphicsNode::detachFromBone(int64_t coid, GraphicsNode * otherNode, const std::string & boneName) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->detachFromBone(otherNode);
+	}
+
+	void GraphicsNode::listenAttachment(GraphicsNode * otherNode, int64_t coid, const std::string & boneName) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_attachedTo = otherNode;
+		_attachedCoid = coid;
+		_attachedBone = boneName;
+	}
+
+	void GraphicsNode::stopListenAttachment() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_attachedTo = nullptr;
 	}
 
 	void GraphicsNode::Tick() {

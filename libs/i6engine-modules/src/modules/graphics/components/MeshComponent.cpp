@@ -17,6 +17,10 @@
 #include "i6engine/modules/graphics/components/MeshComponent.h"
 
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/components/PhysicalStateComponent.h"
+#include "i6engine/api/components/StaticStateComponent.h"
+#include "i6engine/api/configs/ComponentConfig.h"
+#include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
 #include "i6engine/modules/graphics/GraphicsNode.h"
@@ -28,7 +32,7 @@
 namespace i6engine {
 namespace modules {
 
-	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _movableTextObservers(), _boundingBoxObservers() {
+	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _movableTextObservers(), _boundingBoxObservers(), _attachedNodes() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
@@ -55,6 +59,11 @@ namespace modules {
 
 		if (api::EngineController::GetSingletonPtr()->getDebugdrawer() == 3 || api::EngineController::GetSingletonPtr()->getDebugdrawer() == 4) {
 			_sceneNode->showBoundingBox(true);
+		}
+
+		for (const std::pair<GraphicsNode *, std::string> & p : _attachedNodes) {
+			p.first->stopListenAttachment();
+			_parent->removeTicker(this);
 		}
 	}
 
@@ -145,9 +154,31 @@ namespace modules {
 
 	void MeshComponent::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_animationState);
 		uint64_t cT = api::EngineController::GetSingleton().getCurrentTime();
-		_animationState->addTime(_animationSpeed * (cT - _lastTime) / 1000000.0);
+		if (_animationState) {
+			_animationState->addTime(_animationSpeed * (cT - _lastTime) / 1000000.0);
+		}
+		for (const std::pair<GraphicsNode *, std::string> & p : _attachedNodes) {
+			Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0));
+			Ogre::Vector3 newPos = _parent->getSceneNode()->getPosition() + _sceneNode->getPosition() + entity->getSkeleton()->getBone(p.second)->getPosition();
+			Ogre::Quaternion newRot = _parent->getSceneNode()->getOrientation() * _sceneNode->getOrientation() * entity->getSkeleton()->getBone(p.second)->getOrientation();
+			p.first->getSceneNode()->setPosition(newPos);
+			p.first->getSceneNode()->setOrientation(newRot);
+			api::GOPtr go = p.first->_go.get();
+			if (go != nullptr) {
+				auto psc = go->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent);
+				if (psc == nullptr) {
+					auto ssc = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent);
+					if (ssc != nullptr) {
+						ssc->setPosition(Vec3(newPos));
+						ssc->setRotation(Quaternion(newRot));
+					}
+				} else {
+					psc->setPosition(Vec3(newPos), 2);
+					psc->setRotation(Quaternion(newRot), 2);
+				}
+			}
+		}
 		_lastTime = cT;
 	}
 
@@ -174,6 +205,18 @@ namespace modules {
 	Ogre::Entity * MeshComponent::getEntity() const {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		return dynamic_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0));
+	}
+
+	void MeshComponent::attachToBone(GraphicsNode * otherNode, const std::string & boneName) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_attachedNodes[otherNode] = boneName;
+		_parent->addTicker(this);
+	}
+
+	void MeshComponent::detachFromBone(GraphicsNode * otherNode) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_attachedNodes.erase(otherNode);
+		_parent->removeTicker(this);
 	}
 
 } /* namespace modules */

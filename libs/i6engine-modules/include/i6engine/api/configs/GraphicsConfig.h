@@ -73,7 +73,9 @@ namespace graphics {
 		GraDrawBB,
 		GraRemoveBB,
 		GraLoadResources,
-		GraSaveTerrainShape
+		GraSaveTerrainShape,
+		GraAttachToBone,
+		GraDetachFromBone
 	};
 
 	enum class ShadowTechnique {
@@ -800,6 +802,32 @@ namespace graphics {
 			return new Graphics_SaveTerrainShape_Create(*this);
 		}
 	} Graphics_SaveTerrainShape_Create;
+
+	/**
+	 * \brief attaches a GameObject to a bone
+	 */
+	typedef struct Graphics_AttachToBone_Update : GameMessageStruct {
+		int64_t otherGoid;
+		std::string boneName;
+		Graphics_AttachToBone_Update(int64_t coid, int64_t goid, int64_t o, const std::string & b) : GameMessageStruct(coid, goid), otherGoid(o), boneName(b) {
+		}
+		Graphics_AttachToBone_Update * copy() {
+			return new Graphics_AttachToBone_Update(*this);
+		}
+	} Graphics_AttachToBone_Update;
+
+	/**
+	 * \brief detaches a GameObject from a bone
+	 */
+	typedef struct Graphics_DetachFromBone_Update : GameMessageStruct {
+		int64_t otherGoid;
+		std::string boneName;
+		Graphics_DetachFromBone_Update(int64_t coid, int64_t goid, int64_t o, const std::string & b) : GameMessageStruct(coid, goid), otherGoid(o), boneName(b) {
+		}
+		Graphics_DetachFromBone_Update * copy() {
+			return new Graphics_DetachFromBone_Update(*this);
+		}
+	} Graphics_DetachFromBone_Update;
 
 } /* namespace graphics */
 } /* namespace api */

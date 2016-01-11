@@ -60,7 +60,7 @@ namespace profiling {
 		}
 		line[i - 3] = '\0';
 		i = size_t(atoi(line));
-		return i;
+		return uint32_t(i);
 	}
 
 	uint32_t getVRAMValue() { // Note: this value is in KB!

@@ -159,6 +159,16 @@ namespace api {
 		 */
 		void removeBoundingBox() const;
 
+		/**
+		 * \brief attaches a GameObject to a bone of this mesh
+		 */
+		void attachGameObjectToBone(const api::GOPtr & go, const std::string & boneName);
+
+		/**
+		 * \brief detaches a GameObject from a bone
+		 */
+		void detachGameObjectFromBone(const api::GOPtr & go, const std::string & boneName);
+
 	private:
 		/**
 		 * Name of the mesh file of the component
