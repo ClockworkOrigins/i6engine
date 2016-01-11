@@ -58,6 +58,7 @@ namespace dialog {
 	}
 
 	void DialogManager::loadDialogs(const std::string & directory) {
+		_npcDialogs.clear();
 		_parser.loadDialogs(directory);
 
 		for (auto & p : _parser._dialogs) {

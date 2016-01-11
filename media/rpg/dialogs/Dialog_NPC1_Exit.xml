@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog identifier="Dialog_NPC1_Exit">
+    <Participants>NPC01;</Participants>
+    <Nr>999</Nr>
+    <Permanent>True</Permanent>
+    <Description>DIALOG_EXIT</Description>
+    <Info>Dialog_NPC1_Exit_Info</Info>
+</Dialog>

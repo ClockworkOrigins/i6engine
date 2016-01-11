@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog identifier="Dialog_NPC1_HaveYouQuest">
+    <Participants>NPC01;</Participants>
+    <Nr>0</Nr>
+    <Description>Dialog_NPC1_HaveYouQuest_Description</Description>
+    <Condition>Dialog_NPC1_HaveYouQuest_Condition</Condition>
+    <Info>Dialog_NPC1_HaveYouQuest_Info</Info>
+</Dialog>

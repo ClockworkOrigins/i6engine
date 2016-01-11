@@ -23,6 +23,10 @@ IF(ISIXE_WITH_EDITOR)
 	set(I6ENGINE_EDITOR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/tools/i6engine-editor/include)
 ENDIF(ISIXE_WITH_EDITOR)
 
+IF(ISIXE_WITH_RPG)
+	add_subdirectory(DialogCreator)
+ENDIF(ISIXE_WITH_RPG)
+
 add_subdirectory(includeGraphBuilder)
 add_subdirectory(meshToBulletConverter)
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog identifier="Dialog_NPC1_Hi">
+    <Participants>NPC01;</Participants>
+    <Nr>0</Nr>
+    <Important>True</Important>
+    <Info>Dialog_NPC1_Hi_Info</Info>
+</Dialog>
