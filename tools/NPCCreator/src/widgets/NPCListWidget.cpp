@@ -12,7 +12,7 @@ namespace tools {
 namespace npcCreator {
 namespace widgets {
 
-	NPCListWidget::NPCListWidget(QWidget * par) : QWidget(par), _iniParser(), _npcFileList(), _npcEditWidget(nullptr) {
+	NPCListWidget::NPCListWidget(QWidget * par) : QWidget(par), _iniParser(), _npcFileList(), _filteredNpcFileList(), _filter(), _npcEditWidget(nullptr) {
 		setupUi(this);
 
 		if (clockUtils::ClockError::SUCCESS != _iniParser.load("RPG.ini")) {
@@ -29,7 +29,12 @@ namespace widgets {
 
 	void NPCListWidget::selectIndex(QModelIndex index) {
 		int idx = index.row();
-		_npcEditWidget->parseNPC(_npcFileList, idx);
+		_npcEditWidget->parseNPC(_filteredNpcFileList, idx);
+	}
+
+	void NPCListWidget::changedFilter(QString filter) {
+		_filter = filter;
+		refreshNPCList();
 	}
 
 	void NPCListWidget::refreshNPCList() {
@@ -46,8 +51,16 @@ namespace widgets {
 			return a.first < b.first;
 		});
 
-		QStringList list;
+		_filteredNpcFileList.clear();
+
 		for (auto & p : _npcFileList) {
+			if (QString::fromStdString(p.first).contains(QRegExp(_filter))) {
+				_filteredNpcFileList.push_back(p);
+			}
+		}
+
+		QStringList list;
+		for (auto & p : _filteredNpcFileList) {
 			list.append(QString::fromStdString(p.first));
 		}
 		QStringListModel * model = new QStringListModel(listView);

@@ -15,34 +15,58 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>380</width>
-        <height>222</height>
-       </rect>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QListView" name="listView">
-           <property name="editTriggers">
-            <set>QAbstractItemView::NoEditTriggers</set>
-           </property>
-          </widget>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>378</width>
+          <height>192</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QListView" name="listView">
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5">
+       <item>
+        <widget class="QLabel" name="filterLabel">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Filter</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="filterEdit"/>
        </item>
       </layout>
-     </widget>
-    </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -64,8 +88,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>filterEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>npcListWidget</receiver>
+   <slot>changedFilter(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>199</x>
+     <y>221</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>selectIndex(QModelIndex)</slot>
+  <slot>changedFilter(QString)</slot>
  </slots>
 </ui>
