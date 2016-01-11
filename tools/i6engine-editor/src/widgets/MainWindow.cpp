@@ -37,14 +37,14 @@ namespace i6engine {
 namespace editor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins() {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins() {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
 
 		showMaximized();
 
-		setWindowTitle(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
+		setWindowTitle(WINDOWTITLE);
 
 		gridLayout->addWidget(_templateListWidget, 0, 0);
 		gridLayout->addWidget(_renderWidget, 0, 1);
@@ -78,6 +78,7 @@ namespace widgets {
 		if (!file.isEmpty()) {
 			loadLevel(file.toStdString());
 			_level = file;
+			setWindowTitle(WINDOWTITLE + " - " + _level);
 		}
 	}
 

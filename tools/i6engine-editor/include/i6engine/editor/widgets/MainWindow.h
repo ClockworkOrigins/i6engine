@@ -36,6 +36,7 @@ namespace widgets {
 		void closeEditor();
 
 	private:
+		const QString WINDOWTITLE;
 		RenderWidget * _renderWidget;
 		ObjectContainerWidget * _objectContainerWidget;
 		TemplateListWidget * _templateListWidget;
