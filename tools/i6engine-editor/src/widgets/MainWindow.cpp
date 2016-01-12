@@ -79,6 +79,23 @@ namespace widgets {
 	MainWindow::~MainWindow() {
 	}
 
+	void MainWindow::createNewLevel() {
+		if (_changed) {
+			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
+				chooseSaveLevelAs();
+			}
+		}
+		QString file = QFileDialog::getSaveFileName(nullptr, "New file name ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
+		if (!file.isEmpty()) {
+			clearLevel();
+			saveLevel(file.toStdString());
+			loadLevel(file.toStdString());
+			_level = file;
+			setWindowTitle(WINDOWTITLE + " - " + _level);
+			_changed = false;
+		}
+	}
+
 	void MainWindow::chooseLoadLevel() {
 		if (_changed) {
 			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
@@ -104,7 +121,7 @@ namespace widgets {
 	}
 
 	void MainWindow::chooseSaveLevelAs() {
-		QString file = QFileDialog::getOpenFileName(nullptr, "Save file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
+		QString file = QFileDialog::getSaveFileName(nullptr, "Save file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
 		if (!file.isEmpty()) {
 			saveLevel(file.toStdString());
 			_level = file;

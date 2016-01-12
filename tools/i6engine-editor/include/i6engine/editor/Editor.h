@@ -93,6 +93,8 @@ namespace editor {
 			_selectedObjectID = id;
 		}
 
+		void clearLevel();
+
 	private:
 		api::GOPtr _camera;
 

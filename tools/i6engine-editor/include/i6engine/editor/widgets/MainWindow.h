@@ -33,6 +33,7 @@ namespace widgets {
 		void doChangedLevel();
 
 	private slots:
+		void createNewLevel();
 		void chooseLoadLevel();
 		void chooseSaveLevel();
 		void chooseSaveLevelAs();

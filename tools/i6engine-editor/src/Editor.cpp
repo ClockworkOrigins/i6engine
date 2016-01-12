@@ -140,17 +140,7 @@ namespace editor {
 		}
 
 		std::thread([this, file]() {
-			api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-			api::EngineController::GetSingletonPtr()->getGraphicsFacade()->resetSubSystem();
-			api::EngineController::GetSingletonPtr()->getGUIFacade()->resetSubSystem();
-			api::EngineController::GetSingletonPtr()->getInputFacade()->resetSubSystem();
-			api::EngineController::GetSingletonPtr()->getObjectFacade()->resetSubSystem();
-			api::EngineController::GetSingletonPtr()->getPhysicsFacade()->resetSubSystem();
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
+			clearLevel();
 
 			std::string flags = "";
 
@@ -259,6 +249,20 @@ namespace editor {
 		}
 
 		doc.SaveFile(level.c_str());
+	}
+
+	void Editor::clearLevel() {
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->resetSubSystem();
+		api::EngineController::GetSingletonPtr()->getGUIFacade()->resetSubSystem();
+		api::EngineController::GetSingletonPtr()->getInputFacade()->resetSubSystem();
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->resetSubSystem();
+		api::EngineController::GetSingletonPtr()->getPhysicsFacade()->resetSubSystem();
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
 	void Editor::InputMailbox(const api::GameMessage::Ptr & msg) {
