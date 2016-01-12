@@ -80,6 +80,11 @@ namespace widgets {
 	}
 
 	void MainWindow::chooseLoadLevel() {
+		if (_changed) {
+			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
+				chooseSaveLevelAs();
+			}
+		}
 		QString file = QFileDialog::getOpenFileName(nullptr, "Open file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
 		if (!file.isEmpty()) {
 			loadLevel(file.toStdString());
@@ -109,6 +114,11 @@ namespace widgets {
 	}
 
 	void MainWindow::closeEditor() {
+		if (_changed) {
+			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
+				chooseSaveLevelAs();
+			}
+		}
 		api::EngineController::GetSingleton().stop();
 	}
 
