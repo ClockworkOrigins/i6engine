@@ -139,6 +139,7 @@ namespace widgets {
 		void setEnumString(QString name, QString value);
 		void setQuaternion(QString name, Quaternion value);
 		void setString(QString name, QString value);
+		void setTimeAndColourList(QString name, std::vector<std::pair<double, Vec4>> value);
 		void setUint16(QString name, uint16_t value);
 		void setVector3(QString name, ParticleUniverse::Vector3 value);
 		void setVector3List(QString name, std::vector<ParticleUniverse::Vector3> value);

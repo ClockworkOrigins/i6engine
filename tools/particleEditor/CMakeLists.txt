@@ -51,6 +51,8 @@ set(particleEditorSrc
 	${srcdir}/properties/EnumProperty.cpp
 	${srcdir}/properties/QuaternionProperty.cpp
 	${srcdir}/properties/StringProperty.cpp
+	${srcdir}/properties/TimeAndColourListProperty.cpp
+	${srcdir}/properties/TimeAndColourProperty.cpp
 	${srcdir}/properties/UIntProperty.cpp
 	${srcdir}/properties/Vec3ListProperty.cpp
 	${srcdir}/properties/Vec3Property.cpp
@@ -167,6 +169,8 @@ QT5_WRAP_CPP(particleEditorGuiHeader
 	${includedir}/properties/EnumProperty.h
 	${includedir}/properties/QuaternionProperty.h
 	${includedir}/properties/StringProperty.h
+	${includedir}/properties/TimeAndColourListProperty.h
+	${includedir}/properties/TimeAndColourProperty.h
 	${includedir}/properties/UIntProperty.h
 	${includedir}/properties/Vec3ListProperty.h
 	${includedir}/properties/Vec3Property.h

@@ -105,6 +105,10 @@ namespace widgets {
 		_properties[name]->setString(value);
 	}
 
+	void PropertyWindow::setTimeAndColourList(QString name, std::vector<std::pair<double, Vec4>> value) {
+		_properties[name]->setTimeAndColourList(value);
+	}
+
 	void PropertyWindow::setUint16(QString name, uint16_t value) {
 		_properties[name]->setUInt(value);
 	}

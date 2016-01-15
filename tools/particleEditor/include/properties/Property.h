@@ -55,6 +55,9 @@ namespace properties {
 		virtual void setString(QString value) {
 			assert(false);
 		}
+		virtual void setTimeAndColourList(std::vector<std::pair<double, Vec4>> value) {
+			assert(false);
+		}
 		virtual void setUInt(unsigned int value) {
 			assert(false);
 		}
@@ -96,6 +99,10 @@ namespace properties {
 		virtual QString getString() const {
 			assert(false);
 			return QString();
+		}
+		virtual std::vector<std::pair<double, Vec4>> getTimeAndColourList() const {
+			assert(false);
+			return std::vector<std::pair<double, Vec4>>();
 		}
 		virtual unsigned int getUInt() const {
 			assert(false);
