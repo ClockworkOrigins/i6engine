@@ -29,6 +29,7 @@ namespace widgets {
 		void changedEntry();
 		void saveNewNPC();
 		void saveChanges();
+		void selectModel();
 
 	private:
 		MainWindow * _parent;

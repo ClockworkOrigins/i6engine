@@ -99,6 +99,14 @@ namespace npc {
 				ISIXE_THROW_FAILURE("NPCParser", "NPC with identifier '" << identifier << "' in file '" << file << "' misses Level!");
 			}
 			std::string level = npc->FirstChildElement("Level")->GetText();
+			if (npc->FirstChildElement("Model") == nullptr) {
+				ISIXE_THROW_FAILURE("NPCParser", "NPC with identifier '" << identifier << "' in file '" << file << "' misses Nodel!");
+			}
+			std::string model = npc->FirstChildElement("Model")->GetText();
+
+			api::attributeMap paramsMeshAppearance;
+			paramsMeshAppearance.insert(std::make_pair("mesh", model));
+			tpl._components.push_back(api::objects::GOTemplateComponent("MeshAppearance", paramsMeshAppearance, "", false, false));
 
 			api::attributeMap paramsName;
 			paramsName.insert(std::make_pair("name", name));

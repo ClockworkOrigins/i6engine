@@ -4,4 +4,5 @@
 	<XP>1000</XP>
 	<NextXP>1500</NextXP>
 	<Level>1</Level>
+	<Model>Placeholder.mesh</Model>
 </NPC>

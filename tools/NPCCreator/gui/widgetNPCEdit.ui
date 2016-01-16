@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>242</height>
+    <height>289</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,7 +43,7 @@
         <x>0</x>
         <y>0</y>
         <width>380</width>
-        <height>191</height>
+        <height>238</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -52,13 +52,6 @@
          <item row="0" column="1">
           <widget class="QLineEdit" name="identifierLineEdit"/>
          </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="identifierLabel">
-           <property name="text">
-            <string>Identifier</string>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="1">
           <widget class="QLineEdit" name="nameLineEdit"/>
          </item>
@@ -66,6 +59,34 @@
           <widget class="QLabel" name="currentXPLabel">
            <property name="text">
             <string>Current XP</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="identifierLabel">
+           <property name="text">
+            <string>Identifier</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QSpinBox" name="levelSpinBox">
+           <property name="maximum">
+            <number>999999999</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="currentXPSpinBox">
+           <property name="maximum">
+            <number>999999999</number>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="levelLabel">
+           <property name="text">
+            <string>Level</string>
            </property>
           </widget>
          </item>
@@ -80,34 +101,6 @@
           <widget class="QLabel" name="nextXPLabel">
            <property name="text">
             <string>Next XP</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QSpinBox" name="currentXPSpinBox">
-           <property name="maximum">
-            <number>999999999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSpinBox" name="nextXPSpinBox">
-           <property name="maximum">
-            <number>999999999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="levelLabel">
-           <property name="text">
-            <string>Level</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QSpinBox" name="levelSpinBox">
-           <property name="maximum">
-            <number>999999999</number>
            </property>
           </widget>
          </item>
@@ -131,6 +124,40 @@
             <widget class="QSpinBox" name="maxHPSpinBox">
              <property name="maximum">
               <number>999999999</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="1">
+          <widget class="QSpinBox" name="nextXPSpinBox">
+           <property name="maximum">
+            <number>999999999</number>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="modelLabel">
+           <property name="text">
+            <string>Model</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
+           <item>
+            <widget class="QLineEdit" name="modelLineEdit"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="modelPushButton">
+             <property name="maximumSize">
+              <size>
+               <width>20</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>...</string>
              </property>
             </widget>
            </item>
@@ -178,9 +205,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>modelPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>npcEditWidget</receiver>
+   <slot>selectModel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>saveNewNPC()</slot>
   <slot>saveChanges()</slot>
+  <slot>selectModel()</slot>
  </slots>
 </ui>

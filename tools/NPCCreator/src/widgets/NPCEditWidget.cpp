@@ -1,7 +1,10 @@
 #include "widgets/NPCEditWidget.h"
 
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/components/MeshAppearanceComponent.h"
+#include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/facades/ObjectFacade.h"
+#include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/npc/NPCManager.h"
 
@@ -10,6 +13,10 @@
 
 #include "clockUtils/iniParser/iniParser.h"
 
+#include "OGRE/OgreMeshManager.h"
+#include "OGRE/OgreResourceManager.h"
+
+#include <QInputDialog>
 #include <QMessageBox>
 
 #include "tinyxml2.h"
@@ -88,6 +95,29 @@ namespace widgets {
 		saveToFile(_currentFile);
 	}
 
+	void NPCEditWidget::selectModel() {
+		QStringList meshList;
+		Ogre::FileInfoListPtr fileinfoiter = Ogre::ResourceGroupManager::getSingleton().listResourceFileInfo("i6engine");
+		for (unsigned int i = 0; i < (*fileinfoiter).size(); i++) {
+			if (QString::fromStdString((*fileinfoiter)[i].filename).contains(".mesh", Qt::CaseInsensitive)) {
+				meshList.push_back(QString::fromStdString((*fileinfoiter)[i].filename));
+			}
+		}
+		QInputDialog dlg(this);
+		dlg.setComboBoxEditable(false);
+		dlg.setComboBoxItems(meshList);
+		dlg.setWindowTitle("Select Model");
+		dlg.setLabelText("Select a model:");
+		dlg.setInputMode(QInputDialog::InputMode::TextInput);
+		if (QDialog::Accepted == dlg.exec()) {
+			modelLineEdit->setText(dlg.textValue());
+			auto goList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("NPC");
+			if (goList.size() > 0) {
+				goList[0]->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent)->setMesh(dlg.textValue().toStdString());
+			}
+		}
+	}
+
 	void NPCEditWidget::parseNPC(const std::vector<std::pair<std::string, std::string>> & npcFileList, int index) {
 		// start with removing of old NPC, can be done in parallel to the rest
 		api::EngineController::GetSingleton().getObjectFacade()->deleteAllObjectsOfType("NPC");
@@ -140,12 +170,20 @@ namespace widgets {
 				return;
 			}
 			int level = std::stoi(npc->FirstChildElement("Level")->GetText());
+			if (npc->FirstChildElement("Model") == nullptr) {
+				QMessageBox box;
+				box.setText(QString("NPC in file '") + QString::fromStdString(file) + QString("' misses Model!"));
+				box.exec();
+				return;
+			}
+			QString model = npc->FirstChildElement("Model")->GetText();
 
 			identifierLineEdit->setText(identifier);
 			nameLineEdit->setText(name);
 			currentXPSpinBox->setValue(xp);
 			nextXPSpinBox->setValue(nextXP);
 			levelSpinBox->setValue(level);
+			modelLineEdit->setText(model);
 
 			// optional stuff
 			// attributes
@@ -209,6 +247,11 @@ namespace widgets {
 		tinyxml2::XMLText * levelValue = doc.NewText(std::to_string(levelSpinBox->value()).c_str());
 		level->LinkEndChild(levelValue);
 		root->LinkEndChild(level);
+
+		tinyxml2::XMLElement * model = doc.NewElement("Model");
+		tinyxml2::XMLText * modelValue = doc.NewText(modelLineEdit->text().toStdString().c_str());
+		model->LinkEndChild(modelValue);
+		root->LinkEndChild(model);
 
 		tinyxml2::XMLElement * currentHP = doc.NewElement("HP");
 		tinyxml2::XMLText * currentHPValue = doc.NewText(std::to_string(currentHPSpinBox->value()).c_str());
