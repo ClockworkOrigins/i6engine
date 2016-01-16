@@ -10,11 +10,10 @@
 
 #include "clockUtils/iniParser/iniParser.h"
 
+#include <QDir>
 #include <QMessageBox>
 
 #include "tinyxml2.h"
-
-#include <iostream>
 
 namespace i6engine {
 namespace tools {
@@ -86,6 +85,28 @@ namespace widgets {
 			return;
 		}
 		saveToFile(_currentFile);
+	}
+
+	void NPCEditWidget::deleteNPC() {
+		clockUtils::iniParser::IniParser iniParser;
+		if (clockUtils::ClockError::SUCCESS != iniParser.load("RPG.ini")) {
+			QMessageBox box;
+			box.setText(QString("RPG.ini not found!"));
+			box.exec();
+			return;
+		}
+		std::string NPCDirectory;
+		if (iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {
+			QMessageBox box;
+			box.setText(QString("No entry for npcDirectory in RPG.ini!"));
+			box.exec();
+			return;
+		}
+		QFile f(qApp->applicationDirPath() + "/" + QString::fromStdString(NPCDirectory) + "/" + identifierLineEdit->text() + ".xml");
+		if (f.exists()) {
+			f.remove();
+		}
+		_npcListWidget->refreshNPCList();
 	}
 
 	void NPCEditWidget::parseNPC(const std::vector<std::pair<std::string, std::string>> & npcFileList, int index) {
