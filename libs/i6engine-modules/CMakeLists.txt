@@ -30,6 +30,9 @@ set(configdir ${CMAKE_SOURCE_DIR}/config)
 # List of all component classes
 # All these classes will be registered as Components
 set(i6components
+	${srcdir}/api/components/AnimatedDirectionalLightComponent.cpp
+	${srcdir}/api/components/AnimatedLuminousAppearanceComponent.cpp
+	${srcdir}/api/components/AnimatedSpotLightComponent.cpp
 	${srcdir}/api/components/BillboardComponent.cpp
 	${srcdir}/api/components/CameraComponent.cpp
 	${srcdir}/api/components/FollowComponent.cpp

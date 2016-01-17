@@ -49,6 +49,20 @@ TEST(i6eVector4, CTor) {
 	EXPECT_DOUBLE_EQ(3.0, v4.getZ());
 }
 
+TEST(i6eVector4, Addition) {
+	Vec4 v1(1.0, 2.0, 3.0, 4.0);
+	Vec4 v2(4.0, 3.0, 2.0, 1.0);
+
+	EXPECT_EQ(Vec4(5.0, 5.0, 5.0, 5.0), v1 + v2);
+	EXPECT_EQ(Vec4(5.0, 5.0, 5.0, 5.0), v2 + v1);
+}
+
+TEST(i6eVector4, Multiplication) {
+	Vec4 v1(1.0, 2.0, 3.0, 4.0);
+
+	EXPECT_EQ(Vec4(0.5, 1.0, 1.5, 2.0), v1 * 0.5);
+}
+
 TEST(i6eVector4, serialize) {
 	Vec4 v1(1.0, 2.0, 3.0, 4.0);
 	Vec4 v2(4.0, 5.0, 6.0, 7.0);

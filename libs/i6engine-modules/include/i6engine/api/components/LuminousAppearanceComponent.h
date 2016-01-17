@@ -61,7 +61,7 @@ namespace api {
 		 */
 		LuminousAppearanceComponent(const int64_t id, const attributeMap & params);
 
-		~LuminousAppearanceComponent();
+		virtual ~LuminousAppearanceComponent();
 
 		/**
 		 * \brief Sets light type
@@ -154,17 +154,27 @@ namespace api {
 		inline Vec3 getDirection() const { return _direction; }
 
 		/**
+		 * \brief sets inner spot light angle
+		 */
+		void setSpotLightInnerRange(double angle);
+
+		/**
+		 * \brief sets outer spot light angle
+		 */
+		void setSpotLightOuterRange(double angle);
+
+		/**
 		 * \brief synchronizes the Components state
 		 */
-		attributeMap synchronize() const override;
+		virtual attributeMap synchronize() const override;
 
-		std::string getTemplateName() const override {
+		virtual std::string getTemplateName() const override {
 			return "LuminousAppearance";
 		}
 
-		std::vector<componentOptions> getComponentOptions() override;
+		virtual std::vector<componentOptions> getComponentOptions() override;
 
-	private:
+	protected:
 		/**
 		 * Light type of the component
 		 */
@@ -211,8 +221,10 @@ namespace api {
 		 */
 		double _spotlightRangeOuter;
 
-		void Init() override;
+		virtual void Init() override;
+		virtual void Finalize() override;
 
+	private:
 		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		/**

@@ -133,6 +133,27 @@ namespace math {
 		}
 
 		/**
+		* \brief + operator
+		*/
+		i6eVector4 operator+(const i6eVector4 & other) const {
+			return i6eVector4(_w + other._w, _x + other._x, _y + other._y, _z + other._z);
+		}
+
+		/**
+		 * \brief * operator
+		 */
+		i6eVector4 operator*(double d) const {
+			return i6eVector4(_w * d, _x * d, _y * d, _z * d);
+		}
+
+		/**
+		 * \brief Operator '==' for Vector4
+		 */
+		bool operator==(const i6eVector4 & b) const {
+			return std::abs(_x - b.getX()) < EPSILON && std::abs(_y - b.getY()) < EPSILON && std::abs(_z - b.getZ()) < EPSILON;
+		}
+
+		/**
 		 * \brief Convert whole vector to Ogre.
 		 *
 		 * \return Vector converted to Ogre

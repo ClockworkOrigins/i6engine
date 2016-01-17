@@ -69,6 +69,10 @@ namespace components {
 		Point2PointConstraintComponent,
 		VelocityComponent,
 		LineComponent,
+		AnimatedLuminousAppearanceComponent,
+		AnimatedDirectionalLightComponent,
+		AnimatedPointLightComponent,
+		AnimatedSpotLightComponent,
 		ComponentTypesCount
 	};
 
