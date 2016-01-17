@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+#include "i6engine/api/components/AnimatedDirectionalLightComponent.h"
+#include "i6engine/api/components/AnimatedLuminousAppearanceComponent.h"
+#include "i6engine/api/components/AnimatedSpotLightComponent.h"
 #include "i6engine/api/components/BillboardComponent.h"
 #include "i6engine/api/components/CameraComponent.h"
 #include "i6engine/api/components/FollowComponent.h"
@@ -41,6 +44,36 @@ using namespace i6engine;
 using namespace i6engine::api;
 
 TEST(Component, Synchronize) {
+	{
+		attributeMap paramsAnimatedDirectionalLightAppearance = { { "lightType", "1" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" }, { "direction", "0.0 0.0 0.0" }, { "pos", "0.0 0.0 0.0" }, { "spotLightRangeInner", "1.0" }, { "spotLightRangeOuter", "1.0" }, { "diffuseDuration", "1000" }, { "diffuseKey_0", "1.0 0.0 0.0" }, { "diffuseKey_1", "0.0 1.0 0.0" }, { "specularDuration", "1000" }, { "specularKey_0", "1.0 0.0 0.0" }, { "specularKey_1", "0.0 1.0 0.0" }, { "attenuationDuration", "1000" }, { "attenuationKey_0", "1.0 0.0 0.0 0.0" }, { "attenuationKey_1", "0.0 1.0 0.0 0.0" }, { "directionDuration", "1000" }, { "directionKey_0", "1.0 0.0 0.0" }, { "directionKey_1", "0.0 1.0 0.0" } };
+		auto lc = Component::createC<AnimatedDirectionalLightComponent>(0, paramsAnimatedDirectionalLightAppearance);
+		auto newMap = lc->synchronize();
+		Component::createC<AnimatedDirectionalLightComponent>(0, newMap);
+	}
+	{
+		attributeMap paramsAnimatedLuminousAppearance = { { "lightType", "0" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" }, { "direction", "0.0 0.0 0.0" }, { "pos", "0.0 0.0 0.0" }, { "spotLightRangeInner", "1.0" }, { "spotLightRangeOuter", "1.0" }, { "diffuseDuration", "1000" }, { "diffuseKey_0", "1.0 0.0 0.0" }, { "diffuseKey_1", "0.0 1.0 0.0" }, { "specularDuration", "1000" }, { "specularKey_0", "1.0 0.0 0.0" }, { "specularKey_1", "0.0 1.0 0.0" }, { "attenuationDuration", "1000" }, { "attenuationKey_0", "1.0 0.0 0.0 0.0" }, { "attenuationKey_1", "0.0 1.0 0.0 0.0" } };
+		auto lc = Component::createC<AnimatedLuminousAppearanceComponent>(0, paramsAnimatedLuminousAppearance);
+		auto newMap = lc->synchronize();
+		Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap);
+	}
+	{
+		attributeMap paramsAnimatedLuminousAppearance = { { "lightType", "1" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" }, { "direction", "0.0 0.0 0.0" }, { "pos", "0.0 0.0 0.0" }, { "spotLightRangeInner", "1.0" }, { "spotLightRangeOuter", "1.0" }, { "diffuseDuration", "1000" }, { "diffuseKey_0", "1.0 0.0 0.0" }, { "diffuseKey_1", "0.0 1.0 0.0" }, { "specularDuration", "1000" }, { "specularKey_0", "1.0 0.0 0.0" }, { "specularKey_1", "0.0 1.0 0.0" }, { "attenuationDuration", "1000" }, { "attenuationKey_0", "1.0 0.0 0.0 0.0" }, { "attenuationKey_1", "0.0 1.0 0.0 0.0" } };
+		auto lc = Component::createC<AnimatedLuminousAppearanceComponent>(0, paramsAnimatedLuminousAppearance);
+		auto newMap = lc->synchronize();
+		Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap);
+	}
+	{
+		attributeMap paramsAnimatedLuminousAppearance = { { "lightType", "2" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" }, { "direction", "0.0 0.0 0.0" }, { "pos", "0.0 0.0 0.0" }, { "spotLightRangeInner", "1.0" }, { "spotLightRangeOuter", "1.0" }, { "diffuseDuration", "1000" }, { "diffuseKey_0", "1.0 0.0 0.0" }, { "diffuseKey_1", "0.0 1.0 0.0" }, { "specularDuration", "1000" }, { "specularKey_0", "1.0 0.0 0.0" }, { "specularKey_1", "0.0 1.0 0.0" }, { "attenuationDuration", "1000" }, { "attenuationKey_0", "1.0 0.0 0.0 0.0" }, { "attenuationKey_1", "0.0 1.0 0.0 0.0" } };
+		auto lc = Component::createC<AnimatedLuminousAppearanceComponent>(0, paramsAnimatedLuminousAppearance);
+		auto newMap = lc->synchronize();
+		Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap);
+	}
+	{
+		attributeMap paramsAnimatedSpotLightAppearance = { { "lightType", "2" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" }, { "direction", "0.0 0.0 0.0" }, { "pos", "0.0 0.0 0.0" }, { "spotLightRangeInner", "1.0" }, { "spotLightRangeOuter", "1.0" }, { "diffuseDuration", "1000" }, { "diffuseKey_0", "1.0 0.0 0.0" }, { "diffuseKey_1", "0.0 1.0 0.0" }, { "specularDuration", "1000" }, { "specularKey_0", "1.0 0.0 0.0" }, { "specularKey_1", "0.0 1.0 0.0" }, { "attenuationDuration", "1000" }, { "attenuationKey_0", "1.0 0.0 0.0 0.0" }, { "attenuationKey_1", "0.0 1.0 0.0 0.0" }, { "directionDuration", "1000" }, { "directionKey_0", "1.0 0.0 0.0" }, { "directionKey_1", "0.0 1.0 0.0" }, { "innerRangeDuration", "1000" }, { "innerRangeKey_0", "1.0" }, { "innerRangeKey_1", "10.0" }, { "outerRangeDuration", "1000" }, { "outerRangeKey_0", "1.0" }, { "outerRangeKey_1", "10.0" } };
+		auto lc = Component::createC<AnimatedSpotLightComponent>(0, paramsAnimatedSpotLightAppearance);
+		auto newMap = lc->synchronize();
+		Component::createC<AnimatedSpotLightComponent>(0, newMap);
+	}
 	{
 		attributeMap paramsBillboard = { { "material", "blafoo" }, { "width", "0.1" }, { "height", "0.1" }, { "origin", "0" } };
 		auto bc = Component::createC<BillboardComponent>(0, paramsBillboard);

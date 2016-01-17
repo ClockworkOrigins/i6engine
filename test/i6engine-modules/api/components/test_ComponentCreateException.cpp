@@ -16,6 +16,9 @@
 
 #include "i6engine/utils/Exceptions.h"
 
+#include "i6engine/api/components/AnimatedDirectionalLightComponent.h"
+#include "i6engine/api/components/AnimatedLuminousAppearanceComponent.h"
+#include "i6engine/api/components/AnimatedSpotLightComponent.h"
 #include "i6engine/api/components/BillboardComponent.h"
 #include "i6engine/api/components/CameraComponent.h"
 #include "i6engine/api/components/FollowComponent.h"
@@ -43,6 +46,51 @@ using namespace i6engine;
 using namespace i6engine::api;
 
 TEST(Component, CreateException) {
+	{
+		attributeMap paramsAnimatedDirectionalLight = { { "lightType", "0" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" } };
+		Component::createC<AnimatedDirectionalLightComponent>(0, paramsAnimatedDirectionalLight);
+		for (auto it = paramsAnimatedDirectionalLight.begin(); it != paramsAnimatedDirectionalLight.end(); it++) {
+			auto newMap = paramsAnimatedDirectionalLight;
+			newMap.erase(it->first);
+			ASSERT_THROW(Component::createC<AnimatedDirectionalLightComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
+	{
+		attributeMap paramsAnimatedLuminousAppearance = { { "lightType", "0" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" } };
+		Component::createC<AnimatedLuminousAppearanceComponent>(0, paramsAnimatedLuminousAppearance);
+		for (auto it = paramsAnimatedLuminousAppearance.begin(); it != paramsAnimatedLuminousAppearance.end(); it++) {
+			auto newMap = paramsAnimatedLuminousAppearance;
+			newMap.erase(it->first);
+			ASSERT_THROW(Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
+	{
+		attributeMap paramsAnimatedLuminousAppearance = { { "lightType", "1" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" }, { "direction", "0.0 0.0 0.0" } };
+		Component::createC<AnimatedLuminousAppearanceComponent>(0, paramsAnimatedLuminousAppearance);
+		for (auto it = paramsAnimatedLuminousAppearance.begin(); it != paramsAnimatedLuminousAppearance.end(); it++) {
+			auto newMap = paramsAnimatedLuminousAppearance;
+			newMap.erase(it->first);
+			ASSERT_THROW(Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
+	{
+		attributeMap paramsAnimatedLuminousAppearance = { { "lightType", "2" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" }, { "direction", "0.0 0.0 0.0" }, { "spotLightRangeInner", "1.0" }, { "spotLightRangeOuter", "1.0" } };
+		Component::createC<AnimatedLuminousAppearanceComponent>(0, paramsAnimatedLuminousAppearance);
+		for (auto it = paramsAnimatedLuminousAppearance.begin(); it != paramsAnimatedLuminousAppearance.end(); it++) {
+			auto newMap = paramsAnimatedLuminousAppearance;
+			newMap.erase(it->first);
+			ASSERT_THROW(Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
+	{
+		attributeMap paramsAnimatedSpotLight = { { "lightType", "0" }, { "diffuseColor", "0.0 0.0 0.0" }, { "specularColor", "0.0 0.0 0.0" }, { "attenuation", "0.0 0.0 0.0 0.0" } };
+		Component::createC<AnimatedSpotLightComponent>(0, paramsAnimatedSpotLight);
+		for (auto it = paramsAnimatedSpotLight.begin(); it != paramsAnimatedSpotLight.end(); it++) {
+			auto newMap = paramsAnimatedSpotLight;
+			newMap.erase(it->first);
+			ASSERT_THROW(Component::createC<AnimatedSpotLightComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
 	{
 		attributeMap paramsBillboard = { { "material", "blafoo" }, { "width", "0.1" }, { "height", "0.1" }, { "origin", "0" } };
 		Component::createC<BillboardComponent>(0, paramsBillboard);
