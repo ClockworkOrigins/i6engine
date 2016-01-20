@@ -47,14 +47,12 @@ namespace components {
 
 	SlotInventoryComponent::SlotInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _rows(), _columns(), _widgetList(), _slotMarker(false), _currentIndex(UINT16_MAX), _slots(), _items() {
 		_objComponentID = config::ComponentTypes::SlotInventoryComponent;
-		_rows = uint16_t(std::stoul(params.find("rows")->second));
-		_columns = uint16_t(std::stoul(params.find("columns")->second));
+		parseAttribute<true>(params, "rows", _rows);
+		parseAttribute<true>(params, "columns", _columns);
 		_slots = std::vector<std::vector<uint16_t>>(_rows, std::vector<uint16_t>(_columns, UINT16_MAX));
 	}
 
 	api::ComPtr SlotInventoryComponent::createC(int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("SlotInventoryComponent", "rows not set!", params.find("rows") != params.end());
-		ISIXE_THROW_API_COND("SlotInventoryComponent", "columns not set!", params.find("columns") != params.end());
 		return utils::make_shared<SlotInventoryComponent, api::Component>(id, params);
 	}
 
@@ -76,6 +74,19 @@ namespace components {
 
 	bool SlotInventoryComponent::addItem(const api::GOPtr & item) {
 		auto sc = item->getGOC<SlotComponent>(config::ComponentTypes::SlotComponent);
+		bool foundEntry = false;
+		if (item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->isStackable()) {
+			for (auto & t : _items) {
+				if (std::get<ItemEntry::Type>(t) == item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID() && std::get<ItemEntry::Name>(t) == item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName()) {
+					std::get<ItemEntry::Amount>(t)++;
+					foundEntry = true;
+					break;
+				}
+			}
+		}
+		if (foundEntry) {
+			return true;
+		}
 		// look for a place this item has enough place
 		for (size_t i = 0; i < _rows; i++) {
 			for (size_t j = 0; j < _columns; j++) {
@@ -103,7 +114,7 @@ namespace components {
 								break;
 							}
 						}
-						_items.push_back(std::make_tuple(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), msgs[0], item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), sc->getWidth(), sc->getHeight(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getInfos(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getValue()));
+						_items.push_back(std::make_tuple(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), msgs[0], item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImageset(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getImage(), sc->getWidth(), sc->getHeight(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getInfos(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getIdentifier(), item->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent)->getValue(), 1));
 						for (auto & cb : _callbacks) {
 							cb(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName(), getItemCount(item->getGOC(config::ComponentTypes::ItemComponent)->getComponentID(), item->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName()));
 						}
@@ -340,16 +351,25 @@ namespace components {
 			auto ic = go->getGOC<ItemComponent>(config::ComponentTypes::ItemComponent);
 			if (ic->use(getOwnerGO())) {
 				std::string n = go->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName();
-				for (uint16_t i = 0; i < _rows; i++) {
-					for (uint16_t j = 0; j < _columns; j++) {
-						if (_slots[i][j] == index) {
-							_slots[i][j] = UINT16_MAX;
-						} else if (_slots[i][j] > index && _slots[i][j] != UINT16_MAX) {
-							_slots[i][j]--;
-						}
+				bool dropEntry = true;
+				if (ic->isStackable()) {
+					std::get<ItemEntry::Amount>(_items[index])--;
+					if (std::get<ItemEntry::Amount>(_items[index]) > 0) {
+						dropEntry = false;
 					}
 				}
-				_items.erase(_items.begin() + int(index));
+				if (dropEntry) {
+					for (uint16_t i = 0; i < _rows; i++) {
+						for (uint16_t j = 0; j < _columns; j++) {
+							if (_slots[i][j] == index) {
+								_slots[i][j] = UINT16_MAX;
+							} else if (_slots[i][j] > index && _slots[i][j] != UINT16_MAX) {
+								_slots[i][j]--;
+							}
+						}
+					}
+					_items.erase(_items.begin() + int(index));
+				}
 				for (auto & cb : _callbacks) {
 					cb(ic->getComponentID(), n, getItemCount(ic->getComponentID(), n));
 				}
@@ -370,7 +390,7 @@ namespace components {
 		uint32_t counter = 0;
 		for (auto & t : _items) {
 			if (std::get<ItemEntry::Identifier>(t) == identifier) {
-				counter++;
+				counter += std::get<ItemEntry::Amount>(t);
 			}
 		}
 		return counter;
@@ -380,7 +400,7 @@ namespace components {
 		uint32_t counter = 0;
 		for (auto & t : _items) {
 			if (std::get<ItemEntry::Type>(t) == item && std::get<ItemEntry::Name>(t) == name) {
-				counter++;
+				counter += std::get<ItemEntry::Amount>(t);
 			}
 		}
 		return counter;
@@ -394,16 +414,18 @@ namespace components {
 					if (_slots[j][k] != UINT16_MAX) {
 						if (std::get<ItemEntry::Identifier>(_items[_slots[j][k]]) == identifier) {
 							uint16_t index = _slots[j][k];
-							for (size_t l = 0; l < _slots.size(); l++) {
-								for (size_t m = 0; m < _slots[l].size(); m++) {
-									if (_slots[l][m] == index) {
-										_slots[l][m] = UINT16_MAX;
-									} else if (_slots[l][m] > index && _slots[l][m] != UINT16_MAX) {
-										_slots[l][m]--;
+							if (--std::get<ItemEntry::Amount>(_items[index]) == 0) {
+								for (size_t l = 0; l < _slots.size(); l++) {
+									for (size_t m = 0; m < _slots[l].size(); m++) {
+										if (_slots[l][m] == index) {
+											_slots[l][m] = UINT16_MAX;
+										} else if (_slots[l][m] > index && _slots[l][m] != UINT16_MAX) {
+											_slots[l][m]--;
+										}
 									}
 								}
+								_items.erase(_items.begin() + int(index));
 							}
-							_items.erase(_items.begin() + int(index));
 							erased = true;
 							break;
 						}

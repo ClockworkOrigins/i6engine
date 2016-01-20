@@ -40,14 +40,13 @@ namespace components {
 		_objFamilyID = config::ThirdPersonControlComponent;
 		_objComponentID = config::ThirdPersonControlComponent;
 
-		_identifier = params.find("ident")->second;
+		parseAttribute<true>(params, "ident", _identifier);
 	}
 
 	ThirdPersonControlComponent::~ThirdPersonControlComponent() {
 	}
 
 	api::ComPtr ThirdPersonControlComponent::createC(const int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("ThirdPersonControlComponent", "ident not found!", params.find("ident") != params.end());
 		return utils::make_shared<ThirdPersonControlComponent, api::Component>(id, params);
 	}
 

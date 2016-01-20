@@ -24,14 +24,15 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	SlotComponent::SlotComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _width(uint16_t(std::stoul(params.find("width")->second))), _height(uint16_t(std::stoul(params.find("height")->second))) {
+	SlotComponent::SlotComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _width(), _height() {
 		_objFamilyID = config::ComponentTypes::SlotComponent;
 		_objComponentID = config::ComponentTypes::SlotComponent;
+
+		parseAttribute<true>(params, "width", _width);
+		parseAttribute<true>(params, "height", _height);
 	}
 
 	api::ComPtr SlotComponent::createC(int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("SlotComponent", "width not set!", params.find("width") != params.end());
-		ISIXE_THROW_API_COND("SlotComponent", "height not set!", params.find("height") != params.end());
 		return utils::make_shared<SlotComponent, api::Component>(id, params);
 	}
 
