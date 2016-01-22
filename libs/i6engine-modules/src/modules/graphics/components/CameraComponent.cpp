@@ -16,6 +16,8 @@
 
 #include "i6engine/modules/graphics/components/CameraComponent.h"
 
+#include "i6engine/math/i6eMath.h"
+
 #include "i6engine/modules/graphics/GraphicsManager.h"
 #include "i6engine/modules/graphics/GraphicsNode.h"
 
@@ -37,7 +39,7 @@ namespace modules {
 		Ogre::Camera * camera = sm->createCamera("camera" + std::to_string(goid) + "_" + std::to_string(coid));
 		_sceneNode->attachObject(camera);
 		camera->setPosition(position.toOgre());
-		camera->lookAt(lookAt.toOgre());
+		camera->lookAt(_parent->getSceneNode()->getPosition() + math::rotateVector(lookAt, Quaternion(_parent->getSceneNode()->getOrientation())).toOgre());
 		camera->setNearClipDistance(nC);
 		camera->setFOVy(Ogre::Radian(fov));
 		camera->setAspectRatio(aspect);
