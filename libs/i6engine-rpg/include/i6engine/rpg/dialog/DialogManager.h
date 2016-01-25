@@ -146,6 +146,11 @@ namespace dialog {
 			return _npcDialogs;
 		}
 
+		/**
+		 * \brief resets DialogManager
+		 */
+		void reset();
+
 	private:
 		DialogParser _parser;
 		std::map<std::string, std::vector<Dialog *>> _npcDialogs;

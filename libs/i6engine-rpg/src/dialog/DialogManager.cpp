@@ -241,6 +241,10 @@ namespace dialog {
 		}
 	}
 
+	void DialogManager::reset() {
+		_guiInitialized = false;
+	}
+
 	bool DialogManager::checkDialogsLoop() {
 		processMessages();
 		// while a dialog is active new important dialogs mustn't start

@@ -77,35 +77,35 @@ namespace rpg {
 		if (_iniParser.getValue("SCRIPT", "externalConstants", externalConstantsFile) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'externalConstants' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		rpg::config::parseExternalConstants(externalConstantsFile);
+		config::parseExternalConstants(externalConstantsFile);
 
-		rpg::item::ItemManager::GetSingletonPtr()->addItemAttributes("UsableItem", { { "HP", "attribute_0" }, { "HP_MAX", "attribute_1" } });
+		item::ItemManager::GetSingletonPtr()->addItemAttributes("UsableItem", { { "HP", "attribute_0" }, { "HP_MAX", "attribute_1" } });
 
 		std::string ItemDirectory;
 		if (_iniParser.getValue("SCRIPT", "itemDirectory", ItemDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'itemDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		rpg::item::ItemManager::GetSingletonPtr()->loadItems(ItemDirectory);
+		item::ItemManager::GetSingletonPtr()->loadItems(ItemDirectory);
 
 		std::string NPCDirectory;
 		if (_iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'npcDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		rpg::npc::NPCParser::GetSingletonPtr()->loadNPCs(NPCDirectory);
+		npc::NPCParser::GetSingletonPtr()->loadNPCs(NPCDirectory);
 
 		// Load Dialogs after NPCs because they require them
 		std::string DialogDirectory;
 		if (_iniParser.getValue("SCRIPT", "dialogDirectory", DialogDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'dialogDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		rpg::dialog::DialogManager::GetSingletonPtr()->loadDialogs(DialogDirectory);
+		dialog::DialogManager::GetSingletonPtr()->loadDialogs(DialogDirectory);
 
 		// Load Quests
 		std::string QuestDirectory;
 		if (_iniParser.getValue("SCRIPT", "questDirectory", QuestDirectory) != clockUtils::ClockError::SUCCESS) {
 			ISIXE_THROW_FAILURE("RPGApplication", "'questDirectory' in section 'SCRIPT' in RPG.ini not found!");
 		}
-		rpg::quest::QuestLog::GetSingletonPtr()->loadQuests(QuestDirectory);
+		quest::QuestLog::GetSingletonPtr()->loadQuests(QuestDirectory);
 	}
 
 	void RPGApplication::AfterInitialize() {
@@ -113,7 +113,7 @@ namespace rpg {
 		api::EngineController::GetSingletonPtr()->getScriptingFacade()->loadAllScripts();
 
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
-		gf->registerWidgetTemplate("Subtitle", boost::factory<rpg::gui::SubtitleWidget *>());
+		gf->registerWidgetTemplate("Subtitle", boost::factory<gui::SubtitleWidget *>());
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
@@ -139,20 +139,20 @@ namespace rpg {
 
 		// register rpg components we want to use
 		// do this befor loading the level
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&rpg::components::AttributeComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&rpg::components::DialogCheckerComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(&rpg::components::ExperienceComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&rpg::components::HealthbarComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&rpg::components::HumanMovementComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&rpg::components::ListInventoryComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&rpg::components::MiscItemComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&rpg::components::NameComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&rpg::components::QuickslotComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&rpg::components::SlotComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(&rpg::components::SlotInventoryComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&rpg::components::ThirdPersonControlComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&rpg::components::UsableItemComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&rpg::components::WeightInventoryComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&components::AttributeComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&components::DialogCheckerComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(&components::ExperienceComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&components::HealthbarComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&components::HumanMovementComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&components::ListInventoryComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&components::MiscItemComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&components::NameComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&components::QuickslotComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&components::SlotComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(&components::SlotInventoryComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&components::ThirdPersonControlComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&components::UsableItemComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&components::WeightInventoryComponent::createC, _1, _2));
 
 		// register keys
 		uint16_t key;
