@@ -18,6 +18,7 @@
 #include "i6engine/modules/object/ObjectController.h"
 #include "i6engine/modules/physics/PhysicsController.h"
 
+#include "i6engine/editor/plugins/FlagPluginInterface.h"
 #include "i6engine/editor/plugins/InitializationPluginInterface.h"
 #include "i6engine/editor/plugins/RunGamePluginInterface.h"
 
@@ -46,7 +47,7 @@ namespace widgets {
 		emit triggerGameAction(_index);
 	}
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _engineThread(), _level(), _initializationPlugins(), _runGamePlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _resetEngineController(false) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _engineThread(), _level(), _initializationPlugins(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _resetEngineController(false) {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -126,6 +127,16 @@ namespace widgets {
 			_movementSpeed = dlg.movementSpeedSlider->value() / 20.0;
 			_rotationSpeed = dlg.rotationSpeedSlider->value() / 20.0;
 		}
+	}
+
+	std::vector<std::string> MainWindow::getLevelFlags() const {
+		std::vector<std::string> vec = { "Singleplayer" };
+		for (plugins::FlagPluginInterface * fpi : _flagPlugins) {
+			for (std::string s : fpi->getFlags()) {
+				vec.push_back(s);
+			}
+		}
+		return vec;
 	}
 
 	void MainWindow::AfterInitialize() {
@@ -252,11 +263,11 @@ namespace widgets {
 	void MainWindow::loadPlugins() {
 		loadInitializationPlugins();
 		loadRunGamePlugins();
+		loadFlagPlugins();
 	}
 
 	void MainWindow::loadInitializationPlugins() {
-		QDir pluginsDir = QDir(qApp->applicationDirPath());
-		pluginsDir.cd("plugins/editor/initialization");
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/initialization");
 		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
 			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
 			QObject * plugin = loader.instance();
@@ -284,6 +295,23 @@ namespace widgets {
 				_gameActionHelperList.push_back(gac);
 				connect(action, SIGNAL(triggered()), gac, SLOT(triggered()));
 				connect(gac, SIGNAL(triggerGameAction(int)), this, SLOT(triggeredGameAction(int)));
+			} else {
+				QMessageBox box;
+				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setInformativeText(loader.errorString());
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+			}
+		}
+	}
+
+	void MainWindow::loadFlagPlugins() {
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/flags");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_flagPlugins.push_back(qobject_cast<plugins::FlagPluginInterface *>(plugin));
 			} else {
 				QMessageBox box;
 				box.setWindowTitle(QString("Error loading plugin!"));
