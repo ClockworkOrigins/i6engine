@@ -254,7 +254,6 @@ namespace api {
 	}
 
 	void EngineController::stop() {
-		std::cout << "Stop" << std::endl;
 		boost::thread thrd(&EngineController::ShutDown, EngineController::GetSingletonPtr());
 		thrd.detach();
 	}
