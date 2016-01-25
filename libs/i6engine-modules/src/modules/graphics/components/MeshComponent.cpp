@@ -32,7 +32,7 @@
 namespace i6engine {
 namespace modules {
 
-	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _movableTextObservers(), _boundingBoxObservers(), _attachedNodes() {
+	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _lastFrameTime(0), _movableTextObservers(), _boundingBoxObservers(), _attachedNodes(), _queueA(), _queueB() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
@@ -142,6 +142,14 @@ namespace modules {
 		_animationSpeed = 1.0;
 
 		_lastTime = api::EngineController::GetSingleton().getCurrentTime();
+		_lastFrameTime = 0;
+
+		while (!_queueA.empty()) {
+			_queueA.pop();
+		}
+		while (!_queueB.empty()) {
+			_queueB.pop();
+		}
 	}
 
 	void MeshComponent::stopAnimation() {
@@ -150,6 +158,21 @@ namespace modules {
 		_animationState->setEnabled(false);
 		_animationState = nullptr;
 		_parent->removeTicker(this);
+		while (!_queueA.empty()) {
+			_queueA.pop();
+		}
+		while (!_queueB.empty()) {
+			_queueB.pop();
+		}
+	}
+
+	void MeshComponent::addAnimationFrameEvent(uint64_t frameTime, const std::function<void(void)> & func) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		if (frameTime >= uint64_t(_animationState->getTimePosition() * 1000000)) {
+			_queueA.push(std::make_pair(frameTime, func));
+		} else {
+			_queueB.push(std::make_pair(frameTime, func));
+		}
 	}
 
 	void MeshComponent::Tick() {
@@ -179,6 +202,18 @@ namespace modules {
 				}
 			}
 		}
+		while (!_queueA.empty() && (uint64_t(_animationState->getTimePosition() * 1000000) >= _queueA.top().first || uint64_t(_animationState->getTimePosition() * 1000000) < _lastFrameTime)) {
+			_queueA.top().second();
+			_queueB.push(_queueA.top());
+			_queueA.pop();
+		}
+		if (uint64_t(_animationState->getTimePosition() * 1000000) < _lastFrameTime) {
+			_queueA = _queueB;
+			while (!_queueB.empty()) {
+				_queueB.pop();
+			}
+		}
+		_lastFrameTime = uint64_t(_animationState->getTimePosition() * 1000000);
 		_lastTime = cT;
 	}
 

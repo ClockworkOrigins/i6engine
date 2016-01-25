@@ -880,6 +880,11 @@ namespace modules {
 			assert(otherNode);
 			node->detachFromBone(coid, otherNode, gdfbu->boneName);
 			otherNode->stopListenAttachment();
+		} else if (msg->getSubtype() == api::graphics::GraAnimationFrameEvent) {
+			api::graphics::Graphics_AnimationFrameEvent_Update * gafeu = dynamic_cast<api::graphics::Graphics_AnimationFrameEvent_Update *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			node->addAnimationFrameEvent(coid, gafeu->frameTime, gafeu->func);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

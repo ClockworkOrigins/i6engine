@@ -883,6 +883,22 @@ namespace object {
 		});
 	}
 
+	void addAnimationFrameEvent(i6engine::api::MeshAppearanceComponent * c, uint64_t frameTime, const std::string & func) {
+		c->addAnimationFrameEvent(frameTime, [func]() {
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
+		});
+	}
+
+	void addAnimationFrameEvent(i6engine::api::MeshAppearanceComponent * c, uint64_t frameTime, const std::string & script, const std::string & func) {
+		c->addAnimationFrameEvent(frameTime, [script, func]() {
+			if (!script.empty() && !func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func);
+			}
+		});
+	}
+
 } /* namespace object */
 } /* namespace python */
 } /* namespace i6engine */
@@ -1074,7 +1090,9 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("drawBoundingBox", &i6engine::api::MeshAppearanceComponent::drawBoundingBox)
 		.def("removeBoundingBox", &i6engine::api::MeshAppearanceComponent::removeBoundingBox)
 		.def("attachGameObjectToBone", &i6engine::api::MeshAppearanceComponent::attachGameObjectToBone)
-		.def("detachGameObjectFromBone", &i6engine::api::MeshAppearanceComponent::detachGameObjectFromBone);
+		.def("detachGameObjectFromBone", &i6engine::api::MeshAppearanceComponent::detachGameObjectFromBone)
+		.def("addAnimationFrameEvent", (void(*)(i6engine::api::MeshAppearanceComponent*, uint64_t, const std::string &)) &i6engine::python::object::addAnimationFrameEvent)
+		.def("addAnimationFrameEvent", (void(*)(i6engine::api::MeshAppearanceComponent*, uint64_t, const std::string &, const std::string &)) &i6engine::python::object::addAnimationFrameEvent);
 
 	class_<i6engine::api::MovableTextComponent, i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>, boost::noncopyable>("MovableTextComponent", no_init)
 		.def("synchronize", &i6engine::api::MovableTextComponent::synchronize)

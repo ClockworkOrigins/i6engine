@@ -75,7 +75,8 @@ namespace graphics {
 		GraLoadResources,
 		GraSaveTerrainShape,
 		GraAttachToBone,
-		GraDetachFromBone
+		GraDetachFromBone,
+		GraAnimationFrameEvent
 	};
 
 	enum class ShadowTechnique {
@@ -830,6 +831,19 @@ namespace graphics {
 			return new Graphics_DetachFromBone_Update(*this);
 		}
 	} Graphics_DetachFromBone_Update;
+	
+	/**
+	 * \brief adds an event to a key frame of an animation
+	 */
+	typedef struct Graphics_AnimationFrameEvent_Update : GameMessageStruct {
+		uint64_t frameTime;
+		std::function<void(void)> func;
+		Graphics_AnimationFrameEvent_Update(int64_t coid, int64_t goid, uint64_t f, const std::function<void(void)> & fu) : GameMessageStruct(coid, goid), frameTime(f), func(fu) {
+		}
+		Graphics_AnimationFrameEvent_Update * copy() {
+			return new Graphics_AnimationFrameEvent_Update(*this);
+		}
+	} Graphics_AnimationFrameEvent_Update;
 
 } /* namespace graphics */
 } /* namespace api */

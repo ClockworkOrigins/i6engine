@@ -23,6 +23,8 @@
 #define __I6ENGINE_MODULES_COMPONENTS_MESHCOMPONENT_H__
 
 #include <cstdint>
+#include <functional>
+#include <queue>
 #include <vector>
 
 #include "i6engine/utils/i6eThreadSafety.h"
@@ -80,11 +82,20 @@ namespace modules {
 		double _animationSpeed;
 
 		uint64_t _lastTime;
+		uint64_t _lastFrameTime;
 
 		std::vector<int64_t> _movableTextObservers;
 		std::vector<int64_t> _boundingBoxObservers;
 
 		std::map<GraphicsNode *, std::string> _attachedNodes;
+		struct sortFrameFunctions {
+			bool operator()(const std::pair<uint64_t, std::function<void(void)>> & a, const std::pair<uint64_t, std::function<void(void)>> & b) const {
+				return a.first < b.first;
+			}
+		};
+
+		std::priority_queue<std::pair<uint64_t, std::function<void(void)>>, std::vector<std::pair<uint64_t, std::function<void(void)>>>, sortFrameFunctions> _queueA;
+		std::priority_queue<std::pair<uint64_t, std::function<void(void)>>, std::vector<std::pair<uint64_t, std::function<void(void)>>>, sortFrameFunctions> _queueB;
 
 		/**
 		 * \brief Create a new MeshComponent
@@ -134,6 +145,12 @@ namespace modules {
 		 * \brief stops an animation
 		 */
 		void stopAnimation();
+
+		/**
+		 * \brief adds an event being triggered, when a specified frame time of the animation is reached
+		 * note that all events are removed when another animation is played!
+		 */
+		void addAnimationFrameEvent(uint64_t frameTime, const std::function<void(void)> & func);
 
 		void Tick();
 
