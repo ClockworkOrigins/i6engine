@@ -77,7 +77,7 @@ namespace api {
 		}, [this](std::string s) {
 			_lifetime = std::stoull(s);
 			return true;
-		}));
+		}, "Integer"));
 
 		return result;
 	}

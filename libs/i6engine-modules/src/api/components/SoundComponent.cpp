@@ -99,7 +99,7 @@ namespace api {
 			_file = s;
 			// TODO: (Daniel) update change
 			return true;
-		}));
+		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Looping", [this]() {
 			return boost::lexical_cast<std::string>(_looping);
 		}, [this](std::string s) {
@@ -110,7 +110,7 @@ namespace api {
 			}
 			// TODO: (Daniel) update change
 			return true;
-		}));
+		}, "Bool"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Max. Dist", [this]() {
 			return boost::lexical_cast<std::string>(_maxDist);
 		}, [this](std::string s) {
@@ -121,7 +121,7 @@ namespace api {
 			}
 			// TODO: (Daniel) update change
 			return true;
-		}));
+		}, "Double"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Offset", [this]() {
 			return _position.toString();
 		}, [this](std::string s) {
@@ -132,7 +132,7 @@ namespace api {
 			}
 			// TODO: (Daniel) update change
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Direction", [this]() {
 			return _direction.toString();
 		}, [this](std::string s) {
@@ -143,7 +143,7 @@ namespace api {
 			}
 			// TODO: (Daniel) update change
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Cache", [this]() {
 			return boost::lexical_cast<std::string>(_cacheable);
 		}, [this](std::string s) {
@@ -154,7 +154,7 @@ namespace api {
 			}
 			// TODO: (Daniel) update change
 			return true;
-		}));
+		}, "Bool"));
 
 		return result;
 	}

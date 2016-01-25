@@ -320,7 +320,7 @@ namespace api {
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNodePosition, core::Method::Update, new physics::Physics_NodePosition_Update(_objOwnerID, getID(), _position), core::Subsystem::Object));
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object));
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Rotation", [this]() {
 			std::stringstream ss;
 			ss << _rotation;
@@ -334,7 +334,7 @@ namespace api {
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), core::Subsystem::Object));
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object));
 			return true;
-		}));
+		}, "Quaternion"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Scale", [this]() {
 			return _scale.toString();
 		}, [this](std::string s) {
@@ -346,7 +346,7 @@ namespace api {
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyNode, core::Method::Update, new physics::Physics_Node_Update(_objOwnerID, getID(), _rotation, _scale), core::Subsystem::Object));
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraNode, core::Method::Update, new graphics::Graphics_Node_Update(_objOwnerID, getID(), _position, _rotation, _scale), core::Subsystem::Object));
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Gravity", [this]() {
 			return _gravity.toString();
 		}, [this](std::string s) {
@@ -357,7 +357,7 @@ namespace api {
 			}
 			setGravity(_gravity);
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Collision Group", [this]() {
 			std::stringstream ss;
 			ss << _collisionGroup.responseType << " " << _collisionGroup.crashType << " " << _collisionGroup.crashMask;
@@ -365,25 +365,25 @@ namespace api {
 		}, [this](std::string s) {
 			setCollisionFlags(CollisionGroup(s));
 			return true;
-		}));
+		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Shape Type", [this]() {
 			return boost::lexical_cast<std::string>(uint16_t(_shapeType));
 		}, [this](std::string s) {
 			_shapeType = ShapeType(boost::lexical_cast<uint16_t>(s));
 			return true;
-		}));
+		}, "ShapeType"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Shatter Interest", [this]() {
 			return boost::lexical_cast<std::string>(uint16_t(_shatterInterest));
 		}, [this](std::string s) {
 			_shatterInterest = ShatterInterest(boost::lexical_cast<uint16_t>(s));
 			return true;
-		}));
+		}, "ShatterInterest"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Sync. Priority", [this]() {
 			return boost::lexical_cast<std::string>(_syncPrio);
 		}, [this](std::string s) {
 			_syncPrio = boost::lexical_cast<uint32_t>(s);
 			return true;
-		}));
+		}, "Integer"));
 
 		return result;
 	}

@@ -81,7 +81,7 @@ namespace api {
 		}, [this](std::string s) {
 			_name = s;
 			return true;
-		}));
+		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Connections", [this]() {
 			std::string connections;
 
@@ -95,7 +95,7 @@ namespace api {
 		}, [this](std::string s) {
 			_connections = utils::split(s, ";");
 			return true;
-		}));
+		}, "String"));
 
 		return result;
 	}
