@@ -62,7 +62,7 @@ namespace modules {
 		_tickList.clear();
 		_GOMap.clear();
 
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOList({});
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOMap({});
 
 		GOPtr::clear();
 		api::ComPtr::clear();
