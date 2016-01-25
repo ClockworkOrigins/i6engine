@@ -60,6 +60,7 @@ namespace widgets {
 		void chooseSaveLevelAs();
 		void closeEditor();
 		void triggeredGameAction(int index);
+		void openOptions();
 		void doInitializeEngine();
 		void doInitializeGame();
 		void doStopApp();

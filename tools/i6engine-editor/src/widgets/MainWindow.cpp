@@ -21,6 +21,7 @@
 #include "i6engine/editor/plugins/InitializationPluginInterface.h"
 #include "i6engine/editor/plugins/RunGamePluginInterface.h"
 
+#include "i6engine/editor/widgets/ConfigDialog.h"
 #include "i6engine/editor/widgets/ObjectContainerWidget.h"
 #include "i6engine/editor/widgets/ObjectInfoWidget.h"
 #include "i6engine/editor/widgets/ObjectListWidget.h"
@@ -114,6 +115,16 @@ namespace widgets {
 			box.setInformativeText("Actually no level is loaded. Load a level first to start game with it!");
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
+		}
+	}
+
+	void MainWindow::openOptions() {
+		ConfigDialog dlg;
+		dlg.movementSpeedSlider->setValue(int(_movementSpeed * 20));
+		dlg.rotationSpeedSlider->setValue(int(_rotationSpeed * 20));
+		if (dlg.exec() == QDialog::Accepted) {
+			_movementSpeed = dlg.movementSpeedSlider->value() / 20.0;
+			_rotationSpeed = dlg.rotationSpeedSlider->value() / 20.0;
 		}
 	}
 
