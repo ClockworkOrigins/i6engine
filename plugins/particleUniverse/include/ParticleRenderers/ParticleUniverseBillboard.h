@@ -26,18 +26,20 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniversePrerequisites.h"
 
-namespace ParticleUniverse
-{
+#include "OGRE/OgreBillboard.h"
+
+namespace ParticleUniverse {
+
 	/** This is a child of the Ogre Billboard class, with the exception that it has new friends ;-)
     */
-	class _ParticleUniverseExport Billboard : public Ogre::Billboard
-	{
+	class _ParticleUniverseExport Billboard : public Ogre::Billboard {
         friend class BillboardRenderer;
 
-		public:
-			Billboard(void) : Ogre::Billboard(){};
-	        virtual ~Billboard(void){};
+	public:
+		Billboard() : Ogre::Billboard() {}
+	    virtual ~Billboard() {}
 	};
 
 }
-#endif
+
+#endif /* __PU_BILLBOARD_H__ */
