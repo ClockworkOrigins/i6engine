@@ -32,8 +32,6 @@
 
 #include "i6engine/api/configs/ObjectConfig.h"
 
-#include "boost/thread/mutex.hpp"
-
 namespace i6engine {
 namespace api {
 
@@ -236,9 +234,9 @@ namespace api {
 		std::unordered_map<int64_t, GOPtr> _GOMap;
 
 		/**
-		 * \brief for locking the _GOList
+		 * \brief for locking the _GOMap
 		 */
-		mutable boost::mutex _lock;
+		mutable std::mutex _lock;
 
 		/**
 		 * \brief contains the current frameTime of this subsystem

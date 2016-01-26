@@ -22,16 +22,15 @@
 #ifndef __I6ENGINE_CORE_MESSAGINGCONTROLLER_H__
 #define __I6ENGINE_CORE_MESSAGINGCONTROLLER_H__
 
+#include <condition_variable>
 #include <list>
 #include <map>
+#include <mutex>
 
 #include "i6engine/utils/DoubleBufferQueue.h"
 
 #include "i6engine/core/messaging/Message.h"
 #include "i6engine/core/subsystem/ModuleController.h"
-
-#include "boost/thread/condition_variable.hpp"
-#include "boost/thread/mutex.hpp"
 
 /**
  * \page page_messagingSystem Messaging System
@@ -140,7 +139,7 @@ namespace core {
 		/**
 		 * \brief
 		 */
-		mutable boost::mutex _objDictionaryMutex;
+		mutable std::mutex _dictionaryMutex;
 
 		/**
 		 * \brief queue containing messages for the controller

@@ -61,6 +61,7 @@ namespace utils {
 		void push(T value) {
 			_value = value;
 			_finished = true;
+			std::unique_lock<std::mutex> ul(_lockValue);
 			_valueCondVar.notify_one();
 		}
 

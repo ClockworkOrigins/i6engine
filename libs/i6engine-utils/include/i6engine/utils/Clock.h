@@ -105,11 +105,8 @@ namespace utils {
 		 */
 		void updateWaitTime(uint64_t timerID, uint64_t time) {
 			if (time <= _systemTime) {
-				std::condition_variable * cond;
-				{
-					std::lock_guard<std::mutex> lock(_lock);
-					cond = _timer[size_t(timerID)].second;
-				}
+				std::lock_guard<std::mutex> lock(_lock);
+				std::condition_variable * cond = _timer[size_t(timerID)].second;
 				cond->notify_all();
 				return;
 			}

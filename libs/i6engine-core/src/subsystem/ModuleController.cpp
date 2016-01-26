@@ -44,6 +44,8 @@ namespace core {
 	ModuleController::~ModuleController() {
 		delete _ptrTimer;
 		_ptrTimer = nullptr;
+		std::unique_lock<std::mutex> ul(_lock);
+		_conditionVariable.notify_one();
 	}
 
 	void ModuleController::runLoopTicking() {
@@ -110,8 +112,10 @@ namespace core {
 
 			try {
 				// delegate system
-				std::unique_lock<std::mutex> ul(_lock);
-				_conditionVariable.wait(ul);
+				{
+					std::unique_lock<std::mutex> ul(_lock);
+					_conditionVariable.wait(ul);
+				}
 				processMessages();
 				bool triggered = true;
 
@@ -216,6 +220,7 @@ namespace core {
 	void ModuleController::deliverMessageInternal(const ReceivedMessagePtr & msg) {
 		MessageSubscriber::deliverMessageInternal(msg);
 		if (msg->message->getMessageType() == messages::SubsystemMessageType) {
+			std::unique_lock<std::mutex> ul(_lock);
 			_conditionVariable.notify_one();
 		}
 	}

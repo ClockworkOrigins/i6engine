@@ -39,6 +39,7 @@ namespace core {
 		}
 
 		utils::exceptions::ExceptionQueue::GetSingleton().addCallback([this]() {
+			std::unique_lock<std::mutex> ul(_lock);
 			_condVar.notify_all();
 		});
 	}

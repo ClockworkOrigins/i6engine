@@ -24,8 +24,8 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-#include "boost/thread/condition_variable.hpp"
-#include "boost/thread/mutex.hpp"
+#include <condition_variable>
+#include <mutex>
 
 namespace i6engine {
 namespace core {
@@ -96,9 +96,8 @@ namespace core {
 		EngineCoreController * _ctrl;
 
 		bool _bolTimerStopped;
-		boost::condition_variable _objCondExecutable;
-		boost::mutex _objCondMut;
-		boost::unique_lock<boost::mutex> _objCondUniqLock;
+		std::condition_variable _condVariable;
+		std::mutex _lock;
 		uint64_t _timerID;
 	};
 

@@ -79,6 +79,7 @@ namespace core {
 		 */
 		void ShutDown() {
 			_bolLoop = false;
+			std::unique_lock<std::mutex> ul(_lock);
 			_condVar.notify_all();
 		}
 

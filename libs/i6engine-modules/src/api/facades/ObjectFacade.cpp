@@ -28,8 +28,6 @@
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/interprocess/sync/scoped_lock.hpp"
-
 namespace i6engine {
 namespace api {
 
@@ -47,7 +45,7 @@ namespace api {
 	}
 
 	GOPtr ObjectFacade::getObject(const int64_t goid) const {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> lg(_lock);
 		auto it = _GOMap.find(goid);
 		if (it != _GOMap.end()) {
 			return it->second;
@@ -81,7 +79,7 @@ namespace api {
 	}
 
 	std::unordered_map<int64_t, GOPtr> ObjectFacade::getGOMap() const {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> lg(_lock);
 		return _GOMap;
 	}
 
@@ -99,6 +97,7 @@ namespace api {
 
 	void ObjectFacade::loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjLevel, core::Method::Create, new objects::Object_Level_Create(file, flags, [this]() {
+			std::unique_lock<std::mutex> ul(_loadLevelLock);
 			_loadLevelCondVar.notify_all();
 		}), core::Subsystem::Unknown);
 		if (resourcesFile.empty()) {
@@ -139,7 +138,7 @@ namespace api {
 	}
 
 	void ObjectFacade::updateGOMap(const std::unordered_map<int64_t, GOPtr> & GOMap) {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> lg(_lock);
 		_GOMap = GOMap;
 	}
 
