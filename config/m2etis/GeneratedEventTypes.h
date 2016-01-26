@@ -12,6 +12,8 @@
 #define ISIXE_CORE_API
 #define ISIXE_MODULES_API
 
+#include <sstream>
+
 #include "i6engine/api/GameMessageStruct.h"
 #include "i6engine/api/GameMessage.h"
 

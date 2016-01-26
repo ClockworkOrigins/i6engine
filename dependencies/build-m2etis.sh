@@ -25,8 +25,8 @@ ROOT_DIR=${3}
 . ./build-common.sh
 
 # M2etis
-ARCHIVE="m2etis-0.3-rev26.zip"
-BUILD_DIR="${BUILD_ROOT}/m2etis-0.3-rev26"
+ARCHIVE="m2etis-0.4.0-src.zip"
+BUILD_DIR="${BUILD_ROOT}/m2etis-0.4.0-src"
 
 PREFIX="${ROOT_DIR}/m2etis"
 DEBUG_FLAG="DEBUG"
@@ -56,7 +56,7 @@ if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-./download-dependency.sh ${ARCHIVE}
+./download-dependency.sh ${ARCHIVE} http://clockwork-origins.de/m2etis/downloads/
 
 status "Cleaning M2etis"
 rm -rf "${PREFIX}"
@@ -70,29 +70,22 @@ cd "${BUILD_DIR}"
 
 status "Configuring M2etis"
 
-cd "library"
-
-if [ -e "CMakeCache.txt" ]; then
-	rm "CMakeCache.txt"
-	make clean
-fi
-
-cp "${DEP_DIR}/../config/m2etis/GeneratedChannelConfigurationExample.h" "include/m2etis/config/examples/"
-cp "${DEP_DIR}/../config/m2etis/GeneratedChannelNameExample.h" "include/m2etis/config/examples/"
-cp "${DEP_DIR}/../config/m2etis/GeneratedEventTypesExample.h" "include/m2etis/config/examples/"
-cp "${DEP_DIR}/../config/m2etis/GeneratedMessageConfigurationExample.h" "include/m2etis/config/examples/"
-mkdir -p "extern/i6engine/api"
-mkdir -p "extern/i6engine/core/messaging"
-mkdir -p "extern/i6engine/utils"
-cp "${DEP_DIR}/../libs/i6engine-core/include/i6engine/core/messaging/IPKey.h" "extern/i6engine/core/messaging"
-cp "${DEP_DIR}/../libs/i6engine-core/include/i6engine/core/messaging/MessageStruct.h" "extern/i6engine/core/messaging"
-cp "${DEP_DIR}/../libs/i6engine-core/include/i6engine/core/messaging/Message.h" "extern/i6engine/core/messaging"
-cp "${DEP_DIR}/../libs/i6engine-modules/include/i6engine/api/GameMessageStruct.h" "extern/i6engine/api"
-cp "${DEP_DIR}/../libs/i6engine-modules/include/i6engine/api/GameMessage.h" "extern/i6engine/api"
-cp "${DEP_DIR}/../libs/i6engine-utils/include/i6engine/utils/i6eSystemParameters.h" "extern/i6engine/utils"
+cp "${DEP_DIR}/../config/m2etis/GeneratedChannelConfiguration.h" "library/generated/"
+cp "${DEP_DIR}/../config/m2etis/GeneratedChannelName.h" "library/generated/"
+cp "${DEP_DIR}/../config/m2etis/GeneratedEventTypes.h" "library/generated/"
+cp "${DEP_DIR}/../config/m2etis/GeneratedMessageConfiguration.h" "library/generated/"
+mkdir -p "library/extern/i6engine/api"
+mkdir -p "library/extern/i6engine/core/messaging"
+mkdir -p "library/extern/i6engine/utils"
+cp "${DEP_DIR}/../libs/i6engine-core/include/i6engine/core/messaging/IPKey.h" "library/extern/i6engine/core/messaging"
+cp "${DEP_DIR}/../libs/i6engine-core/include/i6engine/core/messaging/MessageStruct.h" "library/extern/i6engine/core/messaging"
+cp "${DEP_DIR}/../libs/i6engine-core/include/i6engine/core/messaging/Message.h" "library/extern/i6engine/core/messaging"
+cp "${DEP_DIR}/../libs/i6engine-modules/include/i6engine/api/GameMessageStruct.h" "library/extern/i6engine/api"
+cp "${DEP_DIR}/../libs/i6engine-modules/include/i6engine/api/GameMessage.h" "library/extern/i6engine/api"
+cp "${DEP_DIR}/../libs/i6engine-utils/include/i6engine/utils/i6eSystemParameters.h" "library/extern/i6engine/utils"
 if [ ! -z ${COPY_DIR} ]; then
 	status "Copying '${COPY_DIR}'"
-	cp ${COPY_DIR}/* "extern/i6engine"
+	cp ${COPY_DIR}/* "library/extern/i6engine"
 else
 	status "not Copying '${COPY_DIR}'"
 fi
