@@ -1,7 +1,7 @@
 call build-common.bat %1 %2
 
-Set ARCHIVE=clockutils-0.4.0-src.zip
-Set BUILD_DIR=%TMP_DIR%/clockutils-0.4.0-src
+Set ARCHIVE=clockutils-0.5.0-src.zip
+Set BUILD_DIR=%TMP_DIR%/clockutils-0.5.0-src
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/clockUtils/
 
 echo "Compile clockUtils"
