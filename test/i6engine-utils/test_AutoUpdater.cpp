@@ -60,3 +60,11 @@ TEST(AutoUpdater, Updater) {
 
 	EXPECT_EQ(-353453533, d);
 }
+
+TEST(AutoUpdater, operatorPlusPlus) {
+	i6engine::utils::AutoUpdater<int> ud(5);
+
+	EXPECT_EQ(5, ud++);
+	EXPECT_EQ(6, ud);
+	EXPECT_EQ(7, ++ud);
+}

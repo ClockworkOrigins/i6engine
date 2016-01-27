@@ -41,6 +41,11 @@ namespace editor {
 			return _camera;
 		}
 
+		/**
+		 * \brief saves current state in given file
+		 */
+		void saveLevel(const std::string & file);
+
 	protected:
 		/**
 		 * \brief called before subsystems are started
@@ -75,11 +80,6 @@ namespace editor {
 		void loadLevel(const std::string & file);
 
 		/**
-		 * \brief saves current state in given file
-		 */
-		void saveLevel(const std::string & file);
-
-		/**
 		 * \brief returns the base path where the file dialog shall look for level files
 		 */
 		virtual std::string getBasePath() const = 0;
@@ -94,6 +94,10 @@ namespace editor {
 
 		double _movementSpeed;
 		double _rotationSpeed;
+
+		virtual void setProgressValue(int value) = 0;
+		virtual void setProgressMaximum(int value) = 0;
+		virtual void finishedProgress() = 0;
 
 	private:
 		api::GOPtr _camera;
