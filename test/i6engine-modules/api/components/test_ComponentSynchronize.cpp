@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "i6engine/api/components/AnimationControllerComponent.h"
 #include "i6engine/api/components/BillboardComponent.h"
 #include "i6engine/api/components/CameraComponent.h"
 #include "i6engine/api/components/FollowComponent.h"
@@ -41,6 +42,12 @@ using namespace i6engine;
 using namespace i6engine::api;
 
 TEST(Component, Synchronize) {
+	{
+		attributeMap paramsAnimationController = { };
+		auto acc = Component::createC<AnimationControllerComponent>(0, paramsAnimationController);
+		auto newMap = acc->synchronize();
+		Component::createC<AnimationControllerComponent>(0, newMap);
+	}
 	{
 		attributeMap paramsBillboard = { { "material", "blafoo" }, { "width", "0.1" }, { "height", "0.1" }, { "origin", "0" } };
 		auto bc = Component::createC<BillboardComponent>(0, paramsBillboard);

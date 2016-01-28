@@ -69,6 +69,7 @@ namespace components {
 		Point2PointConstraintComponent,
 		VelocityComponent,
 		LineComponent,
+		AnimationControllerComponent,
 		ComponentTypesCount
 	};
 

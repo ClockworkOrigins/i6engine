@@ -16,6 +16,7 @@
 
 #include "i6engine/utils/Exceptions.h"
 
+#include "i6engine/api/components/AnimationControllerComponent.h"
 #include "i6engine/api/components/BillboardComponent.h"
 #include "i6engine/api/components/CameraComponent.h"
 #include "i6engine/api/components/FollowComponent.h"
@@ -43,6 +44,15 @@ using namespace i6engine;
 using namespace i6engine::api;
 
 TEST(Component, CreateException) {
+	{
+		attributeMap paramsAnimationController = { };
+		Component::createC<AnimationControllerComponent>(0, paramsAnimationController);
+		for (auto it = paramsAnimationController.begin(); it != paramsAnimationController.end(); it++) {
+			auto newMap = paramsAnimationController;
+			newMap.erase(it->first);
+			ASSERT_THROW(Component::createC<AnimationControllerComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
 	{
 		attributeMap paramsBillboard = { { "material", "blafoo" }, { "width", "0.1" }, { "height", "0.1" }, { "origin", "0" } };
 		Component::createC<BillboardComponent>(0, paramsBillboard);
