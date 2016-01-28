@@ -827,6 +827,22 @@ namespace object {
 		});
 	}
 
+	void addAnimationFrameEvent(i6engine::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & func) {
+		c->addAnimationFrameEvent(animation, frameTime, [func]() {
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
+		});
+	}
+
+	void addAnimationFrameEvent(i6engine::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & script, const std::string & func) {
+		c->addAnimationFrameEvent(animation, frameTime, [script, func]() {
+			if (!script.empty() && !func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func);
+			}
+		});
+	}
+
 } /* namespace object */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -937,7 +953,7 @@ scope registerObject() {
 			.def("addTicker", &i6engine::lua::object::ComponentWrapper::addTicker)
 			.def("removeTicker", &i6engine::lua::object::ComponentWrapper::removeTicker),
 
-			class_<i6engine::api::AnimationControllerComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component>>("AnimationControllerComponent")
+		class_<i6engine::api::AnimationControllerComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component>>("AnimationControllerComponent")
 			.def("addAnimationFrameEvent", (void(*)(i6engine::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &)) &i6engine::lua::object::addAnimationFrameEvent)
 			.def("addAnimationFrameEvent", (void(*)(i6engine::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &, const std::string &)) &i6engine::lua::object::addAnimationFrameEvent)
 			.def("playAnimation", &i6engine::api::AnimationControllerComponent::playAnimation)
