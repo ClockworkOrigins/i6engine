@@ -315,7 +315,7 @@ namespace modules {
 			}
 		}
 
-		uint32_t amount = objects.size();
+		uint32_t amount = uint32_t(objects.size());
 		uint32_t counter = 0;
 		core::IPKey owner = api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP();
 
@@ -323,7 +323,7 @@ namespace modules {
 			auto go = createGO(std::get<0>(t), -1, owner, api::EngineController::GetSingleton().getUUID(), std::get<1>(t), std::get<2>(t));
 			go->setFlags(std::get<3>(t));
 			go->setSend(std::get<2>(t));
-			callback(50 + (counter++ / double(amount)) * 50);
+			callback(uint16_t(50 + (counter++ / double(amount)) * 50));
 		}
 
 		api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
