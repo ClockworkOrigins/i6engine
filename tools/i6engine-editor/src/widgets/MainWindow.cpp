@@ -45,7 +45,7 @@ namespace widgets {
 	}
 
 	void GameActionHelper::triggered() {
-		emit triggerGameAction(_index);
+		emit triggerGameAction(int(_index));
 	}
 
 	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _engineThread(), _level(), _initializationPlugins(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false) {

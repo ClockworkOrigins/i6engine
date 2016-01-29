@@ -219,7 +219,7 @@ namespace editor {
 		currentValue.registerUpdate(std::bind(&Editor::setProgressValue, this, std::placeholders::_1));
 		utils::AutoUpdater<int> maxValue = 1;
 		maxValue.registerUpdate(std::bind(&Editor::setProgressMaximum, this, std::placeholders::_1));
-		maxValue += api::EngineController::GetSingleton().getObjectFacade()->getGOMap().size();
+		maxValue += int(api::EngineController::GetSingleton().getObjectFacade()->getGOMap().size());
 
 		for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOMap()) {
 			if (p.second->getType() == "EditorCam") {
