@@ -81,9 +81,10 @@ namespace modules {
 		 * \brief loads a level out of the given file with the given flags
 		 * \param[in] file file to open
 		 * \param[in] flags
+		 * \param[in] callback is called for loading progress
 		 * \throws I6_FAILURE When file can't be opened
 		 */
-		void loadLevel(const std::string & file, const std::string & flags);
+		void loadLevel(const std::string & file, const std::string & flags, const std::function<void(uint16_t)> & callback);
 
 	private:
 		/**

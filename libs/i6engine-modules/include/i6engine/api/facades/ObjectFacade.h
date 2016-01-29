@@ -108,13 +108,33 @@ namespace api {
 		 * \brief loads a level from an xml file only using the objects with given flags
 		 */
 		void loadLevel(const std::string & file, const std::string & flags) const {
-			loadLevel(file, flags, "");
+			loadLevel(file, flags, "", [](uint16_t) {
+			});
 		}
 
 		/**
 		 * \brief loads a level from an xml file only using the objects with given flags and preloads resources specified in resourcesFile
 		 */
-		void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) const;
+		void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) const {
+			loadLevel(file, flags, resourcesFile, [](uint16_t) {
+			});
+		}
+		
+		/**
+		 * \brief loads a level from an xml file only using the objects with given flags
+		 * calls callback when progress changes with current value and maximum value
+		 * the first fifty percent are always the preload of the resources (in this case instant finished), the second fifty percent are the real level
+		 */
+		void loadLevel(const std::string & file, const std::string & flags, const std::function<void(uint16_t)> & callback) const {
+			loadLevel(file, flags, "", callback);
+		}
+
+		/**
+		 * \brief loads a level from an xml file only using the objects with given flags and preloads resources specified in resourcesFile
+		 * calls callback when progress changes with current value and maximum value
+		 * the first fifty percent are always the preload of the resources, the second fifty percent are the real level
+		 */
+		void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile, const std::function<void(uint16_t)> & callback) const;
 
 		/**
 		 * \brief registers a component to be ticked in every Frame

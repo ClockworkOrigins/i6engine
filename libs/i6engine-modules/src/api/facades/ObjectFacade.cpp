@@ -97,14 +97,16 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void ObjectFacade::loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) const {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjLevel, core::Method::Create, new objects::Object_Level_Create(file, flags, [this]() {
+	void ObjectFacade::loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile, const std::function<void(uint16_t)> & callback) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjLevel, core::Method::Create, new objects::Object_Level_Create(file, flags, callback, [this]() {
 			_loadLevelCondVar.notify_all();
 		}), core::Subsystem::Unknown);
 		if (resourcesFile.empty()) {
+			// object subsystem will set it too, but we are here faster!
+			callback(50);
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 		} else {
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraLoadResources, core::Method::Create, new graphics::Graphics_LoadResources_Create(resourcesFile, msg), core::Subsystem::Unknown));
+			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraLoadResources, core::Method::Create, new graphics::Graphics_LoadResources_Create(resourcesFile, callback, msg), core::Subsystem::Unknown));
 		}
 		std::unique_lock<std::mutex> ul(_loadLevelLock);
 		_loadLevelCondVar.wait(ul);

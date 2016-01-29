@@ -50,8 +50,6 @@
 #include "i6engine/api/manager/WaynetManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include <QProgressDialog>
-
 #include "tinyxml2.h"
 
 namespace i6engine {
@@ -152,14 +150,14 @@ namespace editor {
 		}
 	}
 
-	void Editor::loadLevel(const std::string & file) {
+	void Editor::loadLevel(const std::string & file, const std::function<void(uint16_t)> & callback) {
 		_camera = api::GOPtr();
 
 		for (auto & p : _eventMap) {
 			p.second.second = false;
 		}
 
-		std::thread([this, file]() {
+		std::thread([this, file, callback]() {
 			api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -184,7 +182,7 @@ namespace editor {
 				}
 			}
 
-			api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags);
+			api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, callback);
 
 			api::EngineController::GetSingletonPtr()->getGraphicsFacade()->getHighestCoordinate(Vec3::ZERO, [this](Vec3 pos) {
 				i6engine::api::objects::GOTemplate tmpl;
@@ -198,6 +196,8 @@ namespace editor {
 			});
 
 			_inLevel = true;
+
+			finishedProgress();
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 

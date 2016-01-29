@@ -228,7 +228,7 @@ namespace modules {
 
 		bool _showFPS;
 
-		void loadResources(const std::string & resourcesFile);
+		void loadResources(const std::string & resourcesFile, const std::function<void(uint16_t)> & callback);
 
 		/**
 		 * \brief forbidden

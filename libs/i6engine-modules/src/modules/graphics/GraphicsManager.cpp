@@ -486,7 +486,7 @@ namespace modules {
 			_showFPS = true;
 		} else if (msg->getSubtype() == api::graphics::GraLoadResources) {
 			api::graphics::Graphics_LoadResources_Create * glrc = dynamic_cast<api::graphics::Graphics_LoadResources_Create *>(msg->getContent());
-			loadResources(glrc->resourcesFile);
+			loadResources(glrc->resourcesFile, glrc->callback);
 			api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(glrc->msg);
 		} else if (msg->getSubtype() == api::graphics::GraSaveTerrainShape) {
 			api::graphics::Graphics_SaveTerrainShape_Create * gstsc = dynamic_cast<api::graphics::Graphics_SaveTerrainShape_Create *>(msg->getContent());
@@ -934,7 +934,7 @@ namespace modules {
 		_tickers.erase(gn);
 	}
 
-	void GraphicsManager::loadResources(const std::string & resourcesFile) {
+	void GraphicsManager::loadResources(const std::string & resourcesFile, const std::function<void(uint16_t)> & callback) {
 		tinyxml2::XMLDocument doc;
 
 		if (doc.LoadFile(resourcesFile.c_str())) {
@@ -962,10 +962,14 @@ namespace modules {
 			particles.push_back(particle->GetText());
 		}
 
+		uint32_t amount = meshes.size() + particles.size();
+
 		Ogre::SceneNode * sn = _sceneManager->getRootSceneNode()->createChildSceneNode("PreLoadSceneNode_0_0", Ogre::Vector3::ZERO);
 		Ogre::Camera * camera = _sceneManager->createCamera("PreLoadSceneCamera_0_0");
 		sn->attachObject(camera);
 		_rWindow->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
+
+		uint32_t counter = 0;
 
 		for (std::string m : meshes) {
 			Ogre::Entity * meshEntity = _sceneManager->createEntity("PreLoadSceneMesh_0_0", m);
@@ -975,6 +979,8 @@ namespace modules {
 			_objRoot->renderOneFrame();
 			sn->detachObject(meshEntity);
 			_sceneManager->destroyEntity(meshEntity);
+			callback((counter++ / double(amount)) * 50);
+			_guiController->Tick();
 		}
 
 		for (std::string p : particles) {
@@ -985,6 +991,8 @@ namespace modules {
 			sn->detachObject(particleSystem);
 			particleSystem->stop();
 			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(particleSystem, _sceneManager);
+			callback((counter++ / double(amount)) * 50);
+			_guiController->Tick();
 		}
 
 		_rWindow->removeViewport(0);

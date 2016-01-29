@@ -100,9 +100,9 @@ namespace modules {
 		return _componentFactory.createGOC(id, GOCType, params, owner);
 	}
 
-	void ObjectManager::loadLevel(const std::string & file, const std::string & flags) {
+	void ObjectManager::loadLevel(const std::string & file, const std::string & flags, const std::function<void(uint16_t)> & callback) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		_goFactory.loadLevel(file, flags);
+		_goFactory.loadLevel(file, flags, callback);
 	}
 
 	void ObjectManager::NewsCreate(const api::GameMessage::Ptr & msg) {
@@ -134,8 +134,9 @@ namespace modules {
 			if (type == api::objects::ObjLevel) {
 				std::string file = static_cast<api::objects::Object_Level_Create *>(msg->getContent())->file;
 				std::string flags = static_cast<api::objects::Object_Level_Create *>(msg->getContent())->flags;
+				std::function<void(uint16_t)> callback = static_cast<api::objects::Object_Level_Create *>(msg->getContent())->callback;
 
-				loadLevel(file, flags);
+				loadLevel(file, flags, callback);
 
 				auto func = static_cast<api::objects::Object_Level_Create *>(msg->getContent())->func;
 				if (func != nullptr) {

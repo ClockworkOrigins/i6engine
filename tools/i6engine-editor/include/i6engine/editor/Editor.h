@@ -77,7 +77,7 @@ namespace editor {
 		 * \brief loads given level file
 		 * removes old level if some is loaded
 		 */
-		void loadLevel(const std::string & file);
+		void loadLevel(const std::string & file, const std::function<void(uint16_t)> & callback);
 
 		/**
 		 * \brief returns the base path where the file dialog shall look for level files

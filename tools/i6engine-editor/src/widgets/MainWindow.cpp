@@ -84,7 +84,14 @@ namespace widgets {
 	void MainWindow::chooseLoadLevel() {
 		QString file = QFileDialog::getOpenFileName(nullptr, "Open file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
 		if (!file.isEmpty()) {
-			loadLevel(file.toStdString());
+			delete _progressDialog;
+			_progressDialog = new QProgressDialog("Loading level...", "", 0, 100, this);
+			_progressDialog->setWindowModality(Qt::WindowModal);
+			_progressDialog->setCancelButton(nullptr);
+			connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
+			loadLevel(file.toStdString(), [this](uint16_t value) {
+				setProgressValue(int(value));
+			});
 			_level = file;
 		}
 	}
@@ -153,7 +160,14 @@ namespace widgets {
 		emit _templateListWidget->loadTemplates();
 
 		if (_inGame) {
-			loadLevel(_level.toStdString());
+			delete _progressDialog;
+			_progressDialog = new QProgressDialog("Loading level...", "", 0, 100, this);
+			_progressDialog->setWindowModality(Qt::WindowModal);
+			_progressDialog->setCancelButton(nullptr);
+			connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
+			loadLevel(_level.toStdString(), [this](uint16_t value) {
+				setProgressValue(int(value));
+			});
 			_inGame = false;
 		}
 	}

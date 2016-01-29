@@ -96,6 +96,34 @@ namespace object {
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags);
 	}
 
+	void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile);
+	}
+
+	void loadLevelCallbackFunc(const std::string & file, const std::string & flags, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, [func](uint16_t value) {
+			i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, value);
+		});
+	}
+
+	void loadLevelCallbackScript(const std::string & file, const std::string & flags, const std::string & script, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, [script, func](uint16_t value) {
+			i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callScript<void>(script, func, value);
+		});
+	}
+
+	void loadLevelCallbackFunc(const std::string & file, const std::string & flags, const std::string & resourcesFile, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile, [func](uint16_t value) {
+			i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, value);
+		});
+	}
+
+	void loadLevelCallbackScript(const std::string & file, const std::string & flags, const std::string & resourcesFile, const std::string & script, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile, [script, func](uint16_t value) {
+			i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callScript<void>(script, func, value);
+		});
+	}
+
 	uint32_t getFrameTime() {
 		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime();
 	}
@@ -1290,7 +1318,12 @@ scope registerObject() {
 		def("deleteAllObjectsOfType", &i6engine::lua::object::deleteAllObjectsOfType),
 		def("createObject", &i6engine::lua::object::createObject),
 		def("cleanUpAll", &i6engine::lua::object::cleanUpAll),
-		def("loadLevel", &i6engine::lua::object::loadLevel),
+		def("loadLevel", (void(*)(const std::string &, const std::string &)) &i6engine::lua::object::loadLevel),
+		def("loadLevel", (void(*)(const std::string &, const std::string &, const std::string &)) &i6engine::lua::object::loadLevel),
+		def("loadLevelCallbackFunc", (void(*)(const std::string &, const std::string &, const std::string &)) &i6engine::lua::object::loadLevelCallbackFunc),
+		def("loadLevelCallbackScript", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &)) &i6engine::lua::object::loadLevelCallbackScript),
+		def("loadLevelCallbackFunc", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &)) &i6engine::lua::object::loadLevelCallbackFunc),
+		def("loadLevelCallbackScript", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &, const std::string &)) &i6engine::lua::object::loadLevelCallbackScript),
 		def("getFrameTime", &i6engine::lua::object::getFrameTime),
 		def("registerCTemplate", &i6engine::lua::object::registerCTemplate),
 		def("createGO", &i6engine::lua::object::createGO),
