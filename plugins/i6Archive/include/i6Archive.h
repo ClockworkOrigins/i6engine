@@ -15,7 +15,9 @@ namespace plugins {
 		friend class i6ArchiveFactory;
 
 	private:
-		i6Archive(const Ogre::String & name, const Ogre::String & archType) : Archive(name, archType) {
+		std::map<std::string, std::string> _files;
+
+		i6Archive(const Ogre::String & name, const Ogre::String & archType) : Archive(name, archType), _files() {
 			mReadOnly = true;
 		}
 

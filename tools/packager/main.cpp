@@ -41,7 +41,7 @@ void packFile(std::ofstream & out, const std::string & file) {
 	in.close();
 
 	std::string filename = i6engine::utils::split(file, "/").back();
-	filename = i6engine::utils::split(file, "\\").back();
+	filename = i6engine::utils::split(filename, "\\").back();
 
 	char * lBuffer = new char[sizeof(uint32_t)];
 	uint32_t filenameLength = filename.length();
@@ -49,8 +49,8 @@ void packFile(std::ofstream & out, const std::string & file) {
 
 	clockUtils::compression::Compression<clockUtils::compression::algorithm::HuffmanGeneric> compressor;
 	std::string compressed = compressor.compress(std::string(lBuffer, sizeof(uint32_t)) + filename + std::string(buffer, size_t(size)));
-	uint64_t length = uint64_t(size);
-	out.write(reinterpret_cast<char *>(&length), sizeof(uint64_t));
+	uint32_t length = compressed.length();
+	out.write(reinterpret_cast<char *>(&length), sizeof(uint32_t));
 	out.write(compressed.c_str(), compressed.size());
 	out.flush();
 }
@@ -72,6 +72,7 @@ int main(int argc, char ** argv) {
 		directories.push(argv[i]);
 	}
 
+	uint32_t counter = 0;
 	while (!directories.empty()) {
 		std::string dir = directories.front();
 		directories.pop();
@@ -81,6 +82,7 @@ int main(int argc, char ** argv) {
 				if (boost::filesystem::is_regular_file(*iter)) {
 					std::string file = iter->path().string();
 					packFile(out, file);
+					counter++;
 				} else if (boost::filesystem::is_directory(*iter)) {
 					std::string path = iter->path().string();
 					directories.push(path);
@@ -91,10 +93,12 @@ int main(int argc, char ** argv) {
 			// entry not existing OR entry is file
 			if (boost::filesystem::is_regular_file(dir)) {
 				packFile(out, dir);
+				counter++;
 			}
 		}
 	}
 	out.close();
+	std::cout << "Packed " << counter << " files" << std::endl;
 
 	return 0;
 }
