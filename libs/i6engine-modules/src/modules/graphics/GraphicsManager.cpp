@@ -962,7 +962,7 @@ namespace modules {
 			particles.push_back(particle->GetText());
 		}
 
-		uint32_t amount = meshes.size() + particles.size();
+		uint32_t amount = uint32_t(meshes.size() + particles.size());
 
 		Ogre::SceneNode * sn = _sceneManager->getRootSceneNode()->createChildSceneNode("PreLoadSceneNode_0_0", Ogre::Vector3::ZERO);
 		Ogre::Camera * camera = _sceneManager->createCamera("PreLoadSceneCamera_0_0");
@@ -979,7 +979,7 @@ namespace modules {
 			_objRoot->renderOneFrame();
 			sn->detachObject(meshEntity);
 			_sceneManager->destroyEntity(meshEntity);
-			callback((counter++ / double(amount)) * 50);
+			callback(uint16_t((counter++ / double(amount)) * 50));
 			_guiController->Tick();
 		}
 
@@ -991,7 +991,7 @@ namespace modules {
 			sn->detachObject(particleSystem);
 			particleSystem->stop();
 			ParticleUniverse::ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(particleSystem, _sceneManager);
-			callback((counter++ / double(amount)) * 50);
+			callback(uint16_t((counter++ / double(amount)) * 50));
 			_guiController->Tick();
 		}
 
