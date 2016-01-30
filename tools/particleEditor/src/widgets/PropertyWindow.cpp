@@ -61,9 +61,7 @@ namespace widgets {
 		_types.append(DYN_CURVED);
 		_types.append(DYN_OSCILLATE);
 
-		if (!_name.isEmpty()) {
-			append(new properties::StringProperty(this, PRNL_NAME, PRNL_NAME, _name));
-		}
+		append(new properties::StringProperty(this, PRNL_NAME, PRNL_NAME, _name));
 
 		hide();
 	}
