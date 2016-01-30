@@ -252,6 +252,8 @@ namespace widgets {
 		PropertyWindow * tmp = _propertyWindow;
 		_propertyWindow = nullptr;
 		_parent->notifyComponentActivated(this);
+		_subType = subType;
+		setCaption();
 		delete tmp;
 		createPropertyWindow(subType);
 		if (_type == CT_SYSTEM) {
