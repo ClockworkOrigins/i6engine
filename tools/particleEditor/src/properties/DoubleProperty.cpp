@@ -8,7 +8,8 @@ namespace properties {
 
 	DoubleProperty::DoubleProperty(QWidget * par, QString label, QString name, double value) : Property(par, label, name), _value(value), _doubleSpinBox(nullptr) {
 		_doubleSpinBox = new QDoubleSpinBox(this);
-		_doubleSpinBox->setMaximum(DBL_MAX);
+		_doubleSpinBox->setMinimum(-999999);
+		_doubleSpinBox->setMaximum(999999);
 		_doubleSpinBox->setValue(value);
 		horizontalLayout->addWidget(_doubleSpinBox);
 		_doubleSpinBox->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);

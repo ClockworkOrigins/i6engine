@@ -11,7 +11,8 @@ namespace properties {
 		QLabel * l = new QLabel("X", this);
 		horizontalLayout->addWidget(l);
 		_doubleSpinBoxX = new QDoubleSpinBox(this);
-		_doubleSpinBoxX->setMaximum(DBL_MAX);
+		_doubleSpinBoxX->setMinimum(-999999);
+		_doubleSpinBoxX->setMaximum(999999);
 		_doubleSpinBoxX->setValue(value.x);
 		horizontalLayout->addWidget(_doubleSpinBoxX);
 		_doubleSpinBoxX->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
@@ -20,7 +21,8 @@ namespace properties {
 		l = new QLabel("Y", this);
 		horizontalLayout->addWidget(l);
 		_doubleSpinBoxY = new QDoubleSpinBox(this);
-		_doubleSpinBoxY->setMaximum(DBL_MAX);
+		_doubleSpinBoxY->setMinimum(-999999);
+		_doubleSpinBoxY->setMaximum(999999);
 		_doubleSpinBoxY->setValue(value.y);
 		horizontalLayout->addWidget(_doubleSpinBoxY);
 		_doubleSpinBoxY->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
@@ -29,7 +31,8 @@ namespace properties {
 		l = new QLabel("Z", this);
 		horizontalLayout->addWidget(l);
 		_doubleSpinBoxZ = new QDoubleSpinBox(this);
-		_doubleSpinBoxZ->setMaximum(DBL_MAX);
+		_doubleSpinBoxZ->setMinimum(-999999);
+		_doubleSpinBoxZ->setMaximum(999999);
 		_doubleSpinBoxZ->setValue(value.z);
 		horizontalLayout->addWidget(_doubleSpinBoxZ);
 		_doubleSpinBoxZ->setSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Fixed);
