@@ -47,7 +47,7 @@ namespace widgets {
 	}
 
 	void WidgetParticleList::saveParticle() {
-		if (_dirty && _script.toStdString() != ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_system)) {
+		if (_dirty) {
 			QString file = QFileDialog::getSaveFileName(nullptr, "Save file ...", QString::fromStdString("../media/particles"), "Particle Files (*.pu)");
 			if (!file.isEmpty()) {
 				ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_system, file.toStdString());
