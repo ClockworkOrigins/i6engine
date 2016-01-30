@@ -301,34 +301,6 @@ IF(NOT WIN32)
 ENDIF(NOT WIN32)
 
 #----------------------------------------------------
-# wxWidgets
-#----------------------------------------------------
-IF(ISIXE_WITH_TOOLS)
-	SET(LIBNAME "WXWIDGETS")
-	SET(WXWIDGETS_ROOT ${ISIXE_DEP_DIR}/wxWidgets)
-	IF(WIN32)
-		SET(LIBHEADER "wx/wx/wx.h")
-		find_package(EasyFind REQUIRED COMPONENTS wxbase30u wxbase30u_net wxbase30u_xml wxexpat wxjpeg wxmsw30u_adv wxmsw30u_aui wxmsw30u_core wxmsw30u_gl wxmsw30u_html wxmsw30u_media wxmsw30u_propgrid wxmsw30u_qa wxmsw30u_ribbon wxmsw30u_richtext wxmsw30u_stc wxmsw30u_webview wxmsw30u_xrc wxpng wxregexu wxscintilla wxtiff wxzlib)
-		include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR}/wx)
-	ELSEIF(UNIX)
-		SET(LIBHEADER "wx/wx.h")
-		find_package(EasyFind REQUIRED COMPONENTS wx_baseu-3.0 wx_baseu_net-3.0 wx_baseu_xml-3.0 wx_gtk2u_adv-3.0 wx_gtk2u_aui-3.0 wx_gtk2u_core-3.0 wx_gtk2u_html-3.0 wx_gtk2u_qa-3.0 wx_gtk2u_propgrid-3.0 wx_gtk2u_richtext-3.0 wx_gtk2u_xrc-3.0)
-	ENDIF(WIN32)
-	include_directories(SYSTEM ${WXWIDGETS_INCLUDE_DIR})
-ENDIF(ISIXE_WITH_TOOLS)
-
-#----------------------------------------------------
-# GTK
-#----------------------------------------------------
-IF(ISIXE_WITH_TOOLS AND UNIX)
-	find_package(GTK2 REQUIRED gtk)
-	INCLUDE_DIRECTORIES(SYSTEM ${GTK2_INCLUDE_DIRS})
-	find_package(PkgConfig REQUIRED)
-	pkg_check_modules(GLIB2 glib-2.0)
-	INCLUDE_DIRECTORIES(SYSTEM ${GLIB2_INCLUDE_DIRS})
-ENDIF(ISIXE_WITH_TOOLS AND UNIX)
-
-#----------------------------------------------------
 # Qt
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS)

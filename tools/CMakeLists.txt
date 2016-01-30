@@ -35,6 +35,5 @@ IF(ISIXE_WITH_RPG)
 ENDIF(ISIXE_WITH_RPG)
 
 add_subdirectory(particleEditor)
-add_subdirectory(particleUniverseEditor)
 add_subdirectory(terrainShapeCreator)
 add_subdirectory(terrainTextureConverter)
