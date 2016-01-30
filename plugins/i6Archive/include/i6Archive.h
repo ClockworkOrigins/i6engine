@@ -9,7 +9,7 @@ namespace plugins {
 	class i6ArchiveFactory;
 
 	/**
-	 * \class i6Archive is used to represent a container for all objects that need protection and shall be compressed
+	 * \class i6Archive is used to represent a container for all assets that need protection and shall be compressed
 	 */
 	class i6Archive : public Ogre::Archive {
 		friend class i6ArchiveFactory;
@@ -43,7 +43,7 @@ namespace plugins {
 		void unload() override;
 
 		/**
-		 * \brief Open a stream on a given file.
+		 * \brief Open a stream on a given asset.
 		 * \note There is no equivalent 'close' method; the returned stream controls the lifecycle of this file operation.
 		 * \param filename The fully qualified name of the file
 		 * \param readOnly Whether to open the file in read-only mode or not (note,	if the archive is read-only then this cannot be set to false)

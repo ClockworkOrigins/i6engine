@@ -30,30 +30,22 @@ namespace plugins {
 			uint32_t filenameLength;
 			memcpy(&filenameLength, decompressed.c_str(), sizeof(uint32_t));
 			std::string filename(decompressed, sizeof(uint32_t), filenameLength);
-			std::string fileContent(decompressed, sizeof(uint32_t) + filenameLength, length - filenameLength - sizeof(uint32_t));
+			std::string fileContent(decompressed, sizeof(uint32_t) + filenameLength, decompressed.length() - filenameLength - sizeof(uint32_t));
 			_files.insert(std::make_pair(filename, fileContent));
 		}
-		std::cout << "Parsed " << _files.size() << " files" << std::endl;
 	}
 
 	void i6Archive::unload() {
-		std::cout << "unload" << std::endl;
-		// TODO
+		_files.clear();
 	}
 
 	Ogre::DataStreamPtr i6Archive::open(const Ogre::String & filename, bool readOnly) const {
-		std::cout << "open " << filename << std::endl;
 		auto it = _files.find(filename);
 		if (it == _files.end()) {
-			std::cout << "error" << std::endl;
+			return Ogre::DataStreamPtr();
 		}
-		char * buffer = OGRE_ALLOC_T(char, it->second.size(), Ogre::MEMCATEGORY_GENERAL);
-		memcpy(buffer, it->second.c_str(), it->second.size());
-		std::cout << "open 2" << std::endl;
-		Ogre::DataStream * ds = new Ogre::MemoryDataStream(filename, buffer, it->second.size(), true, true);
-		std::cout << "open 3" << std::endl;
+		Ogre::DataStream * ds = new Ogre::MemoryDataStream(filename, const_cast<char *>(it->second.c_str()), it->second.size(), false, true);
 		Ogre::DataStreamPtr ret(ds);
-		std::cout << "open 4" << std::endl;
 		return ret;
 	}
 

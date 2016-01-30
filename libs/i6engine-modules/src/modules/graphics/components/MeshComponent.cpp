@@ -35,24 +35,16 @@ namespace modules {
 	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _lastFrameTime(0), _movableTextObservers(), _boundingBoxObservers(), _attachedNodes(), _queueA(), _queueB() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
-		std::cout << "Starting MC" << std::endl;
 
 		std::string name = "SN_" + std::to_string(goid) + "_" + std::to_string(coid);
 
 		_sceneNode = _parent->getSceneNode()->createChildSceneNode(name, position.toOgre());
 		_sceneNode->setOrientation(rotation.toOgre());
 		_sceneNode->setScale(scale.toOgre());
-		std::cout << "MC 1" << std::endl;
 		Ogre::Entity * meshEntity = sm->createEntity("mesh_" + std::to_string(goid) + "_" + std::to_string(coid), meshName);
-		std::cout << "MC 2" << std::endl;
 		meshEntity->setVisible(visible);
 		meshEntity->setCastShadows(true);
 		_sceneNode->attachObject(meshEntity);
-
-		std::cout << meshName << std::endl;
-		std::cout << meshEntity << std::endl;
-		std::cout << meshEntity->getMesh().get() << std::endl;
-		std::cout << "-------------" << std::endl;
 
 		meshEntity->getMesh()->buildEdgeList();
 
@@ -73,8 +65,6 @@ namespace modules {
 			p.first->stopListenAttachment();
 			_parent->removeTicker(this);
 		}
-
-		std::cout << "Finished MC" << std::endl;
 	}
 
 	MeshComponent::~MeshComponent() {
