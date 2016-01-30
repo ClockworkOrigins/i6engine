@@ -9,7 +9,7 @@ namespace properties {
 	StringProperty::StringProperty(QWidget * par, QString label, QString name, QString value) : Property(par, label, name), _value(value), _lineEdit(nullptr) {
 		_lineEdit = new QLineEdit(_value, this);
 		horizontalLayout->addWidget(_lineEdit);
-		connect(_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(stringChanged(QString)));
+		connect(_lineEdit, SIGNAL(editingFinished()), this, SLOT(stringChanged()));
 	}
 
 	StringProperty::~StringProperty() {
@@ -20,8 +20,8 @@ namespace properties {
 		_lineEdit->setText(value);
 	}
 
-	void StringProperty::stringChanged(QString value) {
-		_value = value;
+	void StringProperty::stringChanged() {
+		_value = _lineEdit->text();
 		triggerChangedSignal();
 	}
 

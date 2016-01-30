@@ -28,7 +28,7 @@ namespace properties {
 		}
 
 	private slots:
-		void stringChanged(QString value);
+		void stringChanged();
 
 	protected:
 		QString _value;

@@ -315,12 +315,14 @@ namespace widgets {
 	}
 
 	void MainWindow::renameParticleSystem(QString oldName, QString newName) {
-		// Script has changed. Reparse and update the templates
+		// Replace the old particle system with a new one, of which the name can also be changed.
 		ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		QString newTemplateName = QString::fromStdString(particleSystemManager->getLastCreatedParticleSystemTemplateName());
 		particleSystemManager->destroyParticleSystemTemplate(oldName.toStdString()); // Delete the old template
 
+		// Script has changed. Reparse and update the templates
 		_particleListWidget->refreshParticleList();
-		_particleListWidget->selectParticle(newName);
+		_particleListWidget->selectParticle(newTemplateName);
 	}
 
 } /* namespace widgets */

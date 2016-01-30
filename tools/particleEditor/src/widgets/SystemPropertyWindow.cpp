@@ -166,9 +166,17 @@ namespace widgets {
 			_owner->setCaption();
 			system->setTemplateName(prop->getString().toStdString());
 
+			ParticleUniverse::String script = ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(system);
+
+			Ogre::ScriptCompilerManager * scriptCompilerManager = Ogre::ScriptCompilerManager::getSingletonPtr();
+			char * buffer = new char[script.length() + 1];
+			strcpy(buffer, script.c_str());
+			Ogre::DataStreamPtr * datastream = new Ogre::DataStreamPtr(new Ogre::MemoryDataStream(buffer, strlen(buffer)));
+			scriptCompilerManager->parseScript(*datastream, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+			delete datastream;
+			delete[] buffer;
+
 			// Update everything
-			ParticleUniverse::ParticleSystemManager * particleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
-			particleSystemManager->addParticleSystemTemplate(prop->getString().toStdString(), system);
 			emit renameParticleSystem(oldName, prop->getString()); // change name only when saving and reload all scripts then to be able to use!
 		} else if (propertyName == PRNL_SYSTEM_CATEGORY) {
 		} else if (propertyName == PRNL_SYSTEM_KEEP_LOCAL) {
