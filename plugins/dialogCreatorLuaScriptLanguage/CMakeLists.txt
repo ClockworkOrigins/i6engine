@@ -38,9 +38,9 @@ ADD_DEFINITIONS(-DQT_SHARED)
 
 add_library(Plugin_LuaScriptLanguage SHARED ${plugindialogCreatorLuaScriptLanguageSrc} ${plugindialogCreatorLuaScriptLanguageInclude})
 
-target_link_libraries(Plugin_LuaScriptLanguage i6engine-rpg ${QT_LIBRARIES})
+target_link_libraries(Plugin_LuaScriptLanguage ${QT_LIBRARIES})
 
-add_custom_command(TARGET Plugin_LuaScriptLanguage PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/plugins/editor/initialization)
+add_custom_command(TARGET Plugin_LuaScriptLanguage PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/plugins/dialogCreator/scriptLanguages)
 
 IF(WIN32)
 	add_custom_command(TARGET Plugin_LuaScriptLanguage POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Plugin_LuaScriptLanguage.dll ${CMAKE_BINARY_DIR}/bin/plugins/dialogCreator/scriptLanguages)
