@@ -5,10 +5,14 @@
 #include "i6engine/rpg/dialog/Dialog.h"
 #include "i6engine/rpg/dialog/DialogManager.h"
 
+#include "plugins/ScriptLanguagePluginInterface.h"
+
 #include "clockUtils/iniParser/iniParser.h"
 
+#include <QDir>
 #include <QFile>
 #include <QMessageBox>
+#include <QPluginLoader>
 #include <QTextStream>
 
 #include "tinyxml2.h"
@@ -17,7 +21,7 @@ namespace i6engine {
 namespace dialogCreator {
 namespace widgets {
 
-	DialogHeaderWidget::DialogHeaderWidget(QWidget * par) : QWidget(par), _participants(), _dialogDirectory(), _pythonScriptsPath(), _luaScriptsPath() {
+	DialogHeaderWidget::DialogHeaderWidget(QWidget * par) : QWidget(par), _participants(), _dialogDirectory(), _pythonScriptsPath(), _luaScriptsPath(), _scriptLanguagePlugins() {
 		setupUi(this);
 
 		_participants.push_back(new QLineEdit(this));
@@ -257,6 +261,23 @@ namespace widgets {
 
 	void DialogHeaderWidget::saveNewDialog() {
 		saveChanges();
+	}
+
+	void DialogHeaderWidget::loadScriptLanguagePlugins() {
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/dialogCreator/scriptLanguages");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_scriptLanguagePlugins.push_back(qobject_cast<plugins::ScriptLanguagePluginInterface *>(plugin));
+			} else {
+				QMessageBox box;
+				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setInformativeText(loader.errorString());
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+			}
+		}
 	}
 
 } /* namespace widgets */

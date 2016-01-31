@@ -5,6 +5,9 @@
 
 namespace i6engine {
 namespace dialogCreator {
+namespace plugins {
+	class ScriptLanguagePluginInterface;
+} /* namespace plugins */
 namespace widgets {
 
 	class DialogHeaderWidget : public QWidget, public Ui::dialogHeaderWidget {
@@ -36,6 +39,9 @@ namespace widgets {
 		std::string _dialogDirectory;
 		std::string _pythonScriptsPath;
 		std::string _luaScriptsPath;
+		std::vector<plugins::ScriptLanguagePluginInterface *> _scriptLanguagePlugins;
+
+		void loadScriptLanguagePlugins();
 	};
 
 } /* namespace widgets */
