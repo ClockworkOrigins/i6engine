@@ -19,6 +19,7 @@
 #####################################################################################
 
 IF(ISIXE_WITH_TOOLS AND ISIXE_WITH_EDITOR AND ISIXE_WITH_RPG)
+	ADD_SUBDIRECTORY(dialogCreatorLuaScriptLanguage)
 	ADD_SUBDIRECTORY(editorRPGInitialization)
 	ADD_SUBDIRECTORY(editorRPGRunGame)
 ENDIF()

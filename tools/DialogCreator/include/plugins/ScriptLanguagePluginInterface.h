@@ -18,6 +18,8 @@
 #define __DIALOGCREATOR_PLUGINS_SCRIPTLANGUAGEPLUGININTERFACE_H__
 
 #include <qplugin.h>
+#include <QStringList>
+#include <QVector>
 
 namespace i6engine {
 namespace dialogCreator {
@@ -45,7 +47,7 @@ namespace plugins {
 		}
 
 		/**
-		 * \brief every script language supported by a plugin needs an entry in i6engine to read the path of the scripts and this method provies this entry
+		 * \brief every script language supported by a plugin needs an entry in DialogCreator.ini to read the path of the scripts and this method provies this entry
 		 */
 		virtual QString getScriptLanguageEntry() const = 0;
 
@@ -60,9 +62,9 @@ namespace plugins {
 		virtual QVector<ScriptFunction> getScriptFunctions() const = 0;
 
 		/**
-		 * \brief converts i6DialogLanguage to the scripting language and exports as file
+		 * \brief converts i6Scripts to the scripting language and exports as file
 		 */
-		virtual void exportScript(const QVector<i6Script> & dialog);
+		virtual void exportScript(const QVector<i6Script> & dialog) = 0;
 	};
 
 } /* namespace plugins */
