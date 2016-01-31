@@ -35,6 +35,11 @@ namespace plugins {
 		 * \brief converts i6Script to python and exports as file
 		 */
 		void exportScript(const QVector<dialogCreator::plugins::i6Script> & dialog);
+
+	private:
+		QVector<dialogCreator::plugins::ScriptFunction> _functions;
+
+		void parseLine(const QString & line);
 	};
 
 } /* namespace plugins */
