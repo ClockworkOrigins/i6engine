@@ -15,10 +15,10 @@ namespace plugins {
 
 	public:
 		/**
-		 * \brief provides the entry in DialogCreator.ini used to identify the path to the dialog scripts for python language
+		 * \brief provides the entry in i6engine.ini used to identify the path to the dialog scripts for python language
 		 */
 		QString getScriptLanguageEntry() const {
-			return "PythonDialogScriptsPath";
+			return "PythonScriptsPath";
 		}
 
 		/**

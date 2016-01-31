@@ -15,10 +15,10 @@ namespace plugins {
 
 	public:
 		/**
-		 * \brief provides the entry in DialogCreator.ini used to identify the path to the dialog scripts for Lua language
+		 * \brief provides the entry in i6engine.ini used to identify the path to the dialog scripts for Lua language
 		 */
 		QString getScriptLanguageEntry() const {
-			return "LuaDialogScriptsPath";
+			return "LuaScriptsPath";
 		}
 
 		/**
@@ -35,6 +35,11 @@ namespace plugins {
 		 * \brief converts i6Script to lua and exports as file
 		 */
 		void exportScript(const QVector<dialogCreator::plugins::i6Script> & dialog);
+
+	private:
+		QVector<dialogCreator::plugins::ScriptFunction> _functions;
+
+		void parseLine(const QString & line);
 	};
 
 } /* namespace plugins */

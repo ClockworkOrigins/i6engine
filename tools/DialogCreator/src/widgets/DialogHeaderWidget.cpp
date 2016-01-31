@@ -35,6 +35,29 @@ namespace widgets {
 		connect(informationLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(updateInfoEntry()));
 
 		clockUtils::iniParser::IniParser iniParser;
+		if (clockUtils::ClockError::SUCCESS != iniParser.load("i6engine.ini")) {
+			QMessageBox box;
+			box.setWindowTitle(QString("Error during startup!"));
+			box.setInformativeText("i6engine.ini not found!");
+			box.setStandardButtons(QMessageBox::StandardButton::Ok);
+			box.exec();
+		}
+
+		loadScriptLanguagePlugins();
+
+		for (plugins::ScriptLanguagePluginInterface * slpi : _scriptLanguagePlugins) {
+			std::string path;
+			if (clockUtils::ClockError::SUCCESS != iniParser.getValue("SCRIPT", slpi->getScriptLanguageEntry().toStdString(), path)) {
+				QMessageBox box;
+				box.setWindowTitle(QString("Entry not found"));
+				box.setInformativeText("DialogScriptPath for plugin not found in DialogCreator.ini!");
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+				return;
+			}
+			slpi->parseScripts(QString::fromStdString(path));
+		}
+
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("DialogCreator.ini")) {
 			QMessageBox box;
 			box.setWindowTitle(QString("Error during startup!"));

@@ -47,7 +47,7 @@ namespace plugins {
 		}
 
 		/**
-		 * \brief every script language supported by a plugin needs an entry in DialogCreator.ini to read the path of the scripts and this method provies this entry
+		 * \brief every script language supported by a plugin needs an entry in i6engine.ini to read the path of the scripts and this method provies this entry
 		 */
 		virtual QString getScriptLanguageEntry() const = 0;
 
