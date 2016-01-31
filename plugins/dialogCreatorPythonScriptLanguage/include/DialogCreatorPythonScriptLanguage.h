@@ -15,6 +15,12 @@ namespace plugins {
 
 	public:
 		/**
+		 * \brief returns an identifier for this plugin, also used as name for the tab
+		 */
+		QString getName() const {
+			return "Python";
+		}
+		/**
 		 * \brief provides the entry in i6engine.ini used to identify the path to the dialog scripts for python language
 		 */
 		QString getScriptLanguageEntry() const {

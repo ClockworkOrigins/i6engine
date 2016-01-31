@@ -49,9 +49,11 @@ namespace plugins {
 
 	void DialogCreatorPythonScriptLanguage::parseLine(const QString & line) {
 		if (line.contains("# i6Function: ")) {
-			QRegExp regex("[A-Za-z]+ [A-Za-z]+\\([A-Za-z, ]{0,10}\\)");
+			std::cout << "Checking line " << line.toStdString() << std::endl;
+			QRegExp regex("[A-Za-z]+ [A-Za-z]+\\([(A-Za-z)+\\,?]+\\)");
 			int pos = regex.indexIn(line);
 			if (pos == -1) {
+				std::cout << "Error" << std::endl;
 				return;
 			}
 			QString i6Func = line.mid(pos, regex.matchedLength());

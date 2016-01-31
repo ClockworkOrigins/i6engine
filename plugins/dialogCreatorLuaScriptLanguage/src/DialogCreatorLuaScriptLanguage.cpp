@@ -48,7 +48,7 @@ namespace plugins {
 
 	void DialogCreatorLuaScriptLanguage::parseLine(const QString & line) {
 		if (line.contains("-- i6Function: ")) {
-			QRegExp regex("[A-Za-z]+ [A-Za-z]+\\([A-Za-z, ]{0,10}\\)");
+			QRegExp regex("[A-Za-z]+ [A-Za-z]+\\([(A-Za-z)+\\,?]+\\)");
 			int pos = regex.indexIn(line);
 			if (pos == -1) {
 				return;

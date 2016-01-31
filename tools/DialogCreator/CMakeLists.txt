@@ -36,12 +36,14 @@ set(dialogCreatorSrc
 	${srcdir}/widgets/DialogListWidget.cpp
 	${srcdir}/widgets/MainWindow.cpp
 	${srcdir}/widgets/NpcListWidget.cpp
+	${srcdir}/widgets/ScriptTabWidget.cpp
 )
 
 QT5_WRAP_UI(dialogCreatorUI
 	gui/widgetDialogHeader.ui
 	gui/widgetDialogList.ui
 	gui/widgetNpcList.ui
+	gui/widgetScriptTab.ui
 	gui/wndMainWindow.ui
 )
 
@@ -50,6 +52,7 @@ QT5_WRAP_CPP(dialogCreatorGuiHeader
 	${includedir}/widgets/DialogListWidget.h
 	${includedir}/widgets/MainWindow.h
 	${includedir}/widgets/NpcListWidget.h
+	${includedir}/widgets/ScriptTabWidget.h
 )
 
 source_group(widgets /widgets/*)

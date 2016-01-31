@@ -47,6 +47,11 @@ namespace plugins {
 		}
 
 		/**
+		 * \brief returns an identifier for this plugin, also used as name for the tab
+		 */
+		virtual QString getName() const = 0;
+
+		/**
 		 * \brief every script language supported by a plugin needs an entry in i6engine.ini to read the path of the scripts and this method provies this entry
 		 */
 		virtual QString getScriptLanguageEntry() const = 0;

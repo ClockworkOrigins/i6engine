@@ -5,6 +5,9 @@
 
 namespace i6engine {
 namespace dialogCreator {
+namespace plugins {
+	class ScriptLanguagePluginInterface;
+} /* namespace plugins */
 namespace widgets {
 
 	class DialogHeaderWidget;
@@ -25,8 +28,10 @@ namespace widgets {
 		DialogListWidget * _dialogListWidget;
 		NpcListWidget * _npcListWidget;
 		DialogHeaderWidget * _dialogHeaderWidget;
+		std::vector<plugins::ScriptLanguagePluginInterface *> _scriptLanguagePlugins;
 
 		void closeEvent(QCloseEvent * evt) override;
+		void loadScriptLanguagePlugins();
 	};
 
 } /* namespace widgets */

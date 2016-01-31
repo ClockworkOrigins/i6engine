@@ -5,14 +5,11 @@
 #include "i6engine/rpg/dialog/Dialog.h"
 #include "i6engine/rpg/dialog/DialogManager.h"
 
-#include "plugins/ScriptLanguagePluginInterface.h"
-
 #include "clockUtils/iniParser/iniParser.h"
 
 #include <QDir>
 #include <QFile>
 #include <QMessageBox>
-#include <QPluginLoader>
 #include <QTextStream>
 
 #include "tinyxml2.h"
@@ -21,7 +18,7 @@ namespace i6engine {
 namespace dialogCreator {
 namespace widgets {
 
-	DialogHeaderWidget::DialogHeaderWidget(QWidget * par) : QWidget(par), _participants(), _dialogDirectory(), _pythonScriptsPath(), _luaScriptsPath(), _scriptLanguagePlugins() {
+	DialogHeaderWidget::DialogHeaderWidget(QWidget * par) : QWidget(par), _participants(), _dialogDirectory(), _pythonScriptsPath(), _luaScriptsPath() {
 		setupUi(this);
 
 		_participants.push_back(new QLineEdit(this));
@@ -33,31 +30,8 @@ namespace widgets {
 
 		connect(conditionLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(updateConditionEntry()));
 		connect(informationLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(updateInfoEntry()));
-
+		
 		clockUtils::iniParser::IniParser iniParser;
-		if (clockUtils::ClockError::SUCCESS != iniParser.load("i6engine.ini")) {
-			QMessageBox box;
-			box.setWindowTitle(QString("Error during startup!"));
-			box.setInformativeText("i6engine.ini not found!");
-			box.setStandardButtons(QMessageBox::StandardButton::Ok);
-			box.exec();
-		}
-
-		loadScriptLanguagePlugins();
-
-		for (plugins::ScriptLanguagePluginInterface * slpi : _scriptLanguagePlugins) {
-			std::string path;
-			if (clockUtils::ClockError::SUCCESS != iniParser.getValue("SCRIPT", slpi->getScriptLanguageEntry().toStdString(), path)) {
-				QMessageBox box;
-				box.setWindowTitle(QString("Entry not found"));
-				box.setInformativeText("DialogScriptPath for plugin not found in DialogCreator.ini!");
-				box.setStandardButtons(QMessageBox::StandardButton::Ok);
-				box.exec();
-				return;
-			}
-			slpi->parseScripts(QString::fromStdString(path));
-		}
-
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("DialogCreator.ini")) {
 			QMessageBox box;
 			box.setWindowTitle(QString("Error during startup!"));
@@ -284,23 +258,6 @@ namespace widgets {
 
 	void DialogHeaderWidget::saveNewDialog() {
 		saveChanges();
-	}
-
-	void DialogHeaderWidget::loadScriptLanguagePlugins() {
-		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/dialogCreator/scriptLanguages");
-		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
-			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
-			QObject * plugin = loader.instance();
-			if (plugin) {
-				_scriptLanguagePlugins.push_back(qobject_cast<plugins::ScriptLanguagePluginInterface *>(plugin));
-			} else {
-				QMessageBox box;
-				box.setWindowTitle(QString("Error loading plugin!"));
-				box.setInformativeText(loader.errorString());
-				box.setStandardButtons(QMessageBox::StandardButton::Ok);
-				box.exec();
-			}
-		}
 	}
 
 } /* namespace widgets */
