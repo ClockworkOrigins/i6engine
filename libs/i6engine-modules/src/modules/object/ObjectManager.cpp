@@ -80,7 +80,7 @@ namespace modules {
 
 #ifdef ISIXE_WITH_PROFILING
 		if (utils::profiling::numberObjects) {
-			ISIXE_LOG_INFO("ObjectManager", "Current amount of GameObjects: " << _GOList.size());
+			ISIXE_LOG_INFO("ObjectManager", "Current amount of GameObjects: " << _GOMap.size());
 		}
 #endif /* ISIXE_PROFLING */
 	}
