@@ -41,7 +41,7 @@
 namespace i6engine {
 namespace api {
 
-	PhysicalStateComponent::PhysicalStateComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _positionNew(), _posDirty(0), _rotDirty(0), _speedDirty(0), _rotation(), _scale(), _scaleNew(), _scaleDirty(0), _linearVelocity(0.0, 0.0, 0.0), _forces(), _gravity(), _collisionGroup(params.find("collisionGroup")->second), _shapeType(), _shapeParams(params), _initialized(false), _shatterInterest(), _lock(), _syncPrio(0) {
+	PhysicalStateComponent::PhysicalStateComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _positionNew(), _posDirty(0), _rotDirty(0), _speedDirty(0), _rotation(), _scale(), _scaleNew(), _scaleDirty(0), _linearVelocity(0.0, 0.0, 0.0), _forces(), _gravity(), _collisionGroup(), _shapeType(), _shapeParams(params), _initialized(false), _shatterInterest(), _lock(), _syncPrio(0) {
 		_objFamilyID = components::PhysicalStateComponent;
 		_objComponentID = components::PhysicalStateComponent;
 

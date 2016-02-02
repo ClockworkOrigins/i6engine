@@ -28,7 +28,7 @@
 namespace i6engine {
 namespace api {
 
-	ParticleEmitterComponent::ParticleEmitterComponent(const int64_t id, const attributeMap & params) : Component(id, params), _emitterName(params.find("particleEmitter")->second), _pos(), _fadeOut(false), _fadeOutCooldown(0) {
+	ParticleEmitterComponent::ParticleEmitterComponent(const int64_t id, const attributeMap & params) : Component(id, params), _emitterName(), _pos(), _fadeOut(false), _fadeOutCooldown(0) {
 		Component::_objFamilyID = components::ParticleEmitterComponent;
 		Component::_objComponentID = components::ParticleEmitterComponent;
 
