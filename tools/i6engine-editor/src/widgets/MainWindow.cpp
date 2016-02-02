@@ -71,9 +71,6 @@ namespace widgets {
 		connect(this, SIGNAL(stopApp()), this, SLOT(doStopApp()));
 
 		emit initializeEngine();
-
-		setMouseTracking(true);
-		installEventFilter(this);
 	}
 
 	MainWindow::~MainWindow() {
@@ -213,11 +210,6 @@ namespace widgets {
 		evt->ignore();
 	}
 
-	void MainWindow::mouseMoveEvent(QMouseEvent * evt) {
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouMouse, core::Method::Update, new api::input::Input_Mouse_Update(evt->pos().x(), evt->pos().y()), core::Subsystem::Input));
-		evt->accept();
-	}
-
 	void MainWindow::mousePressEvent(QMouseEvent * evt) {
 		Qt::MouseButton button = evt->button();
 		api::KeyCode kc = api::KeyCode::MOUSEBUTTONS;
@@ -244,20 +236,6 @@ namespace widgets {
 		}
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, kc, 0), core::Subsystem::Input));
 		evt->accept();
-	}
-
-	bool MainWindow::eventFilter(QObject * obj, QEvent * evt) {
-		QWidget * srcWidget = qobject_cast<QWidget *>(obj);
-		switch (evt->type()) {
-		case QEvent::HoverMove:
-		case QEvent::NonClientAreaMouseMove:
-		case QEvent::MouseMove: {
-			QMouseEvent * me = static_cast<QMouseEvent *>(evt);
-			mouseMoveEvent(me);
-			break;
-		}
-		}
-		return QWidget::eventFilter(obj, evt);
 	}
 
 	void MainWindow::loadPlugins() {

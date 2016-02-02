@@ -93,10 +93,8 @@ namespace widgets {
 		void closeEvent(QCloseEvent * evt) override;
 		void keyPressEvent(QKeyEvent * evt) override;
 		void keyReleaseEvent(QKeyEvent * evt) override;
-		void mouseMoveEvent(QMouseEvent * evt) override;
 		void mousePressEvent(QMouseEvent * evt) override;
 		void mouseReleaseEvent(QMouseEvent * evt) override;
-		bool eventFilter(QObject * obj, QEvent * evt);
 
 		void loadPlugins();
 		void loadInitializationPlugins();
