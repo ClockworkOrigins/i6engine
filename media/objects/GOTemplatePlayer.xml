@@ -26,8 +26,8 @@
 		<Attribute name="scale">0.025 0.025 0.025</Attribute>
 	</Component>
 	<Component template="MovingCamera" owner="true">
-		<Attribute name="pos">0.0 2.0 10.0</Attribute>
-		<Attribute name="lookAt">0.0 5.8 -10.0</Attribute>
+		<Attribute name="pos">0.0 2.0 4.0</Attribute>
+		<Attribute name="lookAt">0.0 1.8 -10.0</Attribute>
 		<Attribute name="nearclip">1</Attribute>
 		<Attribute name="viewport">1</Attribute>
 		<Attribute name="zOrder">0</Attribute>
