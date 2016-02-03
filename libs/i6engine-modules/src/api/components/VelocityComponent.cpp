@@ -11,7 +11,7 @@
 namespace i6engine {
 namespace api {
 
-	VelocityComponent::VelocityComponent(const int64_t id, const attributeMap & params) : Component(id, params), _acceleration(), _deceleration(), _maxSpeed(), _resistanceCoefficient(0.6), _windage(0.8), _handling(MaxSpeedHandling::KeepSpeed) {
+	VelocityComponent::VelocityComponent(const int64_t id, const attributeMap & params) : Component(id, params), _acceleration(), _deceleration(), _maxSpeed(), _resistanceCoefficient(0.6), _windage(0.8), _handling(MaxSpeedHandling::KeepSpeed), _decelerationHandling(DecelerationHandling::StopDeceleration) {
 		Component::_objFamilyID = components::ComponentTypes::VelocityComponent;
 		Component::_objComponentID = components::ComponentTypes::VelocityComponent;
 
@@ -52,10 +52,14 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyAccelerate, core::Method::Update, new physics::Physics_Accelerate_Update(getID(), _objOwnerID, _acceleration, _handling, callback), core::Subsystem::Object));
 	}
 
-	void VelocityComponent::decelerate(const Vec3 & deceleration, const std::function<void(void)> & callback) {
+	void VelocityComponent::decelerate(const Vec3 & deceleration, DecelerationHandling handling, const std::function<void(void)> & callback) {
 		_deceleration = deceleration;
 
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyDecelerate, core::Method::Update, new physics::Physics_Decelerate_Update(getID(), _objOwnerID, _deceleration, callback), core::Subsystem::Object));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyDecelerate, core::Method::Update, new physics::Physics_Decelerate_Update(getID(), _objOwnerID, _deceleration, _decelerationHandling, callback), core::Subsystem::Object));
+	}
+
+	void VelocityComponent::stopAcceleration() const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyStopAcceleration, core::Method::Update, new physics::Physics_StopAcceleration_Update(getID(), _objOwnerID), core::Subsystem::Object));
 	}
 
 	void VelocityComponent::setMaxSpeed(double maxSpeed) {

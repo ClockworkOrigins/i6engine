@@ -174,6 +174,13 @@ namespace components {
 								quest::QuestLog::GetSingleton().show();
 							}
 						}
+					} else if (iku->pressed == api::KeyState::KEY_RELEASED) {
+						auto ic = getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent);
+						auto mc = getOwnerGO()->getGOC<api::MovementComponent>(api::components::ComponentTypes::MovementComponent);
+						std::string keyMapping = api::EngineController::GetSingleton().getInputFacade()->getKeyMapping(iku->code);
+						if (keyMapping == "forward" && !ic->isActive() && !quest::QuestLog::GetSingleton().isActive()) {
+							mc->stop();
+						}
 					}
 				}
 			}

@@ -29,6 +29,10 @@ namespace api {
 			KeepSpeed,
 			StopAcceleration
 		};
+		enum class DecelerationHandling {
+			Backward,
+			StopDeceleration
+		};
 
 		VelocityComponent(const int64_t id, const attributeMap & params);
 
@@ -55,12 +59,17 @@ namespace api {
 		
 		/**
 		 * \brief decelerates the GameObject using deceleration
-		 * reaching 0 speed,callback will be called
+		 * reaching 0 speed, it will perform as defined in handling parameter and callback will be called
 		 */
-		void decelerate(const Vec3 & deceleration, const std::function<void(void)> & callback);
+		void decelerate(const Vec3 & deceleration, DecelerationHandling handling, const std::function<void(void)> & callback);
 		void decelerate(const std::function<void(void)> & callback) {
-			decelerate(_deceleration, callback);
+			decelerate(_deceleration, _decelerationHandling, callback);
 		}
+
+		/**
+		 * \brief stops current acceleration
+		 */
+		void stopAcceleration() const;
 		
 		/**
 		 * \brief sets new maximum speed
@@ -77,6 +86,13 @@ namespace api {
 		 */
 		void setWindage(double windage);
 
+		/**
+		 * \brief sets the deceleration handling
+		 */
+		void setDecelerationHandling(DecelerationHandling handling) {
+			_decelerationHandling = handling;
+		}
+
 	private:
 		Vec3 _acceleration;
 		Vec3 _deceleration;
@@ -84,6 +100,7 @@ namespace api {
 		double _resistanceCoefficient;
 		double _windage;
 		MaxSpeedHandling _handling;
+		DecelerationHandling _decelerationHandling;
 
 		void Init() override;
 

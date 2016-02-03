@@ -567,6 +567,10 @@ namespace object {
 		virtual void right() override {
 			luabind::call_member<void>(this, "right");
 		}
+
+		virtual void stop() override {
+			luabind::call_member<void>(this, "stop");
+		}
 	};
 
 	struct MoverComponentWrapper : public i6engine::api::MoverComponent, public luabind::wrap_base {
@@ -786,8 +790,8 @@ namespace object {
 		});
 	}
 
-	void decelerate(i6engine::api::VelocityComponent * c, const Vec3 & deceleration, const std::string & func) {
-		c->decelerate(deceleration, [func]() {
+	void decelerate(i6engine::api::VelocityComponent * c, const Vec3 & deceleration, i6engine::api::VelocityComponent::DecelerationHandling handling, const std::string & func) {
+		c->decelerate(deceleration, handling, [func]() {
 			if (!func.empty()) {
 				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
 			}
@@ -1034,7 +1038,8 @@ scope registerObject() {
 			.def("forward", &i6engine::lua::object::MovementComponentWrapper::forward)
 			.def("backward", &i6engine::lua::object::MovementComponentWrapper::backward)
 			.def("left", &i6engine::lua::object::MovementComponentWrapper::left)
-			.def("right", &i6engine::lua::object::MovementComponentWrapper::right),
+			.def("right", &i6engine::lua::object::MovementComponentWrapper::right)
+			.def("stop", &i6engine::lua::object::MovementComponentWrapper::stop),
 
 		class_<i6engine::api::MoverCircleComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>>("MoverCircleComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
@@ -1182,18 +1187,18 @@ scope registerObject() {
 				value("OBJECTCHANGE", int(i6engine::api::PhysicalStateComponent::RayTestNotify::OBJECTCHANGE))
 			],
 
-		class_<i6engine::api::RayTestResult>("RayTestResult")
+			class_<i6engine::api::RayTestResult>("RayTestResult")
 			.def(constructor<>())
 			.def_readonly("objID", &i6engine::api::RayTestResult::objID)
 			.def_readonly("sourceID", &i6engine::api::RayTestResult::sourceID)
 			.def_readonly("collisionPoint", &i6engine::api::RayTestResult::collisionPoint),
 
-		class_<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>>("Point2PointConstraintComponent")
+			class_<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>>("Point2PointConstraintComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("synchronize", &i6engine::api::Point2PointConstraintComponent::synchronize)
 			.def("getTemplateName", &i6engine::api::Point2PointConstraintComponent::getTemplateName),
 
-		class_<i6engine::api::ShatterComponent, i6engine::lua::object::ShatterComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>>("ShatterComponent")
+			class_<i6engine::api::ShatterComponent, i6engine::lua::object::ShatterComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>>("ShatterComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("Tick", &i6engine::api::Component::Tick, &i6engine::lua::object::ShatterComponentWrapper::default_Tick)
 			.def("News", &i6engine::api::ShatterComponent::News, &i6engine::lua::object::ShatterComponentWrapper::default_News)
@@ -1205,17 +1210,17 @@ scope registerObject() {
 			.def("shatter", &i6engine::lua::object::ShatterComponentWrapper::shatter)
 			.def("resetRespawn", &i6engine::api::ShatterComponent::resetRespawn),
 
-		class_<i6engine::api::SoundComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>>("SoundComponent")
+			class_<i6engine::api::SoundComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>>("SoundComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("synchronize", &i6engine::api::SoundComponent::synchronize)
 			.def("getTemplateName", &i6engine::api::SoundComponent::getTemplateName),
 
-		class_<i6engine::api::SoundListenerComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>>("SoundListenerComponent")
+			class_<i6engine::api::SoundListenerComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>>("SoundListenerComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("synchronize", &i6engine::api::SoundListenerComponent::synchronize)
 			.def("getTemplateName", &i6engine::api::SoundListenerComponent::getTemplateName),
 
-		class_<i6engine::api::SpawnpointComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>>("SpawnpointComponent")
+			class_<i6engine::api::SpawnpointComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>>("SpawnpointComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("synchronize", &i6engine::api::SpawnpointComponent::synchronize)
 			.def("getTemplateName", &i6engine::api::SpawnpointComponent::getTemplateName)
@@ -1226,7 +1231,7 @@ scope registerObject() {
 			.def("available", &i6engine::api::SpawnpointComponent::available)
 			.def("setState", &i6engine::api::SpawnpointComponent::setState),
 
-		class_<i6engine::api::StaticStateComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>>("StaticStateComponent")
+			class_<i6engine::api::StaticStateComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>>("StaticStateComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("synchronize", &i6engine::api::StaticStateComponent::synchronize)
 			.def("getTemplateName", &i6engine::api::StaticStateComponent::getTemplateName)
@@ -1237,26 +1242,26 @@ scope registerObject() {
 			.def("getRotation", &i6engine::api::StaticStateComponent::getRotation)
 			.def("getScale", &i6engine::api::StaticStateComponent::getScale),
 
-		class_<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>>("TerrainAppearanceComponent")
+			class_<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>>("TerrainAppearanceComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("synchronize", &i6engine::api::TerrainAppearanceComponent::synchronize)
 			.def("getTemplateName", &i6engine::api::TerrainAppearanceComponent::getTemplateName)
 			.def("getHeightmap", &i6engine::api::TerrainAppearanceComponent::getHeightmap)
 			.def("getSize", &i6engine::api::TerrainAppearanceComponent::getSize),
 
-		class_<i6engine::api::ToggleWaynetComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>>("ToggleWaynetComponent")
+			class_<i6engine::api::ToggleWaynetComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>>("ToggleWaynetComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("synchronize", &i6engine::api::ToggleWaynetComponent::synchronize)
 			.def("getTemplateName", &i6engine::api::ToggleWaynetComponent::getTemplateName)
 			.def("enable", &i6engine::api::ToggleWaynetComponent::enable),
 
-		class_<i6engine::api::VelocityComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>>("VelocityComponent")
+			class_<i6engine::api::VelocityComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>>("VelocityComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())
 			.def("synchronize", &i6engine::api::VelocityComponent::synchronize)
 			.def("getTemplateName", &i6engine::api::VelocityComponent::getTemplateName)
 			.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, i6engine::api::VelocityComponent::MaxSpeedHandling, const std::string &)) &i6engine::lua::object::accelerate)
 			.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::lua::object::accelerate)
-			.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, const std::string &)) &i6engine::lua::object::decelerate)
+			.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, i6engine::api::VelocityComponent::DecelerationHandling, const std::string &)) &i6engine::lua::object::decelerate)
 			.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::lua::object::decelerate)
 			.def("setMaxSpeed", &i6engine::api::VelocityComponent::setMaxSpeed)
 			.def("setResistanceCoefficient", &i6engine::api::VelocityComponent::setResistanceCoefficient)
@@ -1265,6 +1270,11 @@ scope registerObject() {
 			[
 				value("KeepSpeed", int(i6engine::api::VelocityComponent::MaxSpeedHandling::KeepSpeed)),
 				value("StopAcceleration", int(i6engine::api::VelocityComponent::MaxSpeedHandling::StopAcceleration))
+			]
+			.enum_("DecelerationHandling")
+			[
+				value("Backward", int(i6engine::api::VelocityComponent::DecelerationHandling::Backward)),
+				value("StopDeceleration", int(i6engine::api::VelocityComponent::DecelerationHandling::StopDeceleration))
 			],
 
 		class_<i6engine::api::WaynetNavigationComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>>("WaynetNavigationComponent")

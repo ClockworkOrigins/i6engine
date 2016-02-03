@@ -30,6 +30,8 @@ namespace api {
 			if ((psc->getPosition() - _path[_index]).length() < 0.5) {
 				_index++;
 				if (_index == _path.size()) {
+					auto mc = _mc.get();
+					mc->stop();
 					return;
 				}
 			}

@@ -608,6 +608,10 @@ namespace object {
 		virtual void right() override {
 			boost::python::call<void>(this->get_override("right").ptr());
 		}
+
+		virtual void stop() override {
+			boost::python::call<void>(this->get_override("stop").ptr());
+		}
 	};
 
 	struct MoverComponentWrapper : public i6engine::api::MoverComponent, public boost::python::wrapper<i6engine::api::MoverComponent> {
@@ -867,8 +871,8 @@ namespace object {
 		});
 	}
 
-	void decelerate(i6engine::api::VelocityComponent * c, const Vec3 & deceleration, const std::string & func) {
-		c->decelerate(deceleration, [func]() {
+	void decelerate(i6engine::api::VelocityComponent * c, const Vec3 & deceleration, i6engine::api::VelocityComponent::DecelerationHandling handling, const std::string & func) {
+		c->decelerate(deceleration, handling, [func]() {
 			if (!func.empty()) {
 				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
 			}
@@ -1116,7 +1120,8 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("forward", pure_virtual(&i6engine::python::object::MovementComponentWrapper::forward))
 		.def("backward", pure_virtual(&i6engine::python::object::MovementComponentWrapper::backward))
 		.def("left", pure_virtual(&i6engine::python::object::MovementComponentWrapper::left))
-		.def("right", pure_virtual(&i6engine::python::object::MovementComponentWrapper::right));
+		.def("right", pure_virtual(&i6engine::python::object::MovementComponentWrapper::right))
+		.def("stop", pure_virtual(&i6engine::python::object::MovementComponentWrapper::stop));
 
 	class_<i6engine::api::MoverCircleComponent, i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>, boost::noncopyable>("MoverCircleComponent", no_init)
 		.def("synchronize", &i6engine::api::MoverCircleComponent::synchronize)
@@ -1315,7 +1320,7 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("getTemplateName", &i6engine::api::VelocityComponent::getTemplateName)
 		.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, i6engine::api::VelocityComponent::MaxSpeedHandling, const std::string &)) &i6engine::python::object::accelerate)
 		.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::python::object::accelerate)
-		.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, const std::string &)) &i6engine::python::object::decelerate)
+		.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, i6engine::api::VelocityComponent::DecelerationHandling, const std::string &)) &i6engine::python::object::decelerate)
 		.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::python::object::decelerate)
 		.def("setMaxSpeed", &i6engine::api::VelocityComponent::setMaxSpeed)
 		.def("setResistanceCoefficient", &i6engine::api::VelocityComponent::setResistanceCoefficient)
@@ -1324,6 +1329,11 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	enum_<i6engine::api::VelocityComponent::MaxSpeedHandling>("MaxSpeedHandling")
 		.value("KeepSpeed", i6engine::api::VelocityComponent::MaxSpeedHandling::KeepSpeed)
 		.value("StopAcceleration", i6engine::api::VelocityComponent::MaxSpeedHandling::StopAcceleration)
+		.export_values();
+
+	enum_<i6engine::api::VelocityComponent::DecelerationHandling>("DecelerationHandling")
+		.value("Backward", i6engine::api::VelocityComponent::DecelerationHandling::Backward)
+		.value("StopDeceleration", i6engine::api::VelocityComponent::DecelerationHandling::StopDeceleration)
 		.export_values();
 
 	class_<i6engine::api::WaynetNavigationComponent, i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>, boost::noncopyable>("WaynetNavigationComponent", no_init)

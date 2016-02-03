@@ -41,9 +41,10 @@ namespace modules {
 		}
 	}
 
-	void PhysicsVelocityComponent::decelerate(const Vec3 & deceleration, const std::function<void(void)> & callback) {
+	void PhysicsVelocityComponent::decelerate(const Vec3 & deceleration, api::VelocityComponent::DecelerationHandling handling, const std::function<void(void)> & callback) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_acceleration = deceleration;
+		_decelerationHandling = handling;
 		_callback = callback;
 
 		if (_accelerating) {
@@ -53,6 +54,18 @@ namespace modules {
 		if (!_decelerating) {
 			_node->addTicker();
 			_decelerating = true;
+		}
+	}
+
+	void PhysicsVelocityComponent::stopAcceleration() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		if (_accelerating) {
+			_node->removeTicker();
+			_accelerating = false;
+		}
+		if (_decelerating) {
+			_node->removeTicker();
+			_decelerating = false;
 		}
 	}
 
@@ -70,7 +83,11 @@ namespace modules {
 					_node->removeTicker();
 				}
 				_callback();
-			} else if (_decelerating && std::abs(_node->getVelocity().length()) < DBL_EPSILON) {
+			} else if (_decelerating && std::abs(_node->getVelocity().length()) < 1.0) {
+				if (_decelerationHandling == api::VelocityComponent::DecelerationHandling::StopDeceleration) {
+					_decelerating = false;
+					_node->removeTicker();
+				}
 				_callback();
 			}
 		}

@@ -12,6 +12,7 @@ namespace i6engine {
 namespace api {
 
 	class PhysicalStateComponent;
+	class VelocityComponent;
 
 	/**
 	 * \brief base class for Movement components
@@ -35,8 +36,11 @@ namespace api {
 
 		virtual void right() = 0;
 
+		virtual void stop() = 0;
+
 	protected:
 		utils::weakPtr<PhysicalStateComponent, Component> _psc;
+		utils::weakPtr<VelocityComponent, Component> _vc;
 	};
 
 } /* namespace api */

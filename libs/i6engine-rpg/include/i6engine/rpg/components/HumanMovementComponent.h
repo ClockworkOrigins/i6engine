@@ -39,6 +39,8 @@ namespace components {
 		void left() override;
 
 		void right() override;
+
+		void stop() override;
 	};
 
 } /* namespace components */
