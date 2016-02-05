@@ -80,11 +80,9 @@ namespace connections {
 			}
 		}
 
-		points[0] = QPoint(x1, y1);
-		points[1] = QPoint(x3, y3);
-		points[2] = QPoint(x4, y4);
-		points[3] = QPoint(x2, y2);
-		painter->drawPolyline(points, 4);
+		QPainterPath path(QPoint(x1, y1));
+		path.cubicTo(QPoint(x3, y3), QPoint(x4, y4), QPoint(x2, y2));
+		painter->drawPath(path);
 	}
 
 	QRectF LineConnector::boundingRect() const {
