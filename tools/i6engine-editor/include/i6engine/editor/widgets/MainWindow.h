@@ -22,7 +22,6 @@ namespace plugins {
 } /* namespace plugins */
 namespace widgets {
 
-	class MainWindow;
 	class ObjectContainerWidget;
 	class RenderWidget;
 	class TemplateListWidget;
@@ -93,6 +92,8 @@ namespace widgets {
 		int _startGame;
 		bool _inGame;
 		QProgressDialog * _progressDialog;
+		bool _isTmpLevel;
+		QString _originalLevel;
 
 		std::string getBasePath() const override {
 			return "../media/maps";

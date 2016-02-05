@@ -48,7 +48,7 @@ namespace widgets {
 		emit triggerGameAction(_index);
 	}
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false), _isTmpLevel(false), _originalLevel() {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -157,7 +157,15 @@ namespace widgets {
 		if (_level.size() > 0) {
 			_startGame = index;
 			_resetEngineController = true;
-			api::EngineController::GetSingleton().stop();
+			if (_changed) {
+				_originalLevel = _level;
+				_isTmpLevel = true;
+				_level = _level.split("/").back().split("\\").back();
+				saveLevel(_level);
+			} else {
+				_isTmpLevel = false;
+				api::EngineController::GetSingleton().stop();
+			}
 		} else {
 			QMessageBox box;
 			box.setWindowTitle(QString("Can't start game!"));
@@ -199,8 +207,21 @@ namespace widgets {
 		emit _templateListWidget->loadTemplates();
 
 		if (_inGame) {
+			if (_isTmpLevel) {
+				_changed = true;
+			}
 			loadLevel(_level.toStdString());
+			if (_changed) {
+				QFile f(_level);
+				f.remove();
+				_level = _originalLevel;
+			}
 			_inGame = false;
+			if (_changed) {
+				setWindowTitle(WINDOWTITLE + " - " + _level + " *");
+			} else {
+				setWindowTitle(WINDOWTITLE + " - " + _level);
+			}
 		}
 	}
 
@@ -539,6 +560,10 @@ namespace widgets {
 	void MainWindow::finishProgress() {
 		delete _progressDialog;
 		_progressDialog = nullptr;
+
+		if (_startGame != -1) {
+			api::EngineController::GetSingleton().stop();
+		}
 	}
 
 } /* namespace widgets */
