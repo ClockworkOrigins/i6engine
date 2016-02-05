@@ -40,7 +40,7 @@ public:
 	~TestTimeClock() {
 	}
 
-	uint64_t getCurrentTime(uint64_t lastTime) {
+	uint64_t getCurrentTime(uint64_t) {
 		return _currentTime - _startTime;
 	}
 
