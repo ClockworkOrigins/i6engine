@@ -9,6 +9,12 @@
 
 namespace i6engine {
 namespace editor {
+namespace plugins {
+
+	class TypePluginInterface;
+	class TypeWidgetInterface;
+
+} /* namespace plugins */
 namespace widgets {
 
 	class ObjectInfoWidget : public QWidget, public Ui::objectInfoWidget {
@@ -40,7 +46,10 @@ namespace widgets {
 	private:
 		int64_t _selectedObjectID;
 		std::vector<QWidget *> _infos;
-		std::map<QLineEdit *, boost::function<void(std::string)>> _entries;
+		std::map<plugins::TypeWidgetInterface *, boost::function<void(std::string)>> _entries;
+		std::map<std::string, plugins::TypePluginInterface *> _typePlugins;
+
+		void loadTypePlugins();
 	};
 
 } /* namespace widgets */

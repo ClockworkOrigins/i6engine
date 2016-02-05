@@ -185,6 +185,13 @@ namespace modules {
 		mc->stopAnimation();
 	}
 
+	void GraphicsNode::addAnimationFrameEvent(int64_t coid, uint64_t frameTime, const std::function<void(void)> & func) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->addAnimationFrameEvent(frameTime, func);
+	}
+
 	void GraphicsNode::deleteMeshComponent(const int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_meshes.find(coid) != _meshes.end());

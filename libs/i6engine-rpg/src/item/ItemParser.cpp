@@ -35,6 +35,8 @@ namespace item {
 	}
 
 	void ItemParser::loadItems(const std::string & directory) {
+		_items.clear();
+		_itemAttributes.clear();
 		std::queue<std::string> directories;
 		directories.push(directory);
 

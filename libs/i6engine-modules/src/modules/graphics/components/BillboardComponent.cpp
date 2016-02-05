@@ -55,9 +55,6 @@ namespace modules {
 		while (!_billboards.empty()) {
 			deleteBillboard(_billboards.begin()->first);
 		}
-
-		_parent->getSceneNode()->detachObject(_billboardSet);
-		_manager->getSceneManager()->destroyBillboardSet(_billboardSet);
 	}
 
 	void BillboardComponent::createOrUpdateBillboard(const std::string & identifier, const Vec3 & offset, double width, double height, double u0, double v0, double u1, double v1) {

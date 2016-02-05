@@ -61,7 +61,21 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuGame">
+    <property name="title">
+     <string>Game</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuGame"/>
+   <widget class="QMenu" name="menuExtras">
+    <property name="title">
+     <string>Extras</string>
+    </property>
+    <addaction name="actionOptions"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuExtras"/>
   </widget>
   <action name="actionLoad_Level">
    <property name="text">
@@ -98,6 +112,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="text">
+    <string>Options</string>
    </property>
   </action>
  </widget>
@@ -183,6 +202,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionOptions</sender>
+   <signal>triggered()</signal>
+   <receiver>wndMainWindow</receiver>
+   <slot>openOptions()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>309</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>chooseLoadLevel()</slot>
@@ -190,5 +225,6 @@
   <slot>chooseSaveLevelAs()</slot>
   <slot>closeEditor()</slot>
   <slot>createNewLevel()</slot>
+  <slot>openOptions()</slot>
  </slots>
 </ui>

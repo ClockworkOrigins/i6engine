@@ -3,6 +3,8 @@
 
 #include "ui_wndMainWindow.h"
 
+#include <thread>
+
 #include "i6engine/api/facades/InputFacade.h"
 
 #include "i6engine/editor/Editor.h"
@@ -11,14 +13,33 @@ namespace i6engine {
 namespace editor {
 namespace plugins {
 
+	class FlagPluginInterface;
 	class InitializationPluginInterface;
+	class RunGamePluginInterface;
 
 } /* namespace plugins */
 namespace widgets {
 
+	class MainWindow;
 	class ObjectContainerWidget;
 	class RenderWidget;
 	class TemplateListWidget;
+
+	class GameActionHelper : public QObject {
+		Q_OBJECT
+
+	public:
+		GameActionHelper(QWidget * par, size_t index);
+
+	signals:
+		void triggerGameAction(int);
+
+	public slots:
+		void triggered();
+
+	private:
+		size_t _index;
+	};
 
 	class MainWindow : public QMainWindow, public Ui::wndMainWindow, public Editor {
 		Q_OBJECT
@@ -31,6 +52,9 @@ namespace widgets {
 
 	signals:
 		void doChangedLevel();
+		void initializeEngine();
+		void initializeGame();
+		void stopApp();
 
 	private slots:
 		void createNewLevel();
@@ -40,24 +64,34 @@ namespace widgets {
 		void closeEditor();
 		void changedLevel();
 		void selectedObject(int64_t id);
+		void triggeredGameAction(int index);
+		void openOptions();
+		void doInitializeEngine();
+		void doInitializeGame();
+		void doStopApp();
 
 	private:
 		const QString WINDOWTITLE;
 		RenderWidget * _renderWidget;
 		ObjectContainerWidget * _objectContainerWidget;
 		TemplateListWidget * _templateListWidget;
+		std::thread _engineThread;
 		QString _level;
 		std::vector<plugins::InitializationPluginInterface *> _initializationPlugins;
 		bool _changed;
 		std::set<api::KeyCode> _keyStates;
+		std::vector<plugins::RunGamePluginInterface *> _runGamePlugins;
+		std::vector<plugins::FlagPluginInterface *> _flagPlugins;
+		std::vector<GameActionHelper *> _gameActionHelperList;
+		bool _resetEngineController;
+		int _startGame;
+		bool _inGame;
 
 		std::string getBasePath() const override {
 			return "../media/maps";
 		}
 
-		std::vector<std::string> getLevelFlags() const override {
-			return { "Singleplayer" };
-		}
+		std::vector<std::string> getLevelFlags() const override;
 
 		void AfterInitialize() override;
 		void Finalize() override;
@@ -67,13 +101,13 @@ namespace widgets {
 		void closeEvent(QCloseEvent * evt) override;
 		void keyPressEvent(QKeyEvent * evt) override;
 		void keyReleaseEvent(QKeyEvent * evt) override;
-		void mouseMoveEvent(QMouseEvent * evt) override;
 		void mousePressEvent(QMouseEvent * evt) override;
 		void mouseReleaseEvent(QMouseEvent * evt) override;
-		bool eventFilter(QObject * obj, QEvent * evt);
 
 		void loadPlugins();
 		void loadInitializationPlugins();
+		void loadRunGamePlugins();
+		void loadFlagPlugins();
 
 		static api::KeyCode convertQtToEngine(int key);
 	};

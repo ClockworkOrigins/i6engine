@@ -505,7 +505,8 @@ namespace modules {
 			_sceneManager->setAmbientLight(Ogre::ColourValue(float(static_cast<api::graphics::Graphics_AmbLight_Update *>(msg->getContent())->red), float(static_cast<api::graphics::Graphics_AmbLight_Update *>(msg->getContent())->green), float(static_cast<api::graphics::Graphics_AmbLight_Update *>(msg->getContent())->blue)));
 		} else if (msg->getSubtype() == api::graphics::GraResolution) {
 			api::graphics::Graphics_Resolution_Update * ru = dynamic_cast<api::graphics::Graphics_Resolution_Update *>(msg->getContent());
-			_rWindow->setFullscreen(_rWindow->isFullScreen(), ru->resolution.width, ru->resolution.height);
+			_rWindow->resize(ru->resolution.width, ru->resolution.height);
+			_rWindow->windowMovedOrResized();
 
 			_guiController->_mailbox->News(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiResolution, core::Method::Update, new api::gui::GUI_Resolution_Update(ru->resolution), core::Subsystem::Graphic));
 			api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputResolution, core::Method::Update, new api::input::Input_Resolution_Update(ru->resolution), core::Subsystem::Graphic));
@@ -879,6 +880,11 @@ namespace modules {
 			assert(otherNode);
 			node->detachFromBone(coid, otherNode, gdfbu->boneName);
 			otherNode->stopListenAttachment();
+		} else if (msg->getSubtype() == api::graphics::GraAnimationFrameEvent) {
+			api::graphics::Graphics_AnimationFrameEvent_Update * gafeu = dynamic_cast<api::graphics::Graphics_AnimationFrameEvent_Update *>(msg->getContent());
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			node->addAnimationFrameEvent(coid, gafeu->frameTime, gafeu->func);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

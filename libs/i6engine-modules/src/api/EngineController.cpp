@@ -75,7 +75,7 @@ namespace i6engine {
 namespace api {
 
 	// Ensures that X11 key repeat is reset to original value in case of a application crash.
-	void forceCleanup(int param) {
+	void forceCleanup(int) {
 		ISIXE_LOG_WARN("EngineController", "***Dirty shutdown detected: running forced cleanup to reset X11 key repeat rate***");
 		EngineController::GetSingletonPtr()->stop();
 	}
@@ -256,6 +256,51 @@ namespace api {
 	void EngineController::stop() {
 		boost::thread thrd(&EngineController::ShutDown, EngineController::GetSingletonPtr());
 		thrd.detach();
+	}
+
+	void EngineController::reset() {
+		delete _subsystemController;
+		delete _coreController;
+		delete _idManager;
+		delete _languageManager;
+		delete _textManager;
+		delete _waynetManager;
+
+		for (const std::pair<std::string, std::pair<core::ModuleController *, uint32_t>> & modulesPair : _queuedModules) {
+			delete modulesPair.second.first;
+		}
+		for (const std::pair<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> & modulesPair : _queuedModulesWaiting) {
+			delete modulesPair.second.first;
+		}
+
+		_queuedModules.clear();
+		_queuedModulesWaiting.clear();
+
+		_messagingController->clear();
+
+		_subsystemController = new core::SubSystemController();
+		_coreController = new core::EngineCoreController(_subsystemController);
+		_idManager = new IDManager();
+		_languageManager = new LanguageManager();
+		_textManager = new TextManager();
+		_waynetManager = new WaynetManager();
+
+		_subsystemController->registerController(_coreController);
+
+		std::string textDir;
+		if (clockUtils::ClockError::SUCCESS != _iParser.getValue("GENERAL", "i6engineTextDir", textDir)) {
+			ISIXE_THROW_FAILURE("EngineController", "An exception has occurred: i6engine.ini couldn't be parsed!");
+		}
+		_textManager->initialize(textDir);
+
+		std::string language;
+		if (clockUtils::ClockError::SUCCESS != _iParser.getValue("GENERAL", "language", language)) {
+			ISIXE_THROW_FAILURE("EngineController", "An exception has occurred: i6engine.ini couldn't be parsed!");
+		}
+		_languageManager->addCallback(std::bind(&TextManager::setLanguage, _textManager, std::placeholders::_1));
+		_languageManager->setLanguage(language);
+
+		_languageManager->addCallback(std::bind(&clockUtils::iniParser::IniParser::setValue<std::string>, &_iParser, "GENERAL", "language", std::placeholders::_1));
 	}
 
 	uint64_t EngineController::getCurrentTime() const {

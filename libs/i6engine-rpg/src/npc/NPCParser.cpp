@@ -37,6 +37,7 @@ namespace npc {
 	void NPCParser::loadNPCs(const std::string & directory) {
 		_npcs.clear();
 		_npcFiles.clear();
+
 		std::queue<std::string> directories;
 		directories.push(directory);
 

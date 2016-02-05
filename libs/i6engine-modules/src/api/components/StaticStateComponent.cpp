@@ -72,7 +72,7 @@ namespace api {
 			_position = Vec3(s);
 			setPosition(_position);
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Rotation", [this]() {
 			std::stringstream ss;
 			ss << _rotation;
@@ -81,14 +81,14 @@ namespace api {
 			_rotation = Quaternion(s);
 			setRotation(_rotation);
 			return true;
-		}));
+		}, "Quaternion"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Scale", [this]() {
 			return _scale.toString();
 		}, [this](std::string s) {
 			_scale = Vec3(s);
 			setScale(_scale);
 			return true;
-		}));
+		}, "Vec3"));
 
 		return result;
 	}

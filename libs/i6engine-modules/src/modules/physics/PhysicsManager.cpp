@@ -342,9 +342,11 @@ namespace modules {
 				return;
 			}
 
-			for (std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t>::iterator it = _collisionPairs.begin(); it != _collisionPairs.end(); ++it) {
+			for (std::map<std::pair<PhysicsNode *, PhysicsNode *>, uint64_t>::iterator it = _collisionPairs.begin(); it != _collisionPairs.end();) {
 				if (it->first.first == tmp || it->first.second == tmp) {
-					_collisionPairs.erase(it);
+					it = _collisionPairs.erase(it);
+				} else {
+					it++;
 				}
 			}
 

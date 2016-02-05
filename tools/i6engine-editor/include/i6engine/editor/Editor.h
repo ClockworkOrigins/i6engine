@@ -20,6 +20,8 @@
 #include "i6engine/api/Application.h"
 #include "i6engine/api/configs/ObjectConfig.h"
 
+#include "clockUtils/iniParser/iniParser.h"
+
 namespace i6engine {
 namespace editor {
 
@@ -94,6 +96,12 @@ namespace editor {
 		}
 
 		void clearLevel();
+
+	protected:
+		clockUtils::iniParser::IniParser _iniParser;
+
+		double _movementSpeed;
+		double _rotationSpeed;
 
 	private:
 		api::GOPtr _camera;

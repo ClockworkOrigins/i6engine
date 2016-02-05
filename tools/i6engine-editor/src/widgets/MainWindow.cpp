@@ -18,8 +18,11 @@
 #include "i6engine/modules/object/ObjectController.h"
 #include "i6engine/modules/physics/PhysicsController.h"
 
+#include "i6engine/editor/plugins/FlagPluginInterface.h"
 #include "i6engine/editor/plugins/InitializationPluginInterface.h"
+#include "i6engine/editor/plugins/RunGamePluginInterface.h"
 
+#include "i6engine/editor/widgets/ConfigDialog.h"
 #include "i6engine/editor/widgets/ObjectContainerWidget.h"
 #include "i6engine/editor/widgets/ObjectInfoWidget.h"
 #include "i6engine/editor/widgets/ObjectListWidget.h"
@@ -37,7 +40,14 @@ namespace i6engine {
 namespace editor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates() {
+	GameActionHelper::GameActionHelper(QWidget * par, size_t index) : QObject(par), _index(index) {
+	}
+
+	void GameActionHelper::triggered() {
+		emit triggerGameAction(_index);
+	}
+
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _resetEngineController(false) {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -56,24 +66,17 @@ namespace widgets {
 
 		loadPlugins();
 
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new modules::GraphicsController(reinterpret_cast<HWND>(_renderWidget->winId())), { core::Subsystem::Object });
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new modules::ObjectController(), LNG_OBJECT_FRAME_TIME);
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
-#ifdef ISIXE_WITH_AUDIO
-		api::EngineController::GetSingletonPtr()->registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
-#endif
-		api::EngineController::GetSingletonPtr()->registerApplication(*this);
-
-		std::thread(&api::EngineController::start, api::EngineController::GetSingletonPtr()).detach();
-
-		setMouseTracking(true);
-		installEventFilter(this);
+		connect(this, SIGNAL(initializeEngine()), this, SLOT(doInitializeEngine()));
+		connect(this, SIGNAL(initializeGame()), this, SLOT(doInitializeGame()));
+		connect(this, SIGNAL(stopApp()), this, SLOT(doStopApp()));
 
 		connect(_templateListWidget, SIGNAL(changedLevel()), this, SLOT(changedLevel()));
 		connect(_objectContainerWidget->objectInfoWidget, SIGNAL(changedLevel()), this, SLOT(changedLevel()));
 		connect(_templateListWidget, SIGNAL(updateObjectList()), _objectContainerWidget->objectListWidget, SLOT(doUpdateObjectList()));
 		connect(this, SIGNAL(doChangedLevel()), this, SLOT(changedLevel()));
 		connect(_objectContainerWidget->objectInfoWidget, SIGNAL(selectedObject(int64_t)), this, SLOT(selectedObject(int64_t)));
+
+		emit initializeEngine();
 	}
 
 	MainWindow::~MainWindow() {
@@ -148,6 +151,40 @@ namespace widgets {
 		setSelectObject(id);
 	}
 
+	void MainWindow::triggeredGameAction(int index) {
+		if (_level.size() > 0) {
+			_startGame = index;
+			_resetEngineController = true;
+			api::EngineController::GetSingleton().stop();
+		} else {
+			QMessageBox box;
+			box.setWindowTitle(QString("Can't start game!"));
+			box.setInformativeText("Actually no level is loaded. Load a level first to start game with it!");
+			box.setStandardButtons(QMessageBox::StandardButton::Ok);
+			box.exec();
+		}
+	}
+
+	void MainWindow::openOptions() {
+		ConfigDialog dlg;
+		dlg.movementSpeedSlider->setValue(int(_movementSpeed * 20));
+		dlg.rotationSpeedSlider->setValue(int(_rotationSpeed * 20));
+		if (dlg.exec() == QDialog::Accepted) {
+			_movementSpeed = dlg.movementSpeedSlider->value() / 20.0;
+			_rotationSpeed = dlg.rotationSpeedSlider->value() / 20.0;
+		}
+	}
+
+	std::vector<std::string> MainWindow::getLevelFlags() const {
+		std::vector<std::string> vec = { "Singleplayer" };
+		for (plugins::FlagPluginInterface * fpi : _flagPlugins) {
+			for (std::string s : fpi->getFlags()) {
+				vec.push_back(s);
+			}
+		}
+		return vec;
+	}
+
 	void MainWindow::AfterInitialize() {
 		Editor::AfterInitialize();
 
@@ -157,15 +194,29 @@ namespace widgets {
 
 		api::EngineController::GetSingleton().getGUIFacade()->setMouseVisibility(false);
 
-		std::thread([this]() {
-			std::this_thread::sleep_for(std::chrono::seconds(1));
-			emit _templateListWidget->loadTemplates();
-		}).detach();
+		emit _templateListWidget->loadTemplates();
+
+		if (_inGame) {
+			loadLevel(_level.toStdString());
+			_inGame = false;
+		}
 	}
 
 	void MainWindow::Finalize() {
-		Editor::Finalize();
-		qApp->exit();
+		if (!_inGame) {
+			Editor::Finalize();
+		}
+		if (_resetEngineController || _inGame) {
+			if (_startGame > -1) {
+				emit initializeGame();
+				_inGame = true;
+			} else {
+				emit initializeEngine();
+			}
+			_resetEngineController = false;
+		} else {
+			emit stopApp();
+		}
 	}
 
 	void MainWindow::updateObjectList() {
@@ -192,13 +243,20 @@ namespace widgets {
 	void MainWindow::keyPressEvent(QKeyEvent * evt) {
 		if (_renderWidget->isActiveWindow()) {
 			api::KeyCode kc = convertQtToEngine(evt->key());
-			api::KeyState ks = api::KeyState::KEY_PRESSED;
-			if (_keyStates.find(kc) != _keyStates.end()) {
-				ks = api::KeyState::KEY_HOLD;
+			if (convertQtToEngine(evt->key()) == api::KeyCode::KC_ESCAPE) {
+				if (_inGame && !_resetEngineController) {
+					_resetEngineController = true;
+					api::EngineController::GetSingletonPtr()->stop();
+				}
 			} else {
-				_keyStates.insert(kc);
+				api::KeyState ks = api::KeyState::KEY_PRESSED;
+				if (_keyStates.find(kc) != _keyStates.end()) {
+					ks = api::KeyState::KEY_HOLD;
+				} else {
+					_keyStates.insert(kc);
+				}
+				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(ks, kc, evt->text().toUInt()), core::Subsystem::Input));
 			}
-			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(ks, kc, evt->text().toUInt()), core::Subsystem::Input));
 			evt->accept();
 		}
 		evt->ignore();
@@ -212,11 +270,6 @@ namespace widgets {
 			evt->accept();
 		}
 		evt->ignore();
-	}
-
-	void MainWindow::mouseMoveEvent(QMouseEvent * evt) {
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouMouse, core::Method::Update, new api::input::Input_Mouse_Update(evt->pos().x(), evt->pos().y()), core::Subsystem::Input));
-		evt->accept();
 	}
 
 	void MainWindow::mousePressEvent(QMouseEvent * evt) {
@@ -254,27 +307,14 @@ namespace widgets {
 		evt->accept();
 	}
 
-	bool MainWindow::eventFilter(QObject * obj, QEvent * evt) {
-		QWidget * srcWidget = qobject_cast<QWidget *>(obj);
-		switch (evt->type()) {
-		case QEvent::HoverMove:
-		case QEvent::NonClientAreaMouseMove:
-		case QEvent::MouseMove: {
-			QMouseEvent * me = static_cast<QMouseEvent *>(evt);
-			mouseMoveEvent(me);
-			break;
-		}
-		}
-		return QWidget::eventFilter(obj, evt);
-	}
-
 	void MainWindow::loadPlugins() {
 		loadInitializationPlugins();
+		loadRunGamePlugins();
+		loadFlagPlugins();
 	}
 
 	void MainWindow::loadInitializationPlugins() {
-		QDir pluginsDir = QDir(qApp->applicationDirPath());
-		pluginsDir.cd("plugins/editor/initialization");
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/initialization");
 		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
 			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
 			QObject * plugin = loader.instance();
@@ -288,7 +328,45 @@ namespace widgets {
 				box.exec();
 			}
 		}
+	}
 
+	void MainWindow::loadRunGamePlugins() {
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/runGame");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_runGamePlugins.push_back(qobject_cast<plugins::RunGamePluginInterface *>(plugin));
+				QAction * action = menuGame->addAction(_runGamePlugins.back()->getMenuEntry());
+				GameActionHelper * gac = new GameActionHelper(this, _runGamePlugins.size() - 1);
+				_gameActionHelperList.push_back(gac);
+				connect(action, SIGNAL(triggered()), gac, SLOT(triggered()));
+				connect(gac, SIGNAL(triggerGameAction(int)), this, SLOT(triggeredGameAction(int)));
+			} else {
+				QMessageBox box;
+				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setInformativeText(loader.errorString());
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+			}
+		}
+	}
+
+	void MainWindow::loadFlagPlugins() {
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/flags");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_flagPlugins.push_back(qobject_cast<plugins::FlagPluginInterface *>(plugin));
+			} else {
+				QMessageBox box;
+				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setInformativeText(loader.errorString());
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+			}
+		}
 	}
 
 	api::KeyCode MainWindow::convertQtToEngine(int key) {
@@ -386,12 +464,52 @@ namespace widgets {
 			kc = api::KeyCode::KC_F4;
 			break;
 		}
+		case Qt::Key::Key_Escape: {
+			kc = api::KeyCode::KC_ESCAPE;
+			break;
+		}
 		default: {
 			kc = api::KeyCode::KC_ESCAPE;
 			break;
 		}
 		}
 		return kc;
+	}
+
+	void MainWindow::doInitializeEngine() {
+		if (_engineThread.joinable()) {
+			_engineThread.join();
+		}
+		api::EngineController::GetSingleton().reset();
+		api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new modules::GraphicsController(reinterpret_cast<HWND>(_renderWidget->winId())), { core::Subsystem::Object });
+		api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new modules::ObjectController(), LNG_OBJECT_FRAME_TIME);
+		api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
+#ifdef ISIXE_WITH_AUDIO
+		api::EngineController::GetSingletonPtr()->registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
+#endif
+		api::EngineController::GetSingletonPtr()->registerApplication(*this);
+
+		_engineThread = std::thread(&api::EngineController::start, api::EngineController::GetSingletonPtr());
+	}
+
+	void MainWindow::doInitializeGame() {
+		if (_engineThread.joinable()) {
+			_engineThread.join();
+		}
+		api::EngineController::GetSingleton().reset();
+		_runGamePlugins[_startGame]->initializeSubSystems(reinterpret_cast<HWND>(_renderWidget->winId()));
+		api::EngineController::GetSingletonPtr()->registerApplication(*_runGamePlugins[_startGame]);
+		_runGamePlugins[_startGame]->setLevel(_level.toStdString());
+		_runGamePlugins[_startGame]->setFinalizeCallback(std::bind(&MainWindow::Finalize, this));
+		_engineThread = std::thread(&api::EngineController::start, api::EngineController::GetSingletonPtr());
+		_startGame = -1;
+	}
+
+	void MainWindow::doStopApp() {
+		if (_engineThread.joinable()) {
+			_engineThread.join();
+		}
+		qApp->exit();
 	}
 
 } /* namespace widgets */

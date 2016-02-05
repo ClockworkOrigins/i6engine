@@ -121,7 +121,7 @@ namespace api {
 			_spawntypes.clear();
 			addSpawntypes(s);
 			return true;
-		}));
+		}, "String"));
 
 		return result;
 	}

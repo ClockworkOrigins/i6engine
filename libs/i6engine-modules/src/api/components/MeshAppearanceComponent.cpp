@@ -141,7 +141,7 @@ namespace api {
 		}, [this](std::string s) {
 			setMesh(s);
 			return true;
-		}));
+		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Visibility", [this]() {
 			return std::to_string(_isVisible);
 		}, [this](std::string s) {
@@ -152,13 +152,13 @@ namespace api {
 			}
 			setVisibility(_isVisible);
 			return true;
-		}));
+		}, "Bool"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Material", [this]() {
 			return _material;
 		}, [this](std::string s) {
 			setMaterial(s);
 			return true;
-		}));
+		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Position", [this]() {
 			return _position.toString();
 		}, [this](std::string s) {
@@ -169,7 +169,7 @@ namespace api {
 			}
 			// TODO: (Daniel) add setPosition method
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Rotation", [this]() {
 			std::stringstream ss;
 			ss << _rotation;
@@ -182,7 +182,7 @@ namespace api {
 			}
 			// TODO: (Daniel) add setRotation method
 			return true;
-		}));
+		}, "Quaternion"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Scale", [this]() {
 			return _scale.toString();
 		}, [this](std::string s) {
@@ -193,7 +193,7 @@ namespace api {
 			}
 			// TODO: (Daniel) add setScale method
 			return true;
-		}));
+		}, "Vec3"));
 
 		return result;
 	}
@@ -215,6 +215,10 @@ namespace api {
 
 	void MeshAppearanceComponent::detachGameObjectFromBone(const api::GOPtr & go, const std::string & boneName) {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraDetachFromBone, core::Method::Update, new graphics::Graphics_DetachFromBone_Update(getID(), _objOwnerID, go->getID(), boneName), core::Subsystem::Object));
+	}
+
+	void MeshAppearanceComponent::addAnimationFrameEvent(uint64_t frameTime, const std::function<void(void)> & func) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraAnimationFrameEvent, core::Method::Update, new graphics::Graphics_AnimationFrameEvent_Update(getID(), _objOwnerID, frameTime, func), core::Subsystem::Object));
 	}
 
 } /* namespace api */

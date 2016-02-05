@@ -70,20 +70,20 @@ namespace api {
 			_startPos = Vec3(s);
 			// TODO: (Daniel) send Update
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "End Position", [this]() {
 			return _endPos.toString();
 		}, [this](std::string s) {
 			_endPos = Vec3(s);
 			// TODO: (Daniel) send Update
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Colour", [this]() {
 			return _colour.toString();
 		}, [this](std::string s) {
 			_colour = Vec3(s);
 			return true;
-		}));
+		}, "Vec3"));
 
 		return result;
 	}

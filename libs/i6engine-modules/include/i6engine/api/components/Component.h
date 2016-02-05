@@ -81,10 +81,11 @@ namespace api {
 		ACCESSSTATE = 0,
 		NAME,
 		READFUNC,
-		WRITEFUNC
+		WRITEFUNC,
+		WIDGETTYPE
 	};
 
-	typedef std::tuple<AccessState, std::string, boost::function<std::string(void)>, boost::function<bool(std::string)>> componentOptions;
+	typedef std::tuple<AccessState, std::string, boost::function<std::string(void)>, boost::function<bool(std::string)>, std::string> componentOptions;
 
 	/**
 	 * \class Component

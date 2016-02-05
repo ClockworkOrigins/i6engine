@@ -11,23 +11,44 @@
 #include "i6engine/api/manager/WaynetManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
+#include "i6engine/editor/plugins/TypePluginInterface.h"
+
+#include <QDir>
 #include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QPluginLoader>
 #include <QPushButton>
+
+Q_IMPORT_PLUGIN(EditorTypeAngle)
+Q_IMPORT_PLUGIN(EditorTypeBool)
+Q_IMPORT_PLUGIN(EditorTypeDouble)
+Q_IMPORT_PLUGIN(EditorTypeInteger)
+Q_IMPORT_PLUGIN(EditorTypeLightType)
+Q_IMPORT_PLUGIN(EditorTypeMoverInterpolateMode)
+Q_IMPORT_PLUGIN(EditorTypeMoverInterpolateWay)
+Q_IMPORT_PLUGIN(EditorTypeMoverPositioning)
+Q_IMPORT_PLUGIN(EditorTypeQuaternion)
+Q_IMPORT_PLUGIN(EditorTypeShapeType)
+Q_IMPORT_PLUGIN(EditorTypeShatterInterest)
+Q_IMPORT_PLUGIN(EditorTypeString)
+Q_IMPORT_PLUGIN(EditorTypeVec3)
+Q_IMPORT_PLUGIN(EditorTypeVec4)
 
 namespace i6engine {
 namespace editor {
 namespace widgets {
 
-	ObjectInfoWidget::ObjectInfoWidget(QWidget * par) : QWidget(par), _selectedObjectID(-1), _infos(), _entries() {
+	ObjectInfoWidget::ObjectInfoWidget(QWidget * par) : QWidget(par), _selectedObjectID(-1), _infos(), _entries(), _typePlugins() {
 		setupUi(this);
 
 		connect(this, SIGNAL(selectObject(int64_t)), this, SLOT(doSelectObject(int64_t)));
 		connect(this, SIGNAL(removeObject()), this, SLOT(doRemoveObject()));
 
 		hide();
+
+		loadTypePlugins();
 	}
 
 	ObjectInfoWidget::~ObjectInfoWidget() {
@@ -63,7 +84,7 @@ namespace widgets {
 			QWidget * w = new QWidget(this);
 			QHBoxLayout * layout = new QHBoxLayout(w);
 			l = new QLabel(QString("Flags"), w);
-			QLineEdit * edit = new QLineEdit(w);
+			plugins::TypeWidgetInterface * twi = _typePlugins["String"]->createWidget(w);
 			std::vector<std::string> flags = go->getFlags();
 			std::string flagString;
 			for (size_t i = 0; i < flags.size(); i++) {
@@ -73,12 +94,12 @@ namespace widgets {
 					flagString += "|";
 				}
 			}
-			edit->setText(QString::fromStdString(flagString));
+			twi->setValues(flagString);
 			layout->addWidget(l);
-			layout->addWidget(edit);
+			layout->addWidget(twi);
 			verticalLayout->addWidget(w);
 			_infos.push_back(w);
-			_entries.insert(std::make_pair(edit, [wgo](std::string s) {
+			_entries.insert(std::make_pair(twi, [wgo](std::string s) {
 				auto gobj = wgo.get();
 				gobj->setFlags(utils::split(s, "|"));
 			}));
@@ -95,16 +116,25 @@ namespace widgets {
 				vLayout->addWidget(l);
 				_infos.push_back(gb);
 				for (auto option : c->getComponentOptions()) {
+					if (_typePlugins.find(std::get<api::ComponentOptionsParameter::WIDGETTYPE>(option)) == _typePlugins.end()) {
+						QMessageBox box;
+						box.setWindowTitle(QString("Attribute can't be displayed!"));
+						box.setInformativeText(QString("Attribute '") + QString::fromStdString(std::get<api::ComponentOptionsParameter::NAME>(option)) + QString("' has unregistered type '") + QString::fromStdString(std::get<api::ComponentOptionsParameter::WIDGETTYPE>(option)) + QString("'. It will be skipped and is not accessible. Check your plugins folder!"));
+						box.setStandardButtons(QMessageBox::StandardButton::Ok);
+						box.exec();
+						continue;
+					}
 					w = new QWidget(gb);
 					layout = new QHBoxLayout(w);
 					w->setLayout(layout);
 					vLayout->addWidget(w);
 					l = new QLabel(QString::fromStdString(std::get<api::ComponentOptionsParameter::NAME>(option)), w);
 					layout->addWidget(l);
-					edit = new QLineEdit(QString::fromStdString(std::get<api::ComponentOptionsParameter::READFUNC>(option)()), w);
-					layout->addWidget(edit);
-					_entries.insert(std::make_pair(edit, std::get<api::ComponentOptionsParameter::WRITEFUNC>(option)));
-					edit->setReadOnly(std::get<api::ComponentOptionsParameter::ACCESSSTATE>(option) == api::AccessState::READONLY);
+					twi = _typePlugins[std::get<api::ComponentOptionsParameter::WIDGETTYPE>(option)]->createWidget(w);
+					twi->setValues(std::get<api::ComponentOptionsParameter::READFUNC>(option)());
+					layout->addWidget(twi);
+					_entries.insert(std::make_pair(twi, std::get<api::ComponentOptionsParameter::WRITEFUNC>(option)));
+					twi->setReadOnly(std::get<api::ComponentOptionsParameter::ACCESSSTATE>(option) == api::AccessState::READONLY);
 				}
 			}
 
@@ -151,7 +181,31 @@ namespace widgets {
 
 	void ObjectInfoWidget::applyChanges() {
 		for (auto & p : _entries) {
-			p.second(p.first->text().toStdString());
+			p.second(p.first->getValues());
+		}
+	}
+
+	void ObjectInfoWidget::loadTypePlugins() {
+		foreach(QObject * plugin, QPluginLoader::staticInstances()) {
+			if (qobject_cast<plugins::TypePluginInterface *>(plugin)) {
+				_typePlugins.insert(std::make_pair(qobject_cast<plugins::TypePluginInterface *>(plugin)->getIdentifier(), qobject_cast<plugins::TypePluginInterface *>(plugin)));
+			}
+		}
+
+
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/type");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_typePlugins.insert(std::make_pair(qobject_cast<plugins::TypePluginInterface *>(plugin)->getIdentifier(), qobject_cast<plugins::TypePluginInterface *>(plugin)));
+			} else {
+				QMessageBox box;
+				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setInformativeText(loader.errorString());
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+			}
 		}
 		emit changedLevel();
 	}

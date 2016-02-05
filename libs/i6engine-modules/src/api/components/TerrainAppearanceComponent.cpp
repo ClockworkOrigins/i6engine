@@ -119,28 +119,28 @@ namespace api {
 			_heightmap = s;
 			sendUpdateMessage();
 			return true;
-		}));
+		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Size", [this]() {
 			return boost::lexical_cast<std::string>(_size);
 		}, [this](std::string s) {
 			_size = std::stod(s);
 			sendUpdateMessage();
 			return true;
-		}));
+		}, "Double"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Input Scale", [this]() {
 			return std::to_string(_inputScale);
 		}, [this](std::string s) {
 			_inputScale = std::stod(s);
 			sendUpdateMessage();
 			return true;
-		}));
+		}, "Double"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Vertices", [this]() {
 			return std::to_string(_vertices);
 		}, [this](std::string s) {
 			_vertices = std::stoul(s);
 			sendUpdateMessage();
 			return true;
-		}));
+		}, "Integer"));
 
 		return result;
 	}

@@ -332,16 +332,16 @@ namespace api {
 		}, [this](std::string s) {
 			_mode = Mode(boost::lexical_cast<uint16_t>(s));
 			return true;
-		}));
+		}, "MoverInterpolateMode"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Way", [this]() {
 			return boost::lexical_cast<std::string>(uint16_t(_way));
 		}, [this](std::string s) {
 			_way = Way(boost::lexical_cast<uint16_t>(s));
 			return true;
-		}));
+		}, "MoverInterpolateWay"));
 		result.push_back(std::make_tuple(AccessState::READONLY, "Num. Keyframes", [this]() {
 			return boost::lexical_cast<std::string>(_keyFrames.size());
-		}, boost::function<bool(std::string)>()));
+		}, boost::function<bool(std::string)>(), "Integer"));
 
 		return result;
 	}

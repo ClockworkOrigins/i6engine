@@ -20,6 +20,10 @@ namespace widgets {
 		 * \brief destructor
 		 */
 		~RenderWidget();
+
+	private:
+		void mouseMoveEvent(QMouseEvent * evt) override;
+		bool eventFilter(QObject * obj, QEvent * evt) override;
 	};
 
 } /* namespace widgets */

@@ -121,24 +121,24 @@ namespace ParticleUniverse
 		}
 
 		// 2. Determine size of the atlas image and alloc memory - Is it possibe to create a square image?
-		size_t imageColums = size_t(Math::Ceil(Math::Sqrt(Real(mImageList.size()))));
-		size_t imageRows = size_t(Math::Ceil(Real(mImageList.size()) / Real(imageColums)));
-		size_t width = imageColums * mIndividualImageWidth;
-		size_t height = imageRows * mIndividualImageHeight;
+		Ogre::uint imageColums = Ogre::uint(Math::Ceil(Math::Sqrt(Real(mImageList.size()))));
+		Ogre::uint imageRows = Ogre::uint(Math::Ceil(Real(mImageList.size()) / Real(imageColums)));
+		Ogre::uint width = Ogre::uint(imageColums * mIndividualImageWidth);
+		Ogre::uint height = Ogre::uint(imageRows * mIndividualImageHeight);
 		size_t pixelSize = Ogre::PixelUtil::getNumElemBytes(mPixelFormat);
 		size_t bufferSize = width * height * pixelSize;
 		uchar* data = OGRE_ALLOC_T(uchar, bufferSize, MEMCATEGORY_GENERAL);
 		memset (data, 0, bufferSize);
 		mAtlas = PU_NEW Ogre::Image();
-		mAtlas->loadDynamicImage(data, width, height, 1, mPixelFormat, true); // Create atlas image, no mipmaps
+		mAtlas->loadDynamicImage(data, width, height, Ogre::PixelFormat::PF_BYTE_L, mPixelFormat, true); // Create atlas image, no mipmaps
 
 		// 3. Add the buffers of all images to the atlas buffer
 		ImageList::iterator it = mImageList.begin();
 		Ogre::Image * image = *it;
 		size_t atlasPointer = 0;
-		for (size_t imageRow = 0; imageRow < imageRows; ++imageRow) {
+		for (Ogre::uint imageRow = 0; imageRow < imageRows; ++imageRow) {
 			atlasPointer = imageRow * mIndividualImageHeight * mAtlas->getRowSpan();
-			for (size_t imageColum = 0; imageColum < imageColums; ++imageColum) {
+			for (Ogre::uint imageColum = 0; imageColum < imageColums; ++imageColum) {
 				atlasPointer = (imageRow * mIndividualImageHeight * mAtlas->getRowSpan()) + (imageColum * mIndividualImageRowSpan);
 				for (size_t pixelLine = 0; pixelLine < mIndividualImageHeight; ++pixelLine) {
 					memcpy(data + atlasPointer, image->getData() + pixelLine * mIndividualImageRowSpan, mIndividualImageRowSpan);	

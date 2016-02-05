@@ -34,7 +34,7 @@
 
 class TestTimeClock {
 public:
-	explicit TestTimeClock(const boost::function<void(void)> & f) : _startTime(), _currentTime() {
+	explicit TestTimeClock(const boost::function<void(void)> &) : _startTime(), _currentTime() {
 	}
 
 	~TestTimeClock() {

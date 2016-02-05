@@ -28,7 +28,7 @@
 namespace i6engine {
 namespace api {
 
-	ParticleEmitterComponent::ParticleEmitterComponent(const int64_t id, const attributeMap & params) : Component(id, params), _emitterName(params.find("particleEmitter")->second), _pos(), _fadeOut(false), _fadeOutCooldown(0) {
+	ParticleEmitterComponent::ParticleEmitterComponent(const int64_t id, const attributeMap & params) : Component(id, params), _emitterName(), _pos(), _fadeOut(false), _fadeOutCooldown(0) {
 		Component::_objFamilyID = components::ParticleEmitterComponent;
 		Component::_objComponentID = components::ParticleEmitterComponent;
 
@@ -80,7 +80,7 @@ namespace api {
 		return params;
 	}
 
-	std::pair<AddStrategy, int64_t> ParticleEmitterComponent::howToAdd(const ComPtr & comp) const {
+	std::pair<AddStrategy, int64_t> ParticleEmitterComponent::howToAdd(const ComPtr &) const {
 		return std::make_pair(AddStrategy::ADD, 0);
 	}
 
@@ -93,26 +93,26 @@ namespace api {
 			_emitterName = s;
 			// TODO: (Daniel) send Update
 			return true;
-		}));
+		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Position", [this]() {
 			return _pos.toString();
 		}, [this](std::string s) {
 			_pos = Vec3(s);
 			// TODO: (Daniel) send Update
 			return true;
-		}));
+		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "FadeOut", [this]() {
 			return std::to_string(_fadeOut);
 		}, [this](std::string s) {
 			_fadeOut = s == "1";
 			return true;
-		}));
+		}, "Bool"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "FadeOut Cooldown", [this]() {
 			return std::to_string(_fadeOutCooldown);
 		}, [this](std::string s) {
 			_fadeOutCooldown = std::stoul(s);
 			return true;
-		}));
+		}, "Integer"));
 
 		return result;
 	}
