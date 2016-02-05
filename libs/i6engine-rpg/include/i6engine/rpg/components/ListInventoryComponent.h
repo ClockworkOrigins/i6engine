@@ -71,7 +71,7 @@ namespace components {
 		void Init() override;
 		void Finalize() override;
 
-		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr & comp) const override {
+		std::pair<api::AddStrategy, int64_t> howToAdd(const api::ComPtr &) const override {
 			return std::make_pair(api::AddStrategy::REJECT, -1);
 		}
 

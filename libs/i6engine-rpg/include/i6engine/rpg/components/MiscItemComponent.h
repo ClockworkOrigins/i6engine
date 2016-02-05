@@ -43,7 +43,7 @@ namespace components {
 			return "MiscItem";
 		}
 
-		bool use(const api::GOPtr & self) override {
+		bool use(const api::GOPtr &) override {
 			return false;
 		}
 

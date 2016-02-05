@@ -27,11 +27,11 @@
 #include "i6engine/modules/network/NetworkController.h"
 
 #ifdef ISIXE_WITH_CONSOLE
-int main(int argc, char ** argv) {
+int main(int, char **) {
 #else
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 #endif
-	sample::ChatApplication app("127.0.0.1", 12345, i6engine::utils::Random::GetSingleton().rand(12346, UINT16_MAX));
+	sample::ChatApplication app("127.0.0.1", 12345, uint16_t(i6engine::utils::Random::GetSingleton().rand(12346, UINT16_MAX)));
 
 	app.setName("Chat Client Sample");
 

@@ -39,7 +39,7 @@ namespace components {
 
 		i6engine::api::attributeMap synchronize() const override;
 
-		std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+		std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr &) const override {
 			return std::make_pair(i6engine::api::AddStrategy::REJECT, -1);
 		}
 

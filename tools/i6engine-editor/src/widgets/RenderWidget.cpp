@@ -29,7 +29,6 @@ namespace widgets {
 	}
 
 	bool RenderWidget::eventFilter(QObject * obj, QEvent * evt) {
-		QWidget * srcWidget = qobject_cast<QWidget *>(obj);
 		switch (evt->type()) {
 		case QEvent::HoverMove:
 		case QEvent::NonClientAreaMouseMove:
