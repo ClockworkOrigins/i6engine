@@ -24,6 +24,7 @@ namespace properties {
 		_vec3Property = new Vec3Property(widget, "Axis", "Axis", axis.toOgre());
 		_layout->addWidget(_vec3Property, 0, 0);
 		connect(_vec3Property, SIGNAL(changed(QString)), this, SLOT(changedValue()));
+		_vec3Property->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 
 		QLabel * l = new QLabel("Angle", widget);
 		_layout->addWidget(l, 1, 0);
@@ -33,6 +34,8 @@ namespace properties {
 		_doubleSpinBox->setValue(angle);
 		_layout->addWidget(_doubleSpinBox, 2, 0);
 		connect(_doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));
+		l->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+		_doubleSpinBox->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 
 		horizontalLayout->addWidget(widget);
 	}
