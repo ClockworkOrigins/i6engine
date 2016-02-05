@@ -9,6 +9,8 @@
 
 #include "i6engine/editor/Editor.h"
 
+class QProgressDialog;
+
 namespace i6engine {
 namespace editor {
 namespace plugins {
@@ -55,6 +57,9 @@ namespace widgets {
 		void initializeEngine();
 		void initializeGame();
 		void stopApp();
+		void triggerProgressValue(int);
+		void triggerProgressMaximum(int);
+		void triggerFinishProgress();
 
 	private slots:
 		void createNewLevel();
@@ -69,6 +74,7 @@ namespace widgets {
 		void doInitializeEngine();
 		void doInitializeGame();
 		void doStopApp();
+		void finishProgress();
 
 	private:
 		const QString WINDOWTITLE;
@@ -86,6 +92,7 @@ namespace widgets {
 		bool _resetEngineController;
 		int _startGame;
 		bool _inGame;
+		QProgressDialog * _progressDialog;
 
 		std::string getBasePath() const override {
 			return "../media/maps";
@@ -108,6 +115,11 @@ namespace widgets {
 		void loadInitializationPlugins();
 		void loadRunGamePlugins();
 		void loadFlagPlugins();
+		void saveLevel(const QString & level);
+
+		void setProgressValue(int value) override;
+		void setProgressMaximum(int value) override;
+		void finishedProgress() override;
 
 		static api::KeyCode convertQtToEngine(int key);
 	};

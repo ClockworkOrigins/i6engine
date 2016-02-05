@@ -34,6 +34,7 @@
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QPluginLoader>
+#include <QProgressDialog>
 #include <QTimer>
 
 namespace i6engine {
@@ -47,7 +48,7 @@ namespace widgets {
 		emit triggerGameAction(_index);
 	}
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _resetEngineController(false) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false) {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -69,6 +70,7 @@ namespace widgets {
 		connect(this, SIGNAL(initializeEngine()), this, SLOT(doInitializeEngine()));
 		connect(this, SIGNAL(initializeGame()), this, SLOT(doInitializeGame()));
 		connect(this, SIGNAL(stopApp()), this, SLOT(doStopApp()));
+		connect(this, SIGNAL(triggerFinishProgress()), this, SLOT(finishProgress()));
 
 		connect(_templateListWidget, SIGNAL(changedLevel()), this, SLOT(changedLevel()));
 		connect(_objectContainerWidget->objectInfoWidget, SIGNAL(changedLevel()), this, SLOT(changedLevel()));
@@ -91,7 +93,7 @@ namespace widgets {
 		QString file = QFileDialog::getSaveFileName(nullptr, "New file name ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
 		if (!file.isEmpty()) {
 			clearLevel();
-			saveLevel(file.toStdString());
+			saveLevel(file);
 			loadLevel(file.toStdString());
 			_level = file;
 			setWindowTitle(WINDOWTITLE + " - " + _level);
@@ -116,7 +118,7 @@ namespace widgets {
 	void MainWindow::chooseSaveLevel() {
 		if (!_level.isEmpty()) {
 			if (_changed) {
-				saveLevel(_level.toStdString());
+				saveLevel(_level);
 				setWindowTitle(WINDOWTITLE + " - " + _level);
 				_changed = false;
 			}
@@ -126,7 +128,7 @@ namespace widgets {
 	void MainWindow::chooseSaveLevelAs() {
 		QString file = QFileDialog::getSaveFileName(nullptr, "Save file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
 		if (!file.isEmpty()) {
-			saveLevel(file.toStdString());
+			saveLevel(file);
 			_level = file;
 			setWindowTitle(WINDOWTITLE + " - " + _level);
 			_changed = false;
@@ -369,6 +371,28 @@ namespace widgets {
 		}
 	}
 
+	void MainWindow::saveLevel(const QString & level) {
+		delete _progressDialog;
+		_progressDialog = new QProgressDialog("Saving level...", "", 0, 1, this);
+		_progressDialog->setWindowModality(Qt::WindowModal);
+		_progressDialog->setCancelButton(nullptr);
+		connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
+		connect(this, SIGNAL(triggerProgressMaximum(int)), _progressDialog, SLOT(setMaximum(int)));
+		std::thread(std::bind(&Editor::saveLevel, this, level.toStdString())).detach();
+	}
+
+	void MainWindow::setProgressValue(int value) {
+		emit triggerProgressValue(value);
+	}
+
+	void MainWindow::setProgressMaximum(int value) {
+		emit triggerProgressMaximum(value);
+	}
+
+	void MainWindow::finishedProgress() {
+		emit triggerFinishProgress();
+	}
+
 	api::KeyCode MainWindow::convertQtToEngine(int key) {
 		api::KeyCode kc = api::KeyCode::KC_ESCAPE;
 		switch (key) {
@@ -510,6 +534,11 @@ namespace widgets {
 			_engineThread.join();
 		}
 		qApp->exit();
+	}
+
+	void MainWindow::finishProgress() {
+		delete _progressDialog;
+		_progressDialog = nullptr;
 	}
 
 } /* namespace widgets */

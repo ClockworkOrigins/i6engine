@@ -23,6 +23,7 @@
 
 #include "i6engine/configs/FrameTimes.h"
 
+#include "i6engine/utils/AutoUpdater.h"
 #include "i6engine/utils/i6eString.h"
 
 #include "i6engine/math/i6eMath.h"
@@ -48,6 +49,8 @@
 #include "i6engine/api/manager/IDManager.h"
 #include "i6engine/api/manager/WaynetManager.h"
 #include "i6engine/api/objects/GameObject.h"
+
+#include <QProgressDialog>
 
 #include "tinyxml2.h"
 
@@ -202,6 +205,12 @@ namespace editor {
 
 		std::map<std::string, std::vector<api::GOPtr>> sectionMap;
 
+		utils::AutoUpdater<int> currentValue = 0;
+		currentValue.registerUpdate(std::bind(&Editor::setProgressValue, this, std::placeholders::_1));
+		utils::AutoUpdater<int> maxValue = 1;
+		maxValue.registerUpdate(std::bind(&Editor::setProgressMaximum, this, std::placeholders::_1));
+		maxValue += api::EngineController::GetSingleton().getObjectFacade()->getGOMap().size();
+
 		for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOMap()) {
 			if (p.second->getType() == "EditorCam") {
 				continue;
@@ -221,6 +230,8 @@ namespace editor {
 			}
 
 			sectionMap[flagString].push_back(p.second);
+			currentValue++;
+			maxValue++;
 		}
 
 		for (auto & p : sectionMap) {
@@ -262,10 +273,13 @@ namespace editor {
 				section->LinkEndChild(gameObject);
 
 				root->LinkEndChild(section);
+				currentValue++;
 			}
 		}
 
 		doc.SaveFile(level.c_str());
+		currentValue++;
+		finishedProgress();
 	}
 
 	void Editor::clearLevel() {

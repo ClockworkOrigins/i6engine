@@ -66,8 +66,6 @@
      <string>Game</string>
     </property>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuGame"/>
    <widget class="QMenu" name="menuExtras">
     <property name="title">
      <string>Extras</string>
@@ -75,6 +73,7 @@
     <addaction name="actionOptions"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuGame"/>
    <addaction name="menuExtras"/>
   </widget>
   <action name="actionLoad_Level">
