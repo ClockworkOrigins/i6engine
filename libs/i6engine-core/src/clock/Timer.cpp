@@ -21,25 +21,28 @@
 namespace i6engine {
 namespace core {
 
-	Timer::Timer(EngineCoreController * ctrl, const uint32_t lngFrameTime) : _ctrl(ctrl), _bolTimerStopped(false), _objCondExecutable(), _objCondMut(), _objCondUniqLock(_objCondMut), _timerID() {
+	Timer::Timer(EngineCoreController * ctrl, const uint32_t lngFrameTime) : _ctrl(ctrl), _bolTimerStopped(false), _condVariable(), _lock(), _timerID() {
 		_timerID = _ctrl->registerTimer(lngFrameTime, boost::bind(&Timer::setLastUpdate, this), true, JobPriorities::Prio_Subsystem);
 	}
 
 	Timer::~Timer() {
 		_bolTimerStopped = true;
-		_objCondExecutable.wait(_objCondUniqLock);
+		std::unique_lock<std::mutex> ul(_lock);
+		_condVariable.wait(ul);
 	}
 
 	void Timer::update() {
 		if (!_bolTimerStopped) {
 			// Pause the thread until it gets waked up by the Scheduler.
-			_objCondExecutable.wait(_objCondUniqLock);
+			std::unique_lock<std::mutex> ul(_lock);
+			_condVariable.wait(ul);
 		}
 	}
 
 	bool Timer::setLastUpdate() {
 		// Wake up the waiting thread.
-		_objCondExecutable.notify_all();
+		std::unique_lock<std::mutex> ul(_lock);
+		_condVariable.notify_all();
 		return !_bolTimerStopped;
 	}
 

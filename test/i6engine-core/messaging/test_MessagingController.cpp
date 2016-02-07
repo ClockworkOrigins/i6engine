@@ -62,13 +62,14 @@ class Mock_SubSystemStress : public MessageSubscriber {
 public:
 	std::vector<int> status;
 
-	Mock_SubSystemStress() : status(100 * 4), _mc(), stop(false), _objCondExecutable(), _objCondMut(), _objCondUniqLock(_objCondMut) {
+	Mock_SubSystemStress() : status(100 * 4), _mc(), stop(false), _condVariable(), _lock() {
 	}
 
 	void Mailbox(const Message::Ptr & msg) {
 		if (msg->getSubtype() == 2) {
 			stop = true;
-			_objCondExecutable.notify_all();
+			std::unique_lock<std::mutex> ul(_lock);
+			_condVariable.notify_all();
 		}
 	}
 
@@ -84,9 +85,8 @@ public:
 
 	Mock_MessagingController * _mc;
 	bool stop;
-	boost::condition_variable _objCondExecutable;
-	boost::mutex _objCondMut;
-	boost::unique_lock<boost::mutex> _objCondUniqLock;
+	std::condition_variable _condVariable;
+	std::mutex _lock;
 };
 
 TEST(MessagingController, Buffer1) {
@@ -108,12 +108,12 @@ TEST(MessagingController, Buffer1) {
 		EXPECT_CALL(ms, _receiveMessage(&(*msg2)));
 	}
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(15));
+	std::this_thread::sleep_for(std::chrono::milliseconds(15));
 
 	mc->deliverMessage(msg1);
 	mc->deliverMessage(msg2);
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(15));
+	std::this_thread::sleep_for(std::chrono::milliseconds(15));
 
 	ms.processMessages();
 
@@ -153,7 +153,7 @@ TEST(MessagingController, Buffer2) {
 		// Message 6 will never be delivered because of Message 5 arrived earlier
 	}
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(15));
+	std::this_thread::sleep_for(std::chrono::milliseconds(15));
 
 	mc->deliverMessage(msg1);
 	mc->deliverMessage(msg2);
@@ -162,7 +162,7 @@ TEST(MessagingController, Buffer2) {
 	mc->deliverMessage(msg5);
 	mc->deliverMessage(msg6);
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(15));
+	std::this_thread::sleep_for(std::chrono::milliseconds(15));
 
 	ms.processMessages();
 
@@ -196,7 +196,7 @@ TEST(MessagingController, specialCases) {
 		EXPECT_CALL(ms, _receiveMessage(&(*msg4)));
 	}
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 	mc->deliverMessage(msg1);
 	mc->deliverMessage(msg2);
@@ -204,13 +204,13 @@ TEST(MessagingController, specialCases) {
 	mc->deliverMessage(msg4);
 
 	// wait for messages to be delivered and processed
-	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	ms.processMessages();
 
 	// now comes a delete
 	mc->deliverMessage(msg5);
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 	ms.processMessages();
 
@@ -244,7 +244,7 @@ TEST(MessagingController, updateAfterDelete) {
 		EXPECT_CALL(ms, _receiveMessage(&(*msg5)));
 	}
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 	mc->deliverMessage(msg1);
 	mc->deliverMessage(msg2);
@@ -252,7 +252,7 @@ TEST(MessagingController, updateAfterDelete) {
 	mc->deliverMessage(msg4);
 
 	// wait for messages to be delivered and processed
-	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	ms.processMessages();
 
 	// now comes a delete
@@ -260,7 +260,7 @@ TEST(MessagingController, updateAfterDelete) {
 	mc->deliverMessage(msg6);
 	mc->deliverMessage(msg7);
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 	ms.processMessages();
 
@@ -310,7 +310,7 @@ TEST(MessagingController, StressTest) {
 		msgs[msgCounter++] = boost::make_shared<Message>(0, 0, Method::Delete, new MessageStruct(i, -1), i6engine::core::Subsystem::Unknown);
 	}
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 	srand(0);
 	std::vector<std::pair<int, size_t>> allMsgs(msgCounter);
@@ -326,7 +326,7 @@ TEST(MessagingController, StressTest) {
 
 	for (int i = 0; i < 100; i++) {
 		ms.processMessages();
-		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 
 	mc->unregisterMessageType(0, &ms);
@@ -390,7 +390,7 @@ TEST(MessagingController, MultithreadedStressTest) {
 
 	std::vector<Method> methods = { Method::Create, Method::Update, Method::Delete };
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 	std::thread([&ms](){
 		while (!ms.stop) {
@@ -413,7 +413,8 @@ TEST(MessagingController, MultithreadedStressTest) {
 
 	mc->deliverMessage(boost::make_shared<Message>(0, 2, Method::Update, new MessageStruct(), i6engine::core::Subsystem::Unknown));
 
-	ms._objCondExecutable.wait(ms._objCondUniqLock);
+	std::unique_lock<std::mutex> ul(ms._lock);
+	ms._condVariable.wait(ul);
 
 	mc->unregisterMessageType(0, &ms);
 
@@ -440,13 +441,13 @@ TEST(MessagingController, handlingBufferedMessageForUnregisteredType) {
 	mc->deliverMessage(msg3);
 
 	// wait for messages to be delivered and processed
-	boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	ms.processMessages();
 
 	// this message will be in buffer when unregistering
 	mc->deliverMessage(msg4);
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 	mc->unregisterMessageType(1, &ms);
 	ms.removeMethod(1);

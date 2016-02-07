@@ -243,6 +243,7 @@ namespace core {
 		void deliverMessageInternal(const ReceivedMessagePtr & msg) override;
 
 		void stop() {
+			std::unique_lock<std::mutex> ul(_lock);
 			_conditionVariable.notify_one();
 		}
 

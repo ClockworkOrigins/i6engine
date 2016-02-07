@@ -29,13 +29,16 @@
 namespace i6engine {
 namespace core {
 
-	MessagingController::MessagingController() : _objMessageTypeDictionary(), _objDictionaryMutex(), _deliverThread(nullptr), _condVar(), _condMutex(), _running(true) {
+	MessagingController::MessagingController() : _objMessageTypeDictionary(), _dictionaryMutex(), _deliverThread(nullptr), _condVar(), _condMutex(), _running(true) {
 		_deliverThread = new boost::thread(boost::bind(&MessagingController::deliverMessages, this));
 	}
 
 	MessagingController::~MessagingController() {
 		_running = false;
-		_condVar.notify_all();
+		{
+			std::unique_lock<std::mutex> ul(_condMutex);
+			_condVar.notify_all();
+		}
 		_deliverThread->interrupt();
 		_deliverThread->join();
 		delete _deliverThread;
@@ -64,7 +67,7 @@ namespace core {
 #endif /* ISIXE_WITH_PROFILING */
 		uint16_t msgType = msg->getMessageType();
 
-		boost::mutex::scoped_lock objScopeLock(_objDictionaryMutex);
+		std::lock_guard<std::mutex> lg(_dictionaryMutex);
 		// Look up the message type in the dictionary (method suggested by Item 24 of Effective STL by Scott Meyers).
 		auto it = _objMessageTypeDictionary.find(msgType);
 		if (it != _objMessageTypeDictionary.end()) {
@@ -80,7 +83,7 @@ namespace core {
 	}
 
 	void MessagingController::registerMessageType(uint16_t msgType, MessageSubscriber * subcriber) {
-		boost::mutex::scoped_lock objScopeLock(_objDictionaryMutex);
+		std::lock_guard<std::mutex> lg(_dictionaryMutex);
 
 		// Look up if the message type already exists in the dictionary (Suggested by Item 24 of Effective STL by Scott Meyers).
 		auto itMsgType = _objMessageTypeDictionary.find(msgType);
@@ -102,7 +105,7 @@ namespace core {
 	}
 
 	void MessagingController::unregisterMessageType(uint16_t msgType, MessageSubscriber * subscriber) {
-		boost::mutex::scoped_lock objScopeLock(_objDictionaryMutex);
+		std::lock_guard<std::mutex> lg(_dictionaryMutex);
 		auto itMsgType = _objMessageTypeDictionary.find(msgType);
 		// Look up if the message type exists in the dictionary (Suggested by Item 24 of Effective STL by Scott Meyers).
 		if (itMsgType != _objMessageTypeDictionary.end()) {
@@ -126,6 +129,7 @@ namespace core {
 		// save Message
 		_msgQueue.push(msg);
 		// and than notify poll thread that there are new messages
+		std::unique_lock<std::mutex> ul(_condMutex);
 		_condVar.notify_all();
 	}
 
