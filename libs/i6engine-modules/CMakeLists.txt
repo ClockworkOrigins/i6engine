@@ -33,6 +33,7 @@ set(i6components
 	${srcdir}/api/components/AnimatedDirectionalLightComponent.cpp
 	${srcdir}/api/components/AnimatedLuminousAppearanceComponent.cpp
 	${srcdir}/api/components/AnimatedSpotLightComponent.cpp
+	${srcdir}/api/components/AnimationControllerComponent.cpp
 	${srcdir}/api/components/BillboardComponent.cpp
 	${srcdir}/api/components/CameraComponent.cpp
 	${srcdir}/api/components/FollowComponent.cpp

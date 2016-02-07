@@ -24,6 +24,7 @@
 #include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/AnimatedDirectionalLightComponent.h"
 #include "i6engine/api/components/AnimatedSpotLightComponent.h"
+#include "i6engine/api/components/AnimationControllerComponent.h"
 #include "i6engine/api/components/BillboardComponent.h"
 #include "i6engine/api/components/FollowComponent.h"
 #include "i6engine/api/components/LifetimeComponent.h"
@@ -220,6 +221,14 @@ namespace object {
 
 	i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component> getAnimatedSpotLightComponent(i6engine::api::GameObject * go, const std::string & identifier) {
 		return go->getGOC<i6engine::api::AnimatedSpotLightComponent>(i6engine::api::components::ComponentTypes::AnimatedSpotLightComponent, identifier);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component> getAnimationControllerComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::AnimationControllerComponent>(i6engine::api::components::ComponentTypes::AnimationControllerComponent);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component> getAnimationControllerComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::AnimationControllerComponent>(i6engine::api::components::ComponentTypes::AnimationControllerComponent, identifier);
 	}
 
 	i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component> getCameraComponent(i6engine::api::GameObject * go) {
@@ -843,6 +852,22 @@ namespace object {
 		});
 	}
 
+	void addAnimationFrameEvent(i6engine::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & func) {
+		c->addAnimationFrameEvent(animation, frameTime, [func]() {
+			if (!func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+			}
+		});
+	}
+
+	void addAnimationFrameEvent(i6engine::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & script, const std::string & func) {
+		c->addAnimationFrameEvent(animation, frameTime, [script, func]() {
+			if (!script.empty() && !func.empty()) {
+				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func);
+			}
+		});
+	}
+
 } /* namespace object */
 } /* namespace lua */
 } /* namespace i6engine */
@@ -868,6 +893,8 @@ scope registerObject() {
 			.def("getAnimatedLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getAnimatedLuminousAppearanceComponent)
 			.def("getAnimatedSpotLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getAnimatedSpotLightComponent)
 			.def("getAnimatedSpotLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getAnimatedSpotLightComponent)
+			.def("getAnimationControllerComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getAnimationControllerComponent)
+			.def("getAnimationControllerComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getAnimationControllerComponent)
 			.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getCameraComponent)
 			.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::lua::object::getCameraComponent)
 			.def("getLifetimeComponent", (i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::lua::object::getLifetimeComponent)
@@ -968,6 +995,15 @@ scope registerObject() {
 		class_<i6engine::api::AnimatedSpotLightComponent, i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component>>("AnimatedSpotLightComponent")
 			.def("synchronize", &i6engine::api::AnimatedDirectionalLightComponent::synchronize)
 			.def("getTemplateName", &i6engine::api::AnimatedDirectionalLightComponent::getTemplateName),
+
+		class_<i6engine::api::AnimationControllerComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component>>("AnimationControllerComponent")
+			.def("addAnimationFrameEvent", (void(*)(i6engine::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &)) &i6engine::lua::object::addAnimationFrameEvent)
+			.def("addAnimationFrameEvent", (void(*)(i6engine::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &, const std::string &)) &i6engine::lua::object::addAnimationFrameEvent)
+			.def("playAnimation", &i6engine::api::AnimationControllerComponent::playAnimation)
+			.def("setAnimationSpeed", &i6engine::api::AnimationControllerComponent::setAnimationSpeed)
+			.def("stopAnimation", &i6engine::api::AnimationControllerComponent::stopAnimation)
+			.def("synchronize", &i6engine::api::AnimationControllerComponent::synchronize)
+			.def("getTemplateName", &i6engine::api::AnimationControllerComponent::getTemplateName),
 
 		class_<i6engine::api::BillboardComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>>("BillboardComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())

@@ -73,6 +73,7 @@ namespace components {
 		AnimatedDirectionalLightComponent,
 		AnimatedPointLightComponent,
 		AnimatedSpotLightComponent,
+		AnimationControllerComponent,
 		ComponentTypesCount
 	};
 

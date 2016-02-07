@@ -17,6 +17,7 @@
 #include "i6engine/api/components/AnimatedDirectionalLightComponent.h"
 #include "i6engine/api/components/AnimatedLuminousAppearanceComponent.h"
 #include "i6engine/api/components/AnimatedSpotLightComponent.h"
+#include "i6engine/api/components/AnimationControllerComponent.h"
 #include "i6engine/api/components/BillboardComponent.h"
 #include "i6engine/api/components/CameraComponent.h"
 #include "i6engine/api/components/FollowComponent.h"
@@ -73,6 +74,12 @@ TEST(Component, Synchronize) {
 		auto lc = Component::createC<AnimatedSpotLightComponent>(0, paramsAnimatedSpotLightAppearance);
 		auto newMap = lc->synchronize();
 		Component::createC<AnimatedSpotLightComponent>(0, newMap);
+	}
+	{
+		attributeMap paramsAnimationController = { };
+		auto acc = Component::createC<AnimationControllerComponent>(0, paramsAnimationController);
+		auto newMap = acc->synchronize();
+		Component::createC<AnimationControllerComponent>(0, newMap);
 	}
 	{
 		attributeMap paramsBillboard = { { "material", "blafoo" }, { "width", "0.1" }, { "height", "0.1" }, { "origin", "0" } };

@@ -19,6 +19,7 @@
 #include "i6engine/api/components/AnimatedDirectionalLightComponent.h"
 #include "i6engine/api/components/AnimatedLuminousAppearanceComponent.h"
 #include "i6engine/api/components/AnimatedSpotLightComponent.h"
+#include "i6engine/api/components/AnimationControllerComponent.h"
 #include "i6engine/api/components/BillboardComponent.h"
 #include "i6engine/api/components/CameraComponent.h"
 #include "i6engine/api/components/FollowComponent.h"
@@ -89,6 +90,15 @@ TEST(Component, CreateException) {
 			auto newMap = paramsAnimatedSpotLight;
 			newMap.erase(it->first);
 			ASSERT_THROW(Component::createC<AnimatedSpotLightComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
+	{
+		attributeMap paramsAnimationController = { };
+		Component::createC<AnimationControllerComponent>(0, paramsAnimationController);
+		for (auto it = paramsAnimationController.begin(); it != paramsAnimationController.end(); it++) {
+			auto newMap = paramsAnimationController;
+			newMap.erase(it->first);
+			ASSERT_THROW(Component::createC<AnimationControllerComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
 		}
 	}
 	{
