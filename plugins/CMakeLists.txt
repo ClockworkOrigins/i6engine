@@ -20,6 +20,8 @@
 
 IF(ISIXE_WITH_TOOLS AND ISIXE_WITH_EDITOR)
 	IF(ISIXE_WITH_RPG)
+		ADD_SUBDIRECTORY(dialogCreatorLuaScriptLanguage)
+		ADD_SUBDIRECTORY(dialogCreatorPythonScriptLanguage)
 		ADD_SUBDIRECTORY(editorRPGInitialization)
 		ADD_SUBDIRECTORY(editorRPGRunGame)
 	ENDIF(ISIXE_WITH_RPG)
@@ -38,4 +40,5 @@ IF(ISIXE_WITH_TOOLS AND ISIXE_WITH_EDITOR)
 	add_subdirectory(editorTypeVec3)
 	add_subdirectory(editorTypeVec4)
 ENDIF(ISIXE_WITH_TOOLS AND ISIXE_WITH_EDITOR)
+
 add_subdirectory(particleUniverse)

@@ -7,6 +7,7 @@
 
 #include "clockUtils/iniParser/iniParser.h"
 
+#include <QDir>
 #include <QFile>
 #include <QMessageBox>
 #include <QTextStream>
@@ -29,7 +30,7 @@ namespace widgets {
 
 		connect(conditionLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(updateConditionEntry()));
 		connect(informationLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(updateInfoEntry()));
-
+		
 		clockUtils::iniParser::IniParser iniParser;
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("DialogCreator.ini")) {
 			QMessageBox box;

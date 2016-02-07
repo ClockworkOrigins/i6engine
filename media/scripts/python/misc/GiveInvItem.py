@@ -1,4 +1,5 @@
 ﻿# gives an item from one NPC to another one
+# i6Function: void giveInvItems(NPC,NPC,ItemIdentifier,int)
 def giveInvItems(self, other, item, amount):
 	self.removeItems(item, amount)
 	other.createItems(item, amount)
