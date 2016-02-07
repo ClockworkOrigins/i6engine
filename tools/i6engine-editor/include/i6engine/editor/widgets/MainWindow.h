@@ -94,6 +94,7 @@ namespace widgets {
 		QProgressDialog * _progressDialog;
 		bool _isTmpLevel;
 		QString _originalLevel;
+		bool _isNewLevel;
 
 		std::string getBasePath() const override {
 			return "../media/maps";

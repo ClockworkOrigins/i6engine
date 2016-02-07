@@ -786,8 +786,9 @@ namespace graphics {
 	 */
 	typedef struct Graphics_LoadResources_Create : GameMessageStruct {
 		std::string resourcesFile;
+		std::function<void(uint16_t)> callback;
 		GameMessage::Ptr msg;
-		Graphics_LoadResources_Create(const std::string & rf, const GameMessage::Ptr & m) : GameMessageStruct(), resourcesFile(rf), msg(m) {
+		Graphics_LoadResources_Create(const std::string & rf, const std::function<void(uint16_t)> & cb, const GameMessage::Ptr & m) : GameMessageStruct(), resourcesFile(rf), callback(cb), msg(m) {
 		}
 		Graphics_LoadResources_Create * copy() {
 			return new Graphics_LoadResources_Create(*this);

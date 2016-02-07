@@ -45,10 +45,10 @@ namespace widgets {
 	}
 
 	void GameActionHelper::triggered() {
-		emit triggerGameAction(_index);
+		emit triggerGameAction(int(_index));
 	}
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false), _isTmpLevel(false), _originalLevel() {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false), _isTmpLevel(false), _originalLevel(), _isNewLevel(false) {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -93,9 +93,9 @@ namespace widgets {
 		QString file = QFileDialog::getSaveFileName(nullptr, "New file name ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
 		if (!file.isEmpty()) {
 			clearLevel();
-			saveLevel(file);
-			loadLevel(file.toStdString());
+			_isNewLevel = true;
 			_level = file;
+			saveLevel(file);
 			setWindowTitle(WINDOWTITLE + " - " + _level);
 			_changed = false;
 		}
@@ -109,7 +109,14 @@ namespace widgets {
 		}
 		QString file = QFileDialog::getOpenFileName(nullptr, "Open file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
 		if (!file.isEmpty()) {
-			loadLevel(file.toStdString());
+			delete _progressDialog;
+			_progressDialog = new QProgressDialog("Loading level...", "", 0, 100, this);
+			_progressDialog->setWindowModality(Qt::WindowModal);
+			_progressDialog->setCancelButton(nullptr);
+			connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
+			loadLevel(file.toStdString(), [this](uint16_t value) {
+				setProgressValue(int(value));
+			});
 			_level = file;
 			setWindowTitle(WINDOWTITLE + " - " + _level);
 		}
@@ -210,7 +217,14 @@ namespace widgets {
 			if (_isTmpLevel) {
 				_changed = true;
 			}
-			loadLevel(_level.toStdString());
+			delete _progressDialog;
+			_progressDialog = new QProgressDialog("Loading level...", "", 0, 100, this);
+			_progressDialog->setWindowModality(Qt::WindowModal);
+			_progressDialog->setCancelButton(nullptr);
+			connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
+			loadLevel(_level.toStdString(), [this](uint16_t value) {
+				setProgressValue(int(value));
+			});
 			if (_changed) {
 				QFile f(_level);
 				f.remove();
@@ -563,6 +577,15 @@ namespace widgets {
 
 		if (_startGame != -1) {
 			api::EngineController::GetSingleton().stop();
+		}
+		if (_isNewLevel) {
+			_progressDialog = new QProgressDialog("Creating new level...", "", 0, 100, this);
+			_progressDialog->setWindowModality(Qt::WindowModal);
+			_progressDialog->setCancelButton(nullptr);
+			connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
+			loadLevel(_level.toStdString(), [this](uint16_t value) {
+				setProgressValue(int(value));
+			});
 		}
 	}
 

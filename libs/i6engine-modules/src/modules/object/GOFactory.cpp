@@ -205,9 +205,11 @@ namespace modules {
 		return go;
 	}
 
-	void GOFactory::loadLevel(const std::string & file, const std::string & flags) {
+	void GOFactory::loadLevel(const std::string & file, const std::string & flags, const std::function<void(uint16_t)> & callback) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		tinyxml2::XMLDocument doc;
+
+		callback(50);
 
 		if (doc.LoadFile(file.c_str())) {
 			ISIXE_THROW_FAILURE("GOFactory", "Couldn't open levelfile: '" << file << "'");
@@ -235,6 +237,8 @@ namespace modules {
 		} while (true);
 
 		tinyxml2::XMLElement * root = doc.FirstChildElement("Map");
+
+		std::vector<std::tuple<std::string, api::objects::GOTemplate, bool, std::vector<std::string>>> objects;
 
 		for (tinyxml2::XMLElement * section = root->FirstChildElement("Section"); section != nullptr; section = section->NextSiblingElement("Section")) {
 			std::string tmp = section->Attribute("flags");
@@ -307,11 +311,19 @@ namespace modules {
 					tmpl._components.push_back(api::objects::GOTemplateComponent(component->Attribute("template"), -1, params, component->Attribute("owner") != nullptr, identifier, deleted));
 				}
 
-				core::IPKey owner = api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP();
-				auto go = createGO(temp, -1, owner, api::EngineController::GetSingleton().getUUID(), tmpl, send);
-				go->setFlags(flagL);
-				go->setSend(send);
+				objects.push_back(std::make_tuple(temp, tmpl, send, flagL));
 			}
+		}
+
+		uint32_t amount = uint32_t(objects.size());
+		uint32_t counter = 0;
+		core::IPKey owner = api::EngineController::GetSingletonPtr()->getNetworkFacade()->getIP();
+
+		for (const std::tuple<std::string, api::objects::GOTemplate, bool, std::vector<std::string>> & t : objects) {
+			auto go = createGO(std::get<0>(t), -1, owner, api::EngineController::GetSingleton().getUUID(), std::get<1>(t), std::get<2>(t));
+			go->setFlags(std::get<3>(t));
+			go->setSend(std::get<2>(t));
+			callback(uint16_t(50 + (counter++ / double(amount)) * 50));
 		}
 
 		api::EngineController::GetSingleton().getWaynetManager()->createWaynet();

@@ -29,7 +29,7 @@ namespace objects {
 	}
 
 	Object_Level_Create::Object_Level_Create() {}
-	Object_Level_Create::Object_Level_Create(const std::string & fi, const std::string & fl, const std::function<void(void)> & fu) : GameMessageStruct(), file(fi), flags(fl), func(fu) {
+	Object_Level_Create::Object_Level_Create(const std::string & fi, const std::string & fl, const std::function<void(uint16_t)> & cb, const std::function<void(void)> & fu) : GameMessageStruct(), file(fi), flags(fl), callback(cb), func(fu) {
 	}
 
 	Object_Type_Delete::Object_Type_Delete() {}
