@@ -30,6 +30,7 @@ namespace widgets {
 		void saveNewNPC();
 		void saveChanges();
 		void deleteNPC();
+		void selectModel();
 
 	private:
 		MainWindow * _parent;
