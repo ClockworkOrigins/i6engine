@@ -75,7 +75,7 @@ namespace i6engine {
 namespace api {
 
 	// Ensures that X11 key repeat is reset to original value in case of a application crash.
-	void forceCleanup(int param) {
+	void forceCleanup(int) {
 		ISIXE_LOG_WARN("EngineController", "***Dirty shutdown detected: running forced cleanup to reset X11 key repeat rate***");
 		EngineController::GetSingletonPtr()->stop();
 	}

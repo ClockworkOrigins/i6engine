@@ -174,7 +174,7 @@ namespace core {
 		 * \param version
 		 */
 		template <typename Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & _messageType;
 			ar & _subType;
 			ar & _method;

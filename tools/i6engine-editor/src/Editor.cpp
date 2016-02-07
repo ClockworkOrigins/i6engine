@@ -23,6 +23,7 @@
 
 #include "i6engine/configs/FrameTimes.h"
 
+#include "i6engine/utils/AutoUpdater.h"
 #include "i6engine/utils/i6eString.h"
 
 #include "i6engine/math/i6eMath.h"
@@ -48,6 +49,8 @@
 #include "i6engine/api/manager/IDManager.h"
 #include "i6engine/api/manager/WaynetManager.h"
 #include "i6engine/api/objects/GameObject.h"
+
+#include <QProgressDialog>
 
 #include "tinyxml2.h"
 
@@ -157,17 +160,7 @@ namespace editor {
 		}
 
 		std::thread([this, file]() {
-			api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-			api::EngineController::GetSingletonPtr()->getGraphicsFacade()->resetSubSystem();
-			api::EngineController::GetSingletonPtr()->getGUIFacade()->resetSubSystem();
-			api::EngineController::GetSingletonPtr()->getInputFacade()->resetSubSystem();
-			api::EngineController::GetSingletonPtr()->getObjectFacade()->resetSubSystem();
-			api::EngineController::GetSingletonPtr()->getPhysicsFacade()->resetSubSystem();
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
+			clearLevel();
 
 			std::string flags = "";
 
@@ -212,6 +205,12 @@ namespace editor {
 
 		std::map<std::string, std::vector<api::GOPtr>> sectionMap;
 
+		utils::AutoUpdater<int> currentValue = 0;
+		currentValue.registerUpdate(std::bind(&Editor::setProgressValue, this, std::placeholders::_1));
+		utils::AutoUpdater<int> maxValue = 1;
+		maxValue.registerUpdate(std::bind(&Editor::setProgressMaximum, this, std::placeholders::_1));
+		maxValue += api::EngineController::GetSingleton().getObjectFacade()->getGOMap().size();
+
 		for (auto & p : api::EngineController::GetSingleton().getObjectFacade()->getGOMap()) {
 			if (p.second->getType() == "EditorCam") {
 				continue;
@@ -231,6 +230,8 @@ namespace editor {
 			}
 
 			sectionMap[flagString].push_back(p.second);
+			currentValue++;
+			maxValue++;
 		}
 
 		for (auto & p : sectionMap) {
@@ -272,10 +273,27 @@ namespace editor {
 				section->LinkEndChild(gameObject);
 
 				root->LinkEndChild(section);
+				currentValue++;
 			}
 		}
 
 		doc.SaveFile(level.c_str());
+		currentValue++;
+		finishedProgress();
+	}
+
+	void Editor::clearLevel() {
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->resetSubSystem();
+		api::EngineController::GetSingletonPtr()->getGUIFacade()->resetSubSystem();
+		api::EngineController::GetSingletonPtr()->getInputFacade()->resetSubSystem();
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->resetSubSystem();
+		api::EngineController::GetSingletonPtr()->getPhysicsFacade()->resetSubSystem();
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
 	void Editor::InputMailbox(const api::GameMessage::Ptr & msg) {
@@ -383,6 +401,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -406,6 +425,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -429,6 +449,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -452,6 +473,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -475,6 +497,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -498,6 +521,7 @@ namespace editor {
 			if (go->getType() == "Waypoint") {
 				api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
 			}
+			triggerChangedLevel();
 		}
 	}
 
@@ -517,6 +541,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -536,6 +561,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -555,6 +581,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -574,6 +601,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -593,6 +621,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -612,6 +641,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -628,6 +658,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -644,6 +675,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -660,6 +692,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -676,6 +709,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -692,6 +726,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -708,6 +743,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -724,6 +760,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 
@@ -740,6 +777,7 @@ namespace editor {
 				}
 			}
 			selectObject(_selectedObjectID);
+			triggerChangedLevel();
 		}
 	}
 

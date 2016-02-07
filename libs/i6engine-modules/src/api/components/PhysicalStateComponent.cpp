@@ -297,7 +297,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(message);
 	}
 
-	std::pair<AddStrategy, int64_t> PhysicalStateComponent::howToAdd(const ComPtr & comp) const {
+	std::pair<AddStrategy, int64_t> PhysicalStateComponent::howToAdd(const ComPtr &) const {
 		return std::make_pair(AddStrategy::ADD, 0);
 	}
 

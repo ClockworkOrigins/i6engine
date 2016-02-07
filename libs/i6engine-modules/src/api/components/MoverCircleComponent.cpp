@@ -80,7 +80,7 @@ namespace api {
 		}
 	}
 
-	void MoverCircleComponent::getNewPosition(const uint64_t t, Vec3 & newPos, Quaternion & newRot) {
+	void MoverCircleComponent::getNewPosition(const uint64_t t, Vec3 & newPos, Quaternion &) {
 		double timeElapsed = double(t % _duration) / _duration;
 		double alpha = timeElapsed * 2 * PI;
 		double diffCos = std::cos(alpha) * _circleRadius;

@@ -32,9 +32,11 @@ namespace widgets {
 		~ObjectInfoWidget();
 
 	signals:
-		void selectObject(int64_t id);
+		void selectObject(int64_t);
 		void removeObject();
 		void updateObjectList();
+		void changedLevel();
+		void selectedObject(int64_t);
 
 	private slots:
 		void doSelectObject(int64_t id);

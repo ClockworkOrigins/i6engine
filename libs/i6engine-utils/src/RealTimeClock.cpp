@@ -30,7 +30,7 @@ namespace utils {
 		_thread = boost::thread(boost::bind(&RealTimeClock::clockUpdater, this));
 	}
 
-	uint64_t RealTimeClock::getCurrentTime(uint64_t oldTime) const {
+	uint64_t RealTimeClock::getCurrentTime(uint64_t) const {
 		return uint64_t(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - _startTime).count()) + _offset;
 	}
 

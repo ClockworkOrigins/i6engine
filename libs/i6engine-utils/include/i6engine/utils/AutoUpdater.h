@@ -120,6 +120,20 @@ namespace utils {
 		operator T() const {
 			return _value;
 		}
+		
+		/**
+		 * doesn't return another AutoUpdater, but the old value of the AutoUpdater!
+		 */
+		T operator++() {
+			*this += 1;
+			return _value;
+		}
+
+		T operator++(T) {
+			T tmp = _value;
+			*this += 1;
+			return tmp;
+		}
 
 	 private:
 		/**

@@ -135,7 +135,7 @@ namespace api {
 		ApplicationWrapper() : Application(), boost::python::wrapper<i6engine::api::Application>() {
 		}
 
-		ApplicationWrapper(const i6engine::api::Application & arg) : Application(), boost::python::wrapper<i6engine::api::Application>() {
+		ApplicationWrapper(const i6engine::api::Application &) : Application(), boost::python::wrapper<i6engine::api::Application>() {
 		}
 
 		virtual void Initialize() {

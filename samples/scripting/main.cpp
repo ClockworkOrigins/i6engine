@@ -32,7 +32,7 @@
 #endif
 
 #ifdef ISIXE_WITH_CONSOLE
-int main(int argc, char ** argv) {
+int main(int, char **) {
 #else
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 #endif

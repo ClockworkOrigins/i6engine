@@ -80,7 +80,7 @@ namespace api {
 		ISIXE_THROW_FAILURE("Component", "News called without News function overridden: " << msg->getMessageInfo() + " " << getComponentID());
 	}
 
-	std::pair<AddStrategy, int64_t> Component::howToAdd(const ComPtr & comp) const {
+	std::pair<AddStrategy, int64_t> Component::howToAdd(const ComPtr &) const {
 		return std::make_pair(AddStrategy::REPLACE_DIS, 0);
 	}
 

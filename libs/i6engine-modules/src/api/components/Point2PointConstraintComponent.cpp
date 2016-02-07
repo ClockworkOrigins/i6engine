@@ -113,7 +113,7 @@ namespace api {
 		return result;
 	}
 
-	std::pair<AddStrategy, int64_t> Point2PointConstraintComponent::howToAdd(const ComPtr & comp) const {
+	std::pair<AddStrategy, int64_t> Point2PointConstraintComponent::howToAdd(const ComPtr &) const {
 		return std::make_pair(AddStrategy::ADD, 0);
 	}
 

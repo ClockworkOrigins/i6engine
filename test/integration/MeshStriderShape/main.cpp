@@ -25,7 +25,7 @@
 #include "i6engine/modules/object/ObjectController.h"
 #include "i6engine/modules/physics/PhysicsController.h"
 
-int main(int argc, char ** argv) {
+int main(int, char **) {
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), { i6engine::core::Subsystem::Object });
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6engine::modules::ObjectController(), { i6engine::core::Subsystem::Physic });
 	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6engine::modules::InputController(), LNG_INPUT_FRAME_TIME);

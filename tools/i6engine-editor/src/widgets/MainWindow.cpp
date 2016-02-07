@@ -34,6 +34,7 @@
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QPluginLoader>
+#include <QProgressDialog>
 #include <QTimer>
 
 namespace i6engine {
@@ -47,14 +48,14 @@ namespace widgets {
 		emit triggerGameAction(_index);
 	}
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _engineThread(), _level(), _initializationPlugins(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _resetEngineController(false) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false), _isTmpLevel(false), _originalLevel() {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
 
 		showMaximized();
 
-		setWindowTitle(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
+		setWindowTitle(WINDOWTITLE);
 
 		gridLayout->addWidget(_templateListWidget, 0, 0);
 		gridLayout->addWidget(_renderWidget, 0, 1);
@@ -69,6 +70,13 @@ namespace widgets {
 		connect(this, SIGNAL(initializeEngine()), this, SLOT(doInitializeEngine()));
 		connect(this, SIGNAL(initializeGame()), this, SLOT(doInitializeGame()));
 		connect(this, SIGNAL(stopApp()), this, SLOT(doStopApp()));
+		connect(this, SIGNAL(triggerFinishProgress()), this, SLOT(finishProgress()));
+
+		connect(_templateListWidget, SIGNAL(changedLevel()), this, SLOT(changedLevel()));
+		connect(_objectContainerWidget->objectInfoWidget, SIGNAL(changedLevel()), this, SLOT(changedLevel()));
+		connect(_templateListWidget, SIGNAL(updateObjectList()), _objectContainerWidget->objectListWidget, SLOT(doUpdateObjectList()));
+		connect(this, SIGNAL(doChangedLevel()), this, SLOT(changedLevel()));
+		connect(_objectContainerWidget->objectInfoWidget, SIGNAL(selectedObject(int64_t)), this, SLOT(selectedObject(int64_t)));
 
 		emit initializeEngine();
 	}
@@ -76,37 +84,88 @@ namespace widgets {
 	MainWindow::~MainWindow() {
 	}
 
+	void MainWindow::createNewLevel() {
+		if (_changed) {
+			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
+				chooseSaveLevelAs();
+			}
+		}
+		QString file = QFileDialog::getSaveFileName(nullptr, "New file name ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
+		if (!file.isEmpty()) {
+			clearLevel();
+			saveLevel(file);
+			loadLevel(file.toStdString());
+			_level = file;
+			setWindowTitle(WINDOWTITLE + " - " + _level);
+			_changed = false;
+		}
+	}
+
 	void MainWindow::chooseLoadLevel() {
+		if (_changed) {
+			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
+				chooseSaveLevelAs();
+			}
+		}
 		QString file = QFileDialog::getOpenFileName(nullptr, "Open file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
 		if (!file.isEmpty()) {
 			loadLevel(file.toStdString());
 			_level = file;
+			setWindowTitle(WINDOWTITLE + " - " + _level);
 		}
 	}
 
 	void MainWindow::chooseSaveLevel() {
 		if (!_level.isEmpty()) {
-			saveLevel(_level.toStdString());
+			if (_changed) {
+				saveLevel(_level);
+				setWindowTitle(WINDOWTITLE + " - " + _level);
+				_changed = false;
+			}
 		}
 	}
 
 	void MainWindow::chooseSaveLevelAs() {
-		QString file = QFileDialog::getOpenFileName(nullptr, "Save file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
+		QString file = QFileDialog::getSaveFileName(nullptr, "Save file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
 		if (!file.isEmpty()) {
-			saveLevel(file.toStdString());
+			saveLevel(file);
 			_level = file;
+			setWindowTitle(WINDOWTITLE + " - " + _level);
+			_changed = false;
 		}
 	}
 
 	void MainWindow::closeEditor() {
+		if (_changed) {
+			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
+				chooseSaveLevelAs();
+			}
+		}
 		api::EngineController::GetSingleton().stop();
+	}
+
+	void MainWindow::changedLevel() {
+		setWindowTitle(WINDOWTITLE + " - " + _level + " *");
+		_changed = true;
+	}
+
+	void MainWindow::selectedObject(int64_t id) {
+		setSelectObject(id);
 	}
 
 	void MainWindow::triggeredGameAction(int index) {
 		if (_level.size() > 0) {
 			_startGame = index;
 			_resetEngineController = true;
-			api::EngineController::GetSingleton().stop();
+			if (_changed) {
+				_originalLevel = _level;
+				_isTmpLevel = true;
+				_level = _level.split("/").back().split("\\").back();
+				saveLevel(_level);
+			} else {
+				_isTmpLevel = false;
+				api::EngineController::GetSingleton().stop();
+			}
 		} else {
 			QMessageBox box;
 			box.setWindowTitle(QString("Can't start game!"));
@@ -148,8 +207,21 @@ namespace widgets {
 		emit _templateListWidget->loadTemplates();
 
 		if (_inGame) {
+			if (_isTmpLevel) {
+				_changed = true;
+			}
 			loadLevel(_level.toStdString());
+			if (_changed) {
+				QFile f(_level);
+				f.remove();
+				_level = _originalLevel;
+			}
 			_inGame = false;
+			if (_changed) {
+				setWindowTitle(WINDOWTITLE + " - " + _level + " *");
+			} else {
+				setWindowTitle(WINDOWTITLE + " - " + _level);
+			}
 		}
 	}
 
@@ -182,6 +254,10 @@ namespace widgets {
 		emit _objectContainerWidget->objectInfoWidget->removeObject();
 	}
 
+	void MainWindow::triggerChangedLevel() {
+		emit doChangedLevel();
+	}
+
 	void MainWindow::closeEvent(QCloseEvent * evt) {
 		closeEditor();
 		evt->ignore();
@@ -189,13 +265,20 @@ namespace widgets {
 
 	void MainWindow::keyPressEvent(QKeyEvent * evt) {
 		if (_renderWidget->isActiveWindow()) {
+			api::KeyCode kc = convertQtToEngine(evt->key());
 			if (convertQtToEngine(evt->key()) == api::KeyCode::KC_ESCAPE) {
 				if (_inGame && !_resetEngineController) {
 					_resetEngineController = true;
 					api::EngineController::GetSingletonPtr()->stop();
 				}
 			} else {
-				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, convertQtToEngine(evt->key()), evt->text().toUInt()), core::Subsystem::Input));
+				api::KeyState ks = api::KeyState::KEY_PRESSED;
+				if (_keyStates.find(kc) != _keyStates.end()) {
+					ks = api::KeyState::KEY_HOLD;
+				} else {
+					_keyStates.insert(kc);
+				}
+				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(ks, kc, evt->text().toUInt()), core::Subsystem::Input));
 			}
 			evt->accept();
 		}
@@ -204,7 +287,9 @@ namespace widgets {
 
 	void MainWindow::keyReleaseEvent(QKeyEvent * evt) {
 		if (_renderWidget->isActiveWindow()) {
-			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, convertQtToEngine(evt->key()), evt->text().toUInt()), core::Subsystem::Input));
+			api::KeyCode kc = convertQtToEngine(evt->key());
+			_keyStates.erase(kc);
+			api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, kc, evt->text().toUInt()), core::Subsystem::Input));
 			evt->accept();
 		}
 		evt->ignore();
@@ -220,7 +305,13 @@ namespace widgets {
 		} else if (button == Qt::MouseButton::RightButton) {
 			kc = api::KeyCode::KC_MBRight;
 		}
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, kc, 0), core::Subsystem::Input));
+		api::KeyState ks = api::KeyState::KEY_PRESSED;
+		if (_keyStates.find(kc) != _keyStates.end()) {
+			ks = api::KeyState::KEY_HOLD;
+		} else {
+			_keyStates.insert(kc);
+		}
+		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(ks, kc, 0), core::Subsystem::Input));
 		evt->accept();
 	}
 
@@ -234,6 +325,7 @@ namespace widgets {
 		} else if (button == Qt::MouseButton::RightButton) {
 			kc = api::KeyCode::KC_MBRight;
 		}
+		_keyStates.erase(kc);
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, kc, 0), core::Subsystem::Input));
 		evt->accept();
 	}
@@ -298,6 +390,28 @@ namespace widgets {
 				box.exec();
 			}
 		}
+	}
+
+	void MainWindow::saveLevel(const QString & level) {
+		delete _progressDialog;
+		_progressDialog = new QProgressDialog("Saving level...", "", 0, 1, this);
+		_progressDialog->setWindowModality(Qt::WindowModal);
+		_progressDialog->setCancelButton(nullptr);
+		connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
+		connect(this, SIGNAL(triggerProgressMaximum(int)), _progressDialog, SLOT(setMaximum(int)));
+		std::thread(std::bind(&Editor::saveLevel, this, level.toStdString())).detach();
+	}
+
+	void MainWindow::setProgressValue(int value) {
+		emit triggerProgressValue(value);
+	}
+
+	void MainWindow::setProgressMaximum(int value) {
+		emit triggerProgressMaximum(value);
+	}
+
+	void MainWindow::finishedProgress() {
+		emit triggerFinishProgress();
 	}
 
 	api::KeyCode MainWindow::convertQtToEngine(int key) {
@@ -441,6 +555,15 @@ namespace widgets {
 			_engineThread.join();
 		}
 		qApp->exit();
+	}
+
+	void MainWindow::finishProgress() {
+		delete _progressDialog;
+		_progressDialog = nullptr;
+
+		if (_startGame != -1) {
+			api::EngineController::GetSingleton().stop();
+		}
 	}
 
 } /* namespace widgets */

@@ -76,7 +76,7 @@ namespace objects {
 		GOTemplateComponent() : _template(), _id(-1), _params(), _owner(false), _identifier(), _deleted(false) {
 		}
 
-		GOTemplateComponent(const std::string & t, int64_t i, const attributeMap & p, bool b, const std::string & id, bool deleted) : _template(t), _id(i), _params(p), _owner(b), _identifier(id), _deleted(false) {
+		GOTemplateComponent(const std::string & t, int64_t i, const attributeMap & p, bool b, const std::string & id, bool deleted) : _template(t), _id(i), _params(p), _owner(b), _identifier(id), _deleted(deleted) {
 		}
 
 		GOTemplateComponent(const std::string & t, const attributeMap & p, const std::string & id, bool deleted, bool owner) : _template(t), _id(-1), _params(p), _owner(owner), _identifier(id), _deleted(deleted) {

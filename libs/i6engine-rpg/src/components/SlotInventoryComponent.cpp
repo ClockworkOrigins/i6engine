@@ -333,7 +333,7 @@ namespace components {
 		}
 	}
 
-	void SlotInventoryComponent::useItem(uint32_t item, const std::string & name, const std::function<void(void)> & callback, uint16_t index) {
+	void SlotInventoryComponent::useItem(uint32_t, const std::string &, const std::function<void(void)> & callback, uint16_t index) {
 		api::GameMessage::Ptr msg = std::get<ItemEntry::Message>(_items[index]);
 		api::objects::Object_Create_Create * occ = dynamic_cast<api::objects::Object_Create_Create *>(msg->getContent());
 		api::EngineController::GetSingleton().getObjectFacade()->createGO(occ->tpl, occ->tmpl, api::EngineController::GetSingleton().getUUID(), occ->send, [this, callback, index](api::GOPtr go) {
@@ -420,7 +420,7 @@ namespace components {
 		processMessages();
 	}
 
-	void SlotInventoryComponent::showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) {
+	void SlotInventoryComponent::showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> &) {
 		show();
 	}
 

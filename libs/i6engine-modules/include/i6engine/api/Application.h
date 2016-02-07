@@ -111,12 +111,12 @@ namespace api {
 		 * \brief called when a player had a disconnect
 		 * \param[in] key key identifying the player
 		 */
-		virtual void disconnectCallback(const core::IPKey & key) {}
+		virtual void disconnectCallback(const core::IPKey &) {}
 
 		/**
 		 * \brief called when connecting to server failes
 		 */
-		virtual void connectionFailed(const core::IPKey & s) {}
+		virtual void connectionFailed(const core::IPKey &) {}
 
 		/**
 		 * \brief called when address or port is already in use while connecting to m2etis
@@ -127,7 +127,7 @@ namespace api {
 		 * \brief called when connection request was handled
 		 * \param[in] key identifying the user who joined
 		 */
-		virtual void connected(const core::IPKey & key) {}
+		virtual void connected(const core::IPKey &) {}
 
 		/**
 		 * \brief called from engine to signal shutdown

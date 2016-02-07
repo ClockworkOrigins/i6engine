@@ -54,6 +54,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionNew_Level"/>
     <addaction name="actionLoad_Level"/>
     <addaction name="actionSave_Level"/>
     <addaction name="actionSave_Level_As"/>
@@ -65,8 +66,6 @@
      <string>Game</string>
     </property>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuGame"/>
    <widget class="QMenu" name="menuExtras">
     <property name="title">
      <string>Extras</string>
@@ -74,6 +73,7 @@
     <addaction name="actionOptions"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuGame"/>
    <addaction name="menuExtras"/>
   </widget>
   <action name="actionLoad_Level">
@@ -96,10 +96,21 @@
    <property name="text">
     <string>Save Level As</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+A, Ctrl+S</string>
+   </property>
   </action>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionNew_Level">
+   <property name="text">
+    <string>New Level</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionOptions">
@@ -175,6 +186,22 @@
    </hints>
   </connection>
   <connection>
+   <sender>actionNew_Level</sender>
+   <signal>triggered()</signal>
+   <receiver>wndMainWindow</receiver>
+   <slot>createNewLevel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>309</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>actionOptions</sender>
    <signal>triggered()</signal>
    <receiver>wndMainWindow</receiver>
@@ -196,6 +223,7 @@
   <slot>chooseSaveLevel()</slot>
   <slot>chooseSaveLevelAs()</slot>
   <slot>closeEditor()</slot>
+  <slot>createNewLevel()</slot>
   <slot>openOptions()</slot>
  </slots>
 </ui>

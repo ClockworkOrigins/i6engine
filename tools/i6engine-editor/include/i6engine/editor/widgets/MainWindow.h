@@ -9,6 +9,8 @@
 
 #include "i6engine/editor/Editor.h"
 
+class QProgressDialog;
+
 namespace i6engine {
 namespace editor {
 namespace plugins {
@@ -20,7 +22,6 @@ namespace plugins {
 } /* namespace plugins */
 namespace widgets {
 
-	class MainWindow;
 	class ObjectContainerWidget;
 	class RenderWidget;
 	class TemplateListWidget;
@@ -51,34 +52,48 @@ namespace widgets {
 		void updateObjectList() override;
 
 	signals:
+		void doChangedLevel();
 		void initializeEngine();
 		void initializeGame();
 		void stopApp();
+		void triggerProgressValue(int);
+		void triggerProgressMaximum(int);
+		void triggerFinishProgress();
 
 	private slots:
+		void createNewLevel();
 		void chooseLoadLevel();
 		void chooseSaveLevel();
 		void chooseSaveLevelAs();
 		void closeEditor();
+		void changedLevel();
+		void selectedObject(int64_t id);
 		void triggeredGameAction(int index);
 		void openOptions();
 		void doInitializeEngine();
 		void doInitializeGame();
 		void doStopApp();
+		void finishProgress();
 
 	private:
+		const QString WINDOWTITLE;
 		RenderWidget * _renderWidget;
 		ObjectContainerWidget * _objectContainerWidget;
 		TemplateListWidget * _templateListWidget;
 		std::thread _engineThread;
 		QString _level;
 		std::vector<plugins::InitializationPluginInterface *> _initializationPlugins;
+		bool _changed;
+		std::set<api::KeyCode> _keyStates;
 		std::vector<plugins::RunGamePluginInterface *> _runGamePlugins;
 		std::vector<plugins::FlagPluginInterface *> _flagPlugins;
 		std::vector<GameActionHelper *> _gameActionHelperList;
 		bool _resetEngineController;
 		int _startGame;
 		bool _inGame;
+		QProgressDialog * _progressDialog;
+		bool _isTmpLevel;
+		QString _originalLevel;
 
 		std::string getBasePath() const override {
 			return "../media/maps";
@@ -90,6 +105,7 @@ namespace widgets {
 		void Finalize() override;
 		void selectObject(int64_t id) override;
 		void removeObject() override;
+		void triggerChangedLevel() override;
 		void closeEvent(QCloseEvent * evt) override;
 		void keyPressEvent(QKeyEvent * evt) override;
 		void keyReleaseEvent(QKeyEvent * evt) override;
@@ -100,6 +116,11 @@ namespace widgets {
 		void loadInitializationPlugins();
 		void loadRunGamePlugins();
 		void loadFlagPlugins();
+		void saveLevel(const QString & level);
+
+		void setProgressValue(int value) override;
+		void setProgressMaximum(int value) override;
+		void finishedProgress() override;
 
 		static api::KeyCode convertQtToEngine(int key);
 	};

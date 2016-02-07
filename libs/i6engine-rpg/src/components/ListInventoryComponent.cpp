@@ -425,7 +425,7 @@ namespace components {
 		processMessages();
 	}
 
-	void ListInventoryComponent::showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> & otherInventory) {
+	void ListInventoryComponent::showTradeView(const utils::sharedPtr<InventoryComponent, api::Component> &) {
 		_active = _isSelfInventory;
 		show();
 	}
