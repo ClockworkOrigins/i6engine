@@ -72,6 +72,13 @@ namespace components {
 		}
 
 		/**
+		 * \brief only used by SlotInventory to determine whether items of same type only take one slot or more
+		 */
+		bool isStackable() const {
+			return _stackable;
+		}
+
+		/**
 		 * \brief returns key value pairs for info screen for this item in inventory
 		 */
 		virtual std::vector<std::pair<std::string, std::string>> getInfos() const = 0;
@@ -82,6 +89,7 @@ namespace components {
 		std::string _image;
 		double _weight;
 		std::string _identifier;
+		bool _stackable;
 	};
 
 } /* namespace components */

@@ -97,7 +97,8 @@ namespace components {
 			Height,
 			Infos,
 			Identifier,
-			Value
+			Value,
+			Amount
 		};
 
 		uint16_t _rows;
@@ -110,7 +111,7 @@ namespace components {
 		 * \brief contains for every slot the index of the item in list or UINT16_MAX, if empty
 		 */
 		std::vector<std::vector<uint16_t>> _slots;
-		std::vector<std::tuple<uint32_t, std::string, api::GameMessage::Ptr, std::string, std::string, uint16_t, uint16_t, std::vector<std::pair<std::string, std::string>>, std::string, uint32_t>> _items;
+		std::vector<std::tuple<uint32_t, std::string, api::GameMessage::Ptr, std::string, std::string, uint16_t, uint16_t, std::vector<std::pair<std::string, std::string>>, std::string, uint32_t, uint32_t>> _items;
 
 		void Init() override;
 		void Finalize() override;

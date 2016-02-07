@@ -42,8 +42,9 @@ namespace components {
 
 	WeightInventoryComponent::WeightInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _items(), _maxWeight(), _currentWeight(0), _currentIndex(), _maxShowIndex(), _currentFilter("NONE"), _slotsPerView(), _widgetList(), _otherInventory(), _filter() {
 		_objComponentID = config::ComponentTypes::WeightInventoryComponent;
-		_maxWeight = std::stoul(params.find("maxWeight")->second);
-		uint32_t filters = std::stoul(params.find("filters")->second);
+		parseAttribute<true>(params, "maxWeight", _maxWeight);
+		uint32_t filters = 0;
+		parseAttribute<true>(params, "filters", filters);
 
 		for (uint32_t i = 0; i < filters; i++) {
 			ISIXE_THROW_API_COND("WeightInventoryComponent", "'filter_" + std::to_string(i) + "_type' not set!", params.find("filter_" + std::to_string(i) + "_type") != params.end());
@@ -55,8 +56,6 @@ namespace components {
 	}
 
 	api::ComPtr WeightInventoryComponent::createC(int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("WeightInventoryComponent", "'maxWeight' not set!", params.find("maxWeight") != params.end());
-		ISIXE_THROW_API_COND("WeightInventoryComponent", "'filters' not set!", params.find("filters") != params.end());
 		return utils::make_shared<WeightInventoryComponent, api::Component>(id, params);
 	}
 

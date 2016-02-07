@@ -28,13 +28,15 @@ namespace components {
 		_objFamilyID = config::ComponentTypes::AttributeComponent;
 		_objComponentID = config::ComponentTypes::AttributeComponent;
 
-		_attributes[0] = std::stoi(params.find("attribute_0")->second);
-		_attributes[1] = std::stoi(params.find("attribute_1")->second);
+		int32_t attribute0 = 0;
+		int32_t attribute1 = 0;
+		parseAttribute<true>(params, "attribute_0", attribute0);
+		parseAttribute<true>(params, "attribute_1", attribute1);
+		_attributes[0] = attribute0;
+		_attributes[1] = attribute1;
 	}
 
 	api::ComPtr AttributeComponent::createC(int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("AttributeComponent", "attribute_0 not set!", params.find("attribute_0") != params.end());
-		ISIXE_THROW_API_COND("AttributeComponent", "attribute_1 not set!", params.find("attribute_1") != params.end());
 		return utils::make_shared<AttributeComponent, api::Component>(id, params);
 	}
 

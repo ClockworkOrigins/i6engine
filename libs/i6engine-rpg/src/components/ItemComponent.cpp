@@ -24,19 +24,13 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	ItemComponent::ItemComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _value(), _imageset(), _image(), _weight(0.0) {
-		ISIXE_THROW_API_COND("ItemComponent", "ident not set!", params.find("ident") != params.end());
-		ISIXE_THROW_API_COND("ItemComponent", "value not set!", params.find("value") != params.end());
-		ISIXE_THROW_API_COND("ItemComponent", "imageset not set!", params.find("imageset") != params.end());
-		ISIXE_THROW_API_COND("ItemComponent", "image not set!", params.find("image") != params.end());
-		_identifier = params.find("ident")->second;
-		_value = std::stoul(params.find("value")->second.c_str());
-		_imageset = params.find("imageset")->second;
-		_image = params.find("image")->second;
-
-		if (params.find("weight") != params.end()) {
-			_weight = std::stod(params.find("weight")->second);
-		}
+	ItemComponent::ItemComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _value(), _imageset(), _image(), _weight(0.0), _stackable(false) {
+		parseAttribute<true>(params, "ident", _identifier);
+		parseAttribute<true>(params, "value", _value);
+		parseAttribute<true>(params, "imageset", _imageset);
+		parseAttribute<true>(params, "image", _image);
+		parseAttribute<false>(params, "weight", _weight);
+		parseAttribute<false>(params, "stackable", _stackable);
 
 		_objFamilyID = config::ComponentTypes::ItemComponent;
 	}
@@ -49,6 +43,7 @@ namespace components {
 		params.insert(std::make_pair("imageset", _imageset));
 		params.insert(std::make_pair("image", _image));
 		params.insert(std::make_pair("weight", std::to_string(_weight)));
+		params.insert(std::make_pair("stackable", std::to_string(_stackable)));
 
 		return params;
 	}

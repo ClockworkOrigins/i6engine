@@ -28,15 +28,12 @@ namespace components {
 		_objFamilyID = config::ComponentTypes::ExperienceComponent;
 		_objComponentID = config::ComponentTypes::ExperienceComponent;
 
-		_currentXP = std::stoul(params.find("currentXP")->second);
-		_nextXP = std::stoul(params.find("nextXP")->second);
-		_level = std::stoul(params.find("level")->second);
+		parseAttribute<true>(params, "currentXP", _currentXP);
+		parseAttribute<true>(params, "nextXP", _nextXP);
+		parseAttribute<true>(params, "level", _level);
 	}
 
 	api::ComPtr ExperienceComponent::createC(int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("ExperienceComponent", "currentXP not set!", params.find("currentXP") != params.end());
-		ISIXE_THROW_API_COND("ExperienceComponent", "nextXP not set!", params.find("nextXP") != params.end());
-		ISIXE_THROW_API_COND("ExperienceComponent", "level not set!", params.find("level") != params.end());
 		return utils::make_shared<ExperienceComponent, api::Component>(id, params);
 	}
 

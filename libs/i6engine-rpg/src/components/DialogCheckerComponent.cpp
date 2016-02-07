@@ -35,11 +35,10 @@ namespace components {
 		_objFamilyID = config::ComponentTypes::DialogCheckerComponent;
 		_objComponentID = config::ComponentTypes::DialogCheckerComponent;
 
-		_identifier = params.find("ident")->second;
+		parseAttribute<true>(params, "ident", _identifier);
 	}
 
 	api::ComPtr DialogCheckerComponent::createC(int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("DialogCheckerComponent", "ident not found!", params.find("ident") != params.end());
 		return utils::make_shared<DialogCheckerComponent, api::Component>(id, params);
 	}
 
@@ -79,6 +78,7 @@ namespace components {
 
 	api::attributeMap DialogCheckerComponent::synchronize() const {
 		api::attributeMap params;
+		params.insert(std::make_pair("ident", _identifier));
 		return params;
 	}
 

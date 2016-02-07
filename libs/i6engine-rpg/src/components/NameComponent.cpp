@@ -24,13 +24,14 @@ namespace i6engine {
 namespace rpg {
 namespace components {
 
-	NameComponent::NameComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _name(params.find("name")->second) {
+	NameComponent::NameComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _name() {
 		_objFamilyID = config::ComponentTypes::NameComponent;
 		_objComponentID = config::ComponentTypes::NameComponent;
+
+		parseAttribute<true>(params, "name", _name);
 	}
 
 	api::ComPtr NameComponent::createC(int64_t id, const api::attributeMap & params) {
-		ISIXE_THROW_API_COND("NameComponent", "name not set!", params.find("name") != params.end());
 		return utils::make_shared<NameComponent, api::Component>(id, params);
 	}
 
