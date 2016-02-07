@@ -41,7 +41,9 @@ namespace modules {
 
 		void accelerate(const Vec3 & acceleration, api::VelocityComponent::MaxSpeedHandling handling, const std::function<void(void)> & callback);
 
-		void decelerate(const Vec3 & deceleration, const std::function<void(void)> & callback);
+		void decelerate(const Vec3 & deceleration, api::VelocityComponent::DecelerationHandling handling, const std::function<void(void)> & callback);
+
+		void stopAcceleration();
 
 		inline void setMaxSpeed(double maxSpeed) {
 			_maxSpeed = maxSpeed;
@@ -65,6 +67,7 @@ namespace modules {
 		double _windage;
 		Vec3 _acceleration;
 		api::VelocityComponent::MaxSpeedHandling _handling;
+		api::VelocityComponent::DecelerationHandling _decelerationHandling;
 		std::function<void(void)> _callback;
 		bool _accelerating;
 		bool _decelerating;

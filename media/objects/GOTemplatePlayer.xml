@@ -18,6 +18,11 @@
 		<Attribute name="compound">0</Attribute>
 		<Attribute name="localInertia">0.0 0.0 0.0</Attribute>
 	</Component>
+	<Component template="Velocity" owner="true">
+		<Attribute name="acceleration">0.0 0.0 -15.0</Attribute>
+		<Attribute name="deceleration">0.0 0.0 15.0</Attribute>
+		<Attribute name="maxSpeed">8.0</Attribute>
+	</Component>
 	<Component template="MeshAppearance" owner="true">
 		<Attribute name="mesh">Placeholder.mesh</Attribute>
 		<Attribute name="visibility">1</Attribute>

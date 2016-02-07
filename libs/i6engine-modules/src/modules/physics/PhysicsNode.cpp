@@ -481,7 +481,9 @@ namespace modules {
 				_velocityComponent->accelerate(pau->acceleration, pau->handling, pau->callback);
 			} else if (msg->getSubtype() == api::physics::PhyDecelerate) {
 				api::physics::Physics_Decelerate_Update * pdu = dynamic_cast<api::physics::Physics_Decelerate_Update *>(msg->getContent());
-				_velocityComponent->decelerate(pdu->deceleration, pdu->callback);
+				_velocityComponent->decelerate(pdu->deceleration, pdu->handling, pdu->callback);
+			} else if (msg->getSubtype() == api::physics::PhyStopAcceleration) {
+				_velocityComponent->stopAcceleration();
 			} else if (msg->getSubtype() == api::physics::PhyMaxSpeed) {
 				_velocityComponent->setMaxSpeed(dynamic_cast<api::physics::Physics_SetMaxSpeed_Update *>(msg->getContent())->maxSpeed);
 			} else if (msg->getSubtype() == api::physics::PhyResistanceCoefficient) {

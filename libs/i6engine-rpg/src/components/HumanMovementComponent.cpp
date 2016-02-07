@@ -4,6 +4,7 @@
 
 #include "i6engine/api/FrontendMessageTypes.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
+#include "i6engine/api/components/VelocityComponent.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/rpg/components/Config.h"
@@ -24,13 +25,14 @@ namespace components {
 	}
 
 	void HumanMovementComponent::forward() {
-		auto psc = _psc.get();
-		psc->applyCentralForce(Vec3(0.0, 0.0, -50.0), true);
+		auto vc = _vc.get();
+		vc->accelerate([]() {});
 	}
 
 	void HumanMovementComponent::backward() {
-		auto psc = _psc.get();
-		psc->applyCentralForce(Vec3(0.0, 0.0, 25.0), true);
+		auto vc = _vc.get();
+		vc->setDecelerationHandling(api::VelocityComponent::DecelerationHandling::Backward);
+		vc->decelerate([]() {});
 	}
 
 	void HumanMovementComponent::left() {
@@ -43,6 +45,12 @@ namespace components {
 		auto psc = _psc.get();
 		Quaternion rot(Vec3(0.0, 1.0, 0.0), -1.5 * PI / 180);
 		psc->applyRotation(rot);
+	}
+
+	void HumanMovementComponent::stop() {
+		auto vc = _vc.get();
+		vc->setDecelerationHandling(api::VelocityComponent::DecelerationHandling::StopDeceleration);
+		vc->decelerate([]() {});
 	}
 
 	api::attributeMap HumanMovementComponent::synchronize() const {

@@ -54,7 +54,8 @@ namespace physics {
 		PhyDecelerate,
 		PhyMaxSpeed,
 		PhyResistanceCoefficient,
-		PhyWindage
+		PhyWindage,
+		PhyStopAcceleration
 	};
 
 	/**
@@ -312,13 +313,25 @@ namespace physics {
 	 */
 	typedef struct Physics_Decelerate_Update : GameMessageStruct {
 		Vec3 deceleration;
+		VelocityComponent::DecelerationHandling handling;
 		std::function<void(void)> callback;
-		Physics_Decelerate_Update(const int64_t coid, const int64_t goid, const Vec3 & d, const std::function<void(void)> & cb) : GameMessageStruct(coid, goid), deceleration(d), callback(cb) {
+		Physics_Decelerate_Update(const int64_t coid, const int64_t goid, const Vec3 & d, VelocityComponent::DecelerationHandling h, const std::function<void(void)> & cb) : GameMessageStruct(coid, goid), deceleration(d), handling(h), callback(cb) {
 		}
 		Physics_Decelerate_Update * copy() {
 			return new Physics_Decelerate_Update(*this);
 		}
 	} Physics_Decelerate_Update;
+
+	/**
+	 * \brief message for stopping acceleration of VelocityComponent
+	 */
+	typedef struct Physics_StopAcceleration_Update : GameMessageStruct {
+		Physics_StopAcceleration_Update(const int64_t coid, const int64_t goid) : GameMessageStruct(coid, goid) {
+		}
+		Physics_StopAcceleration_Update * copy() {
+			return new Physics_StopAcceleration_Update(*this);
+		}
+	} Physics_StopAcceleration_Update;
 
 	/**
 	 * \brief message for setting maxSpeed of a VelocityComponent
