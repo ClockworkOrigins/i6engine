@@ -41,4 +41,5 @@ IF(ISIXE_WITH_TOOLS AND ISIXE_WITH_EDITOR)
 	add_subdirectory(editorTypeVec4)
 ENDIF(ISIXE_WITH_TOOLS AND ISIXE_WITH_EDITOR)
 
+add_subdirectory(i6Archive)
 add_subdirectory(particleUniverse)
