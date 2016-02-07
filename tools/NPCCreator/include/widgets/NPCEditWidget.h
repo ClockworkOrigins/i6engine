@@ -29,6 +29,7 @@ namespace widgets {
 		void changedEntry();
 		void saveNewNPC();
 		void saveChanges();
+		void deleteNPC();
 
 	private:
 		MainWindow * _parent;
