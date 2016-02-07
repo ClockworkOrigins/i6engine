@@ -51,13 +51,16 @@ namespace api {
 	}
 
 	LuminousAppearanceComponent::~LuminousAppearanceComponent() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraLuminous, core::Method::Delete, new graphics::Graphics_Luminous_Delete(_objOwnerID, getID()), core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void LuminousAppearanceComponent::Init() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraLuminous, core::Method::Create, new graphics::Graphics_Luminous_Update(_objOwnerID, getID(), int(_lightType), _diffuseColor, _specularColor, _attenuation, _direction, _spotlightRangeInner, _spotlightRangeOuter, _position), core::Subsystem::Object);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void LuminousAppearanceComponent::Finalize() {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraLuminous, core::Method::Delete, new graphics::Graphics_Luminous_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -94,6 +97,18 @@ namespace api {
 
 	void LuminousAppearanceComponent::setDirection(const Vec3 & direction) {
 		_direction = direction;
+
+		sendUpdateMessage();
+	}
+
+	void LuminousAppearanceComponent::setSpotLightInnerRange(double angle) {
+		_spotlightRangeInner = angle;
+
+		sendUpdateMessage();
+	}
+
+	void LuminousAppearanceComponent::setSpotLightOuterRange(double angle) {
+		_spotlightRangeOuter = angle;
 
 		sendUpdateMessage();
 	}

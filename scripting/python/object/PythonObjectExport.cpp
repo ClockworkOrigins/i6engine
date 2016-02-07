@@ -18,10 +18,11 @@
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/FrontendMessageTypes.h"
+#include "i6engine/api/components/AnimatedDirectionalLightComponent.h"
+#include "i6engine/api/components/AnimatedSpotLightComponent.h"
 #include "i6engine/api/components/BillboardComponent.h"
 #include "i6engine/api/components/FollowComponent.h"
 #include "i6engine/api/components/LifetimeComponent.h"
-#include "i6engine/api/components/LuminousAppearanceComponent.h"
 #include "i6engine/api/components/MeshAppearanceComponent.h"
 #include "i6engine/api/components/MovableTextComponent.h"
 #include "i6engine/api/components/MoveComponent.h"
@@ -209,6 +210,30 @@ namespace object {
 			Component::removeTicker();
 		}
 	};
+
+	i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component> getAnimatedDirectionalLightComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::AnimatedDirectionalLightComponent>(i6engine::api::components::ComponentTypes::AnimatedDirectionalLightComponent);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component> getAnimatedDirectionalLightComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::AnimatedDirectionalLightComponent>(i6engine::api::components::ComponentTypes::AnimatedDirectionalLightComponent, identifier);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component> getAnimatedLuminousAppearanceComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::AnimatedLuminousAppearanceComponent>(i6engine::api::components::ComponentTypes::AnimatedLuminousAppearanceComponent);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component> getAnimatedLuminousAppearanceComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::AnimatedLuminousAppearanceComponent>(i6engine::api::components::ComponentTypes::AnimatedLuminousAppearanceComponent, identifier);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component> getAnimatedSpotLightComponent(i6engine::api::GameObject * go) {
+		return go->getGOC<i6engine::api::AnimatedSpotLightComponent>(i6engine::api::components::ComponentTypes::AnimatedSpotLightComponent);
+	}
+
+	i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component> getAnimatedSpotLightComponent(i6engine::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6engine::api::AnimatedSpotLightComponent>(i6engine::api::components::ComponentTypes::AnimatedSpotLightComponent, identifier);
+	}
 
 	i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component> getCameraComponent(i6engine::api::GameObject * go) {
 		return go->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent);
@@ -927,6 +952,12 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("setDie", &i6engine::api::GameObject::setDie)
 		.def("getOwner", &i6engine::api::GameObject::getOwner)
 		.def("getUUID", &i6engine::api::GameObject::getUUID)
+		.def("getAnimatedDirectionalLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getAnimatedDirectionalLightComponent)
+		.def("getAnimatedDirectionalLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getAnimatedDirectionalLightComponent)
+		.def("getAnimatedLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getAnimatedLuminousAppearanceComponent)
+		.def("getAnimatedLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getAnimatedLuminousAppearanceComponent)
+		.def("getAnimatedSpotLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getAnimatedSpotLightComponent)
+		.def("getAnimatedSpotLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getAnimatedSpotLightComponent)
 		.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getCameraComponent)
 		.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getCameraComponent)
 		.def("getLifetimeComponent", (i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getLifetimeComponent)
@@ -1016,6 +1047,18 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("getTemplateName", pure_virtual(&i6engine::python::object::ComponentWrapper::getTemplateName))
 		.def("addTicker", &i6engine::python::object::ComponentWrapper::addTicker)
 		.def("removeTicker", &i6engine::python::object::ComponentWrapper::removeTicker);
+
+	class_<i6engine::api::AnimatedDirectionalLightComponent, i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component>, boost::noncopyable>("AnimatedDirectionalLightComponent", no_init)
+		.def("synchronize", &i6engine::api::AnimatedDirectionalLightComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::AnimatedDirectionalLightComponent::getTemplateName);
+
+	class_<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component>, boost::noncopyable>("AnimatedLuminousAppearanceComponent", no_init)
+		.def("synchronize", &i6engine::api::LuminousAppearanceComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::LuminousAppearanceComponent::getTemplateName);
+
+	class_<i6engine::api::AnimatedSpotLightComponent, i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component>, boost::noncopyable>("AnimatedSpotLightComponent", no_init)
+		.def("synchronize", &i6engine::api::AnimatedDirectionalLightComponent::synchronize)
+		.def("getTemplateName", &i6engine::api::AnimatedDirectionalLightComponent::getTemplateName);
 
 	class_<i6engine::api::BillboardComponent, i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>, boost::noncopyable>("BillboardComponent", no_init)
 		.def("createOrUpdateBillboard", &i6engine::api::BillboardComponent::createOrUpdateBillboard)
