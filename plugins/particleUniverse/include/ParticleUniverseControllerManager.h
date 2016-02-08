@@ -27,10 +27,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // If the Ogre renderer is replaced by another renderer, the ControllerManager class must be re-implemented
 #include "OgreControllerManager.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	typedef Ogre::ControllerValueRealPtr ControllerValueRealPtr;
 	typedef Ogre::ControllerManager ControllerManager;
-}
 
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_CONTROLLER_MANAGER_H__ */

@@ -28,8 +28,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseTechnique.h"
 #include "ParticleUniverseVisualParticle.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	const bool ParticleEmitter::DEFAULT_ENABLED = true;
 	const Vector3 ParticleEmitter::DEFAULT_POSITION(0, 0, 0);
@@ -47,152 +47,109 @@ namespace ParticleUniverse
 	const ColourValue ParticleEmitter::DEFAULT_COLOUR(1, 1, 1);
 	const bool ParticleEmitter::DEFAULT_AUTO_DIRECTION = false;
 	const bool ParticleEmitter::DEFAULT_FORCE_EMISSION = false;
-	const Real ParticleEmitter::DEFAULT_EMISSION_RATE = 10.0f;
-	const Real ParticleEmitter::DEFAULT_TIME_TO_LIVE = 3.0f;
-	const Real ParticleEmitter::DEFAULT_MASS = 1.0f;
-	const Real ParticleEmitter::DEFAULT_VELOCITY = 100.0f;
-	const Real ParticleEmitter::DEFAULT_DURATION = 0.0f;
-	const Real ParticleEmitter::DEFAULT_REPEAT_DELAY = 0.0f;
-	const Real ParticleEmitter::DEFAULT_ANGLE = 20.0f;
-	const Real ParticleEmitter::DEFAULT_DIMENSIONS = 0.0f;
-	const Real ParticleEmitter::DEFAULT_WIDTH = 0.0f;
-	const Real ParticleEmitter::DEFAULT_HEIGHT = 0.0f;
-	const Real ParticleEmitter::DEFAULT_DEPTH = 0.0f;
+	const Real ParticleEmitter::DEFAULT_EMISSION_RATE = 10.0;
+	const Real ParticleEmitter::DEFAULT_TIME_TO_LIVE = 3.0;
+	const Real ParticleEmitter::DEFAULT_MASS = 1.0;
+	const Real ParticleEmitter::DEFAULT_VELOCITY = 100.0;
+	const Real ParticleEmitter::DEFAULT_DURATION = 0.0;
+	const Real ParticleEmitter::DEFAULT_REPEAT_DELAY = 0.0;
+	const Real ParticleEmitter::DEFAULT_ANGLE = 20.0;
+	const Real ParticleEmitter::DEFAULT_DIMENSIONS = 0.0;
+	const Real ParticleEmitter::DEFAULT_WIDTH = 0.0;
+	const Real ParticleEmitter::DEFAULT_HEIGHT = 0.0;
+	const Real ParticleEmitter::DEFAULT_DEPTH = 0.0;
 
-	//-----------------------------------------------------------------------
-	ParticleEmitter::ParticleEmitter(void) :
-		Particle(),
-		IAlias(),
-		IElement(),
-		mParentTechnique(0),
-		_mEmitterScale(Vector3::UNIT_SCALE),
-		mName(BLANK_STRING),
-		mParticleDirection(DEFAULT_DIRECTION),
-		mOriginalParticleDirection(DEFAULT_DIRECTION),
-		mParticleOrientation(Quaternion::IDENTITY),
-		mParticleOrientationRangeStart(Quaternion::IDENTITY),
-		mParticleOrientationRangeEnd(Quaternion::IDENTITY),
-		mParticleOrientationRangeSet(false),
-		mEmitsType(DEFAULT_EMITS),
-		mEmitsName(BLANK_STRING),
-		mDynParticleAllDimensionsSet(false),
-		mDynParticleWidthSet(false),
-		mDynParticleHeightSet(false),
-		mDynParticleDepthSet(false),
-		mUpVector(Vector3::ZERO),
-		mRemainder(0),
-		mDurationRemain(0),
-		mDynDurationSet(false),
-		mRepeatDelayRemain(0),
-		mDynRepeatDelaySet(false),
-		mEmissionRateCameraDependency(0),
-		mAutoDirection(DEFAULT_AUTO_DIRECTION),
-		mForceEmission(DEFAULT_FORCE_EMISSION),
-		mOriginalForceEmission(false),
-		mForceEmissionExecuted(false),
-		mOriginalForceEmissionExecuted(false),
-		mParticleColour(DEFAULT_COLOUR),
-		mParticleColourRangeStart(DEFAULT_START_COLOUR_RANGE),
-		mParticleColourRangeEnd(DEFAULT_END_COLOUR_RANGE),
-		mParticleColourRangeSet(false),
-		mKeepLocal(false),
-		mParticleTextureCoords(DEFAULT_TEXTURE_COORDS),
-		mParticleTextureCoordsRangeStart(DEFAULT_START_TEXTURE_COORDS),
-		mParticleTextureCoordsRangeEnd(DEFAULT_END_TEXTURE_COORDS),
-		mParticleTextureCoordsRangeSet(false)
-	{
+	ParticleEmitter::ParticleEmitter() : Particle(), IAlias(), IElement(), mParentTechnique(nullptr), _mEmitterScale(Vector3::UNIT_SCALE), mName(BLANK_STRING), mParticleDirection(DEFAULT_DIRECTION), mOriginalParticleDirection(DEFAULT_DIRECTION), mParticleOrientation(Quaternion::IDENTITY), mParticleOrientationRangeStart(Quaternion::IDENTITY), mParticleOrientationRangeEnd(Quaternion::IDENTITY), mParticleOrientationRangeSet(false), mEmitsType(DEFAULT_EMITS), mEmitsName(BLANK_STRING), mDynParticleAllDimensionsSet(false), mDynParticleWidthSet(false), mDynParticleHeightSet(false), mDynParticleDepthSet(false), mUpVector(Vector3::ZERO), mRemainder(0), mDurationRemain(0), mDynDurationSet(false), mRepeatDelayRemain(0), mDynRepeatDelaySet(false), mEmissionRateCameraDependency(nullptr), mAutoDirection(DEFAULT_AUTO_DIRECTION), mForceEmission(DEFAULT_FORCE_EMISSION), mOriginalForceEmission(false), mForceEmissionExecuted(false), mOriginalForceEmissionExecuted(false), mParticleColour(DEFAULT_COLOUR), mParticleColourRangeStart(DEFAULT_START_COLOUR_RANGE), mParticleColourRangeEnd(DEFAULT_END_COLOUR_RANGE), mParticleColourRangeSet(false), mKeepLocal(false), mParticleTextureCoords(DEFAULT_TEXTURE_COORDS), mParticleTextureCoordsRangeStart(DEFAULT_START_TEXTURE_COORDS), mParticleTextureCoordsRangeEnd(DEFAULT_END_TEXTURE_COORDS), mParticleTextureCoordsRangeSet(false) {
 		particleType = PT_EMITTER;
 		mAliasType = AT_EMITTER;
 		mDynEmissionRate = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynEmissionRate))->setValue(DEFAULT_EMISSION_RATE);
+		static_cast<DynamicAttributeFixed *>(mDynEmissionRate)->setValue(DEFAULT_EMISSION_RATE);
 		mDynTotalTimeToLive = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynTotalTimeToLive))->setValue(DEFAULT_TIME_TO_LIVE);
+		static_cast<DynamicAttributeFixed *>(mDynTotalTimeToLive)->setValue(DEFAULT_TIME_TO_LIVE);
 		mDynParticleMass = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynParticleMass))->setValue(DEFAULT_MASS);
+		static_cast<DynamicAttributeFixed *>(mDynParticleMass)->setValue(DEFAULT_MASS);
 		mDynVelocity = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynVelocity))->setValue(DEFAULT_VELOCITY);
+		static_cast<DynamicAttributeFixed *>(mDynVelocity)->setValue(DEFAULT_VELOCITY);
 		mDynDuration = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynDuration))->setValue(DEFAULT_DURATION);
+		static_cast<DynamicAttributeFixed *>(mDynDuration)->setValue(DEFAULT_DURATION);
 		mDynRepeatDelay = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynRepeatDelay))->setValue(DEFAULT_REPEAT_DELAY);
+		static_cast<DynamicAttributeFixed *>(mDynRepeatDelay)->setValue(DEFAULT_REPEAT_DELAY);
 		mDynAngle = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynAngle))->setValue(DEFAULT_ANGLE);
+		static_cast<DynamicAttributeFixed *>(mDynAngle)->setValue(DEFAULT_ANGLE);
 
 		// Set the dimensions attributes to 0; the default is to use the default dimensions of the ParticleTechnique
 		mDynParticleAllDimensions = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynParticleAllDimensions))->setValue(DEFAULT_DIMENSIONS);
+		static_cast<DynamicAttributeFixed *>(mDynParticleAllDimensions)->setValue(DEFAULT_DIMENSIONS);
 		mDynParticleWidth = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynParticleWidth))->setValue(DEFAULT_WIDTH);
+		static_cast<DynamicAttributeFixed *>(mDynParticleWidth)->setValue(DEFAULT_WIDTH);
 		mDynParticleHeight = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynParticleHeight))->setValue(DEFAULT_HEIGHT);
+		static_cast<DynamicAttributeFixed *>(mDynParticleHeight)->setValue(DEFAULT_HEIGHT);
 		mDynParticleDepth = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynParticleDepth))->setValue(DEFAULT_DEPTH);
+		static_cast<DynamicAttributeFixed *>(mDynParticleDepth)->setValue(DEFAULT_DEPTH);
 	}
-	//-----------------------------------------------------------------------
-	ParticleEmitter::~ParticleEmitter(void)
-	{
-		if (mDynEmissionRate)
+
+	ParticleEmitter::~ParticleEmitter() {
+		if (mDynEmissionRate) {
 			PU_DELETE_T(mDynEmissionRate, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mDynTotalTimeToLive)
+		}
+		if (mDynTotalTimeToLive) {
 			PU_DELETE_T(mDynTotalTimeToLive, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mDynParticleMass)
+		}
+		if (mDynParticleMass) {
 			PU_DELETE_T(mDynParticleMass, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mDynVelocity)
+		}
+		if (mDynVelocity) {
 			PU_DELETE_T(mDynVelocity, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mDynDuration)
+		}
+		if (mDynDuration) {
 			PU_DELETE_T(mDynDuration, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mDynRepeatDelay)
+		}
+		if (mDynRepeatDelay) {
 			PU_DELETE_T(mDynRepeatDelay, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mDynParticleAllDimensions)
+		}
+		if (mDynParticleAllDimensions) {
 			PU_DELETE_T(mDynParticleAllDimensions, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mDynParticleWidth)
+		}
+		if (mDynParticleWidth) {
 			PU_DELETE_T(mDynParticleWidth, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mDynParticleHeight)
+		}
+		if (mDynParticleHeight) {
 			PU_DELETE_T(mDynParticleHeight, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mDynParticleDepth)
+		}
+		if (mDynParticleDepth) {
 			PU_DELETE_T(mDynParticleDepth, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-
-		if (mEmissionRateCameraDependency)
+		}
+		if (mEmissionRateCameraDependency) {
 			mCameraDependencyFactory.destroy(mEmissionRateCameraDependency);
-
-		if (mDynAngle)
+		}
+		if (mDynAngle) {
 			PU_DELETE_T(mDynAngle, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleEmitter::isKeepLocal(void) const
-	{
+
+	bool ParticleEmitter::isKeepLocal() const {
 		return mKeepLocal;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setKeepLocal(bool keepLocal)
-	{
+
+	void ParticleEmitter::setKeepLocal(bool keepLocal) {
 		mKeepLocal = keepLocal;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleEmitter::makeParticleLocal(Particle* particle)
-	{
-		if (!particle)
-			return true;
 
-		if (!mKeepLocal || hasEventFlags(Particle::PEF_EXPIRED))
+	bool ParticleEmitter::makeParticleLocal(Particle * particle) {
+		if (!particle) {
+			return true;
+		}
+
+		if (!mKeepLocal || hasEventFlags(Particle::PEF_EXPIRED)) {
 			return false;
+		}
 
 		Vector3 diff = getDerivedPosition() - latestPosition;
 		particle->position += diff;
 		return true;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_pushEmitterEvent(EventType eventType)
-	{
+
+	void ParticleEmitter::_pushEmitterEvent(EventType eventType) {
 		// Create the event
 		ParticleUniverseEvent evt;
 		evt.eventType = eventType;
@@ -202,18 +159,15 @@ namespace ParticleUniverse
 		evt.emitter = this;
 		pushEvent(evt);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::pushEvent(ParticleUniverseEvent& particleUniverseEvent)
-	{
+	
+	void ParticleEmitter::pushEvent(ParticleUniverseEvent & particleUniverseEvent) {
 		// Forward the event
-		if (mParentTechnique)
-		{
+		if (mParentTechnique) {
 			mParentTechnique->pushEvent(particleUniverseEvent);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_notifyStart (void)
-	{
+	
+	void ParticleEmitter::_notifyStart() {
 		latestPosition = getDerivedPosition(); // V1.3.1
 		mForceEmission = mOriginalForceEmission;
 		mForceEmissionExecuted = mOriginalForceEmissionExecuted;
@@ -225,107 +179,86 @@ namespace ParticleUniverse
 		// Generate the event
 		_pushEmitterEvent(PU_EVT_EMITTER_STARTED);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_notifyStop (void)
-	{
+	
+	void ParticleEmitter::_notifyStop() {
 		// Generate the event
 		_pushEmitterEvent(PU_EVT_EMITTER_STOPPED);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_notifyRescaled(const Vector3& scale)
-	{
+	
+	void ParticleEmitter::_notifyRescaled(const Vector3 & scale) {
 		_mEmitterScale = scale;
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& ParticleEmitter::getDerivedPosition(void)
-	{
-		if (mMarkedForEmission)
-		{
+	
+	const Vector3 & ParticleEmitter::getDerivedPosition() {
+		if (mMarkedForEmission) {
 			// Use the emitter position, because it is emitted
 			// If a particle is emitted, position and derived position are the same
 			mDerivedPosition = position;
-		}
-		else
-		{
+		} else {
 			// Add the techniques' derived position. Use the emiters' own 'position' as offset.
-			mDerivedPosition = mParentTechnique->getDerivedPosition() + mParentTechnique->getParentSystem()->getDerivedOrientation() * 
-				(_mEmitterScale * position);
+			mDerivedPosition = mParentTechnique->getDerivedPosition() + mParentTechnique->getParentSystem()->getDerivedOrientation() * (_mEmitterScale * position);
 		}
 		return mDerivedPosition;
 	}
-	//-----------------------------------------------------------------------
-	const ColourValue& ParticleEmitter::getParticleColour(void) const
-	{
+	
+	const ColourValue & ParticleEmitter::getParticleColour() const {
 		return mParticleColour;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleColour(const ColourValue& particleColour)
-	{
+	
+	void ParticleEmitter::setParticleColour(const ColourValue & particleColour) {
 		mParticleColour = particleColour;
 	}
-	//-----------------------------------------------------------------------
-	const ColourValue& ParticleEmitter::getParticleColourRangeStart(void) const
-	{
+	
+	const ColourValue & ParticleEmitter::getParticleColourRangeStart() const {
 		return mParticleColourRangeStart;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleColourRangeStart(const ColourValue& particleColourRangeStart)
-	{
+	
+	void ParticleEmitter::setParticleColourRangeStart(const ColourValue & particleColourRangeStart) {
 		mParticleColourRangeStart = particleColourRangeStart;
 		mParticleColourRangeSet = true;
 	}
-	//-----------------------------------------------------------------------
-	const ColourValue& ParticleEmitter::getParticleColourRangeEnd(void) const
-	{
+	
+	const ColourValue & ParticleEmitter::getParticleColourRangeEnd() const {
 		return mParticleColourRangeEnd;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleColourRangeEnd(const ColourValue& particleColourRangeEnd)
-	{
+	
+	void ParticleEmitter::setParticleColourRangeEnd(const ColourValue & particleColourRangeEnd) {
 		mParticleColourRangeEnd = particleColourRangeEnd;
 		mParticleColourRangeSet = true;
 	}
-	//-----------------------------------------------------------------------
-	const uint16& ParticleEmitter::getParticleTextureCoords(void) const
-	{
+	
+	const uint16 & ParticleEmitter::getParticleTextureCoords() const {
 		return mParticleTextureCoords;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleTextureCoords(const uint16& particleTextureCoords)
-	{
+	
+	void ParticleEmitter::setParticleTextureCoords(const uint16 & particleTextureCoords) {
 		mParticleTextureCoords = particleTextureCoords;
 	}
-	//-----------------------------------------------------------------------
-	const uint16& ParticleEmitter::getParticleTextureCoordsRangeStart(void) const
-	{
+	
+	const uint16 & ParticleEmitter::getParticleTextureCoordsRangeStart() const {
 		return mParticleTextureCoordsRangeStart;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleTextureCoordsRangeStart(const uint16& particleTextureCoordsRangeStart)
-	{
+	
+	void ParticleEmitter::setParticleTextureCoordsRangeStart(const uint16 & particleTextureCoordsRangeStart) {
 		mParticleTextureCoordsRangeStart = particleTextureCoordsRangeStart;
 		mParticleTextureCoordsRangeSet = true;
 	}
-	//-----------------------------------------------------------------------
-	const uint16& ParticleEmitter::getParticleTextureCoordsRangeEnd(void) const
-	{
+	
+	const uint16 & ParticleEmitter::getParticleTextureCoordsRangeEnd() const {
 		return mParticleTextureCoordsRangeEnd;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleTextureCoordsRangeEnd(const uint16& particleTextureCoordsRangeEnd)
-	{
+	
+	void ParticleEmitter::setParticleTextureCoordsRangeEnd(const uint16 & particleTextureCoordsRangeEnd) {
 		mParticleTextureCoordsRangeEnd = particleTextureCoordsRangeEnd;
 		mParticleTextureCoordsRangeSet = true;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::copyAttributesTo(ParticleEmitter* emitter)
-	{
+	
+	void ParticleEmitter::copyAttributesTo(ParticleEmitter * emitter) {
 		copyParentAttributesTo(emitter);
 		emitter->setEmitterType(mEmitterType);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::copyParentAttributesTo(ParticleEmitter* emitter)
-	{
+	
+	void ParticleEmitter::copyParentAttributesTo(ParticleEmitter * emitter) {
 		// Copy Parent attributes
 		Particle::copyAttributesTo(emitter);
 
@@ -373,14 +306,12 @@ namespace ParticleUniverse
 		emitter->setDynVelocity(mDynamicAttributeFactory.cloneDynamicAttribute(getDynVelocity()));
 
 		// Copy Dyn. Duration if available
-		if (mDynDurationSet)
-		{
+		if (mDynDurationSet) {
 			emitter->setDynDuration(mDynamicAttributeFactory.cloneDynamicAttribute(getDynDuration()));
 		}
 
 		// Copy Dyn. RepeatDelay if available
-		if (mDynRepeatDelaySet)
-		{
+		if (mDynRepeatDelaySet) {
 			emitter->setDynRepeatDelay(mDynamicAttributeFactory.cloneDynamicAttribute(getDynRepeatDelay()));
 		}
 
@@ -391,293 +322,255 @@ namespace ParticleUniverse
 		emitter->setDynAngle(mDynamicAttributeFactory.cloneDynamicAttribute(getDynAngle()));
 
 		// Copy Dyn. own width, height and depth if available
-		if (mDynParticleAllDimensionsSet)
-		{
+		if (mDynParticleAllDimensionsSet) {
 			emitter->setDynParticleAllDimensions(mDynamicAttributeFactory.cloneDynamicAttribute(getDynParticleAllDimensions()));
 		}
-		if (mDynParticleWidthSet)
-		{
+		if (mDynParticleWidthSet) {
 			emitter->setDynParticleWidth(mDynamicAttributeFactory.cloneDynamicAttribute(getDynParticleWidth()));
 		}
-		if (mDynParticleHeightSet)
-		{
+		if (mDynParticleHeightSet) {
 			emitter->setDynParticleHeight(mDynamicAttributeFactory.cloneDynamicAttribute(getDynParticleHeight()));
 		}
-		if (mDynParticleDepthSet)
-		{
+		if (mDynParticleDepthSet) {
 			emitter->setDynParticleDepth(mDynamicAttributeFactory.cloneDynamicAttribute(getDynParticleDepth()));
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParentTechnique(ParticleTechnique* parentTechnique)
-	{
+	
+	void ParticleEmitter::setParentTechnique(ParticleTechnique * parentTechnique) {
 		mParentTechnique = parentTechnique;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setEmitsName(const String& emitsName)
-	{
+	
+	void ParticleEmitter::setEmitsName(const String & emitsName) {
 		mEmitsName = emitsName;
-		if (mEmitsName != BLANK_STRING)
-		{
+		if (mEmitsName != BLANK_STRING) {
 			mMarkedForEmission = true;
-			if (mParentTechnique)
-			{
+			if (mParentTechnique) {
 				// Notify the Technique that something changed
 				mParentTechnique->_notifyEmissionChange();
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setEmissionRateCameraDependency(CameraDependency* cameraDependency)
-	{
-		if (mEmissionRateCameraDependency)
+	
+	void ParticleEmitter::setEmissionRateCameraDependency(CameraDependency * cameraDependency) {
+		if (mEmissionRateCameraDependency) {
 			mCameraDependencyFactory.destroy(mEmissionRateCameraDependency);
+		}
 
 		mEmissionRateCameraDependency = cameraDependency;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setEmissionRateCameraDependency(Real squareDistance, bool inc)
-	{
-		if (!mEmissionRateCameraDependency)
-		{
+	
+	void ParticleEmitter::setEmissionRateCameraDependency(Real squareDistance, bool inc) {
+		if (!mEmissionRateCameraDependency) {
 			mEmissionRateCameraDependency = mCameraDependencyFactory.create(squareDistance, inc);
-		}
-		else
-		{
+		} else {
 			mEmissionRateCameraDependency->setThreshold(squareDistance);
 			mEmissionRateCameraDependency->setIncrease(inc);
 		}
 	}
-	//-----------------------------------------------------------------------
-	CameraDependency* ParticleEmitter::getEmissionRateCameraDependency(void) const
-	{
+	
+	CameraDependency * ParticleEmitter::getEmissionRateCameraDependency() const {
 		return mEmissionRateCameraDependency;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynEmissionRate(DynamicAttribute* dynEmissionRate)
-	{
-		if (mDynEmissionRate)
+	
+	void ParticleEmitter::setDynEmissionRate(DynamicAttribute * dynEmissionRate) {
+		if (mDynEmissionRate) {
 			PU_DELETE_T(mDynEmissionRate, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynEmissionRate = dynEmissionRate;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynTotalTimeToLive(DynamicAttribute* dynTotalTimeToLive)
-	{
-		if (mDynTotalTimeToLive)
+	
+	void ParticleEmitter::setDynTotalTimeToLive(DynamicAttribute * dynTotalTimeToLive) {
+		if (mDynTotalTimeToLive) {
 			PU_DELETE_T(mDynTotalTimeToLive, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynTotalTimeToLive = dynTotalTimeToLive;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynParticleMass(DynamicAttribute* dynParticleMass)
-	{
-		if (mDynParticleMass)
+	
+	void ParticleEmitter::setDynParticleMass(DynamicAttribute * dynParticleMass) {
+		if (mDynParticleMass) {
 			PU_DELETE_T(mDynParticleMass, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynParticleMass = dynParticleMass;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynAngle(DynamicAttribute* dynAngle)
-	{
-		if (mDynAngle)
+	
+	void ParticleEmitter::setDynAngle(DynamicAttribute * dynAngle) {
+		if (mDynAngle) {
 			PU_DELETE_T(mDynAngle, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynAngle = dynAngle;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynVelocity(DynamicAttribute* dynVelocity)
-	{
-		if (mDynVelocity)
+	
+	void ParticleEmitter::setDynVelocity(DynamicAttribute * dynVelocity) {
+		if (mDynVelocity) {
 			PU_DELETE_T(mDynVelocity, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynVelocity = dynVelocity;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynDuration(DynamicAttribute* dynDuration)
-	{
-		if (mDynDuration)
+	
+	void ParticleEmitter::setDynDuration(DynamicAttribute * dynDuration) {
+		if (mDynDuration) {
 			PU_DELETE_T(mDynDuration, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynDuration = dynDuration;
 		mDynDurationSet = true;
 		_initTimeBased();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynDurationSet(bool durationSet)
-	{
+	
+	void ParticleEmitter::setDynDurationSet(bool durationSet) {
 		mDynDurationSet = durationSet;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynRepeatDelay(DynamicAttribute* dynRepeatDelay)
-	{
-		if (mDynRepeatDelay)
+	
+	void ParticleEmitter::setDynRepeatDelay(DynamicAttribute * dynRepeatDelay) {
+		if (mDynRepeatDelay) {
 			PU_DELETE_T(mDynRepeatDelay, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynRepeatDelay = dynRepeatDelay;
 		mDynRepeatDelaySet = true;
 		_initTimeBased();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynRepeatDelaySet(bool repeatDelaySet)
-	{
+	
+	void ParticleEmitter::setDynRepeatDelaySet(bool repeatDelaySet) {
 		mDynRepeatDelaySet = repeatDelaySet;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynParticleAllDimensions(DynamicAttribute* dynParticleAllDimensions)
-	{
-		if (mDynParticleAllDimensions)
+	
+	void ParticleEmitter::setDynParticleAllDimensions(DynamicAttribute * dynParticleAllDimensions) {
+		if (mDynParticleAllDimensions) {
 			PU_DELETE_T(mDynParticleAllDimensions, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynParticleAllDimensions = dynParticleAllDimensions;
 		mDynParticleAllDimensionsSet = true;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynParticleAllDimensionsSet(bool particleAllDimensionsSet)
-	{
+	
+	void ParticleEmitter::setDynParticleAllDimensionsSet(bool particleAllDimensionsSet) {
 		mDynParticleAllDimensionsSet = particleAllDimensionsSet;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynParticleWidth(DynamicAttribute* dynParticleWidth)
-	{
-		if (mDynParticleWidth)
+	
+	void ParticleEmitter::setDynParticleWidth(DynamicAttribute * dynParticleWidth) {
+		if (mDynParticleWidth) {
 			PU_DELETE_T(mDynParticleWidth, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynParticleWidth = dynParticleWidth;
 		mDynParticleWidthSet = true;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynParticleWidthSet(bool particleWidthSet)
-	{
+	
+	void ParticleEmitter::setDynParticleWidthSet(bool particleWidthSet) {
 		mDynParticleWidthSet = particleWidthSet;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynParticleHeight(DynamicAttribute* dynParticleHeight)
-	{
-		if (mDynParticleHeight)
+	
+	void ParticleEmitter::setDynParticleHeight(DynamicAttribute * dynParticleHeight) {
+		if (mDynParticleHeight) {
 			PU_DELETE_T(mDynParticleHeight, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynParticleHeight = dynParticleHeight;
 		mDynParticleHeightSet = true;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynParticleHeightSet(bool particleHeightSet)
-	{
+	
+	void ParticleEmitter::setDynParticleHeightSet(bool particleHeightSet) {
 		mDynParticleHeightSet = particleHeightSet;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynParticleDepth(DynamicAttribute* dynParticleDepth)
-	{
-		if (mDynParticleDepth)
+	
+	void ParticleEmitter::setDynParticleDepth(DynamicAttribute * dynParticleDepth) {
+		if (mDynParticleDepth) {
 			PU_DELETE_T(mDynParticleDepth, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynParticleDepth = dynParticleDepth;
 		mDynParticleDepthSet = true;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setDynParticleDepthSet(bool particleDepthSet)
-	{
+	
+	void ParticleEmitter::setDynParticleDepthSet(bool particleDepthSet) {
 		mDynParticleDepthSet = particleDepthSet;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setEnabled(bool enabled)
-	{
+	
+	void ParticleEmitter::setEnabled(bool enabled) {
 		Particle::setEnabled(enabled);
 		_initTimeBased();
     }
-	//-----------------------------------------------------------------------
-	const Vector3& ParticleEmitter::getParticleDirection(void)
-	{
+	
+	const Vector3 & ParticleEmitter::getParticleDirection() {
 		return mParticleDirection;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleDirection(const Vector3& dir)
-	{
+	
+	void ParticleEmitter::setParticleDirection(const Vector3 & dir) {
 		mParticleDirection = dir;
 		mOriginalParticleDirection = dir;
 		mParticleDirection.normalise();
 		mUpVector = mParticleDirection.perpendicular();
 		mUpVector.normalise();
     }
-	//-----------------------------------------------------------------------
-	const Vector3& ParticleEmitter::getOriginalParticleDirection(void) const
-	{
+	
+	const Vector3 & ParticleEmitter::getOriginalParticleDirection() const {
 		return mOriginalParticleDirection;
 	}
-	//-----------------------------------------------------------------------
-	const Quaternion& ParticleEmitter::getParticleOrientation(void) const
-	{
+	
+	const Quaternion & ParticleEmitter::getParticleOrientation() const {
 		return mParticleOrientation;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleOrientation(const Quaternion& orientation)
-	{
+	
+	void ParticleEmitter::setParticleOrientation(const Quaternion & orientation) {
 		mParticleOrientation = orientation;
     }
-	//-----------------------------------------------------------------------
-	const Quaternion& ParticleEmitter::getParticleOrientationRangeStart(void) const
-	{
+	
+	const Quaternion & ParticleEmitter::getParticleOrientationRangeStart() const {
 		return mParticleOrientationRangeStart;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleOrientationRangeStart(const Quaternion& orientationRangeStart)
-	{
+	
+	void ParticleEmitter::setParticleOrientationRangeStart(const Quaternion & orientationRangeStart) {
 		mParticleOrientationRangeStart = orientationRangeStart;
 		mParticleOrientationRangeSet = true;
     }
-	//-----------------------------------------------------------------------
-	const Quaternion& ParticleEmitter::getParticleOrientationRangeEnd(void) const
-	{
+	
+	const Quaternion & ParticleEmitter::getParticleOrientationRangeEnd() const {
 		return mParticleOrientationRangeEnd;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setParticleOrientationRangeEnd(const Quaternion& orientationRangeEnd)
-	{
+	
+	void ParticleEmitter::setParticleOrientationRangeEnd(const Quaternion & orientationRangeEnd) {
 		mParticleOrientationRangeEnd = orientationRangeEnd;
 		mParticleOrientationRangeSet = true;
     }
-	//-----------------------------------------------------------------------
-	bool ParticleEmitter::isAutoDirection(void) const
-	{
+	
+	bool ParticleEmitter::isAutoDirection() const {
 		return mAutoDirection;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setAutoDirection(bool autoDirection)
-	{
+	
+	void ParticleEmitter::setAutoDirection(bool autoDirection) {
 		mAutoDirection = autoDirection;
     }
-	//-----------------------------------------------------------------------
-	bool ParticleEmitter::isForceEmission(void) const
-	{
+	
+	bool ParticleEmitter::isForceEmission() const {
 		return mForceEmission;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::setForceEmission(bool forceEmission)
-	{
+	
+	void ParticleEmitter::setForceEmission(bool forceEmission) {
 		mForceEmission = forceEmission;
 		mOriginalForceEmission = forceEmission;
 		mForceEmissionExecuted = false;
 		mOriginalForceEmissionExecuted = false;
     }
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
+	
+	void ParticleEmitter::_preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
 		// Calculate the emitters' position so it is safe to use mDerivedPosition).
 		getDerivedPosition();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_postProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
+	
+	void ParticleEmitter::_postProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
 		// Added in V1.3.1
 		latestPosition = getDerivedPosition();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initTimeBased(void)
-    {
-		if (mEnabled)
-		{
-			if (mDynDurationSet && mParentTechnique)
-			{
+	
+	void ParticleEmitter::_initTimeBased()  {
+		if (mEnabled) {
+			if (mDynDurationSet && mParentTechnique) {
 				mDurationRemain = mDynamicAttributeHelper.calculate(mDynDuration, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart());
 			}
 
@@ -686,48 +579,40 @@ namespace ParticleUniverse
 				Note, that if the duration has been exceeded, the emitter is disabled. It makes perfect sense to enable 
 				the emitter again when the duration is initialised with a valid value (> 0).
 			*/
-			if (mDurationRemain > 0)
-			{
+			if (mDurationRemain > 0) {
 				mEnabled = true;
 				mRepeatDelayRemain = 0;
 			}
-		}
-		else
-		{
-			if (mDynRepeatDelaySet && mParentTechnique)
-			{
+		} else {
+			if (mDynRepeatDelaySet && mParentTechnique) {
 				mRepeatDelayRemain = mDynamicAttributeHelper.calculate(mDynRepeatDelay, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart());
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initForEmission(void)
-	{
+	
+	void ParticleEmitter::_initForEmission() {
 		// The emitter itself is emitted.
 		Particle::_initForEmission();
 
 		// Emitting an emitter is similar as starting one.
 		_notifyStart();
     }
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initForExpiration(ParticleTechnique* technique, Real timeElapsed)
-	{
+	
+	void ParticleEmitter::_initForExpiration(ParticleTechnique * technique, Real timeElapsed) {
 		// The emitter itself is expired.
 		Particle::_initForExpiration(technique, timeElapsed);
 
 		// Expiring an emitter is similar as stopping one.
 		_notifyStop();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initParticlePosition(Particle* particle)
-	{
+	
+	void ParticleEmitter::_initParticlePosition(Particle * particle) {
 		particle->position = getDerivedPosition();
 		particle->originalPosition = particle->position;
 		particle->latestPosition = particle->position;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initParticleForEmission(Particle* particle)
-	{
+	
+	void ParticleEmitter::_initParticleForEmission(Particle * particle) {
 		// Initialise the particle position (localspace)
 		particle->parentEmitter = this;
 		_initParticlePosition(particle);
@@ -743,151 +628,119 @@ namespace ParticleUniverse
 		// Generate particles' own dimensions if defined.
 		_initParticleDimensions(particle);
 	}
-	//-----------------------------------------------------------------------
-    void ParticleEmitter::_initParticleDirection(Particle* particle)
-    {
+	
+    void ParticleEmitter::_initParticleDirection(Particle * particle) {
 		// Use the default way of initialising the particle direction
 		Radian angle;
 		_generateAngle(angle);
-		if (angle != Radian(0))
-		{
+		if (angle != Radian(0)) {
 			particle->direction = mParticleDirection.randomDeviant(angle, mUpVector);
-		}
-		else
-		{
+		} else {
 			particle->direction = mParticleDirection;
 		}
 		particle->originalDirection = particle->direction;
 		particle->originalDirectionLength = particle->direction.length();
     }
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_generateAngle(Radian& angle)
-	{
+	
+	void ParticleEmitter::_generateAngle(Radian & angle) {
 		Radian a = Angle(mDynamicAttributeHelper.calculate(mDynAngle, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart()));
 		angle = a;
-		if (mDynAngle->getType() == DynamicAttribute::DAT_FIXED)
-		{
+		if (mDynAngle->getType() == DynamicAttribute::DAT_FIXED) {
 			// Make an exception here and donŽt use the fixed angle.
 			angle = Math::UnitRandom() * angle;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initParticleVelocity(Particle* particle)
-    {
-		Real scalar = mDynamicAttributeHelper.calculate(mDynVelocity, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart(), 1.0f);
+	
+	void ParticleEmitter::_initParticleVelocity(Particle * particle) {
+		Real scalar = mDynamicAttributeHelper.calculate(mDynVelocity, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart(), 1.0);
 		particle->direction *= scalar;
 		particle->originalVelocity = scalar;
 		particle->originalScaledDirectionLength = particle->direction.length();
 
-		// DonŽt change the originalDirection, because the real original value has already been set.
+		// Don't change the originalDirection, because the real original value has already been set.
     }
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initParticleOrientation(Particle* particle)
-	{
-		if (particle->particleType != Particle::PT_VISUAL)
+	
+	void ParticleEmitter::_initParticleOrientation(Particle * particle) {
+		if (particle->particleType != Particle::PT_VISUAL) {
 			return;
-
-		VisualParticle* visualParticle = static_cast<VisualParticle*>(particle);
-		if (mParticleOrientationRangeSet)
-		{
-			// Generate random orientation 'between' start en end.
-			visualParticle->orientation = Quaternion::nlerp(Math::UnitRandom(), 
-				mParticleOrientationRangeStart, 
-				mParticleOrientationRangeEnd,
-				true);
 		}
-		else
-		{
+
+		VisualParticle * visualParticle = static_cast<VisualParticle *>(particle);
+		if (mParticleOrientationRangeSet) {
+			// Generate random orientation 'between' start en end.
+			visualParticle->orientation = Quaternion::nlerp(Math::UnitRandom(), mParticleOrientationRangeStart, mParticleOrientationRangeEnd, true);
+		} else {
 			visualParticle->orientation = mParticleOrientation;
 		}
 
 		// Set original orientation
 		visualParticle->originalOrientation = visualParticle->orientation;
     }
-	//-----------------------------------------------------------------------
-    void ParticleEmitter::_initParticleMass(Particle* particle)
-    {
-		Real m = mDynamicAttributeHelper.calculate(mDynParticleMass, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart(), Particle::DEFAULT_MASS);
-		particle->mass = m;
+	
+    void ParticleEmitter::_initParticleMass(Particle * particle) {
+		particle->mass = mDynamicAttributeHelper.calculate(mDynParticleMass, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart(), Particle::DEFAULT_MASS);
     }
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initParticleColour(Particle* particle)
-    {
-		if (particle->particleType != Particle::PT_VISUAL)
+	
+	void ParticleEmitter::_initParticleColour(Particle * particle) {
+		if (particle->particleType != Particle::PT_VISUAL) {
 			return;
+		}
 
-		VisualParticle* visualParticle = static_cast<VisualParticle*>(particle);
-		if (mParticleColourRangeSet)
-		{
+		VisualParticle * visualParticle = static_cast<VisualParticle *>(particle);
+		if (mParticleColourRangeSet) {
 			visualParticle->colour.r = Math::RangeRandom(mParticleColourRangeStart.r, mParticleColourRangeEnd.r);
 			visualParticle->colour.g = Math::RangeRandom(mParticleColourRangeStart.g, mParticleColourRangeEnd.g);
 			visualParticle->colour.b = Math::RangeRandom(mParticleColourRangeStart.b, mParticleColourRangeEnd.b);
 			visualParticle->colour.a = Math::RangeRandom(mParticleColourRangeStart.a, mParticleColourRangeEnd.a);
-		}
-		else
-		{
+		} else {
 			visualParticle->colour = mParticleColour;
 		}
 
 		// Set original colour
 		visualParticle->originalColour = visualParticle->colour;
     }
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initParticleTextureCoords(Particle* particle)
-    {
-		if (particle->particleType != Particle::PT_VISUAL)
+	
+	void ParticleEmitter::_initParticleTextureCoords(Particle * particle) {
+		if (particle->particleType != Particle::PT_VISUAL) {
 			return;
-
-		VisualParticle* visualParticle = static_cast<VisualParticle*>(particle);
-		if (mParticleTextureCoordsRangeSet)
-		{
-			visualParticle->textureCoordsCurrent = uint16(Math::RangeRandom(Real(mParticleTextureCoordsRangeStart), Real(mParticleTextureCoordsRangeEnd) + 0.999f));
 		}
-		else
-		{
+
+		VisualParticle * visualParticle = static_cast<VisualParticle *>(particle);
+		if (mParticleTextureCoordsRangeSet) {
+			visualParticle->textureCoordsCurrent = uint16(Math::RangeRandom(Real(mParticleTextureCoordsRangeStart), Real(mParticleTextureCoordsRangeEnd) + 0.999f));
+		} else {
 			visualParticle->textureCoordsCurrent = mParticleTextureCoords;
 		}
     }
-	//-----------------------------------------------------------------------
-    Real ParticleEmitter::_initParticleTimeToLive(void)
-    {
+	
+    Real ParticleEmitter::_initParticleTimeToLive() {
 		/*  Generate a value for totalTimeToLive. Use time since start from the particle system as argument 
 			in getValue(). If mDynTotalTimeToLive doesnŽt exist, use the default value.
 		*/
 		return mDynamicAttributeHelper.calculate(mDynTotalTimeToLive, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart(), Particle::DEFAULT_TTL);
     }
-    //-----------------------------------------------------------------------
-	unsigned short ParticleEmitter::_calculateRequestedParticles(Real timeElapsed)
-	{
+    
+	unsigned short ParticleEmitter::_calculateRequestedParticles(Real timeElapsed) {
 		unsigned short requestedParticles = 0;
         
-		if (mEnabled)
-		{
-			if (mDynEmissionRate && mParentTechnique && mParentTechnique->getParentSystem())
-			{
+		if (mEnabled) {
+			if (mDynEmissionRate && mParentTechnique && mParentTechnique->getParentSystem()) {
 				Real rate = mDynEmissionRate->getValue(mParentTechnique->getParentSystem()->getTimeElapsedSinceStart());
-				if (mEmissionRateCameraDependency)
-				{
+				if (mEmissionRateCameraDependency) {
 					// Affect the emission rate based on the camera distance
 					mEmissionRateCameraDependency->affect(rate, mParentTechnique->getCameraSquareDistance());
 				}
-				if (mForceEmission)
-				{
-					if (mForceEmissionExecuted)
-					{
+				if (mForceEmission) {
+					if (mForceEmissionExecuted) {
 						// It is a single-shot system, so there is nothing left anymore.
 						requestedParticles = 0;
-					}
-					else
-					{
+					} else {
 						// Ignore the time. Just emit everything at once (if you absolutely need it).
 						// The emitter cannot be disabled yet, because it needs to emit its particles first.
 						requestedParticles = static_cast<unsigned short>(rate);
 						mForceEmissionExecuted = true;
 					}
-				}
-				else
-				{
+				} else {
 					// Particle emission is time driven
 					mRemainder += rate * timeElapsed;
 					requestedParticles = static_cast<unsigned short>(mRemainder);
@@ -897,30 +750,21 @@ namespace ParticleUniverse
 			}
 
 			// Determine whether the duration period has been exceeded.
-			if (mDynDurationSet)
-			{
+			if (mDynDurationSet) {
 				mDurationRemain -= timeElapsed;
-				if (mDurationRemain <= 0)
-				{
+				if (mDurationRemain <= 0) {
 					setEnabled(false);
 				}
 			}
-		}
-		else if (mDynRepeatDelaySet)
-		{
+		} else if (mDynRepeatDelaySet) {
 			mRepeatDelayRemain -= timeElapsed;
-			if (mRepeatDelayRemain <= 0)
-			{
+			if (mRepeatDelayRemain <= 0) {
 				// Initialise again (if stopfade isn't set)
-				if (mParentTechnique)
-				{
-					if (!mParentTechnique->isStopFade())
-					{
+				if (mParentTechnique) {
+					if (!mParentTechnique->isStopFade()) {
 						setEnabled(true);
 					}
-				}
-				else
-				{
+				} else {
 					setEnabled(true);
 				}
 			}
@@ -928,20 +772,18 @@ namespace ParticleUniverse
 
 		return requestedParticles;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleEmitter::_initParticleDimensions(Particle* particle)
-    {
-		if (particle->particleType != Particle::PT_VISUAL)
+	
+	void ParticleEmitter::_initParticleDimensions(Particle * particle) {
+		if (particle->particleType != Particle::PT_VISUAL) {
 			return;
+		}
 
 		// Only continue if one of them is set
-		VisualParticle* visualParticle = static_cast<VisualParticle*>(particle);
-		if (mDynParticleAllDimensionsSet || mDynParticleWidthSet || mDynParticleHeightSet || mDynParticleDepthSet)
-		{
+		VisualParticle * visualParticle = static_cast<VisualParticle *>(particle);
+		if (mDynParticleAllDimensionsSet || mDynParticleWidthSet || mDynParticleHeightSet || mDynParticleDepthSet) {
 			// Set all dimensions equal ...
 			Real extend = 0;
-			if (mDynParticleAllDimensionsSet && mDynParticleAllDimensions)
-			{
+			if (mDynParticleAllDimensionsSet && mDynParticleAllDimensions) {
 				extend = mDynamicAttributeHelper.calculate(mDynParticleAllDimensions, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart());
 				visualParticle->setOwnDimensions(_mEmitterScale.x * extend, _mEmitterScale.y * extend, _mEmitterScale.z * extend);
 				return;
@@ -951,16 +793,13 @@ namespace ParticleUniverse
 			Real width = 0;
 			Real height = 0;
 			Real depth = 0;
-			if (mDynParticleWidthSet && mDynParticleWidth)
-			{
+			if (mDynParticleWidthSet && mDynParticleWidth) {
 				width = mDynamicAttributeHelper.calculate(mDynParticleWidth, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart());
 			}
-			if (mDynParticleHeightSet && mDynParticleHeight)
-			{
+			if (mDynParticleHeightSet && mDynParticleHeight) {
 				height = mDynamicAttributeHelper.calculate(mDynParticleHeight, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart());
 			}
-			if (mDynParticleDepthSet && mDynParticleDepth)
-			{
+			if (mDynParticleDepthSet && mDynParticleDepth) {
 				depth = mDynamicAttributeHelper.calculate(mDynParticleDepth, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart());
 			}
 	
@@ -968,13 +807,10 @@ namespace ParticleUniverse
 			@remarks
 				If one of the dimensions is 0, it will be overridden by the default value later on.
 			*/
-			if (mDynParticleWidthSet || mDynParticleHeightSet || mDynParticleDepthSet)
-			{
+			if (mDynParticleWidthSet || mDynParticleHeightSet || mDynParticleDepthSet) {
 				visualParticle->setOwnDimensions(_mEmitterScale.x * width, _mEmitterScale.y * height, _mEmitterScale.z * depth);
 			}
-		}
-		else
-		{
+		} else {
 			// Just set the width, height and depth, but these are just the default settings; the particle doesn't
 			// have own dimensions. Recalculate the bounding sphere radius.
 			visualParticle->width = _mEmitterScale.x * mParentTechnique->getDefaultWidth();
@@ -983,4 +819,5 @@ namespace ParticleUniverse
 			visualParticle->_calculateBoundingSphereRadius();
 		}
 	}
-}
+
+} /* namespace ParticleUniverse */

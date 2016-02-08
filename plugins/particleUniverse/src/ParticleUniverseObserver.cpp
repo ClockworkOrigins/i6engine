@@ -26,180 +26,133 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseEventHandler.h"
 #include "ParticleUniverseSystemManager.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	const bool ParticleObserver::DEFAULT_ENABLED = true;
 	const Particle::ParticleType ParticleObserver::DEFAULT_PARTICLE_TYPE = Particle::PT_VISUAL;
-	const Real ParticleObserver::DEFAULT_INTERVAL = 0.05f;
+	const Real ParticleObserver::DEFAULT_INTERVAL = 0.05;
 	const bool ParticleObserver::DEFAULT_UNTIL_EVENT = false;
 
-	//-----------------------------------------------------------------------
-	ParticleObserver::ParticleObserver(void) : 
-		IAlias(),
-		IElement(),
-		mParentTechnique(0),
-		mName(BLANK_STRING),
-		mEnabled(DEFAULT_ENABLED),
-		mOriginalEnabled(DEFAULT_ENABLED),
-		mOriginalEnabledSet(false),
-		mObserve(true),
-		mObserveUntilEvent(DEFAULT_UNTIL_EVENT),
-		mEventHandlersExecuted(false),
-		_mObserverScale(Vector3::UNIT_SCALE),
-		mParticleTypeToObserve(DEFAULT_PARTICLE_TYPE),
-		mParticleTypeToObserveSet(false),
-		mObserverInterval(DEFAULT_INTERVAL),
-		mObserverIntervalRemainder(0.0),
-		mObserverIntervalSet(false)
-	{
+	
+	ParticleObserver::ParticleObserver() : IAlias(), IElement(), mParentTechnique(nullptr), mName(BLANK_STRING), mEnabled(DEFAULT_ENABLED), mOriginalEnabled(DEFAULT_ENABLED), mOriginalEnabledSet(false), mObserve(true), mObserveUntilEvent(DEFAULT_UNTIL_EVENT), mEventHandlersExecuted(false), _mObserverScale(Vector3::UNIT_SCALE), mParticleTypeToObserve(DEFAULT_PARTICLE_TYPE), mParticleTypeToObserveSet(false), mObserverInterval(DEFAULT_INTERVAL), mObserverIntervalRemainder(0.0), mObserverIntervalSet(false) {
 		mAliasType = AT_OBSERVER;
 	}
-	//-----------------------------------------------------------------------
-	ParticleObserver::~ParticleObserver(void)
-	{
+	
+	ParticleObserver::~ParticleObserver() {
 		destroyAllEventHandlers();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::_notifyStart (void)
-	{
+	
+	void ParticleObserver::_notifyStart() {
 		mEventHandlersExecuted = false;
 		mObserve = true;
 		setEnabled(mOriginalEnabled);
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleObserver::isEnabled(void) const
-	{
+	
+	bool ParticleObserver::isEnabled() const {
 		return mEnabled;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleObserver::_getOriginalEnabled(void) const
-	{
+	
+	bool ParticleObserver::_getOriginalEnabled() const {
 		return mOriginalEnabled;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::setEnabled(bool enabled)
-	{
+	
+	void ParticleObserver::setEnabled(bool enabled) {
 		mEnabled = enabled;
-		if (!mOriginalEnabledSet)
-		{
+		if (!mOriginalEnabledSet) {
 			// Only one time is permitted
 			mOriginalEnabled = enabled;
 			mOriginalEnabledSet = true;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::_resetEnabled(void)
-	{
+	
+	void ParticleObserver::_resetEnabled() {
 		mOriginalEnabledSet = false;
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleObserver::getObserverInterval(void) const
-	{
+	
+	Real ParticleObserver::getObserverInterval() const {
 		return mObserverInterval;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::setObserverInterval(Real observerInterval)
-	{
+	
+	void ParticleObserver::setObserverInterval(Real observerInterval) {
 		mObserverInterval = observerInterval;
 		mObserverIntervalSet = true;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleObserver::getObserveUntilEvent(void) const
-	{
+	
+	bool ParticleObserver::getObserveUntilEvent() const {
 		return mObserveUntilEvent;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::setObserveUntilEvent(bool observeUntilEvent)
-	{
+	
+	void ParticleObserver::setObserveUntilEvent(bool observeUntilEvent) {
 		mObserveUntilEvent = observeUntilEvent;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::_notifyRescaled(const Vector3& scale)
-	{
+	
+	void ParticleObserver::_notifyRescaled(const Vector3 & scale) {
 		_mObserverScale = scale;
 
-		if (mEventHandlers.empty())
+		if (mEventHandlers.empty()) {
 			return;
+		}
 
-		ParticleEventHandlerConstIterator it;
-		ParticleEventHandlerConstIterator itEnd = mEventHandlers.end();
-		for (it = mEventHandlers.begin(); it != itEnd; ++it)
-		{
+		for (ParticleEventHandlerConstIterator it = mEventHandlers.begin(); it != mEventHandlers.end(); ++it) {
 			(*it)->_notifyRescaled(scale);
 		}
 	}
-	//-----------------------------------------------------------------------
-	ParticleEventHandler* ParticleObserver::createEventHandler(const String& eventHandlerType)
-	{
+	
+	ParticleEventHandler * ParticleObserver::createEventHandler(const String & eventHandlerType) {
 		assert(eventHandlerType != BLANK_STRING && "eventHandlerType is empty!");
-		ParticleEventHandler* eventHandler = ParticleSystemManager::getSingletonPtr()->createEventHandler(eventHandlerType);
+		ParticleEventHandler * eventHandler = ParticleSystemManager::getSingletonPtr()->createEventHandler(eventHandlerType);
 		addEventHandler(eventHandler);
 		return eventHandler;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::addEventHandler(ParticleEventHandler* eventHandler)
-	{
+	
+	void ParticleObserver::addEventHandler(ParticleEventHandler * eventHandler) {
 		assert(eventHandler && "EventHandler is null!");
 		mEventHandlers.push_back(eventHandler);
 		eventHandler->setParentObserver(this);
 		eventHandler->_notifyRescaled(_mObserverScale);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::removeEventHandler(ParticleEventHandler* eventHandler)
-	{
+	
+	void ParticleObserver::removeEventHandler(ParticleEventHandler * eventHandler) {
 		assert(eventHandler && "EventHandler is null!");
-		ParticleEventHandlerIterator it;
-		for (it = mEventHandlers.begin(); it != mEventHandlers.end(); ++it)
-		{
-			if (*it == eventHandler)
-			{
+		for (ParticleEventHandlerIterator it = mEventHandlers.begin(); it != mEventHandlers.end(); ++it) {
+			if (*it == eventHandler) {
 				// Remove it
 				mEventHandlers.erase(it);
 				break;
 			}
 		}
 
-		eventHandler->setParentObserver(0);
+		eventHandler->setParentObserver(nullptr);
 	}
-	//-----------------------------------------------------------------------
-	ParticleEventHandler* ParticleObserver::getEventHandler (size_t index) const
-	{
+	
+	ParticleEventHandler * ParticleObserver::getEventHandler(size_t index) const {
 		assert(index < mEventHandlers.size() && "EventHandler index out of bounds!");
 		return mEventHandlers[index];
 	}
-	//-----------------------------------------------------------------------
-	ParticleEventHandler* ParticleObserver::getEventHandler (const String& eventHandlerName) const
-	{
-		if (eventHandlerName == BLANK_STRING)
-			return 0;
+	
+	ParticleEventHandler * ParticleObserver::getEventHandler(const String & eventHandlerName) const {
+		if (eventHandlerName == BLANK_STRING) {
+			return nullptr;
+		}
 
-		ParticleEventHandlerConstIterator it;
-		ParticleEventHandlerConstIterator itEnd = mEventHandlers.end();
-		for (it = mEventHandlers.begin(); it != itEnd; ++it)
-		{
-			if ((*it)->getName() == eventHandlerName)
-			{
+		for (ParticleEventHandlerConstIterator it = mEventHandlers.begin(); it != mEventHandlers.end(); ++it) {
+			if ((*it)->getName() == eventHandlerName) {
 				return *it;
 			}
 		}
 		
-		return 0;
+		return nullptr;
 	}
-	//-----------------------------------------------------------------------
-	size_t ParticleObserver::getNumEventHandlers (void) const
-	{
+	
+	size_t ParticleObserver::getNumEventHandlers() const {
 		return mEventHandlers.size();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::destroyEventHandler(ParticleEventHandler* eventHandler)
-	{
+	
+	void ParticleObserver::destroyEventHandler(ParticleEventHandler * eventHandler) {
 		assert(eventHandler && "EventHandler is null!");
-		ParticleEventHandlerIterator it;
-		for (it = mEventHandlers.begin(); it != mEventHandlers.end(); ++it)
-		{
-			if (*it == eventHandler)
-			{
+		for (ParticleEventHandlerIterator it = mEventHandlers.begin(); it != mEventHandlers.end(); ++it) {
+			if (*it == eventHandler) {
 				// Detroy it
 				ParticleSystemManager::getSingletonPtr()->destroyEventHandler(*it);
 				mEventHandlers.erase(it);
@@ -207,29 +160,23 @@ namespace ParticleUniverse
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::destroyEventHandler (size_t index)
-	{
+	
+	void ParticleObserver::destroyEventHandler(size_t index) {
 		destroyEventHandler(getEventHandler(index));
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::destroyAllEventHandlers (void)
-	{
-		ParticleEventHandlerIterator it;
-		for (it = mEventHandlers.begin(); it != mEventHandlers.end(); ++it)
-		{
+	
+	void ParticleObserver::destroyAllEventHandlers() {
+		for (ParticleEventHandlerIterator it = mEventHandlers.begin(); it != mEventHandlers.end(); ++it) {
 			ParticleSystemManager::getSingletonPtr()->destroyEventHandler(*it);
 		}
 		mEventHandlers.clear();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::copyAttributesTo(ParticleObserver* observer)
-	{
+	
+	void ParticleObserver::copyAttributesTo(ParticleObserver * observer) {
 		copyParentAttributesTo(observer);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::copyParentAttributesTo(ParticleObserver* observer)
-	{
+	
+	void ParticleObserver::copyParentAttributesTo(ParticleObserver * observer) {
 		// Copy attributes
 		observer->setName(mName);
 		observer->mParticleTypeToObserve = mParticleTypeToObserve;
@@ -246,95 +193,80 @@ namespace ParticleUniverse
 		observer->mOriginalEnabledSet = mOriginalEnabledSet;
 
 		// Copy event handlers
-		size_t i = 0;
-		ParticleEventHandler* eventHandler = 0;
-		ParticleEventHandler* clonedEventHandler = 0;
-		for(i = 0; i < getNumEventHandlers(); ++i)
-		{
+		ParticleEventHandler * eventHandler = nullptr;
+		ParticleEventHandler * clonedEventHandler = nullptr;
+		for (size_t i = 0; i < getNumEventHandlers(); ++i) {
 			eventHandler = getEventHandler(i);
 			clonedEventHandler = ParticleSystemManager::getSingletonPtr()->cloneEventHandler(eventHandler);
 			observer->addEventHandler(clonedEventHandler);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::setParticleTypeToObserve(const Particle::ParticleType particleTypeToObserve)
-	{
+	
+	void ParticleObserver::setParticleTypeToObserve(const Particle::ParticleType particleTypeToObserve) {
 		mParticleTypeToObserve = particleTypeToObserve;
 		mParticleTypeToObserveSet = true;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::_preProcessParticles(ParticleTechnique* technique, Real timeElapsed)
-	{
-		if (!mEnabled)
+	
+	void ParticleObserver::_preProcessParticles(ParticleTechnique * technique, Real timeElapsed) {
+		if (!mEnabled) {
 			return;
+		}
 
-		if (mObserverIntervalSet)
-		{
+		if (mObserverIntervalSet) {
 			mObserverIntervalRemainder -= timeElapsed;
-			if (mObserverIntervalRemainder < 0)
-			{
+			if (mObserverIntervalRemainder < 0) {
 				mObserverIntervalRemainder += mObserverInterval;
 				mObserve = true;
-			}
-			else
-			{
+			} else {
 				mObserve = false;
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::_processParticle(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed, bool firstParticle)
-	{
-		if (!mEnabled)
+	
+	void ParticleObserver::_processParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed, bool firstParticle) {
+		if (!mEnabled) {
 			return;
+		}
 
 		// Call the _firstParticle() function if the first particle in the update loop is encountered.
-		if (firstParticle)
-		{
+		if (firstParticle) {
 			_firstParticle(particleTechnique, particle, timeElapsed);
 		}
 
-		if (mParticleTypeToObserveSet && particle->particleType != mParticleTypeToObserve)
+		if (mParticleTypeToObserveSet && particle->particleType != mParticleTypeToObserve) {
 			return;
+		}
 
 		// Observe
 		_handleObserve(particleTechnique, particle, timeElapsed);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::_handleObserve (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (mEnabled && mObserve)
-		{
-			if (mObserveUntilEvent && mEventHandlersExecuted)
-			{
+	
+	void ParticleObserver::_handleObserve(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (mEnabled && mObserve) {
+			if (mObserveUntilEvent && mEventHandlersExecuted) {
 				// Don't continue if mObserveUntilEvent is set and the event handlers are already called once.
 				return;
 			}
-			if (_observe(particleTechnique, particle, timeElapsed))
-			{
+			if (_observe(particleTechnique, particle, timeElapsed)) {
 				// Handle the event
 				_handleEvent (particleTechnique, particle, timeElapsed);
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleObserver::_handleEvent (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (mEventHandlers.empty())
+	
+	void ParticleObserver::_handleEvent(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (mEventHandlers.empty()) {
 			return;
+		}
 
-		ParticleEventHandlerConstIterator it;
-		ParticleEventHandlerConstIterator itEnd = mEventHandlers.end();
-		for (it = mEventHandlers.begin(); it != itEnd; ++it)
-		{
+		for (ParticleEventHandlerConstIterator it = mEventHandlers.begin(); it != mEventHandlers.end(); ++it) {
 			(*it)->_handle(particleTechnique, particle, timeElapsed);
 		}
 		mEventHandlersExecuted = true;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleObserver::isParticleTypeToObserveSet(void) const
-	{
+	
+	bool ParticleObserver::isParticleTypeToObserveSet() const {
 		return mParticleTypeToObserveSet;
 	}
 
-}
+} /* namespace ParticleUniverse */

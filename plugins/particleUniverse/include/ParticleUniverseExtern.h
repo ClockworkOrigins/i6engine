@@ -28,8 +28,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseIElement.h"
 #include "ParticleUniverseTypes.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The Extern class is the abstract class for all extern components. Each subclass of Extern wraps a
 		particular external component and forms a bridge between the external component and the
 		ParticleUniverse (or to be more specific, the ParticleTechnique).

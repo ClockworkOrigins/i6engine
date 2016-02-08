@@ -27,57 +27,46 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseObserver.h"
 #include "ParticleUniverseSystemManager.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/**************************************************************************
 	 * ParticleEventHandlerTranslator
 	 *************************************************************************/
-	ParticleEventHandlerTranslator::ParticleEventHandlerTranslator()
-		:mParticleEventHandler(0)
-	{
+	ParticleEventHandlerTranslator::ParticleEventHandlerTranslator() : mParticleEventHandler(nullptr) {
 	}
-	//-------------------------------------------------------------------------
-	void ParticleEventHandlerTranslator::translate(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		ObjectAbstractNode* obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
-		ObjectAbstractNode* parent = obj->parent ? reinterpret_cast<ObjectAbstractNode*>(obj->parent) : 0;
+
+	void ParticleEventHandlerTranslator::translate(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		ObjectAbstractNode * obj = reinterpret_cast<ObjectAbstractNode *>(node.get());
+		ObjectAbstractNode * parent = obj->parent ? reinterpret_cast<ObjectAbstractNode *>(obj->parent) : nullptr;
 
 		// The name of the obj is the type of the ParticleEventHandler
 		// Remark: This can be solved by using a listener, so that obj->values is filled with type + name. Something for later
 		String type;
-		if(!obj->name.empty())
-		{
+		if (!obj->name.empty()) {
 			type = obj->name;
-		}
-		else
-		{
+		} else {
 			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
 		// Get the factory
-		ParticleEventHandlerFactory* particleEventHandlerFactory = ParticleSystemManager::getSingletonPtr()->getEventHandlerFactory(type);
-		if (!particleEventHandlerFactory)
-		{
+		ParticleEventHandlerFactory * particleEventHandlerFactory = ParticleSystemManager::getSingletonPtr()->getEventHandlerFactory(type);
+		if (!particleEventHandlerFactory) {
 			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
 		// Create the ParticleEventHandler
 		mParticleEventHandler = ParticleSystemManager::getSingletonPtr()->createEventHandler(type);
-		if (!mParticleEventHandler)
-		{
+		if (!mParticleEventHandler) {
 			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
-		if (!obj->parent->context.isEmpty())
-		{
-			ParticleObserver* observer = any_cast<ParticleObserver*>(obj->parent->context);
+		if (!obj->parent->context.isEmpty()) {
+			ParticleObserver * observer = any_cast<ParticleObserver *>(obj->parent->context);
 			observer->addEventHandler(mParticleEventHandler);
-		}
-		else
-		{
+		} else {
 			// It is an alias
 			mParticleEventHandler->setAliasName(parent->name);
 			ParticleSystemManager::getSingletonPtr()->addAlias(mParticleEventHandler);
@@ -85,8 +74,7 @@ namespace ParticleUniverse
 
 		// The first value is the (optional) name
 		String name;
-		if(!obj->values.empty())
-		{
+		if (!obj->values.empty()) {
 			getString(obj->values.front(), &name);
 			mParticleEventHandler->setName(name);
 		}
@@ -95,45 +83,29 @@ namespace ParticleUniverse
 		obj->context = Any(mParticleEventHandler);
 
 		// Run through properties
-		for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
-		{
+		for (AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i) {
 			// No properties of its own
-			if((*i)->type == ANT_PROPERTY)
-			{
-				PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
-				if (particleEventHandlerFactory->translateChildProperty(compiler, *i))
-				{
+			if ((*i)->type == ANT_PROPERTY) {
+				PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>((*i).get());
+				if (particleEventHandlerFactory->translateChildProperty(compiler, *i)) {
 					// Parsed the property by another translator; do nothing
-				}
-				else
-				{
+				} else {
 					errorUnexpectedProperty(compiler, prop);
 				}
-			}
-			else if((*i)->type == ANT_OBJECT)
-			{
-				if (particleEventHandlerFactory->translateChildObject(compiler, *i))
-				{
+			} else if ((*i)->type == ANT_OBJECT) {
+				if (particleEventHandlerFactory->translateChildObject(compiler, *i)) {
 					// Parsed the object by another translator; do nothing
-				}
-				else
-				{
+				} else {
 					processNode(compiler, *i);
 				}
-			}
-            else
-			{
+			} else {
 				errorUnexpectedToken(compiler, *i);
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
 
-	void ParticleEventHandlerWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	void ParticleEventHandlerWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Nothing yet
 	}
 
-}
+} /* namespace ParticleUniverse */

@@ -26,26 +26,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniversePrerequisites.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	struct ParticleUniverseEvent;
 
 	/*  ParticleSystemListener establishes a channel between a ParticleSystem and some other object, which is a 
 	    type of ParticleSystemListener.
 	*/
-	class _ParticleUniverseExport ParticleSystemListener
-	{
-		public:
+	class _ParticleUniverseExport ParticleSystemListener {
+	public:
+		ParticleSystemListener() {}
+		virtual ~ParticleSystemListener() {}
 
-			ParticleSystemListener(void) {}
-			virtual ~ParticleSystemListener(void) {}
-
-			/*  Callback function, called for all event types.
-			*/
-			virtual void handleParticleSystemEvent(ParticleSystem* particleSystem, ParticleUniverseEvent& particleUniverseEvent) = 0;
-
+		/*  Callback function, called for all event types.
+		*/
+		virtual void handleParticleSystemEvent(ParticleSystem * particleSystem, ParticleUniverseEvent & particleUniverseEvent) = 0;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SYSTEM_LISTENER_H__ */

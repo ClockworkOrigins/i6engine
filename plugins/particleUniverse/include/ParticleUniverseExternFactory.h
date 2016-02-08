@@ -24,50 +24,46 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_EXTERN_FACTORY_H__
 #define __PU_EXTERN_FACTORY_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseExtern.h"
 #include "ParticleUniverseExternTokens.h"
-#include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptReader.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This is the base factory of all Extern implementations.
     */
-	class _ParticleUniverseExport ExternFactory : public ScriptReader, public ScriptWriter, public FactoryAlloc
-	{
-	    protected:
-
-			/** 
-	        */
-			template <class T>
-			Extern* _createExtern(void)
-			{
-				Extern* externObject = PU_NEW T();
-				externObject->setExternType(getExternType());
-				return externObject;
-			}
-
+	class _ParticleUniverseExport ExternFactory : public ScriptReader, public ScriptWriter, public FactoryAlloc {
 	public:
-			ExternFactory(void) {}
-			virtual ~ExternFactory(void) {}
+		ExternFactory() {}
+		virtual ~ExternFactory() {}
 
-		    /** Returns the type of the factory, which identifies the Extern type this factory creates. */
-			virtual String getExternType(void) const = 0;
+		/** Returns the type of the factory, which identifies the Extern type this factory creates. */
+		virtual String getExternType() const = 0;
 
-			/** Creates a new Extern instance.
-		    @remarks
-	        */
-		    virtual Extern* createExtern(void) = 0;
+		/** Creates a new Extern instance.
+		@remarks
+	    */
+		virtual Extern * createExtern() = 0;
 
-			/** Delete an Extern.
-	        */
-			void destroyExtern (Extern* externObject)
-			{
-				if (externObject)
-					PU_DELETE externObject;
+		/** Delete an Extern.
+	    */
+		void destroyExtern(Extern * externObject) {
+			if (externObject) {
+				PU_DELETE externObject;
 			}
+		}
+
+	protected:
+		/**
+		*/
+		template<class T>
+		Extern * _createExtern() {
+			Extern * externObject = PU_NEW T();
+			externObject->setExternType(getExternType());
+			return externObject;
+		}
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_EXTERN_FACTORY_H__ */

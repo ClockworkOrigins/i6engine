@@ -101,21 +101,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OGRE/OgreRoot.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	const String sPluginName = "ParticleUniverse";
-	//---------------------------------------------------------------------
-	ParticleUniversePlugin::ParticleUniversePlugin()
-	{
+	
+	ParticleUniversePlugin::ParticleUniversePlugin() {
 	}
-	//---------------------------------------------------------------------
-	const String& ParticleUniversePlugin::getName() const
-	{
+	
+	const String & ParticleUniversePlugin::getName() const {
 		return sPluginName;
 	}
-	//---------------------------------------------------------------------
-	void ParticleUniversePlugin::install()
-	{
+	
+	void ParticleUniversePlugin::install() {
 #ifdef PU_PHYSICS_PHYSX
 		// ----------------------- Create the PhysXBridge -----------------------
 		mPhysXBridge = PU_NEW_T(PhysXBridge, MEMCATEGORY_SCENE_CONTROL)();
@@ -125,7 +122,7 @@ namespace ParticleUniverse
 		mParticleSystemManager = PU_NEW_T(ParticleSystemManager, MEMCATEGORY_SCENE_CONTROL)();
 
 		// ----------------------- Create renderer factories -----------------------
-		ParticleRendererFactory* particleRendererFactory;
+		ParticleRendererFactory * particleRendererFactory;
 
 		particleRendererFactory = PU_NEW BeamRendererFactory();
 		mParticleSystemManager->addRendererFactory(particleRendererFactory);
@@ -156,7 +153,7 @@ namespace ParticleUniverse
 		mRendererFactories.push_back(particleRendererFactory);
 
 		// ----------------------- Create emitter factories -----------------------
-		ParticleEmitterFactory* particleEmitterFactory;
+		ParticleEmitterFactory * particleEmitterFactory;
 		particleEmitterFactory = PU_NEW PointEmitterFactory();
 		mParticleSystemManager->addEmitterFactory(particleEmitterFactory);
 		mEmitterFactories.push_back(particleEmitterFactory);
@@ -194,7 +191,7 @@ namespace ParticleUniverse
 		mEmitterFactories.push_back(particleEmitterFactory);
 
 		// ----------------------- Create affector factories -----------------------
-		ParticleAffectorFactory* particleAffectorFactory;
+		ParticleAffectorFactory * particleAffectorFactory;
 		particleAffectorFactory = PU_NEW BaseForceAffectorFactory();
 		mParticleSystemManager->addAffectorFactory(particleAffectorFactory);
 		mAffectorFactories.push_back(particleAffectorFactory);
@@ -300,7 +297,7 @@ namespace ParticleUniverse
 		mAffectorFactories.push_back(particleAffectorFactory);
 
 		// ----------------------- Create observer factories -----------------------
-		ParticleObserverFactory* particleObserverFactory;
+		ParticleObserverFactory * particleObserverFactory;
 		particleObserverFactory = PU_NEW OnExpireObserverFactory();
 		mParticleSystemManager->addObserverFactory(particleObserverFactory);
 		mObserverFactories.push_back(particleObserverFactory);
@@ -346,7 +343,7 @@ namespace ParticleUniverse
 		mObserverFactories.push_back(particleObserverFactory);
 
 		// ----------------------- Create event handler factories -----------------------
-		ParticleEventHandlerFactory* particleEventHandlerFactory;
+		ParticleEventHandlerFactory * particleEventHandlerFactory;
 		particleEventHandlerFactory = PU_NEW DoExpireEventHandlerFactory();
 		mParticleSystemManager->addEventHandlerFactory(particleEventHandlerFactory);
 		mEventHandlerFactories.push_back(particleEventHandlerFactory);
@@ -376,7 +373,7 @@ namespace ParticleUniverse
 		mEventHandlerFactories.push_back(particleEventHandlerFactory);
 
 		// ----------------------- Create extern factories -----------------------
-		ExternFactory* externFactory;
+		ExternFactory * externFactory;
 		externFactory = PU_NEW GravityExternFactory();
 		mParticleSystemManager->addExternFactory(externFactory);
 		mExternFactories.push_back(externFactory);
@@ -408,65 +405,48 @@ namespace ParticleUniverse
 #endif //PU_PHYSICS_PHYSX
 
 		// ----------------------- Create behaviour factories -----------------------
-		ParticleBehaviourFactory* particleBehaviourFactory;
+		ParticleBehaviourFactory * particleBehaviourFactory;
 		particleBehaviourFactory = PU_NEW SlaveBehaviourFactory();
 		mParticleSystemManager->addBehaviourFactory(particleBehaviourFactory);
 		mBehaviourFactories.push_back(particleBehaviourFactory);
 	}
-	//---------------------------------------------------------------------
-	void ParticleUniversePlugin::initialise()
-	{
+	
+	void ParticleUniversePlugin::initialise() {
 	}
-	//---------------------------------------------------------------------
-	void ParticleUniversePlugin::shutdown()
-	{
+	
+	void ParticleUniversePlugin::shutdown() {
 		// Delete the manager.
 		// The manager must be deleted before all factories are deleted (also the factories of other plugins)
 		// PU_DELETE_T(mParticleSystemManager, ParticleSystemManager, MEMCATEGORY_SCENE_CONTROL); // TODO: (Daniel) check this, crashes actually
 	}
-	//---------------------------------------------------------------------
-	void ParticleUniversePlugin::uninstall()
-	{
+	
+	void ParticleUniversePlugin::uninstall() {
 		// Delete all factories created in dllStartPlugin (after deleting the ParticleSystemManager)
-		vector<ParticleRendererFactory*>::iterator ri;
-		for (ri = mRendererFactories.begin(); ri != mRendererFactories.end(); ++ri)
-		{
+		for (vector<ParticleRendererFactory *>::iterator ri = mRendererFactories.begin(); ri != mRendererFactories.end(); ++ri) {
 			PU_DELETE *ri;
 		}
 
-		vector<ParticleEmitterFactory*>::iterator ei;
-		for (ei = mEmitterFactories.begin(); ei != mEmitterFactories.end(); ++ei)
-		{
+		for (vector<ParticleEmitterFactory *>::iterator ei = mEmitterFactories.begin(); ei != mEmitterFactories.end(); ++ei) {
 			PU_DELETE *ei;
 		}
 
-		vector<ParticleAffectorFactory*>::iterator ai;
-		for (ai = mAffectorFactories.begin(); ai != mAffectorFactories.end(); ++ai)
-		{
+		for (vector<ParticleAffectorFactory *>::iterator ai = mAffectorFactories.begin(); ai != mAffectorFactories.end(); ++ai) {
 			PU_DELETE *ai;
 		}
 		
-		vector<ParticleObserverFactory*>::iterator oi;
-		for (oi = mObserverFactories.begin(); oi != mObserverFactories.end(); ++oi)
-		{
+		for (vector<ParticleObserverFactory *>::iterator oi = mObserverFactories.begin(); oi != mObserverFactories.end(); ++oi) {
 			PU_DELETE *oi;
 		}
 		
-		vector<ParticleEventHandlerFactory*>::iterator ehi;
-		for (ehi = mEventHandlerFactories.begin(); ehi != mEventHandlerFactories.end(); ++ehi)
-		{
+		for (vector<ParticleEventHandlerFactory *>::iterator ehi = mEventHandlerFactories.begin(); ehi != mEventHandlerFactories.end(); ++ehi) {
 			PU_DELETE *ehi;
 		}
 
-		vector<ExternFactory*>::iterator exi;
-		for (exi = mExternFactories.begin(); exi != mExternFactories.end(); ++exi)
-		{
+		for (vector<ExternFactory *>::iterator exi = mExternFactories.begin(); exi != mExternFactories.end(); ++exi) {
 			PU_DELETE *exi;
 		}
 
-		vector<ParticleBehaviourFactory*>::iterator bi;
-		for (bi = mBehaviourFactories.begin(); bi != mBehaviourFactories.end(); ++bi)
-		{
+		for (vector<ParticleBehaviourFactory *>::iterator bi = mBehaviourFactories.begin(); bi != mBehaviourFactories.end(); ++bi) {
 			PU_DELETE *bi;
 		}
 
@@ -475,4 +455,5 @@ namespace ParticleUniverse
 		PU_DELETE_T(mPhysXBridge, PhysXBridge, MEMCATEGORY_SCENE_CONTROL);
 #endif // PU_PHYSICS_PHYSX
 	}
-}
+
+} /* namespace ParticleUniverse */

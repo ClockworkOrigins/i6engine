@@ -24,49 +24,44 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_OBSERVER_FACTORY_H__
 #define __PU_OBSERVER_FACTORY_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseObserver.h"
 #include "ParticleUniverseObserverTokens.h"
-#include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptReader.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This is the base factory of all ParticleObserver implementations.
     */
-	class _ParticleUniverseExport ParticleObserverFactory : public ScriptReader, public ScriptWriter, public FactoryAlloc
-	{
-	    protected:
-
-			/** 
-	        */
-			template <class T>
-			ParticleObserver* _createObserver(void)
-			{
-				ParticleObserver* particleObserver = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
-				particleObserver->setObserverType(getObserverType());
-				return particleObserver;
-			}
-
+	class _ParticleUniverseExport ParticleObserverFactory : public ScriptReader, public ScriptWriter, public FactoryAlloc {
 	public:
-			ParticleObserverFactory(void) {}
-	        virtual ~ParticleObserverFactory(void) {}
+		ParticleObserverFactory() {}
+	    virtual ~ParticleObserverFactory() {}
 
-		    /** Returns the type of the factory, which identifies the particle observer type this factory creates. */
-			virtual String getObserverType(void) const = 0;
+		/** Returns the type of the factory, which identifies the particle observer type this factory creates. */
+		virtual String getObserverType() const = 0;
 
-	        /** Creates a new observer instance.
-		    @remarks
-	        */
-		    virtual ParticleObserver* createObserver(void) = 0;
+	    /** Creates a new observer instance.
+		@remarks
+	    */
+		virtual ParticleObserver * createObserver() = 0;
 
-			/** Delete an observer
-	        */
-			void destroyObserver (ParticleObserver* observer)
-			{
-				PU_DELETE_T(observer, ParticleObserver, MEMCATEGORY_SCENE_OBJECTS);
-			}
+		/** Delete an observer
+	    */
+		void destroyObserver (ParticleObserver * observer) {
+			PU_DELETE_T(observer, ParticleObserver, MEMCATEGORY_SCENE_OBJECTS);
+		}
+
+	protected:
+		/**
+		*/
+		template<class T>
+		ParticleObserver * _createObserver() {
+			ParticleObserver * particleObserver = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
+			particleObserver->setObserverType(getObserverType());
+			return particleObserver;
+		}
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_OBSERVER_FACTORY_H__ */

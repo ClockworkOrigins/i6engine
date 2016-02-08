@@ -31,11 +31,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OGRE/OgreSceneNode.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	ParticlePool::~ParticlePool (void)
-	{
+namespace ParticleUniverse {
+
+	
+	ParticlePool::~ParticlePool() {
 		// Destroy all visual particles
 		destroyAllVisualParticles();
 
@@ -51,229 +50,193 @@ namespace ParticleUniverse
 		// Destroy all particle system particles
 		destroyAllSystemParticles();
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::destroyParticles(const Particle::ParticleType particleType)
-	{
-		switch(particleType)
-		{
-			case Particle::PT_VISUAL:
-				destroyAllVisualParticles();
-				break;
-
-			case Particle::PT_EMITTER:
-				destroyAllEmitterParticles();
-				break;
-
-			case Particle::PT_TECHNIQUE:
-				destroyAllTechniqueParticles();
-				break;
-
-			case Particle::PT_AFFECTOR:
-				destroyAllAffectorParticles();
-				break;
-
-			case Particle::PT_SYSTEM:
-				destroyAllSystemParticles();
-				break;
-			default: {
-				break;
-			}
+	
+	void ParticlePool::destroyParticles(const Particle::ParticleType particleType) {
+		switch (particleType) {
+		case Particle::PT_VISUAL: {
+			destroyAllVisualParticles();
+			break;
+		}
+		case Particle::PT_EMITTER: {
+			destroyAllEmitterParticles();
+			break;
+		}
+		case Particle::PT_TECHNIQUE: {
+			destroyAllTechniqueParticles();
+			break;
+		}
+		case Particle::PT_AFFECTOR: {
+			destroyAllAffectorParticles();
+			break;
+		}
+		case Particle::PT_SYSTEM: {
+			destroyAllSystemParticles();
+			break;
+		}
+		default: {
+			break;
+		}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::destroyAllVisualParticles(void)
-	{
-		vector<VisualParticle*>::iterator it;
-		for (it = mVisualParticles.begin(); it != mVisualParticles.end(); ++it)
-		{
+	
+	void ParticlePool::destroyAllVisualParticles() {
+		for (vector<VisualParticle *>::iterator it = mVisualParticles.begin(); it != mVisualParticles.end(); ++it) {
 			PU_DELETE_T(*it, VisualParticle, MEMCATEGORY_SCENE_OBJECTS);
 		}
 		mVisualParticles.clear();
 		mVisualParticlesPool.clear();
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::destroyAllEmitterParticles(void)
-	{
-		vector<ParticleEmitter*>::iterator itEmitter;
-		for (itEmitter = mEmitters.begin(); itEmitter != mEmitters.end(); ++itEmitter)
-		{
+	
+	void ParticlePool::destroyAllEmitterParticles() {
+		for (vector<ParticleEmitter *>::iterator itEmitter = mEmitters.begin(); itEmitter != mEmitters.end(); ++itEmitter) {
 			ParticleSystemManager::getSingletonPtr()->destroyEmitter(*itEmitter);
 		}
 		mEmitters.clear();
 		mParticleEmitterPool.clear();
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::destroyAllTechniqueParticles(void)
-	{
-		vector<ParticleTechnique*>::iterator itTechnique;
-		for (itTechnique = mTechniques.begin(); itTechnique != mTechniques.end(); ++itTechnique)
-		{
+	
+	void ParticlePool::destroyAllTechniqueParticles() {
+		for (vector<ParticleTechnique *>::iterator itTechnique = mTechniques.begin(); itTechnique != mTechniques.end(); ++itTechnique) {
 			ParticleSystemManager::getSingletonPtr()->destroyTechnique(*itTechnique);
 		}
 		mTechniques.clear();
 		mParticleTechniquePool.clear();
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::destroyAllAffectorParticles(void)
-	{
-		vector<ParticleAffector*>::iterator itAffector;
-		for (itAffector = mAffectors.begin(); itAffector != mAffectors.end(); ++itAffector)
-		{
+	
+	void ParticlePool::destroyAllAffectorParticles() {
+		for (vector<ParticleAffector *>::iterator itAffector = mAffectors.begin(); itAffector != mAffectors.end(); ++itAffector) {
 			ParticleSystemManager::getSingletonPtr()->destroyAffector(*itAffector);
 		}
 		mAffectors.clear();
 		mParticleAffectorPool.clear();
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::destroyAllSystemParticles(void)
-	{
+	
+	void ParticlePool::destroyAllSystemParticles() {
 		// There is still a problem if the scene is cleared and this Particle System isn't deleted yet.
 		// mParentTechnique doesn�t always have a parent ParticleSystem; this is in case of an alias technique.
-		vector<String>::iterator itSystem;
-		if (mParentTechnique->getParentSystem())
-		{
-			Ogre::SceneManager* sceneManager = mParentTechnique->getParentSystem()->getSceneManager();
-			for (itSystem = mSystems.begin(); itSystem != mSystems.end(); ++itSystem)
-			{
+		if (mParentTechnique->getParentSystem()) {
+			Ogre::SceneManager * sceneManager = mParentTechnique->getParentSystem()->getSceneManager();
+			for (vector<String>::iterator itSystem = mSystems.begin(); itSystem != mSystems.end(); ++itSystem) {
 				ParticleSystemManager::getSingletonPtr()->destroyParticleSystem(*itSystem, sceneManager);
 			}
 		}
 		mSystems.clear();
 		mParticleSystemPool.clear();
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::setParentTechnique(ParticleTechnique* parentTechnique)
-	{
+	
+	void ParticlePool::setParentTechnique(ParticleTechnique * parentTechnique) {
 		mParentTechnique = parentTechnique;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticlePool::isEmpty(void)
-	{
-		return mVisualParticlesPool.isEmpty() && 
-			mParticleEmitterPool.isEmpty() && 
-			mParticleTechniquePool.isEmpty() && 
-			mParticleAffectorPool.isEmpty() &&
-			mParticleSystemPool.isEmpty();
+	
+	bool ParticlePool::isEmpty() {
+		return mVisualParticlesPool.isEmpty() && mParticleEmitterPool.isEmpty() && mParticleTechniquePool.isEmpty() && mParticleAffectorPool.isEmpty() && mParticleSystemPool.isEmpty();
 	}
-	//-----------------------------------------------------------------------
-	bool ParticlePool::isEmpty(const Particle::ParticleType particleType)
-	{
-		switch(particleType)
-		{
-			case Particle::PT_VISUAL:
-				return mVisualParticlesPool.isEmpty();
-				break;
-
-			case Particle::PT_EMITTER:
-				return mParticleEmitterPool.isEmpty();
-				break;
-
-			case Particle::PT_TECHNIQUE:
-				return mParticleTechniquePool.isEmpty();
-				break;
-
-			case Particle::PT_AFFECTOR:
-				return mParticleAffectorPool.isEmpty();
-				break;
-
-			case Particle::PT_SYSTEM:
-				return mParticleSystemPool.isEmpty();
-				break;
-			default: {
-				break;
-			}
+	
+	bool ParticlePool::isEmpty(const Particle::ParticleType particleType) {
+		switch (particleType) {
+		case Particle::PT_VISUAL: {
+			return mVisualParticlesPool.isEmpty();
+			break;
+		}
+		case Particle::PT_EMITTER: {
+			return mParticleEmitterPool.isEmpty();
+			break;
+		}
+		case Particle::PT_TECHNIQUE: {
+			return mParticleTechniquePool.isEmpty();
+			break;
+		}
+		case Particle::PT_AFFECTOR: {
+			return mParticleAffectorPool.isEmpty();
+			break;
+		}
+		case Particle::PT_SYSTEM: {
+			return mParticleSystemPool.isEmpty();
+			break;
+		}
+		default: {
+			break;
+		}
 		}
 
 		return true;
 	}
-	//-----------------------------------------------------------------------
-	size_t ParticlePool::getSize(void)
-	{
-		return mVisualParticlesPool.getSize() + 
-			mParticleEmitterPool.getSize() + 
-			mParticleTechniquePool.getSize() + 
-			mParticleAffectorPool.getSize() + 
-			mParticleSystemPool.getSize();
+	
+	size_t ParticlePool::getSize() {
+		return mVisualParticlesPool.getSize() + mParticleEmitterPool.getSize() + mParticleTechniquePool.getSize() + mParticleAffectorPool.getSize() + mParticleSystemPool.getSize();
 	}
-	//-----------------------------------------------------------------------
-	size_t ParticlePool::getSize(const Particle::ParticleType particleType)
-	{
-		switch(particleType)
-		{
-			case Particle::PT_VISUAL:
-				return mVisualParticlesPool.getSize();
-				break;
-
-			case Particle::PT_EMITTER:
-				return mParticleEmitterPool.getSize();
-				break;
-
-			case Particle::PT_TECHNIQUE:
-				return mParticleTechniquePool.getSize();
-				break;
-
-			case Particle::PT_AFFECTOR:
-				return mParticleAffectorPool.getSize();
-				break;
-
-			case Particle::PT_SYSTEM:
-				return mParticleSystemPool.getSize();
-				break;
-			default: {
-				break;
-			}
+	
+	size_t ParticlePool::getSize(const Particle::ParticleType particleType) {
+		switch (particleType) {
+		case Particle::PT_VISUAL: {
+			return mVisualParticlesPool.getSize();
+			break;
+		}
+		case Particle::PT_EMITTER: {
+			return mParticleEmitterPool.getSize();
+			break;
+		}
+		case Particle::PT_TECHNIQUE: {
+			return mParticleTechniquePool.getSize();
+			break;
+		}
+		case Particle::PT_AFFECTOR: {
+			return mParticleAffectorPool.getSize();
+			break;
+		}
+		case Particle::PT_SYSTEM: {
+			return mParticleSystemPool.getSize();
+			break;
+		}
+		default: {
+			break;
+		}
 		}
 
 		return 0;
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::_increaseVisualParticlePool(size_t size, 
-		Particle::ParticleBehaviourList& behaviours)
-	{
+	
+	void ParticlePool::_increaseVisualParticlePool(size_t size, Particle::ParticleBehaviourList & behaviours) {
 		size_t oldSize = mVisualParticles.size();
-		if (size < oldSize)
+		if (size < oldSize) {
 			return;
+		}
 
 		// Create new visual particles
-		VisualParticle* particle = 0;
-		for (size_t i = oldSize; i < size; i++)
-		{
+		VisualParticle * particle = nullptr;
+		for (size_t i = oldSize; i < size; i++) {
 			particle = PU_NEW_T(VisualParticle, MEMCATEGORY_SCENE_OBJECTS)();
 			particle->copyBehaviours(behaviours);
 			mVisualParticlesPool.addElement(particle);
 			mVisualParticles.push_back(particle);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::_increaseParticleEmitterPool(size_t size, 
-		Particle::ParticleBehaviourList& behaviours, 
-		ParticleTechnique* technique)
-	{
+	
+	void ParticlePool::_increaseParticleEmitterPool(size_t size, Particle::ParticleBehaviourList & behaviours, ParticleTechnique * technique) {
 		size_t oldSize = mEmitters.size();
-		if (size < oldSize)
+		if (size < oldSize) {
 			return;
+		}
 
 		// Create new emitters, based on the already created emitters in the technique and which are marked for emission.
 		size_t numberOfEmittedEmitters = technique->getNumEmittedEmitters();
-		if (numberOfEmittedEmitters == 0)
+		if (numberOfEmittedEmitters == 0) {
 			return;
+		}
 
-		ParticleEmitter* existingEmitter = 0;
-		ParticleEmitter* clonedEmitter = 0;
+		ParticleEmitter * existingEmitter = nullptr;
+		ParticleEmitter * clonedEmitter = nullptr;
 		size_t numEmitters = technique->getNumEmitters();
 
 		// Distribute size equally
 		size_t increment = (size-oldSize) / numberOfEmittedEmitters;
 
 		// Run through emitters of the technique
-		for (size_t emitterCount = 0; emitterCount < numEmitters; emitterCount++)
-		{
+		for (size_t emitterCount = 0; emitterCount < numEmitters; emitterCount++) {
 			existingEmitter = technique->getEmitter(emitterCount);
-			if (existingEmitter->_isMarkedForEmission())
-			{
+			if (existingEmitter->_isMarkedForEmission()) {
 				// Clone the emitter 'increment' times and add to the pool
-				for (size_t i = 0; i < increment; i++)
-				{
+				for (size_t i = 0; i < increment; i++) {
 					clonedEmitter = ParticleSystemManager::getSingletonPtr()->cloneEmitter(existingEmitter);
 					clonedEmitter->_setMarkedForEmission(true);
 					clonedEmitter->copyBehaviours(behaviours);
@@ -288,36 +251,32 @@ namespace ParticleUniverse
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::_increaseParticleTechniquePool(size_t size, 
-		Particle::ParticleBehaviourList& behaviours, 
-		ParticleSystem* system)
-	{
+	
+	void ParticlePool::_increaseParticleTechniquePool(size_t size, Particle::ParticleBehaviourList & behaviours, ParticleSystem * system) {
 		size_t oldSize = mTechniques.size();
-		if (size < oldSize)
+		if (size < oldSize) {
 			return;
+		}
 
 		// Create new techniques, based on the techniques in the particle system and which are marked for emission.
 		size_t numberOfEmittedTechniques = system->getNumEmittedTechniques();
-		if (numberOfEmittedTechniques == 0)
+		if (numberOfEmittedTechniques == 0) {
 			return;
+		}
 
-		ParticleTechnique* existingTechnique = 0;
-		ParticleTechnique* clonedTechnique = 0;
+		ParticleTechnique * existingTechnique = nullptr;
+		ParticleTechnique * clonedTechnique = nullptr;
 		size_t numTechniques = system->getNumTechniques();
 
 		// Distribute size equally
 		size_t increment = (size-oldSize) / numberOfEmittedTechniques;
 
 		// Run through techniques of the system
-		for (size_t techniqueCount = 0; techniqueCount < numTechniques; techniqueCount++)
-		{
+		for (size_t techniqueCount = 0; techniqueCount < numTechniques; techniqueCount++) {
 			existingTechnique = system->getTechnique(techniqueCount);
-			if (existingTechnique->_isMarkedForEmission())
-			{
+			if (existingTechnique->_isMarkedForEmission()) {
 				// Clone the technique 'increment' times and add to the pool
-				for (size_t i = 0; i < increment; i++)
-				{
+				for (size_t i = 0; i < increment; i++) {
 					clonedTechnique = ParticleSystemManager::getSingletonPtr()->cloneTechnique(existingTechnique);
 					clonedTechnique->_setMarkedForEmission(true);
 					clonedTechnique->copyBehaviours(behaviours);
@@ -333,36 +292,32 @@ namespace ParticleUniverse
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::_increaseParticleAffectorPool(size_t size, 
-		Particle::ParticleBehaviourList& behaviours, 
-		ParticleTechnique* technique)
-	{
+	
+	void ParticlePool::_increaseParticleAffectorPool(size_t size, Particle::ParticleBehaviourList & behaviours, ParticleTechnique * technique) {
 		size_t oldSize = mAffectors.size();
-		if (size < oldSize)
+		if (size < oldSize) {
 			return;
+		}
 
 		// Create new affectors, based on the already created affectors in the technique and which are marked for emission.
 		size_t numberOfEmittedAffectors = technique->getNumEmittedAffectors();
-		if (numberOfEmittedAffectors == 0)
+		if (numberOfEmittedAffectors == 0) {
 			return;
+		}
 
-		ParticleAffector* existingAffector = 0;
-		ParticleAffector* clonedAffector = 0;
+		ParticleAffector * existingAffector = nullptr;
+		ParticleAffector * clonedAffector = nullptr;
 		size_t numAffectors = technique->getNumAffectors();
 
 		// Distribute size equally
 		size_t increment = (size-oldSize) / numberOfEmittedAffectors;
 
 		// Run through affectors of the technique
-		for (size_t affectorCount = 0; affectorCount < numAffectors; affectorCount++)
-		{
+		for (size_t affectorCount = 0; affectorCount < numAffectors; affectorCount++) {
 			existingAffector = technique->getAffector(affectorCount);
-			if (existingAffector->_isMarkedForEmission())
-			{
+			if (existingAffector->_isMarkedForEmission()) {
 				// Clone the affector 'increment' times and add to the pool
-				for (size_t i = 0; i < increment; i++)
-				{
+				for (size_t i = 0; i < increment; i++) {
 					clonedAffector = ParticleSystemManager::getSingletonPtr()->cloneAffector(existingAffector);
 					clonedAffector->_setMarkedForEmission(true);
 					clonedAffector->copyBehaviours(behaviours);
@@ -377,67 +332,58 @@ namespace ParticleUniverse
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::_increaseParticleSystemPool(size_t size, 
-		Particle::ParticleBehaviourList& behaviours, 
-		ParticleTechnique* technique)
-	{
+	
+	void ParticlePool::_increaseParticleSystemPool(size_t size, Particle::ParticleBehaviourList & behaviours, ParticleTechnique * technique) {
 		size_t oldSize = mSystems.size();
-		if (size < oldSize)
+		if (size < oldSize) {
 			return;
+		}
 
 		// Run through all emitters in the technique and check which one emits a particle system
 		size_t numberOfEmitters = technique->getNumEmitters();
-		if (numberOfEmitters == 0)
+		if (numberOfEmitters == 0) {
 			return;
+		}
 
-		ParticleSystem* system = 0;
-		ParticleSystem* clonedSystem = 0;
-		ParticleEmitter* emitter = 0;
+		ParticleSystem * system = nullptr;
+		ParticleSystem * clonedSystem = nullptr;
+		ParticleEmitter * emitter = nullptr;
 		size_t numberOfEmittedSystems = 0;
 		size_t systemCount = 0;
 
 		// First determine the number of emitted particle systems.
-		for (systemCount = 0; systemCount < numberOfEmitters; systemCount++)
-		{
+		for (systemCount = 0; systemCount < numberOfEmitters; systemCount++) {
 			emitter = technique->getEmitter(systemCount);
-			if (emitter->getEmitsType() == Particle::PT_SYSTEM)
-			{
+			if (emitter->getEmitsType() == Particle::PT_SYSTEM) {
 				numberOfEmittedSystems++;
 			}
 		}
 
-		if (numberOfEmittedSystems == 0)
+		if (numberOfEmittedSystems == 0) {
 			return;
+		}
 
 		// Distribute size equally
 		size_t increment = (size-oldSize) / numberOfEmittedSystems;
 
 		// Fill the pool
-		for (systemCount = 0; systemCount < numberOfEmitters; systemCount++)
-		{
+		for (systemCount = 0; systemCount < numberOfEmitters; systemCount++) {
 			emitter = technique->getEmitter(systemCount);
-			if (emitter->getEmitsType() == Particle::PT_SYSTEM)
-			{
+			if (emitter->getEmitsType() == Particle::PT_SYSTEM) {
 				system = ParticleSystemManager::getSingletonPtr()->getParticleSystemTemplate(emitter->getEmitsName());
-				if (system)
-				{
+				if (system) {
 					// Create 'increment' ParticleSystems and add to the pool
 					std::stringstream ss; 
 					ss << this;
-					for (size_t i = 0; i < increment; i++)
-					{
-						clonedSystem = ParticleSystemManager::getSingletonPtr()->createParticleSystem(
-							emitter->getEmitsName()+ ss.str() + StringConverter::toString(i), 
-							emitter->getEmitsName(),
-							technique->getParentSystem()->getSceneManager());
+					for (size_t i = 0; i < increment; i++) {
+						clonedSystem = ParticleSystemManager::getSingletonPtr()->createParticleSystem(emitter->getEmitsName()+ ss.str() + StringConverter::toString(i), emitter->getEmitsName(), technique->getParentSystem()->getSceneManager());
 						clonedSystem->_setMarkedForEmission(true);
 						mParticleSystemPool.addElement(emitter->getEmitsName(), clonedSystem);
 						mSystems.push_back(clonedSystem->getName());
 
 						// Attach the Particle System to a SceneNode
-						Ogre::SceneNode* parentNode = technique->getParentSystem()->getParentSceneNode();
-						Ogre::SceneNode* node = parentNode->createChildSceneNode();
+						Ogre::SceneNode * parentNode = technique->getParentSystem()->getParentSceneNode();
+						Ogre::SceneNode * node = parentNode->createChildSceneNode();
 						node->attachObject(clonedSystem);
 						node->setVisible(false);
 					}
@@ -445,78 +391,71 @@ namespace ParticleUniverse
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::initialisePool(void)
-	{
+	
+	void ParticlePool::initialisePool() {
 		// Not sure what to do here.
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::increasePool (const Particle::ParticleType particleType, 
-		size_t size, 
-		Particle::ParticleBehaviourList& behaviours,
-		ParticleTechnique* technique)
-	{
-		switch(particleType)
-		{
-			case Particle::PT_VISUAL:
-				_increaseVisualParticlePool(size, behaviours);
-				break;
-
-			case Particle::PT_EMITTER:
-				_increaseParticleEmitterPool(size, behaviours, technique);
-				break;
-
-			case Particle::PT_TECHNIQUE:
-				_increaseParticleTechniquePool(size, behaviours, technique->getParentSystem());
-				break;
-
-			case Particle::PT_AFFECTOR:
-				_increaseParticleAffectorPool(size, behaviours, technique);
-				break;
-
-			case Particle::PT_SYSTEM:
-				_increaseParticleSystemPool(size, behaviours, technique);
-				break;
-			default: {
-				break;
-			}
+	
+	void ParticlePool::increasePool(const Particle::ParticleType particleType, size_t size, Particle::ParticleBehaviourList & behaviours, ParticleTechnique * technique) {
+		switch (particleType) {
+		case Particle::PT_VISUAL: {
+			_increaseVisualParticlePool(size, behaviours);
+			break;
+		}
+		case Particle::PT_EMITTER: {
+			_increaseParticleEmitterPool(size, behaviours, technique);
+			break;
+		}
+		case Particle::PT_TECHNIQUE: {
+			_increaseParticleTechniquePool(size, behaviours, technique->getParentSystem());
+			break;
+		}
+		case Particle::PT_AFFECTOR: {
+			_increaseParticleAffectorPool(size, behaviours, technique);
+			break;
+		}
+		case Particle::PT_SYSTEM: {
+			_increaseParticleSystemPool(size, behaviours, technique);
+			break;
+		}
+		default: {
+			break;
+		}
 		}
 		resetIterator();
 	}
-	//-----------------------------------------------------------------------
-	Particle* ParticlePool::releaseParticle (const Particle::ParticleType particleType, const String& name)
-	{
-		switch(particleType)
-		{
-			case Particle::PT_VISUAL:
-				return mVisualParticlesPool.releaseElement();
-				break;
-
-			case Particle::PT_EMITTER:
-				return mParticleEmitterPool.releaseElement(name);
-				break;
-
-			case Particle::PT_TECHNIQUE:
-				return mParticleTechniquePool.releaseElement(name);
-				break;
-
-			case Particle::PT_AFFECTOR:
-				return mParticleAffectorPool.releaseElement(name);
-				break;
-
-			case Particle::PT_SYSTEM:
-				return mParticleSystemPool.releaseElement(name);
-				break;
-			default: {
-				break;
-			}
+	
+	Particle * ParticlePool::releaseParticle (const Particle::ParticleType particleType, const String & name) {
+		switch (particleType) {
+		case Particle::PT_VISUAL: {
+			return mVisualParticlesPool.releaseElement();
+			break;
+		}
+		case Particle::PT_EMITTER: {
+			return mParticleEmitterPool.releaseElement(name);
+			break;
+		}
+		case Particle::PT_TECHNIQUE: {
+			return mParticleTechniquePool.releaseElement(name);
+			break;
+		}
+		case Particle::PT_AFFECTOR: {
+			return mParticleAffectorPool.releaseElement(name);
+			break;
+		}
+		case Particle::PT_SYSTEM: {
+			return mParticleSystemPool.releaseElement(name);
+			break;
+		}
+		default: {
+			break;
+		}
 		}
 		
 		return 0;
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::releaseAllParticles (void)
-	{
+	
+	void ParticlePool::releaseAllParticles() {
 		mVisualParticlesPool.releaseAllElements();
 		mParticleEmitterPool.releaseAllElements();
 		mParticleTechniquePool.releaseAllElements();
@@ -524,41 +463,38 @@ namespace ParticleUniverse
 		mParticleSystemPool.releaseAllElements();
 		resetIterator();
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::lockLatestParticle (void)
-	{
-		if (mLatestParticle)
-		{
-			switch(mLatestParticle->particleType)
-			{
-				case Particle::PT_VISUAL:
-					mVisualParticlesPool.lockLatestElement();
-					break;
 	
-				case Particle::PT_EMITTER:
-					mParticleEmitterPool.lockLatestElement();
-					break;
-
-				case Particle::PT_TECHNIQUE:
-					mParticleTechniquePool.lockLatestElement();
-					break;
-
-				case Particle::PT_AFFECTOR:
-					mParticleAffectorPool.lockLatestElement();
-					break;
-
-				case Particle::PT_SYSTEM:
-					mParticleSystemPool.lockLatestElement();
-					break;
-				default: {
-					break;
-				}
+	void ParticlePool::lockLatestParticle() {
+		if (mLatestParticle) {
+			switch (mLatestParticle->particleType) {
+			case Particle::PT_VISUAL: {
+				mVisualParticlesPool.lockLatestElement();
+				break;
+			}
+			case Particle::PT_EMITTER: {
+				mParticleEmitterPool.lockLatestElement();
+				break;
+			}
+			case Particle::PT_TECHNIQUE: {
+				mParticleTechniquePool.lockLatestElement();
+				break;
+			}
+			case Particle::PT_AFFECTOR: {
+				mParticleAffectorPool.lockLatestElement();
+				break;
+			}
+			case Particle::PT_SYSTEM: {
+				mParticleSystemPool.lockLatestElement();
+				break;
+			}
+			default: {
+				break;
+			}
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::lockAllParticles (void)
-	{
+	
+	void ParticlePool::lockAllParticles() {
 		mVisualParticlesPool.lockAllElements();
 		mParticleEmitterPool.lockAllElements();
 		mParticleTechniquePool.lockAllElements();
@@ -566,35 +502,28 @@ namespace ParticleUniverse
 		mParticleSystemPool.lockAllElements();
 		resetIterator();
 	}
-	//-----------------------------------------------------------------------
-	void ParticlePool::resetIterator(void)
-	{
+	
+	void ParticlePool::resetIterator() {
 		mVisualParticlesPool.resetIterator();
 		mParticleEmitterPool.resetIterator();
 		mParticleTechniquePool.resetIterator();
 		mParticleAffectorPool.resetIterator();
 		mParticleSystemPool.resetIterator();
-		mLatestParticle = 0;
+		mLatestParticle = nullptr;
 	}
-	//-----------------------------------------------------------------------
-	Particle* ParticlePool::getFirst(void)
-	{
+	
+	Particle * ParticlePool::getFirst() {
 		resetIterator();
 		mLatestParticle = mVisualParticlesPool.getFirst();
-		if (!mLatestParticle)
-		{
+		if (!mLatestParticle) {
 			mLatestParticle = mParticleEmitterPool.getFirst();
-			if (!mLatestParticle)
-			{
+			if (!mLatestParticle) {
 				mLatestParticle = mParticleTechniquePool.getFirst();
-				if (!mLatestParticle)
-				{
+				if (!mLatestParticle) {
 					mLatestParticle = mParticleAffectorPool.getFirst();
-					if (!mLatestParticle)
-					{
+					if (!mLatestParticle) {
 						mLatestParticle = mParticleSystemPool.getFirst();
-						if (!mLatestParticle)
-						{
+						if (!mLatestParticle) {
 							// Todo: Add other particle types
 						}
 					}
@@ -604,207 +533,184 @@ namespace ParticleUniverse
 
 		return mLatestParticle;
 	}
-	//-----------------------------------------------------------------------
-	Particle* ParticlePool::getNext(void)
-	{
+	
+	Particle * ParticlePool::getNext() {
 		// The getFirst() function must be called first, to get the first element.
-		if (!mLatestParticle)
-			return 0;
+		if (!mLatestParticle) {
+			return nullptr;
+		}
 
-		switch (mLatestParticle->particleType)
-		{
-			// The previous particle was a visual particle?
-			case Particle::PT_VISUAL:
-				{
-					mLatestParticle = mVisualParticlesPool.getNext();
-					if (!mLatestParticle)
-					{
-						// No visual particles left, continue with the emitters
-						mLatestParticle = mParticleEmitterPool.getFirst();
-						if (!mLatestParticle)
-						{
-							// No emitters left, continue with the techniques
-							mLatestParticle = mParticleTechniquePool.getFirst();
-							if (!mLatestParticle)
-							{
-								// No techniques left, continue with the affectors
-								mLatestParticle = mParticleAffectorPool.getFirst();
-								if (!mLatestParticle)
-								{
-									// No affectors left, continue with the systems
-									mLatestParticle = mParticleSystemPool.getFirst();
-								}
-							}
-						}
-					}
-				}
-				break;
-
-			// The previous particle was an emitter?
-			case Particle::PT_EMITTER:
-				{
-					mLatestParticle = mParticleEmitterPool.getNext();
-					if (!mLatestParticle)
-					{
-						// No emitters left, continue with the techniques
-						mLatestParticle = mParticleTechniquePool.getFirst();
-						if (!mLatestParticle)
-						{
-							// No techniques left, continue with the affectors
-							mLatestParticle = mParticleAffectorPool.getFirst();
-							if (!mLatestParticle)
-							{
-								// No affectors left, continue with the systems
-								mLatestParticle = mParticleSystemPool.getFirst();
-							}
-						}
-					}
-				}
-				break;
-
-			// The previous particle was a technique?
-			case Particle::PT_TECHNIQUE:
-				{
-					mLatestParticle = mParticleTechniquePool.getNext();
-					if (!mLatestParticle)
-					{
+		switch (mLatestParticle->particleType) {
+		// The previous particle was a visual particle?
+		case Particle::PT_VISUAL: {
+			mLatestParticle = mVisualParticlesPool.getNext();
+			if (!mLatestParticle) {
+				// No visual particles left, continue with the emitters
+				mLatestParticle = mParticleEmitterPool.getFirst();
+				if (!mLatestParticle) {
+					// No emitters left, continue with the techniques
+					mLatestParticle = mParticleTechniquePool.getFirst();
+					if (!mLatestParticle) {
 						// No techniques left, continue with the affectors
 						mLatestParticle = mParticleAffectorPool.getFirst();
-						if (!mLatestParticle)
-						{
+						if (!mLatestParticle) {
 							// No affectors left, continue with the systems
 							mLatestParticle = mParticleSystemPool.getFirst();
 						}
 					}
 				}
-				break;
+			}
+			break;
+		}
 
-			// The previous particle was an affector?
-			case Particle::PT_AFFECTOR:
-				{
-					mLatestParticle = mParticleAffectorPool.getNext();
-					if (!mLatestParticle)
-					{
+		// The previous particle was an emitter?
+		case Particle::PT_EMITTER: {
+			mLatestParticle = mParticleEmitterPool.getNext();
+			if (!mLatestParticle) {
+				// No emitters left, continue with the techniques
+				mLatestParticle = mParticleTechniquePool.getFirst();
+				if (!mLatestParticle) {
+					// No techniques left, continue with the affectors
+					mLatestParticle = mParticleAffectorPool.getFirst();
+					if (!mLatestParticle) {
 						// No affectors left, continue with the systems
 						mLatestParticle = mParticleSystemPool.getFirst();
 					}
 				}
-				break;
-
-			// The previous particle was a system?
-			case Particle::PT_SYSTEM:
-				{
-					mLatestParticle = mParticleSystemPool.getNext();
-				}
-				break;
-			default: {
-				break;
 			}
+			break;
 		}
-		return mLatestParticle;
-	}
-	//-----------------------------------------------------------------------
-	Particle* ParticlePool::getFirst(const Particle::ParticleType particleType)
-	{
-		resetIterator();
-		switch (particleType)
-		{
-			case Particle::PT_VISUAL:
-				mLatestParticle = mVisualParticlesPool.getFirst();
-				break;
 
-			case Particle::PT_EMITTER:
-				mLatestParticle = mParticleEmitterPool.getFirst();
-				break;
-
-			case Particle::PT_TECHNIQUE:
-				mLatestParticle = mParticleTechniquePool.getFirst();
-				break;
-
-			case Particle::PT_AFFECTOR:
+		// The previous particle was a technique?
+		case Particle::PT_TECHNIQUE: {
+			mLatestParticle = mParticleTechniquePool.getNext();
+			if (!mLatestParticle) {
+				// No techniques left, continue with the affectors
 				mLatestParticle = mParticleAffectorPool.getFirst();
-				break;
+				if (!mLatestParticle) {
+					// No affectors left, continue with the systems
+					mLatestParticle = mParticleSystemPool.getFirst();
+				}
+			}
+			break;
+		}
 
-			case Particle::PT_SYSTEM:
+		// The previous particle was an affector?
+		case Particle::PT_AFFECTOR: {
+			mLatestParticle = mParticleAffectorPool.getNext();
+			if (!mLatestParticle) {
+				// No affectors left, continue with the systems
 				mLatestParticle = mParticleSystemPool.getFirst();
-				break;
-			default: {
-				break;
 			}
+			break;
+		}
+
+		// The previous particle was a system?
+		case Particle::PT_SYSTEM: {
+			mLatestParticle = mParticleSystemPool.getNext();
+			break;
+		}
+		default: {
+			break;
+		}
+		}
+		return mLatestParticle;
+	}
+	
+	Particle * ParticlePool::getFirst(const Particle::ParticleType particleType) {
+		resetIterator();
+		switch (particleType) {
+		case Particle::PT_VISUAL: {
+			mLatestParticle = mVisualParticlesPool.getFirst();
+			break;
+		}
+		case Particle::PT_EMITTER: {
+			mLatestParticle = mParticleEmitterPool.getFirst();
+			break;
+		}
+		case Particle::PT_TECHNIQUE: {
+			mLatestParticle = mParticleTechniquePool.getFirst();
+			break;
+		}
+		case Particle::PT_AFFECTOR: {
+			mLatestParticle = mParticleAffectorPool.getFirst();
+			break;
+		}
+		case Particle::PT_SYSTEM: {
+			mLatestParticle = mParticleSystemPool.getFirst();
+			break;
+		}
+		default: {
+			break;
+		}
 		}
 
 		return mLatestParticle;
 	}
-	//-----------------------------------------------------------------------
-	Particle* ParticlePool::getNext(const Particle::ParticleType particleType)
-	{
-		mLatestParticle = 0;
-		switch (particleType)
-		{
-			case Particle::PT_VISUAL:
-				mLatestParticle = mVisualParticlesPool.getNext();
-				break;
-
-			case Particle::PT_EMITTER:
-				mLatestParticle = mParticleEmitterPool.getNext();
-				break;
-
-			case Particle::PT_TECHNIQUE:
-				mLatestParticle = mParticleTechniquePool.getNext();
-				break;
-
-			case Particle::PT_AFFECTOR:
-				mLatestParticle = mParticleAffectorPool.getNext();
-				break;
-
-			case Particle::PT_SYSTEM:
-				mLatestParticle = mParticleSystemPool.getNext();
-				break;
-			default: {
-				break;
-			}
+	
+	Particle * ParticlePool::getNext(const Particle::ParticleType particleType) {
+		mLatestParticle = nullptr;
+		switch (particleType) {
+		case Particle::PT_VISUAL: {
+			mLatestParticle = mVisualParticlesPool.getNext();
+			break;
+		}
+		case Particle::PT_EMITTER: {
+			mLatestParticle = mParticleEmitterPool.getNext();
+			break;
+		}
+		case Particle::PT_TECHNIQUE: {
+			mLatestParticle = mParticleTechniquePool.getNext();
+			break;
+		}
+		case Particle::PT_AFFECTOR: {
+			mLatestParticle = mParticleAffectorPool.getNext();
+			break;
+		}
+		case Particle::PT_SYSTEM: {
+			mLatestParticle = mParticleSystemPool.getNext();
+			break;
+		}
+		default: {
+			break;
+		}
 		}
 
 		return mLatestParticle;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticlePool::end(void)
-	{
-		return mVisualParticlesPool.end() && 
-			mParticleEmitterPool.end() && 
-			mParticleTechniquePool.end() && 
-			mParticleAffectorPool.end() && 
-			mParticleSystemPool.end();
+	
+	bool ParticlePool::end() {
+		return mVisualParticlesPool.end() && mParticleEmitterPool.end() && mParticleTechniquePool.end() && mParticleAffectorPool.end() && mParticleSystemPool.end();
 	}
-	//-----------------------------------------------------------------------
-	bool ParticlePool::end(const Particle::ParticleType particleType)
-	{
-		switch (particleType)
-		{
-			case Particle::PT_VISUAL:
-				return mVisualParticlesPool.end();
-				break;
-
-			case Particle::PT_EMITTER:
-				return mParticleEmitterPool.end();
-				break;
-
-			case Particle::PT_TECHNIQUE:
-				return mParticleTechniquePool.end();
-				break;
-
-			case Particle::PT_AFFECTOR:
-				return mParticleAffectorPool.end();
-				break;
-
-			case Particle::PT_SYSTEM:
-				return mParticleSystemPool.end();
-				break;
-			default: {
-				break;
-			}
+	
+	bool ParticlePool::end(const Particle::ParticleType particleType) {
+		switch (particleType) {
+		case Particle::PT_VISUAL: {
+			return mVisualParticlesPool.end();
+			break;
+		}
+		case Particle::PT_EMITTER: {
+			return mParticleEmitterPool.end();
+			break;
+		}
+		case Particle::PT_TECHNIQUE: {
+			return mParticleTechniquePool.end();
+			break;
+		}
+		case Particle::PT_AFFECTOR: {
+			return mParticleAffectorPool.end();
+			break;
+		}
+		case Particle::PT_SYSTEM: {
+			return mParticleSystemPool.end();
+			break;
+		}
+		default: {
+			break;
+		}
 		}
 
 		return end(); // To get rid of the warning
 	}
-}
+
+} /* namespace ParticleUniverse */

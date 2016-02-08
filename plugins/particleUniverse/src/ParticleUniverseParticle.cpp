@@ -26,26 +26,20 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseBehaviour.h"
 #include "ParticleUniverseSystemManager.h"
 
-namespace ParticleUniverse
-{
-	Real Particle::DEFAULT_TTL = 10.0f;
-	Real Particle::DEFAULT_MASS = 1.0f;
+namespace ParticleUniverse {
+
+	Real Particle::DEFAULT_TTL = 10.0;
+	Real Particle::DEFAULT_MASS = 1.0;
 	
-	//-----------------------------------------------------------------------
-	Particle::~Particle(void)
-	{
-		ParticleBehaviourIterator it;
-		ParticleBehaviourIterator itEnd = mBehaviours.end();
-		for (it = mBehaviours.begin(); it != itEnd; ++it)
-		{
+	Particle::~Particle() {
+		for (ParticleBehaviourIterator it = mBehaviours.begin(); it != mBehaviours.end(); ++it) {
 			ParticleSystemManager::getSingletonPtr()->destroyBehaviour(*it);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void Particle::_initForEmission(void)
-	{
+	
+	void Particle::_initForEmission() {
 		mEventFlags = 0;
-		timeFraction = 0.0f;
+		timeFraction = 0.0;
 
 		/*	Note, that this flag must only be set as soon as the particle is emitted. As soon as the particle has
 			been moved once, the flag must be removed again.
@@ -56,97 +50,75 @@ namespace ParticleUniverse
 		mFreezed = false;
 
 		// Iterate through all Behaviour objects that are registered at the particle.
-		if (mBehaviours.empty())
+		if (mBehaviours.empty()) {
 			return;
+		}
 
-		ParticleBehaviourIterator it;
-		ParticleBehaviourIterator itEnd = mBehaviours.end();
-		for (it = mBehaviours.begin(); it != itEnd; ++it)
-		{
+		for (ParticleBehaviourIterator it = mBehaviours.begin(); it != mBehaviours.end(); ++it) {
 			(*it)->_initParticleForEmission(this);
 		}
 	}
-	//-----------------------------------------------------------------------
-	bool Particle::isEnabled(void) const
-	{
+	
+	bool Particle::isEnabled() const {
 		return mEnabled;
 	}
-	//-----------------------------------------------------------------------
-	void Particle::setEnabled(bool enabled)
-	{
+	
+	void Particle::setEnabled(bool enabled) {
 		mEnabled = enabled;
-		if (!mOriginalEnabledSet)
-		{
+		if (!mOriginalEnabledSet) {
 			// Only one time is permitted
 			mOriginalEnabled = enabled;
 			mOriginalEnabledSet = true;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void Particle::_setOriginalEnabled(bool originalEnabled)
-	{
+	
+	void Particle::_setOriginalEnabled(bool originalEnabled) {
 		mOriginalEnabled = originalEnabled;
 		mOriginalEnabledSet = true;
 	}
-	//-----------------------------------------------------------------------
-	bool Particle::_getOriginalEnabled(void) const
-	{
+	
+	bool Particle::_getOriginalEnabled() const {
 		return mOriginalEnabled;
 	}
-	//-----------------------------------------------------------------------
-	bool Particle::isFreezed(void) const
-	{
+	
+	bool Particle::isFreezed() const {
 		return mFreezed;
 	}
-	//-----------------------------------------------------------------------
-	void Particle::setFreezed(bool freezed)
-	{
+	
+	void Particle::setFreezed(bool freezed) {
 		mFreezed = freezed;
 	}
-	//-----------------------------------------------------------------------
-	ParticleBehaviour* Particle::getBehaviour(const String& behaviourType)
-	{
-		if (behaviourType == BLANK_STRING)
-			return 0;
+	
+	ParticleBehaviour * Particle::getBehaviour(const String & behaviourType) {
+		if (behaviourType == BLANK_STRING) {
+			return nullptr;
+		}
 
-		ParticleBehaviourIterator it;
-		ParticleBehaviourIterator itEnd = mBehaviours.end();
-		for (it = mBehaviours.begin(); it != itEnd; ++it)
-		{
-			if ((*it)->getBehaviourType() == behaviourType)
-			{
+		for (ParticleBehaviourIterator it = mBehaviours.begin(); it != mBehaviours.end(); ++it) {
+			if ((*it)->getBehaviourType() == behaviourType) {
 				return *it;
 			}
 		}
 		
-		return 0;
+		return nullptr;
 	}
-	//-----------------------------------------------------------------------
-	void Particle::copyBehaviours(ParticleBehaviourList& behaviours)
-	{
-		ParticleBehaviourIterator it;
-		ParticleBehaviourIterator itEnd = behaviours.end();
-		for (it = behaviours.begin(); it != itEnd; ++it)
-		{
+	
+	void Particle::copyBehaviours(ParticleBehaviourList & behaviours) {
+		for (ParticleBehaviourIterator it = behaviours.begin(); it != behaviours.end(); ++it) {
 			mBehaviours.push_back(ParticleSystemManager::getSingletonPtr()->cloneBehaviour(*it));
 		}
 	}
-	//-----------------------------------------------------------------------
-	Real Particle::calculateVelocity(void) const
-	{
-		if (!almostEquals(originalScaledDirectionLength, 0))
-		{
+	
+	Real Particle::calculateVelocity() const {
+		if (!almostEquals(originalScaledDirectionLength, 0)) {
 			return originalVelocity * (direction.length() / originalScaledDirectionLength);
-		}
-		else
-		{
+		} else {
 			// Assume originalScaledDirectionLength to be 1.0 (unit vector)
 			return originalVelocity * direction.length();
 		}
 	}
-	//-----------------------------------------------------------------------
-	void Particle::copyAttributesTo (Particle* particle)
-	{
+	
+	void Particle::copyAttributesTo(Particle * particle) {
 		// Copy attributes
 		particle->position = position;
 		particle->originalPosition = originalPosition;
@@ -170,36 +142,30 @@ namespace ParticleUniverse
 		// Copy Behaviour
 		particle->copyBehaviours(mBehaviours);
 	}
-	//-----------------------------------------------------------------------
-	void Particle::_process(ParticleTechnique* technique, Real timeElapsed)
-	{
+	
+	void Particle::_process(ParticleTechnique * technique, Real timeElapsed) {
 		// Calculate the time fraction, because it is used in different other components
 		timeFraction = (totalTimeToLive - timeToLive) / totalTimeToLive;
 
-		if (mBehaviours.empty())
+		if (mBehaviours.empty()) {
 			return;
+		}
 
 		// Iterate through all Behaviour objects that are registered at the particle.
-		ParticleBehaviourIterator it;
-		ParticleBehaviourIterator itEnd = mBehaviours.end();
-		for (it = mBehaviours.begin(); it != itEnd; ++it)
-		{
+		for (ParticleBehaviourIterator it = mBehaviours.begin(); it != mBehaviours.end(); ++it) {
 			(*it)->_processParticle(technique, this, timeElapsed);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void Particle::_initForExpiration(ParticleTechnique* technique, Real timeElapsed)
-	{
-		if (mBehaviours.empty())
+	
+	void Particle::_initForExpiration(ParticleTechnique * technique, Real timeElapsed) {
+		if (mBehaviours.empty()) {
 			return;
+		}
 
 		// Iterate through all Behaviour objects that are registered at the particle.
-		ParticleBehaviourIterator it;
-		ParticleBehaviourIterator itEnd = mBehaviours.end();
-		for (it = mBehaviours.begin(); it != itEnd; ++it)
-		{
+		for (ParticleBehaviourIterator it = mBehaviours.begin(); it != mBehaviours.end(); ++it) {
 			(*it)->_initParticleForExpiration(technique, this, timeElapsed);
 		}
 	}
 
-}
+} /* namespace ParticleUniverse */

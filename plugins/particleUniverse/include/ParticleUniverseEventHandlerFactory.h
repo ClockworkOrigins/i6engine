@@ -24,49 +24,44 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_EVENT_HANDLER_FACTORY_H__
 #define __PU_EVENT_HANDLER_FACTORY_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandler.h"
 #include "ParticleUniverseEventHandlerTokens.h"
-#include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptReader.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This is the base factory of all ParticleEventHandler implementations.
     */
-	class _ParticleUniverseExport ParticleEventHandlerFactory : public ScriptReader, public ScriptWriter, public FactoryAlloc
-	{
-	    protected:
-
-			/** 
-	        */
-			template <class T>
-			ParticleEventHandler* _createEventHandler(void)
-			{
-				ParticleEventHandler* particleEventHandler = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
-				particleEventHandler->setEventHandlerType(getEventHandlerType());
-				return particleEventHandler;
-			}
-
+	class _ParticleUniverseExport ParticleEventHandlerFactory : public ScriptReader, public ScriptWriter, public FactoryAlloc {
 	public:
-			ParticleEventHandlerFactory(void) {}
-	        virtual ~ParticleEventHandlerFactory(void) {}
+		ParticleEventHandlerFactory() {}
+	    virtual ~ParticleEventHandlerFactory() {}
 
-		    /** Returns the type of the factory, which identifies the event handler type this factory creates. */
-			virtual String getEventHandlerType(void) const = 0;
+		/** Returns the type of the factory, which identifies the event handler type this factory creates. */
+		virtual String getEventHandlerType() const = 0;
 
-			/** Creates a new event handler instance.
-		    @remarks
-	        */
-		    virtual ParticleEventHandler* createEventHandler(void) = 0;
+		/** Creates a new event handler instance.
+		@remarks
+	    */
+		virtual ParticleEventHandler * createEventHandler() = 0;
 
-			/** Delete an event handler
-	        */
-			void destroyEventHandler (ParticleEventHandler* eventHandler)
-			{
-				PU_DELETE_T(eventHandler, ParticleEventHandler, MEMCATEGORY_SCENE_OBJECTS);
-			}
+		/** Delete an event handler
+	    */
+		void destroyEventHandler(ParticleEventHandler * eventHandler) {
+			PU_DELETE_T(eventHandler, ParticleEventHandler, MEMCATEGORY_SCENE_OBJECTS);
+		}
+
+	protected:
+		/**
+		*/
+		template<class T>
+		ParticleEventHandler * _createEventHandler() {
+			ParticleEventHandler * particleEventHandler = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
+			particleEventHandler->setEventHandlerType(getEventHandlerType());
+			return particleEventHandler;
+		}
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_EVENT_HANDLER_FACTORY_H__ */

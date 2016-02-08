@@ -23,36 +23,30 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseExtern.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void Extern::_processParticle(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed, bool firstParticle)
-	{
+namespace ParticleUniverse {
+	
+	void Extern::_processParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed, bool firstParticle) {
 		// Call the _firstParticle() function if the first particle in the update loop is encountered.
-		if (firstParticle)
-		{
+		if (firstParticle) {
 			// Perform a precalculation at the first particle
 			_firstParticle(particleTechnique, particle, timeElapsed);
 		}
 
 		_interface(particleTechnique, particle, timeElapsed);
 	}
-	//-----------------------------------------------------------------------
-	void Extern::_notifyRescaled(const Vector3& scale)
-	{
+	
+	void Extern::_notifyRescaled(const Vector3 & scale) {
 		_mExternScale = scale;
 	}
-	//-----------------------------------------------------------------------
-	void Extern::copyAttributesTo(Extern* externObject)
-	{
+	
+	void Extern::copyAttributesTo(Extern * externObject) {
 		copyParentAttributesTo(externObject);
 	}
-	//-----------------------------------------------------------------------
-	void Extern::copyParentAttributesTo(Extern* externObject)
-	{
+	
+	void Extern::copyParentAttributesTo(Extern * externObject) {
 		externObject->setName(mName);
 		externObject->mParentTechnique = mParentTechnique;
 		externObject->_mExternScale = _mExternScale;
 	}
 
-}
+} /* namespace ParticleUniverse */

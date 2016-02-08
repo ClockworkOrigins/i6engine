@@ -27,57 +27,46 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseSystemManager.h"
 #include "ParticleUniverseTechnique.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/**************************************************************************
 	 * ExternTranslator
 	 *************************************************************************/
-	ExternTranslator::ExternTranslator()
-		:mExtern(0)
-	{
+	ExternTranslator::ExternTranslator() : mExtern(nullptr) {
 	}
-	//-------------------------------------------------------------------------
-	void ExternTranslator::translate(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		ObjectAbstractNode* obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
-		ObjectAbstractNode* parent = obj->parent ? reinterpret_cast<ObjectAbstractNode*>(obj->parent) : 0;
+	
+	void ExternTranslator::translate(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		ObjectAbstractNode * obj = reinterpret_cast<ObjectAbstractNode *>(node.get());
+		ObjectAbstractNode * parent = obj->parent ? reinterpret_cast<ObjectAbstractNode *>(obj->parent) : nullptr;
 
 		// The name of the obj is the type of the Extern
 		// Remark: This can be solved by using a listener, so that obj->values is filled with type + name. Something for later
 		String type;
-		if(!obj->name.empty())
-		{
+		if (!obj->name.empty()) {
 			type = obj->name;
-		}
-		else
-		{
+		} else {
 			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
 		// Get the factory
-		ExternFactory* externFactory = ParticleSystemManager::getSingletonPtr()->getExternFactory(type);
-		if (!externFactory)
-		{
+		ExternFactory * externFactory = ParticleSystemManager::getSingletonPtr()->getExternFactory(type);
+		if (!externFactory) {
 			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
 		// Create the Extern
 		mExtern = ParticleSystemManager::getSingletonPtr()->createExtern(type);
-		if (!mExtern)
-		{
+		if (!mExtern) {
 			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
-		if (!obj->parent->context.isEmpty())
-		{
-			ParticleTechnique* technique = any_cast<ParticleTechnique*>(obj->parent->context);
+		if (!obj->parent->context.isEmpty()) {
+			ParticleTechnique * technique = any_cast<ParticleTechnique *>(obj->parent->context);
 			technique->addExtern(mExtern);
-		}
-		else
-		{
+		} else {
 			// It is an alias
 			mExtern->setAliasName(parent->name);
 			ParticleSystemManager::getSingletonPtr()->addAlias(mExtern);
@@ -85,8 +74,7 @@ namespace ParticleUniverse
 
 		// The first value is the (optional) name
 		String name;
-		if(!obj->values.empty())
-		{
+		if (!obj->values.empty()) {
 			getString(obj->values.front(), &name);
 			mExtern->setName(name);
 		}
@@ -95,45 +83,29 @@ namespace ParticleUniverse
 		obj->context = Any(mExtern);
 
 		// Run through properties
-		for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
-		{
+		for (AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i) {
 			// No properties of its own
-			if((*i)->type == ANT_PROPERTY)
-			{
-				PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
-				if (externFactory->translateChildProperty(compiler, *i))
-				{
+			if ((*i)->type == ANT_PROPERTY) {
+				PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>((*i).get());
+				if (externFactory->translateChildProperty(compiler, *i)) {
 					// Parsed the property by another translator; do nothing
-				}
-				else
-				{
+				} else {
 					errorUnexpectedProperty(compiler, prop);
 				}
-			}
-			else if((*i)->type == ANT_OBJECT)
-			{
-				if (externFactory->translateChildObject(compiler, *i))
-				{
+			} else if ((*i)->type == ANT_OBJECT) {
+				if (externFactory->translateChildObject(compiler, *i)) {
 					// Parsed the object by another translator; do nothing
-				}
-				else
-				{
+				} else {
 					processNode(compiler, *i);
 				}
-			}
-            else
-			{
+			} else {
 				errorUnexpectedToken(compiler, *i);
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
 
-	void ExternWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	void ExternWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Nothing yet
 	}
 
-}
+} /* namespace ParticleUniverse */

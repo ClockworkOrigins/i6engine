@@ -26,50 +26,50 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniversePrerequisites.h"
 
-namespace ParticleUniverse
-{
-	class _ParticleUniverseExport Noise3D
-	{
-		public:
-			/* Constructor / Destructor */
-			Noise3D(void);
-			virtual ~Noise3D(void);
+namespace ParticleUniverse {
 
-			/* Inititialises the noise function */
-			void initialise(ushort octaves, double frequency = 1.0, double amplitude = 1.0, double persistence = 1.0);
+	class _ParticleUniverseExport Noise3D {
+	public:
+		/* Constructor / Destructor */
+		Noise3D();
+		virtual ~Noise3D();
 
-			/* Returns a noise value between [0, 1]
-			@remarks
-				The noise is calculated in realtime
-			*/
-			double noise(double x, double y, double z);
+		/* Inititialises the noise function */
+		void initialise(ushort octaves, double frequency = 1.0, double amplitude = 1.0, double persistence = 1.0);
 
-			/* Returns a noise value between [0, 1]
-			@remarks
-				The noise is calculated in realtime
-			*/
-			double noise(const Vector3& position);
+		/* Returns a noise value between [0, 1]
+		@remarks
+			The noise is calculated in realtime
+		*/
+		double noise(double x, double y, double z);
 
-			/* Creates an image file to test the noise */
-			void noise2img(ushort dimension = 255);
+		/* Returns a noise value between [0, 1]
+		@remarks
+			The noise is calculated in realtime
+		*/
+		double noise(const Vector3 & position);
 
-		protected:
-			int p[512];
-			ushort mOctaves;
-			double mFrequency;
-			double mAmplitude;
-			double mPersistence;
+		/* Creates an image file to test the noise */
+		void noise2img(ushort dimension = 255);
 
-			/* Returns a noise value between [0, 1]
-			@remarks
-				The noise is calculated in realtime
-			*/
-			double _noise(double x, double y, double z);
+	protected:
+		int p[512];
+		ushort mOctaves;
+		double mFrequency;
+		double mAmplitude;
+		double mPersistence;
 
-			double _fade(double t);
-			double _lerp(double t, double a, double b);
-			double _grad(int hash, double x, double y, double z);
+		/* Returns a noise value between [0, 1]
+		@remarks
+			The noise is calculated in realtime
+		*/
+		double _noise(double x, double y, double z);
+
+		double _fade(double t);
+		double _lerp(double t, double a, double b);
+		double _grad(int hash, double x, double y, double z);
 	};
-}
 
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_NOISE_H__ */
