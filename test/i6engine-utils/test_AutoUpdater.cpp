@@ -62,9 +62,15 @@ TEST(AutoUpdater, Updater) {
 }
 
 TEST(AutoUpdater, operatorPlusPlus) {
-	i6engine::utils::AutoUpdater<int> ud(5);
+	i6engine::utils::AutoUpdater<int> i(5);
 
-	EXPECT_EQ(5, ud++);
-	EXPECT_EQ(6, ud);
-	EXPECT_EQ(7, ++ud);
+	EXPECT_EQ(5, i++);
+	EXPECT_EQ(6, i);
+	EXPECT_EQ(7, ++i);
+
+	i6engine::utils::AutoUpdater<uint64_t> ui(5);
+
+	EXPECT_EQ(5, ui++);
+	EXPECT_EQ(6, ui);
+	EXPECT_EQ(7, ++ui);
 }

@@ -129,7 +129,7 @@ namespace utils {
 			return _value;
 		}
 
-		T operator++(T) {
+		T operator++(int) {
 			T tmp = _value;
 			*this += 1;
 			return tmp;
