@@ -27,42 +27,35 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	class ParticleEmitter;
 
 	/** The EmitterTranslator parses 'emitter' tokens
 	*/
-	class _ParticleUniverseExport EmitterTranslator : public ScriptTranslator
-	{
-		protected:
-			ParticleEmitter* mEmitter;
-		public:
-			EmitterTranslator(void);
-			virtual ~EmitterTranslator(void){}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport EmitterTranslator : public ScriptTranslator {
+	public:
+		EmitterTranslator();
+		virtual ~EmitterTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
+
+	protected:
+		ParticleEmitter * mEmitter;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** The ParticleEmitterWriter writes 'emitter' tokens
     */
-	class _ParticleUniverseExport ParticleEmitterWriter : public ScriptWriter
-	{
-		public:
+	class _ParticleUniverseExport ParticleEmitterWriter : public ScriptWriter {
+	public:
+		ParticleEmitterWriter() {}
+		virtual ~ParticleEmitterWriter() {}
 
-			ParticleEmitterWriter(void) {}
-			virtual ~ParticleEmitterWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
-
-		protected:
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_EMITTER_TOKENS_H__ */

@@ -35,6 +35,7 @@ set(pluginParticleUniverseSrc
 	${srcdir}/ParticleUniverseAttachableTokens.cpp
 	${srcdir}/ParticleUniverseBehaviourTokens.cpp
 	${srcdir}/ParticleUniverseCameraDependency.cpp
+	${srcdir}/ParticleUniverseCameraDependencyFactory.cpp
 	${srcdir}/ParticleUniverseCameraDependencyTokens.cpp
 	${srcdir}/ParticleUniverseDll.cpp
 	${srcdir}/ParticleUniverseDynamicAttribute.cpp

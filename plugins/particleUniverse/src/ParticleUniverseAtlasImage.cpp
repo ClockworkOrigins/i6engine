@@ -25,98 +25,74 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseMath.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	AtlasImage::AtlasImage(void) :
-		mAtlas(0),
-		mIndividualImageWidth(0),
-		mIndividualImageHeight(0),
-		mIndividualImageRowSpan(0),
-		mPixelFormat(Ogre::PF_UNKNOWN),
-		mAlwaysUpdate(true)
-	{
+namespace ParticleUniverse {
+
+	AtlasImage::AtlasImage() : mAtlas(nullptr), mIndividualImageWidth(0), mIndividualImageHeight(0), mIndividualImageRowSpan(0), mPixelFormat(Ogre::PF_UNKNOWN), mAlwaysUpdate(true) {
 	}
-	//-----------------------------------------------------------------------
-	AtlasImage::~AtlasImage(void)
-	{
+
+	AtlasImage::~AtlasImage() {
 		// Delete all images
-		ImageList::iterator it;
-		ImageList::iterator itEnd = mImageList.end();
-		for (it = mImageList.begin(); it != itEnd; ++it)
-		{
+		for (ImageList::iterator it = mImageList.begin(); it != mImageList.end(); ++it) {
 			PU_DELETE *it;
 		}
 
 		// Delete the atlas itself
-		if (mAtlas)
-		{
+		if (mAtlas) {
 			PU_DELETE mAtlas;
 		}
 	}
-	//-----------------------------------------------------------------------
-	bool AtlasImage::addImage (const Ogre::Image* image)
-	{
-		if (!image)
-			return false;
 
-		if (mImageList.empty())
-		{
+	bool AtlasImage::addImage(const Ogre::Image * image) {
+		if (!image) {
+			return false;
+		}
+
+		if (mImageList.empty()) {
 			mIndividualImageWidth = image->getWidth();
 			mIndividualImageHeight = image->getHeight();
 			mIndividualImageRowSpan = image->getRowSpan();
 			mPixelFormat = image->getFormat();
-		}
-		else
-		{
-			if (image->getWidth() != mIndividualImageWidth || image->getHeight() != mIndividualImageHeight)
-			{
+		} else {
+			if (image->getWidth() != mIndividualImageWidth || image->getHeight() != mIndividualImageHeight) {
 				// Image not added, because its size doesn't match
 				return false;
 			}
 		}
 
 		mImageList.push_back(PU_NEW Ogre::Image(*image));
-		if (mAlwaysUpdate)
-		{
+		if (mAlwaysUpdate) {
 			_compile();
 		}
 
 		return true;
 	}
-	//-----------------------------------------------------------------------
-	bool AtlasImage::getAlwaysUpdate (void) const
-	{
+
+	bool AtlasImage::getAlwaysUpdate() const {
 		return mAlwaysUpdate;
 	}
-	//-----------------------------------------------------------------------
-	void AtlasImage::setAlwaysUpdate (const bool alwaysUpdate)
-	{
+
+	void AtlasImage::setAlwaysUpdate(const bool alwaysUpdate) {
 		mAlwaysUpdate = alwaysUpdate;
 	}
-	//-----------------------------------------------------------------------
-	const Ogre::Image* AtlasImage::getImage (void) const
-	{
+
+	const Ogre::Image * AtlasImage::getImage() const {
 		return mAtlas;
 	}
-	//-----------------------------------------------------------------------
-	void AtlasImage::save (const String& filename)
-	{
-		if (mAtlas)
-		{
+
+	void AtlasImage::save(const String & filename) {
+		if (mAtlas) {
 			mAtlas->save(filename);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void AtlasImage::_compile (void)
-	{
+
+	void AtlasImage::_compile() {
 		// 0. Reject if no images are added
-		if (mImageList.empty())
+		if (mImageList.empty()) {
 			return;
+		}
 
 		// 1. Destroy old atlas
-		if (mAtlas)
-		{
+		if (mAtlas) {
 			PU_DELETE mAtlas;
 		}
 
@@ -127,8 +103,8 @@ namespace ParticleUniverse
 		Ogre::uint height = Ogre::uint(imageRows * mIndividualImageHeight);
 		size_t pixelSize = Ogre::PixelUtil::getNumElemBytes(mPixelFormat);
 		size_t bufferSize = width * height * pixelSize;
-		uchar* data = OGRE_ALLOC_T(uchar, bufferSize, MEMCATEGORY_GENERAL);
-		memset (data, 0, bufferSize);
+		uchar * data = OGRE_ALLOC_T(uchar, bufferSize, MEMCATEGORY_GENERAL);
+		memset(data, 0, bufferSize);
 		mAtlas = PU_NEW Ogre::Image();
 		mAtlas->loadDynamicImage(data, width, height, Ogre::PixelFormat::PF_BYTE_L, mPixelFormat, true); // Create atlas image, no mipmaps
 
@@ -154,4 +130,4 @@ namespace ParticleUniverse
 		}
 	}
 
-}
+} /* namespace ParticleUniverse */

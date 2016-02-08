@@ -26,22 +26,21 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** 
     */
-	class _ParticleUniverseExport AttachableWriter : public ScriptWriter
-	{
-		public:
-			
-			AttachableWriter(void) {}
-			virtual ~AttachableWriter(void) {}
+	class _ParticleUniverseExport AttachableWriter : public ScriptWriter {
+	public:
+		AttachableWriter() {}
+		virtual ~AttachableWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ATTACHABLE_TOKENS_H__ */

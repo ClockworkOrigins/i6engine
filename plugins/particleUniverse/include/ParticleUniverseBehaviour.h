@@ -29,8 +29,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OGRE/OgreVector3.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Defines the behaviour of a particle.
 	@remarks
 		While a ParticleAffector acts as an external 'force' on the particles, the ParticleBehaviour defines 
@@ -44,83 +44,76 @@ namespace ParticleUniverse
 		The main reason to introduce the ParticleBehaviour class is to be able to expand the attributes and 
 		functions of a particle dynamically and to assign behaviour by means of a particle script.
 	*/
-	class _ParticleUniverseExport ParticleBehaviour : public IAlias, public IElement
-	{
-		protected:
-			// Type of behaviour
-			String mBehaviourType;
+	class _ParticleUniverseExport ParticleBehaviour : public IAlias, public IElement {
+	public:
+		ParticleBehaviour() : IAlias(), IElement(), mParentTechnique(nullptr), _mBehaviourScale(Vector3::UNIT_SCALE) {
+			mAliasType = AT_BEHAVIOUR;
+		}
+		virtual ~ParticleBehaviour() {}
 
-			ParticleTechnique* mParentTechnique;
+		/** Todo
+	    */
+		const String & getBehaviourType() const { return mBehaviourType; }
+		void setBehaviourType(const String & behaviourType) { mBehaviourType = behaviourType; }
 
-			/** Although the scale is on a Particle System level, the behaviour can also be scaled.
-			*/
-			Vector3 _mBehaviourScale;
+		/** Todo
+	    */
+		ParticleTechnique * getParentTechnique() const { return mParentTechnique; }
+		void setParentTechnique(ParticleTechnique * parentTechnique) { mParentTechnique = parentTechnique; }
 
-		public:
-			ParticleBehaviour(void) : 
-				IAlias(),
-				IElement(),
-				mParentTechnique(0),
-				_mBehaviourScale(Vector3::UNIT_SCALE)
-			{
-				mAliasType = AT_BEHAVIOUR;
-			}
-			virtual ~ParticleBehaviour(void) {}
+		/** Notify that the Behaviour is rescaled.
+	    */
+		virtual void _notifyRescaled(const Vector3 & scale) { _mBehaviourScale = scale; }
 
-			/** Todo
-	        */
-			const String& getBehaviourType(void) const { return mBehaviourType; }
-			void setBehaviourType(const String& behaviourType) { mBehaviourType = behaviourType; }
+		/** Perform initialisation actions.
+		@remarks
+			The _prepare() function is automatically called during initialisation (prepare) activities of a 
+			ParticleTechnique. A subclass could implement this function to perform initialisation 
+			actions.
+	    */
+		virtual void _prepare(ParticleTechnique * technique) { /* No implementation */ }
 
-			/** Todo
-	        */
-			ParticleTechnique* getParentTechnique(void) const { return mParentTechnique; }
-			void setParentTechnique(ParticleTechnique* parentTechnique) { mParentTechnique = parentTechnique; }
+		/** Reverse the actions from the _prepare.
+	    */
+		virtual void _unprepare(ParticleTechnique * particleTechnique) { /* No implementation */ }
 
-			/** Notify that the Behaviour is rescaled.
-	        */
-			virtual void _notifyRescaled(const Vector3& scale) { _mBehaviourScale = scale; }
+		/** Perform initialising activities as soon as the particle with which the ParticleBehaviour is
+			associated, is emitted.
+	    */
+		virtual void _initParticleForEmission(Particle * particle) { /* No implementation */ }
 
-			/** Perform initialisation actions.
-			@remarks
-				The _prepare() function is automatically called during initialisation (prepare) activities of a 
-				ParticleTechnique. A subclass could implement this function to perform initialisation 
-				actions.
-	        */
-			virtual void _prepare(ParticleTechnique* technique) {/* No implementation */}
+		/** Process a particle.
+	    */
+		virtual void _processParticle(ParticleTechnique * technique, Particle * particle, Real timeElapsed) = 0;
 
-			/** Reverse the actions from the _prepare.
-	        */
-			virtual void _unprepare(ParticleTechnique* particleTechnique) {/* No implementation */}
+		/** Perform some action if a particle expires.
+	    */
+		virtual void _initParticleForExpiration(ParticleTechnique * technique, Particle * particle, Real timeElapsed) { /* No implementation */ }
 
-			/** Perform initialising activities as soon as the particle with which the ParticleBehaviour is
-				associated, is emitted.
-	        */
-			virtual void _initParticleForEmission(Particle* particle) {/* No implementation */}
+		/** Copy attributes to another ParticleBehaviour.
+	    */
+		virtual void copyAttributesTo(ParticleBehaviour * behaviour) {
+			copyParentAttributesTo(behaviour);
+		}
 
-			/** Process a particle.
-	        */
-			virtual void _processParticle(ParticleTechnique* technique, Particle* particle, Real timeElapsed) = 0;
+		/** Copy parent attributes to another behaviour.
+	    */
+		virtual void copyParentAttributesTo(ParticleBehaviour * behaviour) {
+			behaviour->mParentTechnique = mParentTechnique;
+			behaviour->_mBehaviourScale = _mBehaviourScale;
+		}
 
-			/** Perform some action if a particle expires.
-	        */
-			virtual void _initParticleForExpiration(ParticleTechnique* technique, Particle* particle, Real timeElapsed) {/* No implementation */}
+	protected:
+		// Type of behaviour
+		String mBehaviourType;
 
-			/** Copy attributes to another ParticleBehaviour.
-	        */
-			virtual void copyAttributesTo (ParticleBehaviour* behaviour)
-			{
-				copyParentAttributesTo(behaviour);
-			}
+		ParticleTechnique * mParentTechnique;
 
-			/** Copy parent attributes to another behaviour.
-	        */
-			virtual void copyParentAttributesTo(ParticleBehaviour* behaviour)
-			{
-				behaviour->mParentTechnique = mParentTechnique;
-				behaviour->_mBehaviourScale = _mBehaviourScale;
-			}
+		/** Although the scale is on a Particle System level, the behaviour can also be scaled.
+		*/
+		Vector3 _mBehaviourScale;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BEHAVIOUR_H__ */

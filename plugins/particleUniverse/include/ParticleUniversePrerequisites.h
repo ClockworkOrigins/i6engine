@@ -29,8 +29,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #define PU_RENDERER_OGRE 1
 
-#include "ParticleUniverseTypes.h"
 #include "ParticleUniverseAlloc.h"
+#include "ParticleUniverseTypes.h"
 
 #if (PU_RENDERER_OGRE)
 	#if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32) && !defined(OGRE_STATIC_LIB)
@@ -93,8 +93,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	#pragma warning (disable : 4217 4251 4800)
 #endif
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	class ParticleSystem;
 	class ParticleTechnique;
 	class ParticleEmitter;
@@ -106,6 +106,7 @@ namespace ParticleUniverse
 	class IDependency;
 	class IToken;
 	class BoxColliderExternFactory;
-}
 
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PREREQUISITES_H__ */

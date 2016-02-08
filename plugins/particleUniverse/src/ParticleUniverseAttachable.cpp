@@ -23,88 +23,68 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseAttachable.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	String Attachable::PU_ATTACHABLE = "PUAttachable";
-	//-----------------------------------------------------------------------
-	Attachable::Attachable(void) :
-		Extern(),
-		MovableObject(),
-		mAABB(),
-		mDistanceThreshold(std::numeric_limits<float>::max()),
-		mDistanceThresholdSet(false)
-	{
+
+	Attachable::Attachable() : Extern(), MovableObject(), mAABB(), mDistanceThreshold(std::numeric_limits<float>::max()), mDistanceThresholdSet(false) {
 		// The Movableobject name is auto generated to prevent a clash in Ogre
 		mBoundingRadius = 1;
 		std::stringstream ss; 
 		ss << this;
 		MovableObject::mName = "PUExtern" + ss.str();
 	}
-	//-----------------------------------------------------------------------
-	void Attachable::_notifyAttached(Ogre::Node* parent, bool isTagPoint)
-	{
+
+	void Attachable::_notifyAttached(Ogre::Node * parent, bool isTagPoint) {
 		MovableObject::_notifyAttached(parent, isTagPoint);
 	}
-	//-----------------------------------------------------------------------
-	void Attachable::_notifyCurrentCamera(Camera* cam)
-	{
+
+	void Attachable::_notifyCurrentCamera(Camera * cam) {
 		Ogre::MovableObject::_notifyCurrentCamera(cam);
 	}
-	//-----------------------------------------------------------------------
-	const String& Attachable::getMovableType(void) const
-	{
+
+	const String & Attachable::getMovableType() const {
 		return PU_ATTACHABLE;
 	}
-	//-----------------------------------------------------------------------
-	const AxisAlignedBox& Attachable::getBoundingBox(void) const
-	{
+
+	const AxisAlignedBox & Attachable::getBoundingBox() const {
 		return mAABB;
 	}
-	//-----------------------------------------------------------------------
-	Real Attachable::getBoundingRadius(void) const
-	{
+
+	Real Attachable::getBoundingRadius() const {
 		return mBoundingRadius;
 	}
-	//-----------------------------------------------------------------------
-	Real Attachable::getDistanceThreshold(void) const
-	{
+
+	Real Attachable::getDistanceThreshold() const {
 		return mDistanceThreshold;
 	}
-	//-----------------------------------------------------------------------
-	void Attachable::setDistanceThreshold(const Real distanceThreshold)
-	{
+
+	void Attachable::setDistanceThreshold(const Real distanceThreshold) {
 		mDistanceThresholdSet = true;
 		mDistanceThreshold = distanceThreshold;
 	}
-	//-----------------------------------------------------------------------
-	void Attachable::_updateRenderQueue(Ogre::RenderQueue* queue)
-	{
-		// Nothing to do here.
-	}
-	//-----------------------------------------------------------------------
-	void Attachable::copyAttributesTo (Extern* externObject)
-	{
-		Extern::copyAttributesTo(externObject);
-		Attachable* attachable = static_cast<Attachable*>(externObject);
-		attachable->setDistanceThreshold(mDistanceThreshold);
-	}
-	//-----------------------------------------------------------------------
-	void Attachable::_prepare(ParticleTechnique* technique)
-	{
-		// Nothing to do here.
-	}
-	//-----------------------------------------------------------------------
-	void Attachable::_unprepare(ParticleTechnique* technique)
-	{
-		// Nothing to do here.
-	}
-	//-----------------------------------------------------------------------
-	void Attachable::_interface(ParticleTechnique* technique, 
-		Particle* particle, 
-		Real timeElapsed)
-	{
+
+	void Attachable::_updateRenderQueue(Ogre::RenderQueue * queue) {
 		// Nothing to do here.
 	}
 
-}
+	void Attachable::copyAttributesTo(Extern * externObject) {
+		Extern::copyAttributesTo(externObject);
+		Attachable * attachable = static_cast<Attachable *>(externObject);
+		attachable->setDistanceThreshold(mDistanceThreshold);
+	}
+
+	void Attachable::_prepare(ParticleTechnique * technique) {
+		// Nothing to do here.
+	}
+
+	void Attachable::_unprepare(ParticleTechnique * technique) {
+		// Nothing to do here.
+	}
+
+	void Attachable::_interface(ParticleTechnique * technique, Particle * particle, Real timeElapsed) {
+		// Nothing to do here.
+	}
+
+} /* namespace ParticleUniverse */

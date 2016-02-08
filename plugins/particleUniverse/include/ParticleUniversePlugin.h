@@ -28,8 +28,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OGRE/OgrePlugin.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	class ExternFactory;
 	class ParticleAffectorFactory;
@@ -41,40 +40,40 @@ namespace ParticleUniverse
 	class ParticleSystemManager;
 
 	/** Plugin instance for Particle Universe */
-	class ParticleUniversePlugin : public Ogre::Plugin
-	{
+	class ParticleUniversePlugin : public Ogre::Plugin {
 	public:
-		ParticleUniversePlugin(void);
+		ParticleUniversePlugin();
 
 		/// @copydoc Plugin::getName
-		const String& getName(void) const;
+		const String & getName() const;
 
 		/// @copydoc Plugin::install
-		void install(void);
+		void install();
 
 		/// @copydoc Plugin::initialise
-		void initialise(void);
+		void initialise();
 
 		/// @copydoc Plugin::shutdown
-		void shutdown(void);
+		void shutdown();
 
 		/// @copydoc Plugin::uninstall
-		void uninstall(void);
+		void uninstall();
 
 	protected:
-		ParticleSystemManager* mParticleSystemManager;
+		ParticleSystemManager * mParticleSystemManager;
 #ifdef PU_PHYSICS_PHYSX
 		PhysXBridge* mPhysXBridge;
 #endif // PU_PHYSICS_PHYSX
 
-		vector<ParticleRendererFactory*> mRendererFactories;
-		vector<ParticleEmitterFactory*> mEmitterFactories;
-		vector<ParticleAffectorFactory*> mAffectorFactories;
-		vector<ParticleObserverFactory*> mObserverFactories;
-		vector<ParticleEventHandlerFactory*> mEventHandlerFactories;
-		vector<ExternFactory*> mExternFactories;
-		vector<ParticleBehaviourFactory*> mBehaviourFactories;
+		vector<ParticleRendererFactory *> mRendererFactories;
+		vector<ParticleEmitterFactory *> mEmitterFactories;
+		vector<ParticleAffectorFactory *> mAffectorFactories;
+		vector<ParticleObserverFactory *> mObserverFactories;
+		vector<ParticleEventHandlerFactory *> mEventHandlerFactories;
+		vector<ExternFactory *> mExternFactories;
+		vector<ParticleBehaviourFactory *> mBehaviourFactories;
 	};
-}
 
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PARTICLE_UNIVERSE_PLUGIN_H__ */

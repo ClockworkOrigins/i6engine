@@ -26,17 +26,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseScriptDeserializer.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The AliasTranslator parses 'Alias' tokens
 	*/
-	class _ParticleUniverseExport AliasTranslator : public ScriptTranslator
-	{
-		public:
-			AliasTranslator(void);
-			virtual ~AliasTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport AliasTranslator : public ScriptTranslator {
+	public:
+		AliasTranslator();
+		virtual ~AliasTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PARTICLE_ALIAS_TOKENS_H__ */

@@ -26,20 +26,20 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseIElement.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Abstract (pure virtual) dependency class
 	@remarks
 		In some cases, an attribute of a ParticleSystem or its underlying components (ParticleEmitter, ...) may 
 		depend on another value that changes over time. The ´changing value´ is wrapped into a IDependency class
 		and the attribute is ´continuesly´ changed by the IDependency subclass.
 	*/
-	class _ParticleUniverseExport IDependency : public IElement
-	{
-		public:
-			IDependency(void) : IElement() {}
-			virtual ~IDependency(void) {}
+	class _ParticleUniverseExport IDependency : public IElement {
+	public:
+		IDependency() : IElement() {}
+		virtual ~IDependency() {}
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_I_DEPENDENCY_H__ */

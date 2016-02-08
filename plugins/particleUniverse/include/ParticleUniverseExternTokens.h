@@ -27,41 +27,35 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	class Extern;
 
 	/** The ExternTranslator parses 'Extern' tokens
 	*/
-	class _ParticleUniverseExport ExternTranslator : public ScriptTranslator
-	{
-		protected:
-			Extern* mExtern;
+	class _ParticleUniverseExport ExternTranslator : public ScriptTranslator {
+	public:
+		ExternTranslator();
+		virtual ~ExternTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
 
-		public:
-			ExternTranslator(void);
-			virtual ~ExternTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	protected:
+		Extern * mExtern;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ExternWriter : public ScriptWriter
-	{
-		public:
+	class _ParticleUniverseExport ExternWriter : public ScriptWriter {
+	public:
+		ExternWriter() {}
+		virtual ~ExternWriter() {}
 
-			ExternWriter(void) {}
-			virtual ~ExternWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PARTICLE_EXTERN_TOKENS_H__ */

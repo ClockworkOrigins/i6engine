@@ -26,8 +26,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniversePrerequisites.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The IElement is used to identify classes that must be set as part of a section in case a script is
 		parsed.
 	@remarks
@@ -35,12 +35,12 @@ namespace ParticleUniverse
 		object is created and must be set in the current section of the Context object. the
 		ParticleTechnique object must be of type IElement to be stored in the Context object.
 	*/
-	class _ParticleUniverseExport IElement
-	{
-		public:
-			IElement(void) {}
-			virtual ~IElement(void) {}
+	class _ParticleUniverseExport IElement {
+	public:
+		IElement() {}
+		virtual ~IElement() {}
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_I_ELEMENT_H__ */

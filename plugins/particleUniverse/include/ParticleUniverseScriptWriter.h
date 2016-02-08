@@ -26,26 +26,24 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniversePrerequisites.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	class IElement;
 	class ParticleScriptSerializer;
 
 	/*	A class that implements the ScriptWriter, is responsible for writing (serialization) to a particle script.
 	*/
-	class _ParticleUniverseExport ScriptWriter
-    {
+	class _ParticleUniverseExport ScriptWriter {
+	public:
+		ScriptWriter() {}
+		virtual ~ScriptWriter() {}
 
-		public:
-			ScriptWriter(void) {}
-			virtual ~ScriptWriter(void) {}
-
-			/** Child classes must implement this pure virtual function, which must be used to write an object or attribute to
-				a particle script.
-			**/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element) = 0;
+		/** Child classes must implement this pure virtual function, which must be used to write an object or attribute to
+			a particle script.
+		**/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element) = 0;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SCRIPT_WRITER_H__ */

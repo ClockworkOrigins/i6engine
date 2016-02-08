@@ -27,55 +27,44 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	class ParticleRenderer;
 
 	/** The RendererSetTranslator parses 'Renderer Set' tokens
 	*/
-	class _ParticleUniverseExport RendererSetTranslator : public ScriptTranslator
-	{
-		public:
-			RendererSetTranslator(void) {}
-			virtual ~RendererSetTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport RendererSetTranslator : public ScriptTranslator {
+	public:
+		RendererSetTranslator() {}
+		virtual ~RendererSetTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
+
 	/** The RendererTranslator parses 'Renderer' tokens
 	*/
-	class _ParticleUniverseExport RendererTranslator : public ScriptTranslator
-	{
-		protected:
-			ParticleRenderer* mRenderer;
+	class _ParticleUniverseExport RendererTranslator : public ScriptTranslator {
+	public:
+		RendererTranslator();
+		virtual ~RendererTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
 
-		public:
-			RendererTranslator(void);
-			virtual ~RendererTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	protected:
+		ParticleRenderer * mRenderer;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
+
 	/** 
     */
-	class _ParticleUniverseExport ParticleRendererWriter : public ScriptWriter
-	{
-		protected:
+	class _ParticleUniverseExport ParticleRendererWriter : public ScriptWriter {
+	public:
+		ParticleRendererWriter() {}
+		virtual ~ParticleRendererWriter() {}
 
-		public:
-
-			ParticleRendererWriter(void) {}
-			virtual ~ParticleRendererWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
-
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_RENDERER_TOKENS_H__ */

@@ -27,40 +27,35 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	class DynamicAttribute;
 
 	/** The DynamicAttributeTranslator parses 'dynamic attributes' tokens
 	*/
-	class _ParticleUniverseExport DynamicAttributeTranslator : public ScriptTranslator
-	{
-		protected:
-			DynamicAttribute* mDynamicAttribute;
-		public:
-			DynamicAttributeTranslator(void);
-			virtual ~DynamicAttributeTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport DynamicAttributeTranslator : public ScriptTranslator {
+	public:
+		DynamicAttributeTranslator();
+		virtual ~DynamicAttributeTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
+
+	protected:
+		DynamicAttribute * mDynamicAttribute;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport DynamicAttributeWriter : public ScriptWriter
-	{
-		public:
+	class _ParticleUniverseExport DynamicAttributeWriter : public ScriptWriter {
+	public:
+		DynamicAttributeWriter() {}
+		virtual ~DynamicAttributeWriter() {}
 
-			DynamicAttributeWriter(void) {}
-			virtual ~DynamicAttributeWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DYNAMIC_ATTRIBUTE_TOKENS_H__ */

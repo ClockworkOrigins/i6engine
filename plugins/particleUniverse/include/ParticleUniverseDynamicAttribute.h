@@ -28,14 +28,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseIElement.h"
 #include "ParticleUniverseSimpleSpline.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Comparer used for sorting vector in ascending order
     */
-	struct ControlPointSorter
-	{
-		inline bool operator() (const Vector2& a, const Vector2& b)
-		{
+	struct ControlPointSorter {
+		inline bool operator()(const Vector2 & a, const Vector2 & b) {
 			return a.x < b.x;
 		}
 	};
@@ -50,48 +48,46 @@ namespace ParticleUniverse
 		but where implementation of this behaviour may not be scattered or duplicated within the application that needs 
 		it.
 	*/
-	class _ParticleUniverseExport DynamicAttribute : public IElement
-    {
-		public:
-			enum DynamicAttributeType
-			{
-				DAT_FIXED,
-				DAT_RANDOM,
-				DAT_CURVED,
-				DAT_OSCILLATE
-			};
+	class _ParticleUniverseExport DynamicAttribute : public IElement {
+	public:
+		enum DynamicAttributeType {
+			DAT_FIXED,
+			DAT_RANDOM,
+			DAT_CURVED,
+			DAT_OSCILLATE
+		};
 
-			/** Constructor
-			*/
-			DynamicAttribute (void);
+		/** Constructor
+		*/
+		DynamicAttribute();
 
-			/** Destructor
-			*/
-			virtual ~DynamicAttribute (void);
+		/** Destructor
+		*/
+		virtual ~DynamicAttribute();
 
-			/** Virtual function that needs to be implemented by its childs.
-			*/
-			virtual Real getValue (Real x = 0) = 0;
+		/** Virtual function that needs to be implemented by its childs.
+		*/
+		virtual Real getValue(Real x = 0) = 0;
 
-			/** Todo
-			*/
-			DynamicAttributeType getType (void) const;
+		/** Todo
+		*/
+		DynamicAttributeType getType() const;
 
-			/** Todo
-			*/
-			void setType (DynamicAttributeType type);
+		/** Todo
+		*/
+		void setType(DynamicAttributeType type);
 
-			/** Todo
-			*/
-			virtual void copyAttributesTo(DynamicAttribute* dynamicAttribute) = 0;
+		/** Todo
+		*/
+		virtual void copyAttributesTo(DynamicAttribute * dynamicAttribute) = 0;
 
-			/** Returns true if one of the attributes was changed by an external source.
-			*/
-			bool isValueChangedExternally(void) const;
+		/** Returns true if one of the attributes was changed by an external source.
+		*/
+		bool isValueChangedExternally() const;
 
-		protected:
-			DynamicAttributeType mType;
-			bool mValueChangedExternally;
+	protected:
+		DynamicAttributeType mType;
+		bool mValueChangedExternally;
 	};
 
 	/*	This class is an implementation of the DynamicAttribute class in its most simple form. It just returns a value
@@ -100,72 +96,70 @@ namespace ParticleUniverse
 		Although use of a regular attribute within the class that needs it is preferred, its benefit is that it makes
 		use of the generic 'getValue' mechanism of a DynamicAttribute.
 	*/
-	class _ParticleUniverseExport DynamicAttributeFixed : public DynamicAttribute
-    {
-		public:
-			/** Constructor
-			*/
-			DynamicAttributeFixed (void);
+	class _ParticleUniverseExport DynamicAttributeFixed : public DynamicAttribute {
+	public:
+		/** Constructor
+		*/
+		DynamicAttributeFixed();
 
-			/** Copy constructor
-			*/
-			DynamicAttributeFixed (const DynamicAttributeFixed& dynamicAttributeFixed);
+		/** Copy constructor
+		*/
+		DynamicAttributeFixed(const DynamicAttributeFixed & dynamicAttributeFixed);
 
-			/** Destructor
-			*/
-			~DynamicAttributeFixed (void);
+		/** Destructor
+		*/
+		~DynamicAttributeFixed();
 
-			/** Todo
-			*/
-			virtual Real getValue (Real x = 0);
+		/** Todo
+		*/
+		virtual Real getValue(Real x = 0);
 
-			/** Todo
-			*/
-			virtual void setValue (Real value);
+		/** Todo
+		*/
+		virtual void setValue(Real value);
 
-			/** Todo
-			*/
-			virtual void copyAttributesTo(DynamicAttribute* dynamicAttribute);
+		/** Todo
+		*/
+		virtual void copyAttributesTo(DynamicAttribute * dynamicAttribute);
 
-		protected:
-			Real mValue;
+	protected:
+		Real mValue;
 	};
 
 	/* This class generates random values within a given minimum and maximum interval.
 	*/
-	class _ParticleUniverseExport DynamicAttributeRandom : public DynamicAttribute
-    {
-		public:
-			/** Constructor
-			*/
-			DynamicAttributeRandom (void);
+	class _ParticleUniverseExport DynamicAttributeRandom : public DynamicAttribute {
+	public:
+		/** Constructor
+		*/
+		DynamicAttributeRandom();
 
-			/** Copy constructor
-			*/
-			DynamicAttributeRandom (const DynamicAttributeRandom& dynamicAttributeRandom);
+		/** Copy constructor
+		*/
+		DynamicAttributeRandom(const DynamicAttributeRandom & dynamicAttributeRandom);
 
-			/** Destructor
-			*/
-			~DynamicAttributeRandom (void);
+		/** Destructor
+		*/
+		~DynamicAttributeRandom();
 
-			/** Todo
-			*/
-			virtual Real getValue (Real x = 0);
+		/** Todo
+		*/
+		virtual Real getValue(Real x = 0);
 
-			/** Todo
-			*/
-			void setMin (Real min);
-			Real getMin (void) const;
-			void setMax (Real max);
-			Real getMax (void) const;
-			void setMinMax (Real min, Real max);
+		/** Todo
+		*/
+		void setMin(Real min);
+		Real getMin() const;
+		void setMax(Real max);
+		Real getMax() const;
+		void setMinMax(Real min, Real max);
 
-			/** Todo
-			*/
-			virtual void copyAttributesTo(DynamicAttribute* dynamicAttribute);
+		/** Todo
+		*/
+		virtual void copyAttributesTo(DynamicAttribute * dynamicAttribute);
 
 	protected:
-			Real mMin, mMax;
+		Real mMin, mMax;
 	};
 
 	/* This is a more complex usage of the DynamicAttribute principle. This class returns a value on an curve.
@@ -174,158 +168,154 @@ namespace ParticleUniverse
 		on these control points. Interpolation is done in different flavours. ´Linear´ provides linear interpolation
 		of a value on the curve, while ´Spline´ generates a smooth curve and the returns a value that lies on that curve.
 	*/
-	class _ParticleUniverseExport DynamicAttributeCurved : public DynamicAttribute
-    {
-		public:
-			typedef vector<Vector2> ControlPointList;
+	class _ParticleUniverseExport DynamicAttributeCurved : public DynamicAttribute {
+	public:
+		typedef vector<Vector2> ControlPointList;
 
-			/** Constructor
-			*/
-			DynamicAttributeCurved (void);
-			DynamicAttributeCurved (InterpolationType interpolationType);
+		/** Constructor
+		*/
+		DynamicAttributeCurved();
+		DynamicAttributeCurved(InterpolationType interpolationType);
 
-			/** Copy constructor
-			*/
-			DynamicAttributeCurved (const DynamicAttributeCurved& dynamicAttributeCurved);
+		/** Copy constructor
+		*/
+		DynamicAttributeCurved(const DynamicAttributeCurved & dynamicAttributeCurved);
 
-			/** Destructor
-			*/
-			~DynamicAttributeCurved (void);
+		/** Destructor
+		*/
+		~DynamicAttributeCurved();
 
-			/** Get and set the curve type
-			*/
-			void setInterpolationType (InterpolationType interpolationType);
-			InterpolationType getInterpolationType (void) const;
+		/** Get and set the curve type
+		*/
+		void setInterpolationType(InterpolationType interpolationType);
+		InterpolationType getInterpolationType() const;
 
-			/** Todo
-			*/
-			virtual Real getValue (Real x = 0);
+		/** Todo
+		*/
+		virtual Real getValue(Real x = 0);
 
-			/** Todo
-			*/
-			virtual void addControlPoint (Real x, Real y);
+		/** Todo
+		*/
+		virtual void addControlPoint(Real x, Real y);
 
-			/** Todo
-			*/
-			const ControlPointList& getControlPoints (void) const;
+		/** Todo
+		*/
+		const ControlPointList & getControlPoints() const;
 
-			/** Todo
-			*/
-			void processControlPoints (void);
+		/** Todo
+		*/
+		void processControlPoints();
 
-			/** Todo
-			*/
-			size_t getNumControlPoints(void) const;
+		/** Todo
+		*/
+		size_t getNumControlPoints() const;
 
-			/** Todo
-			*/
-			void removeAllControlPoints(void);
+		/** Todo
+		*/
+		void removeAllControlPoints();
 
-			/** Todo
-			*/
-			virtual void copyAttributesTo(DynamicAttribute* dynamicAttribute);
+		/** Todo
+		*/
+		virtual void copyAttributesTo(DynamicAttribute * dynamicAttribute);
 
-		protected:
+	protected:
+		/** Todo
+		*/
+		Real mRange;
 
-			/** Todo
-			*/
-			Real mRange;
+		/** Todo
+		*/
+		SimpleSpline mSpline;
 
-			/** Todo
-			*/
-			SimpleSpline mSpline;
+		/** Todo
+		*/
+		InterpolationType mInterpolationType;
 
-			/** Todo
-			*/
-			InterpolationType mInterpolationType;
+		/** Todo
+		*/
+		ControlPointList mControlPoints;
 
-			/** Todo
-			*/
-			ControlPointList mControlPoints;
+		/** Find an iterator that forms the low (left) value of the interval where x lies in.
+		*/
+		inline ControlPointList::iterator _findNearestControlPointIterator(Real x);
 
-			/** Find an iterator that forms the low (left) value of the interval where x lies in.
-			*/
-			inline ControlPointList::iterator _findNearestControlPointIterator(Real x);
-
-			/** Helper functions 
-			*/
-			inline ControlPointList::iterator _getFirstValidIterator(void);
-			inline ControlPointList::iterator _getLastValidIterator(void);
+		/** Helper functions 
+		*/
+		inline ControlPointList::iterator _getFirstValidIterator();
+		inline ControlPointList::iterator _getLastValidIterator();
 	};
 
 	/* This class generates values based on an oscillating functione (i.e. Sine).
 	*/
-	class _ParticleUniverseExport DynamicAttributeOscillate : public DynamicAttribute
-    {
-		public:
-			enum OscillationType
-			{
-				OSCT_SINE,
-				OSCT_SQUARE
-			};
+	class _ParticleUniverseExport DynamicAttributeOscillate : public DynamicAttribute {
+	public:
+		enum OscillationType {
+			OSCT_SINE,
+			OSCT_SQUARE
+		};
 
-			/** Constructor
-			*/
-			DynamicAttributeOscillate (void);
+		/** Constructor
+		*/
+		DynamicAttributeOscillate();
 
-			/** Copy constructor
-			*/
-			DynamicAttributeOscillate (const DynamicAttributeOscillate& dynamicAttributeOscillate);
+		/** Copy constructor
+		*/
+		DynamicAttributeOscillate(const DynamicAttributeOscillate & dynamicAttributeOscillate);
 
-			/** Destructor
-			*/
-			~DynamicAttributeOscillate (void);
+		/** Destructor
+		*/
+		~DynamicAttributeOscillate();
 
-			/** Todo
-			*/
-			virtual Real getValue (Real x = 0);
+		/** Todo
+		*/
+		virtual Real getValue(Real x = 0);
 
-			/** Get and set the OscillationType
-			*/
-			OscillationType getOscillationType (void) const;
-			void setOscillationType (OscillationType oscillationType);
+		/** Get and set the OscillationType
+		*/
+		OscillationType getOscillationType() const;
+		void setOscillationType(OscillationType oscillationType);
 
-			/** Get and set the Frequency
-			*/
-			Real getFrequency (void) const;
-			void setFrequency (Real frequency);
+		/** Get and set the Frequency
+		*/
+		Real getFrequency() const;
+		void setFrequency(Real frequency);
 
-			/** Get and set the Phase
-			*/
-			Real getPhase (void) const;
-			void setPhase (Real phase);
+		/** Get and set the Phase
+		*/
+		Real getPhase() const;
+		void setPhase(Real phase);
 
-			/** Get and set the Base
-			*/
-			Real getBase (void) const;
-			void setBase (Real base);
+		/** Get and set the Base
+		*/
+		Real getBase() const;
+		void setBase(Real base);
 
-			/** Get and set the Amplitude
-			*/
-			Real getAmplitude (void) const;
-			void setAmplitude (Real amplitude);
+		/** Get and set the Amplitude
+		*/
+		Real getAmplitude() const;
+		void setAmplitude(Real amplitude);
 
-			/** Todo
-			*/
-			virtual void copyAttributesTo(DynamicAttribute* dynamicAttribute);
+		/** Todo
+		*/
+		virtual void copyAttributesTo(DynamicAttribute * dynamicAttribute);
 
-		protected:
-			OscillationType mOscillationType;
-			Real  mFrequency;
-			Real  mPhase;
-			Real  mBase;
-			Real  mAmplitude;
+	protected:
+		OscillationType mOscillationType;
+		Real  mFrequency;
+		Real  mPhase;
+		Real  mBase;
+		Real  mAmplitude;
 	};
 
 	/* Helper class to do some generic calculation.
 	*/
-	class _ParticleUniverseExport DynamicAttributeHelper
-	{
-		public:
-			/* Return the value of a DynamicAttribute, given te x value.
-			*/
-			Real calculate(DynamicAttribute* dyn, Real x, Real defaultValue = 0.0f);
+	class _ParticleUniverseExport DynamicAttributeHelper {
+	public:
+		/* Return the value of a DynamicAttribute, given te x value.
+		*/
+		Real calculate(DynamicAttribute * dyn, Real x, Real defaultValue = 0.0);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DYNAMIC_ATTRIBUTE_H__ */

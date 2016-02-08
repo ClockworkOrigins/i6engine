@@ -26,49 +26,46 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniversePrerequisites.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Abstract (pure virtual) alias class
 	@remarks
 		The IAlias class acts as an interface and is used to represent all other classes that are a child of the
 		IAlias class. This typically concerns entities that are used in the Particle Universe scripts and for
 		which it is possible to define an alias (i.e. ParticleTechnique, ParticleEmitter and ParticleAffector).
 	*/
-	class _ParticleUniverseExport IAlias
-	{
-		public:
-			enum AliasType
-			{
-				AT_UNDEFINED,
-				AT_TECHNIQUE,
-				AT_RENDERER,
-				AT_EMITTER,
-				AT_AFFECTOR,
-				AT_OBSERVER,
-				AT_EXTERN,
-				AT_HANDLER,
-				AT_BEHAVIOUR
-			};
+	class _ParticleUniverseExport IAlias {
+	public:
+		enum AliasType {
+			AT_UNDEFINED,
+			AT_TECHNIQUE,
+			AT_RENDERER,
+			AT_EMITTER,
+			AT_AFFECTOR,
+			AT_OBSERVER,
+			AT_EXTERN,
+			AT_HANDLER,
+			AT_BEHAVIOUR
+		};
 
-			IAlias(void) : 
-				mAliasName(BLANK_STRING),
-				mAliasType(AT_UNDEFINED) {}
-			virtual ~IAlias(void) {}
+		IAlias() : mAliasName(BLANK_STRING), mAliasType(AT_UNDEFINED) {}
+		virtual ~IAlias() {}
 
-			/** 
-			*/
-			const String& getAliasName(void) const {return mAliasName;}
-			void setAliasName(String aliasName) {mAliasName = aliasName;}
+		/** 
+		*/
+		const String & getAliasName() const { return mAliasName; }
+		void setAliasName(String aliasName) { mAliasName = aliasName; }
 
-			/** 
-			*/
-			AliasType getAliasType(void) const {return mAliasType;}
-			void setAliasType(AliasType aliasType) {mAliasType = aliasType;}
+		/** 
+		*/
+		AliasType getAliasType() const { return mAliasType; }
+		void setAliasType(AliasType aliasType) { mAliasType = aliasType; }
 
-		protected:
-			String mAliasName;
-			AliasType mAliasType;
+	protected:
+		String mAliasName;
+		AliasType mAliasType;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_I_ALIAS_H__ */

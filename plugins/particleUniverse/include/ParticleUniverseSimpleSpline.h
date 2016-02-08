@@ -26,9 +26,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OgreSimpleSpline.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// If the Ogre renderer is replaced by another renderer, the type below must be re-implemented.
 	typedef Ogre::SimpleSpline SimpleSpline;
-}
-#endif
+
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SIMPLE_SPLINE_H__ */

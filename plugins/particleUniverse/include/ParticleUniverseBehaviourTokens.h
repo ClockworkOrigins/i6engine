@@ -27,41 +27,35 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	class ParticleBehaviour;
 
 	/** The BehaviourTranslator parses 'behaviour' tokens
 	*/
-	class _ParticleUniverseExport BehaviourTranslator : public ScriptTranslator
-	{
-		protected:
-			ParticleBehaviour* mBehaviour;
+	class _ParticleUniverseExport BehaviourTranslator : public ScriptTranslator {
+	public:
+		BehaviourTranslator();
+		virtual ~BehaviourTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
 
-		public:
-			BehaviourTranslator(void);
-			virtual ~BehaviourTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	protected:
+		ParticleBehaviour * mBehaviour;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ParticleBehaviourWriter : public ScriptWriter
-	{
-		public:
+	class _ParticleUniverseExport ParticleBehaviourWriter : public ScriptWriter {
+	public:
+		ParticleBehaviourWriter() {}
+		virtual ~ParticleBehaviourWriter() {}
 
-			ParticleBehaviourWriter(void) {}
-			virtual ~ParticleBehaviourWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PARTICLE_BEHAVIOUR_TOKENS_H__ */

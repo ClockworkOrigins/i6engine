@@ -26,8 +26,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OgreMath.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// If the Ogre renderer is replaced by another renderer, the types below must be re-implemented.
 	typedef Ogre::Radian Radian;
 	typedef Ogre::Angle Angle;
@@ -49,5 +49,7 @@ namespace ParticleUniverse
 	// Math::NEG_INFINITY
 	// Math::TWO_PI
 	// Math::PI
-}
-#endif
+
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_MATH_H__ */

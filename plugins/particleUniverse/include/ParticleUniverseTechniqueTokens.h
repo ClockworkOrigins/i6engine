@@ -27,37 +27,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The TechniqueTranslator parses all 'technique' tokens
 	*/
-	class _ParticleUniverseExport TechniqueTranslator : public ScriptTranslator
-	{
-		protected:
-			ParticleTechnique* mTechnique;
-		public:
-			TechniqueTranslator(void);
-			virtual ~TechniqueTranslator(void){}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport TechniqueTranslator : public ScriptTranslator {
+	public:
+		TechniqueTranslator();
+		virtual ~TechniqueTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
+
+	protected:
+		ParticleTechnique * mTechnique;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** The ParticleTechniqueWriter writes all 'technique' tokens
     */
-	class _ParticleUniverseExport ParticleTechniqueWriter : public ScriptWriter
-	{
-		public:
+	class _ParticleUniverseExport ParticleTechniqueWriter : public ScriptWriter {
+	public:
+		ParticleTechniqueWriter() {}
+		virtual ~ParticleTechniqueWriter() {}
 
-			ParticleTechniqueWriter(void) {}
-			virtual ~ParticleTechniqueWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_TECHNIQUE_TOKENS_H__ */

@@ -27,35 +27,30 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The CameraDependencyTranslator parses 'CameraDependency' tokens
 	*/
-	class _ParticleUniverseExport CameraDependencyTranslator : public ScriptTranslator
-	{
-		public:
-			CameraDependencyTranslator(void);
-			virtual ~CameraDependencyTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport CameraDependencyTranslator : public ScriptTranslator {
+	public:
+		CameraDependencyTranslator();
+		virtual ~CameraDependencyTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport CameraDependencyWriter : public ScriptWriter
-	{
-		public:
+	class _ParticleUniverseExport CameraDependencyWriter : public ScriptWriter {
+	public:
+		CameraDependencyWriter() {}
+		virtual ~CameraDependencyWriter() {}
 
-			CameraDependencyWriter(void) {}
-			virtual ~CameraDependencyWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_CAMERA_DEPENDENCY_TOKENS_H__ */

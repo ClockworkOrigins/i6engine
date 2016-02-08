@@ -32,8 +32,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "OgreVector2.h"
 #include "OgreVector3.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Define types
 	typedef unsigned int uint32;
 	typedef unsigned short uint16;
@@ -69,19 +69,20 @@ namespace ParticleUniverse
 
 	// Typedef's for specific 'Ogre' containers.
 	// vector container
-	template <class T> struct vector : public std::vector<T, Ogre::STLAllocator<T, Ogre::GeneralAllocPolicy> >
-	{
+	template<class T>
+	struct vector : public std::vector<T, Ogre::STLAllocator<T, Ogre::GeneralAllocPolicy>> {
 	};
 
 	// list container
-	template <class T> struct list : public std::list<T, Ogre::STLAllocator<T, Ogre::GeneralAllocPolicy> >
-	{ 
+	template<class T>
+	struct list : public std::list<T, Ogre::STLAllocator<T, Ogre::GeneralAllocPolicy>> { 
 	};
 
 	// map container
-	template <class T, class M> struct map : public std::map<T, M, std::less<T>, Ogre::STLAllocator<T, Ogre::GeneralAllocPolicy> >
-	{ 
+	template<class T, class M>
+	struct map : public std::map<T, M, std::less<T>, Ogre::STLAllocator<T, Ogre::GeneralAllocPolicy>> { 
 	};
-}
 
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_TYPES_H__ */

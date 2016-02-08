@@ -28,41 +28,37 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptWriter.h"
 #include "ParticleUniverseTechniqueTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The SystemTranslator parses all 'system' tokens
 	*/
-	class _ParticleUniverseExport SystemTranslator : public ScriptTranslator
-	{
-		protected:
-			ParticleSystem* mSystem;
-		public:
-			SystemTranslator(void);
-			virtual ~SystemTranslator(void){}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport SystemTranslator : public ScriptTranslator {
+	public:
+		SystemTranslator();
+		virtual ~SystemTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
+
+	protected:
+		ParticleSystem * mSystem;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** The ParticleSystemWriter writes all 'system' tokens
     */
-	class _ParticleUniverseExport ParticleSystemWriter : public ScriptWriter
-	{
-		public:
+	class _ParticleUniverseExport ParticleSystemWriter : public ScriptWriter {
+	public:
+		ParticleSystemWriter() {}
+		virtual ~ParticleSystemWriter() {}
 
-			ParticleSystemWriter(void) {}
-			virtual ~ParticleSystemWriter(void) {}
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
-
-		protected:
-			// Gets called during serialization
-			ParticleTechniqueWriter mParticleTechniqueWriter;
+	protected:
+		// Gets called during serialization
+		ParticleTechniqueWriter mParticleTechniqueWriter;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SYSTEM_TOKENS_H__ */

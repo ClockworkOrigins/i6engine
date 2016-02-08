@@ -27,44 +27,40 @@ namespace ParticleUniverse {
 
 	/** The AffectorTranslator parses 'affector' tokens
 	*/
-	class _ParticleUniverseExport AffectorTranslator : public ScriptTranslator
-	{
-		protected:
-			ParticleAffector* mAffector;
+	class _ParticleUniverseExport AffectorTranslator : public ScriptTranslator {
+	public:
+		AffectorTranslator();
+		virtual ~AffectorTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
 
-		public:
-			AffectorTranslator(void);
-			virtual ~AffectorTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	protected:
+		ParticleAffector * mAffector;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ParticleAffectorWriter : public ScriptWriter
-	{
-		public:
-			static const String KEYWORD_AFFECTOR;
-			static const String KEYWORD_EXTERN;
-			static const String KEYWORD_ENABLED;
-			static const String KEYWORD_POSITION;
-			static const String KEYWORD_MASS;
-			static const String KEYWORD_EXCLUDE_EMITTER;
-			static const String KEYWORD_SPECIALISATION;
-			static const String KEYWORD_SPEC_DEFAULT;
-			static const String KEYWORD_SPEC_TTL_INCREASE;
-			static const String KEYWORD_SPEC_TTL_DECREASE;
+	class _ParticleUniverseExport ParticleAffectorWriter : public ScriptWriter {
+	public:
+		static const String KEYWORD_AFFECTOR;
+		static const String KEYWORD_EXTERN;
+		static const String KEYWORD_ENABLED;
+		static const String KEYWORD_POSITION;
+		static const String KEYWORD_MASS;
+		static const String KEYWORD_EXCLUDE_EMITTER;
+		static const String KEYWORD_SPECIALISATION;
+		static const String KEYWORD_SPEC_DEFAULT;
+		static const String KEYWORD_SPEC_TTL_INCREASE;
+		static const String KEYWORD_SPEC_TTL_DECREASE;
 
-			ParticleAffectorWriter(void) {}
-			virtual ~ParticleAffectorWriter(void) {}
+		ParticleAffectorWriter() {}
+		virtual ~ParticleAffectorWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PARTICLE_AFFECTOR_TOKENS_H__ */

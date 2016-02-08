@@ -26,15 +26,16 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OgreAny.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// If the Ogre renderer is replaced by another renderer, the Any class and any_cast must be re-implemented
 	typedef Ogre::Any Any;
-	//template <typename ValueType> ValueType* any_cast(Any* operand) : public any_cast(operand){};
-	template <typename ValueType> ValueType* any_cast(Any* operand)
-	{
+
+	template<typename ValueType>
+	ValueType * any_cast(Any * operand) {
 		return Ogre::any_cast<ValueType>(operand);
 	}
-}
 
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ANY_H__ */

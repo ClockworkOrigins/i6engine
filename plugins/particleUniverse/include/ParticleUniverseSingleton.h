@@ -27,9 +27,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // If the Ogre renderer is replaced by another renderer, the Singleton class must be re-implemented
 #include "OgreSingleton.h"
 
-namespace ParticleUniverse
-{
-	template <typename T> class Singleton : public Ogre::Singleton<T>{};
-}
+namespace ParticleUniverse {
 
-#endif
+	template<typename T>
+	class Singleton : public Ogre::Singleton<T> {};
+
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SINGLETON_H__ */

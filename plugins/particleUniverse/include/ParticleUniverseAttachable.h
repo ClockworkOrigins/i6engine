@@ -30,8 +30,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OGRE/OgreMovableObject.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The Attachable is a MovableObject that can be registered at a ParticleSystem as an Extern. By means
 		of this construction it is possible to make a dependency between the 2 MovableObjects.
 		This can be convenient if the Attachable is a Particle Affector wrapper, that affects a particle
@@ -43,89 +43,86 @@ namespace ParticleUniverse
 		ParticleSystemManager. This implies some additional coding, because this is not supported by the
 		scripting capabilities.
     */
-	class _ParticleUniverseExport Attachable : public Extern, public Ogre::MovableObject
-	{
-		public:
-			// Constants
-			static String PU_ATTACHABLE;
+	class _ParticleUniverseExport Attachable : public Extern, public Ogre::MovableObject {
+	public:
+		// Constants
+		static String PU_ATTACHABLE;
 
-			Attachable(void);
-	        virtual ~Attachable(void) {}
+		Attachable();
+	    virtual ~Attachable() {}
 
-			/** Get the Distance Threshold
-			*/
-			Real getDistanceThreshold(void) const;
+		/** Get the Distance Threshold
+		*/
+		Real getDistanceThreshold() const;
 
-			/** Set the Distance Threshold. This threshold defines at which distance the Attachable doesn't influence 
-				the particle anymore.
-			*/
-			void setDistanceThreshold(const Real distanceThreshold);
+		/** Set the Distance Threshold. This threshold defines at which distance the Attachable doesn't influence 
+			the particle anymore.
+		*/
+		void setDistanceThreshold(const Real distanceThreshold);
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			void _notifyAttached(Ogre::Node* parent, bool isTagPoint = false);
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		void _notifyAttached(Ogre::Node * parent, bool isTagPoint = false);
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			virtual void _notifyCurrentCamera(Camera* cam);
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		virtual void _notifyCurrentCamera(Camera * cam);
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			const String& getMovableType(void) const;
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		const String & getMovableType() const;
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			const AxisAlignedBox& getBoundingBox(void) const;
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		const AxisAlignedBox & getBoundingBox() const;
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			virtual Real getBoundingRadius(void) const;
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		virtual Real getBoundingRadius() const;
 			
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			virtual void _updateRenderQueue(Ogre::RenderQueue* queue);
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		virtual void _updateRenderQueue(Ogre::RenderQueue * queue);
 
-			/** @see MovableObject
-		    */
-			virtual void visitRenderables(Ogre::Renderable::Visitor* visitor,
-				bool debugRenderables = false) {/* No implementation */}
+		/** @see MovableObject
+		*/
+		virtual void visitRenderables(Ogre::Renderable::Visitor * visitor, bool debugRenderables = false) { /* No implementation */ }
 
-			/** Copy attributes to another Extern object.
-	        */
-			virtual void copyAttributesTo (Extern* externObject);
+		/** Copy attributes to another Extern object.
+	    */
+		virtual void copyAttributesTo(Extern * externObject);
 
-			/** Perform initialisation actions.
-	        */
-			virtual void _prepare(ParticleTechnique* technique);
+		/** Perform initialisation actions.
+	    */
+		virtual void _prepare(ParticleTechnique * technique);
 
-			/** Reverse the actions from the _prepare.
-	        */
-			virtual void _unprepare(ParticleTechnique* particleTechnique);
+		/** Reverse the actions from the _prepare.
+	    */
+		virtual void _unprepare(ParticleTechnique * particleTechnique);
 
-			/** Actually processes a particle.
-	        */
-			virtual void _interface(ParticleTechnique* technique, 
-				Particle* particle, 
-				Real timeElapsed);
+		/** Actually processes a particle.
+	    */
+		virtual void _interface(ParticleTechnique * technique, Particle * particle, Real timeElapsed);
 
-		protected:
-			AxisAlignedBox mAABB;
-			Real mBoundingRadius;
-			Real mDistanceThreshold;
-			bool mDistanceThresholdSet;
+	protected:
+		AxisAlignedBox mAABB;
+		Real mBoundingRadius;
+		Real mDistanceThreshold;
+		bool mDistanceThresholdSet;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ATTACHABLE_H__ */

@@ -26,9 +26,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OgreCamera.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// If the Ogre renderer is replaced by another renderer, the type below must be re-implemented.
 	typedef Ogre::Camera Camera;
-}
-#endif
+
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_CONFIG_FILE_H__ */

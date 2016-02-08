@@ -26,8 +26,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OgreScriptCompiler.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// If the Ogre renderer is replaced by another renderer, the types below must be re-implemented.
 	typedef Ogre::ScriptCompiler ScriptCompiler;
 	typedef Ogre::ScriptCompilerManager ScriptCompilerManager;
@@ -39,5 +39,7 @@ namespace ParticleUniverse
 	typedef Ogre::AbstractNodeType AbstractNodeType;
 	static const AbstractNodeType ANT_PROPERTY = Ogre::ANT_PROPERTY;
 	static const AbstractNodeType ANT_OBJECT = Ogre::ANT_OBJECT;
-}
-#endif
+
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SCRIPT_COMPILER_H__ */

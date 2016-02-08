@@ -27,14 +27,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // If the Ogre renderer is replaced by another renderer, the Controller class must be re-implemented
 #include "OgreController.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Using a subclass of public Ogre::Controller does not work, because of some conversion issues between Ogre::Controller and Controller in 
 		the ControllerManager (i.e. in the createFrameTimePassthroughController() function).
 	*/
 	using Ogre::Controller;
-//	template <typename T> class Controller : public Ogre::Controller <T>{};
-	template <typename T> class ControllerValue : public Ogre::ControllerValue <T>{};
-}
+	template<typename T>
+	class ControllerValue : public Ogre::ControllerValue<T> {};
 
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_CONTROLLER_H__ */

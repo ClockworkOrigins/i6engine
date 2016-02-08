@@ -23,28 +23,25 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseAliasTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/**************************************************************************
 	 * AliasTranslator
 	 *************************************************************************/
-	AliasTranslator::AliasTranslator()
-	{
+	AliasTranslator::AliasTranslator() {
 	}
-	//-------------------------------------------------------------------------
-	void AliasTranslator::translate(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		ObjectAbstractNode* obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
-		if(obj->name.empty())
-			compiler->addError(ScriptCompiler::CE_OBJECTNAMEEXPECTED, obj->file, int(obj->line));
 
-		for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
-		{
-			if((*i)->type == ANT_OBJECT)
-			{
+	void AliasTranslator::translate(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		ObjectAbstractNode * obj = reinterpret_cast<ObjectAbstractNode *>(node.get());
+		if (obj->name.empty()) {
+			compiler->addError(ScriptCompiler::CE_OBJECTNAMEEXPECTED, obj->file, int(obj->line));
+		}
+
+		for (AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i) {
+			if ((*i)->type == ANT_OBJECT) {
 				processNode(compiler, *i);
 			}
 		}
 	}
 
-}
+} /* namespace ParticleUniverse */

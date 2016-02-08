@@ -26,15 +26,16 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OgreRadixSort.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// If the Ogre renderer is replaced by another renderer, the RadixSort class must be re-implemented
-	template <class TContainer, class TContainerValueType, typename TCompValueType>	class RadixSort : 
-		public Ogre::RadixSort<TContainer, TContainerValueType, TCompValueType>{};
+	template<class TContainer, class TContainerValueType, typename TCompValueType>
+	class RadixSort : public Ogre::RadixSort<TContainer, TContainerValueType, TCompValueType> {};
 
 	typedef Ogre::SortMode SortMode;
 	static const SortMode SM_DIRECTION = Ogre::SM_DIRECTION;
 	static const SortMode SM_DISTANCE = Ogre::SM_DISTANCE;
-}
 
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_RADIX_SORT_H__ */

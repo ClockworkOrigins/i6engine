@@ -27,41 +27,35 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	class ParticleEventHandler;
 
 	/** The ParticleEventHandlerTranslator parses 'ParticleEventHandler' tokens
 	*/
-	class _ParticleUniverseExport ParticleEventHandlerTranslator : public ScriptTranslator
-	{
-		protected:
-			ParticleEventHandler* mParticleEventHandler;
+	class _ParticleUniverseExport ParticleEventHandlerTranslator : public ScriptTranslator {
+	public:
+		ParticleEventHandlerTranslator();
+		virtual ~ParticleEventHandlerTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
 
-		public:
-			ParticleEventHandlerTranslator(void);
-			virtual ~ParticleEventHandlerTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	protected:
+		ParticleEventHandler * mParticleEventHandler;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ParticleEventHandlerWriter : public ScriptWriter
-	{
-		public:
+	class _ParticleUniverseExport ParticleEventHandlerWriter : public ScriptWriter {
+	public:
+		ParticleEventHandlerWriter() {}
+		virtual ~ParticleEventHandlerWriter() {}
 
-			ParticleEventHandlerWriter(void) {}
-			virtual ~ParticleEventHandlerWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PARTICLE_EVENT_HANDLER_TOKENS_H__ */

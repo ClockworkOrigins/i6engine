@@ -27,56 +27,45 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseSystemManager.h"
 #include "ParticleUniverseTechnique.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/**************************************************************************
 	 * BehaviourTranslator
 	 *************************************************************************/
-	BehaviourTranslator::BehaviourTranslator()
-		:mBehaviour(0)
-	{
+	BehaviourTranslator::BehaviourTranslator() : mBehaviour(nullptr) {
 	}
-	//-------------------------------------------------------------------------
-	void BehaviourTranslator::translate(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		ObjectAbstractNode* obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
-		ObjectAbstractNode* parent = obj->parent ? reinterpret_cast<ObjectAbstractNode*>(obj->parent) : 0;
+
+	void BehaviourTranslator::translate(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		ObjectAbstractNode * obj = reinterpret_cast<ObjectAbstractNode *>(node.get());
+		ObjectAbstractNode * parent = obj->parent ? reinterpret_cast<ObjectAbstractNode *>(obj->parent) : nullptr;
 
 		// The name of the obj is the type of the Behaviour
 		String type;
-		if(!obj->name.empty())
-		{
+		if (!obj->name.empty()) {
 			type = obj->name;
-		}
-		else
-		{
+		} else {
 			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
 		// Get the factory
-		ParticleBehaviourFactory* behaviourFactory = ParticleSystemManager::getSingletonPtr()->getBehaviourFactory(type);
-		if (!behaviourFactory)
-		{
+		ParticleBehaviourFactory * behaviourFactory = ParticleSystemManager::getSingletonPtr()->getBehaviourFactory(type);
+		if (!behaviourFactory) {
 			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
 		// Create the Behaviour
 		mBehaviour = ParticleSystemManager::getSingletonPtr()->createBehaviour(type);
-		if (!mBehaviour)
-		{
+		if (!mBehaviour) {
 			compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, int(obj->line));
 			return;
 		}
 
-		if (!obj->parent->context.isEmpty())
-		{
-			ParticleTechnique* technique = any_cast<ParticleTechnique*>(obj->parent->context);
+		if (!obj->parent->context.isEmpty()) {
+			ParticleTechnique * technique = any_cast<ParticleTechnique*>(obj->parent->context);
 			technique->_addBehaviourTemplate(mBehaviour);
-		}
-		else
-		{
+		} else {
 			// It is an alias
 			mBehaviour->setAliasName(parent->name);
 			ParticleSystemManager::getSingletonPtr()->addAlias(mBehaviour);
@@ -86,45 +75,29 @@ namespace ParticleUniverse
 		obj->context = Any(mBehaviour);
 
 		// Run through properties
-		for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
-		{
+		for (AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i) {
 			// No properties of its own
-			if((*i)->type == ANT_PROPERTY)
-			{
-				PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
-				if (behaviourFactory->translateChildProperty(compiler, *i))
-				{
+			if ((*i)->type == ANT_PROPERTY) {
+				PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>((*i).get());
+				if (behaviourFactory->translateChildProperty(compiler, *i)) {
 					// Parsed the property by another translator; do nothing
-				}
-				else
-				{
+				} else {
 					errorUnexpectedProperty(compiler, prop);
 				}
-			}
-			else if((*i)->type == ANT_OBJECT)
-			{
-				if (behaviourFactory->translateChildObject(compiler, *i))
-				{
+			} else if ((*i)->type == ANT_OBJECT) {
+				if (behaviourFactory->translateChildObject(compiler, *i)) {
 					// Parsed the object by another translator; do nothing
-				}
-				else
-				{
+				} else {
 					processNode(compiler, *i);
 				}
-			}
-            else
-			{
+			} else {
 				errorUnexpectedToken(compiler, *i);
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
 
-	void ParticleBehaviourWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	void ParticleBehaviourWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Nothing yet
 	}
 
-}
+} /* namespace ParticleUniverse */

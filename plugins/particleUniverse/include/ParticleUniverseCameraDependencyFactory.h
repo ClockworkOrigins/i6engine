@@ -25,54 +25,35 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_CAMERA_DEPENDECY_FACTORY_H__
 
 #include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseCameraDependency.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
+	class CameraDependency;
+
 	/** This is the factory class with which a CameraDependency is created.
     */
-	class _ParticleUniverseExport CameraDependencyFactory : public FactoryAlloc
-	{
-	    public:
+	class _ParticleUniverseExport CameraDependencyFactory : public FactoryAlloc {
+	public:
+		CameraDependencyFactory() {}
+	    virtual ~CameraDependencyFactory() {}
 
-			CameraDependencyFactory(void) {};
-	        virtual ~CameraDependencyFactory(void) {};
+		/** 
+	    */
+		CameraDependency * create();
 
-			/** 
-	        */
-			CameraDependency* create(void)
-			{
-				return PU_NEW_T(CameraDependency, MEMCATEGORY_SCENE_OBJECTS)();
-			};
+		/** 
+	    */
+		CameraDependency * create(Real threshold, bool inc);
 
-			/** 
-	        */
-			CameraDependency* create(Real threshold, bool inc)
-			{
-				return PU_NEW_T(CameraDependency, MEMCATEGORY_SCENE_OBJECTS)(threshold, inc);
-			};
-
-			/** 
-	        */
-			CameraDependency* clone(CameraDependency* cameraDependency)
-			{
-				if (cameraDependency)
-				{
-					CameraDependency* newCameraDependency = create();
-					cameraDependency->copyAttributesTo(newCameraDependency);
-					return newCameraDependency;
-				}
-
-				return 0;
-			}
+		/** 
+	    */
+		CameraDependency * clone(CameraDependency * cameraDependency);
 			
-			/** Delete a CameraDependency
-	        */
-			void destroy (CameraDependency* cameraDependency)
-			{
-				PU_DELETE_T(cameraDependency, CameraDependency, MEMCATEGORY_SCENE_OBJECTS);
-			};
+		/** Delete a CameraDependency
+	    */
+		void destroy(CameraDependency * cameraDependency);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_CAMERA_DEPENDECY_FACTORY_H__ */

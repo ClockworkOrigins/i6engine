@@ -27,41 +27,35 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptWriter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 
 	class ParticleObserver;
 
 	/** The ObserverTranslator parses 'Observer' tokens
 	*/
-	class _ParticleUniverseExport ObserverTranslator : public ScriptTranslator
-	{
-		protected:
-			ParticleObserver* mObserver;
+	class _ParticleUniverseExport ObserverTranslator : public ScriptTranslator {
+	public:
+		ObserverTranslator();
+		virtual ~ObserverTranslator() {}
+		virtual void translate(ScriptCompiler * compiler, const AbstractNodePtr & node);
 
-		public:
-			ObserverTranslator(void);
-			virtual ~ObserverTranslator(void) {}
-			virtual void translate(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	protected:
+		ParticleObserver * mObserver;
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ParticleObserverWriter : public ScriptWriter
-	{
-		public:
+	class _ParticleUniverseExport ParticleObserverWriter : public ScriptWriter {
+	public:
+		ParticleObserverWriter() {}
+		virtual ~ParticleObserverWriter() {}
 
-			ParticleObserverWriter(void) {}
-			virtual ~ParticleObserverWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_OBSERVER_TOKENS_H__ */

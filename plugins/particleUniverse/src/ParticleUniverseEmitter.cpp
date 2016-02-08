@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseEmitter.h"
 
+#include "ParticleUniverseCameraDependency.h"
 #include "ParticleUniverseSystem.h"
 #include "ParticleUniverseTechnique.h"
 #include "ParticleUniverseVisualParticle.h"

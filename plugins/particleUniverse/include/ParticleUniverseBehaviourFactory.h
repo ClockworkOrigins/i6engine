@@ -24,48 +24,44 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BEHAVIOUR_FACTORY_H__
 #define __PU_BEHAVIOUR_FACTORY_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBehaviour.h"
 #include "ParticleUniverseBehaviourTokens.h"
-#include "ParticleUniverseScriptDeserializer.h"
 #include "ParticleUniverseScriptReader.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This is the base factory of all ParticleBehaviour implementations.
     */
-	class _ParticleUniverseExport ParticleBehaviourFactory : public ScriptReader, public ScriptWriter, public FactoryAlloc
-	{
-	    protected:
-			/** 
-	        */
-			template <class T>
-			ParticleBehaviour* _createBehaviour(void)
-			{
-				ParticleBehaviour* particleBehaviour = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
-				particleBehaviour->setBehaviourType(getBehaviourType());
-				return particleBehaviour;
-			}
-
+	class _ParticleUniverseExport ParticleBehaviourFactory : public ScriptReader, public ScriptWriter, public FactoryAlloc {
 	public:
-			ParticleBehaviourFactory(void) {};
-			virtual ~ParticleBehaviourFactory(void){};
+		ParticleBehaviourFactory() {}
+		virtual ~ParticleBehaviourFactory() {}
 
-		    /** Returns the type of the factory, which identifies the particle behaviour type this factory creates. */
-			virtual String getBehaviourType(void) const = 0;
+		/** Returns the type of the factory, which identifies the particle behaviour type this factory creates. */
+		virtual String getBehaviourType() const = 0;
 
-			/** Creates a new behaviour instance.
-		    @remarks
-	        */
-		    virtual ParticleBehaviour* createBehaviour(void) = 0;
+		/** Creates a new behaviour instance.
+		@remarks
+	    */
+		virtual ParticleBehaviour * createBehaviour() = 0;
 
-			/** Delete a behaviour
-	        */
-			void destroyBehaviour (ParticleBehaviour* behaviour)
-			{
-				PU_DELETE_T(behaviour, ParticleBehaviour, MEMCATEGORY_SCENE_OBJECTS);
-			}
+		/** Delete a behaviour
+	    */
+		void destroyBehaviour(ParticleBehaviour * behaviour) {
+			PU_DELETE_T(behaviour, ParticleBehaviour, MEMCATEGORY_SCENE_OBJECTS);
+		}
+
+	protected:
+		/**
+		*/
+		template<class T>
+		ParticleBehaviour * _createBehaviour() {
+			ParticleBehaviour * particleBehaviour = PU_NEW_T(T, MEMCATEGORY_SCENE_OBJECTS)();
+			particleBehaviour->setBehaviourType(getBehaviourType());
+			return particleBehaviour;
+		}
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BEHAVIOUR_FACTORY_H__ */

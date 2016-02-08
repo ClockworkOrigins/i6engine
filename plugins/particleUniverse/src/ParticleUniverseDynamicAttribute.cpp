@@ -25,207 +25,164 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseMath.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	DynamicAttribute::DynamicAttribute (void) :
-		IElement()
-	{
+namespace ParticleUniverse {
+
+	DynamicAttribute::DynamicAttribute() : IElement() {
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttribute::~DynamicAttribute (void)
-	{
+
+	DynamicAttribute::~DynamicAttribute() {
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttribute::DynamicAttributeType DynamicAttribute::getType (void) const
-	{
+
+	DynamicAttribute::DynamicAttributeType DynamicAttribute::getType() const {
 		return mType;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttribute::setType (DynamicAttribute::DynamicAttributeType type)
-	{
+
+	void DynamicAttribute::setType(DynamicAttribute::DynamicAttributeType type) {
 		mType = type;
 	}
 
-	//-----------------------------------------------------------------------
-	DynamicAttributeFixed::DynamicAttributeFixed (void) : mValue(0)
-	{
+	DynamicAttributeFixed::DynamicAttributeFixed() : mValue(0) {
 		mType = DynamicAttribute::DAT_FIXED;
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeFixed::DynamicAttributeFixed (const DynamicAttributeFixed& dynamicAttributeFixed)
-	{
+
+	DynamicAttributeFixed::DynamicAttributeFixed(const DynamicAttributeFixed & dynamicAttributeFixed) {
 		mType = DynamicAttribute::DAT_FIXED;
 		mValue = dynamicAttributeFixed.mValue;
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeFixed::~DynamicAttributeFixed (void)
-	{
+
+	DynamicAttributeFixed::~DynamicAttributeFixed() {
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeFixed::setValue (Real value)
-	{
+
+	void DynamicAttributeFixed::setValue(Real value) {
 		mValue = value;
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeFixed::getValue (Real x)
-	{
+
+	Real DynamicAttributeFixed::getValue(Real x) {
 		return mValue;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeFixed::copyAttributesTo(DynamicAttribute* dynamicAttribute)
-	{
-		if (!dynamicAttribute || dynamicAttribute->getType() != DynamicAttribute::DAT_FIXED)
-			return;
 
-		DynamicAttributeFixed* dynAttr = static_cast<DynamicAttributeFixed*>(dynamicAttribute);
+	void DynamicAttributeFixed::copyAttributesTo(DynamicAttribute * dynamicAttribute) {
+		if (!dynamicAttribute || dynamicAttribute->getType() != DynamicAttribute::DAT_FIXED) {
+			return;
+		}
+
+		DynamicAttributeFixed * dynAttr = static_cast<DynamicAttributeFixed *>(dynamicAttribute);
 		dynAttr->mValue = mValue;
 	}
 
-	//-----------------------------------------------------------------------
-	DynamicAttributeRandom::DynamicAttributeRandom (void) : mMin(0), mMax(0)
-	{
+	DynamicAttributeRandom::DynamicAttributeRandom() : mMin(0), mMax(0) {
 		mType = DynamicAttribute::DAT_RANDOM;
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeRandom::DynamicAttributeRandom (const DynamicAttributeRandom& dynamicAttributeRandom)
-	{
+
+	DynamicAttributeRandom::DynamicAttributeRandom(const DynamicAttributeRandom & dynamicAttributeRandom) {
 		mType = DynamicAttribute::DAT_RANDOM;
 		mMin = dynamicAttributeRandom.mMin;
 		mMax = dynamicAttributeRandom.mMax;
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeRandom::~DynamicAttributeRandom (void)
-	{
+
+	DynamicAttributeRandom::~DynamicAttributeRandom() {
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeRandom::getMin (void) const
-	{
+
+	Real DynamicAttributeRandom::getMin() const {
 		return mMin;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeRandom::setMin (Real min)
-	{
+
+	void DynamicAttributeRandom::setMin(Real min) {
 		mMin = min;
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeRandom::getMax (void) const
-	{
+
+	Real DynamicAttributeRandom::getMax() const {
 		return mMax;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeRandom::setMax (Real max)
-	{
+
+	void DynamicAttributeRandom::setMax(Real max) {
 		mMax = max;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeRandom::setMinMax (Real min, Real max)
-	{
+
+	void DynamicAttributeRandom::setMinMax (Real min, Real max) {
 		mMin = min;
 		mMax = max;
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeRandom::getValue (Real x)
-	{
+
+	Real DynamicAttributeRandom::getValue(Real x) {
 		return Math::RangeRandom(mMin, mMax);
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeRandom::copyAttributesTo(DynamicAttribute* dynamicAttribute)
-	{
-		if (!dynamicAttribute || dynamicAttribute->getType() != DynamicAttribute::DAT_RANDOM)
-			return;
 
-		DynamicAttributeRandom* dynAttr = static_cast<DynamicAttributeRandom*>(dynamicAttribute);
+	void DynamicAttributeRandom::copyAttributesTo(DynamicAttribute * dynamicAttribute) {
+		if (!dynamicAttribute || dynamicAttribute->getType() != DynamicAttribute::DAT_RANDOM) {
+			return;
+		}
+
+		DynamicAttributeRandom * dynAttr = static_cast<DynamicAttributeRandom *>(dynamicAttribute);
 		dynAttr->mMin = mMin;
 		dynAttr->mMax = mMax;
 	}
 
-	//-----------------------------------------------------------------------
-	DynamicAttributeCurved::DynamicAttributeCurved (void) : 
-		mRange(0),
-		mInterpolationType(IT_LINEAR)
-	{
+	DynamicAttributeCurved::DynamicAttributeCurved() : mRange(0), mInterpolationType(IT_LINEAR) {
 		mType = DynamicAttribute::DAT_CURVED;
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeCurved::DynamicAttributeCurved (InterpolationType interpolationType) : 
-		mRange(0),
-		mInterpolationType(interpolationType)
-	{
+
+	DynamicAttributeCurved::DynamicAttributeCurved(InterpolationType interpolationType) : mRange(0), mInterpolationType(interpolationType) {
 		mType = DynamicAttribute::DAT_CURVED;
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeCurved::DynamicAttributeCurved (const DynamicAttributeCurved& dynamicAttributeCurved)
-	{
+
+	DynamicAttributeCurved::DynamicAttributeCurved(const DynamicAttributeCurved & dynamicAttributeCurved) {
 		mType = DynamicAttribute::DAT_CURVED;
 		mInterpolationType = dynamicAttributeCurved.mInterpolationType;
 		mSpline = dynamicAttributeCurved.mSpline;
 		mRange = dynamicAttributeCurved.mRange;
 
 		// Copy controlpoints
-		DynamicAttributeCurved::ControlPointList::const_iterator it; // Need const_iterator here!
-		DynamicAttributeCurved::ControlPointList::const_iterator itEnd = dynamicAttributeCurved.mControlPoints.end();
-		for (it = dynamicAttributeCurved.mControlPoints.begin(); it != itEnd; ++it)
-		{
+		for (DynamicAttributeCurved::ControlPointList::const_iterator it = dynamicAttributeCurved.mControlPoints.begin(); it != dynamicAttributeCurved.mControlPoints.end(); ++it) {
 			Vector2 controlPoint = *it;
 			mControlPoints.push_back (controlPoint);
 		}
 		processControlPoints();
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeCurved::~DynamicAttributeCurved (void)
-	{
+
+	DynamicAttributeCurved::~DynamicAttributeCurved() {
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeCurved::setInterpolationType (InterpolationType interpolationType)
-	{
-		if (interpolationType != mInterpolationType)
-		{
+
+	void DynamicAttributeCurved::setInterpolationType(InterpolationType interpolationType) {
+		if (interpolationType != mInterpolationType) {
 			// If switched to another InterpolationType, the already existing ControlPoints will be removed.
 			removeAllControlPoints();
 			mInterpolationType = interpolationType;
 		}
 	}
-	//-----------------------------------------------------------------------
-	InterpolationType DynamicAttributeCurved::getInterpolationType (void) const
-	{
+
+	InterpolationType DynamicAttributeCurved::getInterpolationType() const {
 		return mInterpolationType;
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeCurved::getValue (Real x)
-	{
+
+	Real DynamicAttributeCurved::getValue(Real x) {
 		switch (mInterpolationType)
 		{
-		case IT_LINEAR:
-			{
-				// Search the interval in which 'x' resides and apply linear interpolation
-				if (mControlPoints.empty())
-					return 0;
-
-				ControlPointList::iterator it1 = _findNearestControlPointIterator(x);
-				ControlPointList::iterator it2 = it1 + 1;
-				if (it2 != mControlPoints.end())
-				{
-					// Calculate fraction: y = y1 + ((y2 - y1) * (x - x1)/(x2 - x1))
-					return (*it1).y + (((*it2).y - (*it1).y) * (x - (*it1).x)/((*it2).x - (*it1).x));
-				}
-				else
-				{
-					return (*it1).y;
-				}
+		case IT_LINEAR: {
+			// Search the interval in which 'x' resides and apply linear interpolation
+			if (mControlPoints.empty()) {
+				return 0;
 			}
-			break;
 
-		case IT_SPLINE:
-			{
-				// Fit using spline
-				if (mSpline.getNumPoints() < 1)
-					return 0;
-
-				Real fraction = x / mRange;
-				return (mSpline.interpolate(fraction < 1.0f ? fraction : 1.0f)).y;
+			ControlPointList::iterator it1 = _findNearestControlPointIterator(x);
+			ControlPointList::iterator it2 = it1 + 1;
+			if (it2 != mControlPoints.end()) {
+				// Calculate fraction: y = y1 + ((y2 - y1) * (x - x1)/(x2 - x1))
+				return (*it1).y + (((*it2).y - (*it1).y) * (x - (*it1).x)/((*it2).x - (*it1).x));
+			} else {
+				return (*it1).y;
 			}
-			break;
+		}
+
+		case IT_SPLINE: {
+			// Fit using spline
+			if (mSpline.getNumPoints() < 1) {
+				return 0;
+			}
+
+			Real fraction = x / mRange;
+			return (mSpline.interpolate(fraction < 1.0f ? fraction : 1.0f)).y;
+		}
 		default: {
 			break;
 		}
@@ -233,212 +190,170 @@ namespace ParticleUniverse
 
 		return 0;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeCurved::addControlPoint (Real x, Real y)
-	{
+
+	void DynamicAttributeCurved::addControlPoint(Real x, Real y) {
 		mControlPoints.push_back(Vector2(x, y));
 	}
-	//-----------------------------------------------------------------------
-	const DynamicAttributeCurved::ControlPointList& DynamicAttributeCurved::getControlPoints (void) const
-	{
+
+	const DynamicAttributeCurved::ControlPointList & DynamicAttributeCurved::getControlPoints() const {
 		return mControlPoints;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeCurved::processControlPoints(void)
-	{
-		if (mControlPoints.empty())
+
+	void DynamicAttributeCurved::processControlPoints() {
+		if (mControlPoints.empty()) {
 			return;
+		}
 
 		std::sort(mControlPoints.begin(), mControlPoints.end(), ControlPointSorter());
 		mRange = (*_getLastValidIterator()).x - (*_getFirstValidIterator()).x;
 
-		if (mInterpolationType == IT_SPLINE)
-		{
+		if (mInterpolationType == IT_SPLINE) {
 			// Add all sorted control points to the spline
-			DynamicAttributeCurved::ControlPointList::iterator it;
 			mSpline.clear();
-			for (it = mControlPoints.begin(); it != mControlPoints.end(); ++it)
+			for (DynamicAttributeCurved::ControlPointList::iterator it = mControlPoints.begin(); it != mControlPoints.end(); ++it) {
 				mSpline.addPoint(Vector3((*it).x, (*it).y, 0));
+			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	size_t DynamicAttributeCurved::getNumControlPoints(void) const
-	{
+
+	size_t DynamicAttributeCurved::getNumControlPoints() const {
 		return mControlPoints.size();
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeCurved::removeAllControlPoints(void)
-	{
+
+	void DynamicAttributeCurved::removeAllControlPoints() {
 		mControlPoints.clear();
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeCurved::ControlPointList::iterator DynamicAttributeCurved::_findNearestControlPointIterator(Real x)
-	{
+
+	DynamicAttributeCurved::ControlPointList::iterator DynamicAttributeCurved::_findNearestControlPointIterator(Real x) {
 		// Assume that the ControlPointList is not empty
 		ControlPointList::iterator it;
 		ControlPointList::iterator itEnd = mControlPoints.end();
-		for (it = mControlPoints.begin(); it != itEnd; ++it)
-		{
-			if (x < (*it).x)
-			{
-				if (it == mControlPoints.begin())
+		for (it = mControlPoints.begin(); it != itEnd; ++it) {
+			if (x < (*it).x) {
+				if (it == mControlPoints.begin()) {
 					return it;
-				else
+				} else {
 					return --it;
+				}
 			}
 		}
 
 		// If not found return the last valid iterator
 		return --it;
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeCurved::ControlPointList::iterator DynamicAttributeCurved::_getFirstValidIterator(void)
-	{
+
+	DynamicAttributeCurved::ControlPointList::iterator DynamicAttributeCurved::_getFirstValidIterator() {
 		return mControlPoints.begin();
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeCurved::ControlPointList::iterator DynamicAttributeCurved::_getLastValidIterator(void)
-	{
+
+	DynamicAttributeCurved::ControlPointList::iterator DynamicAttributeCurved::_getLastValidIterator() {
 		return mControlPoints.end() - 1;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeCurved::copyAttributesTo(DynamicAttribute* dynamicAttribute)
-	{
-		if (!dynamicAttribute || dynamicAttribute->getType() != DynamicAttribute::DAT_CURVED)
-			return;
 
-		DynamicAttributeCurved* dynAttr = static_cast<DynamicAttributeCurved*>(dynamicAttribute);
+	void DynamicAttributeCurved::copyAttributesTo(DynamicAttribute * dynamicAttribute) {
+		if (!dynamicAttribute || dynamicAttribute->getType() != DynamicAttribute::DAT_CURVED) {
+			return;
+		}
+
+		DynamicAttributeCurved * dynAttr = static_cast<DynamicAttributeCurved *>(dynamicAttribute);
 		dynAttr->mInterpolationType = mInterpolationType;
 		dynAttr->mSpline = mSpline;
 		dynAttr->mRange = mRange;
 
 		// Copy controlpoints
-		DynamicAttributeCurved::ControlPointList::const_iterator it; // Need const_iterator here!
-		DynamicAttributeCurved::ControlPointList::const_iterator itEnd = mControlPoints.end();
-		for (it = mControlPoints.begin(); it != itEnd; ++it)
-		{
+		for (DynamicAttributeCurved::ControlPointList::const_iterator it = mControlPoints.begin(); it != mControlPoints.end(); ++it) {
 			Vector2 controlPoint = *it;
 			dynAttr->mControlPoints.push_back(controlPoint);
 		}
 		dynAttr->processControlPoints();
 	}
 
+	DynamicAttributeOscillate::DynamicAttributeOscillate() : mOscillationType(DynamicAttributeOscillate::OSCT_SINE), mFrequency(1.0), mPhase(0.0), mBase(0.0), mAmplitude(1.0) {
+		mType = DynamicAttribute::DAT_OSCILLATE;
+	}
 
-	//-----------------------------------------------------------------------
-	DynamicAttributeOscillate::DynamicAttributeOscillate (void) :
-		mOscillationType(DynamicAttributeOscillate::OSCT_SINE),
-		mFrequency(1.0f),
-		mPhase(0.0f),
-		mBase(0.0f),
-		mAmplitude(1.0f)
-	{
+	DynamicAttributeOscillate::DynamicAttributeOscillate(const DynamicAttributeOscillate & dynamicAttributeOscillate) {
 		mType = DynamicAttribute::DAT_OSCILLATE;
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeOscillate::DynamicAttributeOscillate (const DynamicAttributeOscillate& dynamicAttributeOscillate)
-	{
-		mType = DynamicAttribute::DAT_OSCILLATE;
+
+	DynamicAttributeOscillate::~DynamicAttributeOscillate() {
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeOscillate::~DynamicAttributeOscillate (void)
-	{
-	}
-	//-----------------------------------------------------------------------
-	DynamicAttributeOscillate::OscillationType DynamicAttributeOscillate::getOscillationType (void) const
-	{
+
+	DynamicAttributeOscillate::OscillationType DynamicAttributeOscillate::getOscillationType() const {
 		return mOscillationType;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeOscillate::setOscillationType (DynamicAttributeOscillate::OscillationType oscillationType)
-	{
+
+	void DynamicAttributeOscillate::setOscillationType(DynamicAttributeOscillate::OscillationType oscillationType) {
 		mOscillationType = oscillationType;
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeOscillate::getFrequency (void) const
-	{
+
+	Real DynamicAttributeOscillate::getFrequency() const {
 		return mFrequency;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeOscillate::setFrequency (Real frequency)
-	{
+
+	void DynamicAttributeOscillate::setFrequency(Real frequency) {
 		mFrequency = frequency;
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeOscillate::getPhase (void) const
-	{
+
+	Real DynamicAttributeOscillate::getPhase() const {
 		return mPhase;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeOscillate::setPhase (Real phase)
-	{
+
+	void DynamicAttributeOscillate::setPhase(Real phase) {
 		mPhase = phase;
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeOscillate::getBase (void) const
-	{
+
+	Real DynamicAttributeOscillate::getBase() const {
 		return mBase;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeOscillate::setBase (Real base)
-	{
+
+	void DynamicAttributeOscillate::setBase(Real base) {
 		mBase = base;
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeOscillate::getAmplitude (void) const
-	{
+
+	Real DynamicAttributeOscillate::getAmplitude() const {
 		return mAmplitude;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeOscillate::setAmplitude (Real amplitude)
-	{
+
+	void DynamicAttributeOscillate::setAmplitude(Real amplitude) {
 		mAmplitude = amplitude;
 	}
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeOscillate::getValue (Real x)
-	{
-		switch (mOscillationType)
-		{
-			case OSCT_SINE:
-			{
-				return mBase + mAmplitude * Math::Sin(mPhase + mFrequency * x * Math::TWO_PI);
-			}
+
+	Real DynamicAttributeOscillate::getValue(Real x) {
+		switch (mOscillationType) {
+		case OSCT_SINE: {
+			return mBase + mAmplitude * Math::Sin(mPhase + mFrequency * x * Math::TWO_PI);
+		}
+		case OSCT_SQUARE: {
+			return mBase + mAmplitude * Math::Sign(Math::Sin(mPhase + mFrequency * x * Math::TWO_PI));
+		}
+		default: {
 			break;
-			case OSCT_SQUARE:
-			{
-				return mBase + mAmplitude * Math::Sign(Math::Sin(mPhase + mFrequency * x * Math::TWO_PI));
-			}
-			break;
-			default: {
-				break;
-			}
+		}
 		}
 
 		return 0;
 	}
-	//-----------------------------------------------------------------------
-	void DynamicAttributeOscillate::copyAttributesTo(DynamicAttribute* dynamicAttribute)
-	{
-		if (!dynamicAttribute || dynamicAttribute->getType() != DynamicAttribute::DAT_OSCILLATE)
-			return;
 
-		DynamicAttributeOscillate* dynAttr = static_cast<DynamicAttributeOscillate*>(dynamicAttribute);
+	void DynamicAttributeOscillate::copyAttributesTo(DynamicAttribute * dynamicAttribute) {
+		if (!dynamicAttribute || dynamicAttribute->getType() != DynamicAttribute::DAT_OSCILLATE) {
+			return;
+		}
+
+		DynamicAttributeOscillate * dynAttr = static_cast<DynamicAttributeOscillate *>(dynamicAttribute);
 		dynAttr->mOscillationType = mOscillationType;
 		dynAttr->mFrequency = mFrequency;
 		dynAttr->mPhase = mPhase;
 		dynAttr->mBase = mBase;
 		dynAttr->mAmplitude = mAmplitude;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	Real DynamicAttributeHelper::calculate(DynamicAttribute* dyn, Real x, Real defaultValue)
-	{
-		if (dyn)
-		{
+
+	Real DynamicAttributeHelper::calculate(DynamicAttribute * dyn, Real x, Real defaultValue) {
+		if (dyn) {
 			return dyn->getValue(x);
 		}
 
 		return defaultValue;
 	}
 
-}
+} /* namespace ParticleUniverse */

@@ -35,55 +35,48 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseSystemTokens.h"
 #include "ParticleUniverseTechniqueTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The BuiltinScriptTranslatorManager contains all Translators that are used by the compiler.
 	*/
-	class _ParticleUniverseExport BuiltinScriptTranslatorManager : public Ogre::ScriptTranslatorManager
-	{
-		private:
-			SystemTranslator mSystemTranslator;
-			AliasTranslator mAliasTranslator;
-			TechniqueTranslator mTechniqueTranslator;
-			RendererTranslator mRendererTranslator;
-			EmitterTranslator mEmitterTranslator;
-			AffectorTranslator mAffectorTranslator;
-			BehaviourTranslator mBehaviourTranslator;
-			ObserverTranslator mObserverTranslator;
-			ParticleEventHandlerTranslator mParticleEventHandlerTranslator;
-			ExternTranslator mExternTranslator;
+	class _ParticleUniverseExport BuiltinScriptTranslatorManager : public Ogre::ScriptTranslatorManager {
+	public:
+		BuiltinScriptTranslatorManager();
 
-		public:
-			BuiltinScriptTranslatorManager(void);
+		/** 
+		*/ 
+		virtual size_t getNumTranslators() const;
 
-			/** 
-			*/ 
-			virtual size_t getNumTranslators(void) const;
+		/** 
+		*/ 
+		virtual ScriptTranslator * getTranslator(const AbstractNodePtr & node);
 
-			/** 
-			*/ 
-			virtual ScriptTranslator* getTranslator(const AbstractNodePtr &node);
+	private:
+		SystemTranslator mSystemTranslator;
+		AliasTranslator mAliasTranslator;
+		TechniqueTranslator mTechniqueTranslator;
+		RendererTranslator mRendererTranslator;
+		EmitterTranslator mEmitterTranslator;
+		AffectorTranslator mAffectorTranslator;
+		BehaviourTranslator mBehaviourTranslator;
+		ObserverTranslator mObserverTranslator;
+		ParticleEventHandlerTranslator mParticleEventHandlerTranslator;
+		ExternTranslator mExternTranslator;
 	};
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ParticleSystemManagerWriter : public ScriptWriter
-	{
-		protected:
+	class _ParticleUniverseExport ParticleSystemManagerWriter : public ScriptWriter {
+	public:
+		ParticleSystemManagerWriter() {}
+		virtual ~ParticleSystemManagerWriter() {}
 
-		public:
-
-			ParticleSystemManagerWriter(void) {}
-			virtual ~ParticleSystemManagerWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element) {}
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element) {}
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SYSTEM_MANAGER_TOKENS_H__ */

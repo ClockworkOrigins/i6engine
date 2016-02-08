@@ -26,47 +26,47 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseIDependency.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The CameraDependency class is used to define a relation between an attribute (for example the emission
 		rate of a ParticleEmitter) and the camera. The camera distance influences the value of the attribute.
 	@remarks
 		In case of the emission rate for example, it can be defined that that number of emitted particles 
 		decreases if the camera gets further away.
     */
-	class _ParticleUniverseExport CameraDependency : public IDependency
-	{
-		protected:
-			Real mThreshold;
-			bool mIncrease;
+	class _ParticleUniverseExport CameraDependency : public IDependency {
+	public:
+		// Constants
+		static const Real DEFAULT_DISTANCE_THRESHOLD;
+		static const bool DEFAULT_INCREASE;
 
-		public:
-			// Constants
-			static const Real DEFAULT_DISTANCE_THRESHOLD;
-			static const bool DEFAULT_INCREASE;
+		CameraDependency();
+		CameraDependency(Real threshold, bool inc);
+		virtual ~CameraDependency() {}
 
-			CameraDependency(void);
-			CameraDependency(Real threshold, bool inc);
-			virtual ~CameraDependency(void){};
+		/** Todo
+	    */
+		virtual bool affect(Real & baseValue, Real dependencyValue);
 
-			/** Todo
-	        */
-			virtual bool affect(Real& baseValue, Real dependencyValue);
+		/** Todo
+	    */
+		Real getThreshold() const { return mThreshold; }
+		void setThreshold(const Real threshold) { mThreshold = threshold; }
 
-			/** Todo
-	        */
-			Real getThreshold(void) const {return mThreshold;}
-			void setThreshold(const Real threshold) {mThreshold = threshold;}
+		/** Todo
+	    */
+		bool isIncrease() const { return mIncrease; }
+		void setIncrease(bool increase) { mIncrease = increase; }
 
-			/** Todo
-	        */
-			bool isIncrease(void) const {return mIncrease;}
-			void setIncrease(bool increase) {mIncrease = increase;}
+		/** Copy attributes to another camera dependency.
+	    */
+		virtual void copyAttributesTo(CameraDependency * cameraDependency);
 
-			/** Copy attributes to another camera dependency.
-	        */
-			virtual void copyAttributesTo (CameraDependency* cameraDependency);
-
+	protected:
+		Real mThreshold;
+		bool mIncrease;
 	};
-}
-#endif
+
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_CAMERA_DEPENDENCY_H__ */

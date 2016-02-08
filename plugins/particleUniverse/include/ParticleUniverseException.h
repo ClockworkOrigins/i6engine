@@ -26,15 +26,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OgreException.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// If the Ogre renderer is replaced by another renderer, the type below must be re-implemented.
 	typedef Ogre::Exception Exception;
+
 #ifdef OGRE_EXCEPT
 	#define EXCEPT(num, desc, src) OGRE_EXCEPT(num, desc, src);
 #else
 	#define EXCEPT(num, desc, src) throw Ogre::ExceptionFactory::create( \
 			Ogre::ExceptionCodeType<num>(), desc, src, __FILE__, __LINE__ );
 #endif
-}
-#endif
+
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_EXCEPTION_H__ */
