@@ -40,6 +40,6 @@ namespace ParticleUniverse {
 	    virtual ~Billboard() {}
 	};
 
-}
+} /* namespace ParticleUniverse */
 
 #endif /* __PU_BILLBOARD_H__ */

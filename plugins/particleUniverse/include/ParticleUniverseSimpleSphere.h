@@ -26,10 +26,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OgreSphere.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// If the Ogre renderer is replaced by another renderer, the type below must be re-implemented.
 	typedef Ogre::Sphere SimpleSphere;
-}
 
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SIMPLE_SPHERE_H__ */

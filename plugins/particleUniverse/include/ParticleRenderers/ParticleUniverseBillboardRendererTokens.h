@@ -24,41 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BILLBOARD_RENDERER_TOKENS_H__
 #define __PU_BILLBOARD_RENDERER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseRendererTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The BillboardRendererTranslator parses 'BillboardRenderer' tokens
 	*/
-	class _ParticleUniverseExport BillboardRendererTranslator : public ScriptTranslator
-	{
-		public:
-			BillboardRendererTranslator(void){};
-			~BillboardRendererTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport BillboardRendererTranslator : public ScriptTranslator {
+	public:
+		BillboardRendererTranslator() {}
+		~BillboardRendererTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport BillboardRendererWriter : public ParticleRendererWriter
-	{
-		protected:
+	class _ParticleUniverseExport BillboardRendererWriter : public ParticleRendererWriter {
+	public:
+		BillboardRendererWriter() {}
+		virtual ~BillboardRendererWriter() {}
 
-		public:
-
-			BillboardRendererWriter(void) {};
-			virtual ~BillboardRendererWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BILLBOARD_RENDERER_TOKENS_H__ */

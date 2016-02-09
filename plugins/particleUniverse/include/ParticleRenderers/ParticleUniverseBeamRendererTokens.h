@@ -24,41 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BEAM_RENDERER_TOKENS_H__
 #define __PU_BEAM_RENDERER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseRendererTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The BeamRendererTranslator parses 'BeamRenderer' tokens
 	*/
-	class _ParticleUniverseExport BeamRendererTranslator : public ScriptTranslator
-	{
-		public:
-			BeamRendererTranslator(void){};
-			~BeamRendererTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport BeamRendererTranslator : public ScriptTranslator {
+	public:
+		BeamRendererTranslator() {}
+		~BeamRendererTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport BeamRendererWriter : public ParticleRendererWriter
-	{
-		protected:
+	class _ParticleUniverseExport BeamRendererWriter : public ParticleRendererWriter {
+	public:
+		BeamRendererWriter() {}
+		virtual ~BeamRendererWriter() {}
 
-		public:
-
-			BeamRendererWriter(void) {};
-			virtual ~BeamRendererWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BEAM_RENDERER_TOKENS_H__ */

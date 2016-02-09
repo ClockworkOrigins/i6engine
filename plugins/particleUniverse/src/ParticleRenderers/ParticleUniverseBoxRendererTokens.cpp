@@ -21,22 +21,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleRenderers/ParticleUniverseBoxRendererTokens.h"
+
+#include "ParticleUniverseScriptSerializer.h"
+
 #include "ParticleRenderers/ParticleUniverseBoxRenderer.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void BoxRendererWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+namespace ParticleUniverse {
+
+	void BoxRendererWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a BoxRenderer
-		const BoxRenderer* renderer = static_cast<const BoxRenderer*>(element);
+		const BoxRenderer * renderer = static_cast<const BoxRenderer *>(element);
 
 		// Write the header of the BoxRenderer
 		serializer->writeLine(token[TOKEN_RENDERER], renderer->getRendererType(), 8);
@@ -51,4 +46,4 @@ namespace ParticleUniverse
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

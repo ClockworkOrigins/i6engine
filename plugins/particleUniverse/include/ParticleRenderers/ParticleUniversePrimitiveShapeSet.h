@@ -25,159 +25,159 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_PRIMITIVE_SHAPE_SET_H__
 
 #include "ParticleUniversePrerequisites.h"
+#include "ParticleUniverseAxisAlignedBox.h"
+#include "ParticleUniverseCamera.h"
+
 #include "OgreMovableObject.h"
 #include "OgreRenderable.h"
-#include "ParticleUniverseAxisAlignedBox.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The PrimitiveShapeSet is comparable with the BillboardSet in Ogre and provides a virtual class in which some
 		basic functions are implemented. This class cannot be used on its own, but must always be subclassed.
     */
-	class _ParticleUniverseExport PrimitiveShapeSet : public Ogre::MovableObject, public Ogre::Renderable
-	{
-		protected:
-			/** Bounds of all billboards in this set
-			*/
-			AxisAlignedBox mAABB;
-		
-			/** Bounding radius
-			*/
-			Real mBoundingRadius;
+	class _ParticleUniverseExport PrimitiveShapeSet : public Ogre::MovableObject, public Ogre::Renderable {
+	public:
+		/** Default constructor.
+		*/
+		PrimitiveShapeSet(const String & name, unsigned int poolSize = 20, bool externalData = false);
 
-			/** Name of the material to use
-			*/
-			String mMaterialName;
+		/** Default constructor.
+		*/
+		PrimitiveShapeSet();
 
-			/** Pointer to the material to use
-			*/
-			Ogre::MaterialPtr mpMaterial;
+		/** Default destructor.
+		*/
+	    virtual ~PrimitiveShapeSet();
 
-			/** Flag indicating whether each billboard should be culled separately (default: false)
-			*/
-			bool mCullIndividual;
+		/** Set indication whether the 'Z' rotation is activated. Z rotation is a 2D rotation effect and
+			for a primitive shapeset implemented as a texture rotation.
+		*/
+		virtual void setZRotated(bool zRotated);
 
-			/** 
-			*/
-			bool mWorldSpace;
+		/** Returns true if the Z rotation has been set. This causes the textures to rotate.
+		*/
+		virtual bool isZRotated() const;
 
-			/** Current camera
-			*/
-			Camera* mCurrentCamera;
+		/** Internal callback used by primitive shapes to notify their parent that they have been rotated 
+			around the Z-axis.
+		*/
+		virtual void _notifyZRotated();
 
-			/** Indication whether the Z rotation is active or not
-			*/
-			bool mZRotated;
+		/** Sets the name of the material to be used for this primitive shapeset.
+		*/
+		virtual void setMaterialName(const String & name);
 
-			/** True if no primitive shape in this set has been resized - greater efficiency.
-			*/
-			bool mAllDefaultSize;
+		/** Gets the name of the material to be used for this primitive shapeset.
+		*/
+		virtual const String & getMaterialName() const;
 
-		public:
-			/** Default constructor.
-			*/
-			PrimitiveShapeSet(const String& name, unsigned int poolSize = 20, bool externalData = false);
+		/** Internal callback used by primitive shapes to notify their parent that they have been resized.
+		*/
+		virtual void _notifyResized();
 
-			/** Default constructor.
-			*/
-			PrimitiveShapeSet(void);
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		virtual void _notifyCurrentCamera(Camera * cam);
 
-			/** Default destructor.
-			*/
-	        virtual ~PrimitiveShapeSet(void);
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		virtual const AxisAlignedBox & getBoundingBox() const;
 
-			/** Set indication whether the 'Z' rotation is activated. Z rotation is a 2D rotation effect and
-				for a primitive shapeset implemented as a texture rotation.
-			*/
-			virtual void setZRotated(bool zRotated);
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		virtual Real getBoundingRadius() const;
 
-			/** Returns true if the Z rotation has been set. This causes the textures to rotate.
-			*/
-			virtual bool isZRotated(void) const;
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		virtual const Ogre::MaterialPtr & getMaterial() const;
 
-			/** Internal callback used by primitive shapes to notify their parent that they have been rotated 
-				around the Z-axis.
-			*/
-			virtual void _notifyZRotated(void);
+		/** Overridden from MovableObject
+		@see
+			MovableObject
+		*/
+		virtual void getWorldTransforms(Ogre::Matrix4 * xform) const;
 
-			/** Sets the name of the material to be used for this primitive shapeset.
-			*/
-			virtual void setMaterialName(const String& name);
+		/** @copydoc Renderable::getWorldOrientation */
+		virtual const Quaternion & getWorldOrientation() const;
 
-			/** Gets the name of the material to be used for this primitive shapeset.
-			*/
-			virtual const String& getMaterialName(void) const;
+		/** @copydoc Renderable::getWorldPosition */
+		virtual const Vector3 & getWorldPosition() const;
 
-			/** Internal callback used by primitive shapes to notify their parent that they have been resized.
-		    */
-			virtual void _notifyResized(void);
+		/** Returns whether or not primitive shapes in this primitive shapeset are tested individually for culling.
+		*/
+		virtual bool isCullIndividually() const;
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			virtual void _notifyCurrentCamera(Camera* cam);
+		/** Sets whether culling tests primitive shapes in this primitive shapeset individually as well as in a group.
+		*/
+		virtual void setCullIndividually(bool cullIndividual);
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			virtual const AxisAlignedBox& getBoundingBox(void) const;
+		/** Overridden, see Renderable
+		*/
+		virtual Real getSquaredViewDepth(const Camera * cam) const;
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			virtual Real getBoundingRadius(void) const;
+		/** @copydoc Renderable::getLights 
+		*/
+		virtual const Ogre::LightList & getLights() const;
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			virtual const Ogre::MaterialPtr& getMaterial(void) const;
+		/** Override to return specific type flag
+		*/
+		virtual uint32 getTypeFlags() const;
 
-			/** Overridden from MovableObject
-			@see
-				MovableObject
-			*/
-			virtual void getWorldTransforms(Ogre::Matrix4* xform) const;
+		/** Rotate Texture
+		*/
+		virtual void rotateTexture(Real speed);
 
-			/** @copydoc Renderable::getWorldOrientation */
-			virtual const Quaternion& getWorldOrientation(void) const;
+		/** @see MovableObject
+		*/
+		virtual void visitRenderables(Ogre::Renderable::Visitor * visitor, bool debugRenderables = false) { /* No implementation */ }
 
-			/** @copydoc Renderable::getWorldPosition */
-			virtual const Vector3& getWorldPosition(void) const;
+	protected:
+		/** Bounds of all billboards in this set
+		*/
+		AxisAlignedBox mAABB;
 
-			/** Returns whether or not primitive shapes in this primitive shapeset are tested individually for culling.
-			*/
-			virtual bool isCullIndividually(void) const;
+		/** Bounding radius
+		*/
+		Real mBoundingRadius;
 
-			/** Sets whether culling tests primitive shapes in this primitive shapeset individually as well as in a group.
-			*/
-			virtual void setCullIndividually(bool cullIndividual);
+		/** Name of the material to use
+		*/
+		String mMaterialName;
 
-			/** Overridden, see Renderable
-			*/
-			virtual Real getSquaredViewDepth(const Camera* cam) const;
+		/** Pointer to the material to use
+		*/
+		Ogre::MaterialPtr mpMaterial;
 
-			/** @copydoc Renderable::getLights 
-			*/
-			virtual const Ogre::LightList& getLights(void) const;
+		/** Flag indicating whether each billboard should be culled separately (default: false)
+		*/
+		bool mCullIndividual;
 
-			/** Override to return specific type flag
-			*/
-			virtual uint32 getTypeFlags(void) const;
+		/**
+		*/
+		bool mWorldSpace;
 
-			/** Rotate Texture
-		    */
-			virtual void rotateTexture(Real speed);
+		/** Current camera
+		*/
+		Camera * mCurrentCamera;
 
-			/** @see MovableObject
-		    */
-			virtual void visitRenderables(Ogre::Renderable::Visitor* visitor,
-				bool debugRenderables = false) {/* No implementation */};
+		/** Indication whether the Z rotation is active or not
+		*/
+		bool mZRotated;
+
+		/** True if no primitive shape in this set has been resized - greater efficiency.
+		*/
+		bool mAllDefaultSize;
 	};
 
-}
+} /* namespace ParticleUniverse */
 
-#endif
+#endif /* __PU_PRIMITIVE_SHAPE_SET_H__ */

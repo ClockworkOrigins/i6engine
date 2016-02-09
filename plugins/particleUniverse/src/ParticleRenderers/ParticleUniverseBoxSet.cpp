@@ -21,79 +21,50 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleRenderers/ParticleUniverseBoxSet.h"
-#include "ParticleRenderers/ParticleUniverseBox.h"
-#include "OgreNode.h"
-#include "OgreHardwareBufferManager.h"
-#include "ParticleUniverseCamera.h"
-#include "OgreRoot.h"
+
+#include "ParticleUniverseMath.h"
 #include "ParticleUniverseSimpleSphere.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	BoxSet::BoxSet(void) :
-		PrimitiveShapeSet(),
-		mAutoExtendPool(true),
-		mVertexData(0),
-		mIndexData(0),
-		mBuffersCreated(false),
-		mPoolSize(0),
-		mExternalData(false)
-	{
+#include "ParticleRenderers/ParticleUniverseBox.h"
+
+#include "OgreHardwareBufferManager.h"
+#include "OgreRoot.h"
+
+namespace ParticleUniverse {
+	
+	BoxSet::BoxSet() : PrimitiveShapeSet(), mAutoExtendPool(true), mVertexData(nullptr), mIndexData(nullptr), mBuffersCreated(false), mPoolSize(0), mExternalData(false) {
 		setDefaultDimensions(100, 100, 100);
 		_initTextCoord();
 	}
-	//-----------------------------------------------------------------------
-	BoxSet::BoxSet(const String& name, unsigned int poolSize, bool externalData) :
-		PrimitiveShapeSet(name, poolSize, externalData),
-		mAutoExtendPool(true),
-		mVertexData(0),
-		mIndexData(0),
-		mBuffersCreated(false),
-		mPoolSize(poolSize),
-		mExternalData(externalData)
-	{
+	
+	BoxSet::BoxSet(const String & name, unsigned int poolSize, bool externalData) : PrimitiveShapeSet(name, poolSize, externalData), mAutoExtendPool(true), mVertexData(nullptr), mIndexData(nullptr), mBuffersCreated(false), mPoolSize(poolSize), mExternalData(externalData) {
 		setDefaultDimensions(100, 100, 100);
 		setPoolSize(poolSize);
 		_initTextCoord();
 	}
-	//-----------------------------------------------------------------------
-	BoxSet::~BoxSet(void)
-	{
+	
+	BoxSet::~BoxSet() {
 		// Free pool items
-		BoxPool::iterator i;
-		for (i = mBoxPool.begin(); i != mBoxPool.end(); ++i)
-		{
+		for (BoxPool::iterator i = mBoxPool.begin(); i != mBoxPool.end(); ++i) {
 			PU_DELETE *i;
 		}
 
 		// Delete buffers
 		_destroyBuffers();
 	}
-    //-----------------------------------------------------------------------
-	Box* BoxSet::createBox(const Vector3& position)
-    {
-		if(mFreeBoxes.empty())
-		{
-			if(mAutoExtendPool)
-			{
+    
+	Box * BoxSet::createBox(const Vector3 & position) {
+		if (mFreeBoxes.empty()) {
+			if (mAutoExtendPool) {
 				setPoolSize(getPoolSize() * 2);
-            }
-			else
-			{
-				return 0;
+            } else {
+				return nullptr;
 			}
 		}
 
         // Get a new box
-        Box* newBox = mFreeBoxes.front();
+        Box * newBox = mFreeBoxes.front();
 		mActiveBoxes.splice(mActiveBoxes.end(), mFreeBoxes, mFreeBoxes.begin());
 		newBox->setPosition(position);
         newBox->resetDimensions();
@@ -114,123 +85,103 @@ namespace ParticleUniverse
 
         return newBox;
 	}
-	//-----------------------------------------------------------------------
-	Box* BoxSet::createBox(Real x, Real y, Real z)
-	{
+	
+	Box * BoxSet::createBox(Real x, Real y, Real z) {
 		return createBox(Vector3( x, y, z ));
 	}
-	//-----------------------------------------------------------------------
-	unsigned int BoxSet::getNumBoxes(void) const
-	{
+	
+	unsigned int BoxSet::getNumBoxes() const {
 		return static_cast<unsigned int>(mActiveBoxes.size());
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::clear(void)
-	{
+	
+	void BoxSet::clear() {
 		mFreeBoxes.splice(mFreeBoxes.end(), mActiveBoxes);
 	}
-	//-----------------------------------------------------------------------
-	Box* BoxSet::getBox(unsigned int index) const
-	{
+	
+	Box * BoxSet::getBox(unsigned int index) const {
 		assert(index < mActiveBoxes.size() && "Box index out of bounds." );
 
         ActiveBoxList::const_iterator it;
-		if(index >= (mActiveBoxes.size() >> 1))
-		{
+		if (index >= (mActiveBoxes.size() >> 1)) {
 			index = static_cast<unsigned int>(mActiveBoxes.size()) - index;
-			for(it = mActiveBoxes.end(); index; --index, --it );
-		}
-		else
-		{
-			for(it = mActiveBoxes.begin(); index; --index, ++it );
+			for (it = mActiveBoxes.end(); index; --index, --it);
+		} else {
+			for (it = mActiveBoxes.begin(); index; --index, ++it);
 		}
 
 		return *it;
     }
-	//-----------------------------------------------------------------------
-	void BoxSet::removeBox(unsigned int index)
-	{
+	
+	void BoxSet::removeBox(unsigned int index) {
 		assert(index < mActiveBoxes.size() && "Box index out of bounds." );
 
         ActiveBoxList::iterator it;
-        if(index >= (mActiveBoxes.size() >> 1 ))
-		{
+        if (index >= (mActiveBoxes.size() >> 1)) {
 			index = static_cast<unsigned int>(mActiveBoxes.size()) - index;
-			for(it = mActiveBoxes.end(); index; --index, --it );
-		}
-		else
-		{
-			for(it = mActiveBoxes.begin(); index; --index, ++it );
+			for (it = mActiveBoxes.end(); index; --index, --it);
+		} else {
+			for (it = mActiveBoxes.begin(); index; --index, ++it);
 		}
 
 		mFreeBoxes.splice(mFreeBoxes.end(), mActiveBoxes, it);
     }
-	//-----------------------------------------------------------------------
-	void BoxSet::removeBox(Box* box)
-	{
+	
+	void BoxSet::removeBox(Box * box) {
 		ActiveBoxList::iterator it = std::find(mActiveBoxes.begin(), mActiveBoxes.end(), box);
 		assert(it != mActiveBoxes.end() && "Box isn't in the active list." );
 
 		mFreeBoxes.splice(mFreeBoxes.end(), mActiveBoxes, it);
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::setDefaultDimensions(Real width, Real height, Real depth)
-	{
+	
+	void BoxSet::setDefaultDimensions(Real width, Real height, Real depth) {
 		mDefaultWidth = width;
 		mDefaultHeight = height;
 		mDefaultDepth = depth;
-		mDefaultHalfWidth = 0.5f * width;
-		mDefaultHalfHeight = 0.5f * height;
-		mDefaultHalfDepth = 0.5f * depth;
+		mDefaultHalfWidth = 0.5 * width;
+		mDefaultHalfHeight = 0.5 * height;
+		mDefaultHalfDepth = 0.5 * depth;
 		_genDefaultCorners();
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::setDefaultWidth(Real width)
-	{
+	
+	void BoxSet::setDefaultWidth(Real width) {
 		mDefaultWidth = width;
-		mDefaultHalfWidth = 0.5f * width;
+		mDefaultHalfWidth = 0.5 * width;
 		_genDefaultCorners();
 	}
-	//-----------------------------------------------------------------------
-	Real BoxSet::getDefaultWidth(void) const
-	{
+	
+	Real BoxSet::getDefaultWidth() const {
 		return mDefaultWidth;
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::setDefaultHeight(Real height)
-	{
+	
+	void BoxSet::setDefaultHeight(Real height) {
 		mDefaultHeight = height;
-		mDefaultHalfHeight = 0.5f * height;
+		mDefaultHalfHeight = 0.5 * height;
 		_genDefaultCorners();
 	}
-	//-----------------------------------------------------------------------
-	Real BoxSet::getDefaultHeight(void) const
-	{
+	
+	Real BoxSet::getDefaultHeight() const {
 		return mDefaultHeight;
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::setDefaultDepth(Real depth)
-	{
+	
+	void BoxSet::setDefaultDepth(Real depth) {
 		mDefaultDepth = depth;
-		mDefaultHalfDepth = 0.5f * depth;
+		mDefaultHalfDepth = 0.5 * depth;
 		_genDefaultCorners();
 	}
-	//-----------------------------------------------------------------------
-	Real BoxSet::getDefaultDepth(void) const
-	{
+	
+	Real BoxSet::getDefaultDepth() const {
 		return mDefaultDepth;
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::beginBoxes(size_t numBoxes)
-    {
+	
+	void BoxSet::beginBoxes(size_t numBoxes) {
 		// Create vertex / index buffers
-		if(!mBuffersCreated)
+		if (!mBuffersCreated) {
 			_createBuffers();
+		}
 
         mNumVisibleBoxes = 0;
 
-		if (numBoxes)
-		{
+		if (numBoxes) {
 			size_t boxSize;
 			numBoxes = std::min(mPoolSize, numBoxes);
 
@@ -238,58 +189,49 @@ namespace ParticleUniverse
 			boxSize = mMainBuf->getVertexSize() * 16;
 			assert (numBoxes * boxSize <= mMainBuf->getSizeInBytes());
 
-			mLockPtr = static_cast<float*>(
-				mMainBuf->lock(0, numBoxes * boxSize, 
-				Ogre::HardwareBuffer::HBL_DISCARD));
+			mLockPtr = static_cast<float *>(mMainBuf->lock(0, numBoxes * boxSize, Ogre::HardwareBuffer::HBL_DISCARD));
+		} else { // lock the entire thing
+			mLockPtr = static_cast<float *>(mMainBuf->lock(Ogre::HardwareBuffer::HBL_DISCARD));
 		}
-		else // lock the entire thing
-			mLockPtr = static_cast<float*>(
-				mMainBuf->lock(Ogre::HardwareBuffer::HBL_DISCARD) );
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::injectBox(Box& box)
-	{
-		if (mNumVisibleBoxes == mPoolSize) return;
+	
+	void BoxSet::injectBox(Box & box) {
+		if (mNumVisibleBoxes == mPoolSize) {
+			return;
+		}
 
-		if (!boxVisible(mCurrentCamera, box)) return;
+		if (!boxVisible(mCurrentCamera, box)) {
+			return;
+		}
 
 		// Generate vertices
 		_genVertices(box);
         
 		mNumVisibleBoxes++;
 	}
-    //-----------------------------------------------------------------------
-	void BoxSet::endBoxes(void)
-	{
+    
+	void BoxSet::endBoxes() {
 		mMainBuf->unlock();
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::setBounds(const AxisAlignedBox& box, Real radius)
-	{
+	
+	void BoxSet::setBounds(const AxisAlignedBox & box, Real radius) {
 		mAABB = box;
 		mBoundingRadius = radius;
 	}
-    //-----------------------------------------------------------------------
-    void BoxSet::_updateBounds(void)
-    {
-        if (mActiveBoxes.empty())
-        {
+    
+    void BoxSet::_updateBounds()  {
+        if (mActiveBoxes.empty()) {
             // No boxes
             mAABB.setNull();
-			mBoundingRadius = 0.0f;
-        }
-        else
-        {
-			Real maxSqLen = -1.0f;
+			mBoundingRadius = 0.0;
+        } else {
+			Real maxSqLen = -1.0;
 
             Vector3 min(Math::POS_INFINITY, Math::POS_INFINITY, Math::POS_INFINITY);
             Vector3 max(Math::NEG_INFINITY, Math::NEG_INFINITY, Math::NEG_INFINITY);
-            ActiveBoxList::iterator i, iend;
 
-            iend = mActiveBoxes.end();
-            for (i = mActiveBoxes.begin(); i != iend; ++i)
-            {
-                const Vector3& pos = (*i)->getPosition();
+			for (ActiveBoxList::iterator i = mActiveBoxes.begin(); i != mActiveBoxes.end(); ++i) {
+                const Vector3 & pos = (*i)->getPosition();
                 min.makeFloor(pos);
                 max.makeCeil(pos);
 
@@ -305,37 +247,28 @@ namespace ParticleUniverse
 			mBoundingRadius = Math::Sqrt(maxSqLen);
         }
 
-        if (mParentNode)
-            mParentNode->needUpdate();
-
+		if (mParentNode) {
+			mParentNode->needUpdate();
+		}
     }
-	//-----------------------------------------------------------------------
-	void BoxSet::_updateRenderQueue(Ogre::RenderQueue* queue)
-    {
-		if (!mExternalData)
-		{
+	
+	void BoxSet::_updateRenderQueue(Ogre::RenderQueue * queue) {
+		if (!mExternalData) {
 			beginBoxes(mActiveBoxes.size());
-			ActiveBoxList::iterator it;
-			ActiveBoxList::iterator itEnd = mActiveBoxes.end();
-			for(it = mActiveBoxes.begin(); it != itEnd; ++it)
-			{
+			for (ActiveBoxList::iterator it = mActiveBoxes.begin(); it != mActiveBoxes.end(); ++it) {
 				injectBox(*(*it));
 			}
 			endBoxes();
 		}
 
-		if( mRenderQueueIDSet )
-		{
+		if (mRenderQueueIDSet) {
 			queue->addRenderable(this, mRenderQueueID);
-		}
-		else
-		{
+		} else {
 			queue->addRenderable(this);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::getRenderOperation(Ogre::RenderOperation& op)
-	{
+	
+	void BoxSet::getRenderOperation(Ogre::RenderOperation & op) {
 		op.vertexData = mVertexData;
 		op.vertexData->vertexStart = 0;
 		op.operationType = Ogre::RenderOperation::OT_TRIANGLE_LIST;
@@ -345,29 +278,25 @@ namespace ParticleUniverse
 		op.indexData->indexCount = mNumVisibleBoxes * 36u; // 36 indices
 		op.indexData->indexStart = 0;
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::setAutoextend(bool autoextend)
-	{
+	
+	void BoxSet::setAutoextend(bool autoextend) {
 		mAutoExtendPool = autoextend;
 	}
-	//-----------------------------------------------------------------------
-	bool BoxSet::isAutoextend(void) const
-	{
+	
+	bool BoxSet::isAutoextend() const {
 		return mAutoExtendPool;
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::setPoolSize(size_t size)
-	{
-		if (!mExternalData)
-		{
+	
+	void BoxSet::setPoolSize(size_t size) {
+		if (!mExternalData) {
 			size_t currSize = mBoxPool.size();
-			if (currSize >= size)
+			if (currSize >= size) {
 				return;
+			}
 
 			this->increasePool(size);
 
-			for(size_t i = currSize; i < size; ++i)
-			{
+			for (size_t i = currSize; i < size; ++i) {
 				// Add new items to the queue
 				mFreeBoxes.push_back(mBoxPool[i]);
 			}
@@ -376,16 +305,15 @@ namespace ParticleUniverse
 		mPoolSize = size;
 		_destroyBuffers();
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::_createBuffers(void)
-	{
+	
+	void BoxSet::_createBuffers() {
 		// Create vertex buffer
 		mVertexData = PU_NEW Ogre::VertexData();
 		mVertexData->vertexCount = mPoolSize * 16;
 
         mVertexData->vertexStart = 0;
-		Ogre::VertexDeclaration* decl = mVertexData->vertexDeclaration;
-		Ogre::VertexBufferBinding* binding = mVertexData->vertexBufferBinding;
+		Ogre::VertexDeclaration * decl = mVertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding * binding = mVertexData->vertexBufferBinding;
 
 		// Create Vertices, Colour and Texture Coordinates
 		size_t offset = 0;
@@ -397,11 +325,7 @@ namespace ParticleUniverse
 		offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
 		decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES, 0);
 
-		mMainBuf =
-			Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(
-			decl->getVertexSize(0),
-			mVertexData->vertexCount,
-			Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+		mMainBuf = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), mVertexData->vertexCount, Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
 
 		// Bind
 		binding->setBinding(0, mMainBuf);
@@ -411,103 +335,93 @@ namespace ParticleUniverse
 		mIndexData = PU_NEW Ogre::IndexData();
 		mIndexData->indexStart = 0;
 		mIndexData->indexCount = mPoolSize * ibufCount;
-		mIndexData->indexBuffer = Ogre::HardwareBufferManager::getSingleton().
-			createIndexBuffer(Ogre::HardwareIndexBuffer::IT_16BIT,
-			mIndexData->indexCount,
-			Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+		mIndexData->indexBuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_16BIT, mIndexData->indexCount, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
-		ushort* pIdx = static_cast<ushort*>(
-			mIndexData->indexBuffer->lock(0,
-			mIndexData->indexBuffer->getSizeInBytes(),
-			Ogre::HardwareBuffer::HBL_DISCARD));
+		ushort * pIdx = static_cast<ushort *>(mIndexData->indexBuffer->lock(0, mIndexData->indexBuffer->getSizeInBytes(), Ogre::HardwareBuffer::HBL_DISCARD));
 
-		for(size_t idx, idxOff, box = 0; box < mPoolSize; ++box)
-		{
+		for (size_t idx, idxOff, box = 0; box < mPoolSize; ++box) {
 			// Do indexes
 			idx = box * ibufCount;
 			idxOff = box * 16;
 
 			pIdx[idx] = static_cast<unsigned short>(idxOff + 4);
-			pIdx[idx+1] = static_cast<unsigned short>(idxOff + 6);
-			pIdx[idx+2] = static_cast<unsigned short>(idxOff + 2);
+			pIdx[idx + 1] = static_cast<unsigned short>(idxOff + 6);
+			pIdx[idx + 2] = static_cast<unsigned short>(idxOff + 2);
 
-			pIdx[idx+3] = static_cast<unsigned short>(idxOff + 2);
-			pIdx[idx+4] = static_cast<unsigned short>(idxOff + 0);
-			pIdx[idx+5] = static_cast<unsigned short>(idxOff + 4);
+			pIdx[idx + 3] = static_cast<unsigned short>(idxOff + 2);
+			pIdx[idx + 4] = static_cast<unsigned short>(idxOff + 0);
+			pIdx[idx + 5] = static_cast<unsigned short>(idxOff + 4);
 
-			pIdx[idx+6] = static_cast<unsigned short>(idxOff + 1);
-			pIdx[idx+7] = static_cast<unsigned short>(idxOff + 3);
-			pIdx[idx+8] = static_cast<unsigned short>(idxOff + 7);
+			pIdx[idx + 6] = static_cast<unsigned short>(idxOff + 1);
+			pIdx[idx + 7] = static_cast<unsigned short>(idxOff + 3);
+			pIdx[idx + 8] = static_cast<unsigned short>(idxOff + 7);
 
-			pIdx[idx+9] = static_cast<unsigned short>(idxOff + 7);
-			pIdx[idx+10] = static_cast<unsigned short>(idxOff + 5);
-			pIdx[idx+11] = static_cast<unsigned short>(idxOff + 1);
+			pIdx[idx + 9] = static_cast<unsigned short>(idxOff + 7);
+			pIdx[idx + 10] = static_cast<unsigned short>(idxOff + 5);
+			pIdx[idx + 11] = static_cast<unsigned short>(idxOff + 1);
 
-			pIdx[idx+12] = static_cast<unsigned short>(idxOff + 8);
-			pIdx[idx+13] = static_cast<unsigned short>(idxOff + 9);
-			pIdx[idx+14] = static_cast<unsigned short>(idxOff + 13);
+			pIdx[idx + 12] = static_cast<unsigned short>(idxOff + 8);
+			pIdx[idx + 13] = static_cast<unsigned short>(idxOff + 9);
+			pIdx[idx + 14] = static_cast<unsigned short>(idxOff + 13);
 
-			pIdx[idx+15] = static_cast<unsigned short>(idxOff + 13);
-			pIdx[idx+16] = static_cast<unsigned short>(idxOff + 12);
-			pIdx[idx+17] = static_cast<unsigned short>(idxOff + 8);
+			pIdx[idx + 15] = static_cast<unsigned short>(idxOff + 13);
+			pIdx[idx + 16] = static_cast<unsigned short>(idxOff + 12);
+			pIdx[idx + 17] = static_cast<unsigned short>(idxOff + 8);
 
-			pIdx[idx+18] = static_cast<unsigned short>(idxOff + 10);
-			pIdx[idx+19] = static_cast<unsigned short>(idxOff + 14);
-			pIdx[idx+20] = static_cast<unsigned short>(idxOff + 15);
+			pIdx[idx + 18] = static_cast<unsigned short>(idxOff + 10);
+			pIdx[idx + 19] = static_cast<unsigned short>(idxOff + 14);
+			pIdx[idx + 20] = static_cast<unsigned short>(idxOff + 15);
 
-			pIdx[idx+21] = static_cast<unsigned short>(idxOff + 15);
-			pIdx[idx+22] = static_cast<unsigned short>(idxOff + 11);
-			pIdx[idx+23] = static_cast<unsigned short>(idxOff + 10);
+			pIdx[idx + 21] = static_cast<unsigned short>(idxOff + 15);
+			pIdx[idx + 22] = static_cast<unsigned short>(idxOff + 11);
+			pIdx[idx + 23] = static_cast<unsigned short>(idxOff + 10);
 
-			pIdx[idx+24] = static_cast<unsigned short>(idxOff + 8);
-			pIdx[idx+25] = static_cast<unsigned short>(idxOff + 10);
-			pIdx[idx+26] = static_cast<unsigned short>(idxOff + 11);
+			pIdx[idx + 24] = static_cast<unsigned short>(idxOff + 8);
+			pIdx[idx + 25] = static_cast<unsigned short>(idxOff + 10);
+			pIdx[idx + 26] = static_cast<unsigned short>(idxOff + 11);
 
-			pIdx[idx+27] = static_cast<unsigned short>(idxOff + 11);
-			pIdx[idx+28] = static_cast<unsigned short>(idxOff + 9);
-			pIdx[idx+29] = static_cast<unsigned short>(idxOff + 8);
+			pIdx[idx + 27] = static_cast<unsigned short>(idxOff + 11);
+			pIdx[idx + 28] = static_cast<unsigned short>(idxOff + 9);
+			pIdx[idx + 29] = static_cast<unsigned short>(idxOff + 8);
 
-			pIdx[idx+30] = static_cast<unsigned short>(idxOff + 4);
-			pIdx[idx+31] = static_cast<unsigned short>(idxOff + 5);
-			pIdx[idx+32] = static_cast<unsigned short>(idxOff + 7);
+			pIdx[idx + 30] = static_cast<unsigned short>(idxOff + 4);
+			pIdx[idx + 31] = static_cast<unsigned short>(idxOff + 5);
+			pIdx[idx + 32] = static_cast<unsigned short>(idxOff + 7);
 
-			pIdx[idx+33] = static_cast<unsigned short>(idxOff + 7);
-			pIdx[idx+34] = static_cast<unsigned short>(idxOff + 6);
-			pIdx[idx+35] = static_cast<unsigned short>(idxOff + 4);
+			pIdx[idx + 33] = static_cast<unsigned short>(idxOff + 7);
+			pIdx[idx + 34] = static_cast<unsigned short>(idxOff + 6);
+			pIdx[idx + 35] = static_cast<unsigned short>(idxOff + 4);
 		}
 		
 		mIndexData->indexBuffer->unlock();
 
         mBuffersCreated = true;
     }
-	//-----------------------------------------------------------------------
-	void BoxSet::_destroyBuffers(void)
-	{
-		if (mVertexData)
-		{
+	
+	void BoxSet::_destroyBuffers() {
+		if (mVertexData) {
 			PU_DELETE mVertexData;
-			mVertexData = 0;
+			mVertexData = nullptr;
 		}
-		if (mIndexData)
-		{
+		if (mIndexData) {
 			PU_DELETE mIndexData;
-			mIndexData = 0;
+			mIndexData = nullptr;
 		}
 
 		mMainBuf.setNull();
 
 		mBuffersCreated = false;
 	}
-	//-----------------------------------------------------------------------
-	unsigned int BoxSet::getPoolSize(void) const
-	{
+	
+	unsigned int BoxSet::getPoolSize() const {
 		return static_cast<unsigned int>(mBoxPool.size());
 	}
-	//-----------------------------------------------------------------------
-	bool BoxSet::boxVisible(Camera* cam, const Box& box)
-	{
+	
+	bool BoxSet::boxVisible(Camera * cam, const Box & box) {
 		// If not individually culled it is always visible
-		if (!mCullIndividual) return true;
+		if (!mCullIndividual) {
+			return true;
+		}
 
 		// Culling based on sphere
 		SimpleSphere sph;
@@ -515,14 +429,11 @@ namespace ParticleUniverse
 		getWorldTransforms(&xworld);
 		sph.setCenter(xworld.transformAffine(box.mPosition));
 
-		if (box.mOwnDimensions)
-		{
+		if (box.mOwnDimensions) {
 			Real max = std::max(box.mWidth, box.mHeight);
 			max = std::max(box.mDepth, max);
 			sph.setRadius(max);
-		}
-		else
-		{
+		} else {
 			Real max = std::max(mDefaultWidth, mDefaultHeight);
 			max = std::max(mDefaultDepth, max);
 			sph.setRadius(max);
@@ -530,9 +441,8 @@ namespace ParticleUniverse
 
 		return cam->isVisible(sph);
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::increasePool(size_t size)
-	{
+	
+	void BoxSet::increasePool(size_t size) {
 		size_t oldSize = mBoxPool.size();
 
 		// Increase size
@@ -540,12 +450,12 @@ namespace ParticleUniverse
 		mBoxPool.resize(size);
 
 		// Create new boxes
-		for(size_t i = oldSize; i < size; ++i)
+		for (size_t i = oldSize; i < size; ++i) {
 			mBoxPool[i] = PU_NEW Box();
+		}
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::_genDefaultCorners(void)
-	{
+	
+	void BoxSet::_genDefaultCorners() {
 		mDefaultCorners[0].x = - mDefaultHalfWidth;
 		mDefaultCorners[0].y = - mDefaultHalfHeight;
 		mDefaultCorners[0].z = - mDefaultHalfDepth;
@@ -610,26 +520,20 @@ namespace ParticleUniverse
 		mDefaultCorners[15].y = mDefaultHalfHeight;
 		mDefaultCorners[15].z = mDefaultHalfDepth;
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::_genVertices(Box& box)
-	{
+	
+	void BoxSet::_genVertices(Box & box) {
 		Ogre::RGBA colour;
 		Ogre::Root::getSingleton().convertColourValue(box.mColour, &colour);
-		Ogre::RGBA* pCol;
+		Ogre::RGBA * pCol;
 
-		if (!box.mOwnDimensions)
-		{
-			for (size_t i = 0; i < 16; ++i)
-			{
+		if (!box.mOwnDimensions) {
+			for (size_t i = 0; i < 16; ++i) {
 				// Vertex
 				Ogre::Vector3 corner = Ogre::Vector3::ZERO;
-				if (box.mOrientation == Ogre::Quaternion::IDENTITY)
-				{
+				if (box.mOrientation == Ogre::Quaternion::IDENTITY) {
 					// Boxes didnŽt rotate
 					corner = mDefaultCorners[i];
-				}
-				else
-				{
+				} else {
 					// Take box orientation into account
 					corner = box.mOrientation * mDefaultCorners[i];
 				}
@@ -639,34 +543,30 @@ namespace ParticleUniverse
 				*mLockPtr++ = corner.z + box.mPosition.z;
 
 				// Colour
-				pCol = static_cast<Ogre::RGBA*>(static_cast<void*>(mLockPtr));
+				pCol = static_cast<Ogre::RGBA *>(static_cast<void *>(mLockPtr));
 				*pCol++ = colour;
-				mLockPtr = static_cast<float*>(static_cast<void*>(pCol));
+				mLockPtr = static_cast<float *>(static_cast<void *>(pCol));
 
 				// Texture Coordinates
 				*mLockPtr++ = mTextCoord[i].x;
 				*mLockPtr++ = mTextCoord[i].y;
 			}
-		}
-		else
-		{	
+		} else {	
 			/** Loop twice through the corners of the box, because we have duplicated the number of
 				vertices, because of the texture mapping.
 			*/
 			size_t t = 0;
-			for (size_t i = 0; i < 2; ++i)
-			{
-				for (size_t j = 0; j < 8; ++j)
-				{
+			for (size_t i = 0; i < 2; ++i) {
+				for (size_t j = 0; j < 8; ++j) {
 					// Vertex: The box itself takes position and orientation into account
 					*mLockPtr++ = box.getWorldspaceCorner(j).x;
 					*mLockPtr++ = box.getWorldspaceCorner(j).y;
 					*mLockPtr++ = box.getWorldspaceCorner(j).z;
 
 					// Colour
-					pCol = static_cast<Ogre::RGBA*>(static_cast<void*>(mLockPtr));
+					pCol = static_cast<Ogre::RGBA *>(static_cast<void *>(mLockPtr));
 					*pCol++ = colour;
-					mLockPtr = static_cast<float*>(static_cast<void*>(pCol));
+					mLockPtr = static_cast<float *>(static_cast<void *>(pCol));
 
 					// Texture Coordinates
 					*mLockPtr++ = mTextCoord[t].x;
@@ -676,74 +576,63 @@ namespace ParticleUniverse
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	const String& BoxSet::getMovableType(void) const
-	{
+	
+	const String & BoxSet::getMovableType() const {
 		return BoxSetFactory::PU_FACTORY_TYPE_NAME;
 	}
-	//-----------------------------------------------------------------------
-	void BoxSet::_initTextCoord(void)
-	{
-		mTextCoord [0] = Vector2(0.0f, 0.0f);
-		mTextCoord [1] = Vector2(0.0f, 1.0f);
-		mTextCoord [2] = Vector2(0.5f, 0.0f);
-		mTextCoord [3] = Vector2(0.5f, 1.0f);
+	
+	void BoxSet::_initTextCoord() {
+		mTextCoord [0] = Vector2(0.0, 0.0);
+		mTextCoord [1] = Vector2(0.0, 1.0);
+		mTextCoord [2] = Vector2(0.5, 0.0);
+		mTextCoord [3] = Vector2(0.5, 1.0);
 
-		mTextCoord [4] = Vector2(0.0f, 0.33f);
-		mTextCoord [5] = Vector2(0.0f, 0.66f);
-		mTextCoord [6] = Vector2(0.5f, 0.33f);
-		mTextCoord [7] = Vector2(0.5f, 0.66f);
+		mTextCoord [4] = Vector2(0.0, 0.33);
+		mTextCoord [5] = Vector2(0.0, 0.66);
+		mTextCoord [6] = Vector2(0.5, 0.33);
+		mTextCoord [7] = Vector2(0.5, 0.66);
 
-		mTextCoord [8] = Vector2(0.5f, 0.33f);
-		mTextCoord [9] = Vector2(1.0f, 0.33f);
-		mTextCoord [10] = Vector2(0.5f, 0.66f);
-		mTextCoord [11] = Vector2(1.0f, 0.66f);
+		mTextCoord [8] = Vector2(0.5, 0.33);
+		mTextCoord [9] = Vector2(1.0, 0.33);
+		mTextCoord [10] = Vector2(0.5, 0.66);
+		mTextCoord [11] = Vector2(1.0, 0.66);
 
-		mTextCoord [12] = Vector2(0.5f, 0.0f);
-		mTextCoord [13] = Vector2(1.0f, 0.0f);
-		mTextCoord [14] = Vector2(0.5f, 1.0f);
-		mTextCoord [15] = Vector2(1.0f, 1.0f);
+		mTextCoord [12] = Vector2(0.5, 0.0);
+		mTextCoord [13] = Vector2(1.0, 0.0);
+		mTextCoord [14] = Vector2(0.5, 1.0);
+		mTextCoord [15] = Vector2(1.0, 1.0);
 	}
-	//-----------------------------------------------------------------------
+	
 	String BoxSetFactory::PU_FACTORY_TYPE_NAME = "BoxSet";
-	//-----------------------------------------------------------------------
-	const String& BoxSetFactory::getType(void) const
-	{
+	
+	const String & BoxSetFactory::getType() const {
 		return PU_FACTORY_TYPE_NAME;
 	}
-	//-----------------------------------------------------------------------
-	Ogre::MovableObject* BoxSetFactory::createInstanceImpl(const String& name, const Ogre::NameValuePairList* params)
-	{
+	
+	Ogre::MovableObject* BoxSetFactory::createInstanceImpl(const String & name, const Ogre::NameValuePairList * params) {
 		bool externalData = false;
 		unsigned int poolSize = 0;
 
-		if (params != 0)
-		{
+		if (params != nullptr) {
 			Ogre::NameValuePairList::const_iterator ni = params->find("poolSize");
-			if (ni != params->end())
-			{
+			if (ni != params->end()) {
 				poolSize = StringConverter::parseUnsignedInt(ni->second);
 			}
 			ni = params->find("externalData");
-			if (ni != params->end())
-			{
+			if (ni != params->end()) {
 				externalData = StringConverter::parseBool(ni->second);
 			}
 		}
 
-		if (poolSize > 0)
-		{
+		if (poolSize > 0) {
 			return PU_NEW BoxSet(name, poolSize, externalData);
-		}
-		else
-		{
+		} else {
 			return PU_NEW BoxSet(name);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void BoxSetFactory::destroyInstance(Ogre::MovableObject* obj)
-	{
+	
+	void BoxSetFactory::destroyInstance(Ogre::MovableObject * obj) {
 		PU_DELETE obj;
 	}
 
-}
+} /* namespace ParticleUniverse */

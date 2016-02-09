@@ -24,26 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BOX_RENDERER_TOKENS_H__
 #define __PU_BOX_RENDERER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseRendererTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** 
     */
-	class _ParticleUniverseExport BoxRendererWriter : public ParticleRendererWriter
-	{
-		protected:
+	class _ParticleUniverseExport BoxRendererWriter : public ParticleRendererWriter {
+	public:
+		BoxRendererWriter() {}
+		virtual ~BoxRendererWriter() {}
 
-		public:
-			BoxRendererWriter(void) {};
-			virtual ~BoxRendererWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BOX_RENDERER_TOKENS_H__ */

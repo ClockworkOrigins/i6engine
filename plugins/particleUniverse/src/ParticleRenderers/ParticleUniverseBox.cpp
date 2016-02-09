@@ -21,65 +21,30 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleRenderers/ParticleUniverseBox.h"
+
 #include "ParticleRenderers/ParticleUniverseBoxSet.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	Box::Box(void):
-        	mOwnDimensions(false),
-		mWidth(10.0f),
-		mHeight(10.0f),
-		mDepth(10.0f),
-		mHalfWidth(5.0f),
-		mHalfHeight(5.0f),
-		mHalfDepth(5.0f),
-		mDimensionsChanged(false),
-		mTempCorner(Vector3::ZERO),
-		mPosition(Vector3::ZERO),
-		mColour(ColourValue::White),
-        	mParentSet(0)
-	{
+namespace ParticleUniverse {
+	
+	Box::Box() : mOwnDimensions(false), mWidth(10.0), mHeight(10.0), mDepth(10.0), mHalfWidth(5.0), mHalfHeight(5.0), mHalfDepth(5.0), mDimensionsChanged(false), mTempCorner(Vector3::ZERO), mPosition(Vector3::ZERO), mColour(ColourValue::White), mParentSet(nullptr) {
 		mOrientation = Quaternion::IDENTITY;
 		_calculateCorners();
 	}
-    //-----------------------------------------------------------------------
-    Box::Box(const Vector3& position, BoxSet* owner) :
-	        mOwnDimensions(false),
-		mWidth(10.0f),
-		mHeight(10.0f),
-		mDepth(10.0f),
-		mHalfWidth(5.0f),
-		mHalfHeight(5.0f),
-		mHalfDepth(5.0f),
-		mDimensionsChanged(false),
-		mTempCorner(Vector3::ZERO),
-		mPosition(Vector3::ZERO),
-		mColour(ColourValue::White),
-        	mParentSet(0)
-	{
+    
+    Box::Box(const Vector3 & position, BoxSet * owner) : mOwnDimensions(false), mWidth(10.0), mHeight(10.0), mDepth(10.0), mHalfWidth(5.0), mHalfHeight(5.0), mHalfDepth(5.0), mDimensionsChanged(false), mTempCorner(Vector3::ZERO), mPosition(Vector3::ZERO), mColour(ColourValue::White), mParentSet(nullptr) {
 		mOrientation = Quaternion::IDENTITY;
 		_calculateCorners();
 	}
-	//-----------------------------------------------------------------------
-	Box::~Box(void)
-	{
+	
+	Box::~Box() {
 	}
-	//-----------------------------------------------------------------------
-	void Box::_calculateCorners(void)
-	{
-		if (mDimensionsChanged)
-		{
-			mHalfWidth = 0.5f * mWidth;
-			mHalfHeight = 0.5f * mHeight;
-			mHalfDepth = 0.5f * mDepth;
+	
+	void Box::_calculateCorners() {
+		if (mDimensionsChanged) {
+			mHalfWidth = 0.5 * mWidth;
+			mHalfHeight = 0.5 * mHeight;
+			mHalfDepth = 0.5 * mDepth;
 			mDimensionsChanged = false;
 		}
 
@@ -115,100 +80,82 @@ namespace ParticleUniverse
 		mCorners[7].y = mHalfHeight;
 		mCorners[7].z = mHalfDepth;
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& Box::getCorner(size_t index)
-	{
+	
+	const Vector3 & Box::getCorner(size_t index) {
 		assert(index < 8 && "Corner index out of bounds." );
-		if (mOrientation == Quaternion::IDENTITY)
-		{
+		if (mOrientation == Quaternion::IDENTITY) {
 			return mCorners[index];
-		}
-		else
-		{
+		} else {
 			mTempCorner = mOrientation * mCorners[index];
 			return mTempCorner;
 		}
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& Box::getWorldspaceCorner(size_t index)
-	{
+	
+	const Vector3 & Box::getWorldspaceCorner(size_t index) {
 		assert(index < 8 && "Corner index out of bounds." );
-		if (mOrientation == Quaternion::IDENTITY)
-		{
+		if (mOrientation == Quaternion::IDENTITY) {
 			mTempCorner = mPosition + mCorners[index];
-		}
-		else
-		{
+		} else {
 			mTempCorner = mPosition + mOrientation * mCorners[index];
 		}
 
 		return mTempCorner;
 	}
-	//-----------------------------------------------------------------------
-	void Box::setPosition(const Vector3& position)
-	{
+	
+	void Box::setPosition(const Vector3 & position) {
 		mPosition = position;
 		_calculateCorners();
 	}
-	//-----------------------------------------------------------------------
-	void Box::setPosition(Real x, Real y, Real z)
-	{
+	
+	void Box::setPosition(Real x, Real y, Real z) {
 		mPosition.x = x;
 		mPosition.y = y;
 		mPosition.z = z;
 		_calculateCorners();
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& Box::getPosition(void) const
-	{
+	
+	const Vector3 & Box::getPosition() const {
 		return mPosition;
 	}
-	//-----------------------------------------------------------------------
-	void Box::setDimensions(Real width, Real height, Real depth)
-	{
+	
+	void Box::setDimensions(Real width, Real height, Real depth) {
 		mOwnDimensions = true;
 		mWidth = width;
 		mHeight = height;
 		mDepth = depth;
-		if (mParentSet)
+		if (mParentSet) {
 			mParentSet->_notifyResized();
+		}
 		mDimensionsChanged = true;
 		_calculateCorners();
     }
-	//-----------------------------------------------------------------------
-	bool Box::hasOwnDimensions(void) const
-	{
+	
+	bool Box::hasOwnDimensions() const {
 		return mOwnDimensions;
 	}
-	//-----------------------------------------------------------------------
-	void Box::_notifyOwner(BoxSet* owner)
-	{
+	
+	void Box::_notifyOwner(BoxSet * owner) {
 		mParentSet = owner;
 	}
-	//-----------------------------------------------------------------------
-	void Box::setColour(const ColourValue& colour)
-	{
+	
+	void Box::setColour(const ColourValue & colour) {
 		mColour = colour;
 	}
-	//-----------------------------------------------------------------------
-	const ColourValue& Box::getColour(void) const
-	{
+	
+	const ColourValue & Box::getColour() const {
 		return mColour;
 	}
-	//-----------------------------------------------------------------------
-	Real Box::getOwnWidth(void) const
-	{
+	
+	Real Box::getOwnWidth() const {
 		return mWidth;
 	}
-	//-----------------------------------------------------------------------
-	Real Box::getOwnHeight(void) const
-	{
+	
+	Real Box::getOwnHeight() const {
 		return mHeight;
 	}
-	//-----------------------------------------------------------------------
-	Real Box::getOwnDepth(void) const
-	{
+	
+	Real Box::getOwnDepth() const {
 		return mDepth;
 	}
 
-}
+} /* namespace ParticleUniverse */
