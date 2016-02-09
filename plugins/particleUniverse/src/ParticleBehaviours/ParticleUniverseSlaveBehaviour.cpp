@@ -21,36 +21,24 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleBehaviours/ParticleUniverseSlaveBehaviour.h"
 
-namespace ParticleUniverse
-{
-	SlaveBehaviour::SlaveBehaviour(void) : 
-		ParticleBehaviour(),
-		masterParticle(0)
-	{
+#include "ParticleUniverseParticle.h"
+
+namespace ParticleUniverse {
+
+	SlaveBehaviour::SlaveBehaviour() : ParticleBehaviour(), masterParticle(nullptr) {
 	}
-	//-----------------------------------------------------------------------
-	void SlaveBehaviour::_processParticle(ParticleTechnique* technique, Particle* particle, Real timeElapsed)
-	{
-		if (masterParticle && !masterParticle->hasEventFlags(Particle::PEF_EXPIRED))
-		{
+
+	void SlaveBehaviour::_processParticle(ParticleTechnique * technique, Particle * particle, Real timeElapsed) {
+		if (masterParticle && !masterParticle->hasEventFlags(Particle::PEF_EXPIRED)) {
 		    particle->position = masterParticle->position;
 			particle->direction = masterParticle->direction;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void SlaveBehaviour::copyAttributesTo (ParticleBehaviour* behaviour)
-	{
-		ParticleBehaviour::copyAttributesTo(behaviour);
 
-		SlaveBehaviour* slaveBehaviour = static_cast<SlaveBehaviour*>(behaviour);
-		(void)slaveBehaviour;
+	void SlaveBehaviour::copyAttributesTo(ParticleBehaviour * behaviour) {
+		ParticleBehaviour::copyAttributesTo(behaviour);
 	}
-}
+
+} /* namespace ParticleUniverse */

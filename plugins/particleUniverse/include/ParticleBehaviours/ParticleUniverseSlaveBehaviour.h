@@ -24,32 +24,28 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SLAVE_BEHAVIOUR_H__
 #define __PU_SLAVE_BEHAVIOUR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBehaviour.h"
-#include "ParticleUniverseTechniqueListener.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The SlaveBehaviour makes the particle act as a slave, so it follows another particle to which it is related.
     */
-	class _ParticleUniverseExport SlaveBehaviour : public ParticleBehaviour
-	{
-		protected:
+	class _ParticleUniverseExport SlaveBehaviour : public ParticleBehaviour {
+	public:
+		Particle * masterParticle;
 
-		public:
-			Particle* masterParticle;
+		SlaveBehaviour();
+	    virtual ~SlaveBehaviour() {}
 
-			SlaveBehaviour(void);
-	        virtual ~SlaveBehaviour(void){};
+		/** See ParticleBehaviour.
+	    */
+		virtual void _processParticle(ParticleTechnique * technique, Particle * particle, Real timeElapsed);
 
-			/** See ParticleBehaviour.
-	        */
-			virtual void _processParticle(ParticleTechnique* technique, Particle* particle, Real timeElapsed);
-
-			/** 
-	        */
-			virtual void copyAttributesTo (ParticleBehaviour* behaviour);
+		/** 
+	    */
+		virtual void copyAttributesTo(ParticleBehaviour * behaviour);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SLAVE_BEHAVIOUR_H__ */

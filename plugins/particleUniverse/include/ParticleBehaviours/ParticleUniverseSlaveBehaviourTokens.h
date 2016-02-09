@@ -24,24 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SLAVE_BEHAVIOUR_TOKENS_H__
 #define __PU_SLAVE_BEHAVIOUR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBehaviourTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** 
     */
-	class _ParticleUniverseExport SlaveBehaviourWriter : public ParticleBehaviourWriter
-	{
-		public:
-			SlaveBehaviourWriter(void) {};
-			virtual ~SlaveBehaviourWriter(void) {};
+	class _ParticleUniverseExport SlaveBehaviourWriter : public ParticleBehaviourWriter {
+	public:
+		SlaveBehaviourWriter() {}
+		virtual ~SlaveBehaviourWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SLAVE_BEHAVIOUR_TOKENS_H__ */

@@ -21,22 +21,16 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleBehaviours/ParticleUniverseSlaveBehaviour.h"
 #include "ParticleBehaviours/ParticleUniverseSlaveBehaviourTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void SlaveBehaviourWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+#include "ParticleUniverseScriptSerializer.h"
+#include "ParticleBehaviours/ParticleUniverseSlaveBehaviour.h"
+
+namespace ParticleUniverse {
+
+	void SlaveBehaviourWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a SlaveBehaviour
-		const SlaveBehaviour* behaviour = static_cast<const SlaveBehaviour*>(element);
+		const SlaveBehaviour * behaviour = static_cast<const SlaveBehaviour *>(element);
 
 		// Write the header of the SlaveBehaviour
 		serializer->writeLine(token[TOKEN_BEHAVIOUR], behaviour->getBehaviourType(), 8);
@@ -49,4 +43,4 @@ namespace ParticleUniverse
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */
