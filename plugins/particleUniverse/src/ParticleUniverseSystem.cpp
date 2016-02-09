@@ -34,161 +34,64 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "OGRE/OgreSceneManager.h"
 #include "OGRE/OgreSceneNode.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	const bool ParticleSystem::DEFAULT_KEEP_LOCAL = false;
-	const Real ParticleSystem::DEFAULT_ITERATION_INTERVAL = 0.0f;
-	const Real ParticleSystem::DEFAULT_FIXED_TIMEOUT = 0.0f;
-	const Real ParticleSystem::DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT = 0.0f;
+	const Real ParticleSystem::DEFAULT_ITERATION_INTERVAL = 0.0;
+	const Real ParticleSystem::DEFAULT_FIXED_TIMEOUT = 0.0;
+	const Real ParticleSystem::DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT = 0.0;
 	const bool ParticleSystem::DEFAULT_SMOOTH_LOD = false;
-	const Real ParticleSystem::DEFAULT_FAST_FORWARD_TIME = 0.0f;
+	const Real ParticleSystem::DEFAULT_FAST_FORWARD_TIME = 0.0;
 	const char *ParticleSystem::DEFAULT_MAIN_CAMERA_NAME = "";
-	const Real ParticleSystem::DEFAULT_SCALE_VELOCITY = 1.0f;
-	const Real ParticleSystem::DEFAULT_SCALE_TIME = 1.0f;
+	const Real ParticleSystem::DEFAULT_SCALE_VELOCITY = 1.0;
+	const Real ParticleSystem::DEFAULT_SCALE_TIME = 1.0;
 	const Vector3 ParticleSystem::DEFAULT_SCALE(1, 1, 1);
 	const bool ParticleSystem::DEFAULT_TIGHT_BOUNDINGBOX = false;
 
-	//-----------------------------------------------------------------------
-	class ParticleSystemUpdateValue : public ControllerValue<Real>
-	{
-		protected:
-			ParticleSystem* mTarget;
-		
-		public:
-			ParticleSystemUpdateValue(ParticleSystem* target) : mTarget(target) {}
+	
+	class ParticleSystemUpdateValue : public ControllerValue<Real> {		
+	public:
+		ParticleSystemUpdateValue(ParticleSystem * target) : mTarget(target) {}
 			
-			Real getValue(void) const {return 0;}
-			void setValue(Real value) {mTarget->_update(value);}
+		Real getValue() const { return 0; }
+		void setValue(Real value) { mTarget->_update(value); }
+
+	protected:
+		ParticleSystem * mTarget;
 	};
-	//-----------------------------------------------------------------------
-	ParticleSystem::ParticleSystem(const String& name) :
-		MovableObject(name),
-		IElement(),
-		mState(ParticleSystem::PSS_STOPPED),
-		mAABB(),
-		mTimeController(0),
-		mTimeSinceLastVisible(0.0f),
-		mLastVisibleFrame(0),
-		mNonvisibleUpdateTimeout(DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT),
-		mNonvisibleUpdateTimeoutSet(false),
-		mTimeElapsedSinceStart(0),
-		mResourceGroupName(Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME),
-		mSmoothLod(DEFAULT_SMOOTH_LOD),
-		mSuppressNotifyEmissionChange(true),
-		mIterationInterval(DEFAULT_ITERATION_INTERVAL),
-		mIterationIntervalSet(false),
-		mTimeSinceLastUpdate(0.0f),
-		mFixedTimeout(DEFAULT_FIXED_TIMEOUT),
-		mFixedTimeoutSet(false),
-		mBoundsAutoUpdate(true),
-		mBoundsUpdateTime(10.0f),
-		mOriginalBoundsUpdateTime(10.0f),
-		mFastForwardSet(false),
-		mOriginalFastForwardSet(false),
-		mFastForwardTime(DEFAULT_FAST_FORWARD_TIME),
-		mFastForwardInterval(0.0f),
-		mMainCameraName(DEFAULT_MAIN_CAMERA_NAME),
-		mMainCameraNameSet(false),
-		mCurrentCamera(0),
-		mParticleSystemScale(DEFAULT_SCALE),
-		mParticleSystemScaleVelocity(DEFAULT_SCALE_VELOCITY),
-		mParticleSystemScaleTime(DEFAULT_SCALE_TIME),
-		mKeepLocal(DEFAULT_KEEP_LOCAL),
-		mTightBoundingBox(DEFAULT_TIGHT_BOUNDINGBOX),
-		mPauseTime(0.0f),
-		mPauseTimeSet(false),
-		mPauseTimeElapsed(0.0f),
-		mTemplateName(BLANK_STRING),
-		mStopFadeSet(false),
-		mSceneManager(0),
-		mLatestOrientation(Quaternion::IDENTITY),
-		mRotationOffset(Quaternion::IDENTITY),
-		mRotationCentre(Vector3::ZERO),
-		mUseController(true),
-		mAtLeastOneParticleEmitted(false),
-		mLastLodIndex(0)
-	{
+	
+	ParticleSystem::ParticleSystem(const String & name) : MovableObject(name), IElement(), mState(ParticleSystem::PSS_STOPPED), mAABB(), mTimeController(nullptr), mTimeSinceLastVisible(0.0), mLastVisibleFrame(0), mNonvisibleUpdateTimeout(DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT), mNonvisibleUpdateTimeoutSet(false), mTimeElapsedSinceStart(0), mResourceGroupName(Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME), mSmoothLod(DEFAULT_SMOOTH_LOD), mSuppressNotifyEmissionChange(true), mIterationInterval(DEFAULT_ITERATION_INTERVAL), mIterationIntervalSet(false), mTimeSinceLastUpdate(0.0), mFixedTimeout(DEFAULT_FIXED_TIMEOUT), mFixedTimeoutSet(false), mBoundsAutoUpdate(true), mBoundsUpdateTime(10.0), mOriginalBoundsUpdateTime(10.0), mFastForwardSet(false), mOriginalFastForwardSet(false), mFastForwardTime(DEFAULT_FAST_FORWARD_TIME), mFastForwardInterval(0.0), mMainCameraName(DEFAULT_MAIN_CAMERA_NAME), mMainCameraNameSet(false), mCurrentCamera(nullptr), mParticleSystemScale(DEFAULT_SCALE), mParticleSystemScaleVelocity(DEFAULT_SCALE_VELOCITY), mParticleSystemScaleTime(DEFAULT_SCALE_TIME), mKeepLocal(DEFAULT_KEEP_LOCAL), mTightBoundingBox(DEFAULT_TIGHT_BOUNDINGBOX), mPauseTime(0.0), mPauseTimeSet(false), mPauseTimeElapsed(0.0), mTemplateName(BLANK_STRING), mStopFadeSet(false), mSceneManager(nullptr), mLatestOrientation(Quaternion::IDENTITY), mRotationOffset(Quaternion::IDENTITY), mRotationCentre(Vector3::ZERO), mUseController(true), mAtLeastOneParticleEmitted(false), mLastLodIndex(0) {
 		mBoundingRadius = 1;
 		particleType = PT_SYSTEM;
 	}
-	//-----------------------------------------------------------------------
-	ParticleSystem::ParticleSystem(const String& name, const String& resourceGroupName) :
-		MovableObject(name),
-		IElement(),
-		mState(ParticleSystem::PSS_STOPPED),
-		mAABB(),
-		mTimeController(0),
-		mTimeSinceLastVisible(0.0f),
-		mLastVisibleFrame(0),
-		mNonvisibleUpdateTimeout(DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT),
-		mNonvisibleUpdateTimeoutSet(false),
-		mTimeElapsedSinceStart(0),
-		mResourceGroupName(resourceGroupName),
-		mSmoothLod(DEFAULT_SMOOTH_LOD),
-		mSuppressNotifyEmissionChange(true),
-		mIterationInterval(DEFAULT_ITERATION_INTERVAL),
-		mIterationIntervalSet(false),
-		mTimeSinceLastUpdate(0.0f),
-		mFixedTimeout(DEFAULT_FIXED_TIMEOUT),
-		mFixedTimeoutSet(false),
-		mBoundsAutoUpdate(true),
-		mBoundsUpdateTime(10.0f),
-		mOriginalBoundsUpdateTime(10.0f),
-		mFastForwardSet(false),
-		mOriginalFastForwardSet(false),
-		mFastForwardTime(DEFAULT_FAST_FORWARD_TIME),
-		mFastForwardInterval(0.0f),
-		mMainCameraName(DEFAULT_MAIN_CAMERA_NAME),
-		mMainCameraNameSet(false),
-		mCurrentCamera(0),
-		mParticleSystemScale(DEFAULT_SCALE),
-		mParticleSystemScaleVelocity(DEFAULT_SCALE_VELOCITY),
-		mParticleSystemScaleTime(DEFAULT_SCALE_TIME),
-		mKeepLocal(DEFAULT_KEEP_LOCAL),
-		mTightBoundingBox(DEFAULT_TIGHT_BOUNDINGBOX),
-		mPauseTime(0.0f),
-		mPauseTimeSet(false),
-		mPauseTimeElapsed(0.0f),
-		mTemplateName(BLANK_STRING),
-		mStopFadeSet(false),
-		mSceneManager(0),
-		mLatestOrientation(Quaternion::IDENTITY),
-		mRotationOffset(Quaternion::IDENTITY),
-		mRotationCentre(Vector3::ZERO),
-		mUseController(true),
-		mAtLeastOneParticleEmitted(false),
-		mLastLodIndex(0)
-	{
+	
+	ParticleSystem::ParticleSystem(const String & name, const String & resourceGroupName) : MovableObject(name), IElement(), mState(ParticleSystem::PSS_STOPPED), mAABB(), mTimeController(nullptr), mTimeSinceLastVisible(0.0), mLastVisibleFrame(0), mNonvisibleUpdateTimeout(DEFAULT_NON_VISIBLE_UPDATE_TIMEOUT), mNonvisibleUpdateTimeoutSet(false), mTimeElapsedSinceStart(0), mResourceGroupName(resourceGroupName), mSmoothLod(DEFAULT_SMOOTH_LOD), mSuppressNotifyEmissionChange(true), mIterationInterval(DEFAULT_ITERATION_INTERVAL), mIterationIntervalSet(false), mTimeSinceLastUpdate(0.0), mFixedTimeout(DEFAULT_FIXED_TIMEOUT), mFixedTimeoutSet(false), mBoundsAutoUpdate(true), mBoundsUpdateTime(10.0), mOriginalBoundsUpdateTime(10.0), mFastForwardSet(false), mOriginalFastForwardSet(false), mFastForwardTime(DEFAULT_FAST_FORWARD_TIME), mFastForwardInterval(0.0), mMainCameraName(DEFAULT_MAIN_CAMERA_NAME), mMainCameraNameSet(false), mCurrentCamera(nullptr), mParticleSystemScale(DEFAULT_SCALE), mParticleSystemScaleVelocity(DEFAULT_SCALE_VELOCITY), mParticleSystemScaleTime(DEFAULT_SCALE_TIME), mKeepLocal(DEFAULT_KEEP_LOCAL), mTightBoundingBox(DEFAULT_TIGHT_BOUNDINGBOX), mPauseTime(0.0), mPauseTimeSet(false), mPauseTimeElapsed(0.0), mTemplateName(BLANK_STRING), mStopFadeSet(false), mSceneManager(nullptr), mLatestOrientation(Quaternion::IDENTITY), mRotationOffset(Quaternion::IDENTITY), mRotationCentre(Vector3::ZERO), mUseController(true), mAtLeastOneParticleEmitted(false), mLastLodIndex(0) {
 		mBoundingRadius = 1;
 	}
-	//-----------------------------------------------------------------------
-	ParticleSystem::~ParticleSystem(void)
-	{
+	
+	ParticleSystem::~ParticleSystem() {
 		// Generate the event
 		_pushSystemEvent(PU_EVT_SYSTEM_DELETING);
 
 		destroyAllTechniques();
 
-		if (mTimeController && mUseController)
-		{
+		if (mTimeController && mUseController) {
 			// Destroy controller
 			ControllerManager::getSingleton().destroyController(mTimeController);
-			mTimeController = 0;
+			mTimeController = nullptr;
 		}
 	}
-	//-----------------------------------------------------------------------
-	ParticleSystem& ParticleSystem::operator=(const ParticleSystem& ps)
-	{
+	
+	ParticleSystem & ParticleSystem::operator=(const ParticleSystem & ps) {
 		// Destroy all existing techniques.
 		destroyAllTechniques();
 
 		// Copy techniques
 		size_t i = 0;
-		ParticleTechnique* psTechnique = 0;
-		ParticleTechnique* clonedTechnique = 0;
-		for(i = 0; i < ps.getNumTechniques(); ++i)
-		{
+		ParticleTechnique * psTechnique = nullptr;
+		ParticleTechnique * clonedTechnique = nullptr;
+		for (i = 0; i < ps.getNumTechniques(); ++i) {
 			psTechnique = ps.getTechnique(i);
 			clonedTechnique = ParticleSystemManager::getSingletonPtr()->cloneTechnique(psTechnique);
 			addTechnique(clonedTechnique);
@@ -235,45 +138,38 @@ namespace ParticleUniverse
 
 		return *this;
     }
-	//-----------------------------------------------------------------------
-	void ParticleSystem::addParticleSystemListener (ParticleSystemListener* particleSystemListener)
-	{
+	
+	void ParticleSystem::addParticleSystemListener(ParticleSystemListener * particleSystemListener) {
 		mParticleSystemListenerList.push_back(particleSystemListener);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::removeParticleSystemListener (ParticleSystemListener* particleSystemListener)
-	{
+	
+	void ParticleSystem::removeParticleSystemListener (ParticleSystemListener * particleSystemListener) {
 		assert(particleSystemListener && "ParticleSystemListener is null!");
-		ParticleSystemListenerIterator it;
-		ParticleSystemListenerIterator itEnd = mParticleSystemListenerList.end();
-		for (it = mParticleSystemListenerList.begin(); it != itEnd; ++it)
-		{
-			if (*it == particleSystemListener)
-			{
+		for (ParticleSystemListenerIterator it = mParticleSystemListenerList.begin(); it != mParticleSystemListenerList.end(); ++it) {
+			if (*it == particleSystemListener) {
 				// Remove it (donŽt destroy it, because the ParticleSystem is not the owner)
 				mParticleSystemListenerList.erase(it);
 				break;
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_pushSystemEvent(EventType eventType)
-	{
+	
+	void ParticleSystem::_pushSystemEvent(EventType eventType) {
 		// Create the event
 		ParticleUniverseEvent evt;
 		evt.eventType = eventType;
 		evt.componentType = CT_SYSTEM;
 		evt.componentName = getName();
-		evt.technique = 0;
-		evt.emitter = 0;
+		evt.technique = nullptr;
+		evt.emitter = nullptr;
 		pushEvent(evt);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::pushEvent(ParticleUniverseEvent& particleUniverseEvent)
-	{
+	
+	void ParticleSystem::pushEvent(ParticleUniverseEvent & particleUniverseEvent) {
 		// Fast rejection
-		if (mParticleSystemListenerList.empty())
+		if (mParticleSystemListenerList.empty()) {
 			return;
+		}
 
 		// Test order of events: This code is disabled because it is only for debug purposes (no ifdef needed, because it will almost never be used)
 /*
@@ -341,170 +237,129 @@ namespace ParticleUniverse
 */
 
 		// Notify all listeners
-		ParticleSystemListenerIterator it;
-		ParticleSystemListenerIterator itEnd = mParticleSystemListenerList.end();
-		for (it = mParticleSystemListenerList.begin(); it != itEnd; ++it)
-		{
+		for (ParticleSystemListenerIterator it = mParticleSystemListenerList.begin(); it != mParticleSystemListenerList.end(); ++it) {
 			(*it)->handleParticleSystemEvent(this, particleUniverseEvent);
 		}
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleSystem::hasTightBoundingBox(void) const
-	{
+	
+	bool ParticleSystem::hasTightBoundingBox() const {
 		return mTightBoundingBox;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setTightBoundingBox(bool tightBoundingBox)
-	{
+	
+	void ParticleSystem::setTightBoundingBox(bool tightBoundingBox) {
 		mTightBoundingBox = tightBoundingBox;
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleSystem::getPauseTime(void) const
-	{
+	
+	Real ParticleSystem::getPauseTime() const {
 		return mPauseTime;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setPauseTime(Real pauseTime)
-	{
+	
+	void ParticleSystem::setPauseTime(Real pauseTime) {
 		mPauseTime = pauseTime;
 		mPauseTimeSet = true;
 	}
-	//-----------------------------------------------------------------------
-	const String& ParticleSystem::getTemplateName(void) const
-	{
+	
+	const String & ParticleSystem::getTemplateName() const {
 		return mTemplateName;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setTemplateName(const String& templateName)
-	{
+	
+	void ParticleSystem::setTemplateName(const String & templateName) {
 		mTemplateName = templateName;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setEnabled(bool enabled)
-	{
+	
+	void ParticleSystem::setEnabled(bool enabled) {
 		Particle::setEnabled(enabled);
-		if (enabled && mState != PSS_STARTED)
-		{
+		if (enabled && mState != PSS_STARTED) {
 			start();
-		}
-		else
-		{
+		} else {
 			stop();
 		}
 	}
-	//-----------------------------------------------------------------------
-	Ogre::SceneManager* ParticleSystem::getSceneManager(void)
-	{
+	
+	Ogre::SceneManager * ParticleSystem::getSceneManager() {
 		return mSceneManager;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setSceneManager(Ogre::SceneManager* sceneManager)
-	{
+	
+	void ParticleSystem::setSceneManager(Ogre::SceneManager * sceneManager) {
 		mSceneManager = sceneManager;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setUseController(bool useController)
-	{
+	
+	void ParticleSystem::setUseController(bool useController) {
 		mUseController = useController;
-		if (mTimeController && !mUseController)
-		{
+		if (mTimeController && !mUseController) {
 			// Destroy the existing controller, because it isn't used anymore
 			ControllerManager::getSingleton().destroyController(mTimeController);
-			mTimeController = 0;
+			mTimeController = nullptr;
 		}
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleSystem::isKeepLocal(void) const
-	{
+	
+	bool ParticleSystem::isKeepLocal() const {
 		return mKeepLocal;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setKeepLocal(bool keepLocal)
-	{
+	
+	void ParticleSystem::setKeepLocal(bool keepLocal) {
 		mKeepLocal = keepLocal;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleSystem::makeParticleLocal(Particle* particle)
-	{
-		if (!particle)
+	
+	bool ParticleSystem::makeParticleLocal(Particle * particle) {
+		if (!particle) {
 			return true;
+		}
 
-		if (!mKeepLocal || hasEventFlags(Particle::PEF_EXPIRED))
+		if (!mKeepLocal || hasEventFlags(Particle::PEF_EXPIRED)) {
 			return false;
+		}
 
 		Vector3 diff = getDerivedPosition() - latestPosition;
 		particle->position += diff;
 		return true;
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& ParticleSystem::getDerivedPosition(void)
-	{
-		if (mMarkedForEmission)
-		{
+	
+	const Vector3 & ParticleSystem::getDerivedPosition() {
+		if (mMarkedForEmission) {
 			// Use the position, because it is emitted
 			mDerivedPosition = position;
-		}
-		else
-		{
-			if (mParentNode)
-			{
+		} else {
+			if (mParentNode) {
 				mDerivedPosition = mParentNode->_getDerivedPosition();
-			}
-			else
-			{
+			} else {
 				mDerivedPosition = Vector3::ZERO;
 			}
 		}
 		return mDerivedPosition;
 	}
-	//-----------------------------------------------------------------------
-	const Quaternion& ParticleSystem::getDerivedOrientation(void) const
-	{
-		if (mMarkedForEmission)
-		{
-			if (parentEmitter)
-			{
+	
+	const Quaternion & ParticleSystem::getDerivedOrientation() const {
+		if (mMarkedForEmission) {
+			if (parentEmitter) {
 				// Return the derived orientation of the uber ParticleSystem
 				return parentEmitter->getParentTechnique()->getParentSystem()->getDerivedOrientation();
-			}
-			else
-			{
+			} else {
 				// DonŽt know
 				return Quaternion::IDENTITY;
 			}
-		}
-		else
-		{
-			if (mParentNode)
-			{
+		} else {
+			if (mParentNode) {
 				return mParentNode->_getDerivedOrientation();
-			}
-			else
-			{
+			} else {
 				return Quaternion::IDENTITY;
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	const Quaternion& ParticleSystem::getLatestOrientation(void) const
-	{
+	
+	const Quaternion & ParticleSystem::getLatestOrientation() const {
 		return mLatestOrientation;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleSystem::hasRotatedBetweenUpdates(void) const
-	{
+	
+	bool ParticleSystem::hasRotatedBetweenUpdates() const {
 		return mLatestOrientation != getDerivedOrientation();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::calulateRotationOffset(void)
-	{
-		if (mMarkedForEmission)
-		{
+	
+	void ParticleSystem::calulateRotationOffset() {
+		if (mMarkedForEmission) {
 			// Use the uber particle system as centre of rotation and not the particle systems' own position.
 			mRotationCentre = parentEmitter->getParentTechnique()->getParentSystem()->getDerivedPosition();
-		}
-		else
-		{
+		} else {
 			// Use its own position
 			mRotationCentre = getDerivedPosition();
 		}
@@ -514,87 +369,70 @@ namespace ParticleUniverse
 		*/
 		mRotationOffset = getDerivedOrientation() * mLatestOrientation.Inverse();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::rotationOffset(Vector3& pos)
-	{
+	
+	void ParticleSystem::rotationOffset(Vector3 & pos) {
 		/** Calulate the rotated position.
 		*/
 		pos = mRotationCentre + mRotationOffset * (pos - mRotationCentre);
 	}
-	//-----------------------------------------------------------------------
-	ParticleTechnique* ParticleSystem::createTechnique(void)
-	{
-		ParticleTechnique* technique = ParticleSystemManager::getSingletonPtr()->createTechnique();
+	
+	ParticleTechnique * ParticleSystem::createTechnique() {
+		ParticleTechnique * technique = ParticleSystemManager::getSingletonPtr()->createTechnique();
 		addTechnique(technique);
 		return technique;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::addTechnique(ParticleTechnique* technique)
-	{
+	
+	void ParticleSystem::addTechnique(ParticleTechnique * technique) {
 		mTechniques.push_back(technique);
 		technique->setParentSystem(this);
 		technique->_notifyRescaled(mParticleSystemScale);
 		technique->_notifyVelocityRescaled(mParticleSystemScaleVelocity);
 		_notifyEmissionChange();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::removeTechnique(ParticleTechnique* technique)
-	{
+	
+	void ParticleSystem::removeTechnique(ParticleTechnique * technique) {
 		assert(technique && "Technique is null!");
-		ParticleTechniqueIterator it;
-		for (it = mTechniques.begin(); it != mTechniques.end(); ++it)
-		{
-			if ((*it) == technique)
-			{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
+			if ((*it) == technique) {
 				mTechniques.erase(it);
 				break;
 			}
 		}
 
 		// It has no parent anymore
-		technique->setParentSystem(0);
+		technique->setParentSystem(nullptr);
 
 		// Notify, because the removed technique could have emitters that emit other techniques.
 		_notifyEmissionChange();
 	}
-	//-----------------------------------------------------------------------
-	ParticleTechnique* ParticleSystem::getTechnique (size_t index) const
-	{
+	
+	ParticleTechnique * ParticleSystem::getTechnique(size_t index) const {
 		assert(index < mTechniques.size() && "Technique index out of bounds!");
 		return mTechniques[index];
 	}
-	//-----------------------------------------------------------------------
-	ParticleTechnique* ParticleSystem::getTechnique (const String& techniqueName) const
-	{
-		if (techniqueName == BLANK_STRING)
-			return 0;
+	
+	ParticleTechnique * ParticleSystem::getTechnique (const String & techniqueName) const {
+		if (techniqueName == BLANK_STRING) {
+			return nullptr;
+		}
 
-		ParticleTechniqueConstIterator it;
-		ParticleTechniqueConstIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
-			if ((*it)->getName() == techniqueName)
-			{
+		for (ParticleTechniqueConstIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
+			if ((*it)->getName() == techniqueName) {
 				return *it;
 			}
 		}
 
-		return 0;
+		return nullptr;
 	}
-	//-----------------------------------------------------------------------
-	size_t ParticleSystem::getNumTechniques (void) const
-	{
+	
+	size_t ParticleSystem::getNumTechniques() const {
 		return mTechniques.size();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::destroyTechnique(ParticleTechnique* technique)
-	{
+	
+	void ParticleSystem::destroyTechnique(ParticleTechnique * technique) {
 		assert(technique && "Technique is null!");
-		ParticleTechniqueIterator it;
-		for (it = mTechniques.begin(); it != mTechniques.end(); ++it)
-		{
-			if ((*it) == technique)
-			{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
+			if ((*it) == technique) {
 				ParticleSystemManager::getSingletonPtr()->destroyTechnique(*it);
 				mTechniques.erase(it);
 				break;
@@ -604,150 +442,123 @@ namespace ParticleUniverse
 		// Notify, because the destroyed technique could have emitters that emit other techniques.
 		_notifyEmissionChange();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::destroyTechnique (size_t index)
-	{
+	
+	void ParticleSystem::destroyTechnique(size_t index) {
 		destroyTechnique(getTechnique(index));
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::destroyAllTechniques (void)
-	{
-		ParticleTechniqueIterator it;
-		while (mTechniques.size() > 0)
-		{
-			it = mTechniques.begin();
-			ParticleTechnique* tech = *it;
+	
+	void ParticleSystem::destroyAllTechniques() {
+		while (mTechniques.size() > 0) {
+			ParticleTechniqueIterator it = mTechniques.begin();
+			ParticleTechnique * tech = *it;
 			ParticleSystemManager::getSingletonPtr()->destroyTechnique(tech);
 			mTechniques.erase(it);
 		}
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleSystem::getFastForwardTime(void) const
-	{
+	
+	Real ParticleSystem::getFastForwardTime() const {
 		return mFastForwardTime;
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleSystem::getFastForwardInterval(void) const
-	{
+	
+	Real ParticleSystem::getFastForwardInterval() const {
 		return mFastForwardInterval;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setFastForward(Real time, Real interval)
-	{
+	
+	void ParticleSystem::setFastForward(Real time, Real interval) {
 		mFastForwardSet = true;
 		mOriginalFastForwardSet = true;
 		mFastForwardTime = time;
 		mFastForwardInterval = interval;
 	}
-	//-----------------------------------------------------------------------
-	const String& ParticleSystem::getMainCameraName(void) const
-	{
+	
+	const String & ParticleSystem::getMainCameraName() const {
 		return mMainCameraName;
 	}
-	//-----------------------------------------------------------------------
-	Camera* ParticleSystem::getMainCamera(void)
-	{
-		if (mSceneManager)
-		{
+	
+	Camera * ParticleSystem::getMainCamera() {
+		if (mSceneManager) {
 			return mSceneManager->getCamera(mMainCameraName);
 		}
-		return 0;
+		return nullptr;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleSystem::hasMainCamera(void)
-	{
+	
+	bool ParticleSystem::hasMainCamera() {
 		return mMainCameraNameSet;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setMainCameraName(String cameraName)
-	{
+	
+	void ParticleSystem::setMainCameraName(String cameraName) {
 		mMainCameraName = cameraName;
 		mMainCameraNameSet = true;
-		if (mSceneManager)
-		{
+		if (mSceneManager) {
 			mCurrentCamera = mSceneManager->getCamera(cameraName);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setMainCamera(Camera* camera)
-	{
-		if (!camera)
+	
+	void ParticleSystem::setMainCamera(Camera * camera) {
+		if (!camera) {
 			return;
+		}
 		
 		mCurrentCamera = camera;
 		mMainCameraName = camera->getName();
 		mMainCameraNameSet = true;
 	}
-	//-----------------------------------------------------------------------
-	Camera* ParticleSystem::getCurrentCamera(void)
-	{
+	
+	Camera * ParticleSystem::getCurrentCamera() {
 		return mCurrentCamera;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::fastForward(void)
-	{
-		if (!mFastForwardSet)
+	
+	void ParticleSystem::fastForward() {
+		if (!mFastForwardSet) {
 			return;
+		}
 
-		for (Real ftime = 0; ftime < mFastForwardTime; ftime += mFastForwardInterval)
-		{
+		for (Real ftime = 0; ftime < mFastForwardTime; ftime += mFastForwardInterval) {
 			_update(mFastForwardInterval);
 		}
 		
 		mFastForwardSet = false;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_notifyAttached(Ogre::Node* parent, bool isTagPoint)
-	{
+	
+	void ParticleSystem::_notifyAttached(Ogre::Node * parent, bool isTagPoint) {
 		// Generate the event
 		_pushSystemEvent(PU_EVT_SYSTEM_ATTACHING);
 
 		MovableObject::_notifyAttached(parent, isTagPoint);
 		
-		if (parent)
-		{
+		if (parent) {
 			// Create controller
-			if (!mTimeController)
-			{
+			if (!mTimeController) {
 				mTimeSinceLastVisible = 0;
 				mLastVisibleFrame = Ogre::Root::getSingleton().getNextFrameNumber();
-				if (mUseController)
-				{
-					ControllerManager& controllerManager = ControllerManager::getSingleton(); 
+				if (mUseController) {
+					ControllerManager & controllerManager = ControllerManager::getSingleton(); 
 					ControllerValueRealPtr particleSystemUpdateValue(PU_NEW ParticleSystemUpdateValue(this));
 					mTimeController = controllerManager.createFrameTimePassthroughController(particleSystemUpdateValue);
 				}
 			}
-		}
-		else if (!parent && mTimeController && mUseController)
-		{
+		} else if (!parent && mTimeController && mUseController) {
 			// Destroy controller
 			ControllerManager::getSingleton().destroyController(mTimeController);
-			mTimeController = 0;
+			mTimeController = nullptr;
 		}
 
 		// Notify all techniques that the particle system is attached or detached
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			(*it)->_notifyAttached(parent, isTagPoint);
 		}
 
 		// Generate the event
 		_pushSystemEvent(PU_EVT_SYSTEM_ATTACHED);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_notifyCurrentCamera(Camera* cam)
-	{
+	
+	void ParticleSystem::_notifyCurrentCamera(Camera * cam) {
 		mCurrentCamera = cam;
 		Ogre::MovableObject::_notifyCurrentCamera(cam);
 		mLastVisibleFrame = Ogre::Root::getSingleton().getNextFrameNumber();
-		mTimeSinceLastVisible = 0.0f;
+		mTimeSinceLastVisible = 0.0;
 
 		// Notify all techniques
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
 		Vector3 vec = Vector3::ZERO;
 		Real squareDistance = 0;
 		Vector3 vecCameraParentNode = cam->getDerivedPosition() - getParentNode()->_getDerivedPosition();
@@ -755,22 +566,17 @@ namespace ParticleUniverse
 		unsigned short index = 0;
 		bool doCamera = !mMainCameraNameSet || (mMainCameraNameSet && mMainCameraName == cam->getName());
 
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			// Calculate the distance between the camera and each ParticleTechnique (although it isnŽt always used).
-			if ((*it)->_isMarkedForEmission())
-			{
+			if ((*it)->_isMarkedForEmission()) {
 				vec = cam->getDerivedPosition() - (*it)->position;
 				squareDistance = vec.squaredLength();
-			}
-			else
-			{
+			} else {
 				vec = vecCameraParentNode;
 				squareDistance = squareDistanceCameraParentNode;
 			}
 
-			if (doCamera)
-			{
+			if (doCamera) {
 				// Only set the square distance in certain conditions
 				(*it)->setCameraSquareDistance(squareDistance);
 			}
@@ -778,30 +584,24 @@ namespace ParticleUniverse
 			// Determine lod, enable technique with the appropriate lod index 
 			// (only if the distance list is filled). Note, that this really only works with a
 			// 1-camera setup.
-			if (!mLodDistanceList.empty())
-			{
-				if (doCamera)
-				{
+			if (!mLodDistanceList.empty()) {
+				if (doCamera) {
 					index = _getLodIndexSquaredDistance(squareDistance);
-					if ((*it)->getLodIndex() == index)
-					{
+					if ((*it)->getLodIndex() == index) {
 						(*it)->setEnabled(true);
 
-						if (index != mLastLodIndex)
-						{
+						if (index != mLastLodIndex) {
 							// Generate the event: It applies to a particle technique, although it is generated in the particle system
 							ParticleUniverseEvent evt;
 							evt.eventType = PU_EVT_LOD_TRANSITION;
 							evt.componentType = CT_TECHNIQUE;
 							evt.componentName = (*it)->getName();
 							evt.technique = *it;
-							evt.emitter = 0;
+							evt.emitter = nullptr;
 							pushEvent(evt);
 						}
 						mLastLodIndex = index;
-					}
-					else
-					{
+					} else {
 						(*it)->setEnabled(false);
 					}
 				}
@@ -811,63 +611,48 @@ namespace ParticleUniverse
 			(*it)->_notifyCurrentCamera(cam);
 		}
 	}
-	//-----------------------------------------------------------------------
-	const String& ParticleSystem::getMovableType(void) const
-	{
+	
+	const String & ParticleSystem::getMovableType() const {
 		return ParticleSystemFactory::PU_FACTORY_TYPE_NAME;
 	}
-	//-----------------------------------------------------------------------
-	const AxisAlignedBox& ParticleSystem::getBoundingBox(void) const
-	{
+	
+	const AxisAlignedBox & ParticleSystem::getBoundingBox() const {
 		return mAABB;
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleSystem::getBoundingRadius(void) const
-	{
+	
+	Real ParticleSystem::getBoundingRadius() const {
 		return mBoundingRadius;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_updateRenderQueue(Ogre::RenderQueue* queue)
-	{
+	
+	void ParticleSystem::_updateRenderQueue(Ogre::RenderQueue * queue) {
 		// Update renderqueues of all techniques
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			(*it)->_updateRenderQueue(queue);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setRenderQueueGroup(uint8 queueId)
-	{
+	
+	void ParticleSystem::setRenderQueueGroup(uint8 queueId) {
 		MovableObject::setRenderQueueGroup(queueId);
 
 		// Set the same group for all renderers in all techniques
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			(*it)->setRenderQueueGroup(queueId);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_update(Real timeElapsed)
-	{
+	
+	void ParticleSystem::_update(Real timeElapsed) {
 		// Only update if attached to a node
-		if (!mParentNode)
+		if (!mParentNode) {
 			return;
+		}
 
 		// Only update if the particle system is started or prepare the particle system before starting.
-		if (mState == ParticleSystem::PSS_STARTED)
-		{
-			if (mNonvisibleUpdateTimeoutSet)
-			{
+		if (mState == ParticleSystem::PSS_STARTED) {
+			if (mNonvisibleUpdateTimeoutSet) {
 				long frameDiff = long(Ogre::Root::getSingleton().getNextFrameNumber() - mLastVisibleFrame);
-				if (frameDiff > 1 || frameDiff < 0)
-				{
+				if (frameDiff > 1 || frameDiff < 0) {
 					mTimeSinceLastVisible += timeElapsed;
-					if (mTimeSinceLastVisible >= mNonvisibleUpdateTimeout)
-					{
+					if (mTimeSinceLastVisible >= mNonvisibleUpdateTimeout) {
 						// No update
 						return;
 					}
@@ -880,19 +665,14 @@ namespace ParticleUniverse
 			// Only update the time since start if the ParticleSystem is in the 'start' state.
 			// Stop the ParticleSystem if the fixed timeout has been reached (if applicable).
 			mTimeElapsedSinceStart += timeElapsed;
-			if (mFixedTimeoutSet)
-			{
-				if (mTimeElapsedSinceStart >= mFixedTimeout)
-				{
+			if (mFixedTimeoutSet) {
+				if (mTimeElapsedSinceStart >= mFixedTimeout) {
 					// Stop the ParticleSystem
-					if (mStopFadeSet)
-					{
+					if (mStopFadeSet) {
 						// Stop slowly
 						stopFade();
 						mFixedTimeoutSet = false;
-					}
-					else
-					{
+					} else {
 						// Stop immediately
 						stop();
 						return;
@@ -901,67 +681,53 @@ namespace ParticleUniverse
 			}
 
 			// Update bound timer (if not auto updated)
-			if (!mBoundsAutoUpdate && mBoundsUpdateTime > 0.0f)
+			if (!mBoundsAutoUpdate && mBoundsUpdateTime > 0.0) {
 				mBoundsUpdateTime -= timeElapsed;
+			}
 
 			// Calculate rotation of the node
 			calulateRotationOffset();
 
 			// Determine whether timeElapsed or iterationInterval is used
 			size_t particlesLeft = 0;
-			if (mIterationIntervalSet)
-			{
+			if (mIterationIntervalSet) {
 				// Update time since last update
 				mTimeSinceLastUpdate += timeElapsed;
-				while (mTimeSinceLastUpdate >= mIterationInterval)
-				{
+				while (mTimeSinceLastUpdate >= mIterationInterval) {
 					// Update all techniques using the iteration interval value
 					particlesLeft = _updateTechniques(mIterationInterval);
 					mTimeSinceLastUpdate -= mIterationInterval;
 				}
-			}
-			else
-			{
+			} else {
 				// Update all techniques using the time elapsed (since last frame)
 				particlesLeft = _updateTechniques(timeElapsed);
 			}
 
 			// Handle situation when no particles are emitted anymore
-			if (particlesLeft == 0)
-			{
-				if (mAtLeastOneParticleEmitted)
-				{
+			if (particlesLeft == 0) {
+				if (mAtLeastOneParticleEmitted) {
 					// Generate the event
 					_pushSystemEvent(PU_EVT_NO_PARTICLES_LEFT);
 					mAtLeastOneParticleEmitted = false;
 				}
 
 				// Determine whether the particle system should be stopped because of a fade out
-				if (mStopFadeSet)
-				{
-					if (!mFixedTimeoutSet || (mFixedTimeoutSet && mTimeElapsedSinceStart >= mFixedTimeout))
-					{
+				if (mStopFadeSet) {
+					if (!mFixedTimeoutSet || (mFixedTimeoutSet && mTimeElapsedSinceStart >= mFixedTimeout)) {
 						stop();
 						return;
 					}
 				}
-			}
-			else
-			{
+			} else {
 				// At least one particle was emitted, so if 'particlesLef' becomes 0, it concerns the period after the last emitted particle.
 				mAtLeastOneParticleEmitted = true;
 			}
-		}
-		else if (mState == ParticleSystem::PSS_PREPARED)
-		{
+		} else if (mState == ParticleSystem::PSS_PREPARED) {
 			// Generate the event
 			_pushSystemEvent(PU_EVT_SYSTEM_PREPARING);
 
 			// Prepare all techniques (perform some initialisation in advance)
-			ParticleTechniqueIterator it;
-			ParticleTechniqueIterator itEnd = mTechniques.end();
-			for (it = mTechniques.begin(); it != itEnd; ++it)
-			{
+			for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 				(*it)->_prepare();
 			}
 
@@ -970,16 +736,12 @@ namespace ParticleUniverse
 
 			// Generate the event
 			_pushSystemEvent(PU_EVT_SYSTEM_PREPARED);
-		}
-		else if (mState == ParticleSystem::PSS_PAUSED)
-		{
+		} else if (mState == ParticleSystem::PSS_PAUSED) {
 			// Determine whether there is a limit to the pause
-			if (mPauseTimeSet)
-			{
+			if (mPauseTimeSet) {
 				mPauseTimeElapsed += timeElapsed;
-				if (mPauseTimeElapsed > mPauseTime)
-				{
-					mPauseTimeElapsed = 0.0f;
+				if (mPauseTimeElapsed > mPauseTime) {
+					mPauseTimeElapsed = 0.0;
 					resume();
 				}
 			}
@@ -989,9 +751,8 @@ namespace ParticleUniverse
 		latestPosition = getDerivedPosition();
 		mLatestOrientation = getDerivedOrientation();
 	}
-	//-----------------------------------------------------------------------
-	size_t ParticleSystem::_updateTechniques(Real timeElapsed)
-	{
+	
+	size_t ParticleSystem::_updateTechniques(Real timeElapsed) {
 		/** Update all techniques if particle system is started (only if the techniques aren't emitted 
 			themselves) and return the total number of emitted particles.
 			Note, that emitted techniques are updated by the technique that is responsible for emitting 
@@ -1005,24 +766,18 @@ namespace ParticleUniverse
 			Note, the patch in the link was to put the code in each technique. It seems more obvious to put it in the particle system itself, so it
 			is updated only once.
 		*/
-		if (isInScene() && getParentNode())
-		{
+		if (isInScene() && getParentNode()) {
 			getParentNode()->_update(true, true);
 		}
 
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
 		size_t particlesLeft = 0;
-		bool mAABBUpdate = mParentNode && (mBoundsAutoUpdate || mBoundsUpdateTime > 0.0f);
+		bool mAABBUpdate = mParentNode && (mBoundsAutoUpdate || mBoundsUpdateTime > 0.0);
 		bool merge = mAABBUpdate;
 		AxisAlignedBox worldAABB(mParentNode->_getDerivedPosition(), mParentNode->_getDerivedPosition());
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
-			if (!(*it)->_isMarkedForEmission())
-			{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
+			if (!(*it)->_isMarkedForEmission()) {
 				// Only call this if update bounds is needed.
-				if (merge)
-				{
+				if (merge) {
 					// Call _notifyUpdateBounds() for each Particle Technique, so the mWorldAABB in the 
 					// ParticleTechnique::_update() function is (re)calculated.
 					(*it)->_notifyUpdateBounds();
@@ -1032,14 +787,12 @@ namespace ParticleUniverse
 				(*it)->_update(timeElapsed);
 
 				// Merge worldAABB's of all ParticleTechniques
-				if (merge)
-				{
+				if (merge) {
 					// Get the WorldAABB from each technique and merge it with the worldAABB.
 					worldAABB.merge((*it)->getWorldBoundingBox());
 
 					// If worldAABB is infinite, ignore the other Particle Techniques.
-					if (worldAABB.isInfinite())
-					{
+					if (worldAABB.isInfinite()) {
 						merge = false;
 					}
 				}
@@ -1049,27 +802,20 @@ namespace ParticleUniverse
 			}
 		}
 
-		if (mState == ParticleSystem::PSS_STOPPED)
-		{
+		if (mState == ParticleSystem::PSS_STOPPED) {
 			/** Don't bother to update the mAABB, because the system is stopped in one of the techniques.
 				The bounds must be reset, because even though the stop() has been called (which alread resets the
 				bounds) another technique in the list might set the bounds again.
 			*/
 			_resetBounds();
-		}
-		else if (mAABBUpdate)
-		{
+		} else if (mAABBUpdate) {
 			// If needed, update mAABB
-			if (!worldAABB.isNull())
-			{
-				if (mTightBoundingBox)
-				{
+			if (!worldAABB.isNull()) {
+				if (mTightBoundingBox) {
 					// Wrap the bounding box tight around the particle system
 					mAABB = worldAABB;
 					mAABB.transformAffine(mParentNode->_getFullTransform().inverseAffine());
-				}
-				else
-				{
+				} else {
 					// Merge with the current bounding box
 					// Note, that the mAABB must in localspace, so transformation of the worldAABB is required.
 					AxisAlignedBox newAABB(worldAABB);
@@ -1082,9 +828,7 @@ namespace ParticleUniverse
 				// Update bounding radius
 				Real sqDist = std::max(mAABB.getMinimum().squaredLength(), mAABB.getMaximum().squaredLength());
 				mBoundingRadius = Math::Sqrt(sqDist);
-			}
-			else
-			{
+			} else {
 				_resetBounds();
 			}
 
@@ -1095,174 +839,134 @@ namespace ParticleUniverse
 
 		return particlesLeft;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_resetBounds(void)
-	{
+	
+	void ParticleSystem::_resetBounds() {
 		// Reset the bounds to zero
-		if (!mAABB.isNull())
-		{
+		if (!mAABB.isNull()) {
 			mAABB.setNull();
 		}
 		mBoundingRadius = 0.0;
-		if (mParentNode)
-		{
+		if (mParentNode) {
 			mParentNode->needUpdate();
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setBoundsAutoUpdated(bool autoUpdate, Real stopIn)
-	{
+	
+	void ParticleSystem::setBoundsAutoUpdated(bool autoUpdate, Real stopIn) {
 		mBoundsAutoUpdate = autoUpdate;
 		mBoundsUpdateTime = stopIn;
 		mOriginalBoundsUpdateTime = stopIn;
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& ParticleSystem::getScale(void) const
-	{
+	
+	const Vector3 & ParticleSystem::getScale() const {
 		return mParticleSystemScale;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setScale(const Vector3& scale)
-	{
+	
+	void ParticleSystem::setScale(const Vector3 & scale) {
 		// Set the scale and notify the particle techniques
 		mParticleSystemScale = scale;
 		_notifyRescaled();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_notifyRescaled(void)
-	{
+	
+	void ParticleSystem::_notifyRescaled() {
 		// Notify the particle techniques
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			(*it)->_notifyRescaled(mParticleSystemScale);
 		}
 	}
-	//-----------------------------------------------------------------------
-	const Real& ParticleSystem::getScaleVelocity(void) const
-	{
+	
+	const Real & ParticleSystem::getScaleVelocity() const {
 		return mParticleSystemScaleVelocity;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setScaleVelocity(const Real& scaleVelocity)
-	{
+	
+	void ParticleSystem::setScaleVelocity(const Real & scaleVelocity) {
 		// Set the scale and notify the particle techniques
 		mParticleSystemScaleVelocity = scaleVelocity;
 		_notifyVelocityRescaled();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_notifyVelocityRescaled(void)
-	{
+	
+	void ParticleSystem::_notifyVelocityRescaled() {
 		// Notify the particle techniques
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			(*it)->_notifyVelocityRescaled(mParticleSystemScaleVelocity);
 		}
 	}
-	//-----------------------------------------------------------------------
-	const Real& ParticleSystem::getScaleTime(void) const
-	{
+	
+	const Real & ParticleSystem::getScaleTime() const {
 		return mParticleSystemScaleTime;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setScaleTime(const Real& scaleTime)
-	{
+	
+	void ParticleSystem::setScaleTime(const Real & scaleTime) {
 		mParticleSystemScaleTime = scaleTime;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_initForEmission(void)
-	{
+	
+	void ParticleSystem::_initForEmission() {
 		// The system itself is emitted.
 		Particle::_initForEmission();
 
 		// Inherited from the Particle class and is only called if the Particle System is emitted.
 		start();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_initForExpiration(ParticleTechnique* technique, Real timeElapsed)
-	{
+	
+	void ParticleSystem::_initForExpiration(ParticleTechnique * technique, Real timeElapsed) {
 		// The system itself is expired.
 		Particle::_initForExpiration(technique, timeElapsed);
 
 		// Inherited from the Particle class and is only called if the Particle System is emitted.
 		stop();
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_process(ParticleTechnique* technique, Real timeElapsed)
-	{
+	
+	void ParticleSystem::_process(ParticleTechnique * technique, Real timeElapsed) {
 		// Inherited from the Particle class and is only called if the Particle System is emitted.
 		// Update node position.
 		Particle::_process(technique, timeElapsed);
-		Ogre::Node* node = technique->getParentSystem()->getParentNode();
-		if (mParentNode && node)
-		{
+		Ogre::Node * node = technique->getParentSystem()->getParentNode();
+		if (mParentNode && node) {
 			// position attribute is derived, but the the parentNode position must be set in relation to its parent.
 			mParentNode->setPosition(position - node->getPosition());
 		}
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleSystem::getNonVisibleUpdateTimeout(void) const
-	{
+	
+	Real ParticleSystem::getNonVisibleUpdateTimeout() const {
 		return mNonvisibleUpdateTimeout;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setNonVisibleUpdateTimeout(Real timeout)
-	{
-		if (timeout > 0)
-		{
+	
+	void ParticleSystem::setNonVisibleUpdateTimeout(Real timeout) {
+		if (timeout > 0) {
 			mNonvisibleUpdateTimeout = timeout;
 			mNonvisibleUpdateTimeoutSet = true;
-		}
-		else
-		{
+		} else {
 			mNonvisibleUpdateTimeout = 0;
 			mNonvisibleUpdateTimeoutSet = false;
 		}
 	}
-	// --------------------------------------------------------------------
-	const ParticleSystem::LodDistanceList& ParticleSystem::getLodDistances(void) const
-	{
+	
+	const ParticleSystem::LodDistanceList & ParticleSystem::getLodDistances() const {
 		return mLodDistanceList;
 	}
-	// --------------------------------------------------------------------
-	void ParticleSystem::clearLodDistances(void)
-	{
+	
+	void ParticleSystem::clearLodDistances() {
 		mLodDistanceList.clear();
 	}
-	// --------------------------------------------------------------------
-	void ParticleSystem::addLodDistance(Real distance)
-	{
+	
+	void ParticleSystem::addLodDistance(Real distance) {
 		mLodDistanceList.push_back(distance * distance);
 	}
-	// --------------------------------------------------------------------
-	void ParticleSystem::setLodDistances(const LodDistanceList& lodDistances)
-	{
-		LodDistanceConstIterator it, itEnd;
-		itEnd = lodDistances.end();
+	
+	void ParticleSystem::setLodDistances(const LodDistanceList & lodDistances) {
 		mLodDistanceList.clear();
-		for (it = lodDistances.begin(); it != itEnd; ++it)
-		{
+		for (LodDistanceConstIterator it = lodDistances.begin(); it != lodDistances.end(); ++it) {
 			mLodDistanceList.push_back((*it) * (*it));
 		}
 	}
-	// --------------------------------------------------------------------
-	unsigned short ParticleSystem::_getLodIndex(Real distance) const
-	{
+	
+	unsigned short ParticleSystem::_getLodIndex(Real distance) const {
 		return _getLodIndexSquaredDistance(distance * distance);
 	}
-	// --------------------------------------------------------------------
-	unsigned short ParticleSystem::_getLodIndexSquaredDistance(Real squaredDistance) const
-	{
-		LodDistanceConstIterator it, itEnd;
-		itEnd = mLodDistanceList.end();
+	
+	unsigned short ParticleSystem::_getLodIndexSquaredDistance(Real squaredDistance) const {
 		unsigned short index = 0;
-		for (it = mLodDistanceList.begin(); it != itEnd; ++it, ++index)
-		{
-			if (squaredDistance < (*it))
-			{
+		for (LodDistanceConstIterator it = mLodDistanceList.begin(); it != mLodDistanceList.end(); ++it, ++index) {
+			if (squaredDistance < (*it)) {
 				return index;
 			}
 		}
@@ -1270,25 +974,19 @@ namespace ParticleUniverse
 		// No match, so use max. value
 		return static_cast<unsigned short>(mLodDistanceList.size());
 	}
-	//-----------------------------------------------------------------------
-	size_t ParticleSystem::getNumEmittedTechniques (void) const
-	{
-		ParticleTechniqueConstIterator it;
-		ParticleTechniqueConstIterator itEnd = mTechniques.end();
+	
+	size_t ParticleSystem::getNumEmittedTechniques () const {
 		size_t count = 0;
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
-			if ((*it)->_isMarkedForEmission())
-			{
+		for (ParticleTechniqueConstIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
+			if ((*it)->_isMarkedForEmission()) {
 				count++;
 			}
 		}
 
 		return count;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_markForEmission(void)
-	{
+	
+	void ParticleSystem::_markForEmission() {
 		// Reset the marks on all techniques.
 		_resetMarkForEmission();
 
@@ -1296,89 +994,69 @@ namespace ParticleUniverse
 			the techniques perform their marking. The reason for this is, that one technique might mark 
 			another technique.
 		*/
-		ParticleTechniqueIterator it;
 		ParticleTechniqueIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != itEnd; ++it) {
 			(*it)->suppressNotifyEmissionChange(false);
 		}
 
 		// Mark the emitted objects.
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != itEnd; ++it) {
 			(*it)->_markForEmission();
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_resetMarkForEmission(void)
-	{
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+	
+	void ParticleSystem::_resetMarkForEmission() {
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			(*it)->_setMarkedForEmission(false);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::suppressNotifyEmissionChange(bool suppress)
-	{
+	
+	void ParticleSystem::suppressNotifyEmissionChange(bool suppress) {
 		mSuppressNotifyEmissionChange = suppress;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::_notifyEmissionChange(void)
-	{
-		if (mSuppressNotifyEmissionChange)
+	
+	void ParticleSystem::_notifyEmissionChange() {
+		if (mSuppressNotifyEmissionChange) {
 			return;
+		}
 
 		// Mark all emitted techniques, which on their turn mark other techniques, emitters and affectors.
 		_markForEmission();
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleSystem::getIterationInterval(void) const
-	{
+	
+	Real ParticleSystem::getIterationInterval() const {
 		return mIterationInterval;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setIterationInterval(const Real iterationInterval)
-	{
-		if (iterationInterval > 0)
-		{
+	
+	void ParticleSystem::setIterationInterval(const Real iterationInterval) {
+		if (iterationInterval > 0) {
 			mIterationInterval = iterationInterval;
 			mIterationIntervalSet = true;
-		}
-		else
-		{
+		} else {
 			mIterationInterval = 0;
 			mIterationIntervalSet = false;
 		}
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleSystem::getFixedTimeout(void) const
-	{
+	
+	Real ParticleSystem::getFixedTimeout() const {
 		return mFixedTimeout;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::setFixedTimeout(const Real fixedTimeout)
-	{
-		if (fixedTimeout > 0.0f)
-		{
+	
+	void ParticleSystem::setFixedTimeout(const Real fixedTimeout) {
+		if (fixedTimeout > 0.0) {
 			mFixedTimeout = fixedTimeout;
 			mFixedTimeoutSet = true;
-		}
-		else
-		{
-			mFixedTimeout = 0.0f;
+		} else {
+			mFixedTimeout = 0.0;
 			mFixedTimeoutSet = false;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::prepare (void)
-	{
+	
+	void ParticleSystem::prepare() {
 		mState = ParticleSystem::PSS_PREPARED;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::start(void)
-	{
+	
+	void ParticleSystem::start() {
 		// Generate the event; this must be done at the start
 		_pushSystemEvent(PU_EVT_SYSTEM_STARTING);
 
@@ -1389,8 +1067,6 @@ namespace ParticleUniverse
 		mTimeSinceLastVisible = 0;
 		mTimeSinceLastUpdate = 0;
 		mBoundsUpdateTime = mOriginalBoundsUpdateTime;
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
 		mAABB.setExtents(0, 0, 0, 0, 0, 0);
 		mFastForwardSet = mOriginalFastForwardSet;
 		position = Vector3::ZERO;
@@ -1403,8 +1079,7 @@ namespace ParticleUniverse
 		mLastLodIndex = 0; // This triggers the event at least once if lod distances are used.
 
 		// Run through the ParticleTechniques to perform some start-initialisation actions.
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			(*it)->_notifyStart();
 		}
 		
@@ -1414,39 +1089,32 @@ namespace ParticleUniverse
 		// Generate the event; this must be done at the end
 		_pushSystemEvent(PU_EVT_SYSTEM_STARTED);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::start(Real stopTime)
-	{
+	
+	void ParticleSystem::start(Real stopTime) {
 		start();
 		stop(stopTime);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::startAndStopFade(Real stopTime)
-	{
+	
+	void ParticleSystem::startAndStopFade(Real stopTime) {
 		start();
 		stopFade(stopTime);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::stop(void)
-	{
+	
+	void ParticleSystem::stop() {
 		/*  Note, that the ParticleSystem insŽt visible anymore, but it is still attached to the
 			node and still consumes resources, but it allows fast start/stop iterations if needed.
 			An important thing why it keeps attached to the node is that attaching and detaching the 
 			ParticleSystem to/from a node must be done outside of the ParticleSystem. If the ParticleSystem
 			isn't used anymore you have to detach it from the node yourself.
 		*/
-		if (mState != ParticleSystem::PSS_STOPPED)
-		{
+		if (mState != ParticleSystem::PSS_STOPPED) {
 			// Generate the event
 			_pushSystemEvent(PU_EVT_SYSTEM_STOPPING);
 
 			/** Notify all techniques to stop.
 			*/
 			setVisible(false); // Set this movable to invisible
-			ParticleTechniqueIterator it;
-			ParticleTechniqueIterator itEnd = mTechniques.end();
-			for (it = mTechniques.begin(); it != itEnd; ++it)
-			{
+			for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 				(*it)->_notifyStop();
 			}
 
@@ -1460,64 +1128,45 @@ namespace ParticleUniverse
 			_pushSystemEvent(PU_EVT_SYSTEM_STOPPED);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::stop(Real stopTime)
-	{
+	
+	void ParticleSystem::stop(Real stopTime) {
 		setFixedTimeout(stopTime);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::stopFade(void)
-	{
-		size_t i;
-		size_t j;
+	
+	void ParticleSystem::stopFade() {
 		size_t numTechniques = getNumTechniques();
-		size_t numEmitters;
-		ParticleTechnique* technique;
-		ParticleEmitter* emitter;
-		for (i = 0; i < numTechniques; ++i)
-		{
-			technique = getTechnique(i);
-			numEmitters = getTechnique(i)->getNumEmitters();
-			for (j = 0; j < numEmitters; ++j)
-			{
-				emitter = technique->getEmitter(j);
+		for (size_t i = 0; i < numTechniques; ++i) {
+			ParticleTechnique * technique = getTechnique(i);
+			size_t numEmitters = getTechnique(i)->getNumEmitters();
+			for (size_t j = 0; j < numEmitters; ++j) {
+				ParticleEmitter * emitter = technique->getEmitter(j);
 				emitter->setEnabled(false);
 			}
 		}
 		mStopFadeSet = true;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::stopFade(Real stopTime)
-	{
+	
+	void ParticleSystem::stopFade(Real stopTime) {
 		setFixedTimeout(stopTime);
 		mStopFadeSet = true;
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleSystem::isStopFade(void)
-	{
-		if (mFixedTimeoutSet)
-		{
+	
+	bool ParticleSystem::isStopFade() {
+		if (mFixedTimeoutSet) {
 			return mStopFadeSet && mTimeElapsedSinceStart >= mFixedTimeout;
-		}
-		else
-		{
+		} else {
 			return mStopFadeSet;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::pause(void)
-	{
-		if (mState != ParticleSystem::PSS_STOPPED)
-		{
+	
+	void ParticleSystem::pause() {
+		if (mState != ParticleSystem::PSS_STOPPED) {
 			// Generate the event
 			_pushSystemEvent(PU_EVT_SYSTEM_PAUSING);
 
 			mState = ParticleSystem::PSS_PAUSED;
 
-			ParticleTechniqueIterator it;
-			ParticleTechniqueIterator itEnd = mTechniques.end();
-			for (it = mTechniques.begin(); it != itEnd; ++it)
-			{
+			for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 				(*it)->_notifyPause();
 			}
 		}
@@ -1525,26 +1174,20 @@ namespace ParticleUniverse
 		// Generate the event
 		_pushSystemEvent(PU_EVT_SYSTEM_PAUSED);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::pause(Real pauseTime)
-	{
+	
+	void ParticleSystem::pause(Real pauseTime) {
 		pause();
 		setPauseTime(pauseTime);
 	}
-	//-----------------------------------------------------------------------
-	void ParticleSystem::resume(void)
-	{
-		if (mState != ParticleSystem::PSS_STOPPED)
-		{
+	
+	void ParticleSystem::resume() {
+		if (mState != ParticleSystem::PSS_STOPPED) {
 			// Generate the event
 			_pushSystemEvent(PU_EVT_SYSTEM_RESUMING);
 
 			mState = ParticleSystem::PSS_STARTED;
 
-			ParticleTechniqueIterator it;
-			ParticleTechniqueIterator itEnd = mTechniques.end();
-			for (it = mTechniques.begin(); it != itEnd; ++it)
-			{
+			for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 				(*it)->_notifyResume();
 			}
 
@@ -1552,43 +1195,30 @@ namespace ParticleUniverse
 			_pushSystemEvent(PU_EVT_SYSTEM_RESUMED);
 		}
 	}
-	//-----------------------------------------------------------------------
-	bool ParticleSystem::hasExternType(const String& externType) const
-	{
-		ParticleTechniqueConstIterator it;
-		ParticleTechniqueConstIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
-			if ((*it)->getExternType(externType))
-			{
+	
+	bool ParticleSystem::hasExternType(const String & externType) const {
+		for (ParticleTechniqueConstIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
+			if ((*it)->getExternType(externType)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	size_t ParticleSystem::getNumberOfEmittedParticles(void)
-	{
+	
+	size_t ParticleSystem::getNumberOfEmittedParticles() {
 		size_t total = 0;
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			total += (*it)->getNumberOfEmittedParticles();
 		}
 		return total;
 	}
-	//-----------------------------------------------------------------------
-	size_t ParticleSystem::getNumberOfEmittedParticles(Particle::ParticleType pt)
-	{
+	
+	size_t ParticleSystem::getNumberOfEmittedParticles(Particle::ParticleType pt) {
 		size_t total = 0;
-		ParticleTechniqueIterator it;
-		ParticleTechniqueIterator itEnd = mTechniques.end();
-		for (it = mTechniques.begin(); it != itEnd; ++it)
-		{
+		for (ParticleTechniqueIterator it = mTechniques.begin(); it != mTechniques.end(); ++it) {
 			total += (*it)->getNumberOfEmittedParticles(pt);
 		}
 		return total;
 	}
 
-}
+} /* namespace ParticleUniverse */

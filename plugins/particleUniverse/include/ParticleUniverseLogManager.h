@@ -26,9 +26,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "OgreLogManager.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// If the Ogre renderer is replaced by another renderer, the type below must be re-implemented.
 	typedef Ogre::LogManager LogManager;
-}
-#endif
+
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_LOGMANAGER_H__ */

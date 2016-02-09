@@ -26,18 +26,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniversePrerequisites.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This abstract class is used for assigning visual data to some other class. Visual data can be anything,
 		from SceneNodes to specific renderdata.
 	*/
-	class _ParticleUniverseExport IVisualData
-	{
-		public:
-			IVisualData(void) {};
-			virtual ~IVisualData(void) {};
-			virtual void setVisible(bool visible) = 0;
+	class _ParticleUniverseExport IVisualData {
+	public:
+		IVisualData() {}
+		virtual ~IVisualData() {}
+		virtual void setVisible(bool visible) = 0;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_I_VISUALDATA_H__ */

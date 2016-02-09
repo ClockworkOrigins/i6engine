@@ -26,25 +26,25 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniversePrerequisites.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/*  TechniqueListener establishes a channel between a ParticleTechnique and some other object, which is a 
 	    type of TechniqueListener.
 	*/
-	class _ParticleUniverseExport TechniqueListener
-	{
-		public:
-			TechniqueListener(void) {};
-			virtual ~TechniqueListener(void) {};
+	class _ParticleUniverseExport TechniqueListener {
+	public:
+		TechniqueListener() {}
+		virtual ~TechniqueListener() {}
 
-			/*  Callback function, which is called as soon as a particle is emitted.
-			*/
-			virtual void particleEmitted(ParticleTechnique* particleTechnique, Particle* particle) = 0;
+		/*  Callback function, which is called as soon as a particle is emitted.
+		*/
+		virtual void particleEmitted(ParticleTechnique * particleTechnique, Particle * particle) = 0;
 
-			/*  Callback function, which is called as soon as a particle is expired.
-			*/
-			virtual void particleExpired(ParticleTechnique* particleTechnique, Particle* particle) = 0;
+		/*  Callback function, which is called as soon as a particle is expired.
+		*/
+		virtual void particleExpired(ParticleTechnique * particleTechnique, Particle * particle) = 0;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_TECHNIQUE_LISTENER_H__ */
