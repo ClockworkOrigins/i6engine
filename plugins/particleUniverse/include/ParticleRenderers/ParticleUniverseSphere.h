@@ -25,82 +25,83 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_SPHERE_H__
 
 #include "ParticleUniversePrerequisites.h"
-#include "OgreMemoryAllocatorConfig.h"
 
-namespace ParticleUniverse
-{
+#include "OGRE/OgreMemoryAllocatorConfig.h"
+
+namespace ParticleUniverse {
+
 	class SphereSet;
 
 	/** 
     */
-	class _ParticleUniverseExport Sphere : public FXAlloc
-	{
+	class _ParticleUniverseExport Sphere : public FXAlloc {
 		friend class SphereSet;
 		friend class SphereRenderer;
 
-		protected:
-			bool mOwnRadius;
-			Real mRadius;
-			bool mRadiusChanged;
-
-		public:
-			Vector3 mPosition;
-			ColourValue mColour;
-			Quaternion mOrientation;
-			SphereSet* mParentSet;
+	public:
+		Vector3 mPosition;
+		ColourValue mColour;
+		Quaternion mOrientation;
+		SphereSet * mParentSet;
 			
-			/** Default constructor.
-			*/
-			Sphere(void);
+		/** Default constructor.
+		*/
+		Sphere();
 
-			/** Default destructor.
-			*/
-	        virtual ~Sphere(void);
+		/** Default destructor.
+		*/
+	    virtual ~Sphere();
 
-			/** Constructor as called by SphereSet.
-			*/
-			Sphere(const Vector3& position, SphereSet* owner);
+		/** Constructor as called by SphereSet.
+		*/
+		Sphere(const Vector3 & position, SphereSet * owner);
 
-			/** 
-			*/
-			void setPosition(const Vector3& position);
+		/** 
+		*/
+		void setPosition(const Vector3 & position);
 
-			/** 
-			*/
-			void setPosition(Real x, Real y, Real z);
+		/** 
+		*/
+		void setPosition(Real x, Real y, Real z);
 
-			/** 
-			*/
-			const Vector3& getPosition(void) const;
+		/** 
+		*/
+		const Vector3 & getPosition() const;
 
-			/** Sets the colour of this sphere.
-			*/
-			void setColour(const ColourValue& colour);
+		/** Sets the colour of this sphere.
+		*/
+		void setColour(const ColourValue & colour);
 
-			/** Get the colour of this sphere.
-			*/
-			const ColourValue& getColour(void) const;
+		/** Get the colour of this sphere.
+		*/
+		const ColourValue & getColour() const;
 		
-			/** Resets this sphere to use the parent SphereSet's radius instead of it's own.
-			*/
-			void resetRadius(void) { mOwnRadius = false; }
+		/** Resets this sphere to use the parent SphereSet's radius instead of it's own.
+		*/
+		void resetRadius() { mOwnRadius = false; }
 
-			/** Sets the radius for this sphere.
-			*/
-			void setRadius(Real radius);
+		/** Sets the radius for this sphere.
+		*/
+		void setRadius(Real radius);
 
-			/** Returns true if this box deviates from the SphereSet's default radius.
-			*/
-			bool hasOwnRadius(void) const;
+		/** Returns true if this box deviates from the SphereSet's default radius.
+		*/
+		bool hasOwnRadius() const;
 
-			/** Retrieves the sphere's personal radius, if hasOwnRadius is true.
-			*/
-			Real getOwnRadius(void) const;
+		/** Retrieves the sphere's personal radius, if hasOwnRadius is true.
+		*/
+		Real getOwnRadius() const;
 
-			/** Internal method for notifying the box of it's owner.
-			*/
-			void _notifyOwner(SphereSet* owner);
+		/** Internal method for notifying the box of it's owner.
+		*/
+		void _notifyOwner(SphereSet * owner);
+
+	protected:
+		bool mOwnRadius;
+		Real mRadius;
+		bool mRadiusChanged;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SPHERE_H__ */

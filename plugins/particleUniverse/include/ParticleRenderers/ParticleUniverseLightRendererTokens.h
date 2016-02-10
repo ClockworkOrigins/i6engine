@@ -24,41 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_LIGHT_RENDERER_TOKENS_H__
 #define __PU_LIGHT_RENDERER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseRendererTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The LightRendererTranslator parses 'LightRenderer' tokens
 	*/
-	class _ParticleUniverseExport LightRendererTranslator : public ScriptTranslator
-	{
-		public:
-			LightRendererTranslator(void){};
-			~LightRendererTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport LightRendererTranslator : public ScriptTranslator {
+	public:
+		LightRendererTranslator() {}
+		~LightRendererTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport LightRendererWriter : public ParticleRendererWriter
-	{
-		protected:
+	class _ParticleUniverseExport LightRendererWriter : public ParticleRendererWriter {
+	public:
+		LightRendererWriter() {}
+		virtual ~LightRendererWriter() {}
 
-		public:
-
-			LightRendererWriter(void) {};
-			virtual ~LightRendererWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_LIGHT_RENDERER_TOKENS_H__ */

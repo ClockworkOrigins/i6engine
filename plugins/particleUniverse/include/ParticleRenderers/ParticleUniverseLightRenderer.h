@@ -24,37 +24,26 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_LIGHT_RENDERER_H__
 #define __PU_LIGHT_RENDERER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseIVisualData.h"
+#include "ParticleUniverseMath.h"
 #include "ParticleUniverseRenderer.h"
-#include "ParticleUniverseTechnique.h"
-#include "OgreSceneNode.h"
+
 #include "OgreLight.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Visual data specific for this type of renderer.
     */
-	class _ParticleUniverseExport LightRendererVisualData : public IVisualData
-	{
-		public:
-			LightRendererVisualData (Ogre::SceneNode* sceneNode) : 
-				IVisualData(), 
-				node(sceneNode), 
-				light(0),
-				flashFrequencyCount(0.0f),
-				flashLengthCount(0.0f){};
-			Ogre::SceneNode* node;
-			Ogre::Light* light;
-			Real flashFrequencyCount;
-			Real flashLengthCount;
-			virtual void setVisible(bool visible)
-			{
-				if (node)
-				{
-					node->setVisible(visible);
-				}
-			};
+	class _ParticleUniverseExport LightRendererVisualData : public IVisualData {
+	public:
+		Ogre::SceneNode * node;
+		Ogre::Light * light;
+		Real flashFrequencyCount;
+		Real flashLengthCount;
+
+		LightRendererVisualData(Ogre::SceneNode * sceneNode) : IVisualData(),  node(sceneNode), light(nullptr), flashFrequencyCount(0.0), flashLengthCount(0.0) {}
+
+		virtual void setVisible(bool visible);
 	};
 
 	/** The LightRenderer class is responsible to render particles as a light.
@@ -62,164 +51,160 @@ namespace ParticleUniverse
 		Note, that the diffuse colour cannot be set. This is, because the light inherits its diffuse colour from the particle. This makes
 		it possible to manipulate the colour (for instance, using a Colour Affector).
     */
-	class _ParticleUniverseExport LightRenderer : public ParticleRenderer
-	{
+	class _ParticleUniverseExport LightRenderer : public ParticleRenderer {
+	public:
+		// Constants
+		static const Ogre::Light::LightTypes DEFAULT_LIGHT_TYPE;
+		static const ColourValue DEFAULT_DIFFUSE;
+		static const ColourValue DEFAULT_SPECULAR;
+		static const Real DEFAULT_ATT_RANGE;
+		static const Real DEFAULT_ATT_CONSTANT;
+		static const Real DEFAULT_ATT_LINEAR;
+		static const Real DEFAULT_ATT_QUADRATIC;
+		static const Radian DEFAULT_SPOT_INNER_ANGLE;
+		static const Radian DEFAULT_SPOT_OUTER_ANGLE;
+		static const Real DEFAULT_FALLOFF;
+		static const Real DEFAULT_POWER_SCALE;
 
-		protected:
-			String mLightName; // Used for random light name prefix
-			vector<LightRendererVisualData*> mAllVisualData;
-			vector<LightRendererVisualData*> mVisualData;
-			vector<Ogre::Light*> mLights;
-			size_t mQuota;
-			Ogre::Light::LightTypes mLightType;
-			ColourValue mSpecularColour;
-			Real mAttenuationRange;
-			Real mAttenuationConstant;
-			Real mAttenuationLinear;
-			Real mAttenuationQuadratic;
-			Radian mSpotlightInnerAngle;
-			Radian mSpotlightOuterAngle;
-			Real mSpotlightFalloff;
-			Real mPowerScale;
-			Real mFlashFrequency;
-			Real mFlashLength;
-			bool mFlashRandom;
+		LightRenderer();
+	    virtual ~LightRenderer();
 
-			/** Make all nodes to which the entities are attached visible or invisible.
-			*/
-			void _makeNodesVisible(bool visible);
+		/** Return the type of light that is emitted.
+		*/
+		Ogre::Light::LightTypes getLightType() const;
 
-		public:
-			// Constants
-			static const Ogre::Light::LightTypes DEFAULT_LIGHT_TYPE;
-			static const ColourValue DEFAULT_DIFFUSE;
-			static const ColourValue DEFAULT_SPECULAR;
-			static const Real DEFAULT_ATT_RANGE;
-			static const Real DEFAULT_ATT_CONSTANT;
-			static const Real DEFAULT_ATT_LINEAR;
-			static const Real DEFAULT_ATT_QUADRATIC;
-			static const Radian DEFAULT_SPOT_INNER_ANGLE;
-			static const Radian DEFAULT_SPOT_OUTER_ANGLE;
-			static const Real DEFAULT_FALLOFF;
-			static const Real DEFAULT_POWER_SCALE;
+		/** Set the type of light that is emitted.
+		*/
+		void setLightType(Ogre::Light::LightTypes lightType);
 
-			LightRenderer(void);
-	        virtual ~LightRenderer(void);
+		/** 
+		*/
+		const ColourValue & getSpecularColour() const;
+		void setSpecularColour(const ColourValue & specularColour);
 
-			/** Return the type of light that is emitted.
-			*/
-			Ogre::Light::LightTypes getLightType(void) const;
+		/** 
+		*/
+		Real getAttenuationRange() const;
+		void setAttenuationRange(Real attenuationRange);
 
-			/** Set the type of light that is emitted.
-			*/
-			void setLightType(Ogre::Light::LightTypes lightType);
+		/** 
+		*/
+		Real getAttenuationConstant() const;
+		void setAttenuationConstant(Real attenuationConstant);
 
-			/** 
-			*/
-			const ColourValue& getSpecularColour(void) const;
-			void setSpecularColour(const ColourValue& specularColour);
+		/** 
+		*/
+		Real getAttenuationLinear() const;
+		void setAttenuationLinear(Real attenuationLinear);
 
-			/** 
-			*/
-			Real getAttenuationRange(void) const;
-			void setAttenuationRange(Real attenuationRange);
+		/** 
+		*/
+		Real getAttenuationQuadratic() const;
+		void setAttenuationQuadratic(Real attenuationQuadratic);
 
-			/** 
-			*/
-			Real getAttenuationConstant(void) const;
-			void setAttenuationConstant(Real attenuationConstant);
+		/** 
+		*/
+		const Radian & getSpotlightInnerAngle() const;
+		void setSpotlightInnerAngle(const Radian & spotlightInnerAngle);
 
-			/** 
-			*/
-			Real getAttenuationLinear(void) const;
-			void setAttenuationLinear(Real attenuationLinear);
+		/** 
+		*/
+		const Radian & getSpotlightOuterAngle() const;
+		void setSpotlightOuterAngle(const Radian & spotlightOuterAngle);
 
-			/** 
-			*/
-			Real getAttenuationQuadratic(void) const;
-			void setAttenuationQuadratic(Real attenuationQuadratic);
+		/** 
+		*/
+		Real getSpotlightFalloff() const;
+		void setSpotlightFalloff(Real spotlightFalloff);
 
-			/** 
-			*/
-			const Radian& getSpotlightInnerAngle(void) const;
-			void setSpotlightInnerAngle(const Radian& spotlightInnerAngle);
+		/** 
+		*/
+		Real getPowerScale() const;
+		void setPowerScale(Real powerScale);
 
-			/** 
-			*/
-			const Radian& getSpotlightOuterAngle(void) const;
-			void setSpotlightOuterAngle(const Radian& spotlightOuterAngle);
+		/** 
+		*/
+		Real getFlashFrequency() const;
+		void setFlashFrequency(Real flashFrequency);
 
-			/** 
-			*/
-			Real getSpotlightFalloff(void) const;
-			void setSpotlightFalloff(Real spotlightFalloff);
+		/** 
+		*/
+		Real getFlashLength() const;
+		void setFlashLength(Real flashLength);
 
-			/** 
-			*/
-			Real getPowerScale(void) const;
-			void setPowerScale(Real powerScale);
+		/** 
+		*/
+		bool isFlashRandom() const;
+		void setFlashRandom(bool flashRandom);
 
-			/** 
-			*/
-			Real getFlashFrequency(void) const;
-			void setFlashFrequency(Real flashFrequency);
+		/** Deletes all ChildSceneNodes en Lights.
+		*/
+		void _destroyAll();
 
-			/** 
-			*/
-			Real getFlashLength(void) const;
-			void setFlashLength(Real flashLength);
+		/** @copydoc ParticleRenderer::setVisible */
+		//virtual void setVisible(bool visible = true);
 
-			/** 
-			*/
-			bool isFlashRandom(void) const;
-			void setFlashRandom(bool flashRandom);
+		/** @copydoc ParticleRenderer::_prepare */
+		virtual void _prepare(ParticleTechnique * technique);
 
-			/** Deletes all ChildSceneNodes en Lights.
-			*/
-			void _destroyAll(void);
+		/** @copydoc ParticleRenderer::_unprepare */
+		virtual void _unprepare(ParticleTechnique * technique);
 
-			/** @copydoc ParticleRenderer::setVisible */
-			//virtual void setVisible(bool visible = true);
+		/** @copydoc ParticleRenderer::_updateRenderQueue */
+		//virtual void _updateRenderQueue(Ogre::RenderQueue* queue, ParticlePool* pool);
 
-			/** @copydoc ParticleRenderer::_prepare */
-			virtual void _prepare(ParticleTechnique* technique);
+		/** @copydoc ParticleRenderer::_processParticle */
+		inline virtual void _processParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed, bool firstParticle);
 
-			/** @copydoc ParticleRenderer::_unprepare */
-			virtual void _unprepare(ParticleTechnique* technique);
+		/** @copydoc ParticleRenderer::_setMaterialName */
+		virtual void _setMaterialName(const String & materialName);
 
-			/** @copydoc ParticleRenderer::_updateRenderQueue */
-			//virtual void _updateRenderQueue(Ogre::RenderQueue* queue, ParticlePool* pool);
-
-			/** @copydoc ParticleRenderer::_processParticle */
-			inline virtual void _processParticle(ParticleTechnique* particleTechnique, 
-				Particle* particle, 
-				Real timeElapsed, 
-				bool firstParticle);
-
-			/** @copydoc ParticleRenderer::_setMaterialName */
-			virtual void _setMaterialName(const String& materialName);
-
-			/** @copydoc ParticleRenderer::_notifyCurrentCamera */
-			virtual void _notifyCurrentCamera(Camera* cam);
+		/** @copydoc ParticleRenderer::_notifyCurrentCamera */
+		virtual void _notifyCurrentCamera(Camera * cam);
 	
-			/** @copydoc ParticleRenderer::_notifyAttached */
-			virtual void _notifyAttached(Ogre::Node* parent, bool isTagPoint = false);
+		/** @copydoc ParticleRenderer::_notifyAttached */
+		virtual void _notifyAttached(Ogre::Node * parent, bool isTagPoint = false);
 
-			/** @copydoc ParticleRenderer::_notifyParticleQuota */
-			virtual void _notifyParticleQuota(size_t quota);
+		/** @copydoc ParticleRenderer::_notifyParticleQuota */
+		virtual void _notifyParticleQuota(size_t quota);
 
-			/** @copydoc ParticleRenderer::_notifyDefaultDimensions */
-			virtual void _notifyDefaultDimensions(Real width, Real height, Real depth);
+		/** @copydoc ParticleRenderer::_notifyDefaultDimensions */
+		virtual void _notifyDefaultDimensions(Real width, Real height, Real depth);
 
-			/** @copydoc ParticleRenderer::_notifyParticleResized */
-			virtual void _notifyParticleResized(void);
+		/** @copydoc ParticleRenderer::_notifyParticleResized */
+		virtual void _notifyParticleResized();
 
-			/** @copydoc ParticleRenderer::_getSortMode */
-			virtual SortMode _getSortMode(void) const;
+		/** @copydoc ParticleRenderer::_getSortMode */
+		virtual SortMode _getSortMode() const;
 
-			/** @copydoc ParticleRenderer::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleRenderer* renderer);
+		/** @copydoc ParticleRenderer::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleRenderer * renderer);
+
+	protected:
+		String mLightName; // Used for random light name prefix
+		vector<LightRendererVisualData *> mAllVisualData;
+		vector<LightRendererVisualData *> mVisualData;
+		vector<Ogre::Light *> mLights;
+		size_t mQuota;
+		Ogre::Light::LightTypes mLightType;
+		ColourValue mSpecularColour;
+		Real mAttenuationRange;
+		Real mAttenuationConstant;
+		Real mAttenuationLinear;
+		Real mAttenuationQuadratic;
+		Radian mSpotlightInnerAngle;
+		Radian mSpotlightOuterAngle;
+		Real mSpotlightFalloff;
+		Real mPowerScale;
+		Real mFlashFrequency;
+		Real mFlashLength;
+		bool mFlashRandom;
+
+		/** Make all nodes to which the entities are attached visible or invisible.
+		*/
+		void _makeNodesVisible(bool visible);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_LIGHT_RENDERER_H__ */

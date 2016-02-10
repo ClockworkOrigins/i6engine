@@ -21,93 +21,64 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleRenderers/ParticleUniverseSphere.h"
+
 #include "ParticleRenderers/ParticleUniverseSphereSet.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	Sphere::Sphere(void):
-        mOwnRadius(false),
-		mRadius(100.0f),
-		mRadiusChanged(false),
-		mPosition(Vector3::ZERO),
-		mColour(ColourValue::White),
-        	mParentSet(0)
-	{
+namespace ParticleUniverse {
+	
+	Sphere::Sphere() : mOwnRadius(false), mRadius(100.0), mRadiusChanged(false), mPosition(Vector3::ZERO), mColour(ColourValue::White), mParentSet(nullptr) {
 		mOrientation = Quaternion::IDENTITY;
 	}
-    //-----------------------------------------------------------------------
-    Sphere::Sphere(const Vector3& position, SphereSet* owner) :
-        mOwnRadius(false),
-		mRadius(10.0f),
-		mRadiusChanged(false),
-		mPosition(Vector3::ZERO),
-		mColour(ColourValue::White),
-        	mParentSet(0)
-	{
+    
+    Sphere::Sphere(const Vector3 & position, SphereSet * owner) : mOwnRadius(false), mRadius(10.0), mRadiusChanged(false), mPosition(Vector3::ZERO), mColour(ColourValue::White), mParentSet(nullptr) {
 		mOrientation = Quaternion::IDENTITY;
 	}
-	//-----------------------------------------------------------------------
-	Sphere::~Sphere(void)
-	{
+	
+	Sphere::~Sphere() {
 	}
-	//-----------------------------------------------------------------------
-	void Sphere::setPosition(const Vector3& position)
-	{
+	
+	void Sphere::setPosition(const Vector3 & position) {
 		mPosition = position;
 	}
-	//-----------------------------------------------------------------------
-	void Sphere::setPosition(Real x, Real y, Real z)
-	{
+	
+	void Sphere::setPosition(Real x, Real y, Real z) {
 		mPosition.x = x;
 		mPosition.y = y;
 		mPosition.z = z;
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& Sphere::getPosition(void) const
-	{
+	
+	const Vector3 & Sphere::getPosition() const {
 		return mPosition;
 	}
-	//-----------------------------------------------------------------------
-	void Sphere::setRadius(Real radius)
-	{
+	
+	void Sphere::setRadius(Real radius) {
 		mOwnRadius = true;
 		mRadius = radius;
-		if (mParentSet)
+		if (mParentSet) {
 			mParentSet->_notifyResized();
+		}
 		mRadiusChanged = true;
     }
-	//-----------------------------------------------------------------------
-	bool Sphere::hasOwnRadius(void) const
-	{
+	
+	bool Sphere::hasOwnRadius() const {
 		return mOwnRadius;
 	}
-	//-----------------------------------------------------------------------
-	void Sphere::_notifyOwner(SphereSet* owner)
-	{
+	
+	void Sphere::_notifyOwner(SphereSet * owner) {
 		mParentSet = owner;
 	}
-	//-----------------------------------------------------------------------
-	void Sphere::setColour(const ColourValue& colour)
-	{
+	
+	void Sphere::setColour(const ColourValue & colour) {
 		mColour = colour;
 	}
-	//-----------------------------------------------------------------------
-	const ColourValue& Sphere::getColour(void) const
-	{
+	
+	const ColourValue & Sphere::getColour() const {
 		return mColour;
 	}
-	//-----------------------------------------------------------------------
-	Real Sphere::getOwnRadius(void) const
-	{
+	
+	Real Sphere::getOwnRadius() const {
 		return mRadius;
 	}
 
-}
+} /* namespace ParticleUniverse */

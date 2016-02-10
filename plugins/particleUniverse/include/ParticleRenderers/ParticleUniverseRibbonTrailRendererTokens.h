@@ -24,41 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_RIBBONTRAIL_RENDERER_TOKENS_H__
 #define __PU_RIBBONTRAIL_RENDERER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseRendererTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The RibbonTrailRendererTranslator parses 'RibbonTrailRenderer' tokens
 	*/
-	class _ParticleUniverseExport RibbonTrailRendererTranslator : public ScriptTranslator
-	{
-		public:
-			RibbonTrailRendererTranslator(void){};
-			~RibbonTrailRendererTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport RibbonTrailRendererTranslator : public ScriptTranslator {
+	public:
+		RibbonTrailRendererTranslator() {}
+		~RibbonTrailRendererTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport RibbonTrailRendererWriter : public ParticleRendererWriter
-	{
-		protected:
+	class _ParticleUniverseExport RibbonTrailRendererWriter : public ParticleRendererWriter {
+	public:
+		RibbonTrailRendererWriter() {}
+		virtual ~RibbonTrailRendererWriter() {}
 
-		public:
-
-			RibbonTrailRendererWriter(void) {};
-			virtual ~RibbonTrailRendererWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_RIBBONTRAIL_RENDERER_TOKENS_H__ */
