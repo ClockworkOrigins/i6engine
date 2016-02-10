@@ -24,98 +24,97 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BOX_COLLIDER_H__
 #define __PU_BOX_COLLIDER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseBaseCollider.h"
 #include "ParticleUniverseAxisAlignedBox.h"
+#include "ParticleUniverseBaseCollider.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The BoxCollider is a box shape that collides with the particles. The BoxCollider can only collide with
 		particles that are created within the same ParticleTechnique as where the BoxCollider is registered.
     */
-	class _ParticleUniverseExport BoxCollider : public BaseCollider
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport BoxCollider : public BaseCollider {
+	public:
+		using Particle::copyAttributesTo;
 
-			static const Real DEFAULT_WIDTH;
-			static const Real DEFAULT_HEIGHT;
-			static const Real DEFAULT_DEPTH;
+		static const Real DEFAULT_WIDTH;
+		static const Real DEFAULT_HEIGHT;
+		static const Real DEFAULT_DEPTH;
 
-			BoxCollider(void);
-	        virtual ~BoxCollider(void){};
+		BoxCollider();
+	    virtual ~BoxCollider() {}
 
-			/** Returns the width of the box
-			*/
-			Real getWidth(void) const;
+		/** Returns the width of the box
+		*/
+		Real getWidth() const;
 
-			/** Sets the width of the box
-			*/
-			void setWidth(const Real width);
+		/** Sets the width of the box
+		*/
+		void setWidth(const Real width);
 
-			/** Returns the height of the box
-			*/
-			Real getHeight(void) const;
+		/** Returns the height of the box
+		*/
+		Real getHeight() const;
 
-			/** Sets the height of the box
-			*/
-			void setHeight(const Real height);
+		/** Sets the height of the box
+		*/
+		void setHeight(const Real height);
 
-			/** Returns the depth of the box
-			*/
-			Real getDepth(void) const;
+		/** Returns the depth of the box
+		*/
+		Real getDepth() const;
 
-			/** Sets the depth of the box
-			*/
-			void setDepth(const Real depth);
+		/** Sets the depth of the box
+		*/
+		void setDepth(const Real depth);
 
-			/** Returns indication whether the collision is inside or outside of the box
-			@remarks
-				If value is true, the collision is inside of the box.
-			*/
-			bool isInnerCollision(void) const;
+		/** Returns indication whether the collision is inside or outside of the box
+		@remarks
+			If value is true, the collision is inside of the box.
+		*/
+		bool isInnerCollision() const;
 
-			/** Set indication whether the collision is inside or outside of the box
-			@remarks
-				If value is set to true, the collision is inside of the box.
-			*/
-			void setInnerCollision(bool innerCollision);
+		/** Set indication whether the collision is inside or outside of the box
+		@remarks
+			If value is set to true, the collision is inside of the box.
+		*/
+		void setInnerCollision(bool innerCollision);
 
-			/** 
-			*/
-			void calculateDirectionAfterCollision(Particle* particle);
+		/** 
+		*/
+		void calculateDirectionAfterCollision(Particle * particle);
 
-			/** @copydoc ParticleAffector::_preProcessParticles */
-			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);
+		/** @copydoc ParticleAffector::_preProcessParticles */
+		virtual void _preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::_affect */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** @copydoc ParticleAffector::_affect */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo (ParticleAffector * affector);
 
-		protected:
-			Real mWidth;
-			Real mHeight;
-			Real mDepth;
-			Real mXmin;
-			Real mXmax;
-			Real mYmin;
-			Real mYmax;
-			Real mZmin;
-			Real mZmax;
-			AxisAlignedBox mBox;
-			Vector3 mPredictedPosition;
-			bool mInnerCollision;
+	protected:
+		Real mWidth;
+		Real mHeight;
+		Real mDepth;
+		Real mXmin;
+		Real mXmax;
+		Real mYmin;
+		Real mYmax;
+		Real mZmin;
+		Real mZmax;
+		AxisAlignedBox mBox;
+		Vector3 mPredictedPosition;
+		bool mInnerCollision;
 
-			/** 
-			*/
-			void _calculateBounds (void);
+		/** 
+		*/
+		void _calculateBounds();
 
-			/** 
-			*/
-			bool _isSmallestValue(Real value, const Vector3& particlePosition);
+		/** 
+		*/
+		bool _isSmallestValue(Real value, const Vector3 & particlePosition);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BOX_COLLIDER_H__ */

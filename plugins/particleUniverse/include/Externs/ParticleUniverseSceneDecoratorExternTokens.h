@@ -24,40 +24,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SCENE_DECORATOR_EXTERN_TOKENS_H__
 #define __PU_SCENE_DECORATOR_EXTERN_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseExternTokens.h"
 #include "ParticleUniverseAttachableTokens.h"
+#include "ParticleUniverseExternTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The SceneDecoratorExternTranslator parses 'SceneDecoratorExtern' tokens
 	*/
-	class _ParticleUniverseExport SceneDecoratorExternTranslator : public ScriptTranslator
-	{
-		public:
-			SceneDecoratorExternTranslator(void){};
-			~SceneDecoratorExternTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport SceneDecoratorExternTranslator : public ScriptTranslator {
+	public:
+		SceneDecoratorExternTranslator() {}
+		~SceneDecoratorExternTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport SceneDecoratorExternWriter : public AttachableWriter, ExternWriter
-	{
-		public:
+	class _ParticleUniverseExport SceneDecoratorExternWriter : public AttachableWriter, ExternWriter {
+	public:
+		SceneDecoratorExternWriter() {}
+		virtual ~SceneDecoratorExternWriter() {}
 
-			SceneDecoratorExternWriter(void) {};
-			virtual ~SceneDecoratorExternWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SCENE_DECORATOR_EXTERN_TOKENS_H__ */

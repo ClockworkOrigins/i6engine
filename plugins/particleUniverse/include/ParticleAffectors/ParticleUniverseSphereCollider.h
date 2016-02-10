@@ -24,65 +24,64 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SPHERE_COLLIDER_H__
 #define __PU_SPHERE_COLLIDER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBaseCollider.h"
 #include "ParticleUniverseSimpleSphere.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The SphereCollider is a sphere shape that collides with the particles. The SphereCollider can only collide 
 		with particles that are created within the same ParticleTechnique as where the SphereCollider is registered.
     */
-	class _ParticleUniverseExport SphereCollider : public BaseCollider
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport SphereCollider : public BaseCollider {
+	public:
+		using Particle::copyAttributesTo;
 
-			// Constants
-			static const Real DEFAULT_RADIUS;
+		// Constants
+		static const Real DEFAULT_RADIUS;
 
-			SphereCollider(void);
-	        virtual ~SphereCollider(void) {}
+		SphereCollider();
+	    virtual ~SphereCollider() {}
 
-			/** Returns the radius of the sphere
-			*/
-			Real getRadius(void) const;
+		/** Returns the radius of the sphere
+		*/
+		Real getRadius() const;
 
-			/** Sets the radius of the sphere
-			*/
-			void setRadius(const Real radius);
+		/** Sets the radius of the sphere
+		*/
+		void setRadius(const Real radius);
 
-			/** Returns indication whether the collision is inside or outside of the box
-			@remarks
-				If value is true, the collision is inside of the box.
-			*/
-			bool isInnerCollision(void) const;
+		/** Returns indication whether the collision is inside or outside of the box
+		@remarks
+			If value is true, the collision is inside of the box.
+		*/
+		bool isInnerCollision() const;
 
-			/** Set indication whether the collision is inside or outside of the box
-			@remarks
-				If value is set to true, the collision is inside of the box.
-			*/
-			void setInnerCollision(bool innerCollision);
+		/** Set indication whether the collision is inside or outside of the box
+		@remarks
+			If value is set to true, the collision is inside of the box.
+		*/
+		void setInnerCollision(bool innerCollision);
 
-			/** 
-			*/
-			void calculateDirectionAfterCollision(Particle* particle, Vector3 distance, Real distanceLength);
+		/** 
+		*/
+		void calculateDirectionAfterCollision(Particle * particle, Vector3 distance, Real distanceLength);
 
-			/** @copydoc ParticleAffector::_preProcessParticles */
-			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);
+		/** @copydoc ParticleAffector::_preProcessParticles */
+		virtual void _preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::_affect */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** @copydoc ParticleAffector::_affect */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-		protected:
-			Real mRadius;
-			SimpleSphere mSphere;
-			Vector3 mPredictedPosition;
-			bool mInnerCollision;
+	protected:
+		Real mRadius;
+		SimpleSphere mSphere;
+		Vector3 mPredictedPosition;
+		bool mInnerCollision;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SPHERE_COLLIDER_H__ */

@@ -24,40 +24,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BOX_COLLIDER_EXTERN_H__
 #define __PU_BOX_COLLIDER_EXTERN_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleAffectors/ParticleUniverseBoxCollider.h"
 #include "ParticleUniverseAttachable.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleAffectors/ParticleUniverseBoxCollider.h"
+
+namespace ParticleUniverse {
+
 	/** The BoxColliderExtern is a wrapper of the BoxCollider, adding the functionality of a MovableObject.
 		This makes it possible to let particles collide with a BoxCollider that is attached to a different 
 		SceneNode, than the ParticleSystem with which particles it collides.
 	*/
-	class _ParticleUniverseExport BoxColliderExtern : public Attachable, public BoxCollider
-	{
+	class _ParticleUniverseExport BoxColliderExtern : public Attachable, public BoxCollider {
 		using BoxCollider::copyAttributesTo;
 
-		public:
-			BoxColliderExtern(void) : 
-				Attachable(),
-				BoxCollider() {};
-			  virtual ~BoxColliderExtern(void) {};
+	public:
+		BoxColliderExtern() : Attachable(), BoxCollider() {}
+		virtual ~BoxColliderExtern() {}
 
-			/** see Extern::_preProcessParticles */
-			virtual void _preProcessParticles(ParticleTechnique* technique, Real timeElapsed);
+		/** see Extern::_preProcessParticles */
+		virtual void _preProcessParticles(ParticleTechnique * technique, Real timeElapsed);
 
-			/** see Extern::_interface */
-			virtual void _interface(ParticleTechnique* technique, 
-				Particle* particle, 
-				Real timeElapsed);
+		/** see Extern::_interface */
+		virtual void _interface(ParticleTechnique * technique, Particle * particle, Real timeElapsed);
 
-			/** Copy both the Extern and the derived BoxCollider properties.
-			*/
-			virtual void copyAttributesTo (Extern* externObject);
-
-		protected:
+		/** Copy both the Extern and the derived BoxCollider properties.
+		*/
+		virtual void copyAttributesTo(Extern * externObject);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BOX_COLLIDER_EXTERN_H__ */

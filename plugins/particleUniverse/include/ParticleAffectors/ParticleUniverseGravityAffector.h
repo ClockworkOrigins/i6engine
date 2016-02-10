@@ -24,45 +24,44 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_GRAVITY_AFFECTOR_H__
 #define __PU_GRAVITY_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This affector applies Newton's law of universal gravitation. The distance between a particle
 		and the GravityAffector is important in the calculation of the gravity. Therefor, this affector needs
 		to have its position set.
     */
-	class _ParticleUniverseExport GravityAffector : public ParticleAffector
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport GravityAffector : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			// Constants
-			static const Real DEFAULT_GRAVITY;
+		// Constants
+		static const Real DEFAULT_GRAVITY;
 			
-			GravityAffector(void);
-	        virtual ~GravityAffector(void) {}
+		GravityAffector();
+	    virtual ~GravityAffector() {}
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-			/** 
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);
+		/** 
+	    */
+		virtual void _preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed);
 
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			Real getGravity(void) const;
-			void setGravity(Real gravity);
+		/** 
+	    */
+		Real getGravity() const;
+		void setGravity(Real gravity);
 
 	protected:
-			Real mGravity;
+		Real mGravity;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_GRAVITY_AFFECTOR_H__ */

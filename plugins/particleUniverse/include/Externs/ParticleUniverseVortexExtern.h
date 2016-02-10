@@ -24,12 +24,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_VORTEX_EXTERN_H__
 #define __PU_VORTEX_EXTERN_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleAffectors/ParticleUniverseVortexAffector.h"
 #include "ParticleUniverseAttachable.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleAffectors/ParticleUniverseVortexAffector.h"
+
+namespace ParticleUniverse {
+
 	/** The VortexExtern is a wrapper of the VortexAffector, adding the functionality of a MovableObject.
 		The VortexExtern can be attached to another SceneNode than the one where the ParticleSystem at 
 		which the VortexExtern is registered, is attached. This makes it possible to affect the particles 
@@ -38,31 +38,27 @@ namespace ParticleUniverse
 		attached) that flies over a certain area and rotates the leaves on the ground (Particle System attached
 		to another SceneNode).
     */
-	class _ParticleUniverseExport VortexExtern : public Attachable, public VortexAffector
-	{
+	class _ParticleUniverseExport VortexExtern : public Attachable, public VortexAffector {
 		using VortexAffector::copyAttributesTo;
 
-		public:
-		VortexExtern(void) : 
-			Attachable(),
-			VortexAffector(){};
-	        virtual ~VortexExtern(void) {};
+	public:
+		VortexExtern() : Attachable(), VortexAffector() {}
+	    virtual ~VortexExtern() {}
 
-			/** The _preProcessParticles() function sets the position and mDerivedPosition attributes to
-				the actual world position of the node to which it is attached.
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* technique, Real timeElapsed);
+		/** The _preProcessParticles() function sets the position and mDerivedPosition attributes to
+			the actual world position of the node to which it is attached.
+	    */
+		virtual void _preProcessParticles(ParticleTechnique * technique, Real timeElapsed);
 
-			/** Processes a particle.
-	        */
-			virtual void _interface(ParticleTechnique* technique, 
-				Particle* particle, 
-				Real timeElapsed);
+		/** Processes a particle.
+	    */
+		virtual void _interface(ParticleTechnique * technique, Particle * particle, Real timeElapsed);
 
-			/** Copy both the Extern and the derived VortexAffector properties.
-	        */
-			virtual void copyAttributesTo (Extern* externObject);
+		/** Copy both the Extern and the derived VortexAffector properties.
+	    */
+		virtual void copyAttributesTo(Extern * externObject);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_VORTEX_EXTERN_H__ */

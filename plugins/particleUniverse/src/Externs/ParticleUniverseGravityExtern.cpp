@@ -21,48 +21,37 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "Externs/ParticleUniverseGravityExtern.h"
+
 #include "OgreNode.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void GravityExtern::_preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
+namespace ParticleUniverse {
+	
+	void GravityExtern::_preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
 		// Use the position of the parent node in this case.
-		if (isAttached())
-		{
+		if (isAttached()) {
 			position = getParentNode()->_getDerivedPosition();
 			mDerivedPosition = position;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void GravityExtern::_interface(ParticleTechnique* technique, 
-		Particle* particle, 
-		Real timeElapsed)
-	{
-		if (isAttached())
-		{
-			if (mDistanceThresholdSet && mDerivedPosition.distance(particle->position) > mDistanceThreshold)
+	
+	void GravityExtern::_interface(ParticleTechnique * technique, Particle * particle, Real timeElapsed) {
+		if (isAttached()) {
+			if (mDistanceThresholdSet && mDerivedPosition.distance(particle->position) > mDistanceThreshold) {
 				return;
+			}
 
 			// Use the derived GravityAffector functionality here
 			_affect(technique, particle, timeElapsed);
 		}
 	}
-	//-----------------------------------------------------------------------
-	void GravityExtern::copyAttributesTo (Extern* externObject)
-	{
+	
+	void GravityExtern::copyAttributesTo(Extern * externObject) {
 		Attachable::copyAttributesTo(externObject);
 
-		GravityExtern* gravityExtern = static_cast<GravityExtern*>(externObject);
-		GravityAffector* gravityAffector = static_cast<GravityAffector*>(gravityExtern);
+		GravityExtern * gravityExtern = static_cast<GravityExtern *>(externObject);
+		GravityAffector * gravityAffector = static_cast<GravityAffector *>(gravityExtern);
 		GravityAffector::copyAttributesTo(gravityAffector);
 	}
-}
+
+} /* namespace ParticleUniverse */

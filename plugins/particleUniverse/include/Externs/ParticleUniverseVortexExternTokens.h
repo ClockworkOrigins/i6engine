@@ -24,40 +24,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_VORTEX_EXTERN_TOKENS_H__
 #define __PU_VORTEX_EXTERN_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseExternTokens.h"
 #include "ParticleUniverseAttachableTokens.h"
+#include "ParticleUniverseExternTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The VortexExternTranslator parses 'VortexExtern' tokens
 	*/
-	class _ParticleUniverseExport VortexExternTranslator : public ScriptTranslator
-	{
-		public:
-			VortexExternTranslator(void){};
-			~VortexExternTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport VortexExternTranslator : public ScriptTranslator {
+	public:
+		VortexExternTranslator() {}
+		~VortexExternTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport VortexExternWriter : public AttachableWriter, ExternWriter
-	{
-		public:
+	class _ParticleUniverseExport VortexExternWriter : public AttachableWriter, ExternWriter {
+	public:
+		VortexExternWriter() {}
+		virtual ~VortexExternWriter() {}
 
-			VortexExternWriter(void) {};
-			virtual ~VortexExternWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_VORTEX_EXTERN_TOKENS_H__ */

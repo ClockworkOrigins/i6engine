@@ -24,12 +24,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_GRAVITY_EXTERN_H__
 #define __PU_GRAVITY_EXTERN_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleAffectors/ParticleUniverseGravityAffector.h"
 #include "ParticleUniverseAttachable.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleAffectors/ParticleUniverseGravityAffector.h"
+
+namespace ParticleUniverse {
+
 	/** The GravityExtern is a wrapper of the GravityAffector, adding the functionality of a MovableObject.
 		The GravityExtern can be attached to another SceneNode than the one where the ParticleSystem at 
 		which the GravityExtern is registered, is attached. This makes it possible to affect the particles 
@@ -38,32 +38,27 @@ namespace ParticleUniverse
 		attached) that flies over a certain area and moves the leaves on the ground (Particle System attached
 		to another SceneNode).
     */
-	class _ParticleUniverseExport GravityExtern : public Attachable, public GravityAffector
-	{
+	class _ParticleUniverseExport GravityExtern : public Attachable, public GravityAffector {
 		using GravityAffector::copyAttributesTo;
-		public:
-		GravityExtern(void) : 
-			Attachable(),
-			GravityAffector() {};
-	        virtual ~GravityExtern(void) {};
 
-			/** The _preProcessParticles() function sets the position and mDerivedPosition attributes to
-				the actual world position of the node to which it is attached.
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* technique, Real timeElapsed);
+	public:
+		GravityExtern() : Attachable(), GravityAffector() {}
+	    virtual ~GravityExtern() {}
 
-			/** Processes a particle.
-	        */
-			virtual void _interface(ParticleTechnique* technique, 
-				Particle* particle, 
-				Real timeElapsed);
+		/** The _preProcessParticles() function sets the position and mDerivedPosition attributes to
+			the actual world position of the node to which it is attached.
+	    */
+		virtual void _preProcessParticles(ParticleTechnique * technique, Real timeElapsed);
 
-			/** Copy both the Extern and the derived GravityAffector properties.
-	        */
-			virtual void copyAttributesTo (Extern* externObject);
+		/** Processes a particle.
+	    */
+		virtual void _interface(ParticleTechnique * technique, Particle * particle, Real timeElapsed);
 
-		protected:
+		/** Copy both the Extern and the derived GravityAffector properties.
+	    */
+		virtual void copyAttributesTo(Extern * externObject);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_GRAVITY_EXTERN_H__ */

@@ -24,39 +24,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SPHERE_COLLIDER_EXTERN_TOKENS_H__
 #define __PU_SPHERE_COLLIDER_EXTERN_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseExternTokens.h"
 #include "ParticleUniverseAttachableTokens.h"
+#include "ParticleUniverseExternTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The SphereColliderExternTranslator parses 'SphereColliderExtern' tokens
 	*/
-	class _ParticleUniverseExport SphereColliderExternTranslator : public ScriptTranslator
-	{
-		public:
-			SphereColliderExternTranslator(void){};
-			~SphereColliderExternTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport SphereColliderExternTranslator : public ScriptTranslator {
+	public:
+		SphereColliderExternTranslator() {}
+		~SphereColliderExternTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
+
 	/** 
     */
-	class _ParticleUniverseExport SphereColliderExternWriter : public AttachableWriter, ExternWriter
-	{
-		public:
+	class _ParticleUniverseExport SphereColliderExternWriter : public AttachableWriter, ExternWriter {
+	public:
+		SphereColliderExternWriter() {}
+		virtual ~SphereColliderExternWriter() {}
 
-			SphereColliderExternWriter(void) {};
-			virtual ~SphereColliderExternWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SPHERE_COLLIDER_EXTERN_TOKENS_H__ */

@@ -21,62 +21,44 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "Externs/ParticleUniverseVortexExtern.h"
+
 #include "OgreNode.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void VortexExtern::_preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
-		if (isAttached())
-		{
+namespace ParticleUniverse {
+	
+	void VortexExtern::_preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
+		if (isAttached()) {
 			position = getParentNode()->_getDerivedPosition();
 			mDerivedPosition = position;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void VortexExtern::_interface(ParticleTechnique* technique, 
-		Particle* particle, 
-		Real timeElapsed)
-	{
+	
+	void VortexExtern::_interface(ParticleTechnique * technique, Particle * particle, Real timeElapsed) {
 		// Setting the distance threshold is mandatory
-		if (isAttached() && mDistanceThresholdSet)
-		{
+		if (isAttached() && mDistanceThresholdSet) {
 			Real distance = mDerivedPosition.distance(particle->position);
-			if (distance > mDistanceThreshold)
-			{
+			if (distance > mDistanceThreshold) {
 				return;
-			}
-			else
-			{
+			} else {
 				// Rotate position, direction and orientation (visible particle only) based on distance between particle
 				// and VortexExtern
 				Real scalar = 1 - (distance / mDistanceThreshold);
-				if (mParentNode)
-				{
+				if (mParentNode) {
 					mRotation.FromAngleAxis((_calculateRotationSpeed() * timeElapsed * scalar), mParentNode->_getDerivedOrientation() * mRotationVector);
-				}
-				else
-				{
+				} else {
 					mRotation.FromAngleAxis((_calculateRotationSpeed() * timeElapsed * scalar), mRotationVector);
 				}
 				_affect(technique, particle, timeElapsed);
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void VortexExtern::copyAttributesTo (Extern* externObject)
-	{
+	
+	void VortexExtern::copyAttributesTo(Extern * externObject) {
 		Attachable::copyAttributesTo(externObject);
-		VortexExtern* vortexExtern = static_cast<VortexExtern*>(externObject);
-		VortexAffector* vortexAffector = static_cast<VortexAffector*>(vortexExtern);
+		VortexExtern * vortexExtern = static_cast<VortexExtern *>(externObject);
+		VortexAffector * vortexAffector = static_cast<VortexAffector *>(vortexExtern);
 		VortexAffector::copyAttributesTo(vortexAffector);
 	}
-}
+
+} /* namespace ParticleUniverse */

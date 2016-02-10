@@ -26,36 +26,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The BaseColliderTranslator parses 'BaseCollider' tokens
 	*/
-	class _ParticleUniverseExport BaseColliderTranslator : public ScriptTranslator
-	{
-		public:
-			BaseColliderTranslator(void) {}
-			~BaseColliderTranslator(void) {}
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport BaseColliderTranslator : public ScriptTranslator {
+	public:
+		BaseColliderTranslator() {}
+		~BaseColliderTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport BaseColliderWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport BaseColliderWriter : public ParticleAffectorWriter {
+	public:
+		BaseColliderWriter() {}
+		virtual ~BaseColliderWriter() {}
 
-			BaseColliderWriter(void) {}
-			virtual ~BaseColliderWriter(void) {}
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BASE_COLLIDER_TOKENS_H__ */

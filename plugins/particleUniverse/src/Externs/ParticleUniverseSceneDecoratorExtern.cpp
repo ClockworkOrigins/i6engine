@@ -21,89 +21,62 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "Externs/ParticleUniverseSceneDecoratorExtern.h"
+
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
+
+#include "OgreEntity.h"
 #include "OgreSceneManager.h"
 #include "OgreSceneNode.h"
-#include "OgreEntity.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	SceneDecoratorExtern::SceneDecoratorExtern(void) :  
-		Extern(),
-		mEntitySet(false),
-		mEntity(0),
-		mMeshName(BLANK_STRING),
-		mEntityName(BLANK_STRING),
-		mMaterialName("BaseWhite"),
-		mMaterialNameSet(false),
-		mScale(Vector3::UNIT_SCALE),
-		mPosition(Vector3::ZERO),
-		mSubnode(0),
-		mCount(0)
-	{
+namespace ParticleUniverse {
+	
+	SceneDecoratorExtern::SceneDecoratorExtern() : Extern(), mEntitySet(false), mEntity(nullptr), mMeshName(BLANK_STRING), mEntityName(BLANK_STRING), mMaterialName("BaseWhite"), mMaterialNameSet(false), mScale(Vector3::UNIT_SCALE), mPosition(Vector3::ZERO), mSubnode(nullptr), mCount(0) {
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::_prepare(ParticleTechnique* technique)
-	{
-		if (mEntitySet)
-		{
-			if (!mParentTechnique->getParentSystem())
-			{
+	
+	void SceneDecoratorExtern::_prepare(ParticleTechnique * technique) {
+		if (mEntitySet) {
+			if (!mParentTechnique->getParentSystem()) {
 				return;
 			}
 			
 			// Attach entity to a child scenenode. If the parent system is attached to a TagPoint, the entity cannot be attached.
-			Ogre::SceneNode* sceneNode = mParentTechnique->getParentSystem()->getParentSceneNode();
-			if (sceneNode)
-			{
+			Ogre::SceneNode * sceneNode = mParentTechnique->getParentSystem()->getParentSceneNode();
+			if (sceneNode) {
 				std::stringstream ss; 
 				ss << this;
 				String sceneNodeName = "ParticleUniverse" + ss.str() + StringConverter::toString(mCount++);
 				mSubnode = sceneNode->createChildSceneNode(sceneNodeName);
 				mSubnode->setScale(mScale);
 				mSubnode->setPosition(mPosition);
-				if (!mEntity)
-				{
+				if (!mEntity) {
 					createEntity();
 					mSubnode->attachObject(mEntity);
 				}
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::_unprepare(ParticleTechnique* technique)
-	{
+	
+	void SceneDecoratorExtern::_unprepare(ParticleTechnique * technique) {
 		// Todo
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::_interface(ParticleTechnique* technique, 
-		Particle* particle, 
-		Real timeElapsed)
-	{
+	
+	void SceneDecoratorExtern::_interface(ParticleTechnique * technique, Particle * particle, Real timeElapsed) {
 		// Nothing to do yet
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::_notifyStart (void)
-	{
+	
+	void SceneDecoratorExtern::_notifyStart() {
 		// Scale the node
-		if (!mSubnode && mParentTechnique->getParentSystem())
-		{
+		if (!mSubnode && mParentTechnique->getParentSystem()) {
 			std::stringstream ss; 
 			ss << this;
 			String sceneNodeName = "ParticleUniverse" + ss.str() + StringConverter::toString(mCount++);
-			Ogre::SceneNode* sceneNode = mParentTechnique->getParentSystem()->getParentSceneNode();
+			Ogre::SceneNode * sceneNode = mParentTechnique->getParentSystem()->getParentSceneNode();
 			mSubnode = sceneNode->createChildSceneNode(sceneNodeName);
 		}
 
-		if (!mEntity)
-		{
+		if (!mEntity) {
 			createEntity();
 			mSubnode->attachObject(mEntity);
 		}
@@ -111,22 +84,18 @@ namespace ParticleUniverse
 		mSubnode->setScale(mScale);
 		mSubnode->setPosition(mPosition);
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::_notifyStop (void)
-	{
-		if (mSubnode && mParentTechnique->getParentSystem())
-		{
-			Ogre::SceneNode* sceneNode = mParentTechnique->getParentSystem()->getParentSceneNode();
+	
+	void SceneDecoratorExtern::_notifyStop() {
+		if (mSubnode && mParentTechnique->getParentSystem()) {
+			Ogre::SceneNode * sceneNode = mParentTechnique->getParentSystem()->getParentSceneNode();
 			Ogre::SceneNode::ChildNodeIterator it = sceneNode->getChildIterator();
 			unsigned int i = 0;
-			while (it.hasMoreElements()) 
-			{ 
-				Ogre::SceneNode* child = static_cast<Ogre::SceneNode*>(it.getNext());
-				if (child == mSubnode)
-				{
+			while (it.hasMoreElements()) { 
+				Ogre::SceneNode * child = static_cast<Ogre::SceneNode *>(it.getNext());
+				if (child == mSubnode) {
 					mSubnode->detachAllObjects();
 					sceneNode->removeAndDestroyChild(i);
-					mSubnode = 0;
+					mSubnode = nullptr;
 				}
 				++i;
 			}
@@ -134,89 +103,74 @@ namespace ParticleUniverse
 			destroyEntity();
 		}
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::createEntity(void)
-	{
-		if (!mEntity)
-		{
-			Ogre::SceneManager* sceneManager = mParentTechnique->getParentSystem()->getSceneManager();
-			if (sceneManager)
-			{
+	
+	void SceneDecoratorExtern::createEntity() {
+		if (!mEntity) {
+			Ogre::SceneManager * sceneManager = mParentTechnique->getParentSystem()->getSceneManager();
+			if (sceneManager) {
 				std::stringstream ss;
 				ss << this;
 				mEntityName = mMeshName + ss.str();
 				mEntity = sceneManager->createEntity(mEntityName, mMeshName);
-				if (mMaterialNameSet)
-				{
+				if (mMaterialNameSet) {
 					mEntity->setMaterialName(mMaterialName);
 				}
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::destroyEntity(void)
-	{
-		if (mEntity)
-		{
-			Ogre::SceneManager* sceneManager = mParentTechnique->getParentSystem()->getSceneManager();
-			if (sceneManager)
-			{
+	
+	void SceneDecoratorExtern::destroyEntity() {
+		if (mEntity) {
+			Ogre::SceneManager * sceneManager = mParentTechnique->getParentSystem()->getSceneManager();
+			if (sceneManager) {
 				sceneManager->destroyEntity(mEntityName);
-				mEntity = 0;
+				mEntity = nullptr;
 				mEntityName = BLANK_STRING;
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	const String& SceneDecoratorExtern::getMeshName(void) const
-	{
+	
+	const String & SceneDecoratorExtern::getMeshName() const {
 		return mMeshName;
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::setMeshName(const String& meshName)
-	{
+	
+	void SceneDecoratorExtern::setMeshName(const String & meshName) {
 		mMeshName = meshName;
 		mEntitySet = true;
 	}
-	//-----------------------------------------------------------------------
-	const String& SceneDecoratorExtern::getMaterialName(void) const
-	{
+	
+	const String & SceneDecoratorExtern::getMaterialName() const {
 		return mMaterialName;
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::setMaterialName(const String& materialName)
-	{
+	
+	void SceneDecoratorExtern::setMaterialName(const String & materialName) {
 		mMaterialName = materialName;
 		mMaterialNameSet = true;
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& SceneDecoratorExtern::getScale(void) const
-	{
+	
+	const Vector3 & SceneDecoratorExtern::getScale() const {
 		return mScale;
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::setScale(Vector3& scale)
-	{
+	
+	void SceneDecoratorExtern::setScale(Vector3 & scale) {
 		mScale = scale;
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& SceneDecoratorExtern::getPosition(void) const
-	{
+	
+	const Vector3 & SceneDecoratorExtern::getPosition() const {
 		return mPosition;
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::setPosition(Vector3& position)
-	{
+	
+	void SceneDecoratorExtern::setPosition(Vector3 & position) {
 		mPosition = position;
 	}
-	//-----------------------------------------------------------------------
-	void SceneDecoratorExtern::copyAttributesTo (Extern* externObject)
-	{
+	
+	void SceneDecoratorExtern::copyAttributesTo(Extern * externObject) {
 		Extern::copyAttributesTo(externObject);
-		SceneDecoratorExtern* sceneDecoratorExtern = static_cast<SceneDecoratorExtern*>(externObject);
+		SceneDecoratorExtern * sceneDecoratorExtern = static_cast<SceneDecoratorExtern *>(externObject);
 		sceneDecoratorExtern->setMaterialName(mMaterialName);
 		sceneDecoratorExtern->setMeshName(mMeshName);
 		sceneDecoratorExtern->mScale = mScale;
 		sceneDecoratorExtern->mPosition = mPosition;
 	}
-}
+
+} /* namespace ParticleUniverse */
