@@ -24,13 +24,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DO_PLACEMENT_PARTICLE_EVENT_HANDLER_H__
 #define __PU_DO_PLACEMENT_PARTICLE_EVENT_HANDLER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandler.h"
 #include "ParticleUniverseParticle.h"
 #include "ParticleUniverseTechniqueListener.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class 'sticks' one or more particles to the position of a particle that is passed through the 
 		DoPlacementParticleEventHandler.
 	@remarks
@@ -41,147 +40,147 @@ namespace ParticleUniverse
 		This class uses a 'TechniqueListener' to pass the newly created particle from the ParticleTechnique to the 
 		DoPlacementParticleEventHandler, where it is initialised.
     */
-	class _ParticleUniverseExport DoPlacementParticleEventHandler : public ParticleEventHandler, public TechniqueListener
-	{
-		protected:
-			// Identifies the name of emitter
-			String mForceEmitterName;
+	class _ParticleUniverseExport DoPlacementParticleEventHandler : public ParticleEventHandler, public TechniqueListener {
+	public:
+		// Constants
+		static const unsigned int DEFAULT_NUMBER_OF_PARTICLES;
 
-			// The number of particles to emit
-			unsigned int mNumberOfParticles;
+		DoPlacementParticleEventHandler();
+	    virtual ~DoPlacementParticleEventHandler();
 
-			/** Store the technique value to keep up to speed.
-			@remarks
-				If the ParticleTechnique has been destroyed, the DoPlacementParticleEventHandler isn�t automatically
-				notified. Using the pointer causes an exception.
-	        */
-			ParticleTechnique* mTechnique;
+		/** Getters/Setters
+	    */
+		bool isInheritPosition() const { return mInheritPosition; }
+		bool isInheritDirection() const { return mInheritDirection; }
+		bool isInheritOrientation() const { return mInheritOrientation; }
+		bool isInheritTimeToLive() const { return mInheritTimeToLive; }
+		bool isInheritMass() const { return mInheritMass; }
+		bool isInheritTextureCoordinate() const { return mInheritTextureCoordinate; }
+		bool isInheritColour() const { return mInheritColour; }
+		bool isInheritParticleWidth() const { return mInheritParticleWidth; }
+		bool isInheritParticleHeight() const { return mInheritParticleHeight; }
+		bool isInheritParticleDepth() const { return mInheritParticleDepth; }
 
-			/** Store the emitter value to keep up to speed.
-			@remarks
-				If the ParticleEmitter has been destroyed, the DoPlacementParticleEventHandler isn�t automatically
-				notified. Using the pointer causes an exception.
-	        */
-			ParticleEmitter* mEmitter;
+		void setInheritPosition(bool inheritPosition) { mInheritPosition = inheritPosition; }
+		void setInheritDirection(bool inheritDirection) { mInheritDirection = inheritDirection; }
+		void setInheritOrientation(bool inheritOrientation) { mInheritOrientation = inheritOrientation; }
+		void setInheritTimeToLive(bool inheritTimeToLive) { mInheritTimeToLive = inheritTimeToLive; }
+		void setInheritMass(bool inheritMass) { mInheritMass = inheritMass; }
+		void setInheritTextureCoordinate(bool inheritTextureCoordinate) { mInheritTextureCoordinate = inheritTextureCoordinate; }
+		void setInheritColour(bool inheritColour) { mInheritColour = inheritColour; }
+		void setInheritParticleWidth(bool inheritParticleWidth) { mInheritParticleWidth = inheritParticleWidth; }
+		void setInheritParticleHeight(bool inheritParticleHeight) { mInheritParticleHeight = inheritParticleHeight; }
+		void setInheritParticleDepth(bool inheritParticleDepth) { mInheritParticleDepth = inheritParticleDepth; }
 
-			/** Used to determine whether the emitter used by the DoPlacementParticleEventHandler, is already found.
-	        */
-			bool mFound;
+		/** Get the name of the emitter that is used to emit its particles.
+	    */
+		const String & getForceEmitterName() const { return mForceEmitterName; }
 
-			/** By default the place where to put a new particle is on the position of the particle in the _handle function. If 
-				mAlwaysUsePosition is set to false, it tries the contact point of the physics actor that is associated with the 
-				particle.
-	        */
-			bool mAlwaysUsePosition;
+		/** Set the name of the emitter that is used to emit its particles.
+	    */
+		void setForceEmitterName(const String & forceEmitterName);
 
-			/** The base particle from which the attributes are inherited
-			*/
-			Particle* mBaseParticle;
+		/** Returns a pointer to the emitter that is used as a force emitter.
+	    */
+		ParticleEmitter * getForceEmitter() const;
 
-			/** These flags are used to determine which attributes must be inherited from the base particle.
-	        */
-			bool mInheritPosition;
-			bool mInheritDirection;
-			bool mInheritOrientation;
-			bool mInheritTimeToLive;
-			bool mInheritMass;
-			bool mInheritTextureCoordinate;
-			bool mInheritColour;
-			bool mInheritParticleWidth;
-			bool mInheritParticleHeight;
-			bool mInheritParticleDepth;
+		/** Remove this as a listener from the technique.
+		@remarks
+			If a new force-emitter name has been set, the removeAsListener must be called, to remove the DoPlacementParticleEventHandler
+			from the old technique (to which the force-emitter belongs. Only then the new force-emitter is used. 
+			The reason why it is not called automatically in the setForceEmitterName() funtion is to offer some flexibility on 
+			the moment the removeAsListener() is called.
+	    */
+		void removeAsListener();
 
-		public:
-			// Constants
-			static const unsigned int DEFAULT_NUMBER_OF_PARTICLES;
+		/** Get the number of particles to emit.
+	    */
+		unsigned int getNumberOfParticles() const { return mNumberOfParticles; }
 
-			DoPlacementParticleEventHandler(void);
-	        virtual ~DoPlacementParticleEventHandler(void);
+		/** Set the number of particles to emit.
+	    */
+		void setNumberOfParticles(unsigned int numberOfParticles) { mNumberOfParticles = numberOfParticles; }
 
-			/** Getters/Setters
-	        */
-			bool isInheritPosition(void) const {return mInheritPosition;}
-			bool isInheritDirection(void) const {return mInheritDirection;}
-			bool isInheritOrientation(void) const {return mInheritOrientation;}
-			bool isInheritTimeToLive(void) const {return mInheritTimeToLive;}
-			bool isInheritMass(void) const {return mInheritMass;}
-			bool isInheritTextureCoordinate(void) const {return mInheritTextureCoordinate;}
-			bool isInheritColour(void) const {return mInheritColour;}
-			bool isInheritParticleWidth(void) const {return mInheritParticleWidth;}
-			bool isInheritParticleHeight(void) const {return mInheritParticleHeight;}
-			bool isInheritParticleDepth(void) const {return mInheritParticleDepth;}
+		/** Boolean that determines whether always the position of the particle that is handled must be used for emission of 
+			the new particle.
+	    */
+		bool alwaysUsePosition() const { return mAlwaysUsePosition; }
 
-			void setInheritPosition(bool inheritPosition) {mInheritPosition = inheritPosition;}
-			void setInheritDirection(bool inheritDirection) {mInheritDirection = inheritDirection;}
-			void setInheritOrientation(bool inheritOrientation) {mInheritOrientation = inheritOrientation;}
-			void setInheritTimeToLive(bool inheritTimeToLive) {mInheritTimeToLive = inheritTimeToLive;}
-			void setInheritMass(bool inheritMass) {mInheritMass = inheritMass;}
-			void setInheritTextureCoordinate(bool inheritTextureCoordinate) {mInheritTextureCoordinate = inheritTextureCoordinate;}
-			void setInheritColour(bool inheritColour) {mInheritColour = inheritColour;}
-			void setInheritParticleWidth(bool inheritParticleWidth) {mInheritParticleWidth = inheritParticleWidth;}
-			void setInheritParticleHeight(bool inheritParticleHeight) {mInheritParticleHeight = inheritParticleHeight;}
-			void setInheritParticleDepth(bool inheritParticleDepth) {mInheritParticleDepth = inheritParticleDepth;}
+		/** Set the boolean to indicate whether the position of the particle that is handled must be used for emission of 
+			the new particle or whether the contact point of the physics actor must be used. This only applies if a physics angine
+			is used, otherwise the default is used.
+	    */
+		void setAlwaysUsePosition(bool aup) { mAlwaysUsePosition = aup; }
 
-			/** Get the name of the emitter that is used to emit its particles.
-	        */
-			const String& getForceEmitterName(void) const {return mForceEmitterName;}
+		/** If the _handle() function of this class is invoked (by an Observer), it searches the 
+			ParticleEmitter defined by the mForceEmitterName. This ParticleEmitter is either part of 
+			the ParticleTechnique in which the DoPlacementParticleEventHandler is defined, and if the ParticleEmitter
+			is not found, other ParticleTechniques are searched. The ParticleEmitter is 'forced' to emit the
+			requested number of particles.
+	    */
+		virtual void _handle (ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** Set the name of the emitter that is used to emit its particles.
-	        */
-			void setForceEmitterName(const String& forceEmitterName);
+		/** Initialise the emitted particle. This means that its position is set.
+	    */
+		virtual void particleEmitted(ParticleTechnique * particleTechnique, Particle * particle);
 
-			/** Returns a pointer to the emitter that is used as a force emitter.
-	        */
-			ParticleEmitter* getForceEmitter(void) const;
+		/** No implementation.
+	    */
+		virtual void particleExpired(ParticleTechnique * particleTechnique, Particle * particle){}
 
-			/** Remove this as a listener from the technique.
-			@remarks
-				If a new force-emitter name has been set, the removeAsListener must be called, to remove the DoPlacementParticleEventHandler
-				from the old technique (to which the force-emitter belongs. Only then the new force-emitter is used. 
-				The reason why it is not called automatically in the setForceEmitterName() funtion is to offer some flexibility on 
-				the moment the removeAsListener() is called.
-	        */
-			void removeAsListener(void);
+		/** Copy attributes to another event handler.
+	    */
+		virtual void copyAttributesTo(ParticleEventHandler * eventHandler);
 
-			/** Get the number of particles to emit.
-	        */
-			unsigned int getNumberOfParticles(void) const {return mNumberOfParticles;}
+	protected:
+		// Identifies the name of emitter
+		String mForceEmitterName;
 
-			/** Set the number of particles to emit.
-	        */
-			void setNumberOfParticles(unsigned int numberOfParticles){mNumberOfParticles = numberOfParticles;}
+		// The number of particles to emit
+		unsigned int mNumberOfParticles;
 
-			/** Boolean that determines whether always the position of the particle that is handled must be used for emission of 
-				the new particle.
-	        */
-			bool alwaysUsePosition(void) const {return mAlwaysUsePosition;}
+		/** Store the technique value to keep up to speed.
+		@remarks
+		If the ParticleTechnique has been destroyed, the DoPlacementParticleEventHandler isn�t automatically
+		notified. Using the pointer causes an exception.
+		*/
+		ParticleTechnique * mTechnique;
 
-			/** Set the boolean to indicate whether the position of the particle that is handled must be used for emission of 
-				the new particle or whether the contact point of the physics actor must be used. This only applies if a physics angine
-				is used, otherwise the default is used.
-	        */
-			void setAlwaysUsePosition(bool aup) {mAlwaysUsePosition = aup;}
+		/** Store the emitter value to keep up to speed.
+		@remarks
+		If the ParticleEmitter has been destroyed, the DoPlacementParticleEventHandler isn�t automatically
+		notified. Using the pointer causes an exception.
+		*/
+		ParticleEmitter * mEmitter;
 
-			/** If the _handle() function of this class is invoked (by an Observer), it searches the 
-				ParticleEmitter defined by the mForceEmitterName. This ParticleEmitter is either part of 
-				the ParticleTechnique in which the DoPlacementParticleEventHandler is defined, and if the ParticleEmitter
-				is not found, other ParticleTechniques are searched. The ParticleEmitter is 'forced' to emit the
-				requested number of particles.
-	        */
-			virtual void _handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** Used to determine whether the emitter used by the DoPlacementParticleEventHandler, is already found.
+		*/
+		bool mFound;
 
-			/** Initialise the emitted particle. This means that its position is set.
-	        */
-			virtual void particleEmitted(ParticleTechnique* particleTechnique, Particle* particle);
+		/** By default the place where to put a new particle is on the position of the particle in the _handle function. If
+		mAlwaysUsePosition is set to false, it tries the contact point of the physics actor that is associated with the
+		particle.
+		*/
+		bool mAlwaysUsePosition;
 
-			/** No implementation.
-	        */
-			virtual void particleExpired(ParticleTechnique* particleTechnique, Particle* particle){}
+		/** The base particle from which the attributes are inherited
+		*/
+		Particle * mBaseParticle;
 
-			/** Copy attributes to another event handler.
-	        */
-			virtual void copyAttributesTo (ParticleEventHandler* eventHandler);
+		/** These flags are used to determine which attributes must be inherited from the base particle.
+		*/
+		bool mInheritPosition;
+		bool mInheritDirection;
+		bool mInheritOrientation;
+		bool mInheritTimeToLive;
+		bool mInheritMass;
+		bool mInheritTextureCoordinate;
+		bool mInheritColour;
+		bool mInheritParticleWidth;
+		bool mInheritParticleHeight;
+		bool mInheritParticleDepth;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DO_PLACEMENT_PARTICLE_EVENT_HANDLER_H__ */

@@ -21,22 +21,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleEventHandlers/ParticleUniverseDoExpireEventHandler.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void DoExpireEventHandler::_handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (!particle)
-			return;
+#include "ParticleUniverseParticle.h"
 
-		particle->timeToLive = 0.0f;
+namespace ParticleUniverse {
+
+	void DoExpireEventHandler::_handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (!particle) {
+			return;
+		}
+
+		particle->timeToLive = 0.0;
 	}
-}
+
+} /* namespace ParticleUniverse */

@@ -24,27 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DO_STOP_SYSTEM_EVENT_HANDLER_H__
 #define __PU_DO_STOP_SYSTEM_EVENT_HANDLER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandler.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The DoStopSystemEventHandler stops the ParticleSystem.
     */
-	class _ParticleUniverseExport DoStopSystemEventHandler : public ParticleEventHandler
-	{
-		protected:
+	class _ParticleUniverseExport DoStopSystemEventHandler : public ParticleEventHandler {
+	public:
+		DoStopSystemEventHandler() : ParticleEventHandler() {
+		}
+	    virtual ~DoStopSystemEventHandler() {}
 
-		public:
-			DoStopSystemEventHandler(void) : ParticleEventHandler()
-			{
-			};
-	        virtual ~DoStopSystemEventHandler(void) {};
-
-			/** 
-	        */
-			virtual void _handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DO_STOP_SYSTEM_EVENT_HANDLER_H__ */

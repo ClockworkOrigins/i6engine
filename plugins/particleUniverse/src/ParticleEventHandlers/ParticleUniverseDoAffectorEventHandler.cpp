@@ -21,73 +21,55 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleEventHandlers/ParticleUniverseDoAffectorEventHandler.h"
 
 #include "ParticleUniverseAffector.h"
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	const bool DoAffectorEventHandler::DEFAULT_PRE_POST = false;
 
-	//-----------------------------------------------------------------------
-	DoAffectorEventHandler::DoAffectorEventHandler(void) : 
-		ParticleEventHandler(),
-		mAffectorName(BLANK_STRING),
-		mPrePost(DEFAULT_PRE_POST)
-	{
+	DoAffectorEventHandler::DoAffectorEventHandler() : ParticleEventHandler(), mAffectorName(BLANK_STRING), mPrePost(DEFAULT_PRE_POST) {
 	}
-	//-----------------------------------------------------------------------
-	void DoAffectorEventHandler::_handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+	
+	void DoAffectorEventHandler::_handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		/** Search for the affector.
 		*/
-		ParticleTechnique* technique = 0;
-		ParticleAffector* affector = particleTechnique->getAffector(mAffectorName);
-		if (!affector)
-		{
+		ParticleTechnique * technique = nullptr;
+		ParticleAffector * affector = particleTechnique->getAffector(mAffectorName);
+		if (!affector) {
 			// Search all techniques in this ParticleSystem for an affector with the correct name
-			ParticleSystem* system = particleTechnique->getParentSystem();
+			ParticleSystem * system = particleTechnique->getParentSystem();
 			size_t size = system->getNumTechniques();
-			for(size_t i = 0; i < size; ++i)
-			{
+			for (size_t i = 0; i < size; ++i) {
 				technique = system->getTechnique(i);
 				affector = technique->getAffector(mAffectorName);
-				if (affector)
-				{
+				if (affector) {
 					break;
 				}
 			}
 		}
 
-		if (affector)
-		{
+		if (affector) {
 			// Call the affector even if it has enabled set to 'false'.
-			if (mPrePost)
-			{
+			if (mPrePost) {
 				affector->_preProcessParticles(particleTechnique, timeElapsed);
 				affector->_affect(particleTechnique, particle, timeElapsed);
 				affector->_postProcessParticles(particleTechnique, timeElapsed);
-			}
-			else
-			{
+			} else {
 				affector->_affect(particleTechnique, particle, timeElapsed);
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void DoAffectorEventHandler::copyAttributesTo (ParticleEventHandler* eventHandler)
-	{
+	
+	void DoAffectorEventHandler::copyAttributesTo(ParticleEventHandler * eventHandler) {
 		ParticleEventHandler::copyAttributesTo(eventHandler);
-		DoAffectorEventHandler* doAffectorEventHandler = static_cast<DoAffectorEventHandler*>(eventHandler);
+		DoAffectorEventHandler * doAffectorEventHandler = static_cast<DoAffectorEventHandler *>(eventHandler);
 		doAffectorEventHandler->setAffectorName(mAffectorName);
 		doAffectorEventHandler->setPrePost(mPrePost);
 	}
 
-}
+} /* namespace ParticleUniverse */

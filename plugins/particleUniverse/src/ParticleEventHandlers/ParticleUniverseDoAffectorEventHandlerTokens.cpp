@@ -21,45 +21,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleEventHandlers/ParticleUniverseDoAffectorEventHandler.h"
 #include "ParticleEventHandlers/ParticleUniverseDoAffectorEventHandlerTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool DoAffectorEventHandlerTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleEventHandler* evt = any_cast<ParticleEventHandler*>(prop->parent->context);
-		DoAffectorEventHandler* handler = static_cast<DoAffectorEventHandler*>(evt);
+#include "ParticleUniverseAny.h"
+#include "ParticleUniverseScriptSerializer.h"
 
-		if (prop->name == token[TOKEN_FORCE_AFFECTOR])
-		{
+#include "ParticleEventHandlers/ParticleUniverseDoAffectorEventHandler.h"
+
+namespace ParticleUniverse {
+	
+	bool DoAffectorEventHandlerTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleEventHandler * evt = any_cast<ParticleEventHandler *>(prop->parent->context);
+		DoAffectorEventHandler * handler = static_cast<DoAffectorEventHandler *>(evt);
+
+		if (prop->name == token[TOKEN_FORCE_AFFECTOR]) {
 			// Property: force_affector
-			if (passValidateProperty(compiler, prop, token[TOKEN_FORCE_AFFECTOR], VAL_STRING))
-			{
+			if (passValidateProperty(compiler, prop, token[TOKEN_FORCE_AFFECTOR], VAL_STRING)) {
 				String val;
-				if(getString(prop->values.front(), &val))
-				{
+				if (getString(prop->values.front(), &val)) {
 					handler->setAffectorName(val);
 					return true;
 				}
 			}
-		}
-		else if (prop->name == token[TOKEN_FORCE_AFFECTOR_PRE_POST])
-		{
+		} else if (prop->name == token[TOKEN_FORCE_AFFECTOR_PRE_POST]) {
 			// Property: pre_post
-			if (passValidateProperty(compiler, prop, token[TOKEN_FORCE_AFFECTOR_PRE_POST], VAL_BOOL))
-			{
+			if (passValidateProperty(compiler, prop, token[TOKEN_FORCE_AFFECTOR_PRE_POST], VAL_BOOL)) {
 				bool val;
-				if(getBoolean(prop->values.front(), &val))
-				{
+				if (getBoolean(prop->values.front(), &val)) {
 					handler->setPrePost(val);
 					return true;
 				}
@@ -68,19 +57,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool DoAffectorEventHandlerTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool DoAffectorEventHandlerTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void DoAffectorEventHandlerWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void DoAffectorEventHandlerWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a DoAffectorEventHandler
-		const DoAffectorEventHandler* eventHandler = static_cast<const DoAffectorEventHandler*>(element);
+		const DoAffectorEventHandler * eventHandler = static_cast<const DoAffectorEventHandler *>(element);
 
 		// Write the header of the DoAffectorEventHandler
 		serializer->writeLine(token[TOKEN_HANDLER], eventHandler->getEventHandlerType(), eventHandler->getName(), 12);
@@ -90,13 +75,15 @@ namespace ParticleUniverse
 		ParticleEventHandlerWriter::write(serializer, element);
 
 		// Write own attributes
-		if (eventHandler->getAffectorName() != BLANK_STRING) serializer->writeLine(
-			token[TOKEN_FORCE_AFFECTOR], eventHandler->getAffectorName(), 16);
-		if (eventHandler->getPrePost() != DoAffectorEventHandler::DEFAULT_PRE_POST) serializer->writeLine(
-			token[TOKEN_FORCE_AFFECTOR_PRE_POST], StringConverter::toString(eventHandler->getPrePost()), 16);
+		if (eventHandler->getAffectorName() != BLANK_STRING) {
+			serializer->writeLine(token[TOKEN_FORCE_AFFECTOR], eventHandler->getAffectorName(), 16);
+		}
+		if (eventHandler->getPrePost() != DoAffectorEventHandler::DEFAULT_PRE_POST) {
+			serializer->writeLine(token[TOKEN_FORCE_AFFECTOR_PRE_POST], StringConverter::toString(eventHandler->getPrePost()), 16);
+		}
 
 		// Write the close bracket
 		serializer->writeLine("}", 12);
 	}
 
-}
+} /* namespace ParticleUniverse */

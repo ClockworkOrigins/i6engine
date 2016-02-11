@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DO_PLACEMENT_PARTICLE_EVENT_HANDLER_TOKENS_H__
 #define __PU_DO_PLACEMENT_PARTICLE_EVENT_HANDLER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandlerTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The DoPlacementParticleEventHandlerTranslator parses 'DoPlacementParticleEventHandler' tokens
 	*/
-	class _ParticleUniverseExport DoPlacementParticleEventHandlerTranslator : public ScriptTranslator
-	{
-		public:
-			DoPlacementParticleEventHandlerTranslator(void){};
-			~DoPlacementParticleEventHandlerTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport DoPlacementParticleEventHandlerTranslator : public ScriptTranslator {
+	public:
+		DoPlacementParticleEventHandlerTranslator() {}
+		~DoPlacementParticleEventHandlerTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport DoPlacementParticleEventHandlerWriter : public ParticleEventHandlerWriter
-	{
-		public:
+	class _ParticleUniverseExport DoPlacementParticleEventHandlerWriter : public ParticleEventHandlerWriter {
+	public:
+		DoPlacementParticleEventHandlerWriter() {}
+		virtual ~DoPlacementParticleEventHandlerWriter() {}
 
-			DoPlacementParticleEventHandlerWriter(void) {};
-			virtual ~DoPlacementParticleEventHandlerWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DO_PLACEMENT_PARTICLE_EVENT_HANDLER_TOKENS_H__ */

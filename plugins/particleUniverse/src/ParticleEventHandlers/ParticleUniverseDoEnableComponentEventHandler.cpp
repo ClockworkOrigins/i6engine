@@ -28,123 +28,94 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseObserver.h"
 #include "ParticleUniverseTechnique.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	DoEnableComponentEventHandler::DoEnableComponentEventHandler(void) : 
-		ParticleEventHandler(),
-		mComponentName(BLANK_STRING),
-		mComponentType(CT_EMITTER),
-		mComponentEnabled(true)
-	{
+namespace ParticleUniverse {
+	
+	DoEnableComponentEventHandler::DoEnableComponentEventHandler() : ParticleEventHandler(), mComponentName(BLANK_STRING), mComponentType(CT_EMITTER), mComponentEnabled(true) {
 	}
-	//-----------------------------------------------------------------------
-	void DoEnableComponentEventHandler::_handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+	
+	void DoEnableComponentEventHandler::_handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		/** Search for the component.
 		*/
-		ParticleTechnique* technique = 0;
-		switch (mComponentType)
-		{
-			case CT_EMITTER:
-			{
-				ParticleEmitter* emitter = particleTechnique->getEmitter(mComponentName);
-				if (!emitter)
-				{
-					// Search all techniques in this ParticleSystem for an emitter with the correct name
-					ParticleSystem* system = particleTechnique->getParentSystem();
-					size_t size = system->getNumTechniques();
-					for(size_t i = 0; i < size; ++i)		
-					{
-						technique = system->getTechnique(i);
-						emitter = technique->getEmitter(mComponentName);
-						if (emitter)
-						{
-							break;
-						}
+		ParticleTechnique * technique = nullptr;
+		switch (mComponentType) {
+		case CT_EMITTER: {
+			ParticleEmitter * emitter = particleTechnique->getEmitter(mComponentName);
+			if (!emitter) {
+				// Search all techniques in this ParticleSystem for an emitter with the correct name
+				ParticleSystem * system = particleTechnique->getParentSystem();
+				size_t size = system->getNumTechniques();
+				for (size_t i = 0; i < size; ++i) {
+					technique = system->getTechnique(i);
+					emitter = technique->getEmitter(mComponentName);
+					if (emitter) {
+						break;
 					}
 				}
-				if (emitter)
-				{
-					emitter->setEnabled(mComponentEnabled);
-				}
+			}
+			if (emitter) {
+				emitter->setEnabled(mComponentEnabled);
 			}
 			break;
-
-			case CT_AFFECTOR:
-			{
-				ParticleAffector* affector = particleTechnique->getAffector(mComponentName);
-				if (!affector)
-				{
-					// Search all techniques in this ParticleSystem for an affector with the correct name
-					ParticleSystem* system = particleTechnique->getParentSystem();
-					size_t size = system->getNumTechniques();
-					for(size_t i = 0; i < size; ++i)
-					{
-						technique = system->getTechnique(i);
-						affector = technique->getAffector(mComponentName);
-						if (affector)
-						{
-							break;
-						}
+		}
+		case CT_AFFECTOR: {
+			ParticleAffector * affector = particleTechnique->getAffector(mComponentName);
+			if (!affector) {
+				// Search all techniques in this ParticleSystem for an affector with the correct name
+				ParticleSystem * system = particleTechnique->getParentSystem();
+				size_t size = system->getNumTechniques();
+				for (size_t i = 0; i < size; ++i) {
+					technique = system->getTechnique(i);
+					affector = technique->getAffector(mComponentName);
+					if (affector) {
+						break;
 					}
 				}
-				if (affector)
-				{
-					affector->setEnabled(mComponentEnabled);
-				}
+			}
+			if (affector) {
+				affector->setEnabled(mComponentEnabled);
 			}
 			break;
-
-			case CT_OBSERVER:
-			{
-				ParticleObserver* observer = particleTechnique->getObserver(mComponentName);
-				if (!observer)
-				{
-					// Search all techniques in this ParticleSystem for an observer with the correct name
-					ParticleSystem* system = particleTechnique->getParentSystem();
-					size_t size = system->getNumTechniques();
-					for(size_t i = 0; i < size; ++i)		
-					{
-						technique = system->getTechnique(i);
-						observer = technique->getObserver(mComponentName);
-						if (observer)
-						{
-							break;
-						}
+		}
+		case CT_OBSERVER: {
+			ParticleObserver * observer = particleTechnique->getObserver(mComponentName);
+			if (!observer) {
+				// Search all techniques in this ParticleSystem for an observer with the correct name
+				ParticleSystem * system = particleTechnique->getParentSystem();
+				size_t size = system->getNumTechniques();
+				for (size_t i = 0; i < size; ++i) {
+					technique = system->getTechnique(i);
+					observer = technique->getObserver(mComponentName);
+					if (observer) {
+						break;
 					}
 				}
-				if (observer)
-				{
-					observer->setEnabled(mComponentEnabled);
-				}
+			}
+			if (observer) {
+				observer->setEnabled(mComponentEnabled);
 			}
 			break;
-
-			case CT_TECHNIQUE:
-			{
-				// Search in this ParticleSystem for a technique with the correct name
-				ParticleSystem* system = particleTechnique->getParentSystem();
-				technique = system->getTechnique(mComponentName);
-				if (technique)
-				{
-					technique->setEnabled(mComponentEnabled);
-				}
-			}
-			break;
-			default: {
-				break;
+		}
+		case CT_TECHNIQUE: {
+			// Search in this ParticleSystem for a technique with the correct name
+			ParticleSystem * system = particleTechnique->getParentSystem();
+			technique = system->getTechnique(mComponentName);
+			if (technique) {
+				technique->setEnabled(mComponentEnabled);
 			}
 		}
+		break;
+		default: {
+			break;
+		}
+		}
 	}
-	//-----------------------------------------------------------------------
-	void DoEnableComponentEventHandler::copyAttributesTo (ParticleEventHandler* eventHandler)
-	{
+	
+	void DoEnableComponentEventHandler::copyAttributesTo(ParticleEventHandler * eventHandler) {
 		ParticleEventHandler::copyAttributesTo(eventHandler);
-		DoEnableComponentEventHandler* doEnableComponentEventHandler = static_cast<DoEnableComponentEventHandler*>(eventHandler);
+		DoEnableComponentEventHandler * doEnableComponentEventHandler = static_cast<DoEnableComponentEventHandler *>(eventHandler);
 		doEnableComponentEventHandler->setComponentType(mComponentType);
 		doEnableComponentEventHandler->setComponentName(mComponentName);
 		doEnableComponentEventHandler->setComponentEnabled(mComponentEnabled);
 	}
 
-}
+} /* namespace ParticleUniverse */

@@ -24,58 +24,56 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DO_SCALE_EVENT_HANDLER_H__
 #define __PU_DO_SCALE_EVENT_HANDLER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandler.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The DoScaleEventHandler scales different particle attributes.
     */
-	class _ParticleUniverseExport DoScaleEventHandler : public ParticleEventHandler
-	{
-		public:
-			enum ScaleType
-			{
-				ST_TIME_TO_LIVE,
-				ST_VELOCITY
-			};
+	class _ParticleUniverseExport DoScaleEventHandler : public ParticleEventHandler {
+	public:
+		enum ScaleType {
+			ST_TIME_TO_LIVE,
+			ST_VELOCITY
+		};
 
-			// Constants
-			static const ScaleType DEFAULT_SCALE_TYPE;
-			static const Real DEFAULT_SCALE_FRACTION;
+		// Constants
+		static const ScaleType DEFAULT_SCALE_TYPE;
+		static const Real DEFAULT_SCALE_FRACTION;
 
-			DoScaleEventHandler(void);
-	        virtual ~DoScaleEventHandler(void) {}
+		DoScaleEventHandler();
+	    virtual ~DoScaleEventHandler() {}
 
-			/** Returns the scale type
-	        */
-			const ScaleType& getScaleType(void) const;
+		/** Returns the scale type
+	    */
+		const ScaleType & getScaleType() const;
 
-			/** Set the scale type. This scale type identifies to which attribute the scale factor is applied.
-	        */
-			void setScaleType(const ScaleType& scaleType);
+		/** Set the scale type. This scale type identifies to which attribute the scale factor is applied.
+	    */
+		void setScaleType(const ScaleType & scaleType);
 
-			/** Returns the scale fraction
-	        */
-			Real getScaleFraction(void) const;
+		/** Returns the scale fraction
+	    */
+		Real getScaleFraction() const;
 
-			/** Set the scale fraction. This scale fraction value is used to scale different attributes if the 
-				event handler is called.
-	        */
-			void setScaleFraction(const Real scaleFraction);
+		/** Set the scale fraction. This scale fraction value is used to scale different attributes if the 
+			event handler is called.
+	    */
+		void setScaleFraction(const Real scaleFraction);
 
-			/** 
-	        */
-			virtual void _handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** Copy attributes to another event handler.
-	        */
-			virtual void copyAttributesTo (ParticleEventHandler* eventHandler);
+		/** Copy attributes to another event handler.
+	    */
+		virtual void copyAttributesTo(ParticleEventHandler * eventHandler);
 
-		protected:
-			Real mScaleFraction;
-			ScaleType mScaleType;
+	protected:
+		Real mScaleFraction;
+		ScaleType mScaleType;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DO_SCALE_EVENT_HANDLER_H__ */

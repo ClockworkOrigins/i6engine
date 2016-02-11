@@ -24,35 +24,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DOEXPIRE_EVENT_HANDLER_H__
 #define __PU_DOEXPIRE_EVENT_HANDLER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandler.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The DoExpireEventHandler expires a particle.
     */
-	class _ParticleUniverseExport DoExpireEventHandler : public ParticleEventHandler
-	{
-		protected:
+	class _ParticleUniverseExport DoExpireEventHandler : public ParticleEventHandler {
+	public:
+		DoExpireEventHandler() : ParticleEventHandler() {
+		}
+	    virtual ~DoExpireEventHandler() {}
 
-		public:
-			DoExpireEventHandler(void) : ParticleEventHandler()
-			{
-			};
-	        virtual ~DoExpireEventHandler(void) {};
+		/** Get indication that all particles are expired
+	    */
+		bool getExpireAll();
 
-			/** Get indication that all particles are expired
-	        */
-			bool getExpireAll(void);
+		/** Set indication that all particles are expired
+	    */
+		void setExpireAll(bool expireAll);
 
-			/** Set indication that all particles are expired
-	        */
-			void setExpireAll(bool expireAll);
-
-			/** 
-	        */
-			virtual void _handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DOEXPIRE_EVENT_HANDLER_H__ */

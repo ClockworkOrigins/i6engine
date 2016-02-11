@@ -24,27 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DOFREEZE_EVENT_HANDLER_H__
 #define __PU_DOFREEZE_EVENT_HANDLER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandler.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The DoFreezeEventHandler freezes a particle.
     */
-	class _ParticleUniverseExport DoFreezeEventHandler : public ParticleEventHandler
-	{
-		protected:
+	class _ParticleUniverseExport DoFreezeEventHandler : public ParticleEventHandler {
+	public:
+		DoFreezeEventHandler() : ParticleEventHandler() {
+		}
+	    virtual ~DoFreezeEventHandler() {}
 
-		public:
-			DoFreezeEventHandler(void) : ParticleEventHandler()
-			{
-			};
-	        virtual ~DoFreezeEventHandler(void) {};
-
-			/** 
-	        */
-			virtual void _handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DOFREEZE_EVENT_HANDLER_H__ */

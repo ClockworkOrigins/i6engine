@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DO_SCALE_EVENT_HANDLER_TOKENS_H__
 #define __PU_DO_SCALE_EVENT_HANDLER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandlerTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The DoScaleEventHandlerTranslator parses 'DoScaleEventHandler' tokens
 	*/
-	class _ParticleUniverseExport DoScaleEventHandlerTranslator : public ScriptTranslator
-	{
-		public:
-			DoScaleEventHandlerTranslator(void){};
-			~DoScaleEventHandlerTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport DoScaleEventHandlerTranslator : public ScriptTranslator {
+	public:
+		DoScaleEventHandlerTranslator() {}
+		~DoScaleEventHandlerTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport DoScaleEventHandlerWriter : public ParticleEventHandlerWriter
-	{
-		public:
+	class _ParticleUniverseExport DoScaleEventHandlerWriter : public ParticleEventHandlerWriter {
+	public:
+		DoScaleEventHandlerWriter() {}
+		virtual ~DoScaleEventHandlerWriter() {}
 
-			DoScaleEventHandlerWriter(void) {};
-			virtual ~DoScaleEventHandlerWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DO_SCALE_EVENT_HANDLER_TOKENS_H__ */

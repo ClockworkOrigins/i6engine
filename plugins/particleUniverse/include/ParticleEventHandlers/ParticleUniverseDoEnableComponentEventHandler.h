@@ -24,69 +24,67 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__
 #define __PU_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseEventHandler.h"
 #include "ParticleUniverseSystem.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class makes it possible to enable or disable a Component. This component is an 
 		named emitter, affector or technique.
     */
-	class _ParticleUniverseExport DoEnableComponentEventHandler : public ParticleEventHandler
-	{
-		protected:
-			// Identifies the name of component
-			String mComponentName;
+	class _ParticleUniverseExport DoEnableComponentEventHandler : public ParticleEventHandler {
+	public:
+		DoEnableComponentEventHandler();
+	    virtual ~DoEnableComponentEventHandler() {}
 
-			// Identifies the type of component
-			ComponentType mComponentType;
+		/** Get the name of the component that must be enabled or disabled.
+	    */
+		const String & getComponentName() const { return mComponentName; }
 
-			/** Determines whether the Component must be enabled or disabled.
-	        */
-			bool mComponentEnabled;
+		/** Set the name of the component that must be enabled or disables.
+	    */
+		void setComponentName(const String & componentName) { mComponentName = componentName; }
 
-		public:
-			DoEnableComponentEventHandler(void);
-	        virtual ~DoEnableComponentEventHandler(void) {}
+		/** Get the value that identifies whether the component must be enabled or disabled.
+	    */
+		bool isComponentEnabled() const { return mComponentEnabled; }
 
-			/** Get the name of the component that must be enabled or disabled.
-	        */
-			const String& getComponentName(void) const {return mComponentName;}
+		/** Set the value that identifies whether the component must be enabled or disabled.
+	    */
+		void setComponentEnabled(bool enabled) { mComponentEnabled = enabled; }
 
-			/** Set the name of the component that must be enabled or disables.
-	        */
-			void setComponentName(const String& componentName){mComponentName = componentName;}
+		/** Get the value that identifies whether the component must be enabled or disabled.
+	    */
+		ComponentType getComponentType() const { return mComponentType; }
 
-			/** Get the value that identifies whether the component must be enabled or disabled.
-	        */
-			bool isComponentEnabled(void) const {return mComponentEnabled;}
+		/** Set the value that identifies whether the component must be enabled or disabled.
+	    */
+		void setComponentType(ComponentType componentType) { mComponentType = componentType; }
 
-			/** Set the value that identifies whether the component must be enabled or disabled.
-	        */
-			void setComponentEnabled(bool enabled){mComponentEnabled = enabled;}
+		/** If the _handle() function of this class is invoked (by an Observer), it searches the 
+			ParticleEmitter, ParticleAffector or ParticleTechnique defined by the its name. 
+			The ParticleEmitter/Affector is either part of the ParticleTechnique in which the 
+			DoEnableComponentEventHandler is defined, or if the ParticleEmitter/Affector is not 
+			found, other ParticleTechniques are searched.
+	    */
+		virtual void _handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** Get the value that identifies whether the component must be enabled or disabled.
-	        */
-			ComponentType getComponentType(void) const {return mComponentType;}
+		/** Copy attributes to another event handler.
+	    */
+		virtual void copyAttributesTo(ParticleEventHandler * eventHandler);
 
-			/** Set the value that identifies whether the component must be enabled or disabled.
-	        */
-			void setComponentType(ComponentType componentType){mComponentType = componentType;}
+	protected:
+		// Identifies the name of component
+		String mComponentName;
 
-			/** If the _handle() function of this class is invoked (by an Observer), it searches the 
-				ParticleEmitter, ParticleAffector or ParticleTechnique defined by the its name. 
-				The ParticleEmitter/Affector is either part of the ParticleTechnique in which the 
-				DoEnableComponentEventHandler is defined, or if the ParticleEmitter/Affector is not 
-				found, other ParticleTechniques are searched.
-	        */
-			virtual void _handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		// Identifies the type of component
+		ComponentType mComponentType;
 
-			/** Copy attributes to another event handler.
-	        */
-			virtual void copyAttributesTo (ParticleEventHandler* eventHandler);
+		/** Determines whether the Component must be enabled or disabled.
+		*/
+		bool mComponentEnabled;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__ */

@@ -21,73 +21,60 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleEventHandlers/ParticleUniverseDoScaleEventHandler.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleUniverseParticle.h"
+
+namespace ParticleUniverse {
+
 	// Constants
 	const DoScaleEventHandler::ScaleType DoScaleEventHandler::DEFAULT_SCALE_TYPE = DoScaleEventHandler::ST_TIME_TO_LIVE;
-	const Real DoScaleEventHandler::DEFAULT_SCALE_FRACTION = 0.2f;
-
-	//-----------------------------------------------------------------------
-	DoScaleEventHandler::DoScaleEventHandler(void) : 
-		ParticleEventHandler(),
-		mScaleFraction(DEFAULT_SCALE_FRACTION),
-		mScaleType(DEFAULT_SCALE_TYPE)
-	{
+	const Real DoScaleEventHandler::DEFAULT_SCALE_FRACTION = 0.2;
+	
+	DoScaleEventHandler::DoScaleEventHandler() : ParticleEventHandler(), mScaleFraction(DEFAULT_SCALE_FRACTION), mScaleType(DEFAULT_SCALE_TYPE) {
 	}
-	//-----------------------------------------------------------------------
-	const DoScaleEventHandler::ScaleType& DoScaleEventHandler::getScaleType(void) const
-	{
+	
+	const DoScaleEventHandler::ScaleType & DoScaleEventHandler::getScaleType() const {
 		return mScaleType;
 	}
-	//-----------------------------------------------------------------------
-	void DoScaleEventHandler::setScaleType(const DoScaleEventHandler::ScaleType& scaleType)
-	{
+	
+	void DoScaleEventHandler::setScaleType(const DoScaleEventHandler::ScaleType & scaleType) {
 		mScaleType = scaleType;
 	}
-	//-----------------------------------------------------------------------
-	Real DoScaleEventHandler::getScaleFraction(void) const
-	{
+	
+	Real DoScaleEventHandler::getScaleFraction() const {
 		return mScaleFraction;
 	}
-	//-----------------------------------------------------------------------
-	void DoScaleEventHandler::setScaleFraction(const Real scaleFraction)
-	{
+	
+	void DoScaleEventHandler::setScaleFraction(const Real scaleFraction) {
 		mScaleFraction = scaleFraction;
 	}
-	//-----------------------------------------------------------------------
-	void DoScaleEventHandler::_handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (!particle)
+	
+	void DoScaleEventHandler::_handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (!particle) {
 			return;
+		}
 
-		switch (mScaleType)
-		{
-			case ST_TIME_TO_LIVE:
-				particle->timeToLive -= timeElapsed * mScaleFraction * particle->timeToLive;
+		switch (mScaleType) {
+		case ST_TIME_TO_LIVE: {
+			particle->timeToLive -= timeElapsed * mScaleFraction * particle->timeToLive;
 			break;
-
-			case ST_VELOCITY:
-				particle->direction += timeElapsed * mScaleFraction * particle->direction;
+		}
+		case ST_VELOCITY: {
+			particle->direction += timeElapsed * mScaleFraction * particle->direction;
 			break;
-			default: {
-				break;
-			}
+		}
+		default: {
+			break;
+		}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void DoScaleEventHandler::copyAttributesTo (ParticleEventHandler* eventHandler)
-	{
+	
+	void DoScaleEventHandler::copyAttributesTo(ParticleEventHandler * eventHandler) {
 		ParticleEventHandler::copyAttributesTo(eventHandler);
-		DoScaleEventHandler* doScaleEventHandler = static_cast<DoScaleEventHandler*>(eventHandler);
+		DoScaleEventHandler * doScaleEventHandler = static_cast<DoScaleEventHandler *>(eventHandler);
 		doScaleEventHandler->setScaleFraction(mScaleFraction);
 		doScaleEventHandler->setScaleType(mScaleType);
 	}
-}
+
+} /* namespace ParticleUniverse */

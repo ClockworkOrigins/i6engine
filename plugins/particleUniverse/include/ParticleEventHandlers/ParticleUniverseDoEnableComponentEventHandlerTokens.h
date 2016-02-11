@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DO_ENABLE_COMPONENT_EVENT_HANDLER_TOKENS_H__
 #define __PU_DO_ENABLE_COMPONENT_EVENT_HANDLER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandlerTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The DoEnableComponentEventHandlerTranslator parses 'DoEnableComponentEventHandler' tokens
 	*/
-	class _ParticleUniverseExport DoEnableComponentEventHandlerTranslator : public ScriptTranslator
-	{
-		public:
-			DoEnableComponentEventHandlerTranslator(void){};
-			~DoEnableComponentEventHandlerTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport DoEnableComponentEventHandlerTranslator : public ScriptTranslator {
+	public:
+		DoEnableComponentEventHandlerTranslator() {}
+		~DoEnableComponentEventHandlerTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport DoEnableComponentEventHandlerWriter : public ParticleEventHandlerWriter
-	{
-		public:
+	class _ParticleUniverseExport DoEnableComponentEventHandlerWriter : public ParticleEventHandlerWriter {
+	public:
+		DoEnableComponentEventHandlerWriter() {}
+		virtual ~DoEnableComponentEventHandlerWriter() {}
 
-			DoEnableComponentEventHandlerWriter(void) {};
-			virtual ~DoEnableComponentEventHandlerWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DO_ENABLE_COMPONENT_EVENT_HANDLER_TOKENS_H__ */

@@ -24,24 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DO_FREEZE_EVENT_HANDLER_TOKENS_H__
 #define __PU_DO_FREEZE_EVENT_HANDLER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandlerTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** 
     */
-	class _ParticleUniverseExport DoFreezeEventHandlerWriter : public ParticleEventHandlerWriter
-	{
-		public:
-			DoFreezeEventHandlerWriter(void) {};
-			virtual ~DoFreezeEventHandlerWriter(void) {};
+	class _ParticleUniverseExport DoFreezeEventHandlerWriter : public ParticleEventHandlerWriter {
+	public:
+		DoFreezeEventHandlerWriter() {}
+		virtual ~DoFreezeEventHandlerWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DO_FREEZE_EVENT_HANDLER_TOKENS_H__ */

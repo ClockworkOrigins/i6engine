@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_DO_AFFECTOR_EVENT_HANDLER_TOKENS_H__
 #define __PU_DO_AFFECTOR_EVENT_HANDLER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEventHandlerTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The DoAffectorEventHandlerTranslator parses 'DoAffectorEventHandler' tokens
 	*/
-	class _ParticleUniverseExport DoAffectorEventHandlerTranslator : public ScriptTranslator
-	{
-		public:
-			DoAffectorEventHandlerTranslator(void){};
-			~DoAffectorEventHandlerTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport DoAffectorEventHandlerTranslator : public ScriptTranslator {
+	public:
+		DoAffectorEventHandlerTranslator() {}
+		~DoAffectorEventHandlerTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport DoAffectorEventHandlerWriter : public ParticleEventHandlerWriter
-	{
-		public:
+	class _ParticleUniverseExport DoAffectorEventHandlerWriter : public ParticleEventHandlerWriter {
+	public:
+		DoAffectorEventHandlerWriter() {}
+		virtual ~DoAffectorEventHandlerWriter() {}
 
-			DoAffectorEventHandlerWriter(void) {};
-			virtual ~DoAffectorEventHandlerWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_DO_AFFECTOR_EVENT_HANDLER_TOKENS_H__ */

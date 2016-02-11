@@ -21,22 +21,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleEventHandlers/ParticleUniverseDoStopSystemEventHandler.h"
 #include "ParticleEventHandlers/ParticleUniverseDoStopSystemEventHandlerTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void DoStopSystemEventHandlerWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+#include "ParticleUniverseScriptSerializer.h"
+
+#include "ParticleEventHandlers/ParticleUniverseDoStopSystemEventHandler.h"
+
+namespace ParticleUniverse {
+	
+	void DoStopSystemEventHandlerWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a DoStopSystemEventHandler
-		const DoStopSystemEventHandler* eventHandler = static_cast<const DoStopSystemEventHandler*>(element);
+		const DoStopSystemEventHandler* eventHandler = static_cast<const DoStopSystemEventHandler *>(element);
 
 		// Write the header of the DoStopSystemEventHandler
 		serializer->writeLine(token[TOKEN_HANDLER], eventHandler->getEventHandlerType(), eventHandler->getName(), 12);
@@ -49,4 +44,4 @@ namespace ParticleUniverse
 		serializer->writeLine("}", 12);
 	}
 
-}
+} /* namespace ParticleUniverse */

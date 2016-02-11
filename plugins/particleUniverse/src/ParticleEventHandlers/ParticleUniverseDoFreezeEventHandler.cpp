@@ -21,22 +21,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleEventHandlers/ParticleUniverseDoFreezeEventHandler.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void DoFreezeEventHandler::_handle (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (!particle)
+#include "ParticleUniverseParticle.h"
+
+namespace ParticleUniverse {
+	
+	void DoFreezeEventHandler::_handle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (!particle) {
 			return;
+		}
 
 		particle->setFreezed(true);
 	}
-}
+
+} /* namespace ParticleUniverse */

@@ -21,52 +21,39 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleEventHandlers/ParticleUniverseDoScaleEventHandler.h"
 #include "ParticleEventHandlers/ParticleUniverseDoScaleEventHandlerTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool DoScaleEventHandlerTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleEventHandler* evt = any_cast<ParticleEventHandler*>(prop->parent->context);
-		DoScaleEventHandler* handler = static_cast<DoScaleEventHandler*>(evt);
+#include "ParticleUniverseAny.h"
+#include "ParticleUniverseCommon.h"
+#include "ParticleUniverseScriptSerializer.h"
 
-		if (prop->name == token[TOKEN_DOSCALE_FRACTION])
-		{
+#include "ParticleEventHandlers/ParticleUniverseDoScaleEventHandler.h"
+
+namespace ParticleUniverse {
+	
+	bool DoScaleEventHandlerTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleEventHandler * evt = any_cast<ParticleEventHandler *>(prop->parent->context);
+		DoScaleEventHandler * handler = static_cast<DoScaleEventHandler *>(evt);
+
+		if (prop->name == token[TOKEN_DOSCALE_FRACTION]) {
 			// Property: scale_fraction
-			if (passValidateProperty(compiler, prop, token[TOKEN_DOSCALE_FRACTION], VAL_REAL))
-			{
-				Real val = 0.0f;
-				if(getReal(prop->values.front(), &val))
-				{
+			if (passValidateProperty(compiler, prop, token[TOKEN_DOSCALE_FRACTION], VAL_REAL)) {
+				Real val = 0.0;
+				if (getReal(prop->values.front(), &val)) {
 					handler->setScaleFraction(val);
 					return true;
 				}
 			}
-		}
-		else if (prop->name == token[TOKEN_DOSCALE_TYPE])
-		{
+		} else if (prop->name == token[TOKEN_DOSCALE_TYPE]) {
 			// Property: scale_type
-			if (passValidateProperty(compiler, prop, token[TOKEN_DOSCALE_TYPE], VAL_STRING))
-			{
+			if (passValidateProperty(compiler, prop, token[TOKEN_DOSCALE_TYPE], VAL_STRING)) {
 				String val;
-				if(getString(prop->values.front(), &val))
-				{
-					if (val == token[TOKEN_TIME_TO_LIVE] || val == token[TOKEN_DOSCALE_TIME_TO_LIVE])
-					{
+				if (getString(prop->values.front(), &val)) {
+					if (val == token[TOKEN_TIME_TO_LIVE] || val == token[TOKEN_DOSCALE_TIME_TO_LIVE]) {
 						handler->setScaleType(DoScaleEventHandler::ST_TIME_TO_LIVE);
 						return true;
-					}
-					else if (val == token[TOKEN_VELOCITY] || val == token[TOKEN_DOSCALE_VELOCITY])
-					{
+					} else if (val == token[TOKEN_VELOCITY] || val == token[TOKEN_DOSCALE_VELOCITY]) {
 						handler->setScaleType(DoScaleEventHandler::ST_VELOCITY);
 						return true;
 					}
@@ -76,19 +63,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool DoScaleEventHandlerTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool DoScaleEventHandlerTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void DoScaleEventHandlerWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void DoScaleEventHandlerWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a DoScaleEventHandler
-		const DoScaleEventHandler* eventHandler = static_cast<const DoScaleEventHandler*>(element);
+		const DoScaleEventHandler * eventHandler = static_cast<const DoScaleEventHandler *>(element);
 
 		// Write the header of the DoScaleEventHandler
 		serializer->writeLine(token[TOKEN_HANDLER], eventHandler->getEventHandlerType(), eventHandler->getName(), 12);
@@ -98,14 +81,17 @@ namespace ParticleUniverse
 		ParticleEventHandlerWriter::write(serializer, element);
 
 		// Write own attributes
-		if (!almostEquals(eventHandler->getScaleFraction(), DoScaleEventHandler::DEFAULT_SCALE_FRACTION)) serializer->writeLine(
-			token[TOKEN_DOSCALE_FRACTION], StringConverter::toString(eventHandler->getScaleFraction()), 16);
+		if (!almostEquals(eventHandler->getScaleFraction(), DoScaleEventHandler::DEFAULT_SCALE_FRACTION)) {
+			serializer->writeLine(token[TOKEN_DOSCALE_FRACTION], StringConverter::toString(eventHandler->getScaleFraction()), 16);
+		}
 		String scaleType = token[TOKEN_DOSCALE_TIME_TO_LIVE];
-		if (eventHandler->getScaleType() == DoScaleEventHandler::ST_VELOCITY) scaleType = token[TOKEN_DOSCALE_VELOCITY];
+		if (eventHandler->getScaleType() == DoScaleEventHandler::ST_VELOCITY) {
+			scaleType = token[TOKEN_DOSCALE_VELOCITY];
+		}
 		serializer->writeLine(token[TOKEN_DOSCALE_TYPE], scaleType, 16);
 
 		// Write the close bracket
 		serializer->writeLine("}", 12);
 	}
 
-}
+} /* namespace ParticleUniverse */
