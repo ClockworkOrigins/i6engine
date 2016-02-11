@@ -24,49 +24,40 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONCLEAR_OBSERVER_H__
 #define __PU_ONCLEAR_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class is used to observe whether all particles of a technique are no longer emitted.
     */
-	class _ParticleUniverseExport OnClearObserver : public ParticleObserver
-	{
-		protected:
-			bool mContinue;
+	class _ParticleUniverseExport OnClearObserver : public ParticleObserver {
+	public:
+		OnClearObserver() : ParticleObserver(), mContinue(false) {
+		}
+	    virtual ~OnClearObserver() {}
 
-		public:
-			OnClearObserver(void) : ParticleObserver(),
-				mContinue(false)
-			{
-			};
-	        virtual ~OnClearObserver(void) {};
+		/** 
+	    */
+		virtual void _notifyStart();
 
-			/** 
-	        */
-			virtual void _notifyStart (void);
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique,
-				Particle* particle, 
-				Real timeElapsed);
+		/** The _processParticle() function is overridden, because we don´t observe an individual particle.
+			even if there isn´t a particle left anymore (and that is the situation we want to validate).
+	    */
+		virtual void _processParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed, bool firstParticle);
 
-			/** The _processParticle() function is overridden, because we don´t observe an individual particle.
-				even if there isn´t a particle left anymore (and that is the situation we want to validate).
-	        */
-			virtual void _processParticle(ParticleTechnique* particleTechnique, 
-				Particle* particle, 
-				Real timeElapsed, 
-				bool firstParticle);
+		/** Instead of the _processParticle(), the _postProcessParticles() is used because it is called
+			even if there isn´t a particle left anymore (and that is the situation we want to validate).
+	    */
+		virtual void _postProcessParticles(ParticleTechnique * technique, Real timeElapsed);
 
-			/** Instead of the _processParticle(), the _postProcessParticles() is used because it is called
-				even if there isn´t a particle left anymore (and that is the situation we want to validate).
-	        */
-			virtual void _postProcessParticles(ParticleTechnique* technique, Real timeElapsed);
+	protected:
+		bool mContinue;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONCLEAR_OBSERVER_H__ */

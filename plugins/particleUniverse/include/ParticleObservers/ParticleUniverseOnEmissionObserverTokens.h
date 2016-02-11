@@ -24,24 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONEMISSION_OBSERVER_TOKENS_H__
 #define __PU_ONEMISSION_OBSERVER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseObserverTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** 
     */
-	class _ParticleUniverseExport OnEmissionObserverWriter : public ParticleObserverWriter
-	{
-		public:
-			OnEmissionObserverWriter(void) {};
-			virtual ~OnEmissionObserverWriter(void) {};
+	class _ParticleUniverseExport OnEmissionObserverWriter : public ParticleObserverWriter {
+	public:
+		OnEmissionObserverWriter() {}
+		virtual ~OnEmissionObserverWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONEMISSION_OBSERVER_TOKENS_H__ */

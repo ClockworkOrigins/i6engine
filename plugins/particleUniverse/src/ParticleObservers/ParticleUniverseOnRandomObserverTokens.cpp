@@ -21,32 +21,25 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleObservers/ParticleUniverseOnRandomObserver.h"
 #include "ParticleObservers/ParticleUniverseOnRandomObserverTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool OnRandomObserverTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleObserver* ob = any_cast<ParticleObserver*>(prop->parent->context);
-		OnRandomObserver* observer = static_cast<OnRandomObserver*>(ob);
+#include "ParticleUniverseCommon.h"
+#include "ParticleUniverseScriptSerializer.h"
 
-		if (prop->name == token[TOKEN_ONRANDOM_THRESHOLD])
-		{
+#include "ParticleObservers/ParticleUniverseOnRandomObserver.h"
+
+namespace ParticleUniverse {
+	
+	bool OnRandomObserverTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleObserver * ob = any_cast<ParticleObserver *>(prop->parent->context);
+		OnRandomObserver * observer = static_cast<OnRandomObserver *>(ob);
+
+		if (prop->name == token[TOKEN_ONRANDOM_THRESHOLD]) {
 			// Property: random_threshold
-			if (passValidateProperty(compiler, prop, token[TOKEN_ONRANDOM_THRESHOLD], VAL_REAL))
-			{
-				Real val = 0.0f;
-				if(getReal(prop->values.front(), &val))
-				{
+			if (passValidateProperty(compiler, prop, token[TOKEN_ONRANDOM_THRESHOLD], VAL_REAL)) {
+				Real val = 0.0;
+				if (getReal(prop->values.front(), &val)) {
 					observer->setThreshold(val);
 					return true;
 				}
@@ -55,19 +48,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool OnRandomObserverTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool OnRandomObserverTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void OnRandomObserverWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void OnRandomObserverWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a OnRandomObserver
-		const OnRandomObserver* observer = static_cast<const OnRandomObserver*>(element);
+		const OnRandomObserver * observer = static_cast<const OnRandomObserver *>(element);
 
 		// Write the header of the OnRandomObserver
 		serializer->writeLine(token[TOKEN_OBSERVER], observer->getObserverType(), observer->getName(), 8);
@@ -77,11 +66,12 @@ namespace ParticleUniverse
 		ParticleObserverWriter::write(serializer, element);
 
 		// Write own attributes
-		if (!almostEquals(observer->getThreshold(), OnRandomObserver::DEFAULT_THRESHOLD)) serializer->writeLine(
-			token[TOKEN_ONRANDOM_THRESHOLD], StringConverter::toString(observer->getThreshold()), 12);
+		if (!almostEquals(observer->getThreshold(), OnRandomObserver::DEFAULT_THRESHOLD)) {
+			serializer->writeLine(token[TOKEN_ONRANDOM_THRESHOLD], StringConverter::toString(observer->getThreshold()), 12);
+		}
 
 		// Write the close bracket
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

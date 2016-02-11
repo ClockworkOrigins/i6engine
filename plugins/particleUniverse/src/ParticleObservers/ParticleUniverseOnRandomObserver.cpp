@@ -21,49 +21,38 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleObservers/ParticleUniverseOnRandomObserver.h"
 
-namespace ParticleUniverse
-{
-	// Constants
-	const Real OnRandomObserver::DEFAULT_THRESHOLD = 0.5f;
+#include "ParticleUniverseMath.h"
 
-	//-----------------------------------------------------------------------
-	OnRandomObserver::OnRandomObserver(void) : 
-		ParticleObserver(),
-		mThreshold(DEFAULT_THRESHOLD)
-	{
+namespace ParticleUniverse {
+
+	// Constants
+	const Real OnRandomObserver::DEFAULT_THRESHOLD = 0.5;
+
+	OnRandomObserver::OnRandomObserver() : ParticleObserver(), mThreshold(DEFAULT_THRESHOLD) {
 	}
-	//-----------------------------------------------------------------------
-	void OnRandomObserver::_preProcessParticles(ParticleTechnique* technique, Real timeElapsed)
-	{
+	
+	void OnRandomObserver::_preProcessParticles(ParticleTechnique * technique, Real timeElapsed) {
 		// Call parent
 		ParticleObserver::_preProcessParticles(technique, timeElapsed);
 
 		// Handle the _observe here
 		_handleObserve(technique, 0, timeElapsed);
 	}
-	//-----------------------------------------------------------------------
-	void OnRandomObserver::_processParticle(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed, bool firstParticle)
-	{
+	
+	void OnRandomObserver::_processParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed, bool firstParticle) {
 		// No need to determine per particle
 	}
-	//-----------------------------------------------------------------------
-	bool OnRandomObserver::_observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+	
+	bool OnRandomObserver::_observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		return (Math::UnitRandom() > mThreshold);
 	}
-	//-----------------------------------------------------------------------
-	void OnRandomObserver::copyAttributesTo(ParticleObserver* observer)
-	{
+	
+	void OnRandomObserver::copyAttributesTo(ParticleObserver * observer) {
 		ParticleObserver::copyAttributesTo(observer);
-		OnRandomObserver* onRandomObserver = static_cast<OnRandomObserver*>(observer);
+		OnRandomObserver * onRandomObserver = static_cast<OnRandomObserver *>(observer);
 		onRandomObserver->mThreshold = mThreshold;
 	}
-}
+
+} /* namespace ParticleUniverse */

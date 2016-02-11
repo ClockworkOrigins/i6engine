@@ -21,22 +21,16 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleObservers/ParticleUniverseOnEmissionObserver.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool OnEmissionObserver::_observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (!particle)
+namespace ParticleUniverse {
+	
+	bool OnEmissionObserver::_observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (!particle) {
 			return false;
+		}
 
 		return particle->hasEventFlags(Particle::PEF_EMITTED);
 	}
-}
+
+} /* namespace ParticleUniverse */

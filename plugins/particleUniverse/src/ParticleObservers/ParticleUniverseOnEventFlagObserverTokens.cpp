@@ -21,6 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
+#include "ParticleObservers/ParticleUniverseOnEventFlagObserverTokens.h"
+
 #include "ParticleUniversePCH.h"
 
 #ifndef PARTICLE_UNIVERSE_EXPORTS
@@ -28,25 +30,20 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 
 #include "ParticleObservers/ParticleUniverseOnEventFlagObserver.h"
-#include "ParticleObservers/ParticleUniverseOnEventFlagObserverTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool OnEventFlagObserverTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
+namespace ParticleUniverse {
+	
+	bool OnEventFlagObserverTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node)
 	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleObserver* ob = any_cast<ParticleObserver*>(prop->parent->context);
-		OnEventFlagObserver* observer = static_cast<OnEventFlagObserver*>(ob);
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleObserver * ob = any_cast<ParticleObserver *>(prop->parent->context);
+		OnEventFlagObserver * observer = static_cast<OnEventFlagObserver *>(ob);
 
-		if (prop->name == token[TOKEN_ONEVENT_FLAG])
-		{
+		if (prop->name == token[TOKEN_ONEVENT_FLAG]) {
 			// Property: event_flag
-			if (passValidateProperty(compiler, prop, token[TOKEN_ONEVENT_FLAG], VAL_UINT))
-			{
+			if (passValidateProperty(compiler, prop, token[TOKEN_ONEVENT_FLAG], VAL_UINT)) {
 				uint32 val = 0;
-				if(getUInt(prop->values.front(), &val))
-				{
+				if (getUInt(prop->values.front(), &val)) {
 					observer->setEventFlag(val);
 					return true;
 				}
@@ -55,19 +52,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool OnEventFlagObserverTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool OnEventFlagObserverTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void OnEventFlagObserverWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void OnEventFlagObserverWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a OnEventFlagObserver
-		const OnEventFlagObserver* observer = static_cast<const OnEventFlagObserver*>(element);
+		const OnEventFlagObserver * observer = static_cast<const OnEventFlagObserver *>(element);
 
 		// Write the header of the OnEventFlagObserver
 		serializer->writeLine(token[TOKEN_OBSERVER], observer->getObserverType(), observer->getName(), 8);
@@ -77,11 +70,12 @@ namespace ParticleUniverse
 		ParticleObserverWriter::write(serializer, element);
 
 		// Write own attributes
-		if (observer->getEventFlag() != OnEventFlagObserver::DEFAULT_EVENT_FLAG) serializer->writeLine(
-			token[TOKEN_ONEVENT_FLAG], StringConverter::toString(observer->getEventFlag()), 12);
+		if (observer->getEventFlag() != OnEventFlagObserver::DEFAULT_EVENT_FLAG) {
+			serializer->writeLine(token[TOKEN_ONEVENT_FLAG], StringConverter::toString(observer->getEventFlag()), 12);
+		}
 
 		// Write the close bracket
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

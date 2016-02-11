@@ -24,27 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONEMISSION_OBSERVER_H__
 #define __PU_ONEMISSION_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class is used to observe whether a Particle is just emitted.
     */
-	class _ParticleUniverseExport OnEmissionObserver : public ParticleObserver
-	{
-		protected:
+	class _ParticleUniverseExport OnEmissionObserver : public ParticleObserver {
+	public:
+		OnEmissionObserver() : ParticleObserver() {
+		}
+	    virtual ~OnEmissionObserver() {}
 
-		public:
-			OnEmissionObserver(void) : ParticleObserver()
-			{
-			};
-	        virtual ~OnEmissionObserver(void) {};
-
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONEMISSION_OBSERVER_H__ */

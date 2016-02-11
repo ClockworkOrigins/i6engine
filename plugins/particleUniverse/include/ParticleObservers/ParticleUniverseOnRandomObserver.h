@@ -24,47 +24,45 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONRANDOM_OBSERVER_H__
 #define __PU_ONRANDOM_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class is used to observe whether a random generated number is within a specified interval.
     */
-	class _ParticleUniverseExport OnRandomObserver : public ParticleObserver
-	{
-		protected:
-			Real mThreshold; // Value between 0..1
+	class _ParticleUniverseExport OnRandomObserver : public ParticleObserver {
+	public:
+		// Constants
+		static const Real DEFAULT_THRESHOLD;
 
-		public:
-			// Constants
-			static const Real DEFAULT_THRESHOLD;
+		OnRandomObserver();
+	    virtual ~OnRandomObserver() {}
 
-			OnRandomObserver(void);
-	        virtual ~OnRandomObserver(void) {};
+		/** See ParticleObserver::_preProcessParticles()
+	    */
+		virtual void _preProcessParticles(ParticleTechnique * technique, Real timeElapsed);
 
-			/** See ParticleObserver::_preProcessParticles()
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* technique, Real timeElapsed);
+		/** See ParticleObserver::_processParticle()
+	    */
+		virtual void _processParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed, bool firstParticle);
 
-			/** See ParticleObserver::_processParticle()
-	        */
-			virtual void _processParticle(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed, bool firstParticle);
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		Real getThreshold() const { return mThreshold; }
+		void setThreshold(Real threshold) { mThreshold = threshold; }
 
-			/** 
-	        */
-			Real getThreshold(void) const {return mThreshold;};
-			void setThreshold(Real threshold){mThreshold = threshold;};
+		/** Copy attributes to another observer.
+	    */
+		virtual void copyAttributesTo(ParticleObserver * observer);
 
-			/** Copy attributes to another observer.
-	        */
-			virtual void copyAttributesTo (ParticleObserver* observer);
+	protected:
+		Real mThreshold; // Value between 0..1
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONRANDOM_OBSERVER_H__ */

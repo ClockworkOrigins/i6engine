@@ -21,22 +21,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleObservers/ParticleUniverseOnQuotaObserver.h"
 #include "ParticleObservers/ParticleUniverseOnQuotaObserverTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void OnQuotaObserverWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+#include "ParticleUniverseScriptSerializer.h"
+
+#include "ParticleObservers/ParticleUniverseOnQuotaObserver.h"
+
+namespace ParticleUniverse {
+
+	void OnQuotaObserverWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a OnQuotaObserver
-		const OnQuotaObserver* observer = static_cast<const OnQuotaObserver*>(element);
+		const OnQuotaObserver * observer = static_cast<const OnQuotaObserver *>(element);
 
 		// Write the header of the OnQuotaObserver
 		serializer->writeLine(token[TOKEN_OBSERVER], observer->getObserverType(), observer->getName(), 8);
@@ -49,4 +44,4 @@ namespace ParticleUniverse
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

@@ -24,24 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONQUOTA_OBSERVER_TOKENS_H__
 #define __PU_ONQUOTA_OBSERVER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseObserverTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** 
     */
-	class _ParticleUniverseExport OnQuotaObserverWriter : public ParticleObserverWriter
-	{
-		public:
-			OnQuotaObserverWriter(void) {};
-			virtual ~OnQuotaObserverWriter(void) {};
+	class _ParticleUniverseExport OnQuotaObserverWriter : public ParticleObserverWriter {
+	public:
+		OnQuotaObserverWriter() {}
+		virtual ~OnQuotaObserverWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONQUOTA_OBSERVER_TOKENS_H__ */

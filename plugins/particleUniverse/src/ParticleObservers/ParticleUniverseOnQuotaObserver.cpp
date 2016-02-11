@@ -21,62 +21,53 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleObservers/ParticleUniverseOnQuotaObserver.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool OnQuotaObserver::_observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+#include "ParticleUniverseTechnique.h"
+
+namespace ParticleUniverse {
+	
+	bool OnQuotaObserver::_observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		return mResult;
 	}
-	//-----------------------------------------------------------------------
-	void OnQuotaObserver::_postProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
+	
+	void OnQuotaObserver::_postProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
 		mResult = false;
 		size_t quota = 0;
-		if (mParticleTypeToObserveSet)
-		{
+		if (mParticleTypeToObserveSet) {
 			// Type to observe is set, so validate only that one
-			switch (mParticleTypeToObserve)
-			{
-				case Particle::PT_VISUAL:
-					quota = particleTechnique->getVisualParticleQuota();
+			switch (mParticleTypeToObserve) {
+			case Particle::PT_VISUAL: {
+				quota = particleTechnique->getVisualParticleQuota();
 				break;
-				case Particle::PT_EMITTER:
-					quota = particleTechnique->getEmittedEmitterQuota();
+			}
+			case Particle::PT_EMITTER: {
+				quota = particleTechnique->getEmittedEmitterQuota();
 				break;
-				case Particle::PT_AFFECTOR:
-					quota = particleTechnique->getEmittedAffectorQuota();
+			}
+			case Particle::PT_AFFECTOR: {
+				quota = particleTechnique->getEmittedAffectorQuota();
 				break;
-				case Particle::PT_TECHNIQUE:
-					quota = particleTechnique->getEmittedTechniqueQuota();
+			}
+			case Particle::PT_TECHNIQUE: {
+				quota = particleTechnique->getEmittedTechniqueQuota();
 				break;
-				case Particle::PT_SYSTEM:
-					quota = particleTechnique->getEmittedAffectorQuota();
+			}
+			case Particle::PT_SYSTEM: {
+				quota = particleTechnique->getEmittedAffectorQuota();
 				break;
-				default: {
-					break;
-				}
+			}
+			default: {
+				break;
+			}
 			}
 
 			mResult = particleTechnique->getNumberOfEmittedParticles(mParticleTypeToObserve) >= quota;
-		}
-		else
-		{
+		} else {
 			// Type to observe is not set, so check them all
-			quota = particleTechnique->getVisualParticleQuota() + 
-				particleTechnique->getEmittedEmitterQuota() + 
-				particleTechnique->getEmittedTechniqueQuota() + 
-				particleTechnique->getEmittedAffectorQuota() +
-				particleTechnique->getEmittedSystemQuota();
+			quota = particleTechnique->getVisualParticleQuota() + particleTechnique->getEmittedEmitterQuota() + particleTechnique->getEmittedTechniqueQuota() + particleTechnique->getEmittedAffectorQuota() + particleTechnique->getEmittedSystemQuota();
 			mResult = particleTechnique->getNumberOfEmittedParticles() >= quota;
 		}
 	}
-}
+
+} /* namespace ParticleUniverse */

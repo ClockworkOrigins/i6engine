@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONTIME_OBSERVER_TOKENS_H__
 #define __PU_ONTIME_OBSERVER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseObserverTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The OnTimeObserverTranslator parses 'OnTimeObserver' tokens
 	*/
-	class _ParticleUniverseExport OnTimeObserverTranslator : public ScriptTranslator
-	{
-		public:
-			OnTimeObserverTranslator(void){};
-			~OnTimeObserverTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport OnTimeObserverTranslator : public ScriptTranslator {
+	public:
+		OnTimeObserverTranslator() {}
+		~OnTimeObserverTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport OnTimeObserverWriter : public ParticleObserverWriter
-	{
-		public:
+	class _ParticleUniverseExport OnTimeObserverWriter : public ParticleObserverWriter {
+	public:
+		OnTimeObserverWriter() {}
+		virtual ~OnTimeObserverWriter() {}
 
-			OnTimeObserverWriter(void) {};
-			virtual ~OnTimeObserverWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONTIME_OBSERVER_TOKENS_H__ */

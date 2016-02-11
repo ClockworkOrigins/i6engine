@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONCOUNT_OBSERVER_TOKENS_H__
 #define __PU_ONCOUNT_OBSERVER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseObserverTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The OnCountObserverTranslator parses 'OnCountObserver' tokens
 	*/
-	class _ParticleUniverseExport OnCountObserverTranslator : public ScriptTranslator
-	{
-		public:
-			OnCountObserverTranslator(void){};
-			~OnCountObserverTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport OnCountObserverTranslator : public ScriptTranslator {
+	public:
+		OnCountObserverTranslator() {}
+		~OnCountObserverTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport OnCountObserverWriter : public ParticleObserverWriter
-	{
-		public:
+	class _ParticleUniverseExport OnCountObserverWriter : public ParticleObserverWriter {
+	public:
+		OnCountObserverWriter() {}
+		virtual ~OnCountObserverWriter() {}
 
-			OnCountObserverWriter(void) {};
-			virtual ~OnCountObserverWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONCOUNT_OBSERVER_TOKENS_H__ */

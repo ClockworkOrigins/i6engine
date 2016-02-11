@@ -21,19 +21,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleObservers/ParticleUniverseOnCollisionObserver.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool OnCollisionObserver::_observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+namespace ParticleUniverse {
+
+	bool OnCollisionObserver::_observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		return particle->hasEventFlags(Particle::PEF_COLLIDED);
 	}
 }

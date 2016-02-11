@@ -21,77 +21,52 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleObservers/ParticleUniverseOnCountObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	const uint OnCountObserver::DEFAULT_THRESHOLD = 0;
 	const ComparisionOperator OnCountObserver::DEFAULT_COMPARE = CO_LESS_THAN;
 
-	//-----------------------------------------------------------------------
-	OnCountObserver::OnCountObserver(void) : ParticleObserver(),
-		mCount(1),
-		mThreshold(DEFAULT_THRESHOLD),
-		mCompare(DEFAULT_COMPARE)
-	{
+	OnCountObserver::OnCountObserver() : ParticleObserver(), mCount(1), mThreshold(DEFAULT_THRESHOLD), mCompare(DEFAULT_COMPARE) {
 	}
-	//-----------------------------------------------------------------------
-	void OnCountObserver::_notifyStart (void)
-	{
+	
+	void OnCountObserver::_notifyStart() {
 		ParticleObserver::_notifyStart();
 
 		// At a restart the counter must be reset again.
 		mCount = 1;
 	}
-	//-----------------------------------------------------------------------
-	bool OnCountObserver::_observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (!particle)
+	
+	bool OnCountObserver::_observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (!particle) {
 			return false;
+		}
 
-		if (!particle->hasEventFlags(Particle::PEF_EMITTED))
+		if (!particle->hasEventFlags(Particle::PEF_EMITTED)) {
 			return false;
+		}
 		
-		if (mCompare == CO_GREATER_THAN)
-		{
-			if (mCount > mThreshold)
-			{
+		if (mCompare == CO_GREATER_THAN) {
+			if (mCount > mThreshold) {
 				return true;
-			}
-			else
-			{
+			} else {
 				mCount++;
 				return false;
 			}
-		}
-		else if (mCompare == CO_LESS_THAN)
-		{
-			if (mCount < mThreshold)
-			{
+		} else if (mCompare == CO_LESS_THAN) {
+			if (mCount < mThreshold) {
 				mCount++;
 				return true;
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		else
-		{
-			if (mCount == mThreshold)
-			{
+		} else {
+			if (mCount == mThreshold) {
 				mCount++;
 				return true;
-			}
-			else
-			{
+			} else {
 				mCount++;
 				return false;
 			}
@@ -99,14 +74,14 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	void OnCountObserver::copyAttributesTo(ParticleObserver* observer)
-	{
+	
+	void OnCountObserver::copyAttributesTo(ParticleObserver * observer) {
 		ParticleObserver::copyAttributesTo(observer);
 
-		OnCountObserver* onCountObserver = static_cast<OnCountObserver*>(observer);
+		OnCountObserver * onCountObserver = static_cast<OnCountObserver *>(observer);
 		onCountObserver->mCount = mCount;
 		onCountObserver->mThreshold = mThreshold;
 		onCountObserver->mCompare = mCompare;
 	}
-}
+
+} /* namespace ParticleUniverse */

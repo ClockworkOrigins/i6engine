@@ -24,78 +24,86 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONPOSITION_OBSERVER_H__
 #define __PU_ONPOSITION_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseCommon.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class is used to observe whether a Particle reaches a certain position.
     */
-	class _ParticleUniverseExport OnPositionObserver : public ParticleObserver
-	{
-		protected:
-			Real mPositionXThreshold;
-			Real mPositionYThreshold;
-			Real mPositionZThreshold;
-			bool mPositionXThresholdSet;
-			bool mPositionYThresholdSet;
-			bool mPositionZThresholdSet;
-			ComparisionOperator mComparePositionX;
-			ComparisionOperator mComparePositionY;
-			ComparisionOperator mComparePositionZ;
+	class _ParticleUniverseExport OnPositionObserver : public ParticleObserver {
+	public:
+		// Constants
+		static const Vector3 DEFAULT_POSITION_THRESHOLD;
 
-		public:
-			// Constants
-			static const Vector3 DEFAULT_POSITION_THRESHOLD;
+		OnPositionObserver();
+	    virtual ~OnPositionObserver() {}
 
-			OnPositionObserver(void);
-	        virtual ~OnPositionObserver(void) {}
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+			*/
+		void setPositionXThreshold(Real threshold) {
+			mPositionXThreshold = threshold;
+			mPositionXThresholdSet = true;
+		}
+		void setPositionYThreshold(Real threshold) {
+			mPositionYThreshold = threshold;
+			mPositionYThresholdSet = true;
+		}
+		void setPositionZThreshold(Real threshold) {
+			mPositionZThreshold = threshold;
+			mPositionZThresholdSet = true;
+		}
 
-			/** 
-			 */
-			void setPositionXThreshold(Real threshold){mPositionXThreshold = threshold; mPositionXThresholdSet = true;}
-			void setPositionYThreshold(Real threshold){mPositionYThreshold = threshold; mPositionYThresholdSet = true;}
-			void setPositionZThreshold(Real threshold){mPositionZThreshold = threshold; mPositionZThresholdSet = true;}
+		/** 
+			*/
+		Real getPositionXThreshold() const { return mPositionXThreshold; }
+		Real getPositionYThreshold() const { return mPositionYThreshold; }
+		Real getPositionZThreshold() const { return mPositionZThreshold; }
 
-			/** 
-			 */
-			Real getPositionXThreshold(void) const {return mPositionXThreshold;}
-			Real getPositionYThreshold(void) const {return mPositionYThreshold;}
-			Real getPositionZThreshold(void) const {return mPositionZThreshold;}
+		/** 
+			*/
+		bool isPositionXThresholdSet() const { return mPositionXThresholdSet; }
+		bool isPositionYThresholdSet() const { return mPositionYThresholdSet; }
+		bool isPositionZThresholdSet() const { return mPositionZThresholdSet; }
 
-			/** 
-			 */
-			bool isPositionXThresholdSet(void) const {return mPositionXThresholdSet;}
-			bool isPositionYThresholdSet(void) const {return mPositionYThresholdSet;}
-			bool isPositionZThresholdSet(void) const {return mPositionZThresholdSet;}
+		/** 
+			*/
+		void resetPositionXThreshold() { mPositionXThresholdSet = false; }
+		void resetPositionYThreshold() { mPositionYThresholdSet = false; }
+		void resetPositionZThreshold() { mPositionZThresholdSet = false; }
 
-			/** 
-			 */
-			void resetPositionXThreshold(void) {mPositionXThresholdSet = false;}
-			void resetPositionYThreshold(void) {mPositionYThresholdSet = false;}
-			void resetPositionZThreshold(void) {mPositionZThresholdSet = false;}
+		/** 
+			*/
+		void setComparePositionX(ComparisionOperator op) { mComparePositionX = op; }
+		void setComparePositionY(ComparisionOperator op) { mComparePositionY = op; }
+		void setComparePositionZ(ComparisionOperator op) { mComparePositionZ = op; }
 
-			/** 
-			 */
-			void setComparePositionX(ComparisionOperator op){mComparePositionX = op;}
-			void setComparePositionY(ComparisionOperator op){mComparePositionY = op;}
-			void setComparePositionZ(ComparisionOperator op){mComparePositionZ = op;}
+		/** 
+			*/
+		ComparisionOperator getComparePositionX() const { return mComparePositionX; }
+		ComparisionOperator getComparePositionY() const { return mComparePositionY; }
+		ComparisionOperator getComparePositionZ() const { return mComparePositionZ; }
 
-			/** 
-			 */
-			ComparisionOperator getComparePositionX(void) const {return mComparePositionX;}
-			ComparisionOperator getComparePositionY(void) const {return mComparePositionY;}
-			ComparisionOperator getComparePositionZ(void) const {return mComparePositionZ;}
+		/** Copy attributes to another observer.
+	    */
+		virtual void copyAttributesTo(ParticleObserver * observer);
 
-			/** Copy attributes to another observer.
-	        */
-			virtual void copyAttributesTo (ParticleObserver* observer);
+	protected:
+		Real mPositionXThreshold;
+		Real mPositionYThreshold;
+		Real mPositionZThreshold;
+		bool mPositionXThresholdSet;
+		bool mPositionYThresholdSet;
+		bool mPositionZThresholdSet;
+		ComparisionOperator mComparePositionX;
+		ComparisionOperator mComparePositionY;
+		ComparisionOperator mComparePositionZ;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONPOSITION_OBSERVER_H__ */

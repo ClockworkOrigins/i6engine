@@ -24,27 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONEXPIRE_OBSERVER_H__
 #define __PU_ONEXPIRE_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class is used to observe whether a Particle has been expired.
     */
-	class _ParticleUniverseExport OnExpireObserver : public ParticleObserver
-	{
-		protected:
+	class _ParticleUniverseExport OnExpireObserver : public ParticleObserver {
+	public:
+		OnExpireObserver() : ParticleObserver() {
+		}
+	    virtual ~OnExpireObserver() {}
 
-		public:
-			OnExpireObserver(void) : ParticleObserver()
-			{
-			};
-	        virtual ~OnExpireObserver(void) {};
-
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONEXPIRE_OBSERVER_H__ */

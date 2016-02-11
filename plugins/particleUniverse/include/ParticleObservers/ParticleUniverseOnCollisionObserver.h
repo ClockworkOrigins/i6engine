@@ -24,31 +24,26 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONCOLLISION_OBSERVER_H__
 #define __PU_ONCOLLISION_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class is used to observe whether all particles of a technique are no longer emitted.
     */
-	class _ParticleUniverseExport OnCollisionObserver : public ParticleObserver
-	{
-		protected:
-			bool mContinue;
+	class _ParticleUniverseExport OnCollisionObserver : public ParticleObserver {
+	public:
+		OnCollisionObserver() : ParticleObserver() {
+		}
+	    virtual ~OnCollisionObserver() {}
 
-		public:
-			OnCollisionObserver(void) : ParticleObserver()
-			{
-			};
-	        virtual ~OnCollisionObserver(void) {};
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique,
-				Particle* particle, 
-				Real timeElapsed);
+	protected:
+		bool mContinue;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONCOLLISION_OBSERVER_H__ */

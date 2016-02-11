@@ -24,32 +24,28 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONQUOTA_OBSERVER_H__
 #define __PU_ONQUOTA_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class is used to observe whether all particles or all particles of a specific type are emitted.
     */
-	class _ParticleUniverseExport OnQuotaObserver : public ParticleObserver
-	{
-		protected:
-			bool mResult;
+	class _ParticleUniverseExport OnQuotaObserver : public ParticleObserver {
+	public:
+		OnQuotaObserver() : ParticleObserver(), mResult(false) {
+		}
+	    virtual ~OnQuotaObserver() {}
 
-		public:
-			OnQuotaObserver(void) : ParticleObserver(),
-				mResult(false)
-			{
-			};
-	        virtual ~OnQuotaObserver(void) {};
+		/** @copydoc ParticleObserver::_notifyStart */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** @copydoc ParticleObserver::_notifyStart */
-			virtual bool _observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** @copydoc ParticleObserver::_notifyStart */
+		virtual void _postProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed);
 
-			/** @copydoc ParticleObserver::_notifyStart */
-			virtual void _postProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);
+	protected:
+		bool mResult;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONQUOTA_OBSERVER_H__ */

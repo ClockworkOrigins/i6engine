@@ -24,58 +24,57 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONTIME_OBSERVER_H__
 #define __PU_ONTIME_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseCommon.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The OnTimeObserver observers how much time has been elapsed. This can be both the particles own time
 		and the time since the ParticleSystem was started.
     */
-	class _ParticleUniverseExport OnTimeObserver : public ParticleObserver
-	{
-		protected:
-			Real mThreshold;
-			ComparisionOperator mCompare;
-			bool mSinceStartSystem;
+	class _ParticleUniverseExport OnTimeObserver : public ParticleObserver {
+	public:
+		// Constants
+		static const Real DEFAULT_THRESHOLD;
+		static const bool DEFAULT_SINCE_START_SYSTEM;
 
-		public:
-			// Constants
-			static const Real DEFAULT_THRESHOLD;
-			static const bool DEFAULT_SINCE_START_SYSTEM;
+		OnTimeObserver();
+	    virtual ~OnTimeObserver() {}
 
-			OnTimeObserver(void);
-	        virtual ~OnTimeObserver(void) {}
+		/** In case there are no particles, but the observation returns true, the event handlers must still be
+			called.
+	    */
+		virtual void _preProcessParticles(ParticleTechnique * technique, Real timeElapsed);
 
-			/** In case there are no particles, but the observation returns true, the event handlers must still be
-				called.
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* technique, Real timeElapsed);
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		Real getThreshold() const { return mThreshold; }
+		void setThreshold(Real threshold) { mThreshold = threshold; }
 
-			/** 
-	        */
-			Real getThreshold(void) const {return mThreshold;}
-			void setThreshold(Real threshold){mThreshold = threshold;}
+		/** 
+	    */
+		ComparisionOperator getCompare() const { return mCompare; }
+		void setCompare(ComparisionOperator op) { mCompare = op; }
 
-			/** 
-	        */
-			ComparisionOperator getCompare(void) const {return mCompare;}
-			void setCompare(ComparisionOperator op){mCompare = op;}
+		/** 
+	    */
+		bool isSinceStartSystem() const { return mSinceStartSystem; }
+		void setSinceStartSystem(bool sinceStartSystem) { mSinceStartSystem = sinceStartSystem; }
 
-			/** 
-	        */
-			bool isSinceStartSystem(void) const {return mSinceStartSystem;}
-			void setSinceStartSystem(bool sinceStartSystem){mSinceStartSystem = sinceStartSystem;}
+		/** Copy attributes to another observer.
+	    */
+		virtual void copyAttributesTo(ParticleObserver * observer);
 
-			/** Copy attributes to another observer.
-	        */
-			virtual void copyAttributesTo (ParticleObserver* observer);
+	protected:
+		Real mThreshold;
+		ComparisionOperator mCompare;
+		bool mSinceStartSystem;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONTIME_OBSERVER_H__ */

@@ -21,69 +21,59 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleObservers/ParticleUniverseOnPositionObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	const Vector3 OnPositionObserver::DEFAULT_POSITION_THRESHOLD(0, 0, 0);
-
-	//-----------------------------------------------------------------------
-	OnPositionObserver::OnPositionObserver(void) : 
-		ParticleObserver(),
-		mPositionXThreshold(DEFAULT_POSITION_THRESHOLD.x),
-		mPositionYThreshold(DEFAULT_POSITION_THRESHOLD.y),
-		mPositionZThreshold(DEFAULT_POSITION_THRESHOLD.z),
-		mPositionXThresholdSet(false),
-		mPositionYThresholdSet(false),
-		mPositionZThresholdSet(false),
-		mComparePositionX(CO_LESS_THAN),
-		mComparePositionY(CO_LESS_THAN),
-		mComparePositionZ(CO_LESS_THAN)
-	{
+	
+	OnPositionObserver::OnPositionObserver() : ParticleObserver(), mPositionXThreshold(DEFAULT_POSITION_THRESHOLD.x), mPositionYThreshold(DEFAULT_POSITION_THRESHOLD.y), mPositionZThreshold(DEFAULT_POSITION_THRESHOLD.z), mPositionXThresholdSet(false), mPositionYThresholdSet(false), mPositionZThresholdSet(false), mComparePositionX(CO_LESS_THAN), mComparePositionY(CO_LESS_THAN), mComparePositionZ(CO_LESS_THAN) {
 	}
-	//-----------------------------------------------------------------------
-	bool OnPositionObserver::_observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (!particle)
+	
+	bool OnPositionObserver::_observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (!particle) {
 			return false;
+		}
 
 		// Added scale in V1.3.1
-		if (mPositionXThresholdSet && mComparePositionX == CO_LESS_THAN && particle->position.x < mPositionXThreshold * _mObserverScale.x)
+		if (mPositionXThresholdSet && mComparePositionX == CO_LESS_THAN && particle->position.x < mPositionXThreshold * _mObserverScale.x) {
 			return true;
-		if (mPositionXThresholdSet && mComparePositionX == CO_GREATER_THAN && particle->position.x > mPositionXThreshold * _mObserverScale.x)
+		}
+		if (mPositionXThresholdSet && mComparePositionX == CO_GREATER_THAN && particle->position.x > mPositionXThreshold * _mObserverScale.x) {
 			return true;
-		if (mPositionXThresholdSet && mComparePositionX == CO_EQUALS && almostEquals(particle->position.x, mPositionXThreshold * _mObserverScale.x))
+		}
+		if (mPositionXThresholdSet && mComparePositionX == CO_EQUALS && almostEquals(particle->position.x, mPositionXThreshold * _mObserverScale.x)) {
 			return true;
+		}
 
-		if (mPositionYThresholdSet && mComparePositionY == CO_LESS_THAN && particle->position.y < mPositionYThreshold * _mObserverScale.y)
+		if (mPositionYThresholdSet && mComparePositionY == CO_LESS_THAN && particle->position.y < mPositionYThreshold * _mObserverScale.y) {
 			return true;
-		if (mPositionYThresholdSet && mComparePositionY == CO_GREATER_THAN && particle->position.y > mPositionYThreshold * _mObserverScale.y)
+		}
+		if (mPositionYThresholdSet && mComparePositionY == CO_GREATER_THAN && particle->position.y > mPositionYThreshold * _mObserverScale.y) {
 			return true;
-		if (mPositionYThresholdSet && mComparePositionY == CO_EQUALS && almostEquals(particle->position.y, mPositionYThreshold * _mObserverScale.y))
+		}
+		if (mPositionYThresholdSet && mComparePositionY == CO_EQUALS && almostEquals(particle->position.y, mPositionYThreshold * _mObserverScale.y)) {
 			return true;
+		}
 
-		if (mPositionZThresholdSet && mComparePositionZ == CO_LESS_THAN && particle->position.z < mPositionZThreshold * _mObserverScale.z)
+		if (mPositionZThresholdSet && mComparePositionZ == CO_LESS_THAN && particle->position.z < mPositionZThreshold * _mObserverScale.z) {
 			return true;
-		if (mPositionZThresholdSet && mComparePositionZ == CO_GREATER_THAN && particle->position.z > mPositionZThreshold * _mObserverScale.z)
+		}
+		if (mPositionZThresholdSet && mComparePositionZ == CO_GREATER_THAN && particle->position.z > mPositionZThreshold * _mObserverScale.z) {
 			return true;
-		if (mPositionZThresholdSet && mComparePositionZ == CO_EQUALS && !almostEquals(particle->position.z, mPositionZThreshold * _mObserverScale.z))
+		}
+		if (mPositionZThresholdSet && mComparePositionZ == CO_EQUALS && !almostEquals(particle->position.z, mPositionZThreshold * _mObserverScale.z)) {
 			return true;
+		}
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	void OnPositionObserver::copyAttributesTo(ParticleObserver* observer)
-	{
+	
+	void OnPositionObserver::copyAttributesTo(ParticleObserver * observer) {
 		ParticleObserver::copyAttributesTo(observer);
 
-		OnPositionObserver* onPositionObserver = static_cast<OnPositionObserver*>(observer);
+		OnPositionObserver * onPositionObserver = static_cast<OnPositionObserver *>(observer);
 		onPositionObserver->mPositionXThreshold = mPositionXThreshold;
 		onPositionObserver->mPositionYThreshold = mPositionYThreshold;
 		onPositionObserver->mPositionZThreshold = mPositionZThreshold;
@@ -95,4 +85,4 @@ namespace ParticleUniverse
 		onPositionObserver->mPositionZThresholdSet = mPositionZThresholdSet;
 	}
 
-}
+} /* namespace ParticleUniverse */

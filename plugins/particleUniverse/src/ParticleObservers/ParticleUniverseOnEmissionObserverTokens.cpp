@@ -21,22 +21,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleObservers/ParticleUniverseOnEmissionObserver.h"
 #include "ParticleObservers/ParticleUniverseOnEmissionObserverTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void OnEmissionObserverWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+#include "ParticleUniverseScriptSerializer.h"
+
+#include "ParticleObservers/ParticleUniverseOnEmissionObserver.h"
+
+namespace ParticleUniverse {
+	
+	void OnEmissionObserverWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a OnEmissionObserver
-		const OnEmissionObserver* observer = static_cast<const OnEmissionObserver*>(element);
+		const OnEmissionObserver * observer = static_cast<const OnEmissionObserver *>(element);
 
 		// Write the header of the OnEmissionObserver
 		serializer->writeLine(token[TOKEN_OBSERVER], observer->getObserverType(), observer->getName(), 8);
@@ -49,4 +44,4 @@ namespace ParticleUniverse
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

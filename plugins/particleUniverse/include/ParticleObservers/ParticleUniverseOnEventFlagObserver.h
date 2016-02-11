@@ -24,39 +24,37 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONEVENTFLAG_OBSERVER_H__
 #define __PU_ONEVENTFLAG_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseCommon.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The OnEventFlagObserver looks at each particle is one or more eventflags are set.
     */
-	class _ParticleUniverseExport OnEventFlagObserver : public ParticleObserver
-	{
-		protected:
-			uint32 mEventFlag;
+	class _ParticleUniverseExport OnEventFlagObserver : public ParticleObserver {
+	public:
+		// Constants
+		static const uint32 DEFAULT_EVENT_FLAG;
 
-		public:
-			// Constants
-			static const uint32 DEFAULT_EVENT_FLAG;
+		OnEventFlagObserver();
+	    virtual ~OnEventFlagObserver() {}
 
-			OnEventFlagObserver(void);
-	        virtual ~OnEventFlagObserver(void) {};
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		uint32 getEventFlag() const { return mEventFlag; }
+		void setEventFlag(uint32 eventFlag) { mEventFlag = eventFlag; }
 
-			/** 
-	        */
-			uint32 getEventFlag(void) const {return mEventFlag;};
-			void setEventFlag(uint32 eventFlag){mEventFlag = eventFlag;};
+		/** Copy attributes to another observer.
+	    */
+		virtual void copyAttributesTo(ParticleObserver * observer);
 
-			/** Copy attributes to another observer.
-	        */
-			virtual void copyAttributesTo (ParticleObserver* observer);
+	protected:
+		uint32 mEventFlag;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONEVENTFLAG_OBSERVER_H__ */

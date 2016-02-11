@@ -24,46 +24,45 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONVELOCITY_OBSERVER_H__
 #define __PU_ONVELOCITY_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseCommon.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The OnVelocityObserver determines whether the velocity of a particles is lower or higher than a certain
 		threshold value.
     */
-	class _ParticleUniverseExport OnVelocityObserver : public ParticleObserver
-	{
-		protected:
-			Real mThreshold;
-			ComparisionOperator mCompare;
+	class _ParticleUniverseExport OnVelocityObserver : public ParticleObserver {
+	public:
+		// Constants
+		static const Real DEFAULT_VELOCITY_THRESHOLD;
 
-		public:
-			// Constants
-			static const Real DEFAULT_VELOCITY_THRESHOLD;
+		OnVelocityObserver();
+	    virtual ~OnVelocityObserver() {}
 
-			OnVelocityObserver(void);
-	        virtual ~OnVelocityObserver(void) {}
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		Real getThreshold() const { return mThreshold; }
+		void setThreshold(Real threshold) { mThreshold = threshold; }
 
-			/** 
-	        */
-			Real getThreshold(void) const {return mThreshold;}
-			void setThreshold(Real threshold){mThreshold = threshold;}
+		/** 
+	    */
+		ComparisionOperator getCompare() const { return mCompare; }
+		void setCompare(ComparisionOperator op) { mCompare = op; }
 
-			/** 
-	        */
-			ComparisionOperator getCompare(void) const {return mCompare;}
-			void setCompare(ComparisionOperator op){mCompare = op;}
+		/** Copy attributes to another observer.
+	    */
+		virtual void copyAttributesTo(ParticleObserver * observer);
 
-			/** Copy attributes to another observer.
-	        */
-			virtual void copyAttributesTo (ParticleObserver* observer);
+	protected:
+		Real mThreshold;
+		ComparisionOperator mCompare;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONVELOCITY_OBSERVER_H__ */

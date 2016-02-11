@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONPOSITION_OBSERVER_TOKENS_H__
 #define __PU_ONPOSITION_OBSERVER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseObserverTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The OnPositionObserverTranslator parses 'OnPositionObserver' tokens
 	*/
-	class _ParticleUniverseExport OnPositionObserverTranslator : public ScriptTranslator
-	{
-		public:
-			OnPositionObserverTranslator(void){};
-			~OnPositionObserverTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport OnPositionObserverTranslator : public ScriptTranslator {
+	public:
+		OnPositionObserverTranslator() {}
+		~OnPositionObserverTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport OnPositionObserverWriter : public ParticleObserverWriter
-	{
-		public:
+	class _ParticleUniverseExport OnPositionObserverWriter : public ParticleObserverWriter {
+	public:
+		OnPositionObserverWriter() {}
+		virtual ~OnPositionObserverWriter() {}
 
-			OnPositionObserverWriter(void) {};
-			virtual ~OnPositionObserverWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONPOSITION_OBSERVER_TOKENS_H__ */

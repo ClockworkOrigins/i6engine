@@ -24,12 +24,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ONCOUNT_OBSERVER_H__
 #define __PU_ONCOUNT_OBSERVER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseCommon.h"
 #include "ParticleUniverseObserver.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This class is used to observe if an x number of Particles have been emitted.
 	@remarks
 		OnCountObserver supports 2 possible situations. If the comparison operator is set to 
@@ -37,43 +36,43 @@ namespace ParticleUniverse
 		If the comparison operator is set to 'greater than', the _observe() function only returns 
 		true if the counter exceeds the threshold.
     */
-	class _ParticleUniverseExport OnCountObserver : public ParticleObserver
-	{
-		protected:
-			uint mCount;
-			uint mThreshold;
-			ComparisionOperator mCompare;
+	class _ParticleUniverseExport OnCountObserver : public ParticleObserver {
+	public:
+		// Constants
+		static const uint DEFAULT_THRESHOLD;
+		static const ComparisionOperator DEFAULT_COMPARE;
 
-		public:
-			// Constants
-			static const uint DEFAULT_THRESHOLD;
-			static const ComparisionOperator DEFAULT_COMPARE;
+		OnCountObserver();
+	    virtual ~OnCountObserver() {}
 
-			OnCountObserver(void);
-	        virtual ~OnCountObserver(void) {}
+		/** 
+	    */
+		virtual void _notifyStart();
 
-			/** 
-	        */
-			virtual void _notifyStart (void);
+		/** 
+	    */
+		virtual bool _observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual bool _observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		uint getThreshold() const { return mThreshold; }
+		void setThreshold(uint threshold) { mThreshold = threshold; }
 
-			/** 
-	        */
-			uint getThreshold(void) const {return mThreshold;}
-			void setThreshold(uint threshold){mThreshold = threshold;}
+		/** 
+	    */
+		ComparisionOperator getCompare() const { return mCompare; }
+		void setCompare(ComparisionOperator op) { mCompare = op; }
 
-			/** 
-	        */
-			ComparisionOperator getCompare(void) const {return mCompare;}
-			void setCompare(ComparisionOperator op){mCompare = op;}
+		/** Copy attributes to another observer.
+	    */
+		virtual void copyAttributesTo(ParticleObserver * observer);
 
-			/** Copy attributes to another observer.
-	        */
-			virtual void copyAttributesTo (ParticleObserver* observer);
+	protected:
+		uint mCount;
+		uint mThreshold;
+		ComparisionOperator mCompare;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ONCOUNT_OBSERVER_H__ */

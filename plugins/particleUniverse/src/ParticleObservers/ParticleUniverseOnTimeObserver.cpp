@@ -21,79 +21,54 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleObservers/ParticleUniverseOnTimeObserver.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
+
+namespace ParticleUniverse {
+
 	// Constants
-	const Real OnTimeObserver::DEFAULT_THRESHOLD = 0.0f;
+	const Real OnTimeObserver::DEFAULT_THRESHOLD = 0.0;
 	const bool OnTimeObserver::DEFAULT_SINCE_START_SYSTEM = false;
 
-	//-----------------------------------------------------------------------
-	OnTimeObserver::OnTimeObserver(void) : ParticleObserver(),
-		mThreshold(DEFAULT_THRESHOLD),
-		mCompare(CO_GREATER_THAN),
-		mSinceStartSystem(DEFAULT_SINCE_START_SYSTEM)
-	{
+	OnTimeObserver::OnTimeObserver() : ParticleObserver(), mThreshold(DEFAULT_THRESHOLD), mCompare(CO_GREATER_THAN), mSinceStartSystem(DEFAULT_SINCE_START_SYSTEM) {
 	}
-	//-----------------------------------------------------------------------
-	void OnTimeObserver::_preProcessParticles(ParticleTechnique* technique, Real timeElapsed)
-	{
+	
+	void OnTimeObserver::_preProcessParticles(ParticleTechnique * technique, Real timeElapsed) {
 		// Call parent
 		ParticleObserver::_preProcessParticles(technique, timeElapsed);
 
 		// Also observe if there are no particles emitted, because some of the event handlers do not only
 		// perform an action on a particle.
-		if (technique->getNumberOfEmittedParticles() == 0)
-		{
+		if (technique->getNumberOfEmittedParticles() == 0) {
 			_handleObserve(technique, 0, timeElapsed);
 		}
 	}
-	//-----------------------------------------------------------------------
-	bool OnTimeObserver::_observe (ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (mCompare == CO_GREATER_THAN)
-		{
-			if (mSinceStartSystem)
-			{
+	
+	bool OnTimeObserver::_observe(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (mCompare == CO_GREATER_THAN) {
+			if (mSinceStartSystem) {
 				// Validate whether time since start of the particle system > threshold
 				return (mParentTechnique->getParentSystem()->getTimeElapsedSinceStart() > mThreshold);
-			}
-			else
-			{
+			} else {
 				// Validate whether time since start of the particle emission > threshold
 				return (particle && (particle->totalTimeToLive - particle->timeToLive) > mThreshold);
 			}
-		}
-		else if (mCompare == CO_LESS_THAN)
-		{
-			if (mSinceStartSystem)
-			{
+		} else if (mCompare == CO_LESS_THAN) {
+			if (mSinceStartSystem) {
 				// Validate whether time since start of the particle system < threshold
 				return (mParentTechnique->getParentSystem()->getTimeElapsedSinceStart() < mThreshold);
-			}
-			else
-			{
+			} else {
 				// Validate whether time since start of the particle emission < threshold
 				return (particle && (particle->totalTimeToLive - particle->timeToLive) < mThreshold);
 			}
-		}
-		else
-		{
+		} else {
 			// Equals
-			if (mSinceStartSystem)
-			{
+			if (mSinceStartSystem) {
 				// Validate whether time since start of the particle system == threshold
 				return almostEquals(mParentTechnique->getParentSystem()->getTimeElapsedSinceStart(), mThreshold, 0.01f);
-			}
-			else
-			{
+			} else {
 				// Validate whether time since start of the particle emission == threshold
 				return particle && almostEquals((particle->totalTimeToLive - particle->timeToLive), mThreshold, 0.01f);
 			}
@@ -101,14 +76,14 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	void OnTimeObserver::copyAttributesTo(ParticleObserver* observer)
-	{
+	
+	void OnTimeObserver::copyAttributesTo(ParticleObserver * observer) {
 		ParticleObserver::copyAttributesTo(observer);
 
-		OnTimeObserver* onTimeObserver = static_cast<OnTimeObserver*>(observer);
+		OnTimeObserver * onTimeObserver = static_cast<OnTimeObserver *>(observer);
 		onTimeObserver->mThreshold = mThreshold;
 		onTimeObserver->mCompare = mCompare;
 		onTimeObserver->mSinceStartSystem = mSinceStartSystem;
 	}
-}
+
+} /* namespace ParticleUniverse */
