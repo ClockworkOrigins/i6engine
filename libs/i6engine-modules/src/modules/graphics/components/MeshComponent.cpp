@@ -98,6 +98,9 @@ namespace modules {
 		entity = sm->createEntity(name, meshName);
 		_sceneNode->attachObject(entity);
 		entity->setVisible(isVisible);
+		entity->setCastShadows(true);
+
+		entity->getMesh()->buildEdgeList();
 
 		unsigned short src, dest;
 		if (!entity->getMesh()->suggestTangentVectorBuildParams(Ogre::VertexElementSemantic::VES_TANGENT, src, dest)) {
