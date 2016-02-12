@@ -24,12 +24,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_VERTEX_EMITTER_H__
 #define __PU_VERTEX_EMITTER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseEmitter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The VertexEmitter gradually generates spawn points, based on the edges of a mesh. 
 		This means that in every ParticleTechnique-update, a few points are generated, 
 		until all vertices of the mesh have been processed.
@@ -40,144 +38,142 @@ namespace ParticleUniverse
 		Todo:
 		- Add normals to the mSpawnPositionList
     */
-	class _ParticleUniverseExport VertexEmitter : public ParticleEmitter
-	{
-		protected:
-			list<Vector3> mSpawnPositionList;
-			const Ogre::VertexElement* mPositionElement;
-			Ogre::VertexData* mVertexData;
-			Ogre::HardwareVertexBufferSharedPtr mBuffer;
-			unsigned char* mVertexBuffer;
-			Ogre::Mesh* mMesh;
-			Ogre::SubMesh* mSubMesh;
-			bool mMeshProcessed;
-			size_t mVertexSize;
-			size_t mMaxVertexCount;
-			size_t mVertexCount;
-			unsigned short mSubMeshNumber;
-			bool mAllVerticesProcessed;
+	class _ParticleUniverseExport VertexEmitter : public ParticleEmitter {
+	public:
+		using Particle::copyAttributesTo;
 
-			/** Determines the size of the steps that are used to traverse through the vertices.
-	        */
-			unsigned short mStep;
+		// Constants
+		static const unsigned short DEFAULT_STEP;
+		static const unsigned short DEFAULT_SEGMENTS;
+		static const unsigned short DEFAULT_ITERATIONS;
+
+		VertexEmitter();
+	    virtual ~VertexEmitter() {}
+
+		/** 
+	    */
+		unsigned short getIterations() const;
+
+		/** 
+	    */
+		void setIterations(unsigned short iterations);
 			
-			/** Determines in how many segments an edge is divided. This results in spawn points.
-	        */
-			unsigned short mSegments;
+		/** 
+	    */
+		unsigned short getSegments() const;
 
-			/** Defines the speed of generating spawnpoints. In each Particle Technique update
-				'mIterations' vertices are traversed.
-			@remarks
-				Setting this attribute to a higher value is needed if the emssion rate of the emitter
-				is high. On slower computers, emitting the particles may exceed generating the 
-				spawnpoints (because this is not done at once, but per Particle Tehcnique update).
-	        */
-			unsigned short mIterations;
+		/** 
+	    */
+		void setSegments(unsigned short segments);
 
-			/** Determines the name of the mesh of which the vertices are used.
-	        */
-			String mMeshName;
+		/** 
+	    */
+		unsigned short getStep() const;
 
-			/** The _preProcessParticles() function is used to generate some spawn points in every update.
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* technique, Real timeElapsed);
+		/** 
+	    */
+		void setStep(unsigned short step);
 
-			/** 
-	        */
-			void _setDefaults(void);
+		/** 
+	    */
+		const String & getMeshName() const;
 
-			/** 
-	        */
-			void _loadMesh (void);
-
-			/** Generate spawn points from a mesh. The points will not be generated all at once, but
-				gradually. In each call, the points on an edge are generated, until all vertices
-				have been processed. In that case, mAllVerticesProcessed is set to true and this 
-				function stops further processing.
-	        */
-			void _generatePoints (void);
-				
-			/** 
-	        */
-			void _generatePointsFromMesh (void);
-
-			/** 
-	        */
-			void _generatePointsFromSubMesh (void);
-
-			/** 
-	        */
-			void _fillVertexBuffer(void);
-
-			/** 
-	        */
-			void _generatePointsFromVertexBuffer(void);
-
-			/** 
-	        */
-			void _generatePoints (const Vector3& startVector, 
-				const Vector3& endVector,
-				Real lengthIncrement = 0.0f);
-
-		public:
-			using Particle::copyAttributesTo;
-
-			// Constants
-			static const unsigned short DEFAULT_STEP;
-			static const unsigned short DEFAULT_SEGMENTS;
-			static const unsigned short DEFAULT_ITERATIONS;
-
-			VertexEmitter(void);
-	        virtual ~VertexEmitter(void) {}
-
-			/** 
-	        */
-			unsigned short getIterations(void) const;
-
-			/** 
-	        */
-			void setIterations(unsigned short iterations);
+		/** 
+	    */
+		virtual void _notifyStart();
 			
-			/** 
-	        */
-			unsigned short getSegments(void) const;
+		/** 
+	    */
+		void setMeshName(const String & meshName);
 
-			/** 
-	        */
-			void setSegments(unsigned short segments);
+		/** 
+	    */
+		virtual void _initParticlePosition(Particle * particle);
 
-			/** 
-	        */
-			unsigned short getStep(void) const;
+		/** 
+	    */
+		unsigned short _calculateRequestedParticles(Real timeElapsed);
 
-			/** 
-	        */
-			void setStep(unsigned short step);
+		/** 
+	    */
+		virtual void copyAttributesTo(ParticleEmitter * emitter);
 
-			/** 
-	        */
-			const String& getMeshName(void) const;
+	protected:
+		list<Vector3> mSpawnPositionList;
+		const Ogre::VertexElement * mPositionElement;
+		Ogre::VertexData * mVertexData;
+		Ogre::HardwareVertexBufferSharedPtr mBuffer;
+		unsigned char * mVertexBuffer;
+		Ogre::Mesh * mMesh;
+		Ogre::SubMesh * mSubMesh;
+		bool mMeshProcessed;
+		size_t mVertexSize;
+		size_t mMaxVertexCount;
+		size_t mVertexCount;
+		unsigned short mSubMeshNumber;
+		bool mAllVerticesProcessed;
 
-			/** 
-	        */
-			virtual void _notifyStart (void);
-			
-			/** 
-	        */
-			void setMeshName(const String& meshName);
+		/** Determines the size of the steps that are used to traverse through the vertices.
+		*/
+		unsigned short mStep;
 
-			/** 
-	        */
-			virtual void _initParticlePosition(Particle* particle);
+		/** Determines in how many segments an edge is divided. This results in spawn points.
+		*/
+		unsigned short mSegments;
 
-			/** 
-	        */
-			unsigned short _calculateRequestedParticles(Real timeElapsed);
+		/** Defines the speed of generating spawnpoints. In each Particle Technique update
+		'mIterations' vertices are traversed.
+		@remarks
+		Setting this attribute to a higher value is needed if the emssion rate of the emitter
+		is high. On slower computers, emitting the particles may exceed generating the
+		spawnpoints (because this is not done at once, but per Particle Tehcnique update).
+		*/
+		unsigned short mIterations;
 
-			/** 
-	        */
-			virtual void copyAttributesTo (ParticleEmitter* emitter);
+		/** Determines the name of the mesh of which the vertices are used.
+		*/
+		String mMeshName;
+
+		/** The _preProcessParticles() function is used to generate some spawn points in every update.
+		*/
+		virtual void _preProcessParticles(ParticleTechnique * technique, Real timeElapsed);
+
+		/**
+		*/
+		void _setDefaults();
+
+		/**
+		*/
+		void _loadMesh();
+
+		/** Generate spawn points from a mesh. The points will not be generated all at once, but
+		gradually. In each call, the points on an edge are generated, until all vertices
+		have been processed. In that case, mAllVerticesProcessed is set to true and this
+		function stops further processing.
+		*/
+		void _generatePoints();
+
+		/**
+		*/
+		void _generatePointsFromMesh();
+
+		/**
+		*/
+		void _generatePointsFromSubMesh();
+
+		/**
+		*/
+		void _fillVertexBuffer();
+
+		/**
+		*/
+		void _generatePointsFromVertexBuffer();
+
+		/**
+		*/
+		void _generatePoints(const Vector3 & startVector, const Vector3 & endVector, Real lengthIncrement = 0.0);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_VERTEX_EMITTER_H__ */

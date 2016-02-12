@@ -24,24 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_POINT_EMITTER_TOKEN_H__
 #define __PU_POINT_EMITTER_TOKEN_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEmitterTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** 
     */
-	class _ParticleUniverseExport PointEmitterWriter : public ParticleEmitterWriter
-	{
-		public:
-			PointEmitterWriter(void) {};
-			virtual ~PointEmitterWriter(void) {};
+	class _ParticleUniverseExport PointEmitterWriter : public ParticleEmitterWriter {
+	public:
+		PointEmitterWriter() {}
+		virtual ~PointEmitterWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_POINT_EMITTER_TOKEN_H__ */

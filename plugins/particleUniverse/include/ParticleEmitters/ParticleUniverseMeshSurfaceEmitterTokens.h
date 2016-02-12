@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_MESH_SURFACE_EMITTER_TOKENS_H__
 #define __PU_MESH_SURFACE_EMITTER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEmitterTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The MeshSurfaceEmitterTranslator parses 'MeshSurfaceEmitter' tokens
 	*/
-	class _ParticleUniverseExport MeshSurfaceEmitterTranslator : public ScriptTranslator
-	{
-		public:
-			MeshSurfaceEmitterTranslator(void){};
-			~MeshSurfaceEmitterTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport MeshSurfaceEmitterTranslator : public ScriptTranslator {
+	public:
+		MeshSurfaceEmitterTranslator() {}
+		~MeshSurfaceEmitterTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport MeshSurfaceEmitterWriter : public ParticleEmitterWriter
-	{
-		public:
+	class _ParticleUniverseExport MeshSurfaceEmitterWriter : public ParticleEmitterWriter {
+	public:
+		MeshSurfaceEmitterWriter() {}
+		virtual ~MeshSurfaceEmitterWriter() {}
 
-			MeshSurfaceEmitterWriter(void) {};
-			virtual ~MeshSurfaceEmitterWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_MESH_SURFACE_EMITTER_TOKENS_H__ */

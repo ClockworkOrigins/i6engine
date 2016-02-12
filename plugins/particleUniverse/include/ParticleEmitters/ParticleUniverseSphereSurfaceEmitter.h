@@ -24,47 +24,46 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SPHERE_SURFACE_EMITTER_H__
 #define __PU_SPHERE_SURFACE_EMITTER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEmitter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The SphereSurfaceEmitter emits particles from the surface of a sphere (instead within the sphere�s
 		volume). The particles are emitted in a direction perpendicular to the tangentvector where 
 		the particle emits. Using the angle attribute, the direction can be influenced.
     */
-	class _ParticleUniverseExport SphereSurfaceEmitter : public ParticleEmitter
-	{
-		protected:
-			Real mRadius;
-			Vector3 mRandomVector;
+	class _ParticleUniverseExport SphereSurfaceEmitter : public ParticleEmitter {
+	public:
+		using Particle::copyAttributesTo;
 
-		public:
-			using Particle::copyAttributesTo;
+		// Constants
+		static const Real DEFAULT_RADIUS;
 
-			// Constants
-			static const Real DEFAULT_RADIUS;
+		SphereSurfaceEmitter();
+	    virtual ~SphereSurfaceEmitter() {}
 
-			SphereSurfaceEmitter(void);
-	        virtual ~SphereSurfaceEmitter(void) {}
+		/** 
+	    */
+		Real getRadius() const;
+		void setRadius(const Real radius);
 
-			/** 
-	        */
-			Real getRadius(void) const;
-			void setRadius(const Real radius);
+		/** 
+	    */
+		virtual void _initParticlePosition(Particle * particle);
 
-			/** 
-	        */
-			virtual void _initParticlePosition(Particle* particle);
-
-			/** 
-	        */
-			virtual void _initParticleDirection(Particle* particle);
+		/** 
+	    */
+		virtual void _initParticleDirection(Particle * particle);
 			
-			/** 
-	        */
-			virtual void copyAttributesTo (ParticleEmitter* emitter);
+		/** 
+	    */
+		virtual void copyAttributesTo(ParticleEmitter * emitter);
+
+	protected:
+		Real mRadius;
+		Vector3 mRandomVector;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SPHERE_SURFACE_EMITTER_H__ */

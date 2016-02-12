@@ -24,59 +24,57 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BOX_EMITTER_H__
 #define __PU_BOX_EMITTER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseEmitter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The BoxEmitter is a ParticleEmitter that emits particles within a box shape.
     */
-	class _ParticleUniverseExport BoxEmitter : public ParticleEmitter
-	{
-		protected:
-			Real mHeight;
-			Real mWidth;
-			Real mDepth;
+	class _ParticleUniverseExport BoxEmitter : public ParticleEmitter {
+	public:
+		using Particle::copyAttributesTo;
 
-			Real mXRange;
-			Real mYRange;
-			Real mZRange;
+		// Constants
+		static const Real DEFAULT_WIDTH;
+		static const Real DEFAULT_HEIGHT;
+		static const Real DEFAULT_DEPTH;
 
-		public:
-			using Particle::copyAttributesTo;
+		BoxEmitter();
+	    virtual ~BoxEmitter() {}
 
-			// Constants
-			static const Real DEFAULT_WIDTH;
-			static const Real DEFAULT_HEIGHT;
-			static const Real DEFAULT_DEPTH;
+		/** 
+	    */
+		Real getHeight() const;
+		void setHeight(const Real height);
 
-			BoxEmitter(void);
-	        virtual ~BoxEmitter(void) {}
+		/** 
+	    */
+		Real getWidth() const;
+		void setWidth(const Real width);
 
-			/** 
-	        */
-			Real getHeight(void) const;
-			void setHeight(const Real height);
+		/** 
+	    */
+		Real getDepth() const;
+		void setDepth(const Real depth);
 
-			/** 
-	        */
-			Real getWidth(void) const;
-			void setWidth(const Real width);
+		/** 
+	    */
+		virtual void _initParticlePosition(Particle * particle);
 
-			/** 
-	        */
-			Real getDepth(void) const;
-			void setDepth(const Real depth);
+		/** 
+	    */
+		virtual void copyAttributesTo(ParticleEmitter * emitter);
 
-			/** 
-	        */
-			virtual void _initParticlePosition(Particle* particle);
+	protected:
+		Real mHeight;
+		Real mWidth;
+		Real mDepth;
 
-			/** 
-	        */
-			virtual void copyAttributesTo (ParticleEmitter* emitter);
+		Real mXRange;
+		Real mYRange;
+		Real mZRange;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BOX_EMITTER_H__ */

@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_POSITION_EMITTER_TOKEN_H__
 #define __PU_POSITION_EMITTER_TOKEN_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEmitterTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The PositionEmitterTranslator parses 'PositionEmitter' tokens
 	*/
-	class _ParticleUniverseExport PositionEmitterTranslator : public ScriptTranslator
-	{
-		public:
-			PositionEmitterTranslator(void){};
-			~PositionEmitterTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport PositionEmitterTranslator : public ScriptTranslator {
+	public:
+		PositionEmitterTranslator() {}
+		~PositionEmitterTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport PositionEmitterWriter : public ParticleEmitterWriter
-	{
-		public:
+	class _ParticleUniverseExport PositionEmitterWriter : public ParticleEmitterWriter {
+	public:
+		PositionEmitterWriter() {}
+		virtual ~PositionEmitterWriter() {}
 
-			PositionEmitterWriter(void) {};
-			virtual ~PositionEmitterWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_POSITION_EMITTER_TOKEN_H__ */

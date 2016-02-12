@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_LINE_EMITTER_TOKEN_H__
 #define __PU_LINE_EMITTER_TOKEN_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEmitterTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The LineEmitterTranslator parses 'LineEmitter' tokens
 	*/
-	class _ParticleUniverseExport LineEmitterTranslator : public ScriptTranslator
-	{
-		public:
-			LineEmitterTranslator(void){};
-			~LineEmitterTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport LineEmitterTranslator : public ScriptTranslator {
+	public:
+		LineEmitterTranslator() {}
+		~LineEmitterTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport LineEmitterWriter : public ParticleEmitterWriter
-	{
-		public:
+	class _ParticleUniverseExport LineEmitterWriter : public ParticleEmitterWriter {
+	public:
+		LineEmitterWriter() {}
+		virtual ~LineEmitterWriter() {}
 
-			LineEmitterWriter(void) {};
-			virtual ~LineEmitterWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_LINE_EMITTER_TOKEN_H__ */

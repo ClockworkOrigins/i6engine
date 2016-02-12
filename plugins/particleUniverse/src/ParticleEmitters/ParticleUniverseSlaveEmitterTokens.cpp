@@ -21,45 +21,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleEmitters/ParticleUniverseSlaveEmitter.h"
 #include "ParticleEmitters/ParticleUniverseSlaveEmitterTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool SlaveEmitterTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleEmitter* em = any_cast<ParticleEmitter*>(prop->parent->context);
-		SlaveEmitter* emitter = static_cast<SlaveEmitter*>(em);
+#include "ParticleUniverseScriptSerializer.h"
 
-		if (prop->name == token[TOKEN_MASTER_TECHNIQUE])
-		{
+#include "ParticleEmitters/ParticleUniverseSlaveEmitter.h"
+
+namespace ParticleUniverse {
+	
+	bool SlaveEmitterTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleEmitter * em = any_cast<ParticleEmitter *>(prop->parent->context);
+		SlaveEmitter * emitter = static_cast<SlaveEmitter *>(em);
+
+		if (prop->name == token[TOKEN_MASTER_TECHNIQUE]) {
 			// Property: master_technique_name
-			if (passValidateProperty(compiler, prop, token[TOKEN_MASTER_TECHNIQUE], VAL_STRING))
-			{
+			if (passValidateProperty(compiler, prop, token[TOKEN_MASTER_TECHNIQUE], VAL_STRING)) {
 				String val;
-				if(getString(prop->values.front(), &val))
-				{
+				if (getString(prop->values.front(), &val)) {
 					emitter->setMasterTechniqueName(val);
 					return true;
 				}
 			}
-		}
-		else if (prop->name == token[TOKEN_MASTER_EMITTER])
-		{
+		} else if (prop->name == token[TOKEN_MASTER_EMITTER]) {
 			// Property: master_emitter_name
-			if (passValidateProperty(compiler, prop, token[TOKEN_MASTER_EMITTER], VAL_STRING))
-			{
+			if (passValidateProperty(compiler, prop, token[TOKEN_MASTER_EMITTER], VAL_STRING)) {
 				String val;
-				if(getString(prop->values.front(), &val))
-				{
+				if (getString(prop->values.front(), &val)) {
 					emitter->setMasterEmitterName(val);
 					return true;
 				}
@@ -68,19 +56,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool SlaveEmitterTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool SlaveEmitterTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void SlaveEmitterWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void SlaveEmitterWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a SlaveEmitter
-		const SlaveEmitter* emitter = static_cast<const SlaveEmitter*>(element);
+		const SlaveEmitter * emitter = static_cast<const SlaveEmitter *>(element);
 
 		// Write the header of the SlaveEmitter
 		serializer->writeLine(token[TOKEN_EMITTER], emitter->getEmitterType(), emitter->getName(), 8);
@@ -90,13 +74,15 @@ namespace ParticleUniverse
 		ParticleEmitterWriter::write(serializer, element);
 
 		// Write own attributes
-		if (emitter->getMasterTechniqueName() != BLANK_STRING) serializer->writeLine(
-			token[TOKEN_MASTER_TECHNIQUE], emitter->getMasterTechniqueName(), 12);
-		if (emitter->getMasterEmitterName() != BLANK_STRING) serializer->writeLine(
-			token[TOKEN_MASTER_EMITTER], emitter->getMasterEmitterName(), 12);
+		if (emitter->getMasterTechniqueName() != BLANK_STRING) {
+			serializer->writeLine(token[TOKEN_MASTER_TECHNIQUE], emitter->getMasterTechniqueName(), 12);
+		}
+		if (emitter->getMasterEmitterName() != BLANK_STRING) {
+			serializer->writeLine(token[TOKEN_MASTER_EMITTER], emitter->getMasterEmitterName(), 12);
+		}
 
 		// Write the close bracket
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

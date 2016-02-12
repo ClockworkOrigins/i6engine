@@ -21,22 +21,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleEmitters/ParticleUniversePointEmitter.h"
 #include "ParticleEmitters/ParticleUniversePointEmitterTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void PointEmitterWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+#include "ParticleUniverseScriptSerializer.h"
+
+#include "ParticleEmitters/ParticleUniversePointEmitter.h"
+
+namespace ParticleUniverse {
+	
+	void PointEmitterWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a PointEmitter
-		const PointEmitter* emitter = static_cast<const PointEmitter*>(element);
+		const PointEmitter * emitter = static_cast<const PointEmitter *>(element);
 
 		// Write the header of the PointEmitter
 		serializer->writeLine(token[TOKEN_EMITTER], emitter->getEmitterType(), emitter->getName(), 8);
@@ -49,4 +44,4 @@ namespace ParticleUniverse
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

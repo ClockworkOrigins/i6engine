@@ -21,55 +21,37 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleEmitters/ParticleUniverseSlaveEmitter.h"
+
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
+
 #include "ParticleBehaviours/ParticleUniverseSlaveBehaviour.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	SlaveEmitter::SlaveEmitter(void) : 
-		ParticleEmitter(),
-		TechniqueListener(),
-		mMasterParticle(0),
-		mMasterTechniqueName(BLANK_STRING),
-		mMasterEmitterName(BLANK_STRING),
-		mMasterPosition(Vector3::ZERO),
-		mMasterDirection(Vector3::ZERO),
-		mMasterEmitterNameSet(false)
-	{
+namespace ParticleUniverse {
+	
+	SlaveEmitter::SlaveEmitter() :  ParticleEmitter(), TechniqueListener(), mMasterParticle(nullptr), mMasterTechniqueName(BLANK_STRING), mMasterEmitterName(BLANK_STRING), mMasterPosition(Vector3::ZERO), mMasterDirection(Vector3::ZERO), mMasterEmitterNameSet(false) {
 	}
-	//-----------------------------------------------------------------------
-	const String& SlaveEmitter::getMasterTechniqueName(void) const
-	{
+	
+	const String & SlaveEmitter::getMasterTechniqueName() const {
 		return mMasterTechniqueName;
 	}
-	//-----------------------------------------------------------------------
-	void SlaveEmitter::setMasterTechniqueName(const String& masterTechniqueName)
-	{
+	
+	void SlaveEmitter::setMasterTechniqueName(const String & masterTechniqueName) {
 		mMasterTechniqueName = masterTechniqueName;
 	}
-	//-----------------------------------------------------------------------
-	const String& SlaveEmitter::getMasterEmitterName(void) const
-	{
+	
+	const String & SlaveEmitter::getMasterEmitterName() const {
 		return mMasterEmitterName;
 	}
-	//-----------------------------------------------------------------------
-	void SlaveEmitter::setMasterEmitterName(const String& masterEmitterName)
-	{
+	
+	void SlaveEmitter::setMasterEmitterName(const String & masterEmitterName) {
 		mMasterEmitterName = masterEmitterName;
 		mMasterEmitterNameSet = true;
 	}
-	//-----------------------------------------------------------------------
-	void SlaveEmitter::particleEmitted(ParticleTechnique* particleTechnique, Particle* particle)
-	{
-		if (mMasterEmitterNameSet && mMasterEmitterName != particle->parentEmitter->getName())
-		{
+	
+	void SlaveEmitter::particleEmitted(ParticleTechnique * particleTechnique, Particle * particle) {
+		if (mMasterEmitterNameSet && mMasterEmitterName != particle->parentEmitter->getName()) {
 			// Ignore particle
 			return;
 		}
@@ -85,68 +67,58 @@ namespace ParticleUniverse
 		mParentTechnique->forceEmission(this, 1); // Just emit one, to be in sync with the master.
 		mEnabled = false;
 	}
-	//-----------------------------------------------------------------------
-	void SlaveEmitter::_initParticlePosition(Particle* particle)
-	{
+	
+	void SlaveEmitter::_initParticlePosition(Particle * particle) {
 		// Remark: Don't take the orientation of the node into account, because the position of the master particle is leading.
 		particle->position = mMasterPosition;
 		particle->originalPosition = particle->position;
 	}
-	//-----------------------------------------------------------------------
-    void SlaveEmitter::_initParticleDirection(Particle* particle)
-    {
+	
+    void SlaveEmitter::_initParticleDirection(Particle * particle) {
 		particle->direction = mMasterDirection;
 		particle->originalDirection = particle->direction;
 		particle->originalDirectionLength = particle->direction.length();
 
 		// Make use of the opportunity to set the master particle in the behaviour object (if available)
-		SlaveBehaviour* behaviour = static_cast<SlaveBehaviour*>(particle->getBehaviour("Slave"));
-		if (behaviour)
-		{
+		SlaveBehaviour * behaviour = static_cast<SlaveBehaviour *>(particle->getBehaviour("Slave"));
+		if (behaviour) {
 			behaviour->masterParticle = mMasterParticle;
 		}
     }
-	//-----------------------------------------------------------------------
-	void SlaveEmitter::_prepare(ParticleTechnique* particleTechnique)
-	{
-		ParticleSystem* system = particleTechnique->getParentSystem();
-		if (system)
-		{
-			ParticleTechnique* masterTechnique = system->getTechnique(mMasterTechniqueName);
-			if (masterTechnique)
-			{
+	
+	void SlaveEmitter::_prepare(ParticleTechnique * particleTechnique) {
+		ParticleSystem * system = particleTechnique->getParentSystem();
+		if (system) {
+			ParticleTechnique * masterTechnique = system->getTechnique(mMasterTechniqueName);
+			if (masterTechnique) {
 				masterTechnique->addTechniqueListener(this);
 			}
 			mEnabled = false;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void SlaveEmitter::_unprepare(ParticleTechnique* particleTechnique)
-	{
-		ParticleSystem* system = particleTechnique->getParentSystem();
-		if (system)
-		{
-			ParticleTechnique* masterTechnique = system->getTechnique(mMasterTechniqueName);
-			if (masterTechnique)
-			{
+	
+	void SlaveEmitter::_unprepare(ParticleTechnique * particleTechnique) {
+		ParticleSystem * system = particleTechnique->getParentSystem();
+		if (system) {
+			ParticleTechnique * masterTechnique = system->getTechnique(mMasterTechniqueName);
+			if (masterTechnique) {
 				masterTechnique->removeTechniqueListener(this);
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void SlaveEmitter::_notifyStart (void)
-	{
+	
+	void SlaveEmitter::_notifyStart() {
 		ParticleEmitter::_notifyStart();
 		setEnabled(false);
 	}
-	//-----------------------------------------------------------------------
-	void SlaveEmitter::copyAttributesTo (ParticleEmitter* emitter)
-	{
+	
+	void SlaveEmitter::copyAttributesTo (ParticleEmitter * emitter) {
 		ParticleEmitter::copyAttributesTo(emitter);
 
-		SlaveEmitter* slaveEmitter = static_cast<SlaveEmitter*>(emitter);
+		SlaveEmitter * slaveEmitter = static_cast<SlaveEmitter *>(emitter);
 		slaveEmitter->mMasterTechniqueName = mMasterTechniqueName;
 		slaveEmitter->mMasterEmitterName = mMasterEmitterName;
 		slaveEmitter->mMasterEmitterNameSet = mMasterEmitterNameSet;
 	}
-}
+
+} /* namespace ParticleUniverse */

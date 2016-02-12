@@ -24,70 +24,68 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_POSITION_EMITTER_H__
 #define __PU_POSITION_EMITTER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseEmitter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The PositionEmitter is an emitter that emits particles from one or more given positions.
 		The PositionEmitter enables building up a predefined structure out of particles. Imaging building up a
 		wall that is made up from stone blocks. The particles are emitted on the positions that are added to this
 		emitter. Adding some physical behaviour to the particles and you have your stone wall that collapses if a 
 		force is applied to it.
     */
-	class _ParticleUniverseExport PositionEmitter : public ParticleEmitter
-	{
-		protected:
-			vector<Vector3> mPositionList;
-			bool mRandomized;
-			size_t mIndex;
+	class _ParticleUniverseExport PositionEmitter : public ParticleEmitter {
+	public:
+		using Particle::copyAttributesTo;
 
-		public:
-			using Particle::copyAttributesTo;
+		// Constants
+		static const bool DEFAULT_RANDOMIZE;
 
-			// Constants
-			static const bool DEFAULT_RANDOMIZE;
+		PositionEmitter();
+	    virtual ~PositionEmitter() {}
 
-			PositionEmitter(void);
-	        virtual ~PositionEmitter(void) {}
+		/** 
+	    */
+		bool isRandomized() const;
 
-			/** 
-	        */
-			bool isRandomized(void) const;
+		/** 
+	    */
+		void setRandomized(bool randomized);
 
-			/** 
-	        */
-			void setRandomized(bool randomized);
+		/** Returns a list with positions
+	    */
+		const vector<Vector3> & getPositions() const;
 
-			/** Returns a list with positions
-	        */
-			const vector<Vector3>& getPositions(void) const;
+		/** Add a new position to this emitter
+	    */
+		void addPosition(const Vector3 & position);
 
-			/** Add a new position to this emitter
-	        */
-			void addPosition(const Vector3& position);
+		/** Remove all positions from this emitter
+	    */
+		void removeAllPositions();
 
-			/** Remove all positions from this emitter
-	        */
-			void removeAllPositions(void);
+		/** See ParticleEmitter
+		*/
+		void _notifyStart();
 
-			/** See ParticleEmitter
-			*/
-			void _notifyStart(void);
+		/** See ParticleEmitter
+		*/
+		virtual unsigned short _calculateRequestedParticles(Real timeElapsed);
 
-			/** See ParticleEmitter
-			*/
-			virtual unsigned short _calculateRequestedParticles(Real timeElapsed);
+		/** Generate a particle position based on the added positions.
+	    */
+		virtual void _initParticlePosition(Particle * particle);
 
-			/** Generate a particle position based on the added positions.
-	        */
-			virtual void _initParticlePosition(Particle* particle);
+		/** 
+	    */
+		virtual void copyAttributesTo(ParticleEmitter * emitter);
 
-			/** 
-	        */
-			virtual void copyAttributesTo (ParticleEmitter* emitter);
+	protected:
+		vector<Vector3> mPositionList;
+		bool mRandomized;
+		size_t mIndex;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_POSITION_EMITTER_H__ */

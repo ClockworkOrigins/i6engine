@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SLAVE_EMITTER_TOKEN_H__
 #define __PU_SLAVE_EMITTER_TOKEN_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEmitterTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The SlaveEmitterTranslator parses 'SlaveEmitter' tokens
 	*/
-	class _ParticleUniverseExport SlaveEmitterTranslator : public ScriptTranslator
-	{
-		public:
-			SlaveEmitterTranslator(void){};
-			~SlaveEmitterTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport SlaveEmitterTranslator : public ScriptTranslator {
+	public:
+		SlaveEmitterTranslator() {}
+		~SlaveEmitterTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport SlaveEmitterWriter : public ParticleEmitterWriter
-	{
-		public:
+	class _ParticleUniverseExport SlaveEmitterWriter : public ParticleEmitterWriter {
+	public:
+		SlaveEmitterWriter() {}
+		virtual ~SlaveEmitterWriter() {}
 
-			SlaveEmitterWriter(void) {};
-			virtual ~SlaveEmitterWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SLAVE_EMITTER_TOKEN_H__ */

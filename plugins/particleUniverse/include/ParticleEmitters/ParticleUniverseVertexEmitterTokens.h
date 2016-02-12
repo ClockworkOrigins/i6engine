@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_VERTEX_EMITTER_TOKEN_H__
 #define __PU_VERTEX_EMITTER_TOKEN_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseEmitterTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The VertexEmitterTranslator parses 'VertexEmitter' tokens
 	*/
-	class _ParticleUniverseExport VertexEmitterTranslator : public ScriptTranslator
-	{
-		public:
-			VertexEmitterTranslator(void){};
-			~VertexEmitterTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport VertexEmitterTranslator : public ScriptTranslator {
+	public:
+		VertexEmitterTranslator() {}
+		~VertexEmitterTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport VertexEmitterWriter : public ParticleEmitterWriter
-	{
-		public:
+	class _ParticleUniverseExport VertexEmitterWriter : public ParticleEmitterWriter {
+	public:
+		VertexEmitterWriter() {}
+		virtual ~VertexEmitterWriter() {}
 
-			VertexEmitterWriter(void) {};
-			virtual ~VertexEmitterWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_VERTEX_EMITTER_TOKEN_H__ */

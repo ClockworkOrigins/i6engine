@@ -21,113 +21,87 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleEmitters/ParticleUniversePositionEmitter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	const bool PositionEmitter::DEFAULT_RANDOMIZE = true;
 
-	//-----------------------------------------------------------------------
-	PositionEmitter::PositionEmitter(void) : 
-		ParticleEmitter(),
-		mRandomized(DEFAULT_RANDOMIZE),
-		mIndex(0)
-	{
+	PositionEmitter::PositionEmitter() : ParticleEmitter(), mRandomized(DEFAULT_RANDOMIZE), mIndex(0) {
 	}
-	//-----------------------------------------------------------------------
-	bool PositionEmitter::isRandomized() const
-	{
+	
+	bool PositionEmitter::isRandomized() const {
 		return mRandomized;
 	}
-	//-----------------------------------------------------------------------
-	void PositionEmitter::setRandomized(bool randomized)
-	{
+	
+	void PositionEmitter::setRandomized(bool randomized) {
 		mRandomized = randomized;
 	}
-	//-----------------------------------------------------------------------
-	const vector<Vector3>& PositionEmitter::getPositions(void) const
-	{
+	
+	const vector<Vector3> & PositionEmitter::getPositions() const {
 		return mPositionList;
 	}
-	//-----------------------------------------------------------------------
-	void PositionEmitter::addPosition(const Vector3& pos)
-	{
+	
+	void PositionEmitter::addPosition(const Vector3 & pos) {
 		mPositionList.push_back(pos);
 	}
-	//-----------------------------------------------------------------------
-	void PositionEmitter::_notifyStart(void)
-	{
+	
+	void PositionEmitter::_notifyStart() {
 		ParticleEmitter::_notifyStart();
 		mIndex = 0;
 	}
-	//-----------------------------------------------------------------------
-	void PositionEmitter::removeAllPositions(void)
-	{
+	
+	void PositionEmitter::removeAllPositions() {
 		mIndex = 0;
 		mPositionList.clear();
 	}
-	//-----------------------------------------------------------------------
-	unsigned short PositionEmitter::_calculateRequestedParticles(Real timeElapsed)
-	{
+	
+	unsigned short PositionEmitter::_calculateRequestedParticles(Real timeElapsed) {
 		// Fast rejection
-		if (mPositionList.empty())
+		if (mPositionList.empty()) {
 			return 0;
-
-		if (mRandomized)
-		{
-			return ParticleEmitter::_calculateRequestedParticles(timeElapsed);
 		}
-		else if (mIndex < mPositionList.size())
-		{
+
+		if (mRandomized) {
+			return ParticleEmitter::_calculateRequestedParticles(timeElapsed);
+		} else if (mIndex < mPositionList.size()) {
 			unsigned short requested = ParticleEmitter::_calculateRequestedParticles(timeElapsed);
 			unsigned short size = static_cast<unsigned short>(mPositionList.size() - mIndex);
-			if (requested > size)
-			{
+			if (requested > size) {
 				return size;
-			}
-			else
-			{
+			} else {
 				return requested;
 			}
 		}
 
 		return 0;
 	}
-	//-----------------------------------------------------------------------
-	void PositionEmitter::_initParticlePosition(Particle* particle)
-	{
+	
+	void PositionEmitter::_initParticlePosition(Particle * particle) {
 		// Fast rejection
-		if (mPositionList.empty())
+		if (mPositionList.empty()) {
 			return;
+		}
 
 		/** Remark: Don't take the orientation of the node into account, because the positions shouldn't be affected by the rotated node.
 		*/
-		if (mRandomized)
-		{
+		if (mRandomized) {
 			size_t i = size_t(Math::UnitRandom() * (mPositionList.size() - 1));
 			particle->position = getDerivedPosition() + _mEmitterScale * mPositionList[i];
-		}
-		else if (mIndex < mPositionList.size())
-		{
+		} else if (mIndex < mPositionList.size()) {
 			particle->position = getDerivedPosition() + _mEmitterScale * mPositionList[mIndex];
 			mIndex++;
 		}
 
 		particle->originalPosition = particle->position;
 	}
-	//-----------------------------------------------------------------------
-	void PositionEmitter::copyAttributesTo (ParticleEmitter* emitter)
-	{
+	
+	void PositionEmitter::copyAttributesTo(ParticleEmitter * emitter) {
 		ParticleEmitter::copyAttributesTo(emitter);
-		PositionEmitter* positionEmitter = static_cast<PositionEmitter*>(emitter);
+		PositionEmitter * positionEmitter = static_cast<PositionEmitter *>(emitter);
 		positionEmitter->mRandomized = mRandomized;
 		positionEmitter->mPositionList = mPositionList;
 	}
-}
+
+} /* namespace ParticleUniverse */

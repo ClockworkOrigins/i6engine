@@ -24,28 +24,25 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_POINT_EMITTER_H__
 #define __PU_POINT_EMITTER_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseSystem.h"
 #include "ParticleUniverseEmitter.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The PointEmitter is a ParticleEmitter that emits particles from a 3D point.
     */
-	class _ParticleUniverseExport PointEmitter : public ParticleEmitter
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport PointEmitter : public ParticleEmitter {
+	public:
+		using Particle::copyAttributesTo;
 
-			PointEmitter(void) : ParticleEmitter()
-			{
-			}
-	        virtual ~PointEmitter(void) {}
+		PointEmitter() : ParticleEmitter() {
+		}
+	    virtual ~PointEmitter() {}
 
-			/** 
-	        */
-			virtual void copyAttributesTo (ParticleEmitter* emitter);
+		/** 
+	    */
+		virtual void copyAttributesTo(ParticleEmitter * emitter);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_POINT_EMITTER_H__ */

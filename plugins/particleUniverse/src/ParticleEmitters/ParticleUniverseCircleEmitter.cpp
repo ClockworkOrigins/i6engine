@@ -21,112 +21,81 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleEmitters/ParticleUniverseCircleEmitter.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
+
+namespace ParticleUniverse {
+
 	// Constants
-	const Real CircleEmitter::DEFAULT_RADIUS = 100.0f;
-	const Real CircleEmitter::DEFAULT_STEP = 0.1f;
-	const Real CircleEmitter::DEFAULT_ANGLE = 0.0f;
+	const Real CircleEmitter::DEFAULT_RADIUS = 100.0;
+	const Real CircleEmitter::DEFAULT_STEP = 0.1;
+	const Real CircleEmitter::DEFAULT_ANGLE = 0.0;
 	const bool CircleEmitter::DEFAULT_RANDOM = true;
 	const Vector3 CircleEmitter::DEFAULT_NORMAL(0, 0, 0);
-
-	//-----------------------------------------------------------------------
-	CircleEmitter::CircleEmitter(void) : 
-		ParticleEmitter(),
-		mRadius(DEFAULT_RADIUS),
-		mCircleAngle(DEFAULT_ANGLE),
-		mOriginalCircleAngle(DEFAULT_ANGLE),
-		mStep(DEFAULT_STEP),
-		mX(0.0f),
-		mZ(0.0f),
-		mRandom(DEFAULT_RANDOM),
-		mOrientation(Quaternion::IDENTITY),
-		mNormal(DEFAULT_NORMAL)
-	{
+	
+	CircleEmitter::CircleEmitter() : ParticleEmitter(), mRadius(DEFAULT_RADIUS), mCircleAngle(DEFAULT_ANGLE), mOriginalCircleAngle(DEFAULT_ANGLE), mStep(DEFAULT_STEP), mX(0.0), mZ(0.0), mRandom(DEFAULT_RANDOM), mOrientation(Quaternion::IDENTITY), mNormal(DEFAULT_NORMAL) {
 	}
-	//-----------------------------------------------------------------------
-	Real CircleEmitter::getRadius(void) const
-	{
+	
+	Real CircleEmitter::getRadius() const {
 		return mRadius;
 	}
-	//-----------------------------------------------------------------------
-	void CircleEmitter::setRadius(const Real radius)
-	{
+	
+	void CircleEmitter::setRadius(const Real radius) {
 		mRadius = radius;
 	}
-	//-----------------------------------------------------------------------
-	Real CircleEmitter::getCircleAngle(void) const
-	{
+	
+	Real CircleEmitter::getCircleAngle() const {
 		return mOriginalCircleAngle;
 	}
-	//-----------------------------------------------------------------------
-	void CircleEmitter::setCircleAngle(const Real circleAngle)
-	{
+	
+	void CircleEmitter::setCircleAngle(const Real circleAngle) {
 		mOriginalCircleAngle = circleAngle;
 		mCircleAngle = circleAngle;
 	}
-	//-----------------------------------------------------------------------
-	Real CircleEmitter::getStep(void) const
-	{
+	
+	Real CircleEmitter::getStep() const {
 		return mStep;
 	}
-	//-----------------------------------------------------------------------
-	void CircleEmitter::setStep(const Real step)
-	{
+	
+	void CircleEmitter::setStep(const Real step) {
 		mStep = step;
 	}
-	//-----------------------------------------------------------------------
-	bool CircleEmitter::isRandom(void) const
-	{
+	
+	bool CircleEmitter::isRandom() const {
 		return mRandom;
 	}
-	//-----------------------------------------------------------------------
-	void CircleEmitter::setRandom(const bool random)
-	{
+	
+	void CircleEmitter::setRandom(const bool random) {
 		mRandom = random;
 	}
-	//-----------------------------------------------------------------------
-	const Quaternion& CircleEmitter::getOrientation(void) const
-	{
+	
+	const Quaternion & CircleEmitter::getOrientation() const {
 		return mOrientation;
 	}
-	//----------------------------------------------------------------------- 
-	const Vector3& CircleEmitter::getNormal(void) const
-	{ 
+	 
+	const Vector3 & CircleEmitter::getNormal() const { 
 		return mNormal;
 	} 
-	//----------------------------------------------------------------------- 
-	void CircleEmitter::setNormal(const Vector3& normal) 
-	{ 
+	 
+	void CircleEmitter::setNormal(const Vector3 & normal) { 
 		mOrientation = Vector3::UNIT_Y.getRotationTo(normal, Vector3::UNIT_X);
 		mNormal = normal;
 	}
-	//-----------------------------------------------------------------------
-	void CircleEmitter::_notifyStart (void)
-	{
+	
+	void CircleEmitter::_notifyStart() {
 		// Reset the attributes to allow a restart.
 		ParticleEmitter::_notifyStart();
 		mCircleAngle = mOriginalCircleAngle;
 	}
-	//----------------------------------------------------------------------- 
-	void CircleEmitter::_initParticlePosition(Particle* particle)
-	{
+	 
+	void CircleEmitter::_initParticlePosition(Particle * particle) {
 		Real angle = 0;
-		if (mRandom)
-		{
+		if (mRandom) {
 			// Choose a random position on the circle.
 			angle = Math::RangeRandom(0, Math::TWO_PI);
-		}
-		else
-		{
+		} else {
 			// Follow the contour of the circle.
 			mCircleAngle += mStep;
 			mCircleAngle = mCircleAngle > Math::TWO_PI ? mCircleAngle - Math::TWO_PI : mCircleAngle;
@@ -135,51 +104,39 @@ namespace ParticleUniverse
 
 		mX = Math::Cos(angle);
 		mZ = Math::Sin(angle);
-		ParticleSystem* sys = mParentTechnique->getParentSystem();
-		if (sys)
-		{
+		ParticleSystem * sys = mParentTechnique->getParentSystem();
+		if (sys) {
 			// Take both orientation of the node and its own orientation, based on the normal, into account
-			particle->position = getDerivedPosition() + 
-				sys->getDerivedOrientation() * mOrientation * (_mEmitterScale * Vector3(mX * mRadius, 0, mZ * mRadius));
-		}
-		else
-		{
-			particle->position = getDerivedPosition() + _mEmitterScale * ( mOrientation * Vector3(mX * mRadius, 0, mZ * mRadius) );
+			particle->position = getDerivedPosition() + sys->getDerivedOrientation() * mOrientation * (_mEmitterScale * Vector3(mX * mRadius, 0, mZ * mRadius));
+		} else {
+			particle->position = getDerivedPosition() + _mEmitterScale * (mOrientation * Vector3(mX * mRadius, 0, mZ * mRadius));
 		}
 		particle->originalPosition = particle->position;
 	}
-	//-----------------------------------------------------------------------
-    void CircleEmitter::_initParticleDirection(Particle* particle)
-    {
-		if (mAutoDirection)
-		{
+	
+    void CircleEmitter::_initParticleDirection(Particle * particle) {
+		if (mAutoDirection) {
 			// The value of the direction vector that has been set does not have a meaning for
 			// the circle emitter.
 			Radian angle;
 			_generateAngle(angle);
-			if (angle != Radian(0))
-			{
-				particle->direction = (mOrientation * Vector3(mX, 0, mZ) ).randomDeviant(angle, mUpVector);
+			if (angle != Radian(0)) {
+				particle->direction = (mOrientation * Vector3(mX, 0, mZ)).randomDeviant(angle, mUpVector);
 				particle->originalDirection = particle->direction;
-			}
-			else
-			{
+			} else {
 				particle->direction = Vector3(mX, 0, mZ);
 				particle->direction = mOrientation * Vector3(mX, 0, mZ);
 			}
-		}
-		else
-		{
+		} else {
 			// Use the standard way
 			ParticleEmitter::_initParticleDirection(particle);
 		}
     }
-	//-----------------------------------------------------------------------
-	void CircleEmitter::copyAttributesTo (ParticleEmitter* emitter)
-	{
+	
+	void CircleEmitter::copyAttributesTo(ParticleEmitter * emitter) {
 		ParticleEmitter::copyAttributesTo(emitter);
 
-		CircleEmitter* circleEmitter = static_cast<CircleEmitter*>(emitter);
+		CircleEmitter * circleEmitter = static_cast<CircleEmitter *>(emitter);
 		circleEmitter->mRadius = mRadius;
 		circleEmitter->mCircleAngle = mCircleAngle;
 		circleEmitter->mOriginalCircleAngle = mOriginalCircleAngle;
@@ -188,4 +145,5 @@ namespace ParticleUniverse
 		circleEmitter->mNormal = mNormal;
 		circleEmitter->mOrientation = mOrientation; 
 	}
-}
+
+} /* namespace ParticleUniverse */

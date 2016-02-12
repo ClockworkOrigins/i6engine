@@ -21,26 +21,22 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleEmitters/ParticleUniverseMeshSurfaceEmitter.h"
+
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
+
+#include "OgreMesh.h"
 #include "OgreMeshManager.h"
 #include "OgreSubMesh.h"
-#include "OgreMesh.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	const Vector3 MeshSurfaceEmitter::DEFAULT_SCALE(1, 1, 1);
 	const MeshInfo::MeshSurfaceDistribution MeshSurfaceEmitter::DEFAULT_DISTRIBUTION = MeshInfo::MSD_HOMOGENEOUS;
 
-	//-----------------------------------------------------------------------
-	inline void Triangle::calculateSquareSurface (void)
-	{
+	inline void Triangle::calculateSquareSurface() {
 		/* Calculating the surface of a triangle with the following algorithm:
 		   v1 = Vector3(x1, y1, z1)
 		   v2 = Vector3(x2, y2, z2)
@@ -53,23 +49,16 @@ namespace ParticleUniverse
 		*/
 
 		// a, b and c are the length of each triangle
-		Real a = sqrt (	(v1.x - v3.x) * (v1.x - v3.x) + 
-							(v1.y - v3.y) * (v1.y - v3.y) + 
-							(v1.z - v3.z) * (v1.z - v3.z));
-		Real b = sqrt (	(v2.x - v1.x) * (v2.x - v1.x) + 
-							(v2.y - v1.y) * (v2.y - v1.y) + 
-							(v2.z - v1.z) * (v2.z - v1.z));
-		Real c = sqrt (	(v3.x - v2.x) * (v3.x - v2.x) + 
-							(v3.y - v2.y) * (v3.y - v2.y) + 
-							(v3.z - v2.z) * (v3.z - v2.z));
-		Real p = 0.5f * (a + b + c);
+		Real a = sqrt((v1.x - v3.x) * (v1.x - v3.x) + (v1.y - v3.y) * (v1.y - v3.y) + (v1.z - v3.z) * (v1.z - v3.z));
+		Real b = sqrt((v2.x - v1.x) * (v2.x - v1.x) + (v2.y - v1.y) * (v2.y - v1.y) + (v2.z - v1.z) * (v2.z - v1.z));
+		Real c = sqrt((v3.x - v2.x) * (v3.x - v2.x) + (v3.y - v2.y) * (v3.y - v2.y) + (v3.z - v2.z) * (v3.z - v2.z));
+		Real p = 0.5 * (a + b + c);
 
 		// Assign square surface of the triangle
 		squareSurface = p * (p-a) * (p-b) * (p-c);
 	}
-	//-----------------------------------------------------------------------
-	inline void Triangle::calculateSurfaceNormal (void)
-	{
+	
+	inline void Triangle::calculateSurfaceNormal() {
 		/* Calculating the surface normal of a triangle with the following algorithm:
 		   v1 = Vector3(x1, y1, z1)
 		   v2 = Vector3(x2, y2, z2)
@@ -79,9 +68,8 @@ namespace ParticleUniverse
 		surfaceNormal = (v2-v1).crossProduct(v3-v1);
 		surfaceNormal.normalise();
 	}
-	//-----------------------------------------------------------------------
-	inline void Triangle::calculateEdgeNormals (void)
-	{
+	
+	inline void Triangle::calculateEdgeNormals() {
 		en1 = v1.crossProduct(v2);
 		en1.normalise();
 		en2 = v2.crossProduct(v3);
@@ -89,9 +77,8 @@ namespace ParticleUniverse
 		en3 = v3.crossProduct(v1);
 		en3.normalise();
 	}
-	//-----------------------------------------------------------------------
-	Vector3 Triangle::getRandomTrianglePosition (void)
-	{
+	
+	Vector3 Triangle::getRandomTrianglePosition() {
 		// Use barycentric coordinates. Let A, B, C be the three vertices of the triangle. Any point P inside can 
 		// be expressed uniquely as P = aA + bB + cC, where a+b+c=1 and a,b,c are each >= 0.
 		// Knowing a and b permits you to calculate c=1-a-b.
@@ -103,72 +90,51 @@ namespace ParticleUniverse
 		// a,b,c. Compute your point P = aA + bB + cC.
 		Real a = Math::RangeRandom(0, 1);
 		Real b = Math::RangeRandom(0, 1);
-		if (a + b > 1)
-		{
+		if (a + b > 1) {
 			a = 1 - a;
 			b = 1 - b;
 		}
 		Real c = 1 - a - b;
 		return a * v1 + b * v2 + c * v3;
 	}
-	//-----------------------------------------------------------------------
-	Triangle::PositionAndNormal Triangle::getRandomEdgePositionAndNormal (void)
-	{
+	
+	Triangle::PositionAndNormal Triangle::getRandomEdgePositionAndNormal() {
 		Real mult = Math::RangeRandom(0, 1);
 		Real randomVal = Math::RangeRandom(0, 3);
 		PositionAndNormal pAndN;
 		pAndN.position = Vector3::ZERO;
 		pAndN.normal = Vector3::ZERO;
-		if (randomVal < 1)
-		{
-			pAndN.position = Vector3(	v2.x + mult*(v1.x - v2.x),
-											v2.y + mult*(v1.y - v2.y),
-											v2.z + mult*(v1.z - v2.z));
+		if (randomVal < 1) {
+			pAndN.position = Vector3(v2.x + mult*(v1.x - v2.x), v2.y + mult*(v1.y - v2.y), v2.z + mult*(v1.z - v2.z));
 			pAndN.normal = en1;
-		}
-		else
-		{
-			if (randomVal < 2)
-			{
-				pAndN.position = Vector3(	v3.x + mult*(v2.x - v3.x),
-												v3.y + mult*(v2.y - v3.y),
-												v3.z + mult*(v2.z - v3.z));
+		} else {
+			if (randomVal < 2) {
+				pAndN.position = Vector3(v3.x + mult*(v2.x - v3.x), v3.y + mult*(v2.y - v3.y), v3.z + mult*(v2.z - v3.z));
 				pAndN.normal = en2;
-			}
-			else
-			{
+			} else {
 	
-				pAndN.position = Vector3(	v1.x + mult*(v3.x - v1.x),
-												v1.y + mult*(v3.y - v1.y),
-												v1.z + mult*(v3.z - v1.z));
+				pAndN.position = Vector3(v1.x + mult*(v3.x - v1.x), v1.y + mult*(v3.y - v1.y), v1.z + mult*(v3.z - v1.z));
 				pAndN.normal = en3;
 			}
 		}
 
 		return pAndN;
 	}
-	//-----------------------------------------------------------------------
-	Triangle::PositionAndNormal Triangle::getRandomVertexAndNormal (void)
-	{
+	
+	Triangle::PositionAndNormal Triangle::getRandomVertexAndNormal() {
 		Real randomVal = Math::RangeRandom(0, 3);
 		PositionAndNormal pAndN;
 		pAndN.position = Vector3::ZERO;
 		pAndN.normal = Vector3::ZERO;
 
-		if (randomVal < 1)
-		{
+		if (randomVal < 1) {
 			pAndN.position = v1;
 			pAndN.normal = vn1;
-		}
-		else
-		{
-			if (randomVal < 2)
-			{
+		} else {
+			if (randomVal < 2) {
 				pAndN.position = v2;
 				pAndN.normal = vn2;
-			}
-			else
-			{
+			} else {
 				pAndN.position = v3;
 				pAndN.normal = vn3;
 			}
@@ -176,93 +142,69 @@ namespace ParticleUniverse
 
 		return pAndN;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	MeshInfo::MeshInfo (const String& meshName, 
-		MeshSurfaceDistribution distribution,
-		const Quaternion& orientation,
-		const Vector3& scale) : 
-		mDistribution(distribution)
-	{
+	
+	MeshInfo::MeshInfo(const String & meshName, MeshSurfaceDistribution distribution, const Quaternion & orientation, const Vector3 & scale) : mDistribution(distribution) {
 		Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().load(meshName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		getMeshInformation(mesh, Vector3::ZERO, orientation, scale);
 	}
-	//-----------------------------------------------------------------------
-	MeshInfo::~MeshInfo (void)
-	{
+	
+	MeshInfo::~MeshInfo() {
 		_triangles.clear();
 	}
-	//-----------------------------------------------------------------------
-	inline Real MeshInfo::getGaussianRandom (Real high, Real cutoff)
-	{
+	
+	inline Real MeshInfo::getGaussianRandom(Real high, Real cutoff) {
 		Real x1 = 0;
 		Real x2 = 0;
 		Real w = 0;
 		Real y1 = 0;
 
 		uint max = 0;
-		do
-		{
-			x1 = Math::RangeRandom(0,1);
-			x2 = Math::RangeRandom(0,1);
+		do {
+			x1 = Math::RangeRandom(0, 1);
+			x2 = Math::RangeRandom(0, 1);
 			w = x1 * x1 + x2 * x2;
 
 			// Prevent infinite loop
-			if (w >= 1.0f && max > 4 )
+			if (w >= 1.0 && max > 4 )
 				w = x1;
 		
-		} while (w >= 1.0f);
+		} while (w >= 1.0);
 	
-		w = sqrt((-2.0f * log(w)) / w);
+		w = sqrt((-2.0 * log(w)) / w);
 		y1 = std::abs(x1 * w);
 		y1 = y1 > cutoff ? cutoff : y1;
 		y1 *= high / cutoff;
 		return y1;
 	}
-
-	//-----------------------------------------------------------------------
-	const Triangle& MeshInfo::getTriangle (size_t triangleIndex)
-	{
+	
+	const Triangle & MeshInfo::getTriangle(size_t triangleIndex) {
 		return _triangles[triangleIndex];
 	}
-
-	//-----------------------------------------------------------------------
-	size_t MeshInfo::getRandomTriangleIndex (void)
-	{
+	
+	size_t MeshInfo::getRandomTriangleIndex() {
 		size_t index;
-		if (mDistribution == MSD_HOMOGENEOUS || mDistribution == MSD_HETEROGENEOUS_1)
-		{
+		if (mDistribution == MSD_HOMOGENEOUS || mDistribution == MSD_HETEROGENEOUS_1) {
 			index = size_t(getGaussianRandom(Real(_triangles.size() - 1)));
+		} else {
+			index = size_t(Math::RangeRandom(0.0, Real(_triangles.size() - 1)));
 		}
-		else
-			index = size_t(Math::RangeRandom(0.0f, Real(_triangles.size() - 1)));
 
 		return index;
 	}
-
-	//-----------------------------------------------------------------------
-	Triangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal (const size_t triangleIndex)
-	{
+	
+	Triangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal(const size_t triangleIndex) {
 		Triangle triangle = getTriangle(triangleIndex);
 		Triangle::PositionAndNormal pAndN;
 		pAndN.position = Vector3::ZERO;
 		pAndN.normal = Vector3::ZERO;
-		if (mDistribution == MSD_HOMOGENEOUS || mDistribution == MSD_HETEROGENEOUS_1 || mDistribution == MSD_HETEROGENEOUS_2)
-		{
+		if (mDistribution == MSD_HOMOGENEOUS || mDistribution == MSD_HETEROGENEOUS_1 || mDistribution == MSD_HETEROGENEOUS_2) {
 			pAndN.position = triangle.getRandomTrianglePosition();
 			pAndN.normal = triangle.surfaceNormal;
-		}
-		else
-		{
-			if (mDistribution == MSD_VERTEX)
-			{
+		} else {
+			if (mDistribution == MSD_VERTEX) {
 				pAndN = triangle.getRandomVertexAndNormal();
-			}
-			else
-			{
-				if (mDistribution == MSD_EDGE)
-				{
+			} else {
+				if (mDistribution == MSD_EDGE) {
 					pAndN = triangle.getRandomEdgePositionAndNormal();
 				}
 			}
@@ -270,17 +212,13 @@ namespace ParticleUniverse
 		return pAndN;
 	}
 
-	//-----------------------------------------------------------------------
-	void MeshInfo::getMeshInformation(	Ogre::MeshPtr mesh,
-										const Vector3 &position,
-										const Quaternion &orient,
-										const Vector3 &scale)
-	{
+	
+	void MeshInfo::getMeshInformation(Ogre::MeshPtr mesh, const Vector3 & position, const Quaternion & orient, const Vector3 & scale) {
 		size_t vertexCount = 0;
 		size_t indexCount = 0;
-		Vector3* vertices = 0;
-		Vector3* normals;
-		unsigned long* indices = 0;
+		Vector3 * vertices = nullptr;
+		Vector3 * normals;
+		unsigned long * indices = nullptr;
 
 		bool added_shared = false;
 		size_t current_offset = 0;
@@ -289,21 +227,16 @@ namespace ParticleUniverse
 		size_t index_offset = 0;
 
 		// Calculate how many vertices and indices we're going to need
-		for ( unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
-		{
-			Ogre::SubMesh* submesh = mesh->getSubMesh( i );
+		for (unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i) {
+			Ogre::SubMesh * submesh = mesh->getSubMesh( i );
 
 			// We only need to add the shared vertices once
-			if(submesh->useSharedVertices)
-			{
-				if( !added_shared )
-				{
+			if (submesh->useSharedVertices) {
+				if (!added_shared) {
 					vertexCount += mesh->sharedVertexData->vertexCount;
 					added_shared = true;
 				}
-			}
-			else
-			{
+			} else {
 				vertexCount += submesh->vertexData->vertexCount;
 			}
 
@@ -318,27 +251,23 @@ namespace ParticleUniverse
 		added_shared = false;
 
 		// Run through the submeshes again, adding the data into the arrays
-		for ( unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
-		{
-			Ogre::SubMesh* submesh = mesh->getSubMesh(i);
-			Ogre::VertexData* vertex_data = submesh->useSharedVertices ? mesh->sharedVertexData : submesh->vertexData;
+		for (unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i) {
+			Ogre::SubMesh * submesh = mesh->getSubMesh(i);
+			Ogre::VertexData * vertex_data = submesh->useSharedVertices ? mesh->sharedVertexData : submesh->vertexData;
 
-			if((!submesh->useSharedVertices)||(submesh->useSharedVertices && !added_shared))
-			{
-				if(submesh->useSharedVertices)
-				{
+			if ((!submesh->useSharedVertices)||(submesh->useSharedVertices && !added_shared)) {
+				if (submesh->useSharedVertices) {
 					added_shared = true;
 					shared_offset = current_offset;
 				}
 
-				const Ogre::VertexElement* posElem = vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION);
-				const Ogre::VertexElement* normalElem = vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_NORMAL);
+				const Ogre::VertexElement * posElem = vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION);
+				const Ogre::VertexElement * normalElem = vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_NORMAL);
 				Ogre::HardwareVertexBufferSharedPtr vbuf = vertex_data->vertexBufferBinding->getBuffer(posElem->getSource());
-				unsigned char* vertex = static_cast<unsigned char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
-				float* pReal;
+				unsigned char * vertex = static_cast<unsigned char *>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+				float * pReal;
 
-				for( size_t j = 0; j < vertex_data->vertexCount; ++j, vertex += vbuf->getVertexSize())
-				{
+				for (size_t j = 0; j < vertex_data->vertexCount; ++j, vertex += vbuf->getVertexSize()) {
 					posElem->baseVertexPointerToElement(vertex, &pReal);
 					Vector3 pt(pReal[0], pReal[1], pReal[2]);
 					vertices[current_offset + j] = (orient * (pt * scale)) + position;
@@ -352,26 +281,21 @@ namespace ParticleUniverse
 				next_offset += vertex_data->vertexCount;
 			}
 
-			Ogre::IndexData* index_data = submesh->indexData;
+			Ogre::IndexData * index_data = submesh->indexData;
 			size_t numTris = index_data->indexCount / 3;
 			Ogre::HardwareIndexBufferSharedPtr ibuf = index_data->indexBuffer;
     		bool use32bitindexes = (ibuf->getType() == Ogre::HardwareIndexBuffer::IT_32BIT);
-			unsigned long*  pLong = static_cast<unsigned long*>(ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
-			unsigned short* pShort = reinterpret_cast<unsigned short*>(pLong);
+			unsigned long *  pLong = static_cast<unsigned long *>(ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+			unsigned short * pShort = reinterpret_cast<unsigned short *>(pLong);
 			size_t offset = (submesh->useSharedVertices)? shared_offset : current_offset;
 
-			size_t numTrisMultThree = numTris*3;
-			if ( use32bitindexes )
-			{
-				for ( size_t k = 0; k < numTrisMultThree; ++k)
-				{
+			size_t numTrisMultThree = numTris * 3;
+			if (use32bitindexes) {
+				for (size_t k = 0; k < numTrisMultThree; ++k) {
 					indices[index_offset++] = pLong[k] + static_cast<unsigned long>(offset);
 				}
-			}
-			else
-			{
-				for ( size_t k = 0; k < numTrisMultThree; ++k)
-				{
+			} else {
+				for (size_t k = 0; k < numTrisMultThree; ++k) {
 					indices[index_offset++] = static_cast<unsigned long>(pShort[k]) + static_cast<unsigned long>(offset);
 				}
 			}
@@ -381,17 +305,16 @@ namespace ParticleUniverse
 		}
 
 		// Create triangles from the retrieved data
-		for (size_t k = 0; k < indexCount-1; k+=3)
-		{
+		for (size_t k = 0; k < indexCount - 1; k += 3) {
 			Triangle t;
-			t.v1 = vertices [indices[k]];
-			t.vn1 = normals [indices[k]];
+			t.v1 = vertices[indices[k]];
+			t.vn1 = normals[indices[k]];
 
-			t.v2 = vertices [indices[k+1]];
-			t.vn2 = normals [indices[k+1]];
+			t.v2 = vertices[indices[k+1]];
+			t.vn2 = normals[indices[k+1]];
 
-			t.v3 = vertices [indices[k+2]];
-			t.vn3 = normals [indices[k+2]];
+			t.v3 = vertices[indices[k+2]];
+			t.vn3 = normals[indices[k+2]];
 
 			t.calculateSquareSurface();
 			t.calculateSurfaceNormal();
@@ -400,107 +323,78 @@ namespace ParticleUniverse
 		}
 
 		// Delete intermediate arrays
-		delete [] indices;
-		delete [] normals;
-		delete [] vertices;
+		delete[] indices;
+		delete[] normals;
+		delete[] vertices;
 
 		// Sort the triangle on their size, if needed (only if a gaussian random number generator
 		// function is used to perform a random lookup of a triangle)
-		if (mDistribution == MSD_HOMOGENEOUS)
+		if (mDistribution == MSD_HOMOGENEOUS) {
 			sort(_triangles.begin(), _triangles.end(), SortDescending());
-		else
-			if (mDistribution == MSD_HETEROGENEOUS_1)
+		} else {
+			if (mDistribution == MSD_HETEROGENEOUS_1) {
 				sort(_triangles.begin(), _triangles.end(), SortAscending());
-	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	MeshSurfaceEmitter::MeshSurfaceEmitter(void) : 
-		ParticleEmitter(),
-		mMeshName(BLANK_STRING),
-		mOrientation(Quaternion::IDENTITY),
-		mScale(DEFAULT_SCALE),
-		mDistribution(DEFAULT_DISTRIBUTION),
-		mMeshInfo(0),
-		mTriangleIndex(0),
-		mDirectionSet(false)
-	{
-	}
-	//-----------------------------------------------------------------------
-	MeshSurfaceEmitter::~MeshSurfaceEmitter(void)
-    {
-		if (mMeshInfo)
-		{
-			PU_DELETE_T(mMeshInfo, MeshInfo, MEMCATEGORY_SCENE_OBJECTS);
-			mMeshInfo = 0;
+			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void MeshSurfaceEmitter::_prepare(ParticleTechnique* particleTechnique)
-    {
+	
+	MeshSurfaceEmitter::MeshSurfaceEmitter() : ParticleEmitter(), mMeshName(BLANK_STRING), mOrientation(Quaternion::IDENTITY), mScale(DEFAULT_SCALE), mDistribution(DEFAULT_DISTRIBUTION), mMeshInfo(nullptr), mTriangleIndex(0), mDirectionSet(false) {
+	}
+	
+	MeshSurfaceEmitter::~MeshSurfaceEmitter() {
+		if (mMeshInfo) {
+			PU_DELETE_T(mMeshInfo, MeshInfo, MEMCATEGORY_SCENE_OBJECTS);
+			mMeshInfo = nullptr;
+		}
+	}
+	
+	void MeshSurfaceEmitter::_prepare(ParticleTechnique * particleTechnique)  {
 		// Build the data
-		if (mMeshName != BLANK_STRING)
-		{
+		if (mMeshName != BLANK_STRING) {
 			build();
 		}
 	}
-	//-----------------------------------------------------------------------
-	void MeshSurfaceEmitter::_unprepare(ParticleTechnique* particleTechnique)
-    {
+	
+	void MeshSurfaceEmitter::_unprepare(ParticleTechnique * particleTechnique) {
 		// Todo
 	}
-	//-----------------------------------------------------------------------
-	void MeshSurfaceEmitter::_initParticlePosition(Particle* particle)
-	{
+	
+	void MeshSurfaceEmitter::_initParticlePosition(Particle * particle) {
 		Triangle::PositionAndNormal pAndN;
 		pAndN.position = Vector3::ZERO;
 		pAndN.normal = Vector3::ZERO;
 		mDirectionSet = false;
 
-		if (mMeshInfo)
-		{
+		if (mMeshInfo) {
 			getDerivedPosition();
-			mTriangleIndex = mMeshInfo->getRandomTriangleIndex (); // Get a random triangle index
+			mTriangleIndex = mMeshInfo->getRandomTriangleIndex(); // Get a random triangle index
 			pAndN = mMeshInfo->getRandomPositionAndNormal(mTriangleIndex); // Determine position and normal
-			ParticleSystem* sys = mParentTechnique->getParentSystem();
-			if (mAutoDirection)
-			{
-				if (pAndN.normal != Vector3::ZERO)
-				{
+			ParticleSystem * sys = mParentTechnique->getParentSystem();
+			if (mAutoDirection) {
+				if (pAndN.normal != Vector3::ZERO) {
 					// Set position and direction of the particle
-					if (sys)
-					{
+					if (sys) {
 						particle->position = mDerivedPosition + sys->getDerivedOrientation() * (_mEmitterScale * pAndN.position);
-					}
-					else
-					{
+					} else {
 						particle->position = mDerivedPosition + _mEmitterScale * pAndN.position;
 					}
 
 					// The value of the direction vector that has been set does not have a meaning
 					Radian angle(mDynamicAttributeHelper.calculate(mDynAngle, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart()));
-					if (angle != Radian(0))
-					{
+					if (angle != Radian(0)) {
 						particle->direction = (pAndN.normal).randomDeviant(angle, mUpVector);
-					}
-					else
-					{
+					} else {
 						particle->direction = pAndN.normal;
 					}
 
 					particle->originalDirection = particle->direction;
 					mDirectionSet = true;
 				}
-			}
-			else
-			{
+			} else {
 				// Set position of the particle
-				if (sys)
-				{
+				if (sys) {
 					particle->position = mDerivedPosition + sys->getDerivedOrientation() * (_mEmitterScale * pAndN.position);
-				}
-				else
-				{
+				} else {
 					particle->position = mDerivedPosition + _mEmitterScale * pAndN.position;
 				}
 			}
@@ -508,82 +402,69 @@ namespace ParticleUniverse
 			particle->originalPosition = particle->position;
 		}
 	}
-    //-----------------------------------------------------------------------
-	unsigned short MeshSurfaceEmitter::_calculateRequestedParticles(Real timeElapsed)
-	{
-		if (mMeshInfo)
-		{
+    
+	unsigned short MeshSurfaceEmitter::_calculateRequestedParticles(Real timeElapsed) {
+		if (mMeshInfo) {
 			return ParticleEmitter::_calculateRequestedParticles(timeElapsed);
 		}
 
 		return 0;
 	}
-	//-----------------------------------------------------------------------
-    void MeshSurfaceEmitter::_initParticleDirection(Particle* particle)
-    {
+	
+    void MeshSurfaceEmitter::_initParticleDirection(Particle * particle)  {
 		// Only determine direction if it hasn't been calculated yet
-		if (!mDirectionSet)
-		{
+		if (!mDirectionSet) {
 			ParticleEmitter::_initParticleDirection(particle);
 		}
     }
-    //-----------------------------------------------------------------------
-	const String& MeshSurfaceEmitter::getMeshName(void) const
-	{
+    
+	const String & MeshSurfaceEmitter::getMeshName() const {
 		return mMeshName;
 	}
-	//-----------------------------------------------------------------------
-	void MeshSurfaceEmitter::setMeshName(const String& meshName, bool doBuild)
-	{
+	
+	void MeshSurfaceEmitter::setMeshName(const String & meshName, bool doBuild) {
 		mMeshName = meshName;
 
 		// If needed, build the data needed for emitting particles
-		if (doBuild)
-		{
+		if (doBuild) {
 			build();
 		}
 	}
-	//-----------------------------------------------------------------------
-	MeshInfo::MeshSurfaceDistribution MeshSurfaceEmitter::getDistribution (void) const
-	{
+	
+	MeshInfo::MeshSurfaceDistribution MeshSurfaceEmitter::getDistribution() const {
 		return mDistribution;
 	}
-	//-----------------------------------------------------------------------
-	void MeshSurfaceEmitter::setDistribution(MeshInfo::MeshSurfaceDistribution distribution)
-	{
+	
+	void MeshSurfaceEmitter::setDistribution(MeshInfo::MeshSurfaceDistribution distribution) {
 		mDistribution = distribution;
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& MeshSurfaceEmitter::getScale (void) const
-	{
+	
+	const Vector3 & MeshSurfaceEmitter::getScale() const {
 		return mScale;
 	}
-	//-----------------------------------------------------------------------
-	void MeshSurfaceEmitter::setScale (const Vector3& scale)
-	{
+	
+	void MeshSurfaceEmitter::setScale(const Vector3 & scale) {
 		mScale = scale;
 	}
-    //-----------------------------------------------------------------------
-	void MeshSurfaceEmitter::build(void)
-	{
+    
+	void MeshSurfaceEmitter::build() {
 		// Delete the mesh info if already existing
-		if (mMeshInfo)
-		{
+		if (mMeshInfo) {
 			PU_DELETE_T(mMeshInfo, MeshInfo, MEMCATEGORY_SCENE_OBJECTS);
-			mMeshInfo = 0;
+			mMeshInfo = nullptr;
 		}
 
 		// Generate meshinfo.
 		mMeshInfo = PU_NEW_T(MeshInfo, MEMCATEGORY_SCENE_OBJECTS)(mMeshName, mDistribution, mOrientation, mScale);
 	}
-	//-----------------------------------------------------------------------
-	void MeshSurfaceEmitter::copyAttributesTo (ParticleEmitter* emitter)
-	{
+	
+	void MeshSurfaceEmitter::copyAttributesTo(ParticleEmitter * emitter) {
 		ParticleEmitter::copyAttributesTo(emitter);
-		MeshSurfaceEmitter* meshSurfaceEmitter = static_cast<MeshSurfaceEmitter*>(emitter);
+		MeshSurfaceEmitter * meshSurfaceEmitter = static_cast<MeshSurfaceEmitter *>(emitter);
 		meshSurfaceEmitter->mMeshName = mMeshName;
 		meshSurfaceEmitter->mDistribution = mDistribution;
 		meshSurfaceEmitter->mOrientation = mOrientation;
 		meshSurfaceEmitter->mScale = mScale;
 	}
-}
+
+} /* namespace ParticleUniverse */
