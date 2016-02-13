@@ -21,64 +21,50 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseJetAffector.h"
 
-namespace ParticleUniverse
-{
-	// Constants
-	const Real JetAffector::DEFAULT_ACCELERATION = 1.0f;
+namespace ParticleUniverse {
 
-	//-----------------------------------------------------------------------
-	JetAffector::JetAffector (void) : 
-		ParticleAffector(),
-		mScaled(0.0f)
-	{
+	// Constants
+	const Real JetAffector::DEFAULT_ACCELERATION = 1.0;
+
+	JetAffector::JetAffector() : ParticleAffector(), mScaled(0.0) {
 		mDynAcceleration = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynAcceleration))->setValue(DEFAULT_ACCELERATION);
+		static_cast<DynamicAttributeFixed *>(mDynAcceleration)->setValue(DEFAULT_ACCELERATION);
 	}
-	//-----------------------------------------------------------------------
-	JetAffector::~JetAffector (void)
-	{
-		if (!mDynAcceleration)
+	
+	JetAffector::~JetAffector () {
+		if (!mDynAcceleration) {
 			return;
+		}
 
 		PU_DELETE_T(mDynAcceleration, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-		mDynAcceleration = 0;
+		mDynAcceleration = nullptr;
 	}
-	//-----------------------------------------------------------------------
-	void JetAffector::copyAttributesTo (ParticleAffector* affector)
-	{
+	
+	void JetAffector::copyAttributesTo(ParticleAffector * affector) {
 		ParticleAffector::copyAttributesTo(affector);
 
-		JetAffector* jetAffector = static_cast<JetAffector*>(affector);
+		JetAffector * jetAffector = static_cast<JetAffector *>(affector);
 		jetAffector->setDynAcceleration(mDynamicAttributeFactory.cloneDynamicAttribute(getDynAcceleration()));
 	}
-	//-----------------------------------------------------------------------
-	void JetAffector::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		mScaled = timeElapsed * (mDynAcceleration->getValue(particle->timeFraction));
-		if (particle->direction == Vector3::ZERO)
-		{
+	
+	void JetAffector::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		mScaled = timeElapsed * mDynAcceleration->getValue(particle->timeFraction);
+		if (particle->direction == Vector3::ZERO) {
 			// Existing direction is zero, so use original direction
-			particle->direction += (particle->originalDirection * mScaled);
-		}
-		else
-		{
-			particle->direction += (particle->direction * mScaled);
+			particle->direction += particle->originalDirection * mScaled;
+		} else {
+			particle->direction += particle->direction * mScaled;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void JetAffector::setDynAcceleration(DynamicAttribute* dynAcceleration)
-	{
-		if (mDynAcceleration)
+	
+	void JetAffector::setDynAcceleration(DynamicAttribute * dynAcceleration) {
+		if (mDynAcceleration) {
 			PU_DELETE_T(mDynAcceleration, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynAcceleration = dynAcceleration;
 	}
-}
+
+} /* namespace ParticleUniverse */

@@ -21,133 +21,96 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseRandomiser.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleUniverseTechnique.h"
+
+namespace ParticleUniverse {
+
 	// Constants
 	const Vector3 Randomiser::DEFAULT_MAX_DEVIATION(0, 0, 0);
-	const Real Randomiser::DEFAULT_TIME_STEP = 0.0f;
+	const Real Randomiser::DEFAULT_TIME_STEP = 0.0;
 	const bool Randomiser::DEFAULT_RANDOM_DIRECTION = true;
 
-	//-----------------------------------------------------------------------
-	Randomiser::Randomiser(void) : 
-		ParticleAffector(),
-		mMaxDeviationX(DEFAULT_MAX_DEVIATION.x),
-		mMaxDeviationY(DEFAULT_MAX_DEVIATION.y),
-		mMaxDeviationZ(DEFAULT_MAX_DEVIATION.z),
-		mTimeSinceLastUpdate(0.0f),
-		mTimeStep(DEFAULT_TIME_STEP),
-		mRandomDirection(DEFAULT_RANDOM_DIRECTION),
-		mUpdate(true)
-	{
+	Randomiser::Randomiser() : ParticleAffector(), mMaxDeviationX(DEFAULT_MAX_DEVIATION.x), mMaxDeviationY(DEFAULT_MAX_DEVIATION.y), mMaxDeviationZ(DEFAULT_MAX_DEVIATION.z), mTimeSinceLastUpdate(0.0), mTimeStep(DEFAULT_TIME_STEP), mRandomDirection(DEFAULT_RANDOM_DIRECTION), mUpdate(true) {
 	}
-	//-----------------------------------------------------------------------
-	Real Randomiser::getMaxDeviationX(void) const
-	{
+	
+	Real Randomiser::getMaxDeviationX() const {
 		return mMaxDeviationX;
 	}
-	//-----------------------------------------------------------------------
-	void Randomiser::setMaxDeviationX(Real maxDeviationX)
-	{
+	
+	void Randomiser::setMaxDeviationX(Real maxDeviationX) {
 		mMaxDeviationX = maxDeviationX;
 	}
-	//-----------------------------------------------------------------------
-	Real Randomiser::getMaxDeviationY(void) const
-	{
+	
+	Real Randomiser::getMaxDeviationY() const {
 		return mMaxDeviationY;
 	}
-	//-----------------------------------------------------------------------
-	void Randomiser::setMaxDeviationY(Real maxDeviationY)
-	{
+	
+	void Randomiser::setMaxDeviationY(Real maxDeviationY) {
 		mMaxDeviationY = maxDeviationY;
 	}
-	//-----------------------------------------------------------------------
-	Real Randomiser::getMaxDeviationZ(void) const
-	{
+	
+	Real Randomiser::getMaxDeviationZ() const {
 		return mMaxDeviationZ;
 	}
-	//-----------------------------------------------------------------------
-	void Randomiser::setMaxDeviationZ(Real maxDeviationZ)
-	{
+	
+	void Randomiser::setMaxDeviationZ(Real maxDeviationZ) {
 		mMaxDeviationZ = maxDeviationZ;
 	}
-	//-----------------------------------------------------------------------
-	Real Randomiser::getTimeStep(void) const
-	{
+	
+	Real Randomiser::getTimeStep() const {
 		return mTimeStep;
 	}
-	//-----------------------------------------------------------------------
-	void Randomiser::setTimeStep(Real timeStep)
-	{
+	
+	void Randomiser::setTimeStep(Real timeStep) {
 		mTimeStep = timeStep;
 		mTimeSinceLastUpdate = timeStep;
 	}
-	//-----------------------------------------------------------------------
-	bool Randomiser::isRandomDirection(void) const
-	{
+	
+	bool Randomiser::isRandomDirection() const {
 		return mRandomDirection;
 	}
-	//-----------------------------------------------------------------------
-	void Randomiser::setRandomDirection(bool randomDirection)
-	{
+	
+	void Randomiser::setRandomDirection(bool randomDirection) {
 		mRandomDirection = randomDirection;
 	}
-	//-----------------------------------------------------------------------
-	void Randomiser::_preProcessParticles(ParticleTechnique* technique, Real timeElapsed)
-	{
-		if (technique->getNumberOfEmittedParticles() > 0)
-		{
+	
+	void Randomiser::_preProcessParticles(ParticleTechnique * technique, Real timeElapsed) {
+		if (technique->getNumberOfEmittedParticles() > 0) {
 			mTimeSinceLastUpdate += timeElapsed;
-			if (mTimeSinceLastUpdate > mTimeStep)
-			{
+			if (mTimeSinceLastUpdate > mTimeStep) {
 				mTimeSinceLastUpdate -= mTimeStep;
 				mUpdate = true;
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void Randomiser::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (mUpdate)
-		{
-			if (mRandomDirection)
-			{
+	
+	void Randomiser::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (mUpdate) {
+			if (mRandomDirection) {
 				// Random direction: Change the direction after each update
-				particle->direction += Vector3(Math::RangeRandom(-mMaxDeviationX, mMaxDeviationX),
-					Math::RangeRandom(-mMaxDeviationY, mMaxDeviationY),
-					Math::RangeRandom(-mMaxDeviationZ, mMaxDeviationZ));
-			}
-			else
-			{
+				particle->direction += Vector3(Math::RangeRandom(-mMaxDeviationX, mMaxDeviationX), Math::RangeRandom(-mMaxDeviationY, mMaxDeviationY), Math::RangeRandom(-mMaxDeviationZ, mMaxDeviationZ));
+			} else {
 				// Explicitly check on 'freezed', because it passes the techniques' validation.
-				if (particle->isFreezed())
+				if (particle->isFreezed()) {
 					return;
+				}
 
 				// Random position: Add the position deviation after each update
-				particle->position += _mAffectorScale * Vector3(Math::RangeRandom(-mMaxDeviationX, mMaxDeviationX),
-					Math::RangeRandom(-mMaxDeviationY, mMaxDeviationY),
-					Math::RangeRandom(-mMaxDeviationZ, mMaxDeviationZ));
+				particle->position += _mAffectorScale * Vector3(Math::RangeRandom(-mMaxDeviationX, mMaxDeviationX), Math::RangeRandom(-mMaxDeviationY, mMaxDeviationY), Math::RangeRandom(-mMaxDeviationZ, mMaxDeviationZ));
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void Randomiser::_postProcessParticles(ParticleTechnique* technique, Real timeElapsed)
-	{
+	
+	void Randomiser::_postProcessParticles(ParticleTechnique * technique, Real timeElapsed) {
 		mUpdate = false;
 	}
-	//-----------------------------------------------------------------------
-	void Randomiser::copyAttributesTo (ParticleAffector* affector)
-	{
+	
+	void Randomiser::copyAttributesTo(ParticleAffector * affector) {
 		ParticleAffector::copyAttributesTo(affector);
 
-		Randomiser* randomiser = static_cast<Randomiser*>(affector);
+		Randomiser * randomiser = static_cast<Randomiser *>(affector);
 		randomiser->mMaxDeviationX = mMaxDeviationX;
 		randomiser->mMaxDeviationY = mMaxDeviationY;
 		randomiser->mMaxDeviationZ = mMaxDeviationZ;
@@ -155,4 +118,4 @@ namespace ParticleUniverse
 		randomiser->mRandomDirection = mRandomDirection;
 	}
 
-}
+} /* namespace ParticleUniverse */

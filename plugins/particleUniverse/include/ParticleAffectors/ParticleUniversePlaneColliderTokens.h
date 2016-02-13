@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PLANE_COLLIDER_TOKENS_H__
 #define __PU_PLANE_COLLIDER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBaseColliderTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The PlaneColliderTranslator parses 'PlaneCollider' tokens
 	*/
-	class _ParticleUniverseExport PlaneColliderTranslator : public ScriptTranslator
-	{
-		public:
-			PlaneColliderTranslator(void){};
-			~PlaneColliderTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport PlaneColliderTranslator : public ScriptTranslator {
+	public:
+		PlaneColliderTranslator() {}
+		~PlaneColliderTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport PlaneColliderWriter : public BaseColliderWriter
-	{
-		public:
+	class _ParticleUniverseExport PlaneColliderWriter : public BaseColliderWriter {
+	public:
+		PlaneColliderWriter() {}
+		virtual ~PlaneColliderWriter() {}
 
-			PlaneColliderWriter(void) {};
-			virtual ~PlaneColliderWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PLANE_COLLIDER_TOKENS_H__ */

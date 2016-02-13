@@ -21,116 +21,82 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseLineAffector.h"
 
-namespace ParticleUniverse
-{
-	// Constants
-	const Real LineAffector::DEFAULT_MAX_DEVIATION = 1.0f;
-	const Real LineAffector::DEFAULT_TIME_STEP = 0.1f;
-	const Vector3 LineAffector::DEFAULT_END(0, 0, 0);
-	const Real LineAffector::DEFAULT_DRIFT = 0.0f;
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
 
-	//-----------------------------------------------------------------------
-	LineAffector::LineAffector(void) : 
-		ParticleAffector(),
-		mMaxDeviation(DEFAULT_MAX_DEVIATION),
-		_mScaledMaxDeviation(1.0f),
-		mEnd(DEFAULT_END),
-		mTimeSinceLastUpdate(0.0f),
-		mTimeStep(DEFAULT_TIME_STEP),
-		mDrift(DEFAULT_DRIFT),
-		mOneMinusDrift(1.0f),
-		mUpdate(true),
-		mFirst(true)
-	{
+namespace ParticleUniverse {
+
+	// Constants
+	const Real LineAffector::DEFAULT_MAX_DEVIATION = 1.0;
+	const Real LineAffector::DEFAULT_TIME_STEP = 0.1;
+	const Vector3 LineAffector::DEFAULT_END(0, 0, 0);
+	const Real LineAffector::DEFAULT_DRIFT = 0.0;
+	
+	LineAffector::LineAffector() : ParticleAffector(), mMaxDeviation(DEFAULT_MAX_DEVIATION), _mScaledMaxDeviation(1.0), mEnd(DEFAULT_END), mTimeSinceLastUpdate(0.0), mTimeStep(DEFAULT_TIME_STEP), mDrift(DEFAULT_DRIFT), mOneMinusDrift(1.0), mUpdate(true), mFirst(true) {
 	}
-	//-----------------------------------------------------------------------
-	Real LineAffector::getMaxDeviation(void) const
-	{
+	
+	Real LineAffector::getMaxDeviation() const {
 		return mMaxDeviation;
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::setMaxDeviation(Real maxDeviation)
-	{
+	
+	void LineAffector::setMaxDeviation(Real maxDeviation) {
 		mMaxDeviation = maxDeviation;
 		_mScaledMaxDeviation = mMaxDeviation * _mAffectorScale.length();
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& LineAffector::getEnd(void) const
-	{
+	
+	const Vector3 & LineAffector::getEnd() const {
 		return mEnd;
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::setEnd(const Vector3& end)
-	{
+	
+	void LineAffector::setEnd(const Vector3 & end) {
 		mEnd = end;
 	}
-	//-----------------------------------------------------------------------
-	Real LineAffector::getTimeStep(void) const
-	{
+	
+	Real LineAffector::getTimeStep() const {
 		return mTimeStep;
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::setTimeStep(Real timeStep)
-	{
+	
+	void LineAffector::setTimeStep(Real timeStep) {
 		mTimeStep = timeStep;
 	}
-	//-----------------------------------------------------------------------
-	Real LineAffector::getDrift(void) const
-	{
+	
+	Real LineAffector::getDrift() const {
 		return mDrift;
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::setDrift(Real drift)
-	{
+	
+	void LineAffector::setDrift(Real drift) {
 		mDrift = drift;
-		mOneMinusDrift = 1.0f - drift;
+		mOneMinusDrift = 1.0 - drift;
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::_notifyRescaled(const Vector3& scale)
-	{
+	
+	void LineAffector::_notifyRescaled(const Vector3 & scale) {
 		ParticleAffector::_notifyRescaled(scale);
 		_mScaledMaxDeviation = mMaxDeviation * scale.length();
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::_firstParticle(ParticleTechnique* particleTechnique, 
-		Particle* particle, 
-		Real timeElapsed)
-	{
+	
+	void LineAffector::_firstParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		// The first particle should stay on its place
 		mFirst = true;
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::_preProcessParticles(ParticleTechnique* technique, Real timeElapsed)
-	{
-		if (technique->getNumberOfEmittedParticles() > 0)
-		{
+	
+	void LineAffector::_preProcessParticles(ParticleTechnique * technique, Real timeElapsed) {
+		if (technique->getNumberOfEmittedParticles() > 0) {
 			mTimeSinceLastUpdate += timeElapsed;
-			while (mTimeSinceLastUpdate > mTimeStep)
-			{
+			while (mTimeSinceLastUpdate > mTimeStep) {
 				mTimeSinceLastUpdate -= mTimeStep;
 				mUpdate = true;
 			}
 		}
 		mParentTechnique->getParentSystem()->rotationOffset(mEnd); // Always update
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+	
+	void LineAffector::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		mParentTechnique->getParentSystem()->rotationOffset(particle->originalPosition); // Always update
-		if (mUpdate && Math::UnitRandom() > 0.5 && !mFirst)
-		{
+		if (mUpdate && Math::UnitRandom() > 0.5 && !mFirst) {
 			// Generate a random vector perpendicular on the line
-			Vector3 perpendicular = mEnd.crossProduct(Vector3(Math::RangeRandom(-1, 1), 
-				Math::RangeRandom(-1, 1), 
-				Math::RangeRandom(-1, 1)));
+			Vector3 perpendicular = mEnd.crossProduct(Vector3(Math::RangeRandom(-1, 1), Math::RangeRandom(-1, 1), Math::RangeRandom(-1, 1)));
 			perpendicular.normalise();
 
 			// Determine a random point near the line.
@@ -147,17 +113,15 @@ namespace ParticleUniverse
 		}
 		mFirst = false;
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::_postProcessParticles(ParticleTechnique* technique, Real timeElapsed)
-	{
+	
+	void LineAffector::_postProcessParticles(ParticleTechnique * technique, Real timeElapsed) {
 		mUpdate = false;
 	}
-	//-----------------------------------------------------------------------
-	void LineAffector::copyAttributesTo (ParticleAffector* affector)
-	{
+	
+	void LineAffector::copyAttributesTo(ParticleAffector * affector) {
 		ParticleAffector::copyAttributesTo(affector);
 
-		LineAffector* lineAffector = static_cast<LineAffector*>(affector);
+		LineAffector * lineAffector = static_cast<LineAffector *>(affector);
 
 		lineAffector->setMaxDeviation(mMaxDeviation);
 		lineAffector->mEnd = mEnd;
@@ -165,4 +129,5 @@ namespace ParticleUniverse
 		lineAffector->mDrift = mDrift;
 		lineAffector->mOneMinusDrift = mOneMinusDrift;
 	}
-}
+
+} /* namespace ParticleUniverse */

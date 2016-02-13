@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_RANDOMISER_TOKENS_H__
 #define __PU_RANDOMISER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The RandomiserTranslator parses 'Randomiser' tokens
 	*/
-	class _ParticleUniverseExport RandomiserTranslator : public ScriptTranslator
-	{
-		public:
-			RandomiserTranslator(void){};
-			~RandomiserTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport RandomiserTranslator : public ScriptTranslator {
+	public:
+		RandomiserTranslator() {}
+		~RandomiserTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport RandomiserWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport RandomiserWriter : public ParticleAffectorWriter {
+	public:
+		RandomiserWriter() {}
+		virtual ~RandomiserWriter() {}
 
-			RandomiserWriter(void) {};
-			virtual ~RandomiserWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_RANDOMISER_TOKENS_H__ */

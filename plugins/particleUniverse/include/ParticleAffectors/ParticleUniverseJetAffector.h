@@ -24,49 +24,47 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_JET_AFFECTOR_H__
 #define __PU_JET_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffector.h"
-#include "ParticleUniverseDynamicAttribute.h"
 #include "ParticleUniverseDynamicAttributeFactory.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Adds a non-linear boost to a particle.
     */
-	class _ParticleUniverseExport JetAffector : public ParticleAffector
-	{
-		protected:
-			Real mScaled;
+	class _ParticleUniverseExport JetAffector : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			/** Dynamic attribute used to generate the velocity of a particle.
-			*/
-			DynamicAttribute* mDynAcceleration;
+		// Constants
+		static const Real DEFAULT_ACCELERATION;
 
-			/** Helper factory
-			*/
-			DynamicAttributeFactory mDynamicAttributeFactory;
+		JetAffector();
+	    virtual ~JetAffector();
 
-		public:
-			using Particle::copyAttributesTo;
+		/** 
+	    */
+		DynamicAttribute * getDynAcceleration() const { return mDynAcceleration; }
+		void setDynAcceleration(DynamicAttribute * dynAcceleration);
 
-			// Constants
-			static const Real DEFAULT_ACCELERATION;
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			JetAffector(void);
-	        virtual ~JetAffector(void);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-			/** 
-	        */
-			DynamicAttribute* getDynAcceleration(void) const {return mDynAcceleration;}
-			void setDynAcceleration(DynamicAttribute* dynAcceleration);
+	protected:
+		Real mScaled;
 
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** Dynamic attribute used to generate the velocity of a particle.
+		*/
+		DynamicAttribute * mDynAcceleration;
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** Helper factory
+		*/
+		DynamicAttributeFactory mDynamicAttributeFactory;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_JET_AFFECTOR_H__ */

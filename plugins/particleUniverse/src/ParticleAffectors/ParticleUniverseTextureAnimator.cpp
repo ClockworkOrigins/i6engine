@@ -21,248 +21,183 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseTextureAnimator.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleUniverseVisualParticle.h"
+
+namespace ParticleUniverse {
+
 	// Constants
-	const Real TextureAnimator::DEFAULT_TIME_STEP = 0.0f;
+	const Real TextureAnimator::DEFAULT_TIME_STEP = 0.0;
 	const uint16 TextureAnimator::DEFAULT_TEXCOORDS_START = 0;
 	const uint16 TextureAnimator::DEFAULT_TEXCOORDS_END = 0;
 	const TextureAnimator::TextureAnimationType TextureAnimator::DEFAULT_ANIMATION_TYPE = TextureAnimator::TAT_LOOP;
 	const bool TextureAnimator::DEFAULT_START_RANDOM = true;
 
-	//-----------------------------------------------------------------------
-	TextureAnimator::TextureAnimator(void) : 
-		ParticleAffector(),
-		mAnimationTimeStep(DEFAULT_TIME_STEP),
-		mAnimationTimeStepCount(0.0f),
-		mStartRandom(DEFAULT_START_RANDOM),
-		mAnimationTimeStepSet(false),
-		mNextIndex(false),
-		mTextureAnimationType(DEFAULT_ANIMATION_TYPE),
-		mTextureCoordsStart(DEFAULT_TEXCOORDS_START),
-		mTextureCoordsEnd(DEFAULT_TEXCOORDS_END)
-	{
+	TextureAnimator::TextureAnimator() : ParticleAffector(), mAnimationTimeStep(DEFAULT_TIME_STEP), mAnimationTimeStepCount(0.0), mStartRandom(DEFAULT_START_RANDOM), mAnimationTimeStepSet(false), mNextIndex(false), mTextureAnimationType(DEFAULT_ANIMATION_TYPE), mTextureCoordsStart(DEFAULT_TEXCOORDS_START), mTextureCoordsEnd(DEFAULT_TEXCOORDS_END) {
 	}
-	//-----------------------------------------------------------------------
-	TextureAnimator::~TextureAnimator(void)
-	{
+	
+	TextureAnimator::~TextureAnimator() {
 	}
-	//-----------------------------------------------------------------------
-	Real TextureAnimator::getAnimationTimeStep(void) const
-	{
+	
+	Real TextureAnimator::getAnimationTimeStep() const {
 		return mAnimationTimeStep;
 	}
-	//-----------------------------------------------------------------------
-	void TextureAnimator::setAnimationTimeStep(Real animationTimeStep)
-	{
+	
+	void TextureAnimator::setAnimationTimeStep(Real animationTimeStep) {
 		mAnimationTimeStep = animationTimeStep;
 		mAnimationTimeStepSet = true;
 	}
-	//-----------------------------------------------------------------------
-	TextureAnimator::TextureAnimationType TextureAnimator::getTextureAnimationType(void) const
-	{
+	
+	TextureAnimator::TextureAnimationType TextureAnimator::getTextureAnimationType() const {
 		return mTextureAnimationType;
 	}
-	//-----------------------------------------------------------------------
-	void TextureAnimator::setTextureAnimationType(TextureAnimator::TextureAnimationType textureAnimationType)
-	{
+	
+	void TextureAnimator::setTextureAnimationType(TextureAnimator::TextureAnimationType textureAnimationType) {
 		mTextureAnimationType = textureAnimationType;
 	}
-	//-----------------------------------------------------------------------
-	uint16 TextureAnimator::getTextureCoordsStart(void) const
-	{
+	
+	uint16 TextureAnimator::getTextureCoordsStart() const {
 		return mTextureCoordsStart;
 	}
-	//-----------------------------------------------------------------------
-	void TextureAnimator::setTextureCoordsStart(uint16 textureCoordsStart)
-	{
+	
+	void TextureAnimator::setTextureCoordsStart(uint16 textureCoordsStart) {
 		mTextureCoordsStart = textureCoordsStart;
 	}
-	//-----------------------------------------------------------------------
-	uint16 TextureAnimator::getTextureCoordsEnd(void) const
-	{
+	
+	uint16 TextureAnimator::getTextureCoordsEnd() const {
 		return mTextureCoordsEnd;
 	}
-	//-----------------------------------------------------------------------
-	void TextureAnimator::setTextureCoordsEnd(uint16 textureCoordsEnd)
-	{
+	
+	void TextureAnimator::setTextureCoordsEnd(uint16 textureCoordsEnd) {
 		mTextureCoordsEnd = textureCoordsEnd;
 	}
-	//-----------------------------------------------------------------------
-	bool TextureAnimator::isStartRandom(void) const
-	{
+	
+	bool TextureAnimator::isStartRandom() const {
 		return mStartRandom;
 	}
-	//-----------------------------------------------------------------------
-	void TextureAnimator::setStartRandom(bool startRandom)
-	{
+	
+	void TextureAnimator::setStartRandom(bool startRandom) {
 		mStartRandom = startRandom;
 	}
-	//-----------------------------------------------------------------------
-	void TextureAnimator::_initParticleForEmission(Particle* particle)
-	{
+	
+	void TextureAnimator::_initParticleForEmission(Particle * particle) {
 		// Only continue if the particle is a visual particle
-		if (particle->particleType != Particle::PT_VISUAL)
+		if (particle->particleType != Particle::PT_VISUAL) {
 			return;
+		}
 
-		VisualParticle* visualParticle = static_cast<VisualParticle*>(particle);
+		VisualParticle * visualParticle = static_cast<VisualParticle *>(particle);
 
 		// Set first image
-		if (mStartRandom)
-		{
+		if (mStartRandom) {
 			visualParticle->textureCoordsCurrent = uint16(Math::RangeRandom(Real(mTextureCoordsStart), Real(mTextureCoordsEnd) + 0.999f));
-		}
-		else
-		{
+		} else {
 			visualParticle->textureCoordsCurrent = mTextureCoordsStart;
 		}
 
 		// Calculate the animationTimeStep
-		if (!mAnimationTimeStepSet)
-		{
+		if (!mAnimationTimeStepSet) {
 			// Set the animation time step for each particle
-			switch(mTextureAnimationType)
-			{
-				case TAT_LOOP:
-				{
-					visualParticle->textureAnimationTimeStep = visualParticle->timeToLive / (mTextureCoordsEnd - mTextureCoordsStart + 1);
-				}
+			switch (mTextureAnimationType) {
+			case TAT_LOOP: {
+				visualParticle->textureAnimationTimeStep = visualParticle->timeToLive / (mTextureCoordsEnd - mTextureCoordsStart + 1);
 				break;
-
-				case TAT_UP_DOWN:
-				{
-					visualParticle->textureAnimationTimeStep = visualParticle->timeToLive / (2 * (mTextureCoordsEnd - mTextureCoordsStart) + 1);
-				}
+			}
+			case TAT_UP_DOWN: {
+				visualParticle->textureAnimationTimeStep = visualParticle->timeToLive / (2 * (mTextureCoordsEnd - mTextureCoordsStart) + 1);
 				break;
-
-				case TAT_RANDOM:
-				{
-					visualParticle->textureAnimationTimeStep = visualParticle->timeToLive;
-				}
+			}
+			case TAT_RANDOM: {
+				visualParticle->textureAnimationTimeStep = visualParticle->timeToLive;
 				break;
-				default: {
-					break;
-				}
+			}
+			default: {
+				break;
+			}
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void TextureAnimator::_preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
+	
+	void TextureAnimator::_preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
 		// Determine the next texture coords index (global)
-		if (mAnimationTimeStepSet)
-		{
+		if (mAnimationTimeStepSet) {
 			mNextIndex = false;
 			mAnimationTimeStepCount += timeElapsed;
-			if (mAnimationTimeStepCount > mAnimationTimeStep)
-			{
+			if (mAnimationTimeStepCount > mAnimationTimeStep) {
 				mAnimationTimeStepCount -= mAnimationTimeStep;
 				mNextIndex = true;
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void TextureAnimator::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+	
+	void TextureAnimator::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		// Only continue if the particle is a visual particle
-		if (particle->particleType != Particle::PT_VISUAL)
+		if (particle->particleType != Particle::PT_VISUAL) {
 			return;
+		}
 
-		VisualParticle* visualParticle = static_cast<VisualParticle*>(particle);
+		VisualParticle * visualParticle = static_cast<VisualParticle *>(particle);
 
 		// Determine the next texture coords index
-		if (mAnimationTimeStepSet)
-		{
-			if (mNextIndex)
-			{
+		if (mAnimationTimeStepSet) {
+			if (mNextIndex) {
 				// Use the global one for all particles
 				_determineNextTextureCoords(visualParticle);
 			}
-		}
-		else
-		{
+		} else {
 			visualParticle->textureAnimationTimeStepCount += timeElapsed;
-			if (visualParticle->textureAnimationTimeStepCount > visualParticle->textureAnimationTimeStep)
-			{
+			if (visualParticle->textureAnimationTimeStepCount > visualParticle->textureAnimationTimeStep) {
 				visualParticle->textureAnimationTimeStepCount -= visualParticle->textureAnimationTimeStep;
 				_determineNextTextureCoords(visualParticle);
 			}
 		}
 	}
-	//-----------------------------------------------------------------------
-	void TextureAnimator::_determineNextTextureCoords(VisualParticle* visualParticle)
-	{
-		switch(mTextureAnimationType)
-		{
-			case TAT_LOOP:
-			{
-				if (visualParticle->textureCoordsCurrent >= mTextureCoordsEnd)
-				{
-					visualParticle->textureCoordsCurrent = mTextureCoordsStart;
-				}
-				else
-				{
+	
+	void TextureAnimator::_determineNextTextureCoords(VisualParticle * visualParticle) {
+		switch (mTextureAnimationType) {
+		case TAT_LOOP: {
+			if (visualParticle->textureCoordsCurrent >= mTextureCoordsEnd) {
+				visualParticle->textureCoordsCurrent = mTextureCoordsStart;
+			} else {
+				(visualParticle->textureCoordsCurrent)++;
+			}
+			break;
+		}
+		case TAT_UP_DOWN: {
+			if (visualParticle->textureAnimationDirectionUp == true) {
+				// Going up
+				if (visualParticle->textureCoordsCurrent >= mTextureCoordsEnd) {
+					(visualParticle->textureCoordsCurrent)--;
+					visualParticle->textureAnimationDirectionUp = false;
+				} else {
 					(visualParticle->textureCoordsCurrent)++;
 				}
-			}
-			break;
-
-			case TAT_UP_DOWN:
-			{
-				if (visualParticle->textureAnimationDirectionUp == true)
-				{
-					// Going up
-					if (visualParticle->textureCoordsCurrent >= mTextureCoordsEnd)
-					{
-						(visualParticle->textureCoordsCurrent)--;
-						visualParticle->textureAnimationDirectionUp = false;
-					}
-					else
-					{
-						(visualParticle->textureCoordsCurrent)++;
-					}
-				}
-				else
-				{
-					// Going down
-					if (visualParticle->textureCoordsCurrent <= mTextureCoordsStart)
-					{
-						(visualParticle->textureCoordsCurrent)++;
-						visualParticle->textureAnimationDirectionUp = true;
-					}
-					else
-					{
-						(visualParticle->textureCoordsCurrent)--;
-					}
+			} else {
+				// Going down
+				if (visualParticle->textureCoordsCurrent <= mTextureCoordsStart) {
+					(visualParticle->textureCoordsCurrent)++;
+					visualParticle->textureAnimationDirectionUp = true;
+				} else {
+					(visualParticle->textureCoordsCurrent)--;
 				}
 			}
 			break;
-
-			case TAT_RANDOM:
-			{
-				// Generate a random texcoord index
-				visualParticle->textureCoordsCurrent = uint16(Math::RangeRandom(Real(mTextureCoordsStart), Real(mTextureCoordsEnd) + 0.999f));
-			}
+		}
+		case TAT_RANDOM: {
+			// Generate a random texcoord index
+			visualParticle->textureCoordsCurrent = uint16(Math::RangeRandom(Real(mTextureCoordsStart), Real(mTextureCoordsEnd) + 0.999f));
 			break;
-			default: {
-				break;
-			}
+		}
+		default: {
+			break;
+		}
 		}
 	}
 
-	//-----------------------------------------------------------------------
-	void TextureAnimator::copyAttributesTo (ParticleAffector* affector)
-	{
+	void TextureAnimator::copyAttributesTo(ParticleAffector * affector) {
 		ParticleAffector::copyAttributesTo(affector);
-		TextureAnimator* textureAnimator = static_cast<TextureAnimator*>(affector);
+		TextureAnimator * textureAnimator = static_cast<TextureAnimator *>(affector);
 		textureAnimator->mAnimationTimeStep = mAnimationTimeStep;
 		textureAnimator->mAnimationTimeStepSet = mAnimationTimeStepSet;
 		textureAnimator->mTextureAnimationType = mTextureAnimationType;
@@ -271,4 +206,4 @@ namespace ParticleUniverse
 		textureAnimator->mStartRandom = mStartRandom;
 	}
 
-}
+} /* namespace ParticleUniverse */

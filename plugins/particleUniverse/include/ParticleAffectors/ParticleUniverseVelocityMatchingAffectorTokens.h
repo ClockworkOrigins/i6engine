@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_VELOCITY_MATCHING_AFFECTOR_TOKENS_H__
 #define __PU_VELOCITY_MATCHING_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The VelocityMatchingAffectorTranslator parses 'VelocityMatchingAffector' tokens
 	*/
-	class _ParticleUniverseExport VelocityMatchingAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			VelocityMatchingAffectorTranslator(void){};
-			~VelocityMatchingAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport VelocityMatchingAffectorTranslator : public ScriptTranslator {
+	public:
+		VelocityMatchingAffectorTranslator() {}
+		~VelocityMatchingAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport VelocityMatchingAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport VelocityMatchingAffectorWriter : public ParticleAffectorWriter {
+	public:
+		VelocityMatchingAffectorWriter() {}
+		virtual ~VelocityMatchingAffectorWriter() {}
 
-			VelocityMatchingAffectorWriter(void) {};
-			virtual ~VelocityMatchingAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_VELOCITY_MATCHING_AFFECTOR_TOKENS_H__ */

@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SCALE_VELOCITY_AFFECTOR_TOKENS_H__
 #define __PU_SCALE_VELOCITY_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The ScaleVelocityAffectorTranslator parses 'ScaleVelocityAffector' tokens
 	*/
-	class _ParticleUniverseExport ScaleVelocityAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			ScaleVelocityAffectorTranslator(void){};
-			~ScaleVelocityAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport ScaleVelocityAffectorTranslator : public ScriptTranslator {
+	public:
+		ScaleVelocityAffectorTranslator() {}
+		~ScaleVelocityAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ScaleVelocityAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport ScaleVelocityAffectorWriter : public ParticleAffectorWriter {
+	public:
+		ScaleVelocityAffectorWriter() {}
+		virtual ~ScaleVelocityAffectorWriter() {}
 
-			ScaleVelocityAffectorWriter(void) {};
-			virtual ~ScaleVelocityAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SCALE_VELOCITY_AFFECTOR_TOKENS_H__ */

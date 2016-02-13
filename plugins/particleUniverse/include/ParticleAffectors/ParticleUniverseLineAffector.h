@@ -24,80 +24,79 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_LINE_AFFECTOR_H__
 #define __PU_LINE_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Affects a particle depending on a line shape. Particles are getting a new position along the line.
     */
-	class _ParticleUniverseExport LineAffector : public ParticleAffector
-	{
-		protected:
-			Real mMaxDeviation;
-			Real _mScaledMaxDeviation;
-			Vector3 mEnd;
-			Real mTimeSinceLastUpdate;
-			Real mTimeStep;
-			Real mDrift;
-			Real mOneMinusDrift;
-			bool mUpdate;
-			bool mFirst;
+	class _ParticleUniverseExport LineAffector : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-		public:
-			using Particle::copyAttributesTo;
-
-			// Constants
-			static const Real DEFAULT_MAX_DEVIATION;
-			static const Real DEFAULT_TIME_STEP;
-			static const Vector3 DEFAULT_END;
-			static const Real DEFAULT_DRIFT;
+		// Constants
+		static const Real DEFAULT_MAX_DEVIATION;
+		static const Real DEFAULT_TIME_STEP;
+		static const Vector3 DEFAULT_END;
+		static const Real DEFAULT_DRIFT;
 			
-			LineAffector(void);
-	        virtual ~LineAffector(void) {}
+		LineAffector();
+	    virtual ~LineAffector() {}
 
-			/** 
-	        */
-			Real getMaxDeviation(void) const;
-			void setMaxDeviation(Real maxDeviation);
+		/** 
+	    */
+		Real getMaxDeviation() const;
+		void setMaxDeviation(Real maxDeviation);
 
-			/** 
-	        */
-			const Vector3& getEnd(void) const;
-			void setEnd(const Vector3& end);
+		/** 
+	    */
+		const Vector3 & getEnd() const;
+		void setEnd(const Vector3 & end);
 
-			/** 
-	        */
-			Real getTimeStep(void) const;
-			void setTimeStep(Real timeStep);
+		/** 
+	    */
+		Real getTimeStep() const;
+		void setTimeStep(Real timeStep);
 
-			/** 
-	        */
-			Real getDrift(void) const;
-			void setDrift(Real drift);
+		/** 
+	    */
+		Real getDrift() const;
+		void setDrift(Real drift);
 
-			/**
-	        */
-			virtual void _notifyRescaled(const Vector3& scale);
+		/**
+	    */
+		virtual void _notifyRescaled(const Vector3 & scale);
 
-			/** 
-	        */
-			virtual void _firstParticle(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
-			/** 
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);
+		/** 
+	    */
+		virtual void _firstParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed);
 
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual void _postProcessParticles(ParticleTechnique* technique, Real timeElapsed);
+		/** 
+	    */
+		virtual void _postProcessParticles(ParticleTechnique * technique, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
+
+	protected:
+		Real mMaxDeviation;
+		Real _mScaledMaxDeviation;
+		Vector3 mEnd;
+		Real mTimeSinceLastUpdate;
+		Real mTimeStep;
+		Real mDrift;
+		Real mOneMinusDrift;
+		bool mUpdate;
+		bool mFirst;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_LINE_AFFECTOR_H__ */

@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_INTERPARTICLE_COLLIDER_TOKENS_H__
 #define __PU_INTERPARTICLE_COLLIDER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The InterParticleColliderTranslator parses 'InterParticleCollider' tokens
 	*/
-	class _ParticleUniverseExport InterParticleColliderTranslator : public ScriptTranslator
-	{
-		public:
-			InterParticleColliderTranslator(void){};
-			~InterParticleColliderTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport InterParticleColliderTranslator : public ScriptTranslator {
+	public:
+		InterParticleColliderTranslator() {}
+		~InterParticleColliderTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport InterParticleColliderWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport InterParticleColliderWriter : public ParticleAffectorWriter {
+	public:
+		InterParticleColliderWriter() {}
+		virtual ~InterParticleColliderWriter() {}
 
-			InterParticleColliderWriter(void) {};
-			virtual ~InterParticleColliderWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_INTERPARTICLE_COLLIDER_TOKENS_H__ */

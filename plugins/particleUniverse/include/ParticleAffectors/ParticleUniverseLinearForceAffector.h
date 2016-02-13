@@ -24,38 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_LINEAR_FORCE_AFFECTOR_H__
 #define __PU_LINEAR_FORCE_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBaseForceAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Adds a force to particles.
     */
-	class _ParticleUniverseExport LinearForceAffector : public BaseForceAffector
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport LinearForceAffector : public BaseForceAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			LinearForceAffector(void) : 
-				BaseForceAffector()
-			{
-			}
-	        virtual ~LinearForceAffector(void) {}
+		LinearForceAffector() : BaseForceAffector() {
+		}
+	    virtual ~LinearForceAffector() {}
 
-			/** 
-	        */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** 
+	    */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-			/** 
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);
+		/** 
+	    */
+		virtual void _preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed);
 
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
-
-		protected:
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_LINEAR_FORCE_AFFECTOR_H__ */

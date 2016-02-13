@@ -24,38 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_FLOCK_CENTER_AFFECTOR_TOKENS_H__
 #define __PU_FLOCK_CENTER_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBaseForceAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The LinearForceAffectorTranslator parses 'LinearForceAffector' tokens
 	*/
-	class _ParticleUniverseExport LinearForceAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			LinearForceAffectorTranslator(void){};
-			~LinearForceAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport LinearForceAffectorTranslator : public ScriptTranslator {
+	public:
+		LinearForceAffectorTranslator() {}
+		~LinearForceAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport LinearForceAffectorWriter : public BaseForceAffectorWriter
-	{
-		public:
-			LinearForceAffectorWriter(void) {};
-			virtual ~LinearForceAffectorWriter(void) {};
+	class _ParticleUniverseExport LinearForceAffectorWriter : public BaseForceAffectorWriter {
+	public:
+		LinearForceAffectorWriter() {}
+		virtual ~LinearForceAffectorWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_FLOCK_CENTER_AFFECTOR_TOKENS_H__ */

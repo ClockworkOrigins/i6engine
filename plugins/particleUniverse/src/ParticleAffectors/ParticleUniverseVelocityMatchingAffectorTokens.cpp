@@ -21,45 +21,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleAffectors/ParticleUniverseVelocityMatchingAffector.h"
 #include "ParticleAffectors/ParticleUniverseVelocityMatchingAffectorTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool VelocityMatchingAffectorTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleAffector* af = any_cast<ParticleAffector*>(prop->parent->context);
-		VelocityMatchingAffector* affector = static_cast<VelocityMatchingAffector*>(af);
+#include "ParticleUniverseCommon.h"
+#include "ParticleUniverseScriptSerializer.h"
 
-		if (prop->name == token[TOKEN_RADIUS])
-		{
+#include "ParticleAffectors/ParticleUniverseVelocityMatchingAffector.h"
+
+namespace ParticleUniverse {
+	
+	bool VelocityMatchingAffectorTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleAffector * af = any_cast<ParticleAffector *>(prop->parent->context);
+		VelocityMatchingAffector * affector = static_cast<VelocityMatchingAffector *>(af);
+
+		if (prop->name == token[TOKEN_RADIUS]) {
 			// Property: radius
-			if (passValidateProperty(compiler, prop, token[TOKEN_RADIUS], VAL_REAL))
-			{
-				Real val = 0.0f;
-				if(getReal(prop->values.front(), &val))
-				{
+			if (passValidateProperty(compiler, prop, token[TOKEN_RADIUS], VAL_REAL)) {
+				Real val = 0.0;
+				if (getReal(prop->values.front(), &val)) {
 					affector->setRadius(val);
 					return true;
 				}
 			}
-		}
-		else if (prop->name == token[TOKEN_VELO_MATCHING_RADIUS])
-		{
+		} else if (prop->name == token[TOKEN_VELO_MATCHING_RADIUS]) {
 			// Property: velocity_matching_radius (deprecated and replaced by radius)
-			if (passValidateProperty(compiler, prop, token[TOKEN_VELO_MATCHING_RADIUS], VAL_REAL))
-			{
-				Real val = 0.0f;
-				if(getReal(prop->values.front(), &val))
-				{
+			if (passValidateProperty(compiler, prop, token[TOKEN_VELO_MATCHING_RADIUS], VAL_REAL)) {
+				Real val = 0.0;
+				if (getReal(prop->values.front(), &val)) {
 					affector->setRadius(val);
 					return true;
 				}
@@ -68,19 +57,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool VelocityMatchingAffectorTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool VelocityMatchingAffectorTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void VelocityMatchingAffectorWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void VelocityMatchingAffectorWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a VelocityMatchingAffector
-		const VelocityMatchingAffector* affector = static_cast<const VelocityMatchingAffector*>(element);
+		const VelocityMatchingAffector * affector = static_cast<const VelocityMatchingAffector *>(element);
 
 		// Write the header of the VelocityMatchingAffector
 		serializer->writeLine(token[TOKEN_AFFECTOR], affector->getAffectorType(), affector->getName(), 8);
@@ -90,11 +75,12 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (!almostEquals(affector->getRadius(), VelocityMatchingAffector::DEFAULT_RADIUS)) serializer->writeLine(
-			token[TOKEN_RADIUS], StringConverter::toString(affector->getRadius()), 12);
+		if (!almostEquals(affector->getRadius(), VelocityMatchingAffector::DEFAULT_RADIUS)) {
+			serializer->writeLine(token[TOKEN_RADIUS], StringConverter::toString(affector->getRadius()), 12);
+		}
 
 		// Write the close bracket
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

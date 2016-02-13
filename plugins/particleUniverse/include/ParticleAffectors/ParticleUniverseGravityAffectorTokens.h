@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_GRAVITY_AFFECTOR_TOKENS_H__
 #define __PU_GRAVITY_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The GravityAffectorTranslator parses 'GravityAffector' tokens
 	*/
-	class _ParticleUniverseExport GravityAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			GravityAffectorTranslator(void){};
-			~GravityAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport GravityAffectorTranslator : public ScriptTranslator {
+	public:
+		GravityAffectorTranslator() {}
+		~GravityAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport GravityAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport GravityAffectorWriter : public ParticleAffectorWriter {
+	public:
+		GravityAffectorWriter() {}
+		virtual ~GravityAffectorWriter() {}
 
-			GravityAffectorWriter(void) {};
-			virtual ~GravityAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_GRAVITY_AFFECTOR_TOKENS_H__ */

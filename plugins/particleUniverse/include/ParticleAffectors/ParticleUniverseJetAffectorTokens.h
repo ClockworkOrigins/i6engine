@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_JET_AFFECTOR_TOKENS_H__
 #define __PU_JET_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The JetAffectorTranslator parses 'JetAffector' tokens
 	*/
-	class _ParticleUniverseExport JetAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			JetAffectorTranslator(void){};
-			~JetAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport JetAffectorTranslator : public ScriptTranslator {
+	public:
+		JetAffectorTranslator() {}
+		~JetAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport JetAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport JetAffectorWriter : public ParticleAffectorWriter {
+	public:
+		JetAffectorWriter() {}
+		virtual ~JetAffectorWriter() {}
 
-			JetAffectorWriter(void) {};
-			virtual ~JetAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_JET_AFFECTOR_TOKENS_H__ */

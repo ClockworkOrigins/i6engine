@@ -28,83 +28,80 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ParticleUniverseDynamicAttributeFactory.h"
 #include "ParticleUniverseMath.h"
 
-namespace ParticleUniverse
-{
-
-	class DynamicAttribute;
+namespace ParticleUniverse {
 
 	/** The TextureRotator rotates the texture(s) of a particle. In general it is possible to support individual
 		rotation of each particle texture-set - the same as in the geometry rotator, setting 
 		mUseOwnRotationSpeed to true -, but in practice this isn't really usable, because usually all particles
 		share the same material.
     */
-	class _ParticleUniverseExport TextureRotator : public ParticleAffector
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport TextureRotator : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			// Constants
-			static const bool DEFAULT_USE_OWN_SPEED;
-			static const Real DEFAULT_ROTATION_SPEED;
-			static const Real DEFAULT_ROTATION;
+		// Constants
+		static const bool DEFAULT_USE_OWN_SPEED;
+		static const Real DEFAULT_ROTATION_SPEED;
+		static const Real DEFAULT_ROTATION;
 
-			TextureRotator(void);
-	        virtual ~TextureRotator(void);
+		TextureRotator();
+	    virtual ~TextureRotator();
 
-			/** Returns an indication whether the 2D rotation speed is the same for all particles in this 
-				particle technique, or whether the 2D rotation speed of the particle itself is used.
-	        */
-			bool useOwnRotationSpeed (void) const;
+		/** Returns an indication whether the 2D rotation speed is the same for all particles in this 
+			particle technique, or whether the 2D rotation speed of the particle itself is used.
+	    */
+		bool useOwnRotationSpeed() const;
 
-			/** Set the indication whether the 2D rotation speed of the particle itself is used.
-	        */
-			void setUseOwnRotationSpeed (bool useOwnRotationSpeed);
+		/** Set the indication whether the 2D rotation speed of the particle itself is used.
+	    */
+		void setUseOwnRotationSpeed(bool useOwnRotationSpeed);
 
-			/** Returns the rotation speed. This is the speed controlled by the affector.
-	        */
-			DynamicAttribute* getRotationSpeed(void) const;
+		/** Returns the rotation speed. This is the speed controlled by the affector.
+	    */
+		DynamicAttribute * getRotationSpeed() const;
 
-			/** 
-	        */
-			void setRotationSpeed(DynamicAttribute* dynRotationSpeed);
+		/** 
+	    */
+		void setRotationSpeed(DynamicAttribute * dynRotationSpeed);
 
-			/** Returns the rotation defined in the the affector.
-	        */
-			DynamicAttribute* getRotation(void) const;
+		/** Returns the rotation defined in the the affector.
+	    */
+		DynamicAttribute * getRotation() const;
 
-			/** 
-	        */
-			void setRotation(DynamicAttribute* dynRotation);
+		/** 
+	    */
+		void setRotation(DynamicAttribute * dynRotation);
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-			/** Returns a rotation set in the affector, depending on the type of dynamic attribute.
-	        */
-			Radian _calculateRotation (void);
+		/** Returns a rotation set in the affector, depending on the type of dynamic attribute.
+	    */
+		Radian _calculateRotation();
 
-			/** Returns a rotation speed value, depending on the type of dynamic attribute.
-	        */
-			Radian _calculateRotationSpeed (Particle* particle);
+		/** Returns a rotation speed value, depending on the type of dynamic attribute.
+	    */
+		Radian _calculateRotationSpeed(Particle * particle);
 
-			/** @copydoc ParticleAffector::_initParticleForEmission */
-			virtual void _initParticleForEmission(Particle* particle);
+		/** @copydoc ParticleAffector::_initParticleForEmission */
+		virtual void _initParticleForEmission(Particle * particle);
 
-			/** @copydoc ParticleAffector::_affect */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** @copydoc ParticleAffector::_affect */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-		protected:
-			bool mUseOwnRotationSpeed;
-			Radian mScaledRotationSpeed;
-			Radian twoPiRad;
-			DynamicAttribute* mDynRotation;
-			DynamicAttribute* mDynRotationSpeed;
+	protected:
+		bool mUseOwnRotationSpeed;
+		Radian mScaledRotationSpeed;
+		Radian twoPiRad;
+		DynamicAttribute * mDynRotation;
+		DynamicAttribute * mDynRotationSpeed;
 
-			/** Helper factory
-			*/
-			DynamicAttributeFactory mDynamicAttributeFactory;
-			DynamicAttributeHelper mDynamicAttributeHelper;
+		/** Helper factory
+		*/
+		DynamicAttributeFactory mDynamicAttributeFactory;
+		DynamicAttributeHelper mDynamicAttributeHelper;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_TEXTURE_ROTATOR_H__ */

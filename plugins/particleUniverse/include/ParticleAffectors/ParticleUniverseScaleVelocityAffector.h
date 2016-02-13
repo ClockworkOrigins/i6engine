@@ -24,56 +24,54 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SCALE_VELOCITY_AFFECTOR_H__
 #define __PU_SCALE_VELOCITY_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseDynamicAttribute.h"
-#include "ParticleUniverseDynamicAttributeFactory.h"
 #include "ParticleUniverseAffector.h"
+#include "ParticleUniverseDynamicAttributeFactory.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Scales the velocity of a particle. This can be a linear scale, but scaling that changes over time alos is possible.
     */
-	class _ParticleUniverseExport ScaleVelocityAffector : public ParticleAffector
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport ScaleVelocityAffector : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			// Constants
-			static const Real DEFAULT_VELOCITY_SCALE;
+		// Constants
+		static const Real DEFAULT_VELOCITY_SCALE;
 
-			ScaleVelocityAffector(void);
-	        virtual ~ScaleVelocityAffector(void);
+		ScaleVelocityAffector();
+	    virtual ~ScaleVelocityAffector();
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			DynamicAttribute* getDynScaleVelocity(void) const {return mDynScaleVelocity;}
-			void setDynScaleVelocity(DynamicAttribute* dynScaleVelocity);
-			void resetDynScaleVelocity(bool resetToDefault = true);
+		/** 
+	    */
+		DynamicAttribute * getDynScaleVelocity() const { return mDynScaleVelocity; }
+		void setDynScaleVelocity(DynamicAttribute * dynScaleVelocity);
+		void resetDynScaleVelocity(bool resetToDefault = true);
 
-			/** 
-	        */
-			bool isSinceStartSystem(void) const {return mSinceStartSystem;}
-			void setSinceStartSystem(bool sinceStartSystem){mSinceStartSystem = sinceStartSystem;}
+		/** 
+	    */
+		bool isSinceStartSystem() const { return mSinceStartSystem; }
+		void setSinceStartSystem(bool sinceStartSystem) { mSinceStartSystem = sinceStartSystem; }
 
-			/** 
-	        */
-			bool isStopAtFlip(void) const {return mStopAtFlip;}
-			void setStopAtFlip(bool stopAtFlip){mStopAtFlip = stopAtFlip;}
+		/** 
+	    */
+		bool isStopAtFlip() const { return mStopAtFlip; }
+		void setStopAtFlip(bool stopAtFlip) { mStopAtFlip = stopAtFlip; }
 
 	protected:
-			DynamicAttribute* mDynScaleVelocity;
-			DynamicAttributeFactory mDynamicAttributeFactory;
-			DynamicAttributeHelper mDynamicAttributeHelper;
-			bool mSinceStartSystem;
-			bool mStopAtFlip;
+		DynamicAttribute * mDynScaleVelocity;
+		DynamicAttributeFactory mDynamicAttributeFactory;
+		DynamicAttributeHelper mDynamicAttributeHelper;
+		bool mSinceStartSystem;
+		bool mStopAtFlip;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SCALE_VELOCITY_AFFECTOR_H__ */

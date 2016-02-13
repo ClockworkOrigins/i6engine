@@ -24,75 +24,74 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_RANDOMISER_H__
 #define __PU_RANDOMISER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Randomises the position or the direction of a particle.
     */
-	class _ParticleUniverseExport Randomiser : public ParticleAffector
-	{
-		protected:
-			Real mMaxDeviationX;
-			Real mMaxDeviationY;
-			Real mMaxDeviationZ;
-			Real mTimeSinceLastUpdate;
-			Real mTimeStep;
-			bool mRandomDirection;
-			bool mUpdate;
+	class _ParticleUniverseExport Randomiser : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-		public:
-			using Particle::copyAttributesTo;
+		// Constants
+		static const Vector3 DEFAULT_MAX_DEVIATION;
+		static const Real DEFAULT_TIME_STEP;
+		static const bool DEFAULT_RANDOM_DIRECTION;
 
-			// Constants
-			static const Vector3 DEFAULT_MAX_DEVIATION;
-			static const Real DEFAULT_TIME_STEP;
-			static const bool DEFAULT_RANDOM_DIRECTION;
+		Randomiser();
+	    virtual ~Randomiser() {}
 
-			Randomiser(void);
-	        virtual ~Randomiser(void) {}
+		/** 
+	    */
+		Real getMaxDeviationX() const;
+		void setMaxDeviationX(const Real maxDeviationX);
 
-			/** 
-	        */
-			Real getMaxDeviationX(void) const;
-			void setMaxDeviationX(const Real maxDeviationX);
+		/** 
+	    */
+		Real getMaxDeviationY() const;
+		void setMaxDeviationY(const Real maxDeviationZ);
 
-			/** 
-	        */
-			Real getMaxDeviationY(void) const;
-			void setMaxDeviationY(const Real maxDeviationZ);
+		/** 
+	    */
+		Real getMaxDeviationZ() const;
+		void setMaxDeviationZ(const Real maxDeviationZ);
 
-			/** 
-	        */
-			Real getMaxDeviationZ(void) const;
-			void setMaxDeviationZ(const Real maxDeviationZ);
+		/** 
+	    */
+		Real getTimeStep() const;
+		void setTimeStep(const Real timeStep);
 
-			/** 
-	        */
-			Real getTimeStep(void) const;
-			void setTimeStep(const Real timeStep);
+		/** 
+	    */
+		bool isRandomDirection() const;
+		void setRandomDirection(bool randomDirection);
 
-			/** 
-	        */
-			bool isRandomDirection(void) const;
-			void setRandomDirection(bool randomDirection);
-
-			/** 
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);
+		/** 
+	    */
+		virtual void _preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed);
 			
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual void _postProcessParticles(ParticleTechnique* technique, Real timeElapsed);
+		/** 
+	    */
+		virtual void _postProcessParticles(ParticleTechnique * technique, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
+
+	protected:
+		Real mMaxDeviationX;
+		Real mMaxDeviationY;
+		Real mMaxDeviationZ;
+		Real mTimeSinceLastUpdate;
+		Real mTimeStep;
+		bool mRandomDirection;
+		bool mUpdate;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_RANDOMISER_H__ */

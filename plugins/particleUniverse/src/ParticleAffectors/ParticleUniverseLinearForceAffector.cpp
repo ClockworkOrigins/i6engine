@@ -21,39 +21,26 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseLinearForceAffector.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void LinearForceAffector::copyAttributesTo (ParticleAffector* affector)
-	{
+namespace ParticleUniverse {
+	
+	void LinearForceAffector::copyAttributesTo(ParticleAffector * affector) {
 		BaseForceAffector::copyAttributesTo(affector);
 	}
-	//-----------------------------------------------------------------------
-	void LinearForceAffector::_preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
+	
+	void LinearForceAffector::_preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
 		// Scale force
 		mScaledVector = mForceVector * timeElapsed;
 	}
-	//-----------------------------------------------------------------------
-	void LinearForceAffector::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+	
+	void LinearForceAffector::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		// Affect the direction and take the specialisation into account
-		if (mForceApplication == FA_ADD)
-		{
+		if (mForceApplication == FA_ADD) {
 			particle->direction += mScaledVector * _calculateAffectSpecialisationFactor(particle);
-		}
-		else
-		{
+		} else {
 			particle->direction = (particle->direction + mForceVector) / 2;
 		}
 	}
 
-}
+} /* namespace ParticleUniverse */

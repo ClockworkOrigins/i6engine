@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_FOLLOWER_TOKENS_H__
 #define __PU_PARTICLE_FOLLOWER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The ParticleFollowerTranslator parses 'ParticleFollower' tokens
 	*/
-	class _ParticleUniverseExport ParticleFollowerTranslator : public ScriptTranslator
-	{
-		public:
-			ParticleFollowerTranslator(void){};
-			~ParticleFollowerTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport ParticleFollowerTranslator : public ScriptTranslator {
+	public:
+		ParticleFollowerTranslator() {}
+		~ParticleFollowerTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ParticleFollowerWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport ParticleFollowerWriter : public ParticleAffectorWriter {
+	public:
+		ParticleFollowerWriter() {}
+		virtual ~ParticleFollowerWriter() {}
 
-			ParticleFollowerWriter(void) {};
-			virtual ~ParticleFollowerWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PARTICLE_FOLLOWER_TOKENS_H__ */

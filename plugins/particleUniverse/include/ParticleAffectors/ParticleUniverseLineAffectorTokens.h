@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_LINE_AFFECTOR_TOKENS_H__
 #define __PU_LINE_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The LineAffectorTranslator parses 'LineAffector' tokens
 	*/
-	class _ParticleUniverseExport LineAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			LineAffectorTranslator(void){};
-			~LineAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport LineAffectorTranslator : public ScriptTranslator {
+	public:
+		LineAffectorTranslator() {}
+		~LineAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport LineAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport LineAffectorWriter : public ParticleAffectorWriter {
+	public:
+		LineAffectorWriter() {}
+		virtual ~LineAffectorWriter() {}
 
-			LineAffectorWriter(void) {};
-			virtual ~LineAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_LINE_AFFECTOR_TOKENS_H__ */

@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_TEXTURE_ROTATOR_TOKENS_H__
 #define __PU_TEXTURE_ROTATOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The TextureRotatorTranslator parses 'TextureRotator' tokens
 	*/
-	class _ParticleUniverseExport TextureRotatorTranslator : public ScriptTranslator
-	{
-		public:
-			TextureRotatorTranslator(void){};
-			~TextureRotatorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport TextureRotatorTranslator : public ScriptTranslator {
+	public:
+		TextureRotatorTranslator() {}
+		~TextureRotatorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport TextureRotatorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport TextureRotatorWriter : public ParticleAffectorWriter {
+	public:
+		TextureRotatorWriter() {}
+		virtual ~TextureRotatorWriter() {}
 
-			TextureRotatorWriter(void) {};
-			virtual ~TextureRotatorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_TEXTURE_ROTATOR_TOKENS_H__ */

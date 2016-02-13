@@ -21,86 +21,69 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseVortexAffector.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleUniverseSystem.h"
+#include "ParticleUniverseTechnique.h"
+#include "ParticleUniverseVisualParticle.h"
+
+namespace ParticleUniverse {
+
 	// Constants
 	const Vector3 VortexAffector::DEFAULT_ROTATION_VECTOR(0, 0, 0);
-	const Real VortexAffector::DEFAULT_ROTATION_SPEED = 1.0f;
+	const Real VortexAffector::DEFAULT_ROTATION_SPEED = 1.0;
 
-	//-----------------------------------------------------------------------
-	VortexAffector::VortexAffector(void) : 
-		ParticleAffector(),
-		mRotationVector(DEFAULT_ROTATION_VECTOR),
-		mRotation(Quaternion::IDENTITY)
-	{
+	VortexAffector::VortexAffector() : ParticleAffector(), mRotationVector(DEFAULT_ROTATION_VECTOR), mRotation(Quaternion::IDENTITY) {
 		mDynRotationSpeed = PU_NEW_T(DynamicAttributeFixed, MEMCATEGORY_SCENE_OBJECTS)();
-		(static_cast<DynamicAttributeFixed*>(mDynRotationSpeed))->setValue(DEFAULT_ROTATION_SPEED);
+		static_cast<DynamicAttributeFixed *>(mDynRotationSpeed)->setValue(DEFAULT_ROTATION_SPEED);
 	}
-	//-----------------------------------------------------------------------
-	VortexAffector::~VortexAffector(void)
-	{
-		if (mDynRotationSpeed)
-		{
+	
+	VortexAffector::~VortexAffector() {
+		if (mDynRotationSpeed) {
 			PU_DELETE_T(mDynRotationSpeed, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
-			mDynRotationSpeed = 0;
+			mDynRotationSpeed = nullptr;
 		}
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& VortexAffector::getRotationVector(void) const
-	{
+	
+	const Vector3 & VortexAffector::getRotationVector() const {
 		return mRotationVector;
 	}
-	//-----------------------------------------------------------------------
-	void VortexAffector::setRotationVector(const Vector3& rotationVector)
-	{
+	
+	void VortexAffector::setRotationVector(const Vector3 & rotationVector) {
 		mRotationVector = rotationVector;
 	}
-	//-----------------------------------------------------------------------
-	DynamicAttribute* VortexAffector::getRotationSpeed(void) const
-	{
+	
+	DynamicAttribute * VortexAffector::getRotationSpeed() const {
 		return mDynRotationSpeed;
 	}
-	//-----------------------------------------------------------------------
-	void VortexAffector::setRotationSpeed(DynamicAttribute* dynRotationSpeed)
-	{
-		if (mDynRotationSpeed)
+	
+	void VortexAffector::setRotationSpeed(DynamicAttribute * dynRotationSpeed) {
+		if (mDynRotationSpeed) {
 			PU_DELETE_T(mDynRotationSpeed, DynamicAttribute, MEMCATEGORY_SCENE_OBJECTS);
+		}
 
 		mDynRotationSpeed = dynRotationSpeed;
 	}
-	//-----------------------------------------------------------------------
-	void VortexAffector::_preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
+	
+	void VortexAffector::_preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
 		ParticleSystem* sys = mParentTechnique->getParentSystem();
-		if (sys)
-		{
+		if (sys) {
 			mRotation.FromAngleAxis(Radian(_calculateRotationSpeed() * timeElapsed), sys->getDerivedOrientation() * mRotationVector);
-		}
-		else
-		{
+		} else {
 			mRotation.FromAngleAxis(Radian(_calculateRotationSpeed() * timeElapsed), mRotationVector);
 		}
 		getDerivedPosition();
 	}
-	//-----------------------------------------------------------------------
-	Radian VortexAffector::_calculateRotationSpeed(void)
-	{
+	
+	Radian VortexAffector::_calculateRotationSpeed() {
 		return Radian(mDynamicAttributeHelper.calculate(mDynRotationSpeed, mParentTechnique->getParentSystem()->getTimeElapsedSinceStart()));
 	}
-	//-----------------------------------------------------------------------
-	void VortexAffector::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+	
+	void VortexAffector::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		// Explicitly check on 'freezed', because it passes the techniques' validation.
-		if (particle->isFreezed())
+		if (particle->isFreezed()) {
 			return;
+		}
 
 		// Rotate position, direction and orientation (visible particle only) and compensate for the affector position
 		// Also take the affect specialisation into account
@@ -108,21 +91,19 @@ namespace ParticleUniverse
 		particle->position = mDerivedPosition + mRotation * local;
 		particle->direction = mRotation * particle->direction;
 
-		if (particle->particleType == Particle::PT_VISUAL)
-		{
-			VisualParticle* visualParticle = static_cast<VisualParticle*>(particle);
+		if (particle->particleType == Particle::PT_VISUAL) {
+			VisualParticle * visualParticle = static_cast<VisualParticle *>(particle);
 			visualParticle->orientation = mRotation * visualParticle->orientation;
 		}
 	}
-	//-----------------------------------------------------------------------
-	void VortexAffector::copyAttributesTo (ParticleAffector* affector)
-	{
+	
+	void VortexAffector::copyAttributesTo(ParticleAffector * affector) {
 		ParticleAffector::copyAttributesTo(affector);
 
-		VortexAffector* vortexAffector = static_cast<VortexAffector*>(affector);
+		VortexAffector * vortexAffector = static_cast<VortexAffector *>(affector);
 		vortexAffector->mRotation = mRotation;
 		vortexAffector->mRotationVector = mRotationVector;
 		vortexAffector->setRotationSpeed(mDynamicAttributeFactory.cloneDynamicAttribute(getRotationSpeed()));
 	}
 
-}
+} /* namespace ParticleUniverse */

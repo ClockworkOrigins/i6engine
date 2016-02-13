@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SPHERE_COLLIDER_TOKENS_H__
 #define __PU_SPHERE_COLLIDER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBaseColliderTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The SphereColliderTranslator parses 'SphereCollider' tokens
 	*/
-	class _ParticleUniverseExport SphereColliderTranslator : public ScriptTranslator
-	{
-		public:
-			SphereColliderTranslator(void){};
-			~SphereColliderTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport SphereColliderTranslator : public ScriptTranslator {
+	public:
+		SphereColliderTranslator() {}
+		~SphereColliderTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport SphereColliderWriter : public BaseColliderWriter
-	{
-		public:
+	class _ParticleUniverseExport SphereColliderWriter : public BaseColliderWriter {
+	public:
+		SphereColliderWriter() {}
+		virtual ~SphereColliderWriter() {}
 
-			SphereColliderWriter(void) {};
-			virtual ~SphereColliderWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SPHERE_COLLIDER_TOKENS_H__ */

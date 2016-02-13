@@ -21,59 +21,40 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseParticleFollower.h"
 
-namespace ParticleUniverse
-{
-	// Constants
-	const Real ParticleFollower::DEFAULT_MAX_DISTANCE = 3.40282e+038f;
-	const Real ParticleFollower::DEFAULT_MIN_DISTANCE = 10.0f;
+namespace ParticleUniverse {
 
-	//-----------------------------------------------------------------------
-	ParticleFollower::ParticleFollower(void) : 
-		ParticleAffector(),
-		mMinDistance(DEFAULT_MIN_DISTANCE),
-		mMaxDistance(DEFAULT_MAX_DISTANCE),
-		mPositionPreviousParticle(Vector3::ZERO),
-		mFirst(false)
-	{
+	// Constants
+	const Real ParticleFollower::DEFAULT_MAX_DISTANCE = 3.40282e+038;
+	const Real ParticleFollower::DEFAULT_MIN_DISTANCE = 10.0;
+
+	
+	ParticleFollower::ParticleFollower() : ParticleAffector(), mMinDistance(DEFAULT_MIN_DISTANCE), mMaxDistance(DEFAULT_MAX_DISTANCE), mPositionPreviousParticle(Vector3::ZERO), mFirst(false) {
 	}
-	//-----------------------------------------------------------------------
-	void ParticleFollower::copyAttributesTo (ParticleAffector* affector)
-	{
+	
+	void ParticleFollower::copyAttributesTo(ParticleAffector * affector) {
 		ParticleAffector::copyAttributesTo(affector);
 
-		ParticleFollower* particleFollower = static_cast<ParticleFollower*>(affector);
+		ParticleFollower * particleFollower = static_cast<ParticleFollower *>(affector);
 		particleFollower->mMaxDistance = mMaxDistance;
 		particleFollower->mMinDistance = mMinDistance;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleFollower::_firstParticle(ParticleTechnique* particleTechnique, 
-		Particle* particle, 
-		Real timeElapsed)
-	{
+	
+	void ParticleFollower::_firstParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		// The first particle should go its own way
 		mFirst = true;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleFollower::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (!mFirst)
-		{
+	
+	void ParticleFollower::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (!mFirst) {
 			// Change in V 1.3.1
 			// Only proceed if it isn´t the first one. Compensate for scaling.
 //			Real distance = (particle->position / _mAffectorScale).distance(mPositionPreviousParticle / _mAffectorScale);
-			Real distance = (particle->position).distance(mPositionPreviousParticle);
-			Real avgScale = 0.3333f * (_mAffectorScale.x + _mAffectorScale.y + _mAffectorScale.z);
+			Real distance = particle->position.distance(mPositionPreviousParticle);
+			Real avgScale = 0.3333 * (_mAffectorScale.x + _mAffectorScale.y + _mAffectorScale.z);
 			Real scaledMinDistance = avgScale * mMinDistance;
-			if (distance > scaledMinDistance && distance < avgScale * mMaxDistance)
-			{
+			if (distance > scaledMinDistance && distance < avgScale * mMaxDistance) {
 				// This particle drifts too much from the previous one; correct it!
 				Real f = scaledMinDistance/distance;
 				particle->position = mPositionPreviousParticle + f * (particle->position - mPositionPreviousParticle);
@@ -83,24 +64,21 @@ namespace ParticleUniverse
 		mPositionPreviousParticle = particle->position;
 		mFirst = false;
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleFollower::getMaxDistance(void) const
-	{
+	
+	Real ParticleFollower::getMaxDistance() const {
 		return mMaxDistance;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleFollower::setMaxDistance(Real maxDistance)
-	{
+	
+	void ParticleFollower::setMaxDistance(Real maxDistance) {
 		mMaxDistance = maxDistance;
 	}
-	//-----------------------------------------------------------------------
-	Real ParticleFollower::getMinDistance(void) const
-	{
+	
+	Real ParticleFollower::getMinDistance() const {
 		return mMinDistance;
 	}
-	//-----------------------------------------------------------------------
-	void ParticleFollower::setMinDistance(Real minDistance)
-	{
+	
+	void ParticleFollower::setMinDistance(Real minDistance) {
 		mMinDistance = minDistance;
 	}
-}
+
+} /* namespace ParticleUniverse */

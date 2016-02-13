@@ -24,54 +24,51 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PARTICLE_FOLLOWER_H__
 #define __PU_PARTICLE_FOLLOWER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This affector makes particles follow its predecessor.
     */
-	class _ParticleUniverseExport ParticleFollower : public ParticleAffector
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport ParticleFollower : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			// Constants
-			static const Real DEFAULT_MAX_DISTANCE;
-			static const Real DEFAULT_MIN_DISTANCE;
+		// Constants
+		static const Real DEFAULT_MAX_DISTANCE;
+		static const Real DEFAULT_MIN_DISTANCE;
 
-			ParticleFollower(void);
-	        virtual ~ParticleFollower(void) {}
+		ParticleFollower();
+	    virtual ~ParticleFollower() {}
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-			/** Validate if first particle.
-			*/
-			virtual void _firstParticle(ParticleTechnique* particleTechnique, 
-				Particle* particle, 
-				Real timeElapsed);
+		/** Validate if first particle.
+		*/
+		virtual void _firstParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			Real getMaxDistance(void) const;
-			void setMaxDistance(Real maxDistance);
+		/** 
+	    */
+		Real getMaxDistance() const;
+		void setMaxDistance(Real maxDistance);
 
-			/** 
-	        */
-			Real getMinDistance(void) const;
-			void setMinDistance(Real minDistance);
+		/** 
+	    */
+		Real getMinDistance() const;
+		void setMinDistance(Real minDistance);
 
-		protected:
-			Real mMinDistance;
-			Real mMaxDistance;
-			Vector3 mPositionPreviousParticle;
-			bool mFirst;
+	protected:
+		Real mMinDistance;
+		Real mMaxDistance;
+		Vector3 mPositionPreviousParticle;
+		bool mFirst;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PARTICLE_FOLLOWER_H__ */

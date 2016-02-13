@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SINE_FORCE_AFFECTOR_TOKENS_H__
 #define __PU_SINE_FORCE_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBaseForceAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The SineForceAffectorTranslator parses 'SineForceAffector' tokens
 	*/
-	class _ParticleUniverseExport SineForceAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			SineForceAffectorTranslator(void){};
-			~SineForceAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport SineForceAffectorTranslator : public ScriptTranslator {
+	public:
+		SineForceAffectorTranslator() {}
+		~SineForceAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport SineForceAffectorWriter : public BaseForceAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport SineForceAffectorWriter : public BaseForceAffectorWriter {
+	public:
+		SineForceAffectorWriter() {}
+		virtual ~SineForceAffectorWriter() {}
 
-			SineForceAffectorWriter(void) {};
-			virtual ~SineForceAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SINE_FORCE_AFFECTOR_TOKENS_H__ */

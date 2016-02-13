@@ -24,67 +24,65 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_INTERPARTICLE_COLLIDER_H__
 #define __PU_INTERPARTICLE_COLLIDER_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBaseCollider.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The InterParticleCollider is used to perform particle-particle collision.
     */
-	class _ParticleUniverseExport InterParticleCollider : public BaseCollider
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport InterParticleCollider : public BaseCollider {
+	public:
+		using Particle::copyAttributesTo;
 
-			enum InterParticleCollisionResponse
-			{
-				IPCR_AVERAGE_VELOCITY,
-				IPCR_ANGLE_BASED_VELOCITY
-			};
+		enum InterParticleCollisionResponse {
+			IPCR_AVERAGE_VELOCITY,
+			IPCR_ANGLE_BASED_VELOCITY
+		};
 
-			// Constants
-			static const Real DEFAULT_ADJUSTMENT;
-			static const InterParticleCollisionResponse DEFAULT_COLLISION_RESPONSE;
+		// Constants
+		static const Real DEFAULT_ADJUSTMENT;
+		static const InterParticleCollisionResponse DEFAULT_COLLISION_RESPONSE;
 
-			InterParticleCollider(void);
-	        virtual ~InterParticleCollider(void){}
+		InterParticleCollider();
+	    virtual ~InterParticleCollider() {}
 
-			/** Todo
-			*/
-			Real getAdjustment(void) const;
+		/** Todo
+		*/
+		Real getAdjustment() const;
 
-			/** Todo
-			*/
-			void setAdjustment(Real adjustment);
+		/** Todo
+		*/
+		void setAdjustment(Real adjustment);
 
-			/** Todo
-			*/
-			InterParticleCollisionResponse getInterParticleCollisionResponse(void) const;
+		/** Todo
+		*/
+		InterParticleCollisionResponse getInterParticleCollisionResponse() const;
 
-			/** Todo
-			*/
-			void setInterParticleCollisionResponse(InterParticleCollisionResponse interParticleCollisionResponse);
+		/** Todo
+		*/
+		void setInterParticleCollisionResponse(InterParticleCollisionResponse interParticleCollisionResponse);
 
-			/** @copydoc ParticleAffector::_prepare */
-			virtual void _prepare(ParticleTechnique* particleTechnique);
+		/** @copydoc ParticleAffector::_prepare */
+		virtual void _prepare(ParticleTechnique * particleTechnique);
 
-			/** @copydoc ParticleAffector::_unprepare */
-			virtual void _unprepare(ParticleTechnique* particleTechnique);
+		/** @copydoc ParticleAffector::_unprepare */
+		virtual void _unprepare(ParticleTechnique * particleTechnique);
 
-			/** @copydoc ParticleAffector::_affect */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** @copydoc ParticleAffector::_affect */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 		
-		protected:
-			Real mAdjustment;
-			InterParticleCollisionResponse mInterParticleCollisionResponse;
+	protected:
+		Real mAdjustment;
+		InterParticleCollisionResponse mInterParticleCollisionResponse;
 
-			/** Todo
-			*/
-			bool _validateAndExecuteSphereCollision (Particle* particle1, Particle* particle2, Real timeElapsed);
+		/** Todo
+		*/
+		bool _validateAndExecuteSphereCollision(Particle * particle1, Particle * particle2, Real timeElapsed);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_INTERPARTICLE_COLLIDER_H__ */

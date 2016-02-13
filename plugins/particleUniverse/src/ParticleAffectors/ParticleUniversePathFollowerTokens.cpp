@@ -21,32 +21,24 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleAffectors/ParticleUniversePathFollower.h"
 #include "ParticleAffectors/ParticleUniversePathFollowerTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool PathFollowerTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleAffector* af = any_cast<ParticleAffector*>(prop->parent->context);
-		PathFollower* affector = static_cast<PathFollower*>(af);
+#include "ParticleUniverseScriptSerializer.h"
 
-		if (prop->name == token[TOKEN_PATH_POINT])
-		{
+#include "ParticleAffectors/ParticleUniversePathFollower.h"
+
+namespace ParticleUniverse {
+	
+	bool PathFollowerTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleAffector * af = any_cast<ParticleAffector *>(prop->parent->context);
+		PathFollower * affector = static_cast<PathFollower *>(af);
+
+		if (prop->name == token[TOKEN_PATH_POINT]) {
 			// Property: path_follower_point
-			if (passValidateProperty(compiler, prop, token[TOKEN_PATH_POINT], VAL_VECTOR3))
-			{
+			if (passValidateProperty(compiler, prop, token[TOKEN_PATH_POINT], VAL_VECTOR3)) {
 				Vector3 val;
-				if(getVector3(prop->values.begin(), prop->values.end(), &val))
-				{
+				if (getVector3(prop->values.begin(), prop->values.end(), &val)) {
 					affector->addPoint(val);
 					return true;
 				}
@@ -55,19 +47,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool PathFollowerTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool PathFollowerTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void PathFollowerWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void PathFollowerWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a PathFollower
-		const PathFollower* affector = static_cast<const PathFollower*>(element);
+		const PathFollower * affector = static_cast<const PathFollower *>(element);
 
 		// Write the header of the PathFollower
 		serializer->writeLine(token[TOKEN_AFFECTOR], affector->getAffectorType(), affector->getName(), 8);
@@ -78,8 +66,7 @@ namespace ParticleUniverse
 
 		// Write own attributes
 		unsigned short numberOfPoints = affector->getNumPoints();
-		if (numberOfPoints > 0)
-		{
+		if (numberOfPoints > 0) {
 			for (unsigned short u = 0; u < numberOfPoints; ++u)
 			{
 				serializer->writeLine(token[TOKEN_PATH_POINT], StringConverter::toString(affector->getPoint(u)), 12);
@@ -90,4 +77,4 @@ namespace ParticleUniverse
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

@@ -21,66 +21,52 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseGravityAffector.h"
 
-namespace ParticleUniverse
-{
-	// Constants
-	const Real GravityAffector::DEFAULT_GRAVITY = 1.0f;
+#include "ParticleUniverseTechnique.h"
 
-	//-----------------------------------------------------------------------
-	GravityAffector::GravityAffector(void) : 
-		ParticleAffector(),
-		mGravity(DEFAULT_GRAVITY)
-	{
+namespace ParticleUniverse {
+
+	// Constants
+	const Real GravityAffector::DEFAULT_GRAVITY = 1.0;
+
+	GravityAffector::GravityAffector() : ParticleAffector(), mGravity(DEFAULT_GRAVITY) {
 	}
-	//-----------------------------------------------------------------------
-	void GravityAffector::copyAttributesTo (ParticleAffector* affector)
-	{
+	
+	void GravityAffector::copyAttributesTo(ParticleAffector * affector) {
 		ParticleAffector::copyAttributesTo(affector);
 
-		GravityAffector* gravityAffector = static_cast<GravityAffector*>(affector);
+		GravityAffector * gravityAffector = static_cast<GravityAffector *>(affector);
 		gravityAffector->mGravity = mGravity;
 	}
-	//-----------------------------------------------------------------------
-	void GravityAffector::_preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
+	
+	void GravityAffector::_preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
 		// Calculate the affectors' position so it is also safe to use mDerivedPosition.
 		getDerivedPosition();
 	}
-	//-----------------------------------------------------------------------
-	inline void GravityAffector::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+	
+	inline void GravityAffector::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		 // Applied scaling in V1.3.1
 		/** Applying Newton's law of universal gravitation.	*/
 		Vector3 distance = mDerivedPosition - particle->position;
 		Real length = distance.squaredLength();
-		Real scaleVelocity = 1.0f;
-		if (mParentTechnique)
-		{
+		Real scaleVelocity = 1.0;
+		if (mParentTechnique) {
 			scaleVelocity = mParentTechnique->getParticleSystemScaleVelocity();
 		}
-		if (length > 0 && mParentTechnique)
-		{
+		if (length > 0 && mParentTechnique) {
 			//Real force = (mGravity * particle->mass * mass) / length;
 			Real force = (scaleVelocity * mGravity * particle->mass * mass) / length;
 			particle->direction += force * distance * timeElapsed * _calculateAffectSpecialisationFactor(particle);
 		}
 	}
-	//-----------------------------------------------------------------------
-	Real GravityAffector::getGravity(void) const
-	{
+	
+	Real GravityAffector::getGravity() const {
 		return mGravity;
 	}
-	//-----------------------------------------------------------------------
-	void GravityAffector::setGravity(Real gravity)
-	{
+	
+	void GravityAffector::setGravity(Real gravity) {
 		mGravity = gravity;
 	}
-}
+
+} /* namespace ParticleUniverse */

@@ -24,40 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_PATH_FOLLOWER_TOKENS_H__
 #define __PU_PATH_FOLLOWER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The PathFollowerTranslator parses 'PathFollower' tokens
 	*/
-	class _ParticleUniverseExport PathFollowerTranslator : public ScriptTranslator
-	{
-		public:
-			PathFollowerTranslator(void){};
-			~PathFollowerTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport PathFollowerTranslator : public ScriptTranslator {
+	public:
+		PathFollowerTranslator() {}
+		~PathFollowerTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport PathFollowerWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport PathFollowerWriter : public ParticleAffectorWriter {
+	public:
+		PathFollowerWriter() {}
+		virtual ~PathFollowerWriter() {}
 
-			PathFollowerWriter(void) {};
-			virtual ~PathFollowerWriter(void) {};
-
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_PATH_FOLLOWER_TOKENS_H__ */

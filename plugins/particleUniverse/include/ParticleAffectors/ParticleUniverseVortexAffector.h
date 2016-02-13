@@ -25,7 +25,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_VORTEX_AFFECTOR_H__
 
 #include "ParticleUniverseAffector.h"
-#include "ParticleUniverseDynamicAttribute.h"
 #include "ParticleUniverseDynamicAttributeFactory.h"
 #include "ParticleUniverseMath.h"
 

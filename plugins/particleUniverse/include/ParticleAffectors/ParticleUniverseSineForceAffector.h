@@ -24,52 +24,51 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SINE_FORCE_AFFECTOR_H__
 #define __PU_SINE_FORCE_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBaseForceAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Applies a sine force to a particle.
     */
-	class _ParticleUniverseExport SineForceAffector : public BaseForceAffector
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport SineForceAffector : public BaseForceAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			// Constants
-			static const Real DEFAULT_FREQ_MIN;
-			static const Real DEFAULT_FREQ_MAX;
+		// Constants
+		static const Real DEFAULT_FREQ_MIN;
+		static const Real DEFAULT_FREQ_MAX;
 
-			SineForceAffector(void);
-	        virtual ~SineForceAffector(void) {}
+		SineForceAffector();
+	    virtual ~SineForceAffector() {}
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-			/** 
-	        */
-			virtual void _preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed);
+		/** 
+	    */
+		virtual void _preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed);
 
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			Real getFrequencyMin(void) const;
-			void setFrequencyMin(const Real frequencyMin);
+		/** 
+	    */
+		Real getFrequencyMin() const;
+		void setFrequencyMin(const Real frequencyMin);
 
-			/** 
-	        */
-			Real getFrequencyMax(void) const;
-			void setFrequencyMax(const Real frequencyMax);
+		/** 
+	    */
+		Real getFrequencyMax() const;
+		void setFrequencyMax(const Real frequencyMax);
 
-		protected:
-			Real mAngle;
-			Real mFrequencyMin;
-			Real mFrequencyMax;
-			Real mFrequency;
+	protected:
+		Real mAngle;
+		Real mFrequencyMin;
+		Real mFrequencyMax;
+		Real mFrequency;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SINE_FORCE_AFFECTOR_H__ */

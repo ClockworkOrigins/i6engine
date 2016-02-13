@@ -24,84 +24,82 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_SCALE_AFFECTOR_H__
 #define __PU_SCALE_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseDynamicAttribute.h"
-#include "ParticleUniverseDynamicAttributeFactory.h"
 #include "ParticleUniverseAffector.h"
+#include "ParticleUniverseDynamicAttributeFactory.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Scales a particle. This can be a linear scale, but scaling that changes over time is possible.
     */
-	class _ParticleUniverseExport ScaleAffector : public ParticleAffector
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport ScaleAffector : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			// Constants
-			static const Real DEFAULT_X_SCALE;
-			static const Real DEFAULT_Y_SCALE;
-			static const Real DEFAULT_Z_SCALE;
-			static const Real DEFAULT_XYZ_SCALE;
+		// Constants
+		static const Real DEFAULT_X_SCALE;
+		static const Real DEFAULT_Y_SCALE;
+		static const Real DEFAULT_Z_SCALE;
+		static const Real DEFAULT_XYZ_SCALE;
 
-			ScaleAffector(void);
-	        virtual ~ScaleAffector(void);
+		ScaleAffector();
+	    virtual ~ScaleAffector();
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** 
-	        */
-			DynamicAttribute* getDynScaleX(void) const {return mDynScaleX;}
-			void setDynScaleX(DynamicAttribute* dynScaleX);
-			void resetDynScaleX(bool resetToDefault = true);
+		/** 
+	    */
+		DynamicAttribute * getDynScaleX() const { return mDynScaleX; }
+		void setDynScaleX(DynamicAttribute * dynScaleX);
+		void resetDynScaleX(bool resetToDefault = true);
 
-			/** 
-	        */
-			DynamicAttribute* getDynScaleY(void) const {return mDynScaleY;}
-			void setDynScaleY(DynamicAttribute* dynScaleY);
-			void resetDynScaleY(bool resetToDefault = true);
+		/** 
+	    */
+		DynamicAttribute * getDynScaleY() const { return mDynScaleY; }
+		void setDynScaleY(DynamicAttribute * dynScaleY);
+		void resetDynScaleY(bool resetToDefault = true);
 
-			/** 
-	        */
-			DynamicAttribute* getDynScaleZ(void) const {return mDynScaleZ;}
-			void setDynScaleZ(DynamicAttribute* dynScaleZ);
-			void resetDynScaleZ(bool resetToDefault = true);
+		/** 
+	    */
+		DynamicAttribute * getDynScaleZ() const { return mDynScaleZ; }
+		void setDynScaleZ(DynamicAttribute * dynScaleZ);
+		void resetDynScaleZ(bool resetToDefault = true);
 
-			/** 
-	        */
-			DynamicAttribute* getDynScaleXYZ(void) const {return mDynScaleXYZ;}
-			void setDynScaleXYZ(DynamicAttribute* dynScaleXYZ);
-			void resetDynScaleXYZ(bool resetToDefault = true);
+		/** 
+	    */
+		DynamicAttribute * getDynScaleXYZ() const { return mDynScaleXYZ; }
+		void setDynScaleXYZ(DynamicAttribute * dynScaleXYZ);
+		void resetDynScaleXYZ(bool resetToDefault = true);
 
-			/** 
-	        */
-			bool isSinceStartSystem(void) const {return mSinceStartSystem;}
-			void setSinceStartSystem(bool sinceStartSystem){mSinceStartSystem = sinceStartSystem;}
+		/** 
+	    */
+		bool isSinceStartSystem() const { return mSinceStartSystem; }
+		void setSinceStartSystem(bool sinceStartSystem) { mSinceStartSystem = sinceStartSystem; }
 
 	protected:
-			DynamicAttribute* mDynScaleX;
-			DynamicAttribute* mDynScaleY;
-			DynamicAttribute* mDynScaleZ;
-			DynamicAttribute* mDynScaleXYZ;
-			bool mDynScaleXSet;
-			bool mDynScaleYSet;
-			bool mDynScaleZSet;
-			bool mDynScaleXYZSet;
-			DynamicAttributeFactory mDynamicAttributeFactory;
-			DynamicAttributeHelper mDynamicAttributeHelper;
-			bool mSinceStartSystem;
+		DynamicAttribute * mDynScaleX;
+		DynamicAttribute * mDynScaleY;
+		DynamicAttribute * mDynScaleZ;
+		DynamicAttribute * mDynScaleXYZ;
+		bool mDynScaleXSet;
+		bool mDynScaleYSet;
+		bool mDynScaleZSet;
+		bool mDynScaleXYZSet;
+		DynamicAttributeFactory mDynamicAttributeFactory;
+		DynamicAttributeHelper mDynamicAttributeHelper;
+		bool mSinceStartSystem;
 
-			/** Returns the scale value for the dynamic Scale.
-	        */
-			Real _calculateScale(DynamicAttribute* dynScale, Particle* particle);
+		/** Returns the scale value for the dynamic Scale.
+	    */
+		Real _calculateScale(DynamicAttribute * dynScale, Particle * particle);
 
-			Real mLatestTimeElapsed;
+		Real mLatestTimeElapsed;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_SCALE_AFFECTOR_H__ */

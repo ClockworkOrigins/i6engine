@@ -21,33 +21,27 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleAffectors/ParticleUniverseGravityAffector.h"
 #include "ParticleAffectors/ParticleUniverseGravityAffectorTokens.h"
+
+#include "ParticleUniverseCommon.h"
+#include "ParticleUniverseScriptSerializer.h"
+
 #include "Externs/ParticleUniverseGravityExtern.h"
 
+#include "ParticleAffectors/ParticleUniverseGravityAffector.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool GravityAffectorTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleAffector* af = any_cast<ParticleAffector*>(prop->parent->context);
-		GravityAffector* affector = static_cast<GravityAffector*>(af);
 
-		if (prop->name == token[TOKEN_GRAVITY])
-		{
-			if (passValidateProperty(compiler, prop, token[TOKEN_GRAVITY], VAL_REAL))
-			{
-				Real val = 0.0f;
-				if(getReal(prop->values.front(), &val))
-				{
+namespace ParticleUniverse {
+	
+	bool GravityAffectorTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleAffector * af = any_cast<ParticleAffector *>(prop->parent->context);
+		GravityAffector * affector = static_cast<GravityAffector *>(af);
+
+		if (prop->name == token[TOKEN_GRAVITY]) {
+			if (passValidateProperty(compiler, prop, token[TOKEN_GRAVITY], VAL_REAL)) {
+				Real val = 0.0;
+				if (getReal(prop->values.front(), &val)) {
 					affector->setGravity(val);
 					return true;
 				}
@@ -56,19 +50,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool GravityAffectorTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool GravityAffectorTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void GravityAffectorWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void GravityAffectorWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a GravityAffector
-		const GravityAffector* affector = static_cast<const GravityAffector*>(element);
+		const GravityAffector * affector = static_cast<const GravityAffector *>(element);
 
 		// Write the header of the GravityAffector
 		serializer->writeLine(token[TOKEN_AFFECTOR], affector->getAffectorType(), affector->getName(), 8);
@@ -78,11 +68,12 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (!almostEquals(affector->getGravity(), GravityAffector::DEFAULT_GRAVITY)) serializer->writeLine(
-			token[TOKEN_GRAVITY], StringConverter::toString(affector->getGravity()), 12);
+		if (!almostEquals(affector->getGravity(), GravityAffector::DEFAULT_GRAVITY)) {
+			serializer->writeLine(token[TOKEN_GRAVITY], StringConverter::toString(affector->getGravity()), 12);
+		}
 
 		// Write the close bracket
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */
