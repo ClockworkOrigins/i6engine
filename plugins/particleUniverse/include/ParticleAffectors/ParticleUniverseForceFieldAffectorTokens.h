@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_FORCE_FIELD_AFFECTOR_TOKENS_H__
 #define __PU_FORCE_FIELD_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseForceFieldAffectorTokens.h"
+#include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The ForceFieldAffectorTranslator parses 'ForceFieldAffector' tokens
 	*/
-	class _ParticleUniverseExport ForceFieldAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			ForceFieldAffectorTranslator(void){};
-			~ForceFieldAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport ForceFieldAffectorTranslator : public ScriptTranslator {
+	public:
+		ForceFieldAffectorTranslator() {}
+		~ForceFieldAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ForceFieldAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport ForceFieldAffectorWriter : public ParticleAffectorWriter {
+	public:
+		ForceFieldAffectorWriter() {}
+		virtual ~ForceFieldAffectorWriter() {}
 
-			ForceFieldAffectorWriter(void) {};
-			virtual ~ForceFieldAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_FORCE_FIELD_AFFECTOR_TOKENS_H__ */

@@ -21,22 +21,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleAffectors/ParticleUniverseFlockCenteringAffector.h"
 #include "ParticleAffectors/ParticleUniverseFlockCenteringAffectorTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void FlockCenteringAffectorWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+#include "ParticleUniverseScriptSerializer.h"
+
+#include "ParticleAffectors/ParticleUniverseFlockCenteringAffector.h"
+
+namespace ParticleUniverse {
+	
+	void FlockCenteringAffectorWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a FlockCenteringAffector
-		const FlockCenteringAffector* affector = static_cast<const FlockCenteringAffector*>(element);
+		const FlockCenteringAffector * affector = static_cast<const FlockCenteringAffector *>(element);
 
 		// Write the header of the FlockCenteringAffector
 		serializer->writeLine(token[TOKEN_AFFECTOR], affector->getAffectorType(), affector->getName(), 8);
@@ -49,4 +44,4 @@ namespace ParticleUniverse
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

@@ -24,49 +24,48 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_COLLISION_AVOIDANCE_AFFECTOR_H__
 #define __PU_COLLISION_AVOIDANCE_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The CollisionAvoidanceAffector is used to prevent particles from colliding with each other.
 	@remarks
 		The current implementation doesn�t take avoidance of colliders (box, sphere, plane) into account (yet).
     */
-	class _ParticleUniverseExport CollisionAvoidanceAffector : public ParticleAffector
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport CollisionAvoidanceAffector : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			// Constants
-			static const Real DEFAULT_RADIUS;
+		// Constants
+		static const Real DEFAULT_RADIUS;
 
-			CollisionAvoidanceAffector(void);
-	        virtual ~CollisionAvoidanceAffector(void) {}
+		CollisionAvoidanceAffector();
+	    virtual ~CollisionAvoidanceAffector() {}
 
-			/** Todo
-			*/
-			Real getRadius(void) const;
+		/** Todo
+		*/
+		Real getRadius() const;
 
-			/** Todo
-			*/
-			void setRadius(Real radius);
+		/** Todo
+		*/
+		void setRadius(Real radius);
 
-			/** @copydoc ParticleAffector::_prepare */
-			virtual void _prepare(ParticleTechnique* particleTechnique);
+		/** @copydoc ParticleAffector::_prepare */
+		virtual void _prepare(ParticleTechnique * particleTechnique);
 
-			/** @copydoc ParticleAffector::_unprepare */
-			virtual void _unprepare(ParticleTechnique* particleTechnique);
+		/** @copydoc ParticleAffector::_unprepare */
+		virtual void _unprepare(ParticleTechnique * particleTechnique);
 
-			/** @copydoc ParticleAffector::_affect */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** @copydoc ParticleAffector::_affect */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 		
-		protected:
-			Real mRadius;
+	protected:
+		Real mRadius;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_COLLISION_AVOIDANCE_AFFECTOR_H__ */

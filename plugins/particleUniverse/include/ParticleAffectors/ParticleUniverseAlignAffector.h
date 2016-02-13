@@ -24,11 +24,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_ALIGN_AFFECTOR_H__
 #define __PU_ALIGN_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Aligns the orientation of a particle towards the previous particle and adjusts the height of
 		the particle, which becomes the length between the two particles. And how do we benefit from 
 		this? Well, with the right renderer settings you could get a chain of particles, each connected
@@ -42,41 +41,39 @@ namespace ParticleUniverse
 
 		Using the AlignAffector is a step in the direction to generate electric beams.
     */
-	class _ParticleUniverseExport AlignAffector : public ParticleAffector
-	{
-		protected:
-			Particle* mPreviousParticle;
-			bool mResize;
+	class _ParticleUniverseExport AlignAffector : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-		public:
-			using Particle::copyAttributesTo;
+		// Constants
+		static const bool DEFAULT_RESIZE;
 
-			// Constants
-			static const bool DEFAULT_RESIZE;
+		AlignAffector();
+	    virtual ~AlignAffector() {}
 
-			AlignAffector(void);
-	        virtual ~AlignAffector(void) {}
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** See setResize().
+	    */
+		bool isResize() const;
 
-			/** See setResize().
-	        */
-			bool isResize(void) const;
+		/** Set resize. This attribute determines whether the size of the particle must be changed
+			according to its alignment with the previous particle.
+	    */
+		void setResize(bool resize);
 
-			/** Set resize. This attribute determines whether the size of the particle must be changed
-				according to its alignment with the previous particle.
-	        */
-			void setResize(bool resize);
+		/** @copydoc ParticleAffector::_firstParticle */
+		virtual void _firstParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::_firstParticle */
-			virtual void _firstParticle(ParticleTechnique* particleTechnique, 
-				Particle* particle, 
-				Real timeElapsed);
+		/** @copydoc ParticleAffector::_affect */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::_affect */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+	protected:
+		Particle * mPreviousParticle;
+		bool mResize;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_ALIGN_AFFECTOR_H__ */

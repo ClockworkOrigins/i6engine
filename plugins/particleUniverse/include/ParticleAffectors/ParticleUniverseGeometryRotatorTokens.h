@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_GEOMETRY_ROTATOR_TOKENS_H__
 #define __PU_GEOMETRY_ROTATOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The GeometryRotatorTranslator parses 'GeometryRotator' tokens
 	*/
-	class _ParticleUniverseExport GeometryRotatorTranslator : public ScriptTranslator
-	{
-		public:
-			GeometryRotatorTranslator(void){};
-			~GeometryRotatorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport GeometryRotatorTranslator : public ScriptTranslator {
+	public:
+		GeometryRotatorTranslator() {}
+		~GeometryRotatorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport GeometryRotatorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport GeometryRotatorWriter : public ParticleAffectorWriter {
+	public:
+		GeometryRotatorWriter() {}
+		virtual ~GeometryRotatorWriter() {}
 
-			GeometryRotatorWriter(void) {};
-			virtual ~GeometryRotatorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_GEOMETRY_ROTATOR_TOKENS_H__ */

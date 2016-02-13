@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BASE_ATTRACTOR_TOKENS_H__
 #define __PU_BASE_ATTRACTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The BaseForceAffectorTranslator parses 'BaseForceAffector' tokens
 	*/
-	class _ParticleUniverseExport BaseForceAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			BaseForceAffectorTranslator(void){};
-			~BaseForceAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport BaseForceAffectorTranslator : public ScriptTranslator {
+	public:
+		BaseForceAffectorTranslator() {}
+		~BaseForceAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport BaseForceAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport BaseForceAffectorWriter : public ParticleAffectorWriter {
+	public:
+		BaseForceAffectorWriter() {}
+		virtual ~BaseForceAffectorWriter() {}
 
-			BaseForceAffectorWriter(void) {};
-			virtual ~BaseForceAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BASE_ATTRACTOR_TOKENS_H__ */

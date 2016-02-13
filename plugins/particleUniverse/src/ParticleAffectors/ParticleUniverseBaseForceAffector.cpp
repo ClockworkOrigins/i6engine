@@ -21,55 +21,39 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseBaseForceAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	// Constants
 	const Vector3 BaseForceAffector::DEFAULT_FORCE_VECTOR(0, 0, 0);
 	const BaseForceAffector::ForceApplication BaseForceAffector::DEFAULT_FORCE_APPL = BaseForceAffector::FA_ADD;
 
-	//-----------------------------------------------------------------------
-	BaseForceAffector::BaseForceAffector(void) : 
-		ParticleAffector(),
-		mForceVector(DEFAULT_FORCE_VECTOR),
-		mScaledVector(Vector3::ZERO),
-		mForceApplication(DEFAULT_FORCE_APPL)
-	{
+	BaseForceAffector::BaseForceAffector() : ParticleAffector(), mForceVector(DEFAULT_FORCE_VECTOR), mScaledVector(Vector3::ZERO), mForceApplication(DEFAULT_FORCE_APPL) {
 	}
-	//-----------------------------------------------------------------------
-	void BaseForceAffector::copyAttributesTo (ParticleAffector* affector)
-	{
+	
+	void BaseForceAffector::copyAttributesTo(ParticleAffector * affector) {
 		ParticleAffector::copyAttributesTo(affector);
 
-		BaseForceAffector* baseForceAffector = static_cast<BaseForceAffector*>(affector);
+		BaseForceAffector * baseForceAffector = static_cast<BaseForceAffector *>(affector);
 		baseForceAffector->mForceVector = mForceVector;
 		baseForceAffector->mForceApplication = mForceApplication;
 	}
-	//-----------------------------------------------------------------------
-	const Vector3& BaseForceAffector::getForceVector(void) const
-	{
+	
+	const Vector3 & BaseForceAffector::getForceVector() const {
 		return mForceVector;
 	}
-	//-----------------------------------------------------------------------
-	void BaseForceAffector::setForceVector(const Vector3& forceVector)
-	{
+	
+	void BaseForceAffector::setForceVector(const Vector3 & forceVector) {
 		mForceVector = forceVector;
 	}
-	//-----------------------------------------------------------------------
-	BaseForceAffector::ForceApplication BaseForceAffector::getForceApplication(void) const
-	{
+	
+	BaseForceAffector::ForceApplication BaseForceAffector::getForceApplication() const {
 		return mForceApplication;
 	}
-	//-----------------------------------------------------------------------
-	void BaseForceAffector::setForceApplication(BaseForceAffector::ForceApplication forceApplication)
-	{
+	
+	void BaseForceAffector::setForceApplication(BaseForceAffector::ForceApplication forceApplication) {
 		mForceApplication = forceApplication;
 	}
-}
+
+} /* namespace ParticleUniverse */

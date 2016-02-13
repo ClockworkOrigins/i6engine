@@ -21,31 +21,24 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleAffectors/ParticleUniverseCollisionAvoidanceAffector.h"
 #include "ParticleAffectors/ParticleUniverseCollisionAvoidanceAffectorTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool CollisionAvoidanceAffectorTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleAffector* af = any_cast<ParticleAffector*>(prop->parent->context);
-		CollisionAvoidanceAffector* affector = static_cast<CollisionAvoidanceAffector*>(af);
+#include "ParticleUniverseCommon.h"
+#include "ParticleUniverseScriptSerializer.h"
 
-		if (prop->name == token[TOKEN_AVOIDANCE_RADIUS])
-		{
-			if (passValidateProperty(compiler, prop, token[TOKEN_AVOIDANCE_RADIUS], VAL_REAL))
-			{
-				Real val = 0.0f;
-				if(getReal(prop->values.front(), &val))
-				{
+#include "ParticleAffectors/ParticleUniverseCollisionAvoidanceAffector.h"
+
+namespace ParticleUniverse {
+	
+	bool CollisionAvoidanceAffectorTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleAffector * af = any_cast<ParticleAffector *>(prop->parent->context);
+		CollisionAvoidanceAffector * affector = static_cast<CollisionAvoidanceAffector *>(af);
+
+		if (prop->name == token[TOKEN_AVOIDANCE_RADIUS]) {
+			if (passValidateProperty(compiler, prop, token[TOKEN_AVOIDANCE_RADIUS], VAL_REAL)) {
+				Real val = 0.0;
+				if (getReal(prop->values.front(), &val)) {
 					affector->setRadius(val);
 					return true;
 				}
@@ -54,19 +47,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool CollisionAvoidanceAffectorTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool CollisionAvoidanceAffectorTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void CollisionAvoidanceAffectorWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void CollisionAvoidanceAffectorWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a CollisionAvoidanceAffector
-		const CollisionAvoidanceAffector* affector = static_cast<const CollisionAvoidanceAffector*>(element);
+		const CollisionAvoidanceAffector * affector = static_cast<const CollisionAvoidanceAffector *>(element);
 
 		// Write the header of the CollisionAvoidanceAffector
 		serializer->writeLine(token[TOKEN_AFFECTOR], affector->getAffectorType(), affector->getName(), 8);
@@ -76,11 +65,12 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (!almostEquals(affector->getRadius(), CollisionAvoidanceAffector::DEFAULT_RADIUS)) serializer->writeLine(
-			token[TOKEN_AVOIDANCE_RADIUS], StringConverter::toString(affector->getRadius()), 12);
+		if (!almostEquals(affector->getRadius(), CollisionAvoidanceAffector::DEFAULT_RADIUS)) {
+			serializer->writeLine(token[TOKEN_AVOIDANCE_RADIUS], StringConverter::toString(affector->getRadius()), 12);
+		}
 
 		// Write the close bracket
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

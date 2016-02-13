@@ -21,43 +21,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
-#include "ParticleAffectors/ParticleUniverseAlignAffector.h"
 #include "ParticleAffectors/ParticleUniverseAlignAffectorTokens.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	bool AlignAffectorTranslator::translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
-		PropertyAbstractNode* prop = reinterpret_cast<PropertyAbstractNode*>(node.get());
-		ParticleAffector* af = any_cast<ParticleAffector*>(prop->parent->context);
-		AlignAffector* affector = static_cast<AlignAffector*>(af);
+#include "ParticleUniverseScriptSerializer.h"
 
-		if (prop->name == token[TOKEN_RESIZE])
-		{
-			if (passValidateProperty(compiler, prop, token[TOKEN_RESIZE], VAL_BOOL))
-			{
+#include "ParticleAffectors/ParticleUniverseAlignAffector.h"
+
+namespace ParticleUniverse {
+	
+	bool AlignAffectorTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
+		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
+		ParticleAffector * af = any_cast<ParticleAffector *>(prop->parent->context);
+		AlignAffector * affector = static_cast<AlignAffector *>(af);
+
+		if (prop->name == token[TOKEN_RESIZE]) {
+			if (passValidateProperty(compiler, prop, token[TOKEN_RESIZE], VAL_BOOL)) {
 				bool val;
-				if(getBoolean(prop->values.front(), &val))
-				{
+				if (getBoolean(prop->values.front(), &val)) {
 					affector->setResize(val);
 					return true;
 				}
 			}
-		}
-		else if (prop->name == token[TOKEN_ALIGN_RESIZE])
-		{
-			if (passValidateProperty(compiler, prop, token[TOKEN_ALIGN_RESIZE], VAL_BOOL))
-			{
+		} else if (prop->name == token[TOKEN_ALIGN_RESIZE]) {
+			if (passValidateProperty(compiler, prop, token[TOKEN_ALIGN_RESIZE], VAL_BOOL)) {
 				bool val;
-				if(getBoolean(prop->values.front(), &val))
-				{
+				if (getBoolean(prop->values.front(), &val)) {
 					affector->setResize(val);
 					return true;
 				}
@@ -66,19 +54,15 @@ namespace ParticleUniverse
 
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	bool AlignAffectorTranslator::translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node)
-	{
+	
+	bool AlignAffectorTranslator::translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node) {
 		// No objects
 		return false;
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
-	void AlignAffectorWriter::write(ParticleScriptSerializer* serializer, const IElement* element)
-	{
+	
+	void AlignAffectorWriter::write(ParticleScriptSerializer * serializer, const IElement * element) {
 		// Cast the element to a AlignAffector
-		const AlignAffector* affector = static_cast<const AlignAffector*>(element);
+		const AlignAffector * affector = static_cast<const AlignAffector *>(element);
 
 		// Write the header of the AlignAffector
 		serializer->writeLine(token[TOKEN_AFFECTOR], affector->getAffectorType(), affector->getName(), 8);
@@ -88,11 +72,12 @@ namespace ParticleUniverse
 		ParticleAffectorWriter::write(serializer, element);
 
 		// Write own attributes
-		if (affector->isResize() != AlignAffector::DEFAULT_RESIZE) serializer->writeLine(
-			token[TOKEN_RESIZE], StringConverter::toString(affector->isResize()), 12);
+		if (affector->isResize() != AlignAffector::DEFAULT_RESIZE) {
+			serializer->writeLine(token[TOKEN_RESIZE], StringConverter::toString(affector->isResize()), 12);
+		}
 
 		// Write the close bracket
 		serializer->writeLine("}", 8);
 	}
 
-}
+} /* namespace ParticleUniverse */

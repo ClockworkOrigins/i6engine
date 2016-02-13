@@ -21,43 +21,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseFlockCenteringAffector.h"
 
-namespace ParticleUniverse
-{
-	//-----------------------------------------------------------------------
-	void FlockCenteringAffector::_preProcessParticles(ParticleTechnique* particleTechnique, Real timeElapsed)
-	{
-		if (!almostEquals(mCount, 0))
-		{
+#include "ParticleUniverseCommon.h"
+
+namespace ParticleUniverse {
+	
+	void FlockCenteringAffector::_preProcessParticles(ParticleTechnique * particleTechnique, Real timeElapsed) {
+		if (!almostEquals(mCount, 0)) {
 			// Calculate the average of the previous update
 			mAverage = mSum / mCount;
-		}
-		else
-		{
+		} else {
 			mAverage = getDerivedPosition(); // Set to position of the affector
 		}
 		mSum = Vector3::ZERO;
 		mCount = 0;
 	}
-	//-----------------------------------------------------------------------
-	void FlockCenteringAffector::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
+	
+	void FlockCenteringAffector::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		mSum += particle->position;
 		mCount++;
 		particle->direction += (mAverage - particle->position) * timeElapsed; // use average of the previous update
 	}
-	//-----------------------------------------------------------------------
-	void FlockCenteringAffector::copyAttributesTo (ParticleAffector* affector)
-	{
+	
+	void FlockCenteringAffector::copyAttributesTo (ParticleAffector* affector) {
 		ParticleAffector::copyAttributesTo(affector);
-		FlockCenteringAffector* flockCenteringAffector = static_cast<FlockCenteringAffector*>(affector);
-		(void)flockCenteringAffector;
 	}
-}
+
+} /* namespace ParticleUniverse */

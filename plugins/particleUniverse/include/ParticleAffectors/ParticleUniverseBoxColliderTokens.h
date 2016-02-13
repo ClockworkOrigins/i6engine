@@ -24,38 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_BOX_COLLIDER_TOKENS_H__
 #define __PU_BOX_COLLIDER_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseBaseColliderTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The BoxColliderTranslator parses 'BoxCollider' tokens
 	*/
-	class _ParticleUniverseExport BoxColliderTranslator : public ScriptTranslator
-	{
-		public:
-			BoxColliderTranslator(void){};
-			~BoxColliderTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport BoxColliderTranslator : public ScriptTranslator {
+	public:
+		BoxColliderTranslator() {}
+		~BoxColliderTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport BoxColliderWriter : public BaseColliderWriter
-	{
-		public:
-			BoxColliderWriter(void) {};
-			virtual ~BoxColliderWriter(void) {};
+	class _ParticleUniverseExport BoxColliderWriter : public BaseColliderWriter {
+	public:
+		BoxColliderWriter() {}
+		virtual ~BoxColliderWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BOX_COLLIDER_TOKENS_H__ */

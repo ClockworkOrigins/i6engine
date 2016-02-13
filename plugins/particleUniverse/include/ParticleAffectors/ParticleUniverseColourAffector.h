@@ -24,70 +24,68 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_COLOUR_AFFECTOR_H__
 #define __PU_COLOUR_AFFECTOR_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffector.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** This affector is typically used to change the colour of a particle during its lifetime.
     */
-	class _ParticleUniverseExport ColourAffector : public ParticleAffector
-	{
-		public:
-			using Particle::copyAttributesTo;
+	class _ParticleUniverseExport ColourAffector : public ParticleAffector {
+	public:
+		using Particle::copyAttributesTo;
 
-			typedef map<Real, ColourValue> ColourMap;
-			typedef map<Real, ColourValue>::iterator ColourMapIterator;
-			enum ColourOperation
-			{
-				CAO_MULTIPLY,
-				CAO_SET
-			};
+		typedef map<Real, ColourValue> ColourMap;
+		typedef map<Real, ColourValue>::iterator ColourMapIterator;
+		enum ColourOperation {
+			CAO_MULTIPLY,
+			CAO_SET
+		};
 
-			// Constants
-			static const ColourOperation DEFAULT_COLOUR_OPERATION;
+		// Constants
+		static const ColourOperation DEFAULT_COLOUR_OPERATION;
 
-			// Constructor
-			ColourAffector(void);
+		// Constructor
+		ColourAffector();
 
-			// Destructor
-	        virtual ~ColourAffector(void) {}
+		// Destructor
+	    virtual ~ColourAffector() {}
 
-			/** 
-	        */
-			void addColour(Real timeFraction, const ColourValue& colour);
+		/** 
+	    */
+		void addColour(Real timeFraction, const ColourValue & colour);
 
-			/** 
-	        */
-			const ColourMap& getTimeAndColour(void) const;
+		/** 
+	    */
+		const ColourMap & getTimeAndColour() const;
 
-			/** 
-	        */
-			void clearColourMap (void);
+		/** 
+	    */
+		void clearColourMap();
 				
-			/** 
-	        */
-			inline ColourMapIterator _findNearestColourMapIterator(Real timeFraction);
+		/** 
+	    */
+		inline ColourMapIterator _findNearestColourMapIterator(Real timeFraction);
 
-			/** 
-	        */
-			const ColourOperation& getColourOperation (void) const;
+		/** 
+	    */
+		const ColourOperation & getColourOperation() const;
 
-			/** 
-	        */
-			void setColourOperation (const ColourOperation& colourOperation);
+		/** 
+	    */
+		void setColourOperation (const ColourOperation & colourOperation);
 
-			/** 
-	        */
-			virtual void _affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed);
+		/** 
+	    */
+		virtual void _affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed);
 
-			/** @copydoc ParticleAffector::copyAttributesTo */
-			virtual void copyAttributesTo (ParticleAffector* affector);
+		/** @copydoc ParticleAffector::copyAttributesTo */
+		virtual void copyAttributesTo(ParticleAffector * affector);
 
-		protected:
-			ColourMap mColourMap;
-			ColourOperation mColourOperation;
+	protected:
+		ColourMap mColourMap;
+		ColourOperation mColourOperation;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_COLOUR_AFFECTOR_H__ */

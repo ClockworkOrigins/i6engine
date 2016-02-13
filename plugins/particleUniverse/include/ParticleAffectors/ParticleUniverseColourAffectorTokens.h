@@ -24,39 +24,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_COLOUR_AFFECTOR_TOKENS_H__
 #define __PU_COLOUR_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** The ColourAffectorTranslator parses 'ColourAffector' tokens
 	*/
-	class _ParticleUniverseExport ColourAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			ColourAffectorTranslator(void){};
-			~ColourAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport ColourAffectorTranslator : public ScriptTranslator {
+	public:
+		ColourAffectorTranslator() {}
+		~ColourAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport ColourAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport ColourAffectorWriter : public ParticleAffectorWriter {
+	public:
+		ColourAffectorWriter() {}
+		virtual ~ColourAffectorWriter() {}
 
-			ColourAffectorWriter(void) {};
-			virtual ~ColourAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_COLOUR_AFFECTOR_TOKENS_H__ */

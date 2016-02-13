@@ -21,55 +21,38 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------------------------
 */
 
-#include "ParticleUniversePCH.h"
-
-#ifndef PARTICLE_UNIVERSE_EXPORTS
-#define PARTICLE_UNIVERSE_EXPORTS
-#endif
-
 #include "ParticleAffectors/ParticleUniverseAlignAffector.h"
 
-namespace ParticleUniverse
-{
+#include "ParticleUniverseVisualParticle.h"
+
+namespace ParticleUniverse {
+
 	// Constants
 	const bool AlignAffector::DEFAULT_RESIZE = false;
 	
-	//-----------------------------------------------------------------------
-	AlignAffector::AlignAffector(void) : 
-		ParticleAffector(),
-		mPreviousParticle(0),
-		mResize(DEFAULT_RESIZE)
-	{
+	AlignAffector::AlignAffector() : ParticleAffector(), mPreviousParticle(nullptr), mResize(DEFAULT_RESIZE) {
 	}
-	//-----------------------------------------------------------------------
-	void AlignAffector::_firstParticle(ParticleTechnique* particleTechnique, 
-		Particle* particle, 
-		Real timeElapsed)
-	{
+	
+	void AlignAffector::_firstParticle(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
 		mPreviousParticle = particle;
 	}
-	//-----------------------------------------------------------------------
-	bool AlignAffector::isResize(void) const
-	{
+	
+	bool AlignAffector::isResize() const {
 		return mResize;
 	}
-	//-----------------------------------------------------------------------
-	void AlignAffector::setResize(bool resize)
-	{
+	
+	void AlignAffector::setResize(bool resize) {
 		mResize = resize;
 	}
-	//-----------------------------------------------------------------------
-	void AlignAffector::_affect(ParticleTechnique* particleTechnique, Particle* particle, Real timeElapsed)
-	{
-		if (particle->particleType == Particle::PT_VISUAL)
-		{
+	
+	void AlignAffector::_affect(ParticleTechnique * particleTechnique, Particle * particle, Real timeElapsed) {
+		if (particle->particleType == Particle::PT_VISUAL) {
 			// Set the orientation towards the previous particle, but rotation is undetermined.
-			VisualParticle* visualParticle = static_cast<VisualParticle*>(particle);
+			VisualParticle * visualParticle = static_cast<VisualParticle *>(particle);
 
 			// Get difference
 			Vector3 diff = (mPreviousParticle->position - particle->position);
-			if (mResize)
-			{
+			if (mResize) {
 				visualParticle->setOwnDimensions (visualParticle->width, diff.length(), visualParticle->depth);
 			}
 			diff.normalise();
@@ -80,12 +63,12 @@ namespace ParticleUniverse
 
 		mPreviousParticle = particle;
 	}
-	//-----------------------------------------------------------------------
-	void AlignAffector::copyAttributesTo (ParticleAffector* affector)
-	{
+	
+	void AlignAffector::copyAttributesTo(ParticleAffector * affector) {
 		ParticleAffector::copyAttributesTo(affector);
 
-		AlignAffector* alignAffector = static_cast<AlignAffector*>(affector);
+		AlignAffector * alignAffector = static_cast<AlignAffector *>(affector);
 		alignAffector->mResize = mResize;
 	}
-}
+
+} /* namespace ParticleUniverse */

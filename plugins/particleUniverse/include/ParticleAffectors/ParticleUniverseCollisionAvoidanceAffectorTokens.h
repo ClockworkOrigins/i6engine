@@ -24,39 +24,32 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_COLLISION_AVOIDANCE_AFFECTOR_TOKENS_H__
 #define __PU_COLLISION_AVOIDANCE_AFFECTOR_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
 	/** The CollisionAvoidanceAffectorTranslator parses 'CollisionAvoidanceAffector' tokens
 	*/
-	class _ParticleUniverseExport CollisionAvoidanceAffectorTranslator : public ScriptTranslator
-	{
-		public:
-			CollisionAvoidanceAffectorTranslator(void){};
-			~CollisionAvoidanceAffectorTranslator(void){};
-			virtual bool translateChildProperty(ScriptCompiler* compiler, const AbstractNodePtr &node);
-			virtual bool translateChildObject(ScriptCompiler* compiler, const AbstractNodePtr &node);
+	class _ParticleUniverseExport CollisionAvoidanceAffectorTranslator : public ScriptTranslator {
+	public:
+		CollisionAvoidanceAffectorTranslator() {}
+		~CollisionAvoidanceAffectorTranslator() {}
+		virtual bool translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node);
+		virtual bool translateChildObject(ScriptCompiler * compiler, const AbstractNodePtr & node);
 	};
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 
 	/** 
     */
-	class _ParticleUniverseExport CollisionAvoidanceAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
+	class _ParticleUniverseExport CollisionAvoidanceAffectorWriter : public ParticleAffectorWriter {
+	public:
+		CollisionAvoidanceAffectorWriter() {}
+		virtual ~CollisionAvoidanceAffectorWriter() {}
 
-			CollisionAvoidanceAffectorWriter(void) {};
-			virtual ~CollisionAvoidanceAffectorWriter(void) {};
-
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer , const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer , const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_COLLISION_AVOIDANCE_AFFECTOR_TOKENS_H__ */

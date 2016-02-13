@@ -24,24 +24,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef __PU_FLOCK_CENTER_AFF_TOKENS_H__
 #define __PU_FLOCK_CENTER_AFF_TOKENS_H__
 
-#include "ParticleUniversePrerequisites.h"
 #include "ParticleUniverseAffectorTokens.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** 
     */
-	class _ParticleUniverseExport FlockCenteringAffectorWriter : public ParticleAffectorWriter
-	{
-		public:
-			FlockCenteringAffectorWriter(void) {};
-			virtual ~FlockCenteringAffectorWriter(void) {};
+	class _ParticleUniverseExport FlockCenteringAffectorWriter : public ParticleAffectorWriter {
+	public:
+		FlockCenteringAffectorWriter() {}
+		virtual ~FlockCenteringAffectorWriter() {}
 
-			/** @see
-				ScriptWriter::write
-			*/
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element);
+		/** @see
+			ScriptWriter::write
+		*/
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element);
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_FLOCK_CENTER_AFF_TOKENS_H__ */
