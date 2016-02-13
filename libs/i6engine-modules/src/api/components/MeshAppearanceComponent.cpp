@@ -32,7 +32,7 @@
 namespace i6engine {
 namespace api {
 
-	MeshAppearanceComponent::MeshAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _meshName(), _isVisible(), _position(), _rotation(), _scale(), _material() {
+	MeshAppearanceComponent::MeshAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _meshName(), _isVisible(), _position(), _rotation(), _scale(), _material(), _boneTransformLock(), _boneTransforms() {
 		Component::_objFamilyID = components::MeshAppearanceComponent;
 		Component::_objComponentID = components::MeshAppearanceComponent;
 
@@ -129,7 +129,7 @@ namespace api {
 		return params;
 	}
 
-	std::pair<AddStrategy, int64_t> MeshAppearanceComponent::howToAdd(const ComPtr & comp) const {
+	std::pair<AddStrategy, int64_t> MeshAppearanceComponent::howToAdd(const ComPtr &) const {
 		return std::make_pair(AddStrategy::ADD, 0);
 	}
 
@@ -219,6 +219,21 @@ namespace api {
 
 	void MeshAppearanceComponent::addAnimationFrameEvent(uint64_t frameTime, const std::function<void(void)> & func) const {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraAnimationFrameEvent, core::Method::Update, new graphics::Graphics_AnimationFrameEvent_Update(getID(), _objOwnerID, frameTime, func), core::Subsystem::Object));
+	}
+
+	Transform MeshAppearanceComponent::getBoneTransform(const std::string & name) const {
+		std::lock_guard<std::mutex> lg(_boneTransformLock);
+		auto it = _boneTransforms.find(name);
+		if (it != _boneTransforms.end()) {
+			return it->second;
+		} else {
+			return Transform(Vec3::ZERO, Quaternion::IDENTITY);
+		}
+	}
+
+	void MeshAppearanceComponent::updateBoneTransforms(const std::map<std::string, Transform> & boneTransformMap) {
+		std::lock_guard<std::mutex> lg(_boneTransformLock);
+		_boneTransforms = boneTransformMap;
 	}
 
 } /* namespace api */

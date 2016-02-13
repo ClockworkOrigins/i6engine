@@ -22,6 +22,8 @@
 #ifndef __I6ENGINE_API_MESHAPPEARANCECOMPONENT_H__
 #define __I6ENGINE_API_MESHAPPEARANCECOMPONENT_H__
 
+#include <mutex>
+
 #include "i6engine/math/i6eQuaternion.h"
 #include "i6engine/math/i6eVector.h"
 
@@ -36,7 +38,12 @@ namespace math {
 typedef i6engine::math::i6eVector4 Vec4;
 
 namespace i6engine {
+namespace modules {
+	class MeshComponent;
+} /* namespace modules */
 namespace api {
+
+	typedef std::pair<Vec3, Quaternion> Transform;
 
 	/**
 	 * \class MeshAppearanceComponent
@@ -52,6 +59,8 @@ namespace api {
 	 * | material | no | std::string | optional change of the material on the mesh | yes |
 	 */
 	class ISIXE_MODULES_API MeshAppearanceComponent : public Component {
+		friend class modules::MeshComponent;
+
 	public:
 		/**
 		 * \brief Constructor of the component
@@ -175,6 +184,8 @@ namespace api {
 		 */
 		void addAnimationFrameEvent(uint64_t frameTime, const std::function<void(void)> & func) const;
 
+		Transform getBoneTransform(const std::string & name) const;
+
 	private:
 		/**
 		 * Name of the mesh file of the component
@@ -192,6 +203,9 @@ namespace api {
 
 		std::string _material;
 
+		mutable std::mutex _boneTransformLock;
+		std::map<std::string, Transform> _boneTransforms;
+
 		void Init() override;
 
 		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
@@ -201,6 +215,8 @@ namespace api {
 		 * Sends message to MessagingController containing ObjectID, meshname, visibility and component
 		 */
 		void sendUpdateMessage();
+
+		void updateBoneTransforms(const std::map<std::string, Transform> & boneTransformMap);
 	};
 
 } /* namespace api */

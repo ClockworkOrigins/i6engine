@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "i6engine/utils/i6eThreadSafety.h"
+#include "i6engine/utils/weakPtr.h"
 
 #include "i6engine/math/i6eQuaternion.h"
 #include "i6engine/math/i6eVector.h"
@@ -40,6 +41,10 @@ namespace Ogre {
 } /* namespace Ogre */
 
 namespace i6engine {
+namespace api {
+	class Component;
+	class MeshAppearanceComponent;
+} /* namespace api */
 namespace modules {
 
 	class BoundingBoxComponent;
@@ -96,6 +101,8 @@ namespace modules {
 
 		std::priority_queue<std::pair<uint64_t, std::function<void(void)>>, std::vector<std::pair<uint64_t, std::function<void(void)>>>, sortFrameFunctions> _queueA;
 		std::priority_queue<std::pair<uint64_t, std::function<void(void)>>, std::vector<std::pair<uint64_t, std::function<void(void)>>>, sortFrameFunctions> _queueB;
+
+		utils::weakPtr<api::MeshAppearanceComponent, api::Component> _meshComponent;
 
 		/**
 		 * \brief Create a new MeshComponent

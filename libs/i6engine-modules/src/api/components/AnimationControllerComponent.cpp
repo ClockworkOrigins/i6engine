@@ -71,7 +71,7 @@ namespace api {
 		}
 	}
 
-	std::pair<AddStrategy, int64_t> AnimationControllerComponent::howToAdd(const ComPtr & comp) const {
+	std::pair<AddStrategy, int64_t> AnimationControllerComponent::howToAdd(const ComPtr &) const {
 		return std::make_pair(AddStrategy::ADD, 0);
 	}
 

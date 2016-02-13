@@ -17,14 +17,17 @@
 #include "i6engine/modules/graphics/components/MeshComponent.h"
 
 #include "i6engine/api/EngineController.h"
+#include "i6engine/api/components/MeshAppearanceComponent.h"
 #include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/components/StaticStateComponent.h"
 #include "i6engine/api/configs/ComponentConfig.h"
+#include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
 #include "i6engine/modules/graphics/GraphicsManager.h"
 #include "i6engine/modules/graphics/GraphicsNode.h"
 
+#include "OGRE/OgreBone.h"
 #include "OGRE/OgreEntity.h"
 #include "OGRE/OgreSceneManager.h"
 #include "OGRE/OgreSubEntity.h"
@@ -32,7 +35,7 @@
 namespace i6engine {
 namespace modules {
 
-	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _lastFrameTime(0), _movableTextObservers(), _boundingBoxObservers(), _attachedNodes(), _queueA(), _queueB() {
+	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _lastFrameTime(0), _movableTextObservers(), _boundingBoxObservers(), _attachedNodes(), _queueA(), _queueB(), _meshComponent() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
@@ -65,6 +68,10 @@ namespace modules {
 			p.first->stopListenAttachment();
 			_parent->removeTicker(this);
 		}
+
+		auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(goid);
+
+		_meshComponent = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
 	}
 
 	MeshComponent::~MeshComponent() {
@@ -184,8 +191,20 @@ namespace modules {
 		if (_animationState) {
 			_animationState->addTime(_animationSpeed * (cT - _lastTime) / 1000000.0);
 		}
+		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0));
+		std::map<std::string, api::Transform> boneTransforms;
+		for (auto it = entity->getSkeleton()->getBoneIterator().begin(); it != entity->getSkeleton()->getBoneIterator().end(); it++) {
+			std::string name = (*it)->getName();
+			Vec3 pos(_parent->getSceneNode()->getPosition() + _sceneNode->getPosition() + (*it)->getPosition());
+			Quaternion rot(_parent->getSceneNode()->getOrientation() * _sceneNode->getOrientation() * (*it)->getOrientation());
+		}
+		if (!boneTransforms.empty()) {
+			auto mesh = _meshComponent.get();
+			if (mesh != nullptr) {
+				mesh->updateBoneTransforms(boneTransforms);
+			}
+		}
 		for (const std::pair<GraphicsNode *, std::string> & p : _attachedNodes) {
-			Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0));
 			Ogre::Vector3 newPos = _parent->getSceneNode()->getPosition() + _sceneNode->getPosition() + entity->getSkeleton()->getBone(p.second)->getPosition();
 			Ogre::Quaternion newRot = _parent->getSceneNode()->getOrientation() * _sceneNode->getOrientation() * entity->getSkeleton()->getBone(p.second)->getOrientation();
 			p.first->getSceneNode()->setPosition(newPos);
