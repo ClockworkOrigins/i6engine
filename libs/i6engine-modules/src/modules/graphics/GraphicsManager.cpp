@@ -344,6 +344,10 @@ namespace modules {
 
 			// Get results
 			for (itr = result.begin(); itr != result.end(); itr++) {
+				// Particles cause strange behaviour because they seem to be everywhere on the map, so skip them => particles aren't selectable via mouse
+				if (dynamic_cast<ParticleUniverse::ParticleSystem *>(itr->movable)) {
+					continue;
+				}
 				auto split = utils::split(itr->movable->getParentSceneNode()->getName(), "_");
 				if (split.front() == "unnamed" || split.front() == "debug") {
 					if (itr->worldFragment) {
