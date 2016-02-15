@@ -15,24 +15,24 @@
 ##
 
 ################################
-# packager cmake
+# i6Archiver cmake
 ################################
 
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 
-set(packagerSrc
+set(i6ArchiverSrc
 	main.cpp
 )
 
-add_executable(packager ${packagerSrc})
-set_target_properties(packager PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(i6Archiver ${i6ArchiverSrc})
+set_target_properties(i6Archiver PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(packager ${OGRE_LIBRARIES} i6engine-modules)
+target_link_libraries(i6Archiver ${OGRE_LIBRARIES} i6engine-modules)
 
 IF(WIN32)
-	add_custom_command(TARGET packager POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/packager.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET i6Archiver POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6Archiver.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(TARGETS packager
+install(TARGETS i6Archiver
 		DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 	)

@@ -286,8 +286,6 @@ IF(WIN32)
 	add_custom_command(TARGET ParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ParticleEditor.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX})
-
 install(TARGETS ParticleEditor
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 )
