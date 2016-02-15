@@ -24,8 +24,8 @@ namespace i6engine {
 namespace lua {
 namespace audio {
 
-	void createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool cacheable) {
-		i6engine::api::EngineController::GetSingleton().getAudioFacade()->createNode(comId, f, l, m, p, d, cacheable);
+	void createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category) {
+		i6engine::api::EngineController::GetSingleton().getAudioFacade()->createNode(comId, f, l, m, p, d, cacheable, category);
 	}
 
 	void deleteNode(int64_t comId) {
@@ -40,18 +40,18 @@ namespace audio {
 		i6engine::api::EngineController::GetSingleton().getAudioFacade()->updatePosition(comId, position);
 	}
 
-	uint64_t playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable) {
-		return i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir, cacheable);
+	uint64_t playSound(const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::string & category) {
+		return i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSound(file, maxDistance, pos, dir, cacheable, category);
 	}
 
-	uint64_t playSoundWithCallbackScript(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & file, const std::string & func) {
-		return i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, [file, func](bool b) {
+	uint64_t playSoundWithCallbackScript(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category, const std::string & file, const std::string & func) {
+		return i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, category, [file, func](bool b) {
 			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(file, func, b);
 		});
 	}
 
-	uint64_t playSoundWithCallbackFunction(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & func) {
-		return i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, [func](bool b) {
+	uint64_t playSoundWithCallbackFunction(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category, const std::string & func) {
+		return i6engine::api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(f, m, p, d, cacheable, category, [func](bool b) {
 			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, b);
 		});
 	}

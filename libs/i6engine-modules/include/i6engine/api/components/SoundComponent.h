@@ -43,6 +43,7 @@ namespace api {
 	 * | looping | yes | bool | is this sound looping or only played once | yes |
 	 * | maxDist | yes | double | maxmimum distance this sound should be hearable, volume is interpolated | yes |
 	 * | cache | yes | bool | if set to true, this sound is cached in memory and mustn't be loaded from harddisk every time it is played | yes |
+	 * | category | no | std::string | specifies the category this sound belongs to, e.g. music, effect, dialog, default value is empty string | yes |
 	 */
 	class ISIXE_MODULES_API SoundComponent : public Component {
 	public:
@@ -107,6 +108,11 @@ namespace api {
 		 * \brief will this sound file be cached
 		 */
 		bool _cacheable;
+
+		/**
+		 * \brief category of this sound (e.g. music, effect, dialog)
+		 */
+		std::string _category;
 
 		/**
 		 * \brief initializes the component

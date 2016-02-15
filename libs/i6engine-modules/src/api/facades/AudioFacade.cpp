@@ -31,8 +31,8 @@ namespace api {
 	AudioFacade::~AudioFacade() {
 	}
 
-	void AudioFacade::createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool cacheable) {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(comId, f, l, m, p, d, cacheable), core::Subsystem::Unknown));
+	void AudioFacade::createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(comId, f, l, m, p, d, cacheable, category), core::Subsystem::Unknown));
 	}
 
 	void AudioFacade::deleteNode(int64_t comId) {
@@ -47,15 +47,15 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPosition, core::Method::Update, new audio::Audio_Position_Update(comId, position), core::Subsystem::Unknown));
 	}
 
-	uint64_t AudioFacade::playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable) {
+	uint64_t AudioFacade::playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category) {
 		uint64_t handle = _handleCounter++;
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySound, core::Method::Create, new audio::Audio_PlaySound_Create(handle, f, m, p, d, cacheable), core::Subsystem::Unknown));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySound, core::Method::Create, new audio::Audio_PlaySound_Create(handle, f, m, p, d, cacheable, category), core::Subsystem::Unknown));
 		return handle;
 	}
 
-	uint64_t AudioFacade::playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::function<void(bool)> callback) {
+	uint64_t AudioFacade::playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category, const std::function<void(bool)> callback) {
 		uint64_t handle = _handleCounter++;
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySoundWithCallback, core::Method::Create, new audio::Audio_PlaySoundWithCallback_Create(handle, f, m, p, d, cacheable, callback), core::Subsystem::Unknown));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioMessageType, audio::AudioPlaySoundWithCallback, core::Method::Create, new audio::Audio_PlaySoundWithCallback_Create(handle, f, m, p, d, cacheable, category, callback), core::Subsystem::Unknown));
 		return handle;
 	}
 

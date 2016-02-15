@@ -40,7 +40,7 @@ namespace api {
 		/**
 		 * \brief creates a new audio node
 		 */
-		void createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool cacheable);
+		void createNode(int64_t comId, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category);
 
 		/**
 		 * \brief deletes an audio node
@@ -60,12 +60,12 @@ namespace api {
 		/**
 		 * \brief plays given sound once
 		 */
-		uint64_t playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable);
+		uint64_t playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category);
 
 		/**
 		 * \brief plays given sound if found and calls callback afterwards
 		 */
-		uint64_t playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::function<void(bool)> callback);
+		uint64_t playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category, const std::function<void(bool)> callback);
 
 		/**
 		 * \brief stops sound with this handle ID

@@ -25,11 +25,11 @@
 namespace i6engine {
 namespace modules {
 
-	AudioNode::AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable) : AudioNode(loadWavFile(file), looping, maxDist, position, direction, cacheable) {
+	AudioNode::AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable, const std::string & category) : AudioNode(loadWavFile(file), looping, maxDist, position, direction, cacheable, category) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 	}
 
-	AudioNode::AudioNode(boost::shared_ptr<WavFile> file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable) : _source(), _buffer(), _wavFile() {
+	AudioNode::AudioNode(boost::shared_ptr<WavFile> file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable, const std::string & category) : _source(), _buffer(), _wavFile(), _category(category) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		if (cacheable) {

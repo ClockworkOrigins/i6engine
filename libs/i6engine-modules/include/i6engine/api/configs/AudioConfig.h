@@ -52,7 +52,8 @@ namespace audio {
 		Vec3 position;
 		Vec3 direction;
 		bool cacheable;
-		Audio_Node_Create(int64_t c, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool ca) : GameMessageStruct(c, -1), file(f), looping(l), maxDist(m), position(p), direction(d), cacheable(ca) {
+		std::string category;
+		Audio_Node_Create(int64_t c, const std::string & f, bool l, double m, const Vec3 & p, const Vec3 & d, bool ca, const std::string & cat) : GameMessageStruct(c, -1), file(f), looping(l), maxDist(m), position(p), direction(d), cacheable(ca), category(cat) {
 		}
 		Audio_Node_Create * copy() {
 			return new Audio_Node_Create(*this);
@@ -106,7 +107,8 @@ namespace audio {
 		Vec3 position;
 		Vec3 direction;
 		bool cacheable;
-		Audio_PlaySound_Create(uint64_t h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c) {
+		std::string category;
+		Audio_PlaySound_Create(uint64_t h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c, const std::string & cat) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c), category(cat) {
 		}
 		Audio_PlaySound_Create * copy() {
 			return new Audio_PlaySound_Create(*this);
@@ -123,8 +125,9 @@ namespace audio {
 		Vec3 position;
 		Vec3 direction;
 		bool cacheable;
+		std::string category;
 		std::function<void(bool)> callback;
-		Audio_PlaySoundWithCallback_Create(uint64_t h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c, const std::function<void(bool)> & cb) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c), callback(cb) {
+		Audio_PlaySoundWithCallback_Create(uint64_t h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c, const std::string & cat, const std::function<void(bool)> & cb) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c), category(cat), callback(cb) {
 		}
 		Audio_PlaySoundWithCallback_Create * copy() {
 			return new Audio_PlaySoundWithCallback_Create(*this);

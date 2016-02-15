@@ -30,12 +30,10 @@
 #include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace api {
 
-	SoundComponent::SoundComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _offset(), _direction(), _file(), _looping(), _maxDist(), _psc(), _cacheable() {
+	SoundComponent::SoundComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _offset(), _direction(), _file(), _looping(), _maxDist(), _psc(), _cacheable(), _category("") {
 		Component::_objFamilyID = components::SoundComponent;
 		Component::_objComponentID = components::SoundComponent;
 
@@ -45,6 +43,7 @@ namespace api {
 		parseAttribute<true>(params, "looping", _looping);
 		parseAttribute<true>(params, "maxDist", _maxDist);
 		parseAttribute<true>(params, "cache", _cacheable);
+		parseAttribute<false>(params, "category", _category);
 	}
 
 	SoundComponent::~SoundComponent() {
@@ -56,7 +55,7 @@ namespace api {
 		auto psc = getOwnerGO()->getGOC<PhysicalStateComponent>(components::PhysicalStateComponent);
 		_position = psc->getPosition();
 		Vec3 position = psc->getPosition() + math::rotateVector(_offset, psc->getRotation());
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(getID(), _file, _looping, _maxDist, position, _direction, _cacheable), core::Subsystem::Object));
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::AudioNodeMessageType, audio::AudioNode, core::Method::Create, new audio::Audio_Node_Create(getID(), _file, _looping, _maxDist, position, _direction, _cacheable, _category), core::Subsystem::Object));
 		_psc = psc;
 	}
 
@@ -80,9 +79,12 @@ namespace api {
 		_offset.insertInMap("offset", params);
 		_direction.insertInMap("direction", params);
 		params["file"] = _file;
-		params["looping"] = boost::lexical_cast<std::string>(_looping);
-		params["maxDist"] = boost::lexical_cast<std::string>(_maxDist);
-		params["cache"] = boost::lexical_cast<std::string>(_cacheable);
+		params["looping"] = std::to_string(_looping);
+		params["maxDist"] = std::to_string(_maxDist);
+		params["cache"] = std::to_string(_cacheable);
+		if (!_category.empty()) {
+			params["category"] = _category;
+		}
 		return params;
 	}
 
@@ -101,7 +103,7 @@ namespace api {
 			return true;
 		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Looping", [this]() {
-			return boost::lexical_cast<std::string>(_looping);
+			return std::to_string(_looping);
 		}, [this](std::string s) {
 			try {
 				_looping = boost::lexical_cast<bool>(s);
@@ -112,7 +114,7 @@ namespace api {
 			return true;
 		}, "Bool"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Max. Dist", [this]() {
-			return boost::lexical_cast<std::string>(_maxDist);
+			return std::to_string(_maxDist);
 		}, [this](std::string s) {
 			try {
 				_maxDist = boost::lexical_cast<double>(s);
@@ -145,7 +147,7 @@ namespace api {
 			return true;
 		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Cache", [this]() {
-			return boost::lexical_cast<std::string>(_cacheable);
+			return std::to_string(_cacheable);
 		}, [this](std::string s) {
 			try {
 				_cacheable = boost::lexical_cast<bool>(s);

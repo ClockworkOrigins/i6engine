@@ -49,12 +49,12 @@ namespace modules {
 		/**
 		 * \brief constructor loading file
 		 */
-		AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable);
+		AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable, const std::string & category);
 
 		/**
 		 * \brief constructor using cached sound
 		 */
-		AudioNode(boost::shared_ptr<WavFile> file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable);
+		AudioNode(boost::shared_ptr<WavFile> file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable, const std::string & category);
 
 		/**
 		 * \brief destructor
@@ -65,6 +65,7 @@ namespace modules {
 		ALuint _source;
 		ALuint _buffer;
 		boost::shared_ptr<WavFile> _wavFile;
+		std::string _category;
 
 		void News(const api::GameMessage::Ptr & msg);
 

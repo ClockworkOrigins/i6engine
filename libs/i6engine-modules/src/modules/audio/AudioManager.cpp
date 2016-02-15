@@ -83,11 +83,11 @@ namespace modules {
 			if (type == api::audio::AudioPlaySound) {
 				api::audio::Audio_PlaySound_Create * apsc = dynamic_cast<api::audio::Audio_PlaySound_Create *>(msg->getContent());
 
-				playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable);
+				playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable, apsc->category);
 			} else if (type == api::audio::AudioPlaySoundWithCallback) {
 				api::audio::Audio_PlaySoundWithCallback_Create * apsc = dynamic_cast<api::audio::Audio_PlaySoundWithCallback_Create *>(msg->getContent());
 
-				playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable, apsc->callback);
+				playSound(apsc->handle, apsc->file, apsc->maxDist, apsc->position, apsc->direction, apsc->cacheable, apsc->category, apsc->callback);
 			} else {
 				ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 			}
@@ -149,9 +149,9 @@ namespace modules {
 
 				auto it = _cachedSounds.find(anc->file);
 				if (it != _cachedSounds.end()) {
-					_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(it->second, anc->looping, anc->maxDist, anc->position, anc->direction, false);
+					_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(it->second, anc->looping, anc->maxDist, anc->position, anc->direction, false, anc->category);
 				} else {
-					_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(anc->file, anc->looping, anc->maxDist, anc->position, anc->direction, anc->cacheable);
+					_nodes[msg->getContent()->getID()] = boost::make_shared<AudioNode>(anc->file, anc->looping, anc->maxDist, anc->position, anc->direction, anc->cacheable, anc->category);
 					if (anc->cacheable) {
 						_cachedSounds.insert(std::make_pair(anc->file, _nodes[msg->getContent()->getID()]->_wavFile));
 					}
@@ -198,7 +198,7 @@ namespace modules {
 		alListenerfv(AL_VELOCITY, ListenerVel);		// Set velocity of the listener
 	}
 
-	void AudioManager::playSound(uint64_t handle, const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::function<void(bool)> & callback) {
+	void AudioManager::playSound(uint64_t handle, const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::string & category, const std::function<void(bool)> & callback) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		auto it = _cachedSounds.find(file);
 		boost::shared_ptr<WavFile> wh;
@@ -263,7 +263,7 @@ namespace modules {
 		// PLAY 
 		alSourcePlay(source);							// Play the sound buffer linked to the source
 
-		_sounds.push_back(std::make_tuple(source, buffer, callback, handle));
+		_sounds.push_back(std::make_tuple(source, buffer, callback, handle, category));
 	}
 
 } /* namespace modules */

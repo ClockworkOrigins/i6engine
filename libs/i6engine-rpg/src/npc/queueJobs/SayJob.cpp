@@ -61,7 +61,7 @@ namespace npc {
 
 		// start sound
 		auto psc = _self->getGO()->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent);
-		_soundHandle = api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(api::EngineController::GetSingleton().getTextManager()->getText(_soundKey), config::DIALOG_MAX_DISTANCE, psc->getPosition(), math::rotateVector(Vec3(0.0, 0.0, 1.0), psc->getRotation()), false, [this](bool b) {
+		_soundHandle = api::EngineController::GetSingleton().getAudioFacade()->playSoundWithCallback(api::EngineController::GetSingleton().getTextManager()->getText(_soundKey), config::DIALOG_MAX_DISTANCE, psc->getPosition(), math::rotateVector(Vec3(0.0, 0.0, 1.0), psc->getRotation()), false, "DIALOG", [this](bool b) {
 			if (b) {
 				_soundFinished = true;
 			} else {
