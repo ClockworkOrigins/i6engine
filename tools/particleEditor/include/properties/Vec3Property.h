@@ -27,6 +27,10 @@ namespace properties {
 
 		void setVector3(ParticleUniverse::Vector3 value) override;
 
+		ParticleUniverse::Vector3 getVector3() const override {
+			return _value;
+		}
+
 	private slots:
 		void changedValue();
 

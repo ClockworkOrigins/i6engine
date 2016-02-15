@@ -256,7 +256,7 @@ namespace widgets {
 			renderer->setCommonDirection(prop->getVector3());
 		} else if (propertyName == PRNL_UP_VECTOR) {
 			// Common Up Vector: Ogre::Vector3
-			renderer->setCommonUpVector(prop->getVector3());
+			renderer->setCommonUpVector(prop->getVector3().normalisedCopy());
 		} else if (propertyName == PRNL_POINT_RENDERING) {
 			// Point Rendering: bool
 			renderer->setPointRenderingEnabled(prop->getBool());
