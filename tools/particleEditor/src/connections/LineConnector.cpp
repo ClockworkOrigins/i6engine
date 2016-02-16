@@ -9,7 +9,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace connections {
 
-	LineConnector::LineConnector(QGraphicsWidget * first, QGraphicsWidget * second, QColor colour, Qt::PenStyle lineStyle) : _first(first), _second(second), _colour(colour), _lineStyle(lineStyle) {
+	LineConnector::LineConnector(QGraphicsWidget * first, QGraphicsWidget * second, QColor colour, Qt::PenStyle lineStyle) : _first(first), _second(second), _colour(colour), _lineStyle(lineStyle), _path() {
 	}
 
 	void LineConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *) {
@@ -80,13 +80,13 @@ namespace connections {
 			}
 		}
 
-		QPainterPath path(QPoint(x1, y1));
-		path.cubicTo(QPoint(x3, y3), QPoint(x4, y4), QPoint(x2, y2));
-		painter->drawPath(path);
+		_path = QPainterPath(QPoint(x1, y1));
+		_path.cubicTo(QPoint(x3, y3), QPoint(x4, y4), QPoint(x2, y2));
+		painter->drawPath(_path);
 	}
 
 	QRectF LineConnector::boundingRect() const {
-		return QRectF();
+		return _path.boundingRect();
 	}
 
 } /* namespace connections */

@@ -19,6 +19,7 @@ namespace connections {
 		QGraphicsWidget * _second;
 		QColor _colour;
 		Qt::PenStyle _lineStyle;
+		QPainterPath _path;
 
 		void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget) override;
 

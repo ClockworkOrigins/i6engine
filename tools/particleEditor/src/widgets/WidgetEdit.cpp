@@ -237,6 +237,8 @@ namespace widgets {
 			wec->deleteLater();
 		}
 		_components.clear();
+		_graphicsScene->views().first()->hide();
+		_graphicsScene->views().first()->show();
 		WidgetEditComponent * particleSystemEditComponent = forceCreateParticleSystemEditComponent(); // 'Guarantees' a valid particleSystemEditComponent
 		if (copyParticleSystemPropertiesToPropertyWindow(particleSystemEditComponent, newParticleSystem)) {
 			createParticleSystemComponents(particleSystemEditComponent, newParticleSystem);

@@ -25,7 +25,7 @@ namespace widgets {
 		ds >> i >> offset;
 		WidgetEditComponent * wec = (WidgetEditComponent *) i;
 		wec->setPos(evt->scenePos() + offset);
-		update();
+		update(sceneRect());
 	}
 
 } /* namespace widgets */
