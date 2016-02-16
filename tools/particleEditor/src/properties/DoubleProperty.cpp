@@ -26,8 +26,10 @@ namespace properties {
 	}
 
 	void DoubleProperty::valueChanged() {
-		_value = _doubleSpinBox->value();
-		triggerChangedSignal();
+		if (std::abs(_value - _doubleSpinBox->value()) > 0.001) {
+			_value = _doubleSpinBox->value();
+			triggerChangedSignal();
+		}
 	}
 
 } /* namespace properties */

@@ -24,8 +24,10 @@ namespace properties {
 	}
 
 	void UIntProperty::changedValue() {
-		_value = _spinBox->value();
-		triggerChangedSignal();
+		if (_value != _spinBox->value()) {
+			_value = _spinBox->value();
+			triggerChangedSignal();
+		}
 	}
 
 } /* namespace properties */

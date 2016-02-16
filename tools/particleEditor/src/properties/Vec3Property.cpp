@@ -7,7 +7,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace properties {
 
-	Vec3Property::Vec3Property(QWidget * par, QString label, QString name, ParticleUniverse::Vector3 value) : Property(par, label, name), _value(value), _doubleSpinBoxX(nullptr), _doubleSpinBoxY(nullptr), _doubleSpinBoxZ(nullptr) {
+	Vec3Property::Vec3Property(QWidget * par, QString label, QString name, ParticleUniverse::Vector3 value) : Property(par, label, name), _value(value), _doubleSpinBoxX(nullptr), _doubleSpinBoxY(nullptr), _doubleSpinBoxZ(nullptr), _set(false) {
 		QLabel * l = new QLabel("X", this);
 		horizontalLayout->addWidget(l);
 		_doubleSpinBoxX = new QDoubleSpinBox(this);
@@ -43,17 +43,22 @@ namespace properties {
 	}
 
 	void Vec3Property::setVector3(ParticleUniverse::Vector3 value) {
+		// set is used to know in valueChanged when value is not edited via GUI but set from code to avoid notification
+		_set = true;
 		_value = value;
 		_doubleSpinBoxX->setValue(value.x);
 		_doubleSpinBoxY->setValue(value.y);
 		_doubleSpinBoxZ->setValue(value.z);
+		_set = false;
 	}
 
 	void Vec3Property::changedValue() {
-		_value.x = _doubleSpinBoxX->value();
-		_value.y = _doubleSpinBoxY->value();
-		_value.z = _doubleSpinBoxZ->value();
-		triggerChangedSignal();
+		if (!_set) {
+			_value.x = _doubleSpinBoxX->value();
+			_value.y = _doubleSpinBoxY->value();
+			_value.z = _doubleSpinBoxZ->value();
+			triggerChangedSignal();
+		}
 	}
 
 } /* namespace properties */

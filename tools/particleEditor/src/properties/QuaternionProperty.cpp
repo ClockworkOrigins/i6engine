@@ -53,8 +53,11 @@ namespace properties {
 	}
 
 	void QuaternionProperty::changedValue() {
-		_value = Quaternion(Vec3(_vec3Property->getVector3().normalisedCopy()), _doubleSpinBox->value());
-		triggerChangedSignal();
+		Quaternion q = Quaternion(Vec3(_vec3Property->getVector3().normalisedCopy()), _doubleSpinBox->value());
+		if (_value != q) {
+			_value = Quaternion(Vec3(_vec3Property->getVector3().normalisedCopy()), _doubleSpinBox->value());
+			triggerChangedSignal();
+		}
 	}
 
 } /* namespace properties */

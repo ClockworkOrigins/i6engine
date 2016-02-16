@@ -36,6 +36,8 @@ namespace properties {
 
 	private:
 		QStringList _value;
+		QString _currentText;
+		int _currentIndex;
 		QComboBox * _comboBox;
 	};
 

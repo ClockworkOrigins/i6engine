@@ -11,7 +11,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace properties {
 
-	ColourWithAlphaProperty::ColourWithAlphaProperty(QWidget * par, QString label, QString name, Vec4 value) : Property(par, label, name), _layout(nullptr), _value(value), _spinBoxR(nullptr), _spinBoxG(nullptr), _spinBoxB(nullptr), _spinBoxA(nullptr) {
+	ColourWithAlphaProperty::ColourWithAlphaProperty(QWidget * par, QString label, QString name, Vec4 value) : Property(par, label, name), _layout(nullptr), _value(value), _spinBoxR(nullptr), _spinBoxG(nullptr), _spinBoxB(nullptr), _spinBoxA(nullptr), _set(false) {
 		QWidget * widget = new QWidget(this);
 		_layout = new QGridLayout(widget);
 		widget->setLayout(_layout);
@@ -55,19 +55,24 @@ namespace properties {
 	}
 
 	void ColourWithAlphaProperty::setColourWithAlpha(Vec4 value) {
+		// set is used to know in valueChanged when value is not edited via GUI but set from code to avoid notification
+		_set = true;
 		_value = value;
 		_spinBoxR->setValue(value.getX());
 		_spinBoxG->setValue(value.getY());
 		_spinBoxB->setValue(value.getZ());
 		_spinBoxA->setValue(value.getW());
+		_set = false;
 	}
 
 	void ColourWithAlphaProperty::valueChanged() {
-		_value.setW(_spinBoxA->value());
-		_value.setX(_spinBoxR->value());
-		_value.setY(_spinBoxG->value());
-		_value.setZ(_spinBoxB->value());
-		triggerChangedSignal();
+		if (!_set) {
+			_value.setW(_spinBoxA->value());
+			_value.setX(_spinBoxR->value());
+			_value.setY(_spinBoxG->value());
+			_value.setZ(_spinBoxB->value());
+			triggerChangedSignal();
+		}
 	}
 
 } /* namespace properties */

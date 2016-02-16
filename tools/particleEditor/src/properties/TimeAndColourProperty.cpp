@@ -46,8 +46,11 @@ namespace properties {
 	}
 
 	void TimeAndColourProperty::changedValue() {
-		_value = std::make_pair(_doubleSpinBox->value(), _colourProperty->getColourWithAlpha());
-		triggerChangedSignal();
+		auto p = std::make_pair(_doubleSpinBox->value(), _colourProperty->getColourWithAlpha());
+		if (std::abs(_value.first - p.first) > 0.001 || _value.second != p.second) {
+			_value = p;
+			triggerChangedSignal();
+		}
 	}
 
 } /* namespace properties */

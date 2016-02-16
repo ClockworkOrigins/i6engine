@@ -41,6 +41,7 @@ namespace properties {
 		QSpinBox * _spinBoxG;
 		QSpinBox * _spinBoxB;
 		QSpinBox * _spinBoxA;
+		bool _set;
 	};
 
 } /* namespace properties */

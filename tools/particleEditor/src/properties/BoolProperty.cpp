@@ -22,8 +22,10 @@ namespace properties {
 	}
 
 	void BoolProperty::boolChanged() {
-		_value = _checkBox->isChecked();
-		triggerChangedSignal();
+		if (_value != _checkBox->isChecked()) {
+			_value = _checkBox->isChecked();
+			triggerChangedSignal();
+		}
 	}
 
 } /* namespace properties */

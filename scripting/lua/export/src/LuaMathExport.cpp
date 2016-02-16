@@ -237,6 +237,7 @@ scope registerMath() {
 			.property("y", &Vec4::getY, &Vec4::setY)
 			.property("z", &Vec4::getZ, &Vec4::setZ)
 			.property("w", &Vec4::getW, &Vec4::setW)
+			.def(self == self)
 			.def("insertInMap", &Vec4::insertInMap)
 			.def("toString", &Vec4::toString)
 			.def(tostring(self))

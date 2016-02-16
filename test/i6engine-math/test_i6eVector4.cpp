@@ -55,6 +55,7 @@ TEST(i6eVector4, Addition) {
 
 	EXPECT_EQ(Vec4(5.0, 5.0, 5.0, 5.0), v1 + v2);
 	EXPECT_EQ(Vec4(5.0, 5.0, 5.0, 5.0), v2 + v1);
+	EXPECT_NE(Vec4(5.0, 5.0, 5.0, 5.0), v2 + v1 + v1);
 }
 
 TEST(i6eVector4, Multiplication) {

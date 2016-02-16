@@ -6,7 +6,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace properties {
 
-	EnumProperty::EnumProperty(QWidget * par, QString label, QString name, QStringList value) : Property(par, label, name), _value(value) {
+	EnumProperty::EnumProperty(QWidget * par, QString label, QString name, QStringList value) : Property(par, label, name), _value(value), _currentText(), _currentIndex() {
 		_comboBox = new QComboBox(this);
 		horizontalLayout->addWidget(_comboBox);
 		_comboBox->addItems(_value);
@@ -17,10 +17,12 @@ namespace properties {
 	}
 
 	void EnumProperty::setCurrentIndex(int index) {
+		_currentIndex = index;
 		_comboBox->setCurrentIndex(index);
 	}
 
 	void EnumProperty::setEnumString(QString value) {
+		_currentText = value;
 		_comboBox->setCurrentText(value);
 	}
 
@@ -33,7 +35,9 @@ namespace properties {
 	}
 
 	void EnumProperty::changedValue() {
-		triggerChangedSignal();
+		if (_currentIndex != _comboBox->currentIndex() && _currentText != _comboBox->currentText()) {
+			triggerChangedSignal();
+		}
 	}
 
 } /* namespace properties */

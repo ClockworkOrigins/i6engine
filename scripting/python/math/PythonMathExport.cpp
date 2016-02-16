@@ -233,6 +233,8 @@ BOOST_PYTHON_MODULE(ScriptingMathPython) {
 		.add_property("y", &Vec4::getY, &Vec4::setY)
 		.add_property("z", &Vec4::getZ, &Vec4::setZ)
 		.add_property("w", &Vec4::getW, &Vec4::setW)
+		.def(self == self)
+		.def(self != self)
 		.def("insertInMap", &Vec4::insertInMap)
 		.def("toString", &Vec4::toString)
 		.def(self_ns::str(self_ns::self));

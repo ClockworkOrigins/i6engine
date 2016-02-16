@@ -21,8 +21,10 @@ namespace properties {
 	}
 
 	void StringProperty::stringChanged() {
-		_value = _lineEdit->text();
-		triggerChangedSignal();
+		if (_value != _lineEdit->text()) {
+			_value = _lineEdit->text();
+			triggerChangedSignal();
+		}
 	}
 
 } /* namespace properties */

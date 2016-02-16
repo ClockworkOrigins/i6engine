@@ -39,6 +39,7 @@ namespace properties {
 		QDoubleSpinBox * _doubleSpinBoxX;
 		QDoubleSpinBox * _doubleSpinBoxY;
 		QDoubleSpinBox * _doubleSpinBoxZ;
+		bool _set;
 	};
 
 } /* namespace properties */

@@ -154,6 +154,13 @@ namespace math {
 		}
 
 		/**
+		 * \brief Operator '!=' for Vector4 calls == and negatiates result
+		 */
+		bool operator!=(const i6eVector4 & other) const {
+			return !(*this == other);
+		}
+
+		/**
 		 * \brief Convert whole vector to Ogre.
 		 *
 		 * \return Vector converted to Ogre
