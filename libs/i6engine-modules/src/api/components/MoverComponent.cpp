@@ -53,7 +53,7 @@ namespace api {
 			_initial = false;
 			start(_realStartPos);
 		} else {
-			auto a = _startTime;
+			uint64_t a = _startTime;
 			start(_realStartPos);
 			_startTime = a;
 		}
@@ -121,15 +121,6 @@ namespace api {
 
 		parseAttribute<true>(params, "started", _started);
 		parseAttribute<false>(params, "linkable", _linkable);
-
-		if (params.find("started") == params.end()) {
-			ISIXE_THROW_API("MoverComponent", "required paramter 'started' to set");
-		}
-		_started = boost::lexical_cast<bool>(params.find("started")->second);
-
-		if (params.find("linkable") != params.end()) {
-			_linkable = boost::lexical_cast<bool>(params.find("linkable")->second);
-		}
 	}
 
 	attributeMap MoverComponent::synchronize() const {

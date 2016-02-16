@@ -79,6 +79,10 @@ namespace api {
 		}
 
 		if (_keyFrames.size() > 0) {
+			if (_positioning == Positioning::POSITIONING_ABSOLUTE) {
+				// for absolute, startPos ist first key frame
+				_realStartPos = _keyFrames[0].first;
+			}
 			if (_direction) {
 				for (size_t i = 0; i < _keyFrames.size() - 1; ++i) {
 					_totalDistance += (_keyFrames[i + 1].first - _keyFrames[i].first).length();
@@ -271,7 +275,7 @@ namespace api {
 		parseAttribute<true>(params, "keyframes", frames);
 		for (uint32_t i = 0; i < frames; ++i) {
 			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos") != params.end());
-			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) +"_rot" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) +"_rot") != params.end());
+			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot") != params.end());
 			Vec3 pos;
 			Quaternion rot;
 			parseAttribute<true>(params, std::string("keyframe_") + std::to_string(i) + "_pos", pos);
