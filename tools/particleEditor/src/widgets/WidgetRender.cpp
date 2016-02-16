@@ -24,7 +24,7 @@ namespace widgets {
 
 	std::string CURRENT_PS_NAME = "currentParticleSystemName";
 
-	WidgetRender::WidgetRender(QWidget * par) : QWidget(par), _root(nullptr), _resourceManager(nullptr), _rWindow(nullptr), _sceneManager(nullptr), _overlay(nullptr), _textPanel(nullptr), _averageFPS(nullptr), _cameraNode(nullptr), _camera(nullptr), _viewport(nullptr), _particleNode(nullptr), _currentParticleSystemForRenderer(nullptr), _maxNumberOfVisualParticles(0), _maxNumberOfEmittedParticles(0) {
+	WidgetRender::WidgetRender(QWidget * par) : QWidget(par), _root(nullptr), _resourceManager(nullptr), _rWindow(nullptr), _sceneManager(nullptr), _overlay(nullptr), _textPanel(nullptr), _averageFPS(nullptr), _cameraNode(nullptr), _camera(nullptr), _viewport(nullptr), _particleNode(nullptr), _currentParticleSystemForRenderer(nullptr), _maxNumberOfVisualParticles(0), _maxNumberOfEmittedParticles(0), _lastFrameTime(std::chrono::high_resolution_clock::now()), _frames(60) {
 		setupUi(this);
 
 		clockUtils::iniParser::IniParser iniParser;
@@ -149,8 +149,12 @@ namespace widgets {
 	}
 
 	void WidgetRender::render() {
-		_root->renderOneFrame();
-		updateOverlay();
+		std::chrono::time_point<std::chrono::high_resolution_clock> now = std::chrono::high_resolution_clock::now();
+		if (uint64_t(std::chrono::duration_cast<std::chrono::microseconds>(now - _lastFrameTime).count()) >= 1000000 / _frames) {
+			_lastFrameTime = _lastFrameTime + std::chrono::microseconds(1000000 / _frames);
+			_root->renderOneFrame();
+			updateOverlay();
+		}
 		emit triggerRender();
 	}
 

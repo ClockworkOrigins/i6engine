@@ -3,6 +3,8 @@
 
 #include "ui_widgetRender.h"
 
+#include <chrono>
+
 namespace Ogre {
 	class Camera;
 	class Overlay;
@@ -73,6 +75,8 @@ namespace widgets {
 		ParticleUniverse::ParticleSystem * _currentParticleSystemForRenderer;
 		size_t _maxNumberOfVisualParticles;
 		size_t _maxNumberOfEmittedParticles;
+		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrameTime;
+		uint64_t _frames;
 
 		void updateOverlay();
 		void resizeEvent(QResizeEvent * evt) override;
