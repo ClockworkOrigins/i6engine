@@ -56,7 +56,7 @@ namespace modules {
 		 * \brief draws a line from 'from' to 'to' with color 'col'
 		 * \hint toColor is currently ignored
 		 */
-		void drawLine(const btVector3 & from, const btVector3 & to, const btVector3 & col, const btVector3 & toColor) {
+		void drawLine(const btVector3 & from, const btVector3 & to, const btVector3 & col, const btVector3 & /*toColor*/) {
 			drawLine(from, to, col);
 		}
 

@@ -45,6 +45,7 @@ class btTypedConstraint;
 namespace i6engine {
 namespace modules {
 
+	class DebugDrawer;
 	class PhysicsController;
 
 	class PhysicsManager {
@@ -204,6 +205,8 @@ namespace modules {
 		 * \brief is the subsystem paused or not?
 		 */
 		bool _paused;
+
+		DebugDrawer * _debugDrawer;
 
 		/**
 		 * \brief forbidden

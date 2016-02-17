@@ -33,8 +33,8 @@ namespace api {
 		Component::_objComponentID = components::LineComponent;
 
 		parseAttribute<true>(params, "startPos", _startPos);
-		parseAttribute<false>(params, "endPos", _endPos);
-		parseAttribute<false>(params, "colour", _colour);
+		parseAttribute<true>(params, "endPos", _endPos);
+		parseAttribute<true>(params, "colour", _colour);
 	}
 
 	LineComponent::~LineComponent() {

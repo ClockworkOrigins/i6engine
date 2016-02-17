@@ -158,7 +158,7 @@ namespace modules {
 
 	uint64_t PhysicsManager::_tickCount = 0;
 
-	PhysicsManager::PhysicsManager(PhysicsController * pc) : _ctrl(pc), _collisionShapes(), _dynamicsWorld(), _broadphase(), _dispatcher(), _collisionConfiguration(), _solver(), _nodes(), _lngTime(api::EngineController::GetSingleton().getCurrentTime()), _tickList(), _constraints(), _paused(false) {
+	PhysicsManager::PhysicsManager(PhysicsController * pc) : _ctrl(pc), _collisionShapes(), _dynamicsWorld(), _broadphase(), _dispatcher(), _collisionConfiguration(), _solver(), _nodes(), _lngTime(api::EngineController::GetSingleton().getCurrentTime()), _tickList(), _constraints(), _paused(false), _debugDrawer(nullptr) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			// Build the broadphase
@@ -181,7 +181,8 @@ namespace modules {
 			btOverlapFilterCallback * filterCallback = new FilterCallback();
 			_dynamicsWorld->getPairCache()->setOverlapFilterCallback(filterCallback);
 
-			_dynamicsWorld->setDebugDrawer(new DebugDrawer());
+			_debugDrawer = new DebugDrawer();
+			_dynamicsWorld->setDebugDrawer(_debugDrawer);
 			_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 			_dynamicsWorld->getSolverInfo().m_splitImpulse = true;
 			_dynamicsWorld->getSolverInfo().m_numIterations = 20;

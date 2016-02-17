@@ -29,16 +29,16 @@ namespace modules {
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::GraphicsMessageType, api::graphics::GraLine, core::Method::Create, new api::graphics::Graphics_Line_Create(Vec3(from), Vec3(to), Vec3(col)), core::Subsystem::Unknown));
 	}
 
-	void DebugDrawer::drawContactPoint(const btVector3 & a, const btVector3 & b, btScalar g, int f, const btVector3 & c) {
+	void DebugDrawer::drawContactPoint(const btVector3 &, const btVector3 &, btScalar, int, const btVector3 &) {
 	}
 
-	void DebugDrawer::reportErrorWarning(const char * d) {
+	void DebugDrawer::reportErrorWarning(const char *) {
 	}
 
-	void DebugDrawer::draw3dText(const btVector3 & a, const char * c) {
+	void DebugDrawer::draw3dText(const btVector3 &, const char *) {
 	}
 
-	void DebugDrawer::setDebugMode(int a) {
+	void DebugDrawer::setDebugMode(int) {
 	}
 
 	int DebugDrawer::getDebugMode() const {
