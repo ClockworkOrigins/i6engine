@@ -12,6 +12,7 @@
 #include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
+#include "i6engine/api/facades/ObjectFacade.h"
 
 #include "i6engine/modules/audio/AudioController.h"
 #include "i6engine/modules/graphics/GraphicsController.h"
@@ -208,6 +209,8 @@ namespace widgets {
 		for (plugins::InitializationPluginInterface * ipi : _initializationPlugins) {
 			ipi->initialize();
 		}
+
+		api::EngineController::GetSingleton().getObjectFacade()->allowComponentsTicking(false);
 
 		api::EngineController::GetSingleton().getGUIFacade()->setMouseVisibility(false);
 

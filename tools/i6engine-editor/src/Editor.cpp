@@ -174,6 +174,13 @@ namespace editor {
 
 			api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, callback);
 
+			for (auto p : api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap()) {
+				api::ComPtr c = p.second->getGOC(api::components::ComponentTypes::PhysicalStateComponent);
+				if (c != nullptr) {
+					c->enableTicking(true);
+				}
+			}
+
 			api::EngineController::GetSingletonPtr()->getGraphicsFacade()->getHighestCoordinate(Vec3::ZERO, [this](Vec3 pos) {
 				i6engine::api::objects::GOTemplate tmpl;
 				i6engine::api::attributeMap paramsSSC;
