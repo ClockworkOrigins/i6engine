@@ -247,6 +247,12 @@ namespace api {
 			return _templateList;
 		}
 
+		/**
+		 * \brief sets whether newly created Components shall be able to tick per default or not
+		 * per default Components ticking is allowed, but some cases like the level editor want to disable ticking
+		 */
+		void allowComponentsTicking(bool allowTicking) const;
+
 	private:
 		/**
 		 * \brief List with all current GameObjects.

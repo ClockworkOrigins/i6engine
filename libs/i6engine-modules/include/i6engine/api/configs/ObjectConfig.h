@@ -59,7 +59,8 @@ namespace objects {
 		ObjConditionalMessage,
 		Position,
 		ObjClean,
-		ObjPause
+		ObjPause,
+		ObjComponentTicking
 	};
 
 	/**
@@ -283,6 +284,19 @@ namespace objects {
 			return new Object_Pause_Update(*this);
 		}
 	} Object_Pause_Update;
+
+	/**
+	 * \brief enables or disables ticking of Components
+	 * never send through network
+	 */
+	typedef struct ISIXE_MODULES_API Object_ComponentTicking_Update : GameMessageStruct {
+		bool allowTicking;
+		Object_ComponentTicking_Update(bool a) : allowTicking(a) {
+		}
+		Object_ComponentTicking_Update * copy() {
+			return new Object_ComponentTicking_Update(*this);
+		}
+	} Object_ComponentTicking_Update;
 
 } /* namespace objects */
 } /* namespace api */

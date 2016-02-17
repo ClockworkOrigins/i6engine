@@ -27,7 +27,7 @@
 namespace i6engine {
 namespace modules {
 
-	ComponentFactory::ComponentFactory() : _callbacks() {
+	ComponentFactory::ComponentFactory() : _callbacks(), _tickingAllowed(true) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 	}
 
@@ -64,6 +64,7 @@ namespace modules {
 		api::ComPtr co = (it->second)(id, params);
 		owner.get()->setGOC(co);
 		co->setSelf(co);
+		co->enableTicking(_tickingAllowed);
 
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(id);
 

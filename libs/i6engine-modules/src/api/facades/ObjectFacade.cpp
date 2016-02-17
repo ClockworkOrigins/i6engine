@@ -186,5 +186,9 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
+	void ObjectFacade::allowComponentsTicking(bool allowTicking) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjComponentTicking, core::Method::Update, new objects::Object_ComponentTicking_Update(allowTicking), core::Subsystem::Unknown));
+	}
+
 } /* namespace modules */
 } /* namespace i6engine */

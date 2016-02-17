@@ -195,6 +195,12 @@ namespace api {
 		bool getSync() const { return _sync; }
 
 		/**
+		 * \brief sets ticking status for this Component
+		 * per default all Components are allowed to tick and calling addTicker will start ticking, but in some cases, e.g. for level editor, ticking has to be disabled and just a few components are allowed to tick
+		 */
+		void enableTicking(bool allowTicking);
+
+		/**
 		 * \brief asks, how to handle a new component with the same type
 		 * \param[in] comp component that shall be added
 		 * \returns pair containing the strategy to use as well as an additional value
@@ -258,6 +264,21 @@ namespace api {
 		 * \brief a weak_ptr on the own shared_ptr
 		 */
 		WeakComPtr _self;
+
+		/**
+		 * \brief status if this object is allowed to tick or not
+		 */
+		bool _tickingAllowed;
+
+		/**
+		 * \brief stores if a Component which isn't allowed to tick want to tick, so it can start ticking when ticking will be allowed
+		 */
+		bool _wantsToTick;
+
+		/**
+		 * \brief stores whether this Component is actually ticking
+		 */
+		bool _isTicking;
 
 		/**
 		 * \brief adds this component to ticklist

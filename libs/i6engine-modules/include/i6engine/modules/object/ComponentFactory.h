@@ -88,6 +88,14 @@ namespace modules {
 		 */
 		api::ComPtr createGOC(int64_t id, const std::string & GOCType, const api::attributeMap & params, const api::WeakGOPtr & owner) const;
 
+		/**
+		 * \brief sets whether newly created Components shall be allowed to tick or not
+		 * default value is true
+		 */
+		void enableTicking(bool allowTicking) {
+			_tickingAllowed = allowTicking;
+		}
+
 	private:
 		typedef std::map<std::string, api::createGOCCallback> callbackMap;
 
@@ -97,6 +105,11 @@ namespace modules {
 		 * \see createGOCCallback
 		 */
 		callbackMap _callbacks;
+
+		/**
+		 * \brief stores whether new Components are allowed to tick or not
+		 */
+		bool _tickingAllowed;
 
 		/**
 		 * \brief forbidden

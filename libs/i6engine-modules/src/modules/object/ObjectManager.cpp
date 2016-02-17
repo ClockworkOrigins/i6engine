@@ -165,6 +165,8 @@ namespace modules {
 				sendConditionalMessage(*static_cast<api::objects::Object_ConditionalMessage_Update *>(msg->getContent()));
 			} else if (msg->getSubtype() == api::objects::ObjPause) {
 				_paused = dynamic_cast<api::objects::Object_Pause_Update *>(msg->getContent())->pause;
+			} else if (msg->getSubtype() == api::objects::ObjComponentTicking) {
+				_componentFactory.enableTicking(dynamic_cast<api::objects::Object_ComponentTicking_Update *>(msg->getContent())->allowTicking);
 			} else {
 				ISIXE_THROW_FAILURE("ObjectManager", "Invalid update message type: " << msg->getMessageType());
 			}

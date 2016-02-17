@@ -31,12 +31,12 @@
 namespace i6engine {
 namespace api {
 
-	Component::Component() : _objOwnerID(), _objOwnerGO(), _objComponentID(), _objFamilyID(), _id(-1), _sync(true), _self() {
+	Component::Component() : _objOwnerID(), _objOwnerGO(), _objComponentID(), _objFamilyID(), _id(-1), _sync(true), _self(), _tickingAllowed(true), _wantsToTick(false), _isTicking(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		_id = EngineController::GetSingletonPtr()->getIDManager()->getID();
 	}
 
-	Component::Component(const int64_t id, const attributeMap & params) : _objOwnerID(), _objOwnerGO(), _objComponentID(), _objFamilyID(), _id(id), _sync(true), _self() {
+	Component::Component(const int64_t id, const attributeMap & params) : _objOwnerID(), _objOwnerGO(), _objComponentID(), _objFamilyID(), _id(id), _sync(true), _self(), _tickingAllowed(true), _wantsToTick(false), _isTicking(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		if (params.find("identifier") != params.end()) {
 			_identifier = params.find("identifier")->second;
@@ -80,16 +80,41 @@ namespace api {
 		ISIXE_THROW_FAILURE("Component", "News called without News function overridden: " << msg->getMessageInfo() + " " << getComponentID());
 	}
 
+	void Component::enableTicking(bool allowTicking) {
+		_tickingAllowed = allowTicking;
+		if (_tickingAllowed) {
+			if (_wantsToTick) {
+				EngineController::GetSingletonPtr()->getObjectFacade()->addTicker(_self);
+				_wantsToTick = false;
+				_isTicking = true;
+			}
+		} else {
+			if (_isTicking) {
+				EngineController::GetSingletonPtr()->getObjectFacade()->removeTicker(_id);
+				_wantsToTick = true;
+			}
+		}
+	}
+
 	std::pair<AddStrategy, int64_t> Component::howToAdd(const ComPtr &) const {
 		return std::make_pair(AddStrategy::REPLACE_DIS, 0);
 	}
 
 	void Component::addTicker() {
-		EngineController::GetSingletonPtr()->getObjectFacade()->addTicker(_self);
+		if (_tickingAllowed) {
+			EngineController::GetSingletonPtr()->getObjectFacade()->addTicker(_self);
+			_isTicking = true;
+		} else {
+			_wantsToTick = true;
+		}
 	}
 
 	void Component::removeTicker() {
-		EngineController::GetSingletonPtr()->getObjectFacade()->removeTicker(_id);
+		if (_tickingAllowed) {
+			EngineController::GetSingletonPtr()->getObjectFacade()->removeTicker(_id);
+			_isTicking = false;
+		}
+		_wantsToTick = false;
 	}
 
 } /* namespace api */
