@@ -3,12 +3,13 @@
 #include "ParticleUniverseSystemManager.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
 
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	WidgetParticleList::WidgetParticleList(QWidget * par) : QWidget(par), _currentParticleTemplate(), _templateMap(), _system(nullptr), _dirty(false), _script() {
+	WidgetParticleList::WidgetParticleList(QWidget * par) : QWidget(par), _currentParticleTemplate(), _templateMap(), _system(nullptr), _dirty(false), _script(), _systemFileMapping() {
 		setupUi(this);
 
 		refreshParticleList();
@@ -21,10 +22,9 @@ namespace widgets {
 
 	void WidgetParticleList::selectParticle(QTreeWidgetItem * item) {
 		if (_currentParticleTemplate != item->text(0)) {
-			if (_dirty && _script.toStdString() != ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_system)) {
-				QString file = QFileDialog::getSaveFileName(nullptr, "Save file ...", QString::fromStdString("../media/particles"), "Particle Files (*.pu)");
-				if (!file.isEmpty()) {
-					ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_system, file.toStdString());
+			if (_dirty) {
+				if (QMessageBox::question(this, "Unsaved changes!", "There are unsaved changes for particle " + _currentParticleTemplate + ".\n Do you want to save?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No) == QMessageBox::StandardButton::Yes) {
+					saveParticle();
 				}
 			}
 			_currentParticleTemplate = item->text(0);
@@ -48,9 +48,16 @@ namespace widgets {
 
 	void WidgetParticleList::saveParticle() {
 		if (_dirty) {
-			QString file = QFileDialog::getSaveFileName(nullptr, "Save file ...", QString::fromStdString("../media/particles"), "Particle Files (*.pu)");
+			auto it = _systemFileMapping.find(_currentParticleTemplate);
+			QString file;
+			if (it != _systemFileMapping.end()) {
+				file = it->second;
+			} else {
+				file = QFileDialog::getSaveFileName(nullptr, "Save file ...", QString::fromStdString("../media/particles"), "Particle Files (*.pu)");
+			}
 			if (!file.isEmpty()) {
 				ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_system, file.toStdString());
+				_systemFileMapping[_currentParticleTemplate] = file;
 			}
 			_dirty = false;
 		}

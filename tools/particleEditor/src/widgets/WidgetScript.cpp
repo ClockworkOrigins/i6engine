@@ -8,6 +8,8 @@ namespace widgets {
 
 	WidgetScript::WidgetScript(QWidget * par) : QWidget(par) {
 		setupUi(this);
+
+		connect(textEdit, SIGNAL(textChanged()), this, SLOT(changedText()));
 	}
 
 	WidgetScript::~WidgetScript() {
@@ -30,6 +32,10 @@ namespace widgets {
 		scriptCompilerManager->parseScript(*datastream, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		delete datastream;
 		delete[] buffer;
+	}
+
+	void WidgetScript::changedText() {
+		emit notifyChanged();
 	}
 
 } /* namespace widgets */

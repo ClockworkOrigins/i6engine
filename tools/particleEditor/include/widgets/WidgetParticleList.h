@@ -53,6 +53,7 @@ namespace widgets {
 		ParticleUniverse::ParticleSystem * _system;
 		bool _dirty;
 		QString _script;
+		std::map<QString, QString> _systemFileMapping;
 
 		void refreshParticleList();
 	};

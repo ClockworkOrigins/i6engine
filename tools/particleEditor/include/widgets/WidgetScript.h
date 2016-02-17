@@ -29,8 +29,14 @@ namespace widgets {
 
 		void parseScript();
 
+	signals:
+		void notifyChanged();
+
 	public slots:
 		void loadScript(ParticleUniverse::ParticleSystem * system);
+
+	private slots:
+		void changedText();
 	};
 
 } /* namespace widgets */

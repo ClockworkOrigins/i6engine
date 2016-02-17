@@ -123,6 +123,7 @@ namespace widgets {
 		connect(_editWidget, SIGNAL(setPropertyWindow(PropertyWindow *)), this, SLOT(setPropertyWindow(PropertyWindow *)));
 		connect(_editWidget, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(renameParticleSystem(QString, QString)));
 		connect(_editWidget, SIGNAL(notifyChanged()), _particleListWidget, SLOT(notifyChanged()));
+		connect(_scriptWidget, SIGNAL(notifyChanged()), _particleListWidget, SLOT(notifyChanged()));
 	}
 
 	MainWindow::~MainWindow() {
@@ -146,7 +147,7 @@ namespace widgets {
 		if (pSys) {
 			ParticleUniverse::ParticleTechnique * technique = pSys->createTechnique();
 			if (technique) {
-				ParticleUniverse::ParticleEmitter * emitter = technique->createEmitter("Point");
+				technique->createEmitter("Point");
 				technique->setRenderer("Billboard");
 			}
 		}
