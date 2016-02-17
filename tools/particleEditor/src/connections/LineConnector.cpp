@@ -83,10 +83,11 @@ namespace connections {
 		_path = QPainterPath(QPoint(x1, y1));
 		_path.cubicTo(QPoint(x3, y3), QPoint(x4, y4), QPoint(x2, y2));
 		painter->drawPath(_path);
+		prepareGeometryChange();
 	}
 
 	QRectF LineConnector::boundingRect() const {
-		return _path.boundingRect();
+		return QRectF();
 	}
 
 } /* namespace connections */
