@@ -54,9 +54,15 @@ QT5_WRAP_CPP(NPCCreatorGuiHeader
 
 SOURCE_GROUP(moc /moc_*)
 
-ADD_EXECUTABLE(NPCCreator ${GUI_TYPE} ${NPCCreatorSrc} ${NPCCreatorUI} ${NPCCreatorGuiHeader})
+# add translations ...
+QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
+
+ADD_EXECUTABLE(NPCCreator ${GUI_TYPE} ../common/src/Config.cpp ${NPCCreatorSrc} ${NPCCreatorUI} ${NPCCreatorGuiHeader} ${QT_TRANSLATION_FILES})
 
 target_link_libraries(NPCCreator i6engine-rpg ${QT_LIBRARIES})
+
+add_custom_command(TARGET NPCCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
+add_custom_command(TARGET NPCCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
 
 IF(WIN32 AND ISIXE_BUILD_SHARED)
 	add_custom_command(TARGET NPCCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/NPCCreator.exe ${CMAKE_BINARY_DIR}/bin)

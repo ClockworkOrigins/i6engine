@@ -278,9 +278,15 @@ source_group(widgets\\ObserverPropertyWindows /widgets/ObserverPropertyWindows/*
 source_group(widgets\\RendererPropertyWindows /widgets/RendererPropertyWindows/*)
 SOURCE_GROUP(moc /moc_*)
 
-ADD_EXECUTABLE(ParticleEditor ${GUI_TYPE} ${particleEditorSrc} ${particleEditorUI} ${particleEditorGuiHeader})
+# add translations ...
+QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
+
+ADD_EXECUTABLE(ParticleEditor ${GUI_TYPE} ../common/src/Config.cpp ${particleEditorSrc} ${particleEditorUI} ${particleEditorGuiHeader} ${QT_TRANSLATION_FILES})
 
 target_link_libraries(ParticleEditor i6engine-modules ${QT_LIBRARIES})
+
+add_custom_command(TARGET ParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
+add_custom_command(TARGET ParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
 
 IF(WIN32)
 	add_custom_command(TARGET ParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ParticleEditor.exe ${CMAKE_BINARY_DIR}/bin)

@@ -68,9 +68,15 @@ source_group(misc /misc/*)
 source_group(widgets /widgets/*)
 SOURCE_GROUP(moc /moc_*)
 
-ADD_EXECUTABLE(i6engine-editor ${GUI_TYPE} ${editorSrc} ${editorUI} ${editorGuiHeader})
+# add translations ...
+QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
+
+ADD_EXECUTABLE(i6engine-editor ${GUI_TYPE} ../common/src/Config.cpp ${editorSrc} ${editorUI} ${editorGuiHeader} ${QT_TRANSLATION_FILES})
 
 target_link_libraries(i6engine-editor i6engine-modules Plugin_EditorTypeAngle Plugin_EditorTypeBool Plugin_EditorTypeDouble Plugin_EditorTypeInteger Plugin_EditorTypeLightType Plugin_EditorTypeMoverInterpolateMode Plugin_EditorTypeMoverInterpolateWay Plugin_EditorTypeMoverPositioning Plugin_EditorTypeQuaternion Plugin_EditorTypeShapeType Plugin_EditorTypeShatterInterest Plugin_EditorTypeString Plugin_EditorTypeVec3 Plugin_EditorTypeVec4 ${QT_LIBRARIES})
+
+add_custom_command(TARGET i6engine-editor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
+add_custom_command(TARGET i6engine-editor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
 
 IF(WIN32)
 	add_custom_command(TARGET i6engine-editor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6engine-editor.exe ${CMAKE_BINARY_DIR}/bin)

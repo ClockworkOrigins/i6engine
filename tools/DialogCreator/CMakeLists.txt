@@ -58,9 +58,15 @@ QT5_WRAP_CPP(dialogCreatorGuiHeader
 source_group(widgets /widgets/*)
 SOURCE_GROUP(moc /moc_*)
 
-ADD_EXECUTABLE(DialogCreator ${GUI_TYPE} ${dialogCreatorSrc} ${dialogCreatorUI} ${dialogCreatorGuiHeader})
+# add translations ...
+QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
+
+ADD_EXECUTABLE(DialogCreator ${GUI_TYPE} ../common/src/Config.cpp ${dialogCreatorSrc} ${dialogCreatorUI} ${dialogCreatorGuiHeader} ${QT_TRANSLATION_FILES})
 
 target_link_libraries(DialogCreator i6engine-rpg ${QT_LIBRARIES})
+
+add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
+add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
 
 IF(WIN32)
 	add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/DialogCreator.exe ${CMAKE_BINARY_DIR}/bin)

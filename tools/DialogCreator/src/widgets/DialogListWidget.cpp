@@ -14,15 +14,15 @@ namespace widgets {
 
 		if (clockUtils::ClockError::SUCCESS != _iniParser.load("RPG.ini")) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Error during startup!"));
-			box.setInformativeText("RPG.ini not found!");
+			box.setWindowTitle(QApplication::tr("Error during startup!"));
+			box.setInformativeText(QApplication::tr("RPG.ini not found!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 		}
 		if (_iniParser.getValue("SCRIPT", "dialogDirectory", _dialogDirectory) != clockUtils::ClockError::SUCCESS) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Error during startup!"));
-			box.setInformativeText("'dialogDirectory' in section 'SCRIPT' in RPG.ini not found!");
+			box.setWindowTitle(QApplication::tr("Error during startup!"));
+			box.setInformativeText(QApplication::tr("'dialogDirectory' in section 'SCRIPT' in RPG.ini not found!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 		}

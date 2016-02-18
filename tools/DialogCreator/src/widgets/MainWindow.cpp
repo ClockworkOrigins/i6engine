@@ -51,8 +51,8 @@ namespace widgets {
 		clockUtils::iniParser::IniParser iniParser;
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("i6engine.ini")) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Error during startup!"));
-			box.setInformativeText("i6engine.ini not found!");
+			box.setWindowTitle(QApplication::tr("Error during startup!"));
+			box.setInformativeText(QApplication::tr("i6engine.ini not found!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 		}
@@ -63,8 +63,8 @@ namespace widgets {
 			std::string path;
 			if (clockUtils::ClockError::SUCCESS != iniParser.getValue("SCRIPT", slpi->getScriptLanguageEntry().toStdString(), path)) {
 				QMessageBox box;
-				box.setWindowTitle(QString("Entry not found"));
-				box.setInformativeText("ScriptPath for plugin not found in i6engine.ini!");
+				box.setWindowTitle(QApplication::tr("Entry not found!"));
+				box.setInformativeText(QApplication::tr("ScriptPath for plugin not found in i6engine.ini!"));
 				box.setStandardButtons(QMessageBox::StandardButton::Ok);
 				box.exec();
 				return;
@@ -73,6 +73,9 @@ namespace widgets {
 			ScriptTabWidget * scriptTab = new ScriptTabWidget(tabWidget, slpi);
 			tabWidget->addTab(scriptTab, slpi->getName());
 		}
+
+		menuFile->setTitle(QApplication::tr("File"));
+		actionExit->setText(QApplication::tr("Exit"));
 	}
 
 	MainWindow::~MainWindow() {
@@ -96,7 +99,7 @@ namespace widgets {
 				_scriptLanguagePlugins.push_back(qobject_cast<plugins::ScriptLanguagePluginInterface *>(plugin));
 			} else {
 				QMessageBox box;
-				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setWindowTitle(QApplication::tr("Error loading plugin!"));
 				box.setInformativeText(loader.errorString());
 				box.setStandardButtons(QMessageBox::StandardButton::Ok);
 				box.exec();

@@ -34,8 +34,8 @@ namespace widgets {
 		clockUtils::iniParser::IniParser iniParser;
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("DialogCreator.ini")) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Error during startup!"));
-			box.setInformativeText("DialogCreator.ini not found!");
+			box.setWindowTitle(QApplication::tr("Error during startup!"));
+			box.setInformativeText(QApplication::tr("DialogCreator.ini not found!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 		}
@@ -47,6 +47,17 @@ namespace widgets {
 			_luaScriptsPath = "";
 			luaInfoTextEdit->setVisible(false);
 		}
+
+		identifierLabel->setText(QApplication::tr("Identifier"));
+		participantsLabel->setText(QApplication::tr("Participants"));
+		numberLabel->setText(QApplication::tr("Number"));
+		permanentCheckBox->setText(QApplication::tr("Permanent"));
+		importantCheckBox->setText(QApplication::tr("Important"));
+		descriptionLabel->setText(QApplication::tr("Description"));
+		conditionLabel->setText(QApplication::tr("Condition Script"));
+		informationLabel->setText(QApplication::tr("Information Script"));
+		saveChangesButton->setText(QApplication::tr("Save changes"));
+		saveNewDialogButton->setText(QApplication::tr("Save new dialog"));
 	}
 
 	DialogHeaderWidget::~DialogHeaderWidget() {
@@ -139,32 +150,32 @@ namespace widgets {
 	void DialogHeaderWidget::saveChanges() {
 		if (identifierLineEdit->text().isEmpty()) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Incomplete data!"));
-			box.setInformativeText("Identifier for dialog not set!");
+			box.setWindowTitle(QApplication::tr("Incomplete data!"));
+			box.setInformativeText(QApplication::tr("Identifier for dialog not set!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 			return;
 		}
 		if (_participants.size() == 1) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Incomplete data!"));
-			box.setInformativeText("A dialog has to have at least one participant!");
+			box.setWindowTitle(QApplication::tr("Incomplete data!"));
+			box.setInformativeText(QApplication::tr("A dialog has to have at least one participant!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 			return;
 		}
 		if (!importantCheckBox->isChecked() && descriptionLineEdit->text().isEmpty()) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Incomplete data!"));
-			box.setInformativeText("An unimportant dialog has to have a description!");
+			box.setWindowTitle(QApplication::tr("Incomplete data!"));
+			box.setInformativeText(QApplication::tr("An unimportant dialog has to have a description!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 			return;
 		}
 		if (informationLineEdit->text().isEmpty()) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Incomplete data!"));
-			box.setInformativeText("Information script required!");
+			box.setWindowTitle(QApplication::tr("Incomplete data!"));
+			box.setInformativeText(QApplication::tr("Information script required!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 			return;
