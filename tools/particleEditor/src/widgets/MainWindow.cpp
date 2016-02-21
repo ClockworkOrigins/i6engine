@@ -29,13 +29,13 @@ namespace widgets {
 		QHBoxLayout * toolBarLayout = new QHBoxLayout(toolBarWrapper);
 		toolBarWrapper->setLayout(toolBarLayout);
 		QToolBar * tb = new QToolBar(toolBarWrapper);
-		QAction * newAction = tb->addAction(QIcon("../media/textures/new.png"), "New Particle");
-		QAction * cloneAction = tb->addAction(QIcon("../media/textures/clone.png"), "Clone Particle");
-		QAction * saveAction = tb->addAction(QIcon("../media/textures/save.png"), "Save Particle");
+		QAction * newAction = tb->addAction(QIcon("../media/textures/new.png"), QApplication::tr("New Particle"));
+		QAction * cloneAction = tb->addAction(QIcon("../media/textures/clone.png"), QApplication::tr("Clone Particle"));
+		QAction * saveAction = tb->addAction(QIcon("../media/textures/save.png"), QApplication::tr("Save Particle"));
 		tb->addSeparator();
-		QAction * playAction = tb->addAction(QIcon("../media/textures/control_play.png"), "Play");
-		QAction * pauseAction = tb->addAction(QIcon("../media/textures/control_pause.png"), "Pause");
-		QAction * stopAction = tb->addAction(QIcon("../media/textures/control_stop.png"), "Stop");
+		QAction * playAction = tb->addAction(QIcon("../media/textures/control_play.png"), QApplication::tr("Play"));
+		QAction * pauseAction = tb->addAction(QIcon("../media/textures/control_pause.png"), QApplication::tr("Pause"));
+		QAction * stopAction = tb->addAction(QIcon("../media/textures/control_stop.png"), QApplication::tr("Stop"));
 
 		connect(newAction, SIGNAL(triggered()), this, SLOT(handleNewAction()));
 		connect(cloneAction, SIGNAL(triggered()), this, SLOT(handleCloneAction()));
@@ -76,9 +76,9 @@ namespace widgets {
 		_renderWrapper->setLayout(vLayout);
 		vLayout->addWidget(_renderWidget);
 
-		_tabWidget->addTab(_renderWrapper, "Render");
-		_tabWidget->addTab(_editWidget, "Edit");
-		_tabWidget->addTab(_scriptWidget, "Script");
+		_tabWidget->addTab(_renderWrapper, QApplication::tr("Render"));
+		_tabWidget->addTab(_editWidget, QApplication::tr("Edit"));
+		_tabWidget->addTab(_scriptWidget, QApplication::tr("Script"));
 
 		hLayout->setStretch(0, 1);
 		hLayout->setStretch(1, 3);
@@ -90,18 +90,18 @@ namespace widgets {
 		_toolbarActions.insert(std::make_pair("Stop", stopAction));
 
 		_toolBarEdit = new QToolBar(_editWidget);
-		QAction * tbEditTechniqueAction = _toolBarEdit->addAction(QIcon("../media/textures/technique.png"), "Add a new technique");
-		QAction * tbEditRendererAction = _toolBarEdit->addAction(QIcon("../media/textures/renderer.png"), "Add a new renderer");
-		QAction * tbEditEmitterAction = _toolBarEdit->addAction(QIcon("../media/textures/emitter.png"), "Add a new emitter");
-		QAction * tbEditAffectorAction = _toolBarEdit->addAction(QIcon("../media/textures/affector.png"), "Add a new affector");
-		QAction * tbEditObserverAction = _toolBarEdit->addAction(QIcon("../media/textures/observer.png"), "Add a new observer");
-		QAction * tbEditHandlerAction = _toolBarEdit->addAction(QIcon("../media/textures/handler.png"), "Add a new handler");
-		QAction * tbEditBehaviourAction = _toolBarEdit->addAction(QIcon("../media/textures/behaviour.png"), "Add a new behaviour");
-		QAction * tbEditExternAction = _toolBarEdit->addAction(QIcon("../media/textures/extern.png"), "Add a new extern");
+		QAction * tbEditTechniqueAction = _toolBarEdit->addAction(QIcon("../media/textures/technique.png"), QApplication::tr("Add a new technique"));
+		QAction * tbEditRendererAction = _toolBarEdit->addAction(QIcon("../media/textures/renderer.png"), QApplication::tr("Add a new renderer"));
+		QAction * tbEditEmitterAction = _toolBarEdit->addAction(QIcon("../media/textures/emitter.png"), QApplication::tr("Add a new emitter"));
+		QAction * tbEditAffectorAction = _toolBarEdit->addAction(QIcon("../media/textures/affector.png"), QApplication::tr("Add a new affector"));
+		QAction * tbEditObserverAction = _toolBarEdit->addAction(QIcon("../media/textures/observer.png"), QApplication::tr("Add a new observer"));
+		QAction * tbEditHandlerAction = _toolBarEdit->addAction(QIcon("../media/textures/handler.png"), QApplication::tr("Add a new handler"));
+		QAction * tbEditBehaviourAction = _toolBarEdit->addAction(QIcon("../media/textures/behaviour.png"), QApplication::tr("Add a new behaviour"));
+		QAction * tbEditExternAction = _toolBarEdit->addAction(QIcon("../media/textures/extern.png"), QApplication::tr("Add a new extern"));
 		_toolBarEdit->addSeparator();
-		QAction * tbEditConnectAction = _toolBarEdit->addAction(QIcon("../media/textures/connect.png"), "Make connection between two components");
-		QAction * tbEditDisconnectAction = _toolBarEdit->addAction(QIcon("../media/textures/disconnect.png"), "Delete a connection between two components");
-		QAction * tbEditCursorAction = _toolBarEdit->addAction(QIcon("../media/textures/cursor.png"), "Reset to default cursor");
+		QAction * tbEditConnectAction = _toolBarEdit->addAction(QIcon("../media/textures/connect.png"), QApplication::tr("Make connection between two components"));
+		QAction * tbEditDisconnectAction = _toolBarEdit->addAction(QIcon("../media/textures/disconnect.png"), QApplication::tr("Delete a connection between two components"));
+		QAction * tbEditCursorAction = _toolBarEdit->addAction(QIcon("../media/textures/cursor.png"), QApplication::tr("Reset to default cursor"));
 
 		connect(tbEditAffectorAction, SIGNAL(triggered()), _editWidget, SLOT(addNewAffector()));
 		connect(tbEditTechniqueAction, SIGNAL(triggered()), _editWidget, SLOT(addNewTechnique()));
@@ -124,6 +124,9 @@ namespace widgets {
 		connect(_editWidget, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(renameParticleSystem(QString, QString)));
 		connect(_editWidget, SIGNAL(notifyChanged()), _particleListWidget, SLOT(notifyChanged()));
 		connect(_scriptWidget, SIGNAL(notifyChanged()), _particleListWidget, SLOT(notifyChanged()));
+
+		menuFile->setTitle(QApplication::tr("File"));
+		actionExit->setText(QApplication::tr("Exit"));
 	}
 
 	MainWindow::~MainWindow() {

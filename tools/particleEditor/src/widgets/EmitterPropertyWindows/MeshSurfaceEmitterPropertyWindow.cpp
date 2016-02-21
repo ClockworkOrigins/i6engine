@@ -14,12 +14,9 @@ namespace widgets {
 
 	MeshSurfaceEmitterPropertyWindow::MeshSurfaceEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
-		PRNL_MESH_SURFACE_EMITTER_NAME = "Mesh name";
-		PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION = "Mesh surface distribution";
-		PRNL_MESH_SURFACE_EMITTER_SCALE = "Mesh surface scale";
+		PRNL_MESH_SURFACE_EMITTER_NAME = QApplication::tr("Mesh name");
+		PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION = QApplication::tr("Mesh surface distribution");
+		PRNL_MESH_SURFACE_EMITTER_SCALE = QApplication::tr("Mesh surface scale");
 		PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_EDGE = "Edge";
 		PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HETRG_1 = "Heterogeneous_1";
 		PRNL_MESH_SURFACE_EMITTER_DISTRIBUTION_HETRG_2 = "Heterogeneous_2";

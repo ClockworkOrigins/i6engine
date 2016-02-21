@@ -13,12 +13,12 @@ namespace widgets {
 
 	OnPositionObserverPropertyWindow::OnPositionObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ON_POSITION_X_COMPARE = "Position compare x";
-		PRNL_ON_POSITION_Y_COMPARE = "Position compare y";
-		PRNL_ON_POSITION_Z_COMPARE = "Position compare z";
-		PRNL_ON_POSITION_X = "Position.x threshold";
-		PRNL_ON_POSITION_Y = "Position.y threshold";
-		PRNL_ON_POSITION_Z = "Position.z threshold";
+		PRNL_ON_POSITION_X_COMPARE = QApplication::tr("Position compare x");
+		PRNL_ON_POSITION_Y_COMPARE = QApplication::tr("Position compare y");
+		PRNL_ON_POSITION_Z_COMPARE = QApplication::tr("Position compare z");
+		PRNL_ON_POSITION_X = QApplication::tr("Position.x threshold");
+		PRNL_ON_POSITION_Y = QApplication::tr("Position.y threshold");
+		PRNL_ON_POSITION_Z = QApplication::tr("Position.z threshold");
 		PRNL_COMPARE_NOT_USED = "Not used";
 		PRNL_COMPARE_LESS_THAN = "Less than";
 		PRNL_COMPARE_GREATER_THAN = "Greater than";

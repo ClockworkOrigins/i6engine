@@ -16,8 +16,8 @@ namespace widgets {
 	BehaviourPropertyWindow::BehaviourPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		CST_BEHAVIOUR_SLAVE = BEHAVIOUR_SLAVE;
-		PRNL_BEHAVIOUR_TYPE = "Behaviour type";
-		PRNL_NAME = "Name";
+		PRNL_BEHAVIOUR_TYPE = QApplication::tr("Behaviour type");
+		PRNL_NAME = QApplication::tr("Name");
 
 		// Type
 		QStringList types;

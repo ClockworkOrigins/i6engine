@@ -15,14 +15,14 @@ namespace widgets {
 
 	RibbonTrailRendererPropertyWindow::RibbonTrailRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : RendererPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_RENDERER_TYPE = "Renderer type";
-		PRNL_USE_VERTEX_COLOURS = "Use vertex colours";
-		PRNL_MAX_ELEMENTS = "Maximum elements";
-		PRNL_TRAIL_LENGTH = "Trail length";
-		PRNL_TRAIL_WIDTH = "Trail width";
-		PRNL_RANDOM_INITIAL_COLOUR = "Random initial colour";
-		PRNL_INITIAL_COLOUR = "Initial colour";
-		PRNL_COLOUR_CHANGE = "Colour change";
+		PRNL_RENDERER_TYPE = QApplication::tr("Renderer type");
+		PRNL_USE_VERTEX_COLOURS = QApplication::tr("Use vertex colours");
+		PRNL_MAX_ELEMENTS = QApplication::tr("Maximum elements");
+		PRNL_TRAIL_LENGTH = QApplication::tr("Trail length");
+		PRNL_TRAIL_WIDTH = QApplication::tr("Trail width");
+		PRNL_RANDOM_INITIAL_COLOUR = QApplication::tr("Random initial colour");
+		PRNL_INITIAL_COLOUR = QApplication::tr("Initial colour");
+		PRNL_COLOUR_CHANGE = QApplication::tr("Colour change");
 		PRNL_POST_RGB = " RGB";
 		PRNL_POST_ALPHA = " Alpha";
 

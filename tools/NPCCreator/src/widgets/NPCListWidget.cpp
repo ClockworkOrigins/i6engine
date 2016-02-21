@@ -17,11 +17,13 @@ namespace widgets {
 
 		if (clockUtils::ClockError::SUCCESS != _iniParser.load("RPG.ini")) {
 			QMessageBox box;
-			box.setText(QString("RPG.ini not found!"));
+			box.setText(QApplication::tr("RPG.ini not found!"));
 			box.exec();
 		}
 
 		refreshNPCList();
+
+		filterLabel->setText(QApplication::tr("Filter"));
 	}
 
 	NPCListWidget::~NPCListWidget() {
@@ -41,7 +43,7 @@ namespace widgets {
 		std::string NPCDirectory;
 		if (_iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {
 			QMessageBox box;
-			box.setText(QString("No entry for npcDirectory in RPG.ini!"));
+			box.setText(QApplication::tr("No entry for npcDirectory in RPG.ini!"));
 			box.exec();
 		}
 		rpg::npc::NPCParser::GetSingleton().loadNPCs(NPCDirectory);

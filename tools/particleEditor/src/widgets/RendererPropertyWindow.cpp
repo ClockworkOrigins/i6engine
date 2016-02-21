@@ -26,21 +26,21 @@ namespace widgets {
 		CST_RENDERER_ENTITY = RENDERER_ENTITY;
 		CST_RENDERER_LIGHT = RENDERER_LIGHT;
 		CST_RENDERER_RIBBONTRAIL = RENDERER_RIBBONTRAIL;
-		PRNL_RENDERER_TYPE = "Renderer type";
-		PRNL_USE_VERTEX_COLOURS = "Use vertex colours";
-		PRNL_MAX_ELEMENTS = "Maximum elements";
-		PRNL_RENDERER_RENDER_Q_GROUP = "Render queue group";
-		PRNL_RENDERER_SORTING = "Sorting";
-		PRNL_RENDERER_TEXCOORDS_DEFINE = "Texture coords define";
-		PRNL_RENDERER_TEXCOORDS_SET = "Texture coords set";
-		PRNL_RENDERER_TEXCOORDS_ROWS = "Texture coords rows";
-		PRNL_RENDERER_TEXCOORDS_COLUMNS = "Texture coords columns";
-		PRNL_RENDERER_USE_SOFT_PARTICLES = "Use soft particles";
-		PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER = "Soft particles contrast power";
-		PRNL_RENDERER_SOFT_PARTICLES_SCALE = "Soft particles scale";
-		PRNL_RENDERER_SOFT_PARTICLES_DELTA = "Soft particles delta";
-		PRNL_NAME = "Name";
-		PRNL_MESH_NAME = "Mesh name";
+		PRNL_RENDERER_TYPE = QApplication::tr("Renderer type");
+		PRNL_USE_VERTEX_COLOURS = QApplication::tr("Use vertex colours");
+		PRNL_MAX_ELEMENTS = QApplication::tr("Maximum elements");
+		PRNL_RENDERER_RENDER_Q_GROUP = QApplication::tr("Render queue group");
+		PRNL_RENDERER_SORTING = QApplication::tr("Sorting");
+		PRNL_RENDERER_TEXCOORDS_DEFINE = QApplication::tr("Texture coords define");
+		PRNL_RENDERER_TEXCOORDS_SET = QApplication::tr("Texture coords set");
+		PRNL_RENDERER_TEXCOORDS_ROWS = QApplication::tr("Texture coords rows");
+		PRNL_RENDERER_TEXCOORDS_COLUMNS = QApplication::tr("Texture coords columns");
+		PRNL_RENDERER_USE_SOFT_PARTICLES = QApplication::tr("Use soft particles");
+		PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER = QApplication::tr("Soft particles contrast power");
+		PRNL_RENDERER_SOFT_PARTICLES_SCALE = QApplication::tr("Soft particles scale");
+		PRNL_RENDERER_SOFT_PARTICLES_DELTA = QApplication::tr("Soft particles delta");
+		PRNL_NAME = QApplication::tr("Name");
+		PRNL_MESH_NAME = QApplication::tr("Mesh name");
 
 		// Type: List of types (DO NOT CHANGE THE ORDER!
 		// Internationalization means that the string values of this property are unusable to create a renderer)

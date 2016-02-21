@@ -28,12 +28,12 @@ namespace widgets {
 		CST_OBSERVER_ON_RANDOM = OBSERVER_ON_RANDOM;
 		CST_OBSERVER_ON_TIME = OBSERVER_ON_TIME;
 		CST_OBSERVER_ON_VELOCITY = OBSERVER_ON_VELOCITY;
-		PRNL_OBSERVER_TYPE = "Observer type";
-		PRNL_OBSERVER_ENABLED = "Enabled";
-		PRNL_UNTIL_EVENT = "Observer until event";
-		PRNL_OBSERVE_INTERVAL = "Observe interval";
-		PRNL_NAME = "Name";
-		PRNL_PARTICLE_TYPE = "Particle type";
+		PRNL_OBSERVER_TYPE = QApplication::tr("Observer type");
+		PRNL_OBSERVER_ENABLED = QApplication::tr("Enabled");
+		PRNL_UNTIL_EVENT = QApplication::tr("Observer until event");
+		PRNL_OBSERVE_INTERVAL = QApplication::tr("Observe interval");
+		PRNL_NAME = QApplication::tr("Name");
+		PRNL_PARTICLE_TYPE = QApplication::tr("Particle type");
 		PT_ALL = "All types";
 		PT_VISUAL = "Visual";
 		PT_EMITTER = "Emitter";
@@ -71,7 +71,7 @@ namespace widgets {
 		append(new properties::EnumProperty(this, PRNL_PARTICLE_TYPE, PRNL_PARTICLE_TYPE, particleTypes));
 
 		// Observe Interval: ParticleUniverse::Real
-		append(new properties::DoubleProperty(this, PRNL_OBSERVE_INTERVAL, PRNL_OBSERVE_INTERVAL, 0.0f));
+		append(new properties::DoubleProperty(this, PRNL_OBSERVE_INTERVAL, PRNL_OBSERVE_INTERVAL, 0.0));
 
 		// Observe Until Event: bool
 		append(new properties::BoolProperty(this, PRNL_UNTIL_EVENT, PRNL_UNTIL_EVENT, ParticleUniverse::ParticleObserver::DEFAULT_UNTIL_EVENT));

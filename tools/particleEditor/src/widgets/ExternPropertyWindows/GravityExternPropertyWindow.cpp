@@ -13,7 +13,7 @@ namespace widgets {
 
 	GravityExternPropertyWindow::GravityExternPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ExternPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_EXTERN_THRESHOLD = "Distance threshold";
+		PRNL_EXTERN_THRESHOLD = QApplication::tr("Distance threshold");
 
 		// Distance Threshold: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_EXTERN_THRESHOLD, PRNL_EXTERN_THRESHOLD, std::numeric_limits<double>::max()));

@@ -12,11 +12,8 @@ namespace widgets {
 
 	PathFollowerPropertyWindow::PathFollowerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_PATHFOLLOWER_POSITION = "Add Position";
-		PRNL_POSITION = "Position";
-		PRNL_POSITION_X = ".x";
-		PRNL_POSITION_Y = ".y";
-		PRNL_POSITION_Z = ".z";
+		PRNL_PATHFOLLOWER_POSITION = QApplication::tr("Add Position");
+		PRNL_POSITION = QApplication::tr("Position");
 
 		// Positions
 		append(new properties::Vec3ListProperty(this, PRNL_PATHFOLLOWER_POSITION, PRNL_PATHFOLLOWER_POSITION));

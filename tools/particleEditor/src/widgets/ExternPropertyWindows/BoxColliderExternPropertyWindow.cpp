@@ -15,16 +15,16 @@ namespace widgets {
 	BoxColliderExternPropertyWindow::BoxColliderExternPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ExternPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		// TODO
-		PRNL_COLLIDER_FRICTION = "Friction";
-		PRNL_COLLIDER_BOUNCYNESS = "Bouncyness";
-		PRNL_INTERSECTION_TYPE = "Intersection type";
-		PRNL_COLLISION_TYPE = "Collision type";
+		PRNL_COLLIDER_FRICTION = QApplication::tr("Friction");
+		PRNL_COLLIDER_BOUNCYNESS = QApplication::tr("Bouncyness");
+		PRNL_INTERSECTION_TYPE = QApplication::tr("Intersection type");
+		PRNL_COLLISION_TYPE = QApplication::tr("Collision type");
 		IST_POINT = "Point";
 		IST_BOX = "Box";
 		COLLT_NONE = "None";
 		COLLT_BOUNCE = "Bounce";
 		COLLT_FLOW = "Flow";
-		PRNL_EXTERN_THRESHOLD = "Distance threshold";
+		PRNL_EXTERN_THRESHOLD = QApplication::tr("Distance threshold");
 
 		// Distance Threshold: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_EXTERN_THRESHOLD, PRNL_EXTERN_THRESHOLD, std::numeric_limits<double>::max()));

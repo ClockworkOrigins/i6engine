@@ -12,7 +12,7 @@ namespace widgets {
 
 	SphereSurfaceEmitterPropertyWindow::SphereSurfaceEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_SPHERE_SURFACE_EMITTER_RADIUS = "Sphere Radius";
+		PRNL_SPHERE_SURFACE_EMITTER_RADIUS = QApplication::tr("Sphere Radius");
 
 		// Radius: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_SPHERE_SURFACE_EMITTER_RADIUS, PRNL_SPHERE_SURFACE_EMITTER_RADIUS, ParticleUniverse::SphereSurfaceEmitter::DEFAULT_RADIUS));

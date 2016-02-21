@@ -13,8 +13,8 @@ namespace widgets {
 
 	OnCountObserverPropertyWindow::OnCountObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ON_COUNT_COMPARE = "On count compare";
-		PRNL_ON_COUNT_THRESHOLD = "On count threshold";
+		PRNL_ON_COUNT_COMPARE = QApplication::tr("On count compare");
+		PRNL_ON_COUNT_THRESHOLD = QApplication::tr("On count threshold");
 		PRNL_COMPARE_LESS_THAN = "Less than";
 		PRNL_COMPARE_GREATER_THAN = "Greater than";
 		PRNL_COMPARE_EQUALS = "Equals";

@@ -14,20 +14,16 @@ namespace widgets {
 
 	PlaneColliderPropertyWindow::PlaneColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_PLANE_COLLIDER_NORMAL = "Plane normal";
-		PRNL_COLLIDER_FRICTION = "Friction";
-		PRNL_COLLIDER_BOUNCYNESS = "Bouncyness";
-		PRNL_INTERSECTION_TYPE = "Intersection type";
-		PRNL_COLLISION_TYPE = "Collision type";
+		PRNL_PLANE_COLLIDER_NORMAL = QApplication::tr("Plane normal");
+		PRNL_COLLIDER_FRICTION = QApplication::tr("Friction");
+		PRNL_COLLIDER_BOUNCYNESS = QApplication::tr("Bouncyness");
+		PRNL_INTERSECTION_TYPE = QApplication::tr("Intersection type");
+		PRNL_COLLISION_TYPE = QApplication::tr("Collision type");
 		IST_POINT = "Point";
 		IST_BOX = "Box";
 		COLLT_NONE = "None";
 		COLLT_BOUNCE = "Bounce";
 		COLLT_FLOW = "Flow";
-
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
 
 		// Normal: Ogre::Vector3
 		append(new properties::Vec3Property(this, PRNL_PLANE_COLLIDER_NORMAL, PRNL_PLANE_COLLIDER_NORMAL, ParticleUniverse::PlaneCollider::DEFAULT_NORMAL));

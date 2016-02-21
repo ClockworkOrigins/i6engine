@@ -118,8 +118,8 @@ namespace widgets {
 				for (auto option : c->getComponentOptions()) {
 					if (_typePlugins.find(std::get<api::ComponentOptionsParameter::WIDGETTYPE>(option)) == _typePlugins.end()) {
 						QMessageBox box;
-						box.setWindowTitle(QString("Attribute can't be displayed!"));
-						box.setInformativeText(QString("Attribute '") + QString::fromStdString(std::get<api::ComponentOptionsParameter::NAME>(option)) + QString("' has unregistered type '") + QString::fromStdString(std::get<api::ComponentOptionsParameter::WIDGETTYPE>(option)) + QString("'. It will be skipped and is not accessible. Check your plugins folder!"));
+						box.setWindowTitle(QApplication::tr("Attribute can't be displayed!"));
+						box.setInformativeText(QApplication::tr("Attribute '") + QString::fromStdString(std::get<api::ComponentOptionsParameter::NAME>(option)) + QApplication::tr("' has unregistered type '") + QString::fromStdString(std::get<api::ComponentOptionsParameter::WIDGETTYPE>(option)) + QApplication::tr("'. It will be skipped and is not accessible. Check your plugins folder!"));
 						box.setStandardButtons(QMessageBox::StandardButton::Ok);
 						box.exec();
 						continue;
@@ -138,7 +138,7 @@ namespace widgets {
 				}
 			}
 
-			QPushButton * button = new QPushButton(QString("Apply"), this);
+			QPushButton * button = new QPushButton(QApplication::tr("Apply"), this);
 			verticalLayout->addWidget(button);
 			_infos.push_back(button);
 			connect(button, SIGNAL(clicked()), this, SLOT(applyChanges()));
@@ -158,7 +158,7 @@ namespace widgets {
 	void ObjectInfoWidget::doRemoveObject() {
 		if (_selectedObjectID != -1) {
 			QMessageBox box;
-			box.setText(QString("Really delete object?"));
+			box.setText(QApplication::tr("Really delete object?"));
 			box.setStandardButtons(QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No);
 			if (box.exec() == QMessageBox::StandardButton::Yes) {
 				bool waypoint = false;
@@ -201,7 +201,7 @@ namespace widgets {
 				_typePlugins.insert(std::make_pair(qobject_cast<plugins::TypePluginInterface *>(plugin)->getIdentifier(), qobject_cast<plugins::TypePluginInterface *>(plugin)));
 			} else {
 				QMessageBox box;
-				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setWindowTitle(QApplication::tr("Error loading plugin!"));
 				box.setInformativeText(loader.errorString());
 				box.setStandardButtons(QMessageBox::StandardButton::Ok);
 				box.exec();

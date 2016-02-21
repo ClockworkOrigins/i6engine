@@ -37,6 +37,17 @@ namespace widgets {
 		connect(levelSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changedEntry()));
 		connect(currentHPSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changedEntry()));
 		connect(maxHPSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changedEntry()));
+
+		identifierLabel->setText(QApplication::tr("Identifier"));
+		identifierLabel->setText(QApplication::tr("Name"));
+		identifierLabel->setText(QApplication::tr("Current XP"));
+		identifierLabel->setText(QApplication::tr("Next XP"));
+		identifierLabel->setText(QApplication::tr("Level"));
+		identifierLabel->setText(QApplication::tr("Hitpoints"));
+		identifierLabel->setText(QApplication::tr("Model"));
+		identifierLabel->setText(QApplication::tr("Delete NPC"));
+		identifierLabel->setText(QApplication::tr("Save changes"));
+		identifierLabel->setText(QApplication::tr("Save new NPC"));
 	}
 
 	NPCEditWidget::~NPCEditWidget() {
@@ -58,7 +69,7 @@ namespace widgets {
 		for (auto & p : _npcFileList) {
 			if (QString::fromStdString(p.first) == identifierLineEdit->text()) {
 				QMessageBox box;
-				box.setText(QString("Identifier already in use! Choose another one!"));
+				box.setText(QApplication::tr("Identifier already in use! Choose another one!"));
 				box.exec();
 				return;
 			}
@@ -66,13 +77,13 @@ namespace widgets {
 		clockUtils::iniParser::IniParser iniParser;
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("RPG.ini")) {
 			QMessageBox box;
-			box.setText(QString("RPG.ini not found!"));
+			box.setText(QApplication::tr("RPG.ini not found!"));
 			box.exec();
 		}
 		std::string NPCDirectory;
 		if (iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {
 			QMessageBox box;
-			box.setText(QString("No entry for npcDirectory in RPG.ini!"));
+			box.setText(QApplication::tr("No entry for npcDirectory in RPG.ini!"));
 			box.exec();
 		}
 		saveToFile(NPCDirectory + "/" + identifierLineEdit->text().toStdString() + ".xml");
@@ -81,13 +92,13 @@ namespace widgets {
 	void NPCEditWidget::saveChanges() {
 		if (!_changed) {
 			QMessageBox box;
-			box.setText(QString("No changes to save!"));
+			box.setText(QApplication::tr("No changes to save!"));
 			box.exec();
 			return;
 		}
 		if (_changedIdentifier) {
 			QMessageBox box;
-			box.setText(QString("Can't save changes when identifier was changed! Save as new NPC!"));
+			box.setText(QApplication::tr("Can't save changes when identifier was changed! Save as new NPC!"));
 			box.exec();
 			return;
 		}
@@ -98,14 +109,14 @@ namespace widgets {
 		clockUtils::iniParser::IniParser iniParser;
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("RPG.ini")) {
 			QMessageBox box;
-			box.setText(QString("RPG.ini not found!"));
+			box.setText(QApplication::tr("RPG.ini not found!"));
 			box.exec();
 			return;
 		}
 		std::string NPCDirectory;
 		if (iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {
 			QMessageBox box;
-			box.setText(QString("No entry for npcDirectory in RPG.ini!"));
+			box.setText(QApplication::tr("No entry for npcDirectory in RPG.ini!"));
 			box.exec();
 			return;
 		}
@@ -127,8 +138,8 @@ namespace widgets {
 		QInputDialog dlg(this);
 		dlg.setComboBoxEditable(false);
 		dlg.setComboBoxItems(meshList);
-		dlg.setWindowTitle("Select Model");
-		dlg.setLabelText("Select a model:");
+		dlg.setWindowTitle(QApplication::tr("Select Model"));
+		dlg.setLabelText(QApplication::tr("Select a model:"));
 		dlg.setInputMode(QInputDialog::InputMode::TextInput);
 		if (QDialog::Accepted == dlg.exec()) {
 			modelLineEdit->setText(dlg.textValue());
@@ -147,7 +158,7 @@ namespace widgets {
 		tinyxml2::XMLDocument doc;
 		if (doc.LoadFile(file.c_str())) {
 			QMessageBox box;
-			box.setText(QString("Couldn't open NPC file (") + QString::fromStdString(file) + QString(")"));
+			box.setText(QApplication::tr("Couldn't open NPC file (") + QString::fromStdString(file) + QString(")"));
 			box.exec();
 			return;
 		}
@@ -155,7 +166,7 @@ namespace widgets {
 		for (tinyxml2::XMLElement * npc = doc.FirstChildElement("NPC"); npc != nullptr; npc = npc->NextSiblingElement("NPC")) {
 			if (npc->Attribute("identifier") == nullptr) {
 				QMessageBox box;
-				box.setText(QString("NPC in file '") + QString::fromStdString(file) + QString("' misses identifier!"));
+				box.setText(QApplication::tr("NPC in file '") + QString::fromStdString(file) + QApplication::tr("' misses identifier!"));
 				box.exec();
 				return;
 			}
@@ -165,35 +176,35 @@ namespace widgets {
 			}
 			if (npc->FirstChildElement("Name") == nullptr) {
 				QMessageBox box;
-				box.setText(QString("NPC in file '") + QString::fromStdString(file) + QString("' misses Name!"));
+				box.setText(QApplication::tr("NPC in file '") + QString::fromStdString(file) + QApplication::tr("' misses Name!"));
 				box.exec();
 				return;
 			}
 			QString name(npc->FirstChildElement("Name")->GetText());
 			if (npc->FirstChildElement("XP") == nullptr) {
 				QMessageBox box;
-				box.setText(QString("NPC in file '") + QString::fromStdString(file) + QString("' misses XP!"));
+				box.setText(QApplication::tr("NPC in file '") + QString::fromStdString(file) + QApplication::tr("' misses XP!"));
 				box.exec();
 				return;
 			}
 			int xp = std::stoi(npc->FirstChildElement("XP")->GetText());
 			if (npc->FirstChildElement("NextXP") == nullptr) {
 				QMessageBox box;
-				box.setText(QString("NPC in file '") + QString::fromStdString(file) + QString("' misses NextXP!"));
+				box.setText(QApplication::tr("NPC in file '") + QString::fromStdString(file) + QApplication::tr("' misses NextXP!"));
 				box.exec();
 				return;
 			}
 			int nextXP = std::stoi(npc->FirstChildElement("NextXP")->GetText());
 			if (npc->FirstChildElement("Level") == nullptr) {
 				QMessageBox box;
-				box.setText(QString("NPC in file '") + QString::fromStdString(file) + QString("' misses Level!"));
+				box.setText(QApplication::tr("NPC in file '") + QString::fromStdString(file) + QApplication::tr("' misses Level!"));
 				box.exec();
 				return;
 			}
 			int level = std::stoi(npc->FirstChildElement("Level")->GetText());
 			if (npc->FirstChildElement("Model") == nullptr) {
 				QMessageBox box;
-				box.setText(QString("NPC in file '") + QString::fromStdString(file) + QString("' misses Model!"));
+				box.setText(QApplication::tr("NPC in file '") + QString::fromStdString(file) + QApplication::tr("' misses Model!"));
 				box.exec();
 				return;
 			}
@@ -231,13 +242,13 @@ namespace widgets {
 	void NPCEditWidget::saveToFile(const std::string & file) {
 		if (identifierLineEdit->text().isEmpty()) {
 			QMessageBox box;
-			box.setText(QString("No identifier set!"));
+			box.setText(QApplication::tr("No identifier set!"));
 			box.exec();
 			return;
 		}
 		if (nameLineEdit->text().isEmpty()) {
 			QMessageBox box;
-			box.setText(QString("No Name set!"));
+			box.setText(QApplication::tr("No Name set!"));
 			box.exec();
 			return;
 		}
@@ -287,13 +298,13 @@ namespace widgets {
 		clockUtils::iniParser::IniParser iniParser;
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("RPG.ini")) {
 			QMessageBox box;
-			box.setText(QString("RPG.ini not found!"));
+			box.setText(QApplication::tr("RPG.ini not found!"));
 			box.exec();
 		}
 		std::string NPCDirectory;
 		if (iniParser.getValue("SCRIPT", "npcDirectory", NPCDirectory) != clockUtils::ClockError::SUCCESS) {
 			QMessageBox box;
-			box.setText(QString("No entry for npcDirectory in RPG.ini!"));
+			box.setText(QApplication::tr("No entry for npcDirectory in RPG.ini!"));
 			box.exec();
 		}
 		doc.SaveFile(file.c_str());

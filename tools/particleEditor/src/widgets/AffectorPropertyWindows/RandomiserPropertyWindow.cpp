@@ -14,12 +14,9 @@ namespace widgets {
 
 	RandomiserPropertyWindow::RandomiserPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_RANDOM_DIRECTION = "Random direction";
-		PRNL_MAX_DEVIATION = "Maximum deviation";
-		PRNL_TIME_STEP = "Time step";
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
+		PRNL_RANDOM_DIRECTION = QApplication::tr("Random direction");
+		PRNL_MAX_DEVIATION = QApplication::tr("Maximum deviation");
+		PRNL_TIME_STEP = QApplication::tr("Time step");
 
 		// Max. deviation: Ogre::Vector3
 		append(new properties::Vec3Property(this, PRNL_MAX_DEVIATION, PRNL_MAX_DEVIATION, ParticleUniverse::Randomiser::DEFAULT_MAX_DEVIATION));

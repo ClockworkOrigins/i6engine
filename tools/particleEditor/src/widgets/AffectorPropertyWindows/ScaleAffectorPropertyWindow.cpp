@@ -13,14 +13,11 @@ namespace widgets {
 
 	ScaleAffectorPropertyWindow::ScaleAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_XYZ_SCALE = "Scale x, y and z";
-		PRNL_X_SCALE = "Scale x";
-		PRNL_Y_SCALE = "Scale y";
-		PRNL_Z_SCALE = "Scale z";
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
-		PRNL_SINCE_START_SYSTEM = "Since start system";
+		PRNL_XYZ_SCALE = QApplication::tr("Scale x, y and z");
+		PRNL_X_SCALE = QApplication::tr("Scale x");
+		PRNL_Y_SCALE = QApplication::tr("Scale y");
+		PRNL_Z_SCALE = QApplication::tr("Scale z");
+		PRNL_SINCE_START_SYSTEM = QApplication::tr("Since start system");
 
 		// ScaleXYZ: DynamicAttribute
 		ParticleUniverse::DynamicAttributeFixed * dynAttr = new ParticleUniverse::DynamicAttributeFixed();

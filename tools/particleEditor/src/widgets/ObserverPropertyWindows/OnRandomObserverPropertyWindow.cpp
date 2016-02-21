@@ -12,7 +12,7 @@ namespace widgets {
 
 	OnRandomObserverPropertyWindow::OnRandomObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ON_RANDOM_VALUE = "Random threshold";
+		PRNL_ON_RANDOM_VALUE = QApplication::tr("Random threshold");
 
 		// Random Threshold: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_ON_RANDOM_VALUE, PRNL_ON_RANDOM_VALUE, ParticleUniverse::OnRandomObserver::DEFAULT_THRESHOLD));

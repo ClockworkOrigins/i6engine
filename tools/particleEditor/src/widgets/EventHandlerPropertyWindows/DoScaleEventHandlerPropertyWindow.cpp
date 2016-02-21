@@ -13,10 +13,10 @@ namespace widgets {
 
 	DoScaleEventHandlerPropertyWindow::DoScaleEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_SCALE_FRACTION = "Scale fraction";
-		PRNL_SCALE_TYPE = "Scale type";
-		SC_TIME_TO_LIVE = "Time to live";
-		SC_VELOCITY = "Velocity";
+		PRNL_SCALE_FRACTION = QApplication::tr("Scale fraction");
+		PRNL_SCALE_TYPE = QApplication::tr("Scale type");
+		SC_TIME_TO_LIVE = QApplication::tr("Time to live");
+		SC_VELOCITY = QApplication::tr("Velocity");
 
 		// Scale Fraction: Ogre:: Real
 		append(new properties::DoubleProperty(this, PRNL_SCALE_FRACTION, PRNL_SCALE_FRACTION, ParticleUniverse::DoScaleEventHandler::DEFAULT_SCALE_FRACTION));

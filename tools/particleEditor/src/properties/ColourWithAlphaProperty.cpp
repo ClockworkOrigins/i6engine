@@ -16,7 +16,7 @@ namespace properties {
 		_layout = new QGridLayout(widget);
 		widget->setLayout(_layout);
 		horizontalLayout->addWidget(widget);
-		_layout->addWidget(new QLabel("Colour", widget), 0, 0);
+		_layout->addWidget(new QLabel(QApplication::tr("Colour"), widget), 0, 0);
 		QLabel * l = new QLabel("R", this);
 		_layout->addWidget(l, 0, 1);
 		_spinBoxR = new QSpinBox(this);
@@ -38,7 +38,7 @@ namespace properties {
 		_spinBoxB->setValue(value.getZ());
 		_layout->addWidget(_spinBoxB, 0, 6);
 
-		l = new QLabel("Alpha", this);
+		l = new QLabel(QApplication::tr("Alpha"), this);
 		_layout->addWidget(l, 1, 1);
 		_spinBoxA = new QSpinBox(this);
 		_spinBoxA->setMaximum(255);

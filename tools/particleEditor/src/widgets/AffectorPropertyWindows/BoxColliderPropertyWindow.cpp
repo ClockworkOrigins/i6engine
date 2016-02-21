@@ -14,19 +14,19 @@ namespace widgets {
 
 	BoxColliderPropertyWindow::BoxColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_COLLIDER_FRICTION = "Friction";
-		PRNL_COLLIDER_BOUNCYNESS = "Bouncyness";
-		PRNL_INTERSECTION_TYPE = "Intersection type";
-		PRNL_COLLISION_TYPE = "Collision type";
+		PRNL_COLLIDER_FRICTION = QApplication::tr("Friction");
+		PRNL_COLLIDER_BOUNCYNESS = QApplication::tr("Bouncyness");
+		PRNL_INTERSECTION_TYPE = QApplication::tr("Intersection type");
+		PRNL_COLLISION_TYPE = QApplication::tr("Collision type");
 		IST_POINT = "Point";
 		IST_BOX = "Box";
 		COLLT_NONE = "None";
 		COLLT_BOUNCE = "Bounce";
 		COLLT_FLOW = "Flow";
-		PRNL_BOX_COLLIDER_WIDTH = "Box width";
-		PRNL_BOX_COLLIDER_HEIGHT = "Box height";
-		PRNL_BOX_COLLIDER_DEPTH = "Box depth";
-		PRNL_BOX_COLLIDER_INNER = "Inner Collision";
+		PRNL_BOX_COLLIDER_WIDTH = QApplication::tr("Box width");
+		PRNL_BOX_COLLIDER_HEIGHT = QApplication::tr("Box height");
+		PRNL_BOX_COLLIDER_DEPTH = QApplication::tr("Box depth");
+		PRNL_BOX_COLLIDER_INNER = QApplication::tr("Inner Collision");
 
 		// Width: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_BOX_COLLIDER_WIDTH, PRNL_BOX_COLLIDER_WIDTH, ParticleUniverse::BoxCollider::DEFAULT_WIDTH));

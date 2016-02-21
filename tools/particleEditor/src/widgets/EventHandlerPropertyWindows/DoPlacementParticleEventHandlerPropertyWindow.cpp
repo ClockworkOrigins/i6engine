@@ -13,17 +13,17 @@ namespace widgets {
 
 	DoPlacementParticleEventHandlerPropertyWindow::DoPlacementParticleEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_NUMBER_OF_PARTICLES = "Number of particles";
-		PRNL_INHERIT_POSITION = "Inherit position";
-		PRNL_INHERIT_DIRECTION = "Inherit direction";
-		PRNL_INHERIT_ORIENTATION = "Inherit orientation";
-		PRNL_INHERIT_TIME_TO_LIVE = "Inherit time to live";
-		PRNL_INHERIT_MASS = "Inherit mass";
-		PRNL_INHERIT_TEXTURE_COORDINATE = "Inherit texture coord";
-		PRNL_INHERIT_COLOUR = "Inherit colour";
-		PRNL_INHERIT_PARTICLE_WIDTH = "Inherit particle width";
-		PRNL_INHERIT_PARTICLE_HEIGHT = "Inherit particle height";
-		PRNL_INHERIT_PARTICLE_DEPTH = "Inherit particle depth";
+		PRNL_NUMBER_OF_PARTICLES = QApplication::tr("Number of particles");
+		PRNL_INHERIT_POSITION = QApplication::tr("Inherit position");
+		PRNL_INHERIT_DIRECTION = QApplication::tr("Inherit direction");
+		PRNL_INHERIT_ORIENTATION = QApplication::tr("Inherit orientation");
+		PRNL_INHERIT_TIME_TO_LIVE = QApplication::tr("Inherit time to live");
+		PRNL_INHERIT_MASS = QApplication::tr("Inherit mass");
+		PRNL_INHERIT_TEXTURE_COORDINATE = QApplication::tr("Inherit texture coord");
+		PRNL_INHERIT_COLOUR = QApplication::tr("Inherit colour");
+		PRNL_INHERIT_PARTICLE_WIDTH = QApplication::tr("Inherit particle width");
+		PRNL_INHERIT_PARTICLE_HEIGHT = QApplication::tr("Inherit particle height");
+		PRNL_INHERIT_PARTICLE_DEPTH = QApplication::tr("Inherit particle depth");
 
 		// Force Emitter: Is established by means of a connection
 

@@ -12,7 +12,7 @@ namespace widgets {
 
 	JetAffectorPropertyWindow::JetAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ACCELERATION = "Acceleration";
+		PRNL_ACCELERATION = QApplication::tr("Acceleration");
 
 		// Acceleration: DynamicAttribute
 		ParticleUniverse::DynamicAttributeFixed * dynAttr = new ParticleUniverse::DynamicAttributeFixed();

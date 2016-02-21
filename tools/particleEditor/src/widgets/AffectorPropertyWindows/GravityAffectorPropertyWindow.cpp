@@ -12,7 +12,7 @@ namespace widgets {
 
 	GravityAffectorPropertyWindow::GravityAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_GRAVITY = "Gravity";
+		PRNL_GRAVITY = QApplication::tr("Gravity");
 
 		// Gravity: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_GRAVITY, PRNL_GRAVITY, ParticleUniverse::GravityAffector::DEFAULT_GRAVITY));

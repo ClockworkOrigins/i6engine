@@ -13,10 +13,10 @@ namespace widgets {
 
 	InterParticleColliderPropertyWindow::InterParticleColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT = "Adjustment";
-		PRNL_COLLISON_RESPONSE = "Collision response";
-		CR_AVERAGE_VELOCITY = "Average velocity";
-		CR_ANGLE_BASED_VELOCITY = "Angle based velocity";
+		PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT = QApplication::tr("Adjustment");
+		PRNL_COLLISON_RESPONSE = QApplication::tr("Collision response");
+		CR_AVERAGE_VELOCITY = QApplication::tr("Average velocity");
+		CR_ANGLE_BASED_VELOCITY = QApplication::tr("Angle based velocity");
 
 		// Adjustment: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT, PRNL_INTERPARTICLE_COLLIDER_ADJUSTMENT, ParticleUniverse::InterParticleCollider::DEFAULT_ADJUSTMENT));

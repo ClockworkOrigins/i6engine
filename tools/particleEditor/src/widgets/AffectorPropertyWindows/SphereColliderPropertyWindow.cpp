@@ -14,12 +14,12 @@ namespace widgets {
 
 	SphereColliderPropertyWindow::SphereColliderPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_SPHERE_COLLIDER_RADIUS = "Sphere radius";
-		PRNL_SPHERE_COLLIDER_INNER = "Inner Collision";
-		PRNL_COLLIDER_FRICTION = "Friction";
-		PRNL_COLLIDER_BOUNCYNESS = "Bouncyness";
-		PRNL_INTERSECTION_TYPE = "Intersection type";
-		PRNL_COLLISION_TYPE = "Collision type";
+		PRNL_SPHERE_COLLIDER_RADIUS = QApplication::tr("Sphere radius");
+		PRNL_SPHERE_COLLIDER_INNER = QApplication::tr("Inner Collision");
+		PRNL_COLLIDER_FRICTION = QApplication::tr("Friction");
+		PRNL_COLLIDER_BOUNCYNESS = QApplication::tr("Bouncyness");
+		PRNL_INTERSECTION_TYPE = QApplication::tr("Intersection type");
+		PRNL_COLLISION_TYPE = QApplication::tr("Collision type");
 		IST_POINT = "Point";
 		IST_BOX = "Box";
 		COLLT_NONE = "None";

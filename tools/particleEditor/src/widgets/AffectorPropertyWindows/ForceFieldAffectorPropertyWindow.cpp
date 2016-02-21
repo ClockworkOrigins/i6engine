@@ -16,22 +16,22 @@ namespace widgets {
 
 	ForceFieldAffectorPropertyWindow::ForceFieldAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_AFFECTOR_FORCEFIELD_FF_TYPE = "Forcefield type";
+		PRNL_AFFECTOR_FORCEFIELD_FF_TYPE = QApplication::tr("Forcefield type");
 		FORCEFIELD_REALTIME = "Realtime";
 		FORCEFIELD_MATRIX = "Matrix";
-		PRNL_AFFECTOR_FORCEFIELD_DELTA = "Delta";
-		PRNL_AFFECTOR_FORCEFIELD_FORCE = "Force";
-		PRNL_AFFECTOR_FORCEFIELD_OCTAVES = "Octaves";
-		PRNL_AFFECTOR_FORCEFIELD_FREQUENCY = "Frequency";
-		PRNL_AFFECTOR_FORCEFIELD_AMPLITUDE = "Amplitude";
-		PRNL_AFFECTOR_FORCEFIELD_PERSISTENCE = "Persistence";
-		PRNL_AFFECTOR_FORCEFIELD_FF_SIZE = "Forcefield size";
-		PRNL_AFFECTOR_FORCEFIELD_WORLDSIZE = "Worldsize";
-		PRNL_AFFECTOR_FORCEFIELD_IGNORE_X = "Ignore -x";
-		PRNL_AFFECTOR_FORCEFIELD_IGNORE_Y = "Ignore -y";
-		PRNL_AFFECTOR_FORCEFIELD_IGNORE_Z = "Ignore -z";
-		PRNL_AFFECTOR_FORCEFIELD_MOVEMENT = "Movement";
-		PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY = "Movement frequency";
+		PRNL_AFFECTOR_FORCEFIELD_DELTA = QApplication::tr("Delta");
+		PRNL_AFFECTOR_FORCEFIELD_FORCE = QApplication::tr("Force");
+		PRNL_AFFECTOR_FORCEFIELD_OCTAVES = QApplication::tr("Octaves");
+		PRNL_AFFECTOR_FORCEFIELD_FREQUENCY = QApplication::tr("Frequency");
+		PRNL_AFFECTOR_FORCEFIELD_AMPLITUDE = QApplication::tr("Amplitude");
+		PRNL_AFFECTOR_FORCEFIELD_PERSISTENCE = QApplication::tr("Persistence");
+		PRNL_AFFECTOR_FORCEFIELD_FF_SIZE = QApplication::tr("Forcefield size");
+		PRNL_AFFECTOR_FORCEFIELD_WORLDSIZE = QApplication::tr("Worldsize");
+		PRNL_AFFECTOR_FORCEFIELD_IGNORE_X = QApplication::tr("Ignore -x");
+		PRNL_AFFECTOR_FORCEFIELD_IGNORE_Y = QApplication::tr("Ignore -y");
+		PRNL_AFFECTOR_FORCEFIELD_IGNORE_Z = QApplication::tr("Ignore -z");
+		PRNL_AFFECTOR_FORCEFIELD_MOVEMENT = QApplication::tr("Movement");
+		PRNL_AFFECTOR_FORCEFIELD_MOVE_FREQUENCY = QApplication::tr("Movement frequency");
 		PRNL_X = ".x";
 		PRNL_Y = ".y";
 		PRNL_Z = ".z";

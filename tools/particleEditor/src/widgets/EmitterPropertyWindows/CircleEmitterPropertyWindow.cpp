@@ -14,14 +14,11 @@ namespace widgets {
 
 	CircleEmitterPropertyWindow::CircleEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
-		PRNL_CIRCLE_EMITTER_RADIUS = "Circle Radius";
-		PRNL_CIRCLE_EMITTER_STEP = "Circle Step";
-		PRNL_CIRCLE_EMITTER_ANGLE = "Circle angle";
-		PRNL_CIRCLE_EMITTER_RANDOM = "Circle Random";
-		PRNL_CIRCLE_EMITTER_NORMAL = "Circle normal";
+		PRNL_CIRCLE_EMITTER_RADIUS = QApplication::tr("Circle Radius");
+		PRNL_CIRCLE_EMITTER_STEP = QApplication::tr("Circle Step");
+		PRNL_CIRCLE_EMITTER_ANGLE = QApplication::tr("Circle angle");
+		PRNL_CIRCLE_EMITTER_RANDOM = QApplication::tr("Circle Random");
+		PRNL_CIRCLE_EMITTER_NORMAL = QApplication::tr("Circle normal");
 
 		// Radius: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_CIRCLE_EMITTER_RADIUS, PRNL_CIRCLE_EMITTER_RADIUS, ParticleUniverse::CircleEmitter::DEFAULT_RADIUS));

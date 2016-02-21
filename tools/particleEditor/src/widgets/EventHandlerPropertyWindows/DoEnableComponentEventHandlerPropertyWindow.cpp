@@ -12,7 +12,7 @@ namespace widgets {
 
 	DoEnableComponentEventHandlerPropertyWindow::DoEnableComponentEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ENABLE_COMPONENT_TRUE_FALSE = "Enable component";
+		PRNL_ENABLE_COMPONENT_TRUE_FALSE = QApplication::tr("Enable component");
 
 		// Component to enable/disable: Realised by means of a connection
 

@@ -13,10 +13,10 @@ namespace widgets {
 
 	VertexEmitterPropertyWindow::VertexEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_VERTEX_EMITTER_STEP = "Vertex step";
-		PRNL_VERTEX_EMITTER_SEGMENTS = "Vertex segments";
-		PRNL_VERTEX_EMITTER_ITERATION = "Vertex iterations";
-		PRNL_VERTEX_EMITTER_MESH_NAME = "Vertex meshname";
+		PRNL_VERTEX_EMITTER_STEP = QApplication::tr("Vertex step");
+		PRNL_VERTEX_EMITTER_SEGMENTS = QApplication::tr("Vertex segments");
+		PRNL_VERTEX_EMITTER_ITERATION = QApplication::tr("Vertex iterations");
+		PRNL_VERTEX_EMITTER_MESH_NAME = QApplication::tr("Vertex meshname");
 
 		// Step: ParticleUniverse::uint
 		append(new properties::UIntProperty(this, PRNL_VERTEX_EMITTER_STEP, PRNL_VERTEX_EMITTER_STEP, ParticleUniverse::VertexEmitter::DEFAULT_STEP));

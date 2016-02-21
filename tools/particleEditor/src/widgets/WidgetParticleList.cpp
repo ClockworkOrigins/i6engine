@@ -23,7 +23,7 @@ namespace widgets {
 	void WidgetParticleList::selectParticle(QTreeWidgetItem * item) {
 		if (_currentParticleTemplate != item->text(0)) {
 			if (_dirty) {
-				if (QMessageBox::question(this, "Unsaved changes!", "There are unsaved changes for particle " + _currentParticleTemplate + ".\n Do you want to save?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No) == QMessageBox::StandardButton::Yes) {
+				if (QMessageBox::question(this, QApplication::tr("Unsaved changes"), QApplication::tr("There are unsaved changes for particle ") + _currentParticleTemplate + ".\n " + QApplication::tr("Do you want to save?"), QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No) == QMessageBox::StandardButton::Yes) {
 					saveParticle();
 				}
 			}
@@ -53,7 +53,7 @@ namespace widgets {
 			if (it != _systemFileMapping.end()) {
 				file = it->second;
 			} else {
-				file = QFileDialog::getSaveFileName(nullptr, "Save file ...", QString::fromStdString("../media/particles"), "Particle Files (*.pu)");
+				file = QFileDialog::getSaveFileName(nullptr, QApplication::tr("Save file ..."), QString::fromStdString("../media/particles"), QApplication::tr("Particle Files (*.pu)"));
 			}
 			if (!file.isEmpty()) {
 				ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_system, file.toStdString());

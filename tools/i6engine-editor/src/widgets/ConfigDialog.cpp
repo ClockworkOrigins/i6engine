@@ -6,6 +6,9 @@ namespace widgets {
 
 	ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent) {
 		setupUi(this);
+
+		movementSpeedLabel->setText(QApplication::tr("Movement Speed"));
+		rotationSpeedLabel->setText(QApplication::tr("Rotation Speed"));
 	}
 
 	ConfigDialog::~ConfigDialog() {

@@ -15,12 +15,9 @@ namespace widgets {
 	VortexExternPropertyWindow::VortexExternPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ExternPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
 		// TODO
-		PRNL_ROTATION_SPEED = "Rotation speed";
-		PRNL_ROTATION_AXIS = "Rotation axis";
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
-		PRNL_EXTERN_THRESHOLD = "Distance threshold";
+		PRNL_ROTATION_SPEED = QApplication::tr("Rotation speed");
+		PRNL_ROTATION_AXIS = QApplication::tr("Rotation axis");
+		PRNL_EXTERN_THRESHOLD = QApplication::tr("Distance threshold");
 
 		// Distance Threshold: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_EXTERN_THRESHOLD, PRNL_EXTERN_THRESHOLD, std::numeric_limits<double>::max()));

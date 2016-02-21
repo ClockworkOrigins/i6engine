@@ -13,7 +13,7 @@ namespace properties {
 		_layout = new QVBoxLayout(widget);
 		widget->setLayout(_layout);
 		horizontalLayout->addWidget(widget);
-		QPushButton * pb = new QPushButton("Add time and colour", widget);
+		QPushButton * pb = new QPushButton(QApplication::tr("Add time and colour"), widget);
 		_layout->addWidget(pb);
 
 		connect(pb, SIGNAL(clicked()), this, SLOT(addTimeAndColour()));

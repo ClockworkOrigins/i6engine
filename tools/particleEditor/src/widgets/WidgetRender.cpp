@@ -30,8 +30,8 @@ namespace widgets {
 		clockUtils::iniParser::IniParser iniParser;
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("i6engine.ini")) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Error initializing render widget!"));
-			box.setInformativeText("i6engine.ini not found!");
+			box.setWindowTitle(QApplication::tr("Error initializing render widget!"));
+			box.setInformativeText(QApplication::tr("i6engine.ini not found!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 			return;
@@ -40,8 +40,8 @@ namespace widgets {
 		std::string ogrePath;
 		if (clockUtils::ClockError::SUCCESS != iniParser.getValue("GRAPHIC", "ogreConfigsPath", ogrePath)) {
 			QMessageBox box;
-			box.setWindowTitle(QString("Error initializing render widget!"));
-			box.setInformativeText("value ogreConfigsPath in section GRAPHIC not found!");
+			box.setWindowTitle(QApplication::tr("Error initializing render widget!"));
+			box.setInformativeText(QApplication::tr("value ogreConfigsPath in section GRAPHIC not found!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 			return;
@@ -159,40 +159,40 @@ namespace widgets {
 	}
 
 	void WidgetRender::updateOverlay() {
-		ParticleUniverse::String cameraProjectionType = "Perspective";
-		ParticleUniverse::String cameraProjection = " Camera projection: " + cameraProjectionType + "\n";
+		ParticleUniverse::String cameraProjectionType = QApplication::tr("Perspective").toStdString();
+		ParticleUniverse::String cameraProjection = QApplication::tr(" Camera projection: ").toStdString() + cameraProjectionType + "\n";
 		ParticleUniverse::String caption = cameraProjection;
 
 		// Average FPS
 		const Ogre::RenderTarget::FrameStats & stats = _rWindow->getStatistics();
-		ParticleUniverse::String averageFPSString = " Average FPS: " + ParticleUniverse::StringConverter::toString(stats.avgFPS) + "\n";
+		ParticleUniverse::String averageFPSString = QApplication::tr(" Average FPS: ").toStdString() + ParticleUniverse::StringConverter::toString(stats.avgFPS) + "\n";
 
 		// Position of the selected node
 		Ogre::Vector3 pivot = Ogre::Vector3::ZERO;
-		ParticleUniverse::String positionString = " Position: " + ParticleUniverse::StringConverter::toString(pivot.x) + " " + ParticleUniverse::StringConverter::toString(pivot.y) + " " + ParticleUniverse::StringConverter::toString(pivot.z) + "\n";
+		ParticleUniverse::String positionString = QApplication::tr(" Position: ").toStdString() + ParticleUniverse::StringConverter::toString(pivot.x) + " " + ParticleUniverse::StringConverter::toString(pivot.y) + " " + ParticleUniverse::StringConverter::toString(pivot.z) + "\n";
 		caption = caption + averageFPSString + positionString;
 
 		// Distance of the selected node
 		Ogre::Vector3 d = _camera->getPosition() - pivot;
 		ParticleUniverse::Real l = d.length();
-		ParticleUniverse::String distanceString = " Camera distance: " + ParticleUniverse::StringConverter::toString(l) + "\n";
+		ParticleUniverse::String distanceString = QApplication::tr(" Camera distance: ").toStdString() + ParticleUniverse::StringConverter::toString(l) + "\n";
 		caption = caption + distanceString;
 
 		if (_currentParticleSystemForRenderer) {
 			// Number of emitted visual particles
 			size_t numberOfVisualParticles = _currentParticleSystemForRenderer->getNumberOfEmittedParticles(ParticleUniverse::Particle::PT_VISUAL);
 			_maxNumberOfVisualParticles = std::max(_maxNumberOfVisualParticles, numberOfVisualParticles);
-			ParticleUniverse::String numberOfVisualParticlesString = "\n Total visual particles: " + ParticleUniverse::StringConverter::toString(numberOfVisualParticles) + "\n";
+			ParticleUniverse::String numberOfVisualParticlesString = "\n " + QApplication::tr("Total visual particles: ").toStdString() + ParticleUniverse::StringConverter::toString(numberOfVisualParticles) + "\n";
 			caption = caption + numberOfVisualParticlesString;
-			ParticleUniverse::String maxNumberOfVisualParticlesString = " Max visual particles: " + ParticleUniverse::StringConverter::toString(_maxNumberOfVisualParticles) + "\n";
+			ParticleUniverse::String maxNumberOfVisualParticlesString = QApplication::tr(" Max visual particles: ").toStdString() + ParticleUniverse::StringConverter::toString(_maxNumberOfVisualParticles) + "\n";
 			caption = caption + maxNumberOfVisualParticlesString;
 
 			// Number of emitted non-visual particles
 			size_t numberOfEmittedParticles = _currentParticleSystemForRenderer->getNumberOfEmittedParticles() - _currentParticleSystemForRenderer->getNumberOfEmittedParticles(ParticleUniverse::Particle::PT_VISUAL);
 			_maxNumberOfEmittedParticles = std::max(_maxNumberOfEmittedParticles, numberOfEmittedParticles);
-			ParticleUniverse::String numberOfNonVisualParticlesString = " Total non-visual particles: " + ParticleUniverse::StringConverter::toString(numberOfEmittedParticles) + "\n";
+			ParticleUniverse::String numberOfNonVisualParticlesString = QApplication::tr(" Total non-visual particles: ").toStdString() + ParticleUniverse::StringConverter::toString(numberOfEmittedParticles) + "\n";
 			caption = caption + numberOfNonVisualParticlesString;
-			ParticleUniverse::String maxNumberOfNonVisualParticlesString = " Max non-visual particles: " + ParticleUniverse::StringConverter::toString(_maxNumberOfEmittedParticles) + "\n";
+			ParticleUniverse::String maxNumberOfNonVisualParticlesString = QApplication::tr(" Max non-visual particles: ").toStdString() + ParticleUniverse::StringConverter::toString(_maxNumberOfEmittedParticles) + "\n";
 			caption = caption + maxNumberOfNonVisualParticlesString;
 		}
 

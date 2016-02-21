@@ -18,25 +18,25 @@ namespace widgets {
 
 	TechniquePropertyWindow::TechniquePropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_TECHNIQUE_ENABLED = "Enabled";
-		PRNL_TECHNIQUE_POSITION = "Position";
-		PRNL_TECHNIQUE_KEEP_LOCAL = "Keep local";
-		PRNL_TECHNIQUE_VISUAL_PARTICLE_QUOTA = "Visual particle quota";
-		PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA = "Emitted emitter quota";
-		PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA = "Emitted affector quota";
-		PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA = "Emitted technique quota";
-		PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA = "Emitted system quota";
-		PRNL_TECHNIQUE_MATERIAL = "Material";
-		PRNL_TECHNIQUE_LOD_INDEX = "Lod index";
-		PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH = "Default particle width";
-		PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT = "Default particle height";
-		PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH = "Default particle depth";
-		PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION = "Spatial hashing cell dimension";
-		PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP = "Spatial hashing cell overlap";
-		PRNL_TECHNIQUE_SPHASHING_SIZE = "Spatial hashtable size";
-		PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL = "Spatial hashing update interval";
-		PRNL_TECHNIQUE_MAX_VELOCITY = "Maximum velocity";
-		PRNL_NAME = "Name";
+		PRNL_TECHNIQUE_ENABLED = QApplication::tr("Enabled");
+		PRNL_TECHNIQUE_POSITION = QApplication::tr("Position");
+		PRNL_TECHNIQUE_KEEP_LOCAL = QApplication::tr("Keep local");
+		PRNL_TECHNIQUE_VISUAL_PARTICLE_QUOTA = QApplication::tr("Visual particle quota");
+		PRNL_TECHNIQUE_EMITTED_EMITTER_QUOTA = QApplication::tr("Emitted emitter quota");
+		PRNL_TECHNIQUE_EMITTED_AFFECTOR_QUOTA = QApplication::tr("Emitted affector quota");
+		PRNL_TECHNIQUE_EMITTED_TECHNIQUE_QUOTA = QApplication::tr("Emitted technique quota");
+		PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA = QApplication::tr("Emitted system quota");
+		PRNL_TECHNIQUE_MATERIAL = QApplication::tr("Material");
+		PRNL_TECHNIQUE_LOD_INDEX = QApplication::tr("Lod index");
+		PRNL_TECHNIQUE_DEFAULT_PARTICLE_WIDTH = QApplication::tr("Default particle width");
+		PRNL_TECHNIQUE_DEFAULT_PARTICLE_HEIGHT = QApplication::tr("Default particle height");
+		PRNL_TECHNIQUE_DEFAULT_PARTICLE_DEPTH = QApplication::tr("Default particle depth");
+		PRNL_TECHNIQUE_SPHASHING_CELL_DIMENSION = QApplication::tr("Spatial hashing cell dimension");
+		PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP = QApplication::tr("Spatial hashing cell overlap");
+		PRNL_TECHNIQUE_SPHASHING_SIZE = QApplication::tr("Spatial hashtable size");
+		PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL = QApplication::tr("Spatial hashing update interval");
+		PRNL_TECHNIQUE_MAX_VELOCITY = QApplication::tr("Maximum velocity");
+		PRNL_NAME = QApplication::tr("Name");
 		PRNL_X = ".x";
 		PRNL_Y = ".y";
 		PRNL_Z = ".z";

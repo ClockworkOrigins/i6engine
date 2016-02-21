@@ -19,7 +19,7 @@ namespace properties {
 		_layout = new QGridLayout(widget);
 		widget->setLayout(_layout);
 
-		QLabel * l = new QLabel("Time point", widget);
+		QLabel * l = new QLabel(QApplication::tr("Time point"), widget);
 		_layout->addWidget(l, 0, 0);
 		_doubleSpinBox = new QDoubleSpinBox(this);
 		_doubleSpinBox->setMinimum(0.0);
@@ -29,7 +29,7 @@ namespace properties {
 		_layout->addWidget(_doubleSpinBox, 1, 0);
 		connect(_doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));
 
-		_colourProperty = new ColourWithAlphaProperty(widget, "Colour", "Colour", _value.second);
+		_colourProperty = new ColourWithAlphaProperty(widget, QApplication::tr("Colour"), QApplication::tr("Colour"), _value.second);
 		_layout->addWidget(_colourProperty, 2, 0);
 		connect(_colourProperty, SIGNAL(changed(QString)), this, SLOT(changedValue()));
 

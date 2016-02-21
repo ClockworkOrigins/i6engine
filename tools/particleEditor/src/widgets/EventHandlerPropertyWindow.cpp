@@ -23,8 +23,8 @@ namespace widgets {
 		CST_HANDLER_DO_PLACEMENT_PARTICLE = HANDLER_DO_PLACEMENT_PARTICLE;
 		CST_HANDLER_DO_SCALE = HANDLER_DO_SCALE;
 		CST_HANDLER_DO_STOP_SYSTEM = HANDLER_DO_STOP_SYSTEM;
-		PRNL_HANDLER_TYPE = "Event handler type";
-		PRNL_NAME = "Name";
+		PRNL_HANDLER_TYPE = QApplication::tr("Event handler type");
+		PRNL_NAME = QApplication::tr("Name");
 
 		// Type: List of types (DO NOT CHANGE THE ORDER!
 		// Internationalization means that the string values of this property are unusable to create a handler)

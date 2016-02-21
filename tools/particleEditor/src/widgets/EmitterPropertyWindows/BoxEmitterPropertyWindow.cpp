@@ -12,9 +12,9 @@ namespace widgets {
 
 	BoxEmitterPropertyWindow::BoxEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_BOX_EMITTER_WIDTH = "Box width";
-		PRNL_BOX_EMITTER_HEIGHT = "Box height";
-		PRNL_BOX_EMITTER_DEPTH = "Box depth";
+		PRNL_BOX_EMITTER_WIDTH = QApplication::tr("Box width");
+		PRNL_BOX_EMITTER_HEIGHT = QApplication::tr("Box height");
+		PRNL_BOX_EMITTER_DEPTH = QApplication::tr("Box depth");
 
 		// Width: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_BOX_EMITTER_WIDTH, PRNL_BOX_EMITTER_WIDTH, ParticleUniverse::BoxEmitter::DEFAULT_WIDTH));

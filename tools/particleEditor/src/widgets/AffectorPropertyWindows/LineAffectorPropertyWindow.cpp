@@ -13,13 +13,10 @@ namespace widgets {
 
 	LineAffectorPropertyWindow::LineAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_END = "End position";
-		PRNL_DRIFT = "Drift";
-		PRNL_MAX_DEVIATION = "Maximum deviation";
-		PRNL_TIME_STEP = "Time step";
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
+		PRNL_END = QApplication::tr("End position");
+		PRNL_DRIFT = QApplication::tr("Drift");
+		PRNL_MAX_DEVIATION = QApplication::tr("Maximum deviation");
+		PRNL_TIME_STEP = QApplication::tr("Time step");
 
 		// Line end: Ogre::Vector3
 		append(new properties::Vec3Property(this, PRNL_END, PRNL_END, ParticleUniverse::LineAffector::DEFAULT_END));

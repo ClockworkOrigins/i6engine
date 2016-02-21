@@ -15,22 +15,22 @@ namespace widgets {
 
 	LightRendererPropertyWindow::LightRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : RendererPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_RENDERER_TYPE = "Renderer type";
-		PRNL_LIGHT_TYPE = "Light type";
+		PRNL_RENDERER_TYPE = QApplication::tr("Renderer type");
+		PRNL_LIGHT_TYPE = QApplication::tr("Light type");
 		LT_POINT = "Point";
 		LT_SPOT = "Spot";
-		PRNL_ATT_RANGE = "Attenuation range";
-		PRNL_ATT_CONSTANT = "Attenuation constant";
-		PRNL_ATT_LINEAR = "Attenuation linear";
-		PRNL_ATT_QUADRATIC = "Attenuation quadratic";
-		PRNL_SPOT_INNER_ANGLE = "spot inner angle";
-		PRNL_SPOT_OUTER_ANGLE = "spot outer angle";
-		PRNL_FALLOFF = "Falloff";
-		PRNL_POWER_SCALE = "Powerscale";
-		PRNL_FLASH_FREQUENCY = "Flash frequency";
-		PRNL_FLASH_LENGTH = "Flash length";
-		PRNL_FLASH_RANDOM = "Flash random";
-		PRNL_SPECULAR_COLOUR = "Specular";
+		PRNL_ATT_RANGE = QApplication::tr("Attenuation range");
+		PRNL_ATT_CONSTANT = QApplication::tr("Attenuation constant");
+		PRNL_ATT_LINEAR = QApplication::tr("Attenuation linear");
+		PRNL_ATT_QUADRATIC = QApplication::tr("Attenuation quadratic");
+		PRNL_SPOT_INNER_ANGLE = QApplication::tr("spot inner angle");
+		PRNL_SPOT_OUTER_ANGLE = QApplication::tr("spot outer angle");
+		PRNL_FALLOFF = QApplication::tr("Falloff");
+		PRNL_POWER_SCALE = QApplication::tr("Powerscale");
+		PRNL_FLASH_FREQUENCY = QApplication::tr("Flash frequency");
+		PRNL_FLASH_LENGTH = QApplication::tr("Flash length");
+		PRNL_FLASH_RANDOM = QApplication::tr("Flash random");
+		PRNL_SPECULAR_COLOUR = QApplication::tr("Specular");
 		PRNL_POST_RGB = " RGB";
 		PRNL_POST_ALPHA = " Alpha";
 

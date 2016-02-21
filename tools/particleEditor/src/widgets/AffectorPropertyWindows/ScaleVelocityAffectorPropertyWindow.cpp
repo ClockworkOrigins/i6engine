@@ -13,9 +13,9 @@ namespace widgets {
 
 	ScaleVelocityAffectorPropertyWindow::ScaleVelocityAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_VELOCITY_SCALE = "Scale velocity";
-		PRNL_STOP_AT_FLIP = "Stop at flip";
-		PRNL_SINCE_START_SYSTEM = "Since start system";
+		PRNL_VELOCITY_SCALE = QApplication::tr("Scale velocity");
+		PRNL_STOP_AT_FLIP = QApplication::tr("Stop at flip");
+		PRNL_SINCE_START_SYSTEM = QApplication::tr("Since start system");
 
 		// ScaleVelocity: DynamicAttribute
 		ParticleUniverse::DynamicAttributeFixed * dynAttr = new ParticleUniverse::DynamicAttributeFixed();

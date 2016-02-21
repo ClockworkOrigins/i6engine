@@ -16,26 +16,26 @@ namespace widgets {
 
 	SystemPropertyWindow::SystemPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : PropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_NAME = "Name";
-		PRNL_SYSTEM_CATEGORY = "Category";
-		PRNL_SYSTEM_KEEP_LOCAL = "Keep local";
-		PRNL_SYSTEM_ITERATION_INTERVAL = "Iteration interval";
-		PRNL_SYSTEM_FIXED_TIMEOUT = "Fixed timeout";
-		PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT = "Nonvisible update timeout";
-		PRNL_SYSTEM_LOD_DISTANCES = "Lod distances";
-		PRNL_SYSTEM_SMOOTH_LOD = "Smooth lod";
-		PRNL_SYSTEM_FAST_FORWARD = "Fast forward";
-		PRNL_SYSTEM_FAST_FORWARD_TIME = "Time";
-		PRNL_SYSTEM_FAST_FORWARD_INTERVAL = "Interval";
-		PRNL_SYSTEM_MAIN_CAMERA_NAME = "Main camera name";
-		PRNL_SYSTEM_SCALE_VELOCITY = "Scale velocity";
-		PRNL_SYSTEM_SCALE_TIME = "Scale time";
-		PRNL_SYSTEM_SCALE = "Scale dimensions";
-		PRNL_SYSTEM_TIGHT_BOUNDING_BOX = "Use tight bounding box";
+		PRNL_NAME = QApplication::tr("Name");
+		PRNL_SYSTEM_CATEGORY = QApplication::tr("Category");
+		PRNL_SYSTEM_KEEP_LOCAL = QApplication::tr("Keep local");
+		PRNL_SYSTEM_ITERATION_INTERVAL = QApplication::tr("Iteration interval");
+		PRNL_SYSTEM_FIXED_TIMEOUT = QApplication::tr("Fixed timeout");
+		PRNL_SYSTEM_NONVIS_UPDATE_TIMEOUT = QApplication::tr("Nonvisible update timeout");
+		PRNL_SYSTEM_LOD_DISTANCES = QApplication::tr("Lod distances");
+		PRNL_SYSTEM_SMOOTH_LOD = QApplication::tr("Smooth lod");
+		PRNL_SYSTEM_FAST_FORWARD = QApplication::tr("Fast forward");
+		PRNL_SYSTEM_FAST_FORWARD_TIME = QApplication::tr("Time");
+		PRNL_SYSTEM_FAST_FORWARD_INTERVAL = QApplication::tr("Interval");
+		PRNL_SYSTEM_MAIN_CAMERA_NAME = QApplication::tr("Main camera name");
+		PRNL_SYSTEM_SCALE_VELOCITY = QApplication::tr("Scale velocity");
+		PRNL_SYSTEM_SCALE_TIME = QApplication::tr("Scale time");
+		PRNL_SYSTEM_SCALE = QApplication::tr("Scale dimensions");
+		PRNL_SYSTEM_TIGHT_BOUNDING_BOX = QApplication::tr("Use tight bounding box");
 		PRNL_X = ".x";
 		PRNL_Y = ".y";
 		PRNL_Z = ".z";
-		PRNL_FLOAT = "Value";
+		PRNL_FLOAT = QApplication::tr("Value");
 
 		// Category: String
 		append(new properties::StringProperty(this, PRNL_SYSTEM_CATEGORY, PRNL_SYSTEM_CATEGORY, ""));

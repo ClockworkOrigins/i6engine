@@ -15,15 +15,15 @@ namespace widgets {
 
 	BillboardRendererPropertyWindow::BillboardRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : RendererPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_RENDERER_TYPE = "Renderer type";
-		PRNL_BILLBOARD_TYPE = "Billboard type";
+		PRNL_RENDERER_TYPE = QApplication::tr("Renderer type");
+		PRNL_BILLBOARD_TYPE = QApplication::tr("Billboard type");
 		BBT_POINT = "Point";
 		BBT_ORIENTED_COMMON = "Oriented Common";
 		BBT_ORIENTED_SELF = "Oriented Self";
 		BBT_PERPENDICULAR_COMMON = "Perpendicular Common";
 		BBT_PERPENDICULAR_SELF = "Perpendicular Self";
 		BBT_ORIENTED_SHAPE = "Oriented Shape";
-		PRNL_ORIGIN = "Origin";
+		PRNL_ORIGIN = QApplication::tr("Origin");
 		ORG_TOP_LEFT = "Top-left";
 		ORG_TOP_CENTER = "Top-center";
 		ORG_TOP_RIGHT = "Top-right";
@@ -33,22 +33,19 @@ namespace widgets {
 		ORG_BOTTOM_LEFT = "Bottom-left";
 		ORG_BOTTOM_RIGHT = "Bottom-right";
 		ORG_BOTTOM_CENTER = "Bottom-center";
-		PRNL_ROTATION_TYPE = "Rotation type";
+		PRNL_ROTATION_TYPE = QApplication::tr("Rotation type");
 		RT_VERTEX = "Vertex";
 		RT_TEXTURE_COORDINATES = "Texture coordinates";
-		PRNL_COMMON_DIRECTION = "Common direction";
-		PRNL_UP_VECTOR = "Up Vector";
-		PRNL_POINT_RENDERING = "Point Rendering";
-		PRNL_ACCURATE_FACING = "Accurate Facing";
+		PRNL_COMMON_DIRECTION = QApplication::tr("Common direction");
+		PRNL_UP_VECTOR = QApplication::tr("Up Vector");
+		PRNL_POINT_RENDERING = QApplication::tr("Point Rendering");
+		PRNL_ACCURATE_FACING = QApplication::tr("Accurate Facing");
 		ACF_ON = "On";
 		ACF_OFF = "Off";
-		PRNL_RENDERER_USE_SOFT_PARTICLES = "Use soft particles";
-		PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER = "Soft particles contrast power";
-		PRNL_RENDERER_SOFT_PARTICLES_SCALE = "Soft particles scale";
-		PRNL_RENDERER_SOFT_PARTICLES_DELTA = "Soft particles delta";
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
+		PRNL_RENDERER_USE_SOFT_PARTICLES = QApplication::tr("Use soft particles");
+		PRNL_RENDERER_SOFT_PARTICLES_CONTRAST_POWER = QApplication::tr("Soft particles contrast power");
+		PRNL_RENDERER_SOFT_PARTICLES_SCALE = QApplication::tr("Soft particles scale");
+		PRNL_RENDERER_SOFT_PARTICLES_DELTA = QApplication::tr("Soft particles delta");
 
 		// Billboard Type: List
 		QStringList billboardTypes;

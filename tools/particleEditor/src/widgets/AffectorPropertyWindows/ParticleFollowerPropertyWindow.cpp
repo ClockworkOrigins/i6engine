@@ -12,8 +12,8 @@ namespace widgets {
 
 	ParticleFollowerPropertyWindow::ParticleFollowerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_MIN_DISTANCE = "Minimum distance";
-		PRNL_MAX_DISTANCE = "Maximum distance";
+		PRNL_MIN_DISTANCE = QApplication::tr("Minimum distance");
+		PRNL_MAX_DISTANCE = QApplication::tr("Maximum distance");
 
 		// Min distance: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_MIN_DISTANCE, PRNL_MIN_DISTANCE, ParticleUniverse::ParticleFollower::DEFAULT_MIN_DISTANCE));

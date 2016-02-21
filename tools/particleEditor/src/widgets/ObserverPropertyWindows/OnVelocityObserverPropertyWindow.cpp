@@ -13,8 +13,8 @@ namespace widgets {
 
 	OnVelocityObserverPropertyWindow::OnVelocityObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ON_VELOCITY_COMPARE = "Velocity compare";
-		PRNL_ON_VELOCITY_THRESHOLD = "Velocity threshold";
+		PRNL_ON_VELOCITY_COMPARE = QApplication::tr("Velocity compare");
+		PRNL_ON_VELOCITY_THRESHOLD = QApplication::tr("Velocity threshold");
 		PRNL_COMPARE_LESS_THAN = "Less than";
 		PRNL_COMPARE_GREATER_THAN = "Greater than";
 		PRNL_COMPARE_EQUALS = "Equals";

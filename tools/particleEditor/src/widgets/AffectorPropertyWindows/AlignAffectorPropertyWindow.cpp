@@ -11,7 +11,7 @@ namespace particleEditor {
 namespace widgets {
 
 	AlignAffectorPropertyWindow::AlignAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
-		PRNL_AFFECTOR_ALIGN_RESIZE = "Resize";
+		PRNL_AFFECTOR_ALIGN_RESIZE = QApplication::tr("Resize");
 
 		// Resize: bool
 		append(new properties::BoolProperty(this, PRNL_AFFECTOR_ALIGN_RESIZE, PRNL_AFFECTOR_ALIGN_RESIZE, ParticleUniverse::AlignAffector::DEFAULT_RESIZE));

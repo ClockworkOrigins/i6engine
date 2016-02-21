@@ -14,12 +14,9 @@ namespace widgets {
 
 	GeometryRotatorPropertyWindow::GeometryRotatorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ROTATION_SPEED = "Rotation speed";
-		PRNL_ROTATION_AXIS = "Rotation axis";
-		PRNL_USE_OWN_ROTATION = "Use own rotation";
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
+		PRNL_ROTATION_SPEED = QApplication::tr("Rotation speed");
+		PRNL_ROTATION_AXIS = QApplication::tr("Rotation axis");
+		PRNL_USE_OWN_ROTATION = QApplication::tr("Use own rotation");
 
 		// Use own rotation speed: bool
 		append(new properties::BoolProperty(this, PRNL_USE_OWN_ROTATION, PRNL_USE_OWN_ROTATION, ParticleUniverse::GeometryRotator::DEFAULT_USE_OWN));

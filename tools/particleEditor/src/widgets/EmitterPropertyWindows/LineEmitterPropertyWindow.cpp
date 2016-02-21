@@ -13,13 +13,10 @@ namespace widgets {
 
 	LineEmitterPropertyWindow::LineEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
-		PRNL_LINE_END = "Line end";
-		PRNL_LINE_MAX_INCREMENT = "Line max increment";
-		PRNL_LINE_MIN_INCREMENT = "Line min increment";
-		PRNL_LINE_DEVIATION = "Line deviation";
+		PRNL_LINE_END = QApplication::tr("Line end");
+		PRNL_LINE_MAX_INCREMENT = QApplication::tr("Line max increment");
+		PRNL_LINE_MIN_INCREMENT = QApplication::tr("Line min increment");
+		PRNL_LINE_DEVIATION = QApplication::tr("Line deviation");
 
 		// End: Ogre::Vector3
 		append(new properties::Vec3Property(this, PRNL_LINE_END, PRNL_LINE_END, ParticleUniverse::LineEmitter::DEFAULT_END));

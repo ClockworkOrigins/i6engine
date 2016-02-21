@@ -51,6 +51,9 @@ namespace widgets {
 		api::EngineController::GetSingletonPtr()->registerApplication(*this);
 
 		std::thread(&api::EngineController::start, api::EngineController::GetSingletonPtr()).detach();
+
+		menuFile->setTitle(QApplication::tr("File"));
+		actionExit->setText(QApplication::tr("Exit"));
 	}
 
 	MainWindow::~MainWindow() {

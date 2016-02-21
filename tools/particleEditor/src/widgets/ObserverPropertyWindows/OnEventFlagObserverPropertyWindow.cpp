@@ -12,7 +12,7 @@ namespace widgets {
 
 	OnEventFlagObserverPropertyWindow::OnEventFlagObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ON_EVENTFLAG_FLAG = "Event Flag";
+		PRNL_ON_EVENTFLAG_FLAG = QApplication::tr("Event Flag");
 
 		// Event Flag: ParticleUniverse::uint32
 		append(new properties::UIntProperty(this, PRNL_ON_EVENTFLAG_FLAG, PRNL_ON_EVENTFLAG_FLAG, ParticleUniverse::OnEventFlagObserver::DEFAULT_EVENT_FLAG));

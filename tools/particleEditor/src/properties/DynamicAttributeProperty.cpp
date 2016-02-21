@@ -14,12 +14,12 @@ namespace particleEditor {
 namespace properties {
 
 	DynamicAttributeProperty::DynamicAttributeProperty(QWidget * par, QString label, QString name, ParticleUniverse::DynamicAttribute * value) : Property(par, label, name), _widget(nullptr), _layout(nullptr), _value(value), _widgets(), _comboBox(nullptr), _values() {
-		widgets::DYN_FIXED = "Fixed";
-		widgets::DYN_RANDOM = "Random";
-		widgets::DYN_CURVED = "Curved";
-		widgets::DYN_OSCILLATE = "Oscillate";
-		widgets::DYN_CURVED_LINEAR = "Linear";
-		widgets::DYN_CURVED_SPLINE = "Spline";
+		widgets::DYN_FIXED = QApplication::tr("Fixed");
+		widgets::DYN_RANDOM = QApplication::tr("Random");
+		widgets::DYN_CURVED = QApplication::tr("Curved");
+		widgets::DYN_OSCILLATE = QApplication::tr("Oscillate");
+		widgets::DYN_CURVED_LINEAR = QApplication::tr("Linear");
+		widgets::DYN_CURVED_SPLINE = QApplication::tr("Spline");
 
 		_widget = new QWidget(this);
 		_layout = new QGridLayout(_widget);
@@ -151,7 +151,7 @@ namespace properties {
 	}
 
 	void DynamicAttributeProperty::createGUI() {
-		widgets::PRNL_EMITTER_VELOCITY = "Velocity";
+		widgets::PRNL_EMITTER_VELOCITY = QApplication::tr("Velocity");
 		_comboBox = new QComboBox(this);
 		QStringList dynamicTypes;
 		dynamicTypes.append(widgets::DYN_FIXED);
@@ -159,7 +159,7 @@ namespace properties {
 		dynamicTypes.append(widgets::DYN_CURVED);
 		dynamicTypes.append(widgets::DYN_OSCILLATE);
 		_comboBox->addItems(dynamicTypes);
-		QLabel * l = new QLabel("Type", _widget);
+		QLabel * l = new QLabel(QApplication::tr("Type"), _widget);
 		_layout->addWidget(l, 0, 0);
 		_layout->addWidget(_comboBox, 0, 1);
 		_widgets.push_back(_comboBox);
@@ -168,7 +168,7 @@ namespace properties {
 		switch (_value->getType()) {
 		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_FIXED: {
 			_comboBox->setCurrentIndex(0);
-			l = new QLabel("Value", _widget);
+			l = new QLabel(QApplication::tr("Value"), _widget);
 			_layout->addWidget(l, 1, 0);
 			QDoubleSpinBox * dsb = new QDoubleSpinBox(_widget);
 			dsb->setMaximum(DBL_MAX);
@@ -183,7 +183,7 @@ namespace properties {
 		}
 		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_RANDOM: {
 			_comboBox->setCurrentIndex(1);
-			l = new QLabel("Min", _widget);
+			l = new QLabel(QApplication::tr("Min"), _widget);
 			_layout->addWidget(l, 1, 0);
 			QDoubleSpinBox * dsb = new QDoubleSpinBox(_widget);
 			dsb->setMaximum(DBL_MAX);
@@ -194,7 +194,7 @@ namespace properties {
 			_widgets.push_back(l);
 			_values.insert(std::make_pair(PropertyTypes::MinValue, dsb));
 			connect(dsb, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));
-			l = new QLabel("Max", _widget);
+			l = new QLabel(QApplication::tr("Max"), _widget);
 			_layout->addWidget(l, 2, 0);
 			dsb = new QDoubleSpinBox(_widget);
 			dsb->setMaximum(DBL_MAX);

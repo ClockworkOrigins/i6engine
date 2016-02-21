@@ -13,11 +13,8 @@ namespace widgets {
 
 	ColourAffectorPropertyWindow::ColourAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_TIME_AND_COLOUR = "Time and Colour";
-		PRNL_TIME_AND_COLOUR_PARENT = "Time/Colour";
-		PRNL_TIME_AND_COLOUR_TIME = "Time instance";
-		PRNL_TIME_AND_COLOUR_COLOUR = "Colour instance";
-		PRNL_COLOUR_OPERATION = "Colour operation";
+		PRNL_TIME_AND_COLOUR = QApplication::tr("Time and Colour");
+		PRNL_COLOUR_OPERATION = QApplication::tr("Colour operation");
 		COP_SET = "Set";
 		COP_MULTIPLY = "Multiply";
 

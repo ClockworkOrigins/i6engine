@@ -15,14 +15,14 @@ namespace widgets {
 
 	TextureAnimatorPropertyWindow::TextureAnimatorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ANIMATION_TYPE = "Animation type";
+		PRNL_ANIMATION_TYPE = QApplication::tr("Animation type");
 		TAT_LOOP = "Loop";
 		TAT_UP_DOWN = "Up - Down";
 		TAT_RANDOM = "Random";
-		PRNL_TEXCOORDS_START = "Texture coordinate start";
-		PRNL_TEXCOORDS_END = "Texture coordinate end";
-		PRNL_START_RANDOM = "Start random";
-		PRNL_TIME_STEP = "Time step";
+		PRNL_TEXCOORDS_START = QApplication::tr("Texture coordinate start");
+		PRNL_TEXCOORDS_END = QApplication::tr("Texture coordinate end");
+		PRNL_START_RANDOM = QApplication::tr("Start random");
+		PRNL_TIME_STEP = QApplication::tr("Time step");
 
 		// Time Step Animation: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_TIME_STEP, PRNL_TIME_STEP, ParticleUniverse::TextureAnimator::DEFAULT_TIME_STEP));

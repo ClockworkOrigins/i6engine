@@ -12,7 +12,7 @@ namespace widgets {
 
 	CollisionAvoidanceAffectorPropertyWindow::CollisionAvoidanceAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_COLLISON_AVOIDANCE_RADIUS = "Avoidance radius";
+		PRNL_COLLISON_AVOIDANCE_RADIUS = QApplication::tr("Avoidance radius");
 
 		// Avoidance Radius: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_COLLISON_AVOIDANCE_RADIUS, PRNL_COLLISON_AVOIDANCE_RADIUS, ParticleUniverse::CollisionAvoidanceAffector::DEFAULT_RADIUS));

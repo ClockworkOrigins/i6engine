@@ -15,14 +15,14 @@ namespace widgets {
 
 	BeamRendererPropertyWindow::BeamRendererPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : RendererPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_RENDERER_TYPE = "Renderer type";
-		PRNL_USE_VERTEX_COLOURS = "Use vertex colours";
-		PRNL_UPDATE_INTERVAL = "Update interval";
-		PRNL_MAX_ELEMENTS = "Maximum elements";
-		PRNL_DEVIATION = "Deviation";
-		PRNL_NUMBER_OF_SEGMENTS = "Number of segments";
-		PRNL_JUMP = "Jump";
-		PRNL_TEXTURE_DIRECTION = "Texture direction";
+		PRNL_RENDERER_TYPE = QApplication::tr("Renderer type");
+		PRNL_USE_VERTEX_COLOURS = QApplication::tr("Use vertex colours");
+		PRNL_UPDATE_INTERVAL = QApplication::tr("Update interval");
+		PRNL_MAX_ELEMENTS = QApplication::tr("Maximum elements");
+		PRNL_DEVIATION = QApplication::tr("Deviation");
+		PRNL_NUMBER_OF_SEGMENTS = QApplication::tr("Number of segments");
+		PRNL_JUMP = QApplication::tr("Jump");
+		PRNL_TEXTURE_DIRECTION = QApplication::tr("Texture direction");
 		TEXTURE_DIRECTION_U = "TCD_U";
 		TEXTURE_DIRECTION_V = "TCD_V";
 

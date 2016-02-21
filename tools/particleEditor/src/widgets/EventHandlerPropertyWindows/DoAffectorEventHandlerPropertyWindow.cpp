@@ -12,7 +12,7 @@ namespace widgets {
 
 	DoAffectorEventHandlerPropertyWindow::DoAffectorEventHandlerPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EventHandlerPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_PRE_POST = "Perform pre/post processing";
+		PRNL_PRE_POST = QApplication::tr("Perform pre/post processing");
 
 		// Affector component: Doesn't have a property, because this is established by means of a connection
 

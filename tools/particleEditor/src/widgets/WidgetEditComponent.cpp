@@ -357,7 +357,7 @@ namespace widgets {
 		} else {
 			if (count > 0) {
 				DialogChooseConnectionType dcct;
-				dcct.label->setText("Select a connection to be deleted");
+				dcct.label->setText(QApplication::tr("Select a connection to be deleted"));
 				for (int i = 0; i < count; i++) {
 					dcct.comboBox->addItem(choices[i]);
 				}
@@ -410,7 +410,7 @@ namespace widgets {
 
 		if (count > 1) {// TODO: (Michael) check the GetParent() calls here
 			DialogChooseConnectionType dcct;
-			dcct.label->setText("Select a connection type");
+			dcct.label->setText(QApplication::tr("Select a connection type"));
 			for (int i = 0; i < count; i++) {
 				dcct.comboBox->addItem(choices[i]);
 			}

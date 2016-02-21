@@ -14,15 +14,12 @@ namespace widgets {
 
 	SineForceAffectorPropertyWindow::SineForceAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_FREQ_MIN = "Minimum frequency";
-		PRNL_FREQ_MAX = "Maximum frequency";
-		PRNL_FORCE_VECTOR = "Force vector";
-		PRNL_LINEAR_FORCE_APPLICATION = "Application";
+		PRNL_FREQ_MIN = QApplication::tr("Minimum frequency");
+		PRNL_FREQ_MAX = QApplication::tr("Maximum frequency");
+		PRNL_FORCE_VECTOR = QApplication::tr("Force vector");
+		PRNL_LINEAR_FORCE_APPLICATION = QApplication::tr("Application");
 		APP_ADD = "Add";
 		APP_AVG = "Average";
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
 
 		// Force vector: Ogre::Vector3
 		append(new properties::Vec3Property(this, PRNL_FORCE_VECTOR, PRNL_FORCE_VECTOR, ParticleUniverse::SineForceAffector::DEFAULT_FORCE_VECTOR));

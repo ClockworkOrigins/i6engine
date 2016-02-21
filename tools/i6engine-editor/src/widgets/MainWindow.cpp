@@ -80,6 +80,16 @@ namespace widgets {
 		connect(_objectContainerWidget->objectInfoWidget, SIGNAL(selectedObject(int64_t)), this, SLOT(selectedObject(int64_t)));
 
 		emit initializeEngine();
+
+		menuFile->setTitle(QApplication::tr("File"));
+		actionNew_Level->setText(QApplication::tr("New Level"));
+		actionLoad_Level->setText(QApplication::tr("Load Level"));
+		actionSave_Level->setText(QApplication::tr("Save Level"));
+		actionSave_Level_As->setText(QApplication::tr("Save Level As"));
+		actionExit->setText(QApplication::tr("Exit"));
+		menuGame->setTitle(QApplication::tr("Game"));
+		menuExtras->setTitle(QApplication::tr("Extras"));
+		actionOptions->setText(QApplication::tr("Options"));
 	}
 
 	MainWindow::~MainWindow() {
@@ -87,11 +97,11 @@ namespace widgets {
 
 	void MainWindow::createNewLevel() {
 		if (_changed) {
-			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
+			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, QApplication::tr("Unsaved changes"), QApplication::tr("There are unsaved changes in your level. Do you want to save the level?"), QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
 				chooseSaveLevelAs();
 			}
 		}
-		QString file = QFileDialog::getSaveFileName(nullptr, "New file name ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
+		QString file = QFileDialog::getSaveFileName(nullptr, QApplication::tr("New file name ..."), QString::fromStdString(getBasePath()), QApplication::tr("Level Files (*.xml)"));
 		if (!file.isEmpty()) {
 			clearLevel();
 			_isNewLevel = true;
@@ -104,14 +114,14 @@ namespace widgets {
 
 	void MainWindow::chooseLoadLevel() {
 		if (_changed) {
-			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
+			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, QApplication::tr("Unsaved changes"), QApplication::tr("There are unsaved changes in your level. Do you want to save the level?"), QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
 				chooseSaveLevelAs();
 			}
 		}
-		QString file = QFileDialog::getOpenFileName(nullptr, "Open file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
+		QString file = QFileDialog::getOpenFileName(nullptr, QApplication::tr("Open file ..."), QString::fromStdString(getBasePath()), QApplication::tr("Level Files (*.xml)"));
 		if (!file.isEmpty()) {
 			delete _progressDialog;
-			_progressDialog = new QProgressDialog("Loading level...", "", 0, 100, this);
+			_progressDialog = new QProgressDialog(QApplication::tr("Loading level..."), "", 0, 100, this);
 			_progressDialog->setWindowModality(Qt::WindowModal);
 			_progressDialog->setCancelButton(nullptr);
 			connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
@@ -134,7 +144,7 @@ namespace widgets {
 	}
 
 	void MainWindow::chooseSaveLevelAs() {
-		QString file = QFileDialog::getSaveFileName(nullptr, "Save file ...", QString::fromStdString(getBasePath()), "Level Files (*.xml)");
+		QString file = QFileDialog::getSaveFileName(nullptr, QApplication::tr("Save file ..."), QString::fromStdString(getBasePath()), QApplication::tr("Level Files (*.xml)"));
 		if (!file.isEmpty()) {
 			saveLevel(file);
 			_level = file;
@@ -145,7 +155,7 @@ namespace widgets {
 
 	void MainWindow::closeEditor() {
 		if (_changed) {
-			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, "Unsaved changes", "There are unsaved changes in your level. Do you want to save the level?", QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
+			if (QMessageBox::StandardButton::Yes == QMessageBox::warning(this, QApplication::tr("Unsaved changes"), QApplication::tr("There are unsaved changes in your level. Do you want to save the level?"), QMessageBox::StandardButton::Yes, QMessageBox::StandardButton::No)) {
 				chooseSaveLevelAs();
 			}
 		}
@@ -176,8 +186,8 @@ namespace widgets {
 			}
 		} else {
 			QMessageBox box;
-			box.setWindowTitle(QString("Can't start game!"));
-			box.setInformativeText("Actually no level is loaded. Load a level first to start game with it!");
+			box.setWindowTitle(QApplication::tr("Can't start game!"));
+			box.setInformativeText(QApplication::tr("Actually no level is loaded. Load a level first to start game with it!"));
 			box.setStandardButtons(QMessageBox::StandardButton::Ok);
 			box.exec();
 		}
@@ -221,7 +231,7 @@ namespace widgets {
 				_changed = true;
 			}
 			delete _progressDialog;
-			_progressDialog = new QProgressDialog("Loading level...", "", 0, 100, this);
+			_progressDialog = new QProgressDialog(QApplication::tr("Loading level..."), "", 0, 100, this);
 			_progressDialog->setWindowModality(Qt::WindowModal);
 			_progressDialog->setCancelButton(nullptr);
 			connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
@@ -362,7 +372,7 @@ namespace widgets {
 				_initializationPlugins.push_back(qobject_cast<plugins::InitializationPluginInterface *>(plugin));
 			} else {
 				QMessageBox box;
-				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setWindowTitle(QApplication::tr("Error loading plugin!"));
 				box.setInformativeText(loader.errorString());
 				box.setStandardButtons(QMessageBox::StandardButton::Ok);
 				box.exec();
@@ -384,7 +394,7 @@ namespace widgets {
 				connect(gac, SIGNAL(triggerGameAction(int)), this, SLOT(triggeredGameAction(int)));
 			} else {
 				QMessageBox box;
-				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setWindowTitle(QApplication::tr("Error loading plugin!"));
 				box.setInformativeText(loader.errorString());
 				box.setStandardButtons(QMessageBox::StandardButton::Ok);
 				box.exec();
@@ -401,7 +411,7 @@ namespace widgets {
 				_flagPlugins.push_back(qobject_cast<plugins::FlagPluginInterface *>(plugin));
 			} else {
 				QMessageBox box;
-				box.setWindowTitle(QString("Error loading plugin!"));
+				box.setWindowTitle(QApplication::tr("Error loading plugin!"));
 				box.setInformativeText(loader.errorString());
 				box.setStandardButtons(QMessageBox::StandardButton::Ok);
 				box.exec();
@@ -411,7 +421,7 @@ namespace widgets {
 
 	void MainWindow::saveLevel(const QString & level) {
 		delete _progressDialog;
-		_progressDialog = new QProgressDialog("Saving level...", "", 0, 1, this);
+		_progressDialog = new QProgressDialog(QApplication::tr("Saving level..."), "", 0, 1, this);
 		_progressDialog->setWindowModality(Qt::WindowModal);
 		_progressDialog->setCancelButton(nullptr);
 		connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
@@ -582,7 +592,7 @@ namespace widgets {
 			api::EngineController::GetSingleton().stop();
 		}
 		if (_isNewLevel) {
-			_progressDialog = new QProgressDialog("Creating new level...", "", 0, 100, this);
+			_progressDialog = new QProgressDialog(QApplication::tr("Creating new level..."), "", 0, 100, this);
 			_progressDialog->setWindowModality(Qt::WindowModal);
 			_progressDialog->setCancelButton(nullptr);
 			connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));

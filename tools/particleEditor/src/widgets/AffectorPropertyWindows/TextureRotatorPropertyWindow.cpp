@@ -13,9 +13,9 @@ namespace widgets {
 
 	TextureRotatorPropertyWindow::TextureRotatorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_USE_OWN_SPEED = "Use own speed";
-		PRNL_ROTATION = "Rotation";
-		PRNL_ROTATION_SPEED = "Rotation speed";
+		PRNL_USE_OWN_SPEED = QApplication::tr("Use own speed");
+		PRNL_ROTATION = QApplication::tr("Rotation");
+		PRNL_ROTATION_SPEED = QApplication::tr("Rotation speed");
 
 		// Use Own Rotation speed
 		append(new properties::BoolProperty(this, PRNL_USE_OWN_SPEED, PRNL_USE_OWN_SPEED, ParticleUniverse::TextureRotator::DEFAULT_USE_OWN_SPEED));

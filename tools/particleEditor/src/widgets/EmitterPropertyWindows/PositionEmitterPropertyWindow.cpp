@@ -13,12 +13,9 @@ namespace widgets {
 
 	PositionEmitterPropertyWindow::PositionEmitterPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : EmitterPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_POSITION_EMITTER_POSITION = "Add particle position";
-		PRNL_POSITION_EMITTER_RANDOMIZE = "Position randomize";
-		PRNL_POSITION = "Position";
-		PRNL_POSITION_X = ".x";
-		PRNL_POSITION_Y = ".y";
-		PRNL_POSITION_Z = ".z";
+		PRNL_POSITION_EMITTER_POSITION = QApplication::tr("Add particle position");
+		PRNL_POSITION_EMITTER_RANDOMIZE = QApplication::tr("Position randomize");
+		PRNL_POSITION = QApplication::tr("Position");
 
 		// Add Position: Button, with wich new positions can be added
 		append(new properties::Vec3ListProperty(this, PRNL_POSITION_EMITTER_POSITION, PRNL_POSITION_EMITTER_POSITION));

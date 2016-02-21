@@ -14,9 +14,9 @@ namespace widgets {
 
 	OnTimeObserverPropertyWindow::OnTimeObserverPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : ObserverPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_ON_TIME_COMPARE = "On time compare";
-		PRNL_ON_TIME_THRESHOLD = "On time threshold";
-		PRNL_SINCE_START_SYSTEM = "Since start system";
+		PRNL_ON_TIME_COMPARE = QApplication::tr("On time compare");
+		PRNL_ON_TIME_THRESHOLD = QApplication::tr("On time threshold");
+		PRNL_SINCE_START_SYSTEM = QApplication::tr("Since start system");
 		PRNL_COMPARE_LESS_THAN = "Less than";
 		PRNL_COMPARE_GREATER_THAN = "Greater than";
 		PRNL_COMPARE_EQUALS = "Equals";

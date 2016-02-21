@@ -21,12 +21,12 @@ namespace properties {
 
 		_layout = new QGridLayout(widget);
 		widget->setLayout(_layout);
-		_vec3Property = new Vec3Property(widget, "Axis", "Axis", axis.toOgre());
+		_vec3Property = new Vec3Property(widget, QApplication::tr("Axis"), QApplication::tr("Axis"), axis.toOgre());
 		_layout->addWidget(_vec3Property, 0, 0);
 		connect(_vec3Property, SIGNAL(changed(QString)), this, SLOT(changedValue()));
 		_vec3Property->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 
-		QLabel * l = new QLabel("Angle", widget);
+		QLabel * l = new QLabel(QApplication::tr("Angle"), widget);
 		_layout->addWidget(l, 1, 0);
 		_doubleSpinBox = new QDoubleSpinBox(this);
 		_doubleSpinBox->setMinimum(-360.0);

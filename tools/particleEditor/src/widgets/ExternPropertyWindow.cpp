@@ -21,8 +21,8 @@ namespace widgets {
 		CST_EXTERN_PHYSX_ACTOR = EXTERN_PHYSX_ACTOR;
 		CST_EXTERN_PHYSX_FLUID = EXTERN_PHYSX_FLUID;
 		CST_EXTERN_VORTEX = EXTERN_VORTEX;
-		PRNL_EXTERN_TYPE = "Extern type";
-		PRNL_NAME = "Name";
+		PRNL_EXTERN_TYPE = QApplication::tr("Extern type");
+		PRNL_NAME = QApplication::tr("Name");
 
 		// Type: List of types (DO NOT CHANGE THE ORDER!
 		// Internationalization means that the string values of this property are unusable to create an extern)

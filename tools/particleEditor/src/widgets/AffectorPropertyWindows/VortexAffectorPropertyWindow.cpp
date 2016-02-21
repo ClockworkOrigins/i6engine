@@ -13,12 +13,9 @@ namespace widgets {
 
 	VortexAffectorPropertyWindow::VortexAffectorPropertyWindow(QWidget * par, WidgetEditComponent * owner, QString name) : AffectorPropertyWindow(par, owner, name) {
 		// Set the (internationalized) property names
-		PRNL_X = ".x";
-		PRNL_Y = ".y";
-		PRNL_Z = ".z";
-		PRNL_ROTATION = "Rotation";
-		PRNL_ROTATION_AXIS = "Rotation axis";
-		PRNL_ROTATION_SPEED = "Rotation speed";
+		PRNL_ROTATION = QApplication::tr("Rotation");
+		PRNL_ROTATION_AXIS = QApplication::tr("Rotation axis");
+		PRNL_ROTATION_SPEED = QApplication::tr("Rotation speed");
 
 		// Rotation Vector: Ogre::Vector3
 		append(new properties::Vec3Property(this, PRNL_ROTATION_AXIS, PRNL_ROTATION_AXIS, ParticleUniverse::VortexAffector::DEFAULT_ROTATION_VECTOR));
