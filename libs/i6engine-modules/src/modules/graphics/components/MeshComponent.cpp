@@ -71,7 +71,9 @@ namespace modules {
 
 		auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(goid);
 
-		_meshComponent = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
+		if (go != nullptr) {
+			_meshComponent = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
+		}
 	}
 
 	MeshComponent::~MeshComponent() {
