@@ -49,6 +49,9 @@ namespace modules {
 		if (!_sceneManager->getCurrentViewport()) {
 			return;
 		}
+		if (!_sceneManager->getCurrentViewport()->getCamera()) {
+			return;
+		}
 		const Ogre::AxisAlignedBox & bbox = _object->getWorldBoundingBox(true);
 		Ogre::Matrix4 mat = _sceneManager->getCurrentViewport()->getCamera()->getViewMatrix();
 

@@ -50,6 +50,7 @@ namespace modules {
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 		Ogre::Camera * camera = dynamic_cast<Ogre::Camera *>(_sceneNode->getAttachedObject(0));
 		Ogre::Viewport * vp = camera->getViewport();
+		vp->setCamera(nullptr); // ISIXE-1765
 
 		Ogre::CompositorManager::ResourceMapIterator resourceIterator = Ogre::CompositorManager::getSingleton().getResourceIterator();
 
@@ -66,9 +67,7 @@ namespace modules {
 			}
 		}
 
-		if (_zOrder != INT_MAX) {
-			_manager->getRenderWindow()->removeViewport(_zOrder);
-		}
+		_manager->getRenderWindow()->removeViewport(vp->getZOrder());
 
 		_sceneNode->detachObject(camera);
 		sm->destroyCamera(camera);
