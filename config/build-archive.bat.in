@@ -14,6 +14,7 @@ xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/cmake_modules" "@CMAKE_BINARY_DIR@/%archiveNa
 xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/config" "@CMAKE_BINARY_DIR@/%archiveName%/config"
 xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/deps" "@CMAKE_BINARY_DIR@/%archiveName%/deps"
 xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/docs" "@CMAKE_BINARY_DIR@/%archiveName%/docs"
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/languages" "@CMAKE_BINARY_DIR@/%archiveName%/languages"
 xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/libs" "@CMAKE_BINARY_DIR@/%archiveName%/libs"
 xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/media" "@CMAKE_BINARY_DIR@/%archiveName%/media"
 xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/plugins" "@CMAKE_BINARY_DIR@/%archiveName%/plugins"
