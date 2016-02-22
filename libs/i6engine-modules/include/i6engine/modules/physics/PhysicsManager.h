@@ -38,6 +38,7 @@ class btDefaultCollisionConfiguration;
 class btDiscreteDynamicsWorld;
 class btDynamicsWorld;
 class btMotionState;
+class btOverlapFilterCallback;
 class btRigidBody;
 class btSequentialImpulseConstraintSolver;
 class btTypedConstraint;
@@ -207,6 +208,8 @@ namespace modules {
 		bool _paused;
 
 		DebugDrawer * _debugDrawer;
+
+		btOverlapFilterCallback * _filterCallback;
 
 		/**
 		 * \brief forbidden

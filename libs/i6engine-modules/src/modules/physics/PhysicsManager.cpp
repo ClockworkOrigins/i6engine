@@ -158,7 +158,7 @@ namespace modules {
 
 	uint64_t PhysicsManager::_tickCount = 0;
 
-	PhysicsManager::PhysicsManager(PhysicsController * pc) : _ctrl(pc), _collisionShapes(), _dynamicsWorld(), _broadphase(), _dispatcher(), _collisionConfiguration(), _solver(), _nodes(), _lngTime(api::EngineController::GetSingleton().getCurrentTime()), _tickList(), _constraints(), _paused(false), _debugDrawer(nullptr) {
+	PhysicsManager::PhysicsManager(PhysicsController * pc) : _ctrl(pc), _collisionShapes(), _dynamicsWorld(), _broadphase(), _dispatcher(), _collisionConfiguration(), _solver(), _nodes(), _lngTime(api::EngineController::GetSingleton().getCurrentTime()), _tickList(), _constraints(), _paused(false), _debugDrawer(nullptr), _filterCallback(nullptr) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			// Build the broadphase
@@ -178,8 +178,8 @@ namespace modules {
 			_dynamicsWorld->getDispatchInfo().m_useContinuous = true;
 
 			// FilterCallback
-			btOverlapFilterCallback * filterCallback = new FilterCallback();
-			_dynamicsWorld->getPairCache()->setOverlapFilterCallback(filterCallback);
+			_filterCallback = new FilterCallback();
+			_dynamicsWorld->getPairCache()->setOverlapFilterCallback(_filterCallback);
 
 			_debugDrawer = new DebugDrawer();
 			_dynamicsWorld->setDebugDrawer(_debugDrawer);
@@ -214,6 +214,7 @@ namespace modules {
 		delete _dispatcher;
 		delete _collisionConfiguration;
 		delete _broadphase;
+		delete _filterCallback;
 	}
 
 	void PhysicsManager::Tick() {

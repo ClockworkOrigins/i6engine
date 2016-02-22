@@ -32,6 +32,8 @@
 #include "OGRE/OgreWindowEventUtilities.h"
 
 namespace Ogre {
+	class LogManager;
+	class OverlaySystem;
 	class RaySceneQuery;
 	class RenderWindow;
 	class Root;
@@ -45,6 +47,7 @@ namespace modules {
 	class GraphicsNode;
 	class GraphicsController;
 	class GUIController;
+	class ListenerFactoryLogic;
 	class ResourceManager;
 	class Terrain;
 
@@ -227,6 +230,12 @@ namespace modules {
 		bool _initialized;
 
 		bool _showFPS;
+
+		Ogre::OverlaySystem * _overlaySystem;
+
+		Ogre::LogManager * _logManager;
+
+		std::vector<ListenerFactoryLogic *> _compositorLogics;
 
 		void loadResources(const std::string & resourcesFile, const std::function<void(uint16_t)> & callback);
 

@@ -19,6 +19,7 @@ namespace i6engine {
 namespace plugins {
 
 	i6ArchivePlugin * plugin;
+	i6ArchiveFactory * factory;
 
 	extern "C" void ISIXE_PLUGIN_I6ARCHIVE_EXPORT dllStartPlugin() throw() {
 		plugin = OGRE_NEW i6ArchivePlugin();
@@ -34,7 +35,8 @@ namespace plugins {
 	}
 
 	void i6ArchivePlugin::install() {
-		Ogre::ArchiveManager::getSingleton().addArchiveFactory(OGRE_NEW i6ArchiveFactory());
+		factory = OGRE_NEW i6ArchiveFactory();
+		Ogre::ArchiveManager::getSingleton().addArchiveFactory(factory);
 	}
 
 	void i6ArchivePlugin::initialise() {
@@ -44,6 +46,7 @@ namespace plugins {
 	}
 
 	void i6ArchivePlugin::uninstall() {
+		OGRE_DELETE factory;
 	}
 
 } /* namespace plugins */

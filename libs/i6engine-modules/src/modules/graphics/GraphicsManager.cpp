@@ -65,7 +65,7 @@
 namespace i6engine {
 namespace modules {
 
-	GraphicsManager::GraphicsManager(GraphicsController * ctrl, HWND hWnd) : _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false) {
+	GraphicsManager::GraphicsManager(GraphicsController * ctrl, HWND hWnd) : _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false), _overlaySystem(nullptr), _logManager(nullptr), _compositorLogics() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			std::string ogrePath;
@@ -74,8 +74,8 @@ namespace modules {
 				api::EngineController::GetSingletonPtr()->stop();
 				return;
 			}
-			Ogre::LogManager * lm = new Ogre::LogManager();
-			lm->createLog("ogre.log", true, false, false);
+			_logManager = new Ogre::LogManager();
+			_logManager->createLog("ogre.log", true, false, false);
 			_objRoot = new Ogre::Root(ogrePath + "/plugins.cfg", ogrePath + "/ogre.cfg", "");
 
 			// make sure, Resourcemanager is initialized
@@ -117,7 +117,8 @@ namespace modules {
 
 		_sceneManager = _objRoot->createSceneManager(Ogre::ST_GENERIC);
 
-		_sceneManager->addRenderQueueListener(new Ogre::OverlaySystem());
+		_overlaySystem = new Ogre::OverlaySystem();
+		_sceneManager->addRenderQueueListener(_overlaySystem);
 
 		_debug = new Debug(_sceneManager, 0.5f);
 
@@ -129,9 +130,18 @@ namespace modules {
 		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
 		Ogre::CompositorManager & compMgr = Ogre::CompositorManager::getSingleton();
-		compMgr.registerCompositorLogic("HDR", new HDRLogic());
-		compMgr.registerCompositorLogic("GaussianBlur", new GaussianBlurLogic());
-		compMgr.registerCompositorLogic("HeatVision", new HeatVisionLogic());
+		
+		ListenerFactoryLogic * logic = new HDRLogic();
+		compMgr.registerCompositorLogic("HDR", logic);
+		_compositorLogics.push_back(logic);
+
+		logic = new GaussianBlurLogic();
+		compMgr.registerCompositorLogic("GaussianBlur", logic);
+		_compositorLogics.push_back(logic);
+
+		logic = new HeatVisionLogic();
+		compMgr.registerCompositorLogic("HeatVision", logic);
+		_compositorLogics.push_back(logic);
 
 		Ogre::ConfigOptionMap & CurrentRendererOptions = _objRoot->getRenderSystem()->getConfigOptions();
 		Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
@@ -314,12 +324,17 @@ namespace modules {
 			delete p.second;
 		}
 
+		for (ListenerFactoryLogic * logic : _compositorLogics) {
+			delete logic;
+		}
+		delete _overlaySystem;
 		delete _resourceManager;
 		if (_objRoot != nullptr) {
 			_rWindow->destroy();
 			_objRoot->shutdown();
 			delete _objRoot;
 		}
+		delete _logManager;
 		delete _guiController;
 	}
 
