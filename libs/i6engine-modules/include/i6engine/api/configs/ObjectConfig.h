@@ -42,6 +42,7 @@ namespace api {
 	typedef utils::sharedPtr<Component, Component> ComPtr;
 	typedef boost::function<ComPtr(const int64_t, const attributeMap &)> createGOCCallback;
 	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;
+	typedef utils::weakPtr<GameObject, GameObject> WeakGOPtr;
 	typedef void (*CreateGO)(GOPtr, const attributeMap &);
 
 namespace objects {

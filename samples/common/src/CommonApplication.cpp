@@ -136,7 +136,7 @@ namespace sample {
 					_eventMap[key].second = iku->pressed != i6engine::api::KeyState::KEY_RELEASED;
 				} else {
 					if (iku->code == i6engine::api::KeyCode::KC_MBLeft && !i6engine::api::EngineController::GetSingleton().getGUIFacade()->getOnWindow() && iku->pressed == i6engine::api::KeyState::KEY_PRESSED && _shootBall) {
-						i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+						i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 						Vec3 pos = ssc->getPosition();
 
 						i6engine::api::attributeMap paramsPSC;
@@ -144,7 +144,7 @@ namespace sample {
 						i6engine::api::objects::GOTemplate tmpl;
 						tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 						i6engine::api::EngineController::GetSingleton().getObjectFacade()->createGO("Ball", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this, ssc](i6engine::api::GOPtr go) {
-							auto cc = _camera->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent);
+							auto cc = _camera.get()->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent);
 							go->getGOC<i6engine::api::PhysicalStateComponent>(i6engine::api::components::ComponentTypes::PhysicalStateComponent)->setLinearVelocity(i6engine::math::rotateVector((cc->getLookAt() - cc->getPosition() + Vec3(0.0, 0.0, 2.0)).normalize() * 100.0, ssc->getRotation()), 2);
 						});
 					}
@@ -154,62 +154,62 @@ namespace sample {
 	}
 
 	void CommonApplication::Forward() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, 2.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Backward() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, -2.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Left() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(2.0, 0.0, 0.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Right() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(-2.0, 0.0, 0.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Down() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, -2.0, 0.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Up() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 2.0, 0.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::RotateLeft() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), -(PI / 48)));
 	}
 
 	void CommonApplication::RotateRight() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (PI / 48)));
 	}
 
 	void CommonApplication::RotateUp() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), -(PI / 48)));
 	}
 
 	void CommonApplication::RotateDown() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), (PI / 48)));
 	}
 
 	void CommonApplication::LeanLeft() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), -(PI / 48)));
 	}
 
 	void CommonApplication::LeanRight() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
 	}
 

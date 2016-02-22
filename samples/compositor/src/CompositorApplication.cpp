@@ -172,7 +172,7 @@ namespace sample {
 	}
 
 	void CompositorApplication::setCompositor(const std::string & compositor, bool enabled) const {
-		_camera->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent)->enableCompositor(compositor, enabled);
+		_camera.get()->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent)->enableCompositor(compositor, enabled);
 	}
 
 } /* namespace sample */

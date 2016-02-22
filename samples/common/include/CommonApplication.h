@@ -19,6 +19,7 @@
 
 #include "i6engine/api/Application.h"
 #include "i6engine/api/configs/ObjectConfig.h"
+#include "i6engine/api/objects/GameObject.h"
 
 namespace sample {
 
@@ -42,7 +43,7 @@ namespace sample {
 
 	protected:
 		bool _showFPS;
-		i6engine::api::GOPtr _camera;
+		i6engine::api::WeakGOPtr _camera;
 
 		/**
 		 * \brief In this map all registered buttons and their respective actions are stored.
