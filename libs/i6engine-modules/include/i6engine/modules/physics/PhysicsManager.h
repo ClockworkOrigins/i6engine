@@ -38,10 +38,10 @@ class btDefaultCollisionConfiguration;
 class btDiscreteDynamicsWorld;
 class btDynamicsWorld;
 class btMotionState;
-class btOverlapFilterCallback;
 class btRigidBody;
 class btSequentialImpulseConstraintSolver;
 class btTypedConstraint;
+struct btOverlapFilterCallback;
 
 namespace i6engine {
 namespace modules {

@@ -255,6 +255,16 @@ namespace api {
 					ComPtr c = _componentFunc(compID, templ, params, _self);
 
 					c->Init();
+				} else if (msg->getSubtype() == components::ComCreateCallback) {
+					// Create new Component
+					int64_t compID = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->_id;
+					std::string templ = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->tpl;
+					attributeMap params = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->params;
+					boost::function<void(ComPtr)> callback = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->callback;
+
+					ComPtr c = _componentFunc(compID, templ, params, _self);
+					c->Init();
+					callback(c);
 				}
 			} else if (msg->getMethod() == core::Method::Update) {
 				// forward to component

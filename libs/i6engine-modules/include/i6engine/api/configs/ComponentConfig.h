@@ -22,10 +22,18 @@
 #ifndef __I6ENGINE_API_COMPONENTCONFIG_H__
 #define __I6ENGINE_API_COMPONENTCONFIG_H__
 
+#include "i6engine/utils/sharedPtr.h"
+
 #include "i6engine/api/GameMessageStruct.h"
+
+#include "boost/function.hpp"
 
 namespace i6engine {
 namespace api {
+
+	class Component;
+
+	typedef utils::sharedPtr<Component, Component> ComPtr;
 	typedef std::map<std::string, std::string> attributeMap;
 
 	enum ShatterInterest : uint16_t;
@@ -33,10 +41,11 @@ namespace api {
 namespace components {
 	enum ComponentMessageTypes {
 		ComReset = 0,
-		ComCreate,	// ! Creates a new Component
-		ComSpawnpoint,	// ! Reactivates a spawnpoint
-		ComShatter,		// ! Indicates, that the Object shattered
-		ComMoverResync,	// ! Mover Component needs to be resynced
+		ComCreate,			//! Creates a new Component
+		ComCreateCallback,	//! Creates a new Component and calls callback afterwards
+		ComSpawnpoint,		//! Reactivates a spawnpoint
+		ComShatter,			//! Indicates, that the Object shattered
+		ComMoverResync,		//! Mover Component needs to be resynced
 		COUNT
 	};
 	enum ComponentTypes {
@@ -94,6 +103,21 @@ namespace components {
 		}
 		Component_Create_Create * copy() { return new Component_Create_Create(*this); }
 	} Component_Create_Create;
+
+	/**
+	 * \brief creates a Component on Object with id goid and Component id coid with registered template name tpl and attributes of params and calls callback afterwards
+	 * \note not for multiplayer!
+	 */
+	typedef struct ISIXE_MODULES_API Component_CreateCallback_Create : GameMessageStruct {
+		std::string tpl;
+		attributeMap params;
+		core::IPKey receiver;
+		boost::function<void(ComPtr)> callback;
+		Component_CreateCallback_Create(const int64_t goid, const int64_t coid, const core::IPKey & r, const std::string & t, const attributeMap & p, const boost::function<void(ComPtr)> & cb);
+		Component_CreateCallback_Create * copy() {
+			return new Component_CreateCallback_Create(*this);
+		}
+	} Component_CreateCallback_Create;
 
 	/**
 	 * \brief deletes Component with familyID famID on GameObject with id goid

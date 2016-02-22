@@ -30,6 +30,8 @@ SET(testSrc
 	api/components/test_ComponentSynchronize.cpp
 	api/components/test_MoverComponent.cpp
 	
+	api/facades/test_ObjectFacade.cpp
+	
 	api/manager/test_IDManager.cpp
 	api/manager/test_TextManager.cpp
 
@@ -41,7 +43,7 @@ add_executable(ModulesTester ${testSrc})
 
 SET_TARGET_PROPERTIES(ModulesTester PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(ModulesTester ${GTEST_LIBRARIES} i6engine-modules)
+target_link_libraries(ModulesTester ${GTEST_LIBRARIES} i6engine-modules SampleCommon)
 
 IF(NOT WIN32)
 	target_link_libraries(ModulesTester pthread)

@@ -139,6 +139,10 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComCreate, core::Method::Create, new components::Component_Create_Create(goid, coid, core::IPKey(), component, params), core::Subsystem::Unknown));
 	}
 
+	void ObjectFacade::createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params, const boost::function<void(ComPtr)> & callback) const {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComCreateCallback, core::Method::Create, new components::Component_CreateCallback_Create(goid, coid, core::IPKey(), component, params, callback), core::Subsystem::Unknown));
+	}
+
 	void ObjectFacade::updateGOMap(const std::unordered_map<int64_t, GOPtr> & GOMap) {
 		std::lock_guard<std::mutex> lg(_lock);
 		_GOMap = GOMap;

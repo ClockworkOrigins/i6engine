@@ -137,8 +137,20 @@ namespace object {
 		});
 	}
 
-	void createComponent(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params) {
+	void createComponent(int64_t goid, int64_t coid, const std::string & component, const i6engine::api::attributeMap & params) {
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponent(goid, coid, component, params);
+	}
+
+	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6engine::api::attributeMap & params, const std::string & script, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [script, func](i6engine::api::ComPtr c) {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func, c);
+		});
+	}
+
+	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6engine::api::attributeMap & params, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [func](i6engine::api::ComPtr c) {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, c);
+		});
 	}
 
 	void resetObjectSubSystem() {
@@ -162,7 +174,7 @@ namespace object {
 	}
 
 	struct ComponentWrapper : public i6engine::api::Component, public boost::python::wrapper<i6engine::api::Component> {
-		ComponentWrapper(const int64_t id, const attributeMap & params) : Component(id, params), boost::python::wrapper<i6engine::api::Component>() {
+		ComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : Component(id, params), boost::python::wrapper<i6engine::api::Component>() {
 		}
 
 		ComponentWrapper(const i6engine::api::Component & arg) : i6engine::api::Component(), boost::python::wrapper<i6engine::api::Component>() {
@@ -502,7 +514,7 @@ namespace object {
 		CameraComponentWrapper() : CameraComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::CameraComponent>() {
 		}
 
-		CameraComponentWrapper(const int64_t id, const attributeMap & params) : CameraComponent(id, params), boost::python::wrapper<i6engine::api::CameraComponent>() {
+		CameraComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : CameraComponent(id, params), boost::python::wrapper<i6engine::api::CameraComponent>() {
 		}
 
 		CameraComponentWrapper(const i6engine::api::CameraComponent & arg) : i6engine::api::CameraComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::CameraComponent>() {
@@ -582,7 +594,7 @@ namespace object {
 	};
 
 	struct MovementComponentWrapper : public i6engine::api::MovementComponent, public boost::python::wrapper<i6engine::api::MovementComponent> {
-		MovementComponentWrapper(const int64_t id, const attributeMap & params) : MovementComponent(id, params), boost::python::wrapper<i6engine::api::MovementComponent>() {
+		MovementComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : MovementComponent(id, params), boost::python::wrapper<i6engine::api::MovementComponent>() {
 		}
 
 		MovementComponentWrapper(const i6engine::api::MovementComponent & arg) : i6engine::api::MovementComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::MovementComponent>() {
@@ -677,7 +689,7 @@ namespace object {
 	};
 
 	struct MoverComponentWrapper : public i6engine::api::MoverComponent, public boost::python::wrapper<i6engine::api::MoverComponent> {
-		MoverComponentWrapper(const int64_t id, const attributeMap & params) : MoverComponent(id, params), boost::python::wrapper<i6engine::api::MoverComponent>() {
+		MoverComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : MoverComponent(id, params), boost::python::wrapper<i6engine::api::MoverComponent>() {
 		}
 
 		MoverComponentWrapper(const i6engine::api::MoverComponent & arg) : i6engine::api::MoverComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::MoverComponent>() {
@@ -750,7 +762,7 @@ namespace object {
 		}
 
 		void start(Vec3 & startPos) override {
-			boost::python::call<void>(this->get_override("start").ptr());
+			boost::python::call<void>(this->get_override("start").ptr(), startPos);
 		}
 
 		virtual void reset() override {
@@ -763,7 +775,7 @@ namespace object {
 	};
 
 	struct NavigationComponentWrapper : public i6engine::api::NavigationComponent, public boost::python::wrapper<i6engine::api::NavigationComponent> {
-		NavigationComponentWrapper(const int64_t id, const attributeMap & params) : NavigationComponent(id, params), boost::python::wrapper<i6engine::api::NavigationComponent>() {
+		NavigationComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : NavigationComponent(id, params), boost::python::wrapper<i6engine::api::NavigationComponent>() {
 		}
 
 		NavigationComponentWrapper(const i6engine::api::NavigationComponent & arg) : i6engine::api::NavigationComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::NavigationComponent>() {
@@ -838,7 +850,7 @@ namespace object {
 	};
 
 	struct ShatterComponentWrapper : public i6engine::api::ShatterComponent, public boost::python::wrapper<i6engine::api::ShatterComponent> {
-		ShatterComponentWrapper(const int64_t id, const attributeMap & params) : ShatterComponent(id, params), boost::python::wrapper<i6engine::api::ShatterComponent>() {
+		ShatterComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : ShatterComponent(id, params), boost::python::wrapper<i6engine::api::ShatterComponent>() {
 		}
 
 		ShatterComponentWrapper(const i6engine::api::NavigationComponent & arg) : i6engine::api::ShatterComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::ShatterComponent>() {
@@ -1474,6 +1486,8 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	def("getFrameTime", &i6engine::python::object::getFrameTime);
 	def("createGO", &i6engine::python::object::createGO);
 	def("createComponent", &i6engine::python::object::createComponent);
+	def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6engine::api::attributeMap &, const std::string &)) &i6engine::python::object::createComponentCallback);
+	def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6engine::api::attributeMap &, const std::string &, const std::string &)) &i6engine::python::object::createComponentCallback);
 	def("resetObjectSubSystem", &i6engine::python::object::resetObjectSubSystem);
 	def("pauseObject", &i6engine::python::object::pauseObject);
 	def("unpauseObject", &i6engine::python::object::unpauseObject);

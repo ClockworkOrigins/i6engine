@@ -142,8 +142,20 @@ namespace object {
 		});
 	}
 
-	void createComponent(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params) {
+	void createComponent(int64_t goid, int64_t coid, const std::string & component, const i6engine::api::attributeMap & params) {
 		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponent(goid, coid, component, params);
+	}
+
+	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6engine::api::attributeMap & params, const std::string & script, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [script, func](i6engine::api::ComPtr c) {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func, c);
+		});
+	}
+
+	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6engine::api::attributeMap & params, const std::string & func) {
+		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [func](i6engine::api::ComPtr c) {
+			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, c);
+		});
 	}
 
 	void resetObjectSubSystem() {
@@ -167,7 +179,7 @@ namespace object {
 	}
 
 	struct ComponentWrapper : public i6engine::api::Component, public luabind::wrap_base {
-		ComponentWrapper(const int64_t id, const attributeMap & params) : Component(id, params), luabind::wrap_base() {
+		ComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : Component(id, params), luabind::wrap_base() {
 		}
 
 		virtual void Tick() override {
@@ -486,7 +498,7 @@ namespace object {
 	}
 
 	struct CameraComponentWrapper : public i6engine::api::CameraComponent, public luabind::wrap_base {
-		CameraComponentWrapper(const int64_t id, const attributeMap & params) : CameraComponent(id, params), luabind::wrap_base() {
+		CameraComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : CameraComponent(id, params), luabind::wrap_base() {
 		}
 
 		virtual void Tick() override {
@@ -556,7 +568,7 @@ namespace object {
 	}
 
 	struct MovementComponentWrapper : public i6engine::api::MovementComponent, public luabind::wrap_base {
-		MovementComponentWrapper(const int64_t id, const attributeMap & params) : MovementComponent(id, params), luabind::wrap_base() {
+		MovementComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : MovementComponent(id, params), luabind::wrap_base() {
 		}
 
 		virtual void Tick() override {
@@ -636,7 +648,7 @@ namespace object {
 	};
 
 	struct MoverComponentWrapper : public i6engine::api::MoverComponent, public luabind::wrap_base {
-		MoverComponentWrapper(const int64_t id, const attributeMap & params) : MoverComponent(id, params), luabind::wrap_base() {
+		MoverComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : MoverComponent(id, params), luabind::wrap_base() {
 		}
 
 		virtual void Tick() override {
@@ -698,7 +710,7 @@ namespace object {
 		}
 
 		void start(Vec3 & startPos) override {
-			luabind::call_member<void>(this, "start");
+			luabind::call_member<void>(this, "start", startPos);
 		}
 
 		virtual void reset() override {
@@ -715,7 +727,7 @@ namespace object {
 	}
 
 	struct NavigationComponentWrapper : public i6engine::api::NavigationComponent, public luabind::wrap_base {
-		NavigationComponentWrapper(const int64_t id, const attributeMap & params) : NavigationComponent(id, params), luabind::wrap_base() {
+		NavigationComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : NavigationComponent(id, params), luabind::wrap_base() {
 		}
 
 		virtual void Tick() override {
@@ -776,7 +788,7 @@ namespace object {
 	};
 
 	struct ShatterComponentWrapper : public i6engine::api::ShatterComponent, public luabind::wrap_base {
-		ShatterComponentWrapper(const int64_t id, const attributeMap & params) : ShatterComponent(id, params), luabind::wrap_base() {
+		ShatterComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : ShatterComponent(id, params), luabind::wrap_base() {
 		}
 
 		virtual void Tick() override {
@@ -1418,6 +1430,8 @@ scope registerObject() {
 		def("registerCTemplate", &i6engine::lua::object::registerCTemplate),
 		def("createGO", &i6engine::lua::object::createGO),
 		def("createComponent", &i6engine::lua::object::createComponent),
+		def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6engine::api::attributeMap &, const std::string &)) &i6engine::lua::object::createComponentCallback),
+		def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6engine::api::attributeMap &, const std::string &, const std::string &)) &i6engine::lua::object::createComponentCallback),
 		def("resetObjectSubSystem", &i6engine::lua::object::resetObjectSubSystem),
 		def("pauseObject", &i6engine::lua::object::pauseObject),
 		def("unpauseObject", &i6engine::lua::object::unpauseObject),

@@ -35,8 +35,6 @@
 
 #include "boost/function.hpp"
 
-typedef std::map<std::string, std::string> attributeMap;
-
 namespace i6engine {
 namespace modules {
 	class ObjectMailbox;
@@ -46,6 +44,7 @@ namespace api {
 	class Component;
 	class GameObject;
 
+	typedef std::map<std::string, std::string> attributeMap;
 	typedef utils::weakPtr<GameObject> WeakGOPtr;
 	typedef utils::sharedPtr<Component, Component> ComPtr;
 	typedef utils::sequence_map<int64_t, ComPtr> component_table_t;

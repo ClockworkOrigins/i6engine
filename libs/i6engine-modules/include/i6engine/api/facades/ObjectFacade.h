@@ -155,9 +155,9 @@ namespace api {
 		void registerCTemplate(const std::string & GOCType, const createGOCCallback & fn) const;
 
 		/**
-		 * \brief creates a new GameObject of that type and calls given callback after creation is done
+		 * \brief creates a new GameObject of that type and calls given callback from object thread after creation is done
 		 *
-		 * Calls the appropriate create-function and returns the new GameObject. It is automatically stored in the ObjectController, thus manually deleting the object shoudn't be necessary.
+		 * Calls the appropriate create-function and returns the new GameObject. It is automatically stored in the ObjectManager, thus manually deleting the object shouldn't be necessary.
 		 * param[in] name the string used to identify a template.
 		 * param[in] params a list of pair<std::string, std::string> used to parameterize the creation process
 		 * param[in] func callback to be called with the new GameObject
@@ -173,6 +173,16 @@ namespace api {
 		 * \param params attributeMap for this Component
 		 */
 		void createComponent(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params) const;
+
+		/**
+		 * \brief creates a new Component for given GameObject, calls callback from object thread when Component is created and initialized
+		 * \param goid GameObject id
+		 * \param coid id for the Component
+		 * \param component registered string for create method
+		 * \param params attributeMap for this Component
+		 * \param callback callback that is called after Component is created and initialized
+		 */
+		void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params, const boost::function<void(ComPtr)> & callback) const;
 
 		/**
 		 * \brief updates the GOMap with current state in ObjectSubsystem
