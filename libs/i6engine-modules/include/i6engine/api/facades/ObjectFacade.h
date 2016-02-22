@@ -23,7 +23,6 @@
 #define __I6ENGINE_API_OBJECTFACADE_H__
 
 #include <condition_variable>
-#include <list>
 #include <map>
 #include <mutex>
 #include <unordered_map>
@@ -106,16 +105,14 @@ namespace api {
 		 * \brief loads a level from an xml file only using the objects with given flags
 		 */
 		void loadLevel(const std::string & file, const std::string & flags) const {
-			loadLevel(file, flags, "", [](uint16_t) {
-			});
+			loadLevel(file, flags, "", [](uint16_t) {});
 		}
 
 		/**
 		 * \brief loads a level from an xml file only using the objects with given flags and preloads resources specified in resourcesFile
 		 */
 		void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) const {
-			loadLevel(file, flags, resourcesFile, [](uint16_t) {
-			});
+			loadLevel(file, flags, resourcesFile, [](uint16_t) {});
 		}
 		
 		/**

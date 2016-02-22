@@ -59,23 +59,23 @@ namespace api {
 	}
 
 	std::vector<GOPtr> ObjectFacade::getAllObjectsOfType(const std::vector<std::string> & types) const {
-		std::vector<GOPtr> all;
+		std::vector<GOPtr> result;
 
 		_lock.lock();
 		auto copy = _GOMap;
 		_lock.unlock();
-		// Iterate through _GOList
+		// Iterate through _GOMap
 		for (std::unordered_map<int64_t, GOPtr>::const_iterator it = copy.begin(); it != copy.end(); ++it) {
 			// Wanted GameObject found
 			for (const std::string & type : types) {
 				if (it->second->getType() == type) {
-					all.push_back(it->second);
+					result.push_back(it->second);
 					break;
 				}
 			}
 		}
 
-		return all;
+		return result;
 	}
 
 	std::unordered_map<int64_t, GOPtr> ObjectFacade::getGOMap() const {
@@ -100,14 +100,14 @@ namespace api {
 			std::unique_lock<std::mutex> ul(_loadLevelLock);
 			_loadLevelCondVar.notify_all();
 		}), core::Subsystem::Unknown);
+		std::unique_lock<std::mutex> ul(_loadLevelLock);
 		if (resourcesFile.empty()) {
-			// object subsystem will set it too, but we are here faster!
+			// object subsystem will set it too, but we are faster here!
 			callback(50);
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 		} else {
 			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraLoadResources, core::Method::Create, new graphics::Graphics_LoadResources_Create(resourcesFile, callback, msg), core::Subsystem::Unknown));
 		}
-		std::unique_lock<std::mutex> ul(_loadLevelLock);
 		_loadLevelCondVar.wait(ul);
 	}
 
