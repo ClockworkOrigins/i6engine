@@ -76,7 +76,8 @@ namespace graphics {
 		GraSaveTerrainShape,
 		GraAttachToBone,
 		GraDetachFromBone,
-		GraAnimationFrameEvent
+		GraAnimationFrameEvent,
+		GraMeshVisibility
 	};
 
 	enum class ShadowTechnique {
@@ -283,6 +284,17 @@ namespace graphics {
 		Graphics_Mesh_Update(const int64_t, const int64_t, const std::string &, const bool);
 		Graphics_Mesh_Update * copy() { return new Graphics_Mesh_Update(*this); }
 	} Graphics_Mesh_Update;
+
+	/**
+	 * \brief updates the visibility of a mesh on a GraphicsNode
+	 */
+	typedef struct Graphics_MeshVisibility_Update : GameMessageStruct {
+		bool visible;
+		Graphics_MeshVisibility_Update(const int64_t goid, const int64_t wfid, bool v);
+		Graphics_MeshVisibility_Update * copy() {
+			return new Graphics_MeshVisibility_Update(*this);
+		}
+	} Graphics_MeshVisibility_Update;
 
 	/**
 	 * \brief deletes mesh on a GraphicsNode

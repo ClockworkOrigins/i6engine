@@ -45,10 +45,6 @@ namespace api {
 	}
 
 	MeshAppearanceComponent::~MeshAppearanceComponent() {
-		// TODO: (Daniel) move this to Finalize method
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Delete, new graphics::Graphics_Mesh_Delete(_objOwnerID, getID()), core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void MeshAppearanceComponent::Init() {
@@ -61,10 +57,16 @@ namespace api {
 		}
 	}
 
+	void MeshAppearanceComponent::Finalize() {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Delete, new graphics::Graphics_Mesh_Delete(_objOwnerID, getID()), core::Subsystem::Object);
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
 	void MeshAppearanceComponent::setVisibility(const bool visible) {
 		_isVisible = visible;
 
-		sendUpdateMessage();
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMeshVisibility, core::Method::Update, new graphics::Graphics_MeshVisibility_Update(_objOwnerID, getID(), _isVisible), core::Subsystem::Object));
 	}
 
 	void MeshAppearanceComponent::setMesh(const std::string & meshName) {

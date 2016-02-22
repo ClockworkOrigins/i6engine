@@ -79,6 +79,9 @@ namespace graphics {
 	Graphics_Mesh_Update::Graphics_Mesh_Update(const int64_t goID, const int64_t coID, const std::string & s, const bool b) : GameMessageStruct(coID, goID), mesh(s), visible(b) {
 	}
 
+	Graphics_MeshVisibility_Update::Graphics_MeshVisibility_Update(const int64_t goID, const int64_t coID, bool v) : GameMessageStruct(coID, goID), visible(v) {
+	}
+
 	Graphics_Mesh_Delete::Graphics_Mesh_Delete() : GameMessageStruct() {}
 	Graphics_Mesh_Delete::Graphics_Mesh_Delete(const int64_t goid, const int64_t cid) : GameMessageStruct(cid, goid) {
 	}

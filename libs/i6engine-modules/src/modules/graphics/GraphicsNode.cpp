@@ -148,6 +148,13 @@ namespace modules {
 		mc->updateMeshComponent(meshName, isVisible);
 	}
 
+	void GraphicsNode::updateMeshComponentVisibility(const int64_t coid, const bool isVisible) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->setVisibility(isVisible);
+	}
+
 	void GraphicsNode::setMaterial(const int64_t coid, const std::string & materialName) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_meshes.find(coid) != _meshes.end());

@@ -121,6 +121,12 @@ namespace modules {
 		}
 	}
 
+	void MeshComponent::setVisibility(bool visible) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0));
+		entity->setVisible(visible);
+	}
+
 	void MeshComponent::setMaterial(const std::string & materialName) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0));

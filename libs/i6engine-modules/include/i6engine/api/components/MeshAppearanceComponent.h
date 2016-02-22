@@ -208,6 +208,8 @@ namespace api {
 
 		void Init() override;
 
+		void Finalize() override;
+
 		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const override;
 
 		/**

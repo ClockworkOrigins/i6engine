@@ -30,8 +30,6 @@ namespace modules {
 
 	BillboardComponent::BillboardComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & material, double width, double height, api::graphics::BillboardOrigin bo) : _manager(manager), _parent(parent), _billboardSet(nullptr), _billboards() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-		Ogre::SceneManager * sm = _manager->getSceneManager();
-
 		std::string name = "SN_" + std::to_string(goid) + "_" + std::to_string(coid);
 
 		_billboardSet = _manager->getSceneManager()->createBillboardSet(name);

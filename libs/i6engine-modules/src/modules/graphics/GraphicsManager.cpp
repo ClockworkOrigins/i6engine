@@ -785,13 +785,19 @@ namespace modules {
 
 			node->setCustomParameter(m->num, m->value);
 		} else if (msg->getSubtype() == api::graphics::GraMesh) {
-			std::string meshName = static_cast<api::graphics::Graphics_Mesh_Create *>(msg->getContent())->mesh;
+			std::string meshName = static_cast<api::graphics::Graphics_Mesh_Update *>(msg->getContent())->mesh;
 
-			bool isVisible = static_cast<api::graphics::Graphics_Mesh_Create *>(msg->getContent())->visible;
+			bool isVisible = static_cast<api::graphics::Graphics_Mesh_Update *>(msg->getContent())->visible;
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->updateMeshComponent(coid, meshName, isVisible);
+		} else if (msg->getSubtype() == api::graphics::GraMeshVisibility) {
+			bool isVisible = static_cast<api::graphics::Graphics_MeshVisibility_Update *>(msg->getContent())->visible;
+
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			node->updateMeshComponentVisibility(coid, isVisible);
 		} else if (msg->getSubtype() == api::graphics::GraViewport) {
 			int zOrder = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->zOrder;
 			double left = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->left;

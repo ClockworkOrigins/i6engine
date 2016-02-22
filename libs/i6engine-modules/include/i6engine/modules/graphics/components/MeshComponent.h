@@ -116,6 +116,8 @@ namespace modules {
 
 		void updateMeshComponent(const std::string & meshName, const bool visible);
 
+		void setVisibility(bool visible);
+
 		/**
 		 * \brief Creates or updates a material component
 		 *
