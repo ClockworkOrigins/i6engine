@@ -1,5 +1,7 @@
 #include "properties/DynamicAttributeProperty.h"
 
+#include <cfloat>
+
 #include "widgets/EmitterPropertyWindow.h"
 #include "widgets/PropertyWindow.h"
 

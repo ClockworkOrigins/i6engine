@@ -5,7 +5,7 @@
 
 #include <set>
 
-#include "Plugins/ScriptLanguagePluginInterface.h"
+#include "plugins/ScriptLanguagePluginInterface.h"
 
 namespace i6engine {
 namespace dialogCreator {

@@ -19,7 +19,7 @@
 ################################
 
 include_directories("include")
-include_directories(${CMAKE_SOURCE_DIR}/tools/dialogCreator/include/plugins)
+include_directories(${CMAKE_SOURCE_DIR}/tools/DialogCreator/include/plugins)
 
 set(srcdir ./src)
 SET(includedir ./include/)

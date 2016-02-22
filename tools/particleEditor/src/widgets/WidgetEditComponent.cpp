@@ -302,7 +302,7 @@ namespace widgets {
 				QByteArray ba;
 				QDataStream ds(&ba, QIODevice::ReadWrite);
 				QPointF offset(pos() - evt->scenePos());
-				int i = int(this);
+				quint64 i = quint64(this);
 				ds << i << offset;
 				mimeData->setData("widget", ba);
 				drag.setMimeData(mimeData);

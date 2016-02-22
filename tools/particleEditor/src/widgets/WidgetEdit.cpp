@@ -113,42 +113,42 @@ namespace widgets {
 		// Stop the system if needed
 		bool wasStarted = _mustStopParticleSystem();
 
-		if (relation == CR_INCLUDE) {
+		if (relation == ComponentRelation::CR_INCLUDE) {
 			if (!_processIncludeAdded(node1, node2)) {
 				// Switch
 				_processIncludeAdded(node2, node1);
 			}
-		} else if (relation == CR_EXCLUDE) {
+		} else if (relation == ComponentRelation::CR_EXCLUDE) {
 			if (!_processExcludeAdded(node1, node2)) {
 				// Switch
 				_processExcludeAdded(node2, node1);
 			}
-		} else if (relation == CR_EMIT) {
+		} else if (relation == ComponentRelation::CR_EMIT) {
 			if (!_processEmitAdded(node1, node2, relationDirection)) {
 				// Switch
 				_processEmitAdded(node2, node1, getOppositeRelationDirection(relationDirection));
 			}
-		} else if (relation == CR_INTERFACE) {
+		} else if (relation == ComponentRelation::CR_INTERFACE) {
 			if (!_processInterfaceAdded(node1, node2)) {
 				// Switch
 				_processInterfaceAdded(node2, node1);
 			}
-		} else if (relation == CR_SLAVE) {
+		} else if (relation == ComponentRelation::CR_SLAVE) {
 			if (!_processSlaveAdded(node1, node2)) {
 				// Switch
 				_processSlaveAdded(node2, node1);
 			}
-		} else if (relation == CR_ENABLE) {
+		} else if (relation == ComponentRelation::CR_ENABLE) {
 			if (!_processEnableAdded(node1, node2)) {
 				// Switch
 				_processEnableAdded(node2, node1);
 			}
-		} else if (relation == CR_FORCE) {
+		} else if (relation == ComponentRelation::CR_FORCE) {
 			if (!_processForceAdded(node1, node2)) {
 				// Switch
 				_processForceAdded(node2, node1);
 			}
-		} else if (relation == CR_PLACE) {
+		} else if (relation == ComponentRelation::CR_PLACE) {
 			if (!_processPlaceAdded(node1, node2)) {
 				// Switch
 				_processPlaceAdded(node2, node1);
@@ -170,42 +170,42 @@ namespace widgets {
 		_connections.erase(p);
 
 		// Deleting connections also means removing (not deleting) them from the ParticleSystem or its related components.
-		if (relation == CR_INCLUDE) {
+		if (relation == ComponentRelation::CR_INCLUDE) {
 			if (!_processIncludeRemoved(node1, node2)) {
 				// Switch
 				_processIncludeRemoved(node2, node1);
 			}
-		} else if (relation == CR_EXCLUDE) {
+		} else if (relation == ComponentRelation::CR_EXCLUDE) {
 			if (!_processExcludeRemoved(node1, node2)) {
 				// Switch
 				_processExcludeRemoved(node2, node1);
 			}
-		} else if (relation == CR_EMIT) {
+		} else if (relation == ComponentRelation::CR_EMIT) {
 			if (!_processEmitRemoved(node1, node2)) {
 				// Switch
 				_processEmitRemoved(node2, node1);
 			}
-		} else if (relation == CR_INTERFACE) {
+		} else if (relation == ComponentRelation::CR_INTERFACE) {
 			if (!_processInterfaceRemoved(node1, node2)) {
 				// Switch
 				_processInterfaceRemoved(node2, node1);
 			}
-		} else if (relation == CR_SLAVE) {
+		} else if (relation == ComponentRelation::CR_SLAVE) {
 			if (!_processSlaveRemoved(node1, node2)) {
 				// Switch
 				_processSlaveRemoved(node2, node1);
 			}
-		} else if (relation == CR_ENABLE) {
+		} else if (relation == ComponentRelation::CR_ENABLE) {
 			if (!_processEnableRemoved(node1, node2)) {
 				// Switch
 				_processEnableRemoved(node2, node1);
 			}
-		} else if (relation == CR_FORCE) {
+		} else if (relation == ComponentRelation::CR_FORCE) {
 			if (!_processForceRemoved(node1, node2)) {
 				// Switch
 				_processForceRemoved(node2, node1);
 			}
-		} else if (relation == CR_PLACE) {
+		} else if (relation == ComponentRelation::CR_PLACE) {
 			if (!_processPlaceRemoved(node1, node2)) {
 				// Switch
 				_processPlaceRemoved(node2, node1);
@@ -373,7 +373,7 @@ namespace widgets {
 		systemComponent->createPropertyWindow(CST_UNDEFINED); // Recreate it, so it contains the root frame
 
 		// Altough it is possible that a particle system itself is emitted, the connection to the emitter is not defined (there can only be one system on the canvas)
-		systemComponent->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_TECHNIQUE, CST_UNDEFINED);
+		systemComponent->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_INCLUDES, CT_TECHNIQUE, CST_UNDEFINED);
 
 		_graphicsScene->addItem(systemComponent);
 		_components.push_back(systemComponent);
@@ -385,15 +385,15 @@ namespace widgets {
 	WidgetEditComponent * WidgetEdit::createTechniqueEditComponent() {
 		QString name = "Technique" + QString::number(_techniqueCounter++);
 		WidgetEditComponent * technique = new WidgetEditComponent(this, _graphicsScene, name, CT_TECHNIQUE, CST_UNDEFINED);
-		technique->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_SYSTEM, CST_UNDEFINED, false);
-		technique->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_RENDERER, CST_UNDEFINED, false);
-		technique->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_EMITTER, CST_UNDEFINED);
-		technique->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_AFFECTOR, CST_UNDEFINED);
-		technique->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_OBSERVER, CST_UNDEFINED);
-		technique->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_BEHAVIOUR, CST_UNDEFINED);
-		technique->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_EXTERN, CST_UNDEFINED);
-		technique->addPolicy(CR_EMIT, CRDIR_SECUNDAIRY, CRD_EMITTED_BY, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_EMITTED_COLOURCODE);
-		technique->addPolicy(CR_ENABLE, CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
+		technique->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_SYSTEM, CST_UNDEFINED, false);
+		technique->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_INCLUDES, CT_RENDERER, CST_UNDEFINED, false);
+		technique->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_INCLUDES, CT_EMITTER, CST_UNDEFINED);
+		technique->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_INCLUDES, CT_AFFECTOR, CST_UNDEFINED);
+		technique->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_INCLUDES, CT_OBSERVER, CST_UNDEFINED);
+		technique->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_INCLUDES, CT_BEHAVIOUR, CST_UNDEFINED);
+		technique->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_INCLUDES, CT_EXTERN, CST_UNDEFINED);
+		technique->addPolicy(ComponentRelation::CR_EMIT, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_EMITTED_BY, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_EMITTED_COLOURCODE);
+		technique->addPolicy(ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
 		_graphicsScene->addItem(technique);
 		_components.push_back(technique);
 		connect(technique, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
@@ -404,7 +404,7 @@ namespace widgets {
 	WidgetEditComponent * WidgetEdit::createRendererEditComponent(const QString & type) {
 		QString name = "Renderer" + QString::number(_rendererCounter++);
 		WidgetEditComponent * rendererComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_RENDERER, type);
-		rendererComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
+		rendererComponent->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		_graphicsScene->addItem(rendererComponent);
 		_components.push_back(rendererComponent);
 		connect(rendererComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
@@ -417,17 +417,17 @@ namespace widgets {
 		WidgetEditComponent * emitterComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_EMITTER, type);
 
 		// Altough it is possible to emit a particle system, the connection to the system is not defined (there can only be one system on the canvas)
-		emitterComponent->addUniqueRelation(CR_EMIT, CRDIR_PRIMARY); // Only emission of one type is allowed
-		emitterComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
-		emitterComponent->addPolicy(CR_EMIT, CRDIR_PRIMARY, CRD_EMITS, CT_TECHNIQUE, CST_UNDEFINED, false, true, DRAW_EMITTED_COLOURCODE);
-		emitterComponent->addPolicy(CR_EMIT, CRDIR_PRIMARY, CRD_EMITS, CT_EMITTER, CST_UNDEFINED, false, true, DRAW_EMITTED_COLOURCODE);
-		emitterComponent->addPolicy(CR_EMIT, CRDIR_PRIMARY, CRD_EMITS, CT_AFFECTOR, CST_UNDEFINED, false, true, DRAW_EMITTED_COLOURCODE);
-		emitterComponent->addPolicy(CR_EMIT, CRDIR_SECUNDAIRY, CRD_EMITTED_BY, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_EMITTED_COLOURCODE);
-		emitterComponent->addPolicy(CR_SLAVE, CRDIR_SECUNDAIRY, CRD_SLAVES, CT_EMITTER, CST_EMITTER_SLAVE, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
-		emitterComponent->addPolicy(CR_SLAVE, CRDIR_PRIMARY, CRD_SLAVE_OF, CT_EMITTER, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
-		emitterComponent->addPolicy(CR_EXCLUDE, CRDIR_SECUNDAIRY, CRD_EXCLUDED_BY, CT_AFFECTOR, CST_UNDEFINED, true, true, DRAW_DEFAULT_COLOURCODE, Qt::DashLine);
-		emitterComponent->addPolicy(CR_ENABLE, CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
-		emitterComponent->addPolicy(CR_PLACE, CRDIR_SECUNDAIRY, CRD_PLACED_BY, CT_HANDLER, CST_HANDLER_DO_PLACEMENT_PARTICLE, true, false, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
+		emitterComponent->addUniqueRelation(ComponentRelation::CR_EMIT, ComponentRelationDirection::CRDIR_PRIMARY); // Only emission of one type is allowed
+		emitterComponent->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
+		emitterComponent->addPolicy(ComponentRelation::CR_EMIT, ComponentRelationDirection::CRDIR_PRIMARY, CRD_EMITS, CT_TECHNIQUE, CST_UNDEFINED, false, true, DRAW_EMITTED_COLOURCODE);
+		emitterComponent->addPolicy(ComponentRelation::CR_EMIT, ComponentRelationDirection::CRDIR_PRIMARY, CRD_EMITS, CT_EMITTER, CST_UNDEFINED, false, true, DRAW_EMITTED_COLOURCODE);
+		emitterComponent->addPolicy(ComponentRelation::CR_EMIT, ComponentRelationDirection::CRDIR_PRIMARY, CRD_EMITS, CT_AFFECTOR, CST_UNDEFINED, false, true, DRAW_EMITTED_COLOURCODE);
+		emitterComponent->addPolicy(ComponentRelation::CR_EMIT, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_EMITTED_BY, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_EMITTED_COLOURCODE);
+		emitterComponent->addPolicy(ComponentRelation::CR_SLAVE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_SLAVES, CT_EMITTER, CST_EMITTER_SLAVE, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
+		emitterComponent->addPolicy(ComponentRelation::CR_SLAVE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_SLAVE_OF, CT_EMITTER, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
+		emitterComponent->addPolicy(ComponentRelation::CR_EXCLUDE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_EXCLUDED_BY, CT_AFFECTOR, CST_UNDEFINED, true, true, DRAW_DEFAULT_COLOURCODE, Qt::DashLine);
+		emitterComponent->addPolicy(ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
+		emitterComponent->addPolicy(ComponentRelation::CR_PLACE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_PLACED_BY, CT_HANDLER, CST_HANDLER_DO_PLACEMENT_PARTICLE, true, false, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
 		_graphicsScene->addItem(emitterComponent);
 		_components.push_back(emitterComponent);
 		connect(emitterComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
@@ -438,11 +438,11 @@ namespace widgets {
 	WidgetEditComponent * WidgetEdit::createAffectorEditComponent(const QString & type) {
 		QString name = "Affector" + QString::number(_affectorCounter++);
 		WidgetEditComponent * affectorComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_AFFECTOR, type);
-		affectorComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
-		affectorComponent->addPolicy(CR_EMIT, CRDIR_SECUNDAIRY, CRD_EMITTED_BY, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_EMITTED_COLOURCODE);
-		affectorComponent->addPolicy(CR_EXCLUDE, CRDIR_PRIMARY, CRD_EXCLUDES, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_DEFAULT_COLOURCODE, Qt::DashLine);
-		affectorComponent->addPolicy(CR_ENABLE, CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
-		affectorComponent->addPolicy(CR_FORCE, CRDIR_SECUNDAIRY, CRD_FORCED_BY, CT_HANDLER, CST_HANDLER_DO_AFFECTOR, true, false, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
+		affectorComponent->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
+		affectorComponent->addPolicy(ComponentRelation::CR_EMIT, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_EMITTED_BY, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_EMITTED_COLOURCODE);
+		affectorComponent->addPolicy(ComponentRelation::CR_EXCLUDE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_EXCLUDES, CT_EMITTER, CST_UNDEFINED, true, true, DRAW_DEFAULT_COLOURCODE, Qt::DashLine);
+		affectorComponent->addPolicy(ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
+		affectorComponent->addPolicy(ComponentRelation::CR_FORCE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_FORCED_BY, CT_HANDLER, CST_HANDLER_DO_AFFECTOR, true, false, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
 		_graphicsScene->addItem(affectorComponent);
 		_components.push_back(affectorComponent);
 		connect(affectorComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
@@ -453,9 +453,9 @@ namespace widgets {
 	WidgetEditComponent * WidgetEdit::createObserverEditComponent(const QString & type) {
 		QString name = "Observer" + QString::number(_observerCounter++);
 		WidgetEditComponent * observerComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_OBSERVER, type);
-		observerComponent->addPolicy(CR_INCLUDE, CRDIR_PRIMARY, CRD_INCLUDES, CT_HANDLER, CST_UNDEFINED, true);
-		observerComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
-		observerComponent->addPolicy(CR_ENABLE, CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
+		observerComponent->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_INCLUDES, CT_HANDLER, CST_UNDEFINED, true);
+		observerComponent->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
+		observerComponent->addPolicy(ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_ENABLED_BY, CT_HANDLER, CST_HANDLER_DO_ENABLE_COMPONENT, true, false, DRAW_SPECIAL_CASE_COLOURCODE);
 		_graphicsScene->addItem(observerComponent);
 		_components.push_back(observerComponent);
 		connect(observerComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
@@ -466,14 +466,14 @@ namespace widgets {
 	WidgetEditComponent * WidgetEdit::createHandlerEditComponent(const QString & type) {
 		QString name = "Handler" + QString::number(_handlerCounter++);
 		WidgetEditComponent * handler = new WidgetEditComponent(this, _graphicsScene, name, CT_HANDLER, type);
-		handler->addUniqueRelation(CR_ENABLE, CRDIR_PRIMARY); // Only enabling of one type is allowed
-		handler->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_OBSERVER, CST_UNDEFINED, false);
-		handler->addPolicy(CR_ENABLE, CRDIR_PRIMARY, CRD_ENABLES, CT_TECHNIQUE, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
-		handler->addPolicy(CR_ENABLE, CRDIR_PRIMARY, CRD_ENABLES, CT_EMITTER, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
-		handler->addPolicy(CR_ENABLE, CRDIR_PRIMARY, CRD_ENABLES, CT_AFFECTOR, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
-		handler->addPolicy(CR_ENABLE, CRDIR_PRIMARY, CRD_ENABLES, CT_OBSERVER, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
-		handler->addPolicy(CR_PLACE, CRDIR_PRIMARY, CRD_PLACES, CT_EMITTER, CST_UNDEFINED, false, true, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
-		handler->addPolicy(CR_FORCE, CRDIR_PRIMARY, CRD_FORCES, CT_AFFECTOR, CST_UNDEFINED, false, true, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
+		handler->addUniqueRelation(ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_PRIMARY); // Only enabling of one type is allowed
+		handler->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_OBSERVER, CST_UNDEFINED, false);
+		handler->addPolicy(ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_ENABLES, CT_TECHNIQUE, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
+		handler->addPolicy(ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_ENABLES, CT_EMITTER, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
+		handler->addPolicy(ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_ENABLES, CT_AFFECTOR, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
+		handler->addPolicy(ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_ENABLES, CT_OBSERVER, CST_UNDEFINED, false, true, DRAW_SPECIAL_CASE_COLOURCODE);
+		handler->addPolicy(ComponentRelation::CR_PLACE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_PLACES, CT_EMITTER, CST_UNDEFINED, false, true, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
+		handler->addPolicy(ComponentRelation::CR_FORCE, ComponentRelationDirection::CRDIR_PRIMARY, CRD_FORCES, CT_AFFECTOR, CST_UNDEFINED, false, true, DRAW_DEFAULT_COLOURCODE, Qt::DotLine);
 		_graphicsScene->addItem(handler);
 		_components.push_back(handler);
 		connect(handler, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
@@ -484,7 +484,7 @@ namespace widgets {
 	WidgetEditComponent * WidgetEdit::createBehaviourEditComponent(const QString & type) {
 		QString name = "Behaviour" + QString::number(_behaviourCounter++);
 		WidgetEditComponent * behaviourComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_BEHAVIOUR, type);
-		behaviourComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
+		behaviourComponent->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		_graphicsScene->addItem(behaviourComponent);
 		_components.push_back(behaviourComponent);
 		connect(behaviourComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
@@ -495,7 +495,7 @@ namespace widgets {
 	WidgetEditComponent * WidgetEdit::createExternEditComponent(const QString & type) {
 		QString name = "Extern" + QString::number(_externCounter++);
 		WidgetEditComponent * externObjectComponent = new WidgetEditComponent(this, _graphicsScene, name, CT_EXTERN, type);
-		externObjectComponent->addPolicy(CR_INCLUDE, CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
+		externObjectComponent->addPolicy(ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_SECUNDAIRY, CRD_INCLUDED_BY, CT_TECHNIQUE, CST_UNDEFINED, false);
 		_graphicsScene->addItem(externObjectComponent);
 		_components.push_back(externObjectComponent);
 		connect(externObjectComponent, SIGNAL(renameParticleSystem(QString, QString)), this, SLOT(triggerRenameParticleSystem(QString, QString)), Qt::QueuedConnection);
@@ -554,7 +554,7 @@ namespace widgets {
 		int componentWidth = techniqueEditComponent->size().width();
 		int componentHeight = techniqueEditComponent->size().height();
 		static_cast<TechniquePropertyWindow *>(techniqueEditComponent->getPropertyWindow())->copyAttributesFromTechnique(technique);
-		createConnection(systemEditComponent, techniqueEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
+		createConnection(systemEditComponent, techniqueEditComponent, ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY);
 		int highestY = position.y() + componentHeight + _offsetY;
 
 		// Iterate trough the technique and create emitters, affectors, etc...
@@ -635,7 +635,7 @@ namespace widgets {
 		rendererEditComponent->setPos(position);
 		rendererEditComponent->setPUElement(renderer);
 		static_cast<RendererPropertyWindow *>(rendererEditComponent->getPropertyWindow())->copyAttributesFromRenderer(renderer);
-		createConnection(techniqueEditComponent, rendererEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
+		createConnection(techniqueEditComponent, rendererEditComponent, ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY);
 	}
 
 	void WidgetEdit::createComponentFromEmitter(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleEmitter * emitter, QPoint position) {
@@ -646,7 +646,7 @@ namespace widgets {
 		emitterEditComponent->setPos(position);
 		emitterEditComponent->setPUElement(emitter);
 		static_cast<EmitterPropertyWindow *>(emitterEditComponent->getPropertyWindow())->copyAttributesFromEmitter(emitter);
-		createConnection(techniqueEditComponent, emitterEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
+		createConnection(techniqueEditComponent, emitterEditComponent, ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY);
 	}
 
 	void WidgetEdit::createComponentFromAffector(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleAffector * affector, QPoint position) {
@@ -657,7 +657,7 @@ namespace widgets {
 		affectorEditComponent->setPos(position);
 		affectorEditComponent->setPUElement(affector);
 		static_cast<AffectorPropertyWindow *>(affectorEditComponent->getPropertyWindow())->copyAttributesFromAffector(affector);
-		createConnection(techniqueEditComponent, affectorEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
+		createConnection(techniqueEditComponent, affectorEditComponent, ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY);
 	}
 
 	int WidgetEdit::createComponentFromObserver(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleObserver * observer, QPoint position, int latestHandlerY) {
@@ -668,7 +668,7 @@ namespace widgets {
 		observerEditComponent->setPos(position);
 		observerEditComponent->setPUElement(observer);
 		static_cast<ObserverPropertyWindow *>(observerEditComponent->getPropertyWindow())->copyAttributesFromObserver(observer);
-		createConnection(techniqueEditComponent, observerEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
+		createConnection(techniqueEditComponent, observerEditComponent, ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY);
 
 		// Create all handlers
 		int componentWidth = techniqueEditComponent->size().width();
@@ -692,7 +692,7 @@ namespace widgets {
 		handlerEditComponent->setPos(position);
 		handlerEditComponent->setPUElement(eventHandler);
 		static_cast<EventHandlerPropertyWindow *>(handlerEditComponent->getPropertyWindow())->copyAttributesFromEventHandler(eventHandler);
-		createConnection(observerEditComponent, handlerEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
+		createConnection(observerEditComponent, handlerEditComponent, ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY);
 	}
 
 	void WidgetEdit::createComponentFromBehaviour(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::ParticleBehaviour * behaviour, QPoint position) {
@@ -703,7 +703,7 @@ namespace widgets {
 		behaviourEditComponent->setPos(position);
 		behaviourEditComponent->setPUElement(behaviour);
 		static_cast<BehaviourPropertyWindow *>(behaviourEditComponent->getPropertyWindow())->copyAttributesFromBehaviour(behaviour);
-		createConnection(techniqueEditComponent, behaviourEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
+		createConnection(techniqueEditComponent, behaviourEditComponent, ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY);
 	}
 
 	void WidgetEdit::createComponentFromExtern(WidgetEditComponent * techniqueEditComponent, ParticleUniverse::Extern * externObject, QPoint position) {
@@ -714,7 +714,7 @@ namespace widgets {
 		externEditComponent->setPos(position);
 		externEditComponent->setPUElement(externObject);
 		static_cast<ExternPropertyWindow *>(externEditComponent->getPropertyWindow())->copyAttributesFromExtern(externObject);
-		createConnection(techniqueEditComponent, externEditComponent, CR_INCLUDE, CRDIR_PRIMARY);
+		createConnection(techniqueEditComponent, externEditComponent, ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY);
 	}
 
 	void WidgetEdit::createOtherConnections(const ParticleUniverse::ParticleTechnique * technique) {
@@ -728,18 +728,18 @@ namespace widgets {
 			ParticleUniverse::ParticleEmitter * emitter = technique->getEmitter(i);
 			WidgetEditComponent * emitterEditComponent = findEditComponent(emitter);
 			if (emitterEditComponent) {
-				// Create connections: CR_SLAVE
+				// Create connections: ComponentRelation::CR_SLAVE
 				if (QString::fromStdString(emitter->getEmitterType()) == CST_EMITTER_SLAVE) {
 					ParticleUniverse::SlaveEmitter * slaveEmiter = static_cast<ParticleUniverse::SlaveEmitter *>(emitter);
 					QString wxName = QString::fromStdString(slaveEmiter->getMasterEmitterName());
 					QString techniqueName = QString::fromStdString(slaveEmiter->getMasterTechniqueName());
 					WidgetEditComponent * masterEmitterEditComponent = findEditComponentForTechnique(wxName, techniqueName);
 					if (masterEmitterEditComponent) {
-						createConnection(emitterEditComponent, masterEmitterEditComponent, CR_SLAVE, CRDIR_PRIMARY);
+						createConnection(emitterEditComponent, masterEmitterEditComponent, ComponentRelation::CR_SLAVE, ComponentRelationDirection::CRDIR_PRIMARY);
 					}
 				}
 
-				// Create connections: CR_EMIT
+				// Create connections: ComponentRelation::CR_EMIT
 				if (emitter->getEmitsType() != ParticleUniverse::Particle::PT_VISUAL) {
 					// This version of the editor doesn't allow emitted particle systems, because emitting particle systems is not recommended.
 					QString componentType = CT_VISUAL;
@@ -754,7 +754,7 @@ namespace widgets {
 						QString wxName = QString::fromStdString(emitter->getEmitsName());
 						WidgetEditComponent * editComponent = findEditComponent(wxName, componentType);
 						if (editComponent) {
-							createConnection(emitterEditComponent, editComponent, CR_EMIT, CRDIR_PRIMARY);
+							createConnection(emitterEditComponent, editComponent, ComponentRelation::CR_EMIT, ComponentRelationDirection::CRDIR_PRIMARY);
 						}
 					}
 				}
@@ -762,7 +762,7 @@ namespace widgets {
 		}
 
 		// 2. Affectors
-		// Create connections: CR_EXCLUDE
+		// Create connections: ComponentRelation::CR_EXCLUDE
 		size_t numAffector = technique->getNumAffectors();
 		for (size_t i = 0; i < numAffector; ++i) {
 			ParticleUniverse::ParticleAffector * affector = technique->getAffector(i);
@@ -781,7 +781,7 @@ namespace widgets {
 					QString wxName = QString::fromStdString(name);
 					editComponent = findEditComponent(wxName, CT_EMITTER);
 					if (editComponent) {
-						createConnection(affectorEditComponent, editComponent, CR_EXCLUDE, CRDIR_PRIMARY);
+						createConnection(affectorEditComponent, editComponent, ComponentRelation::CR_EXCLUDE, ComponentRelationDirection::CRDIR_PRIMARY);
 					}
 				}
 			}
@@ -797,7 +797,7 @@ namespace widgets {
 				ParticleUniverse::ParticleEventHandler * handler = observer->getEventHandler(j);
 				WidgetEditComponent * eventHandlerEditComponent = findEditComponent(handler);
 				if (QString::fromStdString(handler->getEventHandlerType()) == CST_HANDLER_DO_ENABLE_COMPONENT) {
-					// Create connections: CR_ENABLE
+					// Create connections: ComponentRelation::CR_ENABLE
 					ParticleUniverse::DoEnableComponentEventHandler * doEnableComponentEventHandler = static_cast<ParticleUniverse::DoEnableComponentEventHandler *>(handler);
 					ParticleUniverse::ComponentType componentType = doEnableComponentEventHandler->getComponentType();
 					QString ct = CT_EMITTER;
@@ -811,23 +811,23 @@ namespace widgets {
 					QString wxName = QString::fromStdString(doEnableComponentEventHandler->getComponentName());
 					editComponent = findEditComponent(wxName, ct);
 					if (editComponent) {
-						createConnection(eventHandlerEditComponent, editComponent, CR_ENABLE, CRDIR_PRIMARY);
+						createConnection(eventHandlerEditComponent, editComponent, ComponentRelation::CR_ENABLE, ComponentRelationDirection::CRDIR_PRIMARY);
 					}
 				} else if (QString::fromStdString(handler->getEventHandlerType()) == CST_HANDLER_DO_AFFECTOR) {
-					// Create connections: CR_FORCE
+					// Create connections: ComponentRelation::CR_FORCE
 					ParticleUniverse::DoAffectorEventHandler * doAffectorEventHandler = static_cast<ParticleUniverse::DoAffectorEventHandler *>(handler);
 					QString wxName = QString::fromStdString(doAffectorEventHandler->getAffectorName());
 					editComponent = findEditComponent(wxName, CT_AFFECTOR);
 					if (editComponent) {
-						createConnection(eventHandlerEditComponent, editComponent, CR_FORCE, CRDIR_PRIMARY);
+						createConnection(eventHandlerEditComponent, editComponent, ComponentRelation::CR_FORCE, ComponentRelationDirection::CRDIR_PRIMARY);
 					}
 				} else if (QString::fromStdString(handler->getEventHandlerType()) == CST_HANDLER_DO_PLACEMENT_PARTICLE) {
-					// Create connections: CR_PLACE
+					// Create connections: ComponentRelation::CR_PLACE
 					ParticleUniverse::DoPlacementParticleEventHandler * doPlacementParticleEventHandler = static_cast<ParticleUniverse::DoPlacementParticleEventHandler *>(handler);
 					QString wxName = QString::fromStdString(doPlacementParticleEventHandler->getForceEmitterName());
 					editComponent = findEditComponent(wxName, CT_EMITTER);
 					if (editComponent) {
-						createConnection(eventHandlerEditComponent, editComponent, CR_PLACE, CRDIR_PRIMARY);
+						createConnection(eventHandlerEditComponent, editComponent, ComponentRelation::CR_PLACE, ComponentRelationDirection::CRDIR_PRIMARY);
 					}
 				}
 			}
@@ -878,7 +878,7 @@ namespace widgets {
 		for (std::vector<WidgetEditComponent *>::const_iterator it = _components.begin(); it != _components.end(); ++it) {
 			editComponent = *it;
 			if (editComponent->getName() == name) {
-				if (techniqueEditComponent->isConnected(editComponent, CR_INCLUDE, CRDIR_PRIMARY)) {
+				if (techniqueEditComponent->isConnected(editComponent, ComponentRelation::CR_INCLUDE, ComponentRelationDirection::CRDIR_PRIMARY)) {
 					break;
 				}
 			}
@@ -1116,8 +1116,8 @@ namespace widgets {
 			// Check what type of particle is emitted.
 			ParticleUniverse::ParticleEmitter * emitter = static_cast<ParticleUniverse::ParticleEmitter *>(element1);
 
-			// CRDIR_SECUNDAIRY is the relation of node2 towards node1
-			if (node2->getComponentType() == CT_EMITTER && relationDirection == CRDIR_SECUNDAIRY) {
+			// ComponentRelationDirection::CRDIR_SECUNDAIRY is the relation of node2 towards node1
+			if (node2->getComponentType() == CT_EMITTER && relationDirection == ComponentRelationDirection::CRDIR_SECUNDAIRY) {
 				ParticleUniverse::ParticleEmitter * emittedEmitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
 				emitter->setEmitsType(ParticleUniverse::Particle::PT_EMITTER);
 				if (emittedEmitter->getName() == Ogre::StringUtil::BLANK) {
@@ -1464,7 +1464,7 @@ namespace widgets {
 			ParticleUniverse::ParticleTechnique * technique = nullptr;
 			if (element2) {
 				// Use the technique from the emitted component; this is preferred, because the technique from the emitter might be 0
-				// (if the emitter component was closed, the CR_INCLUDE connection is deleted first and removes the emitter from its
+				// (if the emitter component was closed, the ComponentRelation::CR_INCLUDE connection is deleted first and removes the emitter from its
 				// parent technique).
 				ParticleUniverse::ParticleEmitter * emittedEmitter = static_cast<ParticleUniverse::ParticleEmitter *>(element2);
 				technique = emittedEmitter->getParentTechnique();

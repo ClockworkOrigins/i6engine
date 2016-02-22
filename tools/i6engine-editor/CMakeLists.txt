@@ -75,6 +75,10 @@ ADD_EXECUTABLE(i6engine-editor ${GUI_TYPE} ../common/src/Config.cpp ${editorSrc}
 
 target_link_libraries(i6engine-editor i6engine-modules Plugin_EditorTypeAngle Plugin_EditorTypeBool Plugin_EditorTypeDouble Plugin_EditorTypeInteger Plugin_EditorTypeLightType Plugin_EditorTypeMoverInterpolateMode Plugin_EditorTypeMoverInterpolateWay Plugin_EditorTypeMoverPositioning Plugin_EditorTypeQuaternion Plugin_EditorTypeShapeType Plugin_EditorTypeShatterInterest Plugin_EditorTypeString Plugin_EditorTypeVec3 Plugin_EditorTypeVec4 ${QT_LIBRARIES})
 
+IF(UNIX)
+	target_link_libraries(i6engine-editor pthread)
+ENDIF(UNIX)
+
 add_custom_command(TARGET i6engine-editor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
 add_custom_command(TARGET i6engine-editor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
 

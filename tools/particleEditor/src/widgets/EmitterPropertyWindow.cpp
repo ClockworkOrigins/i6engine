@@ -1,5 +1,7 @@
 #include "widgets/EmitterPropertyWindow.h"
 
+#include <cfloat>
+
 #include "i6engine/math/i6eQuaternion.h"
 
 #include "properties/BoolProperty.h"

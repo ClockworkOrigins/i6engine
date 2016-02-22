@@ -30,6 +30,7 @@
 #ifndef __I6ENGINE_MATH_I6EVECTOR4_H__
 #define __I6ENGINE_MATH_I6EVECTOR4_H__
 
+#include <cmath>
 #include <map>
 #include <string>
 
@@ -150,7 +151,7 @@ namespace math {
 		 * \brief Operator '==' for Vector4
 		 */
 		bool operator==(const i6eVector4 & b) const {
-			return std::abs(_x - b.getX()) < EPSILON && std::abs(_y - b.getY()) < EPSILON && std::abs(_z - b.getZ()) < EPSILON;
+			return std::abs(_x - b.getX()) < EPSILON && std::abs(_y - b.getY()) < EPSILON && std::abs(_z - b.getZ()) < EPSILON && std::abs(_w - b.getW()) < EPSILON;
 		}
 
 		/**

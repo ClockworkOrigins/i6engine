@@ -29,8 +29,8 @@ namespace widgets {
 	class PropertyWindow;
 	class WidgetEditComponent;
 
-	enum ComponentRelation;
-	enum ComponentRelationDirection;
+	enum class ComponentRelation;
+	enum class ComponentRelationDirection;
 
 	class WidgetEdit : public QWidget, public Ui::editWidget {
 		Q_OBJECT

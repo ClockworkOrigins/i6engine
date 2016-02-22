@@ -61,6 +61,10 @@ ADD_EXECUTABLE(NPCCreator ${GUI_TYPE} ../common/src/Config.cpp ${NPCCreatorSrc} 
 
 target_link_libraries(NPCCreator i6engine-rpg ${QT_LIBRARIES})
 
+IF(UNIX)
+	target_link_libraries(NPCCreator pthread)
+ENDIF(UNIX)
+
 add_custom_command(TARGET NPCCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
 add_custom_command(TARGET NPCCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
 

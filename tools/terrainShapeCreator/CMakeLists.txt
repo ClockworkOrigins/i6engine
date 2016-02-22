@@ -34,6 +34,10 @@ set_target_properties(terrainShapeCreator PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(terrainShapeCreator ${BULLET_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} i6engine-modules)
 
+IF(UNIX)
+	target_link_libraries(terrainShapeCreator pthread)
+ENDIF(UNIX)
+
 IF(WIN32)
 	add_custom_command(TARGET terrainShapeCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/terrainShapeCreator.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)

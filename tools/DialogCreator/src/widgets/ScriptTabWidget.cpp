@@ -1,7 +1,5 @@
 #include "widgets/ScriptTabWidget.h"
 
-#include "Plugins/ScriptLanguagePluginInterface.h"
-
 #include <QStringListModel>
 
 namespace i6engine {

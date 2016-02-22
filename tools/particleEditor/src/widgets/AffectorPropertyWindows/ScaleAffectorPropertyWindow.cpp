@@ -1,5 +1,7 @@
 #include "widgets/AffectorPropertyWindows/ScaleAffectorPropertyWindow.h"
 
+#include <cfloat>
+
 #include "properties/BoolProperty.h"
 #include "properties/DynamicAttributeProperty.h"
 

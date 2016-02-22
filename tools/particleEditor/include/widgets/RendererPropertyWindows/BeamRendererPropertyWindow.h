@@ -30,7 +30,7 @@ namespace widgets {
 		 */
 		~BeamRendererPropertyWindow();
 
-		void BeamRendererPropertyWindow::copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) override;
+		void copyAttributesFromRenderer(ParticleUniverse::ParticleRenderer * renderer) override;
 
 	private:
 		void copyAttributeToRenderer(properties::Property * prop, QString propertyName) override;

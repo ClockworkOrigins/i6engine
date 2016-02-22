@@ -35,6 +35,10 @@ set_target_properties(SampleDragDrop PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleDragDrop i6engine-modules)
 
+IF(UNIX)
+	target_link_libraries(SampleDragDrop pthread)
+ENDIF(UNIX)
+
 IF(WIN32)
 	add_custom_command(TARGET SampleDragDrop POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleDragDrop.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)

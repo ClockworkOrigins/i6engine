@@ -1,5 +1,7 @@
 #include "i6ArchivePlugin.h"
 
+#include "i6engine/utils/i6eSystemParameters.h"
+
 #include "i6ArchiveFactory.h"
 
 #include "OGRE/OgreArchiveManager.h"

@@ -36,6 +36,10 @@ set_target_properties(SampleWaynet PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleWaynet i6engine-rpg SampleCommon)
 
+IF(UNIX)
+	target_link_libraries(SampleWaynet pthread)
+ENDIF(UNIX)
+
 IF(WIN32)
 	add_custom_command(TARGET SampleWaynet POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/SampleWaynet.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)

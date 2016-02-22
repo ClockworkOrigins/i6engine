@@ -212,7 +212,11 @@ ENDIF()
 #----------------------------------------------------
 	SET(LIBNAME "OIS")
 	SET(LIBHEADER "OIS/OIS.h")
-	SET(OIS_ROOT ${ISIXE_DEP_DIR}/misc)
+	IF(WIN32)
+		SET(OIS_ROOT ${ISIXE_DEP_DIR}/misc)
+	ELSE(WIN32)
+		SET(OIS_ROOT ${ISIXE_DEP_DIR}/ois)
+	ENDIF(WIN32)
 	find_package(EasyFind REQUIRED COMPONENTS OIS)
 	include_directories(SYSTEM ${OIS_INCLUDE_DIR})
 

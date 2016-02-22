@@ -219,7 +219,7 @@ namespace widgets {
 	static QString CST_EXTERN_VORTEX = EXTERN_VORTEX;
 
 	// Enum: Component Relation
-	enum ComponentRelation {
+	enum class ComponentRelation {
 		CR_INCLUDE,
 		CR_EXCLUDE,
 		CR_HANDLE,
@@ -237,7 +237,7 @@ namespace widgets {
 	};
 
 	// Enum: Component Relation
-	enum ComponentRelationDirection {
+	enum class ComponentRelationDirection {
 		CRDIR_PRIMARY,
 		CRDIR_SECUNDAIRY,
 		CRDIR_EQUAL
@@ -245,12 +245,12 @@ namespace widgets {
 
 	// Function to return the opposite relation direction
 	inline ComponentRelationDirection getOppositeRelationDirection(ComponentRelationDirection relationDirection) {
-		if (relationDirection == CRDIR_PRIMARY) {
-			return CRDIR_SECUNDAIRY;
-		} else if (relationDirection == CRDIR_SECUNDAIRY) {
-			return CRDIR_PRIMARY;
+		if (relationDirection == ComponentRelationDirection::CRDIR_PRIMARY) {
+			return ComponentRelationDirection::CRDIR_SECUNDAIRY;
+		} else if (relationDirection == ComponentRelationDirection::CRDIR_SECUNDAIRY) {
+			return ComponentRelationDirection::CRDIR_PRIMARY;
 		}
-		return CRDIR_EQUAL;
+		return ComponentRelationDirection::CRDIR_EQUAL;
 	}
 
 	class WidgetEditComponent : public QGraphicsWidget {

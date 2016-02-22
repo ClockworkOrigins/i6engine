@@ -65,6 +65,10 @@ ADD_EXECUTABLE(DialogCreator ${GUI_TYPE} ../common/src/Config.cpp ${dialogCreato
 
 target_link_libraries(DialogCreator i6engine-rpg ${QT_LIBRARIES})
 
+IF(UNIX)
+	target_link_libraries(DialogCreator pthread)
+ENDIF(UNIX)
+
 add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
 add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
 
