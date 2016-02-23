@@ -36,6 +36,10 @@ namespace Test_ObjectFacade {
 		ObjectFacadeTest() : sample::CommonApplication(false, false), _lock(), _conditionVariable() {
 		}
 
+		~ObjectFacadeTest() {
+			EngineController::GetSingletonPtr()->reset();
+		}
+
 		// registers test as application and ObjectController
 		virtual void SetUp() {
 			EngineController::GetSingletonPtr()->reset();

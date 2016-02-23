@@ -62,6 +62,8 @@ namespace core {
 		 */
 		explicit EngineCoreController(SubSystemController * ssc);
 
+		~EngineCoreController();
+
 		/**
 		 * \brief This method will set the callback which will be called after initialization.
 		 */
@@ -147,6 +149,8 @@ namespace core {
 		std::vector<boost::function<void(void)>> _vptrOnAfterInitialize;
 		mutable std::mutex _lock;
 		mutable std::condition_variable _condVar;
+		std::mutex _runningLock;
+		std::condition_variable _runningConditionVariable;
 
 		utils::Clock<utils::RealTimeClock> _rClock;
 		Scheduler<utils::RealTimeClock> _scheduler;

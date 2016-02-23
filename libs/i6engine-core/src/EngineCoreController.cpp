@@ -28,7 +28,14 @@
 namespace i6engine {
 namespace core {
 
-	EngineCoreController::EngineCoreController(SubSystemController * ssc) : _subsystemController(ssc), _bolIsInitialized(false), _bolLoop(true), _bolShutdownComplete(false), _vptrOnAfterInitialize(), _lock(), _condVar(), _rClock(), _scheduler(_rClock) {
+	EngineCoreController::EngineCoreController(SubSystemController * ssc) : _subsystemController(ssc), _bolIsInitialized(false), _bolLoop(true), _bolShutdownComplete(true), _vptrOnAfterInitialize(), _lock(), _condVar(), _runningLock(), _runningConditionVariable(), _rClock(), _scheduler(_rClock) {
+	}
+
+	EngineCoreController::~EngineCoreController() {
+		std::unique_lock<std::mutex> ul(_runningLock);
+		if (!_bolShutdownComplete) {
+			_runningConditionVariable.wait(ul);
+		}
 	}
 
 	void EngineCoreController::Initialize() const {
@@ -58,7 +65,10 @@ namespace core {
 	}
 
 	void EngineCoreController::RunEngine() {
+		std::unique_lock<std::mutex> ul(_runningLock);
+		_bolShutdownComplete = false;
 		Run();
+		_runningConditionVariable.notify_one();
 	}
 
 	void EngineCoreController::MainLoop() {

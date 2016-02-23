@@ -190,7 +190,7 @@ namespace api {
 		// TODO (???): game should be paused than call _appl->Shutdown, than shutdown
 		// thus the GameDeveloper can just focus on PreShutdown actions without handeling a changing world
 		// maybe keep Messaging/Networking-Thread running?
-		if (_appl->ShutdownRequest()) {
+		if (_appl && _appl->ShutdownRequest()) {
 			_coreController->ShutDown();
 
 			while (!_subsystemController->isShutdownComplete()) {
@@ -198,6 +198,18 @@ namespace api {
 			}
 
 			_appl->Finalize();
+
+			_appl = nullptr;
+
+			for (const std::pair<std::string, std::pair<core::ModuleController *, uint32_t>> & modulesPair : _queuedModules) {
+				delete modulesPair.second.first;
+			}
+			for (const std::pair<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> & modulesPair : _queuedModulesWaiting) {
+				delete modulesPair.second.first;
+			}
+
+			_queuedModules.clear();
+			_queuedModulesWaiting.clear();
 		}
 	}
 
@@ -259,8 +271,9 @@ namespace api {
 	}
 
 	void EngineController::reset() {
-		delete _subsystemController;
+		ShutDown();
 		delete _coreController;
+		delete _subsystemController;
 		delete _idManager;
 		delete _languageManager;
 		delete _textManager;

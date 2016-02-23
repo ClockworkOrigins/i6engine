@@ -45,8 +45,17 @@ namespace core {
 		}
 	}
 
+	void SubSystemController::JoinAllSubsystems() {
+		for (boost::thread * t : _objThreadGrp) {
+			t->join();
+			delete t;
+		}
+		_objThreadGrp.clear();
+		_objQueuedSubSystems.clear();
+	}
+
 	void SubSystemController::startSubSystemTicking(ModuleController * objSubSystem, const uint32_t lngFrameTime) {
-		_objThreadGrp.add_thread(new boost::thread(boost::bind(&ModuleController::startThreadTicking, objSubSystem, lngFrameTime)));
+		_objThreadGrp.push_back(new boost::thread(boost::bind(&ModuleController::startThreadTicking, objSubSystem, lngFrameTime)));
 
 		while (_bolWaitForInit) {
 			boost::this_thread::sleep(boost::posix_time::milliseconds(5));
@@ -56,7 +65,7 @@ namespace core {
 	}
 
 	void SubSystemController::startSubSystemWaiting(ModuleController * objSubSystem, const std::set<Subsystem> & waitingFor) {
-		_objThreadGrp.add_thread(new boost::thread(boost::bind(&ModuleController::startThreadWaiting, objSubSystem, waitingFor)));
+		_objThreadGrp.push_back(new boost::thread(boost::bind(&ModuleController::startThreadWaiting, objSubSystem, waitingFor)));
 
 		while (_bolWaitForInit) {
 			boost::this_thread::sleep(boost::posix_time::milliseconds(5));

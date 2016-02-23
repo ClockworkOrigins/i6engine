@@ -102,7 +102,7 @@ namespace core {
 		/**
 		 * \brief Waits for all controlled subsystem-threads to terminate.
 		 */
-		inline void JoinAllSubsystems() { _objThreadGrp.join_all(); }
+		void JoinAllSubsystems();
 
 		/**
 		 * \brief This methods tells the SubSystemController that the synchronously started SubSystem has been completed its startup sequence.
@@ -144,7 +144,7 @@ namespace core {
 	private:
 		bool _bolGlobalShutDown;
 		bool _bolWaitForInit;
-		boost::thread_group _objThreadGrp;
+		std::vector<boost::thread *> _objThreadGrp;
 		std::vector<QueuedModule> _objQueuedSubSystems;
 		EngineCoreController * _coreController;
 
