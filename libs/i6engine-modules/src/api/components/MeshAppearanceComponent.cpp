@@ -37,10 +37,10 @@ namespace api {
 		Component::_objComponentID = components::MeshAppearanceComponent;
 
 		parseAttribute<true>(params, "mesh", _meshName);
-		parseAttribute<false>(params, "visibility", _isVisible);
 		parseAttribute<true>(params, "pos", _position);
 		parseAttribute<true>(params, "rot", _rotation);
 		parseAttribute<true>(params, "scale", _scale);
+		parseAttribute<false>(params, "visibility", _isVisible);
 		parseAttribute<false>(params, "material", _material);
 		parseAttribute<false>(params, "shadowCasting", _shadowCasting);
 	}
@@ -120,21 +120,19 @@ namespace api {
 
 	attributeMap MeshAppearanceComponent::synchronize() const {
 		attributeMap params;
-
-		_position.insertInMap("pos", params);
-		_rotation.insertInMap("rot", params);
-		_scale.insertInMap("scale", params);
-
-		params["mesh"] = _meshName;
+		writeAttribute(params, "pos", _position);
+		writeAttribute(params, "rot", _rotation);
+		writeAttribute(params, "scale", _scale);
+		writeAttribute(params, "mesh", _meshName);
 
 		if (!_isVisible) {
-			params["visibility"] = std::to_string(_isVisible);
+			writeAttribute(params, "visibility", _isVisible);
 		}
 		if (!_material.empty()) {
-			params["material"] = _material;
+			writeAttribute(params, "material", _material);
 		}
 		if (!_shadowCasting) {
-			params["shadowCasting"] = std::to_string(_shadowCasting);
+			writeAttribute(params, "shadowCasting", _shadowCasting);
 		}
 
 		return params;

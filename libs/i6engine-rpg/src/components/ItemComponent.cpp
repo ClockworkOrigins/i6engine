@@ -25,26 +25,28 @@ namespace rpg {
 namespace components {
 
 	ItemComponent::ItemComponent(int64_t id, const api::attributeMap & params) : Component(id, params), _value(), _imageset(), _image(), _weight(0.0), _stackable(false) {
-		parseAttribute<true>(params, "ident", _identifier);
-		parseAttribute<true>(params, "value", _value);
-		parseAttribute<true>(params, "imageset", _imageset);
-		parseAttribute<true>(params, "image", _image);
-		parseAttribute<false>(params, "weight", _weight);
-		parseAttribute<false>(params, "stackable", _stackable);
+		api::parseAttribute<true>(params, "ident", _identifier);
+		api::parseAttribute<true>(params, "value", _value);
+		api::parseAttribute<true>(params, "imageset", _imageset);
+		api::parseAttribute<true>(params, "image", _image);
+		api::parseAttribute<false>(params, "weight", _weight);
+		api::parseAttribute<false>(params, "stackable", _stackable);
 
 		_objFamilyID = config::ComponentTypes::ItemComponent;
 	}
 
 	api::attributeMap ItemComponent::synchronize() const {
 		api::attributeMap params;
-
-		params.insert(std::make_pair("ident", _identifier));
-		params.insert(std::make_pair("value", std::to_string(_value)));
-		params.insert(std::make_pair("imageset", _imageset));
-		params.insert(std::make_pair("image", _image));
-		params.insert(std::make_pair("weight", std::to_string(_weight)));
-		params.insert(std::make_pair("stackable", std::to_string(_stackable)));
-
+		api::writeAttribute(params, "ident", _identifier);
+		api::writeAttribute(params, "value", _value);
+		api::writeAttribute(params, "imageset", _imageset);
+		api::writeAttribute(params, "image", _image);
+		if (std::abs(_weight) > DBL_EPSILON) {
+			api::writeAttribute(params, "weight", _weight);
+		}
+		if (_stackable) {
+			api::writeAttribute(params, "stackable", _stackable);
+		}
 		return params;
 	}
 

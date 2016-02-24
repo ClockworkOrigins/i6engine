@@ -87,8 +87,8 @@ namespace api {
 	attributeMap FollowComponent::synchronize() const {
 		attributeMap params;
 		int64_t targetID = (_targetPSC != nullptr) ? _targetPSC.get()->getOwnerGO()->getID() : -1;
-		params.insert(std::make_pair("targetID", std::to_string(targetID)));
-		params.insert(std::make_pair("speed", std::to_string(_speed)));
+		writeAttribute(params, "targetID", targetID);
+		writeAttribute(params, "speed", _speed);
 		return params;
 	}
 

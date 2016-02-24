@@ -25,6 +25,7 @@
 #include "i6engine/utils/sharedPtr.h"
 
 #include "i6engine/api/GameMessageStruct.h"
+#include "i6engine/api/configs/attributeMap.h"
 
 #include "boost/function.hpp"
 
@@ -34,7 +35,6 @@ namespace api {
 	class Component;
 
 	typedef utils::sharedPtr<Component, Component> ComPtr;
-	typedef std::map<std::string, std::string> attributeMap;
 
 	enum ShatterInterest : uint16_t;
 

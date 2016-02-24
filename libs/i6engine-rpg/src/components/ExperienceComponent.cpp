@@ -28,9 +28,9 @@ namespace components {
 		_objFamilyID = config::ComponentTypes::ExperienceComponent;
 		_objComponentID = config::ComponentTypes::ExperienceComponent;
 
-		parseAttribute<true>(params, "currentXP", _currentXP);
-		parseAttribute<true>(params, "nextXP", _nextXP);
-		parseAttribute<true>(params, "level", _level);
+		api::parseAttribute<true>(params, "currentXP", _currentXP);
+		api::parseAttribute<true>(params, "nextXP", _nextXP);
+		api::parseAttribute<true>(params, "level", _level);
 	}
 
 	api::ComPtr ExperienceComponent::createC(int64_t id, const api::attributeMap & params) {
@@ -42,11 +42,9 @@ namespace components {
 
 	api::attributeMap ExperienceComponent::synchronize() const {
 		api::attributeMap params;
-
-		params.insert(std::make_pair("currentXP", std::to_string(_currentXP)));
-		params.insert(std::make_pair("nextXP", std::to_string(_nextXP)));
-		params.insert(std::make_pair("level", std::to_string(_level)));
-
+		api::writeAttribute(params, "currentXP", _currentXP);
+		api::writeAttribute(params, "nextXP", _nextXP);
+		api::writeAttribute(params, "level", _level);
 		return params;
 	}
 

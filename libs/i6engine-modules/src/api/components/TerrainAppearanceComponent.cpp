@@ -91,20 +91,24 @@ namespace api {
 	attributeMap TerrainAppearanceComponent::synchronize() const {
 		attributeMap params;
 
-		params["heightmap"] = _heightmap;
-		params["size"] = boost::lexical_cast<std::string>(_size);
-		params["inputScale"] = std::to_string(_inputScale);
-		params["vertices"] = std::to_string(_vertices);
-		params["layers"] = std::to_string(_layers.size());
-		params["minX"] = std::to_string(_minX);
-		params["minY"] = std::to_string(_minY);
-		params["maxX"] = std::to_string(_maxX);
-		params["maxY"] = std::to_string(_maxY);
+		writeAttribute(params, "heightmap", _heightmap);
+		writeAttribute(params, "size", _size);
+		writeAttribute(params, "inputScale", _inputScale);
+		writeAttribute(params, "vertices", _vertices);
+		writeAttribute(params, "layers", _layers.size());
+		writeAttribute(params, "minX", _minX);
+		writeAttribute(params, "minY", _minY);
+		writeAttribute(params, "maxX", _maxX);
+		writeAttribute(params, "maxY", _maxY);
 
 		for (size_t i = 0; i < _layers.size(); i++) {
-			params["layer_" + std::to_string(i) + "_size"] = std::to_string(std::get<0>(_layers[i]));
-			params["layer_" + std::to_string(i) + "_diffusespecular"] = std::get<1>(_layers[i]);
-			params["layer_" + std::to_string(i) + "_normal"] = std::get<2>(_layers[i]);
+			writeAttribute(params, "layer_" + std::to_string(i) + "_size", std::get<0>(_layers[i]));
+			writeAttribute(params, "layer_" + std::to_string(i) + "_diffusespecular", std::get<1>(_layers[i]));
+			writeAttribute(params, "layer_" + std::to_string(i) + "_normal", std::get<2>(_layers[i]));
+			if (i > 0) {
+				writeAttribute(params, "layer_" + std::to_string(i) + "_minHeight", std::get<3>(_layers[i]));
+				writeAttribute(params, "layer_" + std::to_string(i) + "_fadeDist", std::get<4>(_layers[i]));
+			}
 		}
 
 		return params;

@@ -101,28 +101,28 @@ namespace modules {
 		 * \param[in] motionState
 		 * \param[in] params attributeMap containing all values set for sphere
 		 */
-		btCollisionShape * createSphere(const attributeMap & params);
+		btCollisionShape * createSphere(const api::attributeMap & params);
 
 		/**
 		 * \brief Creates a new RigidBody from a collisionShape from a file.
 		 * \param[in] motionState
 		 * \param[in] params attributeMap containing all values set for file
 		 */
-		btCollisionShape * createFromFile(const attributeMap & params);
+		btCollisionShape * createFromFile(const api::attributeMap & params);
 
 		/**
 		 * \brief Creates a new RigidBody with a box collisionShape.
 		 * \param[in] motionState
 		 * \param[in] params attributeMap containing all values set for box
 		 */
-		btCollisionShape * createBox(const attributeMap & params);
+		btCollisionShape * createBox(const api::attributeMap & params);
 
 		/**
 		 * \brief Creates a new RigidBody with a planes collisionShape.
 		 * \param[in] motionState
 		 * \param[in] params attributeMap containing all values set for plane
 		 */
-		btCollisionShape * createPlane(const attributeMap & params);
+		btCollisionShape * createPlane(const api::attributeMap & params);
 
 		/**
 		 * \brief creates an empty default shape

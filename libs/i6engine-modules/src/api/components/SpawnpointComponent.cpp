@@ -76,12 +76,11 @@ namespace api {
 		attributeMap params;
 
 		std::string types;
-
 		for (const std::string & s : _spawntypes) {
 			types += s + ";";
 		}
 
-		params["spawntypes"] = types;
+		writeAttribute(params, "spawntypes", types);
 
 		return params;
 	}

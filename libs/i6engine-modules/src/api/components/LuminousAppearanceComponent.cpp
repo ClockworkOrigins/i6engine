@@ -25,8 +25,6 @@
 #include "i6engine/api/configs/GraphicsConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace api {
 
@@ -115,16 +113,21 @@ namespace api {
 
 	attributeMap LuminousAppearanceComponent::synchronize() const {
 		attributeMap params;
-		_diffuseColor.insertInMap("diffuseColor", params);
-		_attenuation.insertInMap("attenuation", params);
-		_specularColor.insertInMap("specularColor", params);
-		_direction.insertInMap("direction", params);
-		params.insert(std::make_pair("lightType", boost::lexical_cast<std::string>(uint32_t(_lightType))));
-		params.insert(std::make_pair("spotLightRangeInner", boost::lexical_cast<std::string>(_spotlightRangeInner)));
-		params.insert(std::make_pair("spotLightRangeOuter", boost::lexical_cast<std::string>(_spotlightRangeOuter)));
+		writeAttribute(params, "diffuseColor", _diffuseColor);
+		writeAttribute(params, "attenuation", _attenuation);
+		writeAttribute(params, "specularColor", _specularColor);
+		writeAttribute(params, "lightType", _lightType);
+
+		if (_lightType != LightType::POINT) {
+			writeAttribute(params, "direction", _direction);
+		}
+		if (_lightType == LightType::SPOT) {
+			writeAttribute(params, "spotLightRangeInner", _spotlightRangeInner);
+			writeAttribute(params, "spotLightRangeOuter", _spotlightRangeOuter);
+		}
 
 		if (_position.isValid()) {
-			_position.insertInMap("pos", params);
+			writeAttribute(params, "pos", _position);
 		}
 		return params;
 	}

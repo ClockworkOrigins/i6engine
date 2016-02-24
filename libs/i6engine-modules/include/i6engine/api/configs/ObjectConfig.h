@@ -29,6 +29,7 @@
 
 #include "i6engine/api/GameMessage.h"
 #include "i6engine/api/GameMessageStruct.h"
+#include "i6engine/api/configs/attributeMap.h"
 
 #include "boost/function.hpp"
 
@@ -38,7 +39,6 @@ namespace api {
 	class Component;
 	class GameObject;
 
-	typedef std::map<std::string, std::string> attributeMap;
 	typedef utils::sharedPtr<Component, Component> ComPtr;
 	typedef boost::function<ComPtr(const int64_t, const attributeMap &)> createGOCCallback;
 	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;

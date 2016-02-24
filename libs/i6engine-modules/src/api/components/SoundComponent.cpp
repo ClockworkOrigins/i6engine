@@ -76,14 +76,15 @@ namespace api {
 
 	attributeMap SoundComponent::synchronize() const {
 		attributeMap params;
-		_offset.insertInMap("offset", params);
-		_direction.insertInMap("direction", params);
-		params["file"] = _file;
-		params["looping"] = std::to_string(_looping);
-		params["maxDist"] = std::to_string(_maxDist);
-		params["cache"] = std::to_string(_cacheable);
+		writeAttribute(params, "offset", _offset);
+		writeAttribute(params, "direction", _direction);
+		writeAttribute(params, "file", _file);
+		writeAttribute(params, "looping", _looping);
+		writeAttribute(params, "maxDist", _maxDist);
+		writeAttribute(params, "cache", _cacheable);
+
 		if (!_category.empty()) {
-			params["category"] = _category;
+			writeAttribute(params, "category", _category);
 		}
 		return params;
 	}

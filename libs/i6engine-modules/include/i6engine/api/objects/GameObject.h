@@ -30,8 +30,9 @@
 
 #include "i6engine/core/messaging/IPKey.h"
 
-#include "i6engine/api/components/Component.h"
 #include "i6engine/api/GameMessage.h"
+#include "i6engine/api/components/Component.h"
+#include "i6engine/api/configs/attributeMap.h"
 
 #include "boost/function.hpp"
 
@@ -44,7 +45,6 @@ namespace api {
 	class Component;
 	class GameObject;
 
-	typedef std::map<std::string, std::string> attributeMap;
 	typedef utils::weakPtr<GameObject> WeakGOPtr;
 	typedef utils::sharedPtr<Component, Component> ComPtr;
 	typedef utils::sequence_map<int64_t, ComPtr> component_table_t;

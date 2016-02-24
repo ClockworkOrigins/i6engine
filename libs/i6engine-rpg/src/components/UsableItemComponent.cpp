@@ -49,7 +49,7 @@ namespace components {
 		api::attributeMap params = ItemComponent::synchronize();
 
 		for (auto & p : _attributeChange) {
-			params.insert(std::make_pair("attribute_" + std::to_string(int32_t(p.first)), std::to_string(p.second)));
+			api::writeAttribute(params, "attribute_" + std::to_string(int32_t(p.first)), p.second);
 		}
 
 		return params;

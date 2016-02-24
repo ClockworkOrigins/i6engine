@@ -28,7 +28,7 @@ namespace components {
 		_objFamilyID = config::ComponentTypes::NameComponent;
 		_objComponentID = config::ComponentTypes::NameComponent;
 
-		parseAttribute<true>(params, "name", _name);
+		api::parseAttribute<true>(params, "name", _name);
 	}
 
 	api::ComPtr NameComponent::createC(int64_t id, const api::attributeMap & params) {
@@ -40,9 +40,7 @@ namespace components {
 
 	api::attributeMap NameComponent::synchronize() const {
 		api::attributeMap params;
-
-		params.insert(std::make_pair("name", _name));
-
+		api::writeAttribute(params, "name", _name);
 		return params;
 	}
 

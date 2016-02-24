@@ -29,8 +29,6 @@
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace api {
 
@@ -44,9 +42,9 @@ namespace api {
 		parseAttribute<false>(params, "aspect", _aspect);
 		parseAttribute<false>(params, "fov", _fov);
 
-		if (params.find("viewport") != params.end()) {
+		parseAttribute<false>(params, "viewport", _viewport);
+		if (_viewport) {
 			parseAttribute<true>(params, "zOrder", _zOrder);
-			parseAttribute<true>(params, "viewport", _viewport);
 			parseAttribute<true>(params, "vp_left", _left);
 			parseAttribute<true>(params, "vp_top", _top);
 			parseAttribute<true>(params, "vp_width", _width);
@@ -167,20 +165,22 @@ namespace api {
 
 	attributeMap CameraComponent::synchronize() const {
 		attributeMap params;
-		_position.insertInMap("pos", params);
-		_lookAt.insertInMap("lookAt", params);
-		params.insert(std::make_pair("nearclip", std::to_string(_nearClip)));
-		params.insert(std::make_pair("aspect", std::to_string(_aspect)));
-		params.insert(std::make_pair("viewport", std::to_string(_viewport)));
-		params.insert(std::make_pair("zOrder", std::to_string(_zOrder)));
-		params.insert(std::make_pair("vp_left", std::to_string(_left)));
-		params.insert(std::make_pair("vp_top", std::to_string(_top)));
-		params.insert(std::make_pair("vp_width", std::to_string(_width)));
-		params.insert(std::make_pair("vp_height", std::to_string(_height)));
-		params.insert(std::make_pair("vp_red", std::to_string(_red)));
-		params.insert(std::make_pair("vp_green", std::to_string(_green)));
-		params.insert(std::make_pair("vp_blue", std::to_string(_blue)));
-		params.insert(std::make_pair("vp_alpha", std::to_string(_alpha)));
+		writeAttribute(params, "pos", _position);
+		writeAttribute(params, "lookAt", _lookAt);
+		writeAttribute(params, "nearclip", _nearClip);
+		writeAttribute(params, "aspect", _aspect);
+		writeAttribute(params, "viewport", _viewport);
+		if (_viewport) {
+			writeAttribute(params, "zOrder", _zOrder);
+			writeAttribute(params, "vp_left", _left);
+			writeAttribute(params, "vp_top", _top);
+			writeAttribute(params, "vp_width", _width);
+			writeAttribute(params, "vp_height", _height);
+			writeAttribute(params, "vp_red", _red);
+			writeAttribute(params, "vp_green", _green);
+			writeAttribute(params, "vp_blue", _blue);
+			writeAttribute(params, "vp_alpha", _alpha);
+		}
 		return params;
 	}
 

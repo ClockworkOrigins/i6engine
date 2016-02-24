@@ -36,12 +36,20 @@ namespace api {
 
 	attributeMap VelocityComponent::synchronize() const {
 		attributeMap params;
-		_acceleration.insertInMap("acceleration", params);
-		_deceleration.insertInMap("deceleration", params);
-		params.insert(std::make_pair("maxSpeed", std::to_string(_maxSpeed)));
-		params.insert(std::make_pair("resistanceCoefficient", std::to_string(_resistanceCoefficient)));
-		params.insert(std::make_pair("windage", std::to_string(_windage)));
-		params.insert(std::make_pair("handling", std::to_string(int(_handling))));
+		writeAttribute(params, "acceleration", _acceleration);
+		writeAttribute(params, "maxSpeed", _maxSpeed);
+		if (_deceleration.isValid()) {
+			writeAttribute(params, "deceleration", _deceleration);
+		}
+		if (std::abs(_resistanceCoefficient - 0.6) > DBL_EPSILON) {
+			writeAttribute(params, "resistanceCoefficient", _resistanceCoefficient);
+		}
+		if (std::abs(_windage - 0.8) > DBL_EPSILON) {
+			writeAttribute(params, "windage", _windage);
+		}
+		if (_handling != MaxSpeedHandling::KeepSpeed) {
+			writeAttribute(params, "handling", _handling);
+		}
 		return params;
 	}
 

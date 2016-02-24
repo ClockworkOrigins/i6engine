@@ -50,10 +50,9 @@ namespace api {
 
 	attributeMap LineComponent::synchronize() const {
 		attributeMap params;
-		_startPos.insertInMap("startPos", params);
-		_endPos.insertInMap("endPos", params);
-		_colour.insertInMap("colour", params);
-
+		writeAttribute(params, "startPos", _startPos);
+		writeAttribute(params, "endPos", _endPos);
+		writeAttribute(params, "colour", _colour);
 		return params;
 	}
 

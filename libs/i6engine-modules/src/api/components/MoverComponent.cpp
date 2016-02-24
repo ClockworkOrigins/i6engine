@@ -28,8 +28,6 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace api {
 
@@ -127,16 +125,13 @@ namespace api {
 		attributeMap params;
 
 		// other Component only needs to resume
-		params["continue"] = "true";
-		params["startTime"] = boost::lexical_cast<std::string>(_startTime);
-
-		// general attributes
-		params["duration"] = boost::lexical_cast<std::string>(_duration);
-		params["positioning"] = boost::lexical_cast<std::string>(uint16_t(_positioning));
-		params["started"] = boost::lexical_cast<std::string>(_started);
-		params["linkable"] = boost::lexical_cast<std::string>(_linkable);
-
-		_realStartPos.insertInMap("realCenterPos", params);
+		writeAttribute(params, "continue", true);
+		writeAttribute(params, "startTime", _startTime);
+		writeAttribute(params, "duration", _duration);
+		writeAttribute(params, "positioning", _positioning);
+		writeAttribute(params, "started", _started);
+		writeAttribute(params, "linkable", _linkable);
+		writeAttribute(params, "realCenterPos", _realStartPos);
 
 		return params;
 	}

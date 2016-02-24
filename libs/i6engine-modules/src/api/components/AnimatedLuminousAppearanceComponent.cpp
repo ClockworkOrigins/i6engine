@@ -88,21 +88,21 @@ namespace api {
 	attributeMap AnimatedLuminousAppearanceComponent::synchronize() const {
 		attributeMap params = LuminousAppearanceComponent::synchronize();
 		if (_diffuseDuration > 0) {
-			params.insert(std::make_pair("diffuseDuration", std::to_string(_diffuseDuration)));
+			writeAttribute(params, "diffuseDuration", _diffuseDuration);
 			for (auto it = _diffuseColours.begin(); it != _diffuseColours.end(); it++) {
-				it->second.insertInMap("diffuseKey_" + std::to_string(it->first), params);
+				writeAttribute(params, "diffuseKey_" + std::to_string(it->first), it->second);
 			}
 		}
 		if (_specularDuration > 0) {
-			params.insert(std::make_pair("specularDuration", std::to_string(_specularDuration)));
+			writeAttribute(params, "specularDuration", _specularDuration);
 			for (auto it = _specularColours.begin(); it != _specularColours.end(); it++) {
-				it->second.insertInMap("specularKey_" + std::to_string(it->first), params);
+				writeAttribute(params, "specularKey_" + std::to_string(it->first), it->second);
 			}
 		}
 		if (_attenuationDuration > 0) {
-			params.insert(std::make_pair("attenuationDuration", std::to_string(_attenuationDuration)));
+			writeAttribute(params, "attenuationDuration", _attenuationDuration);
 			for (auto it = _attenuations.begin(); it != _attenuations.end(); it++) {
-				it->second.insertInMap("attenuationKey_" + std::to_string(it->first), params);
+				writeAttribute(params, "attenuationKey_" + std::to_string(it->first), it->second);
 			}
 		}
 		return params;

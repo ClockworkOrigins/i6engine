@@ -97,12 +97,12 @@ namespace api {
 	attributeMap Point2PointConstraintComponent::synchronize() const {
 		attributeMap params;
 
-		params.insert(std::make_pair("selfIdentifier", _selfIdentifier));
-		params.insert(std::make_pair("targetIdentifier", _targetIdentifier));
-		_selfOffset.insertInMap("selfOffset", params);
-		_targetOffset.insertInMap("targetOffset", params);
+		writeAttribute(params, "selfIdentifier", _selfIdentifier);
+		writeAttribute(params, "targetIdentifier", _targetIdentifier);
+		writeAttribute(params, "selfOffset", _selfOffset);
+		writeAttribute(params, "targetOffset", _targetOffset);
 		if (_breakingImpulse < DBL_MAX) {
-			params.insert(std::make_pair("breakingImpulse", std::to_string(_breakingImpulse)));
+			writeAttribute(params, "breakingImpulse", _breakingImpulse);
 		}
 
 		return params;

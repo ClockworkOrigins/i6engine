@@ -57,18 +57,15 @@ namespace api {
 	attributeMap WaypointComponent::synchronize() const {
 		attributeMap params;
 
-		params["name"] = _name;
-
 		std::string connections;
-
 		for (size_t i = 0; i < _connections.size(); i++) {
 			connections += _connections[i];
 			if (i < _connections.size() - 1) {
 				connections += ";";
 			}
 		}
-
-		params["connections"] = connections;
+		writeAttribute(params, "name", _name);
+		writeAttribute(params, "connections", connections);
 
 		return params;
 	}

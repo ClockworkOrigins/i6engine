@@ -45,9 +45,9 @@ namespace api {
 	attributeMap AnimatedDirectionalLightComponent::synchronize() const {
 		attributeMap params = AnimatedLuminousAppearanceComponent::synchronize();
 		if (_directionDuration > 0) {
-			params.insert(std::make_pair("directionDuration", std::to_string(_directionDuration)));
+			writeAttribute(params, "directionDuration", _directionDuration);
 			for (auto it = _directions.begin(); it != _directions.end(); it++) {
-				it->second.insertInMap("directionKey_" + std::to_string(it->first), params);
+				writeAttribute(params, "directionKey_" + std::to_string(it->first), it->second);
 			}
 		}
 		return params;

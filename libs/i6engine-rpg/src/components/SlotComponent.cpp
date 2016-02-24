@@ -28,8 +28,8 @@ namespace components {
 		_objFamilyID = config::ComponentTypes::SlotComponent;
 		_objComponentID = config::ComponentTypes::SlotComponent;
 
-		parseAttribute<true>(params, "width", _width);
-		parseAttribute<true>(params, "height", _height);
+		api::parseAttribute<true>(params, "width", _width);
+		api::parseAttribute<true>(params, "height", _height);
 	}
 
 	api::ComPtr SlotComponent::createC(int64_t id, const api::attributeMap & params) {
@@ -41,10 +41,8 @@ namespace components {
 
 	api::attributeMap SlotComponent::synchronize() const {
 		api::attributeMap params;
-
-		params.insert(std::make_pair("width", std::to_string(_width)));
-		params.insert(std::make_pair("height", std::to_string(_height)));
-
+		api::writeAttribute(params, "width", _width);
+		api::writeAttribute(params, "height", _height);
 		return params;
 	}
 

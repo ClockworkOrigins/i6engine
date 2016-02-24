@@ -66,21 +66,21 @@ namespace api {
 		attributeMap params = AnimatedLuminousAppearanceComponent::synchronize();
 
 		if (_directionDuration > 0) {
-			params.insert(std::make_pair("directionDuration", std::to_string(_directionDuration)));
+			writeAttribute(params, "directionDuration", _directionDuration);
 			for (auto it = _directions.begin(); it != _directions.end(); it++) {
-				it->second.insertInMap("directionKey_" + std::to_string(it->first), params);
+				writeAttribute(params, "directionKey_" + std::to_string(it->first), it->second);
 			}
 		}
 		if (_innerRangeDuration > 0) {
-			params.insert(std::make_pair("innerRangeDuration", std::to_string(_innerRangeDuration)));
+			writeAttribute(params, "innerRangeDuration", _innerRangeDuration);
 			for (auto it = _innerRanges.begin(); it != _innerRanges.end(); it++) {
-				params.insert(std::make_pair("innerRangeKey_" + std::to_string(it->first), std::to_string(it->second)));
+				writeAttribute(params, "innerRangeKey_" + std::to_string(it->first), it->second);
 			}
 		}
 		if (_outerRangeDuration > 0) {
-			params.insert(std::make_pair("innerRangeDuration", std::to_string(_outerRangeDuration)));
+			writeAttribute(params, "innerRangeDuration", _outerRangeDuration);
 			for (auto it = _outerRanges.begin(); it != _outerRanges.end(); it++) {
-				params.insert(std::make_pair("outerRangeKey_" + std::to_string(it->first), std::to_string(it->second)));
+				writeAttribute(params, "outerRangeKey_" + std::to_string(it->first), it->second);
 			}
 		}
 

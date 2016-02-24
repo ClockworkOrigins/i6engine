@@ -55,10 +55,10 @@ namespace api {
 
 	attributeMap MovableTextComponent::synchronize() const {
 		attributeMap params;
-		params.insert(std::make_pair("font", _font));
-		params.insert(std::make_pair("text", _text));
-		params.insert(std::make_pair("size", std::to_string(_size)));
-		_colour.insertInMap("colour", params);
+		writeAttribute(params, "font", _font);
+		writeAttribute(params, "text", _text);
+		writeAttribute(params, "size", _size);
+		writeAttribute(params, "colour", _colour);
 		return params;
 	}
 

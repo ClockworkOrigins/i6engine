@@ -38,8 +38,6 @@ namespace api {
 } /* namespace api */
 namespace modules {
 
-	typedef std::map<std::string, std::string> attributeMap;
-
 	class PhysicsMailbox;
 	class PhysicsManager;
 	class PhysicsVelocityComponent;
@@ -96,7 +94,7 @@ namespace modules {
 		/**
 		 * \brief adds a new child shape to this node
 		 */
-		bool addChild(const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::PhysicalStateComponent::ShapeType shapeType, const attributeMap & shapeParams);
+		bool addChild(const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::PhysicalStateComponent::ShapeType shapeType, const api::attributeMap & shapeParams);
 
 		/**
 		 * \brief removes a child shape

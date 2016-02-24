@@ -32,8 +32,6 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace api {
 
@@ -293,14 +291,14 @@ namespace api {
 		attributeMap params = MoverComponent::synchronize();
 
 		// general attributes
-		params["mode"] = boost::lexical_cast<std::string>(uint16_t(_mode));
-		params["way"] = boost::lexical_cast<std::string>(uint16_t(_way));
-		params["direction"] = std::to_string(_direction);
+		writeAttribute(params, "mode", _mode);
+		writeAttribute(params, "way", _way);
+		writeAttribute(params, "direction", _direction);
+		writeAttribute(params, "keyframes", _keyFrames.size());
 
-		params["keyframes"] = boost::lexical_cast<std::string>(_keyFrames.size());
 		for (size_t i = 0; i < _keyFrames.size(); ++i) {
-			_keyFrames[i].first.insertInMap(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos", params);
-			_keyFrames[i].second.insertInMap(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot", params);
+			writeAttribute(params, std::string("keyframe_") + std::to_string(i) + "_pos", _keyFrames[i].first);
+			writeAttribute(params, std::string("keyframe_") + std::to_string(i) + "_rot", _keyFrames[i].second);
 		}
 
 		return params;

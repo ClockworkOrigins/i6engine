@@ -30,8 +30,6 @@
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/lexical_cast.hpp"
-
 namespace i6engine {
 namespace api {
 

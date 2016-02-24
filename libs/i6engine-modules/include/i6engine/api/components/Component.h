@@ -36,6 +36,7 @@
 #include "i6engine/math/i6eVector4.h"
 
 #include "i6engine/api/GameMessage.h"
+#include "i6engine/api/configs/attributeMap.h"
 
 #include "boost/bind.hpp"
 #include "boost/function.hpp"
@@ -47,7 +48,6 @@ namespace api {
 	class Component;
 	class GameObject;
 
-	typedef std::map<std::string, std::string> attributeMap;
 	typedef utils::sharedPtr<Component, Component> ComPtr;
 	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;
 	typedef utils::weakPtr<Component> WeakComPtr;
@@ -289,42 +289,6 @@ namespace api {
 		 * \brief removes this component from ticklist
 		 */
 		void removeTicker();
-
-		/**
-		 * \brief parses a value from attribute map into a variable with possibility to through exception, if entry not available
-		 */
-		template<bool Required, typename T>
-		typename std::enable_if<Required, void>::type parseAttribute(const attributeMap & params, const std::string & entry, T & value) {
-			auto it = params.find(entry);
-			if (it == params.end()) {
-				ISIXE_THROW_API(getTemplateName() + "Component", entry + " not set!");
-			} else {
-				parseAttribute(it, value);
-			}
-		}
-
-		template<bool Required, typename T>
-		typename std::enable_if<!Required, void>::type parseAttribute(const attributeMap & params, const std::string & entry, T & value) {
-			auto it = params.find(entry);
-			if (it != params.end()) {
-				parseAttribute(it, value);
-			}
-		}
-
-		template<typename T>
-		typename std::enable_if<std::is_enum<T>::value && !std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
-			value = T(std::stoul(it->second));
-		}
-
-		template<typename T>
-		typename std::enable_if<!std::is_enum<T>::value && !std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
-			value = T(it->second);
-		}
-
-		template<typename T>
-		typename std::enable_if<!std::is_enum<T>::value && std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
-			value = boost::lexical_cast<T>(it->second);
-		}
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

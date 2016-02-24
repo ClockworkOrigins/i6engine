@@ -196,7 +196,7 @@ TEST(Component, Synchronize) {
 		Component::createC<StaticStateComponent>(0, newMap);
 	}
 	{
-		attributeMap paramsTerrainAppearance = { { "heightmap", "blafoo" }, { "size", "0.0" }, { "inputScale", "0.0" }, { "vertices", "0" }, { "layers", "1" }, { "layer_0_size", "1.0" }, { "layer_0_diffusespecular", "texture.png" }, { "layer_0_normal", "texture_normal.png" }, { "minX", "0" }, { "minY", "0" }, { "maxX", "0" }, { "maxY", "0" } };
+		attributeMap paramsTerrainAppearance = { { "heightmap", "blafoo" }, { "size", "0.0" }, { "inputScale", "0.0" }, { "vertices", "0" }, { "layers", "2" }, { "layer_0_size", "1.0" }, { "layer_0_diffusespecular", "texture.png" }, { "layer_0_normal", "texture_normal.png" }, { "layer_1_size", "1.0" }, { "layer_1_diffusespecular", "texture.png" }, { "layer_1_normal", "texture_normal.png" }, { "layer_1_minHeight", "0.0" }, { "layer_1_fadeDist", "0.0" }, { "minX", "0" }, { "minY", "0" }, { "maxX", "0" }, { "maxY", "0" } };
 		auto tc = Component::createC<TerrainAppearanceComponent>(0, paramsTerrainAppearance);
 		auto newMap = tc->synchronize();
 		Component::createC<TerrainAppearanceComponent>(0, newMap);

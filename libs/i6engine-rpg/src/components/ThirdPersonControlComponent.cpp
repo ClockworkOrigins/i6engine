@@ -40,7 +40,7 @@ namespace components {
 		_objFamilyID = config::ThirdPersonControlComponent;
 		_objComponentID = config::ThirdPersonControlComponent;
 
-		parseAttribute<true>(params, "ident", _identifier);
+		api::parseAttribute<true>(params, "ident", _identifier);
 	}
 
 	ThirdPersonControlComponent::~ThirdPersonControlComponent() {
@@ -187,7 +187,9 @@ namespace components {
 	}
 
 	api::attributeMap ThirdPersonControlComponent::synchronize() const {
-		return api::attributeMap();
+		api::attributeMap params;
+		api::writeAttribute(params, "ident", _identifier);
+		return params;
 	}
 
 } /* namespace components */

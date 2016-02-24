@@ -65,7 +65,7 @@ namespace api {
 
 	attributeMap LifetimeComponent::synchronize() const {
 		attributeMap params;
-		params["lifetime"] = std::to_string(_lifetime - (EngineController::GetSingleton().getCurrentTime() - _startTime));
+		writeAttribute(params, "lifetime", _lifetime - (EngineController::GetSingleton().getCurrentTime() - _startTime));
 		return params;
 	}
 

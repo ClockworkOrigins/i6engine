@@ -130,6 +130,12 @@ namespace api {
 			return *this;
 		}
 
+		void insertInMap(const std::string & entry, attributeMap & params) const {
+			std::stringstream ss;
+			ss << responseType << " " << crashType << " " << crashMask;
+			params.insert(std::make_pair(entry, ss.str()));
+		}
+
 		template<class Archive>
 		void serialize(Archive & ar, const unsigned int /*version*/) {
 			ar & responseType;

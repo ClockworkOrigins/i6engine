@@ -70,7 +70,7 @@ namespace modules {
 		}
 	}
 
-	bool PhysicsNode::addChild(const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::PhysicalStateComponent::ShapeType shapeType, const attributeMap & shapeParams) {
+	bool PhysicsNode::addChild(const int64_t compId, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale, const api::CollisionGroup & cg, const api::PhysicalStateComponent::ShapeType shapeType, const api::attributeMap & shapeParams) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		btCollisionShape * newShape = nullptr;
 		switch (shapeType) {

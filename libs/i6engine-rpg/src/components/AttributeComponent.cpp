@@ -30,8 +30,8 @@ namespace components {
 
 		int32_t attribute0 = 0;
 		int32_t attribute1 = 0;
-		parseAttribute<true>(params, "attribute_0", attribute0);
-		parseAttribute<true>(params, "attribute_1", attribute1);
+		api::parseAttribute<true>(params, "attribute_0", attribute0);
+		api::parseAttribute<true>(params, "attribute_1", attribute1);
 		_attributes[0] = attribute0;
 		_attributes[1] = attribute1;
 	}
@@ -47,7 +47,7 @@ namespace components {
 		api::attributeMap params;
 
 		for (size_t i = 0; i < _attributes.size(); i++) {
-			params.insert(std::make_pair("attribute_" + std::to_string(i), std::to_string(_attributes[i])));
+			api::writeAttribute<int32_t>(params, "attribute_" + std::to_string(i), _attributes[i]);
 		}
 
 		return params;

@@ -29,6 +29,7 @@
 
 #include "i6engine/utils/weakPtr.h"
 
+#include "i6engine/api/configs/attributeMap.h"
 #include "i6engine/api/configs/ObjectConfig.h"
 
 namespace i6engine {
@@ -37,7 +38,6 @@ namespace api {
 	class Component;
 	class GameObject;
 
-	typedef std::map<std::string, std::string> attributeMap;
 	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;
 	typedef utils::weakPtr<Component> WeakComPtr;
 

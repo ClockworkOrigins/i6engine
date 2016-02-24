@@ -47,8 +47,8 @@ namespace components {
 
 	SlotInventoryComponent::SlotInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _rows(), _columns(), _widgetList(), _slotMarker(false), _currentIndex(UINT16_MAX), _slots(), _items() {
 		_objComponentID = config::ComponentTypes::SlotInventoryComponent;
-		parseAttribute<true>(params, "rows", _rows);
-		parseAttribute<true>(params, "columns", _columns);
+		api::parseAttribute<true>(params, "rows", _rows);
+		api::parseAttribute<true>(params, "columns", _columns);
 		_slots = std::vector<std::vector<uint16_t>>(_rows, std::vector<uint16_t>(_columns, UINT16_MAX));
 	}
 
@@ -67,8 +67,8 @@ namespace components {
 
 	api::attributeMap SlotInventoryComponent::synchronize() const {
 		api::attributeMap params;
-		params.insert(std::make_pair("rows", std::to_string(_rows)));
-		params.insert(std::make_pair("columns", std::to_string(_columns)));
+		api::writeAttribute(params, "rows", _rows);
+		api::writeAttribute(params, "columns", _columns);
 		return params;
 	}
 

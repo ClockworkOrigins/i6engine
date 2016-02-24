@@ -35,7 +35,7 @@ namespace components {
 		_objFamilyID = config::ComponentTypes::DialogCheckerComponent;
 		_objComponentID = config::ComponentTypes::DialogCheckerComponent;
 
-		parseAttribute<true>(params, "ident", _identifier);
+		api::parseAttribute<true>(params, "ident", _identifier);
 	}
 
 	api::ComPtr DialogCheckerComponent::createC(int64_t id, const api::attributeMap & params) {
@@ -78,7 +78,7 @@ namespace components {
 
 	api::attributeMap DialogCheckerComponent::synchronize() const {
 		api::attributeMap params;
-		params.insert(std::make_pair("ident", _identifier));
+		api::writeAttribute(params, "ident", _identifier);
 		return params;
 	}
 

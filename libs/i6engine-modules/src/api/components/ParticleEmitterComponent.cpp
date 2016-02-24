@@ -36,9 +36,6 @@ namespace api {
 		parseAttribute<false>(params, "pos", _pos);
 		parseAttribute<false>(params, "fadeOut", _fadeOut);
 
-		if (params.find("pos") != params.end()) {
-			_pos = Vec3(params, "pos");
-		}
 		if (_fadeOut) {
 			parseAttribute<true>(params, "fadeOutCooldown", _fadeOutCooldown);
 		}
@@ -69,14 +66,14 @@ namespace api {
 
 	attributeMap ParticleEmitterComponent::synchronize() const {
 		attributeMap params;
-		params["particleEmitter"] = _emitterName;
-		params["fadeOut"] = std::to_string(_fadeOut);
-		params["fadeOutCooldown"] = std::to_string(_fadeOutCooldown);
-
-		if (_pos != Vec3::ZERO) {
-			_pos.insertInMap("pos", params);
+		writeAttribute(params, "particleEmitter", _emitterName);
+		if (_fadeOut) {
+			writeAttribute(params, "fadeOut", _fadeOut);
+			writeAttribute(params, "fadeOutCooldown", _fadeOutCooldown);
 		}
-
+		if (_pos.isValid()) {
+			writeAttribute(params, "pos", _pos);
+		}
 		return params;
 	}
 

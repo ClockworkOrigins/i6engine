@@ -126,10 +126,10 @@ namespace api {
 	attributeMap MoverCircleComponent::synchronize() const {
 		attributeMap params = MoverComponent::synchronize();
 
-		_circleCenter.insertInMap("pos", params);
-		_circleAxis.insertInMap("axis", params);
-		params["radius"] = boost::lexical_cast<std::string>(_circleRadius);
-		_lastPos.insertInMap("lastPos", params);
+		writeAttribute(params, "pos", _circleCenter);
+		writeAttribute(params, "axis", _circleAxis);
+		writeAttribute(params, "radius", _circleRadius);
+		writeAttribute(params, "lastPos", _lastPos);
 
 		return params;
 	}

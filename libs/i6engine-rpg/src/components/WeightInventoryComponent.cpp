@@ -42,9 +42,9 @@ namespace components {
 
 	WeightInventoryComponent::WeightInventoryComponent(int64_t id, const api::attributeMap & params) : InventoryComponent(id, params), api::MessageSubscriberFacade(), _items(), _maxWeight(), _currentWeight(0), _currentIndex(), _maxShowIndex(), _currentFilter("NONE"), _slotsPerView(), _widgetList(), _otherInventory(), _filter() {
 		_objComponentID = config::ComponentTypes::WeightInventoryComponent;
-		parseAttribute<true>(params, "maxWeight", _maxWeight);
+		api::parseAttribute<true>(params, "maxWeight", _maxWeight);
 		uint32_t filters = 0;
-		parseAttribute<true>(params, "filters", filters);
+		api::parseAttribute<true>(params, "filters", filters);
 
 		for (uint32_t i = 0; i < filters; i++) {
 			ISIXE_THROW_API_COND("WeightInventoryComponent", "'filter_" + std::to_string(i) + "_type' not set!", params.find("filter_" + std::to_string(i) + "_type") != params.end());
@@ -70,7 +70,14 @@ namespace components {
 
 	api::attributeMap WeightInventoryComponent::synchronize() const {
 		api::attributeMap params;
-		params.insert(std::make_pair("maxWeight", std::to_string(_maxWeight)));
+		api::writeAttribute(params, "maxWeight", _maxWeight);
+		api::writeAttribute(params, "filters", _filter.size());
+		for (size_t i = 0; i < _filter.size(); i++) {
+			api::writeAttribute(params, "filter_" + std::to_string(i) + "_type", std::get<FilterEntry::Type>(_filter[i]));
+			api::writeAttribute(params, "filter_" + std::to_string(i) + "_normalImage", std::get<FilterEntry::NormalImage>(_filter[i]));
+			api::writeAttribute(params, "filter_" + std::to_string(i) + "_hoverImage", std::get<FilterEntry::HoverImage>(_filter[i]));
+			api::writeAttribute(params, "filter_" + std::to_string(i) + "_pushedImage", std::get<FilterEntry::PushedImage>(_filter[i]));
+		}
 		return params;
 	}
 

@@ -56,10 +56,9 @@ namespace api {
 
 	attributeMap StaticStateComponent::synchronize() const {
 		attributeMap params;
-		_position.insertInMap("pos", params);
-		_rotation.insertInMap("rot", params);
-		_scale.insertInMap("scale", params);
-
+		writeAttribute(params, "pos", _position);
+		writeAttribute(params, "rot", _rotation);
+		writeAttribute(params, "scale", _scale);
 		return params;
 	}
 

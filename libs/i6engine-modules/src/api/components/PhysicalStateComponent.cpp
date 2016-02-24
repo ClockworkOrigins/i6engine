@@ -34,8 +34,6 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/lexical_cast.hpp"
-
 #undef max
 
 namespace i6engine {
@@ -275,20 +273,18 @@ namespace api {
 
 	attributeMap PhysicalStateComponent::synchronize() const {
 		attributeMap params = _shapeParams;
-		_position.insertInMap("pos", params);
-		_rotation.insertInMap("rot", params);
-		_scale.insertInMap("scale", params);
+		writeAttribute(params, "pos", _position);
+		writeAttribute(params, "rot", _rotation);
+		writeAttribute(params, "scale", _scale);
+		writeAttribute(params, "collisionGroup", _collisionGroup);
+		writeAttribute(params, "shapeType", _shapeType);
+		writeAttribute(params, "shatterInterest", _shatterInterest);
 		if (_gravity.isValid()) {
-			_gravity.insertInMap("gravity", params);
+			writeAttribute(params, "gravity", _gravity);
 		}
-
-		std::stringstream ss;
-		ss << _collisionGroup.responseType << " " <<  _collisionGroup.crashType << " " << _collisionGroup.crashMask;
-		params["collisionGroup"] = ss.str();
-		params["shapeType"] = boost::lexical_cast<std::string>(uint32_t(_shapeType));
-		params["shatterInterest"] = boost::lexical_cast<std::string>(uint32_t(_shatterInterest));
-		params["syncPrio"] = boost::lexical_cast<std::string>(uint32_t(_syncPrio));
-
+		if (_syncPrio != 0) {
+			writeAttribute(params, "syncPrio", _syncPrio);
+		}
 		return params;
 	}
 

@@ -419,7 +419,7 @@ namespace modules {
 		return compoundShape;
 	}
 
-	btCollisionShape * PhysicsManager::createSphere(const attributeMap & params) {
+	btCollisionShape * PhysicsManager::createSphere(const api::attributeMap & params) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Vec3 localInertia;
 		double radius = 1.0;
@@ -448,7 +448,7 @@ namespace modules {
 		return sphereShape;
 	}
 
-	btCollisionShape * PhysicsManager::createFromFile(const attributeMap & params) {
+	btCollisionShape * PhysicsManager::createFromFile(const api::attributeMap & params) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Vec3 localInertia;
 		double mass = 0.0f;
@@ -542,7 +542,7 @@ namespace modules {
 		return shape;
 	}
 
-	btCollisionShape * PhysicsManager::createBox(const attributeMap & params) {
+	btCollisionShape * PhysicsManager::createBox(const api::attributeMap & params) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Vec3 box;
 		Vec3 localInertia;
@@ -571,7 +571,7 @@ namespace modules {
 		return boxShape;
 	}
 
-	btCollisionShape * PhysicsManager::createPlane(const attributeMap & params) {
+	btCollisionShape * PhysicsManager::createPlane(const api::attributeMap & params) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Vec3 planeNormal;
 		Vec3 localInertia;

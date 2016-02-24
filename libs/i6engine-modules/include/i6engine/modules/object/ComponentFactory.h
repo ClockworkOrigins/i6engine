@@ -28,6 +28,8 @@
 #include "i6engine/utils/i6eThreadSafety.h"
 #include "i6engine/utils/weakPtr.h"
 
+#include "i6engine/api/configs/attributeMap.h"
+
 #include "boost/function.hpp"
 
 namespace i6engine {
@@ -37,7 +39,6 @@ namespace api {
 
 	typedef utils::sharedPtr<Component, Component> ComPtr;
 	typedef utils::weakPtr<GameObject> WeakGOPtr;
-	typedef std::map<std::string, std::string> attributeMap;
 
 	/**
 	 * A pointer to a function which creates a new Components
