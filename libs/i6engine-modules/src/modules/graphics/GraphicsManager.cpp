@@ -47,8 +47,6 @@
 #include "ParticleUniverseSystem.h"
 #include "ParticleUniverseSystemManager.h"
 
-#include "boost/lexical_cast.hpp"
-
 #include "CEGUI/CEGUI.h"
 
 #include "OGRE/OgreCompositionPass.h"
@@ -910,6 +908,12 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->addAnimationFrameEvent(coid, gafeu->frameTime, gafeu->func);
+		} else if (msg->getSubtype() == api::graphics::GraShadowCasting) {
+			bool enabled = static_cast<api::graphics::Graphics_ShadowCasting_Update *>(msg->getContent())->enabled;
+
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			node->updateMeshComponentShadowCasting(coid, enabled);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

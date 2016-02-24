@@ -77,7 +77,8 @@ namespace graphics {
 		GraAttachToBone,
 		GraDetachFromBone,
 		GraAnimationFrameEvent,
-		GraMeshVisibility
+		GraMeshVisibility,
+		GraShadowCasting
 	};
 
 	enum class ShadowTechnique {
@@ -857,6 +858,18 @@ namespace graphics {
 			return new Graphics_AnimationFrameEvent_Update(*this);
 		}
 	} Graphics_AnimationFrameEvent_Update;
+	
+	/**
+	 * \brief enables or disables shadowcasting
+	 */
+	typedef struct Graphics_ShadowCasting_Update : GameMessageStruct {
+		bool enabled;
+		Graphics_ShadowCasting_Update(int64_t coid, int64_t goid, bool b) : GameMessageStruct(coid, goid), enabled(b) {
+		}
+		Graphics_ShadowCasting_Update * copy() {
+			return new Graphics_ShadowCasting_Update(*this);
+		}
+	} Graphics_ShadowCasting_Update;
 
 } /* namespace graphics */
 } /* namespace api */

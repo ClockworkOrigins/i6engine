@@ -103,6 +103,7 @@ namespace modules {
 		std::priority_queue<std::pair<uint64_t, std::function<void(void)>>, std::vector<std::pair<uint64_t, std::function<void(void)>>>, sortFrameFunctions> _queueB;
 
 		utils::weakPtr<api::MeshAppearanceComponent, api::Component> _meshComponent;
+		bool _shadowCasting;
 
 		/**
 		 * \brief Create a new MeshComponent
@@ -117,6 +118,8 @@ namespace modules {
 		void updateMeshComponent(const std::string & meshName, const bool visible);
 
 		void setVisibility(bool visible);
+
+		void setShadowCasting(bool enabled);
 
 		/**
 		 * \brief Creates or updates a material component

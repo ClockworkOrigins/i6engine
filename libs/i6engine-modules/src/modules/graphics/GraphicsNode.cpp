@@ -155,6 +155,13 @@ namespace modules {
 		mc->setVisibility(isVisible);
 	}
 
+	void GraphicsNode::updateMeshComponentShadowCasting(const int64_t coid, const bool enabled) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_meshes.find(coid) != _meshes.end());
+		MeshComponent * mc = _meshes[coid];
+		mc->setShadowCasting(enabled);
+	}
+
 	void GraphicsNode::setMaterial(const int64_t coid, const std::string & materialName) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_meshes.find(coid) != _meshes.end());

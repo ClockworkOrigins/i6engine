@@ -1131,7 +1131,8 @@ scope registerObject() {
 			.def("detachGameObjectFromBone", &i6engine::api::MeshAppearanceComponent::detachGameObjectFromBone)
 			.def("addAnimationFrameEvent", (void(*)(i6engine::api::MeshAppearanceComponent*, uint64_t, const std::string &)) &i6engine::lua::object::addAnimationFrameEvent)
 			.def("addAnimationFrameEvent", (void(*)(i6engine::api::MeshAppearanceComponent*, uint64_t, const std::string &, const std::string &)) &i6engine::lua::object::addAnimationFrameEvent)
-			.def("getBoneTransform", &i6engine::api::MeshAppearanceComponent::getBoneTransform),
+			.def("getBoneTransform", &i6engine::api::MeshAppearanceComponent::getBoneTransform)
+			.def("setShadowCasting", &i6engine::api::MeshAppearanceComponent::setShadowCasting),
 
 		class_<i6engine::api::MovableTextComponent, i6engine::api::Component, i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>>("MovableTextComponent")
 			.def(constructor<int64_t, const i6engine::api::attributeMap &>())

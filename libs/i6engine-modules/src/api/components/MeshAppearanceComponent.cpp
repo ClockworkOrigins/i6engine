@@ -32,16 +32,17 @@
 namespace i6engine {
 namespace api {
 
-	MeshAppearanceComponent::MeshAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _meshName(), _isVisible(), _position(), _rotation(), _scale(), _material(), _boneTransformLock(), _boneTransforms() {
+	MeshAppearanceComponent::MeshAppearanceComponent(const int64_t id, const attributeMap & params) : Component(id, params), _meshName(), _isVisible(true), _position(), _rotation(), _scale(), _material(), _shadowCasting(true), _boneTransformLock(), _boneTransforms() {
 		Component::_objFamilyID = components::MeshAppearanceComponent;
 		Component::_objComponentID = components::MeshAppearanceComponent;
 
 		parseAttribute<true>(params, "mesh", _meshName);
-		parseAttribute<true>(params, "visibility", _isVisible);
+		parseAttribute<false>(params, "visibility", _isVisible);
 		parseAttribute<true>(params, "pos", _position);
 		parseAttribute<true>(params, "rot", _rotation);
 		parseAttribute<true>(params, "scale", _scale);
 		parseAttribute<false>(params, "material", _material);
+		parseAttribute<false>(params, "shadowCasting", _shadowCasting);
 	}
 
 	MeshAppearanceComponent::~MeshAppearanceComponent() {
@@ -54,6 +55,9 @@ namespace api {
 
 		if (!_material.empty()) {
 			setMaterial(_material);
+		}
+		if (!_shadowCasting) {
+			setShadowCasting(_shadowCasting);
 		}
 	}
 
@@ -74,7 +78,7 @@ namespace api {
 		sendUpdateMessage();
 	}
 
-	void MeshAppearanceComponent::sendUpdateMessage() {
+	void MeshAppearanceComponent::sendUpdateMessage() const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMesh, core::Method::Update, new graphics::Graphics_Mesh_Update(_objOwnerID, getID(), _meshName, _isVisible), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
@@ -122,10 +126,15 @@ namespace api {
 		_scale.insertInMap("scale", params);
 
 		params["mesh"] = _meshName;
-		params["visibility"] = std::to_string(_isVisible);
 
+		if (!_isVisible) {
+			params["visibility"] = std::to_string(_isVisible);
+		}
 		if (!_material.empty()) {
 			params["material"] = _material;
+		}
+		if (!_shadowCasting) {
+			params["shadowCasting"] = std::to_string(_shadowCasting);
 		}
 
 		return params;
@@ -196,6 +205,17 @@ namespace api {
 			// TODO: (Daniel) add setScale method
 			return true;
 		}, "Vec3"));
+		result.push_back(std::make_tuple(AccessState::READWRITE, "Shadow Casting", [this]() {
+			return std::to_string(_shadowCasting);
+		}, [this](std::string s) {
+			try {
+				_shadowCasting = std::stoi(s) == 1;
+			} catch (boost::bad_lexical_cast &) {
+				return false;
+			}
+			setShadowCasting(_shadowCasting);
+			return true;
+		}, "Bool"));
 
 		return result;
 	}
@@ -231,6 +251,11 @@ namespace api {
 		} else {
 			return Transform(Vec3::ZERO, Quaternion::IDENTITY);
 		}
+	}
+
+	void MeshAppearanceComponent::setShadowCasting(bool enabled) {
+		_shadowCasting = enabled;
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraShadowCasting, core::Method::Update, new graphics::Graphics_ShadowCasting_Update(getID(), _objOwnerID, _shadowCasting), core::Subsystem::Object));
 	}
 
 	void MeshAppearanceComponent::updateBoneTransforms(const std::map<std::string, Transform> & boneTransformMap) {

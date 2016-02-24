@@ -35,7 +35,7 @@
 namespace i6engine {
 namespace modules {
 
-	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _lastFrameTime(0), _movableTextObservers(), _boundingBoxObservers(), _attachedNodes(), _queueA(), _queueB(), _meshComponent() {
+	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _lastFrameTime(0), _movableTextObservers(), _boundingBoxObservers(), _attachedNodes(), _queueA(), _queueB(), _meshComponent(), _shadowCasting(true) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
@@ -125,6 +125,13 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0));
 		entity->setVisible(visible);
+	}
+
+	void MeshComponent::setShadowCasting(bool enabled) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0));
+		entity->setCastShadows(enabled);
+		_shadowCasting = enabled;
 	}
 
 	void MeshComponent::setMaterial(const std::string & materialName) {

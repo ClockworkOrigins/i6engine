@@ -106,7 +106,16 @@ namespace modules {
 		 */
 		void createMeshComponent(const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale);
 		void updateMeshComponent(const int64_t coid, const std::string & meshName, const bool visible);
+
+		/**
+		 * \brief sets visibility of a MeshComponent
+		 */
 		void updateMeshComponentVisibility(const int64_t coid, const bool visible);
+
+		/**
+		 * \brief enables or disables shadow casting
+		 */
+		void updateMeshComponentShadowCasting(const int64_t coid, const bool enabled);
 
 		/**
 		 * \brief Creates or updates a material component

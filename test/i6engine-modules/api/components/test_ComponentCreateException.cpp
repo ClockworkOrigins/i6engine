@@ -165,7 +165,7 @@ TEST(Component, CreateException) {
 		}
 	}
 	{
-		attributeMap paramsMeshAppearance = { { "mesh", "blafoo.mesh" }, { "pos", "0.0 0.0 0.0" }, { "scale", "0.0 0.0 0.0" }, { "rot", "0.0 0.0 0.0 0.0" }, { "visibility", "1" } };
+		attributeMap paramsMeshAppearance = { { "mesh", "blafoo.mesh" }, { "pos", "0.0 0.0 0.0" }, { "scale", "0.0 0.0 0.0" }, { "rot", "0.0 0.0 0.0 0.0" } };
 		Component::createC<MeshAppearanceComponent>(0, paramsMeshAppearance);
 		for (auto it = paramsMeshAppearance.begin(); it != paramsMeshAppearance.end(); it++) {
 			auto newMap = paramsMeshAppearance;

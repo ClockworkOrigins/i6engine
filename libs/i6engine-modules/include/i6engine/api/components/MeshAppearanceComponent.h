@@ -52,11 +52,12 @@ namespace api {
 	 * | Name | Required | Type | Description | Public |
 	 * |------|----------|------| ----------- | ------------ |
 	 * | mesh | yes | std::string | mesh file | yes |
-	 * | visibility | yes | bool | is this mesh visible or not | yes |
+	 * | visibility | no | bool | is this mesh visible or not, default is true | yes |
 	 * | pos | yes | Vec3 | relative position to SceneNode | yes |
 	 * | rot | yes | Vec3 | relative rotation to SceneNode | yes |
 	 * | scale | yes | Vec3 | relative scale to SceneNode | yes |
 	 * | material | no | std::string | optional change of the material on the mesh | yes |
+	 * | shadowCasting | no | bool | defines whether a mesh casts shadows or not, default is true | yes |
 	 */
 	class ISIXE_MODULES_API MeshAppearanceComponent : public Component {
 		friend class modules::MeshComponent;
@@ -184,7 +185,15 @@ namespace api {
 		 */
 		void addAnimationFrameEvent(uint64_t frameTime, const std::function<void(void)> & func) const;
 
+		/**
+		 * \brief returns the Transform for one bone
+		 */
 		Transform getBoneTransform(const std::string & name) const;
+
+		/**
+		 * \brief enables or disables shadow casting for this mesh
+		 */
+		void setShadowCasting(bool enabled);
 
 	private:
 		/**
@@ -203,6 +212,8 @@ namespace api {
 
 		std::string _material;
 
+		bool _shadowCasting;
+
 		mutable std::mutex _boneTransformLock;
 		std::map<std::string, Transform> _boneTransforms;
 
@@ -216,7 +227,7 @@ namespace api {
 		 * \brief Sends message to MessagingController
 		 * Sends message to MessagingController containing ObjectID, meshname, visibility and component
 		 */
-		void sendUpdateMessage();
+		void sendUpdateMessage() const;
 
 		void updateBoneTransforms(const std::map<std::string, Transform> & boneTransformMap);
 	};
