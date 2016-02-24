@@ -25,12 +25,26 @@
 #include <map>
 #include <string>
 
-#include "i6engine/utils/AutoUpdater.h"
-
 namespace i6engine {
 namespace api {
 
 	typedef std::map<std::string, std::string> attributeMap;
+
+namespace detail {
+
+	template<typename T>
+	struct hasInsertInMap {
+		template<typename U, void(U::*)(const std::string &, attributeMap &)const>
+		struct SFINAE {
+		};
+		template<typename U>
+		static char Test(SFINAE<U, &U::insertInMap>*);
+		template<typename U>
+		static int Test(...);
+		static const bool value = sizeof(Test<T>(0)) == sizeof(char);
+	};
+
+} // detail::
 
 	/**
 	 * \brief parses a value from attribute map into a variable with possibility to throw exception, if entry not available
@@ -77,8 +91,13 @@ namespace api {
 	}
 
 	template<typename T>
-	typename std::enable_if<!std::is_enum<T>::value && !std::is_fundamental<T>::value && !std::is_same<T, std::string>::value, void>::type writeAttribute(attributeMap & params, const std::string & entry, const T & value) {
+	typename std::enable_if<!std::is_enum<T>::value && !std::is_fundamental<T>::value && !std::is_same<T, std::string>::value && detail::hasInsertInMap<T>::value, void>::type writeAttribute(attributeMap & params, const std::string & entry, const T & value) {
 		value.insertInMap(entry, params);
+	}
+
+	template<typename T>
+	typename std::enable_if<!std::is_enum<T>::value && !std::is_fundamental<T>::value && !std::is_same<T, std::string>::value && !detail::hasInsertInMap<T>::value, void>::type writeAttribute(attributeMap & params, const std::string & entry, const T & value) {
+		static_assert(false, "class has no method insertInMap");
 	}
 
 	template<typename T>
