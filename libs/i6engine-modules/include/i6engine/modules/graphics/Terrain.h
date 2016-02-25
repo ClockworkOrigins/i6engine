@@ -49,12 +49,20 @@ namespace modules {
 	class ISIXE_MODULES_API Terrain {
 	public:
 		/**
-		 * \brief Creates a new node with unique name
-		 * Creates a new Ogre terrain by using Ogre's TerrainGroup object
+		 * \brief Creates a new Terrain
+		 * Creates a new Ogre terrain by using Ogre's TerrainGroup object with a heightmap
 		 * Thereby passing a filename and calling Ogre's loadAllTerrains
 		 * Then configuring
 		 */
 		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
+		
+		/**
+		 * \brief Creates a new Terrain
+		 * Creates a new Ogre terrain by using Ogre's TerrainGroup object with heightdata
+		 * Thereby passing a filename and calling Ogre's loadAllTerrains
+		 * Then configuring
+		 */
+		Terrain(GraphicsManager * manager, const std::vector<std::vector<double>> & heightdata, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
 
 		/**
 		 * \brief Terrain::~Terrain()
@@ -63,10 +71,14 @@ namespace modules {
 		~Terrain();
 
 		/**
-		 * \brief Terrain::defineTerrain(const long x, const long y)
-		 * Configures Ogre Terrain texture (?)
+		 * \brief Configures Ogre Terrain using heightmap
 		 */
-		void defineTerrain(const int64_t x, const int64_t y);
+		void defineTerrainHeightmap(const int64_t x, const int64_t y);
+
+		/**
+		 * \brief Configures Ogre Terrain using heightdata
+		 */
+		void defineTerrainHeightdata(const int64_t x, const int64_t y);
 
 		/**
 		 * \brief Terrain::configureTerrainDefaults()
@@ -124,6 +136,11 @@ namespace modules {
 		 * Heightmap of the terrain
 		 */
 		std::string _heightmap;
+
+		/**
+		 * height data of the terrain
+		 */
+		std::vector<std::vector<double>> _heightdata;
 
 		/**
 		 * Size of the terrain

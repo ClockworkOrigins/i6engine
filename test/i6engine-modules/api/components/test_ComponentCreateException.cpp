@@ -282,6 +282,16 @@ TEST(Component, CreateException) {
 		}
 	}
 	{
+		attributeMap paramsTerrainAppearance = { { "size", "0.0" }, { "inputScale", "0.0" }, { "vertices", "0" }, { "layers", "0" }, { "minX", "0" }, { "minY", "0" }, { "maxX", "0" }, { "maxY", "0" } };
+		writeAttribute(paramsTerrainAppearance, "heightdata", std::vector<std::vector<double>>());
+		Component::createC<TerrainAppearanceComponent>(0, paramsTerrainAppearance);
+		for (auto it = paramsTerrainAppearance.begin(); it != paramsTerrainAppearance.end(); it++) {
+			auto newMap = paramsTerrainAppearance;
+			newMap.erase(it->first);
+			ASSERT_THROW(Component::createC<TerrainAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+		}
+	}
+	{
 		attributeMap paramsVelocity = { { "acceleration", "0.0" }, { "maxSpeed", "0.0" } };
 		Component::createC<VelocityComponent>(0, paramsVelocity);
 		for (auto it = paramsVelocity.begin(); it != paramsVelocity.end(); it++) {

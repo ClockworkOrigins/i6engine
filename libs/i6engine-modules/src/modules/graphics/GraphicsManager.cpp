@@ -468,18 +468,30 @@ namespace modules {
 		if (msg->getSubtype() == api::graphics::GraLine) {
 			api::graphics::Graphics_Line_Create * glc = dynamic_cast<api::graphics::Graphics_Line_Create *>(msg->getContent());
 			Debug::getSingleton().drawLine(glc->from.toOgre(), glc->to.toOgre(), Ogre::ColourValue(glc->colour.getX(), glc->colour.getY(), glc->colour.getZ()));
-		} else if (msg->getSubtype() == api::graphics::GraTerrain) {
-			std::string heightmap = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->heightmap;
-			double size = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->size;
-			double inputScale = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->inputScale;
-			uint32_t vertices = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->vertices;
-			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->layers;
-			int64_t minX = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->minX;
-			int64_t minY = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->minY;
-			int64_t maxX = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->maxX;
-			int64_t maxY = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->maxY;
+		} else if (msg->getSubtype() == api::graphics::GraTerrainHeightmap) {
+			std::string heightmap = static_cast<api::graphics::Graphics_TerrainHeightmap_Create *>(msg->getContent())->heightmap;
+			double size = static_cast<api::graphics::Graphics_TerrainHeightmap_Create *>(msg->getContent())->size;
+			double inputScale = static_cast<api::graphics::Graphics_TerrainHeightmap_Create *>(msg->getContent())->inputScale;
+			uint32_t vertices = static_cast<api::graphics::Graphics_TerrainHeightmap_Create *>(msg->getContent())->vertices;
+			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_TerrainHeightmap_Create *>(msg->getContent())->layers;
+			int64_t minX = static_cast<api::graphics::Graphics_TerrainHeightmap_Create *>(msg->getContent())->minX;
+			int64_t minY = static_cast<api::graphics::Graphics_TerrainHeightmap_Create *>(msg->getContent())->minY;
+			int64_t maxX = static_cast<api::graphics::Graphics_TerrainHeightmap_Create *>(msg->getContent())->maxX;
+			int64_t maxY = static_cast<api::graphics::Graphics_TerrainHeightmap_Create *>(msg->getContent())->maxY;
 
 			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, vertices, layers, minX, minY, maxX, maxY));
+		} else if (msg->getSubtype() == api::graphics::GraTerrainHeightdata) {
+			std::vector<std::vector<double>> heightdata = static_cast<api::graphics::Graphics_TerrainHeightdata_Create *>(msg->getContent())->heightdata;
+			double size = static_cast<api::graphics::Graphics_TerrainHeightdata_Create *>(msg->getContent())->size;
+			double inputScale = static_cast<api::graphics::Graphics_TerrainHeightdata_Create *>(msg->getContent())->inputScale;
+			uint32_t vertices = static_cast<api::graphics::Graphics_TerrainHeightdata_Create *>(msg->getContent())->vertices;
+			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_TerrainHeightdata_Create *>(msg->getContent())->layers;
+			int64_t minX = static_cast<api::graphics::Graphics_TerrainHeightdata_Create *>(msg->getContent())->minX;
+			int64_t minY = static_cast<api::graphics::Graphics_TerrainHeightdata_Create *>(msg->getContent())->minY;
+			int64_t maxX = static_cast<api::graphics::Graphics_TerrainHeightdata_Create *>(msg->getContent())->maxX;
+			int64_t maxY = static_cast<api::graphics::Graphics_TerrainHeightdata_Create *>(msg->getContent())->maxY;
+
+			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightdata, size, inputScale, vertices, layers, minX, minY, maxX, maxY));
 		} else if (msg->getSubtype() == api::graphics::GraSkyBox) {
 			api::graphics::Graphics_SkyBox_Create * c = static_cast<api::graphics::Graphics_SkyBox_Create *>(msg->getContent());
 
@@ -562,19 +574,32 @@ namespace modules {
 				configItr++;
 			}
 			_objRoot->saveConfig();
-		} else if (msg->getSubtype() == api::graphics::GraTerrain) {
-			std::string heightmap = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->heightmap;
-			double size = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->size;
-			double inputScale = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->inputScale;
-			uint32_t vertices = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->vertices;
-			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_Terrain_Update *>(msg->getContent())->layers;
-			int64_t minX = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->minX;
-			int64_t minY = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->minY;
-			int64_t maxX = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->maxX;
-			int64_t maxY = static_cast<api::graphics::Graphics_Terrain_Create *>(msg->getContent())->maxY;
+		} else if (msg->getSubtype() == api::graphics::GraTerrainHeightmap) {
+			std::string heightmap = static_cast<api::graphics::Graphics_TerrainHeightmap_Update *>(msg->getContent())->heightmap;
+			double size = static_cast<api::graphics::Graphics_TerrainHeightmap_Update *>(msg->getContent())->size;
+			double inputScale = static_cast<api::graphics::Graphics_TerrainHeightmap_Update *>(msg->getContent())->inputScale;
+			uint32_t vertices = static_cast<api::graphics::Graphics_TerrainHeightmap_Update *>(msg->getContent())->vertices;
+			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_TerrainHeightmap_Update *>(msg->getContent())->layers;
+			int64_t minX = static_cast<api::graphics::Graphics_TerrainHeightmap_Update *>(msg->getContent())->minX;
+			int64_t minY = static_cast<api::graphics::Graphics_TerrainHeightmap_Update *>(msg->getContent())->minY;
+			int64_t maxX = static_cast<api::graphics::Graphics_TerrainHeightmap_Update *>(msg->getContent())->maxX;
+			int64_t maxY = static_cast<api::graphics::Graphics_TerrainHeightmap_Update *>(msg->getContent())->maxY;
 
 			removeTerrain(msg->getContent()->getID());
 			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightmap, size, inputScale, vertices, layers, minX, minY, maxX, maxY));
+		} else if (msg->getSubtype() == api::graphics::GraTerrainHeightdata) {
+			std::vector<std::vector<double>> heightdata = static_cast<api::graphics::Graphics_TerrainHeightdata_Update *>(msg->getContent())->heightdata;
+			double size = static_cast<api::graphics::Graphics_TerrainHeightdata_Update *>(msg->getContent())->size;
+			double inputScale = static_cast<api::graphics::Graphics_TerrainHeightdata_Update *>(msg->getContent())->inputScale;
+			uint32_t vertices = static_cast<api::graphics::Graphics_TerrainHeightdata_Update *>(msg->getContent())->vertices;
+			std::vector<std::tuple<double, std::string, std::string, double, double>> layers = static_cast<api::graphics::Graphics_TerrainHeightdata_Update *>(msg->getContent())->layers;
+			int64_t minX = static_cast<api::graphics::Graphics_TerrainHeightdata_Update *>(msg->getContent())->minX;
+			int64_t minY = static_cast<api::graphics::Graphics_TerrainHeightdata_Update *>(msg->getContent())->minY;
+			int64_t maxX = static_cast<api::graphics::Graphics_TerrainHeightdata_Update *>(msg->getContent())->maxX;
+			int64_t maxY = static_cast<api::graphics::Graphics_TerrainHeightdata_Update *>(msg->getContent())->maxY;
+
+			removeTerrain(msg->getContent()->getID());
+			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightdata, size, inputScale, vertices, layers, minX, minY, maxX, maxY));
 		} else if (msg->getSubtype() == api::graphics::GraShadowTechnique) {
 			api::graphics::ShadowTechnique st = dynamic_cast<api::graphics::Graphics_ShadowTechnique_Update *>(msg->getContent())->shadowTechnique;
 

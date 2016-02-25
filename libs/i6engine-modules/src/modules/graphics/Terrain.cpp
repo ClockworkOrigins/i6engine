@@ -28,7 +28,7 @@
 namespace i6engine {
 namespace modules {
 
-	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _size(size), _inputScale(inputScale), _vertices(vertices), _layers(layers), _minX(minX), _maxX(maxX), _minY(minY), _maxY(maxY) {
+	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _heightdata(), _size(size), _inputScale(inputScale), _vertices(vertices), _layers(layers), _minX(minX), _maxX(maxX), _minY(minY), _maxY(maxY) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		_mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
@@ -40,7 +40,37 @@ namespace modules {
 
 		for (int64_t x = minX; x <= maxX; ++x) {
 			for (int64_t y = minY; y <= maxY; ++y) {
-				defineTerrain(x, y);
+				defineTerrainHeightmap(x, y);
+			}
+		}
+
+		_mTerrainGroup->loadAllTerrains(true);
+
+		if (_mTerrainsImported) {
+			Ogre::TerrainGroup::TerrainIterator ti = _mTerrainGroup->getTerrainIterator();
+
+			while (ti.hasMoreElements()) {
+				Ogre::Terrain * t = ti.getNext()->instance;
+				initBlendMaps(t);
+			}
+		}
+
+		_mTerrainGroup->freeTemporaryResources();
+	}
+
+	Terrain::Terrain(GraphicsManager * manager, const std::vector<std::vector<double>> & heightdata, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(), _heightdata(heightdata), _size(size), _inputScale(inputScale), _vertices(vertices), _layers(layers), _minX(minX), _maxX(maxX), _minY(minY), _maxY(maxY) {
+		ASSERT_THREAD_SAFETY_CONSTRUCTOR
+		_mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
+
+		_mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(_manager->getSceneManager(), Ogre::Terrain::ALIGN_X_Z, _vertices, _size);
+		_mTerrainGroup->setFilenameConvention(Ogre::String("i6engineTerrain"), Ogre::String("dat"));
+		_mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
+
+		configureTerrainDefaults();
+
+		for (int64_t x = minX; x <= maxX; ++x) {
+			for (int64_t y = minY; y <= maxY; ++y) {
+				defineTerrainHeightdata(x, y);
 			}
 		}
 
@@ -91,7 +121,7 @@ namespace modules {
 		}
 	}
 
-	void Terrain::defineTerrain(const int64_t x, const int64_t y) {
+	void Terrain::defineTerrainHeightmap(const int64_t x, const int64_t y) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Ogre::String filename = _mTerrainGroup->generateFilename(long(x), long(y));
 
@@ -103,6 +133,24 @@ namespace modules {
 			getTerrainImage(x % 2 != 0, y % 2 != 0, img);
 
 			_mTerrainGroup->defineTerrain(long(x), long(y), &img);
+			_mTerrainsImported = true;
+		}
+	}
+
+	void Terrain::defineTerrainHeightdata(const int64_t x, const int64_t y) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		Ogre::String filename = _mTerrainGroup->generateFilename(long(x), long(y));
+
+		if (Ogre::ResourceGroupManager::getSingleton().resourceExists(_mTerrainGroup->getResourceGroup(), filename)) {
+			_mTerrainGroup->defineTerrain(long(x), long(y));
+		} else {
+			float * heightdata = new float[_heightdata.size() * _heightdata[0].size()];
+			for (size_t i = 0; i < _heightdata.size(); i++) {
+				for (size_t j = 0; j < _heightdata[i].size(); j++) {
+					heightdata[i * _heightdata[i].size() + j] = _heightdata[i][j];
+				}
+			}
+			_mTerrainGroup->defineTerrain(long(x), long(y), heightdata);
 			_mTerrainsImported = true;
 		}
 	}

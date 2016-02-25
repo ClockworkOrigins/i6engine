@@ -33,7 +33,8 @@ namespace api {
 	 * For creating a TerrainAppearanceComponent, these keys are possible:
 	 * | Name | Required | Type | Description | Public |
 	 * |------|----------|------| ----------- | ------------ |
-	 * | heightmap | yes | std::string | heightmap used for this terrain | yes |
+	 * | heightmap | yes | std::string | heightmap used for this terrain, either this or heightdata required, if both are provided, heightdata is used | yes |
+	 * | heightdata | yes | std::vector<std::vector<double>> | heightdata used for this terrain, either this or heightmap required, if both are provided, heightdata is used | yes |
 	 * | size | yes | double | expansion of the terrain | yes |
 	 * | inputScale | yes | double | scale factor for the terrain heights, highest point of heightmap gets this height | yes |
 	 * | vertices | yes | uint32_t | vertices along an edge, must be 2^n + 1 | yes |
@@ -82,6 +83,7 @@ namespace api {
 
 	private:
 		std::string _heightmap;
+		std::vector<std::vector<double>> _heightdata;
 		double _size;
 		double _inputScale;
 		uint32_t _vertices;
@@ -92,6 +94,8 @@ namespace api {
 		int64_t _maxY;
 
 		void Init() override;
+
+		void Finalize() override;
 
 		void sendUpdateMessage();
 	};

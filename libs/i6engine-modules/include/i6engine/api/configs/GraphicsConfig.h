@@ -44,6 +44,8 @@ namespace graphics {
 		GraParticle,
 		GraShader,
 		GraTerrain,
+		GraTerrainHeightmap,
+		GraTerrainHeightdata,
 		GraViewport,
 		GraFrustum,
 		GraNode,
@@ -330,9 +332,9 @@ namespace graphics {
 	} Graphics_CusParam_Update;
 
 	/**
-	 * \brief creates a Terrain in graphics subsystem
+	 * \brief creates a Terrain using a heightmap in graphics subsystem
 	 */
-	typedef struct Graphics_Terrain_Create : GameMessageStruct {
+	typedef struct Graphics_TerrainHeightmap_Create : GameMessageStruct {
 		std::string heightmap;
 		double size;
 		double inputScale;
@@ -342,14 +344,35 @@ namespace graphics {
 		int64_t minY;
 		int64_t maxX;
 		int64_t maxY;
-		Graphics_Terrain_Create(const int64_t, const int64_t, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
-		Graphics_Terrain_Create * copy() { return new Graphics_Terrain_Create(*this); }
-	} Graphics_Terrain_Create;
+		Graphics_TerrainHeightmap_Create(const int64_t, const int64_t, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
+		Graphics_TerrainHeightmap_Create * copy() {
+			return new Graphics_TerrainHeightmap_Create(*this);
+		}
+	} Graphics_TerrainHeightmap_Create;
 
 	/**
-	 * \brief updates a terrain (sense?)
+	 * \brief creates a Terrain in graphics subsystem
 	 */
-	typedef struct Graphics_Terrain_Update : GameMessageStruct {
+	typedef struct Graphics_TerrainHeightdata_Create : GameMessageStruct {
+		std::vector<std::vector<double>> heightdata;
+		double size;
+		double inputScale;
+		uint32_t vertices;
+		std::vector<std::tuple<double, std::string, std::string, double, double>> layers;
+		int64_t minX;
+		int64_t minY;
+		int64_t maxX;
+		int64_t maxY;
+		Graphics_TerrainHeightdata_Create(const int64_t, const int64_t, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
+		Graphics_TerrainHeightdata_Create * copy() {
+			return new Graphics_TerrainHeightdata_Create(*this);
+		}
+	} Graphics_TerrainHeightdata_Create;
+
+	/**
+	 * \brief updates a terrain
+	 */
+	typedef struct Graphics_TerrainHeightmap_Update : GameMessageStruct {
 		std::string heightmap;
 		double size;
 		double inputScale;
@@ -359,9 +382,30 @@ namespace graphics {
 		int64_t minY;
 		int64_t maxX;
 		int64_t maxY;
-		Graphics_Terrain_Update(const int64_t goID, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
-		Graphics_Terrain_Update * copy() { return new Graphics_Terrain_Update(*this); }
-	} Graphics_Terrain_Update;
+		Graphics_TerrainHeightmap_Update(const int64_t goID, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
+		Graphics_TerrainHeightmap_Update * copy() {
+			return new Graphics_TerrainHeightmap_Update(*this);
+		}
+	} Graphics_TerrainHeightmap_Update;
+
+	/**
+	 * \brief updates a terrain
+	 */
+	typedef struct Graphics_TerrainHeightdata_Update : GameMessageStruct {
+		std::vector<std::vector<double>> heightdata;
+		double size;
+		double inputScale;
+		uint32_t vertices;
+		std::vector<std::tuple<double, std::string, std::string, double, double>> layers;
+		int64_t minX;
+		int64_t minY;
+		int64_t maxX;
+		int64_t maxY;
+		Graphics_TerrainHeightdata_Update(const int64_t goID, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
+		Graphics_TerrainHeightdata_Update * copy() {
+			return new Graphics_TerrainHeightdata_Update(*this);
+		}
+	} Graphics_TerrainHeightdata_Update;
 
 	/**
 	 * \brief deletes a terrain

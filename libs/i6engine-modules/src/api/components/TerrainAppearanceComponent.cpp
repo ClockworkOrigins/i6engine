@@ -23,17 +23,24 @@
 #include "i6engine/api/configs/GraphicsConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-#include "boost/lexical_cast.hpp"
 #include "boost/make_shared.hpp"
 
 namespace i6engine {
 namespace api {
 
-	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _heightmap(), _size(), _inputScale(), _vertices(), _layers(), _minX(), _maxX(), _minY(), _maxY() {
+	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _heightmap(), _heightdata(), _size(), _inputScale(), _vertices(), _layers(), _minX(), _maxX(), _minY(), _maxY() {
 		Component::_objFamilyID = components::TerrainAppearanceComponent;
 		Component::_objComponentID = components::TerrainAppearanceComponent;
 
-		parseAttribute<true>(params, "heightmap", _heightmap);
+		try {
+			parseAttribute<true>(params, "heightmap", _heightmap);
+			parseAttribute<false>(params, "heightdata", _heightdata);
+			if (!_heightdata.empty()) {
+				_heightmap.clear();
+			}
+		} catch (utils::exceptions::i6exception) {
+			parseAttribute<true>(params, "heightdata", _heightdata);
+		}
 		parseAttribute<true>(params, "size", _size);
 		parseAttribute<true>(params, "inputScale", _inputScale);
 		parseAttribute<true>(params, "vertices", _vertices);
@@ -67,19 +74,34 @@ namespace api {
 	}
 
 	TerrainAppearanceComponent::~TerrainAppearanceComponent() {
+	}
+
+	void TerrainAppearanceComponent::Init() {
+		GameMessage::Ptr msg;
+		
+		if (!_heightmap.empty()) {
+			msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainHeightmap, core::Method::Create, new graphics::Graphics_TerrainHeightmap_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
+		} else {
+			msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainHeightdata, core::Method::Create, new graphics::Graphics_TerrainHeightdata_Create(_objOwnerID, getID(), _heightdata, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
+		}
+
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+	}
+
+	void TerrainAppearanceComponent::Finalize() {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Delete, new graphics::Graphics_Terrain_Delete(_objOwnerID, getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void TerrainAppearanceComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Create, new graphics::Graphics_Terrain_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
-
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
-	}
-
 	void TerrainAppearanceComponent::sendUpdateMessage() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Update, new graphics::Graphics_Terrain_Update(getID(), _heightmap, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
+		GameMessage::Ptr msg;
+		
+		if (!_heightmap.empty()) {
+			msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainHeightmap, core::Method::Update, new graphics::Graphics_TerrainHeightmap_Update(getID(), _heightmap, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
+		} else {
+			msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainHeightdata, core::Method::Update, new graphics::Graphics_TerrainHeightdata_Update(getID(), _heightdata, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
+		}
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -91,7 +113,11 @@ namespace api {
 	attributeMap TerrainAppearanceComponent::synchronize() const {
 		attributeMap params;
 
-		writeAttribute(params, "heightmap", _heightmap);
+		if (!_heightmap.empty()) {
+			writeAttribute(params, "heightmap", _heightmap);
+		} else {
+			writeAttribute(params, "heightdata", _heightdata);
+		}
 		writeAttribute(params, "size", _size);
 		writeAttribute(params, "inputScale", _inputScale);
 		writeAttribute(params, "vertices", _vertices);

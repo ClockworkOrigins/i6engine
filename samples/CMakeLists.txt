@@ -39,6 +39,7 @@ IF(SCRIPTING_LUA OR SCRIPTING_PYTHON)
 ENDIF(SCRIPTING_LUA OR SCRIPTING_PYTHON)
 
 add_subdirectory(shadow)
+add_subdirectory(terraforming)
 add_subdirectory(terrain)
 add_subdirectory(tooltip)
 
