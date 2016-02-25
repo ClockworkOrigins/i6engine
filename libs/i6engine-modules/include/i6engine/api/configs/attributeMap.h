@@ -25,6 +25,10 @@
 #include <map>
 #include <string>
 
+#include "i6engine/utils/Exceptions.h"
+
+#include "boost/lexical_cast.hpp"
+
 namespace i6engine {
 namespace api {
 
@@ -44,28 +48,7 @@ namespace detail {
 		static const bool value = sizeof(Test<T>(0)) == sizeof(char);
 	};
 
-} // detail::
-
-	/**
-	 * \brief parses a value from attribute map into a variable with possibility to throw exception, if entry not available
-	 */
-	template<bool Required, typename T>
-	typename std::enable_if<Required, void>::type parseAttribute(const attributeMap & params, const std::string & entry, T & value) {
-		auto it = params.find(entry);
-		if (it == params.end()) {
-			ISIXE_THROW_API("parseAttribute", entry + " not set!");
-		} else {
-			parseAttribute(it, value);
-		}
-	}
-
-	template<bool Required, typename T>
-	typename std::enable_if<!Required, void>::type parseAttribute(const attributeMap & params, const std::string & entry, T & value) {
-		auto it = params.find(entry);
-		if (it != params.end()) {
-			parseAttribute(it, value);
-		}
-	}
+} /* namespace detail */
 
 	template<typename T>
 	typename std::enable_if<std::is_enum<T>::value && !std::is_fundamental<T>::value, void>::type parseAttribute(attributeMap::const_iterator it, T & value) {
@@ -90,6 +73,27 @@ namespace detail {
 		params.insert(std::make_pair(entry, std::to_string(int(value))));
 	}
 
+	/**
+	 * \brief parses a value from attribute map into a variable with possibility to throw exception, if entry not available
+	 */
+	template<bool Required, typename T>
+	typename std::enable_if<Required, void>::type parseAttribute(const attributeMap & params, const std::string & entry, T & value) {
+		auto it = params.find(entry);
+		if (it == params.end()) {
+			ISIXE_THROW_API("parseAttribute", entry + " not set!");
+		} else {
+			parseAttribute(it, value);
+		}
+	}
+
+	template<bool Required, typename T>
+	typename std::enable_if<!Required, void>::type parseAttribute(const attributeMap & params, const std::string & entry, T & value) {
+		auto it = params.find(entry);
+		if (it != params.end()) {
+			parseAttribute(it, value);
+		}
+	}
+
 	template<typename T>
 	typename std::enable_if<!std::is_enum<T>::value && !std::is_fundamental<T>::value && !std::is_same<T, std::string>::value && detail::hasInsertInMap<T>::value, void>::type writeAttribute(attributeMap & params, const std::string & entry, const T & value) {
 		value.insertInMap(entry, params);
@@ -97,7 +101,7 @@ namespace detail {
 
 	template<typename T>
 	typename std::enable_if<!std::is_enum<T>::value && !std::is_fundamental<T>::value && !std::is_same<T, std::string>::value && !detail::hasInsertInMap<T>::value, void>::type writeAttribute(attributeMap & params, const std::string & entry, const T & value) {
-		static_assert(false, "class has no method insertInMap");
+		static_assert(detail::hasInsertInMap<T>::value, "class has no method insertInMap");
 	}
 
 	template<typename T>

@@ -24,6 +24,7 @@ TEST(CollisionShape, CollisionShape) {
 	std::string serialized = csd->Serialize();
 	delete csd;
 	csd = i6engine::modules::CollisionShapeData::Deserialize(serialized);
+	delete csd;
 }
 
 TEST(CollisionShape, HeightmapCollisionShape) {
@@ -31,6 +32,7 @@ TEST(CollisionShape, HeightmapCollisionShape) {
 	std::string serialized = csd->Serialize();
 	delete csd;
 	csd = i6engine::modules::CollisionShapeData::Deserialize(serialized);
+	delete csd;
 }
 
 TEST(CollisionShape, MeshStriderCollisionShape) {
@@ -38,4 +40,5 @@ TEST(CollisionShape, MeshStriderCollisionShape) {
 	std::string serialized = csd->Serialize();
 	delete csd;
 	csd = i6engine::modules::CollisionShapeData::Deserialize(serialized);
+	delete csd;
 }
