@@ -28,7 +28,7 @@
 namespace i6engine {
 namespace modules {
 
-	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _heightdata(), _size(size), _inputScale(inputScale), _vertices(vertices), _layers(layers), _minX(minX), _maxX(maxX), _minY(minY), _maxY(maxY) {
+	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _heightdata(), _size(size), _inputScale(inputScale), _vertices(vertices), _layers(layers), _minX(minX), _maxX(maxX), _minY(minY), _maxY(maxY), _dirty(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		_mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
@@ -147,7 +147,7 @@ namespace modules {
 			float * heightdata = new float[_heightdata.size() * _heightdata[0].size()];
 			for (size_t i = 0; i < _heightdata.size(); i++) {
 				for (size_t j = 0; j < _heightdata[i].size(); j++) {
-					heightdata[i * _heightdata[i].size() + j] = _heightdata[i][j];
+					heightdata[i * _heightdata[i].size() + j] = _heightdata[j][i];
 				}
 			}
 			_mTerrainGroup->defineTerrain(long(x), long(y), heightdata);
@@ -194,7 +194,15 @@ namespace modules {
 		}
 	}
 
+	void Terrain::setHeightAtPosition(uint64_t x, uint64_t z, double height) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		Ogre::Terrain * terrain = _mTerrainGroup->getTerrain(0, 0);
+		terrain->setHeightAtPoint(x, z, height);
+		_dirty = true;
+	}
+
 	void Terrain::saveCollisionShape(const std::string & outFile) {
+		ASSERT_THREAD_SAFETY_FUNCTION
 		Ogre::Terrain * pTerrain = _mTerrainGroup->getTerrain(0, 0);
 		int terrainPageSize = pTerrain->getSize(); // Number of vertices along x/z axe
 
@@ -223,6 +231,13 @@ namespace modules {
 		std::ofstream fs(outFile.c_str(), std::ios_base::binary);
 		fs << serialized;
 		fs.close();
+	}
+
+	void Terrain::update() {
+		Ogre::Terrain * terrain = _mTerrainGroup->getTerrain(0, 0);
+		initBlendMaps(terrain);
+		terrain->update();
+		_dirty = false;
 	}
 
 } /* namespace modules */

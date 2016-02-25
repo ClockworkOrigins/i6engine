@@ -94,7 +94,7 @@ namespace modules {
 			return;
 		}
 
-		boost::thread(iter->second);
+		std::thread(iter->second).detach();
 	}
 
 	void KeyboardListener::Tick() {

@@ -110,6 +110,9 @@ namespace graphics {
 	Graphics_TerrainHeightdata_Update::Graphics_TerrainHeightdata_Update(const int64_t goID, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(goID, -1), heightdata(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
 	}
 
+	Graphics_TerrainSetHeight_Update::Graphics_TerrainSetHeight_Update(const int64_t goID, uint64_t xPos, uint64_t zPos, double h) : GameMessageStruct(goID, -1), x(xPos), z(zPos), height(h) {
+	}
+
 	Graphics_Terrain_Delete::Graphics_Terrain_Delete() : GameMessageStruct() {}
 	Graphics_Terrain_Delete::Graphics_Terrain_Delete(const int64_t i, const int64_t c) : GameMessageStruct(i, -1), comp(c) {
 	}

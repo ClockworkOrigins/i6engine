@@ -106,6 +106,15 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
+	void TerrainAppearanceComponent::setHeightAtPosition(uint64_t x, uint64_t z, double height) {
+		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainSetHeight, core::Method::Update, new graphics::Graphics_TerrainSetHeight_Update(getID(), x, z, height), core::Subsystem::Object));
+		_heightdata[x][z] = height;
+	}
+
+	double TerrainAppearanceComponent::getHeightAtPosition(uint64_t x, uint64_t z) const {
+		return _heightdata[x][z];
+	}
+
 	void TerrainAppearanceComponent::saveCollisionShape(const std::string & outFile, const std::function<void(void)> & cb) {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraSaveTerrainShape, core::Method::Create, new graphics::Graphics_SaveTerrainShape_Create(getID(), outFile, cb), core::Subsystem::Object));
 	}

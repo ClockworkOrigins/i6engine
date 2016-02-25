@@ -65,6 +65,14 @@ namespace api {
 		inline double getSize() const { return _size; }
 
 		/**
+		 * \brief sets the height at a defined position in the terrain
+		 * coordinates in vertices
+		 */
+		void setHeightAtPosition(uint64_t x, uint64_t z, double height);
+
+		double getHeightAtPosition(uint64_t x, uint64_t z) const;
+
+		/**
 		 * \brief saves collision shape as bullet collisionshape to given file
 		 * calls callback after collision shape was exported
 		 */

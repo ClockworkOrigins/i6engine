@@ -57,6 +57,7 @@
 #include "OGRE/OgreRenderWindow.h"
 #include "OGRE/OgreRoot.h"
 #include "OGRE/Overlay/OgreOverlaySystem.h"
+#include "OGRE/Terrain/OgreTerrainGroup.h"
 
 #include "tinyxml2.h"
 
@@ -349,6 +350,7 @@ namespace modules {
 			Ogre::Ray mouseRay = _rWindow->getViewport(0)->getCamera()->getCameraToViewportRay(mousePos.d_x / double(_rWindow->getWidth()), mousePos.d_y / double(_rWindow->getHeight()));
 			_raySceneQuery->setRay(mouseRay);
 			_raySceneQuery->setSortByDistance(true);
+
 			// Execute query
 			Ogre::RaySceneQueryResult & result = _raySceneQuery->execute();
 			Ogre::RaySceneQueryResult::iterator itr;
@@ -370,6 +372,13 @@ namespace modules {
 					}
 				} else {
 					results.push_back(std::make_pair(std::stoi(split[1]), Vec3(mouseRay.getPoint(itr->distance))));
+				}
+			}
+
+			for (auto terrainPair : _terrains) {
+				Ogre::TerrainGroup::RayResult rayResult = terrainPair.second->getTerrainGroup()->rayIntersects(mouseRay);
+				if (rayResult.hit) {
+					results.push_back(std::make_pair(-1, Vec3(rayResult.position)));
 				}
 			}
 			api::EngineController::GetSingleton().getGraphicsFacade()->setSelectables(results);
@@ -397,6 +406,12 @@ namespace modules {
 			oss.str("");
 			oss << std::fixed << std::setprecision(1) << stats.worstFPS;
 			gf->setText("FPS_Worst_Value", oss.str());
+		}
+
+		for (auto terrainPair : _terrains) {
+			if (terrainPair.second->isDirty()) {
+				terrainPair.second->update();
+			}
 		}
 
 		try {
@@ -600,6 +615,12 @@ namespace modules {
 
 			removeTerrain(msg->getContent()->getID());
 			addTerrain(msg->getContent()->getID(), boost::make_shared<Terrain>(this, heightdata, size, inputScale, vertices, layers, minX, minY, maxX, maxY));
+		} else if (msg->getSubtype() == api::graphics::GraTerrainSetHeight) {
+			uint64_t x = static_cast<api::graphics::Graphics_TerrainSetHeight_Update *>(msg->getContent())->x;
+			uint64_t z = static_cast<api::graphics::Graphics_TerrainSetHeight_Update *>(msg->getContent())->z;
+			double height = static_cast<api::graphics::Graphics_TerrainSetHeight_Update *>(msg->getContent())->height;
+
+			_terrains[msg->getContent()->getID()]->setHeightAtPosition(x, z, height);
 		} else if (msg->getSubtype() == api::graphics::GraShadowTechnique) {
 			api::graphics::ShadowTechnique st = dynamic_cast<api::graphics::Graphics_ShadowTechnique_Update *>(msg->getContent())->shadowTechnique;
 

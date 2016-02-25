@@ -80,7 +80,8 @@ namespace graphics {
 		GraDetachFromBone,
 		GraAnimationFrameEvent,
 		GraMeshVisibility,
-		GraShadowCasting
+		GraShadowCasting,
+		GraTerrainSetHeight
 	};
 
 	enum class ShadowTechnique {
@@ -406,6 +407,19 @@ namespace graphics {
 			return new Graphics_TerrainHeightdata_Update(*this);
 		}
 	} Graphics_TerrainHeightdata_Update;
+
+	/**
+	 * \brief updates a terrain
+	 */
+	typedef struct Graphics_TerrainSetHeight_Update : GameMessageStruct {
+		uint64_t x;
+		uint64_t z;
+		double height;
+		Graphics_TerrainSetHeight_Update(const int64_t goID, uint64_t xPos, uint64_t zPos, double h);
+		Graphics_TerrainSetHeight_Update * copy() {
+			return new Graphics_TerrainSetHeight_Update(*this);
+		}
+	} Graphics_TerrainSetHeight_Update;
 
 	/**
 	 * \brief deletes a terrain

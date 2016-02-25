@@ -187,7 +187,9 @@ namespace api {
 		KC_MBButton4,
 		KC_MBButton5,
 		KC_MBButton6,
-		KC_MBButton7
+		KC_MBButton7,
+
+		COUNT
 	};
 
 } /* namespace api */

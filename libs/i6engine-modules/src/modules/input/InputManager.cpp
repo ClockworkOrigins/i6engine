@@ -60,6 +60,9 @@ namespace modules {
 		if (_keyboardListener) {
 			_keyboardListener->Tick();
 		}
+		if (_mouseListener) {
+			_mouseListener->Tick();
+		}
 	}
 
 	void InputManager::captureDevices() {
@@ -157,6 +160,10 @@ namespace modules {
 				ISIXE_THROW_API("InputManager", "No KeyBoardListener available. Have you registered GraphicsSubSystem?")
 			}
 			_keyboardListener->setKeyFunction(static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->code, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->type, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->func);
+			if (_mouseListener == nullptr) {
+				ISIXE_THROW_API("InputManager", "No KeyBoardListener available. Have you registered GraphicsSubSystem?")
+			}
+			_mouseListener->setKeyFunction(static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->code, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->type, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->func);
 		}
 	}
 
@@ -174,6 +181,7 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		if (msg->getSubtype() == api::input::InputSubscribeKeyEvent) {
 			_keyboardListener->removeKeyFunction(static_cast<api::input::Input_SubscribeKeyEvent_Delete *>(msg->getContent())->code, static_cast<api::input::Input_SubscribeKeyEvent_Delete *>(msg->getContent())->type);
+			_mouseListener->removeKeyFunction(static_cast<api::input::Input_SubscribeKeyEvent_Delete *>(msg->getContent())->code, static_cast<api::input::Input_SubscribeKeyEvent_Delete *>(msg->getContent())->type);
 		}
 	}
 

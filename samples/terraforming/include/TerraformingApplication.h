@@ -28,6 +28,12 @@ namespace sample {
 		~TerraformingApplication();
 
 		void AfterInitialize();
+
+	private:
+		uint64_t _lastUpdateTime;
+
+		void lowerTerrain();
+		void raiseTerrain();
 	};
 
 } /* namespace sample */

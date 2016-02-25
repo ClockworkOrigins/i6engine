@@ -107,9 +107,20 @@ namespace modules {
 		inline Ogre::TerrainGlobalOptions * getTerrainGlobalOptions() const { return _mTerrainGlobals; }
 
 		/**
+		 * \brief sets height at position
+		 */
+		void setHeightAtPosition(uint64_t x, uint64_t z, double height);
+
+		/**
 		 * \brief saves collision shape as bullet collisionshape to given file
 		 */
 		void saveCollisionShape(const std::string & outFile);
+
+		bool isDirty() const {
+			return _dirty;
+		}
+
+		void update();
 
 	private:
 		/**
@@ -157,6 +168,8 @@ namespace modules {
 		int64_t _maxX;
 		int64_t _minY;
 		int64_t _maxY;
+
+		bool _dirty;
 
 		/**
 		 * \brief forbidden

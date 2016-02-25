@@ -26,6 +26,7 @@
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
+#include "i6engine/api/KeyCodes.h"
 #include "i6engine/api/facades/InputFacade.h"
 
 #include "OIS/OISKeyboard.h"
@@ -49,8 +50,8 @@ namespace modules {
 		typedef std::map<std::pair<api::KeyCode, api::KeyState>, boost::function<void(void)>> InputKeyFunctions;
 
 	private:
-		std::array<api::KeyState, 238> _keyStates;
-		std::array<char, 238> _keyTexts;
+		std::array<api::KeyState, size_t(api::KeyCode::COUNT)> _keyStates;
+		std::array<char, size_t(api::KeyCode::COUNT)> _keyTexts;
 
 		InputKeyFunctions _objInputKeyFunctions;
 

@@ -26,7 +26,7 @@
 namespace i6engine {
 namespace modules {
 
-	MouseListener::MouseListener() : _lastWheelPos() {
+	MouseListener::MouseListener() : _lastWheelPos(), _keyStates(), _objInputKeyFunctions() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 	}
 
@@ -47,8 +47,16 @@ namespace modules {
 
 	bool MouseListener::mousePressed(const OIS::MouseEvent & objMouseEvent, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		api::KeyCode kc = api::KeyCode(size_t(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1);
+		if (_keyStates[size_t(kc)] == api::KeyState::KEY_RELEASED) {
+			_keyStates[size_t(kc)] = api::KeyState::KEY_PRESSED;
+			triggerKeyFunction(kc, api::KeyState::KEY_PRESSED);
+		} else if (_keyStates[size_t(kc)] == api::KeyState::KEY_PRESSED) {
+			_keyStates[size_t(kc)] = api::KeyState::KEY_HOLD;
+			triggerKeyFunction(kc, api::KeyState::KEY_HOLD);
+		}
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, api::KeyCode(int(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1), 0x0), core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_PRESSED, kc, 0x0), core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
@@ -57,12 +65,53 @@ namespace modules {
 
 	bool MouseListener::mouseReleased(const OIS::MouseEvent & objMouseEvent, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		api::KeyCode kc = api::KeyCode(size_t(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1);
+		if (_keyStates[size_t(kc)] == api::KeyState::KEY_HOLD || _keyStates[size_t(kc)] == api::KeyState::KEY_PRESSED) {
+			_keyStates[size_t(kc)] = api::KeyState::KEY_RELEASED;
+			triggerKeyFunction(kc, api::KeyState::KEY_RELEASED);
+		}
 
-		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, api::KeyCode(int(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1), 0x0), core::Subsystem::Input);
+		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(api::KeyState::KEY_RELEASED, kc, 0x0), core::Subsystem::Input);
 
 		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
 		return true;
+	}
+
+	void MouseListener::setKeyFunction(const api::KeyCode name, const api::KeyState type, const boost::function<void(void)> & f) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_objInputKeyFunctions[std::make_pair(name, type)] = f;
+	}
+
+	void MouseListener::removeKeyFunction(const api::KeyCode name, const api::KeyState type) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_objInputKeyFunctions.erase(std::make_pair(name, type));
+	}
+
+	void MouseListener::triggerKeyFunction(const api::KeyCode keyCode, const api::KeyState type) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		InputKeyFunctions::const_iterator iter = _objInputKeyFunctions.find(std::make_pair(keyCode, type));
+		if (iter == _objInputKeyFunctions.end()) {
+			// keyCode is register for another event
+			return;
+		}
+
+		std::thread(iter->second).detach();
+	}
+
+	void MouseListener::Tick() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		for (size_t i = 0; i < _keyStates.size(); i++) {
+			if (_keyStates[i] == api::KeyState::KEY_PRESSED) {
+				_keyStates[i] = api::KeyState::KEY_HOLD;
+			} else if (_keyStates[i] == api::KeyState::KEY_HOLD) {
+				triggerKeyFunction(api::KeyCode(i), api::KeyState::KEY_HOLD);
+
+				api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::keyboard::KeyKeyboard, core::Method::Update, new api::input::Input_Keyboard_Update(_keyStates[i], api::KeyCode(i), 0x0), core::Subsystem::Input);
+
+				api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+			}
+		}
 	}
 
 } /* namespace modules */

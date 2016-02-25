@@ -22,10 +22,14 @@
 #ifndef __I6ENGINE_MODULES_MOUSELISTENER_H__
 #define __I6ENGINE_MODULES_MOUSELISTENER_H__
 
+#include <array>
 #include <cstdint>
 #include <map>
 
 #include "i6engine/utils/i6eThreadSafety.h"
+
+#include "i6engine/api/KeyCodes.h"
+#include "i6engine/api/facades/InputFacade.h"
 
 #include "OIS/OISMouse.h"
 
@@ -45,7 +49,14 @@ namespace modules {
 	class MouseListener : public OIS::MouseListener {
 		friend class InputManager;
 
+		typedef std::map<std::pair<api::KeyCode, api::KeyState>, boost::function<void(void)>> InputKeyFunctions;
+
 	private:
+		std::array<api::KeyState, size_t(api::KeyCode::COUNT)> _keyStates;
+		std::array<char, size_t(api::KeyCode::COUNT)> _keyTexts;
+
+		InputKeyFunctions _objInputKeyFunctions;
+
 		/**
 		 * \brief last state of the mouseWheel
 		 */
@@ -80,6 +91,38 @@ namespace modules {
 		 * \param[in] id ID of the button whose state changed
 		 */
 		bool mouseReleased(const OIS::MouseEvent & objMouseEvent, OIS::MouseButtonID id);
+
+		/**
+		 * \brief Adds the given function associated with specified keyevent to the _objInputKeyFunctions map
+		 *
+		 * \param name OIS::api::KeyCode of the designated Key
+		 * \param type must either be "Pressed" or "Released"
+		 * \param ptrEventMethod Pointer to the designated function
+		 */
+		void setKeyFunction(const api::KeyCode name, const api::KeyState type, const boost::function<void(void)> & ptrEventMethod);
+
+		/**
+		 * \brief removes the function specified for the given pair of KeyCode and type
+		 *
+		 * \param name OIS::api::KeyCode of the designated Key
+		 * \param type must either be "Pressed" or "Released"
+		 */
+		void removeKeyFunction(const api::KeyCode name, const api::KeyState type);
+
+		/**
+		 * \brief Triggers the previously subscribed event for a key "Pressed" or "Released" event.
+		 *
+		 *    seems to invoke a function call to function in _objGUIFunctions specified by name and type
+		 *    merely checks existance of name and type value pair in _objGUIFunctions and calls boost::thread(iter->second) on success
+		 *
+		 * \return   bool true if enabled, false otherwise
+		 */
+		void triggerKeyFunction(const api::KeyCode keyCode, const api::KeyState type);
+
+		/**
+		 * \brief checks whether keys are hold
+		 */
+		void Tick();
 
 		/**
 		 * \brief Data structure to store mappings of mousebuttons and corresponding actions.
