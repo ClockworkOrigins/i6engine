@@ -98,45 +98,33 @@ namespace sample {
 		}
 	}
 
-	void getHeight(const Vec3 & pos, uint64_t & x, uint64_t & z) {
-		double edgeLength = 1200.0 / 65;
-		x = uint64_t((pos.getX() + 600.0 + edgeLength / 2) / edgeLength - 0.5);
-		z = 65 - uint64_t((pos.getZ() + 600.0 + edgeLength / 2) / edgeLength + 0.5);
-	}
-
 	void TerraformingApplication::lowerTerrain() {
-		if (i6engine::api::EngineController::GetSingleton().getCurrentTime() - _lastUpdateTime >= 100000) {
+		if (i6engine::api::EngineController::GetSingleton().getCurrentTime() - _lastUpdateTime >= 30000) {
 			auto vec = i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
 			for (size_t i = 0; i < vec.size(); i++) {
 				if (vec[i].first == -1) {
-					uint64_t x;
-					uint64_t z;
-					getHeight(vec[i].second, x, z);
 					auto list = i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Terrain");
 					auto tc = list[0]->getGOC<i6engine::api::TerrainAppearanceComponent>(i6engine::api::components::ComponentTypes::TerrainAppearanceComponent);
-					tc->setHeightAtPosition(x, z, tc->getHeightAtPosition(x, z) - 0.1);
+					tc->setHeightAtPosition(vec[i].second, tc->getHeightAtPosition(vec[i].second) - 0.1);
 					break;
 				}
 			}
-			_lastUpdateTime += 30000;
+			_lastUpdateTime = i6engine::api::EngineController::GetSingleton().getCurrentTime();
 		}
 	}
 
 	void TerraformingApplication::raiseTerrain() {
-		if (i6engine::api::EngineController::GetSingleton().getCurrentTime() - _lastUpdateTime >= 100000) {
+		if (i6engine::api::EngineController::GetSingleton().getCurrentTime() - _lastUpdateTime >= 30000) {
 			auto vec = i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
 			for (size_t i = 0; i < vec.size(); i++) {
 				if (vec[i].first == -1) {
-					uint64_t x;
-					uint64_t z;
-					getHeight(vec[i].second, x, z);
 					auto list = i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Terrain");
 					auto tc = list[0]->getGOC<i6engine::api::TerrainAppearanceComponent>(i6engine::api::components::ComponentTypes::TerrainAppearanceComponent);
-					tc->setHeightAtPosition(x, z, tc->getHeightAtPosition(x, z) + 0.1);
+					tc->setHeightAtPosition(vec[i].second, tc->getHeightAtPosition(vec[i].second) + 0.1);
 					break;
 				}
 			}
-			_lastUpdateTime += 30000;
+			_lastUpdateTime = i6engine::api::EngineController::GetSingleton().getCurrentTime();
 		}
 	}
 

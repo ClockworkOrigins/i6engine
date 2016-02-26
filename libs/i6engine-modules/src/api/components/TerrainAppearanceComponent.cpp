@@ -111,8 +111,20 @@ namespace api {
 		_heightdata[x][z] = height;
 	}
 
+	void TerrainAppearanceComponent::setHeightAtPosition(const Vec3 & pos, double height) {
+		uint64_t x, z;
+		convertPositionToVertex(pos, x, z);
+		setHeightAtPosition(x, z, height);
+	}
+
 	double TerrainAppearanceComponent::getHeightAtPosition(uint64_t x, uint64_t z) const {
 		return _heightdata[x][z];
+	}
+
+	double TerrainAppearanceComponent::getHeightAtPosition(const Vec3 & pos) const {
+		uint64_t x, z;
+		convertPositionToVertex(pos, x, z);
+		return getHeightAtPosition(x, z);
 	}
 
 	void TerrainAppearanceComponent::saveCollisionShape(const std::string & outFile, const std::function<void(void)> & cb) {
@@ -182,6 +194,12 @@ namespace api {
 		}, "Integer"));
 
 		return result;
+	}
+
+	void TerrainAppearanceComponent::convertPositionToVertex(const Vec3 & pos, uint64_t & x, uint64_t & z) const {
+		double edgeLength = _size / _vertices;
+		x = uint64_t((pos.getX() + _size * 0.5 + edgeLength * 0.5) / edgeLength - 0.5);
+		z = _vertices - uint64_t((pos.getZ() + _size * 0.5 + edgeLength * 0.5) / edgeLength + 0.5);
 	}
 
 } /* namespace api */

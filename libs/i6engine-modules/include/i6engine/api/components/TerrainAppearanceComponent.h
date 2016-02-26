@@ -70,7 +70,23 @@ namespace api {
 		 */
 		void setHeightAtPosition(uint64_t x, uint64_t z, double height);
 
+		/**
+		 * \brief sets the height at a defined position in the terrain
+		 * position is a real world position
+		 */
+		void setHeightAtPosition(const Vec3 & pos, double height);
+		
+		/**
+		 * \brief gets the height at a defined position in the terrain
+		 * coordinates in vertices
+		 */
 		double getHeightAtPosition(uint64_t x, uint64_t z) const;
+		
+		/**
+		 * \brief gets the height at a defined position in the terrain
+		 * position is a real world position
+		 */
+		double getHeightAtPosition(const Vec3 & pos) const;
 
 		/**
 		 * \brief saves collision shape as bullet collisionshape to given file
@@ -106,6 +122,8 @@ namespace api {
 		void Finalize() override;
 
 		void sendUpdateMessage();
+
+		void convertPositionToVertex(const Vec3 & pos, uint64_t & x, uint64_t & z) const;
 	};
 
 } /* namespace api */
