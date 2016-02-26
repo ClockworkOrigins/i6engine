@@ -95,7 +95,7 @@ namespace modules {
 		std::map<GraphicsNode *, std::string> _attachedNodes;
 		struct sortFrameFunctions {
 			bool operator()(const std::pair<uint64_t, std::function<void(void)>> & a, const std::pair<uint64_t, std::function<void(void)>> & b) const {
-				return a.first < b.first;
+				return !(a.first < b.first);
 			}
 		};
 
