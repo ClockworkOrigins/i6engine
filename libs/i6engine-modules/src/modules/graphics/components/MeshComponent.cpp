@@ -212,6 +212,7 @@ namespace modules {
 			std::string name = (*it)->getName();
 			Vec3 pos(_parent->getSceneNode()->getPosition() + _sceneNode->getPosition() + (*it)->getPosition());
 			Quaternion rot(_parent->getSceneNode()->getOrientation() * _sceneNode->getOrientation() * (*it)->getOrientation());
+			boneTransforms.insert(std::make_pair(name, api::Transform(pos, rot)));
 		}
 		if (!boneTransforms.empty()) {
 			auto mesh = _meshComponent.get();
