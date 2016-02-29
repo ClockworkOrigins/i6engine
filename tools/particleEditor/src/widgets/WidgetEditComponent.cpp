@@ -347,7 +347,7 @@ namespace widgets {
 			count++;
 		}
 
-		if (viewOnly) { // TODO: (Michael) check the GetParent() calls here
+		if (viewOnly) {
 			/*GetParent()->GetParent()->Enable(false); // Disables input from the parent
 			wxSingleChoiceDialog choiceWindow(this, _("overview of existing connections"), _("Existing connections"), count, choices, reinterpret_cast<void **>(0), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCENTRE);
 			choiceWindow.SetSize(320, 200);

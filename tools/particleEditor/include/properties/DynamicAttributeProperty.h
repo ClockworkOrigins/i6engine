@@ -31,6 +31,7 @@ namespace properties {
 	private slots:
 		void changedDynamicType();
 		void changedValue();
+		void addControlPoint();
 
 	private:
 		enum PropertyTypes {
@@ -44,6 +45,8 @@ namespace properties {
 		std::vector<QWidget *> _widgets;
 		QComboBox * _comboBox;
 		std::map<PropertyTypes, QDoubleSpinBox *> _values;
+		QComboBox * _interpolationTypeBox;
+		std::vector<std::pair<QDoubleSpinBox *, QDoubleSpinBox *>> _controlPoints;
 
 		void createGUI();
 	};

@@ -1423,5 +1423,9 @@
         <source>Colour change</source>
         <translation>Farbwechsel</translation>
     </message>
+    <message>
+        <source>Add control point</source>
+        <translation>Kontrollpunkt hinzufügen</translation>
+    </message>
 </context>
 </TS>

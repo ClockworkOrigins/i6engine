@@ -9,13 +9,14 @@
 
 #include <QComboBox>
 #include <QLabel>
+#include <QPushButton>
 #include <QSpinBox>
 
 namespace i6engine {
 namespace particleEditor {
 namespace properties {
 
-	DynamicAttributeProperty::DynamicAttributeProperty(QWidget * par, QString label, QString name, ParticleUniverse::DynamicAttribute * value) : Property(par, label, name), _widget(nullptr), _layout(nullptr), _value(value), _widgets(), _comboBox(nullptr), _values() {
+	DynamicAttributeProperty::DynamicAttributeProperty(QWidget * par, QString label, QString name, ParticleUniverse::DynamicAttribute * value) : Property(par, label, name), _widget(nullptr), _layout(nullptr), _value(value), _widgets(), _comboBox(nullptr), _values(), _interpolationTypeBox(nullptr), _controlPoints() {
 		widgets::DYN_FIXED = QApplication::tr("Fixed");
 		widgets::DYN_RANDOM = QApplication::tr("Random");
 		widgets::DYN_CURVED = QApplication::tr("Curved");
@@ -113,6 +114,11 @@ namespace properties {
 			break;
 		}
 		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_CURVED: {
+			dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value)->setInterpolationType(ParticleUniverse::InterpolationType(_interpolationTypeBox->currentIndex()));
+			dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value)->removeAllControlPoints();
+			for (auto & p : _controlPoints) {
+				dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value)->addControlPoint(p.first->value(), p.second->value());
+			}
 			break;
 		}
 		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_OSCILLATE: {
@@ -211,6 +217,32 @@ namespace properties {
 		}
 		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_CURVED: {
 			_comboBox->setCurrentIndex(2);
+			QComboBox * comboBox = new QComboBox(this);
+			connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changedDynamicType()), Qt::QueuedConnection);
+			QStringList interpolationTypes;
+			interpolationTypes.append(widgets::DYN_CURVED_LINEAR);
+			interpolationTypes.append(widgets::DYN_CURVED_SPLINE);
+			comboBox->addItems(interpolationTypes);
+			_interpolationTypeBox = comboBox;
+			ParticleUniverse::DynamicAttributeCurved * dynAttr = dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value);
+			if (dynAttr->getInterpolationType() == ParticleUniverse::InterpolationType::IT_LINEAR) {
+				comboBox->setCurrentIndex(0);
+			} else if (dynAttr->getInterpolationType() == ParticleUniverse::InterpolationType::IT_SPLINE) {
+				comboBox->setCurrentIndex(1);
+			}
+			QLabel * l = new QLabel(QApplication::tr("Interpolation Type"), _widget);
+			_layout->addWidget(l, 1, 0);
+			_layout->addWidget(comboBox, 1, 1);
+			_widgets.push_back(comboBox);
+			_widgets.push_back(l);
+			QPushButton * pb = new QPushButton(QApplication::tr("Add control point"), _widget);
+			_layout->addWidget(pb, 2, 0);
+			connect(pb, SIGNAL(clicked()), this, SLOT(addControlPoint()));
+			for (auto p : dynAttr->getControlPoints()) {
+				addControlPoint();
+				_controlPoints.back().first->setValue(p.x);
+				_controlPoints.back().second->setValue(p.y);
+			}
 			break;
 		}
 		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_OSCILLATE: {
@@ -222,6 +254,22 @@ namespace properties {
 		}
 		}
 		connect(_comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changedDynamicType()), Qt::QueuedConnection);
+	}
+
+	void DynamicAttributeProperty::addControlPoint() {
+		QDoubleSpinBox * dsbTimepoint = new QDoubleSpinBox(_widget);
+		dsbTimepoint->setMinimum(0.0);
+		dsbTimepoint->setMaximum(1.0);
+		QDoubleSpinBox * dsbValue = new QDoubleSpinBox(_widget);
+		dsbValue->setMinimum(-999999);
+		dsbValue->setMaximum(999999);
+		_layout->addWidget(dsbTimepoint, 3 + _controlPoints.size(), 0);
+		_layout->addWidget(dsbValue, 3 + _controlPoints.size(), 1);
+		_widgets.push_back(dsbTimepoint);
+		_widgets.push_back(dsbValue);
+		connect(dsbTimepoint, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));
+		connect(dsbValue, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));
+		_controlPoints.push_back(std::make_pair(dsbTimepoint, dsbValue));
 	}
 
 } /* namespace properties */
