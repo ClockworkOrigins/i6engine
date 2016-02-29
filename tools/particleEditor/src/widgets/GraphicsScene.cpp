@@ -5,8 +5,6 @@
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
 
-#include <iostream>
-
 namespace i6engine {
 namespace particleEditor {
 namespace widgets {
@@ -20,7 +18,7 @@ namespace widgets {
 	void GraphicsScene::dragMoveEvent(QGraphicsSceneDragDropEvent * evt) {
 		QByteArray ba = evt->mimeData()->data("widget");
 		QDataStream ds(ba);
-		int i;
+		quint64 i;
 		QPointF offset;
 		ds >> i >> offset;
 		WidgetEditComponent * wec = (WidgetEditComponent *) i;
