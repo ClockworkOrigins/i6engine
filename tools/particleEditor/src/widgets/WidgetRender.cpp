@@ -1,5 +1,9 @@
 #include "widgets/WidgetRender.h"
 
+#include "i6engine/math/i6eMath.h"
+
+#include "i6engine/api/KeyCodes.h"
+
 #include "i6engine/modules/graphics/ResourceManager.h"
 
 #include "ParticleUniverseSystem.h"
@@ -24,7 +28,7 @@ namespace widgets {
 
 	std::string CURRENT_PS_NAME = "currentParticleSystemName";
 
-	WidgetRender::WidgetRender(QWidget * par) : QWidget(par), _root(nullptr), _resourceManager(nullptr), _rWindow(nullptr), _sceneManager(nullptr), _overlay(nullptr), _textPanel(nullptr), _averageFPS(nullptr), _cameraNode(nullptr), _camera(nullptr), _viewport(nullptr), _particleNode(nullptr), _currentParticleSystemForRenderer(nullptr), _maxNumberOfVisualParticles(0), _maxNumberOfEmittedParticles(0), _lastFrameTime(std::chrono::high_resolution_clock::now()), _frames(60) {
+	WidgetRender::WidgetRender(QWidget * par) : QWidget(par), _root(nullptr), _resourceManager(nullptr), _rWindow(nullptr), _sceneManager(nullptr), _overlay(nullptr), _textPanel(nullptr), _averageFPS(nullptr), _cameraNode(nullptr), _camera(nullptr), _viewport(nullptr), _particleNode(nullptr), _currentParticleSystemForRenderer(nullptr), _maxNumberOfVisualParticles(0), _maxNumberOfEmittedParticles(0), _lastFrameTime(std::chrono::high_resolution_clock::now()), _frames(60), _lastPos() {
 		setupUi(this);
 
 		clockUtils::iniParser::IniParser iniParser;
@@ -214,6 +218,25 @@ namespace widgets {
 			// Zoom out
 			zoom(1.05);
 		}
+		evt->accept();
+	}
+
+	void WidgetRender::mouseMoveEvent(QMouseEvent * evt) {
+		Ogre::Vector3 cameraPosition = _camera->getPosition();
+		Ogre::Vector3 pivot = Ogre::Vector3::ZERO;
+		Ogre::Vector3 direction = cameraPosition - pivot;
+		Vec3 newPos = math::rotateVector(Vec3(direction), Quaternion(Vec3(0.0, 1.0, 0.0), (evt->pos().x() - _lastPos.getX()) * 1.0 * PI / 180.0) * Quaternion(Vec3(1.0, 0.0, 0.0), (evt->pos().y() - _lastPos.getY()) * 1.0 * PI / 180.0)); // rotate by 1 degree
+		_camera->setPosition(newPos.toOgre());
+		_camera->lookAt(pivot);
+		_lastPos = Vec2i(evt->pos().x(), evt->pos().y());
+		evt->accept();
+	}
+
+	void WidgetRender::mousePressEvent(QMouseEvent * evt) {
+		evt->accept();
+	}
+
+	void WidgetRender::mouseReleaseEvent(QMouseEvent * evt) {
 		evt->accept();
 	}
 

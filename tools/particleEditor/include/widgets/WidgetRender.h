@@ -5,6 +5,8 @@
 
 #include <chrono>
 
+#include "i6engine/math/i6eVector2.h"
+
 namespace Ogre {
 	class Camera;
 	class Overlay;
@@ -77,10 +79,14 @@ namespace widgets {
 		size_t _maxNumberOfEmittedParticles;
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrameTime;
 		uint64_t _frames;
+		Vec2i _lastPos;
 
 		void updateOverlay();
 		void resizeEvent(QResizeEvent * evt) override;
 		void wheelEvent(QWheelEvent * evt) override;
+		void mouseMoveEvent(QMouseEvent * evt) override;
+		void mousePressEvent(QMouseEvent * evt) override;
+		void mouseReleaseEvent(QMouseEvent * evt) override;
 		void zoom(double zoomFactor);
 	};
 
