@@ -49,6 +49,7 @@ set(particleEditorSrc
 	${srcdir}/properties/DoubleProperty.cpp
 	${srcdir}/properties/DynamicAttributeProperty.cpp
 	${srcdir}/properties/EnumProperty.cpp
+	${srcdir}/properties/MaterialProperty.cpp
 	${srcdir}/properties/QuaternionProperty.cpp
 	${srcdir}/properties/StringProperty.cpp
 	${srcdir}/properties/TimeAndColourListProperty.cpp
@@ -167,6 +168,7 @@ QT5_WRAP_CPP(particleEditorGuiHeader
 	${includedir}/properties/DoubleProperty.h
 	${includedir}/properties/DynamicAttributeProperty.h
 	${includedir}/properties/EnumProperty.h
+	${includedir}/properties/MaterialProperty.h
 	${includedir}/properties/QuaternionProperty.h
 	${includedir}/properties/StringProperty.h
 	${includedir}/properties/TimeAndColourListProperty.h

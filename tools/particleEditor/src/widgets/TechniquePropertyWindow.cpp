@@ -2,6 +2,7 @@
 
 #include "properties/BoolProperty.h"
 #include "properties/DoubleProperty.h"
+#include "properties/MaterialProperty.h"
 #include "properties/StringProperty.h"
 #include "properties/UIntProperty.h"
 #include "properties/Vec3Property.h"
@@ -66,7 +67,7 @@ namespace widgets {
 		append(new properties::DoubleProperty(this, PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA, PRNL_TECHNIQUE_EMITTED_SYSTEM_QUOTA, ParticleUniverse::ParticleTechnique::DEFAULT_EMITTED_SYSTEM_QUOTA));
 
 		// Material: Ogre::String
-		append(new properties::StringProperty(this, PRNL_TECHNIQUE_MATERIAL, PRNL_TECHNIQUE_MATERIAL, ""));
+		append(new properties::MaterialProperty(this, PRNL_TECHNIQUE_MATERIAL, PRNL_TECHNIQUE_MATERIAL, "BaseWhite"));
 
 		// Lod index: unsigned short
 		append(new properties::UIntProperty(this, PRNL_TECHNIQUE_LOD_INDEX, PRNL_TECHNIQUE_LOD_INDEX, ParticleUniverse::ParticleTechnique::DEFAULT_LOD_INDEX));
