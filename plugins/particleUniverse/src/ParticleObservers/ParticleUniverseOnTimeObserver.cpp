@@ -73,8 +73,6 @@ namespace ParticleUniverse {
 				return particle && almostEquals((particle->totalTimeToLive - particle->timeToLive), mThreshold, 0.01f);
 			}
 		}
-
-		return false;
 	}
 	
 	void OnTimeObserver::copyAttributesTo(ParticleObserver * observer) {

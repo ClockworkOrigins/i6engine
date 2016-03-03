@@ -85,7 +85,7 @@ namespace objects {
 		}
 
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & _template;
 			ar & _id;
 			ar & _params;
@@ -102,7 +102,7 @@ namespace objects {
 		std::string _type; // Type of the GO
 		std::vector<GOTemplateComponent> _components; // template name, id, params, owner
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & _type;
 			ar & _components;
 		}
@@ -120,7 +120,7 @@ namespace objects {
 		Object_Create_Create();
 		Object_Create_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint64_t u, const GOTemplate & g, const bool b);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & tpl;
 			ar & owner;
@@ -139,7 +139,7 @@ namespace objects {
 		Object_Create_Delete();
 		Object_Create_Delete(const int64_t i, const core::IPKey & o);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & owner;
 		}
@@ -157,7 +157,7 @@ namespace objects {
 		Object_Level_Create();
 		Object_Level_Create(const std::string & fi, const std::string & fl, const std::function<void(uint16_t)> & cb, const std::function<void(void)> & fu);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & file;
 			ar & flags;
@@ -173,7 +173,7 @@ namespace objects {
 		Object_Type_Delete();
 		Object_Type_Delete(const std::string & t);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & type;
 		}
@@ -254,7 +254,7 @@ namespace objects {
 		Position_Update(const int64_t i, const int64_t ci, const Vec3 & p, const Quaternion & r, const Vec3 & s);
 		Position_Update * copy() { return new Position_Update(*this); }
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & pos;
 			ar & rot;

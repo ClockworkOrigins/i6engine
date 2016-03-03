@@ -113,7 +113,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_RENDERER_Q_GROUP], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mRenderer->setRenderQueueGroup(val);
+							mRenderer->setRenderQueueGroup(uint8(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_RENDERER_SORTING]) {
@@ -129,7 +129,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_RENDERER_TEXCOORDS_ROWS], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mRenderer->setTextureCoordsRows(val);
+							mRenderer->setTextureCoordsRows(uchar(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_RENDERER_TEXCOORDS_COLUMNS]) {
@@ -137,7 +137,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_RENDERER_TEXCOORDS_COLUMNS], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mRenderer->setTextureCoordsColumns(val);
+							mRenderer->setTextureCoordsColumns(uchar(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_RENDERER_USE_SOFT_PARTICLES]) {

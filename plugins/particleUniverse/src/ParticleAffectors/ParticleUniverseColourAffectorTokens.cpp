@@ -37,7 +37,7 @@ namespace ParticleUniverse {
 		if (prop->name == token[TOKEN_TIME_COLOUR] || prop->name == token[TOKEN_COLOUR_TIME_COLOUR]) {
 			if (passValidatePropertyNumberOfValuesRange(compiler, prop, token[TOKEN_TIME_COLOUR], 4, 5)) {
 				int n = 0;
-				Real time;
+				Real time = 0.0;
 				ColourValue colour;
 				AbstractNodeList::const_iterator i = prop->values.begin();
 				AbstractNodeList::const_iterator end = prop->values.end();

@@ -68,7 +68,7 @@ namespace api {
 		 * \brief sets the height at a defined position in the terrain
 		 * coordinates in vertices
 		 */
-		void setHeightAtPosition(uint64_t x, uint64_t z, double height);
+		void setHeightAtPosition(size_t x, size_t z, double height);
 
 		/**
 		 * \brief sets the height at a defined position in the terrain
@@ -80,7 +80,7 @@ namespace api {
 		 * \brief gets the height at a defined position in the terrain
 		 * coordinates in vertices
 		 */
-		double getHeightAtPosition(uint64_t x, uint64_t z) const;
+		double getHeightAtPosition(size_t x, size_t z) const;
 		
 		/**
 		 * \brief gets the height at a defined position in the terrain
@@ -110,7 +110,7 @@ namespace api {
 		std::vector<std::vector<double>> _heightdata;
 		double _size;
 		double _inputScale;
-		uint32_t _vertices;
+		uint16_t _vertices;
 		std::vector<std::tuple<double, std::string, std::string, double, double>> _layers;
 		int64_t _minX;
 		int64_t _maxX;

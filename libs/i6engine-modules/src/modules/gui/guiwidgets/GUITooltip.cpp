@@ -10,7 +10,7 @@
 namespace i6engine {
 namespace modules {
 
-	GUITooltip::GUITooltip(const std::string & name, const std::string & style) : GUIWidget(name) {
+	GUITooltip::GUITooltip(const std::string & name, const std::string &) : GUIWidget(name) {
 		loadWindowLayout(name, "Tooltip.layout");
 		_window->setRiseOnClickEnabled(false);
 		enableTicking(true);

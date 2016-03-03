@@ -62,6 +62,7 @@ namespace api {
 
 	void VelocityComponent::decelerate(const Vec3 & deceleration, DecelerationHandling handling, const std::function<void(void)> & callback) {
 		_deceleration = deceleration;
+		_decelerationHandling = handling;
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::PhysicsNodeMessageType, physics::PhyDecelerate, core::Method::Update, new physics::Physics_Decelerate_Update(getID(), _objOwnerID, _deceleration, _decelerationHandling, callback), core::Subsystem::Object));
 	}

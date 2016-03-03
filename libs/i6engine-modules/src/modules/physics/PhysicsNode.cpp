@@ -204,7 +204,7 @@ namespace modules {
 				_parentShape->addChildShape(transform, newShape);
 			}
 		} else {
-			newShape->setLocalScaling(_scale.toBullet() * newShape->getLocalScaling());
+			newShape->setLocalScaling(_scale.toBullet() * newShape->getLocalScaling() * scale.toBullet());
 
 			_childShapes.insert(std::make_pair(compId, std::make_pair(_parentShape->getNumChildShapes(), newShape)));
 			_parentShape->addChildShape(btTransform(rotation.toBullet(), position.toBullet()), newShape);

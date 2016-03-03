@@ -135,7 +135,7 @@ namespace api {
 		return true;
 	}
 
-	bool GUIWidget::drop(const CEGUI::EventArgs & e) {
+	bool GUIWidget::drop(const CEGUI::EventArgs &) {
 		if (!_isDragged) {
 			return true;
 		}
@@ -170,7 +170,7 @@ namespace api {
 		return true;
 	}
 
-	bool GUIWidget::mouseEnter(const CEGUI::EventArgs & e) {
+	bool GUIWidget::mouseEnter(const CEGUI::EventArgs &) {
 		if (_tooltip.empty() || _tooltipActive) {
 			return true;
 		}
@@ -181,7 +181,7 @@ namespace api {
 		return true;
 	}
 
-	bool GUIWidget::mouseLeave(const CEGUI::EventArgs & e) {
+	bool GUIWidget::mouseLeave(const CEGUI::EventArgs &) {
 		if (_isDragged) {
 			setPosition(CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _dragOffset.getX(), CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _dragOffset.getY());
 			enableTicking(true);

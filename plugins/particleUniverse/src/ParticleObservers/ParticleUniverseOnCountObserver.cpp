@@ -71,8 +71,6 @@ namespace ParticleUniverse {
 				return false;
 			}
 		}
-
-		return false;
 	}
 	
 	void OnCountObserver::copyAttributesTo(ParticleObserver * observer) {

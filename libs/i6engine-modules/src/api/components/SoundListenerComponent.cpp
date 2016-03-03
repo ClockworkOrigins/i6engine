@@ -65,7 +65,7 @@ namespace api {
 		return attributeMap();
 	}
 
-	std::pair<AddStrategy, int64_t> SoundListenerComponent::howToAdd(const ComPtr & comp) const {
+	std::pair<AddStrategy, int64_t> SoundListenerComponent::howToAdd(const ComPtr &) const {
 		return std::make_pair(AddStrategy::REPLACE_DIS, 0);
 	}
 

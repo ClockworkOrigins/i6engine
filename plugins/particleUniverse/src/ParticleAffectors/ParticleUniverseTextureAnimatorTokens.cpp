@@ -57,7 +57,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_START_TEXANIM_TEXCOORDS_RANGE], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					affector->setTextureCoordsStart(val);
+					affector->setTextureCoordsStart(uint16(val));
 					return true;
 				}
 			}
@@ -66,7 +66,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_TEXANIM_TEXCOORDS_START], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					affector->setTextureCoordsStart(val);
+					affector->setTextureCoordsStart(uint16(val));
 					return true;
 				}
 			}
@@ -75,7 +75,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_END_TEXANIM_TEXCOORDS_RANGE], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					affector->setTextureCoordsEnd(val);
+					affector->setTextureCoordsEnd(uint16(val));
 					return true;
 				}
 			}
@@ -84,7 +84,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_TEXANIM_TEXCOORDS_END], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					affector->setTextureCoordsEnd(val);
+					affector->setTextureCoordsEnd(uint16(val));
 					return true;
 				}
 			}

@@ -27,7 +27,7 @@ set(i6ArchiverSrc
 add_executable(i6Archiver ${i6ArchiverSrc})
 set_target_properties(i6Archiver PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(i6Archiver ${OGRE_LIBRARIES} i6engine-modules)
+target_link_libraries(i6Archiver ${BOOST_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES})
 
 IF(WIN32)
 	add_custom_command(TARGET i6Archiver POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6Archiver.exe ${CMAKE_BINARY_DIR}/bin)

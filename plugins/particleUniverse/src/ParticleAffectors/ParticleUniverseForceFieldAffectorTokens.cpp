@@ -79,7 +79,7 @@ namespace ParticleUniverse {
 				unsigned int val = 0;
 				if (getUInt(prop->values.front(), &val)) {
 					affector->suppressGeneration(true);
-					affector->setOctaves(val);
+					affector->setOctaves(ushort(val));
 					affector->suppressGeneration(false);
 					return true;
 				}

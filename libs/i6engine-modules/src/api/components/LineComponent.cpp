@@ -56,7 +56,7 @@ namespace api {
 		return params;
 	}
 
-	std::pair<AddStrategy, int64_t> LineComponent::howToAdd(const ComPtr & comp) const {
+	std::pair<AddStrategy, int64_t> LineComponent::howToAdd(const ComPtr &) const {
 		return std::make_pair(AddStrategy::ADD, 0);
 	}
 

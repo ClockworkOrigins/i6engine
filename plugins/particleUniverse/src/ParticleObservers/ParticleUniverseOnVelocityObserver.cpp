@@ -50,8 +50,6 @@ namespace ParticleUniverse {
 			// Equals
 			return almostEquals(particle->calculateVelocity(), (scaleVelocity * mThreshold), 0.01f);
 		}
-
-		return false;
 	}
 	
 	void OnVelocityObserver::copyAttributesTo(ParticleObserver * observer) {

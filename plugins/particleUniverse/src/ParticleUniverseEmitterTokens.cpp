@@ -191,7 +191,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_START_TEXCOORDS_RANGE], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mEmitter->setParticleTextureCoordsRangeStart(val);
+							mEmitter->setParticleTextureCoordsRangeStart(uint16(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_EMITTER_START_TEXCOORDS]) {
@@ -199,7 +199,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_START_TEXCOORDS], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mEmitter->setParticleTextureCoordsRangeStart(val);
+							mEmitter->setParticleTextureCoordsRangeStart(uint16(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_EMITTER_END_TEXCOORDS_RANGE]) {
@@ -207,7 +207,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_END_TEXCOORDS_RANGE], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mEmitter->setParticleTextureCoordsRangeEnd(val);
+							mEmitter->setParticleTextureCoordsRangeEnd(uint16(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_EMITTER_END_TEXCOORDS]) {
@@ -215,7 +215,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_END_TEXCOORDS], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mEmitter->setParticleTextureCoordsRangeEnd(val);
+							mEmitter->setParticleTextureCoordsRangeEnd(uint16(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_EMITTER_TEXCOORDS]) {
@@ -223,7 +223,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_TEXCOORDS], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mEmitter->setParticleTextureCoords(val);
+							mEmitter->setParticleTextureCoords(uint16(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_EMITTER_START_COLOUR_RANGE]) {

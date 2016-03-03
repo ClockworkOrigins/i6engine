@@ -43,8 +43,7 @@ namespace plugins {
 		return _functions;
 	}
 
-	void DialogCreatorPythonScriptLanguage::exportScript(const QVector<dialogCreator::plugins::i6Script> & dialog) {
-
+	void DialogCreatorPythonScriptLanguage::exportScript(const QVector<dialogCreator::plugins::i6Script> &) {
 	}
 
 	void DialogCreatorPythonScriptLanguage::parseLine(const QString & line) {

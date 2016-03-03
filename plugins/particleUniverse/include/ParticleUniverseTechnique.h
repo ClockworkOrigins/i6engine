@@ -64,12 +64,12 @@ namespace ParticleUniverse {
 		static const size_t DEFAULT_EMITTED_TECHNIQUE_QUOTA;
 		static const size_t DEFAULT_EMITTED_AFFECTOR_QUOTA;
 		static const size_t DEFAULT_EMITTED_SYSTEM_QUOTA;
-		static const unsigned short DEFAULT_LOD_INDEX;
+		static const ushort DEFAULT_LOD_INDEX;
 		static const Real DEFAULT_WIDTH;
 		static const Real DEFAULT_HEIGHT;
 		static const Real DEFAULT_DEPTH;
-		static const unsigned short DEFAULT_SPATIAL_HASHING_CELL_DIM;
-		static const unsigned short DEFAULT_SPATIAL_HASHING_CELL_OVERLAP;
+		static const ushort DEFAULT_SPATIAL_HASHING_CELL_DIM;
+		static const ushort DEFAULT_SPATIAL_HASHING_CELL_OVERLAP;
 		static const size_t DEFAULT_SPATIAL_HASHING_TABLE_SIZE;
 		static const Real DEFAULT_SPATIAL_HASHING_INTERVAL;
 		static const Real DEFAULT_MAX_VELOCITY;
@@ -587,11 +587,11 @@ namespace ParticleUniverse {
 			The Lod index determines at which distance this ParticleTechnique is active. This has only effect
 			if the Lod distances of the ParticleSystem to which this ParticleTechnique belongs have been defined.
 		*/
-		inline unsigned short getLodIndex() const { return mLodIndex; }
+		inline ushort getLodIndex() const { return mLodIndex; }
 
 		/** Set the Lod index.
 		*/
-		void setLodIndex(unsigned short lodIndex) { mLodIndex = lodIndex; }
+		void setLodIndex(ushort lodIndex) { mLodIndex = lodIndex; }
 
 		/** Determine which techniques, affectors, emitters will be emitted.
 		@remarks
@@ -717,16 +717,16 @@ namespace ParticleUniverse {
 
 		/** Returns the celsize used in spatial hashing.
 		*/
-		unsigned short getSpatialHashingCellDimension() const;
+		ushort getSpatialHashingCellDimension() const;
 
 		/** Set the celsize used in spatial hashing. A cel represents a small part of the 3d space in which 
 			particles may exist. The size of the cel is the same for both x, y and z dimension.
 		*/
-		void setSpatialHashingCellDimension(unsigned short spatialHashingCellDimension);
+		void setSpatialHashingCellDimension(ushort spatialHashingCellDimension);
 			
 		/** Return the size of the overlap.
 		*/
-		unsigned short getSpatialHashingCellOverlap() const;
+		ushort getSpatialHashingCellOverlap() const;
 
 		/** Set the size of the overlap.
 		@remarks
@@ -742,7 +742,7 @@ namespace ParticleUniverse {
 			2 particles in one cell are also performed in another cell. Set a flag to a particle, indicating that
 			it has been validated.
 		*/
-		void setSpatialHashingCellOverlap(unsigned short spatialHashingCellOverlap);
+		void setSpatialHashingCellOverlap(ushort spatialHashingCellOverlap);
 
 		/** Returns the size of the hashtable used in spatial hashing.
 		*/
@@ -1031,7 +1031,7 @@ namespace ParticleUniverse {
 			Note, that mLodIndex only has a meaning if the lod distances are set by the ParticleSystem, otherwise
 			it is ignored (which enables all ParticleTechniques).
 	    */
-		unsigned short mLodIndex;
+		ushort mLodIndex;
 
 		/** Distance between the latest camera that updated the renderqueue and the particle system.
 		@remarks
@@ -1134,8 +1134,8 @@ namespace ParticleUniverse {
 		*/
 		bool mIsSpatialHashingUsed;
 		bool mIsSpatialHashingInitialised;
-		unsigned short mSpatialHashingCellDimension; // Cell size
-		unsigned short mSpatialHashingCellOverlap; // Amount of overlap between each cell
+		ushort mSpatialHashingCellDimension; // Cell size
+		ushort mSpatialHashingCellOverlap; // Amount of overlap between each cell
 		unsigned int mSpatialHashTableSize;
 		SpatialHashTable<Particle *> * mSpatialHashTableA;
 		SpatialHashTable<Particle *> * mSpatialHashTableB;

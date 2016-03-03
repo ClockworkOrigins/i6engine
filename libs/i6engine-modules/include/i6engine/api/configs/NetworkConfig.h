@@ -53,7 +53,7 @@ namespace network {
 		Administration_GameState_Create() {}
 		Administration_GameState_Create(const core::IPKey & r, const std::vector<GameMessage::Ptr> & msgs);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & messages;
 			ar & receiver;
@@ -70,7 +70,7 @@ namespace network {
 		Network_Ping_Update() {}
 		Network_Ping_Update(const core::IPKey & r, uint64_t time);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & time;
 			ar & receiver;
@@ -87,7 +87,7 @@ namespace network {
 		Network_Pingtime_Update() {}
 		Network_Pingtime_Update(const core::IPKey & c, uint64_t p);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & ping;
 			ar & client;
@@ -106,7 +106,7 @@ namespace network {
 		}
 		Network_TimeSynchro_Update(const core::IPKey & r, uint64_t p, uint64_t t);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & ping;
 			ar & time;
@@ -125,7 +125,7 @@ namespace network {
 		Network_PingEnable_Update() {}
 		Network_PingEnable_Update(bool b);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & enable;
 		}
@@ -141,7 +141,7 @@ namespace network {
 		}
 		Network_ChatMessage(const std::string & t);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & text;
 		}

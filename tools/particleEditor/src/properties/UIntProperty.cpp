@@ -24,7 +24,7 @@ namespace properties {
 	}
 
 	void UIntProperty::changedValue() {
-		if (_value != _spinBox->value()) {
+		if (_value != static_cast<unsigned int>(_spinBox->value())) {
 			_value = _spinBox->value();
 			triggerChangedSignal();
 		}

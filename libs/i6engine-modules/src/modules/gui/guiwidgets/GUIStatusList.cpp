@@ -127,7 +127,7 @@ namespace modules {
 		}
 	}
 
-	bool GUIStatusList::selectionChanged(const CEGUI::EventArgs & evt) {
+	bool GUIStatusList::selectionChanged(const CEGUI::EventArgs &) {
 		if (_selectedCallback == nullptr) {
 			return true;
 		}

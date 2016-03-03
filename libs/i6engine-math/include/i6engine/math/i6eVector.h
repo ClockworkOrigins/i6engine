@@ -284,7 +284,7 @@ namespace math {
 		 * \brief serializer for the vector
 		 */
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & _x;
 			ar & _y;
 			ar & _z;

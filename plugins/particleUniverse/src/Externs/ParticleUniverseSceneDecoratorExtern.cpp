@@ -89,7 +89,7 @@ namespace ParticleUniverse {
 		if (mSubnode && mParentTechnique->getParentSystem()) {
 			Ogre::SceneNode * sceneNode = mParentTechnique->getParentSystem()->getParentSceneNode();
 			Ogre::SceneNode::ChildNodeIterator it = sceneNode->getChildIterator();
-			unsigned int i = 0;
+			unsigned short i = 0;
 			while (it.hasMoreElements()) { 
 				Ogre::SceneNode * child = static_cast<Ogre::SceneNode *>(it.getNext());
 				if (child == mSubnode) {

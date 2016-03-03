@@ -50,7 +50,7 @@ namespace modules {
 		}
 	}
 
-	bool GUIEditbox::textChanged(const CEGUI::EventArgs & evt) {
+	bool GUIEditbox::textChanged(const CEGUI::EventArgs &) {
 		if (_enterCallback == nullptr) {
 			return true;
 		}
@@ -58,7 +58,7 @@ namespace modules {
 		return true;
 	}
 
-	bool GUIEditbox::textAccepted(const CEGUI::EventArgs & evt) {
+	bool GUIEditbox::textAccepted(const CEGUI::EventArgs &) {
 		if (_submitCallback == nullptr) {
 			return true;
 		}

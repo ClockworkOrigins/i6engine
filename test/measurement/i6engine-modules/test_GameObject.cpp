@@ -114,7 +114,7 @@ namespace config {
 			_objFamilyID = config::ComponentTypes::ReplaceDisComponent;
 		}
 		// always replace dispatcher
-		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & c) const {
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr &) const {
 			return std::make_pair(AddStrategy::REPLACE_DIS, 0);
 		}
 	};
@@ -126,7 +126,7 @@ namespace config {
 		}
 
 		// always rejects
-		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & c) const {
+		std::pair<AddStrategy, int64_t> howToAdd(const ComPtr &) const {
 			return std::make_pair(AddStrategy::REJECT, 0);
 		}
 	};

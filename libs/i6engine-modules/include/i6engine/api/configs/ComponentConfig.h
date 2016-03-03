@@ -96,7 +96,7 @@ namespace components {
 		Component_Create_Create();
 		Component_Create_Create(const int64_t goid, const int64_t coid, const core::IPKey & r, const std::string & t, const attributeMap & p);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & tpl;
 			ar & params;
@@ -127,7 +127,7 @@ namespace components {
 		Component_Create_Delete();
 		Component_Create_Delete(const int64_t goid, const int64_t coid, uint32_t fam);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & famID;
 		}
@@ -141,7 +141,7 @@ namespace components {
 		Component_Spawnpoint_Update();
 		Component_Spawnpoint_Update(const int64_t goid, const int64_t coid);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 		}
 		Component_Spawnpoint_Update * copy() { return new Component_Spawnpoint_Update(*this); }
@@ -156,7 +156,7 @@ namespace components {
 		Component_Shatter_Update();
 		Component_Shatter_Update(const int64_t goid, const int64_t coid, const int64_t o, ShatterInterest si);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & other;
 			ar & shatterInterest;
@@ -172,7 +172,7 @@ namespace components {
 		Component_MoverResync_Update();
 		Component_MoverResync_Update(const int64_t goid, const int64_t coid, std::map<std::string, std::string> am);
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & boost::serialization::base_object<GameMessageStruct>(*this);
 			ar & attMap;
 		}

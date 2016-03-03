@@ -964,7 +964,7 @@ namespace ParticleUniverse {
 			Ogre::MaterialPtr depthMaterial = Ogre::MaterialManager::getSingleton().create(mDepthMaterialName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 			mDepthTechnique = depthMaterial->getTechnique(0); // There is already a technique and a pass created
 			mDepthPass = mDepthTechnique->getPass(0);
-			Ogre::TextureUnitState * textureUnitState = mDepthPass->createTextureUnitState(mDepthTextureName);
+			mDepthPass->createTextureUnitState(mDepthTextureName);
 			mDepthPass->setDepthCheckEnabled(false);
 			mDepthPass->setDepthWriteEnabled(false);
 			mDepthPass->setLightingEnabled(false);

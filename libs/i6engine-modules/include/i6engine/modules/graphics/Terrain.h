@@ -54,7 +54,7 @@ namespace modules {
 		 * Thereby passing a filename and calling Ogre's loadAllTerrains
 		 * Then configuring
 		 */
-		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
+		Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint16_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
 		
 		/**
 		 * \brief Creates a new Terrain
@@ -62,7 +62,7 @@ namespace modules {
 		 * Thereby passing a filename and calling Ogre's loadAllTerrains
 		 * Then configuring
 		 */
-		Terrain(GraphicsManager * manager, const std::vector<std::vector<double>> & heightdata, const double size, double inputScale, uint32_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
+		Terrain(GraphicsManager * manager, const std::vector<std::vector<double>> & heightdata, const double size, double inputScale, uint16_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY);
 
 		/**
 		 * \brief Terrain::~Terrain()
@@ -160,7 +160,7 @@ namespace modules {
 
 		double _inputScale;
 
-		uint32_t _vertices;
+		uint16_t _vertices;
 
 		std::vector<std::tuple<double, std::string, std::string, double, double>> _layers;
 

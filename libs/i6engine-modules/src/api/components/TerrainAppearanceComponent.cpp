@@ -106,9 +106,9 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void TerrainAppearanceComponent::setHeightAtPosition(uint64_t x, uint64_t z, double height) {
+	void TerrainAppearanceComponent::setHeightAtPosition(size_t x, size_t z, double height) {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainSetHeight, core::Method::Update, new graphics::Graphics_TerrainSetHeight_Update(getID(), x, z, height), core::Subsystem::Object));
-		_heightdata[x][z] = height;
+		_heightdata[size_t(x)][size_t(z)] = height;
 	}
 
 	void TerrainAppearanceComponent::setHeightAtPosition(const Vec3 & pos, double height) {
@@ -117,7 +117,7 @@ namespace api {
 		setHeightAtPosition(x, z, height);
 	}
 
-	double TerrainAppearanceComponent::getHeightAtPosition(uint64_t x, uint64_t z) const {
+	double TerrainAppearanceComponent::getHeightAtPosition(size_t x, size_t z) const {
 		return _heightdata[x][z];
 	}
 

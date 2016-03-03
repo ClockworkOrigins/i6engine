@@ -435,10 +435,10 @@ namespace ParticleUniverse {
 
 				if (ring != mNumberOfRings) {
 					// each vertex (except the last) has six indices pointing to it
-					*pIdx++ = mVertexIndex + mNumberOfSegments + 1;
+					*pIdx++ = ushort(mVertexIndex + mNumberOfSegments + 1);
 					*pIdx++ = mVertexIndex;
-					*pIdx++ = mVertexIndex + mNumberOfSegments;
-					*pIdx++ = mVertexIndex + mNumberOfSegments + 1;
+					*pIdx++ = ushort(mVertexIndex + mNumberOfSegments);
+					*pIdx++ = ushort(mVertexIndex + mNumberOfSegments + 1);
 					*pIdx++ = mVertexIndex + 1;
 					*pIdx++ = mVertexIndex;
 				}

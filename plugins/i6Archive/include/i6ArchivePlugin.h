@@ -27,6 +27,10 @@ namespace plugins {
 
 	private:
 		const Ogre::String _name;
+
+		i6ArchivePlugin & operator=(const i6ArchivePlugin &) {
+			return *this;
+		}
 	};
 
 } /* namespace plugins */

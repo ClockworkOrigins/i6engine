@@ -157,7 +157,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_TECH_LOD_INDEX], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mTechnique->setLodIndex(val);
+							mTechnique->setLodIndex(ushort(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_TECH_DEFAULT_PARTICLE_WIDTH]) {
@@ -189,7 +189,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_TECH_SPHASHING_CELL_DIMENSION], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mTechnique->setSpatialHashingCellDimension(val);
+							mTechnique->setSpatialHashingCellDimension(ushort(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_TECH_SPHASHING_CELL_OVERLAP]) {
@@ -197,7 +197,7 @@ namespace ParticleUniverse {
 					if (passValidateProperty(compiler, prop, token[TOKEN_TECH_SPHASHING_CELL_OVERLAP], VAL_UINT)) {
 						uint val = 0;
 						if (getUInt(prop->values.front(), &val)) {
-							mTechnique->setSpatialHashingCellOverlap(val);
+							mTechnique->setSpatialHashingCellOverlap(ushort(val));
 						}
 					}
 				} else if (prop->name == token[TOKEN_TECH_SPHASHING_SIZE]) {

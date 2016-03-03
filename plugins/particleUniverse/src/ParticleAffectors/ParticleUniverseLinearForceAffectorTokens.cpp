@@ -30,9 +30,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace ParticleUniverse {
 	
 	bool LinearForceAffectorTranslator::translateChildProperty(ScriptCompiler * compiler, const AbstractNodePtr & node) {
-		PropertyAbstractNode * prop = reinterpret_cast<PropertyAbstractNode *>(node.get());
-		ParticleAffector * af = any_cast<ParticleAffector *>(prop->parent->context);
-
 		// No own properties. Parse the BaseForceAffector
 		BaseForceAffectorTranslator BaseForceAffectorTranslator;
 		return BaseForceAffectorTranslator.translateChildProperty(compiler, node);

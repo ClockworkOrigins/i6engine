@@ -39,7 +39,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_STEP], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					emitter->setStep(val);
+					emitter->setStep(ushort(val));
 					return true;
 				}
 			}
@@ -48,7 +48,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_VERTEX_STEP], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					emitter->setStep(val);
+					emitter->setStep(ushort(val));
 					return true;
 				}
 			}
@@ -57,7 +57,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_NUMBER_OF_SEGMENTS], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					emitter->setSegments(val);
+					emitter->setSegments(ushort(val));
 					return true;
 				}
 			}
@@ -66,7 +66,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_VERTEX_SEGMENTS], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					emitter->setSegments(val);
+					emitter->setSegments(ushort(val));
 					return true;
 				}
 			}
@@ -75,7 +75,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_ITERATIONS], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					emitter->setIterations(val);
+					emitter->setIterations(ushort(val));
 					return true;
 				}
 			}
@@ -84,7 +84,7 @@ namespace ParticleUniverse {
 			if (passValidateProperty(compiler, prop, token[TOKEN_VERTEX_ITERATIONS], VAL_UINT)) {
 				uint val = 0;
 				if (getUInt(prop->values.front(), &val)) {
-					emitter->setIterations(val);
+					emitter->setIterations(ushort(val));
 					return true;
 				}
 			}

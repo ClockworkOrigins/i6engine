@@ -52,7 +52,7 @@ namespace api {
 	}
 
 	void LuminousAppearanceComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraLuminous, core::Method::Create, new graphics::Graphics_Luminous_Update(_objOwnerID, getID(), int(_lightType), _diffuseColor, _specularColor, _attenuation, _direction, _spotlightRangeInner, _spotlightRangeOuter, _position), core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraLuminous, core::Method::Create, new graphics::Graphics_Luminous_Update(_objOwnerID, getID(), uint16_t(_lightType), _diffuseColor, _specularColor, _attenuation, _direction, _spotlightRangeInner, _spotlightRangeOuter, _position), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
@@ -64,7 +64,7 @@ namespace api {
 	}
 
 	void LuminousAppearanceComponent::sendUpdateMessage() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraLuminous, core::Method::Update, new graphics::Graphics_Luminous_Update(_objOwnerID, getID(), int(_lightType), _diffuseColor, _specularColor, _attenuation, _direction, _spotlightRangeInner, _spotlightRangeOuter, _position), core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraLuminous, core::Method::Update, new graphics::Graphics_Luminous_Update(_objOwnerID, getID(), uint16_t(_lightType), _diffuseColor, _specularColor, _attenuation, _direction, _spotlightRangeInner, _spotlightRangeOuter, _position), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}

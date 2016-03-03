@@ -45,7 +45,7 @@ namespace modules {
 		return true;
 	}
 
-	bool MouseListener::mousePressed(const OIS::MouseEvent & objMouseEvent, OIS::MouseButtonID objButtonID) {
+	bool MouseListener::mousePressed(const OIS::MouseEvent &, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		api::KeyCode kc = api::KeyCode(size_t(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1);
 		if (_keyStates[size_t(kc)] == api::KeyState::KEY_RELEASED) {
@@ -63,7 +63,7 @@ namespace modules {
 		return true;
 	}
 
-	bool MouseListener::mouseReleased(const OIS::MouseEvent & objMouseEvent, OIS::MouseButtonID objButtonID) {
+	bool MouseListener::mouseReleased(const OIS::MouseEvent &, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		api::KeyCode kc = api::KeyCode(size_t(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1);
 		if (_keyStates[size_t(kc)] == api::KeyState::KEY_HOLD || _keyStates[size_t(kc)] == api::KeyState::KEY_PRESSED) {

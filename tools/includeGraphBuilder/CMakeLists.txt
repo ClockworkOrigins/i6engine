@@ -27,15 +27,12 @@ set(includeGraphBuilderSrc
 add_executable(includeGraphBuilder ${includeGraphBuilderSrc})
 set_target_properties(includeGraphBuilder PROPERTIES LINKER_LANGUAGE CXX)
 
-IF(WIN32)
-	add_custom_command(TARGET includeGraphBuilder POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/includeGraphBuilder.exe ${CMAKE_BINARY_DIR}/bin)
-ENDIF(WIN32)
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/includeGraphBuilder.bat.in ${CMAKE_BINARY_DIR}/bin/includeGraphBuilder.bat @ONLY)
 
 IF(UNIX)
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/includeGraphBuilder.sh.in ${CMAKE_BINARY_DIR}/bin/includeGraphBuilder.sh @ONLY)
 ELSEIF(WIN32)
+	add_custom_command(TARGET includeGraphBuilder POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/includeGraphBuilder.exe ${CMAKE_BINARY_DIR}/bin)
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/includeGraphBuilder.bat.in ${CMAKE_BINARY_DIR}/bin/includeGraphBuilder.bat @ONLY)
 ENDIF(UNIX)
 

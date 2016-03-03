@@ -29,7 +29,7 @@ namespace plugins {
 			char * buffer = new char[size_t(filenameLength)];
 			in.read(buffer, filenameLength);
 			std::string filename(buffer, filenameLength);
-			_files.insert(std::make_pair(filename, std::make_pair(in.tellg(), length)));
+			_files.insert(std::make_pair(filename, std::make_pair(size_t(in.tellg()), length)));
 			in.ignore(length);
 		}
 	}

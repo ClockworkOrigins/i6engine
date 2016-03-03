@@ -256,7 +256,7 @@ namespace math {
 		 * \brief serialize method for quaternion;
 		 */
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version) {
+		void serialize(Archive & ar, const unsigned int) {
 			ar & _w;
 			ar & _x;
 			ar & _y;

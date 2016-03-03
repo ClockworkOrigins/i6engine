@@ -43,7 +43,7 @@ namespace plugins {
 		return _functions;
 	}
 
-	void DialogCreatorLuaScriptLanguage::exportScript(const QVector<dialogCreator::plugins::i6Script> & dialog) {
+	void DialogCreatorLuaScriptLanguage::exportScript(const QVector<dialogCreator::plugins::i6Script> &) {
 	}
 
 	void DialogCreatorLuaScriptLanguage::parseLine(const QString & line) {

@@ -29,5 +29,5 @@ TEST(Message, Serialize) {
 	std::cout << msg->Serialize().size() << std::endl;
 	std::cout << msg->Serialize() << std::endl;
 
-	EXPECT_LT(msg->Serialize().size(), 20);
+	EXPECT_LT(msg->Serialize().size(), 20u);
 }

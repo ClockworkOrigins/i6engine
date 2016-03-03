@@ -34,7 +34,7 @@ namespace tools {
 	}
 
 	void MeshStrider::getLockedReadOnlyVertexIndexBase(const unsigned char ** vertexbase, int & numverts, PHY_ScalarType & type, int & stride, const unsigned char ** indexbase, int & indexstride, int & numfaces, PHY_ScalarType & indicestype, int subpart) const {
-		Ogre::SubMesh * submesh = _mesh->getSubMesh(subpart);
+		Ogre::SubMesh * submesh = _mesh->getSubMesh(uint16_t(subpart));
 
 		Ogre::VertexData * vertex_data = submesh->useSharedVertices ? _mesh->sharedVertexData : submesh->vertexData;
 
@@ -88,7 +88,7 @@ namespace tools {
 	}
 
 	void MeshStrider::unLockReadOnlyVertexBase(int subpart) const {
-		Ogre::SubMesh * submesh = _mesh->getSubMesh(subpart);
+		Ogre::SubMesh * submesh = _mesh->getSubMesh(uint16_t(subpart));
 
 		Ogre::VertexData * vertex_data = submesh->useSharedVertices ? _mesh->sharedVertexData : submesh->vertexData;
 

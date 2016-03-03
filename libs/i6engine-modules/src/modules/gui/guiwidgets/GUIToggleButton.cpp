@@ -46,7 +46,7 @@ namespace modules {
 		}
 	}
 
-	bool GUIToggleButton::selectionChanged(const CEGUI::EventArgs & evt) {
+	bool GUIToggleButton::selectionChanged(const CEGUI::EventArgs &) {
 		if (_selectedCallback == nullptr) {
 			return true;
 		}

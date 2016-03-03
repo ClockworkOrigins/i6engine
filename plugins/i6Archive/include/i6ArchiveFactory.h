@@ -32,6 +32,10 @@ namespace plugins {
 		}
 
 		void destroyInstance(Ogre::Archive * archive) override;
+
+		i6ArchiveFactory & operator=(const i6ArchiveFactory &) {
+			return *this;
+		}
 	};
 
 } /* namespace plugins */

@@ -43,36 +43,36 @@ namespace ParticleUniverse {
 		using Particle::copyAttributesTo;
 
 		// Constants
-		static const unsigned short DEFAULT_STEP;
-		static const unsigned short DEFAULT_SEGMENTS;
-		static const unsigned short DEFAULT_ITERATIONS;
+		static const ushort DEFAULT_STEP;
+		static const ushort DEFAULT_SEGMENTS;
+		static const ushort DEFAULT_ITERATIONS;
 
 		VertexEmitter();
 	    virtual ~VertexEmitter() {}
 
 		/** 
 	    */
-		unsigned short getIterations() const;
+		ushort getIterations() const;
 
 		/** 
 	    */
-		void setIterations(unsigned short iterations);
+		void setIterations(ushort iterations);
 			
 		/** 
 	    */
-		unsigned short getSegments() const;
+		ushort getSegments() const;
 
 		/** 
 	    */
-		void setSegments(unsigned short segments);
+		void setSegments(ushort segments);
 
 		/** 
 	    */
-		unsigned short getStep() const;
+		ushort getStep() const;
 
 		/** 
 	    */
-		void setStep(unsigned short step);
+		void setStep(ushort step);
 
 		/** 
 	    */
@@ -92,7 +92,7 @@ namespace ParticleUniverse {
 
 		/** 
 	    */
-		unsigned short _calculateRequestedParticles(Real timeElapsed);
+		ushort _calculateRequestedParticles(Real timeElapsed);
 
 		/** 
 	    */
@@ -110,16 +110,16 @@ namespace ParticleUniverse {
 		size_t mVertexSize;
 		size_t mMaxVertexCount;
 		size_t mVertexCount;
-		unsigned short mSubMeshNumber;
+		ushort mSubMeshNumber;
 		bool mAllVerticesProcessed;
 
 		/** Determines the size of the steps that are used to traverse through the vertices.
 		*/
-		unsigned short mStep;
+		ushort mStep;
 
 		/** Determines in how many segments an edge is divided. This results in spawn points.
 		*/
-		unsigned short mSegments;
+		ushort mSegments;
 
 		/** Defines the speed of generating spawnpoints. In each Particle Technique update
 		'mIterations' vertices are traversed.
@@ -128,7 +128,7 @@ namespace ParticleUniverse {
 		is high. On slower computers, emitting the particles may exceed generating the
 		spawnpoints (because this is not done at once, but per Particle Tehcnique update).
 		*/
-		unsigned short mIterations;
+		ushort mIterations;
 
 		/** Determines the name of the mesh of which the vertices are used.
 		*/
