@@ -47,7 +47,7 @@ namespace utils {
 	}
 
 	uint32_t rand(uint32_t min, uint32_t max) {
-		return i6engine::utils::Random::GetSingleton().rand();
+		return i6engine::utils::Random::GetSingleton().rand(min, max);
 	}
 
 	void setSeed(uint32_t seed) {
