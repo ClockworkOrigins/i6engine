@@ -27,7 +27,6 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-#include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/thread.hpp"
 
 namespace i6engine {

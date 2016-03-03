@@ -43,14 +43,13 @@ void packFile(std::ofstream & out, const std::string & file) {
 	std::string filename = i6engine::utils::split(file, "/").back();
 	filename = i6engine::utils::split(filename, "\\").back();
 
-	char * lBuffer = new char[sizeof(uint32_t)];
 	uint32_t filenameLength = filename.length();
-	lBuffer = reinterpret_cast<char *>(&filenameLength);
-
 	clockUtils::compression::Compression<clockUtils::compression::algorithm::HuffmanGeneric> compressor;
-	std::string compressed = compressor.compress(std::string(lBuffer, sizeof(uint32_t)) + filename + std::string(buffer, size_t(size)));
+	std::string compressed = compressor.compress(std::string(buffer, size_t(size)));
 	uint32_t length = compressed.length();
 	out.write(reinterpret_cast<char *>(&length), sizeof(uint32_t));
+	out.write(reinterpret_cast<char *>(&filenameLength), sizeof(uint32_t));
+	out.write(filename.c_str(), filename.size());
 	out.write(compressed.c_str(), compressed.size());
 	out.flush();
 }
