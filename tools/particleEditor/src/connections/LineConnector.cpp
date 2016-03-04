@@ -13,7 +13,7 @@ namespace connections {
 	}
 
 	void LineConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *) {
-		static int xOffsetMin = 24;
+		static const int xOffsetMin = 24;
 
 		QPen pen(QBrush(_colour), _lineStyle);
 		pen.setWidth(2);
