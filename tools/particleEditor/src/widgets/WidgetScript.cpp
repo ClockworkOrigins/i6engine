@@ -6,7 +6,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace widgets {
 
-	WidgetScript::WidgetScript(QWidget * par) : QWidget(par) {
+	WidgetScript::WidgetScript(QWidget * par) : QWidget(par), _changeable(true) {
 		setupUi(this);
 
 		connect(textEdit, SIGNAL(textChanged()), this, SLOT(changedText()));
@@ -20,8 +20,10 @@ namespace widgets {
 	}
 
 	void WidgetScript::loadScript(ParticleUniverse::ParticleSystem * system) {
+		_changeable = false;
 		ParticleUniverse::String script = ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(system);
 		textEdit->setText(QString::fromStdString(script));
+		_changeable = true;
 	}
 
 	void WidgetScript::parseScript() {
@@ -35,7 +37,9 @@ namespace widgets {
 	}
 
 	void WidgetScript::changedText() {
-		emit notifyChanged();
+		if (_changeable) {
+			emit notifyChanged();
+		}
 	}
 
 } /* namespace widgets */

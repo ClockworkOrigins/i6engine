@@ -37,6 +37,9 @@ namespace widgets {
 
 	private slots:
 		void changedText();
+
+	private:
+		bool _changeable;
 	};
 
 } /* namespace widgets */

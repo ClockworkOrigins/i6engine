@@ -40,6 +40,7 @@ namespace widgets {
 	void WidgetParticleList::setNewParticleSystem(ParticleUniverse::ParticleSystem * system) {
 		_system = system;
 		_script = QString::fromStdString(ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(_system));
+		_dirty = false;
 	}
 
 	void WidgetParticleList::notifyChanged() {
