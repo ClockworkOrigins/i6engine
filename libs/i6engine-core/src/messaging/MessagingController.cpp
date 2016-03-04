@@ -127,9 +127,9 @@ namespace core {
 		// Step 1
 		// entry point for other Threads
 		// save Message
+		std::unique_lock<std::mutex> ul(_condMutex);
 		_msgQueue.push(msg);
 		// and than notify poll thread that there are new messages
-		std::unique_lock<std::mutex> ul(_condMutex);
 		_condVar.notify_all();
 	}
 
