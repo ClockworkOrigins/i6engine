@@ -210,8 +210,10 @@ namespace modules {
 		std::map<std::string, api::Transform> boneTransforms;
 		for (auto it = entity->getSkeleton()->getBoneIterator().begin(); it != entity->getSkeleton()->getBoneIterator().end(); it++) {
 			std::string name = (*it)->getName();
-			Vec3 pos(_parent->getSceneNode()->getPosition() + _sceneNode->getPosition() + (*it)->getPosition());
-			Quaternion rot(_parent->getSceneNode()->getOrientation() * _sceneNode->getOrientation() * (*it)->getOrientation());
+			Ogre::Vector3 skeletonSpacePos = (*it)->_getDerivedPosition();
+			Vec3 pos(_sceneNode->convertLocalToWorldPosition(skeletonSpacePos));
+			Ogre::Quaternion skeletonSpaceOrient = (*it)->_getDerivedOrientation();
+			Quaternion rot(_sceneNode->convertLocalToWorldOrientation(skeletonSpaceOrient));
 			boneTransforms.insert(std::make_pair(name, api::Transform(pos, rot)));
 		}
 		if (!boneTransforms.empty()) {
