@@ -30,7 +30,7 @@ namespace widgets {
 		append(new properties::BoolProperty(this, PRNL_USE_VERTEX_COLOURS, PRNL_USE_VERTEX_COLOURS, ParticleUniverse::BeamRenderer::DEFAULT_USE_VERTEX_COLOURS));
 
 		// Max Elements: size_t
-		append(new properties::UIntProperty(this, PRNL_MAX_ELEMENTS, PRNL_MAX_ELEMENTS, ParticleUniverse::BeamRenderer::DEFAULT_MAX_ELEMENTS));
+		append(new properties::UIntProperty(this, PRNL_MAX_ELEMENTS, PRNL_MAX_ELEMENTS, static_cast<unsigned int>(ParticleUniverse::BeamRenderer::DEFAULT_MAX_ELEMENTS)));
 
 		// Update Interval: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_UPDATE_INTERVAL, PRNL_UPDATE_INTERVAL, ParticleUniverse::BeamRenderer::DEFAULT_UPDATE_INTERVAL));
@@ -39,7 +39,7 @@ namespace widgets {
 		append(new properties::DoubleProperty(this, PRNL_DEVIATION, PRNL_DEVIATION, ParticleUniverse::BeamRenderer::DEFAULT_DEVIATION));
 
 		// Number Of Segments: size_t
-		append(new properties::UIntProperty(this, PRNL_NUMBER_OF_SEGMENTS, PRNL_NUMBER_OF_SEGMENTS, ParticleUniverse::BeamRenderer::DEFAULT_NUMBER_OF_SEGMENTS));
+		append(new properties::UIntProperty(this, PRNL_NUMBER_OF_SEGMENTS, PRNL_NUMBER_OF_SEGMENTS, static_cast<unsigned int>(ParticleUniverse::BeamRenderer::DEFAULT_NUMBER_OF_SEGMENTS)));
 
 		// Jump: bool
 		append(new properties::BoolProperty(this, PRNL_JUMP, PRNL_JUMP, false));
@@ -66,7 +66,7 @@ namespace widgets {
 		setBool(PRNL_USE_VERTEX_COLOURS, beamRenderer->isUseVertexColours());
 
 		// Max Elements: size_t
-		setUint16(PRNL_MAX_ELEMENTS, int64_t(beamRenderer->getMaxChainElements()));
+		setUint16(PRNL_MAX_ELEMENTS, uint16_t(beamRenderer->getMaxChainElements()));
 
 		// Update Interval: ParticleUniverse::Real
 		setDouble(PRNL_UPDATE_INTERVAL, beamRenderer->getUpdateInterval());
@@ -75,7 +75,7 @@ namespace widgets {
 		setDouble(PRNL_DEVIATION, beamRenderer->getDeviation());
 
 		// Number Of Segments: size_t
-		setUint16(PRNL_NUMBER_OF_SEGMENTS, int64_t(beamRenderer->getNumberOfSegments()));
+		setUint16(PRNL_NUMBER_OF_SEGMENTS, uint16_t(beamRenderer->getNumberOfSegments()));
 
 		// Number Of Segments: size_t
 		setBool(PRNL_JUMP, beamRenderer->isJump());

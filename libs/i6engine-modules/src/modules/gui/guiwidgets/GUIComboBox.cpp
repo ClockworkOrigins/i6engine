@@ -57,7 +57,7 @@ namespace modules {
 		}
 	}
 
-	bool GUIComboBox::selectionChanged(const CEGUI::EventArgs & evt) {
+	bool GUIComboBox::selectionChanged(const CEGUI::EventArgs &) {
 		if (_selectedCallback == nullptr) {
 			return true;
 		}

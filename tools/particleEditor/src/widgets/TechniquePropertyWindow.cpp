@@ -88,7 +88,7 @@ namespace widgets {
 		append(new properties::UIntProperty(this, PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP, PRNL_TECHNIQUE_SPHASHING_CELL_OVERLAP, ParticleUniverse::ParticleTechnique::DEFAULT_SPATIAL_HASHING_CELL_OVERLAP));
 
 		// Spatial hashtable size: unsigned int
-		append(new properties::UIntProperty(this, PRNL_TECHNIQUE_SPHASHING_SIZE, PRNL_TECHNIQUE_SPHASHING_SIZE, ParticleUniverse::ParticleTechnique::DEFAULT_SPATIAL_HASHING_TABLE_SIZE));
+		append(new properties::UIntProperty(this, PRNL_TECHNIQUE_SPHASHING_SIZE, PRNL_TECHNIQUE_SPHASHING_SIZE, static_cast<unsigned int>(ParticleUniverse::ParticleTechnique::DEFAULT_SPATIAL_HASHING_TABLE_SIZE)));
 
 		// Spatial hashing update interval: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL, PRNL_TECHNIQUE_SPHASHING_UPDATE_INTERVAL, ParticleUniverse::ParticleTechnique::DEFAULT_SPATIAL_HASHING_INTERVAL));

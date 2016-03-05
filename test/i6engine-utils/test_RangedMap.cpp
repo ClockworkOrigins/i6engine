@@ -97,7 +97,7 @@ TEST(RangedMap, multipleMerges) {
 	std::vector<int> vec(ENTRIES);
 
 	for (size_t i = 0; i < ENTRIES; i++) {
-		vec[size_t(i)] = i;
+		vec[size_t(i)] = int(i);
 	}
 
 	std::random_shuffle(vec.begin(), vec.end());
@@ -119,7 +119,7 @@ TEST(RangedMap, multipleMerges) {
 	}
 
 	for (size_t i = 0; i < ENTRIES; i++) {
-		EXPECT_FALSE(rm.get(size_t(i)));
+		EXPECT_FALSE(rm.get(int(i)));
 	}
 }
 

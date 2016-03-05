@@ -30,7 +30,7 @@ namespace widgets {
 		append(new properties::BoolProperty(this, PRNL_USE_VERTEX_COLOURS, PRNL_USE_VERTEX_COLOURS, ParticleUniverse::RibbonTrailRenderer::DEFAULT_USE_VERTEX_COLOURS));
 
 		// Max Chain Elements: unsigned int
-		append(new properties::UIntProperty(this, PRNL_MAX_ELEMENTS, PRNL_MAX_ELEMENTS, ParticleUniverse::RibbonTrailRenderer::DEFAULT_MAX_ELEMENTS));
+		append(new properties::UIntProperty(this, PRNL_MAX_ELEMENTS, PRNL_MAX_ELEMENTS, static_cast<unsigned int>(ParticleUniverse::RibbonTrailRenderer::DEFAULT_MAX_ELEMENTS)));
 
 		// Trail Length: ParticleUniverse::Real
 		append(new properties::DoubleProperty(this, PRNL_TRAIL_LENGTH, PRNL_TRAIL_LENGTH, ParticleUniverse::RibbonTrailRenderer::DEFAULT_LENGTH));
@@ -63,7 +63,7 @@ namespace widgets {
 		setBool(PRNL_USE_VERTEX_COLOURS, ribbonTrailRenderer->isUseVertexColours());
 
 		// Max Chain Elements: unsigned int
-		setUint16(PRNL_MAX_ELEMENTS, ribbonTrailRenderer->getMaxChainElements());
+		setUint16(PRNL_MAX_ELEMENTS, uint16_t(ribbonTrailRenderer->getMaxChainElements()));
 
 		// Trail Length: ParticleUniverse::Real
 		setDouble(PRNL_TRAIL_LENGTH, ribbonTrailRenderer->getTrailLength());

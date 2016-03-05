@@ -104,7 +104,7 @@ namespace utils {
 		/**
 		 * \brief default constructor
 		 */
-		Random() : _linear(new std::minstd_rand(size_t(boost::posix_time::time_period(boost::posix_time::time_from_string("2010-03-19 14:23:10"), boost::posix_time::microsec_clock::universal_time()).length().total_microseconds()))), _lock() {
+		Random() : _linear(new std::minstd_rand(static_cast<unsigned int>(boost::posix_time::time_period(boost::posix_time::time_from_string("2010-03-19 14:23:10"), boost::posix_time::microsec_clock::universal_time()).length().total_microseconds()))), _lock() {
 		}
 	};
 

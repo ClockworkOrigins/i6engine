@@ -263,8 +263,8 @@ namespace properties {
 		QDoubleSpinBox * dsbValue = new QDoubleSpinBox(_widget);
 		dsbValue->setMinimum(-999999);
 		dsbValue->setMaximum(999999);
-		_layout->addWidget(dsbTimepoint, 3 + _controlPoints.size(), 0);
-		_layout->addWidget(dsbValue, 3 + _controlPoints.size(), 1);
+		_layout->addWidget(dsbTimepoint, 3 + int(_controlPoints.size()), 0);
+		_layout->addWidget(dsbValue, 3 + int(_controlPoints.size()), 1);
 		_widgets.push_back(dsbTimepoint);
 		_widgets.push_back(dsbValue);
 		connect(dsbTimepoint, SIGNAL(valueChanged(double)), this, SLOT(changedValue()));

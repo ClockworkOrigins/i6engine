@@ -100,13 +100,13 @@ namespace core {
 			boost::python::call<void>(this->get_override("ShutDown").ptr());
 		}
 
-		void registerMessageType(int msgType, const std::string & func) {
+		void registerMessageType(uint16_t msgType, const std::string & func) {
 			i6engine::api::EngineController::GetSingleton().getMessagingFacade()->registerMessageType(msgType, this, [this, func](const i6engine::core::Message::Ptr & msg) {
-				boost::python::call<void>(this->get_override(func.c_str()).ptr());
+				boost::python::call<void>(this->get_override(func.c_str()).ptr(), msg);
 			});
 		}
 
-		void unregisterMessageType(int msgType) {
+		void unregisterMessageType(uint16_t msgType) {
 			i6engine::api::EngineController::GetSingleton().getMessagingFacade()->unregisterMessageType(msgType, this);
 		}
 	};

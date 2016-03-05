@@ -188,7 +188,7 @@ namespace api {
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Vertices", [this]() {
 			return std::to_string(_vertices);
 		}, [this](std::string s) {
-			_vertices = std::stoul(s);
+			_vertices = uint16_t(std::stoul(s));
 			sendUpdateMessage();
 			return true;
 		}, "Integer"));

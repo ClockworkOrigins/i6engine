@@ -23,7 +23,7 @@ int main(int argc, char ** argv) {
 	for (int i = 2; i < argc; i++) {
 		search.push_back(std::string(argv[i]));
 	}
-	std::map<std::string, int> mm;
+	std::map<std::string, size_t> mm;
 	mm[analyse.front()] = 0;
 	std::cout << "digraph {" << std::endl;
 	std::cout << "0 [label=\"" << analyse.front() << "\"];" << std::endl;
@@ -35,7 +35,7 @@ int main(int argc, char ** argv) {
 			continue;
 		}
 		already.insert(f);
-		int kk = mm[f];
+		size_t kk = mm[f];
 		size_t i;
 		for (i = 0; i < search.size(); i++) {
 			FILE * fp = fopen((search[i] + f).c_str(), "r");

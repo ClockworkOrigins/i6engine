@@ -31,7 +31,7 @@
 namespace i6engine {
 namespace modules {
 
-	GUIChat::GUIChat(const std::string & name, const std::string & style) : api::GUIWidget(name), api::MessageSubscriberFacade(), _submitCallback() {
+	GUIChat::GUIChat(const std::string & name, const std::string &) : api::GUIWidget(name), api::MessageSubscriberFacade(), _submitCallback() {
 		loadWindowLayout(name, "Chat.layout");
 		_window->setProperty("RiseOnClickEnabled", "False");
 
@@ -56,7 +56,7 @@ namespace modules {
 		}
 	}
 
-	bool GUIChat::textAccepted(const CEGUI::EventArgs & evt) {
+	bool GUIChat::textAccepted(const CEGUI::EventArgs &) {
 		if (_submitCallback == nullptr) {
 			return true;
 		}
