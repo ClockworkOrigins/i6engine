@@ -114,6 +114,11 @@ namespace ParticleUniverse {
 			PU_DELETE mSphereSetFactory;
 			mSphereSetFactory = nullptr;
 		}
+
+		for (auto p : mAffectorFactories) {
+			delete p.second;
+		}
+		mAffectorFactories.clear();
 	}
 	
 	void ParticleSystemManager::removeAndDestroyDanglingSceneNodes(Ogre::SceneNode * sceneNode) {

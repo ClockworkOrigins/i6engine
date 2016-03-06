@@ -25,42 +25,39 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define __PU_BOX_RENDERER_FACTORY_H__
 
 #include "ParticleUniversePrerequisites.h"
-#include "ParticleUniverseRendererFactory.h"
 #include "ParticleUniverseBoxRenderer.h"
 #include "ParticleUniverseBoxRendererTokens.h"
+#include "ParticleUniverseRendererFactory.h"
 
-namespace ParticleUniverse
-{
+namespace ParticleUniverse {
+
 	/** Factory class responsible for creating a BoxRenderer.
-    */
-	class _ParticleUniverseExport BoxRendererFactory : public ParticleRendererFactory
-	{
-		public:
-			BoxRendererFactory(void) {};
-	        virtual ~BoxRendererFactory(void) {};
+	 */
+	class _ParticleUniverseExport BoxRendererFactory : public ParticleRendererFactory {
+	public:
+		BoxRendererFactory() : mBoxRendererWriter() {}
+		virtual ~BoxRendererFactory() {}
 
-			/** See ParticleRendererFactory */
-			String getRendererType(void) const
-			{
-				return "Box";
-			}
+		/** See ParticleRendererFactory */
+		String getRendererType() const {
+			return "Box";
+		}
 
-			/** See ParticleRendererFactory */
-			ParticleRenderer* createRenderer(void)
-			{
-				return _createRenderer<BoxRenderer>();
-			}
+		/** See ParticleRendererFactory */
+		ParticleRenderer * createRenderer() {
+			return _createRenderer<BoxRenderer>();
+		}
 
-			/*  */
-			virtual void write(ParticleScriptSerializer* serializer, const IElement* element)
-			{
-				// Delegate
-				mBoxRendererWriter.write(serializer, element);
-			}
+		/*  */
+		virtual void write(ParticleScriptSerializer * serializer, const IElement * element) {
+			// Delegate
+			mBoxRendererWriter.write(serializer, element);
+		}
 
-		protected:
-			BoxRendererWriter mBoxRendererWriter;
+	protected:
+		BoxRendererWriter mBoxRendererWriter;
 	};
 
-}
-#endif
+} /* namespace ParticleUniverse */
+
+#endif /* __PU_BOX_RENDERER_FACTORY_H__ */

@@ -110,7 +110,7 @@ namespace graphics {
 		Vec3 from, to, colour;
 		Graphics_Line_Create();
 		Graphics_Line_Create(const Vec3 & f, const Vec3 & t, const Vec3 & colour);
-		Graphics_Line_Create(uint64_t goid, uint64_t coid, const Vec3 & f, const Vec3 & t, const Vec3 & colour);
+		Graphics_Line_Create(int64_t goid, int64_t coid, const Vec3 & f, const Vec3 & t, const Vec3 & colour);
 		Graphics_Line_Create * copy() { return new Graphics_Line_Create(*this); }
 	} Graphics_Line_Create;
 
@@ -118,7 +118,7 @@ namespace graphics {
 	 * \brief deletes a line between two points
 	 */
 	typedef struct ISIXE_MODULES_API Graphics_Line_Delete : GameMessageStruct {
-		Graphics_Line_Delete(uint64_t goid, uint64_t coid);
+		Graphics_Line_Delete(int64_t goid, int64_t coid);
 		Graphics_Line_Delete * copy() {
 			return new Graphics_Line_Delete(*this);
 		}

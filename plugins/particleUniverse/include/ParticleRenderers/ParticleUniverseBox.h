@@ -33,7 +33,7 @@ namespace ParticleUniverse {
 	class BoxSet;
 
 	/** 
-    */
+	 */
 	class _ParticleUniverseExport Box : public FXAlloc {
 		friend class BoxSet;
 		friend class BoxRenderer;
@@ -45,12 +45,12 @@ namespace ParticleUniverse {
 		BoxSet * mParentSet;
 			
 		/** Default constructor.
-		*/
+		 */
 		Box();
 
 		/** Default destructor.
-		*/
-	    virtual ~Box();
+		 */
+		virtual ~Box();
 
 		/** Constructor as called by BoxSet.
 		*/

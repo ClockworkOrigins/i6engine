@@ -27,12 +27,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace ParticleUniverse {
 	
-	Sphere::Sphere() : mOwnRadius(false), mRadius(100.0), mRadiusChanged(false), mPosition(Vector3::ZERO), mColour(ColourValue::White), mParentSet(nullptr) {
-		mOrientation = Quaternion::IDENTITY;
+	Sphere::Sphere() : mPosition(Vector3::ZERO), mColour(ColourValue::White), mOrientation(Quaternion::IDENTITY), mParentSet(nullptr), mOwnRadius(false), mRadius(100.0), mRadiusChanged(false) {
 	}
-    
-    Sphere::Sphere(const Vector3 & position, SphereSet * owner) : mOwnRadius(false), mRadius(10.0), mRadiusChanged(false), mPosition(Vector3::ZERO), mColour(ColourValue::White), mParentSet(nullptr) {
-		mOrientation = Quaternion::IDENTITY;
+
+	// TODO: (Daniel) check this, position not set?
+	Sphere::Sphere(const Vector3 & position, SphereSet * owner) : mPosition(Vector3::ZERO), mColour(ColourValue::White), mOrientation(Quaternion::IDENTITY), mParentSet(nullptr), mOwnRadius(false), mRadius(10.0), mRadiusChanged(false) {
 	}
 	
 	Sphere::~Sphere() {

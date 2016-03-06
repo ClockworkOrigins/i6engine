@@ -24,9 +24,9 @@ namespace graphics {
 	Graphics_Line_Create::Graphics_Line_Create() : GameMessageStruct() {}
 	Graphics_Line_Create::Graphics_Line_Create(const Vec3 & f, const Vec3 & t, const Vec3 & c) : GameMessageStruct(), from(f), to(t), colour(c) {
 	}
-	Graphics_Line_Create::Graphics_Line_Create(uint64_t goid, uint64_t coid, const Vec3 & f, const Vec3 & t, const Vec3 & c) : GameMessageStruct(coid, goid), from(f), to(t), colour(c) {
+	Graphics_Line_Create::Graphics_Line_Create(int64_t goid, int64_t coid, const Vec3 & f, const Vec3 & t, const Vec3 & c) : GameMessageStruct(coid, goid), from(f), to(t), colour(c) {
 	}
-	Graphics_Line_Delete::Graphics_Line_Delete(uint64_t goid, uint64_t coid) : GameMessageStruct(coid, goid) {
+	Graphics_Line_Delete::Graphics_Line_Delete(int64_t goid, int64_t coid) : GameMessageStruct(coid, goid) {
 	}
 
 	// Graphics

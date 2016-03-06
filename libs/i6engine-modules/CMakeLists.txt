@@ -284,6 +284,8 @@ ENDIF(ISIXE_WITH_NETWORK)
 
 IF(WIN32)
 	target_link_libraries(i6engine-modules ws2_32)
+ELSE(WIN32)
+	target_link_libraries(i6engine-modules pthread)
 ENDIF(WIN32)
 
 IF(WIN32 AND ISIXE_BUILD_SHARED)
