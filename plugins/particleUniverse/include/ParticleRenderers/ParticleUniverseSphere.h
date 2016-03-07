@@ -33,7 +33,7 @@ namespace ParticleUniverse {
 	class SphereSet;
 
 	/** 
-    */
+	 */
 	class _ParticleUniverseExport Sphere : public FXAlloc {
 		friend class SphereSet;
 		friend class SphereRenderer;
@@ -50,7 +50,7 @@ namespace ParticleUniverse {
 
 		/** Default destructor.
 		*/
-	    virtual ~Sphere();
+		virtual ~Sphere();
 
 		/** Constructor as called by SphereSet.
 		*/

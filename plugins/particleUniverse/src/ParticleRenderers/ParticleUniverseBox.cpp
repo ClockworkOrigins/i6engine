@@ -27,13 +27,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace ParticleUniverse {
 	
-	Box::Box() : mOwnDimensions(false), mWidth(10.0), mHeight(10.0), mDepth(10.0), mHalfWidth(5.0), mHalfHeight(5.0), mHalfDepth(5.0), mDimensionsChanged(false), mTempCorner(Vector3::ZERO), mPosition(Vector3::ZERO), mColour(ColourValue::White), mParentSet(nullptr) {
-		mOrientation = Quaternion::IDENTITY;
+	Box::Box() : mPosition(Vector3::ZERO), mColour(ColourValue::White), mOrientation(Quaternion::IDENTITY), mParentSet(nullptr), mOwnDimensions(false), mWidth(10.0), mHeight(10.0), mDepth(10.0), mHalfWidth(5.0), mHalfHeight(5.0), mHalfDepth(5.0), mDimensionsChanged(false), mTempCorner(Vector3::ZERO) {
 		_calculateCorners();
 	}
     
-    Box::Box(const Vector3 & position, BoxSet * owner) : mOwnDimensions(false), mWidth(10.0), mHeight(10.0), mDepth(10.0), mHalfWidth(5.0), mHalfHeight(5.0), mHalfDepth(5.0), mDimensionsChanged(false), mTempCorner(Vector3::ZERO), mPosition(Vector3::ZERO), mColour(ColourValue::White), mParentSet(nullptr) {
-		mOrientation = Quaternion::IDENTITY;
+	// TODO: (Daniel) take a look on this, why is position not set?
+    Box::Box(const Vector3 & position, BoxSet * owner) : mPosition(Vector3::ZERO), mColour(ColourValue::White), mOrientation(Quaternion::IDENTITY), mParentSet(nullptr), mOwnDimensions(false), mWidth(10.0), mHeight(10.0), mDepth(10.0), mHalfWidth(5.0), mHalfHeight(5.0), mHalfDepth(5.0), mDimensionsChanged(false), mTempCorner(Vector3::ZERO) {
 		_calculateCorners();
 	}
 	
