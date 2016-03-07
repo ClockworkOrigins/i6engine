@@ -118,7 +118,7 @@ namespace modules {
 				boost::python::exec_file(path.c_str(), global, global);
 				_scripts.insert(file);
 			}
-		} catch(const boost::python::error_already_set &) {
+		} catch (const boost::python::error_already_set &) {
 			logStacktrace();
 		}
 	}
