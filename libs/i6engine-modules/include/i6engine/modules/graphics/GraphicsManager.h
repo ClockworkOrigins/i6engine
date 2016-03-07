@@ -29,6 +29,7 @@
 
 #include "i6engine/api/GameMessage.h"
 
+#include "OGRE/OgreFrameListener.h"
 #include "OGRE/OgreWindowEventUtilities.h"
 
 namespace Ogre {
@@ -51,7 +52,7 @@ namespace modules {
 	class ResourceManager;
 	class Terrain;
 
-	class ISIXE_MODULES_API GraphicsManager : public Ogre::WindowEventListener {
+	class ISIXE_MODULES_API GraphicsManager : public Ogre::WindowEventListener, public Ogre::FrameListener {
 	public:
 		/**
 		 * \brief initializes Ogre graphics
@@ -238,6 +239,12 @@ namespace modules {
 		std::vector<ListenerFactoryLogic *> _compositorLogics;
 
 		void loadResources(const std::string & resourcesFile, const std::function<void(uint16_t)> & callback);
+
+		/**
+		 * \brief called after rendering a frame
+		 * actually used to get current frame time
+		 */
+		bool frameEnded(const Ogre::FrameEvent & evt) override;
 
 		/**
 		 * \brief forbidden

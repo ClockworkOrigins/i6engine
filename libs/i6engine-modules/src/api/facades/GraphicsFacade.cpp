@@ -140,19 +140,22 @@ namespace api {
 	}
 
 	void GraphicsFacade::showFPS(double x, double y, const std::string & imageStyle, const std::string & printStyle, const std::string & imageset, const std::string & image) const {
-		EngineController::GetSingletonPtr()->getGUIFacade()->addImage("FPSBox", imageStyle, imageset, image, x, y, 0.15, 0.13);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addImage("FPSBox", imageStyle, imageset, image, x, y, 0.15, 0.16);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Cur", printStyle, x + 0.01, y + 0.01, "Cur. FPS: ", gui::Alignment::Left, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg", printStyle, x + 0.01, y + 0.04, "Avg. FPS: ", gui::Alignment::Left, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best", printStyle, x + 0.01, y + 0.07, "Best FPS: ", gui::Alignment::Left, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst", printStyle, x + 0.01, y + 0.10, "Worst FPS: ", gui::Alignment::Left, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_LastFrameTime", printStyle, x + 0.01, y + 0.13, "Last Frametime: ", gui::Alignment::Left, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Cur_Value", printStyle, x + 0.01, y + 0.01, "", gui::Alignment::Right, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Avg_Value", printStyle, x + 0.01, y + 0.04, "", gui::Alignment::Right, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Best_Value", printStyle, x + 0.01, y + 0.07, "", gui::Alignment::Right, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_Worst_Value", printStyle, x + 0.01, y + 0.10, "", gui::Alignment::Right, -1);
+		EngineController::GetSingletonPtr()->getGUIFacade()->addPrint("FPS_LastFrameTime_Value", printStyle, x + 0.01, y + 0.13, "", gui::Alignment::Right, -1);
 		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Cur_Value", 0.14, 0.02);
 		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Avg_Value", 0.14, 0.02);
 		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Best_Value", 0.14, 0.02);
 		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_Worst_Value", 0.14, 0.02);
+		EngineController::GetSingletonPtr()->getGUIFacade()->setSize("FPS_LastFrameTime_Value", 0.14, 0.02);
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraFPS, core::Method::Create, new graphics::Graphics_FPS_Create(), core::Subsystem::Unknown));
 	}
 
@@ -167,6 +170,8 @@ namespace api {
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Avg_Value");
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Best_Value");
 		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_Worst_Value");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_LastFrameTime");
+		EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget("FPS_LastFrameTime_Value");
 	}
 
 	void GraphicsFacade::getHighestCoordinate(const Vec3 & startPos, const std::function<void(Vec3)> & callback) const {

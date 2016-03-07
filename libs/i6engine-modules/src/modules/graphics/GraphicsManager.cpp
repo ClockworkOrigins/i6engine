@@ -64,7 +64,7 @@
 namespace i6engine {
 namespace modules {
 
-	GraphicsManager::GraphicsManager(GraphicsController * ctrl, HWND hWnd) : _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false), _overlaySystem(nullptr), _logManager(nullptr), _compositorLogics() {
+	GraphicsManager::GraphicsManager(GraphicsController * ctrl, HWND hWnd) : Ogre::WindowEventListener(), Ogre::FrameListener(), _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false), _overlaySystem(nullptr), _logManager(nullptr), _compositorLogics() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			std::string ogrePath;
@@ -122,6 +122,7 @@ namespace modules {
 		_debug = new Debug(_sceneManager, 0.5f);
 
 		_raySceneQuery = _sceneManager->createRayQuery(Ogre::Ray());
+		_objRoot->addFrameListener(this);
 
 		// Set default mipmap level (NB some APIs ignore this)
 		Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(Ogre::MIP_UNLIMITED);
@@ -1075,6 +1076,14 @@ namespace modules {
 		_sceneManager->destroyCamera(camera);
 		_sceneManager->getRootSceneNode()->removeChild(sn);
 		_sceneManager->destroySceneNode("PreLoadSceneNode_0_0");
+	}
+
+	bool GraphicsManager::frameEnded(const Ogre::FrameEvent & evt) {
+		if (_showFPS) {
+			api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+			gf->setText("FPS_LastFrameTime_Value", std::to_string(uint64_t(evt.timeSinceLastEvent * 1000)));
+		}
+		return true;
 	}
 
 } /* namespace modules */
