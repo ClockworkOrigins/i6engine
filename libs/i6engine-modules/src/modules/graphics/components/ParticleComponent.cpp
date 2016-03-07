@@ -36,6 +36,7 @@ namespace modules {
 		_sceneNode = _parent->getSceneNode()->createChildSceneNode(name, pos.toOgre());
 		ParticleUniverse::ParticleSystem * particleSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(name, emitterName, sm);
 		_sceneNode->attachObject(particleSystem);
+		particleSystem->setScale(_sceneNode->_getDerivedScale());
 		particleSystem->start();
 	}
 
