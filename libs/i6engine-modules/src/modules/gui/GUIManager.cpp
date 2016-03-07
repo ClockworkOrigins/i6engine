@@ -328,7 +328,7 @@ namespace modules {
 				if (keyCode < api::KeyCode::MOUSEBUTTONS) {
 					KeyHold(keyCode);
 				} else {
-					MouseDown(keyCode);
+					// CEGUI doesn't handle hold of mouse buttons separatly
 				}
 			}
 		}
