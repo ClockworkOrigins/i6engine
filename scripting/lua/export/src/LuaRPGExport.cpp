@@ -39,6 +39,10 @@ namespace i6engine {
 namespace lua {
 namespace rpg {
 
+	void insertItemAtPosition(const std::string & identifier, const Vec3 & pos, const Quaternion & rot) {
+		i6engine::rpg::item::ItemManager::GetSingletonPtr()->createItem(identifier, pos, rot);
+	}
+
 	void insertItemAtWaypoint(const std::string & identifier, const std::string & waypoint) {
 		Vec3 pos;
 		Quaternion rot;
@@ -49,7 +53,11 @@ namespace rpg {
 				break;
 			}
 		}
-		i6engine::rpg::item::ItemManager::GetSingletonPtr()->createItem(identifier, pos, rot);
+		insertItemAtPosition(identifier, pos, rot);
+	}
+
+	void insertNPCAtPosition(const std::string & identifier, const Vec3 & pos, const Quaternion & rot) {
+		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, rot, false);
 	}
 
 	void insertNPCAtWaypoint(const std::string & identifier, const std::string & waypoint) {
@@ -62,7 +70,7 @@ namespace rpg {
 				break;
 			}
 		}
-		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, rot, false);
+		insertNPCAtPosition(identifier, pos, rot);
 	}
 
 	void insertPlayerAtWaypoint(const std::string & identifier, const std::string & waypoint) {
@@ -118,7 +126,9 @@ using namespace luabind;
 
 scope registerRPG() {
 	return
+		def("insertItemAtPosition", &i6engine::lua::rpg::insertItemAtPosition),
 		def("insertItemAtWaypoint", &i6engine::lua::rpg::insertItemAtWaypoint),
+		def("insertNPCAtPosition", &i6engine::lua::rpg::insertNPCAtPosition),
 		def("insertNPCAtWaypoint", &i6engine::lua::rpg::insertNPCAtWaypoint),
 		def("insertPlayerAtWaypoint", &i6engine::lua::rpg::insertPlayerAtWaypoint),
 		def("getNPC", &i6engine::lua::rpg::getNPC),

@@ -22,6 +22,8 @@
 #ifndef __I6ENGINE_RPG_ITEM_ITEMMANAGER_H__
 #define __I6ENGINE_RPG_ITEM_ITEMMANAGER_H__
 
+#include <set>
+
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Singleton.h"
 
@@ -69,6 +71,13 @@ namespace item {
 		 */
 		void addItemAttributes(const std::string & itemType, const std::vector<std::pair<std::string, std::string>> & itemAttributes) {
 			_parser.addItemAttributes(itemType, itemAttributes);
+		}
+
+		/**
+		 * \brief returns all parsed item types
+		 */
+		std::set<std::string> getItemTypes() const {
+			return _parser.getItemTypes();
 		}
 
 	private:

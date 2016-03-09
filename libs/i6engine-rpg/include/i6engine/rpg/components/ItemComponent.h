@@ -67,7 +67,7 @@ namespace components {
 			return _weight;
 		}
 
-		std::string getIdentifier() const {
+		std::string getItemIdentifier() const {
 			return _identifier;
 		}
 

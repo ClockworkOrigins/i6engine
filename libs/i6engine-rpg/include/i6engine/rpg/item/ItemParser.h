@@ -22,6 +22,8 @@
 #ifndef __I6ENGINE_RPG_ITEM_ITEMPARSER_H__
 #define __I6ENGINE_RPG_ITEM_ITEMPARSER_H__
 
+#include <set>
+
 #include "i6engine/utils/i6eSystemParameters.h"
 
 #include "i6engine/api/configs/ObjectConfig.h"
@@ -59,9 +61,17 @@ namespace item {
 			_itemAttributes.insert(std::make_pair(itemType, itemAttributes));
 		}
 
+		/**
+		 * \brief returns all parsed item types
+		 */
+		std::set<std::string> getItemTypes() const {
+			return _itemTypes;
+		}
+
 	private:
 		std::map<std::string, std::pair<std::string, i6engine::api::objects::GOTemplate>> _items;
 		std::map<std::string, std::vector<std::pair<std::string, std::string>>> _itemAttributes;
+		std::set<std::string> _itemTypes;
 
 		void loadItem(const std::string & file);
 	};

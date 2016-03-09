@@ -28,7 +28,7 @@ namespace i6engine {
 namespace rpg {
 namespace item {
 
-	ItemParser::ItemParser() : _items(), _itemAttributes() {
+	ItemParser::ItemParser() : _items(), _itemAttributes(), _itemTypes() {
 	}
 
 	ItemParser::~ItemParser() {
@@ -142,6 +142,8 @@ namespace item {
 			}
 
 			tpl._components.push_back(api::objects::GOTemplateComponent(type, paramsItem, "", false, false));
+
+			_itemTypes.insert(type);
 
 			if (_items.find(identifier) != _items.end()) {
 				ISIXE_THROW_FAILURE("ItemParser", "Item with identifier '" << identifier << "' already defined! Second definition in file '" << file << "'");

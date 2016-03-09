@@ -49,7 +49,7 @@ namespace plugins {
 		 * \param[in] element the XMLElement this go should be linked to if necessary
 		 * \returns true if object was handled by this plugin, otherwise false
 		 */
-		virtual bool saveObject(const i6engine::api::GOPtr & go, tinyxml2::XMLElement * element);
+		virtual bool saveObject(const i6engine::api::GOPtr & go, tinyxml2::XMLElement * element) = 0;
 
 		/**
 		 * \brief finishes save process
