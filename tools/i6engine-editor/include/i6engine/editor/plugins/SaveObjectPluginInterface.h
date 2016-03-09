@@ -31,7 +31,7 @@ namespace editor {
 namespace plugins {
 
 	/**
-	 * \brief interface for plugins used to offer types for Components attributes
+	 * \brief interface for plugins to save special GameObjects in another way than normal GameObjects (e.g. NPCs of RPG are put into Startup method for the level instead of in the level file)
 	 */
 	class SaveObjectPluginInterface {
 	public:
