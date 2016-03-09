@@ -47,6 +47,7 @@ namespace properties {
 		std::map<PropertyTypes, QDoubleSpinBox *> _values;
 		QComboBox * _interpolationTypeBox;
 		std::vector<std::pair<QDoubleSpinBox *, QDoubleSpinBox *>> _controlPoints;
+		bool _setting;
 
 		void createGUI();
 	};

@@ -16,7 +16,7 @@ namespace i6engine {
 namespace particleEditor {
 namespace properties {
 
-	DynamicAttributeProperty::DynamicAttributeProperty(QWidget * par, QString label, QString name, ParticleUniverse::DynamicAttribute * value) : Property(par, label, name), _widget(nullptr), _layout(nullptr), _value(value), _widgets(), _comboBox(nullptr), _values(), _interpolationTypeBox(nullptr), _controlPoints() {
+	DynamicAttributeProperty::DynamicAttributeProperty(QWidget * par, QString label, QString name, ParticleUniverse::DynamicAttribute * value) : Property(par, label, name), _widget(nullptr), _layout(nullptr), _value(value), _widgets(), _comboBox(nullptr), _values(), _interpolationTypeBox(nullptr), _controlPoints(), _setting(false) {
 		widgets::DYN_FIXED = QApplication::tr("Fixed");
 		widgets::DYN_RANDOM = QApplication::tr("Random");
 		widgets::DYN_CURVED = QApplication::tr("Curved");
@@ -37,7 +37,9 @@ namespace properties {
 	}
 
 	void DynamicAttributeProperty::setDynamicAttribute(ParticleUniverse::DynamicAttribute * value) {
+		_setting = true;
 		_comboBox = nullptr;
+		_interpolationTypeBox = nullptr;
 		for (QWidget * w : _widgets) {
 			_layout->removeWidget(w);
 			delete w;
@@ -69,10 +71,11 @@ namespace properties {
 		}
 		value->copyAttributesTo(_value);
 		createGUI();
+		_setting = false;
 	}
 
 	void DynamicAttributeProperty::changedDynamicType() {
-		if (_comboBox && _comboBox->currentIndex() != _value->getType()) {
+		if (_comboBox && _comboBox->currentIndex() != _value->getType() && !_setting) {
 			ParticleUniverse::DynamicAttribute * value = nullptr;
 			switch (ParticleUniverse::DynamicAttribute::DynamicAttributeType(_comboBox->currentIndex())) {
 			case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_FIXED: {
@@ -103,32 +106,34 @@ namespace properties {
 	}
 
 	void DynamicAttributeProperty::changedValue() {
-		switch (_value->getType()) {
-		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_FIXED: {
-			dynamic_cast<ParticleUniverse::DynamicAttributeFixed *>(_value)->setValue(_values[PropertyTypes::Value]->value());
-			break;
-		}
-		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_RANDOM: {
-			dynamic_cast<ParticleUniverse::DynamicAttributeRandom *>(_value)->setMin(_values[PropertyTypes::MinValue]->value());
-			dynamic_cast<ParticleUniverse::DynamicAttributeRandom *>(_value)->setMax(_values[PropertyTypes::MaxValue]->value());
-			break;
-		}
-		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_CURVED: {
-			dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value)->setInterpolationType(ParticleUniverse::InterpolationType(_interpolationTypeBox->currentIndex()));
-			dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value)->removeAllControlPoints();
-			for (auto & p : _controlPoints) {
-				dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value)->addControlPoint(p.first->value(), p.second->value());
+		if (!_setting) {
+			switch (_value->getType()) {
+			case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_FIXED: {
+				dynamic_cast<ParticleUniverse::DynamicAttributeFixed *>(_value)->setValue(_values[PropertyTypes::Value]->value());
+				break;
 			}
-			break;
+			case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_RANDOM: {
+				dynamic_cast<ParticleUniverse::DynamicAttributeRandom *>(_value)->setMin(_values[PropertyTypes::MinValue]->value());
+				dynamic_cast<ParticleUniverse::DynamicAttributeRandom *>(_value)->setMax(_values[PropertyTypes::MaxValue]->value());
+				break;
+			}
+			case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_CURVED: {
+				dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value)->setInterpolationType(ParticleUniverse::InterpolationType(_interpolationTypeBox->currentIndex()));
+				dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value)->removeAllControlPoints();
+				for (auto & p : _controlPoints) {
+					dynamic_cast<ParticleUniverse::DynamicAttributeCurved *>(_value)->addControlPoint(p.first->value(), p.second->value());
+				}
+				break;
+			}
+			case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_OSCILLATE: {
+				break;
+			}
+			default: {
+				break;
+			}
+			}
+			triggerChangedSignal();
 		}
-		case ParticleUniverse::DynamicAttribute::DynamicAttributeType::DAT_OSCILLATE: {
-			break;
-		}
-		default: {
-			break;
-		}
-		}
-		triggerChangedSignal();
 	}
 
 	ParticleUniverse::DynamicAttribute * DynamicAttributeProperty::getDynamicAttribute() const {
