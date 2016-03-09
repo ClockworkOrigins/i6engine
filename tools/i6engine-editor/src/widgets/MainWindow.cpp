@@ -22,6 +22,7 @@
 #include "i6engine/editor/plugins/FlagPluginInterface.h"
 #include "i6engine/editor/plugins/InitializationPluginInterface.h"
 #include "i6engine/editor/plugins/RunGamePluginInterface.h"
+#include "i6engine/editor/plugins/SaveObjectPluginInterface.h"
 
 #include "i6engine/editor/widgets/ConfigDialog.h"
 #include "i6engine/editor/widgets/ObjectContainerWidget.h"
@@ -49,7 +50,7 @@ namespace widgets {
 		emit triggerGameAction(int(_index));
 	}
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false), _isTmpLevel(false), _originalLevel(), _isNewLevel(false) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _saveObjectPlugins(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false), _isTmpLevel(false), _originalLevel(), _isNewLevel(false) {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -358,9 +359,10 @@ namespace widgets {
 	}
 
 	void MainWindow::loadPlugins() {
+		loadFlagPlugins();
 		loadInitializationPlugins();
 		loadRunGamePlugins();
-		loadFlagPlugins();
+		loadSaveObjectPlugins();
 	}
 
 	void MainWindow::loadInitializationPlugins() {
@@ -409,6 +411,23 @@ namespace widgets {
 			QObject * plugin = loader.instance();
 			if (plugin) {
 				_flagPlugins.push_back(qobject_cast<plugins::FlagPluginInterface *>(plugin));
+			} else {
+				QMessageBox box;
+				box.setWindowTitle(QApplication::tr("Error loading plugin!"));
+				box.setInformativeText(loader.errorString());
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+			}
+		}
+	}
+
+	void MainWindow::loadSaveObjectPlugins() {
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/saveObject");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_saveObjectPlugins.push_back(qobject_cast<plugins::SaveObjectPluginInterface *>(plugin));
 			} else {
 				QMessageBox box;
 				box.setWindowTitle(QApplication::tr("Error loading plugin!"));
@@ -600,6 +619,14 @@ namespace widgets {
 				setProgressValue(int(value));
 			});
 		}
+	}
+
+	bool MainWindow::saveObjectWithPlugin(const api::GOPtr & go, tinyxml2::XMLElement * element, const std::string & level) {
+		bool handled = false;
+		for (plugins::SaveObjectPluginInterface * sopi : _saveObjectPlugins) {
+			handled = handled || sopi->saveObject(go, element, QString::fromStdString(level));
+		}
+		return handled;
 	}
 
 } /* namespace widgets */

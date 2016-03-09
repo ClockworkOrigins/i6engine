@@ -247,41 +247,43 @@ namespace editor {
 			section->SetAttribute("flags", p.first.c_str());
 
 			for (auto & go : p.second) {
-				tinyxml2::XMLElement * gameObject = doc.NewElement("GameObject");
-				gameObject->SetAttribute("name", go->getType().c_str());
+				if (!saveObjectWithPlugin(go, section, level)) {
+					tinyxml2::XMLElement * gameObject = doc.NewElement("GameObject");
+					gameObject->SetAttribute("name", go->getType().c_str());
 
-				if (go->getSend()) {
-					gameObject->SetAttribute("send", "true");
-				} else {
-					gameObject->SetAttribute("send", "false");
-				}
-
-				for (auto & c : go->getGOCList()) {
-					if (go->getType() == "Waypoint" && (c->getTemplateName() == "MovableText" || c->getTemplateName() == "MeshAppearance")) {
-						continue;
-					}
-					tinyxml2::XMLElement * component = doc.NewElement("Component");
-					component->SetAttribute("template", c->getTemplateName().c_str());
-
-					for (auto am : c->synchronize()) {
-						tinyxml2::XMLElement * attribute = doc.NewElement("Attribute");
-						attribute->SetAttribute("name", am.first.c_str());
-
-						tinyxml2::XMLText * attributeValue = doc.NewText(am.second.c_str());
-
-						attribute->LinkEndChild(attributeValue);
-
-						component->LinkEndChild(attribute);
+					if (go->getSend()) {
+						gameObject->SetAttribute("send", "true");
+					} else {
+						gameObject->SetAttribute("send", "false");
 					}
 
-					gameObject->LinkEndChild(component);
+					for (auto & c : go->getGOCList()) {
+						if (go->getType() == "Waypoint" && (c->getTemplateName() == "MovableText" || c->getTemplateName() == "MeshAppearance")) {
+							continue;
+						}
+						tinyxml2::XMLElement * component = doc.NewElement("Component");
+						component->SetAttribute("template", c->getTemplateName().c_str());
+
+						for (auto am : c->synchronize()) {
+							tinyxml2::XMLElement * attribute = doc.NewElement("Attribute");
+							attribute->SetAttribute("name", am.first.c_str());
+
+							tinyxml2::XMLText * attributeValue = doc.NewText(am.second.c_str());
+
+							attribute->LinkEndChild(attributeValue);
+
+							component->LinkEndChild(attribute);
+						}
+
+						gameObject->LinkEndChild(component);
+					}
+
+					section->LinkEndChild(gameObject);
 				}
 
-				section->LinkEndChild(gameObject);
-
-				root->LinkEndChild(section);
 				currentValue++;
 			}
+			root->LinkEndChild(section);
 		}
 
 		doc.SaveFile(level.c_str());

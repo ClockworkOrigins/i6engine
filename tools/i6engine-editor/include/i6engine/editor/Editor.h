@@ -22,6 +22,10 @@
 
 #include "clockUtils/iniParser/iniParser.h"
 
+namespace tinyxml2 {
+	class XMLElement;
+} /* namespace tinyxml2 */
+
 namespace i6engine {
 namespace editor {
 
@@ -106,6 +110,7 @@ namespace editor {
 		virtual void setProgressValue(int value) = 0;
 		virtual void setProgressMaximum(int value) = 0;
 		virtual void finishedProgress() = 0;
+		virtual bool saveObjectWithPlugin(const api::GOPtr & go, tinyxml2::XMLElement * element, const std::string & level) = 0;
 
 	private:
 		api::GOPtr _camera;
