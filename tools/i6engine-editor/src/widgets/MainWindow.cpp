@@ -621,12 +621,24 @@ namespace widgets {
 		}
 	}
 
-	bool MainWindow::saveObjectWithPlugin(const api::GOPtr & go, tinyxml2::XMLElement * element, const std::string & level) {
+	void MainWindow::startLevelWithPlugin(const std::string & level) {
+		for (plugins::SaveObjectPluginInterface * sopi : _saveObjectPlugins) {
+			sopi->startLevel(QString::fromStdString(level));
+		}
+	}
+
+	bool MainWindow::saveObjectWithPlugin(const api::GOPtr & go, tinyxml2::XMLElement * element) {
 		bool handled = false;
 		for (plugins::SaveObjectPluginInterface * sopi : _saveObjectPlugins) {
-			handled = handled || sopi->saveObject(go, element, QString::fromStdString(level));
+			handled = handled || sopi->saveObject(go, element);
 		}
 		return handled;
+	}
+
+	void MainWindow::finishLevelWithPlugin() {
+		for (plugins::SaveObjectPluginInterface * sopi : _saveObjectPlugins) {
+			sopi->finishLevel();
+		}
 	}
 
 } /* namespace widgets */

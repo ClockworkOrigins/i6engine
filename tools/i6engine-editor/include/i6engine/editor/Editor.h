@@ -110,7 +110,9 @@ namespace editor {
 		virtual void setProgressValue(int value) = 0;
 		virtual void setProgressMaximum(int value) = 0;
 		virtual void finishedProgress() = 0;
-		virtual bool saveObjectWithPlugin(const api::GOPtr & go, tinyxml2::XMLElement * element, const std::string & level) = 0;
+		virtual void startLevelWithPlugin(const std::string & level) = 0;
+		virtual bool saveObjectWithPlugin(const api::GOPtr & go, tinyxml2::XMLElement * element) = 0;
+		virtual void finishLevelWithPlugin() = 0;
 
 	private:
 		api::GOPtr _camera;

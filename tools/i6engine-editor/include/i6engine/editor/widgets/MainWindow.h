@@ -125,7 +125,9 @@ namespace widgets {
 		void setProgressValue(int value) override;
 		void setProgressMaximum(int value) override;
 		void finishedProgress() override;
-		bool saveObjectWithPlugin(const api::GOPtr & go, tinyxml2::XMLElement * element, const std::string & level) override;
+		void startLevelWithPlugin(const std::string & level) override;
+		bool saveObjectWithPlugin(const api::GOPtr & go, tinyxml2::XMLElement * element) override;
+		void finishLevelWithPlugin() override;
 
 		static api::KeyCode convertQtToEngine(int key);
 	};

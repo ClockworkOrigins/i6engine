@@ -39,13 +39,22 @@ namespace plugins {
 		}
 
 		/**
+		 * \brief initializes save process using given level file
+		 */
+		virtual void startLevel(const QString & level) = 0;
+
+		/**
 		 * \brief tries to save GameObject during saving in editor
 		 * \param[in] go the GOPtr to the GameObject to be saved
 		 * \param[in] element the XMLElement this go should be linked to if necessary
-		 * \param[in] level the level file that is saved
 		 * \returns true if object was handled by this plugin, otherwise false
 		 */
-		virtual bool saveObject(const i6engine::api::GOPtr & go, tinyxml2::XMLElement * element, const QString & level) const;
+		virtual bool saveObject(const i6engine::api::GOPtr & go, tinyxml2::XMLElement * element);
+
+		/**
+		 * \brief finishes save process
+		 */
+		virtual void finishLevel() = 0;
 	};
 
 } /* namespace plugins */

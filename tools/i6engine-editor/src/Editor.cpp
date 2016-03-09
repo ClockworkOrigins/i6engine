@@ -203,6 +203,7 @@ namespace editor {
 	}
 
 	void Editor::saveLevel(const std::string & level) {
+		startLevelWithPlugin(level);
 		tinyxml2::XMLDocument doc;
 		tinyxml2::XMLDeclaration * decl = doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
 		doc.InsertFirstChild(decl);
@@ -247,7 +248,7 @@ namespace editor {
 			section->SetAttribute("flags", p.first.c_str());
 
 			for (auto & go : p.second) {
-				if (!saveObjectWithPlugin(go, section, level)) {
+				if (!saveObjectWithPlugin(go, section)) {
 					tinyxml2::XMLElement * gameObject = doc.NewElement("GameObject");
 					gameObject->SetAttribute("name", go->getType().c_str());
 
@@ -287,6 +288,7 @@ namespace editor {
 		}
 
 		doc.SaveFile(level.c_str());
+		finishLevelWithPlugin();
 		currentValue++;
 		finishedProgress();
 	}
