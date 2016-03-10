@@ -22,7 +22,7 @@
 namespace i6engine {
 namespace core {
 
-	SubSystemController::SubSystemController() : _bolGlobalShutDown(false), _bolWaitForInit(true), _objThreadGrp(), _objQueuedSubSystems(), _coreController() {
+	SubSystemController::SubSystemController() : _bolGlobalShutDown(false), _bolWaitForInit(true), _objThreadGrp(), _objQueuedSubSystems(), _coreController(), _lock() {
 	}
 
 	void SubSystemController::Start() {
@@ -46,6 +46,7 @@ namespace core {
 	}
 
 	void SubSystemController::JoinAllSubsystems() {
+		std::lock_guard<std::mutex> lg(_lock);
 		for (boost::thread * t : _objThreadGrp) {
 			t->join();
 			delete t;
@@ -91,13 +92,13 @@ namespace core {
 	}
 
 	bool SubSystemController::isShutdownComplete() {
+		std::lock_guard<std::mutex> lg(_lock);
 		for (QueuedModule & objQueuedSubSystem : _objQueuedSubSystems) {
 			if (objQueuedSubSystem.module->getRunning()) {
 				return false;
 			}
 		}
 		ISIXE_LOG_INFO("SubSystemController", "all subsystems shut down");
-
 		return true;
 	}
 

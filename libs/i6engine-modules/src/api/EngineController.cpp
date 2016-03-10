@@ -192,6 +192,7 @@ namespace api {
 		// maybe keep Messaging/Networking-Thread running?
 		if (_appl && _appl->ShutdownRequest()) {
 			_coreController->ShutDown();
+			_coreController->WaitForShutDown();
 
 			while (!_subsystemController->isShutdownComplete()) {
 				boost::this_thread::sleep(boost::posix_time::milliseconds(10));

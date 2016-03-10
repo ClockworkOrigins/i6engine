@@ -23,6 +23,7 @@
 #define __I6ENGINE_CORE_SUBSYSTEMCONTROLLER_H__
 
 #include <cstdint>
+#include <mutex>
 #include <set>
 
 #include "i6engine/utils/i6eSystemParameters.h"
@@ -147,6 +148,7 @@ namespace core {
 		std::vector<boost::thread *> _objThreadGrp;
 		std::vector<QueuedModule> _objQueuedSubSystems;
 		EngineCoreController * _coreController;
+		std::mutex _lock;
 
 		/**
 		 * \brief This method will be called when starting all subsystems.
