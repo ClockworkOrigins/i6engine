@@ -52,12 +52,18 @@ QT5_WRAP_CPP(NPCCreatorGuiHeader
 	${includedir}/widgets/NPCRenderWidget.h
 )
 
+SET(ResourceFile resources/resources.qrc)
+
 SOURCE_GROUP(moc /moc_*)
+SOURCE_GROUP(resources /resources/*)
+
+# add resources ...
+QT5_ADD_RESOURCES(QT_RESOURCE_FILES ${ResourceFile})
 
 # add translations ...
 QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
 
-ADD_EXECUTABLE(NPCCreator ${GUI_TYPE} ../common/src/Config.cpp ${NPCCreatorSrc} ${NPCCreatorUI} ${NPCCreatorGuiHeader} ${QT_TRANSLATION_FILES})
+ADD_EXECUTABLE(NPCCreator ${GUI_TYPE} ../common/src/Config.cpp ${NPCCreatorSrc} ${NPCCreatorUI} ${NPCCreatorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES})
 
 target_link_libraries(NPCCreator i6engine-rpg ${QT_LIBRARIES})
 

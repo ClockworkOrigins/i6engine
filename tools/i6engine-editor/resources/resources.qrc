@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+	<file alias="images/new.png">../../../media/textures/new.png</file>
+	<file alias="images/load.png">../../../media/textures/load.png</file>
+	<file alias="images/save.png">../../../media/textures/save.png</file>
+	<file alias="images/close.png">../../../media/textures/close.png</file>
+	<file alias="images/config_general.png">../../../media/textures/config_general.png</file>
+</qresource>
+</RCC>

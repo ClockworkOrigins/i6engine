@@ -1,0 +1,25 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+	<file alias="images/new.png">../../../media/textures/new.png</file>
+	<file alias="images/clone.png">../../../media/textures/clone.png</file>
+	<file alias="images/save.png">../../../media/textures/save.png</file>
+	<file alias="images/control_play.png">../../../media/textures/control_play.png</file>
+	<file alias="images/control_play_blue.png">../../../media/textures/control_play_blue.png</file>
+	<file alias="images/control_pause.png">../../../media/textures/control_pause.png</file>
+	<file alias="images/control_pause_blue.png">../../../media/textures/control_pause_blue.png</file>
+	<file alias="images/control_stop.png">../../../media/textures/control_stop.png</file>
+	<file alias="images/control_stop_blue.png">../../../media/textures/control_stop_blue.png</file>
+	<file alias="images/technique.png">../../../media/textures/technique.png</file>
+	<file alias="images/renderer.png">../../../media/textures/renderer.png</file>
+	<file alias="images/emitter.png">../../../media/textures/emitter.png</file>
+	<file alias="images/affector.png">../../../media/textures/affector.png</file>
+	<file alias="images/observer.png">../../../media/textures/observer.png</file>
+	<file alias="images/handler.png">../../../media/textures/handler.png</file>
+	<file alias="images/behaviour.png">../../../media/textures/behaviour.png</file>
+	<file alias="images/extern.png">../../../media/textures/extern.png</file>
+	<file alias="images/connect.png">../../../media/textures/connect.png</file>
+	<file alias="images/disconnect.png">../../../media/textures/disconnect.png</file>
+	<file alias="images/cursor.png">../../../media/textures/cursor.png</file>
+	<file alias="images/close.png">../../../media/textures/close.png</file>
+</qresource>
+</RCC>

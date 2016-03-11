@@ -76,6 +76,7 @@ namespace widgets {
 
 		menuFile->setTitle(QApplication::tr("File"));
 		actionExit->setText(QApplication::tr("Exit"));
+		actionExit->setIcon(QIcon(":/images/close.png"));
 	}
 
 	MainWindow::~MainWindow() {

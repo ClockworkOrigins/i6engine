@@ -91,6 +91,12 @@ namespace widgets {
 		menuGame->setTitle(QApplication::tr("Game"));
 		menuExtras->setTitle(QApplication::tr("Extras"));
 		actionOptions->setText(QApplication::tr("Options"));
+
+		actionNew_Level->setIcon(QIcon(":/images/new.png"));
+		actionLoad_Level->setIcon(QIcon(":/images/load.png"));
+		actionSave_Level->setIcon(QIcon(":/images/save.png"));
+		actionExit->setIcon(QIcon(":/images/close.png"));
+		actionOptions->setIcon(QIcon(":/images/config_general.png"));
 	}
 
 	MainWindow::~MainWindow() {

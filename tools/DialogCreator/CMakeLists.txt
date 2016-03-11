@@ -55,13 +55,19 @@ QT5_WRAP_CPP(dialogCreatorGuiHeader
 	${includedir}/widgets/ScriptTabWidget.h
 )
 
+SET(ResourceFile resources/resources.qrc)
+
 source_group(widgets /widgets/*)
 SOURCE_GROUP(moc /moc_*)
+SOURCE_GROUP(resources /resources/*)
+
+# add resources ...
+QT5_ADD_RESOURCES(QT_RESOURCE_FILES ${ResourceFile})
 
 # add translations ...
 QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
 
-ADD_EXECUTABLE(DialogCreator ${GUI_TYPE} ../common/src/Config.cpp ${dialogCreatorSrc} ${dialogCreatorUI} ${dialogCreatorGuiHeader} ${QT_TRANSLATION_FILES})
+ADD_EXECUTABLE(DialogCreator ${GUI_TYPE} ../common/src/Config.cpp ${dialogCreatorSrc} ${dialogCreatorUI} ${dialogCreatorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES})
 
 target_link_libraries(DialogCreator i6engine-rpg ${QT_LIBRARIES})
 

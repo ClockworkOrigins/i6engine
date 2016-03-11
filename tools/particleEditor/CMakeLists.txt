@@ -267,6 +267,8 @@ QT5_WRAP_CPP(particleEditorGuiHeader
 	${includedir}/widgets/RendererPropertyWindows/SphereRendererPropertyWindow.h
 )
 
+SET(ResourceFile resources/resources.qrc)
+
 source_group(connections /connections/*)
 source_group(factories /factories/*)
 source_group(properties /properties/*)
@@ -279,11 +281,15 @@ source_group(widgets\\ExternPropertyWindows /widgets/ExternPropertyWindows/*)
 source_group(widgets\\ObserverPropertyWindows /widgets/ObserverPropertyWindows/*)
 source_group(widgets\\RendererPropertyWindows /widgets/RendererPropertyWindows/*)
 SOURCE_GROUP(moc /moc_*)
+SOURCE_GROUP(resources /resources/*)
+
+# add resources ...
+QT5_ADD_RESOURCES(QT_RESOURCE_FILES ${ResourceFile})
 
 # add translations ...
 QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
 
-ADD_EXECUTABLE(ParticleEditor ${GUI_TYPE} ../common/src/Config.cpp ${particleEditorSrc} ${particleEditorUI} ${particleEditorGuiHeader} ${QT_TRANSLATION_FILES})
+ADD_EXECUTABLE(ParticleEditor ${GUI_TYPE} ../common/src/Config.cpp ${particleEditorSrc} ${particleEditorUI} ${particleEditorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES})
 
 target_link_libraries(ParticleEditor i6engine-modules ${QT_LIBRARIES})
 
