@@ -41,7 +41,7 @@ namespace plugins {
 		QStringList vec = level.split("/");
 		vec = vec.back().split("\\");
 		QString levelStartup = vec.back().split(".").front();
-		_file = std::ofstream((_scriptsPath + "/" + levelStartup + _fileExtension).toStdString().c_str());
+		_file = std::ofstream((_scriptsPath + "/Startup_" + levelStartup + _fileExtension).toStdString().c_str());
 		_level = levelStartup;
 		insertMethodDeclaration();
 	}

@@ -85,30 +85,35 @@ namespace modules {
 
 			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
 		} else if (type == api::scripting::ScrLoadAllScripts) {
-			std::queue<std::string> directories;
-			directories.push(_scriptsPath);
-
-			while (!directories.empty()) {
-				std::string dir = directories.front();
-				directories.pop();
-				try {
-					boost::filesystem::directory_iterator iter(dir), dirEnd;
-					while (iter != dirEnd) {
-						if (boost::filesystem::is_regular_file(*iter)) {
-							std::string file = iter->path().string();
-							parseScript(file, true);
-						} else if (boost::filesystem::is_directory(*iter)) {
-							std::string path = iter->path().string();
-							directories.push(path);
-						}
-						iter++;
-					}
-				} catch (boost::filesystem::filesystem_error & e) {
-					ISIXE_THROW_FAILURE("LuaScriptingManager", e.what());
-				}
-			}
+			loadAllScripts();
 		} else {
 			ISIXE_THROW_MESSAGE("LuaScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
+		}
+	}
+
+	void LuaScriptingManager::loadAllScripts() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		std::queue<std::string> directories;
+		directories.push(_scriptsPath);
+
+		while (!directories.empty()) {
+			std::string dir = directories.front();
+			directories.pop();
+			try {
+				boost::filesystem::directory_iterator iter(dir), dirEnd;
+				while (iter != dirEnd) {
+					if (boost::filesystem::is_regular_file(*iter)) {
+						std::string file = iter->path().string();
+						parseScript(file, true);
+					} else if (boost::filesystem::is_directory(*iter)) {
+						std::string path = iter->path().string();
+						directories.push(path);
+					}
+					iter++;
+				}
+			} catch (boost::filesystem::filesystem_error & e) {
+				ISIXE_THROW_FAILURE("PythonScriptingManager", e.what());
+			}
 		}
 	}
 

@@ -57,16 +57,6 @@ namespace modules {
 
 		void Tick();
 
-	private:
-		std::set<std::string> _scripts;
-		std::string _scriptsPath;
-		utils::DoubleBufferQueue<std::function<void(void)>, true, false> _callScripts;
-
-		/**
-		 * \brief called by PythonScriptingMailbox with a message
-		 */
-		void News(const api::GameMessage::Ptr & msg);
-
 		/**
 		 * \brief executes the given method in the given script with return type void
 		 */
@@ -239,6 +229,21 @@ namespace modules {
 				boost::python::scope().attr(name.c_str()) = value;
 			}));
 		}
+
+		/**
+		 * \brief loads all scripts into dictionary
+		 */
+		void loadAllScripts();
+
+	private:
+		std::set<std::string> _scripts;
+		std::string _scriptsPath;
+		utils::DoubleBufferQueue<std::function<void(void)>, true, false> _callScripts;
+
+		/**
+		 * \brief called by PythonScriptingMailbox with a message
+		 */
+		void News(const api::GameMessage::Ptr & msg);
 
 		/**
 		 * \brief parses the given script

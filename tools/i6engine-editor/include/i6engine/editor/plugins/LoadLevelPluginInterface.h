@@ -39,7 +39,7 @@ namespace plugins {
 		/**
 		 * \brief called after loading the complete level file
 		 */
-		virtual bool finishLoadLevel(const QString & level) = 0;
+		virtual void finishLoadLevel(const QString & level) = 0;
 	};
 
 } /* namespace plugins */

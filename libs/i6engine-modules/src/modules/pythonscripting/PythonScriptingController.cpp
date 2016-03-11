@@ -41,30 +41,6 @@ namespace modules {
 
 	void PythonScriptingController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-		// *** Initialization goes here ***
-		Py_Initialize();
-		ISIXE_LOG_INFO("PythonScriptingController", Py_GetVersion());
-
-		boost::filesystem::path workingDir = boost::filesystem::complete("./").normalize();
-		PyObject * sysPath = PySys_GetObject("path");
-		PyList_Insert(sysPath, 0, PyString_FromString(workingDir.string().c_str()));
-		std::string mainDir;
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("GENERAL", "i6engineMainDir", mainDir)) {
-			ISIXE_LOG_WARN("Scripting", "No 'i6engineMainDir' path set in category 'GENERAL' in the config file. No additional path will be added");
-		} else {
-			mainDir += "/lib";
-			PyList_Insert(sysPath, 0, PyString_FromString(mainDir.c_str()));
-		}
-
-		std::string scriptsPath;
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", scriptsPath)) {
-			ISIXE_LOG_ERROR("PythonScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
-			return;
-		}
-
-		boost::filesystem::path workingDir2 = boost::filesystem::complete((scriptsPath + "/").c_str()).normalize();
-		PyList_Insert(sysPath, 0, PyString_FromString(workingDir2.string().c_str()));
-
 		_manager = new PythonScriptingManager();
 		_mailbox = new PythonScriptingMailbox(_manager);
 
@@ -76,7 +52,6 @@ namespace modules {
 		ISIXE_LOG_INFO("PythonScriptingController", "***Shutting down subsystem***");
 
 		ISIXE_UNREGISTERMESSAGETYPE(api::messages::ScriptingMessageType);
-		Py_Finalize();
 		delete _manager;
 		delete _mailbox;
 	}

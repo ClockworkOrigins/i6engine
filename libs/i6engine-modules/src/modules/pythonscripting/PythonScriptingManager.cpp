@@ -30,9 +30,26 @@ namespace modules {
 
 	PythonScriptingManager::PythonScriptingManager() : _scripts(), _scriptsPath(), _callScripts() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
-			ISIXE_THROW_FAILURE("PythonScriptingController", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
+		// *** Initialization goes here ***
+		Py_Initialize();
+		ISIXE_LOG_INFO("PythonScriptingManager", Py_GetVersion());
+
+		boost::filesystem::path workingDir = boost::filesystem::complete("./").normalize();
+		PyObject * sysPath = PySys_GetObject("path");
+		PyList_Insert(sysPath, 0, PyString_FromString(workingDir.string().c_str()));
+		std::string mainDir;
+		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("GENERAL", "i6engineMainDir", mainDir)) {
+			ISIXE_LOG_WARN("PythonScriptingManager", "No 'i6engineMainDir' path set in category 'GENERAL' in the config file. No additional path will be added");
+		} else {
+			mainDir += "/lib";
+			PyList_Insert(sysPath, 0, PyString_FromString(mainDir.c_str()));
 		}
+
+		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
+			ISIXE_THROW_FAILURE("PythonScriptingManager", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
+		}
+		boost::filesystem::path workingDir2 = boost::filesystem::complete((_scriptsPath + "/").c_str()).normalize();
+		PyList_Insert(sysPath, 0, PyString_FromString(workingDir2.string().c_str()));
 #if ISIXE_SCRIPTING == SCRIPTING_PYTHON
 		api::EngineController::GetSingleton().getScriptingFacade()->_manager = this;
 #endif
@@ -59,6 +76,7 @@ namespace modules {
 	PythonScriptingManager::~PythonScriptingManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_scripts.clear();
+		Py_Finalize();
 	}
 
 	void PythonScriptingManager::Tick() {
@@ -78,30 +96,35 @@ namespace modules {
 
 			callScript<void>(file, func, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->raytestResult, static_cast<api::scripting::Scripting_RayResult_Update *>(msg->getContent())->rayID);
 		} else if (type == api::scripting::ScrLoadAllScripts) {
-			std::queue<std::string> directories;
-			directories.push(_scriptsPath);
-
-			while (!directories.empty()) {
-				std::string dir = directories.front();
-				directories.pop();
-				try {
-					boost::filesystem::directory_iterator iter(dir), dirEnd;
-					while (iter != dirEnd) {
-						if (boost::filesystem::is_regular_file(*iter)) {
-							std::string file = iter->path().string();
-							parseScript(file, true);
-						} else if (boost::filesystem::is_directory(*iter)) {
-							std::string path = iter->path().string();
-							directories.push(path);
-						}
-						iter++;
-					}
-				} catch (boost::filesystem::filesystem_error & e) {
-					ISIXE_THROW_FAILURE("PythonScriptingManager", e.what());
-				}
-			}
+			loadAllScripts();
 		} else {
 			ISIXE_THROW_MESSAGE("PythonScriptingManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
+		}
+	}
+
+	void PythonScriptingManager::loadAllScripts() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		std::queue<std::string> directories;
+		directories.push(_scriptsPath);
+
+		while (!directories.empty()) {
+			std::string dir = directories.front();
+			directories.pop();
+			try {
+				boost::filesystem::directory_iterator iter(dir), dirEnd;
+				while (iter != dirEnd) {
+					if (boost::filesystem::is_regular_file(*iter)) {
+						std::string file = iter->path().string();
+						parseScript(file, true);
+					} else if (boost::filesystem::is_directory(*iter)) {
+						std::string path = iter->path().string();
+						directories.push(path);
+					}
+					iter++;
+				}
+			} catch (boost::filesystem::filesystem_error & e) {
+				ISIXE_THROW_FAILURE("PythonScriptingManager", e.what());
+			}
 		}
 	}
 
