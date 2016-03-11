@@ -20,10 +20,12 @@ namespace widgets {
 	}
 
 	void WidgetScript::loadScript(ParticleUniverse::ParticleSystem * system) {
-		_changeable = false;
-		ParticleUniverse::String script = ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(system);
-		textEdit->setText(QString::fromStdString(script));
-		_changeable = true;
+		if (system) {
+			_changeable = false;
+			ParticleUniverse::String script = ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(system);
+			textEdit->setText(QString::fromStdString(script));
+			_changeable = true;
+		}
 	}
 
 	void WidgetScript::parseScript() {
