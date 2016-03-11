@@ -160,6 +160,8 @@ namespace editor {
 		std::thread([this, file, callback]() {
 			clearLevel();
 
+			startLoadLevel(file);
+
 			std::string flags = "";
 
 			std::vector<std::string> levelFlags = getLevelFlags();
@@ -193,6 +195,8 @@ namespace editor {
 			});
 
 			_inLevel = true;
+
+			finishLoadLevel(file);
 
 			finishedProgress();
 

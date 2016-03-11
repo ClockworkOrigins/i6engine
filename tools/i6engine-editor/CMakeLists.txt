@@ -70,6 +70,7 @@ source_group(misc /misc/*)
 source_group(widgets /widgets/*)
 SOURCE_GROUP(moc /moc_*)
 SOURCE_GROUP(resources /resources/*)
+SOURCE_GROUP(resources /qrc_*)
 
 # add resources ...
 QT5_ADD_RESOURCES(QT_RESOURCE_FILES ${ResourceFile})

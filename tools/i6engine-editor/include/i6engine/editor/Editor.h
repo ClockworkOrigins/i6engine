@@ -113,6 +113,8 @@ namespace editor {
 		virtual void startLevelWithPlugin(const std::string & level) = 0;
 		virtual bool saveObjectWithPlugin(const api::GOPtr & go, tinyxml2::XMLElement * element) = 0;
 		virtual void finishLevelWithPlugin() = 0;
+		virtual void startLoadLevel(const std::string & level) = 0;
+		virtual void finishLoadLevel(const std::string & level) = 0;
 
 	private:
 		api::GOPtr _camera;
