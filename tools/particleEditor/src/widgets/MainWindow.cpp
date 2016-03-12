@@ -242,15 +242,15 @@ namespace widgets {
 				}
 			}
 		} else if (_currentTab == CurrentTab::Edit && CurrentTab(index) == CurrentTab::Render) {
-			_renderWrapper->layout()->addWidget(_renderWidget);
 			_editWidget->verticalLayout->removeWidget(_renderWidget);
+			_renderWrapper->layout()->addWidget(_renderWidget);
 			_toolBarEdit->hide();
 			if (_currentPropertyWindow) {
 				_currentPropertyWindow->hide();
 			}
 		} else if (_currentTab == CurrentTab::Edit && CurrentTab(index) == CurrentTab::Script) {
-			_renderWrapper->layout()->addWidget(_renderWidget);
 			_editWidget->verticalLayout->removeWidget(_renderWidget);
+			_renderWrapper->layout()->addWidget(_renderWidget);
 			_toolBarEdit->hide();
 			if (_currentPropertyWindow) {
 				_currentPropertyWindow->hide();
