@@ -247,6 +247,18 @@ namespace widgets {
 		_camera->setPosition(pivot + zoomFactor * direction);
 	}
 
+	void WidgetRender::showEvent(QShowEvent * evt) {
+		int width = size().width();
+		int height = size().height();
+		if (_rWindow) {
+			resize(size() - QSize(1, 1));
+			resize(size() + QSize(1, 1));
+			_rWindow->resize(static_cast<unsigned int>(width), static_cast<unsigned int>(height));
+			_rWindow->windowMovedOrResized();
+			_camera->setAspectRatio(double(width) / double(height));
+		}
+	}
+
 } /* namespace widgets */
 } /* namespace particleEditor */
 } /* namespace i6engine */

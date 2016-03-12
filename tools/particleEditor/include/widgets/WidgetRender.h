@@ -88,6 +88,7 @@ namespace widgets {
 		void mousePressEvent(QMouseEvent * evt) override;
 		void mouseReleaseEvent(QMouseEvent * evt) override;
 		void zoom(double zoomFactor);
+		void showEvent(QShowEvent * evt) override;
 	};
 
 } /* namespace widgets */
