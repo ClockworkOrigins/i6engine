@@ -46,14 +46,21 @@ namespace modules {
 		if (!_enabled) {
 			return;
 		}
-		if (!_sceneManager->getCurrentViewport()) {
+		Ogre::Viewport * vp = nullptr;
+		for (auto it = _sceneManager->getCameras().begin(); it != _sceneManager->getCameras().end(); it++) {
+			if (it->second->getViewport()) {
+				vp = it->second->getViewport();
+				break;
+			}
+		}
+		if (!vp) {
 			return;
 		}
-		if (!_sceneManager->getCurrentViewport()->getCamera()) {
+		if (!vp->getCamera()) {
 			return;
 		}
 		const Ogre::AxisAlignedBox & bbox = _object->getWorldBoundingBox(true);
-		Ogre::Matrix4 mat = _sceneManager->getCurrentViewport()->getCamera()->getViewMatrix();
+		Ogre::Matrix4 mat = vp->getCamera()->getViewMatrix();
 
 		// We want to put the text point in the center of the top of the AABB Box.
 		Ogre::Vector3 topcenter = bbox.getCenter();
