@@ -35,6 +35,7 @@ namespace properties {
 	protected:
 		double _value;
 		QDoubleSpinBox * _doubleSpinBox;
+		bool _changeable;
 	};
 
 } /* namespace properties */
