@@ -51,6 +51,8 @@ namespace widgets {
 
 		_graphicsView->show();
 		_graphicsView->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
+		_graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+		_graphicsView->setCacheMode(QGraphicsView::CacheBackground);
 	}
 
 	WidgetEdit::~WidgetEdit() {
@@ -237,8 +239,8 @@ namespace widgets {
 			wec->deleteLater();
 		}
 		_components.clear();
-		_graphicsScene->views().first()->hide();
-		_graphicsScene->views().first()->show();
+		//_graphicsScene->views().first()->hide();
+		//_graphicsScene->views().first()->show();
 		WidgetEditComponent * particleSystemEditComponent = forceCreateParticleSystemEditComponent(); // 'Guarantees' a valid particleSystemEditComponent
 		if (copyParticleSystemPropertiesToPropertyWindow(particleSystemEditComponent, newParticleSystem)) {
 			createParticleSystemComponents(particleSystemEditComponent, newParticleSystem);

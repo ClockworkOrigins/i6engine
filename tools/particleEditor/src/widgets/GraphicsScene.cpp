@@ -15,6 +15,16 @@ namespace widgets {
 	GraphicsScene::~GraphicsScene() {
 	}
 
+	void GraphicsScene::addItem(QGraphicsItem * item) {
+		QGraphicsScene::addItem(item);
+		setSceneRect(itemsBoundingRect());
+	}
+
+	void GraphicsScene::removeItem(QGraphicsItem * item) {
+		QGraphicsScene::removeItem(item);
+		setSceneRect(itemsBoundingRect());
+	}
+
 	void GraphicsScene::dragMoveEvent(QGraphicsSceneDragDropEvent * evt) {
 		QByteArray ba = evt->mimeData()->data("widget");
 		QDataStream ds(ba);

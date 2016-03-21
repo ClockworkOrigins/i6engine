@@ -1,6 +1,9 @@
 #include "connections/LineConnector.h"
 
+#include <iostream>
+
 #include <QBrush>
+#include <QGraphicsScene>
 #include <QGraphicsWidget>
 #include <QPainter>
 #include <QPen>
@@ -13,23 +16,23 @@ namespace connections {
 	}
 
 	void LineConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *) {
-		static const int xOffsetMin = 24;
+		static const qreal xOffsetMin = 24;
 
 		QPen pen(QBrush(_colour), _lineStyle);
 		pen.setWidth(2);
 		painter->setPen(pen);
 
 		QPoint points[4];
-		int x1 = _first->pos().x();
-		int y1 = _first->pos().y();
-		int x2 = _second->pos().x();
-		int y2 = _second->pos().y();
-		int width1 = _first->size().width();
-		int height1 = _first->size().height();
-		int width2 = _second->size().width();
-		int height2 = _second->size().height();
-		int x3, y3;
-		int x4, y4;
+		qreal x1 = _first->pos().x();
+		qreal y1 = _first->pos().y();
+		qreal x2 = _second->pos().x();
+		qreal y2 = _second->pos().y();
+		qreal width1 = _first->size().width();
+		qreal height1 = _first->size().height();
+		qreal width2 = _second->size().width();
+		qreal height2 = _second->size().height();
+		qreal x3, y3;
+		qreal x4, y4;
 
 		y1 = y1 + 0.5 * height1;
 		y2 = y2 + 0.5 * height2;
@@ -61,7 +64,7 @@ namespace connections {
 		}
 
 		// Calculate the 4 control points
-		int xOffset = 0.25 * std::abs(x1 - x2);
+		qreal xOffset = 0.25 * std::abs(x1 - x2);
 		xOffset = std::max(xOffset, xOffsetMin);
 		if (x1 + width1 > x2 + width2) {
 			x3 = x1 - xOffset;
@@ -80,14 +83,14 @@ namespace connections {
 			}
 		}
 
-		_path = QPainterPath(QPoint(x1, y1));
-		_path.cubicTo(QPoint(x3, y3), QPoint(x4, y4), QPoint(x2, y2));
-		painter->drawPath(_path);
 		prepareGeometryChange();
+		_path = QPainterPath(QPointF(x1, y1));
+		_path.cubicTo(QPointF(x3, y3), QPointF(x4, y4), QPointF(x2, y2));
+		painter->drawPath(_path);
 	}
 
 	QRectF LineConnector::boundingRect() const {
-		return QRectF();
+		return _path.boundingRect();
 	}
 
 } /* namespace connections */
