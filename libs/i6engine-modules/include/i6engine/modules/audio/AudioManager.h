@@ -30,6 +30,7 @@
 #include "i6engine/math/i6eVector.h"
 
 #include "i6engine/api/GameMessage.h"
+#include "i6engine/api/configs/AudioConfig.h"
 
 #include "AL/al.h"
 #include "AL/alc.h"
@@ -75,7 +76,7 @@ namespace modules {
 			Handle,
 			Category
 		};
-		std::vector<std::tuple<ALuint, ALuint, std::function<void(bool)>, uint64_t, std::string>> _sounds;
+		std::vector<std::tuple<ALuint, ALuint, std::function<void(bool)>, api::audio::SoundHandle, std::string>> _sounds;
 
 		std::map<std::string, boost::shared_ptr<WavFile>> _cachedSounds;
 
@@ -97,7 +98,7 @@ namespace modules {
 		/**
 		 * \brief plays given sound
 		 */
-		void playSound(uint64_t handle, const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::string & category, const std::function<void(bool)> & callback = [](bool) {});
+		void playSound(api::audio::SoundHandle handle, const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::string & category, const std::function<void(bool)> & callback = [](bool) {});
 
 		/**
 		 * \brief forbidden

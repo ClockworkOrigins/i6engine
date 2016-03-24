@@ -30,6 +30,9 @@
 namespace i6engine {
 namespace api {
 namespace audio {
+
+	typedef uint64_t SoundHandle;
+
 	enum AudioMessageTypes {
 		AudioReset = 0,
 		AudioNode,
@@ -101,14 +104,14 @@ namespace audio {
 	 * \brief plays given sound once
 	 */
 	typedef struct Audio_PlaySound_Create : GameMessageStruct {
-		uint64_t handle;
+		SoundHandle handle;
 		std::string file;
 		double maxDist;
 		Vec3 position;
 		Vec3 direction;
 		bool cacheable;
 		std::string category;
-		Audio_PlaySound_Create(uint64_t h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c, const std::string & cat) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c), category(cat) {
+		Audio_PlaySound_Create(SoundHandle h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c, const std::string & cat) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c), category(cat) {
 		}
 		Audio_PlaySound_Create * copy() {
 			return new Audio_PlaySound_Create(*this);
@@ -119,7 +122,7 @@ namespace audio {
 	 * \brief plays given sound with callback
 	 */
 	typedef struct Audio_PlaySoundWithCallback_Create : GameMessageStruct {
-		uint64_t handle;
+		SoundHandle handle;
 		std::string file;
 		double maxDist;
 		Vec3 position;
@@ -127,7 +130,7 @@ namespace audio {
 		bool cacheable;
 		std::string category;
 		std::function<void(bool)> callback;
-		Audio_PlaySoundWithCallback_Create(uint64_t h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c, const std::string & cat, const std::function<void(bool)> & cb) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c), category(cat), callback(cb) {
+		Audio_PlaySoundWithCallback_Create(SoundHandle h, const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool c, const std::string & cat, const std::function<void(bool)> & cb) : GameMessageStruct(), handle(h), file(f), maxDist(m), position(p), direction(d), cacheable(c), category(cat), callback(cb) {
 		}
 		Audio_PlaySoundWithCallback_Create * copy() {
 			return new Audio_PlaySoundWithCallback_Create(*this);
@@ -138,8 +141,8 @@ namespace audio {
 	 * \brief stops given sound
 	 */
 	typedef struct Audio_StopSound_Delete : GameMessageStruct {
-		uint64_t handle;
-		Audio_StopSound_Delete(uint64_t h) : GameMessageStruct(), handle(h) {
+		SoundHandle handle;
+		Audio_StopSound_Delete(SoundHandle h) : GameMessageStruct(), handle(h) {
 		}
 		Audio_StopSound_Delete * copy() {
 			return new Audio_StopSound_Delete(*this);

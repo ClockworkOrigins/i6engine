@@ -198,7 +198,7 @@ namespace modules {
 		alListenerfv(AL_VELOCITY, ListenerVel);		// Set velocity of the listener
 	}
 
-	void AudioManager::playSound(uint64_t handle, const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::string & category, const std::function<void(bool)> & callback) {
+	void AudioManager::playSound(api::audio::SoundHandle handle, const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::string & category, const std::function<void(bool)> & callback) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		auto it = _cachedSounds.find(file);
 		boost::shared_ptr<WavFile> wh;

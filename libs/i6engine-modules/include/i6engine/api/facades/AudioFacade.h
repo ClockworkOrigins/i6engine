@@ -29,6 +29,8 @@
 #include "i6engine/math/i6eQuaternion.h"
 #include "i6engine/math/i6eVector.h"
 
+#include "i6engine/api/configs/AudioConfig.h"
+
 namespace i6engine {
 namespace api {
 
@@ -60,17 +62,17 @@ namespace api {
 		/**
 		 * \brief plays given sound once
 		 */
-		uint64_t playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category);
+		audio::SoundHandle playSound(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category);
 
 		/**
 		 * \brief plays given sound if found and calls callback afterwards
 		 */
-		uint64_t playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category, const std::function<void(bool)> callback);
+		audio::SoundHandle playSoundWithCallback(const std::string & f, double m, const Vec3 & p, const Vec3 & d, bool cacheable, const std::string & category, const std::function<void(bool)> callback);
 
 		/**
 		 * \brief stops sound with this handle ID
 		 */
-		void stopSound(uint64_t handle);
+		void stopSound(audio::SoundHandle handle);
 
 		/**
 		 * \brief resets the subsystem to it's defaults
@@ -78,7 +80,7 @@ namespace api {
 		void resetSubSystem();
 
 	private:
-		std::atomic<uint64_t> _handleCounter;
+		std::atomic<audio::SoundHandle> _handleCounter;
 
 		/**
 		 * \brief forbidden
