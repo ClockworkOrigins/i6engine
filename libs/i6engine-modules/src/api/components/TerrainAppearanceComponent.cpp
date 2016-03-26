@@ -80,16 +80,16 @@ namespace api {
 		GameMessage::Ptr msg;
 		
 		if (!_heightmap.empty()) {
-			msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainHeightmap, core::Method::Create, new graphics::Graphics_TerrainHeightmap_Create(_objOwnerID, getID(), _heightmap, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
+			msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainHeightmap, core::Method::Create, new graphics::Graphics_TerrainHeightmap_Create(getID(), _heightmap, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
 		} else {
-			msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainHeightdata, core::Method::Create, new graphics::Graphics_TerrainHeightdata_Create(_objOwnerID, getID(), _heightdata, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
+			msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrainHeightdata, core::Method::Create, new graphics::Graphics_TerrainHeightdata_Create(getID(), _heightdata, _size, _inputScale, _vertices, _layers, _minX, _minY, _maxX, _maxY), core::Subsystem::Object);
 		}
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
 	void TerrainAppearanceComponent::Finalize() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Delete, new graphics::Graphics_Terrain_Delete(_objOwnerID, getID()), core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraTerrain, core::Method::Delete, new graphics::Graphics_Terrain_Delete(getID()), core::Subsystem::Object);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}

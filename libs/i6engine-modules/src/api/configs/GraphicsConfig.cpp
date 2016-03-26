@@ -100,21 +100,21 @@ namespace graphics {
 	}
 
 	// Terrain
-	Graphics_TerrainHeightmap_Create::Graphics_TerrainHeightmap_Create(const int64_t goID, const int64_t coID, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(coID, goID), heightmap(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
+	Graphics_TerrainHeightmap_Create::Graphics_TerrainHeightmap_Create(const int64_t coID, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(coID, -1), heightmap(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
 	}
-	Graphics_TerrainHeightdata_Create::Graphics_TerrainHeightdata_Create(const int64_t goID, const int64_t coID, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(coID, goID), heightdata(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
-	}
-
-	Graphics_TerrainHeightmap_Update::Graphics_TerrainHeightmap_Update(const int64_t goID, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(goID, -1), heightmap(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
-	}
-	Graphics_TerrainHeightdata_Update::Graphics_TerrainHeightdata_Update(const int64_t goID, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(goID, -1), heightdata(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
+	Graphics_TerrainHeightdata_Create::Graphics_TerrainHeightdata_Create(const int64_t coID, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(coID, -1), heightdata(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
 	}
 
-	Graphics_TerrainSetHeight_Update::Graphics_TerrainSetHeight_Update(const int64_t goID, uint64_t xPos, uint64_t zPos, double h) : GameMessageStruct(goID, -1), x(xPos), z(zPos), height(h) {
+	Graphics_TerrainHeightmap_Update::Graphics_TerrainHeightmap_Update(const int64_t coID, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(coID, -1), heightmap(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
+	}
+	Graphics_TerrainHeightdata_Update::Graphics_TerrainHeightdata_Update(const int64_t coID, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY) : GameMessageStruct(coID, -1), heightdata(h), size(s), inputScale(i), vertices(v), layers(l), minX(miX), minY(miY), maxX(maX), maxY(maY) {
+	}
+
+	Graphics_TerrainSetHeight_Update::Graphics_TerrainSetHeight_Update(const int64_t coID, uint64_t xPos, uint64_t zPos, double h) : GameMessageStruct(coID, -1), x(xPos), z(zPos), height(h) {
 	}
 
 	Graphics_Terrain_Delete::Graphics_Terrain_Delete() : GameMessageStruct() {}
-	Graphics_Terrain_Delete::Graphics_Terrain_Delete(const int64_t i, const int64_t c) : GameMessageStruct(i, -1), comp(c) {
+	Graphics_Terrain_Delete::Graphics_Terrain_Delete(const int64_t c) : GameMessageStruct(c, -1) {
 	}
 
 	// Viewport

@@ -345,7 +345,7 @@ namespace graphics {
 		int64_t minY;
 		int64_t maxX;
 		int64_t maxY;
-		Graphics_TerrainHeightmap_Create(const int64_t, const int64_t, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
+		Graphics_TerrainHeightmap_Create(const int64_t, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
 		Graphics_TerrainHeightmap_Create * copy() {
 			return new Graphics_TerrainHeightmap_Create(*this);
 		}
@@ -364,7 +364,7 @@ namespace graphics {
 		int64_t minY;
 		int64_t maxX;
 		int64_t maxY;
-		Graphics_TerrainHeightdata_Create(const int64_t, const int64_t, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
+		Graphics_TerrainHeightdata_Create(const int64_t, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
 		Graphics_TerrainHeightdata_Create * copy() {
 			return new Graphics_TerrainHeightdata_Create(*this);
 		}
@@ -383,7 +383,7 @@ namespace graphics {
 		int64_t minY;
 		int64_t maxX;
 		int64_t maxY;
-		Graphics_TerrainHeightmap_Update(const int64_t goID, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
+		Graphics_TerrainHeightmap_Update(const int64_t coid, const std::string & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
 		Graphics_TerrainHeightmap_Update * copy() {
 			return new Graphics_TerrainHeightmap_Update(*this);
 		}
@@ -402,7 +402,7 @@ namespace graphics {
 		int64_t minY;
 		int64_t maxX;
 		int64_t maxY;
-		Graphics_TerrainHeightdata_Update(const int64_t goID, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
+		Graphics_TerrainHeightdata_Update(const int64_t coid, const std::vector<std::vector<double>> & h, const double s, double i, uint32_t v, const std::vector<std::tuple<double, std::string, std::string, double, double>> & l, int64_t miX, int64_t miY, int64_t maX, int64_t maY);
 		Graphics_TerrainHeightdata_Update * copy() {
 			return new Graphics_TerrainHeightdata_Update(*this);
 		}
@@ -425,9 +425,8 @@ namespace graphics {
 	 * \brief deletes a terrain
 	 */
 	typedef struct Graphics_Terrain_Delete : GameMessageStruct {
-		int64_t comp;
 		Graphics_Terrain_Delete();
-		Graphics_Terrain_Delete(const int64_t i, const int64_t c);
+		Graphics_Terrain_Delete(const int64_t c);
 		Graphics_Terrain_Delete * copy() { return new Graphics_Terrain_Delete(*this); }
 	} Graphics_Terrain_Delete;
 

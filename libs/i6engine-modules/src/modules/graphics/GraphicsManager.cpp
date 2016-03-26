@@ -480,7 +480,6 @@ namespace modules {
 
 	void GraphicsManager::NewsCreate(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		if (msg->getSubtype() == api::graphics::GraLine) {
 			api::graphics::Graphics_Line_Create * glc = dynamic_cast<api::graphics::Graphics_Line_Create *>(msg->getContent());
 			Debug::getSingleton().drawLine(glc->from.toOgre(), glc->to.toOgre(), Ogre::ColourValue(glc->colour.getX(), glc->colour.getY(), glc->colour.getZ()));
@@ -545,7 +544,6 @@ namespace modules {
 
 	void GraphicsManager::NewsUpdate(const api::GameMessage::Ptr & msg) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		if (msg->getSubtype() == api::graphics::GraAmbLight) {
 			_sceneManager->setAmbientLight(Ogre::ColourValue(float(static_cast<api::graphics::Graphics_AmbLight_Update *>(msg->getContent())->red), float(static_cast<api::graphics::Graphics_AmbLight_Update *>(msg->getContent())->green), float(static_cast<api::graphics::Graphics_AmbLight_Update *>(msg->getContent())->blue)));
 		} else if (msg->getSubtype() == api::graphics::GraResolution) {
@@ -678,7 +676,7 @@ namespace modules {
 		if (msg->getSubtype() == api::graphics::GraViewports) {
 			_rWindow->removeAllViewports();
 		} else if (msg->getSubtype() == api::graphics::GraTerrain) {
-			removeTerrain(static_cast<api::graphics::Graphics_Terrain_Delete *>(msg->getContent())->comp);
+			removeTerrain(msg->getContent()->getID());
 		} else if (msg->getSubtype() == api::graphics::GraReset) {
 			_ctrl->reset();
 		} else if (msg->getSubtype() == api::graphics::GraSkyBox) {
