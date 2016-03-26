@@ -96,8 +96,7 @@ namespace api {
 		void createObject(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint64_t uuid, const bool sender) const;
 
 		/**
-		 * \brief This method will be called when shutting down ObjectController.
-		 * For every GameObject in _GOList DeleteObject will be called.
+		 * \brief For every GameObject in _GOMap deleteObject will be called.
 		 */
 		void cleanUpAll() const;
 
