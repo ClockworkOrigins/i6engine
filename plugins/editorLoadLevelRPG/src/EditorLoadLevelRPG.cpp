@@ -1,5 +1,7 @@
 #include "EditorLoadLevelRPG.h"
 
+#include <QStringList>
+
 namespace i6engine {
 namespace plugins {
 
