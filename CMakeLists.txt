@@ -193,6 +193,7 @@ ENDIF(NOT WIN32)
 IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
 	find_package(PythonLibs 2.7 REQUIRED)
 	include_directories(${PYTHON_INCLUDE_DIRS})
+	MESSAGE(INFO " ${PYTHON_INCLUDE_DIRS}")
 ENDIF()
 
 #----------------------------------------------------
@@ -474,8 +475,10 @@ install(FILES ${CMAKE_SOURCE_DIR}/config/plugins.cfg DESTINATION ${CMAKE_INSTALL
 install(FILES ${CMAKE_SOURCE_DIR}/config/pued.cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 install(FILES ${CMAKE_SOURCE_DIR}/config/i6engine.ini DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 
-install(FILES ${CMAKE_BINARY_DIR}/bin/de_DE.qm DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)
-install(FILES ${CMAKE_BINARY_DIR}/bin/en_US.qm DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)
+IF(ISIXE_WITH_EDITOR)
+	install(FILES ${CMAKE_BINARY_DIR}/bin/de_DE.qm DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)
+	install(FILES ${CMAKE_BINARY_DIR}/bin/en_US.qm DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)
+ENDIF(ISIXE_WITH_EDITOR)
 
 IF(ISIXE_WITH_RPG)
 	install(FILES ${CMAKE_SOURCE_DIR}/config/RPG.ini DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
@@ -516,13 +519,15 @@ IF(WIN32)
 	foreach(filename ${files})
 		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin)
 	endforeach()
-
+	
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-archive.bat.in ${CMAKE_BINARY_DIR}/build-archive.bat @ONLY)
+	configure_file(${CMAKE_SOURCE_DIR}/config/build-prebuilt-msvc.bat.in ${CMAKE_BINARY_DIR}/build-prebuilt-msvc.bat @ONLY)
 	configure_file(${CMAKE_SOURCE_DIR}/config/test-buildconfigurations.bat.in ${CMAKE_BINARY_DIR}/test-buildconfigurations.bat @ONLY)
 
 	add_custom_target(BuildReleaseSourceArchive COMMAND build-archive.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 	add_custom_target(BuildRevisionSourceArchive COMMAND build-archive.bat packageRevision WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 	add_custom_target(TestConfigurations COMMAND test-buildconfigurations.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+	add_custom_target(BuildReleasePackages COMMAND build-prebuilt-msvc.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 ENDIF(WIN32)
 
 # set symlinks if it is an out-of-source-build

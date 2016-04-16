@@ -1,0 +1,105 @@
+@echo OFF
+
+SET buildDir=%TEMP%\i6engineBuildDir
+SET currentDir=%cd%
+SET SUFFIX=@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@-@DEP_DIR_BUILD@-
+REM requires also an additional suffix for the configuration
+SET COMPLETESUFFIX=i6engine-%SUFFIX%
+SET installDir=%currentDir%\%COMPLETESUFFIX%
+
+%buildDir:~0,2%
+mkdir %buildDir%
+
+cd %buildDir%
+
+echo "Building LUA sample package"
+
+SET usedInstallDir=%installDir%SamplesLua
+
+cmake -DISIXE_WITH_LOGGING=OFF -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=OFF -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=OFF -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING="lua" -DISIXE_WITH_CONSOLE=OFF -DCMAKE_INSTALL_PREFIX=%usedInstallDir% @CMAKE_SOURCE_DIR@ > build-log.txt
+
+MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
+MSBuild INSTALL.vcxproj /p:Configuration=Release >> build-log.txt
+
+REM move engine files to bin to be able to start directly
+
+for /R "%usedInstallDir%\samples\" %%f in (*.exe) do copy %%f %usedInstallDir%\bin
+for /R "%usedInstallDir%\config\" %%f in (*.cfg) do copy %%f %usedInstallDir%\bin
+for /R "%usedInstallDir%\config\" %%f in (*.ini) do copy %%f %usedInstallDir%\bin
+
+RD /S /Q "%usedInstallDir%\config\"
+RD /S /Q "%usedInstallDir%\include\"
+RD /S /Q "%usedInstallDir%\lib\"
+RD /S /Q "%usedInstallDir%\samples\"
+
+REM add dependencies
+
+for /R "@BOOST_ROOT@\lib\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@CEGUI_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@CLOCKUTILS_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@M2etis_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@OGRE_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@OPENALSOFT_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@TinyXML_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/expat.dll" "%usedInstallDir%\bin\expat.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/FreeImage.dll" "%usedInstallDir%\bin\FreeImage.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/freetype.dll" "%usedInstallDir%\bin\freetype.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/pcre.dll" "%usedInstallDir%\bin\pcre.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/zlib.dll" "%usedInstallDir%\bin\zlib.dll*"
+REM xcopy /F "@ISIXE_DEP_DIR@/misc/bin/cg.dll" "%usedInstallDir%\bin\cg.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/misc/bin/OIS.dll" "%usedInstallDir%\bin\OIS.dll*"
+
+RD /S /Q .
+
+
+
+echo "Building PYTHON sample package"
+
+SET usedInstallDir=%installDir%SamplesPython
+
+cmake -DISIXE_WITH_LOGGING=OFF -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=OFF -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=OFF -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING="python" -DISIXE_WITH_CONSOLE=OFF -DCMAKE_INSTALL_PREFIX=%usedInstallDir% @CMAKE_SOURCE_DIR@ > build-log.txt
+
+MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
+MSBuild INSTALL.vcxproj /p:Configuration=Release >> build-log.txt
+
+REM move engine files to bin to be able to start directly
+
+for /R "%usedInstallDir%\samples\" %%f in (*.exe) do copy %%f %usedInstallDir%\bin
+for /R "%usedInstallDir%\config\" %%f in (*.cfg) do copy %%f %usedInstallDir%\bin
+for /R "%usedInstallDir%\config\" %%f in (*.ini) do copy %%f %usedInstallDir%\bin
+
+RD /S /Q "%usedInstallDir%\config\"
+RD /S /Q "%usedInstallDir%\include\"
+RD /S /Q "%usedInstallDir%\lib\"
+RD /S /Q "%usedInstallDir%\samples\"
+
+REM add dependencies
+
+for /R "@BOOST_ROOT@\lib\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@CEGUI_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@CLOCKUTILS_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@M2etis_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@OGRE_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@OPENALSOFT_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@TinyXML_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/expat.dll" "%usedInstallDir%\bin\expat.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/FreeImage.dll" "%usedInstallDir%\bin\FreeImage.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/freetype.dll" "%usedInstallDir%\bin\freetype.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/pcre.dll" "%usedInstallDir%\bin\pcre.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/zlib.dll" "%usedInstallDir%\bin\zlib.dll*"
+REM xcopy /F "@ISIXE_DEP_DIR@/misc/bin/cg.dll" "%usedInstallDir%\bin\cg.dll*"
+xcopy /F "@ISIXE_DEP_DIR@/misc/bin/OIS.dll" "%usedInstallDir%\bin\OIS.dll*"
+
+RD /S /Q .
+
+cd ..
+
+RD /S /Q %buildDir%
+
+%currentDir:~0,2%
+cd %currentDir%
+
+winrar a -afzip -df %installDir%SamplesLua.zip %COMPLETESUFFIX%SamplesLua
+winrar a -afzip -df %installDir%SamplesPython.zip %COMPLETESUFFIX%SamplesPython
