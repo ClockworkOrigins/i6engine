@@ -193,7 +193,6 @@ ENDIF(NOT WIN32)
 IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
 	find_package(PythonLibs 2.7 REQUIRED)
 	include_directories(${PYTHON_INCLUDE_DIRS})
-	MESSAGE(INFO " ${PYTHON_INCLUDE_DIRS}")
 ENDIF()
 
 #----------------------------------------------------
@@ -327,6 +326,9 @@ IF(ISIXE_WITH_TOOLS)
 			 ${CMAKE_SOURCE_DIR}/languages/de_DE.ts
 			 ${CMAKE_SOURCE_DIR}/languages/en_US.ts
 	)
+
+	# used for Windows prebuilt packages
+	SET(QT_EXPORT_DIR $ENV{Qt5_DIR})
 ENDIF(ISIXE_WITH_TOOLS)
 
 ###############################################################################
@@ -472,7 +474,6 @@ ENDIF(ISIXE_WITH_TUTORIALS)
 install(FILES ${CMAKE_SOURCE_DIR}/config/ogre.cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 install(FILES ${CMAKE_SOURCE_DIR}/config/resources.cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 install(FILES ${CMAKE_SOURCE_DIR}/config/plugins.cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
-install(FILES ${CMAKE_SOURCE_DIR}/config/pued.cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 install(FILES ${CMAKE_SOURCE_DIR}/config/i6engine.ini DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 
 IF(ISIXE_WITH_EDITOR)
@@ -487,7 +488,6 @@ ENDIF(ISIXE_WITH_RPG)
 configure_file(${CMAKE_SOURCE_DIR}/config/resources.cfg ${CMAKE_BINARY_DIR}/bin/resources.cfg COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/config/ogre.cfg ${CMAKE_BINARY_DIR}/bin/ogre.cfg COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/config/plugins.cfg ${CMAKE_BINARY_DIR}/bin/plugins.cfg COPYONLY)
-configure_file(${CMAKE_SOURCE_DIR}/config/pued.cfg ${CMAKE_BINARY_DIR}/bin/pued.cfg COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/config/i6engine.ini ${CMAKE_BINARY_DIR}/bin/i6engine.ini COPYONLY)
 
 IF(ISIXE_WITH_RPG)
@@ -523,6 +523,12 @@ IF(WIN32)
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-archive.bat.in ${CMAKE_BINARY_DIR}/build-archive.bat @ONLY)
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-prebuilt-msvc.bat.in ${CMAKE_BINARY_DIR}/build-prebuilt-msvc.bat @ONLY)
 	configure_file(${CMAKE_SOURCE_DIR}/config/test-buildconfigurations.bat.in ${CMAKE_BINARY_DIR}/test-buildconfigurations.bat @ONLY)
+
+	IF(ISIXE_WITH_TOOLS)
+		configure_file(${CMAKE_SOURCE_DIR}/config/qt.conf ${CMAKE_BINARY_DIR}/bin/qt.conf COPYONLY)
+	
+		install(FILES ${CMAKE_SOURCE_DIR}/config/qt.conf DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
+	ENDIF(ISIXE_WITH_TOOLS)
 
 	add_custom_target(BuildReleaseSourceArchive COMMAND build-archive.bat WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 	add_custom_target(BuildRevisionSourceArchive COMMAND build-archive.bat packageRevision WORKING_DIRECTORY ${CMAKE_BINARY_DIR})

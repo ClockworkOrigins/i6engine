@@ -55,7 +55,6 @@ xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/build-wxWidgets.sh" "@CMAKE_BINARY_DIR
 xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/download-dependency.bat" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/download-dependency.bat*"
 xcopy /F "@CMAKE_SOURCE_DIR@/dependencies/download-dependency.sh" "@CMAKE_BINARY_DIR@/%archiveName%/dependencies/download-dependency.sh*"
 xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "@CMAKE_BINARY_DIR@/%archiveName%/AUTHORS*"
-xcopy /F "@CMAKE_SOURCE_DIR@/CHANGELOG.txt" "@CMAKE_BINARY_DIR@/%archiveName%/CHANGELOG.txt*"
 xcopy /F "@CMAKE_SOURCE_DIR@/CMakeLists.txt" "@CMAKE_BINARY_DIR@/%archiveName%/CMakeLists.txt*"
 xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "@CMAKE_BINARY_DIR@/%archiveName%/LICENSE*"
 xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "@CMAKE_BINARY_DIR@/%archiveName%/NOTICE*"

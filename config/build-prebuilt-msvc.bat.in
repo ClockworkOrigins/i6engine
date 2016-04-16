@@ -47,8 +47,10 @@ xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/FreeImage.dll" "%usedInstallDir%\bin\Fre
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/freetype.dll" "%usedInstallDir%\bin\freetype.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/pcre.dll" "%usedInstallDir%\bin\pcre.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/zlib.dll" "%usedInstallDir%\bin\zlib.dll*"
-REM xcopy /F "@ISIXE_DEP_DIR@/misc/bin/cg.dll" "%usedInstallDir%\bin\cg.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/misc/bin/OIS.dll" "%usedInstallDir%\bin\OIS.dll*"
+xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
+xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
+xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
 
 RD /S /Q .
 
@@ -91,6 +93,85 @@ xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/pcre.dll" "%usedInstallDir%\bin\pcre.dll
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/zlib.dll" "%usedInstallDir%\bin\zlib.dll*"
 REM xcopy /F "@ISIXE_DEP_DIR@/misc/bin/cg.dll" "%usedInstallDir%\bin\cg.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/misc/bin/OIS.dll" "%usedInstallDir%\bin\OIS.dll*"
+xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
+xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
+xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
+
+RD /S /Q .
+
+
+
+echo "Building LUA prebuilt package"
+
+SET usedInstallDir=%installDir%CompleteLua
+
+cmake -DISIXE_WITH_LOGGING=ON -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=ON -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=ON -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING="lua" -DISIXE_WITH_CONSOLE=OFF -DCMAKE_INSTALL_PREFIX=%usedInstallDir% @CMAKE_SOURCE_DIR@ > build-log.txt
+
+MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
+MSBuild INSTALL.vcxproj /p:Configuration=Release >> build-log.txt
+
+REM add dependencies
+
+xcopy /S /Y /I "@ISIXE_DEP_DIR@" "%usedInstallDir%\dependencies"
+
+xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
+xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
+xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
+
+REM Qt special case
+
+xcopy /F "@QT_EXPORT_DIR@\bin\icudt54.dll" "%usedInstallDir%\dependencies\Qt\bin\icudt54.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\icuin54.dll" "%usedInstallDir%\dependencies\Qt\bin\icuin54.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\icuuc54.dll" "%usedInstallDir%\dependencies\Qt\bin\icuuc54.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\libEGL.dll" "%usedInstallDir%\dependencies\Qt\bin\libEGL.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\libGLESv2.dll" "%usedInstallDir%\dependencies\Qt\bin\libGLESv2.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Core.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Core.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Gui.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Gui.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Widgets.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Widgets.dll*"
+xcopy /F "@QT_EXPORT_DIR@\plugins\platforms\qwindows.dll" "%usedInstallDir%\dependencies\Qt\bin\plugins\platforms\qwindows.dll*"
+xcopy /F "@QT_EXPORT_DIR@\lib\libEGL.lib" "%usedInstallDir%\dependencies\Qt\lib\libEGL.lib*"
+xcopy /F "@QT_EXPORT_DIR@\lib\libGLESv2.lib" "%usedInstallDir%\dependencies\Qt\lib\libGLESv2.lib*"
+xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Core.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Core.lib*"
+xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Gui.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Gui.lib*"
+xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Widgets.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Widgets.lib*"
+
+xcopy /S /Y /I "@QT_EXPORT_DIR@\include" "%usedInstallDir%\dependencies\Qt\include"
+
+RD /S /Q .
+
+
+
+echo "Building PYTHON prebuilt package"
+
+SET usedInstallDir=%installDir%CompletePython
+
+cmake -DISIXE_WITH_LOGGING=ON -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=ON -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=ON -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING="python" -DISIXE_WITH_CONSOLE=OFF -DCMAKE_INSTALL_PREFIX=%usedInstallDir% @CMAKE_SOURCE_DIR@ > build-log.txt
+
+MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
+MSBuild INSTALL.vcxproj /p:Configuration=Release >> build-log.txt
+
+REM add dependencies
+
+xcopy /S /Y /I "@ISIXE_DEP_DIR@" "%usedInstallDir%\dependencies"
+
+xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
+xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
+xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
+
+xcopy /F "@QT_EXPORT_DIR@\bin\icudt54.dll" "%usedInstallDir%\dependencies\Qt\bin\icudt54.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\icuin54.dll" "%usedInstallDir%\dependencies\Qt\bin\icuin54.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\icuuc54.dll" "%usedInstallDir%\dependencies\Qt\bin\icuuc54.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\libEGL.dll" "%usedInstallDir%\dependencies\Qt\bin\libEGL.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\libGLESv2.dll" "%usedInstallDir%\dependencies\Qt\bin\libGLESv2.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Core.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Core.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Gui.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Gui.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Widgets.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Widgets.dll*"
+xcopy /F "@QT_EXPORT_DIR@\plugins\platforms\qwindows.dll" "%usedInstallDir%\dependencies\Qt\bin\plugins\platforms\qwindows.dll*"
+xcopy /F "@QT_EXPORT_DIR@\lib\libEGL.lib" "%usedInstallDir%\dependencies\Qt\lib\libEGL.lib*"
+xcopy /F "@QT_EXPORT_DIR@\lib\libGLESv2.lib" "%usedInstallDir%\dependencies\Qt\lib\libGLESv2.lib*"
+xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Core.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Core.lib*"
+xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Gui.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Gui.lib*"
+xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Widgets.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Widgets.lib*"
 
 RD /S /Q .
 
@@ -103,3 +184,5 @@ cd %currentDir%
 
 winrar a -afzip -df %installDir%SamplesLua.zip %COMPLETESUFFIX%SamplesLua
 winrar a -afzip -df %installDir%SamplesPython.zip %COMPLETESUFFIX%SamplesPython
+winrar a -afzip -df %installDir%CompleteLua.zip %COMPLETESUFFIX%CompleteLua
+winrar a -afzip -df %installDir%CompletePython.zip %COMPLETESUFFIX%CompletePython
