@@ -24,22 +24,30 @@
 
 #include "TerrainShapeCreatorApplication.h"
 
+#include "clockUtils/argParser/ArgumentParser.h"
+
 int main(int argc, char ** argv) {
-	argc--;
-	argv++;
+	REGISTER_VARIABLE(std::string, goTemplate, "", "Template of the terrain object the collision shape shall be created for");
+	REGISTER_VARIABLE(std::string, shape, "", "The collision shape file where the export shalls go to including an optional path");
 
-	if (argc != 2) {
-		ISIXE_THROW_API("terrainShapeCreator", "Wrong parameters: goTemplate out.bullet");
+	if (PARSE_COMMANDLINE() != clockUtils::ClockError::SUCCESS) {
+		std::cerr << GETLASTPARSERERROR() << std::endl;
+		return 1;
+	} else if (HELPSET()) {
+		std::cout << GETHELPTEXT() << std::endl;
+	} else if (!goTemplate.isSet()) {
+		std::cerr << "Parameter 'goTemplate' not set!" << std::endl;
+		return 1;
+	} else if (!shape.isSet()) {
+		std::cerr << "Parameter 'shape' not set!" << std::endl;
+		return 1;
 	} else {
-		std::string goTemplate = argv[0];
-		std::string bullet = argv[1];
-
 		std::cout << "Initializing i6engine" << std::endl;
 
 		i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), 10000);
 		i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6engine::modules::ObjectController(), 10000);
 
-		i6engine::tools::TerrainShapeCreatorApplication app(goTemplate, bullet);
+		i6engine::tools::TerrainShapeCreatorApplication app(goTemplate, shape);
 
 		app.setName("TerrainShapeCreator");
 

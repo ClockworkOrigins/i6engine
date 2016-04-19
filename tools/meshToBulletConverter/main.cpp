@@ -28,28 +28,35 @@
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 
+#include "clockUtils/argParser/ArgumentParser.h"
 #include "clockUtils/iniParser/iniParser.h"
 
 #include "OGRE/Ogre.h"
 #include "OGRE/OgreDefaultHardwareBufferManager.h"
 
 int main(int argc, char ** argv) {
-	argc--;
-	argv++;
+	REGISTER_VARIABLE(std::string, mesh, "", "The mesh file without path to be converted to a collision shape");
+	REGISTER_VARIABLE(std::string, shape, "", "The collision shape file where the export shalls go to including an optional path");
 
-	if (argc != 2) {
-		ISIXE_THROW_API("meshToBulletConverter", "Wrong parameters: in.mesh out.bullet");
+	if (PARSE_COMMANDLINE() != clockUtils::ClockError::SUCCESS) {
+		std::cerr << GETLASTPARSERERROR() << std::endl;
+		return 1;
+	} else if (HELPSET()) {
+		std::cout << GETHELPTEXT() << std::endl;
+	} else if (!mesh.isSet()) {
+		std::cerr << "Parameter 'mesh' not set!" << std::endl;
+		return 1;
+	} else if (!shape.isSet()) {
+		std::cerr << "Parameter 'shape' not set!" << std::endl;
+		return 1;
 	} else {
-		std::string mesh = argv[0];
-		std::string bullet = argv[1];
-
 		std::cout << "Initializing Ogre" << std::endl;
 		std::string ogrePath;
 		// GRAPHIC is correct, because we want the same variable as for ogre
 		clockUtils::iniParser::IniParser iniParser;
 		iniParser.load("i6engine.ini");
-		if (clockUtils::ClockError::SUCCESS != iniParser.getValue<std::string>("GRAPHIC", "ogreConfigsPath", ogrePath)) {
-			ISIXE_THROW_API("meshToBulletConverter", "An exception has occurred: value ogreConfigsPath in section GRAPHIC not found!");
+		if (clockUtils::ClockError::SUCCESS != iniParser.getValue("GRAPHIC", "ogreConfigsPath", ogrePath)) {
+			std::cerr << "An exception has occurred: value ogreConfigsPath in section GRAPHIC not found!" << std::endl;
 			return 1;
 		}
 		Ogre::LogManager * lm = new Ogre::LogManager();
@@ -90,10 +97,10 @@ int main(int argc, char ** argv) {
 
 		delete mscsd;
 
-		std::ofstream fs(bullet.c_str(), std::ios_base::binary);
+		std::ofstream fs(shape, std::ios_base::binary);
 		fs << serialized;
 		fs.close();
-		std::cout << "Exported '" << bullet << "'" << std::endl;
+		std::cout << "Exported '" << shape << "'" << std::endl;
 		
 		delete serializer;
 		delete fallShape;

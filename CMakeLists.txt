@@ -188,12 +188,65 @@ ENDIF(NOT WIN32)
 	include_directories(SYSTEM ${BOOST_INCLUDE_DIR})
 
 #----------------------------------------------------
-# Python
+# Bullet
 #----------------------------------------------------
-IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
-	find_package(PythonLibs 2.7 REQUIRED)
-	include_directories(${PYTHON_INCLUDE_DIRS})
-ENDIF()
+	SET(LIBNAME "BULLET")
+	SET(LIBHEADER "bullet/btBulletCollisionCommon.h")
+	SET(BULLET_ROOT ${ISIXE_DEP_DIR}/bullet)
+	find_package(EasyFind REQUIRED COMPONENTS BulletCollision BulletDynamics LinearMath BulletWorldImporter BulletFileLoader)
+	include_directories(SYSTEM ${BULLET_INCLUDE_DIR})
+	include_directories(SYSTEM ${BULLET_INCLUDE_DIR}/bullet)
+
+#----------------------------------------------------
+# CEGUI
+#----------------------------------------------------
+	SET(LIBNAME "CEGUI")
+	SET(LIBHEADER "CEGUI/CEGUI.h")
+	SET(CEGUI_ROOT ${ISIXE_DEP_DIR}/cegui)
+	find_package(EasyFind REQUIRED COMPONENTS CEGUIBase-0 CEGUIExpatParser CEGUIOgreRenderer-0)
+	include_directories(SYSTEM ${CEGUI_INCLUDE_DIR})
+
+#----------------------------------------------------
+# clockUtils
+#----------------------------------------------------
+	SET(LIBNAME "CLOCKUTILS")
+	SET(LIBHEADER "clockUtils/errors.h")
+	SET(CLOCKUTILS_ROOT ${ISIXE_DEP_DIR}/clockUtils)
+	SET(CLOCKUTILS_COMPONENTS clock_compression clock_iniParser)
+	IF(ISIXE_WITH_NETWORK)
+		SET(CLOCKUTILS_COMPONENTS ${CLOCKUTILS_COMPONENTS} clock_sockets)
+	ENDIF(ISIXE_WITH_NETWORK)
+	IF(ISIXE_WITH_TOOLS)
+		SET(CLOCKUTILS_COMPONENTS ${CLOCKUTILS_COMPONENTS} clock_argParser)
+	ENDIF(ISIXE_WITH_TOOLS)
+	find_package(EasyFind REQUIRED COMPONENTS ${CLOCKUTILS_COMPONENTS})
+	include_directories(SYSTEM ${CLOCKUTILS_INCLUDE_DIR})
+
+#----------------------------------------------------
+# Google Test
+#----------------------------------------------------
+IF(ISIXE_WITH_TESTING)
+	SET(LIBNAME "GTEST")
+	SET(LIBHEADER "gtest/gtest.h")
+	SET(GTEST_ROOT ${ISIXE_DEP_DIR}/gmock)
+	find_package(EasyFind REQUIRED COMPONENTS gmock_main gmock gtest gtest_main)
+	include_directories(SYSTEM ${GTEST_INCLUDE_DIR})
+ENDIF(ISIXE_WITH_TESTING)
+
+#----------------------------------------------------
+# Google Performance Tools
+#----------------------------------------------------
+IF(ISIXE_WITH_PROFILING)
+	SET(LIBNAME "GPerfTools")
+	SET(LIBHEADER "gperftools/tcmalloc.h")
+	SET(GPerfTools_ROOT ${ISIXE_DEP_DIR}/gperftools)
+	IF(WIN32)
+		find_package(EasyFind REQUIRED COMPONENTS libtcmalloc_minimal)
+	ELSE(WIN32)
+		find_package(EasyFind REQUIRED COMPONENTS tcmalloc profiler)
+	ENDIF(WIN32)
+	include_directories(SYSTEM ${GPerfTools_INCLUDE_DIR})
+ENDIF(ISIXE_WITH_PROFILING)
 
 #----------------------------------------------------
 # Ogre3D
@@ -236,49 +289,12 @@ IF(ISIXE_WITH_AUDIO)
 ENDIF(ISIXE_WITH_AUDIO)
 
 #----------------------------------------------------
-# Bullet
+# Python
 #----------------------------------------------------
-	SET(LIBNAME "BULLET")
-	SET(LIBHEADER "bullet/btBulletCollisionCommon.h")
-	SET(BULLET_ROOT ${ISIXE_DEP_DIR}/bullet)
-	find_package(EasyFind REQUIRED COMPONENTS BulletCollision BulletDynamics LinearMath BulletWorldImporter BulletFileLoader)
-	include_directories(SYSTEM ${BULLET_INCLUDE_DIR})
-	include_directories(SYSTEM ${BULLET_INCLUDE_DIR}/bullet)
-
-#----------------------------------------------------
-# CEGUI
-#----------------------------------------------------
-	SET(LIBNAME "CEGUI")
-	SET(LIBHEADER "CEGUI/CEGUI.h")
-	SET(CEGUI_ROOT ${ISIXE_DEP_DIR}/cegui)
-	find_package(EasyFind REQUIRED COMPONENTS CEGUIBase-0 CEGUIExpatParser CEGUIOgreRenderer-0)
-	include_directories(SYSTEM ${CEGUI_INCLUDE_DIR})
-
-#----------------------------------------------------
-# Google Test
-#----------------------------------------------------
-IF(ISIXE_WITH_TESTING)
-	SET(LIBNAME "GTEST")
-	SET(LIBHEADER "gtest/gtest.h")
-	SET(GTEST_ROOT ${ISIXE_DEP_DIR}/gmock)
-	find_package(EasyFind REQUIRED COMPONENTS gmock_main gmock gtest gtest_main)
-	include_directories(SYSTEM ${GTEST_INCLUDE_DIR})
-ENDIF(ISIXE_WITH_TESTING)
-
-#----------------------------------------------------
-# Google Performance Tools
-#----------------------------------------------------
-IF(ISIXE_WITH_PROFILING)
-	SET(LIBNAME "GPerfTools")
-	SET(LIBHEADER "gperftools/tcmalloc.h")
-	SET(GPerfTools_ROOT ${ISIXE_DEP_DIR}/gperftools)
-	IF(WIN32)
-		find_package(EasyFind REQUIRED COMPONENTS libtcmalloc_minimal)
-	ELSE(WIN32)
-		find_package(EasyFind REQUIRED COMPONENTS tcmalloc profiler)
-	ENDIF(WIN32)
-	include_directories(SYSTEM ${GPerfTools_INCLUDE_DIR})
-ENDIF(ISIXE_WITH_PROFILING)
+IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
+	find_package(PythonLibs 2.7 REQUIRED)
+	include_directories(${PYTHON_INCLUDE_DIRS})
+ENDIF()
 
 #----------------------------------------------------
 # TinyXML
@@ -288,15 +304,6 @@ ENDIF(ISIXE_WITH_PROFILING)
 	SET(TinyXML_ROOT ${ISIXE_DEP_DIR}/tinyxml2)
 	find_package(EasyFind REQUIRED COMPONENTS tinyxml2)
 	include_directories(SYSTEM ${TinyXML_INCLUDE_DIR})
-
-#----------------------------------------------------
-# clockUtils
-#----------------------------------------------------
-	SET(LIBNAME "CLOCKUTILS")
-	SET(LIBHEADER "clockUtils/errors.h")
-	SET(CLOCKUTILS_ROOT ${ISIXE_DEP_DIR}/clockUtils)
-	find_package(EasyFind REQUIRED COMPONENTS clock_compression clock_iniParser clock_sockets)
-	include_directories(SYSTEM ${CLOCKUTILS_INCLUDE_DIR})
 
 #----------------------------------------------------
 # JPEG
