@@ -40,7 +40,7 @@ public:
 
 class Mock_SubSystem : public MessageSubscriber {
 public:
-	void Mailbox(const Message::Ptr & msg) const {
+	void Mailbox(const Message::Ptr &) const {
 	}
 
 	void processMessages() {
