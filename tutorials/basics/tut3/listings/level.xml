@@ -2,49 +2,29 @@
 <Map>
 	<Section flags="A">
 		<GameObject name="myTemp" send="True">
-			<Attribute name="posX">0</Attribute>
-			<Attribute name="posY">0</Attribute>
-			<Attribute name="posZ">0</Attribute>
-			<Attribute name="rotX">0</Attribute>
-			<Attribute name="rotY">0</Attribute>
-			<Attribute name="rotZ">0</Attribute>
-			<Attribute name="rotW">1</Attribute>
-			<Attribute name="scaleX">0.042</Attribute>
-			<Attribute name="scaleY">0.024</Attribute>
-			<Attribute name="scaleZ">0.2</Attribute>
+			<Attribute name="pos">0.0 0.0 0.0</Attribute>
+			<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+			<Attribute name="scale">0.042 0.024 0.2</Attribute>
 		</GameObject>
 	</Section>
 	<Section flags="B">
 		<GameObject name="myTemp" send="True">
-			<Attribute name="posX">0</Attribute>
-			<Attribute name="posY">0</Attribute>
-			<Attribute name="posZ">0</Attribute>
-			<Attribute name="rotX">0</Attribute>
-			<Attribute name="rotY">0</Attribute>
-			<Attribute name="rotZ">0</Attribute>
-			<Attribute name="rotW">1</Attribute>
-			<Attribute name="scaleX">0.042</Attribute>
-			<Attribute name="scaleY">0.2</Attribute>
-			<Attribute name="scaleZ">0.042</Attribute>
+			<Attribute name="pos">0.0 0.0 0.0</Attribute>
+			<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+			<Attribute name="scale">0.042 0.2 0.024</Attribute>
 		</GameObject>
 	</Section>
 	<Section flags="A|B">
 		<GameObject name="myTemp" send="True">
-			<Attribute name="posX">0</Attribute>
-			<Attribute name="posY">0</Attribute>
-			<Attribute name="posZ">0</Attribute>
-			<Attribute name="rotX">0</Attribute>
-			<Attribute name="rotY">0</Attribute>
-			<Attribute name="rotZ">0</Attribute>
-			<Attribute name="rotW">1</Attribute>
-			<Attribute name="scaleX">0.2</Attribute>
-			<Attribute name="scaleY">0.024</Attribute>
-			<Attribute name="scaleZ">0.042</Attribute>
+			<Attribute name="pos">0.0 0.0 0.0</Attribute>
+			<Attribute name="rot">1.0 0.0 0.0 0.0</Attribute>
+			<Attribute name="scale">0.2 0.024 0.042</Attribute>
 		</GameObject>
 		<GameObject name="Terrain" send="True">
 			<Attribute name="heightmap">terrain.png</Attribute>
 			<Attribute name="size">1700.0</Attribute>
 			<Attribute name="inputScale">60.0</Attribute>
+			<Attribute name="vertices">65</Attribute>
 			<Attribute name="layers">1</Attribute>
 			<Attribute name="layer_0_size">10</Attribute>
 			<Attribute name="layer_0_diffusespecular">GrassFloor.tga</Attribute>
