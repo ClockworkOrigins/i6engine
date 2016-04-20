@@ -26,15 +26,15 @@ Every GameObject in the world is created out of a template you have to specify i
 
 \section{Using the Template}
 
-Now that we have our template, we need to use it in the game (MyApp.cpp). We can create GameObjects as shown in Listing \ref{code:createGO}. The GOTemplate parameter is used for specifying the Components on the GameObject. But we will use the default configuration from the xml, so this parameter doesn't matter for now. The third parameter is the owner id. This feature is only necessary for multiplayer games, in single player the id should always be the one of the EngineController. The \textit{true} indicates whether the object shall be synchroniszed on other clients. As we don't have any network at the moment, this value doesn't matter also. Of course you have to include \begin{quote}i6engine/api/facades/ObjectFacade.h\end{quote} to get the code compiling.
+Now that we have our template, we need to use it in the game (MyApp.cpp). We can create GameObjects as shown in listing \ref{code:createGO}. The GOTemplate parameter is used for specifying the Components on the GameObject. But we will use the default configuration from the xml, so this parameter doesn't matter for now. The third parameter is the owner id. This feature is only necessary for multiplayer games, in single player the id should always be the one of the EngineController. The \textit{true} indicates whether the object shall be synchroniszed on other clients. As we don't have any network at the moment, this value also doesn't matter. Of course you have to include \begin{quote}i6engine/api/facades/ObjectFacade.h\end{quote} to get the code compiling.
 \begin{lstlisting}[language=C++, style=basic, caption={creating objects}, label=code:createGO]
 i6engine::api::EngineController::GetSingleton().getObjectFacade()->createObject("Tutorial", i6engine::api::objects::GOTemplate(), i6engine::api::EngineController::GetSingleton().getUuid(), true);
 \end{lstlisting}
-Ok, we have a first object in our world. But we won't see it. Why? Because we don't have any light. Luckily, to get a simple light is a one-liner shown in Listing \ref{code:light}. Don't forget to include \begin{quote}i6engine/api/facades/GraphicsFacade.h\end{quote}
+Ok, we have a first object in our world. But we won't see it. Why? Because we don't have any light. Luckily to get a simple light is a one-liner shown in listing \ref{code:light}. Don't forget to include \begin{quote}i6engine/api/facades/GraphicsFacade.h\end{quote}
 \begin{lstlisting}[language=C++, style=basic, caption={adding lights}, label=code:light]
 i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
 \end{lstlisting}
-Now, you should see your object in the world. Listing \ref{code:complete} shows the AfterInitialize().
+Now you should see your object in the world. Listing \ref{code:complete} shows the complete AfterInitialize().
 \begin{lstlisting}[language=C++, style=basic, caption={AfterInitialize()}, label=code:complete]
 AfterInitialize() {
 	i6engine::api::EngineController::GetSingleton().getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
@@ -42,7 +42,7 @@ AfterInitialize() {
 }
 \end{lstlisting}
 
-Last thing to do is adding a resource path to our resources.cfg. You can add as many FileSystem lines as you want. But they all have to be below the line with \textit{[i6engine]}. The path specified will be used to find the files you try to load for the graphic (.mesh, .material, .texture, ...).
+Last thing to do is adding a resource path to our resources.cfg. You can add as many FileSystem lines as you want. But they all have to be below the line with \textit{[i6engine]}. The path specified will be used to find the files you try to load for the graphic (.mesh, .material, .png, ...).
 \begin{lstlisting}[style=basic, caption={resource.cfg}, label=code:resourcecfg]
 [i6engine]
 FileSystem=.
