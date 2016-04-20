@@ -11,6 +11,6 @@ int main() {
 	i6engine::api::EngineController::GetSingleton().registerApplication(myApp);
 
 	// start
-	i6engine::api::EngineController::GetSingleton().start(false);
+	i6engine::api::EngineController::GetSingleton().start();
 }
 
