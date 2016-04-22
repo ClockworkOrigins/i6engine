@@ -29,7 +29,7 @@ i6engine::api::EngineController::GetSingleton().registerSubSystem("Object", new 
 
 \subsection{registerSubsystem with subsystem dependencies}
 
-If you want the new subsystem to wait for another subsystem, the second method is your choice. Here you just have to add a list of all the subsystem, your subsystem has to wait for. In listing \ref{code:registerWaiting} we have an example.
+If you want the new subsystem to wait for another subsystem, the second method is your choice. Here you just have to add a list of all the subsystem your subsystem has to wait for. In listing \ref{code:registerWaiting} we have an example.
 
 \begin{lstlisting}[language=C++, style=basic, caption={registering graphics subsystem waiting for object subsystem}, label=code:registerWaiting]
 i6engine::api::EngineController::GetSingleton().registerSubSystem("Graphic", new i6engine::modules::GraphicsController(), { i6engine::core::Subsystem::Object });
