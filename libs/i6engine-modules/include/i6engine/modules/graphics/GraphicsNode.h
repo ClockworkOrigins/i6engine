@@ -74,10 +74,6 @@ namespace modules {
 
 		void removeTicker(MeshComponent * mesh);
 
-		void addTicker(MovableTextComponent * mesh);
-
-		void removeTicker(MovableTextComponent * mesh);
-
 	private:
 		/**
 		 * \brief Creates a new node with unique name
@@ -267,12 +263,12 @@ namespace modules {
 		/**
 		 * \brief creates a movable text upon the target mesh
 		 */
-		void createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour);
+		void createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, double size, const Vec3 & colour);
 
 		/**
 		 * \brief updates settings of the movable text
 		 */
-		void updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour);
+		void updateMovableText(int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour);
 
 		/**
 		 * \brief deletes movable text
@@ -385,7 +381,6 @@ namespace modules {
 		bool _ticking;
 
 		std::vector<MeshComponent *> _tickingMeshes;
-		std::vector<MovableTextComponent *> _tickingMovableTexts;
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};

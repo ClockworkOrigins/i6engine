@@ -61,14 +61,12 @@ namespace modules {
 		 */
 		MovableText * _movableText;
 
-		MeshComponent * _mesh;
-
 		int64_t _id;
 
 		/**
 		 * \brief Create a new MovableTextComponent
 		 */
-		MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, MeshComponent * mesh, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour);
+		MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour);
 
 		/**
 		 * \brief ~MovableTextComponent
@@ -78,9 +76,7 @@ namespace modules {
 		/**
 		 * \brief updates settings of the movable text
 		 */
-		void updateMovableText(const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour);
-
-		void Tick();
+		void updateMovableText(const std::string & font, const std::string & text, double size, const Vec3 & colour);
 
 		/**
 		 * \brief forbidden

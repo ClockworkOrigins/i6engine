@@ -38,7 +38,7 @@ namespace api {
 	 * |------|----------|------| ----------- | ------------ |
 	 * | font | yes | std::string | font used for this Text | yes |
 	 * | text | yes | std::string | the text shown above the GameObject | yes |
-	 * | size | yes | uint16_t | font size | yes |
+	 * | size | yes | double | font size | yes |
 	 * | colour | yes | Vec3 | colour of the text | yes |
 	 */
 	class ISIXE_MODULES_API MovableTextComponent : public Component {
@@ -72,7 +72,7 @@ namespace api {
 	private:
 		std::string _font;
 		std::string _text;
-		uint16_t _size;
+		double _size;
 		Vec3 _colour;
 
 		void Init() override;

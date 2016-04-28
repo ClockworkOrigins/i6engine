@@ -732,9 +732,9 @@ namespace graphics {
 		int64_t targetID;
 		std::string font;
 		std::string text;
-		uint16_t size;
+		double size;
 		Vec3 colour;
-		Graphics_MovableText_Create(int64_t goid, int64_t coid, int64_t tid, const std::string & f, const std::string & t, uint16_t s, const Vec3 & c) : GameMessageStruct(coid, goid), targetID(tid), font(f), text(t), size(s), colour(c) {
+		Graphics_MovableText_Create(int64_t goid, int64_t coid, int64_t tid, const std::string & f, const std::string & t, double s, const Vec3 & c) : GameMessageStruct(coid, goid), targetID(tid), font(f), text(t), size(s), colour(c) {
 		}
 		Graphics_MovableText_Create * copy() {
 			return new Graphics_MovableText_Create(*this);
@@ -747,9 +747,9 @@ namespace graphics {
 	typedef struct Graphics_MovableText_Update : GameMessageStruct {
 		std::string font;
 		std::string text;
-		uint16_t size;
+		double size;
 		Vec3 colour;
-		Graphics_MovableText_Update(int64_t goid, int64_t coid, const std::string & f, const std::string & t, uint16_t s, const Vec3 & c) : GameMessageStruct(coid, goid), font(f), text(t), size(s), colour(c) {
+		Graphics_MovableText_Update(int64_t goid, int64_t coid, const std::string & f, const std::string & t, double s, const Vec3 & c) : GameMessageStruct(coid, goid), font(f), text(t), size(s), colour(c) {
 		}
 		Graphics_MovableText_Update * copy() {
 			return new Graphics_MovableText_Update(*this);

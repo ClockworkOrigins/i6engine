@@ -522,10 +522,14 @@ IF(WIN32)
 		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin)
 	endforeach()
 
-	FILE(GLOB files "$ENV{Qt5_DIR}/bin/*.dll")
-	foreach(filename ${files})
-		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin)
-	endforeach()
+	IF(ISIXE_WITH_TOOLS)
+		FILE(GLOB files "$ENV{Qt5_DIR}/bin/*.dll")
+		foreach(filename ${files})
+			execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin)
+		endforeach()
+
+		configure_file($ENV{Qt5_DIR}/plugins/platforms/qwindows.dll ${CMAKE_BINARY_DIR}/bin/plugins/platforms/qwindows.dll COPYONLY)
+	ENDIF(ISIXE_WITH_TOOLS)
 	
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-archive.bat.in ${CMAKE_BINARY_DIR}/build-archive.bat @ONLY)
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-prebuilt-msvc.bat.in ${CMAKE_BINARY_DIR}/build-prebuilt-msvc.bat @ONLY)

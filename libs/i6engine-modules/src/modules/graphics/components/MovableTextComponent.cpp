@@ -26,17 +26,11 @@
 namespace i6engine {
 namespace modules {
 
-	MovableTextComponent::MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, MeshComponent * mesh, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) : _manager(manager), _parent(parent), _movableText(nullptr), _mesh(mesh), _id(coid) {
+	MovableTextComponent::MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour) : _manager(manager), _parent(parent), _movableText(nullptr), _id(coid) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-		assert(mesh);
 		try {
-			_movableText = new MovableText(mesh->getEntity(), _manager->getSceneManager(), font);
-			_movableText->setText(text);
-			_movableText->setSize(size);
-			_movableText->setColour(colour);
-			_movableText->enable(true);
-			_parent->addTicker(this);
-			mesh->addMovableTextObserver(coid);
+			_movableText = new MovableText("MTC_" + std::to_string(goid) + "_" + std::to_string(coid), text, font, size, Ogre::ColourValue(colour.getX(), colour.getY(), colour.getZ(), 1.0f));
+			_parent->getSceneNode()->attachObject(_movableText);
 		} catch (Ogre::Exception & e) {
 			std::cout << e.what() << std::endl;
 		}
@@ -44,21 +38,15 @@ namespace modules {
 
 	MovableTextComponent::~MovableTextComponent() {
 		ASSERT_THREAD_SAFETY_FUNCTION
+		_parent->getSceneNode()->detachObject(_movableText);
 		delete _movableText;
-		_parent->removeTicker(this);
-		_mesh->removeMovableTextObserver(_id);
 	}
 
-	void MovableTextComponent::updateMovableText(const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
+	void MovableTextComponent::updateMovableText(const std::string & font, const std::string & text, double size, const Vec3 & colour) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		_movableText->setText(text);
-		_movableText->setSize(size);
-		_movableText->setColour(colour);
-	}
-
-	void MovableTextComponent::Tick() {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_movableText->update();
+		_movableText->setCaption(text);
+		_movableText->setCharacterHeight(size);
+		_movableText->setColor(Ogre::ColourValue(colour.getX(), colour.getY(), colour.getZ(), 1.0f));
 	}
 
 } /* namespace modules */

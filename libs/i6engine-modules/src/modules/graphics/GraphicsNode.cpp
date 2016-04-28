@@ -51,30 +51,10 @@ namespace modules {
 				break;
 			}
 		}
-		_ticking = !_tickingMeshes.empty() && !_tickingMovableTexts.empty();
+		_ticking = !_tickingMeshes.empty();
 	}
 
-	void GraphicsNode::addTicker(MovableTextComponent * movableText) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		_tickingMovableTexts.push_back(movableText);
-		if (!_ticking) {
-			_manager->addTicker(this);
-			_ticking = true;
-		}
-	}
-
-	void GraphicsNode::removeTicker(MovableTextComponent * movableText) {
-		ASSERT_THREAD_SAFETY_FUNCTION
-		for (size_t i = 0; i < _tickingMovableTexts.size(); i++) {
-			if (_tickingMovableTexts[i] == movableText) {
-				_tickingMovableTexts.erase(_tickingMovableTexts.begin() + int(i));
-				break;
-			}
-		}
-		_ticking = !_tickingMeshes.empty() && !_tickingMovableTexts.empty();
-	}
-
-	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _cameras(), _lights(), _particles(), _meshes(), _billboardSets(), _movableTexts(), _boundingBoxes(), _lines(), _attachedTo(nullptr), _attachedCoid(), _attachedBone(), _go(), _ticking(false), _tickingMeshes(), _tickingMovableTexts() {
+	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _cameras(), _lights(), _particles(), _meshes(), _billboardSets(), _movableTexts(), _boundingBoxes(), _lines(), _attachedTo(nullptr), _attachedCoid(), _attachedBone(), _go(), _ticking(false), _tickingMeshes() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
@@ -338,16 +318,16 @@ namespace modules {
 		assert(_billboardSets.find(coid) == _billboardSets.end());
 	}
 
-	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
+	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, double size, const Vec3 & colour) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_movableTexts.find(coid) == _movableTexts.end());
 		assert(_meshes.find(targetID) != _meshes.end());
-		MovableTextComponent * mtc = new MovableTextComponent(_manager, this, _gameObjectID, coid, _meshes[targetID], font, text, size, colour);
+		MovableTextComponent * mtc = new MovableTextComponent(_manager, this, _gameObjectID, coid, font, text, size, colour);
 		_movableTexts.insert(std::make_pair(coid, mtc));
 		assert(_movableTexts.find(coid) != _movableTexts.end());
 	}
 
-	void GraphicsNode::updateMovableText(int64_t coid, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) {
+	void GraphicsNode::updateMovableText(int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_movableTexts.find(coid) != _movableTexts.end());
 		MovableTextComponent * mtc = _movableTexts[coid];
@@ -428,9 +408,6 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		for (MeshComponent * mc : _tickingMeshes) {
 			mc->Tick();
-		}
-		for (MovableTextComponent * mtc : _tickingMovableTexts) {
-			mtc->Tick();
 		}
 	}
 

@@ -833,7 +833,7 @@ namespace editor {
 				{
 					api::attributeMap params;
 					params.insert(std::make_pair("font", "DejaVuSans"));
-					params.insert(std::make_pair("size", "16"));
+					params.insert(std::make_pair("size", "0.5"));
 					params.insert(std::make_pair("colour", "1.0 1.0 1.0"));
 					params.insert(std::make_pair("text", go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName()));
 					api::EngineController::GetSingleton().getObjectFacade()->createComponent(go->getID(), api::EngineController::GetSingleton().getIDManager()->getID(), "MovableText", params);
