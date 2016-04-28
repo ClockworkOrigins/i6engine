@@ -89,7 +89,6 @@ TEST(MoverComponent, absoluteStartPosition) {
 		paramsMover["direction"] = "1";
 		paramsMover["way"] = "0";
 		paramsMover["duration"] = "5000000";
-		paramsMover["mode"] = "1";
 		paramsMover["positioning"] = "0";
 		paramsMover["started"] = "1";
 		paramsMover["keyframes"] = "2";

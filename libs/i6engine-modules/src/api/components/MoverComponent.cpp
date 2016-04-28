@@ -39,6 +39,7 @@ namespace api {
 	}
 
 	void MoverComponent::Init() {
+		addTicker();
 		_psc = getOwnerGO()->getGOC<PhysicalStateComponent>(components::PhysicalStateComponent);
 		if (_psc == nullptr) {
 			ISIXE_THROW_FAILURE("MoverComponent", "Object has no PhysicalStateComponent");
@@ -63,13 +64,14 @@ namespace api {
 
 	void MoverComponent::stop() {
 		_moving = false;
-		removeTicker();
-
 		_started = false;
 	}
 
 	void MoverComponent::Tick() {
-		// Zeit vergangen seit beginn der Bewegung
+		if (!_started || !_moving) {
+			return;
+		}
+		// elapsed time since start of movement
 		uint64_t timeElapsed = EngineController::GetSingleton().getCurrentTime() - _startTime;
 
 		Vec3 newPos;

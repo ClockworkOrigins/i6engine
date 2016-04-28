@@ -43,8 +43,6 @@ namespace api {
 	}
 
 	void MoverCircleComponent::start(Vec3 & startPos) {
-		addTicker();
-
 		_startTime = EngineController::GetSingleton().getCurrentTime();
 
 		_started = true;

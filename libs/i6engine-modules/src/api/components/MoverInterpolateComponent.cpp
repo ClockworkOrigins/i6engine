@@ -55,8 +55,6 @@ namespace api {
 	}
 
 	void MoverInterpolateComponent::start(Vec3 & startPos) {
-		addTicker();
-
 		boost::mutex::scoped_lock l(_lock);
 
 		_started = true;
