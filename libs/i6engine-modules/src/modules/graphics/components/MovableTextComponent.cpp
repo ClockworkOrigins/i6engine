@@ -28,6 +28,7 @@ namespace modules {
 
 	MovableTextComponent::MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, MeshComponent * mesh, const std::string & font, const std::string & text, uint16_t size, const Vec3 & colour) : _manager(manager), _parent(parent), _movableText(nullptr), _mesh(mesh), _id(coid) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
+		assert(mesh);
 		try {
 			_movableText = new MovableText(mesh->getEntity(), _manager->getSceneManager(), font);
 			_movableText->setText(text);
