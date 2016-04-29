@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <thread>
 #include <vector>
 
 #include "i6engine/i6engineBuildSettings.h"
@@ -708,7 +709,7 @@ TEST_F(sharedPtr, polymorphismFoo) {
 }
 
 // This test only deals with nullptrs
-// it won't expect anything but can detect segfaulst, memory leaks etc.
+// it won't expect anything but can detect segfaults, memory leaks etc.
 TEST_F(sharedPtr, nullPtrFoo) {
 	using i6engine::utils::sharedPtr;
 
@@ -727,4 +728,38 @@ TEST_F(sharedPtr, nullPtrFoo2) {
 	sharedPtr<SubClassB1_1, Base1> p3(p2);
 	sharedPtr<SubClassB1_1, Base1> p4;
 	p4 = p3;
+}
+
+TEST_F(sharedPtr, weakPtrRaceCondition) {
+	using i6engine::utils::sharedPtr;
+	using i6engine::utils::weakPtr;
+	using i6engine::utils::make_shared;
+	const size_t RUNS = 1000;
+	std::array<sharedPtr<Base1, Base1>, 100> arr;
+	for (size_t i = 0; arr.size(); i++) {
+		arr[i] = make_shared<Base1, Base1>();
+	}
+	std::cout << "Created list" << std::endl;
+	std::thread thrdPurge([&arr, RUNS]() {
+		for (size_t i = 0; i < arr.size(); i++) {
+			arr[i] = make_shared<Base1, Base1>();
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			arr[i] = make_shared<Base1, Base1>();
+		}
+	});
+	std::thread thrdCopy([&arr, RUNS]() {
+		for (size_t i = 0; i < RUNS; i++) {
+			for (size_t j = 0; j < arr.size(); j++) {
+				weakPtr<Base1> wp = arr[j];
+				EXPECT_NE(wp, nullptr);
+			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(2));
+		}
+	});
+	for (size_t i = 0; i < RUNS; i++) {
+		sharedPtr<Base1, Base1>::clear();
+		std::this_thread::sleep_for(std::chrono::milliseconds(2));
+	}
+	thrdPurge.detach();
+	thrdCopy.detach();
 }
