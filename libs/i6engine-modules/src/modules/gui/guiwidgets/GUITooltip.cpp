@@ -13,6 +13,7 @@ namespace modules {
 	GUITooltip::GUITooltip(const std::string & name, const std::string &) : GUIWidget(name) {
 		loadWindowLayout(name, "Tooltip.layout");
 		_window->setRiseOnClickEnabled(false);
+		_window->setMousePassThroughEnabled(true);
 		enableTicking(true);
 	}
 
@@ -49,22 +50,22 @@ namespace modules {
 	void GUITooltip::tick() {
 		CEGUI::Vector2f mousePos = CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition();
 
-		int x = int(mousePos.d_x) - 50;
+		float tooltipWidth = _window->getSize().d_width.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width;
+		float tooltipHeight = _window->getSize().d_height.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height;
 
+		float x = mousePos.d_x - tooltipWidth / 2.0f;
 		if (x < 0) {
 			x = 0;
+		} else if (x > CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - tooltipWidth) {
+			x = CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - tooltipWidth;
 		}
 
-		if (x + _window->getSize().d_width.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width > CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width) {
-			x = int(CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _window->getSize().d_width.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width);
+		float y = mousePos.d_y;
+		if (y < CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height / 2.0f) {
+			y += 25; // 25 pixels below the cursors start position (would be better to use size of the cursor image)
+		} else {
+			y -= tooltipHeight + 5; // five pixels above the cursor is the end of the tooltip box
 		}
-
-		int y = int(mousePos.d_y + _window->getSize().d_height.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height);
-
-		if (y + 0.05 * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height > CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height) {
-			y = int(mousePos.d_y - _window->getSize().d_height.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height);
-		}
-
 		setPosition(x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width, y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height);
 	}
 
