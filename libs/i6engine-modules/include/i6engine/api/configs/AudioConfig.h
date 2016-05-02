@@ -33,6 +33,8 @@ namespace audio {
 
 	typedef uint64_t SoundHandle;
 
+#define INVALID_SOUND UINT64_MAX
+
 	enum AudioMessageTypes {
 		AudioReset = 0,
 		AudioNode,
