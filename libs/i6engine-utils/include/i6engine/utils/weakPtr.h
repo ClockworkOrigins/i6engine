@@ -174,6 +174,7 @@ namespace utils {
 			if (_sharedCounter != nullptr && _sharedCounter->weakCounter-- == 1) {
 				if (_sharedCounter->refCounter == 0) {
 					delete _sharedCounter;
+					_sharedCounter = nullptr;
 				}
 			}
 		}

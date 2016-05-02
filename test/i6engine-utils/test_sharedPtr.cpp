@@ -730,13 +730,21 @@ TEST_F(sharedPtr, nullPtrFoo2) {
 	p4 = p3;
 }
 
+TEST_F(sharedPtr, replacement) {
+	using i6engine::utils::sharedPtr;
+	using i6engine::utils::make_shared;
+	std::array<sharedPtr<Base1, Base1>, 1> arr;
+	auto sp = make_shared<Base1, Base1>();
+	arr[0] = sp;
+}
+
 TEST_F(sharedPtr, weakPtrRaceCondition) {
 	using i6engine::utils::sharedPtr;
 	using i6engine::utils::weakPtr;
 	using i6engine::utils::make_shared;
 	const size_t RUNS = 1000;
 	std::array<sharedPtr<Base1, Base1>, 100> arr;
-	for (size_t i = 0; arr.size(); i++) {
+	for (size_t i = 0; i < arr.size(); i++) {
 		arr[i] = make_shared<Base1, Base1>();
 	}
 	std::cout << "Created list" << std::endl;
@@ -760,6 +768,6 @@ TEST_F(sharedPtr, weakPtrRaceCondition) {
 		sharedPtr<Base1, Base1>::clear();
 		std::this_thread::sleep_for(std::chrono::milliseconds(2));
 	}
-	thrdPurge.detach();
-	thrdCopy.detach();
+	thrdPurge.join();
+	thrdCopy.join();
 }
