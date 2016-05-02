@@ -24,6 +24,7 @@
 
 #include <atomic>
 #include <list>
+#include <memory>
 #include <mutex>
 #include <new>
 
@@ -31,18 +32,16 @@ namespace i6engine {
 namespace utils {
 
 	/**
-	 * \brief struct handling counters for the references
-	 * a sharedCounter that stores a nullptr doesn't have a sharedCounter
+	 * \brief struct handling threadsafe destruction of the wrapped pointer
 	 */
-	typedef struct sharedCounter {
-		std::atomic<uint32_t> refCounter;
-		std::atomic<uint32_t> weakCounter;
+	template<typename T>
+	struct sharedPtrWrapper {
+		T * ptr;
 
-		sharedCounter() : refCounter(0), weakCounter(0) {
+		sharedPtrWrapper(T * p) : ptr(p) {
 		}
-		~sharedCounter() {
-		}
-	} sharedCounter;
+		~sharedPtrWrapper();
+	};
 
 	template<typename T, typename U>
 	class sharedPtr;
@@ -73,38 +72,33 @@ namespace utils {
 		friend class sharedPtr;
 		template<typename V, typename W>
 		friend class weakPtr;
+		friend struct sharedPtrWrapper<T>;
 
 	public:
 		/**
 		 * \brief default constructor creating a sharedPtr containing a nullptr
 		 */
-		sharedPtr() : _sharedCounter(nullptr), _ptr(nullptr) {
+		sharedPtr() : _sharedPtrWrapper(nullptr), _ptr(nullptr) {
 		}
 
 		/**
 		 * \brief normal constructor taking pointer to object to be stored
 		 */
-		explicit sharedPtr(T * ptr) : _sharedCounter(nullptr), _ptr(ptr) {
-			if (ptr != nullptr) {
-				_sharedCounter = new sharedCounter();
-				_sharedCounter->refCounter++;
-			}
+		explicit sharedPtr(T * ptr) : _sharedPtrWrapper(nullptr), _ptr(ptr) {
+			_sharedPtrWrapper = std::make_shared<sharedPtrWrapper<U>>(ptr);
 		}
 
 		/**
 		 * \brief copy constructor sharing reference and incrementing refCounter
 		 */
-		sharedPtr(const sharedPtr & other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			if (_ptr != nullptr) {
-				_sharedCounter->refCounter++;
-			}
+		sharedPtr(const sharedPtr & other) : _sharedPtrWrapper(other._sharedPtrWrapper), _ptr(other._ptr) {
 		}
 
 		/**
 		 * \brief move constructor
 		 */
-		sharedPtr(sharedPtr && other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			other._sharedCounter = nullptr;
+		sharedPtr(sharedPtr && other) : _sharedPtrWrapper(other._sharedPtrWrapper), _ptr(other._ptr) {
+			other._sharedPtrWrapper = nullptr;
 			other._ptr = nullptr;
 		}
 
@@ -112,17 +106,13 @@ namespace utils {
 		 * \brief upcast derived => base
 		 */
 		template<typename V>
-		sharedPtr(const sharedPtr<V, U> & other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			if (_ptr != nullptr) {
-				_sharedCounter->refCounter++;
-			}
+		sharedPtr(const sharedPtr<V, U> & other) : _sharedPtrWrapper(other._sharedPtrWrapper), _ptr(other._ptr) {
 		}
 
 		/**
 		 * \brief destructor, adding pointer of object to clearList if last reference was deleted
 		 */
 		~sharedPtr() {
-			removeRef();
 		}
 
 		/**
@@ -132,13 +122,8 @@ namespace utils {
 			if (*this == other) {
 				return *this;
 			}
-			removeRef();
-
-			_sharedCounter = other._sharedCounter;
+			_sharedPtrWrapper = other._sharedPtrWrapper;
 			_ptr = other._ptr;
-			if (_ptr != nullptr) {
-				_sharedCounter->refCounter++;
-			}
 
 			return *this;
 		}
@@ -150,11 +135,9 @@ namespace utils {
 			if (*this == other) {
 				return *this;
 			}
-			removeRef();
-
-			_sharedCounter = other._sharedCounter;
+			_sharedPtrWrapper = other._sharedPtrWrapper;
 			_ptr = other._ptr;
-			other._sharedCounter = nullptr;
+			other._sharedPtrWrapper = nullptr;
 			other._ptr = nullptr;
 
 			return *this;
@@ -168,13 +151,8 @@ namespace utils {
 			if (*this == other) {
 				return *this;
 			}
-			removeRef();
-
-			_sharedCounter = other._sharedCounter;
+			_sharedPtrWrapper = other._sharedPtrWrapper;
 			_ptr = other._ptr;
-			if (_ptr != nullptr) {
-				_sharedCounter->refCounter++;
-			}
 
 			return *this;
 		}
@@ -235,34 +213,14 @@ namespace utils {
 		}
 
 	private:
+		std::shared_ptr<sharedPtrWrapper<U>> _sharedPtrWrapper;
+		T * _ptr;
+
 		/**
 		 * \brief this constructor is called by dynamic_pointer_cast
 		 */
-		sharedPtr(T * ptr, sharedCounter * sC) : _sharedCounter(sC), _ptr(ptr) {
-			_sharedCounter->refCounter++;
+		sharedPtr(T * ptr, std::shared_ptr<sharedPtrWrapper<U>> sC) : _sharedPtrWrapper(sC), _ptr(ptr) {
 		}
-
-		/**
-		 * \brief handles deletion of a reference
-		 */
-		void removeRef() {
-			if (_sharedCounter != nullptr) {
-				if (_sharedCounter->refCounter-- == 1) {
-					{
-						std::lock_guard<std::mutex> lg(sharedPtr<U, U>::clearListLock);
-						sharedPtr<U, U>::clearList.push_back(reinterpret_cast<U *>(_ptr));
-					}
-
-					if (_sharedCounter->weakCounter == 0) {
-						delete _sharedCounter;
-						_sharedCounter = nullptr;
-					}
-				}
-			}
-		}
-
-		sharedCounter * _sharedCounter;
-		T * _ptr;
 
 		static std::mutex clearListLock;
 		static std::list<U *> clearList;
@@ -271,6 +229,12 @@ namespace utils {
 	template<typename T, typename U> std::mutex sharedPtr<T, U>::clearListLock;
 	template<typename T, typename U> std::list<U *> sharedPtr<T, U>::clearList;
 
+	template<typename T>
+	sharedPtrWrapper<T>::~sharedPtrWrapper() {
+		std::lock_guard<std::mutex> lg(sharedPtr<T, T>::clearListLock);
+		sharedPtr<T, T>::clearList.push_back(reinterpret_cast<T *>(ptr));
+	}
+
 	/**
 	 * \brief casts a sharedPtr of dynamic type T2 to dynamic type T1
 	 */
@@ -278,7 +242,7 @@ namespace utils {
 	sharedPtr<T1, U> dynamic_pointer_cast(const sharedPtr<T2, U> & base) {
 		T1 * t1 = dynamic_cast<T1 *>(base._ptr);
 		if (t1 != nullptr) {
-			return sharedPtr<T1, U>(t1, base._sharedCounter);
+			return sharedPtr<T1, U>(t1, base._sharedPtrWrapper);
 		} else {
 			return sharedPtr<T1, U>();
 		}
@@ -289,11 +253,11 @@ namespace utils {
 	 */
 	template<typename T, typename U, typename... Args>
 	sharedPtr<T, U> make_shared(Args && ... args) {
-		/*char * memory = static_cast<char *>(::operator new(sizeof(T) + sizeof(sharedCounter)));
+		/*char * memory = static_cast<char *>(::operator new(sizeof(T) + sizeof(sharedPtrWrapper)));
 		T * ptr = new(memory) T(args...);
-		sharedCounter * sC = new(memory + sizeof(T)) sharedCounter();*/
+		sharedPtrWrapper * sC = new(memory + sizeof(T)) sharedPtrWrapper();*/
 		T * ptr = new T(args...);
-		sharedCounter * sC = new sharedCounter();
+		std::shared_ptr<sharedPtrWrapper<U>> sC = std::make_shared<sharedPtrWrapper<U>>(ptr);
 		return sharedPtr<T, U>(ptr, sC);
 	}
 

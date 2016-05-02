@@ -747,7 +747,6 @@ TEST_F(sharedPtr, weakPtrRaceCondition) {
 	for (size_t i = 0; i < arr.size(); i++) {
 		arr[i] = make_shared<Base1, Base1>();
 	}
-	std::cout << "Created list" << std::endl;
 	std::thread thrdPurge([&arr, RUNS]() {
 		for (size_t i = 0; i < arr.size(); i++) {
 			arr[i] = make_shared<Base1, Base1>();

@@ -37,53 +37,47 @@ namespace utils {
 		/**
 		 * \brief default constructor
 		 */
-		weakPtr() : _sharedCounter(new sharedCounter()), _ptr(nullptr) {
-			_sharedCounter->weakCounter++;
+		weakPtr() : _sharedPtrWrapper(std::make_shared<sharedPtrWrapper<Base>>(nullptr)), _ptr(nullptr) {
 		}
 
 		/**
 		 * \brief copy constructor copying another weak pointer
 		 */
-		weakPtr(const weakPtr & other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			_sharedCounter->weakCounter++;
+		weakPtr(const weakPtr & other) : _sharedPtrWrapper(other._sharedPtrWrapper), _ptr(other._ptr) {
 		}
 
 		/**
 		 * \brief move constructor
 		 */
-		weakPtr(weakPtr && other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			other._sharedCounter = nullptr;
+		weakPtr(weakPtr && other) : _sharedPtrWrapper(other._sharedPtrWrapper), _ptr(other._ptr) {
+			other._sharedPtrWrapper.reset();
 			other._ptr = nullptr;
 		}
 
 		/**
 		 * \brief constructor takes sharedPtr with same base class
 		 */
-		weakPtr(const sharedPtr<T, Base> & other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			_sharedCounter->weakCounter++;
+		weakPtr(const sharedPtr<T, Base> & other) : _sharedPtrWrapper(other._sharedPtrWrapper), _ptr(other._ptr) {
 		}
 
 		/**
 		 * \brief constructor takes sharedPtr with same base class
 		 */
 		template<typename U>
-		weakPtr(const sharedPtr<U, T> & other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			_sharedCounter->weakCounter++;
+		weakPtr(const sharedPtr<U, T> & other) : _sharedPtrWrapper(other._sharedPtrWrapper), _ptr(other._ptr) {
 		}
 
 		/**
 		 * \brief constructor takes sharedPtr with different types
 		 */
 		template<typename U, typename V>
-		weakPtr(const sharedPtr<U, V> & other) : _sharedCounter(other._sharedCounter), _ptr(other._ptr) {
-			_sharedCounter->weakCounter++;
+		weakPtr(const sharedPtr<U, V> & other) : _sharedPtrWrapper(other._sharedPtrWrapper), _ptr(other._ptr) {
 		}
 
 		/**
-		 * \brief destructor, removes sharedCounter if all weak and sharedPtr are removed
+		 * \brief destructor, removes sharedPtrWrapper if all weak and sharedPtr are removed
 		 */
 		~weakPtr() {
-			removeRef();
 		}
 
 		/**
@@ -93,11 +87,8 @@ namespace utils {
 			if (*this == other) {
 				return *this;
 			}
-			removeRef();
-
-			_sharedCounter = other._sharedCounter;
+			_sharedPtrWrapper = other._sharedPtrWrapper;
 			_ptr = other._ptr;
-			_sharedCounter->weakCounter++;
 
 			return *this;
 		}
@@ -109,11 +100,9 @@ namespace utils {
 			if (*this == other) {
 				return *this;
 			}
-			removeRef();
-
-			_sharedCounter = other._sharedCounter;
+			_sharedPtrWrapper = other._sharedPtrWrapper;
 			_ptr = other._ptr;
-			other._sharedCounter = nullptr;
+			other._sharedPtrWrapper.reset();
 			other._ptr = nullptr;
 
 			return *this;
@@ -149,35 +138,20 @@ namespace utils {
 		 * \brief returns the shared pointer being observed by this weakPtr
 		 */
 		sharedPtr<T, Base> get() const {
-			if (_sharedCounter->refCounter != 0) {
-				return sharedPtr<T, Base>(_ptr, _sharedCounter);
-			} else {
-				return sharedPtr<T, Base>(nullptr, _sharedCounter);
-			}
+			auto p = _sharedPtrWrapper.lock();
+			return sharedPtr<T, Base>((p == nullptr) ? nullptr : _ptr, p);
 		}
 
 		/**
 		 * \brief return true, if pointer is invalid, otherwise false
 		 */
 		bool expired() const {
-			return _sharedCounter->refCounter == 0;
+			return _sharedPtrWrapper.expired();
 		}
 
 	private:
-		sharedCounter * _sharedCounter;
+		std::weak_ptr<sharedPtrWrapper<Base>> _sharedPtrWrapper;
 		T * _ptr;
-
-		/**
-		 * \brief handles deletion of a reference
-		 */
-		void removeRef() {
-			if (_sharedCounter != nullptr && _sharedCounter->weakCounter-- == 1) {
-				if (_sharedCounter->refCounter == 0) {
-					delete _sharedCounter;
-					_sharedCounter = nullptr;
-				}
-			}
-		}
 	};
 
 } /* namespace utils */
