@@ -29,7 +29,7 @@
 
 #include "boost/thread/mutex.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	class PhysicalStateComponent; // forward declaration
@@ -199,7 +199,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_MOVERCOMPONENT_H__ */
 

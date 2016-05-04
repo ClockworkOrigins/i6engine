@@ -36,22 +36,22 @@ namespace sample {
 		CommonApplication::AfterInitialize();
 
 		// ambient light for the scene
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
+		i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
 
-		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
+		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			of->createGO("SpectatorCam", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this](i6engine::api::GOPtr go) {
+			i6e::api::objects::GOTemplate tmpl;
+			of->createGO("SpectatorCam", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this](i6e::api::GOPtr go) {
 				_camera = go;
 			});
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			of->createObject("Sun", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			i6e::api::objects::GOTemplate tmpl;
+			of->createObject("Sun", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			i6engine::api::attributeMap params;
+			i6e::api::objects::GOTemplate tmpl;
+			i6e::api::attributeMap params;
 			params.insert(std::make_pair("size", "1200.0")); // size of the terrain in world units
 			params.insert(std::make_pair("heightmap", "terrain.png")); // the heightmap used for terrain generation
 			params.insert(std::make_pair("inputScale", "60.0")); // scale factor for height in terrain (so maximum height here is 60 meters)
@@ -70,9 +70,9 @@ namespace sample {
 			params.insert(std::make_pair("minY", "-2"));
 			params.insert(std::make_pair("maxY", "2"));
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("TerrainAppearance", params, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("TerrainAppearance", params, "", false, false));
 
-			of->createObject("Terrain", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Terrain", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 	}
 

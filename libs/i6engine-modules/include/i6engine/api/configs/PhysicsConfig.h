@@ -26,7 +26,7 @@
 #include "i6engine/api/components/PhysicalStateComponent.h"
 #include "i6engine/api/components/VelocityComponent.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace physics {
 
@@ -371,7 +371,7 @@ namespace physics {
 
 } /* namespace physics */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_PHYSICSCONFIG_H__ */
 

@@ -12,7 +12,7 @@ namespace ParticleUniverse {
 	class DynamicAttribute;
 } /* namespace ParticleUniverse */
 
-namespace i6engine {
+namespace i6e {
 namespace particleEditor {
 namespace properties {
 
@@ -129,6 +129,6 @@ namespace properties {
 
 } /* namespace properties */
 } /* namespace particleEditor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_PARTICLEEDITOR_PROPERTIES_PROPERTY_H__ */

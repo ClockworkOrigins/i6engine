@@ -23,7 +23,7 @@
 
 namespace sample {
 
-	class CommonApplication : virtual public i6engine::api::Application {
+	class CommonApplication : virtual public i6e::api::Application {
 	public:
 		CommonApplication(bool move, bool shootBall);
 
@@ -43,7 +43,7 @@ namespace sample {
 
 	protected:
 		bool _showFPS;
-		i6engine::api::WeakGOPtr _camera;
+		i6e::api::WeakGOPtr _camera;
 
 		/**
 		 * \brief In this map all registered buttons and their respective actions are stored.
@@ -57,7 +57,7 @@ namespace sample {
 		/**
 		 * \brief processes input messages
 		 */
-		void InputMailbox(const i6engine::api::GameMessage::Ptr & msg);
+		void InputMailbox(const i6e::api::GameMessage::Ptr & msg);
 
 		void Forward();
 		void Backward();

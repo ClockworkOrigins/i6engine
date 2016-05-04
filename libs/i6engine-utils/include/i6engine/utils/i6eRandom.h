@@ -30,7 +30,7 @@
 
 #include "boost/date_time.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	/**
@@ -109,7 +109,7 @@ namespace utils {
 	};
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_RANDOM_H__ */
 

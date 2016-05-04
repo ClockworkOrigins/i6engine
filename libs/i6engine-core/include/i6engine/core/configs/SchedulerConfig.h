@@ -24,13 +24,13 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	const uint16_t SCHEDULER_THREAD_AMOUNT = 10;
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_CONFIG_SCHEDULERCONFIG_H__ */
 

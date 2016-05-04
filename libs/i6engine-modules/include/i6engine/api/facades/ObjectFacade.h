@@ -32,7 +32,7 @@
 #include "i6engine/api/configs/attributeMap.h"
 #include "i6engine/api/configs/ObjectConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	class Component;
@@ -297,7 +297,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_OBJECTFACADE_H__ */
 

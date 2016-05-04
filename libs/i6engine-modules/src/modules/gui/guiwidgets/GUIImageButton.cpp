@@ -4,7 +4,7 @@
 
 #include "CEGUI/CEGUI.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUIImageButton::GUIImageButton(const std::string & name, const std::string & style) : GUIWidget(name) {
@@ -27,4 +27,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

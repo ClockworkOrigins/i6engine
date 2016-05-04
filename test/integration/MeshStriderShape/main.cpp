@@ -26,18 +26,18 @@
 #include "i6engine/modules/physics/PhysicsController.h"
 
 int main(int, char **) {
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), { i6engine::core::Subsystem::Object });
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6engine::modules::ObjectController(), { i6engine::core::Subsystem::Physic });
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6engine::modules::InputController(), LNG_INPUT_FRAME_TIME);
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new i6engine::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
+	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6e::modules::GraphicsController(), { i6e::core::Subsystem::Object });
+	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6e::modules::ObjectController(), { i6e::core::Subsystem::Physic });
+	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6e::modules::InputController(), LNG_INPUT_FRAME_TIME);
+	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new i6e::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
 
-	i6engine::integration::MeshStriderShapeIntegrationTestApplication app;
+	i6e::integration::MeshStriderShapeIntegrationTestApplication app;
 
 	app.setName("MeshStriderShape Test");
 
-	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
+	i6e::api::EngineController::GetSingletonPtr()->registerApplication(app);
 
-	i6engine::api::EngineController::GetSingletonPtr()->start();
+	i6e::api::EngineController::GetSingletonPtr()->start();
 
 	return 0;
 }

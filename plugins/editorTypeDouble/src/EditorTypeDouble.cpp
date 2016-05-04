@@ -3,7 +3,7 @@
 #include <QHBoxLayout>
 #include <QDoubleSpinBox>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	EditorTypeDoubleWidget::EditorTypeDoubleWidget(QWidget * parent) : TypeWidgetInterface(parent), _spinBox(nullptr) {
@@ -30,6 +30,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.type.TypePluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.type.TypePluginInterface")

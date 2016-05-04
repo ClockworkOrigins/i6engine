@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-namespace i6engine {
+namespace i6e {
 namespace particleEditor {
 namespace widgets {
 	class EventHandlerPropertyWindow;
@@ -19,6 +19,6 @@ namespace factories {
 
 } /* namespace factories */
 } /* namespace particleEditor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_PARTICLEEDITOR_FACTORIES_EVENTHANDLERPROPERTYWINDOWFACTORY_H__ */

@@ -21,8 +21,8 @@
 
 #include "gtest/gtest.h"
 
-using namespace i6engine;
-using namespace i6engine::api;
+using namespace i6e;
+using namespace i6e::api;
 
 namespace Test_GameObject {
 namespace config {
@@ -131,7 +131,7 @@ namespace config {
 		}
 	};
 
-	ComPtr func(const int64_t, const std::string &, const i6engine::api::attributeMap &, GameObject *) {
+	ComPtr func(const int64_t, const std::string &, const i6e::api::attributeMap &, GameObject *) {
 		return ComPtr();
 	}
 
@@ -146,18 +146,18 @@ namespace config {
 		virtual void TearDown() {
 			// TODO: (Michael) kill EngineController to get a complete new one in next test (Singleton)
 			GOPtr::clear();
-			i6engine::api::ComPtr::clear();
+			i6e::api::ComPtr::clear();
 		}
 	};
 
 	TEST_F(GOTest, getGOC) {
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) { return i6engine::api::ComPtr(); });
-		i6engine::api::attributeMap attMap;
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) { return i6e::api::ComPtr(); });
+		i6e::api::attributeMap attMap;
 		attMap["identifier"] = "A";
-		i6engine::api::ComPtr cAdd1 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(1, attMap);
-		i6engine::api::ComPtr cAdd2 = i6engine::utils::make_shared<Replace1Component, i6engine::api::Component>(2, attMap);
-		i6engine::api::ComPtr cAdd3 = i6engine::utils::make_shared<ReplaceDisComponent, i6engine::api::Component>(3, attMap);
-		i6engine::api::ComPtr cAdd4 = i6engine::utils::make_shared<RejectComponent, i6engine::api::Component>(4, attMap);
+		i6e::api::ComPtr cAdd1 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(1, attMap);
+		i6e::api::ComPtr cAdd2 = i6e::utils::make_shared<Replace1Component, i6e::api::Component>(2, attMap);
+		i6e::api::ComPtr cAdd3 = i6e::utils::make_shared<ReplaceDisComponent, i6e::api::Component>(3, attMap);
+		i6e::api::ComPtr cAdd4 = i6e::utils::make_shared<RejectComponent, i6e::api::Component>(4, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -168,8 +168,8 @@ namespace config {
 
 		EXPECT_NE(nullptr, owner->getGOC(config::ComponentTypes::AddComponent));
 		EXPECT_EQ(nullptr, owner->getGOC(config::ComponentTypes::Replace0Component));
-		EXPECT_NE(nullptr, i6engine::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)));
-		EXPECT_EQ(nullptr, i6engine::utils::dynamic_pointer_cast<Replace0Component>(owner->getGOC(config::ComponentTypes::AddComponent)));
+		EXPECT_NE(nullptr, i6e::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)));
+		EXPECT_EQ(nullptr, i6e::utils::dynamic_pointer_cast<Replace0Component>(owner->getGOC(config::ComponentTypes::AddComponent)));
 		EXPECT_NE(nullptr, owner->getGOC<AddComponent>(config::ComponentTypes::AddComponent));
 		EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>(config::ComponentTypes::AddComponent));
 		EXPECT_NE(nullptr, owner->getGOC<AddComponent>());
@@ -187,8 +187,8 @@ namespace config {
 
 		startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 		for (uint32_t i = 0; i < COUNTER; i++) {
-			EXPECT_NE(nullptr, i6engine::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)));
-			EXPECT_EQ(nullptr, i6engine::utils::dynamic_pointer_cast<Replace0Component>(owner->getGOC(config::ComponentTypes::AddComponent)));
+			EXPECT_NE(nullptr, i6e::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)));
+			EXPECT_EQ(nullptr, i6e::utils::dynamic_pointer_cast<Replace0Component>(owner->getGOC(config::ComponentTypes::AddComponent)));
 		}
 		endTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 		std::cout << "Test 2: " << endTime - startTime << std::endl;

@@ -24,7 +24,7 @@
 
 #include "i6engine/rpg/components/ItemComponent.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace components {
 
@@ -55,7 +55,7 @@ namespace components {
 
 } /* namespace components */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_COMPONENTS_MISCITEMCOMPONENT_H__ */
 

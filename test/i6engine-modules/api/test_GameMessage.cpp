@@ -25,17 +25,17 @@
 #include "gtest/gtest.h"
 
 TEST(GameMessage, Serialize) {
-	i6engine::api::GameMessage::Ptr msg = boost::make_shared<i6engine::api::GameMessage>(0, 0, i6engine::core::Method::Update, new i6engine::api::GameMessageStruct(), i6engine::core::Subsystem::Unknown);
-	msg->getContent()->_sender = i6engine::core::IPKey("127.123.123.1:12345");
+	i6e::api::GameMessage::Ptr msg = boost::make_shared<i6e::api::GameMessage>(0, 0, i6e::core::Method::Update, new i6e::api::GameMessageStruct(), i6e::core::Subsystem::Unknown);
+	msg->getContent()->_sender = i6e::core::IPKey("127.123.123.1:12345");
 
 	EXPECT_FALSE(msg->Serialize().empty());
 }
 
 TEST(GameMessage, Position_Serialize) {
-	i6engine::api::GameMessage::Ptr msg1 = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::PositionMessageType, i6engine::api::objects::Position, i6engine::core::Method::Update, new i6engine::api::objects::Position_Update(0, 0, Vec3(), Quaternion(), Vec3()), i6engine::core::Subsystem::Unknown);
-	i6engine::api::GameMessage::Ptr msg2 = boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::PositionMessageType, i6engine::api::objects::Position, i6engine::core::Method::Update, new i6engine::api::objects::Position_Update(1000, 1001, Vec3(1000.0, 50.0, 1000.0), Quaternion(1.0, 0.0, 0.0, 0.0), Vec3(1.0, 1.0, 1.0)), i6engine::core::Subsystem::Unknown);
-	msg1->getContent()->_sender = i6engine::core::IPKey("127.123.123.1:12345");
-	msg2->getContent()->_sender = i6engine::core::IPKey("127.123.123.1:12345");
+	i6e::api::GameMessage::Ptr msg1 = boost::make_shared<i6e::api::GameMessage>(i6e::api::messages::PositionMessageType, i6e::api::objects::Position, i6e::core::Method::Update, new i6e::api::objects::Position_Update(0, 0, Vec3(), Quaternion(), Vec3()), i6e::core::Subsystem::Unknown);
+	i6e::api::GameMessage::Ptr msg2 = boost::make_shared<i6e::api::GameMessage>(i6e::api::messages::PositionMessageType, i6e::api::objects::Position, i6e::core::Method::Update, new i6e::api::objects::Position_Update(1000, 1001, Vec3(1000.0, 50.0, 1000.0), Quaternion(1.0, 0.0, 0.0, 0.0), Vec3(1.0, 1.0, 1.0)), i6e::core::Subsystem::Unknown);
+	msg1->getContent()->_sender = i6e::core::IPKey("127.123.123.1:12345");
+	msg2->getContent()->_sender = i6e::core::IPKey("127.123.123.1:12345");
 
 	EXPECT_FALSE(msg1->Serialize().empty());
 	EXPECT_FALSE(msg2->Serialize().empty());

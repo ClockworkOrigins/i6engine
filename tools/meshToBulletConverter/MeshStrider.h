@@ -30,7 +30,7 @@ namespace Ogre {
 	class Mesh;
 } /* namespace Ogre */
 
-namespace i6engine {
+namespace i6e {
 namespace tools {
 
 	/**
@@ -106,7 +106,7 @@ namespace tools {
 	};
 
 } /* namespace tools */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_TOOLS_MESHSTRIDER_H__ */
 

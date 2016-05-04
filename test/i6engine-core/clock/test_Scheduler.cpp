@@ -58,7 +58,7 @@ private:
 int func1_counter;
 std::mutex jobLock;
 
-bool func1(uint64_t time, i6engine::utils::Clock<TestTimeClock> * cl, int counter) {
+bool func1(uint64_t time, i6e::utils::Clock<TestTimeClock> * cl, int counter) {
 	std::lock_guard<std::mutex> lg(jobLock);
 	EXPECT_LE(time, cl->getTime());
 	EXPECT_EQ(counter, func1_counter);
@@ -67,15 +67,15 @@ bool func1(uint64_t time, i6engine::utils::Clock<TestTimeClock> * cl, int counte
 }
 
 TEST(Scheduler, Once) {
-	i6engine::utils::Clock<TestTimeClock> cl;
-	i6engine::core::Scheduler<TestTimeClock> sched(cl);
+	i6e::utils::Clock<TestTimeClock> cl;
+	i6e::core::Scheduler<TestTimeClock> sched(cl);
 	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 
 	func1_counter = 0;
-	sched.runOnce(50001, boost::bind(func1, cl.getTime() + 50001, &cl, 0), i6engine::core::JobPriorities::Prio_Low);
-	sched.runOnce(100000, boost::bind(func1, cl.getTime() + 100000, &cl, 2), i6engine::core::JobPriorities::Prio_Low);
-	sched.runOnce(150000, boost::bind(func1, cl.getTime() + 150000, &cl, 3), i6engine::core::JobPriorities::Prio_Medium);
-	sched.runOnce(75001, boost::bind(func1, cl.getTime() + 75001, &cl, 1), i6engine::core::JobPriorities::Prio_Low);
+	sched.runOnce(50001, boost::bind(func1, cl.getTime() + 50001, &cl, 0), i6e::core::JobPriorities::Prio_Low);
+	sched.runOnce(100000, boost::bind(func1, cl.getTime() + 100000, &cl, 2), i6e::core::JobPriorities::Prio_Low);
+	sched.runOnce(150000, boost::bind(func1, cl.getTime() + 150000, &cl, 3), i6e::core::JobPriorities::Prio_Medium);
+	sched.runOnce(75001, boost::bind(func1, cl.getTime() + 75001, &cl, 1), i6e::core::JobPriorities::Prio_Low);
 
 	for (int i = 0; i < 40; ++i) {
 		boost::this_thread::sleep(boost::posix_time::milliseconds(5));
@@ -95,15 +95,15 @@ bool func2(int counter) {
 }
 
 TEST(Scheduler, Repeat) {
-	i6engine::utils::Clock<TestTimeClock> cl;
-	i6engine::core::Scheduler<TestTimeClock> sched(cl);
+	i6e::utils::Clock<TestTimeClock> cl;
+	i6e::core::Scheduler<TestTimeClock> sched(cl);
 
 	jobs.clear();
 
-	sched.runRepeated(50001, boost::bind(func2, 0), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(100000, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(150000, boost::bind(func2, 2), i6engine::core::JobPriorities::Prio_Medium);
-	sched.runRepeated(75001, boost::bind(func2, 3), i6engine::core::JobPriorities::Prio_Low);
+	sched.runRepeated(50001, boost::bind(func2, 0), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(100000, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(150000, boost::bind(func2, 2), i6e::core::JobPriorities::Prio_Medium);
+	sched.runRepeated(75001, boost::bind(func2, 3), i6e::core::JobPriorities::Prio_Low);
 
 	for (int i = 0; i < 40; ++i) {
 		boost::this_thread::sleep(boost::posix_time::milliseconds(5));
@@ -120,11 +120,11 @@ TEST(Scheduler, Repeat) {
 }
 
 TEST(Scheduler, getTimeLeft) {
-	i6engine::utils::Clock<TestTimeClock> cl;
-	i6engine::core::Scheduler<TestTimeClock> sched(cl);
+	i6e::utils::Clock<TestTimeClock> cl;
+	i6e::core::Scheduler<TestTimeClock> sched(cl);
 
-	uint64_t id1 = sched.runOnce(500000, boost::bind(func2, 0), i6engine::core::JobPriorities::Prio_Low);
-	uint64_t id2 = sched.runRepeated(50000, boost::bind(func2, 0), i6engine::core::JobPriorities::Prio_Low);
+	uint64_t id1 = sched.runOnce(500000, boost::bind(func2, 0), i6e::core::JobPriorities::Prio_Low);
+	uint64_t id2 = sched.runRepeated(50000, boost::bind(func2, 0), i6e::core::JobPriorities::Prio_Low);
 
 	for (int i = 0; i < 40; ++i) {
 		cl.passedTime(5000);
@@ -138,18 +138,18 @@ TEST(Scheduler, getTimeLeft) {
 }
 
 TEST(Scheduler, stop) {
-	i6engine::utils::Clock<TestTimeClock> cl;
-	i6engine::core::Scheduler<TestTimeClock> sched(cl);
+	i6e::utils::Clock<TestTimeClock> cl;
+	i6e::core::Scheduler<TestTimeClock> sched(cl);
 
 	{
 		std::lock_guard<std::mutex> lg(jobLock);
 		jobs.clear();
 	}
 
-	uint64_t id1 = sched.runRepeated(50001, boost::bind(func2, 0), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(100000, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(150000, boost::bind(func2, 2), i6engine::core::JobPriorities::Prio_Medium);
-	uint64_t id4 = sched.runRepeated(75001, boost::bind(func2, 3), i6engine::core::JobPriorities::Prio_Low);
+	uint64_t id1 = sched.runRepeated(50001, boost::bind(func2, 0), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(100000, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(150000, boost::bind(func2, 2), i6e::core::JobPriorities::Prio_Medium);
+	uint64_t id4 = sched.runRepeated(75001, boost::bind(func2, 3), i6e::core::JobPriorities::Prio_Low);
 
 	for (int i = 0; i < 40; ++i) {
 		boost::this_thread::sleep(boost::posix_time::milliseconds(5));
@@ -169,15 +169,15 @@ TEST(Scheduler, stop) {
 }
 
 TEST(Scheduler, removeTimerPriority) {
-	i6engine::utils::Clock<TestTimeClock> cl;
-	i6engine::core::Scheduler<TestTimeClock> sched(cl);
+	i6e::utils::Clock<TestTimeClock> cl;
+	i6e::core::Scheduler<TestTimeClock> sched(cl);
 
 	jobs.clear();
 
-	sched.runRepeated(50001, boost::bind(func2, 0), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(100000, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(150000, boost::bind(func2, 2), i6engine::core::JobPriorities::Prio_Medium);
-	sched.runRepeated(75001, boost::bind(func2, 3), i6engine::core::JobPriorities::Prio_Low);
+	sched.runRepeated(50001, boost::bind(func2, 0), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(100000, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(150000, boost::bind(func2, 2), i6e::core::JobPriorities::Prio_Medium);
+	sched.runRepeated(75001, boost::bind(func2, 3), i6e::core::JobPriorities::Prio_Low);
 
 	for (int i = 0; i < 40; ++i) {
 		boost::this_thread::sleep(boost::posix_time::milliseconds(5));
@@ -185,7 +185,7 @@ TEST(Scheduler, removeTimerPriority) {
 		cl.Update();
 		if (i == 20) {
 			boost::this_thread::sleep(boost::posix_time::milliseconds(5));
-			sched.removeTimer(i6engine::core::JobPriorities::Prio_Low);
+			sched.removeTimer(i6e::core::JobPriorities::Prio_Low);
 		}
 	}
 
@@ -195,12 +195,12 @@ TEST(Scheduler, removeTimerPriority) {
 }
 
 TEST(Scheduler, addTimerLater) {
-	i6engine::utils::Clock<TestTimeClock> cl;
-	i6engine::core::Scheduler<TestTimeClock> sched(cl);
+	i6e::utils::Clock<TestTimeClock> cl;
+	i6e::core::Scheduler<TestTimeClock> sched(cl);
 
 	jobs.clear();
 
-	sched.runOnce(50000, boost::bind(func2, 0), i6engine::core::JobPriorities::Prio_Low);
+	sched.runOnce(50000, boost::bind(func2, 0), i6e::core::JobPriorities::Prio_Low);
 
 	for (int i = 0; i < 6; ++i) {
 		boost::this_thread::sleep(boost::posix_time::milliseconds(5));
@@ -210,7 +210,7 @@ TEST(Scheduler, addTimerLater) {
 
 	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 
-	sched.runOnce(15000, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
+	sched.runOnce(15000, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
 
 	for (int i = 0; i < 3; ++i) {
 		boost::this_thread::sleep(boost::posix_time::milliseconds(5));
@@ -234,20 +234,20 @@ TEST(Scheduler, addTimerLater) {
 }
 
 void startClockAndScheduler() {
-	i6engine::utils::Clock<i6engine::utils::RealTimeClock> cl;
-	i6engine::core::Scheduler<i6engine::utils::RealTimeClock> sched(cl);
+	i6e::utils::Clock<i6e::utils::RealTimeClock> cl;
+	i6e::core::Scheduler<i6e::utils::RealTimeClock> sched(cl);
 
 	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 
-	sched.runOnce(5000, boost::bind(func2, 0), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(2500, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runOnce(1500, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(2500, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(3000, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(2500, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(4500, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(2500, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
-	sched.runRepeated(3500, boost::bind(func2, 1), i6engine::core::JobPriorities::Prio_Low);
+	sched.runOnce(5000, boost::bind(func2, 0), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(2500, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runOnce(1500, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(2500, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(3000, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(2500, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(4500, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(2500, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
+	sched.runRepeated(3500, boost::bind(func2, 1), i6e::core::JobPriorities::Prio_Low);
 
 	boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 }

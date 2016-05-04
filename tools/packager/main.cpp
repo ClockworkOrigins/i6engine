@@ -40,8 +40,8 @@ void packFile(std::ofstream & out, const std::string & file) {
 
 	in.close();
 
-	std::string filename = i6engine::utils::split(file, "/").back();
-	filename = i6engine::utils::split(filename, "\\").back();
+	std::string filename = i6e::utils::split(file, "/").back();
+	filename = i6e::utils::split(filename, "\\").back();
 
 	uint32_t filenameLength = uint32_t(filename.length());
 	clockUtils::compression::Compression<clockUtils::compression::algorithm::HuffmanGeneric> compressor;

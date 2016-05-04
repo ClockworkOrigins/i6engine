@@ -24,7 +24,7 @@
 
 #include "i6engine/api/components/Component.h"
 
-namespace i6engine {
+namespace i6e {
 namespace integration {
 namespace components {
 
@@ -62,7 +62,7 @@ namespace components {
 
 } /* namespace components */
 } /* namespace integration */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_INTEGRATION_COMPONENTS_DRIVECOMPONENT_H__ */
 

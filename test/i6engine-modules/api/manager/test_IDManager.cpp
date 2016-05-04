@@ -21,7 +21,7 @@
 #include "gtest/gtest.h"
 
 TEST(IDManager, getID) {
-	i6engine::api::IDManager idm;
+	i6e::api::IDManager idm;
 
 	for (int i = 0; i < 100; ++i) {
 		EXPECT_EQ(idm.getID(), i);
@@ -37,7 +37,7 @@ TEST(IDManager, getID) {
 }
 
 TEST(IDManager, setBounds) {
-	i6engine::api::IDManager idm;
+	i6e::api::IDManager idm;
 
 	idm.setBounds(50, 100);
 
@@ -45,5 +45,5 @@ TEST(IDManager, setBounds) {
 		EXPECT_EQ(50 + i, idm.getID());
 	}
 
-	ASSERT_THROW(idm.getID(), i6engine::utils::exceptions::SystemFailureException);
+	ASSERT_THROW(idm.getID(), i6e::utils::exceptions::SystemFailureException);
 }

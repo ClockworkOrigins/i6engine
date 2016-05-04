@@ -24,7 +24,7 @@
 
 #include "boost/thread.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	KeyboardListener::KeyboardListener() : _keyStates(), _keyTexts(), _objInputKeyFunctions() {
@@ -121,4 +121,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

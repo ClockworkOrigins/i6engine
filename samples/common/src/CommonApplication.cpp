@@ -39,7 +39,7 @@
 
 namespace sample {
 
-	CommonApplication::CommonApplication(bool move, bool shootBall) : i6engine::api::Application(), _showFPS(false), _camera(), _eventMap(), _move(move), _shootBall(shootBall) {
+	CommonApplication::CommonApplication(bool move, bool shootBall) : i6e::api::Application(), _showFPS(false), _camera(), _eventMap(), _move(move), _shootBall(shootBall) {
 		_eventMap["forward"] = std::make_pair(boost::bind(&CommonApplication::Forward, this), false);
 		_eventMap["backward"] = std::make_pair(boost::bind(&CommonApplication::Backward, this), false);
 		_eventMap["left"] = std::make_pair(boost::bind(&CommonApplication::Left, this), false);
@@ -58,54 +58,54 @@ namespace sample {
 	}
 
 	void CommonApplication::Initialize() {
-		ISIXE_REGISTERMESSAGETYPE(i6engine::api::messages::InputMessageType, CommonApplication::InputMailbox, this);
+		ISIXE_REGISTERMESSAGETYPE(i6e::api::messages::InputMessageType, CommonApplication::InputMailbox, this);
 	}
 
 	void CommonApplication::AfterInitialize() {
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
 
 		// sets gravity for the game... here like on earth
-		i6engine::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(0, -9.81, 0));
+		i6e::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(0, -9.81, 0));
 
 		// ambient light for the scene
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(0.0, 0.0, 0.0);
+		i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(0.0, 0.0, 0.0);
 
 		// register ESC to close the application
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 
 		// register F12 to take screenshot
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F12, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::GraphicsFacade::takeScreenshot, i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "Screen_", ".jpg"));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F12, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::GraphicsFacade::takeScreenshot, i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "Screen_", ".jpg"));
 
 		// shows fps (activate/deactive using F1)
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F1, i6engine::api::KeyState::KEY_PRESSED, [this]() {
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F1, i6e::api::KeyState::KEY_PRESSED, [this]() {
 			if (!_showFPS) {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->showFPS(0.0, 0.0, "RPG/StaticImage", "RPG/Blanko", "RPG", "TbM_Filling");
+				i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->showFPS(0.0, 0.0, "RPG/StaticImage", "RPG/Blanko", "RPG", "TbM_Filling");
 			} else {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->hideFPS();
+				i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->hideFPS();
 			}
 			_showFPS = !_showFPS;
 		});
 
 		// registration of movements
-		i6engine::api::InputFacade * inputFacade = i6engine::api::EngineController::GetSingleton().getInputFacade();
+		i6e::api::InputFacade * inputFacade = i6e::api::EngineController::GetSingleton().getInputFacade();
 
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_W, "forward");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_S, "backward");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_A, "left");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_D, "right");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_LCONTROL, "down");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_SPACE, "up");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_Q, "rotateRight");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_E, "rotateLeft");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_DELETE, "rotateLeft");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_INSERT, "rotateRight");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_HOME, "rotateUp");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_END, "rotateDown");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGUP, "leanLeft");
-		inputFacade->setKeyMapping(i6engine::api::KeyCode::KC_PGDOWN, "leanRight");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_W, "forward");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_S, "backward");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_A, "left");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_D, "right");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_LCONTROL, "down");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_SPACE, "up");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_Q, "rotateRight");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_E, "rotateLeft");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_DELETE, "rotateLeft");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_INSERT, "rotateRight");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_HOME, "rotateUp");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_END, "rotateDown");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_PGUP, "leanLeft");
+		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_PGDOWN, "leanRight");
 	}
 
 	void CommonApplication::Tick() {
@@ -126,26 +126,26 @@ namespace sample {
 	void CommonApplication::ShutDown() {
 	}
 
-	void CommonApplication::InputMailbox(const i6engine::api::GameMessage::Ptr & msg) {
-		if (_move && msg->getSubtype() == i6engine::api::keyboard::KeyKeyboard) { // for movement of the camera
-			i6engine::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6engine::api::input::Input_Keyboard_Update *>(msg->getContent());
-			if (!i6engine::api::EngineController::GetSingleton().getGUIFacade()->getInputCaptured()) {
-				std::string key = i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(iku->code);
+	void CommonApplication::InputMailbox(const i6e::api::GameMessage::Ptr & msg) {
+		if (_move && msg->getSubtype() == i6e::api::keyboard::KeyKeyboard) { // for movement of the camera
+			i6e::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6e::api::input::Input_Keyboard_Update *>(msg->getContent());
+			if (!i6e::api::EngineController::GetSingleton().getGUIFacade()->getInputCaptured()) {
+				std::string key = i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(iku->code);
 
 				if (_eventMap.find(key) != _eventMap.end()) {
-					_eventMap[key].second = iku->pressed != i6engine::api::KeyState::KEY_RELEASED;
+					_eventMap[key].second = iku->pressed != i6e::api::KeyState::KEY_RELEASED;
 				} else {
-					if (iku->code == i6engine::api::KeyCode::KC_MBLeft && !i6engine::api::EngineController::GetSingleton().getGUIFacade()->getOnWindow() && iku->pressed == i6engine::api::KeyState::KEY_PRESSED && _shootBall) {
-						i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+					if (iku->code == i6e::api::KeyCode::KC_MBLeft && !i6e::api::EngineController::GetSingleton().getGUIFacade()->getOnWindow() && iku->pressed == i6e::api::KeyState::KEY_PRESSED && _shootBall) {
+						i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
 						Vec3 pos = ssc->getPosition();
 
-						i6engine::api::attributeMap paramsPSC;
+						i6e::api::attributeMap paramsPSC;
 						pos.insertInMap("pos", paramsPSC);
-						i6engine::api::objects::GOTemplate tmpl;
-						tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
-						i6engine::api::EngineController::GetSingleton().getObjectFacade()->createGO("Ball", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this, ssc](i6engine::api::GOPtr go) {
-							auto cc = _camera.get()->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent);
-							go->getGOC<i6engine::api::PhysicalStateComponent>(i6engine::api::components::ComponentTypes::PhysicalStateComponent)->setLinearVelocity(i6engine::math::rotateVector((cc->getLookAt() - cc->getPosition() + Vec3(0.0, 0.0, 2.0)).normalize() * 100.0, ssc->getRotation()), 2);
+						i6e::api::objects::GOTemplate tmpl;
+						tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+						i6e::api::EngineController::GetSingleton().getObjectFacade()->createGO("Ball", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this, ssc](i6e::api::GOPtr go) {
+							auto cc = _camera.get()->getGOC<i6e::api::CameraComponent>(i6e::api::components::ComponentTypes::CameraComponent);
+							go->getGOC<i6e::api::PhysicalStateComponent>(i6e::api::components::ComponentTypes::PhysicalStateComponent)->setLinearVelocity(i6e::math::rotateVector((cc->getLookAt() - cc->getPosition() + Vec3(0.0, 0.0, 2.0)).normalize() * 100.0, ssc->getRotation()), 2);
 						});
 					}
 				}
@@ -154,62 +154,62 @@ namespace sample {
 	}
 
 	void CommonApplication::Forward() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, 2.0), ssc->getRotation()));
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
+		ssc->setPosition(ssc->getPosition() + i6e::math::rotateVector(Vec3(0.0, 0.0, 2.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Backward() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 0.0, -2.0), ssc->getRotation()));
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
+		ssc->setPosition(ssc->getPosition() + i6e::math::rotateVector(Vec3(0.0, 0.0, -2.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Left() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(2.0, 0.0, 0.0), ssc->getRotation()));
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
+		ssc->setPosition(ssc->getPosition() + i6e::math::rotateVector(Vec3(2.0, 0.0, 0.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Right() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(-2.0, 0.0, 0.0), ssc->getRotation()));
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
+		ssc->setPosition(ssc->getPosition() + i6e::math::rotateVector(Vec3(-2.0, 0.0, 0.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Down() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, -2.0, 0.0), ssc->getRotation()));
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
+		ssc->setPosition(ssc->getPosition() + i6e::math::rotateVector(Vec3(0.0, -2.0, 0.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::Up() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
-		ssc->setPosition(ssc->getPosition() + i6engine::math::rotateVector(Vec3(0.0, 2.0, 0.0), ssc->getRotation()));
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
+		ssc->setPosition(ssc->getPosition() + i6e::math::rotateVector(Vec3(0.0, 2.0, 0.0), ssc->getRotation()));
 	}
 
 	void CommonApplication::RotateLeft() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), -(PI / 48)));
 	}
 
 	void CommonApplication::RotateRight() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), (PI / 48)));
 	}
 
 	void CommonApplication::RotateUp() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), -(PI / 48)));
 	}
 
 	void CommonApplication::RotateDown() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), (PI / 48)));
 	}
 
 	void CommonApplication::LeanLeft() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), -(PI / 48)));
 	}
 
 	void CommonApplication::LeanRight() {
-		i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> ssc = _camera.get()->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::StaticStateComponent);
+		i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
 		ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), (PI / 48)));
 	}
 

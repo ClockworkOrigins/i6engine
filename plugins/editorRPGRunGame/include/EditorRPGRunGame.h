@@ -7,13 +7,13 @@
 
 #include <QObject>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	class EditorRPGRunGame : public QObject, public rpg::RPGApplication, public editor::plugins::RunGamePluginInterface {
 		Q_OBJECT
-		Q_PLUGIN_METADATA(IID "i6engine.editor.runGame.RunGamePluginInterface")
-		Q_INTERFACES(i6engine::editor::plugins::RunGamePluginInterface)
+		Q_PLUGIN_METADATA(IID "i6e.editor.runGame.RunGamePluginInterface")
+		Q_INTERFACES(i6e::editor::plugins::RunGamePluginInterface)
 
 	public:
 		QString getMenuEntry() const override {
@@ -46,6 +46,6 @@ namespace plugins {
 	};
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_PLUGINS_EDITORRPGRUNGAME_H__ */

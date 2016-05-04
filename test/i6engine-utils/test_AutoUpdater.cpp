@@ -27,7 +27,7 @@ void testIt(int32_t i) {
 }
 
 TEST(AutoUpdater, operatorTest) {
-	i6engine::utils::AutoUpdater<int32_t> ud(5);
+	i6e::utils::AutoUpdater<int32_t> ud(5);
 
 	int test = ud;
 
@@ -40,7 +40,7 @@ TEST(AutoUpdater, operatorTest) {
 }
 
 TEST(AutoUpdater, Updater) {
-	i6engine::utils::AutoUpdater<int32_t> ud(5);
+	i6e::utils::AutoUpdater<int32_t> ud(5);
 
 	ud.registerUpdate(std::bind(&testIt, std::placeholders::_1));
 
@@ -62,13 +62,13 @@ TEST(AutoUpdater, Updater) {
 }
 
 TEST(AutoUpdater, operatorPlusPlus) {
-	i6engine::utils::AutoUpdater<int> i(5);
+	i6e::utils::AutoUpdater<int> i(5);
 
 	EXPECT_EQ(5, i++);
 	EXPECT_EQ(6, i);
 	EXPECT_EQ(7, ++i);
 
-	i6engine::utils::AutoUpdater<uint64_t> ui(5);
+	i6e::utils::AutoUpdater<uint64_t> ui(5);
 
 	EXPECT_EQ(5, ui++);
 	EXPECT_EQ(6, ui);

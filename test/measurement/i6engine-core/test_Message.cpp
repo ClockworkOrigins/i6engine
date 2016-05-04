@@ -24,7 +24,7 @@
 #include "gtest/gtest.h"
 
 TEST(Message, Serialize) {
-	i6engine::core::Message::Ptr msg(new i6engine::core::Message(0, 0, i6engine::core::Method::Create, new i6engine::core::MessageStruct(), i6engine::core::Subsystem::Unknown));
+	i6e::core::Message::Ptr msg(new i6e::core::Message(0, 0, i6e::core::Method::Create, new i6e::core::MessageStruct(), i6e::core::Subsystem::Unknown));
 
 	std::cout << msg->Serialize().size() << std::endl;
 	std::cout << msg->Serialize() << std::endl;

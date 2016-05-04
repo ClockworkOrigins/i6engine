@@ -25,7 +25,7 @@
 
 #include "boost/make_shared.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	TerrainAppearanceComponent::TerrainAppearanceComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _heightmap(), _heightdata(), _size(), _inputScale(), _vertices(), _layers(), _minX(), _maxX(), _minY(), _maxY() {
@@ -203,4 +203,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -22,7 +22,7 @@
 #include "i6engine/api/configs/AudioConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	AudioFacade::AudioFacade() : _handleCounter(0) {
@@ -70,4 +70,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

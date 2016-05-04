@@ -29,7 +29,7 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	/**
@@ -70,7 +70,7 @@ namespace utils {
 	}
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_I6ESTRING_H__ */
 

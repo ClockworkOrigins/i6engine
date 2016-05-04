@@ -26,7 +26,7 @@
 
 #include "boost/thread/mutex.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	/**
@@ -86,7 +86,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_IDMANAGER_H__ */
 

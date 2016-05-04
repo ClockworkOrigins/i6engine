@@ -22,7 +22,7 @@
 
 #include "gtest/gtest.h"
 
-using i6engine::utils::RangedMap;
+using i6e::utils::RangedMap;
 
 TEST(RangedMap, comparisonMapToRangedMap) {
 	const int ENTRIES = 3000;
@@ -35,7 +35,7 @@ TEST(RangedMap, comparisonMapToRangedMap) {
 	uint64_t startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 	for (int i = 0; i < RUNS; i++) {
 		for (int j = 0; j < ENTRIES; j++) {
-			vec[size_t(j)] = int(i6engine::utils::Random::GetSingleton().rand(20));
+			vec[size_t(j)] = int(i6e::utils::Random::GetSingleton().rand(20));
 		}
 
 		for (int j = 0; j < ENTRIES; j++) {
@@ -54,7 +54,7 @@ TEST(RangedMap, comparisonMapToRangedMap) {
 	startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 	for (int i = 0; i < RUNS; i++) {
 		for (int j = 0; j < ENTRIES; j++) {
-			vec[size_t(j)] = int(i6engine::utils::Random::GetSingleton().rand(20));
+			vec[size_t(j)] = int(i6e::utils::Random::GetSingleton().rand(20));
 		}
 
 		for (int j = 0; j < ENTRIES; j++) {
@@ -86,7 +86,7 @@ TEST(RangedMap, comparisonMapToRangedMap2) {
 	uint64_t endTime;
 	uint64_t startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 	for (int i = 0; i < RUNS; i++) {
-		int rnd = int(i6engine::utils::Random::GetSingleton().rand(ENTRIES));
+		int rnd = int(i6e::utils::Random::GetSingleton().rand(ENTRIES));
 
 		if (nm[rnd] < 5) {
 			nm[rnd]++;
@@ -100,7 +100,7 @@ TEST(RangedMap, comparisonMapToRangedMap2) {
 
 	startTime = uint64_t(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 	for (int i = 0; i < RUNS; i++) {
-		int rnd = int(i6engine::utils::Random::GetSingleton().rand(ENTRIES));
+		int rnd = int(i6e::utils::Random::GetSingleton().rand(ENTRIES));
 
 		if (rm.get(rnd) < 5) {
 			rm.set(rnd, rm.get(rnd) + 1);
@@ -125,7 +125,7 @@ TEST(RangedMap, comparisonMapToRangedMapSet) {
 	std::vector<int> orderList;
 
 	while (orderSet.size() < ENTRIES) {
-		int rnd = int(i6engine::utils::Random::GetSingleton().rand(ENTRIES));
+		int rnd = int(i6e::utils::Random::GetSingleton().rand(ENTRIES));
 		size_t before = orderSet.size();
 		orderSet.insert(rnd);
 		if (before < orderSet.size()) {
@@ -169,7 +169,7 @@ TEST(RangedMap, comparisonMapToRangedMapGet) {
 	std::vector<std::pair<int, int>> orderList;
 
 	while (orderSet.size() < ENTRIES) {
-		int rnd = int(i6engine::utils::Random::GetSingleton().rand(ENTRIES));
+		int rnd = int(i6e::utils::Random::GetSingleton().rand(ENTRIES));
 		size_t before = orderSet.size();
 		orderSet.insert(rnd);
 		if (before < orderSet.size()) {

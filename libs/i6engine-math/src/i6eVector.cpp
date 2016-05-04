@@ -23,7 +23,7 @@
 #include "OGRE/OgreVector2.h"
 #include "OGRE/OgreVector3.h"
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 
 	const double i6eVector::EPSILON = 1e-15;
@@ -130,4 +130,4 @@ namespace math {
 	}
 
 } /* namespace math */
-} /* namespace i6engine */
+} /* namespace i6e */

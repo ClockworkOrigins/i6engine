@@ -27,7 +27,7 @@
 
 #include "components/DriveComponent.h"
 
-namespace i6engine {
+namespace i6e {
 namespace integration {
 
 	MeshStriderShapeIntegrationTestApplication::MeshStriderShapeIntegrationTestApplication() : CommonApplication(true, false) {
@@ -101,4 +101,4 @@ namespace integration {
 	}
 
 } /* namespace integration */
-} /* namespace i6engine */
+} /* namespace i6e */

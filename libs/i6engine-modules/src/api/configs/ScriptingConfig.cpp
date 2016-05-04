@@ -16,7 +16,7 @@
 
 #include "i6engine/api/configs/ScriptingConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace scripting {
 
@@ -25,4 +25,4 @@ namespace scripting {
 
 } /* namespace scripting */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

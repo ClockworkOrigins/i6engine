@@ -3,7 +3,7 @@
 #include "api/components/CameraComponent.h"
 #include "api/objects/GameObject.h"
 
-using namespace i6engine;
+using namespace i6e;
 
 class TemplateObj {
 public:

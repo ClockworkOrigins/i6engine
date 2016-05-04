@@ -27,7 +27,7 @@
 #include "i6engine/modules/graphics/GraphicsMailbox.h"
 #include "i6engine/modules/graphics/GraphicsManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GraphicsController::GraphicsController(HWND hWnd) : core::ModuleController(core::Subsystem::Graphic), _manager(nullptr), _mailbox(nullptr), _hWnd(hWnd) {
@@ -68,4 +68,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

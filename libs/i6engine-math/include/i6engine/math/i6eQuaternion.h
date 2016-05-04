@@ -38,7 +38,7 @@ namespace Ogre {
 } /* namespace Ogre */
 class btQuaternion;
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 
 	class i6eVector;
@@ -293,9 +293,9 @@ namespace math {
 	ISIXE_MATH_API double scalProd(const i6eQuaternion & p, const i6eQuaternion & q);
 
 } /* namespace math */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-typedef i6engine::math::i6eQuaternion Quaternion;
+typedef i6e::math::i6eQuaternion Quaternion;
 
 #endif /* __I6ENGINE_MATH_I6EQUATERNION_H__ */
 

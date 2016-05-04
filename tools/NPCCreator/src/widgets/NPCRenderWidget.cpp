@@ -2,7 +2,7 @@
 
 #include "widgets/NPCEditWidget.h"
 
-namespace i6engine {
+namespace i6e {
 namespace tools {
 namespace npcCreator {
 namespace widgets {
@@ -17,4 +17,4 @@ namespace widgets {
 } /* namespace widgets */
 } /* namespace npcCreator */
 } /* namespace tools */
-} /* namespace i6engine */
+} /* namespace i6e */

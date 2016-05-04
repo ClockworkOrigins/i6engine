@@ -30,7 +30,7 @@
 #include "boost/archive/text_oarchive.hpp"
 #include "boost/serialization/export.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	enum class Subsystem;
@@ -194,7 +194,7 @@ namespace core {
 	std::ostream & operator<<(std::ostream & stream, const Message::Ptr & msg);
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_MESSAGE_H__ */
 

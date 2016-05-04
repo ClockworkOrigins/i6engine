@@ -22,7 +22,7 @@
 #include "i6engine/api/configs/GraphicsConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	void DebugDrawer::drawLine(const btVector3 & from, const btVector3 & to, const btVector3 & col) {
@@ -46,4 +46,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

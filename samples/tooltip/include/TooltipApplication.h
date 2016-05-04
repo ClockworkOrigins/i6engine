@@ -21,7 +21,7 @@
 
 namespace sample {
 
-	class TooltipApplication : public i6engine::api::Application {
+	class TooltipApplication : public i6e::api::Application {
 	public:
 		TooltipApplication();
 

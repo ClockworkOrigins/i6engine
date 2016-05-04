@@ -38,7 +38,7 @@ namespace serialization {
 } /* namespace serialization */
 } /* namespace boost */
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	/**
@@ -133,7 +133,7 @@ namespace core {
 	ISIXE_CORE_API std::ostream & operator<<(std::ostream & stream, const IPKey & key);
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_IPKEY_H__ */
 

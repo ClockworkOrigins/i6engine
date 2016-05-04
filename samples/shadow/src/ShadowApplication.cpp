@@ -39,42 +39,42 @@ namespace sample {
 	void ShadowApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
 
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
 
 		// add ComboBox with choices for different shadow techniques
 		gf->addComboBox("ShadowTechniques", "RPG/Combobox", 0.85, 0.0, 0.15, 0.2, [](std::string s) {
 			if (s == STENCIL_ADDITIVE) {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique::Stencil_Additive);
+				i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6e::api::graphics::ShadowTechnique::Stencil_Additive);
 			} else if (s == STENCIL_MODULATIVE) {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique::Stencil_Modulative);
+				i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6e::api::graphics::ShadowTechnique::Stencil_Modulative);
 			}
 		});
 		gf->addTextToWidget("ShadowTechniques", STENCIL_ADDITIVE);
 		gf->addTextToWidget("ShadowTechniques", STENCIL_MODULATIVE);
 
-		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
+		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
 		// a camera to see the scene and move around
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 			{
-				i6engine::api::attributeMap params;
+				i6e::api::attributeMap params;
 				params.insert(std::make_pair("pos", "0 5 -20"));
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", params, "", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("StaticState", params, "", false, false));
 			}
-			of->createGO("SpectatorCam", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this](i6engine::api::GOPtr go) {
+			of->createGO("SpectatorCam", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this](i6e::api::GOPtr go) {
 				_camera = go;
 			});
 		}
 		// a ground so we can see shadows on it
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			of->createObject("Floor", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			i6e::api::objects::GOTemplate tmpl;
+			of->createObject("Floor", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		// one static spotlight
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			i6engine::api::attributeMap params;
+			i6e::api::objects::GOTemplate tmpl;
+			i6e::api::attributeMap params;
 			params.insert(std::make_pair("lightType", "2"));
 			params.insert(std::make_pair("spotLightRangeInner", "30.0"));
 			params.insert(std::make_pair("spotLightRangeOuter", "50.0"));
@@ -84,30 +84,30 @@ namespace sample {
 			params.insert(std::make_pair("attenuation", "100000 1 0 0"));
 			Vec3(-1500, -1750, -1300).normalize().insertInMap("direction", params);
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("LuminousAppearance", params, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("LuminousAppearance", params, "", false, false));
 
-			of->createObject("Light", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Light", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		// one dynamic point light being moved around by a mover
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 			{
-				i6engine::api::attributeMap params;
+				i6e::api::attributeMap params;
 				params.insert(std::make_pair("lightType", "0"));
 				params.insert(std::make_pair("diffuseColour", "0.35 0.35 0.38"));
 				params.insert(std::make_pair("specularColour", "1 1 1"));
 				params.insert(std::make_pair("attenuation", "80 1 0.0005 0"));
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("LuminousAppearance", params, "", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("LuminousAppearance", params, "", false, false));
 			}
 			{
-				i6engine::api::attributeMap params;
+				i6e::api::attributeMap params;
 				params.insert(std::make_pair("pos", "0 0 0"));
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
 			}
 			{
-				i6engine::api::attributeMap params;
+				i6e::api::attributeMap params;
 				params.insert(std::make_pair("keyframes", "11"));
 				params.insert(std::make_pair("keyframe_0_pos", "3 7.5 -7"));
 				params.insert(std::make_pair("keyframe_0_rot", "1 0 0 0"));
@@ -132,22 +132,22 @@ namespace sample {
 				params.insert(std::make_pair("keyframe_10_pos", "3 7.5 -7"));
 				params.insert(std::make_pair("keyframe_10_rot", "1 0 0 0"));
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("MoverInterpolate", params, "", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("MoverInterpolate", params, "", false, false));
 			}
 
-			of->createObject("MoverLight", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("MoverLight", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		// some columns casting shadows
 		for (int x = -2; x <= 2; ++x) {
 			for (int z = -2; z <= 2; ++z) {
 				if (x != 0 || z != 0) {
-					i6engine::api::objects::GOTemplate tmpl;
-					i6engine::api::attributeMap params;
+					i6e::api::objects::GOTemplate tmpl;
+					i6e::api::attributeMap params;
 					Vec3 pos(x * 3.0, 1.5, z * 3.0);
 					pos.insertInMap("pos", params);
 
-					tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
-					of->createObject("Column", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+					tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
+					of->createObject("Column", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 				}
 			}
 		}

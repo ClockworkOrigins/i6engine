@@ -27,17 +27,17 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 	app.setName("RPG Sample");
 
-	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
+	i6e::api::EngineController::GetSingletonPtr()->registerApplication(app);
 
 #ifdef ISIXE_WITH_CONSOLE
-	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false);
+	i6e::api::EngineController::GetSingletonPtr()->registerDefault(false);
 #else
-	HWND hWnd = i6engine::api::EngineController::GetSingletonPtr()->createWindow(hInstance);
+	HWND hWnd = i6e::api::EngineController::GetSingletonPtr()->createWindow(hInstance);
 
-	i6engine::api::EngineController::GetSingletonPtr()->registerDefault(false, hWnd);
+	i6e::api::EngineController::GetSingletonPtr()->registerDefault(false, hWnd);
 #endif
 
-	i6engine::api::EngineController::GetSingletonPtr()->start();
+	i6e::api::EngineController::GetSingletonPtr()->start();
 
 	return 0;
 }

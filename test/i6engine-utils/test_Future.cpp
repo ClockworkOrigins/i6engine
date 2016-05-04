@@ -21,8 +21,8 @@
 
 #include "gtest/gtest.h"
 
-std::shared_ptr<i6engine::utils::Future<int>> waitAndReturnValue(int value) {
-	std::shared_ptr<i6engine::utils::Future<int>> ret = std::make_shared<i6engine::utils::Future<int>>();
+std::shared_ptr<i6e::utils::Future<int>> waitAndReturnValue(int value) {
+	std::shared_ptr<i6e::utils::Future<int>> ret = std::make_shared<i6e::utils::Future<int>>();
 	std::thread([ret, value]() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 		ret->push(value);

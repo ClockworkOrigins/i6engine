@@ -20,7 +20,7 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	const Message & Message::operator=(const Message &) {
@@ -92,9 +92,9 @@ namespace core {
 #endif /* ISIXE_WITH_PROFILING */
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-BOOST_CLASS_EXPORT_GUID(i6engine::core::Message, "0")
-BOOST_CLASS_IMPLEMENTATION(i6engine::core::Message, boost::serialization::object_serializable)
-BOOST_CLASS_EXPORT_GUID(i6engine::core::MessageStruct, "1")
-BOOST_CLASS_IMPLEMENTATION(i6engine::core::MessageStruct, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::core::Message, "0")
+BOOST_CLASS_IMPLEMENTATION(i6e::core::Message, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::core::MessageStruct, "1")
+BOOST_CLASS_IMPLEMENTATION(i6e::core::MessageStruct, boost::serialization::object_serializable)

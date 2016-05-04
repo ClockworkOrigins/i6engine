@@ -38,55 +38,55 @@ namespace sample {
 	void ScriptingApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
 
-		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
+		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
 
 		of->registerCTemplate("ScriptingShatter", boost::bind(&components::ScriptingShatterComponent::createC, _1, _2));
 
 		// a camera to see the scene and move around
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 			{
-				i6engine::api::attributeMap params;
+				i6e::api::attributeMap params;
 				params.insert(std::make_pair("pos", "0 5 -20"));
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", params, "", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("StaticState", params, "", false, false));
 			}
-			of->createGO("SpectatorCam", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this](i6engine::api::GOPtr go) {
+			of->createGO("SpectatorCam", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this](i6e::api::GOPtr go) {
 				_camera = go;
 			});
 		}
 		// a ground so we can see shadows on it
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			of->createObject("Floor", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			i6e::api::objects::GOTemplate tmpl;
+			of->createObject("Floor", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		// a sun
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			of->createObject("Sun", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			i6e::api::objects::GOTemplate tmpl;
+			of->createObject("Sun", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		// first scripted block
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 			{
-				i6engine::api::attributeMap params;
+				i6e::api::attributeMap params;
 				params.insert(std::make_pair("pos", "10 1.0 0.0"));
 				Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0).insertInMap("rot", params);
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
 			}
-			of->createObject("ScriptBlock", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ScriptBlock", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 			{
-				i6engine::api::attributeMap params;
+				i6e::api::attributeMap params;
 				params.insert(std::make_pair("pos", "-10 1.0 0.0"));
 				Quaternion(Vec3(0.0, 1.0, 0.0), 3 * PI / 2.0).insertInMap("rot", params);
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
 			}
-			of->createObject("ScriptBlock", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ScriptBlock", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 	}
 

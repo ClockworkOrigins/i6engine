@@ -20,7 +20,7 @@
 #include <qplugin.h>
 #include <QWidget>
 
-namespace i6engine {
+namespace i6e {
 namespace editor {
 namespace plugins {
 
@@ -72,8 +72,8 @@ namespace plugins {
 
 } /* namespace plugins */
 } /* namespace editor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_DECLARE_INTERFACE(i6engine::editor::plugins::TypePluginInterface, "i6engine.editor.type.TypePluginInterface")
+Q_DECLARE_INTERFACE(i6e::editor::plugins::TypePluginInterface, "i6e.editor.type.TypePluginInterface")
 
 #endif /* __I6ENGINE_EDITOR_PLUGINS_TYPEPLUGININTERFACE_H__ */

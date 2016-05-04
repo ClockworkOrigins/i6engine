@@ -43,7 +43,7 @@
  * The whole initialising processlooks like this:
  * Game -> EngineHandle -> EngineModuleController -> EngineCoreController -> SubSystemController -> SubSystems
  */
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	class SubSystemController;
@@ -182,7 +182,7 @@ namespace core {
 	};
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_ENGINECORECONTROLLER_H__ */
 

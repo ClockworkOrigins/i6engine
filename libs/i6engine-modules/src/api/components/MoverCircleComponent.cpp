@@ -30,7 +30,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	MoverCircleComponent::MoverCircleComponent(const int64_t id, const attributeMap & params) : MoverComponent(id, params), _circleCenter(), _circleAxis() {
@@ -170,4 +170,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -26,7 +26,7 @@
 #include "i6engine/modules/input/InputMailbox.h"
 #include "i6engine/modules/input/InputManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	InputController::InputController() : core::ModuleController(core::Subsystem::Input), _mailbox(nullptr), _manager(nullptr) {
@@ -62,4 +62,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

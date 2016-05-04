@@ -26,7 +26,7 @@
 #include "boost/make_shared.hpp"
 #include "boost/thread/mutex.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	/**
@@ -104,7 +104,7 @@ namespace utils {
 	};
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_SINGLETON_H__ */
 

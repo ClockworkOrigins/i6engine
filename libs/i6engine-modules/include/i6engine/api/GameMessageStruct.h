@@ -24,7 +24,7 @@
 
 #include "i6engine/core/messaging/MessageStruct.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	/**
@@ -33,7 +33,7 @@ namespace api {
 	typedef core::MessageStruct GameMessageStruct;
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_GAMEMESSAGESTRUCT_H__ */
 

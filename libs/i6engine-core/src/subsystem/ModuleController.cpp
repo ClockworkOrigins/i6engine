@@ -31,7 +31,7 @@
 
 #include "boost/make_shared.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	ModuleController::ModuleController(Subsystem sub) : MessageSubscriber(), _subsystem(sub), _frameTime(0), _messagingController(), _ctrl(nullptr), _ptrTimer(nullptr), _isRunning(false), _subsystemController(), _type(SubsystemType::Ticking), _waitingSubsystems(), _notifiedSubsystems(), _waitingMessages(), _messages(), _lock(), _conditionVariable()
@@ -226,4 +226,4 @@ namespace core {
 	}
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */

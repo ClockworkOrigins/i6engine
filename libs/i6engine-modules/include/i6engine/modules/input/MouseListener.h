@@ -37,7 +37,7 @@ namespace OIS {
 	class MouseEvent;
 } /* namespace OIS */
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class InputManager;
@@ -143,7 +143,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_MOUSELISTENER_H__ */
 

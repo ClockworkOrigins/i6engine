@@ -11,7 +11,7 @@
 
 #include "clockUtils/iniParser/iniParser.h"
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	EditorSaveObjectRPG::EditorSaveObjectRPG() : _file(), _scriptsPath(), _fileExtension(), _level() {
@@ -46,7 +46,7 @@ namespace plugins {
 		insertMethodDeclaration();
 	}
 
-	bool EditorSaveObjectRPG::saveObject(const i6engine::api::GOPtr & go, tinyxml2::XMLElement *) {
+	bool EditorSaveObjectRPG::saveObject(const i6e::api::GOPtr & go, tinyxml2::XMLElement *) {
 		bool handled = false;
 		if (go->getType() == "NPC") {
 			saveNPC(go->getGOC<rpg::components::DialogCheckerComponent>(rpg::components::config::DialogCheckerComponent)->getNPCIdentifier(), go->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition(), go->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getRotation());
@@ -70,6 +70,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.saveObject.SaveObjectPluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.saveObject.SaveObjectPluginInterface")

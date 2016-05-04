@@ -27,15 +27,15 @@
 
 #include "gtest/gtest.h"
 
-typedef struct TestSubSystemMessage : public i6engine::core::MessageStruct {
+typedef struct TestSubSystemMessage : public i6e::core::MessageStruct {
 	uint32_t tick;
-	TestSubSystemMessage(uint32_t t) : i6engine::core::MessageStruct(), tick(t) {
+	TestSubSystemMessage(uint32_t t) : i6e::core::MessageStruct(), tick(t) {
 	}
 } TestSubSystemMessage;
 
-class Test_SubSystem : public i6engine::core::ModuleController {
+class Test_SubSystem : public i6e::core::ModuleController {
 public:
-	Test_SubSystem(i6engine::core::Subsystem subsystem) : i6engine::core::ModuleController(subsystem), tickCounter() {
+	Test_SubSystem(i6e::core::Subsystem subsystem) : i6e::core::ModuleController(subsystem), tickCounter() {
 	}
 
 	void OnThreadStart() {
@@ -51,14 +51,14 @@ public:
 	uint32_t tickCounter = 0;
 };
 
-class Test_SubSystem2 : public i6engine::core::ModuleController {
+class Test_SubSystem2 : public i6e::core::ModuleController {
 public:
-	Test_SubSystem2(i6engine::core::Subsystem subsystem) : i6engine::core::ModuleController(subsystem), tickCounter() {
+	Test_SubSystem2(i6e::core::Subsystem subsystem) : i6e::core::ModuleController(subsystem), tickCounter() {
 	}
 
 	void OnThreadStart() {
 		_messagingController->registerMessageType(1, this);
-		_ptrMessageMethod.insert(std::make_pair(1, [this](const i6engine::core::Message::Ptr & m) {
+		_ptrMessageMethod.insert(std::make_pair(1, [this](const i6e::core::Message::Ptr & m) {
 			EXPECT_EQ(tickCounter, dynamic_cast<TestSubSystemMessage *>(m->getContent())->tick);
 			receivedMessages++;
 		}));
@@ -76,9 +76,9 @@ public:
 	uint32_t receivedMessages = 0;
 };
 
-class Test_SubSystem3 : public i6engine::core::ModuleController {
+class Test_SubSystem3 : public i6e::core::ModuleController {
 public:
-	Test_SubSystem3(i6engine::core::Subsystem subsystem) : i6engine::core::ModuleController(subsystem), tickCounter() {
+	Test_SubSystem3(i6e::core::Subsystem subsystem) : i6e::core::ModuleController(subsystem), tickCounter() {
 	}
 
 	void OnThreadStart() {
@@ -86,7 +86,7 @@ public:
 
 	void Tick() {
 		for (size_t i = 0; i < 100; i++) {
-			_messagingController->deliverMessage(boost::make_shared<i6engine::core::Message>(1, 1, i6engine::core::Method::Update, new TestSubSystemMessage(tickCounter), _subsystem));
+			_messagingController->deliverMessage(boost::make_shared<i6e::core::Message>(1, 1, i6e::core::Method::Update, new TestSubSystemMessage(tickCounter), _subsystem));
 		}
 		tickCounter++;
 	}
@@ -98,11 +98,11 @@ public:
 };
 
 TEST(Module, Ticking) {
-	i6engine::core::SubSystemController * ssc = new i6engine::core::SubSystemController();
-	i6engine::core::EngineCoreController * ecc = new i6engine::core::EngineCoreController(ssc);
-	i6engine::core::MessagingController * mc = new i6engine::core::MessagingController();
+	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
+	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
+	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6engine::core::Subsystem::Graphic);
+	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
 	s1->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s1, 100000);
 
@@ -123,12 +123,12 @@ TEST(Module, Ticking) {
 }
 
 TEST(Module, TwoTicking) {
-	i6engine::core::SubSystemController * ssc = new i6engine::core::SubSystemController();
-	i6engine::core::EngineCoreController * ecc = new i6engine::core::EngineCoreController(ssc);
-	i6engine::core::MessagingController * mc = new i6engine::core::MessagingController();
+	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
+	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
+	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6engine::core::Subsystem::Graphic);
-	Test_SubSystem * s2 = new Test_SubSystem(i6engine::core::Subsystem::Object);
+	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
+	Test_SubSystem * s2 = new Test_SubSystem(i6e::core::Subsystem::Object);
 	s1->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s1, 100000);
 	s2->setController(ssc, ecc, mc);
@@ -153,14 +153,14 @@ TEST(Module, TwoTicking) {
 }
 
 TEST(Module, Waiting) {
-	i6engine::core::SubSystemController * ssc = new i6engine::core::SubSystemController();
-	i6engine::core::EngineCoreController * ecc = new i6engine::core::EngineCoreController(ssc);
-	i6engine::core::MessagingController * mc = new i6engine::core::MessagingController();
+	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
+	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
+	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6engine::core::Subsystem::Graphic);
-	Test_SubSystem * s2 = new Test_SubSystem(i6engine::core::Subsystem::Object);
+	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
+	Test_SubSystem * s2 = new Test_SubSystem(i6e::core::Subsystem::Object);
 	s1->setController(ssc, ecc, mc);
-	ssc->QueueSubSystemStart(s1, { i6engine::core::Subsystem::Object });
+	ssc->QueueSubSystemStart(s1, { i6e::core::Subsystem::Object });
 	s2->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s2, 100000);
 
@@ -183,15 +183,15 @@ TEST(Module, Waiting) {
 }
 
 TEST(Module, WaitingForTwo) {
-	i6engine::core::SubSystemController * ssc = new i6engine::core::SubSystemController();
-	i6engine::core::EngineCoreController * ecc = new i6engine::core::EngineCoreController(ssc);
-	i6engine::core::MessagingController * mc = new i6engine::core::MessagingController();
+	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
+	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
+	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6engine::core::Subsystem::Graphic);
-	Test_SubSystem * s2 = new Test_SubSystem(i6engine::core::Subsystem::Object);
-	Test_SubSystem * s3 = new Test_SubSystem(i6engine::core::Subsystem::Physic);
+	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
+	Test_SubSystem * s2 = new Test_SubSystem(i6e::core::Subsystem::Object);
+	Test_SubSystem * s3 = new Test_SubSystem(i6e::core::Subsystem::Physic);
 	s1->setController(ssc, ecc, mc);
-	ssc->QueueSubSystemStart(s1, { i6engine::core::Subsystem::Object, i6engine::core::Subsystem::Physic });
+	ssc->QueueSubSystemStart(s1, { i6e::core::Subsystem::Object, i6e::core::Subsystem::Physic });
 	s2->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s2, 100000);
 	s3->setController(ssc, ecc, mc);
@@ -218,17 +218,17 @@ TEST(Module, WaitingForTwo) {
 }
 
 TEST(Module, WaitingChain) {
-	i6engine::core::SubSystemController * ssc = new i6engine::core::SubSystemController();
-	i6engine::core::EngineCoreController * ecc = new i6engine::core::EngineCoreController(ssc);
-	i6engine::core::MessagingController * mc = new i6engine::core::MessagingController();
+	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
+	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
+	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6engine::core::Subsystem::Graphic);
-	Test_SubSystem * s2 = new Test_SubSystem(i6engine::core::Subsystem::Object);
-	Test_SubSystem * s3 = new Test_SubSystem(i6engine::core::Subsystem::Physic);
+	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
+	Test_SubSystem * s2 = new Test_SubSystem(i6e::core::Subsystem::Object);
+	Test_SubSystem * s3 = new Test_SubSystem(i6e::core::Subsystem::Physic);
 	s1->setController(ssc, ecc, mc);
-	ssc->QueueSubSystemStart(s1, { i6engine::core::Subsystem::Object });
+	ssc->QueueSubSystemStart(s1, { i6e::core::Subsystem::Object });
 	s2->setController(ssc, ecc, mc);
-	ssc->QueueSubSystemStart(s2, { i6engine::core::Subsystem::Physic });
+	ssc->QueueSubSystemStart(s2, { i6e::core::Subsystem::Physic });
 	s3->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s3, 100000);
 
@@ -253,14 +253,14 @@ TEST(Module, WaitingChain) {
 }
 
 TEST(Module, WaitingWithMessages) {
-	i6engine::core::SubSystemController * ssc = new i6engine::core::SubSystemController();
-	i6engine::core::EngineCoreController * ecc = new i6engine::core::EngineCoreController(ssc);
-	i6engine::core::MessagingController * mc = new i6engine::core::MessagingController();
+	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
+	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
+	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem2 * s1 = new Test_SubSystem2(i6engine::core::Subsystem::Graphic);
-	Test_SubSystem3 * s2 = new Test_SubSystem3(i6engine::core::Subsystem::Object);
+	Test_SubSystem2 * s1 = new Test_SubSystem2(i6e::core::Subsystem::Graphic);
+	Test_SubSystem3 * s2 = new Test_SubSystem3(i6e::core::Subsystem::Object);
 	s1->setController(ssc, ecc, mc);
-	ssc->QueueSubSystemStart(s1, { i6engine::core::Subsystem::Object });
+	ssc->QueueSubSystemStart(s1, { i6e::core::Subsystem::Object });
 	s2->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s2, 10000);
 

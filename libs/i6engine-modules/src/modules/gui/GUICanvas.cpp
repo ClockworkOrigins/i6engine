@@ -32,7 +32,7 @@
 
 #include "tinyxml2.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	void GUICanvas::load(const std::string & name, const std::string & file, GUIManager * manager, const GUIFactory & factory, std::map<std::string, api::GUIWidget *> & widgets) {
@@ -185,4 +185,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

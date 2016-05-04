@@ -26,7 +26,7 @@
 
 #include "CEGUI/CEGUI.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false), _animations() {
@@ -201,4 +201,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

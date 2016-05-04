@@ -26,7 +26,7 @@
 
 #include "i6engine/rpg/quest/Quest.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace quest {
 
@@ -220,4 +220,4 @@ namespace quest {
 
 } /* namespace quest */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

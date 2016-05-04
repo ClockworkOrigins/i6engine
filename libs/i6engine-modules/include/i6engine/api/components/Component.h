@@ -42,7 +42,7 @@
 #include "boost/function.hpp"
 #include "boost/lexical_cast.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	class Component;
@@ -294,7 +294,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_COMPONENT_H__ */
 

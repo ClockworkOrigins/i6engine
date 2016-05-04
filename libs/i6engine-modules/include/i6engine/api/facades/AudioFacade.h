@@ -31,7 +31,7 @@
 
 #include "i6engine/api/configs/AudioConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	class ISIXE_MODULES_API AudioFacade {
@@ -94,7 +94,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_AUDIOFACADE_H__ */
 

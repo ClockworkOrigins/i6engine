@@ -41,7 +41,7 @@
 	#undef max
 #endif
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace components {
 
@@ -448,4 +448,4 @@ namespace components {
 
 } /* namespace components */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -18,7 +18,7 @@
 
 #include "i6engine/modules/physics/PhysicsNode.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	PhysicsVelocityComponent::PhysicsVelocityComponent(PhysicsNode * node, double mass, double maxSpeed, double resistanceCoefficient, double windage) : _node(node), _mass(mass), _maxSpeed(maxSpeed), _resistanceCoefficient(resistanceCoefficient), _windage(windage), _acceleration(), _handling(api::VelocityComponent::MaxSpeedHandling::StopAcceleration), _callback(), _accelerating(false), _decelerating(false) {
@@ -94,4 +94,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

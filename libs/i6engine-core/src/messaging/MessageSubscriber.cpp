@@ -23,7 +23,7 @@
 
 #include "boost/make_shared.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	void MessageSubscriber::receiveMessage(const Message::Ptr & msg) {
@@ -268,4 +268,4 @@ namespace core {
 	}
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -22,7 +22,7 @@
 #include "i6engine/utils/Semaphore.h"
 #include "i6engine/utils/Splash.h"
 
-namespace i6engine {
+namespace i6e {
 namespace lua {
 namespace utils {
 
@@ -39,19 +39,19 @@ namespace utils {
 	};
 
 	uint32_t rand() {
-		return i6engine::utils::Random::GetSingleton().rand();
+		return i6e::utils::Random::GetSingleton().rand();
 	}
 
 	uint32_t rand(uint32_t max) {
-		return i6engine::utils::Random::GetSingleton().rand(max);
+		return i6e::utils::Random::GetSingleton().rand(max);
 	}
 
 	uint32_t rand(uint32_t min, uint32_t max) {
-		return i6engine::utils::Random::GetSingleton().rand(min, max);
+		return i6e::utils::Random::GetSingleton().rand(min, max);
 	}
 
 	void setSeed(uint32_t seed) {
-		return i6engine::utils::Random::GetSingleton().setSeed(seed);
+		return i6e::utils::Random::GetSingleton().setSeed(seed);
 	}
 
 	void logDebug(const std::string & module, const std::string & message) {
@@ -75,43 +75,43 @@ namespace utils {
 	}
 
 	void setLogLevel(LogLevel::LV level) {
-		ISIXE_LOG_SETLEVEL(i6engine::utils::LogLevel(int(level)));
+		ISIXE_LOG_SETLEVEL(i6e::utils::LogLevel(int(level)));
 	}
 
 } /* namespace rpg */
 } /* namespace lua */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 using namespace luabind;
 
 scope registerUtils() {
 	return
-		def("rand", (uint32_t(*)()) &i6engine::lua::utils::rand),
-		def("rand", (uint32_t(*)(uint32_t)) &i6engine::lua::utils::rand),
-		def("rand", (uint32_t(*)(uint32_t, uint32_t)) &i6engine::lua::utils::rand),
-		def("setSeed", &i6engine::lua::utils::setSeed),
-		def("split", &i6engine::utils::split),
+		def("rand", (uint32_t(*)()) &i6e::lua::utils::rand),
+		def("rand", (uint32_t(*)(uint32_t)) &i6e::lua::utils::rand),
+		def("rand", (uint32_t(*)(uint32_t, uint32_t)) &i6e::lua::utils::rand),
+		def("setSeed", &i6e::lua::utils::setSeed),
+		def("split", &i6e::utils::split),
 
-		class_<i6engine::lua::utils::LogLevel>("LogLevel")
+		class_<i6e::lua::utils::LogLevel>("LogLevel")
 			.def(constructor<>())
 			.enum_("LogLevel")
 			[
-				value("LOGDEBUG", i6engine::lua::utils::LogLevel::LV::LOGDEBUG),
-				value("LOGINFO", i6engine::lua::utils::LogLevel::LV::LOGINFO),
-				value("LOGWARN", i6engine::lua::utils::LogLevel::LV::LOGWARN),
-				value("LOGERROR", i6engine::lua::utils::LogLevel::LV::LOGERROR),
-				value("LOGFATAL", i6engine::lua::utils::LogLevel::LV::LOGFATAL),
-				value("LOGNONE", i6engine::lua::utils::LogLevel::LV::LOGNONE)
+				value("LOGDEBUG", i6e::lua::utils::LogLevel::LV::LOGDEBUG),
+				value("LOGINFO", i6e::lua::utils::LogLevel::LV::LOGINFO),
+				value("LOGWARN", i6e::lua::utils::LogLevel::LV::LOGWARN),
+				value("LOGERROR", i6e::lua::utils::LogLevel::LV::LOGERROR),
+				value("LOGFATAL", i6e::lua::utils::LogLevel::LV::LOGFATAL),
+				value("LOGNONE", i6e::lua::utils::LogLevel::LV::LOGNONE)
 			],
 
-		class_<i6engine::utils::Semaphore>("Semaphore")
+		class_<i6e::utils::Semaphore>("Semaphore")
 			.def(constructor<>())
-			.def("notify", &i6engine::utils::Semaphore::notify)
-			.def("wait", &i6engine::utils::Semaphore::wait),
+			.def("notify", &i6e::utils::Semaphore::notify)
+			.def("wait", &i6e::utils::Semaphore::wait),
 
-		class_<i6engine::utils::Splash>("Splash")
+		class_<i6e::utils::Splash>("Splash")
 			.def(constructor<>())
-			.def("showSplash", &i6engine::utils::Splash::showSplash)
-			.def("closeSplash", &i6engine::utils::Splash::closeSplash)
+			.def("showSplash", &i6e::utils::Splash::showSplash)
+			.def("closeSplash", &i6e::utils::Splash::closeSplash)
 		;
 }

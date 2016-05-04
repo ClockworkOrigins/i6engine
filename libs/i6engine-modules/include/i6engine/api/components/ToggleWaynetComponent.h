@@ -25,7 +25,7 @@
 #include "i6engine/api/components/Component.h"
 #include "i6engine/api/facades/MessageSubscriberFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	/**
@@ -67,7 +67,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_COMPONENTS_TOGGLEWAYNETCOMPONENT_H__ */
 

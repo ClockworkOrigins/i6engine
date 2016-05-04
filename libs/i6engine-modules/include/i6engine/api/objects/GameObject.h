@@ -36,7 +36,7 @@
 
 #include "boost/function.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 	class ObjectMailbox;
 } /* namespace modules */
@@ -339,7 +339,7 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_GAMEOBJECT_H__ */
 

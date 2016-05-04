@@ -19,23 +19,23 @@
 #include "gtest/gtest.h"
 
 TEST(i6eMath, binom) {
-	EXPECT_EQ(10, i6engine::math::binom(5, 3));
-	EXPECT_EQ(10, i6engine::math::binom(5, 2));
-	EXPECT_EQ(13983816, i6engine::math::binom(49, 6));
-	EXPECT_EQ(1, i6engine::math::binom(20, 0));
-	EXPECT_EQ(0, i6engine::math::binom(5, 7));
-	EXPECT_EQ(33, i6engine::math::binom(33, 1));
+	EXPECT_EQ(10, i6e::math::binom(5, 3));
+	EXPECT_EQ(10, i6e::math::binom(5, 2));
+	EXPECT_EQ(13983816, i6e::math::binom(49, 6));
+	EXPECT_EQ(1, i6e::math::binom(20, 0));
+	EXPECT_EQ(0, i6e::math::binom(5, 7));
+	EXPECT_EQ(33, i6e::math::binom(33, 1));
 }
 
 TEST(i6eMath, disPointLine) {
-	EXPECT_FLOAT_EQ(2.5123074f, float(i6engine::math::disPointLine(Vec3(1.0, 2.0, 3.0), Vec3(4.0, 5.0, 6.0), Vec3(6.0, 6.0, 6.0))));
-	EXPECT_FLOAT_EQ(5.0241838f, float(i6engine::math::disPointLine(Vec3(1.0, 0.0, 1.0), Vec3(2.0, 5.0, 2.0), Vec3(5.0, 3.0, -2.0))));
-	ASSERT_THROW(i6engine::math::disPointLine(Vec3(1.0, 0.0, 1.0), Vec3(0.0, 0.0, 0.0), Vec3(5.0, 3.0, -2.0)), i6engine::utils::exceptions::ApiException);
+	EXPECT_FLOAT_EQ(2.5123074f, float(i6e::math::disPointLine(Vec3(1.0, 2.0, 3.0), Vec3(4.0, 5.0, 6.0), Vec3(6.0, 6.0, 6.0))));
+	EXPECT_FLOAT_EQ(5.0241838f, float(i6e::math::disPointLine(Vec3(1.0, 0.0, 1.0), Vec3(2.0, 5.0, 2.0), Vec3(5.0, 3.0, -2.0))));
+	ASSERT_THROW(i6e::math::disPointLine(Vec3(1.0, 0.0, 1.0), Vec3(0.0, 0.0, 0.0), Vec3(5.0, 3.0, -2.0)), i6e::utils::exceptions::ApiException);
 }
 
 TEST(i6eMath, rotateVector) {
 	Vec3 v(1.0, 2.0, 3.0);
 	Quaternion q(1.0, 0.0, 1.0, 0.0);
 
-	EXPECT_EQ(Vec3(6.0, 4.0, -2.0), i6engine::math::rotateVector(v, q));
+	EXPECT_EQ(Vec3(6.0, 4.0, -2.0), i6e::math::rotateVector(v, q));
 }

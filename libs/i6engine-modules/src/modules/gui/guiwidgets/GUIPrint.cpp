@@ -25,7 +25,7 @@
 
 #include "CEGUI/CEGUI.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUIPrint::GUIPrint(const std::string & name, const std::string & type) : api::GUIWidget(name), _lbText(new CEGUI::ListboxTextItem("")), _lifeTime(-1), _alignment(api::gui::Alignment::Left), _text(), _realPosX(), _realPosY(), _startTime() {
@@ -108,4 +108,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

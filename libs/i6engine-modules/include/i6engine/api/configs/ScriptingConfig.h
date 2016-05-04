@@ -25,7 +25,7 @@
 #include "i6engine/api/GameMessageStruct.h"
 #include "i6engine/api/configs/PhysicsConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace scripting {
 	enum ScriptingMessageTypes {
@@ -50,7 +50,7 @@ namespace scripting {
 
 } /* namespace scripting */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_SCRIPTINGCONFIG_H__ */
 

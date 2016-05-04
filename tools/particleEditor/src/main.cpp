@@ -6,8 +6,8 @@
 
 int main(int argc, char ** argv) {
 	QApplication app(argc, argv);
-	i6engine::tools::Config::Init();
-	i6engine::particleEditor::widgets::MainWindow wnd;
+	i6e::tools::Config::Init();
+	i6e::particleEditor::widgets::MainWindow wnd;
 	wnd.show();
 	return app.exec();
 }

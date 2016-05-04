@@ -27,12 +27,12 @@
 namespace sample {
 namespace components {
 
-	ScriptingShatterComponent::ScriptingShatterComponent(int64_t id, const i6engine::api::attributeMap & params) : ShatterComponent(id, params) {
+	ScriptingShatterComponent::ScriptingShatterComponent(int64_t id, const i6e::api::attributeMap & params) : ShatterComponent(id, params) {
 		_objComponentID = config::ComponentTypes::ScriptingShatterComponent;
 	}
 
-	i6engine::api::ComPtr ScriptingShatterComponent::createC(int64_t id, const i6engine::api::attributeMap & params) {
-		return i6engine::utils::make_shared<ScriptingShatterComponent, i6engine::api::Component>(id, params);
+	i6e::api::ComPtr ScriptingShatterComponent::createC(int64_t id, const i6e::api::attributeMap & params) {
+		return i6e::utils::make_shared<ScriptingShatterComponent, i6e::api::Component>(id, params);
 	}
 
 	void ScriptingShatterComponent::Init() {
@@ -40,25 +40,25 @@ namespace components {
 
 		addTicker();
 
-		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>("MoveScript", "init", _objOwnerID);
+		i6e::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>("MoveScript", "init", _objOwnerID);
 	}
 
 	void ScriptingShatterComponent::Finalize() {
 		removeTicker();
 	}
 
-	i6engine::api::attributeMap ScriptingShatterComponent::synchronize() const {
-		i6engine::api::attributeMap params = ShatterComponent::synchronize();
+	i6e::api::attributeMap ScriptingShatterComponent::synchronize() const {
+		i6e::api::attributeMap params = ShatterComponent::synchronize();
 
 		return params;
 	}
 
 	void ScriptingShatterComponent::Tick() {
-		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>("MoveScript", "tick", _objOwnerID);
+		i6e::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>("MoveScript", "tick", _objOwnerID);
 	}
 
-	void ScriptingShatterComponent::shatter(const i6engine::api::GOPtr & other) {
-		i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>("MoveScript", "shatter", _objOwnerID, other->getID());
+	void ScriptingShatterComponent::shatter(const i6e::api::GOPtr & other) {
+		i6e::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>("MoveScript", "shatter", _objOwnerID, other->getID());
 	}
 
 } /* namespace components */

@@ -1,7 +1,7 @@
 #ifndef __I6ENGINE_TOOLS_COMMON_CONFIG_H__
 #define __I6ENGINE_TOOLS_COMMON_CONFIG_H__
 
-namespace i6engine {
+namespace i6e {
 namespace tools {
 
 	class Config {
@@ -13,6 +13,6 @@ namespace tools {
 	};
 
 } /* namespace tools */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_TOOLS_COMMON_CONFIG_H__ */

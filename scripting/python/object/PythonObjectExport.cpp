@@ -57,127 +57,127 @@
 
 #include "boost/python.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace python {
 namespace object {
 
 	boost::python::list getAllObjectsOfType(const std::string & types) {
 		boost::python::list l;
-		std::vector<i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
-		for (std::vector<i6engine::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
+		std::vector<i6e::api::GOPtr> v = i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
+		for (std::vector<i6e::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
 			l.append(*it);
 		}
 		return l;
 	}
 
-	i6engine::api::GOPtr getObject(const int64_t id) {
-		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(id);
+	i6e::api::GOPtr getObject(const int64_t id) {
+		return i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(id);
 	}
 
 	boost::python::list getGOList() {
 		boost::python::list l;
-		std::unordered_map<int64_t, i6engine::api::GOPtr> v = i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap();
-		for (std::unordered_map<int64_t, i6engine::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
+		std::unordered_map<int64_t, i6e::api::GOPtr> v = i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap();
+		for (std::unordered_map<int64_t, i6e::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
 			l.append(it->second);
 		}
 		return l;
 	}
 
 	void deleteAllObjectsOfType(const std::string & types) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->deleteAllObjectsOfType(types);
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->deleteAllObjectsOfType(types);
 	}
 
-	void createObject(const std::string & gTemplate, const i6engine::api::objects::GOTemplate & tmpl, uint32_t uuid, const bool sender) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createObject(gTemplate, tmpl, uuid, sender);
+	void createObject(const std::string & gTemplate, const i6e::api::objects::GOTemplate & tmpl, uint32_t uuid, const bool sender) {
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createObject(gTemplate, tmpl, uuid, sender);
 	}
 
 	void cleanUpAll() {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
 	}
 
 	void loadLevel(const std::string & file, const std::string & flags) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags);
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags);
 	}
 
 	void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile);
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile);
 	}
 
 	void loadLevelCallbackFunc(const std::string & file, const std::string & flags, const std::string & func) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, [func](uint16_t value) {
-			i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, value);
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, [func](uint16_t value) {
+			i6e::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, value);
 		});
 	}
 
 	void loadLevelCallbackScript(const std::string & file, const std::string & flags, const std::string & script, const std::string & func) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, [script, func](uint16_t value) {
-			i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callScript<void>(script, func, value);
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, [script, func](uint16_t value) {
+			i6e::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callScript<void>(script, func, value);
 		});
 	}
 
 	void loadLevelCallbackFunc(const std::string & file, const std::string & flags, const std::string & resourcesFile, const std::string & func) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile, [func](uint16_t value) {
-			i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, value);
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile, [func](uint16_t value) {
+			i6e::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, value);
 		});
 	}
 
 	void loadLevelCallbackScript(const std::string & file, const std::string & flags, const std::string & resourcesFile, const std::string & script, const std::string & func) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile, [script, func](uint16_t value) {
-			i6engine::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callScript<void>(script, func, value);
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile, [script, func](uint16_t value) {
+			i6e::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callScript<void>(script, func, value);
 		});
 	}
 
 	uint32_t getFrameTime() {
-		return i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime();
+		return i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime();
 	}
 
-	void createGO(const std::string & gTemplate, const i6engine::api::objects::GOTemplate & tmpl, uint32_t uuid, const bool sender, const std::string & func) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO(gTemplate, tmpl, uuid, sender, [func](i6engine::api::GOPtr go) {
-			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, go);
+	void createGO(const std::string & gTemplate, const i6e::api::objects::GOTemplate & tmpl, uint32_t uuid, const bool sender, const std::string & func) {
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO(gTemplate, tmpl, uuid, sender, [func](i6e::api::GOPtr go) {
+			i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, go);
 		});
 	}
 
-	void createComponent(int64_t goid, int64_t coid, const std::string & component, const i6engine::api::attributeMap & params) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponent(goid, coid, component, params);
+	void createComponent(int64_t goid, int64_t coid, const std::string & component, const i6e::api::attributeMap & params) {
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponent(goid, coid, component, params);
 	}
 
-	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6engine::api::attributeMap & params, const std::string & script, const std::string & func) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [script, func](i6engine::api::ComPtr c) {
-			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func, c);
+	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6e::api::attributeMap & params, const std::string & script, const std::string & func) {
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [script, func](i6e::api::ComPtr c) {
+			i6e::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func, c);
 		});
 	}
 
-	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6engine::api::attributeMap & params, const std::string & func) {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [func](i6engine::api::ComPtr c) {
-			i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, c);
+	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6e::api::attributeMap & params, const std::string & func) {
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [func](i6e::api::ComPtr c) {
+			i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, c);
 		});
 	}
 
 	void resetObjectSubSystem() {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->resetSubSystem();
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->resetSubSystem();
 	}
 
 	void pauseObject() {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->pause();
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->pause();
 	}
 
 	void unpauseObject() {
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->unpause();
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->unpause();
 	}
 
-	void rayTest(i6engine::api::PhysicalStateComponent * c, const Vec3 & from, const Vec3 & to, i6engine::api::PhysicalStateComponent::RayTestRepetition rtr, i6engine::api::PhysicalStateComponent::RayTestNotify rtn, const std::string & script, const std::string & func, const int64_t rayID) {
-		c->rayTest(from, to, rtr, rtn, boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ScriptingMessageType, i6engine::api::scripting::ScrRayResult, i6engine::core::Method::Update, new i6engine::api::scripting::Scripting_RayResult_Update(script, func, rayID), i6engine::core::Subsystem::Unknown));
+	void rayTest(i6e::api::PhysicalStateComponent * c, const Vec3 & from, const Vec3 & to, i6e::api::PhysicalStateComponent::RayTestRepetition rtr, i6e::api::PhysicalStateComponent::RayTestNotify rtn, const std::string & script, const std::string & func, const int64_t rayID) {
+		c->rayTest(from, to, rtr, rtn, boost::make_shared<i6e::api::GameMessage>(i6e::api::messages::ScriptingMessageType, i6e::api::scripting::ScrRayResult, i6e::core::Method::Update, new i6e::api::scripting::Scripting_RayResult_Update(script, func, rayID), i6e::core::Subsystem::Unknown));
 	}
 
-	void insertPairInAttributeMap(i6engine::api::attributeMap * am, const std::string & key, const std::string & value) {
+	void insertPairInAttributeMap(i6e::api::attributeMap * am, const std::string & key, const std::string & value) {
 		am->insert(std::make_pair(key, value));
 	}
 
-	struct ComponentWrapper : public i6engine::api::Component, public boost::python::wrapper<i6engine::api::Component> {
-		ComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : Component(id, params), boost::python::wrapper<i6engine::api::Component>() {
+	struct ComponentWrapper : public i6e::api::Component, public boost::python::wrapper<i6e::api::Component> {
+		ComponentWrapper(const int64_t id, const i6e::api::attributeMap & params) : Component(id, params), boost::python::wrapper<i6e::api::Component>() {
 		}
 
-		ComponentWrapper(const i6engine::api::Component & arg) : i6engine::api::Component(), boost::python::wrapper<i6engine::api::Component>() {
+		ComponentWrapper(const i6e::api::Component & arg) : i6e::api::Component(), boost::python::wrapper<i6e::api::Component>() {
 		}
 
 		virtual void Tick() override {
@@ -192,7 +192,7 @@ namespace object {
 			this->Component::Tick();
 		}
 
-		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+		virtual void News(const i6e::api::GameMessage::Ptr & msg) override {
 			if (boost::python::override n = this->get_override("News")) {
 				boost::python::call<void>(n.ptr(), msg);
 				return;
@@ -200,7 +200,7 @@ namespace object {
 			Component::News(msg);
 		}
 
-		void default_News(const i6engine::api::GameMessage::Ptr & msg) {
+		void default_News(const i6e::api::GameMessage::Ptr & msg) {
 			this->Component::News(msg);
 		}
 
@@ -220,18 +220,18 @@ namespace object {
 			this->Component::Finalize();
 		}
 
-		virtual i6engine::api::attributeMap synchronize() const {
-			return boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+		virtual i6e::api::attributeMap synchronize() const {
+			return boost::python::call<i6e::api::attributeMap>(this->get_override("synchronize").ptr());
 		}
 
-		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+		virtual std::pair<i6e::api::AddStrategy, int64_t> howToAdd(const i6e::api::ComPtr & comp) const override {
 			if (boost::python::override hta = this->get_override("howToAdd")) {
-				return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(hta.ptr(), comp);
+				return boost::python::call<std::pair<i6e::api::AddStrategy, int64_t>>(hta.ptr(), comp);
 			}
 			return Component::howToAdd(comp);
 		}
 
-		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+		std::pair<i6e::api::AddStrategy, int64_t> default_howToAdd(const i6e::api::ComPtr & comp) {
 			return this->Component::howToAdd(comp);
 		}
 
@@ -239,7 +239,7 @@ namespace object {
 			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
 		}
 
-		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+		std::vector<i6e::api::componentOptions> getComponentOptions() {
 			return {};
 		}
 
@@ -252,272 +252,272 @@ namespace object {
 		}
 	};
 
-	i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component> getAnimatedDirectionalLightComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::AnimatedDirectionalLightComponent>(i6engine::api::components::ComponentTypes::AnimatedDirectionalLightComponent);
+	i6e::utils::sharedPtr<i6e::api::AnimatedDirectionalLightComponent, i6e::api::Component> getAnimatedDirectionalLightComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::AnimatedDirectionalLightComponent>(i6e::api::components::ComponentTypes::AnimatedDirectionalLightComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component> getAnimatedDirectionalLightComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::AnimatedDirectionalLightComponent>(i6engine::api::components::ComponentTypes::AnimatedDirectionalLightComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::AnimatedDirectionalLightComponent, i6e::api::Component> getAnimatedDirectionalLightComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::AnimatedDirectionalLightComponent>(i6e::api::components::ComponentTypes::AnimatedDirectionalLightComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component> getAnimatedLuminousAppearanceComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::AnimatedLuminousAppearanceComponent>(i6engine::api::components::ComponentTypes::AnimatedLuminousAppearanceComponent);
+	i6e::utils::sharedPtr<i6e::api::AnimatedLuminousAppearanceComponent, i6e::api::Component> getAnimatedLuminousAppearanceComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::AnimatedLuminousAppearanceComponent>(i6e::api::components::ComponentTypes::AnimatedLuminousAppearanceComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component> getAnimatedLuminousAppearanceComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::AnimatedLuminousAppearanceComponent>(i6engine::api::components::ComponentTypes::AnimatedLuminousAppearanceComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::AnimatedLuminousAppearanceComponent, i6e::api::Component> getAnimatedLuminousAppearanceComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::AnimatedLuminousAppearanceComponent>(i6e::api::components::ComponentTypes::AnimatedLuminousAppearanceComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component> getAnimatedSpotLightComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::AnimatedSpotLightComponent>(i6engine::api::components::ComponentTypes::AnimatedSpotLightComponent);
+	i6e::utils::sharedPtr<i6e::api::AnimatedSpotLightComponent, i6e::api::Component> getAnimatedSpotLightComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::AnimatedSpotLightComponent>(i6e::api::components::ComponentTypes::AnimatedSpotLightComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component> getAnimatedSpotLightComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::AnimatedSpotLightComponent>(i6engine::api::components::ComponentTypes::AnimatedSpotLightComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::AnimatedSpotLightComponent, i6e::api::Component> getAnimatedSpotLightComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::AnimatedSpotLightComponent>(i6e::api::components::ComponentTypes::AnimatedSpotLightComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component> getAnimationControllerComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::AnimationControllerComponent>(i6engine::api::components::ComponentTypes::AnimationControllerComponent);
+	i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component> getAnimationControllerComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::AnimationControllerComponent>(i6e::api::components::ComponentTypes::AnimationControllerComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component> getAnimationControllerComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::AnimationControllerComponent>(i6engine::api::components::ComponentTypes::AnimationControllerComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component> getAnimationControllerComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::AnimationControllerComponent>(i6e::api::components::ComponentTypes::AnimationControllerComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component> getCameraComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent);
+	i6e::utils::sharedPtr<i6e::api::CameraComponent, i6e::api::Component> getCameraComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::CameraComponent>(i6e::api::components::ComponentTypes::CameraComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component> getCameraComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::CameraComponent>(i6engine::api::components::ComponentTypes::CameraComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::CameraComponent, i6e::api::Component> getCameraComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::CameraComponent>(i6e::api::components::ComponentTypes::CameraComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component> getLifetimeComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::LifetimeComponent>(i6engine::api::components::ComponentTypes::LifetimeComponent);
+	i6e::utils::sharedPtr<i6e::api::LifetimeComponent, i6e::api::Component> getLifetimeComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::LifetimeComponent>(i6e::api::components::ComponentTypes::LifetimeComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component> getLifetimeComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::LifetimeComponent>(i6engine::api::components::ComponentTypes::LifetimeComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::LifetimeComponent, i6e::api::Component> getLifetimeComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::LifetimeComponent>(i6e::api::components::ComponentTypes::LifetimeComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component> getLuminousAppearanceComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::LuminousAppearanceComponent>(i6engine::api::components::ComponentTypes::LuminousAppearanceComponent);
+	i6e::utils::sharedPtr<i6e::api::LuminousAppearanceComponent, i6e::api::Component> getLuminousAppearanceComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::LuminousAppearanceComponent>(i6e::api::components::ComponentTypes::LuminousAppearanceComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component> getLuminousAppearanceComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::LuminousAppearanceComponent>(i6engine::api::components::ComponentTypes::LuminousAppearanceComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::LuminousAppearanceComponent, i6e::api::Component> getLuminousAppearanceComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::LuminousAppearanceComponent>(i6e::api::components::ComponentTypes::LuminousAppearanceComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component> getMeshAppearanceComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::MeshAppearanceComponent>(i6engine::api::components::ComponentTypes::MeshAppearanceComponent);
+	i6e::utils::sharedPtr<i6e::api::MeshAppearanceComponent, i6e::api::Component> getMeshAppearanceComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::MeshAppearanceComponent>(i6e::api::components::ComponentTypes::MeshAppearanceComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component> getMeshAppearanceComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MeshAppearanceComponent>(i6engine::api::components::ComponentTypes::MeshAppearanceComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::MeshAppearanceComponent, i6e::api::Component> getMeshAppearanceComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::MeshAppearanceComponent>(i6e::api::components::ComponentTypes::MeshAppearanceComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component> getMoverCircleComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::MoverCircleComponent>(i6engine::api::components::ComponentTypes::MoverCircleComponent);
+	i6e::utils::sharedPtr<i6e::api::MoverCircleComponent, i6e::api::Component> getMoverCircleComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::MoverCircleComponent>(i6e::api::components::ComponentTypes::MoverCircleComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component> getMoverCircleComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MoverCircleComponent>(i6engine::api::components::ComponentTypes::MoverCircleComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::MoverCircleComponent, i6e::api::Component> getMoverCircleComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::MoverCircleComponent>(i6e::api::components::ComponentTypes::MoverCircleComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component> getMoverComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::MoverComponent>(i6engine::api::components::ComponentTypes::MoverComponent);
+	i6e::utils::sharedPtr<i6e::api::MoverComponent, i6e::api::Component> getMoverComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::MoverComponent>(i6e::api::components::ComponentTypes::MoverComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component> getMoverComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MoverComponent>(i6engine::api::components::ComponentTypes::MoverComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::MoverComponent, i6e::api::Component> getMoverComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::MoverComponent>(i6e::api::components::ComponentTypes::MoverComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component> getMoverInterpolateComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::MoverInterpolateComponent>(i6engine::api::components::ComponentTypes::MoverInterpolateComponent);
+	i6e::utils::sharedPtr<i6e::api::MoverInterpolateComponent, i6e::api::Component> getMoverInterpolateComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::MoverInterpolateComponent>(i6e::api::components::ComponentTypes::MoverInterpolateComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component> getMoverInterpolateComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MoverInterpolateComponent>(i6engine::api::components::ComponentTypes::MoverInterpolateComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::MoverInterpolateComponent, i6e::api::Component> getMoverInterpolateComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::MoverInterpolateComponent>(i6e::api::components::ComponentTypes::MoverInterpolateComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component> getMovingCameraComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::MovingCameraComponent>(i6engine::api::components::ComponentTypes::MovingCameraComponent);
+	i6e::utils::sharedPtr<i6e::api::MovingCameraComponent, i6e::api::Component> getMovingCameraComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::MovingCameraComponent>(i6e::api::components::ComponentTypes::MovingCameraComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component> getMovingCameraComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MovingCameraComponent>(i6engine::api::components::ComponentTypes::MovingCameraComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::MovingCameraComponent, i6e::api::Component> getMovingCameraComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::MovingCameraComponent>(i6e::api::components::ComponentTypes::MovingCameraComponent, identifier);
 	}
 
 #ifdef ISIXE_WITH_NETWORK
-	i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component> getNetworkSenderComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::NetworkSenderComponent>(i6engine::api::components::ComponentTypes::NetworkSenderComponent);
+	i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component> getNetworkSenderComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::NetworkSenderComponent>(i6e::api::components::ComponentTypes::NetworkSenderComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component> getNetworkSenderComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::NetworkSenderComponent>(i6engine::api::components::ComponentTypes::NetworkSenderComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component> getNetworkSenderComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::NetworkSenderComponent>(i6e::api::components::ComponentTypes::NetworkSenderComponent, identifier);
 	}
 #endif
 
-	i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component> getParticleEmitterComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::ParticleEmitterComponent>(i6engine::api::components::ComponentTypes::ParticleEmitterComponent);
+	i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component> getParticleEmitterComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::ParticleEmitterComponent>(i6e::api::components::ComponentTypes::ParticleEmitterComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component> getParticleEmitterComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::ParticleEmitterComponent>(i6engine::api::components::ComponentTypes::ParticleEmitterComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component> getParticleEmitterComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::ParticleEmitterComponent>(i6e::api::components::ComponentTypes::ParticleEmitterComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component> getPhysicalStateComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::PhysicalStateComponent>(i6engine::api::components::ComponentTypes::PhysicalStateComponent);
+	i6e::utils::sharedPtr<i6e::api::PhysicalStateComponent, i6e::api::Component> getPhysicalStateComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::PhysicalStateComponent>(i6e::api::components::ComponentTypes::PhysicalStateComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component> getPhysicalStateComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::PhysicalStateComponent>(i6engine::api::components::ComponentTypes::PhysicalStateComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::PhysicalStateComponent, i6e::api::Component> getPhysicalStateComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::PhysicalStateComponent>(i6e::api::components::ComponentTypes::PhysicalStateComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component> getShatterComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::ShatterComponent>(i6engine::api::components::ComponentTypes::ShatterComponent);
+	i6e::utils::sharedPtr<i6e::api::ShatterComponent, i6e::api::Component> getShatterComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::ShatterComponent>(i6e::api::components::ComponentTypes::ShatterComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component> getShatterComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::ShatterComponent>(i6engine::api::components::ComponentTypes::ShatterComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::ShatterComponent, i6e::api::Component> getShatterComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::ShatterComponent>(i6e::api::components::ComponentTypes::ShatterComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component> getSpawnpointComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::SpawnpointComponent>(i6engine::api::components::ComponentTypes::SpawnpointComponent);
+	i6e::utils::sharedPtr<i6e::api::SpawnpointComponent, i6e::api::Component> getSpawnpointComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::SpawnpointComponent>(i6e::api::components::ComponentTypes::SpawnpointComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component> getSpawnpointComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::SpawnpointComponent>(i6engine::api::components::ComponentTypes::SpawnpointComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::SpawnpointComponent, i6e::api::Component> getSpawnpointComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::SpawnpointComponent>(i6e::api::components::ComponentTypes::SpawnpointComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> getStaticStateComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::ComponentTypes::StaticStateComponent);
+	i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> getStaticStateComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::ComponentTypes::StaticStateComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component> getStaticStateComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::StaticStateComponent>(i6engine::api::components::ComponentTypes::StaticStateComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> getStaticStateComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::ComponentTypes::StaticStateComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component> getTerrainAppearanceComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::TerrainAppearanceComponent>(i6engine::api::components::ComponentTypes::TerrainAppearanceComponent);
+	i6e::utils::sharedPtr<i6e::api::TerrainAppearanceComponent, i6e::api::Component> getTerrainAppearanceComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::TerrainAppearanceComponent>(i6e::api::components::ComponentTypes::TerrainAppearanceComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component> getTerrainAppearanceComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::TerrainAppearanceComponent>(i6engine::api::components::ComponentTypes::TerrainAppearanceComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::TerrainAppearanceComponent, i6e::api::Component> getTerrainAppearanceComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::TerrainAppearanceComponent>(i6e::api::components::ComponentTypes::TerrainAppearanceComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component> getSoundComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::SoundComponent>(i6engine::api::components::ComponentTypes::SoundComponent);
+	i6e::utils::sharedPtr<i6e::api::SoundComponent, i6e::api::Component> getSoundComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::SoundComponent>(i6e::api::components::ComponentTypes::SoundComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component> getSoundComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::SoundComponent>(i6engine::api::components::ComponentTypes::SoundComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::SoundComponent, i6e::api::Component> getSoundComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::SoundComponent>(i6e::api::components::ComponentTypes::SoundComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component> getSoundListenerComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::SoundListenerComponent>(i6engine::api::components::ComponentTypes::SoundListenerComponent);
+	i6e::utils::sharedPtr<i6e::api::SoundListenerComponent, i6e::api::Component> getSoundListenerComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::SoundListenerComponent>(i6e::api::components::ComponentTypes::SoundListenerComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component> getSoundListenerComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::SoundListenerComponent>(i6engine::api::components::ComponentTypes::SoundListenerComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::SoundListenerComponent, i6e::api::Component> getSoundListenerComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::SoundListenerComponent>(i6e::api::components::ComponentTypes::SoundListenerComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component> getBillboardComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::BillboardComponent>(i6engine::api::components::ComponentTypes::BillboardComponent);
+	i6e::utils::sharedPtr<i6e::api::BillboardComponent, i6e::api::Component> getBillboardComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::BillboardComponent>(i6e::api::components::ComponentTypes::BillboardComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component> getBillboardComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::BillboardComponent>(i6engine::api::components::ComponentTypes::BillboardComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::BillboardComponent, i6e::api::Component> getBillboardComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::BillboardComponent>(i6e::api::components::ComponentTypes::BillboardComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component> getFollowComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::FollowComponent>(i6engine::api::components::ComponentTypes::FollowComponent);
+	i6e::utils::sharedPtr<i6e::api::FollowComponent, i6e::api::Component> getFollowComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::FollowComponent>(i6e::api::components::ComponentTypes::FollowComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component> getFollowComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::FollowComponent>(i6engine::api::components::ComponentTypes::FollowComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::FollowComponent, i6e::api::Component> getFollowComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::FollowComponent>(i6e::api::components::ComponentTypes::FollowComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component> getMovableTextComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::MovableTextComponent>(i6engine::api::components::ComponentTypes::MovableTextComponent);
+	i6e::utils::sharedPtr<i6e::api::MovableTextComponent, i6e::api::Component> getMovableTextComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::MovableTextComponent>(i6e::api::components::ComponentTypes::MovableTextComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component> getMovableTextComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MovableTextComponent>(i6engine::api::components::ComponentTypes::MovableTextComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::MovableTextComponent, i6e::api::Component> getMovableTextComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::MovableTextComponent>(i6e::api::components::ComponentTypes::MovableTextComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component> getWaypointComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::WaypointComponent>(i6engine::api::components::ComponentTypes::WaypointComponent);
+	i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component> getWaypointComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::WaypointComponent>(i6e::api::components::ComponentTypes::WaypointComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component> getWaypointComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::WaypointComponent>(i6engine::api::components::ComponentTypes::WaypointComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component> getWaypointComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::WaypointComponent>(i6e::api::components::ComponentTypes::WaypointComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component> getNavigationComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::NavigationComponent>(i6engine::api::components::ComponentTypes::NavigationComponent);
+	i6e::utils::sharedPtr<i6e::api::NavigationComponent, i6e::api::Component> getNavigationComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::NavigationComponent>(i6e::api::components::ComponentTypes::NavigationComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component> getNavigationComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::NavigationComponent>(i6engine::api::components::ComponentTypes::NavigationComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::NavigationComponent, i6e::api::Component> getNavigationComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::NavigationComponent>(i6e::api::components::ComponentTypes::NavigationComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component> getWaynetNavigationComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::WaynetNavigationComponent>(i6engine::api::components::ComponentTypes::WaynetNavigationComponent);
+	i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component> getWaynetNavigationComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::WaynetNavigationComponent>(i6e::api::components::ComponentTypes::WaynetNavigationComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component> getWaynetNavigationComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::WaynetNavigationComponent>(i6engine::api::components::ComponentTypes::WaynetNavigationComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component> getWaynetNavigationComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::WaynetNavigationComponent>(i6e::api::components::ComponentTypes::WaynetNavigationComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component> getMoveComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::MoveComponent>(i6engine::api::components::ComponentTypes::MoveComponent);
+	i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component> getMoveComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::MoveComponent>(i6e::api::components::ComponentTypes::MoveComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component> getMoveComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MoveComponent>(i6engine::api::components::ComponentTypes::MoveComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component> getMoveComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::MoveComponent>(i6e::api::components::ComponentTypes::MoveComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component> getMovementComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::MovementComponent>(i6engine::api::components::ComponentTypes::MovementComponent);
+	i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component> getMovementComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::MovementComponent>(i6e::api::components::ComponentTypes::MovementComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component> getMovementComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::MovementComponent>(i6engine::api::components::ComponentTypes::MovementComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component> getMovementComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::MovementComponent>(i6e::api::components::ComponentTypes::MovementComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component> getToggleWaynetComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::ToggleWaynetComponent>(i6engine::api::components::ComponentTypes::ToggleWaynetComponent);
+	i6e::utils::sharedPtr<i6e::api::ToggleWaynetComponent, i6e::api::Component> getToggleWaynetComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::ToggleWaynetComponent>(i6e::api::components::ComponentTypes::ToggleWaynetComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component> getToggleWaynetComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::ToggleWaynetComponent>(i6engine::api::components::ComponentTypes::ToggleWaynetComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::ToggleWaynetComponent, i6e::api::Component> getToggleWaynetComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::ToggleWaynetComponent>(i6e::api::components::ComponentTypes::ToggleWaynetComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component> getPoint2PointConstraintComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::Point2PointConstraintComponent>(i6engine::api::components::ComponentTypes::Point2PointConstraintComponent);
+	i6e::utils::sharedPtr<i6e::api::Point2PointConstraintComponent, i6e::api::Component> getPoint2PointConstraintComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::Point2PointConstraintComponent>(i6e::api::components::ComponentTypes::Point2PointConstraintComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component> getPoint2PointConstraintComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::Point2PointConstraintComponent>(i6engine::api::components::ComponentTypes::Point2PointConstraintComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::Point2PointConstraintComponent, i6e::api::Component> getPoint2PointConstraintComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::Point2PointConstraintComponent>(i6e::api::components::ComponentTypes::Point2PointConstraintComponent, identifier);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component> getVelocityComponent(i6engine::api::GameObject * go) {
-		return go->getGOC<i6engine::api::VelocityComponent>(i6engine::api::components::ComponentTypes::VelocityComponent);
+	i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component> getVelocityComponent(i6e::api::GameObject * go) {
+		return go->getGOC<i6e::api::VelocityComponent>(i6e::api::components::ComponentTypes::VelocityComponent);
 	}
 
-	i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component> getVelocityComponent(i6engine::api::GameObject * go, const std::string & identifier) {
-		return go->getGOC<i6engine::api::VelocityComponent>(i6engine::api::components::ComponentTypes::VelocityComponent, identifier);
+	i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component> getVelocityComponent(i6e::api::GameObject * go, const std::string & identifier) {
+		return go->getGOC<i6e::api::VelocityComponent>(i6e::api::components::ComponentTypes::VelocityComponent, identifier);
 	}
 
-	struct CameraComponentWrapper : public i6engine::api::CameraComponent, public boost::python::wrapper<i6engine::api::CameraComponent> {
-		CameraComponentWrapper() : CameraComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::CameraComponent>() {
+	struct CameraComponentWrapper : public i6e::api::CameraComponent, public boost::python::wrapper<i6e::api::CameraComponent> {
+		CameraComponentWrapper() : CameraComponent(-1, i6e::api::attributeMap()), boost::python::wrapper<i6e::api::CameraComponent>() {
 		}
 
-		CameraComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : CameraComponent(id, params), boost::python::wrapper<i6engine::api::CameraComponent>() {
+		CameraComponentWrapper(const int64_t id, const i6e::api::attributeMap & params) : CameraComponent(id, params), boost::python::wrapper<i6e::api::CameraComponent>() {
 		}
 
-		CameraComponentWrapper(const i6engine::api::CameraComponent & arg) : i6engine::api::CameraComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::CameraComponent>() {
+		CameraComponentWrapper(const i6e::api::CameraComponent & arg) : i6e::api::CameraComponent(-1, i6e::api::attributeMap()), boost::python::wrapper<i6e::api::CameraComponent>() {
 		}
 
 		virtual void Tick() override {
@@ -532,7 +532,7 @@ namespace object {
 			this->Component::Tick();
 		}
 
-		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+		virtual void News(const i6e::api::GameMessage::Ptr & msg) override {
 			if (boost::python::override n = this->get_override("News")) {
 				boost::python::call<void>(n.ptr(), msg);
 				return;
@@ -540,7 +540,7 @@ namespace object {
 			CameraComponent::News(msg);
 		}
 
-		void default_News(const i6engine::api::GameMessage::Ptr & msg) {
+		void default_News(const i6e::api::GameMessage::Ptr & msg) {
 			this->CameraComponent::News(msg);
 		}
 
@@ -561,18 +561,18 @@ namespace object {
 			this->CameraComponent::Finalize();
 		}
 
-		virtual i6engine::api::attributeMap synchronize() const {
-			i6engine::api::attributeMap params = CameraComponent::synchronize();
-			i6engine::api::attributeMap params2 = boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+		virtual i6e::api::attributeMap synchronize() const {
+			i6e::api::attributeMap params = CameraComponent::synchronize();
+			i6e::api::attributeMap params2 = boost::python::call<i6e::api::attributeMap>(this->get_override("synchronize").ptr());
 			params.insert(params2.begin(), params2.end());
 			return params;
 		}
 
-		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
-			return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
+		virtual std::pair<i6e::api::AddStrategy, int64_t> howToAdd(const i6e::api::ComPtr & comp) const override {
+			return boost::python::call<std::pair<i6e::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
 		}
 
-		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+		std::pair<i6e::api::AddStrategy, int64_t> default_howToAdd(const i6e::api::ComPtr & comp) {
 			return this->CameraComponent::howToAdd(comp);
 		}
 
@@ -580,7 +580,7 @@ namespace object {
 			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
 		}
 
-		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+		std::vector<i6e::api::componentOptions> getComponentOptions() {
 			return {};
 		}
 
@@ -593,11 +593,11 @@ namespace object {
 		}
 	};
 
-	struct MovementComponentWrapper : public i6engine::api::MovementComponent, public boost::python::wrapper<i6engine::api::MovementComponent> {
-		MovementComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : MovementComponent(id, params), boost::python::wrapper<i6engine::api::MovementComponent>() {
+	struct MovementComponentWrapper : public i6e::api::MovementComponent, public boost::python::wrapper<i6e::api::MovementComponent> {
+		MovementComponentWrapper(const int64_t id, const i6e::api::attributeMap & params) : MovementComponent(id, params), boost::python::wrapper<i6e::api::MovementComponent>() {
 		}
 
-		MovementComponentWrapper(const i6engine::api::MovementComponent & arg) : i6engine::api::MovementComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::MovementComponent>() {
+		MovementComponentWrapper(const i6e::api::MovementComponent & arg) : i6e::api::MovementComponent(-1, i6e::api::attributeMap()), boost::python::wrapper<i6e::api::MovementComponent>() {
 		}
 
 		virtual void Tick() override {
@@ -612,14 +612,14 @@ namespace object {
 			this->MovementComponent::Tick();
 		}
 
-		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+		virtual void News(const i6e::api::GameMessage::Ptr & msg) override {
 			if (boost::python::override n = this->get_override("News")) {
 				return boost::python::call<void>(n.ptr(), msg);
 			}
 			Component::News(msg);
 		}
 
-		void default_News(const i6engine::api::GameMessage::Ptr & msg) {
+		void default_News(const i6e::api::GameMessage::Ptr & msg) {
 			this->Component::News(msg);
 		}
 
@@ -647,15 +647,15 @@ namespace object {
 			this->MovementComponent::Finalize();
 		}
 
-		virtual i6engine::api::attributeMap synchronize() const {
-			return boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+		virtual i6e::api::attributeMap synchronize() const {
+			return boost::python::call<i6e::api::attributeMap>(this->get_override("synchronize").ptr());
 		}
 
-		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
-			return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
+		virtual std::pair<i6e::api::AddStrategy, int64_t> howToAdd(const i6e::api::ComPtr & comp) const override {
+			return boost::python::call<std::pair<i6e::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
 		}
 
-		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+		std::pair<i6e::api::AddStrategy, int64_t> default_howToAdd(const i6e::api::ComPtr & comp) {
 			return this->Component::howToAdd(comp);
 		}
 
@@ -663,7 +663,7 @@ namespace object {
 			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
 		}
 
-		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+		std::vector<i6e::api::componentOptions> getComponentOptions() {
 			return {};
 		}
 
@@ -688,11 +688,11 @@ namespace object {
 		}
 	};
 
-	struct MoverComponentWrapper : public i6engine::api::MoverComponent, public boost::python::wrapper<i6engine::api::MoverComponent> {
-		MoverComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : MoverComponent(id, params), boost::python::wrapper<i6engine::api::MoverComponent>() {
+	struct MoverComponentWrapper : public i6e::api::MoverComponent, public boost::python::wrapper<i6e::api::MoverComponent> {
+		MoverComponentWrapper(const int64_t id, const i6e::api::attributeMap & params) : MoverComponent(id, params), boost::python::wrapper<i6e::api::MoverComponent>() {
 		}
 
-		MoverComponentWrapper(const i6engine::api::MoverComponent & arg) : i6engine::api::MoverComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::MoverComponent>() {
+		MoverComponentWrapper(const i6e::api::MoverComponent & arg) : i6e::api::MoverComponent(-1, i6e::api::attributeMap()), boost::python::wrapper<i6e::api::MoverComponent>() {
 		}
 
 		virtual void Tick() override {
@@ -707,7 +707,7 @@ namespace object {
 			this->MoverComponent::Tick();
 		}
 
-		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+		virtual void News(const i6e::api::GameMessage::Ptr & msg) override {
 			boost::python::call<void>(this->get_override("News").ptr(), msg);
 		}
 
@@ -735,21 +735,21 @@ namespace object {
 			this->MoverComponent::Finalize();
 		}
 
-		virtual i6engine::api::attributeMap synchronize() const {
-			i6engine::api::attributeMap params = MoverComponent::synchronize();
-			i6engine::api::attributeMap params2 = boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+		virtual i6e::api::attributeMap synchronize() const {
+			i6e::api::attributeMap params = MoverComponent::synchronize();
+			i6e::api::attributeMap params2 = boost::python::call<i6e::api::attributeMap>(this->get_override("synchronize").ptr());
 			params.insert(params2.begin(), params2.end());
 			return params;
 		}
 
-		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
+		virtual std::pair<i6e::api::AddStrategy, int64_t> howToAdd(const i6e::api::ComPtr & comp) const override {
 			if (boost::python::override hta = this->get_override("howToAdd")) {
-				return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(hta.ptr(), comp);
+				return boost::python::call<std::pair<i6e::api::AddStrategy, int64_t>>(hta.ptr(), comp);
 			}
 			return MoverComponent::howToAdd(comp);
 		}
 
-		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+		std::pair<i6e::api::AddStrategy, int64_t> default_howToAdd(const i6e::api::ComPtr & comp) {
 			return this->MoverComponent::howToAdd(comp);
 		}
 
@@ -757,7 +757,7 @@ namespace object {
 			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
 		}
 
-		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+		std::vector<i6e::api::componentOptions> getComponentOptions() {
 			return {};
 		}
 
@@ -774,11 +774,11 @@ namespace object {
 		}
 	};
 
-	struct NavigationComponentWrapper : public i6engine::api::NavigationComponent, public boost::python::wrapper<i6engine::api::NavigationComponent> {
-		NavigationComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : NavigationComponent(id, params), boost::python::wrapper<i6engine::api::NavigationComponent>() {
+	struct NavigationComponentWrapper : public i6e::api::NavigationComponent, public boost::python::wrapper<i6e::api::NavigationComponent> {
+		NavigationComponentWrapper(const int64_t id, const i6e::api::attributeMap & params) : NavigationComponent(id, params), boost::python::wrapper<i6e::api::NavigationComponent>() {
 		}
 
-		NavigationComponentWrapper(const i6engine::api::NavigationComponent & arg) : i6engine::api::NavigationComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::NavigationComponent>() {
+		NavigationComponentWrapper(const i6e::api::NavigationComponent & arg) : i6e::api::NavigationComponent(-1, i6e::api::attributeMap()), boost::python::wrapper<i6e::api::NavigationComponent>() {
 		}
 
 		virtual void Tick() override {
@@ -793,14 +793,14 @@ namespace object {
 			this->Component::Tick();
 		}
 
-		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+		virtual void News(const i6e::api::GameMessage::Ptr & msg) override {
 			if (boost::python::override n = this->get_override("News")) {
 				return boost::python::call<void>(n.ptr(), msg);
 			}
 			Component::News(msg);
 		}
 
-		void default_News(const i6engine::api::GameMessage::Ptr & msg) {
+		void default_News(const i6e::api::GameMessage::Ptr & msg) {
 			this->Component::News(msg);
 		}
 
@@ -820,15 +820,15 @@ namespace object {
 			this->NavigationComponent::Finalize();
 		}
 
-		virtual i6engine::api::attributeMap synchronize() const {
-			return boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+		virtual i6e::api::attributeMap synchronize() const {
+			return boost::python::call<i6e::api::attributeMap>(this->get_override("synchronize").ptr());
 		}
 
-		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
-			return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
+		virtual std::pair<i6e::api::AddStrategy, int64_t> howToAdd(const i6e::api::ComPtr & comp) const override {
+			return boost::python::call<std::pair<i6e::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
 		}
 
-		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+		std::pair<i6e::api::AddStrategy, int64_t> default_howToAdd(const i6e::api::ComPtr & comp) {
 			return this->Component::howToAdd(comp);
 		}
 
@@ -836,7 +836,7 @@ namespace object {
 			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
 		}
 
-		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+		std::vector<i6e::api::componentOptions> getComponentOptions() {
 			return {};
 		}
 
@@ -849,11 +849,11 @@ namespace object {
 		}
 	};
 
-	struct ShatterComponentWrapper : public i6engine::api::ShatterComponent, public boost::python::wrapper<i6engine::api::ShatterComponent> {
-		ShatterComponentWrapper(const int64_t id, const i6engine::api::attributeMap & params) : ShatterComponent(id, params), boost::python::wrapper<i6engine::api::ShatterComponent>() {
+	struct ShatterComponentWrapper : public i6e::api::ShatterComponent, public boost::python::wrapper<i6e::api::ShatterComponent> {
+		ShatterComponentWrapper(const int64_t id, const i6e::api::attributeMap & params) : ShatterComponent(id, params), boost::python::wrapper<i6e::api::ShatterComponent>() {
 		}
 
-		ShatterComponentWrapper(const i6engine::api::NavigationComponent & arg) : i6engine::api::ShatterComponent(-1, i6engine::api::attributeMap()), boost::python::wrapper<i6engine::api::ShatterComponent>() {
+		ShatterComponentWrapper(const i6e::api::NavigationComponent & arg) : i6e::api::ShatterComponent(-1, i6e::api::attributeMap()), boost::python::wrapper<i6e::api::ShatterComponent>() {
 		}
 
 		virtual void Tick() override {
@@ -868,7 +868,7 @@ namespace object {
 			this->Component::Tick();
 		}
 
-		virtual void News(const i6engine::api::GameMessage::Ptr & msg) override {
+		virtual void News(const i6e::api::GameMessage::Ptr & msg) override {
 			if (boost::python::override n = this->get_override("News")) {
 				boost::python::call<void>(n.ptr(), msg);
 				return;
@@ -876,7 +876,7 @@ namespace object {
 			ShatterComponent::News(msg);
 		}
 
-		void default_News(const i6engine::api::GameMessage::Ptr & msg) {
+		void default_News(const i6e::api::GameMessage::Ptr & msg) {
 			this->ShatterComponent::News(msg);
 		}
 
@@ -904,15 +904,15 @@ namespace object {
 			this->Component::Finalize();
 		}
 
-		virtual i6engine::api::attributeMap synchronize() const {
-			return boost::python::call<i6engine::api::attributeMap>(this->get_override("synchronize").ptr());
+		virtual i6e::api::attributeMap synchronize() const {
+			return boost::python::call<i6e::api::attributeMap>(this->get_override("synchronize").ptr());
 		}
 
-		virtual std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr & comp) const override {
-			return boost::python::call<std::pair<i6engine::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
+		virtual std::pair<i6e::api::AddStrategy, int64_t> howToAdd(const i6e::api::ComPtr & comp) const override {
+			return boost::python::call<std::pair<i6e::api::AddStrategy, int64_t>>(this->get_override("howToAdd").ptr(), comp);
 		}
 
-		std::pair<i6engine::api::AddStrategy, int64_t> default_howToAdd(const i6engine::api::ComPtr & comp) {
+		std::pair<i6e::api::AddStrategy, int64_t> default_howToAdd(const i6e::api::ComPtr & comp) {
 			return this->Component::howToAdd(comp);
 		}
 
@@ -920,88 +920,88 @@ namespace object {
 			return boost::python::call<std::string>(this->get_override("getTemplateName").ptr());
 		}
 
-		std::vector<i6engine::api::componentOptions> getComponentOptions() {
+		std::vector<i6e::api::componentOptions> getComponentOptions() {
 			return {};
 		}
 
-		void shatter(const i6engine::api::GOPtr & other) override {
+		void shatter(const i6e::api::GOPtr & other) override {
 			boost::python::call<void>(this->get_override("shatter").ptr(), other);
 		}
 	};
 
-	void accelerate(i6engine::api::VelocityComponent * c, const Vec3 & acceleration, i6engine::api::VelocityComponent::MaxSpeedHandling handling, const std::string & func) {
+	void accelerate(i6e::api::VelocityComponent * c, const Vec3 & acceleration, i6e::api::VelocityComponent::MaxSpeedHandling handling, const std::string & func) {
 		c->accelerate(acceleration, handling, [func]() {
 			if (!func.empty()) {
-				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
 			}
 		});
 	}
 
-	void accelerate(i6engine::api::VelocityComponent * c, const std::string & func) {
+	void accelerate(i6e::api::VelocityComponent * c, const std::string & func) {
 		c->accelerate([func]() {
 			if (!func.empty()) {
-				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
 			}
 		});
 	}
 
-	void decelerate(i6engine::api::VelocityComponent * c, const Vec3 & deceleration, i6engine::api::VelocityComponent::DecelerationHandling handling, const std::string & func) {
+	void decelerate(i6e::api::VelocityComponent * c, const Vec3 & deceleration, i6e::api::VelocityComponent::DecelerationHandling handling, const std::string & func) {
 		c->decelerate(deceleration, handling, [func]() {
 			if (!func.empty()) {
-				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
 			}
 		});
 	}
 
-	void decelerate(i6engine::api::VelocityComponent * c, const std::string & func) {
+	void decelerate(i6e::api::VelocityComponent * c, const std::string & func) {
 		c->decelerate([func]() {
 			if (!func.empty()) {
-				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
 			}
 		});
 	}
 
-	void addAnimationFrameEvent(i6engine::api::MeshAppearanceComponent * c, uint64_t frameTime, const std::string & func) {
+	void addAnimationFrameEvent(i6e::api::MeshAppearanceComponent * c, uint64_t frameTime, const std::string & func) {
 		c->addAnimationFrameEvent(frameTime, [func]() {
 			if (!func.empty()) {
-				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
 			}
 		});
 	}
 
-	void addAnimationFrameEvent(i6engine::api::MeshAppearanceComponent * c, uint64_t frameTime, const std::string & script, const std::string & func) {
+	void addAnimationFrameEvent(i6e::api::MeshAppearanceComponent * c, uint64_t frameTime, const std::string & script, const std::string & func) {
 		c->addAnimationFrameEvent(frameTime, [script, func]() {
 			if (!script.empty() && !func.empty()) {
-				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func);
+				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func);
 			}
 		});
 	}
 
-	void addAnimationFrameEvent(i6engine::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & func) {
+	void addAnimationFrameEvent(i6e::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & func) {
 		c->addAnimationFrameEvent(animation, frameTime, [func]() {
 			if (!func.empty()) {
-				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
 			}
 		});
 	}
 
-	void addAnimationFrameEvent(i6engine::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & script, const std::string & func) {
+	void addAnimationFrameEvent(i6e::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & script, const std::string & func) {
 		c->addAnimationFrameEvent(animation, frameTime, [script, func]() {
 			if (!script.empty() && !func.empty()) {
-				i6engine::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func);
+				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func);
 			}
 		});
 	}
 
 } /* namespace object */
 } /* namespace python */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 namespace boost {
 namespace python {
 
 	template<typename T, typename U>
-	struct pointee<i6engine::utils::sharedPtr<T, U>> {
+	struct pointee<i6e::utils::sharedPtr<T, U>> {
 		typedef T type;
 	};
 
@@ -1011,548 +1011,548 @@ namespace python {
 BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	using namespace boost::python;
 
-	class_<i6engine::api::GameObject, i6engine::api::GOPtr, boost::noncopyable>("GameObject", no_init)
-		.def("getID", &i6engine::api::GameObject::getID)
-		.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t) const) &i6engine::api::GameObject::getGOC)
-		.def("getGOC", (i6engine::api::ComPtr(i6engine::api::GameObject::*)(uint32_t, const std::string &) const) &i6engine::api::GameObject::getGOC)
-		.def("getGOCID", &i6engine::api::GameObject::getGOCID)
-		.def("getGOCList", &i6engine::api::GameObject::getGOCList)
-		.def("getType", &i6engine::api::GameObject::getType)
-		.def("setDie", &i6engine::api::GameObject::setDie)
-		.def("getOwner", &i6engine::api::GameObject::getOwner)
-		.def("getUUID", &i6engine::api::GameObject::getUUID)
-		.def("getAnimatedDirectionalLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getAnimatedDirectionalLightComponent)
-		.def("getAnimatedDirectionalLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getAnimatedDirectionalLightComponent)
-		.def("getAnimatedLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getAnimatedLuminousAppearanceComponent)
-		.def("getAnimatedLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getAnimatedLuminousAppearanceComponent)
-		.def("getAnimatedSpotLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getAnimatedSpotLightComponent)
-		.def("getAnimatedSpotLightComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getAnimatedSpotLightComponent)
-		.def("getAnimationControllerComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getAnimationControllerComponent)
-		.def("getAnimationControllerComponent", (i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getAnimationControllerComponent)
-		.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getCameraComponent)
-		.def("getCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getCameraComponent)
-		.def("getLifetimeComponent", (i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getLifetimeComponent)
-		.def("getLifetimeComponent", (i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getLifetimeComponent)
-		.def("getLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getLuminousAppearanceComponent)
-		.def("getLuminousAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getLuminousAppearanceComponent)
-		.def("getMeshAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getMeshAppearanceComponent)
-		.def("getMeshAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getMeshAppearanceComponent)
-		.def("getMoverCircleComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getMoverCircleComponent)
-		.def("getMoverCircleComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getMoverCircleComponent)
-		.def("getMoverComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getMoverComponent)
-		.def("getMoverComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getMoverComponent)
-		.def("getMoverInterpolateComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getMoverInterpolateComponent)
-		.def("getMoverInterpolateComponent", (i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getMoverInterpolateComponent)
-		.def("getMovingCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getMovingCameraComponent)
-		.def("getMovingCameraComponent", (i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getMovingCameraComponent)
+	class_<i6e::api::GameObject, i6e::api::GOPtr, boost::noncopyable>("GameObject", no_init)
+		.def("getID", &i6e::api::GameObject::getID)
+		.def("getGOC", (i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t) const) &i6e::api::GameObject::getGOC)
+		.def("getGOC", (i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t, const std::string &) const) &i6e::api::GameObject::getGOC)
+		.def("getGOCID", &i6e::api::GameObject::getGOCID)
+		.def("getGOCList", &i6e::api::GameObject::getGOCList)
+		.def("getType", &i6e::api::GameObject::getType)
+		.def("setDie", &i6e::api::GameObject::setDie)
+		.def("getOwner", &i6e::api::GameObject::getOwner)
+		.def("getUUID", &i6e::api::GameObject::getUUID)
+		.def("getAnimatedDirectionalLightComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedDirectionalLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getAnimatedDirectionalLightComponent)
+		.def("getAnimatedDirectionalLightComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedDirectionalLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getAnimatedDirectionalLightComponent)
+		.def("getAnimatedLuminousAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedLuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getAnimatedLuminousAppearanceComponent)
+		.def("getAnimatedLuminousAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedLuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getAnimatedLuminousAppearanceComponent)
+		.def("getAnimatedSpotLightComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedSpotLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getAnimatedSpotLightComponent)
+		.def("getAnimatedSpotLightComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedSpotLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getAnimatedSpotLightComponent)
+		.def("getAnimationControllerComponent", (i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getAnimationControllerComponent)
+		.def("getAnimationControllerComponent", (i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getAnimationControllerComponent)
+		.def("getCameraComponent", (i6e::utils::sharedPtr<i6e::api::CameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getCameraComponent)
+		.def("getCameraComponent", (i6e::utils::sharedPtr<i6e::api::CameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getCameraComponent)
+		.def("getLifetimeComponent", (i6e::utils::sharedPtr<i6e::api::LifetimeComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getLifetimeComponent)
+		.def("getLifetimeComponent", (i6e::utils::sharedPtr<i6e::api::LifetimeComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getLifetimeComponent)
+		.def("getLuminousAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::LuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getLuminousAppearanceComponent)
+		.def("getLuminousAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::LuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getLuminousAppearanceComponent)
+		.def("getMeshAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::MeshAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMeshAppearanceComponent)
+		.def("getMeshAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::MeshAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMeshAppearanceComponent)
+		.def("getMoverCircleComponent", (i6e::utils::sharedPtr<i6e::api::MoverCircleComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMoverCircleComponent)
+		.def("getMoverCircleComponent", (i6e::utils::sharedPtr<i6e::api::MoverCircleComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMoverCircleComponent)
+		.def("getMoverComponent", (i6e::utils::sharedPtr<i6e::api::MoverComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMoverComponent)
+		.def("getMoverComponent", (i6e::utils::sharedPtr<i6e::api::MoverComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMoverComponent)
+		.def("getMoverInterpolateComponent", (i6e::utils::sharedPtr<i6e::api::MoverInterpolateComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMoverInterpolateComponent)
+		.def("getMoverInterpolateComponent", (i6e::utils::sharedPtr<i6e::api::MoverInterpolateComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMoverInterpolateComponent)
+		.def("getMovingCameraComponent", (i6e::utils::sharedPtr<i6e::api::MovingCameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMovingCameraComponent)
+		.def("getMovingCameraComponent", (i6e::utils::sharedPtr<i6e::api::MovingCameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMovingCameraComponent)
 #ifdef ISIXE_WITH_NETWORK
-		.def("getNetworkSenderComponent", (i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getNetworkSenderComponent)
-		.def("getNetworkSenderComponent", (i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getNetworkSenderComponent)
+		.def("getNetworkSenderComponent", (i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getNetworkSenderComponent)
+		.def("getNetworkSenderComponent", (i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getNetworkSenderComponent)
 #endif
-		.def("getParticleEmitterComponent", (i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getParticleEmitterComponent)
-		.def("getParticleEmitterComponent", (i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getParticleEmitterComponent)
-		.def("getPhysicalStateComponent", (i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getPhysicalStateComponent)
-		.def("getPhysicalStateComponent", (i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getPhysicalStateComponent)
-		.def("getShatterComponent", (i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getShatterComponent)
-		.def("getShatterComponent", (i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getShatterComponent)
-		.def("getSpawnpointComponent", (i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getSpawnpointComponent)
-		.def("getSpawnpointComponent", (i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getSpawnpointComponent)
-		.def("getStaticStateComponent", (i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getStaticStateComponent)
-		.def("getStaticStateComponent", (i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getStaticStateComponent)
-		.def("getTerrainAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getTerrainAppearanceComponent)
-		.def("getTerrainAppearanceComponent", (i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getTerrainAppearanceComponent)
-		.def("getSoundComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getSoundComponent)
-		.def("getSoundComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getSoundComponent)
-		.def("getSoundListenerComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getSoundListenerComponent)
-		.def("getSoundListenerComponent", (i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getSoundListenerComponent)
-		.def("getBillboardComponent", (i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getBillboardComponent)
-		.def("getBillboardComponent", (i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getBillboardComponent)
-		.def("getFollowComponent", (i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getFollowComponent)
-		.def("getFollowComponent", (i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getFollowComponent)
-		.def("getMovableTextComponent", (i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getMovableTextComponent)
-		.def("getMovableTextComponent", (i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getMovableTextComponent)
-		.def("getWaypointComponent", (i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getWaypointComponent)
-		.def("getWaypointComponent", (i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getWaypointComponent)
-		.def("getNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getNavigationComponent)
-		.def("getNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getNavigationComponent)
-		.def("getWaynetNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getWaynetNavigationComponent)
-		.def("getWaynetNavigationComponent", (i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getWaynetNavigationComponent)
-		.def("getMoveComponent", (i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getMoveComponent)
-		.def("getMoveComponent", (i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getMoveComponent)
-		.def("getMovementComponent", (i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getMovementComponent)
-		.def("getMovementComponent", (i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getMovementComponent)
-		.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getToggleWaynetComponent)
-		.def("getToggleWaynetComponent", (i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getToggleWaynetComponent)
-		.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getPoint2PointConstraintComponent)
-		.def("getPoint2PointConstraintComponent", (i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getPoint2PointConstraintComponent)
-		.def("getVelocityComponent", (i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *)) &i6engine::python::object::getVelocityComponent)
-		.def("getVelocityComponent", (i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>(*)(i6engine::api::GameObject *, const std::string &)) &i6engine::python::object::getVelocityComponent);
+		.def("getParticleEmitterComponent", (i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getParticleEmitterComponent)
+		.def("getParticleEmitterComponent", (i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getParticleEmitterComponent)
+		.def("getPhysicalStateComponent", (i6e::utils::sharedPtr<i6e::api::PhysicalStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getPhysicalStateComponent)
+		.def("getPhysicalStateComponent", (i6e::utils::sharedPtr<i6e::api::PhysicalStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getPhysicalStateComponent)
+		.def("getShatterComponent", (i6e::utils::sharedPtr<i6e::api::ShatterComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getShatterComponent)
+		.def("getShatterComponent", (i6e::utils::sharedPtr<i6e::api::ShatterComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getShatterComponent)
+		.def("getSpawnpointComponent", (i6e::utils::sharedPtr<i6e::api::SpawnpointComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getSpawnpointComponent)
+		.def("getSpawnpointComponent", (i6e::utils::sharedPtr<i6e::api::SpawnpointComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getSpawnpointComponent)
+		.def("getStaticStateComponent", (i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getStaticStateComponent)
+		.def("getStaticStateComponent", (i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getStaticStateComponent)
+		.def("getTerrainAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::TerrainAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getTerrainAppearanceComponent)
+		.def("getTerrainAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::TerrainAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getTerrainAppearanceComponent)
+		.def("getSoundComponent", (i6e::utils::sharedPtr<i6e::api::SoundComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getSoundComponent)
+		.def("getSoundComponent", (i6e::utils::sharedPtr<i6e::api::SoundComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getSoundComponent)
+		.def("getSoundListenerComponent", (i6e::utils::sharedPtr<i6e::api::SoundListenerComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getSoundListenerComponent)
+		.def("getSoundListenerComponent", (i6e::utils::sharedPtr<i6e::api::SoundListenerComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getSoundListenerComponent)
+		.def("getBillboardComponent", (i6e::utils::sharedPtr<i6e::api::BillboardComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getBillboardComponent)
+		.def("getBillboardComponent", (i6e::utils::sharedPtr<i6e::api::BillboardComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getBillboardComponent)
+		.def("getFollowComponent", (i6e::utils::sharedPtr<i6e::api::FollowComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getFollowComponent)
+		.def("getFollowComponent", (i6e::utils::sharedPtr<i6e::api::FollowComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getFollowComponent)
+		.def("getMovableTextComponent", (i6e::utils::sharedPtr<i6e::api::MovableTextComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMovableTextComponent)
+		.def("getMovableTextComponent", (i6e::utils::sharedPtr<i6e::api::MovableTextComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMovableTextComponent)
+		.def("getWaypointComponent", (i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getWaypointComponent)
+		.def("getWaypointComponent", (i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getWaypointComponent)
+		.def("getNavigationComponent", (i6e::utils::sharedPtr<i6e::api::NavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getNavigationComponent)
+		.def("getNavigationComponent", (i6e::utils::sharedPtr<i6e::api::NavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getNavigationComponent)
+		.def("getWaynetNavigationComponent", (i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getWaynetNavigationComponent)
+		.def("getWaynetNavigationComponent", (i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getWaynetNavigationComponent)
+		.def("getMoveComponent", (i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMoveComponent)
+		.def("getMoveComponent", (i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMoveComponent)
+		.def("getMovementComponent", (i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMovementComponent)
+		.def("getMovementComponent", (i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMovementComponent)
+		.def("getToggleWaynetComponent", (i6e::utils::sharedPtr<i6e::api::ToggleWaynetComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getToggleWaynetComponent)
+		.def("getToggleWaynetComponent", (i6e::utils::sharedPtr<i6e::api::ToggleWaynetComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getToggleWaynetComponent)
+		.def("getPoint2PointConstraintComponent", (i6e::utils::sharedPtr<i6e::api::Point2PointConstraintComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getPoint2PointConstraintComponent)
+		.def("getPoint2PointConstraintComponent", (i6e::utils::sharedPtr<i6e::api::Point2PointConstraintComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getPoint2PointConstraintComponent)
+		.def("getVelocityComponent", (i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getVelocityComponent)
+		.def("getVelocityComponent", (i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getVelocityComponent);
 	
-	enum_<i6engine::api::AddStrategy>("AddStrategy")
-		.value("ADD", i6engine::api::AddStrategy::ADD)
-		.value("REPLACE", i6engine::api::AddStrategy::REPLACE)
-		.value("REPLACE_DIS", i6engine::api::AddStrategy::REPLACE_DIS)
-		.value("REJECT", i6engine::api::AddStrategy::REJECT)
+	enum_<i6e::api::AddStrategy>("AddStrategy")
+		.value("ADD", i6e::api::AddStrategy::ADD)
+		.value("REPLACE", i6e::api::AddStrategy::REPLACE)
+		.value("REPLACE_DIS", i6e::api::AddStrategy::REPLACE_DIS)
+		.value("REJECT", i6e::api::AddStrategy::REJECT)
 		.export_values();
 
-	class_<std::pair<i6engine::api::AddStrategy, int64_t>>("AddStrategyPair")
+	class_<std::pair<i6e::api::AddStrategy, int64_t>>("AddStrategyPair")
 		.def(init<>())
-		.def_readwrite("first", &std::pair<i6engine::api::AddStrategy, int64_t>::first)
-		.def_readwrite("second", &std::pair<i6engine::api::AddStrategy, int64_t>::second);
+		.def_readwrite("first", &std::pair<i6e::api::AddStrategy, int64_t>::first)
+		.def_readwrite("second", &std::pair<i6e::api::AddStrategy, int64_t>::second);
 
-	class_<i6engine::python::object::ComponentWrapper, i6engine::api::ComPtr, boost::noncopyable>("Component", no_init)
-		.def("getOwnerGO", &i6engine::api::Component::getOwnerGO)
-		.def("getComponentID", &i6engine::api::Component::getComponentID)
-		.def("getFamilyID", &i6engine::api::Component::getFamilyID)
-		.def("getIdentifier", &i6engine::api::Component::getIdentifier)
-		.def("Tick", &i6engine::api::Component::Tick, &i6engine::python::object::ComponentWrapper::default_Tick)
-		.def("setDie", &i6engine::api::Component::setDie)
-		.def("getID", &i6engine::api::Component::getID)
-		.def("News", &i6engine::api::Component::News, &i6engine::python::object::ComponentWrapper::default_News)
-		.def("Init", pure_virtual(&i6engine::python::object::ComponentWrapper::Init))
-		.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::python::object::ComponentWrapper::default_Finalize)
-		.def("synchronize", pure_virtual(&i6engine::python::object::ComponentWrapper::synchronize))
-		.def("setSync", &i6engine::api::Component::setSync)
-		.def("getSync", &i6engine::api::Component::getSync)
-		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::ComponentWrapper::default_howToAdd)
-		.def("getTemplateName", pure_virtual(&i6engine::python::object::ComponentWrapper::getTemplateName))
-		.def("addTicker", &i6engine::python::object::ComponentWrapper::addTicker)
-		.def("removeTicker", &i6engine::python::object::ComponentWrapper::removeTicker);
+	class_<i6e::python::object::ComponentWrapper, i6e::api::ComPtr, boost::noncopyable>("Component", no_init)
+		.def("getOwnerGO", &i6e::api::Component::getOwnerGO)
+		.def("getComponentID", &i6e::api::Component::getComponentID)
+		.def("getFamilyID", &i6e::api::Component::getFamilyID)
+		.def("getIdentifier", &i6e::api::Component::getIdentifier)
+		.def("Tick", &i6e::api::Component::Tick, &i6e::python::object::ComponentWrapper::default_Tick)
+		.def("setDie", &i6e::api::Component::setDie)
+		.def("getID", &i6e::api::Component::getID)
+		.def("News", &i6e::api::Component::News, &i6e::python::object::ComponentWrapper::default_News)
+		.def("Init", pure_virtual(&i6e::python::object::ComponentWrapper::Init))
+		.def("Finalize", &i6e::api::Component::Finalize, &i6e::python::object::ComponentWrapper::default_Finalize)
+		.def("synchronize", pure_virtual(&i6e::python::object::ComponentWrapper::synchronize))
+		.def("setSync", &i6e::api::Component::setSync)
+		.def("getSync", &i6e::api::Component::getSync)
+		//.def("howToAdd", &i6e::api::Component::howToAdd, &i6e::python::object::ComponentWrapper::default_howToAdd)
+		.def("getTemplateName", pure_virtual(&i6e::python::object::ComponentWrapper::getTemplateName))
+		.def("addTicker", &i6e::python::object::ComponentWrapper::addTicker)
+		.def("removeTicker", &i6e::python::object::ComponentWrapper::removeTicker);
 
-	class_<i6engine::api::AnimatedDirectionalLightComponent, i6engine::utils::sharedPtr<i6engine::api::AnimatedDirectionalLightComponent, i6engine::api::Component>, boost::noncopyable>("AnimatedDirectionalLightComponent", no_init)
-		.def("synchronize", &i6engine::api::AnimatedDirectionalLightComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::AnimatedDirectionalLightComponent::getTemplateName);
+	class_<i6e::api::AnimatedDirectionalLightComponent, i6e::utils::sharedPtr<i6e::api::AnimatedDirectionalLightComponent, i6e::api::Component>, boost::noncopyable>("AnimatedDirectionalLightComponent", no_init)
+		.def("synchronize", &i6e::api::AnimatedDirectionalLightComponent::synchronize)
+		.def("getTemplateName", &i6e::api::AnimatedDirectionalLightComponent::getTemplateName);
 
-	class_<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::utils::sharedPtr<i6engine::api::AnimatedLuminousAppearanceComponent, i6engine::api::Component>, boost::noncopyable>("AnimatedLuminousAppearanceComponent", no_init)
-		.def("synchronize", &i6engine::api::LuminousAppearanceComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::LuminousAppearanceComponent::getTemplateName);
+	class_<i6e::api::AnimatedLuminousAppearanceComponent, i6e::utils::sharedPtr<i6e::api::AnimatedLuminousAppearanceComponent, i6e::api::Component>, boost::noncopyable>("AnimatedLuminousAppearanceComponent", no_init)
+		.def("synchronize", &i6e::api::LuminousAppearanceComponent::synchronize)
+		.def("getTemplateName", &i6e::api::LuminousAppearanceComponent::getTemplateName);
 
-	class_<i6engine::api::AnimatedSpotLightComponent, i6engine::utils::sharedPtr<i6engine::api::AnimatedSpotLightComponent, i6engine::api::Component>, boost::noncopyable>("AnimatedSpotLightComponent", no_init)
-		.def("synchronize", &i6engine::api::AnimatedDirectionalLightComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::AnimatedDirectionalLightComponent::getTemplateName);
+	class_<i6e::api::AnimatedSpotLightComponent, i6e::utils::sharedPtr<i6e::api::AnimatedSpotLightComponent, i6e::api::Component>, boost::noncopyable>("AnimatedSpotLightComponent", no_init)
+		.def("synchronize", &i6e::api::AnimatedDirectionalLightComponent::synchronize)
+		.def("getTemplateName", &i6e::api::AnimatedDirectionalLightComponent::getTemplateName);
 
-	class_<i6engine::api::AnimationControllerComponent, i6engine::utils::sharedPtr<i6engine::api::AnimationControllerComponent, i6engine::api::Component>, boost::noncopyable>("AnimationControllerComponent", no_init)
-		.def("addAnimationFrameEvent", (void(*)(i6engine::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &)) &i6engine::python::object::addAnimationFrameEvent)
-		.def("addAnimationFrameEvent", (void(*)(i6engine::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &, const std::string &)) &i6engine::python::object::addAnimationFrameEvent)
-		.def("playAnimation", &i6engine::api::AnimationControllerComponent::playAnimation)
-		.def("setAnimationSpeed", &i6engine::api::AnimationControllerComponent::setAnimationSpeed)
-		.def("stopAnimation", &i6engine::api::AnimationControllerComponent::stopAnimation)
-		.def("synchronize", &i6engine::api::AnimationControllerComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::AnimationControllerComponent::getTemplateName);
+	class_<i6e::api::AnimationControllerComponent, i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component>, boost::noncopyable>("AnimationControllerComponent", no_init)
+		.def("addAnimationFrameEvent", (void(*)(i6e::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &)) &i6e::python::object::addAnimationFrameEvent)
+		.def("addAnimationFrameEvent", (void(*)(i6e::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &, const std::string &)) &i6e::python::object::addAnimationFrameEvent)
+		.def("playAnimation", &i6e::api::AnimationControllerComponent::playAnimation)
+		.def("setAnimationSpeed", &i6e::api::AnimationControllerComponent::setAnimationSpeed)
+		.def("stopAnimation", &i6e::api::AnimationControllerComponent::stopAnimation)
+		.def("synchronize", &i6e::api::AnimationControllerComponent::synchronize)
+		.def("getTemplateName", &i6e::api::AnimationControllerComponent::getTemplateName);
 
-	class_<i6engine::api::BillboardComponent, i6engine::utils::sharedPtr<i6engine::api::BillboardComponent, i6engine::api::Component>, boost::noncopyable>("BillboardComponent", no_init)
-		.def("createOrUpdateBillboard", &i6engine::api::BillboardComponent::createOrUpdateBillboard)
-		.def("deleteBillboard", &i6engine::api::BillboardComponent::deleteBillboard)
-		.def("synchronize", &i6engine::api::BillboardComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::BillboardComponent::getTemplateName);
+	class_<i6e::api::BillboardComponent, i6e::utils::sharedPtr<i6e::api::BillboardComponent, i6e::api::Component>, boost::noncopyable>("BillboardComponent", no_init)
+		.def("createOrUpdateBillboard", &i6e::api::BillboardComponent::createOrUpdateBillboard)
+		.def("deleteBillboard", &i6e::api::BillboardComponent::deleteBillboard)
+		.def("synchronize", &i6e::api::BillboardComponent::synchronize)
+		.def("getTemplateName", &i6e::api::BillboardComponent::getTemplateName);
 
-	class_<i6engine::python::object::CameraComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::CameraComponent, i6engine::api::Component>, boost::noncopyable>("CameraComponent", no_init)
-		.def("Tick", &i6engine::api::Component::Tick, &i6engine::python::object::CameraComponentWrapper::default_Tick)
-		.def("News", &i6engine::api::Component::News, &i6engine::python::object::CameraComponentWrapper::default_News)
-		.def("Init", &i6engine::python::object::CameraComponentWrapper::Init)
-		.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::python::object::CameraComponentWrapper::default_Finalize)
-		.def("synchronize", &i6engine::python::object::CameraComponentWrapper::synchronize)
-		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::CameraComponentWrapper::default_howToAdd)
-		.def("getTemplateName", &i6engine::python::object::CameraComponentWrapper::getTemplateName)
-		.def("addTicker", &i6engine::python::object::CameraComponentWrapper::addTicker)
-		.def("removeTicker", &i6engine::python::object::CameraComponentWrapper::removeTicker)
-		.def("setPosition", &i6engine::api::CameraComponent::setPosition)
-		.def("setLookAt", &i6engine::api::CameraComponent::setLookAt)
-		.def("setNearClip", &i6engine::api::CameraComponent::setNearClip)
-		.def("setAspectRatio", &i6engine::api::CameraComponent::setAspectRatio)
-		.def("setFOVy", &i6engine::api::CameraComponent::setFOVy)
-		.def("setFrustumExtends", &i6engine::api::CameraComponent::setFrustumExtends)
-		.def("setViewportDimension", &i6engine::api::CameraComponent::setViewportDimension)
-		.def("setViewportBackground", &i6engine::api::CameraComponent::setViewportBackground)
-		.def("getPosition", &i6engine::api::CameraComponent::getPosition)
-		.def("getLookAt", &i6engine::api::CameraComponent::getLookAt)
-		.def("enableCompositor", &i6engine::api::CameraComponent::enableCompositor);
+	class_<i6e::python::object::CameraComponentWrapper, i6e::utils::sharedPtr<i6e::api::CameraComponent, i6e::api::Component>, boost::noncopyable>("CameraComponent", no_init)
+		.def("Tick", &i6e::api::Component::Tick, &i6e::python::object::CameraComponentWrapper::default_Tick)
+		.def("News", &i6e::api::Component::News, &i6e::python::object::CameraComponentWrapper::default_News)
+		.def("Init", &i6e::python::object::CameraComponentWrapper::Init)
+		.def("Finalize", &i6e::api::Component::Finalize, &i6e::python::object::CameraComponentWrapper::default_Finalize)
+		.def("synchronize", &i6e::python::object::CameraComponentWrapper::synchronize)
+		//.def("howToAdd", &i6e::api::Component::howToAdd, &i6e::python::object::CameraComponentWrapper::default_howToAdd)
+		.def("getTemplateName", &i6e::python::object::CameraComponentWrapper::getTemplateName)
+		.def("addTicker", &i6e::python::object::CameraComponentWrapper::addTicker)
+		.def("removeTicker", &i6e::python::object::CameraComponentWrapper::removeTicker)
+		.def("setPosition", &i6e::api::CameraComponent::setPosition)
+		.def("setLookAt", &i6e::api::CameraComponent::setLookAt)
+		.def("setNearClip", &i6e::api::CameraComponent::setNearClip)
+		.def("setAspectRatio", &i6e::api::CameraComponent::setAspectRatio)
+		.def("setFOVy", &i6e::api::CameraComponent::setFOVy)
+		.def("setFrustumExtends", &i6e::api::CameraComponent::setFrustumExtends)
+		.def("setViewportDimension", &i6e::api::CameraComponent::setViewportDimension)
+		.def("setViewportBackground", &i6e::api::CameraComponent::setViewportBackground)
+		.def("getPosition", &i6e::api::CameraComponent::getPosition)
+		.def("getLookAt", &i6e::api::CameraComponent::getLookAt)
+		.def("enableCompositor", &i6e::api::CameraComponent::enableCompositor);
 
-	class_<i6engine::api::FollowComponent, i6engine::utils::sharedPtr<i6engine::api::FollowComponent, i6engine::api::Component>, boost::noncopyable>("FollowComponent", no_init)
-		.def("synchronize", &i6engine::api::FollowComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::FollowComponent::getTemplateName);
+	class_<i6e::api::FollowComponent, i6e::utils::sharedPtr<i6e::api::FollowComponent, i6e::api::Component>, boost::noncopyable>("FollowComponent", no_init)
+		.def("synchronize", &i6e::api::FollowComponent::synchronize)
+		.def("getTemplateName", &i6e::api::FollowComponent::getTemplateName);
 
-	class_<i6engine::api::LifetimeComponent, i6engine::utils::sharedPtr<i6engine::api::LifetimeComponent, i6engine::api::Component>, boost::noncopyable>("LifetimeComponent", no_init)
-		.def("synchronize", &i6engine::api::LifetimeComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::LifetimeComponent::getTemplateName)
-		.def("instantKill", &i6engine::api::LifetimeComponent::instantKill);
+	class_<i6e::api::LifetimeComponent, i6e::utils::sharedPtr<i6e::api::LifetimeComponent, i6e::api::Component>, boost::noncopyable>("LifetimeComponent", no_init)
+		.def("synchronize", &i6e::api::LifetimeComponent::synchronize)
+		.def("getTemplateName", &i6e::api::LifetimeComponent::getTemplateName)
+		.def("instantKill", &i6e::api::LifetimeComponent::instantKill);
 
-	class_<i6engine::api::LuminousAppearanceComponent, i6engine::utils::sharedPtr<i6engine::api::LuminousAppearanceComponent, i6engine::api::Component>, boost::noncopyable>("LuminousAppearanceComponent", no_init)
-		.def("synchronize", &i6engine::api::LuminousAppearanceComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::LuminousAppearanceComponent::getTemplateName)
-		.def("setLightType", &i6engine::api::LuminousAppearanceComponent::setLightType)
-		.def("getLightType", &i6engine::api::LuminousAppearanceComponent::getLightType)
-		.def("setDiffuseColor", &i6engine::api::LuminousAppearanceComponent::setDiffuseColor)
-		.def("getDiffuseColor", &i6engine::api::LuminousAppearanceComponent::getDiffuseColor)
-		.def("setSpecularColor", &i6engine::api::LuminousAppearanceComponent::setSpecularColor)
-		.def("getSpecularColor", &i6engine::api::LuminousAppearanceComponent::getSpecularColor)
-		.def("setAttenuation", &i6engine::api::LuminousAppearanceComponent::setAttenuation)
-		.def("getAttenuation", &i6engine::api::LuminousAppearanceComponent::getAttenuation)
-		.def("setDirection", &i6engine::api::LuminousAppearanceComponent::setDirection)
-		.def("getDirection", &i6engine::api::LuminousAppearanceComponent::getDirection);
+	class_<i6e::api::LuminousAppearanceComponent, i6e::utils::sharedPtr<i6e::api::LuminousAppearanceComponent, i6e::api::Component>, boost::noncopyable>("LuminousAppearanceComponent", no_init)
+		.def("synchronize", &i6e::api::LuminousAppearanceComponent::synchronize)
+		.def("getTemplateName", &i6e::api::LuminousAppearanceComponent::getTemplateName)
+		.def("setLightType", &i6e::api::LuminousAppearanceComponent::setLightType)
+		.def("getLightType", &i6e::api::LuminousAppearanceComponent::getLightType)
+		.def("setDiffuseColor", &i6e::api::LuminousAppearanceComponent::setDiffuseColor)
+		.def("getDiffuseColor", &i6e::api::LuminousAppearanceComponent::getDiffuseColor)
+		.def("setSpecularColor", &i6e::api::LuminousAppearanceComponent::setSpecularColor)
+		.def("getSpecularColor", &i6e::api::LuminousAppearanceComponent::getSpecularColor)
+		.def("setAttenuation", &i6e::api::LuminousAppearanceComponent::setAttenuation)
+		.def("getAttenuation", &i6e::api::LuminousAppearanceComponent::getAttenuation)
+		.def("setDirection", &i6e::api::LuminousAppearanceComponent::setDirection)
+		.def("getDirection", &i6e::api::LuminousAppearanceComponent::getDirection);
 
-	enum_<i6engine::api::LuminousAppearanceComponent::LightType>("LightType")
-		.value("POINT", i6engine::api::LuminousAppearanceComponent::LightType::POINT)
-		.value("DIRECTIONAL", i6engine::api::LuminousAppearanceComponent::LightType::DIRECTIONAL)
-		.value("SPOT", i6engine::api::LuminousAppearanceComponent::LightType::SPOT)
+	enum_<i6e::api::LuminousAppearanceComponent::LightType>("LightType")
+		.value("POINT", i6e::api::LuminousAppearanceComponent::LightType::POINT)
+		.value("DIRECTIONAL", i6e::api::LuminousAppearanceComponent::LightType::DIRECTIONAL)
+		.value("SPOT", i6e::api::LuminousAppearanceComponent::LightType::SPOT)
 		.export_values();
 
-	class_<i6engine::api::MeshAppearanceComponent, i6engine::utils::sharedPtr<i6engine::api::MeshAppearanceComponent, i6engine::api::Component>, boost::noncopyable>("MeshAppearanceComponent", no_init)
-		.def("synchronize", &i6engine::api::MeshAppearanceComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::MeshAppearanceComponent::getTemplateName)
-		.def("getPosition", &i6engine::api::MeshAppearanceComponent::getPosition)
-		.def("setVisibility", &i6engine::api::MeshAppearanceComponent::setVisibility)
-		.def("setMesh", &i6engine::api::MeshAppearanceComponent::setMesh)
-		.def("setCustomParameter", &i6engine::api::MeshAppearanceComponent::setCustomParameter)
-		.def("getVisibility", &i6engine::api::MeshAppearanceComponent::getVisibility)
-		.def("getMesh", &i6engine::api::MeshAppearanceComponent::getMesh)
-		.def("setMaterial", &i6engine::api::MeshAppearanceComponent::setMaterial)
-		.def("playAnimation", &i6engine::api::MeshAppearanceComponent::playAnimation)
-		.def("setAnimationSpeed", &i6engine::api::MeshAppearanceComponent::setAnimationSpeed)
-		.def("stopAnimation", &i6engine::api::MeshAppearanceComponent::stopAnimation)
-		.def("drawBoundingBox", &i6engine::api::MeshAppearanceComponent::drawBoundingBox)
-		.def("removeBoundingBox", &i6engine::api::MeshAppearanceComponent::removeBoundingBox)
-		.def("attachGameObjectToBone", &i6engine::api::MeshAppearanceComponent::attachGameObjectToBone)
-		.def("detachGameObjectFromBone", &i6engine::api::MeshAppearanceComponent::detachGameObjectFromBone)
-		.def("addAnimationFrameEvent", (void(*)(i6engine::api::MeshAppearanceComponent*, uint64_t, const std::string &)) &i6engine::python::object::addAnimationFrameEvent)
-		.def("addAnimationFrameEvent", (void(*)(i6engine::api::MeshAppearanceComponent*, uint64_t, const std::string &, const std::string &)) &i6engine::python::object::addAnimationFrameEvent)
-		.def("getBoneTransform", &i6engine::api::MeshAppearanceComponent::getBoneTransform)
-		.def("setShadowCasting", &i6engine::api::MeshAppearanceComponent::setShadowCasting);
+	class_<i6e::api::MeshAppearanceComponent, i6e::utils::sharedPtr<i6e::api::MeshAppearanceComponent, i6e::api::Component>, boost::noncopyable>("MeshAppearanceComponent", no_init)
+		.def("synchronize", &i6e::api::MeshAppearanceComponent::synchronize)
+		.def("getTemplateName", &i6e::api::MeshAppearanceComponent::getTemplateName)
+		.def("getPosition", &i6e::api::MeshAppearanceComponent::getPosition)
+		.def("setVisibility", &i6e::api::MeshAppearanceComponent::setVisibility)
+		.def("setMesh", &i6e::api::MeshAppearanceComponent::setMesh)
+		.def("setCustomParameter", &i6e::api::MeshAppearanceComponent::setCustomParameter)
+		.def("getVisibility", &i6e::api::MeshAppearanceComponent::getVisibility)
+		.def("getMesh", &i6e::api::MeshAppearanceComponent::getMesh)
+		.def("setMaterial", &i6e::api::MeshAppearanceComponent::setMaterial)
+		.def("playAnimation", &i6e::api::MeshAppearanceComponent::playAnimation)
+		.def("setAnimationSpeed", &i6e::api::MeshAppearanceComponent::setAnimationSpeed)
+		.def("stopAnimation", &i6e::api::MeshAppearanceComponent::stopAnimation)
+		.def("drawBoundingBox", &i6e::api::MeshAppearanceComponent::drawBoundingBox)
+		.def("removeBoundingBox", &i6e::api::MeshAppearanceComponent::removeBoundingBox)
+		.def("attachGameObjectToBone", &i6e::api::MeshAppearanceComponent::attachGameObjectToBone)
+		.def("detachGameObjectFromBone", &i6e::api::MeshAppearanceComponent::detachGameObjectFromBone)
+		.def("addAnimationFrameEvent", (void(*)(i6e::api::MeshAppearanceComponent*, uint64_t, const std::string &)) &i6e::python::object::addAnimationFrameEvent)
+		.def("addAnimationFrameEvent", (void(*)(i6e::api::MeshAppearanceComponent*, uint64_t, const std::string &, const std::string &)) &i6e::python::object::addAnimationFrameEvent)
+		.def("getBoneTransform", &i6e::api::MeshAppearanceComponent::getBoneTransform)
+		.def("setShadowCasting", &i6e::api::MeshAppearanceComponent::setShadowCasting);
 
-	class_<i6engine::api::MovableTextComponent, i6engine::utils::sharedPtr<i6engine::api::MovableTextComponent, i6engine::api::Component>, boost::noncopyable>("MovableTextComponent", no_init)
-		.def("synchronize", &i6engine::api::MovableTextComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::MovableTextComponent::getTemplateName)
-		.def("setText", &i6engine::api::MovableTextComponent::setText);
+	class_<i6e::api::MovableTextComponent, i6e::utils::sharedPtr<i6e::api::MovableTextComponent, i6e::api::Component>, boost::noncopyable>("MovableTextComponent", no_init)
+		.def("synchronize", &i6e::api::MovableTextComponent::synchronize)
+		.def("getTemplateName", &i6e::api::MovableTextComponent::getTemplateName)
+		.def("setText", &i6e::api::MovableTextComponent::setText);
 
-	class_<i6engine::api::MoveComponent, i6engine::utils::sharedPtr<i6engine::api::MoveComponent, i6engine::api::Component>, boost::noncopyable>("MoveComponent", no_init)
-		.def("synchronize", &i6engine::api::MoveComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::MoveComponent::getTemplateName)
-		.def("navigate", (void(i6engine::api::MoveComponent::*)(const Vec3 &)) &i6engine::api::MoveComponent::navigate)
-		.def("navigate", (void(i6engine::api::MoveComponent::*)(const std::string &)) &i6engine::api::MoveComponent::navigate);
+	class_<i6e::api::MoveComponent, i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component>, boost::noncopyable>("MoveComponent", no_init)
+		.def("synchronize", &i6e::api::MoveComponent::synchronize)
+		.def("getTemplateName", &i6e::api::MoveComponent::getTemplateName)
+		.def("navigate", (void(i6e::api::MoveComponent::*)(const Vec3 &)) &i6e::api::MoveComponent::navigate)
+		.def("navigate", (void(i6e::api::MoveComponent::*)(const std::string &)) &i6e::api::MoveComponent::navigate);
 
-	class_<i6engine::python::object::MovementComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::MovementComponent, i6engine::api::Component>, boost::noncopyable>("MovementComponent", no_init)
-		.def("Tick", &i6engine::api::MovementComponent::Tick, &i6engine::python::object::MovementComponentWrapper::default_Tick)
-		.def("News", &i6engine::api::MovementComponent::News, &i6engine::python::object::MovementComponentWrapper::default_News)
-		.def("Init", &i6engine::python::object::MovementComponentWrapper::Init)
-		.def("Finalize", &i6engine::api::MovementComponent::Finalize, &i6engine::python::object::MovementComponentWrapper::default_Finalize)
-		.def("synchronize", pure_virtual(&i6engine::python::object::MovementComponentWrapper::synchronize))
-		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::MovementComponentWrapper::default_howToAdd)
-		.def("getTemplateName", pure_virtual(&i6engine::python::object::MovementComponentWrapper::getTemplateName))
-		.def("forward", pure_virtual(&i6engine::python::object::MovementComponentWrapper::forward))
-		.def("backward", pure_virtual(&i6engine::python::object::MovementComponentWrapper::backward))
-		.def("left", pure_virtual(&i6engine::python::object::MovementComponentWrapper::left))
-		.def("right", pure_virtual(&i6engine::python::object::MovementComponentWrapper::right))
-		.def("stop", pure_virtual(&i6engine::python::object::MovementComponentWrapper::stop));
+	class_<i6e::python::object::MovementComponentWrapper, i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component>, boost::noncopyable>("MovementComponent", no_init)
+		.def("Tick", &i6e::api::MovementComponent::Tick, &i6e::python::object::MovementComponentWrapper::default_Tick)
+		.def("News", &i6e::api::MovementComponent::News, &i6e::python::object::MovementComponentWrapper::default_News)
+		.def("Init", &i6e::python::object::MovementComponentWrapper::Init)
+		.def("Finalize", &i6e::api::MovementComponent::Finalize, &i6e::python::object::MovementComponentWrapper::default_Finalize)
+		.def("synchronize", pure_virtual(&i6e::python::object::MovementComponentWrapper::synchronize))
+		//.def("howToAdd", &i6e::api::Component::howToAdd, &i6e::python::object::MovementComponentWrapper::default_howToAdd)
+		.def("getTemplateName", pure_virtual(&i6e::python::object::MovementComponentWrapper::getTemplateName))
+		.def("forward", pure_virtual(&i6e::python::object::MovementComponentWrapper::forward))
+		.def("backward", pure_virtual(&i6e::python::object::MovementComponentWrapper::backward))
+		.def("left", pure_virtual(&i6e::python::object::MovementComponentWrapper::left))
+		.def("right", pure_virtual(&i6e::python::object::MovementComponentWrapper::right))
+		.def("stop", pure_virtual(&i6e::python::object::MovementComponentWrapper::stop));
 
-	class_<i6engine::api::MoverCircleComponent, i6engine::utils::sharedPtr<i6engine::api::MoverCircleComponent, i6engine::api::Component>, boost::noncopyable>("MoverCircleComponent", no_init)
-		.def("synchronize", &i6engine::api::MoverCircleComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::MoverCircleComponent::getTemplateName)
-		.def("setPositioning", &i6engine::api::MoverCircleComponent::setPositioning)
-		.def("setCircleParameters", &i6engine::api::MoverCircleComponent::setCircleParameters)
-		.def("start", &i6engine::api::MoverCircleComponent::start)
-		.def("getCircleAxis", &i6engine::api::MoverCircleComponent::getCircleAxis)
-		.def("getCircleRadius", &i6engine::api::MoverCircleComponent::getCircleRadius)
-		.def("reset", &i6engine::api::MoverCircleComponent::reset);
+	class_<i6e::api::MoverCircleComponent, i6e::utils::sharedPtr<i6e::api::MoverCircleComponent, i6e::api::Component>, boost::noncopyable>("MoverCircleComponent", no_init)
+		.def("synchronize", &i6e::api::MoverCircleComponent::synchronize)
+		.def("getTemplateName", &i6e::api::MoverCircleComponent::getTemplateName)
+		.def("setPositioning", &i6e::api::MoverCircleComponent::setPositioning)
+		.def("setCircleParameters", &i6e::api::MoverCircleComponent::setCircleParameters)
+		.def("start", &i6e::api::MoverCircleComponent::start)
+		.def("getCircleAxis", &i6e::api::MoverCircleComponent::getCircleAxis)
+		.def("getCircleRadius", &i6e::api::MoverCircleComponent::getCircleRadius)
+		.def("reset", &i6e::api::MoverCircleComponent::reset);
 
-	class_<i6engine::python::object::MoverComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::MoverComponent, i6engine::api::Component>, boost::noncopyable>("MoverComponent", no_init)
-		.def("Tick", &i6engine::api::MoverComponent::Tick, &i6engine::python::object::MoverComponentWrapper::default_Tick)
-		.def("News", &i6engine::python::object::MoverComponentWrapper::News)
-		.def("Init", &i6engine::python::object::MoverComponentWrapper::Init)
-		.def("Finalize", &i6engine::api::MoverComponent::Finalize, &i6engine::python::object::MoverComponentWrapper::default_Finalize)
-		.def("synchronize", &i6engine::python::object::MoverComponentWrapper::synchronize)
-		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::MoverComponentWrapper::default_howToAdd)
-		.def("getTemplateName", &i6engine::python::object::MoverComponentWrapper::getTemplateName)
-		.def("start", &i6engine::python::object::MoverComponentWrapper::start)
-		.def("reset", &i6engine::python::object::MoverComponentWrapper::reset);
+	class_<i6e::python::object::MoverComponentWrapper, i6e::utils::sharedPtr<i6e::api::MoverComponent, i6e::api::Component>, boost::noncopyable>("MoverComponent", no_init)
+		.def("Tick", &i6e::api::MoverComponent::Tick, &i6e::python::object::MoverComponentWrapper::default_Tick)
+		.def("News", &i6e::python::object::MoverComponentWrapper::News)
+		.def("Init", &i6e::python::object::MoverComponentWrapper::Init)
+		.def("Finalize", &i6e::api::MoverComponent::Finalize, &i6e::python::object::MoverComponentWrapper::default_Finalize)
+		.def("synchronize", &i6e::python::object::MoverComponentWrapper::synchronize)
+		//.def("howToAdd", &i6e::api::Component::howToAdd, &i6e::python::object::MoverComponentWrapper::default_howToAdd)
+		.def("getTemplateName", &i6e::python::object::MoverComponentWrapper::getTemplateName)
+		.def("start", &i6e::python::object::MoverComponentWrapper::start)
+		.def("reset", &i6e::python::object::MoverComponentWrapper::reset);
 
-	enum_<i6engine::api::MoverComponent::Positioning>("Positioning")
-		.value("POSITIONING_ABSOLUTE", i6engine::api::MoverComponent::Positioning::POSITIONING_ABSOLUTE)
-		.value("POSITIONING_RELATIVE", i6engine::api::MoverComponent::Positioning::POSITIONING_RELATIVE)
+	enum_<i6e::api::MoverComponent::Positioning>("Positioning")
+		.value("POSITIONING_ABSOLUTE", i6e::api::MoverComponent::Positioning::POSITIONING_ABSOLUTE)
+		.value("POSITIONING_RELATIVE", i6e::api::MoverComponent::Positioning::POSITIONING_RELATIVE)
 		.export_values();
 
-	class_<i6engine::api::MoverInterpolateComponent, i6engine::utils::sharedPtr<i6engine::api::MoverInterpolateComponent, i6engine::api::Component>, boost::noncopyable>("MoverInterpolateComponent", no_init)
-		.def("synchronize", &i6engine::api::MoverInterpolateComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::MoverInterpolateComponent::getTemplateName)
-		.def("addKeyFrame", &i6engine::api::MoverInterpolateComponent::addKeyFrame)
-		.def("removeKeyFrame", &i6engine::api::MoverInterpolateComponent::removeKeyFrame)
-		.def("getKeyframe", &i6engine::api::MoverInterpolateComponent::getKeyframe)
-		.def("setMode", &i6engine::api::MoverInterpolateComponent::setMode)
-		.def("setOpenTime", &i6engine::api::MoverInterpolateComponent::setOpenTime)
-		.def("setWay", &i6engine::api::MoverInterpolateComponent::setWay)
-		.def("getWay", &i6engine::api::MoverInterpolateComponent::getWay)
-		.def("start", &i6engine::api::MoverInterpolateComponent::start)
-		.def("reset", &i6engine::api::MoverInterpolateComponent::reset);
+	class_<i6e::api::MoverInterpolateComponent, i6e::utils::sharedPtr<i6e::api::MoverInterpolateComponent, i6e::api::Component>, boost::noncopyable>("MoverInterpolateComponent", no_init)
+		.def("synchronize", &i6e::api::MoverInterpolateComponent::synchronize)
+		.def("getTemplateName", &i6e::api::MoverInterpolateComponent::getTemplateName)
+		.def("addKeyFrame", &i6e::api::MoverInterpolateComponent::addKeyFrame)
+		.def("removeKeyFrame", &i6e::api::MoverInterpolateComponent::removeKeyFrame)
+		.def("getKeyframe", &i6e::api::MoverInterpolateComponent::getKeyframe)
+		.def("setMode", &i6e::api::MoverInterpolateComponent::setMode)
+		.def("setOpenTime", &i6e::api::MoverInterpolateComponent::setOpenTime)
+		.def("setWay", &i6e::api::MoverInterpolateComponent::setWay)
+		.def("getWay", &i6e::api::MoverInterpolateComponent::getWay)
+		.def("start", &i6e::api::MoverInterpolateComponent::start)
+		.def("reset", &i6e::api::MoverInterpolateComponent::reset);
 
-	enum_<i6engine::api::MoverInterpolateComponent::Mode>("Mode")
-		.value("TWOSTATE_TOGGLE", i6engine::api::MoverInterpolateComponent::Mode::TWOSTATE_TOGGLE)
-		.value("TWOSTATE_OPENTIME", i6engine::api::MoverInterpolateComponent::Mode::TWOSTATE_OPENTIME)
-		.value("NSTATE_LOOP", i6engine::api::MoverInterpolateComponent::Mode::NSTATE_LOOP)
-		.value("ONCE", i6engine::api::MoverInterpolateComponent::Mode::ONCE)
+	enum_<i6e::api::MoverInterpolateComponent::Mode>("Mode")
+		.value("TWOSTATE_TOGGLE", i6e::api::MoverInterpolateComponent::Mode::TWOSTATE_TOGGLE)
+		.value("TWOSTATE_OPENTIME", i6e::api::MoverInterpolateComponent::Mode::TWOSTATE_OPENTIME)
+		.value("NSTATE_LOOP", i6e::api::MoverInterpolateComponent::Mode::NSTATE_LOOP)
+		.value("ONCE", i6e::api::MoverInterpolateComponent::Mode::ONCE)
 		.export_values();
 		
-	enum_<i6engine::api::MoverInterpolateComponent::Way>("Way")
-		.value("LINEAR", i6engine::api::MoverInterpolateComponent::Way::LINEAR)
-		.value("BEZIER", i6engine::api::MoverInterpolateComponent::Way::BEZIER)
+	enum_<i6e::api::MoverInterpolateComponent::Way>("Way")
+		.value("LINEAR", i6e::api::MoverInterpolateComponent::Way::LINEAR)
+		.value("BEZIER", i6e::api::MoverInterpolateComponent::Way::BEZIER)
 		.export_values();
 
-	class_<i6engine::api::MovingCameraComponent, i6engine::utils::sharedPtr<i6engine::api::MovingCameraComponent, i6engine::api::Component>, boost::noncopyable>("MovingCameraComponent", no_init)
-		.def("getTemplateName", &i6engine::api::MoverCircleComponent::getTemplateName),
+	class_<i6e::api::MovingCameraComponent, i6e::utils::sharedPtr<i6e::api::MovingCameraComponent, i6e::api::Component>, boost::noncopyable>("MovingCameraComponent", no_init)
+		.def("getTemplateName", &i6e::api::MoverCircleComponent::getTemplateName),
 
-	class_<i6engine::python::object::NavigationComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::NavigationComponent, i6engine::api::Component>, boost::noncopyable>("NavigationComponent", no_init)
-		.def("Tick", &i6engine::api::Component::Tick, &i6engine::python::object::NavigationComponentWrapper::default_Tick)
-		.def("News", &i6engine::api::Component::News, &i6engine::python::object::NavigationComponentWrapper::default_News)
-		.def("Init", &i6engine::python::object::NavigationComponentWrapper::Init)
-		.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::python::object::NavigationComponentWrapper::default_Finalize)
-		.def("synchronize", &i6engine::python::object::NavigationComponentWrapper::synchronize)
-		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::NavigationComponentWrapper::default_howToAdd)
-		.def("getTemplateName", &i6engine::python::object::NavigationComponentWrapper::getTemplateName)
-		.def("getPathPos", (std::vector<Vec3>(i6engine::python::object::NavigationComponentWrapper::*)(const Vec3 &, const Vec3 &) const) &i6engine::python::object::NavigationComponentWrapper::getPath)
-		.def("getPathWP", (std::vector<Vec3>(i6engine::python::object::NavigationComponentWrapper::*)(const Vec3 &, const std::string &) const) &i6engine::python::object::NavigationComponentWrapper::getPath);
+	class_<i6e::python::object::NavigationComponentWrapper, i6e::utils::sharedPtr<i6e::api::NavigationComponent, i6e::api::Component>, boost::noncopyable>("NavigationComponent", no_init)
+		.def("Tick", &i6e::api::Component::Tick, &i6e::python::object::NavigationComponentWrapper::default_Tick)
+		.def("News", &i6e::api::Component::News, &i6e::python::object::NavigationComponentWrapper::default_News)
+		.def("Init", &i6e::python::object::NavigationComponentWrapper::Init)
+		.def("Finalize", &i6e::api::Component::Finalize, &i6e::python::object::NavigationComponentWrapper::default_Finalize)
+		.def("synchronize", &i6e::python::object::NavigationComponentWrapper::synchronize)
+		//.def("howToAdd", &i6e::api::Component::howToAdd, &i6e::python::object::NavigationComponentWrapper::default_howToAdd)
+		.def("getTemplateName", &i6e::python::object::NavigationComponentWrapper::getTemplateName)
+		.def("getPathPos", (std::vector<Vec3>(i6e::python::object::NavigationComponentWrapper::*)(const Vec3 &, const Vec3 &) const) &i6e::python::object::NavigationComponentWrapper::getPath)
+		.def("getPathWP", (std::vector<Vec3>(i6e::python::object::NavigationComponentWrapper::*)(const Vec3 &, const std::string &) const) &i6e::python::object::NavigationComponentWrapper::getPath);
 
 #ifdef ISIXE_WITH_NETWORK
-	class_<i6engine::api::NetworkSenderComponent, i6engine::utils::sharedPtr<i6engine::api::NetworkSenderComponent, i6engine::api::Component>, boost::noncopyable>("NetworkSenderComponent", no_init)
-		.def("getTemplateName", &i6engine::api::NetworkSenderComponent::getTemplateName);
+	class_<i6e::api::NetworkSenderComponent, i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component>, boost::noncopyable>("NetworkSenderComponent", no_init)
+		.def("getTemplateName", &i6e::api::NetworkSenderComponent::getTemplateName);
 #endif
 
-	class_<i6engine::api::ParticleEmitterComponent, i6engine::utils::sharedPtr<i6engine::api::ParticleEmitterComponent, i6engine::api::Component>, boost::noncopyable>("ParticleEmitterComponent", no_init)
-		.def("synchronize", &i6engine::api::ParticleEmitterComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::ParticleEmitterComponent::getTemplateName);
+	class_<i6e::api::ParticleEmitterComponent, i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component>, boost::noncopyable>("ParticleEmitterComponent", no_init)
+		.def("synchronize", &i6e::api::ParticleEmitterComponent::synchronize)
+		.def("getTemplateName", &i6e::api::ParticleEmitterComponent::getTemplateName);
 
-	enum_<i6engine::api::ResponseType::ResponseType>("ResponseType")
-		.value("NONE", i6engine::api::ResponseType::ResponseType::NONE)
-		.value("STATIC", i6engine::api::ResponseType::ResponseType::STATIC)
-		.value("GHOST", i6engine::api::ResponseType::ResponseType::GHOST)
-		.value("TRIGGER", i6engine::api::ResponseType::ResponseType::TRIGGER)
+	enum_<i6e::api::ResponseType::ResponseType>("ResponseType")
+		.value("NONE", i6e::api::ResponseType::ResponseType::NONE)
+		.value("STATIC", i6e::api::ResponseType::ResponseType::STATIC)
+		.value("GHOST", i6e::api::ResponseType::ResponseType::GHOST)
+		.value("TRIGGER", i6e::api::ResponseType::ResponseType::TRIGGER)
 		.export_values();
 
-	enum_<i6engine::api::ShatterInterest>("ShatterInterest")
-		.value("NONE", i6engine::api::ShatterInterest::NONE)
-		.value("START", i6engine::api::ShatterInterest::START)
-		.value("END", i6engine::api::ShatterInterest::END)
-		.value("ALWAYS", i6engine::api::ShatterInterest::ALWAYS)
+	enum_<i6e::api::ShatterInterest>("ShatterInterest")
+		.value("NONE", i6e::api::ShatterInterest::NONE)
+		.value("START", i6e::api::ShatterInterest::START)
+		.value("END", i6e::api::ShatterInterest::END)
+		.value("ALWAYS", i6e::api::ShatterInterest::ALWAYS)
 		.export_values();
 
-	class_<i6engine::api::PhysicalStateComponent, i6engine::utils::sharedPtr<i6engine::api::PhysicalStateComponent, i6engine::api::Component>, boost::noncopyable>("PhysicalStateComponent", no_init)
-		.def("getPosition", &i6engine::api::PhysicalStateComponent::getPosition)
-		.def("setPosition", &i6engine::api::PhysicalStateComponent::setPosition)
-		.def("getRotation", &i6engine::api::PhysicalStateComponent::getRotation)
-		.def("setRotation", &i6engine::api::PhysicalStateComponent::setRotation)
-		.def("getScale", &i6engine::api::PhysicalStateComponent::getScale)
-		.def("setScale", &i6engine::api::PhysicalStateComponent::setScale)
-		.def("setCollisionFlags", &i6engine::api::PhysicalStateComponent::setCollisionFlags)
-		.def("getCollisionFlags", &i6engine::api::PhysicalStateComponent::getCollisionFlags)
-		.def("reset", &i6engine::api::PhysicalStateComponent::reset)
-		.def("setCollisionShape", &i6engine::api::PhysicalStateComponent::setCollisionShape)
-		.def("applyRotation", &i6engine::api::PhysicalStateComponent::applyRotation)
-		.def("getLinearVelocity", &i6engine::api::PhysicalStateComponent::getLinearVelocity)
-		.def("setLinearVelocity", &i6engine::api::PhysicalStateComponent::setLinearVelocity)
-		.def("applyCentralForce", &i6engine::api::PhysicalStateComponent::applyCentralForce)
-		.def("applyForce", &i6engine::api::PhysicalStateComponent::applyForce)
-		.def("setShatterInterest", &i6engine::api::PhysicalStateComponent::setShatterInterest)
-		.def("setGravity", &i6engine::api::PhysicalStateComponent::setGravity)
-		.def("synchronize", &i6engine::api::PhysicalStateComponent::synchronize)
-		.def("rayTest", &i6engine::api::PhysicalStateComponent::rayTest)
-		.def("getTemplateName", &i6engine::api::PhysicalStateComponent::getTemplateName)
-		.def("addPosition", &i6engine::api::PhysicalStateComponent::addPosition);
+	class_<i6e::api::PhysicalStateComponent, i6e::utils::sharedPtr<i6e::api::PhysicalStateComponent, i6e::api::Component>, boost::noncopyable>("PhysicalStateComponent", no_init)
+		.def("getPosition", &i6e::api::PhysicalStateComponent::getPosition)
+		.def("setPosition", &i6e::api::PhysicalStateComponent::setPosition)
+		.def("getRotation", &i6e::api::PhysicalStateComponent::getRotation)
+		.def("setRotation", &i6e::api::PhysicalStateComponent::setRotation)
+		.def("getScale", &i6e::api::PhysicalStateComponent::getScale)
+		.def("setScale", &i6e::api::PhysicalStateComponent::setScale)
+		.def("setCollisionFlags", &i6e::api::PhysicalStateComponent::setCollisionFlags)
+		.def("getCollisionFlags", &i6e::api::PhysicalStateComponent::getCollisionFlags)
+		.def("reset", &i6e::api::PhysicalStateComponent::reset)
+		.def("setCollisionShape", &i6e::api::PhysicalStateComponent::setCollisionShape)
+		.def("applyRotation", &i6e::api::PhysicalStateComponent::applyRotation)
+		.def("getLinearVelocity", &i6e::api::PhysicalStateComponent::getLinearVelocity)
+		.def("setLinearVelocity", &i6e::api::PhysicalStateComponent::setLinearVelocity)
+		.def("applyCentralForce", &i6e::api::PhysicalStateComponent::applyCentralForce)
+		.def("applyForce", &i6e::api::PhysicalStateComponent::applyForce)
+		.def("setShatterInterest", &i6e::api::PhysicalStateComponent::setShatterInterest)
+		.def("setGravity", &i6e::api::PhysicalStateComponent::setGravity)
+		.def("synchronize", &i6e::api::PhysicalStateComponent::synchronize)
+		.def("rayTest", &i6e::api::PhysicalStateComponent::rayTest)
+		.def("getTemplateName", &i6e::api::PhysicalStateComponent::getTemplateName)
+		.def("addPosition", &i6e::api::PhysicalStateComponent::addPosition);
 	
-	enum_<i6engine::api::PhysicalStateComponent::ShapeType>("ShapeType")
-		.value("PLANE", i6engine::api::PhysicalStateComponent::ShapeType::PLANE)
-		.value("BOX", i6engine::api::PhysicalStateComponent::ShapeType::BOX)
-		.value("SPHERE", i6engine::api::PhysicalStateComponent::ShapeType::SPHERE)
-		.value("FILE", i6engine::api::PhysicalStateComponent::ShapeType::FILE)
+	enum_<i6e::api::PhysicalStateComponent::ShapeType>("ShapeType")
+		.value("PLANE", i6e::api::PhysicalStateComponent::ShapeType::PLANE)
+		.value("BOX", i6e::api::PhysicalStateComponent::ShapeType::BOX)
+		.value("SPHERE", i6e::api::PhysicalStateComponent::ShapeType::SPHERE)
+		.value("FILE", i6e::api::PhysicalStateComponent::ShapeType::FILE)
 		.export_values();
 
-	enum_<i6engine::api::PhysicalStateComponent::RayTestRepetition>("RayTestRepetition")
-		.value("STOP", i6engine::api::PhysicalStateComponent::RayTestRepetition::STOP)
-		.value("ONCE", i6engine::api::PhysicalStateComponent::RayTestRepetition::ONCE)
-		.value("PERIODIC", i6engine::api::PhysicalStateComponent::RayTestRepetition::PERIODIC)
+	enum_<i6e::api::PhysicalStateComponent::RayTestRepetition>("RayTestRepetition")
+		.value("STOP", i6e::api::PhysicalStateComponent::RayTestRepetition::STOP)
+		.value("ONCE", i6e::api::PhysicalStateComponent::RayTestRepetition::ONCE)
+		.value("PERIODIC", i6e::api::PhysicalStateComponent::RayTestRepetition::PERIODIC)
 		.export_values();
 
-	enum_<i6engine::api::PhysicalStateComponent::RayTestNotify>("RayTestNotify")
-		.value("ALWAYS", i6engine::api::PhysicalStateComponent::RayTestNotify::ALWAYS)
-		.value("CHANGE", i6engine::api::PhysicalStateComponent::RayTestNotify::CHANGE)
-		.value("FOUND", i6engine::api::PhysicalStateComponent::RayTestNotify::FOUND)
-		.value("NOTFOUND", i6engine::api::PhysicalStateComponent::RayTestNotify::NOTFOUND)
-		.value("OBJECTCHANGE", i6engine::api::PhysicalStateComponent::RayTestNotify::OBJECTCHANGE)
+	enum_<i6e::api::PhysicalStateComponent::RayTestNotify>("RayTestNotify")
+		.value("ALWAYS", i6e::api::PhysicalStateComponent::RayTestNotify::ALWAYS)
+		.value("CHANGE", i6e::api::PhysicalStateComponent::RayTestNotify::CHANGE)
+		.value("FOUND", i6e::api::PhysicalStateComponent::RayTestNotify::FOUND)
+		.value("NOTFOUND", i6e::api::PhysicalStateComponent::RayTestNotify::NOTFOUND)
+		.value("OBJECTCHANGE", i6e::api::PhysicalStateComponent::RayTestNotify::OBJECTCHANGE)
 		.export_values();
 
-	class_<i6engine::api::RayTestResult>("RayTestResult")
+	class_<i6e::api::RayTestResult>("RayTestResult")
 		.def(init<>())
-		.def_readonly("objID", &i6engine::api::RayTestResult::objID)
-		.def_readonly("sourceID", &i6engine::api::RayTestResult::sourceID)
-		.def_readonly("collisionPoint", &i6engine::api::RayTestResult::collisionPoint);
+		.def_readonly("objID", &i6e::api::RayTestResult::objID)
+		.def_readonly("sourceID", &i6e::api::RayTestResult::sourceID)
+		.def_readonly("collisionPoint", &i6e::api::RayTestResult::collisionPoint);
 
-	class_<i6engine::api::Point2PointConstraintComponent, i6engine::utils::sharedPtr<i6engine::api::Point2PointConstraintComponent, i6engine::api::Component>, boost::noncopyable>("Point2PointConstraintComponent", no_init)
-		.def("synchronize", &i6engine::api::Point2PointConstraintComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::Point2PointConstraintComponent::getTemplateName);
+	class_<i6e::api::Point2PointConstraintComponent, i6e::utils::sharedPtr<i6e::api::Point2PointConstraintComponent, i6e::api::Component>, boost::noncopyable>("Point2PointConstraintComponent", no_init)
+		.def("synchronize", &i6e::api::Point2PointConstraintComponent::synchronize)
+		.def("getTemplateName", &i6e::api::Point2PointConstraintComponent::getTemplateName);
 
-	class_<i6engine::python::object::ShatterComponentWrapper, i6engine::utils::sharedPtr<i6engine::api::ShatterComponent, i6engine::api::Component>, boost::noncopyable>("ShatterComponent", no_init)
-		.def("Tick", &i6engine::api::Component::Tick, &i6engine::python::object::ShatterComponentWrapper::default_Tick)
-		.def("News", &i6engine::api::ShatterComponent::News, &i6engine::python::object::ShatterComponentWrapper::default_News)
-		.def("Init", &i6engine::api::ShatterComponent::Init, &i6engine::python::object::ShatterComponentWrapper::Init)
-		.def("Finalize", &i6engine::api::Component::Finalize, &i6engine::python::object::ShatterComponentWrapper::default_Finalize)
-		.def("synchronize", &i6engine::python::object::CameraComponentWrapper::synchronize)
-		//.def("howToAdd", &i6engine::api::Component::howToAdd, &i6engine::python::object::ShatterComponentWrapper::default_howToAdd)
-		.def("getTemplateName", &i6engine::python::object::ShatterComponentWrapper::getTemplateName)
-		.def("shatter", pure_virtual(&i6engine::python::object::ShatterComponentWrapper::shatter))
-		.def("resetRespawn", &i6engine::api::ShatterComponent::resetRespawn);
+	class_<i6e::python::object::ShatterComponentWrapper, i6e::utils::sharedPtr<i6e::api::ShatterComponent, i6e::api::Component>, boost::noncopyable>("ShatterComponent", no_init)
+		.def("Tick", &i6e::api::Component::Tick, &i6e::python::object::ShatterComponentWrapper::default_Tick)
+		.def("News", &i6e::api::ShatterComponent::News, &i6e::python::object::ShatterComponentWrapper::default_News)
+		.def("Init", &i6e::api::ShatterComponent::Init, &i6e::python::object::ShatterComponentWrapper::Init)
+		.def("Finalize", &i6e::api::Component::Finalize, &i6e::python::object::ShatterComponentWrapper::default_Finalize)
+		.def("synchronize", &i6e::python::object::CameraComponentWrapper::synchronize)
+		//.def("howToAdd", &i6e::api::Component::howToAdd, &i6e::python::object::ShatterComponentWrapper::default_howToAdd)
+		.def("getTemplateName", &i6e::python::object::ShatterComponentWrapper::getTemplateName)
+		.def("shatter", pure_virtual(&i6e::python::object::ShatterComponentWrapper::shatter))
+		.def("resetRespawn", &i6e::api::ShatterComponent::resetRespawn);
 
-	class_<i6engine::api::SoundComponent, i6engine::utils::sharedPtr<i6engine::api::SoundComponent, i6engine::api::Component>, boost::noncopyable>("SoundComponent", no_init)
-		.def("synchronize", &i6engine::api::SoundComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::SoundComponent::getTemplateName);
+	class_<i6e::api::SoundComponent, i6e::utils::sharedPtr<i6e::api::SoundComponent, i6e::api::Component>, boost::noncopyable>("SoundComponent", no_init)
+		.def("synchronize", &i6e::api::SoundComponent::synchronize)
+		.def("getTemplateName", &i6e::api::SoundComponent::getTemplateName);
 
-	class_<i6engine::api::SoundListenerComponent, i6engine::utils::sharedPtr<i6engine::api::SoundListenerComponent, i6engine::api::Component>, boost::noncopyable>("SoundListenerComponent", no_init)
-		.def("synchronize", &i6engine::api::SoundListenerComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::SoundListenerComponent::getTemplateName);
+	class_<i6e::api::SoundListenerComponent, i6e::utils::sharedPtr<i6e::api::SoundListenerComponent, i6e::api::Component>, boost::noncopyable>("SoundListenerComponent", no_init)
+		.def("synchronize", &i6e::api::SoundListenerComponent::synchronize)
+		.def("getTemplateName", &i6e::api::SoundListenerComponent::getTemplateName);
 
-	class_<i6engine::api::SpawnpointComponent, i6engine::utils::sharedPtr<i6engine::api::SpawnpointComponent, i6engine::api::Component>, boost::noncopyable>("SpawnpointComponent", no_init)
-		.def("synchronize", &i6engine::api::SpawnpointComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::SpawnpointComponent::getTemplateName)
-		.def("addSpawntype", &i6engine::api::SpawnpointComponent::addSpawntype)
-		.def("addSpawntypes", &i6engine::api::SpawnpointComponent::addSpawntypes)
-		.def("removeSpawntype", &i6engine::api::SpawnpointComponent::removeSpawntype)
-		.def("containsSpawntype", &i6engine::api::SpawnpointComponent::containsSpawntype)
-		.def("available", &i6engine::api::SpawnpointComponent::available)
-		.def("setState", &i6engine::api::SpawnpointComponent::setState);
+	class_<i6e::api::SpawnpointComponent, i6e::utils::sharedPtr<i6e::api::SpawnpointComponent, i6e::api::Component>, boost::noncopyable>("SpawnpointComponent", no_init)
+		.def("synchronize", &i6e::api::SpawnpointComponent::synchronize)
+		.def("getTemplateName", &i6e::api::SpawnpointComponent::getTemplateName)
+		.def("addSpawntype", &i6e::api::SpawnpointComponent::addSpawntype)
+		.def("addSpawntypes", &i6e::api::SpawnpointComponent::addSpawntypes)
+		.def("removeSpawntype", &i6e::api::SpawnpointComponent::removeSpawntype)
+		.def("containsSpawntype", &i6e::api::SpawnpointComponent::containsSpawntype)
+		.def("available", &i6e::api::SpawnpointComponent::available)
+		.def("setState", &i6e::api::SpawnpointComponent::setState);
 
-	class_<i6engine::api::StaticStateComponent, i6engine::utils::sharedPtr<i6engine::api::StaticStateComponent, i6engine::api::Component>, boost::noncopyable>("StaticStateComponent", no_init)
-		.def("synchronize", &i6engine::api::StaticStateComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::StaticStateComponent::getTemplateName)
-		.def("setPosition", &i6engine::api::StaticStateComponent::setPosition)
-		.def("setRotation", &i6engine::api::StaticStateComponent::setRotation)
-		.def("setScale", &i6engine::api::StaticStateComponent::setScale)
-		.def("getPosition", &i6engine::api::StaticStateComponent::getPosition)
-		.def("getRotation", &i6engine::api::StaticStateComponent::getRotation)
-		.def("getScale", &i6engine::api::StaticStateComponent::getScale);
+	class_<i6e::api::StaticStateComponent, i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component>, boost::noncopyable>("StaticStateComponent", no_init)
+		.def("synchronize", &i6e::api::StaticStateComponent::synchronize)
+		.def("getTemplateName", &i6e::api::StaticStateComponent::getTemplateName)
+		.def("setPosition", &i6e::api::StaticStateComponent::setPosition)
+		.def("setRotation", &i6e::api::StaticStateComponent::setRotation)
+		.def("setScale", &i6e::api::StaticStateComponent::setScale)
+		.def("getPosition", &i6e::api::StaticStateComponent::getPosition)
+		.def("getRotation", &i6e::api::StaticStateComponent::getRotation)
+		.def("getScale", &i6e::api::StaticStateComponent::getScale);
 
-	class_<i6engine::api::TerrainAppearanceComponent, i6engine::utils::sharedPtr<i6engine::api::TerrainAppearanceComponent, i6engine::api::Component>, boost::noncopyable>("TerrainAppearanceComponent", no_init)
-		.def("synchronize", &i6engine::api::TerrainAppearanceComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::TerrainAppearanceComponent::getTemplateName)
-		.def("getHeightmap", &i6engine::api::TerrainAppearanceComponent::getHeightmap)
-		.def("getSize", &i6engine::api::TerrainAppearanceComponent::getSize);
+	class_<i6e::api::TerrainAppearanceComponent, i6e::utils::sharedPtr<i6e::api::TerrainAppearanceComponent, i6e::api::Component>, boost::noncopyable>("TerrainAppearanceComponent", no_init)
+		.def("synchronize", &i6e::api::TerrainAppearanceComponent::synchronize)
+		.def("getTemplateName", &i6e::api::TerrainAppearanceComponent::getTemplateName)
+		.def("getHeightmap", &i6e::api::TerrainAppearanceComponent::getHeightmap)
+		.def("getSize", &i6e::api::TerrainAppearanceComponent::getSize);
 
-	class_<i6engine::api::ToggleWaynetComponent, i6engine::utils::sharedPtr<i6engine::api::ToggleWaynetComponent, i6engine::api::Component>, boost::noncopyable>("ToggleWaynetComponent", no_init)
-		.def("synchronize", &i6engine::api::ToggleWaynetComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::ToggleWaynetComponent::getTemplateName)
-		.def("enable", &i6engine::api::ToggleWaynetComponent::enable);
+	class_<i6e::api::ToggleWaynetComponent, i6e::utils::sharedPtr<i6e::api::ToggleWaynetComponent, i6e::api::Component>, boost::noncopyable>("ToggleWaynetComponent", no_init)
+		.def("synchronize", &i6e::api::ToggleWaynetComponent::synchronize)
+		.def("getTemplateName", &i6e::api::ToggleWaynetComponent::getTemplateName)
+		.def("enable", &i6e::api::ToggleWaynetComponent::enable);
 
-	class_<i6engine::api::VelocityComponent, i6engine::utils::sharedPtr<i6engine::api::VelocityComponent, i6engine::api::Component>, boost::noncopyable>("VelocityComponent", no_init)
-		.def("synchronize", &i6engine::api::VelocityComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::VelocityComponent::getTemplateName)
-		.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, i6engine::api::VelocityComponent::MaxSpeedHandling, const std::string &)) &i6engine::python::object::accelerate)
-		.def("accelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::python::object::accelerate)
-		.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const Vec3 &, i6engine::api::VelocityComponent::DecelerationHandling, const std::string &)) &i6engine::python::object::decelerate)
-		.def("decelerate", (void(*)(i6engine::api::VelocityComponent *, const std::string &)) &i6engine::python::object::decelerate)
-		.def("setMaxSpeed", &i6engine::api::VelocityComponent::setMaxSpeed)
-		.def("setResistanceCoefficient", &i6engine::api::VelocityComponent::setResistanceCoefficient)
-		.def("setWindage", &i6engine::api::VelocityComponent::setWindage);
+	class_<i6e::api::VelocityComponent, i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component>, boost::noncopyable>("VelocityComponent", no_init)
+		.def("synchronize", &i6e::api::VelocityComponent::synchronize)
+		.def("getTemplateName", &i6e::api::VelocityComponent::getTemplateName)
+		.def("accelerate", (void(*)(i6e::api::VelocityComponent *, const Vec3 &, i6e::api::VelocityComponent::MaxSpeedHandling, const std::string &)) &i6e::python::object::accelerate)
+		.def("accelerate", (void(*)(i6e::api::VelocityComponent *, const std::string &)) &i6e::python::object::accelerate)
+		.def("decelerate", (void(*)(i6e::api::VelocityComponent *, const Vec3 &, i6e::api::VelocityComponent::DecelerationHandling, const std::string &)) &i6e::python::object::decelerate)
+		.def("decelerate", (void(*)(i6e::api::VelocityComponent *, const std::string &)) &i6e::python::object::decelerate)
+		.def("setMaxSpeed", &i6e::api::VelocityComponent::setMaxSpeed)
+		.def("setResistanceCoefficient", &i6e::api::VelocityComponent::setResistanceCoefficient)
+		.def("setWindage", &i6e::api::VelocityComponent::setWindage);
 
-	enum_<i6engine::api::VelocityComponent::MaxSpeedHandling>("MaxSpeedHandling")
-		.value("KeepSpeed", i6engine::api::VelocityComponent::MaxSpeedHandling::KeepSpeed)
-		.value("StopAcceleration", i6engine::api::VelocityComponent::MaxSpeedHandling::StopAcceleration)
+	enum_<i6e::api::VelocityComponent::MaxSpeedHandling>("MaxSpeedHandling")
+		.value("KeepSpeed", i6e::api::VelocityComponent::MaxSpeedHandling::KeepSpeed)
+		.value("StopAcceleration", i6e::api::VelocityComponent::MaxSpeedHandling::StopAcceleration)
 		.export_values();
 
-	enum_<i6engine::api::VelocityComponent::DecelerationHandling>("DecelerationHandling")
-		.value("Backward", i6engine::api::VelocityComponent::DecelerationHandling::Backward)
-		.value("StopDeceleration", i6engine::api::VelocityComponent::DecelerationHandling::StopDeceleration)
+	enum_<i6e::api::VelocityComponent::DecelerationHandling>("DecelerationHandling")
+		.value("Backward", i6e::api::VelocityComponent::DecelerationHandling::Backward)
+		.value("StopDeceleration", i6e::api::VelocityComponent::DecelerationHandling::StopDeceleration)
 		.export_values();
 
-	class_<i6engine::api::WaynetNavigationComponent, i6engine::utils::sharedPtr<i6engine::api::WaynetNavigationComponent, i6engine::api::Component>, boost::noncopyable>("WaynetNavigationComponent", no_init)
-		.def("synchronize", &i6engine::api::WaynetNavigationComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::WaynetNavigationComponent::getTemplateName)
-		.def("getPathPos", (std::vector<Vec3>(i6engine::api::WaynetNavigationComponent::*)(const Vec3 &, const Vec3 &) const) &i6engine::api::WaynetNavigationComponent::getPath)
-		.def("getPathWP", (std::vector<Vec3>(i6engine::api::WaynetNavigationComponent::*)(const Vec3 &, const std::string &) const) &i6engine::api::WaynetNavigationComponent::getPath);
+	class_<i6e::api::WaynetNavigationComponent, i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component>, boost::noncopyable>("WaynetNavigationComponent", no_init)
+		.def("synchronize", &i6e::api::WaynetNavigationComponent::synchronize)
+		.def("getTemplateName", &i6e::api::WaynetNavigationComponent::getTemplateName)
+		.def("getPathPos", (std::vector<Vec3>(i6e::api::WaynetNavigationComponent::*)(const Vec3 &, const Vec3 &) const) &i6e::api::WaynetNavigationComponent::getPath)
+		.def("getPathWP", (std::vector<Vec3>(i6e::api::WaynetNavigationComponent::*)(const Vec3 &, const std::string &) const) &i6e::api::WaynetNavigationComponent::getPath);
 
-	class_<i6engine::api::WaypointComponent, i6engine::utils::sharedPtr<i6engine::api::WaypointComponent, i6engine::api::Component>, boost::noncopyable>("WaypointComponent", no_init)
-		.def("synchronize", &i6engine::api::WaypointComponent::synchronize)
-		.def("getTemplateName", &i6engine::api::WaypointComponent::getTemplateName)
-		.def("getName", &i6engine::api::WaypointComponent::getName)
-		.def("getConnections", &i6engine::api::WaypointComponent::getConnections)
-		.def("isConnected", &i6engine::api::WaypointComponent::isConnected)
-		.def("addConnection", &i6engine::api::WaypointComponent::addConnection)
-		.def("removeConnection", &i6engine::api::WaypointComponent::removeConnection);
+	class_<i6e::api::WaypointComponent, i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component>, boost::noncopyable>("WaypointComponent", no_init)
+		.def("synchronize", &i6e::api::WaypointComponent::synchronize)
+		.def("getTemplateName", &i6e::api::WaypointComponent::getTemplateName)
+		.def("getName", &i6e::api::WaypointComponent::getName)
+		.def("getConnections", &i6e::api::WaypointComponent::getConnections)
+		.def("isConnected", &i6e::api::WaypointComponent::isConnected)
+		.def("addConnection", &i6e::api::WaypointComponent::addConnection)
+		.def("removeConnection", &i6e::api::WaypointComponent::removeConnection);
 
-	def("getObject", &i6engine::python::object::getObject);
-	def("getAllObjectsOfType", &i6engine::python::object::getAllObjectsOfType);
-	def("getGOList", &i6engine::python::object::getGOList);
-	def("deleteAllObjectsOfType", &i6engine::python::object::deleteAllObjectsOfType);
-	def("createObject", &i6engine::python::object::createObject);
-	def("cleanUpAll", &i6engine::python::object::cleanUpAll);
-	def("loadLevel", (void(*)(const std::string &, const std::string &)) &i6engine::python::object::loadLevel);
-	def("loadLevel", (void(*)(const std::string &, const std::string &, const std::string &)) &i6engine::python::object::loadLevel);
-	def("loadLevelCallbackFunc", (void(*)(const std::string &, const std::string &, const std::string &)) &i6engine::python::object::loadLevelCallbackFunc);
-	def("loadLevelCallbackScript", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &)) &i6engine::python::object::loadLevelCallbackScript);
-	def("loadLevelCallbackFunc", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &)) &i6engine::python::object::loadLevelCallbackFunc);
-	def("loadLevelCallbackScript", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &, const std::string &)) &i6engine::python::object::loadLevelCallbackScript);
-	def("getFrameTime", &i6engine::python::object::getFrameTime);
-	def("createGO", &i6engine::python::object::createGO);
-	def("createComponent", &i6engine::python::object::createComponent);
-	def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6engine::api::attributeMap &, const std::string &)) &i6engine::python::object::createComponentCallback);
-	def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6engine::api::attributeMap &, const std::string &, const std::string &)) &i6engine::python::object::createComponentCallback);
-	def("resetObjectSubSystem", &i6engine::python::object::resetObjectSubSystem);
-	def("pauseObject", &i6engine::python::object::pauseObject);
-	def("unpauseObject", &i6engine::python::object::unpauseObject);
-	def("rayTest", &i6engine::python::object::rayTest);
+	def("getObject", &i6e::python::object::getObject);
+	def("getAllObjectsOfType", &i6e::python::object::getAllObjectsOfType);
+	def("getGOList", &i6e::python::object::getGOList);
+	def("deleteAllObjectsOfType", &i6e::python::object::deleteAllObjectsOfType);
+	def("createObject", &i6e::python::object::createObject);
+	def("cleanUpAll", &i6e::python::object::cleanUpAll);
+	def("loadLevel", (void(*)(const std::string &, const std::string &)) &i6e::python::object::loadLevel);
+	def("loadLevel", (void(*)(const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevel);
+	def("loadLevelCallbackFunc", (void(*)(const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevelCallbackFunc);
+	def("loadLevelCallbackScript", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevelCallbackScript);
+	def("loadLevelCallbackFunc", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevelCallbackFunc);
+	def("loadLevelCallbackScript", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevelCallbackScript);
+	def("getFrameTime", &i6e::python::object::getFrameTime);
+	def("createGO", &i6e::python::object::createGO);
+	def("createComponent", &i6e::python::object::createComponent);
+	def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6e::api::attributeMap &, const std::string &)) &i6e::python::object::createComponentCallback);
+	def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6e::api::attributeMap &, const std::string &, const std::string &)) &i6e::python::object::createComponentCallback);
+	def("resetObjectSubSystem", &i6e::python::object::resetObjectSubSystem);
+	def("pauseObject", &i6e::python::object::pauseObject);
+	def("unpauseObject", &i6e::python::object::unpauseObject);
+	def("rayTest", &i6e::python::object::rayTest);
 
-	class_<i6engine::api::objects::GOTemplateComponent>("GOTemplateComponent")
-		.def(init<const std::string &, const i6engine::api::attributeMap &, const std::string &, bool, bool>())
-		.def_readwrite("template", &i6engine::api::objects::GOTemplateComponent::_template)
-		.def_readwrite("id", &i6engine::api::objects::GOTemplateComponent::_id)
-		.def_readwrite("params", &i6engine::api::objects::GOTemplateComponent::_params)
-		.def_readwrite("owner", &i6engine::api::objects::GOTemplateComponent::_owner)
-		.def_readwrite("identifier", &i6engine::api::objects::GOTemplateComponent::_identifier)
-		.def_readwrite("deleted", &i6engine::api::objects::GOTemplateComponent::_deleted);
+	class_<i6e::api::objects::GOTemplateComponent>("GOTemplateComponent")
+		.def(init<const std::string &, const i6e::api::attributeMap &, const std::string &, bool, bool>())
+		.def_readwrite("template", &i6e::api::objects::GOTemplateComponent::_template)
+		.def_readwrite("id", &i6e::api::objects::GOTemplateComponent::_id)
+		.def_readwrite("params", &i6e::api::objects::GOTemplateComponent::_params)
+		.def_readwrite("owner", &i6e::api::objects::GOTemplateComponent::_owner)
+		.def_readwrite("identifier", &i6e::api::objects::GOTemplateComponent::_identifier)
+		.def_readwrite("deleted", &i6e::api::objects::GOTemplateComponent::_deleted);
 
-	class_<i6engine::api::objects::GOTemplate>("GOTemplate")
+	class_<i6e::api::objects::GOTemplate>("GOTemplate")
 		.def(init<>())
-		.def_readwrite("type", &i6engine::api::objects::GOTemplate::_type)
-		.def_readwrite("components", &i6engine::api::objects::GOTemplate::_components);
+		.def_readwrite("type", &i6e::api::objects::GOTemplate::_type)
+		.def_readwrite("components", &i6e::api::objects::GOTemplate::_components);
 
-	class_<i6engine::api::attributeMap>("attributeMap")
+	class_<i6e::api::attributeMap>("attributeMap")
 		.def(init<>())
-		.def("insert", &i6engine::python::object::insertPairInAttributeMap);
+		.def("insert", &i6e::python::object::insertPairInAttributeMap);
 
-	class_<std::vector<i6engine::api::objects::GOTemplateComponent>>("GOTemplateComponentVector")
+	class_<std::vector<i6e::api::objects::GOTemplateComponent>>("GOTemplateComponentVector")
 		.def(init<>())
-		.def("push_back", (void(std::vector<i6engine::api::objects::GOTemplateComponent>::*)(const i6engine::api::objects::GOTemplateComponent &)) &std::vector<i6engine::api::objects::GOTemplateComponent>::push_back);
+		.def("push_back", (void(std::vector<i6e::api::objects::GOTemplateComponent>::*)(const i6e::api::objects::GOTemplateComponent &)) &std::vector<i6e::api::objects::GOTemplateComponent>::push_back);
 
-	class_<i6engine::api::CollisionGroup>("CollisionGroup")
+	class_<i6e::api::CollisionGroup>("CollisionGroup")
 		.def(init<>())
 		.def(init<uint32_t, uint32_t, uint32_t>())
 		.def(init<const std::string &>())
-		.def_readwrite("responseType", &i6engine::api::CollisionGroup::responseType)
-		.def_readwrite("crashType", &i6engine::api::CollisionGroup::crashType)
-		.def_readwrite("crashMask", &i6engine::api::CollisionGroup::crashMask);
+		.def_readwrite("responseType", &i6e::api::CollisionGroup::responseType)
+		.def_readwrite("crashType", &i6e::api::CollisionGroup::crashType)
+		.def_readwrite("crashMask", &i6e::api::CollisionGroup::crashMask);
 
-	enum_<i6engine::api::components::ComponentTypes>("ComponentTypes")
-		.value("CameraComponent", i6engine::api::components::ComponentTypes::CameraComponent)
-		.value("LifetimeComponent", i6engine::api::components::ComponentTypes::LifetimeComponent)
-		.value("LuminousAppearanceComponent", i6engine::api::components::ComponentTypes::LuminousAppearanceComponent)
-		.value("MeshAppearanceComponent", i6engine::api::components::ComponentTypes::MeshAppearanceComponent)
-		.value("MoverCircleComponent", i6engine::api::components::ComponentTypes::MoverCircleComponent)
-		.value("MoverComponent", i6engine::api::components::ComponentTypes::MoverComponent)
-		.value("MoverInterpolateComponent", i6engine::api::components::ComponentTypes::MoverInterpolateComponent)
-		.value("MovingCameraComponent", i6engine::api::components::ComponentTypes::MovingCameraComponent)
-		.value("NetworkSenderComponent", i6engine::api::components::ComponentTypes::NetworkSenderComponent)
-		.value("ParticleEmitterComponent", i6engine::api::components::ComponentTypes::ParticleEmitterComponent)
-		.value("PhysicalStateComponent", i6engine::api::components::ComponentTypes::PhysicalStateComponent)
-		.value("ShatterComponent", i6engine::api::components::ComponentTypes::ShatterComponent)
-		.value("SpawnpointComponent", i6engine::api::components::ComponentTypes::SpawnpointComponent)
-		.value("StaticStateComponent", i6engine::api::components::ComponentTypes::StaticStateComponent)
-		.value("TerrainAppearanceComponent", i6engine::api::components::ComponentTypes::TerrainAppearanceComponent)
-		.value("SoundComponent", i6engine::api::components::ComponentTypes::SoundComponent)
-		.value("SoundListenerComponent", i6engine::api::components::ComponentTypes::SoundListenerComponent)
-		.value("BillboardComponent", i6engine::api::components::ComponentTypes::BillboardComponent)
-		.value("FollowComponent", i6engine::api::components::ComponentTypes::FollowComponent)
-		.value("MovableTextComponent", i6engine::api::components::ComponentTypes::MovableTextComponent)
-		.value("WaypointComponent", i6engine::api::components::ComponentTypes::WaypointComponent)
-		.value("NavigationComponent", i6engine::api::components::ComponentTypes::NavigationComponent)
-		.value("WaynetNavigationComponent", i6engine::api::components::ComponentTypes::WaynetNavigationComponent)
-		.value("MoveComponent", i6engine::api::components::ComponentTypes::MoveComponent)
-		.value("MovementComponent", i6engine::api::components::ComponentTypes::MovementComponent)
-		.value("ToggleWaynetComponent", i6engine::api::components::ComponentTypes::ToggleWaynetComponent)
-		.value("Point2PointConstraintComponent", i6engine::api::components::ComponentTypes::Point2PointConstraintComponent)
-		.value("VelocityComponent", i6engine::api::components::ComponentTypes::VelocityComponent)
-		.value("ComponentTypesCount", i6engine::api::components::ComponentTypes::ComponentTypesCount)
+	enum_<i6e::api::components::ComponentTypes>("ComponentTypes")
+		.value("CameraComponent", i6e::api::components::ComponentTypes::CameraComponent)
+		.value("LifetimeComponent", i6e::api::components::ComponentTypes::LifetimeComponent)
+		.value("LuminousAppearanceComponent", i6e::api::components::ComponentTypes::LuminousAppearanceComponent)
+		.value("MeshAppearanceComponent", i6e::api::components::ComponentTypes::MeshAppearanceComponent)
+		.value("MoverCircleComponent", i6e::api::components::ComponentTypes::MoverCircleComponent)
+		.value("MoverComponent", i6e::api::components::ComponentTypes::MoverComponent)
+		.value("MoverInterpolateComponent", i6e::api::components::ComponentTypes::MoverInterpolateComponent)
+		.value("MovingCameraComponent", i6e::api::components::ComponentTypes::MovingCameraComponent)
+		.value("NetworkSenderComponent", i6e::api::components::ComponentTypes::NetworkSenderComponent)
+		.value("ParticleEmitterComponent", i6e::api::components::ComponentTypes::ParticleEmitterComponent)
+		.value("PhysicalStateComponent", i6e::api::components::ComponentTypes::PhysicalStateComponent)
+		.value("ShatterComponent", i6e::api::components::ComponentTypes::ShatterComponent)
+		.value("SpawnpointComponent", i6e::api::components::ComponentTypes::SpawnpointComponent)
+		.value("StaticStateComponent", i6e::api::components::ComponentTypes::StaticStateComponent)
+		.value("TerrainAppearanceComponent", i6e::api::components::ComponentTypes::TerrainAppearanceComponent)
+		.value("SoundComponent", i6e::api::components::ComponentTypes::SoundComponent)
+		.value("SoundListenerComponent", i6e::api::components::ComponentTypes::SoundListenerComponent)
+		.value("BillboardComponent", i6e::api::components::ComponentTypes::BillboardComponent)
+		.value("FollowComponent", i6e::api::components::ComponentTypes::FollowComponent)
+		.value("MovableTextComponent", i6e::api::components::ComponentTypes::MovableTextComponent)
+		.value("WaypointComponent", i6e::api::components::ComponentTypes::WaypointComponent)
+		.value("NavigationComponent", i6e::api::components::ComponentTypes::NavigationComponent)
+		.value("WaynetNavigationComponent", i6e::api::components::ComponentTypes::WaynetNavigationComponent)
+		.value("MoveComponent", i6e::api::components::ComponentTypes::MoveComponent)
+		.value("MovementComponent", i6e::api::components::ComponentTypes::MovementComponent)
+		.value("ToggleWaynetComponent", i6e::api::components::ComponentTypes::ToggleWaynetComponent)
+		.value("Point2PointConstraintComponent", i6e::api::components::ComponentTypes::Point2PointConstraintComponent)
+		.value("VelocityComponent", i6e::api::components::ComponentTypes::VelocityComponent)
+		.value("ComponentTypesCount", i6e::api::components::ComponentTypes::ComponentTypesCount)
 		.export_values();
 }

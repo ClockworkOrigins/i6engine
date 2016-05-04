@@ -43,7 +43,7 @@ class btSequentialImpulseConstraintSolver;
 class btTypedConstraint;
 struct btOverlapFilterCallback;
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class DebugDrawer;
@@ -225,7 +225,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_PHYSICSMANAGER_H__ */
 

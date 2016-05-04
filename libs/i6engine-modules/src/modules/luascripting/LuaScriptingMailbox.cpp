@@ -20,7 +20,7 @@
 
 #include "i6engine/modules/luascripting/LuaScriptingManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	LuaScriptingMailbox::LuaScriptingMailbox(LuaScriptingManager * m) : _manager(m) {
@@ -37,4 +37,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

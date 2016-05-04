@@ -38,322 +38,322 @@ namespace sample {
 		CommonApplication::AfterInitialize();
 
 		// ambient light for the scene
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
+		i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
 
-		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
+		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 			{
-				i6engine::api::attributeMap params;
+				i6e::api::attributeMap params;
 				params.insert(std::make_pair("pos", "0 5 -20"));
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", params, "", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("StaticState", params, "", false, false));
 			}
-			of->createGO("SpectatorCam", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this](i6engine::api::GOPtr go) {
+			of->createGO("SpectatorCam", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this](i6e::api::GOPtr go) {
 				_camera = go;
 			});
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			of->createObject("Floor", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			i6e::api::objects::GOTemplate tmpl;
+			of->createObject("Floor", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			of->createObject("Sun", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			i6e::api::objects::GOTemplate tmpl;
+			of->createObject("Sun", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		resetScene();
 
-		i6engine::api::InputFacade * inputFacade = i6engine::api::EngineController::GetSingleton().getInputFacade();
+		i6e::api::InputFacade * inputFacade = i6e::api::EngineController::GetSingleton().getInputFacade();
 
-		inputFacade->subscribeKeyEvent(i6engine::api::KeyCode::KC_RETURN, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&ChainApplication::resetScene, this));
+		inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_RETURN, i6e::api::KeyState::KEY_PRESSED, boost::bind(&ChainApplication::resetScene, this));
 	}
 
 	void ChainApplication::resetScene() {
-		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
+		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
 		of->deleteAllObjectsOfType("ChainLink");
 		of->deleteAllObjectsOfType("Plank");
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 
 			Vec3 pos(0.0, 5.0, 0.0);
 
-			i6engine::api::attributeMap paramsPSC;
+			i6e::api::attributeMap paramsPSC;
 			pos.insertInMap("pos", paramsPSC);
 			paramsPSC["collisionGroup"] = "1 0 0";
 			paramsPSC["mass"] = "0";
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "Plank01";
 				paramsConstraint["targetIdentifier"] = "ChainLink01";
 				paramsConstraint["selfOffset"] = "0.0 -0.05 0.0";
 				paramsConstraint["targetOffset"] = "0.0 0.0 0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "", false, false));
 			}
 
-			of->createObject("Plank", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Plank", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 
 			Vec3 pos(0.0, 5 - 0.075, 0.0);
 			Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
 
-			i6engine::api::attributeMap paramsPSC;
+			i6e::api::attributeMap paramsPSC;
 			pos.insertInMap("pos", paramsPSC);
 			rot.insertInMap("rot", paramsPSC);
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink01";
 				paramsConstraint["targetIdentifier"] = "Plank01";
 				paramsConstraint["selfOffset"] = "0.0 0.0 0.075";
 				paramsConstraint["targetOffset"] = "0.0 -0.05 0.0";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
 			}
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink02";
 				paramsConstraint["targetIdentifier"] = "ChainLink03";
 				paramsConstraint["selfOffset"] = "0.0 0.0 -0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 
 			Vec3 pos(0.0, 5 - 0.075 - 0.15, 0.0);
 			Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
 			rot = rot * Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0);
 
-			i6engine::api::attributeMap paramsPSC;
+			i6e::api::attributeMap paramsPSC;
 			pos.insertInMap("pos", paramsPSC);
 			rot.insertInMap("rot", paramsPSC);
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink03";
 				paramsConstraint["targetIdentifier"] = "ChainLink02";
 				paramsConstraint["selfOffset"] = "0.0 0.0 0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 -0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
 			}
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink04";
 				paramsConstraint["targetIdentifier"] = "ChainLink05";
 				paramsConstraint["selfOffset"] = "0.0 0.0 -0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 
 			Vec3 pos(0.0, 5 - 0.075 - 0.3, 0.0);
 			Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
 
-			i6engine::api::attributeMap paramsPSC;
+			i6e::api::attributeMap paramsPSC;
 			pos.insertInMap("pos", paramsPSC);
 			rot.insertInMap("rot", paramsPSC);
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink05";
 				paramsConstraint["targetIdentifier"] = "ChainLink04";
 				paramsConstraint["selfOffset"] = "0.0 0.0 0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 -0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
 			}
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink06";
 				paramsConstraint["targetIdentifier"] = "ChainLink07";
 				paramsConstraint["selfOffset"] = "0.0 0.0 -0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 
 			Vec3 pos(0.0, 5 - 0.075 - 0.45, 0.0);
 			Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
 			rot = rot * Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0);
 
-			i6engine::api::attributeMap paramsPSC;
+			i6e::api::attributeMap paramsPSC;
 			pos.insertInMap("pos", paramsPSC);
 			rot.insertInMap("rot", paramsPSC);
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink07";
 				paramsConstraint["targetIdentifier"] = "ChainLink06";
 				paramsConstraint["selfOffset"] = "0.0 0.0 0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 -0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
 			}
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink08";
 				paramsConstraint["targetIdentifier"] = "ChainLink09";
 				paramsConstraint["selfOffset"] = "0.0 0.0 -0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 
 			Vec3 pos(0.0, 5 - 0.075 - 0.6, 0.0);
 			Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
 
-			i6engine::api::attributeMap paramsPSC;
+			i6e::api::attributeMap paramsPSC;
 			pos.insertInMap("pos", paramsPSC);
 			rot.insertInMap("rot", paramsPSC);
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink09";
 				paramsConstraint["targetIdentifier"] = "ChainLink08";
 				paramsConstraint["selfOffset"] = "0.0 0.0 0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 -0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
 			}
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink10";
 				paramsConstraint["targetIdentifier"] = "ChainLink11";
 				paramsConstraint["selfOffset"] = "0.0 0.0 -0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 
 			Vec3 pos(0.0, 5 - 0.075 - 0.75, 0.0);
 			Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
 			rot = rot * Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0);
 
-			i6engine::api::attributeMap paramsPSC;
+			i6e::api::attributeMap paramsPSC;
 			pos.insertInMap("pos", paramsPSC);
 			rot.insertInMap("rot", paramsPSC);
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink11";
 				paramsConstraint["targetIdentifier"] = "ChainLink10";
 				paramsConstraint["selfOffset"] = "0.0 0.0 0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 -0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
 			}
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink12";
 				paramsConstraint["targetIdentifier"] = "ChainLink13";
 				paramsConstraint["selfOffset"] = "0.0 0.0 -0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 
 			Vec3 pos(0.0, 5 - 0.075 - 0.75, 0.0);
 			Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
 
-			i6engine::api::attributeMap paramsPSC;
+			i6e::api::attributeMap paramsPSC;
 			pos.insertInMap("pos", paramsPSC);
 			rot.insertInMap("rot", paramsPSC);
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink13";
 				paramsConstraint["targetIdentifier"] = "ChainLink12";
 				paramsConstraint["selfOffset"] = "0.0 0.0 0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 -0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
 			}
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink14";
 				paramsConstraint["targetIdentifier"] = "ChainLink15";
 				paramsConstraint["selfOffset"] = "0.0 0.0 -0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
+			i6e::api::objects::GOTemplate tmpl;
 
 			Vec3 pos(0.0, 5 - 0.075 - 0.9, 0.0);
 			Quaternion rot(Vec3(1.0, 0.0, 0.0), PI / 2.0);
 			rot = rot * Quaternion(Vec3(0.0, 1.0, 0.0), PI / 2.0);
 
-			i6engine::api::attributeMap paramsPSC;
+			i6e::api::attributeMap paramsPSC;
 			pos.insertInMap("pos", paramsPSC);
 			rot.insertInMap("rot", paramsPSC);
 
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 			{
-				i6engine::api::attributeMap paramsConstraint;
+				i6e::api::attributeMap paramsConstraint;
 				paramsConstraint["selfIdentifier"] = "ChainLink15";
 				paramsConstraint["targetIdentifier"] = "ChainLink14";
 				paramsConstraint["selfOffset"] = "0.0 0.0 0.075";
 				paramsConstraint["targetOffset"] = "0.0 0.0 -0.075";
 
-				tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
+				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 	}
 

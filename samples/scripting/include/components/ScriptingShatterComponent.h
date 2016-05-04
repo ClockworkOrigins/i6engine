@@ -27,23 +27,23 @@
 namespace sample {
 namespace components {
 
-	class ScriptingShatterComponent : public i6engine::api::ShatterComponent {
+	class ScriptingShatterComponent : public i6e::api::ShatterComponent {
 	public:
-		ScriptingShatterComponent(int64_t id, const i6engine::api::attributeMap & params);
+		ScriptingShatterComponent(int64_t id, const i6e::api::attributeMap & params);
 
-		static i6engine::api::ComPtr createC(int64_t id, const i6engine::api::attributeMap & params);
+		static i6e::api::ComPtr createC(int64_t id, const i6e::api::attributeMap & params);
 
 		void Init() override;
 
 		void Finalize() override;
 
-		i6engine::api::attributeMap synchronize() const override;
+		i6e::api::attributeMap synchronize() const override;
 
-		std::pair<i6engine::api::AddStrategy, int64_t> howToAdd(const i6engine::api::ComPtr &) const override {
-			return std::make_pair(i6engine::api::AddStrategy::REJECT, -1);
+		std::pair<i6e::api::AddStrategy, int64_t> howToAdd(const i6e::api::ComPtr &) const override {
+			return std::make_pair(i6e::api::AddStrategy::REJECT, -1);
 		}
 
-		std::vector<i6engine::api::componentOptions> getComponentOptions() override {
+		std::vector<i6e::api::componentOptions> getComponentOptions() override {
 			return {};
 		}
 
@@ -53,7 +53,7 @@ namespace components {
 
 		void Tick() override;
 
-		void shatter(const i6engine::api::GOPtr & other);
+		void shatter(const i6e::api::GOPtr & other);
 	};
 
 } /* namespace components */

@@ -16,7 +16,7 @@
 
 #include "i6engine/api/configs/InputConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace input {
 
@@ -46,4 +46,4 @@ namespace input {
 
 } /* namespace input */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

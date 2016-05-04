@@ -11,7 +11,7 @@
 
 class QProgressDialog;
 
-namespace i6engine {
+namespace i6e {
 namespace editor {
 namespace plugins {
 
@@ -139,6 +139,6 @@ namespace widgets {
 
 } /* namespace widgets */
 } /* namespace editor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_EDITOR_WIDGETS_MAINWINDOW_H__ */

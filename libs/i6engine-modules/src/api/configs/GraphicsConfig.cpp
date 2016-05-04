@@ -16,7 +16,7 @@
 
 #include "i6engine/api/configs/GraphicsConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace graphics {
 
@@ -196,4 +196,4 @@ namespace graphics {
 
 } /* namespace graphics */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

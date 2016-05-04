@@ -16,7 +16,7 @@
 
 #include "i6engine/api/configs/ObjectConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace objects {
 
@@ -60,15 +60,15 @@ namespace objects {
 
 } /* namespace objects */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-BOOST_CLASS_EXPORT_GUID(i6engine::api::objects::Object_Create_Create, "O1")
-BOOST_CLASS_IMPLEMENTATION(i6engine::api::objects::Object_Create_Create, boost::serialization::object_serializable)
-BOOST_CLASS_EXPORT_GUID(i6engine::api::objects::Object_Create_Delete, "O2")
-BOOST_CLASS_IMPLEMENTATION(i6engine::api::objects::Object_Create_Delete, boost::serialization::object_serializable)
-BOOST_CLASS_EXPORT_GUID(i6engine::api::objects::Object_Level_Create, "O3")
-BOOST_CLASS_IMPLEMENTATION(i6engine::api::objects::Object_Level_Create, boost::serialization::object_serializable)
-BOOST_CLASS_EXPORT_GUID(i6engine::api::objects::Object_Type_Delete, "O4")
-BOOST_CLASS_IMPLEMENTATION(i6engine::api::objects::Object_Type_Delete, boost::serialization::object_serializable)
-BOOST_CLASS_EXPORT_GUID(i6engine::api::objects::Position_Update, "O5")
-BOOST_CLASS_IMPLEMENTATION(i6engine::api::objects::Position_Update, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::api::objects::Object_Create_Create, "O1")
+BOOST_CLASS_IMPLEMENTATION(i6e::api::objects::Object_Create_Create, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::api::objects::Object_Create_Delete, "O2")
+BOOST_CLASS_IMPLEMENTATION(i6e::api::objects::Object_Create_Delete, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::api::objects::Object_Level_Create, "O3")
+BOOST_CLASS_IMPLEMENTATION(i6e::api::objects::Object_Level_Create, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::api::objects::Object_Type_Delete, "O4")
+BOOST_CLASS_IMPLEMENTATION(i6e::api::objects::Object_Type_Delete, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::api::objects::Position_Update, "O5")
+BOOST_CLASS_IMPLEMENTATION(i6e::api::objects::Position_Update, boost::serialization::object_serializable)

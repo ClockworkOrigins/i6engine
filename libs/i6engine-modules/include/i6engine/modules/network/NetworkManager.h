@@ -44,7 +44,7 @@ namespace pubsub {
 } /* namespace pubsub */
 } /* namespace m2etis */
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class NetworkController;
@@ -153,7 +153,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_NETWORKMANAGER_H__ */
 

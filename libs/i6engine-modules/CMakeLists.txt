@@ -64,7 +64,7 @@ set(i6components
 FILE(WRITE ${CMAKE_BINARY_DIR}/include/i6engine/i6eComponentRegister.h "")
 SET(componentListHeader "#ifndef __I6ENGINE_API_COMPONENTREGISTER_H__\n#define __I6ENGINE_API_COMPONENTREGISTER_H__\n\n#include <vector>\n\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/include/i6engine/i6eComponentRegister.h "${componentListHeader}")
-SET(componentListNamespace "namespace i6engine {\nnamespace api {\n\n\tstd::vector<std::pair<std::string, createGOCCallback>> componentList = {\n")
+SET(componentListNamespace "namespace i6e {\nnamespace api {\n\n\tstd::vector<std::pair<std::string, createGOCCallback>> componentList = {\n")
 SET(firstIt TRUE)
 FOREACH(comp ${i6components})
 	STRING(REGEX MATCH ".*/([a-zA-Z0-9_]+)Component.cpp" compName ${comp})
@@ -76,7 +76,7 @@ FOREACH(comp ${i6components})
 		SET(componentListNamespace "${componentListNamespace},\n\t\t{ \"${CMAKE_MATCH_1}\", boost::bind(&Component::createC<${CMAKE_MATCH_1}Component>, _1, _2) }")
 	ENDIF()
 ENDFOREACH()
-FILE(APPEND ${CMAKE_BINARY_DIR}/include/i6engine/i6eComponentRegister.h "\n${componentListNamespace}\n\t};\n\n} /* namespace api */\n} /* namespace i6engine */\n\n#endif /* __I6ENGINE_API_COMPONENTREGISTER_H__ */\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/include/i6engine/i6eComponentRegister.h "\n${componentListNamespace}\n\t};\n\n} /* namespace api */\n} /* namespace i6e */\n\n#endif /* __I6ENGINE_API_COMPONENTREGISTER_H__ */\n")
 
 # Modules source files
 set(i6modulesSrc

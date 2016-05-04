@@ -100,11 +100,11 @@ struct SubSubClass1 : public SubClassB1_1 {
 struct SubSubClass2 : public SubClassB1_1 {
 };
 
-typedef i6engine::utils::sharedPtr<TestObject1, TestObject1> Ptr1;
-typedef i6engine::utils::sharedPtr<TestObject2, TestObject2> Ptr2;
-typedef i6engine::utils::sharedPtr<TestObject3, TestObject3> Ptr3;
-typedef i6engine::utils::sharedPtr<TestObject4, TestObject3> Ptr4;
-typedef i6engine::utils::weakPtr<TestObject3> WeakPtr3;
+typedef i6e::utils::sharedPtr<TestObject1, TestObject1> Ptr1;
+typedef i6e::utils::sharedPtr<TestObject2, TestObject2> Ptr2;
+typedef i6e::utils::sharedPtr<TestObject3, TestObject3> Ptr3;
+typedef i6e::utils::sharedPtr<TestObject4, TestObject3> Ptr4;
+typedef i6e::utils::weakPtr<TestObject3> WeakPtr3;
 
 std::atomic<int> TestObject1::constructed(0);
 std::atomic<int> TestObject1::deleted(0);
@@ -122,11 +122,11 @@ struct ParentObject;
 struct ChildObject;
 struct OtherChildObject;
 
-typedef i6engine::utils::sharedPtr<OwningObject, OwningObject> OwningPtr;
-typedef i6engine::utils::sharedPtr<ParentObject, ParentObject> ParentPtr;
-typedef i6engine::utils::weakPtr<ParentObject> WeakParentPtr;
-typedef i6engine::utils::sharedPtr<ChildObject, ParentObject> ChildPtr;
-typedef i6engine::utils::sharedPtr<OtherChildObject, ParentObject> OtherChildPtr;
+typedef i6e::utils::sharedPtr<OwningObject, OwningObject> OwningPtr;
+typedef i6e::utils::sharedPtr<ParentObject, ParentObject> ParentPtr;
+typedef i6e::utils::weakPtr<ParentObject> WeakParentPtr;
+typedef i6e::utils::sharedPtr<ChildObject, ParentObject> ChildPtr;
+typedef i6e::utils::sharedPtr<OtherChildObject, ParentObject> OtherChildPtr;
 
 struct OwningObject {
 	static std::atomic<int> constructed;
@@ -214,8 +214,8 @@ public:
 		Ptr1::clear();
 		Ptr2::clear();
 		Ptr3::clear();
-		i6engine::utils::sharedPtr<Base1, Base1>::clear();
-		i6engine::utils::sharedPtr<Base2, Base2>::clear();
+		i6e::utils::sharedPtr<Base1, Base1>::clear();
+		i6e::utils::sharedPtr<Base2, Base2>::clear();
 		OwningPtr::clear();
 		ParentPtr::clear();
 	}
@@ -377,7 +377,7 @@ TEST_F(sharedPtr, derived) {
 
 	{
 		Ptr3 p4 = Ptr4(new TestObject4());
-		Ptr4 p5 = i6engine::utils::dynamic_pointer_cast<TestObject4>(p4);
+		Ptr4 p5 = i6e::utils::dynamic_pointer_cast<TestObject4>(p4);
 	}
 
 	EXPECT_EQ(4, TestObject3::constructed);
@@ -391,7 +391,7 @@ TEST_F(sharedPtr, derived) {
 
 TEST_F(sharedPtr, make_shared) {
 	{
-		Ptr3 p1 = i6engine::utils::make_shared<TestObject3, TestObject3>();
+		Ptr3 p1 = i6e::utils::make_shared<TestObject3, TestObject3>();
 	}
 
 	EXPECT_EQ(1, TestObject3::constructed);
@@ -403,7 +403,7 @@ TEST_F(sharedPtr, make_shared) {
 	EXPECT_EQ(1, TestObject3::deleted);
 
 	{
-		Ptr4 p2 = i6engine::utils::make_shared<TestObject4, TestObject3>();
+		Ptr4 p2 = i6e::utils::make_shared<TestObject4, TestObject3>();
 	}
 
 	EXPECT_EQ(2, TestObject3::constructed);
@@ -415,8 +415,8 @@ TEST_F(sharedPtr, make_shared) {
 	EXPECT_EQ(2, TestObject3::deleted);
 
 	{
-		Ptr3 p3 = i6engine::utils::make_shared<TestObject4, TestObject3>();
-		Ptr4 p4 = i6engine::utils::dynamic_pointer_cast<TestObject4>(p3);
+		Ptr3 p3 = i6e::utils::make_shared<TestObject4, TestObject3>();
+		Ptr4 p4 = i6e::utils::dynamic_pointer_cast<TestObject4>(p3);
 	}
 
 	EXPECT_EQ(3, TestObject3::constructed);
@@ -430,7 +430,7 @@ TEST_F(sharedPtr, make_shared) {
 
 TEST_F(sharedPtr, weakPtr) {
 	{
-		Ptr3 p1 = i6engine::utils::make_shared<TestObject3, TestObject3>();
+		Ptr3 p1 = i6e::utils::make_shared<TestObject3, TestObject3>();
 		WeakPtr3 wp1 = p1;
 
 		EXPECT_FALSE(wp1.expired());
@@ -447,7 +447,7 @@ TEST_F(sharedPtr, weakPtr) {
 	WeakPtr3 wp2;
 
 	{
-		Ptr3 p2 = i6engine::utils::make_shared<TestObject3, TestObject3>();
+		Ptr3 p2 = i6e::utils::make_shared<TestObject3, TestObject3>();
 		wp2 = p2;
 
 		EXPECT_FALSE(wp2.expired());
@@ -466,8 +466,8 @@ TEST_F(sharedPtr, weakPtr) {
 	EXPECT_EQ(2, TestObject3::deleted);
 
 	{
-		Ptr3 p3 = i6engine::utils::make_shared<TestObject4, TestObject3>();
-		Ptr4 p4 = i6engine::utils::dynamic_pointer_cast<TestObject4>(p3);
+		Ptr3 p3 = i6e::utils::make_shared<TestObject4, TestObject3>();
+		Ptr4 p4 = i6e::utils::dynamic_pointer_cast<TestObject4>(p3);
 		WeakPtr3 wp3 = p4;
 
 		EXPECT_FALSE(wp3.expired());
@@ -491,13 +491,13 @@ TEST_F(sharedPtr, usageExample) {
 	EXPECT_EQ(0, ParentObject::deleted);
 
 	{
-		OwningPtr op = i6engine::utils::make_shared<OwningObject, OwningObject>();
+		OwningPtr op = i6e::utils::make_shared<OwningObject, OwningObject>();
 
 		EXPECT_EQ(1, OwningObject::constructed);
 		EXPECT_EQ(0, OwningObject::deleted);
 
 		{
-			ParentPtr pp = i6engine::utils::make_shared<ParentObject, ParentObject>();
+			ParentPtr pp = i6e::utils::make_shared<ParentObject, ParentObject>();
 			op->add(pp);
 			pp->setSelf(pp);
 
@@ -506,7 +506,7 @@ TEST_F(sharedPtr, usageExample) {
 			EXPECT_EQ(1, ParentObject::constructed);
 			EXPECT_EQ(0, ParentObject::deleted);
 
-			ParentPtr pp2 = i6engine::utils::make_shared<ChildObject, ParentObject>();
+			ParentPtr pp2 = i6e::utils::make_shared<ChildObject, ParentObject>();
 			op->add(pp2);
 			pp2->setSelf(pp2);
 
@@ -516,7 +516,7 @@ TEST_F(sharedPtr, usageExample) {
 			EXPECT_EQ(0, ParentObject::deleted);
 
 			{
-				ChildPtr pp3 = i6engine::utils::make_shared<ChildObject, ParentObject>();
+				ChildPtr pp3 = i6e::utils::make_shared<ChildObject, ParentObject>();
 				op->add(pp3);
 				pp3->setSelf(pp3);
 
@@ -533,7 +533,7 @@ TEST_F(sharedPtr, usageExample) {
 			EXPECT_EQ(0, ParentObject::deleted);
 
 			{
-				OtherChildPtr pp4 = i6engine::utils::make_shared<OtherChildObject, ParentObject>();
+				OtherChildPtr pp4 = i6e::utils::make_shared<OtherChildObject, ParentObject>();
 				op->add(pp4);
 				pp4->setSelf(pp4);
 
@@ -575,7 +575,7 @@ TEST_F(sharedPtr, selfAssignment) {
 	EXPECT_EQ(0, ParentObject::deleted);
 
 	{
-		OwningPtr op1 = i6engine::utils::make_shared<OwningObject, OwningObject>();
+		OwningPtr op1 = i6e::utils::make_shared<OwningObject, OwningObject>();
 
 		EXPECT_EQ(1, OwningObject::constructed);
 		EXPECT_EQ(0, OwningObject::deleted);
@@ -632,13 +632,13 @@ TEST_F(sharedPtr, polymorphismGood) {
 	Base1::deleted = 0;
 	Base2::constructed = 0;
 	Base2::deleted = 0;
-	using i6engine::utils::sharedPtr;
+	using i6e::utils::sharedPtr;
 
 	{
 		SubSubClass1 * aPtr = new SubSubClass1();
 		sharedPtr<SubSubClass1, Base1> a1(aPtr);
 		sharedPtr<Base1, Base1> a2 = a1;
-		sharedPtr<SubSubClass1, Base1> a3 = i6engine::utils::dynamic_pointer_cast<SubSubClass1, Base1>(a2);
+		sharedPtr<SubSubClass1, Base1> a3 = i6e::utils::dynamic_pointer_cast<SubSubClass1, Base1>(a2);
 		EXPECT_EQ(aPtr, a1.get());
 		EXPECT_EQ(aPtr, a2.get());
 		EXPECT_EQ(aPtr, a3.get());
@@ -660,7 +660,7 @@ TEST_F(sharedPtr, polymorphismGood) {
 		{
 			sharedPtr<SubClassB12, Base1> b1(bPtr);
 			sharedPtr<Base1, Base1> b2(b1);
-			b3 = i6engine::utils::dynamic_pointer_cast<SubClassB12, Base1>(b2);
+			b3 = i6e::utils::dynamic_pointer_cast<SubClassB12, Base1>(b2);
 			sharedPtr<Base2, Base1> b4 = b3;
 
 			// Base1 and Base2 constructed
@@ -684,7 +684,7 @@ TEST_F(sharedPtr, polymorphismGood) {
 }
 
 TEST_F(sharedPtr, polymorphismFoo) {
-	using i6engine::utils::sharedPtr;
+	using i6e::utils::sharedPtr;
 
 	// invalid cast. This should NOT even compile
 //	sharedPtr<Base1, Base1> a1(new Base1());
@@ -694,7 +694,7 @@ TEST_F(sharedPtr, polymorphismFoo) {
 	SubClassB1_1 * bPtr = new SubClassB1_1();
 	sharedPtr<SubClassB1_1, Base1> b1(bPtr);
 	sharedPtr<Base1, Base1> b2 = b1;
-	sharedPtr<SubClassB1_2, Base1> b3 = i6engine::utils::dynamic_pointer_cast<SubClassB1_2, Base1>(b2);
+	sharedPtr<SubClassB1_2, Base1> b3 = i6e::utils::dynamic_pointer_cast<SubClassB1_2, Base1>(b2);
 	EXPECT_EQ(bPtr, b1.get());
 	EXPECT_EQ(bPtr, b2.get());
 	EXPECT_EQ(nullptr, b3.get());
@@ -702,7 +702,7 @@ TEST_F(sharedPtr, polymorphismFoo) {
 	SubSubClass1 * cPtr = new SubSubClass1();
 	sharedPtr<SubSubClass1, Base1> c1(cPtr);
 	sharedPtr<Base1, Base1> c2 = c1;
-	sharedPtr<SubSubClass2, Base1> c3 = i6engine::utils::dynamic_pointer_cast<SubSubClass2, Base1>(c2);
+	sharedPtr<SubSubClass2, Base1> c3 = i6e::utils::dynamic_pointer_cast<SubSubClass2, Base1>(c2);
 	EXPECT_EQ(cPtr, c1.get());
 	EXPECT_EQ(cPtr, c2.get());
 	EXPECT_EQ(nullptr, c3.get());
@@ -711,7 +711,7 @@ TEST_F(sharedPtr, polymorphismFoo) {
 // This test only deals with nullptrs
 // it won't expect anything but can detect segfaults, memory leaks etc.
 TEST_F(sharedPtr, nullPtrFoo) {
-	using i6engine::utils::sharedPtr;
+	using i6e::utils::sharedPtr;
 
 	sharedPtr<SubClassB12, Base1> p1;
 	sharedPtr<SubClassB12, Base1> p2 = p1;
@@ -721,27 +721,27 @@ TEST_F(sharedPtr, nullPtrFoo) {
 }
 
 TEST_F(sharedPtr, nullPtrFoo2) {
-	using i6engine::utils::sharedPtr;
+	using i6e::utils::sharedPtr;
 
 	sharedPtr<Base1, Base1> p1(new SubClassB1_1());
-	sharedPtr<SubClassB1_1, Base1> p2 = i6engine::utils::dynamic_pointer_cast<SubClassB1_1>(p1);
+	sharedPtr<SubClassB1_1, Base1> p2 = i6e::utils::dynamic_pointer_cast<SubClassB1_1>(p1);
 	sharedPtr<SubClassB1_1, Base1> p3(p2);
 	sharedPtr<SubClassB1_1, Base1> p4;
 	p4 = p3;
 }
 
 TEST_F(sharedPtr, replacement) {
-	using i6engine::utils::sharedPtr;
-	using i6engine::utils::make_shared;
+	using i6e::utils::sharedPtr;
+	using i6e::utils::make_shared;
 	std::array<sharedPtr<Base1, Base1>, 1> arr;
 	auto sp = make_shared<Base1, Base1>();
 	arr[0] = sp;
 }
 
 TEST_F(sharedPtr, weakPtrRaceCondition) {
-	using i6engine::utils::sharedPtr;
-	using i6engine::utils::weakPtr;
-	using i6engine::utils::make_shared;
+	using i6e::utils::sharedPtr;
+	using i6e::utils::weakPtr;
+	using i6e::utils::make_shared;
 	const size_t RUNS = 1000;
 	std::array<sharedPtr<Base1, Base1>, 100> arr;
 	for (size_t i = 0; i < arr.size(); i++) {

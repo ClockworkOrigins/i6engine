@@ -26,10 +26,10 @@ namespace tinyxml2 {
 	class XMLElement;
 } /* namespace tinyxml2 */
 
-namespace i6engine {
+namespace i6e {
 namespace editor {
 
-	class Editor : public i6engine::api::Application {
+	class Editor : public api::Application {
 	public:
 		/**
 		 * \brief creates Editor with given window name
@@ -205,6 +205,6 @@ namespace editor {
 	};
 
 } /* namespace editor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_EDITOR_EDITOR_H__ */

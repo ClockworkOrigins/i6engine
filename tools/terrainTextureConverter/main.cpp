@@ -65,7 +65,7 @@ int main(int argc, char ** argv) {
 		lm->createLog("ogre.log", true, false, false);
 		Ogre::Root * root = new Ogre::Root("", ogrePath + "/ogre.cfg", "");
 		Ogre::DefaultHardwareBufferManager * dhbm = new Ogre::DefaultHardwareBufferManager();
-		i6engine::modules::ResourceManager * resourceManager = new i6engine::modules::ResourceManager(ogrePath);
+		i6e::modules::ResourceManager * resourceManager = new i6e::modules::ResourceManager(ogrePath);
 
 		Ogre::Image combined;
 

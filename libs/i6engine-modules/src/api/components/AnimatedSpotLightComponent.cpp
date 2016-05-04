@@ -20,7 +20,7 @@
 
 #include "i6engine/api/configs/ComponentConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	AnimatedSpotLightComponent::AnimatedSpotLightComponent(const int64_t id, const attributeMap & params) : AnimatedLuminousAppearanceComponent(id, params), _directionDuration(0), _directions(), _innerRangeDuration(0), _innerRanges(), _outerRangeDuration(0), _outerRanges() {
@@ -106,4 +106,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

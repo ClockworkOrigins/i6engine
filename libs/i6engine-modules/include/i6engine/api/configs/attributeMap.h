@@ -33,7 +33,7 @@
 #include "boost/archive/text_iarchive.hpp"
 #include "boost/archive/text_oarchive.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	typedef std::map<std::string, std::string> attributeMap;
@@ -168,7 +168,7 @@ namespace detail {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_CONFIGS_ATTRIBUTEMAP_H__ */
 

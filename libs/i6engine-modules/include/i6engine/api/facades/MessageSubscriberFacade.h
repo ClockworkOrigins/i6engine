@@ -24,13 +24,13 @@
 
 #include "i6engine/core/messaging/MessageSubscriber.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	typedef core::MessageSubscriber MessageSubscriberFacade;
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_MESSAGESUBSCRIBERFACADE_H__ */
 

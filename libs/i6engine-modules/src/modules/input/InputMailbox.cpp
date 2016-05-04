@@ -22,7 +22,7 @@
 
 #include "i6engine/modules/input/InputManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	InputMailbox::InputMailbox(InputManager * manager) : _manager(manager) {
@@ -44,4 +44,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

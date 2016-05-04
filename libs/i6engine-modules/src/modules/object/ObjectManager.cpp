@@ -43,7 +43,7 @@
 
 #include "boost/bind.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	ObjectManager::ObjectManager() : _GOMap(), _tickList(), _componentFactory(), _goFactory(this, &_componentFactory), _paused(false) {
@@ -315,4 +315,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

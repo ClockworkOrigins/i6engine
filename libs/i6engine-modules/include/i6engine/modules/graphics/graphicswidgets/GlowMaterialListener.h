@@ -25,7 +25,7 @@
 #include "Ogre.h"
 #include "OgreMaterialManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GlowMaterialListener : public Ogre::MaterialManager::Listener {
@@ -61,7 +61,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GLOWMATERIALLISTENER_H__ */
 

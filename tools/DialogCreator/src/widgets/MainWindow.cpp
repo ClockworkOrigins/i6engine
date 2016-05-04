@@ -14,7 +14,7 @@
 #include <QMessageBox>
 #include <QPluginLoader>
 
-namespace i6engine {
+namespace i6e {
 namespace dialogCreator {
 namespace widgets {
 
@@ -110,4 +110,4 @@ namespace widgets {
 
 } /* namespace widgets */
 } /* namespace dialogCreator */
-} /* namespace i6engine */
+} /* namespace i6e */

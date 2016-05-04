@@ -31,7 +31,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/manager/IDManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	GameObject::GameObject(const int64_t goid, const core::IPKey & owner, uint64_t uuid, const std::string & tpl, const boost::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f) : _type(), _objGoid(goid), _objComponents(), _template(tpl), _messages(), _owner(owner), _uuid(uuid), _componentFunc(f), _self(), _flags(), _send(false) {
@@ -339,4 +339,4 @@ namespace api {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

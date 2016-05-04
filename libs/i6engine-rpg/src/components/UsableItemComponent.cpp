@@ -23,7 +23,7 @@
 #include "i6engine/rpg/components/AttributeComponent.h"
 #include "i6engine/rpg/components/Config.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace components {
 
@@ -74,4 +74,4 @@ namespace components {
 
 } /* namespace components */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

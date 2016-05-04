@@ -20,7 +20,7 @@
 
 #include "i6engine/modules/audio/AudioManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	AudioMailbox::AudioMailbox(AudioManager * m) : _manager(m) {
@@ -50,4 +50,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

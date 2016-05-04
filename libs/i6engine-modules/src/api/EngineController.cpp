@@ -71,7 +71,7 @@
 #include "boost/uuid/uuid.hpp"
 #include "boost/uuid/uuid_generators.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	// Ensures that X11 key repeat is reset to original value in case of a application crash.
@@ -364,4 +364,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

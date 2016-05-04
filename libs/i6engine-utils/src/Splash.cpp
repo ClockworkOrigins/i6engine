@@ -18,7 +18,7 @@
 
 #include "i6engine/utils/Logger.h"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 #if ISIXE_MPLATFORM == ISIXE_MPLATFORM_WIN32
@@ -332,4 +332,4 @@ namespace utils {
 	}
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */

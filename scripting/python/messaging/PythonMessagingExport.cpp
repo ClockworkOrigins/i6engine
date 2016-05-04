@@ -18,19 +18,19 @@
 
 #include "boost/python.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace python {
 namespace messaging {
 
-	void sendMessage(const i6engine::api::GameMessage::Ptr & msg) {
-		i6engine::api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(msg);
+	void sendMessage(const i6e::api::GameMessage::Ptr & msg) {
+		i6e::api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(msg);
 	}
 
 } /* namespace messaging */
 } /* namespace python */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 BOOST_PYTHON_MODULE(ScriptingMessagingPython) {
 	using namespace boost::python;
-	def("sendMessage", &i6engine::python::messaging::sendMessage);
+	def("sendMessage", &i6e::python::messaging::sendMessage);
 }

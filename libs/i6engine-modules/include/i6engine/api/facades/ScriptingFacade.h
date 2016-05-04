@@ -33,7 +33,7 @@
 	#include "i6engine/modules/pythonscripting/PythonScriptingManager.h"
 #endif
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	class ISIXE_MODULES_API ScriptingFacade {
@@ -150,7 +150,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_SCRIPTINGFACADE_H__ */
 

@@ -16,7 +16,7 @@
 
 #include "i6engine/api/configs/ComponentConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace components {
 
@@ -50,10 +50,10 @@ namespace components {
 
 } /* namespace components */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::components::Component_Create_Create)
-BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::components::Component_Create_Delete)
-BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::components::Component_Spawnpoint_Update)
-BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::components::Component_Shatter_Update)
-BOOST_CLASS_EXPORT_IMPLEMENT(i6engine::api::components::Component_MoverResync_Update)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6e::api::components::Component_Create_Create)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6e::api::components::Component_Create_Delete)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6e::api::components::Component_Spawnpoint_Update)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6e::api::components::Component_Shatter_Update)
+BOOST_CLASS_EXPORT_IMPLEMENT(i6e::api::components::Component_MoverResync_Update)

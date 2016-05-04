@@ -20,7 +20,7 @@
 
 #include "i6engine/api/configs/ComponentConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	AnimatedDirectionalLightComponent::AnimatedDirectionalLightComponent(const int64_t id, const attributeMap & params) : AnimatedLuminousAppearanceComponent(id, params), _directionDuration(0), _directions() {
@@ -66,4 +66,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

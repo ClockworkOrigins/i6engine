@@ -29,7 +29,7 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace dialog {
 
@@ -54,7 +54,7 @@ namespace dialog {
 
 } /* namespace dialog */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_DIALOG_DIALOG_H__ */
 

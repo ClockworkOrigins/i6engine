@@ -25,7 +25,7 @@
 #include "OGRE/OgreBillboardSet.h"
 #include "OGRE/OgreSceneManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	BillboardComponent::BillboardComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & material, double width, double height, api::graphics::BillboardOrigin bo) : _manager(manager), _parent(parent), _billboardSet(nullptr), _billboards() {
@@ -82,4 +82,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

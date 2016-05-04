@@ -26,8 +26,8 @@
 
 #include "gtest/gtest.h"
 
-using namespace i6engine;
-using namespace i6engine::api;
+using namespace i6e;
+using namespace i6e::api;
 
 namespace Test_ObjectFacade {
 

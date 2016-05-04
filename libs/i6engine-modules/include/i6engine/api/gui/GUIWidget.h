@@ -36,7 +36,7 @@ namespace CEGUI {
 	class Window;
 } /* namespace CEGUI */
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace gui {
 	struct GUIUpdateMessageStruct;
@@ -164,7 +164,7 @@ namespace gui {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_GUIWIDGET_H__ */
 

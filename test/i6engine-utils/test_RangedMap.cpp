@@ -22,7 +22,7 @@
 
 #include "gtest/gtest.h"
 
-using i6engine::utils::RangedMap;
+using i6e::utils::RangedMap;
 
 TEST(RangedMap, getAndSet) {
 	RangedMap<int, bool> rm(0, 1000, false);
@@ -76,7 +76,7 @@ TEST(RangedMap, randomSet) {
 	std::map<int, bool> m;
 
 	for (int i = 0; i < 10000; i++) {
-		int rnd = int(i6engine::utils::Random::GetSingleton().rand(0u, UINT_MAX));
+		int rnd = int(i6e::utils::Random::GetSingleton().rand(0u, UINT_MAX));
 		m[rnd] = true;
 		rm.set(rnd, true);
 	}
@@ -146,7 +146,7 @@ TEST(RangedMap, randomValues) {
 	std::vector<int> vec(ENTRIES);
 
 	for (int i = 0; i < ENTRIES; i++) {
-		vec[size_t(i)] = int(i6engine::utils::Random::GetSingleton().rand(20));
+		vec[size_t(i)] = int(i6e::utils::Random::GetSingleton().rand(20));
 	}
 
 	for (int i = 0; i < ENTRIES; i++) {
@@ -176,7 +176,7 @@ TEST(RangedMap, stressTest) {
 
 	for (int j = 0; j < 500; j++) {
 		for (int i = 0; i < ENTRIES; i++) {
-			vec[size_t(i)] = int(i6engine::utils::Random::GetSingleton().rand(20));
+			vec[size_t(i)] = int(i6e::utils::Random::GetSingleton().rand(20));
 		}
 
 		for (int i = 0; i < ENTRIES; i++) {

@@ -28,7 +28,7 @@
 
 #include "boost/function.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	enum class KeyState : uint16_t;
 
@@ -156,7 +156,7 @@ namespace mouse {
 } /* namespace mouse */
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_INPUTCONFIG_H__ */
 

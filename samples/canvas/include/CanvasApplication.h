@@ -21,7 +21,7 @@
 
 namespace sample {
 
-	class CanvasApplication : public i6engine::api::Application {
+	class CanvasApplication : public i6e::api::Application {
 	public:
 		CanvasApplication();
 

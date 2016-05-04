@@ -28,7 +28,7 @@
 
 #include "i6engine/core/subsystem/ModuleController.h"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 	class IPKey;
 } /* namespace core */
@@ -160,7 +160,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_APPLICATION_H__ */
 

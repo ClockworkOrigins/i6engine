@@ -24,22 +24,22 @@
 #include "gtest/gtest.h"
 
 TEST(Message, Constructor) {
-	i6engine::core::IPKey sender;
+	i6e::core::IPKey sender;
 
-	i6engine::core::Message::Ptr msg1(new i6engine::core::Message(0, 0, i6engine::core::Method::Create, new i6engine::core::MessageStruct(-1, sender, 15), i6engine::core::Subsystem::Unknown));
+	i6e::core::Message::Ptr msg1(new i6e::core::Message(0, 0, i6e::core::Method::Create, new i6e::core::MessageStruct(-1, sender, 15), i6e::core::Subsystem::Unknown));
 
 	EXPECT_EQ(0, msg1->getMessageType());
 	EXPECT_EQ(0, msg1->getSubtype());
-	EXPECT_EQ(i6engine::core::Method::Create, msg1->getMethod());
+	EXPECT_EQ(i6e::core::Method::Create, msg1->getMethod());
 	EXPECT_EQ(-1, msg1->getContent()->getID());
 	EXPECT_EQ(15, msg1->getContent()->getWaitID());
 	EXPECT_EQ(sender, msg1->getContent()->_sender);
 
-	i6engine::core::Message::Ptr msg2(new i6engine::core::Message(*msg1));
+	i6e::core::Message::Ptr msg2(new i6e::core::Message(*msg1));
 
 	EXPECT_EQ(0, msg2->getMessageType());
 	EXPECT_EQ(0, msg2->getSubtype());
-	EXPECT_EQ(i6engine::core::Method::Create, msg2->getMethod());
+	EXPECT_EQ(i6e::core::Method::Create, msg2->getMethod());
 	EXPECT_EQ(-1, msg2->getContent()->getID());
 	EXPECT_EQ(15, msg2->getContent()->getWaitID());
 	EXPECT_EQ(sender, msg2->getContent()->_sender);
@@ -51,7 +51,7 @@ TEST(Message, Constructor) {
 }
 
 TEST(Message, setMessageType) {
-	i6engine::core::Message::Ptr msg(new i6engine::core::Message(0, 0, i6engine::core::Method::Create, new i6engine::core::MessageStruct(-1, 15), i6engine::core::Subsystem::Unknown));
+	i6e::core::Message::Ptr msg(new i6e::core::Message(0, 0, i6e::core::Method::Create, new i6e::core::MessageStruct(-1, 15), i6e::core::Subsystem::Unknown));
 
 	EXPECT_EQ(0, msg->getMessageType());
 
@@ -61,7 +61,7 @@ TEST(Message, setMessageType) {
 }
 
 TEST(Message, Serialize) {
-	i6engine::core::Message::Ptr msg(new i6engine::core::Message(0, 0, i6engine::core::Method::Create, new i6engine::core::MessageStruct(), i6engine::core::Subsystem::Unknown));
+	i6e::core::Message::Ptr msg(new i6e::core::Message(0, 0, i6e::core::Method::Create, new i6e::core::MessageStruct(), i6e::core::Subsystem::Unknown));
 
 	msg->Serialize();
 

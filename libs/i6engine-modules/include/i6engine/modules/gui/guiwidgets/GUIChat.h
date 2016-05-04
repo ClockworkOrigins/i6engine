@@ -26,7 +26,7 @@
 #include "i6engine/api/facades/MessageSubscriberFacade.h"
 #include "i6engine/api/gui/GUIWidget.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GUIChat : public api::GUIWidget, api::MessageSubscriberFacade {
@@ -69,7 +69,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GUICHAT_H__ */
 

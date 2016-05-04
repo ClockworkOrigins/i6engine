@@ -30,7 +30,7 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/thread/mutex.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	/**
@@ -112,7 +112,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_MOVERCIRCLECOMPONENT_H__ */
 

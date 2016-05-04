@@ -16,7 +16,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	WaynetManager::WaynetManager() : _waypoints(), _paths() {
@@ -164,4 +164,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

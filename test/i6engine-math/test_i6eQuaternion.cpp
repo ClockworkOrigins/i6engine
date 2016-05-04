@@ -40,7 +40,7 @@ TEST(i6eQuaternion, Construction) {
 
 	Quaternion q4(v, 90.0);
 
-	ASSERT_THROW(Quaternion(Vec3(1.0, 2.0, 3.0), 90.0), i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(Quaternion(Vec3(1.0, 2.0, 3.0), 90.0), i6e::utils::exceptions::ApiException);
 
 	btQuaternion bq(5, 6, 7, 4);
 

@@ -25,7 +25,7 @@
 #include "OGRE/OgreCompositorLogic.h"
 #include "OGRE/OgreCompositorInstance.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class ListenerFactoryLogic : public Ogre::CompositorLogic {
@@ -52,7 +52,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_COMPOSITORS_LISTENERFACTORYLOGIC_H__ */
 

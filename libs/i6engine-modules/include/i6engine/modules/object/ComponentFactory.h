@@ -32,7 +32,7 @@
 
 #include "boost/function.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	class Component;
 	class GameObject;
@@ -126,7 +126,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_COMPONENTFACTORY_H__ */
 

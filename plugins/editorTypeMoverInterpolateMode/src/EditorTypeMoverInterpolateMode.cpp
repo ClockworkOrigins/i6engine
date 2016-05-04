@@ -3,7 +3,7 @@
 #include <QHBoxLayout>
 #include <QComboBox>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	std::map<QString, api::MoverInterpolateComponent::Mode> EditorTypeMoverInterpolateModeWidget::modes = { { "TWOSTATE_TOGGLE", api::MoverInterpolateComponent::Mode::TWOSTATE_TOGGLE }, { "TWOSTATE_OPENTIME", api::MoverInterpolateComponent::Mode::TWOSTATE_OPENTIME }, { "NSTATE_LOOP", api::MoverInterpolateComponent::Mode::NSTATE_LOOP }, { "ONCE", api::MoverInterpolateComponent::Mode::ONCE } };
@@ -41,6 +41,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.type.TypePluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.type.TypePluginInterface")

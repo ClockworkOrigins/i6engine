@@ -9,7 +9,7 @@
 
 #include "ParticleRenderers/ParticleUniverseLightRenderer.h"
 
-namespace i6engine {
+namespace i6e {
 namespace particleEditor {
 namespace widgets {
 
@@ -197,4 +197,4 @@ namespace widgets {
 
 } /* namespace widgets */
 } /* namespace particleEditor */
-} /* namespace i6engine */
+} /* namespace i6e */

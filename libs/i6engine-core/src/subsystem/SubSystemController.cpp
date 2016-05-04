@@ -19,7 +19,7 @@
 #include "i6engine/core/EngineCoreController.h"
 #include "i6engine/core/subsystem/ModuleController.h"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	SubSystemController::SubSystemController() : _bolGlobalShutDown(false), _bolWaitForInit(true), _objThreadGrp(), _objQueuedSubSystems(), _coreController(), _lock() {
@@ -103,4 +103,4 @@ namespace core {
 	}
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -3,7 +3,7 @@
 
 #include "widgets/WidgetEditComponent.h"
 
-namespace i6engine {
+namespace i6e {
 namespace particleEditor {
 namespace connections {
 
@@ -102,6 +102,6 @@ namespace connections {
 
 } /* namespace connections */
 } /* namespace particleEditor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_PARTICLEEDITOR_CONNECTIONS_CONNECTION_H__ */

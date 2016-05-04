@@ -21,37 +21,37 @@
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/PhysicsFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace lua {
 namespace physics {
 
 	void setGravity(const math::i6eVector & vec3Gravity) {
-		i6engine::api::EngineController::GetSingleton().getPhysicsFacade()->setGravity(vec3Gravity);
+		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->setGravity(vec3Gravity);
 	}
 
 	void resetPhysicsSubSystem() {
-		i6engine::api::EngineController::GetSingleton().getPhysicsFacade()->resetSubSystem();
+		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->resetSubSystem();
 	}
 
 	void pausePhysics() {
-		i6engine::api::EngineController::GetSingleton().getPhysicsFacade()->pause();
+		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->pause();
 	}
 
 	void unpausePhysics() {
-		i6engine::api::EngineController::GetSingleton().getPhysicsFacade()->unpause();
+		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->unpause();
 	}
 
 } /* namespace physics */
 } /* namespace lua */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 using namespace luabind;
 
 scope registerPhysics() {
 	return
-		def("setGravity", &i6engine::lua::physics::setGravity),
-		def("resetPhysicsSubSystem", &i6engine::lua::physics::resetPhysicsSubSystem),
-		def("pausePhysics", &i6engine::lua::physics::pausePhysics),
-		def("unpausePhysics", &i6engine::lua::physics::unpausePhysics)
+		def("setGravity", &i6e::lua::physics::setGravity),
+		def("resetPhysicsSubSystem", &i6e::lua::physics::resetPhysicsSubSystem),
+		def("pausePhysics", &i6e::lua::physics::pausePhysics),
+		def("unpausePhysics", &i6e::lua::physics::unpausePhysics)
 		;
 }

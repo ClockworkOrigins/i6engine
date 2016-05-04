@@ -20,7 +20,7 @@
 
 #include "OGRE/OgreCompositorChain.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	Ogre::CompositorInstance::Listener * HDRLogic::createListener(Ogre::CompositorInstance * instance) {
@@ -32,4 +32,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -8,7 +8,7 @@
 
 #include "i6engine/api/configs/GUIConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace gui {
 
@@ -30,7 +30,7 @@ namespace gui {
 
 } /* namespace gui */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_GUI_CONFIG_H__ */
 

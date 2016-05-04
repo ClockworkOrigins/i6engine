@@ -24,7 +24,7 @@
 #include "i6engine/api/configs/PhysicsConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	void PhysicsFacade::setGravity(const Vec3 & vec3Gravity) const {
@@ -62,4 +62,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

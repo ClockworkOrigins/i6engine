@@ -20,7 +20,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/manager/TextManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace item {
 
@@ -36,7 +36,7 @@ namespace item {
 		api::attributeMap paramsSSC;
 		pos.insertInMap("pos", paramsSSC);
 		rot.insertInMap("rot", paramsSSC);
-		p.second._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
+		p.second._components.push_back(i6e::api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
 
 		api::EngineController::GetSingletonPtr()->getObjectFacade()->createObject(p.first, p.second, api::EngineController::GetSingletonPtr()->getUUID(), false);
 	}
@@ -56,4 +56,4 @@ namespace item {
 
 } /* namespace item */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

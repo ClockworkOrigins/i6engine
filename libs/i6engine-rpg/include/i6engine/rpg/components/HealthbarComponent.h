@@ -24,7 +24,7 @@
 
 #include "i6engine/api/components/Component.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace components {
 
@@ -72,7 +72,7 @@ namespace components {
 
 } /* namespace components */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_COMPONENTS_HEALTHBARCOMPONENT_H__ */
 

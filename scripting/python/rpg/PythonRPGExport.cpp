@@ -35,12 +35,12 @@
 
 #include "boost/python.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace python {
 namespace rpg {
 
 	void insertItemAtPosition(const std::string & identifier, const Vec3 & pos, const Quaternion & rot) {
-		i6engine::rpg::item::ItemManager::GetSingletonPtr()->createItem(identifier, pos, rot);
+		i6e::rpg::item::ItemManager::GetSingletonPtr()->createItem(identifier, pos, rot);
 	}
 
 	void insertItemAtWaypoint(const std::string & identifier, const std::string & waypoint) {
@@ -57,7 +57,7 @@ namespace rpg {
 	}
 
 	void insertNPCAtPosition(const std::string & identifier, const Vec3 & pos, const Quaternion & rot) {
-		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, rot, false);
+		i6e::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, rot, false);
 	}
 
 	void insertNPCAtWaypoint(const std::string & identifier, const std::string & waypoint) {
@@ -83,87 +83,87 @@ namespace rpg {
 				break;
 			}
 		}
-		i6engine::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, rot, true);
+		i6e::rpg::npc::NPCManager::GetSingletonPtr()->createNPC(identifier, pos, rot, true);
 	}
 
-	i6engine::rpg::npc::NPC * getNPC(const std::string & identifier) {
-		return i6engine::rpg::npc::NPCManager::GetSingleton().getNPC(identifier);
+	i6e::rpg::npc::NPC * getNPC(const std::string & identifier) {
+		return i6e::rpg::npc::NPCManager::GetSingleton().getNPC(identifier);
 	}
 
 	bool wasHeard(const std::string & identifier) {
-		return i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->wasHeard(identifier);
+		return i6e::rpg::dialog::DialogManager::GetSingletonPtr()->wasHeard(identifier);
 	}
 
 	void exitDialog() {
-		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->exitDialog();
+		i6e::rpg::dialog::DialogManager::GetSingletonPtr()->exitDialog();
 	}
 
 	void isDialogRunning() {
-		i6engine::rpg::dialog::DialogManager::GetSingletonPtr()->isDialogRunning();
+		i6e::rpg::dialog::DialogManager::GetSingletonPtr()->isDialogRunning();
 	}
 
-	void setQuestStatus(const std::string & identifier, i6engine::rpg::quest::QuestStatus status) {
-		i6engine::rpg::quest::QuestLog::GetSingleton().setQuestStatus(identifier, status);
+	void setQuestStatus(const std::string & identifier, i6e::rpg::quest::QuestStatus status) {
+		i6e::rpg::quest::QuestLog::GetSingleton().setQuestStatus(identifier, status);
 	}
 
 	void addLogEntry(const std::string & identifier, const std::string & entry) {
-		i6engine::rpg::quest::QuestLog::GetSingleton().addLogEntry(identifier, entry);
+		i6e::rpg::quest::QuestLog::GetSingleton().addLogEntry(identifier, entry);
 	}
 
 	std::string getItemName(const std::string & identifier) {
-		return i6engine::rpg::item::ItemManager::GetSingleton().getItemName(identifier);
+		return i6e::rpg::item::ItemManager::GetSingleton().getItemName(identifier);
 	}
 
 	std::string getQuestName(const std::string & identifier) {
-		return i6engine::rpg::quest::QuestLog::GetSingleton().getQuestName(identifier);
+		return i6e::rpg::quest::QuestLog::GetSingleton().getQuestName(identifier);
 	}
 
 } /* namespace rpg */
 } /* namespace python */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 	using namespace boost::python;
 
-	def("insertItemAtPosition", &i6engine::python::rpg::insertItemAtPosition);
-	def("insertItemAtWaypoint", &i6engine::python::rpg::insertItemAtWaypoint);
-	def("insertNPCAtPosition", &i6engine::python::rpg::insertNPCAtPosition);
-	def("insertNPCAtWaypoint", &i6engine::python::rpg::insertNPCAtWaypoint);
-	def("insertPlayerAtWaypoint", &i6engine::python::rpg::insertPlayerAtWaypoint);
-	def("getNPC", &i6engine::python::rpg::getNPC, return_internal_reference<>());
-	def("wasHeard", &i6engine::python::rpg::wasHeard);
-	def("exitDialog", &i6engine::python::rpg::exitDialog);
-	def("isDialogRunning", &i6engine::python::rpg::isDialogRunning);
+	def("insertItemAtPosition", &i6e::python::rpg::insertItemAtPosition);
+	def("insertItemAtWaypoint", &i6e::python::rpg::insertItemAtWaypoint);
+	def("insertNPCAtPosition", &i6e::python::rpg::insertNPCAtPosition);
+	def("insertNPCAtWaypoint", &i6e::python::rpg::insertNPCAtWaypoint);
+	def("insertPlayerAtWaypoint", &i6e::python::rpg::insertPlayerAtWaypoint);
+	def("getNPC", &i6e::python::rpg::getNPC, return_internal_reference<>());
+	def("wasHeard", &i6e::python::rpg::wasHeard);
+	def("exitDialog", &i6e::python::rpg::exitDialog);
+	def("isDialogRunning", &i6e::python::rpg::isDialogRunning);
 
-	class_<i6engine::rpg::dialog::Dialog>("Dialog", no_init);
-	class_<i6engine::rpg::npc::NPC>("NPC", no_init)
-		.def("getGO", &i6engine::rpg::npc::NPC::getGO)
-		.def("turnToNPC", &i6engine::rpg::npc::NPC::turnToNPC)
-		.def("say", &i6engine::rpg::npc::NPC::say)
-		.def("getItemCount", &i6engine::rpg::npc::NPC::getItemCount)
-		.def("addJob", &i6engine::rpg::npc::NPC::addJob)
-		.def("setCurrentXP", &i6engine::rpg::npc::NPC::setCurrentXP)
-		.def("getCurrentXP", &i6engine::rpg::npc::NPC::getCurrentXP)
-		.def("setNextXP", &i6engine::rpg::npc::NPC::setNextXP)
-		.def("getNextXP", &i6engine::rpg::npc::NPC::getNextXP)
-		.def("setLevel", &i6engine::rpg::npc::NPC::setLevel)
-		.def("getLevel", &i6engine::rpg::npc::NPC::getLevel)
-		.add_property("xp", &i6engine::rpg::npc::NPC::getCurrentXP, &i6engine::rpg::npc::NPC::setCurrentXP)
-		.add_property("nextXP", &i6engine::rpg::npc::NPC::getNextXP, &i6engine::rpg::npc::NPC::setNextXP)
-		.add_property("level", &i6engine::rpg::npc::NPC::getLevel, &i6engine::rpg::npc::NPC::setLevel)
-		.def("createItems", &i6engine::rpg::npc::NPC::createItems)
-		.def("removeItems", &i6engine::rpg::npc::NPC::removeItems)
-		.def("trade", &i6engine::rpg::npc::NPC::trade);
+	class_<i6e::rpg::dialog::Dialog>("Dialog", no_init);
+	class_<i6e::rpg::npc::NPC>("NPC", no_init)
+		.def("getGO", &i6e::rpg::npc::NPC::getGO)
+		.def("turnToNPC", &i6e::rpg::npc::NPC::turnToNPC)
+		.def("say", &i6e::rpg::npc::NPC::say)
+		.def("getItemCount", &i6e::rpg::npc::NPC::getItemCount)
+		.def("addJob", &i6e::rpg::npc::NPC::addJob)
+		.def("setCurrentXP", &i6e::rpg::npc::NPC::setCurrentXP)
+		.def("getCurrentXP", &i6e::rpg::npc::NPC::getCurrentXP)
+		.def("setNextXP", &i6e::rpg::npc::NPC::setNextXP)
+		.def("getNextXP", &i6e::rpg::npc::NPC::getNextXP)
+		.def("setLevel", &i6e::rpg::npc::NPC::setLevel)
+		.def("getLevel", &i6e::rpg::npc::NPC::getLevel)
+		.add_property("xp", &i6e::rpg::npc::NPC::getCurrentXP, &i6e::rpg::npc::NPC::setCurrentXP)
+		.add_property("nextXP", &i6e::rpg::npc::NPC::getNextXP, &i6e::rpg::npc::NPC::setNextXP)
+		.add_property("level", &i6e::rpg::npc::NPC::getLevel, &i6e::rpg::npc::NPC::setLevel)
+		.def("createItems", &i6e::rpg::npc::NPC::createItems)
+		.def("removeItems", &i6e::rpg::npc::NPC::removeItems)
+		.def("trade", &i6e::rpg::npc::NPC::trade);
 
-	enum_<i6engine::rpg::quest::QuestStatus>("QuestStatus")
-		.value("LOCKED", i6engine::rpg::quest::QuestStatus::LOCKED)
-		.value("RUNNING", i6engine::rpg::quest::QuestStatus::RUNNING)
-		.value("COMPLETED", i6engine::rpg::quest::QuestStatus::COMPLETED)
-		.value("FAILED", i6engine::rpg::quest::QuestStatus::FAILED)
+	enum_<i6e::rpg::quest::QuestStatus>("QuestStatus")
+		.value("LOCKED", i6e::rpg::quest::QuestStatus::LOCKED)
+		.value("RUNNING", i6e::rpg::quest::QuestStatus::RUNNING)
+		.value("COMPLETED", i6e::rpg::quest::QuestStatus::COMPLETED)
+		.value("FAILED", i6e::rpg::quest::QuestStatus::FAILED)
 		.export_values();
 
-	def("setQuestStatus", &i6engine::python::rpg::setQuestStatus);
-	def("addLogEntry", &i6engine::python::rpg::addLogEntry);
-	def("getItemName", &i6engine::python::rpg::getItemName);
-	def("getQuestName", &i6engine::python::rpg::getQuestName);
+	def("setQuestStatus", &i6e::python::rpg::setQuestStatus);
+	def("addLogEntry", &i6e::python::rpg::addLogEntry);
+	def("getItemName", &i6e::python::rpg::getItemName);
+	def("getQuestName", &i6e::python::rpg::getQuestName);
 }

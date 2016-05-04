@@ -26,7 +26,7 @@
 
 #include "i6engine/api/components/Component.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;
@@ -82,7 +82,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_SHATTERCOMPONENT_H__ */
 

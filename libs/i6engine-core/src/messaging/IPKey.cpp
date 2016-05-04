@@ -19,7 +19,7 @@
 #include <cmath>
 #include <sstream>
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	IPKey::IPKey(const std::string & ip, uint16_t port) : _ip(), _port(port) {
@@ -77,4 +77,4 @@ namespace core {
 	}
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */

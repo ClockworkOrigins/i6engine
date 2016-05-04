@@ -21,34 +21,34 @@
 
 #include "boost/python.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace python {
 namespace physics {
 
 	void setGravity(const math::i6eVector & vec3Gravity) {
-		i6engine::api::EngineController::GetSingleton().getPhysicsFacade()->setGravity(vec3Gravity);
+		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->setGravity(vec3Gravity);
 	}
 
 	void resetPhysicsSubSystem() {
-		i6engine::api::EngineController::GetSingleton().getPhysicsFacade()->resetSubSystem();
+		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->resetSubSystem();
 	}
 
 	void pausePhysics() {
-		i6engine::api::EngineController::GetSingleton().getPhysicsFacade()->pause();
+		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->pause();
 	}
 
 	void unpausePhysics() {
-		i6engine::api::EngineController::GetSingleton().getPhysicsFacade()->unpause();
+		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->unpause();
 	}
 
 } /* namespace physics */
 } /* namespace python */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 BOOST_PYTHON_MODULE(ScriptingPhysicsPython) {
 	using namespace boost::python;
-	def("setGravity", &i6engine::python::physics::setGravity);
-	def("resetPhysicsSubSystem", &i6engine::python::physics::resetPhysicsSubSystem);
-	def("pausePhysics", &i6engine::python::physics::pausePhysics);
-	def("unpausePhysics", &i6engine::python::physics::unpausePhysics);
+	def("setGravity", &i6e::python::physics::setGravity);
+	def("resetPhysicsSubSystem", &i6e::python::physics::resetPhysicsSubSystem);
+	def("pausePhysics", &i6e::python::physics::pausePhysics);
+	def("unpausePhysics", &i6e::python::physics::unpausePhysics);
 }

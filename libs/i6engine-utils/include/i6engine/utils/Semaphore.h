@@ -26,7 +26,7 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	class ISIXE_UTILS_API Semaphore {
@@ -53,7 +53,7 @@ namespace utils {
 	};
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_SEMAPHORE_H__ */
 

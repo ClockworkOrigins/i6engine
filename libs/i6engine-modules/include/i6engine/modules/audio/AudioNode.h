@@ -32,7 +32,7 @@
 
 #include "boost/shared_ptr.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class AudioManager;
@@ -73,7 +73,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_AUDIONODE_H__ */
 

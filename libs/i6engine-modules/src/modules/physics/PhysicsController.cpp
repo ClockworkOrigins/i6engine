@@ -25,7 +25,7 @@
 #include "i6engine/modules/physics/PhysicsMailbox.h"
 #include "i6engine/modules/physics/PhysicsManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	PhysicsController::PhysicsController() : core::ModuleController(core::Subsystem::Physic), _manager(), _mailbox() {}
@@ -63,4 +63,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

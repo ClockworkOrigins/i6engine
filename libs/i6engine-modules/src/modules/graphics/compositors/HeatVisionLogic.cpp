@@ -18,7 +18,7 @@
 
 #include "i6engine/modules/graphics/compositors/HeatVisionListener.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	Ogre::CompositorInstance::Listener * HeatVisionLogic::createListener(Ogre::CompositorInstance * instance) {
@@ -26,4 +26,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

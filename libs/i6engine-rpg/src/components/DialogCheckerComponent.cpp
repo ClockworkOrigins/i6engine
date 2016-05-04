@@ -27,7 +27,7 @@
 #include "i6engine/rpg/config/ExternalConstants.h"
 #include "i6engine/rpg/dialog/DialogManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace components {
 
@@ -69,7 +69,7 @@ namespace components {
 			if (player != nullptr) {
 				auto playerPSC = player->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent);
 
-				if ((psc->getPosition() - playerPSC->getPosition()).length() < i6engine::rpg::config::NPC_CHECK_TALK_DISTANCE) {
+				if ((psc->getPosition() - playerPSC->getPosition()).length() < i6e::rpg::config::NPC_CHECK_TALK_DISTANCE) {
 					dialog::DialogManager::GetSingleton().checkImportantDialogs(_identifier);
 				}
 			}
@@ -84,4 +84,4 @@ namespace components {
 
 } /* namespace components */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

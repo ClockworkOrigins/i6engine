@@ -21,7 +21,7 @@
 
 #include <qplugin.h>
 
-namespace i6engine {
+namespace i6e {
 namespace editor {
 namespace plugins {
 
@@ -64,8 +64,8 @@ namespace plugins {
 
 } /* namespace plugins */
 } /* namespace editor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_DECLARE_INTERFACE(i6engine::editor::plugins::RunGamePluginInterface, "i6engine.editor.runGame.RunGamePluginInterface")
+Q_DECLARE_INTERFACE(i6e::editor::plugins::RunGamePluginInterface, "i6e.editor.runGame.RunGamePluginInterface")
 
 #endif /* __I6ENGINE_EDITOR_PLUGINS_RUNGAMEPLUGININTERFACE_H__ */

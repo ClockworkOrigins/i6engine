@@ -24,7 +24,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	WaypointComponent::WaypointComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _name(), _connections() {
@@ -120,4 +120,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

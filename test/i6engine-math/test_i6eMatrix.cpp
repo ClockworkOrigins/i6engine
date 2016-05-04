@@ -18,7 +18,7 @@
 
 #include "gtest/gtest.h"
 
-typedef i6engine::math::i6eMatrix<float> FloatMatrix;
+typedef i6e::math::i6eMatrix<float> FloatMatrix;
 
 TEST(i6eMatrix, Constructor) {
 	FloatMatrix m1;
@@ -61,8 +61,8 @@ TEST(i6eMatrix, setEntry) {
 	m(2, 0, 5.0f);
 	m(2, 1, 6.0f);
 
-	ASSERT_THROW(m(3, 0, 7.0f), i6engine::utils::exceptions::ApiException);
-	ASSERT_THROW(m(2, 2, 8.0f), i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(m(3, 0, 7.0f), i6e::utils::exceptions::ApiException);
+	ASSERT_THROW(m(2, 2, 8.0f), i6e::utils::exceptions::ApiException);
 
 	EXPECT_EQ(1.0f, m(0, 0));
 	EXPECT_EQ(2.0f, m(0, 1));
@@ -71,8 +71,8 @@ TEST(i6eMatrix, setEntry) {
 	EXPECT_EQ(5.0f, m(2, 0));
 	EXPECT_EQ(6.0f, m(2, 1));
 
-	ASSERT_THROW(m(3, 0), i6engine::utils::exceptions::ApiException);
-	ASSERT_THROW(m(2, 2), i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(m(3, 0), i6e::utils::exceptions::ApiException);
+	ASSERT_THROW(m(2, 2), i6e::utils::exceptions::ApiException);
 }
 
 TEST(i6eMatrix, setZero) {
@@ -273,7 +273,7 @@ TEST(i6eMatrix, setIdentity) {
 TEST(i6eMatrix, calcDeterminant) {
 	FloatMatrix m(3, 2);
 
-	ASSERT_THROW(m.calculateDeterminant(), i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(m.calculateDeterminant(), i6e::utils::exceptions::ApiException);
 
 	FloatMatrix m1(3, 3);
 
@@ -320,7 +320,7 @@ TEST(i6eMatrix, matrixMult) {
 
 	FloatMatrix m4(10, 64);
 
-	ASSERT_THROW(m4 * m2, i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(m4 * m2, i6e::utils::exceptions::ApiException);
 
 	FloatMatrix m1 = m2 * m3;
 
@@ -476,7 +476,7 @@ TEST(i6eMatrix, matrixAdd) {
 
 	FloatMatrix m3(10, 64);
 
-	ASSERT_THROW(m3 + m2, i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(m3 + m2, i6e::utils::exceptions::ApiException);
 
 	FloatMatrix m4 = m1 + m2;
 
@@ -509,7 +509,7 @@ TEST(i6eMatrix, matrixSub) {
 
 	FloatMatrix m3(10, 64);
 
-	ASSERT_THROW(m3 + m2, i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(m3 + m2, i6e::utils::exceptions::ApiException);
 
 	FloatMatrix m4 = m1 + m2;
 	m4 -= m2;
@@ -665,7 +665,7 @@ TEST(i6eMatrix, invert) {
 	m1(1, 1, -2.0f);
 	m1(1, 2, 5.0f);
 
-	ASSERT_THROW(FloatMatrix::invert(m1), i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(FloatMatrix::invert(m1), i6e::utils::exceptions::ApiException);
 
 	FloatMatrix m2(3, 3);
 

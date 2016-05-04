@@ -29,7 +29,7 @@
 
 #include "i6engine/api/configs/ObjectConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	class GameObject;
 } /* namespace api */
@@ -119,7 +119,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GOFACTORY_H__ */
 

@@ -21,7 +21,7 @@
 
 namespace sample {
 
-	class RPGApplication : public i6engine::rpg::RPGApplication {
+	class RPGApplication : public i6e::rpg::RPGApplication {
 	public:
 		RPGApplication();
 

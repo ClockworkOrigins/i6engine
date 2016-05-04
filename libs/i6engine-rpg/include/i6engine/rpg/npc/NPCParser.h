@@ -26,7 +26,7 @@
 
 #include "i6engine/api/configs/ObjectConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace npc {
 
@@ -61,7 +61,7 @@ namespace npc {
 
 } /* namespace npc */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_NPC_NPCPARSER_H__ */
 

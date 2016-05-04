@@ -62,7 +62,7 @@ namespace sample {
 	}
 
 	void WaynetApplication::Initialize() {
-		ISIXE_REGISTERMESSAGETYPE(i6engine::api::messages::InputMessageType, WaynetApplication::News, this);
+		ISIXE_REGISTERMESSAGETYPE(i6e::api::messages::InputMessageType, WaynetApplication::News, this);
 	}
 
 	void WaynetApplication::AfterInitialize() {
@@ -71,75 +71,75 @@ namespace sample {
 		// sets gravity for the game... here like on earth
 		std::string gravityString;
 		_iniParser.getValue("PHYSIC", "gravity", gravityString);
-		i6engine::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(gravityString));
+		i6e::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(gravityString));
 
 		// ambient light for the scene
 		std::string ambientLightString;
 		_iniParser.getValue("GRAPHIC", "ambientLight", ambientLightString);
-		auto vec = i6engine::utils::split(ambientLightString, " ");
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(std::stod(vec[0]), std::stod(vec[1]), std::stod(vec[2]));
+		auto vec = i6e::utils::split(ambientLightString, " ");
+		i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(std::stod(vec[0]), std::stod(vec[1]), std::stod(vec[2]));
 
 		// setting shadow technique... currently only additive stencil possible
 		uint16_t shadowTechnique;
 		_iniParser.getValue("GRAPHIC", "shadowTechnique", shadowTechnique);
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6engine::api::graphics::ShadowTechnique(shadowTechnique));
+		i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setShadowTechnique(i6e::api::graphics::ShadowTechnique(shadowTechnique));
 
 		// setting distance fog
-		i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setExponentialFog(Vec3(0.9, 0.9, 0.9), 0.005);
+		i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setExponentialFog(Vec3(0.9, 0.9, 0.9), 0.005);
 
 		// register rpg components we want to use
 		// do this befor loading the level
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6engine::rpg::components::AttributeComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&i6engine::rpg::components::DialogCheckerComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(&i6engine::rpg::components::ExperienceComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&i6engine::rpg::components::HealthbarComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&i6engine::rpg::components::HumanMovementComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&i6engine::rpg::components::ListInventoryComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&i6engine::rpg::components::MiscItemComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&i6engine::rpg::components::NameComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&i6engine::rpg::components::QuickslotComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&i6engine::rpg::components::SlotComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(&i6engine::rpg::components::SlotInventoryComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&i6engine::rpg::components::ThirdPersonControlComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6engine::rpg::components::UsableItemComponent::createC, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&i6engine::rpg::components::WeightInventoryComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6e::rpg::components::AttributeComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&i6e::rpg::components::DialogCheckerComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(&i6e::rpg::components::ExperienceComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&i6e::rpg::components::HealthbarComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&i6e::rpg::components::HumanMovementComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&i6e::rpg::components::ListInventoryComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&i6e::rpg::components::MiscItemComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&i6e::rpg::components::NameComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&i6e::rpg::components::QuickslotComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&i6e::rpg::components::SlotComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(&i6e::rpg::components::SlotInventoryComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&i6e::rpg::components::ThirdPersonControlComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6e::rpg::components::UsableItemComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&i6e::rpg::components::WeightInventoryComponent::createC, _1, _2));
 
 		// loads the RPG demo level
-		i6engine::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/SampleLevel.xml", "Singleplayer");
+		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/SampleLevel.xml", "Singleplayer");
 
-		i6engine::api::ObjectFacade * of = i6engine::api::EngineController::GetSingleton().getObjectFacade();
+		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("ToggleWaynet", i6engine::api::attributeMap(), "", false, false));
-			of->createGO("SpectatorCam", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false, [this](i6engine::api::GOPtr go) {
+			i6e::api::objects::GOTemplate tmpl;
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("ToggleWaynet", i6e::api::attributeMap(), "", false, false));
+			of->createGO("SpectatorCam", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this](i6e::api::GOPtr go) {
 				_camera = go;
-				go->getGOC<i6engine::api::ToggleWaynetComponent>(i6engine::api::components::ComponentTypes::ToggleWaynetComponent)->enable(true);
+				go->getGOC<i6e::api::ToggleWaynetComponent>(i6e::api::components::ComponentTypes::ToggleWaynetComponent)->enable(true);
 			});
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			of->createObject("Sun", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			i6e::api::objects::GOTemplate tmpl;
+			of->createObject("Sun", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			i6engine::api::attributeMap params;
+			i6e::api::objects::GOTemplate tmpl;
+			i6e::api::attributeMap params;
 			params.insert(std::make_pair("name", "NPCName01")); // size of the terrain in world units
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Name", params, "", false, false));
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("DialogChecker", i6engine::api::attributeMap(), "", true, false));
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Experience", i6engine::api::attributeMap(), "", true, false));
-			of->createObject("NPC", tmpl, i6engine::api::EngineController::GetSingleton().getUUID(), false);
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Name", params, "", false, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("DialogChecker", i6e::api::attributeMap(), "", true, false));
+			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Experience", i6e::api::attributeMap(), "", true, false));
+			of->createObject("NPC", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
 		}
 	}
 
-	void WaynetApplication::News(const i6engine::api::GameMessage::Ptr & msg) {
-		if (msg->getMessageType() == i6engine::api::messages::InputMessageType) {
-			if (msg->getSubtype() == i6engine::api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
-				i6engine::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6engine::api::input::Input_Keyboard_Update *>(msg->getContent());
-				if (iku->code == i6engine::api::KeyCode::KC_MBLeft && iku->pressed == i6engine::api::KeyState::KEY_PRESSED) {
-					auto vec = i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->getSelectables();
+	void WaynetApplication::News(const i6e::api::GameMessage::Ptr & msg) {
+		if (msg->getMessageType() == i6e::api::messages::InputMessageType) {
+			if (msg->getSubtype() == i6e::api::keyboard::KeyboardMessageTypes::KeyKeyboard) {
+				i6e::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6e::api::input::Input_Keyboard_Update *>(msg->getContent());
+				if (iku->code == i6e::api::KeyCode::KC_MBLeft && iku->pressed == i6e::api::KeyState::KEY_PRESSED) {
+					auto vec = i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->getSelectables();
 					if (vec.size() > 0) {
-						auto go = i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("NPC").front();
-						go->getGOC<i6engine::api::MoveComponent>(i6engine::api::components::ComponentTypes::MoveComponent)->navigate(vec.front().second);
+						auto go = i6e::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("NPC").front();
+						go->getGOC<i6e::api::MoveComponent>(i6e::api::components::ComponentTypes::MoveComponent)->navigate(vec.front().second);
 					}
 				} else {
 					CommonApplication::InputMailbox(msg);

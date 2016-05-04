@@ -25,7 +25,7 @@
 
 #include "CEGUI/CEGUI.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUITextButton::GUITextButton(const std::string & name, const std::string & type) : api::GUIWidget(name) {
@@ -47,4 +47,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

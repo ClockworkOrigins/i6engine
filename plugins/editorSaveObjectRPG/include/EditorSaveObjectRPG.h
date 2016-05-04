@@ -5,13 +5,13 @@
 
 #include <fstream>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	class EditorSaveObjectRPG : public QObject, public editor::plugins::SaveObjectPluginInterface {
 		Q_OBJECT
-		Q_PLUGIN_METADATA(IID "i6engine.editor.saveObject.SaveObjectPluginInterface")
-		Q_INTERFACES(i6engine::editor::plugins::SaveObjectPluginInterface)
+		Q_PLUGIN_METADATA(IID "i6e.editor.saveObject.SaveObjectPluginInterface")
+		Q_INTERFACES(i6e::editor::plugins::SaveObjectPluginInterface)
 
 	public:
 		EditorSaveObjectRPG();
@@ -27,7 +27,7 @@ namespace plugins {
 		 * \param[in] element the XMLElement this go should be linked to if necessary
 		 * \returns true if object was handled by this plugin, otherwise false
 		 */
-		bool saveObject(const i6engine::api::GOPtr & go, tinyxml2::XMLElement * element);
+		bool saveObject(const i6e::api::GOPtr & go, tinyxml2::XMLElement * element);
 
 		/**
 		 * \brief finishes save process
@@ -47,6 +47,6 @@ namespace plugins {
 	};
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_PLUGINS_EDITORSAVEOBJECTRPG_H__ */

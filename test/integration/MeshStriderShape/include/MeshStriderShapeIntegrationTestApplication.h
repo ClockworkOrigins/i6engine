@@ -19,7 +19,7 @@
 
 #include "../../../../samples/common/include/CommonApplication.h"
 
-namespace i6engine {
+namespace i6e {
 namespace integration {
 
 	class MeshStriderShapeIntegrationTestApplication : public sample::CommonApplication {
@@ -32,6 +32,6 @@ namespace integration {
 	};
 
 } /* namespace integration */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_INTEGRATION_MESHSTRIDERSHAPEINTEGRATIONTESTAPPLICATION_H__ */

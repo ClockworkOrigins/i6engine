@@ -3,7 +3,7 @@
 
 #include "ui_wndMainWindow.h"
 
-namespace i6engine {
+namespace i6e {
 namespace dialogCreator {
 namespace plugins {
 	class ScriptLanguagePluginInterface;
@@ -36,6 +36,6 @@ namespace widgets {
 
 } /* namespace widgets */
 } /* namespace dialogCreator */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_DIALOGCREATOR_WIDGETS_MAINWINDOW_H__ */

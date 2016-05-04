@@ -25,7 +25,7 @@
 #include "i6engine/api/configs/GraphicsConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	LineComponent::LineComponent(const int64_t id, const attributeMap & params) : Component(id, params), _startPos(), _endPos(), _colour() {
@@ -88,4 +88,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -34,7 +34,7 @@
 
 #include "i6engine/luabind/luabind.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	class ScriptingFacade;
 } /* namespace api */
@@ -289,7 +289,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_LUASCRIPTINGMANAGER_H__ */
 

@@ -1,6 +1,6 @@
 #include "i6engine/api/manager/LanguageManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	LanguageManager::LanguageManager() : _language("Deutsch"), _callbacks() {
@@ -23,4 +23,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

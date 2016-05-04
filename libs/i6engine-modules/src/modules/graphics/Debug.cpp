@@ -21,9 +21,9 @@
 #include "OGRE/OgreRenderQueue.h"
 #include "OGRE/OgreSceneManager.h"
 
-template<> i6engine::modules::Debug * Ogre::Singleton<i6engine::modules::Debug>::msSingleton = nullptr;
+template<> i6e::modules::Debug * Ogre::Singleton<i6e::modules::Debug>::msSingleton = nullptr;
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	Debug * Debug::getSingletonPtr() {
@@ -326,4 +326,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

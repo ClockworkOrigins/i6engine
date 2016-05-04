@@ -40,7 +40,7 @@ namespace Ogre {
 	class SceneNode;
 } /* namespace Ogre */
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	class Component;
 	class MeshAppearanceComponent;
@@ -198,7 +198,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_COMPONENTS_MESHCOMPONENT_H__ */
 

@@ -30,7 +30,7 @@
 #include "boost/function.hpp"
 #include "boost/thread/mutex.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	class MessageTypeInfo;
@@ -205,7 +205,7 @@ namespace core {
 	};
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_MESSAGESUBSCRIBER_H__ */
 

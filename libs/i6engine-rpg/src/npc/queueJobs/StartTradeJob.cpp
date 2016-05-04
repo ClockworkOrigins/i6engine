@@ -23,7 +23,7 @@
 
 #include "i6engine/rpg/npc/NPC.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace npc {
 
@@ -46,4 +46,4 @@ namespace npc {
 
 } /* namespace npc */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

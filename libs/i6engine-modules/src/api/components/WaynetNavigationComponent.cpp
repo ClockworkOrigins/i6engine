@@ -20,7 +20,7 @@
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/manager/WaynetManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	WaynetNavigationComponent::WaynetNavigationComponent(const int64_t id, const api::attributeMap & params) : NavigationComponent(id, params) {
@@ -39,4 +39,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

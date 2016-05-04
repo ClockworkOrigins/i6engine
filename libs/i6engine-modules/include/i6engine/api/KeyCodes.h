@@ -26,7 +26,7 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	/**
@@ -193,7 +193,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_KEYCODES_H__ */
 

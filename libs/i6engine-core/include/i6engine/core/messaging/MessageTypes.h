@@ -22,7 +22,7 @@
 #ifndef __I6ENGINE_CORE_MESSAGES_MESSAGETYPES_H__
 #define __I6ENGINE_CORE_MESSAGES_MESSAGETYPES_H__
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 namespace messages {
 
@@ -38,7 +38,7 @@ namespace messages {
 
 } /* namespace messages */
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_MESSAGES_MESSAGETYPES_H__ */
 

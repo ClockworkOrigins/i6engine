@@ -31,23 +31,23 @@ int main(int, char **) {
 #else
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 #endif
-	sample::ChatApplication app("127.0.0.1", 12345, uint16_t(i6engine::utils::Random::GetSingleton().rand(12346, UINT16_MAX)));
+	sample::ChatApplication app("127.0.0.1", 12345, uint16_t(i6e::utils::Random::GetSingleton().rand(12346, UINT16_MAX)));
 
 	app.setName("Chat Client Sample");
 
-	i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
+	i6e::api::EngineController::GetSingletonPtr()->registerApplication(app);
 
 #ifdef ISIXE_WITH_CONSOLE
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), LNG_GRAPHICS_FRAME_TIME);
+	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6e::modules::GraphicsController(), LNG_GRAPHICS_FRAME_TIME);
 #else
-	HWND hWnd = i6engine::api::EngineController::GetSingletonPtr()->createWindow(hInstance);
+	HWND hWnd = i6e::api::EngineController::GetSingletonPtr()->createWindow(hInstance);
 
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(hWnd), LNG_GRAPHICS_FRAME_TIME);
+	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6e::modules::GraphicsController(hWnd), LNG_GRAPHICS_FRAME_TIME);
 #endif
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6engine::modules::InputController(), LNG_INPUT_FRAME_TIME);
-	i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Network", new i6engine::modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
+	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6e::modules::InputController(), LNG_INPUT_FRAME_TIME);
+	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Network", new i6e::modules::NetworkController(), LNG_NETWORK_FRAME_TIME);
 
-	i6engine::api::EngineController::GetSingletonPtr()->start();
+	i6e::api::EngineController::GetSingletonPtr()->start();
 
 	return 0;
 }

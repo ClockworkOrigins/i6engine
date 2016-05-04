@@ -30,7 +30,7 @@ namespace CEGUI {
 	class ListboxTextItem;
 } /* namespace CEGUI */
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace gui {
 	enum class Alignment;
@@ -110,7 +110,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GUIPRINT_H__ */
 

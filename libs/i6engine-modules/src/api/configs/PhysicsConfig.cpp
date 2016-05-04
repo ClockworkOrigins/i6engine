@@ -16,7 +16,7 @@
 
 #include "i6engine/api/configs/PhysicsConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace physics {
 
@@ -53,4 +53,4 @@ namespace physics {
 
 } /* namespace physics */
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

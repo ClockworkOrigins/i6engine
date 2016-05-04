@@ -21,7 +21,7 @@
 
 #include "boost/python.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace python {
 namespace gui {
 
@@ -147,7 +147,7 @@ namespace gui {
 		api::EngineController::GetSingletonPtr()->getGUIFacade()->setLifetime(name, time);
 	}
 
-	void setAlignment(const std::string & name, i6engine::api::gui::Alignment alignment) {
+	void setAlignment(const std::string & name, i6e::api::gui::Alignment alignment) {
 		api::EngineController::GetSingletonPtr()->getGUIFacade()->setAlignment(name, alignment);
 	}
 
@@ -269,71 +269,71 @@ namespace gui {
 
 } /* namespace gui */
 } /* namespace python */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 BOOST_PYTHON_MODULE(ScriptingGUIPython) {
 	using namespace boost::python;
 
-	enum_<i6engine::api::gui::Alignment>("Alignment")
-		.value("Left", i6engine::api::gui::Alignment::Left)
-		.value("Center", i6engine::api::gui::Alignment::Center)
-		.value("Right", i6engine::api::gui::Alignment::Right)
+	enum_<i6e::api::gui::Alignment>("Alignment")
+		.value("Left", i6e::api::gui::Alignment::Left)
+		.value("Center", i6e::api::gui::Alignment::Center)
+		.value("Right", i6e::api::gui::Alignment::Right)
 		.export_values();
 
 
-	def("startGUI", &i6engine::python::gui::startGUI);
-	def("addToRootWindow", &i6engine::python::gui::addToRootWindow);
-	def("setMouseVisibility", &i6engine::python::gui::setMouseVisibility);
-	def("clearAllWindows", &i6engine::python::gui::clearAllWindows);
-	def("subscribeEvent", &i6engine::python::gui::subscribeEvent);
-	def("changeEvent", &i6engine::python::gui::changeEvent);
-	def("setMouseCursorImage", &i6engine::python::gui::setMouseCursorImage);
-	def("addImageset", &i6engine::python::gui::addImageset);
-	def("loadCanvas", &i6engine::python::gui::loadCanvas);
-	def("addPrint", &i6engine::python::gui::addPrint);
-	def("addProgressBar", &i6engine::python::gui::addProgressBar);
-	def("addEditbox", &i6engine::python::gui::addEditbox);
-	def("addTextButton", &i6engine::python::gui::addTextButton);
-	def("addImageButton", &i6engine::python::gui::addImageButton);
-	def("addToggleButton", &i6engine::python::gui::addToggleButton);
-	def("addStatusList", &i6engine::python::gui::addStatusList);
-	def("addImage", &i6engine::python::gui::addImage);
-	def("addMultiColumnList", &i6engine::python::gui::addMultiColumnList);
-	def("addComboBox", &i6engine::python::gui::addComboBox);
-	def("addChat", &i6engine::python::gui::addChat);
-	def("setText", &i6engine::python::gui::setText);
-	def("setPosition", &i6engine::python::gui::setPosition);
-	def("setSize", &i6engine::python::gui::setSize);
-	def("setVisibility", &i6engine::python::gui::setVisibility);
-	def("setAmount", &i6engine::python::gui::setAmount);
-	def("setColour", &i6engine::python::gui::setColour);
-	def("setFont", &i6engine::python::gui::setFont);
-	def("setLifetime", &i6engine::python::gui::setLifetime);
-	def("setAlignment", &i6engine::python::gui::setAlignment);
-	def("enableDropTarget", &i6engine::python::gui::enableDropTarget);
-	def("setDragable", &i6engine::python::gui::setDragable);
-	def("setDropCallback", &i6engine::python::gui::setDropCallback);
-	def("setProgress", &i6engine::python::gui::setProgress);
-	def("addRowToList", &i6engine::python::gui::addRowToList);
-	def("addRowEntry", &i6engine::python::gui::addRowEntry);
-	def("addColumn", &i6engine::python::gui::addColumn);
-	def("clearWidget", &i6engine::python::gui::clearWidget);
-	def("setImage", &i6engine::python::gui::setImage);
-	def("setEnterTextCallback", &i6engine::python::gui::setEnterTextCallback);
-	def("setProperty", &i6engine::python::gui::setProperty);
-	def("setSelected", &i6engine::python::gui::setSelected);
-	def("setSelectedCallback", &i6engine::python::gui::setSelectedCallback);
-	def("setAcceptedTextCallback", &i6engine::python::gui::setAcceptedTextCallback);
-	def("setTooltip", &i6engine::python::gui::setTooltip);
-	def("addTextToWidget", &i6engine::python::gui::addTextToWidget);
-	def("setSelectedStringCallback", &i6engine::python::gui::setSelectedStringCallback);
-	def("playAnimation", &i6engine::python::gui::playAnimation);
-	def("stopAnimation", &i6engine::python::gui::stopAnimation);
-	def("pauseAnimation", &i6engine::python::gui::pauseAnimation);
-	def("unpauseAnimation", &i6engine::python::gui::unpauseAnimation);
-	def("createWidget", &i6engine::python::gui::createWidget);
-	def("deleteWidget", &i6engine::python::gui::deleteWidget);
-	def("resetGUISubSystem", &i6engine::python::gui::resetGUISubSystem);
-	def("getInputCaptured", &i6engine::python::gui::getInputCaptured);
-	def("getOnWindow", &i6engine::python::gui::getOnWindow);
+	def("startGUI", &i6e::python::gui::startGUI);
+	def("addToRootWindow", &i6e::python::gui::addToRootWindow);
+	def("setMouseVisibility", &i6e::python::gui::setMouseVisibility);
+	def("clearAllWindows", &i6e::python::gui::clearAllWindows);
+	def("subscribeEvent", &i6e::python::gui::subscribeEvent);
+	def("changeEvent", &i6e::python::gui::changeEvent);
+	def("setMouseCursorImage", &i6e::python::gui::setMouseCursorImage);
+	def("addImageset", &i6e::python::gui::addImageset);
+	def("loadCanvas", &i6e::python::gui::loadCanvas);
+	def("addPrint", &i6e::python::gui::addPrint);
+	def("addProgressBar", &i6e::python::gui::addProgressBar);
+	def("addEditbox", &i6e::python::gui::addEditbox);
+	def("addTextButton", &i6e::python::gui::addTextButton);
+	def("addImageButton", &i6e::python::gui::addImageButton);
+	def("addToggleButton", &i6e::python::gui::addToggleButton);
+	def("addStatusList", &i6e::python::gui::addStatusList);
+	def("addImage", &i6e::python::gui::addImage);
+	def("addMultiColumnList", &i6e::python::gui::addMultiColumnList);
+	def("addComboBox", &i6e::python::gui::addComboBox);
+	def("addChat", &i6e::python::gui::addChat);
+	def("setText", &i6e::python::gui::setText);
+	def("setPosition", &i6e::python::gui::setPosition);
+	def("setSize", &i6e::python::gui::setSize);
+	def("setVisibility", &i6e::python::gui::setVisibility);
+	def("setAmount", &i6e::python::gui::setAmount);
+	def("setColour", &i6e::python::gui::setColour);
+	def("setFont", &i6e::python::gui::setFont);
+	def("setLifetime", &i6e::python::gui::setLifetime);
+	def("setAlignment", &i6e::python::gui::setAlignment);
+	def("enableDropTarget", &i6e::python::gui::enableDropTarget);
+	def("setDragable", &i6e::python::gui::setDragable);
+	def("setDropCallback", &i6e::python::gui::setDropCallback);
+	def("setProgress", &i6e::python::gui::setProgress);
+	def("addRowToList", &i6e::python::gui::addRowToList);
+	def("addRowEntry", &i6e::python::gui::addRowEntry);
+	def("addColumn", &i6e::python::gui::addColumn);
+	def("clearWidget", &i6e::python::gui::clearWidget);
+	def("setImage", &i6e::python::gui::setImage);
+	def("setEnterTextCallback", &i6e::python::gui::setEnterTextCallback);
+	def("setProperty", &i6e::python::gui::setProperty);
+	def("setSelected", &i6e::python::gui::setSelected);
+	def("setSelectedCallback", &i6e::python::gui::setSelectedCallback);
+	def("setAcceptedTextCallback", &i6e::python::gui::setAcceptedTextCallback);
+	def("setTooltip", &i6e::python::gui::setTooltip);
+	def("addTextToWidget", &i6e::python::gui::addTextToWidget);
+	def("setSelectedStringCallback", &i6e::python::gui::setSelectedStringCallback);
+	def("playAnimation", &i6e::python::gui::playAnimation);
+	def("stopAnimation", &i6e::python::gui::stopAnimation);
+	def("pauseAnimation", &i6e::python::gui::pauseAnimation);
+	def("unpauseAnimation", &i6e::python::gui::unpauseAnimation);
+	def("createWidget", &i6e::python::gui::createWidget);
+	def("deleteWidget", &i6e::python::gui::deleteWidget);
+	def("resetGUISubSystem", &i6e::python::gui::resetGUISubSystem);
+	def("getInputCaptured", &i6e::python::gui::getInputCaptured);
+	def("getOnWindow", &i6e::python::gui::getOnWindow);
 }

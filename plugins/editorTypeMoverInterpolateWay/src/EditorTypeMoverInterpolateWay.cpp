@@ -3,7 +3,7 @@
 #include <QHBoxLayout>
 #include <QComboBox>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	std::map<QString, api::MoverInterpolateComponent::Way> EditorTypeMoverInterpolateWayWidget::ways = { { "LINEAR", api::MoverInterpolateComponent::Way::LINEAR }, { "BEZIER", api::MoverInterpolateComponent::Way::BEZIER } };
@@ -41,6 +41,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.type.TypePluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.type.TypePluginInterface")

@@ -36,7 +36,7 @@ Q_IMPORT_PLUGIN(EditorTypeString)
 Q_IMPORT_PLUGIN(EditorTypeVec3)
 Q_IMPORT_PLUGIN(EditorTypeVec4)
 
-namespace i6engine {
+namespace i6e {
 namespace editor {
 namespace widgets {
 
@@ -212,4 +212,4 @@ namespace widgets {
 
 } /* namespace widgets */
 } /* namespace editor */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -21,7 +21,7 @@
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/facades/ScriptingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace lua {
 namespace gui {
 
@@ -147,7 +147,7 @@ namespace gui {
 		api::EngineController::GetSingletonPtr()->getGUIFacade()->setLifetime(name, time);
 	}
 
-	void setAlignment(const std::string & name, i6engine::api::gui::Alignment alignment) {
+	void setAlignment(const std::string & name, i6e::api::gui::Alignment alignment) {
 		api::EngineController::GetSingletonPtr()->getGUIFacade()->setAlignment(name, alignment);
 	}
 
@@ -269,75 +269,75 @@ namespace gui {
 
 } /* namespace gui */
 } /* namespace lua */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 using namespace luabind;
 
 scope registerGUI() {
 	return
-		class_<i6engine::api::gui::Alignment>("Alignment")
+		class_<i6e::api::gui::Alignment>("Alignment")
 			.def(constructor<>())
 			.enum_("Alignment")
 			[
-				value("Left", int(i6engine::api::gui::Alignment::Left)),
-				value("Center", int(i6engine::api::gui::Alignment::Center)),
-				value("Right", int(i6engine::api::gui::Alignment::Right))
+				value("Left", int(i6e::api::gui::Alignment::Left)),
+				value("Center", int(i6e::api::gui::Alignment::Center)),
+				value("Right", int(i6e::api::gui::Alignment::Right))
 			],
 
-		def("startGUI", &i6engine::lua::gui::startGUI),
-		def("addToRootWindow", &i6engine::lua::gui::addToRootWindow),
-		def("setMouseVisibility", &i6engine::lua::gui::setMouseVisibility),
-		def("clearAllWindows", &i6engine::lua::gui::clearAllWindows),
-		def("subscribeEvent", &i6engine::lua::gui::subscribeEvent),
-		def("changeEvent", &i6engine::lua::gui::changeEvent),
-		def("setMouseCursorImage", &i6engine::lua::gui::setMouseCursorImage),
-		def("addImageset", &i6engine::lua::gui::addImageset),
-		def("loadCanvas", &i6engine::lua::gui::loadCanvas),
-		def("addPrint", &i6engine::lua::gui::addPrint),
-		def("addProgressBar", &i6engine::lua::gui::addProgressBar),
-		def("addEditbox", &i6engine::lua::gui::addEditbox),
-		def("addTextButton", &i6engine::lua::gui::addTextButton),
-		def("addImageButton", &i6engine::lua::gui::addImageButton),
-		def("addToggleButton", &i6engine::lua::gui::addToggleButton),
-		def("addStatusList", &i6engine::lua::gui::addStatusList),
-		def("addImage", &i6engine::lua::gui::addImage),
-		def("addMultiColumnList", &i6engine::lua::gui::addMultiColumnList),
-		def("addComboBox", &i6engine::lua::gui::addComboBox),
-		def("addChat", &i6engine::lua::gui::addChat),
-		def("setText", &i6engine::lua::gui::setText),
-		def("setPosition", &i6engine::lua::gui::setPosition),
-		def("setSize", &i6engine::lua::gui::setSize),
-		def("setVisibility", &i6engine::lua::gui::setVisibility),
-		def("setAmount", &i6engine::lua::gui::setAmount),
-		def("setColour", &i6engine::lua::gui::setColour),
-		def("setFont", &i6engine::lua::gui::setFont),
-		def("setLifetime", &i6engine::lua::gui::setLifetime),
-		def("setAlignment", &i6engine::lua::gui::setAlignment),
-		def("enableDropTarget", &i6engine::lua::gui::enableDropTarget),
-		def("setDragable", &i6engine::lua::gui::setDragable),
-		def("setDropCallback", &i6engine::lua::gui::setDropCallback),
-		def("setProgress", &i6engine::lua::gui::setProgress),
-		def("addRowToList", &i6engine::lua::gui::addRowToList),
-		def("addRowEntry", &i6engine::lua::gui::addRowEntry),
-		def("addColumn", &i6engine::lua::gui::addColumn),
-		def("clearWidget", &i6engine::lua::gui::clearWidget),
-		def("setImage", &i6engine::lua::gui::setImage),
-		def("setEnterTextCallback", &i6engine::lua::gui::setEnterTextCallback),
-		def("setProperty", &i6engine::lua::gui::setProperty),
-		def("setSelected", &i6engine::lua::gui::setSelected),
-		def("setSelectedCallback", &i6engine::lua::gui::setSelectedCallback),
-		def("setAcceptedTextCallback", &i6engine::lua::gui::setAcceptedTextCallback),
-		def("setTooltip", &i6engine::lua::gui::setTooltip),
-		def("addTextToWidget", &i6engine::lua::gui::addTextToWidget),
-		def("setSelectedStringCallback", &i6engine::lua::gui::setSelectedStringCallback),
-		def("playAnimation", &i6engine::lua::gui::playAnimation),
-		def("stopAnimation", &i6engine::lua::gui::stopAnimation),
-		def("pauseAnimation", &i6engine::lua::gui::pauseAnimation),
-		def("unpauseAnimation", &i6engine::lua::gui::unpauseAnimation),
-		def("createWidget", &i6engine::lua::gui::createWidget),
-		def("deleteWidget", &i6engine::lua::gui::deleteWidget),
-		def("resetGUISubSystem", &i6engine::lua::gui::resetGUISubSystem),
-		def("getInputCaptured", &i6engine::lua::gui::getInputCaptured),
-		def("getOnWindow", &i6engine::lua::gui::getOnWindow)
+		def("startGUI", &i6e::lua::gui::startGUI),
+		def("addToRootWindow", &i6e::lua::gui::addToRootWindow),
+		def("setMouseVisibility", &i6e::lua::gui::setMouseVisibility),
+		def("clearAllWindows", &i6e::lua::gui::clearAllWindows),
+		def("subscribeEvent", &i6e::lua::gui::subscribeEvent),
+		def("changeEvent", &i6e::lua::gui::changeEvent),
+		def("setMouseCursorImage", &i6e::lua::gui::setMouseCursorImage),
+		def("addImageset", &i6e::lua::gui::addImageset),
+		def("loadCanvas", &i6e::lua::gui::loadCanvas),
+		def("addPrint", &i6e::lua::gui::addPrint),
+		def("addProgressBar", &i6e::lua::gui::addProgressBar),
+		def("addEditbox", &i6e::lua::gui::addEditbox),
+		def("addTextButton", &i6e::lua::gui::addTextButton),
+		def("addImageButton", &i6e::lua::gui::addImageButton),
+		def("addToggleButton", &i6e::lua::gui::addToggleButton),
+		def("addStatusList", &i6e::lua::gui::addStatusList),
+		def("addImage", &i6e::lua::gui::addImage),
+		def("addMultiColumnList", &i6e::lua::gui::addMultiColumnList),
+		def("addComboBox", &i6e::lua::gui::addComboBox),
+		def("addChat", &i6e::lua::gui::addChat),
+		def("setText", &i6e::lua::gui::setText),
+		def("setPosition", &i6e::lua::gui::setPosition),
+		def("setSize", &i6e::lua::gui::setSize),
+		def("setVisibility", &i6e::lua::gui::setVisibility),
+		def("setAmount", &i6e::lua::gui::setAmount),
+		def("setColour", &i6e::lua::gui::setColour),
+		def("setFont", &i6e::lua::gui::setFont),
+		def("setLifetime", &i6e::lua::gui::setLifetime),
+		def("setAlignment", &i6e::lua::gui::setAlignment),
+		def("enableDropTarget", &i6e::lua::gui::enableDropTarget),
+		def("setDragable", &i6e::lua::gui::setDragable),
+		def("setDropCallback", &i6e::lua::gui::setDropCallback),
+		def("setProgress", &i6e::lua::gui::setProgress),
+		def("addRowToList", &i6e::lua::gui::addRowToList),
+		def("addRowEntry", &i6e::lua::gui::addRowEntry),
+		def("addColumn", &i6e::lua::gui::addColumn),
+		def("clearWidget", &i6e::lua::gui::clearWidget),
+		def("setImage", &i6e::lua::gui::setImage),
+		def("setEnterTextCallback", &i6e::lua::gui::setEnterTextCallback),
+		def("setProperty", &i6e::lua::gui::setProperty),
+		def("setSelected", &i6e::lua::gui::setSelected),
+		def("setSelectedCallback", &i6e::lua::gui::setSelectedCallback),
+		def("setAcceptedTextCallback", &i6e::lua::gui::setAcceptedTextCallback),
+		def("setTooltip", &i6e::lua::gui::setTooltip),
+		def("addTextToWidget", &i6e::lua::gui::addTextToWidget),
+		def("setSelectedStringCallback", &i6e::lua::gui::setSelectedStringCallback),
+		def("playAnimation", &i6e::lua::gui::playAnimation),
+		def("stopAnimation", &i6e::lua::gui::stopAnimation),
+		def("pauseAnimation", &i6e::lua::gui::pauseAnimation),
+		def("unpauseAnimation", &i6e::lua::gui::unpauseAnimation),
+		def("createWidget", &i6e::lua::gui::createWidget),
+		def("deleteWidget", &i6e::lua::gui::deleteWidget),
+		def("resetGUISubSystem", &i6e::lua::gui::resetGUISubSystem),
+		def("getInputCaptured", &i6e::lua::gui::getInputCaptured),
+		def("getOnWindow", &i6e::lua::gui::getOnWindow)
 		;
 }

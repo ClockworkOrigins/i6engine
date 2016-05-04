@@ -26,7 +26,7 @@
 #include "i6engine/modules/gui/GUIMailbox.h"
 #include "i6engine/modules/gui/GUIManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUIController::GUIController() : core::ModuleController(core::Subsystem::GUI), _manager(nullptr), _mailbox(nullptr) {
@@ -72,4 +72,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

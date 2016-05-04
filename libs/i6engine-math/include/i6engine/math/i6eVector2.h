@@ -31,7 +31,7 @@
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Exceptions.h"
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 
 	/**
@@ -265,12 +265,12 @@ namespace math {
 	}
 
 } /* namespace math */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-typedef i6engine::math::i6eVector2<double> Vec2;
-typedef i6engine::math::i6eVector2<float> Vec2f;
-typedef i6engine::math::i6eVector2<int32_t> Vec2i;
-typedef i6engine::math::i6eVector2<uint32_t> Vec2ui;
+typedef i6e::math::i6eVector2<double> Vec2;
+typedef i6e::math::i6eVector2<float> Vec2f;
+typedef i6e::math::i6eVector2<int32_t> Vec2i;
+typedef i6e::math::i6eVector2<uint32_t> Vec2ui;
 
 /**
  * \brief stream operator for the i6eVector2

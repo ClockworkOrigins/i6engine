@@ -19,7 +19,7 @@
 #include "i6engine/core/messaging/MessageSubscriber.h"
 #include "i6engine/core/messaging/MessagingController.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	MessagingFacade::MessagingFacade() : _messagingController(nullptr) {
@@ -48,4 +48,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

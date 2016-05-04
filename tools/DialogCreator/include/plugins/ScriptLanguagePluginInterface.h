@@ -21,7 +21,7 @@
 #include <QStringList>
 #include <QVector>
 
-namespace i6engine {
+namespace i6e {
 namespace dialogCreator {
 namespace plugins {
 
@@ -74,8 +74,8 @@ namespace plugins {
 
 } /* namespace plugins */
 } /* namespace dialogCreator */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_DECLARE_INTERFACE(i6engine::dialogCreator::plugins::ScriptLanguagePluginInterface, "i6engine.dialogCreator.script.ScriptLanguagePluginInterface")
+Q_DECLARE_INTERFACE(i6e::dialogCreator::plugins::ScriptLanguagePluginInterface, "i6e.dialogCreator.script.ScriptLanguagePluginInterface")
 
 #endif /* __DIALOGCREATOR_PLUGINS_SCRIPTLANGUAGEPLUGININTERFACE_H__ */

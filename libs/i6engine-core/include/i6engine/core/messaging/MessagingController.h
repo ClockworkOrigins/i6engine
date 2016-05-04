@@ -69,7 +69,7 @@
  * \image html Core_Messaging.png
  */
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	class EngineCoreController;
@@ -165,7 +165,7 @@ namespace core {
 	};
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_MESSAGINGCONTROLLER_H__ */
 

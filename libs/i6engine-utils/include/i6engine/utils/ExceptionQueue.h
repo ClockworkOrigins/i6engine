@@ -30,7 +30,7 @@
 #include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/Singleton.h"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 namespace exceptions {
 
@@ -81,7 +81,7 @@ namespace exceptions {
 
 } /* namespace exceptions */
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_EXCEPTIONS_EXCEPTIONQUEUE_H__ */
 

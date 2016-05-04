@@ -19,7 +19,7 @@
 
 #include <qplugin.h>
 
-namespace i6engine {
+namespace i6e {
 namespace editor {
 namespace plugins {
 
@@ -36,8 +36,8 @@ namespace plugins {
 
 } /* namespace plugins */
 } /* namespace editor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_DECLARE_INTERFACE(i6engine::editor::plugins::InitializationPluginInterface, "i6engine.editor.initialization.InitializationPluginInterface")
+Q_DECLARE_INTERFACE(i6e::editor::plugins::InitializationPluginInterface, "i6e.editor.initialization.InitializationPluginInterface")
 
 #endif /* __I6ENGINE_EDITOR_PLUGINS_INITIALIZATIONPLUGININTERFACE_H__ */

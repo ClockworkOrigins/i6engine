@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <QDoubleSpinBox>
 
-namespace i6engine {
+namespace i6e {
 namespace particleEditor {
 namespace properties {
 
@@ -62,4 +62,4 @@ namespace properties {
 
 } /* namespace properties */
 } /* namespace particleEditor */
-} /* namespace i6engine */
+} /* namespace i6e */

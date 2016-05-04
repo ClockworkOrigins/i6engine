@@ -8,7 +8,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	FollowComponent::FollowComponent(const int64_t id, const attributeMap & params) : Component(id, params), _ownPSC(), _targetPSC(), _lastTime(), _speed() {
@@ -93,4 +93,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

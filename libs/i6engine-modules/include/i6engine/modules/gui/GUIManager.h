@@ -48,7 +48,7 @@ namespace Ogre {
 	class Root;
 } /* namespace Ogre */
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 	struct MessageStruct;
 } /* namespace core */
@@ -460,7 +460,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GUIMANAGER_H__ */
 
@@ -486,7 +486,7 @@ namespace modules {
  *		</tr>
  *		<tr>
  * 			<td>EventType</td>
- * 			<td>i6engine::modules::GUIConfig::GUI_EVENT_KEY_DOWN </td>
+ * 			<td>i6e::modules::GUIConfig::GUI_EVENT_KEY_DOWN </td>
  * 			<td></td>
  * 		</tr>
  * 		<tr>
@@ -508,7 +508,7 @@ namespace modules {
  *		</tr>
  *		<tr>
  * 			<td>EventType</td>
- * 			<td>i6engine::modules::GUIConfig::GUI_EVENT_KEY_UP </td>
+ * 			<td>i6e::modules::GUIConfig::GUI_EVENT_KEY_UP </td>
  * 			<td></td>
  * 		</tr>
  * 		<tr>
@@ -530,7 +530,7 @@ namespace modules {
  *		</tr>
  *		<tr>
  * 			<td>EventType</td>
- * 			<td>i6engine::modules::GUIConfig::GUI_EVENT_CHAR_INJECT </td>
+ * 			<td>i6e::modules::GUIConfig::GUI_EVENT_CHAR_INJECT </td>
  * 			<td></td>
  * 		</tr>
  * 		<tr>
@@ -552,7 +552,7 @@ namespace modules {
  *		</tr>
  *		<tr>
  * 			<td>EventType</td>
- * 			<td>i6engine::modules::GUIConfig::GUI_SUBSCRIBED_EVENT_OCCURED </td>
+ * 			<td>i6e::modules::GUIConfig::GUI_SUBSCRIBED_EVENT_OCCURED </td>
  * 			<td></td>
  * 		</tr>
  * 		<tr>

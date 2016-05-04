@@ -20,25 +20,25 @@
 #include "gtest/gtest.h"
 
 TEST(CollisionShape, CollisionShape) {
-	i6engine::modules::CollisionShapeData * csd = new i6engine::modules::CollisionShapeData();
+	i6e::modules::CollisionShapeData * csd = new i6e::modules::CollisionShapeData();
 	std::string serialized = csd->Serialize();
 	delete csd;
-	csd = i6engine::modules::CollisionShapeData::Deserialize(serialized);
+	csd = i6e::modules::CollisionShapeData::Deserialize(serialized);
 	delete csd;
 }
 
 TEST(CollisionShape, HeightmapCollisionShape) {
-	i6engine::modules::CollisionShapeData * csd = new i6engine::modules::HeightmapCollisionShapeData();
+	i6e::modules::CollisionShapeData * csd = new i6e::modules::HeightmapCollisionShapeData();
 	std::string serialized = csd->Serialize();
 	delete csd;
-	csd = i6engine::modules::CollisionShapeData::Deserialize(serialized);
+	csd = i6e::modules::CollisionShapeData::Deserialize(serialized);
 	delete csd;
 }
 
 TEST(CollisionShape, MeshStriderCollisionShape) {
-	i6engine::modules::CollisionShapeData * csd = new i6engine::modules::MeshStriderCollisionShapeData();
+	i6e::modules::CollisionShapeData * csd = new i6e::modules::MeshStriderCollisionShapeData();
 	std::string serialized = csd->Serialize();
 	delete csd;
-	csd = i6engine::modules::CollisionShapeData::Deserialize(serialized);
+	csd = i6e::modules::CollisionShapeData::Deserialize(serialized);
 	delete csd;
 }

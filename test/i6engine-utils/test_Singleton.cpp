@@ -24,7 +24,7 @@
 
 #include "gtest/gtest.h"
 
-class SingletonTest : public i6engine::utils::Singleton<SingletonTest> {
+class SingletonTest : public i6e::utils::Singleton<SingletonTest> {
 public:
 	SingletonTest() {
 		_counter++;

@@ -26,7 +26,7 @@
 
 #include "i6engine/api/GameMessage.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class NetworkController;
@@ -85,7 +85,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_NETWORKMAILBOX_H__ */
 

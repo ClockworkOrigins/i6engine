@@ -31,7 +31,7 @@ namespace Ogre {
 	class SceneNode;
 } /* namespace Ogre */
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace graphics {
 	enum class BillboardOrigin;
@@ -386,7 +386,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GRAPHICSNODE_H__ */
 

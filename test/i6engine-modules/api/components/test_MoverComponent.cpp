@@ -25,11 +25,11 @@
 
 #include "gtest/gtest.h"
 
-using namespace i6engine;
-using namespace i6engine::api;
+using namespace i6e;
+using namespace i6e::api;
 
-i6engine::api::ComPtr func(const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) {
-	return i6engine::api::ComPtr();
+i6e::api::ComPtr func(const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) {
+	return i6e::api::ComPtr();
 }
 void funcID(const int64_t) {
 }
@@ -44,7 +44,7 @@ TEST(MoverComponent, absolute) {
 		Vec3 axis(0, 0, 2);
 		Vec3 start(1, 2, 3);
 
-		i6engine::api::attributeMap aMap;
+		i6e::api::attributeMap aMap;
 		aMap["positioning"] = "0";	// ABSOLUTE
 		axis.insertInMap("axis", aMap);
 		realCircleCenter.insertInMap("pos", aMap);
@@ -52,7 +52,7 @@ TEST(MoverComponent, absolute) {
 		aMap["duration"] = "100";
 		aMap["started"] = "1";
 
-		i6engine::api::attributeMap phyMap;		// just for dummy values
+		i6e::api::attributeMap phyMap;		// just for dummy values
 		axis.insertInMap("pos", phyMap);
 		axis.insertInMap("scale", phyMap);
 		Quaternion q(1, 2, 3, 4);
@@ -62,9 +62,9 @@ TEST(MoverComponent, absolute) {
 		phyMap["shatterInterest"] = "0";
 		phyMap["compound"] = "0";
 
-		i6engine::utils::sharedPtr<MoverCircleComponent, Component> mover = i6engine::utils::dynamic_pointer_cast<MoverCircleComponent>(Component::createC<MoverCircleComponent>(0, aMap));
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(1, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", func);
-		i6engine::utils::sharedPtr<PhysicalStateComponent, Component> psc = i6engine::utils::make_shared<PhysicalStateComponent, Component>(2, phyMap);
+		i6e::utils::sharedPtr<MoverCircleComponent, Component> mover = i6e::utils::dynamic_pointer_cast<MoverCircleComponent>(Component::createC<MoverCircleComponent>(0, aMap));
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(1, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", func);
+		i6e::utils::sharedPtr<PhysicalStateComponent, Component> psc = i6e::utils::make_shared<PhysicalStateComponent, Component>(2, phyMap);
 		owner->setSelf(owner);
 		owner->setGOC(psc);
 		owner->setGOC(mover);
@@ -76,7 +76,7 @@ TEST(MoverComponent, absolute) {
 		ASSERT_EQ(Vec3(-45, 10, 15), psc->getPosition());
 	}
 	GOPtr::clear();
-	i6engine::utils::sharedPtr<Component, Component>::clear();
+	i6e::utils::sharedPtr<Component, Component>::clear();
 }
 
 TEST(MoverComponent, absoluteStartPosition) {
@@ -85,7 +85,7 @@ TEST(MoverComponent, absoluteStartPosition) {
 		EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback([](const WeakComPtr &) {});
 		EngineController::GetSingletonPtr()->getObjectFacade()->registerRemoveTickerCallback([](int64_t) {});
 
-		i6engine::api::attributeMap paramsMover;
+		i6e::api::attributeMap paramsMover;
 		paramsMover["direction"] = "1";
 		paramsMover["way"] = "0";
 		paramsMover["duration"] = "5000000";
@@ -102,7 +102,7 @@ TEST(MoverComponent, absoluteStartPosition) {
 		rot.insertInMap("keyframe_0_rot", paramsMover);
 		rot.insertInMap("keyframe_1_rot", paramsMover);
 
-		i6engine::api::attributeMap phyMap;		// just for dummy values
+		i6e::api::attributeMap phyMap;		// just for dummy values
 		pos = Vec3(42.0, 3.14, -5.0);
 		pos.insertInMap("pos", phyMap);
 		phyMap["scale"] = "1.0 1.0 1.0";
@@ -113,9 +113,9 @@ TEST(MoverComponent, absoluteStartPosition) {
 		phyMap["shatterInterest"] = "0";
 		phyMap["compound"] = "0";
 
-		i6engine::utils::sharedPtr<MoverInterpolateComponent, Component> mover = i6engine::utils::dynamic_pointer_cast<MoverInterpolateComponent>(Component::createC<MoverInterpolateComponent>(0, paramsMover));
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(1, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", func);
-		i6engine::utils::sharedPtr<PhysicalStateComponent, Component> psc = i6engine::utils::make_shared<PhysicalStateComponent, Component>(2, phyMap);
+		i6e::utils::sharedPtr<MoverInterpolateComponent, Component> mover = i6e::utils::dynamic_pointer_cast<MoverInterpolateComponent>(Component::createC<MoverInterpolateComponent>(0, paramsMover));
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(1, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", func);
+		i6e::utils::sharedPtr<PhysicalStateComponent, Component> psc = i6e::utils::make_shared<PhysicalStateComponent, Component>(2, phyMap);
 		owner->setSelf(owner);
 		owner->setGOC(psc);
 		owner->setGOC(mover);
@@ -131,5 +131,5 @@ TEST(MoverComponent, absoluteStartPosition) {
 		ASSERT_EQ(Vec3(1.0, 2.0, -3.0), psc->getPosition());
 	}
 	GOPtr::clear();
-	i6engine::utils::sharedPtr<Component, Component>::clear();
+	i6e::utils::sharedPtr<Component, Component>::clear();
 }

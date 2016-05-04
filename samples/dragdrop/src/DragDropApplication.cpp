@@ -29,7 +29,7 @@
 
 namespace sample {
 
-	DragDropApplication::DragDropApplication() : i6engine::api::Application() {
+	DragDropApplication::DragDropApplication() : i6e::api::Application() {
 	}
 
 	DragDropApplication::~DragDropApplication() {
@@ -39,7 +39,7 @@ namespace sample {
 	}
 
 	void DragDropApplication::AfterInitialize() {
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
@@ -60,14 +60,14 @@ namespace sample {
 				if (i / 5 < 2) { // the first two rows accept everything
 					return true;
 				} else if (i / 5 == 2) { // the third row accepts the two blue and the green image
-					auto vec = i6engine::utils::split(s, "_");
+					auto vec = i6e::utils::split(s, "_");
 					if (vec.size() == 2) {
 						if (vec[1] == "0" || vec[1] == "1" || vec[1] == "4") {
 							return true;
 						}
 					}
 				} else if (i / 5 == 3) { // the last row accepts the two red and the green image
-					auto vec = i6engine::utils::split(s, "_");
+					auto vec = i6e::utils::split(s, "_");
 					if (vec.size() == 2) {
 						if (vec[1] == "2" || vec[1] == "3" || vec[1] == "4") {
 							return true;
@@ -91,7 +91,7 @@ namespace sample {
 		}
 
 		// register ESC to close the application
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 	}
 
 	void DragDropApplication::Tick() {

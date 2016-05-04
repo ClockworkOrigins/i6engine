@@ -27,7 +27,7 @@
 
 #include "i6engine/rpg/npc/NPCQueue.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	class GameObject;
 	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;
@@ -91,7 +91,7 @@ namespace npc {
 
 } /* namespace npc */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_NPC_NPC_H__ */
 

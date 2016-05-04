@@ -23,7 +23,7 @@
 
 #include "OGRE/OgreSceneManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	MovableTextComponent::MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour) : _manager(manager), _parent(parent), _movableText(nullptr), _id(coid) {
@@ -50,4 +50,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

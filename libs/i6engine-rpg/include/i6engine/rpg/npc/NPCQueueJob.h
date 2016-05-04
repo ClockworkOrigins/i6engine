@@ -22,7 +22,7 @@
 #ifndef __I6ENGINE_RPG_NPC_NPCQUEUEJOB_H__
 #define __I6ENGINE_RPG_NPC_NPCQUEUEJOB_H__
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace npc {
 
@@ -60,7 +60,7 @@ namespace npc {
 
 } /* namespace npc */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_NPC_NPCQUEUEJOB_H__ */
 

@@ -63,14 +63,14 @@ int main(int argc, char ** argv) {
 		lm->createLog("ogre.log", true, false, false);
 		Ogre::Root * root = new Ogre::Root("", ogrePath + "/ogre.cfg", "");
 		Ogre::DefaultHardwareBufferManager * dhbm = new Ogre::DefaultHardwareBufferManager();
-		i6engine::modules::ResourceManager * resourceManager = new i6engine::modules::ResourceManager(ogrePath);
+		i6e::modules::ResourceManager * resourceManager = new i6e::modules::ResourceManager(ogrePath);
 
 		std::cout << "Loading mesh '" << mesh << "'" << std::endl;
 		Ogre::MeshPtr meshPtr = Ogre::MeshManager::getSingleton().load(mesh, "i6engine");
 		Ogre::Mesh * mp = meshPtr.get();
 
 		std::cout << "Creating collision shape" << std::endl;
-		btBvhTriangleMeshShape * fallShape = new btBvhTriangleMeshShape(new i6engine::tools::MeshStrider(mp), true);
+		btBvhTriangleMeshShape * fallShape = new btBvhTriangleMeshShape(new i6e::tools::MeshStrider(mp), true);
 		btConvexTriangleMeshShape * ctms = new btConvexTriangleMeshShape(fallShape->getMeshInterface());
 		ctms->initializePolyhedralFeatures();
 		btShapeHull * sh = new btShapeHull(ctms);
@@ -91,7 +91,7 @@ int main(int argc, char ** argv) {
 			data[i] = serializer->getBufferPointer()[i];
 		}
 
-		i6engine::modules::MeshStriderCollisionShapeData * mscsd = new i6engine::modules::MeshStriderCollisionShapeData(data);
+		i6e::modules::MeshStriderCollisionShapeData * mscsd = new i6e::modules::MeshStriderCollisionShapeData(data);
 
 		std::string serialized = mscsd->Serialize();
 

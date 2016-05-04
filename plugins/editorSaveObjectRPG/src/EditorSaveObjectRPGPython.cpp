@@ -1,6 +1,6 @@
 #include "EditorSaveObjectRPG.h"
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	void EditorSaveObjectRPG::insertMethodDeclaration() {
@@ -21,4 +21,4 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */

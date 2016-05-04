@@ -22,7 +22,7 @@
 #ifndef __I6ENGINE_CORE_SUBSYSTEMCONFIG_H__
 #define __I6ENGINE_CORE_SUBSYSTEMCONFIG_H__
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	enum class Subsystem {
@@ -39,7 +39,7 @@ namespace core {
 	};
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_SUBSYSTEMCONFIG_H__ */
 

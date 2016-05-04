@@ -26,14 +26,14 @@ using namespace luabind;
 
 scope registerMath() {
 	return
-		def("binom", i6engine::math::binom),
-		def("disPointLine", i6engine::math::disPointLine),
-		def("rotateVector", i6engine::math::rotateVector),
+		def("binom", i6e::math::binom),
+		def("disPointLine", i6e::math::disPointLine),
+		def("rotateVector", i6e::math::rotateVector),
 
 		class_<Quaternion>("Quaternion")
 			.def(constructor<>())
 			.def(constructor<double, double, double, double>())
-			.def(constructor<i6engine::math::i6eVector, double>())
+			.def(constructor<i6e::math::i6eVector, double>())
 			.def(constructor<const std::map<std::string, std::string> &, const std::string &>())
 			.def(constructor<const std::string &>())
 			.def("getX", &Quaternion::getX)
@@ -65,8 +65,8 @@ scope registerMath() {
 			.def(tostring(self))
 			.def(self * Vec3()),
 
-		def("dotProduct", i6engine::math::dotProduct),
-		def("scalProd", i6engine::math::scalProd),
+		def("dotProduct", i6e::math::dotProduct),
+		def("scalProd", i6e::math::scalProd),
 
 		class_<Vec2>("Vec2")
 			.def(constructor<>())

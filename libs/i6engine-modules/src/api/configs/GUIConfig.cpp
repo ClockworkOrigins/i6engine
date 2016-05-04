@@ -16,7 +16,7 @@
 
 #include "i6engine/api/configs/GUIConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace gui {
 
@@ -57,4 +57,4 @@ namespace gui {
 
 } /* namespace gui */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

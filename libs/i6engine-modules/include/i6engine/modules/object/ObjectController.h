@@ -26,7 +26,7 @@
 
 #include "i6engine/core/subsystem/ModuleController.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	class ObjectFacade;
 } /* namespace api */
@@ -91,7 +91,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_OBJECTCONTROLLER_H__ */
 

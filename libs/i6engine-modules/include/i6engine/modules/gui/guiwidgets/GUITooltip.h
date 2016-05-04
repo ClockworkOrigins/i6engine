@@ -8,16 +8,16 @@
 
 #include "i6engine/api/gui/GUIWidget.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
-	class GUITooltip : public i6engine::api::GUIWidget {
+	class GUITooltip : public i6e::api::GUIWidget {
 	public:
 		GUITooltip(const std::string & name, const std::string & type);
 
 		~GUITooltip();
 
-		void update(uint16_t type, i6engine::api::gui::GUIUpdateMessageStruct * data) override;
+		void update(uint16_t type, i6e::api::gui::GUIUpdateMessageStruct * data) override;
 
 		void tick() override;
 
@@ -26,7 +26,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GUITOOLTIP_H__ */
 

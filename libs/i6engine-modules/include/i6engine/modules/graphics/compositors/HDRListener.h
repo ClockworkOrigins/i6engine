@@ -24,7 +24,7 @@
 
 #include "OGRE/OgreCompositorInstance.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class HDRListener : public Ogre::CompositorInstance::Listener {
@@ -47,7 +47,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_COMPOSITORS_HDRLISTENER_H__ */
 

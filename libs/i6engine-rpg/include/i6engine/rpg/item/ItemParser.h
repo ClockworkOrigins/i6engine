@@ -28,7 +28,7 @@
 
 #include "i6engine/api/configs/ObjectConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace item {
 
@@ -52,7 +52,7 @@ namespace item {
 		/**
 		 * \brief returns the template for the given identifier
 		 */
-		std::pair<std::string, i6engine::api::objects::GOTemplate> getTemplate(const std::string & identifier) const;
+		std::pair<std::string, i6e::api::objects::GOTemplate> getTemplate(const std::string & identifier) const;
 
 		/**
 		 * \brief add item attributes, call this before loadItems
@@ -69,7 +69,7 @@ namespace item {
 		}
 
 	private:
-		std::map<std::string, std::pair<std::string, i6engine::api::objects::GOTemplate>> _items;
+		std::map<std::string, std::pair<std::string, i6e::api::objects::GOTemplate>> _items;
 		std::map<std::string, std::vector<std::pair<std::string, std::string>>> _itemAttributes;
 		std::set<std::string> _itemTypes;
 
@@ -78,7 +78,7 @@ namespace item {
 
 } /* namespace item */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_ITEM_ITEMPARSER_H__ */
 

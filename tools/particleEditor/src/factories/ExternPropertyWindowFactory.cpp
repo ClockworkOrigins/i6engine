@@ -7,7 +7,7 @@
 #include "widgets/ExternPropertyWindows/SphereColliderExternPropertyWindow.h"
 #include "widgets/ExternPropertyWindows/VortexExternPropertyWindow.h"
 
-namespace i6engine {
+namespace i6e {
 namespace particleEditor {
 namespace factories {
 
@@ -53,4 +53,4 @@ namespace factories {
 
 } /* namespace factories */
 } /* namespace particleEditor */
-} /* namespace i6engine */
+} /* namespace i6e */

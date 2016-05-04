@@ -26,7 +26,7 @@
 
 #include "OGRE/OgreQuaternion.h"
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 
 	const double i6eQuaternion::EPSILON = 1e-15;
@@ -151,4 +151,4 @@ namespace math {
 	}
 
 } /* namespace math */
-} /* namespace i6engine */
+} /* namespace i6e */

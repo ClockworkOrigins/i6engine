@@ -27,7 +27,7 @@
 
 namespace sample {
 
-	CanvasApplication::CanvasApplication() : i6engine::api::Application(), _percent(0.5) {
+	CanvasApplication::CanvasApplication() : i6e::api::Application(), _percent(0.5) {
 	}
 
 	CanvasApplication::~CanvasApplication() {
@@ -37,7 +37,7 @@ namespace sample {
 	}
 
 	void CanvasApplication::AfterInitialize() {
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
@@ -46,17 +46,17 @@ namespace sample {
 		gf->loadCanvas("Canvas", "../media/gui/canvas/CanvasSample.canvas");
 
 		// now all widgets specified in canvas file are loaded and we can access them
-		i6engine::api::EngineController::GetSingleton().registerTimer(1000000, [this, gf]() {
+		i6e::api::EngineController::GetSingleton().registerTimer(1000000, [this, gf]() {
 			_percent += 0.05;
 			if (_percent > 1.0) {
 				_percent = 0.0;
 			}
 			gf->setProgress("Canvas/Background/Bar", _percent);
 			return true;
-		}, true, i6engine::core::JobPriorities::Prio_Medium);
+		}, true, i6e::core::JobPriorities::Prio_Medium);
 
 		// register ESC to close the application
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 	}
 
 	void CanvasApplication::Tick() {

@@ -28,7 +28,7 @@
 
 #include "boost/function.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	class GUIWidget;
 namespace gui {
@@ -623,7 +623,7 @@ namespace gui {
 
 } /* namespace gui */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_GUI_GUICONFIG_H__ */
 

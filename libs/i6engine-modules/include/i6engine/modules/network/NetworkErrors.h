@@ -26,7 +26,7 @@
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class NetworkManager;
@@ -76,7 +76,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_NETWORKERRORS_H__ */
 

@@ -18,7 +18,7 @@ namespace ParticleUniverse {
 	class ParticleTechnique;
 } /* namespace ParticleUniverse */
 
-namespace i6engine {
+namespace i6e {
 namespace particleEditor {
 namespace connections {
 	class LineConnector;
@@ -169,6 +169,6 @@ namespace widgets {
 
 } /* namespace widgets */
 } /* namespace particleEditor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_PARTICLEEDITOR_WIDGETS_WIDGETEDIT_H__ */

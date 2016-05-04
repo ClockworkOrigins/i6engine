@@ -62,7 +62,7 @@
 #include "boost/bind.hpp"
 #include "boost/functional/factory.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 
 	RPGApplication::RPGApplication() : api::Application(), _iniParser() {
@@ -240,4 +240,4 @@ namespace rpg {
 	}
 
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

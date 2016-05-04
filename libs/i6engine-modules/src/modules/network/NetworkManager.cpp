@@ -38,7 +38,7 @@
 
 #include "m2etis/pubsub/PubSubSystem.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	NetworkManager::NetworkManager(NetworkMailbox * mailbox) : _mailbox(mailbox), _sendPing(false), _counterSent(0), _counterReceived(), _ne(this), _pubsub(nullptr), _lastTickTime(api::EngineController::GetSingleton().getCurrentTime()), _connectionFailed(false), _usedChannels(), _pubSubLock() {
@@ -223,4 +223,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

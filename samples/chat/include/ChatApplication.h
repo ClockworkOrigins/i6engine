@@ -22,7 +22,7 @@
 
 namespace sample {
 
-	class ChatApplication : public i6engine::api::Application {
+	class ChatApplication : public i6e::api::Application {
 	public:
 		ChatApplication(const std::string & remoteIP, uint16_t remotePort, uint16_t localPort);
 
@@ -40,7 +40,7 @@ namespace sample {
 		
 		void ShutDown();
 
-		void News(const i6engine::api::GameMessage::Ptr & msg);
+		void News(const i6e::api::GameMessage::Ptr & msg);
 
 	private:
 		std::string _remoteIP;

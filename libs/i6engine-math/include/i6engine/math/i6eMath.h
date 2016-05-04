@@ -34,7 +34,7 @@
  */
 const double PI = 4 * std::atan(1);
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 
 	/**
@@ -72,7 +72,7 @@ namespace math {
 	}
 
 } /* namespace math */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MATH_I6EMATH_H__ */
 

@@ -22,7 +22,7 @@
 #include "boost/log/utility/setup/file.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	Logger::Logger() : _logger(), _logLevel(LogLevel::LOGDEBUG) {
@@ -46,4 +46,4 @@ namespace utils {
 	}
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */

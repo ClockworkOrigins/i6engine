@@ -30,7 +30,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-using namespace i6engine::core;
+using namespace i6e::core;
 
 class Mock_MessagingController : public MessagingController {
 public:
@@ -97,9 +97,9 @@ TEST(MessagingController, Buffer1) {
 	ms._mc = mc;
 
 	// Update 1 Obj 10, waitfor 5
-	Message::Ptr msg1(new Message(0, 1, Method::Create, new MessageStruct(-1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg1(new Message(0, 1, Method::Create, new MessageStruct(-1, -1), i6e::core::Subsystem::Unknown));
 	// Update 1 Obj 10, waitfor 5
-	Message::Ptr msg2(new Message(0, 1, Method::Create, new MessageStruct(-1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg2(new Message(0, 1, Method::Create, new MessageStruct(-1, -1), i6e::core::Subsystem::Unknown));
 
 	 {
 		::testing::InSequence dummy;
@@ -130,17 +130,17 @@ TEST(MessagingController, Buffer2) {
 	ms._mc = mc;
 
 	// Update 1 Obj 10, waitfor 5
-	Message::Ptr msg1(new Message(0, 1, Method::Update, new MessageStruct(10, 5), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg1(new Message(0, 1, Method::Update, new MessageStruct(10, 5), i6e::core::Subsystem::Unknown));
 	// Update 2 Obj 10, waitfor 5
-	Message::Ptr msg2(new Message(0, 1, Method::Update, new MessageStruct(10, 5), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg2(new Message(0, 1, Method::Update, new MessageStruct(10, 5), i6e::core::Subsystem::Unknown));
 	// Create Obj 10, waitfor 5
-	Message::Ptr msg3(new Message(0, 1, Method::Create, new MessageStruct(10, 5), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg3(new Message(0, 1, Method::Create, new MessageStruct(10, 5), i6e::core::Subsystem::Unknown));
 	// Create Obj 5
-	Message::Ptr msg4(new Message(0, 1, Method::Create, new MessageStruct(5, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg4(new Message(0, 1, Method::Create, new MessageStruct(5, -1), i6e::core::Subsystem::Unknown));
 	// Delete Obj 10
-	Message::Ptr msg5(new Message(0, 1, Method::Delete, new MessageStruct(10, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg5(new Message(0, 1, Method::Delete, new MessageStruct(10, -1), i6e::core::Subsystem::Unknown));
 	// Update 3 Obj 10, waitfor 5
-	Message::Ptr msg6(new Message(0, 1, Method::Update, new MessageStruct(10, 5), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg6(new Message(0, 1, Method::Update, new MessageStruct(10, 5), i6e::core::Subsystem::Unknown));
 
 	 {
 		::testing::InSequence dummy;
@@ -179,13 +179,13 @@ TEST(MessagingController, specialCases) {
 	ms._mc = mc;
 
 	// create and delete obj 1
-	Message::Ptr msg1(new Message(0, 0, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg2(new Message(0, 0, Method::Delete, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg1(new Message(0, 0, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg2(new Message(0, 0, Method::Delete, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
 	// create and delete obj 2
-	Message::Ptr msg3(new Message(0, 0, Method::Create, new MessageStruct(2, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg4(new Message(0, 0, Method::Delete, new MessageStruct(2, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg3(new Message(0, 0, Method::Create, new MessageStruct(2, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg4(new Message(0, 0, Method::Delete, new MessageStruct(2, -1), i6e::core::Subsystem::Unknown));
 	// This message mustn't be delivered because parent (2) is already deleted
-	Message::Ptr msg5(new Message(0, 0, Method::Delete, new MessageStruct(1, 2), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg5(new Message(0, 0, Method::Delete, new MessageStruct(1, 2), i6e::core::Subsystem::Unknown));
 
 	{
 		::testing::InSequence dummy;
@@ -226,13 +226,13 @@ TEST(MessagingController, updateAfterDelete) {
 	mc->registerMessageType(0, &ms);
 	ms._mc = mc;
 
-	Message::Ptr msg1(new Message(0, 0, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg2(new Message(0, 0, Method::Create, new MessageStruct(2, 1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg3(new Message(0, 0, Method::Update, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg4(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg5(new Message(0, 0, Method::Delete, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg6(new Message(0, 0, Method::Delete, new MessageStruct(2, 1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg7(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg1(new Message(0, 0, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg2(new Message(0, 0, Method::Create, new MessageStruct(2, 1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg3(new Message(0, 0, Method::Update, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg4(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg5(new Message(0, 0, Method::Delete, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg6(new Message(0, 0, Method::Delete, new MessageStruct(2, 1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg7(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6e::core::Subsystem::Unknown));
 
 	{
 		::testing::InSequence dummy;
@@ -287,27 +287,27 @@ TEST(MessagingController, StressTest) {
 	msgs.resize(808 * numObjs);
 	size_t msgCounter = 0;
 	for (int i = 0; i < numObjs; i++) {
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(i, -1), i6engine::core::Subsystem::Unknown);
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(i + numObjs, i), i6engine::core::Subsystem::Unknown);
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(i + 2 * numObjs, i), i6engine::core::Subsystem::Unknown);
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(i + 3 * numObjs, i + numObjs), i6engine::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(i, -1), i6e::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(i + numObjs, i), i6e::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(i + 2 * numObjs, i), i6e::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(i + 3 * numObjs, i + numObjs), i6e::core::Subsystem::Unknown);
 	}
 	// create update messages
 	for (int i = 0; i < numObjs; i++) {
 		for (int j = 0; j < 100; j++) {
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, -1), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(-1, i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, i + 1), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, 2 * i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, 3 * i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i + 1, i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(2 * i, 3 * i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(3 * i, i), i6engine::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, -1), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(-1, i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, i + 1), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, 2 * i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, 3 * i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i + 1, i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(2 * i, 3 * i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(3 * i, i), i6e::core::Subsystem::Unknown);
 		}
 	}
 	// delete messages
 	for (int i = 0; i < 4 * numObjs; i++) {
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 0, Method::Delete, new MessageStruct(i, -1), i6engine::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 0, Method::Delete, new MessageStruct(i, -1), i6e::core::Subsystem::Unknown);
 	}
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -343,27 +343,27 @@ void bombMessages(int numObjs, Mock_MessagingController * mc, int id) {
 	msgs.resize(size_t(808 * numObjs));
 	size_t msgCounter = 0;
 	for (int i = 0; i < numObjs; i++) {
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(id + i, -1), i6engine::core::Subsystem::Unknown);
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(id + i + numObjs, id + i), i6engine::core::Subsystem::Unknown);
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(id + i + 2 * numObjs, id + i), i6engine::core::Subsystem::Unknown);
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(id + i + 3 * numObjs, id + i + numObjs), i6engine::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(id + i, -1), i6e::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(id + i + numObjs, id + i), i6e::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(id + i + 2 * numObjs, id + i), i6e::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(id + i + 3 * numObjs, id + i + numObjs), i6e::core::Subsystem::Unknown);
 	}
 	// create update messages
 	for (int i = 0; i < numObjs; i++) {
 		for (int j = 0; j < 100; j++) {
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, -1), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(-1, id + i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, id + i + 1), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, id + 2 * i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, id + 3 * i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i + 1, id + i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + 2 * i, id + 3 * i), i6engine::core::Subsystem::Unknown);
-			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + 3 * i, id + i), i6engine::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, -1), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(-1, id + i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, id + i + 1), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, id + 2 * i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, id + 3 * i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i + 1, id + i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + 2 * i, id + 3 * i), i6e::core::Subsystem::Unknown);
+			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + 3 * i, id + i), i6e::core::Subsystem::Unknown);
 		}
 	}
 	// delete messages
 	for (int i = 0; i < 4 * numObjs; i++) {
-		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Delete, new MessageStruct(id + i, -1), i6engine::core::Subsystem::Unknown);
+		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Delete, new MessageStruct(id + i, -1), i6e::core::Subsystem::Unknown);
 	}
 
 	srand(0);
@@ -411,7 +411,7 @@ TEST(MessagingController, MultithreadedStressTest) {
 		delete threads[i];
 	}
 
-	mc->deliverMessage(boost::make_shared<Message>(0, 2, Method::Update, new MessageStruct(), i6engine::core::Subsystem::Unknown));
+	mc->deliverMessage(boost::make_shared<Message>(0, 2, Method::Update, new MessageStruct(), i6e::core::Subsystem::Unknown));
 
 	std::unique_lock<std::mutex> ul(ms._lock);
 	ms._condVariable.wait(ul);
@@ -429,12 +429,12 @@ TEST(MessagingController, handlingBufferedMessageForUnregisteredType) {
 	ms.addMethod(1, [](const Message::Ptr) {});
 
 	// create and delete obj 1
-	Message::Ptr msg1(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg2(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg3(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg4(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg5(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
-	Message::Ptr msg6(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6engine::core::Subsystem::Unknown));
+	Message::Ptr msg1(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg2(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg3(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg4(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg5(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+	Message::Ptr msg6(new Message(1, 1, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
 
 	mc->deliverMessage(msg1);
 	mc->deliverMessage(msg2);

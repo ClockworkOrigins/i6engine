@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QLineEdit>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	EditorTypeVec4Widget::EditorTypeVec4Widget(QWidget * parent) : TypeWidgetInterface(parent), _lineEditX(nullptr), _lineEditY(nullptr), _lineEditZ(nullptr), _lineEditW(nullptr) {
@@ -54,6 +54,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.type.TypePluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.type.TypePluginInterface")

@@ -22,7 +22,7 @@
 #include "i6engine/api/configs/ScriptingConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	ScriptingFacade::ScriptingFacade()
@@ -46,4 +46,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

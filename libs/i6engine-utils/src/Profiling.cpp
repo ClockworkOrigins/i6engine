@@ -30,7 +30,7 @@
 
 // for future windows support: http://stackoverflow.com/questions/63166/how-to-determine-cpu-and-memory-consumption-from-inside-a-process
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 namespace profiling {
 
@@ -198,4 +198,4 @@ namespace profiling {
 
 } /* namespace profiling */
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */

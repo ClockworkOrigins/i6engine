@@ -18,7 +18,7 @@
 
 #include <QCloseEvent>
 
-namespace i6engine {
+namespace i6e {
 namespace tools {
 namespace npcCreator {
 namespace widgets {
@@ -75,29 +75,29 @@ namespace widgets {
 
 		// add a camera!
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			i6engine::api::attributeMap paramsSSC;
+			api::objects::GOTemplate tmpl;
+			api::attributeMap paramsSSC;
 			paramsSSC.insert(std::make_pair("pos", "0.0 0.0 -10.0"));
-			i6engine::api::attributeMap paramsCamera;
+			api::attributeMap paramsCamera;
 			paramsCamera.insert(std::make_pair("lookAt", "0.0 0.0 -8.0"));
 			paramsCamera.insert(std::make_pair("aspect", std::to_string(double(_npcRenderWidget->size().width()) / _npcRenderWidget->size().height())));
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("Camera", paramsCamera, "", false, false));
+			tmpl._components.push_back(api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
+			tmpl._components.push_back(api::objects::GOTemplateComponent("Camera", paramsCamera, "", false, false));
 			api::EngineController::GetSingletonPtr()->getObjectFacade()->createObject("EditorCam", tmpl, api::EngineController::GetSingleton().getUUID(), false);
 		}
 
 		// add a spot light
 		{
-			i6engine::api::objects::GOTemplate tmpl;
-			i6engine::api::attributeMap paramsSSC;
+			api::objects::GOTemplate tmpl;
+			api::attributeMap paramsSSC;
 			paramsSSC.insert(std::make_pair("pos", "0.0 0.0 -10.0"));
-			i6engine::api::attributeMap paramsLuminous;
+			api::attributeMap paramsLuminous;
 			paramsLuminous.insert(std::make_pair("lightType", "2"));
 			paramsLuminous.insert(std::make_pair("direction", "0.0 0.0 1.0"));
 			paramsLuminous.insert(std::make_pair("spotLightRangeInner", "35"));
 			paramsLuminous.insert(std::make_pair("spotLightRangeOuter", "50"));
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
-			tmpl._components.push_back(i6engine::api::objects::GOTemplateComponent("LuminousAppearance", paramsLuminous, "", false, false));
+			tmpl._components.push_back(api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
+			tmpl._components.push_back(api::objects::GOTemplateComponent("LuminousAppearance", paramsLuminous, "", false, false));
 			api::EngineController::GetSingletonPtr()->getObjectFacade()->createObject("Light", tmpl, api::EngineController::GetSingleton().getUUID(), false);
 		}
 
@@ -111,4 +111,4 @@ namespace widgets {
 } /* namespace widgets */
 } /* namespace npcCreator */
 } /* namespace tools */
-} /* namespace i6engine */
+} /* namespace i6e */

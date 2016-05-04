@@ -30,7 +30,7 @@
 
 #include "clockUtils/sockets/TcpSocket.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	NetworkFacade::NetworkFacade() : _ownIP(), _subscribeInit(false), _unsubscribeInit(false), _publishInit(false), _subscribe(), _unsubscribe(), _publish(), _connectInit(), _disconnectInit(), _connect(), _disconnect(), _connected(false) { // TODO: (Daniel) refactor, bad code and only one 'slot' checked
@@ -127,4 +127,4 @@ namespace api {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

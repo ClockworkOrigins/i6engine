@@ -22,7 +22,7 @@
 
 #include "CEGUI/CEGUI.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUIEditbox::GUIEditbox(const std::string & name, const std::string & style) : api::GUIWidget(name), _enterCallback(), _submitCallback() {
@@ -67,4 +67,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

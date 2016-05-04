@@ -10,7 +10,7 @@
 
 #include "boost/shared_ptr.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	/**
@@ -50,7 +50,7 @@ namespace modules {
 	boost::shared_ptr<WavFile> loadWavFile(const std::string & file);
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_WAVFILE_H__ */
 

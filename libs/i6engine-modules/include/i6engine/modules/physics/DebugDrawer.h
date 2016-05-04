@@ -26,7 +26,7 @@
 
 #include "LinearMath/btIDebugDraw.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	/**
@@ -98,7 +98,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_DEBUGDRAWER_H__ */
 

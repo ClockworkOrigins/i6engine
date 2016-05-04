@@ -27,13 +27,13 @@ TEST(i6eString, split) {
 	std::string testString6 = "Bar";
 	std::string testString7 = ";Bar";
 
-	std::vector<std::string> result1 = i6engine::utils::split(testString1, ";");
-	std::vector<std::string> result2 = i6engine::utils::split(testString2, ";");
-	std::vector<std::string> result3 = i6engine::utils::split(testString3, ";");
-	std::vector<std::string> result4 = i6engine::utils::split(testString4, ";");
-	std::vector<std::string> result5 = i6engine::utils::split(testString5, ";");
-	std::vector<std::string> result6 = i6engine::utils::split(testString6, ";");
-	std::vector<std::string> result7 = i6engine::utils::split(testString7, ";");
+	std::vector<std::string> result1 = i6e::utils::split(testString1, ";");
+	std::vector<std::string> result2 = i6e::utils::split(testString2, ";");
+	std::vector<std::string> result3 = i6e::utils::split(testString3, ";");
+	std::vector<std::string> result4 = i6e::utils::split(testString4, ";");
+	std::vector<std::string> result5 = i6e::utils::split(testString5, ";");
+	std::vector<std::string> result6 = i6e::utils::split(testString6, ";");
+	std::vector<std::string> result7 = i6e::utils::split(testString7, ";");
 
 	ASSERT_TRUE(result1.empty());
 	ASSERT_FALSE(result2.empty());
@@ -67,12 +67,12 @@ TEST(i6eString, split) {
 TEST(i6eString, to_string_with_precision) {
 	double a = 0.0;
 	double b = 3.1415;
-	EXPECT_EQ("0", i6engine::utils::to_string_with_precision(a, 0));
-	EXPECT_EQ("0", i6engine::utils::to_string_with_precision(a, 1));
-	EXPECT_EQ("0", i6engine::utils::to_string_with_precision(a, 2));
-	EXPECT_EQ("3", i6engine::utils::to_string_with_precision(b, 1));
-	EXPECT_EQ("3.1", i6engine::utils::to_string_with_precision(b, 2));
-	EXPECT_EQ("3.14", i6engine::utils::to_string_with_precision(b, 3));
-	EXPECT_EQ("3.142", i6engine::utils::to_string_with_precision(b, 4));
-	EXPECT_EQ("3.1415", i6engine::utils::to_string_with_precision(b, 5));
+	EXPECT_EQ("0", i6e::utils::to_string_with_precision(a, 0));
+	EXPECT_EQ("0", i6e::utils::to_string_with_precision(a, 1));
+	EXPECT_EQ("0", i6e::utils::to_string_with_precision(a, 2));
+	EXPECT_EQ("3", i6e::utils::to_string_with_precision(b, 1));
+	EXPECT_EQ("3.1", i6e::utils::to_string_with_precision(b, 2));
+	EXPECT_EQ("3.14", i6e::utils::to_string_with_precision(b, 3));
+	EXPECT_EQ("3.142", i6e::utils::to_string_with_precision(b, 4));
+	EXPECT_EQ("3.1415", i6e::utils::to_string_with_precision(b, 5));
 }

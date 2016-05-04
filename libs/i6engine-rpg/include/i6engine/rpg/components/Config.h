@@ -24,7 +24,7 @@
 
 #include "i6engine/api/configs/ComponentConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace components {
 namespace config {
@@ -52,7 +52,7 @@ namespace config {
 } /* namespace config */
 } /* namespace components */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_COMPONENTS_CONFIG_H__ */
 

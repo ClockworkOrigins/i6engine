@@ -7,7 +7,7 @@
 #include <QQueue>
 #include <QTextStream>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	void DialogCreatorLuaScriptLanguage::parseScripts(const QString & path) {
@@ -79,6 +79,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine::dialogCreator::plugins::ScriptLanguagePluginInterface")
+Q_PLUGIN_METADATA(IID "i6e::dialogCreator::plugins::ScriptLanguagePluginInterface")

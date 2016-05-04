@@ -24,19 +24,19 @@
 
 #include "i6engine/api/configs/ComponentConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace integration {
 namespace components {
 namespace config {
 
 	enum ComponentTypes {
-		DriveComponent = i6engine::api::components::ComponentTypes::ComponentTypesCount
+		DriveComponent = api::components::ComponentTypes::ComponentTypesCount
 	};
 
 } /* namespace config */
 } /* namespace components */
 } /* namespace integration */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_INTEGRATION_COMPONENTS_CONFIG_H__ */
 

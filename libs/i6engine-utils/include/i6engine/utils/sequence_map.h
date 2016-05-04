@@ -26,7 +26,7 @@
 #include <list>
 #include <unordered_map>
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	/**
@@ -189,7 +189,7 @@ namespace utils {
 	};
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_SEQUENCEMAP_H__ */
 

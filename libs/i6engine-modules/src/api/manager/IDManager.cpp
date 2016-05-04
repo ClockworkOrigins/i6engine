@@ -18,7 +18,7 @@
 
 #include "i6engine/utils/Exceptions.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	IDManager::IDManager() : _idNext(0), _idMax(INT64_MAX), _idMutex() {
@@ -49,4 +49,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

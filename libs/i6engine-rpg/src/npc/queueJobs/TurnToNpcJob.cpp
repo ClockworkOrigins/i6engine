@@ -22,7 +22,7 @@
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace npc {
 
@@ -69,4 +69,4 @@ namespace npc {
 
 } /* namespace npc */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

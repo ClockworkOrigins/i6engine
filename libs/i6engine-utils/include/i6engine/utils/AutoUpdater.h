@@ -28,7 +28,7 @@
 
 #include "i6eSystemParameters.h"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	template<typename T>
@@ -148,7 +148,7 @@ namespace utils {
 	};
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_AUTOUPDATER_H__ */
 

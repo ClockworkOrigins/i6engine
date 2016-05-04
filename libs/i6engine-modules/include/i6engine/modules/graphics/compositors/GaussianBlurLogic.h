@@ -24,7 +24,7 @@
 
 #include "i6engine/modules/graphics/compositors/ListenerFactoryLogic.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GaussianBlurLogic : public ListenerFactoryLogic {
@@ -33,7 +33,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_COMPOSITORS_GAUSSIANBLURLOGIC_H__ */
 

@@ -22,7 +22,7 @@
 #include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	InputFacade::InputFacade() : _keymap(), _lock() {}
@@ -69,4 +69,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

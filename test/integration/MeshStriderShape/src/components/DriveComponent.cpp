@@ -26,7 +26,7 @@
 
 #include "components/Config.h"
 
-namespace i6engine {
+namespace i6e {
 namespace integration {
 namespace components {
 
@@ -75,4 +75,4 @@ namespace components {
 
 } /* namespace components */
 } /* namespace integration */
-} /* namespace i6engine */
+} /* namespace i6e */

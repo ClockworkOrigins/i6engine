@@ -21,8 +21,8 @@
 
 #include "gtest/gtest.h"
 
-using namespace i6engine;
-using namespace i6engine::api;
+using namespace i6e;
+using namespace i6e::api;
 
 namespace Test_GameObject {
 namespace config {
@@ -131,7 +131,7 @@ namespace config {
 		}
 	};
 
-	ComPtr func(const int64_t, const std::string &, const i6engine::api::attributeMap &, GameObject *) {
+	ComPtr func(const int64_t, const std::string &, const i6e::api::attributeMap &, GameObject *) {
 		return ComPtr();
 	}
 
@@ -146,27 +146,27 @@ namespace config {
 		virtual void TearDown() {
 			// TODO: (Michael) kill EngineController to get a complete new one in next test (Singleton)
 			GOPtr::clear();
-			i6engine::api::ComPtr::clear();
+			i6e::api::ComPtr::clear();
 		}
 	};
 
 	TEST_F(GOTest, Component_Add) {
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) { return i6engine::api::ComPtr(); });
-		i6engine::api::attributeMap attMap;
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) { return i6e::api::ComPtr(); });
+		i6e::api::attributeMap attMap;
 		attMap["identifier"] = "A"; // first
-		i6engine::api::ComPtr cAdd1 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(1, attMap);
+		i6e::api::ComPtr cAdd1 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(1, attMap);
 
 		attMap["identifier"] = "B"; // add
-		i6engine::api::ComPtr cAdd2 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(2, attMap);
+		i6e::api::ComPtr cAdd2 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(2, attMap);
 
 		attMap["identifier"] = "C"; // add
-		i6engine::api::ComPtr cAdd3 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(3, attMap);
+		i6e::api::ComPtr cAdd3 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(3, attMap);
 
 		attMap["identifier"] = "D"; // add
-		i6engine::api::ComPtr cAdd4 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(4, attMap);
+		i6e::api::ComPtr cAdd4 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(4, attMap);
 
 		attMap["identifier"] = "B"; // reject (duplicate identifier)
-		i6engine::api::ComPtr cAdd5 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(5, attMap);
+		i6e::api::ComPtr cAdd5 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(5, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -192,22 +192,22 @@ namespace config {
 	}
 
 	TEST_F(GOTest, Component_Rep0) {
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) { return i6engine::api::ComPtr(); });
-		i6engine::api::attributeMap attMap;
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) { return i6e::api::ComPtr(); });
+		i6e::api::attributeMap attMap;
 		attMap["identifier"] = "A"; // first
-		i6engine::api::ComPtr c1 = i6engine::utils::make_shared<Replace0Component, i6engine::api::Component>(1, attMap);
+		i6e::api::ComPtr c1 = i6e::utils::make_shared<Replace0Component, i6e::api::Component>(1, attMap);
 
 		attMap["identifier"] = "B"; // add
-		i6engine::api::ComPtr c2 = i6engine::utils::make_shared<Replace0Component, i6engine::api::Component>(2, attMap);
+		i6e::api::ComPtr c2 = i6e::utils::make_shared<Replace0Component, i6e::api::Component>(2, attMap);
 
 		attMap["identifier"] = "C"; // replace dis
-		i6engine::api::ComPtr c3 = i6engine::utils::make_shared<Replace0Component, i6engine::api::Component>(3, attMap);
+		i6e::api::ComPtr c3 = i6e::utils::make_shared<Replace0Component, i6e::api::Component>(3, attMap);
 
 		attMap["identifier"] = "D"; // add
-		i6engine::api::ComPtr c4 = i6engine::utils::make_shared<Replace0Component, i6engine::api::Component>(4, attMap);
+		i6e::api::ComPtr c4 = i6e::utils::make_shared<Replace0Component, i6e::api::Component>(4, attMap);
 
 		attMap["identifier"] = "B"; // replace dis
-		i6engine::api::ComPtr c5 = i6engine::utils::make_shared<Replace0Component, i6engine::api::Component>(5, attMap);
+		i6e::api::ComPtr c5 = i6e::utils::make_shared<Replace0Component, i6e::api::Component>(5, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -233,22 +233,22 @@ namespace config {
 	}
 
 	TEST_F(GOTest, Component_Rep1) {
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) { return i6engine::api::ComPtr(); });
-		i6engine::api::attributeMap attMap;
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) { return i6e::api::ComPtr(); });
+		i6e::api::attributeMap attMap;
 		attMap["identifier"] = "A"; // first
-		i6engine::api::ComPtr c1 = i6engine::utils::make_shared<Replace1Component, i6engine::api::Component>(1, attMap);
+		i6e::api::ComPtr c1 = i6e::utils::make_shared<Replace1Component, i6e::api::Component>(1, attMap);
 
 		attMap["identifier"] = "B"; // add
-		i6engine::api::ComPtr c2 = i6engine::utils::make_shared<Replace1Component, i6engine::api::Component>(2, attMap);
+		i6e::api::ComPtr c2 = i6e::utils::make_shared<Replace1Component, i6e::api::Component>(2, attMap);
 
 		attMap["identifier"] = "C"; // add
-		i6engine::api::ComPtr c3 = i6engine::utils::make_shared<Replace1Component, i6engine::api::Component>(3, attMap);
+		i6e::api::ComPtr c3 = i6e::utils::make_shared<Replace1Component, i6e::api::Component>(3, attMap);
 
 		attMap["identifier"] = "D"; // replace 3C
-		i6engine::api::ComPtr c4 = i6engine::utils::make_shared<Replace1Component, i6engine::api::Component>(4, attMap);
+		i6e::api::ComPtr c4 = i6e::utils::make_shared<Replace1Component, i6e::api::Component>(4, attMap);
 
 		attMap["identifier"] = "B"; // replace 2B
-		i6engine::api::ComPtr c5 = i6engine::utils::make_shared<Replace1Component, i6engine::api::Component>(5, attMap);
+		i6e::api::ComPtr c5 = i6e::utils::make_shared<Replace1Component, i6e::api::Component>(5, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -274,22 +274,22 @@ namespace config {
 	}
 
 	TEST_F(GOTest, Component_RepDis) {
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) { return i6engine::api::ComPtr(); });
-		i6engine::api::attributeMap attMap;
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) { return i6e::api::ComPtr(); });
+		i6e::api::attributeMap attMap;
 		attMap["identifier"] = "A"; // first
-		i6engine::api::ComPtr c1 = i6engine::utils::make_shared<ReplaceDisComponent, i6engine::api::Component>(1, attMap);
+		i6e::api::ComPtr c1 = i6e::utils::make_shared<ReplaceDisComponent, i6e::api::Component>(1, attMap);
 
 		attMap["identifier"] = "B"; // replace
-		i6engine::api::ComPtr c2 = i6engine::utils::make_shared<ReplaceDisComponent, i6engine::api::Component>(2, attMap);
+		i6e::api::ComPtr c2 = i6e::utils::make_shared<ReplaceDisComponent, i6e::api::Component>(2, attMap);
 
 		attMap["identifier"] = "C"; // replace
-		i6engine::api::ComPtr c3 = i6engine::utils::make_shared<ReplaceDisComponent, i6engine::api::Component>(3, attMap);
+		i6e::api::ComPtr c3 = i6e::utils::make_shared<ReplaceDisComponent, i6e::api::Component>(3, attMap);
 
 		attMap["identifier"] = "D"; // replace
-		i6engine::api::ComPtr c4 = i6engine::utils::make_shared<ReplaceDisComponent, i6engine::api::Component>(4, attMap);
+		i6e::api::ComPtr c4 = i6e::utils::make_shared<ReplaceDisComponent, i6e::api::Component>(4, attMap);
 
 		attMap["identifier"] = "B"; // replace
-		i6engine::api::ComPtr c5 = i6engine::utils::make_shared<ReplaceDisComponent, i6engine::api::Component>(5, attMap);
+		i6e::api::ComPtr c5 = i6e::utils::make_shared<ReplaceDisComponent, i6e::api::Component>(5, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -315,22 +315,22 @@ namespace config {
 	}
 
 	TEST_F(GOTest, Component_Rej) {
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) { return i6engine::api::ComPtr(); });
-		i6engine::api::attributeMap attMap;
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) { return i6e::api::ComPtr(); });
+		i6e::api::attributeMap attMap;
 		attMap["identifier"] = "A"; // first
-		i6engine::api::ComPtr c1 = i6engine::utils::make_shared<RejectComponent, i6engine::api::Component>(1, attMap);
+		i6e::api::ComPtr c1 = i6e::utils::make_shared<RejectComponent, i6e::api::Component>(1, attMap);
 
 		attMap["identifier"] = "B"; // reject
-		i6engine::api::ComPtr c2 = i6engine::utils::make_shared<RejectComponent, i6engine::api::Component>(2, attMap);
+		i6e::api::ComPtr c2 = i6e::utils::make_shared<RejectComponent, i6e::api::Component>(2, attMap);
 
 		attMap["identifier"] = "C"; // reject
-		i6engine::api::ComPtr c3 = i6engine::utils::make_shared<RejectComponent, i6engine::api::Component>(3, attMap);
+		i6e::api::ComPtr c3 = i6e::utils::make_shared<RejectComponent, i6e::api::Component>(3, attMap);
 
 		attMap["identifier"] = "D"; // reject
-		i6engine::api::ComPtr c4 = i6engine::utils::make_shared<RejectComponent, i6engine::api::Component>(4, attMap);
+		i6e::api::ComPtr c4 = i6e::utils::make_shared<RejectComponent, i6e::api::Component>(4, attMap);
 
 		attMap["identifier"] = "B"; // reject
-		i6engine::api::ComPtr c5 = i6engine::utils::make_shared<RejectComponent, i6engine::api::Component>(5, attMap);
+		i6e::api::ComPtr c5 = i6e::utils::make_shared<RejectComponent, i6e::api::Component>(5, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -356,22 +356,22 @@ namespace config {
 	}
 
 	TEST_F(GOTest, deleteGOC) {
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) { return i6engine::api::ComPtr(); });
-		i6engine::api::attributeMap attMap;
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) { return i6e::api::ComPtr(); });
+		i6e::api::attributeMap attMap;
 		attMap["identifier"] = "A";
-		i6engine::api::ComPtr cAdd1 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(1, attMap);
+		i6e::api::ComPtr cAdd1 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(1, attMap);
 		attMap["identifier"] = "B";
-		i6engine::api::ComPtr cAdd2 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(2, attMap);
+		i6e::api::ComPtr cAdd2 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(2, attMap);
 		attMap["identifier"] = "C";
-		i6engine::api::ComPtr cAdd3 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(3, attMap);
+		i6e::api::ComPtr cAdd3 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(3, attMap);
 		attMap["identifier"] = "D";
-		i6engine::api::ComPtr cAdd4 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(4, attMap);
+		i6e::api::ComPtr cAdd4 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(4, attMap);
 		attMap["identifier"] = "E";
-		i6engine::api::ComPtr cAdd5 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(5, attMap);
+		i6e::api::ComPtr cAdd5 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(5, attMap);
 		attMap["identifier"] = "F";
-		i6engine::api::ComPtr cAdd6 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(6, attMap);
+		i6e::api::ComPtr cAdd6 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(6, attMap);
 		attMap["identifier"] = "G";
-		i6engine::api::ComPtr cAdd7 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(7, attMap);
+		i6e::api::ComPtr cAdd7 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(7, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -408,22 +408,22 @@ namespace config {
 	}
 
 	TEST_F(GOTest, clearGOCs) {
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) { return i6engine::api::ComPtr(); });
-		i6engine::api::attributeMap attMap;
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) { return i6e::api::ComPtr(); });
+		i6e::api::attributeMap attMap;
 		attMap["identifier"] = "A";
-		i6engine::api::ComPtr cAdd1 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(1, attMap);
+		i6e::api::ComPtr cAdd1 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(1, attMap);
 		attMap["identifier"] = "B";
-		i6engine::api::ComPtr cAdd2 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(2, attMap);
+		i6e::api::ComPtr cAdd2 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(2, attMap);
 		attMap["identifier"] = "C";
-		i6engine::api::ComPtr cAdd3 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(3, attMap);
+		i6e::api::ComPtr cAdd3 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(3, attMap);
 		attMap["identifier"] = "D";
-		i6engine::api::ComPtr cAdd4 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(4, attMap);
+		i6e::api::ComPtr cAdd4 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(4, attMap);
 		attMap["identifier"] = "E";
-		i6engine::api::ComPtr cAdd5 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(5, attMap);
+		i6e::api::ComPtr cAdd5 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(5, attMap);
 		attMap["identifier"] = "F";
-		i6engine::api::ComPtr cAdd6 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(6, attMap);
+		i6e::api::ComPtr cAdd6 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(6, attMap);
 		attMap["identifier"] = "G";
-		i6engine::api::ComPtr cAdd7 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(7, attMap);
+		i6e::api::ComPtr cAdd7 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(7, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -457,13 +457,13 @@ namespace config {
 	}
 
 	TEST_F(GOTest, getGOC) {
-		GOPtr owner = i6engine::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6engine::api::attributeMap &, const WeakGOPtr &) { return i6engine::api::ComPtr(); });
-		i6engine::api::attributeMap attMap;
+		GOPtr owner = i6e::utils::make_shared<GameObject, GameObject>(0, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", [](const int64_t, const std::string &, const i6e::api::attributeMap &, const WeakGOPtr &) { return i6e::api::ComPtr(); });
+		i6e::api::attributeMap attMap;
 		attMap["identifier"] = "A";
-		i6engine::api::ComPtr cAdd1 = i6engine::utils::make_shared<AddComponent, i6engine::api::Component>(1, attMap);
-		i6engine::api::ComPtr cAdd2 = i6engine::utils::make_shared<Replace1Component, i6engine::api::Component>(2, attMap);
-		i6engine::api::ComPtr cAdd3 = i6engine::utils::make_shared<ReplaceDisComponent, i6engine::api::Component>(3, attMap);
-		i6engine::api::ComPtr cAdd4 = i6engine::utils::make_shared<RejectComponent, i6engine::api::Component>(4, attMap);
+		i6e::api::ComPtr cAdd1 = i6e::utils::make_shared<AddComponent, i6e::api::Component>(1, attMap);
+		i6e::api::ComPtr cAdd2 = i6e::utils::make_shared<Replace1Component, i6e::api::Component>(2, attMap);
+		i6e::api::ComPtr cAdd3 = i6e::utils::make_shared<ReplaceDisComponent, i6e::api::Component>(3, attMap);
+		i6e::api::ComPtr cAdd4 = i6e::utils::make_shared<RejectComponent, i6e::api::Component>(4, attMap);
 
 		// add afterwards to avoid address conflicts due to heap reuse
 		owner->setSelf(owner);
@@ -474,8 +474,8 @@ namespace config {
 
 		EXPECT_NE(nullptr, owner->getGOC(config::ComponentTypes::AddComponent));
 		EXPECT_EQ(nullptr, owner->getGOC(config::ComponentTypes::Replace0Component));
-		EXPECT_NE(nullptr, i6engine::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)));
-		EXPECT_EQ(nullptr, i6engine::utils::dynamic_pointer_cast<Replace0Component>(owner->getGOC(config::ComponentTypes::AddComponent)));
+		EXPECT_NE(nullptr, i6e::utils::dynamic_pointer_cast<AddComponent>(owner->getGOC(config::ComponentTypes::AddComponent)));
+		EXPECT_EQ(nullptr, i6e::utils::dynamic_pointer_cast<Replace0Component>(owner->getGOC(config::ComponentTypes::AddComponent)));
 		EXPECT_NE(nullptr, owner->getGOC<AddComponent>(config::ComponentTypes::AddComponent));
 		EXPECT_EQ(nullptr, owner->getGOC<Replace0Component>(config::ComponentTypes::AddComponent));
 		EXPECT_NE(nullptr, owner->getGOC<AddComponent>());

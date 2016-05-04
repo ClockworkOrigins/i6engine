@@ -30,7 +30,7 @@
 
 #include "boost/bind.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	template<class Updater>
@@ -169,7 +169,7 @@ namespace utils {
 	};
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_CLOCK_H__ */
 

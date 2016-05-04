@@ -32,7 +32,7 @@
 #include "OGRE/OgreSceneManager.h"
 #include "OGRE/OgreSubEntity.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	MeshComponent::MeshComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & meshName, const bool visible, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _animationState(nullptr), _animationSpeed(1.0), _lastTime(), _lastFrameTime(0), _movableTextObservers(), _boundingBoxObservers(), _attachedNodes(), _queueA(), _queueB(), _meshComponent(), _shadowCasting(true) {
@@ -295,4 +295,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

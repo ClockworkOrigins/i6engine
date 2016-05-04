@@ -19,7 +19,7 @@
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	NetworkSenderComponent::NetworkSenderComponent() : Component() {
@@ -40,4 +40,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

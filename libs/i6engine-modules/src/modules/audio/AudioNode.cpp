@@ -22,7 +22,7 @@
 
 #include "i6engine/modules/audio/WavFile.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	AudioNode::AudioNode(const std::string & file, bool looping, double maxDist, const Vec3 & position, const Vec3 & direction, bool cacheable, const std::string & category) : AudioNode(loadWavFile(file), looping, maxDist, position, direction, cacheable, category) {
@@ -104,4 +104,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -20,7 +20,7 @@
 
 #include "boost/lexical_cast.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 
 	/*template<>

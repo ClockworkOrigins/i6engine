@@ -32,7 +32,7 @@
 
 #include "i6engine/rpg/item/ItemParser.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace item {
 
@@ -57,7 +57,7 @@ namespace item {
 		 */
 		void createItem(const std::string & identifier, const Vec3 & pos, const Quaternion & rot);
 
-		std::pair<std::string, i6engine::api::objects::GOTemplate> getTemplate(const std::string & identifier) const {
+		std::pair<std::string, i6e::api::objects::GOTemplate> getTemplate(const std::string & identifier) const {
 			return _parser.getTemplate(identifier);
 		}
 
@@ -88,7 +88,7 @@ namespace item {
 
 } /* namespace item */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_ITEM_ITEMMANAGER_H__ */
 

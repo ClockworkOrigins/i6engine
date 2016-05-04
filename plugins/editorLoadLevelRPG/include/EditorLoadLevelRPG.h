@@ -11,13 +11,13 @@
 	#include "i6engine/modules/pythonscripting/PythonScriptingManager.h"
 #endif
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	class EditorLoadLevelRPG : public QObject, public editor::plugins::LoadLevelPluginInterface {
 		Q_OBJECT
-		Q_PLUGIN_METADATA(IID "i6engine.editor.loadLevel.LoadLevelPluginInterface")
-		Q_INTERFACES(i6engine::editor::plugins::LoadLevelPluginInterface)
+		Q_PLUGIN_METADATA(IID "i6e.editor.loadLevel.LoadLevelPluginInterface")
+		Q_INTERFACES(i6e::editor::plugins::LoadLevelPluginInterface)
 
 	public:
 		EditorLoadLevelRPG();
@@ -41,6 +41,6 @@ namespace plugins {
 	};
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_PLUGINS_EDITORLOADLEVELRPG_H__ */

@@ -32,7 +32,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	MoverInterpolateComponent::MoverInterpolateComponent(const int64_t id, const attributeMap & params) : MoverComponent(id, params), _keyFrames(), _mode(), _openTime(2), _way(), _totalDistance(0), _currentDist(0), _currentFrame(0), _direction(true), _lock() {
@@ -347,4 +347,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

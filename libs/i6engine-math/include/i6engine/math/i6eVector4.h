@@ -41,7 +41,7 @@ namespace Ogre {
 } /* namespace Ogre */
 class btVector4;
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 
 	/**
@@ -206,9 +206,9 @@ namespace math {
 	ISIXE_MATH_API std::ostream & operator<<(std::ostream & stream, const i6eVector4 & v);
 
 } /* namespace math */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-typedef i6engine::math::i6eVector4 Vec4;
+typedef i6e::math::i6eVector4 Vec4;
 
 #endif /* __I6ENGINE_MATH_I6EVECTOR4_H__ */
 

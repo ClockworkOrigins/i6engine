@@ -27,7 +27,7 @@
 #include "i6engine/modules/object/ObjectMailbox.h"
 #include "i6engine/modules/object/ObjectManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	ObjectController::ObjectController() : core::ModuleController(core::Subsystem::Object), _mailbox(), _manager() {
@@ -73,4 +73,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

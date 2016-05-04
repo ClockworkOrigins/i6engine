@@ -28,7 +28,7 @@
 
 #include "i6engine/api/GameMessage.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class InputMailbox;
@@ -88,7 +88,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_INPUTCONTROLLER_H__ */
 

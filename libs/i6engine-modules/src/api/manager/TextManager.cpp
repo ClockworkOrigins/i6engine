@@ -8,7 +8,7 @@
 
 #include "tinyxml2.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	TextManager::TextManager() : _language("Deutsch"), _texts(), _textDir() {
@@ -102,4 +102,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

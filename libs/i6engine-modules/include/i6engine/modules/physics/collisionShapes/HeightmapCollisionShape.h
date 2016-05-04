@@ -31,7 +31,7 @@
 
 #include "boost/serialization/vector.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	struct ISIXE_MODULES_API HeightmapCollisionShapeData : public CollisionShapeData {
@@ -59,7 +59,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_COLLISIONSHAPES_HEIGHTMAPCOLLISIONSHAPE_H__ */
 

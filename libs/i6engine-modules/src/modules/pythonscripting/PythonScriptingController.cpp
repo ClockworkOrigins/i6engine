@@ -30,7 +30,7 @@
 #include "boost/filesystem.hpp"
 #include "boost/python.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	PythonScriptingController::PythonScriptingController() : core::ModuleController(core::Subsystem::Scripting), _mailbox(), _manager() {
@@ -67,4 +67,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

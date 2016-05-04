@@ -32,7 +32,7 @@ namespace Ogre {
 	class ManualObject;
 } /* namespace Ogre */
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GraphicsManager;
@@ -92,7 +92,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_COMPONENTS_BOUNDINGBOXCOMPONENT_H__ */
 

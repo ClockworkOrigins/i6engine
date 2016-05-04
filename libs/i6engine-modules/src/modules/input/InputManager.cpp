@@ -30,7 +30,7 @@
 
 #include "OIS/OIS.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	InputManager::InputManager(InputController * ctrl) : _objRotX(0.0), _objRotY(0.0), _objOisInputManager(nullptr), _objOisKeyboard(nullptr), _objOisMouse(nullptr), _objRenderWindow(nullptr), _keyboardListener(nullptr), _mouseListener(nullptr), _ctrl(ctrl) {
@@ -186,4 +186,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

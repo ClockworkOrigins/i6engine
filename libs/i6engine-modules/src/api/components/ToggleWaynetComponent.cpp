@@ -24,7 +24,7 @@
 #include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/manager/WaynetManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	ToggleWaynetComponent::ToggleWaynetComponent(int64_t id, const attributeMap & params) : Component(id, params), MessageSubscriberFacade(), _active(false) {
@@ -68,4 +68,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

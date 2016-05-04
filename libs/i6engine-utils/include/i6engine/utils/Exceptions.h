@@ -30,25 +30,25 @@
 #define ISIXE_THROW_SUBSYSTEM(module, message) {\
 	std::stringstream logMessageString;\
 	logMessageString << message;\
-	throw i6engine::utils::exceptions::SubsystemException(module, logMessageString.str(), __FILE__, __LINE__);\
+	throw i6e::utils::exceptions::SubsystemException(module, logMessageString.str(), __FILE__, __LINE__);\
 }
 
 #define ISIXE_THROW_FAILURE(module, message) {\
 	std::stringstream logMessageString;\
 	logMessageString << message;\
-	throw i6engine::utils::exceptions::SystemFailureException(module, logMessageString.str(), __FILE__, __LINE__);\
+	throw i6e::utils::exceptions::SystemFailureException(module, logMessageString.str(), __FILE__, __LINE__);\
 }
 
 #define ISIXE_THROW_API(module, message) {\
 	std::stringstream logMessageString;\
 	logMessageString << message;\
-	throw i6engine::utils::exceptions::ApiException(module, logMessageString.str(), __FILE__, __LINE__);\
+	throw i6e::utils::exceptions::ApiException(module, logMessageString.str(), __FILE__, __LINE__);\
 }
 
 #define ISIXE_THROW_MESSAGE(module, message) {\
 	std::stringstream logMessageString;\
 	logMessageString << message;\
-	throw i6engine::utils::exceptions::MessageException(module, logMessageString.str(), __FILE__, __LINE__);\
+	throw i6e::utils::exceptions::MessageException(module, logMessageString.str(), __FILE__, __LINE__);\
 }
 
 #define ISIXE_THROW_API_COND(module, message, condition) {\
@@ -63,10 +63,10 @@
 #define ISIXE_THROW_API_INFO(module, message, info) {\
 	std::stringstream logMessageString;\
 	logMessageString << message << "\nPossible solutin: " << info;\
-	throw i6engine::utils::exceptions::ApiException(module, logMessageString.str(), __FILE__, __LINE__);\
+	throw i6e::utils::exceptions::ApiException(module, logMessageString.str(), __FILE__, __LINE__);\
 }
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 namespace exceptions {
 
@@ -74,7 +74,7 @@ namespace exceptions {
 	 * \brief Internal data structure for exceptions.
 	 */
 	struct ISIXE_UTILS_API loginfo {
-		i6engine::utils::LogLevel level;
+		LogLevel level;
 		std::string message;
 		std::string module;
 		std::string file;
@@ -165,7 +165,7 @@ namespace exceptions {
 
 } /* namespace exceptions */
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_EXCEPTIONS_EXCEPTIONS_H__ */
 

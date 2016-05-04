@@ -15,7 +15,7 @@
 #include "i6engine/math/i6eQuaternion.h"
 #include "i6engine/math/i6eVector.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	class EngineController;
@@ -68,7 +68,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_WAYNETMANAGER_H__ */
 

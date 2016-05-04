@@ -16,7 +16,7 @@
 
 #include "i6engine/modules/physics/collisionShapes/HeightmapCollisionShape.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	HeightmapCollisionShapeData::HeightmapCollisionShapeData() : CollisionShapeData(), width(), height(), data(), minHeight(), maxHeight(), scaling() {
@@ -26,7 +26,7 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-BOOST_CLASS_EXPORT_GUID(i6engine::modules::HeightmapCollisionShapeData, "CS1")
-BOOST_CLASS_IMPLEMENTATION(i6engine::modules::HeightmapCollisionShapeData, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::modules::HeightmapCollisionShapeData, "CS1")
+BOOST_CLASS_IMPLEMENTATION(i6e::modules::HeightmapCollisionShapeData, boost::serialization::object_serializable)

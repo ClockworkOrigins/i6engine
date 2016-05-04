@@ -32,7 +32,7 @@ class btCollisionShape;
 class btCompoundShape;
 class btRigidBody;
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	struct CollisionGroup;
 } /* namespace api */
@@ -314,7 +314,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_PHYSICSNODE_H__ */
 

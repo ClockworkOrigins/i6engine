@@ -20,7 +20,7 @@
 
 #include "i6engine/rpg/dialog/DialogManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	void EditorRPGRunGame::Initialize() {
@@ -44,6 +44,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.runGame.RunGamePluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.runGame.RunGamePluginInterface")

@@ -29,7 +29,7 @@
 
 #include "boost/function.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	class Component;
@@ -181,13 +181,13 @@ namespace components {
 
 } /* namespace components */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-BOOST_CLASS_EXPORT_KEY(i6engine::api::components::Component_Create_Create)
-BOOST_CLASS_EXPORT_KEY(i6engine::api::components::Component_Create_Delete)
-BOOST_CLASS_EXPORT_KEY(i6engine::api::components::Component_Spawnpoint_Update)
-BOOST_CLASS_EXPORT_KEY(i6engine::api::components::Component_Shatter_Update)
-BOOST_CLASS_EXPORT_KEY(i6engine::api::components::Component_MoverResync_Update)
+BOOST_CLASS_EXPORT_KEY(i6e::api::components::Component_Create_Create)
+BOOST_CLASS_EXPORT_KEY(i6e::api::components::Component_Create_Delete)
+BOOST_CLASS_EXPORT_KEY(i6e::api::components::Component_Spawnpoint_Update)
+BOOST_CLASS_EXPORT_KEY(i6e::api::components::Component_Shatter_Update)
+BOOST_CLASS_EXPORT_KEY(i6e::api::components::Component_MoverResync_Update)
 
 #endif /* __I6ENGINE_API_COMPONENTCONFIG_H__ */
 

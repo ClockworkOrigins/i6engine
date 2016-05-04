@@ -32,7 +32,7 @@
 #include "i6engine/rpg/dialog/DialogManager.h"
 #include "i6engine/rpg/quest/QuestLog.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace components {
 
@@ -156,7 +156,7 @@ namespace components {
 										}
 									} else {
 										if (targetGO->getType() == "NPC") {
-											if ((getOwnerGO()->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - targetGO->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= i6engine::rpg::config::NPC_TALK_DISTANCE) {
+											if ((getOwnerGO()->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition() - targetGO->getGOC<api::PhysicalStateComponent>(api::components::ComponentTypes::PhysicalStateComponent)->getPosition()).length() <= i6e::rpg::config::NPC_TALK_DISTANCE) {
 												dialog::DialogManager::GetSingleton().checkDialogs(targetGO->getGOC<DialogCheckerComponent>(config::ComponentTypes::DialogCheckerComponent)->getNPCIdentifier());
 											}
 										}
@@ -194,4 +194,4 @@ namespace components {
 
 } /* namespace components */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

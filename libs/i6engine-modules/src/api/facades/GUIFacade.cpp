@@ -24,7 +24,7 @@
 #include "i6engine/api/configs/GUIConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	GUIFacade::GUIFacade() : _onWindow(), _captured() {
@@ -347,4 +347,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

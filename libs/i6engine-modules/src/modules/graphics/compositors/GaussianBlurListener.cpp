@@ -19,7 +19,7 @@
 #include "OGRE/OgreMaterial.h"
 #include "OGRE/OgreTechnique.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GaussianListener::GaussianListener() : Ogre::CompositorInstance::Listener(), mVpWidth(), mVpHeight(), mBloomTexWeights(), mBloomTexOffsetsHorz(), mBloomTexOffsetsVert() {
@@ -97,4 +97,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

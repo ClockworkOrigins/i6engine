@@ -21,7 +21,7 @@
 
 #include "i6engine/api/configs/ComponentConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	NavigationComponent::NavigationComponent(const int64_t id, const api::attributeMap & params) : Component(id, params) {
@@ -33,4 +33,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -22,7 +22,7 @@
 #include "gtest/gtest.h"
 
 unsigned int counter = 0;
-i6engine::utils::Semaphore sem;
+i6e::utils::Semaphore sem;
 
 void add() {
 	sem.wait();

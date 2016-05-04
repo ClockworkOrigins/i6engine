@@ -34,7 +34,7 @@ namespace serialization {
 } /* serialization */
 } /* boost */
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 
 	/**
@@ -563,7 +563,7 @@ namespace math {
 	}
 
 } /* namespace math */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MATH_I6EMATRIX_H__ */
 

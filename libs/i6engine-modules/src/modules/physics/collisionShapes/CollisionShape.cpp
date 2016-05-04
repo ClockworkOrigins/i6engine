@@ -21,7 +21,7 @@
 #include "clockUtils/compression/Compression.h"
 #include "clockUtils/compression/algorithm/HuffmanGeneric.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	std::string CollisionShapeData::Serialize() const {
@@ -45,7 +45,7 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-BOOST_CLASS_EXPORT_GUID(i6engine::modules::CollisionShapeData, "CS0")
-BOOST_CLASS_IMPLEMENTATION(i6engine::modules::CollisionShapeData, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::modules::CollisionShapeData, "CS0")
+BOOST_CLASS_IMPLEMENTATION(i6e::modules::CollisionShapeData, boost::serialization::object_serializable)

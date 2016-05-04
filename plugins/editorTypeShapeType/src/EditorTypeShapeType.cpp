@@ -3,7 +3,7 @@
 #include <QHBoxLayout>
 #include <QComboBox>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	std::map<QString, api::PhysicalStateComponent::ShapeType> EditorTypeShapeTypeWidget::shapeTypes = { { "PLANE", api::PhysicalStateComponent::ShapeType::PLANE }, { "BOX", api::PhysicalStateComponent::ShapeType::BOX }, { "SPHERE", api::PhysicalStateComponent::ShapeType::SPHERE }, { "FILE", api::PhysicalStateComponent::ShapeType::FILE } };
@@ -41,6 +41,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.type.TypePluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.type.TypePluginInterface")

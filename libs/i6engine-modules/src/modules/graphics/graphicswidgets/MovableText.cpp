@@ -15,7 +15,7 @@
 
 #include "OGRE/Overlay/OgreFontManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 #define POS_TEX_BINDING    0
@@ -509,4 +509,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

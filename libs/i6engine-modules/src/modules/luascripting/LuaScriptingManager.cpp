@@ -31,7 +31,7 @@ extern "C"
 
 #include "boost/filesystem.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	LuaScriptingManager::LuaScriptingManager() : _luaState(luaL_newstate()), _parsedFiles(), _scriptsPath(), _callScripts() {
@@ -135,4 +135,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

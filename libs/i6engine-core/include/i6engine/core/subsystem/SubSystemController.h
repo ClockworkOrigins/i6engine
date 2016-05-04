@@ -56,7 +56,7 @@
  * \li \ref page_scripting
  */
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	class EngineControllerInterface;
@@ -177,7 +177,7 @@ namespace core {
 	};
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_SUBSYSTEMCONTROLLER_H__ */
 

@@ -30,7 +30,7 @@
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	MovingCameraComponent::MovingCameraComponent(const int64_t id, const attributeMap & params) : CameraComponent(id, params), _oldPos() {
@@ -75,4 +75,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

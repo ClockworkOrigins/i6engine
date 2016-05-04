@@ -29,7 +29,7 @@
 #include "i6engine/api/GameMessageStruct.h"
 #include "i6engine/api/GameMessage.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace graphics {
 	enum GraphicsMessageTypes {
@@ -930,7 +930,7 @@ namespace graphics {
 
 } /* namespace graphics */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_GRAPHICSCONFIG_H__ */
 

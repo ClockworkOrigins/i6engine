@@ -28,7 +28,7 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace quest {
 
@@ -56,7 +56,7 @@ namespace quest {
 
 } /* namespace quest */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_QUEST_QUESTPARSER_H__ */
 

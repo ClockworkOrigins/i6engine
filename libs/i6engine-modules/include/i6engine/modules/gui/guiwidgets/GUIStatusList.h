@@ -28,7 +28,7 @@ namespace CEGUI {
 	class Listbox;
 } /* namespace CEGUI */
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GUIStatusList : public api::GUIWidget {
@@ -102,7 +102,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GUISTATUSLIST_H__ */
 

@@ -8,7 +8,7 @@
 #include <QPainter>
 #include <QPen>
 
-namespace i6engine {
+namespace i6e {
 namespace particleEditor {
 namespace connections {
 
@@ -95,4 +95,4 @@ namespace connections {
 
 } /* namespace connections */
 } /* namespace particleEditor */
-} /* namespace i6engine */
+} /* namespace i6e */

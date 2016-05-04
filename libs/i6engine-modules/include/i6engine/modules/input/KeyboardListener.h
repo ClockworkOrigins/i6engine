@@ -35,7 +35,7 @@ namespace OIS {
 	class KeyEvent;
 } /* namespace OIS */
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class InputController;
@@ -125,7 +125,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_KEYBOARDLISTENER_H__ */
 

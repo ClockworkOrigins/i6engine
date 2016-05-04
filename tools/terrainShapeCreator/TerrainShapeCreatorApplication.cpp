@@ -26,7 +26,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace tools {
 
 	void TerrainShapeCreatorApplication::Initialize() {
@@ -40,4 +40,4 @@ namespace tools {
 	}
 
 } /* namespace tools */
-} /* namespace i6engine */
+} /* namespace i6e */

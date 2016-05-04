@@ -26,7 +26,7 @@
 
 #include "clockUtils/iniParser/iniParser.h"
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	void EditorRPGInitialization::initialize() {
@@ -67,23 +67,23 @@ namespace plugins {
 		}
 		rpg::quest::QuestLog::GetSingletonPtr()->loadQuests(QuestDirectory);
 
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(api::Component::createC<rpg::components::AttributeComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(api::Component::createC<rpg::components::DialogCheckerComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(api::Component::createC<rpg::components::ExperienceComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(api::Component::createC<rpg::components::HealthbarComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(api::Component::createC<rpg::components::HumanMovementComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(api::Component::createC<rpg::components::ListInventoryComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(api::Component::createC<rpg::components::MiscItemComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(api::Component::createC<rpg::components::NameComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(api::Component::createC<rpg::components::QuickslotComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(api::Component::createC<rpg::components::SlotComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(api::Component::createC<rpg::components::SlotInventoryComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(api::Component::createC<rpg::components::ThirdPersonControlComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(api::Component::createC<rpg::components::UsableItemComponent>, _1, _2));
-		i6engine::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(api::Component::createC<rpg::components::WeightInventoryComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(api::Component::createC<rpg::components::AttributeComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(api::Component::createC<rpg::components::DialogCheckerComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(api::Component::createC<rpg::components::ExperienceComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(api::Component::createC<rpg::components::HealthbarComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(api::Component::createC<rpg::components::HumanMovementComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(api::Component::createC<rpg::components::ListInventoryComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(api::Component::createC<rpg::components::MiscItemComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(api::Component::createC<rpg::components::NameComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(api::Component::createC<rpg::components::QuickslotComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(api::Component::createC<rpg::components::SlotComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(api::Component::createC<rpg::components::SlotInventoryComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(api::Component::createC<rpg::components::ThirdPersonControlComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(api::Component::createC<rpg::components::UsableItemComponent>, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(api::Component::createC<rpg::components::WeightInventoryComponent>, _1, _2));
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.initialization.InitializationPluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.initialization.InitializationPluginInterface")

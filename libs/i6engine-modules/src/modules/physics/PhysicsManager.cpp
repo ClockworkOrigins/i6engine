@@ -46,7 +46,7 @@
 #include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	struct FilterCallback : public btOverlapFilterCallback {
@@ -665,4 +665,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -27,10 +27,10 @@
 
 #include "boost/bind.hpp"
 
-#define ISIXE_REGISTERMESSAGETYPE(msgType, method, owner) i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->registerMessageType(msgType, this, boost::bind(&method, owner, _1))
-#define ISIXE_UNREGISTERMESSAGETYPE(msgType) i6engine::api::EngineController::GetSingletonPtr()->getMessagingFacade()->unregisterMessageType(msgType, this)
+#define ISIXE_REGISTERMESSAGETYPE(msgType, method, owner) i6e::api::EngineController::GetSingletonPtr()->getMessagingFacade()->registerMessageType(msgType, this, boost::bind(&method, owner, _1))
+#define ISIXE_UNREGISTERMESSAGETYPE(msgType) i6e::api::EngineController::GetSingletonPtr()->getMessagingFacade()->unregisterMessageType(msgType, this)
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 	class MessageSubscriber;
 	class MessagingController;
@@ -96,7 +96,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_MESSAGINGFACADE_H__ */
 

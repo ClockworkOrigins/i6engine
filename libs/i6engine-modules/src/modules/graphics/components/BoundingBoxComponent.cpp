@@ -24,7 +24,7 @@
 #include "OGRE/OgreManualObject.h"
 #include "OGRE/OgreSceneManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	BoundingBoxComponent::BoundingBoxComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, MeshComponent * mesh, const Vec3 & colour) : _manager(manager), _parent(parent), _boundingBox(nullptr), _mesh(mesh), _id(coid) {
@@ -85,4 +85,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

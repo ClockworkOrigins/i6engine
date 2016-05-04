@@ -20,7 +20,7 @@
 
 #include "i6engine/modules/pythonscripting/PythonScriptingManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	PythonScriptingMailbox::PythonScriptingMailbox(PythonScriptingManager * m) : _manager(m) {
@@ -37,4 +37,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

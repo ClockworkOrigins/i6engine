@@ -34,32 +34,32 @@
 
 namespace sample {
 
-	RPGApplication::RPGApplication() : i6engine::rpg::RPGApplication(), _showFPS(false) {
+	RPGApplication::RPGApplication() : i6e::rpg::RPGApplication(), _showFPS(false) {
 	}
 
 	RPGApplication::~RPGApplication() {
 	}
 
 	void RPGApplication::AfterInitialize() {
-		i6engine::rpg::RPGApplication::AfterInitialize();
+		i6e::rpg::RPGApplication::AfterInitialize();
 
 		// register ESC to close the application
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, []() {
-			auto go = *i6engine::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").begin();
-			if (!go->getGOC<i6engine::rpg::components::InventoryComponent>(i6engine::rpg::components::config::ComponentTypes::InventoryComponent)->isActive() && !i6engine::rpg::dialog::DialogManager::GetSingleton().isDialogRunning() && !i6engine::rpg::quest::QuestLog::GetSingleton().isActive()) {
-				i6engine::api::EngineController::GetSingletonPtr()->stop();
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, []() {
+			auto go = *i6e::api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player").begin();
+			if (!go->getGOC<i6e::rpg::components::InventoryComponent>(i6e::rpg::components::config::ComponentTypes::InventoryComponent)->isActive() && !i6e::rpg::dialog::DialogManager::GetSingleton().isDialogRunning() && !i6e::rpg::quest::QuestLog::GetSingleton().isActive()) {
+				i6e::api::EngineController::GetSingletonPtr()->stop();
 			}
 		});
 
 		// register F12 to take screenshot
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F12, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::GraphicsFacade::takeScreenshot, i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "RPGScreen_", ".jpg"));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F12, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::GraphicsFacade::takeScreenshot, i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "RPGScreen_", ".jpg"));
 
 		// shows fps (activate/deactive using F1)
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_F1, i6engine::api::KeyState::KEY_PRESSED, [this]() {
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F1, i6e::api::KeyState::KEY_PRESSED, [this]() {
 			if (!_showFPS) {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->showFPS(0.0, 0.0, "RPG/StaticImage", "RPG/Blanko", "RPG", "TbM_Filling");
+				i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->showFPS(0.0, 0.0, "RPG/StaticImage", "RPG/Blanko", "RPG", "TbM_Filling");
 			} else {
-				i6engine::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->hideFPS();
+				i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->hideFPS();
 			}
 			_showFPS = !_showFPS;
 		});

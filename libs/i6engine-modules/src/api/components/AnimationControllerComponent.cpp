@@ -20,7 +20,7 @@
 #include "i6engine/api/configs/ComponentConfig.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	AnimationControllerComponent::AnimationControllerComponent(const int64_t id, const attributeMap & params) : Component(id, params), _animationMap(), _meshComponent() {
@@ -81,4 +81,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

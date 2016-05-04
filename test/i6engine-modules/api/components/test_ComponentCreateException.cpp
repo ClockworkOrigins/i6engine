@@ -43,8 +43,8 @@
 
 #include "gtest/gtest.h"
 
-using namespace i6engine;
-using namespace i6engine::api;
+using namespace i6e;
+using namespace i6e::api;
 
 TEST(Component, CreateException) {
 	{
@@ -53,7 +53,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsAnimatedDirectionalLight.begin(); it != paramsAnimatedDirectionalLight.end(); it++) {
 			auto newMap = paramsAnimatedDirectionalLight;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<AnimatedDirectionalLightComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<AnimatedDirectionalLightComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -62,7 +62,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsAnimatedLuminousAppearance.begin(); it != paramsAnimatedLuminousAppearance.end(); it++) {
 			auto newMap = paramsAnimatedLuminousAppearance;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -71,7 +71,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsAnimatedLuminousAppearance.begin(); it != paramsAnimatedLuminousAppearance.end(); it++) {
 			auto newMap = paramsAnimatedLuminousAppearance;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -80,7 +80,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsAnimatedLuminousAppearance.begin(); it != paramsAnimatedLuminousAppearance.end(); it++) {
 			auto newMap = paramsAnimatedLuminousAppearance;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<AnimatedLuminousAppearanceComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -89,7 +89,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsAnimatedSpotLight.begin(); it != paramsAnimatedSpotLight.end(); it++) {
 			auto newMap = paramsAnimatedSpotLight;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<AnimatedSpotLightComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<AnimatedSpotLightComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -98,7 +98,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsAnimationController.begin(); it != paramsAnimationController.end(); it++) {
 			auto newMap = paramsAnimationController;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<AnimationControllerComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<AnimationControllerComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -107,7 +107,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsBillboard.begin(); it != paramsBillboard.end(); it++) {
 			auto newMap = paramsBillboard;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<BillboardComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<BillboardComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -116,7 +116,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsCamera.begin(); it != paramsCamera.end(); it++) {
 			auto newMap = paramsCamera;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<CameraComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<CameraComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -125,7 +125,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsFollow.begin(); it != paramsFollow.end(); it++) {
 			auto newMap = paramsFollow;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<FollowComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<FollowComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -134,7 +134,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsLifetime.begin(); it != paramsLifetime.end(); it++) {
 			auto newMap = paramsLifetime;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<LifetimeComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<LifetimeComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -143,7 +143,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsLuminousAppearance.begin(); it != paramsLuminousAppearance.end(); it++) {
 			auto newMap = paramsLuminousAppearance;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<LuminousAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<LuminousAppearanceComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -152,7 +152,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsLuminousAppearance.begin(); it != paramsLuminousAppearance.end(); it++) {
 			auto newMap = paramsLuminousAppearance;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<LuminousAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<LuminousAppearanceComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -161,7 +161,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsLuminousAppearance.begin(); it != paramsLuminousAppearance.end(); it++) {
 			auto newMap = paramsLuminousAppearance;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<LuminousAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<LuminousAppearanceComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -170,7 +170,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsMeshAppearance.begin(); it != paramsMeshAppearance.end(); it++) {
 			auto newMap = paramsMeshAppearance;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<MeshAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<MeshAppearanceComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -179,7 +179,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsMovableText.begin(); it != paramsMovableText.end(); it++) {
 			auto newMap = paramsMovableText;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<MovableTextComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<MovableTextComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -188,7 +188,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsMoverCircle.begin(); it != paramsMoverCircle.end(); it++) {
 			auto newMap = paramsMoverCircle;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<MoverCircleComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<MoverCircleComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -197,7 +197,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsMoverInterpolate.begin(); it != paramsMoverInterpolate.end(); it++) {
 			auto newMap = paramsMoverInterpolate;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<MoverInterpolateComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<MoverInterpolateComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -206,7 +206,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsMovingCamera.begin(); it != paramsMovingCamera.end(); it++) {
 			auto newMap = paramsMovingCamera;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<MovingCameraComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<MovingCameraComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -215,7 +215,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsParticleEmitter.begin(); it != paramsParticleEmitter.end(); it++) {
 			auto newMap = paramsParticleEmitter;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<ParticleEmitterComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<ParticleEmitterComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -224,7 +224,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsPhysicalState.begin(); it != paramsPhysicalState.end(); it++) {
 			auto newMap = paramsPhysicalState;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<PhysicalStateComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<PhysicalStateComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -233,7 +233,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsPoint2PointConstraint.begin(); it != paramsPoint2PointConstraint.end(); it++) {
 			auto newMap = paramsPoint2PointConstraint;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<Point2PointConstraintComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<Point2PointConstraintComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -242,7 +242,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsSound.begin(); it != paramsSound.end(); it++) {
 			auto newMap = paramsSound;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<SoundComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<SoundComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -251,7 +251,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsSoundListener.begin(); it != paramsSoundListener.end(); it++) {
 			auto newMap = paramsSoundListener;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<SoundListenerComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<SoundListenerComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -260,7 +260,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsSpawnpoint.begin(); it != paramsSpawnpoint.end(); it++) {
 			auto newMap = paramsSpawnpoint;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<SpawnpointComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<SpawnpointComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -269,7 +269,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsStaticState.begin(); it != paramsStaticState.end(); it++) {
 			auto newMap = paramsStaticState;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<StaticStateComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<StaticStateComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -278,7 +278,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsTerrainAppearance.begin(); it != paramsTerrainAppearance.end(); it++) {
 			auto newMap = paramsTerrainAppearance;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<TerrainAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<TerrainAppearanceComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -288,7 +288,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsTerrainAppearance.begin(); it != paramsTerrainAppearance.end(); it++) {
 			auto newMap = paramsTerrainAppearance;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<TerrainAppearanceComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<TerrainAppearanceComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -297,7 +297,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsVelocity.begin(); it != paramsVelocity.end(); it++) {
 			auto newMap = paramsVelocity;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<VelocityComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<VelocityComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	{
@@ -306,7 +306,7 @@ TEST(Component, CreateException) {
 		for (auto it = paramsWaypoint.begin(); it != paramsWaypoint.end(); it++) {
 			auto newMap = paramsWaypoint;
 			newMap.erase(it->first);
-			ASSERT_THROW(Component::createC<WaypointComponent>(0, newMap), i6engine::utils::exceptions::ApiException);
+			ASSERT_THROW(Component::createC<WaypointComponent>(0, newMap), i6e::utils::exceptions::ApiException);
 		}
 	}
 	ComPtr::clear();

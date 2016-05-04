@@ -10,7 +10,7 @@
 #include "widgets/EventHandlerPropertyWindows/DoScaleEventHandlerPropertyWindow.h"
 #include "widgets/EventHandlerPropertyWindows/DoStopSystemEventHandlerPropertyWindow.h"
 
-namespace i6engine {
+namespace i6e {
 namespace particleEditor {
 namespace factories {
 
@@ -68,4 +68,4 @@ namespace factories {
 
 } /* namespace factories */
 } /* namespace particleEditor */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -26,7 +26,7 @@
 
 #include "boost/function.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 	class i6eVector;
 } /* namespace math */
@@ -94,7 +94,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_PHYSICSFACADE_H__ */
 

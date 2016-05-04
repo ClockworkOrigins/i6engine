@@ -24,7 +24,7 @@
 #include "OGRE/OgreLight.h"
 #include "OGRE/OgreSceneManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	LuminousComponent::LuminousComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const api::LuminousAppearanceComponent::LightType type, const Vec3 & diffuse, const Vec3 & specular, const Vec4 & attenuation, const Vec3 & direction, const Vec3 & position, double spotLightRangeInner, double spotLightRangeOuter) : _manager(manager), _parent(parent), _sceneNode(nullptr) {
@@ -73,4 +73,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

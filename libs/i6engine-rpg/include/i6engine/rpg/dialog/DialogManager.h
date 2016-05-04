@@ -36,7 +36,7 @@
 
 #include "i6engine/rpg/dialog/DialogParser.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace npc {
 	class ExitDialogJob;
@@ -199,7 +199,7 @@ namespace dialog {
 
 } /* namespace dialog */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_DIALOG_DIALOGMANAGER_H__ */
 

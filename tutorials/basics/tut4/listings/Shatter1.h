@@ -5,7 +5,7 @@
 
 #include "api/components/ShatterComponent.h"
 
-class Shatter1 : public i6engine::api::ShatterComponent {
+class Shatter1 : public i6e::api::ShatterComponent {
 public:
 	Shatter1(int64_t id, const attributeMap & params) : ShatterComponent(id, params) {
 	}

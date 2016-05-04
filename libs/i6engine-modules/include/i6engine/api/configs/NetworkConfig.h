@@ -27,7 +27,7 @@
 
 #include "boost/shared_ptr.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace network {
 	enum NetworkMessageTypes {
@@ -152,14 +152,14 @@ namespace network {
 
 } /* namespace network */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Administration_GameState_Create)
-BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_Ping_Update)
-BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_Pingtime_Update)
-BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_PingEnable_Update)
-BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_TimeSynchro_Update)
-BOOST_CLASS_EXPORT_KEY(i6engine::api::network::Network_ChatMessage)
+BOOST_CLASS_EXPORT_KEY(i6e::api::network::Administration_GameState_Create)
+BOOST_CLASS_EXPORT_KEY(i6e::api::network::Network_Ping_Update)
+BOOST_CLASS_EXPORT_KEY(i6e::api::network::Network_Pingtime_Update)
+BOOST_CLASS_EXPORT_KEY(i6e::api::network::Network_PingEnable_Update)
+BOOST_CLASS_EXPORT_KEY(i6e::api::network::Network_TimeSynchro_Update)
+BOOST_CLASS_EXPORT_KEY(i6e::api::network::Network_ChatMessage)
 
 #endif /* __I6ENGINE_API_NETWORKCONFIG_H__ */
 

@@ -42,7 +42,7 @@
 
 #include "clockUtils/iniParser/iniParser.h"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 	class EngineCoreController;
 	class MessagingController;
@@ -355,7 +355,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_ENGINECONTROLLER_H__ */
 

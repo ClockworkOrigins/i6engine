@@ -21,7 +21,7 @@
 
 #include "i6engine/rpg/npc/NPCQueueJob.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace npc {
 
@@ -46,6 +46,6 @@ namespace npc {
 
 } /* namespace npc */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_RPG_NPC_QUEUE_SHOWDIALOGSJOB_H__ */

@@ -24,7 +24,7 @@
 #include "ParticleUniverseSystem.h"
 #include "ParticleUniverseSystemManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	ParticleComponent::ParticleComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & emitterName, const Vec3 & pos) : _manager(manager), _parent(parent), _sceneNode(nullptr) {
@@ -60,4 +60,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

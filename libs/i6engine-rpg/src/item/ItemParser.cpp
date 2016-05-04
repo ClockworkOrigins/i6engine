@@ -24,7 +24,7 @@
 
 #include "tinyxml2.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace item {
 
@@ -155,4 +155,4 @@ namespace item {
 
 } /* namespace item */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

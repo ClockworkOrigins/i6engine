@@ -21,7 +21,7 @@
 
 namespace sample {
 
-	class MultilanguageApplication : public i6engine::api::Application {
+	class MultilanguageApplication : public i6e::api::Application {
 	public:
 		MultilanguageApplication();
 

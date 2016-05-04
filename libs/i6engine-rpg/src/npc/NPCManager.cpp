@@ -24,7 +24,7 @@
 
 #include "boost/bind.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace npc {
 
@@ -42,7 +42,7 @@ namespace npc {
 		api::attributeMap paramsPSC;
 		pos.insertInMap("pos", paramsPSC);
 		rot.insertInMap("rot", paramsPSC);
-		tpl._components.push_back(i6engine::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
+		tpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
 
 		if (!player) {
 			api::attributeMap paramsDC;
@@ -75,4 +75,4 @@ namespace npc {
 
 } /* namespace npc */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

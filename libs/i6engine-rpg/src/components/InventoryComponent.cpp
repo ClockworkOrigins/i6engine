@@ -32,7 +32,7 @@
 	#undef max
 #endif
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace components {
 
@@ -54,7 +54,7 @@ namespace components {
 			api::attributeMap paramsSSC;
 			paramsSSC.insert(std::make_pair("pos", "0.0 0.0 0.0"));
 			paramsSSC.insert(std::make_pair("rot", "1.0 0.0 0.0 0.0"));
-			p.second._components.push_back(i6engine::api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
+			p.second._components.push_back(i6e::api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
 
 			uint32_t oldAmount = getItemCount(identifier);
 
@@ -105,4 +105,4 @@ namespace components {
 
 } /* namespace components */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

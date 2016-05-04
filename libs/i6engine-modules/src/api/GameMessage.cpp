@@ -18,15 +18,15 @@
 
 #include "i6engine/api/GameMessageStruct.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #ifdef ISIXE_BUILD_SHARED
-	BOOST_CLASS_EXPORT_GUID(i6engine::api::GameMessage, "0")
-	BOOST_CLASS_IMPLEMENTATION(i6engine::api::GameMessage, boost::serialization::object_serializable)
-	BOOST_CLASS_EXPORT_GUID(i6engine::api::GameMessageStruct, "1")
-	BOOST_CLASS_IMPLEMENTATION(i6engine::api::GameMessageStruct, boost::serialization::object_serializable)
+	BOOST_CLASS_EXPORT_GUID(i6e::api::GameMessage, "0")
+	BOOST_CLASS_IMPLEMENTATION(i6e::api::GameMessage, boost::serialization::object_serializable)
+	BOOST_CLASS_EXPORT_GUID(i6e::api::GameMessageStruct, "1")
+	BOOST_CLASS_IMPLEMENTATION(i6e::api::GameMessageStruct, boost::serialization::object_serializable)
 #endif /* ISIXE_BUILD_SHARED */

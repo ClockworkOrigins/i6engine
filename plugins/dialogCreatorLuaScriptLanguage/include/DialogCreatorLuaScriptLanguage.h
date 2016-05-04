@@ -5,13 +5,13 @@
 
 #include <QObject>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	class DialogCreatorLuaScriptLanguage : public QObject, public dialogCreator::plugins::ScriptLanguagePluginInterface {
 		Q_OBJECT
-		Q_PLUGIN_METADATA(IID "i6engine::dialogCreator::plugins::ScriptLanguagePluginInterface")
-		Q_INTERFACES(i6engine::dialogCreator::plugins::ScriptLanguagePluginInterface)
+		Q_PLUGIN_METADATA(IID "i6e::dialogCreator::plugins::ScriptLanguagePluginInterface")
+		Q_INTERFACES(i6e::dialogCreator::plugins::ScriptLanguagePluginInterface)
 
 	public:
 		/**
@@ -50,6 +50,6 @@ namespace plugins {
 	};
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_PLUGINS_DIALOGCREATORLUASCRIPTLANGUAGE_H__ */

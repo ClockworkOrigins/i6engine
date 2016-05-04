@@ -31,7 +31,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	Point2PointConstraintComponent::Point2PointConstraintComponent(const int64_t id, const api::attributeMap & params) : Component(id, params), _connected(false), _selfIdentifier(), _targetIdentifier(), _selfOffset(), _targetOffset(), _breakingImpulse(DBL_MAX), _targetID() {
@@ -118,4 +118,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

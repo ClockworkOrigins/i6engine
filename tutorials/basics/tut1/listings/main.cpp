@@ -7,10 +7,10 @@ int main() {
 	MyApp myApp;
 
 	// register basics
-	i6engine::api::EngineController::GetSingleton().registerDefault(false);
-	i6engine::api::EngineController::GetSingleton().registerApplication(myApp);
+	i6e::api::EngineController::GetSingleton().registerDefault(false);
+	i6e::api::EngineController::GetSingleton().registerApplication(myApp);
 
 	// start
-	i6engine::api::EngineController::GetSingleton().start();
+	i6e::api::EngineController::GetSingleton().start();
 }
 

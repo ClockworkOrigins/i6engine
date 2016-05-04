@@ -20,7 +20,7 @@
 
 #include "i6engine/api/configs/ComponentConfig.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	AnimatedLuminousAppearanceComponent::AnimatedLuminousAppearanceComponent(const int64_t id, const attributeMap & params) : LuminousAppearanceComponent(id, params), _startTime(), _diffuseDuration(0), _diffuseColours(), _specularDuration(0), _specularColours(), _attenuationDuration(0), _attenuations() {
@@ -114,4 +114,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

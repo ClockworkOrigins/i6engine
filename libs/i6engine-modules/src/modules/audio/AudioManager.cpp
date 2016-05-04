@@ -29,7 +29,7 @@
 
 #include "boost/make_shared.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	AudioManager::AudioManager() : _initialized(false), _device(), _context(), _nodes(), _sounds(), _cachedSounds() {
@@ -267,4 +267,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -26,7 +26,7 @@
 
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GraphicsManager;
@@ -37,7 +37,7 @@ namespace modules {
 	 * \class GUIMailbox
 	 * \brief Extracts the contents of incoming messages on the "Gui" channel and calls the corresponding methods of the gui subsystem
 	 * \details Please consult the messaging documentation found in the "Related Pages" on top of this page for in-depth usage details.
-	 * 	The supported methods are declared in the enum method of GUIConfig: \ref i6engine::modules::GUIConfig::method
+	 * 	The supported methods are declared in the enum method of GUIConfig: \ref i6e::modules::GUIConfig::method
 	 */
 	class GUIMailbox {
 		friend class GraphicsManager;
@@ -76,7 +76,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GUIMAILBOX_H__ */
 
@@ -111,7 +111,7 @@ namespace modules {
 		 	 </tr>
 		 	 <tr>
 		 	 	 <td>Method</td>
-		 	 	 <td>i6engine::modules::GUIConfig::GUI_MOUSE_POS</td>
+		 	 	 <td>i6e::modules::GUIConfig::GUI_MOUSE_POS</td>
 		 	 	 <td></td>
 		 	 </tr>
 		 	 <tr>
@@ -138,7 +138,7 @@ namespace modules {
 		 	 </tr>
 		 	 <tr>
 		 	 	 <td>Method</td>
-		 	 	 <td>i6engine::modules::GUIConfig::GUI_KEY_DOWN</td>
+		 	 	 <td>i6e::modules::GUIConfig::GUI_KEY_DOWN</td>
 		 	 	 <td></td>
 		 	 </tr>
 		 	 <tr>
@@ -160,7 +160,7 @@ namespace modules {
 		 	 </tr>
 		 	 <tr>
 		 	 	 <td>Method</td>
-		 	 	 <td>i6engine::modules::GUIConfig::GUI_KEY_UP</td>
+		 	 	 <td>i6e::modules::GUIConfig::GUI_KEY_UP</td>
 		 	 	 <td></td>
 		 	 </tr>
 		 	 <tr>
@@ -182,7 +182,7 @@ namespace modules {
 		 	 </tr>
 		 	 <tr>
 		 	 	 <td>Method</td>
-		 	 	 <td>i6engine::modules::GUIConfig::GUI_CHAR</td>
+		 	 	 <td>i6e::modules::GUIConfig::GUI_CHAR</td>
 		 	 	 <td></td>
 		 	 </tr>
 		 	 <tr>
@@ -204,7 +204,7 @@ namespace modules {
 		 	 </tr>
 		 	 <tr>
 		 	 	 <td>Method</td>
-		 	 	 <td>i6engine::modules::GUIConfig::GUI_TIMEPULSE</td>
+		 	 	 <td>i6e::modules::GUIConfig::GUI_TIMEPULSE</td>
 		 	 	 <td></td>
 		 	 </tr>
 		 	 <tr>
@@ -226,7 +226,7 @@ namespace modules {
 		 	 </tr>
 		 	 <tr>
 		 	 	 <td>Method</td>
-		 	 	 <td>i6engine::modules::GUIConfig::GUI_MOUSE_LEAVES</td>
+		 	 	 <td>i6e::modules::GUIConfig::GUI_MOUSE_LEAVES</td>
 		 	 	 <td></td>
 		 	 </tr>
 		 </table>

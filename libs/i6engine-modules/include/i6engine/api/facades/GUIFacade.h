@@ -28,7 +28,7 @@
 
 #include "boost/function.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace gui {
 	enum class Alignment;
@@ -553,7 +553,7 @@ namespace gui {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_GUIFACADE_H__ */
 

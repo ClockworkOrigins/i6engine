@@ -30,7 +30,7 @@ typedef std::pair<Ogre::Vector3, Ogre::ColourValue> VertexPair;
 
 #define DEFAULT_ICOSPHERE_RECURSION_LEVEL    1
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class IcoSphere {
@@ -152,7 +152,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_DEBUG_H__ */
 

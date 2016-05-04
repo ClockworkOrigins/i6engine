@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QLineEdit>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	EditorTypeQuaternionWidget::EditorTypeQuaternionWidget(QWidget * parent) : TypeWidgetInterface(parent), _lineEditX(nullptr), _lineEditY(nullptr), _lineEditZ(nullptr), _spinBox(nullptr) {
@@ -62,6 +62,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.type.TypePluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.type.TypePluginInterface")

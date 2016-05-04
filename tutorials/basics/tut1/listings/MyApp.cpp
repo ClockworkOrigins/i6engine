@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-class MyApp : public i6engine::api::Application {
+class MyApp : public i6e::api::Application {
 public:
-	MyApp() : i6engine::api::Application() {}
+	MyApp() : i6e::api::Application() {}
 
 	~MyApp() {}
 

@@ -29,7 +29,7 @@
 #include "boost/function.hpp"
 #include "boost/thread/mutex.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	enum class KeyCode : uint32_t;
@@ -110,7 +110,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_INPUTFACADE_H__ */
 

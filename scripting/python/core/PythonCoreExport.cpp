@@ -25,25 +25,25 @@
 
 #include "boost/python.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace python {
 namespace core {
 
-	i6engine::core::Message::Ptr createMessage(uint16_t messageType, uint16_t subtype, const i6engine::core::Method method, i6engine::core::MessageStruct * content, i6engine::core::Subsystem sender) {
-		return boost::make_shared<i6engine::core::Message>(messageType, subtype,method, content, sender);
+	i6e::core::Message::Ptr createMessage(uint16_t messageType, uint16_t subtype, const i6e::core::Method method, i6e::core::MessageStruct * content, i6e::core::Subsystem sender) {
+		return boost::make_shared<i6e::core::Message>(messageType, subtype,method, content, sender);
 	}
 
-	struct MessageStructWrapper : public i6engine::core::MessageStruct, public boost::python::wrapper<i6engine::core::MessageStruct> {
-		MessageStructWrapper() : MessageStruct(), boost::python::wrapper<i6engine::core::MessageStruct>() {
+	struct MessageStructWrapper : public i6e::core::MessageStruct, public boost::python::wrapper<i6e::core::MessageStruct> {
+		MessageStructWrapper() : MessageStruct(), boost::python::wrapper<i6e::core::MessageStruct>() {
 		}
 
-		MessageStructWrapper(const int64_t id, const i6engine::core::IPKey & send, const int64_t waitID) : MessageStruct(id, send, waitID), boost::python::wrapper<i6engine::core::MessageStruct>() {
+		MessageStructWrapper(const int64_t id, const i6e::core::IPKey & send, const int64_t waitID) : MessageStruct(id, send, waitID), boost::python::wrapper<i6e::core::MessageStruct>() {
 		}
 
-		MessageStructWrapper(int64_t id, int64_t waitID) : MessageStruct(id, waitID), boost::python::wrapper<i6engine::core::MessageStruct>() {
+		MessageStructWrapper(int64_t id, int64_t waitID) : MessageStruct(id, waitID), boost::python::wrapper<i6e::core::MessageStruct>() {
 		}
 
-		MessageStructWrapper(const i6engine::core::MessageStruct & arg) : i6engine::core::MessageStruct(arg), boost::python::wrapper<i6engine::core::MessageStruct>() {
+		MessageStructWrapper(const i6e::core::MessageStruct & arg) : i6e::core::MessageStruct(arg), boost::python::wrapper<i6e::core::MessageStruct>() {
 		}
 
 		virtual MessageStruct * copy() {
@@ -58,11 +58,11 @@ namespace core {
 		}
 	};
 
-	struct MessageSubscriberWrapper : public i6engine::core::MessageSubscriber, public boost::python::wrapper<i6engine::core::MessageSubscriber> {
-		MessageSubscriberWrapper() : MessageSubscriber(), boost::python::wrapper<i6engine::core::MessageSubscriber>() {
+	struct MessageSubscriberWrapper : public i6e::core::MessageSubscriber, public boost::python::wrapper<i6e::core::MessageSubscriber> {
+		MessageSubscriberWrapper() : MessageSubscriber(), boost::python::wrapper<i6e::core::MessageSubscriber>() {
 		}
 
-		MessageSubscriberWrapper(const i6engine::core::MessageSubscriber & arg) : i6engine::core::MessageSubscriber(), boost::python::wrapper<i6engine::core::MessageSubscriber>() {
+		MessageSubscriberWrapper(const i6e::core::MessageSubscriber & arg) : i6e::core::MessageSubscriber(), boost::python::wrapper<i6e::core::MessageSubscriber>() {
 		}
 
 		virtual void processMessages() {
@@ -78,14 +78,14 @@ namespace core {
 		}
 	};
 
-	struct ModuleControllerWrapper : public i6engine::core::ModuleController, public boost::python::wrapper<i6engine::core::ModuleController> {
-		ModuleControllerWrapper() : ModuleController(i6engine::core::Subsystem::Unknown), boost::python::wrapper<i6engine::core::ModuleController>() {
+	struct ModuleControllerWrapper : public i6e::core::ModuleController, public boost::python::wrapper<i6e::core::ModuleController> {
+		ModuleControllerWrapper() : ModuleController(i6e::core::Subsystem::Unknown), boost::python::wrapper<i6e::core::ModuleController>() {
 		}
 
-		ModuleControllerWrapper(i6engine::core::Subsystem s) : ModuleController(s), boost::python::wrapper<i6engine::core::ModuleController>() {
+		ModuleControllerWrapper(i6e::core::Subsystem s) : ModuleController(s), boost::python::wrapper<i6e::core::ModuleController>() {
 		}
 
-		ModuleControllerWrapper(const i6engine::core::ModuleController & arg) : i6engine::core::ModuleController(arg.getSubsystem()), boost::python::wrapper<i6engine::core::ModuleController>() {
+		ModuleControllerWrapper(const i6e::core::ModuleController & arg) : i6e::core::ModuleController(arg.getSubsystem()), boost::python::wrapper<i6e::core::ModuleController>() {
 		}
 
 		virtual void OnThreadStart() {
@@ -101,86 +101,86 @@ namespace core {
 		}
 
 		void registerMessageType(uint16_t msgType, const std::string & func) {
-			i6engine::api::EngineController::GetSingleton().getMessagingFacade()->registerMessageType(msgType, this, [this, func](const i6engine::core::Message::Ptr & msg) {
+			i6e::api::EngineController::GetSingleton().getMessagingFacade()->registerMessageType(msgType, this, [this, func](const i6e::core::Message::Ptr & msg) {
 				boost::python::call<void>(this->get_override(func.c_str()).ptr(), msg);
 			});
 		}
 
 		void unregisterMessageType(uint16_t msgType) {
-			i6engine::api::EngineController::GetSingleton().getMessagingFacade()->unregisterMessageType(msgType, this);
+			i6e::api::EngineController::GetSingleton().getMessagingFacade()->unregisterMessageType(msgType, this);
 		}
 	};
 
 } /* namespace core */
 } /* namespace python */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 BOOST_PYTHON_MODULE(ScriptingCorePython) {
 	using namespace boost::python;
 
-	enum_<i6engine::core::Subsystem>("Subsystem")
-		.value("Unknown", i6engine::core::Subsystem::Unknown)
-		.value("Application", i6engine::core::Subsystem::Application)
-		.value("Audio", i6engine::core::Subsystem::Audio)
-		.value("Graphic", i6engine::core::Subsystem::Graphic)
-		.value("GUI", i6engine::core::Subsystem::GUI)
-		.value("Input", i6engine::core::Subsystem::Input)
-		.value("Network", i6engine::core::Subsystem::Network)
-		.value("Object", i6engine::core::Subsystem::Object)
-		.value("Physic", i6engine::core::Subsystem::Physic)
-		.value("Scripting", i6engine::core::Subsystem::Scripting)
+	enum_<i6e::core::Subsystem>("Subsystem")
+		.value("Unknown", i6e::core::Subsystem::Unknown)
+		.value("Application", i6e::core::Subsystem::Application)
+		.value("Audio", i6e::core::Subsystem::Audio)
+		.value("Graphic", i6e::core::Subsystem::Graphic)
+		.value("GUI", i6e::core::Subsystem::GUI)
+		.value("Input", i6e::core::Subsystem::Input)
+		.value("Network", i6e::core::Subsystem::Network)
+		.value("Object", i6e::core::Subsystem::Object)
+		.value("Physic", i6e::core::Subsystem::Physic)
+		.value("Scripting", i6e::core::Subsystem::Scripting)
 		.export_values();
 
-	class_<i6engine::core::IPKey>("IPKey")
+	class_<i6e::core::IPKey>("IPKey")
 		.def(init<>())
 		.def(init<const std::string &, uint16_t>())
 		.def(init<const std::string &>())
 		.def(self == self)
 		.def(self != self)
-		.def("getIP", &i6engine::core::IPKey::getIP)
-		.def("getPort", &i6engine::core::IPKey::getPort)
-		.def("isValid", &i6engine::core::IPKey::isValid)
-		.def("toString", &i6engine::core::IPKey::toString);
+		.def("getIP", &i6e::core::IPKey::getIP)
+		.def("getPort", &i6e::core::IPKey::getPort)
+		.def("isValid", &i6e::core::IPKey::isValid)
+		.def("toString", &i6e::core::IPKey::toString);
 
-	enum_<i6engine::core::Method>("Method")
-		.value("Create", i6engine::core::Method::Create)
-		.value("Update", i6engine::core::Method::Update)
-		.value("Delete", i6engine::core::Method::Delete)
+	enum_<i6e::core::Method>("Method")
+		.value("Create", i6e::core::Method::Create)
+		.value("Update", i6e::core::Method::Update)
+		.value("Delete", i6e::core::Method::Delete)
 		.export_values();
 
-	class_<i6engine::core::Message, boost::shared_ptr<i6engine::core::Message>>("Message")
+	class_<i6e::core::Message, boost::shared_ptr<i6e::core::Message>>("Message")
 		.def(init<>())
-		.def("getMessageType", &i6engine::core::Message::getMessageType)
-		.def("getSubtype", &i6engine::core::Message::getSubtype)
-		.def("getMethod", &i6engine::core::Message::getMethod)
-		.def("setMessageType", &i6engine::core::Message::setMessageType)
-		.def("getSender", &i6engine::core::Message::getSender)
-		.def("getMessageInfo", &i6engine::core::Message::getMessageInfo)
-		.def("getContent", &i6engine::core::Message::getContent, return_internal_reference<>());
+		.def("getMessageType", &i6e::core::Message::getMessageType)
+		.def("getSubtype", &i6e::core::Message::getSubtype)
+		.def("getMethod", &i6e::core::Message::getMethod)
+		.def("setMessageType", &i6e::core::Message::setMessageType)
+		.def("getSender", &i6e::core::Message::getSender)
+		.def("getMessageInfo", &i6e::core::Message::getMessageInfo)
+		.def("getContent", &i6e::core::Message::getContent, return_internal_reference<>());
 
-	class_<i6engine::python::core::MessageStructWrapper, boost::noncopyable>("MessageStruct")
+	class_<i6e::python::core::MessageStructWrapper, boost::noncopyable>("MessageStruct")
 		.def(init<>())
-		.def(init<const int64_t, const i6engine::core::IPKey &, const int64_t>())
+		.def(init<const int64_t, const i6e::core::IPKey &, const int64_t>())
 		.def(init<const int64_t, const int64_t>())
-		.def("copy", &i6engine::core::MessageStruct::copy, &i6engine::python::core::MessageStructWrapper::default_copy, return_internal_reference<>())
-		.def("getID", &i6engine::core::MessageStruct::getID)
-		.def("getWaitID", &i6engine::core::MessageStruct::getWaitID)
-		.def_readwrite("id", &i6engine::core::MessageStruct::_id)
-		.def_readwrite("sender", &i6engine::core::MessageStruct::_sender)
-		.def_readwrite("waitID", &i6engine::core::MessageStruct::_waitForId);
+		.def("copy", &i6e::core::MessageStruct::copy, &i6e::python::core::MessageStructWrapper::default_copy, return_internal_reference<>())
+		.def("getID", &i6e::core::MessageStruct::getID)
+		.def("getWaitID", &i6e::core::MessageStruct::getWaitID)
+		.def_readwrite("id", &i6e::core::MessageStruct::_id)
+		.def_readwrite("sender", &i6e::core::MessageStruct::_sender)
+		.def_readwrite("waitID", &i6e::core::MessageStruct::_waitForId);
 
-	class_<i6engine::python::core::MessageSubscriberWrapper>("MessageSubscriber")
+	class_<i6e::python::core::MessageSubscriberWrapper>("MessageSubscriber")
 		.def(init<>())
-		.def("processMessages", &i6engine::core::MessageSubscriber::processMessages, &i6engine::python::core::MessageSubscriberWrapper::default_processMessages)
-		.def("notifyNewID", &i6engine::core::MessageSubscriber::notifyNewID);
+		.def("processMessages", &i6e::core::MessageSubscriber::processMessages, &i6e::python::core::MessageSubscriberWrapper::default_processMessages)
+		.def("notifyNewID", &i6e::core::MessageSubscriber::notifyNewID);
 
-	class_<i6engine::python::core::ModuleControllerWrapper, boost::noncopyable>("ModuleController")
+	class_<i6e::python::core::ModuleControllerWrapper, boost::noncopyable>("ModuleController")
 		.def(init<>())
-		.def(init<i6engine::core::Subsystem>())
-		.def("OnThreadStart", pure_virtual(&i6engine::core::ModuleController::OnThreadStart))
-		.def("Tick", pure_virtual(&i6engine::core::ModuleController::Tick))
-		.def("ShutDown", pure_virtual(&i6engine::core::ModuleController::ShutDown))
-		.def("registerMessageType", &i6engine::python::core::ModuleControllerWrapper::registerMessageType)
-		.def("unregisterMessageType", &i6engine::python::core::ModuleControllerWrapper::unregisterMessageType)
-		.def("getFrameTime", &i6engine::core::ModuleController::getFrameTime);
+		.def(init<i6e::core::Subsystem>())
+		.def("OnThreadStart", pure_virtual(&i6e::core::ModuleController::OnThreadStart))
+		.def("Tick", pure_virtual(&i6e::core::ModuleController::Tick))
+		.def("ShutDown", pure_virtual(&i6e::core::ModuleController::ShutDown))
+		.def("registerMessageType", &i6e::python::core::ModuleControllerWrapper::registerMessageType)
+		.def("unregisterMessageType", &i6e::python::core::ModuleControllerWrapper::unregisterMessageType)
+		.def("getFrameTime", &i6e::core::ModuleController::getFrameTime);
 }

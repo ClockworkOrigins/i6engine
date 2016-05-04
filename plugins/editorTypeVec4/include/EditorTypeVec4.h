@@ -5,7 +5,7 @@
 
 class QLineEdit;
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	class EditorTypeVec4Widget : public editor::plugins::TypeWidgetInterface {
@@ -29,8 +29,8 @@ namespace plugins {
 
 	class EditorTypeVec4 : public QObject, public editor::plugins::TypePluginInterface {
 		Q_OBJECT
-		Q_PLUGIN_METADATA(IID "i6engine.editor.type.TypePluginInterface")
-		Q_INTERFACES(i6engine::editor::plugins::TypePluginInterface)
+		Q_PLUGIN_METADATA(IID "i6e.editor.type.TypePluginInterface")
+		Q_INTERFACES(i6e::editor::plugins::TypePluginInterface)
 
 	public:
 		std::string getIdentifier() const override {
@@ -41,6 +41,6 @@ namespace plugins {
 	};
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_PLUGINS_EDITORTYPEVEC4_H__ */

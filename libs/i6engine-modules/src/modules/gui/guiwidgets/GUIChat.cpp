@@ -28,7 +28,7 @@
 
 #include "CEGUI/CEGUI.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUIChat::GUIChat(const std::string & name, const std::string &) : api::GUIWidget(name), api::MessageSubscriberFacade(), _submitCallback() {
@@ -76,4 +76,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

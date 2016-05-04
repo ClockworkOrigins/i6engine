@@ -29,7 +29,7 @@
 
 #include "boost/thread.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	class ISIXE_UTILS_API RealTimeClock {
@@ -86,7 +86,7 @@ namespace utils {
 	};
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_REALTIMECLOCK_H__ */
 

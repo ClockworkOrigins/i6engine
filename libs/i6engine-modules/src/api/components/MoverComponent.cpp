@@ -28,7 +28,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	MoverComponent::MoverComponent(const int64_t id, const attributeMap & params) : ShatterComponent(id, params), _duration(0), _positioning(), _psc(), _startTime(), _lastPos(), _realStartPos(), _lastRot(), _moving(false), _initial(true), _started(false), _linkable(false), _linked() {
@@ -204,4 +204,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

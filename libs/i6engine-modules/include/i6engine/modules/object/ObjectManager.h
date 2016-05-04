@@ -28,7 +28,7 @@
 #include "i6engine/modules/object/ComponentFactory.h"
 #include "i6engine/modules/object/GOFactory.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 	typedef utils::weakPtr<Component> WeakComPtr;
 } /* namespace api */
@@ -186,7 +186,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_OBJECTMANAGER_H__ */
 

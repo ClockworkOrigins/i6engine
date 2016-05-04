@@ -16,8 +16,8 @@
 
 #include "i6engine/api/facades/MessageSubscriberFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

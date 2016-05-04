@@ -27,7 +27,7 @@
 
 #include "boost/make_shared.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	StaticStateComponent::StaticStateComponent(const int64_t id, const attributeMap & params) : Component(id, params), _position(), _rotation(), _scale() {
@@ -93,4 +93,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

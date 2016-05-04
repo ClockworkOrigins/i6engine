@@ -20,7 +20,7 @@
 
 #include "i6engine/api/gui/GUIWidget.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUIFactory::GUIFactory() {
@@ -44,4 +44,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

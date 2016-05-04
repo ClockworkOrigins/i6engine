@@ -51,7 +51,7 @@
 
 #include "OGRE/OgreRoot.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUIManager::GUIManager(GUIController * ctrl) : _objRenderer(), _objGUIFunctions(), _objGUIKeyFunctions(), _objRoot(), _widgets(), _enabledFunctions(), _listIDs(0), _toTick(), _keyStates(), _factory(), _tickerLock(), _ctrl(ctrl), _lastOnWindow(""), _mouseOverWidgets() {
@@ -663,5 +663,5 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 

@@ -26,7 +26,7 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 namespace profiling {
 
@@ -59,7 +59,7 @@ namespace profiling {
 
 } /* namespace profiling */
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_PROFILING_H__ */
 

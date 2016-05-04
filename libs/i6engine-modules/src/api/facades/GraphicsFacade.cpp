@@ -25,7 +25,7 @@
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	GraphicsFacade::GraphicsFacade() : _notify(), _notifyInit(false), _resolutions(), _currentResolution(), _selectablesLock(), _selectables() {
@@ -196,4 +196,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

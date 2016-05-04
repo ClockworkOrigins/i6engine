@@ -26,7 +26,7 @@
 #include "i6engine/modules/luascripting/LuaScriptingMailbox.h"
 #include "i6engine/modules/luascripting/LuaScriptingManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	LuaScriptingController::LuaScriptingController() : core::ModuleController(core::Subsystem::Scripting), _mailbox(), _manager() {
@@ -58,4 +58,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

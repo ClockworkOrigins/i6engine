@@ -23,14 +23,14 @@
 BOOST_PYTHON_MODULE(ScriptingMathPython) {
 	using namespace boost::python;
 
-	def("binom", &i6engine::math::binom);
-	def("disPointLine", &i6engine::math::disPointLine);
-	def("rotateVector", &i6engine::math::rotateVector);
+	def("binom", &i6e::math::binom);
+	def("disPointLine", &i6e::math::disPointLine);
+	def("rotateVector", &i6e::math::rotateVector);
 
 	class_<Quaternion>("Quaternion")
 		.def(init<>())
 		.def(init<double, double, double, double>())
-		.def(init<i6engine::math::i6eVector, double>())
+		.def(init<i6e::math::i6eVector, double>())
 		.def(init<const std::map<std::string, std::string> &, const std::string &>())
 		.def(init<const std::string &>())
 		.def("getX", &Quaternion::getX)
@@ -64,8 +64,8 @@ BOOST_PYTHON_MODULE(ScriptingMathPython) {
 		.def(self_ns::str(self_ns::self))
 		.def(self * Vec3());
 
-	def("dotProduct", i6engine::math::dotProduct);
-	def("scalProd", i6engine::math::scalProd);
+	def("dotProduct", i6e::math::dotProduct);
+	def("scalProd", i6e::math::scalProd);
 
 	class_<Vec2>("Vec2")
 		.def(init<>())

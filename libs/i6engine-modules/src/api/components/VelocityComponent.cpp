@@ -8,7 +8,7 @@
 #include "i6engine/api/configs/PhysicsConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	VelocityComponent::VelocityComponent(const int64_t id, const attributeMap & params) : Component(id, params), _acceleration(), _deceleration(), _maxSpeed(), _resistanceCoefficient(0.6), _windage(0.8), _handling(MaxSpeedHandling::KeepSpeed), _decelerationHandling(DecelerationHandling::StopDeceleration) {
@@ -90,4 +90,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

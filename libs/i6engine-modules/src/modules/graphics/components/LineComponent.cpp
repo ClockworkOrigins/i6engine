@@ -22,7 +22,7 @@
 #include "OGRE/OgreManualObject.h"
 #include "OGRE/OgreSceneManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	LineComponent::LineComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const Vec3 & startPos, const Vec3 & endPos, const Vec3 & colour) : _manager(manager), _parent(parent), _sceneNode(nullptr), _line(nullptr), _material() {
@@ -65,4 +65,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

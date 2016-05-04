@@ -26,7 +26,7 @@
 #include "i6engine/modules/network/NetworkMailbox.h"
 #include "i6engine/modules/network/NetworkManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	NetworkController::NetworkController() : core::ModuleController(core::Subsystem::Network), _mailbox(), _manager() {
@@ -62,4 +62,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

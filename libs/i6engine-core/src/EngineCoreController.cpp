@@ -25,7 +25,7 @@
 
 #include "i6engine/core/subsystem/SubSystemController.h"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	EngineCoreController::EngineCoreController(SubSystemController * ssc) : _subsystemController(ssc), _bolIsInitialized(false), _bolLoop(true), _bolShutdownComplete(true), _vptrOnAfterInitialize(), _lock(), _condVar(), _runningLock(), _runningConditionVariable(), _rClock(), _scheduler(_rClock) {
@@ -141,4 +141,4 @@ namespace core {
 	}
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */

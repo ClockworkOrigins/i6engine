@@ -27,7 +27,7 @@
 
 #include "i6engine/api/GameMessageStruct.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 namespace audio {
 
@@ -153,7 +153,7 @@ namespace audio {
 
 } /* namespace audio */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_AUDIOCONFIG_H__ */
 

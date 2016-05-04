@@ -29,7 +29,7 @@
 
 #include "i6engine/modules/network/NetworkManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	NetworkMailbox::NetworkMailbox() {
@@ -96,4 +96,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

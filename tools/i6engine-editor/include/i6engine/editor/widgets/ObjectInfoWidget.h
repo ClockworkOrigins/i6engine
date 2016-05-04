@@ -7,7 +7,7 @@
 
 #include "boost/function.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace editor {
 namespace plugins {
 
@@ -54,6 +54,6 @@ namespace widgets {
 
 } /* namespace widgets */
 } /* namespace editor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_EDITOR_WIDGETS_OBJECTINFOWIDGET_H__ */

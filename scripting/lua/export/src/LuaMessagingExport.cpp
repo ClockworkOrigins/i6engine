@@ -18,22 +18,22 @@
 
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace lua {
 namespace messaging {
 
-	void sendMessage(const i6engine::api::GameMessage::Ptr & msg) {
-		i6engine::api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(msg);
+	void sendMessage(const i6e::api::GameMessage::Ptr & msg) {
+		i6e::api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(msg);
 	}
 
 } /* namespace messaging */
 } /* namespace lua */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 using namespace luabind;
 
 scope registerMessaging() {
 	return
-		def("sendMessage", &i6engine::lua::messaging::sendMessage)
+		def("sendMessage", &i6e::lua::messaging::sendMessage)
 		;
 }

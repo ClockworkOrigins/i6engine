@@ -28,7 +28,7 @@
 #include "i6engine/api/manager/IDManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	Component::Component() : _objOwnerID(), _objOwnerGO(), _objComponentID(), _objFamilyID(), _id(-1), _sync(true), _self(), _tickingAllowed(true), _wantsToTick(false), _isTicking(false) {
@@ -118,4 +118,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

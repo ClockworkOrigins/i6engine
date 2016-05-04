@@ -41,7 +41,7 @@
 	#include "boost/thread/mutex.hpp"
 #endif /* ISIXE_WITH_PROFILING */
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	typedef struct ISIXE_CORE_API MessageStruct {
@@ -189,7 +189,7 @@ namespace core {
 	} MessageStruct;
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_CORE_MESSAGESTRUCT_H__ */
 

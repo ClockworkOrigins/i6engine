@@ -26,7 +26,7 @@
 #include "i6engine/modules/audio/AudioMailbox.h"
 #include "i6engine/modules/audio/AudioManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	AudioController::AudioController() : core::ModuleController(core::Subsystem::Audio), _mailbox(), _manager() {
@@ -61,4 +61,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

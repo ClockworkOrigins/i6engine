@@ -26,7 +26,7 @@
 
 #include "i6engine/api/GameMessage.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GraphicsManager;
@@ -35,7 +35,7 @@ namespace modules {
 	 * \class GraphicsMailbox
 	 * \brief Extracts the contents of incoming messages on the "Graphics" channel and calls the corresponding methods of the graphics subsystem
 	 * \details Please consult the messaging documentation found in the "Related Pages" on top of this page for in-depth usage details.
-	 * 	The supported methods are declared in the enum method of GraphicsConfig: \ref i6engine::modules::GraphicsConfig::method
+	 * 	The supported methods are declared in the enum method of GraphicsConfig: \ref i6e::modules::GraphicsConfig::method
 	 */
 	class GraphicsMailbox {
 	public:
@@ -72,7 +72,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GRAPHICSMAILBOX_H__ */
 

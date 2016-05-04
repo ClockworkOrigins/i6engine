@@ -41,7 +41,7 @@
 
 #include "tinyxml2.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GOFactory::GOFactory(ObjectManager * m, ComponentFactory * c) : _templateList(), _manager(m), _compFactory(c) {
@@ -330,4 +330,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

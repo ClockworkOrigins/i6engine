@@ -43,7 +43,7 @@
 	#define u_char unsigned char
 #endif
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	typedef struct {
@@ -96,7 +96,7 @@ namespace utils {
 	};
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_SPLASH_H__ */
 

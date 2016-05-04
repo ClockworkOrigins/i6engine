@@ -22,7 +22,7 @@
 
 #include "CEGUI/CEGUI.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUIToggleButton::GUIToggleButton(const std::string & name, const std::string & style) : api::GUIWidget(name), _selectedCallback() {
@@ -55,4 +55,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

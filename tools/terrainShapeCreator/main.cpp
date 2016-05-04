@@ -44,16 +44,16 @@ int main(int argc, char ** argv) {
 	} else {
 		std::cout << "Initializing i6engine" << std::endl;
 
-		i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6engine::modules::GraphicsController(), 10000);
-		i6engine::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6engine::modules::ObjectController(), 10000);
+		i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6e::modules::GraphicsController(), 10000);
+		i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6e::modules::ObjectController(), 10000);
 
-		i6engine::tools::TerrainShapeCreatorApplication app(goTemplate, shape);
+		i6e::tools::TerrainShapeCreatorApplication app(goTemplate, shape);
 
 		app.setName("TerrainShapeCreator");
 
-		i6engine::api::EngineController::GetSingletonPtr()->registerApplication(app);
+		i6e::api::EngineController::GetSingletonPtr()->registerApplication(app);
 
-		i6engine::api::EngineController::GetSingletonPtr()->start();
+		i6e::api::EngineController::GetSingletonPtr()->start();
 	}
 
 	return 0;

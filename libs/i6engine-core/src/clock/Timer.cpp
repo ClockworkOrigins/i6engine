@@ -18,7 +18,7 @@
 
 #include "i6engine/core/EngineCoreController.h"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	Timer::Timer(EngineCoreController * ctrl, const uint32_t lngFrameTime) : _ctrl(ctrl), _bolTimerStopped(false), _condVariable(), _lock(), _timerID() {
@@ -47,4 +47,4 @@ namespace core {
 	}
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */

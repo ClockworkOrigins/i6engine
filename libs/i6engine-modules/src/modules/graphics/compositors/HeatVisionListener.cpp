@@ -20,7 +20,7 @@
 #include "OGRE/OgreTechnique.h"
 #include "OGRE/OgreTimer.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	HeatVisionListener::HeatVisionListener() {
@@ -61,4 +61,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

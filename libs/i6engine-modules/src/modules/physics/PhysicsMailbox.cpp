@@ -24,7 +24,7 @@
 
 #include "i6engine/modules/physics/PhysicsManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	void PhysicsMailbox::News(const api::GameMessage::Ptr & msg) const {
@@ -55,4 +55,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

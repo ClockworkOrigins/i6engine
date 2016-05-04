@@ -28,7 +28,7 @@
 #include "boost/archive/text_oarchive.hpp"
 #include "boost/serialization/export.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	enum class CollisionShapeType {
@@ -60,7 +60,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_COLLISIONSHAPE_COLLISIONSHAPE_H__ */
 

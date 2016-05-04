@@ -16,7 +16,7 @@
 
 #include "i6engine/modules/physics/collisionShapes/MeshStriderCollisionShape.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	MeshStriderCollisionShapeData::MeshStriderCollisionShapeData() : CollisionShapeData(), data() {
@@ -26,7 +26,7 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-BOOST_CLASS_EXPORT_GUID(i6engine::modules::MeshStriderCollisionShapeData, "CS2")
-BOOST_CLASS_IMPLEMENTATION(i6engine::modules::MeshStriderCollisionShapeData, boost::serialization::object_serializable)
+BOOST_CLASS_EXPORT_GUID(i6e::modules::MeshStriderCollisionShapeData, "CS2")
+BOOST_CLASS_IMPLEMENTATION(i6e::modules::MeshStriderCollisionShapeData, boost::serialization::object_serializable)

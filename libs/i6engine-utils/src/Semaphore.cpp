@@ -16,7 +16,7 @@
 
 #include "i6engine/utils/Semaphore.h"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	Semaphore::Semaphore() : _mutex(), _condition(), _count(1) {
@@ -37,4 +37,4 @@ namespace utils {
 	}
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */

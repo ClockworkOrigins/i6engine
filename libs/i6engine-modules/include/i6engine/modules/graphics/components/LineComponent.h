@@ -35,7 +35,7 @@ namespace Ogre {
 	class SceneNode;
 } /* namespace Ogre */
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GraphicsManager;
@@ -100,7 +100,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_COMPONENTS_LINECOMPONENT_H__ */
 

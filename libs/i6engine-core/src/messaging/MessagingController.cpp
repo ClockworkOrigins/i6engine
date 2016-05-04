@@ -26,7 +26,7 @@
 
 #include "boost/thread.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace core {
 
 	MessagingController::MessagingController() : _objMessageTypeDictionary(), _dictionaryMutex(), _deliverThread(nullptr), _condVar(), _condMutex(), _running(true) {
@@ -134,4 +134,4 @@ namespace core {
 	}
 
 } /* namespace core */
-} /* namespace i6engine */
+} /* namespace i6e */

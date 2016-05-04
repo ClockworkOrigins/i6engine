@@ -31,7 +31,7 @@
 
 #include "OGRE/OgreSceneManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	void GraphicsNode::addTicker(MeshComponent * mesh) {
@@ -412,4 +412,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

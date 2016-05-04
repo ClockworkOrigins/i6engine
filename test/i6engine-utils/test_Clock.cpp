@@ -61,7 +61,7 @@ private:
 };
 
 TEST(Clock, RealTime) {
-	i6engine::utils::Clock<TestTimeClock> clock;
+	i6e::utils::Clock<TestTimeClock> clock;
 
 	uint64_t lastTime = clock.getTime();
 	lastTime += 2000;
@@ -83,7 +83,7 @@ TEST(Clock, RealTime) {
 uint64_t sT;
 bool done;
 
-void func(i6engine::utils::Clock<TestTimeClock> * c) {
+void func(i6e::utils::Clock<TestTimeClock> * c) {
 	for (int i = 0; i < 10; ++i) {
 		// wait for some time
 		uint64_t wT = 50000;
@@ -96,7 +96,7 @@ void func(i6engine::utils::Clock<TestTimeClock> * c) {
 }
 
 TEST(Clock, Notifies) {
-    i6engine::utils::Clock<TestTimeClock> * clock = new i6engine::utils::Clock<TestTimeClock>();
+    i6e::utils::Clock<TestTimeClock> * clock = new i6e::utils::Clock<TestTimeClock>();
 	uint64_t ind = clock->registerTimer();
     EXPECT_EQ(ind, 0);
 	sT = clock->getTime();

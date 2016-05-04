@@ -18,7 +18,7 @@
 
 #include "gtest/gtest.h"
 
-using i6engine::core::IPKey;
+using i6e::core::IPKey;
 
 TEST(IPKey, Equality) {
 	IPKey k1("127.0.0.1", 4711);

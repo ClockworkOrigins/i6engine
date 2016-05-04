@@ -10,7 +10,7 @@
 
 #include "i6engine/api/components/Component.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	class MovementComponent;
@@ -57,7 +57,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_COMPONENTS_MOVECOMPONENT_H__ */
 

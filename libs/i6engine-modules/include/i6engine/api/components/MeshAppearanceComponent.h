@@ -29,15 +29,15 @@
 
 #include "i6engine/api/components/Component.h"
 
-namespace i6engine {
+namespace i6e {
 namespace math {
 	class i6eVector4;
 } /* namespace math */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-typedef i6engine::math::i6eVector4 Vec4;
+typedef i6e::math::i6eVector4 Vec4;
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 	class MeshComponent;
 } /* namespace modules */
@@ -233,7 +233,7 @@ namespace api {
 	};
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_MESHAPPEARANCECOMPONENT_H__ */
 

@@ -29,7 +29,7 @@ namespace components {
 namespace config {
 
 	enum ComponentTypes {
-		ScriptingShatterComponent = i6engine::api::components::ComponentTypes::ComponentTypesCount
+		ScriptingShatterComponent = i6e::api::components::ComponentTypes::ComponentTypesCount
 	};
 
 } /* namespace config */

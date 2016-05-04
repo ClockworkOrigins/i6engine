@@ -25,7 +25,7 @@
 
 #include "CEGUI/CEGUI.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GUIStatusList::GUIStatusList(const std::string & name, const std::string & type) : api::GUIWidget(name), _startTime(), _lifetime(-1), _amount(UINT32_MAX), _selectedCallback(), _autoLineBreak(false) {
@@ -136,4 +136,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

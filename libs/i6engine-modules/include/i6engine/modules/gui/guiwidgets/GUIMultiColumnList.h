@@ -29,7 +29,7 @@ namespace CEGUI {
 	class MultiColumnList;
 } /* namespace CEGUI */
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GUIMultiColumnList : public api::GUIWidget {
@@ -75,7 +75,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GUIMULTICOLUMNLIST_H__ */
 

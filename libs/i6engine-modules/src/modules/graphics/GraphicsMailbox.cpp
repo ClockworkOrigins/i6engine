@@ -22,7 +22,7 @@
 
 #include "boost/shared_ptr.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GraphicsMailbox::GraphicsMailbox(GraphicsManager * manager) : _manager(manager) {
@@ -55,4 +55,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

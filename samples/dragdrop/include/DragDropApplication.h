@@ -21,7 +21,7 @@
 
 namespace sample {
 
-	class DragDropApplication : public i6engine::api::Application {
+	class DragDropApplication : public i6e::api::Application {
 	public:
 		DragDropApplication();
 

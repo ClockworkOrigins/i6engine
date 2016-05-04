@@ -24,7 +24,7 @@
 
 #include "i6engine/api/gui/GUIWidget.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class GUIImage : public api::GUIWidget {
@@ -68,7 +68,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GUIIMAGE_H__ */
 

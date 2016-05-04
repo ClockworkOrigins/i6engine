@@ -61,7 +61,7 @@
 
 #include "tinyxml2.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	GraphicsManager::GraphicsManager(GraphicsController * ctrl, HWND hWnd) : Ogre::WindowEventListener(), Ogre::FrameListener(), _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false), _overlaySystem(nullptr), _logManager(nullptr), _compositorLogics() {
@@ -1085,4 +1085,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

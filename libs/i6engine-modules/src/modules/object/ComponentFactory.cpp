@@ -24,7 +24,7 @@
 #include "i6engine/api/manager/IDManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	ComponentFactory::ComponentFactory() : _callbacks(), _tickingAllowed(true) {
@@ -72,4 +72,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

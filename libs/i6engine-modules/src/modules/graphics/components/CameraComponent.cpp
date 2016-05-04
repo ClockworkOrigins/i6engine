@@ -26,7 +26,7 @@
 #include "OGRE/OgreRoot.h"
 #include "OGRE/OgreSceneManager.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	CameraComponent::CameraComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const Vec3 & position, const Vec3 & lookAt, const double nC, double aspect, const double fov) : _manager(manager), _parent(parent), _sceneNode(nullptr), _zOrder(INT_MAX) {
@@ -135,4 +135,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

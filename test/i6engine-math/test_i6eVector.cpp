@@ -145,7 +145,7 @@ TEST(i6eVector, normalize) {
 
 	EXPECT_TRUE(res1 == v1.normalize());
 	EXPECT_TRUE(res2 == v2.normalize());
-	ASSERT_THROW(v3.normalize(), i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(v3.normalize(), i6e::utils::exceptions::ApiException);
 }
 
 TEST(i6eVector, crossAngle) {

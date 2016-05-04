@@ -36,26 +36,26 @@
 
 namespace sample {
 
-	ChatApplication::ChatApplication(const std::string & remoteIP, uint16_t remotePort, uint16_t localPort) : i6engine::api::Application(), _remoteIP(remoteIP), _remotePort(remotePort), _localPort(localPort) {
+	ChatApplication::ChatApplication(const std::string & remoteIP, uint16_t remotePort, uint16_t localPort) : i6e::api::Application(), _remoteIP(remoteIP), _remotePort(remotePort), _localPort(localPort) {
 	}
 
 	ChatApplication::~ChatApplication() {
 	}
 
 	void ChatApplication::Initialize() {
-		ISIXE_REGISTERMESSAGETYPE(i6engine::api::messages::ChatMessageType, ChatApplication::News, this);
+		ISIXE_REGISTERMESSAGETYPE(i6e::api::messages::ChatMessageType, ChatApplication::News, this);
 	}
 
 	void ChatApplication::AfterInitialize() {
 		if (_localPort == _remotePort) { // if port of client and host are the same this node is the host, so listen to port
-			i6engine::api::EngineController::GetSingleton().getNetworkFacade()->listen(_localPort);
+			i6e::api::EngineController::GetSingleton().getNetworkFacade()->listen(_localPort);
 		} else { // otherwise this node has to connect to host
-			i6engine::api::EngineController::GetSingleton().getNetworkFacade()->connect(i6engine::core::IPKey(_remoteIP, _remotePort), _localPort);
+			i6e::api::EngineController::GetSingleton().getNetworkFacade()->connect(i6e::core::IPKey(_remoteIP, _remotePort), _localPort);
 		}
 		// with this subscription to the chat channel this node gets all messages on this channel
-		i6engine::api::EngineController::GetSingleton().getNetworkFacade()->subscribe(CHAT_CHANNEL);
+		i6e::api::EngineController::GetSingleton().getNetworkFacade()->subscribe(CHAT_CHANNEL);
 
-		i6engine::api::GUIFacade * gf = i6engine::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
@@ -73,7 +73,7 @@ namespace sample {
 		// this callback is used to get the message
 		gf->setAcceptedTextCallback("Editbox", [gf](std::string s) {
 			// add sender to message
-			s = i6engine::api::EngineController::GetSingleton().getNetworkFacade()->getIP().toString() + ": " + s;
+			s = i6e::api::EngineController::GetSingleton().getNetworkFacade()->getIP().toString() + ": " + s;
 
 			// add message to own list
 			gf->addTextToWidget("Listbox", s);
@@ -82,13 +82,13 @@ namespace sample {
 			gf->setText("Editbox", "");
 
 			// send message over network to all registered clients
-			i6engine::api::EngineController::GetSingleton().getNetworkFacade()->publish(CHAT_CHANNEL, boost::make_shared<i6engine::api::GameMessage>(i6engine::api::messages::ChatMessageType, i6engine::api::network::ChatMessage, i6engine::core::Method::Create, new i6engine::api::network::Network_ChatMessage(s), i6engine::core::Subsystem::Unknown));
+			i6e::api::EngineController::GetSingleton().getNetworkFacade()->publish(CHAT_CHANNEL, boost::make_shared<i6e::api::GameMessage>(i6e::api::messages::ChatMessageType, i6e::api::network::ChatMessage, i6e::core::Method::Create, new i6e::api::network::Network_ChatMessage(s), i6e::core::Subsystem::Unknown));
 
 			return "";
 		});
 
 		// register ESC to close the application
-		i6engine::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6engine::api::KeyCode::KC_ESCAPE, i6engine::api::KeyState::KEY_PRESSED, boost::bind(&i6engine::api::EngineController::stop, i6engine::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 	}
 
 	void ChatApplication::Tick() {
@@ -99,19 +99,19 @@ namespace sample {
 	}
 
 	void ChatApplication::Finalize() {
-		ISIXE_UNREGISTERMESSAGETYPE(i6engine::api::messages::ChatMessageType);
-		i6engine::api::EngineController::GetSingleton().getNetworkFacade()->disconnect();
+		ISIXE_UNREGISTERMESSAGETYPE(i6e::api::messages::ChatMessageType);
+		i6e::api::EngineController::GetSingleton().getNetworkFacade()->disconnect();
 	}
 
 	void ChatApplication::ShutDown() {
-		i6engine::api::EngineController::GetSingleton().getNetworkFacade()->unsubscribe(CHAT_CHANNEL);
+		i6e::api::EngineController::GetSingleton().getNetworkFacade()->unsubscribe(CHAT_CHANNEL);
 	}
 
-	void ChatApplication::News(const i6engine::api::GameMessage::Ptr & msg) {
-		if (msg->getMessageType() == i6engine::api::messages::ChatMessageType) {
-			if (msg->getSubtype() == i6engine::api::network::ChatMessage) {
+	void ChatApplication::News(const i6e::api::GameMessage::Ptr & msg) {
+		if (msg->getMessageType() == i6e::api::messages::ChatMessageType) {
+			if (msg->getSubtype() == i6e::api::network::ChatMessage) {
 				// got message from other instance, so add message to listbox
-				i6engine::api::EngineController::GetSingleton().getGUIFacade()->addTextToWidget("Listbox", dynamic_cast<i6engine::api::network::Network_ChatMessage *>(msg->getContent())->text);
+				i6e::api::EngineController::GetSingleton().getGUIFacade()->addTextToWidget("Listbox", dynamic_cast<i6e::api::network::Network_ChatMessage *>(msg->getContent())->text);
 			}
 		}
 	}

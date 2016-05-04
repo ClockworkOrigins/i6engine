@@ -2,7 +2,7 @@
 
 #include <QStringList>
 
-namespace i6engine {
+namespace i6e {
 namespace plugins {
 
 	EditorLoadLevelRPG::EditorLoadLevelRPG() : _scriptingManager() {
@@ -22,6 +22,6 @@ namespace plugins {
 	}
 
 } /* namespace plugins */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 Q_PLUGIN_METADATA(IID "i6engine.editor.loadLevel.LoadLevelPluginInterface")

@@ -20,7 +20,7 @@
 
 #include "OGRE/Ogre.h"
 
-namespace i6engine {
+namespace i6e {
 namespace tools {
 
 	int MeshStrider::getNumSubParts() const {
@@ -113,4 +113,4 @@ namespace tools {
 	}
 
 } /* namespace tools */
-} /* namespace i6engine */
+} /* namespace i6e */

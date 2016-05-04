@@ -20,7 +20,7 @@
 
 #include "gtest/gtest.h"
 
-using i6engine::utils::DoubleBufferQueue;
+using i6e::utils::DoubleBufferQueue;
 
 TEST(DoubleBufferQueue, Simple) {
 	DoubleBufferQueue<int, false, false> q;
@@ -105,14 +105,14 @@ TEST(DoubleBufferQueue, Clear) {
 
 TEST(DoubleBufferQueue, Exception) {
 	DoubleBufferQueue<int, false, false> q;
-	ASSERT_THROW(q.pop(), i6engine::utils::exceptions::ApiException);
-	ASSERT_THROW(q.front(), i6engine::utils::exceptions::ApiException);
-	ASSERT_THROW(q.poll(), i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(q.pop(), i6e::utils::exceptions::ApiException);
+	ASSERT_THROW(q.front(), i6e::utils::exceptions::ApiException);
+	ASSERT_THROW(q.poll(), i6e::utils::exceptions::ApiException);
 	q.push(23);
 	q.pop();
-	ASSERT_THROW(q.pop(), i6engine::utils::exceptions::ApiException);
-	ASSERT_THROW(q.front(), i6engine::utils::exceptions::ApiException);
-	ASSERT_THROW(q.poll(), i6engine::utils::exceptions::ApiException);
+	ASSERT_THROW(q.pop(), i6e::utils::exceptions::ApiException);
+	ASSERT_THROW(q.front(), i6e::utils::exceptions::ApiException);
+	ASSERT_THROW(q.poll(), i6e::utils::exceptions::ApiException);
 }
 
 void pusher(DoubleBufferQueue<int, true, true> * q, int amount, int value) {
@@ -126,7 +126,7 @@ void popper(DoubleBufferQueue<int, true, true> * qFrom, DoubleBufferQueue<int, t
 		try {
 			int a = qFrom->poll();
 			qTo->push(a);
-		} catch(i6engine::utils::exceptions::ApiException &) {
+		} catch(i6e::utils::exceptions::ApiException &) {
 			i--;
 		}
 	}

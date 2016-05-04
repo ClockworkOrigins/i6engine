@@ -18,7 +18,7 @@
 
 #include "i6engine/utils/i6eString.h"
 
-namespace i6engine {
+namespace i6e {
 namespace rpg {
 namespace dialog {
 
@@ -31,4 +31,4 @@ namespace dialog {
 
 } /* namespace Dialog */
 } /* namespace rpg */
-} /* namespace i6engine */
+} /* namespace i6e */

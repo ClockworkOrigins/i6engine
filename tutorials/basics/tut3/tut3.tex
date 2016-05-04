@@ -24,7 +24,7 @@ Take a look at listing \ref{code:xml}. It demonstrates the basic structure of su
 We're nearly done. The xml is written. Now comes the C++ code to load a level.
 
 \begin{lstlisting}[language=C++, style=basic, caption={loading a level}, label=code:load]
-i6engine::api::EngineController::getObjectFacade()->loadLevel("level.xml", "A");
+i6e::api::EngineController::getObjectFacade()->loadLevel("level.xml", "A");
 \end{lstlisting}
 
 Yeah, you're done. Pass the path to the level as well as the flag specifying the section(s) you want to load and the rest is done by the engine.

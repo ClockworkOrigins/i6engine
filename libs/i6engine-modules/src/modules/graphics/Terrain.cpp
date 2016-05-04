@@ -25,7 +25,7 @@
 #include "OGRE/OgreImage.h"
 #include "OGRE/Terrain/OgreTerrainGroup.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	Terrain::Terrain(GraphicsManager * manager, const std::string & heightmap, const double size, double inputScale, uint16_t vertices, const std::vector<std::tuple<double, std::string, std::string, double, double>> & layers, int64_t minX, int64_t minY, int64_t maxX, int64_t maxY) : _manager(manager), _mTerrainGroup(), _mTerrainGlobals(), _mTerrainsImported(false), _heightmap(heightmap), _heightdata(), _size(size), _inputScale(inputScale), _vertices(vertices), _layers(layers), _minX(minX), _maxX(maxX), _minY(minY), _maxY(maxY), _dirty(false) {
@@ -241,4 +241,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

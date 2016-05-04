@@ -52,7 +52,7 @@ namespace sample {
 	private:
 		clockUtils::iniParser::IniParser _iniParser;
 
-		void News(const i6engine::api::GameMessage::Ptr & msg);
+		void News(const i6e::api::GameMessage::Ptr & msg);
 	};
 
 } /* namespace sample */

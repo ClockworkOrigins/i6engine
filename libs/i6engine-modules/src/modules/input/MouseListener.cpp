@@ -23,7 +23,7 @@
 #include "i6engine/api/facades/InputFacade.h"
 #include "i6engine/api/facades/MessagingFacade.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	MouseListener::MouseListener() : _lastWheelPos(), _keyStates(), _objInputKeyFunctions() {
@@ -115,4 +115,4 @@ namespace modules {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

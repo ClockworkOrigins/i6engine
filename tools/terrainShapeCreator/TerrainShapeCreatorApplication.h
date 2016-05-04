@@ -16,7 +16,7 @@
 
 #include "i6engine/api/Application.h"
 
-namespace i6engine {
+namespace i6e {
 namespace tools {
 
 	class TerrainShapeCreatorApplication : public api::Application {
@@ -44,4 +44,4 @@ namespace tools {
 	};
 
 } /* namespace tools */
-} /* namespace i6engine */
+} /* namespace i6e */

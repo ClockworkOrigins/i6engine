@@ -25,7 +25,7 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	ShatterComponent::ShatterComponent(const int64_t id, const attributeMap & params) : Component(id, params), _respawn(0) {
@@ -66,4 +66,4 @@ namespace api {
 	}
 
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -21,7 +21,7 @@
 #include "gtest/gtest.h"
 
 TEST(sequence_map, insert) {
-	i6engine::utils::sequence_map<std::string, int> testMap1;
+	i6e::utils::sequence_map<std::string, int> testMap1;
 
 	testMap1["FirstEntry"] = 0;
 	testMap1["SecondEntry"] = 1;
@@ -45,7 +45,7 @@ TEST(sequence_map, insert) {
 }
 
 TEST(sequence_map, iterator) {
-	i6engine::utils::sequence_map<std::string, int> testMap1;
+	i6e::utils::sequence_map<std::string, int> testMap1;
 
 	testMap1["FirstEntry"] = 0;
 	testMap1["SecondEntry"] = 1;
@@ -66,7 +66,7 @@ TEST(sequence_map, iterator) {
 }
 
 TEST(sequence_map, erase) {
-	i6engine::utils::sequence_map<std::string, int> testMap1;
+	i6e::utils::sequence_map<std::string, int> testMap1;
 
 	testMap1["FirstEntry"] = 0;
 	testMap1["SecondEntry"] = 1;
@@ -137,7 +137,7 @@ TEST(sequence_map, erase) {
 }
 
 TEST(sequence_map, clear) {
-	i6engine::utils::sequence_map<std::string, int> testMap1;
+	i6e::utils::sequence_map<std::string, int> testMap1;
 
 	testMap1["FirstEntry"] = 0;
 	testMap1["SecondEntry"] = 1;
@@ -166,7 +166,7 @@ TEST(sequence_map, clear) {
 }
 
 TEST(sequence_map, find) {
-	i6engine::utils::sequence_map<std::string, int> testMap1;
+	i6e::utils::sequence_map<std::string, int> testMap1;
 
 	testMap1["FirstEntry"] = 0;
 	testMap1["SecondEntry"] = 1;

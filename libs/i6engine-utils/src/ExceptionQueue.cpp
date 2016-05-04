@@ -16,7 +16,7 @@
 
 #include "i6engine/utils/ExceptionQueue.h"
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 namespace exceptions {
 
@@ -50,4 +50,4 @@ namespace exceptions {
 
 } /* namespace exceptions */
 } /* namespace utils */
-} /* namespace exceptions */
+} /* namespace i6e */

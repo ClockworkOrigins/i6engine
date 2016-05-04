@@ -26,7 +26,7 @@ namespace tinyxml2 {
 	class XMLElement;
 } /* namespace tinyxml2 */
 
-namespace i6engine {
+namespace i6e {
 namespace editor {
 namespace plugins {
 
@@ -49,7 +49,7 @@ namespace plugins {
 		 * \param[in] element the XMLElement this go should be linked to if necessary
 		 * \returns true if object was handled by this plugin, otherwise false
 		 */
-		virtual bool saveObject(const i6engine::api::GOPtr & go, tinyxml2::XMLElement * element) = 0;
+		virtual bool saveObject(const i6e::api::GOPtr & go, tinyxml2::XMLElement * element) = 0;
 
 		/**
 		 * \brief finishes save process
@@ -59,8 +59,8 @@ namespace plugins {
 
 } /* namespace plugins */
 } /* namespace editor */
-} /* namespace i6engine */
+} /* namespace i6e */
 
-Q_DECLARE_INTERFACE(i6engine::editor::plugins::SaveObjectPluginInterface, "i6engine.editor.saveObject.SaveObjectPluginInterface")
+Q_DECLARE_INTERFACE(i6e::editor::plugins::SaveObjectPluginInterface, "i6e.editor.saveObject.SaveObjectPluginInterface")
 
 #endif /* __I6ENGINE_EDITOR_PLUGINS_SAVEOBJECTPLUGININTERFACE_H__ */

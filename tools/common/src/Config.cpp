@@ -6,7 +6,7 @@
 #include <QLocale>
 #include <QTranslator>
 
-namespace i6engine {
+namespace i6e {
 namespace tools {
 
 	void Config::Init() {
@@ -35,4 +35,4 @@ namespace tools {
 	}
 
 } /* namespace tools */
-} /* namespace i6engine */
+} /* namespace i6e */

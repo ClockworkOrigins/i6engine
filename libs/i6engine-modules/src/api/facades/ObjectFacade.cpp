@@ -28,7 +28,7 @@
 #include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	ObjectFacade::ObjectFacade() : _GOMap(), _lock(), _notify(), _addTicker(), _removeTicker(), _loadLevelLock(), _loadLevelCondVar(), _templateList() {
@@ -195,4 +195,4 @@ namespace api {
 	}
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */

@@ -23,7 +23,7 @@
 #include "OGRE/Overlay/OgreOverlay.h"
 #include "OGRE/Overlay/OgreOverlayContainer.h"
 
-namespace i6engine {
+namespace i6e {
 namespace modules {
 
 	class MovableText : public Ogre::MovableObject, public Ogre::Renderable {
@@ -171,7 +171,7 @@ namespace modules {
 	};
 
 } /* namespace modules */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_MODULES_GRAPHICS_MOVABLETEXT_H__ */
 

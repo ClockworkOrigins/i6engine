@@ -33,7 +33,7 @@
 
 #include "boost/function.hpp"
 
-namespace i6engine {
+namespace i6e {
 namespace api {
 
 	class Component;
@@ -301,7 +301,7 @@ namespace objects {
 
 } /* namespace objects */
 } /* namespace api */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_API_OBJECTCONFIG_H__ */
 

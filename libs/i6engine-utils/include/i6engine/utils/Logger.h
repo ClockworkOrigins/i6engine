@@ -39,31 +39,31 @@
 	#define ISIXE_LOG_DEBUG(module, message) {\
 		std::stringstream logMessageString; \
 		logMessageString << message; \
-		i6engine::utils::Logger::GetSingleton().LogMessage(i6engine::utils::LogLevel::LOGDEBUG, __FILE__, __LINE__, module, logMessageString.str());\
+		i6e::utils::Logger::GetSingleton().LogMessage(i6e::utils::LogLevel::LOGDEBUG, __FILE__, __LINE__, module, logMessageString.str());\
 	}
 	#define ISIXE_LOG_INFO(module, message) {\
 		std::stringstream logMessageString; \
 		logMessageString << message; \
-		i6engine::utils::Logger::GetSingleton().LogMessage(i6engine::utils::LogLevel::LOGINFO, __FILE__, __LINE__, module, logMessageString.str());\
+		i6e::utils::Logger::GetSingleton().LogMessage(i6e::utils::LogLevel::LOGINFO, __FILE__, __LINE__, module, logMessageString.str());\
 	}
 	#define ISIXE_LOG_WARN(module, message) {\
 		std::stringstream logMessageString; \
 		logMessageString << message; \
-		i6engine::utils::Logger::GetSingleton().LogMessage(i6engine::utils::LogLevel::LOGWARN, __FILE__, __LINE__, module, logMessageString.str());\
+		i6e::utils::Logger::GetSingleton().LogMessage(i6e::utils::LogLevel::LOGWARN, __FILE__, __LINE__, module, logMessageString.str());\
 	}
 	#define ISIXE_LOG_ERROR(module, message) {\
 		std::stringstream logMessageString; \
 		logMessageString << message; \
-		i6engine::utils::Logger::GetSingleton().LogMessage(i6engine::utils::LogLevel::LOGERROR, __FILE__, __LINE__, module, logMessageString.str());\
+		i6e::utils::Logger::GetSingleton().LogMessage(i6e::utils::LogLevel::LOGERROR, __FILE__, __LINE__, module, logMessageString.str());\
 	}
 	#define ISIXE_LOG_FATAL(module, message) {\
 		std::stringstream logMessageString; \
 		logMessageString << message; \
-		i6engine::utils::Logger::GetSingleton().LogMessage(i6engine::utils::LogLevel::LOGFATAL, __FILE__, __LINE__, module, logMessageString.str());\
+		i6e::utils::Logger::GetSingleton().LogMessage(i6e::utils::LogLevel::LOGFATAL, __FILE__, __LINE__, module, logMessageString.str());\
 	}
 
 	#define ISIXE_LOG_SETLEVEL(level) {\
-		i6engine::utils::Logger::GetSingleton().setLogLevel(level);\
+		i6e::utils::Logger::GetSingleton().setLogLevel(level);\
 	}
 #else
 	#define ISIXE_LOG_DEBUG(module, message) {\
@@ -81,7 +81,7 @@
 	}
 #endif // ISIXE_WITH_LOGGING
 
-namespace i6engine {
+namespace i6e {
 namespace utils {
 
 	static const std::string logEnumNames[] = { "Debug", "Info", "Warning", "ERROR", "FATAL", "---" };
@@ -113,12 +113,12 @@ namespace utils {
 	 * \note
 	 * Logger.h defines the macros:
 	 * \li \c ISIXE_LOG_X("Module", "Message") Writes log message with LogLevel X ('LOGDEBUG', 'LOGINFO', LOG'WARN', 'LOGERROR', 'LOGFATAL', 'LOGNONE')
-	 * \li \c ISIXE_LOG_SETLEVEL(level) Sets the new LogLevel (for example: i6engine::utils::LogLevel::LOGDEBUG)
+	 * \li \c ISIXE_LOG_SETLEVEL(level) Sets the new LogLevel (for example: i6e::utils::LogLevel::LOGDEBUG)
 	 *
 	 * See \ref macrodoc for a list of all globally defined macros.
 	 */
-	class ISIXE_UTILS_API Logger : public i6engine::utils::Singleton<Logger> {
-		friend class i6engine::utils::Singleton<Logger>;
+	class ISIXE_UTILS_API Logger : public i6e::utils::Singleton<Logger> {
+		friend class i6e::utils::Singleton<Logger>;
 
 	public:
 		/**
@@ -141,7 +141,7 @@ namespace utils {
 #endif /* ISIXE_WITH_LOGGING */
 
 } /* namespace utils */
-} /* namespace i6engine */
+} /* namespace i6e */
 
 #endif /* __I6ENGINE_UTILS_LOGGER_H__ */
 
