@@ -161,7 +161,7 @@ namespace modules {
 		void getRenderOperation(Ogre::RenderOperation & op);
 
 		const Ogre::MaterialPtr & getMaterial() const {
-			assert(!mpMaterial.isNull());
+			assert(!_material.isNull());
 			return _material;
 		}
 
