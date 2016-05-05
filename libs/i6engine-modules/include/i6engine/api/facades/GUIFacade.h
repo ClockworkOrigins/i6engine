@@ -533,6 +533,11 @@ namespace gui {
 			return _onWindow;
 		}
 
+		/**
+		 * \brief sets default font to be used
+		 */
+		void setDefaultFont(const std::string & font) const;
+
 	private:
 		bool _onWindow;
 		bool _captured;

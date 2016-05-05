@@ -88,6 +88,7 @@ namespace gui {
 		GuiUnpauseAnimation,
 		GuiLoadCanvas,
 		GuiSetAutoLineBreak,
+		GuiDefaultFont,
 		GuiMessageTypesCount
 	};
 
@@ -620,6 +621,18 @@ namespace gui {
 			return new GUI_SetAutoLineBreak(*this);
 		}
 	} GUI_SetAutoLineBreak;
+
+	/**
+	 * \brief sets default font
+	 */
+	typedef struct GUI_SetDefaultFont : GUIUpdateMessageStruct {
+		std::string font;
+		GUI_SetDefaultFont(const std::string & f) : GUIUpdateMessageStruct("GUIManager"), font(f) {
+		}
+		GUI_SetDefaultFont * copy() {
+			return new GUI_SetDefaultFont(*this);
+		}
+	} GUI_SetDefaultFont;
 
 } /* namespace gui */
 } /* namespace api */

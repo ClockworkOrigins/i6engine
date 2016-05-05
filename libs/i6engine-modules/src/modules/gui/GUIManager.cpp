@@ -587,6 +587,9 @@ namespace modules {
 			}
 			subscribeEvent(static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->name, static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->event);
 			setFunction(static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->name, static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->func);
+		} else if (type == api::gui::GuiDefaultFont) {
+			const api::gui::GUI_SetDefaultFont * sdf = dynamic_cast<api::gui::GUI_SetDefaultFont *>(data);
+			CEGUI::System::getSingleton().getDefaultGUIContext().setDefaultFont(sdf->font);
 		} else {
 			ISIXE_THROW_API("GUIManager", "Can't handle update message " << type);
 		}

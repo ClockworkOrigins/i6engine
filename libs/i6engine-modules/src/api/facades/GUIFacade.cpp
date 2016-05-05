@@ -346,5 +346,9 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
+	void GUIFacade::setDefaultFont(const std::string & font) const {
+		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiDefaultFont, core::Method::Update, new gui::GUI_SetDefaultFont(font), core::Subsystem::Unknown));
+	}
+
 } /* namespace api */
 } /* namespace i6e */
