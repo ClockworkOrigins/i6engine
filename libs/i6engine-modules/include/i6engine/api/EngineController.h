@@ -357,6 +357,18 @@ namespace api {
 } /* namespace api */
 } /* namespace i6e */
 
+#define i6eEngineController i6e::api::EngineController::GetSingletonPtr()
+#define i6eAppl i6e::api::EngineController::GetSingletonPtr()->getApplication()
+#define i6eAudioFacade i6e::api::EngineController::GetSingletonPtr()->getAudioFacade()
+#define i6eGraphicsFacade i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()
+#define i6eGUIFacade i6e::api::EngineController::GetSingletonPtr()->getGUIFacade()
+#define i6eInputFacade i6e::api::EngineController::GetSingletonPtr()->getInputFacade()
+#define i6eMessagingFacade i6e::api::EngineController::GetSingletonPtr()->getMessagingFacade()
+#define i6eNetworkFacade i6e::api::EngineController::GetSingletonPtr()->getNetworkFacade()
+#define i6eObjectFacade i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()
+#define i6ePhysicsFacade i6e::api::EngineController::GetSingletonPtr()->getPhysicsFacade()
+#define i6eScriptingFacade i6e::api::EngineController::GetSingletonPtr()->getScriptingFacade()
+
 #endif /* __I6ENGINE_API_ENGINECONTROLLER_H__ */
 
 /**
