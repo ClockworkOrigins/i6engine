@@ -538,6 +538,11 @@ namespace gui {
 		 */
 		void setDefaultFont(const std::string & font) const;
 
+		/**
+		 * \brief adds a widget as child of another one
+		 */
+		void addWidgetAsChildTo(const std::string & child, const std::string & parent) const;
+
 	private:
 		bool _onWindow;
 		bool _captured;

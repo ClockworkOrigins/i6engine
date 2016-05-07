@@ -202,6 +202,13 @@ namespace components {
 						}
 						tooltip += api::EngineController::GetSingleton().getTextManager()->getText("Value_Key") + ": " + std::to_string(std::max(1u, uint32_t(std::get<ItemEntry::Value>(_items[i]) * _multiplier)));
 						gf->setTooltip("SlotInventory_Item_" + std::to_string(_id) + "_" + std::to_string(i), tooltip);
+						if (std::get<ItemEntry::Amount>(_items[i]) > 1) {
+							gf->addPrint("SlotInventory_Item_Amount_" + std::to_string(_id) + "_" + std::to_string(i), "RPG/Blanko", 0.5, 0.75, std::to_string(std::get<ItemEntry::Amount>(_items[i])), api::gui::Alignment::Center, -1);
+							gf->setSize("SlotInventory_Item_Amount_" + std::to_string(_id) + "_" + std::to_string(i), 1.0, 0.2);
+							gf->addWidgetAsChildTo("SlotInventory_Item_Amount_" + std::to_string(_id) + "_" + std::to_string(i), "SlotInventory_Item_" + std::to_string(_id) + "_" + std::to_string(i));
+
+							_widgetList.push_back("SlotInventory_Item_Amount_" + std::to_string(_id) + "_" + std::to_string(i));
+						}
 						_widgetList.push_back("SlotInventory_Item_" + std::to_string(_id) + "_" + std::to_string(i));
 						break;
 					}

@@ -560,12 +560,7 @@ namespace modules {
 	void GUIManager::handleUpdateMessage(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		if (type == api::gui::GuiChild) {
-			std::string parent_window = static_cast<api::gui::GUI_Child_Update *>(data)->name;
-			std::string child_window = static_cast<api::gui::GUI_Child_Update *>(data)->child;
-
-			addChildWindow(parent_window, child_window);
-		} else if (type == api::gui::GuiAddToRoot) {
+		if (type == api::gui::GuiAddToRoot) {
 			std::string child_window = static_cast<api::gui::GUI_AddToRoot_Update *>(data)->child;
 			addToRootWindow(getWidgetByName(child_window)->_window);
 		} else if (type == api::gui::GuiMouseVisible) {
@@ -590,6 +585,9 @@ namespace modules {
 		} else if (type == api::gui::GuiDefaultFont) {
 			const api::gui::GUI_SetDefaultFont * sdf = dynamic_cast<api::gui::GUI_SetDefaultFont *>(data);
 			CEGUI::System::getSingleton().getDefaultGUIContext().setDefaultFont(sdf->font);
+		} else if (type == api::gui::GuiSetParent) {
+			const api::gui::GUI_SetParent * sp = dynamic_cast<api::gui::GUI_SetParent *>(data);
+			addChildWindow(sp->parent, sp->child);
 		} else {
 			ISIXE_THROW_API("GUIManager", "Can't handle update message " << type);
 		}

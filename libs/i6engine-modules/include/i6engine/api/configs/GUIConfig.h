@@ -42,7 +42,6 @@ namespace gui {
 		GuiGuiChar,
 		GuiTimepulse,
 		GuiMouseLeave,
-		GuiChild,
 		GuiSubscribeEvent,
 		GuiEvent,
 		GuiWidgetTemplate,
@@ -89,6 +88,7 @@ namespace gui {
 		GuiLoadCanvas,
 		GuiSetAutoLineBreak,
 		GuiDefaultFont,
+		GuiSetParent,
 		GuiMessageTypesCount
 	};
 
@@ -633,6 +633,19 @@ namespace gui {
 			return new GUI_SetDefaultFont(*this);
 		}
 	} GUI_SetDefaultFont;
+
+	/**
+	 * \brief sets widget as child of another one
+	 */
+	typedef struct GUI_SetParent : GUIUpdateMessageStruct {
+		std::string child;
+		std::string parent;
+		GUI_SetParent(const std::string & c, const std::string & p) : GUIUpdateMessageStruct("GUIManager"), child(c), parent(p) {
+		}
+		GUI_SetParent * copy() {
+			return new GUI_SetParent(*this);
+		}
+	} GUI_SetParent;
 
 } /* namespace gui */
 } /* namespace api */

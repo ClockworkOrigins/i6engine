@@ -85,7 +85,7 @@ namespace components {
 				// add MovableText to new target
 				api::attributeMap params;
 				params.insert(std::make_pair("font", "DejaVuSans"));
-				params.insert(std::make_pair("size", "16"));
+				params.insert(std::make_pair("size", "0.2"));
 				params.insert(std::make_pair("colour", "1.0 1.0 1.0"));
 				params.insert(std::make_pair("text", api::EngineController::GetSingleton().getTextManager()->getText(targetGO->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName())));
 				api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponent(highlightTargetID, api::EngineController::GetSingletonPtr()->getIDManager()->getID(), "MovableText", params);
@@ -99,7 +99,7 @@ namespace components {
 					// add MovableText to new target
 					api::attributeMap params;
 					params.insert(std::make_pair("font", "DejaVuSans"));
-					params.insert(std::make_pair("size", "16"));
+					params.insert(std::make_pair("size", "0.2"));
 					params.insert(std::make_pair("colour", "1.0 1.0 1.0"));
 					params.insert(std::make_pair("text", api::EngineController::GetSingleton().getTextManager()->getText(targetGO->getGOC<NameComponent>(config::ComponentTypes::NameComponent)->getName())));
 					api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::ComponentMessageType, api::components::ComCreate, core::Method::Create, new api::components::Component_Create_Create(highlightTargetID, api::EngineController::GetSingletonPtr()->getIDManager()->getID(), core::IPKey(), "MovableText", params), core::Subsystem::Unknown));
