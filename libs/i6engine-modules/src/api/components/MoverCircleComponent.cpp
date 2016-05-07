@@ -106,7 +106,7 @@ namespace api {
 			Vec3 x(am, "realCenterPos");
 			start(x);
 		} else {
-			ISIXE_THROW_FAILURE("MoverComponent", "Unknown message type");
+			Component::News(msg);
 		}
 	}
 

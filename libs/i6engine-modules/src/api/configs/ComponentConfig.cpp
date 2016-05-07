@@ -48,6 +48,9 @@ namespace components {
 	Component_MoverResync_Update::Component_MoverResync_Update(const int64_t goid, const int64_t coid, std::map<std::string, std::string> am) : GameMessageStruct(coid, goid), attMap(am) {
 	}
 
+	Component_EnableTicking_Update::Component_EnableTicking_Update(const int64_t goid, const int64_t coid, bool at) : GameMessageStruct(coid, goid), allowTicking(at) {
+	}
+
 } /* namespace components */
 } /* namespace api */
 } /* namespace i6e */

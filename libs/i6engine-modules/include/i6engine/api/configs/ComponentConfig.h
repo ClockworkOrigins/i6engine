@@ -46,6 +46,7 @@ namespace components {
 		ComSpawnpoint,		//! Reactivates a spawnpoint
 		ComShatter,			//! Indicates, that the Object shattered
 		ComMoverResync,		//! Mover Component needs to be resynced
+		ComEnableTicking,	//! Enables or disables ticking of a Component
 		COUNT
 	};
 	enum ComponentTypes {
@@ -178,6 +179,17 @@ namespace components {
 		}
 		Component_MoverResync_Update * copy() { return new Component_MoverResync_Update(*this); }
 	} Component_MoverResync_Update;
+
+	/**
+	 * \brief enables or disables ticking of a Component
+	 */
+	typedef struct Component_EnableTicking_Update : GameMessageStruct {
+		bool allowTicking;
+		Component_EnableTicking_Update(const int64_t goid, const int64_t coid, bool at);
+		Component_EnableTicking_Update * copy() {
+			return new Component_EnableTicking_Update(*this);
+		}
+	} Component_EnableTicking_Update;
 
 } /* namespace components */
 } /* namespace api */

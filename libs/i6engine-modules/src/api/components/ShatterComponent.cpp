@@ -57,7 +57,7 @@ namespace api {
 
 			shatter(objB);
 		} else {
-			ISIXE_THROW_FAILURE("ShatterComponent", "Unknown message type");
+			Component::News(msg);
 		}
 	}
 

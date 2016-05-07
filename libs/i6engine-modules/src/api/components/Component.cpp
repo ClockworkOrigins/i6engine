@@ -77,23 +77,15 @@ namespace api {
 	}
 
 	void Component::News(const GameMessage::Ptr & msg) {
-		ISIXE_THROW_FAILURE("Component", "News called without News function overridden: " << msg->getMessageInfo() + " " << getComponentID());
+		if (msg->getSubtype() == components::ComponentMessageTypes::ComEnableTicking) {
+			doEnableTicking(dynamic_cast<components::Component_EnableTicking_Update *>(msg->getContent())->allowTicking);
+		} else {
+			ISIXE_THROW_FAILURE("Component", "News called without News function overridden: " << msg->getMessageInfo() + " " << getComponentID());
+		}
 	}
 
-	void Component::enableTicking(bool allowTicking) {
-		_tickingAllowed = allowTicking;
-		if (_tickingAllowed) {
-			if (_wantsToTick) {
-				EngineController::GetSingletonPtr()->getObjectFacade()->addTicker(_self);
-				_wantsToTick = false;
-				_isTicking = true;
-			}
-		} else {
-			if (_isTicking) {
-				EngineController::GetSingletonPtr()->getObjectFacade()->removeTicker(_id);
-				_wantsToTick = true;
-			}
-		}
+	void Component::enableTicking(bool allowTicking) const {
+		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComEnableTicking, core::Method::Update, new components::Component_EnableTicking_Update(_objOwnerID, getID(), allowTicking), core::Subsystem::Unknown));
 	}
 
 	std::pair<AddStrategy, int64_t> Component::howToAdd(const ComPtr &) const {
@@ -115,6 +107,22 @@ namespace api {
 			_isTicking = false;
 		}
 		_wantsToTick = false;
+	}
+
+	void Component::doEnableTicking(bool allowTicking) {
+		_tickingAllowed = allowTicking;
+		if (_tickingAllowed) {
+			if (_wantsToTick) {
+				EngineController::GetSingletonPtr()->getObjectFacade()->addTicker(_self);
+				_wantsToTick = false;
+				_isTicking = true;
+			}
+		} else {
+			if (_isTicking) {
+				EngineController::GetSingletonPtr()->getObjectFacade()->removeTicker(_id);
+				_wantsToTick = true;
+			}
+		}
 	}
 
 } /* namespace api */

@@ -195,10 +195,9 @@ namespace api {
 		bool getSync() const { return _sync; }
 
 		/**
-		 * \brief sets ticking status for this Component
-		 * per default all Components are allowed to tick and calling addTicker will start ticking, but in some cases, e.g. for level editor, ticking has to be disabled and just a few components are allowed to tick
+		 * \brief triggers doEnableTicking threadsafe
 		 */
-		void enableTicking(bool allowTicking);
+		void enableTicking(bool allowTicking) const;
 
 		/**
 		 * \brief asks, how to handle a new component with the same type
@@ -289,6 +288,12 @@ namespace api {
 		 * \brief removes this component from ticklist
 		 */
 		void removeTicker();
+		
+		/**
+		 * \brief sets ticking status for this Component
+		 * per default all Components are allowed to tick and calling addTicker will start ticking, but in some cases, e.g. for level editor, ticking has to be disabled and just a few components are allowed to tick
+		 */
+		void doEnableTicking(bool allowTicking);
 
 		ASSERT_THREAD_SAFETY_HEADER
 	};
