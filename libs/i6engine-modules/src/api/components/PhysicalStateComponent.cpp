@@ -192,10 +192,8 @@ namespace api {
 					sc->News(msg);
 				}
 			} else {
-				ISIXE_THROW_MESSAGE("PhysicalStateComponent", "Unknown Message: " << msg->getSubtype());
+				Component::News(msg);
 			}
-		} else {
-			Component::News(msg);
 		}
 	}
 
