@@ -146,6 +146,8 @@ set(particleEditorSrc
 	${srcdir}/widgets/RendererPropertyWindows/LightRendererPropertyWindow.cpp
 	${srcdir}/widgets/RendererPropertyWindows/RibbonTrailRendererPropertyWindow.cpp
 	${srcdir}/widgets/RendererPropertyWindows/SphereRendererPropertyWindow.cpp
+
+	${srcdir}/utils/SyntaxHighlighter.cpp
 )
 
 QT5_WRAP_UI(particleEditorUI
@@ -265,6 +267,8 @@ QT5_WRAP_CPP(particleEditorGuiHeader
 	${includedir}/widgets/RendererPropertyWindows/LightRendererPropertyWindow.h
 	${includedir}/widgets/RendererPropertyWindows/RibbonTrailRendererPropertyWindow.h
 	${includedir}/widgets/RendererPropertyWindows/SphereRendererPropertyWindow.h
+
+	${includedir}/utils/SyntaxHighlighter.h
 )
 
 SET(ResourceFile resources/resources.qrc)
@@ -280,6 +284,7 @@ source_group(widgets\\EventHandlerPropertyWindows /widgets/EventHandlerPropertyW
 source_group(widgets\\ExternPropertyWindows /widgets/ExternPropertyWindows/*)
 source_group(widgets\\ObserverPropertyWindows /widgets/ObserverPropertyWindows/*)
 source_group(widgets\\RendererPropertyWindows /widgets/RendererPropertyWindows/*)
+SOURCE_GROUP(utils /utils/*)
 SOURCE_GROUP(moc /moc_*)
 SOURCE_GROUP(resources /resources/*)
 

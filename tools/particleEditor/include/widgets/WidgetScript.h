@@ -9,6 +9,9 @@ namespace ParticleUniverse {
 
 namespace i6e {
 namespace particleEditor {
+namespace utils {
+	class SyntaxHighlighter;
+} /* namespace utils */
 namespace widgets {
 
 	class WidgetScript : public QWidget, public Ui::scriptWidget {
@@ -40,6 +43,7 @@ namespace widgets {
 
 	private:
 		bool _changeable;
+		utils::SyntaxHighlighter * _syntaxHighlighter;
 	};
 
 } /* namespace widgets */

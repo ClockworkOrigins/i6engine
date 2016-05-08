@@ -2,12 +2,16 @@
 
 #include "ParticleUniverseSystemManager.h"
 
+#include "utils/SyntaxHighlighter.h"
+
 namespace i6e {
 namespace particleEditor {
 namespace widgets {
 
 	WidgetScript::WidgetScript(QWidget * par) : QWidget(par), _changeable(true) {
 		setupUi(this);
+
+		_syntaxHighlighter = new utils::SyntaxHighlighter(textEdit->document());
 
 		connect(textEdit, SIGNAL(textChanged()), this, SLOT(changedText()));
 	}
