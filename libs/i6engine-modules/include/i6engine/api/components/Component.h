@@ -221,6 +221,13 @@ namespace api {
 		 */
 		virtual std::vector<componentOptions> getComponentOptions() = 0;
 
+		/**
+		 * \brief returns all SubComponents attached to this Component
+		 */
+		std::vector<ComPtr> getSubComponents() const {
+			return _subComps;
+		}
+
 	protected:
 		/**
 		 * \brief ID of the GameObject that owns this Component
