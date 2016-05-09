@@ -91,14 +91,18 @@ namespace api {
 		}
 		auto psc = _psc.get();
 		if (_way == Way::LINEAR) {
-			psc->setPosition(_realStartPos, 2);
+			if (_positioning == Positioning::POSITIONING_ABSOLUTE) {
+				psc->setPosition(_realStartPos, 2);
+			}
 			if (_direction) {
 				_lastPos = _keyFrames[0].first;
 			} else {
 				_lastPos = _keyFrames.back().first;
 			}
 		} else if (_way == Way::BEZIER) {
-			psc->setPosition(_realStartPos, 2);
+			if (_positioning == Positioning::POSITIONING_ABSOLUTE) {
+				psc->setPosition(_realStartPos, 2);
+			}
 			if (_direction) {
 				_lastPos = _keyFrames[0].first;
 			} else {
