@@ -18,6 +18,7 @@ namespace plugins {
 	class FlagPluginInterface;
 	class InitializationPluginInterface;
 	class LoadLevelPluginInterface;
+	class ObjectTypePluginInterface;
 	class RunGamePluginInterface;
 	class SaveObjectPluginInterface;
 
@@ -92,6 +93,7 @@ namespace widgets {
 		std::vector<GameActionHelper *> _gameActionHelperList;
 		std::vector<plugins::SaveObjectPluginInterface *> _saveObjectPlugins;
 		std::vector<plugins::LoadLevelPluginInterface *> _loadLevelPlugins;
+		std::vector<plugins::ObjectTypePluginInterface *> _objectTypePlugins;
 		bool _resetEngineController;
 		int _startGame;
 		bool _inGame;
@@ -123,6 +125,7 @@ namespace widgets {
 		void loadFlagPlugins();
 		void loadSaveObjectPlugins();
 		void loadLoadLevelPlugins();
+		void loadObjectTypePlugins();
 		void saveLevel(const QString & level);
 
 		void setProgressValue(int value) override;
@@ -133,6 +136,8 @@ namespace widgets {
 		void finishLevelWithPlugin() override;
 		void startLoadLevel(const std::string & level) override;
 		void finishLoadLevel(const std::string & level) override;
+
+		void doObjectTypeUpdate();
 
 		static api::KeyCode convertQtToEngine(int key);
 	};

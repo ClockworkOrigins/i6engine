@@ -22,6 +22,7 @@
 #include "i6engine/editor/plugins/FlagPluginInterface.h"
 #include "i6engine/editor/plugins/InitializationPluginInterface.h"
 #include "i6engine/editor/plugins/LoadLevelPluginInterface.h"
+#include "i6engine/editor/plugins/ObjectTypePluginInterface.h"
 #include "i6engine/editor/plugins/RunGamePluginInterface.h"
 #include "i6engine/editor/plugins/SaveObjectPluginInterface.h"
 
@@ -51,7 +52,7 @@ namespace widgets {
 		emit triggerGameAction(int(_index));
 	}
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _saveObjectPlugins(), _loadLevelPlugins(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false), _isTmpLevel(false), _originalLevel(), _isNewLevel(false) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _saveObjectPlugins(), _loadLevelPlugins(), _objectTypePlugins(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false), _isTmpLevel(false), _originalLevel(), _isNewLevel(false) {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -60,6 +61,14 @@ namespace widgets {
 
 		setWindowTitle(WINDOWTITLE);
 
+		loadPlugins();
+
+		for (plugins::ObjectTypePluginInterface * otpi : _objectTypePlugins) {
+			plugins::ObjectTypeWidgetInterface * objectTypeWidget = otpi->createWidget(_templateListWidget);
+			_templateListWidget->verticalLayout->addWidget(objectTypeWidget);
+			objectTypeWidget->setUpdateCallback(std::bind(&MainWindow::doObjectTypeUpdate, this));
+		}
+
 		gridLayout->addWidget(_templateListWidget, 0, 0);
 		gridLayout->addWidget(_renderWidget, 0, 1);
 		gridLayout->addWidget(_objectContainerWidget, 0, 2);
@@ -67,8 +76,6 @@ namespace widgets {
 		gridLayout->setColumnStretch(0, 1);
 		gridLayout->setColumnStretch(1, 9);
 		gridLayout->setColumnStretch(2, 2);
-
-		loadPlugins();
 
 		connect(this, SIGNAL(initializeEngine()), this, SLOT(doInitializeEngine()));
 		connect(this, SIGNAL(initializeGame()), this, SLOT(doInitializeGame()));
@@ -369,6 +376,7 @@ namespace widgets {
 		loadFlagPlugins();
 		loadInitializationPlugins();
 		loadLoadLevelPlugins();
+		loadObjectTypePlugins();
 		loadRunGamePlugins();
 		loadSaveObjectPlugins();
 	}
@@ -453,6 +461,23 @@ namespace widgets {
 			QObject * plugin = loader.instance();
 			if (plugin) {
 				_loadLevelPlugins.push_back(qobject_cast<plugins::LoadLevelPluginInterface *>(plugin));
+			} else {
+				QMessageBox box;
+				box.setWindowTitle(QApplication::tr("Error loading plugin!"));
+				box.setInformativeText(loader.errorString());
+				box.setStandardButtons(QMessageBox::StandardButton::Ok);
+				box.exec();
+			}
+		}
+	}
+
+	void MainWindow::loadObjectTypePlugins() {
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/editor/objectTypes");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_objectTypePlugins.push_back(qobject_cast<plugins::ObjectTypePluginInterface *>(plugin));
 			} else {
 				QMessageBox box;
 				box.setWindowTitle(QApplication::tr("Error loading plugin!"));
@@ -676,6 +701,12 @@ namespace widgets {
 		for (plugins::LoadLevelPluginInterface * llpi : _loadLevelPlugins) {
 			llpi->finishLoadLevel(QString::fromStdString(level));
 		}
+	}
+
+	void MainWindow::doObjectTypeUpdate() {
+		setFocus();
+		updateObjectList();
+		triggerChangedLevel();
 	}
 
 } /* namespace widgets */
