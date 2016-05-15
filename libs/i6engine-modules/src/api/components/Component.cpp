@@ -80,7 +80,7 @@ namespace api {
 		if (msg->getSubtype() == components::ComponentMessageTypes::ComEnableTicking) {
 			doEnableTicking(dynamic_cast<components::Component_EnableTicking_Update *>(msg->getContent())->allowTicking);
 		} else {
-			ISIXE_THROW_FAILURE("Component", "News called without News function overridden: " << msg->getMessageInfo() + " " << getComponentID());
+			ISIXE_THROW_FAILURE("Component", "News called without News function overridden: " << msg->getMessageInfo() << " " << getComponentID());
 		}
 	}
 

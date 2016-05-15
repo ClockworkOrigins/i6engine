@@ -46,15 +46,6 @@ namespace api {
 	}
 
 	void MovableTextComponent::Init() {
-		// check whether a MeshAppearanceComponent exists
-		auto c = getOwnerGO()->getGOC(components::ComponentTypes::MeshAppearanceComponent);
-		if (c == nullptr) {
-			ISIXE_THROW_API_INFO("MovableTextComponent", "MovableTextComponent requires a MeshAppearanceComponent", "Add a MeshAppearanceComponent to the GameObject before the MovableTextComponent is added.");
-		} else {
-			if (c->getID() > getID()) {
-				ISIXE_THROW_API_INFO("MovableTextComponent", "MovableTextComponent requires a MeshAppearanceComponent", "Add a MeshAppearanceComponent to the GameObject before the MovableTextComponent is added.");
-			}
-		}
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Create, new graphics::Graphics_MovableText_Create(_objOwnerID, getID(), getOwnerGO()->getGOC(components::ComponentTypes::MeshAppearanceComponent)->getID(), _font, _text, _size, _colour), core::Subsystem::Object));
 	}
 

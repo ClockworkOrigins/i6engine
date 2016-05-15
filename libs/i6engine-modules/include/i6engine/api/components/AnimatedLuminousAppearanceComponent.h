@@ -91,7 +91,7 @@ namespace api {
 					return newValue;
 				}
 			}
-			ISIXE_THROW_FAILURE("AnimatedLuminousAppearanceComponent", "interpolation didn't work!");
+			ISIXE_THROW_FAILURE("AnimatedLuminousAppearanceComponent", "interpolation didn't work.");
 			return T();
 		}
 

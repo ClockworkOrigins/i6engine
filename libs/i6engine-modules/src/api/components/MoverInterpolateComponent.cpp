@@ -70,7 +70,7 @@ namespace api {
 		_startTime = EngineController::GetSingleton().getCurrentTime();
 
 		if (_keyFrames.size() <= 1) {
-			ISIXE_THROW_FAILURE("MoverComponent", "You need at least two keyFrames");
+			ISIXE_THROW_FAILURE("MoverComponent", "You need at least two keyFrames.");
 			return;
 		}
 
@@ -109,7 +109,7 @@ namespace api {
 				_lastPos = _keyFrames.back().first;
 			}
 		} else {
-			ISIXE_THROW_FAILURE("MoverComponent", "Unknown way");
+			ISIXE_THROW_FAILURE("MoverComponent", "Unknown way.");
 		}
 
 		// resync
@@ -235,7 +235,7 @@ namespace api {
 			break;
 		}
 		default: {
-			ISIXE_THROW_FAILURE("MoverLinearComponent", "Invalid way");
+			ISIXE_THROW_FAILURE("MoverLinearComponent", "Invalid way.");
 			return;
 		}
 		} /* switch _way */
@@ -274,8 +274,6 @@ namespace api {
 		uint32_t frames;
 		parseAttribute<true>(params, "keyframes", frames);
 		for (uint32_t i = 0; i < frames; ++i) {
-			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_pos") != params.end());
-			ISIXE_THROW_API_COND("MoverComponent", "required parameter '" << std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot" << "' not set", params.find(std::string("keyframe_") + boost::lexical_cast<std::string>(i) + "_rot") != params.end());
 			Vec3 pos;
 			Quaternion rot;
 			parseAttribute<true>(params, std::string("keyframe_") + std::to_string(i) + "_pos", pos);
@@ -313,7 +311,7 @@ namespace api {
 		_totalDistance = 0;
 
 		if (_keyFrames.size() <= 1) {
-			ISIXE_THROW_FAILURE("MoverComponent", "You need at least two keyFrames");
+			ISIXE_THROW_FAILURE("MoverComponent", "You need at least two keyFrames.");
 			return;
 		}
 		auto psc = _psc.get();
@@ -324,7 +322,7 @@ namespace api {
 			psc->setPosition(_realStartPos, 1);
 			_lastPos = _keyFrames[0].first;
 		} else {
-			ISIXE_THROW_FAILURE("MoverComponent", "Unknown way");
+			ISIXE_THROW_FAILURE("MoverComponent", "Unknown way.");
 		}
 	}
 

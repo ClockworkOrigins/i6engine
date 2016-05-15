@@ -44,8 +44,7 @@ namespace core {
 			break;
 		}
 		default: {
-			ISIXE_THROW_FAILURE("Message", "getMessageInfo() unknown message method");
-			return "";
+			ISIXE_THROW_FAILURE("Message", "getMessageInfo() unknown message method: " << int(_method));
 		}
 		}
 		ss << ", ID: " << _content->_id << ", waitForId: " << _content->_waitForId << ", sender: " << _content->_sender;
