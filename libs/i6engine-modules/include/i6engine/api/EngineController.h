@@ -358,7 +358,7 @@ namespace api {
 } /* namespace i6e */
 
 #define i6eEngineController i6e::api::EngineController::GetSingletonPtr()
-#define i6eAppl i6e::api::EngineController::GetSingletonPtr()->getApplication()
+#define i6eAppl i6e::api::EngineController::GetSingletonPtr()->getAppl()
 #define i6eAudioFacade i6e::api::EngineController::GetSingletonPtr()->getAudioFacade()
 #define i6eGraphicsFacade i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()
 #define i6eGUIFacade i6e::api::EngineController::GetSingletonPtr()->getGUIFacade()
