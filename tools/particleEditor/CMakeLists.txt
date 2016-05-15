@@ -60,6 +60,7 @@ set(particleEditorSrc
 	
 	${srcdir}/widgets/AffectorPropertyWindow.cpp
 	${srcdir}/widgets/BehaviourPropertyWindow.cpp
+	${srcdir}/widgets/ConfigDialog.cpp
 	${srcdir}/widgets/DialogChooseConnectionType.cpp
 	${srcdir}/widgets/EmitterPropertyWindow.cpp
 	${srcdir}/widgets/EventHandlerPropertyWindow.cpp
@@ -152,6 +153,7 @@ set(particleEditorSrc
 
 QT5_WRAP_UI(particleEditorUI
 	gui/dialogChooseConnectionType.ui
+	gui/dialogConfig.ui
 	gui/widgetEdit.ui
 	gui/widgetParticleList.ui
 	gui/widgetProperty.ui
@@ -181,6 +183,7 @@ QT5_WRAP_CPP(particleEditorGuiHeader
 	
 	${includedir}/widgets/AffectorPropertyWindow.h
 	${includedir}/widgets/BehaviourPropertyWindow.h
+	${includedir}/widgets/ConfigDialog.h
 	${includedir}/widgets/DialogChooseConnectionType.h
 	${includedir}/widgets/EmitterPropertyWindow.h
 	${includedir}/widgets/EventHandlerPropertyWindow.h

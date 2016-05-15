@@ -5,10 +5,12 @@
 
 #include <chrono>
 
+#include "i6engine/math/i6eVector.h"
 #include "i6engine/math/i6eVector2.h"
 
 namespace Ogre {
 	class Camera;
+	class ManualObject;
 	class Overlay;
 	class OverlayContainer;
 	class RenderWindow;
@@ -48,6 +50,12 @@ namespace widgets {
 			return _currentParticleSystemForRenderer;
 		}
 
+		void changeDimensions(const Vec3 & dimensions);
+
+		Vec3 getDimensions() const {
+			return _dimensions;
+		}
+
 	public slots:
 		void play();
 		void pause();
@@ -74,12 +82,14 @@ namespace widgets {
 		Ogre::Camera * _camera;
 		Ogre::Viewport * _viewport;
 		Ogre::SceneNode * _particleNode;
+		Ogre::ManualObject * _box;
 		ParticleUniverse::ParticleSystem * _currentParticleSystemForRenderer;
 		size_t _maxNumberOfVisualParticles;
 		size_t _maxNumberOfEmittedParticles;
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrameTime;
 		uint64_t _frames;
 		Vec2i _lastPos;
+		Vec3 _dimensions;
 
 		void updateOverlay();
 		void resizeEvent(QResizeEvent * evt) override;
@@ -89,6 +99,8 @@ namespace widgets {
 		void mouseReleaseEvent(QMouseEvent * evt) override;
 		void zoom(double zoomFactor);
 		void showEvent(QShowEvent * evt) override;
+
+		void drawBox();
 	};
 
 } /* namespace widgets */

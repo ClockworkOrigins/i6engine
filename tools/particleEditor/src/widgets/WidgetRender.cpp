@@ -11,6 +11,7 @@
 
 #include "clockUtils/iniParser/iniParser.h"
 
+#include "OGRE/OgreManualObject.h"
 #include "OGRE/OgreRenderWindow.h"
 #include "OGRE/OgreRoot.h"
 #include "OGRE/Overlay/OgreOverlay.h"
@@ -28,7 +29,7 @@ namespace widgets {
 
 	std::string CURRENT_PS_NAME = "currentParticleSystemName";
 
-	WidgetRender::WidgetRender(QWidget * par) : QWidget(par), _root(nullptr), _resourceManager(nullptr), _rWindow(nullptr), _sceneManager(nullptr), _overlay(nullptr), _textPanel(nullptr), _averageFPS(nullptr), _cameraNode(nullptr), _camera(nullptr), _viewport(nullptr), _particleNode(nullptr), _currentParticleSystemForRenderer(nullptr), _maxNumberOfVisualParticles(0), _maxNumberOfEmittedParticles(0), _lastFrameTime(std::chrono::high_resolution_clock::now()), _frames(60), _lastPos() {
+	WidgetRender::WidgetRender(QWidget * par) : QWidget(par), _root(nullptr), _resourceManager(nullptr), _rWindow(nullptr), _sceneManager(nullptr), _overlay(nullptr), _textPanel(nullptr), _averageFPS(nullptr), _cameraNode(nullptr), _camera(nullptr), _viewport(nullptr), _particleNode(nullptr), _box(nullptr), _currentParticleSystemForRenderer(nullptr), _maxNumberOfVisualParticles(0), _maxNumberOfEmittedParticles(0), _lastFrameTime(std::chrono::high_resolution_clock::now()), _frames(60), _lastPos(), _dimensions() {
 		setupUi(this);
 
 		clockUtils::iniParser::IniParser iniParser;
@@ -114,6 +115,11 @@ namespace widgets {
 		_rWindow->destroy();
 		_root->shutdown();
 		delete _root;
+	}
+
+	void WidgetRender::changeDimensions(const Vec3 & dimensions) {
+		_dimensions = dimensions;
+		drawBox();
 	}
 
 	void WidgetRender::play() {
@@ -257,6 +263,68 @@ namespace widgets {
 			_rWindow->windowMovedOrResized();
 			_camera->setAspectRatio(double(width) / double(height));
 		}
+	}
+
+	void WidgetRender::drawBox() {
+		if (_box) {
+			_sceneManager->getRootSceneNode()->detachObject(_box);
+			_sceneManager->destroyManualObject(_box);
+		}
+		if (_dimensions == Vec3::ZERO) {
+			return;
+		}
+		_box = _sceneManager->createManualObject("MO_BOX");
+
+		// NOTE: The second parameter to the create method is the resource group the material will be added to.
+		// If the group you name does not exist (in your resources.cfg file) the library will assert() and your program will crash
+		Ogre::MaterialPtr myManualObjectMaterial = Ogre::MaterialManager::getSingleton().create("MO_BOX_Material", "General");
+		myManualObjectMaterial->setReceiveShadows(false);
+		myManualObjectMaterial->getTechnique(0)->setLightingEnabled(true);
+		myManualObjectMaterial->getTechnique(0)->getPass(0)->setDiffuse(Ogre::ColourValue::White);
+		myManualObjectMaterial->getTechnique(0)->getPass(0)->setAmbient(Ogre::ColourValue::White);
+		myManualObjectMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(Ogre::ColourValue::White);
+
+		_box->begin("MO_BOX_Material", Ogre::RenderOperation::OT_LINE_LIST);
+
+		Vec3 farLeftBottom(-_dimensions.getX() / 2.0, -_dimensions.getY() / 2.0, -_dimensions.getZ() / 2.0);
+		Vec3 farRightBottom(_dimensions.getX() / 2.0, -_dimensions.getY() / 2.0, -_dimensions.getZ() / 2.0);
+		Vec3 nearRightBottom(_dimensions.getX() / 2.0, -_dimensions.getY() / 2.0, _dimensions.getZ() / 2.0);
+		Vec3 nearLeftBottom(-_dimensions.getX() / 2.0, -_dimensions.getY() / 2.0, _dimensions.getZ() / 2.0);
+		Vec3 farLeftTop(-_dimensions.getX() / 2.0, _dimensions.getY() / 2.0, -_dimensions.getZ() / 2.0);
+		Vec3 farRightTop(_dimensions.getX() / 2.0, _dimensions.getY() / 2.0, -_dimensions.getZ() / 2.0);
+		Vec3 nearRightTop(_dimensions.getX() / 2.0, _dimensions.getY() / 2.0, _dimensions.getZ() / 2.0);
+		Vec3 nearLeftTop(-_dimensions.getX() / 2.0, _dimensions.getY() / 2.0, _dimensions.getZ() / 2.0);
+
+		_box->position(farLeftBottom.toOgre());
+		_box->position(farRightBottom.toOgre());
+		_box->position(nearRightBottom.toOgre());
+		_box->position(nearLeftBottom.toOgre());
+		_box->position(farRightBottom.toOgre());
+		_box->position(nearRightBottom.toOgre());
+		_box->position(farLeftBottom.toOgre());
+		_box->position(nearLeftBottom.toOgre());
+
+		_box->position(farLeftTop.toOgre());
+		_box->position(farRightTop.toOgre());
+		_box->position(nearRightTop.toOgre());
+		_box->position(nearLeftTop.toOgre());
+		_box->position(farRightTop.toOgre());
+		_box->position(nearRightTop.toOgre());
+		_box->position(farLeftTop.toOgre());
+		_box->position(nearLeftTop.toOgre());
+
+		_box->position(farLeftBottom.toOgre());
+		_box->position(farLeftTop.toOgre());
+		_box->position(farRightBottom.toOgre());
+		_box->position(farRightTop.toOgre());
+		_box->position(nearLeftBottom.toOgre());
+		_box->position(nearLeftTop.toOgre());
+		_box->position(nearRightBottom.toOgre());
+		_box->position(nearRightTop.toOgre());
+
+		_box->end();
+
+		_sceneManager->getRootSceneNode()->attachObject(_box);
 	}
 
 } /* namespace widgets */

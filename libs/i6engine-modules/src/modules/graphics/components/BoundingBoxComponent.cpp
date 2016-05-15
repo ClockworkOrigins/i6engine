@@ -73,6 +73,8 @@ namespace modules {
 		_boundingBox->position(meshEntity->getBoundingBox().getCorner(Ogre::AxisAlignedBox::CornerEnum::NEAR_RIGHT_TOP));
 
 		_boundingBox->end();
+
+		_parent->getSceneNode()->attachObject(_boundingBox);
 	}
 
 	BoundingBoxComponent::~BoundingBoxComponent() {

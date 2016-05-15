@@ -2,6 +2,7 @@
 
 #include "i6engine/i6engineBuildSettings.h"
 
+#include "widgets/ConfigDialog.h"
 #include "widgets/PropertyWindow.h"
 #include "widgets/WidgetEdit.h"
 #include "widgets/WidgetParticleList.h"
@@ -128,6 +129,11 @@ namespace widgets {
 		menuFile->setTitle(QApplication::tr("File"));
 		actionExit->setText(QApplication::tr("Exit"));
 		actionExit->setIcon(QIcon(":/images/close.png"));
+
+		menuExtras->setTitle(QApplication::tr("Extras"));
+		actionOptions->setText(QApplication::tr("Options"));
+
+		actionOptions->setIcon(QIcon(":/images/config_general.png"));
 	}
 
 	MainWindow::~MainWindow() {
@@ -328,6 +334,17 @@ namespace widgets {
 		// Script has changed. Reparse and update the templates
 		_particleListWidget->refreshParticleList();
 		_particleListWidget->selectParticle(newTemplateName);
+	}
+
+	void MainWindow::openOptions() {
+		ConfigDialog dlg;
+		dlg.boxXValue->setValue(_renderWidget->getDimensions().getX());
+		dlg.boxYValue->setValue(_renderWidget->getDimensions().getY());
+		dlg.boxZValue->setValue(_renderWidget->getDimensions().getZ());
+		if (dlg.exec() == QDialog::Accepted) {
+			Vec3 dimensions(dlg.boxXValue->value(), dlg.boxYValue->value(), dlg.boxZValue->value());
+			_renderWidget->changeDimensions(dimensions);
+		}
 	}
 
 } /* namespace widgets */

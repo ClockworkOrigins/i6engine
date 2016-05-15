@@ -1427,5 +1427,9 @@
         <source>Add control point</source>
         <translation>Kontrollpunkt hinzufügen</translation>
     </message>
+    <message>
+        <source>Box Size</source>
+        <translation>Boxgröße</translation>
+    </message>
 </context>
 </TS>
