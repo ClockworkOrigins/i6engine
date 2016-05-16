@@ -58,6 +58,14 @@ TEST(i6eVector4, Addition) {
 	EXPECT_NE(Vec4(5.0, 5.0, 5.0, 5.0), v2 + v1 + v1);
 }
 
+TEST(i6eVector4, Subtraction) {
+	Vec4 v1(1.0, 2.0, 3.0, 4.0);
+	Vec4 v2(4.0, 3.0, 2.0, 1.0);
+
+	EXPECT_EQ(Vec4(-3.0, -1.0, 1.0, 3.0), v1 - v2);
+	EXPECT_EQ(Vec4(3.0, 1.0, -1.0, -3.0), v2 - v1);
+}
+
 TEST(i6eVector4, Multiplication) {
 	Vec4 v1(1.0, 2.0, 3.0, 4.0);
 

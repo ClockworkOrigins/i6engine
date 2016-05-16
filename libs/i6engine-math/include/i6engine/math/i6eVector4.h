@@ -134,10 +134,17 @@ namespace math {
 		}
 
 		/**
-		* \brief + operator
-		*/
+		 * \brief + operator
+		 */
 		i6eVector4 operator+(const i6eVector4 & other) const {
 			return i6eVector4(_w + other._w, _x + other._x, _y + other._y, _z + other._z);
+		}
+
+		/**
+		 * \brief - operator
+		 */
+		i6eVector4 operator-(const i6eVector4 & other) const {
+			return i6eVector4(_w - other._w, _x - other._x, _y - other._y, _z - other._z);
 		}
 
 		/**

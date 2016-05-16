@@ -16,8 +16,6 @@
 
 #include "i6engine/math/i6eVector4.h"
 
-#include "boost/lexical_cast.hpp"
-
 #include "LinearMath/btVector3.h"
 
 #include "OGRE/OgreVector4.h"
