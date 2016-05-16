@@ -29,13 +29,14 @@
 namespace i6e {
 namespace api {
 
-	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false), _animations() {
+	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false), _animations(), _hitTestBuffer(nullptr), _hitBufferCapacity(), _hitBufferSize(), _hitBufferInverted(false) {
 	}
 
 	GUIWidget::~GUIWidget() {
 		if (!_parent) {
 			_window->destroy();
 		}
+		delete[] _hitTestBuffer;
 	}
 
 	void GUIWidget::update(uint16_t type, gui::GUIUpdateMessageStruct * message) {
@@ -106,9 +107,9 @@ namespace api {
 
 	void GUIWidget::enableTicking(bool enabled) {
 		if (enabled) {
-			EngineController::GetSingletonPtr()->getGUIFacade()->addTicker(this);
+			i6eGUIFacade->addTicker(this);
 		} else {
-			EngineController::GetSingletonPtr()->getGUIFacade()->removeTicker(this);
+			i6eGUIFacade->removeTicker(this);
 		}
 		_ticking = enabled;
 	}
@@ -119,6 +120,62 @@ namespace api {
 
 	void GUIWidget::setSize(double w, double h) {
 		_window->setSize(CEGUI::USize(CEGUI::UDim(float(w), 0.0f), CEGUI::UDim(float(h), 0.0f)));
+	}
+
+	bool GUIWidget::isHit() const {
+		CEGUI::Vector2f position = CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition();
+		if (!_window->isHit(position, false)) {
+			return false;
+		}
+
+		if (!_hitTestBuffer) {
+			return true;
+		}
+
+		const CEGUI::Vector2f wpos(CEGUI::CoordConverter::screenToWindow(*_window, position));
+		const size_t idx = (_hitBufferInverted ? _hitBufferSize.getY() - wpos.d_y : wpos.d_y) * _hitBufferSize.getX() + wpos.d_x;
+
+		return (_hitTestBuffer[idx] >> 24) > 0;
+	}
+
+	bool GUIWidget::renderingEndedHandler(const CEGUI::EventArgs & args) {
+		if (static_cast<const CEGUI::RenderQueueEventArgs &>(args).queueID != CEGUI::RQ_BASE) {
+			return false;
+		}
+
+		// rendering surface needs to exist and needs to be texture backed
+		CEGUI::RenderingSurface * const rs = _window->getRenderingSurface();
+		if (!rs || !rs->isRenderingWindow()) {
+			return false;
+		}
+
+		CEGUI::TextureTarget & tt = static_cast<CEGUI::RenderingWindow * const>(rs)->getTextureTarget();
+
+		CEGUI::Texture & texture = tt.getTexture();
+		const CEGUI::Sizef tex_sz(texture.getSize());
+		const size_t reqd_capacity = int(tex_sz.d_width) * int(tex_sz.d_height);
+
+		// see if we need to reallocate buffer:
+		if (reqd_capacity > _hitBufferCapacity) {
+			delete[] _hitTestBuffer;
+			_hitTestBuffer = nullptr;
+			_hitBufferCapacity = 0;
+		}
+
+		// allocate buffer to hold data if it's not already allocated
+		if (!_hitTestBuffer) {
+			_hitTestBuffer = new uint32_t[reqd_capacity];
+			_hitBufferCapacity = reqd_capacity;
+		}
+
+		// save details about what will be in the buffer
+		_hitBufferInverted = tt.isRenderingInverted();
+		_hitBufferSize = Vec2f(tex_sz.d_width, tex_sz.d_height);
+
+		// grab a copy of the data.
+		texture.blitToMemory(_hitTestBuffer);
+
+		return true;
 	}
 
 	bool GUIWidget::drag(const CEGUI::EventArgs & e) {

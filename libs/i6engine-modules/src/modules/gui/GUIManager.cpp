@@ -624,40 +624,36 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		if (_objRenderer) {
-			auto win = CEGUI::System::getSingleton().getDefaultGUIContext().getWindowContainingMouse();
-			if (win != nullptr) {
-				std::string onWindow = std::string(win->getName().c_str());
-				if (onWindow != _lastOnWindow) {
-					_lastOnWindow = onWindow;
-					api::EngineController::GetSingleton().getGUIFacade()->setOnWindow(_lastOnWindow != "root");
-				}
-			}
 			tickWidgets();
 
-			api::EngineController::GetSingleton().getGUIFacade()->setInputCaptured(CEGUI::System::getSingleton().getDefaultGUIContext().getWindowContainingMouse() != nullptr && CEGUI::System::getSingleton().getDefaultGUIContext().getWindowContainingMouse()->isActive() && _lastOnWindow != "root");
-
+			// get mouse position to find underlying widgets
 			double x = CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_x;
 			double y = CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_y;
-
+			// search for underlying widgets
 			_mouseOverWidgets.clear();
-
 			for (auto widget : _widgets) {
 				double posX = widget.second->_window->getPosition().d_x.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width;
 				double posY = widget.second->_window->getPosition().d_y.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height;
 				double sizeX = widget.second->_window->getSize().d_width.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width;
 				double sizeY = widget.second->_window->getSize().d_height.d_scale * CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height;
-				if (x >= posX && x <= posX + sizeX && y >= posY && y <= posY + sizeY && widget.second->_window->isVisible()) {
+				if (x >= posX && x <= posX + sizeX && y >= posY && y <= posY + sizeY && widget.second->_window->isVisible() && widget.second->isHit()) {
 					_mouseOverWidgets.push_back(widget.second);
 				}
 			}
+			// sort them to get upper widget as required to get the main window
 			std::sort(_mouseOverWidgets.begin(), _mouseOverWidgets.end(), [](api::GUIWidget * a, api::GUIWidget * b) {
 				return a->_window->getZIndex() > b->_window->getZIndex();
 			});
+			// if there are widgets below the mouse at this point they are visible and not transparent
+			i6eGUIFacade->setOnWindow(!_mouseOverWidgets.empty());
+
+			// check if there is a widget capturing input
+			i6eGUIFacade->setInputCaptured(!_mouseOverWidgets.empty() && _mouseOverWidgets.front()->_window->isActive());
 
 			// Inject the time since the last tick into CEGUI to allow calculations based on the frame time (fading etc.).
 			// Inject the frame time of the graphics subsystem in seconds.
-			static uint64_t lastTime = api::EngineController::GetSingleton().getCurrentTime();
-			uint64_t cT = api::EngineController::GetSingleton().getCurrentTime();
+			static uint64_t lastTime = i6eEngineController->getCurrentTime();
+			uint64_t cT = i6eEngineController->getCurrentTime();
 			CEGUI::System::getSingleton().injectTimePulse((cT - lastTime) / 1000000.0f);
 			lastTime = cT;
 		}

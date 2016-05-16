@@ -29,10 +29,18 @@ namespace modules {
 		CEGUI::WindowManager & wmgr = CEGUI::WindowManager::getSingleton();
 
 		_window = wmgr.createWindow(style, name);
+		_window->setUserData(this);
 		_window->setProperty("RiseOnClickEnabled", "False");
 		dynamic_cast<CEGUI::Combobox *>(_window)->setReadOnly(true);
 
 		_window->subscribeEvent(CEGUI::Combobox::EventListSelectionAccepted, CEGUI::Event::Subscriber(&GUIComboBox::selectionChanged, this));
+
+		_window->setUsingAutoRenderingSurface(true);
+
+		CEGUI::RenderingSurface* rs = _window->getRenderingSurface();
+		if (rs) {
+			rs->subscribeEvent(CEGUI::RenderingSurface::EventRenderQueueEnded, CEGUI::Event::Subscriber(&api::GUIWidget::renderingEndedHandler, dynamic_cast<api::GUIWidget *>(this)));
+		}
 	}
 
 	void GUIComboBox::update(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {

@@ -124,6 +124,11 @@ namespace gui {
 		 * \brief sets size of this widget
 		 */
 		void setSize(double w, double h);
+		
+		bool isHit() const;
+
+		//! handler to copy rendered data to a memory buffer
+		bool renderingEndedHandler(const CEGUI::EventArgs & args);
 
 		std::string _name;
 		CEGUI::Window * _window;
@@ -146,11 +151,23 @@ namespace gui {
 		bool _tooltipActive;
 		std::map<std::string, CEGUI::AnimationInstance *> _animations;
 
+		//! Pointer to buffer holding the render data
+		uint32_t * _hitTestBuffer;
+		//! Size of the hit test buffer (i.e. its capacity)
+		size_t _hitBufferCapacity;
+		//! Dimensions in pixels of the data in the hit test buffer
+		Vec2f _hitBufferSize;
+		//! whether data in hit test buffer is inverted.
+		bool _hitBufferInverted;
+
 		bool drag(const CEGUI::EventArgs & e);
 		bool drop(const CEGUI::EventArgs & e);
 		bool mouseMove(const CEGUI::EventArgs & e);
 		bool mouseEnter(const CEGUI::EventArgs & e);
 		bool mouseLeave(const CEGUI::EventArgs & e);
+
+		// overridden from Window base class
+		//bool testClassName_impl(const CEGUI::String & class_name) const;
 
 		/**
 		 * \brief forbidden

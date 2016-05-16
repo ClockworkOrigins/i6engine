@@ -33,9 +33,11 @@ namespace modules {
 
 	GUIChat::GUIChat(const std::string & name, const std::string &) : api::GUIWidget(name), api::MessageSubscriberFacade(), _submitCallback() {
 		loadWindowLayout(name, "Chat.layout");
+		_window->setUserData(this);
 		_window->setProperty("RiseOnClickEnabled", "False");
 
 		_window->getChild("Editbox")->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIChat::textAccepted, this));
+		_window->setUsingAutoRenderingSurface(true);
 
 		ISIXE_REGISTERMESSAGETYPE(api::messages::ChatMessageType, GUIChat::News, this);
 	}

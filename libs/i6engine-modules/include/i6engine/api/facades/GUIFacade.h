@@ -452,7 +452,7 @@ namespace gui {
 		void unpauseAnimation(const std::string & name, const std::string & animation) const;
 
 		/**
-		 * \brief sets automatic line break to the widget (currently only implemtend for Statuslist
+		 * \brief sets automatic line break to the widget (currently only implemtend for Statuslist)
 		 */
 		void setAutoLineBreak(const std::string & name, bool enabled) const;
 
@@ -527,7 +527,8 @@ namespace gui {
 		}
 
 		/**
-		 * \brief returns true if mouse is above a GUI widget
+		 * \brief returns true if mouse is above a visible GUI widget element
+		 * transparent GUI parts aren't recognized
 		 */
 		bool getOnWindow() const {
 			return _onWindow;

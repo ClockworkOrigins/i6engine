@@ -12,8 +12,17 @@ namespace modules {
 
 	GUITooltip::GUITooltip(const std::string & name, const std::string &) : GUIWidget(name) {
 		loadWindowLayout(name, "Tooltip.layout");
+		_window->setUserData(this);
 		_window->setRiseOnClickEnabled(false);
 		_window->setMousePassThroughEnabled(true);
+
+		_window->setUsingAutoRenderingSurface(true);
+		
+		CEGUI::RenderingSurface* rs = _window->getRenderingSurface();
+		if (rs) {
+			rs->subscribeEvent(CEGUI::RenderingSurface::EventRenderQueueEnded, CEGUI::Event::Subscriber(&api::GUIWidget::renderingEndedHandler, dynamic_cast<api::GUIWidget *>(this)));
+		}
+
 		enableTicking(true);
 	}
 

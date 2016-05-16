@@ -31,8 +31,16 @@ namespace modules {
 	GUIPrint::GUIPrint(const std::string & name, const std::string & type) : api::GUIWidget(name), _lbText(new CEGUI::ListboxTextItem("")), _lifeTime(-1), _alignment(api::gui::Alignment::Left), _text(), _realPosX(), _realPosY(), _startTime() {
 		_lb = dynamic_cast<CEGUI::Listbox *>(CEGUI::WindowManager::getSingleton().createWindow(type, name));
 		_window = _lb;
+		_window->setUserData(this);
 		_lb->addItem(_lbText);
 		enableTicking(true);
+
+		_window->setUsingAutoRenderingSurface(true);
+
+		CEGUI::RenderingSurface* rs = _window->getRenderingSurface();
+		if (rs) {
+			rs->subscribeEvent(CEGUI::RenderingSurface::EventRenderQueueEnded, CEGUI::Event::Subscriber(&api::GUIWidget::renderingEndedHandler, dynamic_cast<api::GUIWidget *>(this)));
+		}
 	}
 
 	GUIPrint::~GUIPrint() {
