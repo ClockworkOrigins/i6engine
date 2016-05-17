@@ -770,7 +770,7 @@ namespace modules {
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
-			node->createMovableText(coid, gmtc->targetID, gmtc->font, gmtc->text, gmtc->size, gmtc->colour);
+			node->createMovableText(coid, gmtc->font, gmtc->text, gmtc->size, gmtc->colour);
 		} else if (msg->getSubtype() == api::graphics::GraLine) {
 			api::graphics::Graphics_Line_Create * glc = static_cast<api::graphics::Graphics_Line_Create *>(msg->getContent());
 			GraphicsNode * node = getGraphicsNode(goid);
@@ -909,6 +909,12 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->updateMovableText(coid, gmtu->font, gmtu->text, gmtu->size, gmtu->colour);
+		} else if (msg->getSubtype() == api::graphics::GraMovableTextAutoScaleCallback) {
+			api::graphics::Graphics_MovableTextAutoScaleCallback_Update * gmtu = static_cast<api::graphics::Graphics_MovableTextAutoScaleCallback_Update *>(msg->getContent());
+
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			node->updateMovableTextSetAutoScaleCallback(coid, gmtu->callback);
 		} else if (msg->getSubtype() == api::graphics::GraCompositor) {
 			api::graphics::Graphics_Compositor_Update * gcu = dynamic_cast<api::graphics::Graphics_Compositor_Update *>(msg->getContent());
 

@@ -67,6 +67,7 @@ namespace graphics {
 		GraSetExponentialFog,
 		GraSetExponentialFog2,
 		GraMovableText,
+		GraMovableTextAutoScaleCallback,
 		GraCompositor,
 		GraScreenshot,
 		GraFPS,
@@ -729,12 +730,11 @@ namespace graphics {
 	 * \brief creates a MovableText on a GraphicsNode
 	 */
 	typedef struct Graphics_MovableText_Create : GameMessageStruct {
-		int64_t targetID;
 		std::string font;
 		std::string text;
 		double size;
 		Vec3 colour;
-		Graphics_MovableText_Create(int64_t goid, int64_t coid, int64_t tid, const std::string & f, const std::string & t, double s, const Vec3 & c) : GameMessageStruct(coid, goid), targetID(tid), font(f), text(t), size(s), colour(c) {
+		Graphics_MovableText_Create(int64_t goid, int64_t coid, const std::string & f, const std::string & t, double s, const Vec3 & c) : GameMessageStruct(coid, goid), font(f), text(t), size(s), colour(c) {
 		}
 		Graphics_MovableText_Create * copy() {
 			return new Graphics_MovableText_Create(*this);
@@ -755,6 +755,18 @@ namespace graphics {
 			return new Graphics_MovableText_Update(*this);
 		}
 	} Graphics_MovableText_Update;
+
+	/**
+	 * \brief updates a MovableText on a GraphicsNode and adds auto scaling
+	 */
+	typedef struct Graphics_MovableTextAutoScaleCallback_Update : GameMessageStruct {
+		std::function<double(const Vec3 &, const Vec3 &)> callback;
+		Graphics_MovableTextAutoScaleCallback_Update(int64_t goid, int64_t coid, const std::function<double(const Vec3 &, const Vec3 &)> & c) : GameMessageStruct(coid, goid), callback(c) {
+		}
+		Graphics_MovableTextAutoScaleCallback_Update * copy() {
+			return new Graphics_MovableTextAutoScaleCallback_Update(*this);
+		}
+	} Graphics_MovableTextAutoScaleCallback_Update;
 
 	/**
 	 * \brief deletes a MovableText on a GraphicsNode

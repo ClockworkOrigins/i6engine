@@ -69,11 +69,14 @@ namespace api {
 		 */
 		void setText(const std::string & text);
 
+		void setAutoScaleCallback(const std::function<double(const Vec3 &, const Vec3 &)> & callback);
+
 	private:
 		std::string _font;
 		std::string _text;
 		double _size;
 		Vec3 _colour;
+		std::function<double(const Vec3 &, const Vec3 &)> _autoScaleCallback;
 
 		void Init() override;
 

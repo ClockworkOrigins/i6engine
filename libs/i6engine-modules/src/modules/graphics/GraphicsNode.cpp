@@ -51,10 +51,38 @@ namespace modules {
 				break;
 			}
 		}
-		_ticking = !_tickingMeshes.empty();
+		_ticking = !_tickingMovableTexts.empty() || !_tickingMeshes.empty();
+		if (!_ticking) {
+			_manager->removeTicker(this);
+		}
 	}
 
-	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _cameras(), _lights(), _particles(), _meshes(), _billboardSets(), _movableTexts(), _boundingBoxes(), _lines(), _attachedTo(nullptr), _attachedCoid(), _attachedBone(), _go(), _ticking(false), _tickingMeshes() {
+	void GraphicsNode::addTicker(MovableTextComponent * movableText) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_tickingMovableTexts.push_back(movableText);
+		if (!_ticking) {
+			std::cout << "GN Start Ticking" << std::endl;
+			_manager->addTicker(this);
+			_ticking = true;
+		}
+	}
+
+	void GraphicsNode::removeTicker(MovableTextComponent * movableText) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		for (size_t i = 0; i < _tickingMovableTexts.size(); i++) {
+			if (_tickingMovableTexts[i] == movableText) {
+				_tickingMovableTexts.erase(_tickingMovableTexts.begin() + int(i));
+				break;
+			}
+		}
+		_ticking = !_tickingMovableTexts.empty() || !_tickingMeshes.empty();
+		if (!_ticking) {
+			std::cout << "GN Stop Ticking" << std::endl;
+			_manager->removeTicker(this);
+		}
+	}
+
+	GraphicsNode::GraphicsNode(GraphicsManager * manager, const int64_t goid, const Vec3 & position, const Quaternion & rotation, const Vec3 & scale) : _manager(manager), _gameObjectID(goid), _sceneNode(nullptr), _cameras(), _lights(), _particles(), _meshes(), _billboardSets(), _movableTexts(), _boundingBoxes(), _lines(), _attachedTo(nullptr), _attachedCoid(), _attachedBone(), _go(), _ticking(false), _tickingMeshes(), _tickingMovableTexts() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
@@ -67,7 +95,7 @@ namespace modules {
 		_sceneNode->setOrientation(rotation.toOgre());
 		_sceneNode->setScale(scale.toOgre());
 
-		auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(goid);
+		auto go = i6eObjectFacade->getObject(goid);
 
 		if (go != nullptr) {
 			_go = go;
@@ -318,10 +346,9 @@ namespace modules {
 		assert(_billboardSets.find(coid) == _billboardSets.end());
 	}
 
-	void GraphicsNode::createMovableText(int64_t coid, int64_t targetID, const std::string & font, const std::string & text, double size, const Vec3 & colour) {
+	void GraphicsNode::createMovableText(int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_movableTexts.find(coid) == _movableTexts.end());
-		assert(_meshes.find(targetID) != _meshes.end());
 		MovableTextComponent * mtc = new MovableTextComponent(_manager, this, _gameObjectID, coid, font, text, size, colour);
 		_movableTexts.insert(std::make_pair(coid, mtc));
 		assert(_movableTexts.find(coid) != _movableTexts.end());
@@ -332,6 +359,13 @@ namespace modules {
 		assert(_movableTexts.find(coid) != _movableTexts.end());
 		MovableTextComponent * mtc = _movableTexts[coid];
 		mtc->updateMovableText(font, text, size, colour);
+	}
+
+	void GraphicsNode::updateMovableTextSetAutoScaleCallback(int64_t coid, const std::function<double(const Vec3 &, const Vec3 &)> & callback) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		assert(_movableTexts.find(coid) != _movableTexts.end());
+		MovableTextComponent * mtc = _movableTexts[coid];
+		mtc->setAutoScaleCallback(callback);
 	}
 
 	void GraphicsNode::deleteMovableText(int64_t coid) {
@@ -408,6 +442,9 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		for (MeshComponent * mc : _tickingMeshes) {
 			mc->Tick();
+		}
+		for (MovableTextComponent * mtc : _tickingMovableTexts) {
+			mtc->Tick();
 		}
 	}
 

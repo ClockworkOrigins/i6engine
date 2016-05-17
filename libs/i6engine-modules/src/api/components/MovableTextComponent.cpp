@@ -32,7 +32,7 @@
 namespace i6e {
 namespace api {
 
-	MovableTextComponent::MovableTextComponent(const int64_t id, const attributeMap & params) : Component(id, params), _font(), _text(), _size(), _colour() {
+	MovableTextComponent::MovableTextComponent(const int64_t id, const attributeMap & params) : Component(id, params), _font(), _text(), _size(), _colour(), _autoScaleCallback() {
 		Component::_objFamilyID = components::MovableTextComponent;
 		Component::_objComponentID = components::MovableTextComponent;
 
@@ -46,11 +46,11 @@ namespace api {
 	}
 
 	void MovableTextComponent::Init() {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Create, new graphics::Graphics_MovableText_Create(_objOwnerID, getID(), getOwnerGO()->getGOC(components::ComponentTypes::MeshAppearanceComponent)->getID(), _font, _text, _size, _colour), core::Subsystem::Object));
+		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Create, new graphics::Graphics_MovableText_Create(_objOwnerID, getID(), _font, _text, _size, _colour), core::Subsystem::Object));
 	}
 
 	void MovableTextComponent::Finalize() {
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Delete, new graphics::Graphics_MovableText_Delete(_objOwnerID, getID()), core::Subsystem::Object));
+		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Delete, new graphics::Graphics_MovableText_Delete(_objOwnerID, getID()), core::Subsystem::Object));
 	}
 
 	attributeMap MovableTextComponent::synchronize() const {
@@ -74,7 +74,12 @@ namespace api {
 
 	void MovableTextComponent::setText(const std::string & text) {
 		_text = text;
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Update, new graphics::Graphics_MovableText_Update(_objOwnerID, getID(), _font, _text, _size, _colour), core::Subsystem::Object));
+		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Update, new graphics::Graphics_MovableText_Update(_objOwnerID, getID(), _font, _text, _size, _colour), core::Subsystem::Object));
+	}
+
+	void MovableTextComponent::setAutoScaleCallback(const std::function<double(const Vec3 &, const Vec3 &)> & callback) {
+		_autoScaleCallback = callback;
+		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableTextAutoScaleCallback, core::Method::Update, new graphics::Graphics_MovableTextAutoScaleCallback_Update(_objOwnerID, getID(), _autoScaleCallback), core::Subsystem::Object));
 	}
 
 } /* namespace api */

@@ -48,7 +48,7 @@ namespace modules {
 		if (_fontName != fontName || _material.isNull() || !_font) {
 			_fontName = fontName;
 
-			_font = (Ogre::Font *) Ogre::FontManager::getSingleton().getByName(_fontName).getPointer();
+			_font = Ogre::FontManager::getSingleton().getByName(_fontName).getPointer();
 			if (!_font) {
 				throw Ogre::Exception(Ogre::Exception::ERR_ITEM_NOT_FOUND, "Could not find font " + fontName, "MovableText::setFontName");
 			}

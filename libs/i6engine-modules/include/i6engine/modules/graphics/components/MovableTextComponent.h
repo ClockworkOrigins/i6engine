@@ -23,6 +23,7 @@
 #define __I6ENGINE_MODULES_COMPONENTS_MOVABLETEXTCOMPONENT_H__
 
 #include <cstdint>
+#include <functional>
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
@@ -63,6 +64,10 @@ namespace modules {
 
 		int64_t _id;
 
+		double _size;
+
+		std::function<double(const Vec3 &, const Vec3 &)> _autoScaleCallback;
+
 		/**
 		 * \brief Create a new MovableTextComponent
 		 */
@@ -77,6 +82,10 @@ namespace modules {
 		 * \brief updates settings of the movable text
 		 */
 		void updateMovableText(const std::string & font, const std::string & text, double size, const Vec3 & colour);
+
+		void setAutoScaleCallback(const std::function<double(const Vec3 &, const Vec3 &)> & callback);
+
+		void Tick();
 
 		/**
 		 * \brief forbidden

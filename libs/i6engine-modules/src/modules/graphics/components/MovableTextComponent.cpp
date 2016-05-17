@@ -26,7 +26,7 @@
 namespace i6e {
 namespace modules {
 
-	MovableTextComponent::MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour) : _manager(manager), _parent(parent), _movableText(nullptr), _id(coid) {
+	MovableTextComponent::MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour) : _manager(manager), _parent(parent), _movableText(nullptr), _id(coid), _size(size), _autoScaleCallback() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			_movableText = new MovableText("MTC_" + std::to_string(goid) + "_" + std::to_string(coid), text, font, size, Ogre::ColourValue(colour.getX(), colour.getY(), colour.getZ(), 1.0f));
@@ -40,6 +40,9 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_parent->getSceneNode()->detachObject(_movableText);
 		delete _movableText;
+		if (_autoScaleCallback != nullptr) {
+			_parent->removeTicker(this);
+		}
 	}
 
 	void MovableTextComponent::updateMovableText(const std::string & font, const std::string & text, double size, const Vec3 & colour) {
@@ -47,6 +50,27 @@ namespace modules {
 		_movableText->setCaption(text);
 		_movableText->setCharacterHeight(size);
 		_movableText->setColor(Ogre::ColourValue(colour.getX(), colour.getY(), colour.getZ(), 1.0f));
+		_size = size;
+	}
+
+	void MovableTextComponent::setAutoScaleCallback(const std::function<double(const Vec3 &, const Vec3 &)> & callback) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		std::cout << "Adding Callback" << std::endl;
+		if (_autoScaleCallback == nullptr && callback != nullptr) {
+			std::cout << "MTC Adding ticker" << std::endl;
+			_parent->addTicker(this);
+		} else if (callback == nullptr && _autoScaleCallback != nullptr) {
+			std::cout << "MTC Removing ticker" << std::endl;
+			_parent->removeTicker(this);
+		}
+		_autoScaleCallback = callback;
+	}
+
+	void MovableTextComponent::Tick() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		Ogre::Vector3 cameraPos = _manager->getRenderWindow()->getViewport(0)->getCamera()->getDerivedPosition();
+		Ogre::Vector3 ownPos = _parent->getSceneNode()->getPosition();
+		_movableText->setCharacterHeight(_autoScaleCallback(Vec3(cameraPos), Vec3(ownPos)));
 	}
 
 } /* namespace modules */
