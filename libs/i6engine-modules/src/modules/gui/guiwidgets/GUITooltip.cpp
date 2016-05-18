@@ -15,6 +15,7 @@ namespace modules {
 		_window->setUserData(this);
 		_window->setRiseOnClickEnabled(false);
 		_window->setMousePassThroughEnabled(true);
+		_window->setAlwaysOnTop(true);
 
 		_window->setUsingAutoRenderingSurface(true);
 		
