@@ -62,7 +62,7 @@ namespace modules {
 
 	// TODO: move to memberfunction
 	// TODO: only save contact pair if objects really collide
-	bool myContactAddedCallback(btManifoldPoint & cp, const btCollisionObject * colObj0, int partId0, int index0, const btCollisionObject * colObj1, int partId1, int index1) {
+	bool myContactAddedCallback(btManifoldPoint & /*cp*/, const btCollisionObject * colObj0, int /*partId0*/, int /*index0*/, const btCollisionObject * colObj1, int /*partId1*/, int /*index1*/) {
 		// do nothing in multiplayer clients
 		if (api::EngineController::GetSingletonPtr()->getType() != api::GameType::SERVER && api::EngineController::GetSingletonPtr()->getType() != api::GameType::SINGLEPLAYER) {
 			return false;

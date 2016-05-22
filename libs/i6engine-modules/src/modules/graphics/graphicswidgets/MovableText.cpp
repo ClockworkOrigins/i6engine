@@ -182,7 +182,6 @@ namespace modules {
 		Ogre::HardwareVertexBufferSharedPtr cbuf = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(COLOUR_BINDING), _renderOp.vertexData->vertexCount, Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
 		bind->setBinding(COLOUR_BINDING, cbuf);
 
-		size_t charlen = _caption.size();
 		float * pPCBuff = static_cast<float *>(ptbuf->lock(Ogre::HardwareBuffer::HBL_DISCARD));
 
 		float largestWidth = 0.0f;

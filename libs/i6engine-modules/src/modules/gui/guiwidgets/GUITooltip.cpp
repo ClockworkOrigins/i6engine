@@ -19,7 +19,7 @@ namespace modules {
 
 		_window->setUsingAutoRenderingSurface(true);
 		
-		CEGUI::RenderingSurface* rs = _window->getRenderingSurface();
+		CEGUI::RenderingSurface * rs = _window->getRenderingSurface();
 		if (rs) {
 			rs->subscribeEvent(CEGUI::RenderingSurface::EventRenderQueueEnded, CEGUI::Event::Subscriber(&api::GUIWidget::renderingEndedHandler, dynamic_cast<api::GUIWidget *>(this)));
 		}

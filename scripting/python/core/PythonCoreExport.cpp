@@ -62,7 +62,7 @@ namespace core {
 		MessageSubscriberWrapper() : MessageSubscriber(), boost::python::wrapper<i6e::core::MessageSubscriber>() {
 		}
 
-		MessageSubscriberWrapper(const i6e::core::MessageSubscriber & arg) : i6e::core::MessageSubscriber(), boost::python::wrapper<i6e::core::MessageSubscriber>() {
+		MessageSubscriberWrapper(const i6e::core::MessageSubscriber &) : i6e::core::MessageSubscriber(), boost::python::wrapper<i6e::core::MessageSubscriber>() {
 		}
 
 		virtual void processMessages() {

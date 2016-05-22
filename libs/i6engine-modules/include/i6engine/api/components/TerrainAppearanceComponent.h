@@ -123,7 +123,7 @@ namespace api {
 
 		void sendUpdateMessage();
 
-		void convertPositionToVertex(const Vec3 & pos, uint64_t & x, uint64_t & z) const;
+		void convertPositionToVertex(const Vec3 & pos, size_t & x, size_t & z) const;
 	};
 
 } /* namespace api */
