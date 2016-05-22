@@ -34,7 +34,7 @@ namespace modules {
 			_movableText = new MovableText("MTC_" + std::to_string(goid) + "_" + std::to_string(coid), text, font, size, Ogre::ColourValue(colour.getX(), colour.getY(), colour.getZ(), 1.0f));
 			_parent->getSceneNode()->attachObject(_movableText);
 		} catch (Ogre::Exception & e) {
-			ISIXE_LOG_WARN(e.what());
+			ISIXE_LOG_WARN("MovableTextComponent", e.what());
 		}
 	}
 
