@@ -1,12 +1,20 @@
-/**
- * File: MovableText.cpp
+/*
+ * i6engine
+ * Copyright (2016) Daniel Bonrath, Michael Baer, All rights reserved.
  *
- * description: This create create a billboarding object that display a text.
+ * This file is part of i6engine; i6engine is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * @author	2003 by cTh see gavocanov@rambler.ru
- * @update	2006 by barraq see nospam@barraquand.com
- * @update	2012 to work with newer versions of OGRE by MindCalamity <mindcalamity@gmail.com>
- *	- See "Notes" on: http://www.ogre3d.org/tikiwiki/tiki-editpage.php?page=MovableText
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
