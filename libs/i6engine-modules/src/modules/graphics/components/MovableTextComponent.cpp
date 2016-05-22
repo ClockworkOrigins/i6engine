@@ -16,6 +16,8 @@
 
 #include "i6engine/modules/graphics/components/MovableTextComponent.h"
 
+#include "i6engine/utils/Logger.h"
+
 #include "i6engine/modules/graphics/GraphicsManager.h"
 #include "i6engine/modules/graphics/GraphicsNode.h"
 #include "i6engine/modules/graphics/components/MeshComponent.h"
@@ -32,7 +34,7 @@ namespace modules {
 			_movableText = new MovableText("MTC_" + std::to_string(goid) + "_" + std::to_string(coid), text, font, size, Ogre::ColourValue(colour.getX(), colour.getY(), colour.getZ(), 1.0f));
 			_parent->getSceneNode()->attachObject(_movableText);
 		} catch (Ogre::Exception & e) {
-			std::cout << e.what() << std::endl;
+			ISIXE_LOG_WARN(e.what());
 		}
 	}
 
@@ -55,12 +57,9 @@ namespace modules {
 
 	void MovableTextComponent::setAutoScaleCallback(const std::function<double(const Vec3 &, const Vec3 &)> & callback) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		std::cout << "Adding Callback" << std::endl;
 		if (_autoScaleCallback == nullptr && callback != nullptr) {
-			std::cout << "MTC Adding ticker" << std::endl;
 			_parent->addTicker(this);
 		} else if (callback == nullptr && _autoScaleCallback != nullptr) {
-			std::cout << "MTC Removing ticker" << std::endl;
 			_parent->removeTicker(this);
 		}
 		_autoScaleCallback = callback;

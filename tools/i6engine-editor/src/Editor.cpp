@@ -103,7 +103,7 @@ namespace editor {
 	}
 
 	void Editor::AfterInitialize() {
-		api::InputFacade * inputFacade = i6eEngineController->getInputFacade();
+		api::InputFacade * inputFacade = i6eInputFacade;
 
 		inputFacade->setKeyMapping(api::KeyCode::KC_W, "forward");
 		inputFacade->setKeyMapping(api::KeyCode::KC_S, "backward");
@@ -174,9 +174,9 @@ namespace editor {
 				}
 			}
 
-			api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, callback);
+			i6eObjectFacade->loadLevel(file, flags, callback);
 
-			for (auto p : api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap()) {
+			for (auto p : i6eObjectFacade->getGOMap()) {
 				api::ComPtr c = p.second->getGOC(api::components::ComponentTypes::PhysicalStateComponent);
 				if (c != nullptr) {
 					c->enableTicking(true);
@@ -191,7 +191,7 @@ namespace editor {
 				Vec3(0.0, 0.0, 1.0).insertInMap("lookAt", paramsCamera);
 				tmpl._components.push_back(api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
 				tmpl._components.push_back(api::objects::GOTemplateComponent("Camera", paramsCamera, "", false, false));
-				api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO("EditorCam", tmpl, i6eEngineController->getUUID(), false, boost::bind(&Editor::setCamera, this, _1));
+				i6eObjectFacade->createGO("EditorCam", tmpl, i6eEngineController->getUUID(), false, boost::bind(&Editor::setCamera, this, _1));
 			});
 
 			_inLevel = true;
@@ -298,14 +298,14 @@ namespace editor {
 	}
 
 	void Editor::clearLevel() {
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
+		i6eObjectFacade->cleanUpAll();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->resetSubSystem();
 		api::EngineController::GetSingletonPtr()->getGUIFacade()->resetSubSystem();
 		api::EngineController::GetSingletonPtr()->getInputFacade()->resetSubSystem();
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->resetSubSystem();
+		i6eObjectFacade->resetSubSystem();
 		api::EngineController::GetSingletonPtr()->getPhysicsFacade()->resetSubSystem();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -314,7 +314,7 @@ namespace editor {
 	void Editor::InputMailbox(const api::GameMessage::Ptr & msg) {
 		if (msg->getSubtype() == api::keyboard::KeyKeyboard) {
 			api::input::Input_Keyboard_Update * iku = dynamic_cast<api::input::Input_Keyboard_Update *>(msg->getContent());
-			if (!i6eEngineController->getGUIFacade()->getInputCaptured()) {
+			if (!i6eGUIFacade->getInputCaptured()) {
 				std::string key = api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(iku->code);
 
 				if (_eventMap.find(key) != _eventMap.end()) {

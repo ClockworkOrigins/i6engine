@@ -7,7 +7,8 @@
 #include "i6engine/api/GameMessage.h"
 #include "i6engine/api/configs/InputConfig.h"
 #include "i6engine/api/facades/MessagingFacade.h"
-#include <QKeyEvent>
+
+#include <QMouseEvent>
 
 namespace i6e {
 namespace editor {
@@ -24,7 +25,7 @@ namespace widgets {
 	}
 
 	void RenderWidget::mouseMoveEvent(QMouseEvent * evt) {
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouMouse, core::Method::Update, new api::input::Input_Mouse_Update(evt->pos().x(), evt->pos().y()), core::Subsystem::Input));
+		i6eMessagingFacade->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::mouse::MouMouse, core::Method::Update, new api::input::Input_Mouse_Update(evt->pos().x(), evt->pos().y()), core::Subsystem::Input));
 		evt->accept();
 	}
 

@@ -61,7 +61,6 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_tickingMovableTexts.push_back(movableText);
 		if (!_ticking) {
-			std::cout << "GN Start Ticking" << std::endl;
 			_manager->addTicker(this);
 			_ticking = true;
 		}
@@ -77,7 +76,6 @@ namespace modules {
 		}
 		_ticking = !_tickingMovableTexts.empty() || !_tickingMeshes.empty();
 		if (!_ticking) {
-			std::cout << "GN Stop Ticking" << std::endl;
 			_manager->removeTicker(this);
 		}
 	}
