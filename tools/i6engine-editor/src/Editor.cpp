@@ -839,7 +839,12 @@ namespace editor {
 					api::writeAttribute(params, "rot", Quaternion::IDENTITY);
 					api::writeAttribute(params, "scale", Vec3(1.0, 1.0, 1.0));
 					api::writeAttribute(params, "visibility", true);
-					i6eObjectFacade->createComponent(go->getID(), i6eEngineController->getIDManager()->getID(), "MeshAppearance", params);
+					i6eObjectFacade->createComponentCallback(go->getID(), i6eEngineController->getIDManager()->getID(), "MeshAppearance", params, [this](api::ComPtr c) {
+						if (_selectedObjectID == c->getOwnerGO()->getID()) {
+							auto mac = utils::dynamic_pointer_cast<api::MeshAppearanceComponent>(c);
+							mac->drawBoundingBox(Vec3(1.0, 0.0, 0.0));
+						}
+					});
 				}
 				{
 					api::attributeMap params;

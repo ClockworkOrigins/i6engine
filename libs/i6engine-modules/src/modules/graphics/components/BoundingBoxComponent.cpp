@@ -75,6 +75,8 @@ namespace modules {
 		_boundingBox->end();
 
 		_parent->getSceneNode()->attachObject(_boundingBox);
+
+		_mesh->addBoundingBoxObserver(coid);
 	}
 
 	BoundingBoxComponent::~BoundingBoxComponent() {

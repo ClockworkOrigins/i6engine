@@ -62,7 +62,7 @@ namespace widgets {
 			}
 			_infos.clear();
 			_entries.clear();
-			auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+			auto go = i6eObjectFacade->getObject(_selectedObjectID);
 			if (go != nullptr) {
 				auto mc = go->getGOC<api::MeshAppearanceComponent>(api::components::ComponentTypes::MeshAppearanceComponent);
 				if (mc != nullptr) {
@@ -74,7 +74,7 @@ namespace widgets {
 		emit selectedObject(id);
 
 		if (_selectedObjectID != -1) {
-			api::GOPtr go = api::EngineController::GetSingleton().getObjectFacade()->getObject(id);
+			api::GOPtr go = i6eObjectFacade->getObject(id);
 			api::WeakGOPtr wgo = go;
 
 			QLabel * l = new QLabel(QString::fromStdString(go->getType()), this);
@@ -164,14 +164,14 @@ namespace widgets {
 				bool waypoint = false;
 				{
 					// Daniel: scope to remove reference to sharedPtr before waiting!
-					auto go = api::EngineController::GetSingleton().getObjectFacade()->getObject(_selectedObjectID);
+					auto go = i6eObjectFacade->getObject(_selectedObjectID);
 					waypoint = go->getType() == "Waypoint";
 					emit selectObject(-1);
 					go->setDie();
 				}
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				if (waypoint) {
-					api::EngineController::GetSingleton().getWaynetManager()->createWaynet();
+					i6eEngineController->getWaynetManager()->createWaynet();
 				}
 				emit updateObjectList();
 				emit changedLevel();
