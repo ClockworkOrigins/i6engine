@@ -155,6 +155,8 @@ namespace editor {
 
 		bool _removeBox;
 
+		bool _mouseHold;
+
 		/**
 		 * \brief stores camera object used for navigation through level
 		 */

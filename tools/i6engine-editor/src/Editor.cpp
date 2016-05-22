@@ -55,7 +55,7 @@
 namespace i6e {
 namespace editor {
 
-	Editor::Editor() : Application(), _iniParser(), _movementSpeed(1.0), _rotationSpeed(1.0), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints(), _removeBox(false) {
+	Editor::Editor() : Application(), _iniParser(), _movementSpeed(1.0), _rotationSpeed(1.0), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints(), _removeBox(false), _mouseHold(false) {
 		_eventMap["forward"] = std::make_pair(boost::bind(&Editor::Forward, this), false);
 		_eventMap["backward"] = std::make_pair(boost::bind(&Editor::Backward, this), false);
 		_eventMap["left"] = std::make_pair(boost::bind(&Editor::Left, this), false);
@@ -337,8 +337,8 @@ namespace editor {
 					if (iku->pressed == api::KeyState::KEY_PRESSED) {
 						removeObject();
 					}
-				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBLeft && !i6eEngineController->getGUIFacade()->getOnWindow()) {
-					auto targetList = i6eEngineController->getGraphicsFacade()->getSelectables();
+				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBLeft && !i6eGUIFacade->getOnWindow() && !_mouseHold) {
+					auto targetList = i6eGraphicsFacade->getSelectables();
 					for (auto & p : targetList) {
 						auto go = i6eObjectFacade->getObject(p.first);
 						if (go != nullptr && go->getType() != "EditorCam") {
@@ -346,8 +346,11 @@ namespace editor {
 							break;
 						}
 					}
-				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBMiddle && !i6eEngineController->getGUIFacade()->getOnWindow()) {
-					auto targetList = i6eEngineController->getGraphicsFacade()->getSelectables();
+					_mouseHold = true;
+				} else if (iku->pressed == api::KeyState::KEY_RELEASED && iku->code == api::KeyCode::KC_MBLeft && _mouseHold) {
+					_mouseHold = false;
+				} else if (iku->pressed == api::KeyState::KEY_PRESSED && iku->code == api::KeyCode::KC_MBMiddle && !i6eGUIFacade->getOnWindow()) {
+					auto targetList = i6eGraphicsFacade->getSelectables();
 
 					for (auto & p : targetList) {
 						auto go = i6eObjectFacade->getObject(p.first);
@@ -387,18 +390,26 @@ namespace editor {
 				} else if (_lastY > imu->intNewY) {
 					RotateUp();
 				}
-				_lastX = imu->intNewX;
-				_lastY = imu->intNewY;
-			} else {
-				_lastX = imu->intNewX;
-				_lastY = imu->intNewY;
+			} else if (_selectedObjectID != -1 && _mouseHold) {
+				if (_lastX < imu->intNewX) {
+					Right();
+				} else if (_lastX > imu->intNewX) {
+					Left();
+				}
+				if (_lastY < imu->intNewY) {
+					Backward();
+				} else if (_lastY > imu->intNewY) {
+					Forward();
+				}
 			}
+			_lastX = imu->intNewX;
+			_lastY = imu->intNewY;
 		}
 	}
 
 	void Editor::Forward() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, _movementSpeed), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
@@ -422,7 +433,7 @@ namespace editor {
 
 	void Editor::Backward() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, 0.0, -_movementSpeed), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
@@ -446,7 +457,7 @@ namespace editor {
 
 	void Editor::Left() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(_movementSpeed, 0.0, 0.0), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
@@ -470,7 +481,7 @@ namespace editor {
 
 	void Editor::Right() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(-_movementSpeed, 0.0, 0.0), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
@@ -494,7 +505,7 @@ namespace editor {
 
 	void Editor::Down() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, -_movementSpeed, 0.0), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
@@ -518,7 +529,7 @@ namespace editor {
 
 	void Editor::Up() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setPosition(ssc->getPosition() + math::rotateVector(Vec3(0.0, _movementSpeed, 0.0), ssc->getRotation()));
 			updateWaypointNames();
 		} else {
@@ -542,7 +553,7 @@ namespace editor {
 
 	void Editor::RotateLeft() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), _rotationSpeed  * -(PI / 48)));
 		} else {
 			api::GOPtr go = i6eObjectFacade->getObject(_selectedObjectID);
@@ -562,7 +573,7 @@ namespace editor {
 
 	void Editor::RotateRight() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 1.0, 0.0), _rotationSpeed * (PI / 48)));
 		} else {
 			api::GOPtr go = i6eObjectFacade->getObject(_selectedObjectID);
@@ -582,7 +593,7 @@ namespace editor {
 
 	void Editor::RotateUp() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), _rotationSpeed  * -(PI / 48)));
 		} else {
 			api::GOPtr go = i6eObjectFacade->getObject(_selectedObjectID);
@@ -602,7 +613,7 @@ namespace editor {
 
 	void Editor::RotateDown() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(1.0, 0.0, 0.0), _rotationSpeed * (PI / 48)));
 		} else {
 			api::GOPtr go = i6eObjectFacade->getObject(_selectedObjectID);
@@ -622,7 +633,7 @@ namespace editor {
 
 	void Editor::LeanLeft() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), _rotationSpeed  * -(PI / 48)));
 		} else {
 			api::GOPtr go = i6eObjectFacade->getObject(_selectedObjectID);
@@ -642,7 +653,7 @@ namespace editor {
 
 	void Editor::LeanRight() {
 		utils::sharedPtr<api::StaticStateComponent, api::Component> ssc = _camera->getGOC<api::StaticStateComponent>(api::components::StaticStateComponent);
-		if (!_moveObject) {
+		if (!_moveObject && !_mouseHold) {
 			ssc->setRotation(ssc->getRotation() * Quaternion(Vec3(0.0, 0.0, 1.0), _rotationSpeed * (PI / 48)));
 		} else {
 			api::GOPtr go = i6eObjectFacade->getObject(_selectedObjectID);
