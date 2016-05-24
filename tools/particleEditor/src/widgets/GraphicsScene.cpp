@@ -19,6 +19,8 @@
 
 #include "widgets/GraphicsScene.h"
 
+#include "connections/LineConnector.h"
+
 #include "widgets/WidgetEditComponent.h"
 
 #include <QGraphicsSceneDragDropEvent>
@@ -53,6 +55,7 @@ namespace widgets {
 		WidgetEditComponent * wec = (WidgetEditComponent *) i;
 		wec->setPos(evt->scenePos() + offset);
 		update(sceneRect());
+		wec->getConnection()->updatePath();
 	}
 
 } /* namespace widgets */

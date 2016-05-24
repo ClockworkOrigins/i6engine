@@ -32,6 +32,7 @@ namespace particleEditor {
 namespace connections {
 	class Connection;
 	class ConnectionPolicy;
+	class LineConnector;
 	class UniqueRelation;
 } /* namespace connections */
 namespace widgets {
@@ -319,7 +320,7 @@ namespace widgets {
 		
 		void addUniqueRelation(ComponentRelation relation, ComponentRelationDirection relationDirection);
 
-		void addConnection(WidgetEditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection);
+		void addConnection(WidgetEditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection, connections::LineConnector * connection);
 
 		bool isRelationUnique(ComponentRelation relation, ComponentRelationDirection relationDirection) const;
 
@@ -335,6 +336,10 @@ namespace widgets {
 
 		PropertyWindow * getPropertyWindow() const {
 			return _propertyWindow;
+		}
+
+		connections::LineConnector * getConnection() const {
+			return _connection;
 		}
 
 	signals:
@@ -359,6 +364,7 @@ namespace widgets {
 		connections::ConnectionPolicy * _selectedPolicy;
 		PropertyWindow * _propertyWindow;
 		PropertyWindow * _oldPropertyWindow;
+		connections::LineConnector * _connection;
 
 		void mousePressEvent(QGraphicsSceneMouseEvent * evt) override;
 

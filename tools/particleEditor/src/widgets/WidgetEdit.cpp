@@ -112,10 +112,10 @@ namespace widgets {
 				_connections.insert(std::make_pair(std::make_pair(_startConnector, _endConnector), lc));
 				_connections.insert(std::make_pair(std::make_pair(_endConnector, _startConnector), lc));
 				_graphicsScene->addItem(lc);
-				_endConnector->addConnection(_startConnector, policyEnd->getRelation(), policyEnd->getRelationDirection());
+				_endConnector->addConnection(_startConnector, policyEnd->getRelation(), policyEnd->getRelationDirection(), lc);
 
 				// Use the relation of the policyEnd, because this is the same for Start and End
-				_startConnector->addConnection(_endConnector, policyEnd->getRelation(), getOppositeRelationDirection(policyEnd->getRelationDirection()));
+				_startConnector->addConnection(_endConnector, policyEnd->getRelation(), getOppositeRelationDirection(policyEnd->getRelationDirection()), lc);
 				notifyConnectionAdded(_startConnector, _endConnector, policyEnd->getRelation(), policyEnd->getRelationDirection());
 				notifyConnectionsChanged();
 				_startConnector = nullptr;
@@ -862,8 +862,8 @@ namespace widgets {
 		_connections.insert(std::make_pair(std::make_pair(componentPrimary, componentSecondary), lc));
 		_connections.insert(std::make_pair(std::make_pair(componentSecondary, componentPrimary), lc));
 		_graphicsScene->addItem(lc);
-		componentPrimary->addConnection(componentSecondary, relation, direction);
-		componentSecondary->addConnection(componentPrimary, relation, getOppositeRelationDirection(direction));
+		componentPrimary->addConnection(componentSecondary, relation, direction, lc);
+		componentSecondary->addConnection(componentPrimary, relation, getOppositeRelationDirection(direction), lc);
 	}
 
 	WidgetEditComponent * WidgetEdit::findEditComponent(const ParticleUniverse::IElement * puElement) const {

@@ -67,7 +67,7 @@ namespace widgets {
 
 	const int MAX_NUMBER_OF_CONNECTIONS = 20;
 
-	WidgetEditComponent::WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _parent(parent), _label(nullptr), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections(), _selectedPolicy(nullptr), _propertyWindow(nullptr), _oldPropertyWindow(nullptr) {
+	WidgetEditComponent::WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _parent(parent), _label(nullptr), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections(), _selectedPolicy(nullptr), _propertyWindow(nullptr), _oldPropertyWindow(nullptr), _connection(nullptr) {
 		QString labelText = type + " (" + subType + ")";
 		QWidget * widget = new QWidget();
 		QHBoxLayout * hLayout = new QHBoxLayout(widget);
@@ -129,7 +129,9 @@ namespace widgets {
 		_uniqueRelations.push_back(new connections::UniqueRelation(relation, relationDirection));
 	}
 
-	void WidgetEditComponent::addConnection(WidgetEditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection) {
+	void WidgetEditComponent::addConnection(WidgetEditComponent * componentToBeConnectedWith, ComponentRelation relation, ComponentRelationDirection relationDirection, connections::LineConnector * connection) {
+		_connection = connection;
+
 		_connections.push_back(new connections::Connection(componentToBeConnectedWith, relation, relationDirection));
 
 		// Loop through the policies and possibly lock it
