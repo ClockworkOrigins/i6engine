@@ -173,7 +173,7 @@ namespace widgets {
 		// start with removing of old NPC, can be done in parallel to the rest
 		api::EngineController::GetSingleton().getObjectFacade()->deleteAllObjectsOfType("NPC");
 
-		std::string file = npcFileList[index].second;
+		std::string file = npcFileList[size_t(index)].second;
 		tinyxml2::XMLDocument doc;
 		if (doc.LoadFile(file.c_str())) {
 			QMessageBox box;
@@ -190,7 +190,7 @@ namespace widgets {
 				return;
 			}
 			QString identifier(npc->Attribute("identifier"));
-			if (QString::fromStdString(npcFileList[index].first) != identifier) {
+			if (QString::fromStdString(npcFileList[size_t(index)].first) != identifier) {
 				continue;
 			}
 			if (npc->FirstChildElement("Name") == nullptr) {
@@ -250,7 +250,7 @@ namespace widgets {
 		_parent->setWindowTitle(_windowTitle);
 		_changed = false;
 		_changedIdentifier = false;
-		_currentIdentifier = QString::fromStdString(npcFileList[index].first);
+		_currentIdentifier = QString::fromStdString(npcFileList[size_t(index)].first);
 		_currentFile = file;
 		_npcFileList = npcFileList;
 

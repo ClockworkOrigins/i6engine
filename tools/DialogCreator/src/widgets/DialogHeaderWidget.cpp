@@ -91,7 +91,7 @@ namespace widgets {
 		for (std::string s : dialog->participants) {
 			_participants.back()->setText(QString::fromStdString(s));
 		}
-		numberSpinBox->setValue(dialog->nr);
+		numberSpinBox->setValue(int(dialog->nr));
 		permanentCheckBox->setChecked(dialog->permanent);
 		importantCheckBox->setChecked(dialog->important);
 		descriptionLineEdit->setText(QString::fromStdString(dialog->description));
@@ -153,7 +153,7 @@ namespace widgets {
 			if (i < _participants.size() - 1) {
 				if (_participants[i]->text().isEmpty()) {
 					delete _participants[i];
-					_participants.erase(_participants.begin() + i);
+					_participants.erase(_participants.begin() + int(i));
 					break;
 				}
 			} else {

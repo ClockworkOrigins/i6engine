@@ -29,7 +29,7 @@ namespace properties {
 		_spinBox = new QSpinBox(this);
 		_spinBox->setMinimum(0);
 		_spinBox->setMaximum(INT_MAX);
-		_spinBox->setValue(value);
+		_spinBox->setValue(int(value));
 		horizontalLayout->addWidget(_spinBox);
 		connect(_spinBox, SIGNAL(valueChanged(int)), this, SLOT(changedValue()));
 	}
@@ -39,12 +39,12 @@ namespace properties {
 
 	void UIntProperty::setUInt(unsigned int value) {
 		_value = value;
-		_spinBox->setValue(value);
+		_spinBox->setValue(int(value));
 	}
 
 	void UIntProperty::changedValue() {
 		if (_value != static_cast<unsigned int>(_spinBox->value())) {
-			_value = _spinBox->value();
+			_value = static_cast<unsigned int>(_spinBox->value());
 			triggerChangedSignal();
 		}
 	}

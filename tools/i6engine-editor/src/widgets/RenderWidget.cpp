@@ -57,6 +57,9 @@ namespace widgets {
 			mouseMoveEvent(me);
 			break;
 		}
+		default: {
+			break;
+		}
 		}
 		return QWidget::eventFilter(obj, evt);
 	}

@@ -66,10 +66,10 @@ namespace plugins {
 		if (!in.good()) {
 			return Ogre::DataStreamPtr();
 		}
-		in.seekg(it->second.first, std::ios::beg);
+		in.seekg(std::ifstream::off_type(it->second.first), std::ios::beg);
 		if (!in.eof()) {
 			char * buffer = new char[size_t(it->second.second)];
-			in.read(buffer, it->second.second);
+			in.read(buffer, std::streamsize(it->second.second));
 			std::string compressed(buffer, it->second.second);
 			clockUtils::compression::Compression<clockUtils::compression::algorithm::HuffmanGeneric> decompressor;
 			std::string decompressed = decompressor.decompress(compressed);

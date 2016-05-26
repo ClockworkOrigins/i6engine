@@ -41,6 +41,9 @@ namespace plugins {
          * \return An object created by the factory. The type of the object depends on the factory. In this case it's an i6Archive
          */
 		Ogre::Archive * createInstance(const Ogre::String & name, bool readOnly) override;
+		Ogre::Archive * createInstance(const Ogre::String & name) override {
+			return createInstance(name, true);
+		}
 
 		/**
 		 * \brief returns the type this factory supports

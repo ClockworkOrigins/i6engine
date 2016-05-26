@@ -52,8 +52,8 @@ void packFile(std::ofstream & out, const std::string & file) {
 	uint32_t length = uint32_t(compressed.length());
 	out.write(reinterpret_cast<char *>(&length), sizeof(uint32_t));
 	out.write(reinterpret_cast<char *>(&filenameLength), sizeof(uint32_t));
-	out.write(filename.c_str(), filename.size());
-	out.write(compressed.c_str(), compressed.size());
+	out.write(filename.c_str(), std::streamsize(filename.size()));
+	out.write(compressed.c_str(), std::streamsize(compressed.size()));
 	out.flush();
 }
 

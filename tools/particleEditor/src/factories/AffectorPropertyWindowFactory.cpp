@@ -108,7 +108,7 @@ namespace factories {
 			return new widgets::AffectorPropertyWindow(parent, owner, name);
 		}
 		return nullptr;
-	};
+	}
 
 	/**
 	Create a specific Affector Property Window and propagate the attributes from the AffectorPropertyWindow
@@ -168,7 +168,7 @@ namespace factories {
 			return new widgets::AffectorPropertyWindow(affectorPropertyWindow, owner);
 		}
 		return nullptr;
-	};
+	}
 
 } /* namespace factories */
 } /* namespace particleEditor */

@@ -63,7 +63,7 @@ namespace factories {
 			return new widgets::EmitterPropertyWindow(parent, owner, name);
 		}
 		return 0;
-	};
+	}
 
 	/**
 	Create a specific Emitter Property Window and propagate the attributes from the EmitterPropertyWindow

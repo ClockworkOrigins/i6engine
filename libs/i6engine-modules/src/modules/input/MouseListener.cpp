@@ -29,7 +29,7 @@
 namespace i6e {
 namespace modules {
 
-	MouseListener::MouseListener() : _lastWheelPos(), _keyStates(), _objInputKeyFunctions() {
+	MouseListener::MouseListener() : _keyStates(), _keyTexts(), _objInputKeyFunctions(), _lastWheelPos() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 	}
 
@@ -50,7 +50,7 @@ namespace modules {
 
 	bool MouseListener::mousePressed(const OIS::MouseEvent &, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		api::KeyCode kc = api::KeyCode(size_t(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1);
+		api::KeyCode kc = api::KeyCode(int(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1);
 		if (_keyStates[size_t(kc)] == api::KeyState::KEY_RELEASED) {
 			_keyStates[size_t(kc)] = api::KeyState::KEY_PRESSED;
 			triggerKeyFunction(kc, api::KeyState::KEY_PRESSED);
@@ -68,7 +68,7 @@ namespace modules {
 
 	bool MouseListener::mouseReleased(const OIS::MouseEvent &, OIS::MouseButtonID objButtonID) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		api::KeyCode kc = api::KeyCode(size_t(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1);
+		api::KeyCode kc = api::KeyCode(int(api::KeyCode::MOUSEBUTTONS) + objButtonID - OIS::MB_Left + 1);
 		if (_keyStates[size_t(kc)] == api::KeyState::KEY_HOLD || _keyStates[size_t(kc)] == api::KeyState::KEY_PRESSED) {
 			_keyStates[size_t(kc)] = api::KeyState::KEY_RELEASED;
 			triggerKeyFunction(kc, api::KeyState::KEY_RELEASED);

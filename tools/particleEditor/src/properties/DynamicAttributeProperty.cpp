@@ -254,7 +254,7 @@ namespace properties {
 			} else if (dynAttr->getInterpolationType() == ParticleUniverse::InterpolationType::IT_SPLINE) {
 				comboBox->setCurrentIndex(1);
 			}
-			QLabel * l = new QLabel(QApplication::tr("Interpolation Type"), _widget);
+			l = new QLabel(QApplication::tr("Interpolation Type"), _widget);
 			_layout->addWidget(l, 1, 0);
 			_layout->addWidget(comboBox, 1, 1);
 			_widgets.push_back(comboBox);

@@ -19,6 +19,8 @@
 
 #include "i6engine/modules/graphics/graphicswidgets/MovableText.h"
 
+#include <cfloat>
+
 #include "OGRE/Overlay/OgreOverlayManager.h"
 
 #include "OGRE/Overlay/OgreFontManager.h"
@@ -29,7 +31,7 @@ namespace modules {
 #define POS_TEX_BINDING    0
 #define COLOUR_BINDING     1
 
-	MovableText::MovableText(const Ogre::String & name, const Ogre::String & caption, const Ogre::String & fontName, Ogre::Real charHeight, const Ogre::ColourValue & color): _camera(nullptr), _renderWindow(nullptr), _font(nullptr), _name(name), _caption(caption), _fontName(fontName), _charHeight(charHeight), _color(color), _type("MovableText"), _timeUntilNextToggle(0), _spaceWidth(0), _updateColours(true), _onTop(false), _horizontalAlignment(H_CENTER), _verticalAlignment(V_ABOVE), _globalTranslation(0.0), _localTranslation(0.0) {
+	MovableText::MovableText(const Ogre::String & name, const Ogre::String & caption, const Ogre::String & fontName, Ogre::Real charHeight, const Ogre::ColourValue & color): _fontName(fontName), _type("MovableText"), _name(name), _caption(caption), _horizontalAlignment(H_CENTER), _verticalAlignment(V_ABOVE), _color(color), _renderOp(), _AABB(), _lightList(), _charHeight(charHeight), _spaceWidth(0), _needUpdate(false), _updateColours(true), _onTop(false), _timeUntilNextToggle(0), _radius(), _globalTranslation(0.0), _localTranslation(0.0), _camera(nullptr), _renderWindow(nullptr), _font(nullptr), _material(), _backgroundMaterial() {
 		assert(name != "" && "Trying to create MovableText without name");
 		assert(caption != "" && "Trying to create MovableText without caption");
 
@@ -95,14 +97,14 @@ namespace modules {
 	}
 
 	void MovableText::setCharacterHeight(Ogre::Real height) {
-		if (height != _charHeight) {
+		if (std::abs(height - _charHeight) > DBL_EPSILON) {
 			_charHeight = height;
 			_needUpdate = true;
 		}
 	}
 
 	void MovableText::setSpaceWidth(Ogre::Real width) {
-		if (width != _spaceWidth) {
+		if (std::abs(width - _spaceWidth) > DBL_EPSILON) {
 			_spaceWidth = width;
 			_needUpdate = true;
 		}
@@ -198,7 +200,7 @@ namespace modules {
 
 		Ogre::Real spaceWidth = _spaceWidth;
 		// Derive space width from a capital A
-		if (spaceWidth == 0) {
+		if (std::abs(spaceWidth) < DBL_EPSILON) {
 			spaceWidth = _font->getGlyphAspectRatio('A') * _charHeight * 2.0;
 		}
 
@@ -215,15 +217,21 @@ namespace modules {
 
 		Ogre::Real verticalOffset = 0;
 		switch (_verticalAlignment) {
-		case MovableText::V_ABOVE:
+		case MovableText::V_ABOVE: {
 			verticalOffset = _charHeight;
 			break;
-		case MovableText::V_CENTER:
+		}
+		case MovableText::V_CENTER: {
 			verticalOffset = 0.5*_charHeight;
 			break;
-		case MovableText::V_BELOW:
+		}
+		case MovableText::V_BELOW: {
 			verticalOffset = 0;
 			break;
+		}
+		default: {
+			break;
+		}
 		}
 		// Raise the first line of the caption
 		top += verticalOffset;
@@ -236,10 +244,11 @@ namespace modules {
 			if (newLine) {
 				len = 0.0f;
 				for (Ogre::String::iterator j = i; j != iend && *j != '\n'; j++) {
-					if (*j == ' ')
+					if (*j == ' ') {
 						len += spaceWidth;
-					else
-						len += _font->getGlyphAspectRatio((unsigned char) *j) * _charHeight * 2.0;
+					} else {
+						len += _font->getGlyphAspectRatio(static_cast<unsigned char>(*j)) * _charHeight * 2.0;
+					}
 				}
 				newLine = false;
 			}
@@ -265,10 +274,10 @@ namespace modules {
 				continue;
 			}
 
-			Ogre::Real horiz_height = _font->getGlyphAspectRatio((unsigned char) *i);
+			Ogre::Real horiz_height = _font->getGlyphAspectRatio(static_cast<unsigned char>(*i));
 			Ogre::Real u1, u2, v1, v2;
 			Ogre::Font::UVRect utmp;
-			utmp = _font->getGlyphTexCoords((unsigned char) *i);
+			utmp = _font->getGlyphTexCoords(static_cast<unsigned char>(*i));
 			u1 = utmp.left;
 			u2 = utmp.right;
 			v1 = utmp.top;
@@ -442,7 +451,7 @@ namespace modules {
 		Ogre::Root::getSingleton().convertColourValue(_color, &color);
 		Ogre::HardwareVertexBufferSharedPtr vbuf = _renderOp.vertexData->vertexBufferBinding->getBuffer(COLOUR_BINDING);
 		Ogre::RGBA * pDest = static_cast<Ogre::RGBA *>(vbuf->lock(Ogre::HardwareBuffer::HBL_DISCARD));
-		for (int i = 0; i < (int) _renderOp.vertexData->vertexCount; ++i) {
+		for (size_t i = 0; i < _renderOp.vertexData->vertexCount; ++i) {
 			*pDest++ = color;
 		}
 		vbuf->unlock();

@@ -156,7 +156,7 @@ namespace api {
 
 		CEGUI::Texture & texture = tt.getTexture();
 		const CEGUI::Sizef tex_sz(texture.getSize());
-		const size_t reqd_capacity = int(tex_sz.d_width) * int(tex_sz.d_height);
+		const size_t reqd_capacity = size_t(tex_sz.d_width) * size_t(tex_sz.d_height);
 
 		// see if we need to reallocate buffer:
 		if (reqd_capacity > _hitBufferCapacity) {

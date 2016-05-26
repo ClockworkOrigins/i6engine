@@ -39,7 +39,6 @@ namespace connections {
 	}
 
 	void LineConnector::updatePath() {
-		QPoint points[4];
 		qreal x1 = _first->pos().x();
 		qreal y1 = _first->pos().y();
 		qreal x2 = _second->pos().x();

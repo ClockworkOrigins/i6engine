@@ -78,7 +78,7 @@ namespace Test_ObjectFacade {
 		EXPECT_EQ(0, EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap().size());
 		std::unique_lock<std::mutex> ul(_lock);
 		EngineController::GetSingletonPtr()->getObjectFacade()->createGO("JengaStick", objects::GOTemplate(), EngineController::GetSingletonPtr()->getUUID(), false, [this](GOPtr go) {
-			std::unique_lock<std::mutex> ul(_lock);
+			std::unique_lock<std::mutex> ul2(_lock);
 			EXPECT_EQ("JengaStick", go->getType());
 			_conditionVariable.notify_one();
 		});
@@ -95,7 +95,7 @@ namespace Test_ObjectFacade {
 			params.insert(std::make_pair("speed", "1.0"));
 			EXPECT_TRUE(go->getGOC(components::ComponentTypes::FollowComponent) == nullptr);
 			EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(go->getID(), -1, "Follow", params, [this, go](ComPtr c) {
-				std::unique_lock<std::mutex> ul(_lock);
+				std::unique_lock<std::mutex> ul2(_lock);
 				EXPECT_TRUE(go->getGOC(components::ComponentTypes::FollowComponent) != nullptr);
 				EXPECT_TRUE(go == c->getOwnerGO());
 				_conditionVariable.notify_one();

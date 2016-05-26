@@ -88,10 +88,10 @@ int main(int argc, char ** argv) {
 		chs->serializeSingleShape(serializer);
 		serializer->finishSerialization();
 
-		std::vector<char> data(serializer->getCurrentBufferSize());
+		std::vector<char> data(size_t(serializer->getCurrentBufferSize()));
 
 		for (size_t i = 0; i < data.size(); i++) {
-			data[i] = serializer->getBufferPointer()[i];
+			data[i] = char(serializer->getBufferPointer()[i]);
 		}
 
 		i6e::modules::MeshStriderCollisionShapeData * mscsd = new i6e::modules::MeshStriderCollisionShapeData(data);

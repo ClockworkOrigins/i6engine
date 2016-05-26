@@ -71,7 +71,7 @@ namespace widgets {
 		emit triggerGameAction(int(_index));
 	}
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _level(), _initializationPlugins(), _changed(false), _keyStates(), _engineThread(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _saveObjectPlugins(), _loadLevelPlugins(), _objectTypePlugins(), _startGame(-1), _inGame(false), _progressDialog(nullptr), _resetEngineController(false), _isTmpLevel(false), _originalLevel(), _isNewLevel(false) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _engineThread(), _level(), _initializationPlugins(), _changed(false), _keyStates(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _saveObjectPlugins(), _loadLevelPlugins(), _objectTypePlugins(), _resetEngineController(false), _startGame(-1), _inGame(false), _progressDialog(nullptr), _isTmpLevel(false), _originalLevel(), _isNewLevel(false) {
 		setupUi(this);
 
 		qRegisterMetaType<int64_t>("int64_t");
@@ -657,10 +657,11 @@ namespace widgets {
 			_engineThread.join();
 		}
 		api::EngineController::GetSingleton().reset();
-		_runGamePlugins[_startGame]->initializeSubSystems(reinterpret_cast<HWND>(_renderWidget->winId()));
-		api::EngineController::GetSingletonPtr()->registerApplication(*_runGamePlugins[_startGame]);
-		_runGamePlugins[_startGame]->setLevel(_level.toStdString());
-		_runGamePlugins[_startGame]->setFinalizeCallback(std::bind(&MainWindow::Finalize, this));
+		assert(_startGame >= 0);
+		_runGamePlugins[size_t(_startGame)]->initializeSubSystems(reinterpret_cast<HWND>(_renderWidget->winId()));
+		api::EngineController::GetSingletonPtr()->registerApplication(*_runGamePlugins[size_t(_startGame)]);
+		_runGamePlugins[size_t(_startGame)]->setLevel(_level.toStdString());
+		_runGamePlugins[size_t(_startGame)]->setFinalizeCallback(std::bind(&MainWindow::Finalize, this));
 		_engineThread = std::thread(&api::EngineController::start, api::EngineController::GetSingletonPtr());
 		_startGame = -1;
 	}
