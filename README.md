@@ -68,9 +68,9 @@ The doxygen documentation can be found on our homepage: http://clockwork-origins
 
 **LINUX**
 
- * First of all, build all the dependencies. This will take some time (~ 15 minutes)
+ * First of all, build all the dependencies. This will take some time.
  * There are several build-scripts, but build-dependencies.sh will run them all
-* You can run the scripts individually, e.g. if you want to rebuild 1 library, but be careful
+ * You can run the scripts individually, e.g. if you want to rebuild 1 library, but be careful
  * some libraries depends on others (read comments in build-dependencies)
 
 cd dependencies
@@ -87,7 +87,7 @@ make
 
 **WINDOWS**
 
- * First of all, build all the dependencies. This will take some time
+ * First of all, build all the dependencies. This will take some time.
  * There are several build-scripts, but build-dependencies.bat will run them all
  * You can run the scripts individually, e.g. if you want to rebuild 1 library, but be careful
  * some libraries depends on others (read comments in build-dependencies)

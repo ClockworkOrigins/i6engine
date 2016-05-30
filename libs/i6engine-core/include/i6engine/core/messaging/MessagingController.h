@@ -97,7 +97,6 @@ namespace core {
 		/**
 		 * \brief This method registers a message type with the given message subscriber and the given Method. It is normally called via the macro ISIXE_REGISTERMESSAGETYPE.
 		 *
-		 * \todo Calling this method directly allows it, that objects let other objects subscribe to certain message types.
 		 * \param strMessageType Name of the new message type.
 		 * \param objMessageSubscriber The new receiver of messages of the given type (should be the caller by itself).
 		 * \param bolNetworking Flag if the message type should sent over the network.

@@ -63,7 +63,6 @@ namespace modules {
 		/**
 		 * \brief Handles messages for Components
 		 * \param objMessage Any message on the channel
-		 * \todo Code for Create and Update almost identical. Someone should check this.
 		 */
 		void NewsComponent(const api::GameMessage::Ptr & msg) const;
 

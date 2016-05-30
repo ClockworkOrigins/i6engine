@@ -56,8 +56,6 @@ namespace api {
 		/**
 		 * \brief It returns a pointer to the GameObject with GUID guid.
 		 * If there is no GameObject with GUID guid, NULL is returned.
-		 * \deprecated don't use this method or don't call any function on the pointer. This 
-		 * is highly thread unsafe...
 		 * \param[in] GameObjectID
 		 * \return A pointer to the wanted GameObject
 		 */
@@ -65,22 +63,20 @@ namespace api {
 
 		/**
 		 * \brief It returns _GOList.
-		 * \deprecated don't use this method or don't call any function on the pointer. This 
-		 * is highly thread unsafe..
 		 * \return _GOList
 		 */
 		std::unordered_map<int64_t, GOPtr> getGOMap() const;
 
 		/**
 		 * \brief returns a vector with all GameObjects of the given type
-		 * \param[in] type the list of types given in one string, using ; as delimiter
+		 * \param[in] types the list of types given in one string, using ; as delimiter
 		 * \returns list
 		 */
 		std::vector<GOPtr> getAllObjectsOfType(const std::string & types) const;
 
 		/**
 		 * \brief returns a vector with all GameObjects of the given type
-		 * \param[in] type the list of types given as a vector
+		 * \param[in] types the list of types given as a vector
 		 * \returns list
 		 */
 		std::vector<GOPtr> getAllObjectsOfType(const std::vector<std::string> & types) const;

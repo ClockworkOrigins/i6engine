@@ -57,7 +57,6 @@ namespace modules {
 
 		/**
 		 * \brief Handles incoming messages.
-		 * \todo PhyNode Create and Update Method have identical Code.
 		 */
 		void News(const api::GameMessage::Ptr & msg) const;
 
