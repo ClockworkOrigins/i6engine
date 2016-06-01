@@ -18,3 +18,4 @@
 configure_file(registerSubsystem.tex ${CMAKE_CURRENT_BINARY_DIR}/registerSubsystem.tex COPYONLY)
 
 add_custom_target(AdvancedTutorialRegisterSubsystem COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/registerSubsystem.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET AdvancedTutorialRegisterSubsystem POST_BUILD COMMAND htlatex ${CMAKE_CURRENT_BINARY_DIR}/registerSubsystem.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})

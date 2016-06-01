@@ -18,3 +18,4 @@
 configure_file(addComponent.tex ${CMAKE_CURRENT_BINARY_DIR}/addComponent.tex COPYONLY)
 
 add_custom_target(AdvancedTutorialAddComponent COMMAND ${PDFLATEX_COMPILER} ${CMAKE_CURRENT_BINARY_DIR}/addComponent.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET AdvancedTutorialAddComponent POST_BUILD COMMAND htlatex ${CMAKE_CURRENT_BINARY_DIR}/addComponent.tex WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
