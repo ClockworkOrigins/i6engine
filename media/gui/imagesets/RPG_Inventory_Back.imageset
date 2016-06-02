@@ -1,4 +1,4 @@
 <?xml version="1.0" ?>
-<Imageset name="RPG_Inventory_Back" imagefile="RPG_Inventory_Back.tga" nativeHorzRes="16" nativeVertRes="16" autoScaled="true" version="2">
-	<Image name="Back" xPos="0" yPos="0" width="16" height="16" />
+<Imageset name="RPG_Inventory_Back" imagefile="ui_inv_slot_frame_bg.png" nativeHorzRes="256" nativeVertRes="256" autoScaled="true" version="2">
+	<Image name="Back" xPos="0" yPos="0" width="256" height="256" />
 </Imageset>

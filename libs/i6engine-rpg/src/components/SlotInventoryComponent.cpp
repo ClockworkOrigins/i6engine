@@ -154,6 +154,7 @@ namespace components {
 
 		for (uint16_t i = 0; i < _rows; i++) {
 			for (uint16_t j = 0; j < _columns; j++) {
+				gf->addImage("SlotInventory_Background_" + std::to_string(_id) + "_" + std::to_string(i) + "_" + std::to_string(j), "RPG/StaticImage", "RPG_Inventory_Back", "Back", startPos + j * width, 0.025 + i * height, width, height);
 				gf->addImage("SlotInventory_BackgroundSlot_" + std::to_string(_id) + "_" + std::to_string(i) + "_" + std::to_string(j), "RPG/StaticImage", "RPG_Inventory_Slot", "Slot", startPos + j * width, 0.025 + i * height, width, height);
 				gf->enableDropTarget("SlotInventory_BackgroundSlot_" + std::to_string(_id) + "_" + std::to_string(i) + "_" + std::to_string(j), true, [this, i, j](std::string s) {
 					if (_slots[i][j] == UINT16_MAX) {
@@ -229,6 +230,7 @@ namespace components {
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		for (uint16_t i = 0; i < _rows; i++) {
 			for (uint16_t j = 0; j < _columns; j++) {
+				gf->deleteWidget("SlotInventory_Background_" + std::to_string(_id) + "_" + std::to_string(i) + "_" + std::to_string(j));
 				gf->deleteWidget("SlotInventory_BackgroundSlot_" + std::to_string(_id) + "_" + std::to_string(i) + "_" + std::to_string(j));
 			}
 		}

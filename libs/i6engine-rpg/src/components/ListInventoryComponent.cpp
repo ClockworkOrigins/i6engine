@@ -116,7 +116,7 @@ namespace components {
 		double height = (width * res.width) / res.height;
 
 		_slotCount = 0;
-		for (uint32_t i = 0; 0.1 + height * (i / _columns + 1) < 0.8; i++) {
+		for (uint32_t i = 0; 0.1 + height * (i / _columns + 1) < 0.6; i++) {
 			std::string namePrefix = "Inventory_" + std::to_string(_id) + "_" + std::to_string(i) + "_";
 			gf->addImage(namePrefix + "Back", "RPG/StaticImage", "RPG_Inventory_Back", "Back", startPos + width * (i % _columns), 0.1 + height * (i / _columns), width, height);
 			_slotCount++;
@@ -126,7 +126,7 @@ namespace components {
 		}
 
 		// info screen in the middle of the bottom
-		gf->addImage("Inventory_InfoScreen_" + std::to_string(_id), "RPG/StaticImage", "RPG", "TbM_Filling", 0.25, 0.8, 0.5, 0.15);
+		gf->addImage("Inventory_InfoScreen_" + std::to_string(_id), "RPG/StaticImage", "RPG", "TbM_Filling", 0.25, 0.6, 0.5, 0.15);
 		if (!_active) {
 			gf->setVisibility("Inventory_InfoScreen_" + std::to_string(_id), false);
 		}
