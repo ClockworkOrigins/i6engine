@@ -164,7 +164,7 @@ namespace modules {
 			}
 			_keyboardListener->setKeyFunction(static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->code, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->type, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->func);
 			if (_mouseListener == nullptr) {
-				ISIXE_THROW_API("InputManager", "No KeyBoardListener available. Have you registered GraphicsSubSystem?")
+				ISIXE_THROW_API("InputManager", "No MouseListener available. Have you registered GraphicsSubSystem?")
 			}
 			_mouseListener->setKeyFunction(static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->code, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->type, static_cast<api::input::Input_SubscribeKeyEvent_Create *>(msg->getContent())->func);
 		}
