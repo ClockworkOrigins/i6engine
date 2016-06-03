@@ -40,6 +40,8 @@ namespace widgets {
 	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _dialogListWidget(new DialogListWidget(this)), _npcListWidget(new NpcListWidget(this)), _dialogHeaderWidget(new DialogHeaderWidget(this)), _scriptLanguagePlugins() {
 		setupUi(this);
 
+		setWindowIcon(QIcon(":/icon.png"));
+
 		showMaximized();
 
 		setWindowTitle(QString("DialogCreator (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));

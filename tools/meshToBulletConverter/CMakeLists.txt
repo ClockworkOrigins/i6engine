@@ -29,7 +29,13 @@ set(meshToBulletConverterSrc
 	MeshStrider.cpp
 )
 
-add_executable(meshToBulletConverter ${meshToBulletConverterSrc})
+IF(WIN32)
+   set(WINDOWS_RC_FILES
+         icon.rc
+         )
+ENDIF(WIN32)
+
+add_executable(meshToBulletConverter ${meshToBulletConverterSrc} ${WINDOWS_RC_FILES})
 set_target_properties(meshToBulletConverter PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(meshToBulletConverter ${BULLET_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} i6engine-modules)

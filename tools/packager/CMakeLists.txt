@@ -25,7 +25,13 @@ set(i6ArchiverSrc
 	main.cpp
 )
 
-add_executable(i6Archiver ${i6ArchiverSrc})
+IF(WIN32)
+   set(WINDOWS_RC_FILES
+         icon.rc
+         )
+ENDIF(WIN32)
+
+add_executable(i6Archiver ${i6ArchiverSrc} ${WINDOWS_RC_FILES})
 set_target_properties(i6Archiver PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(i6Archiver ${BOOST_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES})

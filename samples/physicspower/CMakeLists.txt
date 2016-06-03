@@ -31,7 +31,14 @@ set(SamplePhysicsPowerSrc
 	src/PhysicsPowerApplication.cpp
 )
 
-add_executable(SamplePhysicsPower ${GUI_TYPE} ${SamplePhysicsPowerSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SamplePhysicsPower ${GUI_TYPE} ${SamplePhysicsPowerSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SamplePhysicsPower PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SamplePhysicsPower SampleCommon)

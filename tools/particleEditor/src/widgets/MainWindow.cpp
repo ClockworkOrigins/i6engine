@@ -41,6 +41,8 @@ namespace widgets {
 	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _toolBarEdit(nullptr), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render), _particleSystemCounter(0), _leftLayout(nullptr), _currentPropertyWindow(nullptr) {
 		setupUi(this);
 
+		setWindowIcon(QIcon(":/icon.png"));
+
 		showMaximized();
 
 		setWindowTitle(QString("ParticleEditor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));

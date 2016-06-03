@@ -74,6 +74,8 @@ namespace widgets {
 	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _engineThread(), _level(), _initializationPlugins(), _changed(false), _keyStates(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _saveObjectPlugins(), _loadLevelPlugins(), _objectTypePlugins(), _resetEngineController(false), _startGame(-1), _inGame(false), _progressDialog(nullptr), _isTmpLevel(false), _originalLevel(), _isNewLevel(false) {
 		setupUi(this);
 
+		setWindowIcon(QIcon(":/icon.png"));
+
 		qRegisterMetaType<int64_t>("int64_t");
 
 		showMaximized();

@@ -5,5 +5,6 @@
 	<file alias="images/save.png">../../../media/textures/save.png</file>
 	<file alias="images/close.png">../../../media/textures/close.png</file>
 	<file alias="images/config_general.png">../../../media/textures/config_general.png</file>
+	<file alias="icon.png">../../../config/i6engine_logo.png</file>
 </qresource>
 </RCC>

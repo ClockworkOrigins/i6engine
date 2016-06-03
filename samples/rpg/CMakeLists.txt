@@ -35,7 +35,14 @@ set(SampleRPGSrc
 	src/RPGApplication.cpp
 )
 
-add_executable(SampleRPG ${GUI_TYPE} ${SampleRPGSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleRPG ${GUI_TYPE} ${SampleRPGSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleRPG PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleRPG i6engine-rpg)

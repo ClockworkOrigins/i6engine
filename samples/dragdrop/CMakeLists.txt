@@ -31,7 +31,14 @@ set(SampleDragDropSrc
 	src/DragDropApplication.cpp
 )
 
-add_executable(SampleDragDrop ${GUI_TYPE} ${SampleDragDropSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleDragDrop ${GUI_TYPE} ${SampleDragDropSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleDragDrop PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleDragDrop i6engine-modules)

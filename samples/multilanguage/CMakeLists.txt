@@ -31,7 +31,14 @@ set(SampleMultilanguageSrc
 	src/MultilanguageApplication.cpp
 )
 
-add_executable(SampleMultilanguage ${GUI_TYPE} ${SampleMultilanguageSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleMultilanguage ${GUI_TYPE} ${SampleMultilanguageSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleMultilanguage PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleMultilanguage i6engine-modules)

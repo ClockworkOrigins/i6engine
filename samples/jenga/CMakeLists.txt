@@ -31,7 +31,14 @@ set(SampleJengaSrc
 	src/JengaApplication.cpp
 )
 
-add_executable(SampleJenga ${GUI_TYPE} ${SampleJengaSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleJenga ${GUI_TYPE} ${SampleJengaSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleJenga PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleJenga SampleCommon)

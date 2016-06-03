@@ -80,7 +80,13 @@ QT5_ADD_RESOURCES(QT_RESOURCE_FILES ${ResourceFile})
 # add translations ...
 QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
 
-ADD_EXECUTABLE(i6engine-editor ${GUI_TYPE} ../common/src/Config.cpp ${editorSrc} ${editorUI} ${editorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES})
+IF(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+ENDIF(WIN32)
+
+ADD_EXECUTABLE(i6engine-editor ${GUI_TYPE} ../common/src/Config.cpp ${editorSrc} ${editorUI} ${editorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
 
 target_link_libraries(i6engine-editor i6engine-modules Plugin_EditorTypeAngle Plugin_EditorTypeBool Plugin_EditorTypeDouble Plugin_EditorTypeInteger Plugin_EditorTypeLightType Plugin_EditorTypeMoverInterpolateMode Plugin_EditorTypeMoverInterpolateWay Plugin_EditorTypeMoverPositioning Plugin_EditorTypeQuaternion Plugin_EditorTypeShapeType Plugin_EditorTypeShatterInterest Plugin_EditorTypeString Plugin_EditorTypeVec3 Plugin_EditorTypeVec4 ${QT_LIBRARIES})
 

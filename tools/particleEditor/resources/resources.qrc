@@ -22,5 +22,6 @@
 	<file alias="images/cursor.png">../../../media/textures/cursor.png</file>
 	<file alias="images/close.png">../../../media/textures/close.png</file>
 	<file alias="images/config_general.png">../../../media/textures/config_general.png</file>
+	<file alias="icon.png">../../../config/i6engine_logo.png</file>
 </qresource>
 </RCC>

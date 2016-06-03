@@ -31,7 +31,14 @@ set(SampleShadowSrc
 	src/ShadowApplication.cpp
 )
 
-add_executable(SampleShadow ${GUI_TYPE} ${SampleShadowSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleShadow ${GUI_TYPE} ${SampleShadowSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleShadow PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleShadow SampleCommon)

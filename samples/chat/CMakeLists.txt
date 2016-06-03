@@ -37,12 +37,19 @@ set(SampleChatHostSrc
 	src/ChatApplication.cpp
 )
 
-add_executable(SampleChatClient ${GUI_TYPE} ${SampleChatClientSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleChatClient ${GUI_TYPE} ${SampleChatClientSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleChatClient PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleChatClient i6engine-modules)
 
-add_executable(SampleChatHost ${GUI_TYPE} ${SampleChatHostSrc})
+add_executable(SampleChatHost ${GUI_TYPE} ${SampleChatHostSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleChatHost PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleChatHost i6engine-modules)

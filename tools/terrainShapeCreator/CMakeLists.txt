@@ -30,7 +30,13 @@ set(terrainShapeCreatorSrc
 	TerrainShapeCreatorApplication.cpp
 )
 
-add_executable(terrainShapeCreator ${terrainShapeCreatorSrc})
+IF(WIN32)
+   set(WINDOWS_RC_FILES
+         icon.rc
+         )
+ENDIF(WIN32)
+
+add_executable(terrainShapeCreator ${terrainShapeCreatorSrc} ${WINDOWS_RC_FILES})
 set_target_properties(terrainShapeCreator PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(terrainShapeCreator ${BULLET_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} i6engine-modules)

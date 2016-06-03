@@ -45,6 +45,8 @@ namespace widgets {
 	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), RPGApplication(), _npcListWidget(nullptr), _npcEditWidget(nullptr), _npcRenderWidget(nullptr) {
 		setupUi(this);
 
+		setWindowIcon(QIcon(":/icon.png"));
+
 		setWindowTitle(QString("NPCCreator (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
 
 		_npcListWidget = new NPCListWidget(this);

@@ -298,7 +298,13 @@ QT5_ADD_RESOURCES(QT_RESOURCE_FILES ${ResourceFile})
 # add translations ...
 QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
 
-ADD_EXECUTABLE(ParticleEditor ${GUI_TYPE} ../common/src/Config.cpp ${particleEditorSrc} ${particleEditorUI} ${particleEditorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES})
+IF(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+ENDIF(WIN32)
+
+ADD_EXECUTABLE(ParticleEditor ${GUI_TYPE} ../common/src/Config.cpp ${particleEditorSrc} ${particleEditorUI} ${particleEditorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
 
 target_link_libraries(ParticleEditor i6engine-modules ${QT_LIBRARIES})
 

@@ -25,7 +25,13 @@ set(includeGraphBuilderSrc
 	main.cpp
 )
 
-add_executable(includeGraphBuilder ${includeGraphBuilderSrc})
+IF(WIN32)
+   set(WINDOWS_RC_FILES
+         icon.rc
+         )
+ENDIF(WIN32)
+
+add_executable(includeGraphBuilder ${includeGraphBuilderSrc} ${WINDOWS_RC_FILES})
 set_target_properties(includeGraphBuilder PROPERTIES LINKER_LANGUAGE CXX)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/includeGraphBuilder.bat.in ${CMAKE_BINARY_DIR}/bin/includeGraphBuilder.bat @ONLY)

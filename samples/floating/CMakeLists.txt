@@ -31,7 +31,14 @@ set(SampleFloatingSrc
 	src/FloatingApplication.cpp
 )
 
-add_executable(SampleFloating ${GUI_TYPE} ${SampleFloatingSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleFloating ${GUI_TYPE} ${SampleFloatingSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleFloating PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleFloating SampleCommon)

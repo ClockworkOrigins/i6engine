@@ -31,7 +31,14 @@ set(SampleTooltipSrc
 	src/TooltipApplication.cpp
 )
 
-add_executable(SampleTooltip ${GUI_TYPE} ${SampleTooltipSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleTooltip ${GUI_TYPE} ${SampleTooltipSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleTooltip PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleTooltip i6engine-modules)

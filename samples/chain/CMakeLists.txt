@@ -31,7 +31,14 @@ set(SampleChainSrc
 	src/ChainApplication.cpp
 )
 
-add_executable(SampleChain ${GUI_TYPE} ${SampleChainSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleChain ${GUI_TYPE} ${SampleChainSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleChain PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleChain SampleCommon)

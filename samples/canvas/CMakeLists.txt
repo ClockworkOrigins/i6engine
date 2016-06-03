@@ -31,7 +31,14 @@ set(SampleCanvasSrc
 	src/CanvasApplication.cpp
 )
 
-add_executable(SampleCanvas ${GUI_TYPE} ${SampleCanvasSrc})
+if(WIN32)
+   set(WINDOWS_RC_FILES
+         resources/icon.rc
+         )
+    source_group("Resources" FILES ${WINDOWS_RC_FILES})
+endif()
+
+add_executable(SampleCanvas ${GUI_TYPE} ${SampleCanvasSrc} ${WINDOWS_RC_FILES})
 set_target_properties(SampleCanvas PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(SampleCanvas i6engine-modules)
