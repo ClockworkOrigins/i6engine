@@ -103,6 +103,7 @@ for /R "@OGRE_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
 for /R "@OPENALSOFT_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
 for /R "@TinyXML_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
 
+xcopy /F "@PYTHON_DLL@" "%usedInstallDir%\bin\python27.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/expat.dll" "%usedInstallDir%\bin\expat.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/FreeImage.dll" "%usedInstallDir%\bin\FreeImage.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/freetype.dll" "%usedInstallDir%\bin\freetype.dll*"
@@ -175,6 +176,7 @@ xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
 xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
 xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
 
+xcopy /F "@PYTHON_DLL@" "%usedInstallDir%\dependencies\python\bin\python27.dll*"
 xcopy /F "@QT_EXPORT_DIR@\bin\icudt54.dll" "%usedInstallDir%\dependencies\Qt\bin\icudt54.dll*"
 xcopy /F "@QT_EXPORT_DIR@\bin\icuin54.dll" "%usedInstallDir%\dependencies\Qt\bin\icuin54.dll*"
 xcopy /F "@QT_EXPORT_DIR@\bin\icuuc54.dll" "%usedInstallDir%\dependencies\Qt\bin\icuuc54.dll*"

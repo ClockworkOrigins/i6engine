@@ -289,6 +289,16 @@ ENDIF(ISIXE_WITH_AUDIO)
 IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
 	find_package(PythonLibs 2.7 REQUIRED)
 	include_directories(${PYTHON_INCLUDE_DIRS})
+
+	IF(WIN32)
+		SET(PYTHON_DLL "$ENV{windir}")
+		IF(64BIT)
+			SET(PYTHON_DLL "${PYTHON_DLL}\\System32")
+		ELSE(64BIT)
+			SET(PYTHON_DLL "${PYTHON_DLL}\\SysWOW64")
+		ENDIF(64BIT)
+		SET(PYTHON_DLL "${PYTHON_DLL}\\python27.dll")
+	ENDIF(WIN32)
 ENDIF()
 
 #----------------------------------------------------
