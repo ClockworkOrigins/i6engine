@@ -101,14 +101,14 @@ ELSE()
 ENDIF()
 
 # Setting last version
-SET(LAST_VERSION_MAJOR 0)
-SET(LAST_VERSION_MINOR 9)
+SET(LAST_VERSION_MAJOR 1)
+SET(LAST_VERSION_MINOR 0)
 SET(LAST_VERSION_PATCH 0)
 
 # Setting current version
 SET(VERSION_MAJOR 1)
 SET(VERSION_MINOR 0)
-SET(VERSION_PATCH 0)
+SET(VERSION_PATCH 1)
 
 #########################################################################
 # Global Macros and Definitions
