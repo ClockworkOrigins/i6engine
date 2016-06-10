@@ -74,12 +74,15 @@ The doxygen documentation can be found on our homepage: http://clockwork-origins
  * some libraries depends on others (read comments in build-dependencies)
 
 cd dependencies
+
 ./build-dependencies.sh
 
  * Go back to the main directory, run cmake with the appropriate options (see infos below) and finally make
 
 cd ..
+
 cmake .
+
 make
 
  * now, you'll find the executables in the bin subdirectory and can run it
@@ -102,11 +105,13 @@ make
  * and move to i6engine directory. Then just follow the next steps:
 
 cd dependencies
+
 build-dependencies.bat
 
  * Go back to the main directory, run cmake with the appropriate options (see infos below) and you get your Visual Studio project
 
 cd ..
+
 cmake .
 
  * now you find a i6engine.sln file you can open in Visual Studio. You can compile it using F7. After this, all library files
