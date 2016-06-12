@@ -180,11 +180,10 @@ namespace modules {
 				t._params["identifier"] = t._identifier;
 
 				api::ComPtr c = _compFactory->createGOC(t._id, t._template, t._params, go);
-				c->setSync(!t._owner);
-
 				if (c == nullptr) {
 					ISIXE_THROW_FAILURE("GOFactory", "couldn't create Component!");
 				}
+				c->setSync(!t._owner);
 			}
 		}
 
@@ -194,9 +193,9 @@ namespace modules {
 		// add NetworkSenderComponent if sending object and Multiplayer
 		if (sender && api::EngineController::GetSingletonPtr()->getType() != api::GameType::SINGLEPLAYER) {
 			api::ComPtr nsc = utils::make_shared<api::NetworkSenderComponent, api::Component>();
-			go->setGOC(nsc);
-			nsc->setOwnerGO(go);
-			nsc->Init();
+			if (go->setGOC(nsc)) {
+				nsc->Init();
+			}
 		}
 #endif
 

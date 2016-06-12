@@ -115,7 +115,7 @@ namespace api {
 		return result;
 	}
 
-	void GameObject::setGOC(const ComPtr & objNewGOC) {
+	bool GameObject::setGOC(const ComPtr & objNewGOC) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		// Check, if the new GOC is nullptr
 		if (objNewGOC == nullptr) {
@@ -127,7 +127,7 @@ namespace api {
 
 		// Check, if GameObject already has a GOComponent with the family id of objNewGOC
 		ComPtr objOldGOC = getGOC(famID);
-
+		bool ret = true;
 		if (objOldGOC != nullptr) {
 			std::pair<AddStrategy, int64_t> add = objOldGOC->howToAdd(objNewGOC);
 			switch (add.first) {
@@ -153,6 +153,7 @@ namespace api {
 				break;
 			}
 			case AddStrategy::REJECT: {
+				ret = false;
 				break;
 			}
 			default: {
@@ -167,6 +168,7 @@ namespace api {
 			_objComponents[famID] = objNewGOC;
 			objNewGOC->setOwnerGO(_self);
 		}
+		return ret;
 	}
 
 	void GameObject::clearGOCs() {
@@ -256,8 +258,9 @@ namespace api {
 					attributeMap params = static_cast<components::Component_Create_Create *>(msg->getContent())->params;
 
 					ComPtr c = _componentFunc(compID, templ, params, _self);
-
-					c->Init();
+					if (c != nullptr) {
+						c->Init();
+					}
 				} else if (msg->getSubtype() == components::ComCreateCallback) {
 					// Create new Component
 					int64_t compID = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->_id;
@@ -266,7 +269,9 @@ namespace api {
 					boost::function<void(ComPtr)> callback = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->callback;
 
 					ComPtr c = _componentFunc(compID, templ, params, _self);
-					c->Init();
+					if (c != nullptr) {
+						c->Init();
+					}
 					callback(c);
 				}
 			} else if (msg->getMethod() == core::Method::Update) {

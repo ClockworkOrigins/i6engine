@@ -136,10 +136,11 @@ namespace api {
 		/**
 		 * \brief Inserts objNewGOC into the component table.
 		 * If a GOComponent of the same type already exists, it will be replaced.
-		 * \param[in] objNewGOC a GOComponent* argument
+		 * \param[in] objNewGOC a GOComponent argument
 		 * \throws ISIXE_THROW_FAILURE when objNewGOC is NULL
+		 * \return returns true, if the Component really was added, otherwise false. If false is returned, no Init must be called
 		 */
-		void setGOC(const ComPtr & objNewGOC);
+		bool setGOC(const ComPtr & objNewGOC);
 
 		/**
 		 * \brief Remove all GOCs held by the component table.
