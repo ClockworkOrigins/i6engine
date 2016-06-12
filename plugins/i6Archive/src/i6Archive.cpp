@@ -21,8 +21,10 @@
 
 #include <fstream>
 #include <regex>
-#include <thread>
 
+#include "i6engine/utils/Exceptions.h"
+
+#include "clockUtils/errors.h"
 #include "clockUtils/compression/Compression.h"
 #include "clockUtils/compression/algorithm/HuffmanGeneric.h"
 
@@ -72,7 +74,10 @@ namespace plugins {
 			in.read(buffer, std::streamsize(it->second.second));
 			std::string compressed(buffer, it->second.second);
 			clockUtils::compression::Compression<clockUtils::compression::algorithm::HuffmanGeneric> decompressor;
-			std::string decompressed = decompressor.decompress(compressed);
+			std::string decompressed;
+			if (clockUtils::ClockError::SUCCESS != decompressor.decompress(compressed, decompressed)) {
+				ISIXE_THROW_FAILURE("i6Archive", "Failed to decompress file");
+			}
 			char * realData = new char[decompressed.size()];
 			memcpy(realData, decompressed.c_str(), decompressed.size());
 			Ogre::DataStream * ds = new Ogre::MemoryDataStream(filename, realData, decompressed.size(), true, true);

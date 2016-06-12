@@ -27,23 +27,21 @@
 
 #include "TerrainShapeCreatorApplication.h"
 
+#ifdef max
+	#undef max
+#endif
+
 #include "clockUtils/argParser/ArgumentParser.h"
 
 int main(int argc, char ** argv) {
-	REGISTER_VARIABLE(std::string, goTemplate, "", "Template of the terrain object the collision shape shall be created for");
-	REGISTER_VARIABLE(std::string, shape, "", "The collision shape file where the export shalls go to including an optional path");
+	REGISTER_VARIABLE_REQUIRED(std::string, goTemplate, g, "", "Template of the terrain object the collision shape shall be created for");
+	REGISTER_VARIABLE_REQUIRED(std::string, shape, s, "", "The collision shape file where the export shalls go to including an optional path");
 
 	if (PARSE_COMMANDLINE() != clockUtils::ClockError::SUCCESS) {
 		std::cerr << GETLASTPARSERERROR() << std::endl;
 		return 1;
 	} else if (HELPSET()) {
 		std::cout << GETHELPTEXT() << std::endl;
-	} else if (!goTemplate.isSet()) {
-		std::cerr << "Parameter 'goTemplate' not set!" << std::endl;
-		return 1;
-	} else if (!shape.isSet()) {
-		std::cerr << "Parameter 'shape' not set!" << std::endl;
-		return 1;
 	} else {
 		std::cout << "Initializing i6engine" << std::endl;
 

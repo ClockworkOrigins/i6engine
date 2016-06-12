@@ -29,32 +29,17 @@
 #include "OGRE/OgreRoot.h"
 
 int main(int argc, char ** argv) {
-	REGISTER_VARIABLE(std::string, prefix, "", "Prefix of the newly created textures");
-	REGISTER_VARIABLE(std::string, diffuseTexture, "", "Diffuse map to be used");
-	REGISTER_VARIABLE(std::string, normalTexture, "", "Normal map to be used");
-	REGISTER_VARIABLE(std::string, specularTexture, "", "Specular map to be used");
-	REGISTER_VARIABLE(std::string, displacementTexture, "", "Displacement map to be used");
+	REGISTER_VARIABLE_REQUIRED(std::string, prefix, p, "", "Prefix of the newly created textures");
+	REGISTER_VARIABLE_REQUIRED(std::string, diffuseTexture, dif, "", "Diffuse map to be used");
+	REGISTER_VARIABLE_REQUIRED(std::string, normalTexture, n, "", "Normal map to be used");
+	REGISTER_VARIABLE_REQUIRED(std::string, specularTexture, s, "", "Specular map to be used");
+	REGISTER_VARIABLE_REQUIRED(std::string, displacementTexture, dis, "", "Displacement map to be used");
 
 	if (PARSE_COMMANDLINE() != clockUtils::ClockError::SUCCESS) {
 		std::cerr << GETLASTPARSERERROR() << std::endl;
 		return 1;
 	} else if (HELPSET()) {
 		std::cout << GETHELPTEXT() << std::endl;
-	} else if (!prefix.isSet()) {
-		std::cerr << "Parameter 'prefix' not set!" << std::endl;
-		return 1;
-	} else if (!diffuseTexture.isSet()) {
-		std::cerr << "Parameter 'diffuseTexture' not set!" << std::endl;
-		return 1;
-	} else if (!normalTexture.isSet()) {
-		std::cerr << "Parameter 'normalTexture' not set!" << std::endl;
-		return 1;
-	} else if (!specularTexture.isSet()) {
-		std::cerr << "Parameter 'specularTexture' not set!" << std::endl;
-		return 1;
-	} else if (!displacementTexture.isSet()) {
-		std::cerr << "Parameter 'displacementTexture' not set!" << std::endl;
-		return 1;
 	} else {
 		std::string ogrePath;
 		// GRAPHIC is correct, because we want the same variable as for ogre

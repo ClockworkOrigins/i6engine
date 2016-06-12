@@ -19,8 +19,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 
 . ./build-common.sh
 
-ARCHIVE="clockutils-0.5.0-src.zip"
-BUILD_DIR="${BUILD_ROOT}/clockutils-0.5.0-src"
+ARCHIVE="clockutils-1.0.0-src.zip"
+BUILD_DIR="${BUILD_ROOT}/clockutils-1.0.0-src"
 
 PREFIX="${DEP_DIR}/clockUtils"
 DEBUG_FLAG="DEBUG"

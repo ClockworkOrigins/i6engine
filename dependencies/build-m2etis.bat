@@ -24,8 +24,8 @@ call build-common.bat %1 %2
 
 SET SOURCE_DIR=%cd%
 SET DEP_DIR=%ROOT_DIR%
-Set ARCHIVE=m2etis-0.4.0-src.zip
-Set BUILD_DIR=%cd%\tmp\m2etis-0.4.0-src
+Set ARCHIVE=m2etis-0.4.0-src-rev121.zip
+Set BUILD_DIR=%cd%\tmp\m2etis-0.4.0-src-rev121
 Set PREFIX=%ROOT_DIR%/%ARCH_DIR%/m2etis
 
 call %CONFIG_BAT%

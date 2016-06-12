@@ -22,10 +22,12 @@
 #include <queue>
 #include <string>
 
+#include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eString.h"
 
 #include "boost/filesystem.hpp"
 
+#include "clockUtils/errors.h"
 #include "clockUtils/compression/Compression.h"
 #include "clockUtils/compression/algorithm/HuffmanGeneric.h"
 
@@ -48,7 +50,10 @@ void packFile(std::ofstream & out, const std::string & file) {
 
 	uint32_t filenameLength = uint32_t(filename.length());
 	clockUtils::compression::Compression<clockUtils::compression::algorithm::HuffmanGeneric> compressor;
-	std::string compressed = compressor.compress(std::string(buffer, size_t(size)));
+	std::string compressed;
+	if (clockUtils::ClockError::SUCCESS != compressor.compress(std::string(buffer, size_t(size)), compressed)) {
+		ISIXE_THROW_FAILURE("i6Archiver", "Failed to compress file: " << filename);
+	}
 	uint32_t length = uint32_t(compressed.length());
 	out.write(reinterpret_cast<char *>(&length), sizeof(uint32_t));
 	out.write(reinterpret_cast<char *>(&filenameLength), sizeof(uint32_t));

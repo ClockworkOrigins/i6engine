@@ -34,7 +34,7 @@ set(plugini6ArchiveSrc
 
 add_library(Plugin_i6Archive SHARED ${plugini6ArchiveSrc})
 
-target_link_libraries(Plugin_i6Archive ${BOOST_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES})
+target_link_libraries(Plugin_i6Archive i6engine-utils ${BOOST_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES})
 
 IF(UNIX)
 	set_target_properties(Plugin_i6Archive PROPERTIES PREFIX "")

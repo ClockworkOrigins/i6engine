@@ -38,20 +38,14 @@
 #include "OGRE/OgreDefaultHardwareBufferManager.h"
 
 int main(int argc, char ** argv) {
-	REGISTER_VARIABLE(std::string, mesh, "", "The mesh file without path to be converted to a collision shape");
-	REGISTER_VARIABLE(std::string, shape, "", "The collision shape file where the export shalls go to including an optional path");
+	REGISTER_VARIABLE_REQUIRED(std::string, mesh, m, "", "The mesh file without path to be converted to a collision shape");
+	REGISTER_VARIABLE_REQUIRED(std::string, shape, s, "", "The collision shape file where the export shalls go to including an optional path");
 
 	if (PARSE_COMMANDLINE() != clockUtils::ClockError::SUCCESS) {
 		std::cerr << GETLASTPARSERERROR() << std::endl;
 		return 1;
 	} else if (HELPSET()) {
 		std::cout << GETHELPTEXT() << std::endl;
-	} else if (!mesh.isSet()) {
-		std::cerr << "Parameter 'mesh' not set!" << std::endl;
-		return 1;
-	} else if (!shape.isSet()) {
-		std::cerr << "Parameter 'shape' not set!" << std::endl;
-		return 1;
 	} else {
 		std::cout << "Initializing Ogre" << std::endl;
 		std::string ogrePath;

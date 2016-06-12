@@ -21,6 +21,7 @@
 
 #include <sstream>
 
+#include "clockUtils/errors.h"
 #include "clockUtils/compression/Compression.h"
 #include "clockUtils/compression/algorithm/HuffmanGeneric.h"
 
@@ -35,12 +36,17 @@ namespace modules {
 		CollisionShapeData * m = const_cast<CollisionShapeData *>(this);
 		arch << m;
 		clockUtils::compression::Compression<clockUtils::compression::algorithm::HuffmanGeneric> compressor;
-		return compressor.compress(ss.str());
+		std::string compressed;
+		return compressor.compress(ss.str(), compressed) == clockUtils::ClockError::SUCCESS ? compressed : "";
 	}
 
 	CollisionShapeData * CollisionShapeData::Deserialize(const std::string & serialized) {
 		clockUtils::compression::Compression<clockUtils::compression::algorithm::HuffmanGeneric> compressor;
-		std::stringstream ss(compressor.decompress(serialized));
+		std::string decompressed;
+		if (clockUtils::ClockError::SUCCESS != compressor.decompress(serialized, decompressed)) {
+			return nullptr;
+		}
+		std::stringstream ss(decompressed);
 		CollisionShapeData * m;
 		boost::archive::text_iarchive arch(ss, boost::archive::no_header | boost::archive::no_codecvt | boost::archive::no_xml_tag_checking | boost::archive::archive_flags::no_tracking);
 		arch >> m;
