@@ -189,7 +189,7 @@ namespace components {
 					if (std::get<ItemEntry::Amount>(p2.second) == 1) {
 						gf->setVisibility(namePrefix + "Amount", false);
 					}
-					gf->subscribeEvent(namePrefix + "Image", "Clicked", std::bind(&ListInventoryComponent::useItem, this, p.first, p2.first, [this]() {
+					gf->subscribeEvent(namePrefix + "Image", i6e::api::gui::SubscribeEvent::Clicked, std::bind(&ListInventoryComponent::useItem, this, p.first, p2.first, [this]() {
 						hide();
 						show();
 					}));

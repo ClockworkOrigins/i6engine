@@ -101,6 +101,10 @@ namespace gui {
 		Right
 	};
 
+	enum class SubscribeEvent {
+		Clicked
+	};
+
 	/**
 	 * \class GUIUpdateMessageStruct
 	 * \brief Used to partially unwrap GUI messages
@@ -333,11 +337,11 @@ namespace gui {
 	 */
 	typedef struct GUI_SubscribeEvent_Update : GUIUpdateMessageStruct {
 		std::string name;
-		std::string event;
+		SubscribeEvent event;
 		boost::function<void(void)> func;
 		GUI_SubscribeEvent_Update() {
 		}
-		GUI_SubscribeEvent_Update(const std::string & n, const std::string & e, const boost::function<void(void)> & f);
+		GUI_SubscribeEvent_Update(const std::string & n, SubscribeEvent e, const boost::function<void(void)> & f);
 		GUI_SubscribeEvent_Update * copy() {
 			return new GUI_SubscribeEvent_Update(*this);
 		}

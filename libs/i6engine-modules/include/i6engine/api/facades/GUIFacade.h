@@ -35,6 +35,7 @@ namespace i6e {
 namespace api {
 namespace gui {
 	enum class Alignment;
+	enum class SubscribeEvent;
 } /* namespace gui */
 
 	class GUIWidget;
@@ -88,7 +89,15 @@ namespace gui {
 		 * \param eventType Type of the event. Note that the window type (e.g. PushButton) has to support this type of event. At the moment there's only one event type namely "Clicked"
 		 * \param ptrEventMethod Everytime the Event occurs on this window, the Method leading to this pointer will be called
 		 */
-		void subscribeEvent(const std::string & windowname, const std::string & eventType, const boost::function<void(void)> & ptrEventMethod) const;
+		ISIXE_DEPRECATED void subscribeEvent(const std::string & windowname, const std::string & eventType, const boost::function<void(void)> & ptrEventMethod) const;
+
+		/**
+		 * \brief Subscribes for an event (Mouse-Click).
+		 * \param windowname The name of the window to be connected for an event. This can be either a manually created window or the name of a window specified in the .layout file
+		 * \param eventType Type of the event. Note that the window type (e.g. PushButton) has to support this type of event. At the moment there's only one event type namely SubscribeEvent::Clicked
+		 * \param ptrEventMethod Everytime the Event occurs on this window, the Method leading to this pointer will be called
+		 */
+		void subscribeEvent(const std::string & windowname, gui::SubscribeEvent eventType, const boost::function<void(void)> & ptrEventMethod) const;
 
 		/**
 		 * \brief Enable and Disable Events of Windows

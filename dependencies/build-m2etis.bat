@@ -1,3 +1,5 @@
+@echo OFF
+
 REM i6engine
 REM Copyright (2016) Daniel Bonrath, Michael Baer, All rights reserved.
 REM
@@ -15,7 +17,6 @@ REM You should have received a copy of the GNU Lesser General Public
 REM License along with this library; if not, write to the Free Software
 REM Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-@echo OFF
 Set ROOT_DIR=%3
 Set COPY_DIR=%4
 

@@ -129,7 +129,7 @@ namespace components {
 		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
 		gf->addImage("WeightInventory_Background", "RPG/StaticImage", "RPG", "TbM_Filling", 0.0, 0.0, 1.0, 1.0);
 		gf->addImageButton("WeightInventory_Category_All", "RPG/ImageButton", 0.05, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
-		gf->subscribeEvent("WeightInventory_Category_All", "Clicked", [this]() {
+		gf->subscribeEvent("WeightInventory_Category_All", i6e::api::gui::SubscribeEvent::Clicked, [this]() {
 			if (_currentFilter != "NONE") {
 				_currentFilter = "NONE";
 				_currentIndex = 0;
@@ -141,7 +141,7 @@ namespace components {
 		for (size_t i = 0; i < _filter.size(); i++) {
 			std::string name = std::get<FilterEntry::Type>(_filter[i]);
 			gf->addImageButton("WeightInventory_Category_" + name, "RPG/ImageButton", 0.15 + i * 0.1, 0.05, 0.1, 0.05, std::get<FilterEntry::NormalImage>(_filter[i]), std::get<FilterEntry::HoverImage>(_filter[i]), std::get<FilterEntry::PushedImage>(_filter[i]));
-			gf->subscribeEvent("WeightInventory_Category_" + name, "Clicked", [this, name]() {
+			gf->subscribeEvent("WeightInventory_Category_" + name, i6e::api::gui::SubscribeEvent::Clicked, [this, name]() {
 				if (_currentFilter != name) {
 					_currentFilter = name;
 					_currentIndex = 0;
@@ -154,13 +154,13 @@ namespace components {
 		if (_trading) {
 			if (!_isSelfInventory) {
 				gf->addImageButton("WeightInventory_Sell", "RPG/ImageButton", 0.35, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
-				gf->subscribeEvent("WeightInventory_Sell", "Clicked", [this]() {
+				gf->subscribeEvent("WeightInventory_Sell", i6e::api::gui::SubscribeEvent::Clicked, [this]() {
 					hide();
 					_otherInventory.get()->show();
 				});
 			} else {
 				gf->addImageButton("WeightInventory_Buy", "RPG/ImageButton", 0.35, 0.05, 0.1, 0.05, "RPG/Drag01", "RPG/Drag02", "RPG/Drag03");
-				gf->subscribeEvent("WeightInventory_Buy", "Clicked", [this]() {
+				gf->subscribeEvent("WeightInventory_Buy", i6e::api::gui::SubscribeEvent::Clicked, [this]() {
 					hide();
 					_otherInventory.get()->show();
 				});
@@ -195,7 +195,7 @@ namespace components {
 						gf->setFont("WeightInventory_Item_" + std::to_string(p.first) + "_" + p2.first, "DejaVuSansBig");
 						uint32_t first = p.first;
 						std::string second = p2.first;
-						gf->subscribeEvent("WeightInventory_Item_" + std::to_string(p.first) + "_" + p2.first, "Clicked", [this, counter, first, second]() {
+						gf->subscribeEvent("WeightInventory_Item_" + std::to_string(p.first) + "_" + p2.first, i6e::api::gui::SubscribeEvent::Clicked, [this, counter, first, second]() {
 							if (_currentIndex == counter) {
 								useItem(first, second, [this]() {
 									hide();

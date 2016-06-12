@@ -57,7 +57,14 @@ namespace api {
 		i6eMessagingFacade->deliverMessage(msg);
 	}
 
-	void GUIFacade::subscribeEvent(const std::string & windowname, const std::string & eventType, const boost::function<void(void)> & ptrEventMethod) const {
+	void GUIFacade::subscribeEvent(const std::string & windowname, const std::string &, const boost::function<void(void)> & ptrEventMethod) const {
+		gui::SubscribeEvent evt = gui::SubscribeEvent::Clicked; // this works as there is only one supported event right now
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSubscribeEvent, core::Method::Update, new gui::GUI_SubscribeEvent_Update(windowname, evt, ptrEventMethod), core::Subsystem::Unknown);
+
+		i6eMessagingFacade->deliverMessage(msg);
+	}
+
+	void GUIFacade::subscribeEvent(const std::string & windowname, gui::SubscribeEvent eventType, const boost::function<void(void)> & ptrEventMethod) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSubscribeEvent, core::Method::Update, new gui::GUI_SubscribeEvent_Update(windowname, eventType, ptrEventMethod), core::Subsystem::Unknown);
 
 		i6eMessagingFacade->deliverMessage(msg);

@@ -59,6 +59,8 @@ namespace api {
 	class GUIWidget;
 
 namespace gui {
+	enum class SubscribeEvent;
+
 	struct GUIUpdateMessageStruct;
 } /* namespace gui */
 } /* namespace api */
@@ -318,9 +320,9 @@ namespace modules {
 		 *     Sets specific EventHandler depending on event type specified by name (i.e. ClickedEventHandler, PressedEventHandler, ReleasedEventHandler)
 		 *
 		 * \param name The name of the window OR the OIS::api::KeyCode of the designated key.
-		 * \param type Type of the event, either "Clicked" for mouseklicks on windows OR "Pressed"/"Released" for key actions.
+		 * \param type Type of the event, SubscribeEvent
 		 */
-		void subscribeEvent(const std::string & name, const std::string & type);
+		void subscribeEvent(const std::string & name, api::gui::SubscribeEvent type);
 
 		/**
 		 * \brief Triggers the previously subscribed event by clicking the window, with the name "name". Only clicking so far available

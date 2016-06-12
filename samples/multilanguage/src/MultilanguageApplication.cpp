@@ -52,8 +52,8 @@ namespace sample {
 		gf->addTextButton("EnglishButton", "RPG/Button", 0.05, 0.11, 0.1, 0.05, i6e::api::EngineController::GetSingleton().getTextManager()->getText("English_Key"));
 
 		// onClick events setting new language
-		gf->subscribeEvent("GermanButton", "Clicked", boost::bind(&i6e::api::LanguageManager::setLanguage, i6e::api::EngineController::GetSingleton().getLanguageManager(), "Deutsch"));
-		gf->subscribeEvent("EnglishButton", "Clicked", boost::bind(&i6e::api::LanguageManager::setLanguage, i6e::api::EngineController::GetSingleton().getLanguageManager(), "English"));
+		gf->subscribeEvent("GermanButton", i6e::api::gui::SubscribeEvent::Clicked, boost::bind(&i6e::api::LanguageManager::setLanguage, i6e::api::EngineController::GetSingleton().getLanguageManager(), "Deutsch"));
+		gf->subscribeEvent("EnglishButton", i6e::api::gui::SubscribeEvent::Clicked, boost::bind(&i6e::api::LanguageManager::setLanguage, i6e::api::EngineController::GetSingleton().getLanguageManager(), "English"));
 
 		// description how sample works
 		gf->addPrint("ChangeLanguagePrint", "RPG/Blanko", 0.5, 0.48, i6e::api::EngineController::GetSingleton().getTextManager()->getText("ChangeLanguageDescription_Key"), i6e::api::gui::Alignment::Center, -1);

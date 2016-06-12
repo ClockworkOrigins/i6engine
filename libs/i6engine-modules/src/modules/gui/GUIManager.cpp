@@ -19,6 +19,7 @@
 
 #include "i6engine/modules/gui/GUIManager.h"
 
+#include "i6engine/utils/EnumClassStream.h"
 #include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eString.h"
 #include "i6engine/utils/Logger.h"
@@ -388,30 +389,15 @@ namespace modules {
 		_widgets.clear();
 	}
 
-	void GUIManager::subscribeEvent(const std::string & name, const std::string & type) {
+	void GUIManager::subscribeEvent(const std::string & name, api::gui::SubscribeEvent type) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		if (type.compare("Clicked") == 0) {
+		if (type == api::gui::SubscribeEvent::Clicked) {
 			try {
 				CEGUI::PushButton * objButton = static_cast<CEGUI::PushButton *>(_objRoot->getChildRecursive(name));
 				objButton->CEGUI::Window::subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GUIManager::ClickedEventHandler, this));
 				_enabledFunctions.insert(std::make_pair(name, true));
 			} catch(CEGUI::Exception & e) {
-				ISIXE_THROW_API("GUIManager", e.getMessage());
-			}
-		} else if (type.compare("Pressed") == 0) {
-			try {
-				// name ist hier egal, es werden nun ALLE Tastatureingaben am root-window registriert
-				_objRoot->subscribeEvent(_objRoot->EventKeyDown, CEGUI::Event::Subscriber(&GUIManager::PressedEventHandler, this));
-				_enabledFunctions.insert(std::make_pair(name, true));
-			} catch(CEGUI::Exception & e) {
-				ISIXE_THROW_API("GUIManager", e.getMessage());
-			}
-		} else if (type.compare("Released") == 0) {
-			try {
-				_objRoot->subscribeEvent(_objRoot->EventKeyUp, CEGUI::Event::Subscriber(&GUIManager::ReleasedEventHandler, this));
-				_enabledFunctions.insert(std::make_pair(name, true));
-			} catch (CEGUI::Exception & e) {
 				ISIXE_THROW_API("GUIManager", e.getMessage());
 			}
 		} else {

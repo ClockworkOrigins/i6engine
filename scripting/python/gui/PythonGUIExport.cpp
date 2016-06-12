@@ -29,245 +29,251 @@ namespace python {
 namespace gui {
 
 	void startGUI(const std::string & strScheme, const std::string & strFont, const std::string & strDefaultFont, const std::string & strDefaultMouseImageSet, const std::string & strDefaultMouseImageName) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->startGUI(strScheme, strFont, strDefaultFont, strDefaultMouseImageSet, strDefaultMouseImageName);
+		i6eGUIFacade->startGUI(strScheme, strFont, strDefaultFont, strDefaultMouseImageSet, strDefaultMouseImageName);
 	}
 
 	void addToRootWindow(const std::string & child_window) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addToRootWindow(child_window);
+		i6eGUIFacade->addToRootWindow(child_window);
 	}
 
 	void setMouseVisibility(const bool visibility) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setMouseVisibility(visibility);
+		i6eGUIFacade->setMouseVisibility(visibility);
 	}
 
 	void clearAllWindows() {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->clearAllWindows();
+		i6eGUIFacade->clearAllWindows();
 	}
 
-	void subscribeEvent(const std::string & windowname, const std::string & eventType, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->subscribeEvent(windowname, eventType, [func]() {
-			api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func);
+	ISIXE_DEPRECATED void subscribeEventString(const std::string & windowname, const std::string & eventType, const std::string & func) {
+		i6eGUIFacade->subscribeEvent(windowname, i6e::api::gui::SubscribeEvent::Clicked, [func]() {
+			i6eScriptingFacade->callFunction<void>(func);
+		});
+	}
+
+	void subscribeEvent(const std::string & windowname, i6e::api::gui::SubscribeEvent eventType, const std::string & func) {
+		i6eGUIFacade->subscribeEvent(windowname, eventType, [func]() {
+			i6eScriptingFacade->callFunction<void>(func);
 		});
 	}
 
 	void changeEvent(const std::string & windowname, bool b) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->changeEvent(windowname, b);
+		i6eGUIFacade->changeEvent(windowname, b);
 	}
 
 	void setMouseCursorImage(const std::string & image) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setMouseCursorImage(image);
+		i6eGUIFacade->setMouseCursorImage(image);
 	}
 
 	void addImageset(const std::string & imageset) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addImageset(imageset);
+		i6eGUIFacade->addImageset(imageset);
 	}
 
 	void loadCanvas(const std::string & name, const std::string & file) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->loadCanvas(name, file);
+		i6eGUIFacade->loadCanvas(name, file);
 	}
 
 	void addPrint(const std::string & name, const std::string & type, const double x, const double y, const std::string & message, api::gui::Alignment alignment, const int64_t lifetime) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addPrint(name, type, x, y, message, alignment, lifetime);
+		i6eGUIFacade->addPrint(name, type, x, y, message, alignment, lifetime);
 	}
 
 	void addProgressBar(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addProgressBar(name, type, x, y, w, h);
+		i6eGUIFacade->addProgressBar(name, type, x, y, w, h);
 	}
 
 	void addEditbox(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & defaultText, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addEditbox(name, type, x, y, w, h, defaultText, [func](std::string s) {
-			api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, s);
+		i6eGUIFacade->addEditbox(name, type, x, y, w, h, defaultText, [func](std::string s) {
+			i6eScriptingFacade->callFunction<void>(func, s);
 		});
 	}
 
 	void addTextButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & text) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addTextButton(name, type, x, y, w, h, text);
+		i6eGUIFacade->addTextButton(name, type, x, y, w, h, text);
 	}
 
 	void addImageButton(const std::string & name, const std::string & type, double x, double y, double w, double h, const std::string & normalImage, const std::string & hoverImage, const std::string & pushedImage) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addImageButton(name, type, x, y, w, h, normalImage, hoverImage, pushedImage);
+		i6eGUIFacade->addImageButton(name, type, x, y, w, h, normalImage, hoverImage, pushedImage);
 	}
 
 	void addToggleButton(const std::string & name, const std::string & type, double x, double y, double w, double h, bool selected, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addToggleButton(name, type, x, y, w, h, selected, [func](bool b) {
-			api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, b);
+		i6eGUIFacade->addToggleButton(name, type, x, y, w, h, selected, [func](bool b) {
+			i6eScriptingFacade->callFunction<void>(func, b);
 		});
 	}
 
 	void addStatusList(const std::string & name, const std::string & type, const double x, const double y, const int64_t lifetime) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addStatusList(name, type, x, y, lifetime);
+		i6eGUIFacade->addStatusList(name, type, x, y, lifetime);
 	}
 
 	void addImage(const std::string & name, const std::string & type, const std::string & imageSetName, const std::string & imageName, const double x, const double y, const double w, const double h) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addImage(name, type, imageSetName, imageName, x, y, w, h);
+		i6eGUIFacade->addImage(name, type, imageSetName, imageName, x, y, w, h);
 	}
 
 	void addMultiColumnList(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addMultiColumnList(name, type, x, y, w, h);
+		i6eGUIFacade->addMultiColumnList(name, type, x, y, w, h);
 	}
 
 	void addComboBox(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addComboBox(name, type, x, y, w, h, [func](std::string s) {
-			api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, s);
+		i6eGUIFacade->addComboBox(name, type, x, y, w, h, [func](std::string s) {
+			i6eScriptingFacade->callFunction<void>(func, s);
 		});
 	}
 
 	void addChat(const std::string & name, const std::string & type, const double x, const double y, const double w, const double h, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addChat(name, type, x, y, w, h, [func](std::string s) {
-			return api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<std::string>(func, s)->get();
+		i6eGUIFacade->addChat(name, type, x, y, w, h, [func](std::string s) {
+			return i6eScriptingFacade->callFunction<std::string>(func, s)->get();
 		});
 	}
 
 	void setText(const std::string & name, const std::string & text) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setText(name, text);
+		i6eGUIFacade->setText(name, text);
 	}
 
 	void setPosition(const std::string & name, const double x, const double y) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setPosition(name, x, y);
+		i6eGUIFacade->setPosition(name, x, y);
 	}
 
 	void setSize(const std::string & name, const double w, const double h) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setSize(name, w, h);
+		i6eGUIFacade->setSize(name, w, h);
 	}
 
 	void setVisibility(const std::string & windowname, const bool visibility) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setVisibility(windowname, visibility);
+		i6eGUIFacade->setVisibility(windowname, visibility);
 	}
 
 	void setAmount(const std::string & name, const uint32_t amount) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setAmount(name, amount);
+		i6eGUIFacade->setAmount(name, amount);
 	}
 
 	void setColour(const std::string & name, double alpha, double red, double green, double blue) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setColour(name, alpha, red, green, blue);
+		i6eGUIFacade->setColour(name, alpha, red, green, blue);
 	}
 
 	void setFont(const std::string & name, const std::string & font) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setFont(name, font);
+		i6eGUIFacade->setFont(name, font);
 	}
 
 	void setLifetime(const std::string & name, const int64_t time) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setLifetime(name, time);
+		i6eGUIFacade->setLifetime(name, time);
 	}
 
 	void setAlignment(const std::string & name, i6e::api::gui::Alignment alignment) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setAlignment(name, alignment);
+		i6eGUIFacade->setAlignment(name, alignment);
 	}
 
 	void enableDropTarget(const std::string & name, bool target, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->enableDropTarget(name, target, [func](std::string s) {
-			return api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<bool>(func, s)->get();
+		i6eGUIFacade->enableDropTarget(name, target, [func](std::string s) {
+			return i6eScriptingFacade->callFunction<bool>(func, s)->get();
 		});
 	}
 
 	void setDragable(const std::string & name, bool enabled) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setDragable(name, enabled);
+		i6eGUIFacade->setDragable(name, enabled);
 	}
 
 	void setDropCallback(const std::string & name, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setDropCallback(name, [func](const std::string & s1, const std::string & s2) {
-			api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, s1, s2);
+		i6eGUIFacade->setDropCallback(name, [func](const std::string & s1, const std::string & s2) {
+			i6eScriptingFacade->callFunction<void>(func, s1, s2);
 		});
 	}
 
 	void setProgress(const std::string & name, const double progress) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setProgress(name, progress);
+		i6eGUIFacade->setProgress(name, progress);
 	}
 
 	void addRowToList(const std::string & name) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addRowToList(name);
+		i6eGUIFacade->addRowToList(name);
 	}
 
 	void addRowEntry(const std::string & name, const uint32_t row, const uint32_t column, const std::string & entry) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addRowEntry(name, row, column, entry);
+		i6eGUIFacade->addRowEntry(name, row, column, entry);
 	}
 
 	void addColumn(const std::string & name, const std::string & columnHeader, uint32_t column, double width) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addColumn(name, columnHeader, column, width);
+		i6eGUIFacade->addColumn(name, columnHeader, column, width);
 	}
 
 	void clearWidget(const std::string & name) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->clearWidget(name);
+		i6eGUIFacade->clearWidget(name);
 	}
 
 	void setImage(const std::string & name, const std::string & imageSetName, const std::string & imageSet) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setImage(name, imageSetName, imageSet);
+		i6eGUIFacade->setImage(name, imageSetName, imageSet);
 	}
 
 	void setEnterTextCallback(const std::string & name, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setEnterTextCallback(name, [func](std::string s) {
-			api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, s);
+		i6eGUIFacade->setEnterTextCallback(name, [func](std::string s) {
+			i6eScriptingFacade->callFunction<void>(func, s);
 		});
 	}
 
 	void setProperty(const std::string & name, const std::string & prop, const std::string & value) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setProperty(name, prop, value);
+		i6eGUIFacade->setProperty(name, prop, value);
 	}
 
 	void setSelected(const std::string & name, bool selected) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setSelected(name, selected);
+		i6eGUIFacade->setSelected(name, selected);
 	}
 
 	void setSelectedCallback(const std::string & name, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setSelectedCallback(name, [func](bool b) {
-			api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, b);
+		i6eGUIFacade->setSelectedCallback(name, [func](bool b) {
+			i6eScriptingFacade->callFunction<void>(func, b);
 		});
 	}
 
 	void setAcceptedTextCallback(const std::string & name, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setAcceptedTextCallback(name, [func](std::string s) {
-			return api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<std::string>(func, s)->get();
+		i6eGUIFacade->setAcceptedTextCallback(name, [func](std::string s) {
+			return i6eScriptingFacade->callFunction<std::string>(func, s)->get();
 		});
 	}
 
 	void setTooltip(const std::string & name, const std::string & tooltip) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setTooltip(name, tooltip);
+		i6eGUIFacade->setTooltip(name, tooltip);
 	}
 
 	void addTextToWidget(const std::string & name, const std::string & text) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->addTextToWidget(name, text);
+		i6eGUIFacade->addTextToWidget(name, text);
 	}
 
 	void setSelectedStringCallback(const std::string & name, const std::string & func) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->setSelectedStringCallback(name, [func](std::string s) {
-			api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, s);
+		i6eGUIFacade->setSelectedStringCallback(name, [func](std::string s) {
+			i6eScriptingFacade->callFunction<void>(func, s);
 		});
 	}
 
 	void playAnimation(const std::string & name, const std::string & animation) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->playAnimation(name, animation);
+		i6eGUIFacade->playAnimation(name, animation);
 	}
 
 	void stopAnimation(const std::string & name, const std::string & animation) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->stopAnimation(name, animation);
+		i6eGUIFacade->stopAnimation(name, animation);
 	}
 
 	void pauseAnimation(const std::string & name, const std::string & animation) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->pauseAnimation(name, animation);
+		i6eGUIFacade->pauseAnimation(name, animation);
 	}
 
 	void unpauseAnimation(const std::string & name, const std::string & animation) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->unpauseAnimation(name, animation);
+		i6eGUIFacade->unpauseAnimation(name, animation);
 	}
 
 	void createWidget(const std::string & name, const std::string & type, const std::string & style) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->createWidget(name, type, style);
+		i6eGUIFacade->createWidget(name, type, style);
 	}
 
 	void deleteWidget(const std::string & name) {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget(name);
+		i6eGUIFacade->deleteWidget(name);
 	}
 
 	void resetGUISubSystem() {
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->resetSubSystem();
+		i6eGUIFacade->resetSubSystem();
 	}
 
 	bool getInputCaptured() {
-		return api::EngineController::GetSingletonPtr()->getGUIFacade()->getInputCaptured();
+		return i6eGUIFacade->getInputCaptured();
 	}
 
 	bool getOnWindow() {
-		return api::EngineController::GetSingletonPtr()->getGUIFacade()->getOnWindow();
+		return i6eGUIFacade->getOnWindow();
 	}
 
 } /* namespace gui */
@@ -283,11 +289,15 @@ BOOST_PYTHON_MODULE(ScriptingGUIPython) {
 		.value("Right", i6e::api::gui::Alignment::Right)
 		.export_values();
 
+	enum_<i6e::api::gui::SubscribeEvent>("SubscribeEvent")
+		.value("Clicked", i6e::api::gui::SubscribeEvent::Clicked)
+		.export_values();
 
 	def("startGUI", &i6e::python::gui::startGUI);
 	def("addToRootWindow", &i6e::python::gui::addToRootWindow);
 	def("setMouseVisibility", &i6e::python::gui::setMouseVisibility);
 	def("clearAllWindows", &i6e::python::gui::clearAllWindows);
+	def("subscribeEvent", &i6e::python::gui::subscribeEventString);
 	def("subscribeEvent", &i6e::python::gui::subscribeEvent);
 	def("changeEvent", &i6e::python::gui::changeEvent);
 	def("setMouseCursorImage", &i6e::python::gui::setMouseCursorImage);

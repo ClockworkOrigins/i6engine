@@ -146,6 +146,19 @@
 	#endif
 #endif
 
+#ifndef ISIXE_DEPRECATED
+	#ifdef __GNUC__
+		#define ISIXE_DEPRECATED __attribute__((deprecated))
+	#elif defined(_MSC_VER)
+		#define ISIXE_DEPRECATED __declspec(deprecated)
+	#elif defined(_MSC_VER)
+		#define ISIXE_DEPRECATED __attribute__((deprecated))
+	#else
+		#pragma message("WARNING: You need to implement ISIXE_DEPRECATED for this compiler")
+		#define ISIXE_DEPRECATED
+	#endif
+#endif
+
 #ifdef _MSC_VER
 	#pragma warning(disable : 4251) // dll interface to be used by clients...
 #endif
