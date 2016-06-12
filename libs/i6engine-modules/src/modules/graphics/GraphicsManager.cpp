@@ -47,8 +47,10 @@
 #include "i6engine/modules/gui/GUIController.h"
 #include "i6engine/modules/gui/GUIMailbox.h"
 
-#include "ParticleUniverseSystem.h"
-#include "ParticleUniverseSystemManager.h"
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
+	#include "ParticleUniverseSystem.h"
+	#include "ParticleUniverseSystemManager.h"
+#endif
 
 #include "CEGUI/CEGUI.h"
 
@@ -364,9 +366,11 @@ namespace modules {
 			// Get results
 			for (itr = result.begin(); itr != result.end(); itr++) {
 				// Particles cause strange behaviour because they seem to be everywhere on the map, so skip them => particles aren't selectable via mouse
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
 				if (dynamic_cast<ParticleUniverse::ParticleSystem *>(itr->movable)) {
 					continue;
 				}
+#endif
 				auto split = utils::split(itr->movable->getParentSceneNode()->getName(), "_");
 				if (split.front() == "unnamed" || split.front() == "debug") {
 					if (itr->worldFragment) {
@@ -1066,6 +1070,7 @@ namespace modules {
 			_guiController->Tick();
 		}
 
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
 		for (std::string p : particles) {
 			ParticleUniverse::ParticleSystem * particleSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem("PreLoadSceneParticle_0_0", p, _sceneManager);
 			sn->attachObject(particleSystem);
@@ -1077,6 +1082,7 @@ namespace modules {
 			callback(uint16_t((counter++ / double(amount)) * 50));
 			_guiController->Tick();
 		}
+#endif
 
 		_rWindow->removeViewport(0);
 		sn->detachObject(camera);

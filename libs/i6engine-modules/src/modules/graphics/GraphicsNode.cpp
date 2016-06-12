@@ -30,7 +30,10 @@
 #include "i6engine/modules/graphics/components/LuminousComponent.h"
 #include "i6engine/modules/graphics/components/MeshComponent.h"
 #include "i6engine/modules/graphics/components/MovableTextComponent.h"
-#include "i6engine/modules/graphics/components/ParticleComponent.h"
+
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
+	#include "i6engine/modules/graphics/components/ParticleComponent.h"
+#endif
 
 #include "OGRE/OgreSceneManager.h"
 
@@ -124,10 +127,14 @@ namespace modules {
 			delete light.second;
 		}
 		_lights.clear();
+
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
 		for (const std::pair<int64_t, ParticleComponent *> & part : _particles) {
 			delete part.second;
 		}
 		_particles.clear();
+#endif
+
 		for (const std::pair<int64_t, BillboardComponent *> & bill : _billboardSets) {
 			delete bill.second;
 		}
@@ -295,25 +302,31 @@ namespace modules {
 
 	void GraphicsNode::createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
 		assert(_particles.find(coid) == _particles.end());
 		ParticleComponent * pc = new ParticleComponent(_manager, this, _gameObjectID, coid, emitterName, pos);
 		_particles.insert(std::make_pair(coid, pc));
 		assert(_particles.find(coid) != _particles.end());
+#endif
 	}
 
 	void GraphicsNode::particleFadeOut(int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
 		assert(_particles.find(coid) != _particles.end());
 		_particles[coid]->particleFadeOut();
+#endif
 	}
 
 	void GraphicsNode::deleteParticleComponent(const int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
 		assert(_particles.find(coid) != _particles.end());
 		ParticleComponent * pc = _particles[coid];
 		_particles.erase(coid);
 		delete pc;
 		assert(_particles.find(coid) == _particles.end());
+#endif
 	}
 
 	void GraphicsNode::createBilldboardSetComponent(int64_t coid, const std::string & material, double width, double height, api::graphics::BillboardOrigin bo) {

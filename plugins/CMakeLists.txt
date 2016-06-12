@@ -48,4 +48,6 @@ IF(ISIXE_WITH_TOOLS AND ISIXE_WITH_EDITOR)
 ENDIF(ISIXE_WITH_TOOLS AND ISIXE_WITH_EDITOR)
 
 add_subdirectory(i6Archive)
-add_subdirectory(particleUniverse)
+IF(ISIXE_WITH_PARTICLEUNIVERSE)
+	add_subdirectory(particleUniverse)
+ENDIF(ISIXE_WITH_PARTICLEUNIVERSE)

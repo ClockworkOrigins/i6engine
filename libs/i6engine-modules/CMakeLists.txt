@@ -23,7 +23,10 @@ include_directories("include")
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
-include_directories(${I6ENGINE_PARTICLEUNIVERSE_INCLUDE_DIR})
+
+IF(ISIXE_WITH_PARTICLEUNIVERSE)
+	include_directories(${I6ENGINE_PARTICLEUNIVERSE_INCLUDE_DIR})
+ENDIF(ISIXE_WITH_PARTICLEUNIVERSE)
 
 set(srcdir ./src)
 set(configdir ${CMAKE_SOURCE_DIR}/config)
@@ -138,7 +141,6 @@ set(i6modulesSrc
 	${srcdir}/modules/graphics/components/LuminousComponent.cpp
 	${srcdir}/modules/graphics/components/MeshComponent.cpp
 	${srcdir}/modules/graphics/components/MovableTextComponent.cpp
-	${srcdir}/modules/graphics/components/ParticleComponent.cpp
 	${srcdir}/modules/graphics/compositors/GaussianBlurListener.cpp
 	${srcdir}/modules/graphics/compositors/GaussianBlurLogic.cpp
 	${srcdir}/modules/graphics/compositors/HeatVisionListener.cpp
@@ -199,6 +201,16 @@ IF(ISIXE_WITH_AUDIO)
 		${srcdir}/modules/audio/WavFile.cpp
 	)
 ENDIF(ISIXE_WITH_AUDIO)
+
+
+
+IF(ISIXE_WITH_PARTICLEUNIVERSE)
+	set(i6modulesSrc
+		${i6modulesSrc}
+		
+		${srcdir}/modules/graphics/components/ParticleComponent.cpp
+	)
+ENDIF(ISIXE_WITH_PARTICLEUNIVERSE)
 
 IF(ISIXE_WITH_NETWORK)
 	set(i6modulesSrc
@@ -267,11 +279,15 @@ set_target_properties(i6engine-modules PROPERTIES LINKER_LANGUAGE CXX)
 # to find the dependency libs during runtime
 set_target_properties(i6engine-modules PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-target_link_libraries(i6engine-modules i6engine-utils i6engine-math i6engine-core Plugin_ParticleUniverse ${BULLET_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${CEGUI_LIBRARIES} ${TinyXML_LIBRARIES} ${CLOCKUTILS_LIBRARIES})
+target_link_libraries(i6engine-modules i6engine-utils i6engine-math i6engine-core ${BULLET_LIBRARIES} ${CEGUI_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${TinyXML_LIBRARIES})
 
 IF(ISIXE_WITH_AUDIO)
 	target_link_libraries(i6engine-modules ${OPENALSOFT_LIBRARIES})
 ENDIF(ISIXE_WITH_AUDIO)
+
+IF(ISIXE_WITH_PARTICLEUNIVERSE)
+	target_link_libraries(i6engine-modules Plugin_ParticleUniverse)
+ENDIF(ISIXE_WITH_PARTICLEUNIVERSE)
 
 IF(SCRIPTING_LUA)
 	target_link_libraries(i6engine-modules lua luabind)

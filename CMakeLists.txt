@@ -39,6 +39,7 @@ option(ISIXE_WITH_RPG "build rpg module for i6engine" ON)
 option(ISIXE_WITH_DOCU "build documentation for i6engine" ON)
 option(ISIXE_WITH_TUTORIALS "build tutorials for i6engine" ON)
 OPTION(ISIXE_WITH_CONSOLE "build samples and tools with console output" ON)
+OPTION(ISIXE_WITH_PARTICLEUNIVERSE "build with ParticleUniverse particle system. If disabled, no particles are available" ON)
 
 IF(NOT ISIXE_WITH_CONSOLE AND WIN32)
 	SET(GUI_TYPE WIN32)

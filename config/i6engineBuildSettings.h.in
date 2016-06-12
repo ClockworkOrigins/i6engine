@@ -32,6 +32,7 @@
 #cmakedefine ISIXE_WITH_PROFILING
 #cmakedefine ISIXE_WITH_RPG
 #cmakedefine ISIXE_WITH_CONSOLE
+#cmakedefine ISIXE_WITH_PARTICLEUNIVERSE
 
 // Enum
 #define SCRIPTING_NONE 0
