@@ -178,11 +178,13 @@ namespace api {
 
 		/**
 		 * \brief initializes the Component
+		 * this method is only called if the Component was really added to the GameObject, not if it was rejected
 		 */
 		virtual void Init() = 0;
 
 		/**
 		 * \brief finalizes the component
+		 * this method is only called if the Component was really added to the GameObject, not if it was rejected
 		 */
 		virtual void Finalize() {}
 

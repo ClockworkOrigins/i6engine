@@ -65,13 +65,15 @@ namespace modules {
 
 		// Return the new GOComponent created by the registered method
 		api::ComPtr co = (it->second)(id, params);
-		owner.get()->setGOC(co);
-		co->setSelf(co);
-		co->enableTicking(_tickingAllowed);
+		if (owner.get()->setGOC(co)) {
+			co->setSelf(co);
+			co->enableTicking(_tickingAllowed);
 
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(id);
-
-		return co;
+			api::EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(id);
+			return co;
+		} else {
+			return api::ComPtr();
+		}
 	}
 
 } /* namespace modules */
