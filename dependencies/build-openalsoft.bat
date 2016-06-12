@@ -17,8 +17,8 @@ REM Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  U
 
 call build-common.bat %1 %2
 
-Set ARCHIVE=openal-soft-1.16.0.tar.bz2
-Set BUILD_DIR=%TMP_DIR%/openal-soft-1.16.0
+Set ARCHIVE=openal-soft-1.17.2.tar.bz2
+Set BUILD_DIR=%TMP_DIR%/openal-soft-1.17.2
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/OpenAL Soft/
 
 echo "Compile OpenAL Soft"

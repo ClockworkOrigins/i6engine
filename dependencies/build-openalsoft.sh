@@ -19,8 +19,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 
 . ./build-common.sh
 
-ARCHIVE="openal-soft-1.16.0.tar.bz2"
-BUILD_DIR="${BUILD_ROOT}/openal-soft-1.16.0"
+ARCHIVE="openal-soft-1.17.2.tar.bz2"
+BUILD_DIR="${BUILD_ROOT}/openal-soft-1.17.2"
 
 PREFIX="${DEP_DIR}/OpenAL"
 DEBUG_FLAG="DEBUG"
