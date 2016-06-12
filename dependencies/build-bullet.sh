@@ -22,8 +22,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 . ./build-common.sh
 
 # bullet
-ARCHIVE="bullet-2.82-r2704.tgz"
-BUILD_DIR="${BUILD_ROOT}/bullet-2.82-r2704"
+ARCHIVE="bullet-2.83.7.tar.gz"
+BUILD_DIR="${BUILD_ROOT}/bullet-2.83.7"
 
 if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
@@ -66,7 +66,6 @@ status "Configuring Bullet"
 cd "${BUILD_DIR}"
 cmake . \
 		-DCMAKE_INSTALL_PREFIX=${PREFIX} \
-		-DBUILD_DEMOS=OFF \
 		-DINSTALL_LIBS=ON \
 		-DBUILD_SHARED_LIBS=ON \
 		-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
@@ -74,6 +73,11 @@ cmake . \
 		-DUSE_GRAPHICAL_BENCHMARK=OFF \
 		-DUSE_GLUT=OFF \
 		-DBUILD_EXTRAS=ON \
+		-DBUILD_CPU_DEMOS=OFF \
+		-DBUILD_BULLET2_DEMOS=OFF \
+		-DBUILD_BULLET3=OFF \
+		-DBUILD_OPENGL3_DEMOS=OFF \
+		-DBUILD_UNIT_TESTS=OFF \
 		-DINSTALL_EXTRA_LIBS=ON\
 		>/dev/null
 
