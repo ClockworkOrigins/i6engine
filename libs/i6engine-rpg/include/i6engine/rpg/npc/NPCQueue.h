@@ -25,7 +25,7 @@
 #ifndef __I6ENGINE_RPG_NPC_NPCQUEUE_H__
 #define __I6ENGINE_RPG_NPC_NPCQUEUE_H__
 
-#include "i6engine/utils/DoubleBufferQueue.h"
+#include "clockUtils/container/DoubleBufferQueue.h"
 
 namespace i6e {
 namespace rpg {
@@ -51,7 +51,7 @@ namespace npc {
 		void checkJobs();
 
 	private:
-		utils::DoubleBufferQueue<NPCQueueJob *, true, false> _queue;
+		clockUtils::container::DoubleBufferQueue<NPCQueueJob *, true, false> _queue;
 
 		NPCQueue(const NPCQueue &) = delete;
 	};

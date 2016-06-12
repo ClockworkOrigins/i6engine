@@ -30,10 +30,10 @@
 #include <map>
 #include <mutex>
 
-#include "i6engine/utils/DoubleBufferQueue.h"
-
 #include "i6engine/core/messaging/Message.h"
 #include "i6engine/core/subsystem/ModuleController.h"
+
+#include "clockUtils/container/DoubleBufferQueue.h"
 
 /**
  * \page page_messagingSystem Messaging System
@@ -146,7 +146,7 @@ namespace core {
 		/**
 		 * \brief queue containing messages for the controller
 		 */
-		utils::DoubleBufferQueue<Message::Ptr, true, false> _msgQueue;
+		clockUtils::container::DoubleBufferQueue<Message::Ptr, true, false> _msgQueue;
 
 		boost::thread * _deliverThread;
 

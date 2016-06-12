@@ -53,7 +53,9 @@ namespace core {
 		// send Messages to the buffering method
 		while (_running) {
 			while (!_msgQueue.empty()) {
-				deliverMessageToSubscribers(_msgQueue.poll());
+				i6e::core::Message::Ptr msg;
+				_msgQueue.poll(msg); // Daniel: no error check necessary as it is polled just from one thread
+				deliverMessageToSubscribers(msg);
 			}
 			std::unique_lock<std::mutex> ul(_condMutex);
 			_condVar.wait(ul);

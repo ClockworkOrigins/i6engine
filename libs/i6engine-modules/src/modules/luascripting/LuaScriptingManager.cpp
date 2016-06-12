@@ -69,7 +69,9 @@ namespace modules {
 	void LuaScriptingManager::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		while (!_callScripts.empty()) {
-			_callScripts.poll()();
+			std::function<void(void)> func;
+			_callScripts.poll(func); // Daniel: no error check necessary as it is polled just from one thread
+			func();
 		}
 		// after all scripts have been called collect garbage!
 		int status = luaL_dostring(_luaState, "collectgarbage('collect')");

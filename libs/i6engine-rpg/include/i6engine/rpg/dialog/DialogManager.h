@@ -27,7 +27,6 @@
 
 #include <set>
 
-#include "i6engine/utils/DoubleBufferQueue.h"
 #include "i6engine/utils/Future.h"
 #include "i6engine/utils/i6eSystemParameters.h"
 #include "i6engine/utils/Singleton.h"
@@ -38,6 +37,8 @@
 #include "i6engine/api/facades/MessageSubscriberFacade.h"
 
 #include "i6engine/rpg/dialog/DialogParser.h"
+
+#include "clockUtils/container/DoubleBufferQueue.h"
 
 namespace i6e {
 namespace rpg {
@@ -164,8 +165,8 @@ namespace dialog {
 			Result
 		};
 
-		utils::DoubleBufferQueue<std::tuple<std::string, std::string, std::shared_ptr<utils::Future<bool>>>, true, false> _importantChecks;
-		utils::DoubleBufferQueue<std::tuple<std::string, std::string, std::shared_ptr<utils::Future<bool>>>, true, false> _showDialogboxChecks;
+		clockUtils::container::DoubleBufferQueue<std::tuple<std::string, std::string, std::shared_ptr<utils::Future<bool>>>, true, false> _importantChecks;
+		clockUtils::container::DoubleBufferQueue<std::tuple<std::string, std::string, std::shared_ptr<utils::Future<bool>>>, true, false> _showDialogboxChecks;
 		std::atomic<bool> _dialogActive;
 
 		mutable std::mutex _lock;

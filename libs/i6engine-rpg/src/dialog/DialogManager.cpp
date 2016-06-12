@@ -255,7 +255,8 @@ namespace dialog {
 			_importantChecks.clear();
 		}
 		while (!_importantChecks.empty()) {
-			auto t = _importantChecks.poll();
+			std::tuple<std::string, std::string, std::shared_ptr<utils::Future<bool>>> t;
+			_importantChecks.poll(t); // Daniel: no error check necessary as it is polled just from one thread
 			if (std::get<DialogCheck::Result>(t)->get()) {
 				// dialog can be run, but we have to check the distance between the participants
 				auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
@@ -303,7 +304,8 @@ namespace dialog {
 			}
 		}
 		while (!_showDialogboxChecks.empty()) {
-			auto t = _showDialogboxChecks.poll();
+			std::tuple<std::string, std::string, std::shared_ptr<utils::Future<bool>>> t;
+			_showDialogboxChecks.poll(t); // Daniel: no error check necessary as it is polled just from one thread
 			if (std::get<DialogCheck::Result>(t)->get()) {
 				// dialog can be run, but we have to check the distance between the participants
 				auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");

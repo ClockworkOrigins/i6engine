@@ -27,13 +27,14 @@
 
 #include <set>
 
-#include "i6engine/utils/DoubleBufferQueue.h"
 #include "i6engine/utils/Future.h"
 #include "i6engine/utils/i6eThreadSafety.h"
 
 #include "i6engine/api/GameMessage.h"
 
 #include "boost/python.hpp"
+
+#include "clockUtils/container/DoubleBufferQueue.h"
 
 namespace i6e {
 namespace api {
@@ -241,7 +242,7 @@ namespace modules {
 	private:
 		std::set<std::string> _scripts;
 		std::string _scriptsPath;
-		utils::DoubleBufferQueue<std::function<void(void)>, true, false> _callScripts;
+		clockUtils::container::DoubleBufferQueue<std::function<void(void)>, true, false> _callScripts;
 
 		/**
 		 * \brief called by PythonScriptingMailbox with a message

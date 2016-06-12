@@ -55,13 +55,13 @@ namespace utils {
 		/**
 		 * \brief default constructor
 		 */
-		DoubleBufferQueue() : _queueA(), _queueB(), _queueRead(&_queueA), _queueWrite(&_queueB), _readLock(), _writeLock() {
+		ISIXE_DEPRECATED DoubleBufferQueue() : _queueA(), _queueB(), _queueRead(&_queueA), _queueWrite(&_queueB), _readLock(), _writeLock() {
 		}
 
 		/**
 		 * \brief pushes the given value into the queue
 		 */
-		void push(const T & value) {
+		ISIXE_DEPRECATED void push(const T & value) {
 			boost::mutex::scoped_lock scopeLock(_writeLock);
 			_queueWrite->push(value);
 		}
@@ -69,42 +69,42 @@ namespace utils {
 		/**
 		 * \brief removes first entry of the queue
 		 */
-		void pop() {
+		ISIXE_DEPRECATED void pop() {
 			pop(Bool2Type<consumer>());
 		}
 
 		/**
 		 * \brief returns first entry of the queue
 		 */
-		T front() {
+		ISIXE_DEPRECATED T front() {
 			return front(Bool2Type<consumer>());
 		}
 
 		/**
 		 * \brief removes first entry of the queue and returns its value
 		 */
-		T poll() {
+		ISIXE_DEPRECATED T poll() {
 			return poll(Bool2Type<consumer>());
 		}
-
+		
 		/**
 		 * \brief returns true if the queue is empty, otherwise false
 		 */
-		inline bool empty() const {
+		ISIXE_DEPRECATED inline bool empty() const {
 			return _queueRead->empty() && _queueWrite->empty();
 		}
 
 		/**
 		 * \brief returns size of the queue
 		 */
-		inline size_t size() const {
+		ISIXE_DEPRECATED inline size_t size() const {
 			return _queueRead->size() + _queueWrite->size();
 		}
 
 		/**
 		 * \brief removes all elements in the queue
 		 */
-		void clear() {
+		ISIXE_DEPRECATED void clear() {
 			_readLock.lock();
 			while (!_queueRead->empty()) {
 				_queueRead->pop();

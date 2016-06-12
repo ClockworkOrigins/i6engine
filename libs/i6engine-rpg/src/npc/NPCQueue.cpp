@@ -37,7 +37,8 @@ namespace npc {
 
 	void NPCQueue::checkJobs() {
 		while (!_queue.empty()) {
-			NPCQueueJob * job = _queue.front();
+			NPCQueueJob * job;
+			_queue.front(job); // Daniel: no error check necessary as it is polled just from one thread
 			if (!job->condition()) {
 				job->loop();
 				break;
@@ -46,7 +47,8 @@ namespace npc {
 				delete job;
 				_queue.pop();
 				if (!_queue.empty()) {
-					_queue.front()->start();
+					_queue.front(job); // Daniel: no error check necessary as it is polled just from one thread
+					job->start();
 				}
 			}
 		}
