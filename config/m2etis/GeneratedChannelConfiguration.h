@@ -35,16 +35,16 @@ namespace pubsub {
 typedef Channel<
     ChannelType<
         DirectBroadcastRouting<net::NetworkType<net::clockTCP> >
-		, NullFilter<i6engine::api::GameMessage, net::NetworkType<net::clockTCP> >
+		, NullFilter<i6e::api::GameMessage, net::NetworkType<net::clockTCP> >
 		, NullOrder<net::NetworkType<net::clockTCP> >
 		, NullDeliver<net::NetworkType<net::clockTCP> >
         , NullPersistence
         , NullValidity
-		, NullPartition<net::NetworkType<net::clockTCP>, i6engine::api::GameMessage>
+		, NullPartition<net::NetworkType<net::clockTCP>, i6e::api::GameMessage>
         , NullSecurity, NullRendezvous
     >,
 	net::NetworkType<net::clockTCP>,
-	i6engine::api::GameMessage
+	i6e::api::GameMessage
 > I6ENGINE_Direct_Null_Null_Null_Null_Null_DirectBroadcast_Null_GameMessage_TCPType;
 
 template <>
