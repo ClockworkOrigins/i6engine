@@ -1,3 +1,5 @@
+@echo off
+
 REM i6engine
 REM Copyright (2016) Daniel Bonrath, Michael Baer, All rights reserved.
 REM
@@ -17,9 +19,9 @@ REM Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  U
 
 call build-common.bat %1 %2
 
-Set ARCHIVE=cegui-0.8.4.tar.bz2
+Set ARCHIVE=cegui-0.8.7.tar.bz2
 Set DEP_ARCHIVE=cegui-deps-0.8.x-src.zip
-Set BUILD_DIR=%TMP_DIR%/cegui-0.8.4
+Set BUILD_DIR=%TMP_DIR%/cegui-0.8.7
 Set BUILD_DIR_DEPS=%TMP_DIR%/cegui-deps-0.8.x-src
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/cegui/
 Set PREFIX_DEPS=%DEP_DIR%/%ARCH_DIR%/ceguideps
