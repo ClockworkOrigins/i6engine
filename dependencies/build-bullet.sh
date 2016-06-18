@@ -22,8 +22,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 . ./build-common.sh
 
 # bullet
-ARCHIVE="bullet-2.83.7.tar.gz"
-BUILD_DIR="${BUILD_ROOT}/bullet-2.83.7"
+ARCHIVE="bullet3-2.83.7.tar.gz"
+BUILD_DIR="${BUILD_ROOT}/bullet3-2.83.7"
 
 if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
