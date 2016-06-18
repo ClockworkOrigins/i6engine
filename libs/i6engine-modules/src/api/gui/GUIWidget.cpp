@@ -54,6 +54,9 @@ namespace api {
 		} else if (type == api::gui::GuiSetVisible) {
 			bool vis = static_cast<gui::GUI_Visibility *>(message)->visible;
 			_window->setVisible(vis);
+			for (GUIWidget * child : _childs) {
+				child->update(type, message);
+			}
 		} else if (type == gui::GUIMessageTypes::GuiSetDropTarget) {
 			_dropable = dynamic_cast<gui::GUI_SetDropTarget *>(message)->dropable;
 			_canDrop = dynamic_cast<gui::GUI_SetDropTarget *>(message)->func;
