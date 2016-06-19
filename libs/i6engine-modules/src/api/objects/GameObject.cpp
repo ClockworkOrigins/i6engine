@@ -278,8 +278,8 @@ namespace api {
 				// forward to component
 				int64_t comID = msg->getContent()->_id;
 				ComPtr com = getGOCID(comID);
-				if (com == nullptr) {
-					ISIXE_THROW_FAILURE("GameObject", "News: Component with id " << comID << " not part of this GameObject: " << msg->getMessageInfo() << " for GameObject of type: " << getType());
+				if (com == nullptr) { // (Daniel) Why can it happen that the message is delivered but the Component doesn't exist? Component deletion is possible in two scenarios: GameObject is deleted (can't arrive here) or setDie is called which must block all further messages for the comID
+					ISIXE_LOG_ERROR("GameObject", "News: Component with id " << comID << " not part of this GameObject: " << msg->getMessageInfo() << " for GameObject of type: " << getType()); // TODO: (Daniel) check where the component really is deleted and fix it, this is only a workaround!!!
 					return;
 				}
 				com->News(msg);
@@ -289,8 +289,7 @@ namespace api {
 				ComPtr com = getGOCID(comID);
 
 				if (com == nullptr) {
-					// ISIXE_THROW_FAILURE("GameObject", "News: Component not part of this GameObject: " + msg->getMessageInfo() + " for GameObject of type: " + getType());
-					ISIXE_LOG_FATAL("GameObject", "News: Component not part of this GameObject: " << msg->getMessageInfo() << " for GameObject of type: " << getType()); // TODO: (Daniel) check where the component really is deleted and fix it, this is only a workaround!!!
+					ISIXE_LOG_ERROR("GameObject", "News: Component not part of this GameObject: " << msg->getMessageInfo() << " for GameObject of type: " << getType()); // TODO: (Daniel) check where the component really is deleted and fix it, this is only a workaround!!!
 					return;
 				}
 				deleteGOC(com->getFamilyID(), com->getIdentifier());
