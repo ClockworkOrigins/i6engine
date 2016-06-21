@@ -63,6 +63,7 @@ namespace widgets {
 	private:
 		bool _changeable;
 		utils::SyntaxHighlighter * _syntaxHighlighter;
+		QString _text;
 	};
 
 } /* namespace widgets */
