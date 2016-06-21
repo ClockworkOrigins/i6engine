@@ -188,7 +188,7 @@ namespace widgets {
 
 		delete _connections[p];
 		_connections.erase(p);
-		_connections.erase(p);
+		_connections.erase(std::make_pair(node2, node1));
 
 		// Deleting connections also means removing (not deleting) them from the ParticleSystem or its related components.
 		if (relation == ComponentRelation::CR_INCLUDE) {
@@ -258,8 +258,6 @@ namespace widgets {
 			wec->deleteLater();
 		}
 		_components.clear();
-		//_graphicsScene->views().first()->hide();
-		//_graphicsScene->views().first()->show();
 		WidgetEditComponent * particleSystemEditComponent = forceCreateParticleSystemEditComponent(); // 'Guarantees' a valid particleSystemEditComponent
 		if (copyParticleSystemPropertiesToPropertyWindow(particleSystemEditComponent, newParticleSystem)) {
 			createParticleSystemComponents(particleSystemEditComponent, newParticleSystem);
