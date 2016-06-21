@@ -27,7 +27,7 @@ namespace i6e {
 namespace particleEditor {
 namespace widgets {
 
-	WidgetScript::WidgetScript(QWidget * par) : QWidget(par), _changeable(true) {
+	WidgetScript::WidgetScript(QWidget * par) : QWidget(par), _changeable(true), _syntaxHighlighter(nullptr), _text() {
 		setupUi(this);
 
 		_syntaxHighlighter = new utils::SyntaxHighlighter(textEdit->document());
@@ -46,7 +46,8 @@ namespace widgets {
 		if (system) {
 			_changeable = false;
 			ParticleUniverse::String script = ParticleUniverse::ParticleSystemManager::getSingleton().writeScript(system);
-			textEdit->setText(QString::fromStdString(script));
+			_text = QString::fromStdString(script);
+			textEdit->setText(_text);
 			_changeable = true;
 		}
 	}
@@ -62,7 +63,7 @@ namespace widgets {
 	}
 
 	void WidgetScript::changedText() {
-		if (_changeable) {
+		if (_changeable && !_text.isEmpty()) {
 			emit notifyChanged();
 		}
 	}
