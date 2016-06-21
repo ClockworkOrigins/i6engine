@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Unsaved changes</source>
-        <translation>Ungespeicherte �nderungen</translation>
+        <translation>Ungespeicherte Änderungen</translation>
     </message>
     <message>
         <source>There are unsaved changes in your level. Do you want to save the level?</source>
@@ -829,7 +829,7 @@
     </message>
     <message>
         <source>There are unsaved changes for particle </source>
-        <translation>Es gibt ungespeicherte Änderungen für den Partikel </translation>
+        <translation>Es gibt ungespeicherte Änderungen für den Partikel</translation>
     </message>
     <message>
         <source>Do you want to save?</source>
