@@ -55,7 +55,9 @@ namespace widgets {
 		WidgetEditComponent * wec = (WidgetEditComponent *) i;
 		wec->setPos(evt->scenePos() + offset);
 		update(sceneRect());
-		wec->getConnection()->updatePath();
+		if (wec->getConnection()) {
+			wec->getConnection()->updatePath();
+		}
 	}
 
 } /* namespace widgets */
