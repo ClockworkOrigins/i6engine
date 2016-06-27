@@ -78,7 +78,9 @@ namespace config {
 		}
 
 		std::mutex _lock;
+		std::mutex _lock2;
 		std::condition_variable _conditionVariable;
+		std::condition_variable _conditionVariable2;
 	};
 
 	class RejectComponent : public Component {
@@ -148,22 +150,23 @@ namespace config {
 		RejectComponent::initCounter = 0;
 		EXPECT_EQ(0, RejectComponent::initCounter);
 		std::unique_lock<std::mutex> ul(_lock);
+		std::unique_lock<std::mutex> ul2(_lock2);
 		EngineController::GetSingletonPtr()->getObjectFacade()->registerCTemplate("Reject", boost::bind(&Component::createC<RejectComponent>, _1, _2));
 		EngineController::GetSingletonPtr()->getObjectFacade()->createGO("JengaStick", objects::GOTemplate(), EngineController::GetSingletonPtr()->getUUID(), false, [this](GOPtr go) {
 			attributeMap params;
 			EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(go->getID(), -1, "Reject", params, [this, go](ComPtr c) {
-				std::unique_lock<std::mutex> ul2(_lock);
+				std::unique_lock<std::mutex> ul3(_lock);
 				EXPECT_EQ(1, RejectComponent::initCounter);
 				_conditionVariable.notify_one();
 			});
 			EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(go->getID(), -1, "Reject", params, [this, go](ComPtr c) {
-				std::unique_lock<std::mutex> ul2(_lock);
+				std::unique_lock<std::mutex> ul4(_lock2);
 				EXPECT_EQ(1, RejectComponent::initCounter);
-				_conditionVariable.notify_one();
+				_conditionVariable2.notify_one();
 			});
 		});
-		_conditionVariable.wait(ul);
-		_conditionVariable.wait(ul);
+		EXPECT_EQ(0, int(_conditionVariable.wait_for(ul, std::chrono::seconds(1))));
+		EXPECT_EQ(0, int(_conditionVariable2.wait_for(ul2, std::chrono::seconds(1))));
 	}
 
 }
