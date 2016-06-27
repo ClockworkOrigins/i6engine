@@ -72,6 +72,8 @@ namespace widgets {
 		_graphicsView->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
 		_graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 		_graphicsView->setCacheMode(QGraphicsView::CacheBackground);
+
+		_graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 	}
 
 	WidgetEdit::~WidgetEdit() {
