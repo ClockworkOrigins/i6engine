@@ -28,12 +28,11 @@
 #include <cstdint>
 #include <mutex>
 #include <set>
+#include <vector>
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
 #include "i6engine/core/configs/SubsystemConfig.h"
-
-#include "boost/thread.hpp"
 
 /**
  * \page page_subsystems SubSystems
@@ -58,6 +57,10 @@
  * \li \ref page_physics
  * \li \ref page_scripting
  */
+
+namespace std {
+	class thread;
+} /* namespace std */
 
 namespace i6e {
 namespace core {
@@ -148,7 +151,7 @@ namespace core {
 	private:
 		bool _bolGlobalShutDown;
 		bool _bolWaitForInit;
-		std::vector<boost::thread *> _objThreadGrp;
+		std::vector<std::thread *> _objThreadGrp;
 		std::vector<QueuedModule> _objQueuedSubSystems;
 		EngineCoreController * _coreController;
 		std::mutex _lock;

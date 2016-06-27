@@ -19,6 +19,8 @@
 
 #include "i6engine/core/subsystem/SubSystemController.h"
 
+#include <thread>
+
 #include "i6engine/core/EngineCoreController.h"
 #include "i6engine/core/subsystem/ModuleController.h"
 
@@ -50,7 +52,7 @@ namespace core {
 
 	void SubSystemController::JoinAllSubsystems() {
 		std::lock_guard<std::mutex> lg(_lock);
-		for (boost::thread * t : _objThreadGrp) {
+		for (std::thread * t : _objThreadGrp) {
 			t->join();
 			delete t;
 		}
@@ -59,20 +61,20 @@ namespace core {
 	}
 
 	void SubSystemController::startSubSystemTicking(ModuleController * objSubSystem, const uint32_t lngFrameTime) {
-		_objThreadGrp.push_back(new boost::thread(boost::bind(&ModuleController::startThreadTicking, objSubSystem, lngFrameTime)));
+		_objThreadGrp.push_back(new std::thread(std::bind(&ModuleController::startThreadTicking, objSubSystem, lngFrameTime)));
 
 		while (_bolWaitForInit) {
-			boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
 		}
 
 		_bolWaitForInit = true;
 	}
 
 	void SubSystemController::startSubSystemWaiting(ModuleController * objSubSystem, const std::set<Subsystem> & waitingFor) {
-		_objThreadGrp.push_back(new boost::thread(boost::bind(&ModuleController::startThreadWaiting, objSubSystem, waitingFor)));
+		_objThreadGrp.push_back(new std::thread(std::bind(&ModuleController::startThreadWaiting, objSubSystem, waitingFor)));
 
 		while (_bolWaitForInit) {
-			boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
 		}
 
 		_bolWaitForInit = true;

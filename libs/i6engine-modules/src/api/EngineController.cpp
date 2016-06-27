@@ -71,6 +71,7 @@
 	#include "i6engine/modules/pythonscripting/PythonScriptingController.h"
 #endif
 
+#include "boost/thread.hpp" // FIXME: (Daniel) hack, otherwise boost::uuid isn't found
 #include "boost/uuid/uuid.hpp"
 #include "boost/uuid/uuid_generators.hpp"
 
@@ -198,7 +199,7 @@ namespace api {
 			_coreController->WaitForShutDown();
 
 			while (!_subsystemController->isShutdownComplete()) {
-				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
 
 			_appl->Finalize();
@@ -270,8 +271,7 @@ namespace api {
 	}
 
 	void EngineController::stop() {
-		boost::thread thrd(&EngineController::ShutDown, EngineController::GetSingletonPtr());
-		thrd.detach();
+		std::thread(&EngineController::ShutDown, EngineController::GetSingletonPtr()).detach();
 	}
 
 	void EngineController::reset() {

@@ -19,6 +19,8 @@
 
 #include "i6engine/core/messaging/MessagingController.h"
 
+#include <thread>
+
 #include "i6engine/utils/Logger.h"
 
 #ifdef ISIXE_WITH_PROFILING
@@ -27,13 +29,11 @@
 
 #include "i6engine/core/messaging/MessageSubscriber.h"
 
-#include "boost/thread.hpp"
-
 namespace i6e {
 namespace core {
 
 	MessagingController::MessagingController() : _objMessageTypeDictionary(), _dictionaryMutex(), _deliverThread(nullptr), _condVar(), _condMutex(), _running(true) {
-		_deliverThread = new boost::thread(boost::bind(&MessagingController::deliverMessages, this));
+		_deliverThread = new std::thread(std::bind(&MessagingController::deliverMessages, this));
 	}
 
 	MessagingController::~MessagingController() {
@@ -42,7 +42,6 @@ namespace core {
 			std::unique_lock<std::mutex> ul(_condMutex);
 			_condVar.notify_all();
 		}
-		_deliverThread->interrupt();
 		_deliverThread->join();
 		delete _deliverThread;
 	}

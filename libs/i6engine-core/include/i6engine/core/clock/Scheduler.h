@@ -27,14 +27,13 @@
 
 #include <queue>
 #include <set>
+#include <thread>
 
 #include "i6engine/utils/Clock.h"
 #include "i6engine/utils/Exceptions.h"
 
 #include "i6engine/core/configs/JobPriorities.h"
 #include "i6engine/core/configs/SchedulerConfig.h"
-
-#include "boost/thread.hpp"
 
 namespace i6e {
 namespace core {
@@ -97,7 +96,7 @@ namespace core {
 		explicit Scheduler(utils::Clock<ClockUpdater> & c) : _running(true), _clock(c), _queue(), _lock(), _id(), _workerThreads(), _removeIDs() {
 			for (uint16_t i = 0; i < SCHEDULER_THREAD_AMOUNT; i++) {
 				uint64_t tid = _clock.registerTimer();
-				_workerThreads.push_back(std::make_pair(tid, new boost::thread(boost::bind(&Scheduler<ClockUpdater>::worker, this, tid))));
+				_workerThreads.push_back(std::make_pair(tid, new std::thread(std::bind(&Scheduler<ClockUpdater>::worker, this, tid))));
 			}
 		}
 
@@ -127,12 +126,8 @@ namespace core {
 		 * \param[in] priority the priority in which order the timers are scheduled if time is equal
 		 */
 		uint64_t runOnce(uint64_t time, const boost::function<bool(void)> & f, JobPriorities priority) {
-			if (time <= 0) {
-				ISIXE_THROW_API("Scheduler", "time need to be > 0");
-			}
-
 			Job j(f, _clock.getTime() + time, priority, _id++);
-			boost::mutex::scoped_lock sl(_lock);
+			std::lock_guard<std::mutex> lg(_lock);
 			_queue.push(j);
 			if (_queue.top().time == j.time) {
 				for (uint16_t i = 0; i < SCHEDULER_THREAD_AMOUNT; i++) {
@@ -157,7 +152,7 @@ namespace core {
 			}
 
 			Job j(f, _clock.getTime() + interval, priority, _id++, interval);
-			boost::mutex::scoped_lock sl(_lock);
+			std::lock_guard<std::mutex> lg(_lock);
 			_queue.push(j);
 			if (_queue.top().time == j.time) {
 				for (uint16_t i = 0; i < SCHEDULER_THREAD_AMOUNT; i++) {
@@ -192,7 +187,7 @@ namespace core {
 		 * \brief removes all timers with given priority
 		 */
 		void removeTimer(JobPriorities priority) {
-			boost::mutex::scoped_lock sl(_lock);
+			std::lock_guard<std::mutex> lg(_lock);
 			std::priority_queue<Job> copy = _queue;
 
 			while (!_queue.empty()) {
@@ -214,7 +209,7 @@ namespace core {
 		 * returns true, if Timer was found, otherwise false
 		 */
 		bool stop(uint64_t id) {
-			boost::mutex::scoped_lock sl(_lock);
+			std::lock_guard<std::mutex> lg(_lock);
 			_removeIDs.insert(id);
 			return true;
 		}
@@ -275,14 +270,14 @@ namespace core {
 		/**
 		 * \brief mutex for thread safety
 		 */
-		mutable boost::mutex _lock;
+		mutable std::mutex _lock;
 
 		std::atomic<uint64_t> _id;
 
 		/**
 		 * \brief internal threads for worker method and their timer id
 		 */
-		std::vector<std::pair<uint64_t, boost::thread *>> _workerThreads;
+		std::vector<std::pair<uint64_t, std::thread *>> _workerThreads;
 
 		std::set<uint64_t> _removeIDs;
 

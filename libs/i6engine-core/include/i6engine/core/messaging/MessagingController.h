@@ -72,6 +72,10 @@
  * \image html Core_Messaging.png
  */
 
+namespace std {
+	class thread;
+} /* namespace std */
+
 namespace i6e {
 namespace core {
 
@@ -148,7 +152,7 @@ namespace core {
 		 */
 		clockUtils::container::DoubleBufferQueue<Message::Ptr, true, false> _msgQueue;
 
-		boost::thread * _deliverThread;
+		std::thread * _deliverThread;
 
 		std::condition_variable _condVar;
 		std::mutex _condMutex;

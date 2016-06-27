@@ -22,7 +22,6 @@
 #include "i6engine/editor/Editor.h"
 
 #include <chrono>
-#include <thread>
 
 #include "i6engine/configs/FrameTimes.h"
 
@@ -160,7 +159,7 @@ namespace editor {
 			p.second.second = false;
 		}
 
-		std::thread([this, file, callback]() {
+		i6eEngineController->registerTimer(0, [this, file, callback]() {
 			clearLevel();
 
 			startLoadLevel(file);
@@ -206,7 +205,8 @@ namespace editor {
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 			updateObjectList();
-		}).detach();
+			return false;
+		}, false, core::JobPriorities::Prio_Medium);
 	}
 
 	void Editor::saveLevel(const std::string & level) {

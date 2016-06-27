@@ -30,7 +30,11 @@
 
 #include "i6engine/utils/i6eSystemParameters.h"
 
-#include "boost/thread.hpp"
+#include "boost/function.hpp"
+
+namespace std {
+	class thread;
+} /* namespace std */
 
 namespace i6e {
 namespace utils {
@@ -56,14 +60,16 @@ namespace utils {
 		 * \brief sets the current time (only at clients, time will be synchronized by server)
 		 */
 		void setCurrentTime(uint64_t time);
+		
+		/**
+		 * \brief initializes the clock
+		 */
+		void Init();
 
 		/**
 		 * \brief stops the clock
 		 */
 		void Stop();
-
-	protected:
-		void Init();
 
 	private:
 		std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
@@ -74,7 +80,7 @@ namespace utils {
 
 		std::atomic<bool> _running;
 
-		boost::thread _thread;
+		std::thread * _thread;
 
 		/**
 		 * \brief updater method

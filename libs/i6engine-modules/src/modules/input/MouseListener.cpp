@@ -99,7 +99,11 @@ namespace modules {
 			return;
 		}
 
-		std::thread(iter->second).detach();
+		std::function<void(void)> callback = iter->second;
+		i6eEngineController->registerTimer(0, [callback]() {
+			callback();
+			return false;
+		}, false, core::JobPriorities::Prio_Medium);
 	}
 
 	void MouseListener::Tick() {

@@ -114,11 +114,6 @@ namespace modules {
 
 		/**
 		 * \brief Triggers the previously subscribed event for a key "Pressed" or "Released" event.
-		 *
-		 *    seems to invoke a function call to function in _objGUIFunctions specified by name and type
-		 *    merely checks existance of name and type value pair in _objGUIFunctions and calls boost::thread(iter->second) on success
-		 *
-		 * \return   bool true if enabled, false otherwise
 		 */
 		void triggerKeyFunction(const api::KeyCode keyCode, const api::KeyState type);
 

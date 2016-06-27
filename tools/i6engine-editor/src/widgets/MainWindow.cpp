@@ -516,7 +516,12 @@ namespace widgets {
 		_progressDialog->setCancelButton(nullptr);
 		connect(this, SIGNAL(triggerProgressValue(int)), _progressDialog, SLOT(setValue(int)));
 		connect(this, SIGNAL(triggerProgressMaximum(int)), _progressDialog, SLOT(setMaximum(int)));
-		std::thread(std::bind(&Editor::saveLevel, this, level.toStdString())).detach();
+
+		std::function<void(void)> callback = std::bind(&Editor::saveLevel, this, level.toStdString());
+		i6eEngineController->registerTimer(0, [callback]() {
+			callback();
+			return false;
+		}, false, core::JobPriorities::Prio_Medium);
 	}
 
 	void MainWindow::setProgressValue(int value) {

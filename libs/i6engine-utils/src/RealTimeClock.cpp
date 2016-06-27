@@ -19,10 +19,13 @@
 
 #include "i6engine/utils/RealTimeClock.h"
 
+#include <iostream>
+#include <thread>
+
 namespace i6e {
 namespace utils {
 
-	RealTimeClock::RealTimeClock(const boost::function<void(void)> & f) : _startTime(std::chrono::high_resolution_clock::now()), _offset(0), _update(f), _running(true), _thread() {
+	RealTimeClock::RealTimeClock(const boost::function<void(void)> & f) : _startTime(std::chrono::high_resolution_clock::now()), _offset(0), _update(f), _running(true), _thread(nullptr) {
 	}
 
 	RealTimeClock::~RealTimeClock() {
@@ -30,7 +33,7 @@ namespace utils {
 	}
 
 	void RealTimeClock::Init() {
-		_thread = boost::thread(boost::bind(&RealTimeClock::clockUpdater, this));
+		_thread = new std::thread(std::bind(&RealTimeClock::clockUpdater, this));
 	}
 
 	uint64_t RealTimeClock::getCurrentTime(uint64_t) const {
@@ -43,14 +46,17 @@ namespace utils {
 	}
 
 	void RealTimeClock::Stop() {
-		_running = false;
-		_thread.join();
+		if (_running) {
+			_running = false;
+			_thread->join();
+			delete _thread;
+		}
 	}
 
 	void RealTimeClock::clockUpdater() {
 		while (_running) {
 			_update();
-			boost::this_thread::sleep(boost::posix_time::microseconds(500));
+			std::this_thread::sleep_for(std::chrono::microseconds(500));
 		}
 	}
 

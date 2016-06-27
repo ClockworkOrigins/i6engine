@@ -326,22 +326,11 @@ namespace modules {
 
 		/**
 		 * \brief Triggers the previously subscribed event by clicking the window, with the name "name". Only clicking so far available
-		 *
-		 *    seems to invoke a function call to function in _objGUIFunctions specified by name
-		 *    merely checks existance of name in _objGUIFunctions and calls boost::thread(iter->second) on success
-		 *
-		 * \param   name
-		 * \return   bool true if enabled, false otherwise
 		 */
 		void triggerFunction(const std::string & name);
 
 		/**
 		 * \brief Triggers the previously subscribed event for a key "Pressed" or "Released" event.
-		 *
-		 *    seems to invoke a function call to function in _objGUIFunctions specified by name and type
-		 *    merely checks existance of name and type value pair in _objGUIFunctions and calls boost::thread(iter->second) on success
-		 *
-		 * \return   bool true if enabled, false otherwise
 		 */
 		void triggerKeyFunction(const uint32_t keyCode, const std::string & type);
 

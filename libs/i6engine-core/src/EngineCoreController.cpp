@@ -45,7 +45,7 @@ namespace core {
 		_subsystemController->Start();
 
 		while (!_bolIsInitialized) {
-			boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
 		}
 
 		utils::exceptions::ExceptionQueue::GetSingleton().addCallback([this]() {
@@ -102,7 +102,7 @@ namespace core {
 				}
 
 				// throttle main thread
-				boost::this_thread::sleep(boost::posix_time::milliseconds(5));
+				std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 				if (!utils::exceptions::ExceptionQueue::GetSingleton().isEmpty()) {
 					utils::exceptions::loginfo info = utils::exceptions::ExceptionQueue::GetSingleton().dequeue();
