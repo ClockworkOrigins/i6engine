@@ -32,7 +32,7 @@ set(terrainShapeCreatorSrc
 
 IF(WIN32)
    set(WINDOWS_RC_FILES
-         icon.rc
+         ${CMAKE_SOURCE_DIR}/config/icon.rc
          )
 ENDIF(WIN32)
 

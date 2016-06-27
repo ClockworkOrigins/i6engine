@@ -34,7 +34,7 @@ set(SampleWaynetSrc
 
 if(WIN32)
    set(WINDOWS_RC_FILES
-         resources/icon.rc
+         ${CMAKE_SOURCE_DIR}/config/icon.rc
          )
     source_group("Resources" FILES ${WINDOWS_RC_FILES})
 endif()

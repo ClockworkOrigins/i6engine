@@ -300,7 +300,7 @@ QT5_ADD_TRANSLATION(QT_TRANSLATION_FILES ${TRANS})
 
 IF(WIN32)
    set(WINDOWS_RC_FILES
-         resources/icon.rc
+         ${CMAKE_SOURCE_DIR}/config/icon.rc
          )
 ENDIF(WIN32)
 
