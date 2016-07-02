@@ -40,8 +40,6 @@
 #include <QMessageBox>
 #include <QResizeEvent>
 
-#undef max
-
 namespace i6e {
 namespace particleEditor {
 namespace widgets {

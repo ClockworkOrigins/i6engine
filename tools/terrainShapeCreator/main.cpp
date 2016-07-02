@@ -27,10 +27,6 @@
 
 #include "TerrainShapeCreatorApplication.h"
 
-#ifdef max
-	#undef max
-#endif
-
 #include "clockUtils/argParser/ArgumentParser.h"
 
 int main(int argc, char ** argv) {

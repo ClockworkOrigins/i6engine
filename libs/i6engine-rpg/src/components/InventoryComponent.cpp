@@ -31,10 +31,6 @@
 
 #include "i6engine/rpg/item/ItemManager.h"
 
-#ifdef max
-	#undef max
-#endif
-
 namespace i6e {
 namespace rpg {
 namespace components {

@@ -40,10 +40,6 @@
 #include "i6engine/rpg/components/SlotComponent.h"
 #include "i6engine/rpg/components/UsableItemComponent.h"
 
-#ifdef max
-	#undef max
-#endif
-
 namespace i6e {
 namespace rpg {
 namespace components {

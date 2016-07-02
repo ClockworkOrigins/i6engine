@@ -37,8 +37,6 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#undef max
-
 namespace i6e {
 namespace api {
 
