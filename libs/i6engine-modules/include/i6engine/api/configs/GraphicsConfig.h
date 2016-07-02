@@ -460,8 +460,9 @@ namespace graphics {
 	typedef struct Graphics_Particle_Create : GameMessageStruct {
 		std::string emitterName;
 		Vec3 pos;
+		Vec3 scale;
 		Graphics_Particle_Create();
-		Graphics_Particle_Create(const int64_t i, const int64_t, const std::string & s, const Vec3 & p);
+		Graphics_Particle_Create(const int64_t i, const int64_t, const std::string & s, const Vec3 & p, const Vec3 & sc);
 		Graphics_Particle_Create * copy() { return new Graphics_Particle_Create(*this); }
 	} Graphics_Particle_Create;
 

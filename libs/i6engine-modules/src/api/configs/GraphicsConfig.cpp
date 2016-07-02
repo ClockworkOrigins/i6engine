@@ -127,7 +127,7 @@ namespace graphics {
 
 	// Particle
 	Graphics_Particle_Create::Graphics_Particle_Create() : GameMessageStruct() {}
-	Graphics_Particle_Create::Graphics_Particle_Create(const int64_t goID, const int64_t coID, const std::string & s, const Vec3 & p) : GameMessageStruct(coID, goID), emitterName(s), pos(p) {
+	Graphics_Particle_Create::Graphics_Particle_Create(const int64_t goID, const int64_t coID, const std::string & s, const Vec3 & p, const Vec3 & sc) : GameMessageStruct(coID, goID), emitterName(s), pos(p), scale(sc) {
 	}
 
 	// Particle

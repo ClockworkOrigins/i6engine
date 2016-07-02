@@ -30,7 +30,7 @@
 namespace i6e {
 namespace modules {
 
-	ParticleComponent::ParticleComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & emitterName, const Vec3 & pos) : _manager(manager), _parent(parent), _sceneNode(nullptr) {
+	ParticleComponent::ParticleComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & emitterName, const Vec3 & pos, const Vec3 & scale) : _manager(manager), _parent(parent), _sceneNode(nullptr), _scale(scale) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		Ogre::SceneManager * sm = _manager->getSceneManager();
 
@@ -39,7 +39,7 @@ namespace modules {
 		_sceneNode = _parent->getSceneNode()->createChildSceneNode(name, pos.toOgre());
 		ParticleUniverse::ParticleSystem * particleSystem = ParticleUniverse::ParticleSystemManager::getSingletonPtr()->createParticleSystem(name, emitterName, sm);
 		_sceneNode->attachObject(particleSystem);
-		particleSystem->setScale(_sceneNode->_getDerivedScale());
+		particleSystem->setScale(_sceneNode->_getDerivedScale() * _scale.toOgre());
 		particleSystem->start();
 	}
 

@@ -762,10 +762,11 @@ namespace modules {
 
 			std::string emitterName = g->emitterName;
 			Vec3 pos = g->pos;
+			Vec3 scale = g->scale;
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
-			node->createParticleComponent(coid, emitterName, pos);
+			node->createParticleComponent(coid, emitterName, pos, scale);
 		} else if (msg->getSubtype() == api::graphics::GraBillboardSet) {
 			api::graphics::Graphics_BillboardSet_Create * gbc = static_cast<api::graphics::Graphics_BillboardSet_Create *>(msg->getContent());
 

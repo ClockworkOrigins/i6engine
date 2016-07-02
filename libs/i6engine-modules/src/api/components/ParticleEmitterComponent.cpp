@@ -31,12 +31,13 @@
 namespace i6e {
 namespace api {
 
-	ParticleEmitterComponent::ParticleEmitterComponent(const int64_t id, const attributeMap & params) : Component(id, params), _emitterName(), _pos(), _fadeOut(false), _fadeOutCooldown(0) {
+	ParticleEmitterComponent::ParticleEmitterComponent(const int64_t id, const attributeMap & params) : Component(id, params), _emitterName(), _pos(), _scale(1.0, 1.0, 1.0), _fadeOut(false), _fadeOutCooldown(0) {
 		Component::_objFamilyID = components::ParticleEmitterComponent;
 		Component::_objComponentID = components::ParticleEmitterComponent;
 
 		parseAttribute<true>(params, "particleEmitter", _emitterName);
 		parseAttribute<false>(params, "pos", _pos);
+		parseAttribute<false>(params, "scale", _scale);
 		parseAttribute<false>(params, "fadeOut", _fadeOut);
 
 		if (_fadeOut) {
@@ -48,22 +49,22 @@ namespace api {
 	}
 
 	void ParticleEmitterComponent::Init() {
-		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Create, new graphics::Graphics_Particle_Create(_objOwnerID, getID(), _emitterName, _pos), core::Subsystem::Object);
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Create, new graphics::Graphics_Particle_Create(_objOwnerID, getID(), _emitterName, _pos, _scale), core::Subsystem::Object);
 
-		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+		i6eMessagingFacade->deliverMessage(msg);
 	}
 
 	void ParticleEmitterComponent::Finalize() {
 		if (_fadeOut) {
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticleFadeOut, core::Method::Update, new graphics::Graphics_ParticleFadeOut_Update(_objOwnerID, getID()), core::Subsystem::Object));
+			i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticleFadeOut, core::Method::Update, new graphics::Graphics_ParticleFadeOut_Update(_objOwnerID, getID()), core::Subsystem::Object));
 			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), core::Subsystem::Object);
-			EngineController::GetSingleton().registerTimer(_fadeOutCooldown, [msg]() {
-				EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+			i6eEngineController->registerTimer(_fadeOutCooldown, [msg]() {
+				i6eMessagingFacade->deliverMessage(msg);
 				return false;
 			}, false, core::JobPriorities::Prio_Medium);
 		} else {
 			GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticle, core::Method::Delete, new graphics::Graphics_Particle_Delete(_objOwnerID, getID()), core::Subsystem::Object);
-			EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+			i6eMessagingFacade->deliverMessage(msg);
 		}
 	}
 
@@ -76,6 +77,9 @@ namespace api {
 		}
 		if (_pos.isValid()) {
 			writeAttribute(params, "pos", _pos);
+		}
+		if (_scale.isValid()) {
+			writeAttribute(params, "scale", _scale);
 		}
 		return params;
 	}
@@ -98,6 +102,13 @@ namespace api {
 			return _pos.toString();
 		}, [this](std::string s) {
 			_pos = Vec3(s);
+			// TODO: (Daniel) send Update
+			return true;
+		}, "Vec3"));
+		result.push_back(std::make_tuple(AccessState::READWRITE, "Scale", [this]() {
+			return _scale.toString();
+		}, [this](std::string s) {
+			_scale = Vec3(s);
 			// TODO: (Daniel) send Update
 			return true;
 		}, "Vec3"));

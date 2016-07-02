@@ -300,11 +300,11 @@ namespace modules {
 		assert(_lights.find(coid) == _lights.end());
 	}
 
-	void GraphicsNode::createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos) {
+	void GraphicsNode::createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos, const Vec3 & scale) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 #ifdef ISIXE_WITH_PARTICLEUNIVERSE
 		assert(_particles.find(coid) == _particles.end());
-		ParticleComponent * pc = new ParticleComponent(_manager, this, _gameObjectID, coid, emitterName, pos);
+		ParticleComponent * pc = new ParticleComponent(_manager, this, _gameObjectID, coid, emitterName, pos, scale);
 		_particles.insert(std::make_pair(coid, pc));
 		assert(_particles.find(coid) != _particles.end());
 #endif

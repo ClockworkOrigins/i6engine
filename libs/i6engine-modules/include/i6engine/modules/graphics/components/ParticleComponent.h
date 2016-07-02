@@ -67,9 +67,14 @@ namespace modules {
 		Ogre::SceneNode * _sceneNode;
 
 		/**
+		 * Scale of this particle
+		 */
+		Vec3 _scale;
+
+		/**
 		 * \brief Create a new ParticleComponent
 		 */
-		ParticleComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & emitterName, const Vec3 & pos);
+		ParticleComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & emitterName, const Vec3 & pos, const Vec3 & scale);
 
 		/**
 		 * \brief ~ParticleComponent

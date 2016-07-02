@@ -232,8 +232,9 @@ namespace modules {
 		 *
 		 * \param emitterName Script file for this emitter
 		 * \param pos Relative Position to this GraphicsNode
+		 * \param scale Relative Scale to this GraphicsNode
 		 */
-		void createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos);
+		void createParticleComponent(const int64_t coid, const std::string & emitterName, const Vec3 & pos, const Vec3 & scale);
 
 		/**
 		 * \brief lets a particle fade out
