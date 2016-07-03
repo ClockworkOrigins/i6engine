@@ -92,6 +92,7 @@ namespace gui {
 		GuiSetAutoLineBreak,
 		GuiDefaultFont,
 		GuiSetParent,
+		GuiSetTransparencyCheck,
 		GuiMessageTypesCount
 	};
 
@@ -649,6 +650,18 @@ namespace gui {
 			return new GUI_SetParent(*this);
 		}
 	} GUI_SetParent;
+
+	/**
+	 * \brief enables or disables transparency check
+	 */
+	typedef struct GUI_SetTransparencyCheck : GUIUpdateMessageStruct {
+		bool enabled;
+		GUI_SetTransparencyCheck(const std::string & name, bool e) : GUIUpdateMessageStruct(name), enabled(e) {
+		}
+		GUI_SetTransparencyCheck * copy() {
+			return new GUI_SetTransparencyCheck(*this);
+		}
+	} GUI_SetTransparencyCheck;
 
 } /* namespace gui */
 } /* namespace api */

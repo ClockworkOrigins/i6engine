@@ -36,13 +36,6 @@ namespace modules {
 		_window->setProperty("RiseOnClickEnabled", "False");
 
 		_window->subscribeEvent(CEGUI::Window::EventTextChanged, CEGUI::Event::Subscriber(&GUIEditbox::textChanged, this));
-
-		_window->setUsingAutoRenderingSurface(true);
-
-		CEGUI::RenderingSurface* rs = _window->getRenderingSurface();
-		if (rs) {
-			rs->subscribeEvent(CEGUI::RenderingSurface::EventRenderQueueEnded, CEGUI::Event::Subscriber(&api::GUIWidget::renderingEndedHandler, dynamic_cast<api::GUIWidget *>(this)));
-		}
 	}
 
 	void GUIEditbox::update(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {

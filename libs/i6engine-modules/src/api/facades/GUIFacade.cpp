@@ -357,5 +357,9 @@ namespace api {
 		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetParent, core::Method::Update, new gui::GUI_SetParent(child, parent), core::Subsystem::Unknown));
 	}
 
+	void GUIFacade::setTransparencyCheckEnabled(const std::string & name, bool enabled) const {
+		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetTransparencyCheck, core::Method::Update, new gui::GUI_SetTransparencyCheck(name, enabled), core::Subsystem::Unknown));
+	}
+
 } /* namespace api */
 } /* namespace i6e */

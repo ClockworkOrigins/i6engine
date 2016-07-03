@@ -547,6 +547,12 @@ namespace gui {
 		 */
 		void addWidgetAsChildTo(const std::string & child, const std::string & parent) const;
 
+		/**
+		 * \brief enables or disables transparent check for a GUIWidget
+		 * the check is disabled by default as it needs memory and time, so take care to just enable it for widgets you really need to check
+		 */
+		void setTransparencyCheckEnabled(const std::string & name, bool enabled) const;
+
 	private:
 		bool _onWindow;
 		bool _captured;

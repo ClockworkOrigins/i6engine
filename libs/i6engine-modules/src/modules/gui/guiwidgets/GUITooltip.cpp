@@ -36,13 +36,6 @@ namespace modules {
 		_window->setMousePassThroughEnabled(true);
 		_window->setAlwaysOnTop(true);
 
-		_window->setUsingAutoRenderingSurface(true);
-		
-		CEGUI::RenderingSurface * rs = _window->getRenderingSurface();
-		if (rs) {
-			rs->subscribeEvent(CEGUI::RenderingSurface::EventRenderQueueEnded, CEGUI::Event::Subscriber(&api::GUIWidget::renderingEndedHandler, dynamic_cast<api::GUIWidget *>(this)));
-		}
-
 		enableTicking(true);
 	}
 
