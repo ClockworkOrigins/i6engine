@@ -360,10 +360,10 @@ namespace modules {
 		assert(_billboardSets.find(coid) == _billboardSets.end());
 	}
 
-	void GraphicsNode::createMovableText(int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour) {
+	void GraphicsNode::createMovableText(int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour, const Vec3 & position) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		assert(_movableTexts.find(coid) == _movableTexts.end());
-		MovableTextComponent * mtc = new MovableTextComponent(_manager, this, _gameObjectID, coid, font, text, size, colour);
+		MovableTextComponent * mtc = new MovableTextComponent(_manager, this, _gameObjectID, coid, font, text, size, colour, position);
 		_movableTexts.insert(std::make_pair(coid, mtc));
 		assert(_movableTexts.find(coid) != _movableTexts.end());
 	}

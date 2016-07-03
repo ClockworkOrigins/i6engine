@@ -269,7 +269,7 @@ namespace modules {
 		/**
 		 * \brief creates a movable text upon the target mesh
 		 */
-		void createMovableText(int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour);
+		void createMovableText(int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour, const Vec3 & position);
 
 		/**
 		 * \brief updates settings of the movable text

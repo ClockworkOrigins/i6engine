@@ -738,7 +738,8 @@ namespace graphics {
 		std::string text;
 		double size;
 		Vec3 colour;
-		Graphics_MovableText_Create(int64_t goid, int64_t coid, const std::string & f, const std::string & t, double s, const Vec3 & c) : GameMessageStruct(coid, goid), font(f), text(t), size(s), colour(c) {
+		Vec3 position;
+		Graphics_MovableText_Create(int64_t goid, int64_t coid, const std::string & f, const std::string & t, double s, const Vec3 & c, const Vec3 & p) : GameMessageStruct(coid, goid), font(f), text(t), size(s), colour(c), position(p) {
 		}
 		Graphics_MovableText_Create * copy() {
 			return new Graphics_MovableText_Create(*this);

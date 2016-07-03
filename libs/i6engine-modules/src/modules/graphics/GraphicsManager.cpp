@@ -778,7 +778,7 @@ namespace modules {
 
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
-			node->createMovableText(coid, gmtc->font, gmtc->text, gmtc->size, gmtc->colour);
+			node->createMovableText(coid, gmtc->font, gmtc->text, gmtc->size, gmtc->colour, gmtc->position);
 		} else if (msg->getSubtype() == api::graphics::GraLine) {
 			api::graphics::Graphics_Line_Create * glc = static_cast<api::graphics::Graphics_Line_Create *>(msg->getContent());
 			GraphicsNode * node = getGraphicsNode(goid);

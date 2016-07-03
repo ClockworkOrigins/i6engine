@@ -43,6 +43,7 @@ namespace api {
 	 * | text | yes | std::string | the text shown above the GameObject | yes |
 	 * | size | yes | double | font size | yes |
 	 * | colour | yes | Vec3 | colour of the text | yes |
+	 * | pos | no | Vec3 | offset of this MovableText |
 	 */
 	class ISIXE_MODULES_API MovableTextComponent : public Component {
 	public:
@@ -79,6 +80,7 @@ namespace api {
 		std::string _text;
 		double _size;
 		Vec3 _colour;
+		Vec3 _position;
 		std::function<double(const Vec3 &, const Vec3 &)> _autoScaleCallback;
 
 		void Init() override;

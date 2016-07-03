@@ -855,7 +855,7 @@ namespace editor {
 					api::writeAttribute(params, "size", 0.5);
 					api::writeAttribute(params, "colour", Vec3(1.0, 1.0, 1.0));
 					api::writeAttribute(params, "text", go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName());
-					api::writeAttribute(params, "autoScaleDistance", 10.0);
+					api::writeAttribute(params, "pos", Vec3(0.0, 1.0, 0.0));
 					i6eObjectFacade->createComponentCallback(go->getID(), i6eEngineController->getIDManager()->getID(), "MovableText", params, [](api::ComPtr c) {
 						auto mtc = utils::dynamic_pointer_cast<api::MovableTextComponent>(c);
 						mtc->setAutoScaleCallback([](const Vec3 & cameraPos, const Vec3 & textPos) {

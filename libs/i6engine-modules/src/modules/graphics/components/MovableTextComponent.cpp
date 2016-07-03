@@ -31,10 +31,11 @@
 namespace i6e {
 namespace modules {
 
-	MovableTextComponent::MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour) : _manager(manager), _parent(parent), _movableText(nullptr), _id(coid), _size(size), _autoScaleCallback() {
+	MovableTextComponent::MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour, const Vec3 & position) : _manager(manager), _parent(parent), _movableText(nullptr), _id(coid), _size(size), _autoScaleCallback() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			_movableText = new MovableText("MTC_" + std::to_string(goid) + "_" + std::to_string(coid), text, font, size, Ogre::ColourValue(colour.getX(), colour.getY(), colour.getZ(), 1.0f));
+			_movableText->setLocalTranslation(position.toOgre());
 			_parent->getSceneNode()->attachObject(_movableText);
 		} catch (Ogre::Exception & e) {
 			ISIXE_LOG_WARN("MovableTextComponent", e.what());

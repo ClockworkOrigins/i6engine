@@ -35,7 +35,7 @@
 namespace i6e {
 namespace api {
 
-	MovableTextComponent::MovableTextComponent(const int64_t id, const attributeMap & params) : Component(id, params), _font(), _text(), _size(), _colour(), _autoScaleCallback() {
+	MovableTextComponent::MovableTextComponent(const int64_t id, const attributeMap & params) : Component(id, params), _font(), _text(), _size(), _colour(), _position(), _autoScaleCallback() {
 		Component::_objFamilyID = components::MovableTextComponent;
 		Component::_objComponentID = components::MovableTextComponent;
 
@@ -43,13 +43,14 @@ namespace api {
 		parseAttribute<true>(params, "text", _text);
 		parseAttribute<true>(params, "size", _size);
 		parseAttribute<true>(params, "colour", _colour);
+		parseAttribute<false>(params, "pos", _position);
 	}
 
 	MovableTextComponent::~MovableTextComponent() {
 	}
 
 	void MovableTextComponent::Init() {
-		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Create, new graphics::Graphics_MovableText_Create(_objOwnerID, getID(), _font, _text, _size, _colour), core::Subsystem::Object));
+		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraMovableText, core::Method::Create, new graphics::Graphics_MovableText_Create(_objOwnerID, getID(), _font, _text, _size, _colour, _position), core::Subsystem::Object));
 	}
 
 	void MovableTextComponent::Finalize() {
@@ -62,6 +63,7 @@ namespace api {
 		writeAttribute(params, "text", _text);
 		writeAttribute(params, "size", _size);
 		writeAttribute(params, "colour", _colour);
+		writeAttribute(params, "pos", _position);
 		return params;
 	}
 

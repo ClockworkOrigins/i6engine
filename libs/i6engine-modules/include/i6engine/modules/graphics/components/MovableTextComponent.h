@@ -74,7 +74,7 @@ namespace modules {
 		/**
 		 * \brief Create a new MovableTextComponent
 		 */
-		MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour);
+		MovableTextComponent(GraphicsManager * manager, GraphicsNode * parent, const int64_t goid, const int64_t coid, const std::string & font, const std::string & text, double size, const Vec3 & colour, const Vec3 & position);
 
 		/**
 		 * \brief ~MovableTextComponent
