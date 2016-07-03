@@ -881,6 +881,8 @@ namespace modules {
 			Vec3 s = static_cast<api::graphics::Graphics_Node_Update *>(msg->getContent())->scale;
 
 			sceneNode->setScale(s.toOgre());
+
+			node->updateParticleScales();
 		} else if (msg->getSubtype() == api::graphics::GraPlayAnimation) {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
@@ -973,6 +975,10 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->updateMeshComponentShadowCasting(coid, enabled);
+		} else if (msg->getSubtype() == api::graphics::GraParticleScale) {
+			GraphicsNode * node = getGraphicsNode(goid);
+			assert(node);
+			node->particleScale(coid, dynamic_cast<api::graphics::Graphics_ParticleScale_Update *>(msg->getContent())->scale);
 		} else {
 			ISIXE_THROW_MESSAGE("GraphicsManager", "Unknown MessageSubType '" << msg->getSubtype() << "'");
 		}

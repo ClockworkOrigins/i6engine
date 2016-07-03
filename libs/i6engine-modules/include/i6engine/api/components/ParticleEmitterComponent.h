@@ -61,6 +61,11 @@ namespace api {
 		~ParticleEmitterComponent();
 
 		/**
+		 * \brief sets the scale of this particle relative to its SceneNode
+		 */
+		void setScale(const Vec3 & scale);
+
+		/**
 		 * \brief synchronizes the Components state
 		 */
 		attributeMap synchronize() const override;

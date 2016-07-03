@@ -85,7 +85,8 @@ namespace graphics {
 		GraAnimationFrameEvent,
 		GraMeshVisibility,
 		GraShadowCasting,
-		GraTerrainSetHeight
+		GraTerrainSetHeight,
+		GraParticleScale
 	};
 
 	enum class ShadowTechnique {
@@ -474,6 +475,17 @@ namespace graphics {
 		Graphics_Particle_Update(const int64_t, const int64_t);
 		Graphics_Particle_Update * copy() { return new Graphics_Particle_Update(*this); }
 	} Graphics_Particle_Update;
+
+	/**
+	 * \brief updates a particle effect
+	 */
+	typedef struct Graphics_ParticleScale_Update : GameMessageStruct {
+		Vec3 scale;
+		Graphics_ParticleScale_Update(const int64_t, const int64_t, const Vec3 & s);
+		Graphics_ParticleScale_Update * copy() {
+			return new Graphics_ParticleScale_Update(*this);
+		}
+	} Graphics_ParticleScale_Update;
 
 	/**
 	 * \brief lets a particle fade out

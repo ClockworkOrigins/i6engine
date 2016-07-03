@@ -87,6 +87,16 @@ namespace modules {
 		void particleFadeOut();
 
 		/**
+		 * \brief sets Scale of this particle
+		 */
+		void setScale(const Vec3 & scale);
+
+		/**
+		 * \brief updates scale if parent changed
+		 */
+		void updateScale();
+
+		/**
 		 * \brief forbidden
 		 */
 		ParticleComponent(const ParticleComponent &) = delete;

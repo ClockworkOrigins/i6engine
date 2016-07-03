@@ -318,6 +318,23 @@ namespace modules {
 #endif
 	}
 
+	void GraphicsNode::particleScale(int64_t coid, const Vec3 & scale) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
+		assert(_particles.find(coid) != _particles.end());
+		_particles[coid]->setScale(scale);
+#endif
+	}
+
+	void GraphicsNode::updateParticleScales() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+#ifdef ISIXE_WITH_PARTICLEUNIVERSE
+		for (auto it = _particles.begin(); it != _particles.end(); it++) {
+			it->second->updateScale();
+		}
+#endif
+	}
+
 	void GraphicsNode::deleteParticleComponent(const int64_t coid) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 #ifdef ISIXE_WITH_PARTICLEUNIVERSE

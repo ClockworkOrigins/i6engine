@@ -1244,7 +1244,8 @@ scope registerObject() {
 		class_<i6e::api::ParticleEmitterComponent, i6e::api::Component, i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component>>("ParticleEmitterComponent")
 			.def(constructor<int64_t, const i6e::api::attributeMap &>())
 			.def("synchronize", &i6e::api::ParticleEmitterComponent::synchronize)
-			.def("getTemplateName", &i6e::api::ParticleEmitterComponent::getTemplateName),
+			.def("getTemplateName", &i6e::api::ParticleEmitterComponent::getTemplateName)
+			.def("setScale", &i6e::api::ParticleEmitterComponent::setScale),
 
 		class_<i6e::api::ResponseType::ResponseType>("ResponseType")
 			.def(constructor<>())

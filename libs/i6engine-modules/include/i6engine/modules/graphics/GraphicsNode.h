@@ -242,6 +242,16 @@ namespace modules {
 		void particleFadeOut(int64_t coid);
 
 		/**
+		 * \brief scales a particle
+		 */
+		void particleScale(int64_t coid, const Vec3 & scale);
+
+		/**
+		 * \brief updates the scale for every attached particle
+		 */
+		void updateParticleScales();
+
+		/**
 		 * \brief deletes the ParticleEmitter of this Node
 		 */
 		void deleteParticleComponent(const int64_t coid);

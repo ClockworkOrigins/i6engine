@@ -68,6 +68,11 @@ namespace api {
 		}
 	}
 
+	void ParticleEmitterComponent::setScale(const Vec3 & scale) {
+		_scale = scale;
+		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsNodeMessageType, graphics::GraParticleScale, core::Method::Update, new graphics::Graphics_ParticleScale_Update(_objOwnerID, getID(), scale), core::Subsystem::Object));
+	}
+
 	attributeMap ParticleEmitterComponent::synchronize() const {
 		attributeMap params;
 		writeAttribute(params, "particleEmitter", _emitterName);

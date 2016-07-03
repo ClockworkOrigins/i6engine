@@ -62,5 +62,24 @@ namespace modules {
 		part->stopFade();
 	}
 
+	void ParticleComponent::setScale(const Vec3 & scale) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_scale = scale;
+		ParticleUniverse::ParticleSystem * part = dynamic_cast<ParticleUniverse::ParticleSystem *>(_sceneNode->getAttachedObject(0));
+		if (part == nullptr) {
+			ISIXE_THROW_FAILURE("ParticleComponent", "Particle system broken, can't fade out");
+		}
+		part->setScale(_sceneNode->_getDerivedScale() * _scale.toOgre());
+	}
+
+	void ParticleComponent::updateScale() {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		ParticleUniverse::ParticleSystem * part = dynamic_cast<ParticleUniverse::ParticleSystem *>(_sceneNode->getAttachedObject(0));
+		if (part == nullptr) {
+			ISIXE_THROW_FAILURE("ParticleComponent", "Particle system broken, can't fade out");
+		}
+		part->setScale(_sceneNode->_getDerivedScale() * _scale.toOgre());
+	}
+
 } /* namespace modules */
 } /* namespace i6e */

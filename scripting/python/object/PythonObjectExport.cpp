@@ -1319,7 +1319,8 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 
 	class_<i6e::api::ParticleEmitterComponent, i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component>, boost::noncopyable>("ParticleEmitterComponent", no_init)
 		.def("synchronize", &i6e::api::ParticleEmitterComponent::synchronize)
-		.def("getTemplateName", &i6e::api::ParticleEmitterComponent::getTemplateName);
+		.def("getTemplateName", &i6e::api::ParticleEmitterComponent::getTemplateName)
+		.def("setScale", &i6e::api::ParticleEmitterComponent::setScale);
 
 	enum_<i6e::api::ResponseType::ResponseType>("ResponseType")
 		.value("NONE", i6e::api::ResponseType::ResponseType::NONE)

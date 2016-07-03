@@ -134,6 +134,8 @@ namespace graphics {
 	Graphics_Particle_Update::Graphics_Particle_Update() : GameMessageStruct() {}
 	Graphics_Particle_Update::Graphics_Particle_Update(const int64_t goID, const int64_t coID) : GameMessageStruct(coID, goID) {
 	}
+	Graphics_ParticleScale_Update::Graphics_ParticleScale_Update(const int64_t goID, const int64_t coID, const Vec3 & s) : GameMessageStruct(coID, goID), scale(s) {
+	}
 
 	// Particle
 	Graphics_Particle_Delete::Graphics_Particle_Delete() : GameMessageStruct() {}
