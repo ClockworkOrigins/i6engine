@@ -163,6 +163,8 @@ namespace gui {
 		//! whether data in hit test buffer is inverted.
 		bool _hitBufferInverted;
 
+		bool _transparencyCheckEnabled;
+
 		bool drag(const CEGUI::EventArgs & e);
 		bool drop(const CEGUI::EventArgs & e);
 		bool mouseMove(const CEGUI::EventArgs & e);

@@ -30,7 +30,7 @@
 namespace i6e {
 namespace api {
 
-	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false), _animations(), _hitTestBuffer(nullptr), _hitBufferCapacity(), _hitBufferSize(), _hitBufferInverted(false) {
+	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false), _animations(), _hitTestBuffer(nullptr), _hitBufferCapacity(), _hitBufferSize(), _hitBufferInverted(false), _transparencyCheckEnabled(false) {
 	}
 
 	GUIWidget::~GUIWidget() {
@@ -93,6 +93,30 @@ namespace api {
 		} else if (type == gui::GUIMessageTypes::GuiUnpauseAnimation) {
 			auto it = _animations.find(dynamic_cast<gui::GUI_UnpauseAnimation *>(message)->animation);
 			it->second->unpause();
+		} else if (type == gui::GUIMessageTypes::GuiSetTransparencyCheck) {
+			bool enabled = dynamic_cast<gui::GUI_SetTransparencyCheck *>(message)->enabled;
+			if (_transparencyCheckEnabled != enabled) {
+				_transparencyCheckEnabled = enabled;
+				if (_transparencyCheckEnabled) {
+					_window->setUsingAutoRenderingSurface(true);
+
+					CEGUI::RenderingSurface* rs = _window->getRenderingSurface();
+					if (rs) {
+						rs->subscribeEvent(CEGUI::RenderingSurface::EventRenderQueueEnded, CEGUI::Event::Subscriber(&api::GUIWidget::renderingEndedHandler, dynamic_cast<api::GUIWidget *>(this)));
+					}
+				} else {
+					_window->setUsingAutoRenderingSurface(false);
+
+					CEGUI::RenderingSurface* rs = _window->getRenderingSurface();
+					if (rs) {
+						rs->removeEvent(CEGUI::RenderingSurface::EventRenderQueueEnded);
+					}
+
+					delete[] _hitTestBuffer;
+					_hitTestBuffer = nullptr;
+					_hitBufferCapacity = 0;
+				}
+			}
 		} else {
 			ISIXE_THROW_API("GUI", "Don't know what to do with " << type);
 		}
@@ -143,6 +167,9 @@ namespace api {
 	}
 
 	bool GUIWidget::renderingEndedHandler(const CEGUI::EventArgs & args) {
+		if (!_transparencyCheckEnabled) {
+			return false;
+		}
 		if (static_cast<const CEGUI::RenderQueueEventArgs &>(args).queueID != CEGUI::RQ_BASE) {
 			return false;
 		}

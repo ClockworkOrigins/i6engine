@@ -40,7 +40,6 @@ namespace modules {
 		_window->setProperty("RiseOnClickEnabled", "False");
 
 		_window->getChild("Editbox")->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&GUIChat::textAccepted, this));
-		_window->setUsingAutoRenderingSurface(true);
 
 		ISIXE_REGISTERMESSAGETYPE(api::messages::ChatMessageType, GUIChat::News, this);
 	}
