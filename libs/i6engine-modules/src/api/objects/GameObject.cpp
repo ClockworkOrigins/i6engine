@@ -115,7 +115,7 @@ namespace api {
 		return result;
 	}
 
-	bool GameObject::setGOC(const ComPtr & objNewGOC) {
+	std::pair<bool, int64_t> GameObject::setGOC(const ComPtr & objNewGOC) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		// Check, if the new GOC is nullptr
 		if (objNewGOC == nullptr) {
@@ -128,6 +128,7 @@ namespace api {
 		// Check, if GameObject already has a GOComponent with the family id of objNewGOC
 		ComPtr objOldGOC = getGOC(famID);
 		bool ret = true;
+		int64_t id = -1;
 		if (objOldGOC != nullptr) {
 			std::pair<AddStrategy, int64_t> add = objOldGOC->howToAdd(objNewGOC);
 			switch (add.first) {
@@ -145,11 +146,13 @@ namespace api {
 					objOldGOC->_subComps[size_t(add.second)]->Finalize();
 					objOldGOC->_subComps[size_t(add.second)] = objNewGOC;
 				}
+				id = objOldGOC->getID();
 				break;
 			}
 			case AddStrategy::REPLACE_DIS: {
 				_objComponents[famID]->Finalize();
 				_objComponents[famID] = objNewGOC; // add new component
+				id = objOldGOC->getID();
 				break;
 			}
 			case AddStrategy::REJECT: {
@@ -168,7 +171,7 @@ namespace api {
 			_objComponents[famID] = objNewGOC;
 			objNewGOC->setOwnerGO(_self);
 		}
-		return ret;
+		return std::make_pair(ret, id);
 	}
 
 	void GameObject::clearGOCs() {
