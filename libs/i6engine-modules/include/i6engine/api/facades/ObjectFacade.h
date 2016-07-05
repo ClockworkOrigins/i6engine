@@ -208,9 +208,19 @@ namespace api {
 		void registerNotifyCallback(const boost::function<void(int64_t)> & f);
 
 		/**
+		 * \brief register callback for notifying deleted IDs, call only from ObjectController
+		 */
+		void registerDeletedNotifyCallback(const boost::function<void(int64_t)> & f);
+
+		/**
 		 * \brief notifies new id in subsystem
 		 */
 		void notifyNewID(int64_t id);
+
+		/**
+		 * \brief notifies deleted id in subsystem
+		 */
+		void notifyDeletedID(int64_t id);
 
 		/**
 		 * \brief registers callback for addTicker, call only by Object Subsystem
@@ -274,7 +284,8 @@ namespace api {
 		 */
 		uint32_t _frameTime;
 
-		boost::function<void(int64_t)> _notify;
+		boost::function<void(int64_t)> _notifyNewID;
+		boost::function<void(int64_t)> _notifyDeletedID;
 
 		boost::function<void(const WeakComPtr &)> _addTicker;
 		boost::function<void(int64_t)> _removeTicker;

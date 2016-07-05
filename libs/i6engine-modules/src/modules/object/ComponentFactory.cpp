@@ -60,16 +60,22 @@ namespace modules {
 		}
 
 		if (id == -1) {
-			id = api::EngineController::GetSingletonPtr()->getIDManager()->getID();
+			id = i6eEngineController->getIDManager()->getID();
 		}
 
 		// Return the new GOComponent created by the registered method
 		api::ComPtr co = (it->second)(id, params);
-		if (owner.get()->setGOC(co)) {
+		std::pair<bool, int64_t> addedOrReplaced = owner.get()->setGOC(co);
+		if (addedOrReplaced.first) {
 			co->setSelf(co);
 			co->enableTicking(_tickingAllowed);
 
-			api::EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(id);
+			i6eEngineController->getObjectFacade()->notifyNewID(id);
+
+			if (addedOrReplaced.second != -1) {
+				i6eEngineController->getObjectFacade()->notifyDeletedID(id);
+			}
+
 			return co;
 		} else {
 			return api::ComPtr();

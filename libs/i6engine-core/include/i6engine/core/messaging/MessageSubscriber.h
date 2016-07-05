@@ -58,7 +58,6 @@ namespace core {
 		}
 	};
 	typedef boost::shared_ptr<ReceivedMessage> ReceivedMessagePtr;
-
 	typedef std::vector<ReceivedMessagePtr> MessageVector;
 
 	/**
@@ -78,7 +77,7 @@ namespace core {
 		/**
 		 * \brief Standard constructor
 		 */
-		MessageSubscriber() : _objMessageVectorMutex(), _objMessageVectorA(), _objMessageVectorB(), _objActiveMessageVector(&_objMessageVectorA), _objInActiveMessageVector(&_objMessageVectorB), _ptrMessageMethod(), _newCreatedIDs(), _existingObjects(), _waitingMsgs(), _objMessageListMutex() {
+		MessageSubscriber() : _objMessageVectorMutex(), _objMessageVectorA(), _objMessageVectorB(), _objActiveMessageVector(&_objMessageVectorA), _objInActiveMessageVector(&_objMessageVectorB), _ptrMessageMethod(), _newCreatedIDs(), _newDeletedIDs(), _existingObjects(), _waitingMsgs(), _objMessageListMutex() {
 		}
 
 		/**
@@ -105,6 +104,12 @@ namespace core {
 		 * \param id The new id.
 		 */
 		void notifyNewID(const int64_t id);
+
+		/**
+		 * \brief This method notifies the MessagingController that Messages waiting for this id mustn't be forwarded anymore
+		 * \param id The new id.
+		 */
+		void notifyDeletedID(const int64_t id);
 
 		/**
 		 * \brief Calls deliverMessageInternal if the message should be delivered now, buffers it if not.
@@ -168,11 +173,15 @@ namespace core {
 		virtual void deliverMessageInternal(const ReceivedMessagePtr & msg);
 
 	private:
-
 		/**
 		 * \brief vector containing all new notified IDs since the last tick happened
 		 */
 		std::vector<int64_t> _newCreatedIDs; // list of all IDs that got created since the last tick
+
+		/**
+		 * \brief vector containing all new deleted IDs since the last tick happened
+		 */
+		std::vector<int64_t> _newDeletedIDs;
 
 		/**
 		 * \brief list of all IDs being registered

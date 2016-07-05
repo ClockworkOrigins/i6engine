@@ -120,6 +120,16 @@ namespace core {
 	bool MessageSubscriber::updateBuffer() {
 		// Step 6
 		// determind all Messages that can now be delivered
+		{
+			_objMessageListMutex.lock();
+			std::vector<int64_t> ids = _newDeletedIDs;
+			_newDeletedIDs.clear();
+			_objMessageListMutex.unlock();
+			for (int64_t i : ids) {
+				_existingObjects[i] = IDStatus::DELETED;
+			}
+		}
+
 		_objMessageListMutex.lock();
 		std::vector<int64_t> ids = _newCreatedIDs;
 		_newCreatedIDs.clear();
@@ -199,6 +209,11 @@ namespace core {
 	void MessageSubscriber::notifyNewID(const int64_t id) {
 		boost::mutex::scoped_lock sl(_objMessageListMutex);
 		_newCreatedIDs.push_back(id);
+	}
+
+	void MessageSubscriber::notifyDeletedID(const int64_t id) {
+		boost::mutex::scoped_lock sl(_objMessageListMutex);
+		_newDeletedIDs.push_back(id);
 	}
 
 	void MessageSubscriber::deliverMessageInternal(const ReceivedMessagePtr & msg) {

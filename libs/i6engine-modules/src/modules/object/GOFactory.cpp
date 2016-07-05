@@ -193,7 +193,7 @@ namespace modules {
 		// add NetworkSenderComponent if sending object and Multiplayer
 		if (sender && api::EngineController::GetSingletonPtr()->getType() != api::GameType::SINGLEPLAYER) {
 			api::ComPtr nsc = utils::make_shared<api::NetworkSenderComponent, api::Component>();
-			if (go->setGOC(nsc)) {
+			if (go->setGOC(nsc).first) {
 				nsc->Init();
 			}
 		}
@@ -201,7 +201,7 @@ namespace modules {
 
 		_manager->insertObject(go);
 
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->notifyNewID(go->getID());
+		i6eObjectFacade->notifyNewID(go->getID());
 		api::EngineController::GetSingletonPtr()->getPhysicsFacade()->notifyNewID(go->getID());
 
 		return go;

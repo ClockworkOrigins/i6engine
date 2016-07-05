@@ -138,9 +138,9 @@ namespace api {
 		 * If a GOComponent of the same type already exists, it will be replaced.
 		 * \param[in] objNewGOC a GOComponent argument
 		 * \throws ISIXE_THROW_FAILURE when objNewGOC is NULL
-		 * \return returns true, if the Component really was added, otherwise false. If false is returned, no Init must be called
+		 * \return returns bool and id. bool specifies whether the Component was added or not. In case there already was a Component which was replaced, id is the id of this Component, otherwise -1. If false is returned, no Init must be called. If id != -1 the ID has to be marked as deleted.
 		 */
-		bool setGOC(const ComPtr & objNewGOC);
+		std::pair<bool, int64_t> setGOC(const ComPtr & objNewGOC);
 
 		/**
 		 * \brief Remove all GOCs held by the component table.

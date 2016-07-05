@@ -41,7 +41,8 @@ namespace modules {
 
 	void ObjectController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
+		i6eObjectFacade->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
+		i6eObjectFacade->registerDeletedNotifyCallback(boost::bind(&MessageSubscriber::notifyDeletedID, this, _1));
 
 		_manager = new ObjectManager();
 		_mailbox = new ObjectMailbox(_manager);
@@ -51,7 +52,7 @@ namespace modules {
 		ISIXE_REGISTERMESSAGETYPE(api::messages::ObjectManagerMessageType, ObjectMailbox::NewsObjectManager, _mailbox);
 		ISIXE_REGISTERMESSAGETYPE(api::messages::PositionMessageType, ObjectMailbox::NewsObject, _mailbox);
 
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->setFrametime(getFrameTime());
+		i6eObjectFacade->setFrametime(getFrameTime());
 	}
 
 	void ObjectController::ShutDown() {
