@@ -276,6 +276,10 @@ namespace gui {
 		return i6eGUIFacade->getOnWindow();
 	}
 
+	void setTransparencyCheckEnabled(const std::string & name, bool enabled) {
+		i6eGUIFacade->setTransparencyCheckEnabled(name, enabled);
+	}
+
 } /* namespace gui */
 } /* namespace lua */
 } /* namespace i6e */
@@ -355,6 +359,7 @@ scope registerGUI() {
 		def("deleteWidget", &i6e::lua::gui::deleteWidget),
 		def("resetGUISubSystem", &i6e::lua::gui::resetGUISubSystem),
 		def("getInputCaptured", &i6e::lua::gui::getInputCaptured),
-		def("getOnWindow", &i6e::lua::gui::getOnWindow)
+		def("getOnWindow", &i6e::lua::gui::getOnWindow),
+		def("setTransparencyCheckEnabled", &i6e::lua::gui::setTransparencyCheckEnabled)
 		;
 }

@@ -276,6 +276,10 @@ namespace gui {
 		return i6eGUIFacade->getOnWindow();
 	}
 
+	void setTransparencyCheckEnabled(const std::string & name, bool enabled) {
+		i6eGUIFacade->setTransparencyCheckEnabled(name, enabled);
+	}
+
 } /* namespace gui */
 } /* namespace python */
 } /* namespace i6e */
@@ -349,4 +353,5 @@ BOOST_PYTHON_MODULE(ScriptingGUIPython) {
 	def("resetGUISubSystem", &i6e::python::gui::resetGUISubSystem);
 	def("getInputCaptured", &i6e::python::gui::getInputCaptured);
 	def("getOnWindow", &i6e::python::gui::getOnWindow);
+	def("setTransparencyCheckEnabled", &i6e::python::gui::setTransparencyCheckEnabled);
 }
