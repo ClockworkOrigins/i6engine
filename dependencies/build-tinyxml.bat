@@ -1,3 +1,5 @@
+@echo OFF
+
 REM i6engine
 REM Copyright (2016) Daniel Bonrath, Michael Baer, All rights reserved.
 REM
@@ -20,6 +22,8 @@ call build-common.bat %1 %2
 Set ARCHIVE=tinyxml2.zip
 Set BUILD_DIR=%TMP_DIR%/tinyxml2
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/tinyxml2/
+
+IF EXIST %PREFIX% EXIT /B
 
 echo "Compile TinyXML"
 

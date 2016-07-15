@@ -1,3 +1,5 @@
+@echo OFF
+
 REM i6engine
 REM Copyright (2016) Daniel Bonrath, Michael Baer, All rights reserved.
 REM
@@ -19,7 +21,7 @@ call build-common.bat %1 %2
 
 Set ARCHIVE=openal-soft-1.17.2.tar.bz2
 Set BUILD_DIR=%TMP_DIR%/openal-soft-1.17.2
-Set PREFIX=%DEP_DIR%/%ARCH_DIR%/OpenAL Soft/
+Set PREFIX=%DEP_DIR%/%ARCH_DIR%/OpenALSoft/
 
 echo "Compile OpenAL Soft"
 

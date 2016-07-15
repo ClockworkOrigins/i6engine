@@ -28,6 +28,10 @@ RELEASE_FLAG="RELEASE"
 PARALLEL_FLAG=""
 BUILD_TYPE="Release"
 
+if [ -d ${PREFIX} ]; then
+	exit 0
+fi
+
 if [ ! -z "${BUILD_PARALLEL}" ]; then
 	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
 fi

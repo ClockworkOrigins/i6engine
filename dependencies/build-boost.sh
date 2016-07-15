@@ -29,10 +29,14 @@ if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
 fi
 
-PREFIX="${PWD}/boost/"
+PREFIX="${DEP_DIR}/boost/"
 DEBUG_FLAG="variant=debug"
 RELEASE_FLAG="variant=release"
 PARALLEL_FLAG=""
+
+if [ -d ${PREFIX} ]; then
+	exit 0
+fi
 
 if [ ! -z "${BUILD_PARALLEL}" ]; then
 	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"

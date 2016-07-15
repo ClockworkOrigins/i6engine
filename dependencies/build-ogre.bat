@@ -1,3 +1,5 @@
+@echo OFF
+
 REM i6engine
 REM Copyright (2016) Daniel Bonrath, Michael Baer, All rights reserved.
 REM
@@ -23,6 +25,8 @@ Set BUILD_DIR=%TMP_DIR%/sinbad-ogre-dd30349ea667
 Set BUILD_DIR_DEPS=%TMP_DIR%/cabalistic-ogredeps-0e96ef9d3475
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/ogre/
 Set PREFIX_DEPS=%DEP_DIR%/%ARCH_DIR%/misc/
+
+IF EXIST %PREFIX% EXIT /B
 
 echo "Compile Ogre"
 

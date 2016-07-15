@@ -31,6 +31,10 @@ fi
 
 PREFIX="${DEP_DIR}/cegui/"
 
+if [ -d ${PREFIX} ]; then
+	exit 0
+fi
+
 PARALLEL_FLAG=""
 if [ ! -z "${BUILD_PARALLEL}" ]; then
 	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"

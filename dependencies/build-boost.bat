@@ -1,3 +1,5 @@
+@echo OFF
+
 REM i6engine
 REM Copyright (2016) Daniel Bonrath, Michael Baer, All rights reserved.
 REM
@@ -25,6 +27,8 @@ Set DEBUG_FLAG="variant=debug"
 Set RELEASE_FLAG="variant=release"
 
 Set BUILD_TYPE=%RELEASE_FLAG%
+
+IF EXIST %PREFIX% EXIT /B
 
 echo "Compile Boost"
 

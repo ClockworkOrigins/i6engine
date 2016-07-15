@@ -22,11 +22,15 @@ cd "$(readlink -f "$(dirname "${0}")")"
 ARCHIVE="openal-soft-1.17.2.tar.bz2"
 BUILD_DIR="${BUILD_ROOT}/openal-soft-1.17.2"
 
-PREFIX="${DEP_DIR}/OpenAL"
+PREFIX="${DEP_DIR}/OpenALSoft"
 DEBUG_FLAG="DEBUG"
 RELEASE_FLAG="RELEASE"
 PARALLEL_FLAG=""
 BUILD_TYPE="Release"
+
+if [ -d ${PREFIX} ]; then
+	exit 0
+fi
 
 if [ ! -z "${BUILD_PARALLEL}" ]; then
 	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"

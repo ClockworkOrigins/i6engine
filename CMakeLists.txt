@@ -50,12 +50,23 @@ ENDIF(NOT ISIXE_WITH_CONSOLE AND WIN32)
 # * "python"
 # * "lua"
 set(ISIXE_WITH_SCRIPTING "python" CACHE STRING "specifies the scripting system to use" )
-
-IF(WIN32)
+IF(ANDROID)
+	ADD_DEFINITIONS(-DANDROID)
+	SET(ANDROID_STL "gnustl_shared")
+	SET(DEP_DIR_BUILD android)
+	SET(Qt5_Platform android_armv7)
+	SET(ANDROID_SDK_PATH $ENV{ANDROID_HOME})
+ELSEIF(UNIX)
+	SET(DEP_DIR_BUILD "x86")
+	SET(Qt5_Platform gcc_64)
+ELSEIF(WIN32)
 	IF(CMAKE_GENERATOR MATCHES "Visual Studio 12")
 		SET(DEP_DIR_BUILD "msvc12_")
+		SET(VS_TOOLCHAIN "msvc12")
+		SET(Qt5_Platform msvc2013)
 	ELSEIF(CMAKE_GENERATOR MATCHES "Visual Studio 14")
 		SET(DEP_DIR_BUILD "msvc14_")
+		SET(VS_TOOLCHAIN "msvc14")
 	ELSE()
 		MESSAGE([WARNING] "Toolchain not supported yet!")
 	ENDIF()
@@ -63,10 +74,14 @@ IF(WIN32)
 	IF(CMAKE_GENERATOR MATCHES "Win64")
 		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}x64")
 		SET(64BIT ON)
+		SET(VS_ARCH "64")
+		SET(Qt5_Platform ${Qt5_Platform}_64)
 	ELSEIF(CMAKE_GENERATOR MATCHES "ARM")
 		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}arm")
+		SET(VS_ARCH "arm")
 	ELSE()
 		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}x86")
+		SET(VS_ARCH "32")
 	ENDIF()
 ENDIF()
 
@@ -138,7 +153,7 @@ ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
 	set (CMAKE_CXX_FLAGS_DEBUG		"${CMAKE_CXX_FLAGS_DEBUG} ${CXX_FLAGS}")
 	set (CMAKE_CXX_FLAGS_MINSIZEREL	"${CMAKE_CXX_FLAGS_MINSIZEREL} ${CXX_FLAGS}")
 	set (CMAKE_CXX_FLAGS_RELEASE		"${CMAKE_CXX_FLAGS_RELEASE} ${CXX_FLAGS}")
-	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${CXX_FLAGS} /Qvec-report:1 /Qpar /Qpar-report:1")
+	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${CXX_FLAGS}")
 ELSE()
 	message (SEND_INFO "Unknown C++ compiler \"${CMAKE_CXX_COMPILER_ID}\". Only GNU, Clang and MSVC are completely supported.")
 ENDIF()
@@ -169,6 +184,12 @@ ENDIF(NOT WIN32)
 #----------------------------------------------------
 # Boost
 #---------------------------------------------------
+IF(WIN32)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-boost.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ELSEIF(UNIX)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-boost.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ENDIF()
+
 	SET(LIBNAME "BOOST")
 	SET(LIBHEADER "boost/thread.hpp")
 	SET(BOOST_ROOT ${ISIXE_DEP_DIR}/boost)
@@ -189,6 +210,12 @@ ENDIF(NOT WIN32)
 #----------------------------------------------------
 # Bullet
 #----------------------------------------------------
+IF(WIN32)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-bullet.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ELSEIF(UNIX)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-bullet.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ENDIF()
+
 	SET(LIBNAME "BULLET")
 	SET(LIBHEADER "bullet/btBulletCollisionCommon.h")
 	SET(BULLET_ROOT ${ISIXE_DEP_DIR}/bullet)
@@ -197,17 +224,14 @@ ENDIF(NOT WIN32)
 	include_directories(SYSTEM ${BULLET_INCLUDE_DIR}/bullet)
 
 #----------------------------------------------------
-# CEGUI
-#----------------------------------------------------
-	SET(LIBNAME "CEGUI")
-	SET(LIBHEADER "CEGUI/CEGUI.h")
-	SET(CEGUI_ROOT ${ISIXE_DEP_DIR}/cegui)
-	find_package(EasyFind REQUIRED COMPONENTS CEGUIBase-0 CEGUIExpatParser CEGUIOgreRenderer-0)
-	include_directories(SYSTEM ${CEGUI_INCLUDE_DIR})
-
-#----------------------------------------------------
 # clockUtils
 #----------------------------------------------------
+IF(WIN32)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-clockUtils.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ELSEIF(UNIX)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-clockUtils.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ENDIF()
+
 	SET(LIBNAME "CLOCKUTILS")
 	SET(LIBHEADER "clockUtils/errors.h")
 	SET(CLOCKUTILS_ROOT ${ISIXE_DEP_DIR}/clockUtils)
@@ -222,6 +246,12 @@ ENDIF(NOT WIN32)
 # Google Test
 #----------------------------------------------------
 IF(ISIXE_WITH_TESTING)
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gmock.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gmock.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
+
 	SET(LIBNAME "GTEST")
 	SET(LIBHEADER "gtest/gtest.h")
 	SET(GTEST_ROOT ${ISIXE_DEP_DIR}/gmock)
@@ -233,6 +263,12 @@ ENDIF(ISIXE_WITH_TESTING)
 # Google Performance Tools
 #----------------------------------------------------
 IF(ISIXE_WITH_PROFILING)
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gperftools.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gperftools.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
+
 	SET(LIBNAME "GPerfTools")
 	SET(LIBHEADER "gperftools/tcmalloc.h")
 	SET(GPerfTools_ROOT ${ISIXE_DEP_DIR}/gperftools)
@@ -245,20 +281,12 @@ IF(ISIXE_WITH_PROFILING)
 ENDIF(ISIXE_WITH_PROFILING)
 
 #----------------------------------------------------
-# Ogre3D
-#----------------------------------------------------
-	SET(LIBNAME "OGRE")
-	SET(LIBHEADER "OGRE/Ogre.h")
-	SET(OGRE_ROOT ${ISIXE_DEP_DIR}/ogre)
-	find_package(EasyFind REQUIRED COMPONENTS OgreMain OgreOverlay OgrePaging OgreProperty OgreRTShaderSystem OgreTerrain)
-	include_directories(SYSTEM ${OGRE_INCLUDE_DIR})
-	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/)
-	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/Paging)
-	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/Terrain)
-
-#----------------------------------------------------
 # OIS
 #----------------------------------------------------
+IF(UNIX) # Windows build OIS together with Ogre deps
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-ois.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ENDIF()
+
 	SET(LIBNAME "OIS")
 	SET(LIBHEADER "OIS/OIS.h")
 	IF(WIN32)
@@ -270,12 +298,51 @@ ENDIF(ISIXE_WITH_PROFILING)
 	include_directories(SYSTEM ${OIS_INCLUDE_DIR})
 
 #----------------------------------------------------
+# Ogre3D
+#----------------------------------------------------
+IF(WIN32)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-ogre.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ELSEIF(UNIX)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-ogre.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ENDIF()
+
+	SET(LIBNAME "OGRE")
+	SET(LIBHEADER "OGRE/Ogre.h")
+	SET(OGRE_ROOT ${ISIXE_DEP_DIR}/ogre)
+	find_package(EasyFind REQUIRED COMPONENTS OgreMain OgreOverlay OgrePaging OgreProperty OgreRTShaderSystem OgreTerrain)
+	include_directories(SYSTEM ${OGRE_INCLUDE_DIR})
+	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/)
+	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/Paging)
+	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/Terrain)
+
+#----------------------------------------------------
+# CEGUI
+#----------------------------------------------------
+IF(WIN32)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-cegui.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ELSEIF(UNIX)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-cegui.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ENDIF()
+
+	SET(LIBNAME "CEGUI")
+	SET(LIBHEADER "CEGUI/CEGUI.h")
+	SET(CEGUI_ROOT ${ISIXE_DEP_DIR}/cegui)
+	find_package(EasyFind REQUIRED COMPONENTS CEGUIBase-0 CEGUIExpatParser CEGUIOgreRenderer-0)
+	include_directories(SYSTEM ${CEGUI_INCLUDE_DIR})
+
+#----------------------------------------------------
 # OpenAL Soft
 #----------------------------------------------------
 IF(ISIXE_WITH_AUDIO)
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-openalsoft.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-openalsoft.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
+
 	SET(LIBNAME "OPENALSOFT")
 	SET(LIBHEADER "AL/al.h")
-	SET(OPENALSOFT_ROOT ${ISIXE_DEP_DIR}/OpenAL)
+	SET(OPENALSOFT_ROOT ${ISIXE_DEP_DIR}/OpenALSoft)
 	IF(WIN32)
 		find_package(EasyFind REQUIRED COMPONENTS OpenAL32)
 	ELSEIF(UNIX)
@@ -305,6 +372,12 @@ ENDIF()
 #----------------------------------------------------
 # TinyXML
 #----------------------------------------------------
+IF(WIN32)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-tinyxml.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ELSEIF(UNIX)
+	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-tinyxml.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+ENDIF()
+
 	SET(LIBNAME "TinyXML")
 	SET(LIBHEADER "tinyxml2.h")
 	SET(TinyXML_ROOT ${ISIXE_DEP_DIR}/tinyxml2)
@@ -357,24 +430,11 @@ install(FILES ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h DESTI
 IF(ISIXE_WITH_NETWORK)
 	# Build m2etis
 	IF(WIN32)
-		IF(CMAKE_GENERATOR MATCHES "Visual Studio 12")
-			SET(METIS_TOOLCHAIN msvc12)
-		ELSE()
-			MESSAGE([ERROR] "Generator not supported yet!")
-		ENDIF()
-		IF(CMAKE_GENERATOR MATCHES "Win64")
-			SET(METIS_ARCH 64)
-		ELSE(CMAKE_GENERATOR MATCHES "Win64")
-			SET(METIS_ARCH 32)
-		ENDIF(CMAKE_GENERATOR MATCHES "Win64")
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.bat ${METIS_TOOLCHAIN} ${METIS_ARCH} "${ISIXE_DEP_DIR}/.." "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSE(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.bat ${VS_TOOLCHAIN} ${VS_ARCH} "${ISIXE_DEP_DIR}/.." "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
 		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.sh "${CMAKE_BINARY_DIR}/include/i6engine" "${CMAKE_BUILD_TYPE}" "${ISIXE_DEP_DIR}" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ENDIF(WIN32)
+	ENDIF()
 
-	#----------------------------------------------------
-	# I6M2ETIS
-	#----------------------------------------------------
 	SET(LIBNAME "M2etis")
 	SET(LIBHEADER "m2etis/pubsub/PubSubSystem.h")
 	SET(M2etis_ROOT ${ISIXE_DEP_DIR}/m2etis)

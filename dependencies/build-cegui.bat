@@ -1,4 +1,4 @@
-@echo off
+@echo OFF
 
 REM i6engine
 REM Copyright (2016) Daniel Bonrath, Michael Baer, All rights reserved.
@@ -25,6 +25,8 @@ Set BUILD_DIR=%TMP_DIR%/cegui-0.8.7
 Set BUILD_DIR_DEPS=%TMP_DIR%/cegui-deps-0.8.x-src
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/cegui/
 Set PREFIX_DEPS=%DEP_DIR%/%ARCH_DIR%/ceguideps
+
+IF EXIST %PREFIX% EXIT /B
 
 echo "Compile CEGUI"
 

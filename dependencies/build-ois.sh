@@ -34,6 +34,10 @@ RELEASE_FLAG=""
 DEBUG_FLAG="CFLAGS=-g"
 PARALLEL_FLAG=""
 
+if [ -d ${PREFIX} ]; then
+	exit 0
+fi
+
 if [ ! -z "${BUILD_PARALLEL}" ]; then
 	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
 fi

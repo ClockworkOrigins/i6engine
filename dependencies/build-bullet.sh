@@ -32,6 +32,10 @@ fi
 PREFIX="${DEP_DIR}/bullet/"
 PARALLEL_FLAG=""
 
+if [ -d ${PREFIX} ]; then
+	exit 0
+fi
+
 if [ ! -z "${BUILD_PARALLEL}" ]; then
 	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
 fi
