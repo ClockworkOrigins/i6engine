@@ -29,7 +29,7 @@
 
 extern "C"
 {
-	#include "i6engine/lua/lualib.h"
+	#include "lualib.h"
 }
 
 #include "boost/filesystem.hpp"

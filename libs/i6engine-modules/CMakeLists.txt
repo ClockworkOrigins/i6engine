@@ -202,8 +202,6 @@ IF(ISIXE_WITH_AUDIO)
 	)
 ENDIF(ISIXE_WITH_AUDIO)
 
-
-
 IF(ISIXE_WITH_PARTICLEUNIVERSE)
 	set(i6modulesSrc
 		${i6modulesSrc}
@@ -226,7 +224,6 @@ IF(ISIXE_WITH_NETWORK)
 ENDIF(ISIXE_WITH_NETWORK)
 
 IF(SCRIPTING_LUA)
-	include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
 	include_directories(${I6ENGINE_LUABIND_INCLUDE_DIR})
 
 	set(i6modulesSrc
@@ -290,7 +287,7 @@ IF(ISIXE_WITH_PARTICLEUNIVERSE)
 ENDIF(ISIXE_WITH_PARTICLEUNIVERSE)
 
 IF(SCRIPTING_LUA)
-	target_link_libraries(i6engine-modules lua luabind)
+	target_link_libraries(i6engine-modules ${LUA_LIBRARIES} luabind)
 ELSEIF(SCRIPTING_PYTHON)
 	target_link_libraries(i6engine-modules ${PYTHON_LIBRARIES})
 ENDIF()

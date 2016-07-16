@@ -20,7 +20,6 @@
 ################################
 
 include_directories("include")
-include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
 
 set(srcdir ./src)
 

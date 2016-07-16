@@ -24,7 +24,6 @@ include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 include_directories(${I6ENGINE_MODULES_INCLUDE_DIR})
-include_directories(${I6ENGINE_LUA_INCLUDE_DIR})
 include_directories(${I6ENGINE_LUABIND_INCLUDE_DIR})
 
 IF(ISIXE_WITH_RPG)

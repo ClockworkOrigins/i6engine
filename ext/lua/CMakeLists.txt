@@ -113,7 +113,7 @@ set_target_properties(lua PROPERTIES POSITION_INDEPENDENT_CODE ON)
 # lua install
 ########################
 
-install(FILES src/lapi.h  DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+install(FILES src/lua.h src/lauxlib.h src/luaconf.h src/lapi.h src/lcode.h src/lctype.h src/ldebug.h src/ldo.h src/lfunc.h src/lgc.h src/llex.h src/llimits.h src/lmem.h src/lobject.h src/lopcodes.h src/lparser.h src/lprefix.h src/lstate.h src/lstring.h src/ltable.h src/ltm.h src/lualib.h src/lundump.h src/lvm.h src/lzio.h  DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 
 install(TARGETS lua
 	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin

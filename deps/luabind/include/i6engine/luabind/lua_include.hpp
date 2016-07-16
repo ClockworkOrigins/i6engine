@@ -28,8 +28,8 @@ extern "C"
 {
 #endif
 
-	#include "i6engine/lua/lua.h"
-	#include "i6engine/lua/lauxlib.h"
+	#include "lua.h"
+	#include "lauxlib.h"
 
 #ifndef LUABIND_CPLUSPLUS_LUA
 }
