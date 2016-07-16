@@ -281,6 +281,23 @@ IF(ISIXE_WITH_PROFILING)
 ENDIF(ISIXE_WITH_PROFILING)
 
 #----------------------------------------------------
+# Lua
+#----------------------------------------------------
+IF(ISIXE_WITH_SCRIPTING STREQUAL "lua")
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-lua.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-lua.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
+
+	SET(LIBNAME "LUA")
+	SET(LIBHEADER "lapi.h")
+	SET(LUA_ROOT ${ISIXE_DEP_DIR}/lua)
+	find_package(EasyFind REQUIRED COMPONENTS lua)
+	include_directories(SYSTEM ${LUA_INCLUDE_DIR})
+ENDIF()
+
+#----------------------------------------------------
 # OIS
 #----------------------------------------------------
 IF(UNIX) # Windows build OIS together with Ogre deps
