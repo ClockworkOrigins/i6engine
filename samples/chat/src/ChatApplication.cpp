@@ -35,8 +35,6 @@
 #include "i6engine/api/manager/TextManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/bind.hpp"
-
 namespace sample {
 
 	ChatApplication::ChatApplication(const std::string & remoteIP, uint16_t remotePort, uint16_t localPort) : i6e::api::Application(), _remoteIP(remoteIP), _remotePort(remotePort), _localPort(localPort) {
@@ -91,7 +89,7 @@ namespace sample {
 		});
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 	}
 
 	void ChatApplication::Tick() {

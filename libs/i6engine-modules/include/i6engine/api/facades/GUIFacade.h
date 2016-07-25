@@ -89,7 +89,7 @@ namespace gui {
 		 * \param eventType Type of the event. Note that the window type (e.g. PushButton) has to support this type of event. At the moment there's only one event type namely "Clicked"
 		 * \param ptrEventMethod Everytime the Event occurs on this window, the Method leading to this pointer will be called
 		 */
-		ISIXE_DEPRECATED void subscribeEvent(const std::string & windowname, const std::string & eventType, const boost::function<void(void)> & ptrEventMethod) const;
+		ISIXE_DEPRECATED void subscribeEvent(const std::string & windowname, const std::string & eventType, const std::function<void(void)> & ptrEventMethod) const;
 
 		/**
 		 * \brief Subscribes for an event (Mouse-Click).
@@ -97,7 +97,7 @@ namespace gui {
 		 * \param eventType Type of the event. Note that the window type (e.g. PushButton) has to support this type of event. At the moment there's only one event type namely SubscribeEvent::Clicked
 		 * \param ptrEventMethod Everytime the Event occurs on this window, the Method leading to this pointer will be called
 		 */
-		void subscribeEvent(const std::string & windowname, gui::SubscribeEvent eventType, const boost::function<void(void)> & ptrEventMethod) const;
+		void subscribeEvent(const std::string & windowname, gui::SubscribeEvent eventType, const std::function<void(void)> & ptrEventMethod) const;
 
 		/**
 		 * \brief Enable and Disable Events of Windows
@@ -474,7 +474,7 @@ namespace gui {
 		 * \param createFunc A function to create a widget. It gets a string for the name and a string for the style.
 		 *  Tip: You can use boost::factory to give it a GUIWidget constructor
 		 */
-		void registerWidgetTemplate(const std::string & name, const boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc) const;
+		void registerWidgetTemplate(const std::string & name, const std::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc) const;
 
 		/**
 		 * \brief Creates a new Widget.
@@ -503,12 +503,12 @@ namespace gui {
 		/**
 		 * \brief registers the callback for addTicker, call only by GUI subsystem
 		 */
-		void registerAddTickerCallback(const boost::function<void(GUIWidget *)> & func);
+		void registerAddTickerCallback(const std::function<void(GUIWidget *)> & func);
 
 		/**
 		 * \brief registers the callback for removeTicker, call only by GUI subsystem
 		 */
-		void registerRemoveTickerCallback(const boost::function<void(GUIWidget *)> & func);
+		void registerRemoveTickerCallback(const std::function<void(GUIWidget *)> & func);
 
 		/**
 		 * \brief resets the subsystem to it's defaults
@@ -576,9 +576,9 @@ namespace gui {
 		 */
 		GUIFacade & operator=(const GUIFacade &) = delete;
 
-		boost::function<void(GUIWidget *)> _addTickerCallback;
+		std::function<void(GUIWidget *)> _addTickerCallback;
 
-		boost::function<void(GUIWidget *)> _removeTickerCallback;
+		std::function<void(GUIWidget *)> _removeTickerCallback;
 	};
 
 } /* namespace api */

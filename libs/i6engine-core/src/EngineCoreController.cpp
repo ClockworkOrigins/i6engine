@@ -58,7 +58,7 @@ namespace core {
 		Initialize();
 
 		for (size_t i = 0; i < _vptrOnAfterInitialize.size(); ++i) {
-			if (_vptrOnAfterInitialize[i].vtable != nullptr) {
+			if (_vptrOnAfterInitialize[i] != nullptr) {
 				_vptrOnAfterInitialize[i]();
 			}
 		}
@@ -123,7 +123,7 @@ namespace core {
 		_subsystemController->JoinAllSubsystems();
 	}
 
-	uint64_t EngineCoreController::registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, JobPriorities priority /* = 0 */) {
+	uint64_t EngineCoreController::registerTimer(uint64_t time, const std::function<bool(void)> & func, bool looping, JobPriorities priority /* = 0 */) {
 		if (looping) {
 			return _scheduler.runRepeated(time, func, priority);
 		} else {

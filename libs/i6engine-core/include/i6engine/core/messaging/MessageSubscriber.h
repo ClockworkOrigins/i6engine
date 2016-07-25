@@ -25,13 +25,11 @@
 #ifndef __I6ENGINE_CORE_MESSAGESUBSCRIBER_H__
 #define __I6ENGINE_CORE_MESSAGESUBSCRIBER_H__
 
+#include <mutex>
 #include <set>
 #include <vector>
 
 #include "i6engine/core/messaging/Message.h"
-
-#include "boost/function.hpp"
-#include "boost/thread/mutex.hpp"
 
 namespace i6e {
 namespace core {
@@ -125,7 +123,7 @@ namespace core {
 		/**
 		 * \brief adds a method for given message type where messages shall be delivered
 		 */
-		inline void addMethod(uint16_t msgType, const boost::function<void(const Message::Ptr &)> & ptrMessageMethod) {
+		inline void addMethod(uint16_t msgType, const std::function<void(const Message::Ptr &)> & ptrMessageMethod) {
 			_ptrMessageMethod[msgType] = ptrMessageMethod;
 		}
 
@@ -134,7 +132,7 @@ namespace core {
 		 */
 		inline void removeMethod(uint16_t msgType) {
 			_ptrMessageMethod.erase(msgType);
-			boost::mutex::scoped_lock objScopeLock(_objMessageVectorMutex);
+			std::lock_guard<std::mutex> objScopeLock(_objMessageVectorMutex);
 			MessageVector result;
 			for (auto & rm : *_objActiveMessageVector) {
 				if (rm->message->getMessageType() != msgType) {
@@ -158,13 +156,13 @@ namespace core {
 		 */
 		bool updateBuffer();
 
-		boost::mutex _objMessageVectorMutex;
+		std::mutex _objMessageVectorMutex;
 		MessageVector _objMessageVectorA;
 		MessageVector _objMessageVectorB;
 		MessageVector * _objActiveMessageVector;
 		MessageVector * _objInActiveMessageVector;
 
-		std::map<uint16_t, boost::function<void(const Message::Ptr &)>> _ptrMessageMethod;
+		std::map<uint16_t, std::function<void(const Message::Ptr &)>> _ptrMessageMethod;
 
 		/**
 		 * \brief This method really delivers the Message without buffering it anymore.
@@ -198,12 +196,12 @@ namespace core {
 		/**
 		 * \brief lock for notifies
 		 */
-		mutable boost::mutex _objMessageListMutex;
+		mutable std::mutex _objMessageListMutex;
 
 		/**
 		 * \brief lock for buffering methods
 		 */
-		mutable boost::mutex _bufferLock;
+		mutable std::mutex _bufferLock;
 
 		/**
 		 * \brief forbidden

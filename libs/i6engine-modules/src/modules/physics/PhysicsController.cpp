@@ -38,7 +38,7 @@ namespace modules {
 
 	void PhysicsController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-		api::EngineController::GetSingletonPtr()->getPhysicsFacade()->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
+		api::EngineController::GetSingletonPtr()->getPhysicsFacade()->registerNotifyCallback(std::bind(&MessageSubscriber::notifyNewID, this, std::placeholders::_1));
 
 		_manager = new PhysicsManager(this);
 		_mailbox = new PhysicsMailbox(_manager);

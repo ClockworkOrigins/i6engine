@@ -19,8 +19,7 @@
 
 #include "i6engine/utils/Semaphore.h"
 
-#include "boost/bind.hpp"
-#include "boost/thread.hpp"
+#include <thread>
 
 #include "gtest/gtest.h"
 
@@ -30,17 +29,17 @@ i6e::utils::Semaphore sem;
 void add() {
 	sem.wait();
 	unsigned int newCounter = counter + 1;
-	boost::this_thread::sleep(boost::posix_time::milliseconds(1));
+	std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	counter = newCounter;
 	sem.notify();
 }
 
 TEST(Semaphore, lock) {
-	std::vector<boost::thread *> v;
+	std::vector<std::thread *> v;
 
 	EXPECT_EQ(0, counter);
 	for(int i = 0; i < 10; i++) {
-		v.push_back(new boost::thread(boost::bind(add)));
+		v.push_back(new std::thread(std::bind(add)));
 	}
 	for (size_t i = 0; i < 10; i++) {
 		v[i]->join();

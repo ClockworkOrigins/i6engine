@@ -58,26 +58,26 @@ namespace i6e {
 namespace editor {
 
 	Editor::Editor() : Application(), _iniParser(), _movementSpeed(1.0), _rotationSpeed(1.0), _camera(), _eventMap(), _inLevel(false), _selectedObjectID(-1), _freeFlyMode(false), _moveObject(false), _lastX(), _lastY(), _lastNearWaypoints(), _removeBox(false), _mouseHold(false) {
-		_eventMap["forward"] = std::make_pair(boost::bind(&Editor::Forward, this), false);
-		_eventMap["backward"] = std::make_pair(boost::bind(&Editor::Backward, this), false);
-		_eventMap["left"] = std::make_pair(boost::bind(&Editor::Left, this), false);
-		_eventMap["right"] = std::make_pair(boost::bind(&Editor::Right, this), false);
-		_eventMap["down"] = std::make_pair(boost::bind(&Editor::Down, this), false);
-		_eventMap["up"] = std::make_pair(boost::bind(&Editor::Up, this), false);
-		_eventMap["rotateLeft"] = std::make_pair(boost::bind(&Editor::RotateLeft, this), false);
-		_eventMap["rotateRight"] = std::make_pair(boost::bind(&Editor::RotateRight, this), false);
-		_eventMap["rotateUp"] = std::make_pair(boost::bind(&Editor::RotateUp, this), false);
-		_eventMap["rotateDown"] = std::make_pair(boost::bind(&Editor::RotateDown, this), false);
-		_eventMap["leanLeft"] = std::make_pair(boost::bind(&Editor::LeanLeft, this), false);
-		_eventMap["leanRight"] = std::make_pair(boost::bind(&Editor::LeanRight, this), false);
-		_eventMap["scaleUp"] = std::make_pair(boost::bind(&Editor::ScaleUp, this), false);
-		_eventMap["scaleDown"] = std::make_pair(boost::bind(&Editor::ScaleDown, this), false);
-		_eventMap["scaleXUp"] = std::make_pair(boost::bind(&Editor::ScaleXUp, this), false);
-		_eventMap["scaleXDown"] = std::make_pair(boost::bind(&Editor::ScaleXDown, this), false);
-		_eventMap["scaleYUp"] = std::make_pair(boost::bind(&Editor::ScaleYUp, this), false);
-		_eventMap["scaleYDown"] = std::make_pair(boost::bind(&Editor::ScaleYDown, this), false);
-		_eventMap["scaleZUp"] = std::make_pair(boost::bind(&Editor::ScaleZUp, this), false);
-		_eventMap["scaleZDown"] = std::make_pair(boost::bind(&Editor::ScaleZDown, this), false);
+		_eventMap["forward"] = std::make_pair(std::bind(&Editor::Forward, this), false);
+		_eventMap["backward"] = std::make_pair(std::bind(&Editor::Backward, this), false);
+		_eventMap["left"] = std::make_pair(std::bind(&Editor::Left, this), false);
+		_eventMap["right"] = std::make_pair(std::bind(&Editor::Right, this), false);
+		_eventMap["down"] = std::make_pair(std::bind(&Editor::Down, this), false);
+		_eventMap["up"] = std::make_pair(std::bind(&Editor::Up, this), false);
+		_eventMap["rotateLeft"] = std::make_pair(std::bind(&Editor::RotateLeft, this), false);
+		_eventMap["rotateRight"] = std::make_pair(std::bind(&Editor::RotateRight, this), false);
+		_eventMap["rotateUp"] = std::make_pair(std::bind(&Editor::RotateUp, this), false);
+		_eventMap["rotateDown"] = std::make_pair(std::bind(&Editor::RotateDown, this), false);
+		_eventMap["leanLeft"] = std::make_pair(std::bind(&Editor::LeanLeft, this), false);
+		_eventMap["leanRight"] = std::make_pair(std::bind(&Editor::LeanRight, this), false);
+		_eventMap["scaleUp"] = std::make_pair(std::bind(&Editor::ScaleUp, this), false);
+		_eventMap["scaleDown"] = std::make_pair(std::bind(&Editor::ScaleDown, this), false);
+		_eventMap["scaleXUp"] = std::make_pair(std::bind(&Editor::ScaleXUp, this), false);
+		_eventMap["scaleXDown"] = std::make_pair(std::bind(&Editor::ScaleXDown, this), false);
+		_eventMap["scaleYUp"] = std::make_pair(std::bind(&Editor::ScaleYUp, this), false);
+		_eventMap["scaleYDown"] = std::make_pair(std::bind(&Editor::ScaleYDown, this), false);
+		_eventMap["scaleZUp"] = std::make_pair(std::bind(&Editor::ScaleZUp, this), false);
+		_eventMap["scaleZDown"] = std::make_pair(std::bind(&Editor::ScaleZDown, this), false);
 
 		if (clockUtils::ClockError::SUCCESS != _iniParser.load("i6engine-editor.ini")) {
 			ISIXE_THROW_FAILURE("Editor", "i6engine-editor.ini not found!");
@@ -193,7 +193,7 @@ namespace editor {
 				Vec3(0.0, 0.0, 1.0).insertInMap("lookAt", paramsCamera);
 				tmpl._components.push_back(api::objects::GOTemplateComponent("StaticState", paramsSSC, "", false, false));
 				tmpl._components.push_back(api::objects::GOTemplateComponent("Camera", paramsCamera, "", false, false));
-				i6eObjectFacade->createGO("EditorCam", tmpl, i6eEngineController->getUUID(), false, boost::bind(&Editor::setCamera, this, _1));
+				i6eObjectFacade->createGO("EditorCam", tmpl, i6eEngineController->getUUID(), false, std::bind(&Editor::setCamera, this, std::placeholders::_1));
 			});
 
 			_inLevel = true;

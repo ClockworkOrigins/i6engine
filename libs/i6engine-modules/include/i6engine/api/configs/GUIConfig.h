@@ -339,10 +339,10 @@ namespace gui {
 	typedef struct GUI_SubscribeEvent_Update : GUIUpdateMessageStruct {
 		std::string name;
 		SubscribeEvent event;
-		boost::function<void(void)> func;
+		std::function<void(void)> func;
 		GUI_SubscribeEvent_Update() {
 		}
-		GUI_SubscribeEvent_Update(const std::string & n, SubscribeEvent e, const boost::function<void(void)> & f);
+		GUI_SubscribeEvent_Update(const std::string & n, SubscribeEvent e, const std::function<void(void)> & f);
 		GUI_SubscribeEvent_Update * copy() {
 			return new GUI_SubscribeEvent_Update(*this);
 		}
@@ -364,9 +364,9 @@ namespace gui {
 	 */
 	typedef struct GUI_WidgetTemplate_Create : GUIUpdateMessageStruct {
 		std::string name;
-		boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> func;
+		std::function<api::GUIWidget * (const std::string & name, const std::string & style)> func;
 		GUI_WidgetTemplate_Create() {}
-		GUI_WidgetTemplate_Create(const std::string & n, const boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> & f);
+		GUI_WidgetTemplate_Create(const std::string & n, const std::function<api::GUIWidget * (const std::string & name, const std::string & style)> & f);
 		GUI_WidgetTemplate_Create * copy() { return new GUI_WidgetTemplate_Create(*this); }
 	} GUI_WidgetTemplate_Create;
 

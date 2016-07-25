@@ -60,7 +60,7 @@ namespace api {
 		/**
 		 * \brief register callback for notifying IDs, call only from PhysicsController
 		 */
-		void registerNotifyCallback(const boost::function<void(int64_t)> & f);
+		void registerNotifyCallback(const std::function<void(int64_t)> & f);
 
 		/**
 		 * \brief notifies new id in subsystem
@@ -83,7 +83,7 @@ namespace api {
 		void unpause() const;
 
 	private:
-		boost::function<void(int64_t)> _notify;
+		std::function<void(int64_t)> _notify;
 
 		/**
 		 * \brief forbidden

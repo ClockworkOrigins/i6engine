@@ -17,15 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <array>
 #include <thread>
 #include <vector>
 
 #include "i6engine/i6engineBuildSettings.h"
 
 #include "i6engine/utils/weakPtr.h"
-
-#include "boost/bind.hpp"
-#include "boost/thread.hpp"
 
 #include "gtest/gtest.h"
 
@@ -330,13 +328,14 @@ void spawn(Ptr1 p) {
 		Ptr1::clear();
 	}
 }
+
 TEST_F(sharedPtr, multiThread) {
-	std::vector<boost::thread *> v;
+	std::vector<std::thread *> v;
 
 	{
 		Ptr1 p = Ptr1(new TestObject1());
 		for(int i = 0; i < 100; i++) {
-			v.push_back(new boost::thread(boost::bind(spawn, p)));
+			v.push_back(new std::thread(std::bind(spawn, p)));
 		}
 		for (size_t i = 0; i < 100; i++) {
 			Ptr1::clear();

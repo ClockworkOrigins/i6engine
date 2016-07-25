@@ -26,6 +26,7 @@
 #define __I6ENGINE_MODULES_NETWORKMANAGER_H__
 
 #include <map>
+#include <mutex>
 
 #include "i6engine/utils/i6eThreadSafety.h"
 
@@ -34,8 +35,6 @@
 #include "i6engine/api/GameMessage.h"
 
 #include "i6engine/modules/network/NetworkErrors.h"
-
-#include "boost/thread/mutex.hpp"
 
 #include "m2etis/message/M2Message.h"
 #include "m2etis/pubsub/DeliverCallbackInterface.h"
@@ -78,7 +77,7 @@ namespace modules {
 
 		std::map<uint16_t, uint32_t> _usedChannels;
 
-		boost::mutex _pubSubLock;
+		std::mutex _pubSubLock;
 
 		/**
 		 * \brief constructor

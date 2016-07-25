@@ -44,7 +44,7 @@ namespace integration {
 
 		api::ObjectFacade * of = api::EngineController::GetSingleton().getObjectFacade();
 
-		of->registerCTemplate("Drive", boost::bind(&components::DriveComponent::createC, _1, _2));
+		of->registerCTemplate("Drive", std::bind(&components::DriveComponent::createC, std::placeholders::_1, std::placeholders::_2));
 
 		// a camera to see the scene and move around
 		{

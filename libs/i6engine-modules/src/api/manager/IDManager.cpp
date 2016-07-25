@@ -33,7 +33,7 @@ namespace api {
 	}
 
 	int64_t IDManager::getID() {
-		boost::mutex::scoped_lock lock(_idMutex);
+		std::lock_guard<std::mutex> lock(_idMutex);
 
 		if (_idMax != -1 && _idNext > _idMax) {
 			ISIXE_THROW_FAILURE("IDManager", "no more ids available.");
@@ -42,7 +42,7 @@ namespace api {
 	}
 
 	int64_t IDManager::getID(const uint32_t amount) {
-		boost::mutex::scoped_lock lock(_idMutex);
+		std::lock_guard<std::mutex> lock(_idMutex);
 
 		if (_idMax != -1 && _idNext + amount - 1 > _idMax) {
 			ISIXE_THROW_FAILURE("IDManager", "no more ids available.");

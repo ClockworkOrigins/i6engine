@@ -33,8 +33,6 @@
 
 #include "i6engine/rpg/quest/QuestLog.h"
 
-#include "boost/bind.hpp"
-
 namespace sample {
 
 	RPGApplication::RPGApplication() : i6e::rpg::RPGApplication(), _showFPS(false) {
@@ -55,7 +53,7 @@ namespace sample {
 		});
 
 		// register F12 to take screenshot
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F12, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::GraphicsFacade::takeScreenshot, i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "RPGScreen_", ".jpg"));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F12, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::GraphicsFacade::takeScreenshot, i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "RPGScreen_", ".jpg"));
 
 		// shows fps (activate/deactive using F1)
 		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F1, i6e::api::KeyState::KEY_PRESSED, [this]() {

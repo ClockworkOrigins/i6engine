@@ -55,7 +55,7 @@ namespace api {
 	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;
 	typedef utils::weakPtr<Component> WeakComPtr;
 	typedef utils::weakPtr<GameObject> WeakGOPtr;
-	typedef boost::function<ComPtr(const int64_t, const attributeMap &)> createGOCCallback;
+	typedef std::function<ComPtr(const int64_t, const attributeMap &)> createGOCCallback;
 
 	/**
 	 * \brief defines how new components should be handled
@@ -88,7 +88,7 @@ namespace api {
 		WIDGETTYPE
 	};
 
-	typedef std::tuple<AccessState, std::string, boost::function<std::string(void)>, boost::function<bool(std::string)>, std::string> componentOptions;
+	typedef std::tuple<AccessState, std::string, std::function<std::string(void)>, std::function<bool(std::string)>, std::string> componentOptions;
 
 	/**
 	 * \class Component

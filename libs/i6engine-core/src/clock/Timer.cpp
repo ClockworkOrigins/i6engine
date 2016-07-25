@@ -25,7 +25,7 @@ namespace i6e {
 namespace core {
 
 	Timer::Timer(EngineCoreController * ctrl, const uint32_t lngFrameTime) : _ctrl(ctrl), _bolTimerStopped(false), _condVariable(), _lock(), _timerID() {
-		_timerID = _ctrl->registerTimer(lngFrameTime, boost::bind(&Timer::setLastUpdate, this), true, JobPriorities::Prio_Subsystem);
+		_timerID = _ctrl->registerTimer(lngFrameTime, std::bind(&Timer::setLastUpdate, this), true, JobPriorities::Prio_Subsystem);
 	}
 
 	Timer::~Timer() {

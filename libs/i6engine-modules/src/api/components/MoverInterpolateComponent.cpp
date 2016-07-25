@@ -48,17 +48,17 @@ namespace api {
 	}
 
 	void MoverInterpolateComponent::addKeyFrame(const Vec3 & position, const Quaternion & rotation) {
-		boost::mutex::scoped_lock l(_lock);
+		std::lock_guard<std::mutex> l(_lock);
 		_keyFrames.push_back(keyFrame(position, rotation));
 	}
 
 	void MoverInterpolateComponent::removeKeyFrame(const uint32_t id) {
-		boost::mutex::scoped_lock l(_lock);
+		std::lock_guard<std::mutex> l(_lock);
 		_keyFrames.erase(_keyFrames.begin() + int(id));
 	}
 
 	void MoverInterpolateComponent::start(Vec3 & startPos) {
-		boost::mutex::scoped_lock l(_lock);
+		std::lock_guard<std::mutex> l(_lock);
 
 		_started = true;
 
@@ -127,7 +127,7 @@ namespace api {
 	void MoverInterpolateComponent::getNewPosition(const uint64_t t, Vec3 & newPos, Quaternion & newRot) {
 		uint64_t timeElapsed = t;
 
-		boost::mutex::scoped_lock l(_lock);
+		std::lock_guard<std::mutex> l(_lock);
 
 		double tt = 0;
 		if (_mode == Mode::NSTATE_LOOP) {
@@ -251,7 +251,7 @@ namespace api {
 			stop();
 
 			{
-				boost::mutex::scoped_lock l(_lock);
+				std::lock_guard<std::mutex> l(_lock);
 				_keyFrames.clear();
 			}
 
@@ -308,7 +308,7 @@ namespace api {
 	}
 
 	void MoverInterpolateComponent::reset() {
-		boost::mutex::scoped_lock l(_lock);
+		std::lock_guard<std::mutex> l(_lock);
 
 		_currentFrame = 0;
 		_totalDistance = 0;
@@ -346,7 +346,7 @@ namespace api {
 		}, "MoverInterpolateWay"));
 		result.push_back(std::make_tuple(AccessState::READONLY, "Num. Keyframes", [this]() {
 			return boost::lexical_cast<std::string>(_keyFrames.size());
-		}, boost::function<bool(std::string)>(), "Integer"));
+		}, std::function<bool(std::string)>(), "Integer"));
 
 		return result;
 	}

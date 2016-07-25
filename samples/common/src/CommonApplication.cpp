@@ -38,23 +38,21 @@
 #include "i6engine/api/facades/PhysicsFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/bind.hpp"
-
 namespace sample {
 
 	CommonApplication::CommonApplication(bool move, bool shootBall) : i6e::api::Application(), _showFPS(false), _camera(), _eventMap(), _move(move), _shootBall(shootBall) {
-		_eventMap["forward"] = std::make_pair(boost::bind(&CommonApplication::Forward, this), false);
-		_eventMap["backward"] = std::make_pair(boost::bind(&CommonApplication::Backward, this), false);
-		_eventMap["left"] = std::make_pair(boost::bind(&CommonApplication::Left, this), false);
-		_eventMap["right"] = std::make_pair(boost::bind(&CommonApplication::Right, this), false);
-		_eventMap["down"] = std::make_pair(boost::bind(&CommonApplication::Down, this), false);
-		_eventMap["up"] = std::make_pair(boost::bind(&CommonApplication::Up, this), false);
-		_eventMap["rotateLeft"] = std::make_pair(boost::bind(&CommonApplication::RotateLeft, this), false);
-		_eventMap["rotateRight"] = std::make_pair(boost::bind(&CommonApplication::RotateRight, this), false);
-		_eventMap["rotateUp"] = std::make_pair(boost::bind(&CommonApplication::RotateUp, this), false);
-		_eventMap["rotateDown"] = std::make_pair(boost::bind(&CommonApplication::RotateDown, this), false);
-		_eventMap["leanLeft"] = std::make_pair(boost::bind(&CommonApplication::LeanLeft, this), false);
-		_eventMap["leanRight"] = std::make_pair(boost::bind(&CommonApplication::LeanRight, this), false);
+		_eventMap["forward"] = std::make_pair(std::bind(&CommonApplication::Forward, this), false);
+		_eventMap["backward"] = std::make_pair(std::bind(&CommonApplication::Backward, this), false);
+		_eventMap["left"] = std::make_pair(std::bind(&CommonApplication::Left, this), false);
+		_eventMap["right"] = std::make_pair(std::bind(&CommonApplication::Right, this), false);
+		_eventMap["down"] = std::make_pair(std::bind(&CommonApplication::Down, this), false);
+		_eventMap["up"] = std::make_pair(std::bind(&CommonApplication::Up, this), false);
+		_eventMap["rotateLeft"] = std::make_pair(std::bind(&CommonApplication::RotateLeft, this), false);
+		_eventMap["rotateRight"] = std::make_pair(std::bind(&CommonApplication::RotateRight, this), false);
+		_eventMap["rotateUp"] = std::make_pair(std::bind(&CommonApplication::RotateUp, this), false);
+		_eventMap["rotateDown"] = std::make_pair(std::bind(&CommonApplication::RotateDown, this), false);
+		_eventMap["leanLeft"] = std::make_pair(std::bind(&CommonApplication::LeanLeft, this), false);
+		_eventMap["leanRight"] = std::make_pair(std::bind(&CommonApplication::LeanRight, this), false);
 	}
 
 	CommonApplication::~CommonApplication() {
@@ -77,10 +75,10 @@ namespace sample {
 		i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(0.0, 0.0, 0.0);
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 
 		// register F12 to take screenshot
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F12, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::GraphicsFacade::takeScreenshot, i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "Screen_", ".jpg"));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F12, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::GraphicsFacade::takeScreenshot, i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "Screen_", ".jpg"));
 
 		// shows fps (activate/deactive using F1)
 		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F1, i6e::api::KeyState::KEY_PRESSED, [this]() {

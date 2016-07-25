@@ -41,8 +41,8 @@ namespace modules {
 
 	void ObjectController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
-		i6eObjectFacade->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
-		i6eObjectFacade->registerDeletedNotifyCallback(boost::bind(&MessageSubscriber::notifyDeletedID, this, _1));
+		i6eObjectFacade->registerNotifyCallback(std::bind(&MessageSubscriber::notifyNewID, this, std::placeholders::_1));
+		i6eObjectFacade->registerDeletedNotifyCallback(std::bind(&MessageSubscriber::notifyDeletedID, this, std::placeholders::_1));
 
 		_manager = new ObjectManager();
 		_mailbox = new ObjectMailbox(_manager);

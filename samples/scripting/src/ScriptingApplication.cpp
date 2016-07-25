@@ -43,7 +43,7 @@ namespace sample {
 
 		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
 
-		of->registerCTemplate("ScriptingShatter", boost::bind(&components::ScriptingShatterComponent::createC, _1, _2));
+		of->registerCTemplate("ScriptingShatter", std::bind(&components::ScriptingShatterComponent::createC, std::placeholders::_1, std::placeholders::_2));
 
 		// a camera to see the scene and move around
 		{

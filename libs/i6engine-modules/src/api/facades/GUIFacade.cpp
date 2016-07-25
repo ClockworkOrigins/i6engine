@@ -57,14 +57,14 @@ namespace api {
 		i6eMessagingFacade->deliverMessage(msg);
 	}
 
-	void GUIFacade::subscribeEvent(const std::string & windowname, const std::string &, const boost::function<void(void)> & ptrEventMethod) const {
+	void GUIFacade::subscribeEvent(const std::string & windowname, const std::string &, const std::function<void(void)> & ptrEventMethod) const {
 		gui::SubscribeEvent evt = gui::SubscribeEvent::Clicked; // this works as there is only one supported event right now
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSubscribeEvent, core::Method::Update, new gui::GUI_SubscribeEvent_Update(windowname, evt, ptrEventMethod), core::Subsystem::Unknown);
 
 		i6eMessagingFacade->deliverMessage(msg);
 	}
 
-	void GUIFacade::subscribeEvent(const std::string & windowname, gui::SubscribeEvent eventType, const boost::function<void(void)> & ptrEventMethod) const {
+	void GUIFacade::subscribeEvent(const std::string & windowname, gui::SubscribeEvent eventType, const std::function<void(void)> & ptrEventMethod) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSubscribeEvent, core::Method::Update, new gui::GUI_SubscribeEvent_Update(windowname, eventType, ptrEventMethod), core::Subsystem::Unknown);
 
 		i6eMessagingFacade->deliverMessage(msg);
@@ -90,7 +90,7 @@ namespace api {
 		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiLoadCanvas, core::Method::Create, new gui::GUI_LoadCanvas_Create(name, file), core::Subsystem::Unknown));
 	}
 
-	void GUIFacade::registerWidgetTemplate(const std::string & name, const boost::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc) const {
+	void GUIFacade::registerWidgetTemplate(const std::string & name, const std::function<api::GUIWidget * (const std::string & name, const std::string & style)> & createFunc) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiWidgetTemplate, core::Method::Create, new gui::GUI_WidgetTemplate_Create(name, createFunc), core::Subsystem::Unknown);
 
 		i6eMessagingFacade->deliverMessage(msg);
@@ -342,11 +342,11 @@ namespace api {
 		_removeTickerCallback(widget);
 	}
 
-	void GUIFacade::registerAddTickerCallback(const boost::function<void(GUIWidget *)> & func) {
+	void GUIFacade::registerAddTickerCallback(const std::function<void(GUIWidget *)> & func) {
 		_addTickerCallback = func;
 	}
 
-	void GUIFacade::registerRemoveTickerCallback(const boost::function<void(GUIWidget *)> & func) {
+	void GUIFacade::registerRemoveTickerCallback(const std::function<void(GUIWidget *)> & func) {
 		_removeTickerCallback = func;
 	}
 

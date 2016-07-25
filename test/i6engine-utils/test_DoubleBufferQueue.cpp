@@ -19,7 +19,7 @@
 
 #include "i6engine/utils/DoubleBufferQueue.h"
 
-#include "boost/thread.hpp"
+#include <thread>
 
 #include "gtest/gtest.h"
 
@@ -138,12 +138,12 @@ void popper(DoubleBufferQueue<int, true, true> * qFrom, DoubleBufferQueue<int, t
 TEST(DoubleBufferQueue, StressTest) {
 	DoubleBufferQueue<int, true, true> q1;
 	DoubleBufferQueue<int, true, false> q2;
-	std::vector<boost::thread *> v;
+	std::vector<std::thread *> v;
 	for (int i = 0; i < 40; ++i) {
-		v.push_back(new boost::thread(boost::bind(pusher, &q1, 10000, i)));
+		v.push_back(new std::thread(std::bind(pusher, &q1, 10000, i)));
 	}
 	for (int i = 0; i < 80; ++i) {
-		v.push_back(new boost::thread(boost::bind(popper, &q1, &q2, 5000)));
+		v.push_back(new std::thread(std::bind(popper, &q1, &q2, 5000)));
 	}
 	std::vector<int> counts(40);
 	for (unsigned int i = 0; i < 120; ++i) {

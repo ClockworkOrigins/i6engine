@@ -34,7 +34,7 @@ namespace api {
 		_messagingController->deliverMessage(msg);
 	}
 
-	void MessagingFacade::registerMessageType(uint16_t msgType, core::MessageSubscriber * objMessageSubscriber, const boost::function<void(GameMessage::Ptr)> & ptrMessageMethod) {
+	void MessagingFacade::registerMessageType(uint16_t msgType, core::MessageSubscriber * objMessageSubscriber, const std::function<void(GameMessage::Ptr)> & ptrMessageMethod) {
 		objMessageSubscriber->addMethod(msgType, ptrMessageMethod);
 
 		_messagingController->registerMessageType(msgType, objMessageSubscriber);

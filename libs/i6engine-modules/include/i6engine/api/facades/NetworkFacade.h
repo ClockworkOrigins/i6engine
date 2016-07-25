@@ -84,27 +84,27 @@ namespace api {
 		/**
 		 * \brief registers a callback for subscribe, call only by networking subsystem
 		 */
-		void registerSubscribeCallback(const boost::function<void(uint16_t)> & f);
+		void registerSubscribeCallback(const std::function<void(uint16_t)> & f);
 
 		/**
 		 * \brief registers a callback for unsubscribe, call only by networking subsystem
 		 */
-		void registerUnsubscribeCallback(const boost::function<void(uint16_t)> & f);
+		void registerUnsubscribeCallback(const std::function<void(uint16_t)> & f);
 
 		/**
 		 * \brief registers a callback for publish, call only by networking subsystem
 		 */
-		void registerPublishCallback(const boost::function<void(uint16_t, const GameMessage::Ptr &)> & f);
+		void registerPublishCallback(const std::function<void(uint16_t, const GameMessage::Ptr &)> & f);
 
 		/**
 		 * \brief registers a callback for connect, call only by networking subsystem
 		 */
-		void registerConnectCallback(const boost::function<bool(const core::IPKey &, const core::IPKey &)> & f);
+		void registerConnectCallback(const std::function<bool(const core::IPKey &, const core::IPKey &)> & f);
 
 		/**
 		 * \brief registers a callback for disconnect, call only by networking subsystem
 		 */
-		void registerDisconnectCallback(const boost::function<void(void)> & f);
+		void registerDisconnectCallback(const std::function<void(void)> & f);
 
 		/**
 		 * \brief resets the subsystem to it's defaults
@@ -135,17 +135,17 @@ namespace api {
 		/**
 		 * \brief callback for subscribe
 		 */
-		boost::function<void(uint16_t)> _subscribe;
+		std::function<void(uint16_t)> _subscribe;
 
 		/**
 		 * \brief callback for subscribe
 		 */
-		boost::function<void(uint16_t)> _unsubscribe;
+		std::function<void(uint16_t)> _unsubscribe;
 
 		/**
 		 * \brief callback for subscribe
 		 */
-		boost::function<void(uint16_t, const GameMessage::Ptr &)> _publish;
+		std::function<void(uint16_t, const GameMessage::Ptr &)> _publish;
 
 		/**
 		 * \brief holds state whether a connect callback is set or not
@@ -160,12 +160,12 @@ namespace api {
 		/**
 		 * \brief callback for connect
 		 */
-		boost::function<bool(const core::IPKey &, const core::IPKey &)> _connect;
+		std::function<bool(const core::IPKey &, const core::IPKey &)> _connect;
 
 		/**
 		 * \brief callback for connect
 		 */
-		boost::function<void(void)> _disconnect;
+		std::function<void(void)> _disconnect;
 
 		bool _connected;
 

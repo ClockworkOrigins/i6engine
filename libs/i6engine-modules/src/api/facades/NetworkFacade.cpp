@@ -98,27 +98,27 @@ namespace api {
 		}
 	}
 
-	void NetworkFacade::registerSubscribeCallback(const boost::function<void(uint16_t)> & f) {
+	void NetworkFacade::registerSubscribeCallback(const std::function<void(uint16_t)> & f) {
 		_subscribe = f;
 		_subscribeInit = true;
 	}
 
-	void NetworkFacade::registerUnsubscribeCallback(const boost::function<void(uint16_t)> & f) {
+	void NetworkFacade::registerUnsubscribeCallback(const std::function<void(uint16_t)> & f) {
 		_unsubscribe = f;
 		_unsubscribeInit = true;
 	}
 
-	void NetworkFacade::registerPublishCallback(const boost::function<void(uint16_t, const GameMessage::Ptr &)> & f) {
+	void NetworkFacade::registerPublishCallback(const std::function<void(uint16_t, const GameMessage::Ptr &)> & f) {
 		_publish = f;
 		_publishInit = true;
 	}
 
-	void NetworkFacade::registerConnectCallback(const boost::function<bool(const core::IPKey &, const core::IPKey &)> & f) {
+	void NetworkFacade::registerConnectCallback(const std::function<bool(const core::IPKey &, const core::IPKey &)> & f) {
 		_connect = f;
 		_connectInit = true;
 	}
 
-	void NetworkFacade::registerDisconnectCallback(const boost::function<void(void)> & f) {
+	void NetworkFacade::registerDisconnectCallback(const std::function<void(void)> & f) {
 		_disconnect = f;
 		_disconnectInit = true;
 	}

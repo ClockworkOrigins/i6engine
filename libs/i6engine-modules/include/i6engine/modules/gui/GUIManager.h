@@ -38,9 +38,6 @@
 
 #include "i6engine/modules/gui/GUIFactory.h"
 
-#include "boost/function.hpp"
-#include "boost/thread/mutex.hpp"
-
 namespace CEGUI {
 	class EventArgs;
 	class OgreRenderer;
@@ -82,9 +79,9 @@ namespace modules {
 		friend class GUIMailbox;
 
 	public:
-		typedef std::map<std::string, boost::function<void(void)>> GUIFunctions;
+		typedef std::map<std::string, std::function<void(void)>> GUIFunctions;
 
-		typedef std::map<std::pair<api::KeyCode, std::string>, boost::function<void(void)>> GUIKeyFunctions;
+		typedef std::map<std::pair<api::KeyCode, std::string>, std::function<void(void)>> GUIKeyFunctions;
 
 		/**
 		 * \brief constructor, registers basic GUI stuff
@@ -118,7 +115,7 @@ namespace modules {
 		 * \param name Name of the associated window
 		 * \param ptrEventMethod Pointer to the designated function
 		 */
-		void setFunction(const std::string & name, const boost::function<void(void)> & ptrEventMethod);
+		void setFunction(const std::string & name, const std::function<void(void)> & ptrEventMethod);
 
 		/**
 		 * \brief returns true, if the event is allowed to be called
@@ -190,7 +187,7 @@ namespace modules {
 		/**
 		 * \brief registers a widget-template to create new widgets via messages.
 		 * \param[in] name Name of the widget-type.
-		 * \param[in] createFunc A boost::function which takes a string name and a string style, and returns a GUIWidget *
+		 * \param[in] createFunc A std::function which takes a string name and a string style, and returns a GUIWidget *
 		 *  Tip: You can use boost::factory to register the Constructor of a GUIWidget.
 		 */
 		void registerGUIWidgetTemplate(const std::string & name, GUIWidget_factory createFunc);
@@ -432,7 +429,7 @@ namespace modules {
 		/**
 		 * \brief lock for tickerList
 		 */
-		mutable boost::mutex _tickerLock;
+		mutable std::mutex _tickerLock;
 
 		GUIController * _ctrl;
 

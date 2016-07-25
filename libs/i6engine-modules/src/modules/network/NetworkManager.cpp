@@ -47,11 +47,11 @@ namespace modules {
 	NetworkManager::NetworkManager(NetworkMailbox * mailbox) : _mailbox(mailbox), _sendPing(false), _counterSent(0), _counterReceived(), _ne(this), _pubsub(nullptr), _lastTickTime(api::EngineController::GetSingleton().getCurrentTime()), _connectionFailed(false), _usedChannels(), _pubSubLock() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
-		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerConnectCallback(boost::bind(&NetworkManager::connect, this, _1, _2));
-		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerDisconnectCallback(boost::bind(&NetworkManager::disconnect, this));
-		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerSubscribeCallback(boost::bind(&NetworkManager::subscribe, this, _1));
-		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerUnsubscribeCallback(boost::bind(&NetworkManager::unsubscribe, this, _1));
-		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerPublishCallback(boost::bind(&NetworkManager::publish, this, _1, _2));
+		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerConnectCallback(std::bind(&NetworkManager::connect, this, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerDisconnectCallback(std::bind(&NetworkManager::disconnect, this));
+		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerSubscribeCallback(std::bind(&NetworkManager::subscribe, this, std::placeholders::_1));
+		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerUnsubscribeCallback(std::bind(&NetworkManager::unsubscribe, this, std::placeholders::_1));
+		api::EngineController::GetSingletonPtr()->getNetworkFacade()->registerPublishCallback(std::bind(&NetworkManager::publish, this, std::placeholders::_1, std::placeholders::_2));
 	}
 
 	NetworkManager::~NetworkManager() {
@@ -62,7 +62,7 @@ namespace modules {
 	}
 
 	void NetworkManager::subscribe(uint16_t channel) {
-		boost::mutex::scoped_lock sl(_pubSubLock);
+		std::lock_guard<std::mutex> sl(_pubSubLock);
 		if (_pubsub == nullptr) {
 			ISIXE_THROW_FAILURE("NetworkManager", "Tried to subscribe without having connected before");
 		}
@@ -74,7 +74,7 @@ namespace modules {
 	}
 
 	void NetworkManager::unsubscribe(uint16_t channel) {
-		boost::mutex::scoped_lock sl(_pubSubLock);
+		std::lock_guard<std::mutex> sl(_pubSubLock);
 		if (_pubsub == nullptr) {
 			ISIXE_THROW_FAILURE("NetworkManager", "Tried to unsubscribe without having connected before");
 		}
@@ -89,7 +89,7 @@ namespace modules {
 	}
 
 	void NetworkManager::publish(uint16_t channel, const api::GameMessage::Ptr & msg) {
-		boost::mutex::scoped_lock sl(_pubSubLock);
+		std::lock_guard<std::mutex> sl(_pubSubLock);
 		if (_pubsub == nullptr) {
 			ISIXE_LOG_WARN("NetworkManager", "Tried to publish without having connected before");
 			return;
@@ -106,15 +106,15 @@ namespace modules {
 	}
 
 	bool NetworkManager::connect(const core::IPKey & remote, const core::IPKey & local) {
-		boost::mutex::scoped_lock sl(_pubSubLock);
+		std::lock_guard<std::mutex> sl(_pubSubLock);
 		if (_pubsub != nullptr) {
 			return false;
 		}
 		_pubsub = new m2etis::pubsub::PubSubSystem(local.getIP(), local.getPort(), remote.getIP(), remote.getPort(), { remote.getIP() });
 
-		_pubsub->registerExceptionCallback(m2etis::pubsub::CONNECTION_FAILED, boost::bind(&NetworkErrors::connectionFailed, &_ne, _1));
-		_pubsub->registerExceptionCallback(m2etis::pubsub::CONNECTION_CLOSED, boost::bind(&NetworkErrors::connectionClosed, &_ne, _1));
-		_pubsub->registerExceptionCallback(m2etis::pubsub::BINDFAILURE, boost::bind(&NetworkErrors::bindFailure, &_ne, _1));
+		_pubsub->registerExceptionCallback(m2etis::pubsub::CONNECTION_FAILED, std::bind(&NetworkErrors::connectionFailed, &_ne, std::placeholders::_1));
+		_pubsub->registerExceptionCallback(m2etis::pubsub::CONNECTION_CLOSED, std::bind(&NetworkErrors::connectionClosed, &_ne, std::placeholders::_1));
+		_pubsub->registerExceptionCallback(m2etis::pubsub::BINDFAILURE, std::bind(&NetworkErrors::bindFailure, &_ne, std::placeholders::_1));
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
@@ -132,14 +132,14 @@ namespace modules {
 
 	void NetworkManager::disconnect() {
 		while (!_usedChannels.empty()) {
-			boost::mutex::scoped_lock sl(_pubSubLock);
+			std::lock_guard<std::mutex> sl(_pubSubLock);
 			_pubsub->unsubscribe<api::GameMessage>(m2etis::pubsub::ChannelName(_usedChannels.begin()->first));
 			_usedChannels.erase(_usedChannels.begin());
 		}
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-		boost::mutex::scoped_lock sl(_pubSubLock);
+		std::lock_guard<std::mutex> sl(_pubSubLock);
 		delete _pubsub;
 		_pubsub = nullptr;
 	}

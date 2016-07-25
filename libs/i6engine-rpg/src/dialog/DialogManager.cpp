@@ -51,7 +51,7 @@ namespace dialog {
 
 	DialogManager::DialogManager() : api::MessageSubscriberFacade(), _parser(), _npcDialogs(), _importantChecks(), _showDialogboxChecks(), _dialogActive(false), _lock(), _heardDialogs(), _running(true), _jobID(), _guiInitialized(false), _activeNPCs(), _dialogMapping(), _dialogNumberVector(), _showDialogCalls(0), _subtitles(true), _subtitlePosition(0.2, 0.05), _subtitleSize(0.6, 0.25), _subtitleFont("DejaVuSans-8"), _dialogNumbers(false) {
 		ISIXE_REGISTERMESSAGETYPE(api::messages::InputMessageType, DialogManager::News, this);
-		_jobID = api::EngineController::GetSingleton().registerTimer(10000, boost::bind(&DialogManager::checkDialogsLoop, this), true, core::JobPriorities::Prio_Medium);
+		_jobID = api::EngineController::GetSingleton().registerTimer(10000, std::bind(&DialogManager::checkDialogsLoop, this), true, core::JobPriorities::Prio_Medium);
 	}
 
 	DialogManager::~DialogManager() {

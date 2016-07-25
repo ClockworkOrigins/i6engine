@@ -44,7 +44,7 @@ namespace utils {
 		/**
 		 * \brief constructor taking the function to be called during update
 		 */
-		explicit RealTimeClock(const boost::function<void(void)> & f);
+		explicit RealTimeClock(const std::function<void(void)> & f);
 
 		/**
 		 * \brief destructor, stopping threads and cleaning up
@@ -76,7 +76,7 @@ namespace utils {
 
 		uint64_t _offset;
 
-		boost::function<void(void)> _update;
+		std::function<void(void)> _update;
 
 		std::atomic<bool> _running;
 

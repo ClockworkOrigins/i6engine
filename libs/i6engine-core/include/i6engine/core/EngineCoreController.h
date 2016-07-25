@@ -70,7 +70,7 @@ namespace core {
 		/**
 		 * \brief This method will set the callback which will be called after initialization.
 		 */
-		void SetOnAfterInitializedCallback(const boost::function<void(void)> & ptrOnAfterInitialize) {
+		void SetOnAfterInitializedCallback(const std::function<void(void)> & ptrOnAfterInitialize) {
 			_vptrOnAfterInitialize.push_back(ptrOnAfterInitialize);
 		}
 
@@ -113,7 +113,7 @@ namespace core {
 		 * \param[in] time time in microseconds until func is called
 		 * \param[in] func function to be called after given time
 		 */
-		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, JobPriorities priority);
+		uint64_t registerTimer(uint64_t time, const std::function<bool(void)> & func, bool looping, JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given priority
@@ -149,7 +149,7 @@ namespace core {
 		bool _bolIsInitialized;
 		bool _bolLoop;
 		bool _bolShutdownComplete;
-		std::vector<boost::function<void(void)>> _vptrOnAfterInitialize;
+		std::vector<std::function<void(void)>> _vptrOnAfterInitialize;
 		mutable std::mutex _lock;
 		mutable std::condition_variable _condVar;
 		std::mutex _runningLock;

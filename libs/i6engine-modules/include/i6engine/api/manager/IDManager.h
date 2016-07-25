@@ -25,9 +25,9 @@
 #ifndef __I6ENGINE_API_IDMANAGER_H__
 #define __I6ENGINE_API_IDMANAGER_H__
 
-#include "i6engine/utils/i6eSystemParameters.h"
+#include <mutex>
 
-#include "boost/thread/mutex.hpp"
+#include "i6engine/utils/i6eSystemParameters.h"
 
 namespace i6e {
 namespace api {
@@ -75,7 +75,7 @@ namespace api {
 		/**
 		 * \brief mutex for locking the id
 		 */
-		mutable boost::mutex _idMutex;
+		mutable std::mutex _idMutex;
 
 		/**
 		 * \brief forbidden

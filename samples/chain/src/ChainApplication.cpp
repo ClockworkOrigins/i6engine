@@ -68,7 +68,7 @@ namespace sample {
 
 		i6e::api::InputFacade * inputFacade = i6e::api::EngineController::GetSingleton().getInputFacade();
 
-		inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_RETURN, i6e::api::KeyState::KEY_PRESSED, boost::bind(&ChainApplication::resetScene, this));
+		inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_RETURN, i6e::api::KeyState::KEY_PRESSED, std::bind(&ChainApplication::resetScene, this));
 	}
 
 	void ChainApplication::resetScene() {

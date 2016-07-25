@@ -151,7 +151,7 @@ namespace config {
 		EXPECT_EQ(0, RejectComponent::initCounter);
 		std::unique_lock<std::mutex> ul(_lock);
 		std::unique_lock<std::mutex> ul2(_lock2);
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerCTemplate("Reject", boost::bind(&Component::createC<RejectComponent>, _1, _2));
+		EngineController::GetSingletonPtr()->getObjectFacade()->registerCTemplate("Reject", std::bind(&Component::createC<RejectComponent>, std::placeholders::_1, std::placeholders::_2));
 		EngineController::GetSingletonPtr()->getObjectFacade()->createGO("JengaStick", objects::GOTemplate(), EngineController::GetSingletonPtr()->getUUID(), false, [this](GOPtr go) {
 			attributeMap params;
 			EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(go->getID(), -1, "Reject", params, [this, go](ComPtr c) {

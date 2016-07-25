@@ -46,11 +46,11 @@ namespace objects {
 	}
 
 	Object_CreateAndCall_Create::Object_CreateAndCall_Create() {}
-	Object_CreateAndCall_Create::Object_CreateAndCall_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint64_t u, const GOTemplate & g, const bool b, const boost::function<void(const GOPtr &)> & f) : GameMessageStruct(i, -1), tpl(t), owner(own), uuid(u), tmpl(g), send(b), func(f) {
+	Object_CreateAndCall_Create::Object_CreateAndCall_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint64_t u, const GOTemplate & g, const bool b, const std::function<void(const GOPtr &)> & f) : GameMessageStruct(i, -1), tpl(t), owner(own), uuid(u), tmpl(g), send(b), func(f) {
 	}
 
 	Object_ConditionalMessage_Update::Object_ConditionalMessage_Update() {}
-	Object_ConditionalMessage_Update::Object_ConditionalMessage_Update(const GameMessage::Ptr & m, const boost::function<bool(const GOPtr &)> & f, bool s, uint32_t c) : GameMessageStruct(), msg(m), func(f), sync(s), comFamID(c) {}
+	Object_ConditionalMessage_Update::Object_ConditionalMessage_Update(const GameMessage::Ptr & m, const std::function<bool(const GOPtr &)> & f, bool s, uint32_t c) : GameMessageStruct(), msg(m), func(f), sync(s), comFamID(c) {}
 
 	Object_KillMe_Update::Object_KillMe_Update() {}
 

@@ -185,7 +185,7 @@ namespace api {
 			ISIXE_LOG_INFO("EngineController", "Starting, Server is disabled");
 		}
 		_appl->Initialize();
-		_coreController->SetOnAfterInitializedCallback(boost::bind(&Application::AfterInitialize, _appl));
+		_coreController->SetOnAfterInitializedCallback(std::bind(&Application::AfterInitialize, _appl));
 		runEngine();
 	}
 
@@ -254,7 +254,7 @@ namespace api {
 		}
 	}
 
-	uint64_t EngineController::registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, core::JobPriorities priority) {
+	uint64_t EngineController::registerTimer(uint64_t time, const std::function<bool(void)> & func, bool looping, core::JobPriorities priority) {
 		return _coreController->registerTimer(time, func, looping, priority);
 	}
 

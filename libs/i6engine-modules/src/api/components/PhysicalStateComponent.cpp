@@ -92,7 +92,7 @@ namespace api {
 	}
 
 	void PhysicalStateComponent::setPosition(const Vec3 & position, uint32_t prio) {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		if (prio >= _posDirty && _positionNew != position && (_positionNew - position).length() > 0.001) {
 			_positionNew = position;
 			_posDirty = prio;
@@ -100,7 +100,7 @@ namespace api {
 	}
 
 	void PhysicalStateComponent::setRotation(const Quaternion & rotation, uint32_t prio) {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		if (prio >= _rotDirty && _rotationNew != rotation) {
 			// FIXME: (Michael) better definition of 'same rotation'
 			Vec3 r11 = math::rotateVector(Vec3(10.0, 10.0, 10.0), _rotationNew);
@@ -119,7 +119,7 @@ namespace api {
 	}
 
 	void PhysicalStateComponent::setScale(const Vec3 & scale, uint32_t prio) {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		if (prio >= _scaleDirty && _scaleNew != scale) {
 			_scaleNew = scale;
 			_scaleDirty = prio;
@@ -142,7 +142,7 @@ namespace api {
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		_forces.clear();
 	}
 
@@ -152,7 +152,7 @@ namespace api {
 	}
 
 	void PhysicalStateComponent::setLinearVelocity(const Vec3 & linVel, uint32_t prio) {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		if (prio >= _speedDirty && _speedNew != linVel && (_speedNew - linVel).length() > 0.001) {
 			_speedNew = linVel;
 			_speedDirty = prio;
@@ -160,12 +160,12 @@ namespace api {
 	}
 
 	void PhysicalStateComponent::applyCentralForce(const Vec3 & cForce, bool forceIsLocalSpace) {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		_forces.push_back(std::make_tuple(cForce, Vec3::ZERO, forceIsLocalSpace));
 	}
 
 	void PhysicalStateComponent::applyForce(const Vec3 & force, const Vec3 & offset, bool forceIsLocalSpace) {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		_forces.push_back(std::make_tuple(force, offset, forceIsLocalSpace));
 	}
 
@@ -202,7 +202,7 @@ namespace api {
 		bool isDirty = false;
 		uint32_t netPrio = 0;
 		{
-			boost::mutex::scoped_lock sl(_lock);
+			std::lock_guard<std::mutex> sl(_lock);
 			if (_posDirty > 0) {
 				_position = _positionNew;
 				if (_posDirty > 1) {

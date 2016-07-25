@@ -25,12 +25,12 @@
 #ifndef __I6ENGINE_API_INPUTFACADE_H__
 #define __I6ENGINE_API_INPUTFACADE_H__
 
+#include <cstdint>
+#include <functional>
 #include <map>
+#include <mutex>
 
 #include "i6engine/utils/i6eSystemParameters.h"
-
-#include "boost/function.hpp"
-#include "boost/thread/mutex.hpp"
 
 namespace i6e {
 namespace api {
@@ -82,7 +82,7 @@ namespace api {
 		 * \param type Type of the keyboard event.
 		 * \param ptrEventMethod Everytime the Event occurs on this window, the Method leading to this pointer will be called
 		 */
-		void subscribeKeyEvent(const KeyCode name, const KeyState type, const boost::function<void(void)> & f) const;
+		void subscribeKeyEvent(const KeyCode name, const KeyState type, const std::function<void(void)> & f) const;
 
 		/**
 		 * \brief Unsubscribes for a keyboard event. (m)
@@ -99,7 +99,7 @@ namespace api {
 	private:
 		mapKeymap _keymap;
 
-		mutable boost::mutex _lock;
+		mutable std::mutex _lock;
 
 		/**
 		 * \brief forbidden

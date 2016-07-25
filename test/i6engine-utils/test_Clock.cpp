@@ -31,13 +31,11 @@
 
 #include "i6engine/utils/Clock.h"
 
-#include "boost/function.hpp"
-
 #include "gtest/gtest.h"
 
 class TestTimeClock {
 public:
-	explicit TestTimeClock(const boost::function<void(void)> &) : _startTime(), _currentTime() {
+	explicit TestTimeClock(const std::function<void(void)> &) : _startTime(), _currentTime() {
 	}
 
 	~TestTimeClock() {

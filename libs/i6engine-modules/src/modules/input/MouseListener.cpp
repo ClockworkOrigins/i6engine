@@ -81,7 +81,7 @@ namespace modules {
 		return true;
 	}
 
-	void MouseListener::setKeyFunction(const api::KeyCode name, const api::KeyState type, const boost::function<void(void)> & f) {
+	void MouseListener::setKeyFunction(const api::KeyCode name, const api::KeyState type, const std::function<void(void)> & f) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		_objInputKeyFunctions[std::make_pair(name, type)] = f;
 	}

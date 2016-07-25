@@ -34,17 +34,17 @@ namespace api {
 
 	// keyboard methods
 	void InputFacade::setKeyMapping(const KeyCode id, const std::string & strAction) {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		_keymap[id] = strAction;
 	}
 
 	void InputFacade::removeKeyMapping(const KeyCode id) {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		_keymap.erase(id);
 	}
 
 	std::string InputFacade::getKeyMapping(const KeyCode id) const {
-		boost::mutex::scoped_lock sl(_lock);
+		std::lock_guard<std::mutex> sl(_lock);
 		mapKeymap::const_iterator iter = _keymap.find(id);
 
 		if (iter == _keymap.end()) {
@@ -53,7 +53,7 @@ namespace api {
 		return iter->second;
 	}
 
-	void InputFacade::subscribeKeyEvent(const KeyCode name, const KeyState type, const boost::function<void(void)> & f) const {
+	void InputFacade::subscribeKeyEvent(const KeyCode name, const KeyState type, const std::function<void(void)> & f) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::InputMessageType, input::InputSubscribeKeyEvent, core::Method::Create, new input::Input_SubscribeKeyEvent_Create(name, type, f), core::Subsystem::Unknown);
 
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);

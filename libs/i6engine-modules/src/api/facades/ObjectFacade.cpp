@@ -132,7 +132,7 @@ namespace api {
 		i6eMessagingFacade->deliverMessage(msg);
 	}
 
-	void ObjectFacade::createGO(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint64_t uuid, const bool sender, const boost::function<void(GOPtr)> & func) const {
+	void ObjectFacade::createGO(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint64_t uuid, const bool sender, const std::function<void(GOPtr)> & func) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectMessageType, objects::ObjCreateAndCall, core::Method::Create, new objects::Object_CreateAndCall_Create(-1, gTemplate, EngineController::GetSingletonPtr()->getNetworkFacade()->getIP(), uuid, tmpl, sender, func), core::Subsystem::Unknown);
 
 		i6eMessagingFacade->deliverMessage(msg);
@@ -142,7 +142,7 @@ namespace api {
 		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComCreate, core::Method::Create, new components::Component_Create_Create(goid, coid, core::IPKey(), component, params), core::Subsystem::Unknown));
 	}
 
-	void ObjectFacade::createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params, const boost::function<void(ComPtr)> & callback) const {
+	void ObjectFacade::createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params, const std::function<void(ComPtr)> & callback) const {
 		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::ComponentMessageType, components::ComCreateCallback, core::Method::Create, new components::Component_CreateCallback_Create(goid, coid, core::IPKey(), component, params, callback), core::Subsystem::Unknown));
 	}
 
@@ -151,37 +151,37 @@ namespace api {
 		_GOMap = GOMap;
 	}
 
-	void ObjectFacade::sendConditionalMessage(const GameMessage::Ptr & m, const boost::function<bool(const GOPtr &)> & f, bool sync, uint32_t compFamID) const {
+	void ObjectFacade::sendConditionalMessage(const GameMessage::Ptr & m, const std::function<bool(const GOPtr &)> & f, bool sync, uint32_t compFamID) const {
 		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::ObjectManagerMessageType, objects::ObjConditionalMessage, core::Method::Update, new objects::Object_ConditionalMessage_Update(m, f, sync, compFamID), core::Subsystem::Unknown);
 
 		i6eMessagingFacade->deliverMessage(msg);
 	}
 
-	void ObjectFacade::registerNotifyCallback(const boost::function<void(int64_t)> & f) {
+	void ObjectFacade::registerNotifyCallback(const std::function<void(int64_t)> & f) {
 		_notifyNewID = f;
 	}
 
-	void ObjectFacade::registerDeletedNotifyCallback(const boost::function<void(int64_t)> & f) {
+	void ObjectFacade::registerDeletedNotifyCallback(const std::function<void(int64_t)> & f) {
 		_notifyDeletedID = f;
 	}
 
 	void ObjectFacade::notifyNewID(int64_t id) {
-		if (!_notifyNewID.empty()) {
+		if (_notifyNewID != nullptr) {
 			_notifyNewID(id);
 		}
 	}
 
 	void ObjectFacade::notifyDeletedID(int64_t id) {
-		if (!_notifyDeletedID.empty()) {
+		if (_notifyDeletedID != nullptr) {
 			_notifyDeletedID(id);
 		}
 	}
 
-	void ObjectFacade::registerAddTickerCallback(const boost::function<void(const WeakComPtr &)> & func) {
+	void ObjectFacade::registerAddTickerCallback(const std::function<void(const WeakComPtr &)> & func) {
 		_addTicker = func;
 	}
 
-	void ObjectFacade::registerRemoveTickerCallback(const boost::function<void(int64_t)> & func) {
+	void ObjectFacade::registerRemoveTickerCallback(const std::function<void(int64_t)> & func) {
 		_removeTicker = func;
 	}
 

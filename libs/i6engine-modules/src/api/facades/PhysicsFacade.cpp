@@ -36,12 +36,12 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
 	}
 
-	void PhysicsFacade::registerNotifyCallback(const boost::function<void(int64_t)> & f) {
+	void PhysicsFacade::registerNotifyCallback(const std::function<void(int64_t)> & f) {
 		_notify = f;
 	}
 
 	void PhysicsFacade::notifyNewID(int64_t id) {
-		if (!_notify.empty()) {
+		if (_notify != nullptr) {
 			_notify(id);
 		}
 	}

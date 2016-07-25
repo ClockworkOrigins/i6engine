@@ -42,7 +42,7 @@ namespace modules {
 	void GraphicsController::OnThreadStart() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
-		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->registerNotifyCallback(boost::bind(&MessageSubscriber::notifyNewID, this, _1));
+		api::EngineController::GetSingletonPtr()->getGraphicsFacade()->registerNotifyCallback(std::bind(&MessageSubscriber::notifyNewID, this, std::placeholders::_1));
 
 		_manager = new GraphicsManager(this, _hWnd);
 		_mailbox = new GraphicsMailbox(_manager);

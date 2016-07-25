@@ -53,8 +53,6 @@
 #include "i6engine/rpg/components/UsableItemComponent.h"
 #include "i6engine/rpg/components/WeightInventoryComponent.h"
 
-#include "boost/bind.hpp"
-
 namespace sample {
 
 	WaynetApplication::WaynetApplication() : CommonApplication(true, false), _iniParser() {
@@ -92,20 +90,20 @@ namespace sample {
 
 		// register rpg components we want to use
 		// do this befor loading the level
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&i6e::rpg::components::AttributeComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&i6e::rpg::components::DialogCheckerComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(&i6e::rpg::components::ExperienceComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&i6e::rpg::components::HealthbarComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&i6e::rpg::components::HumanMovementComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&i6e::rpg::components::ListInventoryComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&i6e::rpg::components::MiscItemComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&i6e::rpg::components::NameComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&i6e::rpg::components::QuickslotComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&i6e::rpg::components::SlotComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(&i6e::rpg::components::SlotInventoryComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&i6e::rpg::components::ThirdPersonControlComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&i6e::rpg::components::UsableItemComponent::createC, _1, _2));
-		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&i6e::rpg::components::WeightInventoryComponent::createC, _1, _2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", std::bind(&i6e::rpg::components::AttributeComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", std::bind(&i6e::rpg::components::DialogCheckerComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", std::bind(&i6e::rpg::components::ExperienceComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", std::bind(&i6e::rpg::components::HealthbarComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", std::bind(&i6e::rpg::components::HumanMovementComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", std::bind(&i6e::rpg::components::ListInventoryComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", std::bind(&i6e::rpg::components::MiscItemComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", std::bind(&i6e::rpg::components::NameComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", std::bind(&i6e::rpg::components::QuickslotComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", std::bind(&i6e::rpg::components::SlotComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", std::bind(&i6e::rpg::components::SlotInventoryComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", std::bind(&i6e::rpg::components::ThirdPersonControlComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", std::bind(&i6e::rpg::components::UsableItemComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		i6e::api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", std::bind(&i6e::rpg::components::WeightInventoryComponent::createC, std::placeholders::_1, std::placeholders::_2));
 
 		// loads the RPG demo level
 		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel("../media/maps/SampleLevel.xml", "Singleplayer");

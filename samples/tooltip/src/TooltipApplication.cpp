@@ -27,8 +27,6 @@
 #include "i6engine/api/manager/TextManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/bind.hpp"
-
 namespace sample {
 
 	TooltipApplication::TooltipApplication() : i6e::api::Application(), _progressTimer(), _counter(0) {
@@ -89,7 +87,7 @@ namespace sample {
 		gf->setTooltip("ProgressBar", "A progress bar is used for showing progress or for healthbars.");
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 	}
 
 	void TooltipApplication::Tick() {

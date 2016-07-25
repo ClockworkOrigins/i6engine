@@ -37,7 +37,7 @@
 namespace i6e {
 namespace api {
 
-	GameObject::GameObject(const int64_t goid, const core::IPKey & owner, uint64_t uuid, const std::string & tpl, const boost::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f) : _type(), _objGoid(goid), _objComponents(), _template(tpl), _messages(), _owner(owner), _uuid(uuid), _componentFunc(f), _self(), _flags(), _send(false) {
+	GameObject::GameObject(const int64_t goid, const core::IPKey & owner, uint64_t uuid, const std::string & tpl, const std::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f) : _type(), _objGoid(goid), _objComponents(), _template(tpl), _messages(), _owner(owner), _uuid(uuid), _componentFunc(f), _self(), _flags(), _send(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		if (_objGoid == -1) {
 			_objGoid = EngineController::GetSingletonPtr()->getIDManager()->getID();
@@ -269,7 +269,7 @@ namespace api {
 					int64_t compID = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->_id;
 					std::string templ = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->tpl;
 					attributeMap params = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->params;
-					boost::function<void(ComPtr)> callback = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->callback;
+					std::function<void(ComPtr)> callback = static_cast<components::Component_CreateCallback_Create *>(msg->getContent())->callback;
 
 					ComPtr c = _componentFunc(compID, templ, params, _self);
 					if (c != nullptr) {

@@ -25,7 +25,7 @@
 namespace i6e {
 namespace utils {
 
-	RealTimeClock::RealTimeClock(const boost::function<void(void)> & f) : _startTime(std::chrono::high_resolution_clock::now()), _offset(0), _update(f), _running(true), _thread(nullptr) {
+	RealTimeClock::RealTimeClock(const std::function<void(void)> & f) : _startTime(std::chrono::high_resolution_clock::now()), _offset(0), _update(f), _running(true), _thread(nullptr) {
 	}
 
 	RealTimeClock::~RealTimeClock() {

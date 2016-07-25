@@ -81,7 +81,7 @@ namespace api {
 		/**
 		 * \brief register callback for notifying IDs, call only from GraphicsController
 		 */
-		void registerNotifyCallback(const boost::function<void(int64_t)> & f);
+		void registerNotifyCallback(const std::function<void(int64_t)> & f);
 
 		/**
 		 * \brief notifies new id in subsystem
@@ -181,7 +181,7 @@ namespace api {
 		void getHighestCoordinate(const Vec3 & startPos, const std::function<void(Vec3)> & callback) const;
 
 	private:
-		boost::function<void(int64_t)> _notify;
+		std::function<void(int64_t)> _notify;
 
 		bool _notifyInit;
 

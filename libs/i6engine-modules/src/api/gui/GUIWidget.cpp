@@ -210,7 +210,7 @@ namespace api {
 	}
 
 	bool GUIWidget::drag(const CEGUI::EventArgs & e) {
-		if (!_clickCallback.empty()) {
+		if (_clickCallback != nullptr) {
 			std::function<void(void)> callback = _clickCallback;
 			i6eEngineController->registerTimer(0, [callback]() {
 				callback();

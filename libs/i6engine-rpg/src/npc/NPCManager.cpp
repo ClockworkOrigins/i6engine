@@ -25,14 +25,12 @@
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/facades/ScriptingFacade.h"
 
-#include "boost/bind.hpp"
-
 namespace i6e {
 namespace rpg {
 namespace npc {
 
 	NPCManager::NPCManager() : utils::Singleton<NPCManager>(), _npcs(), _running(true), _jobID() {
-		_jobID = api::EngineController::GetSingleton().registerTimer(10000, boost::bind(&NPCManager::checkNPCs, this), true, core::JobPriorities::Prio_Medium);
+		_jobID = api::EngineController::GetSingleton().registerTimer(10000, std::bind(&NPCManager::checkNPCs, this), true, core::JobPriorities::Prio_Medium);
 	}
 
 	NPCManager::~NPCManager() {

@@ -47,7 +47,7 @@ namespace api {
 	 * A pointer to a function which creates a new Components
 	 * \see Components
 	 */
-	typedef boost::function<ComPtr(const int64_t, const attributeMap &)> createGOCCallback;
+	typedef std::function<ComPtr(const int64_t, const attributeMap &)> createGOCCallback;
 } /* namespace api */
 
 namespace modules {

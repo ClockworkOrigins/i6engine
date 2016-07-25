@@ -19,14 +19,12 @@
 
 #include "i6engine/utils/RealTimeClock.h"
 
-#include "boost/bind.hpp"
-
 #include "gtest/gtest.h"
 
 void emptyMethod() {}
 
 TEST(RealTimeClock, getCurrentTime) {
-	i6e::utils::RealTimeClock clock(boost::bind(&emptyMethod));
+	i6e::utils::RealTimeClock clock(std::bind(&emptyMethod));
 	clock.Init();
 
 	uint64_t firstTime = clock.getCurrentTime(0);
@@ -92,7 +90,7 @@ TEST(RealTimeClock, getCurrentTime) {
 }
 
 TEST(RealTimeClock, setCurrentTime) {
-	i6e::utils::RealTimeClock clock(boost::bind(&emptyMethod));
+	i6e::utils::RealTimeClock clock(std::bind(&emptyMethod));
 	clock.Init();
 
 	uint64_t firstTime = clock.getCurrentTime(0);

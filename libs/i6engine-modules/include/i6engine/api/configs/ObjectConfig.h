@@ -43,7 +43,7 @@ namespace api {
 	class GameObject;
 
 	typedef utils::sharedPtr<Component, Component> ComPtr;
-	typedef boost::function<ComPtr(const int64_t, const attributeMap &)> createGOCCallback;
+	typedef std::function<ComPtr(const int64_t, const attributeMap &)> createGOCCallback;
 	typedef utils::sharedPtr<GameObject, GameObject> GOPtr;
 	typedef utils::weakPtr<GameObject, GameObject> WeakGOPtr;
 	typedef void (*CreateGO)(GOPtr, const attributeMap &);
@@ -216,9 +216,9 @@ namespace objects {
 		uint64_t uuid;
 		GOTemplate tmpl;
 		bool send;
-		boost::function<void(const GOPtr &)> func;
+		std::function<void(const GOPtr &)> func;
 		Object_CreateAndCall_Create();
-		Object_CreateAndCall_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint64_t u, const GOTemplate & g, const bool b, const boost::function<void(const GOPtr &)> & f);
+		Object_CreateAndCall_Create(const int64_t i, const std::string & t, const core::IPKey & own, uint64_t u, const GOTemplate & g, const bool b, const std::function<void(const GOPtr &)> & f);
 		Object_CreateAndCall_Create * copy() { return new Object_CreateAndCall_Create(*this); }
 	} Object_CreateAndCall_Create;
 
@@ -228,11 +228,11 @@ namespace objects {
 	 */
 	typedef struct ISIXE_MODULES_API Object_ConditionalMessage_Update : GameMessageStruct {
 		GameMessage::Ptr msg;
-		boost::function<bool(const GOPtr &)> func;
+		std::function<bool(const GOPtr &)> func;
 		bool sync;
 		uint32_t comFamID;
 		Object_ConditionalMessage_Update();
-		Object_ConditionalMessage_Update(const GameMessage::Ptr & m, const boost::function<bool(const GOPtr &)> & f, bool s, uint32_t c);
+		Object_ConditionalMessage_Update(const GameMessage::Ptr & m, const std::function<bool(const GOPtr &)> & f, bool s, uint32_t c);
 		Object_ConditionalMessage_Update * copy() { return new Object_ConditionalMessage_Update(*this); }
 	} Object_ConditionalMessage_Update;
 

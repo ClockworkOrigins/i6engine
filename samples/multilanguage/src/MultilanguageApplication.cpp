@@ -27,8 +27,6 @@
 #include "i6engine/api/manager/TextManager.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/bind.hpp"
-
 namespace sample {
 
 	MultilanguageApplication::MultilanguageApplication() : i6e::api::Application() {
@@ -52,8 +50,8 @@ namespace sample {
 		gf->addTextButton("EnglishButton", "RPG/Button", 0.05, 0.11, 0.1, 0.05, i6e::api::EngineController::GetSingleton().getTextManager()->getText("English_Key"));
 
 		// onClick events setting new language
-		gf->subscribeEvent("GermanButton", i6e::api::gui::SubscribeEvent::Clicked, boost::bind(&i6e::api::LanguageManager::setLanguage, i6e::api::EngineController::GetSingleton().getLanguageManager(), "Deutsch"));
-		gf->subscribeEvent("EnglishButton", i6e::api::gui::SubscribeEvent::Clicked, boost::bind(&i6e::api::LanguageManager::setLanguage, i6e::api::EngineController::GetSingleton().getLanguageManager(), "English"));
+		gf->subscribeEvent("GermanButton", i6e::api::gui::SubscribeEvent::Clicked, std::bind(&i6e::api::LanguageManager::setLanguage, i6e::api::EngineController::GetSingleton().getLanguageManager(), "Deutsch"));
+		gf->subscribeEvent("EnglishButton", i6e::api::gui::SubscribeEvent::Clicked, std::bind(&i6e::api::LanguageManager::setLanguage, i6e::api::EngineController::GetSingleton().getLanguageManager(), "English"));
 
 		// description how sample works
 		gf->addPrint("ChangeLanguagePrint", "RPG/Blanko", 0.5, 0.48, i6e::api::EngineController::GetSingleton().getTextManager()->getText("ChangeLanguageDescription_Key"), i6e::api::gui::Alignment::Center, -1);
@@ -67,7 +65,7 @@ namespace sample {
 		});
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 	}
 
 	void MultilanguageApplication::Tick() {

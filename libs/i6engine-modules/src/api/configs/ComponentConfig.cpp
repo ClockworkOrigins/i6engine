@@ -28,7 +28,7 @@ namespace components {
 	Component_Create_Create::Component_Create_Create(const int64_t goid, const int64_t coid, const core::IPKey & r, const std::string & t, const api::attributeMap & p) : GameMessageStruct(coid, goid), tpl(t), params(p), receiver(r) {
 	}
 
-	Component_CreateCallback_Create::Component_CreateCallback_Create(const int64_t goid, const int64_t coid, const core::IPKey & r, const std::string & t, const api::attributeMap & p, const boost::function<void(ComPtr)> & cb) : GameMessageStruct(coid, goid), tpl(t), params(p), receiver(r), callback(cb) {
+	Component_CreateCallback_Create::Component_CreateCallback_Create(const int64_t goid, const int64_t coid, const core::IPKey & r, const std::string & t, const api::attributeMap & p, const std::function<void(ComPtr)> & cb) : GameMessageStruct(coid, goid), tpl(t), params(p), receiver(r), callback(cb) {
 	}
 
 	Component_Create_Delete::Component_Create_Delete() : GameMessageStruct() {

@@ -62,7 +62,6 @@
 
 #include "i6engine/rpg/quest/QuestLog.h"
 
-#include "boost/bind.hpp"
 #include "boost/functional/factory.hpp"
 
 namespace i6e {
@@ -82,7 +81,7 @@ namespace rpg {
 		}
 		config::parseExternalConstants(externalConstantsFile);
 
-		item::ItemManager::GetSingletonPtr()->addItemAttributes("UsableItem", { { "HP", "attribute_0" }, { "HP_MAX", "attribute_1" } });
+		item::ItemManager::GetSingletonPtr()->addItemAttributes("UsableItem", { { "HP", "attribute_0" }, { "HP_MAX", "attributestd::placeholders::_1" } });
 
 		std::string ItemDirectory;
 		if (_iniParser.getValue("SCRIPT", "itemDirectory", ItemDirectory) != clockUtils::ClockError::SUCCESS) {
@@ -142,20 +141,20 @@ namespace rpg {
 
 		// register rpg components we want to use
 		// do this befor loading the level
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", boost::bind(&components::AttributeComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", boost::bind(&components::DialogCheckerComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", boost::bind(&components::ExperienceComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", boost::bind(&components::HealthbarComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", boost::bind(&components::HumanMovementComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", boost::bind(&components::ListInventoryComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", boost::bind(&components::MiscItemComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", boost::bind(&components::NameComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", boost::bind(&components::QuickslotComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", boost::bind(&components::SlotComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", boost::bind(&components::SlotInventoryComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", boost::bind(&components::ThirdPersonControlComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", boost::bind(&components::UsableItemComponent::createC, _1, _2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", boost::bind(&components::WeightInventoryComponent::createC, _1, _2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", std::bind(&components::AttributeComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", std::bind(&components::DialogCheckerComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", std::bind(&components::ExperienceComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", std::bind(&components::HealthbarComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", std::bind(&components::HumanMovementComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", std::bind(&components::ListInventoryComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", std::bind(&components::MiscItemComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", std::bind(&components::NameComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", std::bind(&components::QuickslotComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", std::bind(&components::SlotComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", std::bind(&components::SlotInventoryComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", std::bind(&components::ThirdPersonControlComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", std::bind(&components::UsableItemComponent::createC, std::placeholders::_1, std::placeholders::_2));
+		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", std::bind(&components::WeightInventoryComponent::createC, std::placeholders::_1, std::placeholders::_2));
 
 		// register keys
 		uint16_t key;

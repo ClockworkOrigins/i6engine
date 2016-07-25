@@ -181,7 +181,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(boost::make_shared<GameMessage>(messages::GraphicsMessageType, graphics::GraGetHighestCoordinate, core::Method::Update, new graphics::Graphics_GetHighestCoordinate_Update(startPos, callback), core::Subsystem::Unknown));
 	}
 
-	void GraphicsFacade::registerNotifyCallback(const boost::function<void(int64_t)> & f) {
+	void GraphicsFacade::registerNotifyCallback(const std::function<void(int64_t)> & f) {
 		_notify = f;
 		_notifyInit = true;
 	}

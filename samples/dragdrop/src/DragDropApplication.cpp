@@ -28,8 +28,6 @@
 #include "i6engine/api/manager/LanguageManager.h"
 #include "i6engine/api/manager/TextManager.h"
 
-#include "boost/bind.hpp"
-
 namespace sample {
 
 	DragDropApplication::DragDropApplication() : i6e::api::Application() {
@@ -94,7 +92,7 @@ namespace sample {
 		}
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 	}
 
 	void DragDropApplication::Tick() {

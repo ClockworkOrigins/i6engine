@@ -66,7 +66,7 @@ namespace sample {
 
 		i6e::api::InputFacade * inputFacade = i6e::api::EngineController::GetSingleton().getInputFacade();
 
-		inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_RETURN, i6e::api::KeyState::KEY_PRESSED, boost::bind(&JengaApplication::resetScene, this));
+		inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_RETURN, i6e::api::KeyState::KEY_PRESSED, std::bind(&JengaApplication::resetScene, this));
 	}
 
 	void JengaApplication::resetScene() {

@@ -94,10 +94,10 @@ namespace sample {
 
 			i6e::api::InputFacade * inputFacade = i6e::api::EngineController::GetSingleton().getInputFacade();
 
-			inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_MBLeft, i6e::api::KeyState::KEY_PRESSED, boost::bind(&TerraformingApplication::lowerTerrain, this));
-			inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_MBLeft, i6e::api::KeyState::KEY_HOLD, boost::bind(&TerraformingApplication::lowerTerrain, this));
-			inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_MBRight, i6e::api::KeyState::KEY_PRESSED, boost::bind(&TerraformingApplication::raiseTerrain, this));
-			inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_MBRight, i6e::api::KeyState::KEY_HOLD, boost::bind(&TerraformingApplication::raiseTerrain, this));
+			inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_MBLeft, i6e::api::KeyState::KEY_PRESSED, std::bind(&TerraformingApplication::lowerTerrain, this));
+			inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_MBLeft, i6e::api::KeyState::KEY_HOLD, std::bind(&TerraformingApplication::lowerTerrain, this));
+			inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_MBRight, i6e::api::KeyState::KEY_PRESSED, std::bind(&TerraformingApplication::raiseTerrain, this));
+			inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_MBRight, i6e::api::KeyState::KEY_HOLD, std::bind(&TerraformingApplication::raiseTerrain, this));
 		}
 	}
 

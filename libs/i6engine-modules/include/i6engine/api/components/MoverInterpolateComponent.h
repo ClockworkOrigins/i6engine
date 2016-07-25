@@ -161,7 +161,7 @@ namespace api {
 		/**
 		 * \brief used to lock the internal objects
 		 */
-		boost::mutex _lock;
+		std::mutex _lock;
 
 		void News(const GameMessage::Ptr & msg) override;
 

@@ -62,8 +62,6 @@
 
 #include "i6engine/api/components/Component.h"
 
-#include "boost/thread/mutex.hpp"
-
 namespace i6e {
 namespace api {
 
@@ -432,7 +430,7 @@ namespace api {
 		/**
 		 * \brief for locking the API
 		 */
-		mutable boost::mutex _lock;
+		mutable std::mutex _lock;
 
 		uint32_t _syncPrio;
 

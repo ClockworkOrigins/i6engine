@@ -31,8 +31,6 @@
 
 #include "i6engine/math/i6eVector2.h"
 
-#include "boost/function.hpp"
-
 namespace CEGUI {
 	class AnimationInstance;
 	class EventArgs;
@@ -93,7 +91,7 @@ namespace gui {
 		 * This function can be used to handle event-subscription-messages.
 		 * \param callback The function to be executed.
 		 */
-		void subscribeClickEvent(const boost::function<void(void)> & callback) {
+		void subscribeClickEvent(const std::function<void(void)> & callback) {
 			_clickCallback = callback;
 		}
 
@@ -149,7 +147,7 @@ namespace gui {
 		Vec2f _originalPos;
 		bool _isDragged;
 		Vec2f _dragOffset;
-		boost::function<void(void)> _clickCallback;
+		std::function<void(void)> _clickCallback;
 		std::string _tooltip;
 		bool _tooltipActive;
 		std::map<std::string, CEGUI::AnimationInstance *> _animations;

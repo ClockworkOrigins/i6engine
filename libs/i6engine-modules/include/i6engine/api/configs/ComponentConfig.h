@@ -116,8 +116,8 @@ namespace components {
 		std::string tpl;
 		attributeMap params;
 		core::IPKey receiver;
-		boost::function<void(ComPtr)> callback;
-		Component_CreateCallback_Create(const int64_t goid, const int64_t coid, const core::IPKey & r, const std::string & t, const attributeMap & p, const boost::function<void(ComPtr)> & cb);
+		std::function<void(ComPtr)> callback;
+		Component_CreateCallback_Create(const int64_t goid, const int64_t coid, const core::IPKey & r, const std::string & t, const attributeMap & p, const std::function<void(ComPtr)> & cb);
 		Component_CreateCallback_Create * copy() {
 			return new Component_CreateCallback_Create(*this);
 		}

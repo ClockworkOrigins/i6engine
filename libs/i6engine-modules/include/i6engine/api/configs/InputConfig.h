@@ -96,9 +96,9 @@ namespace input {
 	typedef struct Input_SubscribeKeyEvent_Create : GameMessageStruct {
 		KeyCode code;
 		KeyState type;
-		boost::function<void(void)> func;
+		std::function<void(void)> func;
 		Input_SubscribeKeyEvent_Create() {}
-		Input_SubscribeKeyEvent_Create(const KeyCode & c, const KeyState t, const boost::function<void(void)> & f);
+		Input_SubscribeKeyEvent_Create(const KeyCode & c, const KeyState t, const std::function<void(void)> & f);
 		Input_SubscribeKeyEvent_Create * copy() { return new Input_SubscribeKeyEvent_Create(*this); }
 	} Input_SubscribeKeyEvent_Create;
 

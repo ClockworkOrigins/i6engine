@@ -78,7 +78,7 @@ namespace components {
 			gf->addPrint(name + "Amount_" + std::to_string(i), "RPG/Blanko", startX + i * sizeX, startY + sizeY - 0.02, "0", api::gui::Alignment::Right, -1);
 			gf->setSize(name + "Amount_" + std::to_string(i), sizeX, sizeY);
 			gf->setVisibility(name + "Amount_" + std::to_string(i), false);
-			gf->subscribeEvent(name + "Thumbnail_" + std::to_string(i), i6e::api::gui::SubscribeEvent::Clicked, boost::bind(&QuickslotComponent::selectSlot, this, i));
+			gf->subscribeEvent(name + "Thumbnail_" + std::to_string(i), i6e::api::gui::SubscribeEvent::Clicked, std::bind(&QuickslotComponent::selectSlot, this, i));
 		}
 
 		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_1, "quickslot1");

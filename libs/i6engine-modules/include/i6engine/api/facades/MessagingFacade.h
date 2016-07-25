@@ -70,7 +70,7 @@ namespace api {
 		 * \param objMessageSubscriber The new receiver of messages of the given type (should be the caller by itself).
 		 * \param ptrMessageMethod The name of the method that will be called when a message of a certain type arrives at the receiver.
 		 */
-		void registerMessageType(uint16_t msgType, core::MessageSubscriber * objMessageSubscriber, const boost::function<void(GameMessage::Ptr)> & ptrMessageMethod);
+		void registerMessageType(uint16_t msgType, core::MessageSubscriber * objMessageSubscriber, const std::function<void(GameMessage::Ptr)> & ptrMessageMethod);
 
 		/**
 		 * \brief This method unregisters a message type of the given message subscriber.

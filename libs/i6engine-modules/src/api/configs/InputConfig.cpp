@@ -35,7 +35,7 @@ namespace input {
 	Input_Window_Create::Input_Window_Create(void * w) : GameMessageStruct(), window(w) {
 	}
 
-	Input_SubscribeKeyEvent_Create::Input_SubscribeKeyEvent_Create(const KeyCode & c, const KeyState t, const boost::function<void(void)> & f) : GameMessageStruct(), code(c), type(t), func(f) {
+	Input_SubscribeKeyEvent_Create::Input_SubscribeKeyEvent_Create(const KeyCode & c, const KeyState t, const std::function<void(void)> & f) : GameMessageStruct(), code(c), type(t), func(f) {
 	}
 
 	Input_SubscribeKeyEvent_Delete::Input_SubscribeKeyEvent_Delete(const KeyCode & c, const KeyState t) : GameMessageStruct(), code(c), type(t) {

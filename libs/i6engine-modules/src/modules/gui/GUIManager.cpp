@@ -47,7 +47,6 @@
 
 #include "boost/filesystem.hpp"
 #include "boost/functional/factory.hpp"
-#include "boost/interprocess/sync/scoped_lock.hpp"
 #include "boost/lexical_cast.hpp"
 
 #include "CEGUI/CEGUI.h"
@@ -61,8 +60,8 @@ namespace modules {
 	GUIManager::GUIManager(GUIController * ctrl) : _objRenderer(), _objGUIFunctions(), _objGUIKeyFunctions(), _objRoot(), _widgets(), _enabledFunctions(), _listIDs(0), _toTick(), _keyStates(), _factory(), _tickerLock(), _ctrl(ctrl), _lastOnWindow(""), _mouseOverWidgets() {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerAddTickerCallback(boost::bind(&GUIManager::addTicker, this, _1));
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerRemoveTickerCallback(boost::bind(&GUIManager::removeTicker, this, _1));
+		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerAddTickerCallback(std::bind(&GUIManager::addTicker, this, std::placeholders::_1));
+		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerRemoveTickerCallback(std::bind(&GUIManager::removeTicker, this, std::placeholders::_1));
 
 		registerGUIWidgetTemplate("GUIBar", boost::factory<GUIBar *>());
 		registerGUIWidgetTemplate("GUIChat", boost::factory<GUIChat *>());
@@ -341,19 +340,19 @@ namespace modules {
 	void GUIManager::addTicker(api::GUIWidget * widget) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
-		boost::mutex::scoped_lock sl(_tickerLock);
+		std::lock_guard<std::mutex> sl(_tickerLock);
 		_toTick.push_back(widget);
 	}
 
 	void GUIManager::removeTicker(api::GUIWidget * widget) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		boost::mutex::scoped_lock sl(_tickerLock);
+		std::lock_guard<std::mutex> sl(_tickerLock);
 		_toTick.remove(widget);
 	}
 
 	void GUIManager::tickWidgets() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		boost::mutex::scoped_lock sl(_tickerLock);
+		std::lock_guard<std::mutex> sl(_tickerLock);
 		for (api::GUIWidget * widget : _toTick) {
 			widget->tick();
 		}
@@ -467,7 +466,7 @@ namespace modules {
 		return true;
 	}
 
-	void GUIManager::setFunction(const std::string & name, const boost::function<void(void)> & ptrEventMethod) {
+	void GUIManager::setFunction(const std::string & name, const std::function<void(void)> & ptrEventMethod) {
 		ASSERT_THREAD_SAFETY_FUNCTION
 
 		_objGUIFunctions[name] = ptrEventMethod;

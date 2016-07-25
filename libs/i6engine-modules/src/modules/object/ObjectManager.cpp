@@ -44,16 +44,14 @@
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
-#include "boost/bind.hpp"
-
 namespace i6e {
 namespace modules {
 
 	ObjectManager::ObjectManager() : _GOMap(), _tickList(), _componentFactory(), _goFactory(this, &_componentFactory), _paused(false) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback(boost::bind(&ObjectManager::addTicker, this, _1));
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerRemoveTickerCallback(boost::bind(&ObjectManager::removeTicker, this, _1));
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback(std::bind(&ObjectManager::addTicker, this, std::placeholders::_1));
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->registerRemoveTickerCallback(std::bind(&ObjectManager::removeTicker, this, std::placeholders::_1));
 
 		for (std::pair<std::string, api::createGOCCallback> & p : api::componentList) {
 			registerCTemplate(p.first, p.second);

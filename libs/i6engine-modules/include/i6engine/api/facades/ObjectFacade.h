@@ -161,7 +161,7 @@ namespace api {
 		 * param[in] func callback to be called with the new GameObject
 		 * param[in] sender true if this GameObject should be synchronized in multiplayer games
 		 */
-		void createGO(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint64_t uuid, const bool sender, const boost::function<void(GOPtr)> & func) const;
+		void createGO(const std::string & gTemplate, const objects::GOTemplate & tmpl, uint64_t uuid, const bool sender, const std::function<void(GOPtr)> & func) const;
 
 		/**
 		 * \brief creates a new Component for given GameObject
@@ -180,7 +180,7 @@ namespace api {
 		 * \param params attributeMap for this Component
 		 * \param callback callback that is called after Component is created and initialized
 		 */
-		void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params, const boost::function<void(ComPtr)> & callback) const;
+		void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const attributeMap & params, const std::function<void(ComPtr)> & callback) const;
 
 		/**
 		 * \brief updates the GOMap with current state in ObjectSubsystem
@@ -200,17 +200,17 @@ namespace api {
 		 * \param sync true iff messages should go to all clients
 		 * \param compFamID sends the message to the component of this family ID if the GameObject has it. If this is empty the message is send to the GameObject.
 		 */
-		void sendConditionalMessage(const GameMessage::Ptr & m, const boost::function<bool(const GOPtr &)> & f, bool sync, uint32_t compFamID) const;
+		void sendConditionalMessage(const GameMessage::Ptr & m, const std::function<bool(const GOPtr &)> & f, bool sync, uint32_t compFamID) const;
 
 		/**
 		 * \brief register callback for notifying IDs, call only from ObjectController
 		 */
-		void registerNotifyCallback(const boost::function<void(int64_t)> & f);
+		void registerNotifyCallback(const std::function<void(int64_t)> & f);
 
 		/**
 		 * \brief register callback for notifying deleted IDs, call only from ObjectController
 		 */
-		void registerDeletedNotifyCallback(const boost::function<void(int64_t)> & f);
+		void registerDeletedNotifyCallback(const std::function<void(int64_t)> & f);
 
 		/**
 		 * \brief notifies new id in subsystem
@@ -225,12 +225,12 @@ namespace api {
 		/**
 		 * \brief registers callback for addTicker, call only by Object Subsystem
 		 */
-		void registerAddTickerCallback(const boost::function<void(const WeakComPtr &)> & func);
+		void registerAddTickerCallback(const std::function<void(const WeakComPtr &)> & func);
 
 		/**
 		 * \brief registers callback for removeTicker, call only by Object Subsystem
 		 */
-		void registerRemoveTickerCallback(const boost::function<void(int64_t)> & func);
+		void registerRemoveTickerCallback(const std::function<void(int64_t)> & func);
 
 		/**
 		 * \brief resets the subsystem to it's defaults
@@ -284,11 +284,11 @@ namespace api {
 		 */
 		uint32_t _frameTime;
 
-		boost::function<void(int64_t)> _notifyNewID;
-		boost::function<void(int64_t)> _notifyDeletedID;
+		std::function<void(int64_t)> _notifyNewID;
+		std::function<void(int64_t)> _notifyDeletedID;
 
-		boost::function<void(const WeakComPtr &)> _addTicker;
-		boost::function<void(int64_t)> _removeTicker;
+		std::function<void(const WeakComPtr &)> _addTicker;
+		std::function<void(int64_t)> _removeTicker;
 
 		mutable std::mutex _loadLevelLock;
 		mutable std::condition_variable _loadLevelCondVar;

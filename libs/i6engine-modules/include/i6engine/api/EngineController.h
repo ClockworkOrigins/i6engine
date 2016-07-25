@@ -228,7 +228,7 @@ namespace api {
 		 * \param[in] looping defines whether method is looping or just running once
 		 * \param[in] priority priority of this task, defining which Job will be handles preferred
 		 */
-		uint64_t registerTimer(uint64_t time, const boost::function<bool(void)> & func, bool looping, core::JobPriorities priority);
+		uint64_t registerTimer(uint64_t time, const std::function<bool(void)> & func, bool looping, core::JobPriorities priority);
 
 		/**
 		 * \brief deletes all timer with given priority

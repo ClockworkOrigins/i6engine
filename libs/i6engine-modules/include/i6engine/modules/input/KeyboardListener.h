@@ -50,7 +50,7 @@ namespace modules {
 	class KeyboardListener : public OIS::KeyListener {
 		friend class InputManager;
 
-		typedef std::map<std::pair<api::KeyCode, api::KeyState>, boost::function<void(void)>> InputKeyFunctions;
+		typedef std::map<std::pair<api::KeyCode, api::KeyState>, std::function<void(void)>> InputKeyFunctions;
 
 	private:
 		std::array<api::KeyState, size_t(api::KeyCode::COUNT)> _keyStates;
@@ -89,7 +89,7 @@ namespace modules {
 		 * \param type must either be "Pressed" or "Released"
 		 * \param ptrEventMethod Pointer to the designated function
 		 */
-		void setKeyFunction(const api::KeyCode name, const api::KeyState type, const boost::function<void(void)> & ptrEventMethod);
+		void setKeyFunction(const api::KeyCode name, const api::KeyState type, const std::function<void(void)> & ptrEventMethod);
 
 		/**
 		 * \brief removes the function specified for the given pair of KeyCode and type

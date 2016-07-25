@@ -26,8 +26,6 @@
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/facades/InputFacade.h"
 
-#include "boost/bind.hpp"
-
 namespace sample {
 
 	CanvasApplication::CanvasApplication() : i6e::api::Application(), _percent(0.5) {
@@ -59,7 +57,7 @@ namespace sample {
 		}, true, i6e::core::JobPriorities::Prio_Medium);
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, boost::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 	}
 
 	void CanvasApplication::Tick() {

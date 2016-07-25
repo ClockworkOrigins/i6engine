@@ -37,7 +37,7 @@ namespace core {
 	}
 
 	void MessageSubscriber::swapMessageBuffer() {
-		boost::mutex::scoped_lock objScopeLock(_objMessageVectorMutex);
+		std::lock_guard<std::mutex> objScopeLock(_objMessageVectorMutex);
 		std::swap(_objActiveMessageVector, _objInActiveMessageVector);
 	}
 
@@ -59,7 +59,7 @@ namespace core {
 		// if buffer() is called frequently from many different threads, it may be better to release it after obtaining the status and
 		// reaquire it later on
 		// however for a single thread buffering, aquiring twice is very slow
-		boost::mutex::scoped_lock sl(_bufferLock);
+		std::lock_guard<std::mutex> sl(_bufferLock);
 
 		if (id != -1 && _existingObjects.find(id) != _existingObjects.end()) {
 			statusID = _existingObjects.at(id);
@@ -137,7 +137,7 @@ namespace core {
 
 		bool notify = false;
 
-		boost::mutex::scoped_lock sl(_bufferLock);
+		std::lock_guard<std::mutex> sl(_bufferLock);
 
 		for (int64_t i : ids) {
 			if (_existingObjects.find(i) != _existingObjects.end()) {
@@ -207,12 +207,12 @@ namespace core {
 	}
 
 	void MessageSubscriber::notifyNewID(const int64_t id) {
-		boost::mutex::scoped_lock sl(_objMessageListMutex);
+		std::lock_guard<std::mutex> sl(_objMessageListMutex);
 		_newCreatedIDs.push_back(id);
 	}
 
 	void MessageSubscriber::notifyDeletedID(const int64_t id) {
-		boost::mutex::scoped_lock sl(_objMessageListMutex);
+		std::lock_guard<std::mutex> sl(_objMessageListMutex);
 		_newDeletedIDs.push_back(id);
 	}
 
@@ -240,20 +240,20 @@ namespace core {
 			_waitingMsgs[msg->message->getContent()->_id] = std::move(vNeu);
 		}
 
-		boost::mutex::scoped_lock objScopeLock(_objMessageVectorMutex);
+		std::lock_guard<std::mutex> objScopeLock(_objMessageVectorMutex);
 		_objActiveMessageVector->push_back(msg);
 	}
 
 	void MessageSubscriber::reset() {
-		boost::mutex::scoped_lock sl1(_objMessageVectorMutex);
+		std::lock_guard<std::mutex> sl1(_objMessageVectorMutex);
 
 		_objMessageVectorA.clear();
 		_objMessageVectorB.clear();
 
-		boost::mutex::scoped_lock sl2(_objMessageListMutex);
+		std::lock_guard<std::mutex> sl2(_objMessageListMutex);
 		_newCreatedIDs.clear();
 
-		boost::mutex::scoped_lock sl3(_bufferLock);
+		std::lock_guard<std::mutex> sl3(_bufferLock);
 		_existingObjects.clear();
 		_waitingMsgs.clear();
 	}

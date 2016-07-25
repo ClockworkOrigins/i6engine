@@ -76,7 +76,7 @@ namespace api {
 		 */
 		GameObject() {
 		}
-		GameObject(const int64_t goid, const core::IPKey & ownerNode, uint64_t uuid, const std::string & tpl, const boost::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f);
+		GameObject(const int64_t goid, const core::IPKey & ownerNode, uint64_t uuid, const std::string & tpl, const std::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> & f);
 
 		/**
 		 * \brief Remove all GOCs held by the component table.
@@ -268,7 +268,7 @@ namespace api {
 		/**
 		 * \brief callback for creation of Components
 		 */
-		boost::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> _componentFunc;
+		std::function<ComPtr(const int64_t, const std::string &, const attributeMap &, const WeakGOPtr &)> _componentFunc;
 
 		WeakGOPtr _self;
 
