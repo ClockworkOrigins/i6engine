@@ -309,12 +309,12 @@ namespace utils {
 		wc.hIconSm = 0;                               //.hBrushBackground field will be the color of the Window's
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);      //background.  The .cbWndExtra field is very useful as it allows
 		//wc.hbrBackground = (HBRUSH) COLOR_BTNSHADOW;         //you to associate object (Window) data to the instantiated Window's
-		wc.hbrBackground = CreatePatternBrush((HBITMAP)::LoadImage(nullptr, (LPCSTR) file.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION));
+		wc.hbrBackground = CreatePatternBrush((HBITMAP)::LoadImage(nullptr, (LPCSTR) file.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 		wc.cbWndExtra = 0;                               //internal structure, i.e., accomodate member data.
 		wc.cbClsExtra = 0;
 		wc.lpszMenuName = NULL;
 		RegisterClassEx(&wc);
-		HBITMAP hBitmap = (HBITMAP)::LoadImage(nullptr, (LPCSTR) file.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		HBITMAP hBitmap = (HBITMAP)::LoadImage(nullptr, (LPCSTR) file.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		if (!hBitmap) {
 			return;
 		}
@@ -328,7 +328,7 @@ namespace utils {
 		int xPos = (GetSystemMetrics(SM_CXSCREEN) - rc.right) / 2;
 		int yPos = (GetSystemMetrics(SM_CYSCREEN) - rc.bottom) / 2;
 
-		SetWindowPos(hWnd, 0, xPos, yPos, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
+		SetWindowPos(hWnd, HWND_TOPMOST, xPos, yPos, 0, 0, SWP_NOSIZE);
 
 		ShowWindow(hWnd, SW_SHOW);
 #endif
