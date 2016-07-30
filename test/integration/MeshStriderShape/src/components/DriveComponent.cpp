@@ -27,6 +27,8 @@
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
+#include "MeshStriderShapeIntegrationTestApplication.h"
+
 #include "components/Config.h"
 
 namespace i6e {
@@ -44,13 +46,13 @@ namespace components {
 	void DriveComponent::Init() {
 		addTicker();
 
-		api::EngineController::GetSingleton().getGUIFacade()->addPrint("JumpCounter", "RPG/Blanko", 0.01, 0.01, "0", api::gui::Alignment::Left, -1);
+		i6eGUIFacade->addPrint("JumpCounter", "RPG/Blanko", 0.01, 0.01, "0", api::gui::Alignment::Left, -1);
 	}
 
 	void DriveComponent::Finalize() {
 		removeTicker();
 
-		api::EngineController::GetSingleton().getGUIFacade()->deleteWidget("JumpCounter");
+		i6eGUIFacade->deleteWidget("JumpCounter");
 	}
 
 	api::attributeMap DriveComponent::synchronize() const {
@@ -71,7 +73,11 @@ namespace components {
 		} else {
 			if (std::abs(psc->getPosition().getY() - _sum / 1000.0) > 0.1 * _sum / 1000.0) {
 				_counter++;
-				api::EngineController::GetSingleton().getGUIFacade()->setText("JumpCounter", std::to_string(_counter));
+				i6eGUIFacade->setText("JumpCounter", std::to_string(_counter));
+				if (_counter >= 100) {
+					dynamic_cast<MeshStriderShapeIntegrationTestApplication *>(i6eAppl)->testFailed = true;
+					i6eEngineController->stop();
+				}
 			}
 		}
 	}

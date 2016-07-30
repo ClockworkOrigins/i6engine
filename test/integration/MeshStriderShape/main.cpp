@@ -29,18 +29,18 @@
 #include "i6engine/modules/physics/PhysicsController.h"
 
 int main(int, char **) {
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6e::modules::GraphicsController(), { i6e::core::Subsystem::Object });
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6e::modules::ObjectController(), { i6e::core::Subsystem::Physic });
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6e::modules::InputController(), LNG_INPUT_FRAME_TIME);
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new i6e::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
+	i6eEngineController->registerSubSystem("Graphics", new i6e::modules::GraphicsController(), { i6e::core::Subsystem::Object });
+	i6eEngineController->registerSubSystem("Object", new i6e::modules::ObjectController(), { i6e::core::Subsystem::Physic });
+	i6eEngineController->registerSubSystem("Input", new i6e::modules::InputController(), LNG_INPUT_FRAME_TIME);
+	i6eEngineController->registerSubSystem("Physics", new i6e::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
 
 	i6e::integration::MeshStriderShapeIntegrationTestApplication app;
 
 	app.setName("MeshStriderShape Test");
 
-	i6e::api::EngineController::GetSingletonPtr()->registerApplication(app);
+	i6eEngineController->registerApplication(app);
 
-	i6e::api::EngineController::GetSingletonPtr()->start();
+	i6eEngineController->start();
 
-	return 0;
+	return app.testFailed;
 }

@@ -37,6 +37,10 @@ namespace integration {
 		for (size_t i = 0; i < 400; i++) {
 			i6eGUIFacade->addImage("Image_" + std::to_string(i), "RPG/StaticImage", "RPG_Inventory_Slot", "Slot", 0.0, 0.0, 1.0, 1.0);
 		}
+		i6eEngineController->registerTimer(10000000, [this]() {
+			i6eEngineController->stop();
+			return false;
+		}, false, i6e::core::JobPriorities::Prio_Low);
 	}
 
 } /* namespace integration */

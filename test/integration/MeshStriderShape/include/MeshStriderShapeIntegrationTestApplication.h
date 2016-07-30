@@ -32,6 +32,8 @@ namespace integration {
 		~MeshStriderShapeIntegrationTestApplication();
 
 		void AfterInitialize();
+
+		bool testFailed;
 	};
 
 } /* namespace integration */

@@ -33,7 +33,7 @@
 namespace i6e {
 namespace integration {
 
-	MeshStriderShapeIntegrationTestApplication::MeshStriderShapeIntegrationTestApplication() : CommonApplication(true, false) {
+	MeshStriderShapeIntegrationTestApplication::MeshStriderShapeIntegrationTestApplication() : CommonApplication(true, false), testFailed(false) {
 	}
 
 	MeshStriderShapeIntegrationTestApplication::~MeshStriderShapeIntegrationTestApplication() {
@@ -42,7 +42,7 @@ namespace integration {
 	void MeshStriderShapeIntegrationTestApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
 
-		api::ObjectFacade * of = api::EngineController::GetSingleton().getObjectFacade();
+		api::ObjectFacade * of = i6eObjectFacade;
 
 		of->registerCTemplate("Drive", std::bind(&components::DriveComponent::createC, std::placeholders::_1, std::placeholders::_2));
 
@@ -55,7 +55,7 @@ namespace integration {
 
 				tmpl._components.push_back(api::objects::GOTemplateComponent("StaticState", params, "", false, false));
 			}
-			of->createGO("SpectatorCam", tmpl, api::EngineController::GetSingleton().getUUID(), false, [this](api::GOPtr go) {
+			of->createGO("SpectatorCam", tmpl, i6eEngineController->getUUID(), false, [this](api::GOPtr go) {
 				_camera = go;
 			});
 		}
@@ -76,12 +76,12 @@ namespace integration {
 
 				tmpl._components.push_back(api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
 			}
-			of->createObject("Floor", tmpl, api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Floor", tmpl, i6eEngineController->getUUID(), false);
 		}
 		// a sun
 		{
 			api::objects::GOTemplate tmpl;
-			of->createObject("Sun", tmpl, api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Sun", tmpl, i6eEngineController->getUUID(), false);
 		}
 		// first scripted block
 		{
@@ -99,8 +99,12 @@ namespace integration {
 			{
 				tmpl._components.push_back(api::objects::GOTemplateComponent("Drive", api::attributeMap(), "", false, false));
 			}
-			of->createObject("ScriptBlock", tmpl, api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ScriptBlock", tmpl, i6eEngineController->getUUID(), false);
 		}
+		i6eEngineController->registerTimer(10000000, [this]() {
+			i6eEngineController->stop();
+			return false;
+		}, false, i6e::core::JobPriorities::Prio_Low);
 	}
 
 } /* namespace integration */
