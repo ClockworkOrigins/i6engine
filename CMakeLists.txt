@@ -184,10 +184,12 @@ ENDIF(NOT WIN32)
 #----------------------------------------------------
 # Boost
 #---------------------------------------------------
-IF(WIN32)
-	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-boost.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-ELSEIF(UNIX)
-	execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-boost.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+IF(NOT EXISTS ${ISIXE_DEP_DIR}/boost)
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-boost.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-boost.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
 ENDIF()
 
 	SET(LIBNAME "BOOST")
@@ -210,10 +212,12 @@ ENDIF()
 #----------------------------------------------------
 # Bullet
 #----------------------------------------------------
-IF(WIN32)
-	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-bullet.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-ELSEIF(UNIX)
-	execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-bullet.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+IF(NOT EXISTS ${ISIXE_DEP_DIR}/bullet)
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-bullet.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-bullet.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
 ENDIF()
 
 	SET(LIBNAME "BULLET")
@@ -226,10 +230,12 @@ ENDIF()
 #----------------------------------------------------
 # clockUtils
 #----------------------------------------------------
-IF(WIN32)
-	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-clockUtils.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-ELSEIF(UNIX)
-	execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-clockUtils.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+IF(NOT EXISTS ${ISIXE_DEP_DIR}/clockUtils)
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-clockUtils.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-clockUtils.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
 ENDIF()
 
 	SET(LIBNAME "CLOCKUTILS")
@@ -246,10 +252,12 @@ ENDIF()
 # Google Test
 #----------------------------------------------------
 IF(ISIXE_WITH_TESTING)
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gmock.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-gmock.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	IF(NOT EXISTS ${ISIXE_DEP_DIR}/gmock)
+		IF(WIN32)
+			execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gmock.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+		ELSEIF(UNIX)
+			execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-gmock.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+		ENDIF()
 	ENDIF()
 
 	SET(LIBNAME "GTEST")
@@ -263,10 +271,12 @@ ENDIF(ISIXE_WITH_TESTING)
 # Google Performance Tools
 #----------------------------------------------------
 IF(ISIXE_WITH_PROFILING)
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gperftools.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-gperftools.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	IF(NOT EXISTS ${ISIXE_DEP_DIR}/gperftools)
+		IF(WIN32)
+			execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gperftools.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+		ELSEIF(UNIX)
+			execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-gperftools.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+		ENDIF()
 	ENDIF()
 
 	SET(LIBNAME "GPerfTools")
@@ -284,10 +294,12 @@ ENDIF(ISIXE_WITH_PROFILING)
 # Lua
 #----------------------------------------------------
 IF(ISIXE_WITH_SCRIPTING STREQUAL "lua")
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-lua.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-lua.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	IF(NOT EXISTS ${ISIXE_DEP_DIR}/lua)
+		IF(WIN32)
+			execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-lua.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+		ELSEIF(UNIX)
+			execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-lua.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+		ENDIF()
 	ENDIF()
 
 	SET(LIBNAME "LUA")
@@ -300,8 +312,18 @@ ENDIF()
 #----------------------------------------------------
 # OIS
 #----------------------------------------------------
-IF(UNIX) # Windows build OIS together with Ogre deps
-	execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-ois.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+IF(NOT EXISTS ${ISIXE_DEP_DIR}/ois)
+	IF(UNIX) # Windows build OIS together with Ogre deps
+		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-ois.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
+ENDIF()
+
+IF(NOT EXISTS ${ISIXE_DEP_DIR}/ogre) # build ogre before searching OIS as OIS is built by ogre build scripts together with some other dependencies
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-ogre.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-ogre.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
 ENDIF()
 
 	SET(LIBNAME "OIS")
@@ -317,11 +339,6 @@ ENDIF()
 #----------------------------------------------------
 # Ogre3D
 #----------------------------------------------------
-IF(WIN32)
-	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-ogre.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-ELSEIF(UNIX)
-	execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-ogre.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-ENDIF()
 
 	SET(LIBNAME "OGRE")
 	SET(LIBHEADER "OGRE/Ogre.h")
@@ -335,10 +352,12 @@ ENDIF()
 #----------------------------------------------------
 # CEGUI
 #----------------------------------------------------
-IF(WIN32)
-	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-cegui.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-ELSEIF(UNIX)
-	execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-cegui.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+IF(NOT EXISTS ${ISIXE_DEP_DIR}/cegui)
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-cegui.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-cegui.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
 ENDIF()
 
 	SET(LIBNAME "CEGUI")
@@ -351,10 +370,12 @@ ENDIF()
 # OpenAL Soft
 #----------------------------------------------------
 IF(ISIXE_WITH_AUDIO)
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-openalsoft.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-openalsoft.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	IF(NOT EXISTS ${ISIXE_DEP_DIR}/OpenALSoft)
+		IF(WIN32)
+			execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-openalsoft.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+		ELSEIF(UNIX)
+			execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-openalsoft.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+		ENDIF()
 	ENDIF()
 
 	SET(LIBNAME "OPENALSOFT")
@@ -389,10 +410,12 @@ ENDIF()
 #----------------------------------------------------
 # TinyXML
 #----------------------------------------------------
-IF(WIN32)
-	execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-tinyxml.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-ELSEIF(UNIX)
-	execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-tinyxml.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+IF(NOT EXISTS ${ISIXE_DEP_DIR}/tinyxml2)
+	IF(WIN32)
+		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-tinyxml.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ELSEIF(UNIX)
+		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-tinyxml.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
+	ENDIF()
 ENDIF()
 
 	SET(LIBNAME "TinyXML")
