@@ -328,6 +328,8 @@ namespace utils {
 		int xPos = (GetSystemMetrics(SM_CXSCREEN) - rc.right) / 2;
 		int yPos = (GetSystemMetrics(SM_CYSCREEN) - rc.bottom) / 2;
 
+		::SetForegroundWindow(hWnd);
+
 		SetWindowPos(hWnd, HWND_TOPMOST, xPos, yPos, 0, 0, SWP_NOSIZE);
 
 		ShowWindow(hWnd, SW_SHOW);
