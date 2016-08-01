@@ -104,6 +104,11 @@ namespace modules {
 		void playSound(api::audio::SoundHandle handle, const std::string & file, double maxDistance, const Vec3 & pos, const Vec3 & dir, bool cacheable, const std::string & category, const std::function<void(bool)> & callback = [](bool) {});
 
 		/**
+		 * \brief sets volume for a sound category
+		 */
+		void setVolume(const std::string & category, uint16_t volume);
+
+		/**
 		 * \brief forbidden
 		 */
 		AudioManager(const AudioManager &) = delete;

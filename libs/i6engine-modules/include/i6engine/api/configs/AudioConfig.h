@@ -47,6 +47,7 @@ namespace audio {
 		AudioPlaySound,
 		AudioPlaySoundWithCallback,
 		AudioStopSound,
+		AudioSetVolume,
 		AudioMessageTypesCount
 	};
 
@@ -153,6 +154,19 @@ namespace audio {
 			return new Audio_StopSound_Delete(*this);
 		}
 	} Audio_StopSound_Delete;
+
+	/**
+	 * \brief sets volume for a category
+	 */
+	typedef struct Audio_SetVolume_Update : GameMessageStruct {
+		std::string category;
+		uint16_t volume;
+		Audio_SetVolume_Update(const std::string & c, uint16_t v) : GameMessageStruct(), category(c), volume(v) {
+		}
+		Audio_SetVolume_Update * copy() {
+			return new Audio_SetVolume_Update(*this);
+		}
+	} Audio_SetVolume_Update;
 
 } /* namespace audio */
 } /* namespace api */

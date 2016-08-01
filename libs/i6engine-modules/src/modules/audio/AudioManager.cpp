@@ -106,6 +106,10 @@ namespace modules {
 				api::audio::Audio_Listener_Update * alu = dynamic_cast<api::audio::Audio_Listener_Update *>(msg->getContent());
 
 				updateListener(alu->position, alu->rotation, alu->velocity);
+			} else if (type == api::audio::AudioSetVolume) {
+				api::audio::Audio_SetVolume_Update * asvu = dynamic_cast<api::audio::Audio_SetVolume_Update *>(msg->getContent());
+
+				setVolume(asvu->category, asvu->volume);
 			} else {
 				ISIXE_THROW_MESSAGE("AudioManager", "Don't know what to do with message type " << type);
 			}
@@ -267,6 +271,15 @@ namespace modules {
 		alSourcePlay(source);							// Play the sound buffer linked to the source
 
 		_sounds.push_back(std::make_tuple(source, buffer, callback, handle, category));
+	}
+
+	void AudioManager::setVolume(const std::string & category, uint16_t volume) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		for (auto & t : _sounds) {
+			if (std::get<SoundEntry::Category>(t) == category) {
+				alSourcef(std::get<SoundEntry::Source>(t), AL_GAIN, volume / 100.0f);
+			}
+		}
 	}
 
 } /* namespace modules */

@@ -78,6 +78,13 @@ namespace api {
 		void stopSound(audio::SoundHandle handle);
 
 		/**
+		 * \brief sets volume for a sound category
+		 * \param[in] category sound category
+		 * \param[in] volume volume value in range [0; 100]
+		 */
+		void setVolume(const std::string & category, uint16_t volume) const;
+
+		/**
 		 * \brief resets the subsystem to it's defaults
 		 */
 		void resetSubSystem();
