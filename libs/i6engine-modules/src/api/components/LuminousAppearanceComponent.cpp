@@ -183,7 +183,7 @@ namespace api {
 			}
 			setDiffuseColor(_diffuseColor);
 			return true;
-		}, "Vec3"));
+		}, "Colour"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Specular Color", [this]() {
 			return _specularColor.toString();
 		}, [this](std::string s) {
@@ -194,7 +194,7 @@ namespace api {
 			}
 			setSpecularColor(_specularColor);
 			return true;
-		}, "Vec3"));
+		}, "Colour"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Attenuation", [this]() {
 			return _attenuation.toString();
 		}, [this](std::string s) {

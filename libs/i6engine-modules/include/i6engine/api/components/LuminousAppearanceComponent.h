@@ -40,8 +40,8 @@ namespace api {
 	 * | Name | Required | Type | Description | Public |
 	 * |------|----------|------| ----------- | ------------ |
 	 * | lightType | yes | int | one of the LightTypes | yes |
-	 * | diffuseColor | yes | Vec3 | diffuse colour of the light | yes |
-	 * | specularColor | yes | Vec3 | specular colour of the light | yes |
+	 * | diffuseColor | yes | Vec3 | diffuse colour of the light, in range [0.0; 1.0] | yes |
+	 * | specularColor | yes | Vec3 | specular colour of the light, in range [0.0; 1.0] | yes |
 	 * | attenuation | yes | Vec4 | attenuation of the light, W = range (range in world units), X = constant (1.0 never attenuate, 0.0 complete attenuation), Y = linear (linear attenuation depending on distance), Z = quadratic factor | yes |
 	 * | pos | no | Vec3 | relative position to SceneNode | yes |
 	 * | direction | *) | Vec3 | direction of the light shaft, *) required if lightType is DIRECTIONAL or SPOT | yes |

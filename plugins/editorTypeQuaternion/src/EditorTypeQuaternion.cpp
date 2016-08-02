@@ -25,29 +25,28 @@
 #include <QDoubleSpinBox>
 #include <QGridLayout>
 #include <QLabel>
-#include <QLineEdit>
 
 namespace i6e {
 namespace plugins {
 
-	EditorTypeQuaternionWidget::EditorTypeQuaternionWidget(QWidget * parent) : TypeWidgetInterface(parent), _lineEditX(nullptr), _lineEditY(nullptr), _lineEditZ(nullptr), _spinBox(nullptr) {
+	EditorTypeQuaternionWidget::EditorTypeQuaternionWidget(QWidget * parent) : TypeWidgetInterface(parent), _spinBoxX(nullptr), _spinBoxY(nullptr), _spinBoxZ(nullptr), _spinBox(nullptr) {
 		QGridLayout * layout = new QGridLayout(this);
-		_lineEditX = new QLineEdit(this);
+		_spinBoxX = new QDoubleSpinBox(this);
 		QLabel * labelX = new QLabel("X", this);
-		_lineEditY = new QLineEdit(this);
+		_spinBoxY = new QDoubleSpinBox(this);
 		QLabel * labelY = new QLabel("Y", this);
-		_lineEditZ = new QLineEdit(this);
+		_spinBoxZ = new QDoubleSpinBox(this);
 		QLabel * labelZ = new QLabel("Z", this);
 		_spinBox = new QDoubleSpinBox(this);
 		_spinBox->setMinimum(-360.0);
 		_spinBox->setMaximum(360.0);
 		QLabel * labelAngle = new QLabel("Angle", this);
 		layout->addWidget(labelX, 0, 0);
-		layout->addWidget(_lineEditX, 0, 1);
+		layout->addWidget(_spinBoxX, 0, 1);
 		layout->addWidget(labelY, 0, 2);
-		layout->addWidget(_lineEditY, 0, 3);
+		layout->addWidget(_spinBoxY, 0, 3);
 		layout->addWidget(labelZ, 0, 4);
-		layout->addWidget(_lineEditZ, 0, 5);
+		layout->addWidget(_spinBoxZ, 0, 5);
 		layout->addWidget(labelAngle, 1, 2);
 		layout->addWidget(_spinBox, 1, 3);
 		setLayout(layout);
@@ -58,21 +57,21 @@ namespace plugins {
 		Vec3 vec;
 		double angle;
 		quat.toAxisAngle(vec, angle);
-		_lineEditX->setText(QString::number(vec.getX()));
-		_lineEditY->setText(QString::number(vec.getY()));
-		_lineEditZ->setText(QString::number(vec.getZ()));
+		_spinBoxX->setValue(vec.getX());
+		_spinBoxY->setValue(vec.getY());
+		_spinBoxZ->setValue(vec.getZ());
 		_spinBox->setValue(angle);
 	}
 
 	std::string EditorTypeQuaternionWidget::getValues() const {
-		Quaternion quat(Vec3((_lineEditX->text() + " " + _lineEditY->text() + " " + _lineEditZ->text()).toStdString()), _spinBox->value());
+		Quaternion quat(Vec3(_spinBoxX->value(), _spinBoxY->value(), _spinBoxZ->value()), _spinBox->value());
 		return (std::to_string(quat.getW()) + " " + std::to_string(quat.getX()) + " " + std::to_string(quat.getY()) + " " + std::to_string(quat.getZ()));
 	}
 
 	void EditorTypeQuaternionWidget::setReadOnly(bool readOnly) {
-		_lineEditX->setReadOnly(readOnly);
-		_lineEditY->setReadOnly(readOnly);
-		_lineEditZ->setReadOnly(readOnly);
+		_spinBoxX->setReadOnly(readOnly);
+		_spinBoxY->setReadOnly(readOnly);
+		_spinBoxZ->setReadOnly(readOnly);
 		_spinBox->setReadOnly(readOnly);
 	}
 

@@ -22,7 +22,7 @@
 
 #include "i6engine/editor/plugins/TypePluginInterface.h"
 
-class QLineEdit;
+class QDoubleSpinBox;
 
 namespace i6e {
 namespace plugins {
@@ -40,9 +40,9 @@ namespace plugins {
 		void setReadOnly(bool readOnly);
 
 	private:
-		QLineEdit * _lineEditX;
-		QLineEdit * _lineEditY;
-		QLineEdit * _lineEditZ;
+		QDoubleSpinBox * _spinBoxX;
+		QDoubleSpinBox * _spinBoxY;
+		QDoubleSpinBox * _spinBoxZ;
 	};
 
 	class EditorTypeVec3 : public QObject, public editor::plugins::TypePluginInterface {

@@ -17,21 +17,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_PLUGINS_EDITORTYPEVEC4_H__
-#define __I6ENGINE_PLUGINS_EDITORTYPEVEC4_H__
+#ifndef __I6ENGINE_PLUGINS_EDITORTYPECOLOUR_H__
+#define __I6ENGINE_PLUGINS_EDITORTYPECOLOUR_H__
 
 #include "i6engine/editor/plugins/TypePluginInterface.h"
 
-class QDoubleSpinBox;
+class QSpinBox;
+class QPushButton;
 
 namespace i6e {
 namespace plugins {
 
-	class EditorTypeVec4Widget : public editor::plugins::TypeWidgetInterface {
+	class EditorTypeColourWidget : public editor::plugins::TypeWidgetInterface {
 		Q_OBJECT
 
 	public:
-		EditorTypeVec4Widget(QWidget * parent);
+		EditorTypeColourWidget(QWidget * parent);
 
 		void setValues(const std::string & values);
 
@@ -39,21 +40,24 @@ namespace plugins {
 
 		void setReadOnly(bool readOnly);
 
+	private slots:
+		void selectColour();
+
 	private:
-		QDoubleSpinBox * _spinBoxX;
-		QDoubleSpinBox * _spinBoxY;
-		QDoubleSpinBox * _spinBoxZ;
-		QDoubleSpinBox * _spinBoxW;
+		QSpinBox * _spinBoxX;
+		QSpinBox * _spinBoxY;
+		QSpinBox * _spinBoxZ;
+		QPushButton * _colorButton;
 	};
 
-	class EditorTypeVec4 : public QObject, public editor::plugins::TypePluginInterface {
+	class EditorTypeColour : public QObject, public editor::plugins::TypePluginInterface {
 		Q_OBJECT
 		Q_PLUGIN_METADATA(IID "i6e.editor.type.TypePluginInterface")
 		Q_INTERFACES(i6e::editor::plugins::TypePluginInterface)
 
 	public:
 		std::string getIdentifier() const override {
-			return "Vec4";
+			return "Colour";
 		}
 
 		editor::plugins::TypeWidgetInterface * createWidget(QWidget * parent);
@@ -62,4 +66,4 @@ namespace plugins {
 } /* namespace plugins */
 } /* namespace i6e */
 
-#endif /* __I6ENGINE_PLUGINS_EDITORTYPEVEC4_H__ */
+#endif /* __I6ENGINE_PLUGINS_EDITORTYPECOLOUR_H__ */

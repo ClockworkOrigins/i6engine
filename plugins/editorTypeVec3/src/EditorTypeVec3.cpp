@@ -21,45 +21,45 @@
 
 #include "i6engine/math/i6eVector.h"
 
+#include <QDoubleSpinBox>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QLineEdit>
 
 namespace i6e {
 namespace plugins {
 
-	EditorTypeVec3Widget::EditorTypeVec3Widget(QWidget * parent) : TypeWidgetInterface(parent), _lineEditX(nullptr), _lineEditY(nullptr), _lineEditZ(nullptr) {
+	EditorTypeVec3Widget::EditorTypeVec3Widget(QWidget * parent) : TypeWidgetInterface(parent), _spinBoxX(nullptr), _spinBoxY(nullptr), _spinBoxZ(nullptr) {
 		QLayout * layout = new QHBoxLayout(this);
-		_lineEditX = new QLineEdit(this);
+		_spinBoxX = new QDoubleSpinBox(this);
 		QLabel * labelX = new QLabel("X", this);
-		_lineEditY = new QLineEdit(this);
+		_spinBoxY = new QDoubleSpinBox(this);
 		QLabel * labelY = new QLabel("Y", this);
-		_lineEditZ = new QLineEdit(this);
+		_spinBoxZ = new QDoubleSpinBox(this);
 		QLabel * labelZ = new QLabel("Z", this);
 		layout->addWidget(labelX);
-		layout->addWidget(_lineEditX);
+		layout->addWidget(_spinBoxX);
 		layout->addWidget(labelY);
-		layout->addWidget(_lineEditY);
+		layout->addWidget(_spinBoxY);
 		layout->addWidget(labelZ);
-		layout->addWidget(_lineEditZ);
+		layout->addWidget(_spinBoxZ);
 		setLayout(layout);
 	}
 
 	void EditorTypeVec3Widget::setValues(const std::string & values) {
 		Vec3 vec(values);
-		_lineEditX->setText(QString::number(vec.getX()));
-		_lineEditY->setText(QString::number(vec.getY()));
-		_lineEditZ->setText(QString::number(vec.getZ()));
+		_spinBoxX->setValue(vec.getX());
+		_spinBoxY->setValue(vec.getY());
+		_spinBoxZ->setValue(vec.getZ());
 	}
 
 	std::string EditorTypeVec3Widget::getValues() const {
-		return (_lineEditX->text() + " " + _lineEditY->text() + " " + _lineEditZ->text()).toStdString();
+		return (_spinBoxX->text() + " " + _spinBoxY->text() + " " + _spinBoxZ->text()).toStdString();
 	}
 
 	void EditorTypeVec3Widget::setReadOnly(bool readOnly) {
-		_lineEditX->setReadOnly(readOnly);
-		_lineEditY->setReadOnly(readOnly);
-		_lineEditZ->setReadOnly(readOnly);
+		_spinBoxX->setReadOnly(readOnly);
+		_spinBoxY->setReadOnly(readOnly);
+		_spinBoxZ->setReadOnly(readOnly);
 	}
 
 	editor::plugins::TypeWidgetInterface * EditorTypeVec3::createWidget(QWidget * parent) {

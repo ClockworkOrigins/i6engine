@@ -42,6 +42,7 @@
 
 Q_IMPORT_PLUGIN(EditorTypeAngle)
 Q_IMPORT_PLUGIN(EditorTypeBool)
+Q_IMPORT_PLUGIN(EditorTypeColour)
 Q_IMPORT_PLUGIN(EditorTypeDouble)
 Q_IMPORT_PLUGIN(EditorTypeInteger)
 Q_IMPORT_PLUGIN(EditorTypeLightType)

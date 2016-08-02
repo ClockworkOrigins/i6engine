@@ -23,7 +23,6 @@
 #include "i6engine/editor/plugins/TypePluginInterface.h"
 
 class QDoubleSpinBox;
-class QLineEdit;
 
 namespace i6e {
 namespace plugins {
@@ -41,9 +40,9 @@ namespace plugins {
 		void setReadOnly(bool readOnly);
 
 	private:
-		QLineEdit * _lineEditX;
-		QLineEdit * _lineEditY;
-		QLineEdit * _lineEditZ;
+		QDoubleSpinBox * _spinBoxX;
+		QDoubleSpinBox * _spinBoxY;
+		QDoubleSpinBox * _spinBoxZ;
 		QDoubleSpinBox * _spinBox;
 	};
 
