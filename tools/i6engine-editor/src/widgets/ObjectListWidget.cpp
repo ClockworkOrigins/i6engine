@@ -56,11 +56,13 @@ namespace widgets {
 		auto goMap = api::EngineController::GetSingleton().getObjectFacade()->getGOMap();
 		int idx = index.row();
 		for (auto it = goMap.begin(); it != goMap.end(); it++) {
-			if (idx == 0) {
-				emit selectObject(it->second->getID());
-				break;
+			if (it->second->getType() != "EditorCam") {
+				if (idx == 0) {
+					emit selectObject(it->second->getID());
+					break;
+				}
+				idx--;
 			}
-			idx--;
 		}
 
 		_mainWindow->setFocus();
