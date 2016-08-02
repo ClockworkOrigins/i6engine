@@ -24,6 +24,7 @@
 
 #include "i6engine/math/i6eVector4.h"
 
+class QPushButton;
 class QSpinBox;
 
 namespace i6e {
@@ -52,6 +53,7 @@ namespace properties {
 
 	private slots:
 		void valueChanged();
+		void selectColour();
 
 	private:
 		QGridLayout * _layout;
@@ -60,6 +62,7 @@ namespace properties {
 		QSpinBox * _spinBoxG;
 		QSpinBox * _spinBoxB;
 		QSpinBox * _spinBoxA;
+		QPushButton * _colourButton;
 		bool _set;
 	};
 

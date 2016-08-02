@@ -23,14 +23,16 @@
 
 #include "ParticleUniverseDynamicAttribute.h"
 
+#include <QColorDialog>
 #include <QLabel>
+#include <QPushButton>
 #include <QSpinBox>
 
 namespace i6e {
 namespace particleEditor {
 namespace properties {
 
-	ColourWithAlphaProperty::ColourWithAlphaProperty(QWidget * par, QString label, QString name, Vec4 value) : Property(par, label, name), _layout(nullptr), _value(value), _spinBoxR(nullptr), _spinBoxG(nullptr), _spinBoxB(nullptr), _spinBoxA(nullptr), _set(false) {
+	ColourWithAlphaProperty::ColourWithAlphaProperty(QWidget * par, QString label, QString name, Vec4 value) : Property(par, label, name), _layout(nullptr), _value(value), _spinBoxR(nullptr), _spinBoxG(nullptr), _spinBoxB(nullptr), _spinBoxA(nullptr), _colourButton(nullptr), _set(false) {
 		QWidget * widget = new QWidget(this);
 		_layout = new QGridLayout(widget);
 		widget->setLayout(_layout);
@@ -64,6 +66,10 @@ namespace properties {
 		_spinBoxA->setValue(value.getW());
 		_layout->addWidget(_spinBoxA, 1, 2);
 
+		_colourButton = new QPushButton(this);
+		connect(_colourButton, SIGNAL(clicked()), this, SLOT(selectColour()));
+		_layout->addWidget(_colourButton, 1, 3);
+
 		connect(_spinBoxR, SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
 		connect(_spinBoxG, SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
 		connect(_spinBoxB, SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
@@ -82,6 +88,13 @@ namespace properties {
 		_spinBoxB->setValue(value.getZ());
 		_spinBoxA->setValue(value.getW());
 		_set = false;
+		QColor color(_spinBoxR->value(), _spinBoxG->value(), _spinBoxB->value(), _spinBoxA->value());
+		QString styleSheet = _colourButton->styleSheet();
+		QString newStyleSheet = styleSheet.replace(QRegExp("background-color: #[0-9A-Fa-f]*;"), "background-color: " + color.name() + ";");
+		if (styleSheet == newStyleSheet) {
+			newStyleSheet += "background-color: " + color.name() + ";";
+		}
+		_colourButton->setStyleSheet(newStyleSheet);
 	}
 
 	void ColourWithAlphaProperty::valueChanged() {
@@ -92,6 +105,25 @@ namespace properties {
 			_value.setZ(_spinBoxB->value());
 			triggerChangedSignal();
 		}
+	}
+
+	void ColourWithAlphaProperty::selectColour() {
+		QColorDialog dlg;
+		dlg.setCurrentColor(QColor(int(_spinBoxR->value()), int(_spinBoxG->value()), int(_spinBoxB->value()), int(_spinBoxA->value())));
+		dlg.exec();
+		QString styleSheet = _colourButton->styleSheet();
+		QString newStyleSheet = styleSheet.replace(QRegExp("background-color: #[0-9A-Fa-f]*;"), "background-color: " + dlg.currentColor().name() + ";");
+		if (styleSheet == newStyleSheet) {
+			newStyleSheet += "background-color: " + dlg.currentColor().name() + ";";
+		}
+		_colourButton->setStyleSheet(newStyleSheet);
+		_set = true;
+		_spinBoxR->setValue(dlg.currentColor().red());
+		_spinBoxG->setValue(dlg.currentColor().green());
+		_spinBoxB->setValue(dlg.currentColor().blue());
+		_spinBoxA->setValue(dlg.currentColor().alpha());
+		_set = false;
+		valueChanged();
 	}
 
 } /* namespace properties */
