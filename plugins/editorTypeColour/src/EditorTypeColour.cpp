@@ -30,56 +30,70 @@
 namespace i6e {
 namespace plugins {
 
-	EditorTypeColourWidget::EditorTypeColourWidget(QWidget * parent) : TypeWidgetInterface(parent), _spinBoxX(nullptr), _spinBoxY(nullptr), _spinBoxZ(nullptr), _colorButton(nullptr) {
+	EditorTypeColourWidget::EditorTypeColourWidget(QWidget * parent) : TypeWidgetInterface(parent), _spinBoxR(nullptr), _spinBoxG(nullptr), _spinBoxB(nullptr), _colorButton(nullptr) {
 		QLayout * layout = new QHBoxLayout(this);
-		_spinBoxX = new QSpinBox(this);
-		_spinBoxX->setMinimum(0);
-		_spinBoxX->setMaximum(255);
-		QLabel * labelX = new QLabel("X", this);
-		_spinBoxY = new QSpinBox(this);
-		_spinBoxY->setMinimum(0);
-		_spinBoxY->setMaximum(255);
-		QLabel * labelY = new QLabel("Y", this);
-		_spinBoxZ = new QSpinBox(this);
-		_spinBoxZ->setMinimum(0);
-		_spinBoxZ->setMaximum(255);
-		QLabel * labelZ = new QLabel("Z", this);
+		_spinBoxR = new QSpinBox(this);
+		_spinBoxR->setMinimum(0);
+		_spinBoxR->setMaximum(255);
+		QLabel * labelX = new QLabel("R", this);
+		_spinBoxG = new QSpinBox(this);
+		_spinBoxG->setMinimum(0);
+		_spinBoxG->setMaximum(255);
+		QLabel * labelY = new QLabel("G", this);
+		_spinBoxB = new QSpinBox(this);
+		_spinBoxB->setMinimum(0);
+		_spinBoxB->setMaximum(255);
+		QLabel * labelZ = new QLabel("B", this);
 		_colorButton = new QPushButton(this);
 		connect(_colorButton, SIGNAL(clicked()), this, SLOT(selectColour()));
 		layout->addWidget(labelX);
-		layout->addWidget(_spinBoxX);
+		layout->addWidget(_spinBoxR);
 		layout->addWidget(labelY);
-		layout->addWidget(_spinBoxY);
+		layout->addWidget(_spinBoxG);
 		layout->addWidget(labelZ);
-		layout->addWidget(_spinBoxZ);
+		layout->addWidget(_spinBoxB);
 		layout->addWidget(_colorButton);
 		setLayout(layout);
 	}
 
 	void EditorTypeColourWidget::setValues(const std::string & values) {
 		Vec3 vec(values);
-		_spinBoxX->setValue(vec.getX() * 255);
-		_spinBoxY->setValue(vec.getY() * 255);
-		_spinBoxZ->setValue(vec.getZ() * 255);
+		_spinBoxR->setValue(vec.getX() * 255);
+		_spinBoxG->setValue(vec.getY() * 255);
+		_spinBoxB->setValue(vec.getZ() * 255);
+		QColor color(_spinBoxR->value(), _spinBoxG->value(), _spinBoxB->value());
+		QString styleSheet = _colorButton->styleSheet();
+		QString newStyleSheet = styleSheet.replace(QRegExp("background-color: #[0-9A-Fa-f]*;"), "background-color: " + color.name() + ";");
+		if (styleSheet == newStyleSheet) {
+			newStyleSheet += "background-color: " + color.name() + ";";
+		}
+		_colorButton->setStyleSheet(newStyleSheet);
+
 	}
 
 	std::string EditorTypeColourWidget::getValues() const {
-		return (QString::number(_spinBoxX->value() / 255.0) + " " + QString::number(_spinBoxY->value() / 255.0) + " " + QString::number(_spinBoxZ->value() / 255.0)).toStdString();
+		return (QString::number(_spinBoxR->value() / 255.0) + " " + QString::number(_spinBoxG->value() / 255.0) + " " + QString::number(_spinBoxB->value() / 255.0)).toStdString();
 	}
 
 	void EditorTypeColourWidget::setReadOnly(bool readOnly) {
-		_spinBoxX->setReadOnly(readOnly);
-		_spinBoxY->setReadOnly(readOnly);
-		_spinBoxZ->setReadOnly(readOnly);
+		_spinBoxR->setReadOnly(readOnly);
+		_spinBoxG->setReadOnly(readOnly);
+		_spinBoxB->setReadOnly(readOnly);
 	}
 
 	void EditorTypeColourWidget::selectColour() {
 		QColorDialog dlg;
-		dlg.setCurrentColor(QColor(int(_spinBoxX->value()), int(_spinBoxY->value()), int(_spinBoxZ->value())));
+		dlg.setCurrentColor(QColor(int(_spinBoxR->value()), int(_spinBoxG->value()), int(_spinBoxB->value())));
 		dlg.exec();
-		QPalette pal = _colorButton->palette();
-		pal.setColor(QPalette::ButtonText, dlg.currentColor());
-		_colorButton->setPalette(pal);
+		QString styleSheet = _colorButton->styleSheet();
+		QString newStyleSheet = styleSheet.replace(QRegExp("background-color: #[0-9A-Fa-f]*;"), "background-color: " + dlg.currentColor().name() + ";");
+		if (styleSheet == newStyleSheet) {
+			newStyleSheet += "background-color: " + dlg.currentColor().name() + ";";
+		}
+		_colorButton->setStyleSheet(newStyleSheet);
+		_spinBoxR->setValue(dlg.currentColor().red());
+		_spinBoxG->setValue(dlg.currentColor().green());
+		_spinBoxB->setValue(dlg.currentColor().blue());
 	}
 
 	editor::plugins::TypeWidgetInterface * EditorTypeColour::createWidget(QWidget * parent) {

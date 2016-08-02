@@ -44,9 +44,9 @@ namespace plugins {
 		void selectColour();
 
 	private:
-		QSpinBox * _spinBoxX;
-		QSpinBox * _spinBoxY;
-		QSpinBox * _spinBoxZ;
+		QSpinBox * _spinBoxR;
+		QSpinBox * _spinBoxG;
+		QSpinBox * _spinBoxB;
 		QPushButton * _colorButton;
 	};
 
