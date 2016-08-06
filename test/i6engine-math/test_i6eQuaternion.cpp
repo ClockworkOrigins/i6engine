@@ -239,3 +239,20 @@ TEST(i6eQuaternion, toAxisAngle) {
 	EXPECT_EQ(Vec3(0.0, 1.0, 0.0), v1);
 	EXPECT_EQ(Vec3(1.0, 0.0, 0.0), v2);
 }
+
+TEST(i6eQuaternion, MultiplicationAndAssignment) {
+	Quaternion q1(1, 2, 3, 4);
+	Quaternion q2(4, 5, 6, 7);
+
+	btQuaternion b1(2, 3, 4, 1);
+	btQuaternion b2(5, 6, 7, 4);
+
+	Quaternion q3 = q1;
+	q3 *= q2;
+
+	Quaternion q4 = q2;
+	q4 *= q1;
+
+	EXPECT_TRUE(q3.toBullet() == (b1 * b2));
+	EXPECT_TRUE(q4.toBullet() == (b2 * b1));
+}

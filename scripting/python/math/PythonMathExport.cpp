@@ -54,6 +54,7 @@ BOOST_PYTHON_MODULE(ScriptingMathPython) {
 		.def(self * double())
 		.def(self / double())
 		.def(self += self)
+		.def(self *= self)
 		.def("insertInMap", &Quaternion::insertInMap)
 		.def("inverse", &Quaternion::inverse)
 		.def("length", &Quaternion::length)

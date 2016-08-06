@@ -174,11 +174,19 @@ namespace math {
 		/**
 		 * \brief Operator '+=' for Quaternions
 		 */
-		i6eQuaternion operator+=(const i6eQuaternion & b) {
+		i6eQuaternion & operator+=(const i6eQuaternion & b) {
 			setW(getW() + b.getW());
 			setX(getX() + b.getX());
 			setY(getY() + b.getY());
 			setZ(getZ() + b.getZ());
+			return *this;
+		}
+
+		/**
+		 * \brief Operator '*=' for Quaternions
+		 */
+		i6eQuaternion & operator*=(const i6eQuaternion & b) {
+			*this = *this * b;
 			return *this;
 		}
 
@@ -200,7 +208,7 @@ namespace math {
 		double length() const;
 
 		/**
-		 * \brief normalieses Quaternion to length 1
+		 * \brief normalizes Quaternion to length 1
 		 */
 		i6eQuaternion normalize() const;
 
