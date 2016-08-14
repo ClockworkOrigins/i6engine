@@ -84,7 +84,7 @@ cmake -G 'Unix Makefiles'\
 	-DOGRE_BUILD_RTSHADERSYSTEM_CORE_SHADERS:BOOL=ON\
 	-DOGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS:BOOL=ON\
 	-DOGRE_BUILD_TESTS:BOOL=OFF\
-	-DOGRE_BUILD_SAMPLES:BOOL=ON\
+	-DOGRE_BUILD_SAMPLES:BOOL=OFF\
 	-DOGRE_BUILD_TOOLS:BOOL=ON\
 	-DOGRE_CONFIG_ALLOCATOR:STRING=1\
 	-DOGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR:BOOL=ON\
@@ -114,14 +114,14 @@ cmake -G 'Unix Makefiles'\
 	-DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE\
 	-DCMAKE_INSTALL_RPATH="${DEP_DIR}/boost/lib"\
 	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE\
-	${RELEASE_FLAG} . > /dev/null
+	${RELEASE_FLAG} .
 
 status "Building release version of Ogre"
 # I'll leave the build output enabled here, because it's cmake output and because it takes fairly long
-make ${PARALLEL_FLAG} &>/dev/null
+make ${PARALLEL_FLAG}
 
 status "Installing release version of Ogre"
-make ${PARALLEL_FLAG} install &>/dev/null
+make ${PARALLEL_FLAG} install
 
 status "Cleaning up"
 cd "${DEP_DIR}"

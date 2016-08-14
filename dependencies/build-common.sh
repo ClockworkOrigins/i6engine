@@ -80,7 +80,7 @@ if [ -z "${ARGS_PARSED}" ]; then
 fi
 
 # shared variables
-DEP_DIR="${PWD}"
+DEP_DIR="${PWD}/x86"
 BUILD_ROOT="/tmp/`whoami`/i6engine"
 
 mkdir -p "${BUILD_ROOT}"
