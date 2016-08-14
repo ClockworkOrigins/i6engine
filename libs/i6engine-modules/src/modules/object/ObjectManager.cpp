@@ -63,7 +63,7 @@ namespace modules {
 		_tickList.clear();
 		_GOMap.clear();
 
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOMap({});
+		api::EngineController::GetSingletonPtr()->getObjectFacade()->updateGOMap(std::unordered_map<int64_t, GOPtr>());
 
 		GOPtr::clear();
 		api::ComPtr::clear();
