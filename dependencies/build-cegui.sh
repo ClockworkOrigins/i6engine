@@ -25,44 +25,18 @@ cd "$(readlink -f "$(dirname "${0}")")"
 ARCHIVE="cegui-0.8.7.tar.bz2"
 BUILD_DIR="${BUILD_ROOT}/cegui-0.8.7"
 
-if [ -d ${BUILD_DIR} ]; then
-	rm -rf ${BUILD_DIR}
-fi
-
-PREFIX="${DEP_DIR}/cegui/"
+PREFIX="${DEP_DIR_OUT}/cegui/"
 
 if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-PARALLEL_FLAG=""
-if [ ! -z "${BUILD_PARALLEL}" ]; then
-	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
-fi
-
-DEBUG_FLAG="Debug"
-RELEASE_FLAG="Release"
-
-if [ -z "${DEBUG}" ]; then
-	BUILD_TYPE="${RELEASE_FLAG}"
-else
-	BUILD_TYPE="${DEBUG_FLAG}"
-fi
-
-if [ ! -z "${CLEAN}" ]; then
-	status "Cleaning CEGUI"
-	rm -rf "${PREFIX}"
-	exit 0
-fi
-
 title "Compile CEGUI"
 
-./download-dependency.sh ${ARCHIVE}
-
-status "Cleaning CEGUI"
-rm -rf "${PREFIX}" >/dev/null
+. ./download-dependency.sh ${ARCHIVE}
 
 status "Extracting CEGUI"
+
 cd "${BUILD_ROOT}"
 tar xf "${ARCHIVE}" >/dev/null
 
@@ -94,29 +68,30 @@ cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}"\
 	-DCEGUI_BUILD_PYTHON_MODULES=OFF\
 	-DCEGUI_SAMPLES_ENABLED=OFF\
 	-DCEGUI_BUILD_TESTS=OFF\
-	-DCMAKE_BUILD_TYPE=${BUILD_TYPE}\
-	-DBOOST_ROOT=${DEP_DIR}/boost/\
-	-DOGRE_H_PATH=${DEP_DIR}/ogre/include/OGRE/\
-	-DOGRE_H_BUILD_SETTINGS_PATH=${DEP_DIR}/ogre/include/OGRE/\
-	-DOGRE_LIB=${DEP_DIR}/ogre/lib/libOgreMain.so\
-	-DOIS_H_PATH=${DEP_DIR}/ois/include\
-	-DOIS_LIB=${DEP_DIR}/ois/lib64/libOIS.so\
+	-DCMAKE_BUILD_TYPE=Release\
+	-DBOOST_ROOT=${DEP_DIR_OUT}/boost/\
+	-DOGRE_H_PATH=${DEP_DIR_OUT}/ogre/include/OGRE/\
+	-DOGRE_H_BUILD_SETTINGS_PATH=${DEP_DIR_OUT}/ogre/include/OGRE/\
+	-DOGRE_LIB=${DEP_DIR_OUT}/ogre/lib/libOgreMain.so\
+	-DOIS_H_PATH=${DEP_DIR_OUT}/ois/include\
+	-DOIS_LIB=${DEP_DIR_OUT}/ois/lib64/libOIS.so\
 	-DCMAKE_SKIP_BUILD_RPATH=FALSE\
 	-DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE\
-	-DCMAKE_INSTALL_RPATH="${DEP_DIR}/boost/lib"\
+	-DCMAKE_INSTALL_RPATH="${DEP_DIR_OUT}/boost/lib"\
 	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE
 
 status "Building CEGUI"
-make ${PARALLEL_FLAG} >/dev/null
+make -j ${CPU_CORES} >/dev/null
 
 status "Installing CEGUI"
-make ${PARALLEL_FLAG} install >/dev/null
+make -j ${CPU_CORES} install >/dev/null
 
 # cp instead of mv is important. otherwise dynamically loaded libs aren't found somehow...
 cp -r ${PREFIX}lib/cegui-0.8/* ${PREFIX}lib/
 cp -r ${PREFIX}include/cegui-0/* ${PREFIX}include/
 
 status "Cleaning up"
+
 cd "${DEP_DIR}"
 rm -rf "${BUILD_ROOT}" >/dev/null
 

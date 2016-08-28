@@ -25,41 +25,18 @@ cd "$(readlink -f "$(dirname "${0}")")"
 ARCHIVE="boost_1_58_0.tar.bz2"
 BUILD_DIR="${BUILD_ROOT}/boost_1_58_0"
 
-if [ -d ${BUILD_DIR} ]; then
-	rm -rf ${BUILD_DIR}
-fi
-
-PREFIX="${DEP_DIR}/boost/"
-DEBUG_FLAG="variant=debug"
-RELEASE_FLAG="variant=release"
-PARALLEL_FLAG=""
+PREFIX="${DEP_DIR_OUT}/boost/"
 
 if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-if [ ! -z "${BUILD_PARALLEL}" ]; then
-	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
-fi
-if [ -z "${DEBUG}" ]; then
-	BUILD_TYPE="${RELEASE_FLAG}"
-else
-	BUILD_TYPE="${DEBUG_FLAG}"
-fi
-if [ ! -z "${CLEAN}" ]; then
-	status "Cleaning Boost"
-	rm -rf "${PREFIX}"
-	exit 0
-fi
-
 title "Compile Boost"
 
-./download-dependency.sh ${ARCHIVE}
-
-status "Cleaning Boost"
-rm -rf "${PREFIX}" >/dev/null
+. ./download-dependency.sh ${ARCHIVE}
 
 status "Extracting Boost"
+
 cd "${BUILD_ROOT}"
 tar xfj "${ARCHIVE}" >/dev/null
 
@@ -70,8 +47,8 @@ cd "${BUILD_DIR}"
 
 status "Building & Installing Boost"
 ./bjam -d2 \
-	${PARALLEL_FLAG} \
-	${BUILD_TYPE} \
+	-j ${CPU_CORES} \
+	variant=release \
 	link=shared \
 	--layout=system \
 	threading=multi \
@@ -83,7 +60,8 @@ if [ 0 -ne $? ]; then
 fi
 
 status "Cleaning up"
+
 cd "${DEP_DIR}"
-rm -rf "${BUILD_ROOT}" >/dev/null
+rm -rf "${BUILD_ROOT}"
 
 touch "${PREFIX}"

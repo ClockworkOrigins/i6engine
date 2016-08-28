@@ -22,46 +22,22 @@ cd "$(readlink -f "$(dirname "${0}")")"
 ARCHIVE="clockutils-1.0.0-src.zip"
 BUILD_DIR="${BUILD_ROOT}/clockutils-1.0.0-src"
 
-PREFIX="${DEP_DIR}/clockUtils"
-DEBUG_FLAG="DEBUG"
-RELEASE_FLAG="RELEASE"
-PARALLEL_FLAG=""
-BUILD_TYPE="Release"
+PREFIX="${DEP_DIR_OUT}/clockUtils"
 
 if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-if [ ! -z "${BUILD_PARALLEL}" ]; then
-	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
-fi
-
-if [ ! -z "${CLEAN}" ]; then
-	rm -rf "${PREFIX}"
-	exit 0
-fi
-
-if [ -d ${PREFIX} ]; then
-	exit 0
-fi
-
-rm -rf "${PREFIX}"
-
-./download-dependency.sh ${ARCHIVE} http://clockwork-origins.de/clockUtils/downloads/
-
+. ./download-dependency.sh ${ARCHIVE} http://clockwork-origins.de/clockUtils/downloads/
 
 cd "${BUILD_ROOT}"
+
 unzip "${ARCHIVE}" >/dev/null
 
 cd "${BUILD_DIR}"
 
-if [ -e "CMakeCache.txt" ]; then
-	rm "CMakeCache.txt"
-	make clean
-fi
-
 cmake -G 'Unix Makefiles'\
- -DCMAKE_BUILD_TYPE="${BUILD_TYPE}"\
+ -DCMAKE_BUILD_TYPE=Release\
  -DCMAKE_INSTALL_PREFIX="${PREFIX}"\
  -DWITH_TESTING=OFF\
  -DWITH_LIBRARY_COMPRESSION=ON\
@@ -71,11 +47,11 @@ cmake -G 'Unix Makefiles'\
  -DCMAKE_CXX_COMPILER=g++\
  .
 
-make -j 8
+make -j ${CPU_CORES}
 
-make install
+make -j ${CPU_CORES} install
 
 cd "${DEP_DIR}"
-rm -rf "${BUILD_ROOT}" >/dev/null
+rm -rf "${BUILD_ROOT}"
 
 touch "${PREFIX}"

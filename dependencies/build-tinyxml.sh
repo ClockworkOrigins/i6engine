@@ -23,50 +23,25 @@ cd "$(readlink -f "$(dirname "${0}")")"
 
 # TinyXML
 ARCHIVE="tinyxml2.zip"
-BUILD_DIR="${BUILD_ROOT}/tinyxml2"
+BUILD_DIR="${BUILD_ROOT}/tinyxml2/jni"
 
-PREFIX="${DEP_DIR}/tinyxml2"
-DEBUG_FLAG=""
-RELEASE_FLAG=""
-PARALLEL_FLAG=""
+PREFIX="${DEP_DIR_OUT}/tinyxml2"
 
 if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-if [ ! -z "${BUILD_PARALLEL}" ]; then
-	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
-fi
-
-if [ -z "${DEBUG}" ]; then
-	BUILD_TYPE="${RELEASE_FLAG}"
-else
-	BUILD_TYPE="${DEBUG_FLAG}"
-fi
-
-if [ ! -z "${CLEAN}" ]; then
-	status "Cleaning tinyxml2"
-	rm -rf "${PREFIX}"
-	exit 0
-fi
-
 title "Compile TinyXML"
 
-./download-dependency.sh ${ARCHIVE}
-
-status "Cleaning TinyXML"
-rm -rf "${PREFIX}"
+. ./download-dependency.sh ${ARCHIVE}
 
 status "Extracting TinyXML"
-cd "${BUILD_ROOT}"
 
-# delete old directory
-# this should be done during "Cleanup" but doesn't work properly with bamboo
-rm -rf "tinyxml2"
+cd "${BUILD_ROOT}"
 
 unzip "${ARCHIVE}" >/dev/null
 
-cd "${BUILD_DIR}/jni"
+cd "${BUILD_DIR}"
 
 status "Building TinyXML"
 gcc -c -fPIC tinyxml2.cpp -o tinyxml2.o
@@ -82,6 +57,7 @@ cp ./*.h "${PREFIX}/include"
 cp ./*.so "${PREFIX}/lib"
 
 status "Cleaning up"
+
 cd "${DEP_DIR}"
 rm -rf "${BUILD_ROOT}" >/dev/null
 

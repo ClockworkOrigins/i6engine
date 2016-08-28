@@ -25,54 +25,30 @@ cd "$(readlink -f "$(dirname "${0}")")"
 ARCHIVE="bullet3-2.83.7.tar.gz"
 BUILD_DIR="${BUILD_ROOT}/bullet3-2.83.7"
 
-if [ -d ${BUILD_DIR} ]; then
-	rm -rf ${BUILD_DIR}
-fi
-
-PREFIX="${DEP_DIR}/bullet/"
-PARALLEL_FLAG=""
+PREFIX="${DEP_DIR_OUT}/bullet/"
 
 if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-if [ ! -z "${BUILD_PARALLEL}" ]; then
-	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
-fi
-
-RELEASE_FLAG=Release
-DEBUG_FLAG=Debug
-
-if [ -z "${DEBUG}" ]; then
-	BUILD_TYPE="${RELEASE_FLAG}"
-else
-	BUILD_TYPE="${DEBUG_FLAG}"
-fi
-
-if [ ! -z "${CLEAN}" ]; then
-	status "Cleaning Bullet"
-	rm -rf "${PREFIX}"
-	exit 0
-fi
-
 title "Compile Bullet"
 
-./download-dependency.sh ${ARCHIVE}
-
-status "Cleaning Bullet"
-rm -rf "${PREFIX}" >/dev/null
+. ./download-dependency.sh ${ARCHIVE}
 
 status "Extracting Bullet"
+
 cd "${BUILD_ROOT}"
 tar xfz "${ARCHIVE}" >/dev/null
 
 status "Configuring Bullet"
+
 cd "${BUILD_DIR}"
+
 cmake . \
 		-DCMAKE_INSTALL_PREFIX=${PREFIX} \
 		-DINSTALL_LIBS=ON \
 		-DBUILD_SHARED_LIBS=ON \
-		-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+		-DCMAKE_BUILD_TYPE=Release \
 		-DUSE_DOUBLE_PRECISION=ON \
 		-DUSE_GRAPHICAL_BENCHMARK=OFF \
 		-DUSE_GLUT=OFF \
@@ -86,13 +62,14 @@ cmake . \
 		>/dev/null
 
 status "Building Bullet"
-make ${PARALLEL_FLAG} >/dev/null
+make -j ${CPU_CORES} >/dev/null
 
 status "Installing Bullet"
-make ${PARALLEL_FLAG} install >/dev/null
+make -j ${CPU_CORES} install >/dev/null
 
 status "Cleaning up"
+
 cd "${DEP_DIR}"
-rm -rf "${BUILD_ROOT}" >/dev/null
+rm -rf "${BUILD_ROOT}"
 
 touch "${PREFIX}"

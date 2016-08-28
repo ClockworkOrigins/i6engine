@@ -20,56 +20,30 @@ cd "$(readlink -f "$(dirname "${0}")")"
 . ./build-common.sh
 
 ARCHIVE="openal-soft-1.17.2.tar.bz2"
-BUILD_DIR="${BUILD_ROOT}/openal-soft-1.17.2"
+BUILD_DIR="${BUILD_ROOT}/openal-soft-1.17.2/build"
 
-PREFIX="${DEP_DIR}/OpenALSoft"
-DEBUG_FLAG="DEBUG"
-RELEASE_FLAG="RELEASE"
-PARALLEL_FLAG=""
-BUILD_TYPE="Release"
+PREFIX="${DEP_DIR_OUT}/OpenALSoft"
 
 if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-if [ ! -z "${BUILD_PARALLEL}" ]; then
-	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
-fi
-
-if [ ! -z "${CLEAN}" ]; then
-	rm -rf "${PREFIX}"
-	exit 0
-fi
-
-if [ -d ${PREFIX} ]; then
-	exit 0
-fi
-
-rm -rf "${PREFIX}"
-
-./download-dependency.sh ${ARCHIVE}
-
+. ./download-dependency.sh ${ARCHIVE}
 
 cd "${BUILD_ROOT}"
+
 tar xfvj "${ARCHIVE}" > /dev/null
 
 cd "${BUILD_DIR}"
 
-if [ -e "CMakeCache.txt" ]; then
-	rm "CMakeCache.txt"
-	make clean
-fi
-
-cd "build"
-
 cmake -G 'Unix Makefiles'\
- -DCMAKE_BUILD_TYPE="${BUILD_TYPE}"\
+ -DCMAKE_BUILD_TYPE=Release\
  -DCMAKE_INSTALL_PREFIX="${PREFIX}"\
  -DALSOFT_NO_CONFIG_UTIL=ON\
  -DCMAKE_CXX_COMPILER=g++\
  ..
 
-make -j 8 > /dev/null
+make -j ${CPU_CORES} > /dev/null
 
 make install > /dev/null
 

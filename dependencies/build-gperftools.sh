@@ -25,58 +25,38 @@ cd "$(readlink -f "$(dirname "${0}")")"
 ARCHIVE="gperftools-2.4.tar.gz"
 BUILD_DIR="${BUILD_ROOT}/gperftools-2.4"
 
-if [ -d ${BUILD_DIR} ]; then
-	rm -rf ${BUILD_DIR}
-fi
-
-PREFIX="${DEP_DIR}/gperftools/"
-PARALLEL_FLAG=""
+PREFIX="${DEP_DIR_OUT}/gperftools/"
 
 if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-if [ ! -z "${BUILD_PARALLEL}" ]; then
-	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
-fi
-
-RELEASE_FLAG=""
-DEBUG_FLAG="CFLAGS=-g"
-
-if [ -z "${DEBUG}" ]; then
-	BUILD_TYPE="${RELEASE_FLAG}"
-else
-	BUILD_TYPE="${DEBUG_FLAG}"
-fi
-
-if [ ! -z "${CLEAN}" ]; then
-	status "Cleaning GPerfTools"
-	rm -rf "${PREFIX}"
-	exit 0
-fi
-
 title "Compile GPerfTools"
 
-./download-dependency.sh ${ARCHIVE}
+. ./download-dependency.sh ${ARCHIVE}
 
 status "Extracting GPerfTools"
+
 cd "${BUILD_ROOT}"
+
 tar xfz "${ARCHIVE}" >/dev/null
+
 cd "${BUILD_DIR}"
 
 # set readable
 chmod -R u+w .
 
 status "Configuring GPerfTools"
-./configure --libdir="${PREFIX}/lib" --prefix="${PREFIX}" --enable-frame-pointers ${BUILD_TYPE} >/dev/null
+./configure --libdir="${PREFIX}/lib" --prefix="${PREFIX}" --enable-frame-pointers
 
 status "Building GPerfTools"
-make ${PARALLEL_FLAG} >/dev/null
+make -j ${CPU_CORES} >/dev/null
 
 status "Installing GPerfTools"
-make ${PARALLEL_FLAG} install >/dev/null
+make -j ${CPU_CORES} install >/dev/null
 
 status "Cleaning up"
+
 cd "${DEP_DIR}"
 rm -rf "${BUILD_ROOT}" >/dev/null
 

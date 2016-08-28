@@ -27,41 +27,23 @@ DEP_ARCHIVE="cabalistic-ogredeps-0e96ef9d3475.zip"
 BUILD_DIR="${BUILD_ROOT}/sinbad-ogre-dd30349ea667"
 BUILD_DIR_DEPS="${BUILD_ROOT}/cabalistic-ogredeps-0e96ef9d3475"
 
-if [ -d ${BUILD_DIR} ]; then
-	rm -rf ${BUILD_DIR}
-fi
-
-PREFIX="${DEP_DIR}/ogre/"
-PREFIX_DEPS="${DEP_DIR}/misc/"
-DEBUG_FLAG="-DCMAKE_BUILD_TYPE=Debug"
-RELEASE_FLAG="-DCMAKE_BUILD_TYPE=Release"
-PARALLEL_FLAG=""
+PREFIX="${DEP_DIR_OUT}/ogre/"
+PREFIX_DEPS="${DEP_DIR_OUT}/misc/"
 
 if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-if [ ! -z "${BUILD_PARALLEL}" ]; then
-	PARALLEL_FLAG="-j ${BUILD_PARALLEL}"
-fi
-
-if [ ! -z "${CLEAN}" ]; then
-	status "Cleaning Ogre"
-	rm -rf "${PREFIX}"
-	exit 0
-fi
-
 title "Compile Ogre"
 
-./download-dependency.sh ${ARCHIVE}
-./download-dependency.sh ${DEP_ARCHIVE}
-./download-dependency.sh 1.9.0-03_move_stowed_template_func.patch
-
-status "Cleaning Ogre"
-rm -rf "${PREFIX}"
+. ./download-dependency.sh ${ARCHIVE}
+. ./download-dependency.sh ${DEP_ARCHIVE}
+. ./download-dependency.sh 1.9.0-03_move_stowed_template_func.patch
 
 status "Extracting Ogre"
+
 cd "${BUILD_ROOT}"
+
 tar xfj "${ARCHIVE}"
 unzip "${DEP_ARCHIVE}"
 
@@ -69,15 +51,15 @@ cd ${BUILD_DIR_DEPS}
 
 cmake -DCMAKE_INSTALL_PREFIX:PATH=${PREFIX_DEPS} -DOGREDEPS_BUILD_OIS=ON -DCMAKE_BUILD_TYPE=Release .
 
-make
+make -j ${CPU_CORES}
 make install
 
 # ../cmake_files/FindBoost.cmake tries to find the libs here
-export BOOST_ROOT="${DEP_DIR}/boost"
-export BOOST_INCLUDEDIR="${DEP_DIR}/boost/include"
-export BOOST_LIBRARYDIR="${DEP_DIR}/boost/lib"
+export BOOST_ROOT="${DEP_DIR_OUT}/boost"
+export BOOST_INCLUDEDIR="${DEP_DIR_OUT}/boost/include"
+export BOOST_LIBRARYDIR="${DEP_DIR_OUT}/boost/lib"
 
-export OIS_HOME="${DEP_DIR}/ois"
+export OIS_HOME="${DEP_DIR_OUT}/ois"
 
 cd "${BUILD_DIR}"
 
@@ -130,16 +112,17 @@ cmake -G 'Unix Makefiles'\
 	-DCMAKE_INSTALL_RPATH="${DEP_DIR}/boost/lib"\
 	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE\
 	-DOGRE_DEPENDENCIES_DIR=${PREFIX_DEPS}\
-	${RELEASE_FLAG} .
+	-DCMAKE_BUILD_TYPE=Release .
 
 status "Building release version of Ogre"
 # I'll leave the build output enabled here, because it's cmake output and because it takes fairly long
-make ${PARALLEL_FLAG}
+make -j ${CPU_CORES}
 
 status "Installing release version of Ogre"
-make ${PARALLEL_FLAG} install
+make -j ${CPU_CORES} install
 
 status "Cleaning up"
+
 cd "${DEP_DIR}"
 rm -rf "${BUILD_ROOT}" &>/dev/null
 
