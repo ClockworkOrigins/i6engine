@@ -3,6 +3,6 @@
 INCLUDES="@CMAKE_SOURCE_DIR@/libs/i6engine-utils/include/ @CMAKE_SOURCE_DIR@/libs/i6engine-math/include/ @CMAKE_SOURCE_DIR@/libs/i6engine-core/include/ @CMAKE_SOURCE_DIR@/libs/i6engine-modules/include/"
 
 for i; do
-	./includeGraphBuilder $i $INCLUDES> `basename ${i}`.dot
+	./i6eIncludeGraphBuilder $i $INCLUDES> `basename ${i}`.dot
 	dot -Tpdf `basename ${i}`.dot > `basename ${i}`.pdf
 done

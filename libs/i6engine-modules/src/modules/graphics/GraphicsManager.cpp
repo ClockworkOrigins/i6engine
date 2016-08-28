@@ -528,6 +528,7 @@ namespace modules {
 			_sceneManager->setSkyPlane(true, Ogre::Plane(Ogre::Vector3(0.0, c->direction, 0.0), c->distance), c->material, c->size, c->tiles, c->renderFirst, c->curvature, c->xSegments, c->ySegments);
 		} else if (msg->getSubtype() == api::graphics::GraScreenshot) {
 			api::graphics::Graphics_Screenshot_Create * gsc = dynamic_cast<api::graphics::Graphics_Screenshot_Create *>(msg->getContent());
+			std::cout << "2: " << _rWindow << std::endl;
 			try {
 				_rWindow->writeContentsToTimestampedFile(gsc->prefix, gsc->suffix);
 			} catch (Ogre::Exception & e) {

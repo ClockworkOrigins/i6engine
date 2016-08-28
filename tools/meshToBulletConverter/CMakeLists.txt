@@ -35,15 +35,15 @@ IF(WIN32)
          )
 ENDIF(WIN32)
 
-add_executable(meshToBulletConverter ${meshToBulletConverterSrc} ${WINDOWS_RC_FILES})
-set_target_properties(meshToBulletConverter PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(i6eMeshToBulletConverter ${meshToBulletConverterSrc} ${WINDOWS_RC_FILES})
+set_target_properties(i6eMeshToBulletConverter PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(meshToBulletConverter ${BULLET_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} i6engine-modules)
+target_link_libraries(i6eMeshToBulletConverter ${BULLET_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} i6engine-modules)
 
 IF(WIN32)
-	add_custom_command(TARGET meshToBulletConverter POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/meshToBulletConverter.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET i6eMeshToBulletConverter POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6eMeshToBulletConverter.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(TARGETS meshToBulletConverter
+install(TARGETS i6eMeshToBulletConverter
 		DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 	)

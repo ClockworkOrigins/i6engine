@@ -74,25 +74,25 @@ IF(WIN32)
          )
 ENDIF(WIN32)
 
-ADD_EXECUTABLE(DialogCreator ${GUI_TYPE} ../common/src/Config.cpp ${dialogCreatorSrc} ${dialogCreatorUI} ${dialogCreatorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
+ADD_EXECUTABLE(i6eDialogCreator ${GUI_TYPE} ../common/src/Config.cpp ${dialogCreatorSrc} ${dialogCreatorUI} ${dialogCreatorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
 
-target_link_libraries(DialogCreator i6engine-rpg ${QT_LIBRARIES})
+target_link_libraries(i6eDialogCreator i6engine-rpg ${QT_LIBRARIES})
 
 IF(UNIX)
-	target_link_libraries(DialogCreator pthread)
+	target_link_libraries(i6eDialogCreator pthread)
 ENDIF(UNIX)
 
-add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
-add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
+add_custom_command(TARGET i6eDialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
+add_custom_command(TARGET i6eDialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
 
 IF(WIN32)
-	add_custom_command(TARGET DialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/DialogCreator.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET i6eDialogCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6eDialogCreator.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
 configure_file(${CMAKE_SOURCE_DIR}/config/DialogCreator.ini ${CMAKE_BINARY_DIR}/bin/DialogCreator.ini COPYONLY)
 
 install(FILES ${CMAKE_SOURCE_DIR}/config/DialogCreator.ini DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 
-install(TARGETS DialogCreator
+install(TARGETS i6eDialogCreator
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 )

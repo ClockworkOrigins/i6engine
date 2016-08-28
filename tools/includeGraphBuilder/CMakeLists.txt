@@ -31,18 +31,18 @@ IF(WIN32)
          )
 ENDIF(WIN32)
 
-add_executable(includeGraphBuilder ${includeGraphBuilderSrc} ${WINDOWS_RC_FILES})
-set_target_properties(includeGraphBuilder PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(i6eIncludeGraphBuilder ${includeGraphBuilderSrc} ${WINDOWS_RC_FILES})
+set_target_properties(i6eIncludeGraphBuilder PROPERTIES LINKER_LANGUAGE CXX)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/includeGraphBuilder.bat.in ${CMAKE_BINARY_DIR}/bin/includeGraphBuilder.bat @ONLY)
 
 IF(UNIX)
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/includeGraphBuilder.sh.in ${CMAKE_BINARY_DIR}/bin/includeGraphBuilder.sh @ONLY)
 ELSEIF(WIN32)
-	add_custom_command(TARGET includeGraphBuilder POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/includeGraphBuilder.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET i6eIncludeGraphBuilder POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6eIncludeGraphBuilder.exe ${CMAKE_BINARY_DIR}/bin)
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/includeGraphBuilder.bat.in ${CMAKE_BINARY_DIR}/bin/includeGraphBuilder.bat @ONLY)
 ENDIF(UNIX)
 
-install(TARGETS includeGraphBuilder
+install(TARGETS i6eIncludeGraphBuilder
 		DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 	)

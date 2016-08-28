@@ -304,17 +304,17 @@ IF(WIN32)
          )
 ENDIF(WIN32)
 
-ADD_EXECUTABLE(ParticleEditor ${GUI_TYPE} ../common/src/Config.cpp ${particleEditorSrc} ${particleEditorUI} ${particleEditorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
+ADD_EXECUTABLE(i6eParticleEditor ${GUI_TYPE} ../common/src/Config.cpp ${particleEditorSrc} ${particleEditorUI} ${particleEditorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
 
-target_link_libraries(ParticleEditor i6engine-modules ${QT_LIBRARIES})
+target_link_libraries(i6eParticleEditor i6engine-modules ${QT_LIBRARIES})
 
-add_custom_command(TARGET ParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
-add_custom_command(TARGET ParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
+add_custom_command(TARGET i6eParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/de_DE.qm ${CMAKE_BINARY_DIR}/bin)
+add_custom_command(TARGET i6eParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/en_US.qm ${CMAKE_BINARY_DIR}/bin)
 
 IF(WIN32)
-	add_custom_command(TARGET ParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/ParticleEditor.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET i6eParticleEditor POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6eParticleEditor.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(TARGETS ParticleEditor
+install(TARGETS i6eParticleEditor
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 )

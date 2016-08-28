@@ -36,19 +36,19 @@ IF(WIN32)
          )
 ENDIF(WIN32)
 
-add_executable(terrainShapeCreator ${terrainShapeCreatorSrc} ${WINDOWS_RC_FILES})
-set_target_properties(terrainShapeCreator PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(i6eTerrainShapeCreator ${terrainShapeCreatorSrc} ${WINDOWS_RC_FILES})
+set_target_properties(i6eTerrainShapeCreator PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(terrainShapeCreator ${BULLET_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} i6engine-modules)
+target_link_libraries(i6eTerrainShapeCreator ${BULLET_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} i6engine-modules)
 
 IF(UNIX)
-	target_link_libraries(terrainShapeCreator pthread)
+	target_link_libraries(i6eTerrainShapeCreator pthread)
 ENDIF(UNIX)
 
 IF(WIN32)
-	add_custom_command(TARGET terrainShapeCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/terrainShapeCreator.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET i6eTerrainShapeCreator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6eTerrainShapeCreator.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(TARGETS terrainShapeCreator
+install(TARGETS i6eTerrainShapeCreator
 		DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 	)

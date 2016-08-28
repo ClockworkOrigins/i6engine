@@ -2,4 +2,4 @@ REM needs dot: http://www.graphviz.org/About.php
 
 SET INCLUDES=@CMAKE_SOURCE_DIR@/libs/i6engine-utils/include/ @CMAKE_SOURCE_DIR@/libs/i6engine-math/include/ @CMAKE_SOURCE_DIR@/libs/i6engine-core/include/ @CMAKE_SOURCE_DIR@/libs/i6engine-modules/include/
 
-FOR %%X IN (%*) DO (includeGraphBuilder.exe %%X %INCLUDES% > %%~nX.dot & dot -Tpdf %%~nX.dot > %%~nX.pdf)
+FOR %%X IN (%*) DO (i6eIncludeGraphBuilder.exe %%X %INCLUDES% > %%~nX.dot & dot -Tpdf %%~nX.dot > %%~nX.pdf)

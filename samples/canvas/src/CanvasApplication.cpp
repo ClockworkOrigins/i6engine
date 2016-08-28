@@ -23,6 +23,7 @@
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/GUIConfig.h"
+#include "i6engine/api/facades/GraphicsFacade.h"
 #include "i6engine/api/facades/GUIFacade.h"
 #include "i6engine/api/facades/InputFacade.h"
 
@@ -57,7 +58,8 @@ namespace sample {
 		}, true, i6e::core::JobPriorities::Prio_Medium);
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6eInputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6eEngineController));
+		i6eInputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_F12, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::GraphicsFacade::takeScreenshot, i6eGraphicsFacade, "SampleCanvas_", ".png"));
 	}
 
 	void CanvasApplication::Tick() {

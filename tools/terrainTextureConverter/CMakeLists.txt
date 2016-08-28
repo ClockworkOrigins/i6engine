@@ -32,15 +32,15 @@ IF(WIN32)
          )
 ENDIF(WIN32)
 
-add_executable(terrainTextureConverter ${terrainTextureConverterSrc} ${WINDOWS_RC_FILES})
-set_target_properties(terrainTextureConverter PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(i6eTerrainTextureConverter ${terrainTextureConverterSrc} ${WINDOWS_RC_FILES})
+set_target_properties(i6eTerrainTextureConverter PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(terrainTextureConverter ${OGRE_LIBRARIES} i6engine-modules)
+target_link_libraries(i6eTerrainTextureConverter ${OGRE_LIBRARIES} i6engine-modules)
 
 IF(WIN32)
-	add_custom_command(TARGET terrainTextureConverter POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/terrainTextureConverter.exe ${CMAKE_BINARY_DIR}/bin)
+	add_custom_command(TARGET i6eTerrainTextureConverter POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6eTerrainTextureConverter.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
-install(TARGETS terrainTextureConverter
+install(TARGETS i6eTerrainTextureConverter
 		DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 	)
