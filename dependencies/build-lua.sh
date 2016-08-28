@@ -56,7 +56,7 @@ if [ -e "CMakeCache.txt" ]; then
 	make clean
 fi
 
-cp "${DEP_DIR}/../ext/lua/CMakeLists.txt" "${BUILD_DIR}/CMakeLists.txt"
+cp "${DEP_DIR}/../../ext/lua/CMakeLists.txt" "${BUILD_DIR}/CMakeLists.txt"
 
 cmake -G 'Unix Makefiles'\
  -DCMAKE_BUILD_TYPE="${BUILD_TYPE}"\
