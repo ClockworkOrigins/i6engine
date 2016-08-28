@@ -37,7 +37,7 @@ tar xfz "${ARCHIVE}" > /dev/null
 
 cd "${BUILD_DIR}"
 
-cp "${DEP_DIR}/../../ext/lua/CMakeLists.txt" "${BUILD_DIR}/CMakeLists.txt"
+cp "${DEP_DIR}/../ext/lua/CMakeLists.txt" "${BUILD_DIR}/CMakeLists.txt"
 
 cmake -G 'Unix Makefiles'\
  -DCMAKE_BUILD_TYPE=Release\
