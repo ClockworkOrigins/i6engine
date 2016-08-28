@@ -312,12 +312,6 @@ ENDIF()
 #----------------------------------------------------
 # OIS
 #----------------------------------------------------
-IF(NOT EXISTS ${ISIXE_DEP_DIR}/ois)
-	IF(UNIX) # Windows build OIS together with Ogre deps
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-ois.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ENDIF()
-ENDIF()
-
 IF(NOT EXISTS ${ISIXE_DEP_DIR}/ogre) # build ogre before searching OIS as OIS is built by ogre build scripts together with some other dependencies
 	IF(WIN32)
 		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-ogre.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
@@ -328,11 +322,7 @@ ENDIF()
 
 	SET(LIBNAME "OIS")
 	SET(LIBHEADER "OIS/OIS.h")
-	IF(WIN32)
-		SET(OIS_ROOT ${ISIXE_DEP_DIR}/misc)
-	ELSE(WIN32)
-		SET(OIS_ROOT ${ISIXE_DEP_DIR}/ois)
-	ENDIF(WIN32)
+	SET(OIS_ROOT ${ISIXE_DEP_DIR}/misc)
 	find_package(EasyFind REQUIRED COMPONENTS OIS)
 	include_directories(SYSTEM ${OIS_INCLUDE_DIR})
 

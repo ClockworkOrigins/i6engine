@@ -55,6 +55,7 @@ title "Compile Ogre"
 
 ./download-dependency.sh ${ARCHIVE}
 ./download-dependency.sh ${DEP_ARCHIVE}
+./download-dependency.sh 1.9.0-03_move_stowed_template_func.patch
 
 status "Cleaning Ogre"
 rm -rf "${PREFIX}"
@@ -79,6 +80,8 @@ export BOOST_LIBRARYDIR="${DEP_DIR}/boost/lib"
 export OIS_HOME="${DEP_DIR}/ois"
 
 cd "${BUILD_DIR}"
+
+patch -p0 -i "1.9.0-03_move_stowed_template_func.patch"
 
 status "Configurig release version of Ogre"
 cmake -G 'Unix Makefiles'\
