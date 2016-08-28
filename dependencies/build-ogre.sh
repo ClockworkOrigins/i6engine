@@ -23,13 +23,16 @@ cd "$(readlink -f "$(dirname "${0}")")"
 
 # Ogre
 ARCHIVE="sinbad-ogre-dd30349ea667.tar.bz2"
+DEP_ARCHIVE="cabalistic-ogredeps-0e96ef9d3475.zip"
 BUILD_DIR="${BUILD_ROOT}/sinbad-ogre-dd30349ea667"
+BUILD_DIR_DEPS="${BUILD_ROOT}/cabalistic-ogredeps-0e96ef9d3475"
 
 if [ -d ${BUILD_DIR} ]; then
 	rm -rf ${BUILD_DIR}
 fi
 
 PREFIX="${DEP_DIR}/ogre/"
+PREFIX_DEPS="${DEP_DIR}/misc/"
 DEBUG_FLAG="-DCMAKE_BUILD_TYPE=Debug"
 RELEASE_FLAG="-DCMAKE_BUILD_TYPE=Release"
 PARALLEL_FLAG=""
@@ -51,6 +54,7 @@ fi
 title "Compile Ogre"
 
 ./download-dependency.sh ${ARCHIVE}
+./download-dependency.sh ${DEP_ARCHIVE}
 
 status "Cleaning Ogre"
 rm -rf "${PREFIX}"
@@ -58,6 +62,14 @@ rm -rf "${PREFIX}"
 status "Extracting Ogre"
 cd "${BUILD_ROOT}"
 tar xfj "${ARCHIVE}"
+unzip "${DEP_ARCHIVE}"
+
+cd ${BUILD_DIR_DEPS}
+
+cmake -DCMAKE_INSTALL_PREFIX:PATH=${PREFIX_DEPS} -DOGREDEPS_BUILD_OIS=ON -DCMAKE_BUILD_TYPE=Release .
+
+make
+make install
 
 # ../cmake_files/FindBoost.cmake tries to find the libs here
 export BOOST_ROOT="${DEP_DIR}/boost"
@@ -114,6 +126,7 @@ cmake -G 'Unix Makefiles'\
 	-DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE\
 	-DCMAKE_INSTALL_RPATH="${DEP_DIR}/boost/lib"\
 	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE\
+	-DOGRE_DEPENDENCIES_DIR=${PREFIX_DEPS}\
 	${RELEASE_FLAG} .
 
 status "Building release version of Ogre"
