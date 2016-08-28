@@ -81,7 +81,7 @@ export OIS_HOME="${DEP_DIR}/ois"
 
 cd "${BUILD_DIR}"
 
-patch -p0 -i "1.9.0-03_move_stowed_template_func.patch"
+patch -p1 -i "../1.9.0-03_move_stowed_template_func.patch"
 
 status "Configurig release version of Ogre"
 cmake -G 'Unix Makefiles'\
