@@ -38,7 +38,7 @@ namespace sample {
 	}
 
 	void CanvasApplication::AfterInitialize() {
-		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6eGUIFacade;
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
@@ -47,7 +47,7 @@ namespace sample {
 		gf->loadCanvas("Canvas", "../media/gui/canvas/CanvasSample.canvas");
 
 		// now all widgets specified in canvas file are loaded and we can access them
-		i6e::api::EngineController::GetSingleton().registerTimer(1000000, [this, gf]() {
+		i6eEngineController->registerTimer(1000000, [this, gf]() {
 			_percent += 0.05;
 			if (_percent > 1.0) {
 				_percent = 0.0;

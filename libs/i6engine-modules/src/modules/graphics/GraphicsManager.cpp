@@ -73,9 +73,9 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			std::string ogrePath;
-			if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue<std::string>("GRAPHIC", "ogreConfigsPath", ogrePath)) {
+			if (clockUtils::ClockError::SUCCESS != i6eEngineController->getIniParser().getValue<std::string>("GRAPHIC", "ogreConfigsPath", ogrePath)) {
 				ISIXE_LOG_ERROR("Graphics", "An exception has occurred: value ogreConfigsPath in section GRAPHIC not found!");
-				api::EngineController::GetSingletonPtr()->stop();
+				i6eEngineController->stop();
 				return;
 			}
 			_logManager = new Ogre::LogManager();
@@ -88,8 +88,8 @@ namespace modules {
 			_objRoot->restoreConfig();
 
 			if (hWnd) {
-				_objRoot->initialise(false, api::EngineController::GetSingletonPtr()->getAppl()->getName());
-				api::graphics::Resolution res = api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution();
+				_objRoot->initialise(false, i6eAppl->getName());
+				api::graphics::Resolution res = i6eGraphicsFacade->getCurrentResolution();
 				Ogre::ConfigOptionMap & CurrentRendererOptions = _objRoot->getRenderSystem()->getConfigOptions();
 				Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
 				bool fullscreen = false;
@@ -104,14 +104,14 @@ namespace modules {
 				Ogre::NameValuePairList misc;
 				misc["externalWindowHandle"] = Ogre::StringConverter::toString((size_t) hWnd);
 				misc["parentWindowHandle"] = Ogre::StringConverter::toString((size_t) hWnd);
-				_rWindow = _objRoot->createRenderWindow(api::EngineController::GetSingletonPtr()->getAppl()->getName(), res.width, res.height, fullscreen, &misc);
+				_rWindow = _objRoot->createRenderWindow(i6eAppl->getName(), res.width, res.height, fullscreen, &misc);
 			} else {
-				_rWindow = _objRoot->initialise(true, api::EngineController::GetSingletonPtr()->getAppl()->getName());
+				_rWindow = _objRoot->initialise(true, i6eAppl->getName());
 			}
 		} catch (Ogre::Exception & e) {
 			ISIXE_LOG_ERROR("Graphics", "An exception has occurred: " << e.what());
 			std::cout << "An exception has occurred: " << e.what() << std::endl;
-			api::EngineController::GetSingletonPtr()->stop();
+			i6eEngineController->stop();
 			return;
 		}
 
@@ -168,7 +168,7 @@ namespace modules {
 			res2.push_back(r);
 		}
 
-		api::EngineController::GetSingleton().getGraphicsFacade()->setPossibleResolutions(res2);
+		i6eGraphicsFacade->setPossibleResolutions(res2);
 
 		// initalize MotionBlur
 		Ogre::CompositorPtr comp3 = Ogre::CompositorManager::getSingleton().create("MotionBlur", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
@@ -297,11 +297,11 @@ namespace modules {
 
 		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_rWindow)), core::Subsystem::Graphic);
 
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg);
+		i6eMessagingFacade->deliverMessage(msg);
 
 		api::GameMessage::Ptr msg2 = boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiWindow, core::Method::Create, new api::gui::GUI_Window_Create(reinterpret_cast<void *>(_objRoot)), core::Subsystem::Graphic);
 
-		api::EngineController::GetSingletonPtr()->getMessagingFacade()->deliverMessage(msg2);
+		i6eMessagingFacade->deliverMessage(msg2);
 
 		_rWindow->resetStatistics();
 
@@ -389,9 +389,9 @@ namespace modules {
 					results.push_back(std::make_pair(-1, Vec3(rayResult.position)));
 				}
 			}
-			api::EngineController::GetSingleton().getGraphicsFacade()->setSelectables(results);
+			i6eGraphicsFacade->setSelectables(results);
 		} else {
-			api::EngineController::GetSingleton().getGraphicsFacade()->setSelectables(std::vector<std::pair<int64_t, Vec3>>());
+			i6eGraphicsFacade->setSelectables(std::vector<std::pair<int64_t, Vec3>>());
 		}
 
 		for (auto gn : _tickers) {
@@ -400,7 +400,7 @@ namespace modules {
 
 		if (_showFPS) {
 			Ogre::RenderTarget::FrameStats stats = _rWindow->getStatistics();
-			api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+			api::GUIFacade * gf = i6eGUIFacade;
 			std::ostringstream oss;
 			oss.str("");
 			oss << std::fixed << std::setprecision(1) << stats.lastFPS;
@@ -756,7 +756,7 @@ namespace modules {
 
 			sceneNode->setScale(s.toOgre());
 
-			api::EngineController::GetSingleton().getGraphicsFacade()->notifyNewID(static_cast<api::graphics::Graphics_Node_Create *>(msg->getContent())->coid);
+			i6eGraphicsFacade->notifyNewID(static_cast<api::graphics::Graphics_Node_Create *>(msg->getContent())->coid);
 		} else if (msg->getSubtype() == api::graphics::GraParticle) {
 			api::graphics::Graphics_Particle_Create * g = static_cast<api::graphics::Graphics_Particle_Create *>(msg->getContent());
 
@@ -1100,7 +1100,7 @@ namespace modules {
 
 	bool GraphicsManager::frameEnded(const Ogre::FrameEvent & evt) {
 		if (_showFPS) {
-			api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+			api::GUIFacade * gf = i6eGUIFacade;
 			gf->setText("FPS_LastFrameTime_Value", std::to_string(uint64_t(evt.timeSinceLastEvent * 1000)));
 		}
 		return true;
