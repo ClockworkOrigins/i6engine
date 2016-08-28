@@ -31,6 +31,7 @@ IF(ISIXE_WITH_RPG)
 ENDIF(ISIXE_WITH_RPG)
 
 add_subdirectory(includeGraphBuilder)
+add_subdirectory(meshPreview)
 add_subdirectory(meshToBulletConverter)
 
 IF(ISIXE_WITH_RPG)
