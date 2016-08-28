@@ -435,9 +435,6 @@ ENDIF(NOT WIN32)
 # Qt
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS)
-	IF(64BIT)
-		SET(ENV{Qt5_DIR} "$ENV{Qt5_DIR}_64")
-	ENDIF(64BIT)
 	FIND_PACKAGE(Qt5 REQUIRED Widgets Core Gui LinguistTools)
 	INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
 

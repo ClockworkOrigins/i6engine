@@ -47,7 +47,7 @@ rm -rf "${PREFIX}"
 
 
 cd "${BUILD_ROOT}"
-tar xfvj "${ARCHIVE}" > /dev/null
+tar xfz "${ARCHIVE}" > /dev/null
 
 cd "${BUILD_DIR}"
 
