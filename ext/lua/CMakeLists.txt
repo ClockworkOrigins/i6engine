@@ -101,10 +101,10 @@ set(luaSrc
 	${srcdir}/lzio.c
 )
 
-add_library(lua STATIC ${luaSrc})
+add_library(lua SHARED ${luaSrc})
 
 IF(UNIX)
-	target_compile_options(lua PRIVATE "-DLUA_USE_LINUX")
+	target_compile_options(lua PRIVATE "-DLUA_USE_LINUX -DLUA_DL_DLOPEN")
 	target_link_libraries(lua dl)
 ENDIF(UNIX)
 set_target_properties(lua PROPERTIES POSITION_INDEPENDENT_CODE ON)

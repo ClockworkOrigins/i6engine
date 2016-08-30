@@ -35,6 +35,7 @@ void add() {
 }
 
 TEST(Semaphore, lock) {
+	counter = 0;
 	std::vector<std::thread *> v;
 
 	EXPECT_EQ(0, counter);

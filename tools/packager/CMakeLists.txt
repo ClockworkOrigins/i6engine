@@ -40,6 +40,10 @@ IF(WIN32)
 	add_custom_command(TARGET i6Archiver POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/i6Archiver.exe ${CMAKE_BINARY_DIR}/bin)
 ENDIF(WIN32)
 
+IF(UNIX)
+	target_link_libraries(i6Archiver pthread)
+ENDIF(UNIX)
+
 install(TARGETS i6Archiver
 		DESTINATION ${CMAKE_INSTALL_PREFIX}/tools
 	)
