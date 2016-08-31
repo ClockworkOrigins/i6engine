@@ -101,7 +101,11 @@ set(luaSrc
 	${srcdir}/lzio.c
 )
 
-add_library(lua SHARED ${luaSrc})
+IF(UNIX)
+	add_library(lua SHARED ${luaSrc})
+ELSEIF(WIN32)
+	add_library(lua STATIC ${luaSrc})
+ENDIF()
 
 IF(UNIX)
 	target_compile_options(lua PRIVATE "-DLUA_USE_LINUX -DLUA_DL_DLOPEN")
