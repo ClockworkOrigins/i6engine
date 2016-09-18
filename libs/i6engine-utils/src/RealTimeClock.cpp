@@ -19,7 +19,6 @@
 
 #include "i6engine/utils/RealTimeClock.h"
 
-#include <iostream>
 #include <thread>
 
 namespace i6e {
