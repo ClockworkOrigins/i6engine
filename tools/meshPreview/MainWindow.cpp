@@ -256,8 +256,10 @@ namespace tools {
 	}
 
 	void MainWindow::resizeEvent(QResizeEvent * evt) {
-		_renderWindow->resize(evt->size().width(), evt->size().height());
-		_renderWindow->windowMovedOrResized();
+		if (_renderWindow) {
+			_renderWindow->resize(evt->size().width(), evt->size().height());
+			_renderWindow->windowMovedOrResized();
+		}
 		evt->ignore();
 	}
 

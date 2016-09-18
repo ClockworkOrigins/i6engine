@@ -50,7 +50,9 @@ namespace plugins {
 			char * buffer = new char[size_t(filenameLength)];
 			in.read(buffer, filenameLength);
 			std::string filename(buffer, filenameLength);
-			_files.insert(std::make_pair(filename, std::make_pair(size_t(in.tellg()), length)));
+			std::string p = filename;
+			std::transform(p.begin(), p.end(), p.begin(), ::tolower);
+			_files.insert(std::make_pair(p, std::make_pair(size_t(in.tellg()), length)));
 			in.ignore(length);
 		}
 	}
@@ -60,7 +62,9 @@ namespace plugins {
 	}
 
 	Ogre::DataStreamPtr i6Archive::open(const Ogre::String & filename, bool readOnly) const {
-		auto it = _files.find(filename);
+		std::string p = filename;
+		std::transform(p.begin(), p.end(), p.begin(), ::tolower);
+		auto it = _files.find(p);
 		if (it == _files.end()) {
 			return Ogre::DataStreamPtr();
 		}
@@ -80,7 +84,7 @@ namespace plugins {
 			}
 			char * realData = new char[decompressed.size()];
 			memcpy(realData, decompressed.c_str(), decompressed.size());
-			Ogre::DataStream * ds = new Ogre::MemoryDataStream(filename, realData, decompressed.size(), true, true);
+			Ogre::DataStream * ds = new Ogre::MemoryDataStream(p, realData, decompressed.size(), true, true);
 			Ogre::DataStreamPtr ret(ds);
 			return ret;
 		}
@@ -96,9 +100,11 @@ namespace plugins {
 	}
 
 	Ogre::StringVectorPtr i6Archive::find(const Ogre::String & pattern, bool recursive, bool dirs) {
+		std::string p = pattern;
+		std::transform(p.begin(), p.end(), p.begin(), ::tolower);
 		Ogre::StringVectorPtr ret(OGRE_NEW_T(Ogre::StringVector, Ogre::MEMCATEGORY_GENERAL)(), Ogre::SPFM_DELETE_T);
 		for (std::map<std::string, std::pair<size_t, size_t>>::const_iterator it = _files.begin(); it != _files.end(); it++) {
-			std::regex regex(std::regex_replace(pattern, std::regex("\\*"), ".*"));
+			std::regex regex(std::regex_replace(p, std::regex("\\*"), ".*"));
 			if (std::regex_match(it->first, regex)) {
 				ret->push_back(it->first);
 			}
@@ -111,9 +117,11 @@ namespace plugins {
 	}
 
 	Ogre::FileInfoListPtr i6Archive::findFileInfo(const Ogre::String & pattern, bool recursive, bool dirs) const {
+		std::string p = pattern;
+		std::transform(p.begin(), p.end(), p.begin(), ::tolower);
 		Ogre::FileInfoListPtr ret(OGRE_NEW_T(Ogre::FileInfoList, Ogre::MEMCATEGORY_GENERAL)(), Ogre::SPFM_DELETE_T);
 		for (std::map<std::string, std::pair<size_t, size_t>>::const_iterator it = _files.begin(); it != _files.end(); it++) {
-			std::regex regex(std::regex_replace(pattern, std::regex("\\*\\."), ".*."));
+			std::regex regex(std::regex_replace(p, std::regex("\\*"), ".*"));
 			if (std::regex_match(it->first, regex)) {
 				Ogre::FileInfo info;
 				info.archive = this;
