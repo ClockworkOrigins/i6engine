@@ -85,6 +85,8 @@ ELSEIF(WIN32)
 	ENDIF()
 ENDIF()
 
+SET(ENV{Qt5_DIR} $ENV{Qt5_BaseDir}/${Qt5_Platform})
+
 SET(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies/${DEP_DIR_BUILD}" CACHE STRING "path to dependencies for i6engine")
 
 IF(ISIXE_WITH_TESTING AND NOT WIN32)

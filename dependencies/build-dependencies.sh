@@ -36,7 +36,6 @@ fi
 
 ./build-boost.sh
 ./build-bullet.sh
-./build-ois.sh
 ./build-ogre.sh		# depends on boost and ois
 ./build-cegui.sh	# depends on ois, ogre and boost
 ./build-gperftools.sh
