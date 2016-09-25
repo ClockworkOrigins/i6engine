@@ -148,6 +148,8 @@ namespace gui {
 		bool _isDragged;
 		Vec2f _dragOffset;
 		std::function<void(void)> _clickCallback;
+		std::function<void(void)> _mouseEnterCallback;
+		std::function<void(void)> _mouseLeaveCallback;
 		std::string _tooltip;
 		bool _tooltipActive;
 		std::map<std::string, CEGUI::AnimationInstance *> _animations;
@@ -168,9 +170,6 @@ namespace gui {
 		bool mouseMove(const CEGUI::EventArgs & e);
 		bool mouseEnter(const CEGUI::EventArgs & e);
 		bool mouseLeave(const CEGUI::EventArgs & e);
-
-		// overridden from Window base class
-		//bool testClassName_impl(const CEGUI::String & class_name) const;
 
 		/**
 		 * \brief forbidden

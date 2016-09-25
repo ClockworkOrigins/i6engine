@@ -295,6 +295,8 @@ BOOST_PYTHON_MODULE(ScriptingGUIPython) {
 
 	enum_<i6e::api::gui::SubscribeEvent>("SubscribeEvent")
 		.value("Clicked", i6e::api::gui::SubscribeEvent::Clicked)
+		.value("MouseEnter", i6e::api::gui::SubscribeEvent::MouseEnter)
+		.value("MouseLeave", i6e::api::gui::SubscribeEvent::MouseLeave)
 		.export_values();
 
 	def("startGUI", &i6e::python::gui::startGUI);

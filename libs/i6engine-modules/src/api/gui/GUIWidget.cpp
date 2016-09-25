@@ -30,7 +30,7 @@
 namespace i6e {
 namespace api {
 
-	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _tooltip(), _tooltipActive(false), _animations(), _hitTestBuffer(nullptr), _hitBufferCapacity(), _hitBufferSize(), _hitBufferInverted(false), _transparencyCheckEnabled(false) {
+	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _mouseEnterCallback(), _mouseLeaveCallback(), _tooltip(), _tooltipActive(false), _animations(), _hitTestBuffer(nullptr), _hitBufferCapacity(), _hitBufferSize(), _hitBufferInverted(false), _transparencyCheckEnabled(false) {
 	}
 
 	GUIWidget::~GUIWidget() {
@@ -67,8 +67,30 @@ namespace api {
 		} else if (type == gui::GUIMessageTypes::GuiSetDropCallback) {
 			_dropCallback = dynamic_cast<gui::GUI_SetDropCallback *>(message)->callback;
 		} else if (type == gui::GUIMessageTypes::GuiSubscribeEvent) {
-			subscribeClickEvent(dynamic_cast<gui::GUI_SubscribeEvent_Update *>(message)->func);
-			_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
+			gui::GUI_SubscribeEvent_Update * se = dynamic_cast<gui::GUI_SubscribeEvent_Update *>(message);
+			switch (se->event) {
+			case gui::SubscribeEvent::Clicked: {
+				if (!_clickCallback) {
+					_window->subscribeEvent(CEGUI::Window::EventMouseButtonDown, CEGUI::Event::Subscriber(&GUIWidget::drag, this));
+				}
+				subscribeClickEvent(se->func);
+				break;
+			}
+			case gui::SubscribeEvent::MouseEnter: {
+				if (_tooltip.empty() && !_mouseEnterCallback) {
+					_window->subscribeEvent(CEGUI::Window::EventMouseEntersArea, CEGUI::Event::Subscriber(&GUIWidget::mouseEnter, this));
+				}
+				_mouseEnterCallback = se->func;
+				break;
+			}
+			case gui::SubscribeEvent::MouseLeave: {
+				if (_tooltip.empty() && !_mouseLeaveCallback) {
+					_window->subscribeEvent(CEGUI::Window::EventMouseLeavesArea, CEGUI::Event::Subscriber(&GUIWidget::mouseLeave, this));
+				}
+				_mouseLeaveCallback = se->func;
+				break;
+			}
+			}
 		} else if (type == gui::GUIMessageTypes::GuiSetTooltip) {
 			_tooltip = dynamic_cast<gui::GUI_SetTooltip *>(message)->tooltip;
 			_window->subscribeEvent(CEGUI::Window::EventMouseEntersArea, CEGUI::Event::Subscriber(&GUIWidget::mouseEnter, this));
@@ -210,7 +232,7 @@ namespace api {
 	}
 
 	bool GUIWidget::drag(const CEGUI::EventArgs & e) {
-		if (_clickCallback != nullptr) {
+		if (_clickCallback) {
 			std::function<void(void)> callback = _clickCallback;
 			i6eEngineController->registerTimer(0, [callback]() {
 				callback();
@@ -263,6 +285,9 @@ namespace api {
 	}
 
 	bool GUIWidget::mouseEnter(const CEGUI::EventArgs &) {
+		if (_mouseEnterCallback) {
+			_mouseEnterCallback();
+		}
 		if (_tooltip.empty() || _tooltipActive) {
 			return true;
 		}
@@ -274,6 +299,9 @@ namespace api {
 	}
 
 	bool GUIWidget::mouseLeave(const CEGUI::EventArgs &) {
+		if (_mouseLeaveCallback) {
+			_mouseLeaveCallback();
+		}
 		if (_isDragged) {
 			setPosition(CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_x / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_width - _dragOffset.getX(), CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getPosition().d_y / CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height - _dragOffset.getY());
 			enableTicking(true);

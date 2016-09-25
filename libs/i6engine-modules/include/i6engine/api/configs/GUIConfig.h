@@ -103,7 +103,9 @@ namespace gui {
 	};
 
 	enum class SubscribeEvent {
-		Clicked
+		Clicked,
+		MouseEnter,
+		MouseLeave
 	};
 
 	/**

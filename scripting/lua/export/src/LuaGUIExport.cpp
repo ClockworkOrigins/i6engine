@@ -301,7 +301,9 @@ scope registerGUI() {
 			.def(constructor<>())
 			.enum_("SubscribeEvent")
 			[
-				value("Clicked", int(i6e::api::gui::SubscribeEvent::Clicked))
+				value("Clicked", int(i6e::api::gui::SubscribeEvent::Clicked)),
+				value("MouseEnter", int(i6e::api::gui::SubscribeEvent::MouseEnter)),
+				value("MouseLeave", int(i6e::api::gui::SubscribeEvent::MouseLeave))
 			],
 
 		def("startGUI", &i6e::lua::gui::startGUI),
