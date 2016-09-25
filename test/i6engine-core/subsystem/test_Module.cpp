@@ -23,7 +23,7 @@
 
 #include "i6engine/core/EngineCoreController.h"
 #include "i6engine/core/messaging/MessagingController.h"
-#include "i6engine/core/subsystem/ModuleController.h"
+#include "i6engine/core/subsystem/ModuleControllerController.h"
 #include "i6engine/core/subsystem/SubSystemController.h"
 
 #include "boost/make_shared.hpp"
@@ -36,9 +36,9 @@ typedef struct TestSubSystemMessage : public i6e::core::MessageStruct {
 	}
 } TestSubSystemMessage;
 
-class Test_SubSystem : public i6e::core::ModuleController {
+class Test_SubSystem : public i6e::core::ModuleControllerController {
 public:
-	Test_SubSystem(i6e::core::Subsystem subsystem) : i6e::core::ModuleController(subsystem), tickCounter() {
+	Test_SubSystem(i6e::core::Subsystem subsystem) : i6e::core::ModuleControllerController(subsystem), tickCounter() {
 	}
 
 	void OnThreadStart() {
@@ -54,9 +54,9 @@ public:
 	uint32_t tickCounter = 0;
 };
 
-class Test_SubSystem2 : public i6e::core::ModuleController {
+class Test_SubSystem2 : public i6e::core::ModuleControllerController {
 public:
-	Test_SubSystem2(i6e::core::Subsystem subsystem) : i6e::core::ModuleController(subsystem), tickCounter() {
+	Test_SubSystem2(i6e::core::Subsystem subsystem) : i6e::core::ModuleControllerController(subsystem), tickCounter() {
 	}
 
 	void OnThreadStart() {
@@ -79,9 +79,9 @@ public:
 	uint32_t receivedMessages = 0;
 };
 
-class Test_SubSystem3 : public i6e::core::ModuleController {
+class Test_SubSystem3 : public i6e::core::ModuleControllerController {
 public:
-	Test_SubSystem3(i6e::core::Subsystem subsystem) : i6e::core::ModuleController(subsystem), tickCounter() {
+	Test_SubSystem3(i6e::core::Subsystem subsystem) : i6e::core::ModuleControllerController(subsystem), tickCounter() {
 	}
 
 	void OnThreadStart() {
@@ -100,7 +100,7 @@ public:
 	uint32_t tickCounter = 0;
 };
 
-TEST(Module, Ticking) {
+TEST(ModuleController, Ticking) {
 	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
@@ -125,7 +125,7 @@ TEST(Module, Ticking) {
 	delete ssc;
 }
 
-TEST(Module, TwoTicking) {
+TEST(ModuleController, TwoTicking) {
 	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
@@ -145,8 +145,7 @@ TEST(Module, TwoTicking) {
 
 	ecc->RunEngine();
 
-	EXPECT_LE(9U, s1->tickCounter);
-	EXPECT_LE(18U, s2->tickCounter);
+	EXPECT_LT(s1->tickCounter, s2->tickCounter);
 
 	delete s2;
 	delete s1;
@@ -155,7 +154,7 @@ TEST(Module, TwoTicking) {
 	delete ssc;
 }
 
-TEST(Module, Waiting) {
+TEST(ModuleController, Waiting) {
 	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
@@ -175,8 +174,7 @@ TEST(Module, Waiting) {
 
 	ecc->RunEngine();
 
-	EXPECT_LE(9U, s1->tickCounter);
-	EXPECT_LE(9U, s2->tickCounter);
+	EXPECT_LE(s1->tickCounter, s2->tickCounter);
 
 	delete s2;
 	delete s1;
@@ -185,7 +183,7 @@ TEST(Module, Waiting) {
 	delete ssc;
 }
 
-TEST(Module, WaitingForTwo) {
+TEST(ModuleController, WaitingForTwo) {
 	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
@@ -208,9 +206,9 @@ TEST(Module, WaitingForTwo) {
 
 	ecc->RunEngine();
 
-	EXPECT_LE(9U, s1->tickCounter);
-	EXPECT_LE(9U, s2->tickCounter);
-	EXPECT_LE(18U, s3->tickCounter);
+	EXPECT_LT(s2->tickCounter, s3->tickCounter);
+	EXPECT_LE(s1->tickCounter, s2->tickCounter);
+	EXPECT_LE(s1->tickCounter, s3->tickCounter);
 
 	delete s3;
 	delete s2;
@@ -220,7 +218,7 @@ TEST(Module, WaitingForTwo) {
 	delete ssc;
 }
 
-TEST(Module, WaitingChain) {
+TEST(ModuleController, WaitingChain) {
 	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
@@ -243,9 +241,9 @@ TEST(Module, WaitingChain) {
 
 	ecc->RunEngine();
 
-	EXPECT_LE(9U, s1->tickCounter);
-	EXPECT_LE(9U, s2->tickCounter);
-	EXPECT_LE(9U, s3->tickCounter);
+	EXPECT_LE(s1->tickCounter, s2->tickCounter);
+	EXPECT_LE(s1->tickCounter, s3->tickCounter);
+	EXPECT_LE(s2->tickCounter, s3->tickCounter);
 
 	delete s3;
 	delete s2;
@@ -255,7 +253,7 @@ TEST(Module, WaitingChain) {
 	delete ssc;
 }
 
-TEST(Module, WaitingWithMessages) {
+TEST(ModuleController, WaitingWithMessages) {
 	i6e::core::SubSystemController * ssc = new i6e::core::SubSystemController();
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
@@ -275,11 +273,8 @@ TEST(Module, WaitingWithMessages) {
 
 	ecc->RunEngine();
 
-	EXPECT_GE(s1->tickCounter, 90U);
-	EXPECT_GE(s2->tickCounter, 90U);
-	EXPECT_LE(s1->tickCounter, 100U);
-	EXPECT_LE(s2->tickCounter, 100U);
-	EXPECT_GE(s1->receivedMessages, 900U);
+	EXPECT_LE(s1->tickCounter, s2->tickCounter);
+	EXPECT_GE(s1->receivedMessages, 400U);
 
 	delete s2;
 	delete s1;
