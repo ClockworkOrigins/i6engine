@@ -49,6 +49,9 @@ namespace gui {
 	GUI_MouseCursorImage_Update::GUI_MouseCursorImage_Update(const std::string & i) : GUIUpdateMessageStruct("GUIManager"), image(i) {
 	}
 
+	GUI_MouseCursorSequence_Update::GUI_MouseCursorSequence_Update(const std::vector<std::string> & s, double f, bool l) : GUIUpdateMessageStruct("GUIManager"), sequence(s), fps(f), looping(l) {
+	}
+
 	GUI_Resolution_Update::GUI_Resolution_Update(const graphics::Resolution & r) : GUIUpdateMessageStruct("GUIManager"), resolution(r) {
 	}
 

@@ -44,7 +44,7 @@ namespace gui {
 		i6eGUIFacade->clearAllWindows();
 	}
 
-	ISIXE_DEPRECATED void subscribeEventString(const std::string & windowname, const std::string & eventType, const std::string & func) {
+	ISIXE_DEPRECATED void subscribeEventString(const std::string & windowname, const std::string &, const std::string & func) {
 		i6eGUIFacade->subscribeEvent(windowname, i6e::api::gui::SubscribeEvent::Clicked, [func]() {
 			i6eScriptingFacade->callFunction<void>(func);
 		});
@@ -62,6 +62,10 @@ namespace gui {
 
 	void setMouseCursorImage(const std::string & image) {
 		i6eGUIFacade->setMouseCursorImage(image);
+	}
+
+	void setMouseCursorImage(const std::vector<std::string> & sequence, double fps, bool looping) {
+		i6eGUIFacade->setMouseCursorImage(sequence, fps, looping);
 	}
 
 	void addImageset(const std::string & imageset) {
@@ -200,6 +204,10 @@ namespace gui {
 		i6eGUIFacade->setImage(name, imageSetName, imageSet);
 	}
 
+	void setImage(const std::string & name, const std::vector<std::pair<std::string, std::string>> & sequence, double fps, bool looping) {
+		i6eGUIFacade->setImage(name, sequence, fps, looping);
+	}
+
 	void setEnterTextCallback(const std::string & name, const std::string & func) {
 		i6eGUIFacade->setEnterTextCallback(name, [func](std::string s) {
 			i6eScriptingFacade->callFunction<void>(func, s);
@@ -306,7 +314,8 @@ BOOST_PYTHON_MODULE(ScriptingGUIPython) {
 	def("subscribeEvent", &i6e::python::gui::subscribeEventString);
 	def("subscribeEvent", &i6e::python::gui::subscribeEvent);
 	def("changeEvent", &i6e::python::gui::changeEvent);
-	def("setMouseCursorImage", &i6e::python::gui::setMouseCursorImage);
+	def("setMouseCursorImage", (void(*)(const std::string &)) &i6e::python::gui::setMouseCursorImage);
+	def("setMouseCursorImage", (void(*)(const std::vector<std::string> &, double, bool)) &i6e::python::gui::setMouseCursorImage);
 	def("addImageset", &i6e::python::gui::addImageset);
 	def("loadCanvas", &i6e::python::gui::loadCanvas);
 	def("addPrint", &i6e::python::gui::addPrint);
@@ -337,7 +346,8 @@ BOOST_PYTHON_MODULE(ScriptingGUIPython) {
 	def("addRowEntry", &i6e::python::gui::addRowEntry);
 	def("addColumn", &i6e::python::gui::addColumn);
 	def("clearWidget", &i6e::python::gui::clearWidget);
-	def("setImage", &i6e::python::gui::setImage);
+	def("setImage", (void(*)(const std::string &, const std::string &, const std::string &)) &i6e::python::gui::setImage);
+	def("setImage", (void(*)(const std::string &, const std::vector<std::pair<std::string, std::string>> &, double, bool)) &i6e::python::gui::setImage);
 	def("setEnterTextCallback", &i6e::python::gui::setEnterTextCallback);
 	def("setProperty", &i6e::python::gui::setProperty);
 	def("setSelected", &i6e::python::gui::setSelected);

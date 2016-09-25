@@ -21,14 +21,16 @@
 
 #include "i6engine/utils/Exceptions.h"
 
+#include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/GUIConfig.h"
+#include "i6engine/api/facades/GUIFacade.h"
 
 #include "CEGUI/CEGUI.h"
 
 namespace i6e {
 namespace modules {
 
-	GUIImage::GUIImage(const std::string & name, const std::string & style) : api::GUIWidget(name) {
+	GUIImage::GUIImage(const std::string & name, const std::string & style) : api::GUIWidget(name), _imageSequence(), _fps(0.0), _looping(false), _startTime(0) {
 		CEGUI::WindowManager & wmgr = CEGUI::WindowManager::getSingleton();
 
 		// style has to support parameter "image"
@@ -41,6 +43,9 @@ namespace modules {
 		if (type == api::gui::GuiSetImage) {
 			api::gui::GUI_Image * g = static_cast<api::gui::GUI_Image *>(data);
 			setImage(g->imageSetName, g->imageName);
+		} else if (type == api::gui::GuiSetImageSequence) {
+			api::gui::GUI_ImageSequence * g = static_cast<api::gui::GUI_ImageSequence *>(data);
+			setImageSequence(g->sequence, g->fps, g->looping);
 		} else {
 			GUIWidget::update(type, data);
 		}
@@ -48,6 +53,37 @@ namespace modules {
 
 	void GUIImage::setImage(const std::string & imageSetName, const std::string & imageName) {
 		_window->setProperty("Image", imageSetName + "/" + imageName);
+	}
+
+	void GUIImage::setImageSequence(const std::vector<std::pair<std::string, std::string>> & sequence, double fps, bool looping) {
+		_imageSequence = sequence;
+		_fps = fps;
+		_looping = looping;
+		_startTime = i6eEngineController->getCurrentTime();
+		if (!sequence.empty()) {
+			_window->setProperty("Image", sequence.front().first + "/" + sequence.front().second);
+			enableTicking(true);
+		}
+	}
+
+	void GUIImage::tick() {
+		api::GUIWidget::tick();
+		uint64_t cT = i6eEngineController->getCurrentTime();
+		// animate mouse cursor
+		if (std::abs(_fps) > DBL_EPSILON && _imageSequence.size() > 1) {
+			uint64_t timeDiff = cT - _startTime;
+			if (timeDiff > _imageSequence.size() * 1000000.0 / _fps) {
+				if (_looping) {
+					_startTime += uint64_t(_imageSequence.size() * 1000000.0 / _fps);
+				} else {
+					_fps = 0.0;
+					i6eGUIFacade->setImage(_name, _imageSequence.back().first, _imageSequence.back().second);
+				}
+			} else {
+				size_t index = size_t(std::ceil((timeDiff * _fps) / 1000000.0));
+				_window->setProperty("Image", _imageSequence[index].first + "/" + _imageSequence[index].second);
+			}
+		}
 	}
 
 } /* namespace modules */

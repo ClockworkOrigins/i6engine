@@ -52,12 +52,21 @@ namespace modules {
 		void update(uint16_t type, api::gui::GUIUpdateMessageStruct * message) override;
 
 	private:
+		std::vector<std::pair<std::string, std::string>> _imageSequence;
+		double _fps;
+		bool _looping;
+		uint64_t _startTime;
+
 		/**
 		 * \brief Sets the image of the image
 		 * \param ImageSet-Name
 		 * \param Image-Name
 		 */
 		void setImage(const std::string & imageSetName, const std::string & imageName);
+
+		void setImageSequence(const std::vector<std::pair<std::string, std::string>> & sequence, double fps, bool looping);
+
+		void tick() override;
 
 		/**
 		 * \brief forbidden

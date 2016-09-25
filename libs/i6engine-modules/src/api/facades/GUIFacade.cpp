@@ -82,6 +82,12 @@ namespace api {
 		i6eMessagingFacade->deliverMessage(msg);
 	}
 
+	void GUIFacade::setMouseCursorImage(const std::vector<std::string> & sequence, double fps, bool looping) const {
+		GameMessage::Ptr msg = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiMouseCursorSequence, core::Method::Update, new gui::GUI_MouseCursorSequence_Update(sequence, fps, looping), core::Subsystem::Unknown);
+
+		i6eMessagingFacade->deliverMessage(msg);
+	}
+
 	void GUIFacade::addImageset(const std::string & imageset) const {
 		i6eMessagingFacade->deliverMessage(boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiAddImageset, core::Method::Create, new gui::GUI_AddImageset_Create(imageset), core::Subsystem::Unknown));
 	}
@@ -213,6 +219,12 @@ namespace api {
 
 	void GUIFacade::setImage(const std::string & name, const std::string & imageSetName, const std::string & imageName) const {
 		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetImage, core::Method::Update, new gui::GUI_Image(name, imageSetName, imageName), core::Subsystem::Unknown);
+
+		i6eMessagingFacade->deliverMessage(pos);
+	}
+
+	void GUIFacade::setImage(const std::string & name, const std::vector<std::pair<std::string, std::string>> & sequence, double fps, bool looping) const {
+		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetImageSequence, core::Method::Update, new gui::GUI_ImageSequence(name, sequence, fps, looping), core::Subsystem::Unknown);
 
 		i6eMessagingFacade->deliverMessage(pos);
 	}

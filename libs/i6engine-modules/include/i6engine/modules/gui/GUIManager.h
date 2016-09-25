@@ -437,6 +437,13 @@ namespace modules {
 
 		std::vector<api::GUIWidget *> _mouseOverWidgets;
 
+		std::vector<std::string> _mouseCursorSequence;
+		double _mouseCursorFps;
+		bool _mouseCursorAnimationLooping;
+		uint64_t _mouseCursorAnimationStartTime;
+
+		void setAnimatedMouseCursor(const std::vector<std::string> & sequence, double fps, bool looping);
+
 		/**
 		 * \brief forbidden
 		 */

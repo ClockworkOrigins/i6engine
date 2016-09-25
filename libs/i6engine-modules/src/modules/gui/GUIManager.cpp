@@ -57,11 +57,11 @@
 namespace i6e {
 namespace modules {
 
-	GUIManager::GUIManager(GUIController * ctrl) : _objRenderer(), _objGUIFunctions(), _objGUIKeyFunctions(), _objRoot(), _widgets(), _enabledFunctions(), _listIDs(0), _toTick(), _keyStates(), _factory(), _tickerLock(), _ctrl(ctrl), _lastOnWindow(""), _mouseOverWidgets() {
+	GUIManager::GUIManager(GUIController * ctrl) : _objRenderer(), _objGUIFunctions(), _objGUIKeyFunctions(), _objRoot(), _widgets(), _enabledFunctions(), _listIDs(0), _toTick(), _keyStates(), _factory(), _tickerLock(), _ctrl(ctrl), _lastOnWindow(""), _mouseOverWidgets(), _mouseCursorSequence(), _mouseCursorFps(0.0), _mouseCursorAnimationLooping(false), _mouseCursorAnimationStartTime(0) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerAddTickerCallback(std::bind(&GUIManager::addTicker, this, std::placeholders::_1));
-		api::EngineController::GetSingletonPtr()->getGUIFacade()->registerRemoveTickerCallback(std::bind(&GUIManager::removeTicker, this, std::placeholders::_1));
+		i6eGUIFacade->registerAddTickerCallback(std::bind(&GUIManager::addTicker, this, std::placeholders::_1));
+		i6eGUIFacade->registerRemoveTickerCallback(std::bind(&GUIManager::removeTicker, this, std::placeholders::_1));
 
 		registerGUIWidgetTemplate("GUIBar", boost::factory<GUIBar *>());
 		registerGUIWidgetTemplate("GUIChat", boost::factory<GUIChat *>());
@@ -566,7 +566,10 @@ namespace modules {
 		} else if (type == api::gui::GuiEvent) {
 			changeEvent(static_cast<api::gui::GUI_Event_Update *>(data)->name, static_cast<api::gui::GUI_Event_Update *>(data)->enabled);
 		} else if (type == api::gui::GuiMouseCursorImage) {
-			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage(static_cast<api::gui::GUI_MouseCursorImage_Update *>(data)->image);
+			setAnimatedMouseCursor({ static_cast<api::gui::GUI_MouseCursorImage_Update *>(data)->image }, 0.0, false);
+		} else if (type == api::gui::GuiMouseCursorSequence) {
+			api::gui::GUI_MouseCursorSequence_Update * mcsu = dynamic_cast<api::gui::GUI_MouseCursorSequence_Update *>(data);
+			setAnimatedMouseCursor(mcsu->sequence, mcsu->fps, mcsu->looping);
 		} else if (type == api::gui::GuiResolution) {
 			const api::gui::GUI_Resolution_Update * ru = dynamic_cast<api::gui::GUI_Resolution_Update *>(data);
 			_objRenderer->setDisplaySize(CEGUI::Sizef(float(ru->resolution.width), float(ru->resolution.height)));
@@ -591,7 +594,6 @@ namespace modules {
 
 	void GUIManager::handleDeleteMessage(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		if (type == api::gui::GuiCleanUp) {
 			 cleanUpAllWindows();
 		} else {
@@ -601,7 +603,6 @@ namespace modules {
 
 	void GUIManager::initializeGUI(Ogre::Root * root) {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		// Bootstrap CEGUI::System with an OgreRenderer object that uses the
 		// default Ogre rendering window as the default output surface, an Ogre based
 		// ResourceProvider, and an Ogre based ImageCodec.
@@ -618,7 +619,6 @@ namespace modules {
 
 	void GUIManager::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-
 		if (_objRenderer) {
 			tickWidgets();
 
@@ -646,12 +646,38 @@ namespace modules {
 			// check if there is a widget capturing input
 			i6eGUIFacade->setInputCaptured(!_mouseOverWidgets.empty() && _mouseOverWidgets.front()->_window->isActive());
 
-			// Inject the time since the last tick into CEGUI to allow calculations based on the frame time (fading etc.).
-			// Inject the frame time of the graphics subsystem in seconds.
 			static uint64_t lastTime = i6eEngineController->getCurrentTime();
 			uint64_t cT = i6eEngineController->getCurrentTime();
+			// animate mouse cursor
+			if (std::abs(_mouseCursorFps) > DBL_EPSILON && _mouseCursorSequence.size() > 1) {
+				uint64_t timeDiff = cT - _mouseCursorAnimationStartTime;
+				if (timeDiff > _mouseCursorSequence.size() * 1000000.0 / _mouseCursorFps) {
+					if (_mouseCursorAnimationLooping) {
+						_mouseCursorAnimationStartTime += uint64_t(_mouseCursorSequence.size() * 1000000.0 / _mouseCursorFps);
+					} else {
+						_mouseCursorFps = 0.0;
+					}
+				} else {
+					size_t index = size_t(std::ceil((timeDiff * _mouseCursorFps) / 1000000.0));
+					CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage(_mouseCursorSequence[index]);
+				}
+			}
+
+			// Inject the time since the last tick into CEGUI to allow calculations based on the frame time (fading etc.).
+			// Inject the frame time of the graphics subsystem in seconds.
 			CEGUI::System::getSingleton().injectTimePulse((cT - lastTime) / 1000000.0f);
 			lastTime = cT;
+		}
+	}
+
+	void GUIManager::setAnimatedMouseCursor(const std::vector<std::string> & sequence, double fps, bool looping) {
+		ASSERT_THREAD_SAFETY_FUNCTION
+		_mouseCursorSequence = sequence;
+		_mouseCursorFps = fps;
+		_mouseCursorAnimationLooping = looping;
+		_mouseCursorAnimationStartTime = i6eEngineController->getCurrentTime();
+		if (!sequence.empty()) {
+			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage(sequence.front());
 		}
 	}
 

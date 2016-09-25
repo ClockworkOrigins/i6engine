@@ -69,7 +69,9 @@ namespace gui {
 		GuiClearWidget,
 		GuiSetAmount,
 		GuiSetImage,
+		GuiSetImageSequence,
 		GuiMouseCursorImage,
+		GuiMouseCursorSequence,
 		GuiResolution,
 		GuiAddImageset,
 		GuiSetAlignment,
@@ -159,7 +161,6 @@ namespace gui {
 	typedef struct GUI_Image : GUIUpdateMessageStruct {
 		std::string imageSetName;
 		std::string imageName;
-		GUI_Image() {}
 		GUI_Image(const std::string & name, const std::string & imageSetName2, const std::string & imageName2) : GUIUpdateMessageStruct(name), imageSetName(imageSetName2), imageName(imageName2) {
 		}
 		GUI_Image * copy() {
@@ -168,11 +169,24 @@ namespace gui {
 	} GUI_Image;
 
 	/**
+	 * \brief sets image sequence as animation to Widget
+	 */
+	typedef struct GUI_ImageSequence : GUIUpdateMessageStruct {
+		std::vector<std::pair<std::string, std::string>> sequence;
+		double fps;
+		bool looping;
+		GUI_ImageSequence(const std::string & name, const std::vector<std::pair<std::string, std::string>> & s, double f, bool l) : GUIUpdateMessageStruct(name), sequence(s), fps(f), looping(l) {
+		}
+		GUI_ImageSequence * copy() {
+			return new GUI_ImageSequence(*this);
+		}
+	} GUI_ImageSequence;
+
+	/**
 	 * \brief sets color for Widget
 	 */
 	typedef struct GUI_Colour : GUIUpdateMessageStruct {
 		double alpha, red, green, blue;
-		GUI_Colour() {}
 		GUI_Colour(const std::string & name, const double a, const double r, const double g, const double b) : GUIUpdateMessageStruct(name), alpha(a), red(r), green(g), blue(b) {
 		}
 		GUI_Colour * copy() {
@@ -389,6 +403,19 @@ namespace gui {
 		GUI_MouseCursorImage_Update(const std::string & i);
 		GUI_MouseCursorImage_Update * copy() { return new GUI_MouseCursorImage_Update(*this); }
 	} GUI_MouseCursorImage_Update;
+
+	/**
+	 * \brief changes the mouse cursor image to an animated sequence
+	 */
+	typedef struct GUI_MouseCursorSequence_Update : GUIUpdateMessageStruct {
+		std::vector<std::string> sequence;
+		double fps;
+		bool looping;
+		GUI_MouseCursorSequence_Update(const std::vector<std::string> & s, double f, bool l);
+		GUI_MouseCursorSequence_Update * copy() {
+			return new GUI_MouseCursorSequence_Update(*this);
+		}
+	} GUI_MouseCursorSequence_Update;
 
 	/**
 	 * \brief updates resolution of render window

@@ -25,11 +25,11 @@
 #ifndef __I6ENGINE_API_GUIFACADE_H__
 #define __I6ENGINE_API_GUIFACADE_H__
 
+#include <functional>
 #include <map>
+#include <vector>
 
 #include "i6engine/api/KeyCodes.h"
-
-#include "boost/function.hpp"
 
 namespace i6e {
 namespace api {
@@ -109,6 +109,11 @@ namespace gui {
 		 * \brief sets image for mouse cursor
 		 */
 		void setMouseCursorImage(const std::string & image) const;
+
+		/**
+		 * \brief adds a sequence with given frames per seconds value to be played as cursor animation
+		 */
+		void setMouseCursorImage(const std::vector<std::string> & sequence, double fps, bool looping) const;
 
 		/**
 		 * \brief adds given imageset so it can be used with own graphics
@@ -378,6 +383,11 @@ namespace gui {
 		 * \param imageName image
 		 */
 		void setImage(const std::string & name, const std::string & imageSetName, const std::string & imageSet) const;
+
+		/**
+		 * \brief adds a sequence with given frames per seconds value to be played
+		 */
+		void setImage(const std::string & name, const std::vector<std::pair<std::string, std::string>> & sequence, double fps, bool looping) const;
 
 		/**
 		 * \brief Sets a enter callback to an Editbox
