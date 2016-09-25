@@ -23,7 +23,7 @@
 
 #include "i6engine/core/EngineCoreController.h"
 #include "i6engine/core/messaging/MessagingController.h"
-#include "i6engine/core/subsystem/ModuleControllerController.h"
+#include "i6engine/core/subsystem/ModuleController.h"
 #include "i6engine/core/subsystem/SubSystemController.h"
 
 #include "boost/make_shared.hpp"
@@ -36,9 +36,9 @@ typedef struct TestSubSystemMessage : public i6e::core::MessageStruct {
 	}
 } TestSubSystemMessage;
 
-class Test_SubSystem : public i6e::core::ModuleControllerController {
+class Test_SubSystem : public i6e::core::ModuleController {
 public:
-	Test_SubSystem(i6e::core::Subsystem subsystem) : i6e::core::ModuleControllerController(subsystem), tickCounter() {
+	Test_SubSystem(i6e::core::Subsystem subsystem) : i6e::core::ModuleController(subsystem), tickCounter() {
 	}
 
 	void OnThreadStart() {
@@ -54,9 +54,9 @@ public:
 	uint32_t tickCounter = 0;
 };
 
-class Test_SubSystem2 : public i6e::core::ModuleControllerController {
+class Test_SubSystem2 : public i6e::core::ModuleController {
 public:
-	Test_SubSystem2(i6e::core::Subsystem subsystem) : i6e::core::ModuleControllerController(subsystem), tickCounter() {
+	Test_SubSystem2(i6e::core::Subsystem subsystem) : i6e::core::ModuleController(subsystem), tickCounter() {
 	}
 
 	void OnThreadStart() {
@@ -79,9 +79,9 @@ public:
 	uint32_t receivedMessages = 0;
 };
 
-class Test_SubSystem3 : public i6e::core::ModuleControllerController {
+class Test_SubSystem3 : public i6e::core::ModuleController {
 public:
-	Test_SubSystem3(i6e::core::Subsystem subsystem) : i6e::core::ModuleControllerController(subsystem), tickCounter() {
+	Test_SubSystem3(i6e::core::Subsystem subsystem) : i6e::core::ModuleController(subsystem), tickCounter() {
 	}
 
 	void OnThreadStart() {
