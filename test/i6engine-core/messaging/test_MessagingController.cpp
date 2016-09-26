@@ -388,6 +388,7 @@ TEST(MessagingController, MultithreadedStressTest) {
 	Mock_MessagingController * mc = new Mock_MessagingController();
 	Mock_SubSystemStress ms;
 
+	std::unique_lock<std::mutex> ul(ms._lock);
 	mc->registerMessageType(0, &ms);
 	ms._mc = mc;
 
@@ -416,7 +417,6 @@ TEST(MessagingController, MultithreadedStressTest) {
 
 	mc->deliverMessage(boost::make_shared<Message>(0, 2, Method::Update, new MessageStruct(), i6e::core::Subsystem::Unknown));
 
-	std::unique_lock<std::mutex> ul(ms._lock);
 	ms._condVariable.wait(ul);
 
 	mc->unregisterMessageType(0, &ms);
