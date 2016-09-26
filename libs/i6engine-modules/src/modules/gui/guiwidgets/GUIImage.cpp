@@ -72,15 +72,16 @@ namespace modules {
 		// animate mouse cursor
 		if (std::abs(_fps) > DBL_EPSILON && _imageSequence.size() > 1) {
 			uint64_t timeDiff = cT - _startTime;
-			if (timeDiff > _imageSequence.size() * 1000000.0 / _fps) {
+			if (timeDiff > (_imageSequence.size() - 1) * 1000000.0 / _fps) {
 				if (_looping) {
-					_startTime += uint64_t(_imageSequence.size() * 1000000.0 / _fps);
+					_startTime += uint64_t((_imageSequence.size() - 1) * 1000000.0 / _fps);
 				} else {
 					_fps = 0.0;
 					i6eGUIFacade->setImage(_name, _imageSequence.back().first, _imageSequence.back().second);
 				}
-			} else {
-				size_t index = size_t(std::ceil((timeDiff * _fps) / 1000000.0));
+			}
+			if (std::abs(_fps) > DBL_EPSILON) {
+				size_t index = size_t(std::round((timeDiff * _fps) / 1000000.0));
 				_window->setProperty("Image", _imageSequence[index].first + "/" + _imageSequence[index].second);
 			}
 		}

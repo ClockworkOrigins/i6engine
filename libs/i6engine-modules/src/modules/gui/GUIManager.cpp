@@ -651,15 +651,16 @@ namespace modules {
 			// animate mouse cursor
 			if (std::abs(_mouseCursorFps) > DBL_EPSILON && _mouseCursorSequence.size() > 1) {
 				uint64_t timeDiff = cT - _mouseCursorAnimationStartTime;
-				if (timeDiff > _mouseCursorSequence.size() * 1000000.0 / _mouseCursorFps) {
+				if (timeDiff > (_mouseCursorSequence.size() - 1) * 1000000.0 / _mouseCursorFps) {
 					if (_mouseCursorAnimationLooping) {
-						_mouseCursorAnimationStartTime += uint64_t(_mouseCursorSequence.size() * 1000000.0 / _mouseCursorFps);
+						_mouseCursorAnimationStartTime += uint64_t((_mouseCursorSequence.size() - 1) * 1000000.0 / _mouseCursorFps);
 					} else {
 						_mouseCursorFps = 0.0;
 					}
-				} else {
-					size_t index = size_t(std::ceil((timeDiff * _mouseCursorFps) / 1000000.0));
-					CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage(_mouseCursorSequence[index]);
+				}
+				if (std::abs(_mouseCursorFps) > DBL_EPSILON) {
+					size_t index = size_t(std::round((timeDiff * _mouseCursorFps) / 1000000.0));
+					CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setImage(_mouseCursorSequence[index]);
 				}
 			}
 
@@ -677,7 +678,7 @@ namespace modules {
 		_mouseCursorAnimationLooping = looping;
 		_mouseCursorAnimationStartTime = i6eEngineController->getCurrentTime();
 		if (!sequence.empty()) {
-			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage(sequence.front());
+			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setImage(sequence.front());
 		}
 	}
 
