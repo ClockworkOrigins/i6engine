@@ -22,8 +22,8 @@ cd "$(readlink -f "$(dirname "${0}")")"
 . ./build-common.sh
 
 # CEGUI
-ARCHIVE="cegui-0.8.7.tar.bz2"
-BUILD_DIR="${BUILD_ROOT}/cegui-0.8.7"
+ARCHIVE="cegui-0.8.4.tar.bz2"
+BUILD_DIR="${BUILD_ROOT}/cegui-0.8.4"
 
 PREFIX="${DEP_DIR_OUT}/cegui/"
 
