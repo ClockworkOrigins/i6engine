@@ -72,10 +72,10 @@ namespace api {
 		 * \info You can combine these flags
 		 */
 		enum ResponseType {
-			NONE = 0,		// !< Simple objects being pushable
-			STATIC = 1<<0,	// !< Static object (don't move, can't be pushed away, ...)
-			GHOST = 1<<1,	// !< Objects that don't interact physically with other objects (it's more like an area)
-			TRIGGER = 1<<2	// !< collision with this object will trigger the internal callbacks (use this if you need shatter info)
+			NONE = 0,			// !< Simple objects being pushable
+			STATIC = 1 << 0,	// !< Static object (don't move, can't be pushed away, ...)
+			GHOST = 1 << 1,		// !< Objects that don't interact physically with other objects (it's more like an area)
+			TRIGGER = 1 << 2	// !< collision with this object will trigger the internal callbacks (use this if you need shatter info)
 		};
 	}
 
@@ -124,6 +124,9 @@ namespace api {
 			ss >> crashMask;
 		}
 
+		/**
+		 * \brief assignment operator copying values from parameter to this
+		 */
 		CollisionGroup & operator=(const CollisionGroup & cg) {
 			responseType = cg.responseType;
 			crashType = cg.crashType;
@@ -131,10 +134,20 @@ namespace api {
 			return *this;
 		}
 
+		/**
+		 * \brief inserts this CollisionGroup as entry in the given attributeMap
+		 */
 		void insertInMap(const std::string & entry, attributeMap & params) const {
+			params.insert(std::make_pair(entry, toString()));
+		}
+
+		/**
+		 * \brief returns string representation of CollisionGroup
+		 */
+		std::string toString() const {
 			std::stringstream ss;
 			ss << responseType << " " << crashType << " " << crashMask;
-			params.insert(std::make_pair(entry, ss.str()));
+			return ss.str();
 		}
 
 		template<class Archive>

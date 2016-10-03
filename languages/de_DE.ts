@@ -1431,5 +1431,57 @@
         <source>Box Size</source>
         <translation>Boxgröße</translation>
     </message>
+    <message>
+        <source>Open CollisionFlags</source>
+        <translation>Öffne Kollisionsattribute</translation>
+    </message>
+    <message>
+        <source>ResponseTypes</source>
+        <translation>Typ</translation>
+    </message>
+    <message>
+        <source>StaticResponseType</source>
+        <translation>Statisch</translation>
+    </message>
+    <message>
+        <source>StaticResponseTypeTooltip</source>
+        <translation>Statisches Objekt (kann nicht bewegt werden, kann nicht weggeschoben werden, ...)</translation>
+    </message>
+    <message>
+        <source>GhostResponseType</source>
+        <translation>Geist</translation>
+    </message>
+    <message>
+        <source>GhostResponseTypeTooltip</source>
+        <translation>Objekte, die nicht physikalisch mit anderen interagieren (eher ein Gebiet)</translation>
+    </message>
+    <message>
+        <source>TriggerResponseType</source>
+        <translation>Auslöser</translation>
+    </message>
+    <message>
+        <source>TriggerResponseTypeTooltip</source>
+        <translation>Kollision mit diesem Objekt wird interne Callback auslösen (benutze dieses, um Kollisionsmeldungen zu erhalten)</translation>
+    </message>
+    <message>
+        <source>AddCollisionTypeTooltip</source>
+        <translation>Füge neuen Kollisionstyp ein</translation>
+    </message>
+    <message>
+        <source>OwnCollisionType</source>
+        <translation>Eigener Kollisionstyp</translation>
+    </message>
+    <message>
+        <source>OwnCollisionTypeTooltip</source>
+        <translation>Spezifiziere den eigenen Typ für Kollisionen. Notwendig, um zu spezifizieren welche Art von Objekten mit diesem kollidieren können.</translation>
+    </message>
+    <message>
+        <source>CollidableCollisionTypes</source>
+        <translation>Kollidierende Kollisionstypen</translation>
+    </message>
+    <message>
+        <source>CollidableCollisionTypesTooltip</source>
+        <translation>Wähle alle Typen aus, mit denen dieses Objekt kollidieren können soll. Dieses Attribut ist nur für den Typ Trigger relevant.</translation>
+    </message>
 </context>
 </TS>

@@ -1431,5 +1431,57 @@
         <source>Box Size</source>
         <translation>Box Size</translation>
     </message>
+    <message>
+        <source>Open CollisionFlags</source>
+        <translation>Open CollisionFlags</translation>
+    </message>
+    <message>
+        <source>ResponseTypes</source>
+        <translation>Type</translation>
+    </message>
+    <message>
+        <source>StaticResponseType</source>
+        <translation>Static</translation>
+    </message>
+    <message>
+        <source>StaticResponseTypeTooltip</source>
+        <translation>Static object (don't move, can't be pushed away, ...)</translation>
+    </message>
+    <message>
+        <source>GhostResponseType</source>
+        <translation>Ghost</translation>
+    </message>
+    <message>
+        <source>GhostResponseTypeTooltip</source>
+        <translation>Objects that don't interact physically with other objects (it's more like an area)</translation>
+    </message>
+    <message>
+        <source>TriggerResponseType</source>
+        <translation>Trigger</translation>
+    </message>
+    <message>
+        <source>TriggerResponseTypeTooltip</source>
+        <translation>collision with this object will trigger the internal callbacks (use this if you need shatter info)</translation>
+    </message>
+    <message>
+        <source>AddCollisionTypeTooltip</source>
+        <translation>Add a new collision type</translation>
+    </message>
+    <message>
+        <source>OwnCollisionType</source>
+        <translation>Own collision type</translation>
+    </message>
+    <message>
+        <source>OwnCollisionTypeTooltip</source>
+        <translation>Specifies the own type for collisions. Necessary to specifiy what kind of objects can collide with this one.</translation>
+    </message>
+    <message>
+        <source>CollidableCollisionTypes</source>
+        <translation>Collidable collision types</translation>
+    </message>
+    <message>
+        <source>CollidableCollisionTypesTooltip</source>
+        <translation>Select all types this object shall be allowed to collide with. This flag is only relevant for type Trigger.</translation>
+    </message>
 </context>
 </TS>
