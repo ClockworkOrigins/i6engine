@@ -69,6 +69,8 @@ xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
 xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
 xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
 
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/copyright" "%usedInstallDir%\copyright"
+
 RD /S /Q .
 
 
@@ -109,11 +111,12 @@ xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/FreeImage.dll" "%usedInstallDir%\bin\Fre
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/freetype.dll" "%usedInstallDir%\bin\freetype.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/pcre.dll" "%usedInstallDir%\bin\pcre.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/zlib.dll" "%usedInstallDir%\bin\zlib.dll*"
-REM xcopy /F "@ISIXE_DEP_DIR@/misc/bin/cg.dll" "%usedInstallDir%\bin\cg.dll*"
 xcopy /F "@ISIXE_DEP_DIR@/misc/bin/OIS.dll" "%usedInstallDir%\bin\OIS.dll*"
 xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
 xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
 xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
+
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/copyright" "%usedInstallDir%\copyright"
 
 RD /S /Q .
 
@@ -135,6 +138,8 @@ xcopy /S /Y /I "@ISIXE_DEP_DIR@" "%usedInstallDir%\dependencies"
 xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
 xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
 xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
+
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/copyright" "%usedInstallDir%\copyright"
 
 REM Qt special case
 
@@ -175,6 +180,8 @@ xcopy /S /Y /I "@ISIXE_DEP_DIR@" "%usedInstallDir%\dependencies"
 xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
 xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
 xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
+
+xcopy /S /Y /I "@CMAKE_SOURCE_DIR@/copyright" "%usedInstallDir%\copyright"
 
 xcopy /F "@PYTHON_DLL@" "%usedInstallDir%\dependencies\python\bin\python27.dll*"
 xcopy /F "@QT_EXPORT_DIR@\bin\icudt54.dll" "%usedInstallDir%\dependencies\Qt\bin\icudt54.dll*"
