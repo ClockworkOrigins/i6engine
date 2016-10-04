@@ -62,7 +62,7 @@ public:
 	void OnThreadStart() {
 		_messagingController->registerMessageType(1, this);
 		_ptrMessageMethod.insert(std::make_pair(1, [this](const i6e::core::Message::Ptr & m) {
-			EXPECT_EQ(tickCounter, dynamic_cast<TestSubSystemMessage *>(m->getContent())->tick);
+			EXPECT_LE(tickCounter, dynamic_cast<TestSubSystemMessage *>(m->getContent())->tick);
 			receivedMessages++;
 		}));
 	}

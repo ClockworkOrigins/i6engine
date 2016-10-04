@@ -102,7 +102,7 @@ TEST(Clock, Notifies) {
     EXPECT_EQ(ind, 0);
 	sT = clock->getTime();
     done = false;
-	std::thread(std::bind(func, clock)).detach();
+	std::thread t(std::bind(func, clock));
     for (int i = 0; i < 20; ++i) {
     	std::this_thread::sleep_for(std::chrono::milliseconds(5));
     	clock->passedTime(20000);
@@ -114,6 +114,7 @@ TEST(Clock, Notifies) {
     	clock->passedTime(20000);
     	clock->Update();
 	}
+	t.join();
     EXPECT_TRUE(done);
 	delete clock;
 }
