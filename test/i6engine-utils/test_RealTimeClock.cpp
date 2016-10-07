@@ -98,10 +98,10 @@ TEST(RealTimeClock, setCurrentTime) {
 
 	EXPECT_LE(firstTime, secondTime);
 
-	clock.setCurrentTime(1000);
+	clock.setCurrentTime(secondTime + 1000);
 
 	firstTime = clock.getCurrentTime(secondTime);
 
 	EXPECT_LE(secondTime, firstTime);
-	EXPECT_LE(1000, firstTime);
+	EXPECT_LE(secondTime + 1000, firstTime);
 }
