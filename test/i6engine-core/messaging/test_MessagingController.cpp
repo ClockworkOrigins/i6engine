@@ -396,7 +396,7 @@ TEST(MessagingController, MultithreadedStressTest) {
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
-	std::thread([&ms](){
+	std::thread t([&ms](){
 		while (!ms.stop) {
 			ms.processMessages();
 		}
@@ -418,6 +418,8 @@ TEST(MessagingController, MultithreadedStressTest) {
 	mc->deliverMessage(boost::make_shared<Message>(0, 2, Method::Update, new MessageStruct(), i6e::core::Subsystem::Unknown));
 
 	ms._condVariable.wait(ul);
+
+	t.join();
 
 	mc->unregisterMessageType(0, &ms);
 
