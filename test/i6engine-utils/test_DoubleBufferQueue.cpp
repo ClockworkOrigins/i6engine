@@ -139,22 +139,22 @@ TEST(DoubleBufferQueue, StressTest) {
 	DoubleBufferQueue<int, true, true> q1;
 	DoubleBufferQueue<int, true, false> q2;
 	std::vector<std::thread *> v;
-	for (int i = 0; i < 40; ++i) {
-		v.push_back(new std::thread(std::bind(pusher, &q1, 10000, i)));
+	for (int i = 0; i < 4; ++i) {
+		v.push_back(new std::thread(std::bind(pusher, &q1, 1000, i)));
 	}
-	for (int i = 0; i < 80; ++i) {
-		v.push_back(new std::thread(std::bind(popper, &q1, &q2, 5000)));
+	for (int i = 0; i < 8; ++i) {
+		v.push_back(new std::thread(std::bind(popper, &q1, &q2, 500)));
 	}
 	std::vector<int> counts(40);
-	for (unsigned int i = 0; i < 120; ++i) {
+	for (unsigned int i = 0; i < 12; ++i) {
 		v[i]->join();
 		delete v[i];
 	}
-	for (int i = 0; i < 40 * 10000; ++i) {
+	for (int i = 0; i < 4 * 1000; ++i) {
 		counts[size_t(q2.poll())]++;
 	}
-	for (unsigned int i = 0; i < 40; ++i) {
-		EXPECT_EQ(10000, counts[i]);
+	for (unsigned int i = 0; i < 4; ++i) {
+		EXPECT_EQ(1000, counts[i]);
 	}
 	EXPECT_TRUE(q1.empty());
 	EXPECT_TRUE(q2.empty());

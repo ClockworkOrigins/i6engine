@@ -78,13 +78,13 @@ TEST(RangedMap, randomSet) {
 
 	std::map<int, bool> m;
 
-	for (int i = 0; i < 10000; i++) {
+	for (int i = 0; i < 1000; i++) {
 		int rnd = int(i6e::utils::Random::GetSingleton().rand(0u, UINT_MAX));
 		m[rnd] = true;
 		rm.set(rnd, true);
 	}
 
-	for (int i = INT_MIN / 1000; i < INT_MAX / 1000; i++) {
+	for (int i = INT_MIN / 100; i < INT_MAX / 100; i++) {
 		if (m.find(i) == m.end()) {
 			EXPECT_FALSE(rm.get(i));
 		} else {
@@ -94,7 +94,7 @@ TEST(RangedMap, randomSet) {
 }
 
 TEST(RangedMap, multipleMerges) {
-	const size_t ENTRIES = 10000;
+	const size_t ENTRIES = 1000;
 	RangedMap<int, bool> rm(0, ENTRIES, false);
 
 	std::vector<int> vec(ENTRIES);
@@ -143,7 +143,7 @@ TEST(RangedMap, specialMultipleMerges) {
 }
 
 TEST(RangedMap, randomValues) {
-	const int ENTRIES = 10000;
+	const int ENTRIES = 100;
 	RangedMap<int, int> rm(0, ENTRIES, -1);
 
 	std::vector<int> vec(ENTRIES);
@@ -172,12 +172,12 @@ TEST(RangedMap, randomValues) {
 }
 
 TEST(RangedMap, stressTest) {
-	const int ENTRIES = 3000;
+	const int ENTRIES = 300;
 	RangedMap<int, int> rm(0, ENTRIES, -1);
 
 	std::vector<int> vec(ENTRIES);
 
-	for (int j = 0; j < 500; j++) {
+	for (int j = 0; j < 50; j++) {
 		for (int i = 0; i < ENTRIES; i++) {
 			vec[size_t(i)] = int(i6e::utils::Random::GetSingleton().rand(20));
 		}

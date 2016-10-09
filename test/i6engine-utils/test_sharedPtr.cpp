@@ -334,10 +334,10 @@ TEST_F(sharedPtr, multiThread) {
 
 	{
 		Ptr1 p = Ptr1(new TestObject1());
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 10; i++) {
 			v.push_back(new std::thread(std::bind(spawn, p)));
 		}
-		for (size_t i = 0; i < 100; i++) {
+		for (size_t i = 0; i < 10; i++) {
 			Ptr1::clear();
 			v[i]->join();
 			delete v[i];

@@ -42,13 +42,13 @@
 #endif
 
 // Debug/Release modes
-#define I6E_DEBUG	1
-#define I6E_RELEASE 2
+#define ISIXE_DEBUG	1
+#define ISIXE_RELEASE 2
 
 #if defined(NDEBUG)
-	#define ISIXE_MODE I6E_RELEASE
+	#define ISIXE_MODE ISIXE_RELEASE
 #else
-	#define ISIXE_MODE I6E_DEBUG
+	#define ISIXE_MODE ISIXE_DEBUG
 #endif
 
 // Dynamic library import/export macro

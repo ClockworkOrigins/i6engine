@@ -65,7 +65,7 @@ class Mock_SubSystemStress : public MessageSubscriber {
 public:
 	std::vector<int> status;
 
-	Mock_SubSystemStress() : status(100 * 4), _mc(), stop(false), _condVariable(), _lock() {
+	Mock_SubSystemStress() : status(50 * 4), _mc(), stop(false), _condVariable(), _lock() {
 	}
 
 	void Mailbox(const Message::Ptr & msg) {
@@ -273,7 +273,7 @@ TEST(MessagingController, updateAfterDelete) {
 }
 
 TEST(MessagingController, StressTest) {
-	const int numObjs = 100; // modify in Mock_SubSystemStress as well!
+	const int numObjs = 50; // modify in Mock_SubSystemStress as well!
 
 	Mock_MessagingController * mc = new Mock_MessagingController();
 	Mock_SubSystemStress ms;
@@ -287,7 +287,7 @@ TEST(MessagingController, StressTest) {
 	// * numObjs basic msgs
 	// * 2*numObjs objs depending on the first
 	// * numObjs objs waiting on the second
-	msgs.resize(808 * numObjs);
+	msgs.resize(408 * numObjs);
 	size_t msgCounter = 0;
 	for (int i = 0; i < numObjs; i++) {
 		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(i, -1), i6e::core::Subsystem::Unknown);
@@ -297,7 +297,7 @@ TEST(MessagingController, StressTest) {
 	}
 	// create update messages
 	for (int i = 0; i < numObjs; i++) {
-		for (int j = 0; j < 100; j++) {
+		for (int j = 0; j < 50; j++) {
 			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, -1), i6e::core::Subsystem::Unknown);
 			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(-1, i), i6e::core::Subsystem::Unknown);
 			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(i, i + 1), i6e::core::Subsystem::Unknown);
@@ -343,7 +343,7 @@ void bombMessages(int numObjs, Mock_MessagingController * mc, int id) {
 	// * numObjs basic msgs
 	// * 2*numObjs objs depending on the first
 	// * numObjs objs waiting on the second
-	msgs.resize(size_t(808 * numObjs));
+	msgs.resize(size_t((4 + 50 * 8 + 4) * numObjs));
 	size_t msgCounter = 0;
 	for (int i = 0; i < numObjs; i++) {
 		msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Create, new MessageStruct(id + i, -1), i6e::core::Subsystem::Unknown);
@@ -353,7 +353,7 @@ void bombMessages(int numObjs, Mock_MessagingController * mc, int id) {
 	}
 	// create update messages
 	for (int i = 0; i < numObjs; i++) {
-		for (int j = 0; j < 100; j++) {
+		for (int j = 0; j < 50; j++) {
 			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, -1), i6e::core::Subsystem::Unknown);
 			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(-1, id + i), i6e::core::Subsystem::Unknown);
 			msgs[msgCounter++] = boost::make_shared<Message>(0, 1, Method::Update, new MessageStruct(id + i, id + i + 1), i6e::core::Subsystem::Unknown);
@@ -383,7 +383,7 @@ void bombMessages(int numObjs, Mock_MessagingController * mc, int id) {
 }
 
 TEST(MessagingController, MultithreadedStressTest) {
-	const int numObjs = 100; // modify in Mock_SubSystemStress as well!
+	const int numObjs = 50; // modify in Mock_SubSystemStress as well!
 
 	Mock_MessagingController * mc = new Mock_MessagingController();
 	Mock_SubSystemStress ms;
@@ -404,7 +404,7 @@ TEST(MessagingController, MultithreadedStressTest) {
 
 	std::vector<std::thread *> threads;
 
-	const unsigned int THREADS = 10;
+	const unsigned int THREADS = 5;
 
 	for (unsigned int i = 0; i < THREADS; i++) {
 		threads.push_back(new std::thread(bombMessages, numObjs, mc, THREADS * i));
