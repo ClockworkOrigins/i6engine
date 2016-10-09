@@ -79,12 +79,12 @@ TEST(RangedMap, randomSet) {
 	std::map<int, bool> m;
 
 	for (int i = 0; i < 1000; i++) {
-		int rnd = int(i6e::utils::Random::GetSingleton().rand(0u, UINT_MAX));
+		int rnd = int(i6e::utils::Random::GetSingleton().rand(0u, UINT32_MAX));
 		m[rnd] = true;
 		rm.set(rnd, true);
 	}
 
-	for (int i = INT_MIN / 100; i < INT_MAX / 100; i++) {
+	for (int i = INT_MIN / 100000000; i < INT_MAX / 100000000; i++) {
 		if (m.find(i) == m.end()) {
 			EXPECT_FALSE(rm.get(i));
 		} else {
