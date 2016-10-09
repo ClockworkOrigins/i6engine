@@ -22,7 +22,7 @@
 #include "gtest/gtest.h"
 
 TEST(i6eRandom, rand) {
-	const uint32_t RUNS = 1000000;
+	const uint32_t RUNS = 100000;
 	for (uint32_t i = 0; i < RUNS; ++i) {
 		uint32_t r = i6e::utils::Random::GetSingletonPtr()->rand(1000);
 
