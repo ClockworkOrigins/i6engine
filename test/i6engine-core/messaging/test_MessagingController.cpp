@@ -400,7 +400,7 @@ TEST(MessagingController, MultithreadedStressTest) {
 		while (!ms.stop) {
 			ms.processMessages();
 		}
-	}).detach();
+	});
 
 	std::vector<std::thread *> threads;
 
