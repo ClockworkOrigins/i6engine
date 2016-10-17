@@ -52,6 +52,7 @@ public:
 
 		for (ReceivedMessagePtr & rm : *MessageSubscriber::_objInActiveMessageVector) {
 			_receiveMessage(&(*rm->message));
+			received++;
 		}
 		MessageSubscriber::_objInActiveMessageVector->clear();
 	}
@@ -59,6 +60,7 @@ public:
 	MOCK_METHOD1(_receiveMessage, void(Message *));
 
 	Mock_MessagingController * _mc;
+	int received = 0;
 };
 
 class Mock_SubSystemStress : public MessageSubscriber {
@@ -120,6 +122,12 @@ TEST(MessagingController, Buffer1) {
 
 	ms.processMessages();
 
+	int tries = 0;
+	while (tries < 5 && ms.received < 2) {
+		ms.processMessages();
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
+
 	mc->unregisterMessageType(0, &ms);
 
 	delete mc;
@@ -169,6 +177,12 @@ TEST(MessagingController, Buffer2) {
 
 	ms.processMessages();
 
+	int tries = 0;
+	while (tries < 5 && ms.received < 5) {
+		ms.processMessages();
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
+
 	mc->unregisterMessageType(0, &ms);
 
 	delete mc;
@@ -216,6 +230,12 @@ TEST(MessagingController, specialCases) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 	ms.processMessages();
+
+	int tries = 0;
+	while (tries < 5 && ms.received < 4) {
+		ms.processMessages();
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
 
 	mc->unregisterMessageType(0, &ms);
 
@@ -266,6 +286,12 @@ TEST(MessagingController, updateAfterDelete) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
 	ms.processMessages();
+
+	int tries = 0;
+	while (tries < 5 && ms.received < 5) {
+		ms.processMessages();
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
 
 	mc->unregisterMessageType(0, &ms);
 
