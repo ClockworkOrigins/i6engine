@@ -105,7 +105,7 @@ TEST(Module, Ticking) {
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
+	std::shared_ptr<Test_SubSystem> s1 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Graphic));
 	s1->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s1, 100000);
 
@@ -119,7 +119,6 @@ TEST(Module, Ticking) {
 
 	EXPECT_EQ(10, s1->tickCounter);
 
-	delete s1;
 	delete mc;
 	delete ecc;
 	delete ssc;
@@ -130,8 +129,8 @@ TEST(Module, TwoTicking) {
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
-	Test_SubSystem * s2 = new Test_SubSystem(i6e::core::Subsystem::Object);
+	std::shared_ptr<Test_SubSystem> s1 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Graphic));
+	std::shared_ptr<Test_SubSystem> s2 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Object));
 	s1->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s1, 100000);
 	s2->setController(ssc, ecc, mc);
@@ -148,8 +147,6 @@ TEST(Module, TwoTicking) {
 	EXPECT_EQ(10, s1->tickCounter);
 	EXPECT_EQ(20, s2->tickCounter);
 
-	delete s2;
-	delete s1;
 	delete mc;
 	delete ecc;
 	delete ssc;
@@ -160,8 +157,8 @@ TEST(Module, Waiting) {
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
-	Test_SubSystem * s2 = new Test_SubSystem(i6e::core::Subsystem::Object);
+	std::shared_ptr<Test_SubSystem> s1 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Graphic));
+	std::shared_ptr<Test_SubSystem> s2 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Object));
 	s1->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s1, { i6e::core::Subsystem::Object });
 	s2->setController(ssc, ecc, mc);
@@ -178,8 +175,6 @@ TEST(Module, Waiting) {
 	EXPECT_EQ(10, s1->tickCounter);
 	EXPECT_EQ(10, s2->tickCounter);
 
-	delete s2;
-	delete s1;
 	delete mc;
 	delete ecc;
 	delete ssc;
@@ -190,9 +185,9 @@ TEST(Module, WaitingForTwo) {
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
-	Test_SubSystem * s2 = new Test_SubSystem(i6e::core::Subsystem::Object);
-	Test_SubSystem * s3 = new Test_SubSystem(i6e::core::Subsystem::Physic);
+	std::shared_ptr<Test_SubSystem> s1 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Graphic));
+	std::shared_ptr<Test_SubSystem> s2 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Object));
+	std::shared_ptr<Test_SubSystem> s3 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Physic));
 	s1->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s1, { i6e::core::Subsystem::Object, i6e::core::Subsystem::Physic });
 	s2->setController(ssc, ecc, mc);
@@ -212,9 +207,6 @@ TEST(Module, WaitingForTwo) {
 	EXPECT_EQ(10, s2->tickCounter);
 	EXPECT_EQ(20, s3->tickCounter);
 
-	delete s3;
-	delete s2;
-	delete s1;
 	delete mc;
 	delete ecc;
 	delete ssc;
@@ -225,9 +217,9 @@ TEST(Module, WaitingChain) {
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem * s1 = new Test_SubSystem(i6e::core::Subsystem::Graphic);
-	Test_SubSystem * s2 = new Test_SubSystem(i6e::core::Subsystem::Object);
-	Test_SubSystem * s3 = new Test_SubSystem(i6e::core::Subsystem::Physic);
+	std::shared_ptr<Test_SubSystem> s1 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Graphic));
+	std::shared_ptr<Test_SubSystem> s2 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Object));
+	std::shared_ptr<Test_SubSystem> s3 = std::shared_ptr<Test_SubSystem>(new Test_SubSystem(i6e::core::Subsystem::Physic));
 	s1->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s1, { i6e::core::Subsystem::Object });
 	s2->setController(ssc, ecc, mc);
@@ -247,9 +239,6 @@ TEST(Module, WaitingChain) {
 	EXPECT_EQ(10, s2->tickCounter);
 	EXPECT_EQ(10, s3->tickCounter);
 
-	delete s3;
-	delete s2;
-	delete s1;
 	delete mc;
 	delete ecc;
 	delete ssc;
@@ -260,8 +249,8 @@ TEST(Module, WaitingWithMessages) {
 	i6e::core::EngineCoreController * ecc = new i6e::core::EngineCoreController(ssc);
 	i6e::core::MessagingController * mc = new i6e::core::MessagingController();
 	ssc->registerController(ecc);
-	Test_SubSystem2 * s1 = new Test_SubSystem2(i6e::core::Subsystem::Graphic);
-	Test_SubSystem3 * s2 = new Test_SubSystem3(i6e::core::Subsystem::Object);
+	std::shared_ptr<Test_SubSystem2> s1 = std::shared_ptr<Test_SubSystem2>(new Test_SubSystem2(i6e::core::Subsystem::Graphic));
+	std::shared_ptr<Test_SubSystem3> s2 = std::shared_ptr<Test_SubSystem3>(new Test_SubSystem3(i6e::core::Subsystem::Object));
 	s1->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s1, { i6e::core::Subsystem::Object });
 	s2->setController(ssc, ecc, mc);
@@ -281,8 +270,6 @@ TEST(Module, WaitingWithMessages) {
 	EXPECT_LE(s2->tickCounter, 100U);
 	EXPECT_GE(s1->receivedMessages, 900U);
 
-	delete s2;
-	delete s1;
 	delete mc;
 	delete ecc;
 	delete ssc;

@@ -26,6 +26,7 @@
 #define __I6ENGINE_API_ENGINECONTROLLER_H__
 
 #include <map>
+#include <mutex>
 #include <set>
 #include <thread>
 
@@ -108,6 +109,8 @@ namespace api {
 		 */
 		void registerSubSystem(const std::string & name, core::ModuleController * module, uint32_t frameTime);
 		void registerSubSystem(const std::string & name, core::ModuleController * module, const std::set<core::Subsystem> & waitingFor);
+		void registerSubSystem(const std::string & name, std::shared_ptr<core::ModuleController> module, uint32_t frameTime);
+		void registerSubSystem(const std::string & name, std::shared_ptr<core::ModuleController> module, const std::set<core::Subsystem> & waitingFor);
 
 		inline AudioFacade * getAudioFacade() const {
 			return _audioFacade;
@@ -294,8 +297,8 @@ namespace api {
 		void enableCommandLineReader();
 
 	private:
-		std::map<std::string, std::pair<core::ModuleController *, uint32_t>> _queuedModules;
-		std::map<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> _queuedModulesWaiting;
+		std::map<std::string, std::pair<std::shared_ptr<core::ModuleController>, uint32_t>> _queuedModules;
+		std::map<std::string, std::pair<std::shared_ptr<core::ModuleController>, std::set<core::Subsystem>>> _queuedModulesWaiting;
 		core::SubSystemController * _subsystemController;
 		core::EngineCoreController * _coreController;
 		IDManager * _idManager;
@@ -328,6 +331,8 @@ namespace api {
 
 		bool _running;
 		std::thread _commandLineReadThread;
+
+		mutable std::mutex _lock;
 
 		/**
 		 * \brief Contructor

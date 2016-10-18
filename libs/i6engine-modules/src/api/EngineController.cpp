@@ -84,7 +84,7 @@ namespace api {
 		EngineController::GetSingletonPtr()->stop();
 	}
 
-	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _languageManager(new LanguageManager()), _textManager(new TextManager()), _waynetManager(new WaynetManager()), _appl(), _debugdrawer(0), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER), _running(true), _commandLineReadThread() {
+	EngineController::EngineController() : _queuedModules(), _queuedModulesWaiting(), _subsystemController(new core::SubSystemController()), _coreController(new core::EngineCoreController(_subsystemController)), _idManager(new IDManager()), _languageManager(new LanguageManager()), _textManager(new TextManager()), _waynetManager(new WaynetManager()), _appl(), _debugdrawer(0), _audioFacade(new AudioFacade()), _graphicsFacade(new GraphicsFacade()), _guiFacade(new GUIFacade()), _inputFacade(new InputFacade()), _messagingFacade(new MessagingFacade()), _networkFacade(new NetworkFacade()), _objectFacade(new ObjectFacade()), _physicsFacade(new PhysicsFacade()), _scriptingFacade(new ScriptingFacade()), _messagingController(new core::MessagingController()), _uuid(getNewUUID()), _iParser(), _type(GameType::SINGLEPLAYER), _running(true), _commandLineReadThread(), _lock() {
 		// WORKAROUND: Install signal handlers to overcome OIS's limitation to handle X11 key repeat rate properly when crashing.
 		signal(SIGINT, forceCleanup);
 		// TODO: kA
@@ -117,19 +117,13 @@ namespace api {
 	}
 
 	EngineController::~EngineController() {
+		std::lock_guard<std::mutex> lg(_lock);
 		delete _subsystemController;
 		delete _coreController;
 		delete _idManager;
 		delete _languageManager;
 		delete _textManager;
 		delete _waynetManager;
-
-		for (const std::pair<std::string, std::pair<core::ModuleController *, uint32_t>> & modulesPair : _queuedModules) {
-			delete modulesPair.second.first;
-		}
-		for (const std::pair<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> & modulesPair : _queuedModulesWaiting) {
-			delete modulesPair.second.first;
-		}
 
 		_queuedModules.clear();
 		_queuedModulesWaiting.clear();
@@ -155,24 +149,41 @@ namespace api {
 	}
 
 	void EngineController::runEngine() {
-		for (const std::pair<std::string, std::pair<core::ModuleController *, uint32_t>> & modulesPair : _queuedModules) {
-			_subsystemController->QueueSubSystemStart(modulesPair.second.first, modulesPair.second.second);
-		}
-		for (const std::pair<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> & modulesPair : _queuedModulesWaiting) {
-			_subsystemController->QueueSubSystemStart(modulesPair.second.first, modulesPair.second.second);
-		}
+		{
+			std::lock_guard<std::mutex> lg(_lock);
+			for (const std::pair<std::string, std::pair<std::shared_ptr<core::ModuleController>, uint32_t>> & modulesPair : _queuedModules) {
+				_subsystemController->QueueSubSystemStart(modulesPair.second.first, modulesPair.second.second);
+			}
+			for (const std::pair<std::string, std::pair<std::shared_ptr<core::ModuleController>, std::set<core::Subsystem>>> & modulesPair : _queuedModulesWaiting) {
+				_subsystemController->QueueSubSystemStart(modulesPair.second.first, modulesPair.second.second);
+			}
 
-		_subsystemController->QueueSubSystemStart(_appl, LNG_GAME_FRAME_TIME);
+			_subsystemController->QueueSubSystemStart(_appl, LNG_GAME_FRAME_TIME);
+		}
 
 		_coreController->RunEngine();
 	}
 
 	void EngineController::registerSubSystem(const std::string & name, core::ModuleController * module, uint32_t frameTime) {
-		_queuedModules.insert(std::make_pair(name, std::make_pair(module, frameTime)));
+		std::lock_guard<std::mutex> lg(_lock);
+		_queuedModules.insert(std::make_pair(name, std::make_pair(std::shared_ptr<core::ModuleController>(module), frameTime)));
 		module->setController(_subsystemController, _coreController, _messagingController);
 	}
 
 	void EngineController::registerSubSystem(const std::string & name, core::ModuleController * module, const std::set<core::Subsystem> & waitingFor) {
+		std::lock_guard<std::mutex> lg(_lock);
+		_queuedModulesWaiting.insert(std::make_pair(name, std::make_pair(std::shared_ptr<core::ModuleController>(module), waitingFor)));
+		module->setController(_subsystemController, _coreController, _messagingController);
+	}
+
+	void EngineController::registerSubSystem(const std::string & name, std::shared_ptr<core::ModuleController> module, uint32_t frameTime) {
+		std::lock_guard<std::mutex> lg(_lock);
+		_queuedModules.insert(std::make_pair(name, std::make_pair(module, frameTime)));
+		module->setController(_subsystemController, _coreController, _messagingController);
+	}
+
+	void EngineController::registerSubSystem(const std::string & name, std::shared_ptr<core::ModuleController> module, const std::set<core::Subsystem> & waitingFor) {
+		std::lock_guard<std::mutex> lg(_lock);
 		_queuedModulesWaiting.insert(std::make_pair(name, std::make_pair(module, waitingFor)));
 		module->setController(_subsystemController, _coreController, _messagingController);
 	}
@@ -194,6 +205,7 @@ namespace api {
 		// TODO (???): game should be paused than call _appl->Shutdown, than shutdown
 		// thus the GameDeveloper can just focus on PreShutdown actions without handeling a changing world
 		// maybe keep Messaging/Networking-Thread running?
+		std::lock_guard<std::mutex> lg(_lock);
 		if (_appl && _appl->ShutdownRequest()) {
 			_coreController->ShutDown();
 			_coreController->WaitForShutDown();
@@ -205,13 +217,6 @@ namespace api {
 			_appl->Finalize();
 
 			_appl = nullptr;
-
-			for (const std::pair<std::string, std::pair<core::ModuleController *, uint32_t>> & modulesPair : _queuedModules) {
-				delete modulesPair.second.first;
-			}
-			for (const std::pair<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> & modulesPair : _queuedModulesWaiting) {
-				delete modulesPair.second.first;
-			}
 
 			_queuedModules.clear();
 			_queuedModulesWaiting.clear();
@@ -276,19 +281,13 @@ namespace api {
 
 	void EngineController::reset() {
 		ShutDown();
+		std::lock_guard<std::mutex> lg(_lock);
 		delete _coreController;
 		delete _subsystemController;
 		delete _idManager;
 		delete _languageManager;
 		delete _textManager;
 		delete _waynetManager;
-
-		for (const std::pair<std::string, std::pair<core::ModuleController *, uint32_t>> & modulesPair : _queuedModules) {
-			delete modulesPair.second.first;
-		}
-		for (const std::pair<std::string, std::pair<core::ModuleController *, std::set<core::Subsystem>>> & modulesPair : _queuedModulesWaiting) {
-			delete modulesPair.second.first;
-		}
 
 		_queuedModules.clear();
 		_queuedModulesWaiting.clear();

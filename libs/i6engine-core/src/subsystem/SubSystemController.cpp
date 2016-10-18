@@ -33,9 +33,17 @@ namespace core {
 	void SubSystemController::Start() {
 		for (QueuedModule & objQueuedSubSystem : _objQueuedSubSystems) {
 			if (objQueuedSubSystem.type == SubsystemType::Ticking) {
-				startSubSystemTicking(objQueuedSubSystem.module, objQueuedSubSystem.framerate);
+				if (objQueuedSubSystem.module) {
+					startSubSystemTicking(objQueuedSubSystem.module, objQueuedSubSystem.framerate);
+				} else {
+					startSubSystemTicking(objQueuedSubSystem.moduleOld, objQueuedSubSystem.framerate);
+				}
 			} else {
-				startSubSystemWaiting(objQueuedSubSystem.module, objQueuedSubSystem.waitingFor);
+				if (objQueuedSubSystem.module) {
+					startSubSystemWaiting(objQueuedSubSystem.module, objQueuedSubSystem.waitingFor);
+				} else {
+					startSubSystemWaiting(objQueuedSubSystem.moduleOld, objQueuedSubSystem.waitingFor);
+				}
 			}
 		}
 
@@ -46,7 +54,13 @@ namespace core {
 		_bolGlobalShutDown = true;
 
 		for (QueuedModule & objQueuedSubSystem : _objQueuedSubSystems) {
-			objQueuedSubSystem.module->stop();
+			if (objQueuedSubSystem.module) {
+				assert(objQueuedSubSystem.module);
+				objQueuedSubSystem.module->stop();
+			} else {
+				assert(objQueuedSubSystem.moduleOld);
+				objQueuedSubSystem.moduleOld->stop();
+			}
 		}
 	}
 
@@ -61,6 +75,18 @@ namespace core {
 	}
 
 	void SubSystemController::startSubSystemTicking(ModuleController * objSubSystem, const uint32_t lngFrameTime) {
+		assert(objSubSystem);
+		_objThreadGrp.push_back(new std::thread(std::bind(&ModuleController::startThreadTicking, objSubSystem, lngFrameTime)));
+
+		while (_bolWaitForInit) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
+		}
+
+		_bolWaitForInit = true;
+	}
+
+	void SubSystemController::startSubSystemTicking(std::shared_ptr<ModuleController> objSubSystem, const uint32_t lngFrameTime) {
+		assert(objSubSystem);
 		_objThreadGrp.push_back(new std::thread(std::bind(&ModuleController::startThreadTicking, objSubSystem, lngFrameTime)));
 
 		while (_bolWaitForInit) {
@@ -71,6 +97,18 @@ namespace core {
 	}
 
 	void SubSystemController::startSubSystemWaiting(ModuleController * objSubSystem, const std::set<Subsystem> & waitingFor) {
+		assert(objSubSystem);
+		_objThreadGrp.push_back(new std::thread(std::bind(&ModuleController::startThreadWaiting, objSubSystem, waitingFor)));
+
+		while (_bolWaitForInit) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
+		}
+
+		_bolWaitForInit = true;
+	}
+
+	void SubSystemController::startSubSystemWaiting(std::shared_ptr<ModuleController> objSubSystem, const std::set<Subsystem> & waitingFor) {
+		assert(objSubSystem);
 		_objThreadGrp.push_back(new std::thread(std::bind(&ModuleController::startThreadWaiting, objSubSystem, waitingFor)));
 
 		while (_bolWaitForInit) {
@@ -81,15 +119,29 @@ namespace core {
 	}
 
 	void SubSystemController::QueueSubSystemStart(ModuleController * objSubsystem, const uint32_t lngFrameTime) {
+		assert(objSubSystem);
 		QueuedModule objQueuedSubSystem;
+		objQueuedSubSystem.moduleOld = objSubsystem;
+		objQueuedSubSystem.module = nullptr;
+		objQueuedSubSystem.type = SubsystemType::Ticking;
+		objQueuedSubSystem.framerate = lngFrameTime;
+		_objQueuedSubSystems.push_back(objQueuedSubSystem);
+	}
+
+	void SubSystemController::QueueSubSystemStart(std::shared_ptr<ModuleController> objSubsystem, const uint32_t lngFrameTime) {
+		assert(objSubSystem);
+		QueuedModule objQueuedSubSystem;
+		objQueuedSubSystem.moduleOld = nullptr;
 		objQueuedSubSystem.module = objSubsystem;
 		objQueuedSubSystem.type = SubsystemType::Ticking;
 		objQueuedSubSystem.framerate = lngFrameTime;
 		_objQueuedSubSystems.push_back(objQueuedSubSystem);
 	}
 
-	void SubSystemController::QueueSubSystemStart(ModuleController * objSubsystem, const std::set<Subsystem> & waitingFor) {
+	void SubSystemController::QueueSubSystemStart(std::shared_ptr<ModuleController> objSubsystem, const std::set<Subsystem> & waitingFor) {
+		assert(objSubSystem);
 		QueuedModule objQueuedSubSystem;
+		objQueuedSubSystem.moduleOld = nullptr;
 		objQueuedSubSystem.module = objSubsystem;
 		objQueuedSubSystem.type = SubsystemType::Waiting;
 		objQueuedSubSystem.waitingFor = waitingFor;

@@ -26,6 +26,7 @@
 #define __I6ENGINE_CORE_SUBSYSTEMCONTROLLER_H__
 
 #include <cstdint>
+#include <memory>
 #include <mutex>
 #include <set>
 #include <vector>
@@ -72,7 +73,8 @@ namespace core {
 	enum class SubsystemType;
 
 	typedef struct {
-		ModuleController * module;
+		ModuleController * moduleOld; // keep this, Application mustn't be a shared_ptr
+		std::shared_ptr<ModuleController> module;
 		SubsystemType type;
 		uint32_t framerate;
 		std::set<Subsystem> waitingFor;
@@ -123,6 +125,7 @@ namespace core {
 		 * \param lngFrameTime Framerate of the subsystem.
 		 */
 		void QueueSubSystemStart(ModuleController * objSubsystem, const uint32_t lngFrameTime);
+		void QueueSubSystemStart(std::shared_ptr<ModuleController> objSubsystem, const uint32_t lngFrameTime);
 
 		/**
 		 * \brief This method queues a user defined Subsystem to start.
@@ -130,7 +133,7 @@ namespace core {
 		 * \param objSubsystem Subsystem to be started.
 		 * \param waitingFor subsystems, this subsystem is waiting for
 		 */
-		void QueueSubSystemStart(ModuleController * objSubsystem, const std::set<Subsystem> & waitingFor);
+		void QueueSubSystemStart(std::shared_ptr<ModuleController> objSubsystem, const std::set<Subsystem> & waitingFor);
 
 		/**
 		 * \brief This method returns the amount of subsystems.
@@ -165,11 +168,13 @@ namespace core {
 		 * \brief This method will start a subsystem synchronously.
 		 */
 		void startSubSystemTicking(ModuleController * objSubSystem, const uint32_t lngFrameTime);
+		void startSubSystemTicking(std::shared_ptr<ModuleController> objSubSystem, const uint32_t lngFrameTime);
 
 		/**
 		 * \brief This method will start a subsystem synchronously.
 		 */
 		void startSubSystemWaiting(ModuleController * objSubSystem, const std::set<Subsystem> & waitingFor);
+		void startSubSystemWaiting(std::shared_ptr<ModuleController> objSubSystem, const std::set<Subsystem> & waitingFor);
 
 		/**
 		 * \brief forbidden
