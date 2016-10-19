@@ -40,7 +40,7 @@ IF [%1] == [msvc14] (
 	SET VSCOMPILER=Visual Studio 14
 	SET BOOSTCOMPILER=msvc-14.0
 	SET ARCH_DIR=msvc14_
-	Set CONFIG_BAT_PATH="%VS14%"
+	Set CONFIG_BAT_PATH="%VS15%"
 )
 IF [%1] == [android] (
 	SET VSCOMPILER=
