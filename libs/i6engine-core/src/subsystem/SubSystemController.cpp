@@ -119,7 +119,7 @@ namespace core {
 	}
 
 	void SubSystemController::QueueSubSystemStart(ModuleController * objSubsystem, const uint32_t lngFrameTime) {
-		assert(objSubSystem);
+		assert(objSubsystem);
 		QueuedModule objQueuedSubSystem;
 		objQueuedSubSystem.moduleOld = objSubsystem;
 		objQueuedSubSystem.module = nullptr;
@@ -129,7 +129,7 @@ namespace core {
 	}
 
 	void SubSystemController::QueueSubSystemStart(std::shared_ptr<ModuleController> objSubsystem, const uint32_t lngFrameTime) {
-		assert(objSubSystem);
+		assert(objSubsystem);
 		QueuedModule objQueuedSubSystem;
 		objQueuedSubSystem.moduleOld = nullptr;
 		objQueuedSubSystem.module = objSubsystem;
@@ -139,7 +139,7 @@ namespace core {
 	}
 
 	void SubSystemController::QueueSubSystemStart(std::shared_ptr<ModuleController> objSubsystem, const std::set<Subsystem> & waitingFor) {
-		assert(objSubSystem);
+		assert(objSubsystem);
 		QueuedModule objQueuedSubSystem;
 		objQueuedSubSystem.moduleOld = nullptr;
 		objQueuedSubSystem.module = objSubsystem;
