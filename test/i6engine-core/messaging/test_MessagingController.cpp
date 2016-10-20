@@ -50,7 +50,7 @@ public:
 		while (MessageSubscriber::updateBuffer());
 		MessageSubscriber::swapMessageBuffer();
 
-		for (ReceivedMessagePtr & rm : *MessageSubscriber::_objInActiveMessageVector) {
+		for (const ReceivedMessagePtr & rm : *MessageSubscriber::_objInActiveMessageVector) {
 			_receiveMessage(&(*rm->message));
 			received++;
 		}
@@ -82,7 +82,7 @@ public:
 		while (MessageSubscriber::updateBuffer());
 		MessageSubscriber::swapMessageBuffer();
 
-		for (ReceivedMessagePtr & rm : *MessageSubscriber::_objInActiveMessageVector) {
+		for (const ReceivedMessagePtr & rm : *MessageSubscriber::_objInActiveMessageVector) {
 			Mailbox(rm->message);
 		}
 		MessageSubscriber::_objInActiveMessageVector->clear();
