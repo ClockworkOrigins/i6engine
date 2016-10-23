@@ -30,7 +30,9 @@
 namespace i6e {
 namespace api {
 
-	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _isDragged(false), _dragOffset(), _clickCallback(), _mouseEnterCallback(), _mouseLeaveCallback(), _tooltip(), _tooltipActive(false), _animations(), _hitTestBuffer(nullptr), _hitBufferCapacity(), _hitBufferSize(), _hitBufferInverted(false), _transparencyCheckEnabled(false) {
+	GUIWidget::GUIWidget(const std::string & name) : _name(name), _window(), _parent(nullptr), _childs(), _ticking(false), _mouseOverCallback(), _dropable(false), _canDrop(), _dragable(false), _dropCallback(), _originalPos(), _originalPosPxl(), _isDragged(false), _dragOffset(), _clickCallback(), _mouseEnterCallback(), _mouseLeaveCallback(), _tooltip(), _tooltipActive(false), _animations(), _hitTestBuffer(nullptr), _hitBufferCapacity(), _hitBufferSize(), _hitBufferInverted(false), _transparencyCheckEnabled(false) {
+		_originalPos.setValid(false);
+		_originalPosPxl.setValid(false);
 	}
 
 	GUIWidget::~GUIWidget() {
@@ -44,11 +46,23 @@ namespace api {
 		if (type == api::gui::GuiSetPosition) {
 			gui::GUI_Position * g = static_cast<gui::GUI_Position *>(message);
 			setPosition(g->x, g->y);
+			_originalPos.setValid(true);
 			_originalPos.setX(float(g->x));
 			_originalPos.setY(float(g->y));
+			_originalPosPxl.setValid(false);
+		} else if (type == api::gui::GuiSetPositionPxl) {
+			gui::GUI_Position * g = static_cast<gui::GUI_Position *>(message);
+			setPositionPxl(g->x, g->y);
+			_originalPosPxl.setValid(true);
+			_originalPosPxl.setX(float(g->x));
+			_originalPosPxl.setY(float(g->y));
+			_originalPos.setValid(false);
 		} else if (type == api::gui::GuiSetSize) {
 			gui::GUI_Size * g = static_cast<gui::GUI_Size *>(message);
 			setSize(g->width, g->height);
+		} else if (type == api::gui::GuiSetSizePxl) {
+			gui::GUI_Size * g = static_cast<gui::GUI_Size *>(message);
+			setSizePxl(g->width, g->height);
 		} else if (type == api::gui::GuiSetVisible) {
 			bool vis = static_cast<gui::GUI_Visibility *>(message)->visible;
 			_window->setVisible(vis);
@@ -169,8 +183,16 @@ namespace api {
 		_window->setPosition(CEGUI::UVector2(CEGUI::UDim(float(x), 0.0f), CEGUI::UDim(float(y), 0.0f)));
 	}
 
+	void GUIWidget::setPositionPxl(double x, double y) {
+		_window->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, float(x)), CEGUI::UDim(0.0f, float(y))));
+	}
+
 	void GUIWidget::setSize(double w, double h) {
 		_window->setSize(CEGUI::USize(CEGUI::UDim(float(w), 0.0f), CEGUI::UDim(float(h), 0.0f)));
+	}
+
+	void GUIWidget::setSizePxl(double w, double h) {
+		_window->setSize(CEGUI::USize(CEGUI::UDim(0.0f, float(w)), CEGUI::UDim(0.0f, float(h))));
 	}
 
 	bool GUIWidget::isHit() const {
@@ -269,7 +291,11 @@ namespace api {
 			}
 		}
 		if (!found) {
-			setPosition(_originalPos.getX(), _originalPos.getY());
+			if (_originalPos.isValid()) {
+				setPosition(_originalPos.getX(), _originalPos.getY());
+			} else {
+				setPositionPxl(_originalPosPxl.getX(), _originalPosPxl.getY());
+			}
 		}
 		_window->setAlwaysOnTop(false);
 		return true;

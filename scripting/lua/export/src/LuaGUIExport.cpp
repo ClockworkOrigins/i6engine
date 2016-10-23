@@ -136,8 +136,16 @@ namespace gui {
 		i6eGUIFacade->setPosition(name, x, y);
 	}
 
+	void setPositionPxl(const std::string & name, const double x, const double y) {
+		i6eGUIFacade->setPositionPxl(name, x, y);
+	}
+
 	void setSize(const std::string & name, const double w, const double h) {
 		i6eGUIFacade->setSize(name, w, h);
+	}
+
+	void setSizePxl(const std::string & name, const double w, const double h) {
+		i6eGUIFacade->setSizePxl(name, w, h);
 	}
 
 	void setVisibility(const std::string & windowname, const bool visibility) {
@@ -338,7 +346,9 @@ scope registerGUI() {
 		def("addChat", &i6e::lua::gui::addChat),
 		def("setText", &i6e::lua::gui::setText),
 		def("setPosition", &i6e::lua::gui::setPosition),
+		def("setPositionPxl", &i6e::lua::gui::setPositionPxl),
 		def("setSize", &i6e::lua::gui::setSize),
+		def("setSizePxl", &i6e::lua::gui::setSizePxl),
 		def("setVisibility", &i6e::lua::gui::setVisibility),
 		def("setAmount", &i6e::lua::gui::setAmount),
 		def("setColour", &i6e::lua::gui::setColour),

@@ -19,8 +19,6 @@
 
 #include "i6engine/api/facades/GUIFacade.h"
 
-#include "i6engine/utils/Exceptions.h"
-
 #include "i6engine/core/configs/SubsystemConfig.h"
 
 #include "i6engine/api/FrontendMessageTypes.h"
@@ -31,6 +29,9 @@ namespace i6e {
 namespace api {
 
 	GUIFacade::GUIFacade() : _onWindow(), _captured() {
+	}
+
+	GUIFacade::~GUIFacade() {
 	}
 
 	void GUIFacade::startGUI(const std::string & strScheme, const std::string & strFont, const std::string & strDefaultFont, const std::string & strDefaultMouseImageSet, const std::string & strDefaultMouseImageName) const {
@@ -211,6 +212,12 @@ namespace api {
 		i6eMessagingFacade->deliverMessage(pos);
 	}
 
+	void GUIFacade::setPositionPxl(const std::string & name, const double x, const double y) const {
+		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetPositionPxl, core::Method::Update, new gui::GUI_Position(name, x, y), core::Subsystem::Unknown);
+
+		i6eMessagingFacade->deliverMessage(pos);
+	}
+
 	void GUIFacade::setAmount(const std::string & name, const uint32_t amount) const {
 		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetAmount, core::Method::Update, new gui::GUI_Amount(name, amount), core::Subsystem::Unknown);
 
@@ -247,6 +254,12 @@ namespace api {
 
 	void GUIFacade::setSize(const std::string & name, const double w, const double h) const {
 		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSize, core::Method::Update, new gui::GUI_Size(name, w, h), core::Subsystem::Unknown);
+
+		i6eMessagingFacade->deliverMessage(pos);
+	}
+
+	void GUIFacade::setSizePxl(const std::string & name, const double w, const double h) const {
+		GameMessage::Ptr pos = boost::make_shared<GameMessage>(messages::GUIMessageType, gui::GuiSetSizePxl, core::Method::Update, new gui::GUI_Size(name, w, h), core::Subsystem::Unknown);
 
 		i6eMessagingFacade->deliverMessage(pos);
 	}

@@ -117,14 +117,24 @@ namespace gui {
 		}
 
 		/**
-		 * \brief sets position of this widget
+		 * \brief sets position of this widget in relative coordinates [0, 1]
 		 */
 		void setPosition(double x, double y);
 
 		/**
-		 * \brief sets size of this widget
+		 * \brief sets position of this widget in absolute pixel coordinates
+		 */
+		void setPositionPxl(double x, double y);
+
+		/**
+		 * \brief sets size of this widget in relative size [0, 1]
 		 */
 		void setSize(double w, double h);
+
+		/**
+		 * \brief sets size of this widget in absolute pixel sizes
+		 */
+		void setSizePxl(double w, double h);
 		
 		bool isHit() const;
 
@@ -145,6 +155,7 @@ namespace gui {
 		bool _dragable;
 		std::function<void(const std::string &, const std::string &)> _dropCallback;
 		Vec2f _originalPos;
+		Vec2f _originalPosPxl;
 		bool _isDragged;
 		Vec2f _dragOffset;
 		std::function<void(void)> _clickCallback;

@@ -51,8 +51,7 @@ namespace gui {
 	public:
 		GUIFacade();
 
-		~GUIFacade() {
-		}
+		~GUIFacade();
 
 		/**
 		 * \brief Creates the GUI. This function has to be called before you can start creating windows ect.
@@ -261,7 +260,7 @@ namespace gui {
 		void setText(const std::string & name, const std::string & text) const;
 
 		/**
-		 * \brief Sets the Position of an specified object.
+		 * \brief Sets the Position of an specified object in relative coordinates [0, 1].
 		 * \param name Name of the object.
 		 * \param x X-Value of the position.
 		 * \param y Y-Value of the position.
@@ -269,12 +268,28 @@ namespace gui {
 		void setPosition(const std::string & name, const double x, const double y) const;
 
 		/**
-		 * \brief Sets the Size of an specified object.
+		 * \brief Sets the Position of an specified object in absolute pixel coordinates.
+		 * \param name Name of the object.
+		 * \param x X-Value of the position.
+		 * \param y Y-Value of the position.
+		 */
+		void setPositionPxl(const std::string & name, const double x, const double y) const;
+
+		/**
+		 * \brief Sets the Size of an specified object in relative values [0, 1].
 		 * \param name Name of the object.
 		 * \param w Width
 		 * \param h Height
 		 */
 		void setSize(const std::string & name, const double w, const double h) const;
+
+		/**
+		 * \brief Sets the Size of an specified object in absolute pixel size.
+		 * \param name Name of the object.
+		 * \param w Width
+		 * \param h Height
+		 */
+		void setSizePxl(const std::string & name, const double w, const double h) const;
 
 		/**
 		 * \brief Sets visibility of a window
