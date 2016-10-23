@@ -46,6 +46,9 @@ namespace modules {
 	void GUITextButton::update(uint16_t type, api::gui::GUIUpdateMessageStruct * data) {
 		if (type == api::gui::GuiSetText) {
 			_window->setText(static_cast<const api::gui::GUI_Text *>(data)->text);
+		} else if (type == api::gui::GuiSetFont) {
+			std::string font = static_cast<api::gui::GUI_Text *>(data)->text;
+			_window->setFont(font);
 		} else {
 			GUIWidget::update(type, data);
 		}
