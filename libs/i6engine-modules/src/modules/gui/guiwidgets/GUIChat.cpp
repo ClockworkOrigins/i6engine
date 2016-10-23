@@ -29,7 +29,9 @@
 #include "i6engine/api/facades/MessagingFacade.h"
 #include "i6engine/api/facades/NetworkFacade.h"
 
-#include "CEGUI/CEGUI.h"
+#include "CEGUI/widgets/Editbox.h"
+#include "CEGUI/widgets/Listbox.h"
+#include "CEGUI/widgets/ListboxTextItem.h"
 
 namespace i6e {
 namespace modules {

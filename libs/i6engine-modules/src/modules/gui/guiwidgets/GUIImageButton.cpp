@@ -21,7 +21,8 @@
 
 #include "i6engine/api/configs/GUIConfig.h"
 
-#include "CEGUI/CEGUI.h"
+#include "CEGUI/Window.h"
+#include "CEGUI/WindowManager.h"
 
 namespace i6e {
 namespace modules {

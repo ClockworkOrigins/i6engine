@@ -19,14 +19,14 @@
 
 #include "i6engine/modules/gui/guiwidgets/GUIStatusList.h"
 
-#include "i6engine/utils/Exceptions.h"
 #include "i6engine/utils/i6eString.h"
-#include "i6engine/utils/Logger.h"
 
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/GUIConfig.h"
 
-#include "CEGUI/CEGUI.h"
+#include "CEGUI/WindowManager.h"
+#include "CEGUI/widgets/Listbox.h"
+#include "CEGUI/widgets/ListboxTextItem.h"
 
 namespace i6e {
 namespace modules {
@@ -99,7 +99,7 @@ namespace modules {
 			_listbox->addItem(lbi);
 		}
 
-		_startTime = api::EngineController::GetSingleton().getCurrentTime();
+		_startTime = i6eEngineController->getCurrentTime();
 
 		if (_listbox->getItemCount() > _amount) {
 			_listbox->removeItem(_listbox->getListboxItemFromIndex(0));
@@ -124,7 +124,7 @@ namespace modules {
 			enableTicking(false);
 			return; // -1 means infinite
 		}
-		if (uint64_t(int64_t(_startTime) + _lifetime) <= api::EngineController::GetSingleton().getCurrentTime()) {
+		if (uint64_t(int64_t(_startTime) + _lifetime) <= i6eEngineController->getCurrentTime()) {
 			if (_listbox->getItemCount() > 0) {
 				_listbox->removeItem(_listbox->getListboxItemFromIndex(0));
 			}

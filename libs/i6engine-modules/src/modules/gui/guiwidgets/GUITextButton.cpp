@@ -19,14 +19,10 @@
 
 #include "i6engine/modules/gui/guiwidgets/GUITextButton.h"
 
-#include "i6engine/utils/Exceptions.h"
-#include "i6engine/utils/Logger.h"
-
-#include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/GUIConfig.h"
-#include "i6engine/api/facades/GUIFacade.h"
 
-#include "CEGUI/CEGUI.h"
+#include "CEGUI/Window.h"
+#include "CEGUI/WindowManager.h"
 
 namespace i6e {
 namespace modules {

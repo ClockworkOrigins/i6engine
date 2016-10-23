@@ -21,7 +21,9 @@
 
 #include "i6engine/api/configs/GUIConfig.h"
 
-#include "CEGUI/CEGUI.h"
+#include "CEGUI/WindowManager.h"
+#include "CEGUI/widgets/ListboxTextItem.h"
+#include "CEGUI/widgets/MultiColumnList.h"
 
 namespace i6e {
 namespace modules {

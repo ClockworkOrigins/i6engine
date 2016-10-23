@@ -19,11 +19,11 @@
 
 #include "i6engine/modules/gui/guiwidgets/GUIComboBox.h"
 
-#include "i6engine/utils/Exceptions.h"
-
 #include "i6engine/api/configs/GUIConfig.h"
 
-#include "CEGUI/CEGUI.h"
+#include "CEGUI/WindowManager.h"
+#include "CEGUI/widgets/Combobox.h"
+#include "CEGUI/widgets/ListboxTextItem.h"
 
 namespace i6e {
 namespace modules {

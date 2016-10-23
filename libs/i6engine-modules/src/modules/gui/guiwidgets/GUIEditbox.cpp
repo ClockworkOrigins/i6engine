@@ -19,11 +19,10 @@
 
 #include "i6engine/modules/gui/guiwidgets/GUIEditbox.h"
 
-#include "i6engine/utils/Exceptions.h"
-
 #include "i6engine/api/configs/GUIConfig.h"
 
-#include "CEGUI/CEGUI.h"
+#include "CEGUI/WindowManager.h"
+#include "CEGUI/widgets/Editbox.h"
 
 namespace i6e {
 namespace modules {

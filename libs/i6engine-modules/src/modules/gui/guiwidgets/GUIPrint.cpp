@@ -19,14 +19,13 @@
 
 #include "i6engine/modules/gui/guiwidgets/GUIPrint.h"
 
-#include "i6engine/utils/Exceptions.h"
-#include "i6engine/utils/Logger.h"
-
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/GUIConfig.h"
 #include "i6engine/api/facades/GUIFacade.h"
 
-#include "CEGUI/CEGUI.h"
+#include "CEGUI/WindowManager.h"
+#include "CEGUI/widgets/Listbox.h"
+#include "CEGUI/widgets/ListboxTextItem.h"
 
 namespace i6e {
 namespace modules {
@@ -107,7 +106,7 @@ namespace modules {
 			return;
 		}
 		if (uint64_t(int64_t(_startTime) + _lifeTime) <= api::EngineController::GetSingleton().getCurrentTime()) {
-			api::EngineController::GetSingletonPtr()->getGUIFacade()->deleteWidget(_name);
+			i6eGUIFacade->deleteWidget(_name);
 		}
 	}
 
