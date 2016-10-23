@@ -23,9 +23,9 @@ cd "$(readlink -f "$(dirname "${0}")")"
 
 # Ogre
 ARCHIVE="sinbad-ogre-dd30349ea667.tar.bz2"
-DEP_ARCHIVE="cabalistic-ogredeps-c658f22ec7b1.zip"
+DEP_ARCHIVE="cabalistic-ogredeps-bfc878e4fd9a.zip"
 BUILD_DIR="${BUILD_ROOT}/sinbad-ogre-dd30349ea667"
-BUILD_DIR_DEPS="${BUILD_ROOT}/cabalistic-ogredeps-c658f22ec7b1"
+BUILD_DIR_DEPS="${BUILD_ROOT}/cabalistic-ogredeps-bfc878e4fd9a"
 
 PREFIX="${DEP_DIR_OUT}/ogre/"
 PREFIX_DEPS="${DEP_DIR_OUT}/misc/"

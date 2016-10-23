@@ -20,9 +20,9 @@ REM Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  U
 call build-common.bat %1 %2
 
 Set ARCHIVE=sinbad-ogre-dd30349ea667.tar.bz2
-Set DEP_ARCHIVE=cabalistic-ogredeps-c658f22ec7b1.zip
+Set DEP_ARCHIVE=cabalistic-ogredeps-bfc878e4fd9a.zip
 Set BUILD_DIR=%TMP_DIR%/sinbad-ogre-dd30349ea667
-Set BUILD_DIR_DEPS=%TMP_DIR%/cabalistic-ogredeps-c658f22ec7b1
+Set BUILD_DIR_DEPS=%TMP_DIR%/cabalistic-ogredeps-bfc878e4fd9a
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/ogre/
 Set PREFIX_DEPS=%DEP_DIR%/%ARCH_DIR%/misc/
 
@@ -41,10 +41,10 @@ cd %BUILD_DIR_DEPS%
 cmake -OGREDEPS_BUILD_CG=ON -DOGREDEPS_BUILD_FREEIMAGE=ON -DOGREDEPS_BUILD_FREETYPE=ON -DOGREDEPS_BUILD_OIS=ON -DOGREDEPS_BUILD_ZLIB=ON -DOGREDEPS_BUILD_ZZIPLIB=ON -DOGREDEPS_BUILD_RAPIDJSON=OFF -DOGREDEPS_BUILD_SDL2=OFF -DOGREDEPS_BUILD_AMD_QBS=OFF -DOGREDEPS_BUILD_NVIDIA_NVAPI=OFF -DCMAKE_INSTALL_PREFIX:PATH=%PREFIX_DEPS% -DOGREDEPS_BUILD_OIS=ON -G "%VSCOMPILER%%VSARCH%" .
 
 echo "Building OgreDeps"
-MSBuild.exe OGREDEPS.sln /p:Configuration=Release > NUL
+MSBuild.exe OGREDEPS.sln /p:Configuration=Release
 
 echo "Installing OgreDeps"
-MSBuild.exe INSTALL.vcxproj /p:Configuration=Release > NUL
+MSBuild.exe INSTALL.vcxproj /p:Configuration=Release
 
 echo "Cleaning up OgreDeps"
 cd %DEP_DIR%
