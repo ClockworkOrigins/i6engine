@@ -44,5 +44,6 @@ IF(ISIXE_WITH_PARTICLEUNIVERSE)
 	add_subdirectory(particleEditor)
 ENDIF(ISIXE_WITH_PARTICLEUNIVERSE)
 
+add_subdirectory(TakeControl)
 add_subdirectory(terrainShapeCreator)
 add_subdirectory(terrainTextureConverter)
