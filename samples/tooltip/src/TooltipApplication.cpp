@@ -39,7 +39,7 @@ namespace sample {
 	}
 
 	void TooltipApplication::AfterInitialize() {
-		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6eGUIFacade;
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
@@ -67,7 +67,7 @@ namespace sample {
 		gf->addToggleButton("ToggleButton", "RPG/ToggleButton", 0.6, 0.4, 0.02, 0.02, false, [this, gf](bool b) {
 			if (b) {
 				gf->setTooltip("ToggleButton", "Press to deactivate progress bar.");
-				_progressTimer = i6e::api::EngineController::GetSingleton().registerTimer(1000000, [this, gf]() {
+				_progressTimer = i6eEngineController->registerTimer(1000000, [this, gf]() {
 					_counter = (_counter + 1) % 11;
 					gf->setProgress("ProgressBar", _counter / 10.0);
 					return true;
@@ -75,7 +75,7 @@ namespace sample {
 				gf->pauseAnimation("ToggleButton", "RotateY");
 			} else {
 				gf->setTooltip("ToggleButton", "Press to activate progress bar.");
-				i6e::api::EngineController::GetSingleton().removeTimerID(_progressTimer);
+				i6eEngineController->removeTimerID(_progressTimer);
 				gf->unpauseAnimation("ToggleButton", "RotateY");
 			}
 		});
@@ -87,7 +87,7 @@ namespace sample {
 		gf->setTooltip("ProgressBar", "A progress bar is used for showing progress or for healthbars.");
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6eInputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 	}
 
 	void TooltipApplication::Tick() {

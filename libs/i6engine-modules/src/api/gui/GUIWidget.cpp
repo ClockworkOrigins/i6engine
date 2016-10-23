@@ -100,6 +100,7 @@ namespace api {
 			}
 		} else if (type == gui::GUIMessageTypes::GuiSetProperty) {
 			_window->setProperty(dynamic_cast<gui::GUI_SetProperty *>(message)->prop, dynamic_cast<gui::GUI_SetProperty *>(message)->value);
+			_window->invalidate();
 		} else if (type == gui::GUIMessageTypes::GuiPlayAnimation) {
 			CEGUI::AnimationInstance * instance = CEGUI::AnimationManager::getSingleton().instantiateAnimation(dynamic_cast<gui::GUI_PlayAnimation *>(message)->animation);
 			instance->setTargetWindow(_window);

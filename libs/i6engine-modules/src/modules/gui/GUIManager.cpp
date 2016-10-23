@@ -661,6 +661,8 @@ namespace modules {
 				if (std::abs(_mouseCursorFps) > DBL_EPSILON) {
 					size_t index = size_t(std::round((timeDiff * _mouseCursorFps) / 1000000.0));
 					CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setImage(_mouseCursorSequence[index]);
+					CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().invalidate();
+					CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().draw();
 				}
 			}
 
@@ -679,6 +681,8 @@ namespace modules {
 		_mouseCursorAnimationStartTime = i6eEngineController->getCurrentTime();
 		if (!sequence.empty()) {
 			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setImage(sequence.front());
+			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().invalidate();
+			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().draw();
 		}
 	}
 
