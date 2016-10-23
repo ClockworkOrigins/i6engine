@@ -166,6 +166,7 @@ namespace core {
 								}
 							} else {
 								// ID not in existing map, but it should have been created
+								assert(false);
 								ISIXE_LOG_FATAL("MessageSubscriber", "ID Lifetimecycle corrupted");
 							}
 						} else {
@@ -185,6 +186,7 @@ namespace core {
 								}
 							} else {
 								// ID not in existing map, but it should have been created
+								assert(false);
 								ISIXE_LOG_FATAL("MessageSubscriber", "ID Lifetimecycle corrupted");
 							}
 						} else {
