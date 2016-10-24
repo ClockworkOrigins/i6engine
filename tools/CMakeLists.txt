@@ -21,6 +21,8 @@
 
 INCLUDE_DIRECTORIES(common/include)
 
+add_subdirectory(common)
+
 IF(ISIXE_WITH_EDITOR)
 	add_subdirectory(i6engine-editor)
 	set(I6ENGINE_EDITOR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/tools/i6engine-editor/include)

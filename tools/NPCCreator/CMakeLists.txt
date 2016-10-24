@@ -70,9 +70,9 @@ IF(WIN32)
          )
 ENDIF(WIN32)
 
-ADD_EXECUTABLE(i6eNPCCreator ${GUI_TYPE} ../common/src/Config.cpp ${NPCCreatorSrc} ${NPCCreatorUI} ${NPCCreatorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
+ADD_EXECUTABLE(i6eNPCCreator ${GUI_TYPE} ${NPCCreatorSrc} ${NPCCreatorUI} ${NPCCreatorGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
 
-target_link_libraries(i6eNPCCreator i6engine-rpg ${QT_LIBRARIES})
+target_link_libraries(i6eNPCCreator i6engine-rpg toolsCommon ${QT_LIBRARIES})
 
 IF(UNIX)
 	target_link_libraries(i6eNPCCreator pthread)

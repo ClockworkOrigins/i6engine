@@ -1483,5 +1483,13 @@
         <source>CollidableCollisionTypesTooltip</source>
         <translation>Wähle alle Typen aus, mit denen dieses Objekt kollidieren können soll. Dieses Attribut ist nur für den Typ Trigger relevant.</translation>
     </message>
+    <message>
+        <source>Help</source>
+        <translation>Hilfe</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>Über</translation>
+    </message>
 </context>
 </TS>

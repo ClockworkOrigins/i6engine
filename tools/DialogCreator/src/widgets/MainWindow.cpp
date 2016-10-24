@@ -28,6 +28,8 @@
 #include "widgets/NpcListWidget.h"
 #include "widgets/ScriptTabWidget.h"
 
+#include "widgets/AboutDialog.h"
+
 #include <QCloseEvent>
 #include <QDir>
 #include <QMessageBox>
@@ -37,7 +39,7 @@ namespace i6e {
 namespace dialogCreator {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _dialogListWidget(new DialogListWidget(this)), _npcListWidget(new NpcListWidget(this)), _dialogHeaderWidget(new DialogHeaderWidget(this)), _scriptLanguagePlugins() {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _dialogListWidget(new DialogListWidget(this)), _npcListWidget(new NpcListWidget(this)), _dialogHeaderWidget(new DialogHeaderWidget(this)), _scriptLanguagePlugins(), _aboutDialog(new tools::common::AboutDialog(this)) {
 		setupUi(this);
 
 		setWindowIcon(QIcon(":/icon.png"));
@@ -98,6 +100,13 @@ namespace widgets {
 		menuFile->setTitle(QApplication::tr("File"));
 		actionExit->setText(QApplication::tr("Exit"));
 		actionExit->setIcon(QIcon(":/images/close.png"));
+
+		QMenu * helpMenu = new QMenu(QApplication::tr("Help"), this);
+		mainMenuBar->addMenu(helpMenu);
+		QAction * aboutAction = new QAction(QApplication::tr("About"), helpMenu);
+		helpMenu->addAction(aboutAction);
+
+		connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAboutDialog()));
 	}
 
 	MainWindow::~MainWindow() {
@@ -105,6 +114,10 @@ namespace widgets {
 
 	void MainWindow::closeEditor() {
 		qApp->exit();
+	}
+
+	void MainWindow::showAboutDialog() {
+		_aboutDialog->show();
 	}
 
 	void MainWindow::closeEvent(QCloseEvent * evt) {

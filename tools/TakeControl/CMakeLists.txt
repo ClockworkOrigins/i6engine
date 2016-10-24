@@ -58,9 +58,9 @@ IF(WIN32)
          )
 ENDIF(WIN32)
 
-ADD_EXECUTABLE(i6eTakeControl ${GUI_TYPE} ../common/src/Config.cpp ${TakeControlSrc} ${TakeControlGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
+ADD_EXECUTABLE(i6eTakeControl ${GUI_TYPE} ${TakeControlSrc} ${TakeControlGuiHeader} ${QT_TRANSLATION_FILES} ${QT_RESOURCE_FILES} ${WINDOWS_RC_FILES})
 
-target_link_libraries(i6eTakeControl ${CLOCKUTILS_LIBRARIES} ${QT_LIBRARIES})
+target_link_libraries(i6eTakeControl toolsCommon ${CLOCKUTILS_LIBRARIES} ${QT_LIBRARIES})
 
 IF(UNIX)
 	target_link_libraries(i6eTakeControl pthread)

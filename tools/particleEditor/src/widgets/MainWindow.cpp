@@ -28,6 +28,8 @@
 #include "widgets/WidgetRender.h"
 #include "widgets/WidgetScript.h"
 
+#include "widgets/AboutDialog.h"
+
 #include "ParticleUniverseSystem.h"
 #include "ParticleUniverseSystemManager.h"
 #include "ParticleUniverseTechnique.h"
@@ -38,7 +40,7 @@ namespace i6e {
 namespace particleEditor {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _toolBarEdit(nullptr), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render), _particleSystemCounter(0), _leftLayout(nullptr), _currentPropertyWindow(nullptr) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _renderWrapper(new QWidget(this)), _renderWidget(new WidgetRender(this)), _particleListWidget(new WidgetParticleList(this)), _editWidget(new WidgetEdit(this, _renderWidget)), _scriptWidget(new WidgetScript(this)), _tabWidget(new QTabWidget(this)), _toolBarEdit(nullptr), _playing(false), _toolbarActions(), _currentTab(CurrentTab::Render), _particleSystemCounter(0), _leftLayout(nullptr), _currentPropertyWindow(nullptr), _aboutDialog(new tools::common::AboutDialog(this)) {
 		setupUi(this);
 
 		setWindowIcon(QIcon(":/icon.png"));
@@ -155,6 +157,13 @@ namespace widgets {
 		actionOptions->setText(QApplication::tr("Options"));
 
 		actionOptions->setIcon(QIcon(":/images/config_general.png"));
+
+		QMenu * helpMenu = new QMenu(QApplication::tr("Help"), this);
+		mainMenuBar->addMenu(helpMenu);
+		QAction * aboutAction = new QAction(QApplication::tr("About"), helpMenu);
+		helpMenu->addAction(aboutAction);
+
+		connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAboutDialog()));
 	}
 
 	MainWindow::~MainWindow() {
@@ -162,6 +171,10 @@ namespace widgets {
 
 	void MainWindow::closeEditor() {
 		qApp->exit();
+	}
+
+	void MainWindow::showAboutDialog() {
+		_aboutDialog->show();
 	}
 
 	void MainWindow::handleNewAction() {

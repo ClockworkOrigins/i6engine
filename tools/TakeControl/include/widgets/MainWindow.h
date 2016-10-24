@@ -23,6 +23,11 @@
 #include <QMainWindow>
 
 namespace i6e {
+namespace tools {
+namespace common {
+	class AboutDialog;
+} /* namespace common */
+} /* namespace tools */
 namespace dialogCreator {
 namespace widgets {
 
@@ -35,8 +40,11 @@ namespace widgets {
 
 	private slots:
 		void closeEditor();
+		void showAboutDialog();
 
 	private:
+		tools::common::AboutDialog * _aboutDialog;
+
 		void closeEvent(QCloseEvent * evt) override;
 	};
 

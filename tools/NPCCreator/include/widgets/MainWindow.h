@@ -26,6 +26,9 @@
 
 namespace i6e {
 namespace tools {
+namespace common {
+	class AboutDialog;
+} /* namespace common */
 namespace npcCreator {
 namespace widgets {
 
@@ -42,11 +45,13 @@ namespace widgets {
 
 	private slots:
 		void closeCreator();
+		void showAboutDialog();
 
 	private:
 		NPCListWidget * _npcListWidget;
 		NPCEditWidget * _npcEditWidget;
 		NPCRenderWidget * _npcRenderWidget;
+		common::AboutDialog * _aboutDialog;
 
 		void closeEvent(QCloseEvent * evt) override;
 

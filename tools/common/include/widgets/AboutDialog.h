@@ -1,8 +1,8 @@
 /*
- * i6engine
+ * SocketPerformanceTester
  * Copyright (2016) Daniel Bonrath, Michael Baer, All rights reserved.
  *
- * This file is part of i6engine; i6engine is free software; you can redistribute it and/or
+ * This file is part of SocketPerformanceTester; SocketPerformanceTester is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
@@ -17,23 +17,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_TOOLS_COMMON_CONFIG_H__
-#define __I6ENGINE_TOOLS_COMMON_CONFIG_H__
+#ifndef __I6ENGINE_TOOLS_COMMON_ABOUTDIALOG_H__
+#define __I6ENGINE_TOOLS_COMMON_ABOUTDIALOG_H__
+
+#include <QDialog>
 
 namespace i6e {
 namespace tools {
 namespace common {
 
-	class Config {
+	class AboutDialog : public QDialog {
+		Q_OBJECT
+
 	public:
-		/**
-			* \brief always call after creation of QApplication in main and before creating MainWindow
-			*/
-		static void Init();
+		AboutDialog(QWidget * parent);
+		~AboutDialog();
 	};
 
 } /* namespace common */
 } /* namespace tools */
 } /* namespace i6e */
 
-#endif /* __I6ENGINE_TOOLS_COMMON_CONFIG_H__ */
+#endif /* __I6ENGINE_TOOLS_COMMON_ABOUTDIALOG_H__ */

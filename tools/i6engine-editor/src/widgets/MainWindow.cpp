@@ -52,6 +52,8 @@
 #include "i6engine/editor/widgets/RenderWidget.h"
 #include "i6engine/editor/widgets/TemplateListWidget.h"
 
+#include "widgets/AboutDialog.h"
+
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QKeyEvent>
@@ -71,7 +73,7 @@ namespace widgets {
 		emit triggerGameAction(int(_index));
 	}
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _engineThread(), _level(), _initializationPlugins(), _changed(false), _keyStates(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _saveObjectPlugins(), _loadLevelPlugins(), _objectTypePlugins(), _resetEngineController(false), _startGame(-1), _inGame(false), _progressDialog(nullptr), _isTmpLevel(false), _originalLevel(), _isNewLevel(false) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), Editor(), WINDOWTITLE(QString("i6engine-editor (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")")), _renderWidget(new RenderWidget(this)), _objectContainerWidget(new ObjectContainerWidget(this)), _templateListWidget(new TemplateListWidget(this)), _engineThread(), _level(), _initializationPlugins(), _changed(false), _keyStates(), _runGamePlugins(), _flagPlugins(), _gameActionHelperList(), _saveObjectPlugins(), _loadLevelPlugins(), _objectTypePlugins(), _resetEngineController(false), _startGame(-1), _inGame(false), _progressDialog(nullptr), _isTmpLevel(false), _originalLevel(), _isNewLevel(false), _aboutDialog(new tools::common::AboutDialog(this)) {
 		setupUi(this);
 
 		setWindowIcon(QIcon(":/icon.png"));
@@ -126,6 +128,13 @@ namespace widgets {
 		actionSave_Level->setIcon(QIcon(":/images/save.png"));
 		actionExit->setIcon(QIcon(":/images/close.png"));
 		actionOptions->setIcon(QIcon(":/images/config_general.png"));
+
+		QMenu * helpMenu = new QMenu(QApplication::tr("Help"), this);
+		menuBar()->addMenu(helpMenu);
+		QAction * aboutAction = new QAction(QApplication::tr("About"), helpMenu);
+		helpMenu->addAction(aboutAction);
+
+		connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAboutDialog()));
 	}
 
 	MainWindow::~MainWindow() {
@@ -196,6 +205,10 @@ namespace widgets {
 			}
 		}
 		api::EngineController::GetSingleton().stop();
+	}
+
+	void MainWindow::showAboutDialog() {
+		_aboutDialog->show();
 	}
 
 	void MainWindow::changedLevel() {

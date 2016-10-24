@@ -35,6 +35,8 @@
 #include "widgets/NPCListWidget.h"
 #include "widgets/NPCRenderWidget.h"
 
+#include "widgets/AboutDialog.h"
+
 #include <QCloseEvent>
 
 namespace i6e {
@@ -42,7 +44,7 @@ namespace tools {
 namespace npcCreator {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), RPGApplication(), _npcListWidget(nullptr), _npcEditWidget(nullptr), _npcRenderWidget(nullptr) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), RPGApplication(), _npcListWidget(nullptr), _npcEditWidget(nullptr), _npcRenderWidget(nullptr), _aboutDialog(new common::AboutDialog(this)) {
 		setupUi(this);
 
 		setWindowIcon(QIcon(":/icon.png"));
@@ -76,6 +78,13 @@ namespace widgets {
 		menuFile->setTitle(QApplication::tr("File"));
 		actionExit->setText(QApplication::tr("Exit"));
 		actionExit->setIcon(QIcon(":/images/close.png"));
+
+		QMenu * helpMenu = new QMenu(QApplication::tr("Help"), this);
+		mainMenuBar->addMenu(helpMenu);
+		QAction * aboutAction = new QAction(QApplication::tr("About"), helpMenu);
+		helpMenu->addAction(aboutAction);
+
+		connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAboutDialog()));
 	}
 
 	MainWindow::~MainWindow() {
@@ -83,6 +92,10 @@ namespace widgets {
 
 	void MainWindow::closeCreator() {
 		api::EngineController::GetSingleton().stop();
+	}
+
+	void MainWindow::showAboutDialog() {
+		_aboutDialog->show();
 	}
 
 	void MainWindow::closeEvent(QCloseEvent * evt) {

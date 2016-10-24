@@ -29,6 +29,11 @@ namespace ParticleUniverse {
 } /* namespace ParticleUniverse */
 
 namespace i6e {
+namespace tools {
+namespace common {
+	class AboutDialog;
+} /* namespace common */
+} /* namespace tools */
 namespace particleEditor {
 namespace widgets {
 
@@ -54,6 +59,7 @@ namespace widgets {
 
 	private slots:
 		void closeEditor();
+		void showAboutDialog();
 		void handleNewAction();
 		void handleCloneAction();
 		void handlePlayAction();
@@ -85,6 +91,7 @@ namespace widgets {
 		uint32_t _particleSystemCounter;
 		QVBoxLayout * _leftLayout;
 		QWidget * _currentPropertyWindow;
+		tools::common::AboutDialog * _aboutDialog;
 	};
 
 } /* namespace widgets */

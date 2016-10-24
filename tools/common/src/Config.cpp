@@ -27,6 +27,7 @@
 
 namespace i6e {
 namespace tools {
+namespace common {
 
 	void Config::Init() {
 		clockUtils::iniParser::IniParser iniParser;
@@ -53,5 +54,6 @@ namespace tools {
 		qApp->installTranslator(translator);
 	}
 
+} /* namespace common */
 } /* namespace tools */
 } /* namespace i6e */

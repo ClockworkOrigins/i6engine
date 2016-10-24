@@ -31,6 +31,11 @@
 class QProgressDialog;
 
 namespace i6e {
+namespace tools {
+namespace common {
+	class AboutDialog;
+} /* namespace common */
+} /* namespace tools */
 namespace editor {
 namespace plugins {
 
@@ -88,6 +93,7 @@ namespace widgets {
 		void chooseSaveLevel();
 		void chooseSaveLevelAs();
 		void closeEditor();
+		void showAboutDialog();
 		void changedLevel();
 		void selectedObject(int64_t id);
 		void triggeredGameAction(int index);
@@ -120,6 +126,7 @@ namespace widgets {
 		bool _isTmpLevel;
 		QString _originalLevel;
 		bool _isNewLevel;
+		tools::common::AboutDialog * _aboutDialog;
 
 		std::string getBasePath() const override {
 			return "../media/maps";

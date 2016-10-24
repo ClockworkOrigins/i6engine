@@ -2,5 +2,6 @@
 <qresource>
 	<file alias="images/close.png">../../../media/textures/close.png</file>
 	<file alias="icon.png">../../../config/i6engine_logo.png</file>
+	<file alias="clockworkLogo.png">../../../config/ClockworkOrigins_Logo.png</file>
 </qresource>
 </RCC>

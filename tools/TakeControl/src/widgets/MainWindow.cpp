@@ -19,21 +19,30 @@
 
 #include "widgets/MainWindow.h"
 
+#include "widgets/AboutDialog.h"
+
 #include "i6engine/i6engineBuildSettings.h"
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QMenu>
+#include <QMenuBar>
 
 namespace i6e {
 namespace dialogCreator {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _aboutDialog(new tools::common::AboutDialog(this)) {
 		setWindowIcon(QIcon(":/icon.png"));
 
 		setWindowTitle(QString("TakeControl (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
 
+		QMenu * helpMenu = new QMenu(QApplication::tr("Help"), this);
+		menuBar()->addMenu(helpMenu);
+		QAction * aboutAction = new QAction(QApplication::tr("About"), helpMenu);
+		helpMenu->addAction(aboutAction);
 
+		connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAboutDialog()));
 	}
 
 	MainWindow::~MainWindow() {
@@ -41,6 +50,10 @@ namespace widgets {
 
 	void MainWindow::closeEditor() {
 		qApp->exit();
+	}
+
+	void MainWindow::showAboutDialog() {
+		_aboutDialog->show();
 	}
 
 	void MainWindow::closeEvent(QCloseEvent * evt) {

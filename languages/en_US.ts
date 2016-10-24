@@ -1483,5 +1483,13 @@
         <source>CollidableCollisionTypesTooltip</source>
         <translation>Select all types this object shall be allowed to collide with. This flag is only relevant for type Trigger.</translation>
     </message>
+    <message>
+        <source>Help</source>
+        <translation>Help</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>About</translation>
+    </message>
 </context>
 </TS>
