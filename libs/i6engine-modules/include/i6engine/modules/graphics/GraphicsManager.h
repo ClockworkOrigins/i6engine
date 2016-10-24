@@ -135,7 +135,7 @@ namespace modules {
 		 * \param   Ogre::RenderWindow * rw
 		 * \return   bool: true on success
 		 */
-		bool windowClosing(Ogre::RenderWindow * rw);
+		bool windowClosing(Ogre::RenderWindow * rw) override;
 
 		/**
 		 * \brief handles all create messages for the graphics subsystem
@@ -248,6 +248,9 @@ namespace modules {
 		 * actually used to get current frame time
 		 */
 		bool frameEnded(const Ogre::FrameEvent & evt) override;
+
+		void windowResized(Ogre::RenderWindow * rw) override;
+		void windowClosed(Ogre::RenderWindow * rw) override;
 
 		/**
 		 * \brief forbidden

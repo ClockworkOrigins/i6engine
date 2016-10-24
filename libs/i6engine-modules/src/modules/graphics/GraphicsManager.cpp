@@ -568,7 +568,7 @@ namespace modules {
 			while (configItr != CurrentRendererOptions.end()) {
 				if (configItr->first == "Video Mode") {
 					// Store Available Resolutions
-					configItr->second.currentValue = boost::lexical_cast<std::string>(ru->resolution.width) + " x " + boost::lexical_cast<std::string>(ru->resolution.height);
+					configItr->second.currentValue = std::to_string(ru->resolution.width) + " x " + std::to_string(ru->resolution.height);
 					break;
 				}
 				configItr++;
@@ -1105,6 +1105,36 @@ namespace modules {
 			gf->setText("FPS_LastFrameTime_Value", std::to_string(uint64_t(evt.timeSinceLastEvent * 1000)));
 		}
 		return true;
+	}
+
+	void GraphicsManager::windowResized(Ogre::RenderWindow * rw) {
+		unsigned int width, height, depth;
+		int left, top;
+		rw->getMetrics(width, height, depth, left, top);
+
+		api::graphics::Resolution resolution;
+		resolution.width = width;
+		resolution.height = height;
+
+		_guiController->_mailbox->News(boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiResolution, core::Method::Update, new api::gui::GUI_Resolution_Update(resolution), core::Subsystem::Graphic));
+		api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputResolution, core::Method::Update, new api::input::Input_Resolution_Update(resolution), core::Subsystem::Graphic));
+
+		Ogre::ConfigOptionMap & CurrentRendererOptions = _objRoot->getRenderSystem()->getConfigOptions();
+		Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
+		Ogre::StringVector res;
+		while (configItr != CurrentRendererOptions.end()) {
+			if (configItr->first == "Video Mode") {
+				// Store Available Resolutions
+				configItr->second.currentValue = std::to_string(width) + " x " + std::to_string(height);
+				break;
+			}
+			configItr++;
+		}
+		_objRoot->saveConfig();
+	}
+
+	void GraphicsManager::windowClosed(Ogre::RenderWindow *) {
+		i6eEngineController->stop();
 	}
 
 } /* namespace modules */
