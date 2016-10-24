@@ -31,9 +31,7 @@ namespace widgets {
 	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par) {
 		setWindowIcon(QIcon(":/icon.png"));
 
-		showMaximized();
-
-		setWindowTitle(QString("DialogCreator (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
+		setWindowTitle(QString("TakeControl (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
 	}
 
 	MainWindow::~MainWindow() {

@@ -77,7 +77,10 @@ IF [%2] == [] (
 
 IF [%CONFIG_BAT_PATH%] == [] EXIT /B
 
-call %CONFIG_BAT_PATH%\vcvarsall.bat %VSBATARCH%
+for %%X in (MSBuild.exe) do (set FOUND=%%~$PATH:X)
+IF NOT DEFINED FOUND (
+	call %CONFIG_BAT_PATH%\vcvarsall.bat %VSBATARCH%
+)
 
 EXIT /B
 
