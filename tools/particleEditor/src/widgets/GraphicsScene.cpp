@@ -56,7 +56,9 @@ namespace widgets {
 		wec->setPos(evt->scenePos() + offset);
 		update(sceneRect());
 		if (wec->getConnection()) {
-			wec->getConnection()->updatePath();
+			for (connections::LineConnector * lc : wec->getConnections()) {
+				lc->updatePath();
+			}
 		}
 	}
 

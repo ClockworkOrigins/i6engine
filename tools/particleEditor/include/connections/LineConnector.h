@@ -34,6 +34,14 @@ namespace connections {
 
 		void updatePath();
 
+		QGraphicsWidget * getFrom() const {
+			return _first;
+		}
+
+		QGraphicsWidget * getTo() const {
+			return _second;
+		}
+
 	private:
 		QGraphicsWidget * _first;
 		QGraphicsWidget * _second;

@@ -342,6 +342,10 @@ namespace widgets {
 			return _connection;
 		}
 
+		std::vector<connections::LineConnector *> getConnections() const {
+			return _lineConnections;
+		}
+
 		void deselect();
 
 	signals:
@@ -363,6 +367,7 @@ namespace widgets {
 		std::vector<connections::ConnectionPolicy *> _policies;
 		std::vector<connections::UniqueRelation *> _uniqueRelations;
 		std::vector<connections::Connection *> _connections;
+		std::vector<connections::LineConnector *> _lineConnections;
 		connections::ConnectionPolicy * _selectedPolicy;
 		PropertyWindow * _propertyWindow;
 		PropertyWindow * _oldPropertyWindow;

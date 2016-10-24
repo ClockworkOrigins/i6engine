@@ -20,6 +20,7 @@
 #include "widgets/WidgetEditComponent.h"
 
 #include "connections/Connection.h"
+#include "connections/LineConnector.h"
 
 #include "factories/AffectorPropertyWindowFactory.h"
 #include "factories/BehaviourPropertyWindowFactory.h"
@@ -70,7 +71,7 @@ namespace widgets {
 	const QString borderColorString = "4f4f51";
 	const QString selectedBorderColorString = "0000af";
 
-	WidgetEditComponent::WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _parent(parent), _label(nullptr), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections(), _selectedPolicy(nullptr), _propertyWindow(nullptr), _oldPropertyWindow(nullptr), _connection(nullptr), _backgroundColor(), _widget(nullptr) {
+	WidgetEditComponent::WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _parent(parent), _label(nullptr), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections(), _lineConnections(), _selectedPolicy(nullptr), _propertyWindow(nullptr), _oldPropertyWindow(nullptr), _connection(nullptr), _backgroundColor(), _widget(nullptr) {
 		QString labelText = type + " (" + subType + ")";
 		_widget = new QWidget();
 		QHBoxLayout * hLayout = new QHBoxLayout(_widget);
@@ -137,6 +138,7 @@ namespace widgets {
 		_connection = connection;
 
 		_connections.push_back(new connections::Connection(componentToBeConnectedWith, relation, relationDirection));
+		_lineConnections.push_back(connection);
 
 		// Loop through the policies and possibly lock it
 		for (std::vector<connections::ConnectionPolicy *>::iterator it = _policies.begin(); it != _policies.end(); ++it) {
@@ -492,6 +494,10 @@ namespace widgets {
 		if (!connection) {
 			return;
 		}
+
+		std::remove_if(_lineConnections.begin(), _lineConnections.end(), [this](connections::LineConnector * lc) {
+			return lc->getFrom() == this || lc->getTo() == this;
+		});
 
 		for (std::vector<connections::Connection *>::iterator it = _connections.begin(); it != _connections.end(); ++it) {
 			connections::Connection * connectionFromList = *it;
