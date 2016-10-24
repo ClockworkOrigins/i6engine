@@ -87,7 +87,7 @@ namespace sample {
 		gf->setTooltip("ProgressBar", "A progress bar is used for showing progress or for healthbars.");
 
 		// register ESC to close the application
-		i6eInputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6eInputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6eEngineController));
 	}
 
 	void TooltipApplication::Tick() {

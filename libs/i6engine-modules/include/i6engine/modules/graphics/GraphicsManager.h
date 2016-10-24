@@ -241,6 +241,9 @@ namespace modules {
 
 		std::vector<ListenerFactoryLogic *> _compositorLogics;
 
+		Ogre::Camera * _mainCamera;
+		Ogre::Viewport * _mainViewport;
+
 		void loadResources(const std::string & resourcesFile, const std::function<void(uint16_t)> & callback);
 
 		/**

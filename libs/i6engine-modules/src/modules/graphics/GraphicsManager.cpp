@@ -69,7 +69,7 @@
 namespace i6e {
 namespace modules {
 
-	GraphicsManager::GraphicsManager(GraphicsController * ctrl, HWND hWnd) : Ogre::WindowEventListener(), Ogre::FrameListener(), _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false), _overlaySystem(nullptr), _logManager(nullptr), _compositorLogics() {
+	GraphicsManager::GraphicsManager(GraphicsController * ctrl, HWND hWnd) : Ogre::WindowEventListener(), Ogre::FrameListener(), _rWindow(), _objRoot(), _sceneManager(), _nodes(), _terrains(), _resourceManager(), _debug(), _raySceneQuery(), _tickers(), _guiController(new GUIController()), _ctrl(ctrl), _initialized(false), _showFPS(false), _overlaySystem(nullptr), _logManager(nullptr), _compositorLogics(), _mainCamera(nullptr) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 		try {
 			std::string ogrePath;
@@ -163,12 +163,16 @@ namespace modules {
 		for (auto s : res) {
 			api::graphics::Resolution r;
 			std::vector<std::string> tmp = utils::split(s, " ");
-			r.width = boost::lexical_cast<uint32_t>(tmp.front());
-			r.height = boost::lexical_cast<uint32_t>(tmp.back());
+			r.width = std::stoul(tmp.front());
+			r.height = std::stoul(tmp.back());
 			res2.push_back(r);
 		}
 
 		i6eGraphicsFacade->setPossibleResolutions(res2);
+
+		// ISIXE-1909: assure at least one viewport is always available
+		_mainCamera = _sceneManager->createCamera("MainCamera");
+		_mainViewport = _rWindow->addViewport(_mainCamera, -1);
 
 		// initalize MotionBlur
 		Ogre::CompositorPtr comp3 = Ogre::CompositorManager::getSingleton().create("MotionBlur", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
@@ -296,11 +300,9 @@ namespace modules {
 		_guiController->OnThreadStart();
 
 		api::GameMessage::Ptr msg = boost::make_shared<api::GameMessage>(api::messages::InputMessageType, api::input::InputWindow, core::Method::Create, new api::input::Input_Window_Create(reinterpret_cast<void *>(_rWindow)), core::Subsystem::Graphic);
-
 		i6eMessagingFacade->deliverMessage(msg);
 
 		api::GameMessage::Ptr msg2 = boost::make_shared<api::GameMessage>(api::messages::GUIMessageType, api::gui::GuiWindow, core::Method::Create, new api::gui::GUI_Window_Create(reinterpret_cast<void *>(_objRoot)), core::Subsystem::Graphic);
-
 		i6eMessagingFacade->deliverMessage(msg2);
 
 		_rWindow->resetStatistics();
@@ -313,6 +315,9 @@ namespace modules {
 
 	GraphicsManager::~GraphicsManager() {
 		ASSERT_THREAD_SAFETY_FUNCTION
+
+		_rWindow->removeViewport(-1);
+		_sceneManager->destroyCamera(_mainCamera);
 
 		_sceneManager->destroyQuery(_raySceneQuery);
 
@@ -528,7 +533,6 @@ namespace modules {
 			_sceneManager->setSkyPlane(true, Ogre::Plane(Ogre::Vector3(0.0, c->direction, 0.0), c->distance), c->material, c->size, c->tiles, c->renderFirst, c->curvature, c->xSegments, c->ySegments);
 		} else if (msg->getSubtype() == api::graphics::GraScreenshot) {
 			api::graphics::Graphics_Screenshot_Create * gsc = dynamic_cast<api::graphics::Graphics_Screenshot_Create *>(msg->getContent());
-			std::cout << "2: " << _rWindow << std::endl;
 			try {
 				_rWindow->writeContentsToTimestampedFile(gsc->prefix, gsc->suffix);
 			} catch (Ogre::Exception & e) {
@@ -591,7 +595,7 @@ namespace modules {
 				}
 				if (configItr->first == "Video Mode") {
 					std::vector<std::string> resolution = utils::split(configItr->second.currentValue, " ");
-					_rWindow->setFullscreen(ru->fullscreen, boost::lexical_cast<uint32_t>(resolution.front()), boost::lexical_cast<uint32_t>(resolution.back()));
+					_rWindow->setFullscreen(ru->fullscreen, std::stoul(resolution.front()), std::stoul(resolution.back()));
 				}
 				configItr++;
 			}
@@ -852,6 +856,7 @@ namespace modules {
 			node->updateMeshComponentVisibility(coid, isVisible);
 		} else if (msg->getSubtype() == api::graphics::GraViewport) {
 			int zOrder = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->zOrder;
+			assert(zOrder >= 0 && "zOrder has to be greater than 0");
 			double left = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->left;
 			double top = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->top;
 			double width = static_cast<api::graphics::Graphics_Viewport_Update *>(msg->getContent())->width;
@@ -864,6 +869,11 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->createOrUpdateViewport(coid, zOrder, left, top, width, height, red, green, blue, alpha);
+
+			if (_mainViewport) { // ISIXE-1909: assure there isn't an overhead caused by this background viewport
+				_rWindow->removeViewport(-1);
+				_mainViewport = nullptr;
+			}
 		} else if (msg->getSubtype() == api::graphics::GraNode) {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
@@ -994,6 +1004,10 @@ namespace modules {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
 			node->deleteCameraComponent(coid);
+
+			if (_rWindow->getViewport(0)) {
+				_mainViewport = _rWindow->addViewport(_mainCamera, -1); // ISIXE-1909: assure at least one viewport is always available
+			}
 		} else if (msg->getSubtype() == api::graphics::GraLuminous) {
 			GraphicsNode * node = getGraphicsNode(goid);
 			assert(node);
