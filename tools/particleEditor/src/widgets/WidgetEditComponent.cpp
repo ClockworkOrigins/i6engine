@@ -66,42 +66,46 @@ namespace particleEditor {
 namespace widgets {
 
 	const int MAX_NUMBER_OF_CONNECTIONS = 20;
+	const QString styleString = "background: %1; border: 2px solid #%2";
+	const QString borderColorString = "4f4f51";
+	const QString selectedBorderColorString = "0000af";
 
-	WidgetEditComponent::WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _parent(parent), _label(nullptr), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections(), _selectedPolicy(nullptr), _propertyWindow(nullptr), _oldPropertyWindow(nullptr), _connection(nullptr) {
+	WidgetEditComponent::WidgetEditComponent(WidgetEdit * parent, QGraphicsScene * scene, QString name, QString type, QString subType) : QGraphicsWidget(), _parent(parent), _label(nullptr), _name(name), _type(type), _subType(subType), _element(nullptr), _policies(), _uniqueRelations(), _connections(), _selectedPolicy(nullptr), _propertyWindow(nullptr), _oldPropertyWindow(nullptr), _connection(nullptr), _backgroundColor(), _widget(nullptr) {
 		QString labelText = type + " (" + subType + ")";
-		QWidget * widget = new QWidget();
-		QHBoxLayout * hLayout = new QHBoxLayout(widget);
-		widget->setLayout(hLayout);
-		_label = new QLabel(widget);
+		_widget = new QWidget();
+		QHBoxLayout * hLayout = new QHBoxLayout(_widget);
+		_widget->setLayout(hLayout);
+		_label = new QLabel(_widget);
 		hLayout->addWidget(_label);
 		QGraphicsLinearLayout * layout = new QGraphicsLinearLayout(this);
 		setLayout(layout);
-		layout->addItem(scene->addWidget(widget));
+		layout->addItem(scene->addWidget(_widget));
 		if (!name.isEmpty()) {
 			labelText += " - " + name;
 		}
 		_label->setText(labelText);
 
 		if (type == CT_SYSTEM) {
-			widget->setStyleSheet("background: black");
+			_backgroundColor = QColor(0, 0, 0);
 			_label->setStyleSheet("color: white");
 		} else if (type == CT_TECHNIQUE) {
-			widget->setStyleSheet("background: " + QVariant(QColor(102, 152, 255)).toString() + ";");
+			_backgroundColor = QColor(102, 152, 255);
 		} else if (type == CT_RENDERER) {
-			widget->setStyleSheet("background: " + QVariant(QColor(228, 34, 23)).toString() + ";");
+			_backgroundColor = QColor(228, 34, 23);
 		} else if (type == CT_EMITTER) {
-			widget->setStyleSheet("background: " + QVariant(QColor(76, 196, 23)).toString() + ";");
+			_backgroundColor = QColor(76, 196, 23);
 		} else if (type == CT_OBSERVER) {
-			widget->setStyleSheet("background: " + QVariant(QColor(37, 65, 23)).toString() + ";");
+			_backgroundColor = QColor(37, 65, 23);
 		} else if (type == CT_AFFECTOR) {
-			widget->setStyleSheet("background: " + QVariant(QColor(251, 177, 23)).toString() + ";");
+			_backgroundColor = QColor(251, 177, 23);
 		} else if (type == CT_HANDLER) {
-			widget->setStyleSheet("background: " + QVariant(QColor(141, 56, 201)).toString() + ";");
+			_backgroundColor = QColor(141, 56, 201);
 		} else if (type == CT_BEHAVIOUR) {
-			widget->setStyleSheet("background: " + QVariant(QColor(48, 125, 126)).toString() + ";");
+			_backgroundColor = QColor(48, 125, 126);
 		} else if (type == CT_EXTERN) {
-			widget->setStyleSheet("background: " + QVariant(QColor(130, 123, 96)).toString() + ";");
+			_backgroundColor = QColor(130, 123, 96);
 		}
+		_widget->setStyleSheet(styleString.arg(QVariant(_backgroundColor).toString()).arg(borderColorString));
 
 		resize(200, 80);
 
@@ -269,6 +273,10 @@ namespace widgets {
 		return _propertyWindow;
 	}
 
+	void WidgetEditComponent::deselect() {
+		_widget->setStyleSheet(styleString.arg(QVariant(_backgroundColor).toString()).arg(borderColorString));
+	}
+
 	void WidgetEditComponent::replacePropertyWindow(QString subType) {
 		PropertyWindow * tmp = _propertyWindow;
 		_propertyWindow = nullptr;
@@ -309,6 +317,7 @@ namespace widgets {
 
 	void WidgetEditComponent::mousePressEvent(QGraphicsSceneMouseEvent * evt) {
 		if (evt->button() == Qt::MouseButton::LeftButton) {
+			_widget->setStyleSheet(styleString.arg(QVariant(_backgroundColor).toString()).arg(selectedBorderColorString));
 			if (_parent->getConnectionMode() == WidgetEdit::CM_CONNECT_ENDING && this != _parent->getStartConnector()) {
 				// First make a selection of available policies
 				selectPolicy(_parent->getStartConnector());
@@ -331,6 +340,7 @@ namespace widgets {
 			}
 			_parent->notifyComponentActivated(this);
 		} else if (evt->button() == Qt::MouseButton::RightButton) {
+			_widget->setStyleSheet(styleString.arg(QVariant(_backgroundColor).toString()).arg(borderColorString));
 			_parent->resetConnectionMode();
 		}
 	}

@@ -126,6 +126,7 @@ namespace widgets {
 		WidgetEditComponent * _startConnector;
 		WidgetEditComponent * _endConnector;
 		std::map<std::pair<WidgetEditComponent *, WidgetEditComponent *>, connections::LineConnector *> _connections;
+		WidgetEditComponent * _selectedComponent;
 
 		void createTechniqueForComponent(WidgetEditComponent * component);
 		void createRendererForComponent(const QString & type, WidgetEditComponent * component);

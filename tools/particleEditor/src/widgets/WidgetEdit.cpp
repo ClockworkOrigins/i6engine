@@ -59,7 +59,7 @@ namespace widgets {
 	const QColor DRAW_EMITTED_COLOURCODE = QColor(255, 0, 0);
 	const QColor DRAW_SPECIAL_CASE_COLOURCODE = QColor(56, 124, 68);
 
-	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsScene(new GraphicsScene(this)), _graphicsView(new QGraphicsView(_graphicsScene)), _components(), _offsetX(48), _offsetY(8), _techniqueCounter(1), _rendererCounter(1), _emitterCounter(1), _affectorCounter(1), _observerCounter(1), _handlerCounter(1), _behaviourCounter(1), _externCounter(1), _connectionMode(CM_CONNECT_NONE), _startConnector(nullptr), _endConnector(nullptr), _connections() {
+	WidgetEdit::WidgetEdit(QWidget * par, QWidget * renderWidget) : QWidget(par), _graphicsScene(new GraphicsScene(this)), _graphicsView(new QGraphicsView(_graphicsScene)), _components(), _offsetX(48), _offsetY(8), _techniqueCounter(1), _rendererCounter(1), _emitterCounter(1), _affectorCounter(1), _observerCounter(1), _handlerCounter(1), _behaviourCounter(1), _externCounter(1), _connectionMode(CM_CONNECT_NONE), _startConnector(nullptr), _endConnector(nullptr), _connections(), _selectedComponent(nullptr) {
 		setupUi(this);
 
 		verticalLayout->addWidget(_graphicsView);
@@ -96,7 +96,9 @@ namespace widgets {
 		// A component is activated, check the mode
 		if (_connectionMode == CM_CONNECT_STARTING) {
 			// Start connecting
-			//mCanvas->createMouseConnector(component);
+			if (_startConnector) {
+				_startConnector->deselect();
+			}
 			_startConnector = component;
 			setConnectionMode(CM_CONNECT_ENDING);
 		} else if (_connectionMode == CM_CONNECT_ENDING && component != _startConnector) {
@@ -120,10 +122,16 @@ namespace widgets {
 				_startConnector->addConnection(_endConnector, policyEnd->getRelation(), getOppositeRelationDirection(policyEnd->getRelationDirection()), lc);
 				notifyConnectionAdded(_startConnector, _endConnector, policyEnd->getRelation(), policyEnd->getRelationDirection());
 				notifyConnectionsChanged();
+				_startConnector->deselect();
+				_endConnector->deselect();
 				_startConnector = nullptr;
 				_endConnector = nullptr;
 			}
 		} else {
+			if (_selectedComponent) {
+				_selectedComponent->deselect();
+			}
+			_selectedComponent = component;
 			emit setPropertyWindow(component->getPropertyWindow());
 		}
 	}
@@ -239,8 +247,15 @@ namespace widgets {
 	}
 
 	void WidgetEdit::resetConnectionMode() {
+		if (_startConnector) {
+			_startConnector->deselect();
+		}
+		if (_selectedComponent) {
+			_selectedComponent->deselect();
+		}
 		_startConnector = nullptr;
 		_endConnector = nullptr;
+		_selectedComponent = nullptr;
 		setConnectionMode(CM_CONNECT_NONE);
 	}
 
@@ -260,6 +275,7 @@ namespace widgets {
 			wec->deleteLater();
 		}
 		_components.clear();
+		_selectedComponent = nullptr;
 		WidgetEditComponent * particleSystemEditComponent = forceCreateParticleSystemEditComponent(); // 'Guarantees' a valid particleSystemEditComponent
 		if (copyParticleSystemPropertiesToPropertyWindow(particleSystemEditComponent, newParticleSystem)) {
 			createParticleSystemComponents(particleSystemEditComponent, newParticleSystem);

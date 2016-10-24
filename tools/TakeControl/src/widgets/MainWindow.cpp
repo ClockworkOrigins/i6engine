@@ -32,6 +32,8 @@ namespace widgets {
 		setWindowIcon(QIcon(":/icon.png"));
 
 		setWindowTitle(QString("TakeControl (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
+
+
 	}
 
 	MainWindow::~MainWindow() {

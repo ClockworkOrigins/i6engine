@@ -342,6 +342,8 @@ namespace widgets {
 			return _connection;
 		}
 
+		void deselect();
+
 	signals:
 		void renameParticleSystem(QString, QString);
 		void notifyChanged();
@@ -365,6 +367,8 @@ namespace widgets {
 		PropertyWindow * _propertyWindow;
 		PropertyWindow * _oldPropertyWindow;
 		connections::LineConnector * _connection;
+		QColor _backgroundColor;
+		QWidget * _widget;
 
 		void mousePressEvent(QGraphicsSceneMouseEvent * evt) override;
 
