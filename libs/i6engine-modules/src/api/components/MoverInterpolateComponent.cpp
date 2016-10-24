@@ -333,19 +333,19 @@ namespace api {
 		std::vector<componentOptions> result = MoverComponent::getComponentOptions();
 
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Mode", [this]() {
-			return boost::lexical_cast<std::string>(uint16_t(_mode));
+			return std::to_string(uint16_t(_mode));
 		}, [this](std::string s) {
-			_mode = Mode(boost::lexical_cast<uint16_t>(s));
+			_mode = Mode(std::stoi(s));
 			return true;
 		}, "MoverInterpolateMode"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Way", [this]() {
-			return boost::lexical_cast<std::string>(uint16_t(_way));
+			return std::to_string(uint16_t(_way));
 		}, [this](std::string s) {
-			_way = Way(boost::lexical_cast<uint16_t>(s));
+			_way = Way(std::stoi(s));
 			return true;
 		}, "MoverInterpolateWay"));
 		result.push_back(std::make_tuple(AccessState::READONLY, "Num. Keyframes", [this]() {
-			return boost::lexical_cast<std::string>(_keyFrames.size());
+			return std::to_string(_keyFrames.size());
 		}, std::function<bool(std::string)>(), "Integer"));
 
 		return result;

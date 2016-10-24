@@ -217,18 +217,14 @@ namespace api {
 			return true;
 		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Near Clip", [this]() {
-			return boost::lexical_cast<std::string>(_nearClip);
+			return std::to_string(_nearClip);
 		}, [this](std::string s) {
-			try {
-				_nearClip = boost::lexical_cast<int32_t>(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
+			_nearClip = std::stoi(s);
 			setNearClip(_nearClip);
 			return true;
 		}, "Integer"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Aspect Ratio", [this]() {
-			return boost::lexical_cast<std::string>(_aspect);
+			return std::to_string(_aspect);
 		}, [this](std::string s) {
 			try {
 				_aspect = std::stod(s);

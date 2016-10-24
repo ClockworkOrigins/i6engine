@@ -179,27 +179,27 @@ namespace api {
 		std::vector<componentOptions> result;
 
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Duration", [this]() {
-			return boost::lexical_cast<std::string>(_duration);
+			return std::to_string(_duration);
 		}, [this](std::string s) {
-			_duration = boost::lexical_cast<uint64_t>(s);
+			_duration = std::stoull(s);
 			return true;
 		}, "Integer"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Positioning", [this]() {
-			return boost::lexical_cast<std::string>(uint16_t(_positioning));
+			return std::to_string(uint16_t(_positioning));
 		}, [this](std::string s) {
-			_positioning = Positioning(boost::lexical_cast<int>(s));
+			_positioning = Positioning(std::stoi(s));
 			return true;
 		}, "MoverPositioning"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "OnStart On", [this]() {
-			return boost::lexical_cast<std::string>(_started);
+			return std::to_string(_started);
 		}, [this](std::string s) {
-			_started = boost::lexical_cast<bool>(s);
+			_started = std::stoi(s) == 1;
 			return true;
 		}, "Bool"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Linkable", [this]() {
-			return boost::lexical_cast<std::string>(_linkable);
+			return std::to_string(_linkable);
 		}, [this](std::string s) {
-			_linkable = boost::lexical_cast<bool>(s);
+			_linkable = std::stoi(s) == 1;
 			return true;
 		}, "Bool"));
 

@@ -19,8 +19,6 @@
 
 #include "i6engine/rpg/components/QuickslotComponent.h"
 
-#include "boost/lexical_cast.hpp"
-
 #include "i6engine/math/i6eMath.h"
 
 #include "i6engine/api/EngineController.h"
@@ -68,7 +66,7 @@ namespace components {
 		double sizeX = 0.08;
 		double sizeY = 0.12;
 
-		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+		api::GUIFacade * gf = i6eGUIFacade;
 
 		for (uint32_t i = 0; i < 10; i++) {
 			gf->addImage(name + "Image_" + std::to_string(i), "RPG/StaticImage", "RPG", "TbM_Filling", startX + i * sizeX, startY, sizeX, sizeY);
@@ -81,16 +79,16 @@ namespace components {
 			gf->subscribeEvent(name + "Thumbnail_" + std::to_string(i), i6e::api::gui::SubscribeEvent::Clicked, std::bind(&QuickslotComponent::selectSlot, this, i));
 		}
 
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_1, "quickslot1");
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_2, "quickslot2");
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_3, "quickslot3");
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_4, "quickslot4");
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_5, "quickslot5");
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_6, "quickslot6");
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_7, "quickslot7");
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_8, "quickslot8");
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_9, "quickslot9");
-		api::EngineController::GetSingletonPtr()->getInputFacade()->setKeyMapping(api::KeyCode::KC_0, "quickslot0");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_1, "quickslot1");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_2, "quickslot2");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_3, "quickslot3");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_4, "quickslot4");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_5, "quickslot5");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_6, "quickslot6");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_7, "quickslot7");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_8, "quickslot8");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_9, "quickslot9");
+		i6eInputFacade->setKeyMapping(api::KeyCode::KC_0, "quickslot0");
 
 		getOwnerGO()->getGOC<InventoryComponent>(config::ComponentTypes::InventoryComponent)->registerUpdateCallback(std::bind(&QuickslotComponent::updateItem, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	}
@@ -100,7 +98,7 @@ namespace components {
 
 		removeTicker();
 
-		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+		api::GUIFacade * gf = i6eGUIFacade;
 		for (uint32_t i = 0; i < 10; i++) {
 			gf->deleteWidget("Quickslot_Image_" + std::to_string(i));
 			gf->deleteWidget("Quickslot_Thumbnail_" + std::to_string(i));
@@ -128,7 +126,7 @@ namespace components {
 					return;
 				}
 
-				std::string keyString = api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(button);
+				std::string keyString = i6eInputFacade->getKeyMapping(button);
 
 				if (keyString == "quickslot1") {
 					selectSlot(0);
@@ -160,7 +158,7 @@ namespace components {
 		if (ic->isActive()) { // add selected item to this slot
 			auto selection = ic->getSelectedItem();
 			if (std::get<0>(selection) != UINT32_MAX) {
-				api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+				api::GUIFacade * gf = i6eGUIFacade;
 				for (uint16_t i = 0; i < _slots.size(); i++) {
 					if (_slots[i].first == std::get<0>(selection) && _slots[i].second == std::get<1>(selection)) {
 						gf->setImage("Quickslot_Thumbnail_" + std::to_string(i), "RPG", "TbM_Filling");
@@ -200,7 +198,7 @@ namespace components {
 		if (slot == UINT32_MAX) {
 			return;
 		}
-		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+		api::GUIFacade * gf = i6eGUIFacade;
 		if (amount) {
 			gf->setText("Quickslot_Amount_" + std::to_string(slot), std::to_string(amount));
 		} else {
@@ -212,7 +210,7 @@ namespace components {
 	}
 
 	void QuickslotComponent::show() {
-		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+		api::GUIFacade * gf = i6eGUIFacade;
 		for (uint32_t i = 0; i < 10; i++) {
 			gf->setVisibility("Quickslot_Image_" + std::to_string(i), true);
 			gf->setVisibility("Quickslot_Thumbnail_" + std::to_string(i), true);
@@ -224,7 +222,7 @@ namespace components {
 	}
 
 	void QuickslotComponent::hide() {
-		api::GUIFacade * gf = api::EngineController::GetSingleton().getGUIFacade();
+		api::GUIFacade * gf = i6eGUIFacade;
 		for (uint32_t i = 0; i < 10; i++) {
 			gf->setVisibility("Quickslot_Image_" + std::to_string(i), false);
 			gf->setVisibility("Quickslot_Thumbnail_" + std::to_string(i), false);

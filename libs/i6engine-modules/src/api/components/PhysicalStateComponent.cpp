@@ -342,11 +342,7 @@ namespace api {
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Gravity", [this]() {
 			return _gravity.toString();
 		}, [this](std::string s) {
-			try {
-				_gravity = Vec3(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
+			_gravity = Vec3(s);
 			setGravity(_gravity);
 			return true;
 		}, "Vec3"));
@@ -359,21 +355,21 @@ namespace api {
 			return true;
 		}, "CollisionFlags"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Shape Type", [this]() {
-			return boost::lexical_cast<std::string>(uint16_t(_shapeType));
+			return std::to_string(uint16_t(_shapeType));
 		}, [this](std::string s) {
-			_shapeType = ShapeType(boost::lexical_cast<uint16_t>(s));
+			_shapeType = ShapeType(std::stoi(s));
 			return true;
 		}, "ShapeType"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Shatter Interest", [this]() {
-			return boost::lexical_cast<std::string>(uint16_t(_shatterInterest));
+			return std::to_string(uint16_t(_shatterInterest));
 		}, [this](std::string s) {
-			_shatterInterest = ShatterInterest(boost::lexical_cast<uint16_t>(s));
+			_shatterInterest = ShatterInterest(std::stoi(s));
 			return true;
 		}, "ShatterInterest"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Sync. Priority", [this]() {
-			return boost::lexical_cast<std::string>(_syncPrio);
+			return std::to_string(_syncPrio);
 		}, [this](std::string s) {
-			_syncPrio = boost::lexical_cast<uint32_t>(s);
+			_syncPrio = std::stoul(s);
 			return true;
 		}, "Integer"));
 

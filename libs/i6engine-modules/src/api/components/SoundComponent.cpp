@@ -109,33 +109,21 @@ namespace api {
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Looping", [this]() {
 			return std::to_string(_looping);
 		}, [this](std::string s) {
-			try {
-				_looping = boost::lexical_cast<bool>(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
+			_looping = std::stoi(s) == 1;
 			// TODO: (Daniel) update change
 			return true;
 		}, "Bool"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Max. Dist", [this]() {
 			return std::to_string(_maxDist);
 		}, [this](std::string s) {
-			try {
-				_maxDist = boost::lexical_cast<double>(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
+			_maxDist = std::stod(s);
 			// TODO: (Daniel) update change
 			return true;
 		}, "Double"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Offset", [this]() {
 			return _position.toString();
 		}, [this](std::string s) {
-			try {
-				_position = Vec3(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
+			_position = Vec3(s);
 			// TODO: (Daniel) update change
 			return true;
 		}, "Vec3"));
@@ -153,11 +141,7 @@ namespace api {
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Cache", [this]() {
 			return std::to_string(_cacheable);
 		}, [this](std::string s) {
-			try {
-				_cacheable = boost::lexical_cast<bool>(s);
-			} catch (boost::bad_lexical_cast &) {
-				return false;
-			}
+			_cacheable = std::stoi(s) == 1;
 			// TODO: (Daniel) update change
 			return true;
 		}, "Bool"));

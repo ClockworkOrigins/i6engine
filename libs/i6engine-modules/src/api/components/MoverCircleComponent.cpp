@@ -163,9 +163,9 @@ namespace api {
 			return true;
 		}, "Vec3"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Radius", [this]() {
-			return boost::lexical_cast<std::string>(_circleRadius);
+			return std::to_string(_circleRadius);
 		}, [this](std::string s) {
-			_circleRadius = boost::lexical_cast<double>(s);
+			_circleRadius = std::stod(s);
 			return true;
 		}, "Double"));
 

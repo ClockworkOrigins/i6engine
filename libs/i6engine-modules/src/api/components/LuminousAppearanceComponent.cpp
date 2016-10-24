@@ -143,20 +143,20 @@ namespace api {
 		std::vector<componentOptions> result;
 
 		result.push_back(std::make_tuple(AccessState::READWRITE, "LightType", [this]() {
-			return boost::lexical_cast<std::string>(int(_lightType));
+			return std::to_string(int(_lightType));
 		}, [this](std::string s) {
-			setLightType(LightType(boost::lexical_cast<int>(s)));
+			setLightType(LightType(std::stoi(s)));
 			return true;
 		}, "LightType"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Inner Spotlight Range", [this]() {
-			return boost::lexical_cast<std::string>(_spotlightRangeInner);
+			return std::to_string(_spotlightRangeInner);
 		}, [this](std::string s) {
 			_spotlightRangeInner = std::stod(s);
 			sendUpdateMessage();
 			return true;
 		}, "Angle"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Outer Spotlight Range", [this]() {
-			return boost::lexical_cast<std::string>(_spotlightRangeOuter);
+			return std::to_string(_spotlightRangeOuter);
 		}, [this](std::string s) {
 			_spotlightRangeOuter = std::stod(s);
 			sendUpdateMessage();

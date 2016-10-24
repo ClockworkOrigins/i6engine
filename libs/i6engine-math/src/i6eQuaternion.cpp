@@ -23,8 +23,6 @@
 
 #include "i6engine/math/i6eVector.h"
 
-#include "boost/lexical_cast.hpp"
-
 #include "LinearMath/btQuaternion.h"
 
 #include "OGRE/OgreQuaternion.h"

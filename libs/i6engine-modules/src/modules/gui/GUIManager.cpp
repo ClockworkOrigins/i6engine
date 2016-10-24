@@ -47,7 +47,6 @@
 
 #include "boost/filesystem.hpp"
 #include "boost/functional/factory.hpp"
-#include "boost/lexical_cast.hpp"
 
 #include "CEGUI/CEGUI.h"
 #include "CEGUI/RendererModules/Ogre/Renderer.h"
@@ -237,7 +236,7 @@ namespace modules {
 		ss << uint32_t(intKeyCode);
 
 		if (allowedEvent(ss.str())) {
-			triggerKeyFunction(boost::lexical_cast<uint32_t>(ss.str()), "Hold");
+			triggerKeyFunction(std::stoul(ss.str()), "Hold");
 		}
 	}
 
@@ -436,7 +435,7 @@ namespace modules {
 		}
 
 		if (allowedEvent(ss.str())) {
-			triggerKeyFunction(boost::lexical_cast<uint32_t>(ss.str()), "Pressed");
+			triggerKeyFunction(std::stoul(ss.str()), "Pressed");
 		}
 
 		return true;
@@ -460,7 +459,7 @@ namespace modules {
 		}
 
 		if (allowedEvent(ss.str())) {
-			triggerKeyFunction(boost::lexical_cast<uint32_t>(ss.str()), "Released");
+			triggerKeyFunction(std::stoul(ss.str()), "Released");
 		}
 
 		return true;

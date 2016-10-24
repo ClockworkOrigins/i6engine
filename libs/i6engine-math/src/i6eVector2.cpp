@@ -19,26 +19,6 @@
 
 #include "i6engine/math/i6eVector2.h"
 
-#include "i6engine/utils/Exceptions.h"
-
-#include "boost/lexical_cast.hpp"
-
-namespace i6e {
-namespace math {
-
-	/*template<>
-	bool i6eVector2<int32_t>::operator==(const i6eVector2<int32_t> & b) const {
-		return std::fabs(double(_x - b.getX())) < EPSILON && std::fabs(double(_y - b.getY())) < EPSILON;
-	}
-
-	template<>
-	bool i6eVector2<uint32_t>::operator==(const i6eVector2<uint32_t> & b) const {
-		return std::fabs(double(_x - b.getX())) < EPSILON && std::fabs(double(_y - b.getY())) < EPSILON;
-	}*/
-
-} /* namespace math */
-} /* namespace i6engine */
-
 std::ostream & operator<<(std::ostream & stream, const Vec2 & v) {
 	stream << "(" << v.getX() << ", " << v.getY() << ")";
 	return stream;

@@ -175,7 +175,7 @@ namespace api {
 			return true;
 		}, "String"));
 		result.push_back(std::make_tuple(AccessState::READWRITE, "Size", [this]() {
-			return boost::lexical_cast<std::string>(_size);
+			return std::to_string(_size);
 		}, [this](std::string s) {
 			_size = std::stod(s);
 			sendUpdateMessage();
