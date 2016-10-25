@@ -214,7 +214,6 @@ namespace tools {
 			uint16_t numAnimations = _mesh->getSkeleton()->getNumAnimations();
 			for (uint16_t i = 0; i < numAnimations; i++) {
 				animationList.append(QString::fromStdString(_mesh->getSkeleton()->getAnimation(i)->getName()));
-				std::cout << "Animation: " << _mesh->getSkeleton()->getAnimation(i)->getName() << std::endl;
 			}
 		}
 		if (animationList.size() > 1) {

@@ -55,7 +55,6 @@ namespace plugins {
 				dirs.enqueue(dir.absolutePath() + "/" + dirName);
 			}
 		}
-		std::cout << "Parsed " << _functions.size() << " python scripts" << std::endl;
 	}
 
 	QVector<dialogCreator::plugins::ScriptFunction> DialogCreatorPythonScriptLanguage::getScriptFunctions() const {
@@ -67,11 +66,9 @@ namespace plugins {
 
 	void DialogCreatorPythonScriptLanguage::parseLine(const QString & line) {
 		if (line.contains("# i6Function: ")) {
-			std::cout << "Checking line " << line.toStdString() << std::endl;
 			QRegExp regex("[A-Za-z]+ [A-Za-z]+\\([(A-Za-z)+\\,?]+\\)");
 			int pos = regex.indexIn(line);
 			if (pos == -1) {
-				std::cout << "Error" << std::endl;
 				return;
 			}
 			QString i6Func = line.mid(pos, regex.matchedLength());

@@ -31,8 +31,6 @@
 #include <condition_variable>
 #include <vector>
 
-#include "boost/bind.hpp"
-
 namespace i6e {
 namespace utils {
 
@@ -42,7 +40,7 @@ namespace utils {
 		/**
 		 * \brief default constructor
 		 */
-		Clock() : Updater(boost::bind(&Clock::Update, this)), _timer(), _lock(), _systemTime(0), _running(true) {
+		Clock() : Updater(std::bind(&Clock::Update, this)), _timer(), _lock(), _systemTime(0), _running(true) {
 			Updater::Init();
 		}
 

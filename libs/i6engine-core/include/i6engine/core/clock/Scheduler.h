@@ -48,13 +48,13 @@ namespace core {
 			/**
 			 * \brief constructor of the timer
 			 */
-			Job(const boost::function<bool(void)> & f, uint64_t t, JobPriorities p, uint64_t d, uint64_t i = UINT64_MAX) : func(f), time(t), priority(p), interval(i), id(d) {
+			Job(const std::function<bool(void)> & f, uint64_t t, JobPriorities p, uint64_t d, uint64_t i = UINT64_MAX) : func(f), time(t), priority(p), interval(i), id(d) {
 			}
 
 			/**
 			 * \brief method called by this timer
 			 */
-			boost::function<bool(void)> func;
+			std::function<bool(void)> func;
 
 			/**
 			 * \brief time this job will be scheduled
@@ -125,7 +125,7 @@ namespace core {
 		 * \param[in] f the method to be called if time is over
 		 * \param[in] priority the priority in which order the timers are scheduled if time is equal
 		 */
-		uint64_t runOnce(uint64_t time, const boost::function<bool(void)> & f, JobPriorities priority) {
+		uint64_t runOnce(uint64_t time, const std::function<bool(void)> & f, JobPriorities priority) {
 			Job j(f, _clock.getTime() + time, priority, _id++);
 			std::lock_guard<std::mutex> lg(_lock);
 			_queue.push(j);
@@ -146,7 +146,7 @@ namespace core {
 		 * \param[in] f the method to be called if time is over
 		 * \param[in] priority the priority in which order the timers are scheduled if time is equal
 		 */
-		uint64_t runRepeated(uint64_t interval, const boost::function<bool(void)> & f, JobPriorities priority) {
+		uint64_t runRepeated(uint64_t interval, const std::function<bool(void)> & f, JobPriorities priority) {
 			if (interval <= 0) {
 				ISIXE_THROW_API("Scheduler", "interval has to be greater than 0, otherwise there would be an instant call");
 			}

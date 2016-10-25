@@ -55,7 +55,6 @@ namespace plugins {
 				dirs.enqueue(dir.absolutePath() + "/" + dirName);
 			}
 		}
-		std::cout << "Parsed " << _functions.size() << " lua scripts" << std::endl;
 	}
 
 	QVector<dialogCreator::plugins::ScriptFunction> DialogCreatorLuaScriptLanguage::getScriptFunctions() const {
