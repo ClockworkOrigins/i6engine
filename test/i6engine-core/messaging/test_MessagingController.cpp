@@ -21,6 +21,8 @@
 
 #include <thread>
 
+#include "i6engine/utils/Exceptions.h"
+
 #include "i6engine/core/configs/SubsystemConfig.h"
 
 #include "i6engine/core/messaging/IPKey.h"
@@ -243,59 +245,73 @@ TEST(MessagingController, specialCases) {
 }
 
 TEST(MessagingController, updateAfterDelete) {
-	Mock_MessagingController * mc = new Mock_MessagingController();
-	Mock_SubSystem ms;
+	try {
+		Mock_MessagingController * mc = new Mock_MessagingController();
+		Mock_SubSystem ms;
 
-	mc->registerMessageType(0, &ms);
-	ms._mc = mc;
+		mc->registerMessageType(0, &ms);
+		ms._mc = mc;
 
-	Message::Ptr msg1(new Message(0, 0, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
-	Message::Ptr msg2(new Message(0, 0, Method::Create, new MessageStruct(2, 1), i6e::core::Subsystem::Unknown));
-	Message::Ptr msg3(new Message(0, 0, Method::Update, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
-	Message::Ptr msg4(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6e::core::Subsystem::Unknown));
-	Message::Ptr msg5(new Message(0, 0, Method::Delete, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
-	Message::Ptr msg6(new Message(0, 0, Method::Delete, new MessageStruct(2, 1), i6e::core::Subsystem::Unknown));
-	Message::Ptr msg7(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6e::core::Subsystem::Unknown));
+		Message::Ptr msg1(new Message(0, 0, Method::Create, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+		Message::Ptr msg2(new Message(0, 0, Method::Create, new MessageStruct(2, 1), i6e::core::Subsystem::Unknown));
+		Message::Ptr msg3(new Message(0, 0, Method::Update, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+		Message::Ptr msg4(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6e::core::Subsystem::Unknown));
+		Message::Ptr msg5(new Message(0, 0, Method::Delete, new MessageStruct(1, -1), i6e::core::Subsystem::Unknown));
+		Message::Ptr msg6(new Message(0, 0, Method::Delete, new MessageStruct(2, 1), i6e::core::Subsystem::Unknown));
+		Message::Ptr msg7(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6e::core::Subsystem::Unknown));
 
-	{
-		::testing::InSequence dummy;
+		{
+			::testing::InSequence dummy;
 
-		EXPECT_CALL(ms, _receiveMessage(&(*msg1)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg2)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg3)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg4)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg5)));
-	}
+			EXPECT_CALL(ms, _receiveMessage(&(*msg1)));
+			EXPECT_CALL(ms, _receiveMessage(&(*msg2)));
+			EXPECT_CALL(ms, _receiveMessage(&(*msg3)));
+			EXPECT_CALL(ms, _receiveMessage(&(*msg4)));
+			EXPECT_CALL(ms, _receiveMessage(&(*msg5)));
+		}
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(5));
+		std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
-	mc->deliverMessage(msg1);
-	mc->deliverMessage(msg2);
-	mc->deliverMessage(msg3);
-	mc->deliverMessage(msg4);
+		mc->deliverMessage(msg1);
+		mc->deliverMessage(msg2);
+		mc->deliverMessage(msg3);
+		mc->deliverMessage(msg4);
 
-	// wait for messages to be delivered and processed
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	ms.processMessages();
-
-	// now comes a delete
-	mc->deliverMessage(msg5);
-	mc->deliverMessage(msg6);
-	mc->deliverMessage(msg7);
-
-	std::this_thread::sleep_for(std::chrono::milliseconds(5));
-
-	ms.processMessages();
-
-	int tries = 0;
-	while (tries < 5 && ms.received < 5) {
+		// wait for messages to be delivered and processed
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		ms.processMessages();
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		// now comes a delete
+		mc->deliverMessage(msg5);
+		mc->deliverMessage(msg6);
+		mc->deliverMessage(msg7);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(5));
+
+		ms.processMessages();
+
+		int tries = 0;
+		while (tries < 5 && ms.received < 5) {
+			ms.processMessages();
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+		}
+
+		mc->unregisterMessageType(0, &ms);
+
+		delete mc;
+	} catch (i6e::utils::exceptions::i6exception & e) {
+		std::cout << "Caught i6exception::exception " << e.what() << std::endl;
+		ASSERT_FALSE(true);
+	} catch (boost::exception & e) {
+		std::cout << "Caught boost::exception" << std::endl;
+		ASSERT_FALSE(true);
+	} catch (std::exception & e) {
+		std::cout << "Caught std::exception " << e.what() << std::endl;
+		ASSERT_FALSE(true);
+	} catch (...) {
+		std::cout << "Caught unknown exception" << std::endl;
+		ASSERT_FALSE(true);
 	}
-
-	mc->unregisterMessageType(0, &ms);
-
-	delete mc;
 }
 
 TEST(MessagingController, StressTest) {

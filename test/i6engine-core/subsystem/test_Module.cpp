@@ -109,15 +109,17 @@ TEST(ModuleController, Ticking) {
 	s1->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s1, 100000);
 
-	std::thread([ecc]() {
+	std::thread t([ecc]() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(975));
 
 		ecc->ShutDown();
-	}).detach();
+	});
 
 	ecc->RunEngine();
 
-	EXPECT_GE(s1->tickCounter, 1);
+	t.join();
+
+	EXPECT_GE(s1->tickCounter, 1u);
 
 	delete mc;
 	delete ecc;
@@ -136,13 +138,15 @@ TEST(ModuleController, TwoTicking) {
 	s2->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s2, 50000);
 
-	std::thread([ecc]() {
+	std::thread t([ecc]() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(975));
 
 		ecc->ShutDown();
-	}).detach();
+	});
 
 	ecc->RunEngine();
+
+	t.join();
 
 	EXPECT_LT(s1->tickCounter, s2->tickCounter);
 
@@ -163,13 +167,15 @@ TEST(ModuleController, Waiting) {
 	s2->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s2, 100000);
 
-	std::thread([ecc]() {
+	std::thread t([ecc]() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(975));
 
 		ecc->ShutDown();
-	}).detach();
+	});
 
 	ecc->RunEngine();
+
+	t.join();
 
 	EXPECT_LE(s1->tickCounter, s2->tickCounter);
 
@@ -193,13 +199,15 @@ TEST(ModuleController, WaitingForTwo) {
 	s3->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s3, 50000);
 
-	std::thread([ecc]() {
+	std::thread t([ecc]() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(990));
 
 		ecc->ShutDown();
-	}).detach();
+	});
 
 	ecc->RunEngine();
+
+	t.join();
 
 	EXPECT_LT(s2->tickCounter, s3->tickCounter);
 	EXPECT_LE(s1->tickCounter, s2->tickCounter);
@@ -225,13 +233,15 @@ TEST(ModuleController, WaitingChain) {
 	s3->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s3, 100000);
 
-	std::thread([ecc]() {
+	std::thread t([ecc]() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(990));
 
 		ecc->ShutDown();
-	}).detach();
+	});
 
 	ecc->RunEngine();
+
+	t.join();
 
 	EXPECT_LE(s1->tickCounter, s2->tickCounter);
 	EXPECT_LE(s1->tickCounter, s3->tickCounter);
@@ -254,13 +264,15 @@ TEST(ModuleController, WaitingWithMessages) {
 	s2->setController(ssc, ecc, mc);
 	ssc->QueueSubSystemStart(s2, 10000);
 
-	std::thread([ecc]() {
+	std::thread t([ecc]() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 		ecc->ShutDown();
-	}).detach();
+	});
 
 	ecc->RunEngine();
+
+	t.join();
 
 	EXPECT_LE(s1->tickCounter, s2->tickCounter);
 	EXPECT_GE(s1->receivedMessages, 400U);
