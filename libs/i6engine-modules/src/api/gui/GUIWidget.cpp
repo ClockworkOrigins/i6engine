@@ -65,7 +65,22 @@ namespace api {
 			setSizePxl(g->width, g->height);
 		} else if (type == api::gui::GuiSetVisible) {
 			bool vis = static_cast<gui::GUI_Visibility *>(message)->visible;
+			bool oldVis = _window->isVisible();
+			if (isHit()) {
+				if (oldVis && !vis) {
+					if (_mouseLeaveCallback) {
+						_mouseLeaveCallback();
+					}
+				}
+			}
 			_window->setVisible(vis);
+			if (isHit()) {
+				if (!oldVis && vis) {
+					if (_mouseEnterCallback) {
+						_mouseEnterCallback();
+					}
+				}
+			}
 			for (GUIWidget * child : _childs) {
 				child->update(type, message);
 			}
