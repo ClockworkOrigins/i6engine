@@ -80,8 +80,8 @@ namespace connections {
 		}
 
 		// Calculate the 4 control points
-		qreal xOffset = 0.25 * std::abs(x1 - x2);
-		xOffset = std::max(xOffset, xOffsetMin);
+		qreal xOffset = 0.25 * qAbs(x1 - x2);
+		xOffset = qMax(xOffset, xOffsetMin);
 		if (x1 + width1 > x2 + width2) {
 			x3 = x1 - xOffset;
 			x4 = x2 - xOffset;
