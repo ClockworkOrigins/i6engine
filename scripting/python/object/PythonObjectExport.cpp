@@ -60,6 +60,171 @@
 
 #include "boost/python.hpp"
 
+ // FIXME: (Daniel) ISIXE-1935 fix for Visual Studio 2015 Update 3, remove when this bug is fixed
+#if _MSC_VER == 1900
+namespace boost {
+	template<>
+	i6e::api::AnimatedDirectionalLightComponent const volatile * get_pointer<class i6e::api::AnimatedDirectionalLightComponent const volatile>(class i6e::api::AnimatedDirectionalLightComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::AnimatedLuminousAppearanceComponent const volatile * get_pointer<class i6e::api::AnimatedLuminousAppearanceComponent const volatile>(class i6e::api::AnimatedLuminousAppearanceComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::AnimatedSpotLightComponent const volatile * get_pointer<class i6e::api::AnimatedSpotLightComponent const volatile>(class i6e::api::AnimatedSpotLightComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::AnimationControllerComponent const volatile * get_pointer<class i6e::api::AnimationControllerComponent const volatile>(class i6e::api::AnimationControllerComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::BillboardComponent const volatile * get_pointer<class i6e::api::BillboardComponent const volatile>(class i6e::api::BillboardComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::FollowComponent const volatile * get_pointer<class i6e::api::FollowComponent const volatile>(class i6e::api::FollowComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::LifetimeComponent const volatile * get_pointer<class i6e::api::LifetimeComponent const volatile>(class i6e::api::LifetimeComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::LuminousAppearanceComponent const volatile * get_pointer<class i6e::api::LuminousAppearanceComponent const volatile>(class i6e::api::LuminousAppearanceComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::MeshAppearanceComponent const volatile * get_pointer<class i6e::api::MeshAppearanceComponent const volatile>(class i6e::api::MeshAppearanceComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::MovableTextComponent const volatile * get_pointer<class i6e::api::MovableTextComponent const volatile>(class i6e::api::MovableTextComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::MoveComponent const volatile * get_pointer<class i6e::api::MoveComponent const volatile>(class i6e::api::MoveComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::MoverCircleComponent const volatile * get_pointer<class i6e::api::MoverCircleComponent const volatile>(class i6e::api::MoverCircleComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::MoverInterpolateComponent const volatile * get_pointer<class i6e::api::MoverInterpolateComponent const volatile>(class i6e::api::MoverInterpolateComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::MovingCameraComponent const volatile * get_pointer<class i6e::api::MovingCameraComponent const volatile>(class i6e::api::MovingCameraComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::ParticleEmitterComponent const volatile * get_pointer<class i6e::api::ParticleEmitterComponent const volatile>(class i6e::api::ParticleEmitterComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::PhysicalStateComponent const volatile * get_pointer<class i6e::api::PhysicalStateComponent const volatile>(class i6e::api::PhysicalStateComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::Point2PointConstraintComponent const volatile * get_pointer<class i6e::api::Point2PointConstraintComponent const volatile>(class i6e::api::Point2PointConstraintComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::SoundComponent const volatile * get_pointer<class i6e::api::SoundComponent const volatile>(class i6e::api::SoundComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::SoundListenerComponent const volatile * get_pointer<class i6e::api::SoundListenerComponent const volatile>(class i6e::api::SoundListenerComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::SpawnpointComponent const volatile * get_pointer<class i6e::api::SpawnpointComponent const volatile>(class i6e::api::SpawnpointComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::StaticStateComponent const volatile * get_pointer<class i6e::api::StaticStateComponent const volatile>(class i6e::api::StaticStateComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::TerrainAppearanceComponent const volatile * get_pointer<class i6e::api::TerrainAppearanceComponent const volatile>(class i6e::api::TerrainAppearanceComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::ToggleWaynetComponent const volatile * get_pointer<class i6e::api::ToggleWaynetComponent const volatile>(class i6e::api::ToggleWaynetComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::VelocityComponent const volatile * get_pointer<class i6e::api::VelocityComponent const volatile>(class i6e::api::VelocityComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::WaynetNavigationComponent const volatile * get_pointer<class i6e::api::WaynetNavigationComponent const volatile>(class i6e::api::WaynetNavigationComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::WaypointComponent const volatile * get_pointer<class i6e::api::WaypointComponent const volatile>(class i6e::api::WaypointComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::Component const volatile * get_pointer<class i6e::api::Component const volatile>(class i6e::api::Component const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::CameraComponent const volatile * get_pointer<class i6e::api::CameraComponent const volatile>(class i6e::api::CameraComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::MovementComponent const volatile * get_pointer<class i6e::api::MovementComponent const volatile>(class i6e::api::MovementComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::MoverComponent const volatile * get_pointer<class i6e::api::MoverComponent const volatile>(class i6e::api::MoverComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::NavigationComponent const volatile * get_pointer<class i6e::api::NavigationComponent const volatile>(class i6e::api::NavigationComponent const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::api::ShatterComponent const volatile * get_pointer<class i6e::api::ShatterComponent const volatile>(class i6e::api::ShatterComponent const volatile * c) {
+		return c;
+	}
+} /* namespace boost */
+#endif
+
 namespace i6e {
 namespace python {
 namespace object {

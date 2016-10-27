@@ -28,6 +28,21 @@
 
 #include "boost/python.hpp"
 
+ // FIXME: (Daniel) ISIXE-1935 fix for Visual Studio 2015 Update 3, remove when this bug is fixed
+#if _MSC_VER == 1900
+namespace boost {
+	template<>
+	i6e::core::Message const volatile * get_pointer<class i6e::core::Message const volatile>(class i6e::core::Message const volatile * c) {
+		return c;
+	}
+
+	template<>
+	i6e::core::MessageStruct const volatile * get_pointer<class i6e::core::MessageStruct const volatile>(class i6e::core::MessageStruct const volatile * c) {
+		return c;
+	}
+} /* namespace boost */
+#endif
+
 namespace i6e {
 namespace python {
 namespace core {
