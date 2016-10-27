@@ -350,7 +350,7 @@ namespace modules {
 		 * \brief Returns a pointer to the renderer of the gui subsystem
 		 * \return Pointer to the CEGUI renderer for Ogre
 		 */
-		inline CEGUI::OgreRenderer * getRenderer() const { return _objRenderer; }
+		inline CEGUI::OgreRenderer * getRenderer() const { return _ogreRenderer; }
 
 		/**
 		 * \brief Tick method of the GUI Subsystem
@@ -405,7 +405,7 @@ namespace modules {
 			return _mouseOverWidgets;
 		}
 
-		CEGUI::OgreRenderer * _objRenderer;
+		CEGUI::OgreRenderer * _ogreRenderer;
 		GUIFunctions _objGUIFunctions;
 		GUIKeyFunctions _objGUIKeyFunctions;
 		CEGUI::Window * _objRoot;

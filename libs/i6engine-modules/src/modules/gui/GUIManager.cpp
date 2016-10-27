@@ -56,7 +56,7 @@
 namespace i6e {
 namespace modules {
 
-	GUIManager::GUIManager(GUIController * ctrl) : _objRenderer(), _objGUIFunctions(), _objGUIKeyFunctions(), _objRoot(), _widgets(), _enabledFunctions(), _listIDs(0), _toTick(), _keyStates(), _factory(), _tickerLock(), _ctrl(ctrl), _lastOnWindow(""), _mouseOverWidgets(), _mouseCursorSequence(), _mouseCursorFps(0.0), _mouseCursorAnimationLooping(false), _mouseCursorAnimationStartTime(0) {
+	GUIManager::GUIManager(GUIController * ctrl) : _ogreRenderer(), _objGUIFunctions(), _objGUIKeyFunctions(), _objRoot(), _widgets(), _enabledFunctions(), _listIDs(0), _toTick(), _keyStates(), _factory(), _tickerLock(), _ctrl(ctrl), _lastOnWindow(""), _mouseOverWidgets(), _mouseCursorSequence(), _mouseCursorFps(0.0), _mouseCursorAnimationLooping(false), _mouseCursorAnimationStartTime(0) {
 		ASSERT_THREAD_SAFETY_CONSTRUCTOR
 
 		i6eGUIFacade->registerAddTickerCallback(std::bind(&GUIManager::addTicker, this, std::placeholders::_1));
@@ -571,7 +571,7 @@ namespace modules {
 			setAnimatedMouseCursor(mcsu->sequence, mcsu->fps, mcsu->looping);
 		} else if (type == api::gui::GuiResolution) {
 			const api::gui::GUI_Resolution_Update * ru = dynamic_cast<api::gui::GUI_Resolution_Update *>(data);
-			_objRenderer->setDisplaySize(CEGUI::Sizef(float(ru->resolution.width), float(ru->resolution.height)));
+			_ogreRenderer->setDisplaySize(CEGUI::Sizef(float(ru->resolution.width), float(ru->resolution.height)));
 		} else if (type == api::gui::GuiSubscribeEvent) {
 			std::map<std::string, api::GUIWidget *>::iterator it = _widgets.find(static_cast<api::gui::GUI_SubscribeEvent_Update *>(data)->name);
 			if (it != _widgets.end()) {
@@ -606,7 +606,7 @@ namespace modules {
 		// default Ogre rendering window as the default output surface, an Ogre based
 		// ResourceProvider, and an Ogre based ImageCodec.
 		Ogre::RenderTarget & _target = *root->getRenderTarget(api::EngineController::GetSingletonPtr()->getAppl()->getName());
-		_objRenderer = &CEGUI::OgreRenderer::bootstrapSystem(_target);
+		_ogreRenderer = &CEGUI::OgreRenderer::bootstrapSystem(_target);
 
 		// Add default resource groups (Paths to these groups are defined in /bin/resources.cfg)
 		CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
@@ -618,7 +618,7 @@ namespace modules {
 
 	void GUIManager::Tick() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		if (_objRenderer) {
+		if (_ogreRenderer) {
 			tickWidgets();
 
 			// get mouse position to find underlying widgets
@@ -678,7 +678,7 @@ namespace modules {
 		_mouseCursorFps = fps;
 		_mouseCursorAnimationLooping = looping;
 		_mouseCursorAnimationStartTime = i6eEngineController->getCurrentTime();
-		if (!sequence.empty()) {
+		if (!sequence.empty() && _ogreRenderer) {
 			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setImage(sequence.front());
 			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().invalidate();
 			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().draw();
