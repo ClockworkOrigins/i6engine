@@ -23,6 +23,7 @@
 
 #include "i6engine/api/configs/GUIConfig.h"
 
+#include "CEGUI/Image.h"
 #include "CEGUI/widgets/Listbox.h"
 #include "CEGUI/widgets/ListboxTextItem.h"
 
@@ -84,7 +85,8 @@ namespace modules {
 
 		float y = mousePos.d_y;
 		if (y < CEGUI::System::getSingleton().getRenderer()->getDisplaySize().d_height / 2.0f) {
-			y += 25; // 25 pixels below the cursors start position (would be better to use size of the cursor image)
+			const CEGUI::Image * cursorImage = CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().getImage();
+			y += cursorImage->getRenderedSize().d_height + cursorImage->getRenderedOffset().d_y; // 25 pixels below the cursors start position (would be better to use size of the cursor image)
 		} else {
 			y -= tooltipHeight + 5; // five pixels above the cursor is the end of the tooltip box
 		}
