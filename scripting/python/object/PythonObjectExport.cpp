@@ -222,6 +222,13 @@ namespace boost {
 	i6e::api::ShatterComponent const volatile * get_pointer<class i6e::api::ShatterComponent const volatile>(class i6e::api::ShatterComponent const volatile * c) {
 		return c;
 	}
+
+#ifdef ISIXE_WITH_NETWORK
+	template<>
+	i6e::api::NetworkSenderComponent const volatile * get_pointer<class i6e::api::NetworkSenderComponent const volatile>(class i6e::api::NetworkSenderComponent const volatile * c) {
+		return c;
+	}
+#endif
 } /* namespace boost */
 #endif
 
