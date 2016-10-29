@@ -33,11 +33,17 @@ SET(includedir ./include)
 set(TakeControlSrc
 	${srcdir}/main.cpp
 	
+	${srcdir}/widgets/DialogListWidget.cpp
+	${srcdir}/widgets/InfoWidget.cpp
 	${srcdir}/widgets/MainWindow.cpp
+	${srcdir}/widgets/NPCListWidget.cpp
 )
 
 QT5_WRAP_CPP(TakeControlGuiHeader
+	${includedir}/widgets/DialogListWidget.h
+	${includedir}/widgets/InfoWidget.h
 	${includedir}/widgets/MainWindow.h
+	${includedir}/widgets/NPCListWidget.h
 )
 
 SET(ResourceFile resources/resources.qrc)

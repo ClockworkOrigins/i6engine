@@ -17,46 +17,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
-#define __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
+#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
+#define __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
 
-#include <QMainWindow>
+#include <QWidget>
+
+class QListView;
 
 namespace i6e {
-namespace tools {
-namespace common {
-	class AboutDialog;
-} /* namespace common */
-} /* namespace tools */
 namespace takeControl {
 namespace widgets {
 
-	class DialogListWidget;
-	class InfoWidget;
-	class NPCListWidget;
-
-	class MainWindow : public QMainWindow {
+	class NPCListWidget : public QWidget {
 		Q_OBJECT
 
 	public:
-		MainWindow(QMainWindow * par = nullptr);
-		~MainWindow();
-
-	private slots:
-		void closeEditor();
-		void showAboutDialog();
+		NPCListWidget(QWidget * par = nullptr);
+		~NPCListWidget();
 
 	private:
-		tools::common::AboutDialog * _aboutDialog;
-		NPCListWidget * _npcListWidget;
-		DialogListWidget * _dialogListWidget;
-		InfoWidget * _infoWidget;
-
-		void closeEvent(QCloseEvent * evt) override;
+		QListView * _listView;
 	};
 
 } /* namespace widgets */
 } /* namespace takeControl */
 } /* namespace i6e */
 
-#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__ */
+#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__ */

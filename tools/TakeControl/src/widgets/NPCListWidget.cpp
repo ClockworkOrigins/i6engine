@@ -17,46 +17,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
-#define __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
+#include "widgets/NPCListWidget.h"
 
-#include <QMainWindow>
+#include <QListView>
+#include <QStringListModel>
+#include <QVBoxLayout>
 
 namespace i6e {
-namespace tools {
-namespace common {
-	class AboutDialog;
-} /* namespace common */
-} /* namespace tools */
 namespace takeControl {
 namespace widgets {
 
-	class DialogListWidget;
-	class InfoWidget;
-	class NPCListWidget;
+	NPCListWidget::NPCListWidget(QWidget * par) : QWidget(par), _listView(new QListView(this)) {
+		QVBoxLayout * l = new QVBoxLayout();
+		l->addWidget(_listView);
+		setLayout(l);
 
-	class MainWindow : public QMainWindow {
-		Q_OBJECT
+		QStringListModel * model = new QStringListModel(_listView);
+		model->setStringList({ "NPC1", "NPC2", "NPC3", "NPC4" });
 
-	public:
-		MainWindow(QMainWindow * par = nullptr);
-		~MainWindow();
+		_listView->setModel(model);
+	}
 
-	private slots:
-		void closeEditor();
-		void showAboutDialog();
-
-	private:
-		tools::common::AboutDialog * _aboutDialog;
-		NPCListWidget * _npcListWidget;
-		DialogListWidget * _dialogListWidget;
-		InfoWidget * _infoWidget;
-
-		void closeEvent(QCloseEvent * evt) override;
-	};
+	NPCListWidget::~NPCListWidget() {
+	}
 
 } /* namespace widgets */
 } /* namespace takeControl */
 } /* namespace i6e */
-
-#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__ */

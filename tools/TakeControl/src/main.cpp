@@ -26,7 +26,7 @@
 int main(int argc, char ** argv) {
 	QApplication app(argc, argv);
 	i6e::tools::common::Config::Init();
-	i6e::dialogCreator::widgets::MainWindow wnd;
+	i6e::takeControl::widgets::MainWindow wnd;
 	wnd.showMaximized();
 	return app.exec();
 }

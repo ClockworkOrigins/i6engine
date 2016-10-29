@@ -17,46 +17,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
-#define __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
+#include "widgets/DialogListWidget.h"
 
-#include <QMainWindow>
+#include <QTreeWidget>
+#include <QVBoxLayout>
 
 namespace i6e {
-namespace tools {
-namespace common {
-	class AboutDialog;
-} /* namespace common */
-} /* namespace tools */
 namespace takeControl {
 namespace widgets {
 
-	class DialogListWidget;
-	class InfoWidget;
-	class NPCListWidget;
+	DialogListWidget::DialogListWidget(QWidget * par) : QWidget(par), _treeWidget(new QTreeWidget(this)) {
+		QVBoxLayout * l = new QVBoxLayout();
+		l->addWidget(_treeWidget);
+		setLayout(l);
 
-	class MainWindow : public QMainWindow {
-		Q_OBJECT
+		_treeWidget->clear();
+		_treeWidget->setHeaderHidden(true);
 
-	public:
-		MainWindow(QMainWindow * par = nullptr);
-		~MainWindow();
+		for (int i = 0; i < 10; i++) {
+			QTreeWidgetItem * twi = new QTreeWidgetItem(_treeWidget, { "Dialog_" + QString::number(i) });
+			_treeWidget->addTopLevelItem(twi);
 
-	private slots:
-		void closeEditor();
-		void showAboutDialog();
+			for (int j = 0; j < 5; j++) {
+				twi->addChild(new QTreeWidgetItem(twi, { "This is sentence " + QString::number(j) }));
+			}
+		}
+	}
 
-	private:
-		tools::common::AboutDialog * _aboutDialog;
-		NPCListWidget * _npcListWidget;
-		DialogListWidget * _dialogListWidget;
-		InfoWidget * _infoWidget;
-
-		void closeEvent(QCloseEvent * evt) override;
-	};
+	DialogListWidget::~DialogListWidget() {
+	}
 
 } /* namespace widgets */
 } /* namespace takeControl */
 } /* namespace i6e */
-
-#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__ */

@@ -20,19 +20,23 @@
 #include "widgets/MainWindow.h"
 
 #include "widgets/AboutDialog.h"
+#include "widgets/DialogListWidget.h"
+#include "widgets/InfoWidget.h"
+#include "widgets/NPCListWidget.h"
 
 #include "i6engine/i6engineBuildSettings.h"
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QHBoxLayout>
 #include <QMenu>
 #include <QMenuBar>
 
 namespace i6e {
-namespace dialogCreator {
+namespace takeControl {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _aboutDialog(new tools::common::AboutDialog(this)) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _aboutDialog(new tools::common::AboutDialog(this)), _npcListWidget(new NPCListWidget(this)), _dialogListWidget(new DialogListWidget(this)), _infoWidget(new InfoWidget(this)) {
 		setWindowIcon(QIcon(":/icon.png"));
 
 		setWindowTitle(QString("TakeControl (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
@@ -43,6 +47,28 @@ namespace widgets {
 		helpMenu->addAction(aboutAction);
 
 		connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAboutDialog()));
+
+		QWidget * w = new QWidget(this);
+		QHBoxLayout * l = new QHBoxLayout();
+
+		l->addWidget(_npcListWidget);
+
+		QWidget * rightWidget = new QWidget(this);
+		QVBoxLayout * rightLayout = new QVBoxLayout();
+
+		rightLayout->addWidget(_dialogListWidget);
+		rightLayout->addWidget(_infoWidget);
+
+		rightWidget->setLayout(rightLayout);
+
+		l->addWidget(rightWidget);
+
+		w->setLayout(l);
+
+		l->setStretch(0, 1);
+		l->setStretch(1, 3);
+
+		setCentralWidget(w);
 	}
 
 	MainWindow::~MainWindow() {
@@ -62,5 +88,5 @@ namespace widgets {
 	}
 
 } /* namespace widgets */
-} /* namespace dialogCreator */
+} /* namespace takeControl */
 } /* namespace i6e */
