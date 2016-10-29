@@ -71,7 +71,7 @@ xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "@CMAKE_BINARY_DIR@/%archiveName%/AUTHORS*
 xcopy /F "@CMAKE_SOURCE_DIR@/CMakeLists.txt" "@CMAKE_BINARY_DIR@/%archiveName%/CMakeLists.txt*"
 xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "@CMAKE_BINARY_DIR@/%archiveName%/LICENSE*"
 xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "@CMAKE_BINARY_DIR@/%archiveName%/NOTICE*"
-xcopy /F "@CMAKE_SOURCE_DIR@/README" "@CMAKE_BINARY_DIR@/%archiveName%/README*"
+xcopy /F "@CMAKE_SOURCE_DIR@/README.md" "@CMAKE_BINARY_DIR@/%archiveName%/README.md*"
 
 winrar a -afzip -df %archiveName%.zip %archiveName%
 exit /b
