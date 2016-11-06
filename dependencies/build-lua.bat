@@ -36,7 +36,8 @@ call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 echo "Configuring Lua"
 
 cd %BUILD_DIR%
-xcopy /F "%DEP_DIR%\..\ext\lua\CMakeLists.txt" "%BUILD_DIR%\CMakeLists.txt*" > NULcmake -DCMAKE_INSTALL_PREFIX=%PREFIX% -G "%VSCOMPILER%%VSARCH%" .
+xcopy /F "%DEP_DIR%\..\ext\patches\lua\CMakeLists.txt" "%BUILD_DIR%\CMakeLists.txt*"
+cmake -DCMAKE_INSTALL_PREFIX=%PREFIX% -G "%VSCOMPILER%%VSARCH%" .
 
 echo "Building Lua"
 

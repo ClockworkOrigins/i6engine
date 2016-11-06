@@ -43,7 +43,8 @@ unzip "${ARCHIVE}"
 status "Configuring Lua"
 
 cd "${BUILD_DIR}"
-cp "${PATCH_DIR}/lua/CMakeLists.txt" "${BUILD_DIR}/CMakeLists.txt"cmake \
+cp "${PATCH_DIR}/lua/CMakeLists.txt" "${BUILD_DIR}/CMakeLists.txt"
+cmake \
 	-DCMAKE_INSTALL_PREFIX="${PREFIX}" \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_C_COMPILER=${C_COMPILER} \
