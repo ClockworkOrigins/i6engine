@@ -679,6 +679,7 @@ namespace modules {
 		_mouseCursorAnimationLooping = looping;
 		_mouseCursorAnimationStartTime = i6eEngineController->getCurrentTime();
 		if (!sequence.empty() && _ogreRenderer) {
+			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage(sequence.front());
 			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setImage(sequence.front());
 			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().invalidate();
 			CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().draw();
