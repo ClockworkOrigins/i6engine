@@ -18,7 +18,7 @@
 # CMake main configfile i6engine project
 #
 
-cmake_minimum_required (VERSION 2.8.12)
+cmake_minimum_required (VERSION 3.0)
 
 #########################################################################
 #########################################################################
@@ -40,52 +40,15 @@ option(ISIXE_WITH_DOCU "build documentation for i6engine" ON)
 option(ISIXE_WITH_TUTORIALS "build tutorials for i6engine" ON)
 OPTION(ISIXE_WITH_CONSOLE "build samples and tools with console output" ON)
 OPTION(ISIXE_WITH_PARTICLEUNIVERSE "build with ParticleUniverse particle system. If disabled, no particles are available" ON)
-
-IF(NOT ISIXE_WITH_CONSOLE AND WIN32)
-	SET(GUI_TYPE WIN32)
-ENDIF(NOT ISIXE_WITH_CONSOLE AND WIN32)
-
+set(ISIXE_WITH_SCRIPTING "python" CACHE STRING "specifies the scripting system to use" )
 # options are
 # * ""
 # * "python"
 # * "lua"
-set(ISIXE_WITH_SCRIPTING "python" CACHE STRING "specifies the scripting system to use" )
-IF(ANDROID)
-	ADD_DEFINITIONS(-DANDROID)
-	SET(ANDROID_STL "gnustl_shared")
-	SET(DEP_DIR_BUILD android)
-	SET(Qt5_Platform android_armv7)
-	SET(ANDROID_SDK_PATH $ENV{ANDROID_HOME})
-ELSEIF(UNIX)
-	SET(DEP_DIR_BUILD "x86")
-	SET(Qt5_Platform gcc_64)
-ELSEIF(WIN32)
-	IF(CMAKE_GENERATOR MATCHES "Visual Studio 12")
-		SET(DEP_DIR_BUILD "msvc12_")
-		SET(VS_TOOLCHAIN "msvc12")
-		SET(Qt5_Platform msvc2013)
-	ELSEIF(CMAKE_GENERATOR MATCHES "Visual Studio 14")
-		SET(DEP_DIR_BUILD "msvc14_")
-		SET(VS_TOOLCHAIN "msvc14")
-		SET(Qt5_Platform msvc2015)
-	ELSE()
-		MESSAGE([WARNING] "Toolchain not supported yet!")
-	ENDIF()
 
-	IF(CMAKE_GENERATOR MATCHES "Win64")
-		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}x64")
-		SET(64BIT ON)
-		SET(VS_ARCH "64")
-		SET(Qt5_Platform ${Qt5_Platform}_64)
-	ELSE()
-		SET(DEP_DIR_BUILD "${DEP_DIR_BUILD}x86")
-		SET(VS_ARCH "32")
-	ENDIF()
-ENDIF()
-
-SET(ENV{Qt5_DIR} $ENV{Qt5_BaseDir}/${Qt5_Platform})
-
-SET(ISIXE_DEP_DIR "${CMAKE_SOURCE_DIR}/dependencies/${DEP_DIR_BUILD}" CACHE STRING "path to dependencies for i6engine")
+IF(NOT ISIXE_WITH_CONSOLE AND WIN32)
+	SET(GUI_TYPE WIN32)
+ENDIF(NOT ISIXE_WITH_CONSOLE AND WIN32)
 
 IF(ISIXE_WITH_TESTING AND NOT WIN32)
 	# static for gmock
@@ -96,11 +59,7 @@ ENDIF(ISIXE_WITH_TESTING AND NOT WIN32)
 
 project(i6engine)
 
-IF(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug CACHE STRING
-      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
-      FORCE)
-ENDIF(NOT CMAKE_BUILD_TYPE)
+include(cmake/variables.cmake)
 
 IF(ISIXE_WITH_SCRIPTING STREQUAL "lua")
 	set(SCRIPTING_LUA ON)
@@ -128,266 +87,31 @@ SET(VERSION_MAJOR 1)
 SET(VERSION_MINOR 1)
 SET(VERSION_PATCH 0)
 
-#########################################################################
-# Global Macros and Definitions
-#########################################################################
+###############################################################################
+# Configure Build Settings (has to be before building m2etis because m2etis needs i6engineBuildSettings)
+###############################################################################
 
-# Sets appropriate Compilerflags
+configure_file(${CMAKE_SOURCE_DIR}/config/i6engineBuildSettings.h.in ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/i6engine)
 
-set (CXX_FLAGS "-pedantic -Wall -Wextra -Wold-style-cast -Woverloaded-virtual -Wnon-virtual-dtor -Wformat=2 -Winit-self -Wswitch-default -Wfloat-equal -Wshadow -Wredundant-decls -Wctor-dtor-privacy -Wsign-conversion -Wno-unused-parameter -Wno-long-long -std=c++11")
-IF(ISIXE_WITH_TESTING)
-	set(CXX_FLAGS "${CXX_FLAGS} -fPIC")
-ENDIF(ISIXE_WITH_TESTING)
-set (CLANG_FLAGS "-Wstring-plus-int")
-
-IF(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
-	set (CMAKE_CXX_FLAGS_DEBUG		"${CXX_FLAGS} ${CLANG_FLAGS} -g")
-	set (CMAKE_CXX_FLAGS_MINSIZEREL		"${CXX_FLAGS} ${CLANG_FLAGS} -0s -DNDEBUG")
-	set (CMAKE_CXX_FLAGS_RELEASE		"${CXX_FLAGS} ${CLANG_FLAGS} -O3 -DNDEBUG")
-	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CXX_FLAGS} ${CLANG_FLAGS} -O2 -g")
-ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
-	set (CMAKE_CXX_FLAGS_DEBUG		"${CXX_FLAGS} -g")
-	set (CMAKE_CXX_FLAGS_MINSIZEREL		"${CXX_FLAGS} -0s -DNDEBUG")
-	set (CMAKE_CXX_FLAGS_RELEASE		"${CXX_FLAGS} -O3 -DNDEBUG")
-	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CXX_FLAGS} -O2 -g")
-ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-	set (CXX_FLAGS "/MP /W4 /wd4127 /DNOMINMAX")
-	set (CMAKE_CXX_FLAGS_DEBUG		"${CMAKE_CXX_FLAGS_DEBUG} ${CXX_FLAGS}")
-	set (CMAKE_CXX_FLAGS_MINSIZEREL	"${CMAKE_CXX_FLAGS_MINSIZEREL} ${CXX_FLAGS}")
-	set (CMAKE_CXX_FLAGS_RELEASE		"${CMAKE_CXX_FLAGS_RELEASE} ${CXX_FLAGS}")
-	set (CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${CXX_FLAGS}")
-ELSE()
-	message (SEND_INFO "Unknown C++ compiler \"${CMAKE_CXX_COMPILER_ID}\". Only GNU, Clang and MSVC are completely supported.")
-ENDIF()
-
-#########################################################################
-# Global Directory Definitions
-#########################################################################
-
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules/" ${CMAKE_MODULE_PATH})
-
-#Setting Output Directories
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
+configure_file(${CMAKE_SOURCE_DIR}/config/i6engineBuildSettings.h.in ${CMAKE_BINARY_DIR}/m2etisIncludes/i6engine/i6engineBuildSettings.h @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/libs/i6engine-utils/include/i6engine/utils/i6eSystemParameters.h ${CMAKE_BINARY_DIR}/m2etisIncludes/i6engine/utils/i6eSystemParameters.h COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/libs/i6engine-core/include/i6engine/core/messaging/IPKey.h ${CMAKE_BINARY_DIR}/m2etisIncludes/i6engine/core/messaging/IPKey.h COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/libs/i6engine-core/include/i6engine/core/messaging/Message.h ${CMAKE_BINARY_DIR}/m2etisIncludes/i6engine/core/messaging/Message.h COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/libs/i6engine-core/include/i6engine/core/messaging/MessageStruct.h ${CMAKE_BINARY_DIR}/m2etisIncludes/i6engine/core/messaging/MessageStruct.h COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/libs/i6engine-modules/include/i6engine/api/GameMessage.h ${CMAKE_BINARY_DIR}/m2etisIncludes/i6engine/api/GameMessage.h COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/libs/i6engine-modules/include/i6engine/api/GameMessageStruct.h ${CMAKE_BINARY_DIR}/m2etisIncludes/i6engine/api/GameMessageStruct.h COPYONLY)
 
 #########################################################################
 # Library Section
 #########################################################################
 
-#----------------------------------------------------
-# Pthreads
-#----------------------------------------------------
-IF(NOT WIN32)
-	find_package(Pthreads REQUIRED)
-	include_directories(SYSTEM ${PTHREADS_INCLUDE_DIR})
-ENDIF(NOT WIN32)
-
-#----------------------------------------------------
-# Boost
-#---------------------------------------------------
-IF(NOT EXISTS ${ISIXE_DEP_DIR}/boost)
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-boost.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-boost.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ENDIF()
-ENDIF()
-
-	SET(LIBNAME "BOOST")
-	SET(LIBHEADER "boost/thread.hpp")
-	SET(BOOST_ROOT ${ISIXE_DEP_DIR}/boost)
-	set(BOOST_COMPONENTS chrono date_time filesystem serialization system thread)
-	IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
-		SET(BOOST_COMPONENTS ${BOOST_COMPONENTS} python)
-	ENDIF()
-	IF(ISIXE_WITH_LOGGING)
-		SET(BOOST_COMPONENTS ${BOOST_COMPONENTS} log log_setup)
-	ENDIF(ISIXE_WITH_LOGGING)
-	FOREACH(comp ${BOOST_COMPONENTS})
-		list(APPEND libs boost_${comp})
-	ENDFOREACH(comp)
-	SET(BOOST_COMPONENTS ${libs})
-	find_package(EasyFind REQUIRED COMPONENTS ${BOOST_COMPONENTS})
-	include_directories(SYSTEM ${BOOST_INCLUDE_DIR})
-
-#----------------------------------------------------
-# Bullet
-#----------------------------------------------------
-IF(NOT EXISTS ${ISIXE_DEP_DIR}/bullet)
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-bullet.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-bullet.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ENDIF()
-ENDIF()
-
-	SET(LIBNAME "BULLET")
-	SET(LIBHEADER "bullet/btBulletCollisionCommon.h")
-	SET(BULLET_ROOT ${ISIXE_DEP_DIR}/bullet)
-	find_package(EasyFind REQUIRED COMPONENTS BulletCollision BulletDynamics LinearMath BulletWorldImporter BulletFileLoader)
-	include_directories(SYSTEM ${BULLET_INCLUDE_DIR})
-	include_directories(SYSTEM ${BULLET_INCLUDE_DIR}/bullet)
-
-#----------------------------------------------------
-# clockUtils
-#----------------------------------------------------
-IF(NOT EXISTS ${ISIXE_DEP_DIR}/clockUtils)
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-clockUtils.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-clockUtils.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ENDIF()
-ENDIF()
-
-	SET(LIBNAME "CLOCKUTILS")
-	SET(LIBHEADER "clockUtils/errors.h")
-	SET(CLOCKUTILS_ROOT ${ISIXE_DEP_DIR}/clockUtils)
-	SET(CLOCKUTILS_COMPONENTS clock_compression clock_iniParser clock_sockets)
-	IF(ISIXE_WITH_TOOLS)
-		SET(CLOCKUTILS_COMPONENTS ${CLOCKUTILS_COMPONENTS} clock_argParser)
-	ENDIF(ISIXE_WITH_TOOLS)
-	find_package(EasyFind REQUIRED COMPONENTS ${CLOCKUTILS_COMPONENTS})
-	include_directories(SYSTEM ${CLOCKUTILS_INCLUDE_DIR})
-
-#----------------------------------------------------
-# Google Test
-#----------------------------------------------------
-IF(ISIXE_WITH_TESTING)
-	IF(NOT EXISTS ${ISIXE_DEP_DIR}/gmock)
-		IF(WIN32)
-			execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gmock.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-		ELSEIF(UNIX)
-			execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-gmock.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-		ENDIF()
-	ENDIF()
-
-	SET(LIBNAME "GTEST")
-	SET(LIBHEADER "gtest/gtest.h")
-	SET(GTEST_ROOT ${ISIXE_DEP_DIR}/gmock)
-	find_package(EasyFind REQUIRED COMPONENTS gmock_main gmock gtest gtest_main)
-	include_directories(SYSTEM ${GTEST_INCLUDE_DIR})
-ENDIF(ISIXE_WITH_TESTING)
-
-#----------------------------------------------------
-# Google Performance Tools
-#----------------------------------------------------
-IF(ISIXE_WITH_PROFILING)
-	IF(NOT EXISTS ${ISIXE_DEP_DIR}/gperftools)
-		IF(WIN32)
-			execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-gperftools.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-		ELSEIF(UNIX)
-			execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-gperftools.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-		ENDIF()
-	ENDIF()
-
-	SET(LIBNAME "GPerfTools")
-	SET(LIBHEADER "gperftools/tcmalloc.h")
-	SET(GPerfTools_ROOT ${ISIXE_DEP_DIR}/gperftools)
-	IF(WIN32)
-		find_package(EasyFind REQUIRED COMPONENTS libtcmalloc_minimal)
-	ELSE(WIN32)
-		find_package(EasyFind REQUIRED COMPONENTS tcmalloc profiler)
-	ENDIF(WIN32)
-	include_directories(SYSTEM ${GPerfTools_INCLUDE_DIR})
-ENDIF(ISIXE_WITH_PROFILING)
-
-#----------------------------------------------------
-# Lua
-#----------------------------------------------------
-IF(ISIXE_WITH_SCRIPTING STREQUAL "lua")
-	IF(NOT EXISTS ${ISIXE_DEP_DIR}/lua)
-		IF(WIN32)
-			execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-lua.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-		ELSEIF(UNIX)
-			execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-lua.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-		ENDIF()
-	ENDIF()
-
-	SET(LIBNAME "LUA")
-	SET(LIBHEADER "lua.h")
-	SET(LUA_ROOT ${ISIXE_DEP_DIR}/lua)
-	find_package(EasyFind REQUIRED COMPONENTS lua)
-	include_directories(SYSTEM ${LUA_INCLUDE_DIR})
-ENDIF()
-
-#----------------------------------------------------
-# OIS
-#----------------------------------------------------
-IF(NOT EXISTS ${ISIXE_DEP_DIR}/ogre) # build ogre before searching OIS as OIS is built by ogre build scripts together with some other dependencies
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-ogre.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-ogre.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ENDIF()
-ENDIF()
-
-	SET(LIBNAME "OIS")
-	SET(LIBHEADER "OIS/OIS.h")
-	SET(OIS_ROOT ${ISIXE_DEP_DIR}/misc)
-	find_package(EasyFind REQUIRED COMPONENTS OIS)
-	include_directories(SYSTEM ${OIS_INCLUDE_DIR})
-
-#----------------------------------------------------
-# Ogre3D
-#----------------------------------------------------
-
-	SET(LIBNAME "OGRE")
-	SET(LIBHEADER "OGRE/Ogre.h")
-	SET(OGRE_ROOT ${ISIXE_DEP_DIR}/ogre)
-	find_package(EasyFind REQUIRED COMPONENTS OgreMain OgreOverlay OgrePaging OgreProperty OgreRTShaderSystem OgreTerrain)
-	include_directories(SYSTEM ${OGRE_INCLUDE_DIR})
-	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/)
-	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/Paging)
-	include_directories(SYSTEM ${OGRE_INCLUDE_DIR}/OGRE/Terrain)
-
-#----------------------------------------------------
-# CEGUI
-#----------------------------------------------------
-IF(NOT EXISTS ${ISIXE_DEP_DIR}/cegui)
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-cegui.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-cegui.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ENDIF()
-ENDIF()
-
-	SET(LIBNAME "CEGUI")
-	SET(LIBHEADER "CEGUI/CEGUI.h")
-	SET(CEGUI_ROOT ${ISIXE_DEP_DIR}/cegui)
-	find_package(EasyFind REQUIRED COMPONENTS CEGUIBase-0 CEGUIExpatParser CEGUIOgreRenderer-0)
-	include_directories(SYSTEM ${CEGUI_INCLUDE_DIR})
-
-#----------------------------------------------------
-# OpenAL Soft
-#----------------------------------------------------
-IF(ISIXE_WITH_AUDIO)
-	IF(NOT EXISTS ${ISIXE_DEP_DIR}/OpenALSoft)
-		IF(WIN32)
-			execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-openalsoft.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-		ELSEIF(UNIX)
-			execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-openalsoft.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-		ENDIF()
-	ENDIF()
-
-	SET(LIBNAME "OPENALSOFT")
-	SET(LIBHEADER "AL/al.h")
-	SET(OPENALSOFT_ROOT ${ISIXE_DEP_DIR}/OpenALSoft)
-	IF(WIN32)
-		find_package(EasyFind REQUIRED COMPONENTS OpenAL32)
-	ELSEIF(UNIX)
-		find_package(EasyFind REQUIRED COMPONENTS openal)
-	ENDIF()
-	include_directories(SYSTEM ${OPENALSOFT_INCLUDE_DIR})
-ENDIF(ISIXE_WITH_AUDIO)
+include(cmake/searchDependencies.cmake)
 
 #----------------------------------------------------
 # Python
 #----------------------------------------------------
-IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
-	find_package(PythonLibs 2.7 REQUIRED)
-	include_directories(${PYTHON_INCLUDE_DIRS})
-
+IF(SCRIPTING_PYTHON)
 	IF(WIN32)
 		SET(PYTHON_DLL "$ENV{windir}")
 		IF(64BIT)
@@ -400,38 +124,9 @@ IF(ISIXE_WITH_SCRIPTING STREQUAL "python")
 ENDIF()
 
 #----------------------------------------------------
-# TinyXML
-#----------------------------------------------------
-IF(NOT EXISTS ${ISIXE_DEP_DIR}/tinyxml2)
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-tinyxml.bat ${VS_TOOLCHAIN} ${VS_ARCH} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-tinyxml.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ENDIF()
-ENDIF()
-
-	SET(LIBNAME "TinyXML")
-	SET(LIBHEADER "tinyxml2.h")
-	SET(TinyXML_ROOT ${ISIXE_DEP_DIR}/tinyxml2)
-	find_package(EasyFind REQUIRED COMPONENTS tinyxml2)
-	include_directories(SYSTEM ${TinyXML_INCLUDE_DIR})
-
-#----------------------------------------------------
-# JPEG
-#----------------------------------------------------
-IF(NOT WIN32)
-	find_package(JPEG REQUIRED)
-ENDIF(NOT WIN32)
-
-#----------------------------------------------------
 # Qt
 #----------------------------------------------------
 IF(ISIXE_WITH_TOOLS)
-	FIND_PACKAGE(Qt5 REQUIRED Widgets Core Gui LinguistTools)
-	INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
-
-	SET(QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
-
 	IF(ISIXE_WITH_CONSOLE AND WIN32)
 		SET(QT_LIBRARIES ${QT_LIBRARIES} Qt5::WinMain)
 	ENDIF(ISIXE_WITH_CONSOLE AND WIN32)
@@ -445,31 +140,6 @@ IF(ISIXE_WITH_TOOLS)
 	# used for Windows prebuilt packages
 	SET(QT_EXPORT_DIR $ENV{Qt5_DIR})
 ENDIF(ISIXE_WITH_TOOLS)
-
-###############################################################################
-# Configure Build Settings (has to be before building m2etis because m2etis needs i6engineBuildSettings)
-###############################################################################
-
-configure_file(${CMAKE_SOURCE_DIR}/config/i6engineBuildSettings.h.in ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/include/i6engine/i6engineBuildSettings.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/i6engine)
-
-#----------------------------------------------------
-# m2etis
-#----------------------------------------------------
-IF(ISIXE_WITH_NETWORK)
-	# Build m2etis
-	IF(WIN32)
-		execute_process(COMMAND ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.bat ${VS_TOOLCHAIN} ${VS_ARCH} "${ISIXE_DEP_DIR}/.." "${CMAKE_BINARY_DIR}/include" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ELSEIF(UNIX)
-		execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/dependencies/build-m2etis.sh "${CMAKE_BINARY_DIR}/include/i6engine" "${CMAKE_BUILD_TYPE}" "${ISIXE_DEP_DIR}" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/dependencies)
-	ENDIF()
-
-	SET(LIBNAME "M2etis")
-	SET(LIBHEADER "m2etis/pubsub/PubSubSystem.h")
-	SET(M2etis_ROOT ${ISIXE_DEP_DIR}/m2etis)
-	find_package(EasyFind REQUIRED COMPONENTS m2etis)
-	include_directories(SYSTEM ${M2etis_INCLUDE_DIR})
-ENDIF(ISIXE_WITH_NETWORK)
 
 ####################################################################################
 # Install paths
@@ -553,7 +223,6 @@ ENDIF(ISIXE_WITH_TOOLS)
 ###############################################################################
 
 IF(ISIXE_WITH_DOCU)
-	find_package(Doxygen)
 	IF(DOXYGEN_FOUND)
 		add_subdirectory(docs)
 	ENDIF(DOXYGEN_FOUND)
@@ -599,58 +268,19 @@ IF(ISIXE_WITH_PROFILING)
 	configure_file(${CMAKE_SOURCE_DIR}/config/profiling.info ${CMAKE_BINARY_DIR}/bin/profiling.info COPYONLY)
 ENDIF(ISIXE_WITH_PROFILING)
 
-IF(UNIX)
-	file(GLOB files "${ISIXE_DEP_DIR}/ogre/lib/OGRE/*.so.*")
-	foreach(filename ${files})
-		get_filename_component(filename_pure ${filename} NAME)
-		execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${filename} ${CMAKE_BINARY_DIR}/bin/${filename_pure})
-	endforeach()
+include(cmake/addToBinDir.cmake)
 
+IF(UNIX)
 	configure_file(${CMAKE_SOURCE_DIR}/config/test-buildconfigurations.sh.in ${CMAKE_BINARY_DIR}/test-buildconfigurations.sh @ONLY)
 	add_custom_target(TestConfigurations COMMAND ./test-buildconfigurations.sh WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 ENDIF(UNIX)
 
-IF(WIN32)
-	file(GLOB_RECURSE files "${ISIXE_DEP_DIR}/*.dll")
-	foreach(filename ${files})
-		execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${filename} ${CMAKE_BINARY_DIR}/bin)
-	endforeach()
-
-	IF(ISIXE_WITH_TOOLS)
-		file(GLOB_RECURSE files "$ENV{Qt5_DIR}/bin/icudt*.dll")
-		foreach(filename ${files})
-			get_filename_component(filename ${filename} NAME)
-			configure_file($ENV{Qt5_DIR}/bin/${filename} ${CMAKE_BINARY_DIR}/bin/${filename} COPYONLY)
-		endforeach()
-
-		file(GLOB_RECURSE files "$ENV{Qt5_DIR}/bin/icuin*.dll")
-		foreach(filename ${files})
-			get_filename_component(filename ${filename} NAME)
-			configure_file($ENV{Qt5_DIR}/bin/${filename} ${CMAKE_BINARY_DIR}/bin/${filename} COPYONLY)
-		endforeach()
-
-		file(GLOB_RECURSE files "$ENV{Qt5_DIR}/bin/icuuc*.dll")
-		foreach(filename ${files})
-			get_filename_component(filename ${filename} NAME)
-			configure_file($ENV{Qt5_DIR}/bin/${filename} ${CMAKE_BINARY_DIR}/bin/${filename} COPYONLY)
-		endforeach()
-
-		configure_file($ENV{Qt5_DIR}/bin/libEGL.dll ${CMAKE_BINARY_DIR}/bin/libEGL.dll COPYONLY)
-		configure_file($ENV{Qt5_DIR}/bin/libGLESv2.dll ${CMAKE_BINARY_DIR}/bin/libGLESv2.dll COPYONLY)
-		configure_file($ENV{Qt5_DIR}/bin/Qt5Core.dll ${CMAKE_BINARY_DIR}/bin/Qt5Core.dll COPYONLY)
-		configure_file($ENV{Qt5_DIR}/bin/Qt5Gui.dll ${CMAKE_BINARY_DIR}/bin/Qt5Gui.dll COPYONLY)
-		configure_file($ENV{Qt5_DIR}/bin/Qt5Widgets.dll ${CMAKE_BINARY_DIR}/bin/Qt5Widgets.dll COPYONLY)
-
-		configure_file($ENV{Qt5_DIR}/plugins/platforms/qwindows.dll ${CMAKE_BINARY_DIR}/bin/plugins/platforms/qwindows.dll COPYONLY)
-	ENDIF(ISIXE_WITH_TOOLS)
-	
+IF(WIN32)	
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-archive.bat.in ${CMAKE_BINARY_DIR}/build-archive.bat @ONLY)
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-prebuilt-msvc.bat.in ${CMAKE_BINARY_DIR}/build-prebuilt-msvc.bat @ONLY)
 	configure_file(${CMAKE_SOURCE_DIR}/config/test-buildconfigurations.bat.in ${CMAKE_BINARY_DIR}/test-buildconfigurations.bat @ONLY)
 
-	IF(ISIXE_WITH_TOOLS)
-		configure_file(${CMAKE_SOURCE_DIR}/config/qt.conf ${CMAKE_BINARY_DIR}/bin/qt.conf COPYONLY)
-	
+	IF(ISIXE_WITH_TOOLS)	
 		install(FILES ${CMAKE_SOURCE_DIR}/config/qt.conf DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 	ENDIF(ISIXE_WITH_TOOLS)
 

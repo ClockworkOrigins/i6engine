@@ -21,7 +21,7 @@
 
 cd "$(readlink "$(dirname "${0}")")"
 
-. ./build-common.sh ${1}
+. ./build-common.sh android
 
 ARCHIVE="tinyxml2.zip"
 BUILD_DIR="${BUILD_ROOT}/tinyxml2"
@@ -44,16 +44,13 @@ status "Building tinyxml2"
 
 cd "${BUILD_DIR}/jni"
 cp -rf "${PATCH_DIR}/tinyxml2/tinyxml2.cpp" "${BUILD_ROOT}/tinyxml2/jni"
-${CXX_COMPILER} -c tinyxml2.cpp -o tinyxml2.o
-ar rcs libtinyxml2.a tinyxml2.o
-
-status "Installing tinyxml2"
+${ANDROID_NDK}/ndk-build
 
 mkdir -p "${PREFIX}/include"
 mkdir "${PREFIX}/lib"
 
-cp ./*.h "${PREFIX}/include"
-cp ./*.a "${PREFIX}/lib"
+cp ./jni/*.h "${PREFIX}/include"
+cp ./obj/local/armeabi/*.so "${PREFIX}/lib"
 
 status "Cleaning up"
 

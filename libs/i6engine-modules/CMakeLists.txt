@@ -276,7 +276,7 @@ set_target_properties(i6engine-modules PROPERTIES LINKER_LANGUAGE CXX)
 # to find the dependency libs during runtime
 set_target_properties(i6engine-modules PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-target_link_libraries(i6engine-modules i6engine-utils i6engine-math i6engine-core ${BULLET_LIBRARIES} ${CEGUI_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${TinyXML_LIBRARIES})
+target_link_libraries(i6engine-modules i6engine-utils i6engine-math i6engine-core ${BULLET_LIBRARIES} ${CEGUI_LIBRARIES} ${CLOCKUTILS_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${TINYXML_LIBRARIES})
 
 IF(ISIXE_WITH_AUDIO)
 	target_link_libraries(i6engine-modules ${OPENALSOFT_LIBRARIES})
@@ -293,7 +293,7 @@ ELSEIF(SCRIPTING_PYTHON)
 ENDIF()
 
 IF(ISIXE_WITH_NETWORK)
-	target_link_libraries(i6engine-modules ${M2etis_LIBRARIES})
+	target_link_libraries(i6engine-modules ${M2ETIS_LIBRARIES})
 ENDIF(ISIXE_WITH_NETWORK)
 
 IF(WIN32)

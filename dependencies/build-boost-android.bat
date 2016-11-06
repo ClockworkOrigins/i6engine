@@ -19,13 +19,11 @@ REM License along with this library; if not, write to the Free Software
 REM Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 REM
 
-setlocal EnableDelayedExpansion
-
-call build-common.bat %1 %2
+call build-common.bat android
 
 Set ARCHIVE=boost_1_58_0.tar.bz2
 Set BUILD_DIR=%TMP_DIR%/boost_1_58_0
-Set PREFIX=%DEP_DIR%\%ARCH_DIR%\boost
+Set PREFIX=%DEP_DIR%/%ARCH_DIR%/boost
 
 IF EXIST %PREFIX% EXIT /B
 
@@ -38,16 +36,11 @@ call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 echo "Configuring Boost"
 
 cd %BUILD_DIR%
+xcopy /F "%DEP_DIR%\..\ext\patches\boost\user-config-AndroidWindows.jam" "%BUILD_DIR%\tools\build\src\user-config.jam*"
 call bootstrap.bat
-IF [%BOOSTARCH%] == [64] (
-	echo using python : 2.7 : %PYTHON_PATH_x64% ; >> user-config.jam
-)
-IF [%BOOSTARCH%] == [32] (
-	echo using python : 2.7 : %PYTHON_PATH_x86% ; >> user-config.jam
-)
 
 echo "Building Boost"
-b2 --user-config=user-config.jam toolset=%BOOSTCOMPILER% address-model=%BOOSTARCH% --with-atomic --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system -j %NUMBER_OF_PROCESSORS% variant=release install --prefix=%PREFIX% stage > NUL
+b2 toolset=gcc-android target-os=linux --with-atomic --with-date_time --with-filesystem --with-log --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system -j %NUMBER_OF_PROCESSORS% variant=release install --prefix=%PREFIX% stage > NUL
 
 echo "Installing Boost"
 

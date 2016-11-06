@@ -21,39 +21,42 @@
 
 cd "$(readlink "$(dirname "${0}")")"
 
-. ./build-common.sh ${1}
+. ./build-common.sh android
 
-ARCHIVE="tinyxml2.zip"
-BUILD_DIR="${BUILD_ROOT}/tinyxml2"
-PREFIX="${DEP_OUT_DIR}/tinyxml2/"
+ARCHIVE="boost_1_58_0.tar.bz2"
+BUILD_DIR="${BUILD_ROOT}/boost_1_58_0"
+PREFIX="${DEP_OUT_DIR}/boost/"
 
 if [ -d ${PREFIX} ]; then
 	exit 0
 fi
 
-title "Compile tinyxml2"
+title "Compile Boost"
 
 . ./download-dependency.sh ${ARCHIVE}
 
-status "Extracting tinyxml2"
+status "Extracting Boost"
 
 cd "${BUILD_ROOT}"
-unzip "${ARCHIVE}"
+tar xfj "${ARCHIVE}"
 
-status "Building tinyxml2"
+status "Configuring Boost"
 
-cd "${BUILD_DIR}/jni"
-cp -rf "${PATCH_DIR}/tinyxml2/tinyxml2.cpp" "${BUILD_ROOT}/tinyxml2/jni"
-${CXX_COMPILER} -c tinyxml2.cpp -o tinyxml2.o
-ar rcs libtinyxml2.a tinyxml2.o
+cd "${BUILD_DIR}"
+cp "${PATCH_DIR}/boost/user-config-AndroidLinux.jam" "${BUILD_DIR}/tools/build/src/user-config.jam"
+./bootstrap.sh  --prefix="${PREFIX}" --with-libraries=atomic,date_time,filesystem,log,regex,serialization,system,thread --with-python=python2.7
 
-status "Installing tinyxml2"
+status "Building & Installing Boost"
 
-mkdir -p "${PREFIX}/include"
-mkdir "${PREFIX}/lib"
-
-cp ./*.h "${PREFIX}/include"
-cp ./*.a "${PREFIX}/lib"
+./bjam -d2 \
+	cxxflags=-fPIC \
+	-j ${CPU_CORES} \
+	variant=release \
+	--layout=system \
+	threading=multi \
+	link=shared \
+	toolset=gcc-android \
+	install >/dev/null
 
 status "Cleaning up"
 

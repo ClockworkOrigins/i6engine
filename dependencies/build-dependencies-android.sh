@@ -19,44 +19,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ##
 
-cd "$(readlink "$(dirname "${0}")")"
+set -e
 
-. ./build-common.sh ${1}
-
-ARCHIVE="tinyxml2.zip"
-BUILD_DIR="${BUILD_ROOT}/tinyxml2"
-PREFIX="${DEP_OUT_DIR}/tinyxml2/"
-
-if [ -d ${PREFIX} ]; then
-	exit 0
-fi
-
-title "Compile tinyxml2"
-
-. ./download-dependency.sh ${ARCHIVE}
-
-status "Extracting tinyxml2"
-
-cd "${BUILD_ROOT}"
-unzip "${ARCHIVE}"
-
-status "Building tinyxml2"
-
-cd "${BUILD_DIR}/jni"
-cp -rf "${PATCH_DIR}/tinyxml2/tinyxml2.cpp" "${BUILD_ROOT}/tinyxml2/jni"
-${CXX_COMPILER} -c tinyxml2.cpp -o tinyxml2.o
-ar rcs libtinyxml2.a tinyxml2.o
-
-status "Installing tinyxml2"
-
-mkdir -p "${PREFIX}/include"
-mkdir "${PREFIX}/lib"
-
-cp ./*.h "${PREFIX}/include"
-cp ./*.a "${PREFIX}/lib"
-
-status "Cleaning up"
-
-cd "${DEP_DIR}"
-rm -rf "${BUILD_ROOT}"
-
+. ./build-boost-android.sh
+. ./build-clockUtils-android.sh
+. ./build-tinyxml-android.sh

@@ -19,13 +19,39 @@ REM License along with this library; if not, write to the Free Software
 REM Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 REM
 
-call build-boost.bat %1 %2
-call build-bullet.bat %1 %2
-call build-clockUtils.bat %1 %2
-call build-gmock.bat %1 %2
-call build-lua.bat %1 %2
-call build-m2etis.bat %1 %2
-call build-ogre.bat %1 %2
-call build-openalsoft.bat %1 %2
-call build-tinyxml.bat %1 %2
-call build-cegui.bat %1 %2
+call build-common.bat android
+
+Set ARCHIVE=tinyxml2.zip
+Set BUILD_DIR=%TMP_DIR%/tinyxml2
+Set PREFIX=%DEP_DIR%/%ARCH_DIR%/tinyxml2
+
+IF EXIST %PREFIX% EXIT /B
+
+echo "Compile tinyxml2"
+
+echo "Extracting tinyxml2"
+
+call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
+
+echo "Building tinyxml2"
+
+cd %BUILD_DIR%\jni
+xcopy /S /Y %DEP_DIR%\..\ext\patches\tinyxml2 .
+
+call ndk-build
+if %errorlevel% gtr 0 exit /b
+
+echo "Installing tinyxml2"
+
+mkdir "%PREFIX%"
+mkdir "%PREFIX%/lib"
+mkdir "%PREFIX%/include"
+
+move tinyxml2.h %PREFIX%/include/tinyxml2.h
+move ..\libs\armeabi\libtinyxml2.so %PREFIX%/lib/tinyxml2.so
+
+echo "Cleaning up"
+
+cd %DEP_DIR%
+RD /S /Q "%TMP_DIR%"
+

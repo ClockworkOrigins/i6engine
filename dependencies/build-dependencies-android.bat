@@ -19,13 +19,6 @@ REM License along with this library; if not, write to the Free Software
 REM Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 REM
 
-call build-boost.bat %1 %2
-call build-bullet.bat %1 %2
-call build-clockUtils.bat %1 %2
-call build-gmock.bat %1 %2
-call build-lua.bat %1 %2
-call build-m2etis.bat %1 %2
-call build-ogre.bat %1 %2
-call build-openalsoft.bat %1 %2
-call build-tinyxml.bat %1 %2
-call build-cegui.bat %1 %2
+call build-boost-android.bat
+call build-clockUtils-android.bat
+call build-tinyxml-android.bat
