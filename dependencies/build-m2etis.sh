@@ -49,7 +49,7 @@ status "Configuring m2etis"
 cd "${BUILD_DIR}"
 if [ -d "${COPY_DIR}" ]; then
 	mkdir -p ${BUILD_DIR}/library/extern
-	cp -r ${COPY_DIR} ${BUILD_DIR}/library/extern/
+	cp -r ${COPY_DIR}/* ${BUILD_DIR}/library/extern/
 fi
 if [ -d "${DEP_DIR}/../config/m2etis" ]; then
 	cp -rf ${DEP_DIR}/../config/m2etis/* ${BUILD_DIR}/library/generated/
