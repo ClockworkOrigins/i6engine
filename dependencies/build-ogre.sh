@@ -68,6 +68,7 @@ make install
 status "Configuring Ogre"
 
 cd "${BUILD_DIR}"
+patch -p1 -i "../1.9.0-03_move_stowed_template_func.patch"
 cmake \
 	-DBoost_NO_SYSTEM_PATHS=ON \
 	-DOGRE_BUILD_COMPONENT_PAGING:BOOL=ON \
