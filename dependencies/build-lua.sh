@@ -38,7 +38,7 @@ title "Compile Lua"
 status "Extracting Lua"
 
 cd "${BUILD_ROOT}"
-unzip "${ARCHIVE}"
+tar xfz "${ARCHIVE}"
 
 status "Configuring Lua"
 

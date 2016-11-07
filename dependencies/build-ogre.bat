@@ -22,9 +22,9 @@ REM
 call build-common.bat %1 %2
 
 Set ARCHIVE=sinbad-ogre-dd30349ea667.tar.bz2
-Set DEP_ARCHIVE=cabalistic-ogredeps-0e96ef9d3475.zip
+Set DEP_ARCHIVE=cabalistic-ogredeps-bfc878e4fd9a.zip
 Set BUILD_DIR=%TMP_DIR%/sinbad-ogre-dd30349ea667
-Set BUILD_DIR_DEPS=%TMP_DIR%/cabalistic-ogredeps-0e96ef9d3475
+Set BUILD_DIR_DEPS=%TMP_DIR%/cabalistic-ogredeps-bfc878e4fd9a
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/ogre
 Set PREFIX_DEPS=%DEP_DIR%/%ARCH_DIR%/misc/
 
