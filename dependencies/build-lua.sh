@@ -49,7 +49,7 @@ cmake \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_C_COMPILER=${C_COMPILER} \
 	-DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
-.
+	.
 
 status "Building Lua"
 
