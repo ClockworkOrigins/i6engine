@@ -44,7 +44,7 @@ status "Building tinyxml2"
 
 cd "${BUILD_DIR}/jni"
 cp -rf "${PATCH_DIR}/tinyxml2/tinyxml2.cpp" "${BUILD_ROOT}/tinyxml2/jni"
-${CXX_COMPILER} -c tinyxml2.cpp -o tinyxml2.o
+${CXX_COMPILER} -fPIC -c tinyxml2.cpp -o tinyxml2.o
 ar rcs libtinyxml2.a tinyxml2.o
 
 status "Installing tinyxml2"
