@@ -22,9 +22,9 @@ REM
 call build-common.bat %1 %2
 
 Set ARCHIVE=cegui-0.8.4.tar.bz2
-Set DEP_ARCHIVE=cegui-deps-0.8.x-src.zip
+Set DEP_ARCHIVE=cegui-cegui-dependencies-0ecdf3a9e49b.zip
 Set BUILD_DIR=%TMP_DIR%/cegui-0.8.4
-Set BUILD_DIR_DEPS=%TMP_DIR%/cegui-deps-0.8.x-src
+Set BUILD_DIR_DEPS=%TMP_DIR%/cegui-cegui-dependencies-0ecdf3a9e49b
 Set PREFIX=%DEP_DIR%\%ARCH_DIR%\cegui
 Set PREFIX_DEPS=%DEP_DIR%\%ARCH_DIR%\ceguideps
 
