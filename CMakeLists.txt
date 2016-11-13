@@ -50,13 +50,6 @@ IF(NOT ISIXE_WITH_CONSOLE AND WIN32)
 	SET(GUI_TYPE WIN32)
 ENDIF(NOT ISIXE_WITH_CONSOLE AND WIN32)
 
-IF(ISIXE_WITH_TESTING AND NOT WIN32)
-	# static for gmock
-	option(ISIXE_BUILD_SHARED "build project with shared libraries" OFF)
-ELSE(ISIXE_WITH_TESTING AND NOT WIN32)
-	option(ISIXE_BUILD_SHARED "build project with shared libraries" ON)
-ENDIF(ISIXE_WITH_TESTING AND NOT WIN32)
-
 project(i6engine)
 
 include(cmake/variables.cmake)
