@@ -33,12 +33,9 @@ fi
 
 title "Compile tinyxml2"
 
-. ./download-dependency.sh ${ARCHIVE}
-
 status "Extracting tinyxml2"
 
-cd "${BUILD_ROOT}"
-unzip "${ARCHIVE}"
+downloadAndUnpack ${ARCHIVE}
 
 status "Building tinyxml2"
 

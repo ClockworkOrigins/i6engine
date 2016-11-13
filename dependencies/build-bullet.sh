@@ -33,12 +33,9 @@ fi
 
 title "Compile Bullet"
 
-. ./download-dependency.sh ${ARCHIVE}
-
 status "Extracting Bullet"
 
-cd "${BUILD_ROOT}"
-tar xfz "${ARCHIVE}"
+downloadAndUnpack ${ARCHIVE}
 
 status "Configuring Bullet"
 

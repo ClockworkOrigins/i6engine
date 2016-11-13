@@ -40,7 +40,7 @@ cmake -DINSTALL_LIBS=ON -DUSE_DOUBLE_PRECISION=ON -DUSE_GRAPHICAL_BENCHMARK=OFF 
 
 echo "Building Bullet"
 
-MSBuild.exe BULLET_PHYSICS.sln /p:Configuration=Release
+MSBuild.exe BULLET_PHYSICS.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Release
 
 echo "Installing Bullet"
 

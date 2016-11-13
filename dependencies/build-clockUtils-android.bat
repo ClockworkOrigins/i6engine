@@ -21,8 +21,8 @@ REM
 
 call build-common.bat android
 
-Set ARCHIVE=clockutils-1.0.0-src.zip
-Set BUILD_DIR=%TMP_DIR%/clockutils-1.0.0-src
+Set ARCHIVE=clockutils-1.1.0-src.zip
+Set BUILD_DIR=%TMP_DIR%/clockutils-1.1.0-src
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/clockUtils
 
 IF EXIST %PREFIX% EXIT /B

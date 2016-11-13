@@ -51,7 +51,7 @@ cmake -DWITH_TESTING=OFF -DWITH_SIM=OFF -DWITH_LOGGING=OFF  -DWITH_MESSAGECOMPRE
 
 echo "Building m2etis"
 
-MSBuild.exe m2etis.sln /p:Configuration=Release
+MSBuild.exe m2etis.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Release
 
 echo "Installing m2etis"
 

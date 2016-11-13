@@ -36,15 +36,11 @@ fi
 
 title "Compile Ogre"
 
-. ./download-dependency.sh ${ARCHIVE}
-. ./download-dependency.sh ${DEP_ARCHIVE}
-. ./download-dependency.sh 1.9.0-03_move_stowed_template_func.patch
-
 status "Extracting Ogre"
 
-cd "${BUILD_ROOT}"
-tar xfj "${ARCHIVE}"
-unzip "${DEP_ARCHIVE}"
+downloadAndUnpack ${ARCHIVE}
+downloadAndUnpack ${DEP_ARCHIVE}
+downloadAndUnpack 1.9.0-03_move_stowed_template_func.patch
 
 status "Configuring OgreDeps"
 

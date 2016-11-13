@@ -37,12 +37,9 @@ fi
 
 title "Compile m2etis"
 
-. ./download-dependency.sh ${ARCHIVE} http://clockwork-origins.de/m2etis/downloads/
-
 status "Extracting m2etis"
 
-cd "${BUILD_ROOT}"
-unzip "${ARCHIVE}"
+downloadAndUnpack ${ARCHIVE} http://clockwork-origins.de/m2etis/downloads/
 
 status "Configuring m2etis"
 

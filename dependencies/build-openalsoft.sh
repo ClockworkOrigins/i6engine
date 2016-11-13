@@ -33,12 +33,9 @@ fi
 
 title "Compile OpenAL Soft"
 
-. ./download-dependency.sh ${ARCHIVE}
-
 status "Extracting OpenAL Soft"
 
-cd "${BUILD_ROOT}"
-tar xfvj "${ARCHIVE}"
+downloadAndUnpack ${ARCHIVE}
 
 status "Configuring OpenAL Soft"
 

@@ -33,12 +33,9 @@ fi
 
 title "Compile CEGUI"
 
-. ./download-dependency.sh ${ARCHIVE}
-
 status "Extracting CEGUI"
 
-cd "${BUILD_ROOT}"
-tar xf "${ARCHIVE}"
+downloadAndUnpack ${ARCHIVE}
 
 status "Configuring CEGUI"
 

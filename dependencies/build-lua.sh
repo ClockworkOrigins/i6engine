@@ -33,12 +33,9 @@ fi
 
 title "Compile Lua"
 
-. ./download-dependency.sh ${ARCHIVE}
-
 status "Extracting Lua"
 
-cd "${BUILD_ROOT}"
-tar xfz "${ARCHIVE}"
+downloadAndUnpack ${ARCHIVE}
 
 status "Configuring Lua"
 

@@ -41,7 +41,7 @@ cmake -DCMAKE_INSTALL_PREFIX=%PREFIX% -G "%VSCOMPILER%%VSARCH%" .
 
 echo "Building Lua"
 
-MSBuild.exe lua.sln /p:Configuration=Release
+MSBuild.exe lua.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Release
 
 echo "Installing Lua"
 

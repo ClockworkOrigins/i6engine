@@ -45,7 +45,7 @@ cmake -OGREDEPS_BUILD_CG=ON -DOGREDEPS_BUILD_FREEIMAGE=ON -DOGREDEPS_BUILD_FREET
 
 echo "Building OgreDeps"
 
-MSBuild.exe OGREDEPS.sln /p:Configuration=Release
+MSBuild.exe OGREDEPS.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Release
 
 echo "Installing OgreDeps"
 
@@ -62,14 +62,14 @@ cmake -DOGRE_BUILD_COMPONENT_PAGING=ON -DOGRE_BUILD_COMPONENT_PROPERTY=ON -DOGRE
 
 echo "Building Ogre"
 
-MSBuild.exe OGRE.sln /p:Configuration=Release
+MSBuild.exe OGRE.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Release
 
 echo "Installing Ogre"
 
 MSBuild.exe INSTALL.vcxproj /p:Configuration=Release
 
-xcopy /S /Y "%PREFIX%/bin/Release" "%PREFIX%/bin" > NUL
-xcopy /S /Y "%PREFIX%/lib/Release" "%PREFIX%/lib" > NUL
+xcopy /S /Y "%PREFIX%/bin/Release" "%PREFIX%/bin"
+xcopy /S /Y "%PREFIX%/lib/Release" "%PREFIX%/lib"
 rd /S /Q "%PREFIX%/bin/Release"
 rd /S /Q "%PREFIX%/lib/Release"
 rd /S /Q "%PREFIX%/include/OIS"

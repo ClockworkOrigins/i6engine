@@ -21,8 +21,8 @@ REM
 
 call build-common.bat %1 %2
 
-Set ARCHIVE=clockutils-1.0.0-src.zip
-Set BUILD_DIR=%TMP_DIR%/clockutils-1.0.0-src
+Set ARCHIVE=clockutils-1.1.0-src.zip
+Set BUILD_DIR=%TMP_DIR%/clockutils-1.1.0-src
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/clockUtils
 
 IF EXIST %PREFIX% EXIT /B
@@ -40,7 +40,7 @@ cmake -DWITH_TESTING=OFF -DWITH_LIBRARY_ARGPARSER=ON  -DWITH_LIBRARY_COMPRESSION
 
 echo "Building clockUtils"
 
-MSBuild.exe clockUtils.sln /p:Configuration=Release
+MSBuild.exe clockUtils.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Release
 
 echo "Installing clockUtils"
 

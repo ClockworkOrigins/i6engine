@@ -23,8 +23,8 @@ cd "$(readlink "$(dirname "${0}")")"
 
 . ./build-common.sh android
 
-ARCHIVE="clockutils-1.0.0-src.zip"
-BUILD_DIR="${BUILD_ROOT}/clockutils-1.0.0-src"
+ARCHIVE="clockutils-1.1.0-src.zip"
+BUILD_DIR="${BUILD_ROOT}/clockutils-1.1.0-src"
 PREFIX="${DEP_OUT_DIR}/clockUtils/"
 
 if [ -d ${PREFIX} ]; then
@@ -33,12 +33,9 @@ fi
 
 title "Compile clockUtils"
 
-. ./download-dependency.sh ${ARCHIVE} http://clockwork-origins.de/clockUtils/downloads/
-
 status "Extracting clockUtils"
 
-cd "${BUILD_ROOT}"
-unzip "${ARCHIVE}"
+downloadAndUnpack ${ARCHIVE} http://clockwork-origins.de/clockUtils/downloads/
 
 status "Configuring clockUtils"
 

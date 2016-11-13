@@ -40,7 +40,7 @@ cmake -DALSOFT_NO_CONFIG_UTIL=ON -DCMAKE_INSTALL_PREFIX=%PREFIX% -G "%VSCOMPILER
 
 echo "Building OpenAL Soft"
 
-MSBuild.exe OpenAL.sln /p:Configuration=Release
+MSBuild.exe OpenAL.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Release
 
 echo "Installing OpenAL Soft"
 

@@ -23,8 +23,8 @@ setlocal EnableDelayedExpansion
 
 call build-common.bat %1 %2
 
-Set ARCHIVE=boost_1_58_0.tar.bz2
-Set BUILD_DIR=%TMP_DIR%/boost_1_58_0
+Set ARCHIVE=boost_1_62_0.tar.bz2
+Set BUILD_DIR=%TMP_DIR%/boost_1_62_0
 Set PREFIX=%DEP_DIR%\%ARCH_DIR%\boost
 
 IF EXIST %PREFIX% EXIT /B
@@ -47,7 +47,7 @@ IF [%BOOSTARCH%] == [32] (
 )
 
 echo "Building Boost"
-b2 --user-config=user-config.jam toolset=%BOOSTCOMPILER% address-model=%BOOSTARCH% --with-atomic --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system -j %NUMBER_OF_PROCESSORS% variant=release install --prefix=%PREFIX% stage > NUL
+b2 --user-config=user-config.jam toolset=%BOOSTCOMPILER% address-model=%BOOSTARCH% --with-atomic --with-date_time --with-filesystem --with-log --with-python --with-regex --with-serialization --with-system --with-thread link=shared threading=multi --layout=system -j %NUMBER_OF_PROCESSORS% variant=release install --prefix=%PREFIX% stage
 
 echo "Installing Boost"
 
