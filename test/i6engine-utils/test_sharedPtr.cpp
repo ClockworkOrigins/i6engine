@@ -752,8 +752,23 @@ TEST_F(sharedPtr, useAsBool) {
 
 	sharedPtr<Base1, Base1> filledPtr = make_shared<Base1, Base1>();
 	EXPECT_TRUE(filledPtr);
-	weakPtr<Base1, Base1> filledWeakPtr = make_shared<Base1, Base1>();
+	weakPtr<Base1, Base1> filledWeakPtr = filledPtr;
 	EXPECT_TRUE(filledWeakPtr);
+}
+
+TEST_F(sharedPtr, clear) {
+	using i6e::utils::sharedPtr;
+	using i6e::utils::weakPtr;
+	using i6e::utils::make_shared;
+
+	sharedPtr<Base1, Base1> filledPtr = make_shared<Base1, Base1>();
+	ASSERT_TRUE(filledPtr);
+	weakPtr<Base1, Base1> filledWeakPtr = filledPtr;
+	ASSERT_TRUE(filledWeakPtr);
+
+	filledPtr.clearReference();
+	ASSERT_FALSE(filledPtr);
+	ASSERT_FALSE(filledWeakPtr);
 }
 
 // removed this test, check whether it makes sense... accessing the same entry of a vector reading and writing is never threadsafe!

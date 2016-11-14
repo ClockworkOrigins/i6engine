@@ -201,7 +201,7 @@ namespace utils {
 		 * \brief operator to determine whether pointer is valid or not
 		 */
 		operator bool() const {
-			return _ptr != nullptr;
+			return _sharedPtrWrapper != nullptr;
 		}
 
 		/**
@@ -220,6 +220,14 @@ namespace utils {
 		 */
 		T * get() const {
 			return _ptr;
+		}
+
+		/**
+		 * \brief removes reference to internal pointer
+		 */
+		void clearReference() {
+			_sharedPtrWrapper.reset();
+			_ptr = nullptr;
 		}
 
 	private:

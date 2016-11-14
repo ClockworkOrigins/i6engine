@@ -141,7 +141,7 @@ namespace utils {
 		 * \brief operator to determine whether pointer is valid or not
 		 */
 		operator bool() const {
-			return _ptr != nullptr;
+			return !expired();
 		}
 
 		/**
@@ -157,6 +157,14 @@ namespace utils {
 		 */
 		bool expired() const {
 			return _sharedPtrWrapper.expired();
+		}
+
+		/**
+		 * \brief removes reference to internal pointer
+		 */
+		void clearReference() {
+			_sharedPtrWrapper.reset();
+			_ptr = nullptr;
 		}
 
 	private:
