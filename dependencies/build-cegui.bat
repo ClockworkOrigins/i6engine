@@ -49,7 +49,7 @@ cmake -DCMAKE_INSTALL_PREFIX:PATH=%PREFIX_DEPS% -DCEGUI_BUILD_CORONA=OFF -DCEGUI
 echo "Building CEGUIDeps"
 
 MSBuild.exe CEGUI-DEPS.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Debug
-MSBuild.exe CEGUI-DEPS.sln /p:Configuration=Release
+MSBuild.exe CEGUI-DEPS.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Release
 
 echo "Installing CEGUIDeps"
 

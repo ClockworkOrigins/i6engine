@@ -81,18 +81,18 @@ downloadAndUnpack() {
 	if ! [ -f "${BUILD_ROOT}/${FILE}" ]; then
 		wget ${URL}/${FILE} -P ${BUILD_ROOT}
 	fi
-	FILENAME=$(basename "${ARCHIVE}")
+	FILENAME=$(basename "${FILE}")
 	EXTENSION="${FILENAME##*.}"
 	
 	cd "${BUILD_ROOT}"
 	if [ "${EXTENSION}" == "zip" ]; then
-		unzip "${ARCHIVE}"
+		unzip "${FILE}"
 	fi
 	if [ "${EXTENSION}" == "gz" ]; then
-		tar xfz "${ARCHIVE}"
+		tar xfz "${FILE}"
 	fi
 	if [ "${EXTENSION}" == "bz2" ]; then
-		tar xfj "${ARCHIVE}"
+		tar xfj "${FILE}"
 	fi
 }
 
