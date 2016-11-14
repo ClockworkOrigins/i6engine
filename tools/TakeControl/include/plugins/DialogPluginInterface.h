@@ -17,51 +17,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
-#define __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
+#ifndef __TAKECONTROL_PLUGINS_DIALOGPLUGININTERFACE_H__
+#define __TAKECONTROL_PLUGINS_DIALOGPLUGININTERFACE_H__
 
-#include <QMainWindow>
+#include "i6engine/rpg/dialog/Dialog.h"
+#include "i6engine/rpg/npc/NPC.h"
+
+#include <qplugin.h>
 
 namespace i6e {
-namespace tools {
-namespace common {
-	class AboutDialog;
-} /* namespace common */
-} /* namespace tools */
 namespace takeControl {
 namespace plugins {
-	class DialogPluginInterface;
-} /* namespace plugins */
-namespace widgets {
 
-	class DialogListWidget;
-	class InfoWidget;
-	class NPCListWidget;
-
-	class MainWindow : public QMainWindow {
-		Q_OBJECT
-
+	/**
+	 * \brief interface for plugins used to handle different dialog languages
+	 */
+	class DialogPluginInterface {
 	public:
-		MainWindow(QMainWindow * par = nullptr);
-		~MainWindow();
+		virtual ~DialogPluginInterface() {
+		}
 
-	private slots:
-		void closeEditor();
-		void showAboutDialog();
+		virtual std::vector<rpg::dialog::Dialog *> getDialogs() = 0;
 
-	private:
-		tools::common::AboutDialog * _aboutDialog;
-		NPCListWidget * _npcListWidget;
-		DialogListWidget * _dialogListWidget;
-		InfoWidget * _infoWidget;
-		std::vector<plugins::DialogPluginInterface *> _dialogPlugins;
-
-		void closeEvent(QCloseEvent * evt) override;
-		void loadPlugins();
+		virtual std::vector<rpg::npc::NPC *> getNPCs() = 0;
 	};
 
-} /* namespace widgets */
+} /* namespace plugins */
 } /* namespace takeControl */
 } /* namespace i6e */
 
-#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__ */
+Q_DECLARE_INTERFACE(i6e::takeControl::plugins::DialogPluginInterface, "i6e.takeControl.script.DialogPluginInterface")
+
+#endif /* __TAKECONTROL_PLUGINS_DIALOGPLUGININTERFACE_H__ */

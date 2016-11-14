@@ -19,6 +19,8 @@
 
 #include "widgets/MainWindow.h"
 
+#include "Plugins/DialogPluginInterface.h"
+
 #include "widgets/AboutDialog.h"
 #include "widgets/DialogListWidget.h"
 #include "widgets/InfoWidget.h"
@@ -28,15 +30,17 @@
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QDir>
 #include <QHBoxLayout>
 #include <QMenu>
 #include <QMenuBar>
+#include <QPluginLoader>
 
 namespace i6e {
 namespace takeControl {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _aboutDialog(new tools::common::AboutDialog(this)), _npcListWidget(new NPCListWidget(this)), _dialogListWidget(new DialogListWidget(this)), _infoWidget(new InfoWidget(this)) {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _aboutDialog(new tools::common::AboutDialog(this)), _npcListWidget(new NPCListWidget(this)), _dialogListWidget(new DialogListWidget(this)), _infoWidget(new InfoWidget(this)), _dialogPlugins() {
 		setWindowIcon(QIcon(":/icon.png"));
 
 		setWindowTitle(QString("TakeControl (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
@@ -83,8 +87,20 @@ namespace widgets {
 	}
 
 	void MainWindow::closeEvent(QCloseEvent * evt) {
+		QMainWindow::closeEvent(evt);
 		closeEditor();
 		evt->ignore();
+	}
+
+	void MainWindow::loadPlugins() {
+		QDir pluginsDir = QDir(qApp->applicationDirPath() + "/plugins/takeControl/dialog");
+		foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+			QObject * plugin = loader.instance();
+			if (plugin) {
+				_dialogPlugins.push_back(qobject_cast<plugins::DialogPluginInterface *>(plugin));
+			}
+		}
 	}
 
 } /* namespace widgets */
