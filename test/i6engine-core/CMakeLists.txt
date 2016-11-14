@@ -23,6 +23,8 @@ include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories(${I6ENGINE_CORE_INCLUDE_DIR})
 
 SET(testSrc
+	main.cpp
+
 	clock/test_Scheduler.cpp
 
 	messaging/test_IPKey.cpp

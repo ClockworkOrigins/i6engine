@@ -23,6 +23,8 @@ include_directories(${I6ENGINE_MATH_INCLUDE_DIR})
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 
 SET(testSrc
+	main.cpp
+
 	test_i6eMath.cpp
 	test_i6eMatrix.cpp
 	test_i6eQuaternion.cpp

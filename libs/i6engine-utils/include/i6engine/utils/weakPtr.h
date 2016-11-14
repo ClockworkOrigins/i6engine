@@ -136,6 +136,13 @@ namespace utils {
 		bool operator<(const weakPtr & other) const {
 			return _ptr < other._ptr;
 		}
+		
+		/**
+		 * \brief operator to determine whether pointer is valid or not
+		 */
+		operator bool() const {
+			return _ptr != nullptr;
+		}
 
 		/**
 		 * \brief returns the shared pointer being observed by this weakPtr

@@ -198,6 +198,13 @@ namespace utils {
 		}
 
 		/**
+		 * \brief operator to determine whether pointer is valid or not
+		 */
+		operator bool() const {
+			return _ptr != nullptr;
+		}
+
+		/**
 		 * \brief deletes all pointers in clearList
 		 */
 		static void clear() {

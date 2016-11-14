@@ -740,6 +740,22 @@ TEST_F(sharedPtr, replacement) {
 	arr[0] = sp;
 }
 
+TEST_F(sharedPtr, useAsBool) {
+	using i6e::utils::sharedPtr;
+	using i6e::utils::weakPtr;
+	using i6e::utils::make_shared;
+
+	sharedPtr<Base1, Base1> emptyPtr;
+	EXPECT_FALSE(emptyPtr);
+	weakPtr<Base1, Base1> emptyWeakPtr;
+	EXPECT_FALSE(emptyWeakPtr);
+
+	sharedPtr<Base1, Base1> filledPtr = make_shared<Base1, Base1>();
+	EXPECT_TRUE(filledPtr);
+	weakPtr<Base1, Base1> filledWeakPtr = make_shared<Base1, Base1>();
+	EXPECT_TRUE(filledWeakPtr);
+}
+
 // removed this test, check whether it makes sense... accessing the same entry of a vector reading and writing is never threadsafe!
 /*TEST_F(sharedPtr, weakPtrRaceCondition) {
 	using i6e::utils::sharedPtr;

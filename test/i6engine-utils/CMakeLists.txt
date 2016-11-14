@@ -22,6 +22,8 @@
 include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 
 SET(testSrc
+	main.cpp
+
 	test_AutoUpdater.cpp
 	test_Clock.cpp
 	test_DoubleBufferQueue.cpp
