@@ -19,7 +19,7 @@
 
 #include "widgets/MainWindow.h"
 
-#include "Plugins/DialogPluginInterface.h"
+#include "plugins/DialogPluginInterface.h"
 
 #include "widgets/AboutDialog.h"
 #include "widgets/DialogListWidget.h"
