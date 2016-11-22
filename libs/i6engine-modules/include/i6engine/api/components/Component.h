@@ -208,6 +208,7 @@ namespace api {
 		 * \brief asks, how to handle a new component with the same type
 		 * \param[in] comp component that shall be added
 		 * \returns pair containing the strategy to use as well as an additional value
+		 * default return is REPLACE_DIS
 		 */
 		virtual std::pair<AddStrategy, int64_t> howToAdd(const ComPtr & comp) const;
 

@@ -19,12 +19,8 @@
 
 #include "i6engine/api/components/ShatterComponent.h"
 
-#include "i6engine/utils/Exceptions.h"
-#include "i6engine/utils/Logger.h"
-
 #include "i6engine/api/EngineController.h"
 #include "i6engine/api/configs/ComponentConfig.h"
-#include "i6engine/api/facades/NetworkFacade.h"
 #include "i6engine/api/facades/ObjectFacade.h"
 #include "i6engine/api/objects/GameObject.h"
 
@@ -47,10 +43,9 @@ namespace api {
 
 		if (type == components::ComShatter) {
 			int64_t b = static_cast<components::Component_Shatter_Update *>(msg->getContent())->other;
-			GOPtr objB = EngineController::GetSingletonPtr()->getObjectFacade()->getObject(b);
+			GOPtr go = i6eObjectFacade->getObject(b);
 
-			if (objB == nullptr) {
-				ISIXE_LOG_WARN("ObjectMailbox", "ComShatter message for a nonexistent GameObject");
+			if (go == nullptr) {
 				return;
 			}
 
@@ -58,7 +53,7 @@ namespace api {
 			msg->insertTimestamp("ShatterComponent: " + _objComponentID);
 #endif /* ISIXE_WITH_PROFILING */
 
-			shatter(objB);
+			shatter(go);
 		} else {
 			Component::News(msg);
 		}
