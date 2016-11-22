@@ -49,8 +49,8 @@ status "Installing tinyxml2"
 mkdir -p "${PREFIX}/include"
 mkdir "${PREFIX}/lib"
 
-cp ./*.h "${PREFIX}/include"
-cp ./*.a "${PREFIX}/lib"
+cp ${BUILD_DIR}/jni/*.h "${PREFIX}/include"
+cp ${BUILD_DIR}/jni/*.a "${PREFIX}/lib"
 
 status "Cleaning up"
 

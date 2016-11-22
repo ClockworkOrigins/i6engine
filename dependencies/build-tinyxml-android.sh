@@ -46,8 +46,8 @@ ${ANDROID_NDK}/ndk-build
 mkdir -p "${PREFIX}/include"
 mkdir "${PREFIX}/lib"
 
-cp ./jni/*.h "${PREFIX}/include"
-cp ./obj/local/armeabi/*.so "${PREFIX}/lib"
+cp ${BUILD_DIR}/jni/*.h "${PREFIX}/include"
+cp ${BUILD_DIR}/obj/local/armeabi/*.so "${PREFIX}/lib"
 
 status "Cleaning up"
 
