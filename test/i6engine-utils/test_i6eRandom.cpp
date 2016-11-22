@@ -47,6 +47,21 @@ TEST(i6eRandom, rand) {
 	ASSERT_THROW(i6e::utils::Random::GetSingletonPtr()->rand(5, 2), i6e::utils::exceptions::ApiException);
 }
 
+TEST(i6eRandom, randMinMax) {
+	const size_t MAXVALUE = 5;
+	const uint32_t RUNS = 100000;
+	std::map<uint32_t, uint32_t> count;
+	for (uint32_t i = 0; i < RUNS; ++i) {
+		uint32_t r = i6e::utils::Random::GetSingletonPtr()->rand(0, uint32_t(MAXVALUE));
+		count[r]++;
+		EXPECT_LT(r, MAXVALUE);
+	}
+	ASSERT_EQ(MAXVALUE, count.size());
+	for (auto it = count.begin(); it != count.end(); it++) {
+		EXPECT_NEAR(RUNS / MAXVALUE, it->second, RUNS / MAXVALUE * 0.02);
+	}
+}
+
 TEST(i6eRandom, setSeed) {
 	const uint32_t RUNS = 1000;
 
