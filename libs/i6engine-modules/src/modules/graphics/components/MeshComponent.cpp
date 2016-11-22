@@ -157,16 +157,25 @@ namespace modules {
 		ASSERT_THREAD_SAFETY_FUNCTION
 		Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0));
 
-		if (_animationState == nullptr) {
-			_parent->addTicker(this);
-		} else {
-			_animationState->setEnabled(false);
+		try {
+			if (_animationState == nullptr) {
+				_parent->addTicker(this);
+			} else {
+				_animationState->setEnabled(false);
+			}
+
+			_animationState = entity->getAnimationState(anim);
+			if (_animationState) {
+				_animationState->setEnabled(true);
+				_animationState->setLoop(looping);
+				_animationState->setTimePosition(offsetPercent * _animationState->getLength());
+			}
+		} catch (...) {
+			_animationState = nullptr;
+			stopAnimation();
+			return;
 		}
 
-		_animationState = entity->getAnimationState(anim);
-		_animationState->setEnabled(true);
-		_animationState->setLoop(looping);
-		_animationState->setTimePosition(offsetPercent * _animationState->getLength());
 		_animationSpeed = 1.0;
 
 		_lastTime = api::EngineController::GetSingleton().getCurrentTime();
@@ -182,8 +191,9 @@ namespace modules {
 
 	void MeshComponent::stopAnimation() {
 		ASSERT_THREAD_SAFETY_FUNCTION
-		assert(_animationState);
-		_animationState->setEnabled(false);
+		if (_animationState) {
+			_animationState->setEnabled(false);
+		}
 		_animationState = nullptr;
 		_parent->removeTicker(this);
 		while (!_queueA.empty()) {
