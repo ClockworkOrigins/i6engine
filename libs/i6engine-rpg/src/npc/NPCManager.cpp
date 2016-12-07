@@ -55,7 +55,7 @@ namespace npc {
 			tpl._components.push_back(api::objects::GOTemplateComponent("ThirdPersonControl", paramsTPC, "", false, false));
 		}
 
-		NPC * n = new NPC(tpl, player);
+		NPC * n = new NPC(identifier, tpl, player);
 		_npcs.insert(std::make_pair(identifier, n));
 	}
 

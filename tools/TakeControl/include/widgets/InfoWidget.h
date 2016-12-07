@@ -37,6 +37,10 @@ namespace widgets {
 		InfoWidget(QWidget * par = nullptr);
 		~InfoWidget();
 
+	public slots:
+		void selectedNPC(QString identifier);
+		void selectedDialog(QString dialog);
+
 	private:
 		QLabel * _npcLabel;
 		QLabel * _npcDescriptionLabel;

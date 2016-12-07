@@ -37,9 +37,22 @@ namespace plugins {
 		virtual ~DialogPluginInterface() {
 		}
 
-		virtual std::vector<rpg::dialog::Dialog *> getDialogs() = 0;
+		/**
+		 * \brief returns all dialogs this plugin provides
+		 * the vector returned is the list, while the tuple contains the Dialog itself and a vector containing all sentences of this dialog
+		 * the sentences are split into a tuple consisting of the speaking NPC and an identifier for the sentence itself
+		 */
+		virtual std::vector<std::tuple<rpg::dialog::Dialog *, std::vector<std::tuple<std::string, std::string>>>> getDialogs() = 0;
 
+		/**
+		 * \brief returns all NPCs this plugin provides
+		 */
 		virtual std::vector<rpg::npc::NPC *> getNPCs() = 0;
+
+		/**
+		 * \brief returns the preview text for the given subtitle identifier
+		 */
+		virtual QString getSubtitleText(QString identifier) const = 0;
 	};
 
 } /* namespace plugins */

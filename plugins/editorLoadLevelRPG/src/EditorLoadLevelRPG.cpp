@@ -43,4 +43,4 @@ namespace plugins {
 } /* namespace plugins */
 } /* namespace i6e */
 
-Q_PLUGIN_METADATA(IID "i6engine.editor.loadLevel.LoadLevelPluginInterface")
+Q_PLUGIN_METADATA(IID "i6e.editor.loadLevel.LoadLevelPluginInterface")

@@ -23,9 +23,18 @@
 #include <QWidget>
 
 class QTreeWidget;
+class QTreeWidgetItem;
 
 namespace i6e {
+namespace rpg {
+namespace dialog {
+	struct Dialog;
+} /* namespace dialog */
+} /* namespace rpg */
 namespace takeControl {
+namespace plugins {
+	class DialogPluginInterface;
+} /* namespace plugins */
 namespace widgets {
 
 	class DialogListWidget : public QWidget {
@@ -35,8 +44,22 @@ namespace widgets {
 		DialogListWidget(QWidget * par = nullptr);
 		~DialogListWidget();
 
+	signals:
+		void selectDialog(QString);
+		void selectNPC(QString);
+
+	public slots:
+		void loadedDialogPlugin(plugins::DialogPluginInterface * plugin);
+		void selectedNPC(QString identifier);
+
+	private slots:
+		void selectedDialog(QTreeWidgetItem * item, int column);
+
 	private:
 		QTreeWidget * _treeWidget;
+		std::vector<std::tuple<rpg::dialog::Dialog *, std::vector<std::tuple<std::string, std::string>>, plugins::DialogPluginInterface *>> _dialogList;
+		std::vector<std::tuple<rpg::dialog::Dialog *, std::vector<std::tuple<std::string, std::string>>, plugins::DialogPluginInterface *>> _activeDialogList;
+		QString _npcIdentifier;
 	};
 
 } /* namespace widgets */

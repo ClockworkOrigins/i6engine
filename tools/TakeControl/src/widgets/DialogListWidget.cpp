@@ -19,6 +19,8 @@
 
 #include "widgets/DialogListWidget.h"
 
+#include "Plugins/DialogPluginInterface.h"
+
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
@@ -26,25 +28,54 @@ namespace i6e {
 namespace takeControl {
 namespace widgets {
 
-	DialogListWidget::DialogListWidget(QWidget * par) : QWidget(par), _treeWidget(new QTreeWidget(this)) {
+	DialogListWidget::DialogListWidget(QWidget * par) : QWidget(par), _treeWidget(new QTreeWidget(this)), _dialogList(), _activeDialogList(), _npcIdentifier() {
 		QVBoxLayout * l = new QVBoxLayout();
 		l->addWidget(_treeWidget);
 		setLayout(l);
 
 		_treeWidget->clear();
 		_treeWidget->setHeaderHidden(true);
+		_treeWidget->setColumnCount(2);
 
-		for (int i = 0; i < 10; i++) {
-			QTreeWidgetItem * twi = new QTreeWidgetItem(_treeWidget, { "Dialog_" + QString::number(i) });
-			_treeWidget->addTopLevelItem(twi);
-
-			for (int j = 0; j < 5; j++) {
-				twi->addChild(new QTreeWidgetItem(twi, { "This is sentence " + QString::number(j) }));
-			}
-		}
+		connect(_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(selectedDialog(QTreeWidgetItem *, int)));
 	}
 
 	DialogListWidget::~DialogListWidget() {
+	}
+
+	void DialogListWidget::loadedDialogPlugin(plugins::DialogPluginInterface * plugin) {
+		auto dialogs = plugin->getDialogs();
+		for (auto & t : dialogs) {
+			_dialogList.push_back(std::make_tuple(std::get<0>(t), std::get<1>(t), plugin));
+		}
+	}
+
+	void DialogListWidget::selectedNPC(QString identifier) {
+		_treeWidget->clear();
+		_activeDialogList.clear();
+		for (auto & t : _dialogList) {
+			std::vector<std::string> participants = std::get<0>(t)->participants;
+			if (std::find(participants.begin(), participants.end(), identifier.toStdString()) != participants.end()) {
+				QTreeWidgetItem * twi = new QTreeWidgetItem(_treeWidget, { QString::fromStdString(std::get<0>(t)->identifier) });
+				_treeWidget->addTopLevelItem(twi);
+				for (auto & t2 : std::get<1>(t)) {
+					twi->addChild(new QTreeWidgetItem(twi, { QString::fromStdString(std::get<0>(t2)), std::get<2>(t)->getSubtitleText(QString::fromStdString(std::get<1>(t2))) }));
+				}
+				_activeDialogList.push_back(t);
+			}
+		}
+		_treeWidget->resizeColumnToContents(0);
+		_npcIdentifier = identifier;
+	}
+
+	void DialogListWidget::selectedDialog(QTreeWidgetItem * item, int) {
+		if (item != _treeWidget->topLevelItem(_treeWidget->indexOfTopLevelItem(item))) {
+			emit selectDialog(item->text(1));
+			emit selectNPC(item->text(0));
+		} else {
+			emit selectDialog(QString());
+			emit selectNPC(_npcIdentifier);
+		}
 	}
 
 } /* namespace widgets */

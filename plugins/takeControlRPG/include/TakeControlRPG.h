@@ -17,48 +17,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
-#define __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
+#ifndef __I6ENGINE_PLUGINS_TAKECONTROLRPG_H__
+#define __I6ENGINE_PLUGINS_TAKECONTROLRPG_H__
 
-#include <QWidget>
-
-class QListView;
+#include "../../../tools/takeControl/include/plugins/DialogPluginInterface.h"
 
 namespace i6e {
-namespace rpg {
-namespace npc {
-	class NPC;
-} /* namespace npc */
-} /* namespace rpg */
-namespace takeControl {
 namespace plugins {
-	class DialogPluginInterface;
-} /* namespace plugins */
-namespace widgets {
 
-	class NPCListWidget : public QWidget {
+	class TakeControlRPG : public QObject, public takeControl::plugins::DialogPluginInterface {
 		Q_OBJECT
+		Q_PLUGIN_METADATA(IID "i6e.takeControl.script.DialogPluginInterface")
+		Q_INTERFACES(i6e::takeControl::plugins::DialogPluginInterface)
 
 	public:
-		NPCListWidget(QWidget * par = nullptr);
-		~NPCListWidget();
-
-	signals:
-		void selectNPC(QString);
-
-	public slots:
-		void loadedDialogPlugin(plugins::DialogPluginInterface * plugin);
-
-	private slots:
-		void selectedNPC(const QModelIndex & idx);
+		TakeControlRPG();
 
 	private:
-		QListView * _listView;
 		std::vector<rpg::npc::NPC *> _npcList;
+		std::vector<std::tuple<rpg::dialog::Dialog *, std::vector<std::tuple<std::string, std::string>>>> _dialogList;
+
+		std::vector<std::tuple<rpg::dialog::Dialog *, std::vector<std::tuple<std::string, std::string>>>> getDialogs() override;
+
+		std::vector<rpg::npc::NPC *> getNPCs() override;
+
+		QString getSubtitleText(QString identifier) const override;
 	};
 
-} /* namespace widgets */
-} /* namespace takeControl */
+} /* namespace plugins */
 } /* namespace i6e */
 
-#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__ */
+#endif /* __I6ENGINE_PLUGINS_TAKECONTROLRPG_H__ */

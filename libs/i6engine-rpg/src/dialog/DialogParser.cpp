@@ -97,6 +97,7 @@ namespace dialog {
 			std::string info = dialog->FirstChildElement("Info")->GetText();
 
 			Dialog * d = new Dialog(identifier, participants);
+			d->participants.push_back("Player01");
 			d->infoScript = info;
 
 			if (dialog->FirstChildElement("Nr") != nullptr) {

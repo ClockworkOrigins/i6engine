@@ -38,13 +38,17 @@ namespace i6e {
 namespace rpg {
 namespace npc {
 
-	NPC::NPC(const api::objects::GOTemplate & tpl, bool player) : _go(), _queue() {
-		api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO((player) ? "Player" : "NPC", tpl, api::EngineController::GetSingletonPtr()->getUUID(), false, [this](api::GOPtr go) {
+	NPC::NPC(const std::string & identifier, const api::objects::GOTemplate & tpl, bool player) : _go(), _queue(), _identifier(identifier) {
+		i6eObjectFacade->createGO((player) ? "Player" : "NPC", tpl, i6eEngineController->getUUID(), false, [this](api::GOPtr go) {
 			_go = go;
 		});
 	}
 
 	NPC::~NPC() {
+	}
+
+	std::string NPC::getIdentifier() const {
+		return _identifier;
 	}
 
 	void NPC::turnToNPC(NPC * npc) {
@@ -63,7 +67,7 @@ namespace npc {
 			}
 		}
 
-		auto playerList = api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Player");
+		auto playerList = i6eObjectFacade->getAllObjectsOfType("Player");
 		auto player = *playerList.begin();
 		npc::NPC * p = npc::NPCManager::GetSingleton().getNPC(player->getGOC<components::ThirdPersonControlComponent>(components::config::ComponentTypes::ThirdPersonControlComponent)->getNPCIdentifier());
 

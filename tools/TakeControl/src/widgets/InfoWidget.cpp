@@ -38,14 +38,20 @@ namespace widgets {
 		l->addWidget(_loadSoundFileButton, 1, 2);
 		setLayout(l);
 
-		_npcLabel->setText("NPC1");
 		_npcDescriptionLabel->setText("This character is old and has a deep voice");
-		_sentenceLabel->setText("This is sentence 1");
 		_dialogDescriptionLabel->setText("Some dialog description");
 		_spokenCheckBox->setText("Take spoken");
 	}
 
 	InfoWidget::~InfoWidget() {
+	}
+
+	void InfoWidget::selectedNPC(QString identifier) {
+		_npcLabel->setText(identifier);
+	}
+
+	void InfoWidget::selectedDialog(QString dialog) {
+		_sentenceLabel->setText(dialog);
 	}
 
 } /* namespace widgets */

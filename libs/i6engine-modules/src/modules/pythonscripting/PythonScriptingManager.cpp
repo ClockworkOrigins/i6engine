@@ -41,14 +41,14 @@ namespace modules {
 		PyObject * sysPath = PySys_GetObject("path");
 		PyList_Insert(sysPath, 0, PyString_FromString(workingDir.string().c_str()));
 		std::string mainDir;
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("GENERAL", "i6engineMainDir", mainDir)) {
+		if (clockUtils::ClockError::SUCCESS != i6eEngineController->getIniParser().getValue("GENERAL", "i6engineMainDir", mainDir)) {
 			ISIXE_LOG_WARN("PythonScriptingManager", "No 'i6engineMainDir' path set in category 'GENERAL' in the config file. No additional path will be added");
 		} else {
 			mainDir += "/lib";
 			PyList_Insert(sysPath, 0, PyString_FromString(mainDir.c_str()));
 		}
 
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
+		if (clockUtils::ClockError::SUCCESS != i6eEngineController->getIniParser().getValue("SCRIPT", "PythonScriptsPath", _scriptsPath)) {
 			ISIXE_THROW_FAILURE("PythonScriptingManager", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
 		}
 		boost::filesystem::path workingDir2 = boost::filesystem::complete((_scriptsPath + "/").c_str()).normalize();

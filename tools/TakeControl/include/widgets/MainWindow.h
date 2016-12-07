@@ -45,6 +45,9 @@ namespace widgets {
 		MainWindow(QMainWindow * par = nullptr);
 		~MainWindow();
 
+	signals:
+		void pluginLoaded(plugins::DialogPluginInterface *);
+
 	private slots:
 		void closeEditor();
 		void showAboutDialog();

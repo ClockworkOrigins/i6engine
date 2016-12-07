@@ -73,6 +73,16 @@ namespace widgets {
 		l->setStretch(1, 3);
 
 		setCentralWidget(w);
+
+		// connect before loadPlugins is called
+		connect(this, SIGNAL(pluginLoaded(plugins::DialogPluginInterface *)), _npcListWidget, SLOT(loadedDialogPlugin(plugins::DialogPluginInterface *)));
+		connect(this, SIGNAL(pluginLoaded(plugins::DialogPluginInterface *)), _dialogListWidget, SLOT(loadedDialogPlugin(plugins::DialogPluginInterface *)));
+		connect(_npcListWidget, SIGNAL(selectNPC(QString)), _dialogListWidget, SLOT(selectedNPC(QString)));
+		connect(_npcListWidget, SIGNAL(selectNPC(QString)), _infoWidget, SLOT(selectedNPC(QString)));
+		connect(_dialogListWidget, SIGNAL(selectDialog(QString)), _infoWidget, SLOT(selectedDialog(QString)));
+		connect(_dialogListWidget, SIGNAL(selectNPC(QString)), _infoWidget, SLOT(selectedNPC(QString)));
+
+		loadPlugins();
 	}
 
 	MainWindow::~MainWindow() {
@@ -98,7 +108,10 @@ namespace widgets {
 			QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
 			QObject * plugin = loader.instance();
 			if (plugin) {
-				_dialogPlugins.push_back(qobject_cast<plugins::DialogPluginInterface *>(plugin));
+				plugins::DialogPluginInterface * dp = qobject_cast<plugins::DialogPluginInterface *>(plugin);
+				assert(dp);
+				_dialogPlugins.push_back(dp);
+				emit pluginLoaded(dp);
 			}
 		}
 	}

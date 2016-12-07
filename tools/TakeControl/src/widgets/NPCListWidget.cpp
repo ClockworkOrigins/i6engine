@@ -19,6 +19,10 @@
 
 #include "widgets/NPCListWidget.h"
 
+#include <cassert>
+
+#include "Plugins/DialogPluginInterface.h"
+
 #include <QListView>
 #include <QStringListModel>
 #include <QVBoxLayout>
@@ -27,18 +31,41 @@ namespace i6e {
 namespace takeControl {
 namespace widgets {
 
-	NPCListWidget::NPCListWidget(QWidget * par) : QWidget(par), _listView(new QListView(this)) {
+	NPCListWidget::NPCListWidget(QWidget * par) : QWidget(par), _listView(new QListView(this)), _npcList() {
 		QVBoxLayout * l = new QVBoxLayout();
 		l->addWidget(_listView);
 		setLayout(l);
 
 		QStringListModel * model = new QStringListModel(_listView);
-		model->setStringList({ "NPC1", "NPC2", "NPC3", "NPC4" });
-
 		_listView->setModel(model);
+
+		connect(_listView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(selectedNPC(const QModelIndex &)));
 	}
 
 	NPCListWidget::~NPCListWidget() {
+	}
+
+	void NPCListWidget::loadedDialogPlugin(plugins::DialogPluginInterface * plugin) {
+		QStringListModel * model = dynamic_cast<QStringListModel *>(_listView->model());
+		assert(model);
+		QStringList list = model->stringList();
+		auto npcList = plugin->getNPCs();
+		for (rpg::npc::NPC * npc : npcList) {
+			list.append(QString::fromStdString(npc->getIdentifier()));
+		}
+		qSort(list);
+		model->setStringList(list);
+		_npcList.insert(_npcList.begin(), npcList.begin(), npcList.end());
+		std::sort(_npcList.begin(), _npcList.end(), [](rpg::npc::NPC * a, rpg::npc::NPC * b) {
+			return a->getIdentifier() < b->getIdentifier();
+		});
+	}
+
+	void NPCListWidget::selectedNPC(const QModelIndex & idx) {
+		int index = idx.row();
+		QStringListModel * model = dynamic_cast<QStringListModel *>(_listView->model());
+		assert(model);
+		emit selectNPC(model->stringList().at(index));
 	}
 
 } /* namespace widgets */

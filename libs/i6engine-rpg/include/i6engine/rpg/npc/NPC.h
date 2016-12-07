@@ -47,10 +47,12 @@ namespace npc {
 	 */
 	class ISIXE_RPG_API NPC {
 	public:
-		NPC(const api::objects::GOTemplate & tpl, bool player);
+		NPC(const std::string & identifier, const api::objects::GOTemplate & tpl, bool player);
 		NPC(const NPC & other) : _go(other._go), _queue() {
 		}
 		~NPC();
+
+		std::string getIdentifier() const;
 
 		api::GOPtr getGO() const {
 			return _go.get();
@@ -90,6 +92,7 @@ namespace npc {
 	private:
 		api::WeakGOPtr _go;
 		NPCQueue _queue;
+		std::string _identifier;
 	};
 
 } /* namespace npc */
