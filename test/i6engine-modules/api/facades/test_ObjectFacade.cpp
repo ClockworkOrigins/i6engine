@@ -47,17 +47,17 @@ namespace config {
 		}
 
 		~ObjectFacadeTest() {
-			EngineController::GetSingletonPtr()->reset();
+			i6eEngineController->reset();
 		}
 
 		// registers test as application and ObjectController
 		virtual void SetUp() {
-			EngineController::GetSingletonPtr()->reset();
-			EngineController::GetSingletonPtr()->registerApplication(*this);
-			EngineController::GetSingletonPtr()->registerSubSystem("Object", new modules::ObjectController(), 10000);
+			i6eEngineController->reset();
+			i6eEngineController->registerApplication(*this);
+			i6eEngineController->registerSubSystem("Object", new modules::ObjectController(), 10000);
 
 			std::unique_lock<std::mutex> ul(_lock);
-			std::thread(std::bind(&EngineController::start, EngineController::GetSingletonPtr())).detach();
+			std::thread(std::bind(&EngineController::start, i6eEngineController)).detach();
 			_conditionVariable.wait(ul);
 		}
 
@@ -68,7 +68,7 @@ namespace config {
 
 		virtual void TearDown() {
 			std::unique_lock<std::mutex> ul(_lock);
-			EngineController::GetSingletonPtr()->stop();
+			i6eEngineController->stop();
 			_conditionVariable.wait(ul);
 		}
 
@@ -116,26 +116,26 @@ namespace config {
 	int RejectComponent::initCounter = 0;
 
 	TEST_F(ObjectFacadeTest, createGO) {
-		EXPECT_EQ(0, EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap().size());
+		EXPECT_EQ(0, i6eObjectFacade->getGOMap().size());
 		std::unique_lock<std::mutex> ul(_lock);
-		EngineController::GetSingletonPtr()->getObjectFacade()->createGO("JengaStick", objects::GOTemplate(), EngineController::GetSingletonPtr()->getUUID(), false, [this](GOPtr go) {
+		i6eObjectFacade->createGO("JengaStick", objects::GOTemplate(), i6eEngineController->getUUID(), false, [this](GOPtr go) {
 			std::unique_lock<std::mutex> ul2(_lock);
 			EXPECT_EQ("JengaStick", go->getType());
 			_conditionVariable.notify_one();
 		});
 		_conditionVariable.wait(ul);
-		EXPECT_EQ(1, EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap().size());
+		EXPECT_EQ(1, i6eObjectFacade->getGOMap().size());
 	}
 
 	TEST_F(ObjectFacadeTest, createComponentCallback) {
-		EXPECT_EQ(0, EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap().size());
+		EXPECT_EQ(0, i6eObjectFacade->getGOMap().size());
 		std::unique_lock<std::mutex> ul(_lock);
-		EngineController::GetSingletonPtr()->getObjectFacade()->createGO("JengaStick", objects::GOTemplate(), EngineController::GetSingletonPtr()->getUUID(), false, [this](GOPtr go) {
+		i6eObjectFacade->createGO("JengaStick", objects::GOTemplate(), i6eEngineController->getUUID(), false, [this](GOPtr go) {
 			attributeMap params;
 			params.insert(std::make_pair("targetID", "1"));
 			params.insert(std::make_pair("speed", "1.0"));
 			EXPECT_TRUE(go->getGOC(components::ComponentTypes::FollowComponent) == nullptr);
-			EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(go->getID(), -1, "Follow", params, [this, go](ComPtr c) {
+			i6eObjectFacade->createComponentCallback(go->getID(), -1, "Follow", params, [this, go](ComPtr c) {
 				std::unique_lock<std::mutex> ul2(_lock);
 				EXPECT_TRUE(go->getGOC(components::ComponentTypes::FollowComponent) != nullptr);
 				EXPECT_TRUE(go == c->getOwnerGO());
@@ -143,7 +143,7 @@ namespace config {
 			});
 		});
 		_conditionVariable.wait(ul);
-		EXPECT_EQ(1, EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap().size());
+		EXPECT_EQ(1, i6eObjectFacade->getGOMap().size());
 	}
 
 	TEST_F(ObjectFacadeTest, rejectGOC) {
@@ -151,15 +151,15 @@ namespace config {
 		EXPECT_EQ(0, RejectComponent::initCounter);
 		std::unique_lock<std::mutex> ul(_lock);
 		std::unique_lock<std::mutex> ul2(_lock2);
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerCTemplate("Reject", std::bind(&Component::createC<RejectComponent>, std::placeholders::_1, std::placeholders::_2));
-		EngineController::GetSingletonPtr()->getObjectFacade()->createGO("JengaStick", objects::GOTemplate(), EngineController::GetSingletonPtr()->getUUID(), false, [this](GOPtr go) {
+		i6eObjectFacade->registerCTemplate("Reject", std::bind(&Component::createC<RejectComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->createGO("JengaStick", objects::GOTemplate(), i6eEngineController->getUUID(), false, [this](GOPtr go) {
 			attributeMap params;
-			EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(go->getID(), -1, "Reject", params, [this, go](ComPtr c) {
+			i6eObjectFacade->createComponentCallback(go->getID(), -1, "Reject", params, [this, go](ComPtr c) {
 				std::unique_lock<std::mutex> ul3(_lock);
 				EXPECT_EQ(1, RejectComponent::initCounter);
 				_conditionVariable.notify_one();
 			});
-			EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(go->getID(), -1, "Reject", params, [this, go](ComPtr c) {
+			i6eObjectFacade->createComponentCallback(go->getID(), -1, "Reject", params, [this, go](ComPtr c) {
 				std::unique_lock<std::mutex> ul4(_lock2);
 				EXPECT_EQ(1, RejectComponent::initCounter);
 				_conditionVariable2.notify_one();
