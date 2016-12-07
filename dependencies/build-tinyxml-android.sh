@@ -23,8 +23,8 @@ cd "$(readlink "$(dirname "${0}")")"
 
 . ./build-common.sh android
 
-ARCHIVE="tinyxml2.zip"
-BUILD_DIR="${BUILD_ROOT}/tinyxml2"
+ARCHIVE="tinyxml2-4.0.1.zip"
+BUILD_DIR="${BUILD_ROOT}/tinyxml2-4.0.1"
 PREFIX="${DEP_OUT_DIR}/tinyxml2/"
 
 if [ -d ${PREFIX} ]; then
@@ -37,17 +37,25 @@ status "Extracting tinyxml2"
 
 downloadAndUnpack ${ARCHIVE}
 
+status "Configuring clockUtils"
+
+cd "${BUILD_DIR}"
+cmake \
+	-DBUILD_SHARED_LIBS=OFF \
+	-DBUILD_STATIC_LIBS=ON \
+	-DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_TOOLCHAIN_FILE=${DEP_OUT_DIR}/../../cmake/android.toolchain.cmake \
+	-DANDROID_STL=gnustl_shared \
+	.
+
 status "Building tinyxml2"
 
-cd "${BUILD_DIR}/jni"
-cp -rf "${PATCH_DIR}/tinyxml2/tinyxml2.cpp" "${BUILD_ROOT}/tinyxml2/jni"
-${ANDROID_NDK}/ndk-build
+make -j ${CPU_CORES}
 
-mkdir -p "${PREFIX}/include"
-mkdir "${PREFIX}/lib"
+status "Installing tinyxml2"
 
-cp ${BUILD_DIR}/jni/*.h "${PREFIX}/include"
-cp ${BUILD_DIR}/obj/local/armeabi/*.so "${PREFIX}/lib"
+make install
 
 status "Cleaning up"
 

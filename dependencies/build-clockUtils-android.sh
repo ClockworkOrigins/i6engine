@@ -52,7 +52,7 @@ cmake \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_TOOLCHAIN_FILE=${DEP_OUT_DIR}/../../cmake/android.toolchain.cmake \
 	-DANDROID_STL=gnustl_shared \
-.
+	.
 
 status "Building clockUtils"
 

@@ -21,8 +21,8 @@ REM
 
 call build-common.bat android
 
-Set ARCHIVE=boost_1_62_0.tar.bz2
-Set BUILD_DIR=%TMP_DIR%/boost_1_62_0
+Set ARCHIVE=boost_1_58_0.tar.bz2
+Set BUILD_DIR=%TMP_DIR%/boost_1_58_0
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/boost
 
 IF EXIST %PREFIX% EXIT /B

@@ -273,7 +273,7 @@ IF(WIN32)
 	configure_file(${CMAKE_SOURCE_DIR}/config/build-prebuilt-msvc.bat.in ${CMAKE_BINARY_DIR}/build-prebuilt-msvc.bat @ONLY)
 	configure_file(${CMAKE_SOURCE_DIR}/config/test-buildconfigurations.bat.in ${CMAKE_BINARY_DIR}/test-buildconfigurations.bat @ONLY)
 
-	IF(ISIXE_WITH_TOOLS)	
+	IF(ISIXE_WITH_TOOLS)
 		install(FILES ${CMAKE_SOURCE_DIR}/config/qt.conf DESTINATION ${CMAKE_INSTALL_PREFIX}/config)
 	ENDIF(ISIXE_WITH_TOOLS)
 

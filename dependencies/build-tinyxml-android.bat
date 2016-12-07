@@ -21,8 +21,8 @@ REM
 
 call build-common.bat android
 
-Set ARCHIVE=tinyxml2.zip
-Set BUILD_DIR=%TMP_DIR%/tinyxml2
+Set ARCHIVE=tinyxml2-4.0.1.zip
+Set BUILD_DIR=%TMP_DIR%/tinyxml2-4.0.1
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/tinyxml2
 
 IF EXIST %PREFIX% EXIT /B
@@ -33,22 +33,18 @@ echo "Extracting tinyxml2"
 
 call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
+echo "Configuring tinyxml2"
+
+cd %BUILD_DIR%
+cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%PREFIX% -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=%DEP_DIR%/../cmake/android.toolchain.cmake -DCMAKE_MAKE_PROGRAM="%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe" -DANDROID_STL=gnustl_shared .
+
 echo "Building tinyxml2"
 
-cd %BUILD_DIR%\jni
-xcopy /S /Y %DEP_DIR%\..\ext\patches\tinyxml2 .
-
-call ndk-build
-if %errorlevel% gtr 0 exit /b
+cmake --build .
 
 echo "Installing tinyxml2"
 
-mkdir "%PREFIX%"
-mkdir "%PREFIX%/lib"
-mkdir "%PREFIX%/include"
-
-move tinyxml2.h %PREFIX%/include/tinyxml2.h
-move ..\libs\armeabi\libtinyxml2.so %PREFIX%/lib/tinyxml2.so
+cmake --build . --target install
 
 echo "Cleaning up"
 

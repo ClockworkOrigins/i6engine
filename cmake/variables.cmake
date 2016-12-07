@@ -105,15 +105,22 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 
 # Sets appropriate Compilerflags
 
-SET(CXX_FLAGS "-pedantic -Wall -Wextra -Wold-style-cast -Woverloaded-virtual -Wnon-virtual-dtor -Wformat=2 -Winit-self -Wswitch-default -Wfloat-equal -Wshadow -Wredundant-decls -Wctor-dtor-privacy -Wno-sign-conversion -Wno-unused-parameter -Wno-long-long -fPIC -std=c++11")
+SET(CXX_FLAGS "-pedantic -Wall -Wextra -Woverloaded-virtual -Wnon-virtual-dtor -Wformat=2 -Winit-self -Wswitch-default -Wfloat-equal -Wshadow -Wredundant-decls -Wctor-dtor-privacy -Wno-sign-conversion -Wno-unused-parameter -Wno-long-long -fPIC -std=c++11")
 SET(CLANG_FLAGS "-Wstring-plus-int")
 
 IF(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
+	IF(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.7)
+		SET(CXX_FLAGS "${CXX_FLAGS} -Wold-style-cast")
+	ENDIF()
+	IF(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.8)
+		SET(CXX_FLAGS "${CXX_FLAGS} -Wno-old-style-cast")
+	ENDIF()
 	SET(CMAKE_CXX_FLAGS_DEBUG		"${CXX_FLAGS} -g")
 	SET(CMAKE_CXX_FLAGS_MINSIZEREL		"${CXX_FLAGS} -0s -DNDEBUG")
 	SET(CMAKE_CXX_FLAGS_RELEASE		"${CXX_FLAGS} -O3 -DNDEBUG")
 	SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CXX_FLAGS} -O2 -g")
 ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
+	SET(CXX_FLAGS "${CXX_FLAGS} -Wold-style-cast")
 	SET(CMAKE_CXX_FLAGS_DEBUG		"${CXX_FLAGS} ${CLANG_FLAGS} -g")
 	SET(CMAKE_CXX_FLAGS_MINSIZEREL		"${CXX_FLAGS} ${CLANG_FLAGS} -0s -DNDEBUG")
 	SET(CMAKE_CXX_FLAGS_RELEASE		"${CXX_FLAGS} ${CLANG_FLAGS} -O3 -DNDEBUG")

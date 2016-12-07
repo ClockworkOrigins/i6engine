@@ -23,8 +23,8 @@ cd "$(readlink "$(dirname "${0}")")"
 
 . ./build-common.sh ${1}
 
-ARCHIVE="tinyxml2.zip"
-BUILD_DIR="${BUILD_ROOT}/tinyxml2"
+ARCHIVE="tinyxml2-4.0.1.zip"
+BUILD_DIR="${BUILD_ROOT}/tinyxml2-4.0.1"
 PREFIX="${DEP_OUT_DIR}/tinyxml2/"
 
 if [ -d ${PREFIX} ]; then
@@ -37,20 +37,25 @@ status "Extracting tinyxml2"
 
 downloadAndUnpack ${ARCHIVE}
 
+status "Configuring tinyxml2"
+
+cd "${BUILD_DIR}"
+cmake \
+	-DBUILD_SHARED_LIBS=ON \
+	-DBUILD_STATIC_LIBS=OFF \
+	-DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_C_COMPILER=${C_COMPILER} \
+	-DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
+	.
+
 status "Building tinyxml2"
 
-cd "${BUILD_DIR}/jni"
-cp -rf "${PATCH_DIR}/tinyxml2/tinyxml2.cpp" "${BUILD_ROOT}/tinyxml2/jni"
-${CXX_COMPILER} -fPIC -c tinyxml2.cpp -o tinyxml2.o
-ar rcs libtinyxml2.a tinyxml2.o
+make -j ${CPU_CORES}
 
 status "Installing tinyxml2"
 
-mkdir -p "${PREFIX}/include"
-mkdir "${PREFIX}/lib"
-
-cp ${BUILD_DIR}/jni/*.h "${PREFIX}/include"
-cp ${BUILD_DIR}/jni/*.a "${PREFIX}/lib"
+make install
 
 status "Cleaning up"
 

@@ -21,8 +21,8 @@ REM
 
 call build-common.bat %1 %2
 
-Set ARCHIVE=tinyxml2.zip
-Set BUILD_DIR=%TMP_DIR%/tinyxml2
+Set ARCHIVE=tinyxml2-4.0.1.zip
+Set BUILD_DIR=%TMP_DIR%/tinyxml2-4.0.1
 Set PREFIX=%DEP_DIR%/%ARCH_DIR%/tinyxml2
 
 IF EXIST %PREFIX% EXIT /B
@@ -33,23 +33,18 @@ echo "Extracting tinyxml2"
 
 call build-common.bat downloadAndUnpack %ARCHIVE% %BUILD_DIR%
 
+echo "Configuring tinyxml2"
+
+cd %BUILD_DIR%
+cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_LIBS=ON -DCMAKE_INSTALL_PREFIX=%PREFIX% -G "%VSCOMPILER%%VSARCH%" .
+
 echo "Building tinyxml2"
 
-cd %BUILD_DIR%\jni
-xcopy /S /Y %DEP_DIR%\..\ext\patches\tinyxml2 .
-cl /EHsc /MP /GS /TP /analyze- /W3 /Zc:wchar_t /Z7 /Gm- /Ox /fp:precise /FD /D "WIN32" /D "_WINDOWS" /D "TINYXML2_EXPORT" /D "_WINDLL" /D "_MBCS" /errorReport:prompt /WX- /Zc:forScope /GR /Gd /Oy- /MD /nologo /D_USRDLL tinyxml2.cpp /link /DLL /OUT:tinyxml2.dll
-if %errorlevel% gtr 0 exit /b
+MSBuild.exe tinyxml2.sln /m:%NUMBER_OF_PROCESSORS% /p:Configuration=Release
 
 echo "Installing tinyxml2"
 
-mkdir "%PREFIX%"
-mkdir "%PREFIX%/bin"
-mkdir "%PREFIX%/lib"
-mkdir "%PREFIX%/include"
-
-move tinyxml2.h %PREFIX%/include/tinyxml2.h
-move tinyxml2.dll %PREFIX%/bin/tinyxml2.dll
-move tinyxml2.lib %PREFIX%/lib/tinyxml2.lib
+MSBuild.exe INSTALL.vcxproj /p:Configuration=Release
 
 echo "Cleaning up"
 
