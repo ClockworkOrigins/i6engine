@@ -19,6 +19,7 @@
 
 #include "TakeControlRPG.h"
 
+#include <fstream>
 #include <regex>
 
 #include "i6engine/utils/i6eString.h"
