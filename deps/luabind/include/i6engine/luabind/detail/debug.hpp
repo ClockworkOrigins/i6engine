@@ -46,7 +46,8 @@ namespace detail {
 } /* namespace detail */
 } /* namespace luabind*/
 
-#define LUABIND_CHECK_STATE_INTERNAL(L, number) luabind::detail::stack_checker_type stack_checker_object##number(L)
+#define LUABIND_CHECK_STATE_INTERNAL2(L, number) luabind::detail::stack_checker_type stack_checker_object##number(L)
+#define LUABIND_CHECK_STATE_INTERNAL(L, number) LUABIND_CHECK_STATE_INTERNAL2(L, number)
 #define LUABIND_CHECK_STACK(L) LUABIND_CHECK_STATE_INTERNAL(L, __LINE__)
 #else
 	#define LUABIND_CHECK_STACK(L) do {} while (0)
