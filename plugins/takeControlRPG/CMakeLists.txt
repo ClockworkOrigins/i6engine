@@ -31,7 +31,7 @@ include_directories(${CMAKE_SOURCE_DIR}/tools/TakeControl/include)
 set(srcdir ./src)
 SET(includedir ./include/)
 
-set(plugintakeControlRPGSrc
+set(pluginTakeControlRPGSrc
 	${srcdir}/TakeControlRPG.cpp
 )
 
@@ -43,7 +43,7 @@ ADD_DEFINITIONS(-DQT_PLUGIN)
 ADD_DEFINITIONS(-DQT_NO_DEBUG)
 ADD_DEFINITIONS(-DQT_SHARED)
 
-add_library(Plugin_TakeControlRPG SHARED ${plugintakeControlRPGSrc} ${pluginTakeControlRPGInclude})
+add_library(Plugin_TakeControlRPG SHARED ${pluginTakeControlRPGSrc} ${pluginTakeControlRPGInclude})
 
 target_link_libraries(Plugin_TakeControlRPG i6engine-rpg ${QT_LIBRARIES})
 
