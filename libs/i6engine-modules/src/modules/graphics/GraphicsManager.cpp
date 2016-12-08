@@ -102,8 +102,8 @@ namespace modules {
 					configItr++;
 				}
 				Ogre::NameValuePairList misc;
-				misc["externalWindowHandle"] = Ogre::StringConverter::toString((size_t) hWnd);
-				misc["parentWindowHandle"] = Ogre::StringConverter::toString((size_t) hWnd);
+				misc["externalWindowHandle"] = Ogre::StringConverter::toString(reinterpret_cast<size_t>(hWnd));
+				misc["parentWindowHandle"] = Ogre::StringConverter::toString(reinterpret_cast<size_t>(hWnd));
 				_rWindow = _objRoot->createRenderWindow(i6eAppl->getName(), res.width, res.height, fullscreen, &misc);
 			} else {
 				_rWindow = _objRoot->initialise(true, i6eAppl->getName());

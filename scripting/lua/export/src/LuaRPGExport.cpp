@@ -49,7 +49,7 @@ namespace rpg {
 	void insertItemAtWaypoint(const std::string & identifier, const std::string & waypoint) {
 		Vec3 pos;
 		Quaternion rot;
-		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
+		for (auto & go : i6eObjectFacade->getAllObjectsOfType("Waypoint")) {
 			if (go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName() == waypoint) {
 				pos = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getPosition();
 				rot = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getRotation();
@@ -66,7 +66,7 @@ namespace rpg {
 	void insertNPCAtWaypoint(const std::string & identifier, const std::string & waypoint) {
 		Vec3 pos;
 		Quaternion rot;
-		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
+		for (auto & go : i6eObjectFacade->getAllObjectsOfType("Waypoint")) {
 			if (go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName() == waypoint) {
 				pos = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getPosition();
 				rot = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getRotation();
@@ -79,7 +79,7 @@ namespace rpg {
 	void insertPlayerAtWaypoint(const std::string & identifier, const std::string & waypoint) {
 		Vec3 pos;
 		Quaternion rot;
-		for (auto & go : api::EngineController::GetSingleton().getObjectFacade()->getAllObjectsOfType("Waypoint")) {
+		for (auto & go : i6eObjectFacade->getAllObjectsOfType("Waypoint")) {
 			if (go->getGOC<api::WaypointComponent>(api::components::ComponentTypes::WaypointComponent)->getName() == waypoint) {
 				pos = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getPosition();
 				rot = go->getGOC<api::StaticStateComponent>(api::components::ComponentTypes::StaticStateComponent)->getRotation();

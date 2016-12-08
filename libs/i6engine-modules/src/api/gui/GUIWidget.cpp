@@ -119,6 +119,10 @@ namespace api {
 				_mouseLeaveCallback = se->func;
 				break;
 			}
+			default: {
+				assert(false);
+				break;
+			}
 			}
 		} else if (type == gui::GUIMessageTypes::GuiSetTooltip) {
 			_tooltip = dynamic_cast<gui::GUI_SetTooltip *>(message)->tooltip;

@@ -92,7 +92,7 @@ namespace plugins {
 		_ghostTypeCheckbox->setChecked(_collisionGroup.responseType & api::ResponseType::ResponseType::GHOST);
 		_triggerTypeCheckbox->setChecked(_collisionGroup.responseType & api::ResponseType::ResponseType::TRIGGER);
 		for (int i = 0; i < _ownCollisionTypes.size(); i++) {
-			_ownCollisionTypes[i]->setChecked(_collisionGroup.crashType == (1 << i));
+			_ownCollisionTypes[i]->setChecked(int(_collisionGroup.crashType) == (1 << i));
 		}
 		for (int i = 0; i < _collidableCollisionTypes.size(); i++) {
 			_collidableCollisionTypes[i]->setChecked(_collisionGroup.crashMask & (1 << i));

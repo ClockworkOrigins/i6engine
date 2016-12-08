@@ -25,13 +25,14 @@
 #define LUABIND_TYPETRAITS_HPP_INCLUDED
 
 #include "i6engine/luabind/config.hpp"
-#include "boost/mpl/if.hpp"
-#include "boost/type_traits/is_reference.hpp"
-#include "boost/type_traits/is_const.hpp"
 #include "i6engine/luabind/detail/primitives.hpp"
 
-namespace luabind { namespace detail 
-{
+#include "boost/mpl/if.hpp"
+#include "boost/type_traits/is_const.hpp"
+#include "boost/type_traits/is_reference.hpp"
+
+namespace luabind {
+namespace detail {
 
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
@@ -101,12 +102,9 @@ namespace luabind { namespace detail
 
 #endif
 
-
 	template<class T>
-	struct is_nonconst_reference
-	{
-		enum
-		{
+	struct is_nonconst_reference {
+		enum {
 			value = boost::is_reference<T>::value && !is_const_reference<T>::value
 		};
 		typedef boost::mpl::bool_<value> type;
@@ -117,9 +115,10 @@ namespace luabind { namespace detail
 	no_t is_const_pointer_helper(...);
 
 	template<class T>
-	struct is_const_pointer
-	{
-		enum { value = sizeof(is_const_pointer_helper((void(*)(T))0)) == sizeof(yes_t) };
+	struct is_const_pointer {
+		enum {
+			value = sizeof(is_const_pointer_helper(static_cast<void(*)(T)>(0))) == sizeof(yes_t)
+		};
 		typedef boost::mpl::bool_<value> type;
 	};
 
@@ -128,9 +127,10 @@ namespace luabind { namespace detail
 	no_t is_nonconst_pointer_helper(...);
 
 	template<class T>
-	struct is_nonconst_pointer
-	{
-		enum { value = sizeof(is_nonconst_pointer_helper((void(*)(T))0)) == sizeof(yes_t) && !is_const_pointer<T>::value };
+	struct is_nonconst_pointer {
+		enum {
+			value = sizeof(is_nonconst_pointer_helper(static_cast<void(*)(T)>(0))) == sizeof(yes_t) && !is_const_pointer<T>::value
+		};
 		typedef boost::mpl::bool_<value> type;
 	};
 /*

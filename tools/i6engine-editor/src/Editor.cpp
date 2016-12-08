@@ -94,10 +94,7 @@ namespace editor {
 	Editor::~Editor() {
 		_iniParser.setValue("GENERAL", "movementSpeed", _movementSpeed);
 		_iniParser.setValue("GENERAL", "rotationSpeed", _rotationSpeed);
-
-		if (clockUtils::ClockError::SUCCESS != _iniParser.save("i6engine-editor.ini")) {
-			ISIXE_THROW_FAILURE("Editor", "i6engine-editor.ini couldn't be saved!");
-		}
+		_iniParser.save("i6engine-editor.ini");
 	}
 
 	void Editor::Initialize() {

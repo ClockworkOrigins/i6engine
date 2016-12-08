@@ -19,6 +19,7 @@
 # luabind cmake
 ################################
 
+include_directories(${I6ENGINE_UTILS_INCLUDE_DIR})
 include_directories("include")
 
 set(srcdir ./src)

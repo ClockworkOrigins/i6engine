@@ -159,6 +159,10 @@
 	#endif
 #endif
 
+#ifndef ISIXE_UNUSED
+	#define ISIXE_UNUSED(param) static_cast<void>(param)
+#endif
+
 #ifdef _MSC_VER
 	#pragma warning(disable : 4251) // dll interface to be used by clients...
 #endif

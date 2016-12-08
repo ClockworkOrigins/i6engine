@@ -302,7 +302,7 @@ TEST(MessagingController, updateAfterDelete) {
 	} catch (i6e::utils::exceptions::i6exception & e) {
 		std::cout << "Caught i6exception::exception " << e.what() << std::endl;
 		ASSERT_FALSE(true);
-	} catch (boost::exception & e) {
+	} catch (boost::exception &) {
 		std::cout << "Caught boost::exception" << std::endl;
 		ASSERT_FALSE(true);
 	} catch (std::exception & e) {

@@ -68,7 +68,7 @@ namespace detail
       Handler handler;
   };
 
-  LUABIND_API void handle_exception_aux(lua_State* L);
+  //LUABIND_API void handle_exception_aux(lua_State* L);
   LUABIND_API void register_exception_handler(exception_handler_base*);
 
 } // namespace detail

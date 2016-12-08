@@ -20,7 +20,7 @@
 #ifndef __I6ENGINE_PLUGINS_TAKECONTROLRPG_H__
 #define __I6ENGINE_PLUGINS_TAKECONTROLRPG_H__
 
-#include "../../../tools/takeControl/include/plugins/DialogPluginInterface.h"
+#include "plugins/DialogPluginInterface.h"
 
 namespace i6e {
 namespace plugins {

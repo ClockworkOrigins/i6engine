@@ -25,6 +25,7 @@
 #ifndef __I6ENGINE_UTILS_LOGGER_H__
 #define __I6ENGINE_UTILS_LOGGER_H__
 
+#include <sstream>
 #include <string>
 
 #include "i6engine/i6engineBuildSettings.h"
@@ -69,18 +70,30 @@
 		i6e::utils::Logger::GetSingleton().setLogLevel(level);\
 	}
 #else
+	#define ISIXE_NO_DEBUG(module, message) {\
+		ISIXE_UNUSED(module);\
+		std::stringstream logMessageString;\
+		logMessageString << message;\
+		ISIXE_UNUSED(logMessageString);\
+	}
 	#define ISIXE_LOG_DEBUG(module, message) {\
+		ISIXE_NO_DEBUG(module, message);\
 	}
 	#define ISIXE_LOG_INFO(module, message) {\
+		ISIXE_NO_DEBUG(module, message);\
 	}
 	#define ISIXE_LOG_WARN(module, message) {\
+		ISIXE_NO_DEBUG(module, message);\
 	}
 	#define ISIXE_LOG_ERROR(module, message) {\
+		ISIXE_NO_DEBUG(module, message);\
 	}
 	#define ISIXE_LOG_FATAL(module, message) {\
+		ISIXE_NO_DEBUG(module, message);\
 	}
 
 	#define ISIXE_LOG_SETLEVEL(level) {\
+		ISIXE_UNUSED(level);\
 	}
 #endif // ISIXE_WITH_LOGGING
 

@@ -27,87 +27,87 @@ namespace lua {
 namespace graphics {
 
 	void closeViewports() {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->closeViewports();
+		i6eGraphicsFacade->closeViewports();
 	}
 
 	void setAmbientLight(double r, double g, double b) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setAmbientLight(r, g, b);
+		i6eGraphicsFacade->setAmbientLight(r, g, b);
 	}
 
 	void setSkyBox(const std::string & material, double distance, bool renderFirst) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setSkyBox(material, distance, renderFirst);
+		i6eGraphicsFacade->setSkyBox(material, distance, renderFirst);
 	}
 
 	void setSkyDome(const std::string & material, int32_t curvature, double tiles, double distance, bool renderFirst) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setSkyDome(material, curvature, tiles, distance, renderFirst);
+		i6eGraphicsFacade->setSkyDome(material, curvature, tiles, distance, renderFirst);
 	}
 
 	void setSkyPlane(const std::string & material, double distance, int32_t direction, int32_t size, double tiles, bool renderFirst, double curvature, int32_t xSegments, int32_t ySegments) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setSkyPlane(material, distance, direction, size, tiles, renderFirst, curvature, xSegments, ySegments);
+		i6eGraphicsFacade->setSkyPlane(material, distance, direction, size, tiles, renderFirst, curvature, xSegments, ySegments);
 	}
 
 	void removeSkyBox() {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->removeSkyBox();
+		i6eGraphicsFacade->removeSkyBox();
 	}
 
 	void removeSkyDome() {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->removeSkyDome();
+		i6eGraphicsFacade->removeSkyDome();
 	}
 
 	void removeSkyPlane() {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->removeSkyPlane();
+		i6eGraphicsFacade->removeSkyPlane();
 	}
 
 	void setResolution(const i6e::api::graphics::Resolution & resolution) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setResolution(resolution);
+		i6eGraphicsFacade->setResolution(resolution);
 	}
 
 	void setFullscreen(bool fullscreen) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setFullscreen(fullscreen);
+		i6eGraphicsFacade->setFullscreen(fullscreen);
 	}
 
 	void setShadowTechnique(i6e::api::graphics::ShadowTechnique st) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setShadowTechnique(st);
+		i6eGraphicsFacade->setShadowTechnique(st);
 	}
 
 	void resetGraphicsSubSystem() {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->resetSubSystem();
+		i6eGraphicsFacade->resetSubSystem();
 	}
 
 	std::vector<i6e::api::graphics::Resolution> getPossibleResolutions() {
-		return i6e::api::EngineController::GetSingleton().getGraphicsFacade()->getPossibleResolutions();
+		return i6eGraphicsFacade->getPossibleResolutions();
 	}
 
 	i6e::api::graphics::Resolution getCurrentResolution() {
-		return i6e::api::EngineController::GetSingleton().getGraphicsFacade()->getCurrentResolution();
+		return i6eGraphicsFacade->getCurrentResolution();
 	}
 
 	std::vector<std::pair<int64_t, Vec3>> getSelectables() {
-		return i6e::api::EngineController::GetSingleton().getGraphicsFacade()->getSelectables();
+		return i6eGraphicsFacade->getSelectables();
 	}
 
 	void setLinearFog(const Vec3 & colour, double start, double end) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setLinearFog(colour, start, end);
+		i6eGraphicsFacade->setLinearFog(colour, start, end);
 	}
 
 	void setExponentialFog(const Vec3 & colour, double density) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setExponentialFog(colour, density);
+		i6eGraphicsFacade->setExponentialFog(colour, density);
 	}
 
 	void setExponentialFog2(const Vec3 & colour, double density) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->setExponentialFog2(colour, density);
+		i6eGraphicsFacade->setExponentialFog2(colour, density);
 	}
 
 	void takeScreenshot(const std::string & prefix, const std::string & suffix) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->takeScreenshot(prefix, suffix);
+		i6eGraphicsFacade->takeScreenshot(prefix, suffix);
 	}
 
 	void showFPS(double x, double y, const std::string & imageStyle, const std::string & printStyle, const std::string & imageset, const std::string & image) {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->showFPS(x, y, imageStyle, printStyle, imageset, image);
+		i6eGraphicsFacade->showFPS(x, y, imageStyle, printStyle, imageset, image);
 	}
 
 	void hideFPS() {
-		i6e::api::EngineController::GetSingleton().getGraphicsFacade()->hideFPS();
+		i6eGraphicsFacade->hideFPS();
 	}
 
 } /* namespace graphics */

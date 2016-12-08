@@ -22,8 +22,9 @@
 
 #define LUABIND_BUILDING
 
-#include "i6engine/luabind/error.hpp"
+#include "i6engine/i6engineBuildSettings.h"
 
+#include "i6engine/luabind/error.hpp"
 
 namespace luabind
 {

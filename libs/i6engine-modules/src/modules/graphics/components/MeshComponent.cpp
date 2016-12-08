@@ -61,6 +61,7 @@ namespace modules {
 			}
 		} catch (const Ogre::Exception & e) {
 			ISIXE_LOG_WARN("GraphicsNode", e.what());
+			ISIXE_UNUSED(e);
 		}
 
 		if (api::EngineController::GetSingletonPtr()->getDebugdrawer() == 3 || api::EngineController::GetSingletonPtr()->getDebugdrawer() == 4) {

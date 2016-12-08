@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include "Plugins/DialogPluginInterface.h"
+#include "plugins/DialogPluginInterface.h"
 
 #include <QListView>
 #include <QStringListModel>

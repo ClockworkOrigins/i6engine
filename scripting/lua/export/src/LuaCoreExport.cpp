@@ -118,13 +118,13 @@ namespace core {
 		}
 
 		void registerMessageType(int msgType, const std::string & func) {
-			i6e::api::EngineController::GetSingleton().getMessagingFacade()->registerMessageType(msgType, this, [this, func](const i6e::core::Message::Ptr & msg) {
+			i6eMessagingFacade->registerMessageType(msgType, this, [this, func](const i6e::core::Message::Ptr & msg) {
 				luabind::call_member<void>(this, func.c_str(), msg);
 			});
 		}
 
 		void unregisterMessageType(int msgType) {
-			i6e::api::EngineController::GetSingleton().getMessagingFacade()->unregisterMessageType(msgType, this);
+			i6eMessagingFacade->unregisterMessageType(msgType, this);
 		}
 	};
 

@@ -22,12 +22,13 @@
 
 #define LUABIND_BUILDING
 
+#include <cassert>
+
 #include "i6engine/luabind/lua_include.hpp"
 
 #include "i6engine/luabind/scope.hpp"
 #include "i6engine/luabind/detail/debug.hpp"
 #include "i6engine/luabind/detail/stack_utils.hpp"
-#include <cassert>
 
 #if LUA_VERSION_NUM < 502
 # define lua_pushglobaltable(L) lua_pushvalue(L, LUA_GLOBALSINDEX)

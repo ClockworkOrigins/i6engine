@@ -194,6 +194,7 @@ namespace modules {
 			gContactAddedCallback = reinterpret_cast<ContactAddedCallback>(&myContactAddedCallback);
 		} catch(std::exception & e) {
 			ISIXE_LOG_ERROR("Physics", "An exception has occurred: " << e.what());
+			ISIXE_UNUSED(e);
 		}
 
 		// (Daniel) it's a bit hacky, but necessary for static build to link against serialization code

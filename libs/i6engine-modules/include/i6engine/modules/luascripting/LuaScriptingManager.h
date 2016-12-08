@@ -78,10 +78,9 @@ namespace modules {
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
 					luabind::call_function<Ret>(o, A...);
-				} catch (const luabind::error & e) {
-					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (...) {
 				}
 			}, B...));
 		}
@@ -102,10 +101,9 @@ namespace modules {
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
 					ret->push(Ret(luabind::call_function<Ret>(o, A...)));
-				} catch (const luabind::error & e) {
-					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (...) {
 				}
 			}, B...));
 			return ret;
@@ -123,10 +121,9 @@ namespace modules {
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
 					luabind::call_function<Ret>(o, A...);
-				} catch (const luabind::error & e) {
-					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (...) {
 				}
 			}, B...));
 		}
@@ -144,10 +141,9 @@ namespace modules {
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
 					ret->push(Ret(luabind::call_function<Ret>(o, A...)));
-				} catch (const luabind::error & e) {
-					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (...) {
 				}
 			}, B...));
 			return ret;
@@ -168,10 +164,9 @@ namespace modules {
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
 					luabind::call_function<Ret>(o, A...);
-				} catch (const luabind::error & e) {
-					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (...) {
 				}
 				callback();
 			}, B...));
@@ -193,10 +188,9 @@ namespace modules {
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
 					ret->push(Ret(luabind::call_function<Ret>(o, A...)));
-				} catch (const luabind::error & e) {
-					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "' in script '" << file << ".lua': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (...) {
 				}
 				callback();
 			}, B...));
@@ -215,10 +209,9 @@ namespace modules {
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
 					luabind::call_function<Ret>(o, A...);
-				} catch (const luabind::error & e) {
-					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (...) {
 				}
 				callback();
 			}, B...));
@@ -237,10 +230,9 @@ namespace modules {
 					assert(lua_isfunction(_luaState, -1));
 					luabind::object o(luabind::from_stack(_luaState, -1));
 					ret->push(Ret(luabind::call_function<Ret>(o, A...)));
-				} catch (const luabind::error & e) {
-					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
 				} catch (const std::exception & e) {
 					ISIXE_THROW_FAILURE("LuaScriptingManager", "Error calling function '" << func << "': " << e.what() << ": " << lua_tostring(_luaState, -1));
+				} catch (...) {
 				}
 				callback();
 			}, B...));

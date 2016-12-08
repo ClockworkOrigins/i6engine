@@ -52,7 +52,7 @@ namespace widgets {
 		quint64 i;
 		QPointF offset;
 		ds >> i >> offset;
-		WidgetEditComponent * wec = (WidgetEditComponent *) i;
+		WidgetEditComponent * wec = reinterpret_cast<WidgetEditComponent *>(i);
 		wec->setPos(evt->scenePos() + offset);
 		update(sceneRect());
 		if (wec->getConnection()) {

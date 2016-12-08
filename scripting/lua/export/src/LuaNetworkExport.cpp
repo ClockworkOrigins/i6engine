@@ -27,43 +27,43 @@ namespace lua {
 namespace network {
 
 	i6e::core::IPKey getIP() {
-		return i6e::api::EngineController::GetSingleton().getNetworkFacade()->getIP();
+		return i6eNetworkFacade->getIP();
 	}
 
 	std::string getSimpleIP() {
-		return i6e::api::EngineController::GetSingleton().getNetworkFacade()->getSimpleIP();
+		return i6eNetworkFacade->getSimpleIP();
 	}
 
 	bool connect(const core::IPKey remoteIP, const uint16_t localPort) {
-		return i6e::api::EngineController::GetSingleton().getNetworkFacade()->connect(remoteIP, localPort);
+		return i6eNetworkFacade->connect(remoteIP, localPort);
 	}
 
 	bool listen(const uint16_t localPort) {
-		return i6e::api::EngineController::GetSingleton().getNetworkFacade()->listen(localPort);
+		return i6eNetworkFacade->listen(localPort);
 	}
 
 	void disconnect() {
-		i6e::api::EngineController::GetSingleton().getNetworkFacade()->disconnect();
+		i6eNetworkFacade->disconnect();
 	}
 
 	void enablePing(bool enabled) {
-		i6e::api::EngineController::GetSingleton().getNetworkFacade()->enablePing(enabled);
+		i6eNetworkFacade->enablePing(enabled);
 	}
 
 	void subscribe(uint32_t channel) {
-		i6e::api::EngineController::GetSingleton().getNetworkFacade()->subscribe(channel);
+		i6eNetworkFacade->subscribe(channel);
 	}
 
 	void unsubscribe(uint32_t channel) {
-		i6e::api::EngineController::GetSingleton().getNetworkFacade()->unsubscribe(channel);
+		i6eNetworkFacade->unsubscribe(channel);
 	}
 
 	void publish(uint32_t channel, const i6e::api::GameMessage::Ptr & msg) {
-		i6e::api::EngineController::GetSingleton().getNetworkFacade()->publish(channel, msg);
+		i6eNetworkFacade->publish(channel, msg);
 	}
 
 	void resetNetworkSubSystem() {
-		i6e::api::EngineController::GetSingleton().getNetworkFacade()->resetSubSystem();
+		i6eNetworkFacade->resetSubSystem();
 	}
 
 } /* namespace network */

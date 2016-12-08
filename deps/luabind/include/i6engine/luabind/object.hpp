@@ -23,6 +23,8 @@
 #ifndef LUABIND_OBJECT_050419_HPP
 #define LUABIND_OBJECT_050419_HPP
 
+#include "i6engine/utils/i6eSystemParameters.h"
+
 #include "boost/implicit_cast.hpp" // detail::push()
 #include "boost/ref.hpp" // detail::push()
 #include "boost/mpl/bool.hpp" // value_wrapper_traits specializations
@@ -417,6 +419,7 @@ LUABIND_BINARY_OP_DEF(<, LUA_OPLT)
       void push(lua_State* ip)
       {
           assert(ip == m_interpreter);
+		  ISIXE_UNUSED(ip);
           lua_pushvalue(m_interpreter, m_key_index);
           AccessPolicy::get(m_interpreter, m_table_index);
       }
@@ -902,6 +905,7 @@ template<class Next>
 inline void adl::index_proxy<Next>::push(lua_State* ip)
 {
     assert(ip == m_interpreter);
+	ISIXE_UNUSED(ip);
 
     value_wrapper_traits<Next>::unwrap(m_interpreter, m_next);
 

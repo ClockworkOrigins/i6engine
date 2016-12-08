@@ -89,9 +89,9 @@ using namespace luabind;
 
 scope registerUtils() {
 	return
-		def("rand", (uint32_t(*)()) &i6e::lua::utils::rand),
-		def("rand", (uint32_t(*)(uint32_t)) &i6e::lua::utils::rand),
-		def("rand", (uint32_t(*)(uint32_t, uint32_t)) &i6e::lua::utils::rand),
+		def("rand", static_cast<uint32_t(*)()>(&i6e::lua::utils::rand)),
+		def("rand", static_cast<uint32_t(*)(uint32_t)>(&i6e::lua::utils::rand)),
+		def("rand", static_cast<uint32_t(*)(uint32_t, uint32_t)>(&i6e::lua::utils::rand)),
 		def("setSeed", &i6e::lua::utils::setSeed),
 		def("split", &i6e::utils::split),
 
