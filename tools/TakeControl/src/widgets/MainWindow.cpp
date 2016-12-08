@@ -19,6 +19,8 @@
 
 #include "widgets/MainWindow.h"
 
+#include <cassert>
+
 #include "plugins/DialogPluginInterface.h"
 
 #include "widgets/AboutDialog.h"

@@ -36,7 +36,7 @@ namespace rpg {
 	 * \brief base class for RPG module
 	 * derive from this class to get basic RPG setup
 	 */
-	class ISIXE_RPG_API RPGApplication : virtual public i6e::api::Application {
+	class ISIXE_RPG_API RPGApplication : public i6e::api::Application {
 	public:
 		RPGApplication();
 

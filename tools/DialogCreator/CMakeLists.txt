@@ -78,6 +78,10 @@ ADD_EXECUTABLE(i6eDialogCreator ${GUI_TYPE} ${dialogCreatorSrc} ${dialogCreatorU
 
 target_link_libraries(i6eDialogCreator i6engine-rpg toolsCommon ${QT_LIBRARIES})
 
+IF(SCRIPTING_LUA)
+	target_link_libraries(i6eDialogCreator ${LUA_LIBRARIES})
+ENDIF(SCRIPTING_LUA)
+
 IF(UNIX)
 	target_link_libraries(i6eDialogCreator pthread)
 ENDIF(UNIX)
