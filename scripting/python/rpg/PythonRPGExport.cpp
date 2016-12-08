@@ -140,6 +140,7 @@ BOOST_PYTHON_MODULE(ScriptingRPGPython) {
 
 	class_<i6e::rpg::dialog::Dialog>("Dialog", no_init);
 	class_<i6e::rpg::npc::NPC>("NPC", no_init)
+		.def("getIdentifier", &i6e::rpg::npc::NPC::getIdentifier)
 		.def("getGO", &i6e::rpg::npc::NPC::getGO)
 		.def("turnToNPC", &i6e::rpg::npc::NPC::turnToNPC)
 		.def("say", &i6e::rpg::npc::NPC::say)

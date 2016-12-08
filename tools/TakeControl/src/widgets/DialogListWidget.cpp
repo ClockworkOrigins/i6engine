@@ -19,7 +19,7 @@
 
 #include "widgets/DialogListWidget.h"
 
-#include "Plugins/DialogPluginInterface.h"
+#include "plugins/DialogPluginInterface.h"
 
 #include <QTreeWidget>
 #include <QVBoxLayout>

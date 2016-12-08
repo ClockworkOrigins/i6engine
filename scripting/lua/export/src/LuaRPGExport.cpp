@@ -143,7 +143,8 @@ scope registerRPG() {
 			.def(constructor<const std::string &, const std::string &>()),
 
 		class_<i6e::rpg::npc::NPC>("NPC")
-			.def(constructor<const i6e::api::objects::GOTemplate &, bool>())
+			.def(constructor<const std::string &, const i6e::api::objects::GOTemplate &, bool>())
+			.def("getIdentifier", &i6e::rpg::npc::NPC::getIdentifier)
 			.def("getGO", &i6e::rpg::npc::NPC::getGO)
 			.def("turnToNPC", &i6e::rpg::npc::NPC::turnToNPC)
 			.def("say", &i6e::rpg::npc::NPC::say)
