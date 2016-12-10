@@ -33,41 +33,54 @@ echo "Building @SCRIPTING_NAME@ sample package"
 
 SET usedInstallDir=%installDir%Samples@SCRIPTING_NAME@
 
-cmake -DISIXE_WITH_LOGGING=OFF -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=OFF -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=OFF -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING=@ISIXE_WITH_SCRIPTING@ -DISIXE_WITH_CONSOLE=OFF -DCMAKE_INSTALL_PREFIX=%usedInstallDir% -G "@CMAKE_GENERATOR@" @CMAKE_SOURCE_DIR@ > build-log.txt
+cmake -DISIXE_WITH_LOGGING=OFF -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=ON -DISIXE_WITH_GOTHIC=ON -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=ON -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING=@ISIXE_WITH_SCRIPTING@ -DISIXE_BUILD_SHARED=ON -DISIXE_WITH_CONSOLE=ON -DCMAKE_INSTALL_PREFIX=%usedInstallDir% -G "@CMAKE_GENERATOR@" @CMAKE_SOURCE_DIR@ > @CMAKE_BINARY_DIR@\build-log.txt
 
-MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
-MSBuild INSTALL.vcxproj /p:Configuration=Release >> build-log.txt
+MSBuild i6engine.sln /p:Configuration=Release >> @CMAKE_BINARY_DIR@\build-log.txt
+MSBuild INSTALL.vcxproj /p:Configuration=Release >> @CMAKE_BINARY_DIR@\build-log.txt
 
 REM move engine files to bin to be able to start directly
 
 for /R "%usedInstallDir%\samples\" %%f in (*.exe) do copy %%f %usedInstallDir%\bin
+for /R "%usedInstallDir%\tools\" %%f in (*.exe) do copy %%f %usedInstallDir%\bin
 for /R "%usedInstallDir%\config\" %%f in (*.cfg) do copy %%f %usedInstallDir%\bin
 for /R "%usedInstallDir%\config\" %%f in (*.ini) do copy %%f %usedInstallDir%\bin
+for /R "%usedInstallDir%\config\" %%f in (*.conf) do copy %%f %usedInstallDir%\bin
 
 RD /S /Q "%usedInstallDir%\config\"
 RD /S /Q "%usedInstallDir%\include\"
 RD /S /Q "%usedInstallDir%\lib\"
 RD /S /Q "%usedInstallDir%\samples\"
+RD /S /Q "%usedInstallDir%\tools\"
 
 REM add dependencies
 
 for /R "@BOOST_ROOT@\lib\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
 for /R "@CEGUI_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
 for /R "@CLOCKUTILS_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
-for /R "@M2etis_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@M2ETIS_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
 for /R "@OGRE_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
 for /R "@OPENALSOFT_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
-for /R "@TinyXML_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
+for /R "@TINYXML_ROOT@\bin\" %%f in (*.dll) do copy %%f %usedInstallDir%\bin
 
 if "@ISIXE_WITH_SCRIPTING@" == "python" (
 	xcopy /F "@PYTHON_DLL@" "%usedInstallDir%\bin\python27.dll*"
 )
-xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/expat.dll" "%usedInstallDir%\bin\expat.dll*"
-xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/FreeImage.dll" "%usedInstallDir%\bin\FreeImage.dll*"
-xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/freetype.dll" "%usedInstallDir%\bin\freetype.dll*"
-xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/pcre.dll" "%usedInstallDir%\bin\pcre.dll*"
-xcopy /F "@ISIXE_DEP_DIR@/ceguideps/bin/zlib.dll" "%usedInstallDir%\bin\zlib.dll*"
-xcopy /F "@ISIXE_DEP_DIR@/misc/bin/OIS.dll" "%usedInstallDir%\bin\OIS.dll*"
+xcopy /F "@I6ENGINE_DEP_DIR@/ceguideps/bin/libexpat.dll" "%usedInstallDir%\bin\libexpat.dll*"
+xcopy /F "@I6ENGINE_DEP_DIR@/ceguideps/bin/FreeImage.dll" "%usedInstallDir%\bin\FreeImage.dll*"
+xcopy /F "@I6ENGINE_DEP_DIR@/ceguideps/bin/freetype.dll" "%usedInstallDir%\bin\freetype.dll*"
+xcopy /F "@I6ENGINE_DEP_DIR@/ceguideps/bin/pcre.dll" "%usedInstallDir%\bin\pcre.dll*"
+xcopy /F "@I6ENGINE_DEP_DIR@/ceguideps/bin/zlib.dll" "%usedInstallDir%\bin\zlib.dll*"
+xcopy /F "@I6ENGINE_DEP_DIR@/misc/bin/OIS.dll" "%usedInstallDir%\bin\OIS.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\icudt54.dll" "%usedInstallDir%\bin\icudt54.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\icuin54.dll" "%usedInstallDir%\bin\icuin54.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\icuuc54.dll" "%usedInstallDir%\bin\icuuc54.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\libEGL.dll" "%usedInstallDir%\bin\libEGL.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\libGLESv2.dll" "%usedInstallDir%\bin\libGLESv2.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Concurrent.dll" "%usedInstallDir%\bin\Qt5Concurrent.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Core.dll" "%usedInstallDir%\bin\Qt5Core.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Gui.dll" "%usedInstallDir%\bin\Qt5Gui.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Widgets.dll" "%usedInstallDir%\bin\Qt5Widgets.dll*"
+xcopy /F "@QT_EXPORT_DIR@\plugins\platforms\qwindows.dll" "%usedInstallDir%\bin\plugins\platforms\qwindows.dll*"
 xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
 xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
 xcopy /F "@CMAKE_SOURCE_DIR@/NOTICE" "%usedInstallDir%\NOTICE*"
@@ -82,14 +95,14 @@ echo "Building @SCRIPTING_NAME@ prebuilt package"
 
 SET usedInstallDir=%installDir%Complete@SCRIPTING_NAME@
 
-cmake -DISIXE_WITH_LOGGING=ON -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=ON -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=ON -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING="@ISIXE_WITH_SCRIPTING@" -DISIXE_WITH_CONSOLE=OFF -DCMAKE_INSTALL_PREFIX=%usedInstallDir% -G "@CMAKE_GENERATOR@" @CMAKE_SOURCE_DIR@ > build-log.txt
+cmake -DISIXE_WITH_LOGGING=ON -DISIXE_WITH_NETWORK=ON -DISIXE_WITH_PROFILING=OFF -DISIXE_WITH_TESTING=OFF -DISIXE_WITH_AUDIO=ON -DISIXE_WITH_EDITOR=ON -DISIXE_WITH_GOTHIC=ON -DISIXE_WITH_SAMPLES=ON -DISIXE_WITH_TOOLS=ON -DISIXE_WITH_RPG=ON -DISIXE_WITH_SCRIPTING="@ISIXE_WITH_SCRIPTING@" -DISIXE_BUILD_SHARED=ON -DISIXE_WITH_CONSOLE=ON -DCMAKE_INSTALL_PREFIX=%usedInstallDir% -G "@CMAKE_GENERATOR@" @CMAKE_SOURCE_DIR@ >> @CMAKE_BINARY_DIR@\build-log.txt
 
-MSBuild i6engine.sln /p:Configuration=Release >> build-log.txt
-MSBuild INSTALL.vcxproj /p:Configuration=Release >> build-log.txt
+MSBuild i6engine.sln /p:Configuration=Release >> @CMAKE_BINARY_DIR@\build-log.txt
+MSBuild INSTALL.vcxproj /p:Configuration=Release >> @CMAKE_BINARY_DIR@\build-log.txt
 
 REM add dependencies
 
-xcopy /S /Y /I "@ISIXE_DEP_DIR@" "%usedInstallDir%\dependencies"
+xcopy /S /Y /I "@I6ENGINE_DEP_DIR@" "%usedInstallDir%\dependencies"
 
 xcopy /F "@CMAKE_SOURCE_DIR@/AUTHORS" "%usedInstallDir%\AUTHORS*"
 xcopy /F "@CMAKE_SOURCE_DIR@/LICENSE" "%usedInstallDir%\LICENSE*"
@@ -107,12 +120,14 @@ xcopy /F "@QT_EXPORT_DIR@\bin\icuin54.dll" "%usedInstallDir%\dependencies\Qt\bin
 xcopy /F "@QT_EXPORT_DIR@\bin\icuuc54.dll" "%usedInstallDir%\dependencies\Qt\bin\icuuc54.dll*"
 xcopy /F "@QT_EXPORT_DIR@\bin\libEGL.dll" "%usedInstallDir%\dependencies\Qt\bin\libEGL.dll*"
 xcopy /F "@QT_EXPORT_DIR@\bin\libGLESv2.dll" "%usedInstallDir%\dependencies\Qt\bin\libGLESv2.dll*"
+xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Concurrent.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Concurrent.dll*"
 xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Core.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Core.dll*"
 xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Gui.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Gui.dll*"
 xcopy /F "@QT_EXPORT_DIR@\bin\Qt5Widgets.dll" "%usedInstallDir%\dependencies\Qt\bin\Qt5Widgets.dll*"
 xcopy /F "@QT_EXPORT_DIR@\plugins\platforms\qwindows.dll" "%usedInstallDir%\dependencies\Qt\bin\plugins\platforms\qwindows.dll*"
 xcopy /F "@QT_EXPORT_DIR@\lib\libEGL.lib" "%usedInstallDir%\dependencies\Qt\lib\libEGL.lib*"
 xcopy /F "@QT_EXPORT_DIR@\lib\libGLESv2.lib" "%usedInstallDir%\dependencies\Qt\lib\libGLESv2.lib*"
+xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Concurrent.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Concurrent.lib*"
 xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Core.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Core.lib*"
 xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Gui.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Gui.lib*"
 xcopy /F "@QT_EXPORT_DIR@\lib\Qt5Widgets.lib" "%usedInstallDir%\dependencies\Qt\lib\Qt5Widgets.lib*"

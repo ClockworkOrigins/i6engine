@@ -64,7 +64,6 @@ namespace widgets {
 		QVBoxLayout * l = new QVBoxLayout();
 
 		l->addWidget(scrollArea);
-		l->addStretch();
 
 		setLayout(l);
 	}
@@ -77,7 +76,7 @@ namespace widgets {
 		_tabWidget->addTab(widget, tabName);
 		connect(this, SIGNAL(applySettings()), widget, SLOT(saveSettings()));
 		connect(this, SIGNAL(rejectSettings()), widget, SLOT(rejectChanges()));
-		adjustSize();
+		setMinimumSize(std::max(minimumWidth(), widget->minimumWidth() + 100), std::max(minimumHeight(), widget->minimumHeight() + 100));
 	}
 
 } /* namespace widgets */

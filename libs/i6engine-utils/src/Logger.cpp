@@ -45,7 +45,7 @@ namespace utils {
 		}
 
 		// strange strings for colored output in terminal
-		BOOST_LOG(_logger) << logEnumNames[static_cast<int>(level)] << " (" << boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::universal_time()) << "): " << module << " - " << message << " (" << file << ":" << line << ")";
+		BOOST_LOG(_logger) << logEnumNames[int(level)] << " (" << boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::universal_time()) << "): " << module << " - " << message << " (" << file << ":" << line << ")";
 	}
 
 } /* namespace utils */

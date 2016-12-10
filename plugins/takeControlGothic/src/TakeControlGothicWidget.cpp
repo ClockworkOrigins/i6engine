@@ -32,7 +32,7 @@ namespace i6e {
 namespace plugins {
 
 	TakeControlGothicWidget::TakeControlGothicWidget(clockUtils::iniParser::IniParser * iniParser, QWidget * par) : SettingsWidget(par), _iniParser(iniParser), _lineEdit(nullptr) {
-		QGridLayout * l = new QGridLayout();
+		QHBoxLayout * l = new QHBoxLayout();
 
 		std::string path;
 		if (clockUtils::ClockError::SUCCESS == _iniParser->getValue("GOTHIC", "scriptPath", path)) {
@@ -47,14 +47,16 @@ namespace plugins {
 		_lineEdit->setReadOnly(true);
 		_lineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Ignored);
 		QPushButton * gothicPathPushButton = new QPushButton("...", this);
-		l->addWidget(gothicPathLabel, 0, 0);
-		l->addWidget(_lineEdit, 0, 1);
-		l->addWidget(gothicPathPushButton, 0, 2);
+		l->addWidget(gothicPathLabel);
+		l->addWidget(_lineEdit);
+		l->addWidget(gothicPathPushButton);
 		connect(gothicPathPushButton, SIGNAL(clicked()), this, SLOT(openFileDialog()));
 
 		setLayout(l);
+		l->setAlignment(Qt::AlignTop);
 
-		setMinimumWidth(500);
+		setMinimumWidth(600);
+		setMinimumHeight(50);
 		setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	}
 

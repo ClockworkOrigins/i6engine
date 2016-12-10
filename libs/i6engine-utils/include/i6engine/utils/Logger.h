@@ -29,9 +29,9 @@
 #include <string>
 
 #include "i6engine/i6engineBuildSettings.h"
+#include "i6engine/utils/i6eSystemParameters.h"
 
 #ifdef ISIXE_WITH_LOGGING
-	#include "i6engine/utils/i6eSystemParameters.h"
 	#include "i6engine/utils/Singleton.h"
 
 	#include "boost/log/common.hpp"
