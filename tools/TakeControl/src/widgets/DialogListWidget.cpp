@@ -48,6 +48,7 @@ namespace widgets {
 		for (auto & t : dialogs) {
 			_dialogList.push_back(std::make_tuple(std::get<0>(t), std::get<1>(t), plugin));
 		}
+		connect(dynamic_cast<QObject *>(plugin), SIGNAL(updatedData()), this, SLOT(updateData()));
 	}
 
 	void DialogListWidget::selectedNPC(QString identifier) {
@@ -55,13 +56,15 @@ namespace widgets {
 		_activeDialogList.clear();
 		for (auto & t : _dialogList) {
 			std::vector<std::string> participants = std::get<0>(t)->participants;
-			if (std::find(participants.begin(), participants.end(), identifier.toStdString()) != participants.end()) {
-				QTreeWidgetItem * twi = new QTreeWidgetItem(_treeWidget, { QString::fromStdString(std::get<0>(t)->identifier) });
-				_treeWidget->addTopLevelItem(twi);
-				for (auto & t2 : std::get<1>(t)) {
-					twi->addChild(new QTreeWidgetItem(twi, { QString::fromStdString(std::get<0>(t2)), std::get<2>(t)->getSubtitleText(QString::fromStdString(std::get<1>(t2))) }));
+			for (auto s : participants) {
+				if (QString::fromStdString(s).compare(identifier, Qt::CaseSensitivity::CaseInsensitive) == 0) {
+					QTreeWidgetItem * twi = new QTreeWidgetItem(_treeWidget, { QString::fromStdString(std::get<0>(t)->identifier) });
+					_treeWidget->addTopLevelItem(twi);
+					for (auto & t2 : std::get<1>(t)) {
+						twi->addChild(new QTreeWidgetItem(twi, { QString::fromStdString(std::get<0>(t2)), std::get<2>(t)->getSubtitleText(QString::fromStdString(std::get<1>(t2))) }));
+					}
+					_activeDialogList.push_back(t);
 				}
-				_activeDialogList.push_back(t);
 			}
 		}
 		_treeWidget->resizeColumnToContents(0);
@@ -75,6 +78,15 @@ namespace widgets {
 		} else {
 			emit selectDialog(QString());
 			emit selectNPC(_npcIdentifier);
+		}
+	}
+
+	void DialogListWidget::updateData() {
+		plugins::DialogPluginInterface * plugin = dynamic_cast<plugins::DialogPluginInterface *>(sender());
+		_dialogList.clear();
+		auto dialogs = plugin->getDialogs();
+		for (auto & t : dialogs) {
+			_dialogList.push_back(std::make_tuple(std::get<0>(t), std::get<1>(t), plugin));
 		}
 	}
 

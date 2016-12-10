@@ -17,49 +17,44 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
-#define __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
+#ifndef __I6ENGINE_PLUGINS_TAKECONTROLGOTHICWIDGET_H__
+#define __I6ENGINE_PLUGINS_TAKECONTROLGOTHICWIDGET_H__
 
-#include <QWidget>
+#include "widgets/SettingsWidget.h"
 
-class QListView;
+class QLineEdit;
+
+namespace clockUtils {
+namespace iniParser {
+	class IniParser;
+} /* namespace iniParser */
+} /* namespace clockUtils */
 
 namespace i6e {
-namespace rpg {
-namespace npc {
-	class NPC;
-} /* namespace npc */
-} /* namespace rpg */
-namespace takeControl {
 namespace plugins {
-	class DialogPluginInterface;
-} /* namespace plugins */
-namespace widgets {
 
-	class NPCListWidget : public QWidget {
+	class TakeControlGothicWidget : public takeControl::widgets::SettingsWidget {
 		Q_OBJECT
 
 	public:
-		NPCListWidget(QWidget * par = nullptr);
-		~NPCListWidget();
+		TakeControlGothicWidget(clockUtils::iniParser::IniParser * iniParser, QWidget * par);
+
+		QString getGothicPath() const;
 
 	signals:
-		void selectNPC(QString);
-
-	public slots:
-		void loadedDialogPlugin(plugins::DialogPluginInterface * plugin);
+		void gothicPathChanged(QString);
 
 	private slots:
-		void selectedNPC(const QModelIndex & idx);
-		void updateData();
+		void saveSettings() override;
+		void rejectChanges() override;
+		void openFileDialog();
 
 	private:
-		QListView * _listView;
-		std::vector<rpg::npc::NPC *> _npcList;
+		clockUtils::iniParser::IniParser * _iniParser;
+		QLineEdit * _lineEdit;
 	};
 
-} /* namespace widgets */
-} /* namespace takeControl */
+} /* namespace plugins */
 } /* namespace i6e */
 
-#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__ */
+#endif /* __I6ENGINE_PLUGINS_TAKECONTROLGOTHICWIDGET_H__ */

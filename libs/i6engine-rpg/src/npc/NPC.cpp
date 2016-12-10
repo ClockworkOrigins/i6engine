@@ -39,9 +39,11 @@ namespace rpg {
 namespace npc {
 
 	NPC::NPC(const std::string & identifier, const api::objects::GOTemplate & tpl, bool player) : _go(), _queue(), _identifier(identifier) {
-		i6eObjectFacade->createGO((player) ? "Player" : "NPC", tpl, i6eEngineController->getUUID(), false, [this](api::GOPtr go) {
-			_go = go;
-		});
+		if (!tpl._type.empty()) {
+			i6eObjectFacade->createGO((player) ? "Player" : "NPC", tpl, i6eEngineController->getUUID(), false, [this](api::GOPtr go) {
+				_go = go;
+			});
+		}
 	}
 
 	NPC::~NPC() {

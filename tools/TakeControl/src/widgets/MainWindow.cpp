@@ -27,6 +27,7 @@
 #include "widgets/DialogListWidget.h"
 #include "widgets/InfoWidget.h"
 #include "widgets/NPCListWidget.h"
+#include "widgets/SettingsDialog.h"
 
 #include "i6engine/i6engineBuildSettings.h"
 
@@ -42,10 +43,17 @@ namespace i6e {
 namespace takeControl {
 namespace widgets {
 
-	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _aboutDialog(new tools::common::AboutDialog(this)), _npcListWidget(new NPCListWidget(this)), _dialogListWidget(new DialogListWidget(this)), _infoWidget(new InfoWidget(this)), _dialogPlugins() {
+	MainWindow::MainWindow(QMainWindow * par) : QMainWindow(par), _aboutDialog(new tools::common::AboutDialog(this)), _npcListWidget(new NPCListWidget(this)), _dialogListWidget(new DialogListWidget(this)), _infoWidget(new InfoWidget(this)), _settingsDialog(new SettingsDialog(this)), _dialogPlugins() {
 		setWindowIcon(QIcon(":/icon.png"));
 
 		setWindowTitle(QString("TakeControl (v ") + QString::number(ISIXE_VERSION_MAJOR) + QString(".") + QString::number(ISIXE_VERSION_MINOR) + QString(".") + QString::number(ISIXE_VERSION_PATCH) + QString(")"));
+
+		QMenu * fileMenu = new QMenu(QApplication::tr("File"), this);
+		menuBar()->addMenu(fileMenu);
+		QAction * settingsAction = new QAction(QApplication::tr("Settings"), fileMenu);
+		fileMenu->addAction(settingsAction);
+
+		connect(settingsAction, SIGNAL(triggered()), _settingsDialog, SLOT(exec()));
 
 		QMenu * helpMenu = new QMenu(QApplication::tr("Help"), this);
 		menuBar()->addMenu(helpMenu);
@@ -113,6 +121,11 @@ namespace widgets {
 				plugins::DialogPluginInterface * dp = qobject_cast<plugins::DialogPluginInterface *>(plugin);
 				assert(dp);
 				_dialogPlugins.push_back(dp);
+				QString pluginName = dp->getName();
+				SettingsWidget * settingsWidget = dp->getSettingsWidget(_settingsDialog->getIniParser(), _settingsDialog);
+				if (settingsWidget) {
+					_settingsDialog->addSettingsWidget(pluginName, settingsWidget);
+				}
 				emit pluginLoaded(dp);
 			}
 		}

@@ -238,7 +238,7 @@ namespace object {
 
 	boost::python::list getAllObjectsOfType(const std::string & types) {
 		boost::python::list l;
-		std::vector<i6e::api::GOPtr> v = i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->getAllObjectsOfType(types);
+		std::vector<i6e::api::GOPtr> v = i6eObjectFacade->getAllObjectsOfType(types);
 		for (std::vector<i6e::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
 			l.append(*it);
 		}
@@ -246,12 +246,12 @@ namespace object {
 	}
 
 	i6e::api::GOPtr getObject(const int64_t id) {
-		return i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->getObject(id);
+		return i6eObjectFacade->getObject(id);
 	}
 
 	boost::python::list getGOList() {
 		boost::python::list l;
-		std::unordered_map<int64_t, i6e::api::GOPtr> v = i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->getGOMap();
+		std::unordered_map<int64_t, i6e::api::GOPtr> v = i6eObjectFacade->getGOMap();
 		for (std::unordered_map<int64_t, i6e::api::GOPtr>::const_iterator it = v.begin(); it != v.end(); ++it) {
 			l.append(it->second);
 		}
@@ -259,85 +259,85 @@ namespace object {
 	}
 
 	void deleteAllObjectsOfType(const std::string & types) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->deleteAllObjectsOfType(types);
+		i6eObjectFacade->deleteAllObjectsOfType(types);
 	}
 
 	void createObject(const std::string & gTemplate, const i6e::api::objects::GOTemplate & tmpl, uint32_t uuid, const bool sender) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createObject(gTemplate, tmpl, uuid, sender);
+		i6eObjectFacade->createObject(gTemplate, tmpl, uuid, sender);
 	}
 
 	void cleanUpAll() {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->cleanUpAll();
+		i6eObjectFacade->cleanUpAll();
 	}
 
 	void loadLevel(const std::string & file, const std::string & flags) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags);
+		i6eObjectFacade->loadLevel(file, flags);
 	}
 
 	void loadLevel(const std::string & file, const std::string & flags, const std::string & resourcesFile) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile);
+		i6eObjectFacade->loadLevel(file, flags, resourcesFile);
 	}
 
 	void loadLevelCallbackFunc(const std::string & file, const std::string & flags, const std::string & func) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, [func](uint16_t value) {
-			i6e::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, value);
+		i6eObjectFacade->loadLevel(file, flags, [func](uint16_t value) {
+			i6eScriptingFacade->callFunction<void>(func, value);
 		});
 	}
 
 	void loadLevelCallbackScript(const std::string & file, const std::string & flags, const std::string & script, const std::string & func) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, [script, func](uint16_t value) {
-			i6e::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callScript<void>(script, func, value);
+		i6eObjectFacade->loadLevel(file, flags, [script, func](uint16_t value) {
+			i6eScriptingFacade->callScript<void>(script, func, value);
 		});
 	}
 
 	void loadLevelCallbackFunc(const std::string & file, const std::string & flags, const std::string & resourcesFile, const std::string & func) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile, [func](uint16_t value) {
-			i6e::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callFunction<void>(func, value);
+		i6eObjectFacade->loadLevel(file, flags, resourcesFile, [func](uint16_t value) {
+			i6eScriptingFacade->callFunction<void>(func, value);
 		});
 	}
 
 	void loadLevelCallbackScript(const std::string & file, const std::string & flags, const std::string & resourcesFile, const std::string & script, const std::string & func) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->loadLevel(file, flags, resourcesFile, [script, func](uint16_t value) {
-			i6e::api::EngineController::GetSingletonPtr()->getScriptingFacade()->callScript<void>(script, func, value);
+		i6eObjectFacade->loadLevel(file, flags, resourcesFile, [script, func](uint16_t value) {
+			i6eScriptingFacade->callScript<void>(script, func, value);
 		});
 	}
 
 	uint32_t getFrameTime() {
-		return i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->getFrameTime();
+		return i6eObjectFacade->getFrameTime();
 	}
 
 	void createGO(const std::string & gTemplate, const i6e::api::objects::GOTemplate & tmpl, uint32_t uuid, const bool sender, const std::string & func) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createGO(gTemplate, tmpl, uuid, sender, [func](i6e::api::GOPtr go) {
-			i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, go);
+		i6eObjectFacade->createGO(gTemplate, tmpl, uuid, sender, [func](i6e::api::GOPtr go) {
+			i6eScriptingFacade->callFunction<void>(func, go);
 		});
 	}
 
 	void createComponent(int64_t goid, int64_t coid, const std::string & component, const i6e::api::attributeMap & params) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponent(goid, coid, component, params);
+		i6eObjectFacade->createComponent(goid, coid, component, params);
 	}
 
 	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6e::api::attributeMap & params, const std::string & script, const std::string & func) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [script, func](i6e::api::ComPtr c) {
-			i6e::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func, c);
+		i6eObjectFacade->createComponentCallback(goid, coid, component, params, [script, func](i6e::api::ComPtr c) {
+			i6eScriptingFacade->callScript<void>(script, func, c);
 		});
 	}
 
 	void createComponentCallback(int64_t goid, int64_t coid, const std::string & component, const i6e::api::attributeMap & params, const std::string & func) {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->createComponentCallback(goid, coid, component, params, [func](i6e::api::ComPtr c) {
-			i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func, c);
+		i6eObjectFacade->createComponentCallback(goid, coid, component, params, [func](i6e::api::ComPtr c) {
+			i6eScriptingFacade->callFunction<void>(func, c);
 		});
 	}
 
 	void resetObjectSubSystem() {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->resetSubSystem();
+		i6eObjectFacade->resetSubSystem();
 	}
 
 	void pauseObject() {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->pause();
+		i6eObjectFacade->pause();
 	}
 
 	void unpauseObject() {
-		i6e::api::EngineController::GetSingletonPtr()->getObjectFacade()->unpause();
+		i6eObjectFacade->unpause();
 	}
 
 	void rayTest(i6e::api::PhysicalStateComponent * c, const Vec3 & from, const Vec3 & to, i6e::api::PhysicalStateComponent::RayTestRepetition rtr, i6e::api::PhysicalStateComponent::RayTestNotify rtn, const std::string & script, const std::string & func, const int64_t rayID) {
@@ -1107,7 +1107,7 @@ namespace object {
 	void accelerate(i6e::api::VelocityComponent * c, const Vec3 & acceleration, i6e::api::VelocityComponent::MaxSpeedHandling handling, const std::string & func) {
 		c->accelerate(acceleration, handling, [func]() {
 			if (!func.empty()) {
-				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6eScriptingFacade->callFunction<void>(func);
 			}
 		});
 	}
@@ -1115,7 +1115,7 @@ namespace object {
 	void accelerate(i6e::api::VelocityComponent * c, const std::string & func) {
 		c->accelerate([func]() {
 			if (!func.empty()) {
-				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6eScriptingFacade->callFunction<void>(func);
 			}
 		});
 	}
@@ -1123,7 +1123,7 @@ namespace object {
 	void decelerate(i6e::api::VelocityComponent * c, const Vec3 & deceleration, i6e::api::VelocityComponent::DecelerationHandling handling, const std::string & func) {
 		c->decelerate(deceleration, handling, [func]() {
 			if (!func.empty()) {
-				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6eScriptingFacade->callFunction<void>(func);
 			}
 		});
 	}
@@ -1131,7 +1131,7 @@ namespace object {
 	void decelerate(i6e::api::VelocityComponent * c, const std::string & func) {
 		c->decelerate([func]() {
 			if (!func.empty()) {
-				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6eScriptingFacade->callFunction<void>(func);
 			}
 		});
 	}
@@ -1139,7 +1139,7 @@ namespace object {
 	void addAnimationFrameEvent(i6e::api::MeshAppearanceComponent * c, uint64_t frameTime, const std::string & func) {
 		c->addAnimationFrameEvent(frameTime, [func]() {
 			if (!func.empty()) {
-				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6eScriptingFacade->callFunction<void>(func);
 			}
 		});
 	}
@@ -1147,7 +1147,7 @@ namespace object {
 	void addAnimationFrameEvent(i6e::api::MeshAppearanceComponent * c, uint64_t frameTime, const std::string & script, const std::string & func) {
 		c->addAnimationFrameEvent(frameTime, [script, func]() {
 			if (!script.empty() && !func.empty()) {
-				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func);
+				i6eScriptingFacade->callScript<void>(script, func);
 			}
 		});
 	}
@@ -1155,7 +1155,7 @@ namespace object {
 	void addAnimationFrameEvent(i6e::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & func) {
 		c->addAnimationFrameEvent(animation, frameTime, [func]() {
 			if (!func.empty()) {
-				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+				i6eScriptingFacade->callFunction<void>(func);
 			}
 		});
 	}
@@ -1163,7 +1163,7 @@ namespace object {
 	void addAnimationFrameEvent(i6e::api::AnimationControllerComponent * c, const std::string & animation, uint64_t frameTime, const std::string & script, const std::string & func) {
 		c->addAnimationFrameEvent(animation, frameTime, [script, func]() {
 			if (!script.empty() && !func.empty()) {
-				i6e::api::EngineController::GetSingleton().getScriptingFacade()->callScript<void>(script, func);
+				i6eScriptingFacade->callScript<void>(script, func);
 			}
 		});
 	}
@@ -1188,80 +1188,80 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 
 	class_<i6e::api::GameObject, i6e::api::GOPtr, boost::noncopyable>("GameObject", no_init)
 		.def("getID", &i6e::api::GameObject::getID)
-		.def("getGOC", (i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t) const) &i6e::api::GameObject::getGOC)
-		.def("getGOC", (i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t, const std::string &) const) &i6e::api::GameObject::getGOC)
+		.def("getGOC", static_cast<i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t) const>(&i6e::api::GameObject::getGOC))
+		.def("getGOC", static_cast<i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t, const std::string &) const>(&i6e::api::GameObject::getGOC))
 		.def("getGOCID", &i6e::api::GameObject::getGOCID)
 		.def("getGOCList", &i6e::api::GameObject::getGOCList)
 		.def("getType", &i6e::api::GameObject::getType)
 		.def("setDie", &i6e::api::GameObject::setDie)
 		.def("getOwner", &i6e::api::GameObject::getOwner)
 		.def("getUUID", &i6e::api::GameObject::getUUID)
-		.def("getAnimatedDirectionalLightComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedDirectionalLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getAnimatedDirectionalLightComponent)
-		.def("getAnimatedDirectionalLightComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedDirectionalLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getAnimatedDirectionalLightComponent)
-		.def("getAnimatedLuminousAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedLuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getAnimatedLuminousAppearanceComponent)
-		.def("getAnimatedLuminousAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedLuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getAnimatedLuminousAppearanceComponent)
-		.def("getAnimatedSpotLightComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedSpotLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getAnimatedSpotLightComponent)
-		.def("getAnimatedSpotLightComponent", (i6e::utils::sharedPtr<i6e::api::AnimatedSpotLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getAnimatedSpotLightComponent)
-		.def("getAnimationControllerComponent", (i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getAnimationControllerComponent)
-		.def("getAnimationControllerComponent", (i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getAnimationControllerComponent)
-		.def("getCameraComponent", (i6e::utils::sharedPtr<i6e::api::CameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getCameraComponent)
-		.def("getCameraComponent", (i6e::utils::sharedPtr<i6e::api::CameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getCameraComponent)
-		.def("getLifetimeComponent", (i6e::utils::sharedPtr<i6e::api::LifetimeComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getLifetimeComponent)
-		.def("getLifetimeComponent", (i6e::utils::sharedPtr<i6e::api::LifetimeComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getLifetimeComponent)
-		.def("getLuminousAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::LuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getLuminousAppearanceComponent)
-		.def("getLuminousAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::LuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getLuminousAppearanceComponent)
-		.def("getMeshAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::MeshAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMeshAppearanceComponent)
-		.def("getMeshAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::MeshAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMeshAppearanceComponent)
-		.def("getMoverCircleComponent", (i6e::utils::sharedPtr<i6e::api::MoverCircleComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMoverCircleComponent)
-		.def("getMoverCircleComponent", (i6e::utils::sharedPtr<i6e::api::MoverCircleComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMoverCircleComponent)
-		.def("getMoverComponent", (i6e::utils::sharedPtr<i6e::api::MoverComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMoverComponent)
-		.def("getMoverComponent", (i6e::utils::sharedPtr<i6e::api::MoverComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMoverComponent)
-		.def("getMoverInterpolateComponent", (i6e::utils::sharedPtr<i6e::api::MoverInterpolateComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMoverInterpolateComponent)
-		.def("getMoverInterpolateComponent", (i6e::utils::sharedPtr<i6e::api::MoverInterpolateComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMoverInterpolateComponent)
-		.def("getMovingCameraComponent", (i6e::utils::sharedPtr<i6e::api::MovingCameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMovingCameraComponent)
-		.def("getMovingCameraComponent", (i6e::utils::sharedPtr<i6e::api::MovingCameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMovingCameraComponent)
+		.def("getAnimatedDirectionalLightComponent", static_cast<i6e::utils::sharedPtr<i6e::api::AnimatedDirectionalLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getAnimatedDirectionalLightComponent))
+		.def("getAnimatedDirectionalLightComponent", static_cast<i6e::utils::sharedPtr<i6e::api::AnimatedDirectionalLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getAnimatedDirectionalLightComponent))
+		.def("getAnimatedLuminousAppearanceComponent", static_cast<i6e::utils::sharedPtr<i6e::api::AnimatedLuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getAnimatedLuminousAppearanceComponent))
+		.def("getAnimatedLuminousAppearanceComponent", static_cast<i6e::utils::sharedPtr<i6e::api::AnimatedLuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getAnimatedLuminousAppearanceComponent))
+		.def("getAnimatedSpotLightComponent", static_cast<i6e::utils::sharedPtr<i6e::api::AnimatedSpotLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getAnimatedSpotLightComponent))
+		.def("getAnimatedSpotLightComponent", static_cast<i6e::utils::sharedPtr<i6e::api::AnimatedSpotLightComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getAnimatedSpotLightComponent))
+		.def("getAnimationControllerComponent", static_cast<i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getAnimationControllerComponent))
+		.def("getAnimationControllerComponent", static_cast<i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getAnimationControllerComponent))
+		.def("getCameraComponent", static_cast<i6e::utils::sharedPtr<i6e::api::CameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getCameraComponent))
+		.def("getCameraComponent", static_cast<i6e::utils::sharedPtr<i6e::api::CameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getCameraComponent))
+		.def("getLifetimeComponent", static_cast<i6e::utils::sharedPtr<i6e::api::LifetimeComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getLifetimeComponent))
+		.def("getLifetimeComponent", static_cast<i6e::utils::sharedPtr<i6e::api::LifetimeComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getLifetimeComponent))
+		.def("getLuminousAppearanceComponent", static_cast<i6e::utils::sharedPtr<i6e::api::LuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getLuminousAppearanceComponent))
+		.def("getLuminousAppearanceComponent", static_cast<i6e::utils::sharedPtr<i6e::api::LuminousAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getLuminousAppearanceComponent))
+		.def("getMeshAppearanceComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MeshAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getMeshAppearanceComponent))
+		.def("getMeshAppearanceComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MeshAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getMeshAppearanceComponent))
+		.def("getMoverCircleComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MoverCircleComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getMoverCircleComponent))
+		.def("getMoverCircleComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MoverCircleComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getMoverCircleComponent))
+		.def("getMoverComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MoverComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getMoverComponent))
+		.def("getMoverComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MoverComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getMoverComponent))
+		.def("getMoverInterpolateComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MoverInterpolateComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getMoverInterpolateComponent))
+		.def("getMoverInterpolateComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MoverInterpolateComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getMoverInterpolateComponent))
+		.def("getMovingCameraComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MovingCameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getMovingCameraComponent))
+		.def("getMovingCameraComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MovingCameraComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getMovingCameraComponent))
 #ifdef ISIXE_WITH_NETWORK
-		.def("getNetworkSenderComponent", (i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getNetworkSenderComponent)
-		.def("getNetworkSenderComponent", (i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getNetworkSenderComponent)
+		.def("getNetworkSenderComponent", static_cast<i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getNetworkSenderComponent))
+		.def("getNetworkSenderComponent", static_cast<i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getNetworkSenderComponent))
 #endif
-		.def("getParticleEmitterComponent", (i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getParticleEmitterComponent)
-		.def("getParticleEmitterComponent", (i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getParticleEmitterComponent)
-		.def("getPhysicalStateComponent", (i6e::utils::sharedPtr<i6e::api::PhysicalStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getPhysicalStateComponent)
-		.def("getPhysicalStateComponent", (i6e::utils::sharedPtr<i6e::api::PhysicalStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getPhysicalStateComponent)
-		.def("getShatterComponent", (i6e::utils::sharedPtr<i6e::api::ShatterComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getShatterComponent)
-		.def("getShatterComponent", (i6e::utils::sharedPtr<i6e::api::ShatterComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getShatterComponent)
-		.def("getSpawnpointComponent", (i6e::utils::sharedPtr<i6e::api::SpawnpointComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getSpawnpointComponent)
-		.def("getSpawnpointComponent", (i6e::utils::sharedPtr<i6e::api::SpawnpointComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getSpawnpointComponent)
-		.def("getStaticStateComponent", (i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getStaticStateComponent)
-		.def("getStaticStateComponent", (i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getStaticStateComponent)
-		.def("getTerrainAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::TerrainAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getTerrainAppearanceComponent)
-		.def("getTerrainAppearanceComponent", (i6e::utils::sharedPtr<i6e::api::TerrainAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getTerrainAppearanceComponent)
-		.def("getSoundComponent", (i6e::utils::sharedPtr<i6e::api::SoundComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getSoundComponent)
-		.def("getSoundComponent", (i6e::utils::sharedPtr<i6e::api::SoundComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getSoundComponent)
-		.def("getSoundListenerComponent", (i6e::utils::sharedPtr<i6e::api::SoundListenerComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getSoundListenerComponent)
-		.def("getSoundListenerComponent", (i6e::utils::sharedPtr<i6e::api::SoundListenerComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getSoundListenerComponent)
-		.def("getBillboardComponent", (i6e::utils::sharedPtr<i6e::api::BillboardComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getBillboardComponent)
-		.def("getBillboardComponent", (i6e::utils::sharedPtr<i6e::api::BillboardComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getBillboardComponent)
-		.def("getFollowComponent", (i6e::utils::sharedPtr<i6e::api::FollowComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getFollowComponent)
-		.def("getFollowComponent", (i6e::utils::sharedPtr<i6e::api::FollowComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getFollowComponent)
-		.def("getMovableTextComponent", (i6e::utils::sharedPtr<i6e::api::MovableTextComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMovableTextComponent)
-		.def("getMovableTextComponent", (i6e::utils::sharedPtr<i6e::api::MovableTextComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMovableTextComponent)
-		.def("getWaypointComponent", (i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getWaypointComponent)
-		.def("getWaypointComponent", (i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getWaypointComponent)
-		.def("getNavigationComponent", (i6e::utils::sharedPtr<i6e::api::NavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getNavigationComponent)
-		.def("getNavigationComponent", (i6e::utils::sharedPtr<i6e::api::NavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getNavigationComponent)
-		.def("getWaynetNavigationComponent", (i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getWaynetNavigationComponent)
-		.def("getWaynetNavigationComponent", (i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getWaynetNavigationComponent)
-		.def("getMoveComponent", (i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMoveComponent)
-		.def("getMoveComponent", (i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMoveComponent)
-		.def("getMovementComponent", (i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getMovementComponent)
-		.def("getMovementComponent", (i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getMovementComponent)
-		.def("getToggleWaynetComponent", (i6e::utils::sharedPtr<i6e::api::ToggleWaynetComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getToggleWaynetComponent)
-		.def("getToggleWaynetComponent", (i6e::utils::sharedPtr<i6e::api::ToggleWaynetComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getToggleWaynetComponent)
-		.def("getPoint2PointConstraintComponent", (i6e::utils::sharedPtr<i6e::api::Point2PointConstraintComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getPoint2PointConstraintComponent)
-		.def("getPoint2PointConstraintComponent", (i6e::utils::sharedPtr<i6e::api::Point2PointConstraintComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getPoint2PointConstraintComponent)
-		.def("getVelocityComponent", (i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component>(*)(i6e::api::GameObject *)) &i6e::python::object::getVelocityComponent)
-		.def("getVelocityComponent", (i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)) &i6e::python::object::getVelocityComponent);
+		.def("getParticleEmitterComponent", static_cast<i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getParticleEmitterComponent))
+		.def("getParticleEmitterComponent", static_cast<i6e::utils::sharedPtr<i6e::api::ParticleEmitterComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getParticleEmitterComponent))
+		.def("getPhysicalStateComponent", static_cast<i6e::utils::sharedPtr<i6e::api::PhysicalStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getPhysicalStateComponent))
+		.def("getPhysicalStateComponent", static_cast<i6e::utils::sharedPtr<i6e::api::PhysicalStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getPhysicalStateComponent))
+		.def("getShatterComponent", static_cast<i6e::utils::sharedPtr<i6e::api::ShatterComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getShatterComponent))
+		.def("getShatterComponent", static_cast<i6e::utils::sharedPtr<i6e::api::ShatterComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getShatterComponent))
+		.def("getSpawnpointComponent", static_cast<i6e::utils::sharedPtr<i6e::api::SpawnpointComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getSpawnpointComponent))
+		.def("getSpawnpointComponent", static_cast<i6e::utils::sharedPtr<i6e::api::SpawnpointComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getSpawnpointComponent))
+		.def("getStaticStateComponent", static_cast<i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getStaticStateComponent))
+		.def("getStaticStateComponent", static_cast<i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getStaticStateComponent))
+		.def("getTerrainAppearanceComponent", static_cast<i6e::utils::sharedPtr<i6e::api::TerrainAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getTerrainAppearanceComponent))
+		.def("getTerrainAppearanceComponent", static_cast<i6e::utils::sharedPtr<i6e::api::TerrainAppearanceComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getTerrainAppearanceComponent))
+		.def("getSoundComponent", static_cast<i6e::utils::sharedPtr<i6e::api::SoundComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getSoundComponent))
+		.def("getSoundComponent", static_cast<i6e::utils::sharedPtr<i6e::api::SoundComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getSoundComponent))
+		.def("getSoundListenerComponent", static_cast<i6e::utils::sharedPtr<i6e::api::SoundListenerComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getSoundListenerComponent))
+		.def("getSoundListenerComponent", static_cast<i6e::utils::sharedPtr<i6e::api::SoundListenerComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getSoundListenerComponent))
+		.def("getBillboardComponent", static_cast<i6e::utils::sharedPtr<i6e::api::BillboardComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getBillboardComponent))
+		.def("getBillboardComponent", static_cast<i6e::utils::sharedPtr<i6e::api::BillboardComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getBillboardComponent))
+		.def("getFollowComponent", static_cast<i6e::utils::sharedPtr<i6e::api::FollowComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getFollowComponent))
+		.def("getFollowComponent", static_cast<i6e::utils::sharedPtr<i6e::api::FollowComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getFollowComponent))
+		.def("getMovableTextComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MovableTextComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getMovableTextComponent))
+		.def("getMovableTextComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MovableTextComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getMovableTextComponent))
+		.def("getWaypointComponent", static_cast<i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getWaypointComponent))
+		.def("getWaypointComponent", static_cast<i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getWaypointComponent))
+		.def("getNavigationComponent", static_cast<i6e::utils::sharedPtr<i6e::api::NavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getNavigationComponent))
+		.def("getNavigationComponent", static_cast<i6e::utils::sharedPtr<i6e::api::NavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getNavigationComponent))
+		.def("getWaynetNavigationComponent", static_cast<i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getWaynetNavigationComponent))
+		.def("getWaynetNavigationComponent", static_cast<i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getWaynetNavigationComponent))
+		.def("getMoveComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getMoveComponent))
+		.def("getMoveComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getMoveComponent))
+		.def("getMovementComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getMovementComponent))
+		.def("getMovementComponent", static_cast<i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getMovementComponent))
+		.def("getToggleWaynetComponent", static_cast<i6e::utils::sharedPtr<i6e::api::ToggleWaynetComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getToggleWaynetComponent))
+		.def("getToggleWaynetComponent", static_cast<i6e::utils::sharedPtr<i6e::api::ToggleWaynetComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getToggleWaynetComponent))
+		.def("getPoint2PointConstraintComponent", static_cast<i6e::utils::sharedPtr<i6e::api::Point2PointConstraintComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getPoint2PointConstraintComponent))
+		.def("getPoint2PointConstraintComponent", static_cast<i6e::utils::sharedPtr<i6e::api::Point2PointConstraintComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getPoint2PointConstraintComponent))
+		.def("getVelocityComponent", static_cast<i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component>(*)(i6e::api::GameObject *)>(&i6e::python::object::getVelocityComponent))
+		.def("getVelocityComponent", static_cast<i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component>(*)(i6e::api::GameObject *, const std::string &)>(&i6e::python::object::getVelocityComponent));
 	
 	enum_<i6e::api::AddStrategy>("AddStrategy")
 		.value("ADD", i6e::api::AddStrategy::ADD)
@@ -1307,8 +1307,8 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("getTemplateName", &i6e::api::AnimatedDirectionalLightComponent::getTemplateName);
 
 	class_<i6e::api::AnimationControllerComponent, i6e::utils::sharedPtr<i6e::api::AnimationControllerComponent, i6e::api::Component>, boost::noncopyable>("AnimationControllerComponent", no_init)
-		.def("addAnimationFrameEvent", (void(*)(i6e::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &)) &i6e::python::object::addAnimationFrameEvent)
-		.def("addAnimationFrameEvent", (void(*)(i6e::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &, const std::string &)) &i6e::python::object::addAnimationFrameEvent)
+		.def("addAnimationFrameEvent", static_cast<void(*)(i6e::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &)>(&i6e::python::object::addAnimationFrameEvent))
+		.def("addAnimationFrameEvent", static_cast<void(*)(i6e::api::AnimationControllerComponent*, const std::string &, uint64_t, const std::string &, const std::string &)>(&i6e::python::object::addAnimationFrameEvent))
 		.def("playAnimation", &i6e::api::AnimationControllerComponent::playAnimation)
 		.def("setAnimationSpeed", &i6e::api::AnimationControllerComponent::setAnimationSpeed)
 		.def("stopAnimation", &i6e::api::AnimationControllerComponent::stopAnimation)
@@ -1389,8 +1389,8 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("removeBoundingBox", &i6e::api::MeshAppearanceComponent::removeBoundingBox)
 		.def("attachGameObjectToBone", &i6e::api::MeshAppearanceComponent::attachGameObjectToBone)
 		.def("detachGameObjectFromBone", &i6e::api::MeshAppearanceComponent::detachGameObjectFromBone)
-		.def("addAnimationFrameEvent", (void(*)(i6e::api::MeshAppearanceComponent*, uint64_t, const std::string &)) &i6e::python::object::addAnimationFrameEvent)
-		.def("addAnimationFrameEvent", (void(*)(i6e::api::MeshAppearanceComponent*, uint64_t, const std::string &, const std::string &)) &i6e::python::object::addAnimationFrameEvent)
+		.def("addAnimationFrameEvent", static_cast<void(*)(i6e::api::MeshAppearanceComponent*, uint64_t, const std::string &)>(&i6e::python::object::addAnimationFrameEvent))
+		.def("addAnimationFrameEvent", static_cast<void(*)(i6e::api::MeshAppearanceComponent*, uint64_t, const std::string &, const std::string &)>(&i6e::python::object::addAnimationFrameEvent))
 		.def("getBoneTransform", &i6e::api::MeshAppearanceComponent::getBoneTransform)
 		.def("setShadowCasting", &i6e::api::MeshAppearanceComponent::setShadowCasting);
 
@@ -1402,8 +1402,8 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	class_<i6e::api::MoveComponent, i6e::utils::sharedPtr<i6e::api::MoveComponent, i6e::api::Component>, boost::noncopyable>("MoveComponent", no_init)
 		.def("synchronize", &i6e::api::MoveComponent::synchronize)
 		.def("getTemplateName", &i6e::api::MoveComponent::getTemplateName)
-		.def("navigate", (void(i6e::api::MoveComponent::*)(const Vec3 &)) &i6e::api::MoveComponent::navigate)
-		.def("navigate", (void(i6e::api::MoveComponent::*)(const std::string &)) &i6e::api::MoveComponent::navigate);
+		.def("navigate", static_cast<void(i6e::api::MoveComponent::*)(const Vec3 &)>(&i6e::api::MoveComponent::navigate))
+		.def("navigate", static_cast<void(i6e::api::MoveComponent::*)(const std::string &)>(&i6e::api::MoveComponent::navigate));
 
 	class_<i6e::python::object::MovementComponentWrapper, i6e::utils::sharedPtr<i6e::api::MovementComponent, i6e::api::Component>, boost::noncopyable>("MovementComponent", no_init)
 		.def("Tick", &i6e::api::MovementComponent::Tick, &i6e::python::object::MovementComponentWrapper::default_Tick)
@@ -1481,8 +1481,8 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 		.def("synchronize", &i6e::python::object::NavigationComponentWrapper::synchronize)
 		//.def("howToAdd", &i6e::api::Component::howToAdd, &i6e::python::object::NavigationComponentWrapper::default_howToAdd)
 		.def("getTemplateName", &i6e::python::object::NavigationComponentWrapper::getTemplateName)
-		.def("getPathPos", (std::vector<Vec3>(i6e::python::object::NavigationComponentWrapper::*)(const Vec3 &, const Vec3 &) const) &i6e::python::object::NavigationComponentWrapper::getPath)
-		.def("getPathWP", (std::vector<Vec3>(i6e::python::object::NavigationComponentWrapper::*)(const Vec3 &, const std::string &) const) &i6e::python::object::NavigationComponentWrapper::getPath);
+		.def("getPathPos", static_cast<std::vector<Vec3>(i6e::python::object::NavigationComponentWrapper::*)(const Vec3 &, const Vec3 &) const>(&i6e::python::object::NavigationComponentWrapper::getPath))
+		.def("getPathWP", static_cast<std::vector<Vec3>(i6e::python::object::NavigationComponentWrapper::*)(const Vec3 &, const std::string &) const>(&i6e::python::object::NavigationComponentWrapper::getPath));
 
 #ifdef ISIXE_WITH_NETWORK
 	class_<i6e::api::NetworkSenderComponent, i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component>, boost::noncopyable>("NetworkSenderComponent", no_init)
@@ -1615,10 +1615,10 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	class_<i6e::api::VelocityComponent, i6e::utils::sharedPtr<i6e::api::VelocityComponent, i6e::api::Component>, boost::noncopyable>("VelocityComponent", no_init)
 		.def("synchronize", &i6e::api::VelocityComponent::synchronize)
 		.def("getTemplateName", &i6e::api::VelocityComponent::getTemplateName)
-		.def("accelerate", (void(*)(i6e::api::VelocityComponent *, const Vec3 &, i6e::api::VelocityComponent::MaxSpeedHandling, const std::string &)) &i6e::python::object::accelerate)
-		.def("accelerate", (void(*)(i6e::api::VelocityComponent *, const std::string &)) &i6e::python::object::accelerate)
-		.def("decelerate", (void(*)(i6e::api::VelocityComponent *, const Vec3 &, i6e::api::VelocityComponent::DecelerationHandling, const std::string &)) &i6e::python::object::decelerate)
-		.def("decelerate", (void(*)(i6e::api::VelocityComponent *, const std::string &)) &i6e::python::object::decelerate)
+		.def("accelerate", static_cast<void(*)(i6e::api::VelocityComponent *, const Vec3 &, i6e::api::VelocityComponent::MaxSpeedHandling, const std::string &)>(&i6e::python::object::accelerate))
+		.def("accelerate", static_cast<void(*)(i6e::api::VelocityComponent *, const std::string &)>(&i6e::python::object::accelerate))
+		.def("decelerate", static_cast<void(*)(i6e::api::VelocityComponent *, const Vec3 &, i6e::api::VelocityComponent::DecelerationHandling, const std::string &)>(&i6e::python::object::decelerate))
+		.def("decelerate", static_cast<void(*)(i6e::api::VelocityComponent *, const std::string &)>(&i6e::python::object::decelerate))
 		.def("setMaxSpeed", &i6e::api::VelocityComponent::setMaxSpeed)
 		.def("setResistanceCoefficient", &i6e::api::VelocityComponent::setResistanceCoefficient)
 		.def("setWindage", &i6e::api::VelocityComponent::setWindage);
@@ -1636,8 +1636,8 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	class_<i6e::api::WaynetNavigationComponent, i6e::utils::sharedPtr<i6e::api::WaynetNavigationComponent, i6e::api::Component>, boost::noncopyable>("WaynetNavigationComponent", no_init)
 		.def("synchronize", &i6e::api::WaynetNavigationComponent::synchronize)
 		.def("getTemplateName", &i6e::api::WaynetNavigationComponent::getTemplateName)
-		.def("getPathPos", (std::vector<Vec3>(i6e::api::WaynetNavigationComponent::*)(const Vec3 &, const Vec3 &) const) &i6e::api::WaynetNavigationComponent::getPath)
-		.def("getPathWP", (std::vector<Vec3>(i6e::api::WaynetNavigationComponent::*)(const Vec3 &, const std::string &) const) &i6e::api::WaynetNavigationComponent::getPath);
+		.def("getPathPos", static_cast<std::vector<Vec3>(i6e::api::WaynetNavigationComponent::*)(const Vec3 &, const Vec3 &) const>(&i6e::api::WaynetNavigationComponent::getPath))
+		.def("getPathWP", static_cast<std::vector<Vec3>(i6e::api::WaynetNavigationComponent::*)(const Vec3 &, const std::string &) const>(&i6e::api::WaynetNavigationComponent::getPath));
 
 	class_<i6e::api::WaypointComponent, i6e::utils::sharedPtr<i6e::api::WaypointComponent, i6e::api::Component>, boost::noncopyable>("WaypointComponent", no_init)
 		.def("synchronize", &i6e::api::WaypointComponent::synchronize)
@@ -1654,17 +1654,17 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 	def("deleteAllObjectsOfType", &i6e::python::object::deleteAllObjectsOfType);
 	def("createObject", &i6e::python::object::createObject);
 	def("cleanUpAll", &i6e::python::object::cleanUpAll);
-	def("loadLevel", (void(*)(const std::string &, const std::string &)) &i6e::python::object::loadLevel);
-	def("loadLevel", (void(*)(const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevel);
-	def("loadLevelCallbackFunc", (void(*)(const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevelCallbackFunc);
-	def("loadLevelCallbackScript", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevelCallbackScript);
-	def("loadLevelCallbackFunc", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevelCallbackFunc);
-	def("loadLevelCallbackScript", (void(*)(const std::string &, const std::string &, const std::string &, const std::string &, const std::string &)) &i6e::python::object::loadLevelCallbackScript);
+	def("loadLevel", static_cast<void(*)(const std::string &, const std::string &)>(&i6e::python::object::loadLevel));
+	def("loadLevel", static_cast<void(*)(const std::string &, const std::string &, const std::string &)>(&i6e::python::object::loadLevel));
+	def("loadLevelCallbackFunc", static_cast<void(*)(const std::string &, const std::string &, const std::string &)>(&i6e::python::object::loadLevelCallbackFunc));
+	def("loadLevelCallbackScript", static_cast<void(*)(const std::string &, const std::string &, const std::string &, const std::string &)>(&i6e::python::object::loadLevelCallbackScript));
+	def("loadLevelCallbackFunc", static_cast<void(*)(const std::string &, const std::string &, const std::string &, const std::string &)>(&i6e::python::object::loadLevelCallbackFunc));
+	def("loadLevelCallbackScript", static_cast<void(*)(const std::string &, const std::string &, const std::string &, const std::string &, const std::string &)>(&i6e::python::object::loadLevelCallbackScript));
 	def("getFrameTime", &i6e::python::object::getFrameTime);
 	def("createGO", &i6e::python::object::createGO);
 	def("createComponent", &i6e::python::object::createComponent);
-	def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6e::api::attributeMap &, const std::string &)) &i6e::python::object::createComponentCallback);
-	def("createComponentCallback", (void(*)(int64_t, int64_t, const std::string &, const i6e::api::attributeMap &, const std::string &, const std::string &)) &i6e::python::object::createComponentCallback);
+	def("createComponentCallback", static_cast<void(*)(int64_t, int64_t, const std::string &, const i6e::api::attributeMap &, const std::string &)>(&i6e::python::object::createComponentCallback));
+	def("createComponentCallback", static_cast<void(*)(int64_t, int64_t, const std::string &, const i6e::api::attributeMap &, const std::string &, const std::string &)>(&i6e::python::object::createComponentCallback));
 	def("resetObjectSubSystem", &i6e::python::object::resetObjectSubSystem);
 	def("pauseObject", &i6e::python::object::pauseObject);
 	def("unpauseObject", &i6e::python::object::unpauseObject);
@@ -1690,7 +1690,7 @@ BOOST_PYTHON_MODULE(ScriptingObjectPython) {
 
 	class_<std::vector<i6e::api::objects::GOTemplateComponent>>("GOTemplateComponentVector")
 		.def(init<>())
-		.def("push_back", (void(std::vector<i6e::api::objects::GOTemplateComponent>::*)(const i6e::api::objects::GOTemplateComponent &)) &std::vector<i6e::api::objects::GOTemplateComponent>::push_back);
+		.def("push_back", static_cast<void(std::vector<i6e::api::objects::GOTemplateComponent>::*)(const i6e::api::objects::GOTemplateComponent &)>(&std::vector<i6e::api::objects::GOTemplateComponent>::push_back));
 
 	class_<i6e::api::CollisionGroup>("CollisionGroup")
 		.def(init<>())

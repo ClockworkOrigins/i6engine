@@ -1491,5 +1491,13 @@
         <source>About</source>
         <translation>About</translation>
     </message>
+    <message>
+        <source>GothicSourcePath</source>
+        <translation>Path to Gothic scripts</translation>
+    </message>
+    <message>
+        <source>SelectGothicDir</source>
+        <translation>Select path to Gothic script directory</translation>
+    </message>
 </context>
 </TS>

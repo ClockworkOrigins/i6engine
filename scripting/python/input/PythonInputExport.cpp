@@ -29,29 +29,29 @@ namespace python {
 namespace input {
 
 	void setKeyMapping(const i6e::api::KeyCode id, const std::string & strAction) {
-		i6e::api::EngineController::GetSingleton().getInputFacade()->setKeyMapping(id, strAction);
+		i6eInputFacade->setKeyMapping(id, strAction);
 	}
 
 	void removeKeyMapping(const i6e::api::KeyCode id) {
-		i6e::api::EngineController::GetSingleton().getInputFacade()->removeKeyMapping(id);
+		i6eInputFacade->removeKeyMapping(id);
 	}
 
 	std::string getKeyMapping(const i6e::api::KeyCode id) {
-		return i6e::api::EngineController::GetSingleton().getInputFacade()->getKeyMapping(id);
+		return i6eInputFacade->getKeyMapping(id);
 	}
 
 	void subscribeKeyEvent(const i6e::api::KeyCode name, const i6e::api::KeyState type, const std::string & func) {
-		i6e::api::EngineController::GetSingleton().getInputFacade()->subscribeKeyEvent(name, type, [func]() {
-			i6e::api::EngineController::GetSingleton().getScriptingFacade()->callFunction<void>(func);
+		i6eInputFacade->subscribeKeyEvent(name, type, [func]() {
+			i6eScriptingFacade->callFunction<void>(func);
 		});
 	}
 
 	void unsubscribeKeyEvent(const i6e::api::KeyCode name, const i6e::api::KeyState type) {
-		i6e::api::EngineController::GetSingleton().getInputFacade()->unsubscribeKeyEvent(name, type);
+		i6eInputFacade->unsubscribeKeyEvent(name, type);
 	}
 
 	void resetInputSubSystem() {
-		i6e::api::EngineController::GetSingleton().getInputFacade()->resetSubSystem();
+		i6eInputFacade->resetSubSystem();
 	}
 
 } /* namespace input */

@@ -29,19 +29,19 @@ namespace python {
 namespace physics {
 
 	void setGravity(const math::i6eVector & vec3Gravity) {
-		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->setGravity(vec3Gravity);
+		i6ePhysicsFacade->setGravity(vec3Gravity);
 	}
 
 	void resetPhysicsSubSystem() {
-		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->resetSubSystem();
+		i6ePhysicsFacade->resetSubSystem();
 	}
 
 	void pausePhysics() {
-		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->pause();
+		i6ePhysicsFacade->pause();
 	}
 
 	void unpausePhysics() {
-		i6e::api::EngineController::GetSingleton().getPhysicsFacade()->unpause();
+		i6ePhysicsFacade->unpause();
 	}
 
 } /* namespace physics */

@@ -17,31 +17,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_PLUGINS_TAKECONTROLRPG_H__
-#define __I6ENGINE_PLUGINS_TAKECONTROLRPG_H__
+#ifndef __I6ENGINE_PLUGINS_TAKECONTROLGOTHICPLUGIN_H__
+#define __I6ENGINE_PLUGINS_TAKECONTROLGOTHICPLUGIN_H__
 
 #include "plugins/DialogPluginInterface.h"
 
 namespace i6e {
 namespace plugins {
 
-	class TakeControlRPGPlugin : public QObject, public takeControl::plugins::DialogPluginInterface {
+	class TakeControlGothicPlugin : public QObject, public takeControl::plugins::DialogPluginInterface {
 		Q_OBJECT
 		Q_PLUGIN_METADATA(IID "i6e.takeControl.script.DialogPluginInterface")
 		Q_INTERFACES(i6e::takeControl::plugins::DialogPluginInterface)
 
 	public:
-		TakeControlRPGPlugin();
+		TakeControlGothicPlugin();
 
 	signals:
-		void updatedData();
+		void updatedData() override;
+
+	public slots:
+		void gothicPathChanged(QString path);
 
 	private:
 		std::vector<rpg::npc::NPC *> _npcList;
 		std::vector<std::tuple<rpg::dialog::Dialog *, std::vector<std::tuple<std::string, std::string>>>> _dialogList;
+		std::map<QString, QString> _subtitleToTextMap;
+		QString _lastPath;
 
 		QString getName() const override {
-			return "RPG";
+			return "Gothic";
 		}
 
 		std::vector<std::tuple<rpg::dialog::Dialog *, std::vector<std::tuple<std::string, std::string>>>> getDialogs() override;
@@ -56,4 +61,4 @@ namespace plugins {
 } /* namespace plugins */
 } /* namespace i6e */
 
-#endif /* __I6ENGINE_PLUGINS_TAKECONTROLRPG_H__ */
+#endif /* __I6ENGINE_PLUGINS_TAKECONTROLGOTHICPLUGIN_H__ */

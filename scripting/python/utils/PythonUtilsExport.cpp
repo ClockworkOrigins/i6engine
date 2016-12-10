@@ -75,9 +75,9 @@ namespace utils {
 
 BOOST_PYTHON_MODULE(ScriptingUtilsPython) {
 	using namespace boost::python;
-	def("rand", (uint32_t(*)()) &i6e::python::utils::rand);
-	def("rand", (uint32_t(*)(uint32_t)) &i6e::python::utils::rand);
-	def("rand", (uint32_t(*)(uint32_t, uint32_t)) &i6e::python::utils::rand);
+	def("rand", static_cast<uint32_t(*)()>(&i6e::python::utils::rand));
+	def("rand", static_cast<uint32_t(*)(uint32_t)>(&i6e::python::utils::rand));
+	def("rand", static_cast<uint32_t(*)(uint32_t, uint32_t)>(&i6e::python::utils::rand));
 	def("setSeed", &i6e::python::utils::setSeed);
 	def("split", &i6e::utils::split);
 

@@ -25,8 +25,17 @@
 
 #include <qplugin.h>
 
+namespace clockUtils {
+namespace iniParser {
+	class IniParser;
+} /* namespace iniParser */
+} /* namespace clockUtils */
+
 namespace i6e {
 namespace takeControl {
+namespace widgets {
+	class SettingsWidget;
+} /* namespace widgets */
 namespace plugins {
 
 	/**
@@ -36,6 +45,11 @@ namespace plugins {
 	public:
 		virtual ~DialogPluginInterface() {
 		}
+
+		/**
+		 * \brief returns the name of this plugin
+		 */
+		virtual QString getName() const = 0;
 
 		/**
 		 * \brief returns all dialogs this plugin provides
@@ -53,6 +67,18 @@ namespace plugins {
 		 * \brief returns the preview text for the given subtitle identifier
 		 */
 		virtual QString getSubtitleText(QString identifier) const = 0;
+
+		/**
+		 * \brief returns a QWidget added as tab to settings dialog for this plugin
+		 * if no settings are provided for this plugin, return a nullptr
+		 */
+		virtual widgets::SettingsWidget * getSettingsWidget(clockUtils::iniParser::IniParser * iniParser, QWidget * par) = 0;
+
+	signals:
+		/**
+		 * \brief this signal is emitted when NPC and/or Dialog data has changed
+		 */
+		virtual void updatedData() = 0;
 	};
 
 } /* namespace plugins */

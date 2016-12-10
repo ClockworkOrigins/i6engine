@@ -26,7 +26,7 @@ namespace python {
 namespace messaging {
 
 	void sendMessage(const i6e::api::GameMessage::Ptr & msg) {
-		i6e::api::EngineController::GetSingleton().getMessagingFacade()->deliverMessage(msg);
+		i6eMessagingFacade->deliverMessage(msg);
 	}
 
 } /* namespace messaging */

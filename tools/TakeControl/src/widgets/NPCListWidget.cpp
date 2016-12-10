@@ -59,6 +59,7 @@ namespace widgets {
 		std::sort(_npcList.begin(), _npcList.end(), [](rpg::npc::NPC * a, rpg::npc::NPC * b) {
 			return a->getIdentifier() < b->getIdentifier();
 		});
+		connect(dynamic_cast<QObject *>(plugin), SIGNAL(updatedData()), this, SLOT(updateData()));
 	}
 
 	void NPCListWidget::selectedNPC(const QModelIndex & idx) {
@@ -66,6 +67,26 @@ namespace widgets {
 		QStringListModel * model = dynamic_cast<QStringListModel *>(_listView->model());
 		assert(model);
 		emit selectNPC(model->stringList().at(index));
+	}
+
+	void NPCListWidget::updateData() {
+		plugins::DialogPluginInterface * plugin = dynamic_cast<plugins::DialogPluginInterface *>(sender());
+
+		_npcList.clear();
+
+		QStringListModel * model = dynamic_cast<QStringListModel *>(_listView->model());
+		assert(model);
+		QStringList list;
+		auto npcList = plugin->getNPCs();
+		for (rpg::npc::NPC * npc : npcList) {
+			list.append(QString::fromStdString(npc->getIdentifier()));
+		}
+		qSort(list);
+		model->setStringList(list);
+		_npcList.insert(_npcList.begin(), npcList.begin(), npcList.end());
+		std::sort(_npcList.begin(), _npcList.end(), [](rpg::npc::NPC * a, rpg::npc::NPC * b) {
+			return a->getIdentifier() < b->getIdentifier();
+		});
 	}
 
 } /* namespace widgets */

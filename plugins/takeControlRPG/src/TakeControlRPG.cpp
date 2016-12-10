@@ -42,7 +42,7 @@
 namespace i6e {
 namespace plugins {
 
-	TakeControlRPG::TakeControlRPG() : _npcList(), _dialogList() {
+	TakeControlRPGPlugin::TakeControlRPGPlugin() : _npcList(), _dialogList() {
 		clockUtils::iniParser::IniParser iniParser;
 		if (clockUtils::ClockError::SUCCESS != iniParser.load("RPG.ini")) {
 			QMessageBox box;
@@ -203,16 +203,20 @@ namespace plugins {
 		}
 	}
 
-	std::vector<std::tuple<rpg::dialog::Dialog *, std::vector<std::tuple<std::string, std::string>>>> TakeControlRPG::getDialogs() {
+	std::vector<std::tuple<rpg::dialog::Dialog *, std::vector<std::tuple<std::string, std::string>>>> TakeControlRPGPlugin::getDialogs() {
 		return _dialogList;
 	}
 
-	std::vector<rpg::npc::NPC *> TakeControlRPG::getNPCs() {
+	std::vector<rpg::npc::NPC *> TakeControlRPGPlugin::getNPCs() {
 		return _npcList;
 	}
 
-	QString TakeControlRPG::getSubtitleText(QString identifier) const {
+	QString TakeControlRPGPlugin::getSubtitleText(QString identifier) const {
 		return QString::fromLatin1(i6eEngineController->getTextManager()->getText(identifier.toStdString()).c_str());
+	}
+
+	takeControl::widgets::SettingsWidget * TakeControlRPGPlugin::getSettingsWidget(clockUtils::iniParser::IniParser *, QWidget *) {
+		return nullptr;
 	}
 
 } /* namespace plugins */

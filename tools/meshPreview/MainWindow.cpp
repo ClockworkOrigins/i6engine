@@ -78,8 +78,9 @@ namespace tools {
 
 		_root->initialise(false, "MeshPreview");
 		Ogre::NameValuePairList misc;
-		misc["externalWindowHandle"] = Ogre::StringConverter::toString((size_t) _renderWidget->winId());
-		misc["parentWindowHandle"] = Ogre::StringConverter::toString((size_t) _renderWidget->winId());
+		HWND wnd = reinterpret_cast<HWND>(_renderWidget->winId());
+		misc["externalWindowHandle"] = Ogre::StringConverter::toString(reinterpret_cast<size_t>(wnd));
+		misc["parentWindowHandle"] = Ogre::StringConverter::toString(reinterpret_cast<size_t>(wnd));
 		_renderWindow = _root->createRenderWindow("MeshPreview", size().width(), size().height(), false, &misc);
 
 		Ogre::WindowEventUtilities::addWindowEventListener(_renderWindow, this);

@@ -37,6 +37,7 @@ set(TakeControlSrc
 	${srcdir}/widgets/InfoWidget.cpp
 	${srcdir}/widgets/MainWindow.cpp
 	${srcdir}/widgets/NPCListWidget.cpp
+	${srcdir}/widgets/SettingsDialog.cpp
 )
 
 QT5_WRAP_CPP(TakeControlGuiHeader
@@ -44,6 +45,7 @@ QT5_WRAP_CPP(TakeControlGuiHeader
 	${includedir}/widgets/InfoWidget.h
 	${includedir}/widgets/MainWindow.h
 	${includedir}/widgets/NPCListWidget.h
+	${includedir}/widgets/SettingsDialog.h
 )
 
 SET(ResourceFile resources/resources.qrc)

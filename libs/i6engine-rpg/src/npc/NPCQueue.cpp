@@ -19,6 +19,8 @@
 
 #include "i6engine/rpg/npc/NPCQueue.h"
 
+#include <cassert>
+
 #include "i6engine/rpg/npc/NPCQueueJob.h"
 
 namespace i6e {
@@ -37,18 +39,21 @@ namespace npc {
 
 	void NPCQueue::checkJobs() {
 		while (!_queue.empty()) {
-			NPCQueueJob * job;
-			_queue.front(job); // Daniel: no error check necessary as it is polled just from one thread
-			if (!job->condition()) {
-				job->loop();
-				break;
-			} else {
-				job->finish();
-				delete job;
-				_queue.pop();
-				if (!_queue.empty()) {
-					_queue.front(job); // Daniel: no error check necessary as it is polled just from one thread
-					job->start();
+			NPCQueueJob * job = nullptr;
+			clockUtils::ClockError err = _queue.front(job); // Daniel: no error check necessary as it is polled just from one thread
+			assert(err == clockUtils::ClockError::SUCCESS);
+			if (err == clockUtils::ClockError::SUCCESS) {
+				if (!job->condition()) {
+					job->loop();
+					break;
+				} else {
+					job->finish();
+					delete job;
+					_queue.pop();
+					if (!_queue.empty()) {
+						_queue.front(job); // Daniel: no error check necessary as it is polled just from one thread
+						job->start();
+					}
 				}
 			}
 		}

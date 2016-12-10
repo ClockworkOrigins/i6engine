@@ -17,49 +17,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
-#define __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
+#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_SETTINGSWIDGET_H__
+#define __I6ENGINE_TAKECONTROL_WIDGETS_SETTINGSWIDGET_H__
 
 #include <QWidget>
 
-class QListView;
-
 namespace i6e {
-namespace rpg {
-namespace npc {
-	class NPC;
-} /* namespace npc */
-} /* namespace rpg */
 namespace takeControl {
-namespace plugins {
-	class DialogPluginInterface;
-} /* namespace plugins */
 namespace widgets {
 
-	class NPCListWidget : public QWidget {
-		Q_OBJECT
-
+	class SettingsWidget : public QWidget {
 	public:
-		NPCListWidget(QWidget * par = nullptr);
-		~NPCListWidget();
-
-	signals:
-		void selectNPC(QString);
+		SettingsWidget(QWidget * par) : QWidget(par) {
+		}
+		virtual ~SettingsWidget() {
+		}
 
 	public slots:
-		void loadedDialogPlugin(plugins::DialogPluginInterface * plugin);
-
-	private slots:
-		void selectedNPC(const QModelIndex & idx);
-		void updateData();
-
-	private:
-		QListView * _listView;
-		std::vector<rpg::npc::NPC *> _npcList;
+		virtual void saveSettings() = 0;
+		virtual void rejectChanges() = 0;
 	};
 
 } /* namespace widgets */
 } /* namespace takeControl */
 } /* namespace i6e */
 
-#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__ */
+#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_SETTINGSWIDGET_H__ */

@@ -17,56 +17,49 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
-#define __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__
+#ifndef __I6ENGINE_TAKECONTROL_WIDGETS_SETTINGSDIALOG_H__
+#define __I6ENGINE_TAKECONTROL_WIDGETS_SETTINGSDIALOG_H__
 
-#include <QMainWindow>
+#include <QDialog>
+
+class QTabWidget;
+
+namespace clockUtils {
+namespace iniParser {
+	class IniParser;
+} /* namespace iniParser */
+} /* namespace clockUtils */
 
 namespace i6e {
-namespace tools {
-namespace common {
-	class AboutDialog;
-} /* namespace common */
-} /* namespace tools */
 namespace takeControl {
-namespace plugins {
-	class DialogPluginInterface;
-} /* namespace plugins */
 namespace widgets {
 
-	class DialogListWidget;
-	class InfoWidget;
-	class NPCListWidget;
-	class SettingsDialog;
+	class SettingsWidget;
 
-	class MainWindow : public QMainWindow {
+	class SettingsDialog : public QDialog {
 		Q_OBJECT
 
 	public:
-		MainWindow(QMainWindow * par = nullptr);
-		~MainWindow();
+		SettingsDialog(QWidget * par);
+		~SettingsDialog();
+
+		clockUtils::iniParser::IniParser * getIniParser() const {
+			return _iniParser;
+		}
+
+		void addSettingsWidget(QString tabName, SettingsWidget * widget);
 
 	signals:
-		void pluginLoaded(plugins::DialogPluginInterface *);
-
-	private slots:
-		void closeEditor();
-		void showAboutDialog();
+		void applySettings();
+		void rejectSettings();
 
 	private:
-		tools::common::AboutDialog * _aboutDialog;
-		NPCListWidget * _npcListWidget;
-		DialogListWidget * _dialogListWidget;
-		InfoWidget * _infoWidget;
-		SettingsDialog * _settingsDialog;
-		std::vector<plugins::DialogPluginInterface *> _dialogPlugins;
-
-		void closeEvent(QCloseEvent * evt) override;
-		void loadPlugins();
+		QTabWidget * _tabWidget;
+		clockUtils::iniParser::IniParser * _iniParser;
 	};
 
 } /* namespace widgets */
 } /* namespace takeControl */
 } /* namespace i6e */
 
-#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_MAINWINDOW_H__ */
+#endif /* __I6ENGINE_TAKECONTROL_WIDGETS_SETTINGSDIALOG_H__ */

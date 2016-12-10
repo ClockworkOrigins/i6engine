@@ -119,13 +119,13 @@ namespace core {
 		}
 
 		void registerMessageType(uint16_t msgType, const std::string & func) {
-			i6e::api::EngineController::GetSingleton().getMessagingFacade()->registerMessageType(msgType, this, [this, func](const i6e::core::Message::Ptr & msg) {
+			i6eMessagingFacade->registerMessageType(msgType, this, [this, func](const i6e::core::Message::Ptr & msg) {
 				boost::python::call<void>(this->get_override(func.c_str()).ptr(), msg);
 			});
 		}
 
 		void unregisterMessageType(uint16_t msgType) {
-			i6e::api::EngineController::GetSingleton().getMessagingFacade()->unregisterMessageType(msgType, this);
+			i6eMessagingFacade->unregisterMessageType(msgType, this);
 		}
 	};
 

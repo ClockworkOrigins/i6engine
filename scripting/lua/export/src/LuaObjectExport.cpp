@@ -926,8 +926,8 @@ scope registerObject() {
 		class_<i6e::api::GameObject, i6e::api::GOPtr>("GameObject")
 			.def(constructor<>())
 			.def("getID", &i6e::api::GameObject::getID)
-			.def("getGOC", (i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t)const) &i6e::api::GameObject::getGOC)
-			.def("getGOC", (i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t, const std::string &)const) &i6e::api::GameObject::getGOC)
+			.def("getGOC", static_cast<i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t)const>(&i6e::api::GameObject::getGOC))
+			.def("getGOC", static_cast<i6e::api::ComPtr(i6e::api::GameObject::*)(uint32_t, const std::string &)const>(&i6e::api::GameObject::getGOC))
 			.def("getGOCID", &i6e::api::GameObject::getGOCID)
 			.def("getGOCList", &i6e::api::GameObject::getGOCList)
 			.def("getType", &i6e::api::GameObject::getType)
@@ -1232,8 +1232,8 @@ scope registerObject() {
 			.def("synchronize", &i6e::lua::object::NavigationComponentWrapper::synchronize)
 			.def("howToAdd", &i6e::api::Component::howToAdd, &i6e::lua::object::NavigationComponentWrapper::default_howToAdd)
 			.def("getTemplateName", &i6e::lua::object::NavigationComponentWrapper::getTemplateName)
-			.def("getPathPos", (std::vector<Vec3>(i6e::lua::object::NavigationComponentWrapper::*)(const Vec3 &, const Vec3 &) const) &i6e::lua::object::NavigationComponentWrapper::getPath)
-			.def("getPathWP", (std::vector<Vec3>(i6e::lua::object::NavigationComponentWrapper::*)(const Vec3 &, const std::string &) const) &i6e::lua::object::NavigationComponentWrapper::getPath),
+			.def("getPathPos", static_cast<std::vector<Vec3>(i6e::lua::object::NavigationComponentWrapper::*)(const Vec3 &, const Vec3 &) const>(&i6e::lua::object::NavigationComponentWrapper::getPath))
+			.def("getPathWP", static_cast<std::vector<Vec3>(i6e::lua::object::NavigationComponentWrapper::*)(const Vec3 &, const std::string &) const>(&i6e::lua::object::NavigationComponentWrapper::getPath)),
 
 #ifdef ISIXE_WITH_NETWORK
 		class_<i6e::api::NetworkSenderComponent, i6e::api::Component, i6e::utils::sharedPtr<i6e::api::NetworkSenderComponent, i6e::api::Component>>("NetworkSenderComponent")

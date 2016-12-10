@@ -54,6 +54,7 @@ namespace widgets {
 
 	private slots:
 		void selectedDialog(QTreeWidgetItem * item, int column);
+		void updateData();
 
 	private:
 		QTreeWidget * _treeWidget;
