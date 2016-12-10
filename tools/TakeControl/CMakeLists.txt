@@ -70,6 +70,10 @@ ADD_EXECUTABLE(i6eTakeControl ${GUI_TYPE} ${TakeControlSrc} ${TakeControlGuiHead
 
 target_link_libraries(i6eTakeControl toolsCommon i6engine-rpg ${CLOCKUTILS_LIBRARIES} ${QT_LIBRARIES})
 
+IF(SCRIPTING_LUA)
+	target_link_libraries(i6eTakeControl luabind ${LUA_LIBRARIES})
+ENDIF(SCRIPTING_LUA)
+
 IF(UNIX)
 	target_link_libraries(i6eTakeControl pthread)
 ENDIF(UNIX)
