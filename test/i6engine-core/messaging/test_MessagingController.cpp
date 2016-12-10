@@ -32,7 +32,6 @@
 
 #include "boost/make_shared.hpp"
 
-#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 using namespace i6e::core;
@@ -53,16 +52,15 @@ public:
 		MessageSubscriber::swapMessageBuffer();
 
 		for (const ReceivedMessagePtr & rm : *MessageSubscriber::_objInActiveMessageVector) {
-			_receiveMessage(&(*rm->message));
+			sequence.push_back(rm->message);
 			received++;
 		}
 		MessageSubscriber::_objInActiveMessageVector->clear();
 	}
 
-	MOCK_METHOD1(_receiveMessage, void(Message *));
-
 	Mock_MessagingController * _mc;
 	int received = 0;
+	std::vector<Message::Ptr> sequence;
 };
 
 class Mock_SubSystemStress : public MessageSubscriber {
@@ -108,11 +106,10 @@ TEST(MessagingController, Buffer1) {
 	// Update 1 Obj 10, waitfor 5
 	Message::Ptr msg2(new Message(0, 1, Method::Create, new MessageStruct(-1, -1), i6e::core::Subsystem::Unknown));
 
-	 {
-		::testing::InSequence dummy;
-
-		EXPECT_CALL(ms, _receiveMessage(&(*msg1)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg2)));
+	std::vector<Message::Ptr> expectedSequence;
+	{
+		expectedSequence.push_back(msg1);
+		expectedSequence.push_back(msg2);
 	}
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(15));
@@ -129,6 +126,8 @@ TEST(MessagingController, Buffer1) {
 		ms.processMessages();
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
+
+	EXPECT_EQ(expectedSequence, ms.sequence);
 
 	mc->unregisterMessageType(0, &ms);
 
@@ -155,14 +154,13 @@ TEST(MessagingController, Buffer2) {
 	// Update 3 Obj 10, waitfor 5
 	Message::Ptr msg6(new Message(0, 1, Method::Update, new MessageStruct(10, 5), i6e::core::Subsystem::Unknown));
 
-	 {
-		::testing::InSequence dummy;
-
-		EXPECT_CALL(ms, _receiveMessage(&(*msg4)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg3)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg1)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg2)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg5)));
+	std::vector<Message::Ptr> expectedSequence;
+	{
+		expectedSequence.push_back(msg4);
+		expectedSequence.push_back(msg3);
+		expectedSequence.push_back(msg1);
+		expectedSequence.push_back(msg2);
+		expectedSequence.push_back(msg5);
 		// Message 6 will never be delivered because of Message 5 arrived earlier
 	}
 
@@ -185,6 +183,8 @@ TEST(MessagingController, Buffer2) {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
+	EXPECT_EQ(expectedSequence, ms.sequence);
+
 	mc->unregisterMessageType(0, &ms);
 
 	delete mc;
@@ -206,13 +206,12 @@ TEST(MessagingController, specialCases) {
 	// This message mustn't be delivered because parent (2) is already deleted
 	Message::Ptr msg5(new Message(0, 0, Method::Delete, new MessageStruct(1, 2), i6e::core::Subsystem::Unknown));
 
+	std::vector<Message::Ptr> expectedSequence;
 	{
-		::testing::InSequence dummy;
-
-		EXPECT_CALL(ms, _receiveMessage(&(*msg1)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg3)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg2)));
-		EXPECT_CALL(ms, _receiveMessage(&(*msg4)));
+		expectedSequence.push_back(msg1);
+		expectedSequence.push_back(msg3);
+		expectedSequence.push_back(msg2);
+		expectedSequence.push_back(msg4);
 	}
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -239,6 +238,8 @@ TEST(MessagingController, specialCases) {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
+	EXPECT_EQ(expectedSequence, ms.sequence);
+
 	mc->unregisterMessageType(0, &ms);
 
 	delete mc;
@@ -260,14 +261,13 @@ TEST(MessagingController, updateAfterDelete) {
 		Message::Ptr msg6(new Message(0, 0, Method::Delete, new MessageStruct(2, 1), i6e::core::Subsystem::Unknown));
 		Message::Ptr msg7(new Message(0, 0, Method::Update, new MessageStruct(2, -1), i6e::core::Subsystem::Unknown));
 
+		std::vector<Message::Ptr> expectedSequence;
 		{
-			::testing::InSequence dummy;
-
-			EXPECT_CALL(ms, _receiveMessage(&(*msg1)));
-			EXPECT_CALL(ms, _receiveMessage(&(*msg2)));
-			EXPECT_CALL(ms, _receiveMessage(&(*msg3)));
-			EXPECT_CALL(ms, _receiveMessage(&(*msg4)));
-			EXPECT_CALL(ms, _receiveMessage(&(*msg5)));
+			expectedSequence.push_back(msg1);
+			expectedSequence.push_back(msg2);
+			expectedSequence.push_back(msg3);
+			expectedSequence.push_back(msg4);
+			expectedSequence.push_back(msg5);
 		}
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -295,6 +295,8 @@ TEST(MessagingController, updateAfterDelete) {
 			ms.processMessages();
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
+
+		EXPECT_EQ(expectedSequence, ms.sequence);
 
 		mc->unregisterMessageType(0, &ms);
 
