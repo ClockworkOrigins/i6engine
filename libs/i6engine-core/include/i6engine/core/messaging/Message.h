@@ -193,8 +193,8 @@ namespace core {
 		Subsystem _sender;
 	};
 
-	std::ostream & operator<<(std::ostream & stream, const Message & msg);
-	std::ostream & operator<<(std::ostream & stream, const Message::Ptr & msg);
+	ISIXE_CORE_API std::ostream & operator<<(std::ostream & stream, const Message & msg);
+	ISIXE_CORE_API std::ostream & operator<<(std::ostream & stream, const Message::Ptr & msg);
 
 } /* namespace core */
 } /* namespace i6e */
