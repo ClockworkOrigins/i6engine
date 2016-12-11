@@ -137,6 +137,7 @@ namespace npc {
 				ISIXE_THROW_FAILURE("NPCParser", "NPC with identifier '" << identifier << "' already defined! Second definition in file '" << file << "'");
 			}
 
+			tpl._type = "NPC";
 			_npcs.insert(std::make_pair(identifier, tpl));
 			_npcFiles.push_back(std::make_pair(identifier, file));
 		}

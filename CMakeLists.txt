@@ -27,6 +27,7 @@ cmake_minimum_required (VERSION 3.0)
 #
 #########################################################################
 
+OPTION(ISIXE_BUILD_SHARED "enabled shared libraries" ON)
 option(ISIXE_WITH_LOGGING "enables Logging" OFF)
 option(ISIXE_WITH_NETWORK "build i6engine with networking capabilities" OFF)
 option(ISIXE_WITH_PROFILING "build i6engine with profiling" OFF)
