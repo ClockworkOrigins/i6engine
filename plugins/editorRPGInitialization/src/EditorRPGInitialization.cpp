@@ -86,20 +86,20 @@ namespace plugins {
 		}
 		rpg::quest::QuestLog::GetSingletonPtr()->loadQuests(QuestDirectory);
 
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Attribute", std::bind(api::Component::createC<rpg::components::AttributeComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("DialogChecker", std::bind(api::Component::createC<rpg::components::DialogCheckerComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Experience", std::bind(api::Component::createC<rpg::components::ExperienceComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Healthbar", std::bind(api::Component::createC<rpg::components::HealthbarComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("HumanMovement", std::bind(api::Component::createC<rpg::components::HumanMovementComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ListInventory", std::bind(api::Component::createC<rpg::components::ListInventoryComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("MiscItem", std::bind(api::Component::createC<rpg::components::MiscItemComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Name", std::bind(api::Component::createC<rpg::components::NameComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Quickslot", std::bind(api::Component::createC<rpg::components::QuickslotComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("Slot", std::bind(api::Component::createC<rpg::components::SlotComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("SlotInventory", std::bind(api::Component::createC<rpg::components::SlotInventoryComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("ThirdPersonControl", std::bind(api::Component::createC<rpg::components::ThirdPersonControlComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("UsableItem", std::bind(api::Component::createC<rpg::components::UsableItemComponent>, std::placeholders::_1, std::placeholders::_2));
-		api::EngineController::GetSingleton().getObjectFacade()->registerCTemplate("WeightInventory", std::bind(api::Component::createC<rpg::components::WeightInventoryComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("Attribute", std::bind(api::Component::createC<rpg::components::AttributeComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("DialogChecker", std::bind(api::Component::createC<rpg::components::DialogCheckerComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("Experience", std::bind(api::Component::createC<rpg::components::ExperienceComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("Healthbar", std::bind(api::Component::createC<rpg::components::HealthbarComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("HumanMovement", std::bind(api::Component::createC<rpg::components::HumanMovementComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("ListInventory", std::bind(api::Component::createC<rpg::components::ListInventoryComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("MiscItem", std::bind(api::Component::createC<rpg::components::MiscItemComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("Name", std::bind(api::Component::createC<rpg::components::NameComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("Quickslot", std::bind(api::Component::createC<rpg::components::QuickslotComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("Slot", std::bind(api::Component::createC<rpg::components::SlotComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("SlotInventory", std::bind(api::Component::createC<rpg::components::SlotInventoryComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("ThirdPersonControl", std::bind(api::Component::createC<rpg::components::ThirdPersonControlComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("UsableItem", std::bind(api::Component::createC<rpg::components::UsableItemComponent>, std::placeholders::_1, std::placeholders::_2));
+		i6eObjectFacade->registerCTemplate("WeightInventory", std::bind(api::Component::createC<rpg::components::WeightInventoryComponent>, std::placeholders::_1, std::placeholders::_2));
 	}
 
 } /* namespace plugins */

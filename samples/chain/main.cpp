@@ -37,20 +37,20 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 	app.setName("Chain Sample");
 
-	i6e::api::EngineController::GetSingletonPtr()->registerApplication(app);
+	i6eEngineController->registerApplication(app);
 
 #ifdef ISIXE_WITH_CONSOLE
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6e::modules::GraphicsController(), { i6e::core::Subsystem::Object });
+	i6eEngineController->registerSubSystem("Graphics", new i6e::modules::GraphicsController(), { i6e::core::Subsystem::Object });
 #else
-	HWND hWnd = i6e::api::EngineController::GetSingletonPtr()->createWindow(hInstance);
+	HWND hWnd = i6eEngineController->createWindow(hInstance);
 
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6e::modules::GraphicsController(hWnd), { i6e::core::Subsystem::Object });
+	i6eEngineController->registerSubSystem("Graphics", new i6e::modules::GraphicsController(hWnd), { i6e::core::Subsystem::Object });
 #endif
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Object", new i6e::modules::ObjectController(), { i6e::core::Subsystem::Physic });
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6e::modules::InputController(), LNG_INPUT_FRAME_TIME);
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Physics", new i6e::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
+	i6eEngineController->registerSubSystem("Object", new i6e::modules::ObjectController(), { i6e::core::Subsystem::Physic });
+	i6eEngineController->registerSubSystem("Input", new i6e::modules::InputController(), LNG_INPUT_FRAME_TIME);
+	i6eEngineController->registerSubSystem("Physics", new i6e::modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
 
-	i6e::api::EngineController::GetSingletonPtr()->start();
+	i6eEngineController->start();
 
 	return 0;
 }

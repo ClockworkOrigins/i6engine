@@ -35,18 +35,18 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 	app.setName("Drag & Drop Sample");
 
-	i6e::api::EngineController::GetSingletonPtr()->registerApplication(app);
+	i6eEngineController->registerApplication(app);
 
 #ifdef ISIXE_WITH_CONSOLE
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6e::modules::GraphicsController(), LNG_GRAPHICS_FRAME_TIME);
+	i6eEngineController->registerSubSystem("Graphics", new i6e::modules::GraphicsController(), LNG_GRAPHICS_FRAME_TIME);
 #else
-	HWND hWnd = i6e::api::EngineController::GetSingletonPtr()->createWindow(hInstance);
+	HWND hWnd = i6eEngineController->createWindow(hInstance);
 
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Graphics", new i6e::modules::GraphicsController(hWnd), LNG_GRAPHICS_FRAME_TIME);
+	i6eEngineController->registerSubSystem("Graphics", new i6e::modules::GraphicsController(hWnd), LNG_GRAPHICS_FRAME_TIME);
 #endif
-	i6e::api::EngineController::GetSingletonPtr()->registerSubSystem("Input", new i6e::modules::InputController(), LNG_INPUT_FRAME_TIME);
+	i6eEngineController->registerSubSystem("Input", new i6e::modules::InputController(), LNG_INPUT_FRAME_TIME);
 
-	i6e::api::EngineController::GetSingletonPtr()->start();
+	i6eEngineController->start();
 
 	return 0;
 }

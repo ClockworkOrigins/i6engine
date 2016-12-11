@@ -40,7 +40,7 @@ namespace sample {
 	}
 
 	void DragDropApplication::AfterInitialize() {
-		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6eGUIFacade;
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
@@ -92,7 +92,7 @@ namespace sample {
 		}
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6eInputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6eEngineController));
 	}
 
 	void DragDropApplication::Tick() {

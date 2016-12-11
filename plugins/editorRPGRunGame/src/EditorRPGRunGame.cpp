@@ -49,16 +49,16 @@ namespace plugins {
 	}
 
 	void EditorRPGRunGame::initializeSubSystems(HWND hWnd) {
-		api::EngineController::GetSingleton().registerSubSystem("Graphics", new modules::GraphicsController(hWnd), { core::Subsystem::Object });
-		api::EngineController::GetSingleton().registerSubSystem("Object", new modules::ObjectController(), { core::Subsystem::Physic });
-		api::EngineController::GetSingleton().registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
+		i6eEngineController->registerSubSystem("Graphics", new modules::GraphicsController(hWnd), { core::Subsystem::Object });
+		i6eEngineController->registerSubSystem("Object", new modules::ObjectController(), { core::Subsystem::Physic });
+		i6eEngineController->registerSubSystem("Physics", new modules::PhysicsController(), LNG_PHYSICS_FRAME_TIME);
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
-		api::EngineController::GetSingleton().registerSubSystem("Scripting", new modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
+		i6eEngineController->registerSubSystem("Scripting", new modules::LuaScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
-		api::EngineController::GetSingleton().registerSubSystem("Scripting", new modules::PythonScriptingController(), LNG_SCRIPTING_FRAME_TIME);
+		i6eEngineController->registerSubSystem("Scripting", new modules::PythonScriptingController(), LNG_SCRIPTING_FRAME_TIME);
 #endif
 #ifdef ISIXE_WITH_AUDIO
-		api::EngineController::GetSingleton().registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
+		i6eEngineController->registerSubSystem("Audio", new modules::AudioController(), LNG_AUDIO_FRAME_TIME);
 #endif
 	}
 

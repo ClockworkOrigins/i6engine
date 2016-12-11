@@ -41,9 +41,9 @@ namespace sample {
 		CommonApplication::AfterInitialize();
 
 		// ambient light for the scene
-		i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(1.0, 1.0, 1.0);
+		i6eGraphicsFacade->setAmbientLight(1.0, 1.0, 1.0);
 
-		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
+		i6e::api::ObjectFacade * of = i6eObjectFacade;
 		{
 			i6e::api::objects::GOTemplate tmpl;
 			{
@@ -52,27 +52,27 @@ namespace sample {
 
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("StaticState", params, "", false, false));
 			}
-			of->createGO("SpectatorCam", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this](i6e::api::GOPtr go) {
+			of->createGO("SpectatorCam", tmpl, i6eEngineController->getUUID(), false, [this](i6e::api::GOPtr go) {
 				_camera = go;
 			});
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
-			of->createObject("Floor", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Floor", tmpl, i6eEngineController->getUUID(), false);
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
-			of->createObject("Sun", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Sun", tmpl, i6eEngineController->getUUID(), false);
 		}
 		resetScene();
 
-		i6e::api::InputFacade * inputFacade = i6e::api::EngineController::GetSingleton().getInputFacade();
+		i6e::api::InputFacade * inputFacade = i6eInputFacade;
 
 		inputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_RETURN, i6e::api::KeyState::KEY_PRESSED, std::bind(&ChainApplication::resetScene, this));
 	}
 
 	void ChainApplication::resetScene() {
-		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
+		i6e::api::ObjectFacade * of = i6eObjectFacade;
 		of->deleteAllObjectsOfType("ChainLink");
 		of->deleteAllObjectsOfType("Plank");
 		{
@@ -97,7 +97,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "", false, false));
 			}
 
-			of->createObject("Plank", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Plank", tmpl, i6eEngineController->getUUID(), false);
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
@@ -130,7 +130,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6eEngineController->getUUID(), false);
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
@@ -164,7 +164,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6eEngineController->getUUID(), false);
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
@@ -197,7 +197,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6eEngineController->getUUID(), false);
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
@@ -231,7 +231,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6eEngineController->getUUID(), false);
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
@@ -264,7 +264,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6eEngineController->getUUID(), false);
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
@@ -298,7 +298,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6eEngineController->getUUID(), false);
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
@@ -331,7 +331,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink02", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6eEngineController->getUUID(), false);
 		}
 		{
 			i6e::api::objects::GOTemplate tmpl;
@@ -356,7 +356,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("Point2PointConstraint", paramsConstraint, "ChainLink01", false, false));
 			}
 
-			of->createObject("ChainLink", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("ChainLink", tmpl, i6eEngineController->getUUID(), false);
 		}
 	}
 

@@ -23,5 +23,5 @@
 #include "gtest/gtest.h"
 
 TEST(TextManager, getText) {
-	EXPECT_EQ("I", i6e::api::EngineController::GetSingleton().getTextManager()->getText("PlayerName"));
+	EXPECT_EQ("I", i6eEngineController->getTextManager()->getText("PlayerName"));
 }

@@ -40,7 +40,7 @@ namespace sample {
 	void CompositorApplication::AfterInitialize() {
 		CommonApplication::AfterInitialize();
 
-		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6eGUIFacade;
 
 		// add ToggleButtons for different compositors
 		gf->addToggleButton("Bloom", "RPG/ToggleButton", 0.85, 0.02, 0.02, 0.02, false, [this](bool b) {
@@ -72,7 +72,7 @@ namespace sample {
 		});
 		gf->addPrint("RadialBlurText", "RPG/Blanko", 0.87, 0.20, "Radial Blur", i6e::api::gui::Alignment::Left, -1);
 
-		i6e::api::ObjectFacade * of = i6e::api::EngineController::GetSingleton().getObjectFacade();
+		i6e::api::ObjectFacade * of = i6eObjectFacade;
 		// a camera to see the scene and move around
 		{
 			i6e::api::objects::GOTemplate tmpl;
@@ -82,14 +82,14 @@ namespace sample {
 
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("StaticState", params, "", false, false));
 			}
-			of->createGO("SpectatorCam", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this](i6e::api::GOPtr go) {
+			of->createGO("SpectatorCam", tmpl, i6eEngineController->getUUID(), false, [this](i6e::api::GOPtr go) {
 				_camera = go;
 			});
 		}
 		// a ground so we can see shadows on it
 		{
 			i6e::api::objects::GOTemplate tmpl;
-			of->createObject("Floor", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Floor", tmpl, i6eEngineController->getUUID(), false);
 		}
 		// one static spotlight
 		{
@@ -106,7 +106,7 @@ namespace sample {
 
 			tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("LuminousAppearance", params, "", false, false));
 
-			of->createObject("Light", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("Light", tmpl, i6eEngineController->getUUID(), false);
 		}
 		// one dynamic point light being moved around by a mover
 		{
@@ -155,7 +155,7 @@ namespace sample {
 				tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("MoverInterpolate", params, "", false, false));
 			}
 
-			of->createObject("MoverLight", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+			of->createObject("MoverLight", tmpl, i6eEngineController->getUUID(), false);
 		}
 		// some columns casting shadows
 		for (int x = -2; x <= 2; ++x) {
@@ -167,7 +167,7 @@ namespace sample {
 					pos.insertInMap("pos", params);
 
 					tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", params, "", false, false));
-					of->createObject("Column", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false);
+					of->createObject("Column", tmpl, i6eEngineController->getUUID(), false);
 				}
 			}
 

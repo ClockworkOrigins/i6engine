@@ -36,12 +36,12 @@ namespace plugins {
 	EditorSaveObjectRPG::EditorSaveObjectRPG() : _file(), _scriptsPath(), _fileExtension(), _level() {
 		std::string scriptsPath;
 #if ISIXE_SCRIPTING == SCRIPTING_LUA
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "LuaScriptsPath", scriptsPath)) {
+		if (clockUtils::ClockError::SUCCESS != i6eEngineController->getIniParser().getValue("SCRIPT", "LuaScriptsPath", scriptsPath)) {
 			ISIXE_THROW_FAILURE("EditorSaveObjectRPG", "An exception has occurred: value LuaScriptsPath in section SCRIPT not found!");
 		}
 		_fileExtension = ".lua";
 #elif ISIXE_SCRIPTING == SCRIPTING_PYTHON
-		if (clockUtils::ClockError::SUCCESS != api::EngineController::GetSingletonPtr()->getIniParser().getValue("SCRIPT", "PythonScriptsPath", scriptsPath)) {
+		if (clockUtils::ClockError::SUCCESS != i6eEngineController->getIniParser().getValue("SCRIPT", "PythonScriptsPath", scriptsPath)) {
 			ISIXE_THROW_FAILURE("EditorSaveObjectRPG", "An exception has occurred: value PythonScriptsPath in section SCRIPT not found!");
 		}
 		_fileExtension = ".py";

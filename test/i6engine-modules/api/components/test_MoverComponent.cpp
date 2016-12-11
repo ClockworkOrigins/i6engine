@@ -39,9 +39,9 @@ void funcID(const int64_t) {
 
 TEST(MoverComponent, absolute) {
 	{
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerNotifyCallback(funcID);
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback([](const WeakComPtr &) {});
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerRemoveTickerCallback([](int64_t) {});
+		i6eObjectFacade->registerNotifyCallback(funcID);
+		i6eObjectFacade->registerAddTickerCallback([](const WeakComPtr &) {});
+		i6eObjectFacade->registerRemoveTickerCallback([](int64_t) {});
 
 		Vec3 realCircleCenter(5, 10, 15);
 		Vec3 axis(0, 0, 2);
@@ -66,7 +66,7 @@ TEST(MoverComponent, absolute) {
 		phyMap["compound"] = "0";
 
 		utils::sharedPtr<MoverCircleComponent, Component> mover = utils::dynamic_pointer_cast<MoverCircleComponent>(Component::createC<MoverCircleComponent>(0, aMap));
-		GOPtr owner = utils::make_shared<GameObject, GameObject>(1, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", func);
+		GOPtr owner = utils::make_shared<GameObject, GameObject>(1, core::IPKey(), i6eEngineController->getUUID(), "tpl", func);
 		utils::sharedPtr<PhysicalStateComponent, Component> psc = utils::make_shared<PhysicalStateComponent, Component>(2, phyMap);
 		owner->setSelf(owner);
 		owner->setGOC(psc);
@@ -84,9 +84,9 @@ TEST(MoverComponent, absolute) {
 
 TEST(MoverComponent, absoluteStartPosition) {
 	{
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerNotifyCallback(funcID);
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback([](const WeakComPtr &) {});
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerRemoveTickerCallback([](int64_t) {});
+		i6eObjectFacade->registerNotifyCallback(funcID);
+		i6eObjectFacade->registerAddTickerCallback([](const WeakComPtr &) {});
+		i6eObjectFacade->registerRemoveTickerCallback([](int64_t) {});
 
 		attributeMap paramsMover;
 		paramsMover["direction"] = "1";
@@ -117,7 +117,7 @@ TEST(MoverComponent, absoluteStartPosition) {
 		phyMap["compound"] = "0";
 
 		utils::sharedPtr<MoverInterpolateComponent, Component> mover = utils::dynamic_pointer_cast<MoverInterpolateComponent>(Component::createC<MoverInterpolateComponent>(0, paramsMover));
-		GOPtr owner = utils::make_shared<GameObject, GameObject>(1, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", func);
+		GOPtr owner = utils::make_shared<GameObject, GameObject>(1, core::IPKey(), i6eEngineController->getUUID(), "tpl", func);
 		utils::sharedPtr<PhysicalStateComponent, Component> psc = utils::make_shared<PhysicalStateComponent, Component>(2, phyMap);
 		owner->setSelf(owner);
 		owner->setGOC(psc);
@@ -139,9 +139,9 @@ TEST(MoverComponent, absoluteStartPosition) {
 
 TEST(MoverComponent, relative) {
 	{
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerNotifyCallback(funcID);
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerAddTickerCallback([](const WeakComPtr &) {});
-		EngineController::GetSingletonPtr()->getObjectFacade()->registerRemoveTickerCallback([](int64_t) {});
+		i6eObjectFacade->registerNotifyCallback(funcID);
+		i6eObjectFacade->registerAddTickerCallback([](const WeakComPtr &) {});
+		i6eObjectFacade->registerRemoveTickerCallback([](int64_t) {});
 
 		Vec3 start(12, 20, 33);
 
@@ -169,7 +169,7 @@ TEST(MoverComponent, relative) {
 		phyMap["compound"] = "0";
 
 		utils::sharedPtr<MoverInterpolateComponent, Component> mover = utils::dynamic_pointer_cast<MoverInterpolateComponent>(Component::createC<MoverInterpolateComponent>(0, aMap));
-		GOPtr owner = utils::make_shared<GameObject, GameObject>(1, core::IPKey(), EngineController::GetSingleton().getUUID(), "tpl", func);
+		GOPtr owner = utils::make_shared<GameObject, GameObject>(1, core::IPKey(), i6eEngineController->getUUID(), "tpl", func);
 		utils::sharedPtr<PhysicalStateComponent, Component> psc = utils::make_shared<PhysicalStateComponent, Component>(2, phyMap);
 		owner->setSelf(owner);
 		owner->setGOC(psc);

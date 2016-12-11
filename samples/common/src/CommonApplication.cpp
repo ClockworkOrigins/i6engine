@@ -63,35 +63,35 @@ namespace sample {
 	}
 
 	void CommonApplication::AfterInitialize() {
-		i6e::api::GUIFacade * gf = i6e::api::EngineController::GetSingleton().getGUIFacade();
+		i6e::api::GUIFacade * gf = i6eGUIFacade;
 
 		// register GUI scheme
 		gf->startGUI("RPG.scheme", "", "", "RPG", "MouseArrow");
 
 		// sets gravity for the game... here like on earth
-		i6e::api::EngineController::GetSingletonPtr()->getPhysicsFacade()->setGravity(Vec3(0, -9.81, 0));
+		i6ePhysicsFacade->setGravity(Vec3(0, -9.81, 0));
 
 		// ambient light for the scene
-		i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->setAmbientLight(0.0, 0.0, 0.0);
+		i6eGraphicsFacade->setAmbientLight(0.0, 0.0, 0.0);
 
 		// register ESC to close the application
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
+		i6eInputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_ESCAPE, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::EngineController::stop, i6e::api::EngineController::GetSingletonPtr()));
 
 		// register F12 to take screenshot
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F12, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::GraphicsFacade::takeScreenshot, i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade(), "Screen_", ".jpg"));
+		i6eInputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_F12, i6e::api::KeyState::KEY_PRESSED, std::bind(&i6e::api::GraphicsFacade::takeScreenshot, i6eGraphicsFacade, "Screen_", ".jpg"));
 
 		// shows fps (activate/deactive using F1)
-		i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->subscribeKeyEvent(i6e::api::KeyCode::KC_F1, i6e::api::KeyState::KEY_PRESSED, [this]() {
+		i6eInputFacade->subscribeKeyEvent(i6e::api::KeyCode::KC_F1, i6e::api::KeyState::KEY_PRESSED, [this]() {
 			if (!_showFPS) {
-				i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->showFPS(0.0, 0.0, "RPG/StaticImage", "RPG/Blanko", "RPG", "TbM_Filling");
+				i6eGraphicsFacade->showFPS(0.0, 0.0, "RPG/StaticImage", "RPG/Blanko", "RPG", "TbM_Filling");
 			} else {
-				i6e::api::EngineController::GetSingletonPtr()->getGraphicsFacade()->hideFPS();
+				i6eGraphicsFacade->hideFPS();
 			}
 			_showFPS = !_showFPS;
 		});
 
 		// registration of movements
-		i6e::api::InputFacade * inputFacade = i6e::api::EngineController::GetSingleton().getInputFacade();
+		i6e::api::InputFacade * inputFacade = i6eInputFacade;
 
 		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_W, "forward");
 		inputFacade->setKeyMapping(i6e::api::KeyCode::KC_S, "backward");
@@ -130,13 +130,13 @@ namespace sample {
 	void CommonApplication::InputMailbox(const i6e::api::GameMessage::Ptr & msg) {
 		if (_move && msg->getSubtype() == i6e::api::keyboard::KeyKeyboard) { // for movement of the camera
 			i6e::api::input::Input_Keyboard_Update * iku = dynamic_cast<i6e::api::input::Input_Keyboard_Update *>(msg->getContent());
-			if (!i6e::api::EngineController::GetSingleton().getGUIFacade()->getInputCaptured()) {
-				std::string key = i6e::api::EngineController::GetSingletonPtr()->getInputFacade()->getKeyMapping(iku->code);
+			if (!i6eGUIFacade->getInputCaptured()) {
+				std::string key = i6eInputFacade->getKeyMapping(iku->code);
 
 				if (_eventMap.find(key) != _eventMap.end()) {
 					_eventMap[key].second = iku->pressed != i6e::api::KeyState::KEY_RELEASED;
 				} else {
-					if (iku->code == i6e::api::KeyCode::KC_MBLeft && !i6e::api::EngineController::GetSingleton().getGUIFacade()->getOnWindow() && iku->pressed == i6e::api::KeyState::KEY_PRESSED && _shootBall) {
+					if (iku->code == i6e::api::KeyCode::KC_MBLeft && !i6eGUIFacade->getOnWindow() && iku->pressed == i6e::api::KeyState::KEY_PRESSED && _shootBall) {
 						i6e::utils::sharedPtr<i6e::api::StaticStateComponent, i6e::api::Component> ssc = _camera.get()->getGOC<i6e::api::StaticStateComponent>(i6e::api::components::StaticStateComponent);
 						Vec3 pos = ssc->getPosition();
 
@@ -144,7 +144,7 @@ namespace sample {
 						pos.insertInMap("pos", paramsPSC);
 						i6e::api::objects::GOTemplate tmpl;
 						tmpl._components.push_back(i6e::api::objects::GOTemplateComponent("PhysicalState", paramsPSC, "", false, false));
-						i6e::api::EngineController::GetSingleton().getObjectFacade()->createGO("Ball", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this, ssc](i6e::api::GOPtr go) {
+						i6eObjectFacade->createGO("Ball", tmpl, i6e::api::EngineController::GetSingleton().getUUID(), false, [this, ssc](i6e::api::GOPtr go) {
 							auto cc = _camera.get()->getGOC<i6e::api::CameraComponent>(i6e::api::components::ComponentTypes::CameraComponent);
 							go->getGOC<i6e::api::PhysicalStateComponent>(i6e::api::components::ComponentTypes::PhysicalStateComponent)->setLinearVelocity(i6e::math::rotateVector((cc->getLookAt() - cc->getPosition() + Vec3(0.0, 0.0, 2.0)).normalize() * 100.0, ssc->getRotation()), 2);
 						});
