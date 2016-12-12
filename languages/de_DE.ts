@@ -1499,5 +1499,21 @@
         <source>SelectGothicDir</source>
         <translation>Pfad zu Gothic-Scripten auswählen</translation>
     </message>
+    <message>
+        <source>Character</source>
+        <translation>Charakter</translation>
+    </message>
+    <message>
+        <source>Takes</source>
+        <translation>Takes</translation>
+    </message>
+    <message>
+        <source>Dialogs</source>
+        <translation>Dialoge</translation>
+    </message>
+    <message>
+        <source>Hide NPCs without dialogs</source>
+        <translation>NPCs ohne Dialoge ausblenden</translation>
+    </message>
 </context>
 </TS>

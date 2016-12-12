@@ -20,9 +20,11 @@
 #ifndef __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
 #define __I6ENGINE_TAKECONTROL_WIDGETS_NPCLISTWIDGET_H__
 
+#include <QSortFilterProxyModel>
 #include <QWidget>
 
-class QListView;
+class QStandardItemModel;
+class QTableView;
 
 namespace i6e {
 namespace rpg {
@@ -35,6 +37,21 @@ namespace plugins {
 	class DialogPluginInterface;
 } /* namespace plugins */
 namespace widgets {
+
+	class FilterNPCsWithoutDialogModel : public QSortFilterProxyModel {
+		Q_OBJECT
+
+	public:
+		FilterNPCsWithoutDialogModel(QWidget * par);
+
+		bool filterAcceptsRow(int source_row, const QModelIndex &) const override;
+
+	public slots:
+		void stateChanged(int checkState);
+
+	private:
+		bool _checked;
+	};
 
 	class NPCListWidget : public QWidget {
 		Q_OBJECT
@@ -54,7 +71,8 @@ namespace widgets {
 		void updateData();
 
 	private:
-		QListView * _listView;
+		QTableView * _tableView;
+		QStandardItemModel * _sourceModel;
 		std::vector<rpg::npc::NPC *> _npcList;
 	};
 
