@@ -35,6 +35,7 @@ namespace plugins {
 
 	signals:
 		void updatedData() override;
+		void updateParseProgress(int);
 
 	public slots:
 		void gothicPathChanged(QString path);
