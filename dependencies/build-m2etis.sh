@@ -23,6 +23,7 @@ cd "$(readlink "$(dirname "${0}")")"
 
 ROOT_DIR=${2}
 COPY_DIR=${3}
+CONFIG_DIR=${4}
 
 . ./build-common.sh ${1}
 
@@ -48,8 +49,8 @@ if [ -d "${COPY_DIR}" ]; then
 	mkdir -p ${BUILD_DIR}/library/extern
 	cp -r ${COPY_DIR}/* ${BUILD_DIR}/library/extern/
 fi
-if [ -d "${DEP_DIR}/../config/m2etis" ]; then
-	cp -rf ${DEP_DIR}/../config/m2etis/* ${BUILD_DIR}/library/generated/
+if [ -d "${CONFIG_DIR}" ]; then
+	cp -rf ${CONFIG_DIR}/* ${BUILD_DIR}/library/generated/
 fi
 cmake \
 	-DWITH_TESTING=OFF \

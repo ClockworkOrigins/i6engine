@@ -21,6 +21,7 @@ REM
 
 Set ROOT_DIR=%3
 Set COPY_DIR=%4
+Set CONFIG_DIR=%5
 
 call build-common.bat %1 %2
 
@@ -45,7 +46,7 @@ IF EXIST %COPY_DIR% (
 	xcopy /I /S /Y "%COPY_DIR%" "%BUILD_DIR%\library\extern\"
 )
 IF EXIST "%DEP_DIR%\..\config\m2etis" (
-	xcopy /I /S /Y "%DEP_DIR%\..\config\m2etis" "%BUILD_DIR%\library\generated\"
+	xcopy /I /S /Y "%CONFIG_DIR%" "%BUILD_DIR%\library\generated\"
 )
 cmake -DWITH_TESTING=OFF -DWITH_SIM=OFF -DWITH_LOGGING=OFF  -DWITH_MESSAGECOMPRESSION=OFF  -DM2ETIS_BUILD_SHARED=ON -DADDITIONAL_INCLUDE_DIRECTORIES=%BUILD_DIR%\library\extern -DDEP_DIR=%ROOT_DIR%/ -DCMAKE_INSTALL_PREFIX=%PREFIX% -G "%VSCOMPILER%%VSARCH%" .
 
