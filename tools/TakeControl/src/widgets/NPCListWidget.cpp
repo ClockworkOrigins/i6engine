@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QCheckBox>
 #include <QHeaderView>
+#include <QLabel>
 #include <QStandardItemModel>
 #include <QTableView>
 #include <QVBoxLayout>
@@ -35,6 +36,10 @@ namespace takeControl {
 namespace widgets {
 
 	FilterNPCsWithoutDialogModel::FilterNPCsWithoutDialogModel(QWidget * par) : QSortFilterProxyModel(par), _checked(true) {
+		connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(countChanged()));
+		connect(this, SIGNAL(rowsMoved(const QModelIndex &, int, int, const QModelIndex &, int)), this, SLOT(countChanged()));
+		connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(countChanged()));
+		connect(this, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(countChanged()));
 	}
 
 	bool FilterNPCsWithoutDialogModel::filterAcceptsRow(int source_row, const QModelIndex &) const {
@@ -48,8 +53,14 @@ namespace widgets {
 		invalidateFilter();
 	}
 
-	NPCListWidget::NPCListWidget(QWidget * par) : QWidget(par), _tableView(new QTableView(this)), _npcList(), _sourceModel(nullptr) {
+	void FilterNPCsWithoutDialogModel::countChanged() {
+		emit updateCount(QApplication::tr("NPCCount") + ": " + QString::number(rowCount()));
+	}
+
+	NPCListWidget::NPCListWidget(QWidget * par) : QWidget(par), _tableView(new QTableView(this)), _amountLabel(nullptr), _npcList(), _sourceModel(nullptr) {
 		QVBoxLayout * l = new QVBoxLayout();
+		_amountLabel = new QLabel(QApplication::tr("NPCCount") + ": " + QString::number(0), this);
+		l->addWidget(_amountLabel);
 		l->addWidget(_tableView);
 
 		QCheckBox * cb = new QCheckBox(QApplication::tr("Hide NPCs without dialogs"), this);
@@ -70,6 +81,7 @@ namespace widgets {
 
 		connect(_tableView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(selectedNPC(const QModelIndex &)));
 		connect(cb, SIGNAL(stateChanged(int)), filterModel, SLOT(stateChanged(int)));
+		connect(filterModel, SIGNAL(updateCount(QString)), _amountLabel, SLOT(setText(QString)));
 	}
 
 	NPCListWidget::~NPCListWidget() {

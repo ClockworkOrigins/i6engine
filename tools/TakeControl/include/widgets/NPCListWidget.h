@@ -23,6 +23,7 @@
 #include <QSortFilterProxyModel>
 #include <QWidget>
 
+class QLabel;
 class QStandardItemModel;
 class QTableView;
 
@@ -46,8 +47,14 @@ namespace widgets {
 
 		bool filterAcceptsRow(int source_row, const QModelIndex &) const override;
 
+	signals:
+		void updateCount(QString);
+
 	public slots:
 		void stateChanged(int checkState);
+
+	private slots:
+		void countChanged();
 
 	private:
 		bool _checked;
@@ -72,6 +79,7 @@ namespace widgets {
 
 	private:
 		QTableView * _tableView;
+		QLabel * _amountLabel;
 		QStandardItemModel * _sourceModel;
 		std::vector<rpg::npc::NPC *> _npcList;
 	};

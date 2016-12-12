@@ -1515,5 +1515,9 @@
         <source>Hide NPCs without dialogs</source>
         <translation>NPCs ohne Dialoge ausblenden</translation>
     </message>
+    <message>
+        <source>NPCCount</source>
+        <translation>Anzahl NPCs</translation>
+    </message>
 </context>
 </TS>
