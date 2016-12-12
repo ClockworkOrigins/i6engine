@@ -58,7 +58,7 @@ TEST(i6eRandom, randMinMax) {
 	}
 	ASSERT_EQ(MAXVALUE, count.size());
 	for (auto it = count.begin(); it != count.end(); it++) {
-		EXPECT_NEAR(RUNS / MAXVALUE, it->second, RUNS / MAXVALUE * 0.02);
+		EXPECT_NEAR(RUNS / MAXVALUE, it->second, RUNS / MAXVALUE * 0.05);
 	}
 }
 
